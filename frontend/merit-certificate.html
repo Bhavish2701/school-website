@@ -1147,7 +1147,7 @@
       const s = STUDENTS[idx];
       const certNo = 'MC-2025-' + s.certN;
       const today  = getToday();
-      const origin = window.location.origin || 'http://localhost:8080';
+      const origin = window.location.origin || 'http://localhost:5000';
       const pathname = window.location.pathname.replace(/\/+$/, '') || '/merit-certificate.html';
       const qrUrl  = origin + pathname + '?cert=' + certNo + '&name=' + encodeURIComponent(s.name) + '&rank=' + s.rank + '&ts=' + Date.now();
 

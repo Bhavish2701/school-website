@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Parent Portal | Sri Vidya E.M High School</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../css/style.css">
+  <link rel="stylesheet" href="../../css/portal.css">
+</head>
+<body class="portal-body">
+  <div class="portal-main-wrapper" style="margin-left: 0; padding: 1.5rem 2.5rem; max-width: 1400px; margin: 0 auto;">
+    <header style="display:flex; justify-content:space-between; align-items:center; padding-bottom: 1.5rem; border-bottom: 1px solid var(--color-border); margin-bottom: 2rem; flex-wrap:wrap; gap:1rem;">
+      <div style="display:flex; align-items:center; gap:1rem;">
+        <img src="../../assets/images/school-logo.jpg" alt="Logo" style="width:50px; height:50px; border-radius:50%; object-fit:cover;">
+        <div>
+          <h2 style="margin:0; font-size:1.35rem; font-weight:800; color:var(--color-text-dark);">Sri Vidya E.M High School</h2>
+          <span class="portal-badge badge-primary"><i class="fa-solid fa-people-roof"></i> Parent &amp; Guardian Companion Portal</span>
+        </div>
+      </div>
+      <div style="display:flex; gap:0.65rem; align-items:center; flex-wrap:wrap;">
+        <div style="display:inline-flex; align-items:center; gap:0.45rem; background:#ecfdf5; color:#065f46; border:1px solid #a7f3d0; padding:0.35rem 0.85rem; border-radius:20px; font-weight:700; font-size:0.85rem;">
+          <i class="fa-regular fa-clock"></i>
+          <span id="parentLiveTime">--:--:-- -- IST</span>
+        </div>
+        <div style="display:inline-flex; align-items:center; gap:0.45rem; background:#f1f5f9; color:#475569; border:1px solid #e2e8f0; padding:0.35rem 0.85rem; border-radius:20px; font-weight:600; font-size:0.85rem;">
+          <i class="fa-regular fa-calendar"></i>
+          <span id="parentLiveDate">--</span>
+        </div>
+        <a href="/management" class="btn btn-secondary btn-sm"><i class="fa-solid fa-building-columns"></i> Admin Portal</a>
+        <a href="/student" class="btn btn-secondary btn-sm"><i class="fa-solid fa-user-graduate"></i> Student Portal</a>
+        <a href="/" class="btn btn-primary btn-sm"><i class="fa-solid fa-house"></i> Public Website</a>
+      </div>
+    </header>
+
+    <div style="background: linear-gradient(135deg, #065f46 0%, #059669 100%); color:#fff; border-radius:var(--radius-lg); padding: 1.5rem 2rem; margin-bottom: 2rem; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1.25rem;">
+      <div>
+        <span class="portal-badge" style="background:rgba(255,255,255,0.2); color:#fff;"><i class="fa-solid fa-shield-cat"></i> Enrolled Ward Details</span>
+        <h3 style="margin:0.5rem 0 0.25rem; font-size:1.4rem;">Parent / Guardian: Sri K. Venkata Rao</h3>
+        <p style="margin:0; color:#d1fae5; font-size:0.92rem;">Student: <strong>K. Sai Tharun</strong> • Class: <strong>VIII-A</strong> • Admission No: <strong>SV-0210</strong></p>
+      </div>
+      <div style="text-align:right;">
+        <span class="portal-badge badge-success" style="background:#fff; color:#065f46; font-weight:700;"><i class="fa-solid fa-bell"></i> Gate In-Time: 08:24 AM (On-Time)</span>
+      </div>
+    </div>
+
+    <div class="portal-metric-grid" style="display:grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.25rem; margin-bottom: 2rem;">
+      <div class="metric-card">
+        <span class="metric-label">Child Attendance</span>
+        <span class="metric-value text-emerald">96.8%</span>
+        <span class="metric-sub text-emerald">Regular • Zero Unexcused Absences</span>
+      </div>
+      <div class="metric-card">
+        <span class="metric-label">Term 1 Grade Average</span>
+        <span class="metric-value text-blue">94.2%</span>
+        <span class="metric-sub text-blue">Rank 3 in Class VIII-A</span>
+      </div>
+      <div class="metric-card">
+        <span class="metric-label">Annual Fee Status</span>
+        <span class="metric-value text-emerald">Paid In Full</span>
+        <span class="metric-sub text-muted">Term 1 &amp; 2 Cleared</span>
+      </div>
+      <div class="metric-card">
+        <span class="metric-label">Upcoming PTM</span>
+        <span class="metric-value">Nov 08</span>
+        <span class="metric-sub text-muted">Saturday 09:30 AM</span>
+      </div>
+    </div>
+
+    <div class="card p-4" style="background:var(--color-bg-surface); border:1px solid var(--color-border); border-radius:var(--radius-lg);">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem; flex-wrap:wrap; gap:0.5rem;">
+        <div>
+          <h3 style="margin:0; font-size:1.15rem; font-weight:700;"><i class="fa-solid fa-message text-primary"></i> Direct Teacher Communication &amp; Leave Request</h3>
+          <p class="text-muted" style="margin:0.25rem 0 0; font-size:0.875rem;">Submit leave notices or query Class Teacher Ms. Anjali directly</p>
+        </div>
+      </div>
+      <form onsubmit="event.preventDefault(); alert('Leave request submitted to Class Teacher Ms. Anjali.');" style="display:grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap:1rem;">
+        <div>
+          <label style="display:block; font-size:0.85rem; font-weight:600; margin-bottom:0.25rem;">Leave Date *</label>
+          <input type="date" class="form-control" value="2026-10-26" required>
+        </div>
+        <div>
+          <label style="display:block; font-size:0.85rem; font-weight:600; margin-bottom:0.25rem;">Reason for Leave *</label>
+          <input type="text" class="form-control" placeholder="e.g. Family Function / Medical Checkup" required>
+        </div>
+        <div style="display:flex; align-items:flex-end;">
+          <button type="submit" class="btn btn-primary" style="width:100%;"><i class="fa-solid fa-paper-plane"></i> Submit Notice to School</button>
+        </div>
+      </form>
+    </div>
+  </div>
+  <script>
+    function updateParentClock() {
+      const now = new Date();
+      const dateOptions = { timeZone: 'Asia/Kolkata', weekday: 'long', month: 'short', day: 'numeric', year: 'numeric' };
+      const timeOptions = { timeZone: 'Asia/Kolkata', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true };
+      const timeEl = document.getElementById('parentLiveTime');
+      const dateEl = document.getElementById('parentLiveDate');
+      if (timeEl) timeEl.textContent = new Intl.DateTimeFormat('en-US', timeOptions).format(now) + ' IST';
+      if (dateEl) dateEl.textContent = new Intl.DateTimeFormat('en-US', dateOptions).format(now);
+    }
+    updateParentClock();
+    setInterval(updateParentClock, 1000);
+  </script>
+</body>
+</html>

@@ -1,0 +1,963 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Platform Administration | Sri Vidya Educational Trust ERP</title>
+  <meta name="description" content="Central multi-tenant platform administration and institutional infrastructure configuration for Sri Vidya Educational Trust.">
+  
+  <!-- FontAwesome & Google Fonts -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  
+  <!-- Core Styles -->
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/portal.css">
+  <link rel="stylesheet" href="/css/platform-admin.css">
+</head>
+<body class="platform-admin-body">
+
+  <!-- =========================================================================
+       SIDEBAR NAVIGATION (10 RECOMMENDED PLATFORM MODULES)
+       ========================================================================= -->
+  <aside class="portal-sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <a href="#dashboard" class="sidebar-brand" onclick="platformApp.navigateTo('dashboard')">
+        <div class="brand-icon">
+          <i class="fa-solid fa-layer-group"></i>
+        </div>
+        <div>
+          <span class="brand-title">Sri Vidya Trust</span>
+          <span class="brand-sub">Platform Administration</span>
+        </div>
+      </a>
+    </div>
+
+    <nav class="sidebar-nav">
+      <div class="nav-section-title">Core Operations</div>
+      <a class="nav-link active" data-view="dashboard" onclick="platformApp.navigateTo('dashboard')">
+        <span class="nav-icon"><i class="fa-solid fa-gauge-high"></i></span>
+        <span class="nav-text">Platform Dashboard</span>
+      </a>
+      <a class="nav-link" data-view="institutions" onclick="platformApp.navigateTo('institutions')">
+        <span class="nav-icon"><i class="fa-solid fa-school-flag"></i></span>
+        <span class="nav-text">Institution Management</span>
+        <span class="nav-badge">3</span>
+      </a>
+      <a class="nav-link" data-view="config" onclick="platformApp.navigateTo('config')">
+        <span class="nav-icon"><i class="fa-solid fa-sliders"></i></span>
+        <span class="nav-text">School Configuration</span>
+      </a>
+
+      <div class="nav-section-title">Access &amp; Security</div>
+      <a class="nav-link" data-view="users" onclick="platformApp.navigateTo('users')">
+        <span class="nav-icon"><i class="fa-solid fa-user-shield"></i></span>
+        <span class="nav-text">User &amp; Account Management</span>
+      </a>
+      <a class="nav-link" data-view="roles" onclick="platformApp.navigateTo('roles')">
+        <span class="nav-icon"><i class="fa-solid fa-id-card-clip"></i></span>
+        <span class="nav-text">Role Templates</span>
+      </a>
+      <a class="nav-link" data-view="audit" onclick="platformApp.navigateTo('audit')">
+        <span class="nav-icon"><i class="fa-solid fa-clock-rotate-left"></i></span>
+        <span class="nav-text">Audit Logs</span>
+      </a>
+
+      <div class="nav-section-title">Platform Infrastructure</div>
+      <a class="nav-link" data-view="subscription" onclick="platformApp.navigateTo('subscription')">
+        <span class="nav-icon"><i class="fa-solid fa-certificate"></i></span>
+        <span class="nav-text">Subscription &amp; Plans</span>
+      </a>
+      <a class="nav-link" data-view="health" onclick="platformApp.navigateTo('health')">
+        <span class="nav-icon"><i class="fa-solid fa-server"></i></span>
+        <span class="nav-text">System Health &amp; Deployment</span>
+      </a>
+      <a class="nav-link" data-view="settings" onclick="platformApp.navigateTo('settings')">
+        <span class="nav-icon"><i class="fa-solid fa-gears"></i></span>
+        <span class="nav-text">Global Settings</span>
+      </a>
+      <a class="nav-link" data-view="support" onclick="platformApp.navigateTo('support')">
+        <span class="nav-icon"><i class="fa-solid fa-headset"></i></span>
+        <span class="nav-text">Support &amp; Issue Management</span>
+        <span class="nav-badge" style="background: rgba(245,158,11,0.25); color: #F59E0B;">2 Open</span>
+      </a>
+
+      <div class="nav-section-title">School Gateways</div>
+      <a href="/management" class="nav-link" target="_blank">
+        <span class="nav-icon"><i class="fa-solid fa-building-columns"></i></span>
+        <span class="nav-text">School Administration Portal</span>
+      </a>
+      <a href="/teacher" class="nav-link" target="_blank">
+        <span class="nav-icon"><i class="fa-solid fa-chalkboard-user"></i></span>
+        <span class="nav-text">Faculty &amp; Teacher Portal</span>
+      </a>
+      <a href="/" class="nav-link">
+        <span class="nav-icon"><i class="fa-solid fa-arrow-left"></i></span>
+        <span class="nav-text">Public Website</span>
+      </a>
+    </nav>
+
+    <!-- Sidebar Operator Card -->
+    <div class="sidebar-operator-card">
+      <div class="operator-avatar">SA</div>
+      <div class="operator-info">
+        <div class="operator-name">Root Platform Admin</div>
+        <div class="operator-role"><i class="fa-solid fa-shield-halved"></i> Super Admin Operator</div>
+      </div>
+      <button class="btn-pa btn-pa-secondary" style="padding: 0.35rem 0.5rem;" title="Sign out" onclick="PortalAuth.logout('management')">
+        <i class="fa-solid fa-arrow-right-from-bracket"></i>
+      </button>
+    </div>
+  </aside>
+
+  <!-- =========================================================================
+       MAIN CONTENT CONTAINER
+       ========================================================================= -->
+  <div class="portal-main">
+    
+    <!-- Top Sticky Header Bar -->
+    <header class="portal-header">
+      <div class="header-left">
+        <button class="mobile-toggle" onclick="platformApp.toggleMobileSidebar()" aria-label="Toggle Navigation">
+          <i class="fa-solid fa-bars"></i>
+        </button>
+        <div style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.875rem;">
+          <span style="color: #64748B;">Platform Administration</span>
+          <i class="fa-solid fa-chevron-right" style="font-size: 0.7rem; color: #94A3B8;"></i>
+          <span style="font-weight: 700; color: var(--color-text-main);" id="currentViewBreadcrumb">Platform Dashboard</span>
+        </div>
+      </div>
+
+      <div class="header-right">
+        <!-- Live Cluster Status Indicator -->
+        <span class="badge-active" style="padding: 0.35rem 0.75rem;">
+          <span style="width: 8px; height: 8px; border-radius: 50%; background: #10B981; box-shadow: 0 0 6px #10B981;"></span>
+          Cluster: Healthy (99.98%)
+        </span>
+
+        <!-- Theme Toggle -->
+        <button class="btn-pa btn-pa-secondary" id="platformThemeToggle" onclick="platformApp.toggleTheme()" title="Toggle Dark/Light Mode" style="padding: 0.45rem 0.8rem;">
+          <i class="fa-solid fa-moon" id="platformThemeIcon"></i>
+        </button>
+
+        <!-- Direct Launch Gateway -->
+        <a href="/management" class="btn-pa btn-pa-primary" style="padding: 0.45rem 0.9rem;">
+          <i class="fa-solid fa-arrow-up-right-from-square"></i> Open School Portal
+        </a>
+      </div>
+    </header>
+
+    <main class="portal-content" style="padding: 1.75rem 2rem;">
+
+      <!-- =======================================================================
+           EXECUTIVE WELCOME BANNER WITH PROMINENT LIVE IST CLOCK (BIG & FIRST)
+           ======================================================================= -->
+      <div class="super-admin-banner">
+        <div>
+          <span class="banner-badge">
+            <i class="fa-solid fa-network-wired"></i> Central Multi-Tenant Infrastructure
+          </span>
+          <h1 class="banner-title">Sri Vidya Educational Trust • Platform Administration</h1>
+          <p class="banner-subtitle">
+            Global management of multi-school software instances, tenant licensing, hardware gateways, system security policies, and institutional configurations.
+          </p>
+        </div>
+
+        <div class="banner-meta-col">
+          <!-- Big, High-Contrast Live IST Clock (Top & First) -->
+          <div class="banner-clock-pill" id="platformClockPill" title="Indian Standard Time (IST, UTC+5:30)">
+            <i class="fa-regular fa-clock"></i>
+            <span id="platformLiveTimeText">--:--:-- -- IST</span>
+          </div>
+
+          <!-- Secondary Metadata Down of the Time -->
+          <div class="banner-subpill">
+            <i class="fa-regular fa-calendar"></i>
+            <span id="platformLiveDateText">Saturday, Oct 24, 2026</span>
+          </div>
+          <div class="banner-subpill">
+            <i class="fa-solid fa-server"></i>
+            <span>Node Cluster: AP-South-1 (Hyderabad)</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- =======================================================================
+           CRITICAL PRIVACY BOUNDARY ENFORCEMENT BANNER
+           ======================================================================= -->
+      <div class="privacy-guard-banner">
+        <div class="privacy-guard-icon">
+          <i class="fa-solid fa-user-shield"></i>
+        </div>
+        <div class="privacy-guard-text">
+          <h4>Architectural Privacy Isolation Boundary Enforced</h4>
+          <p>
+            The Super Admin manages cloud infrastructure, tenant onboarding, and system configurations. 
+            <strong>By strict architectural design, platform operators do not receive unrestricted access to confidential student medical dossiers, personal counseling files, or private academic logs.</strong> 
+            School records remain sovereign and access-controlled exclusively to authorized institutional leadership and faculty.
+          </p>
+        </div>
+      </div>
+
+      <!-- =======================================================================
+           MODULE 1: PLATFORM DASHBOARD (#view-dashboard)
+           ======================================================================= -->
+      <section class="portal-view active" id="view-dashboard">
+        
+        <!-- Platform Metric Quad -->
+        <div class="platform-metric-quad">
+          <div class="pa-metric-card" onclick="platformApp.navigateTo('institutions')" style="cursor: pointer;">
+            <div class="pa-metric-top">
+              <span class="pa-metric-label">Managed Institutions</span>
+              <div class="pa-metric-icon-box" style="background: rgba(79, 70, 229, 0.12); color: #4F46E5;">
+                <i class="fa-solid fa-school-flag"></i>
+              </div>
+            </div>
+            <div class="pa-metric-value">3 Campuses</div>
+            <div class="pa-metric-sub text-emerald">
+              <i class="fa-solid fa-circle-check"></i> 100% Operational &amp; Licensed
+            </div>
+          </div>
+
+          <div class="pa-metric-card" onclick="platformApp.navigateTo('users')" style="cursor: pointer;">
+            <div class="pa-metric-top">
+              <span class="pa-metric-label">Total Provisioned Users</span>
+              <div class="pa-metric-icon-box" style="background: rgba(6, 182, 212, 0.12); color: #06B6D4;">
+                <i class="fa-solid fa-users-gear"></i>
+              </div>
+            </div>
+            <div class="pa-metric-value">1,315</div>
+            <div class="pa-metric-sub">
+              <span>855 Students • 58 Faculty • 5 Admins</span>
+            </div>
+          </div>
+
+          <div class="pa-metric-card" onclick="platformApp.navigateTo('subscription')" style="cursor: pointer;">
+            <div class="pa-metric-top">
+              <span class="pa-metric-label">Student Seat Quota</span>
+              <div class="pa-metric-icon-box" style="background: rgba(245, 158, 11, 0.12); color: #F59E0B;">
+                <i class="fa-solid fa-chart-pie"></i>
+              </div>
+            </div>
+            <div class="pa-metric-value">57% Used</div>
+            <div class="pa-metric-sub">
+              <span>855 / 1,500 Enrolled Seats Allocated</span>
+            </div>
+          </div>
+
+          <div class="pa-metric-card" onclick="platformApp.navigateTo('health')" style="cursor: pointer;">
+            <div class="pa-metric-top">
+              <span class="pa-metric-label">System Performance</span>
+              <div class="pa-metric-icon-box" style="background: rgba(16, 185, 129, 0.12); color: #10B981;">
+                <i class="fa-solid fa-gauge-simple-high"></i>
+              </div>
+            </div>
+            <div class="pa-metric-value text-emerald">24 ms</div>
+            <div class="pa-metric-sub text-emerald">
+              <i class="fa-solid fa-cloud-arrow-up"></i> P95 Gateway Latency (Zero Drops)
+            </div>
+          </div>
+        </div>
+
+        <!-- Quick Platform Actions Bar -->
+        <div class="pa-card">
+          <div class="pa-card-header">
+            <div>
+              <h3 class="pa-card-title"><i class="fa-solid fa-bolt text-amber"></i> Operator Quick Actions</h3>
+              <p class="pa-card-desc">Execute high-priority operational workflows across the platform ecosystem</p>
+            </div>
+            <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+              <button class="btn-pa btn-pa-primary" onclick="platformApp.openModal('modalAddInstitution')">
+                <i class="fa-solid fa-plus"></i> Onboard New Institution
+              </button>
+              <button class="btn-pa btn-pa-secondary" onclick="platformApp.openModal('modalCreateTicket')">
+                <i class="fa-solid fa-ticket"></i> Log Support Ticket
+              </button>
+              <button class="btn-pa btn-pa-secondary" onclick="platformApp.pingCluster()" id="btnPingCluster">
+                <i class="fa-solid fa-satellite-dish"></i> Run Diagnostics Ping
+              </button>
+              <button class="btn-pa btn-pa-secondary" onclick="platformApp.exportAuditTrail()">
+                <i class="fa-solid fa-download"></i> Export Audit Log
+              </button>
+            </div>
+          </div>
+
+          <!-- Multi-Campus Tenant Overview Cards -->
+          <h4 style="margin: 1.25rem 0 0.85rem; font-size: 1rem; color: var(--color-text-main);">
+            <i class="fa-solid fa-sitemap text-primary"></i> Active Institutional Tenants
+          </h4>
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(310px, 1fr)); gap: 1.25rem;">
+            
+            <div style="border: 1px solid var(--color-border); border-radius: 12px; padding: 1.35rem; background: var(--color-bg-subtle);">
+              <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem;">
+                <span class="badge-operator" style="background:#4F46E5; color:#fff;">Lead Campus</span>
+                <span class="badge-active">Active</span>
+              </div>
+              <h4 style="margin: 0.25rem 0; font-size: 1.05rem;">Sri Vidya E.M High School</h4>
+              <p style="margin: 0 0 0.75rem; font-size: 0.8rem; color: #64748B;">UDISE: 28172901923 • Primary &amp; Secondary (Class 1–10)</p>
+              <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 1rem; padding: 0.5rem 0; border-top: 1px dashed var(--color-border); border-bottom: 1px dashed var(--color-border);">
+                <span>Students: <strong>855</strong></span>
+                <span>Staff: <strong>34</strong></span>
+                <span>Term: <strong>2025–26</strong></span>
+              </div>
+              <div style="display: flex; gap: 0.5rem;">
+                <a href="/management" class="btn-pa btn-pa-primary" style="flex:1; justify-content:center; font-size:0.8rem;">
+                  <i class="fa-solid fa-arrow-right"></i> Open Portal
+                </a>
+                <button class="btn-pa btn-pa-secondary" onclick="platformApp.navigateTo('config')" style="font-size:0.8rem;">
+                  <i class="fa-solid fa-sliders"></i>
+                </button>
+              </div>
+            </div>
+
+            <div style="border: 1px solid var(--color-border); border-radius: 12px; padding: 1.35rem; background: var(--color-bg-subtle);">
+              <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem;">
+                <span class="badge-operator">Intermediate Wing</span>
+                <span class="badge-active">Active</span>
+              </div>
+              <h4 style="margin: 0.25rem 0; font-size: 1.05rem;">Sri Vidya Junior College</h4>
+              <p style="margin: 0 0 0.75rem; font-size: 0.8rem; color: #64748B;">UDISE: 28172901924 • BIEAP AP (+1 &amp; +2 MPC/BiPC)</p>
+              <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 1rem; padding: 0.5rem 0; border-top: 1px dashed var(--color-border); border-bottom: 1px dashed var(--color-border);">
+                <span>Students: <strong>320</strong></span>
+                <span>Staff: <strong>18</strong></span>
+                <span>Term: <strong>2025–26</strong></span>
+              </div>
+              <div style="display: flex; gap: 0.5rem;">
+                <a href="/management" class="btn-pa btn-pa-secondary" style="flex:1; justify-content:center; font-size:0.8rem;">
+                  <i class="fa-solid fa-arrow-right"></i> Open Portal
+                </a>
+                <button class="btn-pa btn-pa-secondary" onclick="platformApp.navigateTo('config')" style="font-size:0.8rem;">
+                  <i class="fa-solid fa-sliders"></i>
+                </button>
+              </div>
+            </div>
+
+            <div style="border: 1px solid var(--color-border); border-radius: 12px; padding: 1.35rem; background: var(--color-bg-subtle);">
+              <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem;">
+                <span class="badge-operator">Pre-Primary</span>
+                <span class="badge-active">Active</span>
+              </div>
+              <h4 style="margin: 0.25rem 0; font-size: 1.05rem;">Sri Vidya Kids Academy</h4>
+              <p style="margin: 0 0 0.75rem; font-size: 0.8rem; color: #64748B;">UDISE: 28172901925 • Nursery, LKG, UKG Play School</p>
+              <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 1rem; padding: 0.5rem 0; border-top: 1px dashed var(--color-border); border-bottom: 1px dashed var(--color-border);">
+                <span>Students: <strong>140</strong></span>
+                <span>Staff: <strong>8</strong></span>
+                <span>Term: <strong>2025–26</strong></span>
+              </div>
+              <div style="display: flex; gap: 0.5rem;">
+                <a href="/management" class="btn-pa btn-pa-secondary" style="flex:1; justify-content:center; font-size:0.8rem;">
+                  <i class="fa-solid fa-arrow-right"></i> Open Portal
+                </a>
+                <button class="btn-pa btn-pa-secondary" onclick="platformApp.navigateTo('config')" style="font-size:0.8rem;">
+                  <i class="fa-solid fa-sliders"></i>
+                </button>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+      </section>
+
+      <!-- =======================================================================
+           MODULE 2: INSTITUTION MANAGEMENT (#view-institutions)
+           ======================================================================= -->
+      <section class="portal-view" id="view-institutions">
+        <div class="pa-card">
+          <div class="pa-card-header">
+            <div>
+              <h3 class="pa-card-title"><i class="fa-solid fa-school-flag text-primary"></i> Institution Registry</h3>
+              <p class="pa-card-desc">Configure, provision, and maintain all school campuses under the educational trust</p>
+            </div>
+            <button class="btn-pa btn-pa-primary" onclick="platformApp.openModal('modalAddInstitution')">
+              <i class="fa-solid fa-plus"></i> Add New Institution
+            </button>
+          </div>
+
+          <div class="pa-table-responsive">
+            <table class="pa-table">
+              <thead>
+                <tr>
+                  <th>Institution Details</th>
+                  <th>Affiliation &amp; Category</th>
+                  <th>Enrollment Footprint</th>
+                  <th>Domain Mapping</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="institutionsTableBody">
+                <!-- Dynamically populated by platform-admin.js -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- =======================================================================
+           MODULE 3: SCHOOL CONFIGURATION (#view-config)
+           ======================================================================= -->
+      <section class="portal-view" id="view-config">
+        <div class="pa-card">
+          <div class="pa-card-header">
+            <div>
+              <h3 class="pa-card-title"><i class="fa-solid fa-sliders text-primary"></i> School Configuration &amp; Feature Flags</h3>
+              <p class="pa-card-desc">Set institutional policies, academic terms, grading scales, and hardware integration modules</p>
+            </div>
+            <button class="btn-pa btn-pa-primary" onclick="platformApp.showToast('Configuration saved and distributed to cluster!', 'success')">
+              <i class="fa-solid fa-floppy-disk"></i> Save Global Changes
+            </button>
+          </div>
+
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); gap: 1.5rem;">
+            
+            <!-- Academic Standards -->
+            <div>
+              <h4 style="margin: 0 0 0.85rem; font-size: 0.95rem; font-weight: 700; color: var(--color-text-main);">
+                <i class="fa-solid fa-graduation-cap text-primary"></i> Academic &amp; Grading Standards
+              </h4>
+              
+              <div class="mb-3">
+                <label style="font-size: 0.8rem; font-weight: 600; display: block; margin-bottom: 0.35rem;">Primary Board Curriculum</label>
+                <select class="pa-select" style="width: 100%;">
+                  <option selected>Andhra Pradesh State Board (AP SSC - English Medium)</option>
+                  <option>Central Board of Secondary Education (CBSE)</option>
+                  <option>Dual-Stream (AP Board + CBSE Integrated Track)</option>
+                </select>
+              </div>
+
+              <div class="mb-3">
+                <label style="font-size: 0.8rem; font-weight: 600; display: block; margin-bottom: 0.35rem;">Current Academic Year</label>
+                <input type="text" class="pa-search-input" value="2025–26 (Term 1 &amp; Term 2)" style="width: 100%;">
+              </div>
+
+              <div class="mb-3">
+                <label style="font-size: 0.8rem; font-weight: 600; display: block; margin-bottom: 0.35rem;">Admission Number Auto-Generation Prefix</label>
+                <input type="text" class="pa-search-input" value="SV-" style="width: 100%;">
+                <small style="color: #64748B; font-size: 0.75rem;">Generates format: SV-0001 to SV-9999 with automatic uniqueness check</small>
+              </div>
+            </div>
+
+            <!-- Hardware & Cloud Integration Flags -->
+            <div>
+              <h4 style="margin: 0 0 0.85rem; font-size: 0.95rem; font-weight: 700; color: var(--color-text-main);">
+                <i class="fa-solid fa-microchip text-primary"></i> Platform Integration Toggles
+              </h4>
+
+              <div class="pa-switch-label">
+                <div>
+                  <div style="font-weight: 600; font-size: 0.875rem;">Biometric Fingerprint Devices</div>
+                  <div style="font-size: 0.75rem; color: #64748B;">Real-time teacher and staff biometric attendance gateway</div>
+                </div>
+                <label class="pa-switch">
+                  <input type="checkbox" checked onchange="platformApp.toggleFeature('Biometric Devices')">
+                  <span class="pa-slider"></span>
+                </label>
+              </div>
+
+              <div class="pa-switch-label">
+                <div>
+                  <div style="font-weight: 600; font-size: 0.875rem;">School Van Fleet GPS Tracking</div>
+                  <div style="font-size: 0.75rem; color: #64748B;">Live transit map for student transportation &amp; parents</div>
+                </div>
+                <label class="pa-switch">
+                  <input type="checkbox" checked onchange="platformApp.toggleFeature('GPS Fleet Tracking')">
+                  <span class="pa-slider"></span>
+                </label>
+              </div>
+
+              <div class="pa-switch-label">
+                <div>
+                  <div style="font-weight: 600; font-size: 0.875rem;">Online Fee Gateway (Razorpay/UPI)</div>
+                  <div style="font-size: 0.75rem; color: #64748B;">Accept instant card, NetBanking, and UPI payments</div>
+                </div>
+                <label class="pa-switch">
+                  <input type="checkbox" checked onchange="platformApp.toggleFeature('Online Fee Payment Gateway')">
+                  <span class="pa-slider"></span>
+                </label>
+              </div>
+
+              <div class="pa-switch-label">
+                <div>
+                  <div style="font-weight: 600; font-size: 0.875rem;">WhatsApp &amp; SMS Parent Dispatch</div>
+                  <div style="font-size: 0.75rem; color: #64748B;">Automated circulars, attendance alerts, and fee reminders</div>
+                </div>
+                <label class="pa-switch">
+                  <input type="checkbox" checked onchange="platformApp.toggleFeature('Parent Dispatch Gateway')">
+                  <span class="pa-slider"></span>
+                </label>
+              </div>
+
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      <!-- =======================================================================
+           MODULE 4: USER & ACCOUNT MANAGEMENT (#view-users)
+           ======================================================================= -->
+      <section class="portal-view" id="view-users">
+        <div class="pa-card">
+          <div class="pa-card-header">
+            <div>
+              <h3 class="pa-card-title"><i class="fa-solid fa-user-shield text-primary"></i> User &amp; Account Management</h3>
+              <p class="pa-card-desc">Super Admins, Institutional Executives, and Platform Operators with MFA Enforcement</p>
+            </div>
+            <button class="btn-pa btn-pa-primary" onclick="platformApp.showToast('Invitation dispatched to operator email', 'info')">
+              <i class="fa-solid fa-user-plus"></i> Provision New Operator
+            </button>
+          </div>
+
+          <div class="pa-table-responsive">
+            <table class="pa-table">
+              <thead>
+                <tr>
+                  <th>Account Holder</th>
+                  <th>Assigned Role</th>
+                  <th>Campus Scope</th>
+                  <th>MFA Status</th>
+                  <th>Last Authentication</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="operatorsTableBody">
+                <!-- Dynamically populated by platform-admin.js -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- =======================================================================
+           MODULE 5: ROLE TEMPLATES (#view-roles)
+           ======================================================================= -->
+      <section class="portal-view" id="view-roles">
+        <div class="pa-card">
+          <div class="pa-card-header">
+            <div>
+              <h3 class="pa-card-title"><i class="fa-solid fa-id-card-clip text-primary"></i> Role-Based Access Control (RBAC) Templates</h3>
+              <p class="pa-card-desc">Granular authorization boundaries ensuring strict separation between software operations and school records</p>
+            </div>
+          </div>
+
+          <div class="pa-table-responsive">
+            <table class="pa-table">
+              <thead>
+                <tr>
+                  <th>Role Template</th>
+                  <th>Software Configuration</th>
+                  <th>Student Private Files</th>
+                  <th>Financial Audits</th>
+                  <th>Staff Directory</th>
+                  <th>Security Posture</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>
+                    <strong>Super Administrator</strong>
+                    <div style="font-size:0.75rem; color:#64748B;">Platform Operator</div>
+                  </td>
+                  <td><span class="text-emerald font-bold"><i class="fa-solid fa-check"></i> Full Control</span></td>
+                  <td><span class="text-danger font-bold"><i class="fa-solid fa-ban"></i> Restricted (Privacy Guard)</span></td>
+                  <td><span class="text-muted">Subscription Only</span></td>
+                  <td><span class="text-emerald font-bold"><i class="fa-solid fa-check"></i> Account Level</span></td>
+                  <td><span class="badge-operator">Platform Root</span></td>
+                </tr>
+                <tr>
+                  <td>
+                    <strong>Institutional Principal</strong>
+                    <div style="font-size:0.75rem; color:#64748B;">Executive Authority</div>
+                  </td>
+                  <td><span class="text-emerald font-bold"><i class="fa-solid fa-check"></i> School Level</span></td>
+                  <td><span class="text-emerald font-bold"><i class="fa-solid fa-check"></i> Full Access</span></td>
+                  <td><span class="text-emerald font-bold"><i class="fa-solid fa-check"></i> Full Sign-off</span></td>
+                  <td><span class="text-emerald font-bold"><i class="fa-solid fa-check"></i> Governance</span></td>
+                  <td><span class="badge-active">School Root</span></td>
+                </tr>
+                <tr>
+                  <td>
+                    <strong>Vice Principal / HOD</strong>
+                    <div style="font-size:0.75rem; color:#64748B;">Academic Dean</div>
+                  </td>
+                  <td><span class="text-muted">Curriculum Only</span></td>
+                  <td><span class="text-emerald font-bold"><i class="fa-solid fa-check"></i> Academic Dossiers</span></td>
+                  <td><span class="text-muted">Read-Only</span></td>
+                  <td><span class="text-emerald font-bold"><i class="fa-solid fa-check"></i> Faculty Rosters</span></td>
+                  <td><span class="badge-active">Academic Root</span></td>
+                </tr>
+                <tr>
+                  <td>
+                    <strong>Teaching Faculty</strong>
+                    <div style="font-size:0.75rem; color:#64748B;">Class Teacher</div>
+                  </td>
+                  <td><span class="text-danger"><i class="fa-solid fa-ban"></i> None</span></td>
+                  <td><span class="text-emerald font-bold"><i class="fa-solid fa-check"></i> Assigned Classes Only</span></td>
+                  <td><span class="text-danger"><i class="fa-solid fa-ban"></i> None</span></td>
+                  <td><span class="text-muted">Colleague Directory</span></td>
+                  <td><span class="badge-operator">Faculty Scope</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- =======================================================================
+           MODULE 6: SUBSCRIPTION & PLANS (#view-subscription)
+           ======================================================================= -->
+      <section class="portal-view" id="view-subscription">
+        <div class="pa-card">
+          <div class="pa-card-header">
+            <div>
+              <h3 class="pa-card-title"><i class="fa-solid fa-certificate text-primary"></i> Subscription Tier &amp; Commercial Plans</h3>
+              <p class="pa-card-desc">Institutional seat allocations, cloud storage volume, and commercial entitlements</p>
+            </div>
+            <span class="badge-active" style="padding: 0.35rem 0.85rem; font-size: 0.85rem;">
+              <i class="fa-solid fa-crown"></i> Institutional Enterprise License
+            </span>
+          </div>
+
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-bottom: 1.5rem;">
+            
+            <div style="border: 1.5px solid #4F46E5; border-radius: 12px; padding: 1.5rem; background: rgba(79, 70, 229, 0.03);">
+              <div style="font-size: 0.8rem; font-weight: 700; color: #4F46E5; text-transform: uppercase;">Allocated Student Quota</div>
+              <div style="font-size: 2rem; font-weight: 900; margin: 0.35rem 0;">855 / 1,500</div>
+              <div style="height: 8px; border-radius: 4px; background: #E2E8F0; overflow: hidden; margin-bottom: 0.5rem;">
+                <div style="width: 57%; height: 100%; background: #4F46E5;"></div>
+              </div>
+              <span style="font-size: 0.78rem; color: #64748B;">645 student seats remaining for current academic cycle</span>
+            </div>
+
+            <div style="border: 1px solid var(--color-border); border-radius: 12px; padding: 1.5rem; background: var(--color-bg-subtle);">
+              <div style="font-size: 0.8rem; font-weight: 700; color: #06B6D4; text-transform: uppercase;">Cloud Document Vault</div>
+              <div style="font-size: 2rem; font-weight: 900; margin: 0.35rem 0;">42.8 / 500 GB</div>
+              <div style="height: 8px; border-radius: 4px; background: #E2E8F0; overflow: hidden; margin-bottom: 0.5rem;">
+                <div style="width: 8.5%; height: 100%; background: #06B6D4;"></div>
+              </div>
+              <span style="font-size: 0.78rem; color: #64748B;">AES-256 encrypted storage for certificates and academic records</span>
+            </div>
+
+            <div style="border: 1px solid var(--color-border); border-radius: 12px; padding: 1.5rem; background: var(--color-bg-subtle);">
+              <div style="font-size: 0.8rem; font-weight: 700; color: #10B981; text-transform: uppercase;">Trust License SLA</div>
+              <div style="font-size: 1.35rem; font-weight: 800; margin: 0.35rem 0;">Perpetual Support</div>
+              <p style="margin: 0; font-size: 0.8rem; color: #64748B;">
+                Valid through <strong>March 31, 2028</strong> with guaranteed 99.9% uptime SLA &amp; automated cloud backups.
+              </p>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      <!-- =======================================================================
+           MODULE 7: SYSTEM HEALTH & DEPLOYMENT (#view-health)
+           ======================================================================= -->
+      <section class="portal-view" id="view-health">
+        <div class="pa-card">
+          <div class="pa-card-header">
+            <div>
+              <h3 class="pa-card-title"><i class="fa-solid fa-server text-primary"></i> System Health &amp; Deployment Topology</h3>
+              <p class="pa-card-desc">Live performance metrics, database pool health, and background worker monitoring</p>
+            </div>
+            <button class="btn-pa btn-pa-secondary" onclick="platformApp.pingCluster()">
+              <i class="fa-solid fa-rotate"></i> Refresh Telemetry
+            </button>
+          </div>
+
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.25rem;">
+            
+            <div style="border: 1px solid var(--color-border); border-radius: 10px; padding: 1.25rem; background: var(--color-bg-subtle);">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                <span style="font-size: 0.85rem; font-weight: 600;">API Gateway</span>
+                <span class="badge-active">Online</span>
+              </div>
+              <div style="font-size: 1.6rem; font-weight: 800; color: #10B981;">99.98%</div>
+              <div style="font-size: 0.78rem; color: #64748B;">HTTP 200 OK • 0 Faults in 24h</div>
+            </div>
+
+            <div style="border: 1px solid var(--color-border); border-radius: 10px; padding: 1.25rem; background: var(--color-bg-subtle);">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                <span style="font-size: 0.85rem; font-weight: 600;">PostgreSQL Primary</span>
+                <span class="badge-active">Connected</span>
+              </div>
+              <div style="font-size: 1.6rem; font-weight: 800; color: #2563EB;">14 / 100</div>
+              <div style="font-size: 0.78rem; color: #64748B;">Active Connections • 0ms lag</div>
+            </div>
+
+            <div style="border: 1px solid var(--color-border); border-radius: 10px; padding: 1.25rem; background: var(--color-bg-subtle);">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                <span style="font-size: 0.85rem; font-weight: 600;">Memory &amp; CPU</span>
+                <span class="badge-active">Optimal</span>
+              </div>
+              <div style="font-size: 1.6rem; font-weight: 800;">18% CPU</div>
+              <div style="font-size: 0.78rem; color: #64748B;">4.2 GB / 16 GB RAM utilized</div>
+            </div>
+
+            <div style="border: 1px solid var(--color-border); border-radius: 10px; padding: 1.25rem; background: var(--color-bg-subtle);">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                <span style="font-size: 0.85rem; font-weight: 600;">Automated Backups</span>
+                <span class="badge-active">Verified</span>
+              </div>
+              <div style="font-size: 1.6rem; font-weight: 800; color: #059669;">02:00 AM</div>
+              <div style="font-size: 0.78rem; color: #64748B;">Daily snapshot 1.4 GB encrypted</div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      <!-- =======================================================================
+           MODULE 8: AUDIT LOGS (#view-audit)
+           ======================================================================= -->
+      <section class="portal-view" id="view-audit">
+        <div class="pa-card">
+          <div class="pa-card-header">
+            <div>
+              <h3 class="pa-card-title"><i class="fa-solid fa-clock-rotate-left text-primary"></i> Immutable Platform Audit Logs</h3>
+              <p class="pa-card-desc">Cryptographically timestamped trail of platform administrative interventions and access events</p>
+            </div>
+            <button class="btn-pa btn-pa-secondary" onclick="platformApp.exportAuditTrail()">
+              <i class="fa-solid fa-file-csv"></i> Export CSV Trail
+            </button>
+          </div>
+
+          <!-- Filter Search -->
+          <div class="pa-filter-bar">
+            <input type="text" id="auditSearchInput" class="pa-search-input" placeholder="Search by actor, action, target, or IP address..." onkeyup="platformApp.filterAuditLogs()">
+            <select class="pa-select">
+              <option selected>All Event Categories</option>
+              <option>Configuration Updates</option>
+              <option>Security &amp; Permissions</option>
+              <option>Tenant Provisioning</option>
+              <option>Authentication</option>
+            </select>
+          </div>
+
+          <div class="pa-table-responsive">
+            <table class="pa-table">
+              <thead>
+                <tr>
+                  <th>Timestamp (IST)</th>
+                  <th>Operator Actor</th>
+                  <th>Action Executed</th>
+                  <th>Audit Details</th>
+                  <th>IP Address</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody id="auditLogsTableBody">
+                <!-- Dynamically populated by platform-admin.js -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- =======================================================================
+           MODULE 9: GLOBAL SETTINGS (#view-settings)
+           ======================================================================= -->
+      <section class="portal-view" id="view-settings">
+        <div class="pa-card">
+          <div class="pa-card-header">
+            <div>
+              <h3 class="pa-card-title"><i class="fa-solid fa-gears text-primary"></i> Global Platform Settings</h3>
+              <p class="pa-card-desc">White-label branding, SMTP gateways, password complexity, and data retention windows</p>
+            </div>
+            <button class="btn-pa btn-pa-primary" onclick="platformApp.showToast('Global settings updated and applied!', 'success')">
+              <i class="fa-solid fa-check"></i> Apply Settings
+            </button>
+          </div>
+
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.5rem;">
+            
+            <div>
+              <h4 style="margin: 0 0 0.85rem; font-size: 0.95rem; font-weight: 700; color: var(--color-text-main);">
+                <i class="fa-solid fa-palette text-primary"></i> Trust Branding &amp; White-Labeling
+              </h4>
+
+              <div class="mb-3">
+                <label style="font-size: 0.8rem; font-weight: 600; display: block; margin-bottom: 0.35rem;">Educational Trust Name</label>
+                <input type="text" class="pa-search-input" value="Sri Vidya Educational Trust" style="width: 100%;">
+              </div>
+
+              <div class="mb-3">
+                <label style="font-size: 0.8rem; font-weight: 600; display: block; margin-bottom: 0.35rem;">Official Support Email</label>
+                <input type="email" class="pa-search-input" value="srividyaschools2017@gmail.com" style="width: 100%;">
+              </div>
+
+              <div class="mb-3">
+                <label style="font-size: 0.8rem; font-weight: 600; display: block; margin-bottom: 0.35rem;">Primary Helpline Number</label>
+                <input type="text" class="pa-search-input" value="+91 94402 33445" style="width: 100%;">
+              </div>
+            </div>
+
+            <div>
+              <h4 style="margin: 0 0 0.85rem; font-size: 0.95rem; font-weight: 700; color: var(--color-text-main);">
+                <i class="fa-solid fa-shield-halved text-primary"></i> Security &amp; Session Policies
+              </h4>
+
+              <div class="mb-3">
+                <label style="font-size: 0.8rem; font-weight: 600; display: block; margin-bottom: 0.35rem;">Inactivity Session Timeout</label>
+                <select class="pa-select" style="width: 100%;">
+                  <option>15 Minutes</option>
+                  <option selected>30 Minutes (Recommended)</option>
+                  <option>60 Minutes</option>
+                </select>
+              </div>
+
+              <div class="mb-3">
+                <label style="font-size: 0.8rem; font-weight: 600; display: block; margin-bottom: 0.35rem;">Max Failed Logins Before Lockout</label>
+                <select class="pa-select" style="width: 100%;">
+                  <option selected>5 Attempts (15-min lockout)</option>
+                  <option>3 Attempts (Strict)</option>
+                  <option>10 Attempts</option>
+                </select>
+              </div>
+
+              <div class="mb-3">
+                <label style="font-size: 0.8rem; font-weight: 600; display: block; margin-bottom: 0.35rem;">Audit Trail Data Retention Window</label>
+                <select class="pa-select" style="width: 100%;">
+                  <option selected>365 Days (1 Full Year)</option>
+                  <option>730 Days (2 Years)</option>
+                  <option>Permanent Archive</option>
+                </select>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      <!-- =======================================================================
+           MODULE 10: SUPPORT & ISSUE MANAGEMENT (#view-support)
+           ======================================================================= -->
+      <section class="portal-view" id="view-support">
+        <div class="pa-card">
+          <div class="pa-card-header">
+            <div>
+              <h3 class="pa-card-title"><i class="fa-solid fa-headset text-primary"></i> Support &amp; Institutional Issue Queue</h3>
+              <p class="pa-card-desc">Direct technical assistance tickets submitted by school principals, vice principals, and office staff</p>
+            </div>
+            <button class="btn-pa btn-pa-primary" onclick="platformApp.openModal('modalCreateTicket')">
+              <i class="fa-solid fa-plus"></i> Open New Support Ticket
+            </button>
+          </div>
+
+          <div class="pa-table-responsive">
+            <table class="pa-table">
+              <thead>
+                <tr>
+                  <th>Ticket ID</th>
+                  <th>Subject &amp; Campus Context</th>
+                  <th>Category</th>
+                  <th>Priority</th>
+                  <th>Status</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="supportTicketsTableBody">
+                <!-- Dynamically populated by platform-admin.js -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- =========================================================================
+       MODAL 1: ADD NEW INSTITUTION
+       ========================================================================= -->
+  <div class="pa-modal-backdrop" id="modalAddInstitution">
+    <div class="pa-modal">
+      <div class="pa-modal-header">
+        <h3 style="margin: 0; font-size: 1.15rem; font-weight: 700;">
+          <i class="fa-solid fa-school-flag text-primary"></i> Onboard New Institutional Campus
+        </h3>
+        <button class="btn-pa btn-pa-secondary" style="padding: 0.3rem 0.6rem;" onclick="platformApp.closeModal('modalAddInstitution')">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <form onsubmit="platformApp.handleAddInstitution(event)">
+        <div class="pa-modal-body">
+          <div class="mb-3">
+            <label style="font-size: 0.8rem; font-weight: 600; display: block; margin-bottom: 0.35rem;">Institution Full Name *</label>
+            <input type="text" id="newInstName" class="pa-search-input" style="width: 100%;" required placeholder="e.g. Sri Vidya Degree &amp; PG College">
+          </div>
+          <div class="mb-3">
+            <label style="font-size: 0.8rem; font-weight: 600; display: block; margin-bottom: 0.35rem;">Campus Code *</label>
+            <input type="text" id="newInstCode" class="pa-search-input" style="width: 100%;" required placeholder="e.g. SV-DEGREE">
+          </div>
+          <div class="mb-3">
+            <label style="font-size: 0.8rem; font-weight: 600; display: block; margin-bottom: 0.35rem;">Board / University Affiliation *</label>
+            <input type="text" id="newInstBoard" class="pa-search-input" style="width: 100%;" required placeholder="e.g. Acharya Nagarjuna University">
+          </div>
+          <div class="mb-3">
+            <label style="font-size: 0.8rem; font-weight: 600; display: block; margin-bottom: 0.35rem;">Primary Web Domain *</label>
+            <input type="text" id="newInstDomain" class="pa-search-input" style="width: 100%;" required placeholder="e.g. degree.srividya.edu.in">
+          </div>
+        </div>
+        <div class="pa-modal-footer">
+          <button type="button" class="btn-pa btn-pa-secondary" onclick="platformApp.closeModal('modalAddInstitution')">Cancel</button>
+          <button type="submit" class="btn-pa btn-pa-primary">Provision Tenant</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       MODAL 2: LOG SUPPORT TICKET
+       ========================================================================= -->
+  <div class="pa-modal-backdrop" id="modalCreateTicket">
+    <div class="pa-modal">
+      <div class="pa-modal-header">
+        <h3 style="margin: 0; font-size: 1.15rem; font-weight: 700;">
+          <i class="fa-solid fa-headset text-primary"></i> Create Support Ticket
+        </h3>
+        <button class="btn-pa btn-pa-secondary" style="padding: 0.3rem 0.6rem;" onclick="platformApp.closeModal('modalCreateTicket')">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <form onsubmit="platformApp.handleCreateTicket(event)">
+        <div class="pa-modal-body">
+          <div class="mb-3">
+            <label style="font-size: 0.8rem; font-weight: 600; display: block; margin-bottom: 0.35rem;">Subject / Brief Summary *</label>
+            <input type="text" id="newTicketSubject" class="pa-search-input" style="width: 100%;" required placeholder="Describe the technical requirement...">
+          </div>
+          <div class="mb-3">
+            <label style="font-size: 0.8rem; font-weight: 600; display: block; margin-bottom: 0.35rem;">Ticket Category *</label>
+            <select id="newTicketCategory" class="pa-select" style="width: 100%;">
+              <option>Subscription &amp; Quota</option>
+              <option>Hardware Integration</option>
+              <option>School Configuration</option>
+              <option>Third-Party Gateways</option>
+              <option>Security &amp; Permissions</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label style="font-size: 0.8rem; font-weight: 600; display: block; margin-bottom: 0.35rem;">Priority Level *</label>
+            <select id="newTicketPriority" class="pa-select" style="width: 100%;">
+              <option>Normal</option>
+              <option>Medium</option>
+              <option>High</option>
+            </select>
+          </div>
+        </div>
+        <div class="pa-modal-footer">
+          <button type="button" class="btn-pa btn-pa-secondary" onclick="platformApp.closeModal('modalCreateTicket')">Cancel</button>
+          <button type="submit" class="btn-pa btn-pa-primary">Submit Ticket</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="/js/portal-auth.js"></script>
+  <script src="/js/platform-admin.js"></script>
+</body>
+</html>

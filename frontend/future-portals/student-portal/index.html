@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Portal | Sri Vidya E.M High School</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/portal.css">
+</head>
+<body class="portal-body">
+  <div class="portal-main-wrapper" style="margin-left: 0; padding: 1.5rem 2.5rem; max-width: 1400px; margin: 0 auto;">
+    <header style="display:flex; justify-content:space-between; align-items:center; padding-bottom: 1.5rem; border-bottom: 1px solid var(--color-border); margin-bottom: 2rem; flex-wrap:wrap; gap:1rem;">
+      <div style="display:flex; align-items:center; gap:1rem;">
+        <img src="/assets/images/school-logo.jpg" alt="Logo" style="width:50px; height:50px; border-radius:50%; object-fit:cover;">
+        <div>
+          <h2 style="margin:0; font-size:1.35rem; font-weight:800; color:var(--color-text-dark);">Sri Vidya E.M High School</h2>
+          <span class="portal-badge badge-primary"><i class="fa-solid fa-user-graduate"></i> Student Workspace • Academic Year 2026-27</span>
+        </div>
+      </div>
+      <div style="display:flex; gap:0.65rem; align-items:center; flex-wrap:wrap;">
+        <div style="display:inline-flex; align-items:center; gap:0.45rem; background:#eff6ff; color:#1d4ed8; border:1px solid #bfdbfe; padding:0.35rem 0.85rem; border-radius:20px; font-weight:700; font-size:0.85rem;">
+          <i class="fa-regular fa-clock"></i>
+          <span id="studentLiveTime">--:--:-- -- IST</span>
+        </div>
+        <div style="display:inline-flex; align-items:center; gap:0.45rem; background:#f1f5f9; color:#475569; border:1px solid #e2e8f0; padding:0.35rem 0.85rem; border-radius:20px; font-weight:600; font-size:0.85rem;">
+          <i class="fa-regular fa-calendar"></i>
+          <span id="studentLiveDate">--</span>
+        </div>
+        <a href="/management" class="btn btn-secondary btn-sm"><i class="fa-solid fa-building-columns"></i> Admin Portal</a>
+        <a href="/teacher" class="btn btn-secondary btn-sm"><i class="fa-solid fa-chalkboard-user"></i> Faculty Portal</a>
+        <a href="/" class="btn btn-primary btn-sm"><i class="fa-solid fa-house"></i> Public Website</a>
+      </div>
+    </header>
+
+    <div style="background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%); color:#fff; border-radius:var(--radius-lg); padding: 1.5rem 2rem; margin-bottom: 2rem; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1.25rem;">
+      <div style="display:flex; align-items:center; gap:1.25rem;">
+        <div style="width:65px; height:65px; border-radius:50%; background:rgba(255,255,255,0.2); display:flex; align-items:center; justify-content:center; font-size:1.8rem; font-weight:700;">
+          ST
+        </div>
+        <div>
+          <h3 style="margin:0; font-size:1.35rem;">K. Sai Tharun</h3>
+          <p style="margin:0.25rem 0 0; color:#dbeafe; font-size:0.9rem;">Adm No: <strong>SV-0210</strong> • Class: <strong>VIII-A</strong> • Roll No: <strong>#12</strong> • Class Teacher: <strong>Ms. Anjali</strong></p>
+        </div>
+      </div>
+      <div style="display:flex; align-items:center; gap:0.75rem;">
+        <span class="portal-badge" id="studentCurrentPeriodBadge" style="background:rgba(255,255,255,0.25); color:#fff; font-weight:700; font-size:0.875rem;"><i class="fa-solid fa-circle-play"></i> Checking Schedule...</span>
+        <span class="portal-badge badge-success" style="background:#10b981; color:#fff; font-size:0.875rem;"><i class="fa-solid fa-circle-check"></i> Active Student</span>
+      </div>
+    </div>
+
+    <div class="portal-metric-grid" style="display:grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.25rem; margin-bottom: 2rem;">
+      <div class="metric-card">
+        <span class="metric-label">Attendance Record</span>
+        <span class="metric-value text-emerald">96.8%</span>
+        <span class="metric-sub text-emerald">182 / 188 Sessions Present</span>
+      </div>
+      <div class="metric-card">
+        <span class="metric-label">Cumulative GPA</span>
+        <span class="metric-value text-blue">9.4 / 10</span>
+        <span class="metric-sub text-blue">Grade A1 • Term 1 Honor Roll</span>
+      </div>
+      <div class="metric-card">
+        <span class="metric-label">Pending Homework</span>
+        <span class="metric-value text-amber">2 Tasks</span>
+        <span class="metric-sub text-muted">Science Lab &amp; Math Ex 4.2</span>
+      </div>
+      <div class="metric-card">
+        <span class="metric-label">Fee Clearance</span>
+        <span class="metric-value text-emerald">Paid</span>
+        <span class="metric-sub text-muted">Term 1 Dues Cleared</span>
+      </div>
+    </div>
+
+    <div class="card p-4" style="background:var(--color-bg-surface); border:1px solid var(--color-border); border-radius:var(--radius-lg);">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem; flex-wrap:wrap; gap:0.5rem;">
+        <h3 style="margin:0; font-size:1.15rem; font-weight:700;"><i class="fa-solid fa-calendar-day text-primary"></i> Today's Class Timetable (Class VIII-A)</h3>
+        <span class="portal-badge" id="timetableStatusTag" style="background:#f1f5f9; color:#475569; font-weight:600;">Academic Schedule</span>
+      </div>
+      <table class="data-table mt-3" style="width:100%;">
+        <thead>
+          <tr>
+            <th>Period</th>
+            <th>Time</th>
+            <th>Subject</th>
+            <th>Faculty Teacher</th>
+            <th>Room</th>
+            <th>Live Status</th>
+          </tr>
+        </thead>
+        <tbody id="studentTimetableBody">
+          <!-- Populated dynamically based on real-time clock -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <script>
+    const STUDENT_PERIODS = [
+      { num: 'Period 1', time: '09:00 AM – 09:45 AM', start: 540, end: 585, subj: 'Mathematics', teacher: 'Sri K. Rajesh (M.Sc., B.Ed.)', room: 'Room 203' },
+      { num: 'Period 2', time: '09:45 AM – 10:30 AM', start: 585, end: 630, subj: 'Physical Science', teacher: 'Sri Navva Anand (VP)', room: 'Science Lab 1' },
+      { num: 'Period 3', time: '10:30 AM – 11:15 AM', start: 630, end: 675, subj: 'English Literature', teacher: 'Ms. Anjali (M.A., B.Ed.)', room: 'Room 203' },
+      { num: 'Period 4', time: '11:15 AM – 12:00 PM', start: 675, end: 720, subj: 'Social Studies', teacher: 'Smt. S. Lakshmi (M.A.)', room: 'Room 203' },
+      { num: 'Lunch Break', isBreak: true, time: '12:00 PM – 12:45 PM', start: 720, end: 765, subj: 'Lunch / Mid-Day Meal', teacher: 'Dining Hall Supervisors', room: 'Dining Hall' },
+      { num: 'Period 5', time: '12:45 PM – 01:30 PM', start: 765, end: 810, subj: 'Telugu (1st Lang)', teacher: 'Sri S. Ramana Murthy', room: 'Room 203' },
+      { num: 'Period 6', time: '01:30 PM – 02:15 PM', start: 810, end: 855, subj: 'Biology & EVS', teacher: 'Smt. S. Lakshmi', room: 'Biology Lab' },
+      { num: 'Period 7', time: '02:15 PM – 03:00 PM', start: 855, end: 900, subj: 'Computer Science', teacher: 'Sri D. Srinivas', room: 'Digital Computer Lab' },
+      { num: 'Period 8', time: '03:00 PM – 03:45 PM', start: 900, end: 945, subj: 'Games & Physical Ed', teacher: 'Sri M. Sridhar (PET)', room: 'School Playground' }
+    ];
+
+    function updateStudentDashboard() {
+      const now = new Date();
+      const dateOptions = { timeZone: 'Asia/Kolkata', weekday: 'long', month: 'short', day: 'numeric', year: 'numeric' };
+      const timeOptions = { timeZone: 'Asia/Kolkata', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true };
+      
+      const dateStr = new Intl.DateTimeFormat('en-US', dateOptions).format(now);
+      const timeStr = new Intl.DateTimeFormat('en-US', timeOptions).format(now);
+
+      const parts = new Intl.DateTimeFormat('en-US', { timeZone: 'Asia/Kolkata', hour: 'numeric', minute: 'numeric', hour12: false, weekday: 'short' }).formatToParts(now);
+      const hour = parseInt((parts.find(p => p.type === 'hour') || {}).value || '0', 10);
+      const minute = parseInt((parts.find(p => p.type === 'minute') || {}).value || '0', 10);
+      const weekday = (parts.find(p => p.type === 'weekday') || {}).value || '';
+      const currentMinutes = hour * 60 + minute;
+
+      const timeEl = document.getElementById('studentLiveTime');
+      const dateEl = document.getElementById('studentLiveDate');
+      if (timeEl) timeEl.textContent = timeStr + ' IST';
+      if (dateEl) dateEl.textContent = dateStr;
+
+      const isSunday = (weekday === 'Sun');
+      const curBadge = document.getElementById('studentCurrentPeriodBadge');
+
+      const tbody = document.getElementById('studentTimetableBody');
+      if (!tbody) return;
+
+      let activeFound = null;
+
+      tbody.innerHTML = STUDENT_PERIODS.map(p => {
+        let badgeHtml = '';
+        let rowStyle = '';
+
+        if (isSunday) {
+          badgeHtml = '<span class="portal-badge badge-secondary">Sunday Holiday</span>';
+        } else if (currentMinutes >= p.start && currentMinutes < p.end) {
+          activeFound = p;
+          badgeHtml = '<span class="portal-badge badge-primary" style="background:#1d4ed8; color:#fff;"><i class="fa-solid fa-circle-play"></i> Active Now</span>';
+          rowStyle = 'background: #eff6ff; font-weight:600;';
+        } else if (currentMinutes >= p.end) {
+          badgeHtml = '<span class="portal-badge badge-success"><i class="fa-solid fa-check"></i> Completed</span>';
+          rowStyle = 'opacity: 0.85;';
+        } else {
+          badgeHtml = '<span class="portal-badge badge-secondary">Upcoming</span>';
+        }
+
+        if (p.isBreak) {
+          return `
+            <tr style="${rowStyle} background:${currentMinutes >= p.start && currentMinutes < p.end ? '#fef3c7' : '#f8fafc'};">
+              <td><strong>${p.num}</strong></td>
+              <td>${p.time}</td>
+              <td colspan="3" style="color:#d97706; font-weight:700;"><i class="fa-solid fa-utensils"></i> ${p.subj}</td>
+              <td>${badgeHtml}</td>
+            </tr>
+          `;
+        }
+
+        return `
+          <tr style="${rowStyle}">
+            <td><strong>${p.num}</strong></td>
+            <td>${p.time}</td>
+            <td><strong class="text-primary">${p.subj}</strong></td>
+            <td>${p.teacher}</td>
+            <td>${p.room}</td>
+            <td>${badgeHtml}</td>
+          </tr>
+        `;
+      }).join('');
+
+      if (curBadge) {
+        if (isSunday) {
+          curBadge.innerHTML = '<i class="fa-solid fa-calendar-xmark"></i> Sunday Holiday';
+        } else if (activeFound) {
+          curBadge.innerHTML = `<i class="fa-solid fa-circle-play"></i> ${activeFound.num}: ${activeFound.subj}`;
+        } else if (currentMinutes < 540) {
+          curBadge.innerHTML = '<i class="fa-solid fa-bell"></i> Assembly • Next: Period 1 at 09:00 AM';
+        } else {
+          curBadge.innerHTML = '<i class="fa-solid fa-circle-check"></i> Classes Concluded Today';
+        }
+      }
+    }
+
+    updateStudentDashboard();
+    setInterval(updateStudentDashboard, 1000);
+  </script>
+</body>
+</html>

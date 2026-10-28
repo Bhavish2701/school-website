@@ -16,12 +16,15 @@ const startServer = async () => {
   // Start HTTP Server
   const server = app.listen(config.port, () => {
     console.log('====================================================');
-    console.log('  SRI VIDYA E.M HIGH SCHOOL - BACKEND API (v1)     ');
+    console.log('  SRI VIDYA ERP - UNIFIED FULL-STACK SERVER (PORT 5000)');
     console.log('====================================================');
-    console.log(`  Environment  : ${config.nodeEnv}`);
-    console.log(`  Listening on : http://localhost:${config.port}`);
-    console.log(`  Health Check : http://localhost:${config.port}/api/v1/health`);
-    console.log(`  Database URI : ${config.mongodbUri}`);
+    console.log(`  Public Website   : http://localhost:${config.port}/`);
+    console.log(`  Platform Admin   : http://localhost:${config.port}/platform-admin`);
+    console.log(`  Admin Portal     : http://localhost:${config.port}/management`);
+    console.log(`  Faculty Portal   : http://localhost:${config.port}/teacher`);
+    console.log(`  Student Portal   : http://localhost:${config.port}/student`);
+    console.log(`  Parent Portal    : http://localhost:${config.port}/parent`);
+    console.log(`  API Health Check : http://localhost:${config.port}/api/v1/health`);
     console.log('====================================================');
   });
 

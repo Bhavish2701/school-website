@@ -3,16 +3,16 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Teacher Portal | Sri Vidya E.M High School</title>
-  <meta name="description" content="Dedicated Teacher and Classroom Management Portal for Sri Vidya E.M High School faculty.">
+  <title>Faculty Portal | Sri Vidya E.M High School</title>
+  <meta name="description" content="Dedicated Faculty Portal for Sri Vidya E.M High School teachers and classroom management.">
   <link rel="icon" type="image/x-icon" href="assets/images/favicon.ico">
 
   <!-- Font Awesome 6 Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
   <!-- Teacher Portal Stylesheet -->
-  <link rel="stylesheet" href="css/teacher.css">
-  <link rel="stylesheet" href="css/portal-login.css">
+  <link rel="stylesheet" href="/css/teacher.css">
+  <link rel="stylesheet" href="/css/portal-login.css">
 </head>
 <body>
   <!-- ==========================================================================
@@ -32,7 +32,6 @@
               <div class="showcase-logo-wrap">
                 <img src="assets/images/school-logo.jpg" alt="Sri Vidya Emblem" class="showcase-logo-img">
               </div>
-      </nav>
               <div class="showcase-brand-text">
                 <span class="showcase-school-name">SRI VIDYA</span>
                 <span class="showcase-school-sub">E.M. HIGH SCHOOL • EST. 2017</span>
@@ -201,10 +200,10 @@
       <!-- School Brand Header -->
       <div class="sidebar-brand">
         <a href="index.html" class="brand-link" title="Return to Public Website">
-          <img src="assets/images/school-logo.jpg" alt="Logo" class="brand-logo" onerror="this.src='images/logo.png'">
+          <img src="assets/images/school-logo.jpg" alt="Logo" class="brand-logo" onerror="this.src='assets/images/school-logo.jpg'">
           <div>
             <div class="brand-name">SRI VIDYA</div>
-            <div class="brand-sub">Teacher Portal</div>
+            <div class="brand-sub">Faculty Portal</div>
             <div class="brand-est">Est. 2017</div>
           </div>
         </a>
@@ -215,11 +214,11 @@
 
       <!-- Navigation Modules Menu -->
       <nav class="sidebar-menu" id="teacherSidebarMenu">
-        <div class="nav-section-title">TEACHER WORKSPACE</div>
+        <div class="nav-section-title">TEACHER PORTAL</div>
 
         <!-- 1. Dashboard -->
         <div class="nav-item active" data-module="dashboard">
-          <a href="#dashboard" class="nav-link">
+          <a href="#dashboard" class="nav-link" onclick="teacherApp.navigateTo('dashboard'); return false;">
             <span class="nav-icon"><i class="fa-solid fa-chalkboard-user"></i></span>
             <span class="nav-text">Dashboard</span>
             <span class="nav-badge">Today</span>
@@ -228,141 +227,128 @@
 
         <!-- 2. My Classes -->
         <div class="nav-item" data-module="my-classes">
-          <a href="#my-classes" class="nav-link">
+          <a href="#my-classes" class="nav-link" onclick="teacherApp.navigateTo('my-classes'); return false;">
             <span class="nav-icon"><i class="fa-solid fa-shapes"></i></span>
             <span class="nav-text">My Classes</span>
             <span class="nav-arrow"><i class="fa-solid fa-chevron-right"></i></span>
           </a>
           <div class="nav-sub">
-            <a href="#class-8a" class="nav-sub-link active" data-sub="8a"><i class="fa-solid fa-star text-amber"></i> Class 8A (Class Teacher)</a>
-            <a href="#class-9b" class="nav-sub-link" data-sub="9b">Class 9B (Maths)</a>
-            <a href="#class-7c" class="nav-sub-link" data-sub="7c">Class 7C (Maths)</a>
-            <a href="#class-10a" class="nav-sub-link" data-sub="10a" onclick="teacherApp.switchClassTab('10a');"><i class="fa-solid fa-graduation-cap text-purple"></i> Class 10A (Remedial)</a>
+            <a href="#my-classes-classes" class="nav-sub-link active" data-sub="classes" onclick="teacherApp.switchSubTab('my-classes', 'classes'); return false;">Assigned Classes</a>
+            <a href="#my-classes-roster" class="nav-sub-link" data-sub="roster" onclick="teacherApp.switchSubTab('my-classes', 'roster'); return false;">Class Lists</a>
+            <a href="#my-classes-profiles" class="nav-sub-link" data-sub="profiles" onclick="teacherApp.switchSubTab('my-classes', 'profiles'); return false;">Student Profiles</a>
           </div>
         </div>
 
-        <!-- 3. Students -->
-        <div class="nav-item" data-module="students">
-          <a href="#students" class="nav-link">
-            <span class="nav-icon"><i class="fa-solid fa-user-graduate"></i></span>
-            <span class="nav-text">Students</span>
-            <span class="nav-arrow"><i class="fa-solid fa-chevron-right"></i></span>
-          </a>
-          <div class="nav-sub">
-            <a href="#students-list" class="nav-sub-link active" data-sub="list">Student List</a>
-            <a href="#students-profile" class="nav-sub-link" data-sub="profile">Student Profile</a>
-            <a href="#students-attendance" class="nav-sub-link" data-sub="att-history">Attendance</a>
-            <a href="#students-performance" class="nav-sub-link" data-sub="perf">Performance</a>
-          </div>
-        </div>
-
-        <!-- 4. Attendance -->
+        <!-- 3. Attendance -->
         <div class="nav-item" data-module="attendance">
-          <a href="#attendance" class="nav-link">
+          <a href="#attendance" class="nav-link" onclick="teacherApp.navigateTo('attendance'); return false;">
             <span class="nav-icon"><i class="fa-solid fa-clipboard-check"></i></span>
             <span class="nav-text">Attendance</span>
             <span class="nav-arrow"><i class="fa-solid fa-chevron-right"></i></span>
           </a>
           <div class="nav-sub">
-            <a href="#attendance-mark" class="nav-sub-link active" data-sub="mark">Mark Attendance</a>
-            <a href="#attendance-history" class="nav-sub-link" data-sub="history">Attendance History</a>
-            <a href="#attendance-report" class="nav-sub-link" data-sub="report">Attendance Report</a>
+            <a href="#attendance-mark" class="nav-sub-link active" data-sub="mark" onclick="teacherApp.switchSubTab('attendance', 'mark'); return false;">Mark Attendance</a>
+            <a href="#attendance-history" class="nav-sub-link" data-sub="history" onclick="teacherApp.switchSubTab('attendance', 'history'); return false;">Attendance History</a>
+            <a href="#attendance-corrections" class="nav-sub-link" data-sub="corrections" onclick="teacherApp.switchSubTab('attendance', 'corrections'); return false;">Correction Requests</a>
           </div>
         </div>
 
-        <!-- 5. Academics -->
+        <!-- 4. Academics -->
         <div class="nav-item" data-module="academics">
-          <a href="#academics" class="nav-link">
-            <span class="nav-icon"><i class="fa-solid fa-book"></i></span>
+          <a href="#academics" class="nav-link" onclick="teacherApp.navigateTo('academics'); return false;">
+            <span class="nav-icon"><i class="fa-solid fa-book-open"></i></span>
             <span class="nav-text">Academics</span>
             <span class="nav-arrow"><i class="fa-solid fa-chevron-right"></i></span>
           </a>
           <div class="nav-sub">
-            <a href="#academics-assignments" class="nav-sub-link active" data-sub="assignments">Assignments</a>
-            <a href="#academics-homework" class="nav-sub-link" data-sub="homework">Homework</a>
-            <a href="#academics-materials" class="nav-sub-link" data-sub="materials">Study Materials</a>
-            <a href="#academics-lessonplans" class="nav-sub-link" data-sub="plans">Lesson Plans</a>
-            <a href="#academics-syllabus" class="nav-sub-link" data-sub="syllabus">Syllabus</a>
+            <a href="#academics-plans" class="nav-sub-link active" data-sub="plans" onclick="teacherApp.switchSubTab('academics', 'plans'); return false;">Lesson Plans</a>
+            <a href="#academics-syllabus" class="nav-sub-link" data-sub="syllabus" onclick="teacherApp.switchSubTab('academics', 'syllabus'); return false;">Syllabus Progress</a>
+            <a href="#academics-materials" class="nav-sub-link" data-sub="materials" onclick="teacherApp.switchSubTab('academics', 'materials'); return false;">Study Materials</a>
+          </div>
+        </div>
+
+        <!-- 5. Assignments -->
+        <div class="nav-item" data-module="assignments">
+          <a href="#assignments" class="nav-link" onclick="teacherApp.navigateTo('assignments'); return false;">
+            <span class="nav-icon"><i class="fa-solid fa-file-signature"></i></span>
+            <span class="nav-text">Assignments</span>
+            <span class="nav-badge" id="sidebarHwBadge">3 Active</span>
+            <span class="nav-arrow"><i class="fa-solid fa-chevron-right"></i></span>
+          </a>
+          <div class="nav-sub">
+            <a href="#assignments-create" class="nav-sub-link active" data-sub="create" onclick="teacherApp.switchSubTab('assignments', 'create'); return false;">Create Assignment</a>
+            <a href="#assignments-submissions" class="nav-sub-link" data-sub="submissions" onclick="teacherApp.switchSubTab('assignments', 'submissions'); return false;">Submissions</a>
+            <a href="#assignments-feedback" class="nav-sub-link" data-sub="feedback" onclick="teacherApp.switchSubTab('assignments', 'feedback'); return false;">Grading &amp; Feedback</a>
           </div>
         </div>
 
         <!-- 6. Examinations -->
         <div class="nav-item" data-module="examinations">
-          <a href="#examinations" class="nav-link">
+          <a href="#examinations" class="nav-link" onclick="teacherApp.navigateTo('examinations'); return false;">
             <span class="nav-icon"><i class="fa-solid fa-file-pen"></i></span>
             <span class="nav-text">Examinations</span>
             <span class="nav-arrow"><i class="fa-solid fa-chevron-right"></i></span>
           </a>
           <div class="nav-sub">
-            <a href="#exams-create" class="nav-sub-link active" data-sub="create">Create Exam</a>
-            <a href="#exams-entermarks" class="nav-sub-link" data-sub="enter-marks">Enter Marks</a>
-            <a href="#exams-gradestudents" class="nav-sub-link" data-sub="grade">Grade Students</a>
-            <a href="#exams-results" class="nav-sub-link" data-sub="results">Results</a>
+            <a href="#exams-schedule" class="nav-sub-link active" data-sub="schedule" onclick="teacherApp.switchSubTab('examinations', 'schedule'); return false;">Exam Schedule</a>
+            <a href="#exams-entermarks" class="nav-sub-link" data-sub="enter-marks" onclick="teacherApp.switchSubTab('examinations', 'enter-marks'); return false;">Enter Marks</a>
+            <a href="#exams-review" class="nav-sub-link" data-sub="review" onclick="teacherApp.switchSubTab('examinations', 'review'); return false;">Submit Marks for Review</a>
           </div>
         </div>
 
         <!-- 7. Timetable -->
         <div class="nav-item" data-module="timetable">
-          <a href="#timetable" class="nav-link">
+          <a href="#timetable" class="nav-link" onclick="teacherApp.navigateTo('timetable'); return false;">
             <span class="nav-icon"><i class="fa-solid fa-calendar-days"></i></span>
             <span class="nav-text">Timetable</span>
             <span class="nav-arrow"><i class="fa-solid fa-chevron-right"></i></span>
           </a>
           <div class="nav-sub">
-            <a href="#timetable-my" class="nav-sub-link active" data-sub="my">My Timetable</a>
-            <a href="#timetable-class" class="nav-sub-link" data-sub="class">Class Timetable</a>
+            <a href="#timetable-my" class="nav-sub-link active" data-sub="my" onclick="teacherApp.switchSubTab('timetable', 'my'); return false;">My Timetable</a>
+            <a href="#timetable-substitutions" class="nav-sub-link" data-sub="substitutions" onclick="teacherApp.switchSubTab('timetable', 'substitutions'); return false;">Substitution Schedule</a>
           </div>
         </div>
-
-        <div class="nav-section-title">CONNECT & LEAVE</div>
 
         <!-- 8. Communication -->
         <div class="nav-item" data-module="communication">
-          <a href="#communication" class="nav-link">
+          <a href="#communication" class="nav-link" onclick="teacherApp.navigateTo('communication'); return false;">
             <span class="nav-icon"><i class="fa-solid fa-comments"></i></span>
             <span class="nav-text">Communication</span>
+            <span class="nav-badge" style="background: var(--color-accent-amber); color:#fff;">2 New</span>
             <span class="nav-arrow"><i class="fa-solid fa-chevron-right"></i></span>
           </a>
           <div class="nav-sub">
-            <a href="#comm-class" class="nav-sub-link active" data-sub="class-announcements">Class Announcements</a>
-            <a href="#comm-parents" class="nav-sub-link" data-sub="parent-messages">Parent Messages <span class="nav-badge" style="background: var(--color-accent-amber); color:#fff;">2 New</span></a>
-            <a href="#comm-notifications" class="nav-sub-link" data-sub="notifications">Notifications</a>
+            <a href="#comm-class" class="nav-sub-link active" data-sub="class-announcements" onclick="teacherApp.switchSubTab('communication', 'class-announcements'); return false;">Class Announcements</a>
+            <a href="#comm-parents" class="nav-sub-link" data-sub="parent-messages" onclick="teacherApp.switchSubTab('communication', 'parent-messages'); return false;">Parent Messages</a>
+            <a href="#comm-notices" class="nav-sub-link" data-sub="school-notices" onclick="teacherApp.switchSubTab('communication', 'school-notices'); return false;">School Notices</a>
           </div>
         </div>
 
-        <!-- 9. Leave -->
+        <!-- 9. Leave Management -->
         <div class="nav-item" data-module="leave">
-          <a href="#leave" class="nav-link">
+          <a href="#leave" class="nav-link" onclick="teacherApp.navigateTo('leave'); return false;">
             <span class="nav-icon"><i class="fa-solid fa-calendar-minus"></i></span>
-            <span class="nav-text">Leave</span>
+            <span class="nav-text">Leave Management</span>
             <span class="nav-arrow"><i class="fa-solid fa-chevron-right"></i></span>
           </a>
           <div class="nav-sub">
-            <a href="#leave-apply" class="nav-sub-link active" data-sub="apply">Apply Leave</a>
-            <a href="#leave-status" class="nav-sub-link" data-sub="status">Leave Status</a>
+            <a href="#leave-apply" class="nav-sub-link active" data-sub="apply" onclick="teacherApp.switchSubTab('leave', 'apply'); return false;">Apply Leave</a>
+            <a href="#leave-history" class="nav-sub-link" data-sub="history" onclick="teacherApp.switchSubTab('leave', 'history'); return false;">Leave History</a>
           </div>
         </div>
 
-        <!-- 10. Reports -->
-        <div class="nav-item" data-module="reports">
-          <a href="#reports" class="nav-link">
-            <span class="nav-icon"><i class="fa-solid fa-chart-line"></i></span>
-            <span class="nav-text">Reports</span>
-            <span class="nav-arrow"><i class="fa-solid fa-chevron-right"></i></span>
-          </a>
-          <div class="nav-sub">
-            <a href="#reports-performance" class="nav-sub-link active" data-sub="student-perf">Student Performance</a>
-          </div>
-        </div>
-        <div class="nav-section-title">ACCOUNT &amp; PROFILE</div>
-
-        <!-- 11. My Profile -->
+        <!-- 10. My Profile -->
         <div class="nav-item" data-module="profile">
-          <a href="#profile" class="nav-link">
+          <a href="#profile" class="nav-link" onclick="teacherApp.navigateTo('profile'); return false;">
             <span class="nav-icon"><i class="fa-solid fa-id-badge"></i></span>
             <span class="nav-text">My Profile</span>
-            <span class="nav-badge" style="background: rgba(5, 150, 105, 0.15); color: #059669; font-weight: 700;">Settings</span>
+            <span class="nav-arrow"><i class="fa-solid fa-chevron-right"></i></span>
           </a>
+          <div class="nav-sub">
+            <a href="#profile-personal" class="nav-sub-link active" data-sub="personal" onclick="teacherApp.switchSubTab('profile', 'personal'); return false;">Personal Details</a>
+            <a href="#profile-documents" class="nav-sub-link" data-sub="documents" onclick="teacherApp.switchSubTab('profile', 'documents'); return false;">Documents</a>
+            <a href="#profile-password" class="nav-sub-link" data-sub="password" onclick="teacherApp.switchSubTab('profile', 'password'); return false;">Change Password</a>
+          </div>
         </div>
       </nav>
 
@@ -375,7 +361,7 @@
           <span class="user-name" id="teacherUserName">Ms. Anjali</span>
           <span class="user-badge" id="teacherUserDesignation">Class Teacher (8A)</span>
         </div>
-        <button type="button" class="btn-logout" data-action="portal-logout" onclick="event.stopPropagation(); PortalAuth.logout('teacher')" title="Fast Logout from Teacher Portal">
+        <button type="button" class="btn-logout" data-action="portal-logout" onclick="event.stopPropagation(); PortalAuth.logout('teacher')" title="Fast Logout from Faculty Portal">
           <i class="fa-solid fa-arrow-right-from-bracket"></i>
         </button>
       </div>
@@ -426,7 +412,7 @@
           </button>
 
           
-<button type="button" class="btn-header-signout" data-action="portal-logout" onclick="PortalAuth.logout('teacher')" title="Fast Logout from Teacher Portal">
+<button type="button" class="btn-header-signout" data-action="portal-logout" onclick="PortalAuth.logout('teacher')" title="Fast Logout from Faculty Portal">
             <i class="fa-solid fa-arrow-right-from-bracket"></i>
             <span>Logout</span>
           </button>
@@ -448,7 +434,11 @@
               <h1 class="tw-title">Good Morning, Ms. Anjali</h1>
               <div class="tw-subtitle">Class Teacher – Grade 8A</div>
               <div class="tw-meta-pills">
-                <span class="tw-pill"><i class="fa-regular fa-calendar"></i> Saturday, Sept 19, 2026</span>
+                <span class="tw-pill live-clock-pill" id="teacherClockPill" title="Indian Standard Time (IST, UTC+5:30)">
+                  <i class="fa-regular fa-clock"></i>
+                  <span id="teacherTimeText">--:--:-- -- IST</span>
+                </span>
+                <span class="tw-pill"><i class="fa-regular fa-calendar"></i> <span id="teacherDateText">Saturday, Oct 24, 2026</span></span>
                 <span class="tw-pill"><i class="fa-solid fa-school"></i> Academic Term 1 (2025–26)</span>
                 <span class="tw-pill active"><i class="fa-solid fa-circle-check"></i> Next Class: 09:00 AM (8A)</span>
               </div>
@@ -609,28 +599,124 @@
              ================================================================= -->
         <section class="portal-view" id="view-my-classes">
           <div class="card-header-bar mb-3">
-            <h2><i class="fa-solid fa-shapes text-primary"></i> My Classes Management</h2>
+            <div>
+              <h2><i class="fa-solid fa-shapes text-primary"></i> My Classes &amp; Students</h2>
+              <p class="text-muted text-sm mt-1">Assigned classes, class lists, student profiles, and relevant parent contacts.</p>
+            </div>
             <button class="btn btn-primary" onclick="teacherApp.openModal('createHomeworkModal')">
               <i class="fa-solid fa-plus"></i> Post Homework
             </button>
           </div>
 
-          <div class="tab-strip">
-            <button class="tab-btn active" onclick="teacherApp.switchClassTab('8a')">Class 8A (Class Teacher - 42 Students)</button>
-            <button class="tab-btn" onclick="teacherApp.switchClassTab('9b')">Class 9B (Subject - 40 Students)</button>
-            <button class="tab-btn" onclick="teacherApp.switchClassTab('7c')">Class 7C (Subject - 38 Students)</button>
+          <!-- Subtab Strip: Assigned Classes, Class Lists, Student Profiles, Parent Contacts -->
+          <div class="tab-strip" id="myClassesTabStrip">
+            <button type="button" class="tab-btn active" data-sub="classes" onclick="teacherApp.switchSubTab('my-classes', 'classes'); return false;">
+              <i class="fa-solid fa-shapes mr-1"></i> Assigned Classes
+            </button>
+            <button type="button" class="tab-btn" data-sub="roster" onclick="teacherApp.switchSubTab('my-classes', 'roster'); return false;">
+              <i class="fa-solid fa-users mr-1"></i> Class Lists
+            </button>
+            <button type="button" class="tab-btn" data-sub="profiles" onclick="teacherApp.switchSubTab('my-classes', 'profiles'); return false;">
+              <i class="fa-solid fa-id-card mr-1"></i> Student Profiles
+            </button>
           </div>
 
-          <div id="classOverviewContent">
-            <!-- Rendered dynamically -->
+          <!-- Panel 1: Assigned Classes -->
+          <div id="subtab-classes-panel" class="my-classes-subview">
+            <div class="row g-3" id="assignedClassesCardsGrid">
+              <!-- Rendered via JS -->
+            </div>
           </div>
+
+          <!-- Panel 2: Class Lists (Roster) -->
+          <div id="subtab-roster-panel" class="my-classes-subview" style="display: none;">
+            <div class="card p-3">
+              <div class="d-flex justify-content-between align-items-center mb-3">
+                <div class="d-flex align-items-center gap-2">
+                  <span class="fw-bold">Select Class:</span>
+                  <select class="form-control form-control-sm" id="classRosterSelect" style="width: 180px;" onchange="teacherApp.renderClassListRoster(this.value)">
+                    <option value="8A">Class 8A (Class Teacher)</option>
+                    <option value="9B">Class 9B (Maths)</option>
+                    <option value="7C">Class 7C (Maths)</option>
+                    <option value="10A">Class 10A (Remedial)</option>
+                  </select>
+                </div>
+                <input type="text" class="form-control form-control-sm" placeholder="Search Student by Name / Roll..." style="width: 240px;" onkeyup="teacherApp.filterRosterTable(this.value)">
+              </div>
+              <div class="table-container">
+                <table class="data-table" id="classListTable" style="width: 100%;">
+                  <thead>
+                    <tr>
+                      <th>Roll No</th>
+                      <th>Student Name</th>
+                      <th>Class</th>
+                      <th>Attendance Rate</th>
+                      <th>Academic Status</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody id="classListTableBody">
+                    <!-- Populated via JS -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <!-- Panel 3: Student Profiles -->
+          <div id="subtab-profiles-panel" class="my-classes-subview" style="display: none;">
+            <div class="card p-3">
+              <div class="d-flex justify-content-between align-items-center mb-3">
+                <h3 class="m-0" style="font-size:1.05rem;"><i class="fa-solid fa-id-card text-primary mr-1"></i> Student Academic Dossier</h3>
+                <input type="text" class="form-control form-control-sm" placeholder="Search Roll or Name..." style="width: 220px;" onkeyup="teacherApp.searchStudentProfile(this.value)">
+              </div>
+              <div id="studentProfilePreviewCard">
+                <!-- Rendered dynamically -->
+              </div>
+            </div>
+          </div>
+
+          <!-- Panel 4: Parent Contacts -->
+          <div id="subtab-parents-panel" class="my-classes-subview" style="display: none;">
+            <div class="card p-3">
+              <div class="d-flex justify-content-between align-items-center mb-3">
+                <h3 class="m-0" style="font-size:1.05rem;"><i class="fa-solid fa-phone text-emerald mr-1"></i> Relevant Parent &amp; Guardian Contacts</h3>
+                <span class="badge badge-info">Assigned Students Only</span>
+              </div>
+              <div class="table-container">
+                <table class="data-table" id="parentContactsTable" style="width: 100%;">
+                  <thead>
+                    <tr>
+                      <th>Student Name</th>
+                      <th>Class &amp; Roll</th>
+                      <th>Parent / Guardian</th>
+                      <th>Contact Number</th>
+                      <th>Emergency Contact</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody id="parentContactsTableBody">
+                    <!-- Populated via JS -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
         </section>
 
         <!-- =================================================================
-             MODULE 3: STUDENTS
-             (Student List, Profile, Attendance, Performance)
-             ================================================================= -->
+             ===================================== -->
         <section class="portal-view" id="view-students">
+
+          <!-- Institutional Scope & Privacy Notice -->
+          <div class="alert alert-info d-flex align-items-center gap-3 mb-3" style="background: rgba(14, 165, 233, 0.08); border: 1px solid rgba(14, 165, 233, 0.25); border-radius: 8px; padding: 0.85rem 1.25rem;">
+            <i class="fa-solid fa-shield-halved text-info" style="font-size: 1.4rem;"></i>
+            <div style="font-size: 0.85rem; line-height: 1.4;">
+              <strong>Assigned Student Records Scope</strong>: Showing academic and attendance records exclusively for your assigned classes (Class 8A, Class 9B, Class 7C, and Class 10A Remedial). School-wide financial ledgers, staff compensation, and role-management settings are restricted by school governance.
+            </div>
+          </div>
+
           <div class="card-header-bar mb-3">
             <div>
               <h2><i class="fa-solid fa-user-graduate text-primary"></i> Student Roster & Performance</h2>
@@ -723,6 +809,7 @@
             <button type="button" class="tab-btn active" onclick="teacherApp.switchSubTab('attendance', 'mark')">Mark Attendance (Today: Class 8A)</button>
             <button type="button" class="tab-btn" onclick="teacherApp.switchSubTab('attendance', 'history')">Monthly Attendance History</button>
             <button type="button" class="tab-btn" onclick="teacherApp.switchSubTab('attendance', 'report')">Absentee Summary</button>
+            <button type="button" class="tab-btn" onclick="teacherApp.switchSubTab('attendance', 'corrections')">Submit Corrections</button>
           </div>
 
           <div class="card p-4">
@@ -781,6 +868,60 @@
               </table>
             </div>
           </div>
+        
+          <!-- Subview: Submit Attendance Corrections -->
+          <div id="subview-attendance-corrections" class="attendance-subview" style="display: none; margin-top: 1rem;">
+            <div class="card p-4">
+              <div class="card-header-bar mb-3">
+                <div>
+                  <h3><i class="fa-solid fa-file-signature text-amber mr-1"></i> Submit Attendance Correction Slip</h3>
+                  <p class="text-muted text-sm mt-1">Submit attendance correction slips to the Principal / Office for late bus arrivals, medical excuses, or gate pass validations.</p>
+                </div>
+              </div>
+              <form id="attendanceCorrectionForm" onsubmit="event.preventDefault(); teacherApp.submitAttendanceCorrection();">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+                  <div>
+                    <label class="form-label" style="font-weight: 600; font-size: 0.85rem;">Class &amp; Section</label>
+                    <select class="form-control" id="corrClassSelect" required>
+                      <option value="8A">Class 8A</option>
+                      <option value="9B">Class 9B</option>
+                      <option value="7C">Class 7C</option>
+                      <option value="10A">Class 10A</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label class="form-label" style="font-weight: 600; font-size: 0.85rem;">Date of Attendance</label>
+                    <input type="date" class="form-control" id="corrDateInput" value="2026-10-24" required>
+                  </div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+                  <div>
+                    <label class="form-label" style="font-weight: 600; font-size: 0.85rem;">Student Name &amp; Roll</label>
+                    <input type="text" class="form-control" id="corrStudentInput" placeholder="e.g. Roll #841 CH. Karthik" required>
+                  </div>
+                  <div>
+                    <label class="form-label" style="font-weight: 600; font-size: 0.85rem;">Requested Correction</label>
+                    <select class="form-control" id="corrTypeSelect" required>
+                      <option value="Absent to Present">Change 'Absent' to 'Present' (Medical Note Attached)</option>
+                      <option value="Late to Present">Change 'Late' to 'Present' (School Bus Delay Route #3)</option>
+                      <option value="Absent to On-Duty">Change 'Absent' to 'On-Duty' (Science Fair Participation)</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div style="margin-bottom: 1.25rem;">
+                  <label class="form-label" style="font-weight: 600; font-size: 0.85rem;">Justification / Evidence</label>
+                  <textarea class="form-control" id="corrReasonInput" rows="2" placeholder="Specify reason and attach confirmation..." required></textarea>
+                </div>
+
+                <button type="submit" class="btn btn-primary">
+                  <i class="fa-solid fa-paper-plane mr-1"></i> Forward Correction Slip to Office
+                </button>
+              </form>
+            </div>
+          </div>
+
         </section>
 
         <!-- =================================================================
@@ -795,12 +936,16 @@
             </button>
           </div>
 
-          <div class="tab-strip">
-            <button type="button" class="tab-btn active" onclick="teacherApp.switchSubTab('academics', 'assignments')">Assignments (<span id="hwCountBadge">3</span> Active)</button>
-            <button type="button" class="tab-btn" onclick="teacherApp.switchSubTab('academics', 'homework')">Daily Homework Log</button>
-            <button type="button" class="tab-btn" onclick="teacherApp.switchSubTab('academics', 'materials')">Study Materials & PDFs</button>
-            <button type="button" class="tab-btn" onclick="teacherApp.switchSubTab('academics', 'plans')">Lesson Plans</button>
-            <button type="button" class="tab-btn" onclick="teacherApp.switchSubTab('academics', 'syllabus')">Syllabus Tracker</button>
+          <div class="tab-strip" id="academicsTabStrip">
+            <button type="button" class="tab-btn active" data-sub="plans" onclick="teacherApp.switchSubTab('academics', 'plans'); return false;">
+              <i class="fa-solid fa-calendar-check mr-1"></i> Lesson Plans
+            </button>
+            <button type="button" class="tab-btn" data-sub="syllabus" onclick="teacherApp.switchSubTab('academics', 'syllabus'); return false;">
+              <i class="fa-solid fa-chart-line mr-1"></i> Syllabus Progress
+            </button>
+            <button type="button" class="tab-btn" data-sub="materials" onclick="teacherApp.switchSubTab('academics', 'materials'); return false;">
+              <i class="fa-solid fa-folder-open mr-1"></i> Study Materials
+            </button>
           </div>
 
           <div id="homeworkFeedContainer">
@@ -822,11 +967,16 @@
             </div>
           </div>
 
-          <div class="tab-strip">
-            <button type="button" class="tab-btn active" onclick="teacherApp.switchSubTab('examinations', 'enter-marks')">Enter Marks: Class 8A (Unit Test 2 - Maths)</button>
-            <button type="button" class="tab-btn" onclick="teacherApp.switchSubTab('examinations', 'create')">Create Assessment</button>
-            <button type="button" class="tab-btn" onclick="teacherApp.switchSubTab('examinations', 'grade')">Grade Distributions</button>
-            <button type="button" class="tab-btn" onclick="teacherApp.switchSubTab('examinations', 'results')">Class Results Dossier</button>
+          <div class="tab-strip" id="examinationsTabStrip">
+            <button type="button" class="tab-btn active" data-sub="schedule" onclick="teacherApp.switchSubTab('examinations', 'schedule'); return false;">
+              <i class="fa-solid fa-calendar-days mr-1"></i> Exam Schedule
+            </button>
+            <button type="button" class="tab-btn" data-sub="enter-marks" onclick="teacherApp.switchSubTab('examinations', 'enter-marks'); return false;">
+              <i class="fa-solid fa-pen-to-square mr-1"></i> Enter Marks
+            </button>
+            <button type="button" class="tab-btn" data-sub="review" onclick="teacherApp.switchSubTab('examinations', 'review'); return false;">
+              <i class="fa-solid fa-clipboard-check mr-1"></i> Submit Marks for Review
+            </button>
           </div>
 
           <div class="card p-4">
@@ -870,9 +1020,13 @@
             </button>
           </div>
 
-          <div class="tab-strip">
-            <button class="tab-btn active" onclick="teacherApp.switchSubTab('timetable', 'my')">My Weekly Teaching Schedule</button>
-            <button class="tab-btn" onclick="teacherApp.switchSubTab('timetable', 'class')">Class 8A Full Timetable</button>
+          <div class="tab-strip" id="timetableTabStrip">
+            <button type="button" class="tab-btn active" data-sub="my" onclick="teacherApp.switchSubTab('timetable', 'my'); return false;">
+              <i class="fa-solid fa-calendar-days mr-1"></i> My Timetable
+            </button>
+            <button type="button" class="tab-btn" data-sub="substitutions" onclick="teacherApp.switchSubTab('timetable', 'substitutions'); return false;">
+              <i class="fa-solid fa-user-clock mr-1"></i> Substitution Schedule
+            </button>
           </div>
 
           <div class="card p-4">
@@ -945,10 +1099,16 @@
             </button>
           </div>
 
-          <div class="tab-strip">
-            <button type="button" class="tab-btn active" onclick="teacherApp.switchSubTab('communication', 'class-announcements')">Class 8A Notices</button>
-            <button type="button" class="tab-btn" onclick="teacherApp.switchSubTab('communication', 'parent-messages')">Parent Messages (<span id="parentMsgCountBadge">2</span>)</button>
-            <button type="button" class="tab-btn" onclick="teacherApp.switchSubTab('communication', 'notifications')">Staff Circulars</button>
+          <div class="tab-strip" id="commTabStrip">
+            <button type="button" class="tab-btn active" data-sub="class-announcements" onclick="teacherApp.switchSubTab('communication', 'class-announcements'); return false;">
+              <i class="fa-solid fa-bullhorn mr-1"></i> Class Announcements
+            </button>
+            <button type="button" class="tab-btn" data-sub="parent-messages" onclick="teacherApp.switchSubTab('communication', 'parent-messages'); return false;">
+              <i class="fa-solid fa-comments mr-1"></i> Parent Messages (<span class="badge badge-warning">2 New</span>)
+            </button>
+            <button type="button" class="tab-btn" data-sub="school-notices" onclick="teacherApp.switchSubTab('communication', 'school-notices'); return false;">
+              <i class="fa-solid fa-scroll mr-1"></i> School Notices
+            </button>
           </div>
 
           <div id="parentMessagesContainer">
@@ -968,9 +1128,13 @@
             </button>
           </div>
 
-          <div class="tab-strip">
-            <button class="tab-btn active" onclick="teacherApp.switchSubTab('leave', 'apply')">Apply for Leave</button>
-            <button class="tab-btn" onclick="teacherApp.switchSubTab('leave', 'status')">My Leave Applications History</button>
+          <div class="tab-strip" id="leaveTabStrip">
+            <button type="button" class="tab-btn active" data-sub="apply" onclick="teacherApp.switchSubTab('leave', 'apply'); return false;">
+              <i class="fa-solid fa-calendar-plus mr-1"></i> Apply Leave
+            </button>
+            <button type="button" class="tab-btn" data-sub="history" onclick="teacherApp.switchSubTab('leave', 'history'); return false;">
+              <i class="fa-solid fa-clock-rotate-left mr-1"></i> Leave History
+            </button>
           </div>
 
           <div class="card p-4">
@@ -1152,6 +1316,245 @@
                 <!-- =================================================================
              MODULE 11: MY PROFILE & PROFESSIONAL DETAILS
              ================================================================= -->
+        
+        <!-- =================================================================
+             MODULE 6: ASSIGNMENTS & STUDY MATERIALS
+             ================================================================= -->
+        <section class="portal-view" id="view-assignments">
+          <div class="card-header-bar mb-3">
+            <div>
+              <h2><i class="fa-solid fa-folder-open text-primary"></i> Assignments &amp; Study Materials</h2>
+              <p class="text-muted text-sm mt-1">Manage homework assignments, digital study guides, and evaluation trackers for assigned classes.</p>
+            </div>
+            <button class="btn btn-primary" onclick="teacherApp.openModal('createHomeworkModal')">
+              <i class="fa-solid fa-plus"></i> New Assignment
+            </button>
+          </div>
+
+          <div class="tab-strip mb-3" id="assignmentsTabStrip">
+            <button type="button" class="tab-btn active" data-sub="create" onclick="teacherApp.switchSubTab('assignments', 'create'); return false;">
+              <i class="fa-solid fa-plus-circle mr-1"></i> Create Assignment
+            </button>
+            <button type="button" class="tab-btn" data-sub="submissions" onclick="teacherApp.switchSubTab('assignments', 'submissions'); return false;">
+              <i class="fa-solid fa-inbox mr-1"></i> Submissions
+            </button>
+            <button type="button" class="tab-btn" data-sub="feedback" onclick="teacherApp.switchSubTab('assignments', 'feedback'); return false;">
+              <i class="fa-solid fa-comment-dots mr-1"></i> Grading &amp; Feedback
+            </button>
+          </div>
+
+          <div id="assignmentsContentArea">
+            <div class="row g-3">
+              <div class="col-md-4">
+                <div class="card p-3 h-100" style="border-left: 4px solid var(--color-primary);">
+                  <div class="d-flex justify-content-between align-items-center">
+                    <span class="portal-badge badge-primary">Class 8A • Homework</span>
+                    <span class="text-danger text-sm font-weight-bold">Due Today (05:00 PM)</span>
+                  </div>
+                  <h4 class="mt-2 mb-1" style="font-size: 1rem;">Ex 2.3 Linear Equations Questions 1–10</h4>
+                  <p class="text-muted text-xs">Solve step-by-step in the mathematics classwork notebook. Bring for morning desk correction.</p>
+                  <div class="mt-3 pt-2 border-top d-flex justify-content-between align-items-center text-xs">
+                    <span>Submissions: <strong>38 / 42 (90%)</strong></span>
+                    <button class="btn btn-secondary btn-sm" onclick="teacherApp.showToast('Opened Class 8A submission ledger', 'info')">Check Submissions</button>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-4">
+                <div class="card p-3 h-100" style="border-left: 4px solid #06B6D4;">
+                  <div class="d-flex justify-content-between align-items-center">
+                    <span class="portal-badge badge-primary" style="background: rgba(6,182,212,0.15); color: #0891B2;">Class 9B • Project</span>
+                    <span class="text-muted text-sm font-weight-bold">Due Tomorrow</span>
+                  </div>
+                  <h4 class="mt-2 mb-1" style="font-size: 1rem;">Polynomials Factorization Practice Sheet</h4>
+                  <p class="text-muted text-xs">Complete 15 factorization problems on splitting middle terms and applying factor theorem.</p>
+                  <div class="mt-3 pt-2 border-top d-flex justify-content-between align-items-center text-xs">
+                    <span>Submissions: <strong>26 / 40 (65%)</strong></span>
+                    <button class="btn btn-secondary btn-sm" onclick="teacherApp.showToast('Opened Class 9B submission ledger', 'info')">Check Submissions</button>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-4">
+                <div class="card p-3 h-100" style="border-left: 4px solid #10B981;">
+                  <div class="d-flex justify-content-between align-items-center">
+                    <span class="portal-badge badge-success">Class 7C • Drill</span>
+                    <span class="text-muted text-sm font-weight-bold">Sept 22, 2026</span>
+                  </div>
+                  <h4 class="mt-2 mb-1" style="font-size: 1rem;">Fractions Reciprocal &amp; Division Drill</h4>
+                  <p class="text-muted text-xs">Workbook exercise 3B: Practice mental fraction conversion and area model representations.</p>
+                  <div class="mt-3 pt-2 border-top d-flex justify-content-between align-items-center text-xs">
+                    <span>Submissions: <strong>35 / 38 (92%)</strong></span>
+                    <button class="btn btn-secondary btn-sm" onclick="teacherApp.showToast('Opened Class 7C submission ledger', 'info')">Check Submissions</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Downloadable Study Guides Section -->
+            <div class="card p-4 mt-4">
+              <div class="card-header-bar">
+                <h3><i class="fa-solid fa-file-pdf text-danger"></i> Class Study Material Repository</h3>
+                <button class="btn btn-secondary btn-sm" onclick="teacherApp.showToast('Uploaded new syllabus notes PDF', 'success')">
+                  <i class="fa-solid fa-cloud-arrow-up"></i> Upload PDF to Class
+                </button>
+              </div>
+              <div class="table-container mt-3">
+                <table class="data-table">
+                  <thead>
+                    <tr>
+                      <th>Document Name</th>
+                      <th>Target Class</th>
+                      <th>Upload Date</th>
+                      <th>File Size</th>
+                      <th class="text-center">Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><strong>Chapter 2: Linear Equations Formula Sheet &amp; Notes</strong></td>
+                      <td><span class="portal-badge badge-primary">Class 8A</span></td>
+                      <td>Sept 15, 2026</td>
+                      <td>2.4 MB (PDF)</td>
+                      <td class="text-center"><button class="btn btn-secondary btn-sm" onclick="teacherApp.showToast('Downloaded Linear Equations Notes', 'success')"><i class="fa-solid fa-download"></i> Download</button></td>
+                    </tr>
+                    <tr>
+                      <td><strong>Polynomials &amp; Factor Theorem Solved Examples</strong></td>
+                      <td><span class="portal-badge badge-primary">Class 9B</span></td>
+                      <td>Sept 12, 2026</td>
+                      <td>3.1 MB (PDF)</td>
+                      <td class="text-center"><button class="btn btn-secondary btn-sm" onclick="teacherApp.showToast('Downloaded Polynomials Guide', 'success')"><i class="fa-solid fa-download"></i> Download</button></td>
+                    </tr>
+                    <tr>
+                      <td><strong>Grade 7 Fractions Multiplication Drill Workbook</strong></td>
+                      <td><span class="portal-badge badge-primary">Class 7C</span></td>
+                      <td>Sept 08, 2026</td>
+                      <td>1.8 MB (PDF)</td>
+                      <td class="text-center"><button class="btn btn-secondary btn-sm" onclick="teacherApp.showToast('Downloaded Grade 7 Workbook', 'success')"><i class="fa-solid fa-download"></i> Download</button></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- =================================================================
+             MODULE 10: APPOINTMENTS & PARENT MEETINGS (PTM)
+             ================================================================= -->
+        <section class="portal-view" id="view-appointments">
+          <div class="card-header-bar mb-3">
+            <div>
+              <h2><i class="fa-solid fa-calendar-check text-primary"></i> Appointments &amp; Parent Meetings</h2>
+              <p class="text-muted text-sm mt-1">Manage parent consultation slots (Visiting Hours: 03:30 PM - 04:30 PM) and track parent-teacher conference minutes.</p>
+            </div>
+            <button class="btn btn-primary" onclick="teacherApp.showToast('Scheduling form opened for parent consultation', 'info')">
+              <i class="fa-solid fa-plus"></i> Schedule Meeting
+            </button>
+          </div>
+
+          <div class="tab-strip mb-3">
+            <button type="button" class="tab-btn active" onclick="teacherApp.switchSubTab('appointments', 'upcoming')">Upcoming Consultations (2)</button>
+            <button type="button" class="tab-btn" onclick="teacherApp.switchSubTab('appointments', 'requests')">Pending Parent Requests (1)</button>
+            <button type="button" class="tab-btn" onclick="teacherApp.switchSubTab('appointments', 'logs')">Past PTM Minutes</button>
+          </div>
+
+          <div class="row g-3">
+            <div class="col-md-6">
+              <div class="card p-3">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                  <span class="portal-badge badge-primary">Today • 03:45 PM - 04:00 PM</span>
+                  <span class="portal-badge badge-success">Confirmed</span>
+                </div>
+                <h4 style="font-size: 1.05rem;" class="mb-1">Mr. CH. Rambabu (Parent of CH. Karthik, Roll 841)</h4>
+                <div class="text-muted text-xs mb-2">Class: <strong>8A</strong> • Subject: <strong>Mathematics Performance &amp; Late Arrival</strong></div>
+                <p class="text-sm text-secondary" style="background: rgba(0,0,0,0.02); padding: 0.5rem; border-radius: 6px;">
+                  "Discussing geometry practice notebook completion and ensuring punctuality during morning assembly."
+                </p>
+                <div class="mt-3 pt-2 border-top d-flex justify-content-between">
+                  <button class="btn btn-secondary btn-sm" onclick="teacherApp.showToast('Rescheduled notification sent to parent', 'info')"><i class="fa-solid fa-clock"></i> Reschedule</button>
+                  <button class="btn btn-primary btn-sm" onclick="teacherApp.showToast('Meeting logged and completed', 'success')"><i class="fa-solid fa-check"></i> Mark Completed</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <div class="card p-3">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                  <span class="portal-badge badge-primary">Tomorrow • 04:00 PM - 04:15 PM</span>
+                  <span class="portal-badge badge-warning">Pending Faculty Confirmation</span>
+                </div>
+                <h4 style="font-size: 1.05rem;" class="mb-1">Mrs. V. Lakshmi (Parent of V. Divya Bharathi, Roll 804)</h4>
+                <div class="text-muted text-xs mb-2">Class: <strong>8A</strong> • Subject: <strong>State Math Olympiad Nominations</strong></div>
+                <p class="text-sm text-secondary" style="background: rgba(0,0,0,0.02); padding: 0.5rem; border-radius: 6px;">
+                  "Requesting guidance and extra practice material for Divya's upcoming Andhra Pradesh State Mathematics Olympiad."
+                </p>
+                <div class="mt-3 pt-2 border-top d-flex justify-content-between">
+                  <button class="btn btn-secondary btn-sm" onclick="teacherApp.showToast('Parent request declined with note', 'error')"><i class="fa-solid fa-xmark"></i> Decline</button>
+                  <button class="btn btn-primary btn-sm" onclick="teacherApp.showToast('Appointment confirmed for tomorrow 4:00 PM', 'success')"><i class="fa-solid fa-calendar-check"></i> Confirm Slot</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- =================================================================
+             MODULE 12: TASKS & NOTIFICATIONS
+             ================================================================= -->
+        <section class="portal-view" id="view-tasks">
+          <div class="card-header-bar mb-3">
+            <div>
+              <h2><i class="fa-solid fa-list-check text-primary"></i> Tasks &amp; Classroom Administration</h2>
+              <p class="text-muted text-sm mt-1">Daily classroom checklist, evaluation queues, and institutional announcements from the Principal.</p>
+            </div>
+            <button class="btn btn-primary btn-sm" onclick="teacherApp.addNewTaskPrompt()">
+              <i class="fa-solid fa-plus"></i> Add Personal Task
+            </button>
+          </div>
+
+          <div class="row g-3">
+            <div class="col-lg-8">
+              <div class="card p-4">
+                <h3 class="mb-3"><i class="fa-solid fa-check-double text-primary"></i> Academic Action Items</h3>
+                <div class="pending-tasks-list" id="fullTaskListContainer">
+                  <!-- Dynamically populated from teacherApp.renderTasksList -->
+                </div>
+              </div>
+            </div>
+
+            <div class="col-lg-4">
+              <div class="card p-3 mb-3">
+                <h4><i class="fa-solid fa-bullhorn text-amber"></i> School Leadership Notices</h4>
+                <div class="mt-3 text-xs" style="display: flex; flex-direction: column; gap: 0.85rem;">
+                  <div class="p-2 border-left-amber" style="background: rgba(245, 158, 11, 0.08); border-left: 3px solid #F59E0B; border-radius: 4px;">
+                    <strong>Quarterly Exam Question Papers</strong>
+                    <p class="text-muted mt-1 mb-0">From Vice Principal: Submit final math blueprints by Sept 21 for Grade 8 and Grade 9.</p>
+                  </div>
+                  <div class="p-2" style="background: rgba(79, 70, 229, 0.06); border-left: 3px solid #4F46E5; border-radius: 4px;">
+                    <strong>Annual Science &amp; Math Exhibition</strong>
+                    <p class="text-muted mt-1 mb-0">From Principal: Math Club exhibits registration closes Friday. Ensure 6 team representations.</p>
+                  </div>
+                  <div class="p-2" style="background: rgba(16, 185, 129, 0.06); border-left: 3px solid #10B981; border-radius: 4px;">
+                    <strong>Staff Biometric Punching Rule</strong>
+                    <p class="text-muted mt-1 mb-0">Office Administration: Morning check-in before 08:30 AM IST is strictly recorded for attendance regularisation.</p>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Institutional Boundary Card -->
+              <div class="card p-3" style="background: rgba(15, 23, 42, 0.03); border: 1px dashed rgba(100, 116, 139, 0.3);">
+                <div class="d-flex align-items-center gap-2 mb-2">
+                  <i class="fa-solid fa-shield-halved text-primary"></i>
+                  <strong style="font-size: 0.82rem;">Authorization Boundary</strong>
+                </div>
+                <p class="text-xs text-muted mb-0">
+                  This faculty account operates under Academic &amp; Classroom Administration permissions. School-wide financial ledgers, salary registers, unrestricted disciplinary actions, and role management settings are restricted by school policy.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
         <section class="portal-view" id="view-profile">
           <div class="prof-clean-container">
             
@@ -1299,7 +1702,25 @@
                     </div>
                     <div class="prof-form-group">
                       <label class="prof-form-label">Designation / Role Title</label>
-                      <input type="text" class="prof-form-control" id="profDesignation" value="Senior Faculty &amp; Grade 8A Class Teacher" placeholder="e.g. Senior Faculty">
+                      <select class="prof-form-control" id="profDesignation">
+                        <option value="Principal">Principal</option>
+                        <option value="Vice Principal">Vice Principal</option>
+                        <option value="Head of Department">Head of Department</option>
+                        <option value="Senior Faculty &amp; Grade 8A Class Teacher" selected>Senior Faculty &amp; Grade 8A Class Teacher</option>
+                        <option value="Senior Faculty">Senior Faculty</option>
+                        <option value="Subject Teacher">Subject Teacher</option>
+                        <option value="Class Teacher">Class Teacher</option>
+                        <option value="Special Education Teacher">Special Education Teacher</option>
+                        <option value="Physical Education Teacher">Physical Education Teacher</option>
+                        <option value="Counsellor">Counsellor</option>
+                        <option value="Librarian">Librarian</option>
+                        <option value="Lab Assistant">Lab Assistant</option>
+                        <option value="Office Administrator">Office Administrator</option>
+                        <option value="Accounts Assistant">Accounts Assistant</option>
+                        <option value="Receptionist">Receptionist</option>
+                        <option value="Transport Coordinator">Transport Coordinator</option>
+                        <option value="Support Staff">Support Staff</option>
+                      </select>
                     </div>
                   </div>
 
@@ -1866,11 +2287,12 @@
   <div class="toast-container" id="toastContainer"></div>
 
   <!-- Reusable API Client -->
-  <script src="js/api-client.js"></script>
+  <script src="/js/api-client.js"></script>
   <!-- Teacher Portal Logic -->
-  <script src="js/teacher.js"></script>
+  <script src="/js/student-roster.js"></script>
+  <script src="/js/teacher.js"></script>
   <!-- Portal Auth Script -->
-  <script src="js/portal-auth.js"></script>
+  <script src="/js/portal-auth.js"></script>
   <script>
     document.addEventListener('DOMContentLoaded', () => {
       PortalAuth.init('teacher');

@@ -19,15 +19,15 @@ const PortalAuth = {
       storageKey: 'sv_auth_management',
       roleKey: 'sv_role_management',
       defaultRole: 'principal',
-      portalTitle: 'Management Portal',
+      portalTitle: 'Administration Portal',
       welcomeMsg: 'Welcome back, Principal Smt. Gorle Varalakshmi!',
       defaultUser: 'principal',
       defaultPass: 'Principal@123'
     },
     teacher: {
       storageKey: 'sv_auth_teacher',
-      portalTitle: 'Teacher Portal',
-      welcomeMsg: 'Welcome to Sri Vidya Teacher Portal!',
+      portalTitle: 'Faculty Portal',
+      welcomeMsg: 'Welcome to Sri Vidya Faculty Portal!',
       defaultUser: 'teacher1',
       defaultPass: 'Teacher@123'
     },
@@ -45,6 +45,261 @@ const PortalAuth = {
       defaultUser: 'parent1',
       defaultPass: 'Parent@123'
     }
+  },
+
+  /* =========================================================================
+   * INACTIVITY / IDLE SESSION EXPIRATION ENGINE (15 MINUTES)
+   * Automatically starts countdown when user stops interacting with the portal.
+   * If inactive for 15 minutes, expires the session and presents the login screen.
+   * ========================================================================= */
+  inactivity: {
+    TIMEOUT_MS: 15 * 60 * 1000, // 15 minutes = 900,000 ms
+    WARNING_MS: 60 * 1000,       // 1 minute remaining warning
+    STORAGE_KEY: 'sv_session_last_active',
+    timerId: null,
+    warningTimerId: null,
+    tickerIntervalId: null,
+    activePortalType: null,
+    isInitialized: false,
+    lastInteractionTime: Date.now(),
+
+    recordActivity() {
+      const now = Date.now();
+      // Throttle localStorage updates to avoid unnecessary disk/storage writes
+      if (now - this.lastInteractionTime > 2000) {
+        this.lastInteractionTime = now;
+        try {
+          localStorage.setItem(this.STORAGE_KEY, String(now));
+        } catch (e) {}
+      } else {
+        this.lastInteractionTime = now;
+      }
+      this.restartTimers();
+    },
+
+    restartTimers() {
+      if (this.timerId) clearTimeout(this.timerId);
+      if (this.warningTimerId) clearTimeout(this.warningTimerId);
+      if (this.tickerIntervalId) {
+        clearInterval(this.tickerIntervalId);
+        this.tickerIntervalId = null;
+      }
+      this.hideWarningModal();
+
+      if (!this.isAuthenticated()) return;
+
+      const now = Date.now();
+      const last = this.getLastActivity();
+      const elapsed = now - last;
+      const remaining = Math.max(0, this.TIMEOUT_MS - elapsed);
+
+      if (remaining <= 0) {
+        this.triggerExpiry();
+        return;
+      }
+
+      // Schedule 60-second warning countdown modal before session expires
+      const warningDelay = Math.max(0, remaining - this.WARNING_MS);
+      this.warningTimerId = setTimeout(() => {
+        this.showWarningModal();
+      }, warningDelay);
+
+      // Schedule session lock when 15 minutes of inactivity elapse
+      this.timerId = setTimeout(() => {
+        this.triggerExpiry();
+      }, remaining);
+    },
+
+    getLastActivity() {
+      try {
+        const stored = localStorage.getItem(this.STORAGE_KEY);
+        if (stored) {
+          const t = parseInt(stored, 10);
+          if (!isNaN(t)) return t;
+        }
+      } catch (e) {}
+      return this.lastInteractionTime;
+    },
+
+    isAuthenticated() {
+      const type = this.activePortalType || 'management';
+      const cfg = PortalAuth.configs[type];
+      const overlay = document.getElementById(`${type}LoginOverlay`);
+      const isOverlayHidden = overlay && overlay.classList.contains('hidden');
+      const hasAuth = (cfg && (sessionStorage.getItem(cfg.storageKey) === 'true' || localStorage.getItem(cfg.storageKey) === 'true')) ||
+                      (window.ApiClient && typeof window.ApiClient.isAuthenticated === 'function' && window.ApiClient.isAuthenticated());
+      return Boolean(hasAuth && isOverlayHidden);
+    },
+
+    triggerExpiry() {
+      this.hideWarningModal();
+      this.stop();
+      const type = this.activePortalType || 'management';
+      PortalAuth.expireSessionDueToInactivity(type);
+    },
+
+    showWarningModal() {
+      if (!this.isAuthenticated()) return;
+      let modal = document.getElementById('inactivityWarningModal');
+      if (!modal) {
+        modal = document.createElement('div');
+        modal.id = 'inactivityWarningModal';
+        modal.className = 'inactivity-warning-modal';
+        modal.innerHTML = `
+          <div class="inactivity-warning-backdrop"></div>
+          <div class="inactivity-warning-card">
+            <div class="inactivity-warning-icon">
+              <i class="fa-solid fa-clock-rotate-left"></i>
+            </div>
+            <h3 class="inactivity-warning-title">Session Expiring Due to Inactivity</h3>
+            <p class="inactivity-warning-desc">
+              You have been inactive for nearly 15 minutes. For campus security, your portal session will lock automatically in:
+            </p>
+            <div class="inactivity-countdown" id="inactivityCountdownDisplay">60s</div>
+            <div class="inactivity-warning-actions">
+              <button type="button" class="btn-stay-signed-in" id="btnStaySignedIn">
+                <i class="fa-solid fa-shield-halved"></i> I'm Active (Keep Session Alive)
+              </button>
+            </div>
+          </div>
+        `;
+        document.body.appendChild(modal);
+
+        const stayBtn = modal.querySelector('#btnStaySignedIn');
+        if (stayBtn) {
+          stayBtn.addEventListener('click', () => {
+            this.recordActivity();
+            PortalAuth.showToast('✓ Activity detected: Session refreshed for 15 minutes!', 'fa-circle-check');
+          });
+        }
+      }
+
+      modal.style.display = 'flex';
+
+      const countdownEl = document.getElementById('inactivityCountdownDisplay');
+      const updateTicker = () => {
+        const last = this.getLastActivity();
+        const remainingMs = Math.max(0, this.TIMEOUT_MS - (Date.now() - last));
+        const seconds = Math.ceil(remainingMs / 1000);
+        if (countdownEl) {
+          countdownEl.textContent = `${seconds}s`;
+        }
+        if (remainingMs <= 0) {
+          if (this.tickerIntervalId) clearInterval(this.tickerIntervalId);
+          this.triggerExpiry();
+        }
+      };
+
+      updateTicker();
+      if (this.tickerIntervalId) clearInterval(this.tickerIntervalId);
+      this.tickerIntervalId = setInterval(updateTicker, 1000);
+    },
+
+    hideWarningModal() {
+      const modal = document.getElementById('inactivityWarningModal');
+      if (modal) modal.style.display = 'none';
+      if (this.tickerIntervalId) {
+        clearInterval(this.tickerIntervalId);
+        this.tickerIntervalId = null;
+      }
+    },
+
+    stop() {
+      if (this.timerId) clearTimeout(this.timerId);
+      if (this.warningTimerId) clearTimeout(this.warningTimerId);
+      if (this.tickerIntervalId) clearInterval(this.tickerIntervalId);
+      this.hideWarningModal();
+    },
+
+    init(portalType) {
+      this.activePortalType = portalType;
+      this.lastInteractionTime = Date.now();
+      try {
+        localStorage.setItem(this.STORAGE_KEY, String(this.lastInteractionTime));
+      } catch (e) {}
+
+      if (!this.isInitialized) {
+        this.isInitialized = true;
+
+        // User activity listeners: reset countdown whenever user is active
+        const events = ['mousemove', 'mousedown', 'keydown', 'touchstart', 'scroll', 'click'];
+        const activityHandler = () => {
+          if (this.isAuthenticated()) {
+            this.recordActivity();
+          }
+        };
+
+        events.forEach(evt => {
+          window.addEventListener(evt, activityHandler, { passive: true });
+        });
+
+        // Sync activity across multiple open tabs
+        window.addEventListener('storage', (e) => {
+          if (e.key === this.STORAGE_KEY) {
+            this.lastInteractionTime = parseInt(e.newValue || String(Date.now()), 10);
+            this.restartTimers();
+          }
+        });
+
+        // Check if session expired while tab was in background / machine was asleep
+        document.addEventListener('visibilitychange', () => {
+          if (!document.hidden && this.isAuthenticated()) {
+            this.restartTimers();
+          }
+        });
+      }
+
+      this.restartTimers();
+    }
+  },
+
+  expireSessionDueToInactivity(portalType) {
+    const cfg = this.configs[portalType];
+    if (cfg) {
+      sessionStorage.removeItem(cfg.storageKey);
+      localStorage.removeItem(cfg.storageKey);
+      if (cfg.roleKey) {
+        sessionStorage.removeItem(cfg.roleKey);
+        localStorage.removeItem(cfg.roleKey);
+      }
+      if (portalType === 'teacher') {
+        sessionStorage.removeItem('sv_active_teacher_id');
+        localStorage.removeItem('sv_active_teacher_id');
+        sessionStorage.removeItem('sv_active_teacher_name');
+        localStorage.removeItem('sv_active_teacher_name');
+      }
+    }
+
+    if (window.ApiClient && typeof window.ApiClient.clearSession === 'function') {
+      window.ApiClient.clearSession();
+    }
+
+    // Reset OTP session if active
+    if (this.otpSessions && this.otpSessions[portalType]) {
+      if (this.otpSessions[portalType].intervalId) {
+        clearInterval(this.otpSessions[portalType].intervalId);
+      }
+      delete this.otpSessions[portalType];
+    }
+
+    const overlay = document.getElementById(`${portalType}LoginOverlay`);
+    if (overlay) {
+      overlay.classList.remove('hidden');
+      const prefix = portalType === 'management' ? 'mgmt' : 'teacher';
+      const loginForm = document.getElementById(portalType === 'management' ? 'mgmtLoginForm' : 'teacherLoginForm');
+      const otpForm = document.getElementById(`${prefix}OtpForm`);
+      if (otpForm) otpForm.style.display = 'none';
+      if (loginForm) loginForm.style.display = 'block';
+
+      // Clear password field requiring credential re-entry
+      const passInput = document.getElementById(`${portalType}LoginPass`);
+      if (passInput) {
+        passInput.value = '';
+        passInput.focus();
+      }
+    }
+
+    this.showToast('⏱️ Session Expired: Inactive for 15 minutes. Please sign in with your credentials.', 'fa-lock', true);
   },
 
   showToast(msg, icon = 'fa-circle-check', isError = false) {
@@ -72,9 +327,16 @@ const PortalAuth = {
   handleMgmtRoleChange(role) {
     const userInput = document.getElementById('managementLoginUser');
     const passInput = document.getElementById('managementLoginPass');
+    const isOfficeRole = role === 'admin' || role === 'clerk' || role === 'office';
+    const portalName = isOfficeRole ? 'Faculty Portal' : 'Administration Portal';
+    const portalTitle = document.getElementById('managementPortalTitle');
+    const portalBadge = document.getElementById('managementPortalBadge');
+    if (portalTitle) portalTitle.textContent = `${portalName} Sign In`;
+    if (portalBadge) portalBadge.textContent = `${portalName} Login`;
+    document.title = `${portalName} | Sri Vidya E.M High School`;
     if (userInput) {
       userInput.value = '';
-      if (role === 'admin' || role === 'clerk' || role === 'office') {
+      if (isOfficeRole) {
         userInput.placeholder = 'Enter assigned Clerk / School ID (e.g. SV-OFFICE-01)';
       } else {
         userInput.placeholder = 'Enter username or official email';
@@ -676,6 +938,11 @@ const PortalAuth = {
     } else if (portalType === 'teacher' && window.teacherApp && typeof window.teacherApp.loadLiveData === 'function') {
       window.teacherApp.loadLiveData();
     }
+
+    // Start 15-minute inactivity session expiration countdown
+    if (this.inactivity) {
+      this.inactivity.init(portalType);
+    }
   },
 
 
@@ -871,6 +1138,10 @@ const PortalAuth = {
       }
     }
 
+    if (this.inactivity) {
+      this.inactivity.stop();
+    }
+
     if (window.ApiClient && typeof window.ApiClient.auth?.logout === 'function') {
       try { await window.ApiClient.auth.logout(); } catch (e) {}
     }
@@ -1027,6 +1298,11 @@ const PortalAuth = {
       }
 
       this.bindLogoutButtons(portalType);
+
+      // Start 15-minute inactivity session expiration countdown
+      if (this.inactivity) {
+        this.inactivity.init(portalType);
+      }
       return;
     }
 

@@ -35,7 +35,7 @@
   --color-text-dark: #0F172A;
   --color-text-white: #FFFFFF;
 
-  --sidebar-width: 260px;
+  --sidebar-width: 280px;
   --header-height: 70px;
 
   --shadow-xs: 0 1px 2px rgba(15, 23, 42, 0.05);
@@ -556,6 +556,8 @@ body {
 
 .tw-meta-pills {
   display: flex;
+  flex-wrap: wrap;
+  align-items: center;
   gap: 0.75rem;
   margin-top: 1rem;
 }
@@ -563,18 +565,69 @@ body {
 .tw-pill {
   display: inline-flex;
   align-items: center;
-  gap: 0.4rem;
-  background: rgba(255, 255, 255, 0.1);
+  gap: 0.45rem;
+  background: rgba(255, 255, 255, 0.12);
   padding: 0.35rem 0.85rem;
   border-radius: var(--radius-full);
   font-size: 0.8rem;
+  font-weight: 600;
   backdrop-filter: blur(4px);
+  color: #FFFFFF;
 }
 
 .tw-pill.active {
   background: rgba(16, 185, 129, 0.25);
   border: 1px solid rgba(16, 185, 129, 0.5);
   color: #A7F3D0;
+}
+
+/* Dedicated Live IST Clock Pill - Big & Executive Quality */
+.tw-pill.live-clock-pill {
+  background: #FFFFFF !important;
+  color: #064E3B !important;
+  border: 1.5px solid rgba(255, 255, 255, 0.95) !important;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.22), 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+  font-variant-numeric: tabular-nums;
+  font-weight: 800;
+  font-size: 1.15rem !important;
+  padding: 0.5rem 1.15rem !important;
+  letter-spacing: 0.75px;
+}
+
+.tw-pill.live-clock-pill i {
+  color: #059669 !important;
+  font-size: 1.12rem !important;
+  margin-right: 0.35rem;
+}
+
+.tw-pill.live-clock-pill span {
+  color: #064E3B !important;
+  font-weight: 800;
+  font-size: 1.15rem !important;
+}
+
+/* Dark Mode - Big Luminous Emerald IST Clock */
+[data-theme="dark"] .tw-pill.live-clock-pill,
+.dark-mode .tw-pill.live-clock-pill {
+  background: rgba(6, 78, 59, 0.8) !important;
+  color: #FFFFFF !important;
+  border: 1.5px solid rgba(52, 211, 153, 0.65) !important;
+  box-shadow: 0 0 16px rgba(16, 185, 129, 0.35) !important;
+  font-size: 1.15rem !important;
+  padding: 0.5rem 1.15rem !important;
+}
+
+[data-theme="dark"] .tw-pill.live-clock-pill i,
+.dark-mode .tw-pill.live-clock-pill i {
+  color: #34D399 !important;
+  font-size: 1.12rem !important;
+}
+
+[data-theme="dark"] .tw-pill.live-clock-pill span,
+.dark-mode .tw-pill.live-clock-pill span {
+  color: #FFFFFF !important;
+  font-weight: 800;
+  font-size: 1.15rem !important;
 }
 
 /* 4 Metrics Quad Cards:
@@ -734,6 +787,10 @@ body {
 .schedule-item.current {
   border-color: var(--color-primary);
   background: var(--color-primary-subtle);
+}
+.schedule-item.completed {
+  opacity: 0.82;
+  background: var(--color-bg-subtle);
 }
 
 .schedule-time-block {

@@ -12,7 +12,7 @@ import os
 import sys
 import urllib.parse
 
-PORT = int(sys.argv[1]) if len(sys.argv) > 1 else 8080
+PORT = int(sys.argv[1]) if len(sys.argv) > 1 else 5000
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 if os.path.isdir(os.path.join(BASE_DIR, 'frontend')):
     DIRECTORY = os.path.join(BASE_DIR, 'frontend')

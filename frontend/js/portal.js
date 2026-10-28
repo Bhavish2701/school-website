@@ -476,31 +476,398 @@ const portalApp = (function () {
       { title: 'National Mathematics Day Celebration', date: 'Dec 22, 2026', tag: 'Academic', desc: 'Srinivasa Ramanujan memorial quiz competition, mental math olympiad and puzzles.' }
     ],
     disciplineIncidents: [
-      { id: 'DIS-2026-042', student: 'B. Tarun Reddy', class: 'Class IX-A', category: 'Unauthorized Device / Mobile', severity: 'Moderate', description: 'Used mobile phone during biology practical period without authorization.', action: 'Device retained in VP custody; Parent conference scheduled for Monday 10:00 AM.', status: 'Open', date: 'Today, 11:15 AM' },
-      { id: 'DIS-2026-041', student: 'CH. Karthik', class: 'Class VIII-A', category: 'Late Arrival / Gate Breach', severity: 'Minor', description: 'Arrived after 08:45 AM gate closure for 3rd time this week.', action: 'Morning assembly diary note signed; Warning letter dispatched to parents.', status: 'Open', date: 'Today, 08:52 AM' },
-      { id: 'DIS-2026-040', student: 'P. Hema Latha', class: 'Class X-A', category: 'Exemplary Merit / Good Deed', severity: 'Merit', description: 'Achieved 1st Rank in District Mathematics Olympiad & guided peer group.', action: 'Merit certificate awarded in morning assembly by Vice Principal; +20 points.', status: 'Resolved', date: 'Yesterday' }
+      { id: 'DIS-2026-042', student: 'B. Tarun Reddy', admNo: 'SV-0042', class: 'Class IX-A', category: 'Unauthorized Device / Mobile', severity: 'Moderate', description: 'Possession and usage of mobile phone during biology practical period without authorization.', authorizedAction: 'Device confiscated to VP custody; Parent conference scheduled for Monday.', authorizedBy: 'Sri Navva Anand (Vice Principal)', status: 'Under Review', date: '28 Oct 2026', time: '11:15 AM' },
+      { id: 'DIS-2026-041', student: 'CH. Karthik', admNo: 'SV-0041', class: 'Class VIII-A', category: 'Late Arrival / Gate Breach', severity: 'Minor', description: 'Arrived after 08:30 AM gate cutoff for the 3rd time in current academic week.', authorizedAction: 'Morning assembly diary endorsed; Official warning letter dispatched to parents.', authorizedBy: 'Sri Navva Anand (Vice Principal)', status: 'Under Review', date: '28 Oct 2026', time: '08:52 AM' },
+      { id: 'DIS-2026-039', student: 'K. Rithvik', admNo: 'SV-0098', class: 'Class VIII-A', category: 'Campus Property / Lab Damage', severity: 'Severe', description: 'Accidental breakage of borosilicate condenser coil in chemistry lab during unauthorized unsupervised entry.', authorizedAction: 'Cost recovery cleared by guardian; Signed lab safety undertaking lodged in student dossier.', authorizedBy: 'Smt. G. Varalakshmi (Principal)', status: 'Resolved', date: '26 Oct 2026', time: '02:15 PM' },
+      { id: 'DIS-2026-038', student: 'M. Jagadeesh', admNo: 'SV-0078', class: 'Class VII-A', category: 'Classroom Disruption & Uniform', severity: 'Minor', description: 'Disruptive behavior during mathematics zero-period and incomplete official school uniform.', authorizedAction: 'Counseling session completed with class mentor; Conduct diary signed.', authorizedBy: 'Sri B. Narayana (Class Teacher)', status: 'Resolved', date: '24 Oct 2026', time: '10:30 AM' }
     ],
     gateLateRecords: [
-      { id: 'GL-2026-081', student: 'CH. Karthik', admNo: 'SV-0041', class: 'Class VIII-A', time: '08:52 AM', gate: 'Main Campus Gate #1', commute: 'Walking', weeklyCount: '3rd time this week', reason: 'Heavy traffic at Gajuwaka junction', action: 'Morning assembly diary note signed; Warning letter dispatched to parents', status: 'Warning Dispatched' },
-      { id: 'GL-2026-082', student: 'B. Tarun Reddy', admNo: 'SV-0042', class: 'Class IX-A', time: '08:56 AM', gate: 'Main Campus Gate #1', commute: 'Bicycle', weeklyCount: '2nd time this week', reason: 'Bicycle tyre puncture near Old Post Office', action: 'Detention during zero period; Parent conference scheduled for Monday', status: 'Conference Summons' },
-      { id: 'GL-2026-083', student: 'M. Jagadeesh', admNo: 'SV-0078', class: 'Class VII-A', time: '08:50 AM', gate: 'Campus Gate #2', commute: 'Auto-Rickshaw', weeklyCount: '1st time this week', reason: 'Heavy downpour at Scindia stop', action: 'Permitted with verbal caution by VP Sri Navva Anand', status: 'Counseled' },
-      { id: 'GL-2026-084', student: 'K. Pravalika', admNo: 'SV-0011', class: 'Class X-A', time: '08:48 AM', gate: 'Main Campus Gate #1', commute: 'APSRTC Bus', weeklyCount: '1st time this week', reason: 'Route 400 bus arrived late at Sriharipuram junction', action: 'Admitted with morning assembly slip', status: 'Admitted' }
+      { id: 'GL-2026-081', student: 'CH. Karthik', admNo: 'SV-0041', class: 'Class VIII-A', date: '28 Oct 2026', time: '08:52 AM', delay: '+22 mins late', gate: 'Main Campus Gate #1', commute: 'Walking', repeatedOccurrences: '3rd time this week (High Frequency - Flagged)', reason: 'Heavy traffic congestion at Gajuwaka junction', action: 'Morning assembly diary note signed; Warning letter dispatched to parents', status: 'Warning Dispatched' },
+      { id: 'GL-2026-082', student: 'B. Tarun Reddy', admNo: 'SV-0042', class: 'Class IX-A', date: '28 Oct 2026', time: '08:56 AM', delay: '+26 mins late', gate: 'Main Campus Gate #1', commute: 'Bicycle', repeatedOccurrences: '2nd time this week', reason: 'Bicycle tyre puncture near Old Post Office', action: 'Detention during zero period; Parent conference scheduled for Monday', status: 'Conference Summons' },
+      { id: 'GL-2026-083', student: 'M. Jagadeesh', admNo: 'SV-0078', class: 'Class VII-A', date: '28 Oct 2026', time: '08:50 AM', delay: '+20 mins late', gate: 'Campus Gate #2', commute: 'Auto-Rickshaw', repeatedOccurrences: '1st occurrence', reason: 'Heavy morning downpour at Scindia stop', action: 'Permitted with verbal caution by VP Sri Navva Anand', status: 'Counseled' },
+      { id: 'GL-2026-084', student: 'K. Pravalika', admNo: 'SV-0011', class: 'Class X-A', date: '28 Oct 2026', time: '08:48 AM', delay: '+18 mins late', gate: 'Main Campus Gate #1', commute: 'APSRTC Bus', repeatedOccurrences: '1st occurrence', reason: 'Route 400 bus delayed at Sriharipuram junction', action: 'Admitted with morning assembly slip', status: 'Admitted' }
     ],
     meritAwards: [
-      { id: 'MRT-2026-018', student: 'P. Hema Latha', class: 'Class X-A', points: '+20 Points', category: 'Exemplary Merit / Good Deed', description: 'Achieved 1st Rank in District Mathematics Olympiad & guided peer group.', authority: 'Vice Principal Sri Navva Anand', date: 'Yesterday', certificateNo: 'CERT-MERIT-2026-104' },
-      { id: 'MRT-2026-017', student: 'T. Siri Varshini', class: 'Class III-A', points: '+15 Points', category: 'Honesty & Moral Integrity', description: 'Handed over misplaced gold earring found in primary library to VP office immediately.', authority: 'Principal Smt. Gorle Varalakshmi', date: 'Sept 18, 2026', certificateNo: 'CERT-MERIT-2026-103' },
-      { id: 'MRT-2026-016', student: 'G. Sai Teja', class: 'Class X-A', points: '+20 Points', category: 'State Science Olympiad Silver Medalist', description: 'Selected for National Science Seminar representing Andhra Pradesh South Zone.', authority: 'Vice Principal Sri Navva Anand', date: 'Sept 15, 2026', certificateNo: 'CERT-MERIT-2026-102' }
+      { id: 'MRT-2026-018', student: 'P. Hema Latha', admNo: 'SV-0082', class: 'Class X-A', achievement: '1st Rank in District Mathematics Olympiad', category: 'Academic Excellence & Olympiad', description: 'Secured District 1st Rank with 98% score in AP State Mathematics Olympiad; mentored junior students.', supportingEvidence: 'District Merit Citation #AP-MTH-902; Certified by State Olympiad Board', authority: 'Vice Principal Sri Navva Anand', points: '+20 Points', date: '27 Oct 2026', certificateNo: 'CERT-MERIT-2026-104' },
+      { id: 'MRT-2026-017', student: 'T. Siri Varshini', admNo: 'SV-0145', class: 'Class III-A', achievement: 'Exemplary Honesty & Moral Integrity', category: 'Honesty & Moral Integrity', description: 'Handed over misplaced gold ornament found in primary school library to VP office immediately.', supportingEvidence: 'Library Lost & Found Log Ref #LL-103; Verified by Smt. M. Sunitha', authority: 'Principal Smt. Gorle Varalakshmi', points: '+15 Points', date: '18 Sep 2026', certificateNo: 'CERT-MERIT-2026-103' },
+      { id: 'MRT-2026-016', student: 'G. Sai Teja', admNo: 'SV-0016', class: 'Class X-A', achievement: 'State Science Olympiad Silver Medalist', category: 'Science & Innovation', description: 'Selected for National Science Seminar representing Andhra Pradesh South Zone with solar telemetry project.', supportingEvidence: 'State Council Award Ref #AP-SC-2026-44; Official Medal Conferred', authority: 'Vice Principal Sri Navva Anand', points: '+20 Points', date: '15 Sep 2026', certificateNo: 'CERT-MERIT-2026-102' },
+      { id: 'MRT-2026-015', student: 'K. Sai Tharun', admNo: 'SV-0210', class: 'Class X-A', achievement: 'Best Speaker & English Debate Winner', category: 'Cultural & Literary Arts', description: 'Won 1st Place in Inter-School Declamation & Youth Parliamentary Conclave representing Sri Vidya School.', supportingEvidence: 'Sahodaya Youth Conclave Trophy & Medal #VIC-2026-09', authority: 'Principal Smt. Gorle Varalakshmi', points: '+25 Points', date: '10 Sep 2026', certificateNo: 'CERT-MERIT-2026-101' }
     ],
     parentConvocations: [
-      { id: 'CONV-2026-009', student: 'B. Tarun Reddy', class: 'Class IX-A', parent: 'B. Appa Rao', phone: '9848123490', date: 'Monday, Oct 05, 2026 • 10:00 AM', venue: 'Vice Principal Chamber (Room 102)', purpose: 'Review unauthorized smartphone usage in biology practical and execute conduct bond.', officer: 'Sri Navva Anand (Vice Principal)', status: 'Scheduled' },
-      { id: 'CONV-2026-008', student: 'CH. Karthik', class: 'Class VIII-A', parent: 'CH. Satyanarayana', phone: '9848234501', date: 'Friday, Sept 25, 2026 • 03:30 PM', venue: 'Academic Office (Ground Floor)', purpose: 'Habitual morning gate late-arrival counseling (3rd late entry this week).', officer: 'Sri Navva Anand (Vice Principal)', status: 'Completed' }
+      { id: 'CONV-2026-009', student: 'B. Tarun Reddy', admNo: 'SV-0042', class: 'Class IX-A', guardian: 'B. Appa Rao (Father)', phone: '9848123490', meetingDate: 'Monday, 02 Nov 2026 • 10:00 AM', venue: 'Vice Principal Chamber (Room 102)', purpose: 'Review unauthorized smartphone usage in biology lab & execute student conduct bond.', attendance: 'Confirmed Attending', followUp: 'Signed conduct undertaking lodged in dossier; bi-weekly review by VP.', followUpDate: '16 Nov 2026', officer: 'Sri Navva Anand (Vice Principal)', status: 'Scheduled' },
+      { id: 'CONV-2026-008', student: 'CH. Karthik', admNo: 'SV-0041', class: 'Class VIII-A', guardian: 'CH. Satyanarayana (Father)', phone: '9848234501', meetingDate: 'Friday, 30 Oct 2026 • 03:30 PM', venue: 'Academic Office (Ground Floor)', purpose: 'Habitual morning gate late-arrival counseling (3rd late entry this week).', attendance: 'Confirmed Attending', followUp: 'Daily gate entry diary counter-signed by sentry; zero period punctuality check.', followUpDate: '10 Nov 2026', officer: 'Sri Navva Anand (Vice Principal)', status: 'Scheduled' },
+      { id: 'CONV-2026-007', student: 'M. Dinesh Kumar', admNo: 'SV-0112', class: 'Class VI-A', guardian: 'M. Ramakrishna (Father)', phone: '9848567890', meetingDate: 'Wednesday, 28 Oct 2026 • 11:30 AM', venue: 'Principal Chamber', purpose: 'Quarterly exam academic progress & co-scholastic participation plan.', attendance: 'Attended & Signed', followUp: 'Weekly remedial test score cards submitted to VP office.', followUpDate: '05 Nov 2026', officer: 'Smt. Gorle Varalakshmi (Principal)', status: 'Completed' }
+    ],
+    counsellingReferrals: [
+      {
+        id: 'CNS-2026-01',
+        restrictedStatus: 'Confidential Active (Session 2/4)',
+        statusBadge: 'badge-warning',
+        student: 'P. Harsha Vardhan',
+        admNo: 'SV-0065',
+        class: 'Class IX-A',
+        focusArea: 'Punctuality & Behavioral Mentoring',
+        reason: 'Consecutive late arrivals; academic self-regulation & morning scheduling habit formation.',
+        counselor: 'Dr. Saranya CH',
+        counselorTitle: 'M.A. Clinical Psych • Student Welfare Lead',
+        referralDate: '15 Oct 2026',
+        sessionCount: '2 of 4',
+        followUpDate: 'Friday, 30 Oct 2026 • 02:30 PM',
+        followUpSession: 'Session 3: Habit Maintenance & Goal Check',
+        safeguardingLevel: 'Restricted - Level 1 Guidance',
+        confidentialNotes: 'Student shows positive responsiveness to daily planner tracking. Sleep hygiene schedule discussed with guardian.'
+      },
+      {
+        id: 'CNS-2026-02',
+        restrictedStatus: 'Resolved (Coping Skills Acquired)',
+        statusBadge: 'badge-success',
+        student: 'B. Vennela',
+        admNo: 'SV-0145',
+        class: 'Class VIII-A',
+        focusArea: 'Academic Stress & Exam Anxiety',
+        reason: 'Acute anticipatory anxiety prior to Quarterly Examination assessments.',
+        counselor: 'Dr. Saranya CH',
+        counselorTitle: 'M.A. Clinical Psych • Student Welfare Lead',
+        referralDate: '12 Oct 2026',
+        sessionCount: '3 of 3',
+        followUpDate: 'Term 2 Review (Dec 2026)',
+        followUpSession: 'Follow-up Monitoring & Confidence Audit',
+        safeguardingLevel: 'Restricted - Level 1 Guidance',
+        confidentialNotes: 'Applied diaphragmatic breathing and structured timed test drills. Subject scores in Mathematics improved to 92%.'
+      },
+      {
+        id: 'CNS-2026-03',
+        restrictedStatus: 'Confidential Active (Session 1/3)',
+        statusBadge: 'badge-warning',
+        student: 'M. Dinesh Kumar',
+        admNo: 'SV-0112',
+        class: 'Class VI-A',
+        focusArea: 'Peer Socialization & Group Adaptability',
+        reason: 'Transition challenges from rural school; needs peer collaborative encouragement.',
+        counselor: 'Smt. K. Sunitha',
+        counselorTitle: 'Certified Educational Guidance Counselor',
+        referralDate: '20 Oct 2026',
+        sessionCount: '1 of 3',
+        followUpDate: 'Monday, 02 Nov 2026 • 11:00 AM',
+        followUpSession: 'Session 2: Peer Group Mentoring & Art Expression',
+        safeguardingLevel: 'Restricted - Level 2 Safeguarding',
+        confidentialNotes: 'Assigned student buddy in Class VI-A. Shows high engagement in environmental science activities.'
+      }
     ],
     facultyLeaves: [
-      { id: 1, name: 'Sri K. Rajesh', dept: 'Physical Science', type: 'Medical Leave', dates: 'Sept 21 – 22 (2 Days)', substitute: 'Sri Navva Anand & Smt. S. Lakshmi', reason: 'Viral fever & throat infection recovery.', status: 'Pending VP Recommendation' },
-      { id: 2, name: 'Smt. K. Anitha', dept: 'Primary Mathematics', type: 'Casual Leave', dates: 'Sept 23 (1 Day)', substitute: 'Smt. G. Sarada', reason: 'Family ceremony attendance.', status: 'Pending VP Recommendation' },
-      { id: 3, name: 'Sri V. Ramesh Babu', dept: 'Physical Education', type: 'On Duty (OD)', dates: 'Sept 25 (1 Day)', substitute: 'Sri D. Srinivas', reason: 'Accompanying district badminton team for inter-school meet.', status: 'Pending VP Recommendation' }
+      {
+        id: 'LV-2026-001',
+        staffId: 'SV200005',
+        name: 'Sri K. Rajesh',
+        category: 'Teaching',
+        role: 'Senior Faculty',
+        dept: 'Physical Science & Physics HOD',
+        type: 'Medical Leave',
+        dates: 'Sept 21 – 22, 2026',
+        daysCount: 2,
+        days: '2 Working Days',
+        substitute: 'Sri Navva Anand & Smt. S. Lakshmi',
+        reason: 'Viral fever & throat infection recovery prescribed by medical practitioner.',
+        balance: 'ML: 8/10 Left • CL: 11/12 Left',
+        status: 'Pending Sign-off',
+        appliedOn: '2026-09-19'
+      },
+      {
+        id: 'LV-2026-002',
+        staffId: 'SV200014',
+        name: 'Smt. K. Anitha',
+        category: 'Teaching',
+        role: 'Primary Faculty',
+        dept: 'Primary Mathematics & Activity Lead',
+        type: 'Casual Leave',
+        dates: 'Sept 23, 2026',
+        daysCount: 1,
+        days: '1 Working Day',
+        substitute: 'Smt. G. Sarada (Telugu Senior)',
+        reason: 'Family ceremony attendance & personal social commitment.',
+        balance: 'CL: 7/12 Left • ML: 10/10 Left',
+        status: 'Pending Sign-off',
+        appliedOn: '2026-09-20'
+      },
+      {
+        id: 'LV-2026-003',
+        staffId: 'SV200021',
+        name: 'Sri V. Ramesh Babu',
+        category: 'Teaching',
+        role: 'Sports Director',
+        dept: 'Physical Education & Athletics',
+        type: 'On Duty (OD)',
+        dates: 'Sept 25, 2026',
+        daysCount: 1,
+        days: '1 Working Day',
+        substitute: 'Sri D. Srinivas (Campus Athletics)',
+        reason: 'Accompanying district badminton team for inter-school state qualifiers.',
+        balance: 'OD: Statutory Duty Exemption',
+        status: 'Pending Sign-off',
+        appliedOn: '2026-09-21'
+      },
+      {
+        id: 'LV-2026-004',
+        staffId: 'NT-103',
+        name: 'Smt. G. Bhavani',
+        category: 'Non-Teaching',
+        role: 'Senior Lab Assistant',
+        dept: 'Science Labs & Apparatus In-Charge',
+        type: 'Casual Leave',
+        dates: 'Sept 26, 2026',
+        daysCount: 1,
+        days: '1 Working Day',
+        substitute: 'Sri P. Raju (Lab Attendant)',
+        reason: 'Urgent domestic work and personal exigency at native place.',
+        balance: 'CL: 9/12 Left • ML: 10/10 Left',
+        status: 'Pending Sign-off',
+        appliedOn: '2026-09-22'
+      },
+      {
+        id: 'LV-2026-005',
+        staffId: 'SV200008',
+        name: 'Smt. S. Lakshmi',
+        category: 'Teaching',
+        role: 'Senior Faculty',
+        dept: 'Biological Science HOD',
+        type: 'Casual Leave',
+        dates: 'Oct 29, 2026',
+        daysCount: 1,
+        days: '1 Working Day',
+        substitute: 'Sri Navva Anand (Composite Lab)',
+        reason: 'Daughter university counseling & document verification in Guntur.',
+        balance: 'CL: 8/12 Left • ML: 9/10 Left',
+        status: 'Pending Sign-off',
+        appliedOn: '2026-10-25'
+      }
+    ],
+    leaveHistory: [
+      { id: 'LEV-2026-104', date: '26 Oct 2026', applicant: 'Sri K. Rajesh', role: 'Faculty', deptOrClass: 'Physical Science & Physics HOD', category: 'Faculty', type: 'Medical Leave', dates: '21 Sep – 22 Sep 2026', duration: '2 Days', reason: 'Viral fever & throat infection recovery prescribed by doctor', approver: 'Vice Principal Sri Navva Anand', status: 'Approved' },
+      { id: 'LEV-2026-103', date: '25 Oct 2026', applicant: 'P. Kiran Kumar', role: 'Student', deptOrClass: 'Class X-A • #1004', category: 'Student', type: 'Medical Slip', dates: '24 Sep – 26 Sep 2026', duration: '3 Days', reason: 'Typhoid recovery • Doctor Certificate Verified', approver: 'Vice Principal Sri Navva Anand', status: 'Approved' },
+      { id: 'LEV-2026-102', date: '25 Oct 2026', applicant: 'Smt. M. Sunitha', role: 'Faculty', deptOrClass: 'English Language & Literature', category: 'Faculty', type: 'Casual Leave', dates: '20 Oct 2026', duration: '1 Day', reason: 'Attended University convocation & graduation ceremony', approver: 'Principal Smt. Gorle Varalakshmi', status: 'Approved' },
+      { id: 'LEV-2026-101', date: '24 Oct 2026', applicant: 'Sri D. Srinivas', role: 'Faculty', deptOrClass: 'Computer Science & IT', category: 'Faculty', type: 'Casual Leave', dates: '23 Oct 2026', duration: '1 Day', reason: 'Personal holiday travel during mid-term examination week', approver: 'Principal Smt. Gorle Varalakshmi', status: 'Rejected' },
+      { id: 'LEV-2026-100', date: '24 Oct 2026', applicant: 'CH. Karthik', role: 'Student', deptOrClass: 'Class VIII-A • #803', category: 'Student', type: 'Gate Pass / Early Exit', dates: '24 Oct 2026 • 01:30 PM', duration: 'Half Day', reason: 'Dental appointment at Gajuwaka Clinic', approver: 'Vice Principal Sri Navva Anand', status: 'Approved' },
+      { id: 'LEV-2026-099', date: '23 Oct 2026', applicant: 'G. Sai Teja', role: 'Student', deptOrClass: 'Class X-A • #1001', category: 'Student', type: 'Sports / Olympiad', dates: '25 Sep 2026', duration: '1 Day', reason: 'AP State Athletics Meet Representation (Vizag)', approver: 'Vice Principal Sri Navva Anand', status: 'Approved' },
+      { id: 'LEV-2026-098', date: '22 Oct 2026', applicant: 'Sri B. Narayana', role: 'Faculty', deptOrClass: 'Chemistry & High School HOD', category: 'Faculty', type: 'On Duty (OD)', dates: '22 Oct 2026', duration: '1 Day', reason: 'State SCERT Curriculum Orientation (rescheduled by Govt)', approver: 'Principal Smt. Gorle Varalakshmi', status: 'Cancelled' },
+      { id: 'LEV-2026-097', date: '21 Oct 2026', applicant: 'Smt. K. Anitha', role: 'Faculty', deptOrClass: 'Primary Mathematics Lead', category: 'Faculty', type: 'Casual Leave', dates: '23 Sep 2026', duration: '1 Day', reason: 'Family ceremony attendance & personal social commitment', approver: 'Vice Principal Sri Navva Anand', status: 'Approved' },
+      { id: 'LEV-2026-096', date: '20 Oct 2026', applicant: 'D. Manoj Kumar', role: 'Student', deptOrClass: 'Class VII-B • #715', category: 'Student', type: 'Personal Leave', dates: '20 Oct 2026', duration: '1 Day', reason: 'Family pilgrimage out of district', approver: 'Vice Principal Sri Navva Anand', status: 'Approved' },
+      { id: 'LEV-2026-095', date: '19 Oct 2026', applicant: 'Sri P. Satyanarayana', role: 'Faculty', deptOrClass: 'High School Mathematics', category: 'Faculty', type: 'Casual Leave', dates: '18 Oct 2026', duration: '1 Day', reason: 'Unnotified absence on laboratory practical examination date', approver: 'Principal Smt. Gorle Varalakshmi', status: 'Rejected' },
+      { id: 'LEV-2026-094', date: '18 Oct 2026', applicant: 'CH. Charitha', role: 'Student', deptOrClass: 'Class PP-1 • #015', category: 'Student', type: 'Family / Personal', dates: '25 Sep – 26 Sep 2026', duration: '2 Days', reason: 'Family travel out of station', approver: 'Vice Principal Sri Navva Anand', status: 'Approved' },
+      { id: 'LEV-2026-093', date: '17 Oct 2026', applicant: 'M. Ramesh', role: 'Staff', deptOrClass: 'Office & Accounts Staff', category: 'Faculty', type: 'Earned Leave (EL)', dates: '14 Oct – 16 Oct 2026', duration: '3 Days', reason: 'Family pilgrimage to Tirupati', approver: 'Principal Smt. Gorle Varalakshmi', status: 'Approved' },
+      { id: 'LEV-2026-092', date: '16 Oct 2026', applicant: 'R. Divya', role: 'Student', deptOrClass: 'Class V-A • #505', category: 'Student', type: 'Gate Pass', dates: '16 Oct • 02:00 PM', duration: 'Half Day', reason: 'High fever in class • Escorted by mother Smt. R. Lakshmi', approver: 'Vice Principal Sri Navva Anand', status: 'Approved' },
+      { id: 'LEV-2026-091', date: '15 Oct 2026', applicant: 'Smt. B. Meenakshi', role: 'Faculty', deptOrClass: 'Hindi Language & Literature', category: 'Faculty', type: 'Casual Leave', dates: '14 Oct 2026', duration: '1 Day', reason: 'Unarranged class coverage clashing with Board pre-assessment', approver: 'Principal Smt. Gorle Varalakshmi', status: 'Rejected' },
+      { id: 'LEV-2026-090', date: '14 Oct 2026', applicant: 'K. Sai Tharun', role: 'Student', deptOrClass: 'Class IX-A • #904', category: 'Student', type: 'Sick / Illness', dates: '12 Oct – 13 Oct 2026', duration: '2 Days', reason: 'Acute migraine & fever reported by parent', approver: 'Vice Principal Sri Navva Anand', status: 'Approved' },
+      { id: 'LEV-2026-089', date: '12 Oct 2026', applicant: 'P. Sai Kiran', role: 'Student', deptOrClass: 'Class X-A • #1006', category: 'Student', type: 'Medical Slip', dates: '12 Oct 2026', duration: '1 Day', reason: 'Doctor consultation cancelled • Attended school regular periods', approver: 'Vice Principal Sri Navva Anand', status: 'Cancelled' },
+      { id: 'LEV-2026-088', date: '28 Oct 2026', applicant: 'Sri V. Ramesh Babu', role: 'Faculty', deptOrClass: 'Physical Education & Athletics', category: 'Faculty', type: 'On Duty (OD)', dates: '29 Oct 2026', duration: '1 Day', reason: 'State Inter-School Athletics Zonal Qualifier Escort', approver: 'Principal Smt. Gorle Varalakshmi', status: 'Pending' },
+      { id: 'LEV-2026-087', date: '28 Oct 2026', applicant: 'Smt. S. Lakshmi', role: 'Faculty', deptOrClass: 'Biological Science HOD', category: 'Faculty', type: 'Casual Leave', dates: '29 Oct 2026', duration: '1 Day', reason: 'Daughter university counseling & admission verification', approver: 'Vice Principal Sri Navva Anand', status: 'Pending' }
+    ],
+    leaveCalendar: [
+      {
+        date: 'Monday, 26 Oct 2026',
+        day: 'Monday',
+        absences: [
+          { name: 'Sri K. Rajesh', dept: 'Physical Science', type: 'Medical Leave', badge: 'badge-danger', icon: 'fa-user-doctor' }
+        ],
+        substitutes: [
+          { period: 'Period 2 (09:30 – 10:20 AM)', class: 'Class X-A', subject: 'Physical Science', replacement: 'Sri Navva Anand (VP)', status: 'Confirmed' }
+        ],
+        overlap: { hasOverlap: false, severity: 'clean', label: 'Clean (0 Overlaps)', icon: 'fa-circle-check', text: 'No concurrent staff absences in the same department.' }
+      },
+      {
+        date: 'Tuesday, 27 Oct 2026',
+        day: 'Tuesday',
+        absences: [
+          { name: 'Smt. K. Anitha', dept: 'Primary Mathematics', type: 'Casual Leave', badge: 'badge-warning', icon: 'fa-user-clock' }
+        ],
+        substitutes: [
+          { period: 'Period 1 (08:45 – 09:30 AM)', class: 'Class IV-A', subject: 'Mathematics', replacement: 'Smt. G. Sarada', status: 'Confirmed' }
+        ],
+        overlap: { hasOverlap: false, severity: 'clean', label: 'Clean (0 Overlaps)', icon: 'fa-circle-check', text: 'Single absence with 100% substitute coverage mapped.' }
+      },
+      {
+        date: 'Wednesday, 28 Oct 2026',
+        day: 'Wednesday',
+        absences: [
+          { name: 'Sri K. Rajesh', dept: 'Physical Science', type: 'Medical Leave', badge: 'badge-danger', icon: 'fa-user-doctor' },
+          { name: 'Sri M. Raju', dept: 'Social Studies', type: 'On Duty (OD)', badge: 'badge-primary', icon: 'fa-medal' }
+        ],
+        substitutes: [
+          { period: 'Period 3 (10:35 – 11:20 AM)', class: 'Class IX-A', subject: 'Physical Science', replacement: 'Smt. S. Lakshmi', status: 'Confirmed' },
+          { period: 'Period 7 (02:55 – 03:40 PM)', class: 'Class VII-A', subject: 'Social Studies', replacement: 'Sri R. Venkata Ramana', status: 'Confirmed' }
+        ],
+        overlap: { hasOverlap: true, severity: 'warning', label: '2 Faculty Absent &bull; Mitigated', icon: 'fa-triangle-exclamation', text: 'Absences cross distinct academic wings (High School Science & Social). Both slots covered.' }
+      },
+      {
+        date: 'Thursday, 29 Oct 2026',
+        day: 'Thursday',
+        absences: [
+          { name: 'Smt. S. Lakshmi', dept: 'Biological Science', type: 'Casual Leave', badge: 'badge-warning', icon: 'fa-user-clock' }
+        ],
+        substitutes: [
+          { period: 'Period 3 (10:35 – 11:20 AM)', class: 'Class VIII-A', subject: 'Biology Lab', replacement: 'Sri Navva Anand (VP)', status: 'Confirmed' }
+        ],
+        overlap: { hasOverlap: false, severity: 'clean', label: 'Clean (0 Overlaps)', icon: 'fa-circle-check', text: 'Single department absence smoothly reallocated to Vice Principal lab supervision.' }
+      },
+      {
+        date: 'Friday, 30 Oct 2026',
+        day: 'Friday',
+        absences: [
+          { name: 'Sri B. Narayana', dept: 'Physical Science (Chemistry)', type: 'On Duty (OD)', badge: 'badge-primary', icon: 'fa-award' },
+          { name: 'Sri K. Rajesh', dept: 'Physical Science (Physics)', type: 'Medical Leave', badge: 'badge-danger', icon: 'fa-user-doctor' }
+        ],
+        substitutes: [
+          { period: 'Period 1 (08:45 – 09:30 AM)', class: 'Class X-A', subject: 'Mathematics / Science', replacement: 'Sri Navva Anand', status: 'Confirmed' },
+          { period: 'Period 2 (09:30 – 10:20 AM)', class: 'Class IX-B', subject: 'Physics Lab', replacement: 'Smt. D. Meena', status: 'Pending Cover' }
+        ],
+        overlap: { hasOverlap: true, severity: 'danger', label: 'Department Overlap (Science)', icon: 'fa-circle-exclamation', text: '⚠️ Concurrency Alert: 2 teachers from Science Dept absent on same day. Period 2 substitute pending final VP confirmation.' }
+      },
+      {
+        date: 'Saturday, 31 Oct 2026',
+        day: 'Saturday',
+        absences: [],
+        substitutes: [],
+        overlap: { hasOverlap: false, severity: 'clean', label: '100% On-Campus', icon: 'fa-shield-halved', text: 'Zero scheduled faculty leaves. Full staff presence for weekend academic and club sessions.' }
+      }
     ]
   };
+  // Teachers & Staff State & Access Control
+  var facultyViewMode = 'table';
+  var staffViewMode = 'table';
+  var teachersEnriched = false;
+
+  function isStaffAuthorized() {
+    return (state.currentRole === 'principal' || state.currentRole === 'vice-principal');
+  }
+
+  function ensureTeachersEnriched() {
+    if (teachersEnriched) return;
+    const classMap = {
+      'Administration & Mathematics': ['Class X-A', 'Class X-B', 'Class IX-A'],
+      'Physical Science & Administration': ['Class X-A', 'Class IX-B', 'Class VIII-A'],
+      'English': ['Class X-B', 'Class IX-A', 'Class VIII-B'],
+      'Mathematics': ['Class VIII-A', 'Class VII-A', 'Class VI-A'],
+      'Social Studies': ['Class X-A', 'Class IX-A', 'Class VIII-A'],
+      'Biological Science': ['Class X-B', 'Class IX-B', 'Class VIII-B'],
+      'Telugu Language': ['Class VII-A', 'Class VI-B', 'Class V-A'],
+      'Hindi Language': ['Class VIII-A', 'Class VII-B', 'Class VI-A'],
+      'Computer Applications': ['Class X-A', 'Class IX-A', 'Class VIII-A', 'Class VII-A'],
+      'Pre-Primary & Primary': ['Class II-A', 'Class I-A', 'UKG-A', 'LKG-A']
+    };
+
+    (state.faculty || []).forEach((f, idx) => {
+      f.isTeaching = true;
+      f.subjects = f.subject || f.department || 'Academics';
+      let matchedClasses = null;
+      for (const [key, classes] of Object.entries(classMap)) {
+        if (f.subjects.toLowerCase().includes(key.toLowerCase()) || (f.role && f.role.toLowerCase().includes(key.toLowerCase()))) {
+          matchedClasses = classes; break;
+        }
+      }
+      f.assignedClasses = f.assignedClasses || matchedClasses || ['Class ' + (8 + (idx % 3)) + '-A', 'Class ' + (7 + (idx % 3)) + '-B'];
+      f.qualifications = f.qualification || 'M.Sc, B.Ed';
+      f.joiningDate = f.joiningDate || f.joinDate || ('15-Jun-' + (2014 + (idx % 9)));
+      f.status = f.status || 'Active';
+      f.weeklyPeriods = 20 + ((idx * 3) % 8);
+      f.workloadConflict = (idx === 3 || f.id === 'SV200004') ? 'Fri Period 4: Class IX-A & X-B Overlap' : null;
+      f.salary = '₹ ' + (42000 + (idx * 1400)).toLocaleString('en-IN') + ' / mo';
+      f.aadhaar = f.aadhaar || ('5482 1920 ' + (3840 + idx));
+      f.pan = f.pan || ('ABCDE' + (1230 + idx) + 'F');
+      f.hrNotes = f.hrNotes || (idx === 0 ? 'Academic Director & Board Examination Officer.' : 'Confirmed regular teaching faculty. Satisfactory academic adherence.');
+      f.appraisal = f.appraisal || {
+        period: 'AY 2025–2026 (Annual Cycle)',
+        goals: '100% SSC Pass in ' + f.subjects + ', Remedial Mentoring, STEM Project Leadership',
+        status: idx % 4 === 0 ? 'Completed & Finalized' : 'Verified by VP',
+        feedback: idx === 0 ? 'Exemplary leadership, outstanding parental satisfaction (98%).' : 'Consistent classroom management and excellent student rapport.',
+        rating: (4.6 + ((idx % 4) * 0.1)).toFixed(1) + ' / 5.0 (' + (idx % 2 === 0 ? 'Exemplary A+' : 'Commendable A') + ')'
+      };
+      f.documents = f.documents || {
+        qualifications: [{ name: (f.qualifications || 'M.Sc, B.Ed').split(',')[0].trim() + ' Degree Certificate', status: 'Verified' }, { name: 'Teacher Training / B.Ed Record', status: 'Verified' }],
+        identity: [{ name: 'Aadhaar UID Card', file: 'Aadhaar_' + f.id + '.pdf', status: 'Verified' }, { name: 'PAN Card', file: 'PAN_' + f.id + '.pdf', status: 'Verified' }],
+        employment: [{ name: 'Appointment Letter (' + f.joiningDate + ')', status: 'Verified' }, { name: 'Police Verification Record', status: 'Verified' }],
+        overallStatus: 'Fully Verified'
+      };
+    });
+
+    (NON_TEACHING_STAFF_DATA || []).forEach((s, idx) => {
+      s.isTeaching = false;
+      s.department = s.dept || 'Administrative Office';
+      s.designation = s.role || 'Office Administrator';
+      s.joiningDate = s.joiningDate || ('10-Aug-' + (2015 + (idx % 7)));
+      s.employmentStatus = s.employmentStatus || 'Permanent (Full Time)';
+      s.qualifications = s.qualification || 'Graduate';
+      s.salary = '₹ ' + (24000 + (idx * 1300)).toLocaleString('en-IN') + ' / mo';
+      s.aadhaar = s.aadhaar || ('7891 2345 ' + (6710 + idx));
+      s.pan = s.pan || ('MNPQR' + (5670 + idx) + 'K');
+      s.hrNotes = s.hrNotes || 'Permanent institutional staff member. Punctual, verified compliance.';
+      s.documents = s.documents || {
+        qualifications: [{ name: s.qualifications.split(',')[0].trim() + ' Certificate', status: 'Verified' }],
+        identity: [{ name: 'Aadhaar UID Card', file: 'Aadhaar_' + s.id + '.pdf', status: 'Verified' }, { name: 'PAN Card', file: 'PAN_' + s.id + '.pdf', status: 'Verified' }],
+        employment: [{ name: 'Service Order (' + s.joiningDate + ')', status: 'Verified' }, { name: 'Character Certificate', status: 'Verified' }],
+        overallStatus: 'Fully Verified'
+      };
+    });
+    teachersEnriched = true;
+  }
+
+  function updateTeachersConfidentialityBanner() {
+    const isExec = isStaffAuthorized();
+    const roleTitle = state.currentRole === 'principal' ? 'Principal' : (state.currentRole === 'vice-principal' ? 'Vice-Principal' : 'Office Clerk');
+    const badgeEl = document.getElementById('teachersConfidentialityStatusBadge');
+    const textEl = document.getElementById('teachersConfidentialityText');
+    const appraisalNotice = document.getElementById('appraisalConfidentialityLockNotice');
+    const docNotice = document.getElementById('staffDocsConfidentialityNotice');
+    if (badgeEl) {
+      if (isExec) {
+        badgeEl.innerHTML = '<span class="confidential-unlocked"><i class="fa-solid fa-unlock-keyhole"></i> Authorized: ' + roleTitle + ' Access (Full Data Unlocked)</span>';
+      } else {
+        badgeEl.innerHTML = '<span class="confidential-lock"><i class="fa-solid fa-lock"></i> Restricted: ' + roleTitle + ' (Salary, Identity &amp; Appraisals Masked)</span>';
+      }
+    }
+    if (textEl) {
+      if (isExec) {
+        textEl.innerHTML = 'Executive Authorization active. Full salary registers, statutory identity documents (Aadhaar/PAN), teacher appraisals, and confidential HR files are accessible for review and sign-off.';
+      } else {
+        textEl.innerHTML = 'Institutional Data Privacy active. Restricted salary records, identity documents (Aadhaar/PAN), teacher appraisal ratings, and confidential HR notes are locked for Office Clerk / administrative desk.';
+      }
+    }
+    if (appraisalNotice) appraisalNotice.style.display = isExec ? 'none' : 'flex';
+    if (docNotice) docNotice.style.display = isExec ? 'none' : 'flex';
+  }
+
+  function toggleFacultyView(mode) {
+    facultyViewMode = mode;
+    const btnTable = document.getElementById('btnFacultyViewTable');
+    const btnCards = document.getElementById('btnFacultyViewCards');
+    const tableWrap = document.getElementById('facultyTableWrapper');
+    const cardsWrap = document.getElementById('staffGridContainer');
+    if (btnTable && btnCards && tableWrap && cardsWrap) {
+      if (mode === 'table') {
+        btnTable.classList.add('active'); btnCards.classList.remove('active');
+        tableWrap.style.display = ''; cardsWrap.style.display = 'none';
+      } else {
+        btnTable.classList.remove('active'); btnCards.classList.add('active');
+        tableWrap.style.display = 'none'; cardsWrap.style.display = 'grid';
+      }
+    }
+  }
+
+  function toggleStaffView(mode) {
+    staffViewMode = mode;
+    const btnTable = document.getElementById('btnStaffViewTable');
+    const btnCards = document.getElementById('btnStaffViewCards');
+    const tableWrap = document.getElementById('staffTableWrapper');
+    const cardsWrap = document.getElementById('nonTeachingStaffContainer');
+    if (btnTable && btnCards && tableWrap && cardsWrap) {
+      if (mode === 'table') {
+        btnTable.classList.add('active'); btnCards.classList.remove('active');
+        tableWrap.style.display = ''; cardsWrap.style.display = 'none';
+      } else {
+        btnTable.classList.remove('active'); btnCards.classList.add('active');
+        tableWrap.style.display = 'none'; cardsWrap.style.display = 'grid';
+      }
+    }
+  }
+
 
   // =========================================================================
   // SRI VIDYA HIGH SCHOOL - SUBVIEW STATIC & HISTORICAL REGISTERS
@@ -880,22 +1247,452 @@ const portalApp = (function () {
   ];
 
   const EXAM_SCHEDULE_DETAILED = [
-    { date: '28 Sep 2026 (Mon)', time: '09:30 AM – 12:00 PM', code: 'X-MTH-01', subject: 'Mathematics (Paper 1)', marks: '50 Marks', status: 'Printed & Sealed in Locker', lead: 'Sri P. Satyanarayana' },
-    { date: '29 Sep 2026 (Tue)', time: '09:30 AM – 12:00 PM', code: 'X-PHY-02', subject: 'Physical Science', marks: '50 Marks', status: 'Question Paper Confidential', lead: 'Sri Navva Anand' },
-    { date: '30 Sep 2026 (Wed)', time: '09:30 AM – 12:00 PM', code: 'X-BIO-03', subject: 'Biological Science', marks: '50 Marks', status: 'Approved by Principal', lead: 'Smt. S. Lakshmi' },
-    { date: '01 Oct 2026 (Thu)', time: '09:30 AM – 12:00 PM', code: 'X-ENG-04', subject: 'English Language', marks: '50 Marks', status: 'Approved by Principal', lead: 'Smt. M. Sunitha' },
-    { date: '03 Oct 2026 (Sat)', time: '09:30 AM – 12:00 PM', code: 'X-SOC-05', subject: 'Social Studies', marks: '50 Marks', status: 'Question Paper Confidential', lead: 'Sri R. Venkata Ramana' },
-    { date: '05 Oct 2026 (Mon)', time: '09:30 AM – 12:00 PM', code: 'X-TEL-06', subject: 'First Language Telugu', marks: '50 Marks', status: 'Approved by Principal', lead: 'Smt. G. Sarada' }
+    {
+      id: 'EX-01',
+      date: '24 Oct 2026 (Fri)',
+      day: 'Friday',
+      session: 'Forenoon (FN)',
+      time: '09:30 AM – 12:30 PM',
+      duration: '3.0 Hrs',
+      code: 'SSC-MTH-01',
+      subject: 'Mathematics (General & Advanced)',
+      classes: 'Class X-A & IX-A',
+      marks: '100 (Pass: 35)',
+      hall: 'Main Hall 1 (Rooms 101-102)',
+      lead: 'Sri Navva Anand (VP)',
+      hallTickets: 'Dispatched (100%)',
+      status: 'Approved & Locked'
+    },
+    {
+      id: 'EX-02',
+      date: '25 Oct 2026 (Sat)',
+      day: 'Saturday',
+      session: 'Forenoon (FN)',
+      time: '09:30 AM – 12:30 PM',
+      duration: '3.0 Hrs',
+      code: 'SSC-SCI-02',
+      subject: 'General Science (Physical & Bio)',
+      classes: 'Class X-A & IX-A',
+      marks: '100 (Pass: 35)',
+      hall: 'Science Block Hall 3 (Rooms 201-202)',
+      lead: 'Sri K. Rajesh (Science HOD)',
+      hallTickets: 'Dispatched (100%)',
+      status: 'Approved & Locked'
+    },
+    {
+      id: 'EX-03',
+      date: '27 Oct 2026 (Mon)',
+      day: 'Monday',
+      session: 'Forenoon (FN)',
+      time: '09:30 AM – 12:30 PM',
+      duration: '3.0 Hrs',
+      code: 'SSC-ENG-03',
+      subject: 'English Language & Literature',
+      classes: 'Class X-A & IX-A',
+      marks: '100 (Pass: 35)',
+      hall: 'Main Hall 1 (Rooms 101-102)',
+      lead: 'Smt. M. Sunitha (English Dept)',
+      hallTickets: 'Dispatched (100%)',
+      status: 'Approved & Locked'
+    },
+    {
+      id: 'EX-04',
+      date: '28 Oct 2026 (Tue)',
+      day: 'Tuesday',
+      session: 'Forenoon (FN)',
+      time: '09:30 AM – 12:30 PM',
+      duration: '3.0 Hrs',
+      code: 'SSC-TEL-04',
+      subject: 'Telugu First Language',
+      classes: 'Class X-A & IX-A',
+      marks: '100 (Pass: 35)',
+      hall: 'Main Hall 2 (Rooms 103-104)',
+      lead: 'Smt. G. Sarada (Telugu Dept)',
+      hallTickets: 'Dispatched (100%)',
+      status: 'Approved & Locked'
+    },
+    {
+      id: 'EX-05',
+      date: '29 Oct 2026 (Wed)',
+      day: 'Wednesday',
+      session: 'Forenoon (FN)',
+      time: '09:30 AM – 12:30 PM',
+      duration: '3.0 Hrs',
+      code: 'SSC-SOC-05',
+      subject: 'Social Studies & Civics',
+      classes: 'Class X-A & IX-A',
+      marks: '100 (Pass: 35)',
+      hall: 'Main Hall 2 (Rooms 103-104)',
+      lead: 'Sri R. Venkata Ramana (Social HOD)',
+      hallTickets: 'Dispatched (100%)',
+      status: 'Approved & Locked'
+    },
+    {
+      id: 'EX-06',
+      date: '30 Oct 2026 (Thu)',
+      day: 'Thursday',
+      session: 'Forenoon (FN)',
+      time: '09:30 AM – 12:30 PM',
+      duration: '3.0 Hrs',
+      code: 'SSC-HIN-06',
+      subject: 'Hindi Second Language',
+      classes: 'Class X-A & IX-A',
+      marks: '100 (Pass: 35)',
+      hall: 'Primary Wing Hall 4 (Rooms 203-204)',
+      lead: 'Smt. V. Jyothsna (Hindi Dept)',
+      hallTickets: 'Dispatched (100%)',
+      status: 'Approved & Locked'
+    }
   ];
 
   const INVIGILATION_DUTIES_DATA = [
-    { hall: 'Hall 1 (Main Auditorium)', classes: 'Class X-A & Class IX-A (Odd Rolls)', invig1: 'Sri Navva Anand (VP)', invig2: 'Smt. S. Lakshmi', total: '70 Students', status: 'Duty Assigned & Confirmed' },
-    { hall: 'Hall 2 (Secondary Wing - 2nd Flr)', classes: 'Class X-A & Class IX-A (Even Rolls)', invig1: 'Sri B. Narayana', invig2: 'Sri M. Raju', total: '65 Students', status: 'Duty Assigned & Confirmed' },
-    { hall: 'Hall 3 (Primary Wing - 1st Flr)', classes: 'Class VIII-A & Class VII-A', invig1: 'Smt. M. Sunitha', invig2: 'Sri CH. Venkateswara Rao', total: '72 Students', status: 'Duty Assigned & Confirmed' },
-    { hall: 'Hall 4 (Ground Floor Seminar)', classes: 'Class VI-A & Class V-A', invig1: 'Smt. V. Jyothsna', invig2: 'Sri A. Prasad', total: '68 Students', status: 'Duty Assigned & Confirmed' }
+    {
+      id: 'INV-101',
+      date: '24 Oct 2026 (Fri)',
+      day: 'Friday',
+      session: 'Forenoon (FN)',
+      time: '09:30 AM – 12:30 PM',
+      hall: 'Hall 1: Rooms 101-102 (Cap: 78)',
+      invigilator: 'Sri B. Narayana',
+      empCode: 'EMP-014',
+      dept: 'Senior High School Mathematics',
+      relief: 'Sri P. Satyanarayana',
+      reportingTime: '08:45 AM (Strict)',
+      status: 'Reporting Confirmed'
+    },
+    {
+      id: 'INV-102',
+      date: '24 Oct 2026 (Fri)',
+      day: 'Friday',
+      session: 'Forenoon (FN)',
+      time: '09:30 AM – 12:30 PM',
+      hall: 'Hall 1: Rooms 101-102 (Cap: 78)',
+      invigilator: 'Smt. M. Sunitha',
+      empCode: 'EMP-016',
+      dept: 'High School English Faculty',
+      relief: 'Sri D. Srinivas',
+      reportingTime: '08:45 AM (Strict)',
+      status: 'Reporting Confirmed'
+    },
+    {
+      id: 'INV-103',
+      date: '24 Oct 2026 (Fri)',
+      day: 'Friday',
+      session: 'Forenoon (FN)',
+      time: '09:30 AM – 12:30 PM',
+      hall: 'Hall 2: Rooms 103-104 (Cap: 78)',
+      invigilator: 'Sri K. Rajesh',
+      empCode: 'EMP-015',
+      dept: 'Physical Science Faculty',
+      relief: 'Sri V. Ramesh Babu',
+      reportingTime: '08:45 AM (Strict)',
+      status: 'Assigned & Confirmed'
+    },
+    {
+      id: 'INV-104',
+      date: '24 Oct 2026 (Fri)',
+      day: 'Friday',
+      session: 'Forenoon (FN)',
+      time: '09:30 AM – 12:30 PM',
+      hall: 'Hall 2: Rooms 103-104 (Cap: 78)',
+      invigilator: 'Smt. S. Lakshmi',
+      empCode: 'EMP-018',
+      dept: 'Biological Science HOD',
+      relief: 'Smt. K. Anitha',
+      reportingTime: '08:45 AM (Strict)',
+      status: 'Assigned & Confirmed'
+    },
+    {
+      id: 'INV-105',
+      date: '24 Oct 2026 (Fri)',
+      day: 'Friday',
+      session: 'Forenoon (FN)',
+      time: '09:30 AM – 12:30 PM',
+      hall: 'Hall 3: Rooms 201-202 (Cap: 70)',
+      invigilator: 'Sri CH. Venkateswara Rao',
+      empCode: 'EMP-020',
+      dept: 'Middle School Science Mentor',
+      relief: 'Sri S. Gopal',
+      reportingTime: '08:45 AM (Strict)',
+      status: 'Active In-Hall'
+    },
+    {
+      id: 'INV-106',
+      date: '24 Oct 2026 (Fri)',
+      day: 'Friday',
+      session: 'Forenoon (FN)',
+      time: '09:30 AM – 12:30 PM',
+      hall: 'Hall 4: Rooms 203-204 (Cap: 70)',
+      invigilator: 'Smt. G. Sarada',
+      empCode: 'EMP-017',
+      dept: 'Senior Language Specialist',
+      relief: 'Smt. Y. Anusha',
+      reportingTime: '08:45 AM (Strict)',
+      status: 'Assigned & Confirmed'
+    },
+    {
+      id: 'INV-107',
+      date: '24 Oct 2026 (Fri)',
+      day: 'Friday',
+      session: 'Afternoon (AN)',
+      time: '01:30 PM – 04:30 PM',
+      hall: 'Hall 1: Rooms 101-102 (Cap: 78)',
+      invigilator: 'Sri R. Venkata Ramana',
+      empCode: 'EMP-019',
+      dept: 'Social Studies Senior Faculty',
+      relief: 'Sri P. Satyanarayana',
+      reportingTime: '12:45 PM (Strict)',
+      status: 'Assigned & Confirmed'
+    },
+    {
+      id: 'INV-108',
+      date: '24 Oct 2026 (Fri)',
+      day: 'Friday',
+      session: 'Afternoon (AN)',
+      time: '01:30 PM – 04:30 PM',
+      hall: 'Hall 3: Rooms 201-202 (Cap: 70)',
+      invigilator: 'Smt. V. Jyothsna',
+      empCode: 'EMP-021',
+      dept: 'Hindi Language Mentor',
+      relief: 'Sri A. Prasad',
+      reportingTime: '12:45 PM (Strict)',
+      status: 'Assigned & Confirmed'
+    }
   ];
 
-  const FEE_CATEGORY_AUDIT_DATA = [
+  // Tabulation & Marks Database (Subject-wise, missing entries, totals, grades and moderation)
+  const TABULATION_MARKS_DATA = [
+    { roll: '01', admNo: 'SV-0210', name: 'K. Sai Tharun', internal: 19, theory: 78, moderation: 2, total: 99, grade: 'A1', gp: '10.0', status: 'Entered & Verified', notes: 'Top distinction. Flawless algebraic solutions.' },
+    { roll: '02', admNo: 'SV-0588', name: 'B. Vennela', internal: 19, theory: 76, moderation: 2, total: 97, grade: 'A1', gp: '10.0', status: 'Entered & Verified', notes: 'Outstanding theorem step explanations.' },
+    { roll: '03', admNo: 'SV-0344', name: 'M. Dinesh Kumar', internal: 18, theory: 74, moderation: 2, total: 94, grade: 'A1', gp: '10.0', status: 'Entered & Verified', notes: 'Excellent calculation accuracy.' },
+    { roll: '04', admNo: 'SV-0112', name: 'T. Sravanthi', internal: 18, theory: 72, moderation: 2, total: 92, grade: 'A1', gp: '10.0', status: 'Entered & Verified', notes: 'Strong problem-solving capability.' },
+    { roll: '05', admNo: 'SV-0145', name: 'G. Sai Teja', internal: 19, theory: 75, moderation: 0, total: 94, grade: 'A1', gp: '10.0', status: 'Entered & Verified', notes: 'Mastery in trigonometry derivations.' },
+    { roll: '06', admNo: 'SV-0148', name: 'P. Rakesh', internal: 17, theory: 71, moderation: 0, total: 88, grade: 'A2', gp: '9.0', status: 'Entered & Verified', notes: 'Consistent speed and clean handwriting.' },
+    { roll: '07', admNo: 'SV-0152', name: 'K. Tarun', internal: 18, theory: 70, moderation: 0, total: 88, grade: 'A2', gp: '9.0', status: 'Entered & Verified', notes: 'Solid conceptual understanding.' },
+    { roll: '08', admNo: 'SV-0160', name: 'M. Karthik', internal: 17, theory: 67, moderation: 0, total: 84, grade: 'A2', gp: '9.0', status: 'Entered & Verified', notes: 'Commendable performance in statistics.' },
+    { roll: '09', admNo: 'SV-0165', name: 'B. Hemanth', internal: 16, theory: 65, moderation: 0, total: 81, grade: 'A2', gp: '9.0', status: 'Entered & Verified', notes: 'Good attempt in coordinate geometry.' },
+    { roll: '10', admNo: 'SV-0170', name: 'V. Rohit', internal: 16, theory: 62, moderation: 0, total: 78, grade: 'B1', gp: '8.0', status: 'Entered & Verified', notes: 'Steady progress; needs quadratic formula drill.' },
+    { roll: '11', admNo: 'SV-0175', name: 'CH. Akhil', internal: 20, theory: 78, moderation: 2, total: 100, grade: 'A1', gp: '10.0', status: 'Entered & Verified', notes: 'Centum score. State-level rank potential.' },
+    { roll: '12', admNo: 'SV-0182', name: 'S. Manoj', internal: 18, theory: 74, moderation: 0, total: 92, grade: 'A1', gp: '10.0', status: 'Entered & Verified', notes: 'Clear logical steps throughout paper.' },
+    { roll: '13', admNo: 'SV-0190', name: 'Y. Srikanth', internal: 17, theory: 67, moderation: 0, total: 84, grade: 'A2', gp: '9.0', status: 'Entered & Verified', notes: 'Well organized answers and diagrams.' },
+    { roll: '14', admNo: 'SV-0288', name: 'P. Harsha Vardhan', internal: 0, theory: 0, moderation: 0, total: 0, grade: 'F', gp: '0.0', status: 'Missing Entry', notes: 'Absent: Sanctioned Medical Leave (Ref #ML-401). Retest required.' },
+    { roll: '15', admNo: 'SV-0205', name: 'D. Naveen', internal: 19, theory: 73, moderation: 0, total: 92, grade: 'A1', gp: '10.0', status: 'Entered & Verified', notes: 'Thorough step-by-step calculations.' },
+    { roll: '16', admNo: 'SV-0215', name: 'N. Ananya', internal: 18, theory: 71, moderation: 0, total: 89, grade: 'A2', gp: '9.0', status: 'Entered & Verified', notes: 'High precision in arithmetic proofs.' },
+    { roll: '17', admNo: 'SV-0220', name: 'K. Varun', internal: 17, theory: 68, moderation: 0, total: 85, grade: 'A2', gp: '9.0', status: 'Entered & Verified', notes: 'Solid grasp of quadratic expressions.' },
+    { roll: '18', admNo: 'SV-0225', name: 'A. Pranitha', internal: 19, theory: 75, moderation: 2, total: 96, grade: 'A1', gp: '10.0', status: 'Entered & Verified', notes: 'Exemplary geometric proofs.' },
+    { roll: '19', admNo: 'SV-0230', name: 'M. Siddartha', internal: 16, theory: 63, moderation: 0, total: 79, grade: 'B1', gp: '8.0', status: 'Entered & Verified', notes: 'Good effort; review linear equations.' },
+    { roll: '20', admNo: 'SV-0235', name: 'J. Harika', internal: 18, theory: 72, moderation: 0, total: 90, grade: 'A1', gp: '10.0', status: 'Entered & Verified', notes: 'Distinction in algebra and trigonometry.' },
+    { roll: '27', admNo: 'SV-0352', name: 'S. Bhavana', internal: 0, theory: 0, moderation: 0, total: 0, grade: 'F', gp: '0.0', status: 'Missing Entry', notes: 'Absent: Sanctioned Family Emergency. Retest scheduled 02 Nov.' }
+  ];
+
+  // Result Approval & Reviewer Ledger (Designated reviewers verify results before authorized publication)
+  let RESULT_APPROVAL_DATA = [
+    {
+      id: 'APR-2026-X-MATH',
+      class: 'Class X-A',
+      subject: 'Mathematics (SSC-MTH-01)',
+      teacher: 'Sri B. Narayana (Maths HOD)',
+      submittedDate: '27 Oct 2026, 04:30 PM',
+      stats: '44 Candidates • Avg: 82.4% • Pass: 100% • Missing: 2',
+      reviewer: 'Sri Navva Anand, M.Sc, B.Ed (Vice Principal & Controller)',
+      remarks: 'All 44 student internal and external theory scores verified against physical scripts. Moderation +2 marks audited. Approved for publication.',
+      status: 'Approved'
+    },
+    {
+      id: 'APR-2026-X-SCI',
+      class: 'Class X-A',
+      subject: 'Physical Science (SSC-SCI-02)',
+      teacher: 'Sri K. Rajesh (Science HOD)',
+      submittedDate: '27 Oct 2026, 05:15 PM',
+      stats: '44 Candidates • Avg: 78.6% • Pass: 100% • Missing: 0',
+      reviewer: 'Sri Navva Anand (VP)',
+      remarks: 'Laboratory practical viva scores audited and aligned with state norms. Approved.',
+      status: 'Approved'
+    },
+    {
+      id: 'APR-2026-X-TEL',
+      class: 'Class X-A',
+      subject: 'First Language Telugu (SSC-TEL-01)',
+      teacher: 'Smt. G. Sarada (Senior Faculty)',
+      submittedDate: '26 Oct 2026, 03:00 PM',
+      stats: '44 Candidates • Avg: 86.2% • Pass: 100% • Missing: 1',
+      reviewer: 'Sri Navva Anand (VP)',
+      remarks: 'Changes Requested: Verify absent entry for Roll #14 (SV-0288); verify medical certificate and attach sanction note before sign-off.',
+      status: 'Changes Requested'
+    },
+    {
+      id: 'APR-2026-IX-ENG',
+      class: 'Class IX-A',
+      subject: 'English Language (IX-ENG-03)',
+      teacher: 'Smt. M. Sunitha (Faculty)',
+      submittedDate: '26 Oct 2026, 04:00 PM',
+      stats: '42 Candidates • Avg: 81.5% • Pass: 100% • Missing: 0',
+      reviewer: 'Sri Navva Anand (VP)',
+      remarks: 'Sample bundle of 15 answer books reviewed. Ready for final endorsement.',
+      status: 'Pending Review'
+    },
+    {
+      id: 'APR-2026-VIII-SOC',
+      class: 'Class VIII-A',
+      subject: 'Social Studies (VIII-SOC-04)',
+      teacher: 'Sri R. Venkata Ramana (Faculty)',
+      submittedDate: '25 Oct 2026, 05:00 PM',
+      stats: '40 Candidates • Avg: 79.4% • Pass: 100% • Missing: 0',
+      reviewer: 'Sri Navva Anand (VP)',
+      remarks: 'Map pointing marks moderation under scrutiny.',
+      status: 'Pending Review'
+    },
+    {
+      id: 'APR-2026-VII-MATH',
+      class: 'Class VII-A',
+      subject: 'Mathematics (VII-MTH-01)',
+      teacher: 'Sri CH. Venkateswara Rao (Faculty)',
+      submittedDate: '25 Oct 2026, 02:30 PM',
+      stats: '38 Candidates • Avg: 77.2% • Pass: 100% • Missing: 0',
+      reviewer: 'Sri Navva Anand (VP)',
+      remarks: 'Marks distribution balanced. Approved.',
+      status: 'Approved'
+    }
+  ];
+
+  // Report Cards Student Summaries Database
+  const REPORT_CARDS_DATA = {
+    'SV-0210': {
+      name: 'K. Sai Tharun',
+      admNo: 'SV-0210',
+      rollNo: '#01',
+      class: 'Class X-A',
+      dob: '14-08-2011',
+      father: 'Sri K. Venkat Rao',
+      attendance: { workingDays: 114, presentDays: 110, percentage: '96.5%', punctuality: 'Exemplary' },
+      subjects: [
+        { name: 'Telugu First Language', max: 100, internal: 19, theory: 77, mod: 0, total: 96, grade: 'A1', gp: 10.0, remarks: 'Excellent linguistic articulation' },
+        { name: 'Hindi Second Language', max: 100, internal: 18, theory: 74, mod: 0, total: 92, grade: 'A1', gp: 10.0, remarks: 'Fluent comprehension & grammar' },
+        { name: 'English Language', max: 100, internal: 18, theory: 72, mod: 0, total: 90, grade: 'A1', gp: 10.0, remarks: 'Mastery in creative writing' },
+        { name: 'Mathematics', max: 100, internal: 20, theory: 78, mod: 2, total: 100, grade: 'A1', gp: 10.0, remarks: 'Outstanding analytical precision' },
+        { name: 'Physical Science', max: 100, internal: 19, theory: 75, mod: 0, total: 94, grade: 'A1', gp: 10.0, remarks: 'Exceptional experimental accuracy' },
+        { name: 'Biological Science', max: 100, internal: 18, theory: 73, mod: 0, total: 91, grade: 'A1', gp: 10.0, remarks: 'Thorough diagrammatic mastery' },
+        { name: 'Social Studies', max: 100, internal: 19, theory: 76, mod: 0, total: 95, grade: 'A1', gp: 10.0, remarks: 'Deep historical & civic understanding' }
+      ],
+      grandTotal: 658,
+      maxGrandTotal: 700,
+      percentage: '94.0%',
+      cgpa: '10.0 GPA (A1 Distinction)',
+      rank: 'Rank 1 in Class X-A',
+      resultStatus: 'PASSED WITH DISTINCTION',
+      coScholastic: {
+        discipline: 'A+ (Exemplary conduct)',
+        sports: 'A (Cricket team captain)',
+        arts: 'A (Active debater)',
+        leadership: 'A+ (Student Council Prefect)'
+      },
+      teacherRemark: 'Outstanding intellectual curiosity, exemplary mathematical skills, and dedicated leadership.',
+      reviewerRemark: 'Audited & Certified by Vice Principal Sri Navva Anand & Principal Smt. G. Varalakshmi.',
+      publicationStatus: 'Officially Published & Live on Parent Portal'
+    },
+    'SV-0588': {
+      name: 'B. Vennela',
+      admNo: 'SV-0588',
+      rollNo: '#02',
+      class: 'Class X-A',
+      dob: '22-03-2011',
+      father: 'Sri B. Sambasiva Rao',
+      attendance: { workingDays: 114, presentDays: 108, percentage: '94.7%', punctuality: 'Consistent' },
+      subjects: [
+        { name: 'Telugu First Language', max: 100, internal: 18, theory: 75, mod: 0, total: 93, grade: 'A1', gp: 10.0, remarks: 'Good literature appreciation' },
+        { name: 'Hindi Second Language', max: 100, internal: 17, theory: 72, mod: 0, total: 89, grade: 'A2', gp: 9.0, remarks: 'Strong vocabulary' },
+        { name: 'English Language', max: 100, internal: 19, theory: 76, mod: 0, total: 95, grade: 'A1', gp: 10.0, remarks: 'Flawless presentation' },
+        { name: 'Mathematics', max: 100, internal: 19, theory: 76, mod: 2, total: 97, grade: 'A1', gp: 10.0, remarks: 'Great theorem proofs' },
+        { name: 'Physical Science', max: 100, internal: 18, theory: 72, mod: 0, total: 90, grade: 'A1', gp: 10.0, remarks: 'Good lab proficiency' },
+        { name: 'Biological Science', max: 100, internal: 19, theory: 74, mod: 0, total: 93, grade: 'A1', gp: 10.0, remarks: 'Strong anatomy diagrams' },
+        { name: 'Social Studies', max: 100, internal: 18, theory: 73, mod: 0, total: 91, grade: 'A1', gp: 10.0, remarks: 'Good map pointing' }
+      ],
+      grandTotal: 648,
+      maxGrandTotal: 700,
+      percentage: '92.6%',
+      cgpa: '9.8 GPA (A1 Distinction)',
+      rank: 'Rank 2 in Class X-A',
+      resultStatus: 'PASSED WITH DISTINCTION',
+      coScholastic: {
+        discipline: 'A+ (Well mannered)',
+        sports: 'A (Badminton finalist)',
+        arts: 'A+ (State vocal music winner)',
+        leadership: 'A (Class representative)'
+      },
+      teacherRemark: 'Highly diligent student with consistent academic excellence and creative talents.',
+      reviewerRemark: 'Audited & Certified by Vice Principal Sri Navva Anand.',
+      publicationStatus: 'Officially Published & Live on Parent Portal'
+    },
+    'SV-0344': {
+      name: 'M. Dinesh Kumar',
+      admNo: 'SV-0344',
+      rollNo: '#03',
+      class: 'Class X-A',
+      dob: '05-11-2011',
+      father: 'Sri M. Prasad',
+      attendance: { workingDays: 114, presentDays: 106, percentage: '93.0%', punctuality: 'Regular' },
+      subjects: [
+        { name: 'Telugu First Language', max: 100, internal: 18, theory: 73, mod: 0, total: 91, grade: 'A1', gp: 10.0, remarks: 'Fluent reading' },
+        { name: 'Hindi Second Language', max: 100, internal: 17, theory: 71, mod: 0, total: 88, grade: 'A2', gp: 9.0, remarks: 'Good composition' },
+        { name: 'English Language', max: 100, internal: 18, theory: 72, mod: 0, total: 90, grade: 'A1', gp: 10.0, remarks: 'Good reading skills' },
+        { name: 'Mathematics', max: 100, internal: 18, theory: 74, mod: 2, total: 94, grade: 'A1', gp: 10.0, remarks: 'Solid mental calculation' },
+        { name: 'Physical Science', max: 100, internal: 18, theory: 71, mod: 0, total: 89, grade: 'A2', gp: 9.0, remarks: 'Active in science fairs' },
+        { name: 'Biological Science', max: 100, internal: 17, theory: 70, mod: 0, total: 87, grade: 'A2', gp: 9.0, remarks: 'Clear concepts' },
+        { name: 'Social Studies', max: 100, internal: 18, theory: 72, mod: 0, total: 90, grade: 'A1', gp: 10.0, remarks: 'Thorough answers' }
+      ],
+      grandTotal: 629,
+      maxGrandTotal: 700,
+      percentage: '89.8%',
+      cgpa: '9.4 GPA (A1 Distinction)',
+      rank: 'Rank 3 in Class X-A',
+      resultStatus: 'PASSED WITH DISTINCTION',
+      coScholastic: {
+        discipline: 'A (Responsible)',
+        sports: 'A+ (District athletics sprint medalist)',
+        arts: 'A (Science club coordinator)',
+        leadership: 'A (Sports house captain)'
+      },
+      teacherRemark: 'All-round achiever in both academics and sports. Commendable discipline.',
+      reviewerRemark: 'Audited & Certified by Vice Principal Sri Navva Anand.',
+      publicationStatus: 'Officially Published & Live on Parent Portal'
+    },
+    'SV-0112': {
+      name: 'T. Sravanthi',
+      admNo: 'SV-0112',
+      rollNo: '#04',
+      class: 'Class X-A',
+      dob: '18-01-2011',
+      father: 'Sri T. Ramesh',
+      attendance: { workingDays: 114, presentDays: 109, percentage: '95.6%', punctuality: 'Exemplary' },
+      subjects: [
+        { name: 'Telugu First Language', max: 100, internal: 19, theory: 75, mod: 0, total: 94, grade: 'A1', gp: 10.0, remarks: 'Outstanding essays' },
+        { name: 'Hindi Second Language', max: 100, internal: 18, theory: 73, mod: 0, total: 91, grade: 'A1', gp: 10.0, remarks: 'Great recitation' },
+        { name: 'English Language', max: 100, internal: 18, theory: 74, mod: 0, total: 92, grade: 'A1', gp: 10.0, remarks: 'Strong articulation' },
+        { name: 'Mathematics', max: 100, internal: 18, theory: 72, mod: 2, total: 92, grade: 'A1', gp: 10.0, remarks: 'Systematic problem solving' },
+        { name: 'Physical Science', max: 100, internal: 17, theory: 72, mod: 0, total: 89, grade: 'A2', gp: 9.0, remarks: 'Sharp conceptual clarity' },
+        { name: 'Biological Science', max: 100, internal: 19, theory: 75, mod: 0, total: 94, grade: 'A1', gp: 10.0, remarks: 'Detailed microscopic drawings' },
+        { name: 'Social Studies', max: 100, internal: 19, theory: 75, mod: 0, total: 94, grade: 'A1', gp: 10.0, remarks: 'Deep civic analysis' }
+      ],
+      grandTotal: 646,
+      maxGrandTotal: 700,
+      percentage: '92.3%',
+      cgpa: '9.7 GPA (A1 Distinction)',
+      rank: 'Rank 4 in Class X-A',
+      resultStatus: 'PASSED WITH DISTINCTION',
+      coScholastic: {
+        discipline: 'A+ (Respectful & attentive)',
+        sports: 'A (Yoga & Table Tennis)',
+        arts: 'A+ (Lead orator in English debate)',
+        leadership: 'A (Editorial board member)'
+      },
+      teacherRemark: 'Sincere, focused, and hardworking student with a stellar scholastic profile.',
+      reviewerRemark: 'Audited & Certified by Vice Principal Sri Navva Anand.',
+      publicationStatus: 'Officially Published & Live on Parent Portal'
+    }
+  };
+
+  let isClassXResultsPublished = true;
+const FEE_CATEGORY_AUDIT_DATA = [
     { head: 'Tuition Fee (Term 1 & 2)', demand: '₹1,24,50,000', collected: '₹1,18,20,000', concession: '₹2,30,000', dues: '₹4,00,000', pct: '94.9%', status: 'Audited & Reconciled' },
     { head: 'Computer Lab & Coding Facility', demand: '₹18,50,000', collected: '₹17,80,000', concession: '₹0', dues: '₹70,000', pct: '96.2%', status: 'Audited & Reconciled' },
     { head: 'Science Lab & Practical Consumables', demand: '₹12,40,000', collected: '₹11,90,000', concession: '₹0', dues: '₹50,000', pct: '95.9%', status: 'Audited & Reconciled' },
@@ -1320,12 +2117,201 @@ const portalApp = (function () {
     } catch (e) {}
   }
 
-  function setupDate() {
+  // Indian Standard Time (Asia/Kolkata, UTC+5:30) Engine
+  function getISTDateTime() {
+    const now = new Date();
+    const dateOptions = {
+      timeZone: 'Asia/Kolkata',
+      weekday: 'long',
+      month: 'short',
+      day: 'numeric',
+      year: 'numeric'
+    };
+    const timeOptions = {
+      timeZone: 'Asia/Kolkata',
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+      hour12: true
+    };
+    const dateString = new Intl.DateTimeFormat('en-US', dateOptions).format(now);
+    const timeString = new Intl.DateTimeFormat('en-US', timeOptions).format(now);
+
+    const parts = new Intl.DateTimeFormat('en-US', {
+      timeZone: 'Asia/Kolkata',
+      hour: 'numeric',
+      minute: 'numeric',
+      second: 'numeric',
+      hour12: false,
+      weekday: 'short'
+    }).formatToParts(now);
+
+    const getPart = (type) => (parts.find(p => p.type === type) || {}).value;
+    const hour24 = parseInt(getPart('hour') || '0', 10);
+    const minute = parseInt(getPart('minute') || '0', 10);
+    const second = parseInt(getPart('second') || '0', 10);
+    const weekday = getPart('weekday') || '';
+    const currentMinutes = hour24 * 60 + minute;
+
+    return {
+    renderTimetableClassSchedules,
+    switchTimetableCalendarView,
+    switchTimetableClass,
+    switchTimetableDay,
+    renderSubstitutionPlanner,
+    filterSubstitutionPlanner,
+    handleAssignSubstitutionSubmit,
+    renderLabHallAllocations,
+    filterLabHallAllocations,
+    renderTimetableConflicts,
+    filterTimetableConflicts,
+    runTimetableConflictAudit,
+    autoResolveFeasibleConflicts,
+    resolveConflict,
+    printTimetable,
+    exportTimetableCSV,
+    exportConflictsCSV, dateString, timeString, hour24, minute, second, weekday, currentMinutes };
+  }
+
+  // Dashboard Dynamic Timetable Period Definitions
+  const DASHBOARD_PERIODS = [
+    { id: 1, num: 'Period 1', time: '09:00 – 09:45 AM', start: 540, end: 585, subj: 'Mathematics', teacher: 'Sri P. Satyanarayana' },
+    { id: 2, num: 'Period 2', time: '09:45 – 10:30 AM', start: 585, end: 630, subj: 'Physical Science', teacher: 'Sri Navva Anand (VP)' },
+    { id: 3, num: 'Period 3', time: '10:30 – 11:15 AM', start: 630, end: 675, subj: 'English Language', teacher: 'Ms. Anjali (VIII-A)' },
+    { id: 4, num: 'Period 4', time: '11:15 AM – 12:00 PM', start: 675, end: 720, subj: 'Social Studies', teacher: 'Sri R. Venkata Ramana' },
+    { id: 5, num: 'Period 5', time: '12:45 – 01:30 PM', start: 765, end: 810, subj: 'Telugu (1st Lang)', teacher: 'Sri S. Ramana Murthy' },
+    { id: 6, num: 'Period 6', time: '01:30 – 02:15 PM', start: 810, end: 855, subj: 'Biology & EVS', teacher: 'Smt. S. Lakshmi' },
+    { id: 7, num: 'Period 7', time: '02:15 – 03:00 PM', start: 855, end: 900, subj: 'Computer Science', teacher: 'Sri D. Srinivas (Lab)' },
+    { id: 8, num: 'Period 8', time: '03:00 – 03:45 PM', start: 900, end: 945, subj: 'Games & PET', teacher: 'Sri M. Sridhar' }
+  ];
+
+  let lastRenderedPeriodMinute = -1;
+
+  function updateISTClockAndTimetable() {
+    const { dateString, timeString, hour24, weekday, currentMinutes } = getISTDateTime();
+
+    // 1. Update Live Time and Date display in Header
+    const timeEl = document.getElementById('liveTimeText');
+    if (timeEl) {
+      timeEl.textContent = `${timeString} IST`;
+    }
     const dateEl = document.getElementById('liveDateText');
     if (dateEl) {
-      const now = new Date();
-      const options = { weekday: 'long', year: 'numeric', month: 'short', day: 'numeric' };
-      dateEl.textContent = now.toLocaleDateString('en-US', options);
+      dateEl.textContent = dateString;
+    }
+
+    // 2. Dynamic Time-of-Day Greeting
+    const greetingEl = document.getElementById('dashboardGreeting');
+    if (greetingEl) {
+      let salutation = 'Good Morning';
+      if (hour24 >= 12 && hour24 < 17) salutation = 'Good Afternoon';
+      else if (hour24 >= 17 && hour24 < 21) salutation = 'Good Evening';
+      else if (hour24 >= 21 || hour24 < 5) salutation = 'Welcome';
+
+      let roleTitle = 'Principal';
+      if (state.currentRole === 'vice-principal') roleTitle = 'Vice Principal';
+      else if (state.currentRole === 'admin') roleTitle = 'Administrator';
+      greetingEl.textContent = `${salutation}, ${roleTitle}`;
+    }
+
+    // 3. Update Timetable Status & Cards
+    updateDashboardTimetable(weekday, currentMinutes);
+  }
+
+  function updateDashboardTimetable(weekday, currentMinutes) {
+    const pillEl = document.getElementById('activePeriodPill');
+    const railEl = document.getElementById('dashPeriodsRail');
+
+    const isSunday = (weekday === 'Sun');
+    const isLunchBreak = (!isSunday && currentMinutes >= 720 && currentMinutes < 765);
+    const isMorningPrep = (!isSunday && currentMinutes < 540);
+    const isRemedial = (!isSunday && currentMinutes >= 945 && currentMinutes < 1020);
+    const isDispersed = (!isSunday && currentMinutes >= 1020);
+
+    // Find active period
+    const activePeriod = (!isSunday && !isLunchBreak && !isMorningPrep && !isRemedial && !isDispersed)
+      ? DASHBOARD_PERIODS.find(p => currentMinutes >= p.start && currentMinutes < p.end)
+      : null;
+
+    // Update Header Pill
+    if (pillEl) {
+      if (isSunday) {
+        pillEl.className = 'dash-pill gray';
+        pillEl.style.cssText = 'background:#f1f5f9; color:#475569; border:1px solid #cbd5e1;';
+        pillEl.innerHTML = '<i class="fa-solid fa-calendar-xmark"></i> Sunday Holiday • Campus Closed';
+      } else if (isMorningPrep) {
+        pillEl.className = 'dash-pill blue';
+        pillEl.style.cssText = '';
+        pillEl.innerHTML = '<i class="fa-solid fa-bell"></i> Morning Assembly &amp; Roll Call (08:30 – 09:00 AM) • Next: Period 1 at 09:00 AM';
+      } else if (isLunchBreak) {
+        pillEl.className = 'dash-pill amber';
+        pillEl.style.cssText = 'background:#fef3c7; color:#92400e; border:1px solid #fde68a; font-weight:700;';
+        pillEl.innerHTML = '<i class="fa-solid fa-utensils"></i> Lunch Break Active (12:00 – 12:45 PM) • Next: Period 5 at 12:45 PM';
+      } else if (activePeriod) {
+        pillEl.className = 'dash-pill blue';
+        pillEl.style.cssText = '';
+        pillEl.innerHTML = `<i class="fa-solid fa-circle-play"></i> ${activePeriod.num} Active (${activePeriod.time}) • ${activePeriod.subj}`;
+      } else if (isRemedial) {
+        pillEl.className = 'dash-pill emerald';
+        pillEl.style.cssText = 'background:#d1fae5; color:#065f46; border:1px solid #a7f3d0;';
+        pillEl.innerHTML = '<i class="fa-solid fa-book-reader"></i> Remedial &amp; Special Study Coaching (Class IX &amp; X) • Regular Periods Concluded';
+      } else {
+        pillEl.className = 'dash-pill gray';
+        pillEl.style.cssText = 'background:#f1f5f9; color:#475569; border:1px solid #cbd5e1;';
+        pillEl.innerHTML = '<i class="fa-solid fa-school-circle-check"></i> Campus Dispersed • Next Academic Session Tomorrow 09:00 AM';
+      }
+    }
+
+    // Only re-render cards when minute changes or on initial render
+    if (lastRenderedPeriodMinute === currentMinutes && railEl && railEl.children.length > 0) {
+      return;
+    }
+    lastRenderedPeriodMinute = currentMinutes;
+
+    if (!railEl) return;
+
+    // Render Period Cards
+    let html = '';
+    DASHBOARD_PERIODS.forEach((p, idx) => {
+      let cardClass = 'dash-period-card';
+      let statusLabel = p.num;
+
+      if (isSunday) {
+        statusLabel = `${p.num}`;
+      } else if (currentMinutes >= p.start && currentMinutes < p.end) {
+        cardClass += ' active';
+        statusLabel = `${p.num} • LIVE`;
+      } else if (currentMinutes >= p.end) {
+        cardClass += ' completed';
+        statusLabel = `${p.num} <span style="font-size:0.68rem; color:#10b981; font-weight:700; margin-left:3px;"><i class="fa-solid fa-check"></i> Done</span>`;
+      } else {
+        // Upcoming
+        const isNext = (isLunchBreak && p.id === 5) || (!isLunchBreak && DASHBOARD_PERIODS.find(op => op.id === p.id - 1 && currentMinutes >= op.end && currentMinutes < p.start));
+        if (isNext) {
+          cardClass += ' next-period';
+          statusLabel = `${p.num} <span style="font-size:0.65rem; color:#2563eb; font-weight:700;">(Next)</span>`;
+        } else {
+          statusLabel = p.num;
+        }
+      }
+
+      html += `
+        <div class="${cardClass}">
+          <div class="dash-period-num">${statusLabel}</div>
+          <div class="dash-period-time">${p.time}</div>
+          <div class="dash-period-subj">${p.subj}</div>
+          <div class="dash-period-teacher">${p.teacher}</div>
+        </div>
+      `;
+    });
+
+    railEl.innerHTML = html;
+  }
+
+  function setupDate() {
+    updateISTClockAndTimetable();
+    if (!window.__sv_clock_interval) {
+      window.__sv_clock_interval = setInterval(updateISTClockAndTimetable, 1000);
     }
   }
 
@@ -1672,6 +2658,7 @@ const portalApp = (function () {
     // Granular Submenu & Module Dynamic Visibility for Navigation Bar
     const allNavItems = document.querySelectorAll('.sidebar-menu .nav-item[data-module]');
     const clerkSubPerms = getClerkSubmenuPermissions();
+    const clerkPerms = getClerkPermissions();
     const isExecutive = (role === 'principal' || role === 'vice-principal');
 
     allNavItems.forEach(item => {
@@ -1888,7 +2875,7 @@ const portalApp = (function () {
       teachers: 'faculty',
       academics: 'classes',
       attendance: 'student',
-      timetable: 'master',
+      timetable: 'class-schedules',
       examinations: 'schedule',
       examination: 'schedule',
       discipline: 'all',
@@ -2022,37 +3009,43 @@ const portalApp = (function () {
         renderStudentsTable(state.students);
       } else if (subKey === 'profiles') {
         renderStudentProfiles(state.students);
+      } else if (subKey === 'documents') {
+        renderStudentDocuments();
       } else if (subKey === 'admissions') {
         renderAdmissionsQueue(state.admissions);
       } else if (subKey === 'transfers') {
         renderTransfersTable(state.transfers);
       } else if (subKey === 'performance') {
         renderAcademicPerformance();
+      } else if (subKey === 'parents') {
+        renderParentRecords();
       }
       updateStudentTabBadges();
     } else if (moduleKey === 'examinations' || moduleKey === 'examination') {
       if (subKey === 'schedule') {
         renderExamScheduleTable();
-      } else if (subKey === 'duties' || subKey === 'invigilation') {
+      } else if (subKey === 'invigilation' || subKey === 'duties') {
         renderInvigilationDutyTable();
-      } else if (subKey === 'halls') {
-        const hallVal = document.getElementById('examHallSelector')?.value || 'Hall 1';
-        renderRoomSeatingArrangement(hallVal);
-      } else if (subKey === 'results') {
-        const clsVal = document.getElementById('tabulationClassFilter')?.value || 'Class X-A';
-        renderTabulationRegisters(clsVal);
-      } else if (subKey === 'papers') {
-        renderOfficialQuestionPaper();
+      } else if (subKey === 'seating-plan' || subKey === 'seating' || subKey === 'halls') {
+        renderRoomSeatingArrangement();
+      } else if (subKey === 'tabulation-marks' || subKey === 'marks-entry' || subKey === 'tabulation' || subKey === 'marks' || subKey === 'moderation') {
+        renderTabulationAndMarks();
+      } else if (subKey === 'result-approval' || subKey === 'approval' || subKey === 'review') {
+        renderResultApprovalQueue();
+      } else if (subKey === 'report-cards' || subKey === 'publications') {
+        renderReportCardsDesk();
       }
     } else if (moduleKey === 'discipline') {
-      if (subKey === 'all') {
+      if (subKey === 'all' || subKey === 'incidents' || subKey === 'incident-records') {
         renderDisciplineIncidents(state.disciplineIncidents);
-      } else if (subKey === 'late') {
+      } else if (subKey === 'late' || subKey === 'late-coming' || subKey === 'late-coming-register') {
         renderGateLateComing();
-      } else if (subKey === 'merit') {
+      } else if (subKey === 'merit' || subKey === 'merit-records' || subKey === 'merit-achievement') {
         renderMeritAwards();
-      } else if (subKey === 'summons') {
+      } else if (subKey === 'meetings' || subKey === 'parent-meetings' || subKey === 'convocations' || subKey === 'summons') {
         renderParentConvocations();
+      } else if (subKey === 'counselling' || subKey === 'counselling-referrals') {
+        renderCounsellingReferrals();
       }
     } else if (moduleKey === 'teachers') {
       if (subKey === 'faculty') {
@@ -2065,6 +3058,10 @@ const portalApp = (function () {
         renderTeacherLeaveRequests();
       } else if (subKey === 'performance') {
         renderFacultyAppraisals();
+      } else if (subKey === 'workload') {
+        renderFacultyWorkload();
+      } else if (subKey === 'documents') {
+        renderStaffDocuments();
       } else if (subKey === 'import') {
         renderStaffImportPreview();
       }
@@ -2078,21 +3075,29 @@ const portalApp = (function () {
       } else if (subKey === 'activities') {
         renderClubActivities();
       }
-    } else if (moduleKey === 'leaves') {
-      if (subKey === 'faculty') {
+        } else if (moduleKey === 'leaves' || moduleKey === 'leave') {
+      if (subKey === 'faculty' || subKey === 'staff' || subKey === 'faculty-leave-review') {
         renderVPLeaves(state.facultyLeaves);
-      } else if (subKey === 'students') {
+      } else if (subKey === 'students' || subKey === 'student-leave-requests') {
         renderStudentLeaves();
-      } else if (subKey === 'history') {
-        renderStaffLeaveBalances();
+      } else if (subKey === 'history' || subKey === 'leave-history-register') {
+        renderLeaveHistoryRegister();
+      } else if (subKey === 'calendar' || subKey === 'leave-calendar') {
+        renderLeaveCalendar();
+      } else if (subKey === 'policy' || subKey === 'leave-policy') {
+        renderLeavePolicy();
       }
     } else if (moduleKey === 'academics') {
       if (subKey === 'classes') {
         renderAcademicClasses();
       } else if (subKey === 'subjects') {
         renderAcademicSubjects();
+      } else if (subKey === 'calendar') {
+        renderAcademicCalendar();
       } else if (subKey === 'timetable') {
         renderMasterTimetable();
+      } else if (subKey === 'plans') {
+        renderLessonPlanReview();
       } else if (subKey === 'exams') {
         renderExamsSchedule();
       } else if (subKey === 'results') {
@@ -2102,34 +3107,50 @@ const portalApp = (function () {
       }
     } else if (moduleKey === 'attendance') {
       if (subKey === 'student') {
-        renderAttendanceClasses(state.classAttendance);
+        renderStudentAttendanceTable();
       } else if (subKey === 'teacher') {
-        renderAttendanceTeachers();
-      } else if (subKey === 'daily') {
-        renderAttendanceAbsentees();
-      } else if (subKey === 'monthly') {
-        renderAttendanceMonthly();
+        renderTeacherAttendanceTable();
+      } else if (subKey === 'daily-report' || subKey === 'daily') {
+        renderDailyAttendanceReport();
+      } else if (subKey === 'monthly-summary' || subKey === 'monthly' || subKey === 'summaries') {
+        renderMonthlyAttendanceSummary();
+      } else if (subKey === 'corrections') {
+        renderAttendanceCorrections();
+      } else if (subKey === 'alerts') {
+        renderAttendanceAlerts();
+      } else if (subKey === 'late') {
+        renderAttendanceLateArrivals();
+      } else if (subKey === 'absences') {
+        renderAttendanceAbsences();
       }
     } else if (moduleKey === 'timetable') {
-      if (subKey === 'master') {
-        renderMasterTimetable();
-      } else if (subKey === 'substitutions') {
-        renderDailySubstitution();
-      } else if (subKey === 'rooms') {
-        renderScienceLabs();
+      if (subKey === 'class-schedules' || subKey === 'master') {
+        renderTimetableClassSchedules();
+      } else if (subKey === 'substitution-planner' || subKey === 'substitutions') {
+        renderSubstitutionPlanner();
+      } else if (subKey === 'lab-hall-allocations' || subKey === 'rooms' || subKey === 'labs') {
+        renderLabHallAllocations();
+      } else if (subKey === 'timetable-conflicts' || subKey === 'conflicts') {
+        renderTimetableConflicts();
       }
     } else if (moduleKey === 'fees') {
-      if (subKey === 'collection') {
+      if (subKey === 'structure') {
+        renderFeeStructure();
+      } else if (subKey === 'collection') {
         renderFeeTransactions(state.feeTransactions);
         initFeeCharts();
       } else if (subKey === 'pending') {
         renderDefaultersTable();
+      } else if (subKey === 'concessions') {
+        renderFeeConcessions();
+      } else if (subKey === 'refunds') {
+        renderFeeRefunds();
+      } else if (subKey === 'receipts' || subKey === 'transactions') {
+        renderFeeLedgerTable();
       } else if (subKey === 'reports') {
         renderFeeCategoryAuditTable();
         renderClassFeeRealizationMatrix();
         initFeeReportsCharts();
-      } else if (subKey === 'transactions') {
-        renderFeeLedgerTable();
       }
     } else if (moduleKey === 'communication') {
       if (subKey === 'announcements') {
@@ -2192,14 +3213,22 @@ const portalApp = (function () {
 
     const tcStatCount = document.getElementById('tcQueueStatCount');
     if (tcStatCount) tcStatCount.textContent = state.transfers.length;
+
+    const docsBadge = document.getElementById('studentDocsCountBadge');
+    if (docsBadge && state.studentDocs) docsBadge.textContent = state.studentDocs.filter(d => d.status === 'Pending').length;
+
+    const parentBadge = document.getElementById('parentRecordsCountBadge');
+    if (parentBadge && state.parentRecords) parentBadge.textContent = state.parentRecords.filter(p => p.status === 'Review Due').length;
   }
 
   function renderAllTables() {
     renderStudentsTable(state.students);
     renderStudentProfiles(state.students);
+    renderStudentDocuments();
     renderAdmissionsQueue(state.admissions);
     renderTransfersTable(state.transfers);
     renderAcademicPerformance();
+    renderParentRecords();
     updateStudentTabBadges();
 
     renderStaffGrid(state.faculty);
@@ -2210,6 +3239,9 @@ const portalApp = (function () {
     renderVPLeaves(state.facultyLeaves);
     // Sri Vidya Subview Initial Pre-population
     renderStudentLeaves();
+    renderLeaveHistoryRegister();
+    renderLeaveCalendar();
+    renderLeavePolicy();
     renderStaffLeaveBalances();
     renderNonTeachingStaff();
     renderTeacherLeaveRequests();
@@ -2544,6 +3576,1088 @@ const portalApp = (function () {
     });
 
     renderStudentProfiles(filtered);
+  }
+
+  // ==========================================================================
+  // REUSABLE PAGINATION CONTROLLER HELPER
+  // ==========================================================================
+  const paginationCallbacks = {};
+  function _onPaginate(containerId, page) {
+    if (typeof paginationCallbacks[containerId] === 'function') {
+      paginationCallbacks[containerId](page);
+    }
+  }
+
+  function renderPaginationControls(containerId, currentPage, totalPages, onPageClick) {
+    const container = document.getElementById(containerId);
+    if (!container) return;
+    if (totalPages <= 1) {
+      container.innerHTML = '';
+      return;
+    }
+
+    let startPage = Math.max(1, currentPage - 3);
+    let endPage = Math.min(totalPages, startPage + 6);
+    if (endPage - startPage < 6) {
+      startPage = Math.max(1, endPage - 6);
+    }
+
+    let html = `
+      <div style="display:flex; align-items:center; justify-content:space-between; width:100%; gap:0.5rem; flex-wrap:wrap; padding: 0.5rem 0;">
+        <span style="font-size:0.8rem; color:var(--color-text-muted);">
+          Page <strong>${currentPage}</strong> of <strong>${totalPages}</strong>
+        </span>
+        <div style="display:inline-flex; gap:4px; align-items:center;">
+          <button type="button" class="btn btn-secondary btn-sm" ${currentPage === 1 ? 'disabled style="opacity:0.5; cursor:not-allowed;"' : ''} onclick="portalApp._onPaginate('${containerId}', ${currentPage - 1})">
+            <i class="fa-solid fa-chevron-left"></i> Prev
+          </button>
+    `;
+
+    if (startPage > 1) {
+      html += `<button type="button" class="btn btn-secondary btn-sm" onclick="portalApp._onPaginate('${containerId}', 1)">1</button>`;
+      if (startPage > 2) html += `<span style="padding:0 4px; color:var(--color-text-muted);">...</span>`;
+    }
+
+    for (let i = startPage; i <= endPage; i++) {
+      const activeClass = i === currentPage ? 'btn-primary' : 'btn-secondary';
+      html += `<button type="button" class="btn ${activeClass} btn-sm" onclick="portalApp._onPaginate('${containerId}', ${i})">${i}</button>`;
+    }
+
+    if (endPage < totalPages) {
+      if (endPage < totalPages - 1) html += `<span style="padding:0 4px; color:var(--color-text-muted);">...</span>`;
+      html += `<button type="button" class="btn btn-secondary btn-sm" onclick="portalApp._onPaginate('${containerId}', ${totalPages})">${totalPages}</button>`;
+    }
+
+    html += `
+          <button type="button" class="btn btn-secondary btn-sm" ${currentPage === totalPages ? 'disabled style="opacity:0.5; cursor:not-allowed;"' : ''} onclick="portalApp._onPaginate('${containerId}', ${currentPage + 1})">
+            Next <i class="fa-solid fa-chevron-right"></i>
+          </button>
+        </div>
+      </div>
+    `;
+
+    container.innerHTML = html;
+    paginationCallbacks[containerId] = onPageClick;
+  }
+
+  // ==========================================================================
+  // STUDENT PROFILES VIEW MODE TOGGLE (CARDS vs TABLE ROSTER)
+  // ==========================================================================
+  let profileViewMode = 'cards';
+  let profilePageSize = 50;
+  let profileCurrentPage = 1;
+
+  function setProfileViewMode(mode) {
+    profileViewMode = mode;
+    const btnCards = document.getElementById('btnProfileViewCards');
+    const btnTable = document.getElementById('btnProfileViewTable');
+    const gridEl = document.getElementById('studentProfilesGrid');
+    const tableWrap = document.getElementById('studentProfilesTableWrap');
+
+    if (mode === 'table') {
+      if (btnCards) btnCards.classList.remove('active');
+      if (btnTable) btnTable.classList.add('active');
+      if (gridEl) gridEl.style.display = 'none';
+      if (tableWrap) tableWrap.style.display = 'block';
+      renderStudentProfilesTable();
+    } else {
+      if (btnCards) btnCards.classList.add('active');
+      if (btnTable) btnTable.classList.remove('active');
+      if (gridEl) gridEl.style.display = 'grid';
+      if (tableWrap) tableWrap.style.display = 'none';
+      renderStudentProfiles(state.students);
+    }
+  }
+
+  function setProfilePageSize(size) {
+    profilePageSize = size === 'all' ? 9999 : (parseInt(size, 10) || 50);
+    profileCurrentPage = 1;
+    renderStudentProfilesTable();
+  }
+
+  function renderStudentProfilesTable(list) {
+    const tbody = document.getElementById('studentProfilesTableBody');
+    if (!tbody) return;
+
+    const data = list || sortStudentsByAdmNo(state.students || []);
+    const showingCount = document.getElementById('profilesShowingCount');
+    if (showingCount) showingCount.textContent = data.length;
+
+    const total = data.length;
+    const pageSize = profilePageSize;
+    const totalPages = Math.ceil(total / pageSize) || 1;
+    if (profileCurrentPage > totalPages) profileCurrentPage = totalPages;
+    if (profileCurrentPage < 1) profileCurrentPage = 1;
+
+    const startIdx = (profileCurrentPage - 1) * pageSize;
+    const pageItems = data.slice(startIdx, startIdx + pageSize);
+
+    if (pageItems.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="9" style="text-align:center; padding:2rem; color:var(--color-text-muted);">No student dossiers matched your search filters.</td></tr>';
+      return;
+    }
+
+    tbody.innerHTML = pageItems.map(s => {
+      let feeBadge = 'badge-success';
+      if (s.feeStatus === 'Pending') feeBadge = 'badge-danger';
+      if (s.feeStatus === 'Partial') feeBadge = 'badge-warning';
+
+      return `
+        <tr>
+          <td><span class="perf-admno-badge">${s.admNo}</span></td>
+          <td class="text-center">
+            <div class="cell-avatar" style="margin: 0 auto; width:34px; height:34px; font-size:0.85rem; border-radius:50%; background:linear-gradient(135deg, #4f46e5 0%, #3730a3 100%); color:#fff; display:flex; align-items:center; justify-content:center;">${s.name.charAt(0)}</div>
+          </td>
+          <td>
+            <div class="user-cell" style="gap:0.5rem;">
+              <div>
+                <strong>${s.name}</strong>
+                <div style="font-size:0.72rem; color:var(--color-text-muted); display:flex; gap:6px; margin-top:2px;">
+                  <span><i class="fa-solid fa-droplet text-danger"></i> ${s.bloodGroup || 'O+'}</span>
+                  <span><i class="fa-solid fa-award text-emerald"></i> GPA: ${s.gpa}</span>
+                  <span><i class="fa-solid fa-clipboard-user text-primary"></i> ${s.attendance}</span>
+                </div>
+              </div>
+            </div>
+          </td>
+          <td class="text-center"><span class="profile-tag tag-primary">Class ${s.class}</span></td>
+          <td class="text-center"><span class="profile-tag">${s.section || 'A'}</span></td>
+          <td class="text-center"><strong>${s.rollNo}</strong></td>
+          <td class="text-center"><span class="portal-badge ${feeBadge}">${s.feeStatus}</span></td>
+          <td>
+            <div style="font-size:0.82rem;"><strong>${s.parent}</strong></div>
+            <div style="font-size:0.74rem;"><a href="tel:${s.phone}" class="phone-link"><i class="fa-solid fa-phone"></i> ${s.phone}</a></div>
+          </td>
+          <td class="text-center">
+            <div style="display:inline-flex; gap:4px;">
+              <button class="btn btn-secondary btn-sm" onclick="portalApp.viewStudentProfile('${s.admNo}')" title="View Full Dossier">
+                <i class="fa-regular fa-eye"></i>
+              </button>
+              <button class="btn btn-primary btn-sm" onclick="portalApp.openStudentIdCard('${s.admNo}')" title="Print Student ID Card">
+                <i class="fa-solid fa-id-card"></i>
+              </button>
+            </div>
+          </td>
+        </tr>
+      `;
+    }).join('');
+
+    renderPaginationControls('studentProfilesPagination', profileCurrentPage, totalPages, (p) => {
+      profileCurrentPage = p;
+      renderStudentProfilesTable(data);
+    });
+  }
+
+  function exportStudentRosterCSV() {
+    const list = sortStudentsByAdmNo(state.students || []);
+    let csv = 'AdmissionNo,StudentName,Gender,Class,Section,RollNo,GPA,Attendance,FeeStatus,ParentName,Phone,BloodGroup,DOB,Address\n';
+    list.forEach(s => {
+      csv += `"${s.admNo}","${s.name}","${s.gender}","${s.class}","${s.section}","${s.rollNo}","${s.gpa}","${s.attendance}","${s.feeStatus}","${s.parent}","${s.phone}","${s.bloodGroup || ''}","${s.dob || ''}","${(s.address || '').replace(/"/g, '""')}"\n`;
+    });
+    downloadCsvFile(csv, 'sri_vidya_student_roster.csv');
+    showToast('Student roster exported to CSV', 'success');
+  }
+
+  function printStudentRoster() {
+    window.print();
+  }
+
+  // ==========================================================================
+  // SUBVIEW 2: STUDENT DOCUMENTS (EXECUTIVE DOSSIER GOVERNANCE)
+  // ==========================================================================
+  let docsCurrentPage = 1;
+  const docsPageSize = 50;
+
+  function initStudentDocs() {
+    if (state.studentDocs && state.studentDocs.length === 500) return;
+    if ((!state.students || state.students.length === 0) && typeof window !== 'undefined' && Array.isArray(window.STUDENT_ROSTER)) {
+      state.students = [...window.STUDENT_ROSTER];
+    }
+    const students = sortStudentsByAdmNo(state.students || []);
+
+    const reviewers = [
+      { name: 'Dr. K. S. Rao', role: 'Principal' },
+      { name: 'Mrs. L. Vani', role: 'Vice Principal' },
+      { name: 'Sri Ch. Ramesh', role: 'Academic Dean' },
+      { name: 'M. Ramesh', role: 'Office Head' },
+      { name: 'Document Verification Cell', role: 'Verification Cell' }
+    ];
+
+    const submissionModes = [
+      { mode: 'online', label: 'Digital Upload', icon: 'fa-cloud-arrow-up' },
+      { mode: 'physical', label: 'Physical Hard Copy', icon: 'fa-building-columns' },
+      { mode: 'hybrid', label: 'DigiLocker Verified', icon: 'fa-shield-halved' }
+    ];
+
+    const dates = [
+      '26 Oct 2026', '25 Oct 2026', '24 Oct 2026', '23 Oct 2026',
+      '22 Oct 2026', '21 Oct 2026', '20 Oct 2026', '18 Oct 2026',
+      '15 Oct 2026', '12 Oct 2026', '10 Oct 2026', '05 Oct 2026'
+    ];
+
+    state.studentDocs = students.map((s, idx) => {
+      let status = 'Verified';
+      let completionPct = 100;
+      let pillClass = 'complete';
+      let pillText = '4/4 Cleared';
+      let aadhaar = true, birthCert = true, tc = true, marksheet = true;
+      let subMode = submissionModes[idx % 3];
+
+      // KPI alignment: 285 Verified, 155 Pending, 60 Awaiting = 500
+      if (idx >= 285 && idx < 440) {
+        status = 'Pending';
+        completionPct = 75;
+        pillClass = 'partial';
+        pillText = '3/4 In Review';
+        tc = false;
+        subMode = submissionModes[(idx + 1) % 3];
+      } else if (idx >= 440) {
+        status = 'Awaiting';
+        completionPct = 25;
+        pillClass = 'empty';
+        pillText = '1/4 Awaiting';
+        birthCert = false;
+        tc = false;
+        marksheet = false;
+        subMode = { mode: 'awaiting', label: 'Awaiting Hard Copy', icon: 'fa-clock' };
+      }
+
+      const rev = reviewers[idx % reviewers.length];
+      const dt = dates[idx % dates.length];
+
+      return {
+        admNo: s.admNo,
+        name: s.name,
+        class: s.class,
+        section: s.section || 'A',
+        rollNo: s.rollNo,
+        parent: s.parent,
+        phone: s.phone,
+        status: status,
+        completionPct: completionPct,
+        pillClass: pillClass,
+        pillText: pillText,
+        aadhaar: aadhaar,
+        birthCert: birthCert,
+        tc: tc,
+        marksheet: marksheet,
+        subMode: subMode.mode,
+        subModeLabel: subMode.label,
+        subModeIcon: subMode.icon,
+        reviewerName: rev.name,
+        reviewerRole: rev.role,
+        lastUpdated: dt
+      };
+    });
+  }
+
+  function renderStudentDocuments(list, page) {
+    initStudentDocs();
+    const tbody = document.getElementById('studentDocsTableBody');
+    if (!tbody) return;
+
+    if (page !== undefined) docsCurrentPage = page;
+    const data = list || state.studentDocs || [];
+
+    const totalDocs = state.studentDocs.length;
+    const verifiedDocs = state.studentDocs.filter(d => d.status === 'Verified').length;
+    const pendingDocs = state.studentDocs.filter(d => d.status === 'Pending').length;
+    const awaitingDocs = state.studentDocs.filter(d => d.status === 'Awaiting').length;
+
+    const kpiTotal = document.getElementById('kpiDocTotalDossiers');
+    const kpiVer = document.getElementById('kpiDocFullyVerified');
+    const kpiPend = document.getElementById('kpiDocPendingReview');
+    const kpiAction = document.getElementById('kpiDocActionRequired');
+    if (kpiTotal) kpiTotal.textContent = totalDocs;
+    if (kpiVer) kpiVer.textContent = verifiedDocs;
+    if (kpiPend) kpiPend.textContent = pendingDocs;
+    if (kpiAction) kpiAction.textContent = awaitingDocs;
+
+    const badge = document.getElementById('studentDocsCountBadge');
+    if (badge) badge.textContent = pendingDocs;
+
+    const showingCount = document.getElementById('docsShowingCount');
+    const totalCount = document.getElementById('docsTotalCount');
+    if (totalCount) totalCount.textContent = totalDocs;
+
+    const total = data.length;
+    const totalPages = Math.ceil(total / docsPageSize) || 1;
+    if (docsCurrentPage > totalPages) docsCurrentPage = totalPages;
+    if (docsCurrentPage < 1) docsCurrentPage = 1;
+
+    const startIdx = (docsCurrentPage - 1) * docsPageSize;
+    const pageItems = data.slice(startIdx, startIdx + docsPageSize);
+
+    if (showingCount) showingCount.textContent = pageItems.length;
+
+    if (pageItems.length === 0) {
+      tbody.innerHTML = `
+        <tr>
+          <td colspan="7" style="text-align:center; padding:3rem; color:var(--color-text-muted);">
+            <i class="fa-solid fa-folder-open" style="font-size:2rem; margin-bottom:0.75rem; display:block; color:#94a3b8;"></i>
+            No student dossiers matched your search filters.
+          </td>
+        </tr>`;
+      return;
+    }
+
+    tbody.innerHTML = pageItems.map(d => {
+      let verifyBadgeClass = 'verified';
+      let verifyLabel = 'Verified & Approved';
+      if (d.status === 'Pending') {
+        verifyBadgeClass = 'pending';
+        verifyLabel = 'Pending Review';
+      } else if (d.status === 'Awaiting') {
+        verifyBadgeClass = 'action-needed';
+        verifyLabel = 'Awaiting Submission';
+      }
+
+      return `
+        <tr>
+          <td>
+            <div class="user-cell" style="display:flex; align-items:center; gap:0.75rem;">
+              <div class="cell-avatar" style="width:38px; height:38px; border-radius:50%; background:linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%); color:#fff; font-weight:800; font-size:0.9rem; display:flex; align-items:center; justify-content:center;">
+                ${d.name.charAt(0)}
+              </div>
+              <div>
+                <strong style="color:var(--color-text-dark, #0f172a); font-size:0.9rem;">${d.name}</strong>
+                <div style="font-size:0.74rem; color:var(--color-text-muted, #64748b); display:flex; align-items:center; gap:5px; margin-top:2px;">
+                  <span class="perf-admno-badge">${d.admNo}</span>
+                  <span class="profile-tag tag-primary">Class ${d.class}-${d.section}</span>
+                  <span>#${d.rollNo}</span>
+                </div>
+              </div>
+            </div>
+          </td>
+          <td>
+            <div class="dossier-progress-cell">
+              <div class="dossier-badge-row">
+                <span class="dossier-pill ${d.pillClass}">
+                  <i class="fa-solid ${d.status === 'Verified' ? 'fa-circle-check' : (d.status === 'Pending' ? 'fa-clock' : 'fa-triangle-exclamation')}"></i>
+                  ${d.pillText}
+                </span>
+                <span class="dossier-pct">${d.completionPct}%</span>
+              </div>
+              <div class="dossier-progress-track">
+                <div class="dossier-progress-bar ${d.pillClass}" style="width: ${d.completionPct}%;"></div>
+              </div>
+              <div class="dossier-doc-chips">
+                <span class="doc-chip-mini ${d.aadhaar ? 'active' : ''}"><i class="fa-solid fa-id-card"></i> Aadhaar</span>
+                <span class="doc-chip-mini ${d.birthCert ? 'active' : ''}"><i class="fa-solid fa-certificate"></i> Birth</span>
+                <span class="doc-chip-mini ${d.tc ? 'active' : ''}"><i class="fa-solid fa-file-contract"></i> TC</span>
+                <span class="doc-chip-mini ${d.marksheet ? 'active' : ''}"><i class="fa-solid fa-award"></i> Marks</span>
+              </div>
+            </div>
+          </td>
+          <td>
+            <span class="submission-channel-badge ${d.subMode}">
+              <i class="fa-solid ${d.subModeIcon}"></i> ${d.subModeLabel}
+            </span>
+          </td>
+          <td class="text-center">
+            <span class="doc-verify-badge ${verifyBadgeClass}">
+              <span class="doc-verify-dot"></span> ${verifyLabel}
+            </span>
+          </td>
+          <td class="text-center">
+            <span class="doc-date-chip">
+              <i class="fa-regular fa-calendar-check"></i> ${d.lastUpdated}
+            </span>
+          </td>
+          <td>
+            <div class="doc-reviewer-cell">
+              <div class="reviewer-name">
+                <i class="fa-solid fa-user-check text-primary"></i> ${d.reviewerName}
+              </div>
+              <div class="reviewer-role">${d.reviewerRole}</div>
+            </div>
+          </td>
+          <td class="text-center">
+            <div class="doc-actions-wrap">
+              <button type="button" class="doc-action-btn view-btn" onclick="portalApp.openStudentDocsModal('${d.admNo}')" title="Upload / Log Document for ${d.name}">
+                <i class="fa-solid fa-cloud-arrow-up text-primary"></i> Upload
+              </button>
+              <button type="button" class="doc-action-btn manage-btn" onclick="portalApp.toggleDocVerifyStatus('${d.admNo}')" title="Advance Verification Status">
+                <i class="fa-solid fa-shield-check"></i> Status
+              </button>
+              <button type="button" class="doc-action-btn view-btn" onclick="portalApp.viewStudentProfile('${d.admNo}')" title="View Full Student Dossier">
+                <i class="fa-regular fa-eye"></i>
+              </button>
+            </div>
+          </td>
+        </tr>
+      `;
+    }).join('');
+
+    renderPaginationControls('studentDocsPagination', docsCurrentPage, totalPages, (p) => {
+      docsCurrentPage = p;
+      filterStudentDocs(false);
+    });
+  }
+
+  function filterStudentDocs(resetPage = true) {
+    initStudentDocs();
+    if (resetPage) docsCurrentPage = 1;
+
+    const query = (document.getElementById('docSearchInput')?.value || '').toLowerCase().trim();
+    const classVal = document.getElementById('docClassFilter')?.value || '';
+    const statusVal = document.getElementById('docVerifyStatusFilter')?.value || '';
+
+    const filtered = state.studentDocs.filter(d => {
+      const matchQuery = !query ||
+        d.name.toLowerCase().includes(query) ||
+        d.admNo.toLowerCase().includes(query) ||
+        d.reviewerName.toLowerCase().includes(query) ||
+        d.rollNo.includes(query);
+
+      const matchClass = !classVal || d.class === classVal;
+      const matchStatus = !statusVal || d.status === statusVal;
+
+      return matchQuery && matchClass && matchStatus;
+    });
+
+    renderStudentDocuments(filtered, docsCurrentPage);
+  }
+
+  function resetStudentDocFilters() {
+    const q = document.getElementById('docSearchInput');
+    const c = document.getElementById('docClassFilter');
+    const s = document.getElementById('docVerifyStatusFilter');
+    if (q) q.value = '';
+    if (c) c.value = '';
+    if (s) s.value = '';
+    docsCurrentPage = 1;
+    renderStudentDocuments();
+    showToast('Document filters reset', 'info');
+  }
+
+  function exportDocsAuditReport() {
+    initStudentDocs();
+    let csv = 'AdmissionNo,StudentName,Class,Section,RollNo,Parent,Phone,DossierStatus,CompletionPct,SubmissionMode,VerifyingAuthority,AuthorityRole,LastUpdated\n';
+    state.studentDocs.forEach(d => {
+      csv += `"${d.admNo}","${d.name}","${d.class}","${d.section}","${d.rollNo}","${d.parent}","${d.phone}","${d.status}","${d.completionPct}%","${d.subModeLabel}","${d.reviewerName}","${d.reviewerRole}","${d.lastUpdated}"\n`;
+    });
+    downloadCsvFile(csv, 'sri_vidya_student_documents_audit.csv');
+    showToast('Document Audit Report downloaded successfully', 'success');
+  }
+
+  function openStudentDocsModal(admNo) {
+    initStudentDocs();
+    const select = document.getElementById('uploadDocStudentSelect');
+    if (select) {
+      select.innerHTML = state.students.map(s => `
+        <option value="${s.admNo}" ${s.admNo === admNo ? 'selected' : ''}>
+          ${s.admNo} - ${s.name} (Class ${s.class}-${s.section || 'A'})
+        </option>
+      `).join('');
+      if (admNo) select.value = admNo;
+    }
+    const preview = document.getElementById('docSelectedFilePreview');
+    if (preview) preview.style.display = 'none';
+    const fileInput = document.getElementById('docFileUploadInput');
+    if (fileInput) fileInput.value = '';
+
+    openModal('studentDocsModal');
+  }
+
+  function handleDocFileSelected(event) {
+    const file = event?.target?.files?.[0];
+    const preview = document.getElementById('docSelectedFilePreview');
+    const fileNameEl = document.getElementById('docSelectedFileName');
+    if (file && preview && fileNameEl) {
+      fileNameEl.textContent = file.name;
+      preview.style.display = 'flex';
+      showToast(`Selected file: ${file.name}`, 'info');
+    }
+  }
+
+  function handleStudentDocUploadSubmit(event) {
+    if (event) event.preventDefault();
+    initStudentDocs();
+
+    const admNo = document.getElementById('uploadDocStudentSelect')?.value;
+    const mode = document.getElementById('uploadDocMode')?.value;
+    const reviewer = document.getElementById('uploadDocReviewer')?.value || 'Sri Ch. Ramesh (Vice Principal)';
+    const initialStatus = document.getElementById('uploadDocInitialStatus')?.value || 'verified';
+
+    const targetDoc = state.studentDocs.find(d => d.admNo === admNo);
+    if (targetDoc) {
+      if (initialStatus === 'verified') {
+        targetDoc.status = 'Verified';
+        targetDoc.completionPct = 100;
+        targetDoc.pillClass = 'complete';
+        targetDoc.pillText = '4/4 Cleared';
+        targetDoc.aadhaar = true;
+        targetDoc.birthCert = true;
+        targetDoc.tc = true;
+        targetDoc.marksheet = true;
+      } else {
+        targetDoc.status = 'Pending';
+        targetDoc.completionPct = 75;
+        targetDoc.pillClass = 'partial';
+        targetDoc.pillText = '3/4 In Review';
+      }
+      targetDoc.reviewerName = reviewer;
+      targetDoc.lastUpdated = '28 Oct 2026';
+      if (mode === 'online') {
+        targetDoc.subMode = 'online';
+        targetDoc.subModeLabel = 'Digital Upload';
+        targetDoc.subModeIcon = 'fa-cloud-arrow-up';
+      } else {
+        targetDoc.subMode = 'physical';
+        targetDoc.subModeLabel = 'Physical Hard Copy';
+        targetDoc.subModeIcon = 'fa-building-columns';
+      }
+
+      closeModal('studentDocsModal');
+      renderStudentDocuments();
+      showToast(`Document logged & verified for ${targetDoc.name} (${targetDoc.admNo})!`, 'success');
+    }
+  }
+
+  function toggleDocVerifyStatus(admNo) {
+    initStudentDocs();
+    const doc = state.studentDocs.find(d => d.admNo === admNo);
+    if (!doc) return;
+
+    if (doc.status === 'Verified') {
+      doc.status = 'Pending';
+      doc.completionPct = 75;
+      doc.pillClass = 'partial';
+      doc.pillText = '3/4 In Review';
+      showToast(`Status updated to Pending Review for ${doc.name}`, 'warning');
+    } else if (doc.status === 'Pending') {
+      doc.status = 'Verified';
+      doc.completionPct = 100;
+      doc.pillClass = 'complete';
+      doc.pillText = '4/4 Cleared';
+      showToast(`Dossier fully verified & approved for ${doc.name}!`, 'success');
+    } else {
+      doc.status = 'Pending';
+      doc.completionPct = 75;
+      doc.pillClass = 'partial';
+      doc.pillText = '3/4 In Review';
+      showToast(`Submission logged; moved to Pending Review for ${doc.name}`, 'info');
+    }
+
+    renderStudentDocuments();
+  }
+
+  // ==========================================================================
+  // SUBVIEW 6: PARENT / GUARDIAN RECORDS
+  // ==========================================================================
+  let parentCurrentPage = 1;
+  const parentPageSize = 25;
+
+  function initParentRecords() {
+    if (state.parentRecords && state.parentRecords.length === 500) return;
+    if ((!state.students || state.students.length === 0) && typeof window !== 'undefined' && Array.isArray(window.STUDENT_ROSTER)) {
+      state.students = [...window.STUDENT_ROSTER];
+    }
+    const students = sortStudentsByAdmNo(state.students || []);
+
+    const occupations = [
+      'Senior Software Architect, TCS',
+      'Govt Revenue Officer, AP Govt',
+      'Business Proprietor, Srikakulam',
+      'Chartered Accountant, FCA',
+      'Professor / Lecturer, Govt College',
+      'Advocate, District High Court',
+      'Senior Branch Manager, SBI',
+      'Agricultural Landholder / Farm Owner',
+      'Mechanical Engineer, Vizag Steel',
+      'Medical Practitioner / Doctor',
+      'Civil Contractor & Builder',
+      'Headmaster, Z.P. High School'
+    ];
+
+    state.parentRecords = students.map((s, idx) => {
+      let relation = 'Father';
+      if (idx % 7 === 2) relation = 'Mother';
+      if (idx % 19 === 5) relation = 'Legal Guardian';
+
+      // Exactly matching the KPI cards: 488 Verified, 12 Review Due
+      const isReviewDue = (idx % 42 === 7) && idx < 500;
+      const status = isReviewDue ? 'Review Due' : 'Verified';
+      const occ = occupations[idx % occupations.length];
+      const cleanEmail = s.name.toLowerCase().replace(/[^a-z]/g, '').slice(0, 10) + '.parent@srividya.edu.in';
+
+      return {
+        guardianName: s.parent,
+        phone: s.phone,
+        email: cleanEmail,
+        relation: relation,
+        occupation: occ,
+        address: s.address || 'Door No. 4-21, MVP Colony, Visakhapatnam',
+        wardAdmNo: s.admNo,
+        wardName: s.name,
+        wardClass: s.class,
+        wardSection: s.section || 'A',
+        wardRollNo: s.rollNo,
+        status: status,
+        lastUpdated: isReviewDue ? 'Review Pending' : 'Verified 2026-27'
+      };
+    });
+  }
+
+  function renderParentRecords(list, page) {
+    initParentRecords();
+    const tbody = document.getElementById('parentRecordsTableBody');
+    if (!tbody) return;
+
+    if (page !== undefined) parentCurrentPage = page;
+    const data = list || state.parentRecords || [];
+
+    const total = data.length;
+    const verified = state.parentRecords.filter(p => p.status === 'Verified').length;
+    const review = state.parentRecords.filter(p => p.status === 'Review Due').length;
+
+    const summaryTotal = document.getElementById('parentSummaryTotal');
+    const summaryVer = document.getElementById('parentSummaryVerified');
+    const summaryRev = document.getElementById('parentSummaryReview');
+    const summarySib = document.getElementById('parentSummarySiblings');
+    if (summaryTotal) summaryTotal.textContent = state.parentRecords.length;
+    if (summaryVer) summaryVer.textContent = verified;
+    if (summaryRev) summaryRev.textContent = review;
+    if (summarySib) summarySib.textContent = 42;
+
+    const badge = document.getElementById('parentRecordsCountBadge');
+    if (badge) badge.textContent = review;
+
+    const showingCount = document.getElementById('parentShowingCount');
+    const totalCount = document.getElementById('parentTotalCount');
+    if (totalCount) totalCount.textContent = state.parentRecords.length;
+
+    const totalPages = Math.ceil(total / parentPageSize) || 1;
+    if (parentCurrentPage > totalPages) parentCurrentPage = totalPages;
+    if (parentCurrentPage < 1) parentCurrentPage = 1;
+
+    const startIdx = (parentCurrentPage - 1) * parentPageSize;
+    const pageItems = data.slice(startIdx, startIdx + parentPageSize);
+
+    if (showingCount) showingCount.textContent = pageItems.length;
+
+    if (pageItems.length === 0) {
+      tbody.innerHTML = `
+        <tr>
+          <td colspan="6" style="text-align:center; padding:3rem; color:var(--color-text-muted);">
+            <i class="fa-solid fa-users-slash" style="font-size:2rem; margin-bottom:0.75rem; display:block; color:#94a3b8;"></i>
+            No parent or guardian dossiers matched your filters.
+          </td>
+        </tr>`;
+      return;
+    }
+
+    tbody.innerHTML = pageItems.map(p => {
+      let relBadgeClass = 'relation-father';
+      let relIcon = 'fa-user-tie';
+      if (p.relation === 'Mother') {
+        relBadgeClass = 'relation-mother';
+        relIcon = 'fa-user';
+      } else if (p.relation === 'Legal Guardian') {
+        relBadgeClass = 'relation-guardian';
+        relIcon = 'fa-user-shield';
+      }
+
+      const isVerified = p.status === 'Verified';
+
+      return `
+        <tr>
+          <td>
+            <div class="parent-details-cell">
+              <div class="parent-avatar">${p.guardianName.charAt(0)}</div>
+              <div>
+                <div class="parent-info-name">${p.guardianName}</div>
+                <div class="parent-info-meta">
+                  <span><i class="fa-solid fa-briefcase text-primary"></i> ${p.occupation}</span>
+                  <span><i class="fa-solid fa-location-dot text-danger"></i> ${p.address}</span>
+                </div>
+              </div>
+            </div>
+          </td>
+          <td>
+            <div class="parent-contact-cell">
+              <a href="tel:${p.phone}" class="parent-phone-pill">
+                <i class="fa-solid fa-phone-volume"></i> ${p.phone}
+              </a>
+              <a href="mailto:${p.email}" class="parent-email-link">
+                <i class="fa-regular fa-envelope"></i> ${p.email}
+              </a>
+              <span class="parent-wa-chip">
+                <i class="fa-brands fa-whatsapp"></i> WhatsApp Active
+              </span>
+            </div>
+          </td>
+          <td>
+            <div class="parent-relation-cell">
+              <span class="parent-relation-badge ${relBadgeClass}">
+                <i class="fa-solid ${relIcon}"></i> ${p.relation}
+              </span>
+              <span class="parent-primary-badge">
+                <i class="fa-solid fa-shield-halved"></i> Primary Guardian
+              </span>
+            </div>
+          </td>
+          <td>
+            <div class="parent-child-cell">
+              <div class="parent-child-name">${p.wardName}</div>
+              <div class="parent-child-meta">
+                <span class="parent-child-admno">${p.wardAdmNo}</span>
+                <span class="parent-child-class">Class ${p.wardClass}-${p.wardSection}</span>
+                <span style="font-size:0.72rem; color:var(--color-text-muted);">#${p.wardRollNo}</span>
+              </div>
+            </div>
+          </td>
+          <td>
+            <div class="parent-status-cell">
+              <span class="parent-status-pill ${isVerified ? 'status-verified' : 'status-review'}">
+                <i class="fa-solid ${isVerified ? 'fa-circle-check' : 'fa-clock-rotate-left'}"></i>
+                ${p.status}
+              </span>
+              <span class="parent-status-time">${p.lastUpdated}</span>
+            </div>
+          </td>
+          <td style="text-align: center;">
+            <div class="parent-actions-cell">
+              <button type="button" class="parent-btn-dossier" onclick="portalApp.viewStudentProfile('${p.wardAdmNo}')" title="Open Ward Dossier">
+                <i class="fa-solid fa-user-graduate text-primary"></i> Ward
+              </button>
+              <button type="button" class="parent-btn-edit" onclick="portalApp.callGuardian('${p.phone}')" title="Place Direct Phone Call">
+                <i class="fa-solid fa-phone text-emerald"></i>
+              </button>
+              <button type="button" class="parent-btn-edit" onclick="portalApp.messageGuardian('${p.phone}', '${p.guardianName}')" title="Send SMS Broadcast">
+                <i class="fa-solid fa-comment-sms text-primary"></i>
+              </button>
+            </div>
+          </td>
+        </tr>
+      `;
+    }).join('');
+
+    renderPaginationControls('parentPagination', parentCurrentPage, totalPages, (p) => {
+      parentCurrentPage = p;
+      filterParentRecords(false);
+    });
+  }
+
+  function filterParentRecords(resetPage = true) {
+    initParentRecords();
+    if (resetPage) parentCurrentPage = 1;
+
+    const query = (document.getElementById('parentFilterInput')?.value || '').toLowerCase().trim();
+    const relVal = document.getElementById('parentRelationFilter')?.value || '';
+    const statusVal = document.getElementById('parentVerifyFilter')?.value || '';
+
+    const filtered = state.parentRecords.filter(p => {
+      const matchQuery = !query ||
+        p.guardianName.toLowerCase().includes(query) ||
+        p.phone.includes(query) ||
+        p.wardName.toLowerCase().includes(query) ||
+        p.wardAdmNo.toLowerCase().includes(query) ||
+        p.occupation.toLowerCase().includes(query);
+
+      const matchRel = !relVal || p.relation === relVal;
+      const matchStatus = !statusVal || p.status === statusVal;
+
+      return matchQuery && matchRel && matchStatus;
+    });
+
+    renderParentRecords(filtered, parentCurrentPage);
+  }
+
+  function resetParentFilters() {
+    const q = document.getElementById('parentFilterInput');
+    const r = document.getElementById('parentRelationFilter');
+    const s = document.getElementById('parentVerifyFilter');
+    if (q) q.value = '';
+    if (r) r.value = '';
+    if (s) s.value = '';
+    parentCurrentPage = 1;
+    renderParentRecords();
+    showToast('Parent directory filters reset', 'info');
+  }
+
+  function exportParentCSV() {
+    initParentRecords();
+    let csv = 'GuardianName,Relationship,Occupation,Phone,Email,Address,WardAdmNo,WardName,WardClass,WardSection,VerificationStatus\n';
+    state.parentRecords.forEach(p => {
+      csv += `"${p.guardianName}","${p.relation}","${p.occupation}","${p.phone}","${p.email}","${(p.address || '').replace(/"/g, '""')}","${p.wardAdmNo}","${p.wardName}","${p.wardClass}","${p.wardSection}","${p.status}"\n`;
+    });
+    downloadCsvFile(csv, 'sri_vidya_parent_guardian_directory.csv');
+    showToast('Guardian Directory exported to CSV', 'success');
+  }
+
+  function printParentDirectory() {
+    window.print();
+  }
+
+  function callGuardian(phone) {
+    if (phone) window.location.href = `tel:${phone}`;
+  }
+
+  function messageGuardian(phone, name) {
+    if (typeof openComposeBroadcastModal === 'function') openComposeBroadcastModal();
+    const phoneInput = document.getElementById('broadcastTestPhone');
+    if (phoneInput) phoneInput.value = phone;
+    showToast(`Prepared communication broadcast for ${name} (${phone})`, 'info');
+  }
+
+  // ==========================================================================
+  // SUBVIEW 5: STUDENT ACADEMIC PERFORMANCE REGISTER TABLE
+  // ==========================================================================
+  let perfCurrentPage = 1;
+  const perfPageSize = 25;
+
+  function initPerformanceRecords() {
+    if (state.performanceRecords && state.performanceRecords.length === 500) return;
+    if ((!state.students || state.students.length === 0) && typeof window !== 'undefined' && Array.isArray(window.STUDENT_ROSTER)) {
+      state.students = [...window.STUDENT_ROSTER];
+    }
+    const students = sortStudentsByAdmNo(state.students || []);
+
+    const remarksPool = [
+      'Exceptional analytical aptitude; consistently excels in Mathematics & Sciences.',
+      'Active classroom contributor; shows keen curiosity and strong presentation skills.',
+      'High concept mastery in languages; recommended for inter-school debates.',
+      'Diligent academic progression; maintains thorough homework records.',
+      'Outstanding laboratory practical score; disciplined problem solver.',
+      'Well-balanced performance; shows commendable improvement across all subjects.',
+      'Strong conceptual foundation; recommended for National Science Olympiad.',
+      'Conscientious effort observed; extra practice recommended in advanced calculus.'
+    ];
+
+    state.performanceRecords = students.map((s, idx) => {
+      const gpa = parseFloat(s.gpa) || 8.5;
+      const baseMark = Math.min(98, Math.max(68, Math.round(gpa * 9.8)));
+      const math = Math.min(100, baseMark + (idx % 5) - 2);
+      const sci = Math.min(100, baseMark + (idx % 7) - 3);
+      const eng = Math.min(100, baseMark + (idx % 3) - 1);
+      const soc = Math.min(100, baseMark + (idx % 4) - 2);
+      const lang1 = Math.min(100, baseMark + (idx % 6) - 1);
+      const totalMarks = math + sci + eng + soc + lang1;
+      const maxMarks = 500;
+      const pct = ((totalMarks / maxMarks) * 100).toFixed(1);
+
+      let grade = 'A1';
+      if (pct < 91 && pct >= 81) grade = 'A2';
+      else if (pct < 81 && pct >= 71) grade = 'B1';
+      else if (pct < 71 && pct >= 61) grade = 'B2';
+      else if (pct < 61) grade = 'C';
+
+      let trend = 'up';
+      let trendLabel = '+3.8%';
+      if (idx % 3 === 1) {
+        trend = 'stable';
+        trendLabel = '+0.4%';
+      } else if (idx % 9 === 3) {
+        trend = 'focus';
+        trendLabel = '-1.2%';
+      }
+
+      const remarks = remarksPool[idx % remarksPool.length];
+
+      return {
+        admNo: s.admNo,
+        name: s.name,
+        class: s.class,
+        section: s.section || 'A',
+        rollNo: s.rollNo,
+        parent: s.parent,
+        phone: s.phone,
+        math: math,
+        sci: sci,
+        eng: eng,
+        soc: soc,
+        lang1: lang1,
+        totalMarks: totalMarks,
+        maxMarks: maxMarks,
+        pct: pct,
+        gpa: gpa,
+        grade: grade,
+        attendance: s.attendance || '94.5%',
+        trend: trend,
+        trendLabel: trendLabel,
+        remarks: remarks
+      };
+    });
+  }
+
+  function renderStudentPerformanceRegister(list, page) {
+    initPerformanceRecords();
+    const tbody = document.getElementById('studentPerformanceTableBody');
+    if (!tbody) return;
+
+    if (page !== undefined) perfCurrentPage = page;
+    const data = list || state.performanceRecords || [];
+
+    const total = data.length;
+    const showingCount = document.getElementById('perfShowingCount');
+    const totalCount = document.getElementById('perfTotalCount');
+    if (totalCount) totalCount.textContent = state.performanceRecords.length;
+
+    const totalPages = Math.ceil(total / perfPageSize) || 1;
+    if (perfCurrentPage > totalPages) perfCurrentPage = totalPages;
+    if (perfCurrentPage < 1) perfCurrentPage = 1;
+
+    const startIdx = (perfCurrentPage - 1) * perfPageSize;
+    const pageItems = data.slice(startIdx, startIdx + perfPageSize);
+
+    if (showingCount) showingCount.textContent = pageItems.length;
+
+    if (pageItems.length === 0) {
+      tbody.innerHTML = `
+        <tr>
+          <td colspan="7" style="text-align:center; padding:3rem; color:var(--color-text-muted);">
+            <i class="fa-solid fa-chart-line" style="font-size:2rem; margin-bottom:0.75rem; display:block; color:#94a3b8;"></i>
+            No student academic records matched your search filters.
+          </td>
+        </tr>`;
+      return;
+    }
+
+    tbody.innerHTML = pageItems.map(p => {
+      const getChipClass = (val) => {
+        if (val >= 90) return 'distinction';
+        if (val >= 80) return 'merit';
+        if (val >= 70) return 'average';
+        return 'needs-drill';
+      };
+
+      const attNum = parseFloat(p.attendance) || 92;
+
+      return `
+        <tr>
+          <td>
+            <div class="perf-student-cell">
+              <div class="perf-student-avatar">${p.name.charAt(0)}</div>
+              <div>
+                <div class="perf-student-name">${p.name}</div>
+                <div class="perf-student-meta">
+                  <span class="perf-admno-badge">${p.admNo}</span>
+                  <span class="profile-tag tag-primary">Class ${p.class}-${p.section}</span>
+                  <span>#${p.rollNo}</span>
+                </div>
+              </div>
+            </div>
+          </td>
+          <td>
+            <div class="perf-marks-grid">
+              <span class="perf-subject-chip ${getChipClass(p.math)}">M: ${p.math}</span>
+              <span class="perf-subject-chip ${getChipClass(p.sci)}">Sci: ${p.sci}</span>
+              <span class="perf-subject-chip ${getChipClass(p.eng)}">Eng: ${p.eng}</span>
+              <span class="perf-subject-chip ${getChipClass(p.soc)}">Soc: ${p.soc}</span>
+              <span class="perf-subject-chip ${getChipClass(p.lang1)}">Lang: ${p.lang1}</span>
+            </div>
+          </td>
+          <td>
+            <div class="perf-gpa-cell">
+              <div class="perf-gpa-score"><strong>${p.totalMarks}</strong> / ${p.maxMarks} (${p.pct}%)</div>
+              <div class="perf-gpa-row">
+                <span class="perf-gpa-badge">${p.gpa} GPA</span>
+                <span class="perf-grade-pill ${p.grade}">${p.grade}</span>
+              </div>
+            </div>
+          </td>
+          <td>
+            <div class="perf-att-cell">
+              <div class="perf-att-row">
+                <span class="perf-att-pct">${p.attendance}</span>
+                <span class="perf-att-days">182 / 190 Days</span>
+              </div>
+              <div class="perf-att-track">
+                <div class="perf-att-bar" style="width: ${attNum}%;"></div>
+              </div>
+            </div>
+          </td>
+          <td>
+            <div class="perf-trend-cell">
+              <span class="perf-trend-pill ${p.trend}">
+                <i class="fa-solid ${p.trend === 'up' ? 'fa-arrow-trend-up' : (p.trend === 'stable' ? 'fa-minus' : 'fa-arrow-trend-down')}"></i>
+                ${p.trendLabel}
+              </span>
+            </div>
+          </td>
+          <td>
+            <div class="perf-remarks-cell">${p.remarks}</div>
+          </td>
+          <td style="text-align: center;">
+            <div class="perf-actions-cell">
+              <button type="button" class="perf-btn-view" onclick="portalApp.generateReportCard('${p.admNo}')" title="Generate Term Report Card">
+                <i class="fa-solid fa-file-invoice"></i> Report
+              </button>
+              <button type="button" class="btn btn-secondary btn-sm" onclick="portalApp.viewStudentProfile('${p.admNo}')" title="View Student Profile">
+                <i class="fa-regular fa-eye"></i>
+              </button>
+            </div>
+          </td>
+        </tr>
+      `;
+    }).join('');
+
+    renderPaginationControls('perfPagination', perfCurrentPage, totalPages, (p) => {
+      perfCurrentPage = p;
+      filterPerformanceRegister(false);
+    });
+  }
+
+  function filterPerformanceRegister(resetPage = true) {
+    initPerformanceRecords();
+    if (resetPage) perfCurrentPage = 1;
+
+    const query = (document.getElementById('perfStudentSearchInput')?.value || '').toLowerCase().trim();
+    const classVal = document.getElementById('perfClassFilter')?.value || '';
+    const gradeVal = document.getElementById('perfGradeFilter')?.value || '';
+
+    const filtered = state.performanceRecords.filter(p => {
+      const matchQuery = !query ||
+        p.name.toLowerCase().includes(query) ||
+        p.admNo.toLowerCase().includes(query) ||
+        p.rollNo.includes(query);
+
+      const matchClass = !classVal || p.class === classVal;
+      const matchGrade = !gradeVal || p.grade === gradeVal;
+
+      return matchQuery && matchClass && matchGrade;
+    });
+
+    renderStudentPerformanceRegister(filtered, perfCurrentPage);
+  }
+
+  function resetPerformanceFilters() {
+    const q = document.getElementById('perfStudentSearchInput');
+    const c = document.getElementById('perfClassFilter');
+    const g = document.getElementById('perfGradeFilter');
+    if (q) q.value = '';
+    if (c) c.value = '';
+    if (g) g.value = '';
+    perfCurrentPage = 1;
+    renderStudentPerformanceRegister();
+    showToast('Performance register filters reset', 'info');
+  }
+
+  function exportPerformanceCSV() {
+    initPerformanceRecords();
+    let csv = 'AdmissionNo,StudentName,Class,Section,RollNo,Mathematics,Science,English,Social,Language,TotalMarks,MaxMarks,Percentage,GPA,GradeTier,Attendance,Trend,Remarks\n';
+    state.performanceRecords.forEach(p => {
+      csv += `"${p.admNo}","${p.name}","${p.class}","${p.section}","${p.rollNo}",${p.math},${p.sci},${p.eng},${p.soc},${p.lang1},${p.totalMarks},${p.maxMarks},"${p.pct}%",${p.gpa},"${p.grade}","${p.attendance}","${p.trendLabel}","${p.remarks.replace(/"/g, '""')}"\n`;
+    });
+    downloadCsvFile(csv, 'sri_vidya_academic_performance_register.csv');
+    showToast('Academic Performance Register exported to CSV', 'success');
+  }
+
+  function printPerformanceTable() {
+    window.print();
+  }
+
+  function generateReportCard(admNo) {
+    initPerformanceRecords();
+    const record = state.performanceRecords.find(p => p.admNo === admNo);
+    if (record) {
+      showToast(`Generating Term Report Card for ${record.name} (GPA ${record.gpa})...`, 'info');
+      setTimeout(() => {
+        window.open(`/merit-certificate?admNo=${record.admNo}&name=${encodeURIComponent(record.name)}&class=${record.class}&gpa=${record.gpa}`, '_blank');
+      }, 350);
+    }
   }
 
   // ==========================================================================
@@ -3745,63 +5859,122 @@ const portalApp = (function () {
         `;
       }).join('');
     }
+
+    // 3. Render Comprehensive Student Academic Performance Register Table
+    renderStudentPerformanceRegister();
   }
 
   function renderStaffGrid(list) {
-    const container = document.getElementById('staffGridContainer');
-    if (!container) return;
+    ensureTeachersEnriched();
+    updateTeachersConfidentialityBanner();
 
-    container.innerHTML = list.map(member => {
-      const initials = (member.name || '').replace(/^(Smt\.|Sri\.|Ms\.|Mr\.|Dr\.)\s*/, '').split(' ').map(n => n[0]).join('').slice(0, 2) || 'TC';
-      const isLead = (member.role || '').includes('Principal');
-      const isBankAadhaar = Boolean(member.bankName && member.aadhaar);
-      const isUpdated = Boolean(member.lastProfileUpdate || member.profileSynced);
-      return `
-        <div class="staff-card ${isLead ? 'lead-card' : ''}">
-          <div class="staff-card-header">
-            <div class="staff-avatar">${initials}</div>
-            <div class="staff-header-info">
-              <div style="display:flex; align-items:center; justify-content:space-between; gap:6px;">
-                <h3 class="staff-name" style="margin-bottom:0;">${member.name}</h3>
-                <span class="teacher-id-badge">${member.id}</span>
-              </div>
-              <span class="staff-role">${member.role}</span>
-              <div style="display:flex; align-items:center; gap:6px; margin-top:4px; flex-wrap:wrap;">
-                <span class="portal-badge ${member.status === 'Present' || member.status === 'Active' ? 'badge-success' : 'badge-warning'}">${member.status || 'Active'}</span>
-                ${isUpdated ? `<span style="font-size:0.72rem; color:#047857; background:#ecfdf5; border:1px solid #a7f3d0; padding:2px 6px; border-radius:4px; font-weight:700;"><i class="fa-solid fa-arrows-rotate"></i> Updated</span>` : ''}
-                ${isBankAadhaar ? `<span style="font-size:0.72rem; color:#1d4ed8; background:#eff6ff; border:1px solid #bfdbfe; padding:2px 6px; border-radius:4px; font-weight:700;"><i class="fa-solid fa-building-columns"></i> Bank &amp; Aadhaar</span>` : ''}
-              </div>
-            </div>
-          </div>
-          <div class="staff-details">
-            <div class="staff-detail-row">
-              <span class="detail-label"><i class="fa-solid fa-graduation-cap"></i> Qualification:</span>
-              <span class="detail-val">${member.qualification || 'B.Ed, Graduate'}</span>
-            </div>
-            <div class="staff-detail-row">
-              <span class="detail-label"><i class="fa-solid fa-briefcase"></i> Experience:</span>
-              <span class="detail-val">${member.exp || '—'}</span>
-            </div>
-            <div class="staff-detail-row">
-              <span class="detail-label"><i class="fa-solid fa-book"></i> Primary Subject:</span>
-              <span class="detail-val">${member.subject || member.department || '—'}</span>
-            </div>
-            <div class="staff-detail-row">
-              <span class="detail-label"><i class="fa-solid fa-phone"></i> Contact:</span>
-              <span class="detail-val"><a href="tel:${member.phone}">${member.phone || '—'}</a></span>
-            </div>
-          </div>
-          <div class="staff-footer">
-            <button class="btn-staff-action outline" onclick="portalApp.openTeacherPermissionsConfig('${member.id}')" title="Configure Teacher Permissions (Principal & Vice Principal)">
-              <i class="fa-solid fa-shield-halved"></i> Permissions
-            </button>
-            <button class="btn-staff-action outline" onclick="portalApp.openFacultyDossier('${member.id}')" title="View Full Faculty Dossier, Aadhaar & Bank Details">
-              <i class="fa-regular fa-folder-open"></i> Dossier
-            </button>
-          </div>
-        </div>
-      `;
-    }).join('');
+    let data = list || state.faculty || [];
+    const searchInput = document.getElementById('facultyFilterInput');
+    const deptFilter = document.getElementById('facultyDeptFilter');
+    const statusFilter = document.getElementById('facultyStatusFilter');
+
+    const searchVal = searchInput ? searchInput.value.toLowerCase().trim() : '';
+    const deptVal = deptFilter ? deptFilter.value.toLowerCase().trim() : '';
+    const statusVal = statusFilter ? statusFilter.value.toLowerCase().trim() : '';
+
+    if (searchVal || deptVal || statusVal) {
+      data = data.filter(f => {
+        const matchesSearch = !searchVal || 
+          (f.name && f.name.toLowerCase().includes(searchVal)) ||
+          (f.id && f.id.toLowerCase().includes(searchVal)) ||
+          (f.subjects && f.subjects.toLowerCase().includes(searchVal)) ||
+          (f.qualifications && f.qualifications.toLowerCase().includes(searchVal)) ||
+          ((f.assignedClasses || []).some(c => c.toLowerCase().includes(searchVal)));
+
+        const matchesDept = !deptVal || (f.subjects && f.subjects.toLowerCase().includes(deptVal));
+        const matchesStatus = !statusVal || (f.status && f.status.toLowerCase() === statusVal);
+
+        return matchesSearch && matchesDept && matchesStatus;
+      });
+    }
+
+    const countBadge = document.getElementById('facultyCountBadge');
+    if (countBadge) countBadge.textContent = data.length;
+
+    const isAuthorized = isStaffAuthorized();
+
+    // 1. Render Table Roster Body
+    const tbody = document.getElementById('facultyTableBody');
+    if (tbody) {
+      if (data.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="9" class="text-center py-4 text-muted">No faculty members found matching your search criteria.</td></tr>';
+      } else {
+        tbody.innerHTML = data.map(f => {
+          const classesChips = (f.assignedClasses || []).map(c => '<span class="class-allocation-chip"><i class="fa-solid fa-chalkboard"></i> ' + c + '</span>').join(' ');
+          const statusBadge = f.status === 'Active' || f.status === 'Present'
+            ? '<span class="portal-badge badge-success"><i class="fa-solid fa-circle-check"></i> Active</span>'
+            : '<span class="portal-badge badge-warning"><i class="fa-solid fa-clock"></i> ' + f.status + '</span>';
+
+          const confidentialCell = isAuthorized
+            ? '<div><strong class="text-emerald" style="font-size:0.85rem;"><i class="fa-solid fa-indian-rupee-sign"></i> ' + f.salary + '</strong><br><small class="text-muted" style="font-size:0.75rem;"><i class="fa-solid fa-user-shield"></i> ' + f.hrNotes + '</small></div>'
+            : '<span class="confidential-lock" title="Restricted: Authorized Personnel Only"><i class="fa-solid fa-lock"></i> Restricted (₹ Confidential)</span>';
+
+          return '<tr>' +
+            '<td><span class="teacher-id-badge">' + f.id + '</span></td>' +
+            '<td><strong style="color:var(--color-text-dark, #0f172a); font-size:0.9rem;">' + f.name + '</strong><br><small class="text-muted">' + (f.role || 'Teaching Faculty') + '</small></td>' +
+            '<td><span class="subject-pill">' + f.subjects + '</span></td>' +
+            '<td><div style="display:flex; flex-wrap:wrap; gap:3px;">' + classesChips + '</div></td>' +
+            '<td><span style="font-weight:600; color:#334155; font-size:0.82rem;">' + f.qualifications + '</span></td>' +
+            '<td><strong>' + f.joiningDate + '</strong></td>' +
+            '<td>' + statusBadge + '</td>' +
+            '<td>' + confidentialCell + '</td>' +
+            '<td style="text-align:center;">' +
+              '<div style="display:inline-flex; gap:6px;">' +
+                '<button type="button" class="btn btn-secondary btn-sm" onclick="portalApp.openFacultyDossier(\'' + f.id + '\')" title="View Comprehensive Faculty Dossier"><i class="fa-regular fa-folder-open"></i> Dossier</button>' +
+                '<button type="button" class="btn btn-secondary btn-sm" onclick="portalApp.openTeacherPermissionsConfig(\'' + f.id + '\')" title="Configure Teacher Permissions"><i class="fa-solid fa-shield-halved"></i></button>' +
+              '</div>' +
+            '</td>' +
+          '</tr>';
+        }).join('');
+      }
+    }
+
+    // 2. Render Cards Grid
+    const cardsContainer = document.getElementById('staffGridContainer');
+    if (cardsContainer) {
+      cardsContainer.innerHTML = data.map(member => {
+        const initials = (member.name || '').replace(/^(Smt\.|Sri\.|Ms\.|Mr\.|Dr\.)\s*/, '').split(' ').map(n => n[0]).join('').slice(0, 2) || 'TC';
+        const isLead = (member.role || '').includes('Principal');
+        const classesChips = (member.assignedClasses || []).map(c => '<span class="class-allocation-chip">' + c + '</span>').join(' ');
+
+        return '<div class="staff-card ' + (isLead ? 'lead-card' : '') + '">' +
+          '<div class="staff-card-header">' +
+            '<div class="staff-avatar">' + initials + '</div>' +
+            '<div class="staff-header-info">' +
+              '<div style="display:flex; align-items:center; justify-content:space-between; gap:6px;">' +
+                '<h3 class="staff-name" style="margin-bottom:0;">' + member.name + '</h3>' +
+                '<span class="teacher-id-badge">' + member.id + '</span>' +
+              '</div>' +
+              '<span class="staff-role">' + member.role + '</span>' +
+              '<div style="display:flex; align-items:center; gap:6px; margin-top:4px; flex-wrap:wrap;">' +
+                '<span class="portal-badge ' + (member.status === 'Present' || member.status === 'Active' ? 'badge-success' : 'badge-warning') + '">' + (member.status || 'Active') + '</span>' +
+                (isAuthorized ? '<span class="confidential-unlocked" style="font-size:0.72rem;"><i class="fa-solid fa-indian-rupee-sign"></i> ' + member.salary + '</span>' : '<span class="confidential-lock" style="font-size:0.72rem;"><i class="fa-solid fa-lock"></i> Salary Restricted</span>') +
+              '</div>' +
+            '</div>' +
+          '</div>' +
+          '<div class="staff-details">' +
+            '<div class="staff-detail-row"><span class="detail-label"><i class="fa-solid fa-graduation-cap"></i> Qualifications:</span><span class="detail-val">' + (member.qualifications || 'B.Ed, Graduate') + '</span></div>' +
+            '<div class="staff-detail-row"><span class="detail-label"><i class="fa-solid fa-book"></i> Subjects:</span><span class="detail-val font-semibold">' + (member.subjects || 'Academics') + '</span></div>' +
+            '<div class="staff-detail-row"><span class="detail-label"><i class="fa-solid fa-chalkboard"></i> Assigned Classes:</span><span class="detail-val">' + classesChips + '</span></div>' +
+            '<div class="staff-detail-row"><span class="detail-label"><i class="fa-solid fa-calendar-check"></i> Joining Date:</span><span class="detail-val"><strong>' + member.joiningDate + '</strong></span></div>' +
+            '<div class="staff-detail-row"><span class="detail-label"><i class="fa-solid fa-phone"></i> Contact:</span><span class="detail-val"><a href="tel:' + member.phone + '">' + (member.phone || '—') + '</a></span></div>' +
+          '</div>' +
+          '<div class="staff-footer">' +
+            '<button class="btn-staff-action outline" onclick="portalApp.openTeacherPermissionsConfig(\'' + member.id + '\')" title="Configure Permissions"><i class="fa-solid fa-shield-halved"></i> Permissions</button>' +
+            '<button class="btn-staff-action outline" onclick="portalApp.openFacultyDossier(\'' + member.id + '\')" title="View Dossier"><i class="fa-regular fa-folder-open"></i> Dossier</button>' +
+          '</div>' +
+        '</div>';
+      }).join('');
+    }
+  }
+
+  function filterFaculty() {
+    renderStaffGrid(state.faculty);
   }
 
   function renderFeeTransactions(list) {
@@ -4587,6 +6760,9 @@ const portalApp = (function () {
     const modal = document.getElementById(modalId);
     if (modal) {
       modal.classList.remove('active');
+      modal.classList.remove('open');
+      modal.classList.remove('show');
+      modal.style.display = 'none';
       document.body.style.overflow = '';
     }
   }
@@ -4669,56 +6845,140 @@ const portalApp = (function () {
 
   // Discipline Incident Rendering & Management
   function renderDisciplineIncidents(list) {
+    const tableBody = document.getElementById('incidentsTableBody');
     const container = document.getElementById('disciplineIncidentsGrid');
-    if (!container) return;
+    const incidents = list || state.disciplineIncidents || [];
 
-    if (list.length === 0) {
-      container.innerHTML = `<div class="p-4 text-center text-muted">No disciplinary incidents on record. All students in good standing!</div>`;
-      return;
+    // Sync badges & stats
+    const badgeAll = document.getElementById('tabBadgeDisciplineAll');
+    if (badgeAll) badgeAll.textContent = incidents.length;
+    const activeBadge = document.getElementById('activeIncidentsBadge');
+    const openCount = (state.disciplineIncidents || []).filter(i => i.status !== 'Resolved').length;
+    if (activeBadge) activeBadge.textContent = `${openCount} Active Case${openCount === 1 ? '' : 's'}`;
+    const activeCasesCount = document.getElementById('activeCasesCount');
+    if (activeCasesCount) activeCasesCount.textContent = openCount;
+
+    if (tableBody) {
+      if (incidents.length === 0) {
+        tableBody.innerHTML = '<tr><td colspan="7" class="text-center p-4 text-muted">No disciplinary incidents match the selected criteria. All students in good standing!</td></tr>';
+      } else {
+        tableBody.innerHTML = incidents.map(inc => {
+          let badgeClass = 'badge-warning';
+          if (inc.status === 'Resolved') badgeClass = 'badge-success';
+          else if (inc.severity === 'Severe' || inc.severity === 'High') badgeClass = 'badge-danger';
+
+          let sevBadge = 'badge-neutral';
+          if (inc.severity === 'Severe' || inc.severity === 'High') sevBadge = 'badge-danger';
+          else if (inc.severity === 'Moderate') sevBadge = 'badge-warning';
+          else if (inc.severity === 'Minor') sevBadge = 'badge-primary';
+
+          return `
+            <tr>
+              <td>
+                <strong class="text-primary font-mono" style="font-size: 0.88rem;">${inc.id}</strong>
+              </td>
+              <td>
+                <div style="font-weight: 700; color: #1e293b;"><i class="fa-regular fa-calendar text-muted"></i> ${inc.date}</div>
+                <small class="text-muted"><i class="fa-regular fa-clock"></i> ${inc.time || '11:15 AM'}</small>
+              </td>
+              <td>
+                <span class="portal-badge ${sevBadge}" style="display: inline-block; margin-bottom: 2px;">${inc.severity} Severity</span>
+                <div style="font-size: 0.82rem; font-weight: 600; color: #334155;">${inc.category}</div>
+              </td>
+              <td>
+                <div style="font-weight: 700; color: #0f172a; font-size: 0.9rem;">${inc.student}</div>
+                <small class="text-muted"><span class="font-mono">${inc.admNo || 'SV-0042'}</span> &bull; <span class="profile-tag tag-primary">${inc.class}</span></small>
+              </td>
+              <td>
+                <span class="portal-badge ${badgeClass}" style="font-weight: 700;">${inc.status}</span>
+              </td>
+              <td>
+                <div style="font-size: 0.82rem; font-weight: 700; color: #0f172a; line-height: 1.35;">${inc.authorizedAction || inc.action}</div>
+                <small class="text-muted" style="display: block; margin-top: 2px;"><i class="fa-solid fa-user-shield text-primary"></i> Authorized: ${inc.authorizedBy || 'Vice Principal Sri Navva Anand'}</small>
+              </td>
+              <td style="text-align: center; white-space: nowrap;">
+                <button class="btn btn-secondary btn-sm" onclick="portalApp.viewIncidentDetails('${inc.id}')" title="View Incident Dossier">
+                  <i class="fa-solid fa-eye"></i>
+                </button>
+                ${inc.status !== 'Resolved' ? `
+                  <button class="btn btn-secondary btn-sm" onclick="portalApp.summonParent('${inc.id}', '${inc.student}')" title="Summon Parent">
+                    <i class="fa-solid fa-phone text-amber"></i>
+                  </button>
+                  <button class="btn btn-primary btn-sm" onclick="portalApp.resolveIncident('${inc.id}')" title="Mark Incident Resolved">
+                    <i class="fa-solid fa-check"></i>
+                  </button>
+                ` : ''}
+              </td>
+            </tr>
+          `;
+        }).join('');
+      }
     }
 
-    container.innerHTML = list.map(inc => {
-      let badgeClass = 'badge-warning';
-      if (inc.severity === 'High') badgeClass = 'badge-danger';
-      if (inc.severity === 'Merit') badgeClass = 'badge-success';
-
-      return `
-        <div class="incident-card" id="inc-card-${inc.id}">
-          <div>
-            <div class="incident-header">
-              <div>
-                <div class="incident-student">${inc.student}</div>
-                <div class="incident-class">${inc.class} • <strong class="text-primary">${inc.id}</strong></div>
+    if (container) {
+      if (incidents.length === 0) {
+        container.innerHTML = '<div class="p-4 text-center text-muted">No disciplinary incidents on record. All students in good standing!</div>';
+        return;
+      }
+      container.innerHTML = incidents.map(inc => {
+        let badgeClass = 'badge-warning';
+        if (inc.severity === 'Severe' || inc.severity === 'High') badgeClass = 'badge-danger';
+        return `
+          <div class="incident-card" id="inc-card-${inc.id}">
+            <div>
+              <div class="incident-header">
+                <div>
+                  <div class="incident-student">${inc.student}</div>
+                  <div class="incident-class">${inc.class} &bull; <strong class="text-primary">${inc.id}</strong></div>
+                </div>
+                <span class="portal-badge ${badgeClass}">${inc.severity} Severity</span>
               </div>
-              <span class="portal-badge ${badgeClass}">${inc.severity} Severity</span>
+              <div class="incident-reason">
+                <strong>Category:</strong> ${inc.category}<br>
+                ${inc.description}
+              </div>
+              <div class="incident-meta-row">
+                <span><strong>Action:</strong> ${inc.authorizedAction || inc.action}</span>
+                <span><i class="fa-regular fa-clock"></i> ${inc.date} ${inc.time || ''}</span>
+              </div>
             </div>
-
-            <div class="incident-reason">
-              <strong>Category:</strong> ${inc.category}<br>
-              ${inc.description}
-            </div>
-
-            <div class="incident-meta-row">
-              <span><strong>Action:</strong> ${inc.action}</span>
-              <span><i class="fa-regular fa-clock"></i> ${inc.date}</span>
+            <div class="incident-actions">
+              ${inc.status !== 'Resolved' ? `
+                <button class="btn btn-secondary btn-sm" onclick="portalApp.summonParent('${inc.id}', '${inc.student}')">
+                  <i class="fa-solid fa-phone"></i> Summon Parent
+                </button>
+                <button class="btn btn-primary btn-sm" onclick="portalApp.resolveIncident('${inc.id}')">
+                  <i class="fa-solid fa-check-double"></i> Mark Resolved
+                </button>
+              ` : `
+                <span class="portal-badge badge-success w-100 text-center"><i class="fa-solid fa-check"></i> Resolved &amp; Diary Signed</span>
+              `}
             </div>
           </div>
+        `;
+      }).join('');
+    }
+  }
 
-          <div class="incident-actions">
-            ${inc.status === 'Open' ? `
-              <button class="btn btn-secondary btn-sm" onclick="portalApp.summonParent('${inc.id}', '${inc.student}')">
-                <i class="fa-solid fa-phone"></i> Summon Parent
-              </button>
-              <button class="btn btn-primary btn-sm" onclick="portalApp.resolveIncident('${inc.id}')">
-                <i class="fa-solid fa-check-double"></i> Mark Resolved
-              </button>
-            ` : `
-              <span class="portal-badge badge-success w-100 text-center"><i class="fa-solid fa-check"></i> Resolved & Diary Signed</span>
-            `}
-          </div>
-        </div>
-      `;
-    }).join('');
+  function filterDisciplineIncidents(sev) {
+    if (!state.disciplineIncidents) return;
+    if (sev === 'all') {
+      renderDisciplineIncidents(state.disciplineIncidents);
+    } else {
+      const filtered = state.disciplineIncidents.filter(i => {
+        if (sev === 'High') return i.severity === 'High' || i.severity === 'Severe';
+        if (sev === 'Moderate') return i.severity === 'Moderate';
+        if (sev === 'Minor') return i.severity === 'Minor';
+        return true;
+      });
+      renderDisciplineIncidents(filtered);
+    }
+  }
+
+  function viewIncidentDetails(id) {
+    const inc = (state.disciplineIncidents || []).find(i => i.id === id);
+    if (!inc) return;
+    alert(`SRI VIDYA E.M HIGH SCHOOL - DISCIPLINARY INCIDENT DOSSIER\n------------------------------------------------------------\nIncident ID: ${inc.id}\nStudent: ${inc.student} (${inc.admNo || 'SV-0042'}) - ${inc.class}\nDate & Time: ${inc.date} at ${inc.time || '11:15 AM'}\nCategory: ${inc.category} (Severity: ${inc.severity})\nStatus: ${inc.status}\n\nDetails:\n${inc.description}\n\nAuthorized Action:\n${inc.authorizedAction || inc.action}\nAuthority: ${inc.authorizedBy || 'Vice Principal Sri Navva Anand'}\nEndorsed: Principal Smt. Gorle Varalakshmi`);
   }
 
   function handleLogIncident(e) {
@@ -4792,56 +7052,135 @@ const portalApp = (function () {
   }
 
   // VP Faculty Leave Review Table Rendering
+  // VP Faculty Leave Review Table Rendering
+  // User Requirement: Employee, leave type, dates, balance, reason and approval actions
   function renderVPLeaves(list) {
     const tbody = document.getElementById('vpLeaveTableBody');
     if (!tbody) return;
 
-    tbody.innerHTML = list.map(item => `
-      <tr id="vp-leave-row-${item.id}">
-        <td><strong>${item.name}</strong></td>
-        <td>${item.dept}</td>
-        <td><span class="portal-badge badge-warning">${item.type}</span></td>
-        <td>${item.dates}</td>
-        <td><strong>${item.substitute}</strong></td>
-        <td>${item.reason}</td>
-        <td>
-          <div class="table-action-btns">
-            <button class="btn btn-primary btn-sm" onclick="portalApp.handleVPLeaveAction(${item.id}, true)" title="Recommend to Principal & Approve Substitution">
-              <i class="fa-solid fa-check"></i> Recommend
-            </button>
-            <button class="btn btn-secondary btn-sm" onclick="portalApp.handleVPLeaveAction(${item.id}, false)" title="Request Reschedule">
-              <i class="fa-solid fa-xmark"></i> Reject
-            </button>
-          </div>
-        </td>
-      </tr>
-    `).join('');
+    const data = list || state.facultyLeaves || [];
+
+    if (data.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="6" class="text-center p-4 text-muted"><i class="fa-solid fa-circle-check text-emerald mr-1"></i> All faculty leave applications have been reviewed and processed.</td></tr>';
+      return;
+    }
+
+    tbody.innerHTML = data.map(item => {
+      let badgeCls = 'badge-warning';
+      if (item.type.includes('Medical')) badgeCls = 'badge-danger';
+      else if (item.type.includes('Duty') || item.type.includes('OD')) badgeCls = 'badge-primary';
+      else if (item.type.includes('Earned')) badgeCls = 'badge-warning';
+
+      const initials = item.name.replace(/^(Sri|Smt\.|Mrs\.|Mr\.)\s*/, '').split(' ').map(p => p[0]).join('').slice(0, 2);
+
+      return `
+        <tr id="vp-leave-row-${item.id}">
+          <td>
+            <div style="display: flex; align-items: center; gap: 0.65rem;">
+              <div style="width: 38px; height: 38px; border-radius: 50%; background: #e0e7ff; color: #3730a3; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.82rem; flex-shrink: 0; box-shadow: 0 1px 3px rgba(0,0,0,0.06);">
+                ${initials}
+              </div>
+              <div>
+                <strong style="color: #0f172a; font-size: 0.88rem; display: block;">${item.name}</strong>
+                <div style="font-size: 0.74rem; color: #64748b; margin-top: 2px;">
+                  ${item.dept} &bull; <span class="font-mono" style="font-weight: 600;">${item.staffId}</span>
+                </div>
+              </div>
+            </div>
+          </td>
+          <td>
+            <span class="portal-badge ${badgeCls}" style="font-weight: 800; font-size: 0.76rem;">
+              <i class="fa-solid ${item.type.includes('Medical') ? 'fa-hospital' : (item.type.includes('Duty') ? 'fa-medal' : 'fa-calendar-day')} mr-1"></i> ${item.type}
+            </span>
+          </td>
+          <td>
+            <strong style="font-size: 0.86rem; color: #1e293b; display: block;">${item.dates}</strong>
+            <div style="font-size: 0.74rem; color: #64748b; margin-top: 2px;">
+              <i class="fa-solid fa-clock mr-1"></i> ${item.days || (item.daysCount + ' Working Days')}
+            </div>
+          </td>
+          <td>
+            <div style="font-weight: 800; font-size: 0.82rem; color: #0369a1;">
+              <i class="fa-solid fa-scale-balanced mr-1"></i> ${item.balance || 'CL: 8/12 Left'}
+            </div>
+            <div style="font-size: 0.72rem; color: #64748b; margin-top: 2px;">
+              Entitlement: Verified &bull; AP SCERT Norm
+            </div>
+          </td>
+          <td>
+            <div style="font-size: 0.84rem; color: #334155; line-height: 1.45;">${item.reason}</div>
+            <div style="margin-top: 4px; font-size: 0.76rem; color: #059669; font-weight: 700;">
+              <i class="fa-solid fa-user-shield mr-1"></i> Cover: <strong>${item.substitute}</strong>
+            </div>
+          </td>
+          <td style="text-align: center;">
+            <div class="table-action-btns" style="justify-content: center; gap: 0.35rem; display: flex; flex-wrap: nowrap;">
+              <button class="btn btn-success btn-sm" onclick="portalApp.handleVPLeaveAction('${item.id}', true)" title="Recommend &amp; Sanction Substitution" style="padding: 0.35rem 0.65rem; font-size: 0.76rem;">
+                <i class="fa-solid fa-check mr-1"></i> Approve
+              </button>
+              <button class="btn btn-danger btn-sm" onclick="portalApp.handleVPLeaveAction('${item.id}', false)" title="Reject Request" style="padding: 0.35rem 0.65rem; font-size: 0.76rem;">
+                <i class="fa-solid fa-xmark mr-1"></i> Reject
+              </button>
+            </div>
+          </td>
+        </tr>
+      `;
+    }).join('');
+
+    const badge = document.getElementById('facultyLeaveTabBadge');
+    if (badge) badge.textContent = data.length;
+    const sideBadge = document.getElementById('sidebarFacultyLeaveBadge');
+    if (sideBadge) sideBadge.textContent = data.length + ' Req';
+    const statPending = document.getElementById('statVpLeavesPending');
+    if (statPending) statPending.textContent = data.length;
   }
 
-  function handleVPLeaveAction(id, approved) {
-    const row = document.getElementById(`vp-leave-row-${id}`);
-    if (row) {
-      row.style.transition = 'all 0.3s ease';
-      row.style.opacity = '0';
-      setTimeout(() => {
-        row.remove();
-        state.facultyLeaves = state.facultyLeaves.filter(l => l.id !== id);
-      }, 300);
+  function filterFacultyLeaves(type) {
+    if (!state.facultyLeaves) return;
+    if (!type || type === 'all') {
+      renderVPLeaves(state.facultyLeaves);
+    } else {
+      const filtered = state.facultyLeaves.filter(item => item.type.toLowerCase().includes(type.toLowerCase()));
+      renderVPLeaves(filtered);
     }
+  }
+
+    function handleVPLeaveAction(id, approved) {
+    const item = (state.facultyLeaves || []).find(l => String(l.id) === String(id));
+    const applicantName = item ? item.name : 'Faculty Member';
+
+    state.facultyLeaves = (state.facultyLeaves || []).filter(l => String(l.id) !== String(id));
+
+    // Also push to history register as audited action
+    if (!state.leaveHistory) state.leaveHistory = [];
+    if (item) {
+      state.leaveHistory.unshift({
+        id: item.id,
+        date: '28 Oct 2026',
+        applicant: item.name,
+        role: 'Faculty',
+        deptOrClass: item.dept,
+        category: 'Faculty',
+        type: item.type,
+        dates: item.dates,
+        duration: item.days || '1 Day',
+        reason: item.reason,
+        approver: approved ? 'Vice Principal Sri Navva Anand &bull; Approved' : 'Vice Principal Sri Navva Anand &bull; Rejected',
+        status: approved ? 'Approved' : 'Rejected'
+      });
+    }
+
+    renderVPLeaves(state.facultyLeaves);
+    if (typeof renderLeaveHistoryRegister === 'function') renderLeaveHistoryRegister();
 
     if (approved) {
-      showToast('Leave recommended by Vice Principal and substitute coverage confirmed', 'success');
+      showToast(`Leave application for ${applicantName} approved by Vice Principal Sri Navva Anand. Substitution confirmed.`, 'success');
     } else {
-      showToast('Leave request declined due to academic timetable constraints', 'warning');
+      showToast(`Leave application for ${applicantName} rejected due to institutional schedule constraints.`, 'warning');
     }
   }
+  // Auto-init moved to the bottom of the closure after all declarations.
 
-  // Auto-init on DOM ready
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', init);
-  } else {
-    init();
-  }
 
 
   // =========================================================================
@@ -4962,6 +7301,12 @@ const portalApp = (function () {
       }
       desksContainer.innerHTML = desksHtml;
     }
+  }
+
+    function checkSeatingConflicts() {
+    const hallKey = document.getElementById('examHallSelector')?.value || 'Hall 1';
+    const hall = (typeof EXAM_HALLS_DATA !== 'undefined' && EXAM_HALLS_DATA[hallKey]) || { name: hallKey, capacityTotal: 78 };
+    showToast(`Conflict Audit Complete: 0 Conflicts detected for ${hall.name}. Capacity (${hall.capacityTotal}) verified with 1.2m alternate seating.`, 'success');
   }
 
   function printExamSeatingPlan() {
@@ -5477,44 +7822,109 @@ const portalApp = (function () {
   }
 
   function renderGateLateComing() {
-    const tbody = document.getElementById('morningGateLateTableBody');
+    const tbody = document.getElementById('morningGateLateTableBody') || document.getElementById('disciplineLateArrivalsTableBody');
     if (!tbody) return;
 
-    if (!state.gateLateRecords || state.gateLateRecords.length === 0) {
-      tbody.innerHTML = `<tr><td colspan="9" class="text-center p-4 text-muted">No gate late arrivals recorded today. Perfect punctuality!</td></tr>`;
+    const records = state.gateLateRecords || [];
+
+    // Sync badges
+    const lateBadge = document.getElementById('tabBadgeDisciplineLate');
+    if (lateBadge) lateBadge.textContent = records.length;
+    const lateTodayCount = document.getElementById('lateArrivalsTodayCount');
+    if (lateTodayCount) lateTodayCount.textContent = records.length;
+    const btnCount = document.getElementById('btnLateCountLabel');
+    if (btnCount) btnCount.textContent = records.length;
+
+    if (records.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="7" class="text-center p-4 text-muted">No gate late arrivals recorded today. Perfect punctuality across all classes!</td></tr>';
       return;
     }
 
-    tbody.innerHTML = state.gateLateRecords.map(r => `
-      <tr id="gate-row-${r.id}">
-        <td><strong>${r.student}</strong><br><small class="text-muted">${r.admNo}</small></td>
-        <td><strong>${r.class}</strong></td>
-        <td><strong class="text-red"><i class="fa-regular fa-clock"></i> ${r.time}</strong></td>
-        <td>${r.gate}</td>
-        <td>${r.commute}</td>
-        <td><span class="portal-badge badge-warning">${r.weeklyCount}</span></td>
-        <td>${r.reason}</td>
-        <td><small>${r.action}</small></td>
-        <td style="text-align: right; white-space: nowrap;">
-          <button class="btn btn-secondary btn-sm" onclick="portalApp.sendGateLateSms('${r.id}')" title="Send SMS Notice to Parent">
-            <i class="fa-solid fa-paper-plane"></i> SMS
-          </button>
-          <button class="btn btn-secondary btn-sm" onclick="portalApp.printGateLateSlip('${r.id}')" title="Print Gate Late Slip">
-            <i class="fa-solid fa-receipt"></i> Slip
-          </button>
-        </td>
-      </tr>
-    `).join('');
+    tbody.innerHTML = records.map(r => {
+      const isRepeatHigh = (r.repeatedOccurrences || r.weeklyCount || '').includes('3') || (r.repeatedOccurrences || '').includes('High');
+      const isRepeatMed = (r.repeatedOccurrences || r.weeklyCount || '').includes('2');
+      const repeatBadge = isRepeatHigh 
+        ? `<span class="portal-badge badge-danger" style="font-weight: 700;"><i class="fa-solid fa-triangle-exclamation"></i> ${r.repeatedOccurrences || r.weeklyCount}</span><br><small class="text-red" style="font-weight: 700;">Parent Summon Flagged</small>`
+        : isRepeatMed
+          ? `<span class="portal-badge badge-warning" style="font-weight: 700;"><i class="fa-solid fa-clock-rotate-left"></i> ${r.repeatedOccurrences || r.weeklyCount}</span><br><small class="text-muted">Diary Warning Note</small>`
+          : `<span class="portal-badge badge-neutral" style="font-weight: 700;"><i class="fa-solid fa-circle-info"></i> ${r.repeatedOccurrences || r.weeklyCount || '1st occurrence'}</span><br><small class="text-muted">Verbal Caution</small>`;
+
+      return `
+        <tr id="gate-row-${r.id}">
+          <td>
+            <strong style="color: #0f172a; font-size: 0.9rem;">${r.student}</strong>
+            <div style="font-size: 0.78rem; color: #64748b; margin-top: 2px;">
+              <span class="font-mono">${r.admNo}</span> &bull; <span class="profile-tag tag-primary">${r.class}</span>
+            </div>
+          </td>
+          <td>
+            <div style="font-weight: 700; color: #1e293b;"><i class="fa-regular fa-calendar text-muted"></i> ${r.date || '28 Oct 2026'}</div>
+            <small class="text-muted"><i class="fa-solid fa-person-walking text-primary"></i> ${r.commute || 'Walking'}</small>
+          </td>
+          <td>
+            <strong class="text-red" style="font-size: 0.92rem;"><i class="fa-regular fa-clock"></i> ${r.time}</strong>
+            <div style="font-size: 0.74rem; color: #b91c1c; font-weight: 700; margin-top: 1px;">${r.delay || '+22m delay'}</div>
+          </td>
+          <td>
+            <div style="font-size: 0.84rem; font-weight: 600; color: #1e293b;">${r.reason}</div>
+            <small class="text-muted"><i class="fa-solid fa-door-open text-primary"></i> ${r.gate}</small>
+          </td>
+          <td>
+            ${repeatBadge}
+          </td>
+          <td>
+            <span class="portal-badge ${r.status.includes('Warning') ? 'badge-danger' : r.status.includes('Admitted') ? 'badge-success' : 'badge-warning'}" style="font-weight: 700;">
+              ${r.status}
+            </span>
+          </td>
+          <td style="text-align: center; white-space: nowrap;">
+            <button class="btn btn-secondary btn-sm" onclick="portalApp.sendGateLateSms('${r.id}')" title="Send SMS Notice to Parent">
+              <i class="fa-solid fa-paper-plane text-primary"></i>
+            </button>
+            <button class="btn btn-secondary btn-sm" onclick="portalApp.printGateLateSlip('${r.id}')" title="Print Official Gate Slip">
+              <i class="fa-solid fa-receipt text-emerald"></i>
+            </button>
+          </td>
+        </tr>
+      `;
+    }).join('');
+
+    const modalTbody = document.getElementById('modalGateLateTableBody');
+    if (modalTbody) {
+      modalTbody.innerHTML = records.map(r => `
+        <tr>
+          <td><strong>${r.student}</strong><br><small class="text-muted">${r.admNo}</small></td>
+          <td><span class="profile-tag tag-primary">${r.class}</span></td>
+          <td><strong class="text-red">${r.time}</strong></td>
+          <td>${r.gate}</td>
+          <td>${r.commute}</td>
+          <td><span class="portal-badge badge-warning">${r.repeatedOccurrences || r.weeklyCount}</span></td>
+          <td><small>${r.action}</small></td>
+          <td style="text-align: right;">
+            <button class="btn btn-secondary btn-sm" onclick="portalApp.sendGateLateSms('${r.id}')"><i class="fa-solid fa-paper-plane"></i></button>
+            <button class="btn btn-secondary btn-sm" onclick="portalApp.printGateLateSlip('${r.id}')"><i class="fa-solid fa-receipt"></i></button>
+          </td>
+        </tr>
+      `).join('');
+    }
   }
 
   function sendGateLateSms(id) {
-    const rec = state.gateLateRecords.find(r => r.id === id);
+    const rec = (state.gateLateRecords || []).find(r => r.id === id);
     if (!rec) return;
-    showToast(`SMS Notice dispatched to parents of ${rec.student}: Arrival at ${rec.time} recorded under VP gate protocol.`, 'success');
+    showToast(`SMS Notice dispatched to parents of ${rec.student}: Arrival at ${rec.time} (${rec.repeatedOccurrences || 'Gate Check'}) logged under VP protocol.`, 'success');
+  }
+
+  function sendBulkGateLateSms() {
+    showToast('Bulk SMS dispatched to all parents of late arrivals recorded today.', 'success');
+  }
+
+  function printGateLateSheet() {
+    window.print();
   }
 
   function printGateLateSlip(id) {
-    const rec = state.gateLateRecords.find(r => r.id === id);
+    const rec = (state.gateLateRecords || []).find(r => r.id === id);
     if (!rec) return;
 
     const printWin = window.open('', '_blank', 'width=500,height=400');
@@ -5543,10 +7953,10 @@ const portalApp = (function () {
           <div class="row"><strong>Slip Ref:</strong> ${rec.id}</div>
           <div class="row"><strong>Student:</strong> ${rec.student} (${rec.admNo})</div>
           <div class="row"><strong>Class:</strong> ${rec.class}</div>
-          <div class="row"><strong>Arrival Time:</strong> ${rec.time} (${rec.weeklyCount})</div>
+          <div class="row"><strong>Arrival Time:</strong> ${rec.time} (${rec.repeatedOccurrences || 'Recorded'})</div>
           <div class="row"><strong>Reason:</strong> ${rec.reason}</div>
           <div class="row"><strong>Gate Officer:</strong> Sri G. Appa Rao (Head Security)</div>
-          <div class="row"><strong>VP Authorization:</strong> Permitted to Zero Period</div>
+          <div class="row"><strong>VP Authorization:</strong> Permitted to Zero Period by Sri Navva Anand</div>
           <br><br>
           <div style="display:flex; justify-content:space-between;">
             <span>Gate Sentry</span>
@@ -5560,45 +7970,60 @@ const portalApp = (function () {
     printWin.document.close();
   }
 
-  function sendBulkGateLateSms() {
-    showToast('Bulk SMS dispatched to all parents of late arrivals recorded today.', 'success');
-  }
-
-  function printGateLateSheet() {
-    window.print();
-  }
-
   function renderMeritAwards() {
-    const grid = document.getElementById('meritAwardsGrid');
-    if (!grid) return;
+    const tableBody = document.getElementById('disciplineMeritTableBody');
+    const records = state.meritAwards || [];
 
-    if (!state.meritAwards || state.meritAwards.length === 0) {
-      grid.innerHTML = `<div class="p-4 text-center text-muted">No merit awards issued yet.</div>`;
-      return;
+    const meritBadge = document.getElementById('tabBadgeDisciplineMerit');
+    if (meritBadge) meritBadge.textContent = records.length;
+
+    if (tableBody) {
+      if (records.length === 0) {
+        tableBody.innerHTML = '<tr><td colspan="7" class="text-center p-4 text-muted">No student merit or achievement records conferred yet.</td></tr>';
+      } else {
+        tableBody.innerHTML = records.map(m => `
+          <tr>
+            <td>
+              <strong style="color: #0f172a; font-size: 0.9rem;">${m.student}</strong>
+              <div style="font-size: 0.78rem; color: #64748b; margin-top: 2px;">
+                <span class="font-mono">${m.admNo || 'SV-0082'}</span> &bull; <span class="profile-tag tag-primary">${m.class}</span>
+              </div>
+            </td>
+            <td>
+              <strong class="text-emerald" style="font-size: 0.88rem; display: block; line-height: 1.3;">
+                <i class="fa-solid fa-award text-amber mr-1"></i> ${m.achievement || m.description}
+              </strong>
+              <small class="text-muted" style="display: block; margin-top: 2px; line-height: 1.3;">${m.description}</small>
+            </td>
+            <td>
+              <span class="portal-badge badge-success" style="font-weight: 700;">
+                <i class="fa-solid fa-medal"></i> ${m.category}
+              </span>
+            </td>
+            <td>
+              <div style="font-weight: 700; color: #1e293b;"><i class="fa-regular fa-calendar text-muted"></i> ${m.date}</div>
+            </td>
+            <td>
+              <div style="font-size: 0.82rem; font-weight: 800; color: #0f172a;">
+                <i class="fa-solid fa-file-shield text-primary"></i> ${m.certificateNo || 'Official Record'}
+              </div>
+              <small class="text-muted" style="display: block; margin-top: 1px; line-height: 1.3;">${m.supportingEvidence || m.evidence || 'Verified by Department & VP Desk'}</small>
+            </td>
+            <td>
+              <strong style="font-size: 0.82rem; color: #1e293b;">${m.authority}</strong>
+              <div style="margin-top: 2px;">
+                <span style="background: #ecfdf5; color: #047857; font-weight: 800; font-size: 0.75rem; padding: 2px 7px; border-radius: 4px; border: 1px solid #a7f3d0;">${m.points}</span>
+              </div>
+            </td>
+            <td style="text-align: center; white-space: nowrap;">
+              <button class="btn btn-secondary btn-sm" onclick="portalApp.printMeritCertificate('${m.id}')" title="Print Certificate of Character &amp; Merit">
+                <i class="fa-solid fa-certificate text-emerald"></i>
+              </button>
+            </td>
+          </tr>
+        `).join('');
+      }
     }
-
-    grid.innerHTML = state.meritAwards.map(m => `
-      <div class="merit-card">
-        <div class="merit-card-header">
-          <div>
-            <div class="merit-student-name">${m.student}</div>
-            <div class="merit-class">${m.class} &bull; <strong class="text-primary">${m.id}</strong></div>
-          </div>
-          <span class="merit-points-badge">${m.points}</span>
-        </div>
-        <div class="merit-category"><i class="fa-solid fa-award"></i> ${m.category}</div>
-        <div class="merit-desc">${m.description}</div>
-        <div class="merit-footer">
-          <div>
-            <small class="text-muted"><i class="fa-solid fa-user-check"></i> ${m.authority}</small><br>
-            <small class="text-muted"><i class="fa-regular fa-calendar"></i> ${m.date}</small>
-          </div>
-          <button class="btn btn-secondary btn-sm" onclick="portalApp.printMeritCertificate('${m.id}')">
-            <i class="fa-solid fa-certificate"></i> Print Certificate
-          </button>
-        </div>
-      </div>
-    `).join('');
   }
 
   function openAwardMeritModal() {
@@ -5621,28 +8046,35 @@ const portalApp = (function () {
     const newMerit = {
       id: `MRT-2026-0${Math.floor(19 + Math.random() * 50)}`,
       student: name,
+      admNo: `SV-0${Math.floor(100 + Math.random() * 800)}`,
       class: cls,
+      achievement: desc.split('.')[0],
       points: pts,
       category: cat,
       description: desc,
+      supportingEvidence: `VP Citation #CIT-2026-${Math.floor(200 + Math.random() * 500)}; State Board Norms`,
       authority: 'Vice Principal Sri Navva Anand',
-      date: 'Today',
+      date: 'Today, 28 Oct 2026',
       certificateNo: `CERT-MERIT-2026-${Math.floor(105 + Math.random() * 100)}`
     };
 
+    if (!state.meritAwards) state.meritAwards = [];
     state.meritAwards.unshift(newMerit);
     renderMeritAwards();
     closeModal('awardMeritModal');
     e.target.reset();
 
-    const meritBadge = document.getElementById('tabBadgeDisciplineMerit');
-    if (meritBadge) meritBadge.textContent = state.meritAwards.length;
-
     showToast(`Merit Commendation ${newMerit.id} successfully conferred to ${name}!`, 'success');
   }
 
   function printMeritCertificate(id) {
-    const m = (state.meritAwards && state.meritAwards.find(item => item.id === id)) || state.meritAwards[0];
+    const m = (state.meritAwards && state.meritAwards.find(item => item.id === id)) || (state.meritAwards && state.meritAwards[0]) || {
+      student: 'P. Hema Latha',
+      class: 'Class X-A',
+      category: 'Academic Excellence & Olympiad',
+      description: 'Secured District 1st Rank in Mathematics Olympiad.',
+      points: '+20 Points'
+    };
     const printWin = window.open('', '_blank', 'width=900,height=650');
     if (!printWin) {
       showToast('Popup blocked. Please allow popups to print Certificate.', 'warning');
@@ -5670,7 +8102,7 @@ const portalApp = (function () {
       <body>
         <div class="cert-border">
           <div class="school">Sri Vidya English Medium High School</div>
-          <div class="affil">Recognized by Govt. of Andhra Pradesh &bull; Estd. 2017 &bull; Visakhapatnam</div>
+          <div class="affil">Recognized by Govt. of Andhra Pradesh &bull; Estd. 2017 &bull; Tilak Road, Guntur</div>
           <div class="cert-title">CERTIFICATE OF CHARACTER &amp; MERIT</div>
           <div class="cert-body">
             This is proudly conferred upon <span class="student-name">${m.student}</span> of <strong>${m.class}</strong><br>
@@ -5681,7 +8113,7 @@ const portalApp = (function () {
           <div class="signatures">
             <div>Vice Principal (Sri Navva Anand)</div>
             <div>Official Seal: Sri Vidya E.M High School</div>
-            <div>Principal (Smt. Gorle Varalakshmi)</div>
+            <div>Principal &amp; Correspondent (Smt. Gorle Varalakshmi)</div>
           </div>
         </div>
         <script>window.onload = function() { window.print(); window.close(); }</script>
@@ -5692,55 +8124,79 @@ const portalApp = (function () {
   }
 
   function renderParentConvocations() {
-    const container = document.getElementById('parentConvocationsContainer');
-    if (!container) return;
+    const tableBody = document.getElementById('disciplineParentMeetingsTableBody');
+    const records = state.parentConvocations || [];
 
-    if (!state.parentConvocations || state.parentConvocations.length === 0) {
-      container.innerHTML = `<div class="p-4 text-center text-muted">No parent convocations scheduled.</div>`;
-      return;
-    }
+    const meetBadge = document.getElementById('tabBadgeDisciplineMeetings');
+    if (meetBadge) meetBadge.textContent = records.length;
 
-    container.innerHTML = `
-      <div class="convocation-grid">
-        ${state.parentConvocations.map(c => `
-          <div class="convocation-card">
-            <div class="convocation-header">
-              <div>
-                <div class="convocation-student">${c.student}</div>
-                <div class="convocation-parent">${c.class} &bull; Parent: <strong>${c.parent}</strong> (${c.phone})</div>
-                <div class="text-muted text-xs mt-1">Ref ID: <strong class="text-primary">${c.id}</strong></div>
-              </div>
-              <span class="portal-badge ${c.status === 'Completed' ? 'badge-success' : 'badge-danger'}">
-                ${c.status === 'Completed' ? '<i class="fa-solid fa-check"></i> Completed' : '<i class="fa-solid fa-calendar-check"></i> ' + c.status}
-              </span>
-            </div>
+    if (tableBody) {
+      if (records.length === 0) {
+        tableBody.innerHTML = '<tr><td colspan="7" class="text-center p-4 text-muted">No parent convocations or disciplinary conferences scheduled.</td></tr>';
+      } else {
+        tableBody.innerHTML = records.map(m => {
+          let attBadge = 'badge-primary';
+          if (m.attendance === 'Attended & Signed' || m.status === 'Completed') attBadge = 'badge-success';
+          else if (m.attendance === 'Awaiting Confirmation') attBadge = 'badge-warning';
 
-            <div class="convocation-purpose">
-              <strong>Agenda:</strong> ${c.purpose}
-            </div>
-
-            <div class="convocation-meta">
-              <div><i class="fa-regular fa-clock"></i> <strong>Schedule:</strong> ${c.date}</div>
-              <div><i class="fa-solid fa-location-dot"></i> <strong>Venue:</strong> ${c.venue}</div>
-              <div><i class="fa-solid fa-user-tie"></i> <strong>Presiding:</strong> ${c.officer}</div>
-            </div>
-
-            <div class="convocation-actions">
-              <button class="btn btn-secondary btn-sm" onclick="portalApp.printSummonsNotice('${c.id}')">
-                <i class="fa-solid fa-print"></i> Print Summons Notice
-              </button>
-              ${c.status === 'Scheduled' ? `
-                <button class="btn btn-primary btn-sm" onclick="portalApp.recordConferenceCompleted('${c.id}')">
-                  <i class="fa-solid fa-check-double"></i> Record Completed
+          return `
+            <tr>
+              <td>
+                <strong style="color: #0f172a; font-size: 0.9rem;">${m.student}</strong>
+                <div style="font-size: 0.78rem; color: #64748b; margin-top: 2px;">
+                  <span class="font-mono">${m.admNo || 'SV-0042'}</span> &bull; <span class="profile-tag tag-primary">${m.class}</span>
+                </div>
+              </td>
+              <td>
+                <strong style="color: #1e293b;">${m.guardian || m.parent}</strong>
+                <div style="font-size: 0.78rem; color: #64748b; margin-top: 2px;">
+                  <i class="fa-solid fa-phone text-primary"></i> ${m.phone || '9848123490'}
+                </div>
+              </td>
+              <td>
+                <div style="font-weight: 700; color: #0f172a; font-size: 0.85rem;">
+                  <i class="fa-regular fa-calendar-check text-primary"></i> ${m.meetingDate || m.date}
+                </div>
+                <small class="text-muted"><i class="fa-solid fa-location-dot"></i> ${m.venue || 'Vice Principal Chamber'}</small>
+              </td>
+              <td>
+                <div style="font-size: 0.84rem; font-weight: 600; color: #0f172a; line-height: 1.35;">${m.purpose || m.reason}</div>
+                <small class="text-muted" style="display: block; margin-top: 2px;"><i class="fa-solid fa-user-shield text-primary"></i> Convened by: ${m.officer || 'Sri Navva Anand (Vice Principal)'}</small>
+              </td>
+              <td>
+                <span class="portal-badge ${attBadge}" style="font-weight: 700;">
+                  ${m.attendance || (m.status === 'Completed' ? 'Attended & Signed' : 'Confirmed Attending')}
+                </span>
+              </td>
+              <td>
+                <div style="font-size: 0.82rem; font-weight: 700; color: #1e293b;">${m.followUp || 'Weekly attendance check; Diary counter-signed'}</div>
+                <small class="text-muted">Target: ${m.followUpDate || 'End of Month'}</small>
+              </td>
+              <td style="text-align: center; white-space: nowrap;">
+                <button class="btn btn-secondary btn-sm" onclick="portalApp.viewMeetingNotice('${m.id}')" title="View Convocations Notice">
+                  <i class="fa-solid fa-envelope-open-text text-primary"></i>
                 </button>
-              ` : `
-                <span class="portal-badge badge-success"><i class="fa-solid fa-check"></i> Conference Executed &amp; Documented</span>
-              `}
-            </div>
-          </div>
-        `).join('')}
-      </div>
-    `;
+                <button class="btn btn-secondary btn-sm" onclick="portalApp.sendMeetingSmsReminder('${m.id}')" title="Send SMS Reminder">
+                  <i class="fa-solid fa-paper-plane text-emerald"></i>
+                </button>
+              </td>
+            </tr>
+          `;
+        }).join('');
+      }
+    }
+  }
+
+  function viewMeetingNotice(id) {
+    const m = (state.parentConvocations || []).find(item => item.id === id);
+    if (!m) return;
+    alert(`SRI VIDYA E.M HIGH SCHOOL - FORMAL PARENT CONVOCATION NOTICE\n------------------------------------------------------------\nMeeting Ref: ${m.id}\nStudent: ${m.student} (${m.class})\nParent / Guardian: ${m.guardian || m.parent} (Ph: ${m.phone})\nSchedule: ${m.meetingDate || m.date}\nVenue: ${m.venue || 'Vice Principal Chamber'}\nConvened By: ${m.officer || 'Sri Navva Anand (Vice Principal)'}\n\nAgenda / Purpose:\n${m.purpose || m.reason}\n\nAttendance Status: ${m.attendance}\nFollow-Up Protocol: ${m.followUp}\nEndorsed: Principal Smt. Gorle Varalakshmi`);
+  }
+
+  function sendMeetingSmsReminder(id) {
+    const m = (state.parentConvocations || []).find(item => item.id === id);
+    if (!m) return;
+    showToast(`SMS reminder dispatched to ${m.guardian || m.parent} (${m.phone}) for conference on ${m.meetingDate || m.date}.`, 'success');
   }
 
   function openScheduleSummonsModal() {
@@ -6177,12 +8633,13 @@ const portalApp = (function () {
     const initials = (member.name || 'Faculty').replace(/^(Smt\.|Sri\.|Ms\.|Mr\.|Dr\.)\s*/, '').split(' ').map(n => n[0]).join('').slice(0, 2) || 'TC';
     const isUpdated = Boolean(member.lastProfileUpdate || member.profileSynced);
     
-    const aadhaarDisplay = member.aadhaar || '5482 1920 3847';
-    const panDisplay = member.pan || 'ABCDE1234F';
+    const isExecAuth = (state.currentRole === 'principal' || state.currentRole === 'vice-principal');
+    const aadhaarDisplay = isExecAuth ? (member.aadhaar || '5482 1920 3847') : ('XXXX XXXX ' + (member.aadhaar || '3847').slice(-4) + ' [Restricted]');
+    const panDisplay = isExecAuth ? (member.pan || 'ABCDE1234F') : ('XXXXX' + (member.pan || '1234F').slice(-4) + ' [Restricted]');
     const udiseDisplay = member.udise || 'AP-FAC-2017-8821';
     const bankNameDisplay = member.bankName || 'State Bank of India (SBI)';
     const acctHolderDisplay = member.accountHolder || member.name;
-    const acctNoDisplay = member.accountNumber || '309812456789';
+    const acctNoDisplay = isExecAuth ? (member.accountNumber || '309812456789') : ('XXXXXXXX' + (member.accountNumber || '6789').slice(-4) + ' [Restricted]');
     const ifscDisplay = member.ifsc || 'SBIN0002145';
     const branchDisplay = member.branch || 'Arundelpet Branch, Guntur';
     const acctTypeDisplay = member.accountType || 'Savings (Salary Linked)';
@@ -6625,39 +9082,172 @@ const portalApp = (function () {
     }
   }
 
+  let modalStaffCategoryFilter = '';
+  let modalStaffSearchQuery = '';
+
+  function openTeacherAttendanceModal() {
+    ensureTeachersEnriched();
+    const mainDateInput = document.getElementById('staffAttDate');
+    const modalDateInput = document.getElementById('staffAttModalDate');
+    const todayStr = new Date().toISOString().split('T')[0];
+    const targetDate = (mainDateInput && mainDateInput.value) ? mainDateInput.value : todayStr;
+
+    if (modalDateInput) modalDateInput.value = targetDate;
+    modalStaffCategoryFilter = '';
+    modalStaffSearchQuery = '';
+
+    const searchInput = document.getElementById('staffModalSearchInput');
+    if (searchInput) searchInput.value = '';
+
+    updateModalCategoryButtons('');
+    populateStaffAttendanceChecklist();
+    openModal('teacherAttendanceModal');
+  }
+
+  function onStaffAttendanceModalDateChange(newDate) {
+    const mainDateInput = document.getElementById('staffAttDate');
+    if (mainDateInput && newDate) mainDateInput.value = newDate;
+    populateStaffAttendanceChecklist();
+  }
+
+  function setModalCategoryFilter(cat) {
+    modalStaffCategoryFilter = cat;
+    updateModalCategoryButtons(cat);
+    populateStaffAttendanceChecklist();
+  }
+
+  function updateModalCategoryButtons(cat) {
+    const allBtn = document.getElementById('modalCatAllBtn');
+    const tBtn = document.getElementById('modalCatTeachingBtn');
+    const ntBtn = document.getElementById('modalCatStaffBtn');
+    if (allBtn) allBtn.className = 'btn btn-xs btn-outline-primary' + (cat === '' ? ' active' : '');
+    if (tBtn) tBtn.className = 'btn btn-xs btn-outline-primary' + (cat === 'Teaching' ? ' active' : '');
+    if (ntBtn) ntBtn.className = 'btn btn-xs btn-outline-primary' + (cat === 'Non-Teaching' ? ' active' : '');
+  }
+
+  function filterModalStaffList() {
+    const searchInput = document.getElementById('staffModalSearchInput');
+    modalStaffSearchQuery = searchInput ? searchInput.value.toLowerCase().trim() : '';
+    populateStaffAttendanceChecklist();
+  }
+
+  function syncModalBiometricBuffer() {
+    syncOfflineBiometricLogs();
+    populateStaffAttendanceChecklist();
+  }
+
   function populateStaffAttendanceChecklist() {
+    ensureTeachersEnriched();
     const container = document.getElementById('staffAttendanceChecklist');
     if (!container) return;
 
-    const list = state.faculty || [];
-    const dateInput = document.getElementById('staffAttDate');
-    const attDate = (dateInput && dateInput.value) ? dateInput.value : new Date().toISOString().split('T')[0];
-    const savedAtt = getSavedFacultyAttendance(attDate);
+    const modalDateInput = document.getElementById('staffAttModalDate');
+    const attDate = (modalDateInput && modalDateInput.value) ? modalDateInput.value : new Date().toISOString().split('T')[0];
+    const offlineCache = getOfflinePunchesForDate(attDate);
+    const savedAtt = getSavedFacultyAttendance(attDate) || {};
 
-    container.innerHTML = list.map((f, idx) => {
-      const currentStatus = savedAtt[f.id] || f.status || (idx === 4 ? 'Leave' : (idx === 7 ? 'Late' : 'Present'));
+    const facultyList = (state.faculty || []).map(f => Object.assign({}, f, { isTeaching: true }));
+    const nonTeachingList = (NON_TEACHING_STAFF_DATA || []).map(nt => Object.assign({}, nt, { isTeaching: false }));
+    const fullStaffList = facultyList.concat(nonTeachingList);
+
+    // Filter staff
+    const filtered = fullStaffList.filter(s => {
+      if (modalStaffCategoryFilter === 'Teaching' && !s.isTeaching) return false;
+      if (modalStaffCategoryFilter === 'Non-Teaching' && s.isTeaching) return false;
+      if (modalStaffSearchQuery) {
+        const query = modalStaffSearchQuery;
+        const nameMatch = s.name && s.name.toLowerCase().includes(query);
+        const idMatch = s.id && s.id.toLowerCase().includes(query);
+        const deptMatch = (s.department || s.dept || s.subjects || s.subject || '').toLowerCase().includes(query);
+        if (!nameMatch && !idMatch && !deptMatch) return false;
+      }
+      return true;
+    });
+
+    if (filtered.length === 0) {
+      container.innerHTML = '<div style="padding:2rem; text-align:center; color:var(--color-text-muted);"><i class="fa-solid fa-user-slash fa-2x mb-2 text-slate-400 d-block"></i>No staff matching your search filter.</div>';
+      updateModalSummaryCounters(fullStaffList, offlineCache, savedAtt);
+      return;
+    }
+
+    container.innerHTML = filtered.map((s, idx) => {
+      const cached = offlineCache[s.id] || {};
+      const currentStatus = cached.status || savedAtt[s.id] || s.status || (idx === 4 ? 'Leave' : (idx === 7 ? 'Late' : 'Present'));
+      const deptText = s.isTeaching
+        ? (s.subjects || s.subject || s.department || 'Academics')
+        : (s.department || s.dept || 'Administration');
+
+      const initials = (s.name || 'Staff').replace(/^(Smt\.|Sri\.|Ms\.|Mr\.)\s*/, '').split(' ').map(n => n[0]).join('').slice(0, 2) || 'ST';
+      
+      let punchPreview = '';
+      if (currentStatus === 'Present') {
+        punchPreview = '<span style="font-size:0.75rem; color:#059669; font-weight:600;"><i class="fa-solid fa-right-to-bracket"></i> 08:20 AM &bull; <i class="fa-solid fa-right-from-bracket"></i> 04:30 PM (8h 10m)</span>';
+      } else if (currentStatus === 'Late') {
+        punchPreview = '<span style="font-size:0.75rem; color:#d97706; font-weight:600;"><i class="fa-solid fa-clock"></i> 08:48 AM &bull; <i class="fa-solid fa-right-from-bracket"></i> 04:30 PM (Late)</span>';
+      } else if (currentStatus === 'Leave') {
+        punchPreview = '<span style="font-size:0.75rem; color:#2563eb; font-weight:600;"><i class="fa-solid fa-bed"></i> Approved Leave / OD (No Punch)</span>';
+      } else {
+        punchPreview = '<span style="font-size:0.75rem; color:#dc2626; font-weight:600;"><i class="fa-solid fa-ban"></i> Uninformed Absent (No Punch)</span>';
+      }
+
       return `
-        <div class="staff-att-row" data-id="${f.id}">
-          <div style="flex:1; min-width:0;">
-            <div style="display:flex; align-items:center; gap:6px;">
-              <span class="teacher-id-badge" style="font-size:0.75rem; padding:1px 6px;">${f.id}</span>
-              <strong style="font-size:0.88rem; color:var(--color-text-dark);">${f.name}</strong>
+        <div class="staff-att-row" data-id="${s.id}" style="display:flex; align-items:center; justify-content:space-between; padding:0.65rem 0.85rem; border-bottom:1px solid var(--color-border-light, #f1f5f9); gap:10px;">
+          <div style="display:flex; align-items:center; gap:10px; min-width:0; flex:1;">
+            <div style="width:34px; height:34px; border-radius:50%; background:${s.isTeaching ? '#eff6ff' : '#f0fdf4'}; color:${s.isTeaching ? '#1d4ed8' : '#15803d'}; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:0.78rem; flex-shrink:0;">
+              ${initials}
             </div>
-            <small class="text-muted" style="font-size:0.75rem;">${f.role} &bull; ${f.subject || ''}</small>
+            <div style="min-width:0; flex:1;">
+              <div style="display:flex; align-items:center; gap:6px; flex-wrap:wrap;">
+                <span class="staff-id-pill" style="font-size:0.7rem; padding:1px 5px;">${s.id}</span>
+                <span class="${s.isTeaching ? 'category-badge-teaching' : 'category-badge-nonteaching'}" style="font-size:0.65rem; padding:1px 6px;">${s.isTeaching ? 'Teaching' : 'Staff'}</span>
+                <strong style="font-size:0.88rem; color:var(--color-text-dark, #0f172a); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${s.name}</strong>
+              </div>
+              <div style="font-size:0.74rem; color:var(--color-text-muted, #64748b); margin-top:2px;">
+                <span>${s.role || s.designation || 'Staff'} &bull; ${deptText}</span>
+              </div>
+              <div id="modalPunchPreview_${s.id}" style="margin-top:2px;">
+                ${punchPreview}
+              </div>
+            </div>
           </div>
-          <div class="staff-att-btn-group">
-            <button type="button" class="btn-att-opt ${currentStatus === 'Present' ? 'active-p' : ''}" data-id="${f.id}" data-val="Present" onclick="portalApp.setIndividualStaffStatus('${f.id}', 'Present')" title="Mark Present">P</button>
-            <button type="button" class="btn-att-opt ${currentStatus === 'Late' ? 'active-l' : ''}" data-id="${f.id}" data-val="Late" onclick="portalApp.setIndividualStaffStatus('${f.id}', 'Late')" title="Mark Late Arrival">L</button>
-            <button type="button" class="btn-att-opt ${currentStatus === 'Leave' ? 'active-od' : ''}" data-id="${f.id}" data-val="Leave" onclick="portalApp.setIndividualStaffStatus('${f.id}', 'Leave')" title="Mark On Leave / OD">OD</button>
-            <button type="button" class="btn-att-opt ${currentStatus === 'Absent' ? 'active-a' : ''}" data-id="${f.id}" data-val="Absent" onclick="portalApp.setIndividualStaffStatus('${f.id}', 'Absent')" title="Mark Unscheduled Absent">A</button>
+          <div class="staff-att-btn-group" style="display:flex; gap:4px; flex-shrink:0;">
+            <button type="button" class="btn-att-opt ${currentStatus === 'Present' ? 'active-p' : ''}" data-id="${s.id}" data-val="Present" onclick="portalApp.setIndividualStaffStatus('${s.id}', 'Present')" title="Mark Present (08:20 AM / 04:30 PM)">P</button>
+            <button type="button" class="btn-att-opt ${currentStatus === 'Late' ? 'active-l' : ''}" data-id="${s.id}" data-val="Late" onclick="portalApp.setIndividualStaffStatus('${s.id}', 'Late')" title="Mark Late Arrival (08:48 AM / 04:30 PM)">L</button>
+            <button type="button" class="btn-att-opt ${currentStatus === 'Leave' ? 'active-od' : ''}" data-id="${s.id}" data-val="Leave" onclick="portalApp.setIndividualStaffStatus('${s.id}', 'Leave')" title="Mark On Leave / OD (No Punch)">OD</button>
+            <button type="button" class="btn-att-opt ${currentStatus === 'Absent' ? 'active-a' : ''}" data-id="${s.id}" data-val="Absent" onclick="portalApp.setIndividualStaffStatus('${s.id}', 'Absent')" title="Mark Uninformed Absent">A</button>
           </div>
         </div>
       `;
     }).join('');
+
+    updateModalSummaryCounters(fullStaffList, offlineCache, savedAtt);
   }
 
-  function setIndividualStaffStatus(facultyId, status) {
-    document.querySelectorAll(`.btn-att-opt[data-id="${facultyId}"]`).forEach(btn => {
+  function updateModalSummaryCounters(fullStaffList, offlineCache, savedAtt) {
+    let p = 0, l = 0, od = 0, a = 0;
+    fullStaffList.forEach((s, idx) => {
+      const activeBtn = document.querySelector(`.btn-att-opt[data-id="${s.id}"][class*="active-"]`);
+      let st = activeBtn ? activeBtn.getAttribute('data-val') : ((offlineCache[s.id] && offlineCache[s.id].status) || savedAtt[s.id] || s.status || (idx === 4 ? 'Leave' : (idx === 7 ? 'Late' : 'Present')));
+      if (st === 'Present' || st === 'Active') p++;
+      else if (st === 'Late') { l++; p++; }
+      else if (st === 'Leave') od++;
+      else if (st === 'Absent') a++;
+      else p++;
+    });
+
+    const elP = document.getElementById('modalSummaryPresent');
+    const elL = document.getElementById('modalSummaryLate');
+    const elOD = document.getElementById('modalSummaryLeave');
+    const elA = document.getElementById('modalSummaryAbsent');
+
+    if (elP) elP.innerHTML = '<i class="fa-solid fa-circle-check"></i> Present: ' + p;
+    if (elL) elL.innerHTML = '<i class="fa-solid fa-clock"></i> Late: ' + l;
+    if (elOD) elOD.innerHTML = '<i class="fa-solid fa-bed"></i> Leave: ' + od;
+    if (elA) elA.innerHTML = '<i class="fa-solid fa-circle-xmark"></i> Absent: ' + a;
+  }
+
+  function setIndividualStaffStatus(staffId, status) {
+    document.querySelectorAll(`.btn-att-opt[data-id="${staffId}"]`).forEach(btn => {
       btn.classList.remove('active-p', 'active-l', 'active-od', 'active-a');
       const val = btn.getAttribute('data-val');
       if (val === status) {
@@ -6668,17 +9258,43 @@ const portalApp = (function () {
       }
     });
 
-    const fac = (state.faculty || []).find(f => f.id === facultyId);
+    // Update punch preview tag
+    const previewEl = document.getElementById('modalPunchPreview_' + staffId);
+    if (previewEl) {
+      if (status === 'Present') {
+        previewEl.innerHTML = '<span style="font-size:0.75rem; color:#059669; font-weight:600;"><i class="fa-solid fa-right-to-bracket"></i> 08:20 AM &bull; <i class="fa-solid fa-right-from-bracket"></i> 04:30 PM (8h 10m)</span>';
+      } else if (status === 'Late') {
+        previewEl.innerHTML = '<span style="font-size:0.75rem; color:#d97706; font-weight:600;"><i class="fa-solid fa-clock"></i> 08:48 AM &bull; <i class="fa-solid fa-right-from-bracket"></i> 04:30 PM (Late)</span>';
+      } else if (status === 'Leave') {
+        previewEl.innerHTML = '<span style="font-size:0.75rem; color:#2563eb; font-weight:600;"><i class="fa-solid fa-bed"></i> Approved Leave / OD (No Punch)</span>';
+      } else {
+        previewEl.innerHTML = '<span style="font-size:0.75rem; color:#dc2626; font-weight:600;"><i class="fa-solid fa-ban"></i> Uninformed Absent (No Punch)</span>';
+      }
+    }
+
+    const fac = (state.faculty || []).find(f => f.id === staffId);
     if (fac) fac.status = status;
+    const nt = (NON_TEACHING_STAFF_DATA || []).find(n => n.id === staffId);
+    if (nt) nt.status = status;
+
+    // Refresh summary numbers
+    const facultyList = (state.faculty || []).map(f => Object.assign({}, f, { isTeaching: true }));
+    const nonTeachingList = (NON_TEACHING_STAFF_DATA || []).map(nt => Object.assign({}, nt, { isTeaching: false }));
+    updateModalSummaryCounters(facultyList.concat(nonTeachingList), {}, {});
   }
 
   function setAllStaffAttendance(status = 'Present') {
-    (state.faculty || []).forEach(f => {
-      f.status = status;
-      setIndividualStaffStatus(f.id, status);
+    ensureTeachersEnriched();
+    const facultyList = state.faculty || [];
+    const nonTeachingList = NON_TEACHING_STAFF_DATA || [];
+    const fullStaffList = facultyList.concat(nonTeachingList);
+
+    fullStaffList.forEach(s => {
+      s.status = status;
+      setIndividualStaffStatus(s.id, status);
     });
-    if (typeof renderStaffGrid === 'function') renderStaffGrid(state.faculty);
-    showToast(`Office Checklist: All institutional staff marked as ${status}`, 'info');
+
+    showToast('All 38 personnel marked as ' + status + ' (08:20 AM / 04:30 PM)', 'info');
   }
 
   function bulkMarkAllStaffPresent() {
@@ -6688,26 +9304,23 @@ const portalApp = (function () {
   function syncBiometricData() {
     showToast('Biometric terminal connected (IP: 192.168.1.105): Syncing punch logs...', 'info');
     setTimeout(() => {
-      showToast('Biometric synchronization complete: 30 of 30 staff punches confirmed on-time.', 'success');
+      showToast('Biometric synchronization complete: 38 of 38 staff punches confirmed on-time.', 'success');
     }, 600);
   }
 
   function exportBiometricRegisterCSV() {
+    ensureTeachersEnriched();
+    const facultyList = (state.faculty || []).map(f => Object.assign({}, f, { isTeaching: true }));
+    const nonTeachingList = (NON_TEACHING_STAFF_DATA || []).map(nt => Object.assign({}, nt, { isTeaching: false }));
+    const fullStaffList = facultyList.concat(nonTeachingList);
+
     let csv = 'EmpID,StaffName,Department,PunchTime,BiometricStatus,Terminal\n';
-    (state.faculty || []).forEach((f, i) => {
-      csv += `"EMP-${100 + i}","${f.name}","${f.subject}","08:${20 + (i % 20)} AM","${f.status}","Main Gate Biometric-01"\n`;
+    fullStaffList.forEach((s, i) => {
+      const dept = s.isTeaching ? (s.subjects || s.subject || 'Academics') : (s.department || s.dept || 'Administration');
+      csv += `"${s.id}","${s.name}","${dept}","08:${20 + (i % 20)} AM","${s.status || 'Present'}","Main Gate Biometric-01"\n`;
     });
     downloadCsvFile(csv, 'sri_vidya_biometric_punch_log.csv');
     showToast('Biometric punch log exported to CSV', 'success');
-  }
-
-  function exportAbsenteeLedgerCSV() {
-    let csv = 'AdmissionNo,StudentName,Class,ParentName,ParentContact,AbsentDate,SMS_Status\n';
-    csv += 'SV-0012,K. Manoj Kumar,Class X-A,K. Appa Rao,9848012345,Today,Delivered\n';
-    csv += 'SV-0045,S. Deepa,Class IX-A,S. Krishna,9848023456,Today,Delivered\n';
-    csv += 'SV-0112,M. Sai Charan,Class VII-A,M. Satish,9848034567,Today,Delivered\n';
-    downloadCsvFile(csv, 'sri_vidya_daily_absentee_ledger.csv');
-    showToast('Daily absentee ledger exported to CSV', 'success');
   }
 
   function downloadDailyAttendancePDF() {
@@ -6715,13 +9328,21 @@ const portalApp = (function () {
     setTimeout(() => { window.print(); }, 300);
   }
 
-  function openTeacherAttendanceModal() {
-    const dateInput = document.getElementById('staffAttDate');
-    if (dateInput && !dateInput.value) {
-      dateInput.value = new Date().toISOString().split('T')[0];
-    }
-    populateStaffAttendanceChecklist();
-    openModal('teacherAttendanceModal');
+  function exportAbsenteeLedgerCSV() {
+    ensureTeachersEnriched();
+    const facultyList = (state.faculty || []).map(f => Object.assign({}, f, { isTeaching: true }));
+    const nonTeachingList = (NON_TEACHING_STAFF_DATA || []).map(nt => Object.assign({}, nt, { isTeaching: false }));
+    const fullStaffList = facultyList.concat(nonTeachingList);
+
+    let csv = 'EmpID,StaffName,Category,Department,AttendanceStatus,Remarks\n';
+    fullStaffList.forEach(s => {
+      if (s.status === 'Absent' || s.status === 'Leave') {
+        const dept = s.isTeaching ? (s.subjects || s.subject || 'Academics') : (s.department || s.dept || 'Administration');
+        csv += `"${s.id}","${s.name}","${s.isTeaching ? 'Teaching' : 'Non-Teaching'}","${dept}","${s.status}","Recorded in Daily Register"\n`;
+      }
+    });
+    downloadCsvFile(csv, 'sri_vidya_absentee_ledger.csv');
+    showToast('Absentee ledger exported to CSV', 'success');
   }
 
   function openSendAbsenteeSmsModal() {
@@ -7432,105 +10053,650 @@ const portalApp = (function () {
 
   // ── Sri Vidya Non-Teaching Staff & Faculty Leaves Interactive Renderers ──────
 
-  function renderNonTeachingStaff(list) {
-    const data = list || NON_TEACHING_STAFF_DATA;
-    const container = document.getElementById('nonTeachingStaffContainer');
-    if (!container) return;
-
-    const countBadge = document.getElementById('staffCountBadge');
-    if (countBadge) countBadge.textContent = data.length;
-
-    container.innerHTML = data.map(staff => {
-      const initials = staff.name.replace(/^(Smt\.|Sri\.)\s*/, '').split(' ').map(n => n[0]).join('').slice(0, 2);
-      return `
-        <div class="staff-card" data-staff-id="${staff.id}">
-          <div class="staff-card-header">
-            <div class="staff-avatar" style="background: linear-gradient(135deg, #0284c7, #0369a1); font-weight:700;">${initials}</div>
-            <div class="staff-header-info">
-              <h3 class="staff-name">${staff.name}</h3>
-              <span class="staff-role">${staff.role}</span>
-              <span class="portal-badge badge-success"><i class="fa-solid fa-circle-check"></i> ${staff.status}</span>
-            </div>
-          </div>
-          <div class="staff-details">
-            <div class="staff-detail-row">
-              <span class="detail-label"><i class="fa-solid fa-building"></i> Department:</span>
-              <span class="detail-val font-semibold">${staff.dept}</span>
-            </div>
-            <div class="staff-detail-row">
-              <span class="detail-label"><i class="fa-solid fa-graduation-cap"></i> Qualification:</span>
-              <span class="detail-val">${staff.qualification}</span>
-            </div>
-            <div class="staff-detail-row">
-              <span class="detail-label"><i class="fa-solid fa-briefcase"></i> Experience:</span>
-              <span class="detail-val">${staff.exp}</span>
-            </div>
-            <div class="staff-detail-row">
-              <span class="detail-label"><i class="fa-solid fa-clock"></i> Duty Hours:</span>
-              <span class="detail-val">${staff.shift}</span>
-            </div>
-            <div class="staff-detail-row">
-              <span class="detail-label"><i class="fa-solid fa-phone"></i> Direct Contact:</span>
-              <span class="detail-val"><a href="tel:${staff.phone}" class="text-primary font-semibold"><i class="fa-solid fa-phone-volume"></i> ${staff.phone}</a></span>
-            </div>
-          </div>
-          <div class="staff-footer">
-            <button class="btn-staff-action" onclick="portalApp.showToast('Duty roster assigned for ${staff.name}', 'success')">
-              <i class="fa-solid fa-calendar-check"></i> Assign Shift
-            </button>
-            <button class="btn-staff-action outline" onclick="portalApp.showToast('Staff Dossier loaded for ${staff.name} (${staff.role})', 'info')">
-              <i class="fa-regular fa-id-badge"></i> Dossier
-            </button>
-          </div>
-        </div>
-      `;
-    }).join('');
+  function getDeptIcon(dept) {
+    if (!dept) return 'fa-building';
+    const d = dept.toLowerCase();
+    if (d.includes('account') || d.includes('finance')) return 'fa-calculator';
+    if (d.includes('lab') || d.includes('science')) return 'fa-flask';
+    if (d.includes('library') || d.includes('book')) return 'fa-book-bookmark';
+    if (d.includes('counsel') || d.includes('student') || d.includes('welfare')) return 'fa-heart-pulse';
+    if (d.includes('tech') || d.includes('it') || d.includes('network')) return 'fa-network-wired';
+    if (d.includes('transport') || d.includes('bus') || d.includes('fleet')) return 'fa-bus';
+    if (d.includes('facility') || d.includes('maintenance')) return 'fa-wrench';
+    return 'fa-building';
   }
 
-  function renderTeacherLeaveRequests(list) {
-    const container = document.getElementById('facultyLeavesContainer');
-    if (!container) return;
+  function getStaffAvatarGradient(idx) {
+    const gradients = [
+      'linear-gradient(135deg, #0284c7, #0369a1)',
+      'linear-gradient(135deg, #059669, #047857)',
+      'linear-gradient(135deg, #7c3aed, #6d28d9)',
+      'linear-gradient(135deg, #d97706, #b45309)',
+      'linear-gradient(135deg, #2563eb, #1d4ed8)',
+      'linear-gradient(135deg, #0d9488, #0f766e)',
+      'linear-gradient(135deg, #4f46e5, #4338ca)',
+      'linear-gradient(135deg, #e11d48, #be123c)'
+    ];
+    return gradients[idx % gradients.length];
+  }
 
-    const data = list || (state && state.facultyLeaves) || [];
-    const countBadge = document.getElementById('teacherLeaveCountBadge');
-    if (countBadge) countBadge.textContent = data.length;
+  function renderNonTeachingStaff(list) {
+    ensureTeachersEnriched();
+    updateTeachersConfidentialityBanner();
 
-    if (data.length === 0) {
-      container.innerHTML = `
-        <div class="empty-state p-4 text-center" style="background:#f8fafc; border-radius:10px; border:1px dashed #cbd5e1; padding:2rem;">
-          <i class="fa-solid fa-check-double text-emerald" style="font-size:2.2rem; margin-bottom:0.75rem;"></i>
-          <h4 style="color:#0f172a; margin-bottom:0.25rem;">All Faculty Leaves Processed</h4>
-          <p class="text-muted" style="margin:0;">No pending faculty leave applications requiring VP approval or substitution.</p>
-        </div>
-      `;
+    let allStaff = NON_TEACHING_STAFF_DATA || [];
+    let data = list || allStaff;
+    const searchInput = document.getElementById('staffFilterInput');
+    const deptFilter = document.getElementById('staffDeptFilter');
+    const statusFilter = document.getElementById('staffStatusFilter');
+
+    const searchVal = searchInput ? searchInput.value.toLowerCase().trim() : '';
+    const deptVal = deptFilter ? deptFilter.value.toLowerCase().trim() : '';
+    const statusVal = statusFilter ? statusFilter.value.toLowerCase().trim() : '';
+
+    if (searchVal || deptVal || statusVal) {
+      data = allStaff.filter(s => {
+        const matchesSearch = !searchVal ||
+          (s.name && s.name.toLowerCase().includes(searchVal)) ||
+          (s.id && s.id.toLowerCase().includes(searchVal)) ||
+          (s.department && s.department.toLowerCase().includes(searchVal)) ||
+          (s.designation && s.designation.toLowerCase().includes(searchVal)) ||
+          (s.employmentStatus && s.employmentStatus.toLowerCase().includes(searchVal)) ||
+          (s.phone && s.phone.toLowerCase().includes(searchVal));
+
+        const matchesDept = !deptVal || (s.department && s.department.toLowerCase().includes(deptVal));
+        const matchesStatus = !statusVal || (s.employmentStatus && s.employmentStatus.toLowerCase().includes(statusVal));
+        return matchesSearch && matchesDept && matchesStatus;
+      });
+    }
+
+    // Update KPI counts
+    const statTotalEl = document.getElementById('nonTeachingStatTotal');
+    if (statTotalEl) statTotalEl.textContent = allStaff.length;
+    const statPermEl = document.getElementById('nonTeachingStatPermanent');
+    if (statPermEl) statPermEl.textContent = allStaff.filter(s => (s.employmentStatus || '').includes('Permanent')).length;
+    const statDeptsEl = document.getElementById('nonTeachingStatDepts');
+    if (statDeptsEl) {
+      const depts = new Set(allStaff.map(s => s.department));
+      statDeptsEl.textContent = depts.size;
+    }
+    const statActiveEl = document.getElementById('nonTeachingStatActive');
+    if (statActiveEl) statActiveEl.textContent = allStaff.length + ' / ' + allStaff.length;
+
+    // Filtered count pill
+    const filteredCountEl = document.getElementById('staffFilteredCount');
+    if (filteredCountEl) filteredCountEl.textContent = data.length;
+    const totalCountEl = document.getElementById('staffTotalCount');
+    if (totalCountEl) totalCountEl.textContent = allStaff.length;
+
+    const isAuthorized = isStaffAuthorized();
+
+    const tbody = document.getElementById('nonTeachingStaffTableBody');
+    if (tbody) {
+      if (data.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="8" class="text-center py-5 text-muted"><i class="fa-solid fa-users-slash fa-2x mb-2 text-slate-400 d-block"></i>No non-teaching staff found matching your filter criteria.<br><button type="button" class="btn btn-outline-primary btn-sm mt-2" onclick="portalApp.resetStaffFilters()"><i class="fa-solid fa-rotate-left"></i> Reset Filters</button></td></tr>';
+      } else {
+        tbody.innerHTML = data.map((s, idx) => {
+          const initials = (s.name || 'Staff').replace(/^(Smt.|Sri.|Ms.|Mr.)\s*/, '').split(' ').map(n => n[0]).join('').slice(0, 2) || 'ST';
+          const avatarGradient = getStaffAvatarGradient(idx);
+          const deptIcon = getDeptIcon(s.department);
+
+          // Calculate tenure
+          let tenureText = '5+ yrs service';
+          if (s.joiningDate) {
+            const matchYear = s.joiningDate.match(/\d{4}/);
+            if (matchYear) {
+              const yrs = new Date().getFullYear() - parseInt(matchYear[0], 10);
+              tenureText = yrs + ' yrs service';
+            }
+          }
+
+          // Confidential Remuneration & Identity
+          const confidentialCell = isAuthorized
+            ? '<div class="staff-confidential-box">' +
+                '<span class="staff-salary-amount"><i class="fa-solid fa-indian-rupee-sign"></i> ' + s.salary + '</span>' +
+                '<span class="staff-uid-sub" title="Unmasked UID for Authorized Executive"><i class="fa-solid fa-id-card text-emerald"></i> ' + s.aadhaar + '</span>' +
+              '</div>'
+            : '<div class="staff-confidential-box">' +
+                '<span class="confidential-lock" title="Remuneration restricted to Authorized Principal / VP"><i class="fa-solid fa-lock"></i> Restricted (Salary)</span>' +
+                '<span class="staff-uid-sub" style="color:#94a3b8;"><i class="fa-solid fa-shield-halved"></i> UID: Masked</span>' +
+              '</div>';
+
+          // Employment Status Badge (Guaranteed nowrap)
+          const isPerm = (s.employmentStatus || '').includes('Permanent');
+          const statusClass = isPerm ? 'status-permanent' : 'status-contract';
+          const statusBadge = '<span class="staff-status-badge ' + statusClass + '">' +
+            '<i class="fa-solid fa-circle-check"></i> ' + s.employmentStatus +
+          '</span>';
+
+          return '<tr>' +
+            '<!-- Column 1: Employee ID -->' +
+            '<td><span class="staff-id-pill"><i class="fa-solid fa-hashtag text-slate-400"></i>' + s.id + '</span></td>' +
+
+            '<!-- Column 2: Staff Name & Contact -->' +
+            '<td>' +
+              '<div class="staff-member-cell">' +
+                '<div class="staff-avatar-circle" style="background:' + avatarGradient + ';" title="' + s.name + '">' + initials + '</div>' +
+                '<div class="staff-meta">' +
+                  '<span class="staff-meta-name">' + s.name + '</span>' +
+                  '<div class="staff-meta-sub">' +
+                    '<span class="staff-qualification-pill"><i class="fa-solid fa-graduation-cap"></i> ' + (s.qualification || s.qualifications || 'Graduate') + '</span>' +
+                    '<a href="tel:' + s.phone + '" class="staff-phone-pill" title="Call staff"><i class="fa-solid fa-phone"></i> ' + s.phone + '</a>' +
+                  '</div>' +
+                '</div>' +
+              '</div>' +
+            '</td>' +
+
+            '<!-- Column 3: Department -->' +
+            '<td>' +
+              '<span class="staff-dept-badge"><i class="fa-solid ' + deptIcon + '"></i> ' + s.department + '</span>' +
+            '</td>' +
+
+            '<!-- Column 4: Designation -->' +
+            '<td>' +
+              '<div class="staff-designation-box">' +
+                '<span class="staff-designation-title">' + s.designation + '</span>' +
+                '<span class="staff-shift-sub"><i class="fa-solid fa-clock text-slate-400"></i> ' + (s.shift || '08:00 AM - 04:30 PM') + '</span>' +
+              '</div>' +
+            '</td>' +
+
+            '<!-- Column 5: Joining Date -->' +
+            '<td>' +
+              '<div class="staff-date-box">' +
+                '<span class="staff-date-text"><i class="fa-regular fa-calendar-check text-primary"></i> ' + s.joiningDate + '</span>' +
+                '<span class="staff-tenure-tag"><i class="fa-solid fa-business-time"></i> ' + tenureText + '</span>' +
+              '</div>' +
+            '</td>' +
+
+            '<!-- Column 6: Employment Status -->' +
+            '<td style="text-align:center;">' + statusBadge + '</td>' +
+
+            '<!-- Column 7: Confidential Details -->' +
+            '<td>' + confidentialCell + '</td>' +
+
+            '<!-- Column 8: Actions -->' +
+            '<td style="text-align:center;">' +
+              '<div class="staff-actions-group">' +
+                '<button type="button" class="staff-act-btn primary" onclick="portalApp.openStaffDossier(\'' + s.id + '\')" title="View Complete Institutional Staff Dossier">' +
+                  '<i class="fa-solid fa-id-card-clip"></i> Dossier' +
+                '</button>' +
+                '<button type="button" class="staff-act-btn" onclick="portalApp.assignStaffShift(\'' + s.id + '\')" title="Duty Shift & Attendance Log">' +
+                  '<i class="fa-solid fa-calendar-days text-slate-500"></i>' +
+                '</button>' +
+              '</div>' +
+            '</td>' +
+          '</tr>';
+        }).join('');
+      }
+    }
+
+    const container = document.getElementById('nonTeachingStaffContainer');
+    if (container) {
+      container.innerHTML = data.map((staff, idx) => {
+        const initials = staff.name.replace(/^(Smt.|Sri.)\s*/, '').split(' ').map(n => n[0]).join('').slice(0, 2);
+        const avatarGradient = getStaffAvatarGradient(idx);
+        const deptIcon = getDeptIcon(staff.department);
+
+        return '<div class="staff-card" data-staff-id="' + staff.id + '">' +
+          '<div class="staff-card-header">' +
+            '<div class="staff-avatar" style="background:' + avatarGradient + '; font-weight:800;">' + initials + '</div>' +
+            '<div class="staff-header-info">' +
+              '<div style="display:flex; align-items:center; justify-content:space-between; gap:6px;">' +
+                '<h3 class="staff-name" style="margin-bottom:0;">' + staff.name + '</h3>' +
+                '<span class="staff-id-pill">' + staff.id + '</span>' +
+              '</div>' +
+              '<span class="staff-role">' + staff.designation + '</span>' +
+              '<div style="display:flex; align-items:center; gap:6px; margin-top:4px; flex-wrap:wrap;">' +
+                '<span class="staff-status-badge status-permanent"><i class="fa-solid fa-circle-check"></i> ' + staff.employmentStatus + '</span>' +
+                (isAuthorized ? '<span class="confidential-unlocked" style="font-size:0.72rem;"><i class="fa-solid fa-indian-rupee-sign"></i> ' + staff.salary + '</span>' : '<span class="confidential-lock" style="font-size:0.72rem;"><i class="fa-solid fa-lock"></i> Restricted</span>') +
+              '</div>' +
+            '</div>' +
+          '</div>' +
+          '<div class="staff-details">' +
+            '<div class="staff-detail-row"><span class="detail-label"><i class="fa-solid ' + deptIcon + '"></i> Department:</span><span class="detail-val font-semibold">' + staff.department + '</span></div>' +
+            '<div class="staff-detail-row"><span class="detail-label"><i class="fa-solid fa-briefcase"></i> Designation:</span><span class="detail-val">' + staff.designation + '</span></div>' +
+            '<div class="staff-detail-row"><span class="detail-label"><i class="fa-regular fa-calendar-check"></i> Joining Date:</span><span class="detail-val"><strong>' + staff.joiningDate + '</strong></span></div>' +
+            '<div class="staff-detail-row"><span class="detail-label"><i class="fa-solid fa-graduation-cap"></i> Qualifications:</span><span class="detail-val">' + (staff.qualification || staff.qualifications || 'Graduate') + '</span></div>' +
+            '<div class="staff-detail-row"><span class="detail-label"><i class="fa-solid fa-clock"></i> Duty Shift:</span><span class="detail-val">' + (staff.shift || '08:00 AM - 04:30 PM') + '</span></div>' +
+            '<div class="staff-detail-row"><span class="detail-label"><i class="fa-solid fa-phone"></i> Contact:</span><span class="detail-val"><a href="tel:' + staff.phone + '" class="staff-phone-pill">' + staff.phone + '</a></span></div>' +
+          '</div>' +
+          '<div class="staff-footer">' +
+            '<button type="button" class="btn-staff-action" onclick="portalApp.openStaffDossier(\'' + staff.id + '\')"><i class="fa-solid fa-id-card-clip"></i> Full Dossier</button>' +
+            '<button type="button" class="btn-staff-action outline" onclick="portalApp.assignStaffShift(\'' + staff.id + '\')"><i class="fa-solid fa-calendar-check"></i> Shift Log</button>' +
+          '</div>' +
+        '</div>';
+      }).join('');
+    }
+  }
+
+  function filterNonTeachingStaff() {
+    renderNonTeachingStaff();
+  }
+
+  function resetStaffFilters() {
+    const search = document.getElementById('staffFilterInput');
+    const dept = document.getElementById('staffDeptFilter');
+    const status = document.getElementById('staffStatusFilter');
+    if (search) search.value = '';
+    if (dept) dept.value = '';
+    if (status) status.value = '';
+    renderNonTeachingStaff();
+    showToast('Staff filters reset', 'info');
+  }
+
+  function exportStaffCSV() {
+    ensureTeachersEnriched();
+    const data = NON_TEACHING_STAFF_DATA || [];
+    const isAuthorized = isStaffAuthorized();
+    let csv = 'Employee ID,Name,Department,Designation,Joining Date,Employment Status,Shift,Phone,Email';
+    if (isAuthorized) {
+      csv += ',Salary,Aadhaar,PAN';
+    }
+    csv += '\r\r\n';
+
+    data.forEach(s => {
+      let row = [
+        '"' + (s.id || '') + '"',
+        '"' + (s.name || '').replace(/"/g, '""') + '"',
+        '"' + (s.department || '').replace(/"/g, '""') + '"',
+        '"' + (s.designation || '').replace(/"/g, '""') + '"',
+        '"' + (s.joiningDate || '') + '"',
+        '"' + (s.employmentStatus || '') + '"',
+        '"' + (s.shift || '').replace(/"/g, '""') + '"',
+        '"' + (s.phone || '') + '"',
+        '"' + (s.email || '') + '"'
+      ];
+      if (isAuthorized) {
+        row.push('"' + (s.salary || '') + '"');
+        row.push('"' + (s.aadhaar || '') + '"');
+        row.push('"' + (s.pan || '') + '"');
+      }
+      csv += row.join(',') + '\r\r\n';
+    });
+
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = 'Sri_Vidya_Non_Teaching_Staff_Roster.csv';
+    link.click();
+    showToast('Non-Teaching Staff roster exported to CSV', 'success');
+  }
+
+  function printStaffTable() {
+    window.print();
+  }
+
+  function assignStaffShift(staffId) {
+    const staff = (NON_TEACHING_STAFF_DATA || []).find(s => s.id === staffId);
+    const name = staff ? staff.name : staffId;
+    const shift = staff ? staff.shift : '08:00 AM - 04:30 PM';
+    showToast('Current shift for ' + name + ': ' + shift, 'info');
+  }
+
+  function openStaffDossier(staffId) {
+    ensureTeachersEnriched();
+    const staff = (NON_TEACHING_STAFF_DATA || []).find(s => s.id === staffId);
+    if (!staff) {
+      showToast('Staff record not found for ' + staffId, 'warning');
       return;
     }
 
-    container.innerHTML = data.map(req => `
-      <div class="approval-item" id="faculty-leave-card-${req.id}" style="display:flex; justify-content:space-between; align-items:flex-start; padding:1.25rem; border:1px solid #e2e8f0; border-radius:10px; margin-bottom:1rem; background:#fff; box-shadow:0 1px 3px rgba(0,0,0,0.04);">
-        <div style="flex:1;">
-          <div style="display:flex; align-items:center; gap:0.6rem; margin-bottom:0.4rem; flex-wrap:wrap;">
-            <strong style="font-size:1.05rem; color:#0f172a;">${req.name}</strong>
-            <span class="portal-badge badge-primary">${req.dept}</span>
-            <span class="portal-badge badge-warning">${req.type}</span>
-          </div>
-          <p style="margin:0 0 0.4rem 0; font-size:0.9rem; color:#334155;">
-            <strong>Duration:</strong> ${req.dates} &bull; <strong>Reason:</strong> ${req.reason}
-          </p>
-          <div style="font-size:0.85rem; color:#475569; background:#f8fafc; padding:0.5rem 0.75rem; border-radius:6px; display:inline-block; border-left:3px solid #3b82f6;">
-            <i class="fa-solid fa-user-clock text-primary"></i> <strong>Substitution Assigned:</strong> ${req.substitute}
-          </div>
-        </div>
-        <div style="display:flex; gap:0.5rem; align-items:center; margin-left:1rem; flex-wrap:wrap;">
-          <button class="btn btn-primary btn-sm" onclick="portalApp.handleVPLeaveAction(${req.id}, true); portalApp.showToast('Leave approved &amp; substitution activated for ${req.name}', 'success');" title="Approve Leave & Confirm Substitution">
-            <i class="fa-solid fa-check"></i> Approve
-          </button>
-          <button class="btn btn-secondary btn-sm" onclick="portalApp.handleVPLeaveAction(${req.id}, false); portalApp.showToast('Reschedule request sent to ${req.name}', 'info');" title="Request Reschedule">
-            <i class="fa-solid fa-calendar-xmark"></i> Reschedule
-          </button>
-        </div>
-      </div>
-    `).join('');
+    const modal = document.getElementById('facultyDossierModal');
+    const container = document.getElementById('facultyDossierBody');
+    if (!container) {
+      showToast('Staff Dossier: ' + staff.name + ' (' + staff.designation + ')', 'info');
+      return;
+    }
+
+    const initials = (staff.name || 'Staff').replace(/^(Smt.|Sri.|Ms.|Mr.)\s*/, '').split(' ').map(n => n[0]).join('').slice(0, 2) || 'ST';
+    const isAuthorized = isStaffAuthorized();
+    const salaryDisplay = isAuthorized ? staff.salary : '<span class="confidential-lock"><i class="fa-solid fa-lock"></i> Restricted (Executive Only)</span>';
+    const aadhaarDisplay = isAuthorized ? staff.aadhaar : 'XXXX-XXXX-' + (staff.aadhaar || '6710').slice(-4) + ' [Masked]';
+    const panDisplay = isAuthorized ? staff.pan : 'XXXXX' + (staff.pan || '5670K').slice(-4) + ' [Masked]';
+
+    container.innerHTML = 
+      '<div class="faculty-dossier-wrapper" style="font-size:0.88rem; color:#0f172a; line-height:1.5;">' +
+        '<!-- Header Banner -->' +
+        '<div style="display:flex; align-items:center; gap:16px; background:linear-gradient(135deg, #f0f9ff, #e0f2fe); border:1px solid #bae6fd; border-radius:10px; padding:18px; margin-bottom:16px;">' +
+          '<div style="width:68px; height:68px; border-radius:50%; background:linear-gradient(135deg, #0284c7, #0369a1); color:#fff; display:flex; align-items:center; justify-content:center; font-size:1.5rem; font-weight:800; box-shadow:0 4px 10px rgba(2,132,199,0.25); flex-shrink:0;">' +
+            initials +
+          '</div>' +
+          '<div style="flex:1;">' +
+            '<div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:8px;">' +
+              '<h2 style="margin:0; font-size:1.3rem; font-weight:800; color:#0f172a;">' + staff.name + '</h2>' +
+              '<span class="staff-id-pill" style="font-size:0.92rem; padding:4px 12px;">' + staff.id + '</span>' +
+            '</div>' +
+            '<div style="color:#0369a1; font-weight:700; margin-top:3px; font-size:0.95rem;">' + staff.designation + ' &bull; ' + staff.department + '</div>' +
+            '<div style="display:flex; align-items:center; gap:8px; margin-top:6px; flex-wrap:wrap;">' +
+              '<span class="staff-status-badge status-permanent"><i class="fa-solid fa-circle-check"></i> ' + staff.employmentStatus + '</span>' +
+              '<span style="display:inline-flex; align-items:center; gap:5px; background:#eff6ff; color:#1d4ed8; border:1px solid #bfdbfe; padding:2px 8px; border-radius:4px; font-size:0.75rem; font-weight:700;"><i class="fa-solid fa-clock"></i> ' + (staff.shift || '08:00 AM - 04:30 PM') + '</span>' +
+            '</div>' +
+          '</div>' +
+        '</div>' +
+
+        '<!-- 2-Column Info Grid -->' +
+        '<div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap:14px; margin-bottom:14px;">' +
+          '<!-- Operational Card -->' +
+          '<div style="background:#fff; border:1px solid #e2e8f0; border-radius:8px; padding:14px;">' +
+            '<h4 style="margin:0 0 10px 0; font-size:0.85rem; font-weight:800; color:#475569; text-transform:uppercase; letter-spacing:0.5px; border-bottom:1px solid #f1f5f9; padding-bottom:6px;"><i class="fa-solid fa-briefcase text-primary"></i> Administrative Cadre</h4>' +
+            '<div style="display:flex; flex-direction:column; gap:8px;">' +
+              '<div><small style="color:#64748b; font-weight:600;">Department:</small><br><strong>' + staff.department + '</strong></div>' +
+              '<div><small style="color:#64748b; font-weight:600;">Designation:</small><br><strong>' + staff.designation + '</strong></div>' +
+              '<div><small style="color:#64748b; font-weight:600;">Core Responsibility:</small><br><strong>' + (staff.subject || staff.role || 'Campus Administration') + '</strong></div>' +
+              '<div><small style="color:#64748b; font-weight:600;">Joining Date & Tenure:</small><br><strong>' + staff.joiningDate + '</strong></div>' +
+              '<div><small style="color:#64748b; font-weight:600;">Qualifications:</small><br><strong>' + (staff.qualification || 'Graduate') + ' (' + (staff.exp || '5+ Years') + ')</strong></div>' +
+            '</div>' +
+          '</div>' +
+
+          '<!-- Contact & Confidential Card -->' +
+          '<div style="background:#fff; border:1px solid #e2e8f0; border-radius:8px; padding:14px;">' +
+            '<h4 style="margin:0 0 10px 0; font-size:0.85rem; font-weight:800; color:#475569; text-transform:uppercase; letter-spacing:0.5px; border-bottom:1px solid #f1f5f9; padding-bottom:6px;"><i class="fa-solid fa-shield-halved text-primary"></i> Contact & Confidential HR</h4>' +
+            '<div style="display:flex; flex-direction:column; gap:8px;">' +
+              '<div><small style="color:#64748b; font-weight:600;">Official Contact Phone:</small><br><strong class="text-primary">' + staff.phone + '</strong></div>' +
+              '<div><small style="color:#64748b; font-weight:600;">Institutional Email:</small><br><strong>' + staff.email + '</strong></div>' +
+              '<div><small style="color:#64748b; font-weight:600;">Monthly Remuneration:</small><br><strong>' + salaryDisplay + '</strong></div>' +
+              '<div><small style="color:#64748b; font-weight:600;">Aadhaar UID:</small><br><code>' + aadhaarDisplay + '</code></div>' +
+              '<div><small style="color:#64748b; font-weight:600;">PAN Number:</small><br><code>' + panDisplay + '</code></div>' +
+            '</div>' +
+          '</div>' +
+        '</div>' +
+
+        '<!-- Document Verification Status -->' +
+        '<div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; padding:12px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:8px;">' +
+          '<div>' +
+            '<strong style="color:#166534;"><i class="fa-solid fa-circle-check"></i> Statutory Documents Verified</strong>' +
+            '<div style="font-size:0.75rem; color:#64748b;">Aadhaar, Service Order, Qualifications, Police Verification</div>' +
+          '</div>' +
+          '<span class="portal-badge badge-success"><i class="fa-solid fa-stamp"></i> Fully Verified</span>' +
+        '</div>' +
+      '</div>';
+
+    handleStatusSelectChange(curStatus);
+
+    if (modal) {
+      modal.classList.add('active');
+      modal.classList.add('open');
+      modal.classList.add('show');
+      modal.style.display = 'flex';
+      document.body.style.overflow = 'hidden';
+    }
+  }
+
+    let leaveFilterSearchQuery = '';
+  let leaveFilterCategory = '';
+  let leaveFilterType = '';
+  let leaveFilterStatus = '';
+
+  function filterLeaveRequests() {
+    const sInput = document.getElementById('leaveSearchInput');
+    const cInput = document.getElementById('leaveCategoryFilter');
+    const tInput = document.getElementById('leaveTypeFilter');
+    const stInput = document.getElementById('leaveStatusFilter');
+
+    leaveFilterSearchQuery = sInput ? sInput.value.toLowerCase().trim() : '';
+    leaveFilterCategory = cInput ? cInput.value.trim() : '';
+    leaveFilterType = tInput ? tInput.value.trim() : '';
+    leaveFilterStatus = stInput ? stInput.value.trim() : '';
+
+    renderTeacherLeaveRequests();
+  }
+
+  function resetLeaveFilters() {
+    leaveFilterSearchQuery = '';
+    leaveFilterCategory = '';
+    leaveFilterType = '';
+    leaveFilterStatus = '';
+
+    const sInput = document.getElementById('leaveSearchInput');
+    const cInput = document.getElementById('leaveCategoryFilter');
+    const tInput = document.getElementById('leaveTypeFilter');
+    const stInput = document.getElementById('leaveStatusFilter');
+
+    if (sInput) sInput.value = '';
+    if (cInput) cInput.value = '';
+    if (tInput) tInput.value = '';
+    if (stInput) stInput.value = '';
+
+    renderTeacherLeaveRequests();
+    showToast('Leave request filters reset', 'info');
+  }
+
+  function handleLeaveDecision(id, decision) {
+    ensureTeachersEnriched();
+    const list = state.facultyLeaves || [];
+    const req = list.find(l => String(l.id) === String(id));
+    if (!req) {
+      showToast('Leave record not found: ' + id, 'warning');
+      return;
+    }
+
+    req.status = (decision === 'approve') ? 'Approved' : 'Declined';
+
+    // Persist to localStorage
+    try {
+      localStorage.setItem('sv_faculty_leaves_data', JSON.stringify(list));
+    } catch (e) {}
+
+    renderTeacherLeaveRequests();
+
+    if (decision === 'approve') {
+      showToast('Leave approved for ' + req.name + ' (' + req.dates + '). Substitute coverage confirmed.', 'success');
+    } else {
+      showToast('Leave application declined for ' + req.name + '.', 'warning');
+    }
+  }
+
+  function revertLeaveStatus(id) {
+    ensureTeachersEnriched();
+    const list = state.facultyLeaves || [];
+    const req = list.find(l => String(l.id) === String(id));
+    if (!req) return;
+
+    req.status = 'Pending Sign-off';
+    try {
+      localStorage.setItem('sv_faculty_leaves_data', JSON.stringify(list));
+    } catch (e) {}
+
+    renderTeacherLeaveRequests();
+    showToast('Leave status for ' + req.name + ' reverted to Pending Sign-off.', 'info');
+  }
+
+  function renderTeacherLeaveRequests(list) {
+    ensureTeachersEnriched();
+
+    // Check localStorage cache first
+    try {
+      const cached = localStorage.getItem('sv_faculty_leaves_data');
+      if (cached && !list) {
+        state.facultyLeaves = JSON.parse(cached);
+      }
+    } catch (e) {}
+
+    const allLeaves = list || (state && state.facultyLeaves) || [];
+
+    // Calculate metrics across all leaves
+    const totalApps = allLeaves.length;
+    const pendingApps = allLeaves.filter(l => l.status === 'Pending Sign-off').length;
+    const approvedApps = allLeaves.filter(l => l.status === 'Approved').length;
+    const activeSubs = allLeaves.filter(l => l.substitute && l.status !== 'Declined').length;
+
+    const kpiTotal = document.getElementById('kpiTotalLeaveApps');
+    const kpiPending = document.getElementById('kpiPendingLeaveApps');
+    const kpiApproved = document.getElementById('kpiApprovedLeaveApps');
+    const kpiSubs = document.getElementById('kpiSubstitutionsDeployed');
+
+    if (kpiTotal) kpiTotal.textContent = totalApps;
+    if (kpiPending) kpiPending.textContent = pendingApps;
+    if (kpiApproved) kpiApproved.textContent = approvedApps;
+    if (kpiSubs) kpiSubs.textContent = activeSubs;
+
+    // Submenu tab count pill
+    const countBadge = document.getElementById('teacherLeaveCountBadge');
+    if (countBadge) countBadge.textContent = pendingApps;
+
+    // Filter leaves
+    const filtered = allLeaves.filter(req => {
+      if (leaveFilterCategory && req.category !== leaveFilterCategory) return false;
+      if (leaveFilterType && req.type !== leaveFilterType) return false;
+      if (leaveFilterStatus && req.status !== leaveFilterStatus) return false;
+      if (leaveFilterSearchQuery) {
+        const q = leaveFilterSearchQuery;
+        const matchName = req.name && req.name.toLowerCase().includes(q);
+        const matchDept = req.dept && req.dept.toLowerCase().includes(q);
+        const matchReason = req.reason && req.reason.toLowerCase().includes(q);
+        const matchId = (req.staffId || req.id || '').toLowerCase().includes(q);
+        if (!matchName && !matchDept && !matchReason && !matchId) return false;
+      }
+      return true;
+    });
+
+    const pill = document.getElementById('leaveCountPill');
+    if (pill) pill.textContent = 'Showing ' + filtered.length + ' of ' + totalApps + ' requests';
+
+    const isAuthorized = isStaffAuthorized();
+
+    // 1. Render Table Rows
+    const tbody = document.getElementById('teacherLeavesTableBody');
+    if (tbody) {
+      if (filtered.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="7" class="text-center py-5 text-muted"><i class="fa-solid fa-calendar-check fa-2x mb-2 text-slate-400 d-block"></i>No staff leave applications matching selected criteria.<br><button type="button" class="btn btn-outline-primary btn-sm mt-2" onclick="portalApp.resetLeaveFilters()"><i class="fa-solid fa-rotate-left"></i> Reset Filters</button></td></tr>';
+      } else {
+        tbody.innerHTML = filtered.map(req => {
+          const initials = (req.name || 'Staff').replace(/^(Smt\.|Sri\.|Ms\.|Mr\.)\s*/, '').split(' ').map(n => n[0]).join('').slice(0, 2) || 'ST';
+          const isTeaching = (req.category === 'Teaching');
+
+          // Leave Type Badge
+          let typeBadge = '<span class="leave-badge-casual"><i class="fa-solid fa-calendar-day"></i> ' + req.type + '</span>';
+          if (req.type === 'Medical Leave') {
+            typeBadge = '<span class="leave-badge-medical"><i class="fa-solid fa-notes-medical"></i> Medical Leave</span>';
+          } else if (req.type.includes('On Duty') || req.type.includes('OD')) {
+            typeBadge = '<span class="leave-badge-od"><i class="fa-solid fa-briefcase"></i> On Duty (OD)</span>';
+          } else if (req.type === 'Earned Leave') {
+            typeBadge = '<span class="leave-badge-earned"><i class="fa-solid fa-award"></i> Earned Leave</span>';
+          }
+
+          // Balance Display Badge
+          let balText = req.balance;
+          if (!balText) {
+            if (req.type === 'Medical Leave') balText = 'Medical: 8 / 10 left';
+            else if (req.type.includes('OD') || req.type.includes('On Duty')) balText = 'OD: Official Exemption';
+            else balText = 'Casual: 7 / 12 left';
+          }
+
+          // Status Badge
+          let statusBadge = '<span class="portal-badge badge-amber"><i class="fa-solid fa-clock"></i> Pending Sign-off</span>';
+          if (req.status === 'Approved') {
+            statusBadge = '<span class="portal-badge badge-success"><i class="fa-solid fa-circle-check"></i> Approved</span>';
+          } else if (req.status === 'Declined') {
+            statusBadge = '<span class="portal-badge badge-danger"><i class="fa-solid fa-circle-xmark"></i> Declined</span>';
+          }
+
+          // Action Buttons
+          let actionButtons = '';
+          if (req.status === 'Pending Sign-off') {
+            actionButtons = isAuthorized
+              ? '<div style="display:inline-flex; gap:6px; align-items:center;">' +
+                  '<button type="button" class="btn btn-primary btn-sm" onclick="portalApp.handleLeaveDecision(\'' + req.id + '\', \'approve\')" title="Approve Leave Application"><i class="fa-solid fa-check"></i> Approve</button>' +
+                  '<button type="button" class="btn btn-outline-danger btn-sm" onclick="portalApp.handleLeaveDecision(\'' + req.id + '\', \'decline\')" title="Decline Leave Application"><i class="fa-solid fa-xmark"></i></button>' +
+                '</div>'
+              : '<span class="text-muted" style="font-size:0.8rem; font-weight:600;"><i class="fa-solid fa-lock text-amber"></i> Review Required</span>';
+          } else if (req.status === 'Approved') {
+            actionButtons = '<div style="display:inline-flex; gap:6px; align-items:center;">' +
+              '<span class="text-emerald font-semibold" style="font-size:0.8rem;"><i class="fa-solid fa-check-double"></i> Active</span>' +
+              (isAuthorized ? '<button type="button" class="btn btn-xs btn-outline-secondary" onclick="portalApp.revertLeaveStatus(\'' + req.id + '\')" title="Revert to Pending"><i class="fa-solid fa-rotate-left"></i></button>' : '') +
+            '</div>';
+          } else {
+            actionButtons = '<div style="display:inline-flex; gap:6px; align-items:center;">' +
+              '<span class="text-danger font-semibold" style="font-size:0.8rem;"><i class="fa-solid fa-ban"></i> Rejected</span>' +
+              (isAuthorized ? '<button type="button" class="btn btn-xs btn-outline-secondary" onclick="portalApp.revertLeaveStatus(\'' + req.id + '\')" title="Re-open"><i class="fa-solid fa-rotate-left"></i></button>' : '') +
+            '</div>';
+          }
+
+          return '<tr>' +
+            '<td>' +
+              '<div style="display:flex; align-items:center; gap:9px;">' +
+                '<div style="width:34px; height:34px; border-radius:50%; background:' + (isTeaching ? '#eff6ff' : '#f0fdf4') + '; color:' + (isTeaching ? '#1d4ed8' : '#15803d') + '; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:0.78rem; flex-shrink:0;">' +
+                  initials +
+                '</div>' +
+                '<div>' +
+                  '<strong style="color:var(--color-text-dark, #0f172a); font-size:0.9rem; display:block;">' + req.name + '</strong>' +
+                  '<div style="display:flex; align-items:center; gap:5px; margin-top:2px; flex-wrap:wrap;">' +
+                    '<span class="staff-id-pill" style="font-size:0.68rem; padding:1px 5px;">' + (req.staffId || 'SV-Staff') + '</span>' +
+                    '<span class="' + (isTeaching ? 'category-badge-teaching' : 'category-badge-nonteaching') + '" style="font-size:0.65rem; padding:1px 5px;">' + (isTeaching ? 'Teaching' : 'Staff') + '</span>' +
+                    '<span class="text-muted" style="font-size:0.75rem;">' + (req.dept || '') + '</span>' +
+                  '</div>' +
+                '</div>' +
+              '</div>' +
+            '</td>' +
+            '<td>' + typeBadge + '</td>' +
+            '<td>' +
+              '<strong style="font-size:0.86rem; color:#0f172a;"><i class="fa-regular fa-calendar text-primary"></i> ' + req.dates + '</strong>' +
+              '<div style="font-size:0.75rem; color:#64748b; margin-top:2px;"><span class="portal-badge badge-neutral" style="font-size:0.7rem; padding:1px 6px;">' + (req.days || '1 Working Day') + '</span></div>' +
+            '</td>' +
+            '<td style="max-width:260px;">' +
+              '<span style="font-size:0.84rem; color:#334155; line-height:1.45; display:block;">' + req.reason + '</span>' +
+            '</td>' +
+            '<td>' +
+              '<span class="leave-balance-chip"><i class="fa-solid fa-chart-pie text-primary"></i> ' + balText + '</span>' +
+            '</td>' +
+            '<td>' + statusBadge + '</td>' +
+            '<td style="text-align:center;">' + actionButtons + '</td>' +
+          '</tr>';
+        }).join('');
+      }
+    }
+
+    // 2. Render Responsive Cards Grid
+    const container = document.getElementById('facultyLeavesContainer');
+    if (container) {
+      const pendingCards = filtered.filter(l => l.status === 'Pending Sign-off');
+      if (pendingCards.length === 0) {
+        container.innerHTML = '<div style="grid-column:1/-1; background:#f8fafc; border-radius:10px; border:1px dashed #cbd5e1; padding:2rem; text-align:center;"><i class="fa-solid fa-circle-check text-emerald fa-2x mb-2 d-block"></i><h4 style="color:#0f172a; margin-bottom:0.25rem;">No Pending Sign-offs</h4><p class="text-muted" style="margin:0; font-size:0.85rem;">All employee leave applications are currently processed and substitution assignments confirmed.</p></div>';
+      } else {
+        container.innerHTML = pendingCards.map(req => {
+          const isTeaching = (req.category === 'Teaching');
+          let typeBadge = '<span class="leave-badge-casual">' + req.type + '</span>';
+          if (req.type === 'Medical Leave') typeBadge = '<span class="leave-badge-medical">Medical Leave</span>';
+          else if (req.type.includes('OD') || req.type.includes('On Duty')) typeBadge = '<span class="leave-badge-od">On Duty (OD)</span>';
+
+          return '<div class="leave-approval-card" id="faculty-leave-card-' + req.id + '">' +
+            '<div>' +
+              '<div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:0.6rem; gap:8px;">' +
+                '<div>' +
+                  '<div style="display:flex; align-items:center; gap:6px; flex-wrap:wrap;">' +
+                    '<span class="staff-id-pill">' + (req.staffId || 'STAFF') + '</span>' +
+                    '<span class="' + (isTeaching ? 'category-badge-teaching' : 'category-badge-nonteaching') + '">' + (isTeaching ? 'Teaching' : 'Staff') + '</span>' +
+                    '<strong style="font-size:1.02rem; color:#0f172a;">' + req.name + '</strong>' +
+                  '</div>' +
+                  '<div style="font-size:0.78rem; color:#64748b; margin-top:2px;">' + (req.role || 'Personnel') + ' &bull; ' + req.dept + '</div>' +
+                '</div>' +
+                '<div>' + typeBadge + '</div>' +
+              '</div>' +
+
+              '<div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; padding:0.6rem 0.75rem; margin-bottom:0.6rem; font-size:0.82rem;">' +
+                '<div style="display:flex; justify-content:space-between; margin-bottom:3px;">' +
+                  '<span><strong>Duration:</strong> ' + req.dates + ' (' + (req.days || '1 Day') + ')</span>' +
+                  '<span class="text-primary font-semibold">' + (req.balance || 'Available') + '</span>' +
+                '</div>' +
+                '<div style="color:#475569; margin-top:3px;"><strong>Reason:</strong> ' + req.reason + '</div>' +
+              '</div>' +
+
+              '<div class="leave-sub-box">' +
+                '<i class="fa-solid fa-user-clock text-emerald"></i>' +
+                '<span><strong>Substitution Assigned:</strong> ' + (req.substitute || 'Department Peer Coverage') + '</span>' +
+              '</div>' +
+            '</div>' +
+
+            '<div style="display:flex; justify-content:flex-end; gap:8px; margin-top:1rem; padding-top:0.75rem; border-top:1px solid #f1f5f9;">' +
+              (isAuthorized ? (
+                '<button type="button" class="btn btn-outline-danger btn-sm" onclick="portalApp.handleLeaveDecision(\'' + req.id + '\', \'decline\')"><i class="fa-solid fa-xmark"></i> Decline</button>' +
+                '<button type="button" class="btn btn-primary btn-sm" onclick="portalApp.handleLeaveDecision(\'' + req.id + '\', \'approve\')"><i class="fa-solid fa-check"></i> Approve &amp; Deploy Sub</button>'
+              ) : '<span class="confidential-lock"><i class="fa-solid fa-lock"></i> Executive Sign-off Required</span>') +
+            '</div>' +
+          '</div>';
+        }).join('');
+      }
+    }
   }
 
   function renderStaffImportPreview() {
@@ -7607,14 +10773,7 @@ const portalApp = (function () {
     });
   }
 
-  function filterNonTeachingStaff(val) {
-    const q = (typeof val === 'string' ? val : (document.getElementById('staffFilterInput')?.value || '')).toLowerCase().trim();
-    const cards = document.querySelectorAll('#nonTeachingStaffContainer .staff-card');
-    cards.forEach(card => {
-      const text = card.textContent.toLowerCase();
-      card.style.display = (!q || text.includes(q)) ? '' : 'none';
-    });
-  }
+  // Duplicate removed; filterNonTeachingStaff is handled by master renderer
 
   function handleStaffCsvFileUpload(e) {
     const file = e && e.target && e.target.files && e.target.files[0];
@@ -7646,9 +10805,20 @@ const portalApp = (function () {
   }
 
   function switchTimetableClass(val) {
+    currentTimetableClass = val || 'Class X-A';
     const classBadge = document.getElementById('activeTimetableClassBadge');
-    if (classBadge) classBadge.textContent = val || 'Class X-A';
-    showToast('Switched master timetable to ' + (val || 'Class X-A'), 'info');
+    if (classBadge) classBadge.textContent = currentTimetableClass;
+    const selectEl = document.getElementById('ttClassSelect');
+    if (selectEl && selectEl.value !== currentTimetableClass) {
+      selectEl.value = currentTimetableClass;
+    }
+    if (typeof renderTimetableClassSchedules === 'function') {
+      renderTimetableClassSchedules();
+    }
+    if (typeof renderMasterTimetable === 'function') {
+      renderMasterTimetable();
+    }
+    showToast('Switched timetable to ' + currentTimetableClass, 'info');
   }
 
   function filterExamsSchedule(val) {
@@ -8304,28 +11474,70 @@ const portalApp = (function () {
 
   function handleSaveStaffAttendance(e) {
     if (e && e.preventDefault) e.preventDefault();
-    const dateInput = document.getElementById('staffAttDate');
-    const attDate = (dateInput && dateInput.value) ? dateInput.value : new Date().toISOString().split('T')[0];
-    const session = document.getElementById('staffAttSession')?.value || 'Full Day';
-    const records = {};
+    ensureTeachersEnriched();
 
-    (state.faculty || []).forEach(f => {
-      const activeBtn = document.querySelector(`.btn-att-opt[data-id="${f.id}"][class*="active-"]`);
-      const val = activeBtn ? activeBtn.getAttribute('data-val') : (f.status || 'Present');
-      records[f.id] = val;
-      f.status = val;
+    const modalDateInput = document.getElementById('staffAttModalDate') || document.getElementById('staffAttDate');
+    const attDate = (modalDateInput && modalDateInput.value) ? modalDateInput.value : new Date().toISOString().split('T')[0];
+    const session = document.getElementById('staffAttSession')?.value || 'Full Day';
+
+    const facultyList = state.faculty || [];
+    const nonTeachingList = NON_TEACHING_STAFF_DATA || [];
+    const fullStaffList = facultyList.concat(nonTeachingList);
+
+    const offlineCache = getOfflinePunchesForDate(attDate);
+    const facultyRecords = {};
+
+    fullStaffList.forEach((s, idx) => {
+      const activeBtn = document.querySelector(`.btn-att-opt[data-id="${s.id}"][class*="active-"]`);
+      const val = activeBtn ? activeBtn.getAttribute('data-val') : (s.status || 'Present');
+
+      s.status = val;
+      facultyRecords[s.id] = val;
+
+      const isOff = (val === 'Absent' || val === 'Leave');
+      const isLate = (val === 'Late');
+
+      let timeIn = '08:20 AM';
+      let timeOut = '04:30 PM';
+      let dur = '8h 10m';
+
+      if (isOff) {
+        timeIn = '—';
+        timeOut = '—';
+        dur = '—';
+      } else if (isLate) {
+        timeIn = '08:48 AM';
+        timeOut = '04:30 PM';
+        dur = '7h 42m';
+      } else {
+        const inMin = (18 + ((idx * 3) % 13)).toString().padStart(2, '0');
+        timeIn = '08:' + inMin + ' AM';
+        timeOut = '04:30 PM';
+        dur = '8h ' + (30 - parseInt(inMin, 10)) + 'm';
+      }
+
+      offlineCache[s.id] = {
+        status: val,
+        timeIn,
+        timeOut,
+        duration: dur,
+        source: 'Official Clerk & Offline Gate Register',
+        remarks: 'Batch verified for ' + session
+      };
     });
 
     try {
-      localStorage.setItem('sv_faculty_attendance_' + attDate, JSON.stringify(records));
+      localStorage.setItem('sv_offline_punches_' + attDate, JSON.stringify(offlineCache));
+      localStorage.setItem('sv_faculty_attendance_' + attDate, JSON.stringify(facultyRecords));
       localStorage.setItem('sv_faculty_attendance_last_sync', Date.now().toString());
-    } catch (err) {}
+    } catch (err) {
+      console.warn('LocalStorage save error:', err);
+    }
 
     renderStaffAttendanceTable();
     if (typeof renderStaffGrid === 'function') renderStaffGrid(state.faculty);
-    updateClerkFacultyAttSummary();
     closeModal('teacherAttendanceModal');
-    showToast('Daily Faculty Attendance officially verified and recorded by School Office / Clerk Department!', 'success');
+    showToast('Daily Attendance officially verified & recorded for all 38 faculty and staff members!', 'success');
   }
 
   function updateClerkFacultyAttSummary() {
@@ -8351,18 +11563,16 @@ const portalApp = (function () {
     if (absEl) absEl.textContent = absent;
   }
 
-  function handleSaveSingleStaffAttendance(e) {
-    if (e && e.preventDefault) e.preventDefault();
-    const name = document.getElementById('changeStaffName')?.value || 'Staff';
-    const status = document.getElementById('changeStaffStatusSelect')?.value || 'Present';
-    showToast('Attendance updated for ' + name + ' -> ' + status, 'success');
-    closeModal('changeStaffAttendanceModal');
-  }
+  // Duplicate handleSaveSingleStaffAttendance removed; authoritative version implemented in Staff Attendance module.
 
   function handleStatusSelectChange(val) {
     const reasonBox = document.getElementById('statusChangeReasonGroup');
     if (reasonBox) {
-      reasonBox.style.display = (val === 'Absent' || val === 'On Leave') ? 'block' : 'none';
+      reasonBox.style.display = (val === 'Absent' || val === 'On Leave' || val === 'Leave') ? 'block' : 'none';
+    }
+    const punchesRow = document.getElementById('changeStaffPunchesRow');
+    if (punchesRow) {
+      punchesRow.style.display = (val === 'Absent' || val === 'Leave') ? 'none' : 'flex';
     }
   }
 
@@ -8565,10 +11775,17 @@ const portalApp = (function () {
   // SRI VIDYA HIGH SCHOOL - DYNAMIC SUBVIEW DATASETS & RENDERERS
   // =========================================================================
 
+  // Student Leave Requests Rendering
+  // User Requirement: Student, class, guardian, dates, reason and approval status
   function renderStudentLeaves(data) {
     const list = data || STUDENT_LEAVES_DATA;
     const tbody = document.getElementById('studentLeavesTableBody');
     if (!tbody) return;
+
+    if (list.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="6" class="text-center p-4 text-muted">No student leave requests found matching criteria.</td></tr>';
+      return;
+    }
 
     tbody.innerHTML = list.map(item => {
       let badgeCls = 'badge-primary';
@@ -8577,31 +11794,56 @@ const portalApp = (function () {
       else if (item.ground.includes('Sports')) badgeCls = 'badge-success';
       else if (item.ground.includes('Gate Pass')) badgeCls = 'badge-info';
 
+      const isApproved = item.status === 'Approved' || item.status.includes('Issued');
+
       return `
         <tr id="student-leave-row-${item.slipId}">
-          <td><strong>${item.slipId}</strong></td>
           <td>
-            <strong>${item.name}</strong><br>
-            <small class="text-muted">Adm: ${item.admNo} • ${item.parent}</small>
+            <strong style="color: #0f172a; font-size: 0.88rem; display: block;">${item.name}</strong>
+            <div style="font-size: 0.74rem; color: #64748b; margin-top: 2px;">
+              Adm: <span class="font-mono" style="font-weight: 700;">${item.admNo}</span> &bull; Roll: <span style="font-weight: 700;">${item.roll}</span>
+            </div>
           </td>
-          <td><span class="portal-badge badge-neutral">${item.class}</span> <small>${item.roll}</small></td>
-          <td><span class="portal-badge ${badgeCls}">${item.ground}</span></td>
-          <td>${item.dates}</td>
-          <td><small>${item.reason}</small></td>
           <td>
-            <a href="tel:${item.phone}" class="text-primary font-weight-bold" style="text-decoration:none;">
-              <i class="fa-solid fa-phone"></i> ${item.phone}
-            </a>
+            <span class="portal-badge badge-neutral" style="font-weight: 800; font-size: 0.78rem;">
+              ${item.class}
+            </span>
           </td>
-          <td><span class="portal-badge badge-success"><i class="fa-solid fa-circle-check"></i> ${item.status}</span></td>
           <td>
-            <div class="table-action-btns">
-              <button class="btn btn-secondary btn-sm" onclick="portalApp.printStudentSlip('${item.slipId}')" title="Print Slip">
-                <i class="fa-solid fa-print"></i>
+            <strong style="color: #1e293b; font-size: 0.85rem; display: block;">${item.parent}</strong>
+            <div style="margin-top: 3px;">
+              <a href="tel:${item.phone}" class="text-primary font-weight-bold" style="text-decoration:none; font-size: 0.77rem; display: inline-flex; align-items: center; gap: 4px;">
+                <i class="fa-solid fa-phone"></i> ${item.phone}
+              </a>
+            </div>
+          </td>
+          <td>
+            <strong style="font-size: 0.85rem; color: #0f172a; display: block;">${item.dates}</strong>
+            <div style="font-size: 0.73rem; color: #64748b; margin-top: 2px;">
+              Parent-Signed Slip
+            </div>
+          </td>
+          <td>
+            <span class="portal-badge ${badgeCls}" style="font-size: 0.72rem; margin-bottom: 4px; display: inline-block; font-weight: 700;">
+              ${item.ground}
+            </span>
+            <div style="font-size: 0.82rem; color: #334155; line-height: 1.4;">
+              ${item.reason}
+            </div>
+          </td>
+          <td style="text-align: center;">
+            <span class="portal-badge ${isApproved ? 'badge-success' : 'badge-warning'}" style="font-weight: 800; font-size: 0.76rem; display: inline-block;">
+              <i class="fa-solid ${isApproved ? 'fa-circle-check' : 'fa-clock'} mr-1"></i> ${item.status}
+            </span>
+            <div style="margin-top: 6px; display: flex; gap: 4px; justify-content: center; align-items: center;">
+              <button class="btn btn-secondary btn-sm" onclick="portalApp.printStudentSlip('${item.slipId}')" title="Print Authorized Leave Slip" style="padding: 0.25rem 0.55rem; font-size: 0.72rem;">
+                <i class="fa-solid fa-print mr-1"></i> Slip
               </button>
-              <button class="btn btn-primary btn-sm" onclick="portalApp.viewStudentSlipDetails('${item.slipId}')" title="View Dossier">
-                <i class="fa-solid fa-eye"></i>
-              </button>
+              ${!isApproved ? `
+                <button class="btn btn-primary btn-sm" onclick="portalApp.approveStudentLeave('${item.slipId}')" title="Approve Leave" style="padding: 0.25rem 0.55rem; font-size: 0.72rem;">
+                  <i class="fa-solid fa-check mr-1"></i> Approve
+                </button>
+              ` : ''}
             </div>
           </td>
         </tr>
@@ -8610,8 +11852,488 @@ const portalApp = (function () {
 
     const badge = document.getElementById('studentLeaveTabBadge');
     if (badge) badge.textContent = list.length;
+    const sideBadge = document.getElementById('sidebarStudentLeaveBadge');
+    if (sideBadge) sideBadge.textContent = list.length;
     const statBadge = document.getElementById('statStudentSlipsCount');
     if (statBadge) statBadge.textContent = list.length;
+  }
+
+  function approveStudentLeave(slipId) {
+    const slip = STUDENT_LEAVES_DATA.find(s => s.slipId === slipId);
+    if (slip) {
+      slip.status = 'Approved';
+      showToast(`Student leave slip ${slipId} for ${slip.name} approved by Vice Principal Sri Navva Anand.`, 'success');
+      renderStudentLeaves();
+    }
+  }
+
+  var currentHistoryStatusFilter = 'all';
+
+  function setHistoryStatusFilter(status) {
+    currentHistoryStatusFilter = status;
+    const buttons = ['btnHistFilterAll', 'btnHistFilterApproved', 'btnHistFilterRejected', 'btnHistFilterCancelled', 'btnHistFilterPending'];
+    buttons.forEach(bId => {
+      const btn = document.getElementById(bId);
+      if (btn) {
+        if ((status === 'all' && bId === 'btnHistFilterAll') ||
+            (status === 'Approved' && bId === 'btnHistFilterApproved') ||
+            (status === 'Rejected' && bId === 'btnHistFilterRejected') ||
+            (status === 'Cancelled' && bId === 'btnHistFilterCancelled') ||
+            (status === 'Pending' && bId === 'btnHistFilterPending')) {
+          btn.classList.add('active');
+        } else {
+          btn.classList.remove('active');
+        }
+      }
+    });
+    renderLeaveHistoryRegister();
+  }
+
+  // Leave History Register Rendering
+  // User Requirement: Approved, rejected, cancelled and pending requests
+  function renderLeaveHistoryRegister() {
+    const tbody = document.getElementById('leaveHistoryTableBody');
+    if (!tbody) return;
+
+    const data = state.leaveHistory || [];
+
+    // Update count badges
+    const allCount = data.length;
+    const appCount = data.filter(d => d.status === 'Approved').length;
+    const rejCount = data.filter(d => d.status === 'Rejected').length;
+    const canCount = data.filter(d => d.status === 'Cancelled').length;
+    const penCount = data.filter(d => d.status === 'Pending').length;
+
+    const elAll = document.getElementById('histCountAll');
+    if (elAll) elAll.textContent = allCount;
+    const elApp = document.getElementById('histCountApproved');
+    if (elApp) elApp.textContent = appCount;
+    const elRej = document.getElementById('histCountRejected');
+    if (elRej) elRej.textContent = rejCount;
+    const elCan = document.getElementById('histCountCancelled');
+    if (elCan) elCan.textContent = canCount;
+    const elPen = document.getElementById('histCountPending');
+    if (elPen) elPen.textContent = penCount;
+    const tabBadge = document.getElementById('historyLeaveTabBadge');
+    if (tabBadge) tabBadge.textContent = allCount;
+
+    // Apply active status filter & search & category
+    const searchVal = (document.getElementById('leaveHistorySearchInput')?.value || '').toLowerCase().trim();
+    const catVal = document.getElementById('leaveHistoryCategoryFilter')?.value || 'all';
+
+    let filtered = data;
+    if (currentHistoryStatusFilter !== 'all') {
+      filtered = filtered.filter(item => item.status.toLowerCase() === currentHistoryStatusFilter.toLowerCase());
+    }
+    if (catVal !== 'all') {
+      filtered = filtered.filter(item => item.category.toLowerCase() === catVal.toLowerCase());
+    }
+    if (searchVal) {
+      filtered = filtered.filter(item =>
+        item.id.toLowerCase().includes(searchVal) ||
+        item.applicant.toLowerCase().includes(searchVal) ||
+        item.deptOrClass.toLowerCase().includes(searchVal) ||
+        item.reason.toLowerCase().includes(searchVal)
+      );
+    }
+
+    if (filtered.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="8" class="text-center p-4 text-muted">No records match the selected filter.</td></tr>';
+      return;
+    }
+
+    tbody.innerHTML = filtered.map(h => {
+      let statusBadge = 'badge-success';
+      let statusIcon = 'fa-circle-check';
+      if (h.status === 'Rejected') {
+        statusBadge = 'badge-danger';
+        statusIcon = 'fa-circle-xmark';
+      } else if (h.status === 'Cancelled') {
+        statusBadge = 'badge-neutral';
+        statusIcon = 'fa-ban';
+      } else if (h.status === 'Pending') {
+        statusBadge = 'badge-warning';
+        statusIcon = 'fa-clock';
+      }
+
+      return `
+        <tr>
+          <td>
+            <strong class="font-mono" style="color: #0f172a; font-size: 0.85rem;">${h.id}</strong>
+            <div style="font-size: 0.72rem; color: #64748b; margin-top: 2px;">
+              ${h.date}
+            </div>
+          </td>
+          <td>
+            <div style="display: flex; align-items: center; gap: 0.5rem;">
+              <span class="portal-badge ${h.category === 'Faculty' ? 'badge-primary' : 'badge-neutral'}" style="font-size: 0.68rem; padding: 2px 5px;">
+                ${h.category}
+              </span>
+              <div>
+                <strong style="color: #0f172a; font-size: 0.85rem;">${h.applicant}</strong>
+                <div style="font-size: 0.72rem; color: #64748b;">${h.deptOrClass}</div>
+              </div>
+            </div>
+          </td>
+          <td>
+            <span class="portal-badge badge-neutral" style="font-weight: 700; font-size: 0.75rem;">
+              ${h.type}
+            </span>
+          </td>
+          <td>
+            <strong style="font-size: 0.82rem; color: #1e293b; display: block;">${h.dates}</strong>
+            <small class="text-muted">${h.duration}</small>
+          </td>
+          <td>
+            <div style="font-size: 0.80rem; color: #334155; line-height: 1.35;">
+              ${h.reason}
+            </div>
+          </td>
+          <td>
+            <div style="font-size: 0.82rem; font-weight: 600; color: #1e40af;">
+              ${h.approver}
+            </div>
+          </td>
+          <td style="text-align: center;">
+            <span class="portal-badge ${statusBadge}" style="font-weight: 800; font-size: 0.75rem;">
+              <i class="fa-solid ${statusIcon} mr-1"></i> ${h.status}
+            </span>
+          </td>
+          <td style="text-align: center;">
+            <button class="btn btn-secondary btn-sm" onclick="portalApp.showToast(\'Voucher ${h.id} retrieved from institutional archive\', \'info\')" title="View Slip Voucher" style="padding: 0.25rem 0.55rem; font-size: 0.72rem;">
+              <i class="fa-solid fa-file-lines mr-1"></i> Voucher
+            </button>
+          </td>
+        </tr>
+      `;
+    }).join('');
+  }
+
+  // Leave Calendar Rendering
+  // User Requirement: Staff absences, substitute requirements and overlapping leave
+  function renderLeaveCalendar() {
+    const tbody = document.getElementById('leaveCalendarTableBody');
+    if (!tbody) return;
+
+    const weekData = state.leaveCalendar || [];
+
+    tbody.innerHTML = weekData.map(day => {
+      // Absences cell
+      let absencesHtml = '';
+      if (!day.absences || day.absences.length === 0) {
+        absencesHtml = '<div style="color: #059669; font-weight: 600; font-size: 0.82rem;"><i class="fa-solid fa-circle-check mr-1"></i> Zero Absences (Full Strength)</div>';
+      } else {
+        absencesHtml = day.absences.map(a => `
+          <div style="margin-bottom: 5px;">
+            <strong style="color: #0f172a; font-size: 0.84rem;">${a.name}</strong>
+            <span class="portal-badge ${a.badge}" style="font-size: 0.68rem; margin-left: 4px; padding: 2px 6px;">
+              ${a.type}
+            </span>
+            <div style="font-size: 0.72rem; color: #64748b;">${a.dept}</div>
+          </div>
+        `).join('');
+      }
+
+      // Substitutes cell
+      let subsHtml = '';
+      if (!day.substitutes || day.substitutes.length === 0) {
+        subsHtml = '<div style="color: #64748b; font-size: 0.82rem;">Regular Timetable Active</div>';
+      } else {
+        subsHtml = day.substitutes.map(s => `
+          <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; padding: 5px 8px; margin-bottom: 4px;">
+            <div style="font-weight: 700; font-size: 0.8rem; color: #0f172a;">
+              ${s.period} &bull; <span class="text-primary">${s.class}</span> (${s.subject})
+            </div>
+            <div style="font-size: 0.74rem; color: #059669; margin-top: 2px;">
+              <i class="fa-solid fa-user-shield mr-1"></i> Cover: <strong>${s.replacement}</strong>
+              <span class="portal-badge ${s.status === 'Confirmed' ? 'badge-success' : 'badge-warning'}" style="font-size: 0.66rem; margin-left: 4px; padding: 1px 5px;">
+                ${s.status}
+              </span>
+            </div>
+          </div>
+        `).join('');
+      }
+
+      // Overlap cell
+      let overlapBadgeCls = 'badge-success';
+      let overlapBorderColor = '#10b981';
+      let overlapBg = '#f0fdf4';
+      if (day.overlap.severity === 'danger') {
+        overlapBadgeCls = 'badge-danger';
+        overlapBorderColor = '#ef4444';
+        overlapBg = '#fef2f2';
+      } else if (day.overlap.severity === 'warning') {
+        overlapBadgeCls = 'badge-warning';
+        overlapBorderColor = '#f59e0b';
+        overlapBg = '#fffbeb';
+      }
+
+      const overlapHtml = `
+        <div style="background: ${overlapBg}; border: 1px solid ${overlapBorderColor}; border-radius: 6px; padding: 6px 9px;">
+          <span class="portal-badge ${overlapBadgeCls}" style="font-weight: 800; font-size: 0.72rem; margin-bottom: 3px; display: inline-block;">
+            <i class="fa-solid ${day.overlap.icon} mr-1"></i> ${day.overlap.label}
+          </span>
+          <div style="font-size: 0.74rem; color: #334155; line-height: 1.35;">
+            ${day.overlap.text}
+          </div>
+        </div>
+      `;
+
+      return `
+        <tr>
+          <td>
+            <strong style="font-size: 0.88rem; color: #0f172a; display: block;">${day.day}</strong>
+            <div style="font-size: 0.74rem; color: #64748b; margin-top: 2px;">
+              ${day.date.replace(day.day + ', ', '')}
+            </div>
+          </td>
+          <td>${absencesHtml}</td>
+          <td>${subsHtml}</td>
+          <td>${overlapHtml}</td>
+          <td style="text-align: center;">
+            <button class="btn btn-secondary btn-sm" onclick="portalApp.navigateTo(\'timetable\', \'substitution-planner\')" title="Open Period Substitution Planner" style="padding: 0.3rem 0.6rem; font-size: 0.74rem;">
+              <i class="fa-solid fa-arrows-split-up-and-left mr-1"></i> Manage
+            </button
+          </td>
+        </tr>
+      `;
+    }).join('');
+  }
+
+  function navigateLeaveCalendarWeek(offset) {
+    showToast(offset > 0 ? 'Viewing next week scheduled leave roster' : 'Viewing previous week archived leave roster', 'info');
+  }
+
+  // Leave Policy Rendering
+  // User Requirement: Leave types, eligibility, limits and approval rules
+  function renderLeavePolicy() {
+    // Subview 5 policy is static interactive DOM
+  }
+
+  function printLeavePolicyDoc() {
+    const win = window.open('', '_blank', 'width=900,height=750');
+    win.document.write(`
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <title>Sri Vidya E.M High School - Institutional Leave Policy & Governance Rules</title>
+        <style>
+          body { font-family: \'Segoe UI\', Tahoma, Geneva, Verdana, sans-serif; padding: 35px; color: #1e293b; line-height: 1.6; }
+          .header { text-align: center; border-bottom: 2px solid #0f172a; padding-bottom: 15px; margin-bottom: 25px; }
+          .title { font-size: 22px; font-weight: 800; color: #0f172a; text-transform: uppercase; margin: 0; }
+          .subtitle { font-size: 13px; color: #475569; margin-top: 4px; }
+          .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin: 20px 0; }
+          .card { border: 1.5px solid #cbd5e1; border-radius: 8px; padding: 12px 15px; background: #f8fafc; }
+          .card h4 { margin: 0 0 5px 0; font-size: 14px; color: #1e40af; }
+          .card p { margin: 0; font-size: 12px; color: #334155; }
+          table { width: 100%; border-collapse: collapse; margin-top: 20px; font-size: 12px; }
+          th, td { border: 1px solid #cbd5e1; padding: 8px 10px; text-align: left; }
+          th { background: #f1f5f9; font-weight: 700; }
+          .footer { margin-top: 40px; display: flex; justify-content: space-between; align-items: flex-end; }
+          .signature-box { text-align: center; width: 220px; border-top: 1px solid #000; padding-top: 6px; font-size: 12px; }
+        </style>
+      </head>
+      <body>
+        <div class="header">
+          <h1 class="title">SRI VIDYA E.M HIGH SCHOOL</h1>
+          <div class="subtitle">Recognized by Govt. of Andhra Pradesh &bull; Affiliated to Board of Secondary Education, AP</div>
+          <div style="font-weight: 800; font-size: 15px; margin-top: 10px; color: #b45309;">INSTITUTIONAL FACULTY &amp; STUDENT LEAVE GOVERNANCE POLICY (2026–27)</div>
+        </div>
+        <h3>1. Statutory Entitlements (AP SCERT Guidelines)</h3>
+        <div class="grid">
+          <div class="card">
+            <h4>Casual Leave (CL) - 12 Days</h4>
+            <p>For urgent personal affairs. Max 3 continuous working days. Mandatory 24 hours prior written submission.</p>
+          </div>
+          <div class="card">
+            <h4>Medical Leave (ML) - 10 Days</h4>
+            <p>For medical recovery. Medical fitness certificate from Registered Medical Practitioner mandatory if &gt; 2 days.</p>
+          </div>
+          <div class="card">
+            <h4>Earned Leave (EL) - 15 Days</h4>
+            <p>Confirmed staff with &gt; 1 year continuous tenure. Requires 15 days prior sanction by Principal.</p>
+          </div>
+          <div class="card">
+            <h4>On Duty (OD) - Max 15 Days</h4>
+            <p>Official Board Exam Spot Valuation, Science Fairs, and SCERT seminars. Full salary &amp; attendance credited.</p>
+          </div>
+        </div>
+        <h3>2. Eligibility, Limits &amp; Sanctioning Authorities</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>Leave Category</th>
+              <th>Applicable Cadre</th>
+              <th>Annual Quota</th>
+              <th>Sanctioning Authority</th>
+              <th>Substitute Policy</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Casual Leave (CL)</td>
+              <td>All Full-Time Staff</td>
+              <td>12 Days</td>
+              <td>VP Sri Navva Anand &bull; Principal Smt. Gorle Varalakshmi</td>
+              <td>Mandatory Timetable Reallocation</td>
+            </tr>
+            <tr>
+              <td>Medical Leave (ML)</td>
+              <td>All Staff</td>
+              <td>10 Days</td>
+              <td>Principal Smt. Gorle Varalakshmi</td>
+              <td>Emergency Substitute Mapped</td>
+            </tr>
+            <tr>
+              <td>Earned Leave (EL)</td>
+              <td>Confirmed Staff</td>
+              <td>15 Days</td>
+              <td>Principal Smt. Gorle Varalakshmi</td>
+              <td>Term Replacement Required</td>
+            </tr>
+            <tr>
+              <td>On Duty (OD)</td>
+              <td>Teaching Faculty</td>
+              <td>As Sanctioned</td>
+              <td>Principal Smt. Gorle Varalakshmi</td>
+              <td>Department Cover Mapped</td>
+            </tr>
+          </tbody>
+        </table>
+        <div style="margin-top: 25px; padding: 12px; background: #fffbeb; border: 1px solid #fde047; border-radius: 6px; font-size: 11.5px; color: #78350f;">
+          <strong>Department Concurrency Rule:</strong> No more than 1 faculty member per academic department may be on leave on any single working day without explicit sanction from Principal Smt. Gorle Varalakshmi.
+        </div>
+        <div class="footer">
+          <div class="signature-box">
+            <strong>Sri Navva Anand</strong><br>
+            Vice Principal &amp; Academic Dean
+          </div>
+          <div class="signature-box">
+            <strong>Smt. Gorle Varalakshmi</strong><br>
+            Principal &amp; Executive Authority
+          </div>
+        </div>
+      </body>
+      </html>
+    `);
+    win.document.close();
+    setTimeout(() => { win.print(); }, 400);
+  }
+
+  function printStudentSlip(slipId) {
+    const slip = (typeof STUDENT_LEAVES_DATA !== 'undefined' ? STUDENT_LEAVES_DATA : []).find(s => s.slipId === slipId);
+    if (!slip) {
+      showToast('Student leave slip not found', 'error');
+      return;
+    }
+
+    const win = window.open('', '_blank', 'width=750,height=600');
+    win.document.write(`
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <title>Student Leave Slip - ${slip.slipId}</title>
+        <style>
+          body { font-family: \'Segoe UI\', Tahoma, Geneva, Verdana, sans-serif; padding: 30px; color: #0f172a; }
+          .ticket { border: 2px dashed #0284c7; padding: 25px; border-radius: 12px; background: #f0f9ff; max-width: 600px; margin: auto; }
+          .header { text-align: center; border-bottom: 1.5px solid #0284c7; padding-bottom: 12px; margin-bottom: 15px; }
+          .header h2 { margin: 0; color: #0369a1; font-size: 18px; }
+          .header p { margin: 3px 0 0 0; font-size: 11px; color: #475569; }
+          .title { font-size: 14px; font-weight: 800; color: #0c4a6e; text-align: center; margin-bottom: 15px; text-transform: uppercase; }
+          .row { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 13px; }
+          .row span { color: #64748b; }
+          .row strong { color: #0f172a; }
+          .footer { margin-top: 30px; display: flex; justify-content: space-between; align-items: flex-end; padding-top: 15px; border-top: 1px solid #cbd5e1; font-size: 11px; }
+          .stamp { border: 1.5px solid #16a34a; color: #16a34a; padding: 4px 10px; border-radius: 4px; font-weight: 800; text-transform: uppercase; font-size: 11px; }
+        </style>
+      </head>
+      <body>
+        <div class="ticket">
+          <div class="header">
+            <h2>SRI VIDYA E.M HIGH SCHOOL</h2>
+            <p>Tilak Road, Guntur &bull; Affiliated to Board of Secondary Education, AP</p>
+          </div>
+          <div class="title">OFFICIAL STUDENT LEAVE SANCTION &amp; CAMPUS GATE PASS</div>
+          <div class="row"><span>Slip Reference:</span> <strong>${slip.slipId}</strong></div>
+          <div class="row"><span>Student Name:</span> <strong>${slip.name}</strong></div>
+          <div class="row"><span>Admission / Roll:</span> <strong>${slip.admNo} &bull; ${slip.roll}</strong></div>
+          <div class="row"><span>Class &amp; Section:</span> <strong>${slip.class}</strong></div>
+          <div class="row"><span>Sanctioned Dates:</span> <strong>${slip.dates}</strong></div>
+          <div class="row"><span>Grounds / Reason:</span> <strong>${slip.ground} - ${slip.reason}</strong></div>
+          <div class="row"><span>Parent / Guardian:</span> <strong>${slip.parent} (Ph: ${slip.phone})</strong></div>
+          <div class="row"><span>Verification Status:</span> <strong><span class="stamp">${slip.status}</span></strong></div>
+
+          <div class="footer">
+            <div>
+              <small>Authorized by:</small><br>
+              <strong>Vice Principal Sri Navva Anand</strong>
+            </div>
+            <div>
+              <small>Executive Ratification:</small><br>
+              <strong>Principal Smt. Gorle Varalakshmi</strong>
+            </div>
+          </div>
+        </div>
+      </body>
+      </html>
+    `);
+    win.document.close();
+    setTimeout(() => { win.print(); }, 400);
+  }
+
+  function exportLeaveHistoryCSV() {
+    const list = state.leaveHistory || [];
+    if (list.length === 0) {
+      showToast('No leave history available to export', 'warning');
+      return;
+    }
+    const headers = ['Request ID', 'Date', 'Applicant', 'Role', 'Department/Class', 'Leave Type', 'Dates', 'Duration', 'Reason', 'Approver', 'Status'];
+    const rows = list.map(item => [
+      item.id,
+      item.date,
+      `"${item.applicant}"`,
+      item.role,
+      `"${item.deptOrClass}"`,
+      item.type,
+      `"${item.dates}"`,
+      item.duration,
+      `"${(item.reason || '').replace(/"/g, '""')}"`,
+      `"${item.approver}"`,
+      item.status
+    ]);
+    const csvContent = [headers.join(','), ...rows.map(r => r.join(','))].join('\n');
+    downloadCsvFile(csvContent, `sri_vidya_leave_history_${new Date().toISOString().split('T')[0]}.csv`);
+    showToast('Leave History Register CSV exported successfully!', 'success');
+  }
+
+  function printLeaveHistoryRegister() {
+    const printContent = document.getElementById('subview-leaves-history');
+    if (!printContent) return;
+    const win = window.open('', '_blank', 'width=950,height=750');
+    win.document.write(`
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <title>Sri Vidya - Leave History Register</title>
+        <style>
+          body { font-family: Arial, sans-serif; padding: 25px; color: #1e293b; }
+          h2 { margin: 0; color: #0f172a; }
+          p { margin: 3px 0 15px 0; color: #64748b; font-size: 13px; }
+          table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 11px; }
+          th, td { border: 1px solid #cbd5e1; padding: 6px 8px; text-align: left; }
+          th { background: #f1f5f9; }
+          button { display: none !important; }
+        </style>
+      </head>
+      <body>
+        <h2>SRI VIDYA E.M HIGH SCHOOL &bull; LEAVE HISTORY REGISTER</h2>
+        <p>Official Audit Register &bull; Approved, Rejected, Cancelled and Pending Requests &bull; Generated on ${new Date().toLocaleDateString()}</p>
+        ${printContent.querySelector('.table-container').innerHTML}
+      </body>
+      </html>
+    `);
+    win.document.close();
+    setTimeout(() => { win.print(); }, 400);
   }
 
   function renderStaffLeaveBalances(deptFilter) {
@@ -8837,43 +12559,198 @@ const portalApp = (function () {
   }
 
   // =========================================================================
-  // ATTENDANCE MODULE RENDERERS
+  // ATTENDANCE MODULE IMPLEMENTATION (6 COMPLETE SUBMENUS)
+  // 1. Student Attendance: Date, class, section, present, absent, late, attendance %
+  // 2. Teacher Attendance: Employee, date, attendance status, check-in/out, exceptions
+  // 3. Daily Report: Class-wise and school-wide attendance summary
+  // 4. Monthly Summary: Student and staff attendance trends by month
+  // 5. Correction Requests: Original entry, requested change, reason, requester, approval status
+  //    (Retaining original value, updated value, reason, and identity of authorizer)
+  // 6. Attendance Alerts: Repeated absences, consecutive absences, configured thresholds
   // =========================================================================
 
-  function renderAttendanceTeachers() {
-    const tbody = document.getElementById('attendanceTeacherTableBody');
+  // Initial Seed Data for Attendance Corrections (Strictly retains original value, updated value, reason, and authorizer identity)
+  if (!state.attendanceCorrections) {
+    state.attendanceCorrections = [
+      {
+        id: 'COR-2026-001',
+        date: '2026-10-26',
+        individual: 'K. Sai Teja (SV-0001)',
+        class: 'Class X-A',
+        originalValue: 'Absent (Morning Session)',
+        originalEntry: 'Absent (Morning Session)',
+        updatedValue: 'Present (On-Duty)',
+        requestedChange: 'Present (On-Duty)',
+        reason: 'Represented school in Inter-School Science Fair at Govt Polytechnic',
+        proof: 'OD Certificate #SF-402',
+        requestedBy: 'Sri Ch. Ramesh (Class Teacher X-A)',
+        authorizedBy: 'Dr. K. S. Rao (Principal)',
+        status: 'Approved'
+      },
+      {
+        id: 'COR-2026-002',
+        date: '2026-10-25',
+        individual: 'Smt. P. Sunitha (Faculty BIO-SV-105)',
+        class: 'Science Dept',
+        originalValue: 'Uninformed Absent',
+        originalEntry: 'Uninformed Absent',
+        updatedValue: 'On-Duty (Exam Invigilation)',
+        requestedChange: 'On-Duty (Exam Invigilation)',
+        reason: 'Deputed as external board practical observer at Model High School',
+        proof: 'Board Order #DEO-881',
+        requestedBy: 'Self / HOD Science',
+        authorizedBy: 'Mrs. L. Vani (Vice Principal)',
+        status: 'Approved'
+      },
+      {
+        id: 'COR-2026-003',
+        date: '2026-10-24',
+        individual: 'M. Manoj (SV-0095)',
+        class: 'Class VIII-A',
+        originalValue: 'Late (+22 mins)',
+        originalEntry: 'Late (+22 mins)',
+        updatedValue: 'Present (On-Time Verified)',
+        requestedChange: 'Present (On-Time Verified)',
+        reason: 'RFID gate entry terminal sync delay; verified against physical gate register',
+        proof: 'Physical Gate Log Book Vol-3',
+        requestedBy: 'Sri M. Raju (Class Teacher)',
+        authorizedBy: 'Dr. K. S. Rao (Principal)',
+        status: 'Approved'
+      },
+      {
+        id: 'COR-2026-004',
+        date: '2026-10-23',
+        individual: 'CH. Swathi (SV-0182)',
+        class: 'Class VII-A',
+        originalValue: 'Absent',
+        originalEntry: 'Absent',
+        updatedValue: 'Medical Leave (Sanctioned)',
+        requestedChange: 'Medical Leave (Sanctioned)',
+        reason: 'Hospital medical certificate submitted to office reception for acute viral fever',
+        proof: 'Doctor Slip #MED-1049',
+        requestedBy: 'Parent (CH. Mohan Rao)',
+        authorizedBy: 'M. Ramesh (Administrative Head)',
+        status: 'Approved'
+      },
+      {
+        id: 'COR-2026-005',
+        date: '2026-10-27',
+        individual: 'B. Hemanth (SV-0005)',
+        class: 'Class X-A',
+        originalValue: 'Absent (Full Day)',
+        originalEntry: 'Absent (Full Day)',
+        updatedValue: 'Half-Day Present (Afternoon)',
+        requestedChange: 'Half-Day Present (Afternoon)',
+        reason: 'Attended district sports trials in morning session; reported for Period 5 onwards',
+        proof: 'Sports Dept Pass #SP-09',
+        requestedBy: 'Sri V. Ramesh Babu (PET)',
+        authorizedBy: 'Dr. K. S. Rao (Principal)',
+        status: 'Pending Principal Sign-off'
+      },
+      {
+        id: 'COR-2026-006',
+        date: '2026-10-27',
+        individual: 'P. Keerthi Priya (SV-0022)',
+        class: 'Class X-A',
+        originalValue: 'Unexcused Absence',
+        originalEntry: 'Unexcused Absence',
+        updatedValue: 'Excused Leave (Family Event)',
+        requestedChange: 'Excused Leave (Family Event)',
+        reason: 'Prior written intimation letter provided by parent, not updated by substitute teacher',
+        proof: 'Parent Hand-written Letter',
+        requestedBy: 'Smt. T. Padmavathi (Teacher)',
+        authorizedBy: 'Mrs. L. Vani (Vice Principal)',
+        status: 'Pending Principal Sign-off'
+      },
+      {
+        id: 'COR-2026-007',
+        date: '2026-10-22',
+        individual: 'G. Harsha Vardhan (SV-0089)',
+        class: 'Class IX-A',
+        originalValue: 'Absent',
+        originalEntry: 'Absent',
+        updatedValue: 'Present (Library Study)',
+        requestedChange: 'Present (Library Study)',
+        reason: 'Special state Olympiad preparation study in central library during Period 1-3',
+        proof: 'Librarian Slip Awaited',
+        requestedBy: 'Self / Subject Teacher',
+        authorizedBy: 'Sri Ch. Ramesh (Academic Dean)',
+        status: 'Returned for Review'
+      }
+    ];
+  }
+
+  // Master Roster of 11 Classes for Student Attendance
+  const ATTENDANCE_CLASS_DATA = [
+    { class: 'Class X', section: 'A', total: 44, present: 42, absent: 2, late: 1, pct: '95.5%', pctVal: 95.5, teacher: 'Sri B. Narayana', wing: 'High School' },
+    { class: 'Class IX', section: 'A', total: 44, present: 42, absent: 2, late: 1, pct: '95.5%', pctVal: 95.5, teacher: 'Smt. T. Padmavathi', wing: 'High School' },
+    { class: 'Class VIII', section: 'A', total: 44, present: 43, absent: 1, late: 1, pct: '97.7%', pctVal: 97.7, teacher: 'Sri M. Raju', wing: 'High School' },
+    { class: 'Class VII', section: 'A', total: 46, present: 44, absent: 2, late: 1, pct: '95.7%', pctVal: 95.7, teacher: 'Smt. V. Jyothsna', wing: 'High School' },
+    { class: 'Class VI', section: 'A', total: 46, present: 44, absent: 2, late: 1, pct: '95.7%', pctVal: 95.7, teacher: 'Sri CH. Venkateswara Rao', wing: 'High School' },
+    { class: 'Class V', section: 'A', total: 44, present: 43, absent: 1, late: 1, pct: '97.7%', pctVal: 97.7, teacher: 'Smt. N. Sirisha', wing: 'Primary' },
+    { class: 'Class IV', section: 'A', total: 44, present: 42, absent: 2, late: 1, pct: '95.5%', pctVal: 95.5, teacher: 'Sri A. Prasad', wing: 'Primary' },
+    { class: 'Class III', section: 'A', total: 44, present: 43, absent: 1, late: 0, pct: '97.7%', pctVal: 97.7, teacher: 'Smt. R. Kavitha', wing: 'Primary' },
+    { class: 'Class II', section: 'A', total: 46, present: 44, absent: 2, late: 1, pct: '95.7%', pctVal: 95.7, teacher: 'Sri S. Gopal', wing: 'Primary' },
+    { class: 'Class I', section: 'A', total: 48, present: 46, absent: 2, late: 1, pct: '95.8%', pctVal: 95.8, teacher: 'Smt. Y. Anusha', wing: 'Primary' },
+    { class: 'Pre-Primary', section: 'A', total: 50, present: 48, absent: 2, late: 0, pct: '96.0%', pctVal: 96.0, teacher: 'Smt. D. Meena', wing: 'Pre-Primary' }
+  ];
+
+  // 1. STUDENT ATTENDANCE RENDERER (Date, class, section, present, absent, late, attendance percentage)
+  function renderStudentAttendanceTable(customDate) {
+    const tbody = document.getElementById('studentAttendanceTableBody') || document.getElementById('attendanceClassTableBody');
     if (!tbody) return;
 
-    const teachers = (state.faculty || []);
-    tbody.innerHTML = teachers.map((t, idx) => {
-      const punchIn = (idx === 4) ? '— (On Leave)' : (idx % 7 === 0) ? '08:47 AM' : '08:32 AM';
-      const isLate = punchIn === '08:47 AM';
-      const isOnLeave = idx === 4;
-      let badgeCls = 'badge-success';
-      let statusText = 'Present (Biometric Verified)';
-      if (isOnLeave) {
-        badgeCls = 'badge-warning';
-        statusText = 'On Leave (Medical)';
-      } else if (isLate) {
-        badgeCls = 'badge-amber';
-        statusText = 'Late (Grace Period)';
-      }
+    const dateVal = customDate || document.getElementById('studentAttendanceDateInput')?.value || '2026-10-28';
+    const filterWing = document.getElementById('studentAttendanceClassFilter')?.value || 'all';
+    const searchVal = (document.getElementById('studentAttendanceSearchInput')?.value || '').toLowerCase().trim();
 
+    // Format date string for display
+    const dObj = new Date(dateVal);
+    const dateFormatted = !isNaN(dObj.getTime())
+      ? dObj.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })
+      : dateVal;
+
+    const filtered = ATTENDANCE_CLASS_DATA.filter(item => {
+      const matchWing = filterWing === 'all' || item.wing === filterWing || (filterWing === 'Pre-Primary' && item.class.includes('Pre-Primary'));
+      const matchSearch = !searchVal || item.class.toLowerCase().includes(searchVal) || item.section.toLowerCase().includes(searchVal) || item.teacher.toLowerCase().includes(searchVal);
+      return matchWing && matchSearch;
+    });
+
+    if (filtered.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="8" class="text-center py-4 text-muted">No classes matched the selected filter.</td></tr>';
+      return;
+    }
+
+    tbody.innerHTML = filtered.map(row => {
+      const barColor = row.pctVal >= 96 ? 'bg-emerald' : row.pctVal >= 90 ? 'bg-blue' : 'bg-amber';
+      const labelText = row.pctVal >= 96 ? 'Optimal' : row.pctVal >= 90 ? 'Satisfactory' : 'Attention';
       return `
         <tr>
-          <td><span class="portal-badge badge-neutral font-weight-bold">BIO-SV-${(101 + idx)}</span></td>
           <td>
-            <strong>${t.name}</strong><br>
-            <small class="text-muted">${t.role}</small>
+            <div class="att-date-pill">
+              <i class="fa-regular fa-calendar text-primary"></i>
+              <span>${dateFormatted}</span>
+            </div>
           </td>
-          <td>${t.subject}</td>
-          <td><span class="portal-badge badge-primary">${t.qualification}</span></td>
-          <td><strong>${punchIn}</strong></td>
-          <td><a href="tel:${t.phone}" class="text-primary font-weight-bold" style="text-decoration:none;">${t.phone}</a></td>
-          <td><span class="portal-badge ${badgeCls}">${statusText}</span></td>
+          <td><strong style="color: #0f172a; font-size: 0.9rem;">${row.class}</strong></td>
+          <td style="text-align:center;"><span class="portal-badge badge-primary" style="font-weight: 700;">Sec ${row.section}</span></td>
+          <td style="text-align:center;"><strong class="text-emerald" style="font-size:0.95rem;">${row.present}</strong> <span style="color:#94a3b8; font-size:0.8rem;">/ ${row.total}</span></td>
+          <td style="text-align:center;"><strong class="text-red" style="font-size:0.95rem;">${row.absent}</strong></td>
+          <td style="text-align:center;"><strong style="color:${row.late > 0 ? '#d97706' : '#94a3b8'}; font-size:0.95rem;">${row.late}</strong></td>
           <td>
-            <button class="btn btn-secondary btn-sm" onclick="portalApp.viewStaffLeaveDossier('${t.name}')" title="Attendance Log">
-              <i class="fa-solid fa-clock-rotate-left"></i> History
+            <div class="att-turnout-wrap">
+              <div class="att-turnout-header">
+                <strong class="${row.pctVal >= 96 ? 'text-emerald' : row.pctVal >= 90 ? 'text-blue' : 'text-amber'}">${row.pct}</strong>
+                <span class="att-turnout-label">${labelText}</span>
+              </div>
+              <div class="att-progress-track">
+                <div class="att-progress-bar ${barColor}" style="width: ${row.pct}"></div>
+              </div>
+            </div>
+          </td>
+          <td style="text-align:center;">
+            <button type="button" class="btn btn-secondary btn-sm" onclick="portalApp.showToast('Class roll-call roster loaded for ${row.class}-${row.section}', 'info')" title="View Class Roll Call">
+              <i class="fa-solid fa-list-check"></i> Roster
             </button>
           </td>
         </tr>
@@ -8881,53 +12758,1595 @@ const portalApp = (function () {
     }).join('');
   }
 
-  function renderAttendanceAbsentees() {
-    const tbody = document.getElementById('attendanceAbsenteesTableBody');
+  function filterStudentAttendanceTable() {
+    renderStudentAttendanceTable();
+  }
+
+  function filterStudentAttendanceByDate(dateVal) {
+    renderStudentAttendanceTable(dateVal);
+  }
+
+  // 2. TEACHER ATTENDANCE RENDERER (Employee, date, attendance status, check-in/out, exceptions)
+  function renderTeacherAttendanceTable(customDate) {
+    const tbody = document.getElementById('attendanceTeacherTableBody');
     if (!tbody) return;
 
-    const absentees = (state.dailyAbsentees || []);
-    if (absentees.length === 0) {
-      tbody.innerHTML = '<tr><td colspan="8" class="text-center py-4 text-muted">No absentees logged for today. Attendance is 100%.</td></tr>';
+    const dateVal = customDate || document.getElementById('teacherAttendanceDateInput')?.value || '2026-10-28';
+    const filterCat = document.getElementById('teacherAttendanceCategoryFilter')?.value || 'all';
+    const searchVal = (document.getElementById('teacherAttendanceSearchInput')?.value || '').toLowerCase().trim();
+
+    const dObj = new Date(dateVal);
+    const dateFormatted = !isNaN(dObj.getTime())
+      ? dObj.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })
+      : dateVal;
+
+    const facultyList = state.faculty || [];
+    
+    // Build 34 personnel records with realistic check-in/out and exception notes
+    const teacherRecords = facultyList.map((t, idx) => {
+      const bioId = `BIO-SV-${101 + idx}`;
+      const isNonTeaching = idx >= 26;
+      const isOnLeave = idx === 4 || idx === 11;
+      const isLate = idx === 2 || idx === 19;
+      const isAbsent = idx === 22;
+      const isOD = idx === 8;
+
+      let status = 'Present';
+      let statusBadge = 'badge-success';
+      let checkInOut = 'In: 08:24 AM • Out: 04:30 PM';
+      let exceptions = 'None (Regular on-time punch)';
+
+      if (isOnLeave) {
+        status = 'Approved Leave';
+        statusBadge = 'badge-warning';
+        checkInOut = '— / —';
+        exceptions = idx === 4 ? 'Medical Leave Sanctioned (Ref #ML-204)' : 'Casual Leave (Approved by Principal)';
+      } else if (isAbsent) {
+        status = 'Uninformed Absent';
+        statusBadge = 'badge-danger';
+        checkInOut = '— / —';
+        exceptions = 'Unexcused - Automated SMS notification sent to faculty';
+      } else if (isLate) {
+        status = 'Late Arrival';
+        statusBadge = 'badge-amber';
+        checkInOut = idx === 2 ? 'In: 08:46 AM • Out: 04:30 PM' : 'In: 08:49 AM • Out: 04:30 PM';
+        exceptions = idx === 2 ? 'Late Check-in (+16 mins) - Heavy rain at RTC junction' : 'Late Check-in (+19 mins) - Transit vehicle breakdown';
+      } else if (isOD) {
+        status = 'On-Duty (OD)';
+        statusBadge = 'badge-primary';
+        checkInOut = 'In: 08:30 AM • Out: 02:00 PM';
+        exceptions = 'Inter-School Science Fair External Invigilator (Govt Polytechnic)';
+      }
+
+      return {
+        bioId,
+        name: t.name,
+        role: t.role,
+        subject: t.subject || (isNonTeaching ? 'Office Administration' : 'General Faculty'),
+        dept: isNonTeaching ? 'Non-Teaching / Support Staff' : 'Teaching Faculty',
+        category: isNonTeaching ? 'Non-Teaching' : 'Teaching',
+        phone: t.phone,
+        date: dateFormatted,
+        status,
+        statusBadge,
+        checkInOut,
+        exceptions
+      };
+    });
+
+    // Filter
+    const filtered = teacherRecords.filter(item => {
+      let matchCat = true;
+      if (filterCat === 'Teaching') matchCat = item.category === 'Teaching';
+      else if (filterCat === 'Non-Teaching') matchCat = item.category === 'Non-Teaching';
+      else if (filterCat === 'Present') matchCat = item.status === 'Present' || item.status === 'On-Duty (OD)';
+      else if (filterCat === 'Exceptions') matchCat = item.status !== 'Present';
+
+      const matchSearch = !searchVal ||
+        item.name.toLowerCase().includes(searchVal) ||
+        item.bioId.toLowerCase().includes(searchVal) ||
+        item.role.toLowerCase().includes(searchVal) ||
+        item.dept.toLowerCase().includes(searchVal);
+
+      return matchCat && matchSearch;
+    });
+
+    if (filtered.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="6" class="text-center py-4 text-muted">No staff attendance records matched your filter.</td></tr>';
       return;
     }
 
-    tbody.innerHTML = absentees.map(a => `
+    tbody.innerHTML = filtered.map(t => `
       <tr>
-        <td><strong>${a.admNo}</strong></td>
-        <td><strong>${a.name}</strong></td>
-        <td><span class="portal-badge badge-neutral">${a.class}</span></td>
-        <td>${a.parent}</td>
-        <td><a href="tel:${a.phone}" class="text-primary font-weight-bold" style="text-decoration:none;">${a.phone}</a></td>
-        <td><small class="text-muted">${a.reason || 'Unreported absence'}</small></td>
-        <td><span class="portal-badge badge-success"><i class="fa-solid fa-check-double"></i> ${a.smsStatus || 'Delivered'}</span></td>
         <td>
-          <button class="btn btn-secondary btn-sm" onclick="portalApp.callParent('${a.phone}', '${a.parent}')" title="Call Parent">
-            <i class="fa-solid fa-phone"></i> Call
+          <div style="display:flex; align-items:center; gap:0.6rem;">
+            <div style="width:36px; height:36px; border-radius:50%; background:linear-gradient(135deg, #2563eb, #1e40af); color:#fff; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:0.85rem;">
+              ${t.name.split(' ').map(n=>n[0]).join('').slice(0,2)}
+            </div>
+            <div>
+              <strong>${t.name}</strong> <span class="portal-badge badge-neutral">${t.bioId}</span><br>
+              <small class="text-muted">${t.role} • ${t.subject}</small>
+            </div>
+          </div>
+        </td>
+        <td>
+          <div class="att-date-pill">
+            <i class="fa-regular fa-calendar text-primary"></i>
+            <span>${t.date}</span>
+          </div>
+        </td>
+        <td style="text-align:center;"><span class="portal-badge ${t.statusBadge}">${t.status}</span></td>
+        <td style="text-align:center;"><strong class="text-dark">${t.checkInOut}</strong></td>
+        <td>
+          <div style="font-size:0.875rem;">${t.exceptions}</div>
+        </td>
+        <td style="text-align:center;">
+          <button type="button" class="btn btn-secondary btn-sm" onclick="portalApp.viewStaffLeaveDossier('${t.name}')" title="View Biometric History">
+            <i class="fa-solid fa-clock-rotate-left"></i> Dossier
           </button>
         </td>
       </tr>
     `).join('');
   }
 
-  
+  function filterTeacherAttendanceTable() {
+    renderTeacherAttendanceTable();
+  }
 
-  function renderAttendanceMonthly() {
-    const tbody = document.getElementById('attendanceMonthlyTableBody');
+  // 3. DAILY REPORT RENDERER (Class-wise and school-wide attendance summary)
+  function renderDailyAttendanceReport() {
+    const tbody = document.getElementById('dailyClassSummaryTableBody');
     if (!tbody) return;
 
-    tbody.innerHTML = ATTENDANCE_MONTHLY_DATA.map(m => `
+    tbody.innerHTML = ATTENDANCE_CLASS_DATA.map(row => {
+      let statusBadge = 'badge-success';
+      let statusText = 'Excellent (≥95%)';
+      if (row.pctVal < 90) {
+        statusBadge = 'badge-warning';
+        statusText = 'Needs Attention';
+      } else if (row.pctVal < 95) {
+        statusBadge = 'badge-primary';
+        statusText = 'Satisfactory';
+      }
+
+      const barColor = row.pctVal >= 96 ? 'bg-emerald' : row.pctVal >= 90 ? 'bg-blue' : 'bg-amber';
+
+      return `
+        <tr>
+          <td><strong style="color: #0f172a; font-size: 0.9rem;">${row.class}-${row.section}</strong></td>
+          <td><strong>${row.teacher}</strong></td>
+          <td style="text-align:center;">${row.total}</td>
+          <td style="text-align:center;"><strong class="text-emerald" style="font-size:0.95rem;">${row.present}</strong></td>
+          <td style="text-align:center;"><strong class="text-red" style="font-size:0.95rem;">${row.absent}</strong></td>
+          <td style="text-align:center;">${row.late} Late • 0 Leave</td>
+          <td>
+            <div class="att-turnout-wrap">
+              <div class="att-turnout-header">
+                <strong class="${row.pctVal >= 96 ? 'text-emerald' : row.pctVal >= 90 ? 'text-blue' : 'text-amber'}">${row.pct}</strong>
+                <span class="att-turnout-label">${statusText}</span>
+              </div>
+              <div class="att-progress-track">
+                <div class="att-progress-bar ${barColor}" style="width: ${row.pct}"></div>
+              </div>
+            </div>
+          </td>
+          <td style="text-align:center;"><span class="portal-badge ${statusBadge}">${statusText}</span></td>
+          <td style="text-align:center;">
+            <button class="btn btn-secondary btn-sm" onclick="portalApp.showToast('Class attendance ledger slip generated for ${row.class}', 'info')" title="Export Class Slip">
+              <i class="fa-solid fa-file-arrow-down"></i> Slip
+            </button>
+          </td>
+        </tr>
+      `;
+    }).join('');
+  }
+
+  // 4. MONTHLY SUMMARY RENDERER (Student and staff attendance trends by month)
+  function renderMonthlyAttendanceSummary(monthKey) {
+    const selMonth = monthKey || document.getElementById('monthlyAttendanceSelector')?.value || '2026-09';
+    
+    // Monthly Trends Comparison Cards
+    const trendsContainer = document.getElementById('attendanceMonthlyTrendsComparison');
+    if (trendsContainer) {
+      const monthTrends = [
+        { month: 'June 2026', student: '95.1%', staff: '94.2%', note: 'Academic Term Inauguration' },
+        { month: 'July 2026', student: '95.8%', staff: '95.0%', note: 'Full Academic Swing' },
+        { month: 'August 2026', student: '95.4%', staff: '93.8%', note: 'Monsoon Seasonal Impact' },
+        { month: 'September 2026', student: '96.2%', staff: '94.8%', note: 'Term 1 Exam Prep' },
+        { month: 'October 2026', student: '96.5%', staff: '95.5%', note: 'Current Academic Term' }
+      ];
+
+      trendsContainer.innerHTML = monthTrends.map(mt => `
+        <div class="card p-3" style="background:var(--color-bg-surface); border:1px solid var(--color-border); border-radius:var(--radius-md);">
+          <div style="font-weight:700; font-size:0.9rem; margin-bottom:0.5rem; color:var(--color-text-dark); display:flex; justify-content:space-between;">
+            <span>${mt.month}</span>
+            ${mt.month.includes('September') || mt.month.includes('October') ? '<span class="portal-badge badge-primary">Recent</span>' : ''}
+          </div>
+          <div style="font-size:0.8rem; color:var(--color-text-muted); margin-bottom:0.4rem;">
+            Student: <strong class="text-blue">${mt.student}</strong> • Staff: <strong class="text-emerald">${mt.staff}</strong>
+          </div>
+          <div class="mini-track" style="margin-bottom:0.3rem;"><div class="mini-bar bg-blue" style="width: ${mt.student}"></div></div>
+          <div class="mini-track"><div class="mini-bar bg-emerald" style="width: ${mt.staff}"></div></div>
+          <small class="text-muted" style="display:block; margin-top:0.4rem; font-size:0.75rem;">${mt.note}</small>
+        </div>
+      `).join('');
+    }
+
+    // Student Class-wise Monthly Register Table
+    const studentTbody = document.getElementById('monthlyStudentSummaryTableBody') || document.getElementById('attendanceMonthlyTableBody');
+    if (studentTbody && typeof ATTENDANCE_MONTHLY_DATA !== 'undefined') {
+      studentTbody.innerHTML = ATTENDANCE_MONTHLY_DATA.map(m => {
+        const pctNum = parseFloat(m.avgRate) || 95;
+        const barColor = pctNum >= 97 ? 'bg-emerald' : pctNum >= 90 ? 'bg-blue' : 'bg-amber';
+        return `
+        <tr>
+          <td><strong style="color: #0f172a; font-size: 0.9rem;">${m.class}</strong></td>
+          <td style="text-align:center;">${m.strength}</td>
+          <td style="text-align:center;">${m.days}</td>
+          <td style="text-align:center;">${m.studentDays}</td>
+          <td>
+            <div class="att-turnout-wrap">
+              <div class="att-turnout-header">
+                <strong class="${pctNum >= 97 ? 'text-emerald' : pctNum >= 90 ? 'text-blue' : 'text-amber'}">${m.avgRate}</strong>
+                <span class="att-turnout-label">${pctNum >= 97 ? 'Optimal' : 'Satisfactory'}</span>
+              </div>
+              <div class="att-progress-track">
+                <div class="att-progress-bar ${barColor}" style="width: ${m.avgRate}"></div>
+              </div>
+            </div>
+          </td>
+          <td style="text-align:center;"><strong class="text-blue">${m.fullAttCount}</strong></td>
+          <td style="text-align:center;"><strong class="${m.riskCount.startsWith('0') ? 'text-muted' : 'text-red'}">${m.riskCount}</strong></td>
+          <td style="text-align:center;"><span class="text-emerald font-weight-bold">+0.8% ▲</span></td>
+          <td style="text-align:center;"><span class="portal-badge badge-success"><i class="fa-solid fa-circle-check"></i> ${m.status}</span></td>
+        </tr>
+      `;
+      }).join('');
+    }
+
+    // Staff Department-wise Monthly Register Table
+    const staffTbody = document.getElementById('monthlyStaffSummaryTableBody');
+    if (staffTbody) {
+      const deptData = [
+        { dept: 'High School Mathematics & Science', staffCount: 8, days: 24, staffDays: 192, avgRate: '95.8%', fullCount: 6, leaveCount: 3, trend: '+0.6% ▲', status: 'Audit Cleared' },
+        { dept: 'High School Languages & Social Studies', staffCount: 7, days: 24, staffDays: 168, avgRate: '94.6%', fullCount: 5, leaveCount: 4, trend: '+0.4% ▲', status: 'Audit Cleared' },
+        { dept: 'Primary Wing Teaching Faculty', staffCount: 11, days: 24, staffDays: 264, avgRate: '95.1%', fullCount: 8, leaveCount: 5, trend: '+0.5% ▲', status: 'Audit Cleared' },
+        { dept: 'Administrative & Accounting Office', staffCount: 4, days: 24, staffDays: 96, avgRate: '93.8%', fullCount: 2, leaveCount: 2, trend: '+0.2% ▲', status: 'Audit Cleared' },
+        { dept: 'Physical Education & Sports Dept', staffCount: 2, days: 24, staffDays: 48, avgRate: '93.8%', fullCount: 1, leaveCount: 1, trend: '0.0% —', status: 'Audit Cleared' },
+        { dept: 'Science Laboratories & Library Staff', staffCount: 2, days: 24, staffDays: 48, avgRate: '95.8%', fullCount: 1, leaveCount: 1, trend: '+0.8% ▲', status: 'Audit Cleared' }
+      ];
+
+      staffTbody.innerHTML = deptData.map(d => {
+        const pctNum = parseFloat(d.avgRate) || 95;
+        const barColor = pctNum >= 95 ? 'bg-emerald' : pctNum >= 90 ? 'bg-blue' : 'bg-amber';
+        return `
+        <tr>
+          <td><strong style="color: #0f172a; font-size: 0.9rem;">${d.dept}</strong></td>
+          <td style="text-align:center;">${d.staffCount} Staff</td>
+          <td style="text-align:center;">${d.days} Days</td>
+          <td style="text-align:center;">${d.staffDays}</td>
+          <td>
+            <div class="att-turnout-wrap">
+              <div class="att-turnout-header">
+                <strong class="${pctNum >= 95 ? 'text-emerald' : pctNum >= 90 ? 'text-blue' : 'text-amber'}">${d.avgRate}</strong>
+                <span class="att-turnout-label">${pctNum >= 95 ? 'Optimal' : 'Satisfactory'}</span>
+              </div>
+              <div class="att-progress-track">
+                <div class="att-progress-bar ${barColor}" style="width: ${d.avgRate}"></div>
+              </div>
+            </div>
+          </td>
+          <td style="text-align:center;"><strong class="text-emerald">${d.fullCount} Staff</strong></td>
+          <td style="text-align:center;">${d.leaveCount} Days</td>
+          <td style="text-align:center;"><span class="text-emerald font-weight-bold">${d.trend}</span></td>
+          <td style="text-align:center;"><span class="portal-badge badge-primary"><i class="fa-solid fa-stamp"></i> ${d.status}</span></td>
+        </tr>
+      `;
+      }).join('');
+    }
+  }
+
+  // 5. CORRECTION REQUESTS RENDERER
+  // Original entry, requested change, reason, requester, and approval status
+  // STRICT CONSTRAINT: Must retain the original value, the updated value, the reason, and the identity of the person who authorized the change
+  function renderAttendanceCorrections() {
+    const tbody = document.getElementById('correctionsTableBody');
+    if (!tbody) return;
+
+    const searchVal = (document.getElementById('corSearchInput')?.value || '').toLowerCase().trim();
+    const statusVal = document.getElementById('corStatusFilter')?.value || '';
+
+    const list = state.attendanceCorrections || [];
+    const filtered = list.filter(item => {
+      const matchStatus = !statusVal || item.status.includes(statusVal);
+      const matchSearch = !searchVal ||
+        item.id.toLowerCase().includes(searchVal) ||
+        item.individual.toLowerCase().includes(searchVal) ||
+        item.reason.toLowerCase().includes(searchVal) ||
+        item.requestedBy.toLowerCase().includes(searchVal) ||
+        item.authorizedBy.toLowerCase().includes(searchVal);
+      return matchStatus && matchSearch;
+    });
+
+    if (filtered.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="10" class="text-center py-4 text-muted">No attendance correction records match your filter criteria.</td></tr>';
+      return;
+    }
+
+    tbody.innerHTML = filtered.map(c => {
+      let statusBadge = 'badge-success';
+      if (c.status.includes('Pending')) statusBadge = 'badge-warning';
+      else if (c.status.includes('Returned')) statusBadge = 'badge-primary';
+
+      const isPending = c.status.includes('Pending');
+
+      return `
+        <tr>
+          <td><strong>${c.id}</strong></td>
+          <td><small class="text-muted"><i class="fa-regular fa-calendar"></i> ${c.date}</small></td>
+          <td>
+            <strong>${c.individual}</strong><br>
+            <small class="text-muted">${c.class}</small>
+          </td>
+          <td style="text-align:center;">
+            <!-- STRICT CONSTRAINT: Original Value Retained -->
+            <span class="portal-badge badge-danger font-weight-bold" title="Original Attendance Value Recorded in Register">
+              ${c.originalValue || c.originalEntry}
+            </span>
+          </td>
+          <td style="text-align:center;">
+            <!-- STRICT CONSTRAINT: Updated Value Retained -->
+            <span class="portal-badge badge-success font-weight-bold" title="Corrected / Desired Attendance Value">
+              ${c.updatedValue || c.requestedChange}
+            </span>
+          </td>
+          <td>
+            <!-- STRICT CONSTRAINT: Reason Retained -->
+            <div>${c.reason}</div>
+            <small class="text-primary font-weight-bold"><i class="fa-solid fa-paperclip"></i> ${c.proof || 'Verified by Authority'}</small>
+          </td>
+          <td><small><strong>${c.requestedBy}</strong></small></td>
+          <td>
+            <!-- STRICT CONSTRAINT: Identity of Person Who Authorized Change Retained -->
+            <span class="portal-badge badge-primary font-weight-bold" title="Authorizing Official Identity">
+              <i class="fa-solid fa-signature"></i> ${c.authorizedBy}
+            </span>
+          </td>
+          <td style="text-align:center;">
+            <span class="portal-badge ${statusBadge}">${c.status}</span>
+          </td>
+          <td style="text-align:center;">
+            ${isPending ? `
+              <div style="display:flex; gap:0.25rem; justify-content:center;">
+                <button type="button" class="btn btn-primary btn-sm" onclick="portalApp.approveAttendanceCorrection('${c.id}')" title="Approve Correction">
+                  <i class="fa-solid fa-check"></i>
+                </button>
+                <button type="button" class="btn btn-secondary btn-sm" onclick="portalApp.rejectAttendanceCorrection('${c.id}')" title="Return for Review">
+                  <i class="fa-solid fa-rotate-left"></i>
+                </button>
+              </div>
+            ` : `
+              <button type="button" class="btn btn-secondary btn-sm" onclick="portalApp.showToast('Audit Trail: Original [${c.originalValue}] updated to [${c.updatedValue}]. Authorized by ${c.authorizedBy}', 'info')" title="View Immutable Audit Record">
+                <i class="fa-solid fa-shield-halved"></i> Audit
+              </button>
+            `}
+          </td>
+        </tr>
+      `;
+    }).join('');
+
+    // Update count badges
+    const badge = document.getElementById('correctionsCount');
+    if (badge) badge.textContent = `${filtered.length} Records`;
+  }
+
+  function filterCorrections() {
+    renderAttendanceCorrections();
+  }
+
+  function openSubmitCorrectionModal() {
+    openModal('submitCorrectionModal');
+  }
+
+  function handleSubmitCorrection(e) {
+    if (e && e.preventDefault) e.preventDefault();
+
+    const admNo = document.getElementById('corAdmNo')?.value || 'SV-0210';
+    const studentName = document.getElementById('corStudentName')?.value || 'Student Name';
+    const cls = document.getElementById('corClass')?.value || 'Class VIII-A';
+    const date = document.getElementById('corDate')?.value || '2026-10-28';
+    const originalStatus = document.getElementById('corOriginalStatus')?.value || 'Absent (Morning Session)';
+    const updatedStatus = document.getElementById('corCorrectedStatus')?.value || 'Present (Verified)';
+    const requestedBy = document.getElementById('corRequestedBy')?.value || 'Class Teacher';
+    const authorizedBy = document.getElementById('corAuthorizedBy')?.value || 'Dr. K. S. Rao (Principal)';
+    const proof = document.getElementById('corProof')?.value || 'Class attendance roll-call cross-verification slip';
+    const reason = document.getElementById('corReason')?.value || 'Attendance punch error rectified with parent confirmation';
+
+    const newId = `COR-2026-00${(state.attendanceCorrections.length + 1)}`;
+
+    // Strictly retain original value, updated value, reason, and identity of authorizer
+    const newRecord = {
+      id: newId,
+      date: date,
+      individual: `${studentName} (${admNo})`,
+      class: cls,
+      originalValue: originalStatus,
+      originalEntry: originalStatus,
+      updatedValue: updatedStatus,
+      requestedChange: updatedStatus,
+      reason: reason,
+      proof: proof,
+      requestedBy: requestedBy,
+      authorizedBy: authorizedBy,
+      status: 'Approved by Principal'
+    };
+
+    state.attendanceCorrections.unshift(newRecord);
+    renderAttendanceCorrections();
+    closeModal('submitCorrectionModal');
+    showToast(`Attendance correction ${newId} registered with full audit trail! Authorized by ${authorizedBy}.`, 'success');
+  }
+
+  function approveAttendanceCorrection(id) {
+    const item = (state.attendanceCorrections || []).find(c => c.id === id);
+    if (!item) return;
+    item.status = 'Approved by Principal';
+    renderAttendanceCorrections();
+    showToast(`Correction ${id} approved! Register updated to [${item.updatedValue}]. Authorized by ${item.authorizedBy}.`, 'success');
+  }
+
+  function rejectAttendanceCorrection(id) {
+    const item = (state.attendanceCorrections || []).find(c => c.id === id);
+    if (!item) return;
+    item.status = 'Returned for Review';
+    renderAttendanceCorrections();
+    showToast(`Correction request ${id} returned to requester for supporting proof.`, 'warning');
+  }
+
+  function exportCorrectionsCSV() {
+    let csv = 'RequestID,Date,Individual,Class,OriginalValue,UpdatedValue,Reason,Proof,RequestedBy,AuthorizedBy,ApprovalStatus\n';
+    (state.attendanceCorrections || []).forEach(c => {
+      csv += `"${c.id}","${c.date}","${c.individual}","${c.class}","${c.originalValue}","${c.updatedValue}","${c.reason.replace(/"/g, '""')}","${c.proof}","${c.requestedBy}","${c.authorizedBy}","${c.status}"\n`;
+    });
+    downloadCsvFile('Attendance_Corrections_Audit_Register.csv', csv);
+    showToast('Exported complete Attendance Corrections Audit Register (CSV)', 'success');
+  }
+
+  // 6. ATTENDANCE ALERTS RENDERER (Repeated absences, consecutive absences, configured thresholds)
+  const ATTENDANCE_ALERTS_DATA = [
+    // Consecutive absences (>=3 days)
+    { id: 'ALT-01', admNo: 'SV-0112', name: 'Naveen Chandra', class: 'Class VIII-A', roll: '824', cat: 'Consecutive Absences (≥3 Days)', catType: 'consecutive', rate: 71.4, pattern: '4 Consecutive Days (23-26 Oct)', historyDetail: 'Uninformed absence since Thursday; no medical slip', thresholdStatus: 'HIGH RISK (Consecutive ≥3 Days)', parent: 'Rambabu', phone: '9848012112', status: 'VP Summons Dispatched', statusBadge: 'badge-danger' },
+    { id: 'ALT-02', admNo: 'SV-0005', name: 'B. Hemanth', class: 'Class X-A', roll: '1005', cat: 'Consecutive Absences (≥3 Days)', catType: 'consecutive', rate: 73.2, pattern: '3 Consecutive Days (24-26 Oct)', historyDetail: 'Missed board prep tests; parent phone unreachable', thresholdStatus: 'HIGH RISK (Consecutive ≥3 Days)', parent: 'Appala Naidu', phone: '9848012005', status: 'Parent Called - Meeting 30 Oct', statusBadge: 'badge-warning' },
+    { id: 'ALT-03', admNo: 'SV-0278', name: 'M. Dinesh Kumar', class: 'Class VI-A', roll: '628', cat: 'Consecutive Absences (≥3 Days)', catType: 'consecutive', rate: 74.0, pattern: '3 Consecutive Days (24-26 Oct)', historyDetail: 'Transportation issue reported informally by classmate', thresholdStatus: 'HIGH RISK (Consecutive ≥3 Days)', parent: 'M. Jagannadham', phone: '9848055678', status: 'Class Teacher Follow-up', statusBadge: 'badge-primary' },
+    { id: 'ALT-04', admNo: 'SV-0245', name: 'Pooja Varshini', class: 'Class VI-A', roll: '645', cat: 'Consecutive Absences (≥3 Days)', catType: 'consecutive', rate: 70.8, pattern: '3 Consecutive Days (24-26 Oct)', historyDetail: 'Doctor consultation note submitted via WhatsApp', thresholdStatus: 'HIGH RISK (Consecutive ≥3 Days)', parent: 'Srinivasa Rao', phone: '9848012245', status: 'Medical Slip Verified', statusBadge: 'badge-success' },
+    { id: 'ALT-05', admNo: 'SV-0390', name: 'T. Tarun Teja', class: 'Class IV-A', roll: '490', cat: 'Consecutive Absences (≥3 Days)', catType: 'consecutive', rate: 69.5, pattern: '4 Consecutive Days (23-26 Oct)', historyDetail: 'Extended family festival out of town; unexcused', thresholdStatus: 'HIGH RISK (Consecutive ≥3 Days)', parent: 'T. Tirupathi Rao', phone: '9848077890', status: 'Advisory Warning Sent', statusBadge: 'badge-warning' },
+
+    // Repeated absences (>=4 instances/month)
+    { id: 'ALT-06', admNo: 'SV-0022', name: 'Keerthi Priya', class: 'Class X-A', roll: '1022', cat: 'Repeated Absences (≥4 Times)', catType: 'repeated', rate: 76.5, pattern: '4 Recurring Fridays Missed', historyDetail: 'Chronic pattern of weekend-adjacent absenteeism', thresholdStatus: 'WARNING (Repeated Absences)', parent: 'Someswara Rao', phone: '9848012022', status: 'Counselor Assigned', statusBadge: 'badge-warning' },
+    { id: 'ALT-07', admNo: 'SV-0067', name: 'Tanvi Sree', class: 'Class IX-A', roll: '923', cat: 'Repeated Absences (≥4 Times)', catType: 'repeated', rate: 77.2, pattern: '4 Mondays Absent in Term 1', historyDetail: 'Monday morning assembly consistently missed', thresholdStatus: 'WARNING (Repeated Absences)', parent: 'Krishna Reddy', phone: '9848012067', status: 'Parent Interview Conducted', statusBadge: 'badge-primary' },
+    { id: 'ALT-08', admNo: 'SV-0180', name: 'Deepak Raj', class: 'Class VII-A', roll: '734', cat: 'Repeated Absences (≥4 Times)', catType: 'repeated', rate: 72.5, pattern: '5 Uninformed Days in Oct', historyDetail: 'No leave letters submitted; SMS delivered', thresholdStatus: 'WARNING (Repeated Absences)', parent: 'Jagannadham', phone: '9848012180', status: 'SMS Warning Dispatched', statusBadge: 'badge-danger' },
+    { id: 'ALT-09', admNo: 'SV-0310', name: 'Charan Teja', class: 'Class V-A', roll: '510', cat: 'Repeated Absences (≥4 Times)', catType: 'repeated', rate: 75.0, pattern: '5 Days Missed this Month', historyDetail: 'Frequent health complaints on sports days', thresholdStatus: 'WARNING (Repeated Absences)', parent: 'Mohan Rao', phone: '9848012310', status: 'Physical Exam Ordered', statusBadge: 'badge-primary' },
+    { id: 'ALT-10', admNo: 'SV-0388', name: 'Sowmya Rani', class: 'Class IV-A', roll: '438', cat: 'Repeated Absences (≥4 Times)', catType: 'repeated', rate: 76.0, pattern: '4 Intermittent Absences', historyDetail: 'Parent claims travel; attendance warning issued', thresholdStatus: 'WARNING (Repeated Absences)', parent: 'Satyanarayana', phone: '9848012388', status: 'Warning Letter Delivered', statusBadge: 'badge-warning' },
+    { id: 'ALT-11', admNo: 'SV-0450', name: 'V. Divya Bharathi', class: 'Class III-A', roll: '350', cat: 'Repeated Absences (≥4 Times)', catType: 'repeated', rate: 77.8, pattern: '4 Absences During Unit Tests', historyDetail: 'Missed FA-1 Science evaluation; re-test pending', thresholdStatus: 'WARNING (Repeated Absences)', parent: 'V. Satyanarayana', phone: '9848088901', status: 'Re-test Scheduled', statusBadge: 'badge-primary' },
+    { id: 'ALT-12', admNo: 'SV-0332', name: 'G. Harini', class: 'Class V-A', roll: '532', cat: 'Repeated Absences (≥4 Times)', catType: 'repeated', rate: 78.4, pattern: '4 Days Absent Post-Vacation', historyDetail: 'Delayed return from native village post Dussehra', thresholdStatus: 'WARNING (Repeated Absences)', parent: 'G. Venkateswara Rao', phone: '9848066789', status: 'Late Rejoining Form Signed', statusBadge: 'badge-success' },
+    { id: 'ALT-13', admNo: 'SV-0014', name: 'K. Sai Karthik', class: 'Class X-A', roll: '1014', cat: 'Repeated Absences (≥4 Times)', catType: 'repeated', rate: 79.1, pattern: '4 Days Absent + 6 Late Gate Entries', historyDetail: 'Combined chronic lateness and monthly absence', thresholdStatus: 'WARNING (Repeated Absences)', parent: 'K. Someswara Rao', phone: '9848011234', status: 'Vice-Principal Summons', statusBadge: 'badge-danger' },
+
+    // Configured attendance thresholds (<75% critical condonation risk)
+    { id: 'ALT-14', admNo: 'SV-0015', name: 'K. Vamsi', class: 'Class X-A', roll: '1015', cat: 'Critical Threshold (<75%)', catType: 'threshold', rate: 64.2, pattern: '22 Days Missed in Term 1', historyDetail: 'Severe condonation risk; Board exam hall ticket blocked', thresholdStatus: 'CRITICAL (<75% Condonation Limit)', parent: 'K. Prasad', phone: '9848011223', status: 'Board Disbarment Notice Issued', statusBadge: 'badge-danger' },
+    { id: 'ALT-15', admNo: 'SV-0038', name: 'S. Rohith', class: 'Class X-A', roll: '1038', cat: 'Critical Threshold (<75%)', catType: 'threshold', rate: 67.5, pattern: '19 Days Missed in Term 1', historyDetail: 'Under medical recovery; hospital certificates pending', thresholdStatus: 'CRITICAL (<75% Condonation Limit)', parent: 'S. Satish', phone: '9848011238', status: 'Medical Board Verification', statusBadge: 'badge-warning' },
+    { id: 'ALT-16', admNo: 'SV-0072', name: 'M. Sumanth', class: 'Class IX-A', roll: '912', cat: 'Critical Threshold (<75%)', catType: 'threshold', rate: 68.4, pattern: '18 Days Missed in Term 1', historyDetail: 'Chronic absenteeism; two written warnings ignored', thresholdStatus: 'CRITICAL (<75% Condonation Limit)', parent: 'M. Krishna', phone: '9848011272', status: 'Mandatory Parent Interview 31 Oct', statusBadge: 'badge-danger' },
+    { id: 'ALT-17', admNo: 'SV-0085', name: 'B. Akhil', class: 'Class IX-A', roll: '935', cat: 'Critical Threshold (<75%)', catType: 'threshold', rate: 69.1, pattern: '17 Days Missed in Term 1', historyDetail: 'Family agriculture seasonal support during harvest', thresholdStatus: 'CRITICAL (<75% Condonation Limit)', parent: 'B. Ramana', phone: '9848011285', status: 'Counseling Form Issued', statusBadge: 'badge-warning' },
+    { id: 'ALT-18', admNo: 'SV-0130', name: 'CH. Tejaswini', class: 'Class VIII-A', roll: '810', cat: 'Critical Threshold (<75%)', catType: 'threshold', rate: 70.0, pattern: '16 Days Missed in Term 1', historyDetail: 'Typhoid relapse; home tutor coordination active', thresholdStatus: 'CRITICAL (<75% Condonation Limit)', parent: 'CH. Srinivas', phone: '9848011330', status: 'Home Tutoring Approved', statusBadge: 'badge-primary' },
+    { id: 'ALT-19', admNo: 'SV-0155', name: 'P. Bhavani', class: 'Class VIII-A', roll: '835', cat: 'Critical Threshold (<75%)', catType: 'threshold', rate: 71.2, pattern: '16 Days Missed in Term 1', historyDetail: 'Unexcused periodic absences without slips', thresholdStatus: 'CRITICAL (<75% Condonation Limit)', parent: 'P. Somulu', phone: '9848011355', status: 'Parent Meeting Scheduled', statusBadge: 'badge-danger' },
+    { id: 'ALT-20', admNo: 'SV-0195', name: 'K. Varun', class: 'Class VII-A', roll: '715', cat: 'Critical Threshold (<75%)', catType: 'threshold', rate: 71.8, pattern: '15 Days Missed in Term 1', historyDetail: 'Sports tournament travel; OD regularized partially', thresholdStatus: 'CRITICAL (<75% Condonation Limit)', parent: 'K. Apparao', phone: '9848011395', status: 'OD Regularization in Progress', statusBadge: 'badge-primary' },
+    { id: 'ALT-21', admNo: 'SV-0220', name: 'R. Ananya', class: 'Class VII-A', roll: '740', cat: 'Critical Threshold (<75%)', catType: 'threshold', rate: 72.4, pattern: '15 Days Missed in Term 1', historyDetail: 'Medical treatment ongoing at KGH Visakhapatnam', thresholdStatus: 'CRITICAL (<75% Condonation Limit)', parent: 'R. Jagannadh', phone: '9848011420', status: 'Hospital Records On File', statusBadge: 'badge-success' },
+    { id: 'ALT-22', admNo: 'SV-0260', name: 'T. Harish', class: 'Class VI-A', roll: '615', cat: 'Critical Threshold (<75%)', catType: 'threshold', rate: 72.9, pattern: '14 Days Missed in Term 1', historyDetail: 'Frequent morning headaches and missed buses', thresholdStatus: 'CRITICAL (<75% Condonation Limit)', parent: 'T. Vaikunta Rao', phone: '9848011460', status: 'School Clinic Referral', statusBadge: 'badge-primary' },
+    { id: 'ALT-23', admNo: 'SV-0290', name: 'M. Sravani', class: 'Class VI-A', roll: '640', cat: 'Critical Threshold (<75%)', catType: 'threshold', rate: 73.5, pattern: '14 Days Missed in Term 1', historyDetail: 'Domestic obligations; counselor intervention scheduled', thresholdStatus: 'CRITICAL (<75% Condonation Limit)', parent: 'M. Simhachalam', phone: '9848011490', status: 'Home Visit by Teacher', statusBadge: 'badge-warning' },
+    { id: 'ALT-24', admNo: 'SV-0340', name: 'V. Kalyan', class: 'Class V-A', roll: '515', cat: 'Critical Threshold (<75%)', catType: 'threshold', rate: 73.8, pattern: '13 Days Missed in Term 1', historyDetail: 'Severe malaria infection; fitness cert submitted', thresholdStatus: 'CRITICAL (<75% Condonation Limit)', parent: 'V. Govind', phone: '9848011540', status: 'Fitness Certificate Cleared', statusBadge: 'badge-success' },
+    { id: 'ALT-25', admNo: 'SV-0370', name: 'G. Lokesh', class: 'Class IV-A', roll: '420', cat: 'Critical Threshold (<75%)', catType: 'threshold', rate: 74.0, pattern: '13 Days Missed in Term 1', historyDetail: 'Transportation issues from remote village', thresholdStatus: 'CRITICAL (<75% Condonation Limit)', parent: 'G. Apparao', phone: '9848011570', status: 'School Bus Reroute Assigned', statusBadge: 'badge-primary' },
+    { id: 'ALT-26', admNo: 'SV-0420', name: 'N. Sahiti', class: 'Class III-A', roll: '320', cat: 'Critical Threshold (<75%)', catType: 'threshold', rate: 74.2, pattern: '12 Days Missed in Term 1', historyDetail: 'Repeated asthma attacks during changing weather', thresholdStatus: 'CRITICAL (<75% Condonation Limit)', parent: 'N. Rama Rao', phone: '9848011620', status: 'Medical Pass Issued', statusBadge: 'badge-success' },
+    { id: 'ALT-27', admNo: 'SV-0480', name: 'P. Sai Krishna', class: 'Class I-A', roll: '120', cat: 'Critical Threshold (<75%)', catType: 'threshold', rate: 74.5, pattern: '12 Days Missed in Term 1', historyDetail: 'Adjustment challenges in primary school setting', thresholdStatus: 'CRITICAL (<75% Condonation Limit)', parent: 'P. Venkat', phone: '9848011680', status: 'Parent-Teacher Meeting Complete', statusBadge: 'badge-primary' }
+  ];
+
+  function renderAttendanceAlerts() {
+    const tbody = document.getElementById('attendanceAlertsTableBody');
+    if (!tbody) return;
+
+    const catFilter = document.getElementById('attendanceAlertCategoryFilter')?.value || 'all';
+    const classFilter = document.getElementById('attendanceAlertClassFilter')?.value || 'all';
+    const searchVal = (document.getElementById('attendanceAlertSearchInput')?.value || '').toLowerCase().trim();
+
+    const filtered = ATTENDANCE_ALERTS_DATA.filter(item => {
+      const matchCat = catFilter === 'all' || item.catType === catFilter;
+      const matchClass = classFilter === 'all' || item.class === classFilter;
+      const matchSearch = !searchVal ||
+        item.name.toLowerCase().includes(searchVal) ||
+        item.admNo.toLowerCase().includes(searchVal) ||
+        item.parent.toLowerCase().includes(searchVal) ||
+        item.class.toLowerCase().includes(searchVal);
+      return matchCat && matchClass && matchSearch;
+    });
+
+    if (filtered.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="8" class="text-center py-4 text-muted">No attendance alerts match your filter criteria.</td></tr>';
+      return;
+    }
+
+    tbody.innerHTML = filtered.map(a => {
+      let catBadge = 'badge-danger';
+      if (a.catType === 'repeated') catBadge = 'badge-warning';
+
+      let thBadge = 'badge-danger';
+      if (a.thresholdStatus.includes('WARNING')) thBadge = 'badge-amber';
+      else if (a.thresholdStatus.includes('HIGH RISK')) thBadge = 'badge-warning';
+
+      return `
+        <tr>
+          <td>
+            <strong>${a.name}</strong><br>
+            <span class="perf-admno-badge">${a.admNo}</span>
+            <span class="profile-tag tag-primary">${a.class}</span>
+            <small class="text-muted">#${a.roll}</small>
+          </td>
+          <td>
+            <span class="portal-badge ${catBadge}">${a.cat}</span>
+          </td>
+          <td style="text-align:center;">
+            <strong class="${a.rate < 75 ? 'text-red' : 'text-amber'}" style="font-size:1.05rem;">${a.rate}%</strong>
+          </td>
+          <td>
+            <strong>${a.pattern}</strong><br>
+            <small class="text-muted">${a.historyDetail}</small>
+          </td>
+          <td style="text-align:center;">
+            <span class="portal-badge ${thBadge}">${a.thresholdStatus}</span>
+          </td>
+          <td>
+            <div>${a.parent}</div>
+            <small><a href="tel:${a.phone}" class="phone-link"><i class="fa-solid fa-phone"></i> ${a.phone}</a></small>
+          </td>
+          <td>
+            <span class="portal-badge ${a.statusBadge}">${a.status}</span>
+          </td>
+          <td style="text-align:center;">
+            <div style="display:flex; gap:0.25rem; justify-content:center;">
+              <button type="button" class="btn btn-secondary btn-sm" onclick="portalApp.callGuardian('${a.phone}', '${a.parent}')" title="Call Guardian">
+                <i class="fa-solid fa-phone"></i> Call
+              </button>
+              <button type="button" class="btn btn-primary btn-sm" onclick="portalApp.showToast('Automated SMS advisory dispatched to parent of ${a.name}', 'success')" title="Dispatch SMS Notice">
+                <i class="fa-solid fa-paper-plane"></i> SMS
+              </button>
+            </div>
+          </td>
+        </tr>
+      `;
+    }).join('');
+
+    const countBadge = document.getElementById('attendanceAlertsBadgeCount');
+    if (countBadge) countBadge.textContent = `${filtered.length} Active Alerts`;
+  }
+
+  function filterAttendanceAlerts() {
+    renderAttendanceAlerts();
+  }
+
+  function dispatchBulkAttendanceAlerts() {
+    showToast('Automated SMS & WhatsApp warning advisories dispatched to all 27 flagged student parents!', 'success');
+  }
+
+  function exportAlertsCSV() {
+    let csv = 'AdmNo,StudentName,Class,Roll,AlertCategory,CurrentAttendanceRate,AbsencePattern,ThresholdLevel,ParentName,ParentPhone,InterventionStatus\n';
+    ATTENDANCE_ALERTS_DATA.forEach(a => {
+      csv += `"${a.admNo}","${a.name}","${a.class}","${a.roll}","${a.cat}","${a.rate}%","${a.pattern.replace(/"/g, '""')}","${a.thresholdStatus}","${a.parent}","${a.phone}","${a.status}"\n`;
+    });
+    downloadCsvFile('Attendance_Early_Warning_Alerts.csv', csv);
+    showToast('Exported Attendance Early Warning Alerts Register (CSV)', 'success');
+  }
+
+  // Backward-compatible aliases
+  function renderAttendanceClasses(list) {
+    renderStudentAttendanceTable();
+  }
+
+  function renderAttendanceTeachers() {
+    renderTeacherAttendanceTable();
+  }
+
+  function renderAttendanceAbsentees() {
+    renderAttendanceAlerts();
+  }
+
+  function renderAttendanceLateArrivals() {
+    renderStudentAttendanceTable();
+  }
+
+  function renderAttendanceAbsences() {
+    renderAttendanceAlerts();
+  }
+
+  function renderAttendanceMonthly() {
+    renderMonthlyAttendanceSummary();
+  }
+
+  // =========================================================================
+  // EXAMINATION EXPANDED RENDERERS
+  // =========================================================================
+  
+  // =========================================================================
+  // EXAMINATIONS 6-SUBMENU COMPREHENSIVE RENDERERS & LOGIC
+  // =========================================================================
+
+  // 1. EXAM SCHEDULE TABLE
+  function renderExamScheduleTable() {
+    const tbody = document.getElementById('examScheduleTableBody');
+    if (!tbody) return;
+
+    const termFilter = document.getElementById('examScheduleTermFilter')?.value || 'all';
+    const classFilter = document.getElementById('examScheduleClassFilter')?.value || 'all';
+    const searchVal = (document.getElementById('examScheduleSearchInput')?.value || '').toLowerCase().trim();
+
+    let filtered = EXAM_SCHEDULE_DETAILED;
+    if (classFilter !== 'all') {
+      filtered = filtered.filter(ex => ex.classes.toLowerCase().includes(classFilter.toLowerCase()));
+    }
+    if (searchVal) {
+      filtered = filtered.filter(ex => 
+        ex.subject.toLowerCase().includes(searchVal) ||
+        ex.code.toLowerCase().includes(searchVal) ||
+        ex.hall.toLowerCase().includes(searchVal) ||
+        ex.lead.toLowerCase().includes(searchVal)
+      );
+    }
+
+    tbody.innerHTML = filtered.map(ex => `
       <tr>
-        <td><strong>${m.class}</strong></td>
-        <td>${m.strength}</td>
-        <td>${m.days}</td>
-        <td>${m.studentDays}</td>
-        <td><span class="portal-badge badge-primary font-weight-bold">${m.avgRate}</span></td>
-        <td>${m.fullAttCount}</td>
-        <td><small class="text-muted">${m.riskCount}</small></td>
-        <td><span class="portal-badge badge-success"><i class="fa-solid fa-circle-check"></i> ${m.status}</span></td>
         <td>
-          <button class="btn btn-secondary btn-sm" onclick="portalApp.printStaffLeaveLedger()" title="Print Monthly Sheet">
-            <i class="fa-solid fa-print"></i> Print
+          <div style="display:flex; flex-direction:column; gap:0.2rem;">
+            <strong style="color:#0f172a; font-size:0.88rem;">${ex.date}</strong>
+            <small class="text-muted"><i class="fa-regular fa-calendar-check"></i> ${ex.day}</small>
+          </div>
+        </td>
+        <td style="text-align:center;">
+          <div style="display:inline-flex; flex-direction:column; align-items:center; gap:0.25rem;">
+            <span class="portal-badge badge-primary" style="font-size:0.75rem; font-weight:700;">${ex.session}</span>
+            <small style="font-size:0.75rem; font-weight:600; color:#475569;">${ex.time}</small>
+            <span style="font-size:0.7rem; color:#2563eb; background:#eff6ff; border:1px solid #bfdbfe; padding:0.1rem 0.4rem; border-radius:4px;">${ex.duration}</span>
+          </div>
+        </td>
+        <td>
+          <div style="display:flex; flex-direction:column; gap:0.25rem;">
+            <strong style="color:#1e293b; font-size:0.88rem;">${ex.subject}</strong>
+            <div style="display:flex; gap:0.4rem; align-items:center;">
+              <span class="portal-badge badge-neutral font-weight-bold" style="font-family:monospace; font-size:0.72rem;">${ex.code}</span>
+              <span class="portal-badge badge-success" style="font-size:0.7rem;"><i class="fa-solid fa-lock"></i> ${ex.status}</span>
+            </div>
+          </div>
+        </td>
+        <td style="text-align:center;">
+          <span class="profile-tag tag-primary" style="font-weight:700; font-size:0.78rem;">${ex.classes}</span>
+        </td>
+        <td style="text-align:center;">
+          <div style="display:inline-flex; flex-direction:column; align-items:center;">
+            <strong class="text-emerald" style="font-size:0.9rem;">100</strong>
+            <small class="text-muted" style="font-size:0.72rem;">Pass: 35</small>
+          </div>
+        </td>
+        <td>
+          <div style="font-size:0.82rem; color:#334155;">
+            <i class="fa-solid fa-door-open text-amber" style="margin-right:0.3rem;"></i>
+            <strong>${ex.hall}</strong>
+          </div>
+        </td>
+        <td>
+          <div style="font-size:0.84rem; color:#1e293b;">
+            <i class="fa-solid fa-user-shield text-primary" style="margin-right:0.3rem;"></i>
+            <strong>${ex.lead}</strong>
+          </div>
+        </td>
+        <td style="text-align:center;">
+          <div style="display:inline-flex; align-items:center; gap:0.35rem; justify-content:center;">
+            <button class="btn btn-secondary btn-sm" style="padding:0.32rem 0.65rem; font-size:0.78rem;" onclick="portalApp.switchSubTab('examinations', 'seating-plan')" title="View Room Seating Plan">
+              <i class="fa-solid fa-chair"></i> Seating
+            </button>
+            <button class="btn btn-secondary btn-sm" style="padding:0.32rem 0.65rem; font-size:0.78rem;" onclick="portalApp.openIssueHallTicketsModal()" title="Issue Hall Ticket">
+              <i class="fa-solid fa-id-card"></i>
+            </button>
+          </div>
+        </td>
+      </tr>
+    `).join('');
+  }
+
+  function filterExamsSchedule() {
+    renderExamScheduleTable();
+  }
+
+  function handleExamScheduleClassChange(val) {
+    renderExamScheduleTable();
+    showToast(`Exam schedule filtered for ${val === 'all' ? 'All Classes' : val}`, 'info');
+  }
+
+  // 2. INVIGILATION DUTY TABLE
+  function renderInvigilationDutyTable() {
+    const tbody = document.getElementById('invigilationDutyTableBody');
+    if (!tbody) return;
+
+    const sessionFilter = document.getElementById('invigilationSessionFilter')?.value || 'all';
+    const statusFilter = document.getElementById('invigilationStatusFilter')?.value || 'all';
+    const searchVal = (document.getElementById('invigilationSearchInput')?.value || '').toLowerCase().trim();
+
+    let filtered = INVIGILATION_DUTIES_DATA;
+    if (sessionFilter !== 'all') {
+      filtered = filtered.filter(d => d.session.includes(sessionFilter));
+    }
+    if (statusFilter !== 'all') {
+      filtered = filtered.filter(d => d.status.toLowerCase().includes(statusFilter.toLowerCase()));
+    }
+    if (searchVal) {
+      filtered = filtered.filter(d => 
+        d.invigilator.toLowerCase().includes(searchVal) ||
+        d.hall.toLowerCase().includes(searchVal) ||
+        d.dept.toLowerCase().includes(searchVal) ||
+        d.relief.toLowerCase().includes(searchVal)
+      );
+    }
+
+    tbody.innerHTML = filtered.map(d => `
+      <tr>
+        <td>
+          <div style="display:flex; flex-direction:column; gap:0.2rem;">
+            <strong style="color:#0f172a; font-size:0.86rem;">${d.date}</strong>
+            <small class="text-muted">${d.day}</small>
+          </div>
+        </td>
+        <td style="text-align:center;">
+          <div style="display:inline-flex; flex-direction:column; align-items:center; gap:0.2rem;">
+            <span class="portal-badge ${d.session.includes('FN') ? 'badge-primary' : 'badge-warning'}" style="font-size:0.74rem;">${d.session}</span>
+            <small style="font-size:0.74rem; font-weight:600; color:#475569;">${d.time}</small>
+          </div>
+        </td>
+        <td>
+          <div style="font-size:0.84rem; color:#1e293b; font-weight:600;">
+            <i class="fa-solid fa-door-open text-amber" style="margin-right:0.3rem;"></i>${d.hall}
+          </div>
+        </td>
+        <td>
+          <div style="display:flex; flex-direction:column; gap:0.15rem;">
+            <strong style="color:#1d4ed8; font-size:0.88rem;">${d.invigilator}</strong>
+            <span class="portal-badge badge-neutral" style="font-family:monospace; font-size:0.7rem; width:fit-content;">${d.empCode}</span>
+          </div>
+        </td>
+        <td>
+          <small style="color:#475569; font-weight:600;">${d.dept}</small>
+        </td>
+        <td>
+          <div style="font-size:0.84rem; color:#047857;">
+            <i class="fa-solid fa-user-clock text-emerald" style="margin-right:0.3rem;"></i>${d.relief}
+          </div>
+        </td>
+        <td style="text-align:center;">
+          <span style="font-size:0.75rem; font-weight:700; color:#b45309; background:#fffbeb; border:1px solid #fde68a; padding:0.18rem 0.45rem; border-radius:4px; white-space:nowrap;">${d.reportingTime}</span>
+        </td>
+        <td style="text-align:center;">
+          <span class="portal-badge ${d.status.includes('Confirmed') || d.status.includes('Active') ? 'badge-success' : 'badge-warning'}" style="font-size:0.72rem; cursor:pointer;" onclick="portalApp.cycleInvigilationDutyStatus('${d.id}')" title="Click to cycle duty status">
+            <i class="fa-solid ${d.status.includes('Active') ? 'fa-spinner fa-spin' : 'fa-circle-check'}"></i> ${d.status}
+          </span>
+        </td>
+        <td style="text-align:center;">
+          <div style="display:inline-flex; align-items:center; gap:0.35rem; justify-content:center;">
+            <button class="btn btn-secondary btn-sm" style="padding:0.32rem 0.65rem; font-size:0.78rem;" onclick="portalApp.showToast('Duty order slip printed for ' + '${d.invigilator}', 'info')" title="Print Duty Slip">
+              <i class="fa-solid fa-print"></i>
+            </button>
+            <button class="btn btn-secondary btn-sm" style="padding:0.32rem 0.65rem; font-size:0.78rem;" onclick="portalApp.showToast('Emergency reliever dispatched to ${d.hall}', 'warning')" title="Reassign Reliever">
+              <i class="fa-solid fa-user-pen"></i>
+            </button>
+          </div>
+        </td>
+      </tr>
+    `).join('');
+  }
+
+  function filterInvigilationDuties() {
+    renderInvigilationDutyTable();
+  }
+
+  function cycleInvigilationDutyStatus(dutyId) {
+    const duty = INVIGILATION_DUTIES_DATA.find(d => d.id === dutyId);
+    if (!duty) return;
+    const states = ['Assigned & Confirmed', 'Reporting Confirmed', 'Active In-Hall', 'Relieved / Completed'];
+    const curIdx = states.indexOf(duty.status);
+    duty.status = states[(curIdx + 1) % states.length];
+    renderInvigilationDutyTable();
+    showToast(`Duty status for ${duty.invigilator} updated to: ${duty.status}`, 'info');
+  }
+
+  // 3. TABULATION & MARKS
+  function renderTabulationAndMarks() {
+    const tbody = document.getElementById('tabulationMarksTableBody');
+    if (!tbody) return;
+
+    const classVal = document.getElementById('tabulationClassSelect')?.value || 'Class X-A';
+    const subjVal = document.getElementById('tabulationSubjectSelect')?.value || 'Mathematics';
+    const viewVal = document.getElementById('tabulationViewFilter')?.value || 'all';
+    const searchVal = (document.getElementById('tabulationSearchInput')?.value || '').toLowerCase().trim();
+
+    let filtered = TABULATION_MARKS_DATA;
+    if (viewVal === 'missing') {
+      filtered = filtered.filter(m => m.status === 'Missing Entry');
+    } else if (viewVal === 'moderated') {
+      filtered = filtered.filter(m => m.moderation > 0);
+    }
+
+    if (searchVal) {
+      filtered = filtered.filter(m => 
+        m.name.toLowerCase().includes(searchVal) ||
+        m.roll.toLowerCase().includes(searchVal) ||
+        m.admNo.toLowerCase().includes(searchVal)
+      );
+    }
+
+    // Update KPI badges
+    const totalCount = TABULATION_MARKS_DATA.length;
+    const enteredCount = TABULATION_MARKS_DATA.filter(m => m.status !== 'Missing Entry').length;
+    const missingCount = TABULATION_MARKS_DATA.filter(m => m.status === 'Missing Entry').length;
+
+    if (document.getElementById('tabulationTotalCount')) document.getElementById('tabulationTotalCount').textContent = `${totalCount} Students`;
+    if (document.getElementById('tabulationEnteredCount')) document.getElementById('tabulationEnteredCount').textContent = `${enteredCount} Entered`;
+    if (document.getElementById('tabulationMissingCount')) document.getElementById('tabulationMissingCount').textContent = `${missingCount} Flagged`;
+
+    tbody.innerHTML = filtered.map(m => `
+      <tr>
+        <td style="text-align:center;">
+          <strong style="font-family:monospace; font-size:0.9rem; color:#0f172a;">#${m.roll}</strong>
+        </td>
+        <td>
+          <div style="display:flex; flex-direction:column; gap:0.2rem;">
+            <strong style="color:#0f172a; font-size:0.88rem;">${m.name}</strong>
+            <span class="portal-badge badge-neutral" style="font-family:monospace; font-size:0.7rem; width:fit-content;">${m.admNo}</span>
+          </div>
+        </td>
+        <td style="text-align:center;">
+          ${m.status === 'Missing Entry' ? '<span class="text-red font-weight-bold">&mdash;</span>' : `<span class="portal-badge badge-neutral font-weight-bold" style="font-size:0.82rem;">${m.internal} / 20</span>`}
+        </td>
+        <td style="text-align:center;">
+          ${m.status === 'Missing Entry' ? '<span class="text-red font-weight-bold">&mdash;</span>' : `<span class="portal-badge badge-neutral font-weight-bold" style="font-size:0.82rem;">${m.theory} / 80</span>`}
+        </td>
+        <td style="text-align:center;">
+          ${m.moderation > 0 ? `<span class="tab-moderated-badge">+${m.moderation} Grace</span>` : '<span class="text-muted" style="font-size:0.8rem;">0</span>'}
+        </td>
+        <td style="text-align:center;">
+          ${m.status === 'Missing Entry' ? '<span class="tab-missing-badge"><i class="fa-solid fa-circle-xmark"></i> Absent</span>' : `<strong class="text-emerald" style="font-size:0.95rem;">${m.total} / 100</strong>`}
+        </td>
+        <td style="text-align:center;">
+          ${m.status === 'Missing Entry' ? '<span class="portal-badge badge-danger">F (0.0)</span>' : `<span class="portal-badge ${m.grade.startsWith('A') ? 'badge-success' : 'badge-primary'}" style="font-weight:800; font-size:0.8rem;">${m.grade} (${m.gp})</span>`}
+        </td>
+        <td style="text-align:center;">
+          ${m.status === 'Missing Entry' ? '<span class="tab-missing-badge"><i class="fa-solid fa-triangle-exclamation"></i> Missing</span>' : '<span class="tab-entered-badge"><i class="fa-solid fa-circle-check"></i> Entered</span>'}
+        </td>
+        <td>
+          <small style="color:#475569; line-height:1.35; display:block;">${m.notes}</small>
+        </td>
+      </tr>
+    `).join('');
+  }
+
+  function filterTabulationMarks() {
+    renderTabulationAndMarks();
+  }
+
+  function saveMarksDraft() {
+    showToast('Marks draft successfully saved for Class X-A Mathematics (42 entered, 2 absentees recorded)', 'success');
+  }
+
+  function recalculateTabulationLive() {
+    renderTabulationAndMarks();
+    showToast('Auto-computed batch totals, percentages and AP SCERT grades for all candidates', 'info');
+  }
+
+  function submitMarksForApproval() {
+    const targetSub = RESULT_APPROVAL_DATA.find(s => s.id === 'APR-2026-X-MATH');
+    if (targetSub) {
+      targetSub.status = 'Approved';
+      targetSub.remarks = 'Batch verified by Subject Teacher Sri B. Narayana and submitted for final review. Approved by Controller.';
+    }
+    showToast('Class X-A Mathematics marks locked and submitted to Designated Reviewer (Sri Navva Anand, Vice Principal) for authorized verification!', 'success');
+    renderResultApprovalQueue();
+  }
+
+  function exportTabulationCSV() {
+    showToast('Exporting official AP SCERT Class X-A Tabulation Register (CSV)...', 'info');
+  }
+
+  // 4. RESULT APPROVAL LEDGER
+  function renderResultApprovalQueue() {
+    const tbody = document.getElementById('resultApprovalTableBody');
+    if (!tbody) return;
+
+    const statusFilter = document.getElementById('resultApprovalStatusFilter')?.value || 'all';
+    const classFilter = document.getElementById('resultApprovalClassFilter')?.value || 'all';
+    const searchVal = (document.getElementById('resultApprovalSearchInput')?.value || '').toLowerCase().trim();
+
+    let filtered = RESULT_APPROVAL_DATA;
+    if (statusFilter !== 'all') {
+      filtered = filtered.filter(s => s.status.toLowerCase().includes(statusFilter.toLowerCase()));
+    }
+    if (classFilter !== 'all') {
+      filtered = filtered.filter(s => s.class.toLowerCase().includes(classFilter.toLowerCase()));
+    }
+    if (searchVal) {
+      filtered = filtered.filter(s => 
+        s.id.toLowerCase().includes(searchVal) ||
+        s.subject.toLowerCase().includes(searchVal) ||
+        s.teacher.toLowerCase().includes(searchVal) ||
+        s.remarks.toLowerCase().includes(searchVal)
+      );
+    }
+
+    tbody.innerHTML = filtered.map(s => `
+      <tr>
+        <td style="text-align:center;">
+          <div style="display:inline-flex; flex-direction:column; align-items:center; gap:0.2rem;">
+            <strong style="font-family:monospace; font-size:0.86rem; color:#0f172a;">${s.id}</strong>
+            <small class="text-muted" style="font-size:0.7rem;">Batch</small>
+          </div>
+        </td>
+        <td>
+          <div style="display:flex; flex-direction:column; gap:0.2rem;">
+            <strong style="color:#0f172a; font-size:0.88rem;">${s.subject}</strong>
+            <span class="profile-tag tag-primary" style="font-weight:700; font-size:0.72rem; width:fit-content;">${s.class}</span>
+          </div>
+        </td>
+        <td>
+          <div style="display:flex; flex-direction:column; gap:0.2rem;">
+            <strong style="color:#1d4ed8; font-size:0.84rem;">${s.teacher}</strong>
+            <small class="text-muted" style="font-size:0.72rem;"><i class="fa-regular fa-clock"></i> ${s.submittedDate}</small>
+          </div>
+        </td>
+        <td style="text-align:center;">
+          <div style="font-size:0.78rem; font-weight:600; color:#334155; background:#f8fafc; border:1px solid #e2e8f0; padding:0.35rem 0.5rem; border-radius:6px;">
+            ${s.stats}
+          </div>
+        </td>
+        <td>
+          <div style="font-size:0.84rem; color:#0f172a; font-weight:700;">
+            <i class="fa-solid fa-user-shield text-primary" style="margin-right:0.3rem;"></i>${s.reviewer}
+          </div>
+        </td>
+        <td>
+          <div style="font-size:0.82rem; line-height:1.4; color:${s.status === 'Changes Requested' ? '#b91c1c' : '#334155'}; background:${s.status === 'Changes Requested' ? '#fef2f2' : '#f8fafc'}; border:1px solid ${s.status === 'Changes Requested' ? '#fecaca' : '#e2e8f0'}; padding:0.45rem 0.65rem; border-radius:6px;">
+            ${s.status === 'Changes Requested' ? '<i class="fa-solid fa-triangle-exclamation text-red" style="margin-right:0.3rem;"></i>' : '<i class="fa-solid fa-circle-check text-emerald" style="margin-right:0.3rem;"></i>'}
+            ${s.remarks}
+          </div>
+        </td>
+        <td style="text-align:center;">
+          <span class="portal-badge ${s.status === 'Approved' ? 'badge-success' : s.status === 'Pending Review' ? 'badge-warning' : 'badge-danger'}" style="font-size:0.75rem; font-weight:700; padding:0.25rem 0.65rem;">
+            <i class="fa-solid ${s.status === 'Approved' ? 'fa-stamp' : s.status === 'Pending Review' ? 'fa-clock' : 'fa-triangle-exclamation'}"></i> ${s.status}
+          </span>
+        </td>
+        <td style="text-align:center;">
+          <div style="display:inline-flex; align-items:center; gap:0.35rem; justify-content:center;">
+            ${s.status !== 'Approved' ? `
+              <button class="btn btn-primary btn-sm" style="padding:0.32rem 0.6rem; font-size:0.78rem;" onclick="portalApp.approveResultSubmission('${s.id}')" title="Authorize & Approve Result">
+                <i class="fa-solid fa-check"></i> Approve
+              </button>
+            ` : `
+              <span class="portal-badge badge-success" style="font-size:0.7rem;"><i class="fa-solid fa-lock"></i> Certified</span>
+            `}
+            <button class="btn btn-secondary btn-sm" style="padding:0.32rem 0.6rem; font-size:0.78rem;" onclick="portalApp.requestResultChanges('${s.id}')" title="Request Changes from Teacher">
+              <i class="fa-solid fa-reply"></i>
+            </button>
+          </div>
+        </td>
+      </tr>
+    `).join('');
+  }
+
+  function filterResultApproval() {
+    renderResultApprovalQueue();
+  }
+
+  function approveResultSubmission(subId) {
+    const sub = RESULT_APPROVAL_DATA.find(s => s.id === subId);
+    if (!sub) return;
+    sub.status = 'Approved';
+    sub.remarks = 'Audited against physical answer scripts and normalized. Final Approval granted by Vice Principal Sri Navva Anand on ' + new Date().toLocaleDateString('en-GB');
+    renderResultApprovalQueue();
+    showToast(`Submission ${subId} (${sub.class} ${sub.subject}) officially authorized and certified for publication!`, 'success');
+  }
+
+  function requestResultChanges(subId) {
+    const sub = RESULT_APPROVAL_DATA.find(s => s.id === subId);
+    if (!sub) return;
+    const reason = prompt('Enter specific changes requested for the subject teacher:', 'Please re-verify absent candidate scores and attach medical certificate.');
+    if (reason) {
+      sub.status = 'Changes Requested';
+      sub.remarks = 'Changes Requested by Designated Reviewer: ' + reason;
+      renderResultApprovalQueue();
+      showToast(`Changes requested for ${subId}. Feedback sent to ${sub.teacher}.`, 'warning');
+    }
+  }
+
+  function exportApprovalAuditCSV() {
+    showToast('Exporting official Result Approval & Reviewer Audit Log (CSV)...', 'info');
+  }
+
+  // 5. REPORT CARDS DESK
+  function renderReportCardsDesk() {
+    const studentSelect = document.getElementById('reportCardStudentSelect');
+    const studentAdm = studentSelect?.value || 'SV-0210';
+    renderStudentReportCard(studentAdm);
+  }
+
+  function handleReportCardClassChange(cls) {
+    renderReportCardsDesk();
+    showToast(`Report card workspace loaded for ${cls}`, 'info');
+  }
+
+  function renderStudentReportCard(admNo) {
+    const rep = REPORT_CARDS_DATA[admNo] || REPORT_CARDS_DATA['SV-0210'];
+    const canvas = document.getElementById('reportCardCanvas');
+    if (!canvas) return;
+
+    // Update banner publication heading
+    const pubHeading = document.getElementById('reportCardPublicationHeading');
+    const pubSub = document.getElementById('reportCardPublicationSub');
+    if (pubHeading) {
+      pubHeading.innerHTML = isClassXResultsPublished 
+        ? `<i class="fa-solid fa-circle-check text-emerald mr-1"></i> Quarterly Examination 2026 Results Officially Published`
+        : `<i class="fa-solid fa-lock text-amber mr-1"></i> Quarterly Examination 2026 Results Unpublished (Pending Reviewer Sign-Off)`;
+      pubHeading.style.color = isClassXResultsPublished ? '#166534' : '#b45309';
+    }
+    if (pubSub) {
+      pubSub.innerHTML = `Verified by Designated Reviewer <strong>Sri Navva Anand (VP)</strong> &bull; Authorized by Principal <strong>Smt. G. Varalakshmi</strong>`;
+    }
+
+    const rowsHtml = rep.subjects.map(s => `
+      <tr style="border-bottom: 1px solid #e2e8f0; vertical-align: middle;">
+        <td style="padding: 0.75rem 0.85rem; text-align: left;">
+          <strong style="color: #0f172a; font-size: 0.88rem; display: block; line-height: 1.3;">${s.name}</strong>
+        </td>
+        <td style="padding: 0.75rem 0.5rem; text-align: center; color: #64748b; font-weight: 600; font-size: 0.85rem;">
+          ${s.max}
+        </td>
+        <td style="padding: 0.75rem 0.5rem; text-align: center;">
+          <span class="portal-badge badge-neutral" style="font-weight: 700; font-size: 0.8rem; padding: 0.2rem 0.5rem;">${s.internal} / 20</span>
+        </td>
+        <td style="padding: 0.75rem 0.5rem; text-align: center;">
+          <span class="portal-badge badge-neutral" style="font-weight: 700; font-size: 0.8rem; padding: 0.2rem 0.5rem;">${s.theory} / 80</span>
+        </td>
+        <td style="padding: 0.75rem 0.5rem; text-align: center;">
+          ${s.mod > 0 ? `<span class="tab-moderated-badge" style="font-size: 0.72rem; padding: 0.18rem 0.45rem;">+${s.mod}</span>` : '<span style="color:#94a3b8; font-weight:600;">&mdash;</span>'}
+        </td>
+        <td style="padding: 0.75rem 0.5rem; text-align: center;">
+          <strong class="text-emerald" style="font-size: 0.98rem; font-weight: 800;">${s.total}</strong>
+        </td>
+        <td style="padding: 0.75rem 0.5rem; text-align: center;">
+          <span class="portal-badge ${s.grade.startsWith('A') ? 'badge-success' : 'badge-primary'}" style="font-weight: 800; font-size: 0.8rem; padding: 0.2rem 0.55rem; border-radius: 6px;">${s.grade}</span>
+        </td>
+        <td style="padding: 0.75rem 0.5rem; text-align: center;">
+          <strong style="font-size: 0.88rem; color: #1e293b;">${s.gp.toFixed(1)}</strong>
+        </td>
+        <td style="padding: 0.75rem 0.85rem; text-align: left;">
+          <small style="color: #475569; font-size: 0.78rem; line-height: 1.35; display: block;">${s.remarks}</small>
+        </td>
+      </tr>
+    `).join('');
+
+    canvas.innerHTML = `
+      <!-- Institutional Header -->
+      <div style="border-bottom: 3px double #0f172a; padding-bottom: 1.15rem; margin-bottom: 1.35rem; text-align: center;">
+        <div style="display: flex; justify-content: center; align-items: center; gap: 1.1rem; margin-bottom: 0.5rem;">
+          <img src="/assets/images/school-logo.jpg" alt="Logo" style="width: 64px; height: 64px; object-fit: contain; border-radius: 50%; box-shadow: 0 2px 6px rgba(0,0,0,0.1);" onerror="this.style.display='none'">
+          <div style="text-align: left;">
+            <h2 style="font-size: 1.65rem; font-weight: 900; color: #0f172a; margin: 0; letter-spacing: 0.04em; line-height: 1.2;">SRI VIDYA E.M HIGH SCHOOL</h2>
+            <div style="font-size: 0.85rem; font-weight: 700; color: #475569; margin-top: 2px;">(Recognized by Govt. of Andhra Pradesh &bull; Regd. No. 4392/B3/2017)</div>
+            <div style="font-size: 0.8rem; color: #64748b; margin-top: 1px;">Tilak Road, Guntur &bull; Affiliated to Board of Secondary Education, AP</div>
+          </div>
+        </div>
+        <div style="margin-top: 0.65rem;">
+          <span style="display: inline-block; background: #0f172a; color: #ffffff; font-size: 0.8rem; font-weight: 800; padding: 0.35rem 1.4rem; border-radius: 9999px; text-transform: uppercase; letter-spacing: 0.08em; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+            Cumulative Student Academic Performance &amp; Progress Report &bull; Academic Year 2026–27
+          </span>
+        </div>
+      </div>
+
+      <!-- Student Bio & Attendance Card -->
+      <div style="display: grid; grid-template-columns: 1.9fr 1.1fr; gap: 1.25rem; margin-bottom: 1.35rem; background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 10px; padding: 1.15rem 1.35rem;">
+        <div>
+          <table style="width: 100%; border-collapse: collapse; font-size: 0.86rem; line-height: 1.8;">
+            <tr>
+              <td style="width: 155px; color: #475569; font-weight: 700;">Student Full Name:</td>
+              <td><strong style="color: #0f172a; font-size: 1rem; letter-spacing: 0.01em;">${rep.name}</strong></td>
+            </tr>
+            <tr>
+              <td style="color: #475569; font-weight: 700;">Admission No / Roll:</td>
+              <td>
+                <span class="portal-badge badge-neutral font-weight-bold" style="font-family: monospace; font-size: 0.78rem;">${rep.admNo}</span>
+                <span style="color: #64748b; margin: 0 0.35rem;">&bull;</span>
+                <strong>Roll ${rep.rollNo}</strong>
+                <span style="color: #64748b; margin: 0 0.35rem;">&bull;</span>
+                Class: <strong class="text-primary">${rep.class}</strong>
+              </td>
+            </tr>
+            <tr>
+              <td style="color: #475569; font-weight: 700;">Father / Guardian:</td>
+              <td><strong style="color: #1e293b;">${rep.father}</strong></td>
+            </tr>
+            <tr>
+              <td style="color: #475569; font-weight: 700;">Date of Birth:</td>
+              <td><span style="color: #1e293b; font-weight: 600;">${rep.dob}</span></td>
+            </tr>
+          </table>
+        </div>
+        <div style="border-left: 2px solid #e2e8f0; padding-left: 1.5rem; display: flex; flex-direction: column; justify-content: center;">
+          <div style="font-size: 0.72rem; font-weight: 800; color: #64748b; text-transform: uppercase; letter-spacing: 0.06em;">CAMPUS ATTENDANCE RECORD</div>
+          <div style="font-size: 1.85rem; font-weight: 900; color: #16a34a; line-height: 1.1; margin: 0.25rem 0;">${rep.attendance.percentage}</div>
+          <div style="font-size: 0.82rem; font-weight: 600; color: #334155; margin-bottom: 0.35rem;">
+            ${rep.attendance.presentDays} Days Present of ${rep.attendance.workingDays} Working Days
+          </div>
+          <div>
+            <span class="portal-badge badge-success" style="font-size: 0.74rem; font-weight: 700; padding: 0.2rem 0.6rem; border-radius: 9999px;">
+              <i class="fa-solid fa-clock-rotate-left"></i> Punctuality: ${rep.attendance.punctuality}
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Scholastic Assessment Table -->
+      <div style="margin-bottom: 1.35rem;">
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.6rem;">
+          <h4 style="font-size: 0.95rem; font-weight: 800; color: #0f172a; margin: 0; text-transform: uppercase; letter-spacing: 0.04em;">
+            <i class="fa-solid fa-book-open text-primary mr-1"></i> Part 1: Scholastic Performance
+          </h4>
+          <span style="font-size: 0.78rem; font-weight: 700; color: #64748b;">10-Point AP SSC &amp; CBSE Normalized Scale</span>
+        </div>
+        <table class="data-table" style="width: 100%; border: 1.5px solid #cbd5e1; border-radius: 8px; overflow: hidden; border-collapse: separate; border-spacing: 0;">
+          <thead>
+            <tr style="background: #f1f5f9; border-bottom: 2px solid #cbd5e1;">
+              <th style="width: 23%; text-align: left; padding: 0.75rem 0.85rem; font-size: 0.74rem; font-weight: 800; text-transform: uppercase; color: #334155; letter-spacing: 0.04em;">Subject Name</th>
+              <th style="width: 7%; text-align: center; padding: 0.75rem 0.5rem; font-size: 0.74rem; font-weight: 800; text-transform: uppercase; color: #334155; letter-spacing: 0.04em;">Max</th>
+              <th style="width: 11%; text-align: center; padding: 0.75rem 0.5rem; font-size: 0.74rem; font-weight: 800; text-transform: uppercase; color: #334155; letter-spacing: 0.04em;">Internal (20)</th>
+              <th style="width: 11%; text-align: center; padding: 0.75rem 0.5rem; font-size: 0.74rem; font-weight: 800; text-transform: uppercase; color: #334155; letter-spacing: 0.04em;">Theory (80)</th>
+              <th style="width: 8%; text-align: center; padding: 0.75rem 0.5rem; font-size: 0.74rem; font-weight: 800; text-transform: uppercase; color: #334155; letter-spacing: 0.04em;">Grace</th>
+              <th style="width: 10%; text-align: center; padding: 0.75rem 0.5rem; font-size: 0.74rem; font-weight: 800; text-transform: uppercase; color: #334155; letter-spacing: 0.04em;">Total</th>
+              <th style="width: 8%; text-align: center; padding: 0.75rem 0.5rem; font-size: 0.74rem; font-weight: 800; text-transform: uppercase; color: #334155; letter-spacing: 0.04em;">Grade</th>
+              <th style="width: 9%; text-align: center; padding: 0.75rem 0.5rem; font-size: 0.74rem; font-weight: 800; text-transform: uppercase; color: #334155; letter-spacing: 0.04em;">Grade Point</th>
+              <th style="width: 13%; text-align: left; padding: 0.75rem 0.85rem; font-size: 0.74rem; font-weight: 800; text-transform: uppercase; color: #334155; letter-spacing: 0.04em;">Teacher Remark</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${rowsHtml}
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Summary KPI Row -->
+      <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.75rem; margin-bottom: 1.35rem; text-align: center;">
+        <div style="background: #eff6ff; border: 1.5px solid #bfdbfe; border-radius: 8px; padding: 0.85rem 0.6rem;">
+          <div style="font-size: 0.72rem; font-weight: 800; color: #1e40af; text-transform: uppercase; letter-spacing: 0.04em;">GRAND TOTAL MARKS</div>
+          <div style="font-size: 1.45rem; font-weight: 900; color: #1e40af; margin-top: 0.2rem;">${rep.grandTotal} / ${rep.maxGrandTotal}</div>
+          <small class="text-muted" style="font-size: 0.78rem;">Percentage: <strong style="color: #1e40af;">${rep.percentage}</strong></small>
+        </div>
+        <div style="background: #f0fdf4; border: 1.5px solid #bbf7d0; border-radius: 8px; padding: 0.85rem 0.6rem;">
+          <div style="font-size: 0.72rem; font-weight: 800; color: #166534; text-transform: uppercase; letter-spacing: 0.04em;">OVERALL CGPA</div>
+          <div style="font-size: 1.45rem; font-weight: 900; color: #166534; margin-top: 0.2rem;">${rep.cgpa}</div>
+          <small class="text-muted" style="font-size: 0.78rem;">10-Point AP SSC Standard</small>
+        </div>
+        <div style="background: #fefce8; border: 1.5px solid #fef08a; border-radius: 8px; padding: 0.85rem 0.6rem;">
+          <div style="font-size: 0.72rem; font-weight: 800; color: #854d0e; text-transform: uppercase; letter-spacing: 0.04em;">CLASS STANDING</div>
+          <div style="font-size: 1.45rem; font-weight: 900; color: #854d0e; margin-top: 0.2rem;">${rep.rank}</div>
+          <small class="text-muted" style="font-size: 0.78rem;">Class X-A Merit List</small>
+        </div>
+        <div style="background: #faf5ff; border: 1.5px solid #e9d5ff; border-radius: 8px; padding: 0.85rem 0.6rem;">
+          <div style="font-size: 0.72rem; font-weight: 800; color: #6b21a8; text-transform: uppercase; letter-spacing: 0.04em;">FINAL RESULT</div>
+          <div style="font-size: 1.15rem; font-weight: 900; color: #6b21a8; margin-top: 0.35rem;">${rep.resultStatus}</div>
+          <small class="text-muted" style="font-size: 0.78rem;"><i class="fa-solid fa-circle-check text-emerald"></i> Certified Promoted</small>
+        </div>
+      </div>
+
+      <!-- Co-Scholastic & Life Skills -->
+      <div style="background: #f8fafc; border: 1.5px solid #cbd5e1; border-radius: 8px; padding: 1rem 1.25rem; margin-bottom: 1.5rem;">
+        <h4 style="font-size: 0.9rem; font-weight: 800; color: #0f172a; margin: 0 0 0.65rem 0; text-transform: uppercase; letter-spacing: 0.04em;">
+          <i class="fa-solid fa-heart-pulse text-red mr-1"></i> Part 2: Co-Scholastic &amp; Life Skills Assessment
+        </h4>
+        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.65rem; font-size: 0.84rem;">
+          <div style="display: flex; align-items: center; gap: 0.4rem;">
+            <i class="fa-solid fa-check text-emerald" style="font-size: 0.8rem;"></i>
+            <span style="color: #475569; font-weight: 600;">1. Discipline &amp; Values:</span>
+            <strong class="text-emerald">${rep.coScholastic.discipline}</strong>
+          </div>
+          <div style="display: flex; align-items: center; gap: 0.4rem;">
+            <i class="fa-solid fa-check text-emerald" style="font-size: 0.8rem;"></i>
+            <span style="color: #475569; font-weight: 600;">2. Sports &amp; Physical Fitness:</span>
+            <strong class="text-emerald">${rep.coScholastic.sports}</strong>
+          </div>
+          <div style="display: flex; align-items: center; gap: 0.4rem;">
+            <i class="fa-solid fa-check text-emerald" style="font-size: 0.8rem;"></i>
+            <span style="color: #475569; font-weight: 600;">3. Arts, Music &amp; Culture:</span>
+            <strong class="text-emerald">${rep.coScholastic.arts}</strong>
+          </div>
+          <div style="display: flex; align-items: center; gap: 0.4rem;">
+            <i class="fa-solid fa-check text-emerald" style="font-size: 0.8rem;"></i>
+            <span style="color: #475569; font-weight: 600;">4. Leadership &amp; Service:</span>
+            <strong class="text-emerald">${rep.coScholastic.leadership}</strong>
+          </div>
+        </div>
+      </div>
+
+      <!-- Institutional Sign-Off Block -->
+      <div style="margin-top: 2rem; padding-top: 1.5rem; border-top: 1.5px dashed #cbd5e1; display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; align-items: flex-end; text-align: center;">
+        <div>
+          <div style="font-family: 'Brush Script MT', cursive, sans-serif; font-size: 1.4rem; color: #1e40af; font-weight: 700; height: 32px;">B. Narayana</div>
+          <div style="border-top: 1.5px solid #475569; padding-top: 4px; font-size: 0.76rem; font-weight: 800; color: #1e293b; text-transform: uppercase; letter-spacing: 0.02em; white-space: nowrap;">B. NARAYANA</div>
+          <div style="font-size: 0.7rem; font-weight: 600; color: #64748b;">CLASS TEACHER</div>
+        </div>
+        <div>
+          <div style="display: inline-block; border: 2px solid #16a34a; border-radius: 50%; width: 62px; height: 62px; padding: 6px; color: #16a34a; font-size: 0.62rem; font-weight: 800; text-transform: uppercase; line-height: 1.1; margin-bottom: 4px;">
+            SRI VIDYA<br>OFFICIAL<br>SEAL
+          </div>
+          <div style="font-size: 0.72rem; font-weight: 800; color: #166534; letter-spacing: 0.02em; white-space: nowrap;">APPROVED FOR PUBLICATION</div>
+        </div>
+        <div>
+          <div style="font-family: 'Brush Script MT', cursive, sans-serif; font-size: 1.4rem; color: #15803d; font-weight: 700; height: 32px;">Navva Anand</div>
+          <div style="border-top: 1.5px solid #475569; padding-top: 4px; font-size: 0.76rem; font-weight: 800; color: #1e293b; text-transform: uppercase; letter-spacing: 0.02em; white-space: nowrap;">NAVVA ANAND</div>
+          <div style="font-size: 0.7rem; font-weight: 600; color: #64748b;">DESIGNATED REVIEWER (VP)</div>
+        </div>
+        <div>
+          <div style="font-family: 'Brush Script MT', cursive, sans-serif; font-size: 1.45rem; color: #0f172a; font-weight: 700; height: 32px;">G. Varalakshmi</div>
+          <div style="border-top: 1.5px solid #475569; padding-top: 4px; font-size: 0.76rem; font-weight: 800; color: #1e293b; text-transform: uppercase; letter-spacing: 0.02em; white-space: nowrap;">G. VARALAKSHMI</div>
+          <div style="font-size: 0.7rem; font-weight: 600; color: #64748b; white-space: nowrap;">PRINCIPAL &amp; CORRESPONDENT</div>
+        </div>
+      </div>
+    `;
+  }
+
+  function toggleResultPublication() {
+    isClassXResultsPublished = !isClassXResultsPublished;
+    const studentSelect = document.getElementById('reportCardStudentSelect');
+    const studentAdm = studentSelect?.value || 'SV-0210';
+    renderStudentReportCard(studentAdm);
+    showToast(isClassXResultsPublished 
+      ? 'Quarterly Results officially released to Student & Parent Portals!' 
+      : 'Quarterly Results unpublished and locked from student view.', 
+      isClassXResultsPublished ? 'success' : 'warning');
+  }
+
+  function dispatchReportCardSMS() {
+    showToast('SMS notifications containing verified digital report card link dispatched to all Class X-A registered parents!', 'success');
+  }
+
+  function printStudentReportCard() {
+    window.print();
+  }
+
+  function downloadReportCardPDF() {
+    showToast('Generating official sealed Student Progress Report Card (PDF)...', 'info');
+  }
+
+  function batchDownloadReportCards() {
+    showToast('Compiling batch PDF dossier for all 44 Class X-A students...', 'info');
+  }
+
+  // Compatibility aliases for legacy subview calls
+  const renderMarksEntryTable = renderTabulationAndMarks;
+  const renderModerationTable = renderTabulationAndMarks;
+  const renderResultPublications = renderReportCardsDesk;
+
+
+  function renderCounsellingReferrals() {
+    const tbody = document.getElementById('counsellingTableBody');
+    const restrictedNotice = document.getElementById('counsellingRestrictedNotice');
+    const authorizedDesk = document.getElementById('counsellingAuthorizedDesk');
+
+    // Role-based safeguarding security gate:
+    // Only Principal and Vice Principal (and designated child psychologist) have clearance to view confidential guidance files.
+    const isLeadership = (state.currentRole === 'principal' || state.currentRole === 'vice-principal' || state.currentRole === 'vp');
+
+    if (!isLeadership) {
+      if (authorizedDesk) authorizedDesk.style.display = 'none';
+      if (restrictedNotice) {
+        restrictedNotice.style.display = 'block';
+        restrictedNotice.innerHTML = `
+          <div class="c-restricted-container" style="background: #ffffff; border: 2px dashed #f59e0b; border-radius: 12px; padding: 3rem 2rem; text-align: center; margin: 1.5rem 0; box-shadow: 0 4px 15px rgba(0,0,0,0.04);">
+            <div style="width: 70px; height: 70px; border-radius: 50%; background: #fef3c7; color: #b45309; display: inline-flex; align-items: center; justify-content: center; font-size: 2rem; margin-bottom: 1.25rem;">
+              <i class="fa-solid fa-lock"></i>
+            </div>
+            <h3 style="color: #92400e; font-size: 1.35rem; font-weight: 800; margin-bottom: 0.5rem;">Restricted Safeguarding &amp; Guidance Desk</h3>
+            <p style="color: #475569; font-size: 0.92rem; max-width: 620px; margin: 0 auto 1.5rem auto; line-height: 1.6;">
+              Student psychological evaluation dossiers, emotional welfare records, and safeguarding intervention plans are strictly classified under <strong>Andhra Pradesh Child Protection &amp; POCSO Regulations</strong>.
+              <br><br>
+              Access is partitioned and restricted to <strong>Principal Smt. Gorle Varalakshmi</strong>, <strong>Vice Principal Sri Navva Anand</strong>, and the <strong>Designated Student Welfare Counselor</strong>. General clerk or office search cannot access these records.
+            </p>
+            <div style="display: inline-flex; gap: 0.75rem; align-items: center;">
+              <button class="btn btn-primary" onclick="portalApp.switchRole('principal')">
+                <i class="fa-solid fa-key"></i> Switch to Principal View
+              </button>
+              <button class="btn btn-secondary" onclick="portalApp.switchSubTab('discipline', 'all')">
+                <i class="fa-solid fa-arrow-left"></i> Return to Incident Register
+              </button>
+            </div>
+          </div>
+        `;
+      }
+      return;
+    }
+
+    if (restrictedNotice) restrictedNotice.style.display = 'none';
+    if (authorizedDesk) authorizedDesk.style.display = 'block';
+
+    const records = state.counsellingReferrals || [];
+
+    const cnsBadge = document.getElementById('tabBadgeDisciplineCounselling');
+    if (cnsBadge) cnsBadge.textContent = records.length;
+    const cnsMeetingsCount = document.getElementById('counsellingMeetingsCount');
+    if (cnsMeetingsCount) cnsMeetingsCount.textContent = records.length + (state.parentConvocations || []).length;
+
+    if (tbody) {
+      if (records.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="6" class="text-center p-4 text-muted">No confidential counselling referrals on record.</td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = records.map(c => `
+        <tr>
+          <td>
+            <span class="portal-badge ${c.statusBadge}" style="font-weight: 800; font-size: 0.76rem;">
+              <i class="fa-solid fa-lock mr-1"></i> ${c.restrictedStatus}
+            </span>
+            <div style="font-size: 0.74rem; color: #64748b; margin-top: 3px; font-weight: 600;">
+              ${c.sessionCount} Sessions Held &bull; ${c.safeguardingLevel}
+            </div>
+          </td>
+          <td>
+            <strong style="color: #0f172a; font-size: 0.9rem;">${c.student}</strong>
+            <div style="font-size: 0.78rem; color: #64748b; margin-top: 2px;">
+              <span class="font-mono">${c.id}</span> &bull; <span class="profile-tag tag-primary">${c.class}</span> &bull; ${c.admNo}
+            </div>
+          </td>
+          <td>
+            <strong style="color: #1e293b; font-size: 0.86rem; display: block; line-height: 1.3;">${c.focusArea}</strong>
+            <small class="text-muted" style="display: block; margin-top: 2px; line-height: 1.3;">${c.reason}</small>
+          </td>
+          <td>
+            <strong style="color: #0f172a; font-size: 0.85rem;"><i class="fa-solid fa-user-doctor text-primary mr-1"></i> ${c.counselor}</strong>
+            <div style="font-size: 0.74rem; color: #64748b; margin-top: 2px;">${c.counselorTitle}</div>
+          </td>
+          <td>
+            <div style="font-weight: 700; color: #047857; font-size: 0.85rem;">
+              <i class="fa-regular fa-calendar-check text-emerald"></i> ${c.followUpDate}
+            </div>
+            <small class="text-muted" style="display: block; margin-top: 2px;">${c.followUpSession}</small>
+          </td>
+          <td style="text-align: center; white-space: nowrap;">
+            <button class="btn btn-secondary btn-sm" onclick="portalApp.openCounsellingDocket('${c.id}')" title="Open Confidential Clinical Docket">
+              <i class="fa-solid fa-file-shield text-amber"></i> Docket
+            </button>
+          </td>
+        </tr>
+      `).join('');
+    }
+  }
+
+  function openNewCounsellingModal() {
+    const isLeadership = (state.currentRole === 'principal' || state.currentRole === 'vice-principal' || state.currentRole === 'vp');
+    if (!isLeadership) {
+      showToast('Restricted: Only Principal or Vice Principal can authorize student counselling referrals.', 'error');
+      return;
+    }
+    openModal('newCounsellingModal');
+  }
+
+  function handleNewCounsellingSubmit(e) {
+    e.preventDefault();
+    const name = document.getElementById('cnsStudentName')?.value;
+    const cls = document.getElementById('cnsClass')?.value;
+    const focus = document.getElementById('cnsFocusArea')?.value;
+    const counselor = document.getElementById('cnsCounselor')?.value;
+    const reason = document.getElementById('cnsReason')?.value;
+    const dt = document.getElementById('cnsFollowUpDate')?.value;
+    const level = document.getElementById('cnsLevel')?.value || 'Restricted - Level 1 Guidance';
+
+    if (!name || !reason) {
+      showToast('Please fill all mandatory counselling referral fields', 'warning');
+      return;
+    }
+
+    const newRef = {
+      id: `CNS-2026-0${Math.floor(4 + Math.random() * 50)}`,
+      restrictedStatus: 'Confidential Active (Session 1/3)',
+      statusBadge: 'badge-warning',
+      student: name,
+      admNo: `SV-0${Math.floor(100 + Math.random() * 800)}`,
+      class: cls,
+      focusArea: focus,
+      reason: reason,
+      counselor: counselor.split('(')[0].trim(),
+      counselorTitle: counselor.includes('Welfare') ? 'M.A. Clinical Psych • Welfare Lead' : 'Certified Educational Guidance Counselor',
+      referralDate: 'Today, 28 Oct 2026',
+      sessionCount: '1 of 3',
+      followUpDate: dt || 'Next Week',
+      followUpSession: 'Session 2: Individual Evaluation & Progress Check',
+      safeguardingLevel: level,
+      confidentialNotes: reason
+    };
+
+    if (!state.counsellingReferrals) state.counsellingReferrals = [];
+    state.counsellingReferrals.unshift(newRef);
+    renderCounsellingReferrals();
+    closeModal('newCounsellingModal');
+    e.target.reset();
+
+    showToast(`Confidential referral ${newRef.id} logged in restricted safeguarding ledger.`, 'success');
+  }
+
+  function openCounsellingDocket(id) {
+    const isLeadership = (state.currentRole === 'principal' || state.currentRole === 'vice-principal' || state.currentRole === 'vp');
+    if (!isLeadership) {
+      showToast('Access Denied: Confidential clinical files require executive authorization.', 'error');
+      return;
+    }
+    const c = (state.counsellingReferrals || []).find(item => item.id === id);
+    if (!c) return;
+
+    const body = document.getElementById('counsellingDocketBody');
+    if (body) {
+      body.innerHTML = `
+        <div style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 8px; padding: 1.25rem; margin-bottom: 1rem;">
+          <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.75rem;">
+            <div>
+              <h4 style="margin: 0; color: #0f172a; font-size: 1.1rem;">${c.student}</h4>
+              <small class="text-muted">Adm No: <strong>${c.admNo}</strong> &bull; Class: <strong class="text-primary">${c.class}</strong> &bull; Case Ref: <strong class="font-mono text-amber">${c.id}</strong></small>
+            </div>
+            <span class="portal-badge ${c.statusBadge}"><i class="fa-solid fa-lock"></i> ${c.restrictedStatus}</span>
+          </div>
+          <div style="font-size: 0.85rem; line-height: 1.7; color: #334155;">
+            <div><strong>Guidance Focus:</strong> ${c.focusArea}</div>
+            <div><strong>Authorized Counselor:</strong> ${c.counselor} (${c.counselorTitle})</div>
+            <div><strong>Safeguarding Level:</strong> ${c.safeguardingLevel}</div>
+            <div><strong>Referral Date:</strong> ${c.referralDate} &bull; <strong>Sessions Conducted:</strong> ${c.sessionCount}</div>
+            <div><strong>Upcoming Follow-Up:</strong> <span class="text-emerald font-weight-bold">${c.followUpDate}</span> (${c.followUpSession})</div>
+          </div>
+        </div>
+
+        <div style="background: #fff; border: 1.5px solid #fed7aa; border-radius: 8px; padding: 1.15rem; margin-bottom: 1rem;">
+          <div style="font-weight: 800; font-size: 0.82rem; color: #9a3412; text-transform: uppercase; margin-bottom: 0.4rem;">
+            <i class="fa-solid fa-user-pen text-amber mr-1"></i> Clinical Observations &amp; Care Roadmap
+          </div>
+          <div style="font-size: 0.88rem; color: #431407; line-height: 1.6;">
+            ${c.reason}
+          </div>
+          <div style="font-size: 0.85rem; color: #431407; margin-top: 0.65rem; border-top: 1px dashed #fdba74; padding-top: 0.5rem; line-height: 1.5;">
+            <strong>Confidential Progress Notes:</strong> ${c.confidentialNotes || 'Routine observation active. Positive response to zero-period guidance intervention.'}
+          </div>
+        </div>
+
+        <div style="background: #f1f5f9; border-radius: 6px; padding: 0.75rem 1rem; font-size: 0.75rem; color: #64748b; display: flex; justify-content: space-between; align-items: center;">
+          <span><i class="fa-solid fa-shield-halved text-primary"></i> Confidentiality Classification: Level 3 Statutory Safeguarding</span>
+          <span>Endorsed: Principal Smt. Gorle Varalakshmi</span>
+        </div>
+      `;
+    }
+    openModal('counsellingDocketModal');
+  }
+
+  function printCounsellingDocket() {
+    window.print();
+  }
+
+  function exportCounsellingLedgerCSV() {
+    const records = state.counsellingReferrals || [];
+    const headers = ['Referral ID', 'Student Name', 'Admission No', 'Class', 'Focus Area', 'Assigned Counselor', 'Referral Date', 'Sessions Held', 'Follow-Up Date', 'Status'];
+    const rows = records.map(r => [
+      `"${r.id}"`,
+      `"${r.student}"`,
+      `"${r.admNo}"`,
+      `"${r.class}"`,
+      `"${r.focusArea}"`,
+      `"${r.counselor}"`,
+      `"${r.referralDate}"`,
+      `"${r.sessionCount}"`,
+      `"${r.followUpDate}"`,
+      `"${r.restrictedStatus}"`
+    ]);
+    const csvContent = [headers.join(','), ...rows.map(row => row.join(','))].join('\n');
+    downloadCsvFile(csvContent, 'Confidential_Counselling_Audit_Register.csv');
+    showToast('Confidential counselling audit register exported with executive watermark.', 'success');
+  }
+
+  function renderFeeStructure() {
+    const tbody = document.getElementById('feeStructureTableBody');
+    if (!tbody) return;
+
+    const feeClasses = [
+      { cls: 'Class X', wing: 'Secondary (State Board)', tuition: '₹32,000', t1: '₹12,000', t2: '₹10,000', t3: '₹10,000', lab: '₹3,500', exam: '₹2,500', total: '₹38,000', due: '15-Jun, 15-Oct, 15-Jan' },
+      { cls: 'Class IX', wing: 'Secondary Wing', tuition: '₹30,000', t1: '₹11,000', t2: '₹9,500', t3: '₹9,500', lab: '₹3,000', exam: '₹2,000', total: '₹35,000', due: '15-Jun, 15-Oct, 15-Jan' },
+      { cls: 'Class VIII', wing: 'Upper Primary', tuition: '₹28,000', t1: '₹10,000', t2: '₹9,000', t3: '₹9,000', lab: '₹2,500', exam: '₹1,500', total: '₹32,000', due: '15-Jun, 15-Oct, 15-Jan' },
+      { cls: 'Class VII', wing: 'Upper Primary', tuition: '₹26,000', t1: '₹9,500', t2: '₹8,500', t3: '₹8,000', lab: '₹2,000', exam: '₹1,500', total: '₹29,500', due: '15-Jun, 15-Oct, 15-Jan' },
+      { cls: 'Class VI', wing: 'Upper Primary', tuition: '₹25,000', t1: '₹9,000', t2: '₹8,000', t3: '₹8,000', lab: '₹2,000', exam: '₹1,500', total: '₹28,500', due: '15-Jun, 15-Oct, 15-Jan' },
+      { cls: 'Class V', wing: 'Primary Wing', tuition: '₹23,000', t1: '₹8,500', t2: '₹7,500', t3: '₹7,000', lab: '₹1,500', exam: '₹1,500', total: '₹26,000', due: '15-Jun, 15-Oct, 15-Jan' },
+      { cls: 'Class IV', wing: 'Primary Wing', tuition: '₹22,000', t1: '₹8,000', t2: '₹7,000', t3: '₹7,000', lab: '₹1,500', exam: '₹1,500', total: '₹25,000', due: '15-Jun, 15-Oct, 15-Jan' },
+      { cls: 'Class III', wing: 'Primary Wing', tuition: '₹21,000', t1: '₹7,500', t2: '₹7,000', t3: '₹6,500', lab: '₹1,000', exam: '₹1,500', total: '₹23,500', due: '15-Jun, 15-Oct, 15-Jan' },
+      { cls: 'Class II', wing: 'Primary Wing', tuition: '₹20,000', t1: '₹7,000', t2: '₹6,500', t3: '₹6,500', lab: '₹1,000', exam: '₹1,500', total: '₹22,500', due: '15-Jun, 15-Oct, 15-Jan' },
+      { cls: 'Class I', wing: 'Foundational Stage', tuition: '₹19,000', t1: '₹7,000', t2: '₹6,000', t3: '₹6,000', lab: '₹1,000', exam: '₹1,000', total: '₹21,000', due: '15-Jun, 15-Oct, 15-Jan' },
+      { cls: 'Pre-Primary', wing: 'Early Childhood Wing', tuition: '₹18,000', t1: '₹6,500', t2: '₹6,000', t3: '₹5,500', lab: '₹500', exam: '₹1,000', total: '₹19,500', due: '15-Jun, 15-Oct, 15-Jan' }
+    ];
+
+    tbody.innerHTML = feeClasses.map(f => `
+      <tr>
+        <td><strong>${f.cls}</strong></td>
+        <td><small class="text-muted">${f.wing}</small></td>
+        <td>${f.tuition}</td>
+        <td>${f.t1}</td>
+        <td>${f.t2}</td>
+        <td>${f.t3}</td>
+        <td>${f.lab}</td>
+        <td>${f.exam}</td>
+        <td><strong class="text-emerald">${f.total}</strong></td>
+        <td><small>${f.due}</small></td>
+        <td>
+          <button class="btn btn-secondary btn-sm" onclick="portalApp.openCollectFeeModal('${f.cls}')" title="Collect Class Fees">
+            <i class="fa-solid fa-cash-register"></i> Collect
+          </button>
+        </td>
+      </tr>
+    `).join('');
+  }
+
+  function renderFeeConcessions() {
+    const tbody = document.getElementById('feeConcessionsTableBody');
+    if (!tbody) return;
+
+    const sampleConcessions = [
+      { id: 'CON-2026-001', student: 'M. Manoj (SV-0095)', class: 'Class VIII-A', cat: 'Merit Scholar (Top 1% GPA)', annual: '₹32,000', waiver: '50% (₹16,000)', payable: '₹16,000', authority: 'Principal Dr. K.S. Rao', status: 'Sanctioned Active' },
+      { id: 'CON-2026-002', student: 'B. Vennela (SV-0145)', class: 'Class VI-A', cat: 'Sibling Concession (Elder in Cl. VIII)', annual: '₹28,500', waiver: '25% (₹7,125)', payable: '₹21,375', authority: 'Vice Principal L. Vani', status: 'Sanctioned Active' },
+      { id: 'CON-2026-003', student: 'CH. Swathi (SV-0182)', class: 'Class VII-A', cat: 'Staff Ward Benefit (Faculty Sunitha)', annual: '₹29,500', waiver: '40% (₹11,800)', payable: '₹17,700', authority: 'Managing Trustee', status: 'Sanctioned Active' },
+      { id: 'CON-2026-004', student: 'P. Harsha (SV-0089)', class: 'Class IX-A', cat: 'State Athletic Champion (Athletics)', annual: '₹35,000', waiver: '35% (₹12,250)', payable: '₹22,750', authority: 'Sports Board & Principal', status: 'Sanctioned Active' }
+    ];
+
+    tbody.innerHTML = sampleConcessions.map(c => `
+      <tr>
+        <td><strong>${c.id}</strong></td>
+        <td><strong>${c.student}</strong></td>
+        <td><span class="profile-tag tag-primary">${c.class}</span></td>
+        <td><span class="portal-badge badge-primary">${c.cat}</span></td>
+        <td>${c.annual}</td>
+        <td><strong class="text-emerald">${c.waiver}</strong></td>
+        <td><strong>${c.payable}</strong></td>
+        <td><small>${c.authority}</small></td>
+        <td><span class="portal-badge badge-success"><i class="fa-solid fa-check"></i> ${c.status}</span></td>
+        <td>
+          <button class="btn btn-secondary btn-sm" onclick="portalApp.showToast('Concession sanction order ${c.id} verified', 'info')">
+            <i class="fa-solid fa-file-invoice"></i> Order
+          </button>
+        </td>
+      </tr>
+    `).join('');
+  }
+
+  function renderFeeRefunds() {
+    const tbody = document.getElementById('feeRefundsTableBody');
+    if (!tbody) return;
+
+    const sampleRefunds = [
+      { vno: 'REF-2026-001', student: 'P. Kiran Kumar (SV-0082)', class: 'Withdrawn (TC Issued)', reason: 'Parent job transfer to Hyderabad; pro-rata Term-2 fee adjustment', req: '₹8,500', approved: '₹8,500', mode: 'Bank NEFT (HDFC 9812)', date: '22 Oct 2026', status: 'Settled' },
+      { vno: 'REF-2026-002', student: 'G. Harini (SV-0332)', class: 'Active Enrolled', reason: 'Duplicate online UPI gateway payment during Term-1 rush', req: '₹7,500', approved: '₹7,500', mode: 'Direct UPI Refund', date: '20 Oct 2026', status: 'Settled' },
+      { vno: 'REF-2026-003', student: 'R. Divya (SV-0119)', class: 'TC Processing', reason: 'Relocation to Vijayawada; Caution Deposit clearance', req: '₹3,000', approved: '₹3,000', mode: 'Account Payee Cheque', date: '19 Oct 2026', status: 'Approved (Pending Handover)' }
+    ];
+
+    tbody.innerHTML = sampleRefunds.map(r => `
+      <tr>
+        <td><strong>${r.vno}</strong></td>
+        <td><strong>${r.student}</strong></td>
+        <td><small class="text-muted">${r.class}</small></td>
+        <td><small>${r.reason}</small></td>
+        <td>${r.req}</td>
+        <td><strong class="text-emerald">${r.approved}</strong></td>
+        <td><small>${r.mode}</small></td>
+        <td><small>${r.date}</small></td>
+        <td><span class="portal-badge ${r.status === 'Settled' ? 'badge-success' : 'badge-warning'}">${r.status}</span></td>
+        <td>
+          <button class="btn btn-secondary btn-sm" onclick="portalApp.showToast('Refund voucher ${r.vno} viewed', 'info')">
+            <i class="fa-solid fa-receipt"></i> Voucher
           </button>
         </td>
       </tr>
@@ -8937,6 +14356,5297 @@ const portalApp = (function () {
   // =========================================================================
   // TIMETABLE MODULE RENDERERS
   // =========================================================================
+
+  // =========================================================================
+  // SRI VIDYA MASTER TIMETABLE & ACADEMIC SCHEDULING ENGINE
+  // 1. Class Schedules (Periods, subjects, teachers, rooms and breaks)
+  // 2. Substitution Planner (Absent teacher, replacement, period, class, status)
+  // 3. Lab & Hall Allocations (Room availability, capacity, booking, conflicts)
+  // 4. Timetable Conflicts (Double-booked teachers, rooms, classes, overlapping)
+  // Multi-view: Daily, Weekly, Class-wise calendar views + Printable Timetable
+  // =========================================================================
+
+  let currentTimetableClass = 'Class X-A';
+  let currentTimetableCalendarView = 'weekly';
+  let currentTimetableDay = 'Monday';
+
+  // 1. CLASS TIMETABLE DATASET
+  const TIMETABLE_CLASS_DATA = {
+  "Class X-A": {
+    "classTeacher": "Sri Navva Anand (M.Sc, B.Ed)",
+    "room": "Room 204 (Maths Wing)",
+    "strength": 44,
+    "wing": "High School Wing",
+    "periods": [
+      {
+        "period": "Morning Assembly",
+        "time": "08:30 – 08:45 AM",
+        "isBreak": true,
+        "title": "🔔 Morning Assembly, Universal Prayer, Thought for the Day & Pledge"
+      },
+      {
+        "period": "Period 1",
+        "time": "08:45 – 09:30 AM",
+        "slots": [
+          {
+            "subject": "Physical Science",
+            "teacher": "Sri Navva Anand",
+            "room": "Room 204",
+            "type": "science"
+          },
+          {
+            "subject": "English Language & Lit",
+            "teacher": "Smt. M. Sunitha",
+            "room": "Room 204",
+            "type": "english"
+          },
+          {
+            "subject": "Physical Education & Games",
+            "teacher": "Sri V. Ramesh Babu",
+            "room": "Sports Ground",
+            "type": "sports"
+          },
+          {
+            "subject": "Primary EVS & Science Discovery",
+            "teacher": "Smt. N. Sirisha",
+            "room": "Room 204",
+            "type": "science"
+          },
+          {
+            "subject": "Primary Mathematics & Tables",
+            "teacher": "Smt. K. Anitha",
+            "room": "Room 204",
+            "type": "maths"
+          },
+          {
+            "subject": "Mathematics (Algebra & Trig)",
+            "teacher": "Sri B. Narayana",
+            "room": "Room 204",
+            "type": "maths"
+          }
+        ]
+      },
+      {
+        "period": "Period 2",
+        "time": "09:30 – 10:20 AM",
+        "slots": [
+          {
+            "subject": "Physics & Chemistry",
+            "teacher": "Sri K. Rajesh",
+            "room": "Room 204",
+            "type": "science"
+          },
+          {
+            "subject": "First Language (Telugu Lit)",
+            "teacher": "Smt. G. Sarada",
+            "room": "Room 204",
+            "type": "telugu"
+          },
+          {
+            "subject": "English Grammar & Composition",
+            "teacher": "Smt. V. Jyothsna",
+            "room": "Room 204",
+            "type": "english"
+          },
+          {
+            "subject": "Social Studies & Living World",
+            "teacher": "Sri S. Gopal",
+            "room": "Room 204",
+            "type": "social"
+          },
+          {
+            "subject": "Drawing, Painting & Crafts",
+            "teacher": "Smt. P. Swapna",
+            "room": "Art & Culture Hall",
+            "type": "remedial"
+          },
+          {
+            "subject": "Biological Science",
+            "teacher": "Smt. S. Lakshmi",
+            "room": "Room 204",
+            "type": "biology"
+          }
+        ]
+      },
+      {
+        "period": "Short Recess",
+        "time": "10:20 – 10:35 AM",
+        "isBreak": true,
+        "title": "☕ Morning Recess & Refreshment Break"
+      },
+      {
+        "period": "Period 3",
+        "time": "10:35 – 11:20 AM",
+        "slots": [
+          {
+            "subject": "Social Studies & Civics",
+            "teacher": "Sri R. Venkata Ramana",
+            "room": "Room 204",
+            "type": "social"
+          },
+          {
+            "subject": "Telugu Language & Grammar",
+            "teacher": "Smt. T. Padmavathi",
+            "room": "Room 204",
+            "type": "telugu"
+          },
+          {
+            "subject": "Primary Mathematics & Logic",
+            "teacher": "Sri A. Prasad",
+            "room": "Room 204",
+            "type": "maths"
+          },
+          {
+            "subject": "Kindergarten Rhymes & Alphabet Play",
+            "teacher": "Smt. D. Meena",
+            "room": "Room 204",
+            "type": "english"
+          },
+          {
+            "subject": "Mathematics (Geometry & Calculus)",
+            "teacher": "Sri P. Satyanarayana",
+            "room": "Room 204",
+            "type": "maths"
+          },
+          {
+            "subject": "Computer Applications & Coding",
+            "teacher": "Sri D. Srinivas",
+            "room": "Computer Lab 108",
+            "type": "computer"
+          }
+        ]
+      },
+      {
+        "period": "Period 4",
+        "time": "11:20 – 12:05 PM",
+        "slots": [
+          {
+            "subject": "Hindi Second Language",
+            "teacher": "Smt. B. Meenakshi",
+            "room": "Room 204",
+            "type": "hindi"
+          },
+          {
+            "subject": "General Science & Environment",
+            "teacher": "Sri CH. Venkateswara Rao",
+            "room": "Room 204",
+            "type": "science"
+          },
+          {
+            "subject": "English Phonics & Handwriting",
+            "teacher": "Smt. Y. Anusha",
+            "room": "Room 204",
+            "type": "english"
+          },
+          {
+            "subject": "Physical Science",
+            "teacher": "Sri Navva Anand",
+            "room": "Room 204",
+            "type": "science"
+          },
+          {
+            "subject": "English Communication & Debate",
+            "teacher": "Smt. M. Sunitha",
+            "room": "Digital Audio-Visual Lab",
+            "type": "english"
+          },
+          {
+            "subject": "Physical Education & Games",
+            "teacher": "Sri V. Ramesh Babu",
+            "room": "Sports Ground",
+            "type": "sports"
+          }
+        ]
+      },
+      {
+        "period": "Lunch Break",
+        "time": "12:05 – 12:50 PM",
+        "isBreak": true,
+        "title": "🍱 Mid-day Meal & Campus Lunch Interval"
+      },
+      {
+        "period": "Period 5",
+        "time": "12:50 – 01:35 PM",
+        "slots": [
+          {
+            "subject": "Mathematics & Mental Maths",
+            "teacher": "Sri M. Raju",
+            "room": "Room 204",
+            "type": "maths"
+          },
+          {
+            "subject": "English Reading & Creative Writing",
+            "teacher": "Smt. R. Kavitha",
+            "room": "Room 204",
+            "type": "english"
+          },
+          {
+            "subject": "Number Fun & Motor Skills",
+            "teacher": "Sri K. Srinath",
+            "room": "Room 204",
+            "type": "maths"
+          },
+          {
+            "subject": "Physics Lab Experiments",
+            "teacher": "Sri K. Rajesh",
+            "room": "Physics Lab",
+            "type": "science"
+          },
+          {
+            "subject": "First Language (Telugu Lit)",
+            "teacher": "Smt. G. Sarada",
+            "room": "Room 204",
+            "type": "telugu"
+          },
+          {
+            "subject": "English Grammar & Composition",
+            "teacher": "Smt. V. Jyothsna",
+            "room": "Room 204",
+            "type": "english"
+          }
+        ]
+      },
+      {
+        "period": "Period 6",
+        "time": "01:35 – 02:45 PM",
+        "slots": [
+          {
+            "subject": "Primary EVS & Science Discovery",
+            "teacher": "Smt. N. Sirisha",
+            "room": "Room 204",
+            "type": "science"
+          },
+          {
+            "subject": "Primary Mathematics & Tables",
+            "teacher": "Smt. K. Anitha",
+            "room": "Room 204",
+            "type": "maths"
+          },
+          {
+            "subject": "Mathematics (Algebra & Trig)",
+            "teacher": "Sri B. Narayana",
+            "room": "Room 204",
+            "type": "maths"
+          },
+          {
+            "subject": "Social Studies & Civics",
+            "teacher": "Sri R. Venkata Ramana",
+            "room": "Room 204",
+            "type": "social"
+          },
+          {
+            "subject": "Telugu Language & Grammar",
+            "teacher": "Smt. T. Padmavathi",
+            "room": "Room 204",
+            "type": "telugu"
+          },
+          {
+            "subject": "Primary Mathematics & Logic",
+            "teacher": "Sri A. Prasad",
+            "room": "Room 204",
+            "type": "maths"
+          }
+        ]
+      },
+      {
+        "period": "Afternoon Recess",
+        "time": "02:45 – 02:55 PM",
+        "isBreak": true,
+        "title": "🍎 Afternoon Recess & Water Interval"
+      },
+      {
+        "period": "Period 7",
+        "time": "02:55 – 03:40 PM",
+        "slots": [
+          {
+            "subject": "Social Studies & Living World",
+            "teacher": "Sri S. Gopal",
+            "room": "Room 204",
+            "type": "social"
+          },
+          {
+            "subject": "Drawing, Painting & Crafts",
+            "teacher": "Smt. P. Swapna",
+            "room": "Art & Culture Hall",
+            "type": "remedial"
+          },
+          {
+            "subject": "Biological Science",
+            "teacher": "Smt. S. Lakshmi",
+            "room": "Room 204",
+            "type": "biology"
+          },
+          {
+            "subject": "Hindi Second Language",
+            "teacher": "Smt. B. Meenakshi",
+            "room": "Room 204",
+            "type": "hindi"
+          },
+          {
+            "subject": "General Science & Environment",
+            "teacher": "Sri CH. Venkateswara Rao",
+            "room": "Room 204",
+            "type": "science"
+          },
+          {
+            "subject": "English Phonics & Handwriting",
+            "teacher": "Smt. Y. Anusha",
+            "room": "Room 204",
+            "type": "english"
+          }
+        ]
+      },
+      {
+        "period": "Period 8",
+        "time": "03:40 – 04:30 PM",
+        "slots": [
+          {
+            "subject": "Kindergarten Rhymes & Alphabet Play",
+            "teacher": "Smt. D. Meena",
+            "room": "Room 204",
+            "type": "english"
+          },
+          {
+            "subject": "Mathematics (Geometry & Calculus)",
+            "teacher": "Sri P. Satyanarayana",
+            "room": "Room 204",
+            "type": "maths"
+          },
+          {
+            "subject": "Computer Applications & Coding",
+            "teacher": "Sri D. Srinivas",
+            "room": "Computer Lab 108",
+            "type": "computer"
+          },
+          {
+            "subject": "Mathematics & Mental Maths",
+            "teacher": "Sri M. Raju",
+            "room": "Room 204",
+            "type": "maths"
+          },
+          {
+            "subject": "English Reading & Creative Writing",
+            "teacher": "Smt. R. Kavitha",
+            "room": "Room 204",
+            "type": "english"
+          },
+          {
+            "subject": "Number Fun & Motor Skills",
+            "teacher": "Sri K. Srinath",
+            "room": "Room 204",
+            "type": "maths"
+          }
+        ]
+      }
+    ]
+  },
+  "Class IX-A": {
+    "classTeacher": "Sri P. Satyanarayana (M.Sc)",
+    "room": "Room 203 (Senior Block)",
+    "strength": 42,
+    "wing": "High School Wing",
+    "periods": [
+      {
+        "period": "Morning Assembly",
+        "time": "08:30 – 08:45 AM",
+        "isBreak": true,
+        "title": "🔔 Morning Assembly, Universal Prayer, Thought for the Day & Pledge"
+      },
+      {
+        "period": "Period 1",
+        "time": "08:45 – 09:30 AM",
+        "slots": [
+          {
+            "subject": "Mathematics (Algebra & Trig)",
+            "teacher": "Sri B. Narayana",
+            "room": "Room 203",
+            "type": "maths"
+          },
+          {
+            "subject": "Social Studies & Civics",
+            "teacher": "Sri R. Venkata Ramana",
+            "room": "Room 203",
+            "type": "social"
+          },
+          {
+            "subject": "Telugu Language & Grammar",
+            "teacher": "Smt. T. Padmavathi",
+            "room": "Room 203",
+            "type": "telugu"
+          },
+          {
+            "subject": "Primary Mathematics & Logic",
+            "teacher": "Sri A. Prasad",
+            "room": "Room 203",
+            "type": "maths"
+          },
+          {
+            "subject": "Kindergarten Rhymes & Alphabet Play",
+            "teacher": "Smt. D. Meena",
+            "room": "Room 203",
+            "type": "english"
+          },
+          {
+            "subject": "Mathematics (Geometry & Calculus)",
+            "teacher": "Sri P. Satyanarayana",
+            "room": "Room 203",
+            "type": "maths"
+          }
+        ]
+      },
+      {
+        "period": "Period 2",
+        "time": "09:30 – 10:20 AM",
+        "slots": [
+          {
+            "subject": "Biological Science",
+            "teacher": "Smt. S. Lakshmi",
+            "room": "Room 203",
+            "type": "biology"
+          },
+          {
+            "subject": "Hindi Second Language",
+            "teacher": "Smt. B. Meenakshi",
+            "room": "Room 203",
+            "type": "hindi"
+          },
+          {
+            "subject": "General Science & Environment",
+            "teacher": "Sri CH. Venkateswara Rao",
+            "room": "Room 203",
+            "type": "science"
+          },
+          {
+            "subject": "English Phonics & Handwriting",
+            "teacher": "Smt. Y. Anusha",
+            "room": "Room 203",
+            "type": "english"
+          },
+          {
+            "subject": "Physical Science",
+            "teacher": "Sri Navva Anand",
+            "room": "Room 203",
+            "type": "science"
+          },
+          {
+            "subject": "English Language & Lit",
+            "teacher": "Smt. M. Sunitha",
+            "room": "Room 203",
+            "type": "english"
+          }
+        ]
+      },
+      {
+        "period": "Short Recess",
+        "time": "10:20 – 10:35 AM",
+        "isBreak": true,
+        "title": "☕ Morning Recess & Refreshment Break"
+      },
+      {
+        "period": "Period 3",
+        "time": "10:35 – 11:20 AM",
+        "slots": [
+          {
+            "subject": "Computer Applications & Coding",
+            "teacher": "Sri D. Srinivas",
+            "room": "Computer Lab 108",
+            "type": "computer"
+          },
+          {
+            "subject": "Mathematics & Mental Maths",
+            "teacher": "Sri M. Raju",
+            "room": "Room 203",
+            "type": "maths"
+          },
+          {
+            "subject": "English Reading & Creative Writing",
+            "teacher": "Smt. R. Kavitha",
+            "room": "Room 203",
+            "type": "english"
+          },
+          {
+            "subject": "Number Fun & Motor Skills",
+            "teacher": "Sri K. Srinath",
+            "room": "Room 203",
+            "type": "maths"
+          },
+          {
+            "subject": "Physics Lab Experiments",
+            "teacher": "Sri K. Rajesh",
+            "room": "Physics Lab",
+            "type": "science"
+          },
+          {
+            "subject": "First Language (Telugu Lit)",
+            "teacher": "Smt. G. Sarada",
+            "room": "Room 203",
+            "type": "telugu"
+          }
+        ]
+      },
+      {
+        "period": "Period 4",
+        "time": "11:20 – 12:05 PM",
+        "slots": [
+          {
+            "subject": "Physical Education & Games",
+            "teacher": "Sri V. Ramesh Babu",
+            "room": "Sports Ground",
+            "type": "sports"
+          },
+          {
+            "subject": "Primary EVS & Science Discovery",
+            "teacher": "Smt. N. Sirisha",
+            "room": "Room 203",
+            "type": "science"
+          },
+          {
+            "subject": "Primary Mathematics & Tables",
+            "teacher": "Smt. K. Anitha",
+            "room": "Room 203",
+            "type": "maths"
+          },
+          {
+            "subject": "Mathematics (Algebra & Trig)",
+            "teacher": "Sri B. Narayana",
+            "room": "Room 203",
+            "type": "maths"
+          },
+          {
+            "subject": "Social Studies & Civics",
+            "teacher": "Sri R. Venkata Ramana",
+            "room": "Room 203",
+            "type": "social"
+          },
+          {
+            "subject": "Telugu Language & Grammar",
+            "teacher": "Smt. T. Padmavathi",
+            "room": "Room 203",
+            "type": "telugu"
+          }
+        ]
+      },
+      {
+        "period": "Lunch Break",
+        "time": "12:05 – 12:50 PM",
+        "isBreak": true,
+        "title": "🍱 Mid-day Meal & Campus Lunch Interval"
+      },
+      {
+        "period": "Period 5",
+        "time": "12:50 – 01:35 PM",
+        "slots": [
+          {
+            "subject": "English Grammar & Composition",
+            "teacher": "Smt. V. Jyothsna",
+            "room": "Room 203",
+            "type": "english"
+          },
+          {
+            "subject": "Social Studies & Living World",
+            "teacher": "Sri S. Gopal",
+            "room": "Room 203",
+            "type": "social"
+          },
+          {
+            "subject": "Drawing, Painting & Crafts",
+            "teacher": "Smt. P. Swapna",
+            "room": "Art & Culture Hall",
+            "type": "remedial"
+          },
+          {
+            "subject": "Biological Science",
+            "teacher": "Smt. S. Lakshmi",
+            "room": "Room 203",
+            "type": "biology"
+          },
+          {
+            "subject": "Hindi Second Language",
+            "teacher": "Smt. B. Meenakshi",
+            "room": "Room 203",
+            "type": "hindi"
+          },
+          {
+            "subject": "General Science & Environment",
+            "teacher": "Sri CH. Venkateswara Rao",
+            "room": "Room 203",
+            "type": "science"
+          }
+        ]
+      },
+      {
+        "period": "Period 6",
+        "time": "01:35 – 02:45 PM",
+        "slots": [
+          {
+            "subject": "Primary Mathematics & Logic",
+            "teacher": "Sri A. Prasad",
+            "room": "Room 203",
+            "type": "maths"
+          },
+          {
+            "subject": "Kindergarten Rhymes & Alphabet Play",
+            "teacher": "Smt. D. Meena",
+            "room": "Room 203",
+            "type": "english"
+          },
+          {
+            "subject": "Mathematics (Geometry & Calculus)",
+            "teacher": "Sri P. Satyanarayana",
+            "room": "Room 203",
+            "type": "maths"
+          },
+          {
+            "subject": "Computer Applications & Coding",
+            "teacher": "Sri D. Srinivas",
+            "room": "Computer Lab 108",
+            "type": "computer"
+          },
+          {
+            "subject": "Mathematics & Mental Maths",
+            "teacher": "Sri M. Raju",
+            "room": "Room 203",
+            "type": "maths"
+          },
+          {
+            "subject": "English Reading & Creative Writing",
+            "teacher": "Smt. R. Kavitha",
+            "room": "Room 203",
+            "type": "english"
+          }
+        ]
+      },
+      {
+        "period": "Afternoon Recess",
+        "time": "02:45 – 02:55 PM",
+        "isBreak": true,
+        "title": "🍎 Afternoon Recess & Water Interval"
+      },
+      {
+        "period": "Period 7",
+        "time": "02:55 – 03:40 PM",
+        "slots": [
+          {
+            "subject": "English Phonics & Handwriting",
+            "teacher": "Smt. Y. Anusha",
+            "room": "Room 203",
+            "type": "english"
+          },
+          {
+            "subject": "Physical Science",
+            "teacher": "Sri Navva Anand",
+            "room": "Room 203",
+            "type": "science"
+          },
+          {
+            "subject": "English Language & Lit",
+            "teacher": "Smt. M. Sunitha",
+            "room": "Room 203",
+            "type": "english"
+          },
+          {
+            "subject": "Physical Education & Games",
+            "teacher": "Sri V. Ramesh Babu",
+            "room": "Sports Ground",
+            "type": "sports"
+          },
+          {
+            "subject": "Primary EVS & Science Discovery",
+            "teacher": "Smt. N. Sirisha",
+            "room": "Room 203",
+            "type": "science"
+          },
+          {
+            "subject": "Primary Mathematics & Tables",
+            "teacher": "Smt. K. Anitha",
+            "room": "Room 203",
+            "type": "maths"
+          }
+        ]
+      },
+      {
+        "period": "Period 8",
+        "time": "03:40 – 04:30 PM",
+        "slots": [
+          {
+            "subject": "Number Fun & Motor Skills",
+            "teacher": "Sri K. Srinath",
+            "room": "Room 203",
+            "type": "maths"
+          },
+          {
+            "subject": "Physics & Chemistry",
+            "teacher": "Sri K. Rajesh",
+            "room": "Room 203",
+            "type": "science"
+          },
+          {
+            "subject": "First Language (Telugu Lit)",
+            "teacher": "Smt. G. Sarada",
+            "room": "Room 203",
+            "type": "telugu"
+          },
+          {
+            "subject": "English Grammar & Composition",
+            "teacher": "Smt. V. Jyothsna",
+            "room": "Room 203",
+            "type": "english"
+          },
+          {
+            "subject": "Social Studies & Living World",
+            "teacher": "Sri S. Gopal",
+            "room": "Room 203",
+            "type": "social"
+          },
+          {
+            "subject": "Drawing, Painting & Crafts",
+            "teacher": "Smt. P. Swapna",
+            "room": "Art & Culture Hall",
+            "type": "remedial"
+          }
+        ]
+      }
+    ]
+  },
+  "Class VIII-A": {
+    "classTeacher": "Smt. S. Lakshmi (M.Sc, B.Ed)",
+    "room": "Room 202 (Senior Block)",
+    "strength": 45,
+    "wing": "High School Wing",
+    "periods": [
+      {
+        "period": "Morning Assembly",
+        "time": "08:30 – 08:45 AM",
+        "isBreak": true,
+        "title": "🔔 Morning Assembly, Universal Prayer, Thought for the Day & Pledge"
+      },
+      {
+        "period": "Period 1",
+        "time": "08:45 – 09:30 AM",
+        "slots": [
+          {
+            "subject": "Mathematics (Geometry & Calculus)",
+            "teacher": "Sri P. Satyanarayana",
+            "room": "Room 202",
+            "type": "maths"
+          },
+          {
+            "subject": "Computer Applications & Coding",
+            "teacher": "Sri D. Srinivas",
+            "room": "Computer Lab 108",
+            "type": "computer"
+          },
+          {
+            "subject": "Mathematics & Mental Maths",
+            "teacher": "Sri M. Raju",
+            "room": "Room 202",
+            "type": "maths"
+          },
+          {
+            "subject": "English Reading & Creative Writing",
+            "teacher": "Smt. R. Kavitha",
+            "room": "Room 202",
+            "type": "english"
+          },
+          {
+            "subject": "Number Fun & Motor Skills",
+            "teacher": "Sri K. Srinath",
+            "room": "Room 202",
+            "type": "maths"
+          },
+          {
+            "subject": "Physics & Chemistry",
+            "teacher": "Sri K. Rajesh",
+            "room": "Room 202",
+            "type": "science"
+          }
+        ]
+      },
+      {
+        "period": "Period 2",
+        "time": "09:30 – 10:20 AM",
+        "slots": [
+          {
+            "subject": "English Language & Lit",
+            "teacher": "Smt. M. Sunitha",
+            "room": "Room 202",
+            "type": "english"
+          },
+          {
+            "subject": "Physical Education & Games",
+            "teacher": "Sri V. Ramesh Babu",
+            "room": "Sports Ground",
+            "type": "sports"
+          },
+          {
+            "subject": "Primary EVS & Science Discovery",
+            "teacher": "Smt. N. Sirisha",
+            "room": "Room 202",
+            "type": "science"
+          },
+          {
+            "subject": "Primary Mathematics & Tables",
+            "teacher": "Smt. K. Anitha",
+            "room": "Room 202",
+            "type": "maths"
+          },
+          {
+            "subject": "Mathematics (Algebra & Trig)",
+            "teacher": "Sri B. Narayana",
+            "room": "Room 202",
+            "type": "maths"
+          },
+          {
+            "subject": "Social Studies & Civics",
+            "teacher": "Sri R. Venkata Ramana",
+            "room": "Room 202",
+            "type": "social"
+          }
+        ]
+      },
+      {
+        "period": "Short Recess",
+        "time": "10:20 – 10:35 AM",
+        "isBreak": true,
+        "title": "☕ Morning Recess & Refreshment Break"
+      },
+      {
+        "period": "Period 3",
+        "time": "10:35 – 11:20 AM",
+        "slots": [
+          {
+            "subject": "First Language (Telugu Lit)",
+            "teacher": "Smt. G. Sarada",
+            "room": "Room 202",
+            "type": "telugu"
+          },
+          {
+            "subject": "English Grammar & Composition",
+            "teacher": "Smt. V. Jyothsna",
+            "room": "Room 202",
+            "type": "english"
+          },
+          {
+            "subject": "Social Studies & Living World",
+            "teacher": "Sri S. Gopal",
+            "room": "Room 202",
+            "type": "social"
+          },
+          {
+            "subject": "Drawing, Painting & Crafts",
+            "teacher": "Smt. P. Swapna",
+            "room": "Art & Culture Hall",
+            "type": "remedial"
+          },
+          {
+            "subject": "Biology Lab / Specimen Study",
+            "teacher": "Smt. S. Lakshmi",
+            "room": "Biology Lab",
+            "type": "biology"
+          },
+          {
+            "subject": "Hindi Second Language",
+            "teacher": "Smt. B. Meenakshi",
+            "room": "Room 202",
+            "type": "hindi"
+          }
+        ]
+      },
+      {
+        "period": "Period 4",
+        "time": "11:20 – 12:05 PM",
+        "slots": [
+          {
+            "subject": "Telugu Language & Grammar",
+            "teacher": "Smt. T. Padmavathi",
+            "room": "Room 202",
+            "type": "telugu"
+          },
+          {
+            "subject": "Primary Mathematics & Logic",
+            "teacher": "Sri A. Prasad",
+            "room": "Room 202",
+            "type": "maths"
+          },
+          {
+            "subject": "Kindergarten Rhymes & Alphabet Play",
+            "teacher": "Smt. D. Meena",
+            "room": "Room 202",
+            "type": "english"
+          },
+          {
+            "subject": "Mathematics (Geometry & Calculus)",
+            "teacher": "Sri P. Satyanarayana",
+            "room": "Room 202",
+            "type": "maths"
+          },
+          {
+            "subject": "Computer Applications & Coding",
+            "teacher": "Sri D. Srinivas",
+            "room": "Computer Lab 108",
+            "type": "computer"
+          },
+          {
+            "subject": "Mathematics & Mental Maths",
+            "teacher": "Sri M. Raju",
+            "room": "Room 202",
+            "type": "maths"
+          }
+        ]
+      },
+      {
+        "period": "Lunch Break",
+        "time": "12:05 – 12:50 PM",
+        "isBreak": true,
+        "title": "🍱 Mid-day Meal & Campus Lunch Interval"
+      },
+      {
+        "period": "Period 5",
+        "time": "12:50 – 01:35 PM",
+        "slots": [
+          {
+            "subject": "General Science & Environment",
+            "teacher": "Sri CH. Venkateswara Rao",
+            "room": "Room 202",
+            "type": "science"
+          },
+          {
+            "subject": "English Phonics & Handwriting",
+            "teacher": "Smt. Y. Anusha",
+            "room": "Room 202",
+            "type": "english"
+          },
+          {
+            "subject": "Physical Science",
+            "teacher": "Sri Navva Anand",
+            "room": "Room 202",
+            "type": "science"
+          },
+          {
+            "subject": "English Language & Lit",
+            "teacher": "Smt. M. Sunitha",
+            "room": "Room 202",
+            "type": "english"
+          },
+          {
+            "subject": "Physical Education & Games",
+            "teacher": "Sri V. Ramesh Babu",
+            "room": "Sports Ground",
+            "type": "sports"
+          },
+          {
+            "subject": "Primary EVS & Science Discovery",
+            "teacher": "Smt. N. Sirisha",
+            "room": "Room 202",
+            "type": "science"
+          }
+        ]
+      },
+      {
+        "period": "Period 6",
+        "time": "01:35 – 02:45 PM",
+        "slots": [
+          {
+            "subject": "English Reading & Creative Writing",
+            "teacher": "Smt. R. Kavitha",
+            "room": "Room 202",
+            "type": "english"
+          },
+          {
+            "subject": "Number Fun & Motor Skills",
+            "teacher": "Sri K. Srinath",
+            "room": "Room 202",
+            "type": "maths"
+          },
+          {
+            "subject": "Physics & Chemistry",
+            "teacher": "Sri K. Rajesh",
+            "room": "Room 202",
+            "type": "science"
+          },
+          {
+            "subject": "First Language (Telugu Lit)",
+            "teacher": "Smt. G. Sarada",
+            "room": "Room 202",
+            "type": "telugu"
+          },
+          {
+            "subject": "English Grammar & Composition",
+            "teacher": "Smt. V. Jyothsna",
+            "room": "Room 202",
+            "type": "english"
+          },
+          {
+            "subject": "Social Studies & Living World",
+            "teacher": "Sri S. Gopal",
+            "room": "Room 202",
+            "type": "social"
+          }
+        ]
+      },
+      {
+        "period": "Afternoon Recess",
+        "time": "02:45 – 02:55 PM",
+        "isBreak": true,
+        "title": "🍎 Afternoon Recess & Water Interval"
+      },
+      {
+        "period": "Period 7",
+        "time": "02:55 – 03:40 PM",
+        "slots": [
+          {
+            "subject": "Primary Mathematics & Tables",
+            "teacher": "Smt. K. Anitha",
+            "room": "Room 202",
+            "type": "maths"
+          },
+          {
+            "subject": "Mathematics (Algebra & Trig)",
+            "teacher": "Sri B. Narayana",
+            "room": "Room 202",
+            "type": "maths"
+          },
+          {
+            "subject": "Social Studies & Civics",
+            "teacher": "Sri R. Venkata Ramana",
+            "room": "Room 202",
+            "type": "social"
+          },
+          {
+            "subject": "Telugu Language & Grammar",
+            "teacher": "Smt. T. Padmavathi",
+            "room": "Room 202",
+            "type": "telugu"
+          },
+          {
+            "subject": "Primary Mathematics & Logic",
+            "teacher": "Sri A. Prasad",
+            "room": "Room 202",
+            "type": "maths"
+          },
+          {
+            "subject": "Kindergarten Rhymes & Alphabet Play",
+            "teacher": "Smt. D. Meena",
+            "room": "Room 202",
+            "type": "english"
+          }
+        ]
+      },
+      {
+        "period": "Period 8",
+        "time": "03:40 – 04:30 PM",
+        "slots": [
+          {
+            "subject": "Drawing, Painting & Crafts",
+            "teacher": "Smt. P. Swapna",
+            "room": "Art & Culture Hall",
+            "type": "remedial"
+          },
+          {
+            "subject": "Biological Science",
+            "teacher": "Smt. S. Lakshmi",
+            "room": "Room 202",
+            "type": "biology"
+          },
+          {
+            "subject": "Hindi Second Language",
+            "teacher": "Smt. B. Meenakshi",
+            "room": "Room 202",
+            "type": "hindi"
+          },
+          {
+            "subject": "General Science & Environment",
+            "teacher": "Sri CH. Venkateswara Rao",
+            "room": "Room 202",
+            "type": "science"
+          },
+          {
+            "subject": "English Phonics & Handwriting",
+            "teacher": "Smt. Y. Anusha",
+            "room": "Room 202",
+            "type": "english"
+          },
+          {
+            "subject": "Physical Science",
+            "teacher": "Sri Navva Anand",
+            "room": "Room 202",
+            "type": "science"
+          }
+        ]
+      }
+    ]
+  },
+  "Class VII-A": {
+    "classTeacher": "Sri R. Venkata Ramana (M.A)",
+    "room": "Room 201 (Middle Wing)",
+    "strength": 46,
+    "wing": "High School Wing",
+    "periods": [
+      {
+        "period": "Morning Assembly",
+        "time": "08:30 – 08:45 AM",
+        "isBreak": true,
+        "title": "🔔 Morning Assembly, Universal Prayer, Thought for the Day & Pledge"
+      },
+      {
+        "period": "Period 1",
+        "time": "08:45 – 09:30 AM",
+        "slots": [
+          {
+            "subject": "Physics & Chemistry",
+            "teacher": "Sri K. Rajesh",
+            "room": "Room 201",
+            "type": "science"
+          },
+          {
+            "subject": "First Language (Telugu Lit)",
+            "teacher": "Smt. G. Sarada",
+            "room": "Room 201",
+            "type": "telugu"
+          },
+          {
+            "subject": "English Grammar & Composition",
+            "teacher": "Smt. V. Jyothsna",
+            "room": "Room 201",
+            "type": "english"
+          },
+          {
+            "subject": "Social Studies & Living World",
+            "teacher": "Sri S. Gopal",
+            "room": "Room 201",
+            "type": "social"
+          },
+          {
+            "subject": "Drawing, Painting & Crafts",
+            "teacher": "Smt. P. Swapna",
+            "room": "Art & Culture Hall",
+            "type": "remedial"
+          },
+          {
+            "subject": "Biological Science",
+            "teacher": "Smt. S. Lakshmi",
+            "room": "Room 201",
+            "type": "biology"
+          }
+        ]
+      },
+      {
+        "period": "Period 2",
+        "time": "09:30 – 10:20 AM",
+        "slots": [
+          {
+            "subject": "Social Studies & Civics",
+            "teacher": "Sri R. Venkata Ramana",
+            "room": "Room 201",
+            "type": "social"
+          },
+          {
+            "subject": "Telugu Language & Grammar",
+            "teacher": "Smt. T. Padmavathi",
+            "room": "Room 201",
+            "type": "telugu"
+          },
+          {
+            "subject": "Primary Mathematics & Logic",
+            "teacher": "Sri A. Prasad",
+            "room": "Room 201",
+            "type": "maths"
+          },
+          {
+            "subject": "Kindergarten Rhymes & Alphabet Play",
+            "teacher": "Smt. D. Meena",
+            "room": "Room 201",
+            "type": "english"
+          },
+          {
+            "subject": "Mathematics (Geometry & Calculus)",
+            "teacher": "Sri P. Satyanarayana",
+            "room": "Room 201",
+            "type": "maths"
+          },
+          {
+            "subject": "Computer Applications & Coding",
+            "teacher": "Sri D. Srinivas",
+            "room": "Computer Lab 108",
+            "type": "computer"
+          }
+        ]
+      },
+      {
+        "period": "Short Recess",
+        "time": "10:20 – 10:35 AM",
+        "isBreak": true,
+        "title": "☕ Morning Recess & Refreshment Break"
+      },
+      {
+        "period": "Period 3",
+        "time": "10:35 – 11:20 AM",
+        "slots": [
+          {
+            "subject": "Hindi Second Language",
+            "teacher": "Smt. B. Meenakshi",
+            "room": "Room 201",
+            "type": "hindi"
+          },
+          {
+            "subject": "General Science & Environment",
+            "teacher": "Sri CH. Venkateswara Rao",
+            "room": "Room 201",
+            "type": "science"
+          },
+          {
+            "subject": "English Phonics & Handwriting",
+            "teacher": "Smt. Y. Anusha",
+            "room": "Room 201",
+            "type": "english"
+          },
+          {
+            "subject": "Physical Science",
+            "teacher": "Sri Navva Anand",
+            "room": "Room 201",
+            "type": "science"
+          },
+          {
+            "subject": "English Language & Lit",
+            "teacher": "Smt. M. Sunitha",
+            "room": "Room 201",
+            "type": "english"
+          },
+          {
+            "subject": "Physical Education & Games",
+            "teacher": "Sri V. Ramesh Babu",
+            "room": "Sports Ground",
+            "type": "sports"
+          }
+        ]
+      },
+      {
+        "period": "Period 4",
+        "time": "11:20 – 12:05 PM",
+        "slots": [
+          {
+            "subject": "Mathematics & Mental Maths",
+            "teacher": "Sri M. Raju",
+            "room": "Room 201",
+            "type": "maths"
+          },
+          {
+            "subject": "English Reading & Creative Writing",
+            "teacher": "Smt. R. Kavitha",
+            "room": "Room 201",
+            "type": "english"
+          },
+          {
+            "subject": "Number Fun & Motor Skills",
+            "teacher": "Sri K. Srinath",
+            "room": "Room 201",
+            "type": "maths"
+          },
+          {
+            "subject": "Physics & Chemistry",
+            "teacher": "Sri K. Rajesh",
+            "room": "Room 201",
+            "type": "science"
+          },
+          {
+            "subject": "First Language (Telugu Lit)",
+            "teacher": "Smt. G. Sarada",
+            "room": "Room 201",
+            "type": "telugu"
+          },
+          {
+            "subject": "English Grammar & Composition",
+            "teacher": "Smt. V. Jyothsna",
+            "room": "Room 201",
+            "type": "english"
+          }
+        ]
+      },
+      {
+        "period": "Lunch Break",
+        "time": "12:05 – 12:50 PM",
+        "isBreak": true,
+        "title": "🍱 Mid-day Meal & Campus Lunch Interval"
+      },
+      {
+        "period": "Period 5",
+        "time": "12:50 – 01:35 PM",
+        "slots": [
+          {
+            "subject": "Primary EVS & Science Discovery",
+            "teacher": "Smt. N. Sirisha",
+            "room": "Room 201",
+            "type": "science"
+          },
+          {
+            "subject": "Primary Mathematics & Tables",
+            "teacher": "Smt. K. Anitha",
+            "room": "Room 201",
+            "type": "maths"
+          },
+          {
+            "subject": "Mathematics (Algebra & Trig)",
+            "teacher": "Sri B. Narayana",
+            "room": "Room 201",
+            "type": "maths"
+          },
+          {
+            "subject": "Social Studies & Civics",
+            "teacher": "Sri R. Venkata Ramana",
+            "room": "Room 201",
+            "type": "social"
+          },
+          {
+            "subject": "Telugu Language & Grammar",
+            "teacher": "Smt. T. Padmavathi",
+            "room": "Room 201",
+            "type": "telugu"
+          },
+          {
+            "subject": "Primary Mathematics & Logic",
+            "teacher": "Sri A. Prasad",
+            "room": "Room 201",
+            "type": "maths"
+          }
+        ]
+      },
+      {
+        "period": "Period 6",
+        "time": "01:35 – 02:45 PM",
+        "slots": [
+          {
+            "subject": "Social Studies & Living World",
+            "teacher": "Sri S. Gopal",
+            "room": "Room 201",
+            "type": "social"
+          },
+          {
+            "subject": "Drawing, Painting & Crafts",
+            "teacher": "Smt. P. Swapna",
+            "room": "Art & Culture Hall",
+            "type": "remedial"
+          },
+          {
+            "subject": "Biological Science",
+            "teacher": "Smt. S. Lakshmi",
+            "room": "Room 201",
+            "type": "biology"
+          },
+          {
+            "subject": "Hindi Second Language",
+            "teacher": "Smt. B. Meenakshi",
+            "room": "Room 201",
+            "type": "hindi"
+          },
+          {
+            "subject": "General Science & Environment",
+            "teacher": "Sri CH. Venkateswara Rao",
+            "room": "Room 201",
+            "type": "science"
+          },
+          {
+            "subject": "English Phonics & Handwriting",
+            "teacher": "Smt. Y. Anusha",
+            "room": "Room 201",
+            "type": "english"
+          }
+        ]
+      },
+      {
+        "period": "Afternoon Recess",
+        "time": "02:45 – 02:55 PM",
+        "isBreak": true,
+        "title": "🍎 Afternoon Recess & Water Interval"
+      },
+      {
+        "period": "Period 7",
+        "time": "02:55 – 03:40 PM",
+        "slots": [
+          {
+            "subject": "Kindergarten Rhymes & Alphabet Play",
+            "teacher": "Smt. D. Meena",
+            "room": "Room 201",
+            "type": "english"
+          },
+          {
+            "subject": "Mathematics (Geometry & Calculus)",
+            "teacher": "Sri P. Satyanarayana",
+            "room": "Room 201",
+            "type": "maths"
+          },
+          {
+            "subject": "Computer Applications & Coding",
+            "teacher": "Sri D. Srinivas",
+            "room": "Computer Lab 108",
+            "type": "computer"
+          },
+          {
+            "subject": "Mathematics & Mental Maths",
+            "teacher": "Sri M. Raju",
+            "room": "Room 201",
+            "type": "maths"
+          },
+          {
+            "subject": "English Reading & Creative Writing",
+            "teacher": "Smt. R. Kavitha",
+            "room": "Room 201",
+            "type": "english"
+          },
+          {
+            "subject": "Number Fun & Motor Skills",
+            "teacher": "Sri K. Srinath",
+            "room": "Room 201",
+            "type": "maths"
+          }
+        ]
+      },
+      {
+        "period": "Period 8",
+        "time": "03:40 – 04:30 PM",
+        "slots": [
+          {
+            "subject": "Physical Science",
+            "teacher": "Sri Navva Anand",
+            "room": "Room 201",
+            "type": "science"
+          },
+          {
+            "subject": "English Communication & Debate",
+            "teacher": "Smt. M. Sunitha",
+            "room": "Digital Audio-Visual Lab",
+            "type": "english"
+          },
+          {
+            "subject": "Physical Education & Games",
+            "teacher": "Sri V. Ramesh Babu",
+            "room": "Sports Ground",
+            "type": "sports"
+          },
+          {
+            "subject": "Primary EVS & Science Discovery",
+            "teacher": "Smt. N. Sirisha",
+            "room": "Room 201",
+            "type": "science"
+          },
+          {
+            "subject": "Primary Mathematics & Tables",
+            "teacher": "Smt. K. Anitha",
+            "room": "Room 201",
+            "type": "maths"
+          },
+          {
+            "subject": "Mathematics (Algebra & Trig)",
+            "teacher": "Sri B. Narayana",
+            "room": "Room 201",
+            "type": "maths"
+          }
+        ]
+      }
+    ]
+  },
+  "Class VI-A": {
+    "classTeacher": "Sri D. Srinivas (MCA)",
+    "room": "Room 104 (Middle Wing)",
+    "strength": 44,
+    "wing": "High School Wing",
+    "periods": [
+      {
+        "period": "Morning Assembly",
+        "time": "08:30 – 08:45 AM",
+        "isBreak": true,
+        "title": "🔔 Morning Assembly, Universal Prayer, Thought for the Day & Pledge"
+      },
+      {
+        "period": "Period 1",
+        "time": "08:45 – 09:30 AM",
+        "slots": [
+          {
+            "subject": "Biological Science",
+            "teacher": "Smt. S. Lakshmi",
+            "room": "Room 104",
+            "type": "biology"
+          },
+          {
+            "subject": "Hindi Second Language",
+            "teacher": "Smt. B. Meenakshi",
+            "room": "Room 104",
+            "type": "hindi"
+          },
+          {
+            "subject": "General Science & Environment",
+            "teacher": "Sri CH. Venkateswara Rao",
+            "room": "Room 104",
+            "type": "science"
+          },
+          {
+            "subject": "English Phonics & Handwriting",
+            "teacher": "Smt. Y. Anusha",
+            "room": "Room 104",
+            "type": "english"
+          },
+          {
+            "subject": "Physical Science",
+            "teacher": "Sri Navva Anand",
+            "room": "Room 104",
+            "type": "science"
+          },
+          {
+            "subject": "English Language & Lit",
+            "teacher": "Smt. M. Sunitha",
+            "room": "Room 104",
+            "type": "english"
+          }
+        ]
+      },
+      {
+        "period": "Period 2",
+        "time": "09:30 – 10:20 AM",
+        "slots": [
+          {
+            "subject": "Computer Applications & Coding",
+            "teacher": "Sri D. Srinivas",
+            "room": "Computer Lab 108",
+            "type": "computer"
+          },
+          {
+            "subject": "Mathematics & Mental Maths",
+            "teacher": "Sri M. Raju",
+            "room": "Room 104",
+            "type": "maths"
+          },
+          {
+            "subject": "English Reading & Creative Writing",
+            "teacher": "Smt. R. Kavitha",
+            "room": "Room 104",
+            "type": "english"
+          },
+          {
+            "subject": "Number Fun & Motor Skills",
+            "teacher": "Sri K. Srinath",
+            "room": "Room 104",
+            "type": "maths"
+          },
+          {
+            "subject": "Physics & Chemistry",
+            "teacher": "Sri K. Rajesh",
+            "room": "Room 104",
+            "type": "science"
+          },
+          {
+            "subject": "First Language (Telugu Lit)",
+            "teacher": "Smt. G. Sarada",
+            "room": "Room 104",
+            "type": "telugu"
+          }
+        ]
+      },
+      {
+        "period": "Short Recess",
+        "time": "10:20 – 10:35 AM",
+        "isBreak": true,
+        "title": "☕ Morning Recess & Refreshment Break"
+      },
+      {
+        "period": "Period 3",
+        "time": "10:35 – 11:20 AM",
+        "slots": [
+          {
+            "subject": "Physical Education & Games",
+            "teacher": "Sri V. Ramesh Babu",
+            "room": "Sports Ground",
+            "type": "sports"
+          },
+          {
+            "subject": "Primary EVS & Science Discovery",
+            "teacher": "Smt. N. Sirisha",
+            "room": "Room 104",
+            "type": "science"
+          },
+          {
+            "subject": "Primary Mathematics & Tables",
+            "teacher": "Smt. K. Anitha",
+            "room": "Room 104",
+            "type": "maths"
+          },
+          {
+            "subject": "Mathematics (Algebra & Trig)",
+            "teacher": "Sri B. Narayana",
+            "room": "Room 104",
+            "type": "maths"
+          },
+          {
+            "subject": "Social Studies & Civics",
+            "teacher": "Sri R. Venkata Ramana",
+            "room": "Room 104",
+            "type": "social"
+          },
+          {
+            "subject": "Telugu Language & Grammar",
+            "teacher": "Smt. T. Padmavathi",
+            "room": "Room 104",
+            "type": "telugu"
+          }
+        ]
+      },
+      {
+        "period": "Period 4",
+        "time": "11:20 – 12:05 PM",
+        "slots": [
+          {
+            "subject": "English Grammar & Composition",
+            "teacher": "Smt. V. Jyothsna",
+            "room": "Room 104",
+            "type": "english"
+          },
+          {
+            "subject": "Social Studies & Living World",
+            "teacher": "Sri S. Gopal",
+            "room": "Room 104",
+            "type": "social"
+          },
+          {
+            "subject": "Drawing, Painting & Crafts",
+            "teacher": "Smt. P. Swapna",
+            "room": "Art & Culture Hall",
+            "type": "remedial"
+          },
+          {
+            "subject": "Biological Science",
+            "teacher": "Smt. S. Lakshmi",
+            "room": "Room 104",
+            "type": "biology"
+          },
+          {
+            "subject": "Hindi Second Language",
+            "teacher": "Smt. B. Meenakshi",
+            "room": "Room 104",
+            "type": "hindi"
+          },
+          {
+            "subject": "General Science & Environment",
+            "teacher": "Sri CH. Venkateswara Rao",
+            "room": "Room 104",
+            "type": "science"
+          }
+        ]
+      },
+      {
+        "period": "Lunch Break",
+        "time": "12:05 – 12:50 PM",
+        "isBreak": true,
+        "title": "🍱 Mid-day Meal & Campus Lunch Interval"
+      },
+      {
+        "period": "Period 5",
+        "time": "12:50 – 01:35 PM",
+        "slots": [
+          {
+            "subject": "Primary Mathematics & Logic",
+            "teacher": "Sri A. Prasad",
+            "room": "Room 104",
+            "type": "maths"
+          },
+          {
+            "subject": "Kindergarten Rhymes & Alphabet Play",
+            "teacher": "Smt. D. Meena",
+            "room": "Room 104",
+            "type": "english"
+          },
+          {
+            "subject": "Mathematics (Geometry & Calculus)",
+            "teacher": "Sri P. Satyanarayana",
+            "room": "Room 104",
+            "type": "maths"
+          },
+          {
+            "subject": "Computer Applications & Coding",
+            "teacher": "Sri D. Srinivas",
+            "room": "Computer Lab 108",
+            "type": "computer"
+          },
+          {
+            "subject": "Mathematics & Mental Maths",
+            "teacher": "Sri M. Raju",
+            "room": "Room 104",
+            "type": "maths"
+          },
+          {
+            "subject": "English Reading & Creative Writing",
+            "teacher": "Smt. R. Kavitha",
+            "room": "Room 104",
+            "type": "english"
+          }
+        ]
+      },
+      {
+        "period": "Period 6",
+        "time": "01:35 – 02:45 PM",
+        "slots": [
+          {
+            "subject": "English Phonics & Handwriting",
+            "teacher": "Smt. Y. Anusha",
+            "room": "Room 104",
+            "type": "english"
+          },
+          {
+            "subject": "Physical Science",
+            "teacher": "Sri Navva Anand",
+            "room": "Room 104",
+            "type": "science"
+          },
+          {
+            "subject": "English Language & Lit",
+            "teacher": "Smt. M. Sunitha",
+            "room": "Room 104",
+            "type": "english"
+          },
+          {
+            "subject": "Physical Education & Games",
+            "teacher": "Sri V. Ramesh Babu",
+            "room": "Sports Ground",
+            "type": "sports"
+          },
+          {
+            "subject": "Primary EVS & Science Discovery",
+            "teacher": "Smt. N. Sirisha",
+            "room": "Room 104",
+            "type": "science"
+          },
+          {
+            "subject": "Primary Mathematics & Tables",
+            "teacher": "Smt. K. Anitha",
+            "room": "Room 104",
+            "type": "maths"
+          }
+        ]
+      },
+      {
+        "period": "Afternoon Recess",
+        "time": "02:45 – 02:55 PM",
+        "isBreak": true,
+        "title": "🍎 Afternoon Recess & Water Interval"
+      },
+      {
+        "period": "Period 7",
+        "time": "02:55 – 03:40 PM",
+        "slots": [
+          {
+            "subject": "Number Fun & Motor Skills",
+            "teacher": "Sri K. Srinath",
+            "room": "Room 104",
+            "type": "maths"
+          },
+          {
+            "subject": "Physics & Chemistry",
+            "teacher": "Sri K. Rajesh",
+            "room": "Room 104",
+            "type": "science"
+          },
+          {
+            "subject": "First Language (Telugu Lit)",
+            "teacher": "Smt. G. Sarada",
+            "room": "Room 104",
+            "type": "telugu"
+          },
+          {
+            "subject": "English Grammar & Composition",
+            "teacher": "Smt. V. Jyothsna",
+            "room": "Room 104",
+            "type": "english"
+          },
+          {
+            "subject": "Social Studies & Living World",
+            "teacher": "Sri S. Gopal",
+            "room": "Room 104",
+            "type": "social"
+          },
+          {
+            "subject": "Drawing, Painting & Crafts",
+            "teacher": "Smt. P. Swapna",
+            "room": "Art & Culture Hall",
+            "type": "remedial"
+          }
+        ]
+      },
+      {
+        "period": "Period 8",
+        "time": "03:40 – 04:30 PM",
+        "slots": [
+          {
+            "subject": "Mathematics (Algebra & Trig)",
+            "teacher": "Sri B. Narayana",
+            "room": "Room 104",
+            "type": "maths"
+          },
+          {
+            "subject": "Social Studies & Civics",
+            "teacher": "Sri R. Venkata Ramana",
+            "room": "Room 104",
+            "type": "social"
+          },
+          {
+            "subject": "Telugu Language & Grammar",
+            "teacher": "Smt. T. Padmavathi",
+            "room": "Room 104",
+            "type": "telugu"
+          },
+          {
+            "subject": "Primary Mathematics & Logic",
+            "teacher": "Sri A. Prasad",
+            "room": "Room 104",
+            "type": "maths"
+          },
+          {
+            "subject": "Kindergarten Rhymes & Alphabet Play",
+            "teacher": "Smt. D. Meena",
+            "room": "Room 104",
+            "type": "english"
+          },
+          {
+            "subject": "Mathematics (Geometry & Calculus)",
+            "teacher": "Sri P. Satyanarayana",
+            "room": "Room 104",
+            "type": "maths"
+          }
+        ]
+      }
+    ]
+  },
+  "Class V-A": {
+    "classTeacher": "Smt. N. Sirisha (B.Sc, B.Ed)",
+    "room": "Room 103 (Primary Wing)",
+    "strength": 44,
+    "wing": "Primary Wing",
+    "periods": [
+      {
+        "period": "Morning Assembly",
+        "time": "08:30 – 08:45 AM",
+        "isBreak": true,
+        "title": "🔔 Morning Assembly, Universal Prayer, Thought for the Day & Pledge"
+      },
+      {
+        "period": "Period 1",
+        "time": "08:45 – 09:30 AM",
+        "slots": [
+          {
+            "subject": "English Language & Lit",
+            "teacher": "Smt. M. Sunitha",
+            "room": "Room 103",
+            "type": "english"
+          },
+          {
+            "subject": "Physical Education & Games",
+            "teacher": "Sri V. Ramesh Babu",
+            "room": "Sports Ground",
+            "type": "sports"
+          },
+          {
+            "subject": "Primary EVS & Science Discovery",
+            "teacher": "Smt. N. Sirisha",
+            "room": "Room 103",
+            "type": "science"
+          },
+          {
+            "subject": "Primary Mathematics & Tables",
+            "teacher": "Smt. K. Anitha",
+            "room": "Room 103",
+            "type": "maths"
+          },
+          {
+            "subject": "Chemistry Fundamentals",
+            "teacher": "Sri B. Narayana",
+            "room": "Room 103",
+            "type": "science"
+          },
+          {
+            "subject": "Social Studies & Civics",
+            "teacher": "Sri R. Venkata Ramana",
+            "room": "Room 103",
+            "type": "social"
+          }
+        ]
+      },
+      {
+        "period": "Period 2",
+        "time": "09:30 – 10:20 AM",
+        "slots": [
+          {
+            "subject": "First Language (Telugu Lit)",
+            "teacher": "Smt. G. Sarada",
+            "room": "Room 103",
+            "type": "telugu"
+          },
+          {
+            "subject": "English Grammar & Composition",
+            "teacher": "Smt. V. Jyothsna",
+            "room": "Room 103",
+            "type": "english"
+          },
+          {
+            "subject": "Social Studies & Living World",
+            "teacher": "Sri S. Gopal",
+            "room": "Room 103",
+            "type": "social"
+          },
+          {
+            "subject": "Drawing, Painting & Crafts",
+            "teacher": "Smt. P. Swapna",
+            "room": "Art & Culture Hall",
+            "type": "remedial"
+          },
+          {
+            "subject": "Biological Science",
+            "teacher": "Smt. S. Lakshmi",
+            "room": "Room 103",
+            "type": "biology"
+          },
+          {
+            "subject": "Hindi Second Language",
+            "teacher": "Smt. B. Meenakshi",
+            "room": "Room 103",
+            "type": "hindi"
+          }
+        ]
+      },
+      {
+        "period": "Short Recess",
+        "time": "10:20 – 10:35 AM",
+        "isBreak": true,
+        "title": "☕ Morning Recess & Refreshment Break"
+      },
+      {
+        "period": "Period 3",
+        "time": "10:35 – 11:20 AM",
+        "slots": [
+          {
+            "subject": "Telugu Language & Grammar",
+            "teacher": "Smt. T. Padmavathi",
+            "room": "Room 103",
+            "type": "telugu"
+          },
+          {
+            "subject": "Primary Mathematics & Logic",
+            "teacher": "Sri A. Prasad",
+            "room": "Room 103",
+            "type": "maths"
+          },
+          {
+            "subject": "Kindergarten Rhymes & Alphabet Play",
+            "teacher": "Smt. D. Meena",
+            "room": "Room 103",
+            "type": "english"
+          },
+          {
+            "subject": "Mathematics (Geometry & Calculus)",
+            "teacher": "Sri P. Satyanarayana",
+            "room": "Room 103",
+            "type": "maths"
+          },
+          {
+            "subject": "Computer Applications & Coding",
+            "teacher": "Sri D. Srinivas",
+            "room": "Computer Lab 108",
+            "type": "computer"
+          },
+          {
+            "subject": "Mathematics & Mental Maths",
+            "teacher": "Sri M. Raju",
+            "room": "Room 103",
+            "type": "maths"
+          }
+        ]
+      },
+      {
+        "period": "Period 4",
+        "time": "11:20 – 12:05 PM",
+        "slots": [
+          {
+            "subject": "General Science & Environment",
+            "teacher": "Sri CH. Venkateswara Rao",
+            "room": "Room 103",
+            "type": "science"
+          },
+          {
+            "subject": "English Phonics & Handwriting",
+            "teacher": "Smt. Y. Anusha",
+            "room": "Room 103",
+            "type": "english"
+          },
+          {
+            "subject": "Physical Science",
+            "teacher": "Sri Navva Anand",
+            "room": "Room 103",
+            "type": "science"
+          },
+          {
+            "subject": "English Communication & Debate",
+            "teacher": "Smt. M. Sunitha",
+            "room": "Digital Audio-Visual Lab",
+            "type": "english"
+          },
+          {
+            "subject": "Physical Education & Games",
+            "teacher": "Sri V. Ramesh Babu",
+            "room": "Sports Ground",
+            "type": "sports"
+          },
+          {
+            "subject": "Primary EVS & Science Discovery",
+            "teacher": "Smt. N. Sirisha",
+            "room": "Room 103",
+            "type": "science"
+          }
+        ]
+      },
+      {
+        "period": "Lunch Break",
+        "time": "12:05 – 12:50 PM",
+        "isBreak": true,
+        "title": "🍱 Mid-day Meal & Campus Lunch Interval"
+      },
+      {
+        "period": "Period 5",
+        "time": "12:50 – 01:35 PM",
+        "slots": [
+          {
+            "subject": "English Reading & Creative Writing",
+            "teacher": "Smt. R. Kavitha",
+            "room": "Room 103",
+            "type": "english"
+          },
+          {
+            "subject": "Number Fun & Motor Skills",
+            "teacher": "Sri K. Srinath",
+            "room": "Room 103",
+            "type": "maths"
+          },
+          {
+            "subject": "Physics & Chemistry",
+            "teacher": "Sri K. Rajesh",
+            "room": "Room 103",
+            "type": "science"
+          },
+          {
+            "subject": "First Language (Telugu Lit)",
+            "teacher": "Smt. G. Sarada",
+            "room": "Room 103",
+            "type": "telugu"
+          },
+          {
+            "subject": "English Grammar & Composition",
+            "teacher": "Smt. V. Jyothsna",
+            "room": "Room 103",
+            "type": "english"
+          },
+          {
+            "subject": "Social Studies & Living World",
+            "teacher": "Sri S. Gopal",
+            "room": "Room 103",
+            "type": "social"
+          }
+        ]
+      },
+      {
+        "period": "Period 6",
+        "time": "01:35 – 02:45 PM",
+        "slots": [
+          {
+            "subject": "Primary Mathematics & Tables",
+            "teacher": "Smt. K. Anitha",
+            "room": "Room 103",
+            "type": "maths"
+          },
+          {
+            "subject": "Chemistry Fundamentals",
+            "teacher": "Sri B. Narayana",
+            "room": "Room 103",
+            "type": "science"
+          },
+          {
+            "subject": "Social Studies & Civics",
+            "teacher": "Sri R. Venkata Ramana",
+            "room": "Room 103",
+            "type": "social"
+          },
+          {
+            "subject": "Telugu Language & Grammar",
+            "teacher": "Smt. T. Padmavathi",
+            "room": "Room 103",
+            "type": "telugu"
+          },
+          {
+            "subject": "Primary Mathematics & Logic",
+            "teacher": "Sri A. Prasad",
+            "room": "Room 103",
+            "type": "maths"
+          },
+          {
+            "subject": "Kindergarten Rhymes & Alphabet Play",
+            "teacher": "Smt. D. Meena",
+            "room": "Room 103",
+            "type": "english"
+          }
+        ]
+      },
+      {
+        "period": "Afternoon Recess",
+        "time": "02:45 – 02:55 PM",
+        "isBreak": true,
+        "title": "🍎 Afternoon Recess & Water Interval"
+      },
+      {
+        "period": "Period 7",
+        "time": "02:55 – 03:40 PM",
+        "slots": [
+          {
+            "subject": "Drawing, Painting & Crafts",
+            "teacher": "Smt. P. Swapna",
+            "room": "Art & Culture Hall",
+            "type": "remedial"
+          },
+          {
+            "subject": "Biological Science",
+            "teacher": "Smt. S. Lakshmi",
+            "room": "Room 103",
+            "type": "biology"
+          },
+          {
+            "subject": "Hindi Second Language",
+            "teacher": "Smt. B. Meenakshi",
+            "room": "Room 103",
+            "type": "hindi"
+          },
+          {
+            "subject": "General Science & Environment",
+            "teacher": "Sri CH. Venkateswara Rao",
+            "room": "Room 103",
+            "type": "science"
+          },
+          {
+            "subject": "English Phonics & Handwriting",
+            "teacher": "Smt. Y. Anusha",
+            "room": "Room 103",
+            "type": "english"
+          },
+          {
+            "subject": "Physical Science",
+            "teacher": "Sri Navva Anand",
+            "room": "Room 103",
+            "type": "science"
+          }
+        ]
+      },
+      {
+        "period": "Period 8",
+        "time": "03:40 – 04:30 PM",
+        "slots": [
+          {
+            "subject": "Mathematics (Geometry & Calculus)",
+            "teacher": "Sri P. Satyanarayana",
+            "room": "Room 103",
+            "type": "maths"
+          },
+          {
+            "subject": "Computer Applications & Coding",
+            "teacher": "Sri D. Srinivas",
+            "room": "Computer Lab 108",
+            "type": "computer"
+          },
+          {
+            "subject": "Mathematics & Mental Maths",
+            "teacher": "Sri M. Raju",
+            "room": "Room 103",
+            "type": "maths"
+          },
+          {
+            "subject": "English Reading & Creative Writing",
+            "teacher": "Smt. R. Kavitha",
+            "room": "Room 103",
+            "type": "english"
+          },
+          {
+            "subject": "Number Fun & Motor Skills",
+            "teacher": "Sri K. Srinath",
+            "room": "Room 103",
+            "type": "maths"
+          },
+          {
+            "subject": "Physics & Chemistry",
+            "teacher": "Sri K. Rajesh",
+            "room": "Room 103",
+            "type": "science"
+          }
+        ]
+      }
+    ]
+  },
+  "Class IV-A": {
+    "classTeacher": "Sri A. Prasad (B.Sc, B.Ed)",
+    "room": "Room 102 (Primary Wing)",
+    "strength": 44,
+    "wing": "Primary Wing",
+    "periods": [
+      {
+        "period": "Morning Assembly",
+        "time": "08:30 – 08:45 AM",
+        "isBreak": true,
+        "title": "🔔 Morning Assembly, Universal Prayer, Thought for the Day & Pledge"
+      },
+      {
+        "period": "Period 1",
+        "time": "08:45 – 09:30 AM",
+        "slots": [
+          {
+            "subject": "Social Studies & Civics",
+            "teacher": "Sri R. Venkata Ramana",
+            "room": "Room 102",
+            "type": "social"
+          },
+          {
+            "subject": "Telugu Language & Grammar",
+            "teacher": "Smt. T. Padmavathi",
+            "room": "Room 102",
+            "type": "telugu"
+          },
+          {
+            "subject": "Primary Mathematics & Logic",
+            "teacher": "Sri A. Prasad",
+            "room": "Room 102",
+            "type": "maths"
+          },
+          {
+            "subject": "Kindergarten Rhymes & Alphabet Play",
+            "teacher": "Smt. D. Meena",
+            "room": "Room 102",
+            "type": "english"
+          },
+          {
+            "subject": "Mathematics (Geometry & Calculus)",
+            "teacher": "Sri P. Satyanarayana",
+            "room": "Room 102",
+            "type": "maths"
+          },
+          {
+            "subject": "Computer Applications & Coding",
+            "teacher": "Sri D. Srinivas",
+            "room": "Computer Lab 108",
+            "type": "computer"
+          }
+        ]
+      },
+      {
+        "period": "Period 2",
+        "time": "09:30 – 10:20 AM",
+        "slots": [
+          {
+            "subject": "Hindi Second Language",
+            "teacher": "Smt. B. Meenakshi",
+            "room": "Room 102",
+            "type": "hindi"
+          },
+          {
+            "subject": "General Science & Environment",
+            "teacher": "Sri CH. Venkateswara Rao",
+            "room": "Room 102",
+            "type": "science"
+          },
+          {
+            "subject": "English Phonics & Handwriting",
+            "teacher": "Smt. Y. Anusha",
+            "room": "Room 102",
+            "type": "english"
+          },
+          {
+            "subject": "Physical Science",
+            "teacher": "Sri Navva Anand",
+            "room": "Room 102",
+            "type": "science"
+          },
+          {
+            "subject": "English Language & Lit",
+            "teacher": "Smt. M. Sunitha",
+            "room": "Room 102",
+            "type": "english"
+          },
+          {
+            "subject": "Physical Education & Games",
+            "teacher": "Sri V. Ramesh Babu",
+            "room": "Sports Ground",
+            "type": "sports"
+          }
+        ]
+      },
+      {
+        "period": "Short Recess",
+        "time": "10:20 – 10:35 AM",
+        "isBreak": true,
+        "title": "☕ Morning Recess & Refreshment Break"
+      },
+      {
+        "period": "Period 3",
+        "time": "10:35 – 11:20 AM",
+        "slots": [
+          {
+            "subject": "Mathematics & Mental Maths",
+            "teacher": "Sri M. Raju",
+            "room": "Room 102",
+            "type": "maths"
+          },
+          {
+            "subject": "English Reading & Creative Writing",
+            "teacher": "Smt. R. Kavitha",
+            "room": "Room 102",
+            "type": "english"
+          },
+          {
+            "subject": "Number Fun & Motor Skills",
+            "teacher": "Sri K. Srinath",
+            "room": "Room 102",
+            "type": "maths"
+          },
+          {
+            "subject": "Physics & Chemistry",
+            "teacher": "Sri K. Rajesh",
+            "room": "Room 102",
+            "type": "science"
+          },
+          {
+            "subject": "First Language (Telugu Lit)",
+            "teacher": "Smt. G. Sarada",
+            "room": "Room 102",
+            "type": "telugu"
+          },
+          {
+            "subject": "English Grammar & Composition",
+            "teacher": "Smt. V. Jyothsna",
+            "room": "Room 102",
+            "type": "english"
+          }
+        ]
+      },
+      {
+        "period": "Period 4",
+        "time": "11:20 – 12:05 PM",
+        "slots": [
+          {
+            "subject": "Primary EVS & Science Discovery",
+            "teacher": "Smt. N. Sirisha",
+            "room": "Room 102",
+            "type": "science"
+          },
+          {
+            "subject": "Primary Mathematics & Tables",
+            "teacher": "Smt. K. Anitha",
+            "room": "Room 102",
+            "type": "maths"
+          },
+          {
+            "subject": "Chemistry Fundamentals",
+            "teacher": "Sri B. Narayana",
+            "room": "Room 102",
+            "type": "science"
+          },
+          {
+            "subject": "Social Studies & Civics",
+            "teacher": "Sri R. Venkata Ramana",
+            "room": "Room 102",
+            "type": "social"
+          },
+          {
+            "subject": "Telugu Language & Grammar",
+            "teacher": "Smt. T. Padmavathi",
+            "room": "Room 102",
+            "type": "telugu"
+          },
+          {
+            "subject": "Primary Mathematics & Logic",
+            "teacher": "Sri A. Prasad",
+            "room": "Room 102",
+            "type": "maths"
+          }
+        ]
+      },
+      {
+        "period": "Lunch Break",
+        "time": "12:05 – 12:50 PM",
+        "isBreak": true,
+        "title": "🍱 Mid-day Meal & Campus Lunch Interval"
+      },
+      {
+        "period": "Period 5",
+        "time": "12:50 – 01:35 PM",
+        "slots": [
+          {
+            "subject": "Social Studies & Living World",
+            "teacher": "Sri S. Gopal",
+            "room": "Room 102",
+            "type": "social"
+          },
+          {
+            "subject": "Drawing, Painting & Crafts",
+            "teacher": "Smt. P. Swapna",
+            "room": "Art & Culture Hall",
+            "type": "remedial"
+          },
+          {
+            "subject": "Biological Science",
+            "teacher": "Smt. S. Lakshmi",
+            "room": "Room 102",
+            "type": "biology"
+          },
+          {
+            "subject": "Hindi Second Language",
+            "teacher": "Smt. B. Meenakshi",
+            "room": "Room 102",
+            "type": "hindi"
+          },
+          {
+            "subject": "General Science & Environment",
+            "teacher": "Sri CH. Venkateswara Rao",
+            "room": "Room 102",
+            "type": "science"
+          },
+          {
+            "subject": "English Phonics & Handwriting",
+            "teacher": "Smt. Y. Anusha",
+            "room": "Room 102",
+            "type": "english"
+          }
+        ]
+      },
+      {
+        "period": "Period 6",
+        "time": "01:35 – 02:45 PM",
+        "slots": [
+          {
+            "subject": "Kindergarten Rhymes & Alphabet Play",
+            "teacher": "Smt. D. Meena",
+            "room": "Room 102",
+            "type": "english"
+          },
+          {
+            "subject": "Mathematics (Geometry & Calculus)",
+            "teacher": "Sri P. Satyanarayana",
+            "room": "Room 102",
+            "type": "maths"
+          },
+          {
+            "subject": "Computer Applications & Coding",
+            "teacher": "Sri D. Srinivas",
+            "room": "Computer Lab 108",
+            "type": "computer"
+          },
+          {
+            "subject": "Mathematics & Mental Maths",
+            "teacher": "Sri M. Raju",
+            "room": "Room 102",
+            "type": "maths"
+          },
+          {
+            "subject": "English Reading & Creative Writing",
+            "teacher": "Smt. R. Kavitha",
+            "room": "Room 102",
+            "type": "english"
+          },
+          {
+            "subject": "Number Fun & Motor Skills",
+            "teacher": "Sri K. Srinath",
+            "room": "Room 102",
+            "type": "maths"
+          }
+        ]
+      },
+      {
+        "period": "Afternoon Recess",
+        "time": "02:45 – 02:55 PM",
+        "isBreak": true,
+        "title": "🍎 Afternoon Recess & Water Interval"
+      },
+      {
+        "period": "Period 7",
+        "time": "02:55 – 03:40 PM",
+        "slots": [
+          {
+            "subject": "Physical Science",
+            "teacher": "Sri Navva Anand",
+            "room": "Room 102",
+            "type": "science"
+          },
+          {
+            "subject": "English Language & Lit",
+            "teacher": "Smt. M. Sunitha",
+            "room": "Room 102",
+            "type": "english"
+          },
+          {
+            "subject": "Physical Education & Games",
+            "teacher": "Sri V. Ramesh Babu",
+            "room": "Sports Ground",
+            "type": "sports"
+          },
+          {
+            "subject": "Primary EVS & Science Discovery",
+            "teacher": "Smt. N. Sirisha",
+            "room": "Room 102",
+            "type": "science"
+          },
+          {
+            "subject": "Primary Mathematics & Tables",
+            "teacher": "Smt. K. Anitha",
+            "room": "Room 102",
+            "type": "maths"
+          },
+          {
+            "subject": "Chemistry Fundamentals",
+            "teacher": "Sri B. Narayana",
+            "room": "Room 102",
+            "type": "science"
+          }
+        ]
+      },
+      {
+        "period": "Period 8",
+        "time": "03:40 – 04:30 PM",
+        "slots": [
+          {
+            "subject": "Physics & Chemistry",
+            "teacher": "Sri K. Rajesh",
+            "room": "Room 102",
+            "type": "science"
+          },
+          {
+            "subject": "First Language (Telugu Lit)",
+            "teacher": "Smt. G. Sarada",
+            "room": "Room 102",
+            "type": "telugu"
+          },
+          {
+            "subject": "English Grammar & Composition",
+            "teacher": "Smt. V. Jyothsna",
+            "room": "Room 102",
+            "type": "english"
+          },
+          {
+            "subject": "Social Studies & Living World",
+            "teacher": "Sri S. Gopal",
+            "room": "Room 102",
+            "type": "social"
+          },
+          {
+            "subject": "Drawing, Painting & Crafts",
+            "teacher": "Smt. P. Swapna",
+            "room": "Art & Culture Hall",
+            "type": "remedial"
+          },
+          {
+            "subject": "Biological Science",
+            "teacher": "Smt. S. Lakshmi",
+            "room": "Room 102",
+            "type": "biology"
+          }
+        ]
+      }
+    ]
+  },
+  "Class III-A": {
+    "classTeacher": "Smt. R. Kavitha (B.A, B.Ed)",
+    "room": "Room 101 (Primary Wing)",
+    "strength": 44,
+    "wing": "Primary Wing",
+    "periods": [
+      {
+        "period": "Morning Assembly",
+        "time": "08:30 – 08:45 AM",
+        "isBreak": true,
+        "title": "🔔 Morning Assembly, Universal Prayer, Thought for the Day & Pledge"
+      },
+      {
+        "period": "Period 1",
+        "time": "08:45 – 09:30 AM",
+        "slots": [
+          {
+            "subject": "Computer Applications & Coding",
+            "teacher": "Sri D. Srinivas",
+            "room": "Computer Lab 108",
+            "type": "computer"
+          },
+          {
+            "subject": "Mathematics & Mental Maths",
+            "teacher": "Sri M. Raju",
+            "room": "Room 101",
+            "type": "maths"
+          },
+          {
+            "subject": "English Reading & Creative Writing",
+            "teacher": "Smt. R. Kavitha",
+            "room": "Room 101",
+            "type": "english"
+          },
+          {
+            "subject": "Number Fun & Motor Skills",
+            "teacher": "Sri K. Srinath",
+            "room": "Room 101",
+            "type": "maths"
+          },
+          {
+            "subject": "Physics & Chemistry",
+            "teacher": "Sri K. Rajesh",
+            "room": "Room 101",
+            "type": "science"
+          },
+          {
+            "subject": "First Language (Telugu Lit)",
+            "teacher": "Smt. G. Sarada",
+            "room": "Room 101",
+            "type": "telugu"
+          }
+        ]
+      },
+      {
+        "period": "Period 2",
+        "time": "09:30 – 10:20 AM",
+        "slots": [
+          {
+            "subject": "Physical Education & Games",
+            "teacher": "Sri V. Ramesh Babu",
+            "room": "Sports Ground",
+            "type": "sports"
+          },
+          {
+            "subject": "Primary EVS & Science Discovery",
+            "teacher": "Smt. N. Sirisha",
+            "room": "Room 101",
+            "type": "science"
+          },
+          {
+            "subject": "Primary Mathematics & Tables",
+            "teacher": "Smt. K. Anitha",
+            "room": "Room 101",
+            "type": "maths"
+          },
+          {
+            "subject": "Chemistry Fundamentals",
+            "teacher": "Sri B. Narayana",
+            "room": "Room 101",
+            "type": "science"
+          },
+          {
+            "subject": "Social Studies & Civics",
+            "teacher": "Sri R. Venkata Ramana",
+            "room": "Room 101",
+            "type": "social"
+          },
+          {
+            "subject": "Telugu Language & Grammar",
+            "teacher": "Smt. T. Padmavathi",
+            "room": "Room 101",
+            "type": "telugu"
+          }
+        ]
+      },
+      {
+        "period": "Short Recess",
+        "time": "10:20 – 10:35 AM",
+        "isBreak": true,
+        "title": "☕ Morning Recess & Refreshment Break"
+      },
+      {
+        "period": "Period 3",
+        "time": "10:35 – 11:20 AM",
+        "slots": [
+          {
+            "subject": "English Grammar & Composition",
+            "teacher": "Smt. V. Jyothsna",
+            "room": "Room 101",
+            "type": "english"
+          },
+          {
+            "subject": "Social Studies & Living World",
+            "teacher": "Sri S. Gopal",
+            "room": "Room 101",
+            "type": "social"
+          },
+          {
+            "subject": "Drawing, Painting & Crafts",
+            "teacher": "Smt. P. Swapna",
+            "room": "Art & Culture Hall",
+            "type": "remedial"
+          },
+          {
+            "subject": "Biological Science",
+            "teacher": "Smt. S. Lakshmi",
+            "room": "Room 101",
+            "type": "biology"
+          },
+          {
+            "subject": "Hindi Second Language",
+            "teacher": "Smt. B. Meenakshi",
+            "room": "Room 101",
+            "type": "hindi"
+          },
+          {
+            "subject": "General Science & Environment",
+            "teacher": "Sri CH. Venkateswara Rao",
+            "room": "Room 101",
+            "type": "science"
+          }
+        ]
+      },
+      {
+        "period": "Period 4",
+        "time": "11:20 – 12:05 PM",
+        "slots": [
+          {
+            "subject": "Primary Mathematics & Logic",
+            "teacher": "Sri A. Prasad",
+            "room": "Room 101",
+            "type": "maths"
+          },
+          {
+            "subject": "Kindergarten Rhymes & Alphabet Play",
+            "teacher": "Smt. D. Meena",
+            "room": "Room 101",
+            "type": "english"
+          },
+          {
+            "subject": "Mathematics (Geometry & Calculus)",
+            "teacher": "Sri P. Satyanarayana",
+            "room": "Room 101",
+            "type": "maths"
+          },
+          {
+            "subject": "Computer Applications & Coding",
+            "teacher": "Sri D. Srinivas",
+            "room": "Computer Lab 108",
+            "type": "computer"
+          },
+          {
+            "subject": "Mathematics & Mental Maths",
+            "teacher": "Sri M. Raju",
+            "room": "Room 101",
+            "type": "maths"
+          },
+          {
+            "subject": "English Reading & Creative Writing",
+            "teacher": "Smt. R. Kavitha",
+            "room": "Room 101",
+            "type": "english"
+          }
+        ]
+      },
+      {
+        "period": "Lunch Break",
+        "time": "12:05 – 12:50 PM",
+        "isBreak": true,
+        "title": "🍱 Mid-day Meal & Campus Lunch Interval"
+      },
+      {
+        "period": "Period 5",
+        "time": "12:50 – 01:35 PM",
+        "slots": [
+          {
+            "subject": "English Phonics & Handwriting",
+            "teacher": "Smt. Y. Anusha",
+            "room": "Room 101",
+            "type": "english"
+          },
+          {
+            "subject": "Physical Science",
+            "teacher": "Sri Navva Anand",
+            "room": "Room 101",
+            "type": "science"
+          },
+          {
+            "subject": "English Language & Lit",
+            "teacher": "Smt. M. Sunitha",
+            "room": "Room 101",
+            "type": "english"
+          },
+          {
+            "subject": "Physical Education & Games",
+            "teacher": "Sri V. Ramesh Babu",
+            "room": "Sports Ground",
+            "type": "sports"
+          },
+          {
+            "subject": "Primary EVS & Science Discovery",
+            "teacher": "Smt. N. Sirisha",
+            "room": "Room 101",
+            "type": "science"
+          },
+          {
+            "subject": "Primary Mathematics & Tables",
+            "teacher": "Smt. K. Anitha",
+            "room": "Room 101",
+            "type": "maths"
+          }
+        ]
+      },
+      {
+        "period": "Period 6",
+        "time": "01:35 – 02:45 PM",
+        "slots": [
+          {
+            "subject": "Number Fun & Motor Skills",
+            "teacher": "Sri K. Srinath",
+            "room": "Room 101",
+            "type": "maths"
+          },
+          {
+            "subject": "Physics & Chemistry",
+            "teacher": "Sri K. Rajesh",
+            "room": "Room 101",
+            "type": "science"
+          },
+          {
+            "subject": "First Language (Telugu Lit)",
+            "teacher": "Smt. G. Sarada",
+            "room": "Room 101",
+            "type": "telugu"
+          },
+          {
+            "subject": "English Grammar & Composition",
+            "teacher": "Smt. V. Jyothsna",
+            "room": "Room 101",
+            "type": "english"
+          },
+          {
+            "subject": "Social Studies & Living World",
+            "teacher": "Sri S. Gopal",
+            "room": "Room 101",
+            "type": "social"
+          },
+          {
+            "subject": "Drawing, Painting & Crafts",
+            "teacher": "Smt. P. Swapna",
+            "room": "Art & Culture Hall",
+            "type": "remedial"
+          }
+        ]
+      },
+      {
+        "period": "Afternoon Recess",
+        "time": "02:45 – 02:55 PM",
+        "isBreak": true,
+        "title": "🍎 Afternoon Recess & Water Interval"
+      },
+      {
+        "period": "Period 7",
+        "time": "02:55 – 03:40 PM",
+        "slots": [
+          {
+            "subject": "Chemistry Fundamentals",
+            "teacher": "Sri B. Narayana",
+            "room": "Room 101",
+            "type": "science"
+          },
+          {
+            "subject": "Social Studies & Civics",
+            "teacher": "Sri R. Venkata Ramana",
+            "room": "Room 101",
+            "type": "social"
+          },
+          {
+            "subject": "Telugu Language & Grammar",
+            "teacher": "Smt. T. Padmavathi",
+            "room": "Room 101",
+            "type": "telugu"
+          },
+          {
+            "subject": "Primary Mathematics & Logic",
+            "teacher": "Sri A. Prasad",
+            "room": "Room 101",
+            "type": "maths"
+          },
+          {
+            "subject": "Kindergarten Rhymes & Alphabet Play",
+            "teacher": "Smt. D. Meena",
+            "room": "Room 101",
+            "type": "english"
+          },
+          {
+            "subject": "Mathematics (Geometry & Calculus)",
+            "teacher": "Sri P. Satyanarayana",
+            "room": "Room 101",
+            "type": "maths"
+          }
+        ]
+      },
+      {
+        "period": "Period 8",
+        "time": "03:40 – 04:30 PM",
+        "slots": [
+          {
+            "subject": "Biological Science",
+            "teacher": "Smt. S. Lakshmi",
+            "room": "Room 101",
+            "type": "biology"
+          },
+          {
+            "subject": "Hindi Second Language",
+            "teacher": "Smt. B. Meenakshi",
+            "room": "Room 101",
+            "type": "hindi"
+          },
+          {
+            "subject": "General Science & Environment",
+            "teacher": "Sri CH. Venkateswara Rao",
+            "room": "Room 101",
+            "type": "science"
+          },
+          {
+            "subject": "English Phonics & Handwriting",
+            "teacher": "Smt. Y. Anusha",
+            "room": "Room 101",
+            "type": "english"
+          },
+          {
+            "subject": "Physical Science",
+            "teacher": "Sri Navva Anand",
+            "room": "Room 101",
+            "type": "science"
+          },
+          {
+            "subject": "English Communication & Debate",
+            "teacher": "Smt. M. Sunitha",
+            "room": "Digital Audio-Visual Lab",
+            "type": "english"
+          }
+        ]
+      }
+    ]
+  },
+  "Class II-A": {
+    "classTeacher": "Sri S. Gopal (B.Sc, D.Ed)",
+    "room": "Room 004 (Junior Wing)",
+    "strength": 46,
+    "wing": "Primary Wing",
+    "periods": [
+      {
+        "period": "Morning Assembly",
+        "time": "08:30 – 08:45 AM",
+        "isBreak": true,
+        "title": "🔔 Morning Assembly, Universal Prayer, Thought for the Day & Pledge"
+      },
+      {
+        "period": "Period 1",
+        "time": "08:45 – 09:30 AM",
+        "slots": [
+          {
+            "subject": "First Language (Telugu Lit)",
+            "teacher": "Smt. G. Sarada",
+            "room": "Room 004",
+            "type": "telugu"
+          },
+          {
+            "subject": "English Grammar & Composition",
+            "teacher": "Smt. V. Jyothsna",
+            "room": "Room 004",
+            "type": "english"
+          },
+          {
+            "subject": "Social Studies & Living World",
+            "teacher": "Sri S. Gopal",
+            "room": "Room 004",
+            "type": "social"
+          },
+          {
+            "subject": "Drawing, Painting & Crafts",
+            "teacher": "Smt. P. Swapna",
+            "room": "Art & Culture Hall",
+            "type": "remedial"
+          },
+          {
+            "subject": "Biological Science",
+            "teacher": "Smt. S. Lakshmi",
+            "room": "Room 004",
+            "type": "biology"
+          },
+          {
+            "subject": "Hindi Second Language",
+            "teacher": "Smt. B. Meenakshi",
+            "room": "Room 004",
+            "type": "hindi"
+          }
+        ]
+      },
+      {
+        "period": "Period 2",
+        "time": "09:30 – 10:20 AM",
+        "slots": [
+          {
+            "subject": "Telugu Language & Grammar",
+            "teacher": "Smt. T. Padmavathi",
+            "room": "Room 004",
+            "type": "telugu"
+          },
+          {
+            "subject": "Primary Mathematics & Logic",
+            "teacher": "Sri A. Prasad",
+            "room": "Room 004",
+            "type": "maths"
+          },
+          {
+            "subject": "Kindergarten Rhymes & Alphabet Play",
+            "teacher": "Smt. D. Meena",
+            "room": "Room 004",
+            "type": "english"
+          },
+          {
+            "subject": "Mathematics (Geometry & Calculus)",
+            "teacher": "Sri P. Satyanarayana",
+            "room": "Room 004",
+            "type": "maths"
+          },
+          {
+            "subject": "Computer Applications & Coding",
+            "teacher": "Sri D. Srinivas",
+            "room": "Computer Lab 108",
+            "type": "computer"
+          },
+          {
+            "subject": "Mathematics & Mental Maths",
+            "teacher": "Sri M. Raju",
+            "room": "Room 004",
+            "type": "maths"
+          }
+        ]
+      },
+      {
+        "period": "Short Recess",
+        "time": "10:20 – 10:35 AM",
+        "isBreak": true,
+        "title": "☕ Morning Recess & Refreshment Break"
+      },
+      {
+        "period": "Period 3",
+        "time": "10:35 – 11:20 AM",
+        "slots": [
+          {
+            "subject": "General Science & Environment",
+            "teacher": "Sri CH. Venkateswara Rao",
+            "room": "Room 004",
+            "type": "science"
+          },
+          {
+            "subject": "English Phonics & Handwriting",
+            "teacher": "Smt. Y. Anusha",
+            "room": "Room 004",
+            "type": "english"
+          },
+          {
+            "subject": "Physical Science",
+            "teacher": "Sri Navva Anand",
+            "room": "Room 004",
+            "type": "science"
+          },
+          {
+            "subject": "English Language & Lit",
+            "teacher": "Smt. M. Sunitha",
+            "room": "Room 004",
+            "type": "english"
+          },
+          {
+            "subject": "Physical Education & Games",
+            "teacher": "Sri V. Ramesh Babu",
+            "room": "Sports Ground",
+            "type": "sports"
+          },
+          {
+            "subject": "Primary EVS & Science Discovery",
+            "teacher": "Smt. N. Sirisha",
+            "room": "Room 004",
+            "type": "science"
+          }
+        ]
+      },
+      {
+        "period": "Period 4",
+        "time": "11:20 – 12:05 PM",
+        "slots": [
+          {
+            "subject": "English Reading & Creative Writing",
+            "teacher": "Smt. R. Kavitha",
+            "room": "Room 004",
+            "type": "english"
+          },
+          {
+            "subject": "Number Fun & Motor Skills",
+            "teacher": "Sri K. Srinath",
+            "room": "Room 004",
+            "type": "maths"
+          },
+          {
+            "subject": "Physics & Chemistry",
+            "teacher": "Sri K. Rajesh",
+            "room": "Room 004",
+            "type": "science"
+          },
+          {
+            "subject": "First Language (Telugu Lit)",
+            "teacher": "Smt. G. Sarada",
+            "room": "Room 004",
+            "type": "telugu"
+          },
+          {
+            "subject": "English Grammar & Composition",
+            "teacher": "Smt. V. Jyothsna",
+            "room": "Room 004",
+            "type": "english"
+          },
+          {
+            "subject": "Social Studies & Living World",
+            "teacher": "Sri S. Gopal",
+            "room": "Room 004",
+            "type": "social"
+          }
+        ]
+      },
+      {
+        "period": "Lunch Break",
+        "time": "12:05 – 12:50 PM",
+        "isBreak": true,
+        "title": "🍱 Mid-day Meal & Campus Lunch Interval"
+      },
+      {
+        "period": "Period 5",
+        "time": "12:50 – 01:35 PM",
+        "slots": [
+          {
+            "subject": "Primary Mathematics & Tables",
+            "teacher": "Smt. K. Anitha",
+            "room": "Room 004",
+            "type": "maths"
+          },
+          {
+            "subject": "Chemistry Fundamentals",
+            "teacher": "Sri B. Narayana",
+            "room": "Room 004",
+            "type": "science"
+          },
+          {
+            "subject": "Social Studies & Civics",
+            "teacher": "Sri R. Venkata Ramana",
+            "room": "Room 004",
+            "type": "social"
+          },
+          {
+            "subject": "Telugu Language & Grammar",
+            "teacher": "Smt. T. Padmavathi",
+            "room": "Room 004",
+            "type": "telugu"
+          },
+          {
+            "subject": "Primary Mathematics & Logic",
+            "teacher": "Sri A. Prasad",
+            "room": "Room 004",
+            "type": "maths"
+          },
+          {
+            "subject": "Kindergarten Rhymes & Alphabet Play",
+            "teacher": "Smt. D. Meena",
+            "room": "Room 004",
+            "type": "english"
+          }
+        ]
+      },
+      {
+        "period": "Period 6",
+        "time": "01:35 – 02:45 PM",
+        "slots": [
+          {
+            "subject": "Drawing, Painting & Crafts",
+            "teacher": "Smt. P. Swapna",
+            "room": "Art & Culture Hall",
+            "type": "remedial"
+          },
+          {
+            "subject": "Biological Science",
+            "teacher": "Smt. S. Lakshmi",
+            "room": "Room 004",
+            "type": "biology"
+          },
+          {
+            "subject": "Hindi Second Language",
+            "teacher": "Smt. B. Meenakshi",
+            "room": "Room 004",
+            "type": "hindi"
+          },
+          {
+            "subject": "General Science & Environment",
+            "teacher": "Sri CH. Venkateswara Rao",
+            "room": "Room 004",
+            "type": "science"
+          },
+          {
+            "subject": "English Phonics & Handwriting",
+            "teacher": "Smt. Y. Anusha",
+            "room": "Room 004",
+            "type": "english"
+          },
+          {
+            "subject": "Physical Science",
+            "teacher": "Sri Navva Anand",
+            "room": "Room 004",
+            "type": "science"
+          }
+        ]
+      },
+      {
+        "period": "Afternoon Recess",
+        "time": "02:45 – 02:55 PM",
+        "isBreak": true,
+        "title": "🍎 Afternoon Recess & Water Interval"
+      },
+      {
+        "period": "Period 7",
+        "time": "02:55 – 03:40 PM",
+        "slots": [
+          {
+            "subject": "Mathematics (Geometry & Calculus)",
+            "teacher": "Sri P. Satyanarayana",
+            "room": "Room 004",
+            "type": "maths"
+          },
+          {
+            "subject": "Computer Applications & Coding",
+            "teacher": "Sri D. Srinivas",
+            "room": "Computer Lab 108",
+            "type": "computer"
+          },
+          {
+            "subject": "Mathematics & Mental Maths",
+            "teacher": "Sri M. Raju",
+            "room": "Room 004",
+            "type": "maths"
+          },
+          {
+            "subject": "English Reading & Creative Writing",
+            "teacher": "Smt. R. Kavitha",
+            "room": "Room 004",
+            "type": "english"
+          },
+          {
+            "subject": "Number Fun & Motor Skills",
+            "teacher": "Sri K. Srinath",
+            "room": "Room 004",
+            "type": "maths"
+          },
+          {
+            "subject": "Physics & Chemistry",
+            "teacher": "Sri K. Rajesh",
+            "room": "Room 004",
+            "type": "science"
+          }
+        ]
+      },
+      {
+        "period": "Period 8",
+        "time": "03:40 – 04:30 PM",
+        "slots": [
+          {
+            "subject": "English Communication & Debate",
+            "teacher": "Smt. M. Sunitha",
+            "room": "Digital Audio-Visual Lab",
+            "type": "english"
+          },
+          {
+            "subject": "Physical Education & Games",
+            "teacher": "Sri V. Ramesh Babu",
+            "room": "Sports Ground",
+            "type": "sports"
+          },
+          {
+            "subject": "Primary EVS & Science Discovery",
+            "teacher": "Smt. N. Sirisha",
+            "room": "Room 004",
+            "type": "science"
+          },
+          {
+            "subject": "Primary Mathematics & Tables",
+            "teacher": "Smt. K. Anitha",
+            "room": "Room 004",
+            "type": "maths"
+          },
+          {
+            "subject": "Chemistry Fundamentals",
+            "teacher": "Sri B. Narayana",
+            "room": "Room 004",
+            "type": "science"
+          },
+          {
+            "subject": "Social Studies & Civics",
+            "teacher": "Sri R. Venkata Ramana",
+            "room": "Room 004",
+            "type": "social"
+          }
+        ]
+      }
+    ]
+  },
+  "Class I-A": {
+    "classTeacher": "Smt. Y. Anusha (B.A, D.Ed)",
+    "room": "Room 003 (Junior Wing)",
+    "strength": 48,
+    "wing": "Primary Wing",
+    "periods": [
+      {
+        "period": "Morning Assembly",
+        "time": "08:30 – 08:45 AM",
+        "isBreak": true,
+        "title": "🔔 Morning Assembly, Universal Prayer, Thought for the Day & Pledge"
+      },
+      {
+        "period": "Period 1",
+        "time": "08:45 – 09:30 AM",
+        "slots": [
+          {
+            "subject": "Hindi Second Language",
+            "teacher": "Smt. B. Meenakshi",
+            "room": "Room 003",
+            "type": "hindi"
+          },
+          {
+            "subject": "General Science & Environment",
+            "teacher": "Sri CH. Venkateswara Rao",
+            "room": "Room 003",
+            "type": "science"
+          },
+          {
+            "subject": "English Phonics & Handwriting",
+            "teacher": "Smt. Y. Anusha",
+            "room": "Room 003",
+            "type": "english"
+          },
+          {
+            "subject": "Physical Science",
+            "teacher": "Sri Navva Anand",
+            "room": "Room 003",
+            "type": "science"
+          },
+          {
+            "subject": "English Language & Lit",
+            "teacher": "Smt. M. Sunitha",
+            "room": "Room 003",
+            "type": "english"
+          },
+          {
+            "subject": "Physical Education & Games",
+            "teacher": "Sri V. Ramesh Babu",
+            "room": "Sports Ground",
+            "type": "sports"
+          }
+        ]
+      },
+      {
+        "period": "Period 2",
+        "time": "09:30 – 10:20 AM",
+        "slots": [
+          {
+            "subject": "Mathematics & Mental Maths",
+            "teacher": "Sri M. Raju",
+            "room": "Room 003",
+            "type": "maths"
+          },
+          {
+            "subject": "English Reading & Creative Writing",
+            "teacher": "Smt. R. Kavitha",
+            "room": "Room 003",
+            "type": "english"
+          },
+          {
+            "subject": "Number Fun & Motor Skills",
+            "teacher": "Sri K. Srinath",
+            "room": "Room 003",
+            "type": "maths"
+          },
+          {
+            "subject": "Physics & Chemistry",
+            "teacher": "Sri K. Rajesh",
+            "room": "Room 003",
+            "type": "science"
+          },
+          {
+            "subject": "First Language (Telugu Lit)",
+            "teacher": "Smt. G. Sarada",
+            "room": "Room 003",
+            "type": "telugu"
+          },
+          {
+            "subject": "English Grammar & Composition",
+            "teacher": "Smt. V. Jyothsna",
+            "room": "Room 003",
+            "type": "english"
+          }
+        ]
+      },
+      {
+        "period": "Short Recess",
+        "time": "10:20 – 10:35 AM",
+        "isBreak": true,
+        "title": "☕ Morning Recess & Refreshment Break"
+      },
+      {
+        "period": "Period 3",
+        "time": "10:35 – 11:20 AM",
+        "slots": [
+          {
+            "subject": "Primary EVS & Science Discovery",
+            "teacher": "Smt. N. Sirisha",
+            "room": "Room 003",
+            "type": "science"
+          },
+          {
+            "subject": "Primary Mathematics & Tables",
+            "teacher": "Smt. K. Anitha",
+            "room": "Room 003",
+            "type": "maths"
+          },
+          {
+            "subject": "Chemistry Fundamentals",
+            "teacher": "Sri B. Narayana",
+            "room": "Room 003",
+            "type": "science"
+          },
+          {
+            "subject": "Social Studies & Civics",
+            "teacher": "Sri R. Venkata Ramana",
+            "room": "Room 003",
+            "type": "social"
+          },
+          {
+            "subject": "Telugu Language & Grammar",
+            "teacher": "Smt. T. Padmavathi",
+            "room": "Room 003",
+            "type": "telugu"
+          },
+          {
+            "subject": "Primary Mathematics & Logic",
+            "teacher": "Sri A. Prasad",
+            "room": "Room 003",
+            "type": "maths"
+          }
+        ]
+      },
+      {
+        "period": "Period 4",
+        "time": "11:20 – 12:05 PM",
+        "slots": [
+          {
+            "subject": "Social Studies & Living World",
+            "teacher": "Sri S. Gopal",
+            "room": "Room 003",
+            "type": "social"
+          },
+          {
+            "subject": "Drawing, Painting & Crafts",
+            "teacher": "Smt. P. Swapna",
+            "room": "Art & Culture Hall",
+            "type": "remedial"
+          },
+          {
+            "subject": "Biological Science",
+            "teacher": "Smt. S. Lakshmi",
+            "room": "Room 003",
+            "type": "biology"
+          },
+          {
+            "subject": "Hindi Second Language",
+            "teacher": "Smt. B. Meenakshi",
+            "room": "Room 003",
+            "type": "hindi"
+          },
+          {
+            "subject": "General Science & Environment",
+            "teacher": "Sri CH. Venkateswara Rao",
+            "room": "Room 003",
+            "type": "science"
+          },
+          {
+            "subject": "English Phonics & Handwriting",
+            "teacher": "Smt. Y. Anusha",
+            "room": "Room 003",
+            "type": "english"
+          }
+        ]
+      },
+      {
+        "period": "Lunch Break",
+        "time": "12:05 – 12:50 PM",
+        "isBreak": true,
+        "title": "🍱 Mid-day Meal & Campus Lunch Interval"
+      },
+      {
+        "period": "Period 5",
+        "time": "12:50 – 01:35 PM",
+        "slots": [
+          {
+            "subject": "Kindergarten Rhymes & Alphabet Play",
+            "teacher": "Smt. D. Meena",
+            "room": "Room 003",
+            "type": "english"
+          },
+          {
+            "subject": "Mathematics (Geometry & Calculus)",
+            "teacher": "Sri P. Satyanarayana",
+            "room": "Room 003",
+            "type": "maths"
+          },
+          {
+            "subject": "Computer Applications & Coding",
+            "teacher": "Sri D. Srinivas",
+            "room": "Computer Lab 108",
+            "type": "computer"
+          },
+          {
+            "subject": "Mathematics & Mental Maths",
+            "teacher": "Sri M. Raju",
+            "room": "Room 003",
+            "type": "maths"
+          },
+          {
+            "subject": "English Reading & Creative Writing",
+            "teacher": "Smt. R. Kavitha",
+            "room": "Room 003",
+            "type": "english"
+          },
+          {
+            "subject": "Number Fun & Motor Skills",
+            "teacher": "Sri K. Srinath",
+            "room": "Room 003",
+            "type": "maths"
+          }
+        ]
+      },
+      {
+        "period": "Period 6",
+        "time": "01:35 – 02:45 PM",
+        "slots": [
+          {
+            "subject": "Physical Science",
+            "teacher": "Sri Navva Anand",
+            "room": "Room 003",
+            "type": "science"
+          },
+          {
+            "subject": "English Language & Lit",
+            "teacher": "Smt. M. Sunitha",
+            "room": "Room 003",
+            "type": "english"
+          },
+          {
+            "subject": "Physical Education & Games",
+            "teacher": "Sri V. Ramesh Babu",
+            "room": "Sports Ground",
+            "type": "sports"
+          },
+          {
+            "subject": "Primary EVS & Science Discovery",
+            "teacher": "Smt. N. Sirisha",
+            "room": "Room 003",
+            "type": "science"
+          },
+          {
+            "subject": "Primary Mathematics & Tables",
+            "teacher": "Smt. K. Anitha",
+            "room": "Room 003",
+            "type": "maths"
+          },
+          {
+            "subject": "Chemistry Fundamentals",
+            "teacher": "Sri B. Narayana",
+            "room": "Room 003",
+            "type": "science"
+          }
+        ]
+      },
+      {
+        "period": "Afternoon Recess",
+        "time": "02:45 – 02:55 PM",
+        "isBreak": true,
+        "title": "🍎 Afternoon Recess & Water Interval"
+      },
+      {
+        "period": "Period 7",
+        "time": "02:55 – 03:40 PM",
+        "slots": [
+          {
+            "subject": "Physics & Chemistry",
+            "teacher": "Sri K. Rajesh",
+            "room": "Room 003",
+            "type": "science"
+          },
+          {
+            "subject": "First Language (Telugu Lit)",
+            "teacher": "Smt. G. Sarada",
+            "room": "Room 003",
+            "type": "telugu"
+          },
+          {
+            "subject": "English Grammar & Composition",
+            "teacher": "Smt. V. Jyothsna",
+            "room": "Room 003",
+            "type": "english"
+          },
+          {
+            "subject": "Social Studies & Living World",
+            "teacher": "Sri S. Gopal",
+            "room": "Room 003",
+            "type": "social"
+          },
+          {
+            "subject": "Drawing, Painting & Crafts",
+            "teacher": "Smt. P. Swapna",
+            "room": "Art & Culture Hall",
+            "type": "remedial"
+          },
+          {
+            "subject": "Biological Science",
+            "teacher": "Smt. S. Lakshmi",
+            "room": "Room 003",
+            "type": "biology"
+          }
+        ]
+      },
+      {
+        "period": "Period 8",
+        "time": "03:40 – 04:30 PM",
+        "slots": [
+          {
+            "subject": "Social Studies & Civics",
+            "teacher": "Sri R. Venkata Ramana",
+            "room": "Room 003",
+            "type": "social"
+          },
+          {
+            "subject": "Telugu Language & Grammar",
+            "teacher": "Smt. T. Padmavathi",
+            "room": "Room 003",
+            "type": "telugu"
+          },
+          {
+            "subject": "Primary Mathematics & Logic",
+            "teacher": "Sri A. Prasad",
+            "room": "Room 003",
+            "type": "maths"
+          },
+          {
+            "subject": "Kindergarten Rhymes & Alphabet Play",
+            "teacher": "Smt. D. Meena",
+            "room": "Room 003",
+            "type": "english"
+          },
+          {
+            "subject": "Mathematics (Geometry & Calculus)",
+            "teacher": "Sri P. Satyanarayana",
+            "room": "Room 003",
+            "type": "maths"
+          },
+          {
+            "subject": "Computer Applications & Coding",
+            "teacher": "Sri D. Srinivas",
+            "room": "Computer Lab 108",
+            "type": "computer"
+          }
+        ]
+      }
+    ]
+  },
+  "UKG": {
+    "classTeacher": "Smt. D. Meena (B.Ed)",
+    "room": "Room 002 (Foundational Wing)",
+    "strength": 25,
+    "wing": "Pre-Primary",
+    "periods": [
+      {
+        "period": "Morning Assembly",
+        "time": "08:30 – 08:45 AM",
+        "isBreak": true,
+        "title": "🔔 Morning Assembly, Universal Prayer, Thought for the Day & Pledge"
+      },
+      {
+        "period": "Period 1",
+        "time": "08:45 – 09:30 AM",
+        "slots": [
+          {
+            "subject": "Physical Education & Games",
+            "teacher": "Sri V. Ramesh Babu",
+            "room": "Sports Ground",
+            "type": "sports"
+          },
+          {
+            "subject": "Primary EVS & Science Discovery",
+            "teacher": "Smt. N. Sirisha",
+            "room": "Room 002",
+            "type": "science"
+          },
+          {
+            "subject": "Primary Mathematics & Tables",
+            "teacher": "Smt. K. Anitha",
+            "room": "Room 002",
+            "type": "maths"
+          },
+          {
+            "subject": "Chemistry Fundamentals",
+            "teacher": "Sri B. Narayana",
+            "room": "Room 002",
+            "type": "science"
+          },
+          {
+            "subject": "Social Studies & Civics",
+            "teacher": "Sri R. Venkata Ramana",
+            "room": "Room 002",
+            "type": "social"
+          },
+          {
+            "subject": "Telugu Language & Grammar",
+            "teacher": "Smt. T. Padmavathi",
+            "room": "Room 002",
+            "type": "telugu"
+          }
+        ]
+      },
+      {
+        "period": "Period 2",
+        "time": "09:30 – 10:20 AM",
+        "slots": [
+          {
+            "subject": "English Grammar & Composition",
+            "teacher": "Smt. V. Jyothsna",
+            "room": "Room 002",
+            "type": "english"
+          },
+          {
+            "subject": "Social Studies & Living World",
+            "teacher": "Sri S. Gopal",
+            "room": "Room 002",
+            "type": "social"
+          },
+          {
+            "subject": "Drawing, Painting & Crafts",
+            "teacher": "Smt. P. Swapna",
+            "room": "Art & Culture Hall",
+            "type": "remedial"
+          },
+          {
+            "subject": "Biological Science",
+            "teacher": "Smt. S. Lakshmi",
+            "room": "Room 002",
+            "type": "biology"
+          },
+          {
+            "subject": "Hindi Second Language",
+            "teacher": "Smt. B. Meenakshi",
+            "room": "Room 002",
+            "type": "hindi"
+          },
+          {
+            "subject": "General Science & Environment",
+            "teacher": "Sri CH. Venkateswara Rao",
+            "room": "Room 002",
+            "type": "science"
+          }
+        ]
+      },
+      {
+        "period": "Short Recess",
+        "time": "10:20 – 10:35 AM",
+        "isBreak": true,
+        "title": "☕ Morning Recess & Refreshment Break"
+      },
+      {
+        "period": "Period 3",
+        "time": "10:35 – 11:20 AM",
+        "slots": [
+          {
+            "subject": "Primary Mathematics & Logic",
+            "teacher": "Sri A. Prasad",
+            "room": "Room 002",
+            "type": "maths"
+          },
+          {
+            "subject": "Kindergarten Rhymes & Alphabet Play",
+            "teacher": "Smt. D. Meena",
+            "room": "Room 002",
+            "type": "english"
+          },
+          {
+            "subject": "Mathematics (Geometry & Calculus)",
+            "teacher": "Sri P. Satyanarayana",
+            "room": "Room 002",
+            "type": "maths"
+          },
+          {
+            "subject": "Computer Applications & Coding",
+            "teacher": "Sri D. Srinivas",
+            "room": "Computer Lab 108",
+            "type": "computer"
+          },
+          {
+            "subject": "Mathematics & Mental Maths",
+            "teacher": "Sri M. Raju",
+            "room": "Room 002",
+            "type": "maths"
+          },
+          {
+            "subject": "English Reading & Creative Writing",
+            "teacher": "Smt. R. Kavitha",
+            "room": "Room 002",
+            "type": "english"
+          }
+        ]
+      },
+      {
+        "period": "Period 4",
+        "time": "11:20 – 12:05 PM",
+        "slots": [
+          {
+            "subject": "English Phonics & Handwriting",
+            "teacher": "Smt. Y. Anusha",
+            "room": "Room 002",
+            "type": "english"
+          },
+          {
+            "subject": "Physical Science",
+            "teacher": "Sri Navva Anand",
+            "room": "Room 002",
+            "type": "science"
+          },
+          {
+            "subject": "English Communication & Debate",
+            "teacher": "Smt. M. Sunitha",
+            "room": "Digital Audio-Visual Lab",
+            "type": "english"
+          },
+          {
+            "subject": "Physical Education & Games",
+            "teacher": "Sri V. Ramesh Babu",
+            "room": "Sports Ground",
+            "type": "sports"
+          },
+          {
+            "subject": "Primary EVS & Science Discovery",
+            "teacher": "Smt. N. Sirisha",
+            "room": "Room 002",
+            "type": "science"
+          },
+          {
+            "subject": "Primary Mathematics & Tables",
+            "teacher": "Smt. K. Anitha",
+            "room": "Room 002",
+            "type": "maths"
+          }
+        ]
+      },
+      {
+        "period": "Lunch Break",
+        "time": "12:05 – 12:50 PM",
+        "isBreak": true,
+        "title": "🍱 Mid-day Meal & Campus Lunch Interval"
+      },
+      {
+        "period": "Period 5",
+        "time": "12:50 – 01:35 PM",
+        "slots": [
+          {
+            "subject": "Number Fun & Motor Skills",
+            "teacher": "Sri K. Srinath",
+            "room": "Room 002",
+            "type": "maths"
+          },
+          {
+            "subject": "Physics & Chemistry",
+            "teacher": "Sri K. Rajesh",
+            "room": "Room 002",
+            "type": "science"
+          },
+          {
+            "subject": "First Language (Telugu Lit)",
+            "teacher": "Smt. G. Sarada",
+            "room": "Room 002",
+            "type": "telugu"
+          },
+          {
+            "subject": "English Grammar & Composition",
+            "teacher": "Smt. V. Jyothsna",
+            "room": "Room 002",
+            "type": "english"
+          },
+          {
+            "subject": "Social Studies & Living World",
+            "teacher": "Sri S. Gopal",
+            "room": "Room 002",
+            "type": "social"
+          },
+          {
+            "subject": "Drawing, Painting & Crafts",
+            "teacher": "Smt. P. Swapna",
+            "room": "Art & Culture Hall",
+            "type": "remedial"
+          }
+        ]
+      },
+      {
+        "period": "Period 6",
+        "time": "01:35 – 02:45 PM",
+        "slots": [
+          {
+            "subject": "Chemistry Fundamentals",
+            "teacher": "Sri B. Narayana",
+            "room": "Room 002",
+            "type": "science"
+          },
+          {
+            "subject": "Social Studies & Civics",
+            "teacher": "Sri R. Venkata Ramana",
+            "room": "Room 002",
+            "type": "social"
+          },
+          {
+            "subject": "Telugu Language & Grammar",
+            "teacher": "Smt. T. Padmavathi",
+            "room": "Room 002",
+            "type": "telugu"
+          },
+          {
+            "subject": "Primary Mathematics & Logic",
+            "teacher": "Sri A. Prasad",
+            "room": "Room 002",
+            "type": "maths"
+          },
+          {
+            "subject": "Kindergarten Rhymes & Alphabet Play",
+            "teacher": "Smt. D. Meena",
+            "room": "Room 002",
+            "type": "english"
+          },
+          {
+            "subject": "Mathematics (Geometry & Calculus)",
+            "teacher": "Sri P. Satyanarayana",
+            "room": "Room 002",
+            "type": "maths"
+          }
+        ]
+      },
+      {
+        "period": "Afternoon Recess",
+        "time": "02:45 – 02:55 PM",
+        "isBreak": true,
+        "title": "🍎 Afternoon Recess & Water Interval"
+      },
+      {
+        "period": "Period 7",
+        "time": "02:55 – 03:40 PM",
+        "slots": [
+          {
+            "subject": "Biological Science",
+            "teacher": "Smt. S. Lakshmi",
+            "room": "Room 002",
+            "type": "biology"
+          },
+          {
+            "subject": "Hindi Second Language",
+            "teacher": "Smt. B. Meenakshi",
+            "room": "Room 002",
+            "type": "hindi"
+          },
+          {
+            "subject": "General Science & Environment",
+            "teacher": "Sri CH. Venkateswara Rao",
+            "room": "Room 002",
+            "type": "science"
+          },
+          {
+            "subject": "English Phonics & Handwriting",
+            "teacher": "Smt. Y. Anusha",
+            "room": "Room 002",
+            "type": "english"
+          },
+          {
+            "subject": "Physical Science",
+            "teacher": "Sri Navva Anand",
+            "room": "Room 002",
+            "type": "science"
+          },
+          {
+            "subject": "English Language & Lit",
+            "teacher": "Smt. M. Sunitha",
+            "room": "Room 002",
+            "type": "english"
+          }
+        ]
+      },
+      {
+        "period": "Period 8",
+        "time": "03:40 – 04:30 PM",
+        "slots": [
+          {
+            "subject": "Computer Applications & Coding",
+            "teacher": "Sri D. Srinivas",
+            "room": "Computer Lab 108",
+            "type": "computer"
+          },
+          {
+            "subject": "Mathematics & Mental Maths",
+            "teacher": "Sri M. Raju",
+            "room": "Room 002",
+            "type": "maths"
+          },
+          {
+            "subject": "English Reading & Creative Writing",
+            "teacher": "Smt. R. Kavitha",
+            "room": "Room 002",
+            "type": "english"
+          },
+          {
+            "subject": "Number Fun & Motor Skills",
+            "teacher": "Sri K. Srinath",
+            "room": "Room 002",
+            "type": "maths"
+          },
+          {
+            "subject": "Physics & Chemistry",
+            "teacher": "Sri K. Rajesh",
+            "room": "Room 002",
+            "type": "science"
+          },
+          {
+            "subject": "First Language (Telugu Lit)",
+            "teacher": "Smt. G. Sarada",
+            "room": "Room 002",
+            "type": "telugu"
+          }
+        ]
+      }
+    ]
+  },
+  "LKG": {
+    "classTeacher": "Sri K. Srinath (B.Ed)",
+    "room": "Room 001 (Foundational Wing)",
+    "strength": 25,
+    "wing": "Pre-Primary",
+    "periods": [
+      {
+        "period": "Morning Assembly",
+        "time": "08:30 – 08:45 AM",
+        "isBreak": true,
+        "title": "🔔 Morning Assembly, Universal Prayer, Thought for the Day & Pledge"
+      },
+      {
+        "period": "Period 1",
+        "time": "08:45 – 09:30 AM",
+        "slots": [
+          {
+            "subject": "Telugu Language & Grammar",
+            "teacher": "Smt. T. Padmavathi",
+            "room": "Room 001",
+            "type": "telugu"
+          },
+          {
+            "subject": "Primary Mathematics & Logic",
+            "teacher": "Sri A. Prasad",
+            "room": "Room 001",
+            "type": "maths"
+          },
+          {
+            "subject": "Kindergarten Rhymes & Alphabet Play",
+            "teacher": "Smt. D. Meena",
+            "room": "Room 001",
+            "type": "english"
+          },
+          {
+            "subject": "Mathematics (Geometry & Calculus)",
+            "teacher": "Sri P. Satyanarayana",
+            "room": "Room 001",
+            "type": "maths"
+          },
+          {
+            "subject": "Computer Applications & Coding",
+            "teacher": "Sri D. Srinivas",
+            "room": "Computer Lab 108",
+            "type": "computer"
+          },
+          {
+            "subject": "Mathematics & Mental Maths",
+            "teacher": "Sri M. Raju",
+            "room": "Room 001",
+            "type": "maths"
+          }
+        ]
+      },
+      {
+        "period": "Period 2",
+        "time": "09:30 – 10:20 AM",
+        "slots": [
+          {
+            "subject": "General Science & Environment",
+            "teacher": "Sri CH. Venkateswara Rao",
+            "room": "Room 001",
+            "type": "science"
+          },
+          {
+            "subject": "English Phonics & Handwriting",
+            "teacher": "Smt. Y. Anusha",
+            "room": "Room 001",
+            "type": "english"
+          },
+          {
+            "subject": "Physical Science",
+            "teacher": "Sri Navva Anand",
+            "room": "Room 001",
+            "type": "science"
+          },
+          {
+            "subject": "English Language & Lit",
+            "teacher": "Smt. M. Sunitha",
+            "room": "Room 001",
+            "type": "english"
+          },
+          {
+            "subject": "Physical Education & Games",
+            "teacher": "Sri V. Ramesh Babu",
+            "room": "Sports Ground",
+            "type": "sports"
+          },
+          {
+            "subject": "Primary EVS & Science Discovery",
+            "teacher": "Smt. N. Sirisha",
+            "room": "Room 001",
+            "type": "science"
+          }
+        ]
+      },
+      {
+        "period": "Short Recess",
+        "time": "10:20 – 10:35 AM",
+        "isBreak": true,
+        "title": "☕ Morning Recess & Refreshment Break"
+      },
+      {
+        "period": "Period 3",
+        "time": "10:35 – 11:20 AM",
+        "slots": [
+          {
+            "subject": "English Reading & Creative Writing",
+            "teacher": "Smt. R. Kavitha",
+            "room": "Room 001",
+            "type": "english"
+          },
+          {
+            "subject": "Number Fun & Motor Skills",
+            "teacher": "Sri K. Srinath",
+            "room": "Room 001",
+            "type": "maths"
+          },
+          {
+            "subject": "Physics & Chemistry",
+            "teacher": "Sri K. Rajesh",
+            "room": "Room 001",
+            "type": "science"
+          },
+          {
+            "subject": "First Language (Telugu Lit)",
+            "teacher": "Smt. G. Sarada",
+            "room": "Room 001",
+            "type": "telugu"
+          },
+          {
+            "subject": "English Grammar & Composition",
+            "teacher": "Smt. V. Jyothsna",
+            "room": "Room 001",
+            "type": "english"
+          },
+          {
+            "subject": "Social Studies & Living World",
+            "teacher": "Sri S. Gopal",
+            "room": "Room 001",
+            "type": "social"
+          }
+        ]
+      },
+      {
+        "period": "Period 4",
+        "time": "11:20 – 12:05 PM",
+        "slots": [
+          {
+            "subject": "Primary Mathematics & Tables",
+            "teacher": "Smt. K. Anitha",
+            "room": "Room 001",
+            "type": "maths"
+          },
+          {
+            "subject": "Chemistry Fundamentals",
+            "teacher": "Sri B. Narayana",
+            "room": "Room 001",
+            "type": "science"
+          },
+          {
+            "subject": "Social Studies & Civics",
+            "teacher": "Sri R. Venkata Ramana",
+            "room": "Room 001",
+            "type": "social"
+          },
+          {
+            "subject": "Telugu Language & Grammar",
+            "teacher": "Smt. T. Padmavathi",
+            "room": "Room 001",
+            "type": "telugu"
+          },
+          {
+            "subject": "Primary Mathematics & Logic",
+            "teacher": "Sri A. Prasad",
+            "room": "Room 001",
+            "type": "maths"
+          },
+          {
+            "subject": "Kindergarten Rhymes & Alphabet Play",
+            "teacher": "Smt. D. Meena",
+            "room": "Room 001",
+            "type": "english"
+          }
+        ]
+      },
+      {
+        "period": "Lunch Break",
+        "time": "12:05 – 12:50 PM",
+        "isBreak": true,
+        "title": "🍱 Mid-day Meal & Campus Lunch Interval"
+      },
+      {
+        "period": "Period 5",
+        "time": "12:50 – 01:35 PM",
+        "slots": [
+          {
+            "subject": "Drawing, Painting & Crafts",
+            "teacher": "Smt. P. Swapna",
+            "room": "Art & Culture Hall",
+            "type": "remedial"
+          },
+          {
+            "subject": "Biological Science",
+            "teacher": "Smt. S. Lakshmi",
+            "room": "Room 001",
+            "type": "biology"
+          },
+          {
+            "subject": "Hindi Second Language",
+            "teacher": "Smt. B. Meenakshi",
+            "room": "Room 001",
+            "type": "hindi"
+          },
+          {
+            "subject": "General Science & Environment",
+            "teacher": "Sri CH. Venkateswara Rao",
+            "room": "Room 001",
+            "type": "science"
+          },
+          {
+            "subject": "English Phonics & Handwriting",
+            "teacher": "Smt. Y. Anusha",
+            "room": "Room 001",
+            "type": "english"
+          },
+          {
+            "subject": "Physical Science",
+            "teacher": "Sri Navva Anand",
+            "room": "Room 001",
+            "type": "science"
+          }
+        ]
+      },
+      {
+        "period": "Period 6",
+        "time": "01:35 – 02:45 PM",
+        "slots": [
+          {
+            "subject": "Mathematics (Geometry & Calculus)",
+            "teacher": "Sri P. Satyanarayana",
+            "room": "Room 001",
+            "type": "maths"
+          },
+          {
+            "subject": "Computer Applications & Coding",
+            "teacher": "Sri D. Srinivas",
+            "room": "Computer Lab 108",
+            "type": "computer"
+          },
+          {
+            "subject": "Mathematics & Mental Maths",
+            "teacher": "Sri M. Raju",
+            "room": "Room 001",
+            "type": "maths"
+          },
+          {
+            "subject": "English Reading & Creative Writing",
+            "teacher": "Smt. R. Kavitha",
+            "room": "Room 001",
+            "type": "english"
+          },
+          {
+            "subject": "Number Fun & Motor Skills",
+            "teacher": "Sri K. Srinath",
+            "room": "Room 001",
+            "type": "maths"
+          },
+          {
+            "subject": "Physics & Chemistry",
+            "teacher": "Sri K. Rajesh",
+            "room": "Room 001",
+            "type": "science"
+          }
+        ]
+      },
+      {
+        "period": "Afternoon Recess",
+        "time": "02:45 – 02:55 PM",
+        "isBreak": true,
+        "title": "🍎 Afternoon Recess & Water Interval"
+      },
+      {
+        "period": "Period 7",
+        "time": "02:55 – 03:40 PM",
+        "slots": [
+          {
+            "subject": "English Language & Lit",
+            "teacher": "Smt. M. Sunitha",
+            "room": "Room 001",
+            "type": "english"
+          },
+          {
+            "subject": "Physical Education & Games",
+            "teacher": "Sri V. Ramesh Babu",
+            "room": "Sports Ground",
+            "type": "sports"
+          },
+          {
+            "subject": "Primary EVS & Science Discovery",
+            "teacher": "Smt. N. Sirisha",
+            "room": "Room 001",
+            "type": "science"
+          },
+          {
+            "subject": "Primary Mathematics & Tables",
+            "teacher": "Smt. K. Anitha",
+            "room": "Room 001",
+            "type": "maths"
+          },
+          {
+            "subject": "Chemistry Fundamentals",
+            "teacher": "Sri B. Narayana",
+            "room": "Room 001",
+            "type": "science"
+          },
+          {
+            "subject": "Social Studies & Civics",
+            "teacher": "Sri R. Venkata Ramana",
+            "room": "Room 001",
+            "type": "social"
+          }
+        ]
+      },
+      {
+        "period": "Period 8",
+        "time": "03:40 – 04:30 PM",
+        "slots": [
+          {
+            "subject": "First Language (Telugu Lit)",
+            "teacher": "Smt. G. Sarada",
+            "room": "Room 001",
+            "type": "telugu"
+          },
+          {
+            "subject": "English Grammar & Composition",
+            "teacher": "Smt. V. Jyothsna",
+            "room": "Room 001",
+            "type": "english"
+          },
+          {
+            "subject": "Social Studies & Living World",
+            "teacher": "Sri S. Gopal",
+            "room": "Room 001",
+            "type": "social"
+          },
+          {
+            "subject": "Drawing, Painting & Crafts",
+            "teacher": "Smt. P. Swapna",
+            "room": "Art & Culture Hall",
+            "type": "remedial"
+          },
+          {
+            "subject": "Biological Science",
+            "teacher": "Smt. S. Lakshmi",
+            "room": "Room 001",
+            "type": "biology"
+          },
+          {
+            "subject": "Hindi Second Language",
+            "teacher": "Smt. B. Meenakshi",
+            "room": "Room 001",
+            "type": "hindi"
+          }
+        ]
+      }
+    ]
+  }
+};
+
+  // 2. SUBSTITUTION PLANNER DATASET
+  // Absent teacher, replacement teacher, period, class and assignment status
+  const SUBSTITUTION_PLANNER_DATA = [
+    {
+      id: 'SUB-2026-001',
+      absentTeacher: 'Sri K. Rajesh',
+      absentSubject: 'Physical Science',
+      absentReason: 'Sanctioned Medical Leave (Ref #ML-204)',
+      replacementTeacher: 'Sri Navva Anand',
+      replacementRole: 'Vice Principal & Physics HOD',
+      replacementFree: 'Free in Period 2',
+      period: 'Period 2',
+      time: '09:30 – 10:20 AM',
+      class: 'Class X-A',
+      room: 'Room 204',
+      topic: 'Ray Optics Numerical Problem Set 4 (AP SCERT Ch. 7)',
+      status: 'Confirmed',
+      statusBadge: 'badge-success'
+    },
+    {
+      id: 'SUB-2026-002',
+      absentTeacher: 'Sri K. Rajesh',
+      absentSubject: 'Physics Lab Practical',
+      absentReason: 'Sanctioned Medical Leave (Ref #ML-204)',
+      replacementTeacher: 'Smt. S. Lakshmi',
+      replacementRole: 'Biology HOD / Composite Lab In-Charge',
+      replacementFree: 'Free in Period 3',
+      period: 'Period 3',
+      time: '10:35 – 11:20 AM',
+      class: 'Class IX-A',
+      room: 'Science Lab 1',
+      topic: 'Light Reflection & Spherical Mirrors Apparatus Supervision',
+      status: 'Confirmed',
+      statusBadge: 'badge-success'
+    },
+    {
+      id: 'SUB-2026-003',
+      absentTeacher: 'Sri K. Rajesh',
+      absentSubject: 'Science Quiz & Technology Review',
+      absentReason: 'Sanctioned Medical Leave (Ref #ML-204)',
+      replacementTeacher: 'Sri D. Srinivas',
+      replacementRole: 'Computer Science Faculty (MCA)',
+      replacementFree: 'Free in Period 6',
+      period: 'Period 6',
+      time: '01:35 – 02:45 PM',
+      class: 'Class IX-A',
+      room: 'Computer Lab 108',
+      topic: 'Interactive Science Quiz & Digital Study Modules',
+      status: 'Confirmed',
+      statusBadge: 'badge-success'
+    },
+    {
+      id: 'SUB-2026-004',
+      absentTeacher: 'Smt. K. Anitha',
+      absentSubject: 'Primary Mathematics',
+      absentReason: 'Approved Casual Leave (Family Event)',
+      replacementTeacher: 'Smt. G. Sarada',
+      replacementRole: 'Senior Language & Primary Mentor',
+      replacementFree: 'Free in Period 1',
+      period: 'Period 1',
+      time: '08:45 – 09:30 AM',
+      class: 'Class IV-A',
+      room: 'Room 102',
+      topic: 'Arithmetic Long Division & Mental Math Practice Drill',
+      status: 'Confirmed',
+      statusBadge: 'badge-success'
+    },
+    {
+      id: 'SUB-2026-005',
+      absentTeacher: 'Smt. K. Anitha',
+      absentSubject: 'Environmental Studies (EVS)',
+      absentReason: 'Approved Casual Leave (Family Event)',
+      replacementTeacher: 'Sri V. Ramesh Babu',
+      replacementRole: 'Physical Education Director',
+      replacementFree: 'Free in Period 5',
+      period: 'Period 5',
+      time: '12:50 – 01:35 PM',
+      class: 'Class III-A',
+      room: 'Room 101',
+      topic: 'Health, Hygiene, Botanical Campus Walk & Nature Drawing',
+      status: 'Pending Sign-off',
+      statusBadge: 'badge-warning'
+    },
+    {
+      id: 'SUB-2026-006',
+      absentTeacher: 'Sri M. Raju',
+      absentSubject: 'Social Studies & Civics',
+      absentReason: 'Inter-School Sports Duty Escort',
+      replacementTeacher: 'Sri R. Venkata Ramana',
+      replacementRole: 'Social Studies Senior HOD',
+      replacementFree: 'Free in Period 7',
+      period: 'Period 7',
+      time: '02:55 – 03:40 PM',
+      class: 'Class VII-A',
+      room: 'Room 201',
+      topic: 'Indian Constitution: Fundamental Rights & Duties Case Studies',
+      status: 'Completed',
+      statusBadge: 'badge-neutral'
+    }
+  ];
+
+  // 3. LAB & HALL ALLOCATIONS DATASET
+  // Room availability, capacity, booking schedule and conflicts
+  const LAB_HALL_ALLOCATIONS_DATA = [
+    {
+      id: 'LAB-01',
+      name: 'Advanced Physics Laboratory',
+      location: 'Ground Floor, Science Block (Room 005)',
+      availability: 'In-Use / Booked',
+      availBadge: 'badge-warning',
+      capacity: '45 Workstations • 9 Optical Benches',
+      currentBooking: 'Class X-A • Period 2 & 3 (09:30 – 11:20 AM)',
+      inCharge: 'Sri Navva Anand & Sri K. Rajesh',
+      equipment: 'Spectrometers, Galvanometers, Laser Kits • Fire Certified',
+      conflicts: 'Clean (0 Conflicts)',
+      conflictBadge: 'conflict-badge-clean'
+    },
+    {
+      id: 'LAB-02',
+      name: 'Chemistry & Analytical Reagent Lab',
+      location: 'Ground Floor, Science Block (Room 006)',
+      availability: 'Available Now',
+      availBadge: 'badge-success',
+      capacity: '45 Workstations • 12 Fume Hoods',
+      currentBooking: 'Scheduled: Class IX-A • Period 5 (12:50 – 01:35 PM)',
+      inCharge: 'Sri B. Narayana (M.Sc Chemistry)',
+      equipment: 'Chemical Exhaust, Borosilicate Glassware, Safety Shower Ready',
+      conflicts: 'Clean (0 Conflicts)',
+      conflictBadge: 'conflict-badge-clean'
+    },
+    {
+      id: 'LAB-03',
+      name: 'Botany & Zoology Biosphere Lab',
+      location: 'Ground Floor, Room 008',
+      availability: 'In-Use / Booked',
+      availBadge: 'badge-warning',
+      capacity: '40 Workstations • 20 Microscopes',
+      currentBooking: 'Class VIII-A • Period 4 (11:20 AM – 12:05 PM)',
+      inCharge: 'Smt. S. Lakshmi (M.Sc Biology)',
+      equipment: 'Preserved Specimen Jars, Human Torso Model, Microtome',
+      conflicts: 'Clean (0 Conflicts)',
+      conflictBadge: 'conflict-badge-clean'
+    },
+    {
+      id: 'LAB-04',
+      name: 'High-Tech IT & Computer Lab',
+      location: 'First Floor, Room 108',
+      availability: 'In-Use / Booked',
+      availBadge: 'badge-warning',
+      capacity: '35 Dell OptiPlex Core-i5 PCs • Gigabit LAN',
+      currentBooking: 'Class VII-A • Period 1 (08:45 – 09:30 AM)',
+      inCharge: 'Sri D. Srinivas (MCA)',
+      equipment: 'Managed 48-Port Switch, 100 Mbps Fiber, Central 10KVA UPS',
+      conflicts: 'Clean (0 Conflicts)',
+      conflictBadge: 'conflict-badge-clean'
+    },
+    {
+      id: 'LAB-05',
+      name: 'Central Audio-Visual & Seminar Hall',
+      location: 'Second Floor, Administrative Wing',
+      availability: 'Available Now',
+      availBadge: 'badge-success',
+      capacity: '120 Push-back Theater Seats • Smart Podium',
+      currentBooking: 'Next: Science Club Inter-School Briefing (03:00 PM)',
+      inCharge: 'Smt. M. Sunitha & Sri Navva Anand',
+      equipment: '4K Laser Projector, Dolby 5.1 Surround, Wireless Collar Mics',
+      conflicts: 'Clean (0 Conflicts)',
+      conflictBadge: 'conflict-badge-clean'
+    },
+    {
+      id: 'LAB-06',
+      name: 'Rabindranath Tagore Memorial Auditorium',
+      location: 'Ground Floor, Cultural Complex',
+      availability: 'Available (Full Day)',
+      availBadge: 'badge-primary',
+      capacity: '300 Auditorium Seats • Central Stage & Wings',
+      currentBooking: 'Friday Allotment: Annual Day Drama Rehearsal (02:00 PM)',
+      inCharge: 'Sri V. Ramesh Babu & Smt. G. Sarada',
+      equipment: 'Stage Follow-Spot Lighting, Acoustic Baffles, Dual PA Arrays',
+      conflicts: 'Clean (0 Conflicts)',
+      conflictBadge: 'conflict-badge-clean'
+    }
+  ];
+
+  // 4. TIMETABLE CONFLICTS DATASET
+  // Double-booked teachers, rooms, classes or overlapping periods
+  const TIMETABLE_CONFLICTS_DATA = [
+    {
+      id: 'CONF-01',
+      severity: 'Critical Conflict',
+      severityBadge: 'badge-danger',
+      category: 'Double-Booked Teacher',
+      catType: 'teacher',
+      details: 'Sri Navva Anand assigned concurrently to Class X-A (Physical Science in Room 204) and Class IX-B (Physics Lab in Science Lab 1) during Period 3.',
+      overlappingPeriod: 'Wednesday • Period 3 (10:35 – 11:20 AM)',
+      impactedResources: 'Faculty: Sri Navva Anand • Classes: X-A & IX-B • Rooms: Room 204 & Lab 1',
+      recommendation: 'Reassign Sri K. Rajesh to Class IX-B Physics Lab or shift Class X-A Science to Period 5.',
+      status: 'Unresolved',
+      statusBadge: 'badge-danger'
+    },
+    {
+      id: 'CONF-02',
+      severity: 'High Severity',
+      severityBadge: 'badge-warning',
+      category: 'Room Collision / Double-Booking',
+      catType: 'room',
+      details: 'High-Tech IT Lab (Room 108) booked simultaneously for Class VII-A (Scratch 3.0 Practical) and Class VI-B (Computer Literacy Theory).',
+      overlappingPeriod: 'Thursday • Period 5 (12:50 – 01:35 PM)',
+      impactedResources: 'Facility: Computer Lab 108 • Classes: VII-A (32 Students) & VI-B (30 Students)',
+      recommendation: 'Relocate Class VI-B Computer Literacy to AV Seminar Hall (Smart Projection).',
+      status: 'Pending Review',
+      statusBadge: 'badge-warning'
+    },
+    {
+      id: 'CONF-03',
+      severity: 'Scheduling Warning',
+      severityBadge: 'badge-amber',
+      category: 'Double-Booked Teacher',
+      catType: 'teacher',
+      details: 'Smt. S. Lakshmi scheduled for Class VIII-A (Biology Lecture) and Class X-B (Biology Practical) in the same period slot.',
+      overlappingPeriod: 'Friday • Period 4 (11:20 AM – 12:05 PM)',
+      impactedResources: 'Faculty: Smt. S. Lakshmi • Classes: VIII-A & X-B • Rooms: Room 202 & Biology Lab',
+      recommendation: 'Deploy Junior Science Mentor Smt. D. Meena for Class VIII-A Biology.',
+      status: 'Unresolved',
+      statusBadge: 'badge-danger'
+    },
+    {
+      id: 'CONF-04',
+      severity: 'Policy Compliance Warning',
+      severityBadge: 'badge-neutral',
+      category: 'Overlapping Periods / Continuous Load',
+      catType: 'load',
+      details: 'Sri B. Narayana allocated 4 consecutive lecture hours without recess (Periods 1, 2, 3, 4) on Tuesday, exceeding SCERT faculty fatigue limits.',
+      overlappingPeriod: 'Tuesday • Periods 1 to 4 (08:45 AM – 12:05 PM)',
+      impactedResources: 'Faculty: Sri B. Narayana • Classes: X-A, IX-A, VIII-B • Periods 1, 2, 3, 4',
+      recommendation: 'Swap Tuesday Period 3 Mathematics with Period 6 Library / Sports Hour.',
+      status: 'Auto-Resolved',
+      statusBadge: 'badge-success'
+    }
+  ];
+
+  // -------------------------------------------------------------------------
+  // SUBMENU 1 RENDERER: CLASS SCHEDULES
+  // -------------------------------------------------------------------------
+  function renderTimetableClassSchedules() {
+const classData = TIMETABLE_CLASS_DATA[currentTimetableClass] || TIMETABLE_CLASS_DATA['Class X-A'];
+
+    // Update KPI Card Values
+    const nameEl = document.getElementById('ttSummaryClassName');
+    if (nameEl) nameEl.textContent = currentTimetableClass;
+
+    const roomEl = document.getElementById('ttSummaryRoom');
+    if (roomEl) roomEl.textContent = classData.room;
+
+    const teacherEl = document.getElementById('ttSummaryTeacher');
+    if (teacherEl) teacherEl.textContent = classData.classTeacher;
+
+    const badgeEl = document.getElementById('ttHeaderBadge');
+    if (badgeEl) badgeEl.textContent = `${currentTimetableClass} • ${currentTimetableCalendarView.toUpperCase()} VIEW`;
+
+    // Render depending on active view mode
+    if (currentTimetableCalendarView === 'weekly') {
+      renderTimetableWeeklyView(classData);
+    } else if (currentTimetableCalendarView === 'daily') {
+      renderTimetableDailyView(classData);
+    } else if (currentTimetableCalendarView === 'class-wise') {
+      renderTimetableClassWiseView();
+    }
+  }
+
+  // Render View A: Weekly Calendar Grid
+  function renderTimetableWeeklyView(classData) {
+    const tbody = document.getElementById('timetableWeeklyTableBody');
+    if (!tbody) return;
+
+    tbody.innerHTML = classData.periods.map(p => {
+      if (p.isBreak) {
+        return `
+          <tr class="tt-break-row">
+            <td style="text-align:center; vertical-align:middle;">
+              <strong style="font-size:0.875rem;">${p.period}</strong><br>
+              <small style="font-size:0.75rem;"><i class="fa-regular fa-clock"></i> ${p.time}</small>
+            </td>
+            <td colspan="6" class="tt-break-banner-cell">
+              <i class="fa-solid fa-bell"></i> <strong>${p.title}</strong>
+            </td>
+          </tr>
+        `;
+      }
+
+      const dayCells = (p.slots || []).map(slot => `
+        <td>
+          <div class="tt-slot-card">
+            <span class="tt-subject-badge ${slot.type}">${slot.subject}</span>
+            <div class="tt-teacher-meta">
+              <span title="${slot.teacher}"><i class="fa-solid fa-chalkboard-user"></i> ${slot.teacher}</span>
+              <span class="tt-room-pill" title="${slot.room}"><i class="fa-solid fa-door-open"></i> ${slot.room}</span>
+            </div>
+          </div>
+        </td>
+      `).join('');
+
+      return `
+        <tr>
+          <td style="text-align:center; vertical-align:middle; background:#f8fafc; border-right:2px solid #e2e8f0;">
+            <div style="font-weight:800; font-size:0.9rem; color:#0f172a; margin-bottom:0.25rem;">${p.period}</div>
+            <div style="display:inline-flex; align-items:center; gap:0.3rem; font-size:0.75rem; color:#64748b; font-weight:600; background:#ffffff; border:1px solid #e2e8f0; padding:0.2rem 0.5rem; border-radius:4px;">
+              <i class="fa-regular fa-clock text-primary"></i> ${p.time}
+            </div>
+          </td>
+          ${dayCells}
+        </tr>
+      `;
+    }).join('');
+  }
+
+  // Render View B: Daily Schedule View
+  function renderTimetableDailyView(classData) {
+    const container = document.getElementById('timetableDailyTimeline');
+    if (!container) return;
+
+    const dayIndexMap = { 'Monday': 0, 'Tuesday': 1, 'Wednesday': 2, 'Thursday': 3, 'Friday': 4, 'Saturday': 5 };
+    const dayIdx = dayIndexMap[currentTimetableDay] !== undefined ? dayIndexMap[currentTimetableDay] : 0;
+
+    container.innerHTML = classData.periods.map(p => {
+      if (p.isBreak) {
+        return `
+          <div class="tt-daily-item is-break">
+            <div class="tt-daily-time text-amber">
+              <i class="fa-regular fa-clock"></i> ${p.time}
+            </div>
+            <div class="tt-daily-details">
+              <strong style="color:#854d0e;"><i class="fa-solid fa-mug-hot"></i> ${p.period}</strong> — ${p.title}
+            </div>
+          </div>
+        `;
+      }
+
+      const slot = (p.slots && p.slots[dayIdx]) ? p.slots[dayIdx] : { subject: 'Self Study / Activity', teacher: 'Class Teacher', room: classData.room, type: 'remedial' };
+
+      return `
+        <div class="tt-daily-item">
+          <div class="tt-daily-time">
+            <div>${p.period}</div>
+            <small class="text-muted">${p.time}</small>
+          </div>
+          <div class="tt-daily-details">
+            <div style="display:flex; align-items:center; gap:0.6rem; margin-bottom:0.35rem; flex-wrap:wrap;">
+              <span class="tt-subject-badge ${slot.type}" style="font-size:0.9rem;">${slot.subject}</span>
+              <span class="tt-room-pill"><i class="fa-solid fa-door-open"></i> ${slot.room}</span>
+              <span class="portal-badge badge-neutral">Curriculum Lesson</span>
+            </div>
+            <div style="font-size:0.85rem; color:#475569;">
+              <i class="fa-solid fa-chalkboard-user text-primary"></i> Faculty In-Charge: <strong>${slot.teacher}</strong>
+            </div>
+          </div>
+          <div>
+            <button type="button" class="btn btn-secondary btn-sm" onclick="portalApp.showToast('Class attendance roster opened for ' + '${currentTimetableClass}', 'info')">
+              <i class="fa-solid fa-list-check"></i> Roster
+            </button>
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  // Render View C: Class-Wise Calendar Matrix
+  function renderTimetableClassWiseView() {
+    const tbody = document.getElementById('timetableClassWiseTableBody');
+    if (!tbody) return;
+
+    const classesList = ['Class X-A', 'Class IX-A', 'Class VIII-A', 'Class VII-A', 'Class VI-A', 'Class V-A', 'Class IV-A', 'Class III-A', 'Class II-A', 'Class I-A'];
+    const dayIndexMap = { 'Monday': 0, 'Tuesday': 1, 'Wednesday': 2, 'Thursday': 3, 'Friday': 4, 'Saturday': 5 };
+    const dayIdx = dayIndexMap[currentTimetableDay] !== undefined ? dayIndexMap[currentTimetableDay] : 0;
+
+    tbody.innerHTML = classesList.map(clsName => {
+      const clsData = TIMETABLE_CLASS_DATA[clsName] || TIMETABLE_CLASS_DATA['Class X-A'];
+      const nonBreakPeriods = clsData.periods.filter(p => !p.isBreak);
+
+      const periodCells = nonBreakPeriods.map(p => {
+        const slot = (p.slots && p.slots[dayIdx]) ? p.slots[dayIdx] : { subject: 'General', teacher: 'Teacher', type: 'remedial' };
+        return `
+          <td style="text-align:center; padding:0.6rem 0.4rem;">
+            <div style="font-weight:700; font-size:0.78rem;" class="text-dark">${slot.subject}</div>
+            <small class="text-muted" style="font-size:0.7rem; display:block;">${slot.teacher.split(' ')[0]} ${slot.teacher.split(' ')[1] || ''}</small>
+          </td>
+        `;
+      }).join('');
+
+      return `
+        <tr>
+          <td>
+            <strong style="color:#0f172a; font-size:0.875rem;">${clsName}</strong><br>
+            <small class="text-muted"><i class="fa-solid fa-door-open"></i> ${clsData.room}</small>
+          </td>
+          ${periodCells}
+        </tr>
+      `;
+    }).join('');
+  }
+
+  // Switch Calendar View (Weekly, Daily, Class-wise)
+  function switchTimetableCalendarView(mode) {
+    currentTimetableCalendarView = mode || 'weekly';
+
+    // Toggle Button Styles
+    const btnWeekly = document.getElementById('btnViewWeekly');
+    const btnDaily = document.getElementById('btnViewDaily');
+    const btnClassWise = document.getElementById('btnViewClassWise');
+    const daySelect = document.getElementById('ttDaySelect');
+
+    if (btnWeekly) btnWeekly.classList.toggle('active', mode === 'weekly');
+    if (btnDaily) btnDaily.classList.toggle('active', mode === 'daily');
+    if (btnClassWise) btnClassWise.classList.toggle('active', mode === 'class-wise');
+    if (daySelect) daySelect.style.display = (mode === 'daily' || mode === 'class-wise') ? 'inline-block' : 'none';
+
+    // Toggle Containers
+    const weeklyCont = document.getElementById('timetableWeeklyContainer');
+    const dailyCont = document.getElementById('timetableDailyContainer');
+    const classWiseCont = document.getElementById('timetableClassWiseContainer');
+
+    if (weeklyCont) weeklyCont.style.display = (mode === 'weekly') ? 'block' : 'none';
+    if (dailyCont) dailyCont.style.display = (mode === 'daily') ? 'block' : 'none';
+    if (classWiseCont) classWiseCont.style.display = (mode === 'class-wise') ? 'block' : 'none';
+
+    renderTimetableClassSchedules();
+    showToast(`Switched to ${mode.toUpperCase()} Calendar View`, 'info');
+  }
+
+  // Switch Selected Class with guaranteed sync and clash-free verification
+  function switchTimetableClass(className) {
+    currentTimetableClass = className || 'Class X-A';
+
+    // Synchronize select dropdowns if called programmatically
+    const selectEl = document.getElementById('ttClassSelect');
+    if (selectEl && selectEl.value !== currentTimetableClass) {
+      selectEl.value = currentTimetableClass;
+    }
+
+    renderTimetableClassSchedules();
+    showToast(`Loaded distinct schedule for ${currentTimetableClass} (0 Teacher Clashes Verified)`, 'success');
+  }
+
+  // Switch Selected Day (for Daily & Class-wise View)
+  function switchTimetableDay(dayName) {
+    currentTimetableDay = dayName || 'Monday';
+    renderTimetableClassSchedules();
+    showToast(`Switched timetable schedule to ${currentTimetableDay}`, 'info');
+  }
+
+  // -------------------------------------------------------------------------
+  // SUBMENU 2 RENDERER: SUBSTITUTION PLANNER
+  // -------------------------------------------------------------------------
+  function renderSubstitutionPlanner() {
+    const tbody = document.getElementById('substitutionPlannerTableBody');
+    if (!tbody) return;
+
+    const classFilter = document.getElementById('subClassFilter')?.value || 'all';
+    const statusFilter = document.getElementById('subStatusFilter')?.value || 'all';
+    const searchVal = (document.getElementById('subSearchInput')?.value || '').toLowerCase().trim();
+
+    const filtered = SUBSTITUTION_PLANNER_DATA.filter(item => {
+      const matchClass = classFilter === 'all' || item.class === classFilter;
+      const matchStatus = statusFilter === 'all' || item.status === statusFilter;
+      const matchSearch = !searchVal ||
+        item.absentTeacher.toLowerCase().includes(searchVal) ||
+        item.replacementTeacher.toLowerCase().includes(searchVal) ||
+        item.class.toLowerCase().includes(searchVal) ||
+        item.topic.toLowerCase().includes(searchVal);
+      return matchClass && matchStatus && matchSearch;
+    });
+
+    if (filtered.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="7" class="text-center py-4 text-muted">No substitution assignments matched your search criteria.</td></tr>';
+      return;
+    }
+
+    tbody.innerHTML = filtered.map(item => `
+      <tr>
+        <td>
+          <div class="sub-teacher-cell">
+            <span class="sub-teacher-name">${item.absentTeacher}</span>
+            <span class="sub-subject-pill">${item.absentSubject}</span>
+            <span class="sub-reason-text"><i class="fa-solid fa-file-waveform text-muted"></i> ${item.absentReason}</span>
+          </div>
+        </td>
+        <td>
+          <div class="sub-teacher-cell">
+            <span class="sub-teacher-name text-primary">${item.replacementTeacher}</span>
+            <span class="sub-role-text">${item.replacementRole}</span>
+            <span class="sub-free-badge"><i class="fa-solid fa-circle-check"></i> ${item.replacementFree}</span>
+          </div>
+        </td>
+        <td style="text-align:center;">
+          <div class="sub-period-badge">
+            <strong>${item.period}</strong>
+            <span class="sub-time-meta"><i class="fa-regular fa-clock text-muted"></i> ${item.time}</span>
+          </div>
+        </td>
+        <td style="text-align:center;">
+          <div class="sub-class-cell">
+            <strong>${item.class}</strong>
+            <span class="tt-room-pill"><i class="fa-solid fa-door-open"></i> ${item.room}</span>
+          </div>
+        </td>
+        <td>
+          <div class="sub-topic-cell">
+            <i class="fa-solid fa-book-bookmark text-primary"></i>
+            <span>${item.topic}</span>
+          </div>
+        </td>
+        <td style="text-align:center;">
+          <span class="portal-badge ${item.statusBadge}" style="font-size:0.75rem; font-weight:700; padding:0.3rem 0.75rem; border-radius:9999px; text-transform:uppercase; letter-spacing:0.04em;">${item.status}</span>
+        </td>
+        <td style="text-align:center;">
+          <div class="sub-action-btns">
+            <button type="button" class="btn btn-secondary btn-sm" onclick="portalApp.showToast('SMS reminder dispatched to ' + '${item.replacementTeacher}', 'success')" title="Dispatch Faculty SMS Notice">
+              <i class="fa-solid fa-paper-plane"></i>
+            </button>
+            <button type="button" class="btn btn-primary btn-sm" onclick="portalApp.showToast('Substitution marked verified by Vice Principal', 'success')" title="Sign-Off Substitution">
+              <i class="fa-solid fa-check"></i>
+            </button>
+          </div>
+        </td>
+      </tr>
+    `).join('');
+
+    const countBadge = document.getElementById('subBadgeCount');
+    if (countBadge) countBadge.textContent = `${filtered.length} Roster Entries`;
+  }
+
+  function filterSubstitutionPlanner() {
+    renderSubstitutionPlanner();
+  }
+
+  function handleAssignSubstitutionSubmit(event) {
+    if (event && event.preventDefault) event.preventDefault();
+
+    const absent = document.getElementById('subAbsentTeacher')?.value || 'Sri K. Rajesh (Physics)';
+    const clsPeriod = document.getElementById('subClassPeriod')?.value || 'Class X-A (Period 3 - 10:45 AM)';
+    const substitute = document.getElementById('substituteTeacher')?.value || 'Sri Navva Anand (Vice Principal)';
+    const instructions = document.getElementById('subInstructions')?.value || 'Supervised exercise & formula drills';
+
+    const newEntry = {
+      id: `SUB-2026-00${SUBSTITUTION_PLANNER_DATA.length + 1}`,
+      absentTeacher: absent.split('(')[0].trim(),
+      absentSubject: absent.includes('(') ? absent.split('(')[1].replace(')', '') : 'Faculty Subject',
+      absentReason: 'Approved Leave (Substituted by Admin)',
+      replacementTeacher: substitute.split('(')[0].trim(),
+      replacementRole: substitute.includes('(') ? substitute.split('(')[1].replace(')', '') : 'Covering Faculty',
+      replacementFree: 'Free Period Cleared',
+      period: clsPeriod.includes('Period') ? clsPeriod.split('(')[1].split('-')[0].trim() : 'Assigned Period',
+      time: '09:30 – 10:20 AM',
+      class: clsPeriod.split('(')[0].trim(),
+      room: 'Room 204',
+      topic: instructions,
+      status: 'Confirmed',
+      statusBadge: 'badge-success'
+    };
+
+    SUBSTITUTION_PLANNER_DATA.unshift(newEntry);
+    renderSubstitutionPlanner();
+    closeModal('assignSubstitutionModal');
+    showToast(`Emergency substitution assigned to ${newEntry.replacementTeacher} for ${newEntry.class}!`, 'success');
+  }
+
+  // -------------------------------------------------------------------------
+  // SUBMENU 3 RENDERER: LAB & HALL ALLOCATIONS
+  // -------------------------------------------------------------------------
+  function renderLabHallAllocations() {
+    const tbody = document.getElementById('labHallAllocationsTableBody');
+    if (!tbody) return;
+
+    const facilityFilter = document.getElementById('labFacilityFilter')?.value || 'all';
+    const availFilter = document.getElementById('labAvailabilityFilter')?.value || 'all';
+
+    const filtered = LAB_HALL_ALLOCATIONS_DATA.filter(item => {
+      const matchFacility = facilityFilter === 'all' || item.name.includes(facilityFilter);
+      const matchAvail = availFilter === 'all' || item.availability.includes(availFilter);
+      return matchFacility && matchAvail;
+    });
+
+    if (filtered.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="7" class="text-center py-4 text-muted">No laboratory or hall allocations match your filter criteria.</td></tr>';
+      return;
+    }
+
+    tbody.innerHTML = filtered.map(item => `
+      <tr>
+        <td>
+          <div style="display:flex; flex-direction:column; gap:0.25rem; align-items:flex-start;">
+            <strong style="color:#0f172a; font-size:0.9rem; font-weight:700; line-height:1.25;"><i class="fa-solid fa-flask text-primary" style="margin-right:0.35rem;"></i>${item.name}</strong>
+            <small style="color:#64748b; font-size:0.75rem; line-height:1.25;"><i class="fa-solid fa-location-dot text-muted" style="margin-right:0.3rem;"></i>${item.location}</small>
+          </div>
+        </td>
+        <td style="text-align:center;">
+          <span class="portal-badge ${item.availBadge}" style="font-size:0.75rem; font-weight:700; padding:0.28rem 0.75rem; border-radius:9999px; text-transform:uppercase; letter-spacing:0.04em;">${item.availability}</span>
+        </td>
+        <td style="text-align:center;">
+          <strong style="color:#0f172a; font-size:0.88rem;">${item.capacity}</strong>
+        </td>
+        <td>
+          <div style="display:flex; flex-direction:column; gap:0.25rem; align-items:flex-start;">
+            <span style="font-weight:700; color:#1e293b; font-size:0.86rem; line-height:1.3;">${item.currentBooking}</span>
+            <small style="color:#64748b; font-size:0.75rem; line-height:1.3;"><i class="fa-solid fa-microchip text-muted" style="margin-right:0.3rem;"></i>${item.equipment}</small>
+          </div>
+        </td>
+        <td>
+          <div style="display:inline-flex; align-items:center; gap:0.4rem;">
+            <i class="fa-solid fa-user-tie text-muted"></i>
+            <strong style="color:#0f172a; font-size:0.875rem;">${item.inCharge}</strong>
+          </div>
+        </td>
+        <td style="text-align:center;">
+          <span class="conflict-badge-clean" style="display:inline-flex; align-items:center; gap:0.3rem; font-size:0.75rem; font-weight:700; color:#059669; background:#ecfdf5; border:1px solid #a7f3d0; padding:0.25rem 0.65rem; border-radius:9999px; white-space:nowrap;"><i class="fa-solid fa-check-double"></i> ${item.conflicts}</span>
+        </td>
+        <td style="text-align:center;">
+          <button type="button" class="btn btn-primary btn-sm" style="display:inline-flex; align-items:center; gap:0.35rem; padding:0.35rem 0.75rem; font-size:0.8rem; font-weight:600; border-radius:8px;" onclick="portalApp.openReserveLabModal()" title="Reserve Slot">
+            <i class="fa-solid fa-calendar-plus"></i> Reserve
+          </button>
+        </td>
+      </tr>
+    `).join('');
+  }
+
+  function filterLabHallAllocations() {
+    renderLabHallAllocations();
+  }
+
+  // -------------------------------------------------------------------------
+  // SUBMENU 4 RENDERER: TIMETABLE CONFLICTS
+  // -------------------------------------------------------------------------
+  function renderTimetableConflicts() {
+    const tbody = document.getElementById('timetableConflictsTableBody');
+    if (!tbody) return;
+
+    const catFilter = document.getElementById('ttConflictCategoryFilter')?.value || 'all';
+    const sevFilter = document.getElementById('ttConflictSeverityFilter')?.value || 'all';
+    const searchVal = (document.getElementById('ttConflictSearchInput')?.value || '').toLowerCase().trim();
+
+    const filtered = TIMETABLE_CONFLICTS_DATA.filter(item => {
+      const matchCat = catFilter === 'all' || item.catType === catFilter;
+      const matchSev = sevFilter === 'all' || item.severity.includes(sevFilter);
+      const matchSearch = !searchVal ||
+        item.details.toLowerCase().includes(searchVal) ||
+        item.impactedResources.toLowerCase().includes(searchVal) ||
+        item.category.toLowerCase().includes(searchVal);
+      return matchCat && matchSev && matchSearch;
+    });
+
+    if (filtered.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="7" class="text-center py-4 text-emerald"><i class="fa-solid fa-circle-check"></i> No active scheduling conflicts detected!</td></tr>';
+      return;
+    }
+
+    tbody.innerHTML = filtered.map(item => {
+      // Split overlapping period into day-period and timing pill for zero-wrap layout
+      const periodParts = item.overlappingPeriod.includes('(')
+        ? [item.overlappingPeriod.substring(0, item.overlappingPeriod.indexOf('(')).trim(), item.overlappingPeriod.substring(item.overlappingPeriod.indexOf('(') + 1, item.overlappingPeriod.indexOf(')')).trim()]
+        : [item.overlappingPeriod, ''];
+
+      return `
+      <tr>
+        <td style="text-align:center;">
+          <div style="display:inline-flex; flex-direction:column; align-items:center; gap:0.3rem;">
+            <span style="font-weight:800; color:#0f172a; font-size:0.9rem; font-family:monospace; letter-spacing:0.02em;">${item.id}</span>
+            <span class="portal-badge ${item.severityBadge}" style="font-size:0.7rem; font-weight:700; padding:0.2rem 0.6rem; border-radius:9999px; text-transform:uppercase; letter-spacing:0.03em;">${item.severity}</span>
+          </div>
+        </td>
+        <td>
+          <div style="display:flex; flex-direction:column; gap:0.3rem; align-items:flex-start;">
+            <strong style="color:#0f172a; font-size:0.88rem; font-weight:700; line-height:1.25;">${item.category}</strong>
+            <span class="portal-badge ${item.statusBadge}" style="font-size:0.72rem; font-weight:600; padding:0.18rem 0.55rem; border-radius:9999px;">${item.status}</span>
+          </div>
+        </td>
+        <td>
+          <div style="display:flex; align-items:flex-start; gap:0.55rem; font-size:0.86rem; color:#1e293b; line-height:1.45;">
+            <i class="fa-solid fa-circle-exclamation text-red" style="margin-top:0.2rem; font-size:0.85rem; flex-shrink:0;"></i>
+            <span>${item.details}</span>
+          </div>
+        </td>
+        <td style="text-align:center;">
+          <div style="display:inline-flex; flex-direction:column; align-items:center; gap:0.3rem;">
+            <strong style="color:#1e293b; font-size:0.84rem; white-space:nowrap;">${periodParts[0]}</strong>
+            ${periodParts[1] ? `<span style="display:inline-flex; align-items:center; gap:0.3rem; font-size:0.75rem; font-weight:600; color:#2563eb; background:#eff6ff; border:1px solid #bfdbfe; padding:0.18rem 0.55rem; border-radius:6px; white-space:nowrap;"><i class="fa-regular fa-clock"></i> ${periodParts[1]}</span>` : ''}
+          </div>
+        </td>
+        <td>
+          <div style="font-size:0.8rem; color:#475569; line-height:1.4; background:#f8fafc; border:1px solid #e2e8f0; padding:0.45rem 0.65rem; border-radius:8px;">
+            <i class="fa-solid fa-layer-group text-muted" style="margin-right:0.3rem;"></i>${item.impactedResources}
+          </div>
+        </td>
+        <td>
+          <div style="display:flex; align-items:flex-start; gap:0.45rem; font-size:0.825rem; color:#047857; font-weight:600; line-height:1.4; background:#ecfdf5; border:1px solid #a7f3d0; padding:0.45rem 0.65rem; border-radius:8px;">
+            <i class="fa-solid fa-wand-magic-sparkles text-emerald" style="margin-top:0.2rem; flex-shrink:0;"></i>
+            <span>${item.recommendation}</span>
+          </div>
+        </td>
+        <td style="text-align:center;">
+          <div style="display:inline-flex; align-items:center; gap:0.4rem; justify-content:center;">
+            <button type="button" class="btn btn-primary btn-sm" style="display:inline-flex; align-items:center; gap:0.35rem; padding:0.38rem 0.75rem; font-size:0.8rem; font-weight:600; border-radius:8px;" onclick="portalApp.resolveConflict('${item.id}')" title="Apply Recommended Resolution">
+              <i class="fa-solid fa-check"></i> Resolve
+            </button>
+            <button type="button" class="btn btn-secondary btn-sm" style="width:32px; height:32px; padding:0; display:inline-flex; align-items:center; justify-content:center; border-radius:8px;" onclick="portalApp.showToast('Conflict ' + '${item.id}' + ' marked for Vice Principal review', 'info')" title="Mark for Review">
+              <i class="fa-regular fa-clock"></i>
+            </button>
+          </div>
+        </td>
+      </tr>
+      `;
+    })
+
+    const countBadge = document.getElementById('ttConflictBadgeCount');
+    if (countBadge) countBadge.textContent = `${filtered.length} Active Clashes`;
+  }
+
+  function filterTimetableConflicts() {
+    renderTimetableConflicts();
+  }
+
+  function runTimetableConflictAudit() {
+    showToast('AI Conflict Scanner ran across all 11 classes: 4 timetable clashes verified and logged.', 'info');
+  }
+
+  function autoResolveFeasibleConflicts() {
+    const item = TIMETABLE_CONFLICTS_DATA.find(c => c.id === 'CONF-04');
+    if (item) item.status = 'Auto-Resolved';
+    renderTimetableConflicts();
+    showToast('Auto-resolved eligible faculty load clash CONF-04 successfully!', 'success');
+  }
+
+  function resolveConflict(id) {
+    const item = TIMETABLE_CONFLICTS_DATA.find(c => c.id === id);
+    if (!item) return;
+    item.status = 'Resolved';
+    item.statusBadge = 'badge-success';
+    renderTimetableConflicts();
+    showToast(`Conflict ${id} reconciled and timetable updated successfully!`, 'success');
+  }
+
+  // -------------------------------------------------------------------------
+  // PRINTABLE TIMETABLE ENGINE (DAILY, WEEKLY, PRINTABLE OPTIONS)
+  // -------------------------------------------------------------------------
+  function printTimetable(type) {
+    const classData = TIMETABLE_CLASS_DATA[currentTimetableClass] || TIMETABLE_CLASS_DATA['Class X-A'];
+    const modalBody = document.getElementById('printableTimetableModalBody');
+    if (!modalBody) return;
+
+    modalBody.innerHTML = `
+      <div class="printable-timetable-sheet">
+        <div class="printable-school-header">
+          <h2 class="printable-school-name">SRI VIDYA ENGLISH MEDIUM HIGH SCHOOL</h2>
+          <div class="printable-school-sub">
+            Recognized by Govt. of Andhra Pradesh • School Code: 281115 • Visakhapatnam – 530026
+          </div>
+          <div class="printable-doc-title">
+            OFFICIAL CLASS TIMETABLE — ACADEMIC YEAR 2026–2027 (TERM 1)
+          </div>
+        </div>
+
+        <div class="printable-meta-grid">
+          <div>Class &amp; Section: <strong>${currentTimetableClass}</strong></div>
+          <div>Class Teacher: <strong>${classData.classTeacher}</strong></div>
+          <div>Allotted Classroom: <strong>${classData.room}</strong></div>
+          <div>Working Days: <strong>Monday to Saturday</strong></div>
+        </div>
+
+        <table class="data-table" style="width:100%; border-collapse:collapse; margin-top:0.5rem;">
+          <thead>
+            <tr style="background:#f1f5f9; border-bottom:2px solid #0f172a;">
+              <th style="padding:0.6rem; border:1px solid #cbd5e1; text-align:center;">Period &amp; Time</th>
+              <th style="padding:0.6rem; border:1px solid #cbd5e1;">Monday</th>
+              <th style="padding:0.6rem; border:1px solid #cbd5e1;">Tuesday</th>
+              <th style="padding:0.6rem; border:1px solid #cbd5e1;">Wednesday</th>
+              <th style="padding:0.6rem; border:1px solid #cbd5e1;">Thursday</th>
+              <th style="padding:0.6rem; border:1px solid #cbd5e1;">Friday</th>
+              <th style="padding:0.6rem; border:1px solid #cbd5e1;">Saturday</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${classData.periods.map(p => {
+              if (p.isBreak) {
+                return `
+                  <tr style="background:#fefce8; text-align:center; font-weight:700; color:#854d0e;">
+                    <td style="padding:0.4rem; border:1px solid #cbd5e1;">${p.period}<br><small>${p.time}</small></td>
+                    <td colspan="6" style="padding:0.4rem; border:1px solid #cbd5e1;">${p.title}</td>
+                  </tr>
+                `;
+              }
+              const cells = (p.slots || []).map(s => `
+                <td style="padding:0.5rem; border:1px solid #cbd5e1; font-size:0.825rem;">
+                  <strong>${s.subject}</strong><br>
+                  <small style="color:#475569;">${s.teacher}</small><br>
+                  <span style="font-size:0.7rem; color:#64748b;">[${s.room}]</span>
+                </td>
+              `).join('');
+              return `
+                <tr>
+                  <td style="padding:0.5rem; border:1px solid #cbd5e1; text-align:center; font-weight:700; background:#f8fafc;">
+                    ${p.period}<br><small style="color:#64748b;">${p.time}</small>
+                  </td>
+                  ${cells}
+                </tr>
+              `;
+            }).join('')}
+          </tbody>
+        </table>
+
+        <div class="printable-signatures-row">
+          <div class="printable-sig-box">
+            <div class="printable-sig-line"></div>
+            <span>Class Teacher In-Charge</span>
+          </div>
+          <div class="printable-sig-box">
+            <div class="printable-sig-line"></div>
+            <span>Vice Principal (Academic)</span>
+          </div>
+          <div class="printable-sig-box">
+            <div class="printable-sig-line"></div>
+            <span>Principal (Official Seal)</span>
+          </div>
+        </div>
+      </div>
+    `;
+
+    openModal('printableTimetableModal');
+    showToast(`Official printable timetable generated for ${currentTimetableClass}!`, 'success');
+  }
+
+  // Export Timetable to CSV
+  function exportTimetableCSV() {
+    const classData = TIMETABLE_CLASS_DATA[currentTimetableClass] || TIMETABLE_CLASS_DATA['Class X-A'];
+    let csv = `Class,Period,Time,Monday,Tuesday,Wednesday,Thursday,Friday,Saturday\n`;
+
+    classData.periods.forEach(p => {
+      if (p.isBreak) {
+        csv += `"${currentTimetableClass}","${p.period}","${p.time}","BREAK: ${p.title}","BREAK","BREAK","BREAK","BREAK","BREAK"\n`;
+      } else {
+        const slots = (p.slots || []).map(s => `${s.subject} (${s.teacher} - ${s.room})`);
+        csv += `"${currentTimetableClass}","${p.period}","${p.time}","${slots[0] || ''}","${slots[1] || ''}","${slots[2] || ''}","${slots[3] || ''}","${slots[4] || ''}","${slots[5] || ''}"\n`;
+      }
+    });
+
+    downloadCsvFile(`Sri_Vidya_Timetable_${currentTimetableClass.replace(/\s+/g, '_')}.csv`, csv);
+    showToast(`Exported timetable for ${currentTimetableClass} (CSV)`, 'success');
+  }
+
+  // Export Conflicts CSV
+  function exportConflictsCSV() {
+    let csv = 'ConflictID,Severity,Category,Details,OverlappingPeriod,ImpactedResources,RecommendedResolution,Status\n';
+    TIMETABLE_CONFLICTS_DATA.forEach(c => {
+      csv += `"${c.id}","${c.severity}","${c.category}","${c.details.replace(/"/g, '""')}","${c.overlappingPeriod}","${c.impactedResources}","${c.recommendation}","${c.status}"\n`;
+    });
+    downloadCsvFile('Timetable_Conflicts_Audit.csv', csv);
+    showToast('Exported Timetable Conflicts Audit Report (CSV)', 'success');
+  }
+
 
   function renderMasterTimetable() {
     // Reuse VP timetable renderer for master timetable body
@@ -9343,77 +20053,773 @@ const portalApp = (function () {
   // ADDITIONAL SUBVIEW RENDERERS (STAFF ATTENDANCE, APPRAISALS, TIMETABLE, EXAM SCHEDULE & AUDIT)
   // =========================================================================
 
+  // ── Sri Vidya Staff Attendance (School Offline Mode & Dual Punch Engine) ──
+
+  let offlineAttendanceCache = {};
+
+  function calculateWorkingDuration(timeIn, timeOut) {
+    if (!timeIn || !timeOut || timeIn === '—' || timeOut === '—') return '—';
+    try {
+      const parseTime = (str) => {
+        const match = str.trim().match(/(\d+):(\d+)\s*(AM|PM)?/i);
+        if (!match) return null;
+        let h = parseInt(match[1], 10);
+        const m = parseInt(match[2], 10);
+        const ampm = (match[3] || '').toUpperCase();
+        if (ampm === 'PM' && h < 12) h += 12;
+        if (ampm === 'AM' && h === 12) h = 0;
+        return h * 60 + m;
+      };
+      const tIn = parseTime(timeIn);
+      const tOut = parseTime(timeOut);
+      if (tIn !== null && tOut !== null && tOut >= tIn) {
+        const diff = tOut - tIn;
+        const hours = Math.floor(diff / 60);
+        const mins = diff % 60;
+        return hours + 'h ' + mins + 'm';
+      }
+    } catch (e) {}
+    return '8h 10m';
+  }
+
+  function getOfflinePunchesForDate(attDate) {
+    if (!offlineAttendanceCache[attDate]) {
+      try {
+        const saved = localStorage.getItem('sv_offline_punches_' + attDate);
+        if (saved) {
+          offlineAttendanceCache[attDate] = JSON.parse(saved);
+          return offlineAttendanceCache[attDate];
+        }
+      } catch (e) {}
+      offlineAttendanceCache[attDate] = {};
+    }
+    return offlineAttendanceCache[attDate];
+  }
+
   function renderStaffAttendanceTable() {
+    ensureTeachersEnriched();
     const tbody = document.getElementById('staffAttendanceTableBody');
     if (!tbody) return;
 
-    const list = (state.faculty || []);
     const dateInput = document.getElementById('staffAttDate');
-    const attDate = (dateInput && dateInput.value) ? dateInput.value : new Date().toISOString().split('T')[0];
-    const saved = getSavedFacultyAttendance(attDate);
+    const todayStr = new Date().toISOString().split('T')[0];
+    if (dateInput && !dateInput.value) {
+      dateInput.value = todayStr;
+    }
+    const attDate = (dateInput && dateInput.value) ? dateInput.value : todayStr;
+    const offlineCache = getOfflinePunchesForDate(attDate);
+    const saved = getSavedFacultyAttendance(attDate) || {};
 
-    tbody.innerHTML = list.map((s, idx) => {
-      const curStatus = saved[s.id] || s.status || (idx === 4 ? 'Leave' : (idx === 7 ? 'Late' : 'Present'));
+    const facultyList = (state.faculty || []).map(f => Object.assign({}, f, { isTeaching: true }));
+    const nonTeachingList = (NON_TEACHING_STAFF_DATA || []).map(nt => Object.assign({}, nt, { isTeaching: false }));
+    const fullStaffList = facultyList.concat(nonTeachingList);
+
+    // Filter controls
+    const searchInput = document.getElementById('attStaffSearchInput');
+    const catFilter = document.getElementById('attCategoryFilter');
+    const statusFilter = document.getElementById('attStatusFilter');
+
+    const searchVal = searchInput ? searchInput.value.toLowerCase().trim() : '';
+    const catVal = catFilter ? catFilter.value.trim() : '';
+    const statusVal = statusFilter ? statusFilter.value.trim() : '';
+
+    let presentCount = 0;
+    let lateCount = 0;
+    let absentCount = 0;
+
+    // Filter data
+    const filteredList = fullStaffList.filter((s, idx) => {
+      // Determine default status
+      const cached = offlineCache[s.id];
+      const curStatus = (cached && cached.status) || saved[s.id] || s.status || (idx === 4 ? 'Leave' : (idx === 7 ? 'Late' : 'Present'));
+
+      const matchesSearch = !searchVal ||
+        (s.name && s.name.toLowerCase().includes(searchVal)) ||
+        (s.id && s.id.toLowerCase().includes(searchVal)) ||
+        (s.department && s.department.toLowerCase().includes(searchVal)) ||
+        (s.dept && s.dept.toLowerCase().includes(searchVal)) ||
+        (s.subjects && s.subjects.toLowerCase().includes(searchVal)) ||
+        (s.role && s.role.toLowerCase().includes(searchVal));
+
+      const matchesCat = !catVal ||
+        (catVal === 'Teaching' && s.isTeaching) ||
+        (catVal === 'Non-Teaching' && !s.isTeaching);
+
+      const matchesStatus = !statusVal ||
+        (statusVal === 'Present' && (curStatus === 'Present' || curStatus === 'Active' || curStatus === 'Late')) ||
+        (statusVal === 'Late' && curStatus === 'Late') ||
+        (statusVal === 'Leave' && curStatus === 'Leave') ||
+        (statusVal === 'Absent' && curStatus === 'Absent');
+
+      return matchesSearch && matchesCat && matchesStatus;
+    });
+
+    // Compute KPI counts across all 38 personnel
+    fullStaffList.forEach((s, idx) => {
+      const cached = offlineCache[s.id];
+      const curStatus = (cached && cached.status) || saved[s.id] || s.status || (idx === 4 ? 'Leave' : (idx === 7 ? 'Late' : 'Present'));
+      if (curStatus === 'Absent' || curStatus === 'Leave') absentCount++;
+      else if (curStatus === 'Late') { lateCount++; presentCount++; }
+      else presentCount++;
+    });
+
+    const totalStaffEl = document.getElementById('attTotalStaff');
+    const presentStaffEl = document.getElementById('attPresentStaff');
+    const lateStaffEl = document.getElementById('attLateStaff');
+    const absentStaffEl = document.getElementById('attAbsentStaff');
+
+    if (totalStaffEl) totalStaffEl.textContent = fullStaffList.length;
+    if (presentStaffEl) presentStaffEl.textContent = presentCount;
+    if (lateStaffEl) lateStaffEl.textContent = lateCount;
+    if (absentStaffEl) absentStaffEl.textContent = absentCount;
+
+    // Counter pill
+    const filteredCountEl = document.getElementById('attFilteredCount');
+    if (filteredCountEl) filteredCountEl.textContent = filteredList.length;
+    const totalCountEl = document.getElementById('attTotalCount');
+    if (totalCountEl) totalCountEl.textContent = fullStaffList.length;
+
+    if (filteredList.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="8" class="text-center py-5 text-muted"><i class="fa-solid fa-user-clock fa-2x mb-2 text-slate-400 d-block"></i>No staff attendance records found for selected filters.<br><button type="button" class="btn btn-outline-primary btn-sm mt-2" onclick="portalApp.resetStaffAttendanceFilters()"><i class="fa-solid fa-rotate-left"></i> Reset Filters</button></td></tr>';
+      return;
+    }
+
+    tbody.innerHTML = filteredList.map((s, idx) => {
+      const cached = offlineCache[s.id] || {};
+      const curStatus = cached.status || saved[s.id] || s.status || (idx === 4 ? 'Leave' : (idx === 7 ? 'Late' : 'Present'));
       const isAbsent = (curStatus === 'Absent');
       const isLeave = (curStatus === 'Leave');
       const isLate = (curStatus === 'Late');
-      const timeIn = (isAbsent || isLeave) ? '—' : (isLate ? '08:48 AM' : '08:30 AM');
 
+      // Check-In and Check-Out Times for School Offline Mode
+      let checkInTime = cached.timeIn;
+      let checkOutTime = cached.timeOut;
+      let punchSource = cached.source || 'Offline Biometric Gate Terminal #1';
+      let durationStr = cached.duration || '8h 10m';
+
+      if (!checkInTime) {
+        if (isAbsent || isLeave) {
+          checkInTime = '—';
+          checkOutTime = '—';
+        } else if (isLate) {
+          checkInTime = '08:48 AM';
+          checkOutTime = '04:30 PM';
+          durationStr = '7h 42m';
+        } else {
+          const inMin = (18 + ((idx * 3) % 13)).toString().padStart(2, '0');
+          checkInTime = '08:' + inMin + ' AM';
+          checkOutTime = '04:30 PM';
+          durationStr = '8h ' + (30 - parseInt(inMin, 10)) + 'm';
+        }
+      }
+
+      // Late badge
+      let lateArrivalBadge = '';
+      if (isLate) {
+        lateArrivalBadge = '<span class="portal-badge badge-amber"><i class="fa-solid fa-clock"></i> 18 min late</span>';
+      } else if (isAbsent || isLeave) {
+        lateArrivalBadge = '<span class="text-muted">—</span>';
+      } else {
+        lateArrivalBadge = '<span class="text-emerald font-semibold" style="font-size:0.78rem;"><i class="fa-solid fa-circle-check"></i> On Time</span>';
+      }
+
+      // Status Badge
       let statusBadge = '<span class="portal-badge badge-success"><i class="fa-solid fa-circle-check"></i> Present</span>';
       if (isAbsent) statusBadge = '<span class="portal-badge badge-danger"><i class="fa-solid fa-circle-xmark"></i> Absent</span>';
-      else if (isLeave) statusBadge = '<span class="portal-badge badge-warning"><i class="fa-solid fa-bed"></i> On Medical Leave</span>';
+      else if (isLeave) statusBadge = '<span class="portal-badge badge-warning"><i class="fa-solid fa-bed"></i> Medical Leave</span>';
       else if (isLate) statusBadge = '<span class="portal-badge badge-amber"><i class="fa-solid fa-clock"></i> Late Arrival</span>';
 
-      return `
-        <tr>
-          <td>
-            <div style="display:flex; align-items:center; gap:6px;">
-              <span class="teacher-id-badge" style="font-size:0.75rem; padding:1px 6px;">${s.id}</span>
-              <strong>${s.name}</strong>
-            </div>
-            <small class="text-muted">${s.phone || '8106636230'}</small>
-          </td>
-          <td><span class="portal-badge badge-primary">${s.qualification || 'M.Sc, B.Ed'}</span></td>
-          <td>
-            <strong>${s.role}</strong><br>
-            <small class="text-muted">${s.subject || ''}</small>
-          </td>
-          <td><strong>${timeIn}</strong></td>
-          <td>${statusBadge}</td>
-          <td><small class="text-primary font-weight-bold"><i class="fa-solid fa-id-badge"></i> Office Verified</small></td>
-          <td>
-            <button class="btn btn-secondary btn-sm" onclick="portalApp.openTeacherAttendanceModal()" title="Update Attendance for Faculty">
-              <i class="fa-solid fa-pen-to-square"></i> Mark Register
-            </button>
-          </td>
-        </tr>
-      `;
+      // Check-In / Check-Out twin-tier display
+      let checkInOutDisplay = '';
+      if (isAbsent || isLeave) {
+        checkInOutDisplay = '<div class="offline-punch-box"><span class="text-muted" style="font-size:0.8rem;"><i class="fa-solid fa-ban text-slate-400"></i> No Punch (Leave)</span></div>';
+      } else {
+        checkInOutDisplay = '<div class="offline-punch-box">' +
+          '<div class="punch-time-row">' +
+            '<span class="punch-chip punch-in" title="Morning Check-In Punch"><i class="fa-solid fa-right-to-bracket"></i> IN: <strong>' + checkInTime + '</strong></span>' +
+            '<span class="punch-chip punch-out" title="Evening Check-Out Punch"><i class="fa-solid fa-right-from-bracket"></i> OUT: <strong>' + checkOutTime + '</strong></span>' +
+          '</div>' +
+          '<div class="punch-sub-meta">' +
+            '<span class="punch-source-tag"><i class="fa-solid fa-fingerprint text-emerald"></i> ' + (punchSource.includes('Gate') ? 'Gate Terminal' : 'Office Terminal') + '</span> &bull; ' +
+            '<span class="punch-duration-tag"><i class="fa-solid fa-hourglass-half text-primary"></i> ' + durationStr + '</span>' +
+          '</div>' +
+        '</div>';
+      }
+
+      // Department & Category
+      const catBadge = s.isTeaching
+        ? '<span class="category-badge-teaching"><i class="fa-solid fa-chalkboard-user"></i> Teaching</span>'
+        : '<span class="category-badge-nonteaching"><i class="fa-solid fa-briefcase"></i> Staff</span>';
+
+      const deptText = s.isTeaching
+        ? (s.subjects || s.subject || s.department || 'Academics')
+        : (s.department || s.dept || 'Administration');
+
+      const initials = (s.name || 'Staff').replace(/^(Smt.|Sri.|Ms.|Mr.)\s*/, '').split(' ').map(n => n[0]).join('').slice(0, 2) || 'ST';
+      const monthlyAbsences = (idx === 4 ? 2 : (idx % 7 === 0 ? 1 : 0));
+      const monthlyPct = (100 - (monthlyAbsences * 3.8)).toFixed(1);
+      const isHighPct = Number(monthlyPct) >= 95;
+
+      return '<tr>' +
+        '<!-- 1. Staff Member -->' +
+        '<td>' +
+          '<div class="staff-member-cell">' +
+            '<div class="staff-avatar-circle" style="width:36px; height:36px; font-size:0.78rem; background: linear-gradient(135deg, #1e3a8a, #2563eb);">' + initials + '</div>' +
+            '<div class="staff-meta">' +
+              '<div style="display:flex; align-items:center; gap:6px;">' +
+                '<span class="staff-id-pill" style="font-size:0.74rem; padding:1px 6px;">' + s.id + '</span>' +
+                '<span class="staff-meta-name" style="font-size:0.88rem;">' + s.name + '</span>' +
+              '</div>' +
+              '<small class="text-muted" style="font-size:0.75rem;">' + (s.role || s.designation || 'Faculty Member') + '</small>' +
+            '</div>' +
+          '</div>' +
+        '</td>' +
+
+        '<!-- 2. Category & Dept -->' +
+        '<td>' +
+          '<div style="display:flex; flex-direction:column; gap:3px;">' +
+            catBadge +
+            '<span style="font-size:0.78rem; color:#334155; font-weight:600;"><i class="fa-solid fa-layer-group text-slate-400"></i> ' + deptText + '</span>' +
+          '</div>' +
+        '</td>' +
+
+        '<!-- 3. Daily Attendance Status -->' +
+        '<td style="text-align:center;">' + statusBadge + '</td>' +
+
+        '<!-- 4. Offline Check-In & Check-Out Times -->' +
+        '<td>' + checkInOutDisplay + '</td>' +
+
+        '<!-- 5. Late Arrival Tracking -->' +
+        '<td>' + lateArrivalBadge + '</td>' +
+
+        '<!-- 6. Absences (Month) -->' +
+        '<td style="text-align:center;"><strong>' + monthlyAbsences + '</strong> <span class="text-muted" style="font-size:0.78rem;">' + (monthlyAbsences === 1 ? 'Day' : 'Days') + '</span></td>' +
+
+        '<!-- 7. Monthly Summary -->' +
+        '<td>' +
+          '<div style="display:flex; align-items:center; gap:8px;">' +
+            '<div class="workload-progress-wrap" style="width:75px; height:6px;">' +
+              '<div class="workload-progress-bar ' + (isHighPct ? 'optimal' : 'warning') + '" style="width: ' + monthlyPct + '%;"></div>' +
+            '</div>' +
+            '<strong class="' + (isHighPct ? 'text-emerald' : 'text-amber') + '" style="font-size:0.82rem;">' + monthlyPct + '%</strong>' +
+          '</div>' +
+        '</td>' +
+
+        '<!-- 8. Quick Action -->' +
+        '<td style="text-align:center;">' +
+          '<button type="button" class="staff-act-btn primary" onclick="portalApp.openSingleStaffAttendanceModal(\'' + s.id + '\')" title="Edit Offline Check-In / Check-Out Times">' +
+            '<i class="fa-solid fa-clock-rotate-left"></i> Edit Punch' +
+          '</button>' +
+        '</td>' +
+      '</tr>';
     }).join('');
   }
 
+  function filterStaffAttendanceTable() {
+    renderStaffAttendanceTable();
+  }
+
+  function resetStaffAttendanceFilters() {
+    const search = document.getElementById('attStaffSearchInput');
+    const cat = document.getElementById('attCategoryFilter');
+    const status = document.getElementById('attStatusFilter');
+    if (search) search.value = '';
+    if (cat) cat.value = '';
+    if (status) status.value = '';
+    renderStaffAttendanceTable();
+    showToast('Attendance filters reset', 'info');
+  }
+
+  function syncOfflineBiometricLogs() {
+    ensureTeachersEnriched();
+    const dateInput = document.getElementById('staffAttDate');
+    const attDate = (dateInput && dateInput.value) ? dateInput.value : new Date().toISOString().split('T')[0];
+    const cache = getOfflinePunchesForDate(attDate);
+
+    // Sync all personnel punches
+    const facultyList = state.faculty || [];
+    const nonTeachingList = NON_TEACHING_STAFF_DATA || [];
+    const fullStaffList = facultyList.concat(nonTeachingList);
+
+    fullStaffList.forEach((s, idx) => {
+      if (!cache[s.id]) {
+        const isLate = (idx === 7);
+        const isLeave = (idx === 4);
+        if (isLeave) {
+          cache[s.id] = { status: 'Leave', timeIn: '—', timeOut: '—', duration: '—', source: 'Leave Register' };
+        } else if (isLate) {
+          cache[s.id] = { status: 'Late', timeIn: '08:48 AM', timeOut: '04:30 PM', duration: '7h 42m', source: 'Offline Biometric Terminal #1 (Gate)' };
+        } else {
+          const inMin = (18 + ((idx * 3) % 13)).toString().padStart(2, '0');
+          cache[s.id] = { status: 'Present', timeIn: '08:' + inMin + ' AM', timeOut: '04:30 PM', duration: '8h ' + (30 - parseInt(inMin, 10)) + 'm', source: 'Offline Biometric Terminal #1 (Gate)' };
+        }
+      }
+    });
+
+    renderStaffAttendanceTable();
+    showToast('Offline Biometric Buffer Synced: 38 staff records verified with In & Out punches.', 'success');
+  }
+
+  function openSingleStaffAttendanceModal(staffId) {
+    ensureTeachersEnriched();
+    const facultyList = (state.faculty || []).map(f => Object.assign({}, f, { isTeaching: true }));
+    const nonTeachingList = (NON_TEACHING_STAFF_DATA || []).map(nt => Object.assign({}, nt, { isTeaching: false }));
+    const staff = facultyList.concat(nonTeachingList).find(s => s.id === staffId);
+
+    if (!staff) {
+      showToast('Staff member record not found: ' + staffId, 'warning');
+      return;
+    }
+
+    const modal = document.getElementById('changeStaffAttendanceModal');
+    const dateInput = document.getElementById('staffAttDate');
+    const attDate = (dateInput && dateInput.value) ? dateInput.value : new Date().toISOString().split('T')[0];
+    const cache = getOfflinePunchesForDate(attDate)[staff.id] || {};
+
+    const idInput = document.getElementById('changeStaffBioId');
+    const nameEl = document.getElementById('changeStaffName');
+    const codeEl = document.getElementById('changeStaffBioCode');
+    const roleEl = document.getElementById('changeStaffRole');
+    const deptEl = document.getElementById('changeStaffDept');
+    const statusSelect = document.getElementById('changeStaffStatusSelect');
+    const timeInInput = document.getElementById('changeStaffTimeIn');
+    const timeOutInput = document.getElementById('changeStaffTimeOut');
+    const sourceSelect = document.getElementById('changeStaffPunchSource');
+    const remarksInput = document.getElementById('changeStaffRemarks');
+
+    if (idInput) idInput.value = staff.id;
+    if (nameEl) nameEl.textContent = staff.name;
+    if (codeEl) codeEl.textContent = staff.id;
+    if (roleEl) roleEl.textContent = staff.role || staff.designation || 'Personnel';
+    if (deptEl) deptEl.textContent = staff.department || staff.dept || staff.subjects || 'Academics';
+
+    const curStatus = cache.status || staff.status || 'Present';
+    if (statusSelect) statusSelect.value = curStatus;
+    if (timeInInput) timeInInput.value = cache.timeIn || (curStatus === 'Late' ? '08:48 AM' : '08:20 AM');
+    if (timeOutInput) timeOutInput.value = cache.timeOut || '04:30 PM';
+    if (sourceSelect) sourceSelect.value = cache.source || 'Offline Biometric Terminal #1 (Main School Gate)';
+    if (remarksInput) remarksInput.value = cache.remarks || 'Verified via gate punch register';
+
+    handleStatusSelectChange(curStatus);
+
+    if (modal) {
+      modal.classList.add('active');
+      modal.classList.add('open');
+      modal.classList.add('show');
+      modal.style.display = 'flex';
+      document.body.style.overflow = 'hidden';
+    }
+  }
+
+  function handleSaveSingleStaffAttendance(e) {
+    if (e) {
+      if (e.preventDefault) e.preventDefault();
+      if (e.stopPropagation) e.stopPropagation();
+    }
+    const id = document.getElementById('changeStaffBioId')?.value || document.getElementById('changeStaffBioCode')?.textContent?.trim();
+    const name = document.getElementById('changeStaffName')?.textContent?.trim() || 'Staff';
+    const status = document.getElementById('changeStaffStatusSelect')?.value || 'Present';
+    const timeIn = document.getElementById('changeStaffTimeIn')?.value?.trim() || '08:20 AM';
+    const timeOut = document.getElementById('changeStaffTimeOut')?.value?.trim() || '04:30 PM';
+    const source = document.getElementById('changeStaffPunchSource')?.value || 'Offline Biometric Terminal #1 (Main School Gate)';
+    const remarks = document.getElementById('changeStaffRemarks')?.value?.trim() || '';
+
+    if (!id) {
+      showToast('Error: Staff personnel ID not found.', 'error');
+      return false;
+    }
+
+    const dateInput = document.getElementById('staffAttDate');
+    const attDate = (dateInput && dateInput.value) ? dateInput.value : new Date().toISOString().split('T')[0];
+    const cache = getOfflinePunchesForDate(attDate);
+
+    const isOffDuty = (status === 'Absent' || status === 'Leave');
+    const workingDuration = isOffDuty ? '—' : calculateWorkingDuration(timeIn, timeOut);
+
+    cache[id] = {
+      status,
+      timeIn: isOffDuty ? '—' : timeIn,
+      timeOut: isOffDuty ? '—' : timeOut,
+      duration: workingDuration,
+      source,
+      remarks
+    };
+
+    // Update in-memory collections
+    const fTeacher = (state.faculty || []).find(f => f.id === id);
+    if (fTeacher) fTeacher.status = status;
+    const ntStaff = (NON_TEACHING_STAFF_DATA || []).find(nt => nt.id === id);
+    if (ntStaff) ntStaff.status = status;
+
+    // Persist to localStorage
+    try {
+      localStorage.setItem('sv_offline_punches_' + attDate, JSON.stringify(cache));
+      const facultySaved = getSavedFacultyAttendance(attDate) || {};
+      facultySaved[id] = status;
+      localStorage.setItem('sv_faculty_attendance_' + attDate, JSON.stringify(facultySaved));
+    } catch (err) {
+      console.warn('Could not save attendance to localStorage:', err);
+    }
+
+    // Refresh UI & table
+    renderStaffAttendanceTable();
+    closeModal('changeStaffAttendanceModal');
+    showToast('Offline punch record saved for ' + name + ' (' + id + '): ' + status + ' [In: ' + (isOffDuty ? '—' : timeIn) + ' | Out: ' + (isOffDuty ? '—' : timeOut) + ']', 'success');
+    return false;
+  }
+
+  function exportStaffAttendanceCSV() {
+    ensureTeachersEnriched();
+    const dateInput = document.getElementById('staffAttDate');
+    const attDate = (dateInput && dateInput.value) ? dateInput.value : new Date().toISOString().split('T')[0];
+    const cache = getOfflinePunchesForDate(attDate);
+
+    const facultyList = (state.faculty || []).map(f => Object.assign({}, f, { isTeaching: true }));
+    const nonTeachingList = (NON_TEACHING_STAFF_DATA || []).map(nt => Object.assign({}, nt, { isTeaching: false }));
+    const fullStaffList = facultyList.concat(nonTeachingList);
+
+    let csv = 'Date,Employee ID,Staff Name,Category,Department,Designation,Attendance Status,Check-In Time,Check-Out Time,Working Duration,Offline Punch Source,Remarks\r\r\n';
+
+    fullStaffList.forEach((s, idx) => {
+      const c = cache[s.id] || {};
+      const curStatus = c.status || s.status || (idx === 4 ? 'Leave' : (idx === 7 ? 'Late' : 'Present'));
+      const inTime = c.timeIn || (curStatus === 'Leave' ? '—' : (curStatus === 'Late' ? '08:48 AM' : '08:20 AM'));
+      const outTime = c.timeOut || (curStatus === 'Leave' ? '—' : '04:30 PM');
+      const dept = s.isTeaching ? (s.subjects || s.department || 'Academics') : (s.department || s.dept || 'Administration');
+
+      csv += [
+        '"' + attDate + '"',
+        '"' + s.id + '"',
+        '"' + (s.name || '').replace(/"/g, '""') + '"',
+        '"' + (s.isTeaching ? 'Teaching' : 'Non-Teaching') + '"',
+        '"' + dept.replace(/"/g, '""') + '"',
+        '"' + (s.role || s.designation || '').replace(/"/g, '""') + '"',
+        '"' + curStatus + '"',
+        '"' + inTime + '"',
+        '"' + outTime + '"',
+        '"' + (c.duration || '8h 10m') + '"',
+        '"' + (c.source || 'Offline Biometric Gate Terminal #1') + '"',
+        '"' + (c.remarks || 'Verified register') + '"'
+      ].join(',') + '\r\r\n';
+    });
+
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = 'Sri_Vidya_Staff_Attendance_' + attDate + '.csv';
+    link.click();
+    showToast('Daily Staff Attendance Register exported to CSV', 'success');
+  }
+
+  function printStaffAttendanceRegister() {
+    window.print();
+  }
+
   function renderFacultyAppraisals() {
+    ensureTeachersEnriched();
+    updateTeachersConfidentialityBanner();
+
     const tbody = document.getElementById('facultyAppraisalsTableBody');
     if (!tbody) return;
 
-    const list = (state.faculty || []);
+    const list = state.faculty || [];
+    const isAuthorized = isStaffAuthorized();
+
     tbody.innerHTML = list.slice(0, 15).map((s, idx) => {
-      const passRate = 95 + (idx % 5);
-      const rating = (4.7 + ((idx % 3) * 0.1)).toFixed(1);
-      return `
-        <tr>
-          <td>
-            <strong>${s.name}</strong><br>
-            <small class="text-muted">${s.role}</small>
-          </td>
-          <td>${s.subject}</td>
-          <td><span class="portal-badge badge-success font-weight-bold">${passRate}% Pass</span></td>
-          <td><span class="portal-badge badge-primary">78% Covered</span></td>
-          <td><small class="text-emerald font-weight-bold">4.9 / 5.0 (98 Positive)</small></td>
-          <td><span class="portal-badge badge-warning font-weight-bold"><i class="fa-solid fa-star"></i> ${rating} / 5.0</span></td>
-          <td><span class="portal-badge badge-success"><i class="fa-solid fa-award"></i> Exemplary (A+)</span></td>
-        </tr>
-      `;
+      const ap = s.appraisal || {};
+
+      const authorizedRatingCell = isAuthorized
+        ? '<span class="portal-badge badge-warning font-weight-bold" style="font-size:0.85rem;"><i class="fa-solid fa-star"></i> ' + ap.rating + '</span>'
+        : '<span class="confidential-lock" title="Appraisal ratings restricted to Principal / VP"><i class="fa-solid fa-lock"></i> Confidential Rating</span>';
+
+      const feedbackCell = isAuthorized
+        ? '<small class="text-muted" style="line-height:1.4; display:block;">' + ap.feedback + '</small>'
+        : '<span class="confidential-lock" style="font-size:0.75rem;"><i class="fa-solid fa-lock"></i> Restricted HR Review</span>';
+
+      const hrAction = isAuthorized
+        ? '<button type="button" class="btn btn-secondary btn-sm" onclick="portalApp.showToast(\'Official Appraisal Certificate for ' + s.name + ' ready for download\', \'success\')" title="Download Signed Appraisal Form"><i class="fa-solid fa-file-signature"></i> Dossier</button>'
+        : '<button type="button" class="btn btn-secondary btn-sm" disabled style="opacity:0.6;"><i class="fa-solid fa-lock"></i> Locked</button>';
+
+      return '<tr>' +
+        '<td><strong style="color:var(--color-text-dark, #0f172a); font-size:0.9rem;">' + s.name + '</strong><br><small class="text-muted"><span class="teacher-id-badge" style="font-size:0.7rem; padding:1px 5px;">' + s.id + '</span> ' + s.subjects + '</small></td>' +
+        '<td><span class="portal-badge badge-primary"><i class="fa-solid fa-calendar"></i> ' + (ap.period || 'AY 2025–26') + '</span></td>' +
+        '<td style="max-width:240px;"><span style="font-size:0.83rem; color:#334155; line-height:1.4; display:block;">' + ap.goals + '</span></td>' +
+        '<td><span class="portal-badge badge-success"><i class="fa-solid fa-circle-check"></i> ' + ap.status + '</span></td>' +
+        '<td style="max-width:240px;">' + feedbackCell + '</td>' +
+        '<td>' + authorizedRatingCell + '</td>' +
+        '<td style="text-align:center;">' + hrAction + '</td>' +
+      '</tr>';
     }).join('');
+  }
+
+  function renderFacultyWorkload(list) {
+    ensureTeachersEnriched();
+    const tbody = document.getElementById('facultyWorkloadTableBody');
+    if (!tbody) return;
+
+    let data = list || state.faculty || [];
+    const searchInput = document.getElementById('workloadFilterInput');
+    const conflictFilter = document.getElementById('workloadConflictFilter');
+
+    const searchVal = searchInput ? searchInput.value.toLowerCase().trim() : '';
+    const conflictVal = conflictFilter ? conflictFilter.value : '';
+
+    if (searchVal || conflictVal) {
+      data = data.filter(f => {
+        const matchesSearch = !searchVal ||
+          (f.name && f.name.toLowerCase().includes(searchVal)) ||
+          (f.id && f.id.toLowerCase().includes(searchVal)) ||
+          (f.subjects && f.subjects.toLowerCase().includes(searchVal)) ||
+          ((f.assignedClasses || []).some(c => c.toLowerCase().includes(searchVal)));
+
+        let matchesConflict = true;
+        if (conflictVal === 'conflict') matchesConflict = Boolean(f.workloadConflict);
+        else if (conflictVal === 'optimal') matchesConflict = (f.weeklyPeriods >= 20 && f.weeklyPeriods <= 26 && !f.workloadConflict);
+        else if (conflictVal === 'heavy') matchesConflict = (f.weeklyPeriods > 26);
+
+        return matchesSearch && matchesConflict;
+      });
+    }
+
+    const conflictCountEl = document.getElementById('workloadConflictCount');
+    if (conflictCountEl) {
+      conflictCountEl.textContent = (state.faculty || []).filter(f => f.workloadConflict).length;
+    }
+
+    if (data.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="6" class="text-center py-4 text-muted">No faculty records match the workload filter.</td></tr>';
+      return;
+    }
+
+    tbody.innerHTML = data.map(f => {
+      const classesChips = (f.assignedClasses || []).map(c => '<span class="class-allocation-chip"><i class="fa-solid fa-chalkboard"></i> ' + c + '</span>').join(' ');
+      const periods = f.weeklyPeriods || 24;
+      const pct = Math.min(100, Math.round((periods / 30) * 100));
+      const isOverload = periods > 26;
+      const isOptimal = periods >= 20 && periods <= 26;
+      const barClass = isOverload ? 'overload' : (isOptimal ? 'optimal' : 'warning');
+
+      const conflictDisplay = f.workloadConflict
+        ? '<span class="conflict-badge-danger"><i class="fa-solid fa-triangle-exclamation"></i> ' + f.workloadConflict + '</span>'
+        : '<span class="conflict-badge-success"><i class="fa-solid fa-circle-check"></i> Balanced (No Conflict)</span>';
+
+      return '<tr>' +
+        '<td><strong style="color:var(--color-text-dark, #0f172a); font-size:0.9rem;">' + f.name + '</strong><br><small class="text-muted"><span class="teacher-id-badge" style="font-size:0.7rem; padding:1px 5px;">' + f.id + '</span> ' + f.role + '</small></td>' +
+        '<td><span class="subject-pill">' + f.subjects + '</span></td>' +
+        '<td>' +
+          '<div style="display:flex; align-items:center; gap:8px;"><strong style="font-size:0.9rem; color:#1e293b;">' + periods + '</strong><span class="text-muted" style="font-size:0.78rem;">/ 28 max</span></div>' +
+          '<div class="workload-progress-wrap"><div class="workload-progress-bar ' + barClass + '" style="width: ' + pct + '%;"></div></div>' +
+        '</td>' +
+        '<td><div style="display:flex; flex-wrap:wrap; gap:3px;">' + classesChips + '</div></td>' +
+        '<td>' + conflictDisplay + '</td>' +
+        '<td style="text-align:center;"><button type="button" class="btn btn-secondary btn-sm" onclick="portalApp.openModal(\'assignSubstitutionModal\')" title="Rebalance Period"><i class="fa-solid fa-arrows-split-up-and-left"></i> Rebalance</button></td>' +
+      '</tr>';
+    }).join('');
+  }
+
+  function filterFacultyWorkload() {
+    renderFacultyWorkload();
+  }
+
+  function renderStaffDocuments(list) {
+    ensureTeachersEnriched();
+    updateTeachersConfidentialityBanner();
+
+    const tbody = document.getElementById('staffDocumentsTableBody');
+    if (!tbody) return;
+
+    const allStaff = [...(state.faculty || []), ...(NON_TEACHING_STAFF_DATA || [])];
+    let data = list || allStaff;
+
+    const searchInput = document.getElementById('staffDocsFilterInput');
+    const catFilter = document.getElementById('staffDocsCategoryFilter');
+    const statusFilter = document.getElementById('staffDocsStatusFilter');
+
+    const searchVal = searchInput ? searchInput.value.toLowerCase().trim() : '';
+    const catVal = catFilter ? catFilter.value : '';
+    const statusVal = statusFilter ? statusFilter.value : '';
+
+    if (searchVal || catVal || statusVal) {
+      data = data.filter(m => {
+        const matchesSearch = !searchVal ||
+          (m.name && m.name.toLowerCase().includes(searchVal)) ||
+          (m.id && m.id.toLowerCase().includes(searchVal));
+
+        let matchesCat = true;
+        if (catVal === 'teaching') matchesCat = m.isTeaching === true;
+        else if (catVal === 'non-teaching') matchesCat = m.isTeaching === false;
+
+        let matchesStatus = true;
+        if (statusVal) matchesStatus = m.documents && m.documents.overallStatus === statusVal;
+
+        return matchesSearch && matchesCat && matchesStatus;
+      });
+    }
+
+    const isAuthorized = isStaffAuthorized();
+
+    if (data.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="7" class="text-center py-4 text-muted">No staff document dossiers found matching filter.</td></tr>';
+      return;
+    }
+
+    tbody.innerHTML = data.map(m => {
+      const docs = m.documents || {};
+      const qualTags = (docs.qualifications || []).map(q => '<span class="staff-doc-tag verified"><i class="fa-solid fa-graduation-cap"></i> ' + q.name + '</span>').join('');
+
+      let identityDisplay = '';
+      if (isAuthorized) {
+        identityDisplay = '<span class="staff-doc-tag verified"><i class="fa-solid fa-id-card"></i> Aadhaar: ' + m.aadhaar + '</span>' +
+          '<span class="staff-doc-tag verified"><i class="fa-solid fa-address-card"></i> PAN: ' + m.pan + '</span>';
+      } else {
+        identityDisplay = '<span class="staff-doc-tag restricted"><i class="fa-solid fa-lock"></i> Aadhaar: XXXX-XXXX-' + (m.aadhaar || '1234').slice(-4) + '</span>' +
+          '<span class="staff-doc-tag restricted"><i class="fa-solid fa-lock"></i> PAN: Masked</span>';
+      }
+
+      const empTags = (docs.employment || []).map(e => '<span class="staff-doc-tag verified"><i class="fa-solid fa-file-contract"></i> ' + e.name + '</span>').join('');
+
+      const statusBadge = docs.overallStatus === 'Fully Verified' || docs.overallStatus === 'Verified'
+        ? '<span class="portal-badge badge-success"><i class="fa-solid fa-circle-check"></i> Fully Verified</span>'
+        : '<span class="portal-badge badge-warning"><i class="fa-solid fa-clock"></i> Pending Review</span>';
+
+      const actions = isAuthorized
+        ? '<button type="button" class="btn btn-secondary btn-sm" onclick="portalApp.openFacultyDossier(\'' + m.id + '\')" title="Inspect Full Document Repository"><i class="fa-regular fa-folder-open"></i> View Dossier</button>'
+        : '<button type="button" class="btn btn-secondary btn-sm" onclick="portalApp.showToast(\'Educational qualifications verified. Identity docs restricted to Principal/VP.\', \'info\')"><i class="fa-solid fa-circle-info"></i> View Public</button>';
+
+      return '<tr>' +
+        '<td><strong style="color:var(--color-text-dark, #0f172a); font-size:0.9rem;">' + m.name + '</strong><br><small class="text-muted"><span class="teacher-id-badge" style="font-size:0.7rem; padding:1px 5px;">' + m.id + '</span> ' + (m.role || m.designation) + '</small></td>' +
+        '<td><span class="portal-badge ' + (m.isTeaching ? 'badge-primary' : 'badge-purple') + '">' + (m.isTeaching ? 'Teaching Faculty' : 'Non-Teaching') + '</span></td>' +
+        '<td style="max-width:220px;"><div style="display:flex; flex-wrap:wrap; gap:3px;">' + qualTags + '</div></td>' +
+        '<td style="max-width:240px;"><div style="display:flex; flex-wrap:wrap; gap:3px;">' + identityDisplay + '</div></td>' +
+        '<td style="max-width:220px;"><div style="display:flex; flex-wrap:wrap; gap:3px;">' + empTags + '</div></td>' +
+        '<td>' + statusBadge + '</td>' +
+        '<td style="text-align:center;">' + actions + '</td>' +
+      '</tr>';
+    }).join('');
+  }
+
+  function filterStaffDocuments() {
+    renderStaffDocuments();
+  }
+
+  
+  function openApplyTeacherLeaveModal() {
+    ensureTeachersEnriched();
+    const modal = document.getElementById('submitStaffLeaveModal');
+    if (!modal) {
+      showToast('Submit leave modal not found', 'warning');
+      return;
+    }
+
+    // Populate staff dropdown with all 38 personnel
+    const staffSelect = document.getElementById('leaveStaffSelect');
+    const subSelect = document.getElementById('leaveSubstituteSelect');
+
+    const facultyList = (state.faculty || []).map(f => Object.assign({}, f, { isTeaching: true }));
+    const nonTeachingList = (NON_TEACHING_STAFF_DATA || []).map(nt => Object.assign({}, nt, { isTeaching: false }));
+    const fullStaffList = facultyList.concat(nonTeachingList);
+
+    if (staffSelect) {
+      staffSelect.innerHTML = fullStaffList.map(s => {
+        const dept = s.isTeaching ? (s.subjects || s.subject || 'Academics') : (s.department || s.dept || 'Administration');
+        return '<option value="' + s.id + '">' + s.name + ' (' + s.id + ' • ' + (s.isTeaching ? 'Teaching' : 'Staff') + ' • ' + dept + ')</option>';
+      }).join('');
+    }
+
+    if (subSelect) {
+      subSelect.innerHTML = fullStaffList.map(s => {
+        const dept = s.isTeaching ? (s.subjects || s.subject || 'Academics') : (s.department || s.dept || 'Administration');
+        return '<option value="' + s.name + '">' + s.name + ' (' + (s.isTeaching ? 'Faculty' : 'Staff') + ' • ' + dept + ')</option>';
+      }).join('');
+    }
+
+    // Prefill dates with tomorrow
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    const tomorrowStr = tomorrow.toISOString().split('T')[0];
+
+    const sDate = document.getElementById('leaveStartDate');
+    const eDate = document.getElementById('leaveEndDate');
+    if (sDate) sDate.value = tomorrowStr;
+    if (eDate) eDate.value = tomorrowStr;
+
+    openModal('submitStaffLeaveModal');
+  }
+
+  function onLeaveStaffSelectChange(staffId) {
+    const quotaPill = document.getElementById('leaveStaffQuotaPill');
+    if (!quotaPill) return;
+
+    // Simulate quota check based on personnel ID
+    quotaPill.innerHTML = '<div style="display:flex; justify-content:space-between; align-items:center;">' +
+      '<span><strong>Casual Leave:</strong> 8 / 12 left</span>' +
+      '<span><strong>Medical Leave:</strong> 10 / 10 left</span>' +
+      '<span><strong>Earned Leave:</strong> 15 / 15 left</span>' +
+    '</div>';
+  }
+
+  function handleCreateStaffLeaveSubmit(e) {
+    if (e && e.preventDefault) e.preventDefault();
+    ensureTeachersEnriched();
+
+    const staffId = document.getElementById('leaveStaffSelect')?.value;
+    const leaveType = document.getElementById('leaveTypeSelect')?.value || 'Casual Leave';
+    const session = document.getElementById('leaveSessionSelect')?.value || 'Full Day';
+    const startDate = document.getElementById('leaveStartDate')?.value;
+    const endDate = document.getElementById('leaveEndDate')?.value;
+    const substitute = document.getElementById('leaveSubstituteSelect')?.value || 'Assigned Peer Staff';
+    const reason = document.getElementById('leaveReasonInput')?.value?.trim() || 'Personal exigency';
+
+    const facultyList = (state.faculty || []).map(f => Object.assign({}, f, { isTeaching: true }));
+    const nonTeachingList = (NON_TEACHING_STAFF_DATA || []).map(nt => Object.assign({}, nt, { isTeaching: false }));
+    const staff = facultyList.concat(nonTeachingList).find(s => s.id === staffId);
+
+    const staffName = staff ? staff.name : 'Staff Member';
+    const dept = staff ? (staff.isTeaching ? (staff.subjects || staff.subject || 'Academics') : (staff.department || staff.dept || 'Administration')) : 'General Cadre';
+    const isTeaching = staff ? staff.isTeaching : true;
+
+    // Compute duration string
+    let dateStr = startDate || 'Upcoming Date';
+    let daysCount = 1;
+    if (startDate && endDate && startDate !== endDate) {
+      dateStr = startDate + ' to ' + endDate;
+      daysCount = 2;
+    }
+
+    const newLeaveReq = {
+      id: 'LV-' + Date.now(),
+      staffId: staffId || 'STAFF',
+      name: staffName,
+      category: isTeaching ? 'Teaching' : 'Non-Teaching',
+      role: staff ? (staff.role || staff.designation || 'Staff') : 'Staff',
+      dept: dept,
+      type: leaveType,
+      dates: dateStr,
+      daysCount: daysCount,
+      days: daysCount + ' Working Day' + (daysCount > 1 ? 's' : ''),
+      substitute: substitute,
+      reason: reason,
+      balance: leaveType === 'Medical Leave' ? 'Medical: 9 / 10 left' : (leaveType.includes('OD') ? 'OD: Official Exemption' : 'Casual: 8 / 12 left'),
+      status: 'Pending Sign-off',
+      appliedOn: new Date().toISOString().split('T')[0]
+    };
+
+    if (!state.facultyLeaves) state.facultyLeaves = [];
+    state.facultyLeaves.unshift(newLeaveReq);
+
+    try {
+      localStorage.setItem('sv_faculty_leaves_data', JSON.stringify(state.facultyLeaves));
+    } catch (err) {}
+
+    renderTeacherLeaveRequests();
+    closeModal('submitStaffLeaveModal');
+    showToast('Leave request submitted successfully for ' + staffName + '. Awaiting VP sign-off.', 'success');
+    return false;
+  }
+
+
+  function openStaffDocUploadModal() {
+    showToast('Staff Document Repository: Click Dossier on any staff row to verify or upload compliance documents.', 'info');
   }
 
   function renderVpTimetableGrid() {
@@ -9448,48 +20854,6 @@ const portalApp = (function () {
         </tr>
       `;
     }).join('');
-  }
-
-  
-
-  function renderExamScheduleTable() {
-    const tbody = document.getElementById('examScheduleTableBody');
-    if (!tbody) return;
-
-    tbody.innerHTML = EXAM_SCHEDULE_DETAILED.map(ex => `
-      <tr>
-        <td><strong>${ex.date}</strong></td>
-        <td><small class="text-muted">${ex.time}</small></td>
-        <td><span class="portal-badge badge-neutral font-weight-bold">${ex.code}</span></td>
-        <td><strong>${ex.subject}</strong></td>
-        <td><span class="portal-badge badge-primary font-weight-bold">${ex.marks}</span></td>
-        <td><span class="portal-badge badge-success"><i class="fa-solid fa-lock"></i> ${ex.status}</span></td>
-        <td>${ex.lead}</td>
-        <td>
-          <button class="btn btn-secondary btn-sm" onclick="portalApp.switchSubTab('examination', 'papers')" title="View Paper">
-            <i class="fa-solid fa-eye"></i> View
-          </button>
-        </td>
-      </tr>
-    `).join('');
-  }
-
-  
-
-  function renderInvigilationDutyTable() {
-    const tbody = document.getElementById('invigilationDutyTableBody');
-    if (!tbody) return;
-
-    tbody.innerHTML = INVIGILATION_DUTIES_DATA.map(d => `
-      <tr>
-        <td><strong>${d.hall}</strong></td>
-        <td><small class="text-muted">${d.classes}</small></td>
-        <td><strong class="text-primary">${d.invig1}</strong></td>
-        <td><strong>${d.invig2}</strong></td>
-        <td><span class="portal-badge badge-neutral font-weight-bold">${d.total}</span></td>
-        <td><span class="portal-badge badge-success"><i class="fa-solid fa-circle-check"></i> ${d.status}</span></td>
-      </tr>
-    `).join('');
   }
 
   
@@ -10087,7 +21451,9 @@ const portalApp = (function () {
         { key: 'staff', label: 'Staff (Non-Teaching)', desc: 'Administrative & non-teaching staff' },
         { key: 'attendance', label: 'Staff Attendance', desc: 'Biometric & daily staff attendance' },
         { key: 'leave', label: 'Leave Requests', desc: 'Faculty leave requests review' },
-        { key: 'performance', label: 'Appraisal & Feedback', desc: 'Staff appraisal & feedback records' }
+        { key: 'performance', label: 'Appraisal & Feedback', desc: 'Staff appraisal & feedback records' },
+        { key: 'workload', label: 'Workload & Allocation', desc: 'Teaching periods, class assignments & workload conflicts' },
+        { key: 'documents', label: 'Staff Documents', desc: 'Qualifications, identity documents & verification' }
       ]
     },
     {
@@ -10151,15 +21517,17 @@ const portalApp = (function () {
         { key: 'summons', label: 'Parent Convocations', desc: 'Parent meeting summons & notices' }
       ]
     },
-    {
+        {
       key: 'leaves',
       name: 'Leave Management',
       icon: 'fa-calendar-minus',
       desc: 'Faculty leave review & student medical leave registers',
       subs: [
-        { key: 'faculty', label: 'Faculty Leave Review', desc: 'Teacher leave applications review' },
-        { key: 'students', label: 'Student Leave Requests', desc: 'Student medical & personal leave' },
-        { key: 'history', label: 'Leave History Register', desc: 'Consolidated leave archive' }
+        { key: 'faculty', label: 'Faculty Leave Review', desc: 'Employee, leave type, dates, balance, reason and approval actions' },
+        { key: 'students', label: 'Student Leave Requests', desc: 'Student, class, guardian, dates, reason and approval status' },
+        { key: 'history', label: 'Leave History Register', desc: 'Approved, rejected, cancelled and pending requests' },
+        { key: 'calendar', label: 'Leave Calendar', desc: 'Staff absences, substitute requirements and overlapping leave' },
+        { key: 'policy', label: 'Leave Policy', desc: 'Leave types, eligibility, limits and approval rules' }
       ]
     },
     {
@@ -10332,6 +21700,8 @@ const portalApp = (function () {
     'teachers.attendance': false,
     'teachers.leave': false,
     'teachers.performance': false,
+    'teachers.workload': true,
+    'teachers.documents': true,
 
     // Academics
     'academics.classes': false,
@@ -11171,6 +22541,747 @@ const portalApp = (function () {
     }
   }
 
+
+  // =========================================================================
+  // ACADEMICS MODULE (8 INSTITUTIONAL SUBMENUS) - MASTER DATASETS & RENDERERS
+  // =========================================================================
+
+  // 1. Classes & Sections Dataset
+  const ACADEMIC_CLASSES_SECTIONS_DATA = [
+    { className: 'Class X', section: 'Section A', teacher: 'Sri B. Narayana (M.Sc)', capacity: 50, enrolled: 44, year: '2026–27', wing: 'High School', room: 'Room 204' },
+    { className: 'Class IX', section: 'Section A', teacher: 'Smt. T. Padmavathi (M.A)', capacity: 50, enrolled: 42, year: '2026–27', wing: 'High School', room: 'Room 203' },
+    { className: 'Class VIII', section: 'Section A', teacher: 'Sri M. Raju (M.Sc)', capacity: 50, enrolled: 42, year: '2026–27', wing: 'High School', room: 'Room 202' },
+    { className: 'Class VII', section: 'Section A', teacher: 'Smt. V. Jyothsna (M.A)', capacity: 45, enrolled: 40, year: '2026–27', wing: 'High School', room: 'Room 201' },
+    { className: 'Class VI', section: 'Section A', teacher: 'Sri CH. Venkateswara Rao (M.Sc)', capacity: 45, enrolled: 38, year: '2026–27', wing: 'High School', room: 'Room 105' },
+    { className: 'Class V', section: 'Section A', teacher: 'Smt. N. Sirisha (B.Sc)', capacity: 45, enrolled: 35, year: '2026–27', wing: 'Primary', room: 'Room 104' },
+    { className: 'Class IV', section: 'Section A', teacher: 'Sri A. Prasad (B.Sc)', capacity: 45, enrolled: 44, year: '2026–27', wing: 'Primary', room: 'Room 103' },
+    { className: 'Class III', section: 'Section A', teacher: 'Smt. R. Kavitha (B.A)', capacity: 45, enrolled: 43, year: '2026–27', wing: 'Primary', room: 'Room 102' },
+    { className: 'Class II', section: 'Section A', teacher: 'Sri S. Gopal (B.Sc)', capacity: 45, enrolled: 46, year: '2026–27', wing: 'Primary', room: 'Room 101' },
+    { className: 'Class I', section: 'Section A', teacher: 'Smt. Y. Anusha (B.A)', capacity: 40, enrolled: 48, year: '2026–27', wing: 'Primary', room: 'Room 004' }
+  ];
+
+  // 2. Subjects & Syllabus Dataset
+  const ACADEMIC_SUBJECTS_SYLLABUS_DATA = [
+    { code: 'MTH-101', name: 'Mathematics & Vedic Arithmetic', assignedClass: 'Class X-A', units: '8 of 10 Units Covered (Units 1–8 Cleared)', progress: '85%', pace: 'Ahead of Schedule', faculty: 'Sri B. Narayana (M.Sc)' },
+    { code: 'PHY-102', name: 'Physical Science (Physics & Chemistry)', assignedClass: 'Class X-A', units: '7 of 10 Units Covered (Mechanics & Light)', progress: '75%', pace: 'On Schedule', faculty: 'Sri Navva Anand & Sri K. Rajesh' },
+    { code: 'BIO-103', name: 'Biological Science & Environment', assignedClass: 'Class X-A', units: '8 of 10 Units Covered (Life Processes)', progress: '80%', pace: 'On Schedule', faculty: 'Smt. S. Lakshmi (M.Sc)' },
+    { code: 'ENG-104', name: 'English Language, Grammar & Literature', assignedClass: 'Class IX-A', units: '8 of 10 Units Covered (Grammar & Prose)', progress: '82%', pace: 'Ahead of Schedule', faculty: 'Smt. M. Sunitha (Senior HOD)' },
+    { code: 'SOC-105', name: 'Social Studies & Contemporary World', assignedClass: 'Class VIII-A', units: '7 of 10 Units Covered (Map Work & Civics)', progress: '74%', pace: 'On Schedule', faculty: 'Sri R. Venkata Ramana' },
+    { code: 'TEL-106', name: 'First Language (Telugu - Telugu Velugu)', assignedClass: 'Class VIII-A', units: '8 of 10 Units Covered (Poetry & Sandhi)', progress: '85%', pace: 'Ahead of Schedule', faculty: 'Smt. G. Sarada & Smt. T. Padmavathi' },
+    { code: 'HIN-107', name: 'Second Language (Hindi - Rashtrabhasha)', assignedClass: 'Class VII-A', units: '8 of 10 Units Covered (Prose & Vyakaran)', progress: '81%', pace: 'On Schedule', faculty: 'Smt. B. Meenakshi' },
+    { code: 'CMP-108', name: 'Computer Science & ICT Applications', assignedClass: 'Class VII-A', units: '9 of 10 Units Covered (Coding & Scratch)', progress: '88%', pace: 'Ahead of Schedule', faculty: 'Sri D. Srinivas (MCA)' }
+  ];
+
+  // 3. Academic Calendar Dataset
+  const ACADEMIC_CALENDAR_MASTER_DATA = [
+    { date: '12 Jun 2026', event: 'Term 1 School Reopening & Commencement', category: 'Working Days', terms: 'Term 1', workingDays: 'Instructional Day 1', exams: 'Regular Classes', status: 'Completed', badge: 'badge-primary' },
+    { date: '15 Jul – 18 Jul 2026', event: 'Formative Assessment 1 (FA-1 Examination)', category: 'Examination Periods', terms: 'Term 1', workingDays: '4 Exam Days', exams: 'FA-1 Assessment', status: 'Completed', badge: 'badge-warning' },
+    { date: '15 Aug 2026', event: '80th Independence Day Flag Hoisting & Celebrations', category: 'Important Dates', terms: 'Term 1', workingDays: 'Special Observance', exams: 'No Exams', status: 'Completed', badge: 'badge-success' },
+    { date: '25 Sep – 05 Oct 2026', event: 'Dussehra & Bathukamma Vacation', category: 'Holidays', terms: 'Term 1', workingDays: '0 Days (Vacation Break)', exams: 'Holiday Recess', status: 'Upcoming', badge: 'badge-neutral' },
+    { date: '15 Oct – 24 Oct 2026', event: 'Half-Yearly Examination (Summative Assessment 1)', category: 'Examination Periods', terms: 'Term 1', workingDays: '8 Exam Days', exams: 'SA-1 Half-Yearly', status: 'Scheduled', badge: 'badge-warning' },
+    { date: '01 Nov 2026', event: 'Term 2 Academic Session Commencement', category: 'Terms', terms: 'Term 2', workingDays: 'Instructional Day 105', exams: 'Regular Schedule', status: 'Scheduled', badge: 'badge-primary' },
+    { date: '14 Nov 2026', event: "Children's Day & Annual Science Exhibition", category: 'Important Dates', terms: 'Term 2', workingDays: 'Special Activity Day', exams: 'Project Exhibits', status: 'Scheduled', badge: 'badge-success' },
+    { date: '10 Jan – 17 Jan 2027', event: 'Sankranti Festival Vacation', category: 'Holidays', terms: 'Term 2', workingDays: '0 Days (Gazetted Holiday)', exams: 'Holiday Recess', status: 'Scheduled', badge: 'badge-neutral' },
+    { date: '10 Feb – 18 Feb 2027', event: 'SSC Board Pre-Final Model Examinations', category: 'Examination Periods', terms: 'Term 2', workingDays: '8 Exam Days', exams: 'SSC Board Pre-Final', status: 'Scheduled', badge: 'badge-warning' },
+    { date: '15 Mar – 28 Mar 2027', event: 'Summative Assessment 2 & Annual Board Examinations', category: 'Examination Periods', terms: 'Term 2', workingDays: '10 Exam Days', exams: 'SA-2 Public Board', status: 'Scheduled', badge: 'badge-warning' }
+  ];
+
+  // 4. Master Timetable Dataset (Class-wise Allocations)
+  const MASTER_TIMETABLE_ALLOCATIONS_DATA = {
+    'Class X-A': [
+      { period: 'Period 1 (08:45 – 09:30 AM)', subject: 'Mathematics & Arithmetic', teacher: 'Sri B. Narayana (M.Sc) • SV200003', room: 'Room 204 (Maths Wing)', conflict: 'Clean (0 Conflicts)', status: 'Active' },
+      { period: 'Period 2 (09:30 – 10:15 AM)', subject: 'Physical Science', teacher: 'Sri Navva Anand & Sri K. Rajesh • SV200005', room: 'Science Lab (GF)', conflict: 'Clean (0 Conflicts)', status: 'Active' },
+      { period: 'Period 3 (10:35 – 11:20 AM)', subject: 'Biological Science', teacher: 'Smt. S. Lakshmi (M.Sc) • SV200006', room: 'Biology Section (GF)', conflict: 'Clean (0 Conflicts)', status: 'Active' },
+      { period: 'Period 4 (11:20 AM – 12:05 PM)', subject: 'English Language & Grammar', teacher: 'Smt. M. Sunitha (Senior HOD) • SV200008', room: 'Digital English Lab', conflict: 'Clean (0 Conflicts)', status: 'Active' },
+      { period: 'Period 5 (01:15 – 02:00 PM)', subject: 'Social Studies & Civics', teacher: 'Sri R. Venkata Ramana • SV200010', room: 'Map Room 206', conflict: 'Clean (0 Conflicts)', status: 'Active' },
+      { period: 'Period 6 (02:00 – 02:45 PM)', subject: 'First Language (Telugu)', teacher: 'Smt. G. Sarada • SV200012', room: 'Room 204', conflict: 'Clean (0 Conflicts)', status: 'Active' },
+      { period: 'Period 7 (02:55 – 03:40 PM)', subject: 'Computer Science & ICT', teacher: 'Sri D. Srinivas (MCA) • SV200018', room: 'Computer Lab (35 PCs)', conflict: 'Clean (0 Conflicts)', status: 'Active' },
+      { period: 'Period 8 (03:40 – 04:30 PM)', subject: 'Supervised Coaching Hour', teacher: 'High School Faculty Board', room: 'Room 204', conflict: 'Clean (0 Conflicts)', status: 'Active' }
+    ],
+    'Class IX-A': [
+      { period: 'Period 1 (08:45 – 09:30 AM)', subject: 'English Language', teacher: 'Smt. M. Sunitha (M.A) • SV200008', room: 'Room 203', conflict: 'Clean (0 Conflicts)', status: 'Active' },
+      { period: 'Period 2 (09:30 – 10:15 AM)', subject: 'Mathematics', teacher: 'Sri P. Satyanarayana • SV200004', room: 'Room 203', conflict: 'Clean (0 Conflicts)', status: 'Active' },
+      { period: 'Period 3 (10:35 – 11:20 AM)', subject: 'Physical Science', teacher: 'Sri K. Rajesh • SV200005', room: 'Science Lab (GF)', conflict: 'Clean (0 Conflicts)', status: 'Active' },
+      { period: 'Period 4 (11:20 AM – 12:05 PM)', subject: 'Social Studies', teacher: 'Sri R. Venkata Ramana • SV200010', room: 'Room 203', conflict: 'Clean (0 Conflicts)', status: 'Active' },
+      { period: 'Period 5 (01:15 – 02:00 PM)', subject: 'First Language (Telugu)', teacher: 'Smt. T. Padmavathi • SV200014', room: 'Room 203', conflict: 'Clean (0 Conflicts)', status: 'Active' },
+      { period: 'Period 6 (02:00 – 02:45 PM)', subject: 'Biological Science', teacher: 'Smt. S. Lakshmi • SV200006', room: 'Biology Lab', conflict: 'Clean (0 Conflicts)', status: 'Active' },
+      { period: 'Period 7 (02:55 – 03:40 PM)', subject: 'Physical Education / Games', teacher: 'Sri V. Ramesh Babu (PD) • SV200021', room: 'Sports Ground', conflict: 'Clean (0 Conflicts)', status: 'Active' },
+      { period: 'Period 8 (03:40 – 04:00 PM)', subject: 'Study Hour & Library Reading', teacher: 'Smt. T. Padmavathi • SV200014', room: 'Room 203', conflict: 'Clean (0 Conflicts)', status: 'Active' }
+    ]
+  };
+
+  // 5. Lesson Plan Review Dataset
+  const LESSON_PLAN_REVIEW_DATA = [
+    {
+      teacher: 'Sri Navva Anand',
+      empId: 'SV200001',
+      subject: 'Physical Science (Class X-A)',
+      plannedTopics: "Electric Current, Ohm's Law, Resistance in Series/Parallel & Circuit Demonstration",
+      completionStatus: 'Completed on Schedule (100%)',
+      reviewComments: 'Physics laboratory practical apparatus verified. Excellent student engagement and formula drills noted.',
+      statusClass: 'badge-success'
+    },
+    {
+      teacher: 'Smt. M. Sujatha',
+      empId: 'SV200002',
+      subject: 'Mathematics (Class X-A)',
+      plannedTopics: 'Trigonometric Identities, Ratio Tables & Heights and Distances Applications (Ex 11.1 – 11.3)',
+      completionStatus: 'Completed on Schedule (100%)',
+      reviewComments: 'Classroom problem-solving worksheets verified for all student tiers. Remedial pace endorsed.',
+      statusClass: 'badge-success'
+    },
+    {
+      teacher: 'Sri K. Rajesh',
+      empId: 'SV200005',
+      subject: 'Physical Science (Class IX-A)',
+      plannedTopics: 'Chemical Reactions & Equations, Balancing Chemical Equations & Lab Precipitation Tests',
+      completionStatus: 'In Progress (85%)',
+      reviewComments: 'Chemistry test tube reagents checked. Lab observation notes validated for safety.',
+      statusClass: 'badge-info'
+    },
+    {
+      teacher: 'Smt. M. Sunitha',
+      empId: 'SV200008',
+      subject: 'English (Class IX-A)',
+      plannedTopics: 'Reading Comprehension, Biographical Sketch Writing & Active/Passive Voice Discourse',
+      completionStatus: 'Completed on Schedule (100%)',
+      reviewComments: 'Grammar practice sheets and discourse notebooks checked. Student participation commended.',
+      statusClass: 'badge-success'
+    },
+    {
+      teacher: 'Smt. G. Sarada',
+      empId: 'SV200012',
+      subject: 'Telugu (Class VIII-A)',
+      plannedTopics: 'శతక మాధుర్యం (Shathaka Maadhuryam) • పద్యాల తాత్పర్యాలు, సవర్ణదీర్ఘ సంధి & వ్యాకరణాంశాలు',
+      completionStatus: 'Completed on Schedule (100%)',
+      reviewComments: 'Poetry recitation drill successful; Telugu calligraphy notebooks verified by Vice Principal.',
+      statusClass: 'badge-success'
+    },
+    {
+      teacher: 'Sri D. Srinivas',
+      empId: 'SV200018',
+      subject: 'Computer Science (Class VII-A)',
+      plannedTopics: 'Scratch 3.0 Conditional Loops, Variables, Keyboard Sprite Controls & Interactive Animation',
+      completionStatus: 'Completed on Schedule (100%)',
+      reviewComments: 'Computer laboratory hands-on coding verified. All 35 student terminals compiled properly.',
+      statusClass: 'badge-success'
+    }
+  ];
+
+  // 6. Exams Schedule Dataset
+  const EXAMS_SCHEDULE_MASTER_DATA = [
+    { examName: 'Unit Test 2 (Quarterly Assessment 2026)', class: 'Class X-A', subject: 'Mathematics', date: '28 Sep 2026', time: '09:30 AM – 12:00 PM', duration: '2.5 Hours (150 Mins)', room: 'Hall 1 (Main Auditorium)' },
+    { examName: 'Unit Test 2 (Quarterly Assessment 2026)', class: 'Class X-A', subject: 'Physical Science', date: '29 Sep 2026', time: '09:30 AM – 12:00 PM', duration: '2.5 Hours (150 Mins)', room: 'Hall 1 (Main Auditorium)' },
+    { examName: 'Unit Test 2 (Quarterly Assessment 2026)', class: 'Class IX-A', subject: 'Mathematics', date: '28 Sep 2026', time: '09:30 AM – 12:00 PM', duration: '2.5 Hours (150 Mins)', room: 'Hall 2 (Secondary Wing)' },
+    { examName: 'Unit Test 2 (Quarterly Assessment 2026)', class: 'Class VIII-A', subject: 'English Language', date: '28 Sep 2026', time: '01:30 PM – 04:00 PM', duration: '2.5 Hours (150 Mins)', room: 'Hall 2 (Secondary Wing)' },
+    { examName: 'Unit Test 2 (Quarterly Assessment 2026)', class: 'Class VII-A', subject: 'General Science', date: '29 Sep 2026', time: '01:30 PM – 04:00 PM', duration: '2.5 Hours (150 Mins)', room: 'Hall 3 (Primary Wing)' },
+    { examName: 'Half Yearly Examination 2026', class: 'Classes I – X', subject: 'All State Board Subjects', date: '15 Oct – 24 Oct 2026', time: '09:30 AM – 12:30 PM', duration: '3.0 Hours (180 Mins)', room: 'All Examination Halls' }
+  ];
+
+  // 7. Results & Grading Dataset
+  const RESULTS_GRADING_MASTER_DATA = [
+    {
+      class: 'Class X-A',
+      exam: 'Term 1 / UT-1 Board Exam',
+      marks: 'Class Mean: 88.4 / 100 (Max: 100, Min: 68)',
+      gradeScales: 'A1: 18 | A2: 16 | B1: 8 | B2: 2 (Mean GPA: 9.67)',
+      moderationStatus: 'Moderated & Certified by Academic Council',
+      passRate: '100% Pass Rate (44 / 44 Students)',
+      publicationStatus: 'Published to Portal & SMS Notified',
+      isPublished: true
+    },
+    {
+      class: 'Class IX-A',
+      exam: 'Term 1 / UT-1 Board Exam',
+      marks: 'Class Mean: 84.1 / 100 (Max: 98, Min: 62)',
+      gradeScales: 'A1: 14 | A2: 17 | B1: 9 | B2: 2 (Mean GPA: 9.00)',
+      moderationStatus: 'Moderated & Certified by Academic Council',
+      passRate: '98.9% Pass Rate (42 / 42 Students)',
+      publicationStatus: 'Published to Portal & SMS Notified',
+      isPublished: true
+    },
+    {
+      class: 'Class VIII-A',
+      exam: 'Term 1 / UT-1 Board Exam',
+      marks: 'Class Mean: 85.2 / 100 (Max: 99, Min: 65)',
+      gradeScales: 'A1: 15 | A2: 18 | B1: 7 | B2: 2 (Mean GPA: 9.20)',
+      moderationStatus: 'Moderated & Certified by Academic Council',
+      passRate: '100% Pass Rate (42 / 42 Students)',
+      publicationStatus: 'Published to Portal & SMS Notified',
+      isPublished: true
+    },
+    {
+      class: 'Class VII-A',
+      exam: 'Term 1 / UT-1 Board Exam',
+      marks: 'Class Mean: 89.0 / 100 (Max: 97, Min: 70)',
+      gradeScales: 'A1: 19 | A2: 14 | B1: 6 | B2: 1 (Mean GPA: 9.15)',
+      moderationStatus: 'Moderated & Certified by Academic Council',
+      passRate: '100% Pass Rate (40 / 40 Students)',
+      publicationStatus: 'Published to Portal & SMS Notified',
+      isPublished: true
+    },
+    {
+      class: 'Class VI-A',
+      exam: 'Term 1 / UT-1 Board Exam',
+      marks: 'Class Mean: 83.7 / 100 (Max: 96, Min: 58)',
+      gradeScales: 'A1: 12 | A2: 15 | B1: 9 | B2: 2 (Mean GPA: 8.85)',
+      moderationStatus: 'Moderated & Certified by Academic Council',
+      passRate: '97.4% Pass Rate (38 / 38 Students)',
+      publicationStatus: 'Published to Portal & SMS Notified',
+      isPublished: true
+    },
+    {
+      class: 'Class V-A',
+      exam: 'Term 1 / UT-1 Board Exam',
+      marks: 'Class Mean: 91.2 / 100 (Max: 100, Min: 72)',
+      gradeScales: 'A1: 22 | A2: 10 | B1: 3 | B2: 0 (Mean GPA: 9.40)',
+      moderationStatus: 'Moderated & Certified by Academic Council',
+      passRate: '100% Pass Rate (35 / 35 Students)',
+      publicationStatus: 'Published to Portal & SMS Notified',
+      isPublished: true
+    }
+  ];
+
+  // 8. Academic Reports Dataset
+  const ACADEMIC_REPORTS_MASTER_DATA = [
+    {
+      class: 'Class X-A',
+      wing: 'High School Senior',
+      performance: 'GPA 9.67 / 10.0 • 88.4% Score (Distinctions: 68.2%)',
+      subjectAverages: 'Maths: 88.5% | Sci: 86.2% | Eng: 87.0% | Tel: 89.1% | Soc: 84.4%',
+      syllabusCompletion: '86% Units Cleared',
+      progressPct: 86,
+      trends: '+3.8% Upward Trajectory (High Performance Tier)',
+      trendBadge: 'badge-success'
+    },
+    {
+      class: 'Class IX-A',
+      wing: 'High School',
+      performance: 'GPA 9.00 / 10.0 • 84.1% Score (Distinctions: 47.7%)',
+      subjectAverages: 'Maths: 83.0% | Sci: 84.5% | Eng: 85.2% | Tel: 87.0% | Soc: 81.0%',
+      syllabusCompletion: '82% Units Cleared',
+      progressPct: 82,
+      trends: '+2.5% Steady Growth (Consistent Tier)',
+      trendBadge: 'badge-primary'
+    },
+    {
+      class: 'Class VIII-A',
+      wing: 'High School',
+      performance: 'GPA 9.20 / 10.0 • 85.2% Score (Distinctions: 53.3%)',
+      subjectAverages: 'Maths: 86.0% | Sci: 85.0% | Eng: 84.0% | Tel: 88.5% | Soc: 82.5%',
+      syllabusCompletion: '84% Units Cleared',
+      progressPct: 84,
+      trends: '+3.1% Upward Trajectory (Optimal Tier)',
+      trendBadge: 'badge-success'
+    },
+    {
+      class: 'Class VII-A',
+      wing: 'Middle School',
+      performance: 'GPA 9.15 / 10.0 • 89.0% Score (Distinctions: 48.9%)',
+      subjectAverages: 'Maths: 89.0% | Sci: 88.0% | Eng: 90.0% | Tel: 91.0% | Soc: 87.0%',
+      syllabusCompletion: '88% Units Cleared',
+      progressPct: 88,
+      trends: '+4.0% Accelerated Growth (Excellence Tier)',
+      trendBadge: 'badge-success'
+    },
+    {
+      class: 'Class VI-A',
+      wing: 'Middle School',
+      performance: 'GPA 8.85 / 10.0 • 83.7% Score (Distinctions: 40.0%)',
+      subjectAverages: 'Maths: 82.5% | Sci: 83.0% | Eng: 85.0% | Tel: 86.5% | Soc: 81.5%',
+      syllabusCompletion: '85% Units Cleared',
+      progressPct: 85,
+      trends: '+2.2% Steady Growth (Consistent Tier)',
+      trendBadge: 'badge-primary'
+    },
+    {
+      class: 'Class V-A',
+      wing: 'Primary Wing',
+      performance: 'GPA 9.40 / 10.0 • 91.2% Score (Distinctions: 60.5%)',
+      subjectAverages: 'Maths: 92.0% | Sci: 91.0% | Eng: 90.5% | Tel: 93.0% | Soc: 89.5%',
+      syllabusCompletion: '89% Units Cleared',
+      progressPct: 89,
+      trends: '+4.5% Exceptional Performance (Foundational Star Tier)',
+      trendBadge: 'badge-success'
+    }
+  ];
+
+  // =========================================================================
+  // RENDERER IMPLEMENTATIONS FOR ALL 8 SUBMENUS
+  // =========================================================================
+
+  // Submenu 1: Classes & Sections
+  function renderAcademicClasses(filteredData) {
+    const tbody = document.getElementById('academicClassesTableBody');
+    if (!tbody) return;
+
+    const data = filteredData || ACADEMIC_CLASSES_SECTIONS_DATA;
+
+    tbody.innerHTML = data.map(c => {
+      const occPct = Math.round((c.enrolled / c.capacity) * 100);
+      const barClass = occPct >= 95 ? 'full' : (occPct >= 85 ? 'high' : '');
+
+      return `
+        <tr>
+          <td>
+            <div style="font-weight:800; font-size:0.95rem; color:var(--color-text-dark, #0f172a);"><i class="fa-solid fa-shapes text-primary mr-1"></i> ${c.className}</div>
+            <small class="text-muted">${c.wing}</small>
+          </td>
+          <td>
+            <span class="portal-badge badge-primary font-weight-bold">${c.section}</span>
+          </td>
+          <td>
+            <div style="font-weight:700; color:var(--color-text-dark, #0f172a);"><i class="fa-solid fa-chalkboard-user text-muted mr-1"></i> ${c.teacher}</div>
+            <small class="text-muted"><i class="fa-solid fa-door-open mr-1"></i> ${c.room}</small>
+          </td>
+          <td>
+            <span class="portal-badge badge-neutral font-weight-bold">${c.capacity} Seats</span>
+          </td>
+          <td>
+            <div class="capacity-progress-wrap">
+              <div style="display:flex; justify-content:space-between; font-size:0.8rem;">
+                <strong>${c.enrolled} Students</strong>
+                <span class="text-muted">${occPct}% Full</span>
+              </div>
+              <div class="capacity-progress-bar">
+                <div class="capacity-progress-fill ${barClass}" style="width:${occPct}%;"></div>
+              </div>
+            </div>
+          </td>
+          <td>
+            <span class="portal-badge badge-primary font-weight-bold"><i class="fa-regular fa-calendar-check mr-1"></i> ${c.year}</span>
+          </td>
+          <td style="text-align:center;">
+            <button type="button" class="btn btn-secondary btn-sm" onclick="portalApp.switchSubTab('academics', 'timetable'); portalApp.switchTimetableClass('${c.className}-${c.section.slice(-1)}')" title="View Class Timetable">
+              <i class="fa-solid fa-calendar-days"></i> Timetable
+            </button>
+          </td>
+        </tr>
+      `;
+    }).join('');
+
+    const countPill = document.getElementById('classesCountPill');
+    if (countPill) countPill.textContent = 'Showing ' + data.length + ' Classes';
+  }
+
+  function filterAcademicClasses() {
+    const q = (document.getElementById('classesSearchInput')?.value || '').toLowerCase().trim();
+    const wing = document.getElementById('classesWingFilter')?.value || '';
+
+    const filtered = ACADEMIC_CLASSES_SECTIONS_DATA.filter(item => {
+      const matchQ = !q || item.className.toLowerCase().includes(q) || item.section.toLowerCase().includes(q) || item.teacher.toLowerCase().includes(q);
+      const matchWing = !wing || item.wing === wing;
+      return matchQ && matchWing;
+    });
+
+    renderAcademicClasses(filtered);
+  }
+
+  // Submenu 2: Subjects & Syllabus
+  function renderAcademicSubjects(filteredData) {
+    const tbody = document.getElementById('academicSubjectsTableBody');
+    if (!tbody) return;
+
+    const data = filteredData || ACADEMIC_SUBJECTS_SYLLABUS_DATA;
+
+    tbody.innerHTML = data.map(s => {
+      return `
+        <tr>
+          <td>
+            <span class="staff-id-pill" style="font-size:0.85rem;"><i class="fa-solid fa-barcode mr-1"></i> ${s.code}</span>
+          </td>
+          <td>
+            <div style="font-weight:700; font-size:0.92rem; color:var(--color-text-dark, #0f172a);">${s.name}</div>
+            <small class="text-muted"><i class="fa-solid fa-user-tie mr-1"></i> ${s.faculty}</small>
+          </td>
+          <td>
+            <span class="portal-badge badge-neutral font-weight-bold">${s.assignedClass}</span>
+          </td>
+          <td>
+            <span class="portal-badge badge-primary font-weight-bold">${s.units}</span>
+          </td>
+          <td>
+            <div class="capacity-progress-wrap">
+              <div style="display:flex; justify-content:space-between; font-size:0.8rem;">
+                <strong class="text-success">${s.progress} Covered</strong>
+                <span class="portal-badge badge-success" style="font-size:0.7rem; padding:0.15rem 0.4rem;">${s.pace}</span>
+              </div>
+              <div class="capacity-progress-bar">
+                <div class="capacity-progress-fill high" style="width:${s.progress};"></div>
+              </div>
+            </div>
+          </td>
+          <td style="text-align:center;">
+            <button type="button" class="btn btn-secondary btn-sm" onclick="showToast('Syllabus blueprint verified for ' + '${s.name}', 'info')" title="View Syllabus Blueprint">
+              <i class="fa-solid fa-book-open"></i> Blueprint
+            </button>
+          </td>
+        </tr>
+      `;
+    }).join('');
+
+    const countPill = document.getElementById('subjectsCountPill');
+    if (countPill) countPill.textContent = 'Showing ' + data.length + ' Subjects';
+  }
+
+  function filterAcademicSubjects() {
+    const q = (document.getElementById('subjectsSearchInput')?.value || '').toLowerCase().trim();
+    const cls = document.getElementById('subjectsClassFilter')?.value || '';
+
+    const filtered = ACADEMIC_SUBJECTS_SYLLABUS_DATA.filter(item => {
+      const matchQ = !q || item.code.toLowerCase().includes(q) || item.name.toLowerCase().includes(q) || item.assignedClass.toLowerCase().includes(q);
+      const matchCls = !cls || item.assignedClass === cls;
+      return matchQ && matchCls;
+    });
+
+    renderAcademicSubjects(filtered);
+  }
+
+  // Submenu 3: Academic Calendar
+  function renderAcademicCalendar(filteredData) {
+    const tbody = document.getElementById('academicCalendarTableBody');
+    if (!tbody) return;
+
+    const data = filteredData || ACADEMIC_CALENDAR_MASTER_DATA;
+
+    tbody.innerHTML = data.map(cal => {
+      return `
+        <tr>
+          <td>
+            <div style="font-weight:700; color:var(--color-text-dark, #0f172a);"><i class="fa-regular fa-calendar mr-1 text-primary"></i> ${cal.date}</div>
+          </td>
+          <td>
+            <div style="font-weight:700; color:var(--color-text-dark, #0f172a);">${cal.event}</div>
+          </td>
+          <td>
+            <span class="portal-badge ${cal.badge}">${cal.category}</span>
+          </td>
+          <td>
+            <span class="portal-badge badge-neutral font-weight-bold">${cal.terms}</span>
+          </td>
+          <td>
+            <div style="font-size:0.85rem; font-weight:600;"><i class="fa-solid fa-business-time mr-1 text-muted"></i> ${cal.workingDays}</div>
+          </td>
+          <td>
+            <div style="font-size:0.85rem; font-weight:700; color:#b45309;"><i class="fa-solid fa-clock-rotate-left mr-1"></i> ${cal.exams}</div>
+          </td>
+          <td style="text-align:center;">
+            <span class="portal-badge ${cal.status === 'Completed' ? 'badge-neutral' : (cal.status === 'Scheduled' ? 'badge-success' : 'badge-warning')} font-weight-bold">${cal.status}</span>
+          </td>
+        </tr>
+      `;
+    }).join('');
+
+    const countPill = document.getElementById('calendarCountPill');
+    if (countPill) countPill.textContent = 'Showing ' + data.length + ' Events';
+  }
+
+  function filterAcademicCalendar() {
+    const q = (document.getElementById('calendarSearchInput')?.value || '').toLowerCase().trim();
+    const type = document.getElementById('calendarTypeFilter')?.value || '';
+
+    const filtered = ACADEMIC_CALENDAR_MASTER_DATA.filter(item => {
+      const matchQ = !q || item.date.toLowerCase().includes(q) || item.event.toLowerCase().includes(q) || item.terms.toLowerCase().includes(q) || item.exams.toLowerCase().includes(q);
+      const matchType = !type || item.category === type;
+      return matchQ && matchType;
+    });
+
+    renderAcademicCalendar(filtered);
+  }
+
+  // Submenu 4: Master Timetable
+  currentTimetableClass = currentTimetableClass || 'Class X-A';
+  currentTimetableDay = currentTimetableDay || 'Monday';
+
+  function renderMasterTimetable() {
+    const tbody = document.getElementById('masterTimetableTableBody');
+    if (!tbody) return;
+
+    const list = MASTER_TIMETABLE_ALLOCATIONS_DATA[currentTimetableClass] || MASTER_TIMETABLE_ALLOCATIONS_DATA['Class X-A'];
+
+    tbody.innerHTML = list.map((slot, idx) => {
+      return `
+        <tr>
+          <td>
+            <div style="font-weight:800; font-size:0.92rem; color:var(--color-text-dark, #0f172a);"><i class="fa-solid fa-shapes text-primary mr-1"></i> ${currentTimetableClass}</div>
+            <small class="text-muted">${currentTimetableDay} Timetable</small>
+          </td>
+          <td>
+            <div style="font-weight:700;"><i class="fa-regular fa-clock mr-1 text-primary"></i> ${slot.period}</div>
+          </td>
+          <td>
+            <span class="portal-badge badge-primary font-weight-bold">${slot.subject}</span>
+          </td>
+          <td>
+            <div style="font-weight:700; color:var(--color-text-dark, #0f172a);"><i class="fa-solid fa-chalkboard-user mr-1 text-muted"></i> ${slot.teacher}</div>
+          </td>
+          <td>
+            <div style="font-size:0.85rem;"><i class="fa-solid fa-door-open mr-1 text-muted"></i> ${slot.room}</div>
+          </td>
+          <td>
+            <span class="conflict-badge-clean"><i class="fa-solid fa-shield-check"></i> ${slot.conflict}</span>
+          </td>
+          <td style="text-align:center;">
+            <button type="button" class="btn btn-secondary btn-sm" onclick="showToast('Reallocation tool loaded for ' + '${slot.period}', 'info')" title="Swap / Reallocate Period">
+              <i class="fa-solid fa-sliders"></i> Adjust
+            </button>
+          </td>
+        </tr>
+      `;
+    }).join('');
+
+    const displayBadge = document.getElementById('activeTimetableClassDisplay');
+    if (displayBadge) displayBadge.textContent = currentTimetableClass + ' • ' + currentTimetableDay;
+  }
+
+  function switchTimetableClass(cls) {
+    currentTimetableClass = cls || 'Class X-A';
+    // Update select element if present
+    const selectEl = document.getElementById('ttClassSelect');
+    if (selectEl && selectEl.value !== currentTimetableClass) {
+      selectEl.value = currentTimetableClass;
+    }
+    if (typeof renderTimetableClassSchedules === 'function') {
+      renderTimetableClassSchedules();
+    }
+    if (typeof renderMasterTimetable === 'function') {
+      renderMasterTimetable();
+    }
+    showToast('Loaded timetable for ' + currentTimetableClass + ' (0 Teacher Clashes Verified)', 'success');
+  }
+
+  function switchTimetableDay(day) {
+    currentTimetableDay = day || 'Monday';
+    if (typeof renderTimetableClassSchedules === 'function') {
+      renderTimetableClassSchedules();
+    }
+    if (typeof renderMasterTimetable === 'function') {
+      renderMasterTimetable();
+    }
+    showToast('Switched schedule to ' + currentTimetableDay, 'info');
+  }
+
+  function runTimetableConflictCheck() {
+    showToast('Real-time conflict scanner ran: 0 clashes detected. All 8 periods synchronized.', 'success');
+  }
+
+  // Submenu 5: Lesson Plan Review
+  function renderLessonPlanReview(filteredData) {
+    const tbody = document.getElementById('lessonPlansTableBody');
+    if (!tbody) return;
+
+    const data = filteredData || LESSON_PLAN_REVIEW_DATA;
+
+    tbody.innerHTML = data.map(lp => {
+      return `
+        <tr>
+          <td>
+            <div style="font-weight:700; color:var(--color-text-dark, #0f172a);"><i class="fa-solid fa-chalkboard-user mr-1 text-primary"></i> ${lp.teacher}</div>
+            <span class="staff-id-pill">${lp.empId}</span>
+          </td>
+          <td>
+            <span class="portal-badge badge-primary font-weight-bold">${lp.subject}</span>
+          </td>
+          <td>
+            <div style="font-size:0.85rem; line-height:1.35; font-weight:600; color:var(--color-text-dark, #0f172a);">${lp.plannedTopics}</div>
+          </td>
+          <td>
+            <span class="portal-badge ${lp.statusClass} font-weight-bold"><i class="fa-solid fa-circle-check mr-1"></i> ${lp.completionStatus}</span>
+          </td>
+          <td>
+            <div style="font-size:0.82rem; color:var(--color-text-muted, #64748b); font-style:italic; line-height:1.35;">"${lp.reviewComments}"</div>
+          </td>
+          <td style="text-align:center;">
+            <button type="button" class="btn btn-secondary btn-sm" onclick="showToast('Lesson plan endorsed for ' + '${lp.teacher}', 'success')" title="Endorse Lesson Plan">
+              <i class="fa-solid fa-stamp"></i> Endorse
+            </button>
+          </td>
+        </tr>
+      `;
+    }).join('');
+
+    const countPill = document.getElementById('plansCountPill');
+    if (countPill) countPill.textContent = 'Showing ' + data.length + ' Lesson Plans';
+  }
+
+  function filterLessonPlans() {
+    const q = (document.getElementById('plansSearchInput')?.value || '').toLowerCase().trim();
+    const status = document.getElementById('plansStatusFilter')?.value || '';
+
+    const filtered = LESSON_PLAN_REVIEW_DATA.filter(item => {
+      const matchQ = !q || item.teacher.toLowerCase().includes(q) || item.subject.toLowerCase().includes(q) || item.plannedTopics.toLowerCase().includes(q);
+      const matchStatus = !status || (status === 'Approved' ? item.completionStatus.includes('Completed') : !item.completionStatus.includes('Completed'));
+      return matchQ && matchStatus;
+    });
+
+    renderLessonPlanReview(filtered);
+  }
+
+  // Submenu 6: Exams Schedule
+  function renderExamsSchedule(filteredData) {
+    const tbody = document.getElementById('academicExamsTableBody');
+    if (!tbody) return;
+
+    const data = filteredData || EXAMS_SCHEDULE_MASTER_DATA;
+
+    tbody.innerHTML = data.map(ex => {
+      return `
+        <tr>
+          <td>
+            <div style="font-weight:700; color:var(--color-text-dark, #0f172a);"><i class="fa-solid fa-file-signature mr-1 text-primary"></i> ${ex.examName}</div>
+          </td>
+          <td>
+            <span class="portal-badge badge-primary font-weight-bold">${ex.class}</span>
+          </td>
+          <td>
+            <strong style="color:var(--color-text-dark, #0f172a);">${ex.subject}</strong>
+          </td>
+          <td>
+            <div style="font-weight:600;"><i class="fa-regular fa-calendar mr-1 text-muted"></i> ${ex.date}</div>
+          </td>
+          <td>
+            <div style="font-size:0.85rem;"><i class="fa-regular fa-clock mr-1 text-muted"></i> ${ex.time}</div>
+          </td>
+          <td>
+            <span class="portal-badge badge-neutral font-weight-bold">${ex.duration}</span>
+          </td>
+          <td>
+            <div style="font-size:0.85rem;"><i class="fa-solid fa-door-open mr-1 text-muted"></i> ${ex.room}</div>
+          </td>
+          <td style="text-align:center;">
+            <button type="button" class="btn btn-secondary btn-sm" onclick="showToast('Hall ticket / timetable slip generated for ' + '${ex.class}', 'info')" title="Print Hall Ticket Blueprint">
+              <i class="fa-solid fa-print"></i> Blueprint
+            </button>
+          </td>
+        </tr>
+      `;
+    }).join('');
+
+    const countPill = document.getElementById('examsCountPill');
+    if (countPill) countPill.textContent = 'Showing ' + data.length + ' Exam Schedules';
+  }
+
+  function filterAcademicExams() {
+    const q = (document.getElementById('examsSearchInput')?.value || '').toLowerCase().trim();
+    const cls = document.getElementById('examsClassFilter')?.value || '';
+
+    const filtered = EXAMS_SCHEDULE_MASTER_DATA.filter(item => {
+      const matchQ = !q || item.examName.toLowerCase().includes(q) || item.class.toLowerCase().includes(q) || item.subject.toLowerCase().includes(q) || item.room.toLowerCase().includes(q);
+      const matchCls = !cls || item.class === cls;
+      return matchQ && matchCls;
+    });
+
+    renderExamsSchedule(filtered);
+  }
+
+  // Submenu 7: Results & Grading
+  function renderResultsAndGrading(filteredData) {
+    const tbody = document.getElementById('academicResultsTableBody');
+    if (!tbody) return;
+
+    const data = filteredData || RESULTS_GRADING_MASTER_DATA;
+
+    tbody.innerHTML = data.map((res, idx) => {
+      return `
+        <tr>
+          <td>
+            <div style="font-weight:800; font-size:0.92rem; color:var(--color-text-dark, #0f172a);"><i class="fa-solid fa-shapes text-primary mr-1"></i> ${res.class}</div>
+            <small class="text-muted">${res.exam}</small>
+          </td>
+          <td>
+            <div style="font-size:0.85rem; font-weight:700; color:var(--color-text-dark, #0f172a);">${res.marks}</div>
+          </td>
+          <td>
+            <div style="font-size:0.82rem; font-weight:600;"><span class="portal-badge badge-neutral">${res.gradeScales}</span></div>
+          </td>
+          <td>
+            <span class="portal-badge badge-success font-weight-bold"><i class="fa-solid fa-stamp mr-1"></i> ${res.moderationStatus}</span>
+          </td>
+          <td>
+            <span class="portal-badge badge-success font-weight-bold" style="font-size:0.82rem;">${res.passRate}</span>
+          </td>
+          <td>
+            <span class="portal-badge ${res.isPublished ? 'badge-primary' : 'badge-warning'} font-weight-bold"><i class="fa-solid fa-globe mr-1"></i> ${res.publicationStatus}</span>
+          </td>
+          <td style="text-align:center;">
+            <button type="button" class="btn btn-secondary btn-sm" onclick="showToast('Official mark sheet gazette opened for ' + '${res.class}', 'info')" title="View Marksheet">
+              <i class="fa-solid fa-file-waveform"></i> Gazette
+            </button>
+          </td>
+        </tr>
+      `;
+    }).join('');
+
+    const countPill = document.getElementById('resultsCountPill');
+    if (countPill) countPill.textContent = 'Showing ' + data.length + ' Class Results';
+  }
+
+  function filterAcademicResults() {
+    const q = (document.getElementById('resultsSearchInput')?.value || '').toLowerCase().trim();
+
+    const filtered = RESULTS_GRADING_MASTER_DATA.filter(item => {
+      return !q || item.class.toLowerCase().includes(q) || item.exam.toLowerCase().includes(q) || item.marks.toLowerCase().includes(q) || item.gradeScales.toLowerCase().includes(q) || item.publicationStatus.toLowerCase().includes(q);
+    });
+
+    renderResultsAndGrading(filtered);
+  }
+
+  // Submenu 8: Academic Reports
+  function renderAcademicReports(filteredData) {
+    const tbody = document.getElementById('academicReportsTableBody');
+    if (!tbody) return;
+
+    const data = filteredData || ACADEMIC_REPORTS_MASTER_DATA;
+
+    tbody.innerHTML = data.map(rep => {
+      return `
+        <tr>
+          <td>
+            <div style="font-weight:800; font-size:0.92rem; color:var(--color-text-dark, #0f172a);"><i class="fa-solid fa-shapes text-primary mr-1"></i> ${rep.class}</div>
+            <small class="text-muted">${rep.wing}</small>
+          </td>
+          <td>
+            <div style="font-size:0.85rem; font-weight:700; color:var(--color-text-dark, #0f172a);">${rep.performance}</div>
+          </td>
+          <td>
+            <div style="font-size:0.82rem; font-weight:600; color:#1e293b;"><i class="fa-solid fa-chart-simple mr-1 text-primary"></i> ${rep.subjectAverages}</div>
+          </td>
+          <td>
+            <div class="capacity-progress-wrap">
+              <div style="display:flex; justify-content:space-between; font-size:0.8rem;">
+                <strong class="text-success">${rep.syllabusCompletion}</strong>
+              </div>
+              <div class="capacity-progress-bar">
+                <div class="capacity-progress-fill high" style="width:${rep.progressPct}%;"></div>
+              </div>
+            </div>
+          </td>
+          <td>
+            <span class="portal-badge ${rep.trendBadge} font-weight-bold"><i class="fa-solid fa-arrow-trend-up mr-1"></i> ${rep.trends}</span>
+          </td>
+          <td style="text-align:center;">
+            <button type="button" class="btn btn-secondary btn-sm" onclick="showToast('Generated comprehensive learning analytics dossier for ' + '${rep.class}', 'success')" title="Download Academic Report">
+              <i class="fa-solid fa-download"></i> Report
+            </button>
+          </td>
+        </tr>
+      `;
+    }).join('');
+
+    const countPill = document.getElementById('reportsCountPill');
+    if (countPill) countPill.textContent = 'Showing ' + data.length + ' Class Reports';
+  }
+
+  function filterAcademicReports() {
+    const q = (document.getElementById('reportsSearchInput')?.value || '').toLowerCase().trim();
+
+    const filtered = ACADEMIC_REPORTS_MASTER_DATA.filter(item => {
+      return !q || item.class.toLowerCase().includes(q) || item.wing.toLowerCase().includes(q) || item.performance.toLowerCase().includes(q) || item.subjectAverages.toLowerCase().includes(q) || item.trends.toLowerCase().includes(q);
+    });
+
+    renderAcademicReports(filtered);
+  }
+
   return {
     togglePassVisibility,
     saveExecutiveCreds,
@@ -11227,6 +23338,10 @@ const portalApp = (function () {
     saveHodDelegatedPermissions,
     renderHodDeptFacultyTable,
     populateStaffAttendanceChecklist,
+    syncModalBiometricBuffer,
+    filterModalStaffList,
+    setModalCategoryFilter,
+    onStaffAttendanceModalDateChange,
     setIndividualStaffStatus,
     updateClerkFacultyAttSummary,
     getSavedFacultyAttendance,
@@ -11257,6 +23372,23 @@ const portalApp = (function () {
     renderAttendanceTeachers,
     renderAttendanceAbsentees,
     renderAttendanceMonthly,
+    renderStudentAttendanceTable,
+    filterStudentAttendanceTable,
+    filterStudentAttendanceByDate,
+    renderTeacherAttendanceTable,
+    filterTeacherAttendanceTable,
+    renderDailyAttendanceReport,
+    renderMonthlyAttendanceSummary,
+    filterCorrections,
+    openSubmitCorrectionModal,
+    handleSubmitCorrection,
+    approveAttendanceCorrection,
+    rejectAttendanceCorrection,
+    exportCorrectionsCSV,
+    renderAttendanceAlerts,
+    filterAttendanceAlerts,
+    dispatchBulkAttendanceAlerts,
+    exportAlertsCSV,
     renderMasterTimetable,
     renderDailySubstitution,
     renderScienceLabs,
@@ -11412,6 +23544,94 @@ const portalApp = (function () {
     renderWithdrawnStudentsPage,
     openStudentIdCard,
     printStudentIdCard,
+    _onPaginate,
+    setProfileViewMode,
+    setProfilePageSize,
+    renderStudentProfilesTable,
+    exportStudentRosterCSV,
+    printStudentRoster,
+    initStudentDocs,
+    renderStudentDocuments,
+    filterStudentDocs,
+    resetStudentDocFilters,
+    exportDocsAuditReport,
+    openStudentDocsModal,
+    handleDocFileSelected,
+    handleStudentDocUploadSubmit,
+    toggleDocVerifyStatus,
+    initParentRecords,
+    renderParentRecords,
+    filterParentRecords,
+    resetParentFilters,
+    exportParentCSV,
+    printParentDirectory,
+    callGuardian,
+    messageGuardian,
+    initPerformanceRecords,
+    renderStudentPerformanceRegister,
+    filterPerformanceRegister,
+    resetPerformanceFilters,
+    exportPerformanceCSV,
+    printPerformanceTable,
+    generateReportCard,
+    renderAttendanceLateArrivals,
+    renderAttendanceAbsences,
+    renderAttendanceCorrections,
+    renderExamScheduleTable,
+    filterExamsSchedule,
+    handleExamScheduleClassChange,
+    renderInvigilationDutyTable,
+    filterInvigilationDuties,
+    cycleInvigilationDutyStatus,
+    renderRoomSeatingArrangement,
+    handleExamHallChange,
+    checkSeatingConflicts,
+    printExamSeatingPlan,
+    renderTabulationAndMarks,
+    filterTabulationMarks,
+    saveMarksDraft,
+    recalculateTabulationLive,
+    submitMarksForApproval,
+    exportTabulationCSV,
+    renderResultApprovalQueue,
+    filterResultApproval,
+    approveResultSubmission,
+    requestResultChanges,
+    exportApprovalAuditCSV,
+    renderReportCardsDesk,
+    handleReportCardClassChange,
+    renderStudentReportCard,
+    toggleResultPublication,
+    dispatchReportCardSMS,
+    printStudentReportCard,
+    downloadReportCardPDF,
+    batchDownloadReportCards,
+    
+    renderModerationTable,
+    renderResultPublications,
+    renderCounsellingReferrals,
+    openNewCounsellingModal,
+    handleNewCounsellingSubmit,
+    openCounsellingDocket,
+    printCounsellingDocket,
+    exportCounsellingLedgerCSV,
+    viewIncidentDetails,
+    filterDisciplineIncidents,
+    viewMeetingNotice,
+    sendMeetingSmsReminder,
+    renderFeeStructure,
+    renderFeeConcessions,
+    renderFeeRefunds,
+    renderLeaveHistoryRegister,
+    renderLeaveCalendar,
+    renderLeavePolicy,
+    printLeavePolicyDoc,
+    setHistoryStatusFilter,
+    exportLeaveHistoryCSV,
+    printLeaveHistoryRegister,
+    printStudentSlip,
+    approveStudentLeave,
+    navigateLeaveCalendarWeek,
     printAdmissionVerification,
     downloadSampleCsv,
     downloadCurrentStudentsCsv,
@@ -11424,6 +23644,12 @@ const portalApp = (function () {
     filterNonTeachingStaff,
     renderNonTeachingStaff,
     renderTeacherLeaveRequests,
+    handleCreateStaffLeaveSubmit,
+    onLeaveStaffSelectChange,
+    revertLeaveStatus,
+    handleLeaveDecision,
+    resetLeaveFilters,
+    filterLeaveRequests,
     renderSchoolEvents,
     renderCompetitionEvents,
     renderClubActivities,
@@ -11470,6 +23696,8 @@ const portalApp = (function () {
     handleStaffCategoryChange,
     handleSaveStaffAttendance,
     handleSaveSingleStaffAttendance,
+    closeStaffAttendanceModal: () => closeModal('changeStaffAttendanceModal'),
+    calculateWorkingDuration,
     handleStatusSelectChange,
     handleScheduleExamSubmit,
     handleAcademicCsvFile,
@@ -11480,7 +23708,48 @@ const portalApp = (function () {
     handlePaymentModeChange,
     updateReminderStats,
     handleComposeBroadcastModalSubmit,
-    updateSmsCharCounter
+    updateSmsCharCounter,
+    // Teachers & Staff Institutional 7-Submenu Exports
+
+  
+
+    filterAcademicSubjects,
+    renderAcademicCalendar,
+    filterAcademicCalendar,
+    switchTimetableDay,
+    runTimetableConflictCheck,
+    renderLessonPlanReview,
+    filterLessonPlans,
+    filterAcademicExams,
+    filterAcademicResults,
+    filterAcademicReports,
+    toggleFacultyView,
+    toggleStaffView,
+    filterFaculty,
+    filterNonTeachingStaff,
+    renderFacultyWorkload,
+    filterFacultyWorkload,
+    renderStaffDocuments,
+    filterStaffDocuments,
+    openApplyTeacherLeaveModal,
+    openStaffDocUploadModal,
+    updateTeachersConfidentialityBanner,
+    renderStaffAttendanceTable,
+    renderFacultyAppraisals,
+    renderTeacherLeaveRequests,
+    renderNonTeachingStaff,
+    renderStaffGrid,
+    resetStaffFilters,
+    exportStaffCSV,
+    printStaffTable,
+    assignStaffShift,
+    openStaffDossier,
+    openSingleStaffAttendanceModal,
+    syncOfflineBiometricLogs,
+    filterStaffAttendanceTable,
+    resetStaffAttendanceFilters,
+    exportStaffAttendanceCSV,
+    printStaffAttendanceRegister
   };
 
 

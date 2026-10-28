@@ -24,7 +24,10 @@
 
   class ApiClientService {
     constructor() {
-      this.baseUrl = (typeof window !== 'undefined' && window.API_BASE_URL) || DEFAULT_API_BASE;
+      const dynamicOrigin = (typeof window !== 'undefined' && window.location && window.location.origin) 
+        ? `${window.location.origin}/api/v1` 
+        : DEFAULT_API_BASE;
+      this.baseUrl = (typeof window !== 'undefined' && window.API_BASE_URL) || dynamicOrigin;
       this.isRefreshing = false;
       this.failedQueue = [];
       this.activeRequestsCount = 0;

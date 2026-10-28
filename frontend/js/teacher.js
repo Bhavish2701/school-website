@@ -10,15 +10,15 @@ var teacherApp = (function () {
   const state = {
     activeModule: 'dashboard',
     activeSubTab: {
-      'my-classes': '8a',
-      'students': 'list',
+      'my-classes': 'classes',
       'attendance': 'mark',
-      'academics': 'homework',
-      'examinations': 'enter-marks',
+      'academics': 'plans',
+      'assignments': 'create',
+      'examinations': 'schedule',
       'timetable': 'my',
       'communication': 'class-announcements',
       'leave': 'apply',
-      'reports': 'student-perf'
+      'profile': 'personal'
     },
     teacher: {
       name: 'Ms. Anjali',
@@ -223,6 +223,109 @@ var teacherApp = (function () {
 
   let activeDossierRoll = null;
 
+    function getISTDateTime() {
+    const now = new Date();
+    const dateOptions = {
+      timeZone: 'Asia/Kolkata',
+      weekday: 'long',
+      month: 'short',
+      day: 'numeric',
+      year: 'numeric'
+    };
+    const timeOptions = {
+      timeZone: 'Asia/Kolkata',
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+      hour12: true
+    };
+    const hourOptions = {
+      timeZone: 'Asia/Kolkata',
+      hour: 'numeric',
+      hour12: false
+    };
+
+    const dateString = new Intl.DateTimeFormat('en-US', dateOptions).format(now);
+    const timeString = new Intl.DateTimeFormat('en-US', timeOptions).format(now);
+    const hour = parseInt(new Intl.DateTimeFormat('en-US', hourOptions).format(now), 10);
+    const minute = now.getMinutes();
+    const currentMinutes = hour * 60 + minute;
+
+    return { dateString, timeString, hour, currentMinutes };
+  }
+
+  function getISTSalutation(hour) {
+    if (hour >= 4 && hour < 12) {
+      return 'Good Morning';
+    } else if (hour >= 12 && hour < 17) {
+      return 'Good Afternoon';
+    } else {
+      return 'Good Evening';
+    }
+  }
+
+  const TEACHER_DAILY_CLASSES = [
+    { start: 540, end: 585, timeText: '09:00 – 09:45 AM' },
+    { start: 600, end: 645, timeText: '10:00 – 10:45 AM' },
+    { start: 765, end: 810, timeText: '12:45 – 01:30 PM' }
+  ];
+
+  function updateTodayClassesSchedule(currentMinutes) {
+    const scheduleItems = document.querySelectorAll('.class-schedule-list .schedule-item');
+    if (!scheduleItems || scheduleItems.length === 0) return;
+
+    scheduleItems.forEach((item, index) => {
+      const classDef = TEACHER_DAILY_CLASSES[index];
+      if (!classDef) return;
+
+      let badgeEl = item.querySelector('.schedule-live-badge');
+      if (!badgeEl) {
+        badgeEl = document.createElement('span');
+        badgeEl.className = 'schedule-live-badge portal-badge';
+        const h4 = item.querySelector('.schedule-details h4');
+        if (h4) h4.appendChild(badgeEl);
+      }
+
+      if (currentMinutes >= classDef.start && currentMinutes < classDef.end) {
+        item.classList.add('current');
+        item.classList.remove('completed');
+        badgeEl.className = 'schedule-live-badge portal-badge badge-primary';
+        badgeEl.style.cssText = 'margin-left:0.5rem; background:#1d4ed8; color:#fff; font-size:0.75rem;';
+        badgeEl.innerHTML = '<i class="fa-solid fa-circle-play"></i> LIVE NOW';
+      } else if (currentMinutes >= classDef.end) {
+        item.classList.remove('current');
+        item.classList.add('completed');
+        badgeEl.className = 'schedule-live-badge portal-badge badge-success';
+        badgeEl.style.cssText = 'margin-left:0.5rem; font-size:0.75rem;';
+        badgeEl.innerHTML = '<i class="fa-solid fa-check"></i> Completed';
+      } else {
+        item.classList.remove('current');
+        item.classList.remove('completed');
+        badgeEl.className = 'schedule-live-badge portal-badge badge-secondary';
+        badgeEl.style.cssText = 'margin-left:0.5rem; font-size:0.75rem;';
+        badgeEl.textContent = 'Upcoming';
+      }
+    });
+  }
+
+  function updateISTClock() {
+    const { dateString, timeString, hour, currentMinutes } = getISTDateTime();
+    const dateEl = document.getElementById('teacherDateText');
+    if (dateEl) {
+      dateEl.textContent = dateString;
+    }
+    const timeEl = document.getElementById('teacherTimeText');
+    if (timeEl) {
+      timeEl.textContent = `${timeString} IST`;
+    }
+    const bannerH1 = document.querySelector('.teacher-welcome-banner .tw-title');
+    if (bannerH1 && state.teacher && state.teacher.name) {
+      const salutation = getISTSalutation(hour);
+      bannerH1.textContent = `${salutation}, ${state.teacher.name}`;
+    }
+    updateTodayClassesSchedule(currentMinutes);
+  }
+
   function init() {
     // Filter out students withdrawn by Class Teacher
     const withdrawnRolls = JSON.parse(localStorage.getItem('sv_teacher_withdrawn_rolls') || '[]');
@@ -238,6 +341,8 @@ var teacherApp = (function () {
       state.teacher.totalStudents = state.students.length;
     }
     setupTheme();
+    updateISTClock();
+    setInterval(updateISTClock, 1000);
     loadSavedProfile();
     bindEvents();
     renderAll();
@@ -565,14 +670,13 @@ var teacherApp = (function () {
   const DEFAULT_FACULTY_MODULE_PERMS = {
     'dashboard': true,
     'my-classes': true,
-    'students': true,
     'attendance': true,
     'academics': true,
+    'assignments': true,
     'examinations': true,
     'timetable': true,
     'communication': true,
     'leave': true,
-    'reports': true,
     'profile': true
   };
 
@@ -584,6 +688,26 @@ var teacherApp = (function () {
         const parsed = JSON.parse(stored);
         // Map granular keys to module keys
         
+
+  return {
+          'dashboard': true,
+          'my-classes': parsed.class_sections !== false,
+          'students': parsed.view_students !== false || parsed.student_profiles !== false,
+          'attendance': parsed.mark_attendance !== false || parsed.view_attendance !== false,
+          'academics': parsed.homework_assignments !== false || parsed.study_materials !== false,
+          'examinations': parsed.enter_marks !== false || parsed.create_exams !== false,
+          'timetable': parsed.view_timetable !== false,
+          'communication': parsed.send_announcements !== false,
+          'leave': parsed.apply_leave !== false,
+          'reports': parsed.enter_marks !== false || parsed.student_profiles !== false,
+          'profile': true
+        };
+      }
+    } catch (e) {}
+    return Object.assign({}, DEFAULT_FACULTY_MODULE_PERMS);
+  }
+
+  // --- Class Teacher Student Withdrawal Authority ---
   function promptWithdrawStudent(roll, name, className) {
     const cls = state.classes.find(c => c.code === className || c.id === className.toLowerCase());
     if (!cls || !cls.isClassTeacher) {
@@ -750,23 +874,6 @@ var teacherApp = (function () {
     showToast(`Student ${studentName} removed from Class ${className} roster. Main Department (Principal & VP) notified.`, 'success');
   }
 
-  return {
-          'dashboard': true,
-          'my-classes': parsed.class_sections !== false,
-          'students': parsed.view_students !== false || parsed.student_profiles !== false,
-          'attendance': parsed.mark_attendance !== false || parsed.view_attendance !== false,
-          'academics': parsed.homework_assignments !== false || parsed.study_materials !== false,
-          'examinations': parsed.enter_marks !== false || parsed.create_exams !== false,
-          'timetable': parsed.view_timetable !== false,
-          'communication': parsed.send_announcements !== false,
-          'leave': parsed.apply_leave !== false,
-          'reports': parsed.enter_marks !== false || parsed.student_profiles !== false,
-          'profile': true
-        };
-      }
-    } catch (e) {}
-    return Object.assign({}, DEFAULT_FACULTY_MODULE_PERMS);
-  }
 
   function getRawTeacherPermissions(teacherId) {
     const activeId = teacherId || sessionStorage.getItem('sv_active_teacher_id') || 'SV200005';
@@ -791,34 +898,31 @@ var teacherApp = (function () {
   }
 
   const DEFAULT_TEACHER_SUBMENU_PERMISSIONS = {
-    'my-classes.8a': true,
-    'my-classes.9b': true,
-    'my-classes.7c': true,
-    'my-classes.10a': true,
-    'students.list': true,
-    'students.profile': true,
-    'students.att-history': true,
-    'students.perf': true,
+    'my-classes.classes': true,
+    'my-classes.roster': true,
+    'my-classes.profiles': true,
     'attendance.mark': true,
     'attendance.history': true,
-    'attendance.report': true,
-    'academics.assignments': true,
-    'academics.homework': true,
-    'academics.materials': true,
-    'academics.plans': false,
+    'attendance.corrections': true,
+    'academics.plans': true,
     'academics.syllabus': true,
-    'examinations.create': false,
-    'examinations.enter-marks': true,
-    'examinations.grade': true,
-    'examinations.results': false,
+    'academics.materials': true,
+    'assignments.create': true,
+    'assignments.submissions': true,
+    'assignments.grading': true,
+    'examinations.schedule': true,
+    'examinations.marks': true,
+    'examinations.review': true,
     'timetable.my': true,
-    'timetable.class': true,
-    'communication.class-announcements': true,
-    'communication.parent-messages': true,
-    'communication.notifications': true,
+    'timetable.substitutions': true,
+    'communication.announcements': true,
+    'communication.messages': true,
+    'communication.notices': true,
     'leave.apply': true,
-    'leave.status': true,
-    'reports.student-perf': true
+    'leave.history': true,
+    'profile.personal': true,
+    'profile.documents': true,
+    'profile.password': true
   };
 
   function getTeacherSubmenuPermissions(teacherId) {
@@ -1030,6 +1134,17 @@ var teacherApp = (function () {
   }
 
   function navigateTo(moduleKey, subKey) {
+    // Focused Workspace Navigation Aliases
+    if (moduleKey === 'students') {
+      moduleKey = 'my-classes';
+      if (!subKey) subKey = 'roster';
+    } else if (moduleKey === 'appointments') {
+      moduleKey = 'communication';
+      if (!subKey) subKey = 'messages';
+    } else if (moduleKey === 'tasks') {
+      moduleKey = 'dashboard';
+    }
+
     if (moduleKey === 'security' || moduleKey === 'change-password' || moduleKey === 'password') {
       moduleKey = 'profile';
       subKey = 'security';
@@ -1080,6 +1195,9 @@ var teacherApp = (function () {
     // Hide other views, show target
     document.querySelectorAll('.portal-view').forEach(v => v.classList.remove('active'));
     view.classList.add('active');
+    if (moduleKey === 'tasks') {
+      renderFullTasksView();
+    }
 
     // Breadcrumb
     const crumb = document.getElementById('teacherCurrentPageCrumb');
@@ -1111,6 +1229,64 @@ var teacherApp = (function () {
   }
 
   function switchSubTab(moduleKey, subKey) {
+    // Exact user-specified 10 modules subtab handler
+    if (moduleKey === 'profile') {
+      if (typeof switchProfileTab === 'function') {
+        switchProfileTab(subKey);
+      }
+      return;
+    }
+    if (moduleKey === 'my-classes') {
+      document.querySelectorAll('.my-classes-subview').forEach(p => p.style.display = 'none');
+      if (subKey === 'classes') {
+        const p = document.getElementById('subtab-classes-panel');
+        if (p) p.style.display = 'block';
+        if (typeof renderClassesGrid === 'function') renderClassesGrid();
+      } else if (subKey === 'roster') {
+        const p = document.getElementById('subtab-roster-panel');
+        if (p) p.style.display = 'block';
+        if (typeof renderClassListRoster === 'function') renderClassListRoster('8A');
+      } else if (subKey === 'profiles') {
+        const p = document.getElementById('subtab-profiles-panel');
+        if (p) p.style.display = 'block';
+        if (typeof searchStudentProfile === 'function') searchStudentProfile('804');
+      }
+    }
+    if (moduleKey === 'attendance') {
+      const corrPanel = document.getElementById('subview-attendance-corrections');
+      if (corrPanel) corrPanel.style.display = (subKey === 'corrections') ? 'block' : 'none';
+    }
+    if (moduleKey === 'leave') {
+      if (subKey === 'apply') {
+        if (typeof openModal === 'function') openModal('applyLeaveModal');
+      }
+    }
+    if (moduleKey === 'assignments') {
+      if (subKey === 'create') {
+        if (typeof openModal === 'function') openModal('createHomeworkModal');
+      }
+    }
+    if (moduleKey === 'examinations') {
+      if (subKey === 'review') {
+        showToast('Marks submitted to Exam Cell & Principal for final moderation and review.', 'success');
+      }
+    }
+
+    // Sub-router for the 7 focused workspace modules
+    if (moduleKey === 'my-classes') {
+      renderMyClassesSubTab(subKey);
+    } else if (moduleKey === 'attendance') {
+      renderAttendanceEnhancedSubTab(subKey);
+    } else if (moduleKey === 'academics') {
+      renderAcademicsEnhancedSubTab(subKey);
+    } else if (moduleKey === 'examinations') {
+      renderExaminationsEnhancedSubTab(subKey);
+    } else if (moduleKey === 'communication') {
+      renderCommunicationEnhancedSubTab(subKey);
+    } else if (moduleKey === 'timetable') {
+      renderTimetableEnhancedSubTab(subKey);
+    }
+
     state.activeSubTab[moduleKey] = subKey;
     const view = document.getElementById('view-' + moduleKey);
     if (!view) return;
@@ -1273,12 +1449,83 @@ var teacherApp = (function () {
           <div style="display: flex; flex-direction: column; gap: 1rem; margin-top: 1rem;">
             <div>
               <div style="display: flex; justify-content: space-between; margin-bottom: 0.35rem;">
-                <strong>Class 8A Mathematics (Quarterly Target: 4 Chapters)</strong>
-                <span>88% Complete</span>
+                <strong>Class X-A AP SCERT Telugu (Target: 4 Sections)</strong>
+                <span>75% Complete</span>
               </div>
               <div style="width: 100%; height: 10px; background: var(--color-bg-subtle); border-radius: 5px; overflow: hidden;">
-                <div style="width: 88%; height: 100%; background: var(--color-primary);"></div>
+                <div style="width: 75%; height: 100%; background: var(--color-primary);"></div>
               </div>
+              <small class="text-muted">Sections: Prose, Poetry, Non-Detailed Text (Upavaachakam), Grammar &amp; Language Topics.</small>
+            </div>
+            <div>
+              <div style="display: flex; justify-content: space-between; margin-bottom: 0.35rem;">
+                <strong>Class X-A AP SSC Hindi (Target: 14 Topics)</strong>
+                <span>0% Complete</span>
+              </div>
+              <div style="width: 100%; height: 10px; background: var(--color-bg-subtle); border-radius: 5px; overflow: hidden;">
+                <div style="width: 0%; height: 100%; background: var(--color-accent-red);"></div>
+              </div>
+              <small class="text-muted">Topics: Baraste Badal, Idgah, Hum Bharatwasi, Kan-Kan Ka Adhikari, Lokgeet, International Hindi, Bhakti Pad, Swarajya ki Neev, Dakshini Ganga Godavari, Niti ke Dohe, Jal hi Jeevan Hai, Dharti ke Sawaal, Antariksha ke Jawaab, and Upavachak Parts 1 and 2. Completed topics: none.</small>
+            </div>
+            <div>
+              <div style="display: flex; justify-content: space-between; margin-bottom: 0.35rem;">
+                <strong>Class X-A BSEAP English (Target: 4 Sections)</strong>
+                <span>75% Complete</span>
+              </div>
+              <div style="width: 100%; height: 10px; background: var(--color-bg-subtle); border-radius: 5px; overflow: hidden;">
+                <div style="width: 75%; height: 100%; background: var(--color-primary);"></div>
+              </div>
+              <small class="text-muted">Completed: Reading (30 marks), Writing (30 marks), Grammar &amp; Vocabulary (20 marks). Pending: Literature (20 marks) covering prose, poetry, drama, and the prescribed thematic units. Total: 100 marks.</small>
+            </div>
+            <div>
+              <div style="display: flex; justify-content: space-between; margin-bottom: 0.35rem;">
+                <strong>Class X-A AP SSC Mathematics (Target: 14 Units)</strong>
+                <span>86% Complete</span>
+              </div>
+              <div style="width: 100%; height: 10px; background: var(--color-bg-subtle); border-radius: 5px; overflow: hidden;">
+                <div style="width: 86%; height: 100%; background: var(--color-primary);"></div>
+              </div>
+              <small class="text-muted">Units covered: Real Numbers, Sets, Polynomials, Pair of Linear Equations, Quadratic Equations, Progressions, Coordinate Geometry, Similar Triangles, Tangents and Secants, Mensuration, Trigonometry, Applications of Trigonometry, Probability, Statistics.</small>
+            </div>
+            <div>
+              <div style="display: flex; justify-content: space-between; margin-bottom: 0.35rem;">
+                <strong>Class X-A AP SSC Physics</strong>
+                <span>71% Complete</span>
+              </div>
+              <div style="width: 100%; height: 10px; background: var(--color-bg-subtle); border-radius: 5px; overflow: hidden;">
+                <div style="width: 71%; height: 100%; background: var(--color-accent-purple);"></div>
+              </div>
+              <small class="text-muted">Topics covered: Light – Reflection and Refraction; The Human Eye and Colourful World; Electricity; Magnetic Effects of Electric Current; Heat. Current tracker progress: 10 of 14 topics.</small>
+            </div>
+            <div>
+              <div style="display: flex; justify-content: space-between; margin-bottom: 0.35rem;">
+                <strong>Class X-A AP SSC Chemistry (Target: 5 Units)</strong>
+                <span>80% Complete</span>
+              </div>
+              <div style="width: 100%; height: 10px; background: var(--color-bg-subtle); border-radius: 5px; overflow: hidden;">
+                <div style="width: 80%; height: 100%; background: var(--color-accent-green);"></div>
+              </div>
+              <small class="text-muted">Units covered: Chemical Reactions and Equations; Acids, Bases and Salts; Metals and Non-metals; Carbon and Its Compounds. Unit 5 pending: Structure of Atom &amp; Classification of Elements.</small>
+            </div>
+            <div>
+              <div style="display: flex; justify-content: space-between; margin-bottom: 0.35rem;">
+                <strong>Class X-A AP SSC Biology (Target: 10 Chapters)</strong>
+                <span>80% Complete</span>
+              </div>
+              <div style="width: 100%; height: 10px; background: var(--color-bg-subtle); border-radius: 5px; overflow: hidden;">
+                <div style="width: 80%; height: 100%; background: var(--color-accent-purple);"></div>
+              </div>
+              <small class="text-muted">Completed chapters: Nutrition, Respiration, Transportation, Excretion, Coordination, Reproduction, Coordination in Life Processes, Heredity. Pending: Our Environment and Natural Resources.</small>
+            </div>
+            <div>
+              <div style="display: flex; justify-content: space-between; margin-bottom: 0.35rem;">
+                <strong>Class X-A AP SSC Social Studies (Target: 4 Sections)</strong>
+                <span>75% Complete</span>
+              </div>
+              <div style="width: 100%; height: 10px; background: var(--color-bg-subtle); border-radius: 5px; overflow: hidden;">
+                <div style="width: 75%; height: 100%; background: var(--color-primary);"></div>
+              </div>
+              <small class="text-muted">Completed sections: Geography (5 chapters), Economics (6 chapters), and History (7 chapters). Pending: Civics / Political Science (3 chapters covering the Constitution, elections, and social movements).</small>
             </div>
             <div>
               <div style="display: flex; justify-content: space-between; margin-bottom: 0.35rem;">
@@ -1436,7 +1683,7 @@ var teacherApp = (function () {
                 ${studentsList.slice(0, 15).map(s => {
                   const ut1 = Math.round(s.marks * 0.48);
                   const termPct = Math.round(((ut1/25 + s.marks/50) / 2) * 100);
-                  const grade = termPct >= 90 ? 'A1' : (termPct >= 80 ? 'A2' : (termPct >= 70 ? 'B1' : 'B2'));
+                  const grade = termPct >= 90 ? 'O' : (termPct >= 80 ? 'A' : (termPct >= 70 ? 'B' : (termPct >= 60 ? 'C' : (termPct >= 40 ? 'D' : 'E'))));
                   return `
                     <tr>
                       <td class="text-center"><strong>#${s.roll}</strong></td>
@@ -1444,7 +1691,7 @@ var teacherApp = (function () {
                       <td class="text-center">${ut1} / 25</td>
                       <td class="text-center"><strong>${s.marks} / 50</strong></td>
                       <td class="text-center"><strong>${termPct}%</strong></td>
-                      <td class="text-center"><span class="portal-badge ${grade.startsWith('A') ? 'badge-success' : 'badge-primary'}">${grade}</span></td>
+                      <td class="text-center"><span class="portal-badge ${(grade === 'O' || grade === 'A') ? 'badge-success' : ((grade === 'B' || grade === 'C') ? 'badge-primary' : (grade === 'D' ? 'badge-warning' : 'badge-danger'))}">${grade}</span></td>
                     </tr>
                   `;
                 }).join('')}
@@ -1614,7 +1861,7 @@ var teacherApp = (function () {
             <div class="bar-chart-container">
               <div class="bar-chart-row">
                 <div class="bar-header">
-                  <span class="bar-label"><i class="fa-solid fa-medal text-emerald"></i> Grade A1 (91% – 100%): 45 to 50 Marks</span>
+                  <span class="bar-label"><i class="fa-solid fa-medal text-emerald"></i> Grade O (90% – 100%): 45 to 50 Marks</span>
                   <span class="bar-value text-emerald">18 Students (42.9%)</span>
                 </div>
                 <div class="bar-track">
@@ -1623,7 +1870,7 @@ var teacherApp = (function () {
               </div>
               <div class="bar-chart-row">
                 <div class="bar-header">
-                  <span class="bar-label"><i class="fa-solid fa-award text-blue"></i> Grade A2 (81% – 90%): 40 to 44 Marks</span>
+                  <span class="bar-label"><i class="fa-solid fa-award text-blue"></i> Grade A (80% – 89%): 40 to 44 Marks</span>
                   <span class="bar-value text-primary">10 Students (23.8%)</span>
                 </div>
                 <div class="bar-track">
@@ -1632,7 +1879,7 @@ var teacherApp = (function () {
               </div>
               <div class="bar-chart-row">
                 <div class="bar-header">
-                  <span class="bar-label"><i class="fa-solid fa-circle-check" style="color: #8B5CF6;"></i> Grade B1 (71% – 80%): 35 to 39 Marks</span>
+                  <span class="bar-label"><i class="fa-solid fa-circle-check" style="color: #8B5CF6;"></i> Grade B (70% – 79%): 35 to 39 Marks</span>
                   <span class="bar-value" style="color: #8B5CF6;">8 Students (19.0%)</span>
                 </div>
                 <div class="bar-track">
@@ -1641,7 +1888,7 @@ var teacherApp = (function () {
               </div>
               <div class="bar-chart-row">
                 <div class="bar-header">
-                  <span class="bar-label"><i class="fa-solid fa-circle-check text-amber"></i> Grade B2 (61% – 70%): 30 to 34 Marks</span>
+                  <span class="bar-label"><i class="fa-solid fa-circle-check text-amber"></i> Grade C (60% – 69%): 30 to 34 Marks</span>
                   <span class="bar-value text-amber">4 Students (9.5%)</span>
                 </div>
                 <div class="bar-track">
@@ -1805,7 +2052,7 @@ var teacherApp = (function () {
             </thead>
             <tbody>
               ${classStudents.map(s => {
-                const grade = s.marks >= 45 ? 'A1' : (s.marks >= 40 ? 'A2' : (s.marks >= 35 ? 'B1' : 'B2'));
+                const grade = s.marks >= 45 ? 'O' : (s.marks >= 40 ? 'A' : (s.marks >= 35 ? 'B' : (s.marks >= 30 ? 'C' : (s.marks >= 20 ? 'D' : 'E'))));
                 const attPct = s.att === 'P' ? '96%' : (s.att === 'L' ? '91%' : '86%');
                 return `
                   <tr>
@@ -1819,7 +2066,7 @@ var teacherApp = (function () {
                       </span>
                     </td>
                     <td class="text-center"><strong>${s.marks} / 50</strong></td>
-                    <td class="text-center"><span class="portal-badge ${grade.startsWith('A') ? 'badge-success' : 'badge-primary'}">${grade}</span></td>
+                    <td class="text-center"><span class="portal-badge ${(grade === 'O' || grade === 'A') ? 'badge-success' : ((grade === 'B' || grade === 'C') ? 'badge-primary' : (grade === 'D' ? 'badge-warning' : 'badge-danger'))}">${grade}</span></td>
                     <td class="text-center">
                       <button type="button" class="btn btn-secondary btn-sm" onclick="teacherApp.viewStudentDossier(${s.roll})" title="View Student Dossier">
                         <i class="fa-regular fa-id-badge"></i> Dossier
@@ -1909,8 +2156,8 @@ var teacherApp = (function () {
     }
 
     tbody.innerHTML = list.map(s => {
-      const grade = s.marks >= 45 ? 'A1' : (s.marks >= 40 ? 'A2' : (s.marks >= 35 ? 'B1' : 'B2'));
-      const badgeClass = grade.startsWith('A') ? 'badge-success' : 'badge-primary';
+      const grade = s.marks >= 45 ? 'O' : (s.marks >= 40 ? 'A' : (s.marks >= 35 ? 'B' : (s.marks >= 30 ? 'C' : (s.marks >= 20 ? 'D' : 'E'))));
+      const badgeClass = (grade === 'O' || grade === 'A') ? 'badge-success' : ((grade === 'B' || grade === 'C') ? 'badge-primary' : (grade === 'D' ? 'badge-warning' : 'badge-danger'));
       const attPct = s.att === 'P' ? '96%' : (s.att === 'L' ? '91%' : '86%');
       const cls = state.classes.find(c => c.code === s.class || c.id === s.class.toLowerCase());
       const isLeadClassTeacher = cls ? !!cls.isClassTeacher : false;
@@ -2229,33 +2476,104 @@ var teacherApp = (function () {
     showToast(`Quick attendance logged: ${present} Present, ${absentRolls.length} Absent of ${class8A.length} students.`, 'success');
   }
 
+  function syncAllTeacherStudentMarks() {
+    let mathStored = {};
+    let syncStore = {};
+    try {
+      mathStored = JSON.parse(localStorage.getItem('srividya_teacher_marks_math_ut2') || '{}');
+    } catch (e) {}
+    try {
+      syncStore = JSON.parse(localStorage.getItem('srividya_synced_exam_marks') || '{}');
+    } catch (e) {}
+
+    state.students.forEach(s => {
+      // 1. Direct teacher math marks
+      if (mathStored[s.roll] !== undefined) s.marks = mathStored[s.roll];
+      else if (mathStored[s.name] !== undefined) s.marks = mathStored[s.name];
+      else if (s.admNo && mathStored[s.admNo] !== undefined) s.marks = mathStored[s.admNo];
+
+      // 2. Synced full exam record (UT-2, Quarterly, etc.)
+      const keys = [
+        (s.admNo ? s.admNo + '_unit-test-2' : ''),
+        (s.name ? s.name.trim().toLowerCase() + '_unit-test-2' : ''),
+        s.roll + '_unit-test-2',
+        (s.admNo ? s.admNo + '_quarterly-2026' : ''),
+        (s.name ? s.name.trim().toLowerCase() + '_quarterly-2026' : ''),
+        s.roll + '_quarterly-2026'
+      ];
+
+      for (let k of keys) {
+        if (k && syncStore[k]) {
+          s.syncedExamData = syncStore[k];
+          const mathSub = syncStore[k].subjects.find(sub => sub.key === 'math');
+          if (mathSub && mathSub.marksScored !== undefined) {
+            s.marks = mathSub.maxMarks === 50 ? mathSub.marksScored : Math.min(50, Math.round((mathSub.marksScored / mathSub.maxMarks) * 50));
+          }
+          break;
+        }
+      }
+
+      // 3. Fallback: Check student-specific localStorage key if admNo is known
+      if (!s.syncedExamData && s.admNo) {
+        try {
+          const raw = localStorage.getItem('srividya_marks_' + s.admNo);
+          if (raw) {
+            const p = JSON.parse(raw);
+            const exData = p['unit-test-2'] || p['quarterly-2026'];
+            if (exData && Array.isArray(exData.subjects)) {
+              s.syncedExamData = exData;
+              const mathSub = exData.subjects.find(sub => sub.key === 'math');
+              if (mathSub) {
+                s.marks = mathSub.maxMarks === 50 ? mathSub.marksScored : Math.min(50, Math.round((mathSub.marksScored / mathSub.maxMarks) * 50));
+              }
+            }
+          }
+        } catch (e) {}
+      }
+    });
+  }
+
   function renderMarksEntryTable() {
     const tbody = document.getElementById('marksEntryTableBody');
     if (!tbody) return;
 
-    // Load any previously saved marks from localStorage
-    try {
-      const stored = JSON.parse(localStorage.getItem('srividya_teacher_marks_math_ut2') || '{}');
-      state.students.forEach(s => {
-        if (stored[s.roll] !== undefined) s.marks = stored[s.roll];
-        else if (stored[s.name] !== undefined) s.marks = stored[s.name];
-      });
-    } catch (e) {}
+    // Synchronize latest marks from institutional repository
+    syncAllTeacherStudentMarks();
 
     const class8A = state.students.filter(s => s.class === '8A');
 
+    // Add synchronization indicator banner above the table if not present
+    let banner = document.getElementById('marksSyncFeedbackBanner');
+    if (!banner && tbody.closest('.table-container')) {
+      banner = document.createElement('div');
+      banner.id = 'marksSyncFeedbackBanner';
+      banner.style.cssText = 'display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:8px; margin-bottom:12px; padding:10px 14px; background:#f0fdf4; border:1px solid #bbf7d0; border-radius:8px; font-size:0.85rem; color:#166534;';
+      banner.innerHTML = `
+        <div style="display:flex; align-items:center; gap:8px;">
+          <i class="fa-solid fa-arrows-rotate fa-spin-pulse text-emerald" style="font-size:1rem;"></i>
+          <span><strong>Live Class Teacher Sync Active:</strong> Any marks entered or changed here or in Student Profiles update in real time.</span>
+        </div>
+        <span class="portal-badge badge-success" style="font-size:0.75rem;"><i class="fa-solid fa-cloud-arrow-up"></i> Synchronized</span>
+      `;
+      tbody.closest('.table-container').parentNode.insertBefore(banner, tbody.closest('.table-container'));
+    }
+
     tbody.innerHTML = class8A.map(s => {
       const pct = (s.marks / 50) * 100;
-      const grade = pct >= 90 ? 'A1' : (pct >= 80 ? 'A2' : (pct >= 70 ? 'B1' : 'B2'));
+      const grade = pct >= 90 ? 'O' : (pct >= 80 ? 'A' : (pct >= 70 ? 'B' : (pct >= 60 ? 'C' : (pct >= 40 ? 'D' : 'E'))));
+      const hasSynced = !!s.syncedExamData;
       return `
         <tr>
           <td class="text-center">#${s.roll}</td>
-          <td><strong>${s.name}</strong></td>
+          <td>
+            <strong>${s.name}</strong>
+            ${hasSynced ? '<span class="portal-badge badge-success" style="font-size:0.65rem; margin-left:6px;" title="Synced with Institutional Examination Record"><i class="fa-solid fa-arrows-rotate"></i> Synced</span>' : ''}
+          </td>
           <td class="text-center">
             <input type="number" min="0" max="50" class="marks-input" value="${s.marks}" onchange="teacherApp.updateMarks(${s.roll}, this.value)">
           </td>
           <td class="text-center"><strong id="pct-${s.roll}">${pct.toFixed(0)}%</strong></td>
-          <td class="text-center"><span class="portal-badge ${grade.startsWith('A') ? 'badge-success' : 'badge-primary'}" id="grade-${s.roll}">${grade}</span></td>
+          <td class="text-center"><span class="portal-badge ${(grade === 'O' || grade === 'A') ? 'badge-success' : ((grade === 'B' || grade === 'C') ? 'badge-primary' : (grade === 'D' ? 'badge-warning' : 'badge-danger'))}" id="grade-${s.roll}">${grade}</span></td>
           <td><span class="text-muted text-sm">${s.remarks}</span></td>
         </tr>
       `;
@@ -2268,13 +2586,13 @@ var teacherApp = (function () {
     if (s) {
       s.marks = num;
       const pct = (num / 50) * 100;
-      const grade = pct >= 90 ? 'A1' : (pct >= 80 ? 'A2' : (pct >= 70 ? 'B1' : 'B2'));
+      const grade = pct >= 90 ? 'O' : (pct >= 80 ? 'A' : (pct >= 70 ? 'B' : (pct >= 60 ? 'C' : (pct >= 40 ? 'D' : 'E'))));
       const pctEl = document.getElementById(`pct-${roll}`);
       const gradeEl = document.getElementById(`grade-${roll}`);
       if (pctEl) pctEl.textContent = `${pct.toFixed(0)}%`;
       if (gradeEl) {
         gradeEl.textContent = grade;
-        gradeEl.className = `portal-badge ${grade.startsWith('A') ? 'badge-success' : 'badge-primary'}`;
+        gradeEl.className = `portal-badge ${(grade === 'O' || grade === 'A') ? 'badge-success' : ((grade === 'B' || grade === 'C') ? 'badge-primary' : (grade === 'D' ? 'badge-warning' : 'badge-danger'))}`;
       }
 
       // Save to localStorage so student profiles and reports update instantly
@@ -2282,7 +2600,30 @@ var teacherApp = (function () {
         const stored = JSON.parse(localStorage.getItem('srividya_teacher_marks_math_ut2') || '{}');
         stored[roll] = num;
         if (s.name) stored[s.name] = num;
+        if (s.admNo) stored[s.admNo] = num;
         localStorage.setItem('srividya_teacher_marks_math_ut2', JSON.stringify(stored));
+        localStorage.setItem('srividya_teacher_marks_math_ut2_timestamp', new Date().toISOString());
+
+        // Update two-way sync store
+        const syncMap = JSON.parse(localStorage.getItem('srividya_synced_exam_marks') || '{}');
+        const examRecord = syncMap[roll + '_unit-test-2'] || (s.admNo ? syncMap[s.admNo + '_unit-test-2'] : null) || {};
+        if (examRecord.subjects) {
+          const mSub = examRecord.subjects.find(sub => sub.key === 'math');
+          if (mSub) {
+            mSub.marksScored = num;
+            mSub.grade = grade;
+          }
+        }
+        syncMap[roll + '_unit-test-2'] = examRecord;
+        if (s.admNo) syncMap[s.admNo + '_unit-test-2'] = examRecord;
+        localStorage.setItem('srividya_synced_exam_marks', JSON.stringify(syncMap));
+
+        // Dispatch sync event
+        if (typeof window !== 'undefined') {
+          window.dispatchEvent(new CustomEvent('srividyaMarksUpdated', {
+            detail: { roll: roll, name: s.name, admNo: s.admNo, marks: num, subject: 'math' }
+          }));
+        }
       } catch (err) {}
     }
   }
@@ -2459,57 +2800,256 @@ var teacherApp = (function () {
     showToast(`Leave application ${newLv.id} submitted to Vice Principal Sri Navva Anand for recommendation`, 'success');
   }
 
-  function viewStudentDossier(roll) {
+  function switchTeacherDossierExam(roll, examKey) {
+    activeTeacherDossierExam = examKey || 'unit-test-2';
+    viewStudentDossier(roll, activeTeacherDossierExam);
+  }
+
+  let activeTeacherDossierExam = 'unit-test-2';
+
+  function getTeacherStudentExamData(student, examKey) {
+    examKey = examKey || activeTeacherDossierExam || 'unit-test-2';
+    const EXAMS_CONFIG = {
+      'unit-test-1': { id: 'unit-test-1', name: 'Unit Test 1 (Aug 2026)', shortName: 'UT-1 (25M)', maxMarks: 25 },
+      'unit-test-2': { id: 'unit-test-2', name: 'Unit Test 2 (Sep 2026)', shortName: 'UT-2 (50M)', maxMarks: 50 },
+      'quarterly-2026': { id: 'quarterly-2026', name: 'Quarterly Examinations (Oct 2026)', shortName: 'Quarterly (100M)', maxMarks: 100 },
+      'half-yearly-2026': { id: 'half-yearly-2026', name: 'Half-Yearly Summative Assessment (Oct 2026)', shortName: 'Half-Yearly (100M)', maxMarks: 100 }
+    };
+    const exam = EXAMS_CONFIG[examKey] || EXAMS_CONFIG['unit-test-2'];
+    const maxMarks = exam.maxMarks;
+
+    // Check synced storage first
+    try {
+      const syncStore = JSON.parse(localStorage.getItem('srividya_synced_exam_marks') || '{}');
+      const keys = [
+        (student.admNo ? student.admNo + '_' + examKey : ''),
+        (student.name ? student.name.trim().toLowerCase() + '_' + examKey : ''),
+        student.roll + '_' + examKey
+      ];
+      for (let k of keys) {
+        if (k && syncStore[k] && Array.isArray(syncStore[k].subjects)) {
+          return {
+            exam: exam,
+            subjects: syncStore[k].subjects,
+            totalScored: syncStore[k].totalScored,
+            totalMax: syncStore[k].totalMax,
+            percentage: syncStore[k].percentage,
+            overallGrade: syncStore[k].overallGrade,
+            performanceStatus: syncStore[k].performanceStatus,
+            isCustom: true,
+            updatedAt: syncStore[k].updatedAt
+          };
+        }
+      }
+    } catch (e) {}
+
+    // Check student-specific localStorage key
+    if (student.admNo) {
+      try {
+        const raw = localStorage.getItem('srividya_marks_' + student.admNo);
+        if (raw) {
+          const store = JSON.parse(raw);
+          if (store[examKey] && Array.isArray(store[examKey].subjects)) {
+            return {
+              exam: exam,
+              subjects: store[examKey].subjects,
+              totalScored: store[examKey].totalScored,
+              totalMax: store[examKey].totalMax,
+              percentage: store[examKey].percentage,
+              overallGrade: store[examKey].overallGrade,
+              performanceStatus: store[examKey].performanceStatus,
+              isCustom: true,
+              updatedAt: store[examKey].updatedAt
+            };
+          }
+        }
+      } catch (e) {}
+    }
+
+    // Realistic calculation based on teacher marks and student GPA
+    const basePct = Math.min(99, Math.max(50, (student.marks / 50) * 100));
+    const STANDARD_SUBJECTS = [
+      { key: 'lang1', name: 'First Language (Telugu)', icon: 'fa-book-open', off: 1 },
+      { key: 'lang2', name: 'Second Language (Hindi)', icon: 'fa-book', off: -2 },
+      { key: 'lang3', name: 'Third Language (English)', icon: 'fa-book', off: 0 },
+      { key: 'math', name: 'Mathematics', icon: 'fa-calculator', off: 3 },
+      { key: 'sci', name: 'General Science', icon: 'fa-flask', off: 2 },
+      { key: 'soc', name: 'Social Studies', icon: 'fa-globe', off: -1 }
+    ];
+
+    const subjects = STANDARD_SUBJECTS.map(sub => {
+      let subPct = Math.min(100, Math.max(38, Math.round(basePct + sub.off)));
+      let scored = Math.min(maxMarks, Math.max(0, Math.round((subPct / 100) * maxMarks)));
+      if (sub.key === 'math') {
+        if (examKey === 'unit-test-2') scored = Math.min(maxMarks, student.marks);
+        else scored = Math.min(maxMarks, Math.round((student.marks / 50) * maxMarks));
+        subPct = Math.round((scored / maxMarks) * 100);
+      }
+      const grade = subPct >= 90 ? 'O' : (subPct >= 80 ? 'A' : (subPct >= 70 ? 'B' : (subPct >= 60 ? 'C' : (subPct >= 40 ? 'D' : 'E'))));
+      const badgeClass = (grade === 'O' || grade === 'A') ? 'badge-success' : ((grade === 'B' || grade === 'C') ? 'badge-primary' : (grade === 'D' ? 'badge-warning' : 'badge-danger'));
+      return {
+        key: sub.key,
+        name: sub.name,
+        icon: sub.icon,
+        maxMarks: maxMarks,
+        marksScored: scored,
+        grade: grade,
+        badgeClass: badgeClass
+      };
+    });
+
+    const totalScored = subjects.reduce((sum, s) => sum + s.marksScored, 0);
+    const totalMax = maxMarks * subjects.length;
+    const percentage = ((totalScored / totalMax) * 100).toFixed(1);
+    const overallGrade = percentage >= 90 ? 'O' : (percentage >= 80 ? 'A' : (percentage >= 70 ? 'B' : (percentage >= 60 ? 'C' : (percentage >= 40 ? 'D' : 'E'))));
+    let performanceStatus = overallGrade === 'O' ? 'Overall Distinction (Grade O)' : (overallGrade === 'A' ? 'First Class Distinction (Grade A)' : (overallGrade === 'B' ? 'First Class (Grade B)' : (overallGrade === 'C' ? 'Second Class (Grade C)' : (overallGrade === 'D' ? 'Pass Class (Grade D)' : 'Failure (Grade E)'))));
+
+    return {
+      exam: exam,
+      subjects: subjects,
+      totalScored: totalScored,
+      totalMax: totalMax,
+      percentage: percentage,
+      overallGrade: overallGrade,
+      performanceStatus: performanceStatus,
+      isCustom: false
+    };
+  }
+
+  function viewStudentDossier(roll, examKey) {
     const s = state.students.find(st => st.roll === roll);
     if (!s) return;
     activeDossierRoll = roll;
+    activeTeacherDossierExam = examKey || activeTeacherDossierExam || 'unit-test-2';
 
-    const grade = s.marks >= 45 ? 'A1' : (s.marks >= 40 ? 'A2' : (s.marks >= 35 ? 'B1' : 'B2'));
-    const attPct = s.att === 'P' ? '96%' : (s.att === 'L' ? '91%' : '86%');
+    // Synchronize latest marks for this student
+    syncAllTeacherStudentMarks();
+
     const container = document.getElementById('studentDossierContent');
     if (!container) return;
 
+    // Resolve Admission Number if not directly set
+    if (!s.admNo && typeof window !== 'undefined' && Array.isArray(window.STUDENT_ROSTER)) {
+      const match = window.STUDENT_ROSTER.find(r => r.name === s.name || String(r.rollNo) === String(s.roll));
+      if (match) s.admNo = match.admNo;
+    }
+    if (!s.admNo) {
+      s.admNo = 'SV-' + String(s.roll || 801).padStart(4, '0');
+    }
+
+    const examData = getTeacherStudentExamData(s, activeTeacherDossierExam);
+    const attPct = s.att === 'P' ? '96%' : (s.att === 'L' ? '91%' : '86%');
+    const isCustom = !!examData.isCustom;
+
     container.innerHTML = `
-      <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1.25rem;">
-        <div style="width: 52px; height: 52px; border-radius: 50%; background: var(--color-primary); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; font-weight: 700;">
-          ${s.name.split(' ').pop()[0]}
+      <!-- Student Identity Header -->
+      <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; margin-bottom: 1.25rem; padding-bottom: 1rem; border-bottom: 1px solid var(--color-border);">
+        <div style="display: flex; align-items: center; gap: 1rem;">
+          <div style="width: 54px; height: 54px; border-radius: 50%; background: linear-gradient(135deg, var(--color-primary), #1d4ed8); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 1.35rem; font-weight: 700; box-shadow: 0 4px 10px rgba(37,99,235,0.25);">
+            ${s.name.split(' ').pop()[0]}
+          </div>
+          <div>
+            <h3 style="margin: 0; font-size: 1.2rem; color: var(--color-text-dark); font-weight: 700;">${s.name}</h3>
+            <p style="margin: 0.2rem 0 0 0; color: var(--color-text-muted); font-size: 0.85rem;">
+              Roll #${s.roll} • Class ${s.class} • Adm No: <strong style="color:var(--color-primary); font-family:monospace;">${s.admNo}</strong>
+            </p>
+          </div>
         </div>
         <div>
-          <h3 style="margin: 0; font-size: 1.15rem; color: var(--color-text-dark);">${s.name}</h3>
-          <p style="margin: 0.15rem 0 0 0; color: var(--color-text-muted); font-size: 0.85rem;">Roll #${s.roll} • Grade ${s.class} ${s.admNo ? `• Adm No: <strong style="color:var(--color-primary);">${s.admNo}</strong>` : ''} • Sri Vidya E.M High School</p>
+          <span class="portal-badge ${(examData.overallGrade === 'O' || examData.overallGrade === 'A') ? 'badge-success' : ((examData.overallGrade === 'B' || examData.overallGrade === 'C') ? 'badge-primary' : (examData.overallGrade === 'D' ? 'badge-warning' : 'badge-danger'))}" style="font-size:0.85rem; font-weight:700; padding:6px 12px;">
+            Grade ${examData.overallGrade} (${examData.percentage}%)
+          </span>
         </div>
       </div>
 
-      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-bottom: 1rem;">
-        <div style="background: var(--color-bg-subtle); padding: 0.75rem; border-radius: 8px; border: 1px solid var(--color-border);">
-          <span style="font-size: 0.75rem; color: var(--color-text-muted); font-weight: 600; text-transform: uppercase;">Attendance Status</span>
+      <!-- Quick Metrics Strip -->
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 0.75rem; margin-bottom: 1.25rem;">
+        <div style="background: var(--color-bg-subtle); padding: 0.75rem 1rem; border-radius: 8px; border: 1px solid var(--color-border);">
+          <span style="font-size: 0.72rem; color: var(--color-text-muted); font-weight: 700; text-transform: uppercase; letter-spacing:0.5px;">Attendance Record</span>
           <div style="display: flex; align-items: center; gap: 0.5rem; margin-top: 0.25rem;">
             <span class="portal-badge ${s.att === 'P' ? 'badge-success' : (s.att === 'L' ? 'badge-warning' : 'badge-danger')}">
               ${s.att === 'P' ? 'Present' : (s.att === 'L' ? 'Late' : 'Absent')} (${attPct})
             </span>
           </div>
         </div>
-        <div style="background: var(--color-bg-subtle); padding: 0.75rem; border-radius: 8px; border: 1px solid var(--color-border);">
-          <span style="font-size: 0.75rem; color: var(--color-text-muted); font-weight: 600; text-transform: uppercase;">Maths Unit Test 2</span>
-          <div style="margin-top: 0.25rem; font-weight: 700; color: var(--color-text-dark);">
-            ${s.marks} / 50 (${s.marks * 2}%) • <span class="portal-badge badge-primary">${grade}</span>
+        <div style="background: var(--color-bg-subtle); padding: 0.75rem 1rem; border-radius: 8px; border: 1px solid var(--color-border);">
+          <span style="font-size: 0.72rem; color: var(--color-text-muted); font-weight: 700; text-transform: uppercase; letter-spacing:0.5px;">Emergency Contact</span>
+          <div style="margin-top: 0.25rem;">
+            <a href="tel:${s.phone}" style="color: var(--color-primary); font-weight: 600; text-decoration: none; font-size: 0.9rem;">
+              <i class="fa-solid fa-phone"></i> ${s.phone}
+            </a>
+          </div>
+        </div>
+        <div style="background: var(--color-bg-subtle); padding: 0.75rem 1rem; border-radius: 8px; border: 1px solid var(--color-border);">
+          <span style="font-size: 0.72rem; color: var(--color-text-muted); font-weight: 700; text-transform: uppercase; letter-spacing:0.5px;">Live Sync Status</span>
+          <div style="margin-top: 0.25rem;">
+            <span class="portal-badge badge-success" style="font-size: 0.75rem;">
+              <i class="fa-solid fa-arrows-rotate"></i> Synced with Class Teacher
+            </span>
           </div>
         </div>
       </div>
 
-      <div style="background: var(--color-bg-subtle); padding: 0.75rem; border-radius: 8px; border: 1px solid var(--color-border); margin-bottom: 1rem;">
-        <span style="font-size: 0.75rem; color: var(--color-text-muted); font-weight: 600; text-transform: uppercase;">Guardian / Parent Contact</span>
-        <div style="margin-top: 0.35rem; display: flex; justify-content: space-between; align-items: center;">
-          <span style="font-weight: 600; font-size: 0.9rem; color: var(--color-text-dark);">Primary Mobile</span>
-          <a href="tel:${s.phone}" class="btn btn-primary btn-sm" style="padding: 0.3rem 0.75rem;">
-            <i class="fa-solid fa-phone"></i> ${s.phone}
-          </a>
+      <!-- Academic Examination Performance Report Card -->
+      <div style="background: #ffffff; border: 1px solid var(--color-border); border-radius: 10px; overflow: hidden; margin-bottom: 1.25rem; box-shadow: 0 2px 6px rgba(0,0,0,0.04);">
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; padding: 12px 16px; background: #f8fafc; border-bottom: 1px solid var(--color-border);">
+          <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+            <h4 style="margin: 0; font-size: 0.95rem; font-weight: 700; color: #1e293b;">
+              <i class="fa-solid fa-chart-line text-primary"></i> Academic Examination Report
+            </h4>
+            <select class="form-control" style="font-size: 0.8rem; padding: 3px 8px; height: auto; width: auto; font-weight: 600; border-radius: 6px;" onchange="teacherApp.switchTeacherDossierExam(${s.roll}, this.value)">
+              <option value="unit-test-1" ${activeTeacherDossierExam === 'unit-test-1' ? 'selected' : ''}>Unit Test 1 (25 Marks)</option>
+              <option value="unit-test-2" ${activeTeacherDossierExam === 'unit-test-2' ? 'selected' : ''}>Unit Test 2 (50 Marks)</option>
+              <option value="quarterly-2026" ${activeTeacherDossierExam === 'quarterly-2026' ? 'selected' : ''}>Quarterly (100 Marks)</option>
+              <option value="half-yearly-2026" ${activeTeacherDossierExam === 'half-yearly-2026' ? 'selected' : ''}>Half-Yearly Summative (100 Marks)</option>
+            </select>
+          </div>
+          <div>
+            <span class="portal-badge ${(examData.overallGrade === 'O' || examData.overallGrade === 'A') ? 'badge-success' : ((examData.overallGrade === 'B' || examData.overallGrade === 'C') ? 'badge-primary' : (examData.overallGrade === 'D' ? 'badge-warning' : 'badge-danger'))}" style="font-size: 0.76rem; font-weight: 700;">
+              ${examData.performanceStatus}
+            </span>
+          </div>
+        </div>
+
+        <div style="overflow-x: auto;">
+          <table class="data-table" style="margin: 0; width: 100%;">
+            <thead>
+              <tr style="background: #f1f5f9;">
+                <th style="padding: 8px 12px;">Subject</th>
+                <th class="text-center" style="width: 100px; padding: 8px 12px;">Max Marks</th>
+                <th class="text-center" style="width: 120px; padding: 8px 12px;">Marks Scored</th>
+                <th class="text-center" style="width: 90px; padding: 8px 12px;">Grade</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${examData.subjects.map(sub => {
+                const g = sub.grade;
+                const bClass = sub.badgeClass || ((g === 'O' || g === 'A') ? 'badge-success' : ((g === 'B' || g === 'C') ? 'badge-primary' : (g === 'D' ? 'badge-warning' : 'badge-danger')));
+                return `
+                  <tr>
+                    <td style="padding: 7px 12px;"><i class="fa-solid ${sub.icon || 'fa-book'} text-muted"></i> ${sub.name}</td>
+                    <td class="text-center" style="font-weight:600; color:#64748b; padding: 7px 12px;">${sub.maxMarks}</td>
+                    <td class="text-center" style="padding: 7px 12px;"><strong style="font-size:0.95rem; color:#0f172a;">${sub.marksScored}</strong></td>
+                    <td class="text-center" style="padding: 7px 12px;"><span class="portal-badge ${bClass}">${sub.grade}</span></td>
+                  </tr>
+                `;
+              }).join('')}
+            </tbody>
+          </table>
+        </div>
+
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; padding: 10px 16px; background: #f8fafc; border-top: 1px solid var(--color-border); font-size: 0.85rem;">
+          <span>Aggregate: <strong>${examData.totalScored} / ${examData.totalMax}</strong></span>
+          <span>Performance Index: <strong>${examData.percentage}% (Grade ${examData.overallGrade})</strong></span>
         </div>
       </div>
 
-      <div style="background: var(--color-bg-subtle); padding: 0.75rem; border-radius: 8px; border: 1px solid var(--color-border);">
-        <span style="font-size: 0.75rem; color: var(--color-text-muted); font-weight: 600; text-transform: uppercase;">Teacher's Continuous Evaluation Note</span>
-        <p style="margin: 0.35rem 0 0 0; font-size: 0.88rem; color: var(--color-text-dark); font-style: italic;">"${s.remarks}"</p>
+      <!-- Teacher Evaluation & Continuous Assessment Note -->
+      <div style="background: var(--color-bg-subtle); padding: 0.85rem 1rem; border-radius: 8px; border: 1px solid var(--color-border);">
+        <span style="font-size: 0.72rem; color: var(--color-text-muted); font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">Class Teacher's Continuous Assessment Note</span>
+        <p style="margin: 0.35rem 0 0 0; font-size: 0.88rem; color: var(--color-text-dark); font-style: italic;">
+          "${s.remarks || 'Consistent academic performance and regular homework submission.'}"
+        </p>
       </div>
     `;
 
@@ -3111,9 +3651,12 @@ var teacherApp = (function () {
       state.teacher.name = profile.name;
       state.teacher.role = profile.designation || profile.motto || 'Class Teacher – Grade 8A';
 
-      // Update Dashboard welcome banner
+      // Update Dashboard welcome banner with dynamic Indian Standard Time salutation
+      const now = new Date();
+      const istHour = parseInt(new Intl.DateTimeFormat('en-US', { timeZone: 'Asia/Kolkata', hour: 'numeric', hour12: false }).format(now), 10);
+      const salutation = istHour >= 4 && istHour < 12 ? 'Good Morning' : (istHour >= 12 && istHour < 17 ? 'Good Afternoon' : 'Good Evening');
       const bannerH1 = document.querySelector('.teacher-welcome-banner .tw-title');
-      if (bannerH1) bannerH1.textContent = `Good Morning, ${profile.name}`;
+      if (bannerH1) bannerH1.textContent = `${salutation}, ${profile.name}`;
 
       const bannerSub = document.querySelector('.teacher-welcome-banner .tw-subtitle');
       if (bannerSub) bannerSub.textContent = profile.designation || 'Class Teacher – Grade 8A';
@@ -3152,7 +3695,17 @@ var teacherApp = (function () {
 
       // Fill Professional Tab
       if (document.getElementById('profDept')) document.getElementById('profDept').value = profile.department || 'Secondary Mathematics';
-      if (document.getElementById('profDesignation')) document.getElementById('profDesignation').value = profile.designation || 'Senior Faculty';
+      const designationField = document.getElementById('profDesignation');
+      if (designationField) {
+        const designation = profile.designation || 'Senior Faculty';
+        if (!Array.from(designationField.options).some(option => option.value === designation)) {
+          const customOption = document.createElement('option');
+          customOption.value = designation;
+          customOption.textContent = `${designation} (Saved)`;
+          designationField.appendChild(customOption);
+        }
+        designationField.value = designation;
+      }
       if (document.getElementById('profQualification')) document.getElementById('profQualification').value = profile.qualification || 'M.Sc, B.Ed';
       if (document.getElementById('profExperience')) document.getElementById('profExperience').value = profile.experience || '9 Years';
       if (document.getElementById('profJoinDate')) document.getElementById('profJoinDate').value = profile.joinDate || '12-June-2019';
@@ -3355,7 +3908,192 @@ var teacherApp = (function () {
   }
 
   // Public API
+  
+  // =========================================================================
+  // FOCUSED TEACHING WORKSPACE SUBVIEW HANDLERS
+  // =========================================================================
+
+  function renderMyClassesSubTab(subKey) {
+    document.querySelectorAll('.my-classes-subview').forEach(p => p.style.display = 'none');
+    
+    // Sync tab strip buttons
+    const strip = document.getElementById('myClassesTabStrip');
+    if (strip) {
+      strip.querySelectorAll('.tab-btn').forEach(b => {
+        b.classList.toggle('active', b.getAttribute('data-sub') === subKey);
+      });
+    }
+
+    if (subKey === 'classes') {
+      const p = document.getElementById('subtab-classes-panel');
+      if (p) p.style.display = 'block';
+      renderClassesGrid();
+    } else if (subKey === 'roster') {
+      const p = document.getElementById('subtab-roster-panel');
+      if (p) p.style.display = 'block';
+      renderClassListRoster('8A');
+    } else if (subKey === 'profiles') {
+      const p = document.getElementById('subtab-profiles-panel');
+      if (p) p.style.display = 'block';
+      searchStudentProfile('804');
+    } else if (subKey === 'parents') {
+      const p = document.getElementById('subtab-parents-panel');
+      if (p) p.style.display = 'block';
+      renderParentContactsTable();
+    }
+  }
+
+  function renderClassesGrid() {
+    const grid = document.getElementById('assignedClassesCardsGrid');
+    if (!grid) return;
+    grid.innerHTML = state.classes.map(c => `
+      <div class="col-md-6 col-lg-3">
+        <div class="card p-3 h-100" style="border-top: 3px solid #2563EB;">
+          <div class="d-flex justify-content-between align-items-center mb-2">
+            <span class="badge ${c.isClassTeacher ? 'badge-primary' : 'badge-info'}">${c.isClassTeacher ? 'Class Teacher' : 'Subject Faculty'}</span>
+            <small class="text-muted">${c.strength} Students</small>
+          </div>
+          <h3 style="font-size: 1.15rem; font-weight: 700; margin-bottom: 0.25rem;">${c.name}</h3>
+          <p style="font-size: 0.85rem; color: var(--color-text-muted); margin-bottom: 0.5rem;">${c.subject}</p>
+          <div style="font-size: 0.8rem; color: var(--color-text-muted); margin-bottom: 0.75rem;">
+            <div><i class="fa-solid fa-location-dot"></i> ${c.room}</div>
+            <div><i class="fa-solid fa-clock"></i> ${c.timing}</div>
+          </div>
+          <div class="d-flex gap-2 mt-auto">
+            <button class="btn btn-primary btn-xs flex-fill" onclick="teacherApp.switchSubTab('my-classes', 'roster')">
+              <i class="fa-solid fa-users"></i> Roster
+            </button>
+            <button class="btn btn-secondary btn-xs flex-fill" onclick="teacherApp.openModal('markAttendanceModal')">
+              <i class="fa-solid fa-clipboard-check"></i> Attendance
+            </button>
+          </div>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  function renderClassListRoster(classCode) {
+    const tbody = document.getElementById('classListTableBody');
+    if (!tbody) return;
+    const list = state.students.filter(s => s.class === classCode);
+    tbody.innerHTML = list.map(s => `
+      <tr>
+        <td><strong>${s.roll}</strong></td>
+        <td><strong>${s.name}</strong></td>
+        <td><span class="badge badge-info">Class ${s.class}</span></td>
+        <td><strong style="color: #059669;">96.5%</strong></td>
+        <td><span class="badge badge-success">Good Progress</span></td>
+        <td>
+          <button class="btn btn-secondary btn-xs" onclick="teacherApp.searchStudentProfile('${s.roll}')">
+            <i class="fa-solid fa-user"></i> Profile
+          </button>
+        </td>
+      </tr>
+    `).join('');
+  }
+
+  function renderParentContactsTable() {
+    const tbody = document.getElementById('parentContactsTableBody');
+    if (!tbody) return;
+    const sample = state.students.slice(0, 8);
+    tbody.innerHTML = sample.map(s => `
+      <tr>
+        <td><strong>${s.name}</strong></td>
+        <td>Class ${s.class} (Roll #${s.roll})</td>
+        <td><strong>Parent of ${s.name.split(' ')[1] || s.name}</strong></td>
+        <td><i class="fa-solid fa-phone text-primary"></i> +91 ${s.phone}</td>
+        <td><i class="fa-solid fa-phone-volume text-emerald"></i> +91 93985xxxxx</td>
+        <td>
+          <button class="btn btn-primary btn-xs" onclick="teacherApp.navigateTo('communication', 'parent-messages')">
+            <i class="fa-solid fa-message"></i> Message
+          </button>
+        </td>
+      </tr>
+    `).join('');
+  }
+
+  function searchStudentProfile(query) {
+    const card = document.getElementById('studentProfilePreviewCard');
+    if (!card) return;
+    query = String(query).toLowerCase();
+    const s = state.students.find(st => String(st.roll).toLowerCase().includes(query) || st.name.toLowerCase().includes(query)) || state.students[3];
+    card.innerHTML = `
+      <div style="background: var(--color-bg-surface, #f8fafc); border: 1px solid var(--color-border, #e2e8f0); border-radius: 10px; padding: 1.25rem;">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <div class="d-flex align-items-center gap-3">
+            <div style="width: 52px; height: 52px; background: #2563EB; color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; font-weight: 700;">
+              ${s.name.charAt(0)}
+            </div>
+            <div>
+              <h4 style="margin: 0; font-size: 1.15rem; font-weight: 700;">${s.name}</h4>
+              <p style="margin: 0; font-size: 0.85rem; color: var(--color-text-muted);">Roll Number: ${s.roll} • Class ${s.class} (Mathematics)</p>
+            </div>
+          </div>
+          <span class="badge badge-success" style="font-size: 0.85rem;"><i class="fa-solid fa-star"></i> Rank #1 in Math</span>
+        </div>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 0.75rem; margin-bottom: 1rem; text-align: center;">
+          <div class="p-2" style="background:#fff; border-radius:6px; border:1px solid #e2e8f0;">
+            <small class="text-muted">Attendance</small>
+            <div class="fw-bold text-emerald">98.2% (Present)</div>
+          </div>
+          <div class="p-2" style="background:#fff; border-radius:6px; border:1px solid #e2e8f0;">
+            <small class="text-muted">Unit Test 2 Marks</small>
+            <div class="fw-bold text-primary">${s.marks} / 50 (Grade A1)</div>
+          </div>
+          <div class="p-2" style="background:#fff; border-radius:6px; border:1px solid #e2e8f0;">
+            <small class="text-muted">Blood Group</small>
+            <div class="fw-bold">B+ Positive</div>
+          </div>
+          <div class="p-2" style="background:#fff; border-radius:6px; border:1px solid #e2e8f0;">
+            <small class="text-muted">Emergency Parent Contact</small>
+            <div class="fw-bold text-primary">+91 ${s.phone}</div>
+          </div>
+        </div>
+        <div style="font-size: 0.85rem; color: var(--color-text-muted);">
+          <strong>Teacher Remarks:</strong> ${s.remarks}
+        </div>
+      </div>
+    `;
+  }
+
+  function renderAttendanceEnhancedSubTab(subKey) {
+    const corrPanel = document.getElementById('subview-attendance-corrections');
+    if (corrPanel) {
+      corrPanel.style.display = (subKey === 'corrections') ? 'block' : 'none';
+    }
+  }
+
+  function submitAttendanceCorrection() {
+    const student = document.getElementById('corrStudentInput')?.value || '';
+    const type = document.getElementById('corrTypeSelect')?.value || '';
+    showToast(`Attendance correction slip submitted for '${student}' (${type}). Sent to Principal & Office Desk for approval.`, 'success');
+    document.getElementById('attendanceCorrectionForm')?.reset();
+  }
+
+  function renderAcademicsEnhancedSubTab(subKey) {
+    showToast(`Academics & Assignments view: ${subKey.toUpperCase()}`, 'info');
+  }
+
+  function renderExaminationsEnhancedSubTab(subKey) {
+    showToast(`Examinations & Marks view: ${subKey.toUpperCase()}`, 'info');
+  }
+
+  function renderCommunicationEnhancedSubTab(subKey) {
+    showToast(`Communication view: ${subKey.toUpperCase()}`, 'info');
+  }
+
+  function renderTimetableEnhancedSubTab(subKey) {
+    showToast(`Timetable & Leave view: ${subKey.toUpperCase()}`, 'info');
+  }
+
   return {
+    renderMyClassesSubTab,
+    renderClassListRoster,
+    renderParentContactsTable,
+    searchStudentProfile,
+    submitAttendanceCorrection,
+
+    updateISTClock,
     switchProfileTab,
     toggleFieldPass,
     checkPassStrength,

@@ -201,11 +201,8 @@ const seedBaseUsers = async () => {
   });
 
   // Link children on parent users directly to Student model doc IDs as well as User IDs
-  parent1User.children = [student1User._id, studentDoc1._id];
-  await parent1User.save();
-
-  parent2User.children = [student2User._id, studentDoc2._id];
-  await parent2User.save();
+  await User.updateOne({ _id: parent1User._id }, { $set: { children: [student1User._id, studentDoc1._id] } });
+  await User.updateOne({ _id: parent2User._id }, { $set: { children: [student2User._id, studentDoc2._id] } });
 
   // Create corresponding Teacher profile documents
   const teacherDoc1 = await Teacher.create({

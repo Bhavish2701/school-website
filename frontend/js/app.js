@@ -17,7 +17,204 @@ document.addEventListener('DOMContentLoaded', () => {
   initDownloads();
   initContactForm();
   initPortalDropdown();
+  initPublicAcademicCalendar();
+  initHeroFacilitySwitcher();
+  initAppointments();
 });
+
+function initAppointments() {
+  const form = document.getElementById('appointmentRequestForm') || document.getElementById('publicAppointmentForm');
+  const passContainer = document.getElementById('aptSuccessPass');
+  const dateInput = document.getElementById('aptDate');
+
+  if (dateInput) {
+    const today = new Date().toISOString().split('T')[0];
+    dateInput.min = today;
+  }
+
+  if (!form) return;
+
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const nameEl = document.getElementById('aptVisitorName');
+    const phoneEl = document.getElementById('aptVisitorPhone');
+    const emailEl = document.getElementById('aptVisitorEmail');
+    const studentEl = document.getElementById('aptStudentInfo');
+    const officialEl = document.getElementById('aptOfficialSelect');
+    const purposeEl = document.getElementById('aptPurposeSelect');
+    const dateEl = document.getElementById('aptDate');
+    const timeSlotEl = document.getElementById('aptTimeSlot');
+    const notesEl = document.getElementById('aptNotes');
+
+    const name = nameEl ? nameEl.value.trim() : '';
+    const phone = phoneEl ? phoneEl.value.trim() : '';
+    const email = emailEl ? emailEl.value.trim() : '';
+    const student = studentEl ? studentEl.value.trim() : '';
+    const official = officialEl ? officialEl.value : '';
+    const purpose = purposeEl ? purposeEl.value : '';
+    const date = dateEl ? dateEl.value : '';
+    const timeSlot = timeSlotEl ? timeSlotEl.value : '';
+    const notes = notesEl ? notesEl.value.trim() : '';
+
+    if (!name || !phone || !official || !purpose || !date || !timeSlot) {
+      showToast('Please complete all mandatory fields with valid information.', 'error');
+      return;
+    }
+
+    const aptId = 'SV-APT-' + Math.floor(1000 + Math.random() * 9000);
+    const appointmentRecord = {
+      aptId,
+      name,
+      phone,
+      email,
+      student,
+      official,
+      purpose,
+      date,
+      timeSlot,
+      notes,
+      status: 'Confirmed',
+      bookedAt: new Date().toISOString()
+    };
+
+    try {
+      const existing = JSON.parse(localStorage.getItem('sv_public_appointments') || '[]');
+      existing.unshift(appointmentRecord);
+      localStorage.setItem('sv_public_appointments', JSON.stringify(existing));
+    } catch(err) {}
+
+    if (passContainer) {
+      passContainer.innerHTML = `
+        <div style="font-size: 2.2rem; color: #16a34a; margin-bottom: 0.5rem;"><i class="fa-solid fa-circle-check"></i></div>
+        <h4>Appointment Requested Successfully!</h4>
+        <p style="color: #166534; font-size: 0.9rem; margin-bottom: 0.5rem;">Your meeting request has been recorded. Please save your reference pass:</p>
+        <div class="apt-pass-id">${aptId}</div>
+        <div style="text-align: left; background: #ffffff; padding: 1rem 1.25rem; border-radius: 12px; margin-top: 1rem; font-size: 0.85rem; color: #334155; line-height: 1.6;">
+          <div><strong>Official:</strong> ${official}</div>
+          <div><strong>Date &amp; Time:</strong> ${date} (${timeSlot})</div>
+          <div><strong>Visitor:</strong> ${name} (${phone})</div>
+          <div><strong>Purpose:</strong> ${purpose}</div>
+          <div style="margin-top: 0.5rem; color: #15803d; font-weight: 700;"><i class="fa-solid fa-bell"></i> An SMS confirmation has been scheduled for your mobile number.</div>
+        </div>
+        <button type="button" class="btn btn-outline btn-sm" id="btnBookAnotherApt" style="margin-top: 1rem;">
+          <i class="fa-solid fa-rotate-left"></i> Book Another Appointment
+        </button>
+      `;
+      passContainer.style.display = 'block';
+      passContainer.scrollIntoView({ behavior: 'smooth' });
+
+      const bookAnotherBtn = document.getElementById('btnBookAnotherApt');
+      if (bookAnotherBtn) {
+        bookAnotherBtn.addEventListener('click', () => {
+          passContainer.style.display = 'none';
+          form.reset();
+        });
+      }
+    }
+
+    showToast('Appointment ' + aptId + ' booked successfully!', 'success');
+  });
+}
+
+function initHeroFacilitySwitcher() {
+  const heroCard = document.getElementById('heroCardWrapper');
+  const heroImg = document.getElementById('heroCampusImg');
+  const captionText = document.getElementById('heroCaptionText');
+  const tabs = document.querySelectorAll('.hero-facility-switcher .facility-tab');
+  if (!heroImg || !tabs.length) return;
+
+  let currentIndex = 0;
+  let timer = null;
+  let isHovered = false;
+
+  function switchTab(index) {
+    if (index < 0 || index >= tabs.length) index = 0;
+    currentIndex = index;
+
+    tabs.forEach((tab, i) => {
+      tab.classList.toggle('active', i === currentIndex);
+    });
+
+    const activeTab = tabs[currentIndex];
+    const newSrc = activeTab.getAttribute('data-img');
+    const newCaption = activeTab.getAttribute('data-caption');
+
+    heroImg.style.opacity = '0.35';
+    heroImg.style.transform = 'scale(0.98)';
+    setTimeout(() => {
+      heroImg.src = newSrc;
+      if (captionText && newCaption) {
+        captionText.textContent = newCaption;
+      }
+      heroImg.style.opacity = '1';
+      heroImg.style.transform = 'scale(1)';
+    }, 180);
+  }
+
+  tabs.forEach((tab, idx) => {
+    tab.addEventListener('click', (e) => {
+      e.preventDefault();
+      switchTab(idx);
+      if (timer) {
+        clearInterval(timer);
+        timer = setInterval(() => {
+          if (!isHovered) switchTab((currentIndex + 1) % tabs.length);
+        }, 5000);
+      }
+    });
+  });
+
+  if (heroCard) {
+    heroCard.addEventListener('mouseenter', () => { isHovered = true; });
+    heroCard.addEventListener('mouseleave', () => { isHovered = false; });
+  }
+
+  timer = setInterval(() => {
+    if (!isHovered) {
+      switchTab((currentIndex + 1) % tabs.length);
+    }
+  }, 5000);
+}
+
+function initPublicAcademicCalendar() {
+  const tbody = document.getElementById('publicAcademicCalendarBody');
+  if (!tbody) return;
+
+  const defaults = [
+    { date: '01 Jun 2026', event: 'School reopening and orientation', classes: 'All classes', owner: 'Administration', status: 'Completed' },
+    { date: '15 Jul 2026', event: 'Formative Assessment 1', classes: 'I-X', owner: 'Academic Coordinator', status: 'Completed' },
+    { date: '05-15 Oct 2026', event: 'Dasara vacation', classes: 'All classes', owner: 'School Office', status: 'Scheduled' },
+    { date: '02-10 Dec 2026', event: 'Summative Assessment 1', classes: 'III-X', owner: 'Examination Cell', status: 'Scheduled' }
+  ];
+
+  const escapeHtml = value => String(value == null ? '' : value).replace(/[&<>"']/g, character => ({
+    '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;'
+  }[character]));
+
+  function render() {
+    let records = defaults;
+    try {
+      const saved = JSON.parse(localStorage.getItem('sv_academic_calendar') || 'null');
+      if (Array.isArray(saved) && saved.length) records = saved;
+    } catch (error) {
+      console.warn('Unable to load the shared academic calendar.', error);
+    }
+    tbody.innerHTML = records.map(record => `
+      <tr>
+        <td><strong>${escapeHtml(record.date)}</strong></td>
+        <td>${escapeHtml(record.event)}</td>
+        <td>${escapeHtml(record.classes)}</td>
+        <td>${escapeHtml(record.owner)}</td>
+        <td><span class="calendar-status-${escapeHtml(record.status).toLowerCase()}">${escapeHtml(record.status)}</span></td>
+      </tr>
+    `).join('');
+  }
+
+  render();
+  window.addEventListener('storage', event => {
+    if (event.key === 'sv_academic_calendar') render();
+  });
+}
 
 /* ==========================================================================
    1. Toast Notifications
@@ -48,7 +245,13 @@ function showToast(message, type = 'success') {
     toast.style.opacity = '0';
     toast.style.transform = 'translateX(100%)';
     toast.style.transition = 'all 0.3s ease';
-    setTimeout(() => toast.remove(), 300);
+    setTimeout(() => {
+      if (typeof toast.remove === 'function') {
+        toast.remove();
+      } else if (toast.parentNode) {
+        toast.parentNode.removeChild(toast);
+      }
+    }, 300);
   }, 4000);
 }
 
@@ -137,21 +340,56 @@ function initSubTabs() {
   });
 }
 
-/* Deep link router for dropdowns like #about-principal, #academics-curriculum */
+/* Deep link router for dropdowns and navigation links */
 function initHashRouter() {
-  function handleHash() {
-    const hash = window.location.hash;
-    if (!hash) return;
+  const ALIAS_TABS = {
+    'admissions-enquiry': { section: 'admissions', tab: 'tab-adm-apply' },
+    'admissions-process': { section: 'admissions', tab: 'tab-adm-process' },
+    'admissions-eligibility': { section: 'admissions', tab: 'tab-adm-eligibility' },
+    'admissions-documents': { section: 'admissions', tab: 'tab-adm-documents' },
+    'admissions-status': { section: 'admissions', tab: 'tab-adm-status' },
+    'about-profile': { section: 'about', tab: 'tab-profile' },
+    'about-principal': { section: 'about', tab: 'tab-principal' },
+    'about-vision': { section: 'about', tab: 'tab-vision' },
+    'about-infrastructure': { section: 'about', tab: 'tab-infrastructure' },
+    'academics-classes': { section: 'academics', tab: 'tab-classes' },
+    'academics-curriculum': { section: 'academics', tab: 'tab-curriculum' },
+    'academics-approach': { section: 'academics', tab: 'tab-approach' },
+    'academics-calendar': { section: 'academics', tab: 'tab-calendar' },
+  };
 
-    if (hash.includes('-')) {
-      const parts = hash.substring(1).split('-');
+  function handleHash() {
+    const rawHash = window.location.hash ? window.location.hash.substring(1) : '';
+    if (!rawHash) return;
+
+    // Check alias mapping first
+    if (ALIAS_TABS[rawHash]) {
+      const { section, tab } = ALIAS_TABS[rawHash];
+      const sectionEl = document.getElementById(section);
+      if (sectionEl) {
+        sectionEl.scrollIntoView({ behavior: 'smooth' });
+        const targetBtn = sectionEl.querySelector(`.tab-btn[data-tab="${tab}"]`);
+        if (targetBtn) targetBtn.click();
+      }
+      return;
+    }
+
+    // Direct element ID match (e.g., #news-events, #appointments, #gallery, #portals)
+    const directEl = document.getElementById(rawHash);
+    if (directEl) {
+      directEl.scrollIntoView({ behavior: 'smooth' });
+      return;
+    }
+
+    // Generic split hyphen fallback
+    if (rawHash.includes('-')) {
+      const parts = rawHash.split('-');
       const sectionId = parts[0];
       const subTabId = parts.slice(1).join('-');
 
       const sectionEl = document.getElementById(sectionId);
       if (sectionEl) {
         sectionEl.scrollIntoView({ behavior: 'smooth' });
-
         const targetBtn = sectionEl.querySelector(`.tab-btn[data-tab="tab-${subTabId}"], .tab-btn[data-tab="tab-adm-${subTabId}"], .tab-btn[data-tab="${subTabId}"]`);
         if (targetBtn) {
           targetBtn.click();
@@ -161,9 +399,9 @@ function initHashRouter() {
   }
 
   window.addEventListener('hashchange', handleHash);
-  // Initial check
+  // Initial check on load
   if (window.location.hash) {
-    setTimeout(handleHash, 200);
+    setTimeout(handleHash, 250);
   }
 }
 
@@ -208,35 +446,111 @@ function initAdmissionForm() {
   const form = document.getElementById('onlineAdmissionForm');
   const receiptModal = document.getElementById('receiptModal');
   const printBtn = document.getElementById('printReceiptBtn');
+  const submitBtn = document.getElementById('submitAdmissionBtn') || document.getElementById('submitApplicationBtn');
+  const nextBtn = document.getElementById('nextAdmissionStep');
+  const backBtn = document.getElementById('backAdmissionStep');
+  const openReceiptBtn = document.getElementById('openReceiptBtn');
+  const reviewSummary = document.getElementById('admissionReviewSummary');
+  const admissionSteps = document.querySelectorAll('[data-admission-step]');
+  const admissionPanels = document.querySelectorAll('[data-admission-panel]');
+  const isMultiStep = admissionPanels.length > 0 && !!nextBtn;
+  let currentStep = 1;
+
+  function setAdmissionStep(stepNum) {
+    if (!isMultiStep) return;
+    currentStep = Number(stepNum);
+    admissionPanels.forEach(panel => {
+      panel.hidden = Number(panel.getAttribute('data-admission-panel')) !== currentStep;
+    });
+    admissionSteps.forEach(step => {
+      const num = Number(step.getAttribute('data-admission-step'));
+      step.classList.toggle('active', num === currentStep);
+      step.classList.toggle('completed', num < currentStep);
+      step.setAttribute('aria-current', num === currentStep ? 'step' : 'false');
+    });
+  }
+
+  if (isMultiStep) {
+    setAdmissionStep(1);
+  }
+
+  function fieldValue(id, altId, fallback = 'Not provided') {
+    const field = document.getElementById(id) || (altId ? document.getElementById(altId) : null);
+    return field && field.value && field.value.trim() ? field.value.trim() : fallback;
+  }
+
+  function renderReviewSummary() {
+    if (!reviewSummary) return;
+    const values = [
+      ['Student name', fieldValue('studentName', 'admStudentName')],
+      ['Date of birth', fieldValue('studentDob', 'admDob')],
+      ['Gender', fieldValue('studentGender', 'admGender')],
+      ['Class applying for', fieldValue('seekingClass', 'admGrade')],
+      ['Parent / guardian', fieldValue('parentName', 'admParentName')],
+      ['Mobile number', fieldValue('parentPhone', 'admPhone')],
+      ['Email address', fieldValue('parentEmail', 'admEmail')],
+      ['Previous school', fieldValue('previousSchool', 'admPrevSchool')],
+      ['Residential address', fieldValue('residentialAddress', 'admAddress')]
+    ];
+    reviewSummary.innerHTML = values.map(([label, value]) => `
+      <div class="admission-review-item">
+        <span>${label}</span>
+        <strong>${value.replace(/[&<>"']/g, character => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' }[character]))}</strong>
+      </div>
+    `).join('');
+  }
+
+  if (nextBtn) {
+    nextBtn.addEventListener('click', () => {
+      if (!form.reportValidity()) return;
+      renderReviewSummary();
+      currentStep = 2;
+      setAdmissionStep(currentStep);
+    });
+  }
+
+  if (backBtn) {
+    backBtn.addEventListener('click', () => {
+      currentStep = 1;
+      setAdmissionStep(currentStep);
+    });
+  }
 
   if (form) {
-    form.addEventListener('submit', (e) => {
-      e.preventDefault();
+    form.addEventListener('input', () => {
+      if (isMultiStep && currentStep === 1 && submitBtn && !submitBtn.disabled) setAdmissionStep(1);
+    });
 
-      const studentName = document.getElementById('admStudentName').value.trim();
-      const dob = document.getElementById('admDob').value;
-      const gender = document.getElementById('admGender').value;
-      const grade = document.getElementById('admGrade').value;
-      const parentName = document.getElementById('admParentName').value.trim();
-      const phone = document.getElementById('admPhone').value.trim();
-      const email = document.getElementById('admEmail').value.trim();
-      const address = document.getElementById('admAddress').value.trim();
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      if (isMultiStep && currentStep !== 2) return;
+
+      const studentName = fieldValue('studentName', 'admStudentName', '');
+      const dob = fieldValue('studentDob', 'admDob', '');
+      const gender = fieldValue('studentGender', 'admGender', '');
+      const grade = fieldValue('seekingClass', 'admGrade', '');
+      const parentName = fieldValue('parentName', 'admParentName', '');
+      const phone = fieldValue('parentPhone', 'admPhone', '');
+      const email = fieldValue('parentEmail', 'admEmail', '');
+      const address = fieldValue('residentialAddress', 'admAddress', '');
+      const prevSchool = fieldValue('previousSchool', 'admPrevSchool', '');
 
       if (!studentName || !grade || !parentName || !phone) {
-        showToast('Please fill in all mandatory fields.', 'error');
+        showToast('Please fill in all mandatory fields with valid details.', 'error');
         return;
       }
 
-      // Extract Previous School
-      const prevSchoolEl = document.getElementById('admPrevSchool');
-      const prevSchool = prevSchoolEl ? prevSchoolEl.value.trim() : '';
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Submitting application...';
+      }
+      await new Promise(resolve => requestAnimationFrame(resolve));
 
-      // Generate Dynamic Year-Based Unique Application ID (e.g. SV202600007, SV202700001)
+      // Generate Dynamic Year-Based Unique Application ID (e.g. SV202600007)
       const currentYear = new Date().getFullYear();
       const yearPrefix = `SV${currentYear}`;
       const yearSeqKey = `sv_admission_seq_${currentYear}`;
       
-      // Calculate current maximum sequence for this calendar year across base roster + localStorage
       let maxYearSeq = 0;
 
       // 1. Check initial base roster
@@ -316,13 +630,12 @@ function initAdmissionForm() {
           timestamp: Date.now()
         }));
         
-        // Trigger live storage event for active tabs (Principal & VP Management Portal)
         window.dispatchEvent(new Event('storage'));
       } catch (err) {
         console.warn('LocalStorage save error:', err);
       }
 
-      // Fill Receipt Modal (shows Application Number ONLY)
+      // Fill Receipt Modal
       const rcAppId = document.getElementById('receiptAppId');
       if (rcAppId) rcAppId.textContent = generatedAppId;
 
@@ -366,10 +679,28 @@ function initAdmissionForm() {
       }
 
       // Show Receipt Modal
-      if (receiptModal) receiptModal.classList.add('active');
+      if (isMultiStep) {
+        currentStep = 3;
+        setAdmissionStep(currentStep);
+      }
+      const inlineReference = document.getElementById('inlineAdmissionReference');
+      if (inlineReference) inlineReference.textContent = generatedAppId;
+      if (openReceiptBtn) openReceiptBtn.onclick = () => {
+        if (receiptModal) receiptModal.classList.add('active');
+      };
+      
+      // Auto-open Receipt Modal for parents
+      if (receiptModal) {
+        receiptModal.classList.add('active');
+      }
+
       showToast(`Application successfully registered! Reference Number: ${generatedAppId}`, 'success');
 
       form.reset();
+      if (submitBtn) {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Submit Admission Enquiry';
+      }
     });
   }
 
@@ -391,9 +722,9 @@ function initAdmissionForm() {
    5. Admission Status Tracker
    ========================================================================== */
 function initStatusChecker() {
-  const checkBtn = document.getElementById('checkStatusBtn');
+  const checkBtn = document.getElementById('btnCheckStatus') || document.getElementById('checkStatusBtn');
   const searchInput = document.getElementById('statusSearchInput');
-  const resultCard = document.getElementById('statusResultCard');
+  const resultCard = document.getElementById('statusResultArea') || document.getElementById('statusResultCard');
 
   // Load from localStorage if present
   try {
@@ -1512,13 +1843,37 @@ function initContactForm() {
     contactForm.addEventListener('submit', (e) => {
       e.preventDefault();
 
-      const name = document.getElementById('contactName')?.value.trim();
-      const phone = document.getElementById('contactPhone')?.value.trim();
-      const subject = document.getElementById('contactSubject')?.value.trim();
+      const nameEl = document.getElementById('contactName');
+      const phoneEl = document.getElementById('contactPhone');
+      const emailEl = document.getElementById('contactEmail');
+      const subjectEl = document.getElementById('contactSubject');
+      const messageEl = document.getElementById('contactMessage');
+
+      const name = nameEl ? nameEl.value.trim() : '';
+      const phone = phoneEl ? phoneEl.value.trim() : '';
+      const email = emailEl ? emailEl.value.trim() : '';
+      const subject = subjectEl ? subjectEl.value.trim() : 'General Inquiry';
+      const message = messageEl ? messageEl.value.trim() : '';
 
       if (!name || !phone) {
         showToast('Please provide your name and contact phone number.', 'error');
         return;
+      }
+
+      try {
+        const inquiries = JSON.parse(localStorage.getItem('sv_contact_inquiries') || '[]');
+        inquiries.unshift({
+          id: 'INQ-' + Date.now(),
+          name,
+          phone,
+          email,
+          subject,
+          message,
+          submittedAt: new Date().toISOString()
+        });
+        localStorage.setItem('sv_contact_inquiries', JSON.stringify(inquiries));
+      } catch (err) {
+        console.warn('Inquiry storage note:', err);
       }
 
       showToast(`Thank you, ${name}! Your inquiry regarding "${subject}" has been received. Our administrative office will contact you shortly.`);
@@ -1534,18 +1889,26 @@ function initThemeToggle() {
   const toggleBtn = document.getElementById('themeToggleBtn');
   const savedTheme = localStorage.getItem('sv_theme') || 'light';
 
-  document.documentElement.setAttribute('data-theme', savedTheme);
-  updateThemeIcon(savedTheme);
+  applyTheme(savedTheme);
 
   if (toggleBtn) {
     toggleBtn.addEventListener('click', () => {
       const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
       const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-      document.documentElement.setAttribute('data-theme', newTheme);
+      applyTheme(newTheme);
       localStorage.setItem('sv_theme', newTheme);
-      updateThemeIcon(newTheme);
       showToast(`Switched to ${newTheme === 'dark' ? 'Dark' : 'Light'} Mode`, 'info');
     });
+  }
+
+  function applyTheme(theme) {
+    const isDark = theme === 'dark';
+    document.documentElement.setAttribute('data-theme', theme);
+    document.documentElement.classList.toggle('dark-mode', isDark);
+    if (document.body) {
+      document.body.classList.toggle('dark-mode', isDark);
+    }
+    updateThemeIcon(theme);
   }
 
   function updateThemeIcon(theme) {
@@ -1568,8 +1931,6 @@ function initThemeToggle() {
    - Supports: English (Default), Telugu (తెలుగు), Hindi (हिन्दी)
    - Features 100% Full-Website Native Translation via Google Translate Engine
      integrated with an instant in-memory design dictionary.
-   - Strictly satisfies user requirement:
-     "keep the option to change but the main look is every time in english"
    ========================================================================== */
 function initLanguageSelector() {
   const topLangSelector = document.getElementById('langSelector');
@@ -1583,94 +1944,67 @@ function initLanguageSelector() {
         topBarMotto: 'Est. 2017 • Vidyathe Vijayam',
         brandMottoText: 'Est. 2017 • Knowledge Brings Victory',
         navHome: '<i class="fa-solid fa-house"></i> Home',
-        navAbout: 'About School <i class="fa-solid fa-chevron-down dropdown-caret"></i>',
+        navAbout: 'About Us <i class="fa-solid fa-chevron-down dropdown-caret"></i>',
         navAcademics: 'Academics <i class="fa-solid fa-chevron-down dropdown-caret"></i>',
         navAdmissions: 'Admissions <i class="fa-solid fa-chevron-down dropdown-caret"></i>',
-        navStudentLife: 'Student Life <i class="fa-solid fa-chevron-down dropdown-caret"></i>',
-        navNews: 'News & Events',
-        navGallery: 'Gallery',
-        navNotices: 'Notices',
-        navDownloads: 'Downloads',
-        navContact: 'Contact',
-        headerApplyBtnText: 'Apply Online',
-        heroBadgeText: 'Admissions Open for Academic Year 2025-2026',
+        navNewsEvents: '<i class="fa-solid fa-bullhorn"></i> News &amp; Events',
+        navGallery: '<i class="fa-solid fa-images"></i> Gallery',
+        navAppointments: '<i class="fa-solid fa-calendar-check"></i> Appointments',
+        navContact: '<i class="fa-solid fa-envelope"></i> Contact Us',
+        navInstitutionalPortals: '<i class="fa-solid fa-shield-halved"></i> Institutional Portals <i class="fa-solid fa-chevron-down dropdown-caret"></i>',
+        headerAppointmentBtn: '<i class="fa-solid fa-calendar-check"></i> <span>Book Appointment</span>',
+        heroBadgeText: 'Admissions Open for Academic Year 2026-2027',
         heroMainTitle: 'Inspiring Young Minds Through <span class="highlight-red">Knowledge</span> &amp; <span class="highlight-gold">Character</span>',
         heroMottoText: 'Vidyathe Vijayam — <em>"Knowledge Empowers True Victory"</em>',
-        heroDesc: 'Welcome to <strong>Sri Vidya E.M High School</strong>, where traditional Indian moral values blend seamlessly with modern STEM education, smart digital classrooms, and vibrant co-curricular growth under experienced educational leadership.',
-        heroApplyBtnText: 'Apply for Admission',
-        heroExploreBtnText: 'Explore Our Campus',
-        heroTrackBtnText: 'Track Application',
-        principalMsgHeading: 'Message from Smt. Gorle Varalakshmi',
-        principalTitleTag: 'Principal, Sri Vidya E.M High School',
-        principalQuote: '"Education is not just the learning of facts, but the training of the mind to think with clarity, compassion, and courage. At Sri Vidya E.M High School, our guiding light is \'Vidyathe Vijayam\' — true victory is attained through authentic knowledge and unwavering character."',
-        principalMsgDesc: 'We foster an inclusive and warm atmosphere where each child is encouraged to discover their innate curiosity, cultivate discipline, and grow into responsible, empathetic global citizens.',
-        readFullMsgBtn: 'Read Full Message &rarr;',
-        footerBrandMotto: 'Est. 2017 • "Vidyathe Vijayam" — Knowledge Brings Victory',
-        footerAboutDesc: 'Committed to quality English medium schooling, character formation, and student excellence from Pre-Primary to Class X. Established in 2017. Recognized by Govt. of Andhra Pradesh.'
+        heroDesc: 'Welcome to <strong>Sri Vidya E.M High School</strong> (Est. 2017), where traditional Indian values blend seamlessly with modern STEM education, smart digital classrooms, and vibrant co-curricular growth under experienced educational leadership.',
+        heroApplyBtnText: 'Enquiry Form',
+        heroExploreBtnText: 'About School'
       }
     },
     te: {
-      toast: 'మొత్తం వెబ్‌సైట్ తెలుగులోకి మార్చబడింది (Website translated into Telugu)',
+      toast: 'వెబ్‌సైట్ తెలుగులోకి మార్చబడింది (Website translated into Telugu)',
       elements: {
         topBarMotto: 'స్థాపన 2017 • విద్యాతే విజయం',
         brandMottoText: 'స్థాపన 2017 • విజ్ఞానమే విజయం',
         navHome: '<i class="fa-solid fa-house"></i> హోమ్',
-        navAbout: 'పాఠశాల గురించి <i class="fa-solid fa-chevron-down dropdown-caret"></i>',
-        navAcademics: 'విద్యా విభాగం <i class="fa-solid fa-chevron-down dropdown-caret"></i>',
+        navAbout: 'మా గురించి <i class="fa-solid fa-chevron-down dropdown-caret"></i>',
+        navAcademics: 'విద్యా విభాగాలు <i class="fa-solid fa-chevron-down dropdown-caret"></i>',
         navAdmissions: 'ప్రవేశాలు <i class="fa-solid fa-chevron-down dropdown-caret"></i>',
-        navStudentLife: 'విద్యార్థి జీవితం <i class="fa-solid fa-chevron-down dropdown-caret"></i>',
-        navNews: 'వార్తలు &amp; విశేషాలు',
-        navGallery: 'చిత్రమాలిక',
-        navNotices: 'నోటీసులు',
-        navDownloads: 'డౌన్‌లోడ్లు',
-        navContact: 'సంప్రదించండి',
-        headerApplyBtnText: 'ఆన్‌లైన్ దరఖాస్తు',
-        heroBadgeText: 'విద్యా సంవత్సరం 2025-2026 ప్రవేశాలు ప్రారంభమైనవి',
+        navNewsEvents: '<i class="fa-solid fa-bullhorn"></i> వార్తలు &amp; విశేషాలు',
+        navGallery: '<i class="fa-solid fa-images"></i> గ్యాలరీ',
+        navAppointments: '<i class="fa-solid fa-calendar-check"></i> అపాయింట్‌మెంట్‌లు',
+        navContact: '<i class="fa-solid fa-envelope"></i> మమ్మల్ని సంప్రదించండి',
+        navInstitutionalPortals: '<i class="fa-solid fa-shield-halved"></i> సంస్థాగత పోర్టల్స్ <i class="fa-solid fa-chevron-down dropdown-caret"></i>',
+        headerAppointmentBtn: '<i class="fa-solid fa-calendar-check"></i> <span>అపాయింట్‌మెంట్ బుక్ చేయండి</span>',
+        heroBadgeText: 'విద్యా సంవత్సరం 2026-2027 ప్రవేశాలు ప్రారంభమైనవి',
         heroMainTitle: 'యువ మనస్సులను <span class="highlight-red">విజ్ఞానం</span> &amp; <span class="highlight-gold">సదాచారంతో</span> తీర్చిదిద్దుతూ',
         heroMottoText: 'విద్యాతే విజయం — <em>"విజ్ఞానమే నిజమైన విజయం"</em>',
-        heroDesc: '<strong>శ్రీ విద్యా ఇంగ్లీష్ మీడియం హై స్కూల్‌కు</strong> సాదర స్వాగతం. ఇక్కడ భారతీయ సంస్కృతి, నైతిక విలువలు మరియు ఆధునిక సైన్స్, స్మార్ట్ తరగతులు మరియు సంపూర్ణ విద్యార్థి వికాసం అనుభవజ్ఞులైన నాయకత్వంలో సమకూరుతాయి.',
-        heroApplyBtnText: 'ప్రవేశానికి దరఖాస్తు చేసుకోండి',
-        heroExploreBtnText: 'మా ప్రాంగణాన్ని చూడండి',
-        heroTrackBtnText: 'దరఖాస్తు స్థితి తనిఖీ',
-        principalMsgHeading: 'శ్రీమతి గొర్లె వరలక్ష్మి గారి సందేశం',
-        principalTitleTag: 'ప్రధానోపాధ్యాయురాలు, శ్రీ విద్యా ఇ.ఎం. హై స్కూల్',
-        principalQuote: '"విద్య అనేది కేవలం పుస్తక జ్ఞానం మాత్రమే కాదు, స్పష్టత, దయ మరియు ధైర్యంతో ఆలోచించే మనస్సును తీర్చిదిద్దడం. శ్రీ విద్యా ఇంగ్లీష్ మీడియం హై స్కూల్‌లో మా మార్గదర్శక సూత్రం \'విద్యాతే విజయం\' — నిజమైన జ్ఞానం మరియు ఉత్తమ వ్యక్తిత్వం ద్వారానే అసలైన విజయం సాధించబడుతుంది."',
-        principalMsgDesc: 'ప్రతి విద్యార్థి తన సహజమైన జిజ్ఞాసను కనుగొని, క్రమశిక్షణను అలవర్చుకుని, బాధ్యతాయుతమైన పౌరులుగా ఎదిగేలా మేము ప్రోత్సహిస్తాము.',
-        readFullMsgBtn: 'పూర్తి సందేశం చదవండి &rarr;',
-        footerBrandMotto: 'స్థాపన 2017 • "విద్యాతే విజయం" — విజ్ఞానమే విజయం',
-        footerAboutDesc: 'ప్రీ-ప్రైమరీ నుండి పదవ తరగతి వరకు నాణ్యమైన ఇంగ్లీష్ మీడియం విద్య, ఉత్తమ వ్యక్తిత్వ నిర్మాణం మరియు విద్యార్థి ప్రతిభకు నిబద్ధత. స్థాపన 2017. ఆంధ్రప్రదేశ్ ప్రభుత్వం గుర్తింపు పొందినది.'
+        heroDesc: '<strong>శ్రీ విద్యా ఇంగ్లీష్ మీడియం హై స్కూల్‌కు</strong> (స్థాపన 2017) సాదర స్వాగతం. ఇక్కడ సంస్కృతి, నైతిక విలువలు మరియు ఆధునిక సైన్స్ విద్య విద్యార్థి వికాసానికి తోడ్పడతాయి.',
+        heroApplyBtnText: 'విచారణ ఫారమ్',
+        heroExploreBtnText: 'పాఠశాల గురించి'
       }
     },
     hi: {
-      toast: 'पूरी वेबसाइट हिन्दी में बदल दी गई है (Website translated into Hindi)',
+      toast: 'वेबसाइट हिन्दी में बदल दी गई है (Website translated into Hindi)',
       elements: {
         topBarMotto: 'स्थापना 2017 • विद्याते विजयम्',
         brandMottoText: 'स्थापना 2017 • ज्ञान ही विजय है',
-        navHome: '<i class="fa-solid fa-house"></i> मुख्य पृष्ठ',
-        navAbout: 'विद्यालय परिचय <i class="fa-solid fa-chevron-down dropdown-caret"></i>',
-        navAcademics: 'शैक्षणिक <i class="fa-solid fa-chevron-down dropdown-caret"></i>',
+        navHome: '<i class="fa-solid fa-house"></i> होम',
+        navAbout: 'हमारे बारे में <i class="fa-solid fa-chevron-down dropdown-caret"></i>',
+        navAcademics: 'अकादमिक <i class="fa-solid fa-chevron-down dropdown-caret"></i>',
         navAdmissions: 'प्रवेश <i class="fa-solid fa-chevron-down dropdown-caret"></i>',
-        navStudentLife: 'छात्र जीवन <i class="fa-solid fa-chevron-down dropdown-caret"></i>',
-        navNews: 'समाचार एवं कार्यक्रम',
-        navGallery: 'गैलरी',
-        navNotices: 'सूचनाएं',
-        navDownloads: 'डाउनलोड',
-        navContact: 'संपर्क करें',
-        headerApplyBtnText: 'ऑनलाइन आवेदन',
-        heroBadgeText: 'शैक्षणिक सत्र 2025-2026 के लिए प्रवेश प्रारंभ',
+        navNewsEvents: '<i class="fa-solid fa-bullhorn"></i> समाचार एवं आयोजन',
+        navGallery: '<i class="fa-solid fa-images"></i> गैलरी',
+        navAppointments: '<i class="fa-solid fa-calendar-check"></i> अपॉइंटमेंट्स',
+        navContact: '<i class="fa-solid fa-envelope"></i> संपर्क करें',
+        navInstitutionalPortals: '<i class="fa-solid fa-shield-halved"></i> संस्थागत पोर्टल्स <i class="fa-solid fa-chevron-down dropdown-caret"></i>',
+        headerAppointmentBtn: '<i class="fa-solid fa-calendar-check"></i> <span>अपॉइंटमेंट बुक करें</span>',
+        heroBadgeText: 'शैक्षणिक सत्र 2026-2027 के लिए प्रवेश प्रारंभ',
         heroMainTitle: 'युवा मस्तिष्कों को <span class="highlight-red">ज्ञान</span> एवं <span class="highlight-gold">चरित्र</span> से प्रेरित करते हुए',
         heroMottoText: 'विद्याते विजयम् — <em>"ज्ञान ही सच्ची विजय है"</em>',
-        heroDesc: '<strong>श्री विद्या ई.एम. हाई स्कूल</strong> में आपका हार्दिक स्वागत है, जहाँ भारतीय नैतिक मूल्य आधुनिक विज्ञान, स्मार्ट डिजिटल कक्षाओं और अनुभवी शैक्षिक नेतृत्व के साथ उत्कृष्टता प्रदान करते हैं।',
-        heroApplyBtnText: 'प्रवेश के लिए आवेदन करें',
-        heroExploreBtnText: 'हमारा परिसर देखें',
-        heroTrackBtnText: 'आवेदन स्थिति देखें',
-        principalMsgHeading: 'श्रीमती गोर्ले वरलक्ष्मी जी का संदेश',
-        principalTitleTag: 'प्रधानाचार्या, श्री विद्या ई.एम. हाई स्कूल',
-        principalQuote: '"शिक्षा केवल तथ्यों को याद रखना नहीं है, बल्कि स्पष्टता, करुणा और साहस के साथ सोचने के लिए मन को प्रशिक्षित करना है। श्री विद्या ई.एम. हाई स्कूल में हमारा मार्गदर्शक मंत्र \'विद्याते विजयम्\' है — सच्ची विजय वास्तविक ज्ञान और अडिग चरित्र से प्राप्त होती है।"',
-        principalMsgDesc: 'हम एक समावेशी और आत्मीय वातावरण को बढ़ावा देते हैं जहाँ प्रत्येक बच्चे को अपनी सहज जिज्ञासा को खोजने, अनुशासन विकसित करने और जिम्मेदार नागरिक बनने के लिए प्रेरित किया जाता है।',
-        readFullMsgBtn: 'पूरा संदेश पढ़ें &rarr;',
-        footerBrandMotto: 'स्थापना 2017 • "विद्याते विजयम्" — ज्ञान ही विजय है',
-        footerAboutDesc: 'प्री-प्राइमरी से दसवीं कक्षा तक गुणवत्तापूर्ण अंग्रेजी माध्यम शिक्षा, चरित्र निर्माण और छात्र उत्कृष्टता के लिए समर्पित। स्थापना 2017। आंध्र प्रदेश सरकार द्वारा मान्यता प्राप्त।'
+        heroDesc: '<strong>श्री विद्या ई.एम. हाई स्कूल</strong> (स्थापना 2017) में आपका स्वागत है, जहाँ भारतीय नैतिक मूल्य आधुनिक विज्ञान और डिजिटल शिक्षा के साथ मिलते हैं।',
+        heroApplyBtnText: 'पूछताछ फॉर्म',
+        heroExploreBtnText: 'विद्यालय परिचय'
       }
     }
   };
@@ -1796,4 +2130,36 @@ function initPortalDropdown() {
   }
 }
 
+/* ==========================================================================
+   Leadership Desk Switcher (Principal & Vice Principal)
+   ========================================================================== */
+function switchLeadershipDesk(target) {
+  const pPanel = document.getElementById('leadershipDeskPrincipal');
+  const vpPanel = document.getElementById('leadershipDeskVicePrincipal');
+  const btnP = document.getElementById('btnSwitchPrincipal');
+  const btnVp = document.getElementById('btnSwitchVicePrincipal');
+
+  if (target === 'vp') {
+    if (pPanel) pPanel.style.display = 'none';
+    if (vpPanel) {
+      vpPanel.style.display = 'grid';
+    }
+    if (btnP) btnP.classList.remove('active');
+    if (btnVp) {
+      btnVp.classList.add('active');
+      btnVp.classList.add('vp-active');
+    }
+  } else {
+    if (pPanel) {
+      pPanel.style.display = 'grid';
+    }
+    if (vpPanel) vpPanel.style.display = 'none';
+    if (btnP) btnP.classList.add('active');
+    if (btnVp) {
+      btnVp.classList.remove('active');
+      btnVp.classList.remove('vp-active');
+    }
+  }
+}
+window.switchLeadershipDesk = switchLeadershipDesk;
 
