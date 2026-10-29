@@ -395,13 +395,13 @@
             <span class="nav-arrow"><i class="fa-solid fa-chevron-right"></i></span>
           </a>
           <div class="nav-sub">
-            <a href="#fees-structure" class="nav-sub-link" data-sub="structure" onclick="portalApp.switchSubTab('fees', 'structure');">Fee Structures</a>
-            <a href="#fees-collection" class="nav-sub-link active" data-sub="collection" onclick="portalApp.switchSubTab('fees', 'collection');">Collection Counter</a>
+            <a href="#fees-collection" class="nav-sub-link active" data-sub="collection" onclick="portalApp.switchSubTab('fees', 'collection');">Fee Collection</a>
             <a href="#fees-pending" class="nav-sub-link" data-sub="pending" onclick="portalApp.switchSubTab('fees', 'pending');">Pending Dues <span class="nav-sub-badge danger">₹4.2L</span></a>
-            <a href="#fees-concessions" class="nav-sub-link" data-sub="concessions" onclick="portalApp.switchSubTab('fees', 'concessions');">Concessions</a>
+            <a href="#fees-structure" class="nav-sub-link" data-sub="structure" onclick="portalApp.switchSubTab('fees', 'structure');">Fee Structure</a>
+            <a href="#fees-concessions" class="nav-sub-link" data-sub="concessions" onclick="portalApp.switchSubTab('fees', 'concessions');">Concessions &amp; Scholarships</a>
             <a href="#fees-refunds" class="nav-sub-link" data-sub="refunds" onclick="portalApp.switchSubTab('fees', 'refunds');">Refunds</a>
-            <a href="#fees-receipts" class="nav-sub-link" data-sub="receipts" onclick="portalApp.switchSubTab('fees', 'receipts');">Receipts</a>
-            <a href="#fees-reports" class="nav-sub-link" data-sub="reports" onclick="portalApp.switchSubTab('fees', 'reports');">Financial Reports</a>
+            <a href="#fees-reports" class="nav-sub-link" data-sub="reports" onclick="portalApp.switchSubTab('fees', 'reports');">Fee Reports</a>
+            <a href="#fees-transactions" class="nav-sub-link" data-sub="transactions" onclick="portalApp.switchSubTab('fees', 'transactions');">Transactions Ledger</a>
           </div>
         </div>
 
@@ -7972,212 +7972,124 @@
           </div>
 
           <!-- Tab Strip -->
+          <!-- Tab Strip with exact 7 submenus -->
           <div class="tab-strip" id="feesTabStrip">
+            <button class="tab-btn active" data-sub="collection" onclick="portalApp.switchSubTab('fees', 'collection')">
+              <i class="fa-solid fa-cash-register mr-1"></i> Fee Collection
+            </button>
+            <button class="tab-btn" data-sub="pending" onclick="portalApp.switchSubTab('fees', 'pending')">
+              <i class="fa-solid fa-user-clock mr-1"></i> Pending Dues (<span id="feePendingTabBadge">₹4.2L</span>)
+            </button>
             <button class="tab-btn" data-sub="structure" onclick="portalApp.switchSubTab('fees', 'structure')">
               <i class="fa-solid fa-table-list mr-1"></i> Fee Structure
             </button>
-            <button class="tab-btn active" data-sub="collection" onclick="portalApp.switchSubTab('fees', 'collection')">
-              <i class="fa-solid fa-chart-pie mr-1"></i> Collection
-            </button>
-            <button class="tab-btn" data-sub="pending" onclick="portalApp.switchSubTab('fees', 'pending')">
-              <i class="fa-solid fa-user-clock mr-1"></i> Pending dues (<span id="feePendingTabBadge">₹4.2L</span>)
-            </button>
             <button class="tab-btn" data-sub="concessions" onclick="portalApp.switchSubTab('fees', 'concessions')">
-              <i class="fa-solid fa-handshake-angle mr-1"></i> Concessions
+              <i class="fa-solid fa-handshake-angle mr-1"></i> Concessions &amp; Scholarships
             </button>
             <button class="tab-btn" data-sub="refunds" onclick="portalApp.switchSubTab('fees', 'refunds')">
               <i class="fa-solid fa-arrow-rotate-left mr-1"></i> Refunds
             </button>
-            <button class="tab-btn" data-sub="receipts" onclick="portalApp.switchSubTab('fees', 'receipts')">
-              <i class="fa-solid fa-receipt mr-1"></i> Receipts
-            </button>
             <button class="tab-btn" data-sub="reports" onclick="portalApp.switchSubTab('fees', 'reports')">
-              <i class="fa-solid fa-chart-line mr-1"></i> Financial Reports
+              <i class="fa-solid fa-chart-line mr-1"></i> Fee Reports
+            </button>
+            <button class="tab-btn" data-sub="transactions" onclick="portalApp.switchSubTab('fees', 'transactions')">
+              <i class="fa-solid fa-book-bookmark mr-1"></i> Transactions Ledger
             </button>
           </div>
 
           <!-- =========================================================
-               SUBVIEW 1: COLLECTION OVERVIEW
+               SUBVIEW 1: FEE COLLECTION
+               Student, invoice, amount due, amount paid, payment method and receipt
                ========================================================= -->
-          <!-- =========================================================
-               SUBVIEW: FEE STRUCTURE
-               ========================================================= -->
-          <div class="fees-subview" id="subview-fees-structure" data-subview="structure" style="display:none;">
-            <div class="fees-quad-stat mb-3">
-              <div class="fee-stat-box" style="border-left: 4px solid #3b82f6;">
-                <div class="fs-title">High School Tuition</div>
-                <div class="fs-num text-primary">₹36,000 / Yr</div>
-                <div class="fs-sub text-muted">Classes VIII, IX, X • 3 Installments</div>
-              </div>
-              <div class="fee-stat-box" style="border-left: 4px solid #10b981;">
-                <div class="fs-title">Primary School Tuition</div>
-                <div class="fs-num text-emerald">₹24,000 / Yr</div>
-                <div class="fs-sub text-muted">Classes I to V • Activity Integrated</div>
-              </div>
-              <div class="fee-stat-box" style="border-left: 4px solid #f59e0b;">
-                <div class="fs-title">Term Installment Quota</div>
-                <div class="fs-num text-amber">3 Terms</div>
-                <div class="fs-sub text-amber">Term 1 (Jun) • Term 2 (Oct) • Term 3 (Jan)</div>
-              </div>
-              <div class="fee-stat-box" style="border-left: 4px solid #8b5cf6;">
-                <div class="fs-title">Configured Standards</div>
-                <div class="fs-num" style="color: #8b5cf6;">13 Slabs</div>
-                <div class="fs-sub text-muted">Approved by School Governance</div>
-              </div>
-            </div>
+          <div class="fees-subview active" id="subview-fees-collection" data-subview="collection">
             <div class="card p-4">
-              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; flex-wrap: wrap; gap: 0.75rem;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.15rem; flex-wrap: wrap; gap: 0.75rem; background: #fff; padding: 1rem 1.25rem; border-radius: 10px; border: 1px solid var(--color-border);">
                 <div>
-                  <h3 style="margin: 0;"><i class="fa-solid fa-table-list text-primary"></i> Academic Year 2026-27 Fee Structure Schedule</h3>
-                  <p class="text-muted" style="margin: 0.25rem 0 0 0; font-size: 0.85rem;">Official approved tuition, computer lab, sports &amp; examination fee schedules by academic wing.</p>
+                  <h3 style="margin: 0; font-size: 1.05rem; font-weight: 800; color: var(--color-text-dark);">
+                    <i class="fa-solid fa-cash-register text-primary mr-1"></i> Fee Collection &amp; Instant Receipt Counter
+                  </h3>
+                  <p class="text-muted" style="margin: 0.25rem 0 0 0; font-size: 0.84rem;">
+                    Daily fee collections, digital UPI and counter settlements &bull; Supervised by Accounts Office &bull; Sanctioned by Principal Smt. Gorle Varalakshmi
+                  </p>
                 </div>
                 <div style="display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;">
-                  <select id="feeStructureWingFilter" class="form-control form-control-sm" onchange="portalApp.filterFeeStructure(this.value)" style="width: auto;">
-                    <option value="all">All Academic Wings</option>
-                    <option value="High School">High School Wing</option>
-                    <option value="Upper Primary">Upper Primary Wing</option>
-                    <option value="Primary">Primary Wing</option>
-                    <option value="Pre-Primary">Pre-Primary Wing</option>
-                  </select>
-                  <button class="btn btn-secondary btn-sm" onclick="portalApp.printFeeStructureSchedule()">
-                    <i class="fa-solid fa-print"></i> Print Schedule
+                  <button class="btn btn-primary btn-sm" onclick="portalApp.openModal('collectFeeModal')">
+                    <i class="fa-solid fa-plus"></i> Collect Fee
                   </button>
-                  <button class="btn btn-primary btn-sm" onclick="portalApp.exportFeeStructureCSV()">
-                    <i class="fa-solid fa-file-excel"></i> Export Structure CSV
+                  <button class="btn btn-secondary btn-sm" onclick="portalApp.printFeeCollectionRegister()">
+                    <i class="fa-solid fa-print"></i> Print Register
+                  </button>
+                  <button class="btn btn-secondary btn-sm" onclick="portalApp.exportFeeCollectionCSV()">
+                    <i class="fa-solid fa-file-excel"></i> Export CSV
                   </button>
                 </div>
               </div>
+
+              <!-- Collection KPI Cards -->
+              <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin-bottom: 1.25rem;">
+                <div class="stat-card" style="padding: 1rem; border-radius: 8px; background: #fff; border: 1px solid var(--color-border); box-shadow: 0 1px 3px rgba(0,0,0,0.04);">
+                  <div style="font-size: 0.74rem; font-weight: 800; color: var(--color-text-muted); text-transform: uppercase;">ANNUAL CAMPUS DEMAND</div>
+                  <div style="font-size: 1.45rem; font-weight: 900; color: #0f172a; margin-top: 2px;" id="statAnnualDemand">₹32,60,000</div>
+                  <small class="text-muted"><i class="fa-solid fa-users mr-1"></i> 855 Students Enrolled (AY 2026-27)</small>
+                </div>
+                <div class="stat-card" style="padding: 1rem; border-radius: 8px; background: #fff; border: 1px solid var(--color-border); box-shadow: 0 1px 3px rgba(0,0,0,0.04);">
+                  <div style="font-size: 0.74rem; font-weight: 800; color: var(--color-text-muted); text-transform: uppercase;">TOTAL COLLECTED</div>
+                  <div style="font-size: 1.45rem; font-weight: 900; color: #16a34a; margin-top: 2px;" id="statTotalCollected">₹28,40,000</div>
+                  <small class="text-emerald" style="font-weight: 700;"><i class="fa-solid fa-circle-check mr-1"></i> <span id="statRealizedPct">87.1%</span> Realized to Date</small>
+                </div>
+                <div class="stat-card" style="padding: 1rem; border-radius: 8px; background: #fff; border: 1px solid var(--color-border); box-shadow: 0 1px 3px rgba(0,0,0,0.04);">
+                  <div style="font-size: 0.74rem; font-weight: 800; color: var(--color-text-muted); text-transform: uppercase;">OUTSTANDING DUES</div>
+                  <div style="font-size: 1.45rem; font-weight: 900; color: #ea580c; margin-top: 2px;" id="statOutstandingDue">₹4,20,000</div>
+                  <small class="text-muted"><i class="fa-solid fa-clock mr-1"></i> 38 Students Under Follow-up</small>
+                </div>
+                <div class="stat-card" style="padding: 1rem; border-radius: 8px; background: #fff; border: 1px solid var(--color-border); box-shadow: 0 1px 3px rgba(0,0,0,0.04);">
+                  <div style="font-size: 0.74rem; font-weight: 800; color: var(--color-text-muted); text-transform: uppercase;">COLLECTED THIS MONTH</div>
+                  <div style="font-size: 1.45rem; font-weight: 900; color: #2563eb; margin-top: 2px;" id="statMonthCollected">₹3,45,000</div>
+                  <small class="text-muted"><i class="fa-solid fa-building-columns mr-1"></i> 100% Reconciled with Bank</small>
+                </div>
+              </div>
+
+              <!-- Filter Bar -->
+              <div style="display: flex; gap: 0.5rem; align-items: center; margin-bottom: 1rem; flex-wrap: wrap;">
+                <input type="text" id="feeCollectionSearchInput" class="form-control form-control-sm" placeholder="Search student, adm #, receipt, invoice..." oninput="portalApp.filterFeeCollection()" style="width: 240px;">
+                <select id="feeCollectionMethodFilter" class="form-control form-control-sm" onchange="portalApp.filterFeeCollection()" style="width: auto;">
+                  <option value="all">All Payment Methods</option>
+                  <option value="UPI">UPI (PhonePe / GPay / Paytm)</option>
+                  <option value="Cash">Cash Counter</option>
+                  <option value="Net Banking">Net Banking</option>
+                  <option value="Cheque">Cheque</option>
+                  <option value="Card">Debit / Credit Card</option>
+                </select>
+                <select id="feeCollectionClassFilter" class="form-control form-control-sm" onchange="portalApp.filterFeeCollection()" style="width: auto;">
+                  <option value="all">All Classes</option>
+                  <option value="Class X-A">Class X-A</option>
+                  <option value="Class IX-A">Class IX-A</option>
+                  <option value="Class VIII-A">Class VIII-A</option>
+                  <option value="Class VII-A">Class VII-A</option>
+                  <option value="Class VI-A">Class VI-A</option>
+                  <option value="Class V-A">Class V-A</option>
+                  <option value="Class IV-A">Class IV-A</option>
+                  <option value="Class III-A">Class III-A</option>
+                  <option value="Class II-A">Class II-A</option>
+                  <option value="Class I-A">Class I-A</option>
+                </select>
+              </div>
+
+              <!-- Fee Collection Table (6 specified columns: Student, invoice, amount due, amount paid, payment method, receipt) -->
               <div class="table-container">
                 <table class="data-table">
                   <thead>
                     <tr>
-                      <th>Class / Standard</th>
-                      <th>Wing</th>
-                      <th>Annual Tuition</th>
-                      <th>Term 1 (June)</th>
-                      <th>Term 2 (Oct)</th>
-                      <th>Term 3 (Jan)</th>
-                      <th>Lab &amp; Computer</th>
-                      <th>Exam &amp; Sports</th>
-                      <th>Net Annual Total</th>
-                      <th>Due Date</th>
-                      <th>Action</th>
+                      <th style="min-width: 170px; width: 22%;">Student</th>
+                      <th style="min-width: 140px; width: 17%;">Invoice</th>
+                      <th style="min-width: 120px; width: 14%; text-align: right;">Amount Due</th>
+                      <th style="min-width: 120px; width: 14%; text-align: right;">Amount Paid</th>
+                      <th style="min-width: 140px; width: 18%; text-align: center;">Payment Method</th>
+                      <th style="min-width: 110px; width: 15%; text-align: center;">Receipt</th>
                     </tr>
                   </thead>
-                  <tbody id="feeStructureTableBody">
-                    <!-- Rendered dynamically -->
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </div>
-          <div class="fees-subview active" id="subview-fees-collection">
-            <div class="fees-quad-stat">
-              <div class="fee-stat-box fs-demand">
-                <div class="fs-header">
-                  <div class="fs-title">Total Annual Demand</div>
-                  <div class="fs-icon fs-icon-blue"><i class="fa-solid fa-wallet"></i></div>
-                </div>
-                <div class="fs-num" id="statAnnualDemand">₹32,60,000</div>
-                <div class="fs-sub text-muted"><i class="fa-regular fa-calendar"></i> Academic Year 2025-26</div>
-              </div>
-
-              <div class="fee-stat-box fs-collected highlight">
-                <div class="fs-header">
-                  <div class="fs-title">Total Collected</div>
-                  <div class="fs-icon fs-icon-green"><i class="fa-solid fa-circle-check"></i></div>
-                </div>
-                <div class="fs-num text-emerald" id="statTotalCollected">₹28,40,000</div>
-                <div class="fs-sub text-emerald"><i class="fa-solid fa-arrow-trend-up"></i> <span id="statRealizedPct">87.1%</span> Realized</div>
-              </div>
-
-              <div class="fee-stat-box fs-due warning">
-                <div class="fs-header">
-                  <div class="fs-title">Outstanding Due</div>
-                  <div class="fs-icon fs-icon-amber"><i class="fa-solid fa-clock"></i></div>
-                </div>
-                <div class="fs-num text-amber" id="statOutstandingDue">₹4,20,000</div>
-                <div class="fs-sub text-amber"><i class="fa-solid fa-triangle-exclamation"></i> <span id="statPendingPct">12.9%</span> Pending (<span id="statDefaultersCount">38</span> Students)</div>
-              </div>
-
-              <div class="fee-stat-box fs-month">
-                <div class="fs-header">
-                  <div class="fs-title">Collected This Month</div>
-                  <div class="fs-icon fs-icon-purple"><i class="fa-solid fa-calendar-check"></i></div>
-                </div>
-                <div class="fs-num text-primary" id="statMonthCollected">₹3,45,000</div>
-                <div class="fs-sub text-primary"><i class="fa-regular fa-clock"></i> September Receipts (98 Txns)</div>
-              </div>
-            </div>
-
-            <!-- Visual Analytics: Charts Section -->
-            <div class="fee-charts-row">
-              <div class="fee-chart-card">
-                <div class="fee-chart-header">
-                  <div>
-                    <h4><i class="fa-solid fa-chart-area text-primary"></i> Monthly Collection Inflow Trend (2025-26)</h4>
-                    <p class="text-muted">Actual Inflow vs Budgeted Monthly Targets (₹ in Lakhs)</p>
-                  </div>
-                  <div class="fee-chart-legend">
-                    <span class="legend-dot dot-primary"></span> Collected
-                    <span class="legend-dot dot-gray"></span> Target
-                  </div>
-                </div>
-                <div class="fee-chart-body" id="monthlyTrendChartWrapper">
-                  <canvas id="feeMonthlyTrendChart" height="220"></canvas>
-                  <div id="feeMonthlyTrendFallback" class="chart-svg-fallback" style="display:none;"></div>
-                </div>
-              </div>
-
-              <div class="fee-chart-card">
-                <div class="fee-chart-header">
-                  <div>
-                    <h4><i class="fa-solid fa-chart-pie text-emerald"></i> Fee Head Realization</h4>
-                    <p class="text-muted">Breakdown across Tuition, Transport, Lab &amp; Activities</p>
-                  </div>
-                </div>
-                <div class="fee-chart-body" id="streamBreakdownChartWrapper">
-                  <canvas id="feeStreamBreakdownChart" height="220"></canvas>
-                  <div id="feeStreamBreakdownFallback" class="chart-svg-fallback" style="display:none;"></div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Recent Fee Transactions Table -->
-            <div class="table-container mt-4">
-              <div class="table-header-bar fee-table-top-bar">
-                <div class="table-header-left">
-                  <h3><i class="fa-solid fa-list-check text-primary"></i> Recent Fee Transactions</h3>
-                  <span class="portal-badge badge-neutral" id="recentTxnCountBadge">7 Receipts Today</span>
-                </div>
-                <div class="table-header-right">
-                  <div class="table-search-box">
-                    <i class="fa-solid fa-magnifying-glass"></i>
-                    <input type="text" id="recentTxnSearchInput" placeholder="Search receipt, student or class..." oninput="portalApp.filterRecentFeeTransactions(this.value)">
-                  </div>
-                  <button class="btn btn-secondary btn-sm" onclick="portalApp.switchSubTab('fees', 'transactions')">
-                    <i class="fa-solid fa-arrow-right"></i> View Full Ledger
-                  </button>
-                </div>
-              </div>
-
-              <div class="table-responsive">
-                <table class="data-table fee-aligned-table" id="feeTransactionsTable">
-                  <thead>
-                    <tr>
-                      <th class="col-receipt">Receipt #</th>
-                      <th class="col-student">Student Name</th>
-                      <th class="col-class">Class</th>
-                      <th class="col-head">Installment</th>
-                      <th class="col-amount text-right">Amount Paid</th>
-                      <th class="col-mode text-center">Payment Mode</th>
-                      <th class="col-date">Date &amp; Time</th>
-                      <th class="col-cashier">Cashier</th>
-                      <th class="col-receipt-action text-center">Receipt</th>
-                    </tr>
-                  </thead>
-                  <tbody id="feeTransactionsTableBody">
-                    <!-- Rendered dynamically -->
+                  <tbody id="feeCollectionTableBody">
+                    <!-- Populated dynamically via portalApp.renderFeeCollection -->
                   </tbody>
                 </table>
               </div>
@@ -8185,478 +8097,84 @@
           </div>
 
           <!-- =========================================================
-               SUBVIEW 2: PENDING DEFAULTERS
+               SUBVIEW 2: PENDING DUES
+               Student, class, outstanding amount, due date and overdue status
                ========================================================= -->
-          <div class="fees-subview" id="subview-fees-pending" style="display:none;">
-            <!-- Defaulters Stats Row -->
-            <div class="defaulter-summary-grid">
-              <div class="defaulter-card card-total">
-                <div class="def-num" id="defTotalCount">38</div>
-                <div class="def-label">Total Fee Defaulters</div>
-                <div class="def-sub text-muted">Across Classes I - X</div>
-              </div>
-              <div class="defaulter-card card-amount">
-                <div class="def-num text-danger" id="defTotalAmount">₹4,20,000</div>
-                <div class="def-label">Total Overdue Amount</div>
-                <div class="def-sub text-danger">Immediate Action Required</div>
-              </div>
-              <div class="defaulter-card card-critical">
-                <div class="def-num text-amber" id="defCriticalCount">12</div>
-                <div class="def-label">Critical Overdue (>60 Days)</div>
-                <div class="def-sub text-amber">₹1,85,000 Overdue</div>
-              </div>
-              <div class="defaulter-card card-avg">
-                <div class="def-num text-primary">₹11,052</div>
-                <div class="def-label">Avg. Overdue / Student</div>
-                <div class="def-sub text-muted">Term 2 Dues Predominant</div>
-              </div>
-            </div>
-
-            <!-- Toolbar & Filter Row -->
-            <div class="table-container mt-4">
-              <div class="table-header-bar defaulters-toolbar">
-                <div class="def-filters">
-                  <div class="filter-group">
-                    <label><i class="fa-solid fa-filter"></i> Class:</label>
-                    <select class="form-control form-control-sm" id="defaulterClassFilter" onchange="portalApp.filterDefaulters()">
-                      <option value="all">All Classes</option>
-                      <option value="Class X">Class X</option>
-                      <option value="Class IX">Class IX</option>
-                      <option value="Class VIII">Class VIII</option>
-                      <option value="Class VII">Class VII</option>
-                      <option value="Class VI">Class VI</option>
-                      <option value="Class V">Class V</option>
-                      <option value="Class IV">Class IV</option>
-                      <option value="Class III">Class III</option>
-                      <option value="Class II">Class II</option>
-                      <option value="Class I">Class I</option>
-                      <option value="Pre-Primary">Pre-Primary</option>
-                    </select>
-                  </div>
-
-                  <div class="filter-group">
-                    <label><i class="fa-solid fa-hourglass-half"></i> Aging:</label>
-                    <select class="form-control form-control-sm" id="defaulterAgingFilter" onchange="portalApp.filterDefaulters()">
-                      <option value="all">All Aging Periods</option>
-                      <option value="critical">Overdue &gt; 60 Days (Critical)</option>
-                      <option value="moderate">Overdue 30 - 60 Days</option>
-                      <option value="recent">Overdue &lt; 30 Days</option>
-                    </select>
-                  </div>
-
-                  <div class="table-search-box">
-                    <i class="fa-solid fa-magnifying-glass"></i>
-                    <input type="text" id="defaulterSearchInput" placeholder="Search student, adm #, parent..." oninput="portalApp.filterDefaulters()">
-                  </div>
+          <div class="fees-subview" id="subview-fees-pending" data-subview="pending" style="display:none;">
+            <div class="card p-4">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.15rem; flex-wrap: wrap; gap: 0.75rem; background: #fff; padding: 1rem 1.25rem; border-radius: 10px; border: 1px solid var(--color-border);">
+                <div>
+                  <h3 style="margin: 0; font-size: 1.05rem; font-weight: 800; color: var(--color-text-dark);">
+                    <i class="fa-solid fa-user-clock text-primary mr-1"></i> Pending Dues &amp; Defaulters Tracking Register
+                  </h3>
+                  <p class="text-muted" style="margin: 0.25rem 0 0 0; font-size: 0.84rem;">
+                    Real-time fee defaulters tracking, automated WhatsApp &amp; SMS reminder dispatches, and installment aging
+                  </p>
                 </div>
-
-                <div class="def-actions">
-                  <button class="btn btn-secondary btn-sm" onclick="portalApp.openFeeRemindersModal()">
-                    <i class="fa-solid fa-bell"></i> Send Batch Reminders
+                <div style="display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;">
+                  <button class="btn btn-secondary btn-sm" onclick="portalApp.openModal('feeRemindersModal')">
+                    <i class="fa-solid fa-bell"></i> Send WhatsApp / SMS Reminders
                   </button>
-                  <button class="btn btn-outline btn-sm" onclick="portalApp.exportDefaultersList()">
+                  <button class="btn btn-primary btn-sm" onclick="portalApp.exportDefaultersList()">
                     <i class="fa-solid fa-file-excel"></i> Export Defaulters
                   </button>
                 </div>
               </div>
 
-              <!-- Defaulters Table -->
-              <div class="table-responsive">
-                <table class="data-table fee-aligned-table" id="defaultersTable">
-                  <thead>
-                    <tr>
-                      <th class="col-adm">Adm No</th>
-                      <th class="col-student">Student &amp; Parent</th>
-                      <th class="col-class">Class</th>
-                      <th class="col-head">Pending Head</th>
-                      <th class="col-aging">Overdue Aging</th>
-                      <th class="col-amount text-right">Amount Due</th>
-                      <th class="col-reminders">Last Reminder</th>
-                      <th class="col-actions text-center">Quick Actions</th>
-                    </tr>
-                  </thead>
-                  <tbody id="defaultersTableBody">
-                    <!-- Rendered dynamically -->
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </div>
-
-          <!-- =========================================================
-               SUBVIEW 3: FEE REPORTS & SUMMARIES
-               ========================================================= -->
-          <div class="fees-subview" id="subview-fees-reports" style="display:none;">
-            <!-- Top Audit Bar -->
-            <div class="report-meta-header">
-              <div>
-                <h3><i class="fa-solid fa-file-invoice-dollar text-primary"></i> Academic Financial Audit &amp; Realization Reports</h3>
-                <p class="text-muted">Financial Year 2025–26 Collection Performance, Waivers, and Head-wise Matrix</p>
-              </div>
-              <div class="report-export-buttons">
-                <button class="btn btn-secondary btn-sm" onclick="portalApp.exportFeeAuditReport('excel')">
-                  <i class="fa-solid fa-file-excel"></i> Export Excel
-                </button>
-                <button class="btn btn-primary btn-sm" onclick="portalApp.exportFeeAuditReport('pdf')">
-                  <i class="fa-solid fa-file-pdf"></i> Download Audit PDF
-                </button>
-              </div>
-            </div>
-
-            <!-- Reports KPI Row -->
-            <div class="report-kpi-grid">
-              <div class="rkpi-card">
-                <div class="rkpi-label">Overall Realization Rate</div>
-                <div class="rkpi-value text-emerald">87.1%</div>
-                <div class="rkpi-sub">Target: 90.0% by Term 2</div>
-                <div class="progress-bar-bg mt-2" style="height:6px;">
-                  <div class="progress-bar-fill fill-green" style="width: 87.1%;"></div>
+              <!-- Pending Dues KPI Cards -->
+              <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin-bottom: 1.25rem;">
+                <div class="stat-card" style="padding: 1rem; border-radius: 8px; background: #fff; border: 1px solid var(--color-border); box-shadow: 0 1px 3px rgba(0,0,0,0.04);">
+                  <div style="font-size: 0.74rem; font-weight: 800; color: var(--color-text-muted); text-transform: uppercase;">TOTAL IDENTIFIED DEFAULTERS</div>
+                  <div style="font-size: 1.45rem; font-weight: 900; color: #ef4444; margin-top: 2px;" id="defTotalCount">38 Students</div>
+                  <small class="text-muted"><i class="fa-solid fa-user-group mr-1"></i> Across All Classes (4.4% of School)</small>
                 </div>
-              </div>
-              <div class="rkpi-card">
-                <div class="rkpi-label">Scholarships &amp; Concessions</div>
-                <div class="rkpi-value text-primary">₹1,85,000</div>
-                <div class="rkpi-sub">Approved for 62 Meritorious Students</div>
-                <div class="progress-bar-bg mt-2" style="height:6px;">
-                  <div class="progress-bar-fill fill-blue" style="width: 100%;"></div>
+                <div class="stat-card" style="padding: 1rem; border-radius: 8px; background: #fff; border: 1px solid var(--color-border); box-shadow: 0 1px 3px rgba(0,0,0,0.04);">
+                  <div style="font-size: 0.74rem; font-weight: 800; color: var(--color-text-muted); text-transform: uppercase;">OUTSTANDING DUES TOTAL</div>
+                  <div style="font-size: 1.45rem; font-weight: 900; color: #dc2626; margin-top: 2px;" id="defTotalAmount">₹4,20,000</div>
+                  <small class="text-muted"><i class="fa-solid fa-coins mr-1"></i> Term 1 &amp; Term 2 Arrears</small>
                 </div>
-              </div>
-              <div class="rkpi-card">
-                <div class="rkpi-label">Digital Mode Share</div>
-                <div class="rkpi-value text-emerald">71.8%</div>
-                <div class="rkpi-sub">UPI &amp; Net Banking Collections</div>
-                <div class="progress-bar-bg mt-2" style="height:6px;">
-                  <div class="progress-bar-fill fill-green" style="width: 71.8%;"></div>
-                </div>
-              </div>
-              <div class="rkpi-card">
-                <div class="rkpi-label">Audit Compliance Score</div>
-                <div class="rkpi-value text-purple">100%</div>
-                <div class="rkpi-sub">All Receipts Reconciled to Bank</div>
-                <div class="progress-bar-bg mt-2" style="height:6px;">
-                  <div class="progress-bar-fill" style="width: 100%; background: #7c3aed;"></div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Graphs Row in Reports -->
-            <div class="fee-reports-charts-grid mt-4">
-              <!-- Term Comparison -->
-              <div class="fee-chart-card">
-                <div class="fee-chart-header">
-                  <h4><i class="fa-solid fa-chart-column text-primary"></i> Term-Wise Collection vs Budget</h4>
-                </div>
-                <div class="fee-chart-body">
-                  <canvas id="feeTermComparisonChart" height="220"></canvas>
-                  <div id="feeTermFallback" class="chart-svg-fallback" style="display:none;"></div>
+                <div class="stat-card" style="padding: 1rem; border-radius: 8px; background: #fff; border: 1px solid var(--color-border); box-shadow: 0 1px 3px rgba(0,0,0,0.04);">
+                  <div style="font-size: 0.74rem; font-weight: 800; color: var(--color-text-muted); text-transform: uppercase;">CRITICAL DEFAULTERS (60+ DAYS)</div>
+                  <div style="font-size: 1.45rem; font-weight: 900; color: #d97706; margin-top: 2px;" id="defCriticalCount">12 Students</div>
+                  <small class="text-amber" style="font-weight: 700;"><i class="fa-solid fa-triangle-exclamation mr-1"></i> Formal Notice Dispatched</small>
                 </div>
               </div>
 
-              <!-- Payment Mode Share -->
-              <div class="fee-chart-card">
-                <div class="fee-chart-header">
-                  <h4><i class="fa-solid fa-pie-chart text-emerald"></i> Payment Modes Distribution</h4>
-                </div>
-                <div class="fee-chart-body">
-                  <canvas id="feePaymentModesChart" height="220"></canvas>
-                  <div id="feePaymentModesFallback" class="chart-svg-fallback" style="display:none;"></div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Class-wise Progress Matrix -->
-            <div class="table-container mt-4">
-              <div class="table-header-bar">
-                <h3><i class="fa-solid fa-bars-progress text-primary"></i> Class-Wise Collection Realization Matrix</h3>
-                <span class="portal-badge badge-success">855 Active Students</span>
-              </div>
-              <div class="p-3" id="classFeeRealizationMatrix">
-                <!-- Injected via JavaScript -->
-              </div>
-            </div>
-
-            <!-- Category-wise Financial Ledger Table -->
-            <div class="table-container mt-4">
-              <div class="table-header-bar">
-                <h3><i class="fa-solid fa-table-list text-primary"></i> Head-Wise Annual Fee Realization Summary</h3>
-              </div>
-              <div class="table-responsive">
-                <table class="data-table fee-aligned-table">
-                  <thead>
-                    <tr>
-                      <th>Fee Category / Head</th>
-                      <th class="text-right">Total Demand</th>
-                      <th class="text-right">Collected (Realized)</th>
-                      <th class="text-right">Concessions / Waivers</th>
-                      <th class="text-right">Outstanding Dues</th>
-                      <th class="text-center">Realization %</th>
-                      <th class="text-center">Audit Status</th>
-                    </tr>
-                  </thead>
-                  <tbody id="feeCategoryAuditTableBody">
-                    <tr>
-                      <td><strong>Tuition Fee (Term 1 &amp; 2)</strong></td>
-                      <td class="text-right">₹22,40,000</td>
-                      <td class="text-right text-emerald font-weight-bold">₹19,75,000</td>
-                      <td class="text-right text-muted">₹1,10,000</td>
-                      <td class="text-right text-amber font-weight-bold">₹1,55,000</td>
-                      <td class="text-center"><span class="portal-badge badge-success">93.1%</span></td>
-                      <td class="text-center"><span class="portal-badge badge-primary"><i class="fa-solid fa-check-double"></i> Reconciled</span></td>
-                    </tr>
-                    <tr>
-                      <td><strong>Bus &amp; Transport Facility</strong></td>
-                      <td class="text-right">₹4,20,000</td>
-                      <td class="text-right text-emerald font-weight-bold">₹3,45,000</td>
-                      <td class="text-right text-muted">₹15,000</td>
-                      <td class="text-right text-amber font-weight-bold">₹60,000</td>
-                      <td class="text-center"><span class="portal-badge badge-success">85.7%</span></td>
-                      <td class="text-center"><span class="portal-badge badge-primary"><i class="fa-solid fa-check-double"></i> Reconciled</span></td>
-                    </tr>
-                    <tr>
-                      <td><strong>Science &amp; Computer Lab Fees</strong></td>
-                      <td class="text-right">₹2,80,000</td>
-                      <td class="text-right text-emerald font-weight-bold">₹2,42,000</td>
-                      <td class="text-right text-muted">₹10,000</td>
-                      <td class="text-right text-amber font-weight-bold">₹28,000</td>
-                      <td class="text-center"><span class="portal-badge badge-success">90.0%</span></td>
-                      <td class="text-center"><span class="portal-badge badge-primary"><i class="fa-solid fa-check-double"></i> Reconciled</span></td>
-                    </tr>
-                    <tr>
-                      <td><strong>Examination &amp; Continuous Assessment</strong></td>
-                      <td class="text-right">₹1,60,000</td>
-                      <td class="text-right text-emerald font-weight-bold">₹1,48,000</td>
-                      <td class="text-right text-muted">₹0</td>
-                      <td class="text-right text-amber font-weight-bold">₹12,000</td>
-                      <td class="text-center"><span class="portal-badge badge-success">92.5%</span></td>
-                      <td class="text-center"><span class="portal-badge badge-primary"><i class="fa-solid fa-check-double"></i> Reconciled</span></td>
-                    </tr>
-                    <tr>
-                      <td><strong>Admission &amp; Enrolment Registration</strong></td>
-                      <td class="text-right">₹1,60,000</td>
-                      <td class="text-right text-emerald font-weight-bold">₹1,30,000</td>
-                      <td class="text-right text-muted">₹50,000</td>
-                      <td class="text-right text-amber font-weight-bold">₹1,65,000</td>
-                      <td class="text-center"><span class="portal-badge badge-warning">64.4%</span></td>
-                      <td class="text-center"><span class="portal-badge badge-primary"><i class="fa-solid fa-check-double"></i> Reconciled</span></td>
-                    </tr>
-                  </tbody>
-                  <tfoot>
-                    <tr style="background: var(--color-bg-subtle); font-weight: 700;">
-                      <td>TOTAL CAMPUS DEMAND</td>
-                      <td class="text-right">₹32,60,000</td>
-                      <td class="text-right text-emerald">₹28,40,000</td>
-                      <td class="text-right text-muted">₹1,85,000</td>
-                      <td class="text-right text-amber">₹4,20,000</td>
-                      <td class="text-center"><span class="portal-badge badge-success">87.1%</span></td>
-                      <td class="text-center"><span class="portal-badge badge-success">Audited</span></td>
-                    </tr>
-                  </tfoot>
-                </table>
-              </div>
-            </div>
-          </div>
-
-          <!-- =========================================================
-               SUBVIEW 4: TRANSACTIONS & LEDGER
-               ========================================================= -->
-          <div class="fees-subview" id="subview-fees-receipts" data-subview="receipts" style="display:none;">
-            <div class="table-container">
-              <div class="table-header-bar fee-ledger-toolbar">
-                <div class="table-header-left">
-                  <h3><i class="fa-solid fa-book-bookmark text-primary"></i> Official Transactions &amp; Audit Ledger</h3>
-                  <span class="portal-badge badge-neutral" id="ledgerCountBadge">All Receipts</span>
-                </div>
-                <div class="table-header-right">
-                  <div class="table-search-box">
-                    <i class="fa-solid fa-magnifying-glass"></i>
-                    <input type="text" id="ledgerSearchInput" placeholder="Search receipt #, student, cashier..." oninput="portalApp.filterFeeLedger()">
-                  </div>
-
-                  <select class="form-control form-control-sm" id="ledgerModeFilter" onchange="portalApp.filterFeeLedger()">
-                    <option value="all">All Modes</option>
-                    <option value="UPI">UPI (GPay / PhonePe / Paytm)</option>
-                    <option value="Cash">Cash Counter</option>
-                    <option value="Net Banking">Net Banking</option>
-                    <option value="Cheque">Cheque</option>
-                  </select>
-
-                  <button class="btn btn-primary btn-sm" onclick="portalApp.openCollectFeeModal()">
-                    <i class="fa-solid fa-plus"></i> Collect Fee
-                  </button>
-                </div>
+              <!-- Filter Bar -->
+              <div style="display: flex; gap: 0.5rem; align-items: center; margin-bottom: 1rem; flex-wrap: wrap;">
+                <input type="text" id="defaulterSearchInput" class="form-control form-control-sm" placeholder="Search student, adm #, parent..." oninput="portalApp.filterDefaulters()" style="width: 220px;">
+                <select id="defaulterClassFilter" class="form-control form-control-sm" onchange="portalApp.filterDefaulters()" style="width: auto;">
+                  <option value="all">All Classes</option>
+                  <option value="Class X-A">Class X-A</option>
+                  <option value="Class IX-A">Class IX-A</option>
+                  <option value="Class VIII-A">Class VIII-A</option>
+                  <option value="Class VII-A">Class VII-A</option>
+                  <option value="Class VI-A">Class VI-A</option>
+                  <option value="Class V-A">Class V-A</option>
+                </select>
+                <select id="defaulterAgingFilter" class="form-control form-control-sm" onchange="portalApp.filterDefaulters()" style="width: auto;">
+                  <option value="all">All Aging Categories</option>
+                  <option value="60">Critical (&gt; 60 Days Overdue)</option>
+                  <option value="30">Moderate (30–60 Days Overdue)</option>
+                  <option value="grace">Grace Period (&lt; 30 Days)</option>
+                </select>
               </div>
 
-              <div class="table-responsive">
-                <table class="data-table fee-aligned-table" id="feeLedgerTable">
-                  <thead>
-                    <tr>
-                      <th class="col-receipt">Receipt #</th>
-                      <th class="col-date">Date &amp; Time</th>
-                      <th class="col-student">Student Name &amp; Adm #</th>
-                      <th class="col-class">Class</th>
-                      <th class="col-head">Fee Purpose / Installment</th>
-                      <th class="col-mode text-center">Payment Mode</th>
-                      <th class="col-amount text-right">Amount</th>
-                      <th class="col-cashier">Cashier Desk</th>
-                      <th class="col-status text-center">Status</th>
-                      <th class="col-receipt-action text-center">Receipt Slip</th>
-                    </tr>
-                  </thead>
-                  <tbody id="feeLedgerTableBody">
-                    <!-- Rendered dynamically -->
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </div>
-
-
-          <!-- =========================================================
-               SUBVIEW: CONCESSIONS & SCHOLARSHIPS
-               ========================================================= -->
-          <div class="fees-subview" 
-          <!-- Subview: Transactions (Office Permitted) -->
-          <div id="subview-fees-transactions" class="fees-subview" style="display: none;">
-            <div class="card">
-              <div class="card-header" style="display:flex; justify-content:space-between; align-items:center;">
-                <div>
-                  <h3 style="margin:0; font-size:1.1rem; font-weight:700;"><i class="fa-solid fa-receipt text-emerald mr-1"></i> Fee Transactions Register</h3>
-                  <p style="margin:0; font-size:0.8rem; color:var(--color-text-muted);">Audit trail of all recorded fee payments, cash receipts, and bank clearances</p>
-                </div>
-                <button class="btn btn-secondary btn-sm" onclick="portalApp.exportTableToCSV('transactionsTable', 'Sri_Vidya_Fee_Transactions.csv')">
-                  <i class="fa-solid fa-file-export"></i> Export CSV
-                </button>
-              </div>
-              <div class="card-body">
-                <div class="table-container">
-                  <table class="data-table" id="transactionsTable" style="width:100%;">
-                    <thead>
-                      <tr>
-                        <th>Transaction ID</th>
-                        <th>Student &amp; Roll</th>
-                        <th>Class</th>
-                        <th>Fee Head</th>
-                        <th>Mode</th>
-                        <th>Amount Paid</th>
-                        <th>Timestamp</th>
-                        <th>Actions</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td><strong>TXN-2026-0819</strong></td>
-                        <td><strong>Bhavish Yandra</strong> (Roll #101)</td>
-                        <td>Grade 10</td>
-                        <td>Term 2 Tuition Fee</td>
-                        <td><span class="badge badge-info">UPI / PhonePe</span></td>
-                        <td><strong style="color:#059669;">₹12,500</strong></td>
-                        <td>Today 01:45 PM</td>
-                        <td>
-                          <button class="btn btn-secondary btn-xs" onclick="portalApp.printReceiptModal('REC-2026-0819', 'Bhavish Yandra', 12500)">
-                            <i class="fa-solid fa-print"></i> Receipt
-                          </button>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td><strong>TXN-2026-0818</strong></td>
-                        <td><strong>S. Manvitha</strong> (Roll #102)</td>
-                        <td>Grade 9</td>
-                        <td>Annual Transport Fee</td>
-                        <td><span class="badge badge-success">Cash Counter</span></td>
-                        <td><strong style="color:#059669;">₹8,000</strong></td>
-                        <td>Today 12:20 PM</td>
-                        <td>
-                          <button class="btn btn-secondary btn-xs" onclick="portalApp.printReceiptModal('REC-2026-0818', 'S. Manvitha', 8000)">
-                            <i class="fa-solid fa-print"></i> Receipt
-                          </button>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td><strong>TXN-2026-0817</strong></td>
-                        <td><strong>K. Sai Teja</strong> (Roll #103)</td>
-                        <td>Grade 7</td>
-                        <td>Term 2 Tuition &amp; Books</td>
-                        <td><span class="badge badge-primary">Net Banking</span></td>
-                        <td><strong style="color:#059669;">₹14,000</strong></td>
-                        <td>Today 11:05 AM</td>
-                        <td>
-                          <button class="btn btn-secondary btn-xs" onclick="portalApp.printReceiptModal('REC-2026-0817', 'K. Sai Teja', 14000)">
-                            <i class="fa-solid fa-print"></i> Receipt
-                          </button>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            </div>
-          </div>
-
-id="subview-fees-concessions" data-subview="concessions" style="display:none;">
-            <div class="fees-quad-stat mb-3">
-              <div class="fee-stat-box" style="border-left: 4px solid #10b981;">
-                <div class="fs-title">Total Concessions Granted</div>
-                <div class="fs-num text-emerald">₹1,85,000</div>
-                <div class="fs-sub text-muted">Academic Year 2026-27 Allocation</div>
-              </div>
-              <div class="fee-stat-box" style="border-left: 4px solid #3b82f6;">
-                <div class="fs-title">Merit Scholarships</div>
-                <div class="fs-num text-primary">14 Students</div>
-                <div class="fs-sub text-muted">Above 90% in Board &amp; Term Exams</div>
-              </div>
-              <div class="fee-stat-box" style="border-left: 4px solid #f59e0b;">
-                <div class="fs-title">Sibling Discounts</div>
-                <div class="fs-num text-amber">22 Students</div>
-                <div class="fs-sub text-amber">15% Waiver on Second Child</div>
-              </div>
-              <div class="fee-stat-box" style="border-left: 4px solid #8b5cf6;">
-                <div class="fs-title">Staff Child Benefits</div>
-                <div class="fs-num" style="color: #8b5cf6;">8 Students</div>
-                <div class="fs-sub text-muted">Teaching &amp; Non-Teaching Staff</div>
-              </div>
-            </div>
-            <div class="card p-4">
-              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; flex-wrap: wrap; gap: 0.75rem;">
-                <div>
-                  <h3 style="margin: 0;"><i class="fa-solid fa-handshake-angle text-primary"></i> Fee Concessions &amp; Scholarship Sanctions Register</h3>
-                  <p class="text-muted" style="margin: 0.25rem 0 0 0; font-size: 0.85rem;">Official fee waivers, merit concessions, sibling rebates, and hardship exemptions endorsed by Management.</p>
-                </div>
-                <div style="display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;">
-                  <input type="text" id="concessionSearchInput" class="form-control form-control-sm" placeholder="Search student or ID..." oninput="portalApp.filterFeeConcessions()" style="width: 170px;">
-                  <select id="concessionCategoryFilter" class="form-control form-control-sm" onchange="portalApp.filterFeeConcessions()" style="width: auto;">
-                    <option value="all">All Concession Categories</option>
-                    <option value="Merit">Merit Scholarship</option>
-                    <option value="Sibling">Sibling Discount</option>
-                    <option value="Staff Child">Staff Child Benefit</option>
-                    <option value="Sports">Sports Excellence</option>
-                    <option value="Hardship">Financial Hardship</option>
-                  </select>
-                  <button class="btn btn-secondary btn-sm" onclick="portalApp.printConcessionsRegister()">
-                    <i class="fa-solid fa-print"></i> Print Register
-                  </button>
-                  <button class="btn btn-primary btn-sm" onclick="portalApp.exportConcessionsCSV()">
-                    <i class="fa-solid fa-file-excel"></i> Export Concessions CSV
-                  </button>
-                </div>
-              </div>
+              <!-- Table: Student, class, outstanding amount, due date and overdue status -->
               <div class="table-container">
                 <table class="data-table">
                   <thead>
                     <tr>
-                      <th>Sanction ID</th>
-                      <th>Student Details</th>
-                      <th>Class</th>
-                      <th>Concession Category</th>
-                      <th>Annual Fee</th>
-                      <th>Waiver % / Amount</th>
-                      <th>Net Payable</th>
-                      <th>Sanctioning Authority</th>
-                      <th>Status</th>
-                      <th>Action</th>
+                      <th style="min-width: 170px; width: 24%;">Student</th>
+                      <th style="min-width: 90px; width: 12%;">Class</th>
+                      <th style="min-width: 130px; width: 18%; text-align: right;">Outstanding Amount</th>
+                      <th style="min-width: 120px; width: 16%;">Due Date</th>
+                      <th style="min-width: 140px; width: 18%; text-align: center;">Overdue Status</th>
+                      <th style="min-width: 100px; width: 12%; text-align: center;">Actions</th>
                     </tr>
                   </thead>
-                  <tbody id="feeConcessionsTableBody">
-                    <!-- Rendered dynamically -->
+                  <tbody id="defaultersTableBody">
+                    <!-- Populated dynamically via portalApp.renderDefaultersTable -->
                   </tbody>
                 </table>
               </div>
@@ -8664,77 +8182,460 @@ id="subview-fees-concessions" data-subview="concessions" style="display:none;">
           </div>
 
           <!-- =========================================================
-               SUBVIEW: REFUNDS & SETTLEMENTS
+               SUBVIEW 3: FEE STRUCTURE
+               Class-wise fee heads, instalments, due dates and academic year
                ========================================================= -->
-          <div class="fees-subview" id="subview-fees-refunds" data-subview="refunds" style="display:none;">
-            <div class="fees-quad-stat mb-3">
-              <div class="fee-stat-box" style="border-left: 4px solid #ef4444;">
-                <div class="fs-title">Total Refunds Disbursed</div>
-                <div class="fs-num text-red">₹48,500</div>
-                <div class="fs-sub text-muted">Audited &amp; Reconciled with Bank</div>
-              </div>
-              <div class="fee-stat-box" style="border-left: 4px solid #10b981;">
-                <div class="fs-title">Caution Deposits Settled</div>
-                <div class="fs-num text-emerald">₹32,000</div>
-                <div class="fs-sub text-muted">Outgoing Students with Clean Clearance</div>
-              </div>
-              <div class="fee-stat-box" style="border-left: 4px solid #f59e0b;">
-                <div class="fs-title">Pending Claims</div>
-                <div class="fs-num text-amber">0 Claims</div>
-                <div class="fs-sub text-amber">100% Turnaround Compliance</div>
-              </div>
-              <div class="fee-stat-box" style="border-left: 4px solid #3b82f6;">
-                <div class="fs-title">Avg Settlement SLA</div>
-                <div class="fs-num text-primary">3 Days</div>
-                <div class="fs-sub text-muted">Bank Direct Transfer / Cheque</div>
-              </div>
-            </div>
+          <div class="fees-subview" id="subview-fees-structure" data-subview="structure" style="display:none;">
             <div class="card p-4">
-              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; flex-wrap: wrap; gap: 0.75rem;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.15rem; flex-wrap: wrap; gap: 0.75rem; background: #fff; padding: 1rem 1.25rem; border-radius: 10px; border: 1px solid var(--color-border);">
                 <div>
-                  <h3 style="margin: 0;"><i class="fa-solid fa-arrow-rotate-left text-primary"></i> Fee Refunds &amp; Caution Deposit Settlements</h3>
-                  <p class="text-muted" style="margin: 0.25rem 0 0 0; font-size: 0.85rem;">Official record of caution deposit repayments, excess fee reversals, and TC exit reconciliations.</p>
+                  <h3 style="margin: 0; font-size: 1.05rem; font-weight: 800; color: var(--color-text-dark);">
+                    <i class="fa-solid fa-table-list text-primary mr-1"></i> Official Approved Fee Structure &amp; Schedule
+                  </h3>
+                  <p class="text-muted" style="margin: 0.25rem 0 0 0; font-size: 0.84rem;">
+                    Regulated under Andhra Pradesh State Education Department norms &bull; Academic Year 2026–27 &bull; Ratified by Principal Smt. Gorle Varalakshmi
+                  </p>
                 </div>
                 <div style="display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;">
-                  <input type="text" id="refundSearchInput" class="form-control form-control-sm" placeholder="Search student or voucher..." oninput="portalApp.filterFeeRefunds()" style="width: 170px;">
-                  <select id="refundCategoryFilter" class="form-control form-control-sm" onchange="portalApp.filterFeeRefunds()" style="width: auto;">
-                    <option value="all">All Refund Reasons</option>
-                    <option value="Caution">Caution Deposit Settlement</option>
-                    <option value="Payment">Double / Excess Payment</option>
-                    <option value="Bus">Bus Route Adjustment</option>
-                    <option value="Advance">Advance Term Refund</option>
+                  <select id="feeStructureWingFilter" class="form-control form-control-sm" onchange="portalApp.filterFeeStructure(this.value)" style="width: auto;">
+                    <option value="all">All Wings / Standards</option>
+                    <option value="Secondary">Secondary Wing (Classes VIII–X)</option>
+                    <option value="Upper Primary">Upper Primary Wing (Classes VI–VII)</option>
+                    <option value="Primary">Primary Wing (Classes I–V)</option>
+                    <option value="Early Childhood">Early Childhood (Pre-Primary / PP-1 / PP-2)</option>
                   </select>
-                  <button class="btn btn-secondary btn-sm" onclick="portalApp.printRefundsRegister()">
-                    <i class="fa-solid fa-print"></i> Print Register
+                  <button class="btn btn-secondary btn-sm" onclick="portalApp.printFeeStructureSchedule()">
+                    <i class="fa-solid fa-print"></i> Print Schedule
                   </button>
-                  <button class="btn btn-primary btn-sm" onclick="portalApp.exportRefundsCSV()">
+                  <button class="btn btn-primary btn-sm" onclick="portalApp.exportFeeStructureCSV()">
+                    <i class="fa-solid fa-file-excel"></i> Export CSV
+                  </button>
+                </div>
+              </div>
+
+              <!-- Wing Summary Cards -->
+              <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin-bottom: 1.25rem;">
+                <div class="stat-card" style="padding: 1rem; border-radius: 8px; background: #eff6ff; border: 1px solid #bfdbfe;">
+                  <div style="font-size: 0.74rem; font-weight: 800; color: #1e40af; text-transform: uppercase;">HIGH SCHOOL (VIII - X)</div>
+                  <div style="font-size: 1.35rem; font-weight: 900; color: #1e3a8a; margin-top: 2px;">₹36,000 / Year</div>
+                  <small class="text-muted">3 Terms: ₹12k, ₹12k, ₹12k • Lab &amp; Computer Included</small>
+                </div>
+                <div class="stat-card" style="padding: 1rem; border-radius: 8px; background: #f0fdf4; border: 1px solid #bbf7d0;">
+                  <div style="font-size: 0.74rem; font-weight: 800; color: #15803d; text-transform: uppercase;">UPPER PRIMARY (VI - VII)</div>
+                  <div style="font-size: 1.35rem; font-weight: 900; color: #14532d; margin-top: 2px;">₹29,500 / Year</div>
+                  <small class="text-muted">3 Terms: ₹10k, ₹10k, ₹9.5k • Sports &amp; Activities</small>
+                </div>
+                <div class="stat-card" style="padding: 1rem; border-radius: 8px; background: #fffbeb; border: 1px solid #fde68a;">
+                  <div style="font-size: 0.74rem; font-weight: 800; color: #b45309; text-transform: uppercase;">PRIMARY WING (I - V)</div>
+                  <div style="font-size: 1.35rem; font-weight: 900; color: #78350f; margin-top: 2px;">₹24,000 / Year</div>
+                  <small class="text-muted">3 Terms: ₹8k, ₹8k, ₹8k • All Inclusive</small>
+                </div>
+                <div class="stat-card" style="padding: 1rem; border-radius: 8px; background: #faf5ff; border: 1px solid #e9d5ff;">
+                  <div style="font-size: 0.74rem; font-weight: 800; color: #6b21a8; text-transform: uppercase;">PRE-PRIMARY (PP1 &amp; PP2)</div>
+                  <div style="font-size: 1.35rem; font-weight: 900; color: #581c87; margin-top: 2px;">₹19,500 / Year</div>
+                  <small class="text-muted">Activity kits, phonics &amp; smart play included</small>
+                </div>
+              </div>
+
+              <!-- Table: Class-wise fee heads, instalments, due dates and academic year -->
+              <div class="table-container">
+                <table class="data-table">
+                  <thead>
+                    <tr>
+                      <th style="min-width: 220px; width: 32%;">Class-wise Fee Heads</th>
+                      <th style="min-width: 200px; width: 28%;">Instalments</th>
+                      <th style="min-width: 170px; width: 22%;">Due Dates</th>
+                      <th style="min-width: 130px; width: 18%; text-align: center;">Academic Year</th>
+                    </tr>
+                  </thead>
+                  <tbody id="feeStructureTableBody">
+                    <!-- Populated dynamically via portalApp.renderFeeStructure -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <!-- =========================================================
+               SUBVIEW 4: CONCESSIONS & SCHOLARSHIPS
+               Application, eligibility, requested concession, approval and effective amount
+               ========================================================= -->
+          <div class="fees-subview" id="subview-fees-concessions" data-subview="concessions" style="display:none;">
+            <div class="card p-4">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.15rem; flex-wrap: wrap; gap: 0.75rem; background: #fff; padding: 1rem 1.25rem; border-radius: 10px; border: 1px solid var(--color-border);">
+                <div>
+                  <h3 style="margin: 0; font-size: 1.05rem; font-weight: 800; color: var(--color-text-dark);">
+                    <i class="fa-solid fa-handshake-angle text-primary mr-1"></i> Concessions, Fee Waivers &amp; Merit Scholarships Register
+                  </h3>
+                  <p class="text-muted" style="margin: 0.25rem 0 0 0; font-size: 0.84rem;">
+                    Institutional fee concessions for merit scholars, siblings, staff wards, and economically weaker sections &bull; Ratified by Principal Smt. Gorle Varalakshmi
+                  </p>
+                </div>
+                <div style="display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;">
+                  <button class="btn btn-primary btn-sm" onclick="portalApp.openModal('applyConcessionModal')">
+                    <i class="fa-solid fa-plus"></i> Apply Concession
+                  </button>
+                  <button class="btn btn-secondary btn-sm" onclick="portalApp.exportConcessionsCSV()">
+                    <i class="fa-solid fa-file-excel"></i> Export CSV
+                  </button>
+                </div>
+              </div>
+
+              <!-- Concessions KPI Cards -->
+              <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin-bottom: 1.25rem;">
+                <div class="stat-card" style="padding: 1rem; border-radius: 8px; background: #fff; border: 1px solid var(--color-border); box-shadow: 0 1px 3px rgba(0,0,0,0.04);">
+                  <div style="font-size: 0.74rem; font-weight: 800; color: var(--color-text-muted); text-transform: uppercase;">TOTAL CONCESSION OUTLAY</div>
+                  <div style="font-size: 1.45rem; font-weight: 900; color: #2563eb; margin-top: 2px;">₹1,85,000</div>
+                  <small class="text-muted"><i class="fa-solid fa-file-invoice-dollar mr-1"></i> Subsidized under School Trust</small>
+                </div>
+                <div class="stat-card" style="padding: 1rem; border-radius: 8px; background: #fff; border: 1px solid var(--color-border); box-shadow: 0 1px 3px rgba(0,0,0,0.04);">
+                  <div style="font-size: 0.74rem; font-weight: 800; color: var(--color-text-muted); text-transform: uppercase;">MERIT SCHOLARS</div>
+                  <div style="font-size: 1.45rem; font-weight: 900; color: #16a34a; margin-top: 2px;">28 Students</div>
+                  <small class="text-muted"><i class="fa-solid fa-award mr-1"></i> GPA 10.0 &amp; Olympiad Achievers</small>
+                </div>
+                <div class="stat-card" style="padding: 1rem; border-radius: 8px; background: #fff; border: 1px solid var(--color-border); box-shadow: 0 1px 3px rgba(0,0,0,0.04);">
+                  <div style="font-size: 0.74rem; font-weight: 800; color: var(--color-text-muted); text-transform: uppercase;">SIBLING CONCESSIONS</div>
+                  <div style="font-size: 1.45rem; font-weight: 900; color: #7c3aed; margin-top: 2px;">22 Students</div>
+                  <small class="text-muted"><i class="fa-solid fa-people-roof mr-1"></i> 25% Second Child Waiver</small>
+                </div>
+                <div class="stat-card" style="padding: 1rem; border-radius: 8px; background: #fff; border: 1px solid var(--color-border); box-shadow: 0 1px 3px rgba(0,0,0,0.04);">
+                  <div style="font-size: 0.74rem; font-weight: 800; color: var(--color-text-muted); text-transform: uppercase;">STAFF &amp; SPORTS WARDS</div>
+                  <div style="font-size: 1.45rem; font-weight: 900; color: #0891b2; margin-top: 2px;">12 Students</div>
+                  <small class="text-muted"><i class="fa-solid fa-medal mr-1"></i> Institutional Statutory Benefit</small>
+                </div>
+              </div>
+
+              <!-- Filter Bar -->
+              <div style="display: flex; gap: 0.5rem; align-items: center; margin-bottom: 1rem; flex-wrap: wrap;">
+                <input type="text" id="concessionSearchInput" class="form-control form-control-sm" placeholder="Search application ID, student..." oninput="portalApp.filterFeeConcessions()" style="width: 220px;">
+                <select id="concessionCategoryFilter" class="form-control form-control-sm" onchange="portalApp.filterFeeConcessions()" style="width: auto;">
+                  <option value="all">All Concession Categories</option>
+                  <option value="Merit">Merit Scholarship</option>
+                  <option value="Sibling">Sibling Concession</option>
+                  <option value="Staff">Staff Ward Benefit</option>
+                  <option value="Sports">Sports &amp; Athletics Quota</option>
+                  <option value="EWS">EWS Financial Need</option>
+                </select>
+              </div>
+
+              <!-- Table: Application, eligibility, requested concession, approval and effective amount -->
+              <div class="table-container">
+                <table class="data-table">
+                  <thead>
+                    <tr>
+                      <th style="min-width: 170px; width: 22%;">Application</th>
+                      <th style="min-width: 160px; width: 20%;">Eligibility</th>
+                      <th style="min-width: 150px; width: 19%;">Requested Concession</th>
+                      <th style="min-width: 160px; width: 20%;">Approval</th>
+                      <th style="min-width: 150px; width: 19%; text-align: right;">Effective Amount</th>
+                    </tr>
+                  </thead>
+                  <tbody id="feeConcessionsTableBody">
+                    <!-- Populated dynamically via portalApp.renderFeeConcessions -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <!-- =========================================================
+               SUBVIEW 5: REFUNDS
+               Original transaction, refund reason, amount, approval and processing status
+               Special Rule: "Do not let an employee approve their own refund or modify a financial transaction without the required authorization. Record reversals instead of silently changing completed transactions."
+               ========================================================= -->
+          <div class="fees-subview" id="subview-fees-refunds" data-subview="refunds" style="display:none;">
+            <div class="card p-4">
+              
+              <!-- Statutory Governance Notice -->
+              <div style="background: #fffbeb; border: 1.5px solid #fde68a; border-radius: 10px; padding: 0.95rem 1.25rem; margin-bottom: 1.25rem; display: flex; align-items: center; gap: 0.95rem;">
+                <div style="width: 40px; height: 40px; border-radius: 50%; background: #fef3c7; color: #b45309; display: flex; align-items: center; justify-content: center; font-size: 1.15rem; flex-shrink: 0;">
+                  <i class="fa-solid fa-shield-halved"></i>
+                </div>
+                <div style="font-size: 0.82rem; color: #92400e; line-height: 1.45;">
+                  <strong style="display: block; font-size: 0.88rem; color: #78350f; margin-bottom: 2px;">
+                    Statutory Internal Financial Controls &amp; Segregation of Duties:
+                  </strong>
+                  Employees are strictly prohibited from approving their own refunds or modifying financial transactions. All disbursements require two-tier audit authorization: independent accounts audit clearance and final sign-off by <strong>Principal Smt. Gorle Varalakshmi</strong>. Financial entries are immutable; modifications must be recorded as auditable reversal vouchers.
+                </div>
+              </div>
+
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.15rem; flex-wrap: wrap; gap: 0.75rem; background: #fff; padding: 1rem 1.25rem; border-radius: 10px; border: 1px solid var(--color-border);">
+                <div>
+                  <h3 style="margin: 0; font-size: 1.05rem; font-weight: 800; color: var(--color-text-dark);">
+                    <i class="fa-solid fa-arrow-rotate-left text-primary mr-1"></i> Fee Refunds, Caution Deposit Settlements &amp; Bank Reconciliations
+                  </h3>
+                  <p class="text-muted" style="margin: 0.25rem 0 0 0; font-size: 0.84rem;">
+                    Pro-rata term adjustments, withdrawal deposit reimbursements, and duplicate payment resolution
+                  </p>
+                </div>
+                <div style="display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;">
+                  <button class="btn btn-primary btn-sm" onclick="portalApp.openModal('initiateRefundModal')">
+                    <i class="fa-solid fa-plus"></i> Initiate Refund Request
+                  </button>
+                  <button class="btn btn-secondary btn-sm" onclick="portalApp.exportRefundsCSV()">
                     <i class="fa-solid fa-file-excel"></i> Export Refunds CSV
                   </button>
                 </div>
               </div>
+
+              <!-- Refunds KPI Cards -->
+              <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin-bottom: 1.25rem;">
+                <div class="stat-card" style="padding: 1rem; border-radius: 8px; background: #fff; border: 1px solid var(--color-border); box-shadow: 0 1px 3px rgba(0,0,0,0.04);">
+                  <div style="font-size: 0.74rem; font-weight: 800; color: var(--color-text-muted); text-transform: uppercase;">SETTLED REFUNDS (AY 2026-27)</div>
+                  <div style="font-size: 1.45rem; font-weight: 900; color: #16a34a; margin-top: 2px;">₹19,000</div>
+                  <small class="text-muted"><i class="fa-solid fa-circle-check text-emerald mr-1"></i> 3 Transactions Disbursed via Bank NEFT</small>
+                </div>
+                <div class="stat-card" style="padding: 1rem; border-radius: 8px; background: #fff; border: 1px solid var(--color-border); box-shadow: 0 1px 3px rgba(0,0,0,0.04);">
+                  <div style="font-size: 0.74rem; font-weight: 800; color: var(--color-text-muted); text-transform: uppercase;">PENDING AUDIT APPROVAL</div>
+                  <div style="font-size: 1.45rem; font-weight: 900; color: #d97706; margin-top: 2px;">₹3,000</div>
+                  <small class="text-amber" style="font-weight: 700;"><i class="fa-solid fa-clock mr-1"></i> 1 Voucher Under Principal Ratification</small>
+                </div>
+                <div class="stat-card" style="padding: 1rem; border-radius: 8px; background: #fff; border: 1px solid var(--color-border); box-shadow: 0 1px 3px rgba(0,0,0,0.04);">
+                  <div style="font-size: 0.74rem; font-weight: 800; color: var(--color-text-muted); text-transform: uppercase;">AUDIT REVERSAL TRAIL</div>
+                  <div style="font-size: 1.45rem; font-weight: 900; color: #2563eb; margin-top: 2px;">100% Synced</div>
+                  <small class="text-muted"><i class="fa-solid fa-file-shield mr-1"></i> Zero Unauthorized Overwrites</small>
+                </div>
+              </div>
+
+              <!-- Filter Bar -->
+              <div style="display: flex; gap: 0.5rem; align-items: center; margin-bottom: 1rem; flex-wrap: wrap;">
+                <input type="text" id="refundSearchInput" class="form-control form-control-sm" placeholder="Search voucher, student, txn ID..." oninput="portalApp.filterFeeRefunds()" style="width: 240px;">
+                <select id="refundStatusFilter" class="form-control form-control-sm" onchange="portalApp.filterFeeRefunds()" style="width: auto;">
+                  <option value="all">All Processing Statuses</option>
+                  <option value="Settled">Settled (Disbursed via Bank)</option>
+                  <option value="Approved">Approved (Pending Handover)</option>
+                  <option value="Pending">Pending Audit Clearance</option>
+                </select>
+              </div>
+
+              <!-- Table: Original transaction, refund reason, amount, approval and processing status -->
               <div class="table-container">
                 <table class="data-table">
                   <thead>
                     <tr>
-                      <th>Voucher #</th>
-                      <th>Student Details</th>
-                      <th>Class Status</th>
-                      <th>Reason / Settlement Head</th>
-                      <th>Requested</th>
-                      <th>Approved Refund</th>
-                      <th>Disbursement Mode</th>
-                      <th>Date</th>
-                      <th>Status</th>
-                      <th>Action</th>
+                      <th style="min-width: 170px; width: 22%;">Original Transaction</th>
+                      <th style="min-width: 190px; width: 25%;">Refund Reason</th>
+                      <th style="min-width: 130px; width: 16%; text-align: right;">Amount</th>
+                      <th style="min-width: 160px; width: 21%;">Approval</th>
+                      <th style="min-width: 130px; width: 16%; text-align: center;">Processing Status</th>
                     </tr>
                   </thead>
                   <tbody id="feeRefundsTableBody">
-                    <!-- Rendered dynamically -->
+                    <!-- Populated dynamically via portalApp.renderFeeRefunds -->
                   </tbody>
                 </table>
               </div>
             </div>
           </div>
+
+          <!-- =========================================================
+               SUBVIEW 6: FEE REPORTS
+               Collections by date, class, fee type and payment method
+               ========================================================= -->
+          <div class="fees-subview" id="subview-fees-reports" data-subview="reports" style="display:none;">
+            <div class="card p-4">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.15rem; flex-wrap: wrap; gap: 0.75rem; background: #fff; padding: 1rem 1.25rem; border-radius: 10px; border: 1px solid var(--color-border);">
+                <div>
+                  <h3 style="margin: 0; font-size: 1.05rem; font-weight: 800; color: var(--color-text-dark);">
+                    <i class="fa-solid fa-chart-line text-primary mr-1"></i> Multi-Dimensional Fee Realization &amp; Audit Reports
+                  </h3>
+                  <p class="text-muted" style="margin: 0.25rem 0 0 0; font-size: 0.84rem;">
+                    Institutional breakdown: Collections by date, class, fee type and payment method &bull; Academic Year 2026–27
+                  </p>
+                </div>
+                <div style="display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;">
+                  <button class="btn btn-secondary btn-sm" onclick="portalApp.exportFeeAuditReport('excel')">
+                    <i class="fa-solid fa-file-excel"></i> Export Excel
+                  </button>
+                  <button class="btn btn-primary btn-sm" onclick="portalApp.exportFeeAuditReport('pdf')">
+                    <i class="fa-solid fa-file-pdf"></i> Download Audit PDF
+                  </button>
+                </div>
+              </div>
+
+              <!-- Reports KPI Grid -->
+              <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin-bottom: 1.25rem;">
+                <div class="stat-card" style="padding: 1rem; border-radius: 8px; background: #fff; border: 1px solid var(--color-border); box-shadow: 0 1px 3px rgba(0,0,0,0.04);">
+                  <div style="font-size: 0.74rem; font-weight: 800; color: var(--color-text-muted); text-transform: uppercase;">COLLECTION REALIZATION</div>
+                  <div style="font-size: 1.45rem; font-weight: 900; color: #16a34a; margin-top: 2px;">87.1%</div>
+                  <small class="text-muted"><i class="fa-solid fa-bullseye mr-1"></i> Target: 90.0% by Term 2</small>
+                </div>
+                <div class="stat-card" style="padding: 1rem; border-radius: 8px; background: #fff; border: 1px solid var(--color-border); box-shadow: 0 1px 3px rgba(0,0,0,0.04);">
+                  <div style="font-size: 0.74rem; font-weight: 800; color: var(--color-text-muted); text-transform: uppercase;">DIGITAL PAYMENT SHARE</div>
+                  <div style="font-size: 1.45rem; font-weight: 900; color: #2563eb; margin-top: 2px;">71.8%</div>
+                  <small class="text-muted"><i class="fa-solid fa-mobile-screen mr-1"></i> UPI &amp; Net Banking Dominance</small>
+                </div>
+                <div class="stat-card" style="padding: 1rem; border-radius: 8px; background: #fff; border: 1px solid var(--color-border); box-shadow: 0 1px 3px rgba(0,0,0,0.04);">
+                  <div style="font-size: 0.74rem; font-weight: 800; color: var(--color-text-muted); text-transform: uppercase;">CONCESSIONS DISBURSED</div>
+                  <div style="font-size: 1.45rem; font-weight: 900; color: #7c3aed; margin-top: 2px;">₹1,85,000</div>
+                  <small class="text-muted"><i class="fa-solid fa-hand-holding-heart mr-1"></i> 62 Meritorious Beneficiaries</small>
+                </div>
+                <div class="stat-card" style="padding: 1rem; border-radius: 8px; background: #fff; border: 1px solid var(--color-border); box-shadow: 0 1px 3px rgba(0,0,0,0.04);">
+                  <div style="font-size: 0.74rem; font-weight: 800; color: var(--color-text-muted); text-transform: uppercase;">AUDIT COMPLIANCE SCORE</div>
+                  <div style="font-size: 1.45rem; font-weight: 900; color: #059669; margin-top: 2px;">100%</div>
+                  <small class="text-muted"><i class="fa-solid fa-check-double mr-1"></i> All Receipts Reconciled to Bank</small>
+                </div>
+              </div>
+
+              <!-- Multi-Dimensional Report Filter Toolbar: Collections by date, class, fee type and payment method -->
+              <div style="display: flex; gap: 0.5rem; align-items: center; margin-bottom: 1rem; flex-wrap: wrap; background: #f8fafc; padding: 0.85rem 1rem; border-radius: 8px; border: 1px solid #e2e8f0;">
+                <div style="display: flex; align-items: center; gap: 0.35rem;">
+                  <span style="font-size: 0.78rem; font-weight: 700; color: #475569;"><i class="fa-solid fa-calendar mr-1"></i> Date Range:</span>
+                  <input type="date" id="feeReportDateFrom" class="form-control form-control-sm" value="2026-10-01" onchange="portalApp.filterFeeReports()" style="width: auto;">
+                  <span style="font-size: 0.78rem; color: #64748b;">to</span>
+                  <input type="date" id="feeReportDateTo" class="form-control form-control-sm" value="2026-10-31" onchange="portalApp.filterFeeReports()" style="width: auto;">
+                </div>
+                <select id="feeReportClassFilter" class="form-control form-control-sm" onchange="portalApp.filterFeeReports()" style="width: auto;">
+                  <option value="all">All Classes</option>
+                  <option value="Class X">Class X</option>
+                  <option value="Class IX">Class IX</option>
+                  <option value="Class VIII">Class VIII</option>
+                  <option value="Class VII">Class VII</option>
+                  <option value="Class VI">Class VI</option>
+                  <option value="Class V">Class V</option>
+                </select>
+                <select id="feeReportHeadFilter" class="form-control form-control-sm" onchange="portalApp.filterFeeReports()" style="width: auto;">
+                  <option value="all">All Fee Types</option>
+                  <option value="Tuition Fee">Tuition Fee</option>
+                  <option value="Lab & Computer">Lab &amp; Computer Fee</option>
+                  <option value="Transport">Bus &amp; Transport</option>
+                  <option value="Exam & Sports">Examination &amp; Sports</option>
+                  <option value="Admission">Admission Registration</option>
+                </select>
+                <select id="feeReportMethodFilter" class="form-control form-control-sm" onchange="portalApp.filterFeeReports()" style="width: auto;">
+                  <option value="all">All Payment Methods</option>
+                  <option value="UPI">UPI</option>
+                  <option value="Cash">Cash Counter</option>
+                  <option value="Net Banking">Net Banking</option>
+                  <option value="Cheque">Cheque</option>
+                </select>
+              </div>
+
+              <!-- Multi-dimensional Table: Collections by date, class, fee type and payment method -->
+              <h4 style="font-size: 0.95rem; font-weight: 800; color: #0f172a; margin-bottom: 0.65rem; text-transform: uppercase; letter-spacing: 0.03em;">
+                <i class="fa-solid fa-table-list text-primary mr-1"></i> Multi-Dimensional Collections Matrix
+              </h4>
+              <div class="table-container mb-4">
+                <table class="data-table">
+                  <thead>
+                    <tr>
+                      <th style="min-width: 120px; width: 16%;">Date</th>
+                      <th style="min-width: 110px; width: 14%;">Class</th>
+                      <th style="min-width: 170px; width: 24%;">Fee Type</th>
+                      <th style="min-width: 140px; width: 18%; text-align: center;">Payment Method</th>
+                      <th style="min-width: 90px; width: 12%; text-align: center;">Receipts</th>
+                      <th style="min-width: 130px; width: 16%; text-align: right;">Total Collected</th>
+                    </tr>
+                  </thead>
+                  <tbody id="feeReportsTableBody">
+                    <!-- Populated dynamically via portalApp.renderFeeReports -->
+                  </tbody>
+                </table>
+              </div>
+
+              <!-- Visual Charts -->
+              <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1rem; margin-top: 1rem;">
+                <div class="fee-chart-card">
+                  <div class="fee-chart-header">
+                    <h4><i class="fa-solid fa-chart-column text-primary"></i> Term-Wise Collection vs Budget</h4>
+                  </div>
+                  <div class="fee-chart-body">
+                    <canvas id="feeTermComparisonChart" height="220"></canvas>
+                    <div id="feeTermFallback" class="chart-svg-fallback" style="display:none;"></div>
+                  </div>
+                </div>
+                <div class="fee-chart-card">
+                  <div class="fee-chart-header">
+                    <h4><i class="fa-solid fa-pie-chart text-emerald"></i> Payment Methods Distribution</h4>
+                  </div>
+                  <div class="fee-chart-body">
+                    <canvas id="feePaymentModesChart" height="220"></canvas>
+                    <div id="feePaymentModesFallback" class="chart-svg-fallback" style="display:none;"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- =========================================================
+               SUBVIEW 7: TRANSACTIONS LEDGER
+               Transaction ID, debit/credit entry, reference, date and reconciliation status
+               Special Rule: "Record reversals instead of silently changing completed transactions."
+               ========================================================= -->
+          <div class="fees-subview" id="subview-fees-transactions" data-subview="transactions" style="display:none;">
+            <div class="card p-4">
+
+              <!-- Immutability & Reversal Policy Banner -->
+              <div style="background: #eff6ff; border: 1.5px solid #bfdbfe; border-radius: 10px; padding: 0.95rem 1.25rem; margin-bottom: 1.25rem; display: flex; align-items: center; gap: 0.95rem;">
+                <div style="width: 40px; height: 40px; border-radius: 50%; background: #dbeafe; color: #1e40af; display: flex; align-items: center; justify-content: center; font-size: 1.15rem; flex-shrink: 0;">
+                  <i class="fa-solid fa-book-journal-whills"></i>
+                </div>
+                <div style="font-size: 0.82rem; color: #1e3a8a; line-height: 1.45;">
+                  <strong style="display: block; font-size: 0.88rem; color: #1e40af; margin-bottom: 2px;">
+                    Immutable Double-Entry Financial Ledger &amp; Audited Reversal Protocol:
+                  </strong>
+                  Completed financial transactions cannot be overwritten, modified, or silently deleted. To rectify an error or issue a refund, the authorized accounts officer must record an offsetting <strong>Reversal Entry (Debit)</strong> referencing the original Transaction ID. Every adjustment maintains full cryptographic audit traceability under Principal Smt. Gorle Varalakshmi.
+                </div>
+              </div>
+
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.15rem; flex-wrap: wrap; gap: 0.75rem; background: #fff; padding: 1rem 1.25rem; border-radius: 10px; border: 1px solid var(--color-border);">
+                <div>
+                  <h3 style="margin: 0; font-size: 1.05rem; font-weight: 800; color: var(--color-text-dark);">
+                    <i class="fa-solid fa-book-bookmark text-primary mr-1"></i> Comprehensive Transactions Ledger &amp; Audit Trail
+                  </h3>
+                  <p class="text-muted" style="margin: 0.25rem 0 0 0; font-size: 0.84rem;">
+                    Institutional journal of debit/credit entries, bank reconciliation clearance, and reversal records
+                  </p>
+                </div>
+                <div style="display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;">
+                  <button class="btn btn-warning btn-sm" onclick="portalApp.openRecordReversalModal()" style="font-weight: 700;">
+                    <i class="fa-solid fa-rotate-left mr-1"></i> Record Audited Reversal
+                  </button>
+                  <button class="btn btn-secondary btn-sm" onclick="portalApp.printTransactionsLedger()">
+                    <i class="fa-solid fa-print"></i> Print Ledger
+                  </button>
+                  <button class="btn btn-primary btn-sm" onclick="portalApp.exportTransactionsLedgerCSV()">
+                    <i class="fa-solid fa-file-excel"></i> Export Ledger CSV
+                  </button>
+                </div>
+              </div>
+
+              <!-- Quick Filter Pills: All, Credit Inflow, Debit Reversal, Bank Reconciled -->
+              <div style="display: flex; gap: 0.5rem; margin-bottom: 1.15rem; flex-wrap: wrap;">
+                <button class="btn btn-sm btn-outline-primary active" id="btnLedgerFilterAll" onclick="portalApp.setLedgerFilter('all')">
+                  <i class="fa-solid fa-list mr-1"></i> All Entries (<span id="ledgerCountAll">16</span>)
+                </button>
+                <button class="btn btn-sm btn-outline-success" id="btnLedgerFilterCredit" onclick="portalApp.setLedgerFilter('credit')">
+                  <i class="fa-solid fa-arrow-down-left mr-1"></i> Credits / Inflow (<span id="ledgerCountCredit">13</span>)
+                </button>
+                <button class="btn btn-sm btn-outline-danger" id="btnLedgerFilterDebit" onclick="portalApp.setLedgerFilter('debit')">
+                  <i class="fa-solid fa-arrow-up-right mr-1"></i> Debits / Reversals (<span id="ledgerCountDebit">3</span>)
+                </button>
+                <button class="btn btn-sm btn-outline-info" id="btnLedgerFilterReconciled" onclick="portalApp.setLedgerFilter('reconciled')">
+                  <i class="fa-solid fa-check-double mr-1"></i> Bank Reconciled (<span id="ledgerCountReconciled">16</span>)
+                </button>
+              </div>
+
+              <!-- Table: Transaction ID, debit/credit entry, reference, date and reconciliation status -->
+              <div class="table-container">
+                <table class="data-table">
+                  <thead>
+                    <tr>
+                      <th style="min-width: 140px; width: 18%;">Transaction ID</th>
+                      <th style="min-width: 150px; width: 19%; text-align: right;">Debit / Credit Entry</th>
+                      <th style="min-width: 220px; width: 31%;">Reference</th>
+                      <th style="min-width: 130px; width: 16%;">Date</th>
+                      <th style="min-width: 140px; width: 16%; text-align: center;">Reconciliation Status</th>
+                    </tr>
+                  </thead>
+                  <tbody id="transactionsLedgerTableBody">
+                    <!-- Populated dynamically via portalApp.renderTransactionsLedger -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
         </section>
 
         <!-- =================================================================
@@ -13587,6 +13488,154 @@ Class X-A,Monday,2,09:35 AM - 10:20 AM,Physical Science,Sri Navva Anand,Room 201
           <i class="fa-solid fa-print"></i> Print Receipt Slip
         </button>
       </div>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       APPLY FEE CONCESSION / SCHOLARSHIP MODAL
+       ========================================================================== -->
+  <div class="modal-backdrop" id="applyConcessionModal">
+    <div class="portal-modal fee-modal-dialog">
+      <div class="modal-header">
+        <h3><i class="fa-solid fa-handshake-angle text-primary"></i> Apply Fee Concession / Scholarship</h3>
+        <button class="modal-close-x" onclick="portalApp.closeModal('applyConcessionModal')" title="Close" aria-label="Close">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <form id="applyConcessionForm" onsubmit="portalApp.handleConcessionSubmit(event)">
+        <div class="modal-body">
+          <div style="background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px; padding: 0.75rem 1rem; margin-bottom: 1rem; font-size: 0.82rem; color: #166534;">
+            <i class="fa-solid fa-circle-info mr-1"></i>
+            All institutional fee concessions and merit scholarships require final executive ratification by <strong>Principal Smt. Gorle Varalakshmi</strong> per school governance policy.
+          </div>
+          <div class="fee-form-grid">
+            <div class="form-group full-span">
+              <label><i class="fa-solid fa-user"></i> Select Student *</label>
+              <select class="form-control" id="concessionStudentSelect" required onchange="portalApp.handleConcessionStudentChange(this.value)">
+                <option value="">-- Choose Student from Roster --</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Admission No</label>
+              <input type="text" class="form-control" id="concessionAdmNo" readonly placeholder="Auto-populated">
+            </div>
+            <div class="form-group">
+              <label>Class &amp; Section</label>
+              <input type="text" class="form-control" id="concessionClass" readonly placeholder="Auto-populated">
+            </div>
+            <div class="form-group">
+              <label>Concession Category *</label>
+              <select class="form-control" id="concessionCategory" required onchange="portalApp.handleConcessionCategoryChange(this.value)">
+                <option value="Merit Scholarship">Merit Scholarship (Top GPA / Olympiad)</option>
+                <option value="Sibling Concession">Sibling Concession (Elder sibling enrolled)</option>
+                <option value="Staff Ward Benefit">Staff Ward Benefit (Faculty &amp; Staff child)</option>
+                <option value="Sports & Athletics Quota">Sports &amp; Athletics Quota (State / District Medalist)</option>
+                <option value="EWS Financial Need">EWS Financial Need (Govt. Income Certificate)</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Annual Standard Fee (₹)</label>
+              <input type="text" class="form-control" id="concessionAnnualStandard" readonly value="₹32,000" style="font-weight:700;">
+            </div>
+            <div class="form-group">
+              <label>Requested Concession (% or ₹) *</label>
+              <input type="text" class="form-control" id="concessionWaiverInput" required placeholder="e.g. 50% (₹16,000)" value="50% (₹16,000)">
+            </div>
+            <div class="form-group">
+              <label>Net Payable Amount (₹)</label>
+              <input type="text" class="form-control" id="concessionPayableAmount" readonly value="₹16,000" style="font-weight:800; color:#059669;">
+            </div>
+            <div class="form-group full-span">
+              <label>Eligibility Criteria &amp; Supporting Document Ref *</label>
+              <input type="text" class="form-control" id="concessionEligibilityCriteria" required placeholder="e.g. SSC Board Aggregate 96.4% • Certificate #AP-MERIT-2026-99" value="Academic Merit > 95% GPA">
+            </div>
+            <div class="form-group full-span">
+              <label>Sanctioning Authority</label>
+              <input type="text" class="form-control" id="concessionAuthority" readonly value="Principal Smt. Gorle Varalakshmi">
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="portalApp.closeModal('applyConcessionModal')">Cancel</button>
+          <button type="submit" class="btn btn-primary" id="btnSubmitConcession">
+            <i class="fa-solid fa-stamp"></i> Submit Concession Application
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       RECORD AUDITED FINANCIAL REVERSAL MODAL
+       Statutory rule: "Do not let an employee approve their own refund or modify a financial transaction without the required authorization. Record reversals instead of silently changing completed transactions."
+       ========================================================================== -->
+  <div class="modal-backdrop" id="recordReversalModal">
+    <div class="portal-modal fee-modal-dialog">
+      <div class="modal-header">
+        <h3><i class="fa-solid fa-rotate-left text-warning"></i> Record Audited Financial Reversal (Debit Entry)</h3>
+        <button class="modal-close-x" onclick="portalApp.closeModal('recordReversalModal')" title="Close" aria-label="Close">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <form id="recordReversalForm" onsubmit="portalApp.submitTransactionReversal(event)">
+        <div class="modal-body">
+          <div style="background: #fffbeb; border: 1.5px solid #fde68a; border-radius: 8px; padding: 0.85rem 1rem; margin-bottom: 1.15rem; font-size: 0.82rem; color: #92400e; line-height: 1.45;">
+            <div style="font-weight: 800; color: #78350f; margin-bottom: 2px;">
+              <i class="fa-solid fa-shield-halved mr-1"></i> Statutory Financial Immutability &amp; Segregation Policy
+            </div>
+            Financial ledger entries are permanently immutable. To rectify an incorrect charge or disburse a refund, an audited <strong>Reversal Debit Entry</strong> must be posted against the original Transaction ID. Cashiers and clerks cannot authorize their own reversals without executive clearance by <strong>Principal Smt. Gorle Varalakshmi</strong>.
+          </div>
+          <div class="fee-form-grid">
+            <div class="form-group full-span">
+              <label><i class="fa-solid fa-receipt"></i> Target Transaction to Reverse *</label>
+              <select class="form-control" id="reversalTargetTxn" required onchange="portalApp.handleReversalTxnSelect(this.value)">
+                <option value="">-- Choose Transaction from Ledger --</option>
+                <option value="TXN-2026-9041">TXN-2026-9041 | RCPT-2026-4891 | P. Hema Latha (Class X-A) | ₹14,500</option>
+                <option value="TXN-2026-9040">TXN-2026-9040 | RCPT-2026-4890 | M. Sravanthi (Class IX-A) | ₹16,000</option>
+                <option value="TXN-2026-9039">TXN-2026-9039 | RCPT-2026-4889 | K. Tanvi Sree (Class I-A) | ₹11,000</option>
+                <option value="TXN-2026-9038">TXN-2026-9038 | RCPT-2026-4888 | CH. Karthik (Class VIII-A) | ₹6,500</option>
+                <option value="TXN-2026-9037">TXN-2026-9037 | RCPT-2026-4887 | V. Divya Bharathi (Class VIII-A) | ₹13,500</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Original Paid Amount</label>
+              <input type="text" class="form-control" id="reversalOriginalAmount" readonly placeholder="Select a transaction" style="font-weight:700;">
+            </div>
+            <div class="form-group">
+              <label>Reversal Debit Amount (₹) *</label>
+              <input type="number" class="form-control" id="reversalDebitAmount" required min="100" max="100000" placeholder="e.g. 14500" style="font-weight:800; color:#dc2626;">
+            </div>
+            <div class="form-group full-span">
+              <label>Reversal Reason Category *</label>
+              <select class="form-control" id="reversalReasonCat" required>
+                <option value="Duplicate Gateway Payment">Duplicate Gateway / UPI Payment</option>
+                <option value="Pro-Rata TC Withdrawal Adjustment">Pro-Rata TC Withdrawal Adjustment</option>
+                <option value="Caution Deposit Refund Clearance">Caution Deposit Refund Clearance</option>
+                <option value="Erroneous Fee Head Billing Rectification">Erroneous Fee Head Billing Rectification</option>
+                <option value="Approved Scholarship Retroactive Credit">Approved Scholarship Retroactive Credit</option>
+              </select>
+            </div>
+            <div class="form-group full-span">
+              <label>Detailed Audit &amp; Justification Note *</label>
+              <textarea class="form-control" id="reversalAuditNote" rows="2" required placeholder="Specify reason, banking UTR or clearance memorandum number..."></textarea>
+            </div>
+            <div class="form-group">
+              <label>Desk Requester</label>
+              <input type="text" class="form-control" id="reversalRequester" readonly value="S. Ramu (Accounts Desk)">
+            </div>
+            <div class="form-group">
+              <label>Executive Authorizing Authority</label>
+              <input type="text" class="form-control" id="reversalAuthorizer" readonly value="Principal Smt. Gorle Varalakshmi">
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="portalApp.closeModal('recordReversalModal')">Cancel</button>
+          <button type="submit" class="btn btn-warning" id="btnSubmitReversal" style="font-weight:700;">
+            <i class="fa-solid fa-rotate-left mr-1"></i> Post Audited Reversal (Debit Entry)
+          </button>
+        </div>
+      </form>
     </div>
   </div>
 

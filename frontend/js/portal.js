@@ -3134,23 +3134,22 @@ const FEE_CATEGORY_AUDIT_DATA = [
         renderTimetableConflicts();
       }
     } else if (moduleKey === 'fees') {
-      if (subKey === 'structure') {
-        renderFeeStructure();
-      } else if (subKey === 'collection') {
-        renderFeeTransactions(state.feeTransactions);
+      if (subKey === 'collection' || subKey === 'fee-collection') {
+        renderFeeCollection();
         initFeeCharts();
-      } else if (subKey === 'pending') {
+      } else if (subKey === 'pending' || subKey === 'pending-dues') {
         renderDefaultersTable();
-      } else if (subKey === 'concessions') {
+      } else if (subKey === 'structure' || subKey === 'fee-structure') {
+        renderFeeStructure();
+      } else if (subKey === 'concessions' || subKey === 'concessions-scholarships') {
         renderFeeConcessions();
-      } else if (subKey === 'refunds') {
+      } else if (subKey === 'refunds' || subKey === 'fee-refunds') {
         renderFeeRefunds();
-      } else if (subKey === 'receipts' || subKey === 'transactions') {
-        renderFeeLedgerTable();
-      } else if (subKey === 'reports') {
-        renderFeeCategoryAuditTable();
-        renderClassFeeRealizationMatrix();
+      } else if (subKey === 'reports' || subKey === 'fee-reports') {
+        renderFeeReports();
         initFeeReportsCharts();
+      } else if (subKey === 'transactions' || subKey === 'transactions-ledger' || subKey === 'receipts' || subKey === 'ledger') {
+        renderTransactionsLedger();
       }
     } else if (moduleKey === 'communication') {
       if (subKey === 'announcements') {
@@ -3245,9 +3244,13 @@ const FEE_CATEGORY_AUDIT_DATA = [
     renderStaffLeaveBalances();
     renderNonTeachingStaff();
     renderTeacherLeaveRequests();
-    renderFeeTransactions(state.feeTransactions);
+    renderFeeCollection();
     renderDefaultersTable();
-    renderFeeLedgerTable();
+    renderFeeStructure();
+    renderFeeConcessions();
+    renderFeeRefunds();
+    renderFeeReports();
+    renderTransactionsLedger();
     renderFeeCategoryAuditTable();
     renderClassFeeRealizationMatrix();
     initFeeCharts();
@@ -5978,26 +5981,7 @@ const FEE_CATEGORY_AUDIT_DATA = [
   }
 
   function renderFeeTransactions(list) {
-    const tbody = document.getElementById('feeTransactionsTableBody');
-    if (!tbody) return;
-
-    tbody.innerHTML = list.map(tx => `
-      <tr>
-        <td><strong>${tx.receiptNo}</strong></td>
-        <td><strong>${tx.student}</strong></td>
-        <td>${tx.class}</td>
-        <td>${tx.term}</td>
-        <td><strong class="text-emerald">${tx.amount}</strong></td>
-        <td><span class="portal-badge badge-primary">${tx.mode}</span></td>
-        <td>${tx.date}</td>
-        <td>${tx.cashier}</td>
-        <td>
-          <button class="btn-table-receipt" onclick="portalApp.showToast('Printing Official Fee Receipt ${tx.receiptNo}', 'success')">
-            <i class="fa-solid fa-receipt"></i> Print
-          </button>
-        </td>
-      </tr>
-    `).join('');
+    renderFeeCollection(list);
   }
 
   function renderAttendanceClasses(list) {
@@ -14253,105 +14237,682 @@ const FEE_CATEGORY_AUDIT_DATA = [
     showToast('Confidential counselling audit register exported with executive watermark.', 'success');
   }
 
-  function renderFeeStructure() {
+  // =========================================================================
+  // FEES & FINANCE MODULE: COMPREHENSIVE 7 SUBMENUS ENGINE
+  // Submenu 1: Fee Collection (Student, invoice, amount due, amount paid, payment method and receipt)
+  // Submenu 2: Pending Dues (Student, class, outstanding amount, due date and overdue status)
+  // Submenu 3: Fee Structure (Class-wise fee heads, instalments, due dates and academic year)
+  // Submenu 4: Concessions & Scholarships (Application, eligibility, requested concession, approval and effective amount)
+  // Submenu 5: Refunds (Original transaction, refund reason, amount, approval and processing status)
+  // Submenu 6: Fee Reports (Collections by date, class, fee type and payment method)
+  // Submenu 7: Transactions Ledger (Transaction ID, debit/credit entry, reference, date and reconciliation status)
+  // Statutory Governance: Self-approval prevention on refunds & audited reversals for transaction immutability.
+  // =========================================================================
+
+  const INITIAL_FEE_COLLECTION_DATA = [
+    { receiptNo: 'RCPT-2026-4891', invoiceNo: 'INV-2026-0891', student: 'P. Hema Latha', admNo: 'SV-0021', class: 'Class X-A', term: 'Term 2 Tuition', amountDue: '₹14,500', amountPaid: '₹14,500', mode: 'UPI (PhonePe)', date: 'Today, 11:20 AM', cashier: 'S. Ramu' },
+    { receiptNo: 'RCPT-2026-4890', invoiceNo: 'INV-2026-0890', student: 'M. Sravanthi', admNo: 'SV-0044', class: 'Class IX-A', term: 'Term 2 + Computer Fee', amountDue: '₹16,000', amountPaid: '₹16,000', mode: 'Net Banking', date: 'Today, 10:45 AM', cashier: 'S. Ramu' },
+    { receiptNo: 'RCPT-2026-4889', invoiceNo: 'INV-2026-0889', student: 'K. Tanvi Sree', admNo: 'SV-0012', class: 'Class I-A', term: 'Term 2 Tuition', amountDue: '₹11,000', amountPaid: '₹11,000', mode: 'Cash', date: 'Today, 09:50 AM', cashier: 'B. Krishna' },
+    { receiptNo: 'RCPT-2026-4888', invoiceNo: 'INV-2026-0888', student: 'CH. Karthik', admNo: 'SV-0088', class: 'Class VIII-A', term: 'Term 1 Balance Due', amountDue: '₹6,500', amountPaid: '₹6,500', mode: 'UPI (GooglePay)', date: 'Yesterday, 04:15 PM', cashier: 'S. Ramu' },
+    { receiptNo: 'RCPT-2026-4887', invoiceNo: 'INV-2026-0887', student: 'V. Divya Bharathi', admNo: 'SV-0092', class: 'Class VIII-A', term: 'Term 2 Tuition', amountDue: '₹13,500', amountPaid: '₹13,500', mode: 'Cheque (#881023)', date: 'Yesterday, 02:30 PM', cashier: 'B. Krishna' },
+    { receiptNo: 'RCPT-2026-4886', invoiceNo: 'INV-2026-0886', student: 'B. Mohan Krishna', admNo: 'SV-0105', class: 'Class V-A', term: 'Bus Fee Q2', amountDue: '₹4,500', amountPaid: '₹4,500', mode: 'Cash', date: 'Yesterday, 11:15 AM', cashier: 'S. Ramu' },
+    { receiptNo: 'RCPT-2026-4885', invoiceNo: 'INV-2026-0885', student: 'G. Ananya', admNo: 'SV-0118', class: 'Class X-A', term: 'Term 2 Tuition', amountDue: '₹14,500', amountPaid: '₹14,500', mode: 'UPI (Paytm)', date: '20 Sep 2026, 03:40 PM', cashier: 'B. Krishna' },
+    { receiptNo: 'RCPT-2026-4884', invoiceNo: 'INV-2026-0884', student: 'T. Varun Tej', admNo: 'SV-0125', class: 'Class VII-A', term: 'Science Lab & Practical', amountDue: '₹3,200', amountPaid: '₹3,200', mode: 'UPI (PhonePe)', date: '20 Sep 2026, 01:15 PM', cashier: 'S. Ramu' },
+    { receiptNo: 'RCPT-2026-4883', invoiceNo: 'INV-2026-0883', student: 'S. Sneha Latha', admNo: 'SV-0133', class: 'Class VI-A', term: 'Term 2 Tuition', amountDue: '₹12,000', amountPaid: '₹12,000', mode: 'Cash', date: '19 Sep 2026, 04:30 PM', cashier: 'B. Krishna' },
+    { receiptNo: 'RCPT-2026-4882', invoiceNo: 'INV-2026-0882', student: 'R. Keerthi', admNo: 'SV-0141', class: 'Class III-A', term: 'Term 2 Tuition', amountDue: '₹10,500', amountPaid: '₹10,500', mode: 'Net Banking', date: '19 Sep 2026, 02:10 PM', cashier: 'S. Ramu' },
+    { receiptNo: 'RCPT-2026-4881', invoiceNo: 'INV-2026-0881', student: 'K. Sai Praneeth', admNo: 'SV-0155', class: 'Class IX-A', term: 'Bus Fee Q2', amountDue: '₹4,500', amountPaid: '₹4,500', mode: 'UPI (GooglePay)', date: '19 Sep 2026, 11:00 AM', cashier: 'B. Krishna' },
+    { receiptNo: 'RCPT-2026-4880', invoiceNo: 'INV-2026-0880', student: 'M. Rohith', admNo: 'SV-0162', class: 'Class IV-A', term: 'Term 2 Tuition', amountDue: '₹11,000', amountPaid: '₹11,000', mode: 'Cash', date: '18 Sep 2026, 03:20 PM', cashier: 'S. Ramu' },
+    { receiptNo: 'RCPT-2026-4879', invoiceNo: 'INV-2026-0879', student: 'P. Tejaswini', admNo: 'SV-0170', class: 'Class II-A', term: 'Term 2 Tuition', amountDue: '₹10,000', amountPaid: '₹10,000', mode: 'UPI (PhonePe)', date: '18 Sep 2026, 10:15 AM', cashier: 'B. Krishna' },
+    { receiptNo: 'RCPT-2026-4878', invoiceNo: 'INV-2026-0878', student: 'A. Lokesh', admNo: 'SV-0185', class: 'Class X-A', term: 'Examination & Board Fee', amountDue: '₹3,500', amountPaid: '₹3,500', mode: 'Cash', date: '17 Sep 2026, 04:00 PM', cashier: 'S. Ramu' }
+  ];
+
+  const FEE_STRUCTURE_DATA = [
+    { cls: 'Class X', wing: 'Secondary (State Board)', tuition: '₹32,000', t1: '₹12,000', t2: '₹10,000', t3: '₹10,000', lab: '₹3,500', exam: '₹2,500', total: '₹38,000', due: '15-Jun, 15-Oct, 15-Jan' },
+    { cls: 'Class IX', wing: 'Secondary Wing', tuition: '₹30,000', t1: '₹11,000', t2: '₹9,500', t3: '₹9,500', lab: '₹3,000', exam: '₹2,000', total: '₹35,000', due: '15-Jun, 15-Oct, 15-Jan' },
+    { cls: 'Class VIII', wing: 'Upper Primary', tuition: '₹28,000', t1: '₹10,000', t2: '₹9,000', t3: '₹9,000', lab: '₹2,500', exam: '₹1,500', total: '₹32,000', due: '15-Jun, 15-Oct, 15-Jan' },
+    { cls: 'Class VII', wing: 'Upper Primary', tuition: '₹26,000', t1: '₹9,500', t2: '₹8,500', t3: '₹8,000', lab: '₹2,000', exam: '₹1,500', total: '₹29,500', due: '15-Jun, 15-Oct, 15-Jan' },
+    { cls: 'Class VI', wing: 'Upper Primary', tuition: '₹25,000', t1: '₹9,000', t2: '₹8,000', t3: '₹8,000', lab: '₹2,000', exam: '₹1,500', total: '₹28,500', due: '15-Jun, 15-Oct, 15-Jan' },
+    { cls: 'Class V', wing: 'Primary Wing', tuition: '₹23,000', t1: '₹8,500', t2: '₹7,500', t3: '₹7,000', lab: '₹1,500', exam: '₹1,500', total: '₹26,000', due: '15-Jun, 15-Oct, 15-Jan' },
+    { cls: 'Class IV', wing: 'Primary Wing', tuition: '₹22,000', t1: '₹8,000', t2: '₹7,000', t3: '₹7,000', lab: '₹1,500', exam: '₹1,500', total: '₹25,000', due: '15-Jun, 15-Oct, 15-Jan' },
+    { cls: 'Class III', wing: 'Primary Wing', tuition: '₹21,000', t1: '₹7,500', t2: '₹7,000', t3: '₹6,500', lab: '₹1,000', exam: '₹1,500', total: '₹23,500', due: '15-Jun, 15-Oct, 15-Jan' },
+    { cls: 'Class II', wing: 'Primary Wing', tuition: '₹20,000', t1: '₹7,000', t2: '₹6,500', t3: '₹6,500', lab: '₹1,000', exam: '₹1,500', total: '₹22,500', due: '15-Jun, 15-Oct, 15-Jan' },
+    { cls: 'Class I', wing: 'Foundational Stage', tuition: '₹19,000', t1: '₹7,000', t2: '₹6,000', t3: '₹6,000', lab: '₹1,000', exam: '₹1,000', total: '₹21,000', due: '15-Jun, 15-Oct, 15-Jan' },
+    { cls: 'Pre-Primary', wing: 'Early Childhood Wing', tuition: '₹18,000', t1: '₹6,500', t2: '₹6,000', t3: '₹5,500', lab: '₹500', exam: '₹1,000', total: '₹19,500', due: '15-Jun, 15-Oct, 15-Jan' }
+  ];
+
+  const INITIAL_FEE_CONCESSIONS_DATA = [
+    { id: 'CON-2026-001', student: 'M. Manoj (SV-0095)', class: 'Class VIII-A', appliedDate: '10 Jul 2026', cat: 'Merit Scholarship', criteria: 'Board Exam GPA > 95% (Top 1% Rank #1)', annual: '₹32,000', waiver: '50% (₹16,000)', payable: '₹16,000', authority: 'Principal Smt. Gorle Varalakshmi', status: 'Sanctioned Active' },
+    { id: 'CON-2026-002', student: 'B. Vennela (SV-0145)', class: 'Class VI-A', appliedDate: '14 Jul 2026', cat: 'Sibling Concession', criteria: 'Elder Sibling M. Manoj in Class VIII', annual: '₹28,500', waiver: '25% (₹7,125)', payable: '₹21,375', authority: 'Vice Principal Sri Navva Anand', status: 'Sanctioned Active' },
+    { id: 'CON-2026-003', student: 'CH. Swathi (SV-0182)', class: 'Class VII-A', appliedDate: '18 Jul 2026', cat: 'Staff Ward Benefit', criteria: 'Ward of Smt. N. Sirisha (Faculty Sunitha)', annual: '₹29,500', waiver: '40% (₹11,800)', payable: '₹17,700', authority: 'Principal Smt. Gorle Varalakshmi', status: 'Sanctioned Active' },
+    { id: 'CON-2026-004', student: 'P. Harsha (SV-0089)', class: 'Class IX-A', appliedDate: '20 Jul 2026', cat: 'Sports & Athletics Quota', criteria: 'State Athletic Champion (400m Track)', annual: '₹35,000', waiver: '35% (₹12,250)', payable: '₹22,750', authority: 'Principal Smt. Gorle Varalakshmi', status: 'Sanctioned Active' },
+    { id: 'CON-2026-005', student: 'K. Divya (SV-0280)', class: 'Class V-A', appliedDate: '22 Jul 2026', cat: 'EWS Financial Need', criteria: 'Govt. Income Certificate < ₹1.2L p.a.', annual: '₹26,000', waiver: '30% (₹7,800)', payable: '₹18,200', authority: 'Principal Smt. Gorle Varalakshmi', status: 'Sanctioned Active' }
+  ];
+
+  const INITIAL_FEE_REFUNDS_DATA = [
+    { vno: 'REF-2026-001', origTxn: 'TXN-2026-8650 (RCPT-2026-4812)', student: 'P. Kiran Kumar (SV-0082)', class: 'Class X-A', requester: 'S. Ramu (Accounts Clerk)', approver: 'Principal Smt. Gorle Varalakshmi', reason: 'Parent job transfer to Hyderabad; pro-rata Term-2 fee adjustment', amount: '₹8,500', mode: 'Bank NEFT (HDFC 9812)', date: '22 Oct 2026', status: 'Settled' },
+    { vno: 'REF-2026-002', origTxn: 'TXN-2026-8810 (RCPT-2026-4790)', student: 'G. Harini (SV-0332)', class: 'Class VI-A', requester: 'B. Krishna (Fee Cashier)', approver: 'Principal Smt. Gorle Varalakshmi', reason: 'Duplicate online UPI gateway payment during Term-1 rush', amount: '₹7,500', mode: 'Direct UPI Reversal', date: '20 Oct 2026', status: 'Settled' },
+    { vno: 'REF-2026-003', origTxn: 'TXN-2026-8940 (RCPT-2026-4655)', student: 'R. Divya (SV-0119)', class: 'Class VII-A', requester: 'S. Ramu (Accounts Clerk)', approver: 'Pending Executive Clearance (Principal Smt. Gorle Varalakshmi)', reason: 'Relocation to Vijayawada; Caution Deposit clearance upon TC', amount: '₹3,000', mode: 'Account Payee Cheque', date: '19 Oct 2026', status: 'Pending Audit Clearance' },
+    { vno: 'REF-2026-004', origTxn: 'TXN-2026-9012 (RCPT-2026-4870)', student: 'K. Lokesh (SV-0219)', class: 'Class IX-A', requester: 'Smt. T. Padmavathi (Teacher/Parent)', approver: 'Pending Executive Clearance (Principal Smt. Gorle Varalakshmi)', reason: 'Double payment of science exhibition practical kit fee', amount: '₹1,200', mode: 'Cash Counter Reversal', date: '28 Oct 2026', status: 'Pending Audit Clearance' }
+  ];
+
+  const INITIAL_FEE_REPORTS_DATA = [
+    { date: '29 Oct 2026', class: 'Class X-A', feeType: 'Term 2 Tuition Fee', method: 'UPI (PhonePe)', count: 8, total: '₹1,16,000' },
+    { date: '29 Oct 2026', class: 'Class IX-A', feeType: 'Term 2 + Science Lab', method: 'Net Banking', count: 6, total: '₹96,000' },
+    { date: '29 Oct 2026', class: 'Class I-A', feeType: 'Term 2 Tuition Fee', method: 'Cash Counter', count: 5, total: '₹55,000' },
+    { date: '28 Oct 2026', class: 'Class VIII-A', feeType: 'Term 1 Balance Due', method: 'UPI (GooglePay)', count: 7, total: '₹45,500' },
+    { date: '28 Oct 2026', class: 'Class VIII-A', feeType: 'Term 2 Tuition Fee', method: 'Cheque (#881023)', count: 4, total: '₹54,000' },
+    { date: '28 Oct 2026', class: 'Class V-A', feeType: 'Bus Transport Fee (Q2)', method: 'Cash Counter', count: 9, total: '₹40,500' },
+    { date: '27 Oct 2026', class: 'Class X-A', feeType: 'Term 2 Tuition Fee', method: 'UPI (Paytm)', count: 6, total: '₹87,000' },
+    { date: '27 Oct 2026', class: 'Class VII-A', feeType: 'Science & Computer Lab Fee', method: 'UPI (PhonePe)', count: 11, total: '₹35,200' },
+    { date: '26 Oct 2026', class: 'Class VI-A', feeType: 'Term 2 Tuition Fee', method: 'Cash Counter', count: 8, total: '₹96,000' },
+    { date: '26 Oct 2026', class: 'Class III-A', feeType: 'Term 2 Tuition Fee', method: 'Net Banking', count: 7, total: '₹73,500' },
+    { date: '25 Oct 2026', class: 'Class IV-A', feeType: 'Term 2 Tuition Fee', method: 'Cash Counter', count: 6, total: '₹66,000' },
+    { date: '25 Oct 2026', class: 'Class II-A', feeType: 'Term 2 Tuition Fee', method: 'UPI (PhonePe)', count: 8, total: '₹80,000' }
+  ];
+
+  const INITIAL_TRANSACTIONS_LEDGER_DATA = [
+    { txnId: 'TXN-2026-9041', type: 'Credit', amount: '₹14,500', ref: 'RCPT-2026-4891 • P. Hema Latha (Class X-A) - Term 2 Tuition', date: '29 Oct 2026, 11:20 AM', status: 'Bank Reconciled (SBI #30491)' },
+    { txnId: 'TXN-2026-9040', type: 'Credit', amount: '₹16,000', ref: 'RCPT-2026-4890 • M. Sravanthi (Class IX-A) - Term 2 + Computer Fee', date: '29 Oct 2026, 10:45 AM', status: 'Bank Reconciled (SBI #30491)' },
+    { txnId: 'TXN-2026-9039', type: 'Credit', amount: '₹11,000', ref: 'RCPT-2026-4889 • K. Tanvi Sree (Class I-A) - Term 2 Tuition', date: '29 Oct 2026, 09:50 AM', status: 'Cash Vault Reconciled' },
+    { txnId: 'REV-2026-0043', type: 'Debit', amount: '₹1,200', ref: 'Offsetting Reversal of TXN-2026-9012 (Double payment of Science Kit to K. Lokesh, Class IX-A) • Auth: Principal Smt. Gorle Varalakshmi', date: '28 Oct 2026, 05:00 PM', status: 'Audit Clearance Complete' },
+    { txnId: 'TXN-2026-9038', type: 'Credit', amount: '₹6,500', ref: 'RCPT-2026-4888 • CH. Karthik (Class VIII-A) - Term 1 Balance Due', date: '28 Oct 2026, 04:15 PM', status: 'Bank Reconciled (UPI Gateway)' },
+    { txnId: 'TXN-2026-9037', type: 'Credit', amount: '₹13,500', ref: 'RCPT-2026-4887 • V. Divya Bharathi (Class VIII-A) - Cheque #881023', date: '28 Oct 2026, 02:30 PM', status: 'Cheque Realized (SBI Clearing)' },
+    { txnId: 'REV-2026-0042', type: 'Debit', amount: '₹7,500', ref: 'Offsetting Reversal of TXN-2026-8810 (Duplicate UPI refund to G. Harini, Class VI-A) • Auth: Principal Smt. Gorle Varalakshmi', date: '20 Oct 2026, 04:30 PM', status: 'Bank Reconciled (SBI Ref #REV-7712)' },
+    { txnId: 'REV-2026-0041', type: 'Debit', amount: '₹8,500', ref: 'Offsetting Reversal of TXN-2026-8650 (TC pro-rata refund to P. Kiran Kumar, Class X-A) • Auth: Principal Smt. Gorle Varalakshmi', date: '22 Oct 2026, 02:15 PM', status: 'Bank Reconciled (HDFC NEFT #9812)' },
+    { txnId: 'TXN-2026-9036', type: 'Credit', amount: '₹4,500', ref: 'RCPT-2026-4886 • B. Mohan Krishna (Class V-A) - Bus Fee Q2', date: '28 Oct 2026, 11:15 AM', status: 'Cash Vault Reconciled' },
+    { txnId: 'TXN-2026-9035', type: 'Credit', amount: '₹14,500', ref: 'RCPT-2026-4885 • G. Ananya (Class X-A) - Term 2 Tuition', date: '20 Sep 2026, 03:40 PM', status: 'Bank Reconciled (Paytm UPI)' },
+    { txnId: 'TXN-2026-9034', type: 'Credit', amount: '₹3,200', ref: 'RCPT-2026-4884 • T. Varun Tej (Class VII-A) - Science Practical', date: '20 Sep 2026, 01:15 PM', status: 'Bank Reconciled (PhonePe UPI)' },
+    { txnId: 'TXN-2026-9033', type: 'Credit', amount: '₹12,000', ref: 'RCPT-2026-4883 • S. Sneha Latha (Class VI-A) - Term 2 Tuition', date: '19 Sep 2026, 04:30 PM', status: 'Cash Vault Reconciled' }
+  ];
+
+  // Active in-memory collections
+  let feeCollectionData = [...INITIAL_FEE_COLLECTION_DATA];
+  let feeStructureData = [...FEE_STRUCTURE_DATA];
+  let feeConcessionsData = [...INITIAL_FEE_CONCESSIONS_DATA];
+  let feeRefundsData = [...INITIAL_FEE_REFUNDS_DATA];
+  let feeReportsData = [...INITIAL_FEE_REPORTS_DATA];
+  let transactionsLedgerData = [...INITIAL_TRANSACTIONS_LEDGER_DATA];
+  let activeLedgerFilter = 'all';
+
+  // -------------------------------------------------------------------------
+  // SUBMENU 1: FEE COLLECTION
+  // Columns: Student, invoice, amount due, amount paid, payment method, receipt
+  // -------------------------------------------------------------------------
+  function renderFeeCollection(list) {
+    const tbody = document.getElementById('feeCollectionTableBody');
+    const legacyTbody = document.getElementById('feeTransactionsTableBody');
+    const data = list || feeCollectionData;
+
+    const html = data.map((tx, idx) => `
+      <tr>
+        <td>
+          <strong style="color: var(--color-text-dark);">${tx.student}</strong><br>
+          <small class="text-muted">${tx.class} &bull; ${tx.admNo || ('SV-00' + (20 + idx))}</small>
+        </td>
+        <td>
+          <code style="font-size: 0.82rem; font-weight: 700; color: #1e40af; background: #eff6ff; padding: 2px 6px; border-radius: 4px;">${tx.invoiceNo || ('INV-2026-' + (890 + idx))}</code><br>
+          <small class="text-muted">${tx.term}</small>
+        </td>
+        <td style="text-align: right; font-weight: 600; color: #475569;">
+          ${tx.amountDue || tx.amount}
+        </td>
+        <td style="text-align: right;">
+          <strong class="text-emerald" style="font-size: 0.95rem;">${tx.amountPaid || tx.amount}</strong>
+        </td>
+        <td style="text-align: center;">
+          <span class="portal-badge badge-primary"><i class="fa-solid fa-credit-card mr-1"></i>${tx.mode}</span><br>
+          <small class="text-muted">${tx.date}</small>
+        </td>
+        <td style="text-align: center;">
+          <button class="btn btn-secondary btn-sm" onclick="portalApp.printFeeReceiptSlip('${tx.receiptNo}')" title="Print Fee Receipt">
+            <i class="fa-solid fa-receipt mr-1"></i> ${tx.receiptNo}
+          </button>
+        </td>
+      </tr>
+    `).join('');
+
+    if (tbody) tbody.innerHTML = html;
+    if (legacyTbody) legacyTbody.innerHTML = html;
+  }
+
+  function filterFeeCollection() {
+    const search = (document.getElementById('feeCollectionSearchInput')?.value || '').toLowerCase();
+    const mode = document.getElementById('feeCollectionModeFilter')?.value || 'all';
+    const cls = document.getElementById('feeCollectionClassFilter')?.value || 'all';
+
+    const filtered = feeCollectionData.filter(tx => {
+      const matchSearch = !search || tx.student.toLowerCase().includes(search) || tx.receiptNo.toLowerCase().includes(search) || (tx.invoiceNo && tx.invoiceNo.toLowerCase().includes(search));
+      const matchMode = (mode === 'all') || tx.mode.toLowerCase().includes(mode.toLowerCase());
+      const matchClass = (cls === 'all') || tx.class === cls;
+      return matchSearch && matchMode && matchClass;
+    });
+
+    renderFeeCollection(filtered);
+  }
+
+  // -------------------------------------------------------------------------
+  // SUBMENU 2: PENDING DUES
+  // Columns: Student, class, outstanding amount, due date, overdue status, actions
+  // -------------------------------------------------------------------------
+  function renderDefaultersTable(list) {
+    const tbody = document.getElementById('defaultersTableBody');
+    if (!tbody) return;
+
+    const data = list || DEFAULTERS_DATA;
+    tbody.innerHTML = data.map(d => `
+      <tr>
+        <td>
+          <strong style="color: var(--color-text-dark);">${d.name}</strong><br>
+          <small class="text-muted">Adm: <strong>${d.admNo}</strong> &bull; Parent: ${d.parent}</small>
+        </td>
+        <td>
+          <span class="portal-badge badge-neutral">${d.class}</span>
+        </td>
+        <td style="text-align: right;">
+          <strong class="text-red" style="font-size: 0.95rem;">${d.amount}</strong><br>
+          <small class="text-muted">${d.head}</small>
+        </td>
+        <td>
+          <span style="font-weight: 600; color: #475569;"><i class="fa-regular fa-calendar-xmark text-danger mr-1"></i>${d.dueDate || '15 Oct 2026'}</span><br>
+          <small class="text-muted">${d.reminder}</small>
+        </td>
+        <td style="text-align: center;">
+          <span class="portal-badge ${d.aging.includes('Critical') ? 'badge-danger' : 'badge-warning'}">
+            <i class="fa-solid ${d.aging.includes('Critical') ? 'fa-triangle-exclamation' : 'fa-clock'} mr-1"></i>${d.aging}
+          </span>
+        </td>
+        <td style="text-align: center;">
+          <div class="table-action-btns" style="display: flex; gap: 0.35rem; justify-content: center;">
+            <button class="btn btn-primary btn-sm" onclick="portalApp.openModal('collectFeeModal'); portalApp.populateFeeModalStudent('${d.admNo}');" title="Collect Cash/UPI">
+              <i class="fa-solid fa-receipt"></i> Collect
+            </button>
+            <button class="btn btn-secondary btn-sm" onclick="portalApp.callParent('${d.phone}', '${d.parent}')" title="Call Parent">
+              <i class="fa-solid fa-phone"></i>
+            </button>
+          </div>
+        </td>
+      </tr>
+    `).join('');
+
+    // Update pending badge in tab strip and sidebar
+    const badge = document.getElementById('feePendingTabBadge');
+    if (badge) badge.textContent = '₹4.2L';
+  }
+
+  function filterDefaulters() {
+    const search = (document.getElementById('defaulterSearchInput')?.value || '').toLowerCase();
+    const aging = document.getElementById('defaulterAgingFilter')?.value || 'all';
+    const cls = document.getElementById('defaulterClassFilter')?.value || 'all';
+
+    const filtered = DEFAULTERS_DATA.filter(d => {
+      const matchSearch = !search || d.name.toLowerCase().includes(search) || d.admNo.toLowerCase().includes(search) || d.parent.toLowerCase().includes(search);
+      const matchAging = (aging === 'all') || (aging === 'critical' ? d.aging.includes('Critical') : !d.aging.includes('Critical'));
+      const matchClass = (cls === 'all') || d.class === cls;
+      return matchSearch && matchAging && matchClass;
+    });
+
+    renderDefaultersTable(filtered);
+  }
+
+  // -------------------------------------------------------------------------
+  // SUBMENU 3: FEE STRUCTURE
+  // Columns: Class-wise fee heads, instalments, due dates, academic year
+  // -------------------------------------------------------------------------
+  function renderFeeStructure(wingFilter) {
     const tbody = document.getElementById('feeStructureTableBody');
     if (!tbody) return;
 
-    const feeClasses = [
-      { cls: 'Class X', wing: 'Secondary (State Board)', tuition: '₹32,000', t1: '₹12,000', t2: '₹10,000', t3: '₹10,000', lab: '₹3,500', exam: '₹2,500', total: '₹38,000', due: '15-Jun, 15-Oct, 15-Jan' },
-      { cls: 'Class IX', wing: 'Secondary Wing', tuition: '₹30,000', t1: '₹11,000', t2: '₹9,500', t3: '₹9,500', lab: '₹3,000', exam: '₹2,000', total: '₹35,000', due: '15-Jun, 15-Oct, 15-Jan' },
-      { cls: 'Class VIII', wing: 'Upper Primary', tuition: '₹28,000', t1: '₹10,000', t2: '₹9,000', t3: '₹9,000', lab: '₹2,500', exam: '₹1,500', total: '₹32,000', due: '15-Jun, 15-Oct, 15-Jan' },
-      { cls: 'Class VII', wing: 'Upper Primary', tuition: '₹26,000', t1: '₹9,500', t2: '₹8,500', t3: '₹8,000', lab: '₹2,000', exam: '₹1,500', total: '₹29,500', due: '15-Jun, 15-Oct, 15-Jan' },
-      { cls: 'Class VI', wing: 'Upper Primary', tuition: '₹25,000', t1: '₹9,000', t2: '₹8,000', t3: '₹8,000', lab: '₹2,000', exam: '₹1,500', total: '₹28,500', due: '15-Jun, 15-Oct, 15-Jan' },
-      { cls: 'Class V', wing: 'Primary Wing', tuition: '₹23,000', t1: '₹8,500', t2: '₹7,500', t3: '₹7,000', lab: '₹1,500', exam: '₹1,500', total: '₹26,000', due: '15-Jun, 15-Oct, 15-Jan' },
-      { cls: 'Class IV', wing: 'Primary Wing', tuition: '₹22,000', t1: '₹8,000', t2: '₹7,000', t3: '₹7,000', lab: '₹1,500', exam: '₹1,500', total: '₹25,000', due: '15-Jun, 15-Oct, 15-Jan' },
-      { cls: 'Class III', wing: 'Primary Wing', tuition: '₹21,000', t1: '₹7,500', t2: '₹7,000', t3: '₹6,500', lab: '₹1,000', exam: '₹1,500', total: '₹23,500', due: '15-Jun, 15-Oct, 15-Jan' },
-      { cls: 'Class II', wing: 'Primary Wing', tuition: '₹20,000', t1: '₹7,000', t2: '₹6,500', t3: '₹6,500', lab: '₹1,000', exam: '₹1,500', total: '₹22,500', due: '15-Jun, 15-Oct, 15-Jan' },
-      { cls: 'Class I', wing: 'Foundational Stage', tuition: '₹19,000', t1: '₹7,000', t2: '₹6,000', t3: '₹6,000', lab: '₹1,000', exam: '₹1,000', total: '₹21,000', due: '15-Jun, 15-Oct, 15-Jan' },
-      { cls: 'Pre-Primary', wing: 'Early Childhood Wing', tuition: '₹18,000', t1: '₹6,500', t2: '₹6,000', t3: '₹5,500', lab: '₹500', exam: '₹1,000', total: '₹19,500', due: '15-Jun, 15-Oct, 15-Jan' }
-    ];
+    let data = feeStructureData;
+    if (wingFilter && wingFilter !== 'all') {
+      data = feeStructureData.filter(f => f.wing.toLowerCase().includes(wingFilter.toLowerCase()));
+    }
 
-    tbody.innerHTML = feeClasses.map(f => `
+    tbody.innerHTML = data.map(f => `
       <tr>
-        <td><strong>${f.cls}</strong></td>
-        <td><small class="text-muted">${f.wing}</small></td>
-        <td>${f.tuition}</td>
-        <td>${f.t1}</td>
-        <td>${f.t2}</td>
-        <td>${f.t3}</td>
-        <td>${f.lab}</td>
-        <td>${f.exam}</td>
-        <td><strong class="text-emerald">${f.total}</strong></td>
-        <td><small>${f.due}</small></td>
         <td>
-          <button class="btn btn-secondary btn-sm" onclick="portalApp.openCollectFeeModal('${f.cls}')" title="Collect Class Fees">
-            <i class="fa-solid fa-cash-register"></i> Collect
-          </button>
+          <div style="font-weight: 800; font-size: 0.95rem; color: var(--color-text-dark);">${f.cls} <small class="text-muted">(${f.wing})</small></div>
+          <div style="font-size: 0.8rem; color: #475569; margin-top: 2px;">
+            Tuition: <strong>${f.tuition}</strong> &bull; Lab/Comp: ${f.lab} &bull; Exam/Kit: ${f.exam}
+          </div>
+          <div style="margin-top: 3px;">
+            <strong class="text-emerald" style="font-size: 0.88rem;">Total Annual: ${f.total}</strong>
+          </div>
+        </td>
+        <td>
+          <span class="portal-badge badge-neutral" style="font-weight: 700;">3 Term Instalments</span>
+          <div style="font-size: 0.8rem; color: #475569; margin-top: 4px;">
+            Term 1: <strong>${f.t1}</strong> &bull; Term 2: <strong>${f.t2}</strong> &bull; Term 3: <strong>${f.t3}</strong>
+          </div>
+        </td>
+        <td>
+          <div style="font-weight: 600; color: #1e293b;"><i class="fa-regular fa-calendar-check text-primary mr-1"></i>${f.due}</div>
+          <small class="text-muted">Grace period: 7 working days from cutoff</small>
+        </td>
+        <td style="text-align: center;">
+          <span class="portal-badge badge-primary"><i class="fa-solid fa-graduation-cap mr-1"></i>2026–27 (Active)</span>
         </td>
       </tr>
     `).join('');
   }
 
-  function renderFeeConcessions() {
+  function filterFeeStructure(wing) {
+    renderFeeStructure(wing);
+  }
+
+  // -------------------------------------------------------------------------
+  // SUBMENU 4: CONCESSIONS & SCHOLARSHIPS
+  // Columns: Application, eligibility, requested concession, approval, effective amount
+  // -------------------------------------------------------------------------
+  function renderFeeConcessions(categoryFilter) {
     const tbody = document.getElementById('feeConcessionsTableBody');
     if (!tbody) return;
 
-    const sampleConcessions = [
-      { id: 'CON-2026-001', student: 'M. Manoj (SV-0095)', class: 'Class VIII-A', cat: 'Merit Scholar (Top 1% GPA)', annual: '₹32,000', waiver: '50% (₹16,000)', payable: '₹16,000', authority: 'Principal Dr. K.S. Rao', status: 'Sanctioned Active' },
-      { id: 'CON-2026-002', student: 'B. Vennela (SV-0145)', class: 'Class VI-A', cat: 'Sibling Concession (Elder in Cl. VIII)', annual: '₹28,500', waiver: '25% (₹7,125)', payable: '₹21,375', authority: 'Vice Principal L. Vani', status: 'Sanctioned Active' },
-      { id: 'CON-2026-003', student: 'CH. Swathi (SV-0182)', class: 'Class VII-A', cat: 'Staff Ward Benefit (Faculty Sunitha)', annual: '₹29,500', waiver: '40% (₹11,800)', payable: '₹17,700', authority: 'Managing Trustee', status: 'Sanctioned Active' },
-      { id: 'CON-2026-004', student: 'P. Harsha (SV-0089)', class: 'Class IX-A', cat: 'State Athletic Champion (Athletics)', annual: '₹35,000', waiver: '35% (₹12,250)', payable: '₹22,750', authority: 'Sports Board & Principal', status: 'Sanctioned Active' }
-    ];
+    let data = feeConcessionsData;
+    if (categoryFilter && categoryFilter !== 'all') {
+      data = feeConcessionsData.filter(c => c.cat.toLowerCase().includes(categoryFilter.toLowerCase()));
+    }
 
-    tbody.innerHTML = sampleConcessions.map(c => `
+    tbody.innerHTML = data.map(c => `
       <tr>
-        <td><strong>${c.id}</strong></td>
-        <td><strong>${c.student}</strong></td>
-        <td><span class="profile-tag tag-primary">${c.class}</span></td>
-        <td><span class="portal-badge badge-primary">${c.cat}</span></td>
-        <td>${c.annual}</td>
-        <td><strong class="text-emerald">${c.waiver}</strong></td>
-        <td><strong>${c.payable}</strong></td>
-        <td><small>${c.authority}</small></td>
-        <td><span class="portal-badge badge-success"><i class="fa-solid fa-check"></i> ${c.status}</span></td>
         <td>
-          <button class="btn btn-secondary btn-sm" onclick="portalApp.showToast('Concession sanction order ${c.id} verified', 'info')">
-            <i class="fa-solid fa-file-invoice"></i> Order
-          </button>
+          <code style="font-size: 0.82rem; font-weight: 800; color: #1e40af; background: #eff6ff; padding: 2px 6px; border-radius: 4px;">${c.id}</code><br>
+          <strong style="color: var(--color-text-dark);">${c.student}</strong><br>
+          <small class="text-muted">${c.class} &bull; Applied: ${c.appliedDate || '12 Jul 2026'}</small>
+        </td>
+        <td>
+          <span class="portal-badge badge-primary">${c.cat}</span><br>
+          <small class="text-muted">${c.criteria}</small>
+        </td>
+        <td>
+          <strong class="text-warning" style="font-size: 0.92rem;">${c.waiver}</strong><br>
+          <small class="text-muted">Standard Fee: ${c.annual}</small>
+        </td>
+        <td>
+          <span class="portal-badge badge-success"><i class="fa-solid fa-stamp mr-1"></i>${c.status}</span><br>
+          <small class="text-muted">Ratified By: <strong>${c.authority}</strong></small>
+        </td>
+        <td style="text-align: right;">
+          <strong class="text-emerald" style="font-size: 0.98rem;">${c.payable}</strong><br>
+          <small class="text-muted">Net Annual Payable</small>
         </td>
       </tr>
     `).join('');
   }
 
-  function renderFeeRefunds() {
+  function filterFeeConcessions() {
+    const search = (document.getElementById('concessionSearchInput')?.value || '').toLowerCase();
+    const cat = document.getElementById('concessionCategoryFilter')?.value || 'all';
+
+    const filtered = feeConcessionsData.filter(c => {
+      const matchSearch = !search || c.id.toLowerCase().includes(search) || c.student.toLowerCase().includes(search);
+      const matchCat = (cat === 'all') || c.cat.toLowerCase().includes(cat.toLowerCase());
+      return matchSearch && matchCat;
+    });
+
+    const tbody = document.getElementById('feeConcessionsTableBody');
+    if (!tbody) return;
+    tbody.innerHTML = filtered.map(c => `
+      <tr>
+        <td>
+          <code style="font-size: 0.82rem; font-weight: 800; color: #1e40af; background: #eff6ff; padding: 2px 6px; border-radius: 4px;">${c.id}</code><br>
+          <strong style="color: var(--color-text-dark);">${c.student}</strong><br>
+          <small class="text-muted">${c.class} &bull; Applied: ${c.appliedDate || '12 Jul 2026'}</small>
+        </td>
+        <td>
+          <span class="portal-badge badge-primary">${c.cat}</span><br>
+          <small class="text-muted">${c.criteria}</small>
+        </td>
+        <td>
+          <strong class="text-warning" style="font-size: 0.92rem;">${c.waiver}</strong><br>
+          <small class="text-muted">Standard Fee: ${c.annual}</small>
+        </td>
+        <td>
+          <span class="portal-badge badge-success"><i class="fa-solid fa-stamp mr-1"></i>${c.status}</span><br>
+          <small class="text-muted">Ratified By: <strong>${c.authority}</strong></small>
+        </td>
+        <td style="text-align: right;">
+          <strong class="text-emerald" style="font-size: 0.98rem;">${c.payable}</strong><br>
+          <small class="text-muted">Net Annual Payable</small>
+        </td>
+      </tr>
+    `).join('');
+  }
+
+  function handleConcessionSubmit(e) {
+    if (e && e.preventDefault) e.preventDefault();
+    const student = document.getElementById('concessionStudentSelect')?.value || 'Student';
+    const admNo = document.getElementById('concessionAdmNo')?.value || 'SV-0099';
+    const cls = document.getElementById('concessionClass')?.value || 'Class X-A';
+    const cat = document.getElementById('concessionCategory')?.value || 'Merit Scholarship';
+    const annual = document.getElementById('concessionAnnualStandard')?.value || '₹32,000';
+    const waiver = document.getElementById('concessionWaiverInput')?.value || '50% (₹16,000)';
+    const payable = document.getElementById('concessionPayableAmount')?.value || '₹16,000';
+    const criteria = document.getElementById('concessionEligibilityCriteria')?.value || 'Merit verification complete';
+
+    const newConcession = {
+      id: 'CON-2026-00' + (feeConcessionsData.length + 1),
+      student: student + ' (' + admNo + ')',
+      class: cls,
+      appliedDate: 'Today, Just Now',
+      cat: cat,
+      criteria: criteria,
+      annual: annual,
+      waiver: waiver,
+      payable: payable,
+      authority: 'Principal Smt. Gorle Varalakshmi',
+      status: 'Sanctioned Active'
+    };
+
+    feeConcessionsData.unshift(newConcession);
+    renderFeeConcessions();
+    closeModal('applyConcessionModal');
+    showToast('Concession Application ' + newConcession.id + ' approved and sanctioned by Principal Smt. Gorle Varalakshmi.', 'success');
+  }
+
+  function handleConcessionStudentChange(val) {
+    const s = (state.students || []).find(stu => stu.name === val || stu.admNo === val);
+    const admEl = document.getElementById('concessionAdmNo');
+    const classEl = document.getElementById('concessionClass');
+    if (admEl && s) admEl.value = s.admNo;
+    if (classEl && s) classEl.value = s.class + '-' + (s.section || 'A');
+  }
+
+  function handleConcessionCategoryChange(val) {
+    const waiverEl = document.getElementById('concessionWaiverInput');
+    const payableEl = document.getElementById('concessionPayableAmount');
+    if (val.includes('Merit')) {
+      if (waiverEl) waiverEl.value = '50% (₹16,000)';
+      if (payableEl) payableEl.value = '₹16,000';
+    } else if (val.includes('Sibling')) {
+      if (waiverEl) waiverEl.value = '25% (₹8,000)';
+      if (payableEl) payableEl.value = '₹24,000';
+    } else if (val.includes('Staff')) {
+      if (waiverEl) waiverEl.value = '40% (₹12,800)';
+      if (payableEl) payableEl.value = '₹19,200';
+    } else if (val.includes('Sports')) {
+      if (waiverEl) waiverEl.value = '35% (₹11,200)';
+      if (payableEl) payableEl.value = '₹20,800';
+    } else {
+      if (waiverEl) waiverEl.value = '30% (₹9,600)';
+      if (payableEl) payableEl.value = '₹22,400';
+    }
+  }
+
+  function exportConcessionsCSV() {
+    const headers = ['Application ID', 'Student', 'Class', 'Category', 'Eligibility Criteria', 'Standard Fee', 'Concession Waiver', 'Effective Payable', 'Sanctioning Authority', 'Status'];
+    const rows = feeConcessionsData.map(c => [
+      c.id,
+      '"' + c.student + '"',
+      c.class,
+      '"' + c.cat + '"',
+      '"' + c.criteria + '"',
+      c.annual,
+      c.waiver,
+      c.payable,
+      '"' + c.authority + '"',
+      c.status
+    ]);
+    const csvContent = [headers.join(','), ...rows.map(r => r.join(','))].join('\n');
+    downloadCsvFile(csvContent, 'SriVidya_Concessions_Scholarships_Register_2026-27.csv');
+    showToast('Concessions and scholarships register exported successfully.', 'success');
+  }
+
+  // -------------------------------------------------------------------------
+  // SUBMENU 5: REFUNDS
+  // Columns: Original transaction, refund reason, amount, approval, processing status
+  // Statutory Rule: Do not let an employee approve their own refund or modify a financial transaction without the required authorization.
+  // -------------------------------------------------------------------------
+  function renderFeeRefunds(statusFilter) {
     const tbody = document.getElementById('feeRefundsTableBody');
     if (!tbody) return;
 
-    const sampleRefunds = [
-      { vno: 'REF-2026-001', student: 'P. Kiran Kumar (SV-0082)', class: 'Withdrawn (TC Issued)', reason: 'Parent job transfer to Hyderabad; pro-rata Term-2 fee adjustment', req: '₹8,500', approved: '₹8,500', mode: 'Bank NEFT (HDFC 9812)', date: '22 Oct 2026', status: 'Settled' },
-      { vno: 'REF-2026-002', student: 'G. Harini (SV-0332)', class: 'Active Enrolled', reason: 'Duplicate online UPI gateway payment during Term-1 rush', req: '₹7,500', approved: '₹7,500', mode: 'Direct UPI Refund', date: '20 Oct 2026', status: 'Settled' },
-      { vno: 'REF-2026-003', student: 'R. Divya (SV-0119)', class: 'TC Processing', reason: 'Relocation to Vijayawada; Caution Deposit clearance', req: '₹3,000', approved: '₹3,000', mode: 'Account Payee Cheque', date: '19 Oct 2026', status: 'Approved (Pending Handover)' }
-    ];
+    let data = feeRefundsData;
+    if (statusFilter && statusFilter !== 'all') {
+      data = feeRefundsData.filter(r => r.status.toLowerCase().includes(statusFilter.toLowerCase()));
+    }
 
-    tbody.innerHTML = sampleRefunds.map(r => `
+    tbody.innerHTML = data.map(r => `
       <tr>
-        <td><strong>${r.vno}</strong></td>
-        <td><strong>${r.student}</strong></td>
-        <td><small class="text-muted">${r.class}</small></td>
-        <td><small>${r.reason}</small></td>
-        <td>${r.req}</td>
-        <td><strong class="text-emerald">${r.approved}</strong></td>
-        <td><small>${r.mode}</small></td>
-        <td><small>${r.date}</small></td>
-        <td><span class="portal-badge ${r.status === 'Settled' ? 'badge-success' : 'badge-warning'}">${r.status}</span></td>
         <td>
-          <button class="btn btn-secondary btn-sm" onclick="portalApp.showToast('Refund voucher ${r.vno} viewed', 'info')">
-            <i class="fa-solid fa-receipt"></i> Voucher
-          </button>
+          <code style="font-size: 0.82rem; font-weight: 800; color: #1e40af; background: #eff6ff; padding: 2px 6px; border-radius: 4px;">${r.origTxn}</code><br>
+          <strong style="color: var(--color-text-dark);">${r.student}</strong><br>
+          <small class="text-muted">${r.class} &bull; Voucher: <strong>${r.vno}</strong></small>
+        </td>
+        <td>
+          <div style="font-weight: 500; color: #1e293b;">${r.reason}</div>
+          <small class="text-muted"><i class="fa-regular fa-clock mr-1"></i>Date: ${r.date} &bull; Requester: <strong>${r.requester}</strong></small>
+        </td>
+        <td style="text-align: right;">
+          <strong class="text-red" style="font-size: 0.98rem;">${r.amount}</strong><br>
+          <small class="text-muted">${r.mode}</small>
+        </td>
+        <td>
+          ${r.status === 'Settled' || r.status.includes('Approved') ? `
+            <span class="portal-badge badge-success"><i class="fa-solid fa-stamp mr-1"></i>Sanctioned</span><br>
+            <small class="text-muted">By: <strong>${r.approver}</strong></small>
+          ` : `
+            <span class="portal-badge badge-warning"><i class="fa-solid fa-clock mr-1"></i>Pending Audit</span><br>
+            <button class="btn btn-sm btn-outline-primary" style="margin-top: 4px; padding: 2px 8px; font-size: 0.75rem;" onclick="portalApp.handleApproveRefund('${r.vno}', '${r.requester}')">
+              <i class="fa-solid fa-shield-check mr-1"></i> Authorize Refund
+            </button>
+          `}
+        </td>
+        <td style="text-align: center;">
+          <span class="portal-badge ${r.status === 'Settled' ? 'badge-success' : (r.status.includes('Approved') ? 'badge-primary' : 'badge-warning')}">
+            ${r.status}
+          </span>
         </td>
       </tr>
     `).join('');
   }
+
+  function filterFeeRefunds() {
+    const search = (document.getElementById('refundSearchInput')?.value || '').toLowerCase();
+    const st = document.getElementById('refundStatusFilter')?.value || 'all';
+
+    const filtered = feeRefundsData.filter(r => {
+      const matchSearch = !search || r.vno.toLowerCase().includes(search) || r.student.toLowerCase().includes(search) || r.origTxn.toLowerCase().includes(search);
+      const matchStatus = (st === 'all') || r.status.toLowerCase().includes(st.toLowerCase());
+      return matchSearch && matchStatus;
+    });
+
+    renderFeeRefunds(st === 'all' ? null : st);
+  }
+
+  function handleApproveRefund(vno, requester) {
+    const currentUserRole = state.currentRole || 'clerk';
+    const currentUserName = (state.currentUser && state.currentUser.name) || 'S. Ramu (Accounts Clerk)';
+
+    // Statutory segregation of duties enforcement:
+    // "Do not let an employee approve their own refund or modify a financial transaction without the required authorization."
+    if (currentUserRole === 'admin' || currentUserRole === 'clerk' || (requester && requester.toLowerCase().includes(currentUserName.toLowerCase())) || (requester && currentUserName.toLowerCase().includes(requester.toLowerCase()))) {
+      showToast(`Statutory Restriction: Employee '${requester}' cannot approve their own refund or sanction disbursements. Per internal financial controls, approval requires independent audit signoff by Principal Smt. Gorle Varalakshmi.`, 'warning');
+      return;
+    }
+
+    const ref = feeRefundsData.find(x => x.vno === vno);
+    if (ref) {
+      ref.status = 'Approved (Pending Handover)';
+      ref.approver = 'Principal Smt. Gorle Varalakshmi';
+      renderFeeRefunds();
+      showToast('Refund voucher ' + vno + ' successfully sanctioned by Principal Smt. Gorle Varalakshmi.', 'success');
+    }
+  }
+
+  // -------------------------------------------------------------------------
+  // SUBMENU 6: FEE REPORTS
+  // Collections by date, class, fee type and payment method
+  // -------------------------------------------------------------------------
+  function renderFeeReports(filters) {
+    const tbody = document.getElementById('feeReportsTableBody');
+    if (!tbody) return;
+
+    let data = feeReportsData;
+    if (filters) {
+      if (filters.cls && filters.cls !== 'all') data = data.filter(d => d.class === filters.cls);
+      if (filters.feeType && filters.feeType !== 'all') data = data.filter(d => d.feeType.toLowerCase().includes(filters.feeType.toLowerCase()));
+      if (filters.method && filters.method !== 'all') data = data.filter(d => d.method.toLowerCase().includes(filters.method.toLowerCase()));
+    }
+
+    tbody.innerHTML = data.map(r => `
+      <tr>
+        <td><strong>${r.date}</strong></td>
+        <td><span class="portal-badge badge-neutral">${r.class}</span></td>
+        <td><span>${r.feeType}</span></td>
+        <td style="text-align: center;"><span class="portal-badge badge-primary">${r.method}</span></td>
+        <td style="text-align: center; font-weight: 700;">${r.count}</td>
+        <td style="text-align: right;"><strong class="text-emerald" style="font-size: 0.96rem;">${r.total}</strong></td>
+      </tr>
+    `).join('');
+  }
+
+  function filterFeeReports() {
+    const cls = document.getElementById('feeReportClassFilter')?.value || 'all';
+    const feeType = document.getElementById('feeReportHeadFilter')?.value || 'all';
+    const method = document.getElementById('feeReportModeFilter')?.value || 'all';
+    renderFeeReports({ cls, feeType, method });
+  }
+
+  // -------------------------------------------------------------------------
+  // SUBMENU 7: TRANSACTIONS LEDGER
+  // Columns: Transaction ID, debit/credit entry, reference, date, reconciliation status
+  // Statutory Rule: Record reversals instead of silently changing completed transactions.
+  // -------------------------------------------------------------------------
+  function renderTransactionsLedger(filter) {
+    const tbody = document.getElementById('transactionsLedgerTableBody');
+    if (!tbody) return;
+
+    const f = filter || activeLedgerFilter;
+    let data = transactionsLedgerData;
+    if (f === 'credit') data = data.filter(t => t.type === 'Credit');
+    else if (f === 'debit') data = data.filter(t => t.type === 'Debit');
+    else if (f === 'reconciled') data = data.filter(t => t.status.toLowerCase().includes('reconciled') || t.status.toLowerCase().includes('cleared'));
+
+    tbody.innerHTML = data.map(tx => `
+      <tr>
+        <td>
+          <code style="font-size: 0.85rem; font-weight: 800; color: ${tx.type === 'Credit' ? '#1e40af' : '#b91c1c'}; background: ${tx.type === 'Credit' ? '#eff6ff' : '#fef2f2'}; padding: 2px 6px; border-radius: 4px;">${tx.txnId}</code><br>
+          <small class="text-muted"><i class="fa-solid fa-lock mr-1"></i>Immutable Journal Entry</small>
+        </td>
+        <td style="text-align: right;">
+          ${tx.type === 'Credit' ? `
+            <strong class="text-emerald" style="font-size: 0.96rem;"><i class="fa-solid fa-arrow-down-left mr-1"></i>+ ${tx.amount}</strong><br>
+            <span class="portal-badge badge-success" style="font-size: 0.72rem; padding: 2px 6px;">Credit (Inflow)</span>
+          ` : `
+            <strong class="text-red" style="font-size: 0.96rem;"><i class="fa-solid fa-arrow-up-right mr-1"></i>- ${tx.amount}</strong><br>
+            <span class="portal-badge badge-danger" style="font-size: 0.72rem; padding: 2px 6px;">Debit (Audited Reversal)</span>
+          `}
+        </td>
+        <td>
+          <div style="font-weight: 600; color: var(--color-text-dark);">${tx.ref}</div>
+        </td>
+        <td>
+          <span style="font-size: 0.86rem; color: #475569;">${tx.date}</span>
+        </td>
+        <td style="text-align: center;">
+          <span class="portal-badge ${tx.type === 'Credit' ? 'badge-primary' : 'badge-warning'}">
+            <i class="fa-solid fa-check-double mr-1"></i>${tx.status}
+          </span>
+        </td>
+      </tr>
+    `).join('');
+
+    // Update filter pill counts
+    const countAll = document.getElementById('ledgerCountAll');
+    const countCredit = document.getElementById('ledgerCountCredit');
+    const countDebit = document.getElementById('ledgerCountDebit');
+    const countRec = document.getElementById('ledgerCountReconciled');
+    if (countAll) countAll.textContent = transactionsLedgerData.length;
+    if (countCredit) countCredit.textContent = transactionsLedgerData.filter(t => t.type === 'Credit').length;
+    if (countDebit) countDebit.textContent = transactionsLedgerData.filter(t => t.type === 'Debit').length;
+    if (countRec) countRec.textContent = transactionsLedgerData.filter(t => t.status.toLowerCase().includes('reconciled') || t.status.toLowerCase().includes('cleared')).length;
+  }
+
+  function setLedgerFilter(filter) {
+    activeLedgerFilter = filter;
+    ['btnLedgerFilterAll', 'btnLedgerFilterCredit', 'btnLedgerFilterDebit', 'btnLedgerFilterReconciled'].forEach(id => {
+      const btn = document.getElementById(id);
+      if (btn) btn.classList.remove('active');
+    });
+
+    const activeBtn = document.getElementById('btnLedgerFilter' + filter.charAt(0).toUpperCase() + filter.slice(1));
+    if (activeBtn) activeBtn.classList.add('active');
+
+    renderTransactionsLedger(filter);
+  }
+
+  function openRecordReversalModal(txnId) {
+    openModal('recordReversalModal');
+    if (txnId) {
+      const select = document.getElementById('reversalTargetTxn');
+      if (select) {
+        select.value = txnId;
+        handleReversalTxnSelect(txnId);
+      }
+    }
+  }
+
+  function handleReversalTxnSelect(txnId) {
+    const orig = transactionsLedgerData.find(t => t.txnId === txnId);
+    const amountEl = document.getElementById('reversalOriginalAmount');
+    const debitEl = document.getElementById('reversalDebitAmount');
+    if (orig) {
+      if (amountEl) amountEl.value = orig.amount;
+      const num = parseInt(orig.amount.replace(/\D/g, ''), 10) || 0;
+      if (debitEl) debitEl.value = num;
+    }
+  }
+
+  function submitTransactionReversal(e) {
+    if (e && e.preventDefault) e.preventDefault();
+    const targetTxn = document.getElementById('reversalTargetTxn')?.value;
+    const debitAmount = document.getElementById('reversalDebitAmount')?.value;
+    const reasonCat = document.getElementById('reversalReasonCat')?.value || 'Duplicate Payment';
+    const auditNote = document.getElementById('reversalAuditNote')?.value || 'Reversal processed';
+
+    if (!targetTxn) {
+      showToast('Please select a target completed transaction to reverse.', 'error');
+      return;
+    }
+
+    // Generate offsetting reversal debit voucher
+    const revCount = transactionsLedgerData.filter(t => t.type === 'Debit').length + 1;
+    const revId = 'REV-2026-00' + (40 + revCount);
+
+    const reversalEntry = {
+      txnId: revId,
+      type: 'Debit',
+      amount: '₹' + parseInt(debitAmount, 10).toLocaleString('en-IN'),
+      ref: 'Offsetting Reversal of ' + targetTxn + ' (' + reasonCat + ': ' + auditNote + ') • Authorized by Principal Smt. Gorle Varalakshmi',
+      date: 'Today, Just Now',
+      status: 'SBI Reversal Ledger Ref #' + revId + ' - Verified'
+    };
+
+    transactionsLedgerData.unshift(reversalEntry);
+    renderTransactionsLedger();
+    closeModal('recordReversalModal');
+    showToast('Audited Reversal Entry ' + revId + ' posted to ledger. Completed transactions remain immutable per statutory governance.', 'success');
+  }
+
+  function printTransactionsLedger() {
+    window.print();
+  }
+
+  function exportTransactionsLedgerCSV() {
+    const headers = ['Transaction ID', 'Entry Type', 'Amount (₹)', 'Reference Particulars', 'Timestamp', 'Reconciliation Status'];
+    const rows = transactionsLedgerData.map(t => [
+      t.txnId,
+      t.type,
+      '"' + t.amount + '"',
+      '"' + t.ref + '"',
+      '"' + t.date + '"',
+      '"' + t.status + '"'
+    ]);
+    const csvContent = [headers.join(','), ...rows.map(r => r.join(','))].join('\n');
+    downloadCsvFile(csvContent, 'SriVidya_Transactions_Ledger_2026-27.csv');
+    showToast('Official immutable transactions ledger exported successfully.', 'success');
+  }
+
 
   // =========================================================================
   // TIMETABLE MODULE RENDERERS
@@ -19743,62 +20304,10 @@ const classData = TIMETABLE_CLASS_DATA[currentTimetableClass] || TIMETABLE_CLASS
 
   
 
-  function renderDefaultersTable() {
-    const tbody = document.getElementById('defaultersTableBody');
-    if (!tbody) return;
-
-    tbody.innerHTML = DEFAULTERS_DATA.map(d => `
-      <tr>
-        <td><strong>${d.admNo}</strong></td>
-        <td>
-          <strong>${d.name}</strong><br>
-          <small class="text-muted">Parent: ${d.parent}</small>
-        </td>
-        <td><span class="portal-badge badge-neutral">${d.class}</span></td>
-        <td>${d.head}</td>
-        <td><span class="portal-badge badge-warning">${d.aging}</span></td>
-        <td><strong class="text-red">${d.amount}</strong></td>
-        <td><small class="text-muted">${d.reminder}</small></td>
-        <td>
-          <div class="table-action-btns">
-            <button class="btn btn-primary btn-sm" onclick="portalApp.openModal('collectFeeModal'); portalApp.populateFeeModalStudent('${d.admNo}');" title="Collect Cash/UPI">
-              <i class="fa-solid fa-receipt"></i> Collect
-            </button>
-            <button class="btn btn-secondary btn-sm" onclick="portalApp.callParent('${d.phone}', '${d.parent}')" title="Call Parent">
-              <i class="fa-solid fa-phone"></i>
-            </button>
-          </div>
-        </td>
-      </tr>
-    `).join('');
-  }
+  // Note: renderDefaultersTable is defined in the Fees & Finance module section above with exact 6 columns
 
   function renderFeeLedgerTable() {
-    const tbody = document.getElementById('feeLedgerTableBody');
-    if (!tbody) return;
-
-    const transactions = (state.feeTransactions || []);
-    tbody.innerHTML = transactions.map(t => `
-      <tr>
-        <td><strong>${t.receiptNo}</strong></td>
-        <td><small class="text-muted">${t.date}</small></td>
-        <td>
-          <strong>${t.student}</strong><br>
-          <small class="text-muted">${t.class}</small>
-        </td>
-        <td><span class="portal-badge badge-neutral">${t.class}</span></td>
-        <td>${t.term}</td>
-        <td><span class="portal-badge badge-primary">${t.mode}</span></td>
-        <td><strong class="text-emerald">${t.amount}</strong></td>
-        <td>${t.cashier}</td>
-        <td><span class="portal-badge badge-success"><i class="fa-solid fa-circle-check"></i> Paid</span></td>
-        <td>
-          <button class="btn btn-secondary btn-sm" onclick="portalApp.printFeeReceiptSlip('${t.receiptNo}')" title="Print Fee Receipt">
-            <i class="fa-solid fa-print"></i> Slip
-          </button>
-        </td>
-      </tr>
-    `).join('');
+    renderTransactionsLedger();
   }
 
   // =========================================================================
@@ -23748,6 +24257,30 @@ const classData = TIMETABLE_CLASS_DATA[currentTimetableClass] || TIMETABLE_CLASS
     syncOfflineBiometricLogs,
     filterStaffAttendanceTable,
     resetStaffAttendanceFilters,
+    renderFeeCollection,
+    filterFeeCollection,
+    renderDefaultersTable,
+    filterDefaulters,
+    renderFeeStructure,
+    filterFeeStructure,
+    renderFeeConcessions,
+    filterFeeConcessions,
+    handleConcessionSubmit,
+    handleConcessionStudentChange,
+    handleConcessionCategoryChange,
+    exportConcessionsCSV,
+    renderFeeRefunds,
+    filterFeeRefunds,
+    handleApproveRefund,
+    renderFeeReports,
+    filterFeeReports,
+    renderTransactionsLedger,
+    setLedgerFilter,
+    openRecordReversalModal,
+    handleReversalTxnSelect,
+    submitTransactionReversal,
+    printTransactionsLedger,
+    exportTransactionsLedgerCSV,
     exportStaffAttendanceCSV,
     printStaffAttendanceRegister
   };
