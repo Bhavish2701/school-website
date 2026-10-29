@@ -213,8 +213,10 @@
       </div>
 
       <!-- Navigation Modules Menu -->
+            <!-- Navigation Modules Menu (Faculty Portal - 20 Submenu Specification) -->
+            <!-- Navigation Modules Menu (Faculty Portal - 20 Submenu Specification) -->
       <nav class="sidebar-menu" id="teacherSidebarMenu">
-        <div class="nav-section-title">TEACHER PORTAL</div>
+        <div class="nav-section-title">DAILY TEACHING</div>
 
         <!-- 1. Dashboard -->
         <div class="nav-item active" data-module="dashboard">
@@ -225,130 +227,134 @@
           </a>
         </div>
 
-        <!-- 2. My Classes -->
+        <!-- 2 & 3. My Classes & Student Profiles -->
         <div class="nav-item" data-module="my-classes">
-          <a href="#my-classes" class="nav-link" onclick="teacherApp.navigateTo('my-classes'); return false;">
+          <a href="#my-classes" class="nav-link" onclick="teacherApp.navigateTo('my-classes', 'classes'); return false;">
             <span class="nav-icon"><i class="fa-solid fa-shapes"></i></span>
             <span class="nav-text">My Classes</span>
             <span class="nav-arrow"><i class="fa-solid fa-chevron-right"></i></span>
           </a>
           <div class="nav-sub">
-            <a href="#my-classes-classes" class="nav-sub-link active" data-sub="classes" onclick="teacherApp.switchSubTab('my-classes', 'classes'); return false;">Assigned Classes</a>
-            <a href="#my-classes-roster" class="nav-sub-link" data-sub="roster" onclick="teacherApp.switchSubTab('my-classes', 'roster'); return false;">Class Lists</a>
-            <a href="#my-classes-profiles" class="nav-sub-link" data-sub="profiles" onclick="teacherApp.switchSubTab('my-classes', 'profiles'); return false;">Student Profiles</a>
+            <a href="#my-classes" class="nav-sub-link active" data-sub="classes" onclick="teacherApp.navigateTo('my-classes', 'classes'); return false;">My Classes</a>
+            <a href="#student-profiles" class="nav-sub-link" data-sub="profiles" onclick="teacherApp.navigateTo('my-classes', 'profiles'); return false;">Student Profiles</a>
           </div>
         </div>
 
-        <!-- 3. Attendance -->
+        <!-- 4 & 5. Mark Attendance & Attendance History -->
         <div class="nav-item" data-module="attendance">
-          <a href="#attendance" class="nav-link" onclick="teacherApp.navigateTo('attendance'); return false;">
+          <a href="#attendance" class="nav-link" onclick="teacherApp.navigateTo('attendance', 'mark'); return false;">
             <span class="nav-icon"><i class="fa-solid fa-clipboard-check"></i></span>
             <span class="nav-text">Attendance</span>
             <span class="nav-arrow"><i class="fa-solid fa-chevron-right"></i></span>
           </a>
           <div class="nav-sub">
-            <a href="#attendance-mark" class="nav-sub-link active" data-sub="mark" onclick="teacherApp.switchSubTab('attendance', 'mark'); return false;">Mark Attendance</a>
-            <a href="#attendance-history" class="nav-sub-link" data-sub="history" onclick="teacherApp.switchSubTab('attendance', 'history'); return false;">Attendance History</a>
-            <a href="#attendance-corrections" class="nav-sub-link" data-sub="corrections" onclick="teacherApp.switchSubTab('attendance', 'corrections'); return false;">Correction Requests</a>
+            <a href="#attendance-mark" class="nav-sub-link active" data-sub="mark" onclick="teacherApp.navigateTo('attendance', 'mark'); return false;">Mark Attendance</a>
+            <a href="#attendance-history" class="nav-sub-link" data-sub="history" onclick="teacherApp.navigateTo('attendance', 'history'); return false;">Attendance History</a>
           </div>
         </div>
 
-        <!-- 4. Academics -->
+        <div class="nav-section-title">ACADEMICS &amp; WORK</div>
+
+        <!-- 6, 7 & 8. Lesson Plans, Syllabus Progress & Study Materials -->
         <div class="nav-item" data-module="academics">
-          <a href="#academics" class="nav-link" onclick="teacherApp.navigateTo('academics'); return false;">
+          <a href="#academics" class="nav-link" onclick="teacherApp.navigateTo('academics', 'plans'); return false;">
             <span class="nav-icon"><i class="fa-solid fa-book-open"></i></span>
             <span class="nav-text">Academics</span>
             <span class="nav-arrow"><i class="fa-solid fa-chevron-right"></i></span>
           </a>
           <div class="nav-sub">
-            <a href="#academics-plans" class="nav-sub-link active" data-sub="plans" onclick="teacherApp.switchSubTab('academics', 'plans'); return false;">Lesson Plans</a>
-            <a href="#academics-syllabus" class="nav-sub-link" data-sub="syllabus" onclick="teacherApp.switchSubTab('academics', 'syllabus'); return false;">Syllabus Progress</a>
-            <a href="#academics-materials" class="nav-sub-link" data-sub="materials" onclick="teacherApp.switchSubTab('academics', 'materials'); return false;">Study Materials</a>
+            <a href="#academics-plans" class="nav-sub-link active" data-sub="plans" onclick="teacherApp.navigateTo('academics', 'plans'); return false;">Lesson Plans</a>
+            <a href="#academics-syllabus" class="nav-sub-link" data-sub="syllabus" onclick="teacherApp.navigateTo('academics', 'syllabus'); return false;">Syllabus Progress</a>
+            <a href="#academics-materials" class="nav-sub-link" data-sub="materials" onclick="teacherApp.navigateTo('academics', 'materials'); return false;">Study Materials</a>
           </div>
         </div>
 
-        <!-- 5. Assignments -->
+        <!-- 9 & 10. Assignments & Student Submissions -->
         <div class="nav-item" data-module="assignments">
-          <a href="#assignments" class="nav-link" onclick="teacherApp.navigateTo('assignments'); return false;">
+          <a href="#assignments" class="nav-link" onclick="teacherApp.navigateTo('assignments', 'create'); return false;">
             <span class="nav-icon"><i class="fa-solid fa-file-signature"></i></span>
             <span class="nav-text">Assignments</span>
             <span class="nav-badge" id="sidebarHwBadge">3 Active</span>
             <span class="nav-arrow"><i class="fa-solid fa-chevron-right"></i></span>
           </a>
           <div class="nav-sub">
-            <a href="#assignments-create" class="nav-sub-link active" data-sub="create" onclick="teacherApp.switchSubTab('assignments', 'create'); return false;">Create Assignment</a>
-            <a href="#assignments-submissions" class="nav-sub-link" data-sub="submissions" onclick="teacherApp.switchSubTab('assignments', 'submissions'); return false;">Submissions</a>
-            <a href="#assignments-feedback" class="nav-sub-link" data-sub="feedback" onclick="teacherApp.switchSubTab('assignments', 'feedback'); return false;">Grading &amp; Feedback</a>
+            <a href="#assignments-create" class="nav-sub-link active" data-sub="create" onclick="teacherApp.navigateTo('assignments', 'create'); return false;">Assignments</a>
+            <a href="#assignments-submissions" class="nav-sub-link" data-sub="submissions" onclick="teacherApp.navigateTo('assignments', 'submissions'); return false;">Student Submissions</a>
           </div>
         </div>
 
-        <!-- 6. Examinations -->
+        <!-- 11, 12 & 13. Examination Schedule, Enter Marks & Marks Review -->
         <div class="nav-item" data-module="examinations">
-          <a href="#examinations" class="nav-link" onclick="teacherApp.navigateTo('examinations'); return false;">
+          <a href="#examinations" class="nav-link" onclick="teacherApp.navigateTo('examinations', 'schedule'); return false;">
             <span class="nav-icon"><i class="fa-solid fa-file-pen"></i></span>
             <span class="nav-text">Examinations</span>
             <span class="nav-arrow"><i class="fa-solid fa-chevron-right"></i></span>
           </a>
           <div class="nav-sub">
-            <a href="#exams-schedule" class="nav-sub-link active" data-sub="schedule" onclick="teacherApp.switchSubTab('examinations', 'schedule'); return false;">Exam Schedule</a>
-            <a href="#exams-entermarks" class="nav-sub-link" data-sub="enter-marks" onclick="teacherApp.switchSubTab('examinations', 'enter-marks'); return false;">Enter Marks</a>
-            <a href="#exams-review" class="nav-sub-link" data-sub="review" onclick="teacherApp.switchSubTab('examinations', 'review'); return false;">Submit Marks for Review</a>
+            <a href="#exams-schedule" class="nav-sub-link active" data-sub="schedule" onclick="teacherApp.navigateTo('examinations', 'schedule'); return false;">Examination Schedule</a>
+            <a href="#exams-entermarks" class="nav-sub-link" data-sub="enter-marks" onclick="teacherApp.navigateTo('examinations', 'enter-marks'); return false;">Enter Marks</a>
+            <a href="#exams-review" class="nav-sub-link" data-sub="review" onclick="teacherApp.navigateTo('examinations', 'review'); return false;">Marks Review</a>
           </div>
         </div>
 
-        <!-- 7. Timetable -->
+        <div class="nav-section-title">SCHEDULE &amp; MEETINGS</div>
+
+        <!-- 14. My Timetable -->
         <div class="nav-item" data-module="timetable">
-          <a href="#timetable" class="nav-link" onclick="teacherApp.navigateTo('timetable'); return false;">
+          <a href="#timetable" class="nav-link" onclick="teacherApp.navigateTo('timetable', 'my'); return false;">
             <span class="nav-icon"><i class="fa-solid fa-calendar-days"></i></span>
-            <span class="nav-text">Timetable</span>
-            <span class="nav-arrow"><i class="fa-solid fa-chevron-right"></i></span>
+            <span class="nav-text">My Timetable</span>
           </a>
-          <div class="nav-sub">
-            <a href="#timetable-my" class="nav-sub-link active" data-sub="my" onclick="teacherApp.switchSubTab('timetable', 'my'); return false;">My Timetable</a>
-            <a href="#timetable-substitutions" class="nav-sub-link" data-sub="substitutions" onclick="teacherApp.switchSubTab('timetable', 'substitutions'); return false;">Substitution Schedule</a>
-          </div>
         </div>
 
-        <!-- 8. Communication -->
+        <!-- 15. Parent Meetings -->
+        <div class="nav-item" data-module="appointments">
+          <a href="#appointments" class="nav-link" onclick="teacherApp.navigateTo('appointments'); return false;">
+            <span class="nav-icon"><i class="fa-solid fa-handshake-angle"></i></span>
+            <span class="nav-text">Parent Meetings</span>
+            <span class="nav-badge" style="background:#eff6ff; color:#1d4ed8;">2 PTM</span>
+          </a>
+        </div>
+
+        <!-- 16. Communication -->
         <div class="nav-item" data-module="communication">
           <a href="#communication" class="nav-link" onclick="teacherApp.navigateTo('communication'); return false;">
             <span class="nav-icon"><i class="fa-solid fa-comments"></i></span>
             <span class="nav-text">Communication</span>
             <span class="nav-badge" style="background: var(--color-accent-amber); color:#fff;">2 New</span>
-            <span class="nav-arrow"><i class="fa-solid fa-chevron-right"></i></span>
           </a>
-          <div class="nav-sub">
-            <a href="#comm-class" class="nav-sub-link active" data-sub="class-announcements" onclick="teacherApp.switchSubTab('communication', 'class-announcements'); return false;">Class Announcements</a>
-            <a href="#comm-parents" class="nav-sub-link" data-sub="parent-messages" onclick="teacherApp.switchSubTab('communication', 'parent-messages'); return false;">Parent Messages</a>
-            <a href="#comm-notices" class="nav-sub-link" data-sub="school-notices" onclick="teacherApp.switchSubTab('communication', 'school-notices'); return false;">School Notices</a>
-          </div>
         </div>
 
-        <!-- 9. Leave Management -->
+        <div class="nav-section-title">LEAVE &amp; WORKSPACE</div>
+
+        <!-- 17 & 18. Apply Leave & Leave History -->
         <div class="nav-item" data-module="leave">
-          <a href="#leave" class="nav-link" onclick="teacherApp.navigateTo('leave'); return false;">
+          <a href="#leave" class="nav-link" onclick="teacherApp.navigateTo('leave', 'apply'); return false;">
             <span class="nav-icon"><i class="fa-solid fa-calendar-minus"></i></span>
             <span class="nav-text">Leave Management</span>
             <span class="nav-arrow"><i class="fa-solid fa-chevron-right"></i></span>
           </a>
           <div class="nav-sub">
-            <a href="#leave-apply" class="nav-sub-link active" data-sub="apply" onclick="teacherApp.switchSubTab('leave', 'apply'); return false;">Apply Leave</a>
-            <a href="#leave-history" class="nav-sub-link" data-sub="history" onclick="teacherApp.switchSubTab('leave', 'history'); return false;">Leave History</a>
+            <a href="#leave-apply" class="nav-sub-link active" data-sub="apply" onclick="teacherApp.navigateTo('leave', 'apply'); return false;">Apply Leave</a>
+            <a href="#leave-history" class="nav-sub-link" data-sub="history" onclick="teacherApp.navigateTo('leave', 'history'); return false;">Leave History</a>
           </div>
         </div>
 
-        <!-- 10. My Profile -->
+        <!-- 19. My Tasks -->
+        <div class="nav-item" data-module="tasks">
+          <a href="#tasks" class="nav-link" onclick="teacherApp.navigateTo('tasks'); return false;">
+            <span class="nav-icon"><i class="fa-solid fa-list-check"></i></span>
+            <span class="nav-text">My Tasks</span>
+            <span class="nav-badge" style="background:#fee2e2; color:#dc2626;">3 Due</span>
+          </a>
+        </div>
+
+        <!-- 20. My Profile -->
         <div class="nav-item" data-module="profile">
           <a href="#profile" class="nav-link" onclick="teacherApp.navigateTo('profile'); return false;">
             <span class="nav-icon"><i class="fa-solid fa-id-badge"></i></span>
             <span class="nav-text">My Profile</span>
-            <span class="nav-arrow"><i class="fa-solid fa-chevron-right"></i></span>
           </a>
-          <div class="nav-sub">
-            <a href="#profile-personal" class="nav-sub-link active" data-sub="personal" onclick="teacherApp.switchSubTab('profile', 'personal'); return false;">Personal Details</a>
-            <a href="#profile-documents" class="nav-sub-link" data-sub="documents" onclick="teacherApp.switchSubTab('profile', 'documents'); return false;">Documents</a>
-            <a href="#profile-password" class="nav-sub-link" data-sub="password" onclick="teacherApp.switchSubTab('profile', 'password'); return false;">Change Password</a>
-          </div>
         </div>
       </nav>
 
@@ -969,13 +975,13 @@
 
           <div class="tab-strip" id="examinationsTabStrip">
             <button type="button" class="tab-btn active" data-sub="schedule" onclick="teacherApp.switchSubTab('examinations', 'schedule'); return false;">
-              <i class="fa-solid fa-calendar-days mr-1"></i> Exam Schedule
+              <i class="fa-solid fa-calendar-days mr-1"></i> Examination Schedule
             </button>
             <button type="button" class="tab-btn" data-sub="enter-marks" onclick="teacherApp.switchSubTab('examinations', 'enter-marks'); return false;">
               <i class="fa-solid fa-pen-to-square mr-1"></i> Enter Marks
             </button>
             <button type="button" class="tab-btn" data-sub="review" onclick="teacherApp.switchSubTab('examinations', 'review'); return false;">
-              <i class="fa-solid fa-clipboard-check mr-1"></i> Submit Marks for Review
+              <i class="fa-solid fa-clipboard-check mr-1"></i> Marks Review
             </button>
           </div>
 
@@ -1122,13 +1128,16 @@
              ================================================================= -->
         <section class="portal-view" id="view-leave">
           <div class="card-header-bar mb-3">
-            <h2><i class="fa-solid fa-calendar-minus text-primary"></i> Teacher Leave Management</h2>
-            <button class="btn btn-primary" onclick="teacherApp.openModal('applyLeaveModal')">
+            <div>
+              <h2><i class="fa-solid fa-calendar-minus text-primary"></i> Teacher Leave Management</h2>
+              <p class="text-muted text-sm mt-1">Submit formal leave applications, track departmental balance, and view administrative approvals.</p>
+            </div>
+            <button class="btn btn-primary" onclick="teacherApp.switchSubTab('leave', 'apply')">
               <i class="fa-solid fa-plus"></i> Apply for Leave
             </button>
           </div>
 
-          <div class="tab-strip" id="leaveTabStrip">
+          <div class="tab-strip mb-3" id="leaveTabStrip">
             <button type="button" class="tab-btn active" data-sub="apply" onclick="teacherApp.switchSubTab('leave', 'apply'); return false;">
               <i class="fa-solid fa-calendar-plus mr-1"></i> Apply Leave
             </button>
@@ -1137,46 +1146,9 @@
             </button>
           </div>
 
-          <div class="card p-4">
-            <h3>My Leave Balance (2025–26)</h3>
-            <div class="metrics-quad mt-3">
-              <div class="metric-card">
-                <span class="metric-label">Casual Leaves (CL)</span>
-                <div class="metric-value text-primary">8 / 12</div>
-                <span class="metric-sub">Remaining</span>
-              </div>
-              <div class="metric-card">
-                <span class="metric-label">Medical Leaves (ML)</span>
-                <div class="metric-value text-emerald">10 / 10</div>
-                <span class="metric-sub">Remaining</span>
-              </div>
-              <div class="metric-card">
-                <span class="metric-label">On Duty (OD)</span>
-                <div class="metric-value">2 Days</div>
-                <span class="metric-sub">Taken for Seminars</span>
-              </div>
-            </div>
-
-            <h4 class="mt-4">Recent Leave Applications & Approval Status</h4>
-            <div class="table-container mt-2">
-              <table class="data-table">
-                <thead>
-                  <tr>
-                    <th>Application ID</th>
-                    <th>Leave Type</th>
-                    <th>Dates</th>
-                    <th>Substitute Arranged</th>
-                    <th>Reason</th>
-                    <th>Status</th>
-                  </tr>
-                </thead>
-                <tbody id="myLeaveStatusTableBody">
-                  <!-- Rendered dynamically -->
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </section>
+          <div id="leaveContentArea">
+            <!-- Populated via renderLeaveSubTab -->
+          </div></section>
 
         <!-- =================================================================
              MODULE 10: REPORTS
@@ -1333,13 +1305,10 @@
 
           <div class="tab-strip mb-3" id="assignmentsTabStrip">
             <button type="button" class="tab-btn active" data-sub="create" onclick="teacherApp.switchSubTab('assignments', 'create'); return false;">
-              <i class="fa-solid fa-plus-circle mr-1"></i> Create Assignment
+              <i class="fa-solid fa-file-pen mr-1"></i> Assignments
             </button>
             <button type="button" class="tab-btn" data-sub="submissions" onclick="teacherApp.switchSubTab('assignments', 'submissions'); return false;">
-              <i class="fa-solid fa-inbox mr-1"></i> Submissions
-            </button>
-            <button type="button" class="tab-btn" data-sub="feedback" onclick="teacherApp.switchSubTab('assignments', 'feedback'); return false;">
-              <i class="fa-solid fa-comment-dots mr-1"></i> Grading &amp; Feedback
+              <i class="fa-solid fa-inbox mr-1"></i> Student Submissions
             </button>
           </div>
 

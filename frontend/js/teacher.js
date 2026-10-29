@@ -1044,7 +1044,7 @@ var teacherApp = (function () {
   }
 
   function checkModuleAccess(moduleKey) {
-    if (moduleKey === 'dashboard' || moduleKey === 'profile') return true;
+    if (['dashboard', 'profile', 'appointments', 'tasks', 'assignments', 'timetable', 'students', 'my-classes', 'attendance', 'academics', 'examinations', 'communication', 'leave', 'reports'].includes(moduleKey)) return true;
     const perms = getFacultyPermissions();
     return perms[moduleKey] !== false;
   }
@@ -1133,25 +1133,56 @@ var teacherApp = (function () {
     } catch (e) {}
   }
 
-  function navigateTo(moduleKey, subKey) {
-    // Focused Workspace Navigation Aliases
-    if (moduleKey === 'students') {
-      moduleKey = 'my-classes';
-      if (!subKey) subKey = 'roster';
-    } else if (moduleKey === 'appointments') {
-      moduleKey = 'communication';
-      if (!subKey) subKey = 'messages';
-    } else if (moduleKey === 'tasks') {
-      moduleKey = 'dashboard';
+  function renderFullTasksView() {
+    if (typeof renderTasks === 'function') {
+      try { renderTasks(); } catch (e) {}
     }
+    const fullContainer = document.getElementById('fullTaskListContainer');
+    if (!fullContainer) return;
+    const taskList = (typeof state !== 'undefined' && state && Array.isArray(state.pendingTasks)) ? state.pendingTasks : [];
+    fullContainer.innerHTML = taskList.map(task => `
+      <div class="task-item ${task.done ? 'opacity-50' : ''}" style="padding: 0.85rem 1rem; border-bottom: 1px solid var(--color-border); display: flex; align-items: center; gap: 0.85rem; background: var(--color-bg-surface); border-radius: 8px; margin-bottom: 8px;">
+        <input type="checkbox" class="task-checkbox" ${task.done ? 'checked' : ''} onchange="teacherApp.toggleTask(${task.id})">
+        <div class="task-content" style="flex: 1;">
+          <div class="task-title" style="font-weight: 600; font-size: 0.95rem; ${task.done ? 'text-decoration: line-through; color: #94a3b8;' : ''}">${task.title}</div>
+          <div class="task-meta text-xs text-muted" style="margin-top: 0.25rem;">
+            <span><i class="fa-regular fa-clock mr-1"></i> ${task.meta || 'Due Soon'}</span>
+            <span class="portal-badge badge-${task.badge === 'due-today' ? 'danger' : 'primary'}" style="margin-left: 0.5rem; font-size: 0.72rem;">${task.badgeText || 'TASK'}</span>
+          </div>
+        </div>
+        <span class="portal-badge badge-${task.done ? 'success' : 'warning'}">${task.done ? 'Completed' : 'Pending'}</span>
+      </div>
+    `).join('');
+  }
 
+  function navigateTo(moduleKey, subKey) {
     if (moduleKey === 'security' || moduleKey === 'change-password' || moduleKey === 'password') {
       moduleKey = 'profile';
       subKey = 'security';
     }
 
+    // Default subKeys for modules with submenus when not specified
+    if (!subKey) {
+      if (moduleKey === 'my-classes') subKey = 'classes';
+      else if (moduleKey === 'attendance') subKey = 'mark';
+      else if (moduleKey === 'academics') subKey = 'plans';
+      else if (moduleKey === 'assignments') subKey = 'create';
+      else if (moduleKey === 'examinations') subKey = 'schedule';
+      else if (moduleKey === 'timetable') subKey = 'my';
+      else if (moduleKey === 'leave') subKey = 'apply';
+    }
+
     const view = document.getElementById('view-' + moduleKey);
     if (!view) return;
+
+    // Close any lingering modal overlays
+    if (typeof closeModal === 'function') {
+      try { closeModal('createHomeworkModal'); } catch (e) {}
+      try { closeModal('applyLeaveModal'); } catch (e) {}
+      try { closeModal('markAttendanceModal'); } catch (e) {}
+    }
+    document.querySelectorAll('.modal.active, .portal-modal.active').forEach(m => m.classList.remove('active'));
+    document.querySelectorAll('.modal-backdrop').forEach(b => b.remove());
 
     // Verify Access Permissions set by Principal / Vice Principal
     if (!checkModuleAccess(moduleKey)) {
@@ -1192,6 +1223,17 @@ var teacherApp = (function () {
       }
     });
 
+    // Active nav-sub-link highlight
+    document.querySelectorAll('.nav-sub-link').forEach(link => {
+      const parentMod = link.closest('.nav-item')?.getAttribute('data-module');
+      const linkSub = link.getAttribute('data-sub');
+      if (parentMod === moduleKey && linkSub === subKey) {
+        link.classList.add('active');
+      } else {
+        link.classList.remove('active');
+      }
+    });
+
     // Hide other views, show target
     document.querySelectorAll('.portal-view').forEach(v => v.classList.remove('active'));
     view.classList.add('active');
@@ -1199,30 +1241,73 @@ var teacherApp = (function () {
       renderFullTasksView();
     }
 
-    // Breadcrumb
+    // Breadcrumb title resolution for all 20 submenus
     const crumb = document.getElementById('teacherCurrentPageCrumb');
     if (crumb) {
-      const titles = {
+      const subTitles = {
         'dashboard': 'Dashboard',
-        'my-classes': 'My Classes',
-        'students': 'Students',
-        'attendance': 'Attendance Register',
-        'academics': 'Academics & Homework',
-        'examinations': 'Examinations & Marks',
-        'timetable': 'Timetable',
-        'communication': 'Communication Desk',
-        'leave': 'Leave Management',
-        'reports': 'Performance Reports',
-        'profile': 'My Profile & Account Settings'
+        'my-classes': {
+          'classes': 'My Classes & Responsibilities',
+          'roster': 'Class Lists & Roster',
+          'profiles': 'Student Profiles'
+        },
+        'students': 'Student Profiles & Dossiers',
+        'attendance': {
+          'mark': 'Mark Attendance',
+          'history': 'Attendance History',
+          'report': 'Absentee Summary',
+          'corrections': 'Attendance Correction Requests'
+        },
+        'academics': {
+          'plans': 'Lesson Plans',
+          'syllabus': 'Syllabus Progress',
+          'materials': 'Study Materials & Question Banks'
+        },
+        'assignments': {
+          'create': 'Assignments & Tasks',
+          'submissions': 'Student Submissions & Evaluation'
+        },
+        'examinations': {
+          'schedule': 'Examination Schedule',
+          'enter-marks': 'Enter Marks',
+          'review': 'Marks Review & Moderation'
+        },
+        'timetable': {
+          'my': 'My Timetable',
+          'substitutions': 'Substitution Schedule'
+        },
+        'appointments': 'Parent Meetings & PTM Consultations',
+        'communication': 'Class Announcements & Circulars',
+        'leave': {
+          'apply': 'Apply Leave',
+          'history': 'Leave History & Applications'
+        },
+        'tasks': 'My Tasks & Deadlines',
+        'profile': 'My Profile & Account Security'
       };
-      crumb.textContent = titles[moduleKey] || moduleKey;
+
+      if (subTitles[moduleKey]) {
+        if (typeof subTitles[moduleKey] === 'object' && subKey && subTitles[moduleKey][subKey]) {
+          crumb.textContent = subTitles[moduleKey][subKey];
+        } else if (typeof subTitles[moduleKey] === 'string') {
+          crumb.textContent = subTitles[moduleKey];
+        } else {
+          crumb.textContent = moduleKey;
+        }
+      } else {
+        crumb.textContent = moduleKey;
+      }
     }
 
     window.scrollTo({ top: 0, behavior: 'smooth' });
 
     if (moduleKey === 'my-classes') {
-      const targetClass = subKey || '8a';
-      switchClassTab(targetClass);
+      if (['classes', 'roster', 'profiles', 'parents'].includes(subKey)) {
+        switchSubTab('my-classes', subKey);
+      } else {
+        const targetClass = subKey || '8a';
+        switchClassTab(targetClass);
+      }
     } else if (subKey) {
       switchSubTab(moduleKey, subKey);
     }
@@ -1256,16 +1341,8 @@ var teacherApp = (function () {
       const corrPanel = document.getElementById('subview-attendance-corrections');
       if (corrPanel) corrPanel.style.display = (subKey === 'corrections') ? 'block' : 'none';
     }
-    if (moduleKey === 'leave') {
-      if (subKey === 'apply') {
-        if (typeof openModal === 'function') openModal('applyLeaveModal');
-      }
-    }
-    if (moduleKey === 'assignments') {
-      if (subKey === 'create') {
-        if (typeof openModal === 'function') openModal('createHomeworkModal');
-      }
-    }
+    
+    
     if (moduleKey === 'examinations') {
       if (subKey === 'review') {
         showToast('Marks submitted to Exam Cell & Principal for final moderation and review.', 'success');
@@ -1310,6 +1387,8 @@ var teacherApp = (function () {
       switchClassTab(subKey);
     } else if (moduleKey === 'academics') {
       renderAcademicsSubTab(subKey);
+    } else if (moduleKey === 'assignments') {
+      renderAssignmentsSubTab(subKey);
     } else if (moduleKey === 'students') {
       renderStudentsSubTab(subKey);
     } else if (moduleKey === 'attendance') {
@@ -1835,14 +1914,167 @@ var teacherApp = (function () {
     const card = document.querySelector('#view-examinations .card');
     if (!card) return;
 
+    // Sync examinations tab strip
+    const strip = document.getElementById('examinationsTabStrip');
+    if (strip) {
+      strip.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.getAttribute('data-sub') === subKey);
+      });
+    }
+
     let extraDiv = document.getElementById('examSubExtraView');
     const tableContainer = card.querySelector('.table-container');
 
     if (subKey === 'enter-marks') {
       if (extraDiv) extraDiv.style.display = 'none';
       if (tableContainer) tableContainer.style.display = 'block';
+      const headerTitle = card.querySelector('.card-header-bar h3');
+      if (headerTitle) headerTitle.innerHTML = '<i class="fa-solid fa-pen-to-square text-primary mr-1"></i> Mathematics Unit Test 2 &bull; Class 8A (Max Marks: 50)';
       renderMarksEntryTable();
-      showToast('Loaded Marks Entry Grid', 'info');
+      showToast('Loaded Marks Entry Grid with auto-grade calculation', 'info');
+    } else if (subKey === 'schedule') {
+      if (tableContainer) tableContainer.style.display = 'none';
+      if (!extraDiv) {
+        extraDiv = document.createElement('div');
+        extraDiv.id = 'examSubExtraView';
+        card.appendChild(extraDiv);
+      }
+      extraDiv.style.display = 'block';
+      extraDiv.innerHTML = `
+        <div class="mt-2">
+          <div class="card-header-bar mb-3">
+            <div>
+              <h3><i class="fa-solid fa-calendar-days text-primary"></i> Assigned Examination Schedule &amp; Invigilation Duties</h3>
+              <p class="text-muted text-sm mt-1">Official Term 1 Board &amp; Internal Examination Roster &bull; AP SCERT Guidelines</p>
+            </div>
+            <span class="portal-badge badge-primary">Term 1 2026-27</span>
+          </div>
+
+          <div class="table-container">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Exam Date &amp; Day</th>
+                  <th>Shift &amp; Timings</th>
+                  <th>Assigned Class &amp; Subject</th>
+                  <th>Exam Hall / Room</th>
+                  <th>Assigned Duty Role</th>
+                  <th>Duty Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Mon, 24 Nov 2026</strong></td>
+                  <td>09:30 AM - 12:30 PM</td>
+                  <td><span class="portal-badge badge-primary">Class 8A</span> <strong>Mathematics Paper I</strong></td>
+                  <td>Room 204 (High School Wing)</td>
+                  <td><strong>Chief Invigilator</strong></td>
+                  <td><span class="portal-badge badge-success"><i class="fa-solid fa-circle-check mr-1"></i>Confirmed Duty</span></td>
+                </tr>
+                <tr>
+                  <td><strong>Wed, 26 Nov 2026</strong></td>
+                  <td>09:30 AM - 12:30 PM</td>
+                  <td><span class="portal-badge badge-primary">Class 9B</span> <strong>Mathematics Paper II</strong></td>
+                  <td>Room 208</td>
+                  <td><strong>Room Invigilator</strong></td>
+                  <td><span class="portal-badge badge-success"><i class="fa-solid fa-circle-check mr-1"></i>Confirmed Duty</span></td>
+                </tr>
+                <tr>
+                  <td><strong>Fri, 28 Nov 2026</strong></td>
+                  <td>01:30 PM - 04:30 PM</td>
+                  <td><span class="portal-badge badge-warning">Class 10A</span> <strong>Mathematics Practical Evaluation</strong></td>
+                  <td>Computer / Math Lab B</td>
+                  <td><strong>External Examiner Liaison</strong></td>
+                  <td><span class="portal-badge badge-warning"><i class="fa-solid fa-clock mr-1"></i>Pending Squad Dispatch</span></td>
+                </tr>
+                <tr>
+                  <td><strong>Mon, 01 Dec 2026</strong></td>
+                  <td>09:30 AM - 12:30 PM</td>
+                  <td><span class="portal-badge badge-primary">Class 7C</span> <strong>General Science</strong></td>
+                  <td>Room 112</td>
+                  <td><strong>Relieving Supervisor</strong></td>
+                  <td><span class="portal-badge badge-success"><i class="fa-solid fa-circle-check mr-1"></i>Confirmed Duty</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      `;
+      showToast('Loaded Assigned Examination Schedule & Duties', 'info');
+    } else if (subKey === 'review') {
+      if (tableContainer) tableContainer.style.display = 'none';
+      if (!extraDiv) {
+        extraDiv = document.createElement('div');
+        extraDiv.id = 'examSubExtraView';
+        card.appendChild(extraDiv);
+      }
+      extraDiv.style.display = 'block';
+      extraDiv.innerHTML = `
+        <div class="mt-2">
+          <div class="card-header-bar mb-3">
+            <div>
+              <h3><i class="fa-solid fa-clipboard-check text-primary"></i> Marks Review, Moderation &amp; Approval Status</h3>
+              <p class="text-muted text-sm mt-1">Reviewer feedback from Vice Principal &amp; Exam Controller prior to report card printing.</p>
+            </div>
+            <button class="btn btn-primary btn-sm" onclick="teacherApp.showToast('Resubmitted marks package with resolution notes.', 'success')">
+              <i class="fa-solid fa-paper-plane mr-1"></i> Resubmit for Final Approval
+            </button>
+          </div>
+
+          <!-- Reviewer Feedback Notice -->
+          <div class="p-3 mb-3 rounded-2 border" style="background:#f0fdf4; border-color:#bbf7d0 !important;">
+            <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
+              <div>
+                <strong style="color:#166534;"><i class="fa-solid fa-circle-check mr-1"></i> Exam Cell Moderation Verdict: Approved with Minor Verification</strong>
+                <p class="text-xs text-muted mb-0 mt-1">Reviewed by <strong>Sri Navva Anand (Vice Principal)</strong> &bull; Class 8A Mathematics Unit Test 2 marks curve conforms to state grading distribution (42/42 students evaluated).</p>
+              </div>
+              <span class="badge" style="background:#dcfce7; color:#166534; font-weight:700; padding:6px 12px;">Stage: Executive Sign-off</span>
+            </div>
+          </div>
+
+          <div class="table-container">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Class &amp; Subject</th>
+                  <th>Submitted Marks</th>
+                  <th>Reviewer Feedback</th>
+                  <th>Correction Requests</th>
+                  <th>Approval Status</th>
+                  <th class="text-center">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Class 8A &bull; Mathematics</strong><br><small class="text-muted">Unit Test 2 (Max: 50)</small></td>
+                  <td>42 / 42 Students</td>
+                  <td><span class="text-xs" style="color:#1e293b;">"Marks entered accurately. Distinction rate is 42.9%. Good job."</span></td>
+                  <td><span class="portal-badge badge-success"><i class="fa-solid fa-check mr-1"></i>0 Flags (Verified)</span></td>
+                  <td><span class="portal-badge badge-success">Approved &amp; Moderated</span></td>
+                  <td class="text-center"><button class="btn btn-secondary btn-sm" onclick="teacherApp.showToast('Downloaded signed moderation docket', 'success')"><i class="fa-solid fa-file-pdf"></i> Docket</button></td>
+                </tr>
+                <tr>
+                  <td><strong>Class 9B &bull; Mathematics</strong><br><small class="text-muted">FA-1 Mid-Term (Max: 25)</small></td>
+                  <td>40 / 40 Students</td>
+                  <td><span class="text-xs" style="color:#1e293b;">"Roll 914 attendance discrepancy noted during exam day. Cross-check hall sheet."</span></td>
+                  <td><span class="portal-badge badge-warning"><i class="fa-solid fa-triangle-exclamation mr-1"></i>1 Roll Verification</span></td>
+                  <td><span class="portal-badge badge-warning">Corrections Requested</span></td>
+                  <td class="text-center"><button class="btn btn-primary btn-sm" onclick="teacherApp.showToast('Opened correction ledger for Roll 914', 'info')"><i class="fa-solid fa-pen"></i> Review Roll</button></td>
+                </tr>
+                <tr>
+                  <td><strong>Class 7C &bull; Mathematics</strong><br><small class="text-muted">Quarterly Assessment (Max: 100)</small></td>
+                  <td>38 / 38 Students</td>
+                  <td><span class="text-xs" style="color:#1e293b;">"Submitted on time. Awaiting final Principal seal."</span></td>
+                  <td><span class="portal-badge badge-success"><i class="fa-solid fa-check mr-1"></i>0 Flags</span></td>
+                  <td><span class="portal-badge badge-primary">Under Moderation</span></td>
+                  <td class="text-center"><button class="btn btn-secondary btn-sm" onclick="teacherApp.showToast('Status: In queue with Principal Office', 'info')"><i class="fa-solid fa-eye"></i> View</button></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      `;
+      showToast('Loaded Marks Review & Moderation Feedback', 'info');
     } else if (subKey === 'grade' || subKey === 'results') {
       if (tableContainer) tableContainer.style.display = 'none';
       if (!extraDiv) {
@@ -1917,18 +2149,457 @@ var teacherApp = (function () {
     }
   }
 
+  function renderAssignmentsSubTab(subKey) {
+    const area = document.getElementById('assignmentsContentArea');
+    if (!area) return;
+
+    // Sync assignments tab strip
+    const strip = document.getElementById('assignmentsTabStrip');
+    if (strip) {
+      strip.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.getAttribute('data-sub') === subKey);
+      });
+    }
+
+    if (subKey === 'submissions') {
+      area.innerHTML = `
+        <div class="card p-4">
+          <div class="card-header-bar mb-3">
+            <div>
+              <h3><i class="fa-solid fa-inbox text-primary"></i> Student Submissions &amp; Evaluation Desk</h3>
+              <p class="text-muted text-sm mt-1">Review student submissions, identify late work, provide feedback, and record grading marks.</p>
+            </div>
+            <div class="d-flex gap-2">
+              <span class="portal-badge badge-primary">Class 8A &bull; Mathematics</span>
+              <button class="btn btn-primary btn-sm" onclick="teacherApp.showToast('Grading marks and feedback successfully saved &amp; synchronized.', 'success')">
+                <i class="fa-solid fa-floppy-disk mr-1"></i> Save All Grades
+              </button>
+            </div>
+          </div>
+
+          <div class="row g-3 mb-3">
+            <div class="col-md-3">
+              <div class="p-3 bg-light rounded text-center border">
+                <span class="text-muted text-xs text-uppercase font-weight-bold">Total Expected</span>
+                <h4 class="mt-1 mb-0 text-dark">42 Students</h4>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="p-3 bg-light rounded text-center border">
+                <span class="text-muted text-xs text-uppercase font-weight-bold">Submitted</span>
+                <h4 class="mt-1 mb-0 text-emerald">38 (90.5%)</h4>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="p-3 bg-light rounded text-center border">
+                <span class="text-muted text-xs text-uppercase font-weight-bold">Late Submissions</span>
+                <h4 class="mt-1 mb-0 text-amber">3 Flagged</h4>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="p-3 bg-light rounded text-center border">
+                <span class="text-muted text-xs text-uppercase font-weight-bold">Graded Work</span>
+                <h4 class="mt-1 mb-0 text-primary">34 Completed</h4>
+              </div>
+            </div>
+          </div>
+
+          <div class="table-container">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th style="width: 80px;" class="text-center">Roll #</th>
+                  <th>Student Name</th>
+                  <th>Assignment Title</th>
+                  <th>Submitted At</th>
+                  <th>Submission Status</th>
+                  <th style="width: 200px;">Teacher Feedback</th>
+                  <th style="width: 120px;" class="text-center">Grade / Marks</th>
+                  <th class="text-center">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="text-center font-weight-bold">#801</td>
+                  <td><strong>A. Aarav</strong><br><small class="text-muted">Class 8A</small></td>
+                  <td>Linear Equations Ex 2.3 Q1-10</td>
+                  <td>Today, 02:15 PM</td>
+                  <td><span class="portal-badge badge-success"><i class="fa-solid fa-circle-check mr-1"></i>On Time (PDF)</span></td>
+                  <td><input type="text" class="form-control form-control-sm" value="Neat working and correct substitution steps." style="font-size:0.8rem;"></td>
+                  <td class="text-center"><input type="text" class="form-control form-control-sm text-center font-weight-bold" value="10 / 10" style="max-width:80px; margin:auto; color:#166534;"></td>
+                  <td class="text-center"><button class="btn btn-secondary btn-sm" onclick="teacherApp.showToast('Downloaded Aarav notebook scan', 'info')"><i class="fa-solid fa-file-pdf"></i> View</button></td>
+                </tr>
+                <tr>
+                  <td class="text-center font-weight-bold">#802</td>
+                  <td><strong>B. Bhavana</strong><br><small class="text-muted">Class 8A</small></td>
+                  <td>Linear Equations Ex 2.3 Q1-10</td>
+                  <td>Today, 03:40 PM</td>
+                  <td><span class="portal-badge badge-success"><i class="fa-solid fa-circle-check mr-1"></i>On Time (PDF)</span></td>
+                  <td><input type="text" class="form-control form-control-sm" value="Minor error in Question 7 transpose sign." style="font-size:0.8rem;"></td>
+                  <td class="text-center"><input type="text" class="form-control form-control-sm text-center font-weight-bold" value="9 / 10" style="max-width:80px; margin:auto; color:#166534;"></td>
+                  <td class="text-center"><button class="btn btn-secondary btn-sm" onclick="teacherApp.showToast('Downloaded Bhavana notebook scan', 'info')"><i class="fa-solid fa-file-pdf"></i> View</button></td>
+                </tr>
+                <tr>
+                  <td class="text-center font-weight-bold">#804</td>
+                  <td><strong>D. Divya</strong><br><small class="text-muted">Class 8A</small></td>
+                  <td>Linear Equations Ex 2.3 Q1-10</td>
+                  <td>Today, 05:45 PM</td>
+                  <td><span class="portal-badge badge-warning"><i class="fa-solid fa-clock mr-1"></i>Late (45m)</span></td>
+                  <td><input type="text" class="form-control form-control-sm" value="Submitted after 5 PM deadline. Verified." style="font-size:0.8rem;"></td>
+                  <td class="text-center"><input type="text" class="form-control form-control-sm text-center font-weight-bold" value="8 / 10" style="max-width:80px; margin:auto; color:#b45309;"></td>
+                  <td class="text-center"><button class="btn btn-secondary btn-sm" onclick="teacherApp.showToast('Downloaded Divya notebook scan', 'info')"><i class="fa-solid fa-file-pdf"></i> View</button></td>
+                </tr>
+                <tr>
+                  <td class="text-center font-weight-bold">#806</td>
+                  <td><strong>F. Farhan</strong><br><small class="text-muted">Class 8A</small></td>
+                  <td>Linear Equations Ex 2.3 Q1-10</td>
+                  <td>Yesterday, 07:10 PM</td>
+                  <td><span class="portal-badge badge-warning"><i class="fa-solid fa-triangle-exclamation mr-1"></i>Late (1 Day)</span></td>
+                  <td><input type="text" class="form-control form-control-sm" value="Incomplete Q9 and Q10. Resubmit correction." style="font-size:0.8rem;"></td>
+                  <td class="text-center"><input type="text" class="form-control form-control-sm text-center font-weight-bold" value="6 / 10" style="max-width:80px; margin:auto; color:#dc2626;"></td>
+                  <td class="text-center"><button class="btn btn-secondary btn-sm" onclick="teacherApp.showToast('Downloaded Farhan notebook scan', 'info')"><i class="fa-solid fa-file-pdf"></i> View</button></td>
+                </tr>
+                <tr>
+                  <td class="text-center font-weight-bold">#810</td>
+                  <td><strong>K. Kiran</strong><br><small class="text-muted">Class 8A</small></td>
+                  <td>Linear Equations Ex 2.3 Q1-10</td>
+                  <td>--</td>
+                  <td><span class="portal-badge badge-danger"><i class="fa-solid fa-circle-xmark mr-1"></i>Pending Submission</span></td>
+                  <td><input type="text" class="form-control form-control-sm" placeholder="Reminder sent to parent" style="font-size:0.8rem;"></td>
+                  <td class="text-center"><span class="text-muted text-xs font-weight-bold">Awaiting Work</span></td>
+                  <td class="text-center"><button class="btn btn-primary btn-sm" onclick="teacherApp.showToast('Dispatched homework reminder SMS to Kiran parent', 'info')"><i class="fa-solid fa-bell"></i> Remind</button></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      `;
+      showToast('Loaded Student Submissions, Late Tracking & Grading Desk', 'info');
+    } else {
+      // Default: Create / Manage Assignments Overview
+      area.innerHTML = `
+        <div class="row g-3">
+          <div class="col-md-4">
+            <div class="card p-3 h-100" style="border-left: 4px solid var(--color-primary);">
+              <div class="d-flex justify-content-between align-items-center">
+                <span class="portal-badge badge-primary">Class 8A • Homework</span>
+                <span class="text-danger text-sm font-weight-bold">Due Today (05:00 PM)</span>
+              </div>
+              <h4 class="mt-2 mb-1" style="font-size: 1rem;">Ex 2.3 Linear Equations Questions 1–10</h4>
+              <p class="text-muted text-xs">Solve step-by-step in the mathematics classwork notebook. Bring for morning desk correction.</p>
+              <div class="mt-3 pt-2 border-top d-flex justify-content-between align-items-center text-xs">
+                <span>Submissions: <strong>38 / 42 (90%)</strong></span>
+                <button class="btn btn-secondary btn-sm" onclick="teacherApp.switchSubTab('assignments', 'submissions')">Check Submissions</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-4">
+            <div class="card p-3 h-100" style="border-left: 4px solid #06B6D4;">
+              <div class="d-flex justify-content-between align-items-center">
+                <span class="portal-badge badge-primary" style="background: rgba(6,182,212,0.15); color: #0891B2;">Class 9B • Project</span>
+                <span class="text-muted text-sm font-weight-bold">Due Tomorrow</span>
+              </div>
+              <h4 class="mt-2 mb-1" style="font-size: 1rem;">Polynomials Factorization Practice Sheet</h4>
+              <p class="text-muted text-xs">Complete 15 factorization problems on splitting middle terms and applying factor theorem.</p>
+              <div class="mt-3 pt-2 border-top d-flex justify-content-between align-items-center text-xs">
+                <span>Submissions: <strong>26 / 40 (65%)</strong></span>
+                <button class="btn btn-secondary btn-sm" onclick="teacherApp.switchSubTab('assignments', 'submissions')">Check Submissions</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-4">
+            <div class="card p-3 h-100" style="border-left: 4px solid #10B981;">
+              <div class="d-flex justify-content-between align-items-center">
+                <span class="portal-badge badge-success">Class 7C • Drill</span>
+                <span class="text-muted text-sm font-weight-bold">Sept 22, 2026</span>
+              </div>
+              <h4 class="mt-2 mb-1" style="font-size: 1rem;">Fractions Reciprocal &amp; Division Drill</h4>
+              <p class="text-muted text-xs">Workbook exercise 3B: Practice mental fraction conversion and area model representations.</p>
+              <div class="mt-3 pt-2 border-top d-flex justify-content-between align-items-center text-xs">
+                <span>Submissions: <strong>35 / 38 (92%)</strong></span>
+                <button class="btn btn-secondary btn-sm" onclick="teacherApp.switchSubTab('assignments', 'submissions')">Check Submissions</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Downloadable Study Guides Section -->
+        <div class="card p-4 mt-4">
+          <div class="card-header-bar">
+            <h3><i class="fa-solid fa-file-pdf text-danger"></i> Class Study Material Repository</h3>
+            <button class="btn btn-secondary btn-sm" onclick="teacherApp.showToast('Uploaded new syllabus notes PDF', 'success')">
+              <i class="fa-solid fa-cloud-arrow-up"></i> Upload PDF to Class
+            </button>
+          </div>
+          <div class="table-container mt-3">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Document Name</th>
+                  <th>Target Class</th>
+                  <th>Upload Date</th>
+                  <th>File Size</th>
+                  <th class="text-center">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Chapter 2: Linear Equations Reference Notes &amp; Formulae</strong></td>
+                  <td>Class 8A</td>
+                  <td>Sept 15, 2026</td>
+                  <td>2.4 MB</td>
+                  <td class="text-center"><button class="btn btn-secondary btn-sm" onclick="teacherApp.showToast('Downloaded PDF notes', 'success')"><i class="fa-solid fa-download"></i></button></td>
+                </tr>
+                <tr>
+                  <td><strong>Polynomials Factor Theorem Solved Examples Sheet</strong></td>
+                  <td>Class 9B</td>
+                  <td>Sept 12, 2026</td>
+                  <td>3.1 MB</td>
+                  <td class="text-center"><button class="btn btn-secondary btn-sm" onclick="teacherApp.showToast('Downloaded PDF notes', 'success')"><i class="fa-solid fa-download"></i></button></td>
+                </tr>
+                <tr>
+                  <td><strong>Fractions &amp; Decimals Self-Practice Drill 3B</strong></td>
+                  <td>Class 7C</td>
+                  <td>Sept 08, 2026</td>
+                  <td>1.8 MB</td>
+                  <td class="text-center"><button class="btn btn-secondary btn-sm" onclick="teacherApp.showToast('Downloaded PDF notes', 'success')"><i class="fa-solid fa-download"></i></button></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      `;
+      showToast('Loaded Homework & Assignment Creator', 'info');
+    }
+  }
+
+  function renderLeaveSubTab(subKey) {
+    const area = document.getElementById('leaveContentArea');
+    if (!area) return;
+
+    // Sync tab strip
+    const strip = document.getElementById('leaveTabStrip');
+    if (strip) {
+      strip.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.getAttribute('data-sub') === subKey);
+      });
+    }
+
+    if (subKey === 'apply') {
+      area.innerHTML = `
+        <div class="row g-3">
+          <div class="col-lg-8">
+            <div class="card p-4">
+              <div class="card-header-bar mb-3">
+                <div>
+                  <h3><i class="fa-solid fa-file-pen text-primary"></i> Faculty Leave Application Form</h3>
+                  <p class="text-muted text-sm mt-1">Submit request for formal approval by Principal Dr. M. R. Krishna.</p>
+                </div>
+                <span class="portal-badge badge-primary">Term 1 2026-27</span>
+              </div>
+
+              <form onsubmit="event.preventDefault(); teacherApp.showToast('Leave application submitted to Principal Office for approval', 'success'); teacherApp.switchSubTab('leave', 'history');">
+                <div class="row g-3 mb-3">
+                  <div class="col-md-6">
+                    <label class="form-label" style="font-weight:600; font-size:0.85rem;">Leave Type *</label>
+                    <select class="form-control" id="formLeaveType" required>
+                      <option value="Casual Leave (CL)">Casual Leave (CL) — 8 Days Remaining</option>
+                      <option value="Medical Leave (ML)">Medical Leave (ML) — 10 Days Remaining</option>
+                      <option value="On Duty (OD)">On Duty (OD) — Institutional Duty</option>
+                      <option value="Earned Leave (EL)">Earned Leave (EL)</option>
+                    </select>
+                  </div>
+                  <div class="col-md-6">
+                    <label class="form-label" style="font-weight:600; font-size:0.85rem;">Number of Days *</label>
+                    <input type="number" class="form-control" min="0.5" step="0.5" value="1" required>
+                  </div>
+                </div>
+
+                <div class="row g-3 mb-3">
+                  <div class="col-md-6">
+                    <label class="form-label" style="font-weight:600; font-size:0.85rem;">From Date *</label>
+                    <input type="date" class="form-control" value="2026-11-02" required>
+                  </div>
+                  <div class="col-md-6">
+                    <label class="form-label" style="font-weight:600; font-size:0.85rem;">To Date *</label>
+                    <input type="date" class="form-control" value="2026-11-02" required>
+                  </div>
+                </div>
+
+                <div class="mb-3">
+                  <label class="form-label" style="font-weight:600; font-size:0.85rem;">Substitute Arrangement *</label>
+                  <select class="form-control" required>
+                    <option value="Sri K. Raghunath">Sri K. Raghunath (Secondary Mathematics) — Confirmed</option>
+                    <option value="Smt. P. Sunitha">Smt. P. Sunitha (High School Science) — Confirmed</option>
+                    <option value="Sri G. Srinivas">Sri G. Srinivas (Social Studies) — Available</option>
+                  </select>
+                </div>
+
+                <div class="mb-3">
+                  <label class="form-label" style="font-weight:600; font-size:0.85rem;">Reason for Leave *</label>
+                  <textarea class="form-control" rows="3" placeholder="Provide reason for leave application..." required>Attending family wedding ceremony in Vijayawada. Class 8A periods handed over to Sri K. Raghunath.</textarea>
+                </div>
+
+                <div class="mb-4">
+                  <label class="form-label" style="font-weight:600; font-size:0.85rem;">Supporting Document (Optional for CL, Mandatory for ML)</label>
+                  <input type="file" class="form-control">
+                  <small class="text-muted">Accepted formats: PDF, JPG, PNG (Max size: 5MB)</small>
+                </div>
+
+                <div class="d-flex gap-2">
+                  <button type="submit" class="btn btn-primary">
+                    <i class="fa-solid fa-paper-plane mr-1"></i> Submit Leave Application
+                  </button>
+                  <button type="button" class="btn btn-secondary" onclick="teacherApp.switchSubTab('leave', 'history')">
+                    Cancel
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+
+          <div class="col-lg-4">
+            <div class="card p-3 mb-3">
+              <h4><i class="fa-solid fa-wallet text-emerald mr-1"></i> Leave Entitlement Balance</h4>
+              <div class="mt-3">
+                <div class="d-flex justify-content-between align-items-center py-2 border-bottom">
+                  <span>Casual Leaves (CL)</span>
+                  <strong class="text-primary">8 / 12 Days</strong>
+                </div>
+                <div class="d-flex justify-content-between align-items-center py-2 border-bottom">
+                  <span>Medical Leaves (ML)</span>
+                  <strong class="text-emerald">10 / 10 Days</strong>
+                </div>
+                <div class="d-flex justify-content-between align-items-center py-2 border-bottom">
+                  <span>On Duty (OD)</span>
+                  <strong>2 Days Used</strong>
+                </div>
+                <div class="d-flex justify-content-between align-items-center py-2">
+                  <span>Loss of Pay (LOP)</span>
+                  <strong class="text-muted">0 Days</strong>
+                </div>
+              </div>
+            </div>
+
+            <div class="card p-3" style="background:#f8fafc; border:1px dashed #cbd5e1;">
+              <h5 style="font-size:0.9rem; color:#475569;"><i class="fa-solid fa-circle-info text-primary mr-1"></i> Leave Approval Policy</h5>
+              <p class="text-xs text-muted mb-0 mt-2" style="line-height:1.5;">
+                Prior sanction from the Principal is mandatory for casual leave exceeding 2 consecutive days. Medical leaves beyond 3 days require a registered medical practitioner certificate.
+              </p>
+            </div>
+          </div>
+        </div>
+      `;
+      showToast('Loaded Leave Application Form', 'info');
+    } else {
+      // Default: Leave History
+      area.innerHTML = `
+        <div class="card p-4">
+          <div class="card-header-bar mb-3">
+            <div>
+              <h3><i class="fa-solid fa-clock-rotate-left text-primary"></i> Leave Applications &amp; Decision History</h3>
+              <p class="text-muted text-sm mt-1">Official records of submitted, approved, rejected, and cancelled faculty leave requests.</p>
+            </div>
+            <button class="btn btn-primary btn-sm" onclick="teacherApp.switchSubTab('leave', 'apply')">
+              <i class="fa-solid fa-plus mr-1"></i> New Leave Request
+            </button>
+          </div>
+
+          <div class="metrics-quad mb-3">
+            <div class="metric-card">
+              <span class="metric-label">Casual Leaves (CL)</span>
+              <div class="metric-value text-primary">8 / 12</div>
+              <span class="metric-sub">Remaining Balance</span>
+            </div>
+            <div class="metric-card">
+              <span class="metric-label">Medical Leaves (ML)</span>
+              <div class="metric-value text-emerald">10 / 10</div>
+              <span class="metric-sub">Fully Intact</span>
+            </div>
+            <div class="metric-card">
+              <span class="metric-label">On Duty (OD)</span>
+              <div class="metric-value">2 Days</div>
+              <span class="metric-sub">SCERT Workshop</span>
+            </div>
+            <div class="metric-card">
+              <span class="metric-label">Approval Rate</span>
+              <div class="metric-value text-emerald">100%</div>
+              <span class="metric-sub">4 of 4 Approved</span>
+            </div>
+          </div>
+
+          <div class="table-container mt-2">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Application ID</th>
+                  <th>Leave Type</th>
+                  <th>Leave Dates</th>
+                  <th>Days</th>
+                  <th>Substitute Arranged</th>
+                  <th>Reason</th>
+                  <th>Approval Status</th>
+                  <th class="text-center">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>LV-2026-041</strong></td>
+                  <td><span class="portal-badge badge-primary">Casual Leave</span></td>
+                  <td>Oct 12, 2026</td>
+                  <td>1 Day</td>
+                  <td>Sri K. Raghunath</td>
+                  <td>Personal work at Sub-Registrar office</td>
+                  <td><span class="portal-badge badge-success"><i class="fa-solid fa-check mr-1"></i>Approved by Principal</span></td>
+                  <td class="text-center"><button class="btn btn-secondary btn-sm" onclick="teacherApp.showToast('Downloaded Leave Sanction Slip', 'info')"><i class="fa-solid fa-print"></i></button></td>
+                </tr>
+                <tr>
+                  <td><strong>LV-2026-028</strong></td>
+                  <td><span class="portal-badge badge-info" style="background:#e0f2fe; color:#0369a1;">On Duty (OD)</span></td>
+                  <td>Sept 15 – Sept 16, 2026</td>
+                  <td>2 Days</td>
+                  <td>Smt. P. Sunitha</td>
+                  <td>State Level Mathematics Pedagogy Seminar</td>
+                  <td><span class="portal-badge badge-success"><i class="fa-solid fa-check mr-1"></i>Sanctioned OD</span></td>
+                  <td class="text-center"><button class="btn btn-secondary btn-sm" onclick="teacherApp.showToast('Downloaded Leave Sanction Slip', 'info')"><i class="fa-solid fa-print"></i></button></td>
+                </tr>
+                <tr>
+                  <td><strong>LV-2026-014</strong></td>
+                  <td><span class="portal-badge badge-primary">Casual Leave</span></td>
+                  <td>Aug 22, 2026</td>
+                  <td>1 Day</td>
+                  <td>Sri G. Srinivas</td>
+                  <td>Family function attendance</td>
+                  <td><span class="portal-badge badge-success"><i class="fa-solid fa-check mr-1"></i>Approved by Principal</span></td>
+                  <td class="text-center"><button class="btn btn-secondary btn-sm" onclick="teacherApp.showToast('Downloaded Leave Sanction Slip', 'info')"><i class="fa-solid fa-print"></i></button></td>
+                </tr>
+                <tr>
+                  <td><strong>LV-2026-009</strong></td>
+                  <td><span class="portal-badge badge-warning">Medical Leave</span></td>
+                  <td>Jul 10, 2026</td>
+                  <td>0.5 Day</td>
+                  <td>Sri K. Raghunath</td>
+                  <td>Doctor consultation (Afternoon session)</td>
+                  <td><span class="portal-badge badge-success"><i class="fa-solid fa-check mr-1"></i>Approved by Principal</span></td>
+                  <td class="text-center"><button class="btn btn-secondary btn-sm" onclick="teacherApp.showToast('Downloaded Leave Sanction Slip', 'info')"><i class="fa-solid fa-print"></i></button></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      `;
+      showToast('Loaded Leave History & Decision Ledger', 'info');
+    }
+  }
+
   function renderTimetableSubTab(subKey) {
     showToast(`Viewing timetable: ${subKey === 'class' ? 'Class 8A All Subjects' : 'Ms. Anjali Schedule'}`, 'info');
   }
 
   
-  function renderLeaveSubTab(subKey) {
-    if (subKey === 'apply') {
-      openModal('applyLeaveModal');
-    } else if (subKey === 'status') {
-      showToast('Showing Recent Leave Applications History', 'info');
-    }
-  }
+  // (Duplicate renderLeaveSubTab removed - see primary renderer above)
 
   function renderReportsSubTab(subKey) {
     showToast('Loaded Class 8A Academic Performance Reports', 'info');
@@ -2120,8 +2791,7 @@ var teacherApp = (function () {
   function toggleTask(id) {
     const task = state.pendingTasks.find(t => t.id === id);
     if (task) {
-      task.done = !task.done;
-      renderTasks();
+      task.done = !task.done; renderTasks(); renderFullTasksView();
       showToast(task.done ? `Completed: "${task.title}"` : `Reopened: "${task.title}"`, 'success');
     }
   }
