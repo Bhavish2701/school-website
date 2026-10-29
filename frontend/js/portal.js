@@ -3084,7 +3084,30 @@ const FEE_CATEGORY_AUDIT_DATA = [
       } else if (subKey === 'reports') {
         renderEventReportsTable();
       }
-                } else if (moduleKey === 'inventory') {
+                    } else if (moduleKey === 'reports') {
+      if (subKey === 'academic') {
+        renderAcademicReportsTable();
+        initAcademicReportsCharts();
+      } else if (subKey === 'attendance') {
+        renderAttendanceReportsTable();
+        initAttendanceReportsCharts();
+      } else if (subKey === 'financial') {
+        renderFinancialReportsTable();
+        initFinancialReportsCharts();
+      } else if (subKey === 'payroll') {
+        renderPayrollReportsTable();
+        initPayrollReportsCharts();
+      } else if (subKey === 'demographics') {
+        renderDemographicsReportsTable();
+        initDemographicsReportsCharts();
+      } else if (subKey === 'admissions') {
+        renderAdmissionsReportsTable();
+        initAdmissionsReportsCharts();
+      } else if (subKey === 'operational') {
+        renderOperationalReportsTable();
+        initOperationalReportsCharts();
+      }
+    } else if (moduleKey === 'inventory') {
       if (subKey === 'assets' || subKey === 'asset-register') {
         renderInventoryAssetsTable();
       } else if (subKey === 'stock' || subKey === 'stock-management') {
@@ -29411,6 +29434,1037 @@ const classData = TIMETABLE_CLASS_DATA[currentTimetableClass] || TIMETABLE_CLASS
     openComposeBroadcastModal('circulars');
   }
 
+  
+  // ==========================================================================
+  // 16. INSTITUTIONAL REPORTS & EXECUTIVE ANALYTICS INTELLIGENCE (AY 2026-27)
+  // ==========================================================================
+
+  // --- DATASETS ---
+  const REPORTS_ACADEMIC_DATA = [
+    { classId: 'X-A', className: 'Class X-A (SSC Board Batch)', enrolled: 45, examined: 45, gpa: '9.42 / 10', topSubjects: 'Mathematics (94.2%), Physical Science (91.8%), English (89.5%)', passRate: '100%', trend: '+0.58 GPA', trendType: 'up', classTeacher: 'Sri N. Anand (Vice Principal)' },
+    { classId: 'X-B', className: 'Class X-B (SSC Board Batch)', enrolled: 43, examined: 43, gpa: '9.18 / 10', topSubjects: 'Biological Science (92.4%), Social Studies (89.6%), Telugu (91.0%)', passRate: '100%', trend: '+0.41 GPA', trendType: 'up', classTeacher: 'Smt. K. Anuradha' },
+    { classId: 'IX-A', className: 'Class IX-A (Pre-Board)', enrolled: 48, examined: 47, gpa: '8.85 / 10', topSubjects: 'Mathematics (88.6%), Hindi (87.2%), English (86.8%)', passRate: '97.9%', trend: '+0.32 GPA', trendType: 'up', classTeacher: 'Sri Ch. Ramesh' },
+    { classId: 'IX-B', className: 'Class IX-B (Pre-Board)', enrolled: 46, examined: 46, gpa: '8.62 / 10', topSubjects: 'Physical Science (86.4%), Social Studies (85.9%), Telugu (88.1%)', passRate: '95.6%', trend: 'Steady', trendType: 'steady', classTeacher: 'Smt. M. Sailaja' },
+    { classId: 'VIII-A', className: 'Class VIII-A (Upper Primary)', enrolled: 52, examined: 52, gpa: '8.91 / 10', topSubjects: 'Mathematics (90.1%), English (88.4%), General Science (87.5%)', passRate: '98.1%', trend: '+0.45 GPA', trendType: 'up', classTeacher: 'Smt. P. Hema Latha' },
+    { classId: 'VIII-B', className: 'Class VIII-B (Upper Primary)', enrolled: 50, examined: 49, gpa: '8.48 / 10', topSubjects: 'Telugu (89.2%), Social Studies (84.1%), Hindi (82.7%)', passRate: '93.9%', trend: '+0.15 GPA', trendType: 'up', classTeacher: 'Sri G. Venkatesh' },
+    { classId: 'VII-A', className: 'Class VII-A (Middle School)', enrolled: 54, examined: 54, gpa: '8.76 / 10', topSubjects: 'General Science (88.9%), English (87.1%), Mathematics (85.8%)', passRate: '96.3%', trend: '+0.28 GPA', trendType: 'up', classTeacher: 'Smt. T. Sunitha' },
+    { classId: 'VI-A', className: 'Class VI-A (Middle School)', enrolled: 56, examined: 55, gpa: '8.65 / 10', topSubjects: 'Social Studies (86.5%), Telugu (87.8%), Hindi (84.2%)', passRate: '96.4%', trend: 'Steady', trendType: 'steady', classTeacher: 'Sri K. Nagaraju' },
+    { classId: 'Primary-Comp', className: 'Primary Wing (Classes I - V Composite)', enrolled: 441, examined: 439, gpa: '9.08 / 10', topSubjects: 'English Foundation (92.8%), EVS (91.5%), Basic Arithmetic (89.6%)', passRate: '99.5%', trend: '+0.60 GPA', trendType: 'up', classTeacher: 'Smt. G. Varalakshmi (Principal Head)' }
+  ];
+
+  const REPORTS_ATTENDANCE_DATA = [
+    { unit: 'Class X-A (SSC Board Batch)', period: 'October 2026 (Monthly Census)', workingDays: 24, avgPresent: '44.1 / 45', rate: '98.0%', compliance: 'Fully Compliant (Exceeds 75% Threshold)', status: 'Optimal', details: 'Top attendance across secondary school. 0 students below 75%.' },
+    { unit: 'Class X-B (SSC Board Batch)', period: 'October 2026 (Monthly Census)', workingDays: 24, avgPresent: '41.8 / 43', rate: '97.2%', compliance: 'Fully Compliant', status: 'Optimal', details: '1 student on medical leave with verified hospital certificate.' },
+    { unit: 'Class IX-A (Pre-Board)', period: 'October 2026 (Monthly Census)', workingDays: 24, avgPresent: '45.9 / 48', rate: '95.6%', compliance: 'Compliant (2 Flagged)', status: 'Action Required', details: '2 students at 74.2% due to viral fever; remedial extra classes logged.' },
+    { unit: 'Class IX-B (Pre-Board)', period: 'October 2026 (Monthly Census)', workingDays: 24, avgPresent: '43.7 / 46', rate: '95.0%', compliance: 'Compliant (1 Flagged)', status: 'Action Required', details: 'Parent convocation issued for 1 irregular student (Roll 24).' },
+    { unit: 'Class VIII-A (Upper Primary)', period: 'October 2026 (Monthly Census)', workingDays: 24, avgPresent: '50.2 / 52', rate: '96.5%', compliance: 'Fully Compliant', status: 'Optimal', details: 'Consistent 96%+ morning assembly attendance.' },
+    { unit: 'Class VIII-B (Upper Primary)', period: 'October 2026 (Monthly Census)', workingDays: 24, avgPresent: '46.8 / 50', rate: '93.6%', compliance: 'Compliant (3 Flagged)', status: 'Action Required', details: '3 students flagged below 75%; sports team OD attendance regularized.' },
+    { unit: 'Class VII-A & VI-A (Middle School)', period: 'October 2026 (Monthly Census)', workingDays: 24, avgPresent: '106.1 / 110', rate: '96.5%', compliance: 'Fully Compliant', status: 'Optimal', details: 'Excellent student engagement and zero unexcused absences.' },
+    { unit: 'Primary Wing (Classes I - V)', period: 'October 2026 (Monthly Census)', workingDays: 24, avgPresent: '431.2 / 441', rate: '97.8%', compliance: 'Exemplary Compliance', status: 'Optimal', details: 'Class IV-A achieved 98.6% monthly attendance rate.' },
+    { unit: 'Teaching & Non-Teaching Staff', period: 'October 2026 Biometric Punch', workingDays: 26, avgPresent: '52.8 / 54', rate: '97.8%', compliance: 'Statutory Punctuality Verified', status: 'Optimal', details: 'Biometric fingerprint punch verified against leave authorizations.' }
+  ];
+
+  const REPORTS_FINANCIAL_DATA = [
+    { head: 'Tuition Fees (Term 1 & 2)', demand: '₹68,50,000', collected: '₹60,28,000', dues: '₹8,22,000', refunds: '₹42,000', status: 'Reconciled', rate: '88.0%', notes: 'Term 1 collection closed at 96%; Term 2 active collection counter.' },
+    { head: 'Term & Examination Fees', demand: '₹14,25,000', collected: '₹12,82,500', dues: '₹1,42,500', refunds: '₹11,500', status: 'Reconciled', rate: '90.0%', notes: 'Covers AP State Board exam registration & internal answer scripts.' },
+    { head: 'Computer & STEM Laboratory Fees', demand: '₹9,80,000', collected: '₹8,33,000', dues: '₹1,47,000', refunds: '₹8,000', status: 'Reconciled', rate: '85.0%', notes: 'Supports 45 Dell desktops, robotics kits, and high-speed fiber internet.' },
+    { head: 'Library, Sports & Activity Dues', demand: '₹4,10,000', collected: '₹3,56,700', dues: '₹53,300', refunds: '₹4,000', status: 'Reconciled', rate: '87.0%', notes: 'Book acquisitions, sports tournament kits, and science fair requisitions.' },
+    { head: 'Transport Fleet Logistics', demand: '₹5,80,000', collected: '₹4,93,000', dues: '₹87,000', refunds: '₹13,000', status: 'Reconciled', rate: '85.0%', notes: '8 school buses, diesel fuel ledger, and driver statutory RTA permits.' },
+    { head: 'Board Exam Registration & Marks Memos', demand: '₹1,45,000', collected: '₹1,32,000', dues: '₹13,000', refunds: '₹0', status: 'Audited & Cleared', rate: '91.0%', notes: 'Statutory AP SSC Board remittances for Class X 2027 batch.' }
+  ];
+
+  const REPORTS_PAYROLL_DATA = [
+    { empId: 'SV-EXEC-001', name: 'Smt. Gorle Varalakshmi', role: 'Principal & Executive Head', dept: 'Administration', gross: '₹68,000', deductions: '₹7,200', net: '₹60,800', utr: 'SBI-ACH-90412891', audit: 'Audited & Cleared' },
+    { empId: 'SV-EXEC-002', name: 'Sri Navva Anand', role: 'Vice Principal & Discipline Head', dept: 'Teaching Faculty (High School)', gross: '₹56,000', deductions: '₹5,800', net: '₹50,200', utr: 'SBI-ACH-90412892', audit: 'Audited & Cleared' },
+    { empId: 'SV-FAC-014', name: 'Sri Ch. Ramesh', role: 'Senior Mathematics Lecturer', dept: 'Teaching Faculty (High School)', gross: '₹44,000', deductions: '₹4,400', net: '₹39,600', utr: 'SBI-ACH-90412893', audit: 'Audited & Cleared' },
+    { empId: 'SV-FAC-018', name: 'Smt. K. Anuradha', role: 'Senior English Faculty', dept: 'Teaching Faculty (High School)', gross: '₹42,000', deductions: '₹4,200', net: '₹37,800', utr: 'SBI-ACH-90412894', audit: 'Audited & Cleared' },
+    { empId: 'SV-FAC-021', name: 'Smt. M. Sailaja', role: 'Physical Science Faculty', dept: 'Teaching Faculty (High School)', gross: '₹41,000', deductions: '₹4,100', net: '₹36,900', utr: 'SBI-ACH-90412895', audit: 'Audited & Cleared' },
+    { empId: 'SV-FAC-032', name: 'Smt. P. Hema Latha', role: 'Social Studies Faculty', dept: 'Teaching Faculty (High School)', gross: '₹40,000', deductions: '₹4,000', net: '₹36,000', utr: 'SBI-ACH-90412896', audit: 'Audited & Cleared' },
+    { empId: 'SV-PRI-001', name: 'Smt. T. Sunitha', role: 'Primary Section Coordinator', dept: 'Primary Wing', gross: '₹38,000', deductions: '₹3,800', net: '₹34,200', utr: 'SBI-ACH-90412897', audit: 'Audited & Cleared' },
+    { empId: 'SV-ADM-004', name: 'Sri S. Ramu', role: 'Head Accounts Clerk & Cashier', dept: 'Administration', gross: '₹32,000', deductions: '₹3,200', net: '₹28,800', utr: 'SBI-ACH-90412898', audit: 'Audited & Cleared' },
+    { empId: 'SV-LOG-002', name: 'Sri M. Appa Rao', role: 'Senior Transport Driver (Bus 01)', dept: 'Transport Logistics', gross: '₹24,000', deductions: '₹2,400', net: '₹21,600', utr: 'SBI-ACH-90412899', audit: 'Audited & Cleared' },
+    { empId: 'SV-LAB-005', name: 'Sri K. Nagaraju', role: 'Computer & Science Lab Tech', dept: 'Operations & Labs', gross: '₹26,000', deductions: '₹2,600', net: '₹23,400', utr: 'SBI-ACH-90412900', audit: 'Audited & Cleared' }
+  ];
+
+  const REPORTS_DEMOGRAPHICS_DATA = [
+    { classSection: 'Class X (Sections A & B)', total: 88, boys: 48, girls: 40, ageModal: '14 - 15 Years', rteBeneficiaries: 12, udiseSync: '100% Synced (AP Child Info)', notes: 'SSC Board Appearing Batch; complete biometric Aadhaar validation.' },
+    { classSection: 'Class IX (Sections A & B)', total: 94, boys: 51, girls: 43, ageModal: '13 - 14 Years', rteBeneficiaries: 15, udiseSync: '100% Synced', notes: 'Pre-board batch; subject stream allocations verified.' },
+    { classSection: 'Class VIII (Sections A & B)', total: 102, boys: 55, girls: 47, ageModal: '12 - 13 Years', rteBeneficiaries: 18, udiseSync: '100% Synced', notes: 'Upper primary wing; foundational STEM modules active.' },
+    { classSection: 'Class VII (Section A)', total: 54, boys: 29, girls: 25, ageModal: '11 - 12 Years', rteBeneficiaries: 9, udiseSync: '100% Synced', notes: 'Middle school cohort; language bilingual transition.' },
+    { classSection: 'Class VI (Section A)', total: 56, boys: 31, girls: 25, ageModal: '10 - 11 Years', rteBeneficiaries: 10, udiseSync: '100% Synced', notes: 'Entry grade for upper primary; 100% vaccination audit.' },
+    { classSection: 'Class V (Sections A & B)', total: 78, boys: 42, girls: 36, ageModal: '9 - 10 Years', rteBeneficiaries: 14, udiseSync: '100% Synced', notes: 'Senior primary; foundational numeracy and literacy cleared.' },
+    { classSection: 'Class IV (Sections A & B)', total: 82, boys: 44, girls: 38, ageModal: '8 - 9 Years', rteBeneficiaries: 16, udiseSync: '100% Synced', notes: 'Achieved highest monthly punctuality and attendance.' },
+    { classSection: 'Class III (Sections A & B)', total: 86, boys: 46, girls: 40, ageModal: '7 - 8 Years', rteBeneficiaries: 15, udiseSync: '100% Synced', notes: 'Activity-based learning; balanced gender ratio.' },
+    { classSection: 'Classes I & II (Primary Wing)', total: 142, boys: 76, girls: 66, ageModal: '5 - 7 Years', rteBeneficiaries: 24, udiseSync: '100% Synced', notes: 'Entry primary cohort; 100% birth certificate & health cards verified.' },
+    { classSection: 'Pre-Primary (LKG & UKG)', total: 73, boys: 40, girls: 33, ageModal: '3 - 5 Years', rteBeneficiaries: 9, udiseSync: '100% Synced', notes: 'Early childhood development and play-based foundational curriculum.' }
+  ];
+
+  const REPORTS_ADMISSIONS_DATA = [
+    { grade: 'Class X (Transfer Inward)', enquiries: 18, applications: 8, admissions: 4, withdrawals: 1, conversion: '50.0%', capacity: 'Full (88 / 88 Cap)', status: 'Admissions Closed' },
+    { grade: 'Class IX (High School Intake)', enquiries: 42, applications: 28, admissions: 22, withdrawals: 1, conversion: '78.6%', capacity: 'Full (94 / 95 Cap)', status: '1 Seat Left' },
+    { grade: 'Class VIII (Middle School)', enquiries: 38, applications: 26, admissions: 20, withdrawals: 0, conversion: '76.9%', capacity: 'Near Full (102 / 105)', status: '3 Seats Left' },
+    { grade: 'Class VI (Upper Primary Entry)', enquiries: 64, applications: 44, admissions: 35, withdrawals: 1, conversion: '79.5%', capacity: 'Full (56 / 56 Cap)', status: 'Admissions Closed' },
+    { grade: 'Classes I - V (Primary Wing)', enquiries: 95, applications: 58, admissions: 48, withdrawals: 1, conversion: '82.8%', capacity: 'Optimal (441 / 450)', status: 'Limited Seats' },
+    { grade: 'Nursery, LKG & UKG (Foundational)', enquiries: 85, applications: 46, admissions: 36, withdrawals: 0, conversion: '78.3%', capacity: 'Optimal (73 / 80 Cap)', status: '7 Seats Left' }
+  ];
+
+  const REPORTS_OPERATIONAL_DATA = [
+    { wing: 'Staff Leaves & Substitution', scope: '54 Teaching & Non-Teaching Faculty', metric: '24 Leaves Approved • 4 Pending', pendingItems: '4 Pending Reviews (2 Faculty, 2 Drivers)', official: 'Sri Navva Anand (Vice Principal)', status: 'Action Required', notes: 'Zero classroom substitution gaps; all 24 periods covered by designated relief teachers.' },
+    { wing: 'Transport Logistics Fleet', scope: '8 School Buses • 24 Route Stops', metric: '100% On-Time Transit • 362 Students', pendingItems: 'Bus 03 Scheduled Lubricant Service (31 Oct)', official: 'Sri Ch. Ramesh (Transport Officer)', status: 'Optimal', notes: 'RTA fitness certificates, speed governors, and female attendants verified across all 8 routes.' },
+    { wing: 'Inventory, Lab & Store Assets', scope: 'Capital Assets & Consumables (₹26.4L)', metric: '96.8% In-Service • 62 Lab Units Active', pendingItems: '1 Projector Work Order (Infotech Vendors)', official: 'Sri P. Appa Rao (Store Custodian)', status: 'In Progress', notes: 'Science lab apparatus, library accession, and stationery buffer stock verified.' },
+    { wing: 'Principal Appointments & Visitors', scope: 'Campus Security & Executive Meetings', metric: '18 Meetings Logged • 94% On-Time SLA', pendingItems: '2 Follow-up Action Items from PTA Meeting', official: 'Executive Secretary to Principal', status: 'Optimal', notes: 'Visitor gate-pass verification, digital check-in/out, and confidential notes securely stored.' },
+    { wing: 'Examinations Cell Governance', scope: 'Summative & Formative Assessments', metric: '100% Marks Tabulated & Approved', pendingItems: 'Report Card Dispatch for Class X (31 Oct)', official: 'Sri N. Anand (Exam In-Charge)', status: 'Optimal', notes: 'OMR tabulation sheets, moderation ledger, and student report cards generated without dispute.' },
+    { wing: 'Campus Health & Safety Audits', scope: 'Fire Extinguishers, RO Water, CCTV', metric: '100% Compliant (Fire Dept NOC Active)', pendingItems: 'Quarterly Water Test Certificate Renewal', official: 'Sri G. Venkatesh (Campus Admin)', status: 'Optimal', notes: 'RO water sample tested zero bacteria; 32 CCTV cameras recording with 45-day storage backup.' }
+  ];
+
+  // --- CHART INSTANCES ---
+  let chartAcademicSubjectInst = null;
+  let chartAcademicGradeInst = null;
+  let chartAttendanceDailyInst = null;
+  let chartAttendanceClassInst = null;
+  let chartFinancialDemandInst = null;
+  let chartFinancialFeeHeadsInst = null;
+  let chartPayrollDeptInst = null;
+  let chartPayrollDeductionsInst = null;
+  let chartDemographicsGenderInst = null;
+  let chartDemographicsCategoryInst = null;
+  let chartAdmissionsFunnelInst = null;
+  let chartAdmissionsMonthlyInst = null;
+  let chartOperationalRadarInst = null;
+  let chartOperationalWingInst = null;
+
+  // --- RENDERERS ---
+  function renderAcademicReportsTable(data) {
+    const list = data || REPORTS_ACADEMIC_DATA;
+    const tbody = document.getElementById('tbodyAcademicReports');
+    if (!tbody) return;
+    if (list.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="7" class="text-center p-4 text-muted">No academic records found matching criteria.</td></tr>';
+      return;
+    }
+    tbody.innerHTML = list.map(item => `
+      <tr>
+        <td>
+          <div style="font-weight: 700; color: #0f172a;"><i class="fa-solid fa-graduation-cap text-primary mr-1"></i> ${item.className}</div>
+          <small class="text-muted">In-Charge: ${item.classTeacher}</small>
+        </td>
+        <td><strong>${item.examined}</strong> / ${item.enrolled} Examined</td>
+        <td><span class="badge" style="background: #eff6ff; color: #1d4ed8; font-size: 0.85rem; font-weight: 800;">${item.gpa}</span></td>
+        <td style="max-width: 280px; font-size: 0.82rem; color: #334155;">${item.topSubjects}</td>
+        <td><span class="badge" style="background: #f0fdf4; color: #166534; font-weight: 800;">${item.passRate}</span></td>
+        <td>
+          <span class="badge" style="background: ${item.trendType === 'up' ? '#dcfce7; color: #15803d' : '#f1f5f9; color: #475569'}; font-weight: 700;">
+            <i class="fa-solid ${item.trendType === 'up' ? 'fa-arrow-trend-up' : 'fa-arrows-left-right'} mr-1"></i> ${item.trend}
+          </span>
+        </td>
+        <td class="text-end">
+          <button class="btn btn-secondary btn-sm" onclick="portalApp.openReportDossierModal('academic', '${item.classId}')" title="View Diagnostic Dossier">
+            <i class="fa-solid fa-file-waveform mr-1"></i> Diagnostic Dossier
+          </button>
+        </td>
+      </tr>
+    `).join('');
+  }
+
+  function filterAcademicReportsTable() {
+    const q = (document.getElementById('searchAcademicReportsInput')?.value || '').toLowerCase().trim();
+    const cls = document.getElementById('filterAcademicClassSelect')?.value || '';
+    const filtered = REPORTS_ACADEMIC_DATA.filter(item => {
+      const matchQ = !q || item.className.toLowerCase().includes(q) || item.classTeacher.toLowerCase().includes(q) || item.topSubjects.toLowerCase().includes(q);
+      const matchCls = !cls || item.className.includes(cls);
+      return matchQ && matchCls;
+    });
+    renderAcademicReportsTable(filtered);
+  }
+
+  function initAcademicReportsCharts() {
+    if (typeof Chart === 'undefined') return;
+    const ctx1 = document.getElementById('chartAcademicSubjectAverages')?.getContext('2d');
+    if (ctx1) {
+      if (chartAcademicSubjectInst) chartAcademicSubjectInst.destroy();
+      chartAcademicSubjectInst = new Chart(ctx1, {
+        type: 'bar',
+        data: {
+          labels: ['Telugu', 'Hindi', 'English', 'Mathematics', 'Physical Sci', 'Biological Sci', 'Social Studies'],
+          datasets: [
+            {
+              label: 'Subject Average Score (%)',
+              data: [91.2, 87.5, 89.4, 91.8, 88.5, 90.2, 88.0],
+              backgroundColor: 'rgba(37, 99, 235, 0.75)',
+              borderColor: '#1d4ed8',
+              borderWidth: 1.5,
+              borderRadius: 4
+            },
+            {
+              label: 'Pass Percentage (%)',
+              data: [100, 98.5, 100, 97.8, 98.2, 100, 99.1],
+              type: 'line',
+              borderColor: '#10b981',
+              backgroundColor: '#10b981',
+              borderWidth: 2.5,
+              pointRadius: 4,
+              fill: false
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { position: 'top' } },
+          scales: { y: { min: 70, max: 105, ticks: { callback: v => v + '%' } } }
+        }
+      });
+    }
+
+    const ctx2 = document.getElementById('chartAcademicGradeDistribution')?.getContext('2d');
+    if (ctx2) {
+      if (chartAcademicGradeInst) chartAcademicGradeInst.destroy();
+      chartAcademicGradeInst = new Chart(ctx2, {
+        type: 'doughnut',
+        data: {
+          labels: ['Grade A1 (91-100%)', 'Grade A2 (81-90%)', 'Grade B1 (71-80%)', 'Grade B2 (61-70%)', 'Grade C1/C2 (51-60%)', 'Grade D (35-50%)'],
+          datasets: [{
+            data: [275, 240, 168, 100, 52, 20],
+            backgroundColor: ['#2563eb', '#3b82f6', '#10b981', '#f59e0b', '#8b5cf6', '#ef4444'],
+            borderWidth: 2,
+            hoverOffset: 6
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { position: 'right' } }
+        }
+      });
+    }
+  }
+
+  function renderAttendanceReportsTable(data) {
+    const list = data || REPORTS_ATTENDANCE_DATA;
+    const tbody = document.getElementById('tbodyAttendanceReports');
+    if (!tbody) return;
+    if (list.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="7" class="text-center p-4 text-muted">No attendance reports found matching criteria.</td></tr>';
+      return;
+    }
+    tbody.innerHTML = list.map(item => `
+      <tr>
+        <td>
+          <div style="font-weight: 700; color: #0f172a;"><i class="fa-solid fa-users text-primary mr-1"></i> ${item.unit}</div>
+          <small class="text-muted">${item.details}</small>
+        </td>
+        <td>${item.period}</td>
+        <td><strong>${item.workingDays} Days</strong></td>
+        <td>${item.avgPresent}</td>
+        <td><span class="badge" style="background: #eff6ff; color: #1d4ed8; font-weight: 800; font-size: 0.85rem;">${item.rate}</span></td>
+        <td>
+          <span class="badge" style="background: ${item.status === 'Optimal' ? '#dcfce7; color: #15803d' : '#fef3c7; color: #92400e'}; font-weight: 700;">
+            <i class="fa-solid ${item.status === 'Optimal' ? 'fa-circle-check' : 'fa-triangle-exclamation'} mr-1"></i> ${item.compliance}
+          </span>
+        </td>
+        <td class="text-end">
+          <button class="btn btn-secondary btn-sm" onclick="portalApp.openReportDossierModal('attendance', '${item.unit}')" title="View Detailed Register">
+            <i class="fa-solid fa-clipboard-check mr-1"></i> View Register
+          </button>
+        </td>
+      </tr>
+    `).join('');
+  }
+
+  function filterAttendanceReportsTable() {
+    const q = (document.getElementById('searchAttendanceReportsInput')?.value || '').toLowerCase().trim();
+    const scope = document.getElementById('filterAttendanceScopeSelect')?.value || 'all';
+    const filtered = REPORTS_ATTENDANCE_DATA.filter(item => {
+      const matchQ = !q || item.unit.toLowerCase().includes(q) || item.details.toLowerCase().includes(q);
+      const matchScope = (scope === 'all') ||
+        (scope === 'at-risk' && item.status === 'Action Required') ||
+        (scope === 'class-wise' && item.unit.includes('Class')) ||
+        (scope === 'monthly' && item.period.includes('Monthly'));
+      return matchQ && matchScope;
+    });
+    renderAttendanceReportsTable(filtered);
+  }
+
+  function initAttendanceReportsCharts() {
+    if (typeof Chart === 'undefined') return;
+    const ctx1 = document.getElementById('chartAttendanceDailyTrend')?.getContext('2d');
+    if (ctx1) {
+      if (chartAttendanceDailyInst) chartAttendanceDailyInst.destroy();
+      chartAttendanceDailyInst = new Chart(ctx1, {
+        type: 'line',
+        data: {
+          labels: ['1 Oct', '3 Oct', '5 Oct', '7 Oct', '10 Oct', '13 Oct', '16 Oct', '19 Oct', '22 Oct', '25 Oct', '28 Oct'],
+          datasets: [
+            {
+              label: 'Student Campus Attendance (%)',
+              data: [96.2, 95.8, 97.1, 96.5, 96.8, 95.4, 97.5, 96.9, 97.2, 96.4, 97.0],
+              borderColor: '#2563eb',
+              backgroundColor: 'rgba(37, 99, 235, 0.1)',
+              borderWidth: 2.5,
+              pointRadius: 4,
+              fill: true,
+              tension: 0.3
+            },
+            {
+              label: 'Faculty & Staff Punctuality (%)',
+              data: [98.1, 98.1, 96.3, 98.1, 100, 98.1, 96.3, 98.1, 100, 98.1, 98.1],
+              borderColor: '#10b981',
+              borderWidth: 2,
+              borderDash: [5, 5],
+              pointRadius: 3,
+              fill: false
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { position: 'top' } },
+          scales: { y: { min: 90, max: 102, ticks: { callback: v => v + '%' } } }
+        }
+      });
+    }
+
+    const ctx2 = document.getElementById('chartAttendanceClassComparison')?.getContext('2d');
+    if (ctx2) {
+      if (chartAttendanceClassInst) chartAttendanceClassInst.destroy();
+      chartAttendanceClassInst = new Chart(ctx2, {
+        type: 'bar',
+        data: {
+          labels: ['Class X-A', 'Class X-B', 'Class IX-A', 'Class IX-B', 'Class VIII-A', 'Class VIII-B', 'Class VII-A', 'Class VI-A', 'Class IV-A', 'Primary Avg'],
+          datasets: [{
+            label: 'Attendance Rate (%)',
+            data: [98.0, 97.2, 95.6, 95.0, 96.5, 93.6, 96.5, 96.4, 98.6, 97.8],
+            backgroundColor: 'rgba(16, 185, 129, 0.75)',
+            borderColor: '#059669',
+            borderWidth: 1.5,
+            borderRadius: 4
+          }]
+        },
+        options: {
+          indexAxis: 'y',
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { display: false } },
+          scales: { x: { min: 85, max: 100, ticks: { callback: v => v + '%' } } }
+        }
+      });
+    }
+  }
+
+  function renderFinancialReportsTable(data) {
+    const list = data || REPORTS_FINANCIAL_DATA;
+    const tbody = document.getElementById('tbodyFinancialReports');
+    if (!tbody) return;
+    if (list.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="7" class="text-center p-4 text-muted">No financial ledger entries found.</td></tr>';
+      return;
+    }
+    tbody.innerHTML = list.map(item => `
+      <tr>
+        <td>
+          <div style="font-weight: 700; color: #0f172a;"><i class="fa-solid fa-receipt text-primary mr-1"></i> ${item.head}</div>
+          <small class="text-muted">${item.notes}</small>
+        </td>
+        <td><strong>${item.demand}</strong></td>
+        <td><span style="font-weight: 800; color: #166534;">${item.collected}</span> <small class="text-muted">(${item.rate})</small></td>
+        <td><span style="font-weight: 800; color: #dc2626;">${item.dues}</span></td>
+        <td>${item.refunds}</td>
+        <td><span class="badge" style="background: #eff6ff; color: #1d4ed8; font-weight: 700;"><i class="fa-solid fa-circle-check mr-1"></i> ${item.status}</span></td>
+        <td class="text-end">
+          <button class="btn btn-secondary btn-sm" onclick="portalApp.openReportDossierModal('financial', '${item.head}')" title="View Head Voucher Ledger">
+            <i class="fa-solid fa-book mr-1"></i> Audited Voucher
+          </button>
+        </td>
+      </tr>
+    `).join('');
+  }
+
+  function filterFinancialReportsTable() {
+    const q = (document.getElementById('searchFinancialReportsInput')?.value || '').toLowerCase().trim();
+    const head = document.getElementById('filterFinancialHeadSelect')?.value || '';
+    const filtered = REPORTS_FINANCIAL_DATA.filter(item => {
+      const matchQ = !q || item.head.toLowerCase().includes(q) || item.notes.toLowerCase().includes(q);
+      const matchHead = !head || item.head.includes(head);
+      return matchQ && matchHead;
+    });
+    renderFinancialReportsTable(filtered);
+  }
+
+  function initFinancialReportsCharts() {
+    if (typeof Chart === 'undefined') return;
+    const ctx1 = document.getElementById('chartFinancialCollectionsDemand')?.getContext('2d');
+    if (ctx1) {
+      if (chartFinancialDemandInst) chartFinancialDemandInst.destroy();
+      chartFinancialDemandInst = new Chart(ctx1, {
+        type: 'bar',
+        data: {
+          labels: ['June 2026', 'July 2026', 'August 2026', 'September 2026', 'October 2026'],
+          datasets: [
+            {
+              label: 'Assessed Demand (₹ Lakhs)',
+              data: [25.0, 22.5, 18.0, 18.0, 18.95],
+              backgroundColor: 'rgba(148, 163, 184, 0.6)',
+              borderColor: '#64748b',
+              borderWidth: 1.5,
+              borderRadius: 4
+            },
+            {
+              label: 'Realized Collections (₹ Lakhs)',
+              data: [23.8, 20.2, 15.6, 14.8, 13.85],
+              backgroundColor: 'rgba(16, 185, 129, 0.8)',
+              borderColor: '#059669',
+              borderWidth: 1.5,
+              borderRadius: 4
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { position: 'top' } },
+          scales: { y: { ticks: { callback: v => '₹' + v + 'L' } } }
+        }
+      });
+    }
+
+    const ctx2 = document.getElementById('chartFinancialFeeHeadsBreakdown')?.getContext('2d');
+    if (ctx2) {
+      if (chartFinancialFeeHeadsInst) chartFinancialFeeHeadsInst.destroy();
+      chartFinancialFeeHeadsInst = new Chart(ctx2, {
+        type: 'doughnut',
+        data: {
+          labels: ['Tuition Fees (₹60.28L)', 'Term & Exams (₹12.82L)', 'STEM & Lab (₹8.33L)', 'Transport Logistics (₹4.93L)', 'Library & Sports (₹3.56L)'],
+          datasets: [{
+            data: [60.28, 12.82, 8.33, 4.93, 3.56],
+            backgroundColor: ['#2563eb', '#10b981', '#f59e0b', '#8b5cf6', '#ec4899'],
+            borderWidth: 2
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { position: 'right' } }
+        }
+      });
+    }
+  }
+
+  function renderPayrollReportsTable(data) {
+    const list = data || REPORTS_PAYROLL_DATA;
+    const tbody = document.getElementById('tbodyPayrollReports');
+    if (!tbody) return;
+    if (list.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="8" class="text-center p-4 text-muted">No confidential payroll audit records found.</td></tr>';
+      return;
+    }
+    tbody.innerHTML = list.map(item => `
+      <tr>
+        <td>
+          <div style="font-weight: 700; color: #0f172a;"><i class="fa-solid fa-id-badge text-primary mr-1"></i> ${item.name}</div>
+          <small class="text-muted">ID: ${item.empId}</small>
+        </td>
+        <td>
+          <div>${item.role}</div>
+          <small class="text-muted">${item.dept}</small>
+        </td>
+        <td><strong>${item.gross}</strong></td>
+        <td><span style="color: #dc2626; font-weight: 700;">-${item.deductions}</span></td>
+        <td><span style="color: #166534; font-weight: 800; font-size: 0.95rem;">${item.net}</span></td>
+        <td><code style="font-size: 0.8rem; background: #f1f5f9; padding: 2px 6px; border-radius: 4px;">${item.utr}</code></td>
+        <td><span class="badge" style="background: #dcfce7; color: #166534; font-weight: 700;"><i class="fa-solid fa-circle-check mr-1"></i> ${item.audit}</span></td>
+        <td class="text-end">
+          <button class="btn btn-secondary btn-sm" onclick="portalApp.openReportDossierModal('payroll', '${item.empId}')" title="View Payslip & Audit Trail">
+            <i class="fa-solid fa-file-invoice mr-1"></i> Payslip
+          </button>
+        </td>
+      </tr>
+    `).join('');
+  }
+
+  function filterPayrollReportsTable() {
+    const q = (document.getElementById('searchPayrollReportsInput')?.value || '').toLowerCase().trim();
+    const dept = document.getElementById('filterPayrollDeptSelect')?.value || '';
+    const filtered = REPORTS_PAYROLL_DATA.filter(item => {
+      const matchQ = !q || item.name.toLowerCase().includes(q) || item.empId.toLowerCase().includes(q) || item.role.toLowerCase().includes(q);
+      const matchDept = !dept || item.dept.includes(dept);
+      return matchQ && matchDept;
+    });
+    renderPayrollReportsTable(filtered);
+  }
+
+  function initPayrollReportsCharts() {
+    if (typeof Chart === 'undefined') return;
+    const ctx1 = document.getElementById('chartPayrollDepartmentOutlay')?.getContext('2d');
+    if (ctx1) {
+      if (chartPayrollDeptInst) chartPayrollDeptInst.destroy();
+      chartPayrollDeptInst = new Chart(ctx1, {
+        type: 'bar',
+        data: {
+          labels: ['High School Faculty', 'Primary Wing', 'Administration & Accounts', 'Transport Logistics', 'Lab Technicians & Support'],
+          datasets: [{
+            label: 'Monthly Gross Salary Outlay (₹)',
+            data: [840000, 480000, 260000, 145000, 120000],
+            backgroundColor: 'rgba(99, 102, 241, 0.75)',
+            borderColor: '#4f46e5',
+            borderWidth: 1.5,
+            borderRadius: 4
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { display: false } },
+          scales: { y: { ticks: { callback: v => '₹' + (v / 1000) + 'k' } } }
+        }
+      });
+    }
+
+    const ctx2 = document.getElementById('chartPayrollDeductionsBreakdown')?.getContext('2d');
+    if (ctx2) {
+      if (chartPayrollDeductionsInst) chartPayrollDeductionsInst.destroy();
+      chartPayrollDeductionsInst = new Chart(ctx2, {
+        type: 'pie',
+        data: {
+          labels: ['EPF Employee + Employer (₹1,08,000)', 'Professional Tax PT (₹18,600)', 'Income Tax TDS (₹26,000)'],
+          datasets: [{
+            data: [108000, 18600, 26000],
+            backgroundColor: ['#3b82f6', '#f59e0b', '#ef4444'],
+            borderWidth: 2
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { position: 'right' } }
+        }
+      });
+    }
+  }
+
+  function renderDemographicsReportsTable(data) {
+    const list = data || REPORTS_DEMOGRAPHICS_DATA;
+    const tbody = document.getElementById('tbodyDemographicsReports');
+    if (!tbody) return;
+    if (list.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="8" class="text-center p-4 text-muted">No student demographic records found.</td></tr>';
+      return;
+    }
+    tbody.innerHTML = list.map(item => `
+      <tr>
+        <td>
+          <div style="font-weight: 700; color: #0f172a;"><i class="fa-solid fa-school text-primary mr-1"></i> ${item.classSection}</div>
+          <small class="text-muted">${item.notes}</small>
+        </td>
+        <td><strong>${item.total}</strong> Students</td>
+        <td><span class="badge" style="background:#eff6ff; color:#1d4ed8; font-weight:700;">${item.boys} B</span></td>
+        <td><span class="badge" style="background:#fdf2f8; color:#be185d; font-weight:700;">${item.girls} G</span></td>
+        <td>${item.ageModal}</td>
+        <td><span class="badge" style="background: #fef3c7; color: #92400e; font-weight: 700;">${item.rteBeneficiaries} Beneficiaries</span></td>
+        <td><span class="badge" style="background: #dcfce7; color: #166534; font-weight: 700;"><i class="fa-solid fa-circle-check mr-1"></i> ${item.udiseSync}</span></td>
+        <td class="text-end">
+          <button class="btn btn-secondary btn-sm" onclick="portalApp.openReportDossierModal('demographics', '${item.classSection}')" title="Export Class Demographics">
+            <i class="fa-solid fa-print mr-1"></i> Census Sheet
+          </button>
+        </td>
+      </tr>
+    `).join('');
+  }
+
+  function filterDemographicsReportsTable() {
+    const q = (document.getElementById('searchDemographicsReportsInput')?.value || '').toLowerCase().trim();
+    const cls = document.getElementById('filterDemographicsClassSelect')?.value || '';
+    const filtered = REPORTS_DEMOGRAPHICS_DATA.filter(item => {
+      const matchQ = !q || item.classSection.toLowerCase().includes(q) || item.notes.toLowerCase().includes(q);
+      const matchCls = !cls || item.classSection.includes(cls);
+      return matchQ && matchCls;
+    });
+    renderDemographicsReportsTable(filtered);
+  }
+
+  function initDemographicsReportsCharts() {
+    if (typeof Chart === 'undefined') return;
+    const ctx1 = document.getElementById('chartDemographicsGenderClass')?.getContext('2d');
+    if (ctx1) {
+      if (chartDemographicsGenderInst) chartDemographicsGenderInst.destroy();
+      chartDemographicsGenderInst = new Chart(ctx1, {
+        type: 'bar',
+        data: {
+          labels: ['Class X', 'Class IX', 'Class VIII', 'Class VII', 'Class VI', 'Class V', 'Class IV', 'Class III', 'Classes I-II', 'Pre-Primary'],
+          datasets: [
+            {
+              label: 'Boys',
+              data: [48, 51, 55, 29, 31, 42, 44, 46, 76, 40],
+              backgroundColor: 'rgba(37, 99, 235, 0.8)',
+              borderColor: '#1d4ed8',
+              borderWidth: 1.5,
+              borderRadius: 3
+            },
+            {
+              label: 'Girls',
+              data: [40, 43, 47, 25, 25, 36, 38, 40, 66, 33],
+              backgroundColor: 'rgba(236, 72, 153, 0.8)',
+              borderColor: '#db2777',
+              borderWidth: 1.5,
+              borderRadius: 3
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { position: 'top' } },
+          scales: { x: { stacked: true }, y: { stacked: true } }
+        }
+      });
+    }
+
+    const ctx2 = document.getElementById('chartDemographicsCategoryPie')?.getContext('2d');
+    if (ctx2) {
+      if (chartDemographicsCategoryInst) chartDemographicsCategoryInst.destroy();
+      chartDemographicsCategoryInst = new Chart(ctx2, {
+        type: 'doughnut',
+        data: {
+          labels: ['Backward Classes (BC) - 48%', 'General / OC - 28%', 'Scheduled Castes (SC) - 14%', 'Scheduled Tribes (ST) - 6%', 'Minorities - 4%'],
+          datasets: [{
+            data: [410, 239, 120, 51, 35],
+            backgroundColor: ['#3b82f6', '#10b981', '#f59e0b', '#8b5cf6', '#06b6d4'],
+            borderWidth: 2
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { position: 'right' } }
+        }
+      });
+    }
+  }
+
+  function renderAdmissionsReportsTable(data) {
+    const list = data || REPORTS_ADMISSIONS_DATA;
+    const tbody = document.getElementById('tbodyAdmissionsReports');
+    if (!tbody) return;
+    if (list.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="8" class="text-center p-4 text-muted">No admissions data found matching criteria.</td></tr>';
+      return;
+    }
+    tbody.innerHTML = list.map(item => `
+      <tr>
+        <td>
+          <div style="font-weight: 700; color: #0f172a;"><i class="fa-solid fa-door-open text-primary mr-1"></i> ${item.grade}</div>
+          <small class="text-muted">${item.capacity}</small>
+        </td>
+        <td><strong>${item.enquiries}</strong> Enquiries</td>
+        <td><strong>${item.applications}</strong> Applications</td>
+        <td><span style="color: #166534; font-weight: 800; font-size: 0.95rem;">${item.admissions} Confirmed</span></td>
+        <td>${item.withdrawals} TCs</td>
+        <td><span class="badge" style="background: #eff6ff; color: #1d4ed8; font-weight: 800; font-size: 0.85rem;">${item.conversion}</span></td>
+        <td>
+          <span class="badge" style="background: ${item.status === 'Admissions Closed' ? '#fee2e2; color: #991b1b' : '#dcfce7; color: #166534'}; font-weight: 700;">
+            ${item.status}
+          </span>
+        </td>
+        <td class="text-end">
+          <button class="btn btn-secondary btn-sm" onclick="portalApp.openReportDossierModal('admissions', '${item.grade}')" title="View Pipeline">
+            <i class="fa-solid fa-list-check mr-1"></i> Pipeline
+          </button>
+        </td>
+      </tr>
+    `).join('');
+  }
+
+  function filterAdmissionsReportsTable() {
+    const q = (document.getElementById('searchAdmissionsReportsInput')?.value || '').toLowerCase().trim();
+    const filtered = REPORTS_ADMISSIONS_DATA.filter(item => {
+      return !q || item.grade.toLowerCase().includes(q) || item.status.toLowerCase().includes(q);
+    });
+    renderAdmissionsReportsTable(filtered);
+  }
+
+  function initAdmissionsReportsCharts() {
+    if (typeof Chart === 'undefined') return;
+    const ctx1 = document.getElementById('chartAdmissionsFunnel')?.getContext('2d');
+    if (ctx1) {
+      if (chartAdmissionsFunnelInst) chartAdmissionsFunnelInst.destroy();
+      chartAdmissionsFunnelInst = new Chart(ctx1, {
+        type: 'bar',
+        data: {
+          labels: ['1. Initial Enquiries (342)', '2. Campus Tours & Tests (278)', '3. Formal Applications (210)', '4. Provisional Offers (185)', '5. Confirmed Admissions (165)'],
+          datasets: [{
+            label: 'Conversion Stage Candidates',
+            data: [342, 278, 210, 185, 165],
+            backgroundColor: ['#93c5fd', '#60a5fa', '#3b82f6', '#2563eb', '#1d4ed8'],
+            borderRadius: 4
+          }]
+        },
+        options: {
+          indexAxis: 'y',
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { display: false } }
+        }
+      });
+    }
+
+    const ctx2 = document.getElementById('chartAdmissionsMonthlyTrend')?.getContext('2d');
+    if (ctx2) {
+      if (chartAdmissionsMonthlyInst) chartAdmissionsMonthlyInst.destroy();
+      chartAdmissionsMonthlyInst = new Chart(ctx2, {
+        type: 'line',
+        data: {
+          labels: ['Jan 2026', 'Feb 2026', 'Mar 2026', 'Apr 2026', 'May 2026', 'Jun 2026', 'Jul 2026', 'Aug 2026', 'Sep 2026', 'Oct 2026'],
+          datasets: [
+            {
+              label: 'Enquiries Inflow',
+              data: [15, 28, 65, 84, 72, 45, 18, 8, 4, 3],
+              borderColor: '#3b82f6',
+              backgroundColor: 'rgba(59, 130, 246, 0.1)',
+              fill: true,
+              tension: 0.3
+            },
+            {
+              label: 'Confirmed Admissions',
+              data: [4, 12, 38, 52, 36, 15, 5, 2, 1, 0],
+              borderColor: '#10b981',
+              backgroundColor: 'rgba(16, 185, 129, 0.1)',
+              fill: true,
+              tension: 0.3
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { position: 'top' } }
+        }
+      });
+    }
+  }
+
+  function renderOperationalReportsTable(data) {
+    const list = data || REPORTS_OPERATIONAL_DATA;
+    const tbody = document.getElementById('tbodyOperationalReports');
+    if (!tbody) return;
+    if (list.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="7" class="text-center p-4 text-muted">No operational audit records found.</td></tr>';
+      return;
+    }
+    tbody.innerHTML = list.map(item => `
+      <tr>
+        <td>
+          <div style="font-weight: 700; color: #0f172a;"><i class="fa-solid fa-list-check text-primary mr-1"></i> ${item.wing}</div>
+          <small class="text-muted">${item.notes}</small>
+        </td>
+        <td>${item.scope}</td>
+        <td><span class="badge" style="background: #eff6ff; color: #1d4ed8; font-weight: 800; font-size: 0.85rem;">${item.metric}</span></td>
+        <td style="color: #b45309; font-weight: 600;">${item.pendingItems}</td>
+        <td>${item.official}</td>
+        <td>
+          <span class="badge" style="background: ${item.status === 'Optimal' ? '#dcfce7; color: #15803d' : '#fef3c7; color: #92400e'}; font-weight: 700;">
+            <i class="fa-solid ${item.status === 'Optimal' ? 'fa-circle-check' : 'fa-clock'} mr-1"></i> ${item.status}
+          </span>
+        </td>
+        <td class="text-end">
+          <button class="btn btn-secondary btn-sm" onclick="portalApp.openReportDossierModal('operational', '${item.wing}')" title="View Wing Operations Log">
+            <i class="fa-solid fa-eye mr-1"></i> Operations Log
+          </button>
+        </td>
+      </tr>
+    `).join('');
+  }
+
+  function filterOperationalReportsTable() {
+    const q = (document.getElementById('searchOperationalReportsInput')?.value || '').toLowerCase().trim();
+    const wing = document.getElementById('filterOperationalWingSelect')?.value || '';
+    const status = document.getElementById('filterOperationalStatusSelect')?.value || '';
+    const filtered = REPORTS_OPERATIONAL_DATA.filter(item => {
+      const matchQ = !q || item.wing.toLowerCase().includes(q) || item.notes.toLowerCase().includes(q) || item.official.toLowerCase().includes(q);
+      const matchWing = !wing || item.wing.includes(wing);
+      const matchStatus = !status || item.status === status;
+      return matchQ && matchWing && matchStatus;
+    });
+    renderOperationalReportsTable(filtered);
+  }
+
+  function initOperationalReportsCharts() {
+    if (typeof Chart === 'undefined') return;
+    const ctx1 = document.getElementById('chartOperationalHealthRadar')?.getContext('2d');
+    if (ctx1) {
+      if (chartOperationalRadarInst) chartOperationalRadarInst.destroy();
+      chartOperationalRadarInst = new Chart(ctx1, {
+        type: 'radar',
+        data: {
+          labels: ['Staff Attendance & Leave SLA', 'Bus Route Safety & Punctuality', 'Lab & IT Asset Health', 'Executive Visitor SLA', 'Exam Cell Governance', 'Campus Statutory Safety'],
+          datasets: [{
+            label: 'Institutional Health Index (%)',
+            data: [98, 100, 96.8, 94, 100, 100],
+            backgroundColor: 'rgba(37, 99, 235, 0.25)',
+            borderColor: '#2563eb',
+            pointBackgroundColor: '#2563eb',
+            pointBorderColor: '#fff',
+            pointHoverBackgroundColor: '#fff',
+            pointHoverBorderColor: '#2563eb'
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: { r: { min: 80, max: 105, ticks: { callback: v => v + '%' } } }
+        }
+      });
+    }
+
+    const ctx2 = document.getElementById('chartOperationalWingEfficiency')?.getContext('2d');
+    if (ctx2) {
+      if (chartOperationalWingInst) chartOperationalWingInst.destroy();
+      chartOperationalWingInst = new Chart(ctx2, {
+        type: 'bar',
+        data: {
+          labels: ['Staff Leaves', 'Transport Logistics', 'Store & Lab Assets', 'Visitor Desk', 'Exam Cell', 'Campus Safety'],
+          datasets: [{
+            label: 'Resolution SLA Efficiency (%)',
+            data: [96.0, 100.0, 94.5, 92.0, 100.0, 100.0],
+            backgroundColor: 'rgba(16, 185, 129, 0.8)',
+            borderColor: '#059669',
+            borderWidth: 1.5,
+            borderRadius: 4
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { display: false } },
+          scales: { y: { min: 80, max: 105, ticks: { callback: v => v + '%' } } }
+        }
+      });
+    }
+  }
+
+  // --- EXPORT & PRINT FUNCTIONS ---
+  function exportAcademicReportsCSV() {
+    let csv = 'Class & Section,Enrolled,Examined,Class GPA,Top Subject Averages,Pass Rate,Performance Trend,Class Teacher\n';
+    REPORTS_ACADEMIC_DATA.forEach(r => {
+      csv += `"${r.className}","${r.enrolled}","${r.examined}","${r.gpa}","${r.topSubjects}","${r.passRate}","${r.trend}","${r.classTeacher}"\n`;
+    });
+    downloadCSV(csv, 'SriVidya_Academic_Analytics_AY2026-27.csv');
+  }
+
+  function exportAttendanceReportsCSV() {
+    let csv = 'Enrolment Unit,Audit Period,Total Working Days,Avg Present,Attendance Rate,Compliance Status,Notes\n';
+    REPORTS_ATTENDANCE_DATA.forEach(r => {
+      csv += `"${r.unit}","${r.period}","${r.workingDays}","${r.avgPresent}","${r.rate}","${r.compliance}","${r.details}"\n`;
+    });
+    downloadCSV(csv, 'SriVidya_Attendance_Records_Oct2026.csv');
+  }
+
+  function exportFinancialReportsCSV() {
+    let csv = 'Head of Account,Assessed Demand,Realized Collections,Outstanding Dues,Refunds,Reconciliation Status,Rate,Notes\n';
+    REPORTS_FINANCIAL_DATA.forEach(r => {
+      csv += `"${r.head}","${r.demand}","${r.collected}","${r.dues}","${r.refunds}","${r.status}","${r.rate}","${r.notes}"\n`;
+    });
+    downloadCSV(csv, 'SriVidya_Financial_Statements_AY2026-27.csv');
+  }
+
+  function exportPayrollReportsCSV() {
+    let csv = 'Employee ID,Name,Role,Department,Gross Salary,Deductions,Net Disbursed,Bank UTR,Audit Status\n';
+    REPORTS_PAYROLL_DATA.forEach(r => {
+      csv += `"${r.empId}","${r.name}","${r.role}","${r.dept}","${r.gross}","${r.deductions}","${r.net}","${r.utr}","${r.audit}"\n`;
+    });
+    downloadCSV(csv, 'SriVidya_Staff_Payroll_Audit_Oct2026.csv');
+  }
+
+  function exportDemographicsReportsCSV() {
+    let csv = 'Class Section,Total Enrolment,Boys,Girls,Age Range,RTE Beneficiaries,U-DISE Sync Status,Notes\n';
+    REPORTS_DEMOGRAPHICS_DATA.forEach(r => {
+      csv += `"${r.classSection}","${r.total}","${r.boys}","${r.girls}","${r.ageModal}","${r.rteBeneficiaries}","${r.udiseSync}","${r.notes}"\n`;
+    });
+    downloadCSV(csv, 'SriVidya_Student_Demographics_Census_AY2026-27.csv');
+  }
+
+  function exportAdmissionsReportsCSV() {
+    let csv = 'Intake Grade,Enquiries,Applications,Confirmed Admissions,Withdrawals,Conversion Rate,Capacity Status,Status\n';
+    REPORTS_ADMISSIONS_DATA.forEach(r => {
+      csv += `"${r.grade}","${r.enquiries}","${r.applications}","${r.admissions}","${r.withdrawals}","${r.conversion}","${r.capacity}","${r.status}"\n`;
+    });
+    downloadCSV(csv, 'SriVidya_Admissions_Analytics_Pipeline_AY2026-27.csv');
+  }
+
+  function exportOperationalReportsCSV() {
+    let csv = 'Operational Wing,Scope,Performance Metric,Pending Items,Responsible Official,Status,Notes\n';
+    REPORTS_OPERATIONAL_DATA.forEach(r => {
+      csv += `"${r.wing}","${r.scope}","${r.metric}","${r.pendingItems}","${r.official}","${r.status}","${r.notes}"\n`;
+    });
+    downloadCSV(csv, 'SriVidya_Operational_Reports_Oct2026.csv');
+  }
+
+  function downloadCSV(csvContent, filename) {
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.setAttribute('download', filename);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    showToast(`Export completed: ${filename}`, 'success');
+  }
+
+  function printReportDossier(moduleType) {
+    openReportDossierModal(moduleType);
+  }
+
+  function generateMasterReportsDossier() {
+    openReportDossierModal('master');
+  }
+
+  function openReportDossierModal(moduleType, recordId) {
+    const body = document.getElementById('reportDossierModalBody');
+    const title = document.getElementById('reportDossierModalTitle');
+    if (!body) return;
+
+    let dossierContent = '';
+    const nowStr = '29 Oct 2026, 05:30 PM';
+
+    if (moduleType === 'academic') {
+      if (title) title.textContent = 'Official Academic Diagnostic Dossier & Board Examination Audit';
+      dossierContent = `
+        <div style="border-bottom: 2px solid #2563eb; padding-bottom: 0.75rem; margin-bottom: 1rem;">
+          <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+            <div>
+              <h4 style="margin:0; color:#1e3a8a; font-weight:800;">SRI VIDYA E.M HIGH SCHOOL</h4>
+              <p style="margin:0; font-size:0.8rem; color:#64748b;">CBSE &amp; AP State Board Recognized &bull; U-DISE Code: 28111501008</p>
+            </div>
+            <div style="text-align:right;">
+              <span class="badge" style="background:#eff6ff; color:#1d4ed8; font-weight:700;">ACADEMIC EXCELLENCE AUDIT</span>
+              <div style="font-size:0.75rem; color:#64748b; margin-top:2px;">Generated: ${nowStr}</div>
+            </div>
+          </div>
+        </div>
+        <p style="font-size:0.85rem; color:#334155; line-height:1.5;">This diagnostic report documents student performance metrics across the curriculum for Academic Year 2026-27 (Term 1 &amp; Half-Yearly Assessments). The institutional pass rate stands at <strong>100%</strong> with an overall school GPA of <strong>8.74 / 10</strong>.</p>
+        <table class="table table-bordered table-sm mb-3" style="font-size:0.82rem;">
+          <thead style="background:#f1f5f9;">
+            <tr><th>Class</th><th>Enrolled</th><th>Examined</th><th>Class GPA</th><th>Pass Rate</th><th>Trend</th></tr>
+          </thead>
+          <tbody>
+            ${REPORTS_ACADEMIC_DATA.map(r => `<tr><td><strong>${r.className}</strong></td><td>${r.enrolled}</td><td>${r.examined}</td><td><strong>${r.gpa}</strong></td><td>${r.passRate}</td><td>${r.trend}</td></tr>`).join('')}
+          </tbody>
+        </table>
+      `;
+    } else if (moduleType === 'financial') {
+      if (title) title.textContent = 'Audited Financial Ledger & Fee Realization Statement';
+      dossierContent = `
+        <div style="border-bottom: 2px solid #2563eb; padding-bottom: 0.75rem; margin-bottom: 1rem;">
+          <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+            <div>
+              <h4 style="margin:0; color:#1e3a8a; font-weight:800;">SRI VIDYA E.M HIGH SCHOOL</h4>
+              <p style="margin:0; font-size:0.8rem; color:#64748b;">Statutory Financial Ledger Statement &bull; FY 2026-27</p>
+            </div>
+            <div style="text-align:right;">
+              <span class="badge" style="background:#f0fdf4; color:#166534; font-weight:700;">STATUTORY AUDITED</span>
+              <div style="font-size:0.75rem; color:#64748b; margin-top:2px;">Generated: ${nowStr}</div>
+            </div>
+          </div>
+        </div>
+        <table class="table table-bordered table-sm mb-3" style="font-size:0.82rem;">
+          <thead style="background:#f1f5f9;">
+            <tr><th>Head of Account</th><th>Assessed Demand</th><th>Realized Collections</th><th>Outstanding Dues</th><th>Refunds</th><th>Status</th></tr>
+          </thead>
+          <tbody>
+            ${REPORTS_FINANCIAL_DATA.map(r => `<tr><td><strong>${r.head}</strong></td><td>${r.demand}</td><td>${r.collected}</td><td>${r.dues}</td><td>${r.refunds}</td><td>${r.status}</td></tr>`).join('')}
+          </tbody>
+        </table>
+      `;
+    } else if (moduleType === 'payroll') {
+      if (title) title.textContent = 'Confidential Staff Payroll & Statutory EPFO/ESI Disbursal Audit';
+      dossierContent = `
+        <div style="border-bottom: 2px solid #dc2626; padding-bottom: 0.75rem; margin-bottom: 1rem;">
+          <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+            <div>
+              <h4 style="margin:0; color:#991b1b; font-weight:800;">SRI VIDYA E.M HIGH SCHOOL</h4>
+              <p style="margin:0; font-size:0.8rem; color:#64748b;">Confidential Staff Payroll Ledger &bull; October 2026 Disbursal</p>
+            </div>
+            <div style="text-align:right;">
+              <span class="badge" style="background:#fee2e2; color:#991b1b; font-weight:700;">CONFIDENTIAL RESTRICTED</span>
+              <div style="font-size:0.75rem; color:#64748b; margin-top:2px;">Generated: ${nowStr}</div>
+            </div>
+          </div>
+        </div>
+        <table class="table table-bordered table-sm mb-3" style="font-size:0.82rem;">
+          <thead style="background:#f1f5f9;">
+            <tr><th>Employee</th><th>Designation</th><th>Gross</th><th>Deductions</th><th>Net Disbursed</th><th>Bank UTR</th></tr>
+          </thead>
+          <tbody>
+            ${REPORTS_PAYROLL_DATA.map(r => `<tr><td><strong>${r.name}</strong> (${r.empId})</td><td>${r.role}</td><td>${r.gross}</td><td>${r.deductions}</td><td><strong>${r.net}</strong></td><td><code>${r.utr}</code></td></tr>`).join('')}
+          </tbody>
+        </table>
+      `;
+    } else {
+      if (title) title.textContent = 'Sri Vidya Institutional Master Governance Dossier (AY 2026-27)';
+      dossierContent = `
+        <div style="border-bottom: 2px solid #2563eb; padding-bottom: 0.75rem; margin-bottom: 1rem;">
+          <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+            <div>
+              <h4 style="margin:0; color:#1e3a8a; font-weight:800;">SRI VIDYA E.M HIGH SCHOOL</h4>
+              <p style="margin:0; font-size:0.8rem; color:#64748b;">Integrated Institutional Executive Governance Dossier</p>
+            </div>
+            <div style="text-align:right;">
+              <span class="badge" style="background:#eff6ff; color:#1d4ed8; font-weight:700;">CONSOLIDATED AUDIT</span>
+              <div style="font-size:0.75rem; color:#64748b; margin-top:2px;">Generated: ${nowStr}</div>
+            </div>
+          </div>
+        </div>
+        <div class="row g-2 mb-3" style="font-size:0.85rem;">
+          <div class="col-6"><strong>Total Student Enrolment:</strong> 855 Students (100% Aadhaar Verified)</div>
+          <div class="col-6"><strong>SSC Board Examination Pass Rate:</strong> 100% (6 Consecutive Years)</div>
+          <div class="col-6"><strong>Staff &amp; Faculty Count:</strong> 54 Full-Time Staff (100% Biometric Audited)</div>
+          <div class="col-6"><strong>Overall Fee Collection Efficiency:</strong> 86.1% Realized (₹88.25 Lakhs)</div>
+          <div class="col-6"><strong>Transport Safety Index:</strong> 100% GPS Route Punctuality (8 Fleet Buses)</div>
+          <div class="col-6"><strong>U-DISE+ Demographic Verification:</strong> Synchronized &bull; AP Child Info 2026</div>
+        </div>
+      `;
+    }
+
+    // Append Statutory Officer Signatures
+    dossierContent += `
+      <div style="margin-top: 2.5rem; display: flex; justify-content: space-between; text-align: center; font-size: 0.8rem; color: #475569; border-top: 1px dashed #cbd5e1; padding-top: 1.5rem;">
+        <div>
+          <div style="border-bottom: 1px solid #94a3b8; width: 180px; margin: 0 auto 6px; height: 35px;"></div>
+          <strong>Sri Navva Anand</strong><br>
+          Vice Principal &amp; Academic Head
+        </div>
+        <div>
+          <div style="border-bottom: 1px solid #94a3b8; width: 180px; margin: 0 auto 6px; height: 35px;"></div>
+          <strong>Sri S. Ramu</strong><br>
+          Administrative &amp; Accounts Officer
+        </div>
+        <div>
+          <div style="border-bottom: 1px solid #94a3b8; width: 180px; margin: 0 auto 6px; height: 35px;"></div>
+          <strong>Smt. Gorle Varalakshmi</strong><br>
+          Principal &amp; Institutional Executive Head
+        </div>
+      </div>
+    `;
+
+    body.innerHTML = dossierContent;
+    openModal('viewReportDossierModal');
+  }
+
+  function openReportsCustomExportModal() {
+    openModal('reportsCustomExportModal');
+  }
+
+  function handleCustomReportsExportSubmit(e) {
+    if (e && e.preventDefault) e.preventDefault();
+    closeModal('reportsCustomExportModal');
+    const period = document.getElementById('exportReportingPeriod')?.value || 'AY 2026-27';
+    const fmt = document.getElementById('exportFileFormat')?.value || 'csv';
+    showToast(`Bundling compliance datasets for ${period} in ${fmt.toUpperCase()} format...`, 'info');
+    setTimeout(() => {
+      exportAcademicReportsCSV();
+      showToast('Consolidated Master Audit Bundle generated and downloaded successfully.', 'success');
+    }, 800);
+  }
+
   return {
     // Inventory & Assets
     renderInventoryAssetsTable,
@@ -30033,7 +31087,50 @@ const classData = TIMETABLE_CLASS_DATA[currentTimetableClass] || TIMETABLE_CLASS
     printTransactionsLedger,
     exportTransactionsLedgerCSV,
     exportStaffAttendanceCSV,
-    printStaffAttendanceRegister
+    printStaffAttendanceRegister,
+  
+    // Reports & Analytics Exports
+    REPORTS_ACADEMIC_DATA,
+    REPORTS_ATTENDANCE_DATA,
+    REPORTS_FINANCIAL_DATA,
+    REPORTS_PAYROLL_DATA,
+    REPORTS_DEMOGRAPHICS_DATA,
+    REPORTS_ADMISSIONS_DATA,
+    REPORTS_OPERATIONAL_DATA,
+    renderAcademicReportsTable,
+    filterAcademicReportsTable,
+    initAcademicReportsCharts,
+    renderAttendanceReportsTable,
+    filterAttendanceReportsTable,
+    initAttendanceReportsCharts,
+    renderFinancialReportsTable,
+    filterFinancialReportsTable,
+    initFinancialReportsCharts,
+    renderPayrollReportsTable,
+    filterPayrollReportsTable,
+    initPayrollReportsCharts,
+    renderDemographicsReportsTable,
+    filterDemographicsReportsTable,
+    initDemographicsReportsCharts,
+    renderAdmissionsReportsTable,
+    filterAdmissionsReportsTable,
+    initAdmissionsReportsCharts,
+    renderOperationalReportsTable,
+    filterOperationalReportsTable,
+    initOperationalReportsCharts,
+    exportAcademicReportsCSV,
+    exportAttendanceReportsCSV,
+    exportFinancialReportsCSV,
+    exportPayrollReportsCSV,
+    exportDemographicsReportsCSV,
+    exportAdmissionsReportsCSV,
+    exportOperationalReportsCSV,
+    printReportDossier,
+    generateMasterReportsDossier,
+    openReportDossierModal,
+    openReportsCustomExportModal,
+    handleCustomReportsExportSubmit,
+
   };
 
 

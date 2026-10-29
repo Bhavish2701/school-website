@@ -513,15 +513,17 @@
           <a href="#reports" class="nav-link" onclick="portalApp.navigateTo('reports');">
             <span class="nav-icon"><i class="fa-solid fa-chart-pie"></i></span>
             <span class="nav-text">16. Reports &amp; Analytics</span>
+            <span class="nav-badge" style="background: rgba(99,102,241,0.2); color: #4f46e5;">Executive</span>
             <span class="nav-arrow"><i class="fa-solid fa-chevron-right"></i></span>
           </a>
           <div class="nav-sub">
-            <a href="#reports-academic" class="nav-sub-link active" data-sub="academic" onclick="portalApp.switchSubTab('reports', 'academic');">Academic Results</a>
-            <a href="#reports-attendance" class="nav-sub-link" data-sub="attendance" onclick="portalApp.switchSubTab('reports', 'attendance');">Attendance</a>
-            <a href="#reports-admissions" class="nav-sub-link" data-sub="admissions" onclick="portalApp.switchSubTab('reports', 'admissions');">Admissions</a>
-            <a href="#reports-financial" class="nav-sub-link" data-sub="financial" onclick="portalApp.switchSubTab('reports', 'financial');">Finance</a>
-            <a href="#reports-staff" class="nav-sub-link" data-sub="staff" onclick="portalApp.switchSubTab('reports', 'staff');">Staffing</a>
-            <a href="#reports-student" class="nav-sub-link" data-sub="student" onclick="portalApp.switchSubTab('reports', 'student');">Student Demographics &amp; Trends</a>
+            <a href="#reports-academic" class="nav-sub-link active" data-sub="academic" onclick="portalApp.switchSubTab('reports', 'academic');">Academic Analytics</a>
+            <a href="#reports-attendance" class="nav-sub-link" data-sub="attendance" onclick="portalApp.switchSubTab('reports', 'attendance');">Attendance Records</a>
+            <a href="#reports-financial" class="nav-sub-link" data-sub="financial" onclick="portalApp.switchSubTab('reports', 'financial');">Financial Statements</a>
+            <a href="#reports-payroll" class="nav-sub-link" data-sub="payroll" onclick="portalApp.switchSubTab('reports', 'payroll');"><span>Staff Payroll &amp; Audits</span><span class="nav-sub-badge warning"><i class="fa-solid fa-lock"></i> Restricted</span></a>
+            <a href="#reports-demographics" class="nav-sub-link" data-sub="demographics" onclick="portalApp.switchSubTab('reports', 'demographics');">Student Demographics</a>
+            <a href="#reports-admissions" class="nav-sub-link" data-sub="admissions" onclick="portalApp.switchSubTab('reports', 'admissions');">Admissions Analytics</a>
+            <a href="#reports-operational" class="nav-sub-link" data-sub="operational" onclick="portalApp.switchSubTab('reports', 'operational');">Operational Reports</a>
           </div>
         </div>
 
@@ -10442,491 +10444,904 @@
 
         </section>
 
+                <!-- 16. Reports & Analytics View -->
         <section class="portal-view" id="view-reports">
-          <div class="module-header">
-            <div class="module-header-info">
-              <h2><i class="fa-solid fa-chart-pie text-primary"></i> Reports & Analytical Insights</h2>
-              <p>Executive reporting, audit trails, governmental compliance data, and performance analytics.</p>
+          <!-- Module Header Strip -->
+          <div class="module-header-strip mb-4">
+            <div class="mhs-title">
+              <h2><i class="fa-solid fa-chart-pie text-primary"></i> Institutional Reports &amp; Executive Analytics Intelligence</h2>
+              <p>CBSE / AP State Board Compliance • Live BI Visualizations • Financial &amp; Operational Audits • Exportable Dossiers</p>
             </div>
-            <div class="module-header-actions">
-              <button class="btn btn-primary" onclick="window.print()">
-                <i class="fa-solid fa-file-pdf"></i> Generate Master Dossier
+            <div class="mhs-actions" style="display:flex; align-items:center; gap:0.75rem; flex-wrap:wrap;">
+              <span class="badge" style="background:#f8fafc; color:#475569; padding: 7px 14px; font-size: 0.82rem; font-weight:600; border:1px solid #cbd5e1; border-radius: 6px;">
+                <i class="fa-regular fa-clock text-primary mr-1"></i> Reporting Period: <strong>AY 2026-27 (Term 1 &amp; Half-Yearly)</strong> &bull; Updated: <strong id="reportsLastUpdatedTime">Today, 29 Oct 2026, 05:30 PM</strong>
+              </span>
+              <button class="btn btn-secondary btn-sm" onclick="portalApp.openReportsCustomExportModal()">
+                <i class="fa-solid fa-file-export"></i> Custom Export Builder
+              </button>
+              <button class="btn btn-primary btn-sm" onclick="portalApp.generateMasterReportsDossier()">
+                <i class="fa-solid fa-file-pdf"></i> Generate Master Audit Dossier
               </button>
             </div>
           </div>
 
-          <div class="tab-strip" id="reportsTabStrip">
+          <!-- Protocol Notice Strip -->
+          <div class="p-3 mb-4 rounded-3 border" style="background: #f0fdf4; border-color: #bbf7d0 !important;">
+            <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
+              <div class="d-flex align-items-center gap-3">
+                <div style="width: 40px; height: 40px; border-radius: 8px; background: #22c55e; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 1.25rem;">
+                  <i class="fa-solid fa-scale-balanced"></i>
+                </div>
+                <div>
+                  <h6 class="mb-0 font-bold" style="color: #15803d; font-size: 0.95rem;">Andhra Pradesh Educational Institutions Statutory Compliance &amp; Executive Audit Protocol</h6>
+                  <p class="mb-0 text-muted" style="font-size: 0.8rem;">All records verified under AP Education Act 1/1982, CBSE Affiliation Code 01345, and U-DISE+ No. 28111501008. Automated audit trails logged under Executive Sanction of Principal <strong>Smt. Gorle Varalakshmi</strong>.</p>
+                </div>
+              </div>
+              <div class="d-flex align-items-center gap-2">
+                <span class="badge" style="background:#dcfce7; color:#166534; padding:6px 12px; font-weight:700;"><i class="fa-solid fa-circle-check"></i> U-DISE+ Synced</span>
+                <span class="badge" style="background:#e0e7ff; color:#3730a3; padding:6px 12px; font-weight:700;"><i class="fa-solid fa-shield-halved"></i> Statutory Audited</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Module Tab Strip (7 Submenus) -->
+          <div class="tab-strip mb-4" id="reportsTabStrip">
             <button class="tab-btn active" data-sub="academic" onclick="portalApp.switchSubTab('reports', 'academic')">
-              <i class="fa-solid fa-graduation-cap"></i> Academic Reports
+              <i class="fa-solid fa-graduation-cap"></i> Academic Analytics
             </button>
             <button class="tab-btn" data-sub="attendance" onclick="portalApp.switchSubTab('reports', 'attendance')">
-              <i class="fa-solid fa-clipboard-user"></i> Attendance Analytics
+              <i class="fa-solid fa-clipboard-user"></i> Attendance Records
             </button>
             <button class="tab-btn" data-sub="financial" onclick="portalApp.switchSubTab('reports', 'financial')">
-              <i class="fa-solid fa-wallet"></i> Financial Ledger
+              <i class="fa-solid fa-wallet"></i> Financial Statements
             </button>
-            <button class="tab-btn" data-sub="staff" onclick="portalApp.switchSubTab('reports', 'staff')">
-              <i class="fa-solid fa-id-card-clip"></i> Staff &amp; Faculty
+            <button class="tab-btn" data-sub="payroll" onclick="portalApp.switchSubTab('reports', 'payroll')">
+              <i class="fa-solid fa-id-card-clip"></i> Staff Payroll &amp; Audits
             </button>
-            <button class="tab-btn" data-sub="student" onclick="portalApp.switchSubTab('reports', 'student')">
+            <button class="tab-btn" data-sub="demographics" onclick="portalApp.switchSubTab('reports', 'demographics')">
               <i class="fa-solid fa-users-viewfinder"></i> Student Demographics
+            </button>
+            <button class="tab-btn" data-sub="admissions" onclick="portalApp.switchSubTab('reports', 'admissions')">
+              <i class="fa-solid fa-user-plus"></i> Admissions Analytics
+            </button>
+            <button class="tab-btn" data-sub="operational" onclick="portalApp.switchSubTab('reports', 'operational')">
+              <i class="fa-solid fa-list-check"></i> Operational Reports
             </button>
           </div>
 
-          <!-- SUBVIEW 1: ACADEMIC REPORTS -->
+          <!-- ====================================================================
+               SUBVIEW 1: ACADEMIC ANALYTICS
+               Grades, subject averages, pass rates and performance trends
+               ==================================================================== -->
           <div class="report-subview active" id="subview-reports-academic">
+            <!-- Quad Stat Cards -->
             <div class="metrics-quad mb-4">
               <div class="metric-card">
                 <div class="metric-icon-wrap icon-blue"><i class="fa-solid fa-award"></i></div>
                 <div class="metric-details">
-                  <span class="metric-label">SSC Pass Rate</span>
+                  <span class="metric-label">SSC Board Pass Rate</span>
                   <div class="metric-value text-primary">100%</div>
-                  <div class="metric-trend trend-up"><span>6 Consecutive Years</span></div>
+                  <div class="metric-trend trend-up"><span>6 Consecutive Years 10/10 GPA</span></div>
                 </div>
               </div>
               <div class="metric-card">
                 <div class="metric-icon-wrap icon-emerald"><i class="fa-solid fa-chart-line"></i></div>
                 <div class="metric-details">
-                  <span class="metric-label">Average School GPA</span>
-                  <div class="metric-value text-emerald">8.8 / 10</div>
-                  <div class="metric-trend trend-up"><span>+0.3 vs Last Term</span></div>
+                  <span class="metric-label">School Average GPA</span>
+                  <div class="metric-value text-emerald">8.74 / 10</div>
+                  <div class="metric-trend trend-up"><span>+0.42 vs Term 1 Baseline</span></div>
                 </div>
               </div>
               <div class="metric-card">
                 <div class="metric-icon-wrap icon-purple"><i class="fa-solid fa-medal"></i></div>
                 <div class="metric-details">
-                  <span class="metric-label">Distinctions (&gt;9.0)</span>
-                  <div class="metric-value text-purple">24 Students</div>
-                  <div class="metric-trend trend-steady"><span>Class X Board Batch</span></div>
+                  <span class="metric-label">Distinctions (&gt;= 75%)</span>
+                  <div class="metric-value text-purple">783 / 855</div>
+                  <div class="metric-trend trend-steady"><span>91.6% High Achievers</span></div>
                 </div>
               </div>
               <div class="metric-card">
                 <div class="metric-icon-wrap icon-amber"><i class="fa-solid fa-book-open"></i></div>
                 <div class="metric-details">
-                  <span class="metric-label">Syllabus Completion</span>
-                  <div class="metric-value text-amber">94.8%</div>
-                  <div class="metric-trend trend-up"><span>On Schedule</span></div>
+                  <span class="metric-label">Subject Mastery Index</span>
+                  <div class="metric-value text-amber">88.2%</div>
+                  <div class="metric-trend trend-up"><span>STEM &amp; Languages On-Track</span></div>
                 </div>
               </div>
             </div>
 
-            <div class="reports-dossier-grid mb-4">
-              <div class="report-box">
-                <div class="rb-icon"><i class="fa-solid fa-graduation-cap"></i></div>
-                <h3>SSC Board Examination Audit</h3>
-                <p>Comprehensive breakdown of pass percentages, GPA distributions, and topper list over 6 consecutive years.</p>
-                <button class="btn-download-rep" onclick="portalApp.showToast('Generating SSC Board Audit Dossier (PDF)...', 'info')"><i class="fa-solid fa-file-pdf"></i> Download PDF</button>
+            <!-- Visual Charts Grid (2 Canvas Charts) -->
+            <div class="fee-reports-charts-grid mb-4">
+              <div class="chart-card">
+                <div class="chart-header">
+                  <h4><i class="fa-solid fa-chart-column text-primary mr-1"></i> Subject Averages &amp; Pass Percentages (Term 1 &amp; Half-Yearly)</h4>
+                  <span class="badge" style="background:#eff6ff; color:#1d4ed8; font-weight:700;">Curriculum Diagnostic</span>
+                </div>
+                <div class="chart-body" style="height: 280px; position: relative;">
+                  <canvas id="chartAcademicSubjectAverages"></canvas>
+                </div>
               </div>
-              <div class="report-box">
-                <div class="rb-icon"><i class="fa-solid fa-square-poll-vertical"></i></div>
-                <h3>Quarterly Examination Analysis</h3>
-                <p>Subject-wise mark distributions, class median scores, and remedial intervention candidates.</p>
-                <button class="btn-download-rep" onclick="portalApp.showToast('Generating Quarterly Exam Analysis...', 'info')"><i class="fa-solid fa-file-pdf"></i> Download PDF</button>
-              </div>
-              <div class="report-box">
-                <div class="rb-icon"><i class="fa-solid fa-ranking-star"></i></div>
-                <h3>Merit &amp; Academic Honors Dossier</h3>
-                <p>Top rankers list across primary, middle, and high school divisions for term awards ceremony.</p>
-                <button class="btn-download-rep" onclick="portalApp.showToast('Generating Academic Honors Dossier...', 'info')"><i class="fa-solid fa-file-pdf"></i> Download PDF</button>
+              <div class="chart-card">
+                <div class="chart-header">
+                  <h4><i class="fa-solid fa-chart-pie text-primary mr-1"></i> School-Wide Grade Distribution (A1, A2, B1, B2, C, D)</h4>
+                  <span class="badge" style="background:#fdf2f8; color:#be185d; font-weight:700;">CBSE/State Scale</span>
+                </div>
+                <div class="chart-body" style="height: 280px; position: relative;">
+                  <canvas id="chartAcademicGradeDistribution"></canvas>
+                </div>
               </div>
             </div>
 
-            <div class="card p-3">
-              <div class="card-header-flex mb-3">
-                <h3><i class="fa-solid fa-table-list text-primary"></i> Subject-Wise Pass &amp; Distinction Distribution (Term 1)</h3>
-                <button class="btn btn-secondary btn-sm" onclick="window.print()"><i class="fa-solid fa-print"></i> Print Report</button>
+            <!-- Filter & Action Strip -->
+            <div class="report-meta-header">
+              <div class="d-flex align-items-center gap-2 flex-wrap">
+                <div class="search-input-wrap" style="width: 260px;">
+                  <i class="fa-solid fa-magnifying-glass"></i>
+                  <input type="text" class="form-control" id="searchAcademicReportsInput" placeholder="Search class, section, teacher..." onkeyup="portalApp.filterAcademicReportsTable()">
+                </div>
+                <select class="form-control" style="width: 170px;" id="filterAcademicClassSelect" onchange="portalApp.filterAcademicReportsTable()">
+                  <option value="">All Classes</option>
+                  <option value="X">Class X (SSC)</option>
+                  <option value="IX">Class IX</option>
+                  <option value="VIII">Class VIII</option>
+                  <option value="VII">Class VII</option>
+                  <option value="VI">Class VI</option>
+                  <option value="Primary">Primary (I - V)</option>
+                </select>
+                <select class="form-control" style="width: 190px;" id="filterAcademicExamSelect" onchange="portalApp.filterAcademicReportsTable()">
+                  <option value="">All Exam Cycles</option>
+                  <option value="Half-Yearly 2026">Half-Yearly Exam 2026</option>
+                  <option value="Term 1 Summative">Term 1 Summative (SA-1)</option>
+                  <option value="Formative FA-2">Formative Assessment FA-2</option>
+                  <option value="Formative FA-1">Formative Assessment FA-1</option>
+                </select>
               </div>
-              <div class="table-container">
-                <table class="data-table">
-                  <thead>
-                    <tr>
-                      <th>Subject</th>
-                      <th>Curriculum In-Charge</th>
-                      <th>Total Candidates</th>
-                      <th>Pass Rate</th>
-                      <th>Distinctions (&gt;85%)</th>
-                      <th>Class Average</th>
-                      <th>Performance Index</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr><td><strong>Mathematics</strong></td><td>Smt. Gorle Varalakshmi</td><td>855</td><td><span class="portal-badge badge-success">98.4%</span></td><td>184</td><td>79.4 / 100</td><td><span class="text-emerald font-semibold">&bull; Excellent</span></td></tr>
-                    <tr><td><strong>Physical Science</strong></td><td>Sri Navva Anand</td><td>460</td><td><span class="portal-badge badge-success">97.8%</span></td><td>142</td><td>76.8 / 100</td><td><span class="text-emerald font-semibold">&bull; Excellent</span></td></tr>
-                    <tr><td><strong>Biological Science</strong></td><td>Sri K. Rajesh</td><td>460</td><td><span class="portal-badge badge-success">99.1%</span></td><td>168</td><td>81.2 / 100</td><td><span class="text-emerald font-semibold">&bull; Outstanding</span></td></tr>
-                    <tr><td><strong>English Language</strong></td><td>Smt. S. Lakshmi</td><td>855</td><td><span class="portal-badge badge-success">99.5%</span></td><td>210</td><td>83.5 / 100</td><td><span class="text-emerald font-semibold">&bull; Outstanding</span></td></tr>
-                    <tr><td><strong>Social Studies</strong></td><td>Sri M. Prasad</td><td>520</td><td><span class="portal-badge badge-success">98.8%</span></td><td>156</td><td>78.9 / 100</td><td><span class="text-emerald font-semibold">&bull; Excellent</span></td></tr>
-                    <tr><td><strong>First Language Telugu</strong></td><td>Sri P. Satyanarayana</td><td>855</td><td><span class="portal-badge badge-success">100.0%</span></td><td>245</td><td>85.6 / 100</td><td><span class="text-emerald font-semibold">&bull; Exemplary</span></td></tr>
-                    <tr><td><strong>Computer Applications</strong></td><td>Smt. P. Swapna</td><td>640</td><td><span class="portal-badge badge-success">100.0%</span></td><td>280</td><td>89.4 / 100</td><td><span class="text-emerald font-semibold">&bull; Exemplary</span></td></tr>
-                  </tbody>
-                </table>
+              <div class="report-export-buttons">
+                <button class="btn btn-secondary btn-sm" onclick="portalApp.exportAcademicReportsCSV()">
+                  <i class="fa-solid fa-file-csv"></i> Export CSV
+                </button>
+                <button class="btn btn-primary btn-sm" onclick="portalApp.printReportDossier('academic')">
+                  <i class="fa-solid fa-print"></i> Print Academic Dossier
+                </button>
               </div>
+            </div>
+
+            <!-- Responsive Academic Table -->
+            <div class="table-responsive bg-white rounded-3 border">
+              <table class="table table-hover align-middle mb-0" id="tableAcademicReports">
+                <thead class="table-light">
+                  <tr>
+                    <th>Class &amp; Section</th>
+                    <th>Enrolled / Examined</th>
+                    <th>Class GPA</th>
+                    <th>Top Subject Averages</th>
+                    <th>Pass Rate</th>
+                    <th>Performance Trend</th>
+                    <th class="text-end">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="tbodyAcademicReports">
+                  <!-- Rendered dynamically -->
+                </tbody>
+              </table>
             </div>
           </div>
 
-          <!-- SUBVIEW 2: ATTENDANCE ANALYTICS -->
+          <!-- ====================================================================
+               SUBVIEW 2: ATTENDANCE RECORDS
+               Daily, monthly, class-wise and individual attendance reports
+               ==================================================================== -->
           <div class="report-subview" id="subview-reports-attendance" style="display: none;">
+            <!-- Quad Stat Cards -->
             <div class="metrics-quad mb-4">
               <div class="metric-card">
-                <div class="metric-icon-wrap icon-emerald"><i class="fa-solid fa-user-check"></i></div>
+                <div class="metric-icon-wrap icon-blue"><i class="fa-solid fa-user-check"></i></div>
                 <div class="metric-details">
-                  <span class="metric-label">Average Student Attendance</span>
-                  <div class="metric-value text-emerald">94.2%</div>
-                  <div class="metric-trend trend-up"><span>All Grades Combined</span></div>
+                  <span class="metric-label">Overall Campus Attendance</span>
+                  <div class="metric-value text-primary">96.4%</div>
+                  <div class="metric-trend trend-up"><span>Oct 2026 Monthly Average</span></div>
                 </div>
               </div>
               <div class="metric-card">
-                <div class="metric-icon-wrap icon-blue"><i class="fa-solid fa-chalkboard-user"></i></div>
+                <div class="metric-icon-wrap icon-emerald"><i class="fa-solid fa-chalkboard-user"></i></div>
                 <div class="metric-details">
-                  <span class="metric-label">Staff Punctuality</span>
-                  <div class="metric-value text-primary">92.1%</div>
-                  <div class="metric-trend trend-up"><span>Biometric Verified</span></div>
+                  <span class="metric-label">Faculty &amp; Staff Punctuality</span>
+                  <div class="metric-value text-emerald">97.8%</div>
+                  <div class="metric-trend trend-up"><span>Biometric Verified Punch</span></div>
                 </div>
               </div>
               <div class="metric-card">
                 <div class="metric-icon-wrap icon-amber"><i class="fa-solid fa-triangle-exclamation"></i></div>
                 <div class="metric-details">
-                  <span class="metric-label">Chronic Absentees (&lt;75%)</span>
-                  <div class="metric-value text-amber">12 Students</div>
-                  <div class="metric-trend trend-steady"><span>Parent Notices Dispatched</span></div>
+                  <span class="metric-label">At-Risk Enrolment (&lt; 75%)</span>
+                  <div class="metric-value text-amber">14 Students</div>
+                  <div class="metric-trend trend-steady"><span>Parent Summons Dispatched</span></div>
                 </div>
               </div>
               <div class="metric-card">
                 <div class="metric-icon-wrap icon-purple"><i class="fa-solid fa-star"></i></div>
                 <div class="metric-details">
-                  <span class="metric-label">100% Attendance Club</span>
-                  <div class="metric-value text-purple">148 Students</div>
-                  <div class="metric-trend trend-up"><span>Term Badge Recipients</span></div>
+                  <span class="metric-label">Highest Attending Class</span>
+                  <div class="metric-value text-purple">98.6%</div>
+                  <div class="metric-trend trend-up"><span>Class IV-A (Primary Wing)</span></div>
                 </div>
               </div>
             </div>
 
-            <div class="reports-dossier-grid mb-4">
-              <div class="report-box">
-                <div class="rb-icon"><i class="fa-solid fa-chart-simple"></i></div>
-                <h3>Quarterly Attendance Dossier</h3>
-                <p>Section-wise attendance tracking, recurring absentee analysis, and health-related leave metrics.</p>
-                <button class="btn-download-rep" onclick="portalApp.showToast('Generating Quarterly Attendance Dossier...', 'info')"><i class="fa-solid fa-file-pdf"></i> Download PDF</button>
+            <!-- Visual Charts Grid (2 Canvas Charts) -->
+            <div class="fee-reports-charts-grid mb-4">
+              <div class="chart-card">
+                <div class="chart-header">
+                  <h4><i class="fa-solid fa-chart-line text-primary mr-1"></i> 30-Day Daily Attendance Trend (Students vs Faculty)</h4>
+                  <span class="badge" style="background:#eff6ff; color:#1d4ed8; font-weight:700;">Daily Biometric Census</span>
+                </div>
+                <div class="chart-body" style="height: 280px; position: relative;">
+                  <canvas id="chartAttendanceDailyTrend"></canvas>
+                </div>
               </div>
-              <div class="report-box">
-                <div class="rb-icon"><i class="fa-solid fa-fingerprint"></i></div>
-                <h3>Staff Biometric Compliance Log</h3>
-                <p>Daily in-time, out-time, grace period exceptions, and monthly biometric consolidation.</p>
-                <button class="btn-download-rep" onclick="portalApp.showToast('Generating Staff Biometric Audit...', 'info')"><i class="fa-solid fa-file-pdf"></i> Download PDF</button>
-              </div>
-              <div class="report-box">
-                <div class="rb-icon"><i class="fa-solid fa-clock-rotate-left"></i></div>
-                <h3>Morning Gate Punctuality Audit</h3>
-                <p>Late arrivals log, consecutive late occurrences, and parent counseling schedule.</p>
-                <button class="btn-download-rep" onclick="portalApp.showToast('Generating Gate Late Arrival Audit...', 'info')"><i class="fa-solid fa-file-pdf"></i> Download PDF</button>
+              <div class="chart-card">
+                <div class="chart-header">
+                  <h4><i class="fa-solid fa-chart-bar text-primary mr-1"></i> Class-Wise Attendance Comparison (Class I - X)</h4>
+                  <span class="badge" style="background:#f0fdf4; color:#166534; font-weight:700;">Statutory Minimum 75%</span>
+                </div>
+                <div class="chart-body" style="height: 280px; position: relative;">
+                  <canvas id="chartAttendanceClassComparison"></canvas>
+                </div>
               </div>
             </div>
 
-            <div class="card p-3">
-              <div class="card-header-flex mb-3">
-                <h3><i class="fa-solid fa-table text-primary"></i> Class-Wise Attendance Aggregation (Academic Term 2025–26)</h3>
-                <button class="btn btn-secondary btn-sm" onclick="window.print()"><i class="fa-solid fa-print"></i> Print</button>
+            <!-- Filter & Action Strip -->
+            <div class="report-meta-header">
+              <div class="d-flex align-items-center gap-2 flex-wrap">
+                <div class="search-input-wrap" style="width: 260px;">
+                  <i class="fa-solid fa-magnifying-glass"></i>
+                  <input type="text" class="form-control" id="searchAttendanceReportsInput" placeholder="Search student, class, roll no..." onkeyup="portalApp.filterAttendanceReportsTable()">
+                </div>
+                <select class="form-control" style="width: 170px;" id="filterAttendanceScopeSelect" onchange="portalApp.filterAttendanceReportsTable()">
+                  <option value="all">All Records</option>
+                  <option value="class-wise">Class-Wise Aggregates</option>
+                  <option value="monthly">Monthly Register</option>
+                  <option value="at-risk">At-Risk Enrolment (&lt;75%)</option>
+                  <option value="individual">Individual Students</option>
+                </select>
+                <select class="form-control" style="width: 170px;" id="filterAttendanceMonthSelect" onchange="portalApp.filterAttendanceReportsTable()">
+                  <option value="Oct 2026">October 2026</option>
+                  <option value="Sep 2026">September 2026</option>
+                  <option value="Aug 2026">August 2026</option>
+                  <option value="Jul 2026">July 2026</option>
+                  <option value="Jun 2026">June 2026</option>
+                </select>
               </div>
-              <div class="table-container">
-                <table class="data-table">
-                  <thead>
-                    <tr>
-                      <th>Class &amp; Section</th>
-                      <th>Class Teacher</th>
-                      <th>Total Strength</th>
-                      <th>Present Today</th>
-                      <th>Absent Today</th>
-                      <th>Monthly Attendance</th>
-                      <th>Status</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr><td><strong>Class X-A</strong></td><td>Sri Navva Anand</td><td>45</td><td>43</td><td>2</td><td><strong>95.5%</strong></td><td><span class="portal-badge badge-success">Optimal</span></td></tr>
-                    <tr><td><strong>Class X-B</strong></td><td>Smt. Gorle Varalakshmi</td><td>44</td><td>42</td><td>2</td><td><strong>95.4%</strong></td><td><span class="portal-badge badge-success">Optimal</span></td></tr>
-                    <tr><td><strong>Class IX-A</strong></td><td>Sri K. Rajesh</td><td>42</td><td>40</td><td>2</td><td><strong>95.2%</strong></td><td><span class="portal-badge badge-success">Optimal</span></td></tr>
-                    <tr><td><strong>Class IX-B</strong></td><td>Smt. S. Lakshmi</td><td>41</td><td>38</td><td>3</td><td><strong>92.7%</strong></td><td><span class="portal-badge badge-success">Optimal</span></td></tr>
-                    <tr><td><strong>Class VIII-A</strong></td><td>Sri M. Prasad</td><td>48</td><td>45</td><td>3</td><td><strong>93.8%</strong></td><td><span class="portal-badge badge-success">Optimal</span></td></tr>
-                    <tr><td><strong>Class VII-A</strong></td><td>Sri P. Satyanarayana</td><td>46</td><td>43</td><td>3</td><td><strong>93.5%</strong></td><td><span class="portal-badge badge-success">Optimal</span></td></tr>
-                    <tr><td><strong>Class VI-A</strong></td><td>Smt. K. Anitha</td><td>50</td><td>47</td><td>3</td><td><strong>94.0%</strong></td><td><span class="portal-badge badge-success">Optimal</span></td></tr>
-                    <tr><td><strong>Class V-A</strong></td><td>Smt. G. Sarada</td><td>47</td><td>44</td><td>3</td><td><strong>93.6%</strong></td><td><span class="portal-badge badge-success">Optimal</span></td></tr>
-                  </tbody>
-                </table>
+              <div class="report-export-buttons">
+                <button class="btn btn-secondary btn-sm" onclick="portalApp.exportAttendanceReportsCSV()">
+                  <i class="fa-solid fa-file-csv"></i> Export CSV
+                </button>
+                <button class="btn btn-primary btn-sm" onclick="portalApp.printReportDossier('attendance')">
+                  <i class="fa-solid fa-print"></i> Print Attendance Register
+                </button>
               </div>
+            </div>
+
+            <!-- Attendance Data Table -->
+            <div class="table-responsive bg-white rounded-3 border">
+              <table class="table table-hover align-middle mb-0" id="tableAttendanceReports">
+                <thead class="table-light">
+                  <tr>
+                    <th>Class / Enrolment Unit</th>
+                    <th>Audit Period / Type</th>
+                    <th>Total Working Days</th>
+                    <th>Days Present (Avg)</th>
+                    <th>Attendance %</th>
+                    <th>Statutory Compliance</th>
+                    <th class="text-end">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="tbodyAttendanceReports">
+                  <!-- Rendered dynamically -->
+                </tbody>
+              </table>
             </div>
           </div>
 
-          <!-- SUBVIEW 3: FINANCIAL LEDGER -->
+          <!-- ====================================================================
+               SUBVIEW 3: FINANCIAL STATEMENTS
+               Collections, outstanding dues, refunds and authorized financial summaries
+               ==================================================================== -->
           <div class="report-subview" id="subview-reports-financial" style="display: none;">
+            <!-- Quad Stat Cards -->
             <div class="metrics-quad mb-4">
               <div class="metric-card">
-                <div class="metric-icon-wrap icon-emerald"><i class="fa-solid fa-indian-rupee-sign"></i></div>
+                <div class="metric-icon-wrap icon-blue"><i class="fa-solid fa-file-invoice-dollar"></i></div>
                 <div class="metric-details">
-                  <span class="metric-label">Total Fee Realized</span>
-                  <div class="metric-value text-emerald">₹76,20,500</div>
-                  <div class="metric-trend trend-up"><span>86.2% Realization</span></div>
+                  <span class="metric-label">Total Assessed Fee Demand</span>
+                  <div class="metric-value text-primary">₹1,02,45,000</div>
+                  <div class="metric-trend trend-steady"><span>AY 2026-27 Approved Matrix</span></div>
                 </div>
               </div>
               <div class="metric-card">
-                <div class="metric-icon-wrap icon-amber"><i class="fa-solid fa-clock"></i></div>
+                <div class="metric-icon-wrap icon-emerald"><i class="fa-solid fa-circle-check"></i></div>
                 <div class="metric-details">
-                  <span class="metric-label">Outstanding Term Balance</span>
-                  <div class="metric-value text-amber">₹12,24,000</div>
-                  <div class="metric-trend trend-steady"><span>52 Defaulters</span></div>
+                  <span class="metric-label">Realized Collections</span>
+                  <div class="metric-value text-emerald">₹88,25,000</div>
+                  <div class="metric-trend trend-up"><span>86.1% Collection Efficiency</span></div>
                 </div>
               </div>
               <div class="metric-card">
-                <div class="metric-icon-wrap icon-blue"><i class="fa-solid fa-hand-holding-heart"></i></div>
+                <div class="metric-icon-wrap icon-amber"><i class="fa-solid fa-clock-rotate-left"></i></div>
                 <div class="metric-details">
-                  <span class="metric-label">Scholarships &amp; Concessions</span>
-                  <div class="metric-value text-primary">₹4,85,000</div>
-                  <div class="metric-trend trend-steady"><span>42 Merit Beneficiaries</span></div>
+                  <span class="metric-label">Outstanding Dues</span>
+                  <div class="metric-value text-amber">₹14,20,000</div>
+                  <div class="metric-trend trend-down"><span>13.9% Pending Defaulters</span></div>
                 </div>
               </div>
               <div class="metric-card">
-                <div class="metric-icon-wrap icon-purple"><i class="fa-solid fa-building-columns"></i></div>
+                <div class="metric-icon-wrap icon-purple"><i class="fa-solid fa-rotate-left"></i></div>
                 <div class="metric-details">
-                  <span class="metric-label">Direct Bank Deposits</span>
-                  <div class="metric-value text-purple">68.5%</div>
-                  <div class="metric-trend trend-up"><span>UPI &amp; NetBanking</span></div>
+                  <span class="metric-label">Authorized Refunds</span>
+                  <div class="metric-value text-purple">₹78,500</div>
+                  <div class="metric-trend trend-steady"><span>100% Audited Reversals</span></div>
                 </div>
               </div>
             </div>
 
-            <div class="reports-dossier-grid mb-4">
-              <div class="report-box">
-                <div class="rb-icon"><i class="fa-solid fa-wallet"></i></div>
-                <h3>Tuition &amp; Concession Audit</h3>
-                <p>Detailed revenue ledger, scholarship allocations, fee defaults, and bank reconciliation statement.</p>
-                <button class="btn-download-rep" onclick="portalApp.showToast('Generating Financial Ledger Statement...', 'info')"><i class="fa-solid fa-file-pdf"></i> Download PDF</button>
+            <!-- Visual Charts Grid (2 Canvas Charts) -->
+            <div class="fee-reports-charts-grid mb-4">
+              <div class="chart-card">
+                <div class="chart-header">
+                  <h4><i class="fa-solid fa-chart-column text-primary mr-1"></i> Monthly Demand vs Realized Collections (Jun - Oct 2026)</h4>
+                  <span class="badge" style="background:#eff6ff; color:#1d4ed8; font-weight:700;">Cashflow Matrix</span>
+                </div>
+                <div class="chart-body" style="height: 280px; position: relative;">
+                  <canvas id="chartFinancialCollectionsDemand"></canvas>
+                </div>
               </div>
-              <div class="report-box">
-                <div class="rb-icon"><i class="fa-solid fa-receipt"></i></div>
-                <h3>Daily Cash Counter Clearance</h3>
-                <p>Cashier counter collection log, denomination breakup, and daily bank deposit slips.</p>
-                <button class="btn-download-rep" onclick="portalApp.showToast('Generating Daily Cash Counter Log...', 'info')"><i class="fa-solid fa-file-pdf"></i> Download PDF</button>
-              </div>
-              <div class="report-box">
-                <div class="rb-icon"><i class="fa-solid fa-bus"></i></div>
-                <h3>Transport Fleet Revenue Statement</h3>
-                <p>Route-wise bus fee collection, operational diesel costs, and maintenance expenditure report.</p>
-                <button class="btn-download-rep" onclick="portalApp.showToast('Generating Transport Fleet Statement...', 'info')"><i class="fa-solid fa-file-pdf"></i> Download PDF</button>
+              <div class="chart-card">
+                <div class="chart-header">
+                  <h4><i class="fa-solid fa-chart-pie text-primary mr-1"></i> Collections Breakdown by Fee Head Category</h4>
+                  <span class="badge" style="background:#fef3c7; color:#b45309; font-weight:700;">Revenue Stream</span>
+                </div>
+                <div class="chart-body" style="height: 280px; position: relative;">
+                  <canvas id="chartFinancialFeeHeadsBreakdown"></canvas>
+                </div>
               </div>
             </div>
 
-            <div class="card p-3">
-              <div class="card-header-flex mb-3">
-                <h3><i class="fa-solid fa-file-invoice-dollar text-primary"></i> Term Revenue Head Categorization (FY 2025–26)</h3>
-                <button class="btn btn-secondary btn-sm" onclick="window.print()"><i class="fa-solid fa-print"></i> Print Statement</button>
+            <!-- Filter & Action Strip -->
+            <div class="report-meta-header">
+              <div class="d-flex align-items-center gap-2 flex-wrap">
+                <div class="search-input-wrap" style="width: 260px;">
+                  <i class="fa-solid fa-magnifying-glass"></i>
+                  <input type="text" class="form-control" id="searchFinancialReportsInput" placeholder="Search fee head, voucher, ledger..." onkeyup="portalApp.filterFinancialReportsTable()">
+                </div>
+                <select class="form-control" style="width: 180px;" id="filterFinancialHeadSelect" onchange="portalApp.filterFinancialReportsTable()">
+                  <option value="">All Fee Heads</option>
+                  <option value="Tuition">Tuition Fees</option>
+                  <option value="Term & Exam">Term &amp; Examination</option>
+                  <option value="STEM & Lab">Computer &amp; STEM Lab</option>
+                  <option value="Transport">Transport Logistics</option>
+                  <option value="Library">Library &amp; Activity</option>
+                </select>
+                <select class="form-control" style="width: 180px;" id="filterFinancialPeriodSelect" onchange="portalApp.filterFinancialReportsTable()">
+                  <option value="Term 1 & Half-Yearly">Term 1 &amp; Half-Yearly (YTD)</option>
+                  <option value="Q2 FY2026-27">Quarter 2 (Jul - Sep 2026)</option>
+                  <option value="Q1 FY2026-27">Quarter 1 (Apr - Jun 2026)</option>
+                  <option value="Annual AY 2026-27">Full Year Projected AY 2026-27</option>
+                </select>
               </div>
-              <div class="table-container">
-                <table class="data-table">
-                  <thead>
-                    <tr>
-                      <th>Revenue Head</th>
-                      <th>Projected Target</th>
-                      <th>Amount Realized</th>
-                      <th>Outstanding Balance</th>
-                      <th>Collection Ratio</th>
-                      <th>Audit Status</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr><td><strong>Tuition &amp; Academic Fees</strong></td><td>₹58,50,000</td><td class="text-emerald font-semibold">₹52,20,000</td><td class="text-amber">₹6,30,000</td><td>89.2%</td><td><span class="portal-badge badge-success">Audited</span></td></tr>
-                    <tr><td><strong>Transport &amp; Bus Fleet</strong></td><td>₹16,40,000</td><td class="text-emerald font-semibold">₹14,10,000</td><td class="text-amber">₹2,30,000</td><td>86.0%</td><td><span class="portal-badge badge-success">Audited</span></td></tr>
-                    <tr><td><strong>Science &amp; Computer Laboratories</strong></td><td>₹6,80,000</td><td class="text-emerald font-semibold">₹5,90,000</td><td class="text-amber">₹90,000</td><td>86.8%</td><td><span class="portal-badge badge-success">Audited</span></td></tr>
-                    <tr><td><strong>Special Sports &amp; Activities</strong></td><td>₹3,50,000</td><td class="text-emerald font-semibold">₹2,80,500</td><td class="text-amber">₹69,500</td><td>80.1%</td><td><span class="portal-badge badge-success">Audited</span></td></tr>
-                    <tr><td><strong>Examination &amp; Board Registration</strong></td><td>₹3,24,500</td><td class="text-emerald font-semibold">₹1,20,000</td><td class="text-amber">₹2,04,500</td><td>37.0%</td><td><span class="portal-badge badge-warning">In Progress</span></td></tr>
-                  </tbody>
-                </table>
+              <div class="report-export-buttons">
+                <button class="btn btn-secondary btn-sm" onclick="portalApp.exportFinancialReportsCSV()">
+                  <i class="fa-solid fa-file-csv"></i> Export Balance Sheet
+                </button>
+                <button class="btn btn-primary btn-sm" onclick="portalApp.printReportDossier('financial')">
+                  <i class="fa-solid fa-print"></i> Print Audited Statement
+                </button>
               </div>
+            </div>
+
+            <!-- Financial Table -->
+            <div class="table-responsive bg-white rounded-3 border">
+              <table class="table table-hover align-middle mb-0" id="tableFinancialReports">
+                <thead class="table-light">
+                  <tr>
+                    <th>Head of Account</th>
+                    <th>Assessed Demand</th>
+                    <th>Realized Collections</th>
+                    <th>Outstanding Dues</th>
+                    <th>Refunds &amp; Concessions</th>
+                    <th>Reconciliation Status</th>
+                    <th class="text-end">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="tbodyFinancialReports">
+                  <!-- Rendered dynamically -->
+                </tbody>
+              </table>
             </div>
           </div>
 
-          <!-- SUBVIEW 4: STAFF & FACULTY -->
-          <div class="report-subview" id="subview-reports-staff" style="display: none;">
+          <!-- ====================================================================
+               SUBVIEW 4: STAFF PAYROLL & AUDITS
+               Payroll summaries and audit records, restricted to authorized users
+               ==================================================================== -->
+          <div class="report-subview" id="subview-reports-payroll" style="display: none;">
+            <!-- Statutory Restricted Access Banner -->
+            <div class="p-3 mb-4 rounded-3 border" style="background: #fffbeb; border-color: #fde68a !important;">
+              <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
+                <div class="d-flex align-items-center gap-3">
+                  <div style="width: 40px; height: 40px; border-radius: 8px; background: #f59e0b; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 1.25rem;">
+                    <i class="fa-solid fa-user-shield"></i>
+                  </div>
+                  <div>
+                    <h6 class="mb-0 font-bold" style="color: #92400e; font-size: 0.95rem;">Confidential Statutory Staff Payroll &amp; EPF/ESI Audit Ledger</h6>
+                    <p class="mb-0 text-muted" style="font-size: 0.8rem;">Restricted to Executive Principal &amp; Statutory Auditors under AP Private Educational Institutions (Adoption of Code) Rules. All disbursals processed via SBI Corporate Direct Electronic Clearing.</p>
+                  </div>
+                </div>
+                <div>
+                  <span class="badge" style="background: #fef3c7; color: #92400e; font-size: 0.8rem; padding: 6px 12px; font-weight: 800; border: 1px solid #fcd34d;">
+                    <i class="fa-solid fa-lock mr-1"></i> Executive Access Level 5
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Quad Stat Cards -->
             <div class="metrics-quad mb-4">
               <div class="metric-card">
-                <div class="metric-icon-wrap icon-blue"><i class="fa-solid fa-chalkboard-user"></i></div>
+                <div class="metric-icon-wrap icon-blue"><i class="fa-solid fa-money-check-dollar"></i></div>
                 <div class="metric-details">
-                  <span class="metric-label">Teaching Faculty</span>
-                  <div class="metric-value text-primary">30 Teachers</div>
-                  <div class="metric-trend trend-steady"><span>100% Qualified (B.Ed/M.Ed)</span></div>
+                  <span class="metric-label">Monthly Gross Payroll</span>
+                  <div class="metric-value text-primary">₹18,45,000</div>
+                  <div class="metric-trend trend-steady"><span>October 2026 Disbursal</span></div>
                 </div>
               </div>
               <div class="metric-card">
-                <div class="metric-icon-wrap icon-emerald"><i class="fa-solid fa-id-badge"></i></div>
+                <div class="metric-icon-wrap icon-emerald"><i class="fa-solid fa-building-columns"></i></div>
                 <div class="metric-details">
-                  <span class="metric-label">Operational Staff</span>
-                  <div class="metric-value text-emerald">8 Members</div>
-                  <div class="metric-trend trend-steady"><span>Admin, Lab, IT, Transport</span></div>
+                  <span class="metric-label">Net Disbursed to Bank</span>
+                  <div class="metric-value text-emerald">₹16,92,400</div>
+                  <div class="metric-trend trend-up"><span>100% Direct SBI ACH Clear</span></div>
                 </div>
               </div>
               <div class="metric-card">
-                <div class="metric-icon-wrap icon-purple"><i class="fa-solid fa-star"></i></div>
+                <div class="metric-icon-wrap icon-purple"><i class="fa-solid fa-landmark"></i></div>
                 <div class="metric-details">
-                  <span class="metric-label">Faculty Satisfaction</span>
-                  <div class="metric-value text-purple">4.8 / 5.0</div>
-                  <div class="metric-trend trend-up"><span>Annual Parent Feedback</span></div>
+                  <span class="metric-label">Statutory Deductions (PF/PT)</span>
+                  <div class="metric-value text-purple">₹1,52,600</div>
+                  <div class="metric-trend trend-steady"><span>EPFO &amp; AP State Tax Compliant</span></div>
                 </div>
               </div>
               <div class="metric-card">
-                <div class="metric-icon-wrap icon-amber"><i class="fa-solid fa-person-chalkboard"></i></div>
+                <div class="metric-icon-wrap icon-amber"><i class="fa-solid fa-user-check"></i></div>
                 <div class="metric-details">
-                  <span class="metric-label">Teacher-Student Ratio</span>
-                  <div class="metric-value text-amber">1 : 28.5</div>
-                  <div class="metric-trend trend-steady"><span>Compliant with State Norms</span></div>
+                  <span class="metric-label">Audited Staff Count</span>
+                  <div class="metric-value text-amber">54 / 54</div>
+                  <div class="metric-trend trend-up"><span>0 Audit Exceptions Logged</span></div>
                 </div>
               </div>
             </div>
 
-            <div class="reports-dossier-grid mb-4">
-              <div class="report-box">
-                <div class="rb-icon"><i class="fa-solid fa-id-card-clip"></i></div>
-                <h3>Teacher Appraisal &amp; Workload</h3>
-                <p>Class hours, syllabus completion rates, student feedback scores, and training certificates.</p>
-                <button class="btn-download-rep" onclick="portalApp.showToast('Generating Faculty Appraisal Dossier...', 'info')"><i class="fa-solid fa-file-pdf"></i> Download PDF</button>
+            <!-- Visual Charts Grid (2 Canvas Charts) -->
+            <div class="fee-reports-charts-grid mb-4">
+              <div class="chart-card">
+                <div class="chart-header">
+                  <h4><i class="fa-solid fa-chart-column text-primary mr-1"></i> Departmental Salary Outlay Distribution (Monthly)</h4>
+                  <span class="badge" style="background:#eff6ff; color:#1d4ed8; font-weight:700;">Teaching vs Non-Teaching</span>
+                </div>
+                <div class="chart-body" style="height: 280px; position: relative;">
+                  <canvas id="chartPayrollDepartmentOutlay"></canvas>
+                </div>
               </div>
-              <div class="report-box">
-                <div class="rb-icon"><i class="fa-solid fa-book-bookmark"></i></div>
-                <h3>Syllabus Milestone Tracking Report</h3>
-                <p>Curriculum coverage across all standards, monthly lesson plan compliance, and lab practicals log.</p>
-                <button class="btn-download-rep" onclick="portalApp.showToast('Generating Syllabus Milestone Report...', 'info')"><i class="fa-solid fa-file-pdf"></i> Download PDF</button>
-              </div>
-              <div class="report-box">
-                <div class="rb-icon"><i class="fa-solid fa-user-clock"></i></div>
-                <h3>Faculty Substitution &amp; Coverage Log</h3>
-                <p>Period substitution frequency, peer coverage allocations, and academic continuity records.</p>
-                <button class="btn-download-rep" onclick="portalApp.showToast('Generating Substitution Log...', 'info')"><i class="fa-solid fa-file-pdf"></i> Download PDF</button>
+              <div class="chart-card">
+                <div class="chart-header">
+                  <h4><i class="fa-solid fa-chart-pie text-primary mr-1"></i> Statutory Deductions &amp; Audit Tax Composition</h4>
+                  <span class="badge" style="background:#fef2f2; color:#b91c1c; font-weight:700;">EPFO, PT &amp; TDS</span>
+                </div>
+                <div class="chart-body" style="height: 280px; position: relative;">
+                  <canvas id="chartPayrollDeductionsBreakdown"></canvas>
+                </div>
               </div>
             </div>
 
-            <div class="card p-3">
-              <div class="card-header-flex mb-3">
-                <h3><i class="fa-solid fa-user-tie text-primary"></i> Academic Faculty Workload &amp; Departmental Roster</h3>
-                <button class="btn btn-secondary btn-sm" onclick="window.print()"><i class="fa-solid fa-print"></i> Print Register</button>
+            <!-- Filter & Action Strip -->
+            <div class="report-meta-header">
+              <div class="d-flex align-items-center gap-2 flex-wrap">
+                <div class="search-input-wrap" style="width: 260px;">
+                  <i class="fa-solid fa-magnifying-glass"></i>
+                  <input type="text" class="form-control" id="searchPayrollReportsInput" placeholder="Search staff name, ID, designation..." onkeyup="portalApp.filterPayrollReportsTable()">
+                </div>
+                <select class="form-control" style="width: 180px;" id="filterPayrollDeptSelect" onchange="portalApp.filterPayrollReportsTable()">
+                  <option value="">All Departments</option>
+                  <option value="High School">Teaching Faculty (High School)</option>
+                  <option value="Primary Wing">Teaching Faculty (Primary)</option>
+                  <option value="Administration">Administrative &amp; Accounts</option>
+                  <option value="Logistics">Transport &amp; Campus Logistics</option>
+                </select>
+                <select class="form-control" style="width: 170px;" id="filterPayrollMonthSelect" onchange="portalApp.filterPayrollReportsTable()">
+                  <option value="Oct 2026">October 2026</option>
+                  <option value="Sep 2026">September 2026</option>
+                  <option value="Aug 2026">August 2026</option>
+                </select>
               </div>
-              <div class="table-container">
-                <table class="data-table">
-                  <thead>
-                    <tr>
-                      <th>Department</th>
-                      <th>Head of Department</th>
-                      <th>Faculty Count</th>
-                      <th>Weekly Teaching Periods</th>
-                      <th>Avg Experience</th>
-                      <th>Syllabus Milestone</th>
-                      <th>Status</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr><td><strong>Mathematics</strong></td><td>Smt. Gorle Varalakshmi</td><td>6 Teachers</td><td>168 Periods</td><td>14.5 Years</td><td>96% Covered</td><td><span class="portal-badge badge-success">On Schedule</span></td></tr>
-                    <tr><td><strong>Physical &amp; Natural Science</strong></td><td>Sri Navva Anand</td><td>5 Teachers</td><td>142 Periods</td><td>12.8 Years</td><td>95% Covered</td><td><span class="portal-badge badge-success">On Schedule</span></td></tr>
-                    <tr><td><strong>English Language</strong></td><td>Smt. S. Lakshmi</td><td>5 Teachers</td><td>140 Periods</td><td>11.2 Years</td><td>98% Covered</td><td><span class="portal-badge badge-success">On Schedule</span></td></tr>
-                    <tr><td><strong>Social Studies</strong></td><td>Sri M. Prasad</td><td>4 Teachers</td><td>112 Periods</td><td>13.0 Years</td><td>94% Covered</td><td><span class="portal-badge badge-success">On Schedule</span></td></tr>
-                    <tr><td><strong>Telugu &amp; Hindi Languages</strong></td><td>Sri P. Satyanarayana</td><td>5 Teachers</td><td>135 Periods</td><td>15.2 Years</td><td>97% Covered</td><td><span class="portal-badge badge-success">On Schedule</span></td></tr>
-                    <tr><td><strong>Computer &amp; Digital Tech</strong></td><td>Smt. P. Swapna</td><td>2 Teachers</td><td>56 Periods</td><td>7.5 Years</td><td>100% Covered</td><td><span class="portal-badge badge-success">On Schedule</span></td></tr>
-                    <tr><td><strong>Physical Education</strong></td><td>Sri V. Ramesh Babu</td><td>3 Teachers</td><td>72 Periods</td><td>9.0 Years</td><td>100% Covered</td><td><span class="portal-badge badge-success">On Schedule</span></td></tr>
-                  </tbody>
-                </table>
+              <div class="report-export-buttons">
+                <button class="btn btn-secondary btn-sm" onclick="portalApp.exportPayrollReportsCSV()">
+                  <i class="fa-solid fa-file-csv"></i> Export Payroll Ledger
+                </button>
+                <button class="btn btn-primary btn-sm" onclick="portalApp.printReportDossier('payroll')">
+                  <i class="fa-solid fa-print"></i> Print Statutory Audit Summary
+                </button>
               </div>
+            </div>
+
+            <!-- Payroll Table -->
+            <div class="table-responsive bg-white rounded-3 border">
+              <table class="table table-hover align-middle mb-0" id="tablePayrollReports">
+                <thead class="table-light">
+                  <tr>
+                    <th>Employee ID &amp; Name</th>
+                    <th>Designation &amp; Department</th>
+                    <th>Gross Salary</th>
+                    <th>Deductions (PF/PT)</th>
+                    <th>Net Disbursed</th>
+                    <th>Bank UTR / Ref</th>
+                    <th>Audit Status</th>
+                    <th class="text-end">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="tbodyPayrollReports">
+                  <!-- Rendered dynamically -->
+                </tbody>
+              </table>
             </div>
           </div>
 
-          <!-- SUBVIEW 5: STUDENT DEMOGRAPHICS -->
-          <div class="report-subview" id="subview-reports-student" style="display: none;">
+          <!-- ====================================================================
+               SUBVIEW 5: STUDENT DEMOGRAPHICS
+               Enrolment by class, age group, gender where appropriate, and other permitted categories
+               ==================================================================== -->
+          <div class="report-subview" id="subview-reports-demographics" style="display: none;">
+            <!-- Quad Stat Cards -->
             <div class="metrics-quad mb-4">
               <div class="metric-card">
                 <div class="metric-icon-wrap icon-blue"><i class="fa-solid fa-users"></i></div>
                 <div class="metric-details">
-                  <span class="metric-label">Total Student Census</span>
+                  <span class="metric-label">Total Student Enrolment</span>
                   <div class="metric-value text-primary">855 Students</div>
-                  <div class="metric-trend trend-up"><span>Nursery to Class X</span></div>
+                  <div class="metric-trend trend-steady"><span>Class I through Class X (SSC)</span></div>
                 </div>
               </div>
               <div class="metric-card">
                 <div class="metric-icon-wrap icon-emerald"><i class="fa-solid fa-venus-mars"></i></div>
                 <div class="metric-details">
-                  <span class="metric-label">Gender Diversity</span>
-                  <div class="metric-value text-emerald">54.4% : 45.6%</div>
-                  <div class="metric-trend trend-steady"><span>465 Boys • 390 Girls</span></div>
+                  <span class="metric-label">Gender Composition</span>
+                  <div class="metric-value text-emerald">462 B : 393 G</div>
+                  <div class="metric-trend trend-up"><span>54% Boys • 46% Girls</span></div>
                 </div>
               </div>
               <div class="metric-card">
-                <div class="metric-icon-wrap icon-purple"><i class="fa-solid fa-bus"></i></div>
+                <div class="metric-icon-wrap icon-purple"><i class="fa-solid fa-id-card"></i></div>
                 <div class="metric-details">
-                  <span class="metric-label">Bus Commuter Ratio</span>
-                  <div class="metric-value text-purple">62.8%</div>
-                  <div class="metric-trend trend-steady"><span>537 Bus Pass Holders</span></div>
+                  <span class="metric-label">Aadhar &amp; U-DISE+ Linked</span>
+                  <div class="metric-value text-purple">100% Verified</div>
+                  <div class="metric-trend trend-up"><span>AP Child Info System Verified</span></div>
                 </div>
               </div>
               <div class="metric-card">
-                <div class="metric-icon-wrap icon-amber"><i class="fa-solid fa-shield-halved"></i></div>
+                <div class="metric-icon-wrap icon-amber"><i class="fa-solid fa-hands-holding-child"></i></div>
                 <div class="metric-details">
-                  <span class="metric-label">RTE Free Seats</span>
-                  <div class="metric-value text-amber">25% Quota</div>
-                  <div class="metric-trend trend-steady"><span>214 Beneficiaries</span></div>
+                  <span class="metric-label">RTE / Fee Concession Enrolment</span>
+                  <div class="metric-value text-amber">142 Students</div>
+                  <div class="metric-trend trend-steady"><span>16.6% Institutional Welfare</span></div>
                 </div>
               </div>
             </div>
 
-            <div class="reports-dossier-grid mb-4">
-              <div class="report-box">
-                <div class="rb-icon"><i class="fa-solid fa-users-viewfinder"></i></div>
-                <h3>Student Demographic Census Dossier</h3>
-                <p>Complete statistical breakdown of student enrollments, age groups, community representation, and pin codes.</p>
-                <button class="btn-download-rep" onclick="portalApp.showToast('Generating Student Demographic Census...', 'info')"><i class="fa-solid fa-file-pdf"></i> Download PDF</button>
+            <!-- Visual Charts Grid (2 Canvas Charts) -->
+            <div class="fee-reports-charts-grid mb-4">
+              <div class="chart-card">
+                <div class="chart-header">
+                  <h4><i class="fa-solid fa-chart-column text-primary mr-1"></i> Class-Wise Enrolment by Gender (Boys vs Girls)</h4>
+                  <span class="badge" style="background:#eff6ff; color:#1d4ed8; font-weight:700;">Demographic Ratio</span>
+                </div>
+                <div class="chart-body" style="height: 280px; position: relative;">
+                  <canvas id="chartDemographicsGenderClass"></canvas>
+                </div>
               </div>
-              <div class="report-box">
-                <div class="rb-icon"><i class="fa-solid fa-graduation-cap"></i></div>
-                <h3>Class X Board Candidate Roster</h3>
-                <p>Comprehensive registration roster for Board Examinations 2026, including internal assessments and hall ticket codes.</p>
-                <button class="btn-download-rep" onclick="portalApp.showToast('Generating Class X Board Roster...', 'info')"><i class="fa-solid fa-file-pdf"></i> Download PDF</button>
-              </div>
-              <div class="report-box">
-                <div class="rb-icon"><i class="fa-solid fa-map-location-dot"></i></div>
-                <h3>Transport Route Commuter Census</h3>
-                <p>Stop-by-stop passenger manifest, emergency guardian contact registry, and morning pickup timing audit.</p>
-                <button class="btn-download-rep" onclick="portalApp.showToast('Generating Transport Commuter Census...', 'info')"><i class="fa-solid fa-file-pdf"></i> Download PDF</button>
+              <div class="chart-card">
+                <div class="chart-header">
+                  <h4><i class="fa-solid fa-chart-pie text-primary mr-1"></i> Social Category &amp; Permitted Welfare Distribution</h4>
+                  <span class="badge" style="background:#f0fdf4; color:#166534; font-weight:700;">U-DISE+ Categories</span>
+                </div>
+                <div class="chart-body" style="height: 280px; position: relative;">
+                  <canvas id="chartDemographicsCategoryPie"></canvas>
+                </div>
               </div>
             </div>
 
-            <div class="card p-3">
-              <div class="card-header-flex mb-3">
-                <h3><i class="fa-solid fa-table text-primary"></i> Standard-Wise Student Enrollment &amp; Section Strength</h3>
-                <button class="btn btn-secondary btn-sm" onclick="window.print()"><i class="fa-solid fa-print"></i> Print Census</button>
+            <!-- Filter & Action Strip -->
+            <div class="report-meta-header">
+              <div class="d-flex align-items-center gap-2 flex-wrap">
+                <div class="search-input-wrap" style="width: 260px;">
+                  <i class="fa-solid fa-magnifying-glass"></i>
+                  <input type="text" class="form-control" id="searchDemographicsReportsInput" placeholder="Search class, section, age group..." onkeyup="portalApp.filterDemographicsReportsTable()">
+                </div>
+                <select class="form-control" style="width: 180px;" id="filterDemographicsClassSelect" onchange="portalApp.filterDemographicsReportsTable()">
+                  <option value="">All Classes</option>
+                  <option value="High School">High School (VI - X)</option>
+                  <option value="Primary Wing">Primary Wing (I - V)</option>
+                  <option value="Class X">Class X (SSC Batch)</option>
+                </select>
+                <select class="form-control" style="width: 180px;" id="filterDemographicsAgeSelect" onchange="portalApp.filterDemographicsReportsTable()">
+                  <option value="">All Age Brackets</option>
+                  <option value="5-7 yrs">5 - 7 Years (Primary)</option>
+                  <option value="8-10 yrs">8 - 10 Years (Middle Primary)</option>
+                  <option value="11-13 yrs">11 - 13 Years (Upper Primary)</option>
+                  <option value="14-16 yrs">14 - 16 Years (High School)</option>
+                </select>
               </div>
-              <div class="table-container">
-                <table class="data-table">
-                  <thead>
-                    <tr>
-                      <th>Standard</th>
-                      <th>Sections</th>
-                      <th>Boys</th>
-                      <th>Girls</th>
-                      <th>Total Enrolled</th>
-                      <th>Section In-Charge</th>
-                      <th>Capacity Status</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr><td><strong>Class X</strong></td><td>2 (A, B)</td><td>48</td><td>41</td><td><strong>89</strong></td><td>Sri Navva Anand / Smt. Varalakshmi</td><td><span class="portal-badge badge-success">Full</span></td></tr>
-                    <tr><td><strong>Class IX</strong></td><td>2 (A, B)</td><td>45</td><td>38</td><td><strong>83</strong></td><td>Sri K. Rajesh / Smt. S. Lakshmi</td><td><span class="portal-badge badge-success">Full</span></td></tr>
-                    <tr><td><strong>Class VIII</strong></td><td>2 (A, B)</td><td>50</td><td>44</td><td><strong>94</strong></td><td>Sri M. Prasad / Smt. G. Sarada</td><td><span class="portal-badge badge-success">Full</span></td></tr>
-                    <tr><td><strong>Class VII</strong></td><td>2 (A, B)</td><td>48</td><td>42</td><td><strong>90</strong></td><td>Sri P. Satyanarayana / Smt. K. Anitha</td><td><span class="portal-badge badge-success">Full</span></td></tr>
-                    <tr><td><strong>Class VI</strong></td><td>2 (A, B)</td><td>52</td><td>46</td><td><strong>98</strong></td><td>Smt. K. Anitha / Sri M. Prasad</td><td><span class="portal-badge badge-success">Full</span></td></tr>
-                    <tr><td><strong>Class V</strong></td><td>2 (A, B)</td><td>46</td><td>44</td><td><strong>90</strong></td><td>Smt. G. Sarada / Smt. S. Lakshmi</td><td><span class="portal-badge badge-success">Full</span></td></tr>
-                    <tr><td><strong>Classes I – IV</strong></td><td>8 Sections</td><td>176</td><td>135</td><td><strong>311</strong></td><td>Primary Wing Faculty</td><td><span class="portal-badge badge-success">Full</span></td></tr>
-                  </tbody>
-                </table>
+              <div class="report-export-buttons">
+                <button class="btn btn-secondary btn-sm" onclick="portalApp.exportDemographicsReportsCSV()">
+                  <i class="fa-solid fa-file-csv"></i> Export Demographics CSV
+                </button>
+                <button class="btn btn-primary btn-sm" onclick="portalApp.printReportDossier('demographics')">
+                  <i class="fa-solid fa-print"></i> Print U-DISE+ Dossier
+                </button>
               </div>
+            </div>
+
+            <!-- Demographics Table -->
+            <div class="table-responsive bg-white rounded-3 border">
+              <table class="table table-hover align-middle mb-0" id="tableDemographicsReports">
+                <thead class="table-light">
+                  <tr>
+                    <th>Class &amp; Section</th>
+                    <th>Total Enrolment</th>
+                    <th>Boys</th>
+                    <th>Girls</th>
+                    <th>Age Range (Modal)</th>
+                    <th>RTE / Govt Scheme Beneficiaries</th>
+                    <th>U-DISE+ Sync Status</th>
+                    <th class="text-end">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="tbodyDemographicsReports">
+                  <!-- Rendered dynamically -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- ====================================================================
+               SUBVIEW 6: ADMISSIONS ANALYTICS
+               Enquiries, applications, admissions, withdrawals and conversion rates
+               ==================================================================== -->
+          <div class="report-subview" id="subview-reports-admissions" style="display: none;">
+            <!-- Quad Stat Cards -->
+            <div class="metrics-quad mb-4">
+              <div class="metric-card">
+                <div class="metric-icon-wrap icon-blue"><i class="fa-solid fa-headset"></i></div>
+                <div class="metric-details">
+                  <span class="metric-label">Total Intake Enquiries</span>
+                  <div class="metric-value text-primary">342 Enquiries</div>
+                  <div class="metric-trend trend-up"><span>AY 2026-27 Admission Cycle</span></div>
+                </div>
+              </div>
+              <div class="metric-card">
+                <div class="metric-icon-wrap icon-purple"><i class="fa-solid fa-file-signature"></i></div>
+                <div class="metric-details">
+                  <span class="metric-label">Formal Applications</span>
+                  <div class="metric-value text-purple">210 Filed</div>
+                  <div class="metric-trend trend-up"><span>61.4% Enquiry Conversion</span></div>
+                </div>
+              </div>
+              <div class="metric-card">
+                <div class="metric-icon-wrap icon-emerald"><i class="fa-solid fa-user-graduate"></i></div>
+                <div class="metric-details">
+                  <span class="metric-label">Confirmed Admissions</span>
+                  <div class="metric-value text-emerald">165 Admitted</div>
+                  <div class="metric-trend trend-up"><span>78.6% Application Conversion</span></div>
+                </div>
+              </div>
+              <div class="metric-card">
+                <div class="metric-icon-wrap icon-amber"><i class="fa-solid fa-right-from-bracket"></i></div>
+                <div class="metric-details">
+                  <span class="metric-label">Withdrawals / TCs Issued</span>
+                  <div class="metric-value text-amber">4 TCs</div>
+                  <div class="metric-trend trend-steady"><span>Low 0.46% Relocation Rate</span></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Visual Charts Grid (2 Canvas Charts) -->
+            <div class="fee-reports-charts-grid mb-4">
+              <div class="chart-card">
+                <div class="chart-header">
+                  <h4><i class="fa-solid fa-filter text-primary mr-1"></i> Admissions Intake Conversion Funnel (AY 2026-27)</h4>
+                  <span class="badge" style="background:#eff6ff; color:#1d4ed8; font-weight:700;">Conversion Efficiency</span>
+                </div>
+                <div class="chart-body" style="height: 280px; position: relative;">
+                  <canvas id="chartAdmissionsFunnel"></canvas>
+                </div>
+              </div>
+              <div class="chart-card">
+                <div class="chart-header">
+                  <h4><i class="fa-solid fa-chart-line text-primary mr-1"></i> Monthly Inflow of Admissions Enquiries &amp; Enrolments</h4>
+                  <span class="badge" style="background:#f0fdf4; color:#166534; font-weight:700;">Seasonality Curve</span>
+                </div>
+                <div class="chart-body" style="height: 280px; position: relative;">
+                  <canvas id="chartAdmissionsMonthlyTrend"></canvas>
+                </div>
+              </div>
+            </div>
+
+            <!-- Filter & Action Strip -->
+            <div class="report-meta-header">
+              <div class="d-flex align-items-center gap-2 flex-wrap">
+                <div class="search-input-wrap" style="width: 260px;">
+                  <i class="fa-solid fa-magnifying-glass"></i>
+                  <input type="text" class="form-control" id="searchAdmissionsReportsInput" placeholder="Search grade, channel, status..." onkeyup="portalApp.filterAdmissionsReportsTable()">
+                </div>
+                <select class="form-control" style="width: 180px;" id="filterAdmissionsCycleSelect" onchange="portalApp.filterAdmissionsReportsTable()">
+                  <option value="AY 2026-27">AY 2026-27 (Current Cycle)</option>
+                  <option value="AY 2025-26">AY 2025-26 (Past Cycle)</option>
+                </select>
+                <select class="form-control" style="width: 180px;" id="filterAdmissionsSourceSelect" onchange="portalApp.filterAdmissionsReportsTable()">
+                  <option value="">All Intake Sources</option>
+                  <option value="Walk-in Desk">Direct Campus Walk-In</option>
+                  <option value="Website Portal">Online Website Portal</option>
+                  <option value="Parent Referral">Parent / Alumni Referral</option>
+                  <option value="Education Expo">Educational Exhibition</option>
+                </select>
+              </div>
+              <div class="report-export-buttons">
+                <button class="btn btn-secondary btn-sm" onclick="portalApp.exportAdmissionsReportsCSV()">
+                  <i class="fa-solid fa-file-csv"></i> Export Admissions CSV
+                </button>
+                <button class="btn btn-primary btn-sm" onclick="portalApp.printReportDossier('admissions')">
+                  <i class="fa-solid fa-print"></i> Print Admissions Dossier
+                </button>
+              </div>
+            </div>
+
+            <!-- Admissions Table -->
+            <div class="table-responsive bg-white rounded-3 border">
+              <table class="table table-hover align-middle mb-0" id="tableAdmissionsReports">
+                <thead class="table-light">
+                  <tr>
+                    <th>Intake Grade / Wing</th>
+                    <th>Enquiries</th>
+                    <th>Applications</th>
+                    <th>Confirmed Admissions</th>
+                    <th>Withdrawals / TCs</th>
+                    <th>Conversion Rate</th>
+                    <th>Seat Capacity Status</th>
+                    <th class="text-end">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="tbodyAdmissionsReports">
+                  <!-- Rendered dynamically -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- ====================================================================
+               SUBVIEW 7: OPERATIONAL REPORTS
+               Leave, transport, inventory, appointments and pending tasks
+               ==================================================================== -->
+          <div class="report-subview" id="subview-reports-operational" style="display: none;">
+            <!-- Quad Stat Cards -->
+            <div class="metrics-quad mb-4">
+              <div class="metric-card">
+                <div class="metric-icon-wrap icon-blue"><i class="fa-solid fa-calendar-minus"></i></div>
+                <div class="metric-details">
+                  <span class="metric-label">Faculty Leaves Pending</span>
+                  <div class="metric-value text-primary">4 Requests</div>
+                  <div class="metric-trend trend-steady"><span>24 Approved • 0 Substitution Gaps</span></div>
+                </div>
+              </div>
+              <div class="metric-card">
+                <div class="metric-icon-wrap icon-emerald"><i class="fa-solid fa-bus-simple"></i></div>
+                <div class="metric-details">
+                  <span class="metric-label">Transport Route Punctuality</span>
+                  <div class="metric-value text-emerald">100% On-Time</div>
+                  <div class="metric-trend trend-up"><span>8 Fleet Buses • 362 Students Transit</span></div>
+                </div>
+              </div>
+              <div class="metric-card">
+                <div class="metric-icon-wrap icon-purple"><i class="fa-solid fa-boxes-stacked"></i></div>
+                <div class="metric-details">
+                  <span class="metric-label">Asset Health &amp; Stores</span>
+                  <div class="metric-value text-purple">96.8% In-Service</div>
+                  <div class="metric-trend trend-up"><span>1 Active Maintenance Work Order</span></div>
+                </div>
+              </div>
+              <div class="metric-card">
+                <div class="metric-icon-wrap icon-amber"><i class="fa-solid fa-list-check"></i></div>
+                <div class="metric-details">
+                  <span class="metric-label">Executive Tasks Punctuality</span>
+                  <div class="metric-value text-amber">92% SLA Score</div>
+                  <div class="metric-trend trend-up"><span>85 Completed • 12 In-Progress</span></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Visual Charts Grid (2 Canvas Charts) -->
+            <div class="fee-reports-charts-grid mb-4">
+              <div class="chart-card">
+                <div class="chart-header">
+                  <h4><i class="fa-solid fa-crosshairs text-primary mr-1"></i> Multi-Wing Institutional Operations Health Index</h4>
+                  <span class="badge" style="background:#eff6ff; color:#1d4ed8; font-weight:700;">6-Pillar Audit</span>
+                </div>
+                <div class="chart-body" style="height: 280px; position: relative;">
+                  <canvas id="chartOperationalHealthRadar"></canvas>
+                </div>
+              </div>
+              <div class="chart-card">
+                <div class="chart-header">
+                  <h4><i class="fa-solid fa-chart-column text-primary mr-1"></i> Resolution Efficiency &amp; SLA Compliance by Administrative Wing</h4>
+                  <span class="badge" style="background:#f0fdf4; color:#166534; font-weight:700;">Task Resolution %</span>
+                </div>
+                <div class="chart-body" style="height: 280px; position: relative;">
+                  <canvas id="chartOperationalWingEfficiency"></canvas>
+                </div>
+              </div>
+            </div>
+
+            <!-- Filter & Action Strip -->
+            <div class="report-meta-header">
+              <div class="d-flex align-items-center gap-2 flex-wrap">
+                <div class="search-input-wrap" style="width: 260px;">
+                  <i class="fa-solid fa-magnifying-glass"></i>
+                  <input type="text" class="form-control" id="searchOperationalReportsInput" placeholder="Search operation, asset, official..." onkeyup="portalApp.filterOperationalReportsTable()">
+                </div>
+                <select class="form-control" style="width: 210px;" id="filterOperationalWingSelect" onchange="portalApp.filterOperationalReportsTable()">
+                  <option value="">All Operational Wings</option>
+                  <option value="Staff Leaves">Faculty &amp; Staff Leave Reviews</option>
+                  <option value="Transport Logistics">Transport &amp; Bus Fleet</option>
+                  <option value="Inventory & Assets">Inventory, Lab &amp; Store Assets</option>
+                  <option value="Appointments & Visitors">Visitor Desk &amp; Principal Meetings</option>
+                  <option value="Executive Tasks">Executive Administration Tasks</option>
+                </select>
+                <select class="form-control" style="width: 170px;" id="filterOperationalStatusSelect" onchange="portalApp.filterOperationalReportsTable()">
+                  <option value="">All Statuses</option>
+                  <option value="Optimal">Optimal / Compliant</option>
+                  <option value="Action Required">Action Required</option>
+                  <option value="In Progress">In Progress</option>
+                </select>
+              </div>
+              <div class="report-export-buttons">
+                <button class="btn btn-secondary btn-sm" onclick="portalApp.exportOperationalReportsCSV()">
+                  <i class="fa-solid fa-file-csv"></i> Export Operations CSV
+                </button>
+                <button class="btn btn-primary btn-sm" onclick="portalApp.printReportDossier('operational')">
+                  <i class="fa-solid fa-print"></i> Print Operations Log
+                </button>
+              </div>
+            </div>
+
+            <!-- Operational Table -->
+            <div class="table-responsive bg-white rounded-3 border">
+              <table class="table table-hover align-middle mb-0" id="tableOperationalReports">
+                <thead class="table-light">
+                  <tr>
+                    <th>Operational Wing</th>
+                    <th>Scope &amp; Monitored Entities</th>
+                    <th>Current Performance Metric</th>
+                    <th>Pending Action Items</th>
+                    <th>Responsible Official</th>
+                    <th>Audit Status</th>
+                    <th class="text-end">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="tbodyOperationalReports">
+                  <!-- Rendered dynamically -->
+                </tbody>
+              </table>
             </div>
           </div>
         </section>
 
-        <!-- =================================================================
-             MODULE 10: SETTINGS
-             (School Profile, Academic Year, Roles, Permissions)
-             ================================================================= -->
-        <section class="portal-view" id="view-settings">
+<section class="portal-view" id="view-settings">
           
           <!-- Vice Principal Configuration Locked Banner -->
           <div id="settingsLockedBanner" class="restricted-banner" style="display: none;">
@@ -17052,6 +17467,99 @@ Class X-A,Monday,2,09:35 AM - 10:20 AM,Physical Science,Sri Navva Anand,Room 201
         <button type="button" class="btn btn-secondary" onclick="portalApp.closeModal('viewInventoryDossierModal')">Close</button>
         <button type="button" class="btn btn-primary" onclick="window.print()"><i class="fa-solid fa-print"></i> Print Official Record</button>
       </div>
+    </div>
+  </div>
+
+
+  <!-- =========================================================================
+       MODAL 1: OFFICIAL INSTITUTIONAL REPORT DOSSIER PRINT PREVIEW
+       ========================================================================= -->
+  <div class="modal-backdrop" id="viewReportDossierModal" style="display:none;">
+    <div class="portal-modal" style="max-width: 900px; width: 95%;">
+      <div class="modal-header">
+        <h3><i class="fa-solid fa-file-lines text-primary"></i> <span id="reportDossierModalTitle">Institutional Audit &amp; Performance Dossier</span></h3>
+        <button class="modal-close-x" onclick="portalApp.closeModal('viewReportDossierModal')" title="Close" aria-label="Close">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <div class="modal-body" id="reportDossierModalBody" style="max-height: calc(85vh - 130px); overflow-y: auto;">
+        <!-- Populated dynamically via portalApp.openReportDossierModal -->
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" onclick="portalApp.closeModal('viewReportDossierModal')">Close</button>
+        <button type="button" class="btn btn-primary" onclick="window.print()">
+          <i class="fa-solid fa-print"></i> Print Official Document
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       MODAL 2: CUSTOM REPORTS EXPORT BUILDER
+       ========================================================================= -->
+  <div class="modal-backdrop" id="reportsCustomExportModal" style="display:none;">
+    <div class="portal-modal" style="max-width: 650px; width: 95%;">
+      <div class="modal-header">
+        <h3><i class="fa-solid fa-file-export text-primary"></i> Executive Custom Export Builder</h3>
+        <button class="modal-close-x" onclick="portalApp.closeModal('reportsCustomExportModal')" title="Close" aria-label="Close">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <form id="customExportBuilderForm" onsubmit="portalApp.handleCustomReportsExportSubmit(event)">
+        <div class="modal-body">
+          <div style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 8px; padding: 0.85rem 1rem; margin-bottom: 1.15rem; font-size: 0.82rem; color: #475569; line-height: 1.45;">
+            <div style="font-weight: 700; color: #1e293b; margin-bottom: 2px;">
+              <i class="fa-solid fa-cloud-arrow-down text-primary mr-1"></i> Automated Compliance Export Engine
+            </div>
+            Bundle multiple module datasets into a consolidated CSV, Excel, or statutory PDF Master Audit file with cryptographic timestamp.
+          </div>
+          <div class="row g-2">
+            <div class="col-12 mb-2">
+              <label class="form-label text-sm font-bold">Reporting Period <span class="text-danger">*</span></label>
+              <select class="form-control" id="exportReportingPeriod" required>
+                <option value="AY 2026-27 (Term 1 & Half-Yearly)">AY 2026-27 (Term 1 &amp; Half-Yearly Exam)</option>
+                <option value="October 2026 Monthly Audit">October 2026 Monthly Audit</option>
+                <option value="Q2 FY 2026-27 (Jul - Sep 2026)">Q2 FY 2026-27 (Jul - Sep 2026)</option>
+                <option value="Full Academic Year 2026-27 Projected">Full Academic Year 2026-27 Projected</option>
+              </select>
+            </div>
+            <div class="col-12 mb-2">
+              <label class="form-label text-sm font-bold">Select Modules to Include <span class="text-danger">*</span></label>
+              <div class="d-flex flex-wrap gap-2 p-2 border rounded-2 bg-light">
+                <label class="d-flex align-items-center gap-1 font-semibold text-xs" style="cursor:pointer;"><input type="checkbox" id="chkExpAcademic" checked> Academic Analytics</label>
+                <label class="d-flex align-items-center gap-1 font-semibold text-xs" style="cursor:pointer;"><input type="checkbox" id="chkExpAttendance" checked> Attendance Records</label>
+                <label class="d-flex align-items-center gap-1 font-semibold text-xs" style="cursor:pointer;"><input type="checkbox" id="chkExpFinancial" checked> Financial Statements</label>
+                <label class="d-flex align-items-center gap-1 font-semibold text-xs" style="cursor:pointer;"><input type="checkbox" id="chkExpPayroll" checked> Staff Payroll &amp; Audits</label>
+                <label class="d-flex align-items-center gap-1 font-semibold text-xs" style="cursor:pointer;"><input type="checkbox" id="chkExpDemographics" checked> Student Demographics</label>
+                <label class="d-flex align-items-center gap-1 font-semibold text-xs" style="cursor:pointer;"><input type="checkbox" id="chkExpAdmissions" checked> Admissions Analytics</label>
+                <label class="d-flex align-items-center gap-1 font-semibold text-xs" style="cursor:pointer;"><input type="checkbox" id="chkExpOperational" checked> Operational Reports</label>
+              </div>
+            </div>
+            <div class="col-md-6 mb-2">
+              <label class="form-label text-sm font-bold">Export File Format</label>
+              <select class="form-control" id="exportFileFormat">
+                <option value="csv">Standard CSV Spreadsheet</option>
+                <option value="tsv">Tab-Separated (TSV / Excel)</option>
+                <option value="pdf">Consolidated PDF Master Audit</option>
+              </select>
+            </div>
+            <div class="col-md-6 mb-2">
+              <label class="form-label text-sm font-bold">Classification Level</label>
+              <select class="form-control" id="exportClassification">
+                <option value="official">Official Internal School Record</option>
+                <option value="board">CBSE / AP State Board Submission</option>
+                <option value="pta">PTA &amp; Public Transparency Extract</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="portalApp.closeModal('reportsCustomExportModal')">Cancel</button>
+          <button type="submit" class="btn btn-primary" style="font-weight:700;">
+            <i class="fa-solid fa-download mr-1"></i> Generate &amp; Download Bundle
+          </button>
+        </div>
+      </form>
     </div>
   </div>
 
