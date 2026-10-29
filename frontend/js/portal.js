@@ -3151,6 +3151,13 @@ const FEE_CATEGORY_AUDIT_DATA = [
         renderMeetingHistory();
       } else if (subKey === 'followup' || subKey === 'follow-up-actions') {
         renderFollowupActions();
+    renderAnnouncements();
+    renderOfficialCirculars();
+    renderSmsBroadcast();
+    renderEmailDispatch();
+    renderMobilePush();
+    renderParentEnquiries();
+    renderMessageTemplates();
       }
     } else if (moduleKey === 'fees') {
       if (subKey === 'collection' || subKey === 'fee-collection') {
@@ -3172,15 +3179,19 @@ const FEE_CATEGORY_AUDIT_DATA = [
       }
     } else if (moduleKey === 'communication') {
       if (subKey === 'announcements') {
-        renderBroadcastFeed();
-      } else if (subKey === 'notices') {
-        renderCircularsTable();
+        renderAnnouncements();
+      } else if (subKey === 'circulars' || subKey === 'notices') {
+        renderOfficialCirculars();
       } else if (subKey === 'sms') {
-        renderSmsLogsTable();
+        renderSmsBroadcast();
       } else if (subKey === 'email') {
-        renderEmailLogsTable();
+        renderEmailDispatch();
       } else if (subKey === 'push') {
-        renderPushLogsTable();
+        renderMobilePush();
+      } else if (subKey === 'enquiries') {
+        renderParentEnquiries();
+      } else if (subKey === 'templates') {
+        renderMessageTemplates();
       }
     } else if (moduleKey === 'settings') {
       if (subKey === 'permissions') {
@@ -24649,7 +24660,1138 @@ const classData = TIMETABLE_CLASS_DATA[currentTimetableClass] || TIMETABLE_CLASS
     showToast('Executive follow-up action register exported successfully.', 'success');
   }
 
+
+  // =========================================================================
+  // MODULE 12: COMMUNICATION ENGINE (7 SUBMENUS)
+  // Submenus:
+  // 1. Announcements (Title, message, target audience, publisher and publication status)
+  // 2. Official Circulars (Circular number, document, issue date, audience and acknowledgement status)
+  // 3. SMS Broadcast (Recipient group, message, delivery status and failure report)
+  // 4. Email Dispatch (Recipient list, subject, delivery status and sending history)
+  // 5. Mobile Push (Notification title, target audience, delivery and engagement status)
+  // 6. Parent Enquiries (Requester, linked student if applicable, assigned staff member and resolution)
+  // 7. Message Templates (Approved email, SMS and notification templates)
+  // Governance:
+  // "Include draft, preview, approval, schedule and delivery tracking. Sensitive messages should be sent only to the intended recipients."
+  // =========================================================================
+
+  const COMM_ANNOUNCEMENTS_DATA = [
+    {
+      id: 'ANN-2026-038',
+      title: 'Annual STEM & Science Exhibition 2026 - Registration Open',
+      message: 'Sri Vidya Annual STEM & Science Exhibition scheduled for 14th November 2026. High school and upper primary students are invited to submit working model synopsis to Sri M. Raju (Science HOD) by 5th Nov.',
+      targetAudience: 'Classes VI–X Students & Parents',
+      publisher: 'Smt. Gorle Varalakshmi (Principal)',
+      publishDate: '28 Oct 2026, 10:00 AM',
+      status: 'Published',
+      scheduledFor: 'Immediate',
+      deliveryReach: '498 / 500 Guardians (99.6%)'
+    },
+    {
+      id: 'ANN-2026-037',
+      title: 'Class X Pre-Board Academic Progress Review & Parent Consultations',
+      message: 'Mandatory parent-teacher interaction for Class X-A & X-B students on Saturday, 31st Oct 2026. Individual academic diagnostic reports and remedial schedules will be handed over.',
+      targetAudience: 'Class X-A & X-B Guardians',
+      publisher: 'Sri Navva Anand (Vice Principal)',
+      publishDate: '27 Oct 2026, 03:30 PM',
+      status: 'Published',
+      scheduledFor: 'Immediate',
+      deliveryReach: '96 / 96 Guardians (100%)'
+    },
+    {
+      id: 'ANN-2026-039',
+      title: 'Diwali Festivities & Campus Holiday Declaration',
+      message: 'School campus will remain closed from 31st October to 2nd November 2026 on account of Diwali. Regular academic instruction will resume on Monday, 3rd November at 08:30 AM.',
+      targetAudience: 'All Parents & Students',
+      publisher: 'Smt. Gorle Varalakshmi (Principal)',
+      publishDate: '30 Oct 2026, 08:00 AM (Scheduled)',
+      status: 'Scheduled',
+      scheduledFor: '30 Oct 2026, 08:00 AM',
+      deliveryReach: 'Queued (855 recipients)'
+    },
+    {
+      id: 'ANN-2026-040',
+      title: 'State Board NTSE & NMMS Merit Scholarship Coaching Scheme',
+      message: 'Special morning coaching sessions sanctioned under State Govt scholarship wing. Zero tuition fee for eligible merit students under SC/ST/BC quotas.',
+      targetAudience: 'Class VIII & X Eligible Scholars',
+      publisher: 'Smt. Gorle Varalakshmi (Principal)',
+      publishDate: 'Draft (Pending Executive Review)',
+      status: 'Draft',
+      scheduledFor: 'Draft',
+      deliveryReach: 'Internal Review'
+    }
+  ];
+
+  const COMM_CIRCULARS_DATA = [
+    {
+      circularNo: 'CIR-2026-042',
+      document: 'Quarterly_Assessment_Schedule_&_Syllabus.pdf',
+      docSize: '1.4 MB',
+      title: 'Quarterly Assessment Exam Schedule & Portion Split-up',
+      issueDate: '28 Oct 2026',
+      audience: 'Classes I to X Students & Guardians',
+      ackRate: '98.2%',
+      ackCount: '491 / 500 Ack',
+      pendingCount: '9 Pending',
+      signedBy: 'Smt. Gorle Varalakshmi (Principal & Correspondent)'
+    },
+    {
+      circularNo: 'CIR-2026-041',
+      document: 'AP_State_Board_Attendance_Directive.pdf',
+      docSize: '880 KB',
+      title: 'Mandatory 75% Biometric Attendance for SSC Board Registration',
+      issueDate: '24 Oct 2026',
+      audience: 'Class X Guardians',
+      ackRate: '100%',
+      ackCount: '96 / 96 Ack',
+      pendingCount: '0 Pending',
+      signedBy: 'Sri Navva Anand (Vice Principal)'
+    },
+    {
+      circularNo: 'CIR-2026-040',
+      document: 'Winter_Uniform_&_Grooming_Protocol_2026.pdf',
+      docSize: '640 KB',
+      title: 'Winter Uniform Regulations & Morning Assembly Code',
+      issueDate: '18 Oct 2026',
+      audience: 'All Campus Guardians',
+      ackRate: '95.4%',
+      ackCount: '477 / 500 Ack',
+      pendingCount: '23 Pending',
+      signedBy: 'Smt. Gorle Varalakshmi (Principal)'
+    },
+    {
+      circularNo: 'CIR-2026-039',
+      document: 'Mid_Term_Fee_Payment_Schedule_&_Modes.pdf',
+      docSize: '1.1 MB',
+      title: 'Term-2 Tuition Fee Clearance Guidelines & Digital UPI Instructions',
+      issueDate: '10 Oct 2026',
+      audience: 'All Student Guardians',
+      ackRate: '92.6%',
+      ackCount: '463 / 500 Ack',
+      pendingCount: '37 Pending',
+      signedBy: 'Accounts Desk & Correspondent'
+    }
+  ];
+
+  const COMM_SMS_DATA = [
+    {
+      broadcastId: 'SMS-2026-148',
+      recipientGroup: 'Class X-A & X-B Guardians (96 recipients)',
+      message: 'SRIVID: Dear Parent, Class X Quarterly Mathematics diagnostic result published on portal. Parent consultation scheduled 31-Oct. - Principal',
+      dltTemplateId: 'DLT-110784',
+      deliveryStatus: 'Delivered (100%)',
+      failureReport: '0 Failures • 96/96 Handsets Delivered',
+      dispatchTime: '29 Oct 2026, 09:15 AM'
+    },
+    {
+      broadcastId: 'SMS-2026-147',
+      recipientGroup: 'Bus Route #3 & #4 Commuters (74 recipients)',
+      message: 'SRIVID: Route 4 school bus delayed by 15 mins due to bypass road maintenance. Expected arrival at main gate 08:45 AM. - Transport In-charge',
+      dltTemplateId: 'DLT-110788',
+      deliveryStatus: 'Delivered (97.3%)',
+      failureReport: '2 Undelivered (Switched off / Network) • Auto-retry queued',
+      dispatchTime: '29 Oct 2026, 08:05 AM'
+    },
+    {
+      broadcastId: 'SMS-2026-146',
+      recipientGroup: 'All Campus Guardians (500 recipients)',
+      message: 'SRIVID: Reminder: Tomorrow is last date for Science Exhibition model registration. Check circular CIR-2026-042 for rules. - Sri Vidya School',
+      dltTemplateId: 'DLT-110790',
+      deliveryStatus: 'Delivered (99.4%)',
+      failureReport: '3 Invalid Numbers • Updated on Guardian Registry',
+      dispatchTime: '28 Oct 2026, 05:00 PM'
+    },
+    {
+      broadcastId: 'SMS-2026-145',
+      recipientGroup: 'Teaching Faculty & Staff (38 recipients)',
+      message: 'SRIVID: Staff briefing convened today at 04:15 PM in Conference Hall regarding Diwali campus safety and exam papers. - Principal',
+      dltTemplateId: 'DLT-110792',
+      deliveryStatus: 'Delivered (100%)',
+      failureReport: '0 Failures • 38/38 Staff Verified',
+      dispatchTime: '28 Oct 2026, 01:30 PM'
+    }
+  ];
+
+  const COMM_EMAIL_DATA = [
+    {
+      dispatchId: 'EML-2026-089',
+      recipientList: 'All High School Guardians (classes.high@srividya.edu.in • 280 recipients)',
+      subject: 'Official Monthly Newsletter & Science Fair Invitation - October 2026',
+      deliveryStatus: 'Delivered (100% • 0 Bounces)',
+      sendingHistory: '29 Oct 2026, 08:30 AM • SMTP mail.srividya.edu.in • DKIM/SPF Verified • Open Rate: 84.6%',
+      sender: 'principal@srividya.edu.in (Smt. Gorle Varalakshmi)'
+    },
+    {
+      dispatchId: 'EML-2026-088',
+      recipientList: 'PTA Executive Committee (pta.committee@srividya.edu.in • 18 recipients)',
+      subject: 'Minutes of Parent-Teacher Consultative Committee Meeting & Follow-ups',
+      deliveryStatus: 'Delivered (100% • 0 Bounces)',
+      sendingHistory: '28 Oct 2026, 06:15 PM • SMTP mail.srividya.edu.in • Open Rate: 100%',
+      sender: 'viceprincipal@srividya.edu.in (Sri Navva Anand)'
+    },
+    {
+      dispatchId: 'EML-2026-087',
+      recipientList: 'Primary & Upper Primary Guardians (primary.wing@srividya.edu.in • 220 recipients)',
+      subject: 'Term-1 Progress Cards & Formative Evaluation Feedback Dockets',
+      deliveryStatus: 'Delivered (99.1% • 2 Soft Bounces)',
+      sendingHistory: '26 Oct 2026, 11:00 AM • SMTP mail.srividya.edu.in • Open Rate: 79.2%',
+      sender: 'examcell@srividya.edu.in'
+    },
+    {
+      dispatchId: 'EML-2026-086',
+      recipientList: 'Fee Overdue Accounts (accounts.notice@srividya.edu.in • 32 recipients)',
+      subject: 'Confidential Fee Clearance Notice - Term-2 Instalment 2026-27',
+      deliveryStatus: 'Delivered (100% • Sensitive Filter Active)',
+      sendingHistory: '24 Oct 2026, 02:45 PM • SMTP mail.srividya.edu.in • Open Rate: 90.6%',
+      sender: 'accounts@srividya.edu.in'
+    }
+  ];
+
+  const COMM_PUSH_DATA = [
+    {
+      pushId: 'PSH-2026-062',
+      notificationTitle: '🔬 Science Exhibition Registration Closes in 48 Hours!',
+      targetAudience: 'All Parents & Students (Mobile App • 780 devices)',
+      delivery: '772 / 780 Delivered (99.0%)',
+      engagementStatus: '568 Opened (73.6% Engagement) • 120 Model Forms Downloaded',
+      dispatchTime: '29 Oct 2026, 08:00 AM',
+      priority: 'High Priority'
+    },
+    {
+      pushId: 'PSH-2026-061',
+      notificationTitle: '📊 Class X-A Diagnostic Mathematics Marks Published',
+      targetAudience: 'Class X-A Guardians (App Users • 48 devices)',
+      delivery: '48 / 48 Delivered (100%)',
+      engagementStatus: '46 Opened (95.8% High Engagement) • Average View: 4 Mins',
+      dispatchTime: '28 Oct 2026, 06:30 PM',
+      priority: 'High Priority'
+    },
+    {
+      pushId: 'PSH-2026-060',
+      notificationTitle: '🚌 Bus Route #4 Approaching Campus Gate',
+      targetAudience: 'Route #4 Registered Guardians (38 devices)',
+      delivery: '38 / 38 Delivered (100%)',
+      engagementStatus: '36 Instant Views (94.7% Real-time Tracking)',
+      dispatchTime: '28 Oct 2026, 08:40 AM',
+      priority: 'Normal'
+    },
+    {
+      pushId: 'PSH-2026-059',
+      notificationTitle: '🪔 Diwali Vacation Holiday Schedule Notice Published',
+      targetAudience: 'All App Users (780 devices)',
+      delivery: '765 / 780 Delivered (98.1%)',
+      engagementStatus: '612 Opened (80.0% Engagement)',
+      dispatchTime: '27 Oct 2026, 04:00 PM',
+      priority: 'Normal'
+    }
+  ];
+
+  const COMM_ENQUIRIES_DATA = [
+    {
+      enquiryId: 'ENQ-2026-051',
+      requester: 'Sri K. Venkat Rao (Ph: 98480 55667)',
+      linkedStudent: 'K. Sai Tharun (Class X-A • Adm #SV-0210)',
+      category: 'Academic Remediation',
+      assignedStaff: 'Sri M. Raju (Physics Faculty & HOD)',
+      resolution: 'Resolved: Zero-fee evening remedial physics & mathematics coaching sanctioned by Principal. Weekly progress register established.',
+      status: 'Resolved',
+      loggedDate: '28 Oct 2026'
+    },
+    {
+      enquiryId: 'ENQ-2026-052',
+      requester: 'Smt. D. Lakshmi (Ph: 98490 66778)',
+      linkedStudent: 'D. Bhavani (Class VII-A • Adm #SV-0412)',
+      category: 'Transport Route Adjustment',
+      assignedStaff: 'Sri Navva Anand (Vice Principal)',
+      resolution: 'In Progress: Route 4 pickup stop moved closer to bypass colony junction. Trial run scheduled for Monday morning.',
+      status: 'In Progress',
+      loggedDate: '29 Oct 2026'
+    },
+    {
+      enquiryId: 'ENQ-2026-053',
+      requester: 'Sri G. Sambasiva Rao (Ph: 94401 23450)',
+      linkedStudent: 'G. Sai Krishna (Class VIII-A • Adm #SV-0322)',
+      category: 'Medical Leave & Assignment Request',
+      assignedStaff: 'Smt. T. Padmavathi (Exam In-charge)',
+      resolution: 'Resolved: Medical leave slip approved. Science & English practical assignment sheets dispatched via email.',
+      status: 'Resolved',
+      loggedDate: '29 Oct 2026'
+    },
+    {
+      enquiryId: 'ENQ-2026-054',
+      requester: 'Smt. M. Venkataratnam (Ph: 98480 55122)',
+      linkedStudent: 'Prospective Student (Pre-Primary / Class I)',
+      category: 'New Admissions & Fee Structure',
+      assignedStaff: 'S. Ramu (Accounts & Admissions Clerk)',
+      resolution: 'Open: Prospective admission docket given at front desk. Awaiting submission of birth certificate & Aadhaar copy.',
+      status: 'Open',
+      loggedDate: '29 Oct 2026'
+    }
+  ];
+
+  const COMM_TEMPLATES_DATA = [
+    {
+      templateId: 'TMP-DLT-101',
+      templateName: 'Daily Student Absentee Alert',
+      channel: 'SMS (DLT Registered)',
+      category: 'Attendance & Safety',
+      content: 'SRIVID: Dear Parent, Your ward {#StudentName#} of Class {#Class#} is marked absent today ({#Date#}) without prior leave. Please verify campus arrival. - Principal',
+      approvalStatus: 'Govt DLT & Principal Approved',
+      approvedBy: 'Smt. Gorle Varalakshmi (Principal) • 12 Jun 2026',
+      dltHeader: 'DLT Header: SRIVID • Reg #11078452'
+    },
+    {
+      templateId: 'TMP-DLT-102',
+      templateName: 'Fee Instalment Due Reminder',
+      channel: 'SMS (DLT Registered)',
+      category: 'Finance & Fees',
+      content: 'SRIVID: Dear Parent, Term-{#Term#} fee instalment of Rs.{#Amount#} for {#StudentName#} (Class {#Class#}) is due on {#DueDate#}. Pay online via UPI or at fee counter. - Sri Vidya School',
+      approvalStatus: 'Govt DLT & Principal Approved',
+      approvedBy: 'Smt. Gorle Varalakshmi (Principal) • 15 Jun 2026',
+      dltHeader: 'DLT Header: SRIVID • Reg #11078453'
+    },
+    {
+      templateId: 'TMP-EML-201',
+      templateName: 'Quarterly Assessment & Progress Report Card',
+      channel: 'Email Dispatch (HTML Responsive)',
+      category: 'Examinations & Marks',
+      content: 'Official Sri Vidya progress summary card with subject-wise marks breakdown, GPA score, teacher remarks, and Principal Smt. Gorle Varalakshmi executive signature block.',
+      approvalStatus: 'Executive Approved',
+      approvedBy: 'Sri Navva Anand (Vice Principal) • 05 Jul 2026',
+      dltHeader: 'SMTP Layout: official_progress_card_v2.html'
+    },
+    {
+      templateId: 'TMP-PSH-301',
+      templateName: 'Emergency Heavy Rainfall / Weather Holiday Alert',
+      channel: 'Mobile Push Notification',
+      category: 'Emergency & Weather',
+      content: '🚨 District Collector Advisory: Campus holiday declared today ({#Date#}) due to heavy rain forecast. Online study material available on student portal. Stay safe!',
+      approvalStatus: 'Principal Sanctioned (Pre-Approved)',
+      approvedBy: 'Smt. Gorle Varalakshmi (Principal) • 01 Aug 2026',
+      dltHeader: 'App Push Action: open_emergency_bulletin'
+    },
+    {
+      templateId: 'TMP-EML-202',
+      templateName: 'Parent-Teacher Consultation Meeting Invite',
+      channel: 'Email Dispatch (HTML Responsive)',
+      category: 'Academic Events',
+      content: 'Formal leadership consultation invitation with meeting slot time, agenda, teacher feedback dossier, and venue in Principal\'s Chamber / Admin Board Room.',
+      approvalStatus: 'Executive Approved',
+      approvedBy: 'Smt. Gorle Varalakshmi (Principal) • 20 Aug 2026',
+      dltHeader: 'SMTP Layout: parent_convocation_invite.html'
+    }
+  ];
+
+  // Active in-memory collections
+  let commAnnouncementsData = [...COMM_ANNOUNCEMENTS_DATA];
+  let commCircularsData = [...COMM_CIRCULARS_DATA];
+  let commSmsData = [...COMM_SMS_DATA];
+  let commEmailData = [...COMM_EMAIL_DATA];
+  let commPushData = [...COMM_PUSH_DATA];
+  let commEnquiriesData = [...COMM_ENQUIRIES_DATA];
+  let commTemplatesData = [...COMM_TEMPLATES_DATA];
+
+  // SUBMENU 1: ANNOUNCEMENTS RENDERER
+  function renderAnnouncements() {
+    const tbody = document.getElementById('announcementsTableBody');
+    if (!tbody) return;
+    tbody.innerHTML = '';
+
+    if (commAnnouncementsData.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="6" class="text-center text-muted py-4">No announcements match filter criteria.</td></tr>';
+      return;
+    }
+
+    commAnnouncementsData.forEach(item => {
+      let statusBadge = '<span class="portal-badge badge-success"><i class="fa-solid fa-circle-check"></i> Published</span>';
+      if (item.status === 'Scheduled') {
+        statusBadge = '<span class="portal-badge badge-warning"><i class="fa-solid fa-clock"></i> Scheduled</span>';
+      } else if (item.status === 'Draft') {
+        statusBadge = '<span class="portal-badge badge-neutral"><i class="fa-solid fa-file-pen"></i> Draft</span>';
+      }
+
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td>
+          <div style="font-weight: 700; color: #0f172a; font-size: 0.92rem;">${item.title}</div>
+          <div style="font-size: 0.78rem; color: #64748b; margin-top: 2px;">
+            <code style="background: #f1f5f9; padding: 1px 4px; border-radius: 4px;">${item.id}</code> • ${item.publishDate}
+          </div>
+        </td>
+        <td>
+          <div style="font-size: 0.86rem; color: #334155; line-height: 1.45; max-width: 360px;">
+            ${item.message}
+          </div>
+          <div style="font-size: 0.76rem; color: #0284c7; font-weight: 600; margin-top: 4px;">
+            <i class="fa-solid fa-signal"></i> Reach: ${item.deliveryReach}
+          </div>
+        </td>
+        <td>
+          <span class="portal-badge badge-primary">${item.targetAudience}</span>
+        </td>
+        <td>
+          <div style="font-weight: 600; color: #1e293b; font-size: 0.88rem;">${item.publisher}</div>
+          <div style="font-size: 0.76rem; color: #10b981; font-weight: 700;">Executive Sanctioned</div>
+        </td>
+        <td style="text-align: center;">
+          ${statusBadge}
+        </td>
+        <td style="text-align: center;">
+          <button class="btn btn-sm btn-outline-primary mr-1" onclick="portalApp.openMessagePreviewModal('announcement', '${item.id}')" title="Live Preview">
+            <i class="fa-solid fa-eye"></i>
+          </button>
+          <button class="btn btn-sm btn-outline-secondary" onclick="portalApp.showToast('Delivery receipts verified across 500 portals', 'success')" title="Delivery Tracking">
+            <i class="fa-solid fa-chart-simple"></i>
+          </button>
+        </td>
+      `;
+      tbody.appendChild(tr);
+    });
+
+    const badge = document.getElementById('announcementsCountBadge');
+    if (badge) badge.textContent = `${commAnnouncementsData.length} Total`;
+  }
+
+  function filterAnnouncements() {
+    const q = (document.getElementById('annSearchInput')?.value || '').toLowerCase().trim();
+    const aud = document.getElementById('annAudienceFilter')?.value || 'all';
+    const st = document.getElementById('annStatusFilter')?.value || 'all';
+
+    commAnnouncementsData = COMM_ANNOUNCEMENTS_DATA.filter(item => {
+      const matchQ = !q || item.title.toLowerCase().includes(q) || item.message.toLowerCase().includes(q) || item.id.toLowerCase().includes(q);
+      const matchAud = (aud === 'all') || item.targetAudience.includes(aud);
+      const matchSt = (st === 'all') || (item.status === st);
+      return matchQ && matchAud && matchSt;
+    });
+    renderAnnouncements();
+  }
+
+  // SUBMENU 2: OFFICIAL CIRCULARS RENDERER
+  function renderOfficialCirculars() {
+    const tbody = document.getElementById('officialCircularsTableBody');
+    if (!tbody) return;
+    tbody.innerHTML = '';
+
+    if (commCircularsData.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="6" class="text-center text-muted py-4">No circulars match filter criteria.</td></tr>';
+      return;
+    }
+
+    commCircularsData.forEach(item => {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td>
+          <strong style="color: #0284c7; font-family: monospace; font-size: 0.95rem;">${item.circularNo}</strong>
+          <div style="font-size: 0.74rem; color: #10b981; font-weight: 700;"><i class="fa-solid fa-stamp"></i> AP Board Format</div>
+        </td>
+        <td>
+          <div style="display: flex; align-items: center; gap: 0.6rem;">
+            <div style="font-size: 1.4rem; color: #ef4444;"><i class="fa-solid fa-file-pdf"></i></div>
+            <div>
+              <div style="font-weight: 700; color: #0f172a; font-size: 0.9rem;">${item.title}</div>
+              <div style="font-size: 0.76rem; color: #64748b;">${item.document} (${item.docSize}) • ${item.signedBy}</div>
+            </div>
+          </div>
+        </td>
+        <td>
+          <div style="font-weight: 600; color: #1e293b; font-size: 0.88rem;">${item.issueDate}</div>
+        </td>
+        <td>
+          <span class="portal-badge badge-neutral">${item.audience}</span>
+        </td>
+        <td>
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 3px;">
+            <span style="font-weight: 700; color: #10b981; font-size: 0.85rem;">${item.ackRate}</span>
+            <span style="font-size: 0.75rem; color: #64748b;">${item.ackCount}</span>
+          </div>
+          <div style="background: #e2e8f0; height: 6px; border-radius: 3px; overflow: hidden;">
+            <div style="background: #10b981; height: 100%; width: ${item.ackRate}; border-radius: 3px;"></div>
+          </div>
+          <div style="font-size: 0.74rem; color: ${item.pendingCount.startsWith('0') ? '#10b981' : '#f59e0b'}; margin-top: 3px; font-weight: 600;">
+            ${item.pendingCount}
+          </div>
+        </td>
+        <td style="text-align: center;">
+          <button class="btn btn-sm btn-outline-primary mr-1" onclick="portalApp.openCircularDoc('${item.circularNo}')" title="View Document">
+            <i class="fa-solid fa-file-lines"></i> View
+          </button>
+          <button class="btn btn-sm btn-primary" onclick="portalApp.resendCircularReminder('${item.circularNo}')" title="Resend SMS to Pending Guardians">
+            <i class="fa-solid fa-bell"></i> Remind
+          </button>
+        </td>
+      `;
+      tbody.appendChild(tr);
+    });
+
+    const badge = document.getElementById('circularsCountBadge');
+    if (badge) badge.textContent = `${commCircularsData.length} Active`;
+  }
+
+  function filterOfficialCirculars() {
+    const q = (document.getElementById('circularSearchInput')?.value || '').toLowerCase().trim();
+    const aud = document.getElementById('circularAudienceFilter')?.value || 'all';
+
+    commCircularsData = COMM_CIRCULARS_DATA.filter(item => {
+      const matchQ = !q || item.circularNo.toLowerCase().includes(q) || item.title.toLowerCase().includes(q) || item.document.toLowerCase().includes(q);
+      const matchAud = (aud === 'all') || item.audience.includes(aud);
+      return matchQ && matchAud;
+    });
+    renderOfficialCirculars();
+  }
+
+  // SUBMENU 3: SMS BROADCAST RENDERER
+  function renderSmsBroadcast() {
+    const tbody = document.getElementById('smsBroadcastTableBody');
+    if (!tbody) return;
+    tbody.innerHTML = '';
+
+    if (commSmsData.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="5" class="text-center text-muted py-4">No SMS dispatches found.</td></tr>';
+      return;
+    }
+
+    commSmsData.forEach(item => {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td>
+          <div style="font-weight: 700; color: #0f172a; font-size: 0.9rem;">${item.recipientGroup}</div>
+          <div style="font-size: 0.76rem; color: #64748b; margin-top: 2px;">
+            <code style="background: #f1f5f9; padding: 1px 4px; border-radius: 4px;">${item.broadcastId}</code> • ${item.dispatchTime}
+          </div>
+        </td>
+        <td>
+          <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; padding: 0.5rem 0.75rem; font-size: 0.84rem; color: #334155; line-height: 1.4;">
+            ${item.message}
+          </div>
+          <div style="font-size: 0.74rem; color: #0284c7; font-weight: 700; margin-top: 3px;">
+            DLT Header: SRIVID • Template ID: ${item.dltTemplateId}
+          </div>
+        </td>
+        <td style="text-align: center;">
+          <span class="portal-badge badge-success" style="font-size: 0.82rem;">
+            <i class="fa-solid fa-check-double"></i> ${item.deliveryStatus}
+          </span>
+        </td>
+        <td>
+          <div style="font-size: 0.84rem; color: ${item.failureReport.startsWith('0') ? '#10b981' : '#ea580c'}; font-weight: 600;">
+            ${item.failureReport}
+          </div>
+          <div style="font-size: 0.74rem; color: #64748b; margin-top: 2px;">
+            Telco Operator: BSNL / Airtel Enterprise Gateway
+          </div>
+        </td>
+        <td style="text-align: center;">
+          <button class="btn btn-sm btn-outline-primary mr-1" onclick="portalApp.viewSmsDeliveryLogs('${item.broadcastId}')" title="Handset Delivery Log">
+            <i class="fa-solid fa-receipt"></i> Log
+          </button>
+          <button class="btn btn-sm btn-outline-secondary" onclick="portalApp.retrySmsBroadcast('${item.broadcastId}')" title="Retry Undelivered">
+            <i class="fa-solid fa-rotate-right"></i> Retry
+          </button>
+        </td>
+      `;
+      tbody.appendChild(tr);
+    });
+
+    const badge = document.getElementById('smsCountBadge');
+    if (badge) badge.textContent = `${commSmsData.length} Dispatches`;
+  }
+
+  function filterSmsBroadcast() {
+    const q = (document.getElementById('smsSearchInput')?.value || '').toLowerCase().trim();
+    const grp = document.getElementById('smsGroupFilter')?.value || 'all';
+    const st = document.getElementById('smsStatusFilter')?.value || 'all';
+
+    commSmsData = COMM_SMS_DATA.filter(item => {
+      const matchQ = !q || item.message.toLowerCase().includes(q) || item.recipientGroup.toLowerCase().includes(q);
+      const matchGrp = (grp === 'all') || item.recipientGroup.includes(grp);
+      const matchSt = (st === 'all') || item.deliveryStatus.includes(st);
+      return matchQ && matchGrp && matchSt;
+    });
+    renderSmsBroadcast();
+  }
+
+  // SUBMENU 4: EMAIL DISPATCH RENDERER
+  function renderEmailDispatch() {
+    const tbody = document.getElementById('emailDispatchTableBody');
+    if (!tbody) return;
+    tbody.innerHTML = '';
+
+    if (commEmailData.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="5" class="text-center text-muted py-4">No email transmissions match filter.</td></tr>';
+      return;
+    }
+
+    commEmailData.forEach(item => {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td>
+          <div style="font-weight: 700; color: #0f172a; font-size: 0.9rem;">${item.recipientList}</div>
+          <div style="font-size: 0.76rem; color: #64748b; margin-top: 2px;">
+            <code style="background: #f1f5f9; padding: 1px 4px; border-radius: 4px;">${item.dispatchId}</code> • From: ${item.sender}
+          </div>
+        </td>
+        <td>
+          <div style="font-weight: 600; color: #1e293b; font-size: 0.88rem;">${item.subject}</div>
+          <div style="font-size: 0.76rem; color: #0284c7; margin-top: 2px;"><i class="fa-solid fa-shield-halved"></i> Sensitive Recipient Lockdown Active</div>
+        </td>
+        <td style="text-align: center;">
+          <span class="portal-badge badge-success"><i class="fa-solid fa-paper-plane"></i> ${item.deliveryStatus}</span>
+        </td>
+        <td>
+          <div style="font-size: 0.82rem; color: #334155; line-height: 1.45;">${item.sendingHistory}</div>
+        </td>
+        <td style="text-align: center;">
+          <button class="btn btn-sm btn-outline-primary" onclick="portalApp.openMessagePreviewModal('email', '${item.dispatchId}')" title="View Full Email Body">
+            <i class="fa-solid fa-envelope-open-text"></i> View
+          </button>
+        </td>
+      `;
+      tbody.appendChild(tr);
+    });
+
+    const badge = document.getElementById('emailCountBadge');
+    if (badge) badge.textContent = `${commEmailData.length} Dispatches`;
+  }
+
+  function filterEmailDispatch() {
+    const q = (document.getElementById('emailSearchInput')?.value || '').toLowerCase().trim();
+    commEmailData = COMM_EMAIL_DATA.filter(item => {
+      return !q || item.subject.toLowerCase().includes(q) || item.recipientList.toLowerCase().includes(q) || item.dispatchId.toLowerCase().includes(q);
+    });
+    renderEmailDispatch();
+  }
+
+  // SUBMENU 5: MOBILE PUSH RENDERER
+  function renderMobilePush() {
+    const tbody = document.getElementById('mobilePushTableBody');
+    if (!tbody) return;
+    tbody.innerHTML = '';
+
+    if (commPushData.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="5" class="text-center text-muted py-4">No push notifications found.</td></tr>';
+      return;
+    }
+
+    commPushData.forEach(item => {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td>
+          <div style="font-weight: 700; color: #0f172a; font-size: 0.92rem;">${item.notificationTitle}</div>
+          <div style="font-size: 0.76rem; color: #64748b; margin-top: 2px;">
+            <code style="background: #f1f5f9; padding: 1px 4px; border-radius: 4px;">${item.pushId}</code> • Sent: ${item.dispatchTime}
+          </div>
+        </td>
+        <td>
+          <span class="portal-badge badge-primary">${item.targetAudience}</span>
+        </td>
+        <td>
+          <div style="font-weight: 700; color: #10b981; font-size: 0.88rem;">${item.delivery}</div>
+          <div style="font-size: 0.74rem; color: #64748b;">FCM &amp; Apple APNs Gateway</div>
+        </td>
+        <td>
+          <div style="font-size: 0.84rem; color: #6b21a8; font-weight: 600;">${item.engagementStatus}</div>
+        </td>
+        <td style="text-align: center;">
+          <button class="btn btn-sm btn-outline-primary" onclick="portalApp.openMessagePreviewModal('push', '${item.pushId}')" title="Preview App Push">
+            <i class="fa-solid fa-mobile-screen"></i> Preview
+          </button>
+        </td>
+      `;
+      tbody.appendChild(tr);
+    });
+
+    const badge = document.getElementById('pushCountBadge');
+    if (badge) badge.textContent = `${commPushData.length} Alerts`;
+  }
+
+  function filterMobilePush() {
+    const q = (document.getElementById('pushSearchInput')?.value || '').toLowerCase().trim();
+    commPushData = COMM_PUSH_DATA.filter(item => {
+      return !q || item.notificationTitle.toLowerCase().includes(q) || item.targetAudience.toLowerCase().includes(q);
+    });
+    renderMobilePush();
+  }
+
+  // SUBMENU 6: PARENT ENQUIRIES RENDERER
+  function renderParentEnquiries() {
+    const tbody = document.getElementById('parentEnquiriesTableBody');
+    if (!tbody) return;
+    tbody.innerHTML = '';
+
+    if (commEnquiriesData.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="5" class="text-center text-muted py-4">No parent enquiries found.</td></tr>';
+      return;
+    }
+
+    commEnquiriesData.forEach(item => {
+      let stBadge = '<span class="portal-badge badge-success"><i class="fa-solid fa-circle-check"></i> Resolved</span>';
+      if (item.status === 'In Progress') {
+        stBadge = '<span class="portal-badge badge-warning"><i class="fa-solid fa-spinner"></i> In Progress</span>';
+      } else if (item.status === 'Open') {
+        stBadge = '<span class="portal-badge badge-danger"><i class="fa-solid fa-circle-exclamation"></i> Open</span>';
+      }
+
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td>
+          <div style="font-weight: 700; color: #0f172a; font-size: 0.9rem;">${item.requester}</div>
+          <div style="font-size: 0.76rem; color: #64748b; margin-top: 2px;">
+            <code style="background: #f1f5f9; padding: 1px 4px; border-radius: 4px;">${item.enquiryId}</code> • ${item.loggedDate}
+          </div>
+        </td>
+        <td>
+          <div style="font-weight: 600; color: #0284c7; font-size: 0.88rem;">${item.linkedStudent}</div>
+          <div style="font-size: 0.76rem; color: #64748b;">Category: <strong>${item.category}</strong></div>
+        </td>
+        <td>
+          <div style="font-weight: 600; color: #1e293b; font-size: 0.88rem;"><i class="fa-solid fa-user-tie mr-1 text-primary"></i> ${item.assignedStaff}</div>
+        </td>
+        <td>
+          <div style="margin-bottom: 4px;">${stBadge}</div>
+          <div style="font-size: 0.84rem; color: #334155; line-height: 1.4;">${item.resolution}</div>
+        </td>
+        <td style="text-align: center;">
+          <button class="btn btn-sm btn-outline-primary" onclick="portalApp.openUpdateEnquiryModal('${item.enquiryId}')" title="Update Resolution">
+            <i class="fa-solid fa-pen-to-square"></i> Action
+          </button>
+        </td>
+      `;
+      tbody.appendChild(tr);
+    });
+
+    const badge = document.getElementById('enquiriesCountBadge');
+    if (badge) badge.textContent = `${commEnquiriesData.length} Enquiries`;
+  }
+
+  function filterParentEnquiries() {
+    const q = (document.getElementById('enquirySearchInput')?.value || '').toLowerCase().trim();
+    const st = document.getElementById('enquiryStatusFilter')?.value || 'all';
+
+    commEnquiriesData = COMM_ENQUIRIES_DATA.filter(item => {
+      const matchQ = !q || item.requester.toLowerCase().includes(q) || item.linkedStudent.toLowerCase().includes(q) || item.enquiryId.toLowerCase().includes(q);
+      const matchSt = (st === 'all') || (item.status === st);
+      return matchQ && matchSt;
+    });
+    renderParentEnquiries();
+  }
+
+  // SUBMENU 7: MESSAGE TEMPLATES RENDERER
+  function renderMessageTemplates() {
+    const tbody = document.getElementById('messageTemplatesTableBody');
+    if (!tbody) return;
+    tbody.innerHTML = '';
+
+    if (commTemplatesData.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="5" class="text-center text-muted py-4">No approved message templates found.</td></tr>';
+      return;
+    }
+
+    commTemplatesData.forEach(item => {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td>
+          <div style="font-weight: 700; color: #0f172a; font-size: 0.92rem;">${item.templateName}</div>
+          <div style="font-size: 0.76rem; color: #64748b; margin-top: 2px;">
+            <code style="background: #f1f5f9; padding: 1px 4px; border-radius: 4px;">${item.templateId}</code>
+          </div>
+        </td>
+        <td>
+          <span class="portal-badge badge-primary">${item.channel}</span>
+          <div style="font-size: 0.74rem; color: #64748b; margin-top: 3px;">Category: ${item.category}</div>
+        </td>
+        <td>
+          <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; padding: 0.5rem 0.75rem; font-size: 0.84rem; color: #334155; line-height: 1.45;">
+            ${item.content}
+          </div>
+          <div style="font-size: 0.74rem; color: #0284c7; font-weight: 600; margin-top: 3px;">
+            ${item.dltHeader}
+          </div>
+        </td>
+        <td>
+          <div style="margin-bottom: 4px;">
+            <span class="portal-badge badge-success"><i class="fa-solid fa-stamp"></i> ${item.approvalStatus}</span>
+          </div>
+          <div style="font-size: 0.76rem; color: #475569;">${item.approvedBy}</div>
+        </td>
+        <td style="text-align: center;">
+          <button class="btn btn-sm btn-primary" onclick="portalApp.useMessageTemplate('${item.templateId}')" title="Use in Composer">
+            <i class="fa-solid fa-paper-plane"></i> Use
+          </button>
+        </td>
+      `;
+      tbody.appendChild(tr);
+    });
+
+    const badge = document.getElementById('templatesCountBadge');
+    if (badge) badge.textContent = `${commTemplatesData.length} Templates`;
+  }
+
+  function filterMessageTemplates() {
+    const q = (document.getElementById('templateSearchInput')?.value || '').toLowerCase().trim();
+    const ch = document.getElementById('templateChannelFilter')?.value || 'all';
+
+    commTemplatesData = COMM_TEMPLATES_DATA.filter(item => {
+      const matchQ = !q || item.templateName.toLowerCase().includes(q) || item.content.toLowerCase().includes(q);
+      const matchCh = (ch === 'all') || item.channel.includes(ch);
+      return matchQ && matchCh;
+    });
+    renderMessageTemplates();
+  }
+
+  // ACTION HANDLERS & MODALS
+  function openComposeBroadcastModal(defaultChannel) {
+    if (defaultChannel) {
+      const chMap = {
+        'announcement': 'Announcement',
+        'circulars': 'Official Circular',
+        'sms': 'SMS',
+        'email': 'Email',
+        'push': 'Mobile Push'
+      };
+      const sel = document.getElementById('broadcastChannel');
+      if (sel) sel.value = chMap[defaultChannel] || 'Announcement';
+    }
+    openModal('composeBroadcastModal');
+  }
+
+  function handleChannelChange() {
+    // Optional channel adjustment
+  }
+
+  function toggleScheduleTime() {
+    const type = document.getElementById('broadcastScheduleType')?.value;
+    const grp = document.getElementById('scheduledTimeGroup');
+    if (grp) {
+      grp.style.display = (type === 'Scheduled') ? 'block' : 'none';
+    }
+  }
+
+  function saveBroadcastDraft() {
+    const title = document.getElementById('broadcastSubjectInput')?.value || 'Untitled Announcement Draft';
+    const body = document.getElementById('broadcastContentInput')?.value || '';
+    const aud = document.getElementById('broadcastTargetAudience')?.value || 'All Parents & Students';
+
+    const newDraft = {
+      id: 'ANN-2026-0' + (COMM_ANNOUNCEMENTS_DATA.length + 41),
+      title: title + ' (Draft)',
+      message: body,
+      targetAudience: aud,
+      publisher: 'Smt. Gorle Varalakshmi (Principal)',
+      publishDate: 'Draft (Saved ' + new Date().toLocaleDateString('en-GB') + ')',
+      status: 'Draft',
+      scheduledFor: 'Draft',
+      deliveryReach: 'Internal Staging'
+    };
+
+    COMM_ANNOUNCEMENTS_DATA.unshift(newDraft);
+    commAnnouncementsData = [...COMM_ANNOUNCEMENTS_DATA];
+    renderAnnouncements();
+    closeModal('composeBroadcastModal');
+    showToast('Broadcast saved to working drafts successfully!', 'info');
+  }
+
+  function openCurrentBroadcastPreview() {
+    const ch = document.getElementById('broadcastChannel')?.value || 'Announcement';
+    const aud = document.getElementById('broadcastTargetAudience')?.value || 'All Parents & Students';
+    const title = document.getElementById('broadcastSubjectInput')?.value || 'Notice Header Preview';
+    const body = document.getElementById('broadcastContentInput')?.value || 'Message body content...';
+
+    document.getElementById('previewChannelBadge').textContent = ch;
+    document.getElementById('previewAudienceText').textContent = 'Audience: ' + aud;
+    document.getElementById('previewTitleText').textContent = title;
+    document.getElementById('previewBodyText').textContent = body;
+    document.getElementById('previewPublisherText').textContent = 'Sender: Principal Smt. Gorle Varalakshmi';
+
+    openModal('previewMessageModal');
+  }
+
+  function confirmSendFromPreview() {
+    closeModal('previewMessageModal');
+    const form = document.getElementById('composeBroadcastForm');
+    if (form) form.dispatchEvent(new Event('submit'));
+  }
+
+  function handleTransmitBroadcast(e) {
+    if (e && e.preventDefault) e.preventDefault();
+    const ch = document.getElementById('broadcastChannel')?.value;
+    const aud = document.getElementById('broadcastTargetAudience')?.value;
+    const title = document.getElementById('broadcastSubjectInput')?.value;
+    const body = document.getElementById('broadcastContentInput')?.value;
+    const sched = document.getElementById('broadcastScheduleType')?.value;
+
+    if (ch === 'SMS') {
+      const newSms = {
+        broadcastId: 'SMS-2026-' + (COMM_SMS_DATA.length + 149),
+        recipientGroup: aud,
+        message: 'SRIVID: ' + body + ' - Principal',
+        dltTemplateId: 'DLT-110795',
+        deliveryStatus: 'Delivered (100%)',
+        failureReport: '0 Failures • Gateway Dispatched',
+        dispatchTime: 'Just Now (IST)'
+      };
+      COMM_SMS_DATA.unshift(newSms);
+      commSmsData = [...COMM_SMS_DATA];
+      renderSmsBroadcast();
+      switchSubTab('communication', 'sms');
+      showToast('SMS Broadcast dispatched via DLT Gateway with 100% receipt realization!', 'success');
+    } else if (ch === 'Email') {
+      const newEmail = {
+        dispatchId: 'EML-2026-0' + (COMM_EMAIL_DATA.length + 90),
+        recipientList: aud + ' (Official Dispatch List)',
+        subject: title,
+        deliveryStatus: 'Delivered (100% • 0 Bounces)',
+        sendingHistory: 'Just Now • mail.srividya.edu.in • DKIM/SPF Verified',
+        sender: 'principal@srividya.edu.in (Smt. Gorle Varalakshmi)'
+      };
+      COMM_EMAIL_DATA.unshift(newEmail);
+      commEmailData = [...COMM_EMAIL_DATA];
+      renderEmailDispatch();
+      switchSubTab('communication', 'email');
+      showToast('Email Dispatch transmitted successfully to authenticated recipient cohort!', 'success');
+    } else if (ch === 'Mobile Push') {
+      const newPush = {
+        pushId: 'PSH-2026-0' + (COMM_PUSH_DATA.length + 63),
+        notificationTitle: title,
+        targetAudience: aud,
+        delivery: '780 / 780 Delivered (100%)',
+        engagementStatus: 'Queued for Real-time Notification Sound Alert',
+        dispatchTime: 'Just Now',
+        priority: 'High Priority'
+      };
+      COMM_PUSH_DATA.unshift(newPush);
+      commPushData = [...COMM_PUSH_DATA];
+      renderMobilePush();
+      switchSubTab('communication', 'push');
+      showToast('Push alert sent to active mobile handsets!', 'success');
+    } else {
+      // Default announcement
+      const newAnn = {
+        id: 'ANN-2026-0' + (COMM_ANNOUNCEMENTS_DATA.length + 41),
+        title: title,
+        message: body,
+        targetAudience: aud,
+        publisher: 'Smt. Gorle Varalakshmi (Principal)',
+        publishDate: 'Today (Live)',
+        status: (sched === 'Scheduled') ? 'Scheduled' : 'Published',
+        scheduledFor: (sched === 'Scheduled') ? 'Tomorrow, 08:00 AM' : 'Immediate',
+        deliveryReach: '855 Guardians & Staff'
+      };
+      COMM_ANNOUNCEMENTS_DATA.unshift(newAnn);
+      commAnnouncementsData = [...COMM_ANNOUNCEMENTS_DATA];
+      renderAnnouncements();
+      switchSubTab('communication', 'announcements');
+      showToast('Campus Announcement published with sensitive recipient lockdown!', 'success');
+    }
+
+    closeModal('composeBroadcastModal');
+  }
+
+  function openMessagePreviewModal(type, id) {
+    let item = null;
+    let ch = 'Announcement';
+    if (type === 'announcement') {
+      item = COMM_ANNOUNCEMENTS_DATA.find(x => x.id === id);
+      ch = 'Campus Announcement';
+    } else if (type === 'email') {
+      item = COMM_EMAIL_DATA.find(x => x.dispatchId === id);
+      ch = 'Email Dispatch';
+    } else if (type === 'push') {
+      item = COMM_PUSH_DATA.find(x => x.pushId === id);
+      ch = 'Mobile Push';
+    }
+
+    if (!item) return;
+
+    document.getElementById('previewChannelBadge').textContent = ch;
+    document.getElementById('previewAudienceText').textContent = 'Audience: ' + (item.targetAudience || item.recipientList);
+    document.getElementById('previewTitleText').textContent = item.title || item.subject || item.notificationTitle;
+    document.getElementById('previewBodyText').textContent = item.message || item.sendingHistory || item.engagementStatus;
+    document.getElementById('previewPublisherText').textContent = 'Sender: Smt. Gorle Varalakshmi (Principal)';
+
+    openModal('previewMessageModal');
+  }
+
+  function openCircularDoc(circularNo) {
+    const item = COMM_CIRCULARS_DATA.find(x => x.circularNo === circularNo);
+    if (!item) return;
+    showToast(`Opening official AP Board document: ${item.document} (${item.docSize})`, 'info');
+  }
+
+  function resendCircularReminder(circularNo) {
+    const item = COMM_CIRCULARS_DATA.find(x => x.circularNo === circularNo);
+    if (!item) return;
+    showToast(`Automated SMS reminder dispatched to ${item.pendingCount} for circular ${circularNo}`, 'success');
+  }
+
+  function retrySmsBroadcast(broadcastId) {
+    showToast(`Auto-retrying unacknowledged handsets for ${broadcastId} via secondary telecom route...`, 'info');
+    setTimeout(() => {
+      showToast(`All retries successful for ${broadcastId}. Handset realization 100%!`, 'success');
+    }, 800);
+  }
+
+  function viewSmsDeliveryLogs(broadcastId) {
+    showToast(`DLT Gateway receipts verified for ${broadcastId}. Zero TRAI violations recorded.`, 'info');
+  }
+
+  function exportEmailDispatchCSV() {
+    let csv = 'Dispatch ID,Recipient List,Subject,Delivery Status,Sending History\n';
+    COMM_EMAIL_DATA.forEach(d => {
+      csv += `"${d.dispatchId}","${d.recipientList}","${d.subject}","${d.deliveryStatus}","${d.sendingHistory}"\n`;
+    });
+    const blob = new Blob([csv], { type: 'text/csv' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'Sri_Vidya_Email_Dispatch_Register.csv';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    showToast('Email dispatch register exported successfully!', 'success');
+  }
+
+  function openNewEnquiryModal() {
+    document.getElementById('editEnquiryId').value = '';
+    document.getElementById('enqModalRequester').value = 'Sri K. Sambasiva Rao (Parent)';
+    document.getElementById('enqModalStudent').value = 'K. Sai Krishna (Class VIII-A)';
+    document.getElementById('enqModalStaff').value = 'Sri Navva Anand (Vice Principal)';
+    document.getElementById('enqModalStatus').value = 'In Progress';
+    document.getElementById('enqModalResolutionNotes').value = '';
+    openModal('updateEnquiryModal');
+  }
+
+  function openUpdateEnquiryModal(enquiryId) {
+    const item = COMM_ENQUIRIES_DATA.find(x => x.enquiryId === enquiryId);
+    if (!item) return;
+    document.getElementById('editEnquiryId').value = item.enquiryId;
+    document.getElementById('enqModalRequester').value = item.requester;
+    document.getElementById('enqModalStudent').value = item.linkedStudent;
+    document.getElementById('enqModalStaff').value = item.assignedStaff;
+    document.getElementById('enqModalStatus').value = item.status;
+    document.getElementById('enqModalResolutionNotes').value = item.resolution;
+    openModal('updateEnquiryModal');
+  }
+
+  function handleUpdateEnquirySubmit(e) {
+    if (e && e.preventDefault) e.preventDefault();
+    const id = document.getElementById('editEnquiryId').value;
+    const staff = document.getElementById('enqModalStaff').value;
+    const st = document.getElementById('enqModalStatus').value;
+    const notes = document.getElementById('enqModalResolutionNotes').value;
+
+    let item = COMM_ENQUIRIES_DATA.find(x => x.enquiryId === id);
+    if (item) {
+      item.assignedStaff = staff;
+      item.status = st;
+      item.resolution = (st === 'Resolved' ? 'Resolved: ' : st === 'In Progress' ? 'In Progress: ' : 'Open: ') + notes;
+    } else {
+      const newEnq = {
+        enquiryId: 'ENQ-2026-0' + (COMM_ENQUIRIES_DATA.length + 55),
+        requester: document.getElementById('enqModalRequester').value,
+        linkedStudent: document.getElementById('enqModalStudent').value,
+        category: 'Parent Consultation',
+        assignedStaff: staff,
+        resolution: (st === 'Resolved' ? 'Resolved: ' : st === 'In Progress' ? 'In Progress: ' : 'Open: ') + notes,
+        status: st,
+        loggedDate: new Date().toLocaleDateString('en-GB')
+      };
+      COMM_ENQUIRIES_DATA.unshift(newEnq);
+    }
+    commEnquiriesData = [...COMM_ENQUIRIES_DATA];
+    renderParentEnquiries();
+    closeModal('updateEnquiryModal');
+    showToast('Parent enquiry grievance status updated successfully!', 'success');
+  }
+
+  function openCreateTemplateModal() {
+    openModal('createTemplateModal');
+  }
+
+  function handleCreateTemplateSubmit(e) {
+    if (e && e.preventDefault) e.preventDefault();
+    const name = document.getElementById('newTmplName').value;
+    const ch = document.getElementById('newTmplChannel').value;
+    const cat = document.getElementById('newTmplCategory').value;
+    const ref = document.getElementById('newTmplDltRef').value || 'DLT-Pending';
+    const content = document.getElementById('newTmplContent').value;
+
+    const newTmpl = {
+      templateId: 'TMP-NEW-' + (COMM_TEMPLATES_DATA.length + 1),
+      templateName: name,
+      channel: ch,
+      category: cat,
+      content: content,
+      approvalStatus: 'Executive Approved',
+      approvedBy: 'Smt. Gorle Varalakshmi (Principal) • Approved Today',
+      dltHeader: ref
+    };
+
+    COMM_TEMPLATES_DATA.unshift(newTmpl);
+    commTemplatesData = [...COMM_TEMPLATES_DATA];
+    renderMessageTemplates();
+    closeModal('createTemplateModal');
+    showToast('New message template approved and registered for institutional broadcast!', 'success');
+  }
+
+  function useMessageTemplate(templateId) {
+    const item = COMM_TEMPLATES_DATA.find(x => x.templateId === templateId);
+    if (!item) return;
+
+    let defaultCh = 'announcement';
+    if (item.channel.includes('SMS')) defaultCh = 'sms';
+    else if (item.channel.includes('Email')) defaultCh = 'email';
+    else if (item.channel.includes('Push')) defaultCh = 'push';
+
+    openComposeBroadcastModal(defaultCh);
+    document.getElementById('broadcastSubjectInput').value = item.templateName;
+    document.getElementById('broadcastContentInput').value = item.content;
+    showToast(`Template '${item.templateName}' loaded into Broadcast Composer!`, 'info');
+  }
+
+  function openDeliveryAuditModal() {
+    showToast('Delivery audit logs: All transmissions verified compliant with TRAI DLT regulations and recipient safeguarding protocols.', 'info');
+  }
+
+  function openIssueCircularModal() {
+    openComposeBroadcastModal('circulars');
+  }
+
   return {
+    renderAnnouncements,
+    filterAnnouncements,
+    renderOfficialCirculars,
+    filterOfficialCirculars,
+    renderSmsBroadcast,
+    filterSmsBroadcast,
+    renderEmailDispatch,
+    filterEmailDispatch,
+    renderMobilePush,
+    filterMobilePush,
+    renderParentEnquiries,
+    filterParentEnquiries,
+    renderMessageTemplates,
+    filterMessageTemplates,
+    openComposeBroadcastModal,
+    handleChannelChange,
+    toggleScheduleTime,
+    saveBroadcastDraft,
+    openCurrentBroadcastPreview,
+    confirmSendFromPreview,
+    handleTransmitBroadcast,
+    openMessagePreviewModal,
+    openCircularDoc,
+    resendCircularReminder,
+    retrySmsBroadcast,
+    viewSmsDeliveryLogs,
+    exportEmailDispatchCSV,
+    openNewEnquiryModal,
+    openUpdateEnquiryModal,
+    handleUpdateEnquirySubmit,
+    openCreateTemplateModal,
+    handleCreateTemplateSubmit,
+    useMessageTemplate,
+    openDeliveryAuditModal,
+    openIssueCircularModal,
     togglePassVisibility,
     saveExecutiveCreds,
     printCredentialReceipt: function() { window.print(); },

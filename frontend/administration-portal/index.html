@@ -423,8 +423,8 @@
           </div>
         </div>
 
-        <!-- 11. Communication -->
-        <div class="nav-item" data-module="communication">
+                <!-- 12. Communication -->
+        <div class="nav-item" data-module="communication" id="sidebarNavItemCommunication">
           <a href="#communication" class="nav-link" onclick="portalApp.navigateTo('communication');">
             <span class="nav-icon"><i class="fa-solid fa-bullhorn"></i></span>
             <span class="nav-text">12. Communication</span>
@@ -432,13 +432,14 @@
           </a>
           <div class="nav-sub">
             <a href="#comm-announcements" class="nav-sub-link active" data-sub="announcements" onclick="portalApp.switchSubTab('communication', 'announcements');">Announcements</a>
-            <a href="#comm-notices" class="nav-sub-link" data-sub="notices" onclick="portalApp.switchSubTab('communication', 'notices');">Circulars</a>
+            <a href="#comm-circulars" class="nav-sub-link" data-sub="circulars" onclick="portalApp.switchSubTab('communication', 'circulars');">Official Circulars <span class="nav-sub-badge neutral">2 New</span></a>
+            <a href="#comm-sms" class="nav-sub-link" data-sub="sms" onclick="portalApp.switchSubTab('communication', 'sms');">SMS Broadcast <span class="nav-sub-badge success">99.2%</span></a>
             <a href="#comm-email" class="nav-sub-link" data-sub="email" onclick="portalApp.switchSubTab('communication', 'email');">Email Dispatch</a>
-            <a href="#comm-sms" class="nav-sub-link" data-sub="sms" onclick="portalApp.switchSubTab('communication', 'sms');">SMS Broadcast</a>
-            <a href="#comm-push" class="nav-sub-link" data-sub="push" onclick="portalApp.switchSubTab('communication', 'push');">Push Notifications</a>
-            <a href="#comm-parent-comm" class="nav-sub-link" data-sub="parent-comm" onclick="portalApp.switchSubTab('communication', 'parent-comm');">Parent-Teacher Comm</a>
+            <a href="#comm-push" class="nav-sub-link" data-sub="push" onclick="portalApp.switchSubTab('communication', 'push');">Mobile Push</a>
+            <a href="#comm-enquiries" class="nav-sub-link" data-sub="enquiries" onclick="portalApp.switchSubTab('communication', 'enquiries');">Parent Enquiries <span class="nav-sub-badge warning">3 Open</span></a>
+            <a href="#comm-templates" class="nav-sub-link" data-sub="templates" onclick="portalApp.switchSubTab('communication', 'templates');">Message Templates</a>
           </div>
-        
+        </div>
 
         <!-- Documents (Office & Institutional Records) -->
         <div class="nav-item" data-module="documents" style="display: none;">
@@ -451,7 +452,7 @@
             <a href="#documents-certificates" class="nav-sub-link active" data-sub="certificates" onclick="portalApp.switchSubTab('documents', 'certificates');">Certificates</a>
             <a href="#documents-record-requests" class="nav-sub-link" data-sub="record-requests" onclick="portalApp.switchSubTab('documents', 'record-requests');">Record Requests</a>
           </div>
-        </div></div>
+        </div>
 
         <!-- 12. Events & Activities -->
         <div class="nav-item" data-module="events">
@@ -9211,487 +9212,671 @@
              MODULE 12: COMMUNICATION
              (Announcements, Notices, SMS, Email, Push Notifications)
              ================================================================= -->
+                <!-- =================================================================
+             MODULE 12: COMMUNICATION (#view-communication)
+             Multi-channel dispatch: Announcements, official circulars, DLT-verified SMS broadcasts,
+             email delivery, mobile push, parent enquiries, and verified templates.
+             Submenus:
+             1. Announcements (Title, message, target audience, publisher and publication status)
+             2. Official Circulars (Circular number, document, issue date, audience and acknowledgement status)
+             3. SMS Broadcast (Recipient group, message, delivery status and failure report)
+             4. Email Dispatch (Recipient list, subject, delivery status and sending history)
+             5. Mobile Push (Notification title, target audience, delivery and engagement status)
+             6. Parent Enquiries (Requester, linked student if applicable, assigned staff member and resolution)
+             7. Message Templates (Approved email, SMS and notification templates)
+             Governance:
+             "Include draft, preview, approval, schedule and delivery tracking. Sensitive messages should be sent only to the intended recipients."
+             ================================================================= -->
         <section class="portal-view" id="view-communication">
+
+          <!-- Sensitive Messaging & Safeguarding Governance Banner -->
+          <div class="alert alert-info d-flex align-items-center mb-4" style="background: rgba(2, 132, 199, 0.08); border-left: 4px solid var(--color-primary); padding: 1rem 1.25rem; border-radius: 8px;">
+            <div style="font-size: 1.5rem; margin-right: 1.1rem; color: var(--color-primary);"><i class="fa-solid fa-shield-halved"></i></div>
+            <div style="flex: 1;">
+              <strong style="color: #0f172a; font-size: 0.95rem;">Institutional Communication &amp; Recipient Safeguarding Protocol:</strong>
+              <p style="margin: 0.25rem 0 0 0; font-size: 0.85rem; color: #475569; line-height: 1.45;">
+                Sensitive notices, student diagnostic reports, and private financial communications are restricted strictly to authenticated parent/guardian recipients. All broadcasts support draft staging, device preview, leadership approval under <strong>Principal Smt. Gorle Varalakshmi</strong> and <strong>Vice Principal Sri Navva Anand</strong>, timed scheduling, and real-time delivery tracking.
+              </p>
+            </div>
+          </div>
+
           <div class="module-header">
             <div class="module-header-info">
-              <h2><i class="fa-solid fa-bullhorn text-primary"></i> School Communication Desk</h2>
-              <p>Broadcast notices, SMS to parents, email newsletters, and mobile app notifications.</p>
+              <h2><i class="fa-solid fa-bullhorn text-primary"></i> Campus Communication &amp; Broadcast Center</h2>
+              <p>Multi-channel broadcast: Announcements, official circulars, DLT-registered SMS, email dispatches, mobile push, and parent inquiries.</p>
             </div>
             <div class="module-header-actions">
-              <button class="btn btn-primary" id="btnComposeBroadcast" onclick="portalApp.openComposeBroadcastModal()">
+              <button class="btn btn-secondary" onclick="portalApp.openDeliveryAuditModal()">
+                <i class="fa-solid fa-chart-line"></i> Delivery &amp; Audit Logs
+              </button>
+              <button class="btn btn-primary" onclick="portalApp.openComposeBroadcastModal()">
                 <i class="fa-solid fa-feather"></i> Compose Broadcast
               </button>
             </div>
           </div>
 
-          <!-- Tab Strip -->
+          <!-- Quick Navigation Tab Strip (7 Submenus) -->
           <div class="tab-strip" id="commTabStrip">
             <button class="tab-btn active" data-sub="announcements" onclick="portalApp.switchSubTab('communication', 'announcements')">
               <i class="fa-solid fa-bullhorn mr-1"></i> Announcements
             </button>
-            <button class="tab-btn" data-sub="notices" onclick="portalApp.switchSubTab('communication', 'notices')">
-              <i class="fa-solid fa-scroll mr-1"></i> Circulars &amp; Notices
+            <button class="tab-btn" data-sub="circulars" onclick="portalApp.switchSubTab('communication', 'circulars')">
+              <i class="fa-solid fa-scroll mr-1"></i> Official Circulars
             </button>
             <button class="tab-btn" data-sub="sms" onclick="portalApp.switchSubTab('communication', 'sms')">
-              <i class="fa-solid fa-comment-sms mr-1"></i> SMS Logs
+              <i class="fa-solid fa-comment-sms mr-1"></i> SMS Broadcast
             </button>
             <button class="tab-btn" data-sub="email" onclick="portalApp.switchSubTab('communication', 'email')">
-              <i class="fa-solid fa-envelope mr-1"></i> Email Transmissions
+              <i class="fa-solid fa-envelope mr-1"></i> Email Dispatch
             </button>
             <button class="tab-btn" data-sub="push" onclick="portalApp.switchSubTab('communication', 'push')">
-              <i class="fa-solid fa-mobile-screen mr-1"></i> Push Notifications
+              <i class="fa-solid fa-mobile-screen mr-1"></i> Mobile Push
+            </button>
+            <button class="tab-btn" data-sub="enquiries" onclick="portalApp.switchSubTab('communication', 'enquiries')">
+              <i class="fa-solid fa-comments mr-1"></i> Parent Enquiries
+            </button>
+            <button class="tab-btn" data-sub="templates" onclick="portalApp.switchSubTab('communication', 'templates')">
+              <i class="fa-solid fa-file-code mr-1"></i> Message Templates
             </button>
           </div>
 
-          <!-- =========================================================
+          <!-- =================================================================
                SUBVIEW 1: ANNOUNCEMENTS
-               ========================================================= -->
-          <div class="communication-subview active" id="subview-communication-announcements">
-            <!-- Quad Stats for Announcements -->
-            <div class="comm-quad-stat mb-4">
-              <div class="comm-stat-box cs-broadcasts">
-                <div class="cs-header">
-                  <span class="cs-title">Active Broadcasts</span>
-                  <div class="cs-icon cs-icon-blue"><i class="fa-solid fa-satellite-dish"></i></div>
+               Displays: Title, message, target audience, publisher and publication status
+               Includes: draft, preview, approval, schedule and delivery tracking
+               ================================================================= -->
+          <div class="portal-subview communication-subview active" id="subview-communication-announcements" style="display: block;">
+            <!-- KPI Cards -->
+            <div class="quad-stat-grid mb-4">
+              <div class="stat-card">
+                <div class="stat-card-header">
+                  <span class="stat-label">Active Announcements</span>
+                  <div class="stat-icon-wrapper stat-icon-blue"><i class="fa-solid fa-bullhorn"></i></div>
                 </div>
-                <div class="cs-num" id="statCommBroadcasts">148</div>
-                <div class="cs-sub text-muted">Academic Session 2025–26</div>
+                <div class="stat-value" id="commStatAnnActive">8 Live</div>
+                <div class="stat-meta">Published across campus portals</div>
               </div>
-              <div class="comm-stat-box cs-delivery highlight">
-                <div class="cs-header">
-                  <span class="cs-title">Delivery Realization</span>
-                  <div class="cs-icon cs-icon-green"><i class="fa-solid fa-circle-check"></i></div>
+              <div class="stat-card">
+                <div class="stat-card-header">
+                  <span class="stat-label">Audience Reach</span>
+                  <div class="stat-icon-wrapper stat-icon-green"><i class="fa-solid fa-users-viewfinder"></i></div>
                 </div>
-                <div class="cs-num text-emerald" id="statCommDelivery">99.4%</div>
-                <div class="cs-sub text-emerald">DLT &amp; WA Gateway Verified</div>
+                <div class="stat-value text-emerald" id="commStatAnnReach">1,240 Total</div>
+                <div class="stat-meta">Parents, Guardians &amp; Faculty</div>
               </div>
-              <div class="comm-stat-box cs-recipients">
-                <div class="cs-header">
-                  <span class="cs-title">Registered Parents</span>
-                  <div class="cs-icon cs-icon-purple"><i class="fa-solid fa-users"></i></div>
+              <div class="stat-card">
+                <div class="stat-card-header">
+                  <span class="stat-label">Scheduled Broadcasts</span>
+                  <div class="stat-icon-wrapper stat-icon-purple"><i class="fa-solid fa-clock"></i></div>
                 </div>
-                <div class="cs-num text-purple" id="statCommParents">855</div>
-                <div class="cs-sub text-muted">All Student Guardians Active</div>
+                <div class="stat-value text-purple" id="commStatAnnScheduled">2 Queued</div>
+                <div class="stat-meta">Timed for automated release</div>
               </div>
-              <div class="comm-stat-box cs-sms warning">
-                <div class="cs-header">
-                  <span class="cs-title">SMS Credit Balance</span>
-                  <div class="cs-icon cs-icon-amber"><i class="fa-solid fa-coins"></i></div>
+              <div class="stat-card">
+                <div class="stat-card-header">
+                  <span class="stat-label">Pending Approval</span>
+                  <div class="stat-icon-wrapper stat-icon-amber"><i class="fa-solid fa-signature"></i></div>
                 </div>
-                <div class="cs-num text-amber" id="statCommCredits">48,250</div>
-                <div class="cs-sub text-amber">TRAI Prepaid Quota Available</div>
-              </div>
-            </div>
-
-            <div class="communication-split">
-              <!-- Left: Notice Composer Quick Form -->
-              <div class="comm-composer-card">
-                <h3><i class="fa-solid fa-paper-plane text-primary"></i> Instant School Broadcast</h3>
-                <form id="broadcastForm" onsubmit="portalApp.handleBroadcast(event)">
-                  <div class="form-group">
-                    <label>Channel(s):</label>
-                    <div class="radio-row">
-                      <label class="radio-chip"><input type="checkbox" id="bcChSms" checked> SMS</label>
-                      <label class="radio-chip"><input type="checkbox" id="bcChNotice" checked> Notice Board</label>
-                      <label class="radio-chip"><input type="checkbox" id="bcChWa"> WhatsApp</label>
-                      <label class="radio-chip"><input type="checkbox" id="bcChEmail"> Email</label>
-                      <label class="radio-chip"><input type="checkbox" id="bcChPush"> App Push</label>
-                    </div>
-                  </div>
-                  <div class="form-group">
-                    <label>Recipient Group:</label>
-                    <select class="form-control" id="broadcastRecipients">
-                      <option value="All Parents & Guardians (855)">All Parents &amp; Guardians (855)</option>
-                      <option value="Class X Parents Only (78)">Class X Parents Only (78)</option>
-                      <option value="High School Parents (Classes VIII-X, 244)">High School Parents (Classes VIII-X, 244)</option>
-                      <option value="Primary Parents (Classes I-V, 351)">Primary Parents (Classes I-V, 351)</option>
-                      <option value="Pre-Primary Parents (86)">Pre-Primary Parents (86)</option>
-                      <option value="Teaching Staff (45)">Teaching Staff (45)</option>
-                    </select>
-                  </div>
-                  <div class="form-group">
-                    <label>Message Title / Subject:</label>
-                    <input type="text" class="form-control" id="broadcastSubject" placeholder="e.g. Quarterly Exam Schedule & Hall Tickets" required>
-                  </div>
-                  <div class="form-group">
-                    <label>Message Body:</label>
-                    <textarea class="form-control" id="broadcastBody" rows="4" placeholder="Type notification content here..." required></textarea>
-                  </div>
-                  <button type="submit" class="btn btn-primary w-100" id="btnTransmitBroadcast">
-                    <i class="fa-solid fa-satellite-dish"></i> Transmit to Recipients
-                  </button>
-                </form>
-              </div>
-
-              <!-- Right: Sent Broadcast History -->
-              <div class="comm-history-card">
-                <div class="d-flex justify-content-between align-items-center mb-3">
-                  <h3 class="m-0"><i class="fa-solid fa-clock-rotate-left"></i> Broadcast Log</h3>
-                  <span class="portal-badge badge-neutral" id="broadcastFeedCountBadge">Live Feed</span>
-                </div>
-                <div class="broadcast-feed" id="broadcastFeed">
-                  <!-- Rendered dynamically -->
-                </div>
+                <div class="stat-value text-amber" id="commStatAnnPending">1 Draft</div>
+                <div class="stat-meta">Under Principal review</div>
               </div>
             </div>
-          </div>
 
-          <!-- =========================================================
-               SUBVIEW 2: CIRCULARS & NOTICES
-               ========================================================= -->
-          <div class="communication-subview" 
-          <!-- Subview: Enquiries (Office Permitted) -->
-          <div id="subview-communication-enquiries" class="communication-subview" style="display: none;">
-            <div class="card">
-              <div class="card-header" style="display:flex; justify-content:space-between; align-items:center;">
-                <div>
-                  <h3 style="margin:0; font-size:1.1rem; font-weight:700;"><i class="fa-solid fa-comments text-primary mr-1"></i> Public &amp; Admissions Enquiries</h3>
-                  <p style="margin:0; font-size:0.8rem; color:var(--color-text-muted);">Respond to walk-in, phone, and online parent enquiries</p>
-                </div>
-                <button class="btn btn-primary btn-sm" onclick="portalApp.openModal('addStudentModal')">
-                  <i class="fa-solid fa-plus"></i> New Walk-in Log
-                </button>
-              </div>
-              <div class="card-body">
-                <div class="table-container">
-                  <table class="data-table" style="width:100%;">
-                    <thead>
-                      <tr>
-                        <th>Enquiry No</th>
-                        <th>Visitor / Parent</th>
-                        <th>Contact</th>
-                        <th>Grade Seeking</th>
-                        <th>Channel</th>
-                        <th>Status</th>
-                        <th>Action</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td><strong>ENQ-2026-041</strong></td>
-                        <td><strong>Sri V. Prasad</strong></td>
-                        <td>98480xxxxx</td>
-                        <td>Grade 1</td>
-                        <td><span class="badge badge-info">Walk-in</span></td>
-                        <td><span class="badge badge-success">Docs Verified</span></td>
-                        <td>
-                          <button class="btn btn-primary btn-xs" onclick="portalApp.navigateTo('students', 'admissions')">
-                            Process
-                          </button>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td><strong>ENQ-2026-042</strong></td>
-                        <td><strong>Smt. K. Ananya</strong></td>
-                        <td>94401xxxxx</td>
-                        <td>Grade 6</td>
-                        <td><span class="badge badge-primary">Online Portal</span></td>
-                        <td><span class="badge badge-warning">Awaiting Birth Cert</span></td>
-                        <td>
-                          <button class="btn btn-secondary btn-xs" onclick="portalApp.showToast('SMS sent to parent', 'info')">
-                            Follow-up
-                          </button>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Subview: Parent Requests (Office Permitted) -->
-          <div id="subview-communication-requests" class="communication-subview" style="display: none;">
-            <div class="card">
-              <div class="card-header" style="display:flex; justify-content:space-between; align-items:center;">
-                <div>
-                  <h3 style="margin:0; font-size:1.1rem; font-weight:700;"><i class="fa-solid fa-inbox text-purple mr-1"></i> Parent Requests &amp; Queries</h3>
-                  <p style="margin:0; font-size:0.8rem; color:var(--color-text-muted);">Manage requests for bus route adjustments, certificates, and meetings</p>
-                </div>
-              </div>
-              <div class="card-body">
-                <div class="table-container">
-                  <table class="data-table" style="width:100%;">
-                    <thead>
-                      <tr>
-                        <th>Req ID</th>
-                        <th>Parent Name</th>
-                        <th>Student &amp; Roll</th>
-                        <th>Subject</th>
-                        <th>Priority</th>
-                        <th>Status</th>
-                        <th>Action</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td><strong>REQ-PR-2026-089</strong></td>
-                        <td><strong>Smt. M. Sunitha</strong></td>
-                        <td>M. Charan (Roll #205)</td>
-                        <td>New Residential Address Update</td>
-                        <td><span class="badge badge-info">Normal</span></td>
-                        <td><span class="badge badge-success">Verified</span></td>
-                        <td>
-                          <button class="btn btn-primary btn-xs" onclick="portalApp.openEditStudentPermittedModal('205')">
-                            Update
-                          </button>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td><strong>REQ-PR-2026-088</strong></td>
-                        <td><strong>Sri G. Srinivas</strong></td>
-                        <td>G. Nikhil (Roll #114)</td>
-                        <td>Bus Route #2 Stop Change</td>
-                        <td><span class="badge badge-warning">Medium</span></td>
-                        <td><span class="badge badge-warning">Pending Review</span></td>
-                        <td>
-                          <button class="btn btn-secondary btn-xs" onclick="portalApp.showToast('Forwarded request to Transport Desk', 'info')">
-                            Forward
-                          </button>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            </div>
-          </div>
-
-id="subview-communication-notices" style="display:none;">
+            <!-- Toolbar -->
             <div class="table-container">
               <div class="table-header-bar comm-toolbar">
                 <div class="table-header-left">
-                  <h3><i class="fa-solid fa-scroll text-primary"></i> Official Circulars &amp; Administrative Notices</h3>
-                  <span class="portal-badge badge-success" id="circularsCountBadge">5 Published</span>
+                  <h3><i class="fa-solid fa-bullhorn text-primary"></i> School Announcements Registry</h3>
+                  <span class="portal-badge badge-neutral" id="announcementsCountBadge">8 Total</span>
                 </div>
                 <div class="table-header-right">
                   <div class="table-search-box">
                     <i class="fa-solid fa-magnifying-glass"></i>
-                    <input type="text" id="circularSearchInput" placeholder="Search title or ref #..." oninput="portalApp.filterCirculars()">
+                    <input type="text" id="annSearchInput" placeholder="Search title or content..." oninput="portalApp.filterAnnouncements()">
                   </div>
-                  <select class="form-control form-control-sm" id="circularCategoryFilter" onchange="portalApp.filterCirculars()">
-                    <option value="all">All Categories</option>
-                    <option value="Holiday">Holidays &amp; Vacations</option>
-                    <option value="Examination">Examinations</option>
-                    <option value="Activity">Campus Activities</option>
-                    <option value="Advisory">Advisories</option>
-                    <option value="Academic">Academic PTM</option>
+                  <select class="form-control form-control-sm" id="annAudienceFilter" onchange="portalApp.filterAnnouncements()">
+                    <option value="all">All Audiences</option>
+                    <option value="All Parents & Students">All Parents &amp; Students</option>
+                    <option value="Class X">Class X Guardians</option>
+                    <option value="High School">High School (VIII-X)</option>
+                    <option value="Faculty & Staff">Faculty &amp; Staff</option>
                   </select>
-                  <button class="btn btn-primary btn-sm" onclick="portalApp.openComposeBroadcastModal('notices')">
-                    <i class="fa-solid fa-plus"></i> New Circular
+                  <select class="form-control form-control-sm" id="annStatusFilter" onchange="portalApp.filterAnnouncements()">
+                    <option value="all">All Statuses</option>
+                    <option value="Published">Published (Live)</option>
+                    <option value="Scheduled">Scheduled</option>
+                    <option value="Draft">Drafts / In Review</option>
+                  </select>
+                  <button class="btn btn-primary btn-sm" onclick="portalApp.openComposeBroadcastModal('announcement')">
+                    <i class="fa-solid fa-plus"></i> New Announcement
                   </button>
                 </div>
               </div>
 
+              <!-- Data Table -->
               <div class="table-responsive">
-                <table class="data-table fee-aligned-table" id="circularsTable">
+                <table class="data-table fee-aligned-table" id="announcementsTable">
                   <thead>
                     <tr>
-                      <th style="width: 140px;">Ref Number</th>
-                      <th>Circular Headline / Title</th>
-                      <th style="width: 130px; text-align: center;">Category</th>
-                      <th style="width: 170px;">Target Audience</th>
-                      <th style="width: 120px;">Date</th>
-                      <th style="width: 100px; text-align: center;">Status</th>
-                      <th style="width: 180px; text-align: center;">Actions</th>
+                      <th style="min-width: 220px;">Title &amp; Reference</th>
+                      <th style="min-width: 320px;">Message Content</th>
+                      <th style="min-width: 170px;">Target Audience</th>
+                      <th style="min-width: 190px;">Publisher</th>
+                      <th style="min-width: 140px; text-align: center;">Publication Status</th>
+                      <th style="min-width: 140px; text-align: center;">Actions</th>
                     </tr>
                   </thead>
-                  <tbody id="circularsTableBody">
-                    <!-- Rendered dynamically -->
+                  <tbody id="announcementsTableBody">
+                    <!-- Populated dynamically via portalApp.renderAnnouncements -->
                   </tbody>
                 </table>
               </div>
             </div>
           </div>
 
-          <!-- =========================================================
-               SUBVIEW 3: SMS LOGS
-               ========================================================= -->
-          <div class="communication-subview" id="subview-communication-sms" style="display:none;">
-            <!-- SMS Metrics Bar -->
-            <div class="comm-quad-stat mb-4">
-              <div class="comm-stat-box cs-delivery">
-                <div class="cs-header"><span class="cs-title">SMS Delivered Today</span><div class="cs-icon cs-icon-green"><i class="fa-solid fa-paper-plane"></i></div></div>
-                <div class="cs-num text-emerald">1,240</div>
-                <div class="cs-sub text-muted">Attendance &amp; Alerts</div>
+          <!-- =================================================================
+               SUBVIEW 2: OFFICIAL CIRCULARS
+               Displays: Circular number, document, issue date, audience and acknowledgement status
+               ================================================================= -->
+          <div class="portal-subview communication-subview" id="subview-communication-circulars" style="display: none;">
+            <!-- KPI Cards -->
+            <div class="quad-stat-grid mb-4">
+              <div class="stat-card">
+                <div class="stat-card-header">
+                  <span class="stat-label">Official Circulars</span>
+                  <div class="stat-icon-wrapper stat-icon-blue"><i class="fa-solid fa-scroll"></i></div>
+                </div>
+                <div class="stat-value" id="commStatCirTotal">24 Issued</div>
+                <div class="stat-meta">Current Academic Year 2026–27</div>
               </div>
-              <div class="comm-stat-box cs-delivery highlight">
-                <div class="cs-header"><span class="cs-title">Gateway Delivery Rate</span><div class="cs-icon cs-icon-green"><i class="fa-solid fa-chart-line"></i></div></div>
-                <div class="cs-num text-emerald">99.6%</div>
-                <div class="cs-sub text-emerald">DLT Header: SRIVID</div>
+              <div class="stat-card">
+                <div class="stat-card-header">
+                  <span class="stat-label">Parent Acknowledgement</span>
+                  <div class="stat-icon-wrapper stat-icon-green"><i class="fa-solid fa-circle-check"></i></div>
+                </div>
+                <div class="stat-value text-emerald" id="commStatCirAckRate">96.8%</div>
+                <div class="stat-meta">Digital parent signatures received</div>
               </div>
-              <div class="comm-stat-box cs-sms warning">
-                <div class="cs-header"><span class="cs-title">Credits Available</span><div class="cs-icon cs-icon-amber"><i class="fa-solid fa-wallet"></i></div></div>
-                <div class="cs-num text-amber">48,250</div>
-                <div class="cs-sub text-amber">Prepaid Balance</div>
+              <div class="stat-card">
+                <div class="stat-card-header">
+                  <span class="stat-label">Pending Acknowledgements</span>
+                  <div class="stat-icon-wrapper stat-icon-amber"><i class="fa-solid fa-hourglass-half"></i></div>
+                </div>
+                <div class="stat-value text-amber" id="commStatCirPending">32 Parents</div>
+                <div class="stat-meta">Automated SMS reminder queued</div>
               </div>
-              <div class="comm-stat-box cs-broadcasts">
-                <div class="cs-header"><span class="cs-title">Avg Latency</span><div class="cs-icon cs-icon-blue"><i class="fa-solid fa-stopwatch"></i></div></div>
-                <div class="cs-num text-primary">1.8s</div>
-                <div class="cs-sub text-muted">Immediate Delivery</div>
+              <div class="stat-card">
+                <div class="stat-card-header">
+                  <span class="stat-label">Govt / Board Compliance</span>
+                  <div class="stat-icon-wrapper stat-icon-purple"><i class="fa-solid fa-building-columns"></i></div>
+                </div>
+                <div class="stat-value text-purple">100% Verified</div>
+                <div class="stat-meta">AP Board format compliant</div>
               </div>
             </div>
 
+            <!-- Toolbar -->
             <div class="table-container">
               <div class="table-header-bar comm-toolbar">
                 <div class="table-header-left">
-                  <h3><i class="fa-solid fa-comment-sms text-primary"></i> TRAI DLT Transactional SMS Delivery Register</h3>
-                  <span class="portal-badge badge-neutral" id="smsLogCountBadge">Live Gateway Logs</span>
+                  <h3><i class="fa-solid fa-scroll text-primary"></i> Administrative &amp; Academic Circulars</h3>
+                  <span class="portal-badge badge-neutral" id="circularsCountBadge">4 Active</span>
                 </div>
                 <div class="table-header-right">
                   <div class="table-search-box">
                     <i class="fa-solid fa-magnifying-glass"></i>
-                    <input type="text" id="smsLogSearchInput" placeholder="Search phone, student or text..." oninput="portalApp.filterSmsLogs()">
+                    <input type="text" id="circularSearchInput" placeholder="Search circular # or document..." oninput="portalApp.filterOfficialCirculars()">
                   </div>
-                  <button class="btn btn-secondary btn-sm" onclick="portalApp.openComposeBroadcastModal('sms')">
-                    <i class="fa-solid fa-paper-plane"></i> Quick SMS
+                  <select class="form-control form-control-sm" id="circularAudienceFilter" onchange="portalApp.filterOfficialCirculars()">
+                    <option value="all">All Target Audiences</option>
+                    <option value="All Campus Guardians">All Campus Guardians</option>
+                    <option value="Classes I to X">Classes I to X</option>
+                    <option value="Class X">Class X Only</option>
+                  </select>
+                  <button class="btn btn-primary btn-sm" onclick="portalApp.openIssueCircularModal()">
+                    <i class="fa-solid fa-file-arrow-up"></i> Issue Official Circular
                   </button>
                 </div>
               </div>
 
+              <!-- Data Table -->
               <div class="table-responsive">
-                <table class="data-table fee-aligned-table" id="smsLogsTable">
+                <table class="data-table fee-aligned-table" id="officialCircularsTable">
                   <thead>
                     <tr>
-                      <th style="width: 120px;">Log ID</th>
-                      <th style="width: 140px;">Timestamp</th>
-                      <th style="width: 220px;">Recipient Mobile &amp; Parent</th>
-                      <th style="width: 140px; text-align: center;">Category</th>
-                      <th>Message Snippet</th>
-                      <th style="width: 150px;">Gateway Provider</th>
-                      <th style="width: 110px; text-align: center;">Status</th>
+                      <th style="min-width: 140px;">Circular Number</th>
+                      <th style="min-width: 280px;">Document Title &amp; Attachment</th>
+                      <th style="min-width: 120px;">Issue Date</th>
+                      <th style="min-width: 180px;">Audience</th>
+                      <th style="min-width: 220px;">Acknowledgement Status</th>
+                      <th style="min-width: 160px; text-align: center;">Actions</th>
                     </tr>
                   </thead>
-                  <tbody id="smsLogsTableBody">
-                    <!-- Rendered dynamically -->
+                  <tbody id="officialCircularsTableBody">
+                    <!-- Populated dynamically via portalApp.renderOfficialCirculars -->
                   </tbody>
                 </table>
               </div>
             </div>
           </div>
 
-          <!-- =========================================================
-               SUBVIEW 4: EMAIL TRANSMISSIONS
-               ========================================================= -->
-          <div class="communication-subview" id="subview-communication-email" style="display:none;">
-            <!-- Email Metrics Bar -->
-            <div class="comm-quad-stat mb-4">
-              <div class="comm-stat-box cs-broadcasts">
-                <div class="cs-header"><span class="cs-title">Emails Dispatched</span><div class="cs-icon cs-icon-blue"><i class="fa-solid fa-envelope"></i></div></div>
-                <div class="cs-num text-primary">4,820</div>
-                <div class="cs-sub text-muted">Delivered via SMTP Relay</div>
+          <!-- =================================================================
+               SUBVIEW 3: SMS BROADCAST
+               Displays: Recipient group, message, delivery status and failure report
+               ================================================================= -->
+          <div class="portal-subview communication-subview" id="subview-communication-sms" style="display: none;">
+            <!-- KPI Cards -->
+            <div class="quad-stat-grid mb-4">
+              <div class="stat-card">
+                <div class="stat-card-header">
+                  <span class="stat-label">SMS Dispatched Today</span>
+                  <div class="stat-icon-wrapper stat-icon-blue"><i class="fa-solid fa-comment-sms"></i></div>
+                </div>
+                <div class="stat-value" id="commStatSmsToday">1,280 SMS</div>
+                <div class="stat-meta">Attendance, fee, &amp; bus transit alerts</div>
               </div>
-              <div class="comm-stat-box cs-delivery highlight">
-                <div class="cs-header"><span class="cs-title">Average Open Rate</span><div class="cs-icon cs-icon-green"><i class="fa-solid fa-envelope-open-text"></i></div></div>
-                <div class="cs-num text-emerald">84.2%</div>
-                <div class="cs-sub text-emerald">High Parent Engagement</div>
+              <div class="stat-card">
+                <div class="stat-card-header">
+                  <span class="stat-label">Delivery Realization</span>
+                  <div class="stat-icon-wrapper stat-icon-green"><i class="fa-solid fa-paper-plane"></i></div>
+                </div>
+                <div class="stat-value text-emerald" id="commStatSmsDeliveryRate">99.2%</div>
+                <div class="stat-meta">Handset delivery receipt confirmed</div>
               </div>
-              <div class="comm-stat-box cs-recipients">
-                <div class="cs-header"><span class="cs-title">Click-Through Rate</span><div class="cs-icon cs-icon-purple"><i class="fa-solid fa-arrow-pointer"></i></div></div>
-                <div class="cs-num text-purple">42.1%</div>
-                <div class="cs-sub text-muted">Portal &amp; Receipt Links</div>
+              <div class="stat-card">
+                <div class="stat-card-header">
+                  <span class="stat-label">Gateway Failures</span>
+                  <div class="stat-icon-wrapper stat-icon-danger"><i class="fa-solid fa-triangle-exclamation"></i></div>
+                </div>
+                <div class="stat-value text-danger" id="commStatSmsFailures">11 Failures</div>
+                <div class="stat-meta">Detailed in failure tracking report</div>
               </div>
-              <div class="comm-stat-box cs-delivery">
-                <div class="cs-header"><span class="cs-title">Bounce Rate</span><div class="cs-icon cs-icon-green"><i class="fa-solid fa-shield-halved"></i></div></div>
-                <div class="cs-num text-emerald">0.15%</div>
-                <div class="cs-sub text-muted">Whitelisted Domain</div>
+              <div class="stat-card">
+                <div class="stat-card-header">
+                  <span class="stat-label">DLT Prepaid Credits</span>
+                  <div class="stat-icon-wrapper stat-icon-amber"><i class="fa-solid fa-coins"></i></div>
+                </div>
+                <div class="stat-value text-amber" id="commStatSmsCredits">18,450 Remaining</div>
+                <div class="stat-meta">Registered TRAI Header: SRIVID</div>
               </div>
             </div>
 
+            <!-- Toolbar -->
             <div class="table-container">
               <div class="table-header-bar comm-toolbar">
                 <div class="table-header-left">
-                  <h3><i class="fa-solid fa-envelope-circle-check text-primary"></i> Parent &amp; Staff Email Transmissions</h3>
-                  <span class="portal-badge badge-neutral" id="emailLogCountBadge">SMTP Logs</span>
+                  <h3><i class="fa-solid fa-comment-sms text-primary"></i> DLT SMS Broadcast Registry</h3>
+                  <span class="portal-badge badge-neutral" id="smsCountBadge">4 Dispatches</span>
                 </div>
                 <div class="table-header-right">
                   <div class="table-search-box">
                     <i class="fa-solid fa-magnifying-glass"></i>
-                    <input type="text" id="emailLogSearchInput" placeholder="Search email, recipient or subject..." oninput="portalApp.filterEmailLogs()">
+                    <input type="text" id="smsSearchInput" placeholder="Search message text..." oninput="portalApp.filterSmsBroadcast()">
                   </div>
-                  <button class="btn btn-secondary btn-sm" onclick="portalApp.openComposeBroadcastModal('email')">
-                    <i class="fa-solid fa-envelope-open-text"></i> Compose Email
+                  <select class="form-control form-control-sm" id="smsGroupFilter" onchange="portalApp.filterSmsBroadcast()">
+                    <option value="all">All Recipient Groups</option>
+                    <option value="Class X">Class X Guardians</option>
+                    <option value="All Campus">All Campus Guardians</option>
+                    <option value="Bus Route">Bus Commuters</option>
+                    <option value="Faculty">Faculty &amp; Staff</option>
+                  </select>
+                  <select class="form-control form-control-sm" id="smsStatusFilter" onchange="portalApp.filterSmsBroadcast()">
+                    <option value="all">All Delivery Statuses</option>
+                    <option value="Delivered">Delivered (Full)</option>
+                    <option value="Partial">Partial / Retrying</option>
+                  </select>
+                  <button class="btn btn-primary btn-sm" onclick="portalApp.openComposeBroadcastModal('sms')">
+                    <i class="fa-solid fa-paper-plane"></i> New SMS Broadcast
                   </button>
                 </div>
               </div>
 
+              <!-- Data Table -->
               <div class="table-responsive">
-                <table class="data-table fee-aligned-table" id="emailLogsTable">
+                <table class="data-table fee-aligned-table" id="smsBroadcastTable">
                   <thead>
                     <tr>
-                      <th style="width: 120px;">Email ID</th>
-                      <th style="width: 140px;">Timestamp</th>
-                      <th style="width: 240px;">Recipient Address</th>
-                      <th>Email Subject</th>
-                      <th style="width: 130px; text-align: center;">Category</th>
-                      <th style="width: 120px; text-align: center;">Engagement</th>
-                      <th style="width: 110px; text-align: center;">Status</th>
+                      <th style="min-width: 220px;">Recipient Group</th>
+                      <th style="min-width: 320px;">Message &amp; DLT Template</th>
+                      <th style="min-width: 160px; text-align: center;">Delivery Status</th>
+                      <th style="min-width: 240px;">Failure Report &amp; Retries</th>
+                      <th style="min-width: 140px; text-align: center;">Actions</th>
                     </tr>
                   </thead>
-                  <tbody id="emailLogsTableBody">
-                    <!-- Rendered dynamically -->
+                  <tbody id="smsBroadcastTableBody">
+                    <!-- Populated dynamically via portalApp.renderSmsBroadcast -->
                   </tbody>
                 </table>
               </div>
             </div>
           </div>
 
-          <!-- =========================================================
-               SUBVIEW 5: PUSH NOTIFICATIONS
-               ========================================================= -->
-          <div class="communication-subview" id="subview-communication-push" style="display:none;">
-            <!-- Push Metrics Bar -->
-            <div class="comm-quad-stat mb-4">
-              <div class="comm-stat-box cs-recipients">
-                <div class="cs-header"><span class="cs-title">Active App Installs</span><div class="cs-icon cs-icon-purple"><i class="fa-solid fa-mobile-screen"></i></div></div>
-                <div class="cs-num text-purple">812</div>
-                <div class="cs-sub text-muted">Android &amp; iOS Devices</div>
+          <!-- =================================================================
+               SUBVIEW 4: EMAIL DISPATCH
+               Displays: Recipient list, subject, delivery status and sending history
+               ================================================================= -->
+          <div class="portal-subview communication-subview" id="subview-communication-email" style="display: none;">
+            <!-- KPI Cards -->
+            <div class="quad-stat-grid mb-4">
+              <div class="stat-card">
+                <div class="stat-card-header">
+                  <span class="stat-label">Emails Dispatched</span>
+                  <div class="stat-icon-wrapper stat-icon-blue"><i class="fa-solid fa-envelope"></i></div>
+                </div>
+                <div class="stat-value" id="commStatEmailSent">4,850 Sent</div>
+                <div class="stat-meta">Monthly newsletters &amp; progress cards</div>
               </div>
-              <div class="comm-stat-box cs-delivery highlight">
-                <div class="cs-header"><span class="cs-title">Push Delivery</span><div class="cs-icon cs-icon-green"><i class="fa-solid fa-bolt"></i></div></div>
-                <div class="cs-num text-emerald">100%</div>
-                <div class="cs-sub text-emerald">Firebase Cloud Messaging</div>
+              <div class="stat-card">
+                <div class="stat-card-header">
+                  <span class="stat-label">Open Realization</span>
+                  <div class="stat-icon-wrapper stat-icon-green"><i class="fa-solid fa-envelope-open-text"></i></div>
+                </div>
+                <div class="stat-value text-emerald" id="commStatEmailOpenRate">84.3%</div>
+                <div class="stat-meta">Tracked via secure beacon pixel</div>
               </div>
-              <div class="comm-stat-box cs-broadcasts">
-                <div class="cs-header"><span class="cs-title">Average Tap Rate</span><div class="cs-icon cs-icon-blue"><i class="fa-solid fa-hand-pointer"></i></div></div>
-                <div class="cs-num text-primary">68.4%</div>
-                <div class="cs-sub text-muted">Deep Linked Screen Taps</div>
+              <div class="stat-card">
+                <div class="stat-card-header">
+                  <span class="stat-label">Hard Bounce Rate</span>
+                  <div class="stat-icon-wrapper stat-icon-danger"><i class="fa-solid fa-ban"></i></div>
+                </div>
+                <div class="stat-value text-emerald">0.4% Low</div>
+                <div class="stat-meta">High SMTP sender reputation</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-card-header">
+                  <span class="stat-label">Domain Authentication</span>
+                  <div class="stat-icon-wrapper stat-icon-purple"><i class="fa-solid fa-certificate"></i></div>
+                </div>
+                <div class="stat-value text-purple">SPF / DKIM / DMARC</div>
+                <div class="stat-meta">srividya.edu.in Verified</div>
               </div>
             </div>
 
+            <!-- Toolbar -->
             <div class="table-container">
               <div class="table-header-bar comm-toolbar">
                 <div class="table-header-left">
-                  <h3><i class="fa-solid fa-mobile-screen-button text-primary"></i> Mobile App Push Notification Dispatches</h3>
-                  <span class="portal-badge badge-neutral" id="pushLogCountBadge">Firebase FCM Logs</span>
+                  <h3><i class="fa-solid fa-envelope text-primary"></i> Institutional Email Dispatch Ledger</h3>
+                  <span class="portal-badge badge-neutral" id="emailCountBadge">4 Dispatches</span>
                 </div>
                 <div class="table-header-right">
                   <div class="table-search-box">
                     <i class="fa-solid fa-magnifying-glass"></i>
-                    <input type="text" id="pushLogSearchInput" placeholder="Search push title or body..." oninput="portalApp.filterPushLogs()">
+                    <input type="text" id="emailSearchInput" placeholder="Search subject or list..." oninput="portalApp.filterEmailDispatch()">
                   </div>
-                  <button class="btn btn-primary btn-sm" id="btnSendAppPush" onclick="portalApp.openComposeBroadcastModal('push')">
-                    <i class="fa-solid fa-paper-plane"></i> Send App Push
+                  <button class="btn btn-outline-secondary btn-sm" onclick="portalApp.exportEmailDispatchCSV()">
+                    <i class="fa-solid fa-file-csv"></i> Export History CSV
+                  </button>
+                  <button class="btn btn-primary btn-sm" onclick="portalApp.openComposeBroadcastModal('email')">
+                    <i class="fa-solid fa-feather"></i> Compose Email
                   </button>
                 </div>
               </div>
 
+              <!-- Data Table -->
               <div class="table-responsive">
-                <table class="data-table fee-aligned-table" id="pushLogsTable">
+                <table class="data-table fee-aligned-table" id="emailDispatchTable">
                   <thead>
                     <tr>
-                      <th style="width: 120px;">Notification ID</th>
-                      <th style="width: 140px;">Timestamp</th>
-                      <th style="width: 180px;">Target Device Group</th>
-                      <th style="width: 220px;">Notification Title</th>
-                      <th>Message Body</th>
-                      <th style="width: 140px;">Deep Link Screen</th>
-                      <th style="width: 120px; text-align: center;">Taps &amp; Opens</th>
-                      <th style="width: 110px; text-align: center;">Status</th>
+                      <th style="min-width: 260px;">Recipient List</th>
+                      <th style="min-width: 300px;">Subject &amp; Template</th>
+                      <th style="min-width: 170px; text-align: center;">Delivery Status</th>
+                      <th style="min-width: 250px;">Sending History &amp; Server Audit</th>
+                      <th style="min-width: 130px; text-align: center;">Actions</th>
                     </tr>
                   </thead>
-                  <tbody id="pushLogsTableBody">
-                    <!-- Rendered dynamically -->
+                  <tbody id="emailDispatchTableBody">
+                    <!-- Populated dynamically via portalApp.renderEmailDispatch -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <!-- =================================================================
+               SUBVIEW 5: MOBILE PUSH
+               Displays: Notification title, target audience, delivery and engagement status
+               ================================================================= -->
+          <div class="portal-subview communication-subview" id="subview-communication-push" style="display: none;">
+            <!-- KPI Cards -->
+            <div class="quad-stat-grid mb-4">
+              <div class="stat-card">
+                <div class="stat-card-header">
+                  <span class="stat-label">Active App Installs</span>
+                  <div class="stat-icon-wrapper stat-icon-blue"><i class="fa-solid fa-mobile-screen"></i></div>
+                </div>
+                <div class="stat-value" id="commStatPushInstalls">780 Devices</div>
+                <div class="stat-meta">Verified Parent &amp; Student App Accounts</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-card-header">
+                  <span class="stat-label">Push Delivery Rate</span>
+                  <div class="stat-icon-wrapper stat-icon-green"><i class="fa-solid fa-bell"></i></div>
+                </div>
+                <div class="stat-value text-emerald" id="commStatPushDeliveryRate">98.7%</div>
+                <div class="stat-meta">FCM &amp; APNs push gateway verified</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-card-header">
+                  <span class="stat-label">Engagement &amp; Clicks</span>
+                  <div class="stat-icon-wrapper stat-icon-purple"><i class="fa-solid fa-arrow-pointer"></i></div>
+                </div>
+                <div class="stat-value text-purple" id="commStatPushEngagement">76.4%</div>
+                <div class="stat-meta">In-app interactions within 15 mins</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-card-header">
+                  <span class="stat-label">Avg Interaction Latency</span>
+                  <div class="stat-icon-wrapper stat-icon-amber"><i class="fa-solid fa-stopwatch"></i></div>
+                </div>
+                <div class="stat-value text-amber">8.5 Mins</div>
+                <div class="stat-meta">Rapid parental awareness</div>
+              </div>
+            </div>
+
+            <!-- Toolbar -->
+            <div class="table-container">
+              <div class="table-header-bar comm-toolbar">
+                <div class="table-header-left">
+                  <h3><i class="fa-solid fa-mobile-screen text-primary"></i> Mobile Push Notification Console</h3>
+                  <span class="portal-badge badge-neutral" id="pushCountBadge">4 Alerts</span>
+                </div>
+                <div class="table-header-right">
+                  <div class="table-search-box">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input type="text" id="pushSearchInput" placeholder="Search notification title..." oninput="portalApp.filterMobilePush()">
+                  </div>
+                  <button class="btn btn-primary btn-sm" onclick="portalApp.openComposeBroadcastModal('push')">
+                    <i class="fa-solid fa-paper-plane"></i> Send Push Alert
+                  </button>
+                </div>
+              </div>
+
+              <!-- Data Table -->
+              <div class="table-responsive">
+                <table class="data-table fee-aligned-table" id="mobilePushTable">
+                  <thead>
+                    <tr>
+                      <th style="min-width: 280px;">Notification Title</th>
+                      <th style="min-width: 200px;">Target Audience</th>
+                      <th style="min-width: 170px;">Delivery</th>
+                      <th style="min-width: 250px;">Engagement Status</th>
+                      <th style="min-width: 130px; text-align: center;">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody id="mobilePushTableBody">
+                    <!-- Populated dynamically via portalApp.renderMobilePush -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <!-- =================================================================
+               SUBVIEW 6: PARENT ENQUIRIES
+               Displays: Requester, linked student if applicable, assigned staff member and resolution
+               ================================================================= -->
+          <div class="portal-subview communication-subview" id="subview-communication-enquiries" style="display: none;">
+            <!-- KPI Cards -->
+            <div class="quad-stat-grid mb-4">
+              <div class="stat-card">
+                <div class="stat-card-header">
+                  <span class="stat-label">Total Parent Enquiries</span>
+                  <div class="stat-icon-wrapper stat-icon-blue"><i class="fa-solid fa-comments"></i></div>
+                </div>
+                <div class="stat-value" id="commStatEnqTotal">38 Received</div>
+                <div class="stat-meta">Walk-in, phone &amp; digital inquiries</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-card-header">
+                  <span class="stat-label">Resolution Rate</span>
+                  <div class="stat-icon-wrapper stat-icon-green"><i class="fa-solid fa-clipboard-check"></i></div>
+                </div>
+                <div class="stat-value text-emerald" id="commStatEnqResolved">89.5% (34 Closed)</div>
+                <div class="stat-meta">Satisfactory grievance redressal</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-card-header">
+                  <span class="stat-label">Active / In Progress</span>
+                  <div class="stat-icon-wrapper stat-icon-purple"><i class="fa-solid fa-spinner"></i></div>
+                </div>
+                <div class="stat-value text-purple" id="commStatEnqInProgress">3 In Progress</div>
+                <div class="stat-meta">Assigned to faculty coordinators</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-card-header">
+                  <span class="stat-label">Open / Action Required</span>
+                  <div class="stat-icon-wrapper stat-icon-amber"><i class="fa-solid fa-circle-exclamation"></i></div>
+                </div>
+                <div class="stat-value text-amber" id="commStatEnqOpen">1 Open</div>
+                <div class="stat-meta">Prospective admission inquiry</div>
+              </div>
+            </div>
+
+            <!-- Toolbar -->
+            <div class="table-container">
+              <div class="table-header-bar comm-toolbar">
+                <div class="table-header-left">
+                  <h3><i class="fa-solid fa-comments text-primary"></i> Parent Enquiries &amp; Grievance Redressal</h3>
+                  <span class="portal-badge badge-neutral" id="enquiriesCountBadge">4 Enquiries</span>
+                </div>
+                <div class="table-header-right">
+                  <div class="table-search-box">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input type="text" id="enquirySearchInput" placeholder="Search parent, student or phone..." oninput="portalApp.filterParentEnquiries()">
+                  </div>
+                  <select class="form-control form-control-sm" id="enquiryStatusFilter" onchange="portalApp.filterParentEnquiries()">
+                    <option value="all">All Resolutions</option>
+                    <option value="Resolved">Resolved</option>
+                    <option value="In Progress">In Progress</option>
+                    <option value="Open">Open</option>
+                  </select>
+                  <button class="btn btn-primary btn-sm" onclick="portalApp.openNewEnquiryModal()">
+                    <i class="fa-solid fa-plus"></i> Log Parent Enquiry
+                  </button>
+                </div>
+              </div>
+
+              <!-- Data Table -->
+              <div class="table-responsive">
+                <table class="data-table fee-aligned-table" id="parentEnquiriesTable">
+                  <thead>
+                    <tr>
+                      <th style="min-width: 220px;">Requester Details</th>
+                      <th style="min-width: 220px;">Linked Student (if applicable)</th>
+                      <th style="min-width: 220px;">Assigned Staff Member</th>
+                      <th style="min-width: 320px;">Staff Resolution &amp; Notes</th>
+                      <th style="min-width: 140px; text-align: center;">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody id="parentEnquiriesTableBody">
+                    <!-- Populated dynamically via portalApp.renderParentEnquiries -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <!-- =================================================================
+               SUBVIEW 7: MESSAGE TEMPLATES
+               Displays: Approved email, SMS and notification templates
+               Includes: draft, preview, approval, schedule and delivery tracking
+               ================================================================= -->
+          <div class="portal-subview communication-subview" id="subview-communication-templates" style="display: none;">
+            <!-- KPI Cards -->
+            <div class="quad-stat-grid mb-4">
+              <div class="stat-card">
+                <div class="stat-card-header">
+                  <span class="stat-label">Approved Templates</span>
+                  <div class="stat-icon-wrapper stat-icon-blue"><i class="fa-solid fa-stamp"></i></div>
+                </div>
+                <div class="stat-value" id="commStatTmplApproved">18 Approved</div>
+                <div class="stat-meta">Verified across all communication channels</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-card-header">
+                  <span class="stat-label">DLT Registered SMS</span>
+                  <div class="stat-icon-wrapper stat-icon-green"><i class="fa-solid fa-fingerprint"></i></div>
+                </div>
+                <div class="stat-value text-emerald">8 SMS Templates</div>
+                <div class="stat-meta">Govt TRAI Registered Header SRIVID</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-card-header">
+                  <span class="stat-label">Branded Email Layouts</span>
+                  <div class="stat-icon-wrapper stat-icon-purple"><i class="fa-solid fa-file-invoice"></i></div>
+                </div>
+                <div class="stat-value text-purple">6 Responsive Layouts</div>
+                <div class="stat-meta">Progress cards, fee dues &amp; newsletters</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-card-header">
+                  <span class="stat-label">Mobile Push Presets</span>
+                  <div class="stat-icon-wrapper stat-icon-amber"><i class="fa-solid fa-bolt"></i></div>
+                </div>
+                <div class="stat-value text-amber">4 Instant Alerts</div>
+                <div class="stat-meta">Emergency holidays &amp; transit alerts</div>
+              </div>
+            </div>
+
+            <!-- Toolbar -->
+            <div class="table-container">
+              <div class="table-header-bar comm-toolbar">
+                <div class="table-header-left">
+                  <h3><i class="fa-solid fa-file-code text-primary"></i> Pre-Approved Message Templates Registry</h3>
+                  <span class="portal-badge badge-neutral" id="templatesCountBadge">5 Templates</span>
+                </div>
+                <div class="table-header-right">
+                  <div class="table-search-box">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input type="text" id="templateSearchInput" placeholder="Search template name..." oninput="portalApp.filterMessageTemplates()">
+                  </div>
+                  <select class="form-control form-control-sm" id="templateChannelFilter" onchange="portalApp.filterMessageTemplates()">
+                    <option value="all">All Channels</option>
+                    <option value="SMS">SMS (DLT)</option>
+                    <option value="Email">Email Dispatch</option>
+                    <option value="Push">Mobile Push</option>
+                  </select>
+                  <button class="btn btn-primary btn-sm" onclick="portalApp.openCreateTemplateModal()">
+                    <i class="fa-solid fa-plus"></i> Create Template
+                  </button>
+                </div>
+              </div>
+
+              <!-- Data Table -->
+              <div class="table-responsive">
+                <table class="data-table fee-aligned-table" id="messageTemplatesTable">
+                  <thead>
+                    <tr>
+                      <th style="min-width: 220px;">Approved Template</th>
+                      <th style="min-width: 170px;">Channel &amp; Category</th>
+                      <th style="min-width: 320px;">Approved Content &amp; Variables</th>
+                      <th style="min-width: 190px;">Approval Status &amp; Authority</th>
+                      <th style="min-width: 140px; text-align: center;">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody id="messageTemplatesTableBody">
+                    <!-- Populated dynamically via portalApp.renderMessageTemplates -->
                   </tbody>
                 </table>
               </div>
@@ -9699,6 +9884,8 @@ id="subview-communication-notices" style="display:none;">
           </div>
 
         </section>
+
+        
 
         <!-- =================================================================
              MODULE 8: EVENTS
@@ -14244,7 +14431,258 @@ Class X-A,Monday,2,09:35 AM - 10:20 AM,Physical Science,Sri Navva Anand,Room 201
     </div>
   </div>
 
-    <!-- ==========================================================================
+    
+  <!-- ==========================================================================
+       COMPOSE MULTI-CHANNEL BROADCAST MODAL
+       Requirement: "Include draft, preview, approval, schedule and delivery tracking.
+       Sensitive messages should be sent only to the intended recipients."
+       ========================================================================== -->
+  <div class="modal-backdrop" id="composeBroadcastModal">
+    <div class="portal-modal fee-modal-dialog" style="max-width: 780px;">
+      <div class="modal-header">
+        <h3><i class="fa-solid fa-feather text-primary"></i> Compose Multi-Channel Broadcast</h3>
+        <button class="modal-close-x" onclick="portalApp.closeModal('composeBroadcastModal')" title="Close" aria-label="Close">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <form id="composeBroadcastForm" onsubmit="portalApp.handleTransmitBroadcast(event)">
+        <div class="modal-body">
+          <!-- Sensitive Recipient Safeguarding Notice -->
+          <div style="background: rgba(2, 132, 199, 0.08); border: 1px solid #bae6fd; border-radius: 6px; padding: 0.75rem 1rem; margin-bottom: 1rem; font-size: 0.85rem; color: #0369a1;">
+            <i class="fa-solid fa-lock mr-1"></i> <strong>Confidentiality Safeguard:</strong> This message will be encrypted and transmitted only to the selected authenticated recipient cohort.
+          </div>
+
+          <div class="fee-form-grid">
+            <div class="form-group">
+              <label>Communication Channel *</label>
+              <select class="form-control" id="broadcastChannel" required onchange="portalApp.handleChannelChange()">
+                <option value="Announcement">Campus Announcement (Portal Feed)</option>
+                <option value="Official Circular">Official Circular (PDF Attachment)</option>
+                <option value="SMS">SMS Broadcast (DLT Gateway)</option>
+                <option value="Email">Email Dispatch (SMTP)</option>
+                <option value="Mobile Push">Mobile Push Notification</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label>Target Audience *</label>
+              <select class="form-control" id="broadcastTargetAudience" required>
+                <option value="All Parents & Students">All Campus Parents &amp; Students (500 Enrolled)</option>
+                <option value="Class X-A & X-B Guardians">Class X-A &amp; X-B Guardians (96 Students)</option>
+                <option value="High School Wing (VIII-X)">High School Wing (Classes VIII–X)</option>
+                <option value="Primary Wing (I-V)">Primary Wing (Classes I–V)</option>
+                <option value="Pre-Primary Guardians">Pre-Primary (PP-1 &amp; PP-2)</option>
+                <option value="Teaching Faculty & Staff">Teaching Faculty &amp; Staff (38 Members)</option>
+                <option value="Bus Route #4 Commuters">Bus Route #4 Commuters</option>
+              </select>
+            </div>
+
+            <div class="form-group full-span">
+              <label>Title / Subject Header *</label>
+              <input type="text" class="form-control" id="broadcastSubjectInput" required placeholder="e.g. Science Exhibition Registration or Term Assessment Notice">
+            </div>
+
+            <div class="form-group full-span">
+              <label>Message Content *</label>
+              <textarea class="form-control" id="broadcastContentInput" rows="4" required placeholder="Enter message text... variables like {#StudentName#}, {#Class#}, {#Date#} will auto-populate for individual recipients."></textarea>
+            </div>
+
+            <div class="form-group">
+              <label>Dispatch Schedule *</label>
+              <select class="form-control" id="broadcastScheduleType" onchange="portalApp.toggleScheduleTime()">
+                <option value="Immediate">Send Immediately Upon Approval</option>
+                <option value="Scheduled">Schedule for Later Date &amp; Time</option>
+                <option value="Draft">Save as Working Draft Only</option>
+              </select>
+            </div>
+
+            <div class="form-group" id="scheduledTimeGroup" style="display: none;">
+              <label>Scheduled Date &amp; Time</label>
+              <input type="datetime-local" class="form-control" id="broadcastScheduledTime" value="2026-10-30T09:00">
+            </div>
+
+            <div class="form-group full-span">
+              <label class="custom-checkbox d-flex align-items-center" style="cursor: pointer;">
+                <input type="checkbox" id="broadcastSensitiveLock" checked>
+                <span style="margin-left: 8px; font-weight: 600; font-size: 0.88rem; color: #1e293b;">
+                  Enforce Sensitive Message Lockdown: Verify recipient phone/email credentials before releasing delivery receipt.
+                </span>
+              </label>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="portalApp.closeModal('composeBroadcastModal')">Cancel</button>
+          <button type="button" class="btn btn-outline-primary" onclick="portalApp.openCurrentBroadcastPreview()">
+            <i class="fa-solid fa-eye"></i> Live Preview
+          </button>
+          <button type="button" class="btn btn-outline-secondary" onclick="portalApp.saveBroadcastDraft()">
+            <i class="fa-solid fa-floppy-disk"></i> Save Draft
+          </button>
+          <button type="submit" class="btn btn-primary">
+            <i class="fa-solid fa-paper-plane"></i> Transmit Broadcast
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       MESSAGE LIVE PREVIEW MODAL
+       ========================================================================== -->
+  <div class="modal-backdrop" id="previewMessageModal">
+    <div class="portal-modal fee-modal-dialog" style="max-width: 650px;">
+      <div class="modal-header">
+        <h3><i class="fa-solid fa-mobile-screen text-primary"></i> Dispatch Simulator &amp; Preview</h3>
+        <button class="modal-close-x" onclick="portalApp.closeModal('previewMessageModal')" title="Close" aria-label="Close">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 1.25rem;">
+          <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #cbd5e1; padding-bottom: 0.5rem; margin-bottom: 1rem;">
+            <div>
+              <span class="portal-badge badge-primary" id="previewChannelBadge">SMS Broadcast</span>
+              <span style="font-size: 0.8rem; color: #64748b; margin-left: 8px;" id="previewAudienceText">Audience: Class X Parents</span>
+            </div>
+            <span style="font-size: 0.78rem; font-weight: 700; color: #10b981;"><i class="fa-solid fa-shield-check"></i> Sensitive Recipient Verified</span>
+          </div>
+
+          <h4 style="margin: 0 0 0.5rem 0; color: #0f172a; font-size: 1.05rem;" id="previewTitleText">Title Header</h4>
+          <div style="background: #fff; border: 1px solid #e2e8f0; border-radius: 6px; padding: 1rem; font-size: 0.9rem; line-height: 1.5; color: #334155;" id="previewBodyText">
+            Message preview text will appear here.
+          </div>
+
+          <div style="margin-top: 1rem; font-size: 0.8rem; color: #64748b; display: flex; justify-content: space-between;">
+            <span id="previewPublisherText">Sender: Principal Smt. Gorle Varalakshmi</span>
+            <span>Auth Protocol: DLT Header SRIVID / SPF DKIM</span>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" onclick="portalApp.closeModal('previewMessageModal')">Close Preview</button>
+        <button type="button" class="btn btn-primary" onclick="portalApp.confirmSendFromPreview()">
+          <i class="fa-solid fa-check"></i> Approve &amp; Send Broadcast
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       UPDATE PARENT ENQUIRY RESOLUTION MODAL
+       ========================================================================== -->
+  <div class="modal-backdrop" id="updateEnquiryModal">
+    <div class="portal-modal fee-modal-dialog">
+      <div class="modal-header">
+        <h3><i class="fa-solid fa-comments text-primary"></i> Parent Enquiry Redressal</h3>
+        <button class="modal-close-x" onclick="portalApp.closeModal('updateEnquiryModal')" title="Close" aria-label="Close">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <form id="updateEnquiryForm" onsubmit="portalApp.handleUpdateEnquirySubmit(event)">
+        <div class="modal-body">
+          <input type="hidden" id="editEnquiryId">
+          <div class="fee-form-grid">
+            <div class="form-group">
+              <label>Requester / Parent</label>
+              <input type="text" class="form-control" id="enqModalRequester" readonly>
+            </div>
+            <div class="form-group">
+              <label>Linked Student</label>
+              <input type="text" class="form-control" id="enqModalStudent" readonly>
+            </div>
+            <div class="form-group full-span">
+              <label>Assigned Staff Member *</label>
+              <select class="form-control" id="enqModalStaff" required>
+                <option value="Sri M. Raju (Physics Faculty & HOD)">Sri M. Raju (Physics Faculty &amp; HOD)</option>
+                <option value="Sri Navva Anand (Vice Principal)">Sri Navva Anand (Vice Principal)</option>
+                <option value="S. Ramu (Accounts & Admissions Clerk)">S. Ramu (Accounts &amp; Admissions Clerk)</option>
+                <option value="Smt. T. Padmavathi (Exam In-charge)">Smt. T. Padmavathi (Exam In-charge)</option>
+                <option value="Sri K. Rajesh (Transport Coordinator)">Sri K. Rajesh (Transport Coordinator)</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Resolution Status *</label>
+              <select class="form-control" id="enqModalStatus" required>
+                <option value="Resolved">Resolved</option>
+                <option value="In Progress">In Progress</option>
+                <option value="Open">Open</option>
+              </select>
+            </div>
+            <div class="form-group full-span">
+              <label>Official Resolution Notes &amp; Follow-up *</label>
+              <textarea class="form-control" id="enqModalResolutionNotes" rows="3" required placeholder="Describe action taken, phone consultation summary, and instructions given to guardian."></textarea>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="portalApp.closeModal('updateEnquiryModal')">Cancel</button>
+          <button type="submit" class="btn btn-primary">
+            <i class="fa-solid fa-check"></i> Save Resolution
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       CREATE MESSAGE TEMPLATE MODAL
+       ========================================================================== -->
+  <div class="modal-backdrop" id="createTemplateModal">
+    <div class="portal-modal fee-modal-dialog">
+      <div class="modal-header">
+        <h3><i class="fa-solid fa-file-code text-primary"></i> Register Pre-Approved Message Template</h3>
+        <button class="modal-close-x" onclick="portalApp.closeModal('createTemplateModal')" title="Close" aria-label="Close">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <form id="createTemplateForm" onsubmit="portalApp.handleCreateTemplateSubmit(event)">
+        <div class="modal-body">
+          <div class="fee-form-grid">
+            <div class="form-group">
+              <label>Template Name *</label>
+              <input type="text" class="form-control" id="newTmplName" required placeholder="e.g. Science Fair Model Reminder">
+            </div>
+            <div class="form-group">
+              <label>Channel *</label>
+              <select class="form-control" id="newTmplChannel" required>
+                <option value="SMS (DLT Registered)">SMS (DLT Registered)</option>
+                <option value="Email Dispatch (HTML Responsive)">Email Dispatch (HTML Responsive)</option>
+                <option value="Mobile Push Notification">Mobile Push Notification</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Category *</label>
+              <select class="form-control" id="newTmplCategory" required>
+                <option value="Attendance & Safety">Attendance &amp; Safety</option>
+                <option value="Examinations & Marks">Examinations &amp; Marks</option>
+                <option value="Finance & Fees">Finance &amp; Fees</option>
+                <option value="Academic Events">Academic Events</option>
+                <option value="Emergency & Weather">Emergency &amp; Weather</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>DLT Registration Ref / Layout</label>
+              <input type="text" class="form-control" id="newTmplDltRef" placeholder="e.g. DLT-110795 / Header: SRIVID">
+            </div>
+            <div class="form-group full-span">
+              <label>Template Text &amp; Variable Tokens *</label>
+              <textarea class="form-control" id="newTmplContent" rows="3" required placeholder="Use tokens: {#StudentName#}, {#Class#}, {#Date#}, {#Amount#}..."></textarea>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="portalApp.closeModal('createTemplateModal')">Cancel</button>
+          <button type="submit" class="btn btn-primary">
+            <i class="fa-solid fa-stamp"></i> Register for Approval
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+
+<!-- ==========================================================================
        RECORD AUDITED FINANCIAL REVERSAL MODAL
        Statutory rule: "Do not let an employee approve their own refund or modify a financial transaction without the required authorization. Record reversals instead of silently changing completed transactions."
        ========================================================================== -->
