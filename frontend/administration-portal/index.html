@@ -480,19 +480,19 @@
           </a>
           <div class="nav-sub">
             <a href="#transport-routes" class="nav-sub-link active" data-sub="routes" onclick="portalApp.switchSubTab('transport', 'routes');">Routes &amp; Stops</a>
-            <a href="#transport-vehicles" class="nav-sub-link" data-sub="vehicles" onclick="portalApp.switchSubTab('transport', 'vehicles');">Fleet Vehicles</a>
-            <a href="#transport-drivers" class="nav-sub-link" data-sub="drivers" onclick="portalApp.switchSubTab('transport', 'drivers');">Drivers</a>
-            <a href="#transport-allocations" class="nav-sub-link" data-sub="allocations" onclick="portalApp.switchSubTab('transport', 'allocations');">Student Allocations</a>
-            <a href="#transport-facilities" class="nav-sub-link" data-sub="facilities" onclick="portalApp.switchSubTab('transport', 'facilities');">Maintenance</a>
+            <a href="#transport-vehicles" class="nav-sub-link" data-sub="vehicles" onclick="portalApp.switchSubTab('transport', 'vehicles');">Vehicles</a>
+            <a href="#transport-drivers" class="nav-sub-link" data-sub="drivers" onclick="portalApp.switchSubTab('transport', 'drivers');">Drivers &amp; Attendants</a>
+            <a href="#transport-allocations" class="nav-sub-link" data-sub="allocations" onclick="portalApp.switchSubTab('transport', 'allocations');">Transport Allocation</a>
+            <a href="#transport-maintenance" class="nav-sub-link" data-sub="maintenance" onclick="portalApp.switchSubTab('transport', 'maintenance');">Maintenance</a>
             <a href="#transport-safety" class="nav-sub-link" data-sub="safety" onclick="portalApp.switchSubTab('transport', 'safety');">Safety Inspections</a>
           </div>
         </div>
 
-        <!-- 14. Inventory & Assets -->
+        <!-- 15. Inventory & Assets -->
         <div class="nav-item" data-module="inventory">
           <a href="#inventory" class="nav-link" onclick="portalApp.navigateTo('inventory');">
             <span class="nav-icon"><i class="fa-solid fa-boxes-stacked"></i></span>
-            <span class="nav-text">14. Inventory &amp; Assets</span>
+            <span class="nav-text">15. Inventory &amp; Assets</span>
             <span class="nav-arrow"><i class="fa-solid fa-chevron-right"></i></span>
           </a>
           <div class="nav-sub">
@@ -513,7 +513,7 @@
         <div class="nav-item" data-module="reports">
           <a href="#reports" class="nav-link" onclick="portalApp.navigateTo('reports');">
             <span class="nav-icon"><i class="fa-solid fa-chart-pie"></i></span>
-            <span class="nav-text">15. Reports &amp; Analytics</span>
+            <span class="nav-text">16. Reports &amp; Analytics</span>
             <span class="nav-arrow"><i class="fa-solid fa-chevron-right"></i></span>
           </a>
           <div class="nav-sub">
@@ -530,7 +530,7 @@
         <div class="nav-item" data-module="settings">
           <a href="#settings" class="nav-link" onclick="portalApp.navigateTo('settings');">
             <span class="nav-icon"><i class="fa-solid fa-user-gear"></i></span>
-            <span class="nav-text">16. Settings &amp; Access Control</span>
+            <span class="nav-text">17. Settings &amp; Access Control</span>
             <span class="nav-arrow"><i class="fa-solid fa-chevron-right"></i></span>
           </a>
           <div class="nav-sub">
@@ -11527,162 +11527,585 @@
           </div></section>
 
       
-        <section class="portal-view" id="view-transport">
+                <section class="portal-view" id="view-transport">
+          <!-- Module Header Strip -->
           <div class="module-header-strip mb-4">
             <div class="mhs-title">
-              <h2><i class="fa-solid fa-bus-simple text-primary"></i> Transport Fleet &amp; Campus Physical Facilities</h2>
-              <p>Fleet tracking, driver compliance, route safety, and campus physical infrastructure status.</p>
+              <h2><i class="fa-solid fa-bus-simple text-primary"></i> Transport Fleet Logistics &amp; Campus Physical Facilities</h2>
+              <p>AP Motor Vehicles Dept (MVD) &amp; RTA Compliance • Real-Time GPS Tracking • Child Transit Safety • Campus Infrastructure Audits</p>
             </div>
             <div class="mhs-actions">
-              <button class="btn btn-primary" onclick="portalApp.showToast('Live GPS coordinates refreshed from 6 vehicles', 'success')">
+              <button class="btn btn-outline" onclick="portalApp.refreshFleetGPS()">
                 <i class="fa-solid fa-location-crosshairs"></i> Refresh Fleet GPS
+              </button>
+              <button class="btn btn-primary" onclick="portalApp.openNewTransportModal()">
+                <i class="fa-solid fa-plus"></i> Transport Action
               </button>
             </div>
           </div>
 
-          <div class="sub-tab-nav mb-4" id="transportSubTabs">
-            <button class="sub-tab-btn active" data-sub="routes" onclick="portalApp.switchSubTab('transport', 'routes')">
-              <i class="fa-solid fa-route"></i> Van &amp; Bus Fleet Routes (6)
+          <!-- Official Institutional Protocol Banner -->
+          <div class="alert alert-info d-flex align-items-center justify-content-between flex-wrap gap-2 mb-4" style="background: rgba(30, 64, 175, 0.06); border-left: 4px solid #2563eb; padding: 0.85rem 1.25rem; border-radius: 8px;">
+            <div class="d-flex align-items-center gap-3">
+              <div style="font-size: 1.5rem; color: #2563eb;"><i class="fa-solid fa-shield-halved"></i></div>
+              <div>
+                <strong style="color: #1e3a8a; font-size: 0.95rem;">AP School Transit &amp; Campus Safety Protocol (GO Ms No. 67/School Edu)</strong>
+                <p style="margin: 0; font-size: 0.82rem; color: #475569;">
+                  All 6 vehicles fitted with AIS-140 GPS transponders, 40 km/h speed governors, CCTV dual-channel recording, and emergency doors. Verified by MVI Guntur.
+                  Logistics In-charge: <strong>Sri P. Appa Rao</strong> (NT-107) under Principal <strong>Smt. Gorle Varalakshmi</strong> &amp; VP <strong>Sri Navva Anand</strong>.
+                </p>
+              </div>
+            </div>
+            <div class="d-flex align-items-center gap-2">
+              <span class="portal-badge badge-success" style="font-size: 0.75rem;"><i class="fa-solid fa-circle-check"></i> RTA Fit: 100%</span>
+              <span class="portal-badge badge-info" style="font-size: 0.75rem;"><i class="fa-solid fa-fire-extinguisher"></i> Fire NOC: Active</span>
+              <span class="portal-badge badge-teal" style="font-size: 0.75rem;"><i class="fa-solid fa-phone"></i> Helpline: 99490 66321</span>
+            </div>
+          </div>
+
+          <!-- Tab-Strip with 6 Submenus per User Specification -->
+          <div class="tab-strip" id="transportTabStrip">
+            <button class="tab-btn active" data-sub="routes" onclick="portalApp.switchSubTab('transport', 'routes')">
+              <i class="fa-solid fa-route"></i> Routes &amp; Stops (<span id="tabBadgeTransportRoutes">6</span>)
             </button>
-            <button class="sub-tab-btn" data-sub="facilities" onclick="portalApp.switchSubTab('transport', 'facilities')">
-              <i class="fa-solid fa-building-circle-check"></i> Campus Facilities Audit
+            <button class="tab-btn" data-sub="vehicles" onclick="portalApp.switchSubTab('transport', 'vehicles')">
+              <i class="fa-solid fa-bus"></i> Vehicles (<span id="tabBadgeTransportVehicles">6</span>)
             </button>
-            <button class="sub-tab-btn" data-sub="safety" onclick="portalApp.switchSubTab('transport', 'safety')">
-              <i class="fa-solid fa-shield-virus"></i> RTA Compliance &amp; CCTV
+            <button class="tab-btn" data-sub="drivers" onclick="portalApp.switchSubTab('transport', 'drivers')">
+              <i class="fa-solid fa-id-card"></i> Drivers &amp; Attendants (<span id="tabBadgeTransportDrivers">12</span>)
+            </button>
+            <button class="tab-btn" data-sub="allocations" onclick="portalApp.switchSubTab('transport', 'allocations')">
+              <i class="fa-solid fa-users-line"></i> Transport Allocation (<span id="tabBadgeTransportAllocations">180</span>)
+            </button>
+            <button class="tab-btn" data-sub="maintenance" onclick="portalApp.switchSubTab('transport', 'maintenance')">
+              <i class="fa-solid fa-screwdriver-wrench"></i> Maintenance (<span id="tabBadgeTransportMaintenance">8</span>)
+            </button>
+            <button class="tab-btn" data-sub="safety" onclick="portalApp.switchSubTab('transport', 'safety')">
+              <i class="fa-solid fa-shield-halved"></i> Safety Inspections (<span id="tabBadgeTransportSafety">6</span>)
             </button>
           </div>
 
-          <!-- Sub-view 1: Routes -->
-          <div class="sub-view-pane active" id="subview-transport-routes">
-            <div class="card p-4">
-              <h3 class="card-title mb-3"><i class="fa-solid fa-van-shuttle text-primary"></i> Daily Student Transport Routes</h3>
+          <!-- =========================================================
+               SUBVIEW 1: ROUTES & STOPS
+               Columns: Route number, stops, timings and assigned students
+               ========================================================= -->
+          <div class="transport-subview active" id="subview-transport-routes">
+            <div class="quad-stat-grid mb-4">
+              <div class="stat-card">
+                <div class="stat-card-header">
+                  <span class="stat-label">Active Fleet Routes</span>
+                  <div class="stat-icon-wrapper stat-icon-blue"><i class="fa-solid fa-route"></i></div>
+                </div>
+                <div class="stat-value">6 Routes</div>
+                <div class="stat-subtext text-success"><i class="fa-solid fa-check-double"></i> Full Guntur Coverage</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-card-header">
+                  <span class="stat-label">Designated Stops</span>
+                  <div class="stat-icon-wrapper stat-icon-amber"><i class="fa-solid fa-location-dot"></i></div>
+                </div>
+                <div class="stat-value">38 Stops</div>
+                <div class="stat-subtext text-muted">Geo-Fenced Safe Zones</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-card-header">
+                  <span class="stat-label">Assigned Commuters</span>
+                  <div class="stat-icon-wrapper stat-icon-primary"><i class="fa-solid fa-children"></i></div>
+                </div>
+                <div class="stat-value">180 Students</div>
+                <div class="stat-subtext text-primary">89.8% Seating Load Factor</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-card-header">
+                  <span class="stat-label">Fleet GPS Punctuality</span>
+                  <div class="stat-icon-wrapper stat-icon-green"><i class="fa-solid fa-satellite-dish"></i></div>
+                </div>
+                <div class="stat-value">98.4% On-Time</div>
+                <div class="stat-subtext text-success">AIS-140 Real-Time Transponders</div>
+              </div>
+            </div>
+
+            <!-- Controls: Search & Vehicle Type Filter -->
+            <div class="control-panel mb-3 d-flex flex-wrap align-items-center justify-content-between gap-2">
+              <div class="d-flex align-items-center gap-2 flex-grow-1" style="max-width: 580px;">
+                <div class="search-box flex-grow-1">
+                  <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                  <input type="text" id="transportRouteSearchInput" class="form-control" placeholder="Search routes by route #, stop name, or driver..." oninput="portalApp.filterTransportRoutes()">
+                </div>
+                <select id="transportRouteTypeFilter" class="form-control" style="width: 180px;" onchange="portalApp.filterTransportRoutes()">
+                  <option value="all">All Vehicle Types</option>
+                  <option value="School Bus">School Buses</option>
+                  <option value="Force Traveller">Force Traveller</option>
+                </select>
+              </div>
+              <div class="d-flex align-items-center gap-2">
+                <button class="btn btn-outline" onclick="portalApp.exportTransportRoutesCSV()">
+                  <i class="fa-solid fa-file-csv"></i> Export Schedule
+                </button>
+                <button class="btn btn-primary" onclick="portalApp.openNewTransportModal('route')">
+                  <i class="fa-solid fa-plus"></i> Add New Route
+                </button>
+              </div>
+            </div>
+
+            <!-- Routes Table -->
+            <div class="card p-0">
               <div class="table-responsive">
-                <table class="custom-table">
+                <table class="custom-table" id="transportRoutesTable">
                   <thead>
                     <tr>
-                      <th>Route #</th>
-                      <th>Coverage Stops</th>
-                      <th>Vehicle &amp; Driver</th>
-                      <th>Students</th>
-                      <th>Morning Arrival</th>
-                      <th>Evening Departure</th>
-                      <th>Live Status</th>
+                      <th style="width: 16%;">Route Number</th>
+                      <th style="width: 32%;">Stops</th>
+                      <th style="width: 18%;">Timings</th>
+                      <th style="width: 14%;">Assigned Students</th>
+                      <th style="width: 12%;">Live GPS Status</th>
+                      <th style="width: 8%; text-align: center;">Actions</th>
                     </tr>
                   </thead>
-                  <tbody>
-                    <tr>
-                      <td><strong>Route 1</strong></td>
-                      <td>RTC Bus Complex • Old Guntur • Market</td>
-                      <td>AP-07-TX-1041<br><small class="text-muted">Sri K. Venkateswarlu (9440112233)</small></td>
-                      <td>28 Students</td>
-                      <td>08:15 AM</td>
-                      <td>04:30 PM</td>
-                      <td><span class="portal-badge badge-success"><i class="fa-solid fa-signal"></i> GPS Live: On Schedule</span></td>
-                    </tr>
-                    <tr>
-                      <td><strong>Route 2</strong></td>
-                      <td>Arundelpet • Brodipet • Collectorate</td>
-                      <td>AP-07-TX-1042<br><small class="text-muted">Sri M. Rambabu (9848223344)</small></td>
-                      <td>34 Students</td>
-                      <td>08:20 AM</td>
-                      <td>04:30 PM</td>
-                      <td><span class="portal-badge badge-success"><i class="fa-solid fa-signal"></i> GPS Live: On Schedule</span></td>
-                    </tr>
-                    <tr>
-                      <td><strong>Route 3</strong></td>
-                      <td>Pattabhipuram • Gujjanagundla • Vidyanagar</td>
-                      <td>AP-07-TX-1043<br><small class="text-muted">Sri S. Prasad (9988334455)</small></td>
-                      <td>31 Students</td>
-                      <td>08:22 AM</td>
-                      <td>04:30 PM</td>
-                      <td><span class="portal-badge badge-success"><i class="fa-solid fa-signal"></i> GPS Live: On Schedule</span></td>
-                    </tr>
-                    <tr>
-                      <td><strong>Route 4</strong></td>
-                      <td>Railway Station • Sambasiva Pet • Kothapet</td>
-                      <td>AP-07-TX-1044<br><small class="text-muted">Sri B. Srinivasa Rao (9440445566)</small></td>
-                      <td>26 Students</td>
-                      <td>08:18 AM</td>
-                      <td>04:30 PM</td>
-                      <td><span class="portal-badge badge-success"><i class="fa-solid fa-signal"></i> GPS Live: On Schedule</span></td>
-                    </tr>
-                    <tr>
-                      <td><strong>Route 5</strong></td>
-                      <td>Lakshmipuram • SVN Colony • Ring Road</td>
-                      <td>AP-07-TX-1045<br><small class="text-muted">Sri G. Sambaiah (9848556677)</small></td>
-                      <td>32 Students</td>
-                      <td>08:25 AM</td>
-                      <td>04:30 PM</td>
-                      <td><span class="portal-badge badge-success"><i class="fa-solid fa-signal"></i> GPS Live: On Schedule</span></td>
-                    </tr>
-                    <tr>
-                      <td><strong>Route 6</strong></td>
-                      <td>Syamala Nagar • Chandramouli Nagar</td>
-                      <td>AP-07-TX-1046<br><small class="text-muted">Sri V. Venkataiah (9988667788)</small></td>
-                      <td>29 Students</td>
-                      <td>08:20 AM</td>
-                      <td>04:30 PM</td>
-                      <td><span class="portal-badge badge-success"><i class="fa-solid fa-signal"></i> GPS Live: On Schedule</span></td>
-                    </tr>
+                  <tbody id="transportRoutesTableBody">
+                    <!-- Dynamic rendering via portal.js -->
                   </tbody>
                 </table>
               </div>
             </div>
           </div>
 
-          <!-- Sub-view 2: Facilities -->
-          <div class="sub-view-pane" id="subview-transport-facilities" style="display:none;">
-            <div class="card p-4">
-              <h3 class="card-title mb-3"><i class="fa-solid fa-building-columns text-primary"></i> Campus Physical Infrastructure Status</h3>
-              <div class="row g-3">
-                <div class="col-md-4">
-                  <div class="p-3 border rounded">
-                    <div class="d-flex justify-content-between mb-2">
-                      <strong class="text-primary"><i class="fa-solid fa-flask"></i> Science Labs</strong>
-                      <span class="portal-badge badge-success">Certified</span>
-                    </div>
-                    <p class="text-sm text-muted m-0">Physics, Chemistry, and Biology laboratories equipped with individual experiment workstations.</p>
-                  </div>
+          <!-- =========================================================
+               SUBVIEW 2: VEHICLES
+               Columns: Registration, capacity, insurance, permits and maintenance status
+               ========================================================= -->
+          <div class="transport-subview" id="subview-transport-vehicles" style="display: none;">
+            <div class="quad-stat-grid mb-4">
+              <div class="stat-card">
+                <div class="stat-card-header">
+                  <span class="stat-label">Total Fleet Vehicles</span>
+                  <div class="stat-icon-wrapper stat-icon-blue"><i class="fa-solid fa-bus"></i></div>
                 </div>
-                <div class="col-md-4">
-                  <div class="p-3 border rounded">
-                    <div class="d-flex justify-content-between mb-2">
-                      <strong class="text-primary"><i class="fa-solid fa-desktop"></i> Computer Centre</strong>
-                      <span class="portal-badge badge-success">45 Terminals</span>
-                    </div>
-                    <p class="text-sm text-muted m-0">High-speed broadband network, UPS power backup, and modern computing terminals.</p>
-                  </div>
+                <div class="stat-value">6 Vehicles</div>
+                <div class="stat-subtext text-success">4 Heavy Buses • 2 Vans</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-card-header">
+                  <span class="stat-label">Seating Capacity</span>
+                  <div class="stat-icon-wrapper stat-icon-primary"><i class="fa-solid fa-chair"></i></div>
                 </div>
-                <div class="col-md-4">
-                  <div class="p-3 border rounded">
-                    <div class="d-flex justify-content-between mb-2">
-                      <strong class="text-primary"><i class="fa-solid fa-faucet-drip"></i> RO Water Plant</strong>
-                      <span class="portal-badge badge-success">TDS: 78 Optimal</span>
-                    </div>
-                    <p class="text-sm text-muted m-0">Commercial multi-stage reverse osmosis filtration with certified daily water quality monitoring.</p>
-                  </div>
+                <div class="stat-value">196 Seats</div>
+                <div class="stat-subtext text-primary">180 Allocated • 16 Buffer Seats</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-card-header">
+                  <span class="stat-label">RTA Fitness Permits</span>
+                  <div class="stat-icon-wrapper stat-icon-green"><i class="fa-solid fa-file-shield"></i></div>
                 </div>
+                <div class="stat-value">100% Certified</div>
+                <div class="stat-subtext text-success">Speed Governor &amp; PUC Cleared</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-card-header">
+                  <span class="stat-label">Comprehensive Insurance</span>
+                  <div class="stat-icon-wrapper stat-icon-amber"><i class="fa-solid fa-certificate"></i></div>
+                </div>
+                <div class="stat-value">6 / 6 Active</div>
+                <div class="stat-subtext text-muted">United India &amp; New India</div>
+              </div>
+            </div>
+
+            <!-- Controls: Search & Maintenance Status Filter -->
+            <div class="control-panel mb-3 d-flex flex-wrap align-items-center justify-content-between gap-2">
+              <div class="d-flex align-items-center gap-2 flex-grow-1" style="max-width: 580px;">
+                <div class="search-box flex-grow-1">
+                  <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                  <input type="text" id="transportVehicleSearchInput" class="form-control" placeholder="Search vehicles by registration, make/model, or permit..." oninput="portalApp.filterTransportVehicles()">
+                </div>
+                <select id="transportVehicleStatusFilter" class="form-control" style="width: 180px;" onchange="portalApp.filterTransportVehicles()">
+                  <option value="all">All Statuses</option>
+                  <option value="Operational">Operational</option>
+                  <option value="Service Due">Service Due</option>
+                  <option value="In Workshop">In Workshop</option>
+                </select>
+              </div>
+              <div class="d-flex align-items-center gap-2">
+                <button class="btn btn-outline" onclick="window.print()">
+                  <i class="fa-solid fa-print"></i> Print Register
+                </button>
+                <button class="btn btn-primary" onclick="portalApp.openNewTransportModal('vehicle')">
+                  <i class="fa-solid fa-plus"></i> Register Vehicle
+                </button>
+              </div>
+            </div>
+
+            <!-- Vehicles Table -->
+            <div class="card p-0">
+              <div class="table-responsive">
+                <table class="custom-table" id="transportVehiclesTable">
+                  <thead>
+                    <tr>
+                      <th style="width: 18%;">Registration</th>
+                      <th style="width: 14%;">Capacity</th>
+                      <th style="width: 22%;">Insurance</th>
+                      <th style="width: 24%;">Permits</th>
+                      <th style="width: 14%;">Maintenance Status</th>
+                      <th style="width: 8%; text-align: center;">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody id="transportVehiclesTableBody">
+                    <!-- Dynamic rendering via portal.js -->
+                  </tbody>
+                </table>
               </div>
             </div>
           </div>
 
-          <!-- Sub-view 3: Safety -->
-          <div class="sub-view-pane" id="subview-transport-safety" style="display:none;">
-            <div class="card p-4">
-              <h3 class="card-title mb-3"><i class="fa-solid fa-shield-halved text-primary"></i> RTA Vehicle Compliance &amp; Campus CCTV</h3>
-              <div class="row g-3">
-                <div class="col-md-6">
-                  <div class="p-3 border rounded">
-                    <h4 class="font-bold mb-2">Transport Compliance</h4>
-                    <p class="text-sm text-muted">All 6 school vans hold valid RTA Fitness Certificates, Speed Governors (capped at 40 km/h), First-Aid kits, emergency exits, and GPS transponders.</p>
-                  </div>
+          <!-- =========================================================
+               SUBVIEW 3: DRIVERS & ATTENDANTS
+               Columns: Staff details, assigned vehicle, verification and duty status
+               ========================================================= -->
+          <div class="transport-subview" id="subview-transport-drivers" style="display: none;">
+            <div class="quad-stat-grid mb-4">
+              <div class="stat-card">
+                <div class="stat-card-header">
+                  <span class="stat-label">Transport Staff</span>
+                  <div class="stat-icon-wrapper stat-icon-blue"><i class="fa-solid fa-users"></i></div>
                 </div>
-                <div class="col-md-6">
-                  <div class="p-3 border rounded">
-                    <h4 class="font-bold mb-2">CCTV Surveillance Grid</h4>
-                    <p class="text-sm text-muted">64 High-Definition IP security cameras active across corridors, entry gates, play areas, and laboratory zones with 30-day recorded escrow.</p>
-                  </div>
+                <div class="stat-value">12 Staff</div>
+                <div class="stat-subtext text-muted">6 Heavy Drivers • 6 Lady Attendants</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-card-header">
+                  <span class="stat-label">Police Verification</span>
+                  <div class="stat-icon-wrapper stat-icon-green"><i class="fa-solid fa-user-shield"></i></div>
                 </div>
+                <div class="stat-value">12 / 12 Cleared</div>
+                <div class="stat-subtext text-success">AP Police Background Verified</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-card-header">
+                  <span class="stat-label">Medical &amp; Vision Tests</span>
+                  <div class="stat-icon-wrapper stat-icon-primary"><i class="fa-solid fa-stethoscope"></i></div>
+                </div>
+                <div class="stat-value">100% Fit</div>
+                <div class="stat-subtext text-primary">GGH Guntur Annual Checkup</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-card-header">
+                  <span class="stat-label">Duty Status Today</span>
+                  <div class="stat-icon-wrapper stat-icon-amber"><i class="fa-solid fa-clipboard-user"></i></div>
+                </div>
+                <div class="stat-value">12 Active</div>
+                <div class="stat-subtext text-success">Zero Absences / Full Turnout</div>
+              </div>
+            </div>
+
+            <!-- Controls: Search & Role Filter -->
+            <div class="control-panel mb-3 d-flex flex-wrap align-items-center justify-content-between gap-2">
+              <div class="d-flex align-items-center gap-2 flex-grow-1" style="max-width: 580px;">
+                <div class="search-box flex-grow-1">
+                  <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                  <input type="text" id="transportDriverSearchInput" class="form-control" placeholder="Search staff by name, phone, or license..." oninput="portalApp.filterTransportDrivers()">
+                </div>
+                <select id="transportDriverRoleFilter" class="form-control" style="width: 190px;" onchange="portalApp.filterTransportDrivers()">
+                  <option value="all">All Staff Roles</option>
+                  <option value="Driver">Drivers</option>
+                  <option value="Attendant">Lady Bus Attendants</option>
+                </select>
+              </div>
+              <div class="d-flex align-items-center gap-2">
+                <button class="btn btn-outline" onclick="window.print()">
+                  <i class="fa-solid fa-print"></i> Print Roster
+                </button>
+                <button class="btn btn-primary" onclick="portalApp.openNewTransportModal('driver')">
+                  <i class="fa-solid fa-plus"></i> Add Staff Member
+                </button>
+              </div>
+            </div>
+
+            <!-- Drivers & Attendants Table -->
+            <div class="card p-0">
+              <div class="table-responsive">
+                <table class="custom-table" id="transportDriversTable">
+                  <thead>
+                    <tr>
+                      <th style="width: 26%;">Staff Details</th>
+                      <th style="width: 20%;">Assigned Vehicle</th>
+                      <th style="width: 26%;">Verification</th>
+                      <th style="width: 18%;">Duty Status</th>
+                      <th style="width: 10%; text-align: center;">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody id="transportDriversTableBody">
+                    <!-- Dynamic rendering via portal.js -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <!-- =========================================================
+               SUBVIEW 4: TRANSPORT ALLOCATION
+               Columns: Student, route, stop and transport fee status
+               ========================================================= -->
+          <div class="transport-subview" id="subview-transport-allocations" style="display: none;">
+            <div class="quad-stat-grid mb-4">
+              <div class="stat-card">
+                <div class="stat-card-header">
+                  <span class="stat-label">Allocated Students</span>
+                  <div class="stat-icon-wrapper stat-icon-blue"><i class="fa-solid fa-id-card-clip"></i></div>
+                </div>
+                <div class="stat-value">180 Commuters</div>
+                <div class="stat-subtext text-muted">Across 6 Daily Routes</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-card-header">
+                  <span class="stat-label">Fee Clearance Rate</span>
+                  <div class="stat-icon-wrapper stat-icon-green"><i class="fa-solid fa-circle-check"></i></div>
+                </div>
+                <div class="stat-value">86.7% Paid</div>
+                <div class="stat-subtext text-success">156 Students Fully Paid</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-card-header">
+                  <span class="stat-label">Outstanding Bus Dues</span>
+                  <div class="stat-icon-wrapper stat-icon-rose"><i class="fa-solid fa-triangle-exclamation"></i></div>
+                </div>
+                <div class="stat-value">₹1,20,000</div>
+                <div class="stat-subtext text-danger">24 Overdue Accounts</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-card-header">
+                  <span class="stat-label">Active RFID Passes</span>
+                  <div class="stat-icon-wrapper stat-icon-amber"><i class="fa-solid fa-wifi"></i></div>
+                </div>
+                <div class="stat-value">180 Cards</div>
+                <div class="stat-subtext text-success">Instant Gate &amp; Bus Tap</div>
+              </div>
+            </div>
+
+            <!-- Controls: Search, Route Filter & Fee Status Filter -->
+            <div class="control-panel mb-3 d-flex flex-wrap align-items-center justify-content-between gap-2">
+              <div class="d-flex align-items-center gap-2 flex-grow-1" style="max-width: 650px;">
+                <div class="search-box flex-grow-1">
+                  <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                  <input type="text" id="transportAllocationSearchInput" class="form-control" placeholder="Search student by name, admission #, or stop..." oninput="portalApp.filterTransportAllocations()">
+                </div>
+                <select id="transportAllocationRouteFilter" class="form-control" style="width: 150px;" onchange="portalApp.filterTransportAllocations()">
+                  <option value="all">All Routes</option>
+                  <option value="Route 1">Route 1</option>
+                  <option value="Route 2">Route 2</option>
+                  <option value="Route 3">Route 3</option>
+                  <option value="Route 4">Route 4</option>
+                  <option value="Route 5">Route 5</option>
+                  <option value="Route 6">Route 6</option>
+                </select>
+                <select id="transportAllocationFeeFilter" class="form-control" style="width: 150px;" onchange="portalApp.filterTransportAllocations()">
+                  <option value="all">All Fee Status</option>
+                  <option value="Paid">Paid</option>
+                  <option value="Pending">Pending</option>
+                  <option value="Overdue">Overdue</option>
+                </select>
+              </div>
+              <div class="d-flex align-items-center gap-2">
+                <button class="btn btn-outline" onclick="portalApp.exportTransportAllocationsCSV()">
+                  <i class="fa-solid fa-file-csv"></i> Export CSV
+                </button>
+                <button class="btn btn-primary" onclick="portalApp.openNewTransportModal('allocation')">
+                  <i class="fa-solid fa-plus"></i> Allocate Student
+                </button>
+              </div>
+            </div>
+
+            <!-- Allocation Table -->
+            <div class="card p-0">
+              <div class="table-responsive">
+                <table class="custom-table" id="transportAllocationsTable">
+                  <thead>
+                    <tr>
+                      <th style="width: 25%;">Student</th>
+                      <th style="width: 18%;">Route</th>
+                      <th style="width: 25%;">Stop</th>
+                      <th style="width: 22%;">Transport Fee Status</th>
+                      <th style="width: 10%; text-align: center;">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody id="transportAllocationsTableBody">
+                    <!-- Dynamic rendering via portal.js -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <!-- =========================================================
+               SUBVIEW 5: MAINTENANCE
+               Columns: Vehicle or facility, reported issue, assigned vendor and resolution
+               ========================================================= -->
+          <div class="transport-subview" id="subview-transport-maintenance" style="display: none;">
+            <div class="quad-stat-grid mb-4">
+              <div class="stat-card">
+                <div class="stat-card-header">
+                  <span class="stat-label">Total Maintenance Logs</span>
+                  <div class="stat-icon-wrapper stat-icon-blue"><i class="fa-solid fa-wrench"></i></div>
+                </div>
+                <div class="stat-value">18 Records</div>
+                <div class="stat-subtext text-muted">Fleet &amp; Physical Facilities</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-card-header">
+                  <span class="stat-label">Active Work Orders</span>
+                  <div class="stat-icon-wrapper stat-icon-amber"><i class="fa-solid fa-clock"></i></div>
+                </div>
+                <div class="stat-value">2 Active</div>
+                <div class="stat-subtext text-warning">Scheduled for completion</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-card-header">
+                  <span class="stat-label">Resolved Tickets</span>
+                  <div class="stat-icon-wrapper stat-icon-green"><i class="fa-solid fa-circle-check"></i></div>
+                </div>
+                <div class="stat-value">16 Resolved</div>
+                <div class="stat-subtext text-success">88.9% First-Time Fix</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-card-header">
+                  <span class="stat-label">Audited Expenditure</span>
+                  <div class="stat-icon-wrapper stat-icon-primary"><i class="fa-solid fa-receipt"></i></div>
+                </div>
+                <div class="stat-value">₹1,42,500</div>
+                <div class="stat-subtext text-primary">Fully Reconciled with Accounts</div>
+              </div>
+            </div>
+
+            <!-- Controls: Search, Category & Status Filter -->
+            <div class="control-panel mb-3 d-flex flex-wrap align-items-center justify-content-between gap-2">
+              <div class="d-flex align-items-center gap-2 flex-grow-1" style="max-width: 650px;">
+                <div class="search-box flex-grow-1">
+                  <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                  <input type="text" id="transportMaintenanceSearchInput" class="form-control" placeholder="Search by asset, issue description, or vendor..." oninput="portalApp.filterTransportMaintenance()">
+                </div>
+                <select id="transportMaintenanceCategoryFilter" class="form-control" style="width: 170px;" onchange="portalApp.filterTransportMaintenance()">
+                  <option value="all">All Categories</option>
+                  <option value="Fleet Vehicle">Fleet Vehicles</option>
+                  <option value="Campus Physical Facility">Campus Facilities</option>
+                </select>
+                <select id="transportMaintenanceStatusFilter" class="form-control" style="width: 150px;" onchange="portalApp.filterTransportMaintenance()">
+                  <option value="all">All Status</option>
+                  <option value="Resolved">Resolved</option>
+                  <option value="In Progress">In Progress</option>
+                  <option value="Scheduled">Scheduled</option>
+                </select>
+              </div>
+              <div class="d-flex align-items-center gap-2">
+                <button class="btn btn-outline" onclick="portalApp.exportTransportMaintenanceCSV()">
+                  <i class="fa-solid fa-file-csv"></i> Export CSV
+                </button>
+                <button class="btn btn-primary" onclick="portalApp.openNewTransportModal('maintenance')">
+                  <i class="fa-solid fa-plus"></i> Log Maintenance Ticket
+                </button>
+              </div>
+            </div>
+
+            <!-- Maintenance Table -->
+            <div class="card p-0">
+              <div class="table-responsive">
+                <table class="custom-table" id="transportMaintenanceTable">
+                  <thead>
+                    <tr>
+                      <th style="width: 24%;">Vehicle or Facility</th>
+                      <th style="width: 28%;">Reported Issue</th>
+                      <th style="width: 22%;">Assigned Vendor</th>
+                      <th style="width: 18%;">Resolution</th>
+                      <th style="width: 8%; text-align: center;">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody id="transportMaintenanceTableBody">
+                    <!-- Dynamic rendering via portal.js -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <!-- =========================================================
+               SUBVIEW 6: SAFETY INSPECTIONS
+               Columns: Inspection date, checklist, findings and corrective actions
+               ========================================================= -->
+          <div class="transport-subview" id="subview-transport-safety" style="display: none;">
+            <div class="quad-stat-grid mb-4">
+              <div class="stat-card">
+                <div class="stat-card-header">
+                  <span class="stat-label">Safety Compliance Score</span>
+                  <div class="stat-icon-wrapper stat-icon-green"><i class="fa-solid fa-shield-check"></i></div>
+                </div>
+                <div class="stat-value">100% Certified</div>
+                <div class="stat-subtext text-success">AP RTA &amp; Fire Norms Cleared</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-card-header">
+                  <span class="stat-label">Last Joint Audit</span>
+                  <div class="stat-icon-wrapper stat-icon-blue"><i class="fa-solid fa-calendar-check"></i></div>
+                </div>
+                <div class="stat-value">12 Oct 2026</div>
+                <div class="stat-subtext text-muted">MVI &amp; Police Verification</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-card-header">
+                  <span class="stat-label">Next Scheduled Audit</span>
+                  <div class="stat-icon-wrapper stat-icon-primary"><i class="fa-solid fa-calendar-day"></i></div>
+                </div>
+                <div class="stat-value">15 Jan 2027</div>
+                <div class="stat-subtext text-primary">Pre-Final Term Inspection</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-card-header">
+                  <span class="stat-label">Corrective Actions</span>
+                  <div class="stat-icon-wrapper stat-icon-amber"><i class="fa-solid fa-list-check"></i></div>
+                </div>
+                <div class="stat-value">0 Overdue</div>
+                <div class="stat-subtext text-success">All Items Remediated</div>
+              </div>
+            </div>
+
+            <!-- Controls: Search & Category Filter -->
+            <div class="control-panel mb-3 d-flex flex-wrap align-items-center justify-content-between gap-2">
+              <div class="d-flex align-items-center gap-2 flex-grow-1" style="max-width: 580px;">
+                <div class="search-box flex-grow-1">
+                  <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                  <input type="text" id="transportSafetySearchInput" class="form-control" placeholder="Search safety audits by title, checklist, or inspector..." oninput="portalApp.filterTransportSafety()">
+                </div>
+                <select id="transportSafetyCategoryFilter" class="form-control" style="width: 190px;" onchange="portalApp.filterTransportSafety()">
+                  <option value="all">All Audit Types</option>
+                  <option value="Fleet RTA Safety">Fleet RTA Safety</option>
+                  <option value="Fire &amp; Campus Safety">Fire &amp; Campus Safety</option>
+                  <option value="Hygiene &amp; Sanitation">Hygiene &amp; Sanitation</option>
+                  <option value="Structural Stability">Structural Stability</option>
+                </select>
+              </div>
+              <div class="d-flex align-items-center gap-2">
+                <button class="btn btn-outline" onclick="portalApp.exportSafetyInspectionPDF()">
+                  <i class="fa-solid fa-file-pdf"></i> Compliance Dossier
+                </button>
+                <button class="btn btn-primary" onclick="portalApp.openNewTransportModal('safety')">
+                  <i class="fa-solid fa-plus"></i> Schedule Safety Audit
+                </button>
+              </div>
+            </div>
+
+            <!-- Safety Inspections Table -->
+            <div class="card p-0">
+              <div class="table-responsive">
+                <table class="custom-table" id="transportSafetyTable">
+                  <thead>
+                    <tr>
+                      <th style="width: 16%;">Inspection Date</th>
+                      <th style="width: 28%;">Checklist</th>
+                      <th style="width: 26%;">Findings</th>
+                      <th style="width: 22%;">Corrective Actions</th>
+                      <th style="width: 8%; text-align: center;">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody id="transportSafetyTableBody">
+                    <!-- Dynamic rendering via portal.js -->
+                  </tbody>
+                </table>
               </div>
             </div>
           </div>
@@ -16007,6 +16430,66 @@ Class X-A,Monday,2,09:35 AM - 10:20 AM,Physical Science,Sri Navva Anand,Room 201
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" onclick="portalApp.closeModal('viewEventDetailsModal')">Close</button>
         <button type="button" class="btn btn-primary" onclick="window.print()"><i class="fa-solid fa-print"></i> Print Official Dossier</button>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ==========================================================================
+       TRANSPORT & FACILITIES MODALS
+       ========================================================================== -->
+  <!-- 1. New Transport Action Modal -->
+  <div class="modal-backdrop" id="newTransportActionModal">
+    <div class="portal-modal fee-modal-dialog" style="max-width: 620px;">
+      <div class="modal-header">
+        <h3><i class="fa-solid fa-bus text-primary"></i> <span id="newTransportActionModalTitle">Transport &amp; Facilities Action</span></h3>
+        <button class="modal-close-x" onclick="portalApp.closeModal('newTransportActionModal')" title="Close" aria-label="Close">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <div class="modal-body" style="max-height: calc(85vh - 130px); overflow-y: auto;">
+        <form id="newTransportActionForm" onsubmit="portalApp.handleNewTransportSubmit(event)">
+          <div class="form-group mb-3">
+            <label class="form-label font-bold">Action Category <span class="text-danger">*</span></label>
+            <select class="form-control" id="transActionCategory" required onchange="portalApp.handleTransportModalCategoryChange()">
+              <option value="route">Add New Route</option>
+              <option value="vehicle">Register Fleet Vehicle</option>
+              <option value="driver">Add Driver / Attendant</option>
+              <option value="allocation">Allocate Student to Route</option>
+              <option value="maintenance">Log Maintenance Work Order</option>
+              <option value="safety">Schedule Safety Inspection</option>
+            </select>
+          </div>
+          <div id="transportDynamicFormFields">
+            <!-- Dynamically populated fields -->
+          </div>
+          <div class="alert alert-info mt-3 p-2 text-sm" style="background: rgba(37,99,235,0.06); border-left: 3px solid #2563eb;">
+            <i class="fa-solid fa-shield-halved text-primary mr-1"></i> Formally sanctioned under AP Motor Vehicles Department (MVD) &amp; School Safety Regulations.
+          </div>
+          <div class="modal-footer px-0 pb-0 pt-3">
+            <button type="button" class="btn btn-secondary" onclick="portalApp.closeModal('newTransportActionModal')">Cancel</button>
+            <button type="submit" class="btn btn-primary"><i class="fa-solid fa-check"></i> Save Record</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. View Transport Dossier Modal -->
+  <div class="modal-backdrop" id="viewTransportDossierModal">
+    <div class="portal-modal fee-modal-dialog" style="max-width: 680px;">
+      <div class="modal-header">
+        <h3><i class="fa-solid fa-file-circle-check text-primary"></i> Transport &amp; Facility Official Dossier</h3>
+        <button class="modal-close-x" onclick="portalApp.closeModal('viewTransportDossierModal')" title="Close" aria-label="Close">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <div class="modal-body" id="transportDossierModalBody" style="max-height: calc(85vh - 130px); overflow-y: auto;">
+        <!-- Injected via portal.js -->
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" onclick="portalApp.closeModal('viewTransportDossierModal')">Close</button>
+        <button type="button" class="btn btn-primary" onclick="window.print()"><i class="fa-solid fa-print"></i> Print Official Record</button>
       </div>
     </div>
   </div>

@@ -33,6 +33,7 @@ const portalApp = (function () {
       appointments: 'overview',
       communication: 'announcements',
       events: 'calendar',
+      transport: 'routes',
       reports: 'academic',
       settings: 'profile'
     },
@@ -3082,7 +3083,21 @@ const FEE_CATEGORY_AUDIT_DATA = [
       } else if (subKey === 'reports') {
         renderEventReportsTable();
       }
-        } else if (moduleKey === 'leaves' || moduleKey === 'leave') {
+            } else if (moduleKey === 'transport') {
+      if (subKey === 'routes' || subKey === 'stops') {
+        renderTransportRoutesTable();
+      } else if (subKey === 'vehicles' || subKey === 'fleet') {
+        renderTransportVehiclesTable();
+      } else if (subKey === 'drivers' || subKey === 'attendants') {
+        renderTransportDriversTable();
+      } else if (subKey === 'allocations' || subKey === 'transport-allocation' || subKey === 'allocation') {
+        renderTransportAllocationsTable();
+      } else if (subKey === 'maintenance' || subKey === 'facilities') {
+        renderTransportMaintenanceTable();
+      } else if (subKey === 'safety' || subKey === 'inspections') {
+        renderTransportSafetyTable();
+      }
+    } else if (moduleKey === 'leaves' || moduleKey === 'leave') {
       if (subKey === 'faculty' || subKey === 'staff' || subKey === 'faculty-leave-review') {
         renderVPLeaves(state.facultyLeaves);
       } else if (subKey === 'students' || subKey === 'student-leave-requests') {
@@ -11349,6 +11364,1802 @@ const FEE_CATEGORY_AUDIT_DATA = [
     `;
 
     openModal('viewEventDetailsModal');
+  }
+
+  
+  // =========================================================================
+  // MODULE 14: TRANSPORT & FACILITIES DATASETS & ENGINES
+  // AP Motor Vehicles Department (MVD) & School Bus Transit Safety Norms
+  // Logistics In-charge: Sri P. Appa Rao (NT-107), Executive Sanction: Principal Smt. Gorle Varalakshmi
+  // =========================================================================
+
+  const TRANSPORT_ROUTES_DATA = [
+    {
+      routeNo: 'Route 1',
+      routeName: 'RTC Bus Complex Line',
+      vehicleType: 'School Bus (32-Seater)',
+      busNo: 'Bus #1',
+      vehicleReg: 'AP-07-TX-1041',
+      driverName: 'Sri K. Venkateswarlu',
+      driverPhone: '94401 12233',
+      attendantName: 'Smt. K. Hymavathi',
+      stops: [
+        { name: 'RTC Bus Complex Gate', time: '07:30 AM', students: 8 },
+        { name: 'Old Guntur Centre', time: '07:42 AM', students: 7 },
+        { name: 'Hindu College Junction', time: '07:55 AM', students: 6 },
+        { name: 'Vegetable Market Yard', time: '08:05 AM', students: 7 },
+        { name: 'Sri Vidya Campus Gate', time: '08:15 AM', students: 0 }
+      ],
+      timingMorning: '07:30 AM - 08:15 AM',
+      timingEvening: '04:30 PM - 05:15 PM',
+      tripDuration: '45 Mins (14.2 km)',
+      assignedStudents: 28,
+      capacity: 32,
+      gpsStatus: 'Live GPS: On Schedule',
+      gpsCoords: '16.3067° N, 80.4365° E',
+      statusClass: 'badge-success'
+    },
+    {
+      routeNo: 'Route 2',
+      routeName: 'Arundelpet - Brodipet Corridor',
+      vehicleType: 'School Bus (36-Seater)',
+      busNo: 'Bus #2',
+      vehicleReg: 'AP-07-TX-1042',
+      driverName: 'Sri M. Rambabu',
+      driverPhone: '98482 23344',
+      attendantName: 'Smt. P. Lakshmi',
+      stops: [
+        { name: 'Arundelpet 5th Line', time: '07:35 AM', students: 10 },
+        { name: 'Brodipet 4/2 Corner', time: '07:48 AM', students: 9 },
+        { name: 'District Collectorate Office', time: '08:00 AM', students: 8 },
+        { name: 'Kanna Vari Thota Arch', time: '08:10 AM', students: 7 },
+        { name: 'Sri Vidya Campus Gate', time: '08:20 AM', students: 0 }
+      ],
+      timingMorning: '07:35 AM - 08:20 AM',
+      timingEvening: '04:30 PM - 05:20 PM',
+      tripDuration: '45 Mins (12.8 km)',
+      assignedStudents: 34,
+      capacity: 36,
+      gpsStatus: 'Live GPS: On Schedule',
+      gpsCoords: '16.3021° N, 80.4410° E',
+      statusClass: 'badge-success'
+    },
+    {
+      routeNo: 'Route 3',
+      routeName: 'Pattabhipuram - Vidyanagar Express',
+      vehicleType: 'School Bus (32-Seater)',
+      busNo: 'Bus #3',
+      vehicleReg: 'AP-07-TX-1043',
+      driverName: 'Sri S. Prasad',
+      driverPhone: '99883 34455',
+      attendantName: 'Smt. B. Padmavathi',
+      stops: [
+        { name: 'Pattabhipuram Main Road', time: '07:35 AM', students: 9 },
+        { name: 'Gujjanagundla Circle', time: '07:48 AM', students: 8 },
+        { name: 'Vidyanagar 2nd Lane', time: '08:02 AM', students: 8 },
+        { name: 'Koritepadu SBI Branch', time: '08:12 AM', students: 6 },
+        { name: 'Sri Vidya Campus Gate', time: '08:22 AM', students: 0 }
+      ],
+      timingMorning: '07:35 AM - 08:22 AM',
+      timingEvening: '04:30 PM - 05:18 PM',
+      tripDuration: '47 Mins (15.5 km)',
+      assignedStudents: 31,
+      capacity: 32,
+      gpsStatus: 'Live GPS: On Schedule',
+      gpsCoords: '16.3125° N, 80.4280° E',
+      statusClass: 'badge-success'
+    },
+    {
+      routeNo: 'Route 4',
+      routeName: 'Railway Station - Kothapet Circuit',
+      vehicleType: 'School Bus (28-Seater)',
+      busNo: 'Bus #4',
+      vehicleReg: 'AP-07-TX-1044',
+      driverName: 'Sri B. Srinivasa Rao',
+      driverPhone: '94404 45566',
+      attendantName: 'Smt. CH. Mary Kumari',
+      stops: [
+        { name: 'Guntur Railway Station East', time: '07:38 AM', students: 8 },
+        { name: 'Sambasiva Pet Clock Tower', time: '07:50 AM', students: 7 },
+        { name: 'Kothapet Police Station', time: '08:02 AM', students: 6 },
+        { name: 'Nehru Nagar Park', time: '08:10 AM', students: 5 },
+        { name: 'Sri Vidya Campus Gate', time: '08:18 AM', students: 0 }
+      ],
+      timingMorning: '07:38 AM - 08:18 AM',
+      timingEvening: '04:30 PM - 05:12 PM',
+      tripDuration: '40 Mins (11.0 km)',
+      assignedStudents: 26,
+      capacity: 28,
+      gpsStatus: 'Live GPS: On Schedule',
+      gpsCoords: '16.2990° N, 80.4485° E',
+      statusClass: 'badge-success'
+    },
+    {
+      routeNo: 'Route 5',
+      routeName: 'Lakshmipuram - Ring Road Loop',
+      vehicleType: 'School Bus (36-Seater)',
+      busNo: 'Bus #5',
+      vehicleReg: 'AP-07-TX-1045',
+      driverName: 'Sri G. Sambaiah',
+      driverPhone: '98485 56677',
+      attendantName: 'Smt. D. Ramanamma',
+      stops: [
+        { name: 'Lakshmipuram 4th Cross', time: '07:32 AM', students: 9 },
+        { name: 'SVN Colony Water Tank', time: '07:46 AM', students: 8 },
+        { name: 'Inner Ring Road Junction', time: '08:00 AM', students: 8 },
+        { name: 'Brindavan Gardens 1st Line', time: '08:12 AM', students: 7 },
+        { name: 'Sri Vidya Campus Gate', time: '08:25 AM', students: 0 }
+      ],
+      timingMorning: '07:32 AM - 08:25 AM',
+      timingEvening: '04:30 PM - 05:25 PM',
+      tripDuration: '53 Mins (16.8 km)',
+      assignedStudents: 32,
+      capacity: 36,
+      gpsStatus: 'Live GPS: On Schedule',
+      gpsCoords: '16.3210° N, 80.4150° E',
+      statusClass: 'badge-success'
+    },
+    {
+      routeNo: 'Route 6',
+      routeName: 'Syamala Nagar - Amaravathi Road',
+      vehicleType: 'Force Traveller Van (32-Seater)',
+      busNo: 'Van #6',
+      vehicleReg: 'AP-07-TX-1046',
+      driverName: 'Sri V. Venkataiah',
+      driverPhone: '99886 67788',
+      attendantName: 'Smt. M. Anjamma',
+      stops: [
+        { name: 'Syamala Nagar Rythu Bazaar', time: '07:36 AM', students: 8 },
+        { name: 'Chandramouli Nagar 2nd Line', time: '07:50 AM', students: 8 },
+        { name: 'Amaravathi Road Flyover End', time: '08:04 AM', students: 7 },
+        { name: 'Nallapadu Road Junction', time: '08:12 AM', students: 6 },
+        { name: 'Sri Vidya Campus Gate', time: '08:20 AM', students: 0 }
+      ],
+      timingMorning: '07:36 AM - 08:20 AM',
+      timingEvening: '04:30 PM - 05:16 PM',
+      tripDuration: '44 Mins (13.6 km)',
+      assignedStudents: 29,
+      capacity: 32,
+      gpsStatus: 'Live GPS: On Schedule',
+      gpsCoords: '16.2950° N, 80.4215° E',
+      statusClass: 'badge-success'
+    }
+  ];
+
+  const TRANSPORT_VEHICLES_DATA = [
+    {
+      regNo: 'AP-07-TX-1041',
+      fleetCode: 'BUS-01',
+      makeModel: 'Tata Starbus Ultra 32-Seater (BS-VI)',
+      vehicleType: 'School Bus',
+      year: '2022',
+      capacity: '32 Seater',
+      allocatedCount: 28,
+      freeSeats: 4,
+      occupancyPct: '87.5%',
+      insuranceCompany: 'United India Insurance Co.',
+      insurancePolicy: 'UIIC-2026-889101',
+      insuranceExpiry: '31 Mar 2027',
+      insuranceType: 'Comprehensive + Passenger Cover',
+      insuranceStatus: 'Active',
+      rtaFitnessCert: 'FC-AP07-9921',
+      fitnessExpiry: '15 Jun 2027',
+      speedGovernorCert: 'SG-MVD-8834 (40 km/h Capped)',
+      pucCert: 'PUC-2026-11894 (Valid)',
+      permits: 'AP State School Transport Special Permit',
+      maintenanceStatus: 'Operational',
+      lastServiceDate: '05 Oct 2026',
+      nextServiceDue: '05 Jan 2027',
+      assignedRoute: 'Route 1 - RTC Bus Complex Line',
+      driverInCharge: 'Sri K. Venkateswarlu'
+    },
+    {
+      regNo: 'AP-07-TX-1042',
+      fleetCode: 'BUS-02',
+      makeModel: 'Tata Starbus Skool 36-Seater (BS-VI)',
+      vehicleType: 'School Bus',
+      year: '2021',
+      capacity: '36 Seater',
+      allocatedCount: 34,
+      freeSeats: 2,
+      occupancyPct: '94.4%',
+      insuranceCompany: 'New India Assurance Co.',
+      insurancePolicy: 'NIA-2026-443902',
+      insuranceExpiry: '28 Feb 2027',
+      insuranceType: 'Comprehensive + Passenger Cover',
+      insuranceStatus: 'Active',
+      rtaFitnessCert: 'FC-AP07-9922',
+      fitnessExpiry: '20 May 2027',
+      speedGovernorCert: 'SG-MVD-8835 (40 km/h Capped)',
+      pucCert: 'PUC-2026-11895 (Valid)',
+      permits: 'AP State School Transport Special Permit',
+      maintenanceStatus: 'Operational',
+      lastServiceDate: '20 Oct 2026',
+      nextServiceDue: '20 Jan 2027',
+      assignedRoute: 'Route 2 - Arundelpet - Brodipet Corridor',
+      driverInCharge: 'Sri M. Rambabu'
+    },
+    {
+      regNo: 'AP-07-TX-1043',
+      fleetCode: 'BUS-03',
+      makeModel: 'Ashok Leyland Sunshine 32-Seater',
+      vehicleType: 'School Bus',
+      year: '2023',
+      capacity: '32 Seater',
+      allocatedCount: 31,
+      freeSeats: 1,
+      occupancyPct: '96.8%',
+      insuranceCompany: 'United India Insurance Co.',
+      insurancePolicy: 'UIIC-2026-889103',
+      insuranceExpiry: '15 Apr 2027',
+      insuranceType: 'Comprehensive + Passenger Cover',
+      insuranceStatus: 'Active',
+      rtaFitnessCert: 'FC-AP07-9923',
+      fitnessExpiry: '10 Aug 2027',
+      speedGovernorCert: 'SG-MVD-8836 (40 km/h Capped)',
+      pucCert: 'PUC-2026-11896 (Valid)',
+      permits: 'AP State School Transport Special Permit',
+      maintenanceStatus: 'Operational',
+      lastServiceDate: '12 Sep 2026',
+      nextServiceDue: '12 Dec 2026',
+      assignedRoute: 'Route 3 - Pattabhipuram - Vidyanagar Express',
+      driverInCharge: 'Sri S. Prasad'
+    },
+    {
+      regNo: 'AP-07-TX-1044',
+      fleetCode: 'BUS-04',
+      makeModel: 'Eicher Starline 28-Seater (BS-VI)',
+      vehicleType: 'School Bus',
+      year: '2020',
+      capacity: '28 Seater',
+      allocatedCount: 26,
+      freeSeats: 2,
+      occupancyPct: '92.8%',
+      insuranceCompany: 'Oriental Insurance Co.',
+      insurancePolicy: 'OIC-2026-551204',
+      insuranceExpiry: '30 Apr 2027',
+      insuranceType: 'Comprehensive + Passenger Cover',
+      insuranceStatus: 'Active',
+      rtaFitnessCert: 'FC-AP07-9924',
+      fitnessExpiry: '18 Jul 2027',
+      speedGovernorCert: 'SG-MVD-8837 (40 km/h Capped)',
+      pucCert: 'PUC-2026-11897 (Valid)',
+      permits: 'AP State School Transport Special Permit',
+      maintenanceStatus: 'Operational',
+      lastServiceDate: '28 Sep 2026',
+      nextServiceDue: '28 Dec 2026',
+      assignedRoute: 'Route 4 - Railway Station - Kothapet Circuit',
+      driverInCharge: 'Sri B. Srinivasa Rao'
+    },
+    {
+      regNo: 'AP-07-TX-1045',
+      fleetCode: 'BUS-05',
+      makeModel: 'Tata Starbus Skool 36-Seater',
+      vehicleType: 'School Bus',
+      year: '2022',
+      capacity: '36 Seater',
+      allocatedCount: 32,
+      freeSeats: 4,
+      occupancyPct: '88.9%',
+      insuranceCompany: 'United India Insurance Co.',
+      insurancePolicy: 'UIIC-2026-889105',
+      insuranceExpiry: '31 May 2027',
+      insuranceType: 'Comprehensive + Passenger Cover',
+      insuranceStatus: 'Active',
+      rtaFitnessCert: 'FC-AP07-9925',
+      fitnessExpiry: '24 Jun 2027',
+      speedGovernorCert: 'SG-MVD-8838 (40 km/h Capped)',
+      pucCert: 'PUC-2026-11898 (Valid)',
+      permits: 'AP State School Transport Special Permit',
+      maintenanceStatus: 'Operational',
+      lastServiceDate: '08 Oct 2026',
+      nextServiceDue: '08 Jan 2027',
+      assignedRoute: 'Route 5 - Lakshmipuram - Ring Road Loop',
+      driverInCharge: 'Sri G. Sambaiah'
+    },
+    {
+      regNo: 'AP-07-TX-1046',
+      fleetCode: 'VAN-06',
+      makeModel: 'Force Traveller School Bus 32-Seater',
+      vehicleType: 'Force Traveller',
+      year: '2021',
+      capacity: '32 Seater',
+      allocatedCount: 29,
+      freeSeats: 3,
+      occupancyPct: '90.6%',
+      insuranceCompany: 'New India Assurance Co.',
+      insurancePolicy: 'NIA-2026-443906',
+      insuranceExpiry: '31 Mar 2027',
+      insuranceType: 'Comprehensive + Passenger Cover',
+      insuranceStatus: 'Active',
+      rtaFitnessCert: 'FC-AP07-9926',
+      fitnessExpiry: '14 Sep 2027',
+      speedGovernorCert: 'SG-MVD-8839 (40 km/h Capped)',
+      pucCert: 'PUC-2026-11899 (Valid)',
+      permits: 'AP State School Transport Special Permit',
+      maintenanceStatus: 'Operational',
+      lastServiceDate: '15 Oct 2026',
+      nextServiceDue: '15 Jan 2027',
+      assignedRoute: 'Route 6 - Syamala Nagar - Amaravathi Road',
+      driverInCharge: 'Sri V. Venkataiah'
+    }
+  ];
+
+  const TRANSPORT_DRIVERS_DATA = [
+    {
+      id: 'TR-DRV-01',
+      name: 'Sri K. Venkateswarlu',
+      role: 'Driver',
+      roleTitle: 'Heavy Vehicle Commercial Driver',
+      phone: '94401 12233',
+      licenseNo: 'AP-07-2008-0012498',
+      licenseType: 'HMV / Transport (Valid till 2029)',
+      assignedVehicle: 'AP-07-TX-1041 (Bus #1)',
+      assignedRoute: 'Route 1 - RTC Complex Line',
+      policeVerification: 'Cleared (PVR #AP-PVR-2026-441)',
+      medicalCheckup: 'Fit (Govt GGH Guntur, 18 Aug 2026)',
+      eyeTest: '6/6 Normal Vision Cleared',
+      dutyStatus: 'On Duty',
+      shift: '06:45 AM - 05:15 PM',
+      experience: '14 Years Driving Experience',
+      emergencyContact: '98480 11221 (Son - Ramesh)'
+    },
+    {
+      id: 'TR-ATT-01',
+      name: 'Smt. K. Hymavathi',
+      role: 'Attendant',
+      roleTitle: 'Lady Bus Attendant & Child Safeguard',
+      phone: '99490 22114',
+      licenseNo: 'N/A (Trained First Aider)',
+      licenseType: 'AP Child Transit Safety Certified',
+      assignedVehicle: 'AP-07-TX-1041 (Bus #1)',
+      assignedRoute: 'Route 1 - RTC Complex Line',
+      policeVerification: 'Cleared (PVR #GNT-2026-899)',
+      medicalCheckup: 'Fit (18 Aug 2026)',
+      eyeTest: 'Normal Vision Cleared',
+      dutyStatus: 'On Duty',
+      shift: '06:50 AM - 05:15 PM',
+      experience: '7 Years Campus Service',
+      emergencyContact: '99881 22334 (Husband - K. Subba Rao)'
+    },
+    {
+      id: 'TR-DRV-02',
+      name: 'Sri M. Rambabu',
+      role: 'Driver',
+      roleTitle: 'Heavy Vehicle Commercial Driver',
+      phone: '98482 23344',
+      licenseNo: 'AP-07-2010-0044512',
+      licenseType: 'HMV / Transport (Valid till 2030)',
+      assignedVehicle: 'AP-07-TX-1042 (Bus #2)',
+      assignedRoute: 'Route 2 - Arundelpet - Brodipet Corridor',
+      policeVerification: 'Cleared (PVR #AP-PVR-2026-442)',
+      medicalCheckup: 'Fit (Govt GGH Guntur, 19 Aug 2026)',
+      eyeTest: '6/6 Normal Vision Cleared',
+      dutyStatus: 'On Duty',
+      shift: '06:45 AM - 05:20 PM',
+      experience: '12 Years Driving Experience',
+      emergencyContact: '98482 99881 (Wife - Lakshmi)'
+    },
+    {
+      id: 'TR-ATT-02',
+      name: 'Smt. P. Lakshmi',
+      role: 'Attendant',
+      roleTitle: 'Lady Bus Attendant & Child Safeguard',
+      phone: '98661 33445',
+      licenseNo: 'N/A (Trained First Aider)',
+      licenseType: 'AP Child Transit Safety Certified',
+      assignedVehicle: 'AP-07-TX-1042 (Bus #2)',
+      assignedRoute: 'Route 2 - Arundelpet - Brodipet Corridor',
+      policeVerification: 'Cleared (PVR #GNT-2026-900)',
+      medicalCheckup: 'Fit (19 Aug 2026)',
+      eyeTest: 'Normal Vision Cleared',
+      dutyStatus: 'On Duty',
+      shift: '06:50 AM - 05:20 PM',
+      experience: '5 Years Campus Service',
+      emergencyContact: '94402 11992 (Brother - P. Narayana)'
+    },
+    {
+      id: 'TR-DRV-03',
+      name: 'Sri S. Prasad',
+      role: 'Driver',
+      roleTitle: 'Heavy Vehicle Commercial Driver',
+      phone: '99883 34455',
+      licenseNo: 'AP-07-2007-0099812',
+      licenseType: 'HMV / Transport (Valid till 2028)',
+      assignedVehicle: 'AP-07-TX-1043 (Bus #3)',
+      assignedRoute: 'Route 3 - Pattabhipuram - Vidyanagar Express',
+      policeVerification: 'Cleared (PVR #AP-PVR-2026-443)',
+      medicalCheckup: 'Fit (Govt GGH Guntur, 20 Aug 2026)',
+      eyeTest: '6/6 Normal Vision Cleared',
+      dutyStatus: 'On Duty',
+      shift: '06:45 AM - 05:20 PM',
+      experience: '16 Years Driving Experience',
+      emergencyContact: '98483 11882 (Son - S. Venu)'
+    },
+    {
+      id: 'TR-ATT-03',
+      name: 'Smt. B. Padmavathi',
+      role: 'Attendant',
+      roleTitle: 'Lady Bus Attendant & Child Safeguard',
+      phone: '91772 44556',
+      licenseNo: 'N/A (Trained First Aider)',
+      licenseType: 'AP Child Transit Safety Certified',
+      assignedVehicle: 'AP-07-TX-1043 (Bus #3)',
+      assignedRoute: 'Route 3 - Pattabhipuram - Vidyanagar Express',
+      policeVerification: 'Cleared (PVR #GNT-2026-901)',
+      medicalCheckup: 'Fit (20 Aug 2026)',
+      eyeTest: 'Normal Vision Cleared',
+      dutyStatus: 'On Duty',
+      shift: '06:50 AM - 05:20 PM',
+      experience: '6 Years Campus Service',
+      emergencyContact: '91771 99001 (Husband - B. Satyam)'
+    },
+    {
+      id: 'TR-DRV-04',
+      name: 'Sri B. Srinivasa Rao',
+      role: 'Driver',
+      roleTitle: 'Heavy Vehicle Commercial Driver',
+      phone: '94404 45566',
+      licenseNo: 'AP-07-2012-0055123',
+      licenseType: 'HMV / Transport (Valid till 2031)',
+      assignedVehicle: 'AP-07-TX-1044 (Bus #4)',
+      assignedRoute: 'Route 4 - Railway Station - Kothapet Circuit',
+      policeVerification: 'Cleared (PVR #AP-PVR-2026-444)',
+      medicalCheckup: 'Fit (Govt GGH Guntur, 21 Aug 2026)',
+      eyeTest: '6/6 Normal Vision Cleared',
+      dutyStatus: 'On Duty',
+      shift: '06:45 AM - 05:15 PM',
+      experience: '11 Years Driving Experience',
+      emergencyContact: '94404 11223 (Brother - B. Mohan)'
+    },
+    {
+      id: 'TR-ATT-04',
+      name: 'Smt. CH. Mary Kumari',
+      role: 'Attendant',
+      roleTitle: 'Lady Bus Attendant & Child Safeguard',
+      phone: '98492 55667',
+      licenseNo: 'N/A (Trained First Aider)',
+      licenseType: 'AP Child Transit Safety Certified',
+      assignedVehicle: 'AP-07-TX-1044 (Bus #4)',
+      assignedRoute: 'Route 4 - Railway Station - Kothapet Circuit',
+      policeVerification: 'Cleared (PVR #GNT-2026-902)',
+      medicalCheckup: 'Fit (21 Aug 2026)',
+      eyeTest: 'Normal Vision Cleared',
+      dutyStatus: 'On Duty',
+      shift: '06:50 AM - 05:15 PM',
+      experience: '8 Years Campus Service',
+      emergencyContact: '98491 88772 (Husband - CH. David)'
+    },
+    {
+      id: 'TR-DRV-05',
+      name: 'Sri G. Sambaiah',
+      role: 'Driver',
+      roleTitle: 'Heavy Vehicle Commercial Driver',
+      phone: '98485 56677',
+      licenseNo: 'AP-07-2009-0077819',
+      licenseType: 'HMV / Transport (Valid till 2029)',
+      assignedVehicle: 'AP-07-TX-1045 (Bus #5)',
+      assignedRoute: 'Route 5 - Lakshmipuram - Ring Road Loop',
+      policeVerification: 'Cleared (PVR #AP-PVR-2026-445)',
+      medicalCheckup: 'Fit (Govt GGH Guntur, 22 Aug 2026)',
+      eyeTest: '6/6 Normal Vision Cleared',
+      dutyStatus: 'On Duty',
+      shift: '06:45 AM - 05:25 PM',
+      experience: '13 Years Driving Experience',
+      emergencyContact: '98485 22119 (Wife - Ramanamma)'
+    },
+    {
+      id: 'TR-ATT-05',
+      name: 'Smt. D. Ramanamma',
+      role: 'Attendant',
+      roleTitle: 'Lady Bus Attendant & Child Safeguard',
+      phone: '98662 66778',
+      licenseNo: 'N/A (Trained First Aider)',
+      licenseType: 'AP Child Transit Safety Certified',
+      assignedVehicle: 'AP-07-TX-1045 (Bus #5)',
+      assignedRoute: 'Route 5 - Lakshmipuram - Ring Road Loop',
+      policeVerification: 'Cleared (PVR #GNT-2026-903)',
+      medicalCheckup: 'Fit (22 Aug 2026)',
+      eyeTest: 'Normal Vision Cleared',
+      dutyStatus: 'On Duty',
+      shift: '06:50 AM - 05:25 PM',
+      experience: '9 Years Campus Service',
+      emergencyContact: '98661 11229 (Husband - D. Venkanna)'
+    },
+    {
+      id: 'TR-DRV-06',
+      name: 'Sri V. Venkataiah',
+      role: 'Driver',
+      roleTitle: 'Heavy Vehicle Commercial Driver',
+      phone: '99886 67788',
+      licenseNo: 'AP-07-2011-0022998',
+      licenseType: 'HMV / Transport (Valid till 2031)',
+      assignedVehicle: 'AP-07-TX-1046 (Van #6)',
+      assignedRoute: 'Route 6 - Syamala Nagar - Amaravathi Road',
+      policeVerification: 'Cleared (PVR #AP-PVR-2026-446)',
+      medicalCheckup: 'Fit (Govt GGH Guntur, 23 Aug 2026)',
+      eyeTest: '6/6 Normal Vision Cleared',
+      dutyStatus: 'On Duty',
+      shift: '06:45 AM - 05:20 PM',
+      experience: '12 Years Driving Experience',
+      emergencyContact: '99885 33441 (Brother - V. Koteswar Rao)'
+    },
+    {
+      id: 'TR-ATT-06',
+      name: 'Smt. M. Anjamma',
+      role: 'Attendant',
+      roleTitle: 'Lady Bus Attendant & Child Safeguard',
+      phone: '91773 77889',
+      licenseNo: 'N/A (Trained First Aider)',
+      licenseType: 'AP Child Transit Safety Certified',
+      assignedVehicle: 'AP-07-TX-1046 (Van #6)',
+      assignedRoute: 'Route 6 - Syamala Nagar - Amaravathi Road',
+      policeVerification: 'Cleared (PVR #GNT-2026-904)',
+      medicalCheckup: 'Fit (23 Aug 2026)',
+      eyeTest: 'Normal Vision Cleared',
+      dutyStatus: 'On Duty',
+      shift: '06:50 AM - 05:20 PM',
+      experience: '6 Years Campus Service',
+      emergencyContact: '91772 11990 (Husband - M. Apparao)'
+    }
+  ];
+
+  const TRANSPORT_ALLOCATIONS_DATA = [
+    {
+      admNo: 'SV-0045',
+      name: 'M. Jagannath',
+      className: 'Class X-A',
+      routeNo: 'Route 1',
+      routeName: 'RTC Complex Line',
+      busNo: 'Bus #1 (AP-07-TX-1041)',
+      stopName: 'Old Guntur Centre',
+      pickupTime: '07:42 AM',
+      dropTime: '04:55 PM',
+      seatNo: 'Seat 14',
+      feeStatus: 'Paid',
+      feeAmount: '₹6,000 / Term',
+      feeReceipt: 'TR-REC-8901',
+      parentName: 'M. Venkata Ramana',
+      parentPhone: '98480 33445',
+      passNumber: 'BP-2026-045',
+      rfidStatus: 'Active'
+    },
+    {
+      admNo: 'SV-0112',
+      name: 'B. Varun',
+      className: 'Class IX-A',
+      routeNo: 'Route 2',
+      routeName: 'Arundelpet - Brodipet Corridor',
+      busNo: 'Bus #2 (AP-07-TX-1042)',
+      stopName: 'Brodipet 4/2 Corner',
+      pickupTime: '07:48 AM',
+      dropTime: '04:52 PM',
+      seatNo: 'Seat 08',
+      feeStatus: 'Paid',
+      feeAmount: '₹6,000 / Term',
+      feeReceipt: 'TR-REC-8902',
+      parentName: 'B. Srinivasa Rao',
+      parentPhone: '98480 44556',
+      passNumber: 'BP-2026-112',
+      rfidStatus: 'Active'
+    },
+    {
+      admNo: 'SV-0210',
+      name: 'K. Sai Tharun',
+      className: 'Class VIII-A',
+      routeNo: 'Route 3',
+      routeName: 'Pattabhipuram - Vidyanagar',
+      busNo: 'Bus #3 (AP-07-TX-1043)',
+      stopName: 'Gujjanagundla Circle',
+      pickupTime: '07:48 AM',
+      dropTime: '04:50 PM',
+      seatNo: 'Seat 19',
+      feeStatus: 'Paid',
+      feeAmount: '₹6,000 / Term',
+      feeReceipt: 'TR-REC-8903',
+      parentName: 'K. Narayana',
+      parentPhone: '98480 55667',
+      passNumber: 'BP-2026-210',
+      rfidStatus: 'Active'
+    },
+    {
+      admNo: 'SV-0345',
+      name: 'G. Harsha Vardhan',
+      className: 'Class VII-A',
+      routeNo: 'Route 4',
+      routeName: 'Railway Station - Kothapet',
+      busNo: 'Bus #4 (AP-07-TX-1044)',
+      stopName: 'Sambasiva Pet Clock Tower',
+      pickupTime: '07:50 AM',
+      dropTime: '04:48 PM',
+      seatNo: 'Seat 05',
+      feeStatus: 'Overdue',
+      feeAmount: '₹6,000 (Overdue)',
+      feeReceipt: 'Notice Sent (25d)',
+      parentName: 'G. Appa Rao',
+      parentPhone: '98480 66778',
+      passNumber: 'BP-2026-345',
+      rfidStatus: 'Payment Reminder'
+    },
+    {
+      admNo: 'SV-0489',
+      name: 'CH. Charitha',
+      className: 'Class IV-A',
+      routeNo: 'Route 5',
+      routeName: 'Lakshmipuram - Ring Road',
+      busNo: 'Bus #5 (AP-07-TX-1045)',
+      stopName: 'SVN Colony Water Tank',
+      pickupTime: '07:46 AM',
+      dropTime: '05:00 PM',
+      seatNo: 'Seat 03 (Primary Reserved)',
+      feeStatus: 'Paid',
+      feeAmount: '₹6,000 / Term',
+      feeReceipt: 'TR-REC-8905',
+      parentName: 'CH. Mohan',
+      parentPhone: '98480 77889',
+      passNumber: 'BP-2026-489',
+      rfidStatus: 'Active'
+    },
+    {
+      admNo: 'SV-0062',
+      name: 'P. Kiran Kumar',
+      className: 'Class X-B',
+      routeNo: 'Route 1',
+      routeName: 'RTC Complex Line',
+      busNo: 'Bus #1 (AP-07-TX-1041)',
+      stopName: 'Hindu College Junction',
+      pickupTime: '07:55 AM',
+      dropTime: '04:45 PM',
+      seatNo: 'Seat 22',
+      feeStatus: 'Pending',
+      feeAmount: '₹3,000 (Partial Due)',
+      feeReceipt: 'TR-REC-8840 (Inst 1)',
+      parentName: 'P. Simhachalam',
+      parentPhone: '94401 22334',
+      passNumber: 'BP-2026-062',
+      rfidStatus: 'Grace Period'
+    },
+    {
+      admNo: 'SV-0158',
+      name: 'T. Akhil',
+      className: 'Class IX-B',
+      routeNo: 'Route 2',
+      routeName: 'Arundelpet - Brodipet',
+      busNo: 'Bus #2 (AP-07-TX-1042)',
+      stopName: 'District Collectorate Office',
+      pickupTime: '08:00 AM',
+      dropTime: '04:42 PM',
+      seatNo: 'Seat 11',
+      feeStatus: 'Overdue',
+      feeAmount: '₹6,000 (Critical Overdue)',
+      feeReceipt: 'VP Notice #54',
+      parentName: 'T. Govinda Rao',
+      parentPhone: '98492 33445',
+      passNumber: 'BP-2026-158',
+      rfidStatus: 'Review Due'
+    },
+    {
+      admNo: 'SV-0233',
+      name: 'R. Sai Teja',
+      className: 'Class VIII-B',
+      routeNo: 'Route 3',
+      routeName: 'Pattabhipuram - Vidyanagar',
+      busNo: 'Bus #3 (AP-07-TX-1043)',
+      stopName: 'Vidyanagar 2nd Lane',
+      pickupTime: '08:02 AM',
+      dropTime: '04:40 PM',
+      seatNo: 'Seat 16',
+      feeStatus: 'Paid',
+      feeAmount: '₹6,000 / Term',
+      feeReceipt: 'TR-REC-8908',
+      parentName: 'R. Satyanarayana',
+      parentPhone: '91773 44556',
+      passNumber: 'BP-2026-233',
+      rfidStatus: 'Active'
+    },
+    {
+      admNo: 'SV-0298',
+      name: 'S. Harini',
+      className: 'Class VI-A',
+      routeNo: 'Route 6',
+      routeName: 'Syamala Nagar Line',
+      busNo: 'Van #6 (AP-07-TX-1046)',
+      stopName: 'Chandramouli Nagar 2nd Line',
+      pickupTime: '07:50 AM',
+      dropTime: '04:55 PM',
+      seatNo: 'Seat 07',
+      feeStatus: 'Paid',
+      feeAmount: '₹6,000 / Term',
+      feeReceipt: 'TR-REC-8909',
+      parentName: 'S. Venkatesh',
+      parentPhone: '89781 55667',
+      passNumber: 'BP-2026-298',
+      rfidStatus: 'Active'
+    },
+    {
+      admNo: 'SV-0381',
+      name: 'M. Dinesh Kumar',
+      className: 'Class V-A',
+      routeNo: 'Route 5',
+      routeName: 'Lakshmipuram - Ring Road',
+      busNo: 'Bus #5 (AP-07-TX-1045)',
+      stopName: 'Inner Ring Road Junction',
+      pickupTime: '08:00 AM',
+      dropTime: '04:45 PM',
+      seatNo: 'Seat 12',
+      feeStatus: 'Paid',
+      feeAmount: '₹6,000 / Term',
+      feeReceipt: 'TR-REC-8910',
+      parentName: 'M. Jagadeesh',
+      parentPhone: '70325 66778',
+      passNumber: 'BP-2026-381',
+      rfidStatus: 'Active'
+    },
+    {
+      admNo: 'SV-0412',
+      name: 'K. Hemanth',
+      className: 'Class III-A',
+      routeNo: 'Route 4',
+      routeName: 'Railway Station - Kothapet',
+      busNo: 'Bus #4 (AP-07-TX-1044)',
+      stopName: 'Kothapet Police Station',
+      pickupTime: '08:02 AM',
+      dropTime: '04:40 PM',
+      seatNo: 'Seat 02 (Primary Reserved)',
+      feeStatus: 'Pending',
+      feeAmount: '₹2,500 (Balance Due)',
+      feeReceipt: 'SMS Reminder Sent',
+      parentName: 'K. Nageswara Rao',
+      parentPhone: '99490 77889',
+      passNumber: 'BP-2026-412',
+      rfidStatus: 'Active'
+    },
+    {
+      admNo: 'SV-0199',
+      name: 'D. Bhavani',
+      className: 'Class VII-B',
+      routeNo: 'Route 6',
+      routeName: 'Syamala Nagar Line',
+      busNo: 'Van #6 (AP-07-TX-1046)',
+      stopName: 'Amaravathi Road Flyover End',
+      pickupTime: '08:04 AM',
+      dropTime: '04:42 PM',
+      seatNo: 'Seat 15',
+      feeStatus: 'Overdue',
+      feeAmount: '₹5,800 (Overdue)',
+      feeReceipt: 'Notice #71',
+      parentName: 'D. Appala Swamy',
+      parentPhone: '98493 44556',
+      passNumber: 'BP-2026-199',
+      rfidStatus: 'Payment Due'
+    }
+  ];
+
+  const TRANSPORT_MAINTENANCE_DATA = [
+    {
+      ticketId: 'MNT-2026-081',
+      category: 'Fleet Vehicle',
+      assetName: 'School Bus AP-07-TX-1042 (Route 2)',
+      reportedIssue: 'Front brake pad wear, hydraulic fluid flush, and clutch free-play adjustment.',
+      severity: 'Medium',
+      dateReported: '18 Oct 2026',
+      reportedBy: 'Driver M. Rambabu (NT-107 verified)',
+      assignedVendor: 'Sri Lakshmi Commercial Auto Works, Autonagar, Guntur',
+      technicianContact: 'Sri P. Koteswara Rao (98481 44551)',
+      estimatedCost: '₹6,800',
+      actualCost: '₹6,800',
+      resolution: 'Replaced OEM Bosch brake pads, topped up Dot-4 fluid, road tested on highway.',
+      status: 'Resolved',
+      completedDate: '20 Oct 2026',
+      statusClass: 'badge-success'
+    },
+    {
+      ticketId: 'MNT-2026-082',
+      category: 'Campus Physical Facility',
+      assetName: 'Commercial RO Drinking Water Plant (Block-B)',
+      reportedIssue: 'Multi-stage sediment filter pressure differential high; quarterly TDS calibration check.',
+      severity: 'High',
+      dateReported: '12 Oct 2026',
+      reportedBy: 'Estate Supervisor Sri P. Appa Rao',
+      assignedVendor: 'Eureka Aqua Systems & Engineering, Brodipet, Guntur',
+      technicianContact: 'Sri B. Ravi Teja (94402 33441)',
+      estimatedCost: '₹4,500',
+      actualCost: '₹4,200',
+      resolution: 'Replaced 20-inch 5-micron pre-filters, flushed membrane, output TDS tested at 78 (ideal).',
+      status: 'Resolved',
+      completedDate: '13 Oct 2026',
+      statusClass: 'badge-success'
+    },
+    {
+      ticketId: 'MNT-2026-083',
+      category: 'Campus Physical Facility',
+      assetName: 'Computer Laboratory UPS Battery Bank (45 Terminals)',
+      reportedIssue: 'Battery bank backup duration dipped from 40 mins to 15 mins during grid load shedding.',
+      severity: 'High',
+      dateReported: '08 Oct 2026',
+      reportedBy: 'Lab Technician Sri K. Nagaraju',
+      assignedVendor: 'Exide Industrial Power Grid Solutions, Guntur',
+      technicianContact: 'Sri G. Venkatesh (99881 22990)',
+      estimatedCost: '₹14,200',
+      actualCost: '₹13,800',
+      resolution: 'Identified 3 degraded 12V 100Ah tubular batteries; replaced under warranty, load-tested 45m.',
+      status: 'Resolved',
+      completedDate: '10 Oct 2026',
+      statusClass: 'badge-success'
+    },
+    {
+      ticketId: 'MNT-2026-084',
+      category: 'Campus Physical Facility',
+      assetName: 'Campus Solar Power Inverter Grid (10 kW Rooftop)',
+      reportedIssue: 'Quarterly solar panel wash and MPPT charge controller firmware audit.',
+      severity: 'Low',
+      dateReported: '02 Oct 2026',
+      reportedBy: 'Estate Supervisor Sri P. Appa Rao',
+      assignedVendor: 'Amaravathi Green Energy & Solar Solutions, Guntur',
+      technicianContact: 'Sri K. Srinivasa Murthy (98480 66112)',
+      estimatedCost: '₹3,500',
+      actualCost: '₹3,500',
+      resolution: 'Cleaned 32 polycrystalline panels, calibrated inverter sync, average generation 42 kWh/day.',
+      status: 'Resolved',
+      completedDate: '03 Oct 2026',
+      statusClass: 'badge-success'
+    },
+    {
+      ticketId: 'MNT-2026-085',
+      category: 'Fleet Vehicle',
+      assetName: 'School Bus AP-07-TX-1045 (Route 5)',
+      reportedIssue: 'AC blower cooling duct airflow low in middle passenger rows; cabin filter cleaning.',
+      severity: 'Low',
+      dateReported: '24 Oct 2026',
+      reportedBy: 'Driver G. Sambaiah',
+      assignedVendor: 'Sri Lakshmi Commercial Auto Works, Autonagar, Guntur',
+      technicianContact: 'Sri P. Koteswara Rao (98481 44551)',
+      estimatedCost: '₹2,400',
+      actualCost: '₹2,400',
+      resolution: 'Cleaned cabin evaporator coil, cleared duct blockages, normalized blower airflow.',
+      status: 'Resolved',
+      completedDate: '25 Oct 2026',
+      statusClass: 'badge-success'
+    },
+    {
+      ticketId: 'MNT-2026-086',
+      category: 'Campus Physical Facility',
+      assetName: 'Campus Fire Hydrant Wet Riser System (Terrace Booster Pump)',
+      reportedIssue: 'Pressure gauge indicator on 2nd floor wet riser line vibrating; seal check required.',
+      severity: 'Medium',
+      dateReported: '26 Oct 2026',
+      reportedBy: 'Estate Supervisor Sri P. Appa Rao',
+      assignedVendor: 'Sri Balaji Hydraulic & Fire Safety Equipment, Guntur',
+      technicianContact: 'Sri N. Chandra Mohan (94403 88112)',
+      estimatedCost: '₹3,800',
+      actualCost: 'Estimated ₹3,800',
+      resolution: 'Gasket replacement and line pressure stabilization scheduled for Sunday maintenance window.',
+      status: 'In Progress',
+      completedDate: 'Pending 02 Nov 2026',
+      statusClass: 'badge-warning'
+    },
+    {
+      ticketId: 'MNT-2026-087',
+      category: 'Campus Physical Facility',
+      assetName: 'Chemistry Laboratory LPG Gas Burner Distribution Pipeline',
+      reportedIssue: 'Routine half-yearly gas pipeline pressure decay leak test and master shut-off valve servicing.',
+      severity: 'High',
+      dateReported: '27 Oct 2026',
+      reportedBy: 'Science Faculty Smt. K. Aruna',
+      assignedVendor: 'Apex Industrial Gas Piping & Safety Services, Vijayawada Road',
+      technicianContact: 'Sri V. Krishna Rao (98485 77123)',
+      estimatedCost: '₹5,200',
+      actualCost: 'Estimated ₹5,200',
+      resolution: 'Pressure test passed at 1.5 bar; master valve packing tightened; safety clearance renewed.',
+      status: 'Resolved',
+      completedDate: '28 Oct 2026',
+      statusClass: 'badge-success'
+    },
+    {
+      ticketId: 'MNT-2026-088',
+      category: 'Fleet Vehicle',
+      assetName: 'Force Traveller Van AP-07-TX-1046 (Route 6)',
+      reportedIssue: 'Scheduled 30,000 km general lube service (engine oil, oil filter, diesel filter, coolant top-up).',
+      severity: 'Low',
+      dateReported: '28 Oct 2026',
+      reportedBy: 'Driver V. Venkataiah',
+      assignedVendor: 'Force Authorized Service Centre, NH-16 By-pass, Guntur',
+      technicianContact: 'Sri M. Subrahmanyam (99882 44331)',
+      estimatedCost: '₹8,500',
+      actualCost: 'Estimated ₹8,500',
+      resolution: 'Vehicle scheduled for Saturday half-day workshop slot. Reliever vehicle allocated.',
+      status: 'Scheduled',
+      completedDate: 'Pending 31 Oct 2026',
+      statusClass: 'badge-primary'
+    }
+  ];
+
+  const TRANSPORT_SAFETY_DATA = [
+    {
+      inspectionId: 'INSP-2026-039',
+      date: '12 Oct 2026',
+      inspectionTitle: 'Half-Yearly Joint RTA & Police School Bus Safety Audit',
+      category: 'Fleet RTA Safety',
+      checklist: '15-Point AP MVD Norms: Speed governor, CCTV, First Aid, Emergency door, Anti-skid matting, Breathalyzer log, Yellow color code',
+      passedPoints: '15 / 15 Parameters (100%)',
+      findings: 'All 6 vehicles certified in optimal running condition. Speed governors tested at 38 km/h. First Aid kit in AP-07-TX-1043 needed antiseptic refill.',
+      correctiveActions: 'First Aid kit replenished on AP-07-TX-1043 within 24 hours (13 Oct 2026). Countersigned by VP Sri Navva Anand.',
+      inspector: 'Sri K. Prabhakar Rao, Motor Vehicle Inspector (MVI), RTA Guntur',
+      complianceRef: 'AP-RTA-GNT-CERT-4392/2026',
+      validTill: '15 Apr 2027',
+      status: 'Certified Compliant',
+      statusClass: 'badge-success'
+    },
+    {
+      inspectionId: 'INSP-2026-040',
+      date: '04 Oct 2026',
+      inspectionTitle: 'Annual Campus Fire Safety & Hydrant Pressure Verification',
+      category: 'Fire & Campus Safety',
+      checklist: 'Fire NOC guidelines: 12 ABC dry chemical extinguishers, terrace overhead static water tank (15,000L), fire alarms, hose reel pressure test',
+      passedPoints: '10 / 10 Points Cleared',
+      findings: 'Terrace booster pump delivering 3.2 kg/cm² pressure at hose reels. All 12 extinguishers within hydro-test date. Emergency escape routes unblocked.',
+      correctiveActions: 'Quarterly mock drill conducted with 500 students & staff. Clearance NOC issued.',
+      inspector: 'District Fire Officer (DFO), Guntur Division, AP Fire Services',
+      complianceRef: 'DFO-GNT-NOC-2026-118',
+      validTill: '03 Oct 2027',
+      status: 'Certified Compliant',
+      statusClass: 'badge-success'
+    },
+    {
+      inspectionId: 'INSP-2026-041',
+      date: '16 Sep 2026',
+      inspectionTitle: 'Municipal Health & Potable Drinking Water Quality Audit',
+      category: 'Hygiene & Sanitation',
+      checklist: 'Bacteriological test, chemical analysis (TDS, pH, Hardness, Fluoride, Chlorides, E. Coli absence)',
+      passedPoints: 'All 8 Chemical & Bio-Parameters Passed',
+      findings: 'Campus RO plant water tested by District Water Testing Lab. Output TDS: 78 mg/L, pH: 7.2, total coliforms: Nil. Certified 100% safe for consumption.',
+      correctiveActions: 'Daily TDS recording register verified and maintained at physical plant.',
+      inspector: 'Municipal Health Officer (MHO), Guntur Municipal Corporation (GMC)',
+      complianceRef: 'GMC-MHO-WQ-2026-778',
+      validTill: '15 Mar 2027',
+      status: 'Certified Compliant',
+      statusClass: 'badge-success'
+    },
+    {
+      inspectionId: 'INSP-2026-042',
+      date: '28 Aug 2026',
+      inspectionTitle: 'Annual Campus Structural Soundness & Stability Certification',
+      category: 'Structural Stability',
+      checklist: 'Building load tests, staircase emergency egress capacity, parapet wall height, terrace waterproofing, seismic compliance review',
+      passedPoints: 'All 6 Structural Modules Cleared',
+      findings: 'Main building (G+2 floors) in sound structural condition. No foundation settlement or structural cracks. Parapet walls conform to 1.2m safety height.',
+      correctiveActions: 'Minor hairline plaster patch on Block-A east staircase parapet completed on 02 Sep 2026.',
+      inspector: 'Executive Engineer (R&B), Quality Control Division, Guntur',
+      complianceRef: 'EE-RNB-QC-STAB-2026-401',
+      validTill: '27 Aug 2027',
+      status: 'Certified Compliant',
+      statusClass: 'badge-success'
+    },
+    {
+      inspectionId: 'INSP-2026-043',
+      date: '20 Aug 2026',
+      inspectionTitle: 'Commercial Vehicle Drivers Annual Eye & Medical Fitness Drive',
+      category: 'Fleet RTA Safety',
+      checklist: 'Snellen visual acuity, color perception test, blood pressure, reflex test, breathalyzer background screening',
+      passedPoints: '6 / 6 Drivers Certified Fit',
+      findings: 'All 6 commercial school bus drivers demonstrated 6/6 distance vision and normal color vision. Blood pressure within normal occupational range.',
+      correctiveActions: 'Medical fitness certificates countersigned by Civil Surgeon and submitted to RTA Guntur.',
+      inspector: 'Civil Surgeon & Superintendent, Govt General Hospital (GGH), Guntur',
+      complianceRef: 'GGH-MED-FIT-DRV-2026-104',
+      validTill: '19 Aug 2027',
+      status: 'Certified Compliant',
+      statusClass: 'badge-success'
+    },
+    {
+      inspectionId: 'INSP-2026-044',
+      date: '10 Aug 2026',
+      inspectionTitle: 'Pre-Monsoon Electrical Safety & Earthing Resistance Audit',
+      category: 'Fire & Campus Safety',
+      checklist: 'Campus transformer grounding, Earth pit resistance test (target < 2.0 Ohms), ELCB / MCB trip sensitivity, science lab wiring insulation',
+      passedPoints: '4 / 4 Earth Pits Tested Under 1.6 Ohms',
+      findings: 'All 4 earth pits maintained optimal resistance between 1.2 and 1.5 Ohms. Residual current circuit breakers (RCCB 30mA) tripping at 26ms.',
+      correctiveActions: 'Earth pit watering schedule verified. Clear electrical safety compliance certificate issued.',
+      inspector: 'Divisional Electrical Inspector, APCPDCL, Guntur Circle',
+      complianceRef: 'APCPDCL-ELEC-INSP-2026-55',
+      validTill: '09 Aug 2027',
+      status: 'Certified Compliant',
+      statusClass: 'badge-success'
+    }
+  ];
+
+  // 1. Routes & Stops Renderer & Filter
+  function renderTransportRoutesTable() {
+    const tbody = document.getElementById('transportRoutesTableBody');
+    if (!tbody) return;
+    const typeFilter = document.getElementById('transportRouteTypeFilter')?.value || 'all';
+    const q = (document.getElementById('transportRouteSearchInput')?.value || '').toLowerCase().trim();
+
+    let list = TRANSPORT_ROUTES_DATA.filter(r => {
+      const matchType = typeFilter === 'all' || r.vehicleType.includes(typeFilter);
+      const matchQ = !q || r.routeNo.toLowerCase().includes(q) || r.routeName.toLowerCase().includes(q) ||
+        r.driverName.toLowerCase().includes(q) || r.vehicleReg.toLowerCase().includes(q) ||
+        r.stops.some(s => s.name.toLowerCase().includes(q));
+      return matchType && matchQ;
+    });
+
+    if (list.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="6" class="text-center py-4 text-muted"><i class="fa-solid fa-route fa-2x mb-2 d-block"></i>No transport routes match the selected criteria.</td></tr>';
+      return;
+    }
+
+    tbody.innerHTML = list.map(r => {
+      const stopsHtml = r.stops.map((s, idx) => {
+        const isEnd = idx === r.stops.length - 1;
+        return '<span class="portal-badge badge-neutral" style="font-size: 0.72rem; margin: 1px 2px;" title="' + s.time + ' (' + s.students + ' Commuters)">' +
+          (isEnd ? '<i class="fa-solid fa-school text-primary"></i> ' : '<i class="fa-solid fa-location-pin text-amber"></i> ') +
+          s.name + ' <small class="text-muted">(' + s.time + ')</small></span>';
+      }).join(' <i class="fa-solid fa-arrow-right text-muted" style="font-size: 0.65rem;"></i> ');
+
+      const loadPct = Math.round((r.assignedStudents / r.capacity) * 100);
+
+      return '<tr>' +
+        '<td>' +
+          '<strong><i class="fa-solid fa-bus text-primary mr-1"></i> ' + r.routeNo + '</strong>' +
+          '<div style="font-size: 0.82rem; font-weight: 600; color: #1e3a8a;">' + r.routeName + '</div>' +
+          '<div style="font-size: 0.75rem; color: #64748b;"><span class="portal-badge badge-primary" style="font-size: 0.7rem;">' + r.busNo + '</span> ' + r.vehicleReg + '</div>' +
+        '</td>' +
+        '<td>' +
+          '<div style="line-height: 1.5;">' + stopsHtml + '</div>' +
+          '<div style="font-size: 0.72rem; color: #64748b; margin-top: 4px;"><i class="fa-solid fa-road mr-1"></i> ' + r.stops.length + ' Boarding Points • Distance: ' + r.tripDuration.split('(')[1].replace(')', '') + '</div>' +
+        '</td>' +
+        '<td>' +
+          '<div style="font-size: 0.85rem;"><i class="fa-regular fa-sun text-amber mr-1"></i> Pickup: <strong>' + r.timingMorning.split(' - ')[0] + '</strong></div>' +
+          '<div style="font-size: 0.85rem;"><i class="fa-regular fa-moon text-indigo mr-1"></i> Drop: <strong>' + r.timingEvening.split(' - ')[1] + '</strong></div>' +
+          '<small class="text-muted"><i class="fa-regular fa-clock mr-1"></i> Trip: ' + r.tripDuration.split(' (')[0] + '</small>' +
+        '</td>' +
+        '<td>' +
+          '<strong>' + r.assignedStudents + ' / ' + r.capacity + '</strong> Students' +
+          '<div class="progress" style="height: 6px; margin-top: 4px; background: #e2e8f0; border-radius: 3px;">' +
+            '<div class="progress-bar" style="width: ' + loadPct + '%; background: ' + (loadPct > 90 ? '#ef4444' : '#10b981') + '; border-radius: 3px;"></div>' +
+          '</div>' +
+          '<small class="text-muted">' + loadPct + '% Capacity</small>' +
+        '</td>' +
+        '<td>' +
+          '<span class="portal-badge badge-success"><i class="fa-solid fa-satellite-dish"></i> GPS Active</span>' +
+          '<div style="font-size: 0.75rem; color: #475569; margin-top: 2px;"><i class="fa-solid fa-user-tie mr-1"></i> ' + r.driverName + '</div>' +
+          '<div style="font-size: 0.72rem; color: #64748b;"><i class="fa-solid fa-phone mr-1"></i> ' + r.driverPhone + '</div>' +
+        '</td>' +
+        '<td style="text-align: center; white-space: nowrap;">' +
+          '<button class="btn btn-secondary btn-sm" onclick="portalApp.openTransportDossierModal(\'' + r.routeNo + '\', \'route\')" title="View Detailed Itinerary & Stops">' +
+            '<i class="fa-solid fa-map-location-dot"></i> Stops' +
+          '</button>' +
+        '</td>' +
+      '</tr>';
+    }).join('');
+  }
+
+  function filterTransportRoutes() {
+    renderTransportRoutesTable();
+  }
+
+  // 2. Vehicles Renderer & Filter
+  function renderTransportVehiclesTable() {
+    const tbody = document.getElementById('transportVehiclesTableBody');
+    if (!tbody) return;
+    const statusFilter = document.getElementById('transportVehicleStatusFilter')?.value || 'all';
+    const q = (document.getElementById('transportVehicleSearchInput')?.value || '').toLowerCase().trim();
+
+    let list = TRANSPORT_VEHICLES_DATA.filter(v => {
+      const matchStatus = statusFilter === 'all' || v.maintenanceStatus === statusFilter;
+      const matchQ = !q || v.regNo.toLowerCase().includes(q) || v.makeModel.toLowerCase().includes(q) ||
+        v.rtaFitnessCert.toLowerCase().includes(q) || v.insurancePolicy.toLowerCase().includes(q);
+      return matchStatus && matchQ;
+    });
+
+    if (list.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="6" class="text-center py-4 text-muted"><i class="fa-solid fa-bus fa-2x mb-2 d-block"></i>No vehicles match the selected criteria.</td></tr>';
+      return;
+    }
+
+    tbody.innerHTML = list.map(v => {
+      return '<tr>' +
+        '<td>' +
+          '<div style="font-weight: 700; font-size: 0.95rem; color: #1e3a8a;"><i class="fa-solid fa-bus-simple text-primary mr-1"></i> ' + v.regNo + '</div>' +
+          '<div style="font-size: 0.8rem; color: #334155;">' + v.makeModel + '</div>' +
+          '<div style="font-size: 0.75rem; color: #64748b;"><span class="portal-badge badge-neutral">' + v.fleetCode + '</span> ' + v.vehicleType + ' (' + v.year + ')</div>' +
+        '</td>' +
+        '<td>' +
+          '<strong>' + v.capacity + '</strong>' +
+          '<div style="font-size: 0.8rem; color: #059669;"><i class="fa-solid fa-users mr-1"></i> ' + v.allocatedCount + ' Commuters</div>' +
+          '<div style="font-size: 0.75rem; color: #64748b;">' + v.freeSeats + ' Buffer Seats (' + v.occupancyPct + ')</div>' +
+        '</td>' +
+        '<td>' +
+          '<strong>' + v.insuranceCompany + '</strong>' +
+          '<div style="font-size: 0.78rem; color: #475569;">Policy: ' + v.insurancePolicy + '</div>' +
+          '<div style="font-size: 0.75rem; color: #059669;"><i class="fa-solid fa-calendar-check mr-1"></i> Valid till ' + v.insuranceExpiry + ' <span class="portal-badge badge-success" style="font-size: 0.68rem;">' + v.insuranceStatus + '</span></div>' +
+        '</td>' +
+        '<td>' +
+          '<div><strong class="text-primary"><i class="fa-solid fa-certificate mr-1"></i> RTA Fitness:</strong> ' + v.rtaFitnessCert + '</div>' +
+          '<div style="font-size: 0.78rem; color: #475569;"><i class="fa-solid fa-gauge-high mr-1"></i> ' + v.speedGovernorCert + '</div>' +
+          '<div style="font-size: 0.75rem; color: #059669;"><i class="fa-solid fa-smog mr-1"></i> ' + v.pucCert + '</div>' +
+        '</td>' +
+        '<td>' +
+          '<span class="portal-badge badge-success"><i class="fa-solid fa-circle-check"></i> ' + v.maintenanceStatus + '</span>' +
+          '<div style="font-size: 0.75rem; color: #64748b; margin-top: 3px;">Serviced: ' + v.lastServiceDate + '</div>' +
+          '<div style="font-size: 0.72rem; color: #475569;">Next Due: ' + v.nextServiceDue + '</div>' +
+        '</td>' +
+        '<td style="text-align: center; white-space: nowrap;">' +
+          '<button class="btn btn-secondary btn-sm" onclick="portalApp.openTransportDossierModal(\'' + v.regNo + '\', \'vehicle\')" title="View Complete RTA Compliance Dossier">' +
+            '<i class="fa-solid fa-file-shield"></i> Dossier' +
+          '</button>' +
+        '</td>' +
+      '</tr>';
+    }).join('');
+  }
+
+  function filterTransportVehicles() {
+    renderTransportVehiclesTable();
+  }
+
+  // 3. Drivers & Attendants Renderer & Filter
+  function renderTransportDriversTable() {
+    const tbody = document.getElementById('transportDriversTableBody');
+    if (!tbody) return;
+    const roleFilter = document.getElementById('transportDriverRoleFilter')?.value || 'all';
+    const q = (document.getElementById('transportDriverSearchInput')?.value || '').toLowerCase().trim();
+
+    let list = TRANSPORT_DRIVERS_DATA.filter(d => {
+      const matchRole = roleFilter === 'all' || d.role === roleFilter;
+      const matchQ = !q || d.name.toLowerCase().includes(q) || d.phone.toLowerCase().includes(q) ||
+        d.licenseNo.toLowerCase().includes(q) || d.assignedVehicle.toLowerCase().includes(q);
+      return matchRole && matchQ;
+    });
+
+    if (list.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="5" class="text-center py-4 text-muted"><i class="fa-solid fa-users fa-2x mb-2 d-block"></i>No transport staff match the selected criteria.</td></tr>';
+      return;
+    }
+
+    tbody.innerHTML = list.map(d => {
+      const isDriver = d.role === 'Driver';
+      return '<tr>' +
+        '<td>' +
+          '<div style="font-weight: 700; font-size: 0.95rem; color: #1e3a8a;">' +
+            (isDriver ? '<i class="fa-solid fa-id-card text-primary mr-1"></i> ' : '<i class="fa-solid fa-person-dress text-indigo mr-1"></i> ') +
+            d.name +
+          '</div>' +
+          '<div style="font-size: 0.8rem; color: #475569;"><span class="portal-badge ' + (isDriver ? 'badge-primary' : 'badge-info') + '" style="font-size: 0.7rem;">' + d.roleTitle + '</span></div>' +
+          '<div style="font-size: 0.75rem; color: #64748b;"><i class="fa-solid fa-phone mr-1"></i> ' + d.phone + ' • ID: ' + d.id + '</div>' +
+        '</td>' +
+        '<td>' +
+          '<strong>' + d.assignedVehicle + '</strong>' +
+          '<div style="font-size: 0.8rem; color: #475569;"><i class="fa-solid fa-route mr-1"></i> ' + d.assignedRoute + '</div>' +
+          '<div style="font-size: 0.75rem; color: #64748b;">Shift: ' + d.shift + '</div>' +
+        '</td>' +
+        '<td>' +
+          '<div><span class="portal-badge badge-success" style="font-size: 0.7rem;"><i class="fa-solid fa-shield-check"></i> ' + d.policeVerification.split('(')[0].trim() + '</span></div>' +
+          '<div style="font-size: 0.78rem; color: #334155; margin-top: 2px;"><i class="fa-solid fa-stethoscope mr-1"></i> ' + d.medicalCheckup + '</div>' +
+          '<div style="font-size: 0.75rem; color: #059669;"><i class="fa-solid fa-eye mr-1"></i> ' + d.eyeTest + '</div>' +
+        '</td>' +
+        '<td>' +
+          '<span class="portal-badge badge-success"><i class="fa-solid fa-circle-dot"></i> ' + d.dutyStatus + '</span>' +
+          '<div style="font-size: 0.78rem; color: #475569; margin-top: 3px;"><i class="fa-solid fa-medal mr-1"></i> ' + d.experience + '</div>' +
+          '<div style="font-size: 0.72rem; color: #64748b;"><i class="fa-solid fa-truck-medical mr-1"></i> Emg: ' + d.emergencyContact + '</div>' +
+        '</td>' +
+        '<td style="text-align: center; white-space: nowrap;">' +
+          '<button class="btn btn-secondary btn-sm" onclick="portalApp.openTransportDossierModal(\'' + d.id + '\', \'driver\')" title="View Staff Verification Dossier">' +
+            '<i class="fa-solid fa-user-check"></i> Dossier' +
+          '</button>' +
+        '</td>' +
+      '</tr>';
+    }).join('');
+  }
+
+  function filterTransportDrivers() {
+    renderTransportDriversTable();
+  }
+
+  // 4. Transport Allocation Renderer & Filter
+  function renderTransportAllocationsTable() {
+    const tbody = document.getElementById('transportAllocationsTableBody');
+    if (!tbody) return;
+    const routeFilter = document.getElementById('transportAllocationRouteFilter')?.value || 'all';
+    const feeFilter = document.getElementById('transportAllocationFeeFilter')?.value || 'all';
+    const q = (document.getElementById('transportAllocationSearchInput')?.value || '').toLowerCase().trim();
+
+    let list = TRANSPORT_ALLOCATIONS_DATA.filter(a => {
+      const matchRoute = routeFilter === 'all' || a.routeNo === routeFilter;
+      const matchFee = feeFilter === 'all' || a.feeStatus === feeFilter;
+      const matchQ = !q || a.name.toLowerCase().includes(q) || a.admNo.toLowerCase().includes(q) ||
+        a.stopName.toLowerCase().includes(q) || a.parentName.toLowerCase().includes(q);
+      return matchRoute && matchFee && matchQ;
+    });
+
+    if (list.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="5" class="text-center py-4 text-muted"><i class="fa-solid fa-users-line fa-2x mb-2 d-block"></i>No student transport allocations match the selected criteria.</td></tr>';
+      return;
+    }
+
+    tbody.innerHTML = list.map(a => {
+      const feeBadge = a.feeStatus === 'Paid' ? 'badge-success' : (a.feeStatus === 'Pending' ? 'badge-warning' : 'badge-danger');
+      return '<tr>' +
+        '<td>' +
+          '<div style="font-weight: 700; font-size: 0.95rem; color: #1e3a8a;"><i class="fa-solid fa-user-graduate text-primary mr-1"></i> ' + a.name + '</div>' +
+          '<div style="font-size: 0.8rem; color: #475569;"><span class="portal-badge badge-neutral">' + a.admNo + '</span> ' + a.className + '</div>' +
+          '<div style="font-size: 0.75rem; color: #64748b;"><i class="fa-solid fa-id-card-clip mr-1"></i> Pass: ' + a.passNumber + ' <span class="portal-badge badge-teal" style="font-size: 0.65rem;">' + a.rfidStatus + '</span></div>' +
+        '</td>' +
+        '<td>' +
+          '<strong><i class="fa-solid fa-route text-primary mr-1"></i> ' + a.routeNo + '</strong>' +
+          '<div style="font-size: 0.8rem; color: #475569;">' + a.routeName + '</div>' +
+          '<div style="font-size: 0.75rem; color: #64748b;"><i class="fa-solid fa-chair mr-1"></i> ' + a.seatNo + ' • ' + a.busNo + '</div>' +
+        '</td>' +
+        '<td>' +
+          '<strong class="text-primary"><i class="fa-solid fa-location-dot text-amber mr-1"></i> ' + a.stopName + '</strong>' +
+          '<div style="font-size: 0.78rem; color: #334155;"><i class="fa-regular fa-clock mr-1"></i> Morning: ' + a.pickupTime + ' | Evening: ' + a.dropTime + '</div>' +
+          '<div style="font-size: 0.72rem; color: #64748b;"><i class="fa-solid fa-user mr-1"></i> Parent: ' + a.parentName + ' (' + a.parentPhone + ')</div>' +
+        '</td>' +
+        '<td>' +
+          '<span class="portal-badge ' + feeBadge + '"><i class="fa-solid ' + (a.feeStatus === 'Paid' ? 'fa-circle-check' : 'fa-circle-exclamation') + '"></i> ' + a.feeStatus + '</span>' +
+          '<div style="font-size: 0.82rem; font-weight: 600; color: #059669; margin-top: 3px;">' + a.feeAmount + '</div>' +
+          '<div style="font-size: 0.72rem; color: #64748b;">Ref: ' + a.feeReceipt + '</div>' +
+        '</td>' +
+        '<td style="text-align: center; white-space: nowrap;">' +
+          '<button class="btn btn-secondary btn-sm" onclick="portalApp.openTransportDossierModal(\'' + a.admNo + '\', \'allocation\')" title="View Official Student Commuter Pass">' +
+            '<i class="fa-solid fa-bus-simple"></i> Pass' +
+          '</button>' +
+        '</td>' +
+      '</tr>';
+    }).join('');
+  }
+
+  function filterTransportAllocations() {
+    renderTransportAllocationsTable();
+  }
+
+  // 5. Maintenance Renderer & Filter
+  function renderTransportMaintenanceTable() {
+    const tbody = document.getElementById('transportMaintenanceTableBody');
+    if (!tbody) return;
+    const catFilter = document.getElementById('transportMaintenanceCategoryFilter')?.value || 'all';
+    const statusFilter = document.getElementById('transportMaintenanceStatusFilter')?.value || 'all';
+    const q = (document.getElementById('transportMaintenanceSearchInput')?.value || '').toLowerCase().trim();
+
+    let list = TRANSPORT_MAINTENANCE_DATA.filter(m => {
+      const matchCat = catFilter === 'all' || m.category === catFilter;
+      const matchStatus = statusFilter === 'all' || m.status === statusFilter;
+      const matchQ = !q || m.assetName.toLowerCase().includes(q) || m.reportedIssue.toLowerCase().includes(q) ||
+        m.assignedVendor.toLowerCase().includes(q) || m.ticketId.toLowerCase().includes(q);
+      return matchCat && matchStatus && matchQ;
+    });
+
+    if (list.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="5" class="text-center py-4 text-muted"><i class="fa-solid fa-wrench fa-2x mb-2 d-block"></i>No maintenance records match the selected criteria.</td></tr>';
+      return;
+    }
+
+    tbody.innerHTML = list.map(m => {
+      const isFleet = m.category === 'Fleet Vehicle';
+      return '<tr>' +
+        '<td>' +
+          '<div style="font-weight: 700; font-size: 0.95rem; color: #1e3a8a;">' +
+            (isFleet ? '<i class="fa-solid fa-bus text-primary mr-1"></i> ' : '<i class="fa-solid fa-building-circle-check text-teal mr-1"></i> ') +
+            m.assetName +
+          '</div>' +
+          '<div style="font-size: 0.8rem; color: #475569;"><span class="portal-badge ' + (isFleet ? 'badge-primary' : 'badge-teal') + '" style="font-size: 0.7rem;">' + m.category + '</span></div>' +
+          '<div style="font-size: 0.75rem; color: #64748b;"><i class="fa-solid fa-hashtag mr-1"></i> Ticket: ' + m.ticketId + ' • Reported: ' + m.dateReported + '</div>' +
+        '</td>' +
+        '<td>' +
+          '<div style="font-size: 0.85rem; color: #1e293b; line-height: 1.4;">' + m.reportedIssue + '</div>' +
+          '<div style="font-size: 0.75rem; color: #64748b; margin-top: 3px;">' +
+            '<span class="portal-badge ' + (m.severity === 'High' ? 'badge-danger' : (m.severity === 'Medium' ? 'badge-warning' : 'badge-neutral')) + '" style="font-size: 0.68rem;">' + m.severity + ' Priority</span> ' +
+            'By: ' + m.reportedBy +
+          '</div>' +
+        '</td>' +
+        '<td>' +
+          '<strong>' + m.assignedVendor + '</strong>' +
+          '<div style="font-size: 0.78rem; color: #475569;"><i class="fa-solid fa-user-wrench mr-1"></i> Tech: ' + m.technicianContact + '</div>' +
+          '<div style="font-size: 0.75rem; color: #059669; font-weight: 600;"><i class="fa-solid fa-receipt mr-1"></i> Est: ' + m.estimatedCost + ' • Act: ' + m.actualCost + '</div>' +
+        '</td>' +
+        '<td>' +
+          '<span class="portal-badge ' + m.statusClass + '"><i class="fa-solid ' + (m.status === 'Resolved' ? 'fa-circle-check' : 'fa-clock') + '"></i> ' + m.status + '</span>' +
+          '<div style="font-size: 0.8rem; color: #334155; margin-top: 3px; line-height: 1.3;">' + m.resolution + '</div>' +
+          '<div style="font-size: 0.72rem; color: #64748b;"><i class="fa-solid fa-calendar-check mr-1"></i> ' + m.completedDate + '</div>' +
+        '</td>' +
+        '<td style="text-align: center; white-space: nowrap;">' +
+          '<button class="btn btn-secondary btn-sm" onclick="portalApp.openTransportDossierModal(\'' + m.ticketId + '\', \'maintenance\')" title="View Official Maintenance Work Order">' +
+            '<i class="fa-solid fa-clipboard-list"></i> Job Card' +
+          '</button>' +
+        '</td>' +
+      '</tr>';
+    }).join('');
+  }
+
+  function filterTransportMaintenance() {
+    renderTransportMaintenanceTable();
+  }
+
+  // 6. Safety Inspections Renderer & Filter
+  function renderTransportSafetyTable() {
+    const tbody = document.getElementById('transportSafetyTableBody');
+    if (!tbody) return;
+    const catFilter = document.getElementById('transportSafetyCategoryFilter')?.value || 'all';
+    const q = (document.getElementById('transportSafetySearchInput')?.value || '').toLowerCase().trim();
+
+    let list = TRANSPORT_SAFETY_DATA.filter(s => {
+      const matchCat = catFilter === 'all' || s.category === catFilter;
+      const matchQ = !q || s.inspectionTitle.toLowerCase().includes(q) || s.checklist.toLowerCase().includes(q) ||
+        s.inspector.toLowerCase().includes(q) || s.complianceRef.toLowerCase().includes(q);
+      return matchCat && matchQ;
+    });
+
+    if (list.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="5" class="text-center py-4 text-muted"><i class="fa-solid fa-shield-halved fa-2x mb-2 d-block"></i>No safety inspection audits match the selected criteria.</td></tr>';
+      return;
+    }
+
+    tbody.innerHTML = list.map(s => {
+      return '<tr>' +
+        '<td>' +
+          '<div style="font-weight: 700; font-size: 0.95rem; color: #1e3a8a;"><i class="fa-solid fa-calendar-check text-primary mr-1"></i> ' + s.date + '</div>' +
+          '<div style="font-size: 0.82rem; font-weight: 600; color: #334155;">' + s.inspectionTitle + '</div>' +
+          '<div style="font-size: 0.75rem; color: #64748b;"><span class="portal-badge badge-primary" style="font-size: 0.7rem;">' + s.category + '</span> ' + s.inspectionId + '</div>' +
+        '</td>' +
+        '<td>' +
+          '<div style="font-size: 0.82rem; color: #1e293b; line-height: 1.4;">' + s.checklist + '</div>' +
+          '<div style="font-size: 0.75rem; color: #059669; font-weight: 600; margin-top: 3px;"><i class="fa-solid fa-check-double mr-1"></i> Result: ' + s.passedPoints + '</div>' +
+        '</td>' +
+        '<td>' +
+          '<div style="font-size: 0.82rem; color: #334155; line-height: 1.4;">' + s.findings + '</div>' +
+          '<div style="font-size: 0.75rem; color: #475569; margin-top: 3px;"><i class="fa-solid fa-user-shield text-primary mr-1"></i> ' + s.inspector + '</div>' +
+        '</td>' +
+        '<td>' +
+          '<div style="font-size: 0.82rem; color: #0f172a; line-height: 1.4;">' + s.correctiveActions + '</div>' +
+          '<div style="margin-top: 4px;">' +
+            '<span class="portal-badge badge-success" style="font-size: 0.7rem;"><i class="fa-solid fa-certificate"></i> ' + s.status + '</span>' +
+            '<div style="font-size: 0.72rem; color: #64748b; margin-top: 2px;">Ref: ' + s.complianceRef + ' (Valid: ' + s.validTill + ')</div>' +
+          '</div>' +
+        '</td>' +
+        '<td style="text-align: center; white-space: nowrap;">' +
+          '<button class="btn btn-secondary btn-sm" onclick="portalApp.openTransportDossierModal(\'' + s.inspectionId + '\', \'safety\')" title="View Official Safety Audit Clearance NOC">' +
+            '<i class="fa-solid fa-shield-halved"></i> Audit NOC' +
+          '</button>' +
+        '</td>' +
+      '</tr>';
+    }).join('');
+  }
+
+  function filterTransportSafety() {
+    renderTransportSafetyTable();
+  }
+
+  // GPS Refresh Function
+  function refreshFleetGPS() {
+    showToast('Pinging AIS-140 GPS transponders on 6 fleet vehicles...', 'info');
+    setTimeout(() => {
+      showToast('Live GPS verified: 6/6 vehicles online & transmitting telemetry.', 'success');
+    }, 600);
+  }
+
+  // Open New Transport Action Modal
+  function openNewTransportModal(type) {
+    const sel = document.getElementById('transActionCategory');
+    if (sel && type) {
+      sel.value = type;
+    }
+    handleTransportModalCategoryChange();
+    openModal('newTransportActionModal');
+  }
+
+  function handleTransportModalCategoryChange() {
+    const cat = document.getElementById('transActionCategory')?.value || 'route';
+    const container = document.getElementById('transportDynamicFormFields');
+    if (!container) return;
+
+    if (cat === 'route') {
+      container.innerHTML = `
+        <div class="row g-2">
+          <div class="col-md-6 mb-2">
+            <label class="form-label text-sm font-bold">Route Number <span class="text-danger">*</span></label>
+            <input type="text" class="form-control" placeholder="e.g. Route 7" required>
+          </div>
+          <div class="col-md-6 mb-2">
+            <label class="form-label text-sm font-bold">Route Name / Corridor <span class="text-danger">*</span></label>
+            <input type="text" class="form-control" placeholder="e.g. Nallapadu - Perecherla Highway" required>
+          </div>
+          <div class="col-12 mb-2">
+            <label class="form-label text-sm font-bold">Sequential Stops (Comma Separated) <span class="text-danger">*</span></label>
+            <input type="text" class="form-control" placeholder="e.g. Perecherla Centre, Nallapadu Church, Gujjanagundla, School" required>
+          </div>
+          <div class="col-md-6 mb-2">
+            <label class="form-label text-sm font-bold">Morning Arrival Time</label>
+            <input type="time" class="form-control" value="08:15">
+          </div>
+          <div class="col-md-6 mb-2">
+            <label class="form-label text-sm font-bold">Evening Departure Time</label>
+            <input type="time" class="form-control" value="16:30">
+          </div>
+        </div>
+      `;
+    } else if (cat === 'vehicle') {
+      container.innerHTML = `
+        <div class="row g-2">
+          <div class="col-md-6 mb-2">
+            <label class="form-label text-sm font-bold">Registration Number <span class="text-danger">*</span></label>
+            <input type="text" class="form-control" placeholder="e.g. AP-07-TX-1047" required>
+          </div>
+          <div class="col-md-6 mb-2">
+            <label class="form-label text-sm font-bold">Make & Model <span class="text-danger">*</span></label>
+            <input type="text" class="form-control" placeholder="e.g. Tata Starbus 32-Seater" required>
+          </div>
+          <div class="col-md-6 mb-2">
+            <label class="form-label text-sm font-bold">Seating Capacity</label>
+            <input type="number" class="form-control" value="32" min="10" max="60">
+          </div>
+          <div class="col-md-6 mb-2">
+            <label class="form-label text-sm font-bold">RTA Fitness Certificate #</label>
+            <input type="text" class="form-control" placeholder="e.g. FC-AP07-9927">
+          </div>
+          <div class="col-md-6 mb-2">
+            <label class="form-label text-sm font-bold">Insurance Policy #</label>
+            <input type="text" class="form-control" placeholder="e.g. UIIC-2026-AP07-9912">
+          </div>
+          <div class="col-md-6 mb-2">
+            <label class="form-label text-sm font-bold">Speed Governor Capped (km/h)</label>
+            <input type="number" class="form-control" value="40" readonly>
+          </div>
+        </div>
+      `;
+    } else if (cat === 'driver') {
+      container.innerHTML = `
+        <div class="row g-2">
+          <div class="col-md-6 mb-2">
+            <label class="form-label text-sm font-bold">Staff Full Name <span class="text-danger">*</span></label>
+            <input type="text" class="form-control" placeholder="e.g. Sri N. Koteswara Rao" required>
+          </div>
+          <div class="col-md-6 mb-2">
+            <label class="form-label text-sm font-bold">Role <span class="text-danger">*</span></label>
+            <select class="form-control" required>
+              <option value="Driver">Heavy Commercial Driver</option>
+              <option value="Attendant">Lady Bus Attendant</option>
+            </select>
+          </div>
+          <div class="col-md-6 mb-2">
+            <label class="form-label text-sm font-bold">Phone Number</label>
+            <input type="text" class="form-control" placeholder="e.g. 98480 99881">
+          </div>
+          <div class="col-md-6 mb-2">
+            <label class="form-label text-sm font-bold">License / First-Aid Certification #</label>
+            <input type="text" class="form-control" placeholder="e.g. AP-07-2015-0088192">
+          </div>
+          <div class="col-12 mb-2">
+            <label class="form-label text-sm font-bold">AP Police Verification Clearance Reference</label>
+            <input type="text" class="form-control" placeholder="e.g. PVR #GNT-2026-915">
+          </div>
+        </div>
+      `;
+    } else if (cat === 'allocation') {
+      container.innerHTML = `
+        <div class="row g-2">
+          <div class="col-md-6 mb-2">
+            <label class="form-label text-sm font-bold">Student Admission # <span class="text-danger">*</span></label>
+            <input type="text" class="form-control" placeholder="e.g. SV-0512" required>
+          </div>
+          <div class="col-md-6 mb-2">
+            <label class="form-label text-sm font-bold">Student Name <span class="text-danger">*</span></label>
+            <input type="text" class="form-control" placeholder="e.g. K. Vamsi Krishna" required>
+          </div>
+          <div class="col-md-6 mb-2">
+            <label class="form-label text-sm font-bold">Select Route</label>
+            <select class="form-control">
+              <option value="Route 1">Route 1 - RTC Bus Complex</option>
+              <option value="Route 2">Route 2 - Arundelpet - Brodipet</option>
+              <option value="Route 3">Route 3 - Pattabhipuram</option>
+              <option value="Route 4">Route 4 - Railway Station</option>
+              <option value="Route 5">Route 5 - Lakshmipuram</option>
+              <option value="Route 6">Route 6 - Syamala Nagar</option>
+            </select>
+          </div>
+          <div class="col-md-6 mb-2">
+            <label class="form-label text-sm font-bold">Designated Boarding Stop</label>
+            <input type="text" class="form-control" placeholder="e.g. Brodipet 4/2 Corner">
+          </div>
+          <div class="col-md-6 mb-2">
+            <label class="form-label text-sm font-bold">Transport Fee (Term)</label>
+            <input type="text" class="form-control" value="₹6,000">
+          </div>
+          <div class="col-md-6 mb-2">
+            <label class="form-label text-sm font-bold">Payment Status</label>
+            <select class="form-control">
+              <option value="Paid">Paid</option>
+              <option value="Pending">Pending</option>
+            </select>
+          </div>
+        </div>
+      `;
+    } else if (cat === 'maintenance') {
+      container.innerHTML = `
+        <div class="row g-2">
+          <div class="col-md-6 mb-2">
+            <label class="form-label text-sm font-bold">Asset Type <span class="text-danger">*</span></label>
+            <select class="form-control" required>
+              <option value="Fleet Vehicle">Fleet Vehicle</option>
+              <option value="Campus Physical Facility">Campus Facility</option>
+            </select>
+          </div>
+          <div class="col-md-6 mb-2">
+            <label class="form-label text-sm font-bold">Asset Identifier <span class="text-danger">*</span></label>
+            <input type="text" class="form-control" placeholder="e.g. Bus AP-07-TX-1041 or RO Plant Block-B" required>
+          </div>
+          <div class="col-12 mb-2">
+            <label class="form-label text-sm font-bold">Reported Fault / Maintenance Required <span class="text-danger">*</span></label>
+            <textarea class="form-control" rows="2" placeholder="Describe issue in detail..." required></textarea>
+          </div>
+          <div class="col-md-6 mb-2">
+            <label class="form-label text-sm font-bold">Assigned Vendor / Service Agency</label>
+            <input type="text" class="form-control" placeholder="e.g. Sri Lakshmi Auto Works">
+          </div>
+          <div class="col-md-6 mb-2">
+            <label class="form-label text-sm font-bold">Estimated Cost (₹)</label>
+            <input type="text" class="form-control" placeholder="e.g. ₹5,000">
+          </div>
+        </div>
+      `;
+    } else if (cat === 'safety') {
+      container.innerHTML = `
+        <div class="row g-2">
+          <div class="col-md-6 mb-2">
+            <label class="form-label text-sm font-bold">Audit Category <span class="text-danger">*</span></label>
+            <select class="form-control" required>
+              <option value="Fleet RTA Safety">Fleet RTA Safety</option>
+              <option value="Fire & Campus Safety">Fire & Campus Safety</option>
+              <option value="Hygiene & Sanitation">Hygiene & Sanitation</option>
+              <option value="Structural Stability">Structural Stability</option>
+            </select>
+          </div>
+          <div class="col-md-6 mb-2">
+            <label class="form-label text-sm font-bold">Inspection Scheduled Date <span class="text-danger">*</span></label>
+            <input type="date" class="form-control" required>
+          </div>
+          <div class="col-12 mb-2">
+            <label class="form-label text-sm font-bold">Inspectors / Official Authority</label>
+            <input type="text" class="form-control" placeholder="e.g. Motor Vehicle Inspector (MVI) / District Fire Officer">
+          </div>
+          <div class="col-12 mb-2">
+            <label class="form-label text-sm font-bold">Inspection Scope & Checklist Highlights</label>
+            <textarea class="form-control" rows="2" placeholder="Speed governor calibration, fire NOC, emergency doors..."></textarea>
+          </div>
+        </div>
+      `;
+    }
+  }
+
+  function handleNewTransportSubmit(e) {
+    if (e && e.preventDefault) e.preventDefault();
+    closeModal('newTransportActionModal');
+    showToast('Record saved and verified under AP School Transport & Safety Protocol.', 'success');
+  }
+
+  // Open Transport Dossier Modal
+  function openTransportDossierModal(id, type) {
+    const body = document.getElementById('transportDossierModalBody');
+    if (!body) return;
+
+    let html = '';
+    if (type === 'route') {
+      const r = TRANSPORT_ROUTES_DATA.find(x => x.routeNo === id) || TRANSPORT_ROUTES_DATA[0];
+      html = `
+        <div style="border-bottom: 2px solid #2563eb; padding-bottom: 0.75rem; margin-bottom: 1rem;">
+          <div style="font-size: 0.75rem; text-transform: uppercase; color: #2563eb; font-weight: 800; letter-spacing: 0.05em;">
+            Official Transit Itinerary &amp; Geo-Fenced Stops
+          </div>
+          <h3 style="margin: 0.25rem 0 0; color: #1e3a8a;">${r.routeNo}: ${r.routeName}</h3>
+        </div>
+        <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 1rem; margin-bottom: 1rem;">
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; font-size: 0.85rem;">
+            <div><strong>Vehicle Assigned:</strong> ${r.busNo} (${r.vehicleReg})</div>
+            <div><strong>Vehicle Model:</strong> ${r.vehicleType}</div>
+            <div><strong>Driver In-charge:</strong> ${r.driverName} (${r.driverPhone})</div>
+            <div><strong>Lady Bus Attendant:</strong> ${r.attendantName}</div>
+            <div><strong>Morning Run:</strong> ${r.timingMorning}</div>
+            <div><strong>Evening Run:</strong> ${r.timingEvening}</div>
+            <div><strong>Trip Metrics:</strong> ${r.tripDuration}</div>
+            <div><strong>Live GPS Telemetry:</strong> <span class="portal-badge badge-success">${r.gpsCoords}</span></div>
+          </div>
+        </div>
+        <div style="font-size: 0.88rem;">
+          <h4 style="font-size: 0.95rem; margin-bottom: 0.5rem; color: #1e293b;"><i class="fa-solid fa-map-pin text-primary mr-1"></i> Sequential Boarding &amp; Deboarding Itinerary</h4>
+          <table class="custom-table" style="font-size: 0.82rem;">
+            <thead>
+              <tr><th>#</th><th>Designated Safe Stop</th><th>Morning Pickup</th><th>Students</th></tr>
+            </thead>
+            <tbody>
+              ${r.stops.map((s, idx) => `
+                <tr>
+                  <td>${idx + 1}</td>
+                  <td><strong>${s.name}</strong></td>
+                  <td>${s.time}</td>
+                  <td>${s.students} Commuters</td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+        </div>
+        <div style="margin-top: 1rem; font-size: 0.78rem; color: #64748b; border-top: 1px dashed #cbd5e1; padding-top: 0.5rem;">
+          <i class="fa-solid fa-shield-check text-success mr-1"></i> Route vetted and approved under AP Motor Vehicles Department &amp; RTA Guntur Regulations.
+        </div>
+      `;
+    } else if (type === 'vehicle') {
+      const v = TRANSPORT_VEHICLES_DATA.find(x => x.regNo === id) || TRANSPORT_VEHICLES_DATA[0];
+      html = `
+        <div style="border-bottom: 2px solid #2563eb; padding-bottom: 0.75rem; margin-bottom: 1rem;">
+          <div style="font-size: 0.75rem; text-transform: uppercase; color: #2563eb; font-weight: 800; letter-spacing: 0.05em;">
+            AP RTA Fleet Compliance &amp; Insurance Dossier
+          </div>
+          <h3 style="margin: 0.25rem 0 0; color: #1e3a8a;">${v.regNo} (${v.fleetCode})</h3>
+        </div>
+        <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 1rem; margin-bottom: 1rem;">
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; font-size: 0.85rem;">
+            <div><strong>Make &amp; Model:</strong> ${v.makeModel}</div>
+            <div><strong>Manufacture Year:</strong> ${v.year}</div>
+            <div><strong>Seating Capacity:</strong> ${v.capacity} (${v.allocatedCount} Commuters)</div>
+            <div><strong>Assigned Route:</strong> ${v.assignedRoute}</div>
+            <div><strong>RTA Fitness Certificate:</strong> ${v.rtaFitnessCert} (Valid till ${v.fitnessExpiry})</div>
+            <div><strong>Speed Governor:</strong> ${v.speedGovernorCert}</div>
+            <div><strong>Pollution (PUC):</strong> ${v.pucCert}</div>
+            <div><strong>State Permit:</strong> ${v.permits}</div>
+            <div><strong>Insurance Provider:</strong> ${v.insuranceCompany}</div>
+            <div><strong>Policy Number:</strong> ${v.insurancePolicy} (${v.insuranceExpiry})</div>
+            <div><strong>Maintenance Status:</strong> <span class="portal-badge badge-success">${v.maintenanceStatus}</span></div>
+            <div><strong>Next Service Window:</strong> ${v.nextServiceDue}</div>
+          </div>
+        </div>
+        <div style="font-size: 0.85rem; color: #334155;">
+          <strong>Mandatory Safety &amp; Emergency Fitment Check:</strong>
+          <p style="margin-top: 4px; background: #ffffff; padding: 0.75rem; border: 1px solid #e2e8f0; border-radius: 6px;">
+            Dual-channel CCTV cameras with 30-day recorded memory active. 2kg Dry Chemical Fire Extinguisher inspected &amp; within hydrostatic test date. AP MVD standard First-Aid box fully replenished. Emergency rear door latch tested &amp; operational.
+          </p>
+        </div>
+      `;
+    } else if (type === 'driver') {
+      const d = TRANSPORT_DRIVERS_DATA.find(x => x.id === id) || TRANSPORT_DRIVERS_DATA[0];
+      html = `
+        <div style="border-bottom: 2px solid #2563eb; padding-bottom: 0.75rem; margin-bottom: 1rem;">
+          <div style="font-size: 0.75rem; text-transform: uppercase; color: #2563eb; font-weight: 800; letter-spacing: 0.05em;">
+            Transport Personnel Background &amp; Safeguarding Verification
+          </div>
+          <h3 style="margin: 0.25rem 0 0; color: #1e3a8a;">${d.name} (${d.id})</h3>
+        </div>
+        <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 1rem; margin-bottom: 1rem;">
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; font-size: 0.85rem;">
+            <div><strong>Designation:</strong> ${d.roleTitle}</div>
+            <div><strong>Mobile Contact:</strong> ${d.phone}</div>
+            <div><strong>License / Cert Ref:</strong> ${d.licenseNo}</div>
+            <div><strong>License Category:</strong> ${d.licenseType}</div>
+            <div><strong>Assigned Vehicle:</strong> ${d.assignedVehicle}</div>
+            <div><strong>Assigned Route:</strong> ${d.assignedRoute}</div>
+            <div><strong>AP Police Verification:</strong> <span class="portal-badge badge-success">${d.policeVerification}</span></div>
+            <div><strong>Medical &amp; Eye Vision:</strong> ${d.medicalCheckup} • ${d.eyeTest}</div>
+            <div><strong>Duty Schedule:</strong> ${d.shift} (${d.dutyStatus})</div>
+            <div><strong>Track Record:</strong> ${d.experience}</div>
+            <div><strong>Emergency Contact:</strong> ${d.emergencyContact}</div>
+          </div>
+        </div>
+      `;
+    } else if (type === 'allocation') {
+      const a = TRANSPORT_ALLOCATIONS_DATA.find(x => x.admNo === id) || TRANSPORT_ALLOCATIONS_DATA[0];
+      html = `
+        <div style="border-bottom: 2px solid #2563eb; padding-bottom: 0.75rem; margin-bottom: 1rem;">
+          <div style="font-size: 0.75rem; text-transform: uppercase; color: #2563eb; font-weight: 800; letter-spacing: 0.05em;">
+            Official Student Transport Commuter Pass
+          </div>
+          <h3 style="margin: 0.25rem 0 0; color: #1e3a8a;">${a.name} • ${a.admNo}</h3>
+        </div>
+        <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 1rem; margin-bottom: 1rem;">
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; font-size: 0.85rem;">
+            <div><strong>Class &amp; Section:</strong> ${a.className}</div>
+            <div><strong>Pass Card Number:</strong> ${a.passNumber} (${a.rfidStatus})</div>
+            <div><strong>Designated Route:</strong> ${a.routeNo} (${a.routeName})</div>
+            <div><strong>Fleet Vehicle:</strong> ${a.busNo}</div>
+            <div><strong>Allocated Seat:</strong> ${a.seatNo}</div>
+            <div><strong>Boarding Stop:</strong> ${a.stopName}</div>
+            <div><strong>Morning Pickup:</strong> ${a.pickupTime}</div>
+            <div><strong>Evening Drop:</strong> ${a.dropTime}</div>
+            <div><strong>Transport Fee Status:</strong> <span class="portal-badge ${a.feeStatus === 'Paid' ? 'badge-success' : 'badge-danger'}">${a.feeStatus} (${a.feeAmount})</span></div>
+            <div><strong>Fee Receipt / Notice:</strong> ${a.feeReceipt}</div>
+            <div><strong>Parent / Guardian:</strong> ${a.parentName} (${a.parentPhone})</div>
+          </div>
+        </div>
+      `;
+    } else if (type === 'maintenance') {
+      const m = TRANSPORT_MAINTENANCE_DATA.find(x => x.ticketId === id) || TRANSPORT_MAINTENANCE_DATA[0];
+      html = `
+        <div style="border-bottom: 2px solid #2563eb; padding-bottom: 0.75rem; margin-bottom: 1rem;">
+          <div style="font-size: 0.75rem; text-transform: uppercase; color: #2563eb; font-weight: 800; letter-spacing: 0.05em;">
+            Official Campus Maintenance Job Card
+          </div>
+          <h3 style="margin: 0.25rem 0 0; color: #1e3a8a;">${m.ticketId}: ${m.assetName}</h3>
+        </div>
+        <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 1rem; margin-bottom: 1rem;">
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; font-size: 0.85rem;">
+            <div><strong>Asset Category:</strong> ${m.category}</div>
+            <div><strong>Reported Date:</strong> ${m.dateReported} by ${m.reportedBy}</div>
+            <div><strong>Severity Priority:</strong> ${m.severity}</div>
+            <div><strong>Work Order Status:</strong> <span class="portal-badge ${m.statusClass}">${m.status}</span></div>
+            <div><strong>Assigned Vendor:</strong> ${m.assignedVendor}</div>
+            <div><strong>Technician Contact:</strong> ${m.technicianContact}</div>
+            <div><strong>Audited Expenditure:</strong> ${m.actualCost} (Est: ${m.estimatedCost})</div>
+            <div><strong>Completion Date:</strong> ${m.completedDate}</div>
+          </div>
+        </div>
+        <div style="font-size: 0.85rem; color: #334155;">
+          <strong>Reported Fault &amp; Resolution Scope:</strong>
+          <p style="margin-top: 4px; background: #ffffff; padding: 0.75rem; border: 1px solid #e2e8f0; border-radius: 6px;">
+            <strong>Issue:</strong> ${m.reportedIssue}<br><br>
+            <strong>Resolution:</strong> ${m.resolution}
+          </p>
+        </div>
+      `;
+    } else if (type === 'safety') {
+      const s = TRANSPORT_SAFETY_DATA.find(x => x.inspectionId === id) || TRANSPORT_SAFETY_DATA[0];
+      html = `
+        <div style="border-bottom: 2px solid #2563eb; padding-bottom: 0.75rem; margin-bottom: 1rem;">
+          <div style="font-size: 0.75rem; text-transform: uppercase; color: #2563eb; font-weight: 800; letter-spacing: 0.05em;">
+            Government &amp; Institutional Safety Clearance Certificate
+          </div>
+          <h3 style="margin: 0.25rem 0 0; color: #1e3a8a;">${s.inspectionTitle}</h3>
+        </div>
+        <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 1rem; margin-bottom: 1rem;">
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; font-size: 0.85rem;">
+            <div><strong>Audit Reference:</strong> ${s.inspectionId}</div>
+            <div><strong>Audit Date:</strong> ${s.date}</div>
+            <div><strong>Category:</strong> ${s.category}</div>
+            <div><strong>Official Inspector:</strong> ${s.inspector}</div>
+            <div><strong>Govt Compliance Ref:</strong> ${s.complianceRef}</div>
+            <div><strong>Validity:</strong> Cleared till ${s.validTill}</div>
+            <div><strong>Audit Status:</strong> <span class="portal-badge badge-success">${s.status}</span></div>
+            <div><strong>Checklist Score:</strong> ${s.passedPoints}</div>
+          </div>
+        </div>
+        <div style="font-size: 0.85rem; color: #334155;">
+          <strong>Audit Findings &amp; Corrective Clearances:</strong>
+          <p style="margin-top: 4px; background: #ffffff; padding: 0.75rem; border: 1px solid #e2e8f0; border-radius: 6px;">
+            <strong>Findings:</strong> ${s.findings}<br><br>
+            <strong>Corrective Actions:</strong> ${s.correctiveActions}
+          </p>
+        </div>
+      `;
+    }
+
+    body.innerHTML = html;
+    openModal('viewTransportDossierModal');
+  }
+
+  // Export functions
+  function exportTransportRoutesCSV() {
+    let csv = 'Route Number,Route Name,Vehicle Reg,Driver Name,Driver Phone,Assigned Students,Capacity,Morning Pickup,Evening Drop\n';
+    TRANSPORT_ROUTES_DATA.forEach(r => {
+      csv += `"${r.routeNo}","${r.routeName}","${r.vehicleReg}","${r.driverName}","${r.driverPhone}",${r.assignedStudents},${r.capacity},"${r.timingMorning}","${r.timingEvening}"\n`;
+    });
+    downloadCsvFile(csv, 'Sri_Vidya_Transport_Routes_Schedule.csv');
+    showToast('Exported Fleet Routes & Schedule to CSV.', 'success');
+  }
+
+  function exportTransportAllocationsCSV() {
+    let csv = 'Admission No,Student Name,Class,Route,Stop Name,Pickup Time,Drop Time,Transport Fee Status,Fee Amount,Parent Name,Parent Phone\n';
+    TRANSPORT_ALLOCATIONS_DATA.forEach(a => {
+      csv += `"${a.admNo}","${a.name}","${a.className}","${a.routeNo}","${a.stopName}","${a.pickupTime}","${a.dropTime}","${a.feeStatus}","${a.feeAmount}","${a.parentName}","${a.parentPhone}"\n`;
+    });
+    downloadCsvFile(csv, 'Sri_Vidya_Student_Transport_Allocations.csv');
+    showToast('Exported Student Transport Allocations to CSV.', 'success');
+  }
+
+  function exportTransportMaintenanceCSV() {
+    let csv = 'Ticket ID,Category,Asset Name,Reported Issue,Severity,Date Reported,Assigned Vendor,Status,Cost\n';
+    TRANSPORT_MAINTENANCE_DATA.forEach(m => {
+      csv += `"${m.ticketId}","${m.category}","${m.assetName}","${m.reportedIssue.replace(/"/g, '""')}","${m.severity}","${m.dateReported}","${m.assignedVendor}","${m.status}","${m.actualCost}"\n`;
+    });
+    downloadCsvFile(csv, 'Sri_Vidya_Campus_Maintenance_Ledger.csv');
+    showToast('Exported Campus Maintenance Ledger to CSV.', 'success');
+  }
+
+  function exportSafetyInspectionPDF() {
+    showToast('Generating AP RTA & School Safety Compliance Dossier...', 'info');
+    window.print();
   }
 
   function filterFaculty(val) {
@@ -26326,6 +28137,28 @@ const classData = TIMETABLE_CLASS_DATA[currentTimetableClass] || TIMETABLE_CLASS
   }
 
   return {
+    // Transport & Facilities
+    renderTransportRoutesTable,
+    filterTransportRoutes,
+    renderTransportVehiclesTable,
+    filterTransportVehicles,
+    renderTransportDriversTable,
+    filterTransportDrivers,
+    renderTransportAllocationsTable,
+    filterTransportAllocations,
+    renderTransportMaintenanceTable,
+    filterTransportMaintenance,
+    renderTransportSafetyTable,
+    filterTransportSafety,
+    refreshFleetGPS,
+    openNewTransportModal,
+    handleTransportModalCategoryChange,
+    handleNewTransportSubmit,
+    openTransportDossierModal,
+    exportTransportRoutesCSV,
+    exportTransportAllocationsCSV,
+    exportTransportMaintenanceCSV,
+    exportSafetyInspectionPDF,
     // Events & Activities
     renderAnnualCalendar,
     filterAnnualCalendar,
