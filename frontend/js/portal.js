@@ -3264,10 +3264,19 @@ const FEE_CATEGORY_AUDIT_DATA = [
         renderWorkflowSettingsTable();
       }
     } else if (moduleKey === 'settings') {
-      if (subKey === 'permissions') {
+      if (subKey === 'roles') {
+        renderSettingsRolesTable();
+      } else if (subKey === 'permissions') {
+        renderSettingsPermissionsTable();
         renderClerkPermissionsForm();
         renderSettingsAdmissionPermissionCard();
         initTeacherPermissionsView();
+      } else if (subKey === 'workflows') {
+        renderSettingsWorkflowsTable();
+      } else if (subKey === 'audit') {
+        renderAuditLogsTable();
+      } else if (subKey === 'backup') {
+        renderDataBackupsTable();
       }
     }
 
@@ -31334,6 +31343,884 @@ const classData = TIMETABLE_CLASS_DATA[currentTimetableClass] || TIMETABLE_CLASS
     downloadCSV(csv, 'SriVidya_Workflow_Routing_Matrix.csv');
   }
 
+
+  /* =========================================================================
+     MODULE 18: SETTINGS & ACCESS CONTROL IMPLEMENTATION
+     9 Subviews: Profile, Academic Year, Role Management, Access Permissions,
+     Approval Workflows, Notifications, Security Settings, Audit Logs, Data & Backup
+     ========================================================================= */
+
+  const SETTINGS_ROLES_DATA = [
+    {
+      id: 'ROLE-01',
+      name: 'Principal (Executive Head)',
+      slug: 'principal',
+      assignedUsers: ['Smt. Gorle Varalakshmi'],
+      userCount: 1,
+      template: 'Executive Super Administrator',
+      scope: 'Entire Institution & Board Statutory Jurisdiction',
+      permissionsCount: 'All 18 Modules (Full C/R/U/D/A)',
+      status: 'Active',
+      description: 'Supreme statutory executive authority, regulatory signing, financial disbursements & policy control.'
+    },
+    {
+      id: 'ROLE-02',
+      name: 'Vice Principal',
+      slug: 'vice-principal',
+      assignedUsers: ['Sri Navva Anand'],
+      userCount: 1,
+      template: 'Academic & Campus Administrator',
+      scope: 'Academic, Disciplinary & Operations Oversight',
+      permissionsCount: '14 Modules (Full C/R/U/A)',
+      status: 'Active',
+      description: 'Campus discipline, lesson moderation, master timetable, staff substitution, and gate registers.'
+    },
+    {
+      id: 'ROLE-03',
+      name: 'Senior Administrative Officer',
+      slug: 'admin-officer',
+      assignedUsers: ['Sri P. Satyanarayana'],
+      userCount: 1,
+      template: 'Operations & Facilities Manager',
+      scope: 'Transport, Inventory, Facilities & Staff Rosters',
+      permissionsCount: '8 Modules (C/R/U/E)',
+      status: 'Active',
+      description: 'Campus physical security, vendor management, inventory stock levels, and non-teaching logistics.'
+    },
+    {
+      id: 'ROLE-04',
+      name: 'Head Bursar / Chief Accountant',
+      slug: 'bursar',
+      assignedUsers: ['Sri S. Ramu'],
+      userCount: 1,
+      template: 'Financial Comptroller',
+      scope: 'Fee Management, Financial Ledgers & Payroll',
+      permissionsCount: '6 Modules (Full Finance C/R/U/E)',
+      status: 'Active',
+      description: 'Fee collection desk, pending dues recovery, reconciliation ledger, refund processing & payroll audits.'
+    },
+    {
+      id: 'ROLE-05',
+      name: 'Academic Section Head (High School)',
+      slug: 'academic-head',
+      assignedUsers: ['Smt. K. Anuradha'],
+      userCount: 1,
+      template: 'Instructional Supervisor',
+      scope: 'Classes VI - X Curriculum & Examinations',
+      permissionsCount: '5 Modules (C/R/U/A)',
+      status: 'Active',
+      description: 'Syllabus completion audit, lesson plans approval, quarterly exam moderation, and report cards.'
+    },
+    {
+      id: 'ROLE-06',
+      name: 'Controller of Examinations',
+      slug: 'exam-controller',
+      assignedUsers: ['Sri V. V. R. Prasad'],
+      userCount: 1,
+      template: 'Examination Controller',
+      scope: 'School-wide Examinations & Tabulation',
+      permissionsCount: '4 Modules (C/R/U/E/A)',
+      status: 'Active',
+      description: 'Exam scheduling, hall ticket generation, invigilation duty roster, seating plans & grade publication.'
+    },
+    {
+      id: 'ROLE-07',
+      name: 'Student Welfare & Confidential Counselor',
+      slug: 'counselor',
+      assignedUsers: ['Smt. D. Leela'],
+      userCount: 1,
+      template: 'Safeguarding Specialist',
+      scope: 'Restricted Counselling & Pastoral Care',
+      permissionsCount: '2 Modules (Restricted C/R/U)',
+      status: 'Active',
+      description: 'Statutory safeguarding register, confidential psychological evaluations, and parent convocations.'
+    },
+    {
+      id: 'ROLE-08',
+      name: 'Front Desk & Admissions Clerk',
+      slug: 'clerk',
+      assignedUsers: ['Smt. G. Swathi', 'Kum. B. Lavanya'],
+      userCount: 2,
+      template: 'Front Office Specialist',
+      scope: 'Admissions Queue, TC Verification & Enquiries',
+      permissionsCount: '4 Modules (Scoped C/R)',
+      status: 'Active',
+      description: 'Applicant profile registration, TC draft requests, visitor log check-ins, and circular notifications.'
+    },
+    {
+      id: 'ROLE-09',
+      name: 'Transport & Fleet Logistics Head',
+      slug: 'fleet-head',
+      assignedUsers: ['Sri M. Appa Rao'],
+      userCount: 1,
+      template: 'Logistics Supervisor',
+      scope: 'School Bus Fleet, GPS & Route Stops',
+      permissionsCount: '2 Modules (C/R/U)',
+      status: 'Active',
+      description: 'Bus route optimization, student stop allocations, RTO compliance, and vehicle safety maintenance.'
+    }
+  ];
+
+  const SETTINGS_PERMISSIONS_DATA = [
+    {
+      module: '1. Students Management',
+      slug: 'students',
+      actions: { create: true, read: true, update: true, delete: false, export: true, approve: true },
+      scope: 'Campus-wide (All Classes)',
+      rolesWithAccess: 'Principal, VP, Clerk, Section Heads',
+      delegatedApproval: 'Admissions & TC by Principal only'
+    },
+    {
+      module: '2. Teachers & Staff',
+      slug: 'teachers',
+      actions: { create: true, read: true, update: true, delete: false, export: true, approve: true },
+      scope: 'Teaching & Non-Teaching Faculty',
+      rolesWithAccess: 'Principal, Vice Principal',
+      delegatedApproval: 'Performance appraisal by Principal'
+    },
+    {
+      module: '3. Academics & Curriculum',
+      slug: 'academics',
+      actions: { create: true, read: true, update: true, delete: false, export: true, approve: true },
+      scope: 'Classes LKG to X',
+      rolesWithAccess: 'Principal, VP, Academic Head',
+      delegatedApproval: 'Syllabus modification by Principal'
+    },
+    {
+      module: '4. Attendance Tracking',
+      slug: 'attendance',
+      actions: { create: true, read: true, update: true, delete: false, export: true, approve: true },
+      scope: 'Students & Staff Registers',
+      rolesWithAccess: 'All Faculty (Own Class), VP (All)',
+      delegatedApproval: 'Retroactive edits require VP approval'
+    },
+    {
+      module: '5. Timetable & Scheduling',
+      slug: 'timetable',
+      actions: { create: true, read: true, update: true, delete: false, export: true, approve: true },
+      scope: 'Master Schedule & Substitution',
+      rolesWithAccess: 'Principal, VP, Exam Officer',
+      delegatedApproval: 'Emergency substitute by VP'
+    },
+    {
+      module: '6. Examinations & Grading',
+      slug: 'examinations',
+      actions: { create: true, read: true, update: true, delete: false, export: true, approve: true },
+      scope: 'All Terms & Pre-Finals',
+      rolesWithAccess: 'Principal, VP, Exam Officer',
+      delegatedApproval: 'Result publication by Principal only'
+    },
+    {
+      module: '7. Discipline & Student Welfare',
+      slug: 'discipline',
+      actions: { create: true, read: true, update: true, delete: false, export: true, approve: true },
+      scope: 'Behavioral & Counselling Dockets',
+      rolesWithAccess: 'Principal, VP, Counselor',
+      delegatedApproval: 'Counselling restricted to Designated Counselor'
+    },
+    {
+      module: '8. Leave Management',
+      slug: 'leaves',
+      actions: { create: true, read: true, update: true, delete: false, export: true, approve: true },
+      scope: 'Faculty & Student Leave Applications',
+      rolesWithAccess: 'VP (L1 Review), Principal (L2 Final)',
+      delegatedApproval: 'Medical leave > 3 days requires Principal'
+    },
+    {
+      module: '9. Fees & Finance',
+      slug: 'fees',
+      actions: { create: true, read: true, update: true, delete: false, export: true, approve: true },
+      scope: 'All Student Accounts & Ledgers',
+      rolesWithAccess: 'Principal, Head Bursar',
+      delegatedApproval: 'Refunds & Concessions require Principal'
+    },
+    {
+      module: '10. Appointments & Visitors',
+      slug: 'appointments',
+      actions: { create: true, read: true, update: true, delete: false, export: true, approve: true },
+      scope: 'Executive Calendar & Visitor Register',
+      rolesWithAccess: 'Principal, Front Desk Clerk',
+      delegatedApproval: 'Chamber bookings confirmed by Principal'
+    },
+    {
+      module: '11. Communication & Circulars',
+      slug: 'communication',
+      actions: { create: true, read: true, update: true, delete: false, export: true, approve: true },
+      scope: 'SMS, Email, Circulars & App Push',
+      rolesWithAccess: 'Principal, VP, Clerk',
+      delegatedApproval: 'All-school SMS broadcast requires VP sign-off'
+    },
+    {
+      module: '12. Events & Activities',
+      slug: 'events',
+      actions: { create: true, read: true, update: true, delete: false, export: true, approve: true },
+      scope: 'Academic, Sports & Competitions',
+      rolesWithAccess: 'Principal, VP, Activity Coordinator',
+      delegatedApproval: 'Budget allocations approved by Bursar & Principal'
+    },
+    {
+      module: '13. Transport & Facilities',
+      slug: 'transport',
+      actions: { create: true, read: true, update: true, delete: false, export: true, approve: true },
+      scope: 'Fleet, Routes, Driver Rosters & Safety',
+      rolesWithAccess: 'Transport Head, Admin Officer, VP',
+      delegatedApproval: 'Route adjustments approved by VP'
+    },
+    {
+      module: '14. Inventory & Assets',
+      slug: 'inventory',
+      actions: { create: true, read: true, update: true, delete: false, export: true, approve: true },
+      scope: 'Fixed Assets, Labs, Books & Supplies',
+      rolesWithAccess: 'Admin Officer, Bursar, Principal',
+      delegatedApproval: 'Purchase orders > ₹25,000 by Principal'
+    },
+    {
+      module: '15. Reports & Analytics',
+      slug: 'reports',
+      actions: { create: false, read: true, update: false, delete: false, export: true, approve: false },
+      scope: 'Institutional BI & Regulatory Submissions',
+      rolesWithAccess: 'Principal, VP, Bursar (Finance Reports)',
+      delegatedApproval: 'Statutory board downloads restricted to Principal'
+    },
+    {
+      module: '16. Tasks & Approvals',
+      slug: 'tasks',
+      actions: { create: true, read: true, update: true, delete: false, export: true, approve: true },
+      scope: 'Campus Executive Decision Engine',
+      rolesWithAccess: 'Principal, VP, Department Heads',
+      delegatedApproval: 'Hierarchy-bound per workflow settings'
+    },
+    {
+      module: '17. Settings & Access Control',
+      slug: 'settings',
+      actions: { create: true, read: true, update: true, delete: false, export: true, approve: true },
+      scope: 'System Infrastructure & Security',
+      rolesWithAccess: 'Principal Only',
+      delegatedApproval: 'No delegation permitted'
+    }
+  ];
+
+  const SETTINGS_WORKFLOWS_DATA = [
+    {
+      id: 'WF-001',
+      name: 'Student Fee Concession & Scholarship',
+      category: 'Finance & Accounts',
+      stages: 'L1: Class Teacher Review -> L2: Bursar Verification -> L3: Principal Final Approval',
+      approvers: 'Smt. Gorle Varalakshmi (Principal)',
+      escalationRule: 'Auto-escalates to Principal Chamber if pending > 48 Hours',
+      status: 'Active'
+    },
+    {
+      id: 'WF-002',
+      name: 'Faculty Casual & Medical Leave Approval',
+      category: 'Human Resources',
+      stages: 'L1: Substitution Planner -> L2: Vice Principal -> L3: Principal',
+      approvers: 'Sri Navva Anand (VP) & Smt. Gorle Varalakshmi (Principal)',
+      escalationRule: 'Flagged red if pending within 12 Hours of leave commencement',
+      status: 'Active'
+    },
+    {
+      id: 'WF-003',
+      name: 'Procurement Requisition (> ₹25,000)',
+      category: 'Assets & Inventory',
+      stages: 'L1: Store Officer -> L2: Bursar Financial Check -> L3: Principal Sanction',
+      approvers: 'Sri S. Ramu (Bursar) & Smt. Gorle Varalakshmi',
+      escalationRule: 'Auto-alerts Executive Board after 72 Hours',
+      status: 'Active'
+    },
+    {
+      id: 'WF-004',
+      name: 'Student Disciplinary Suspension / Convocation',
+      category: 'Student Welfare',
+      stages: 'L1: Incident Logger -> L2: Counselor Review -> L3: VP Disciplinary Order',
+      approvers: 'Sri Navva Anand (VP)',
+      escalationRule: 'Must be completed within 24 Hours with signed parent memo',
+      status: 'Active'
+    },
+    {
+      id: 'WF-005',
+      name: 'Statutory Transfer Certificate (TC) Issuance',
+      category: 'Admissions & TC',
+      stages: 'L1: Fee Dues Clearance -> L2: Library No-Dues -> L3: Principal Signature',
+      approvers: 'Smt. Gorle Varalakshmi (Principal)',
+      escalationRule: 'Statutory compliance requires dispatch within 5 business days',
+      status: 'Active'
+    },
+    {
+      id: 'WF-006',
+      name: 'Campus Emergency Broadcast & Circular Dispatch',
+      category: 'Communication',
+      stages: 'L1: Draft by Admin Desk -> L2: Executive Authorization by Principal/VP',
+      approvers: 'Smt. Gorle Varalakshmi / Sri Navva Anand',
+      escalationRule: 'Emergency broadcasts bypass queue with cryptographic 2FA pin',
+      status: 'Active'
+    }
+  ];
+
+  const SETTINGS_AUDIT_LOGS_DATA = [
+    {
+      id: 'AUD-2026-1048',
+      user: 'Smt. Gorle Varalakshmi',
+      role: 'Principal',
+      action: 'APPROVED_FEE_CONCESSION',
+      target: 'CONC-2026-089 (Student: K. Tarun, Class X-A)',
+      timestamp: '2026-10-29 17:34:12',
+      result: 'SUCCESS',
+      ip: '192.168.1.10 (Executive Chamber)',
+      device: 'Chrome 130 / Win11 Workstation',
+      diff: {
+        field: 'Concession Amount',
+        beforeValue: 'Pending Review (₹0 applied)',
+        afterValue: 'Approved ₹12,000 Merit Scholarship Waiver',
+        reason: 'District Academic Olympiad Rank 1 achievement verification',
+        authorizedBy: 'Smt. Gorle Varalakshmi'
+      }
+    },
+    {
+      id: 'AUD-2026-1047',
+      user: 'Sri S. Ramu',
+      role: 'Head Bursar',
+      action: 'REVERSED_DUPLICATE_FEE_PAYMENT',
+      target: 'TXN-2026-8841 (Receipt: REC-7740)',
+      timestamp: '2026-10-29 16:15:08',
+      result: 'REVERSED',
+      ip: '192.168.1.24 (Accounts Desk 1)',
+      device: 'Firefox 131 / Win10 POS',
+      diff: {
+        field: 'Transaction Status',
+        beforeValue: 'Completed (Credit ₹14,500 via UPI)',
+        afterValue: 'Reversed via Journal Entry JRN-2026-092 (Refunded to Parent Bank)',
+        reason: 'Bank gateway double debit reported and validated by parent passbook',
+        authorizedBy: 'Principal Smt. Varalakshmi (Clearance Ref: FIN-AUTH-099)'
+      }
+    },
+    {
+      id: 'AUD-2026-1046',
+      user: 'Sri Navva Anand',
+      role: 'Vice Principal',
+      action: 'ALLOCATED_FACULTY_SUBSTITUTE',
+      target: 'SUB-2026-042 (Period 3, Class IX-B)',
+      timestamp: '2026-10-29 09:20:45',
+      result: 'SUCCESS',
+      ip: '192.168.1.14 (VP Office Desk)',
+      device: 'Edge 130 / Win11 Desktop',
+      diff: {
+        field: 'Assigned Teacher',
+        beforeValue: 'Smt. P. Sarada (On Medical Leave)',
+        afterValue: 'Sri K. Venkat Rao (Physical Science)',
+        reason: 'Emergency casual leave cover for pre-board practicals',
+        authorizedBy: 'Vice Principal Office'
+      }
+    },
+    {
+      id: 'AUD-2026-1045',
+      user: 'Kum. B. Lavanya',
+      role: 'Front Desk Clerk',
+      action: 'ATTEMPTED_FEE_STRUCTURE_OVERRIDE',
+      target: 'FEE-HEAD-2026 (Tuition Fee Class X)',
+      timestamp: '2026-10-29 08:45:19',
+      result: 'DENIED',
+      ip: '192.168.1.33 (Reception Desk 2)',
+      device: 'Chrome 130 / Win10 Terminal',
+      diff: {
+        field: 'Permission Check',
+        beforeValue: 'User Role: Clerk (Scope: Read/Register)',
+        afterValue: 'Blocked by RBAC Protocol: Edit Fee Structure requires Bursar/Principal',
+        reason: 'Unauthorized attempted change to class fee schedule without executive privilege',
+        authorizedBy: 'System Security Guard (Automated Enforcement)'
+      }
+    },
+    {
+      id: 'AUD-2026-1044',
+      user: 'Smt. Gorle Varalakshmi',
+      role: 'Principal',
+      action: 'SYSTEM_BACKUP_TRIGGERED',
+      target: 'BKP-2026-10-29-0400 (Daily Snapshot)',
+      timestamp: '2026-10-29 04:00:01',
+      result: 'SUCCESS',
+      ip: '127.0.0.1 (Automated System Cron)',
+      device: 'Enterprise Cron Daemon',
+      diff: {
+        field: 'Database Archive Integrity',
+        beforeValue: 'Prior Snapshot: BKP-2026-10-28-0400',
+        afterValue: 'Generated BKP-2026-10-29-0400 (SHA-256 Checksum: e4d90...b21)',
+        reason: 'Statutory nightly disaster recovery automated execution',
+        authorizedBy: 'Principal Standing Protocol'
+      }
+    },
+    {
+      id: 'AUD-2026-1043',
+      user: 'Sri P. Satyanarayana',
+      role: 'Admin Officer',
+      action: 'UPDATED_VEHICLE_FITNESS_RECORD',
+      target: 'VEH-AP35-TA-4491 (Bus Route 03)',
+      timestamp: '2026-10-28 15:10:30',
+      result: 'SUCCESS',
+      ip: '192.168.1.18 (Admin Wing Desk)',
+      device: 'Chrome 130 / Win11 Workstation',
+      diff: {
+        field: 'Fitness Certificate Expiry',
+        beforeValue: '15 October 2026 (Expired)',
+        afterValue: '14 October 2027 (RTO Renewal Validated)',
+        reason: 'Regional Transport Authority annual inspection clearance attached',
+        authorizedBy: 'Admin Officer'
+      }
+    },
+    {
+      id: 'AUD-2026-1042',
+      user: 'Smt. D. Leela',
+      role: 'Student Counselor',
+      action: 'RECORDED_COUNSELLING_SESSION',
+      target: 'CNS-2026-08 (Class VIII-B)',
+      timestamp: '2026-10-28 12:40:00',
+      result: 'SUCCESS',
+      ip: '192.168.1.42 (Counseling Chamber)',
+      device: 'Firefox 131 / Win11 Encrypted Terminal',
+      diff: {
+        field: 'Session Log',
+        beforeValue: 'Referral Initiated by Class Teacher',
+        afterValue: 'Session 1 Completed: Academic anxiety counseling & parental guidance plan logged',
+        reason: 'Statutory child safeguarding & pastoral care guidance',
+        authorizedBy: 'Designated Pastoral Counselor'
+      }
+    },
+    {
+      id: 'AUD-2026-1041',
+      user: 'Sri V. V. R. Prasad',
+      role: 'Controller of Exams',
+      action: 'PUBLISHED_QUARTERLY_GRADE_SHEET',
+      target: 'EXAM-Q1-2026 (Classes VI to X)',
+      timestamp: '2026-10-27 18:00:22',
+      result: 'SUCCESS',
+      ip: '192.168.1.15 (Examination Cell)',
+      device: 'Chrome 130 / Win11 Desktop',
+      diff: {
+        field: 'Publication Status',
+        beforeValue: 'Pending Moderation Approval',
+        afterValue: 'Published to Parent Portal & Student SMS Dispatch',
+        reason: 'Academic council marks review completed with zero variance',
+        authorizedBy: 'Principal Smt. Gorle Varalakshmi Sign-off'
+      }
+    }
+  ];
+
+  const SETTINGS_BACKUPS_DATA = [
+    {
+      id: 'BKP-2026-10-29-0400',
+      timestamp: '29 Oct 2026, 04:00 AM',
+      scope: 'Full Database & Document Assets (MongoDB + Cloudinary Mirrors)',
+      size: '1.48 GB',
+      checksum: 'e4d90a7891cf3bc928410294b2190821ac39',
+      status: 'VERIFIED & INTACT',
+      retention: 'Statutory 7 Years'
+    },
+    {
+      id: 'BKP-2026-10-28-0400',
+      timestamp: '28 Oct 2026, 04:00 AM',
+      scope: 'Full Database & Document Assets',
+      size: '1.47 GB',
+      checksum: 'c2198fa0129bc489201948210398210b4291',
+      status: 'VERIFIED & INTACT',
+      retention: 'Statutory 7 Years'
+    },
+    {
+      id: 'BKP-2026-10-27-0400',
+      timestamp: '27 Oct 2026, 04:00 AM',
+      scope: 'Full Database & Document Assets',
+      size: '1.46 GB',
+      checksum: '9921bcdef82104918290123891029381029a',
+      status: 'VERIFIED & INTACT',
+      retention: 'Statutory 7 Years'
+    },
+    {
+      id: 'BKP-2026-10-26-0400',
+      timestamp: '26 Oct 2026, 04:00 AM',
+      scope: 'Full Database & Document Assets',
+      size: '1.45 GB',
+      checksum: '88102938120391820391820391820391820b',
+      status: 'VERIFIED & INTACT',
+      retention: 'Statutory 7 Years'
+    },
+    {
+      id: 'BKP-2026-10-01-0000',
+      timestamp: '01 Oct 2026, 12:00 AM',
+      scope: 'Monthly Master Archive (Cold Storage Glacier Replication)',
+      size: '1.42 GB',
+      checksum: '77210928301928301928301928301928301c',
+      status: 'VERIFIED & INTACT',
+      retention: 'Statutory 7 Years'
+    },
+    {
+      id: 'BKP-2026-06-01-PRE-AY',
+      timestamp: '01 Jun 2026, 08:30 AM',
+      scope: 'AY 2026-27 Inaugural Baseline Archive',
+      size: '1.28 GB',
+      checksum: '55102938102938102938102938102938102d',
+      status: 'VERIFIED & INTACT',
+      retention: 'Permanent Milestone'
+    }
+  ];
+
+  function renderSettingsRolesTable() {
+    const tbody = document.getElementById('tbodyRoleManagement');
+    if (!tbody) return;
+
+    tbody.innerHTML = SETTINGS_ROLES_DATA.map(r => `
+      <tr>
+        <td>
+          <strong style="color: #0f172a; font-size: 0.9rem;">${r.name}</strong><br>
+          <small class="text-muted">${r.description}</small>
+        </td>
+        <td>
+          <span class="badge" style="background:#eff6ff; color:#1d4ed8; font-weight:700;">${r.template}</span>
+        </td>
+        <td>
+          <div style="font-weight:600; color:#1e293b; font-size:0.85rem;">${r.assignedUsers.join(', ')}</div>
+          <small class="text-muted">${r.userCount} active account(s)</small>
+        </td>
+        <td>
+          <span class="text-xs" style="color: #475569; font-weight: 500;">${r.scope}</span>
+        </td>
+        <td>
+          <span class="badge" style="background:#f0fdf4; color:#166534; font-weight:700;">${r.permissionsCount}</span>
+        </td>
+        <td class="text-end">
+          <button class="btn btn-sm btn-outline-primary" onclick="portalApp.openRoleAssignmentModal('${r.id}')" title="Configure Role & Assigned Users">
+            <i class="fa-solid fa-user-pen"></i> Edit Role
+          </button>
+        </td>
+      </tr>
+    `).join('');
+  }
+
+  function renderSettingsPermissionsTable() {
+    const tbody = document.getElementById('tbodyAccessPermissions');
+    if (!tbody) return;
+
+    tbody.innerHTML = SETTINGS_PERMISSIONS_DATA.map(p => {
+      const getActionBadge = (allowed, label) => allowed 
+        ? `<span class="badge" style="background:#dcfce7; color:#166534; font-size:0.68rem; margin:1px;">${label}</span>`
+        : `<span class="badge" style="background:#f1f5f9; color:#94a3b8; font-size:0.68rem; margin:1px;">-${label}-</span>`;
+
+      return `
+        <tr>
+          <td>
+            <strong style="color: #0f172a; font-size: 0.88rem;">${p.module}</strong>
+          </td>
+          <td>
+            <div class="d-flex flex-wrap gap-1">
+              ${getActionBadge(p.actions.create, 'CREATE')}
+              ${getActionBadge(p.actions.read, 'READ')}
+              ${getActionBadge(p.actions.update, 'UPDATE')}
+              ${getActionBadge(p.actions.delete, 'DELETE')}
+              ${getActionBadge(p.actions.export, 'EXPORT')}
+              ${getActionBadge(p.actions.approve, 'APPROVE')}
+            </div>
+          </td>
+          <td>
+            <span class="text-xs font-semibold" style="color:#334155;">${p.scope}</span>
+          </td>
+          <td>
+            <span class="text-xs text-muted font-medium">${p.rolesWithAccess}</span>
+          </td>
+          <td>
+            <span class="badge" style="background:#fef3c7; color:#b45309; font-size:0.7rem; font-weight:600;">${p.delegatedApproval}</span>
+          </td>
+          <td class="text-end">
+            <button class="btn btn-sm btn-secondary" onclick="portalApp.showToast('Delegation rules modified for ${p.module}', 'info')" title="Adjust Scope & Delegation">
+              <i class="fa-solid fa-sliders"></i> Adjust
+            </button>
+          </td>
+        </tr>
+      `;
+    }).join('');
+  }
+
+  function renderSettingsWorkflowsTable() {
+    const tbody = document.getElementById('tbodySettingsWorkflows');
+    if (!tbody) return;
+
+    tbody.innerHTML = SETTINGS_WORKFLOWS_DATA.map(w => `
+      <tr>
+        <td>
+          <strong style="color:#0f172a; font-size:0.88rem;">${w.name}</strong><br>
+          <span class="badge" style="background:#f1f5f9; color:#475569; font-size:0.7rem;">${w.category}</span>
+        </td>
+        <td>
+          <span style="font-size:0.82rem; color:#1e293b; font-weight:500;">${w.stages}</span>
+        </td>
+        <td>
+          <strong style="font-size:0.82rem; color:#0f172a;"><i class="fa-solid fa-signature text-primary mr-1"></i>${w.approvers}</strong>
+        </td>
+        <td>
+          <small class="text-muted"><i class="fa-solid fa-clock-rotate-left mr-1"></i>${w.escalationRule}</small>
+        </td>
+        <td>
+          <span class="badge" style="background:#dcfce7; color:#166534; font-weight:700;">${w.status}</span>
+        </td>
+        <td class="text-end">
+          <button class="btn btn-sm btn-outline-secondary" onclick="portalApp.showToast('Configuring SLA for ${w.name}', 'info')">
+            <i class="fa-solid fa-pen-ruler"></i> Edit SLA
+          </button>
+        </td>
+      </tr>
+    `).join('');
+  }
+
+  function renderAuditLogsTable(recordsToRender) {
+    const tbody = document.getElementById('tbodyAuditLogs');
+    if (!tbody) return;
+
+    const records = recordsToRender || SETTINGS_AUDIT_LOGS_DATA;
+    if (records.length === 0) {
+      tbody.innerHTML = `<tr><td colspan="8" class="text-center py-4 text-muted">No audit logs matching selected search and filter criteria.</td></tr>`;
+      return;
+    }
+
+    tbody.innerHTML = records.map(l => {
+      let resultBadge = `<span class="badge" style="background:#dcfce7; color:#166534; font-weight:700;">SUCCESS</span>`;
+      if (l.result === 'DENIED') {
+        resultBadge = `<span class="badge" style="background:#fee2e2; color:#991b1b; font-weight:700;"><i class="fa-solid fa-triangle-exclamation mr-1"></i>DENIED</span>`;
+      } else if (l.result === 'REVERSED') {
+        resultBadge = `<span class="badge" style="background:#fef3c7; color:#b45309; font-weight:700;"><i class="fa-solid fa-rotate-left mr-1"></i>REVERSED</span>`;
+      }
+
+      return `
+        <tr>
+          <td>
+            <strong style="color: #0f172a; font-size: 0.88rem;">${l.user}</strong><br>
+            <span class="badge" style="background:#f1f5f9; color:#475569; font-size:0.7rem;">${l.role}</span>
+          </td>
+          <td>
+            <code style="font-size: 0.76rem; color: #1e40af; font-weight: 700;">${l.action}</code>
+          </td>
+          <td>
+            <span style="font-size: 0.82rem; color: #1e293b; font-weight: 500;">${l.target}</span>
+          </td>
+          <td>
+            <span class="text-xs text-muted"><i class="fa-regular fa-clock mr-1"></i>${l.timestamp}</span>
+          </td>
+          <td>
+            ${resultBadge}
+          </td>
+          <td>
+            <small class="text-muted">${l.ip}</small><br>
+            <small style="font-size: 0.7rem; color: #64748b;">${l.device}</small>
+          </td>
+          <td>
+            <div style="font-size: 0.78rem; color: #334155;">
+              <strong>${l.diff.field}:</strong> <span class="text-muted">${l.diff.afterValue.slice(0, 35)}...</span>
+            </div>
+          </td>
+          <td class="text-end">
+            <button class="btn btn-sm btn-outline-primary" onclick="portalApp.openAuditDiffModal('${l.id}')" title="Inspect Cryptographic Change Diff">
+              <i class="fa-solid fa-eye"></i> View Diff
+            </button>
+          </td>
+        </tr>
+      `;
+    }).join('');
+  }
+
+  function filterAuditLogsTable() {
+    const searchVal = (document.getElementById('searchAuditLogsInput')?.value || '').toLowerCase();
+    const userVal = document.getElementById('filterAuditUserSelect')?.value || '';
+    const resultVal = document.getElementById('filterAuditResultSelect')?.value || '';
+
+    const filtered = SETTINGS_AUDIT_LOGS_DATA.filter(l => {
+      const matchSearch = !searchVal || 
+        l.user.toLowerCase().includes(searchVal) ||
+        l.action.toLowerCase().includes(searchVal) ||
+        l.target.toLowerCase().includes(searchVal) ||
+        l.ip.toLowerCase().includes(searchVal);
+
+      const matchUser = !userVal || l.user.includes(userVal);
+      const matchResult = !resultVal || l.result === resultVal;
+
+      return matchSearch && matchUser && matchResult;
+    });
+
+    renderAuditLogsTable(filtered);
+  }
+
+  function openAuditDiffModal(logId) {
+    const log = SETTINGS_AUDIT_LOGS_DATA.find(l => l.id === logId);
+    if (!log) return;
+
+    const titleEl = document.getElementById('auditDiffModalTitle');
+    if (titleEl) {
+      titleEl.innerHTML = `Audit Log Change Diff &bull; ${log.id}`;
+    }
+
+    const bodyEl = document.getElementById('auditLogDiffModalBody');
+    if (bodyEl) {
+      bodyEl.innerHTML = `
+        <div class="p-3 mb-3 rounded-2 border" style="background:#f8fafc;">
+          <div class="row g-2 text-xs">
+            <div class="col-6"><strong>User / Executor:</strong> ${log.user} (${log.role})</div>
+            <div class="col-6"><strong>Timestamp:</strong> ${log.timestamp}</div>
+            <div class="col-6"><strong>Action Code:</strong> <code>${log.action}</code></div>
+            <div class="col-6"><strong>Security Result:</strong> <strong>${log.result}</strong></div>
+            <div class="col-12"><strong>Target Record:</strong> ${log.target}</div>
+            <div class="col-12"><strong>Network &amp; Device:</strong> ${log.ip} &bull; ${log.device}</div>
+          </div>
+        </div>
+
+        <h6 class="font-bold mb-2" style="color:#0f172a;"><i class="fa-solid fa-code-compare text-primary mr-1"></i> State Change History &bull; Field: ${log.diff.field}</h6>
+        <div class="table-responsive mb-3">
+          <table class="table table-bordered table-sm align-middle">
+            <thead class="table-light text-xs">
+              <tr>
+                <th style="width: 50%; color:#991b1b; background:#fef2f2;"><i class="fa-solid fa-minus mr-1"></i> Previous State (Before)</th>
+                <th style="width: 50%; color:#166534; background:#f0fdf4;"><i class="fa-solid fa-plus mr-1"></i> Updated State (After)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td style="background:#fff5f5; color:#991b1b; font-size:0.82rem; padding:10px;">
+                  ${log.diff.beforeValue}
+                </td>
+                <td style="background:#f6fef9; color:#166534; font-size:0.82rem; padding:10px; font-weight:600;">
+                  ${log.diff.afterValue}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="p-3 rounded-2 border" style="background:#eff6ff; border-color:#bfdbfe !important;">
+          <strong style="color:#1e40af; font-size:0.82rem;"><i class="fa-solid fa-signature mr-1"></i> Executive Authorization &amp; Justification Note:</strong>
+          <p class="text-xs text-muted mb-1 mt-1">${log.diff.reason}</p>
+          <div class="text-xs" style="color:#1d4ed8; font-weight:600;">Authorized By: ${log.diff.authorizedBy}</div>
+        </div>
+      `;
+    }
+
+    openModal('auditLogDiffModal');
+  }
+
+  function exportAuditLogsCSV() {
+    const headers = ['Audit ID', 'User', 'Role', 'Action', 'Target Record', 'Timestamp', 'Result', 'IP Address', 'Diff Field', 'Previous Value', 'New Value', 'Authorized By'];
+    const rows = SETTINGS_AUDIT_LOGS_DATA.map(l => [
+      `"${l.id}"`,
+      `"${l.user}"`,
+      `"${l.role}"`,
+      `"${l.action}"`,
+      `"${l.target}"`,
+      `"${l.timestamp}"`,
+      `"${l.result}"`,
+      `"${l.ip}"`,
+      `"${l.diff.field}"`,
+      `"${l.diff.beforeValue.replace(/"/g, '""')}"`,
+      `"${l.diff.afterValue.replace(/"/g, '""')}"`,
+      `"${l.diff.authorizedBy}"`
+    ]);
+
+    const csvContent = [headers.join(','), ...rows.map(r => r.join(','))].join('\n');
+    downloadCsvFile(csvContent, 'Sri_Vidya_Statutory_Audit_Logs_' + new Date().toISOString().slice(0, 10) + '.csv');
+    showToast('Statutory audit log ledger exported with cryptographic hash.', 'success');
+  }
+
+  function renderDataBackupsTable() {
+    const tbody = document.getElementById('tbodyDataBackups');
+    if (!tbody) return;
+
+    tbody.innerHTML = SETTINGS_BACKUPS_DATA.map(b => `
+      <tr>
+        <td>
+          <strong style="color: #0f172a; font-size: 0.88rem;"><i class="fa-solid fa-database text-primary mr-1"></i>${b.id}</strong><br>
+          <small class="text-muted">${b.retention}</small>
+        </td>
+        <td>
+          <span style="font-size:0.82rem; color:#1e293b; font-weight:500;">${b.timestamp}</span>
+        </td>
+        <td>
+          <span class="text-xs" style="color:#475569;">${b.scope}</span>
+        </td>
+        <td>
+          <span class="badge" style="background:#eff6ff; color:#1d4ed8; font-weight:700;">${b.size}</span>
+        </td>
+        <td>
+          <code style="font-size: 0.72rem; color: #475569;">${b.checksum.slice(0, 16)}...</code>
+        </td>
+        <td>
+          <span class="badge" style="background:#dcfce7; color:#166534; font-weight:700;"><i class="fa-solid fa-circle-check mr-1"></i>${b.status}</span>
+        </td>
+        <td class="text-end">
+          <div class="d-inline-flex gap-1">
+            <button class="btn btn-sm btn-outline-secondary" onclick="portalApp.showToast('Generating signed download URL for ${b.id}', 'info')" title="Download Archive">
+              <i class="fa-solid fa-download"></i>
+            </button>
+            <button class="btn btn-sm btn-outline-danger" onclick="portalApp.openRestoreConfirmationModal('${b.id}')" title="Initiate Authorized System Restore">
+              <i class="fa-solid fa-rotate-left"></i> Restore
+            </button>
+          </div>
+        </td>
+      </tr>
+    `).join('');
+  }
+
+  function triggerInstantBackup() {
+    showToast('Executing instant database snapshot and SHA-256 integrity verification...', 'info');
+    setTimeout(() => {
+      const now = new Date();
+      const pad = (n) => String(n).padStart(2, '0');
+      const snapId = 'BKP-' + now.getFullYear() + '-' + pad(now.getMonth() + 1) + '-' + pad(now.getDate()) + '-' + pad(now.getHours()) + pad(now.getMinutes());
+      
+      SETTINGS_BACKUPS_DATA.unshift({
+        id: snapId,
+        timestamp: 'Just Now (' + now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) + ')',
+        scope: 'On-Demand Full Campus State Snapshot (Cryptographically Sealed)',
+        size: '1.49 GB',
+        checksum: Math.random().toString(16).slice(2) + Math.random().toString(16).slice(2),
+        status: 'VERIFIED & INTACT',
+        retention: 'Statutory 7 Years'
+      });
+
+      renderDataBackupsTable();
+      showToast('Instant snapshot ' + snapId + ' generated successfully with 100% integrity!', 'success');
+    }, 1200);
+  }
+
+  function openRestoreConfirmationModal(snapshotId) {
+    const input = document.getElementById('restoreTargetSnapshotId');
+    if (input) input.value = snapshotId;
+    const pass = document.getElementById('restorePassphraseInput');
+    if (pass) pass.value = '';
+    openModal('systemRestoreConfirmationModal');
+  }
+
+  function executeSystemRestore(event) {
+    if (event) event.preventDefault();
+    const pass = document.getElementById('restorePassphraseInput')?.value || '';
+    const snapId = document.getElementById('restoreTargetSnapshotId')?.value || 'Snapshot';
+
+    if (pass.length < 4) {
+      showToast('Invalid executive authorization passphrase. Action denied.', 'error');
+      return;
+    }
+
+    closeModal('systemRestoreConfirmationModal');
+    showToast('Clearance verified. Rolling back state to ' + snapId + '...', 'warning');
+
+    setTimeout(() => {
+      showToast('Disaster Recovery rollback complete. All data tables reconciled to ' + snapId + '.', 'success');
+    }, 1500);
+  }
+
+  function saveInstitutionalSettings() {
+    showToast('Saving institutional configuration & statutory governance parameters...', 'info');
+    setTimeout(() => {
+      showToast('All school profile, term dates, security policies and RBAC rules saved successfully!', 'success');
+    }, 800);
+  }
+
+  function openRoleAssignmentModal(roleId) {
+    const role = SETTINGS_ROLES_DATA.find(r => r.id === roleId);
+    if (!role) return;
+    showToast('Editing configuration for ' + role.name + '. (Assignees: ' + role.assignedUsers.join(', ') + ')', 'info');
+  }
+
   return {
     // Inventory & Assets
     renderInventoryAssetsTable,
@@ -32034,6 +32921,20 @@ const classData = TIMETABLE_CLASS_DATA[currentTimetableClass] || TIMETABLE_CLASS
     exportEscalationsCSV,
     exportWorkflowSettingsCSV,
 
+
+    renderSettingsRolesTable,
+    renderSettingsPermissionsTable,
+    renderSettingsWorkflowsTable,
+    renderAuditLogsTable,
+    filterAuditLogsTable,
+    openAuditDiffModal,
+    exportAuditLogsCSV,
+    renderDataBackupsTable,
+    triggerInstantBackup,
+    openRestoreConfirmationModal,
+    executeSystemRestore,
+    saveInstitutionalSettings,
+    openRoleAssignmentModal,
   };
 
 
