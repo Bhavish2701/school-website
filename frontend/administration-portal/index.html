@@ -365,7 +365,7 @@
             <a href="#discipline-late" class="nav-sub-link" data-sub="late" onclick="portalApp.switchSubTab('discipline', 'late');">Late-Coming Register</a>
             <a href="#discipline-merit" class="nav-sub-link" data-sub="merit" onclick="portalApp.switchSubTab('discipline', 'merit');">Merit &amp; Achievement</a>
             <a href="#discipline-meetings" class="nav-sub-link" data-sub="meetings" onclick="portalApp.switchSubTab('discipline', 'meetings');">Parent Convocations / Meetings</a>
-            <a href="#discipline-counselling" class="nav-sub-link" data-sub="counselling" onclick="portalApp.switchSubTab('discipline', 'counselling');"><span>Counselling Referrals</span> <span class="nav-sub-badge warning" title="Restricted Access"><i class="fa-solid fa-lock"></i></span></a>
+            <a href="#discipline-counselling" class="nav-sub-link" data-sub="counselling" onclick="portalApp.switchSubTab('discipline', 'counselling');">Counselling Referrals <span class="nav-sub-badge warning" title="Restricted Safeguarding Access"><i class="fa-solid fa-lock"></i> Restricted</span></a>
           </div>
         </div>
 
@@ -455,7 +455,7 @@
         </div>
 
         <!-- 12. Events & Activities -->
-        <div class="nav-item" data-module="events">
+        <div class="nav-item" data-module="events" id="sidebarNavItemEvents">
           <a href="#events" class="nav-link" onclick="portalApp.navigateTo('events');">
             <span class="nav-icon"><i class="fa-solid fa-calendar-days"></i></span>
             <span class="nav-text">13. Events &amp; Activities</span>
@@ -463,15 +463,14 @@
           </a>
           <div class="nav-sub">
             <a href="#events-calendar" class="nav-sub-link active" data-sub="calendar" onclick="portalApp.switchSubTab('events', 'calendar');">Annual Calendar</a>
-            <a href="#events-celebrations" class="nav-sub-link" data-sub="celebrations" onclick="portalApp.switchSubTab('events', 'celebrations');">Celebrations</a>
+            <a href="#events-school" class="nav-sub-link" data-sub="school" onclick="portalApp.switchSubTab('events', 'school');">School Events</a>
             <a href="#events-competitions" class="nav-sub-link" data-sub="competitions" onclick="portalApp.switchSubTab('events', 'competitions');">Competitions</a>
-            <a href="#events-sports" class="nav-sub-link" data-sub="sports" onclick="portalApp.switchSubTab('events', 'sports');">Sports &amp; Athletics</a>
-            <a href="#events-clubs" class="nav-sub-link" data-sub="clubs" onclick="portalApp.switchSubTab('events', 'clubs');">Clubs</a>
+            <a href="#events-clubs-sports" class="nav-sub-link" data-sub="clubs-sports" onclick="portalApp.switchSubTab('events', 'clubs-sports');">Clubs &amp; Sports</a>
             <a href="#events-permissions" class="nav-sub-link" data-sub="permissions" onclick="portalApp.switchSubTab('events', 'permissions');">Event Permissions</a>
+            <a href="#events-reports" class="nav-sub-link" data-sub="reports" onclick="portalApp.switchSubTab('events', 'reports');">Event Reports</a>
           </div>
         </div>
 
-        <!-- 13. Transport & Facilities -->
         <div class="nav-item" data-module="transport">
           <a href="#transport" class="nav-link" onclick="portalApp.navigateTo('transport');">
             <span class="nav-icon"><i class="fa-solid fa-bus-simple"></i></span>
@@ -9895,67 +9894,555 @@
              MODULE 8: EVENTS
              (Calendar, School Events, Competitions, Activities)
              ================================================================= -->
+                <!-- =================================================================
+             MODULE 13: EVENTS & ACTIVITIES (#view-events)
+             Campus Events, Annual Calendar, Competitions, Clubs & Sports,
+             Permissions Governance, and Post-Event Realization Reports.
+             Submenus:
+             1. Annual Calendar (Academic dates, holidays, examinations and major events)
+             2. School Events (Event name, date, location, coordinator, budget and status)
+             3. Competitions (Competition details, eligible classes, registration and results)
+             4. Clubs & Sports (Club, coach, participants, schedules and activities)
+             5. Event Permissions (Permission requests, approvals, venue and safety requirements)
+             6. Event Reports (Attendance, outcomes, expenses and feedback)
+             ================================================================= -->
         <section class="portal-view" id="view-events">
+
+          <!-- Governance & Safety Protocol Banner -->
+          <div class="alert alert-info d-flex align-items-center mb-4" style="background: rgba(2, 132, 199, 0.08); border-left: 4px solid var(--color-primary); padding: 1rem 1.25rem; border-radius: 8px;">
+            <div style="font-size: 1.5rem; margin-right: 1.1rem; color: var(--color-primary);"><i class="fa-solid fa-calendar-check"></i></div>
+            <div style="flex: 1;">
+              <h4 style="margin: 0 0 0.25rem; color: var(--color-primary); font-size: 0.98rem; font-weight: 700;">
+                Institutional Extracurricular &amp; Event Governance Protocol
+              </h4>
+              <p style="margin: 0; font-size: 0.84rem; color: var(--color-text-muted); line-height: 1.45;">
+                All inter-school competitions, campus galas, field excursions, and athletic tournaments require mandatory safety clearances, venue sanitization check, and executive approval from <strong>Principal Smt. Gorle Varalakshmi</strong> and designated reviewer <strong>Vice Principal Sri Navva Anand</strong>.
+              </p>
+            </div>
+            <div style="margin-left: 1rem;">
+              <button class="btn btn-primary btn-sm" onclick="portalApp.openRequestPermissionModal()">
+                <i class="fa-solid fa-file-signature"></i> Request Event Permission
+              </button>
+            </div>
+          </div>
+
           <div class="module-header">
             <div class="module-header-info">
-              <h2><i class="fa-solid fa-calendar-days text-primary"></i> School Events & Activities</h2>
-              <p>Annual academic calendar, cultural events, sports championships, and competitions.</p>
+              <h2><i class="fa-solid fa-calendar-days text-primary"></i> Events &amp; Activities Administration</h2>
+              <p>Annual academic calendar, school events, competitive meets, sports academies, venue clearances, and realized event audit reports.</p>
             </div>
             <div class="module-header-actions">
+              <button class="btn btn-secondary" onclick="portalApp.exportCalendarICS()">
+                <i class="fa-solid fa-file-arrow-down"></i> Export Calendar (.ics)
+              </button>
               <button class="btn btn-primary" onclick="portalApp.openModal('addEventModal')">
                 <i class="fa-solid fa-calendar-plus"></i> Add New Event
               </button>
             </div>
           </div>
 
+          <!-- Navigation Tab Strip matching the 6 required submenus -->
           <div class="tab-strip" id="eventsTabStrip">
             <button class="tab-btn active" data-sub="calendar" onclick="portalApp.switchSubTab('events', 'calendar')">
-              <i class="fa-solid fa-calendar"></i> Annual Calendar (<span id="allEventsCountBadge">10</span>)
+              <i class="fa-solid fa-calendar-days"></i> Annual Calendar (<span id="tabBadgeEventsCalendar">16</span>)
             </button>
             <button class="tab-btn" data-sub="school" onclick="portalApp.switchSubTab('events', 'school')">
-              <i class="fa-solid fa-school-flag"></i> School Events (<span id="schoolEventsCountBadge">4</span>)
+              <i class="fa-solid fa-school-flag"></i> School Events (<span id="tabBadgeEventsSchool">7</span>)
             </button>
             <button class="tab-btn" data-sub="competitions" onclick="portalApp.switchSubTab('events', 'competitions')">
-              <i class="fa-solid fa-trophy"></i> Competitions &amp; Sports (<span id="compEventsCountBadge">3</span>)
+              <i class="fa-solid fa-trophy"></i> Competitions (<span id="tabBadgeEventsCompetitions">6</span>)
             </button>
-            <button class="tab-btn" data-sub="activities" onclick="portalApp.switchSubTab('events', 'activities')">
-              <i class="fa-solid fa-palette"></i> Co-Curricular &amp; Clubs (<span id="actEventsCountBadge">3</span>)
+            <button class="tab-btn" data-sub="clubs-sports" onclick="portalApp.switchSubTab('events', 'clubs-sports')">
+              <i class="fa-solid fa-person-running"></i> Clubs &amp; Sports (<span id="tabBadgeEventsClubs">6</span>)
+            </button>
+            <button class="tab-btn" data-sub="permissions" onclick="portalApp.switchSubTab('events', 'permissions')">
+              <i class="fa-solid fa-shield-halved"></i> Event Permissions (<span id="tabBadgeEventsPermissions">5</span>)
+            </button>
+            <button class="tab-btn" data-sub="reports" onclick="portalApp.switchSubTab('events', 'reports')">
+              <i class="fa-solid fa-clipboard-check"></i> Event Reports (<span id="tabBadgeEventsReports">4</span>)
             </button>
           </div>
 
-          <!-- SUBVIEW: Annual Calendar (All) -->
-          <div class="event-subview active" id="subview-events-calendar">
-            <div class="events-portal-grid" id="eventsContainer">
-              <!-- Event cards generated by JS -->
+          <!-- =========================================================
+               SUBVIEW 1: ANNUAL CALENDAR
+               Columns: Academic dates, holidays, examinations and major events
+               ========================================================= -->
+          <div class="events-subview active" id="subview-events-calendar">
+            <div class="quad-stat-grid mb-4">
+              <div class="stat-card">
+                <div class="stat-card-header">
+                  <span class="stat-label">Total Academic Days</span>
+                  <div class="stat-icon-wrapper stat-icon-blue"><i class="fa-solid fa-calendar-days"></i></div>
+                </div>
+                <div class="stat-value">224</div>
+                <div class="stat-subtext text-success"><i class="fa-solid fa-check-double"></i> AP Board Compliant (Min 220)</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-card-header">
+                  <span class="stat-label">Gazetted Holidays</span>
+                  <div class="stat-icon-wrapper stat-icon-amber"><i class="fa-solid fa-umbrella-beach"></i></div>
+                </div>
+                <div class="stat-value">38 Days</div>
+                <div class="stat-subtext text-muted">Festivals &amp; Vacations</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-card-header">
+                  <span class="stat-label">Scheduled Examinations</span>
+                  <div class="stat-icon-wrapper stat-icon-primary"><i class="fa-solid fa-pen-nib"></i></div>
+                </div>
+                <div class="stat-value">6 Rounds</div>
+                <div class="stat-subtext text-primary">FA-1 to FA-4, SA-1 &amp; Pre-Final</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-card-header">
+                  <span class="stat-label">Major Institutional Events</span>
+                  <div class="stat-icon-wrapper stat-icon-green"><i class="fa-solid fa-star"></i></div>
+                </div>
+                <div class="stat-value">8 Milestones</div>
+                <div class="stat-subtext text-success">Annual Day, Science Expo &amp; Sports</div>
+              </div>
+            </div>
+
+            <!-- Controls: Search & Category Filter -->
+            <div class="control-panel mb-3 d-flex flex-wrap align-items-center justify-content-between gap-2">
+              <div class="d-flex align-items-center gap-2 flex-grow-1" style="max-width: 580px;">
+                <div class="search-box flex-grow-1">
+                  <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                  <input type="text" id="calendarSearchInput" class="form-control" placeholder="Search calendar by title, month, or event type..." oninput="portalApp.filterAnnualCalendar()">
+                </div>
+                <select id="calendarTypeFilter" class="form-control" style="width: 190px;" onchange="portalApp.filterAnnualCalendar()">
+                  <option value="all">All Calendar Items</option>
+                  <option value="Academic">Academic Dates</option>
+                  <option value="Holiday">Official Holidays</option>
+                  <option value="Examination">Examinations</option>
+                  <option value="Major Event">Major Events</option>
+                </select>
+              </div>
+              <div class="d-flex gap-2">
+                <button class="btn btn-secondary btn-sm" onclick="portalApp.exportCalendarPDF()">
+                  <i class="fa-solid fa-file-pdf"></i> Download Official Calendar
+                </button>
+              </div>
+            </div>
+
+            <!-- Table: Annual Calendar -->
+            <div class="table-container">
+              <table class="data-table" id="annualCalendarTable">
+                <thead>
+                  <tr>
+                    <th style="width: 140px;">Academic Dates</th>
+                    <th style="width: 160px;">Event / Milestone</th>
+                    <th style="width: 130px;">Category</th>
+                    <th>Applicable Cohort</th>
+                    <th style="width: 140px;">Session / Venue</th>
+                    <th style="width: 110px;">Status</th>
+                    <th style="text-align: right; width: 100px;">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="annualCalendarTableBody">
+                  <!-- Injected via portal.js -->
+                </tbody>
+              </table>
             </div>
           </div>
 
-          <!-- SUBVIEW: School Events -->
-          <div class="event-subview" id="subview-events-school" style="display: none;">
-            <div class="events-portal-grid" id="schoolEventsContainer">
-              <!-- Event cards generated by JS -->
+          <!-- =========================================================
+               SUBVIEW 2: SCHOOL EVENTS
+               Columns: Event name, date, location, coordinator, budget and status
+               ========================================================= -->
+          <div class="events-subview" id="subview-events-school" style="display: none;">
+            <div class="quad-stat-grid mb-4">
+              <div class="stat-card">
+                <div class="stat-card-header">
+                  <span class="stat-label">Total School Events</span>
+                  <div class="stat-icon-wrapper stat-icon-blue"><i class="fa-solid fa-flag"></i></div>
+                </div>
+                <div class="stat-value">7 Events</div>
+                <div class="stat-subtext text-primary">Academic Year 2026-27</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-card-header">
+                  <span class="stat-label">Sanctioned Budget</span>
+                  <div class="stat-icon-wrapper stat-icon-green"><i class="fa-solid fa-indian-rupee-sign"></i></div>
+                </div>
+                <div class="stat-value">₹4.85 Lakhs</div>
+                <div class="stat-subtext text-success">Approved by Correspondent</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-card-header">
+                  <span class="stat-label">Completed Successfully</span>
+                  <div class="stat-icon-wrapper stat-icon-cyan"><i class="fa-solid fa-circle-check"></i></div>
+                </div>
+                <div class="stat-value">4 Galas</div>
+                <div class="stat-subtext text-muted">Audited &amp; Reconciled</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-card-header">
+                  <span class="stat-label">Upcoming / Planned</span>
+                  <div class="stat-icon-wrapper stat-icon-amber"><i class="fa-solid fa-hourglass-half"></i></div>
+                </div>
+                <div class="stat-value">3 Events</div>
+                <div class="stat-subtext text-amber">Active Planning Stage</div>
+              </div>
+            </div>
+
+            <!-- Controls: Search & Filter -->
+            <div class="control-panel mb-3 d-flex flex-wrap align-items-center justify-content-between gap-2">
+              <div class="d-flex align-items-center gap-2 flex-grow-1" style="max-width: 580px;">
+                <div class="search-box flex-grow-1">
+                  <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                  <input type="text" id="schoolEventsSearchInput" class="form-control" placeholder="Search event name, coordinator, location..." oninput="portalApp.filterSchoolEvents()">
+                </div>
+                <select id="schoolEventsStatusFilter" class="form-control" style="width: 170px;" onchange="portalApp.filterSchoolEvents()">
+                  <option value="all">All Statuses</option>
+                  <option value="Completed">Completed</option>
+                  <option value="Approved">Approved</option>
+                  <option value="Planning">Planning</option>
+                </select>
+              </div>
+              <div class="d-flex gap-2">
+                <button class="btn btn-primary btn-sm" onclick="portalApp.openModal('addEventModal')">
+                  <i class="fa-solid fa-plus"></i> Create School Event
+                </button>
+              </div>
+            </div>
+
+            <!-- Table: School Events -->
+            <div class="table-container">
+              <table class="data-table" id="schoolEventsTable">
+                <thead>
+                  <tr>
+                    <th>Event Name</th>
+                    <th style="width: 130px;">Date &amp; Schedule</th>
+                    <th style="width: 150px;">Location / Venue</th>
+                    <th style="width: 170px;">Coordinator</th>
+                    <th style="width: 120px;">Budget</th>
+                    <th style="width: 120px;">Status</th>
+                    <th style="text-align: right; width: 110px;">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="schoolEventsTableBody">
+                  <!-- Injected via portal.js -->
+                </tbody>
+              </table>
             </div>
           </div>
 
-          <!-- SUBVIEW: Competitions & Sports -->
-          <div class="event-subview" id="subview-events-competitions" style="display: none;">
-            <div class="events-portal-grid" id="compEventsContainer">
-              <!-- Event cards generated by JS -->
+          <!-- =========================================================
+               SUBVIEW 3: COMPETITIONS
+               Columns: Competition details, eligible classes, registration and results
+               ========================================================= -->
+          <div class="events-subview" id="subview-events-competitions" style="display: none;">
+            <div class="quad-stat-grid mb-4">
+              <div class="stat-card">
+                <div class="stat-card-header">
+                  <span class="stat-label">Active Competitions</span>
+                  <div class="stat-icon-wrapper stat-icon-blue"><i class="fa-solid fa-trophy"></i></div>
+                </div>
+                <div class="stat-value">6 Meets</div>
+                <div class="stat-subtext text-primary">Inter-School &amp; District</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-card-header">
+                  <span class="stat-label">Registered Students</span>
+                  <div class="stat-icon-wrapper stat-icon-green"><i class="fa-solid fa-user-check"></i></div>
+                </div>
+                <div class="stat-value">148 Enrolled</div>
+                <div class="stat-subtext text-success">Verified by Class Mentors</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-card-header">
+                  <span class="stat-label">Trophies / Laurels</span>
+                  <div class="stat-icon-wrapper stat-icon-amber"><i class="fa-solid fa-award"></i></div>
+                </div>
+                <div class="stat-value">19 Medals</div>
+                <div class="stat-subtext text-amber">District &amp; State Level</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-card-header">
+                  <span class="stat-label">Upcoming Fixtures</span>
+                  <div class="stat-icon-wrapper stat-icon-purple"><i class="fa-solid fa-bullhorn"></i></div>
+                </div>
+                <div class="stat-value">2 Pending</div>
+                <div class="stat-subtext text-muted">Science Congress &amp; Math Olympiad</div>
+              </div>
+            </div>
+
+            <!-- Controls: Search & Category Filter -->
+            <div class="control-panel mb-3 d-flex flex-wrap align-items-center justify-content-between gap-2">
+              <div class="d-flex align-items-center gap-2 flex-grow-1" style="max-width: 580px;">
+                <div class="search-box flex-grow-1">
+                  <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                  <input type="text" id="competitionsSearchInput" class="form-control" placeholder="Search competition, category, or organizer..." oninput="portalApp.filterCompetitions()">
+                </div>
+                <select id="competitionsClassFilter" class="form-control" style="width: 170px;" onchange="portalApp.filterCompetitions()">
+                  <option value="all">All Classes</option>
+                  <option value="Primary">Classes I - V</option>
+                  <option value="Middle">Classes VI - VIII</option>
+                  <option value="High">Classes IX - X</option>
+                </select>
+              </div>
+              <div class="d-flex gap-2">
+                <button class="btn btn-secondary btn-sm" onclick="portalApp.openRegisterCompModal()">
+                  <i class="fa-solid fa-user-plus"></i> Register Student Roster
+                </button>
+              </div>
+            </div>
+
+            <!-- Table: Competitions -->
+            <div class="table-container">
+              <table class="data-table" id="competitionsTable">
+                <thead>
+                  <tr>
+                    <th>Competition Details</th>
+                    <th style="width: 150px;">Eligible Classes</th>
+                    <th style="width: 170px;">Registration Status</th>
+                    <th style="width: 220px;">Results / Standings</th>
+                    <th style="width: 120px;">Level</th>
+                    <th style="text-align: right; width: 100px;">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="competitionsTableBody">
+                  <!-- Injected via portal.js -->
+                </tbody>
+              </table>
             </div>
           </div>
 
-          <!-- SUBVIEW: Co-Curricular & Clubs -->
-          <div class="event-subview" id="subview-events-activities" style="display: none;">
-            <div class="events-portal-grid" id="actEventsContainer">
-              <!-- Event cards generated by JS -->
+          <!-- =========================================================
+               SUBVIEW 4: CLUBS & SPORTS
+               Columns: Club, coach, participants, schedules and activities
+               ========================================================= -->
+          <div class="events-subview" id="subview-events-clubs-sports" style="display: none;">
+            <div class="quad-stat-grid mb-4">
+              <div class="stat-card">
+                <div class="stat-card-header">
+                  <span class="stat-label">Active Clubs &amp; Teams</span>
+                  <div class="stat-icon-wrapper stat-icon-blue"><i class="fa-solid fa-people-group"></i></div>
+                </div>
+                <div class="stat-value">6 Squads</div>
+                <div class="stat-subtext text-primary">Academic, Arts &amp; Athletics</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-card-header">
+                  <span class="stat-label">Designated Coaches</span>
+                  <div class="stat-icon-wrapper stat-icon-green"><i class="fa-solid fa-user-tie"></i></div>
+                </div>
+                <div class="stat-value">6 Instructors</div>
+                <div class="stat-subtext text-success">NIS Certified &amp; Masters</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-card-header">
+                  <span class="stat-label">Active Participants</span>
+                  <div class="stat-icon-wrapper stat-icon-purple"><i class="fa-solid fa-users"></i></div>
+                </div>
+                <div class="stat-value">210 Students</div>
+                <div class="stat-subtext text-muted">24.5% Student Body</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-card-header">
+                  <span class="stat-label">Weekly Training Hours</span>
+                  <div class="stat-icon-wrapper stat-icon-amber"><i class="fa-solid fa-stopwatch"></i></div>
+                </div>
+                <div class="stat-value">18 Hours</div>
+                <div class="stat-subtext text-amber">Zero Academic Clashes</div>
+              </div>
+            </div>
+
+            <!-- Controls: Search & Category Filter -->
+            <div class="control-panel mb-3 d-flex flex-wrap align-items-center justify-content-between gap-2">
+              <div class="d-flex align-items-center gap-2 flex-grow-1" style="max-width: 580px;">
+                <div class="search-box flex-grow-1">
+                  <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                  <input type="text" id="clubsSearchInput" class="form-control" placeholder="Search club, coach, or activity..." oninput="portalApp.filterClubsSports()">
+                </div>
+                <select id="clubsTypeFilter" class="form-control" style="width: 170px;" onchange="portalApp.filterClubsSports()">
+                  <option value="all">All Academies</option>
+                  <option value="Sports">Sports &amp; Athletics</option>
+                  <option value="Academic">STEM &amp; Literary</option>
+                  <option value="Cultural">Arts &amp; Heritage</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Table: Clubs & Sports -->
+            <div class="table-container">
+              <table class="data-table" id="clubsSportsTable">
+                <thead>
+                  <tr>
+                    <th style="width: 180px;">Club / Academy</th>
+                    <th style="width: 160px;">Coach / Mentor</th>
+                    <th style="width: 130px;">Participants</th>
+                    <th style="width: 190px;">Schedules &amp; Timings</th>
+                    <th>Activities &amp; Curriculum</th>
+                    <th style="text-align: right; width: 100px;">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="clubsSportsTableBody">
+                  <!-- Injected via portal.js -->
+                </tbody>
+              </table>
             </div>
           </div>
+
+          <!-- =========================================================
+               SUBVIEW 5: EVENT PERMISSIONS
+               Columns: Permission requests, approvals, venue and safety requirements
+               ========================================================= -->
+          <div class="events-subview" id="subview-events-permissions" style="display: none;">
+            <div class="quad-stat-grid mb-4">
+              <div class="stat-card">
+                <div class="stat-card-header">
+                  <span class="stat-label">Permission Requests</span>
+                  <div class="stat-icon-wrapper stat-icon-blue"><i class="fa-solid fa-file-signature"></i></div>
+                </div>
+                <div class="stat-value">5 Requests</div>
+                <div class="stat-subtext text-primary">AY 2026-27 Dossiers</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-card-header">
+                  <span class="stat-label">Principal Sanctioned</span>
+                  <div class="stat-icon-wrapper stat-icon-green"><i class="fa-solid fa-stamp"></i></div>
+                </div>
+                <div class="stat-value">3 Approved</div>
+                <div class="stat-subtext text-success">NOC &amp; Budget Cleared</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-card-header">
+                  <span class="stat-label">Under VP Review</span>
+                  <div class="stat-icon-wrapper stat-icon-amber"><i class="fa-solid fa-clock-rotate-left"></i></div>
+                </div>
+                <div class="stat-value">1 In Review</div>
+                <div class="stat-subtext text-amber">Safety Audit Pending</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-card-header">
+                  <span class="stat-label">Safety Compliance</span>
+                  <div class="stat-icon-wrapper stat-icon-purple"><i class="fa-solid fa-shield-virus"></i></div>
+                </div>
+                <div class="stat-value">100%</div>
+                <div class="stat-subtext text-success">Fire &amp; First-Aid Certified</div>
+              </div>
+            </div>
+
+            <!-- Controls: Search & Category Filter -->
+            <div class="control-panel mb-3 d-flex flex-wrap align-items-center justify-content-between gap-2">
+              <div class="d-flex align-items-center gap-2 flex-grow-1" style="max-width: 580px;">
+                <div class="search-box flex-grow-1">
+                  <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                  <input type="text" id="permissionsSearchInput" class="form-control" placeholder="Search request ID, event, venue, or applicant..." oninput="portalApp.filterEventPermissions()">
+                </div>
+                <select id="permissionsStatusFilter" class="form-control" style="width: 170px;" onchange="portalApp.filterEventPermissions()">
+                  <option value="all">All Statuses</option>
+                  <option value="Approved">Approved</option>
+                  <option value="Pending">Pending Review</option>
+                  <option value="Conditional">Conditional Clearance</option>
+                </select>
+              </div>
+              <div class="d-flex gap-2">
+                <button class="btn btn-primary btn-sm" onclick="portalApp.openRequestPermissionModal()">
+                  <i class="fa-solid fa-file-circle-plus"></i> Submit Permission Request
+                </button>
+              </div>
+            </div>
+
+            <!-- Table: Event Permissions -->
+            <div class="table-container">
+              <table class="data-table" id="eventPermissionsTable">
+                <thead>
+                  <tr>
+                    <th style="width: 220px;">Permission Requests</th>
+                    <th style="width: 170px;">Venue &amp; Logistics</th>
+                    <th>Safety Requirements &amp; NOC</th>
+                    <th style="width: 190px;">Approvals &amp; Authority</th>
+                    <th style="width: 120px;">Status</th>
+                    <th style="text-align: right; width: 120px;">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="eventPermissionsTableBody">
+                  <!-- Injected via portal.js -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- =========================================================
+               SUBVIEW 6: EVENT REPORTS
+               Columns: Attendance, outcomes, expenses and feedback
+               ========================================================= -->
+          <div class="events-subview" id="subview-events-reports" style="display: none;">
+            <div class="quad-stat-grid mb-4">
+              <div class="stat-card">
+                <div class="stat-card-header">
+                  <span class="stat-label">Reports Filed &amp; Audited</span>
+                  <div class="stat-icon-wrapper stat-icon-blue"><i class="fa-solid fa-clipboard-check"></i></div>
+                </div>
+                <div class="stat-value">4 Reports</div>
+                <div class="stat-subtext text-primary">Post-Event Dossiers</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-card-header">
+                  <span class="stat-label">Cumulative Attendance</span>
+                  <div class="stat-icon-wrapper stat-icon-green"><i class="fa-solid fa-user-group"></i></div>
+                </div>
+                <div class="stat-value">2,280 Total</div>
+                <div class="stat-subtext text-success">Students, Parents &amp; Dignitaries</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-card-header">
+                  <span class="stat-label">Audited Expenditure</span>
+                  <div class="stat-icon-wrapper stat-icon-amber"><i class="fa-solid fa-receipt"></i></div>
+                </div>
+                <div class="stat-value">₹2.68 Lakhs</div>
+                <div class="stat-subtext text-success">Under Budget (₹2.90L)</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-card-header">
+                  <span class="stat-label">Overall Feedback Score</span>
+                  <div class="stat-icon-wrapper stat-icon-purple"><i class="fa-solid fa-heart"></i></div>
+                </div>
+                <div class="stat-value">4.8 / 5.0</div>
+                <div class="stat-subtext text-success">96% Positive Parent Rating</div>
+              </div>
+            </div>
+
+            <!-- Controls: Search & Category Filter -->
+            <div class="control-panel mb-3 d-flex flex-wrap align-items-center justify-content-between gap-2">
+              <div class="d-flex align-items-center gap-2 flex-grow-1" style="max-width: 580px;">
+                <div class="search-box flex-grow-1">
+                  <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                  <input type="text" id="eventReportsSearchInput" class="form-control" placeholder="Search event report, outcomes, or highlights..." oninput="portalApp.filterEventReports()">
+                </div>
+              </div>
+              <div class="d-flex gap-2">
+                <button class="btn btn-secondary btn-sm" onclick="portalApp.exportEventReportCSV()">
+                  <i class="fa-solid fa-file-csv"></i> Export Realization Ledger
+                </button>
+              </div>
+            </div>
+
+            <!-- Table: Event Reports -->
+            <div class="table-container">
+              <table class="data-table" id="eventReportsTable">
+                <thead>
+                  <tr>
+                    <th style="width: 200px;">Event &amp; Date</th>
+                    <th style="width: 140px;">Attendance</th>
+                    <th>Key Outcomes &amp; Laurels</th>
+                    <th style="width: 160px;">Expenses &amp; Audit</th>
+                    <th style="width: 150px;">Feedback &amp; Rating</th>
+                    <th style="text-align: right; width: 110px;">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="eventReportsTableBody">
+                  <!-- Injected via portal.js -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
         </section>
 
-        <!-- =================================================================
-             MODULE 9: REPORTS
-             (Academic, Attendance, Financial, Staff, Student)
-             ================================================================= -->
         <section class="portal-view" id="view-reports">
           <div class="module-header">
             <div class="module-header-info">
@@ -15425,6 +15912,104 @@ Class X-A,Monday,2,09:35 AM - 10:20 AM,Physical Science,Sri Navva Anand,Room 201
       }
     });
   </script>
+
+
+  <!-- ==========================================================================
+       MODAL: REQUEST EVENT PERMISSION & SAFETY CLEARANCE
+       ========================================================================== -->
+  <div class="modal-backdrop" id="requestEventPermissionModal">
+    <div class="portal-modal fee-modal-dialog" style="max-width: 720px;">
+      <div class="modal-header">
+        <h3><i class="fa-solid fa-shield-halved text-primary"></i> Extracurricular Event Permission &amp; Safety Dossier</h3>
+        <button class="modal-close-x" onclick="portalApp.closeModal('requestEventPermissionModal')" title="Close" aria-label="Close">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <form id="requestEventPermissionForm" onsubmit="portalApp.handleRequestPermissionSubmit(event)">
+        <div class="modal-body" style="max-height: calc(85vh - 130px); overflow-y: auto;">
+          <div style="background: rgba(2, 132, 199, 0.08); border: 1px solid #bae6fd; border-radius: 8px; padding: 0.75rem 1rem; margin-bottom: 1rem; font-size: 0.84rem; color: #0369a1;">
+            <i class="fa-solid fa-circle-info mr-1"></i>
+            Mandatory Institutional Clearance: Approval requires review by <strong>Vice Principal Sri Navva Anand</strong> and final sanction by <strong>Principal Smt. Gorle Varalakshmi</strong>.
+          </div>
+          <div class="fee-form-grid">
+            <div class="form-group full-span">
+              <label>Event Name *</label>
+              <input type="text" id="reqEventName" class="form-control" placeholder="e.g. Annual Inter-School Science Fair 2026" required>
+            </div>
+            <div class="form-group">
+              <label>Proposed Date *</label>
+              <input type="date" id="reqEventDate" class="form-control" required>
+            </div>
+            <div class="form-group">
+              <label>Proposed Venue / Campus Location *</label>
+              <select id="reqEventVenue" class="form-control" required>
+                <option value="Main Auditorium">Main Auditorium (Capacity 600)</option>
+                <option value="Campus Sports Grounds">Campus Sports Grounds</option>
+                <option value="Open Air Amphitheatre">Open Air Amphitheatre</option>
+                <option value="Indoor Badminton &amp; TT Complex">Indoor Badminton &amp; TT Complex</option>
+                <option value="STEM Science Laboratory">STEM Science Laboratory</option>
+                <option value="Off-Campus Excursion Site">Off-Campus Excursion Site (Requires Bus Fleet NOC)</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Applicant / Faculty Coordinator *</label>
+              <input type="text" id="reqEventCoordinator" class="form-control" placeholder="e.g. Smt. K. Aruna (Senior Physics Faculty)" required>
+            </div>
+            <div class="form-group">
+              <label>Estimated Attendance *</label>
+              <input type="number" id="reqEventAttendance" class="form-control" placeholder="e.g. 350" min="10" required>
+            </div>
+            <div class="form-group">
+              <label>Requested Budget (₹) *</label>
+              <input type="number" id="reqEventBudget" class="form-control" placeholder="e.g. 45000" min="0" required>
+            </div>
+            <div class="form-group">
+              <label>Fire &amp; Safety Compliance *</label>
+              <select id="reqEventSafetyNOC" class="form-control" required>
+                <option value="Certified (Campus Fire NOC Valid)">Certified (Campus Fire NOC Valid)</option>
+                <option value="Paramedic Station Assigned">Paramedic Station Assigned</option>
+                <option value="Police Permission Applied">Police Permission Applied (Off-Campus)</option>
+                <option value="Standard Internal Checklist">Standard Internal Checklist</option>
+              </select>
+            </div>
+            <div class="form-group full-span">
+              <label>Safety Protocols &amp; Medical First-Aid Arrangements *</label>
+              <textarea id="reqEventSafetyDetails" class="form-control" rows="2" placeholder="Detail mandatory first aid box, teacher chaperone ratio (1:15), emergency exits, drinking water sanitization..." required></textarea>
+            </div>
+            <div class="form-group full-span">
+              <label>Event Purpose &amp; Academic Justification *</label>
+              <textarea id="reqEventPurpose" class="form-control" rows="2" placeholder="Describe the co-scholastic learning goals, awards, student participation benefits..." required></textarea>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="portalApp.closeModal('requestEventPermissionModal')">Cancel</button>
+          <button type="submit" class="btn btn-primary"><i class="fa-solid fa-paper-plane"></i> Submit Dossier for Clearance</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       MODAL: EVENT DETAILS / REALIZATION DOSSIER
+       ========================================================================== -->
+  <div class="modal-backdrop" id="viewEventDetailsModal">
+    <div class="portal-modal fee-modal-dialog" style="max-width: 680px;">
+      <div class="modal-header">
+        <h3><i class="fa-solid fa-calendar-check text-primary"></i> Institutional Event Dossier</h3>
+        <button class="modal-close-x" onclick="portalApp.closeModal('viewEventDetailsModal')" title="Close" aria-label="Close">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <div class="modal-body" id="eventDetailsModalBody" style="max-height: calc(85vh - 130px); overflow-y: auto;">
+        <!-- Injected via portal.js -->
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" onclick="portalApp.closeModal('viewEventDetailsModal')">Close</button>
+        <button type="button" class="btn btn-primary" onclick="window.print()"><i class="fa-solid fa-print"></i> Print Official Dossier</button>
+      </div>
+    </div>
+  </div>
 
 </body>
 </html>

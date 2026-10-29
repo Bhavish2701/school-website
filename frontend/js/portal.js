@@ -3070,13 +3070,17 @@ const FEE_CATEGORY_AUDIT_DATA = [
       }
     } else if (moduleKey === 'events') {
       if (subKey === 'calendar') {
-        renderEvents(state.events);
+        renderAnnualCalendar();
       } else if (subKey === 'school') {
-        renderSchoolEvents();
+        renderSchoolEventsTable();
       } else if (subKey === 'competitions') {
-        renderCompetitionEvents();
-      } else if (subKey === 'activities') {
-        renderClubActivities();
+        renderCompetitionsTable();
+      } else if (subKey === 'clubs-sports' || subKey === 'activities' || subKey === 'clubs') {
+        renderClubsSportsTable();
+      } else if (subKey === 'permissions') {
+        renderEventPermissionsTable();
+      } else if (subKey === 'reports') {
+        renderEventReportsTable();
       }
         } else if (moduleKey === 'leaves' || moduleKey === 'leave') {
       if (subKey === 'faculty' || subKey === 'staff' || subKey === 'faculty-leave-review') {
@@ -10727,59 +10731,624 @@ const FEE_CATEGORY_AUDIT_DATA = [
     }
   }
 
-  function renderSchoolEvents() {
-    const container = document.getElementById('schoolEventsContainer');
-    if (!container) return;
-    const schoolEvents = [
-      { title: 'Quarterly Examinations 2026', date: 'Sept 24 - Oct 01, 2026', tag: 'Board Assessments', desc: 'Comprehensive assessments for Classes I through X as per State Board guidelines.' },
-      { title: 'Gandhi Jayanti & Swachh Vidya Drive', date: 'Oct 02, 2026', tag: 'Campus Event', desc: 'Patriotic assembly, essay writing, clean campus drive and social awareness rally.' },
-      { title: 'Bathukamma & Dussehra Cultural Utsav', date: 'Oct 10, 2026', tag: 'Cultural Festival', desc: 'Traditional floral festival celebrations, cultural dances, and festive distribution.' },
-      { title: 'Annual Day Celebrations & Prize Distribution', date: 'Jan 24, 2027', tag: 'Annual Day Gala', desc: 'Grand annual day celebration, academic achievers felicitation, and theatrical presentations.' }
-    ];
-    renderEventCardsInto(container, schoolEvents);
+  // =========================================================================
+  // MODULE 13: EVENTS & ACTIVITIES ENGINE
+  // Submenus:
+  // 1. Annual Calendar (Academic dates, holidays, examinations and major events)
+  // 2. School Events (Event name, date, location, coordinator, budget and status)
+  // 3. Competitions (Competition details, eligible classes, registration and results)
+  // 4. Clubs & Sports (Club, coach, participants, schedules and activities)
+  // 5. Event Permissions (Permission requests, approvals, venue and safety requirements)
+  // 6. Event Reports (Attendance, outcomes, expenses and feedback)
+  // =========================================================================
+
+  const ANNUAL_CALENDAR_DATA = [
+    { id: 'AC-01', dates: '12 Jun 2026', title: 'School Reopening & Academic Orientation', category: 'Academic', cohort: 'Classes I - X & KG', venue: 'Campus Auditorium', status: 'Completed' },
+    { id: 'AC-02', dates: '21 Jun 2026', title: 'International Yoga Day Demonstrations', category: 'Major Event', cohort: 'All Students & Staff', venue: 'Open Sports Ground', status: 'Completed' },
+    { id: 'AC-03', dates: '17 Jul 2026', title: 'Moharram Observance', category: 'Holiday', cohort: 'Institution-wide Holiday', venue: 'Campus Closed', status: 'Completed' },
+    { id: 'AC-04', dates: '04 Aug - 08 Aug 2026', title: 'Formative Assessment - I (FA-1)', category: 'Examination', cohort: 'Classes I - X (AP Board)', venue: 'Classrooms / Exam Halls', status: 'Completed' },
+    { id: 'AC-05', dates: '15 Aug 2026', title: '80th Independence Day Flag Hoisting & Parade', category: 'Major Event', cohort: 'All Students & Guardians', venue: 'Central Quadrangle', status: 'Completed' },
+    { id: 'AC-06', dates: '26 Aug 2026', title: 'Sri Krishna Janmashtami Celebrations', category: 'Holiday', cohort: 'Institution-wide Holiday', venue: 'Campus Closed', status: 'Completed' },
+    { id: 'AC-07', dates: '05 Sep 2026', title: 'Teachers\' Day & Student Guru Vandanam', category: 'Major Event', cohort: 'All Faculty & High School', venue: 'Main Auditorium', status: 'Completed' },
+    { id: 'AC-08', dates: '07 Sep 2026', title: 'Vinayaka Chavithi Pooja & Utsav', category: 'Holiday', cohort: 'Institution-wide Holiday', venue: 'Campus Closed', status: 'Completed' },
+    { id: 'AC-09', dates: '14 Sep - 18 Sep 2026', title: 'Formative Assessment - II (FA-2)', category: 'Examination', cohort: 'Classes I - X (AP Board)', venue: 'Classrooms / Exam Halls', status: 'Completed' },
+    { id: 'AC-10', dates: '24 Sep - 01 Oct 2026', title: 'Summative Assessment - I (SA-1 Half-Yearly)', category: 'Examination', cohort: 'Classes I - X', venue: 'Assigned Examination Blocks', status: 'Completed' },
+    { id: 'AC-11', dates: '02 Oct 2026', title: 'Gandhi Jayanti & Swachh Vidya Drive', category: 'Major Event', cohort: 'Campus Community', venue: 'Campus & Tilak Road', status: 'Completed' },
+    { id: 'AC-12', dates: '08 Oct - 17 Oct 2026', title: 'Dussehra / Bathukamma Term Vacation', category: 'Holiday', cohort: 'All Students & Faculty', venue: 'Term Break', status: 'Completed' },
+    { id: 'AC-13', dates: '14 Nov 2026', title: 'Children\'s Day & Mega STEM Science Expo', category: 'Major Event', cohort: 'Classes I - X & Parents', venue: 'Main Auditorium & STEM Labs', status: 'Scheduled' },
+    { id: 'AC-14', dates: '10 Dec - 15 Dec 2026', title: 'Formative Assessment - III (FA-3)', category: 'Examination', cohort: 'Classes I - X', venue: 'Classrooms / Exam Halls', status: 'Scheduled' },
+    { id: 'AC-15', dates: '11 Jan - 17 Jan 2027', title: 'Sankranti / Pongal Harvest Holidays', category: 'Holiday', cohort: 'Institution-wide Holiday', venue: 'Term Break', status: 'Scheduled' },
+    { id: 'AC-16', dates: '24 Jan 2027', title: '9th Annual Day & Academic Laurels Gala', category: 'Major Event', cohort: 'Full Institution & Dignitaries', venue: 'Main Auditorium & Stage', status: 'Scheduled' }
+  ];
+
+  const SCHOOL_EVENTS_DATA = [
+    { id: 'SE-01', name: 'Annual Day Celebrations & Prize Gala', date: '24 Jan 2027 • 05:00 PM', location: 'Main Auditorium', coordinator: 'Smt. Gorle Varalakshmi & Sri Anand', budget: '₹1,45,000', status: 'Approved' },
+    { id: 'SE-02', name: 'Children\'s Day & Mega STEM Science Expo', date: '14 Nov 2026 • 09:30 AM', location: 'STEM Lab & Quadrangle', coordinator: 'Sri K. V. Subbarao (Science HOD)', budget: '₹48,000', status: 'Approved' },
+    { id: 'SE-03', name: 'Inter-House Athletic & Sports Championship', date: '14 Oct - 16 Oct 2026', location: 'Campus Sports Grounds', coordinator: 'Sri B. Ramanaiah (Physical Director)', budget: '₹55,000', status: 'Completed' },
+    { id: 'SE-04', name: 'Gandhi Jayanti Social Service & Clean Rally', date: '02 Oct 2026 • 08:00 AM', location: 'Tilak Road & Campus Quad', coordinator: 'Smt. M. Gayatri (Social Studies)', budget: '₹12,500', status: 'Completed' },
+    { id: 'SE-05', name: 'Teachers\' Day & Cultural Felicitation', date: '05 Sep 2026 • 10:00 AM', location: 'Main Auditorium', coordinator: 'Sri Navva Anand (Vice Principal)', budget: '₹32,000', status: 'Completed' },
+    { id: 'SE-06', name: 'Independence Day Tricolor Flag Assembly', date: '15 Aug 2026 • 08:00 AM', location: 'Campus Central Flagpole', coordinator: 'Sri B. Ramanaiah (PET)', budget: '₹18,000', status: 'Completed' },
+    { id: 'SE-07', name: 'National Mathematics Day & Quiz Expo', date: '22 Dec 2026 • 10:30 AM', location: 'Math Innovation Lab', coordinator: 'Sri Ch. Venkateswarlu (Math HOD)', budget: '₹16,500', status: 'Planning' }
+  ];
+
+  const COMPETITIONS_DATA = [
+    { id: 'CMP-01', name: 'AP State Inter-School Science Congress', organizer: 'AP State Council of Science & Tech', date: '18 Nov 2026', eligibleClasses: 'Classes VIII, IX & X', registration: '12 Projects Registered (Verified)', results: 'State Semi-Finalist Qualified (3 Projects)', level: 'State Level' },
+    { id: 'CMP-02', name: 'District Inter-School Kho-Kho Tournament', organizer: 'Guntur District Sports Authority', date: '15 Oct 2026', eligibleClasses: 'Classes VII - X (Under-16)', registration: 'Boys & Girls Squads (24 Students)', results: 'Runners-up Trophy (Silver Medalists)', level: 'District Level' },
+    { id: 'CMP-03', name: 'All India Ramanujan Math Talent Olympiad', organizer: 'Association of Mathematics Teachers', date: '22 Dec 2026', eligibleClasses: 'Classes IV - X', registration: '45 Students Registered (Fees Paid)', results: 'Awaiting Examination on Dec 22', level: 'National Level' },
+    { id: 'CMP-04', name: 'Guntur City Inter-School Telugu Elocution', organizer: 'Bala Sahiti Vedika', date: '28 Aug 2026', eligibleClasses: 'Classes VI - VIII', registration: '6 Orators Enrolled', results: '1st Prize (K. Jahnavi, Class VIII-A)', level: 'City Level' },
+    { id: 'CMP-05', name: 'National Spelling Bee Championship', organizer: 'India Spelling Foundation', date: '04 Dec 2026', eligibleClasses: 'Classes III - VII', registration: '28 Students Enrolled', results: 'Regional Prelims Cleared (8 Students)', level: 'Regional Level' },
+    { id: 'CMP-06', name: 'District Badminton Singles Championship', organizer: 'AP Badminton Association, Guntur', date: '20 Sep 2026', eligibleClasses: 'Classes VII - IX', registration: '4 Shuttlers Enrolled', results: 'Gold Medal (T. Pavan Kumar, IX-B)', level: 'District Level' }
+  ];
+
+  const CLUBS_SPORTS_DATA = [
+    { id: 'CS-01', club: 'STEM & Robotics Academy', category: 'Academic', coach: 'Sri K. V. Subbarao (M.Sc Physics)', participants: '38 Active Cadets', schedule: 'Tue & Thu • 03:45 PM - 05:00 PM', activities: 'Arduino coding, robotic sensor assembly, STEM working projects, solar models, and IoT circuits.' },
+    { id: 'CS-02', club: 'Cricket Academy & Squad', category: 'Sports', coach: 'Sri B. Ramanaiah (B.P.Ed, NIS Coach)', participants: '32 Squad Players', schedule: 'Mon, Wed, Fri • 06:15 AM - 07:45 AM', activities: 'Net practice, turf wicket conditioning, batting drills, bowling speed audits, and inter-school fixtures.' },
+    { id: 'CS-03', club: 'Badminton & Shuttle Club', category: 'Sports', coach: 'Kum. S. Divya (Certified Shuttle Coach)', participants: '26 Shuttlers', schedule: 'Mon to Fri • 04:00 PM - 05:15 PM', activities: 'Footwork drills, smash-drop practice, tournament simulation, physical fitness, and reflex training.' },
+    { id: 'CS-04', club: 'Literary & Public Oratory Club', category: 'Cultural', coach: 'Smt. T. Anitha (M.A English)', participants: '42 Members', schedule: 'Wednesdays • 03:45 PM - 05:00 PM', activities: 'Model Youth Parliament, parliamentary debates, creative prose, elocution, and extempore competitions.' },
+    { id: 'CS-05', club: 'Classical Dance & Kuchipudi Guild', category: 'Cultural', coach: 'Smt. P. Hemalatha (Vidwan Diploma)', participants: '34 Dancers', schedule: 'Sat • 09:30 AM - 12:30 PM', activities: 'Classical Kuchipudi abhinayam, mudras, stage performance choreography for Annual Day & cultural galas.' },
+    { id: 'CS-06', club: 'Campus Eco & Green Corps', category: 'Academic', coach: 'Smt. M. Gayatri (M.Sc Botany)', participants: '38 Eco-Volunteers', schedule: 'Fridays • 03:45 PM - 05:00 PM', activities: 'Medicinal herb gardens, rainwater harvest monitoring, campus composting, plastic-free drives, and bird feeders.' }
+  ];
+
+  const EVENT_PERMISSIONS_DATA = [
+    {
+      id: 'PRM-2026-081',
+      eventName: '9th Annual Day Celebrations Gala',
+      date: '24 Jan 2027',
+      venue: 'Main Auditorium (Capacity 600)',
+      coordinator: 'Smt. Gorle Varalakshmi & Sri Anand',
+      safetyReq: 'Campus Fire NOC Valid • Dual Exit Clearance • Paramedic Station Assigned • Sound Decibel Clearance',
+      approvals: 'Principal Smt. Gorle Varalakshmi (Sanctioned)',
+      status: 'Approved',
+      budget: '₹1,45,000'
+    },
+    {
+      id: 'PRM-2026-079',
+      eventName: 'Children\'s Day & STEM Science Expo 2026',
+      date: '14 Nov 2026',
+      venue: 'STEM Innovation Wing & Auditorium',
+      coordinator: 'Sri K. V. Subbarao (Science HOD)',
+      safetyReq: 'Electric Safety Fuse Checks • Eye Wash Stations • Fire Extinguisher Demo • Teacher-Student 1:15 Ratio',
+      approvals: 'Vice Principal Sri Navva Anand (Verified)',
+      status: 'Approved',
+      budget: '₹48,000'
+    },
+    {
+      id: 'PRM-2026-078',
+      eventName: 'District Inter-School Athletic Meet Outstation OD',
+      date: '14 Oct - 16 Oct 2026',
+      venue: 'BR Stadium, Guntur Outstation Site',
+      coordinator: 'Sri B. Ramanaiah (Physical Director)',
+      safetyReq: 'Parent Consent Forms (24/24 Signed) • School Bus Fleet Roadworthiness NOC • Emergency First-Aid Kit',
+      approvals: 'Principal Smt. Gorle Varalakshmi (Sanctioned)',
+      status: 'Approved',
+      budget: '₹55,000'
+    },
+    {
+      id: 'PRM-2026-082',
+      eventName: 'Heritage Educational Field Excursion to Amaravathi',
+      date: '12 Dec 2026',
+      venue: 'Amaravathi Archaeological Museum & Stupa',
+      coordinator: 'Smt. M. Gayatri (Social Studies)',
+      safetyReq: 'Under Review: Bus Insurance Audit • Class Chaperone List • Drinking Water Logistics Verification',
+      approvals: 'Reviewing by Vice Principal Sri Navva Anand',
+      status: 'Pending',
+      budget: '₹42,000'
+    },
+    {
+      id: 'PRM-2026-080',
+      eventName: 'Winter Inter-Class Cricket Tournament',
+      date: '18 Dec - 20 Dec 2026',
+      venue: 'Campus Sports Ground',
+      coordinator: 'Sri B. Ramanaiah (PET)',
+      safetyReq: 'Helmet & Protective Guard Mandate • Physiotherapy Desk • Weather & Heat Index Monitoring',
+      approvals: 'Conditional Approval (Medical Kit Clearance)',
+      status: 'Conditional',
+      budget: '₹22,000'
+    }
+  ];
+
+  const EVENT_REPORTS_DATA = [
+    {
+      id: 'REP-2026-04',
+      eventName: 'Inter-House Athletic & Sports Championship 2026',
+      date: '14 Oct - 16 Oct 2026',
+      attendance: '620 Students & 180 Parents',
+      outcomes: 'Emerald House clinched Overall Rolling Trophy (184 pts). Ruby House was Runner-Up. 19 new track records established.',
+      expenses: '₹51,800 Audited (Budget ₹55,000 — ₹3,200 Savings returned to treasury)',
+      feedback: '4.9 / 5.0 (98% Parent Commendation for safety and punctuality)'
+    },
+    {
+      id: 'REP-2026-03',
+      eventName: 'Gandhi Jayanti Social Service & Swachh Rally',
+      date: '02 Oct 2026',
+      attendance: '340 Students & 28 Faculty',
+      outcomes: 'Tilak Road campus perimeter cleaned, 500 paper bags distributed to local vendors, 35 prize-winning essays archived.',
+      expenses: '₹11,400 Audited (Budget ₹12,500 — Fully Reconciled)',
+      feedback: '4.8 / 5.0 (Community Appreciation from Tilak Road Traders Association)'
+    },
+    {
+      id: 'REP-2026-02',
+      eventName: 'Teachers\' Day & Guru Vandanam Celebrations',
+      date: '05 Sep 2026',
+      attendance: '48 Teachers, 450 Students',
+      outcomes: '3 Senior Faculty felicitated for 100% SSC results. Student Parliament successfully managed all morning periods.',
+      expenses: '₹31,200 Audited (Budget ₹32,000)',
+      feedback: '5.0 / 5.0 (Faculty Welfare Board Appreciation)'
+    },
+    {
+      id: 'REP-2026-01',
+      eventName: '80th Independence Day Flag Hoisting & March Past',
+      date: '15 Aug 2026',
+      attendance: '820 Total (Students, Parents & Alumni)',
+      outcomes: 'Tricolor unfurled by Principal Smt. Gorle Varalakshmi. NCC & Scout platoons presented Guard of Honor. 42 merit certificates awarded.',
+      expenses: '₹17,600 Audited (Budget ₹18,000)',
+      feedback: '4.8 / 5.0 (High Parent & Alumni Participation)'
+    }
+  ];
+
+  // Backwards-compatible aliases for legacy event calls
+  function renderSchoolEvents() { renderSchoolEventsTable(); }
+  function renderCompetitionEvents() { renderCompetitionsTable(); }
+  function renderClubActivities() { renderClubsSportsTable(); }
+
+  // 1. Annual Calendar Renderer & Filter
+  function renderAnnualCalendar() {
+    const tbody = document.getElementById('annualCalendarTableBody');
+    if (!tbody) return;
+    const filterType = document.getElementById('calendarTypeFilter')?.value || 'all';
+    const q = (document.getElementById('calendarSearchInput')?.value || '').toLowerCase().trim();
+
+    let list = ANNUAL_CALENDAR_DATA.filter(item => {
+      const matchType = filterType === 'all' || item.category === filterType;
+      const matchQ = !q || item.title.toLowerCase().includes(q) || item.dates.toLowerCase().includes(q) || item.category.toLowerCase().includes(q);
+      return matchType && matchQ;
+    });
+
+    const badgeMap = {
+      'Academic': 'badge-primary',
+      'Holiday': 'badge-amber',
+      'Examination': 'badge-danger',
+      'Major Event': 'badge-success'
+    };
+
+    if (list.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="7" class="text-center p-4 text-muted">No calendar dates found matching the specified filter criteria.</td></tr>';
+      return;
+    }
+
+    tbody.innerHTML = list.map(item => `
+      <tr>
+        <td style="font-weight: 700; color: var(--color-primary); white-space: nowrap;">
+          <i class="fa-regular fa-calendar text-muted mr-1"></i> ${item.dates}
+        </td>
+        <td>
+          <div style="font-weight: 700; color: var(--color-text-main);">${item.title}</div>
+          <small class="text-muted">ID: ${item.id}</small>
+        </td>
+        <td>
+          <span class="portal-badge ${badgeMap[item.category] || 'badge-primary'}">${item.category}</span>
+        </td>
+        <td>${item.cohort}</td>
+        <td><i class="fa-solid fa-location-dot text-muted mr-1"></i> ${item.venue}</td>
+        <td>
+          <span class="portal-badge ${item.status === 'Completed' ? 'badge-success' : 'badge-neutral'}">
+            ${item.status === 'Completed' ? '<i class="fa-solid fa-check"></i> ' : '<i class="fa-regular fa-clock"></i> '}${item.status}
+          </span>
+        </td>
+        <td style="text-align: right; white-space: nowrap;">
+          <button class="btn btn-secondary btn-sm" onclick="portalApp.openEventDetailsModal('${item.id}', 'calendar')" title="View Milestone Dossier">
+            <i class="fa-solid fa-eye"></i> View
+          </button>
+        </td>
+      </tr>
+    `).join('');
   }
 
-  function renderCompetitionEvents() {
-    const container = document.getElementById('compEventsContainer');
-    if (!container) return;
-    const compEvents = [
-      { title: 'Inter-House Athletic & Sports Meet', date: 'Oct 14 - 16, 2026', tag: 'Sports Championship', desc: 'Track & field championships, kho-kho, volleyball, badminton and chess finals.' },
-      { title: 'State Science Olympiad & Talent Search', date: 'Nov 08, 2026', tag: 'State Olympiad', desc: 'Inter-school science talent search and problem-solving competition for high school.' },
-      { title: 'National Mathematics Day Celebration', date: 'Dec 22, 2026', tag: 'Math Olympiad', desc: 'Srinivasa Ramanujan memorial quiz competition, mental math olympiad and puzzles.' }
-    ];
-    renderEventCardsInto(container, compEvents);
+  function filterAnnualCalendar() {
+    renderAnnualCalendar();
   }
 
-  function renderClubActivities() {
-    const container = document.getElementById('actEventsContainer');
-    if (!container) return;
-    const actEvents = [
-      { title: 'Children’s Day & Mega Science Expo', date: 'Nov 14, 2026', tag: 'Science & Robotics', desc: 'Interactive robotics, working science experiments, art showcase and cultural gala.' },
-      { title: 'Campus Eco-Club Tree Plantation Drive', date: 'Nov 28, 2026', tag: 'Eco Club', desc: 'Environmental conservation drive, 250 sapling plantation, and organic garden launch.' },
-      { title: 'Robotics & AI Hands-on Workshop', date: 'Dec 05, 2026', tag: 'Tech Club', desc: 'Hands-on Arduino coding, sensor interfacing, and automated robot demonstrations.' }
-    ];
-    renderEventCardsInto(container, actEvents);
+  function exportCalendarPDF() {
+    showToast('Official Academic Calendar 2026-27 sent to print preview.', 'info');
+    window.print();
   }
 
-  function renderEventCardsInto(container, list) {
-    container.innerHTML = list.map(ev => `
-      <div class="event-card-lg">
-        <div class="event-card-top">
-          <span class="portal-badge badge-primary">${ev.tag}</span>
-          <span class="event-date-text"><i class="fa-regular fa-clock"></i> ${ev.date}</span>
+  function exportCalendarICS() {
+    let icsContent = "BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//Sri Vidya E.M High School//Academic Calendar//EN\nCALSCALE:GREGORIAN\n";
+    ANNUAL_CALENDAR_DATA.forEach(ev => {
+      icsContent += "BEGIN:VEVENT\n";
+      icsContent += "SUMMARY:" + ev.title + "\n";
+      icsContent += "DESCRIPTION:Category: " + ev.category + " | Cohort: " + ev.cohort + "\n";
+      icsContent += "LOCATION:" + ev.venue + "\n";
+      icsContent += "STATUS:CONFIRMED\n";
+      icsContent += "END:VEVENT\n";
+    });
+    icsContent += "END:VCALENDAR";
+
+    downloadCsvFile(icsContent, 'Sri_Vidya_School_Annual_Calendar_2026-27.ics');
+    showToast('Annual Calendar exported as iCalendar (.ics) file.', 'success');
+  }
+
+  // 2. School Events Renderer & Filter
+  function renderSchoolEventsTable() {
+    const tbody = document.getElementById('schoolEventsTableBody');
+    if (!tbody) return;
+    const filterStatus = document.getElementById('schoolEventsStatusFilter')?.value || 'all';
+    const q = (document.getElementById('schoolEventsSearchInput')?.value || '').toLowerCase().trim();
+
+    let list = SCHOOL_EVENTS_DATA.filter(ev => {
+      const matchStatus = filterStatus === 'all' || ev.status === filterStatus;
+      const matchQ = !q || ev.name.toLowerCase().includes(q) || ev.coordinator.toLowerCase().includes(q) || ev.location.toLowerCase().includes(q);
+      return matchStatus && matchQ;
+    });
+
+    const statusBadge = {
+      'Approved': 'badge-success',
+      'Completed': 'badge-neutral',
+      'Planning': 'badge-amber'
+    };
+
+    if (list.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="7" class="text-center p-4 text-muted">No school events found matching your query.</td></tr>';
+      return;
+    }
+
+    tbody.innerHTML = list.map(ev => `
+      <tr>
+        <td>
+          <div style="font-weight: 700; color: var(--color-primary); font-size: 0.94rem;">${ev.name}</div>
+          <small class="text-muted"><i class="fa-solid fa-hashtag"></i> ${ev.id}</small>
+        </td>
+        <td style="font-weight: 600; white-space: nowrap;">${ev.date}</td>
+        <td><i class="fa-solid fa-location-dot text-muted mr-1"></i> ${ev.location}</td>
+        <td>${ev.coordinator}</td>
+        <td style="font-weight: 700; color: #059669;">${ev.budget}</td>
+        <td><span class="portal-badge ${statusBadge[ev.status] || 'badge-primary'}">${ev.status}</span></td>
+        <td style="text-align: right; white-space: nowrap;">
+          <button class="btn btn-secondary btn-sm" onclick="portalApp.openEventDetailsModal('${ev.id}', 'school')" title="View School Event Dossier">
+            <i class="fa-solid fa-eye"></i> Details
+          </button>
+        </td>
+      </tr>
+    `).join('');
+  }
+
+  function filterSchoolEvents() {
+    renderSchoolEventsTable();
+  }
+
+  // 3. Competitions Renderer & Filter
+  function renderCompetitionsTable() {
+    const tbody = document.getElementById('competitionsTableBody');
+    if (!tbody) return;
+    const filterClass = document.getElementById('competitionsClassFilter')?.value || 'all';
+    const q = (document.getElementById('competitionsSearchInput')?.value || '').toLowerCase().trim();
+
+    let list = COMPETITIONS_DATA.filter(c => {
+      const matchClass = filterClass === 'all' || 
+        (filterClass === 'Primary' && (c.eligibleClasses.includes('III') || c.eligibleClasses.includes('IV') || c.eligibleClasses.includes('V'))) ||
+        (filterClass === 'Middle' && (c.eligibleClasses.includes('VI') || c.eligibleClasses.includes('VII') || c.eligibleClasses.includes('VIII'))) ||
+        (filterClass === 'High' && (c.eligibleClasses.includes('IX') || c.eligibleClasses.includes('X')));
+      const matchQ = !q || c.name.toLowerCase().includes(q) || c.organizer.toLowerCase().includes(q) || c.results.toLowerCase().includes(q);
+      return matchClass && matchQ;
+    });
+
+    if (list.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="6" class="text-center p-4 text-muted">No competitions match your search filters.</td></tr>';
+      return;
+    }
+
+    tbody.innerHTML = list.map(c => `
+      <tr>
+        <td>
+          <div style="font-weight: 700; color: var(--color-primary); font-size: 0.94rem;">${c.name}</div>
+          <div style="font-size: 0.8rem; color: var(--color-text-muted);"><i class="fa-solid fa-building-flag mr-1"></i> ${c.organizer} • ${c.date}</div>
+        </td>
+        <td style="font-weight: 600;">${c.eligibleClasses}</td>
+        <td>
+          <span class="portal-badge badge-primary"><i class="fa-solid fa-user-check"></i> ${c.registration}</span>
+        </td>
+        <td>
+          <div style="font-weight: 600; color: #b45309;"><i class="fa-solid fa-award mr-1"></i> ${c.results}</div>
+        </td>
+        <td>
+          <span class="portal-badge badge-neutral">${c.level}</span>
+        </td>
+        <td style="text-align: right; white-space: nowrap;">
+          <button class="btn btn-secondary btn-sm" onclick="portalApp.openEventDetailsModal('${c.id}', 'competition')" title="View Competition Dossier">
+            <i class="fa-solid fa-eye"></i> Details
+          </button>
+        </td>
+      </tr>
+    `).join('');
+  }
+
+  function filterCompetitions() {
+    renderCompetitionsTable();
+  }
+
+  function openRegisterCompModal() {
+    showToast('Student Roster Registration opened for upcoming competitions.', 'info');
+  }
+
+  // 4. Clubs & Sports Renderer & Filter
+  function renderClubsSportsTable() {
+    const tbody = document.getElementById('clubsSportsTableBody');
+    if (!tbody) return;
+    const filterType = document.getElementById('clubsTypeFilter')?.value || 'all';
+    const q = (document.getElementById('clubsSearchInput')?.value || '').toLowerCase().trim();
+
+    let list = CLUBS_SPORTS_DATA.filter(cs => {
+      const matchType = filterType === 'all' || cs.category === filterType;
+      const matchQ = !q || cs.club.toLowerCase().includes(q) || cs.coach.toLowerCase().includes(q) || cs.activities.toLowerCase().includes(q);
+      return matchType && matchQ;
+    });
+
+    if (list.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="6" class="text-center p-4 text-muted">No clubs or sports academies match your search.</td></tr>';
+      return;
+    }
+
+    tbody.innerHTML = list.map(cs => `
+      <tr>
+        <td>
+          <div style="font-weight: 700; color: var(--color-primary); font-size: 0.94rem;">${cs.club}</div>
+          <span class="portal-badge badge-primary" style="font-size: 0.68rem; margin-top: 4px;">${cs.category}</span>
+        </td>
+        <td>
+          <div style="font-weight: 600; color: var(--color-text-main);">${cs.coach}</div>
+        </td>
+        <td>
+          <span class="portal-badge badge-success"><i class="fa-solid fa-users mr-1"></i> ${cs.participants}</span>
+        </td>
+        <td style="font-size: 0.82rem; font-weight: 600; color: #4b5563;">
+          <i class="fa-regular fa-clock text-muted mr-1"></i> ${cs.schedule}
+        </td>
+        <td style="font-size: 0.84rem; color: var(--color-text-main); line-height: 1.45;">
+          ${cs.activities}
+        </td>
+        <td style="text-align: right; white-space: nowrap;">
+          <button class="btn btn-secondary btn-sm" onclick="portalApp.openEventDetailsModal('${cs.id}', 'club')" title="View Academy Dossier">
+            <i class="fa-solid fa-eye"></i> Roster
+          </button>
+        </td>
+      </tr>
+    `).join('');
+  }
+
+  function filterClubsSports() {
+    renderClubsSportsTable();
+  }
+
+  // 5. Event Permissions Renderer & Submission
+  function renderEventPermissionsTable() {
+    const tbody = document.getElementById('eventPermissionsTableBody');
+    if (!tbody) return;
+    const filterStatus = document.getElementById('permissionsStatusFilter')?.value || 'all';
+    const q = (document.getElementById('permissionsSearchInput')?.value || '').toLowerCase().trim();
+
+    let list = EVENT_PERMISSIONS_DATA.filter(p => {
+      const matchStatus = filterStatus === 'all' || p.status === filterStatus;
+      const matchQ = !q || p.eventName.toLowerCase().includes(q) || p.venue.toLowerCase().includes(q) || p.coordinator.toLowerCase().includes(q) || p.id.toLowerCase().includes(q);
+      return matchStatus && matchQ;
+    });
+
+    const statusClass = {
+      'Approved': 'badge-success',
+      'Pending': 'badge-amber',
+      'Conditional': 'badge-danger'
+    };
+
+    if (list.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="6" class="text-center p-4 text-muted">No event permission dossiers found matching criteria.</td></tr>';
+      return;
+    }
+
+    tbody.innerHTML = list.map(p => `
+      <tr>
+        <td>
+          <div style="font-weight: 700; color: var(--color-primary); font-size: 0.94rem;">${p.eventName}</div>
+          <small class="text-muted"><strong>ID:</strong> ${p.id} • <strong>Date:</strong> ${p.date}</small>
+          <div style="font-size: 0.8rem; color: var(--color-text-muted); margin-top: 2px;">
+            <i class="fa-solid fa-user-tie"></i> ${p.coordinator}
+          </div>
+        </td>
+        <td>
+          <div style="font-weight: 600;"><i class="fa-solid fa-location-dot text-muted mr-1"></i> ${p.venue}</div>
+          <small class="text-muted">Budget: <strong>${p.budget}</strong></small>
+        </td>
+        <td style="font-size: 0.82rem; color: var(--color-text-main); line-height: 1.4;">
+          <div style="background: #f8fafc; border-left: 3px solid #0284c7; padding: 4px 8px; border-radius: 4px;">
+            <i class="fa-solid fa-shield-check text-primary mr-1"></i> ${p.safetyReq}
+          </div>
+        </td>
+        <td>
+          <div style="font-weight: 600; font-size: 0.84rem;">${p.approvals}</div>
+        </td>
+        <td>
+          <span class="portal-badge ${statusClass[p.status] || 'badge-primary'}">${p.status}</span>
+        </td>
+        <td style="text-align: right; white-space: nowrap;">
+          ${p.status === 'Pending' ? `
+            <button class="btn btn-primary btn-sm" onclick="portalApp.handleApprovePermission('${p.id}')" title="Principal/VP Approval">
+              <i class="fa-solid fa-stamp"></i> Sanction
+            </button>
+          ` : `
+            <button class="btn btn-secondary btn-sm" onclick="portalApp.openEventDetailsModal('${p.id}', 'permission')" title="View Approved NOC Dossier">
+              <i class="fa-solid fa-certificate"></i> NOC
+            </button>
+          `}
+        </td>
+      </tr>
+    `).join('');
+  }
+
+  function filterEventPermissions() {
+    renderEventPermissionsTable();
+  }
+
+  function openRequestPermissionModal() {
+    openModal('requestEventPermissionModal');
+  }
+
+  function handleRequestPermissionSubmit(e) {
+    e.preventDefault();
+    const name = document.getElementById('reqEventName')?.value;
+    const date = document.getElementById('reqEventDate')?.value;
+    const venue = document.getElementById('reqEventVenue')?.value;
+    const coordinator = document.getElementById('reqEventCoordinator')?.value;
+    const budget = document.getElementById('reqEventBudget')?.value;
+    const safetyNOC = document.getElementById('reqEventSafetyNOC')?.value;
+    const safetyDetails = document.getElementById('reqEventSafetyDetails')?.value;
+
+    const newReq = {
+      id: 'PRM-2026-0' + (EVENT_PERMISSIONS_DATA.length + 80),
+      eventName: name,
+      date: date,
+      venue: venue,
+      coordinator: coordinator,
+      safetyReq: safetyNOC + ': ' + safetyDetails.slice(0, 75) + '...',
+      approvals: 'Submitted to Vice Principal Sri Navva Anand for Safety Verification',
+      status: 'Pending',
+      budget: '₹' + Number(budget).toLocaleString('en-IN')
+    };
+
+    EVENT_PERMISSIONS_DATA.unshift(newReq);
+    renderEventPermissionsTable();
+    closeModal('requestEventPermissionModal');
+    e.target.reset();
+    showToast('Event Permission & Safety Clearance dossier submitted successfully! Awaiting executive sanction.', 'success');
+  }
+
+  function handleApprovePermission(id) {
+    const item = EVENT_PERMISSIONS_DATA.find(p => p.id === id);
+    if (!item) return;
+    item.status = 'Approved';
+    item.approvals = 'Sanctioned by Principal Smt. Gorle Varalakshmi & VP Sri Anand';
+    renderEventPermissionsTable();
+    showToast('Event permission sanctioned and official campus clearance NOC generated for ' + item.eventName, 'success');
+  }
+
+  // 6. Event Reports Renderer & Realization Ledger
+  function renderEventReportsTable() {
+    const tbody = document.getElementById('eventReportsTableBody');
+    if (!tbody) return;
+    const q = (document.getElementById('eventReportsSearchInput')?.value || '').toLowerCase().trim();
+
+    let list = EVENT_REPORTS_DATA.filter(r => {
+      return !q || r.eventName.toLowerCase().includes(q) || r.outcomes.toLowerCase().includes(q) || r.date.toLowerCase().includes(q);
+    });
+
+    if (list.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="6" class="text-center p-4 text-muted">No realized event reports found.</td></tr>';
+      return;
+    }
+
+    tbody.innerHTML = list.map(r => `
+      <tr>
+        <td>
+          <div style="font-weight: 700; color: var(--color-primary); font-size: 0.94rem;">${r.eventName}</div>
+          <small class="text-muted"><strong>Audit ID:</strong> ${r.id} • <strong>Realized:</strong> ${r.date}</small>
+        </td>
+        <td>
+          <span class="portal-badge badge-primary"><i class="fa-solid fa-users mr-1"></i> ${r.attendance}</span>
+        </td>
+        <td style="font-size: 0.84rem; color: var(--color-text-main); line-height: 1.45;">
+          ${r.outcomes}
+        </td>
+        <td style="font-size: 0.84rem; font-weight: 600; color: #059669;">
+          <i class="fa-solid fa-receipt mr-1"></i> ${r.expenses}
+        </td>
+        <td>
+          <div style="font-weight: 700; color: #b45309;"><i class="fa-solid fa-star text-amber mr-1"></i> ${r.feedback}</div>
+        </td>
+        <td style="text-align: right; white-space: nowrap;">
+          <button class="btn btn-secondary btn-sm" onclick="portalApp.openEventDetailsModal('${r.id}', 'report')" title="Open Audited Event Report">
+            <i class="fa-solid fa-file-contract"></i> Dossier
+          </button>
+        </td>
+      </tr>
+    `).join('');
+  }
+
+  function filterEventReports() {
+    renderEventReportsTable();
+  }
+
+  function exportEventReportCSV() {
+    const headers = ['Audit ID', 'Event Name', 'Realized Date', 'Attendance', 'Key Outcomes', 'Audited Expenses', 'Feedback Rating'];
+    const rows = EVENT_REPORTS_DATA.map(r => [
+      r.id,
+      '"' + r.eventName + '"',
+      '"' + r.date + '"',
+      '"' + r.attendance + '"',
+      '"' + r.outcomes.replace(/"/g, '""') + '"',
+      '"' + r.expenses.replace(/"/g, '""') + '"',
+      '"' + r.feedback.replace(/"/g, '""') + '"'
+    ]);
+    const csv = [headers.join(','), ...rows.map(r => r.join(','))].join('\n');
+    downloadCsvFile(csv, 'Sri_Vidya_Realized_Events_Audit_Ledger.csv');
+    showToast('Event realization audit ledger exported successfully.', 'success');
+  }
+
+  function openEventDetailsModal(id, type) {
+    const body = document.getElementById('eventDetailsModalBody');
+    if (!body) return;
+
+    let item;
+    let title = 'Institutional Event Dossier';
+    if (type === 'calendar') {
+      item = ANNUAL_CALENDAR_DATA.find(x => x.id === id);
+      title = item ? item.title : 'Milestone Details';
+    } else if (type === 'school') {
+      item = SCHOOL_EVENTS_DATA.find(x => x.id === id);
+      title = item ? item.name : 'School Event';
+    } else if (type === 'competition') {
+      item = COMPETITIONS_DATA.find(x => x.id === id);
+      title = item ? item.name : 'Competition Dossier';
+    } else if (type === 'club') {
+      item = CLUBS_SPORTS_DATA.find(x => x.id === id);
+      title = item ? item.club : 'Club Academy';
+    } else if (type === 'permission') {
+      item = EVENT_PERMISSIONS_DATA.find(x => x.id === id);
+      title = item ? item.eventName + ' (Clearance NOC)' : 'Permission Dossier';
+    } else if (type === 'report') {
+      item = EVENT_REPORTS_DATA.find(x => x.id === id);
+      title = item ? item.eventName + ' (Realization Report)' : 'Audit Dossier';
+    }
+
+    if (!item) {
+      showToast('Event dossier record not found.', 'error');
+      return;
+    }
+
+    body.innerHTML = `
+      <div style="border-bottom: 2px solid var(--color-primary); padding-bottom: 0.75rem; margin-bottom: 1rem;">
+        <div style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--color-primary); font-weight: 800;">
+          Sri Vidya E.M High School • Co-Scholastic &amp; Extracurricular Registry
         </div>
-        <h3 class="event-card-title">${ev.title}</h3>
-        <p class="event-card-desc">${ev.desc}</p>
-        <div class="event-card-footer">
-          <button class="btn btn-secondary btn-sm" onclick="portalApp.showToast('Event circular dispatched to parents &amp; faculty', 'info')">
-            <i class="fa-solid fa-bullhorn"></i> Send Circular
-          </button>
-          <button class="btn btn-primary btn-sm" onclick="portalApp.showToast('Event dossier opened for ${ev.title}', 'info')">
-            <i class="fa-solid fa-pen-to-square"></i> Manage Event
-          </button>
+        <h3 style="margin: 0.25rem 0 0; color: var(--color-text-main); font-size: 1.25rem;">${title}</h3>
+      </div>
+      <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 1rem; margin-bottom: 1rem;">
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; font-size: 0.85rem;">
+          <div><strong>Record Reference ID:</strong> ${item.id}</div>
+          <div><strong>Institutional Status:</strong> <span class="portal-badge badge-success">${item.status || 'Active / Verified'}</span></div>
+          <div><strong>Academic Year:</strong> 2026-2027</div>
+          <div><strong>Supervising Authority:</strong> Principal Smt. Gorle Varalakshmi</div>
         </div>
       </div>
-    `).join('');
+      <div style="font-size: 0.88rem; line-height: 1.6; color: var(--color-text-main);">
+        <p><strong>Official Description / Realization Summary:</strong></p>
+        <p style="background: #ffffff; padding: 0.75rem; border: 1px solid #e2e8f0; border-radius: 6px;">
+          ${item.outcomes || item.safetyReq || item.activities || item.results || item.title || item.name}
+        </p>
+      </div>
+      <div style="margin-top: 1rem; font-size: 0.78rem; color: var(--color-text-muted); border-top: 1px dashed #cbd5e1; padding-top: 0.5rem;">
+        <i class="fa-solid fa-shield-check text-success mr-1"></i> Formally sanctioned under AP Educational Department Regulations • Sri Vidya Administration Office.
+      </div>
+    `;
+
+    openModal('viewEventDetailsModal');
   }
 
   function filterFaculty(val) {
@@ -25757,6 +26326,27 @@ const classData = TIMETABLE_CLASS_DATA[currentTimetableClass] || TIMETABLE_CLASS
   }
 
   return {
+    // Events & Activities
+    renderAnnualCalendar,
+    filterAnnualCalendar,
+    exportCalendarPDF,
+    exportCalendarICS,
+    renderSchoolEventsTable,
+    filterSchoolEvents,
+    renderCompetitionsTable,
+    filterCompetitions,
+    openRegisterCompModal,
+    renderClubsSportsTable,
+    filterClubsSports,
+    renderEventPermissionsTable,
+    filterEventPermissions,
+    openRequestPermissionModal,
+    handleRequestPermissionSubmit,
+    handleApprovePermission,
+    renderEventReportsTable,
+    filterEventReports,
+    exportEventReportCSV,
+    openEventDetailsModal,
     renderAnnouncements,
     filterAnnouncements,
     renderOfficialCirculars,

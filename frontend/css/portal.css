@@ -389,12 +389,19 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 0.5rem;
   padding: 0.4rem 0.65rem;
   font-size: 0.82rem;
   color: var(--color-text-muted);
   text-decoration: none;
   border-radius: var(--radius-sm);
   transition: var(--transition);
+  text-align: left;
+}
+
+.nav-sub-link > span:first-child:not(.nav-sub-badge) {
+  flex: 1;
+  text-align: left;
 }
 
 .nav-sub-link:hover {
@@ -411,10 +418,15 @@ body {
 .nav-sub-badge {
   font-size: 0.65rem;
   font-weight: 700;
-  padding: 0.1rem 0.4rem;
+  padding: 0.12rem 0.45rem;
   border-radius: var(--radius-full);
   background: var(--color-bg-subtle);
   color: var(--color-text-muted);
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  flex-shrink: 0;
 }
 
 .nav-sub-badge.warning {
