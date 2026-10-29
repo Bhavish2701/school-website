@@ -34,6 +34,7 @@ const portalApp = (function () {
       communication: 'announcements',
       events: 'calendar',
       transport: 'routes',
+      inventory: 'assets',
       reports: 'academic',
       settings: 'profile'
     },
@@ -3083,7 +3084,21 @@ const FEE_CATEGORY_AUDIT_DATA = [
       } else if (subKey === 'reports') {
         renderEventReportsTable();
       }
-            } else if (moduleKey === 'transport') {
+                } else if (moduleKey === 'inventory') {
+      if (subKey === 'assets' || subKey === 'asset-register') {
+        renderInventoryAssetsTable();
+      } else if (subKey === 'stock' || subKey === 'stock-management') {
+        renderInventoryStockTable();
+      } else if (subKey === 'purchases' || subKey === 'purchase-requests' || subKey === 'requisitions') {
+        renderInventoryPurchasesTable();
+      } else if (subKey === 'vendors') {
+        renderInventoryVendorsTable();
+      } else if (subKey === 'issue-return' || subKey === 'issue' || subKey === 'return') {
+        renderInventoryIssueReturnTable();
+      } else if (subKey === 'maintenance' || subKey === 'asset-maintenance') {
+        renderInventoryMaintenanceTable();
+      }
+    } else if (moduleKey === 'transport') {
       if (subKey === 'routes' || subKey === 'stops') {
         renderTransportRoutesTable();
       } else if (subKey === 'vehicles' || subKey === 'fleet') {
@@ -13160,6 +13175,1266 @@ const FEE_CATEGORY_AUDIT_DATA = [
   function exportSafetyInspectionPDF() {
     showToast('Generating AP RTA & School Safety Compliance Dossier...', 'info');
     window.print();
+  }
+
+  
+  // =========================================================================
+  // MODULE 15: INVENTORY & ASSETS DATASETS & ENGINES
+  // AP Educational Institutions Capital Asset & Material Governance Protocol
+  // Store & Estate In-charge: Sri P. Appa Rao (NT-107), Executive Approval: Principal Smt. Gorle Varalakshmi
+  // =========================================================================
+
+  const INVENTORY_ASSETS_DATA = [
+    {
+      assetId: 'AST-IT-2024-001',
+      name: 'Dell OptiPlex 3090 Core i5 Terminals (Set of 45)',
+      category: 'Computer & IT',
+      location: 'Computer Laboratory 1 (Block-B)',
+      purchaseDate: '14 Jun 2024',
+      value: '₹14,85,000',
+      condition: 'Excellent',
+      conditionClass: 'badge-success',
+      serialNo: 'DL-OPT-9981-85',
+      warranty: 'Active 3-Yr On-Site ProSupport (till Jun 2027)',
+      custodian: 'Sri K. Nagaraju (Lab Technician)'
+    },
+    {
+      assetId: 'AST-LAB-2023-014',
+      name: 'Olympus Student Compound Microscopes (15 Units)',
+      category: 'Laboratory Apparatus',
+      location: 'Biology & Life Sciences Lab',
+      purchaseDate: '05 Nov 2023',
+      value: '₹1,25,000',
+      condition: 'Good',
+      conditionClass: 'badge-info',
+      serialNo: 'OLY-MIC-2023-15X',
+      warranty: 'AMC Active with Apex Scientific',
+      custodian: 'Smt. K. Aruna (Senior Science Faculty)'
+    },
+    {
+      assetId: 'AST-AV-2025-008',
+      name: 'Epson EB-E01 3LCD Smart Ceiling Projector',
+      category: 'Audio-Visual',
+      location: 'Smart Classroom & Seminar Hall 1',
+      purchaseDate: '18 Jul 2025',
+      value: '₹42,000',
+      condition: 'Good',
+      conditionClass: 'badge-info',
+      serialNo: 'EPS-3LCD-7712',
+      warranty: 'Active 2-Yr Manufacturer Warranty (till Jul 2027)',
+      custodian: 'Sri Ramanathan (Cultural & AV Coordinator)'
+    },
+    {
+      assetId: 'AST-FUR-2022-045',
+      name: 'Teakwood Dual Student Benches & Desks (120 Sets)',
+      category: 'Classroom Furniture',
+      location: 'High School Classrooms (Block-A)',
+      purchaseDate: '10 May 2022',
+      value: '₹3,60,000',
+      condition: 'Fair (Repaired)',
+      conditionClass: 'badge-warning',
+      serialNo: 'SV-DSK-2022-120',
+      warranty: 'Annual Institutional Carpentry Maintenance',
+      custodian: 'Estate Supervisor Sri P. Appa Rao'
+    },
+    {
+      assetId: 'AST-SCI-2024-019',
+      name: 'Shimadzu Precision Analytical Balance (0.001g)',
+      category: 'Laboratory Apparatus',
+      location: 'Chemistry Laboratory Pre-room',
+      purchaseDate: '22 Aug 2024',
+      value: '₹28,500',
+      condition: 'Excellent',
+      conditionClass: 'badge-success',
+      serialNo: 'SHM-BAL-2024-88',
+      warranty: 'Active NABL Calibrated till Aug 2026',
+      custodian: 'Sri K. Nagaraju (Lab Technician)'
+    },
+    {
+      assetId: 'AST-SPT-2025-012',
+      name: 'SG Pro Full English Willow Cricket & Pitch Kit',
+      category: 'Sports Equipment',
+      location: 'Sports & Athletics Store Room',
+      purchaseDate: '15 Jan 2025',
+      value: '₹38,000',
+      condition: 'Good',
+      conditionClass: 'badge-info',
+      serialNo: 'SG-CRK-2025-09',
+      warranty: 'Manufacturer Seasonal Guarantee',
+      custodian: 'Sri B. Rambabu (Physical Director)'
+    },
+    {
+      assetId: 'AST-OFF-2023-033',
+      name: 'Canon imageRUNNER 2630i Office Photocopier/Scanner',
+      category: 'Office Electronics',
+      location: 'Administrative Examination Desk',
+      purchaseDate: '12 Dec 2023',
+      value: '₹1,85,000',
+      condition: 'Optimal',
+      conditionClass: 'badge-success',
+      serialNo: 'CN-IR-2630-99',
+      warranty: 'Active AMC with Canon India Authorized Partner',
+      custodian: 'Sri Mohan (Office Accounts Clerk)'
+    },
+    {
+      assetId: 'AST-GEN-2024-005',
+      name: 'Kirloskar 15 kVA Silent Diesel Generator Set',
+      category: 'Campus Infrastructure',
+      location: 'Main Electrical Utility Yard',
+      purchaseDate: '20 Mar 2024',
+      value: '₹3,95,000',
+      condition: 'Operational',
+      conditionClass: 'badge-success',
+      serialNo: 'KRL-GEN-15K-01',
+      warranty: 'Active 3-Yr Warranty & Quarterly Service Pack',
+      custodian: 'Estate Supervisor Sri P. Appa Rao'
+    }
+  ];
+
+  const INVENTORY_STOCK_DATA = [
+    {
+      stockId: 'STK-STA-01',
+      item: 'JK Copier A4 Paper Reams (75 GSM)',
+      category: 'Stationery',
+      quantity: 85,
+      stockLevel: 'Optimal',
+      levelClass: 'badge-success',
+      unit: 'Reams (500 sheets)',
+      storageLocation: 'Central Stationery Store (Rack A-1)',
+      threshold: 20,
+      unitPrice: '₹265 / Ream',
+      lastRestocked: '15 Oct 2026'
+    },
+    {
+      stockId: 'STK-TXT-01',
+      item: 'AP SCERT Class X Telugu & Science Textbook Sets',
+      category: 'Textbooks',
+      quantity: 240,
+      stockLevel: 'In Stock',
+      levelClass: 'badge-success',
+      unit: 'Complete Sets',
+      storageLocation: 'Textbook Reserve Bay (Block-B)',
+      threshold: 50,
+      unitPrice: '₹480 / Set',
+      lastRestocked: '10 Jun 2026'
+    },
+    {
+      stockId: 'STK-LAB-01',
+      item: 'Borosil Glass Beakers & Test Tubes (Assorted 100ml-500ml)',
+      category: 'Science Consumables',
+      quantity: 150,
+      stockLevel: 'Low Stock',
+      levelClass: 'badge-warning',
+      unit: 'Pieces / Glassware',
+      storageLocation: 'Chemistry Preparation Room',
+      threshold: 180,
+      unitPrice: '₹75 / Piece',
+      lastRestocked: '02 Sep 2026'
+    },
+    {
+      stockId: 'STK-MED-01',
+      item: 'Sterile First Aid Antiseptic & Bandage Dressings',
+      category: 'Medical Supplies',
+      quantity: 12,
+      stockLevel: 'Reorder Due',
+      levelClass: 'badge-danger',
+      unit: 'Complete Medical Kits',
+      storageLocation: 'Health & Infirmary Bay',
+      threshold: 20,
+      unitPrice: '₹320 / Kit',
+      lastRestocked: '18 Aug 2026'
+    },
+    {
+      stockId: 'STK-SPT-01',
+      item: 'Cosco Super Tournament Basketballs (Size 7)',
+      category: 'Sports Consumables',
+      quantity: 18,
+      stockLevel: 'Optimal',
+      levelClass: 'badge-success',
+      unit: 'Regulation Balls',
+      storageLocation: 'Sports Locker Room',
+      threshold: 6,
+      unitPrice: '₹850 / Ball',
+      lastRestocked: '20 Sep 2026'
+    },
+    {
+      stockId: 'STK-EXM-01',
+      item: 'Official SSC Board Pre-Printed 24-Page Answer Booklets',
+      category: 'Examination Reserves',
+      quantity: 1200,
+      stockLevel: 'Ample Reserve',
+      levelClass: 'badge-success',
+      unit: 'Booklets',
+      storageLocation: 'Examination Strong Room (Locked Safe)',
+      threshold: 400,
+      unitPrice: '₹12 / Booklet',
+      lastRestocked: '01 Oct 2026'
+    },
+    {
+      stockId: 'STK-OFF-01',
+      item: 'Camlin Non-Toxic Whiteboard Markers & Magnetic Dusters',
+      category: 'Office Supplies',
+      quantity: 65,
+      stockLevel: 'Optimal',
+      levelClass: 'badge-success',
+      unit: 'Packs of 10 Markers',
+      storageLocation: 'Administrative Record Desk',
+      threshold: 20,
+      unitPrice: '₹380 / Pack',
+      lastRestocked: '12 Oct 2026'
+    },
+    {
+      stockId: 'STK-CLG-01',
+      item: 'High-Grade Hand Sanitizer & Floor Disinfectant Cans',
+      category: 'Hygiene & Sanitation',
+      quantity: 24,
+      stockLevel: 'In Stock',
+      levelClass: 'badge-success',
+      unit: '5-Litre Cans',
+      storageLocation: 'Estate Sanitation Store Room',
+      threshold: 8,
+      unitPrice: '₹650 / Can',
+      lastRestocked: '05 Oct 2026'
+    }
+  ];
+
+  const INVENTORY_PURCHASES_DATA = [
+    {
+      reqId: 'PR-2026-061',
+      requester: 'Sri P. Rajesh Kumar',
+      department: 'Mathematics & Examination Cell',
+      items: '500x Pre-Printed Graph Sheets & 10x Geometry Master Demonstration Kits for Class IX-X',
+      estimatedCost: '₹14,200',
+      approvalStatus: 'Approved by Principal',
+      statusClass: 'badge-success',
+      date: '24 Oct 2026',
+      priority: 'High',
+      vendorRecommended: 'Sri Krishna Book Depot & Stationers, Brodipet'
+    },
+    {
+      reqId: 'PR-2026-062',
+      requester: 'Smt. K. Aruna',
+      department: 'Science & STEM Labs',
+      items: '25x Analytical Grade Reagent Chemicals & 50x Borosilicate Conical Flasks for SA-1 Practicals',
+      estimatedCost: '₹22,500',
+      approvalStatus: 'Approved by Vice Principal',
+      statusClass: 'badge-success',
+      date: '21 Oct 2026',
+      priority: 'High',
+      vendorRecommended: 'Apex Scientific Laboratory Supplies, Guntur'
+    },
+    {
+      reqId: 'PR-2026-063',
+      requester: 'Sri B. Rambabu',
+      department: 'Physical Education & Athletics',
+      items: '6x Nivia Vega Footballs, 12x Yonex Shuttle Cocks & 2x Volleyball Practice Nets',
+      estimatedCost: '₹11,800',
+      approvalStatus: 'Under Review (Accounts Desk)',
+      statusClass: 'badge-warning',
+      date: '27 Oct 2026',
+      priority: 'Medium',
+      vendorRecommended: 'Amaravathi Sports & Fitness World, Kothapet'
+    },
+    {
+      reqId: 'PR-2026-064',
+      requester: 'Sri Mohan',
+      department: 'Administrative Office & Records',
+      items: '40x Heavy-Duty Box Files, 50x Blue/Red Stamp Pads & 200x Student Record Card Folders',
+      estimatedCost: '₹6,400',
+      approvalStatus: 'Approved by Principal',
+      statusClass: 'badge-success',
+      date: '18 Oct 2026',
+      priority: 'Low',
+      vendorRecommended: 'Sri Krishna Book Depot & Stationers'
+    },
+    {
+      reqId: 'PR-2026-065',
+      requester: 'Sri K. Nagaraju',
+      department: 'Computer Center & IT Services',
+      items: '10x High-Speed Optical USB Mice, 5x Multimedia Keyboards & 2x Cat-6 Ethernet Cable Rolls (305m)',
+      estimatedCost: '₹8,500',
+      approvalStatus: 'Quotation Awaited',
+      statusClass: 'badge-neutral',
+      date: '28 Oct 2026',
+      priority: 'Medium',
+      vendorRecommended: 'Infotech Hardware & Peripherals, Arundelpet'
+    },
+    {
+      reqId: 'PR-2026-066',
+      requester: 'Smt. V. Anuradha',
+      department: 'English & Cultural Activities',
+      items: '120x Scholastic Illustrated Story Readers & 30x Oxford Advanced English Learner Dictionaries',
+      estimatedCost: '₹19,200',
+      approvalStatus: 'Approved by Principal',
+      statusClass: 'badge-success',
+      date: '15 Oct 2026',
+      priority: 'Medium',
+      vendorRecommended: 'Visalandhra Book House, Guntur'
+    }
+  ];
+
+  const INVENTORY_VENDORS_DATA = [
+    {
+      vendorId: 'VND-001',
+      name: 'Sri Krishna Book Depot & Stationers',
+      contactPerson: 'Sri M. Venkateswara Rao',
+      phone: '98480 12345',
+      email: 'srikrishna.stationery@gmail.com',
+      products: 'SCERT Textbooks, Answer Booklets, Examination Graph Paper, A4 Reams, Registers & Markers',
+      contracts: 'Annual Rate Contract (ARC-2026-27) Valid till 31 Mar 2027',
+      paymentTerms: 'Net 30 Days after physical delivery & store verification',
+      rating: '4.9 / 5.0 (Preferred Vendor)',
+      gstin: '37AAACS1289P1Z8',
+      address: 'Brodipet 3rd Lane, Guntur'
+    },
+    {
+      vendorId: 'VND-002',
+      name: 'Apex Scientific Laboratory Supplies',
+      contactPerson: 'Sri D. Ramesh Babu',
+      phone: '94401 23456',
+      email: 'apexscientific.gnt@gmail.com',
+      products: 'Borosil Glassware, Analytical Reagents, Physics Optical Benches, Microscopes & Dissection Kits',
+      contracts: 'Supply & Delivery Framework Agreement (SDFA-2026)',
+      paymentTerms: 'Net 15 Days post lab quality inspection certificate',
+      rating: '4.8 / 5.0 (Certified Vendor)',
+      gstin: '37AABCA4521Q1Z4',
+      address: 'Collectorate Road, Guntur'
+    },
+    {
+      vendorId: 'VND-003',
+      name: 'Infotech Hardware & Peripherals',
+      contactPerson: 'Sri T. Sridhar',
+      phone: '98492 34567',
+      email: 'infotech.guntur@yahoo.com',
+      products: 'Desktop Spares, Networking Switches, Toners, Projector Replacement Lamps & UPS Batteries',
+      contracts: 'Hardware AMC & On-Call Maintenance Agreement 2026-27',
+      paymentTerms: '50% on Delivery, 50% after 15 days burn-in test',
+      rating: '4.7 / 5.0 (Active Supplier)',
+      gstin: '37AAACI9982R1Z2',
+      address: 'Arundelpet 5th Line, Guntur'
+    },
+    {
+      vendorId: 'VND-004',
+      name: 'Amaravathi Sports & Fitness World',
+      contactPerson: 'Sri K. Prasad',
+      phone: '99883 45678',
+      email: 'amaravathisports@gmail.com',
+      products: 'Cricket Kits, Leather Balls, Footballs, Badminton Equipment, Gymnastic Mats & Medals',
+      contracts: 'Annual Inter-School Sports Supply Agreement (ASSA-2026)',
+      paymentTerms: 'Net 30 Days upon physical stock verification',
+      rating: '4.9 / 5.0 (Preferred Vendor)',
+      gstin: '37AAACA8871S1Z9',
+      address: 'Kothapet Main Road, Guntur'
+    },
+    {
+      vendorId: 'VND-005',
+      name: 'Balaji Office Furniture & Woodcraft',
+      contactPerson: 'Sri G. Satyanarayana',
+      phone: '91774 56789',
+      email: 'balajifurniture.gnt@gmail.com',
+      products: 'Teakwood Classroom Dual Benches, Faculty Podiums, Steel Almirahs & Ergonomic Chairs',
+      contracts: 'Rate Contract (Furniture Supply & Carpentry Refurbishment)',
+      paymentTerms: '100% on delivery with 1-Year structural replacement warranty',
+      rating: '4.6 / 5.0 (Active Supplier)',
+      gstin: '37AABCB6621T1Z5',
+      address: 'Autonagar Industrial Area, Guntur'
+    },
+    {
+      vendorId: 'VND-006',
+      name: 'Eureka Forbes Commercial Water Division',
+      contactPerson: 'Sri B. Ravi Teja',
+      phone: '94402 33441',
+      email: 'eureka.guntur@eurekaforbes.com',
+      products: 'Commercial RO Membranes, Multi-stage Sediment Filters, Water Coolers & UV Lamps',
+      contracts: 'Comprehensive Maintenance Contract (CMC-2026)',
+      paymentTerms: 'Quarterly post-service invoice clearance (Net 15 Days)',
+      rating: '5.0 / 5.0 (Essential Services)',
+      gstin: '37AAACE5512U1Z1',
+      address: 'Brodipet Main Road, Guntur'
+    }
+  ];
+
+  const INVENTORY_ISSUE_RETURN_DATA = [
+    {
+      issueId: 'ISS-2026-101',
+      item: 'Dell Latitude 3420 Faculty Laptop (Asset AST-IT-012)',
+      recipient: 'Smt. V. Anuradha (Faculty - English)',
+      quantity: '1 Unit',
+      issueDate: '22 Oct 2026',
+      returnStatus: 'In Use / Active',
+      statusClass: 'badge-primary',
+      dueDate: '22 Dec 2026 (Term End)',
+      issuedBy: 'Store In-charge Sri P. Appa Rao',
+      remarks: 'Issued for digital lesson plan drafting & smart classroom presentations.'
+    },
+    {
+      issueId: 'ISS-2026-102',
+      item: 'Compound Student Optical Microscope (Asset AST-LAB-005)',
+      recipient: 'Sri P. Rajesh Kumar (Faculty - Physics / Science)',
+      quantity: '2 Units',
+      issueDate: '26 Oct 2026',
+      returnStatus: 'Returned in Good Condition',
+      statusClass: 'badge-success',
+      dueDate: '26 Oct 2026 (Evening)',
+      issuedBy: 'Lab Technician Sri K. Nagaraju',
+      remarks: 'Returned post Formative Assessment-2 cell biology practical demonstrations.'
+    },
+    {
+      issueId: 'ISS-2026-103',
+      item: 'Pre-Printed Periodic Assessment Answer Sheets (Class X)',
+      recipient: 'Exam Cell Superintendent (Sri M. Rambabu)',
+      quantity: '500 Sheets',
+      issueDate: '28 Oct 2026',
+      returnStatus: 'Consumed (Exam Material)',
+      statusClass: 'badge-neutral',
+      dueDate: 'N/A (Consumed Material)',
+      issuedBy: 'Store In-charge Sri P. Appa Rao',
+      remarks: 'Dispatched for FA-2 school-wide mid-term examinations.'
+    },
+    {
+      issueId: 'ISS-2026-104',
+      item: 'Sony Dual Wireless UHF Lapel Microphone Kit (Asset AST-AV-015)',
+      recipient: 'Cultural Co-ordinator (Sri Ramanathan)',
+      quantity: '1 Set (2 Mics + Base)',
+      issueDate: '27 Oct 2026',
+      returnStatus: 'Returned in Good Condition',
+      statusClass: 'badge-success',
+      dueDate: '27 Oct 2026 (Evening)',
+      issuedBy: 'Store In-charge Sri P. Appa Rao',
+      remarks: 'Used during Inter-House English Debate Competition in Auditorium.'
+    },
+    {
+      issueId: 'ISS-2026-105',
+      item: 'Cosco Tournament Basketball & Training Cones (Asset AST-SPT-008)',
+      recipient: 'Physical Education Teacher (Sri B. Rambabu)',
+      quantity: '2 Balls, 10 Cones',
+      issueDate: '28 Oct 2026',
+      returnStatus: 'In Use / Active',
+      statusClass: 'badge-primary',
+      dueDate: '29 Oct 2026',
+      issuedBy: 'Store In-charge Sri P. Appa Rao',
+      remarks: 'Issued for District Under-14 team selection trials.'
+    },
+    {
+      issueId: 'ISS-2026-106',
+      item: 'Class X Telugu Demonstration Question Banks (24 Sets)',
+      recipient: 'Senior Faculty Smt. G. Kameswari',
+      quantity: '24 Booklets',
+      issueDate: '18 Oct 2026',
+      returnStatus: 'Returned in Good Condition',
+      statusClass: 'badge-success',
+      dueDate: '25 Oct 2026',
+      issuedBy: 'Store In-charge Sri P. Appa Rao',
+      remarks: 'Returned post special remedial class sessions.'
+    },
+    {
+      issueId: 'ISS-2026-107',
+      item: 'Digital Infrared Thermometer & Pulse Oximeter Kit',
+      recipient: 'School Nurse & Infirmary Desk',
+      quantity: '1 Kit',
+      issueDate: '20 Oct 2026',
+      returnStatus: 'In Use / Active',
+      statusClass: 'badge-primary',
+      dueDate: '20 Nov 2026',
+      issuedBy: 'Store In-charge Sri P. Appa Rao',
+      remarks: 'Active health screening kit in school infirmary.'
+    },
+    {
+      issueId: 'ISS-2026-108',
+      item: 'Epson Portable Classroom Projector (Asset AST-AV-004)',
+      recipient: 'Senior Faculty Sri S. Prasad (Social Studies)',
+      quantity: '1 Unit',
+      issueDate: '25 Oct 2026',
+      returnStatus: 'Overdue for Return',
+      statusClass: 'badge-danger',
+      dueDate: '26 Oct 2026 (Overdue by 3 days)',
+      issuedBy: 'Store In-charge Sri P. Appa Rao',
+      remarks: 'Loan period expired. Reminder notice issued to faculty.'
+    }
+  ];
+
+  const INVENTORY_MAINTENANCE_DATA = [
+    {
+      maintId: 'AST-MNT-2026-031',
+      asset: 'AST-IT-004: Dell OptiPlex Terminal 14 (Computer Lab 1)',
+      fault: 'SMPS power supply unit short circuit and cooling fan grinding noise.',
+      repairCost: '₹1,800',
+      assignedTechnician: 'Sri G. Venkatesh (Infotech Hardware Solutions)',
+      status: 'Resolved',
+      statusClass: 'badge-success',
+      dateLogged: '19 Oct 2026',
+      completionDate: '21 Oct 2026',
+      warranty: '6 Months Replacement Warranty on OEM SMPS',
+      resolution: 'Replaced faulty SMPS with certified Dell OEM 260W unit; load-tested 24 hours.'
+    },
+    {
+      maintId: 'AST-MNT-2026-032',
+      asset: 'AST-LAB-012: Remi Laboratory High-Speed Centrifuge Machine',
+      fault: 'Drive motor carbon brush wear & RPM oscillation above 2000 RPM.',
+      repairCost: '₹3,200',
+      assignedTechnician: 'Sri P. Koteswara Rao (Apex Scientific Instruments)',
+      status: 'Resolved',
+      statusClass: 'badge-success',
+      dateLogged: '14 Oct 2026',
+      completionDate: '16 Oct 2026',
+      warranty: '1 Year Motor Servicing Warranty',
+      resolution: 'Replaced carbon brushes, lubricated high-speed bearings, calibrated tachometer.'
+    },
+    {
+      maintId: 'AST-MNT-2026-033',
+      asset: 'AST-AV-002: Auditorium Optoma Ceiling Projector',
+      fault: 'Projector lamp hours reached 4,200 hrs (dim luminosity output & intermittent thermal flicker).',
+      repairCost: '₹5,400',
+      assignedTechnician: 'Sri T. Sridhar (Audio-Visual Engineer)',
+      status: 'In Progress',
+      statusClass: 'badge-warning',
+      dateLogged: '27 Oct 2026',
+      completionDate: 'Pending 02 Nov 2026',
+      warranty: '3 Months Manufacturer Lamp Warranty',
+      resolution: 'OEM replacement lamp assembly ordered; installation scheduled during Sunday maintenance.'
+    },
+    {
+      maintId: 'AST-MNT-2026-034',
+      asset: 'AST-FUR-032: Teakwood Dual Benches (Row-C Class IX-B)',
+      fault: 'Metal leg frame weld hairline crack and desktop plywood laminate peeling on edges.',
+      repairCost: '₹850',
+      assignedTechnician: 'Campus Carpenter Sri Satyam (Balaji Woodcraft)',
+      status: 'Resolved',
+      statusClass: 'badge-success',
+      dateLogged: '12 Oct 2026',
+      completionDate: '13 Oct 2026',
+      warranty: 'Reinforced Steel Joint Guarantee',
+      resolution: 'Arc-welded structural steel base, re-laminated desktop edge band, and varnished wood.'
+    },
+    {
+      maintId: 'AST-MNT-2026-035',
+      asset: 'AST-OFF-001: Canon imageRUNNER 2630i Office Photocopier',
+      fault: 'Paper pickup roller misfeed & toner density sensor error code E-020.',
+      repairCost: '₹2,600',
+      assignedTechnician: 'Sri N. Prasad (Canon India Authorized Partner)',
+      status: 'Resolved',
+      statusClass: 'badge-success',
+      dateLogged: '22 Oct 2026',
+      completionDate: '23 Oct 2026',
+      warranty: '90 Days Service Warranty',
+      resolution: 'Replaced Cassette 1 pickup & separation rollers; cleaned optical laser polygon mirror.'
+    },
+    {
+      maintId: 'AST-MNT-2026-036',
+      asset: 'AST-SCI-008: Digital Laboratory pH & Conductivity Meter',
+      fault: 'Glass electrode impedance drift; buffer solution recalibration required.',
+      repairCost: '₹1,200',
+      assignedTechnician: 'Lab Tech Sri K. Nagaraju (under Apex Supervision)',
+      status: 'Scheduled',
+      statusClass: 'badge-primary',
+      dateLogged: '28 Oct 2026',
+      completionDate: 'Scheduled 31 Oct 2026',
+      warranty: '6 Months Calibration Certificate',
+      resolution: 'Electrode chemical cleaning in 0.1M HCl; multi-point standard pH buffer calibration.'
+    }
+  ];
+
+  // 1. Asset Register Renderer & Filter
+  function renderInventoryAssetsTable() {
+    const tbody = document.getElementById('inventoryAssetsTableBody');
+    if (!tbody) return;
+    const catFilter = document.getElementById('inventoryAssetCategoryFilter')?.value || 'all';
+    const q = (document.getElementById('inventoryAssetSearchInput')?.value || '').toLowerCase().trim();
+
+    let list = INVENTORY_ASSETS_DATA.filter(a => {
+      const matchCat = catFilter === 'all' || a.category.includes(catFilter);
+      const matchQ = !q || a.assetId.toLowerCase().includes(q) || a.name.toLowerCase().includes(q) ||
+        a.location.toLowerCase().includes(q) || a.serialNo.toLowerCase().includes(q);
+      return matchCat && matchQ;
+    });
+
+    if (list.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="7" class="text-center py-4 text-muted"><i class="fa-solid fa-barcode fa-2x mb-2 d-block"></i>No capital assets match the selected criteria.</td></tr>';
+      return;
+    }
+
+    tbody.innerHTML = list.map(a => {
+      return '<tr>' +
+        '<td>' +
+          '<div style="font-weight: 700; font-size: 0.95rem; color: #1e3a8a;"><i class="fa-solid fa-barcode text-primary mr-1"></i> ' + a.assetId + '</div>' +
+          '<div style="font-size: 0.82rem; font-weight: 600; color: #334155;">' + a.name + '</div>' +
+          '<div style="font-size: 0.72rem; color: #64748b;">SN: ' + a.serialNo + '</div>' +
+        '</td>' +
+        '<td>' +
+          '<span class="portal-badge badge-primary" style="font-size: 0.75rem;">' + a.category + '</span>' +
+          '<div style="font-size: 0.72rem; color: #64748b; margin-top: 2px;">' + a.warranty.split('(')[0] + '</div>' +
+        '</td>' +
+        '<td>' +
+          '<strong class="text-primary"><i class="fa-solid fa-location-dot text-amber mr-1"></i> ' + a.location + '</strong>' +
+          '<div style="font-size: 0.75rem; color: #475569;">Custodian: ' + a.custodian + '</div>' +
+        '</td>' +
+        '<td>' +
+          '<div style="font-size: 0.85rem;"><i class="fa-regular fa-calendar-check text-muted mr-1"></i> ' + a.purchaseDate + '</div>' +
+        '</td>' +
+        '<td>' +
+          '<div style="font-weight: 700; font-size: 0.95rem; color: #059669;">' + a.value + '</div>' +
+          '<small class="text-muted">Capitalized</small>' +
+        '</td>' +
+        '<td>' +
+          '<span class="portal-badge ' + a.conditionClass + '"><i class="fa-solid fa-circle-check"></i> ' + a.condition + '</span>' +
+        '</td>' +
+        '<td style="text-align: center; white-space: nowrap;">' +
+          '<button class="btn btn-secondary btn-sm" onclick="portalApp.openInventoryDossierModal(\'' + a.assetId + '\', \'asset\')" title="View Capital Asset Dossier">' +
+            '<i class="fa-solid fa-qrcode"></i> QR Tag' +
+          '</button>' +
+        '</td>' +
+      '</tr>';
+    }).join('');
+  }
+
+  function filterInventoryAssets() {
+    renderInventoryAssetsTable();
+  }
+
+  // 2. Stock Management Renderer & Filter
+  function renderInventoryStockTable() {
+    const tbody = document.getElementById('inventoryStockTableBody');
+    if (!tbody) return;
+    const levelFilter = document.getElementById('inventoryStockLevelFilter')?.value || 'all';
+    const q = (document.getElementById('inventoryStockSearchInput')?.value || '').toLowerCase().trim();
+
+    let list = INVENTORY_STOCK_DATA.filter(s => {
+      const matchLevel = levelFilter === 'all' || s.stockLevel === levelFilter;
+      const matchQ = !q || s.item.toLowerCase().includes(q) || s.category.toLowerCase().includes(q) ||
+        s.storageLocation.toLowerCase().includes(q) || s.stockId.toLowerCase().includes(q);
+      return matchLevel && matchQ;
+    });
+
+    if (list.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="6" class="text-center py-4 text-muted"><i class="fa-solid fa-boxes-stacked fa-2x mb-2 d-block"></i>No inventory stock items match the selected criteria.</td></tr>';
+      return;
+    }
+
+    tbody.innerHTML = list.map(s => {
+      return '<tr>' +
+        '<td>' +
+          '<div style="font-weight: 700; font-size: 0.95rem; color: #1e3a8a;"><i class="fa-solid fa-box text-primary mr-1"></i> ' + s.item + '</div>' +
+          '<div style="font-size: 0.8rem; color: #475569;"><span class="portal-badge badge-neutral">' + s.stockId + '</span> ' + s.category + '</div>' +
+          '<div style="font-size: 0.72rem; color: #64748b;">Rate: ' + s.unitPrice + ' • Restocked: ' + s.lastRestocked + '</div>' +
+        '</td>' +
+        '<td>' +
+          '<div style="font-weight: 800; font-size: 1.1rem; color: #0f172a;">' + s.quantity.toLocaleString() + '</div>' +
+          '<small class="text-muted">Min: ' + s.threshold + ' ' + s.unit.split(' ')[0] + '</small>' +
+        '</td>' +
+        '<td>' +
+          '<span class="portal-badge ' + s.levelClass + '"><i class="fa-solid ' + (s.stockLevel.includes('Due') || s.stockLevel.includes('Low') ? 'fa-triangle-exclamation' : 'fa-circle-check') + '"></i> ' + s.stockLevel + '</span>' +
+        '</td>' +
+        '<td>' +
+          '<strong>' + s.unit + '</strong>' +
+        '</td>' +
+        '<td>' +
+          '<strong class="text-primary"><i class="fa-solid fa-warehouse text-amber mr-1"></i> ' + s.storageLocation + '</strong>' +
+        '</td>' +
+        '<td style="text-align: center; white-space: nowrap;">' +
+          '<button class="btn btn-secondary btn-sm" onclick="portalApp.openInventoryDossierModal(\'' + s.stockId + '\', \'stock\')" title="View Stock Bin Card">' +
+            '<i class="fa-solid fa-clipboard-list"></i> Bin Card' +
+          '</button>' +
+        '</td>' +
+      '</tr>';
+    }).join('');
+  }
+
+  function filterInventoryStock() {
+    renderInventoryStockTable();
+  }
+
+  // 3. Purchase Requests Renderer & Filter
+  function renderInventoryPurchasesTable() {
+    const tbody = document.getElementById('inventoryPurchasesTableBody');
+    if (!tbody) return;
+    const statusFilter = document.getElementById('inventoryPurchasesStatusFilter')?.value || 'all';
+    const q = (document.getElementById('inventoryPurchasesSearchInput')?.value || '').toLowerCase().trim();
+
+    let list = INVENTORY_PURCHASES_DATA.filter(p => {
+      const matchStatus = statusFilter === 'all' || p.approvalStatus.includes(statusFilter);
+      const matchQ = !q || p.requester.toLowerCase().includes(q) || p.items.toLowerCase().includes(q) ||
+        p.department.toLowerCase().includes(q) || p.reqId.toLowerCase().includes(q);
+      return matchStatus && matchQ;
+    });
+
+    if (list.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="5" class="text-center py-4 text-muted"><i class="fa-solid fa-cart-shopping fa-2x mb-2 d-block"></i>No purchase requests match the selected criteria.</td></tr>';
+      return;
+    }
+
+    tbody.innerHTML = list.map(p => {
+      return '<tr>' +
+        '<td>' +
+          '<div style="font-weight: 700; font-size: 0.95rem; color: #1e3a8a;"><i class="fa-solid fa-user-pen text-primary mr-1"></i> ' + p.requester + '</div>' +
+          '<div style="font-size: 0.8rem; color: #475569;">' + p.department + '</div>' +
+          '<div style="font-size: 0.72rem; color: #64748b;"><span class="portal-badge badge-neutral">' + p.reqId + '</span> Indented: ' + p.date + '</div>' +
+        '</td>' +
+        '<td>' +
+          '<div style="font-size: 0.85rem; color: #1e293b; line-height: 1.4;">' + p.items + '</div>' +
+          '<div style="font-size: 0.75rem; color: #64748b; margin-top: 3px;"><i class="fa-solid fa-store mr-1"></i> Vendor: ' + p.vendorRecommended + '</div>' +
+        '</td>' +
+        '<td>' +
+          '<div style="font-weight: 700; font-size: 1rem; color: #059669;">' + p.estimatedCost + '</div>' +
+          '<small class="text-muted"><span class="portal-badge badge-neutral">' + p.priority + ' Priority</span></small>' +
+        '</td>' +
+        '<td>' +
+          '<span class="portal-badge ' + p.statusClass + '"><i class="fa-solid ' + (p.approvalStatus.includes('Approved') ? 'fa-circle-check' : 'fa-clock') + '"></i> ' + p.approvalStatus + '</span>' +
+        '</td>' +
+        '<td style="text-align: center; white-space: nowrap;">' +
+          '<button class="btn btn-secondary btn-sm" onclick="portalApp.openInventoryDossierModal(\'' + p.reqId + '\', \'purchase\')" title="View Purchase Requisition Dossier">' +
+            '<i class="fa-solid fa-file-invoice-dollar"></i> Indent' +
+          '</button>' +
+        '</td>' +
+      '</tr>';
+    }).join('');
+  }
+
+  function filterInventoryPurchases() {
+    renderInventoryPurchasesTable();
+  }
+
+  // 4. Vendors Renderer & Filter
+  function renderInventoryVendorsTable() {
+    const tbody = document.getElementById('inventoryVendorsTableBody');
+    if (!tbody) return;
+    const ratingFilter = document.getElementById('inventoryVendorsRatingFilter')?.value || 'all';
+    const q = (document.getElementById('inventoryVendorsSearchInput')?.value || '').toLowerCase().trim();
+
+    let list = INVENTORY_VENDORS_DATA.filter(v => {
+      const matchRating = ratingFilter === 'all' || v.rating.includes(ratingFilter);
+      const matchQ = !q || v.name.toLowerCase().includes(q) || v.products.toLowerCase().includes(q) ||
+        v.gstin.toLowerCase().includes(q) || v.contactPerson.toLowerCase().includes(q);
+      return matchRating && matchQ;
+    });
+
+    if (list.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="5" class="text-center py-4 text-muted"><i class="fa-solid fa-handshake fa-2x mb-2 d-block"></i>No vendors match the selected criteria.</td></tr>';
+      return;
+    }
+
+    tbody.innerHTML = list.map(v => {
+      return '<tr>' +
+        '<td>' +
+          '<div style="font-weight: 700; font-size: 0.95rem; color: #1e3a8a;"><i class="fa-solid fa-building text-primary mr-1"></i> ' + v.name + '</div>' +
+          '<div style="font-size: 0.8rem; color: #334155;"><i class="fa-solid fa-user mr-1"></i> ' + v.contactPerson + ' (' + v.phone + ')</div>' +
+          '<div style="font-size: 0.72rem; color: #64748b;">GSTIN: ' + v.gstin + ' • ' + v.address + '</div>' +
+        '</td>' +
+        '<td>' +
+          '<div style="font-size: 0.82rem; color: #1e293b; line-height: 1.4;">' + v.products + '</div>' +
+        '</td>' +
+        '<td>' +
+          '<strong><i class="fa-solid fa-file-contract text-primary mr-1"></i> ' + v.contracts + '</strong>' +
+          '<div style="margin-top: 3px;"><span class="portal-badge badge-success" style="font-size: 0.7rem;"><i class="fa-solid fa-star text-amber"></i> ' + v.rating + '</span></div>' +
+        '</td>' +
+        '<td>' +
+          '<div style="font-size: 0.82rem; color: #0f172a; line-height: 1.3;"><i class="fa-solid fa-money-bill-transfer text-teal mr-1"></i> ' + v.paymentTerms + '</div>' +
+        '</td>' +
+        '<td style="text-align: center; white-space: nowrap;">' +
+          '<button class="btn btn-secondary btn-sm" onclick="portalApp.openInventoryDossierModal(\'' + v.vendorId + '\', \'vendor\')" title="View Vendor Contract Dossier">' +
+            '<i class="fa-solid fa-handshake-angle"></i> Contract' +
+          '</button>' +
+        '</td>' +
+      '</tr>';
+    }).join('');
+  }
+
+  function filterInventoryVendors() {
+    renderInventoryVendorsTable();
+  }
+
+  // 5. Issue & Return Renderer & Filter
+  function renderInventoryIssueReturnTable() {
+    const tbody = document.getElementById('inventoryIssueReturnTableBody');
+    if (!tbody) return;
+    const statusFilter = document.getElementById('inventoryIssueStatusFilter')?.value || 'all';
+    const q = (document.getElementById('inventoryIssueSearchInput')?.value || '').toLowerCase().trim();
+
+    let list = INVENTORY_ISSUE_RETURN_DATA.filter(i => {
+      const matchStatus = statusFilter === 'all' || i.returnStatus.includes(statusFilter);
+      const matchQ = !q || i.item.toLowerCase().includes(q) || i.recipient.toLowerCase().includes(q) ||
+        i.issueId.toLowerCase().includes(q);
+      return matchStatus && matchQ;
+    });
+
+    if (list.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="6" class="text-center py-4 text-muted"><i class="fa-solid fa-arrow-right-arrow-left fa-2x mb-2 d-block"></i>No issue & return records match the selected criteria.</td></tr>';
+      return;
+    }
+
+    tbody.innerHTML = list.map(i => {
+      return '<tr>' +
+        '<td>' +
+          '<div style="font-weight: 700; font-size: 0.95rem; color: #1e3a8a;"><i class="fa-solid fa-box text-primary mr-1"></i> ' + i.item + '</div>' +
+          '<div style="font-size: 0.72rem; color: #64748b;"><span class="portal-badge badge-neutral">' + i.issueId + '</span> By: ' + i.issuedBy + '</div>' +
+        '</td>' +
+        '<td>' +
+          '<strong class="text-primary"><i class="fa-solid fa-user-graduate text-primary mr-1"></i> ' + i.recipient + '</strong>' +
+        '</td>' +
+        '<td>' +
+          '<strong>' + i.quantity + '</strong>' +
+        '</td>' +
+        '<td>' +
+          '<div style="font-size: 0.85rem;"><i class="fa-regular fa-calendar text-muted mr-1"></i> ' + i.issueDate + '</div>' +
+          '<small class="text-muted">Due: ' + i.dueDate + '</small>' +
+        '</td>' +
+        '<td>' +
+          '<span class="portal-badge ' + i.statusClass + '"><i class="fa-solid ' + (i.returnStatus.includes('Returned') ? 'fa-circle-check' : (i.returnStatus.includes('Overdue') ? 'fa-triangle-exclamation' : 'fa-clock')) + '"></i> ' + i.returnStatus + '</span>' +
+          '<div style="font-size: 0.72rem; color: #64748b; margin-top: 2px;">' + i.remarks + '</div>' +
+        '</td>' +
+        '<td style="text-align: center; white-space: nowrap;">' +
+          '<button class="btn btn-secondary btn-sm" onclick="portalApp.openInventoryDossierModal(\'' + i.issueId + '\', \'issue\')" title="View Material Handover Record">' +
+            '<i class="fa-solid fa-receipt"></i> Pass' +
+          '</button>' +
+        '</td>' +
+      '</tr>';
+    }).join('');
+  }
+
+  function filterInventoryIssueReturn() {
+    renderInventoryIssueReturnTable();
+  }
+
+  // 6. Maintenance Renderer & Filter
+  function renderInventoryMaintenanceTable() {
+    const tbody = document.getElementById('inventoryMaintenanceTableBody');
+    if (!tbody) return;
+    const statusFilter = document.getElementById('inventoryMaintenanceStatusFilter')?.value || 'all';
+    const q = (document.getElementById('inventoryMaintenanceSearchInput')?.value || '').toLowerCase().trim();
+
+    let list = INVENTORY_MAINTENANCE_DATA.filter(m => {
+      const matchStatus = statusFilter === 'all' || m.status === statusFilter;
+      const matchQ = !q || m.asset.toLowerCase().includes(q) || m.fault.toLowerCase().includes(q) ||
+        m.assignedTechnician.toLowerCase().includes(q) || m.maintId.toLowerCase().includes(q);
+      return matchStatus && matchQ;
+    });
+
+    if (list.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="6" class="text-center py-4 text-muted"><i class="fa-solid fa-screwdriver-wrench fa-2x mb-2 d-block"></i>No asset repair records match the selected criteria.</td></tr>';
+      return;
+    }
+
+    tbody.innerHTML = list.map(m => {
+      return '<tr>' +
+        '<td>' +
+          '<div style="font-weight: 700; font-size: 0.95rem; color: #1e3a8a;"><i class="fa-solid fa-microchip text-primary mr-1"></i> ' + m.asset + '</div>' +
+          '<div style="font-size: 0.72rem; color: #64748b;"><span class="portal-badge badge-neutral">' + m.maintId + '</span> Logged: ' + m.dateLogged + '</div>' +
+        '</td>' +
+        '<td>' +
+          '<div style="font-size: 0.85rem; color: #1e293b; line-height: 1.4;">' + m.fault + '</div>' +
+          '<div style="font-size: 0.75rem; color: #059669; margin-top: 2px;"><i class="fa-solid fa-wrench mr-1"></i> ' + m.resolution + '</div>' +
+        '</td>' +
+        '<td>' +
+          '<div style="font-weight: 700; font-size: 1rem; color: #059669;">' + m.repairCost + '</div>' +
+          '<small class="text-muted">' + m.warranty.split('(')[0] + '</small>' +
+        '</td>' +
+        '<td>' +
+          '<strong><i class="fa-solid fa-user-wrench text-primary mr-1"></i> ' + m.assignedTechnician + '</strong>' +
+        '</td>' +
+        '<td>' +
+          '<span class="portal-badge ' + m.statusClass + '"><i class="fa-solid ' + (m.status === 'Resolved' ? 'fa-circle-check' : 'fa-clock') + '"></i> ' + m.status + '</span>' +
+          '<div style="font-size: 0.72rem; color: #64748b; margin-top: 2px;">' + m.completionDate + '</div>' +
+        '</td>' +
+        '<td style="text-align: center; white-space: nowrap;">' +
+          '<button class="btn btn-secondary btn-sm" onclick="portalApp.openInventoryDossierModal(\'' + m.maintId + '\', \'maintenance\')" title="View Repair Job Card">' +
+            '<i class="fa-solid fa-clipboard-check"></i> Job Card' +
+          '</button>' +
+        '</td>' +
+      '</tr>';
+    }).join('');
+  }
+
+  function filterInventoryMaintenance() {
+    renderInventoryMaintenanceTable();
+  }
+
+  // Inventory Modals & Actions
+  function openNewInventoryModal(type) {
+    const sel = document.getElementById('invActionCategory');
+    if (sel && type) {
+      sel.value = type;
+    }
+    handleInventoryModalCategoryChange();
+    openModal('newInventoryActionModal');
+  }
+
+  function handleInventoryModalCategoryChange() {
+    const cat = document.getElementById('invActionCategory')?.value || 'asset';
+    const container = document.getElementById('inventoryDynamicFormFields');
+    if (!container) return;
+
+    if (cat === 'asset') {
+      container.innerHTML = `
+        <div class="row g-2">
+          <div class="col-md-6 mb-2">
+            <label class="form-label text-sm font-bold">Asset ID / Barcode <span class="text-danger">*</span></label>
+            <input type="text" class="form-control" placeholder="e.g. AST-IT-2026-048" required>
+          </div>
+          <div class="col-md-6 mb-2">
+            <label class="form-label text-sm font-bold">Asset Name & Model <span class="text-danger">*</span></label>
+            <input type="text" class="form-control" placeholder="e.g. HP LaserJet Pro Multifunction Printer" required>
+          </div>
+          <div class="col-md-6 mb-2">
+            <label class="form-label text-sm font-bold">Category</label>
+            <select class="form-control">
+              <option value="Computer & IT">Computer & IT</option>
+              <option value="Laboratory Apparatus">Laboratory Apparatus</option>
+              <option value="Audio-Visual">Audio-Visual & Smart Class</option>
+              <option value="Classroom Furniture">Classroom Furniture</option>
+              <option value="Campus Infrastructure">Campus Infrastructure</option>
+            </select>
+          </div>
+          <div class="col-md-6 mb-2">
+            <label class="form-label text-sm font-bold">Location</label>
+            <input type="text" class="form-control" placeholder="e.g. Science Lab 2 (Block-A)">
+          </div>
+          <div class="col-md-6 mb-2">
+            <label class="form-label text-sm font-bold">Purchase Date</label>
+            <input type="date" class="form-control" value="2026-10-29">
+          </div>
+          <div class="col-md-6 mb-2">
+            <label class="form-label text-sm font-bold">Capitalized Value (₹)</label>
+            <input type="text" class="form-control" placeholder="e.g. ₹35,000">
+          </div>
+        </div>
+      `;
+    } else if (cat === 'stock') {
+      container.innerHTML = `
+        <div class="row g-2">
+          <div class="col-12 mb-2">
+            <label class="form-label text-sm font-bold">Stock Item Name <span class="text-danger">*</span></label>
+            <input type="text" class="form-control" placeholder="e.g. Whiteboard Markers (Pack of 10)" required>
+          </div>
+          <div class="col-md-6 mb-2">
+            <label class="form-label text-sm font-bold">Quantity to Add <span class="text-danger">*</span></label>
+            <input type="number" class="form-control" value="20" min="1" required>
+          </div>
+          <div class="col-md-6 mb-2">
+            <label class="form-label text-sm font-bold">Unit of Measurement</label>
+            <input type="text" class="form-control" placeholder="e.g. Packs, Reams, Boxes">
+          </div>
+          <div class="col-md-6 mb-2">
+            <label class="form-label text-sm font-bold">Storage Location</label>
+            <input type="text" class="form-control" placeholder="e.g. Central Store Rack B-2">
+          </div>
+          <div class="col-md-6 mb-2">
+            <label class="form-label text-sm font-bold">Reorder Threshold Alert</label>
+            <input type="number" class="form-control" value="10">
+          </div>
+        </div>
+      `;
+    } else if (cat === 'purchase') {
+      container.innerHTML = `
+        <div class="row g-2">
+          <div class="col-md-6 mb-2">
+            <label class="form-label text-sm font-bold">Requester Faculty / Staff <span class="text-danger">*</span></label>
+            <input type="text" class="form-control" placeholder="e.g. Sri P. Rajesh Kumar" required>
+          </div>
+          <div class="col-md-6 mb-2">
+            <label class="form-label text-sm font-bold">Department <span class="text-danger">*</span></label>
+            <input type="text" class="form-control" placeholder="e.g. Mathematics & Physics" required>
+          </div>
+          <div class="col-12 mb-2">
+            <label class="form-label text-sm font-bold">Indented Items & Quantity <span class="text-danger">*</span></label>
+            <textarea class="form-control" rows="2" placeholder="List items, models, and required quantity..." required></textarea>
+          </div>
+          <div class="col-md-6 mb-2">
+            <label class="form-label text-sm font-bold">Estimated Cost (₹)</label>
+            <input type="text" class="form-control" placeholder="e.g. ₹15,000">
+          </div>
+          <div class="col-md-6 mb-2">
+            <label class="form-label text-sm font-bold">Recommended Vendor</label>
+            <input type="text" class="form-control" placeholder="e.g. Sri Krishna Book Depot">
+          </div>
+        </div>
+      `;
+    } else if (cat === 'vendor') {
+      container.innerHTML = `
+        <div class="row g-2">
+          <div class="col-12 mb-2">
+            <label class="form-label text-sm font-bold">Vendor / Firm Name <span class="text-danger">*</span></label>
+            <input type="text" class="form-control" placeholder="e.g. Amaravathi Educational Supplies" required>
+          </div>
+          <div class="col-md-6 mb-2">
+            <label class="form-label text-sm font-bold">Contact Person</label>
+            <input type="text" class="form-control" placeholder="e.g. Sri M. Srinivas">
+          </div>
+          <div class="col-md-6 mb-2">
+            <label class="form-label text-sm font-bold">Phone Number <span class="text-danger">*</span></label>
+            <input type="text" class="form-control" placeholder="e.g. 98480 12345" required>
+          </div>
+          <div class="col-md-6 mb-2">
+            <label class="form-label text-sm font-bold">GSTIN Number</label>
+            <input type="text" class="form-control" placeholder="e.g. 37AAACS1289P1Z8">
+          </div>
+          <div class="col-md-6 mb-2">
+            <label class="form-label text-sm font-bold">Payment Terms</label>
+            <input type="text" class="form-control" placeholder="e.g. Net 30 Days">
+          </div>
+        </div>
+      `;
+    } else if (cat === 'issue') {
+      container.innerHTML = `
+        <div class="row g-2">
+          <div class="col-12 mb-2">
+            <label class="form-label text-sm font-bold">Item / Capital Asset <span class="text-danger">*</span></label>
+            <input type="text" class="form-control" placeholder="e.g. Dell Latitude Faculty Laptop AST-IT-012" required>
+          </div>
+          <div class="col-md-6 mb-2">
+            <label class="form-label text-sm font-bold">Recipient Faculty / Staff <span class="text-danger">*</span></label>
+            <input type="text" class="form-control" placeholder="e.g. Smt. V. Anuradha" required>
+          </div>
+          <div class="col-md-6 mb-2">
+            <label class="form-label text-sm font-bold">Quantity</label>
+            <input type="text" class="form-control" value="1 Unit">
+          </div>
+          <div class="col-md-6 mb-2">
+            <label class="form-label text-sm font-bold">Expected Return Date</label>
+            <input type="date" class="form-control" value="2026-11-30">
+          </div>
+          <div class="col-md-6 mb-2">
+            <label class="form-label text-sm font-bold">Purpose / Remarks</label>
+            <input type="text" class="form-control" placeholder="Classroom lesson presentation">
+          </div>
+        </div>
+      `;
+    } else if (cat === 'maintenance') {
+      container.innerHTML = `
+        <div class="row g-2">
+          <div class="col-12 mb-2">
+            <label class="form-label text-sm font-bold">Asset Identifier & Description <span class="text-danger">*</span></label>
+            <input type="text" class="form-control" placeholder="e.g. AST-IT-004: Desktop Terminal 14" required>
+          </div>
+          <div class="col-12 mb-2">
+            <label class="form-label text-sm font-bold">Reported Fault / Damage <span class="text-danger">*</span></label>
+            <textarea class="form-control" rows="2" placeholder="Describe issue in detail..." required></textarea>
+          </div>
+          <div class="col-md-6 mb-2">
+            <label class="form-label text-sm font-bold">Estimated Repair Cost (₹)</label>
+            <input type="text" class="form-control" placeholder="e.g. ₹2,000">
+          </div>
+          <div class="col-md-6 mb-2">
+            <label class="form-label text-sm font-bold">Assigned Technician / Vendor</label>
+            <input type="text" class="form-control" placeholder="e.g. Sri G. Venkatesh (Infotech)">
+          </div>
+        </div>
+      `;
+    }
+  }
+
+  function handleNewInventorySubmit(e) {
+    if (e && e.preventDefault) e.preventDefault();
+    closeModal('newInventoryActionModal');
+    showToast('Record saved and verified under AP School Asset & Inventory Governance Protocol.', 'success');
+  }
+
+  // Open Inventory Dossier Modal
+  function openInventoryDossierModal(id, type) {
+    const body = document.getElementById('inventoryDossierModalBody');
+    if (!body) return;
+
+    let html = '';
+    if (type === 'asset') {
+      const a = INVENTORY_ASSETS_DATA.find(x => x.assetId === id) || INVENTORY_ASSETS_DATA[0];
+      html = `
+        <div style="border-bottom: 2px solid #2563eb; padding-bottom: 0.75rem; margin-bottom: 1rem;">
+          <div style="font-size: 0.75rem; text-transform: uppercase; color: #2563eb; font-weight: 800; letter-spacing: 0.05em;">
+            Capital Asset Barcode &amp; Depreciation Dossier
+          </div>
+          <h3 style="margin: 0.25rem 0 0; color: #1e3a8a;">${a.name}</h3>
+        </div>
+        <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 1rem; margin-bottom: 1rem;">
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; font-size: 0.85rem;">
+            <div><strong>Asset Barcode ID:</strong> ${a.assetId}</div>
+            <div><strong>Category:</strong> ${a.category}</div>
+            <div><strong>Designated Location:</strong> ${a.location}</div>
+            <div><strong>Serial Number:</strong> ${a.serialNo}</div>
+            <div><strong>Purchase Date:</strong> ${a.purchaseDate}</div>
+            <div><strong>Capitalized Value:</strong> ${a.value}</div>
+            <div><strong>Current Condition:</strong> <span class="portal-badge ${a.conditionClass}">${a.condition}</span></div>
+            <div><strong>Warranty / AMC:</strong> ${a.warranty}</div>
+            <div><strong>Departmental Custodian:</strong> ${a.custodian}</div>
+            <div><strong>Audit Status:</strong> <span class="portal-badge badge-success">Verified Oct 2026</span></div>
+          </div>
+        </div>
+        <div style="font-size: 0.85rem; color: #334155;">
+          <strong>Institutional Asset Governance Notes:</strong>
+          <p style="margin-top: 4px; background: #ffffff; padding: 0.75rem; border: 1px solid #e2e8f0; border-radius: 6px;">
+            Asset registered in Sri Vidya Capital Asset Register (Vol. IV). Physical barcode tag scanned and verified during half-yearly inventory audit. Sinking fund and depreciation calculated under straight-line method.
+          </p>
+        </div>
+      `;
+    } else if (type === 'stock') {
+      const s = INVENTORY_STOCK_DATA.find(x => x.stockId === id) || INVENTORY_STOCK_DATA[0];
+      html = `
+        <div style="border-bottom: 2px solid #2563eb; padding-bottom: 0.75rem; margin-bottom: 1rem;">
+          <div style="font-size: 0.75rem; text-transform: uppercase; color: #2563eb; font-weight: 800; letter-spacing: 0.05em;">
+            Store Bin Card &amp; Stock Ledger
+          </div>
+          <h3 style="margin: 0.25rem 0 0; color: #1e3a8a;">${s.item}</h3>
+        </div>
+        <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 1rem; margin-bottom: 1rem;">
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; font-size: 0.85rem;">
+            <div><strong>Stock ID:</strong> ${s.stockId}</div>
+            <div><strong>Material Category:</strong> ${s.category}</div>
+            <div><strong>Current Quantity:</strong> ${s.quantity} ${s.unit}</div>
+            <div><strong>Stock Level Status:</strong> <span class="portal-badge ${s.levelClass}">${s.stockLevel}</span></div>
+            <div><strong>Storage Location:</strong> ${s.storageLocation}</div>
+            <div><strong>Reorder Minimum Level:</strong> ${s.threshold} ${s.unit}</div>
+            <div><strong>Unit Rate:</strong> ${s.unitPrice}</div>
+            <div><strong>Last Indented:</strong> ${s.lastRestocked}</div>
+          </div>
+        </div>
+      `;
+    } else if (type === 'purchase') {
+      const p = INVENTORY_PURCHASES_DATA.find(x => x.reqId === id) || INVENTORY_PURCHASES_DATA[0];
+      html = `
+        <div style="border-bottom: 2px solid #2563eb; padding-bottom: 0.75rem; margin-bottom: 1rem;">
+          <div style="font-size: 0.75rem; text-transform: uppercase; color: #2563eb; font-weight: 800; letter-spacing: 0.05em;">
+            Departmental Purchase Requisition Indent
+          </div>
+          <h3 style="margin: 0.25rem 0 0; color: #1e3a8a;">${p.reqId}: ${p.department}</h3>
+        </div>
+        <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 1rem; margin-bottom: 1rem;">
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; font-size: 0.85rem;">
+            <div><strong>Requester:</strong> ${p.requester}</div>
+            <div><strong>Date Indented:</strong> ${p.date}</div>
+            <div><strong>Priority Level:</strong> ${p.priority} Priority</div>
+            <div><strong>Estimated Cost:</strong> ${p.estimatedCost}</div>
+            <div><strong>Executive Approval:</strong> <span class="portal-badge ${p.statusClass}">${p.approvalStatus}</span></div>
+            <div><strong>Recommended Vendor:</strong> ${p.vendorRecommended}</div>
+          </div>
+        </div>
+        <div style="font-size: 0.85rem; color: #334155;">
+          <strong>Detailed Specifications &amp; Educational Justification:</strong>
+          <p style="margin-top: 4px; background: #ffffff; padding: 0.75rem; border: 1px solid #e2e8f0; border-radius: 6px;">
+            ${p.items}
+          </p>
+        </div>
+      `;
+    } else if (type === 'vendor') {
+      const v = INVENTORY_VENDORS_DATA.find(x => x.vendorId === id) || INVENTORY_VENDORS_DATA[0];
+      html = `
+        <div style="border-bottom: 2px solid #2563eb; padding-bottom: 0.75rem; margin-bottom: 1rem;">
+          <div style="font-size: 0.75rem; text-transform: uppercase; color: #2563eb; font-weight: 800; letter-spacing: 0.05em;">
+            Empanelled Supplier &amp; Contract Agreement
+          </div>
+          <h3 style="margin: 0.25rem 0 0; color: #1e3a8a;">${v.name}</h3>
+        </div>
+        <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 1rem; margin-bottom: 1rem;">
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; font-size: 0.85rem;">
+            <div><strong>Vendor ID:</strong> ${v.vendorId}</div>
+            <div><strong>Authorized Representative:</strong> ${v.contactPerson}</div>
+            <div><strong>Mobile Phone:</strong> ${v.phone}</div>
+            <div><strong>Official Email:</strong> ${v.email}</div>
+            <div><strong>GSTIN Number:</strong> ${v.gstin}</div>
+            <div><strong>Premises Address:</strong> ${v.address}</div>
+            <div><strong>Supply Agreement:</strong> ${v.contracts}</div>
+            <div><strong>Agreed Payment Terms:</strong> ${v.paymentTerms}</div>
+            <div><strong>Institutional Rating:</strong> <span class="portal-badge badge-success">${v.rating}</span></div>
+          </div>
+        </div>
+        <div style="font-size: 0.85rem; color: #334155;">
+          <strong>Empanelled Product Categories:</strong>
+          <p style="margin-top: 4px; background: #ffffff; padding: 0.75rem; border: 1px solid #e2e8f0; border-radius: 6px;">
+            ${v.products}
+          </p>
+        </div>
+      `;
+    } else if (type === 'issue') {
+      const i = INVENTORY_ISSUE_RETURN_DATA.find(x => x.issueId === id) || INVENTORY_ISSUE_RETURN_DATA[0];
+      html = `
+        <div style="border-bottom: 2px solid #2563eb; padding-bottom: 0.75rem; margin-bottom: 1rem;">
+          <div style="font-size: 0.75rem; text-transform: uppercase; color: #2563eb; font-weight: 800; letter-spacing: 0.05em;">
+            Material Handover &amp; Temporary Loan Voucher
+          </div>
+          <h3 style="margin: 0.25rem 0 0; color: #1e3a8a;">${i.issueId}: ${i.item}</h3>
+        </div>
+        <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 1rem; margin-bottom: 1rem;">
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; font-size: 0.85rem;">
+            <div><strong>Recipient:</strong> ${i.recipient}</div>
+            <div><strong>Quantity Handed Over:</strong> ${i.quantity}</div>
+            <div><strong>Date of Issue:</strong> ${i.issueDate}</div>
+            <div><strong>Return Due Date:</strong> ${i.dueDate}</div>
+            <div><strong>Handover Status:</strong> <span class="portal-badge ${i.statusClass}">${i.returnStatus}</span></div>
+            <div><strong>Issuing Officer:</strong> ${i.issuedBy}</div>
+          </div>
+        </div>
+        <div style="font-size: 0.85rem; color: #334155;">
+          <strong>Official Purpose &amp; Condition Verification:</strong>
+          <p style="margin-top: 4px; background: #ffffff; padding: 0.75rem; border: 1px solid #e2e8f0; border-radius: 6px;">
+            ${i.remarks}
+          </p>
+        </div>
+      `;
+    } else if (type === 'maintenance') {
+      const m = INVENTORY_MAINTENANCE_DATA.find(x => x.maintId === id) || INVENTORY_MAINTENANCE_DATA[0];
+      html = `
+        <div style="border-bottom: 2px solid #2563eb; padding-bottom: 0.75rem; margin-bottom: 1rem;">
+          <div style="font-size: 0.75rem; text-transform: uppercase; color: #2563eb; font-weight: 800; letter-spacing: 0.05em;">
+            Asset Repair &amp; Maintenance Job Card
+          </div>
+          <h3 style="margin: 0.25rem 0 0; color: #1e3a8a;">${m.maintId}</h3>
+        </div>
+        <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 1rem; margin-bottom: 1rem;">
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; font-size: 0.85rem;">
+            <div><strong>Asset Identifier:</strong> ${m.asset}</div>
+            <div><strong>Date Logged:</strong> ${m.dateLogged}</div>
+            <div><strong>Work Order Status:</strong> <span class="portal-badge ${m.statusClass}">${m.status}</span></div>
+            <div><strong>Assigned Technician:</strong> ${m.assignedTechnician}</div>
+            <div><strong>Audited Repair Cost:</strong> ${m.repairCost}</div>
+            <div><strong>Completion Date:</strong> ${m.completionDate}</div>
+            <div><strong>Repair Warranty:</strong> ${m.warranty}</div>
+          </div>
+        </div>
+        <div style="font-size: 0.85rem; color: #334155;">
+          <strong>Reported Fault &amp; Rectification Scope:</strong>
+          <p style="margin-top: 4px; background: #ffffff; padding: 0.75rem; border: 1px solid #e2e8f0; border-radius: 6px;">
+            <strong>Fault:</strong> ${m.fault}<br><br>
+            <strong>Resolution:</strong> ${m.resolution}
+          </p>
+        </div>
+      `;
+    }
+
+    body.innerHTML = html;
+    openModal('viewInventoryDossierModal');
+  }
+
+  // Export functions
+  function exportInventoryAssetsCSV() {
+    let csv = 'Asset ID,Asset Name,Category,Location,Purchase Date,Value,Condition,Serial No\n';
+    INVENTORY_ASSETS_DATA.forEach(a => {
+      csv += `"${a.assetId}","${a.name}","${a.category}","${a.location}","${a.purchaseDate}","${a.value}","${a.condition}","${a.serialNo}"\n`;
+    });
+    downloadCsvFile(csv, 'Sri_Vidya_Capital_Asset_Register.csv');
+    showToast('Exported Capital Asset Register to CSV.', 'success');
+  }
+
+  function exportInventoryStockCSV() {
+    let csv = 'Stock ID,Item,Category,Quantity,Stock Level,Unit,Storage Location,Unit Price\n';
+    INVENTORY_STOCK_DATA.forEach(s => {
+      csv += `"${s.stockId}","${s.item}","${s.category}",${s.quantity},"${s.stockLevel}","${s.unit}","${s.storageLocation}","${s.unitPrice}"\n`;
+    });
+    downloadCsvFile(csv, 'Sri_Vidya_Material_Stock_Ledger.csv');
+    showToast('Exported Material Stock Ledger to CSV.', 'success');
+  }
+
+  function exportInventoryPurchasesCSV() {
+    let csv = 'Request ID,Requester,Department,Items,Estimated Cost,Approval Status,Date\n';
+    INVENTORY_PURCHASES_DATA.forEach(p => {
+      csv += `"${p.reqId}","${p.requester}","${p.department}","${p.items.replace(/"/g, '""')}","${p.estimatedCost}","${p.approvalStatus}","${p.date}"\n`;
+    });
+    downloadCsvFile(csv, 'Sri_Vidya_Departmental_Purchase_Requisitions.csv');
+    showToast('Exported Purchase Requisitions to CSV.', 'success');
+  }
+
+  function exportInventoryIssueReturnCSV() {
+    let csv = 'Issue ID,Item,Recipient,Quantity,Issue Date,Return Due Date,Return Status\n';
+    INVENTORY_ISSUE_RETURN_DATA.forEach(i => {
+      csv += `"${i.issueId}","${i.item}","${i.recipient}","${i.quantity}","${i.issueDate}","${i.dueDate}","${i.returnStatus}"\n`;
+    });
+    downloadCsvFile(csv, 'Sri_Vidya_Asset_Handover_Issue_Return_Log.csv');
+    showToast('Exported Asset Handover & Return Log to CSV.', 'success');
   }
 
   function filterFaculty(val) {
@@ -28137,6 +29412,27 @@ const classData = TIMETABLE_CLASS_DATA[currentTimetableClass] || TIMETABLE_CLASS
   }
 
   return {
+    // Inventory & Assets
+    renderInventoryAssetsTable,
+    filterInventoryAssets,
+    renderInventoryStockTable,
+    filterInventoryStock,
+    renderInventoryPurchasesTable,
+    filterInventoryPurchases,
+    renderInventoryVendorsTable,
+    filterInventoryVendors,
+    renderInventoryIssueReturnTable,
+    filterInventoryIssueReturn,
+    renderInventoryMaintenanceTable,
+    filterInventoryMaintenance,
+    openNewInventoryModal,
+    handleInventoryModalCategoryChange,
+    handleNewInventorySubmit,
+    openInventoryDossierModal,
+    exportInventoryAssetsCSV,
+    exportInventoryStockCSV,
+    exportInventoryPurchasesCSV,
+    exportInventoryIssueReturnCSV,
     // Transport & Facilities
     renderTransportRoutesTable,
     filterTransportRoutes,
