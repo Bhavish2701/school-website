@@ -405,11 +405,29 @@
           </div>
         </div>
 
+        <!-- 11. Appointments & Visitors -->
+        <div class="nav-item" data-module="appointments" id="sidebarNavItemAppointments">
+          <a href="#appointments" class="nav-link" onclick="portalApp.navigateTo('appointments');">
+            <span class="nav-icon"><i class="fa-solid fa-calendar-check"></i></span>
+            <span class="nav-text">11. Appointments &amp; Visitors</span>
+            <span class="nav-arrow"><i class="fa-solid fa-chevron-right"></i></span>
+          </a>
+          <div class="nav-sub">
+            <a href="#appointments-overview" class="nav-sub-link active" data-sub="overview" onclick="portalApp.switchSubTab('appointments', 'overview');">Appointment Overview</a>
+            <a href="#appointments-calendar" class="nav-sub-link" data-sub="calendar" onclick="portalApp.switchSubTab('appointments', 'calendar');">Principal's Calendar</a>
+            <a href="#appointments-requests" class="nav-sub-link" data-sub="requests" onclick="portalApp.switchSubTab('appointments', 'requests');">Appointment Requests <span class="nav-sub-badge warning" id="sidebarPendingApptBadge">3 New</span></a>
+            <a href="#appointments-approved" class="nav-sub-link" data-sub="approved" onclick="portalApp.switchSubTab('appointments', 'approved');">Approved Appointments</a>
+            <a href="#appointments-visitors" class="nav-sub-link" data-sub="visitors" onclick="portalApp.switchSubTab('appointments', 'visitors');">Visitor Register <span class="nav-sub-badge neutral">Active</span></a>
+            <a href="#appointments-history" class="nav-sub-link" data-sub="history" onclick="portalApp.switchSubTab('appointments', 'history');">Meeting History</a>
+            <a href="#appointments-followup" class="nav-sub-link" data-sub="followup" onclick="portalApp.switchSubTab('appointments', 'followup');">Follow-up Actions <span class="nav-sub-badge danger">4 Pending</span></a>
+          </div>
+        </div>
+
         <!-- 11. Communication -->
         <div class="nav-item" data-module="communication">
           <a href="#communication" class="nav-link" onclick="portalApp.navigateTo('communication');">
             <span class="nav-icon"><i class="fa-solid fa-bullhorn"></i></span>
-            <span class="nav-text">11. Communication</span>
+            <span class="nav-text">12. Communication</span>
             <span class="nav-arrow"><i class="fa-solid fa-chevron-right"></i></span>
           </a>
           <div class="nav-sub">
@@ -439,7 +457,7 @@
         <div class="nav-item" data-module="events">
           <a href="#events" class="nav-link" onclick="portalApp.navigateTo('events');">
             <span class="nav-icon"><i class="fa-solid fa-calendar-days"></i></span>
-            <span class="nav-text">12. Events &amp; Activities</span>
+            <span class="nav-text">13. Events &amp; Activities</span>
             <span class="nav-arrow"><i class="fa-solid fa-chevron-right"></i></span>
           </a>
           <div class="nav-sub">
@@ -456,7 +474,7 @@
         <div class="nav-item" data-module="transport">
           <a href="#transport" class="nav-link" onclick="portalApp.navigateTo('transport');">
             <span class="nav-icon"><i class="fa-solid fa-bus-simple"></i></span>
-            <span class="nav-text">13. Transport &amp; Facilities</span>
+            <span class="nav-text">14. Transport &amp; Facilities</span>
             <span class="nav-badge" style="background: rgba(16,185,129,0.2); color: #10b981;">6 Routes</span>
             <span class="nav-arrow"><i class="fa-solid fa-chevron-right"></i></span>
           </a>
@@ -8638,8 +8656,559 @@
 
         </section>
 
+<!-- =================================================================
+             MODULE 11: APPOINTMENTS & VISITORS (#view-appointments)
+             Placed directly below Fees & Finance per statutory executive structure.
+             Submenus:
+             1. Appointment Overview (Today's meetings, pending requests and upcoming appointments)
+             2. Principal's Calendar (Available slots, booked slots, blocked time and meeting locations)
+             3. Appointment Requests (Requester, purpose, preferred time, priority and request status)
+             4. Approved Appointments (Confirmed time, attendee, location and confirmation status)
+             5. Visitor Register (Visitor name, organization, host, check-in/out and visit purpose)
+             6. Meeting History (Completed, cancelled and rescheduled meetings)
+             7. Follow-up Actions (Action item, assigned employee, deadline and completion status)
+             Statutory Governance Rule:
+             "Meeting notes must be visible only to authorized participants or staff. Do not expose the Principal's private calendar or confidential meeting details to other visitors."
+             ================================================================= -->
+        <section class="portal-view" id="view-appointments">
+
+          <!-- Confidentiality & Governance Notice -->
+          <div style="background: #eff6ff; border: 1.5px solid #bfdbfe; border-radius: 10px; padding: 0.95rem 1.25rem; margin-bottom: 1.25rem; display: flex; align-items: center; gap: 0.95rem;">
+            <div style="width: 40px; height: 40px; border-radius: 50%; background: #dbeafe; color: #1e40af; display: flex; align-items: center; justify-content: center; font-size: 1.15rem; flex-shrink: 0;">
+              <i class="fa-solid fa-user-shield"></i>
+            </div>
+            <div style="font-size: 0.82rem; color: #1e3a8a; line-height: 1.45;">
+              <strong style="display: block; font-size: 0.88rem; color: #1e40af; margin-bottom: 2px;">
+                Executive Confidentiality &amp; Campus Visitor Safeguarding Protocol:
+              </strong>
+              Official meeting notes and discussion minutes are confidential and visible only to authorized attendees or staff. The Principal's private administrative blocks and internal hearing dockets are masked from visitor logs to protect administrative integrity under <strong>Principal Smt. Gorle Varalakshmi</strong> and <strong>Vice Principal Sri Navva Anand</strong>.
+            </div>
+          </div>
+
+          <div class="module-header">
+            <div class="module-header-info">
+              <h2><i class="fa-solid fa-calendar-check text-primary"></i> Appointments &amp; Campus Visitors</h2>
+              <p>Reception visitor registry, gate passes, executive consultations, and official calendar for Smt. Gorle Varalakshmi.</p>
+            </div>
+            <div class="module-header-actions">
+              <button class="btn btn-secondary" onclick="portalApp.openModal('newVisitorPassModal')">
+                <i class="fa-solid fa-id-badge"></i> Issue Visitor Gate Pass
+              </button>
+              <button class="btn btn-primary" onclick="portalApp.openModal('requestAppointmentModal')">
+                <i class="fa-solid fa-calendar-plus"></i> Request Appointment
+              </button>
+            </div>
+          </div>
+
+          <!-- Tab Strip with exact 7 submenus -->
+          <div class="tab-strip" id="appointmentsTabStrip">
+            <button class="tab-btn active" data-sub="overview" onclick="portalApp.switchSubTab('appointments', 'overview')">
+              <i class="fa-solid fa-chart-pie mr-1"></i> Appointment Overview
+            </button>
+            <button class="tab-btn" data-sub="calendar" onclick="portalApp.switchSubTab('appointments', 'calendar')">
+              <i class="fa-solid fa-calendar-day mr-1"></i> Principal's Calendar
+            </button>
+            <button class="tab-btn" data-sub="requests" onclick="portalApp.switchSubTab('appointments', 'requests')">
+              <i class="fa-solid fa-envelope-open-text mr-1"></i> Appointment Requests (<span id="apptPendingBadge">3</span>)
+            </button>
+            <button class="tab-btn" data-sub="approved" onclick="portalApp.switchSubTab('appointments', 'approved')">
+              <i class="fa-solid fa-calendar-check mr-1"></i> Approved Appointments
+            </button>
+            <button class="tab-btn" data-sub="visitors" onclick="portalApp.switchSubTab('appointments', 'visitors')">
+              <i class="fa-solid fa-address-book mr-1"></i> Visitor Register
+            </button>
+            <button class="tab-btn" data-sub="history" onclick="portalApp.switchSubTab('appointments', 'history')">
+              <i class="fa-solid fa-clock-rotate-left mr-1"></i> Meeting History
+            </button>
+            <button class="tab-btn" data-sub="followup" onclick="portalApp.switchSubTab('appointments', 'followup')">
+              <i class="fa-solid fa-list-check mr-1"></i> Follow-up Actions (<span id="apptFollowupBadge">4 Pending</span>)
+            </button>
+          </div>
+
+          <!-- =========================================================
+               SUBVIEW 1: APPOINTMENT OVERVIEW
+               Today's meetings, pending requests and upcoming appointments
+               ========================================================= -->
+          <div class="appointments-subview active" id="subview-appointments-overview" data-subview="overview">
+            <div class="card p-4">
+              <!-- KPI Cards -->
+              <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin-bottom: 1.25rem;">
+                <div class="stat-card" style="padding: 1rem; border-radius: 8px; background: #fff; border: 1px solid var(--color-border); box-shadow: 0 1px 3px rgba(0,0,0,0.04);">
+                  <div style="font-size: 0.74rem; font-weight: 800; color: var(--color-text-muted); text-transform: uppercase;">TODAY'S MEETINGS</div>
+                  <div style="font-size: 1.45rem; font-weight: 900; color: #0284c7; margin-top: 2px;">5 Sessions</div>
+                  <small class="text-muted"><i class="fa-solid fa-door-open mr-1 text-primary"></i>Principal's Chamber &amp; Boardroom</small>
+                </div>
+                <div class="stat-card" style="padding: 1rem; border-radius: 8px; background: #fff; border: 1px solid var(--color-border); box-shadow: 0 1px 3px rgba(0,0,0,0.04);">
+                  <div style="font-size: 0.74rem; font-weight: 800; color: var(--color-text-muted); text-transform: uppercase;">PENDING REQUESTS</div>
+                  <div style="font-size: 1.45rem; font-weight: 900; color: #d97706; margin-top: 2px;">3 Awaiting Review</div>
+                  <small class="text-muted"><i class="fa-solid fa-clock mr-1 text-warning"></i>Requires Principal's Decision</small>
+                </div>
+                <div class="stat-card" style="padding: 1rem; border-radius: 8px; background: #fff; border: 1px solid var(--color-border); box-shadow: 0 1px 3px rgba(0,0,0,0.04);">
+                  <div style="font-size: 0.74rem; font-weight: 800; color: var(--color-text-muted); text-transform: uppercase;">UPCOMING (NEXT 7 DAYS)</div>
+                  <div style="font-size: 1.45rem; font-weight: 900; color: #16a34a; margin-top: 2px;">14 Confirmed</div>
+                  <small class="text-muted"><i class="fa-solid fa-calendar-days mr-1 text-emerald"></i>Parent, DEO &amp; Staff Hearings</small>
+                </div>
+                <div class="stat-card" style="padding: 1rem; border-radius: 8px; background: #fff; border: 1px solid var(--color-border); box-shadow: 0 1px 3px rgba(0,0,0,0.04);">
+                  <div style="font-size: 0.74rem; font-weight: 800; color: var(--color-text-muted); text-transform: uppercase;">CAMPUS VISITORS NOW</div>
+                  <div style="font-size: 1.45rem; font-weight: 900; color: #9333ea; margin-top: 2px;">4 In Campus</div>
+                  <small class="text-muted"><i class="fa-solid fa-id-card-clip mr-1 text-purple"></i>Main Gate Verified Passes</small>
+                </div>
+              </div>
+
+              <!-- Panel 1: Today's Meetings -->
+              <div style="margin-bottom: 1.75rem;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.85rem; flex-wrap: wrap; gap: 0.5rem;">
+                  <h3 style="margin: 0; font-size: 1.05rem; font-weight: 800; color: var(--color-text-dark);">
+                    <i class="fa-solid fa-calendar-day text-primary mr-1"></i> Today's Executive Meetings Schedule (Thursday, 29 Oct 2026)
+                  </h3>
+                  <span class="portal-badge badge-primary">Principal Smt. Gorle Varalakshmi Chamber</span>
+                </div>
+                <div class="table-container">
+                  <table class="data-table">
+                    <thead>
+                      <tr>
+                        <th style="min-width: 140px; width: 17%;">Time Window</th>
+                        <th style="min-width: 190px; width: 23%;">Participant / Attendee</th>
+                        <th style="min-width: 150px; width: 18%;">Designation / Organization</th>
+                        <th style="min-width: 200px; width: 22%;">Purpose</th>
+                        <th style="min-width: 140px; width: 17%;">Location</th>
+                        <th style="min-width: 110px; width: 13%; text-align: center;">Status</th>
+                      </tr>
+                    </thead>
+                    <tbody id="overviewTodayMeetingsTableBody">
+                      <!-- Populated dynamically via portalApp.renderAppointmentsOverview -->
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              <!-- 2-Column Split: Pending Requests & Upcoming Appointments -->
+              <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); gap: 1.25rem;">
+                <!-- Pending Requests -->
+                <div style="border: 1px solid var(--color-border); border-radius: 8px; padding: 1.1rem; background: #fff;">
+                  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.85rem;">
+                    <h4 style="margin: 0; font-size: 0.96rem; font-weight: 800; color: #b45309;">
+                      <i class="fa-solid fa-hourglass-half mr-1"></i> Pending Requests Queue (3)
+                    </h4>
+                    <button class="btn btn-sm btn-outline-primary" onclick="portalApp.switchSubTab('appointments', 'requests')">View All</button>
+                  </div>
+                  <div class="table-container">
+                    <table class="data-table" style="font-size: 0.84rem;">
+                      <thead>
+                        <tr>
+                          <th>Requester</th>
+                          <th>Purpose</th>
+                          <th>Preferred Slot</th>
+                          <th style="text-align: center;">Actions</th>
+                        </tr>
+                      </thead>
+                      <tbody id="overviewPendingRequestsTableBody">
+                        <!-- Populated dynamically -->
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+
+                <!-- Upcoming Appointments -->
+                <div style="border: 1px solid var(--color-border); border-radius: 8px; padding: 1.1rem; background: #fff;">
+                  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.85rem;">
+                    <h4 style="margin: 0; font-size: 0.96rem; font-weight: 800; color: #166534;">
+                      <i class="fa-solid fa-calendar-days mr-1"></i> Upcoming Appointments (Next 7 Days)
+                    </h4>
+                    <button class="btn btn-sm btn-outline-primary" onclick="portalApp.switchSubTab('appointments', 'approved')">View Full Schedule</button>
+                  </div>
+                  <div class="table-container">
+                    <table class="data-table" style="font-size: 0.84rem;">
+                      <thead>
+                        <tr>
+                          <th>Date &amp; Time</th>
+                          <th>Attendee</th>
+                          <th>Purpose</th>
+                          <th style="text-align: center;">Location</th>
+                        </tr>
+                      </thead>
+                      <tbody id="overviewUpcomingAppointmentsTableBody">
+                        <!-- Populated dynamically -->
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- =========================================================
+               SUBVIEW 2: PRINCIPAL'S CALENDAR
+               Available slots, booked slots, blocked time and meeting locations
+               ========================================================= -->
+          <div class="appointments-subview" id="subview-appointments-calendar" data-subview="calendar" style="display:none;">
+            <div class="card p-4">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.15rem; flex-wrap: wrap; gap: 0.75rem; background: #fff; padding: 1rem 1.25rem; border-radius: 10px; border: 1px solid var(--color-border);">
+                <div>
+                  <h3 style="margin: 0; font-size: 1.05rem; font-weight: 800; color: var(--color-text-dark);">
+                    <i class="fa-solid fa-calendar-day text-primary mr-1"></i> Principal Smt. Gorle Varalakshmi's Official Executive Schedule
+                  </h3>
+                  <p class="text-muted" style="margin: 0.25rem 0 0 0; font-size: 0.84rem;">
+                    Classified diary: Available consultation windows, booked executive hearings, and blocked academic inspection time.
+                  </p>
+                </div>
+                <div style="display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;">
+                  <select id="calendarFilterDay" class="form-control form-control-sm" onchange="portalApp.filterPrincipalsCalendar()" style="width: auto;">
+                    <option value="today">Today (29 Oct 2026)</option>
+                    <option value="tomorrow">Tomorrow (30 Oct 2026)</option>
+                    <option value="week">Full Academic Week</option>
+                  </select>
+                  <button class="btn btn-secondary btn-sm" onclick="portalApp.printPrincipalsCalendar()">
+                    <i class="fa-solid fa-print"></i> Print Day Sheet
+                  </button>
+                </div>
+              </div>
+
+              <!-- Privacy Notice Banner -->
+              <div style="background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 8px; padding: 0.75rem 1rem; margin-bottom: 1.15rem; display: flex; align-items: center; gap: 0.75rem; font-size: 0.82rem; color: #475569;">
+                <i class="fa-solid fa-shield-halved text-primary" style="font-size: 1rem;"></i>
+                <span><strong>Privacy Shield Active:</strong> Blocked slots for internal evaluations, SSC Board confidential dispatches, and private administrative matters are restricted from visitor reception views.</span>
+              </div>
+
+              <!-- Quick Filter Pills -->
+              <div style="display: flex; gap: 0.5rem; margin-bottom: 1.15rem; flex-wrap: wrap;">
+                <button class="btn btn-sm btn-outline-primary active" id="btnCalFilterAll" onclick="portalApp.setCalendarFilter('all')">
+                  All Slots (<span id="calCountAll">8</span>)
+                </button>
+                <button class="btn btn-sm btn-outline-success" id="btnCalFilterAvailable" onclick="portalApp.setCalendarFilter('available')">
+                  <i class="fa-solid fa-circle-check mr-1"></i> Available Slots (<span id="calCountAvailable">2</span>)
+                </button>
+                <button class="btn btn-sm btn-outline-info" id="btnCalFilterBooked" onclick="portalApp.setCalendarFilter('booked')">
+                  <i class="fa-solid fa-calendar-check mr-1"></i> Booked Slots (<span id="calCountBooked">3</span>)
+                </button>
+                <button class="btn btn-sm btn-outline-warning" id="btnCalFilterBlocked" onclick="portalApp.setCalendarFilter('blocked')">
+                  <i class="fa-solid fa-ban mr-1"></i> Blocked Time (<span id="calCountBlocked">3</span>)
+                </button>
+              </div>
+
+              <!-- Table: Available slots, booked slots, blocked time and meeting locations -->
+              <div class="table-container">
+                <table class="data-table">
+                  <thead>
+                    <tr>
+                      <th style="min-width: 140px; width: 17%;">Time Window</th>
+                      <th style="min-width: 150px; width: 18%; text-align: center;">Slot Classification</th>
+                      <th style="min-width: 220px; width: 28%;">Booking Details / Scheduled Agenda</th>
+                      <th style="min-width: 160px; width: 20%;">Meeting Location</th>
+                      <th style="min-width: 120px; width: 15%; text-align: center;">Availability Status</th>
+                      <th style="min-width: 90px; width: 12%; text-align: center;">Action</th>
+                    </tr>
+                  </thead>
+                  <tbody id="principalsCalendarTableBody">
+                    <!-- Populated dynamically via portalApp.renderPrincipalsCalendar -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <!-- =========================================================
+               SUBVIEW 3: APPOINTMENT REQUESTS
+               Requester, purpose, preferred time, priority and request status
+               ========================================================= -->
+          <div class="appointments-subview" id="subview-appointments-requests" data-subview="requests" style="display:none;">
+            <div class="card p-4">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.15rem; flex-wrap: wrap; gap: 0.75rem; background: #fff; padding: 1rem 1.25rem; border-radius: 10px; border: 1px solid var(--color-border);">
+                <div>
+                  <h3 style="margin: 0; font-size: 1.05rem; font-weight: 800; color: var(--color-text-dark);">
+                    <i class="fa-solid fa-envelope-open-text text-primary mr-1"></i> Official Appointment Requests Registry
+                  </h3>
+                  <p class="text-muted" style="margin: 0.25rem 0 0 0; font-size: 0.84rem;">
+                    Inward consultation petitions submitted by parents, education authorities, and vendors awaiting Principal sanction.
+                  </p>
+                </div>
+                <div style="display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;">
+                  <button class="btn btn-primary btn-sm" onclick="portalApp.openModal('requestAppointmentModal')">
+                    <i class="fa-solid fa-plus"></i> New Request
+                  </button>
+                  <button class="btn btn-secondary btn-sm" onclick="portalApp.exportAppointmentRequestsCSV()">
+                    <i class="fa-solid fa-file-excel"></i> Export CSV
+                  </button>
+                </div>
+              </div>
+
+              <!-- Filter Bar -->
+              <div style="display: flex; gap: 0.5rem; align-items: center; margin-bottom: 1rem; flex-wrap: wrap;">
+                <input type="text" id="requestsSearchInput" class="form-control form-control-sm" placeholder="Search requester, ward, phone..." oninput="portalApp.filterAppointmentRequests()" style="width: 240px;">
+                <select id="requestsPriorityFilter" class="form-control form-control-sm" onchange="portalApp.filterAppointmentRequests()" style="width: auto;">
+                  <option value="all">All Priorities</option>
+                  <option value="High">High Priority</option>
+                  <option value="Medium">Medium Priority</option>
+                  <option value="Normal">Normal</option>
+                </select>
+                <select id="requestsStatusFilter" class="form-control form-control-sm" onchange="portalApp.filterAppointmentRequests()" style="width: auto;">
+                  <option value="all">All Request Statuses</option>
+                  <option value="Pending">Pending Review</option>
+                  <option value="Approved">Approved</option>
+                  <option value="Declined">Declined</option>
+                </select>
+              </div>
+
+              <!-- Table: Requester, purpose, preferred time, priority and request status -->
+              <div class="table-container">
+                <table class="data-table">
+                  <thead>
+                    <tr>
+                      <th style="min-width: 180px; width: 23%;">Requester</th>
+                      <th style="min-width: 200px; width: 26%;">Purpose</th>
+                      <th style="min-width: 140px; width: 18%;">Preferred Time</th>
+                      <th style="min-width: 110px; width: 14%; text-align: center;">Priority</th>
+                      <th style="min-width: 130px; width: 16%; text-align: center;">Request Status</th>
+                      <th style="min-width: 120px; width: 15%; text-align: center;">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody id="appointmentRequestsTableBody">
+                    <!-- Populated dynamically via portalApp.renderAppointmentRequests -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <!-- =========================================================
+               SUBVIEW 4: APPROVED APPOINTMENTS
+               Confirmed time, attendee, location and confirmation status
+               ========================================================= -->
+          <div class="appointments-subview" id="subview-appointments-approved" data-subview="approved" style="display:none;">
+            <div class="card p-4">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.15rem; flex-wrap: wrap; gap: 0.75rem; background: #fff; padding: 1rem 1.25rem; border-radius: 10px; border: 1px solid var(--color-border);">
+                <div>
+                  <h3 style="margin: 0; font-size: 1.05rem; font-weight: 800; color: var(--color-text-dark);">
+                    <i class="fa-solid fa-calendar-check text-primary mr-1"></i> Confirmed &amp; Sanctioned Leadership Appointments
+                  </h3>
+                  <p class="text-muted" style="margin: 0.25rem 0 0 0; font-size: 0.84rem;">
+                    Formally approved consultations with confirmed time slots, attendee verification, and allocated rooms.
+                  </p>
+                </div>
+                <div style="display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;">
+                  <button class="btn btn-secondary btn-sm" onclick="portalApp.printApprovedAppointmentsRegister()">
+                    <i class="fa-solid fa-print"></i> Print Register
+                  </button>
+                </div>
+              </div>
+
+              <!-- Filter Bar -->
+              <div style="display: flex; gap: 0.5rem; align-items: center; margin-bottom: 1rem; flex-wrap: wrap;">
+                <input type="text" id="approvedSearchInput" class="form-control form-control-sm" placeholder="Search attendee, pass ID, location..." oninput="portalApp.filterApprovedAppointments()" style="width: 250px;">
+                <select id="approvedLocationFilter" class="form-control form-control-sm" onchange="portalApp.filterApprovedAppointments()" style="width: auto;">
+                  <option value="all">All Meeting Locations</option>
+                  <option value="Chamber">Principal's Chamber (#101)</option>
+                  <option value="Boardroom">Board Room (Admin Wing)</option>
+                  <option value="Conference">Main Conference Hall</option>
+                  <option value="VP Office">Vice Principal Office (#104)</option>
+                </select>
+              </div>
+
+              <!-- Table: Confirmed time, attendee, location and confirmation status -->
+              <div class="table-container">
+                <table class="data-table">
+                  <thead>
+                    <tr>
+                      <th style="min-width: 160px; width: 20%;">Confirmed Time</th>
+                      <th style="min-width: 200px; width: 26%;">Attendee</th>
+                      <th style="min-width: 170px; width: 22%;">Location</th>
+                      <th style="min-width: 150px; width: 19%; text-align: center;">Confirmation Status</th>
+                      <th style="min-width: 120px; width: 15%; text-align: center;">Pass &amp; Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody id="approvedAppointmentsTableBody">
+                    <!-- Populated dynamically via portalApp.renderApprovedAppointments -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <!-- =========================================================
+               SUBVIEW 5: VISITOR REGISTER
+               Visitor name, organization, host, check-in/out and visit purpose
+               ========================================================= -->
+          <div class="appointments-subview" id="subview-appointments-visitors" data-subview="visitors" style="display:none;">
+            <div class="card p-4">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.15rem; flex-wrap: wrap; gap: 0.75rem; background: #fff; padding: 1rem 1.25rem; border-radius: 10px; border: 1px solid var(--color-border);">
+                <div>
+                  <h3 style="margin: 0; font-size: 1.05rem; font-weight: 800; color: var(--color-text-dark);">
+                    <i class="fa-solid fa-address-book text-primary mr-1"></i> Main Gate Visitor Reception &amp; Security Register
+                  </h3>
+                  <p class="text-muted" style="margin: 0.25rem 0 0 0; font-size: 0.84rem;">
+                    Daily campus ingress/egress records, ID badge issue, security verification, and designated host tracking.
+                  </p>
+                </div>
+                <div style="display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;">
+                  <button class="btn btn-primary btn-sm" onclick="portalApp.openModal('newVisitorPassModal')">
+                    <i class="fa-solid fa-id-badge"></i> Issue Gate Pass
+                  </button>
+                  <button class="btn btn-secondary btn-sm" onclick="portalApp.exportVisitorRegisterCSV()">
+                    <i class="fa-solid fa-file-excel"></i> Export CSV
+                  </button>
+                </div>
+              </div>
+
+              <!-- Filter Bar -->
+              <div style="display: flex; gap: 0.5rem; align-items: center; margin-bottom: 1rem; flex-wrap: wrap;">
+                <input type="text" id="visitorSearchInput" class="form-control form-control-sm" placeholder="Search visitor name, phone, pass #..." oninput="portalApp.filterVisitorRegister()" style="width: 250px;">
+                <select id="visitorStatusFilter" class="form-control form-control-sm" onchange="portalApp.filterVisitorRegister()" style="width: auto;">
+                  <option value="all">All Visitors</option>
+                  <option value="in_campus">Currently In Campus</option>
+                  <option value="exited">Exited / Cleared</option>
+                </select>
+                <select id="visitorHostFilter" class="form-control form-control-sm" onchange="portalApp.filterVisitorRegister()" style="width: auto;">
+                  <option value="all">All Hosts</option>
+                  <option value="Principal">Principal Smt. Gorle Varalakshmi</option>
+                  <option value="Vice Principal">Vice Principal Sri Navva Anand</option>
+                  <option value="Accounts">Accounts Desk</option>
+                  <option value="Science HOD">Science HOD</option>
+                </select>
+              </div>
+
+              <!-- Table: Visitor name, organization, host, check-in/out and visit purpose -->
+              <div class="table-container">
+                <table class="data-table">
+                  <thead>
+                    <tr>
+                      <th style="min-width: 180px; width: 22%;">Visitor Name &amp; Pass #</th>
+                      <th style="min-width: 160px; width: 20%;">Organization</th>
+                      <th style="min-width: 150px; width: 19%;">Host</th>
+                      <th style="min-width: 150px; width: 19%;">Check-In / Out</th>
+                      <th style="min-width: 180px; width: 22%;">Visit Purpose</th>
+                      <th style="min-width: 110px; width: 13%; text-align: center;">Status &amp; Action</th>
+                    </tr>
+                  </thead>
+                  <tbody id="visitorRegisterTableBody">
+                    <!-- Populated dynamically via portalApp.renderVisitorRegister -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <!-- =========================================================
+               SUBVIEW 6: MEETING HISTORY
+               Completed, cancelled and rescheduled meetings
+               Special Rule: "Meeting notes must be visible only to authorized participants or staff."
+               ========================================================= -->
+          <div class="appointments-subview" id="subview-appointments-history" data-subview="history" style="display:none;">
+            <div class="card p-4">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.15rem; flex-wrap: wrap; gap: 0.75rem; background: #fff; padding: 1rem 1.25rem; border-radius: 10px; border: 1px solid var(--color-border);">
+                <div>
+                  <h3 style="margin: 0; font-size: 1.05rem; font-weight: 800; color: var(--color-text-dark);">
+                    <i class="fa-solid fa-clock-rotate-left text-primary mr-1"></i> Executive Consultation &amp; Meeting History Archive
+                  </h3>
+                  <p class="text-muted" style="margin: 0.25rem 0 0 0; font-size: 0.84rem;">
+                    Institutional journal of completed hearings, cancellations, and rescheduled consultations with confidential minutes access.
+                  </p>
+                </div>
+                <div style="display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;">
+                  <button class="btn btn-secondary btn-sm" onclick="portalApp.exportMeetingHistoryCSV()">
+                    <i class="fa-solid fa-file-excel"></i> Export Archive CSV
+                  </button>
+                </div>
+              </div>
+
+              <!-- Filter Pills -->
+              <div style="display: flex; gap: 0.5rem; margin-bottom: 1.15rem; flex-wrap: wrap;">
+                <button class="btn btn-sm btn-outline-primary active" id="btnHistFilterAll" onclick="portalApp.setHistoryFilter('all')">
+                  All Records (<span id="histCountAll">8</span>)
+                </button>
+                <button class="btn btn-sm btn-outline-success" id="btnHistFilterCompleted" onclick="portalApp.setHistoryFilter('completed')">
+                  <i class="fa-solid fa-circle-check mr-1"></i> Completed (<span id="histCountCompleted">5</span>)
+                </button>
+                <button class="btn btn-sm btn-outline-warning" id="btnHistFilterRescheduled" onclick="portalApp.setHistoryFilter('rescheduled')">
+                  <i class="fa-solid fa-calendar-xmark mr-1"></i> Rescheduled (<span id="histCountRescheduled">2</span>)
+                </button>
+                <button class="btn btn-sm btn-outline-danger" id="btnHistFilterCancelled" onclick="portalApp.setHistoryFilter('cancelled')">
+                  <i class="fa-solid fa-ban mr-1"></i> Cancelled (<span id="histCountCancelled">1</span>)
+                </button>
+              </div>
+
+              <!-- Table: Completed, cancelled and rescheduled meetings -->
+              <div class="table-container">
+                <table class="data-table">
+                  <thead>
+                    <tr>
+                      <th style="min-width: 140px; width: 17%;">Meeting ID &amp; Date</th>
+                      <th style="min-width: 180px; width: 22%;">Participants &amp; Attendee</th>
+                      <th style="min-width: 190px; width: 24%;">Purpose</th>
+                      <th style="min-width: 170px; width: 21%;">Outcome / Resolution</th>
+                      <th style="min-width: 110px; width: 14%; text-align: center;">Status</th>
+                      <th style="min-width: 130px; width: 16%; text-align: center;">Confidential Notes</th>
+                    </tr>
+                  </thead>
+                  <tbody id="meetingHistoryTableBody">
+                    <!-- Populated dynamically via portalApp.renderMeetingHistory -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <!-- =========================================================
+               SUBVIEW 7: FOLLOW-UP ACTIONS
+               Action item, assigned employee, deadline and completion status
+               ========================================================= -->
+          <div class="appointments-subview" id="subview-appointments-followup" data-subview="followup" style="display:none;">
+            <div class="card p-4">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.15rem; flex-wrap: wrap; gap: 0.75rem; background: #fff; padding: 1rem 1.25rem; border-radius: 10px; border: 1px solid var(--color-border);">
+                <div>
+                  <h3 style="margin: 0; font-size: 1.05rem; font-weight: 800; color: var(--color-text-dark);">
+                    <i class="fa-solid fa-list-check text-primary mr-1"></i> Executive Follow-Up &amp; Action Items Matrix
+                  </h3>
+                  <p class="text-muted" style="margin: 0.25rem 0 0 0; font-size: 0.84rem;">
+                    Decisions originating from meetings with Principal Smt. Gorle Varalakshmi assigned to faculty and office staff with tracked deadlines.
+                  </p>
+                </div>
+                <div style="display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;">
+                  <button class="btn btn-primary btn-sm" onclick="portalApp.openModal('newFollowupModal')">
+                    <i class="fa-solid fa-plus"></i> New Action Item
+                  </button>
+                  <button class="btn btn-secondary btn-sm" onclick="portalApp.exportFollowupCSV()">
+                    <i class="fa-solid fa-file-excel"></i> Export CSV
+                  </button>
+                </div>
+              </div>
+
+              <!-- Filter Bar -->
+              <div style="display: flex; gap: 0.5rem; align-items: center; margin-bottom: 1rem; flex-wrap: wrap;">
+                <input type="text" id="followupSearchInput" class="form-control form-control-sm" placeholder="Search task, employee, meeting..." oninput="portalApp.filterFollowupActions()" style="width: 250px;">
+                <select id="followupStatusFilter" class="form-control form-control-sm" onchange="portalApp.filterFollowupActions()" style="width: auto;">
+                  <option value="all">All Completion Statuses</option>
+                  <option value="Pending">Pending Assignment</option>
+                  <option value="In Progress">In Progress</option>
+                  <option value="Completed">Completed</option>
+                </select>
+              </div>
+
+              <!-- Table: Action item, assigned employee, deadline and completion status -->
+              <div class="table-container">
+                <table class="data-table">
+                  <thead>
+                    <tr>
+                      <th style="min-width: 220px; width: 28%;">Action Item</th>
+                      <th style="min-width: 170px; width: 21%;">Assigned Employee</th>
+                      <th style="min-width: 140px; width: 18%;">Deadline</th>
+                      <th style="min-width: 130px; width: 16%; text-align: center;">Completion Status</th>
+                      <th style="min-width: 100px; width: 12%; text-align: center;">Priority</th>
+                      <th style="min-width: 90px; width: 12%; text-align: center;">Action</th>
+                    </tr>
+                  </thead>
+                  <tbody id="followupActionsTableBody">
+                    <!-- Populated dynamically via portalApp.renderFollowupActions -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+        </section>
+
         <!-- =================================================================
-             MODULE 7: COMMUNICATION
+             MODULE 12: COMMUNICATION
              (Announcements, Notices, SMS, Email, Push Notifications)
              ================================================================= -->
         <section class="portal-view" id="view-communication">
@@ -10284,162 +10853,6 @@ id="subview-communication-notices" style="display:none;">
           </div></section>
 
       
-        <!-- =================================================================
-             MODULE 11: APPOINTMENTS & VISITORS (#view-appointments)
-             ================================================================= -->
-        <section class="portal-view" id="view-appointments">
-          <div class="module-header-strip mb-4">
-            <div class="mhs-title">
-              <h2><i class="fa-solid fa-handshake text-primary"></i> Appointments &amp; Campus Visitors</h2>
-              <p>Reception visitor registry, gate passes, and executive appointments for Principal &amp; Vice Principal.</p>
-            </div>
-            <div class="mhs-actions">
-              <button class="btn btn-primary" onclick="portalApp.openModal('modalNewVisitorPass')">
-                <i class="fa-solid fa-id-badge"></i> Issue Visitor Gate Pass
-              </button>
-            </div>
-          </div>
-
-          <div class="sub-tab-nav mb-4" id="appointmentsSubTabs">
-            <button class="sub-tab-btn active" data-sub="visitors" onclick="portalApp.switchSubTab('appointments', 'visitors')">
-              <i class="fa-solid fa-list-ol"></i> Today's Visitor Pass Log
-            </button>
-            <button class="sub-tab-btn" data-sub="queue" onclick="portalApp.switchSubTab('appointments', 'queue')">
-              <i class="fa-solid fa-calendar-check"></i> Principal &amp; VP Consultations
-            </button>
-            <button class="sub-tab-btn" data-sub="hours" onclick="portalApp.switchSubTab('appointments', 'hours')">
-              <i class="fa-solid fa-door-open"></i> Visiting Hours &amp; Security Policy
-            </button>
-          </div>
-
-          <!-- Sub-view 1: Visitor Pass Log -->
-          <div class="sub-view-pane active" id="subview-appointments-visitors">
-            <div class="card p-4">
-              <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
-                <h3 class="card-title m-0"><i class="fa-solid fa-id-card text-primary"></i> Main Gate Entry &amp; Visitor Desk</h3>
-                <div class="search-box-wrap" style="width: 280px;">
-                  <input type="text" class="form-control form-control-sm" placeholder="Search visitor name or pass #..." onkeyup="portalApp.filterVisitors(this.value)">
-                </div>
-              </div>
-              <div class="table-responsive">
-                <table class="custom-table" id="visitorDeskTable">
-                  <thead>
-                    <tr>
-                      <th>Pass ID</th>
-                      <th>Visitor Name &amp; Phone</th>
-                      <th>Purpose / Ward Details</th>
-                      <th>Person to Meet</th>
-                      <th>Entry Time</th>
-                      <th>Exit Status</th>
-                      <th>Actions</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td><span class="portal-badge badge-primary">PASS-1048</span></td>
-                      <td><strong>K. Sambasiva Rao</strong><br><small class="text-muted">+91 94401 23450</small></td>
-                      <td>Parent of K. Sai Krishna (Class 8A) • Medical leave submission</td>
-                      <td>Sri Navva Anand (Vice Principal)</td>
-                      <td>10:15 AM (Today)</td>
-                      <td><span class="portal-badge badge-success">In Campus</span></td>
-                      <td><button class="btn btn-sm btn-outline-danger" onclick="portalApp.markVisitorExit(1048)">Mark Exit</button></td>
-                    </tr>
-                    <tr>
-                      <td><span class="portal-badge badge-primary">PASS-1047</span></td>
-                      <td><strong>M. Venkataratnam</strong><br><small class="text-muted">+91 98480 55122</small></td>
-                      <td>New Admission Inquiry for Class 6</td>
-                      <td>Smt. M. Vijaya (Office Admin)</td>
-                      <td>09:40 AM (Today)</td>
-                      <td><span class="portal-badge badge-success">In Campus</span></td>
-                      <td><button class="btn btn-sm btn-outline-danger" onclick="portalApp.markVisitorExit(1047)">Mark Exit</button></td>
-                    </tr>
-                    <tr>
-                      <td><span class="portal-badge badge-secondary">PASS-1046</span></td>
-                      <td><strong>B. Srinivas</strong><br><small class="text-muted">+91 99881 12044</small></td>
-                      <td>Science Lab Equipment Technician • Microscope Calibration</td>
-                      <td>Sri K. Rajesh (Science HOD)</td>
-                      <td>08:50 AM (Today)</td>
-                      <td><span class="portal-badge badge-secondary">Exited at 10:10 AM</span></td>
-                      <td><span class="text-muted text-sm"><i class="fa-solid fa-check"></i> Cleared</span></td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </div>
-
-          <!-- Sub-view 2: Appointments Queue -->
-          <div class="sub-view-pane" id="subview-appointments-queue" style="display:none;">
-            <div class="card p-4">
-              <h3 class="card-title mb-3"><i class="fa-solid fa-calendar-check text-primary"></i> Leadership Consultation Queue</h3>
-              <div class="table-responsive">
-                <table class="custom-table">
-                  <thead>
-                    <tr>
-                      <th>Time Slot</th>
-                      <th>Parent / Official</th>
-                      <th>Meeting Focus</th>
-                      <th>Scheduled With</th>
-                      <th>Status</th>
-                      <th>Actions</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td><strong>11:30 AM – 12:00 PM</strong></td>
-                      <td>Sri P. Ramesh (Parent of P. Charan - 8A)</td>
-                      <td>Academic progression in geometry &amp; science fair participation</td>
-                      <td>Smt. Gorle Varalakshmi (Principal)</td>
-                      <td><span class="portal-badge badge-success">Confirmed</span></td>
-                      <td><button class="btn btn-sm btn-primary" onclick="portalApp.showToast('Parent received in Principal chamber', 'info')">Start Meeting</button></td>
-                    </tr>
-                    <tr>
-                      <td><strong>03:30 PM – 04:00 PM</strong></td>
-                      <td>District Educational Inspector delegation</td>
-                      <td>Annual compliance inspection &amp; student scholarship review</td>
-                      <td>Principal &amp; Vice Principal (Joint)</td>
-                      <td><span class="portal-badge badge-warning">Scheduled</span></td>
-                      <td><button class="btn btn-sm btn-outline-primary" onclick="portalApp.showToast('Inspection briefing dossier ready', 'info')">View Brief</button></td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </div>
-
-          <!-- Sub-view 3: Visiting Hours -->
-          <div class="sub-view-pane" id="subview-appointments-hours" style="display:none;">
-            <div class="card p-4">
-              <h3 class="card-title mb-3"><i class="fa-solid fa-clock text-primary"></i> Official Campus Visiting Hours</h3>
-              <div class="row g-4">
-                <div class="col-md-6">
-                  <div class="p-3 border rounded bg-subtle">
-                    <h4 class="font-bold mb-2 text-primary">Parents &amp; Guardians Visiting Hours</h4>
-                    <ul class="text-sm space-y-1 mb-0" style="padding-left: 1.25rem;">
-                      <li><strong>Morning Slot:</strong> 09:30 AM – 12:30 PM (Mon to Sat)</li>
-                      <li><strong>Afternoon Slot:</strong> 03:00 PM – 05:00 PM (Mon to Fri)</li>
-                      <li>Parent-Teacher meetings must be scheduled during free periods or after 04:00 PM.</li>
-                    </ul>
-                  </div>
-                </div>
-                <div class="col-md-6">
-                  <div class="p-3 border rounded bg-subtle">
-                    <h4 class="font-bold mb-2 text-primary">Campus Security Protocol</h4>
-                    <ul class="text-sm space-y-1 mb-0" style="padding-left: 1.25rem;">
-                      <li>All visitors must produce government-issued ID (Aadhaar, Voter ID, DL) at Gate 1.</li>
-                      <li>Visitor badge must be visibly worn throughout the campus stay.</li>
-                      <li>Unscheduled visits to classrooms during teaching hours are strictly prohibited.</li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <!-- =================================================================
-             MODULE 14: TRANSPORT & FACILITIES (#view-transport)
-             ================================================================= -->
         <section class="portal-view" id="view-transport">
           <div class="module-header-strip mb-4">
             <div class="mhs-title">
@@ -13565,7 +13978,273 @@ Class X-A,Monday,2,09:35 AM - 10:20 AM,Physical Science,Sri Navva Anand,Room 201
     </div>
   </div>
 
+<!-- ==========================================================================
+       ISSUE VISITOR GATE PASS MODAL
+       ========================================================================== -->
+  <div class="modal-backdrop" id="newVisitorPassModal">
+    <div class="portal-modal fee-modal-dialog">
+      <div class="modal-header">
+        <h3><i class="fa-solid fa-id-badge text-primary"></i> Issue Main Gate Visitor Pass</h3>
+        <button class="modal-close-x" onclick="portalApp.closeModal('newVisitorPassModal')" title="Close" aria-label="Close">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <form id="newVisitorPassForm" onsubmit="portalApp.handleCreateVisitorPass(event)">
+        <div class="modal-body">
+          <div style="background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px; padding: 0.75rem 1rem; margin-bottom: 1rem; font-size: 0.82rem; color: #166534;">
+            <i class="fa-solid fa-shield-halved mr-1"></i> Security Protocol: All external guests must present government photo ID. A physical badge must be worn at all times on campus.
+          </div>
+          <div class="fee-form-grid">
+            <div class="form-group">
+              <label><i class="fa-solid fa-user"></i> Visitor Full Name *</label>
+              <input type="text" class="form-control" id="vpassName" required placeholder="e.g. Sri K. Sambasiva Rao">
+            </div>
+            <div class="form-group">
+              <label><i class="fa-solid fa-phone"></i> Mobile Number *</label>
+              <input type="tel" class="form-control" id="vpassPhone" required placeholder="e.g. 98480 12345">
+            </div>
+            <div class="form-group">
+              <label>Organization / Ward Details *</label>
+              <input type="text" class="form-control" id="vpassOrg" required placeholder="e.g. Parent of K. Sai (Class 8-A) / Pearson Books">
+            </div>
+            <div class="form-group">
+              <label>Govt Photo ID Type &amp; Number *</label>
+              <input type="text" class="form-control" id="vpassIdRef" required placeholder="Aadhaar / Voter ID / DL #XXXX">
+            </div>
+            <div class="form-group">
+              <label>Host Official to Meet *</label>
+              <select class="form-control" id="vpassHost" required>
+                <option value="Smt. Gorle Varalakshmi (Principal)">Smt. Gorle Varalakshmi (Principal &amp; Correspondent)</option>
+                <option value="Sri Navva Anand (Vice Principal)">Sri Navva Anand (Vice Principal)</option>
+                <option value="Accounts &amp; Fee Desk">Accounts &amp; Fee Desk (Office Chamber)</option>
+                <option value="Sri K. Rajesh (Science HOD)">Sri K. Rajesh (Science HOD)</option>
+                <option value="Smt. T. Padmavathi (Examination In-Charge)">Smt. T. Padmavathi (Examination In-Charge)</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Physical Gate Pass Badge ID *</label>
+              <input type="text" class="form-control" id="vpassBadgeNo" required value="PASS-2026-1050" readonly style="font-weight:700;">
+            </div>
+            <div class="form-group full-span">
+              <label>Specific Purpose of Visit *</label>
+              <textarea class="form-control" id="vpassPurpose" rows="2" required placeholder="Provide clear visit purpose and student reference if applicable..."></textarea>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="portalApp.closeModal('newVisitorPassModal')">Cancel</button>
+          <button type="submit" class="btn btn-primary" id="btnSubmitVisitorPass">
+            <i class="fa-solid fa-print"></i> Issue Pass &amp; Check In
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
   <!-- ==========================================================================
+       REQUEST LEADERSHIP APPOINTMENT MODAL
+       ========================================================================== -->
+  <div class="modal-backdrop" id="requestAppointmentModal">
+    <div class="portal-modal fee-modal-dialog">
+      <div class="modal-header">
+        <h3><i class="fa-solid fa-calendar-plus text-primary"></i> Request Leadership Appointment</h3>
+        <button class="modal-close-x" onclick="portalApp.closeModal('requestAppointmentModal')" title="Close" aria-label="Close">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <form id="requestAppointmentForm" onsubmit="portalApp.handleAppointmentRequestSubmit(event)">
+        <div class="modal-body">
+          <div style="background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 8px; padding: 0.75rem 1rem; margin-bottom: 1rem; font-size: 0.82rem; color: #1e40af;">
+            <i class="fa-solid fa-calendar-check mr-1"></i> Appointments with <strong>Principal Smt. Gorle Varalakshmi</strong> are reviewed each morning. You will receive an SMS and WhatsApp confirmation once approved.
+          </div>
+          <div class="fee-form-grid">
+            <div class="form-group">
+              <label>Requester Full Name *</label>
+              <input type="text" class="form-control" id="reqApptName" required placeholder="e.g. Smt. D. Lakshmi">
+            </div>
+            <div class="form-group">
+              <label>Contact Phone Number *</label>
+              <input type="tel" class="form-control" id="reqApptPhone" required placeholder="e.g. 98490 66778">
+            </div>
+            <div class="form-group">
+              <label>Requester Category *</label>
+              <select class="form-control" id="reqApptCategory" required>
+                <option value="Parent / Guardian">Parent / Guardian</option>
+                <option value="Education Department Official">Education Department Official (DEO / MEO)</option>
+                <option value="Academic Vendor / Publisher">Academic Vendor / Publisher</option>
+                <option value="Faculty / Staff Member">Faculty / Staff Member</option>
+                <option value="Alumni / Community Leader">Alumni / Community Leader</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Host Official Requested *</label>
+              <select class="form-control" id="reqApptHost" required>
+                <option value="Principal Smt. Gorle Varalakshmi">Principal Smt. Gorle Varalakshmi</option>
+                <option value="Vice Principal Sri Navva Anand">Vice Principal Sri Navva Anand</option>
+                <option value="Joint Executive Hearing (Principal &amp; VP)">Joint Executive Hearing (Principal &amp; VP)</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Preferred Date *</label>
+              <input type="date" class="form-control" id="reqApptDate" required value="2026-10-30">
+            </div>
+            <div class="form-group">
+              <label>Preferred Time Slot *</label>
+              <select class="form-control" id="reqApptSlot" required>
+                <option value="11:00 AM – 11:30 AM">11:00 AM – 11:30 AM (Morning Slot)</option>
+                <option value="11:30 AM – 12:00 PM">11:30 AM – 12:00 PM (Morning Slot)</option>
+                <option value="02:30 PM – 03:00 PM">02:30 PM – 03:00 PM (Afternoon Slot)</option>
+                <option value="03:30 PM – 04:00 PM">03:30 PM – 04:00 PM (Afternoon Slot)</option>
+                <option value="04:00 PM – 04:30 PM">04:00 PM – 04:30 PM (Post-School Slot)</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Priority Level *</label>
+              <select class="form-control" id="reqApptPriority" required>
+                <option value="Normal">Normal Inquiry</option>
+                <option value="Medium">Medium (Academic Review / Transfer)</option>
+                <option value="High Priority">High Priority (Urgent Grievance / Inspection)</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Student Admission No (If Parent)</label>
+              <input type="text" class="form-control" id="reqApptAdmNo" placeholder="e.g. SV-0145">
+            </div>
+            <div class="form-group full-span">
+              <label>Detailed Purpose / Meeting Agenda *</label>
+              <textarea class="form-control" id="reqApptPurpose" rows="2" required placeholder="Specify subjects or administrative matters to be discussed..."></textarea>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="portalApp.closeModal('requestAppointmentModal')">Cancel</button>
+          <button type="submit" class="btn btn-primary" id="btnSubmitApptRequest">
+            <i class="fa-solid fa-paper-plane"></i> Submit Appointment Request
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       CONFIDENTIAL MEETING NOTES MODAL
+       Statutory Rule: "Meeting notes must be visible only to authorized participants or staff. Do not expose the Principal's private calendar or confidential meeting details to other visitors."
+       ========================================================================== -->
+  <div class="modal-backdrop" id="viewMeetingNotesModal">
+    <div class="portal-modal" style="max-width: 680px;">
+      <div class="modal-header">
+        <h3><i class="fa-solid fa-shield-halved text-warning"></i> Confidential Meeting Notes &amp; Minutes</h3>
+        <button class="modal-close-x" onclick="portalApp.closeModal('viewMeetingNotesModal')" title="Close" aria-label="Close">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div style="background: #fffbeb; border: 1.5px solid #fde68a; border-radius: 8px; padding: 0.85rem 1rem; margin-bottom: 1.15rem; font-size: 0.82rem; color: #92400e;">
+          <i class="fa-solid fa-lock mr-1"></i>
+          <strong>Privileged Institutional Document:</strong> Access restricted to authorized executive participants. Distribution or reproduction without express sanction by <strong>Principal Smt. Gorle Varalakshmi</strong> is strictly prohibited.
+        </div>
+        
+        <div style="background: #f8fafc; border: 1px solid var(--color-border); border-radius: 8px; padding: 1.25rem;">
+          <div style="display: flex; justify-content: space-between; border-bottom: 1px solid #e2e8f0; padding-bottom: 0.75rem; margin-bottom: 0.85rem;">
+            <div>
+              <span style="font-size: 0.75rem; font-weight: 800; color: #64748b; text-transform: uppercase;">MEETING REFERENCE</span>
+              <div style="font-weight: 800; font-size: 1.1rem; color: #1e293b;" id="noteModalMeetingId">MTG-2026-098</div>
+            </div>
+            <div style="text-align: right;">
+              <span style="font-size: 0.75rem; font-weight: 800; color: #64748b; text-transform: uppercase;">DATE &amp; TIME</span>
+              <div style="font-weight: 700; color: #1e293b;" id="noteModalDateTime">28 Oct 2026, 11:30 AM</div>
+            </div>
+          </div>
+
+          <div style="margin-bottom: 0.85rem;">
+            <div style="font-size: 0.78rem; font-weight: 700; color: #64748b; text-transform: uppercase;">ATTENDEES &amp; PARTICIPANTS</div>
+            <div style="font-weight: 700; color: #1e293b; margin-top: 2px;" id="noteModalAttendees">Sri K. Venkat Rao (Parent) with Principal Smt. Gorle Varalakshmi</div>
+          </div>
+
+          <div style="margin-bottom: 0.85rem;">
+            <div style="font-size: 0.78rem; font-weight: 700; color: #64748b; text-transform: uppercase;">AGENDA / PURPOSE</div>
+            <div style="color: #334155; margin-top: 2px;" id="noteModalPurpose">Discussion on Class X Board exam special remediation track.</div>
+          </div>
+
+          <div style="margin-bottom: 0.85rem;">
+            <div style="font-size: 0.78rem; font-weight: 700; color: #64748b; text-transform: uppercase;">EXECUTIVE MINUTES &amp; DECISIONS</div>
+            <div style="background: #fff; border: 1px solid #cbd5e1; border-radius: 6px; padding: 0.85rem; color: #1e293b; font-size: 0.88rem; line-height: 1.5; margin-top: 4px;" id="noteModalContent">
+              Meeting convened in Principal chamber. Student K. Sai Tharun's science practical performance reviewed. Principal sanctioned zero-fee remedial evening coaching under Sri M. Raju. Parent committed to monitoring homework completion and submitting weekly progress dairy.
+            </div>
+          </div>
+
+          <div>
+            <div style="font-size: 0.78rem; font-weight: 700; color: #64748b; text-transform: uppercase;">MANDATED ACTION ITEM</div>
+            <div style="font-weight: 700; color: #0284c7; margin-top: 2px;" id="noteModalAction">Assigned to: Sri M. Raju (Physics Faculty) • Deadline: 31 Oct 2026</div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" onclick="portalApp.closeModal('viewMeetingNotesModal')">Close</button>
+        <button type="button" class="btn btn-primary" onclick="portalApp.printMeetingMinutes()">
+          <i class="fa-solid fa-print"></i> Print Official Minutes
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       NEW FOLLOW-UP ACTION ITEM MODAL
+       ========================================================================== -->
+  <div class="modal-backdrop" id="newFollowupModal">
+    <div class="portal-modal fee-modal-dialog">
+      <div class="modal-header">
+        <h3><i class="fa-solid fa-list-check text-primary"></i> Create Executive Action Item</h3>
+        <button class="modal-close-x" onclick="portalApp.closeModal('newFollowupModal')" title="Close" aria-label="Close">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <form id="newFollowupForm" onsubmit="portalApp.handleCreateFollowup(event)">
+        <div class="modal-body">
+          <div class="fee-form-grid">
+            <div class="form-group full-span">
+              <label>Action Item Title / Directive *</label>
+              <input type="text" class="form-control" id="fupTitle" required placeholder="e.g. Schedule laboratory safety inspection following parent inquiry">
+            </div>
+            <div class="form-group">
+              <label>Assigned Employee *</label>
+              <select class="form-control" id="fupAssignee" required>
+                <option value="Sri Navva Anand (Vice Principal)">Sri Navva Anand (Vice Principal)</option>
+                <option value="S. Ramu (Accounts Clerk)">S. Ramu (Accounts Clerk)</option>
+                <option value="Sri K. Rajesh (Science HOD)">Sri K. Rajesh (Science HOD)</option>
+                <option value="Smt. T. Padmavathi (Exam In-charge)">Smt. T. Padmavathi (Exam In-charge)</option>
+                <option value="B. Krishna (Fee Cashier)">B. Krishna (Fee Cashier)</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Deadline Date *</label>
+              <input type="date" class="form-control" id="fupDeadline" required value="2026-11-02">
+            </div>
+            <div class="form-group">
+              <label>Priority Level *</label>
+              <select class="form-control" id="fupPriority" required>
+                <option value="High">High Priority</option>
+                <option value="Medium">Medium</option>
+                <option value="Normal">Normal</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Originating Meeting Ref</label>
+              <input type="text" class="form-control" id="fupMeetingRef" value="MTG-2026-105" placeholder="e.g. MTG-2026-105">
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="portalApp.closeModal('newFollowupModal')">Cancel</button>
+          <button type="submit" class="btn btn-primary">
+            <i class="fa-solid fa-check"></i> Assign Action Item
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+    <!-- ==========================================================================
        RECORD AUDITED FINANCIAL REVERSAL MODAL
        Statutory rule: "Do not let an employee approve their own refund or modify a financial transaction without the required authorization. Record reversals instead of silently changing completed transactions."
        ========================================================================== -->

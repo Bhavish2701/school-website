@@ -30,6 +30,7 @@ const portalApp = (function () {
       academics: 'classes',
       attendance: 'student',
       fees: 'collection',
+      appointments: 'overview',
       communication: 'announcements',
       events: 'calendar',
       reports: 'academic',
@@ -2153,6 +2154,8 @@ const FEE_CATEGORY_AUDIT_DATA = [
     const weekday = getPart('weekday') || '';
     const currentMinutes = hour24 * 60 + minute;
 
+
+
     return {
     renderTimetableClassSchedules,
     switchTimetableCalendarView,
@@ -3133,6 +3136,22 @@ const FEE_CATEGORY_AUDIT_DATA = [
       } else if (subKey === 'timetable-conflicts' || subKey === 'conflicts') {
         renderTimetableConflicts();
       }
+    } else if (moduleKey === 'appointments') {
+      if (subKey === 'overview' || subKey === 'appointment-overview') {
+        renderAppointmentsOverview();
+      } else if (subKey === 'calendar' || subKey === 'principals-calendar') {
+        renderPrincipalsCalendar();
+      } else if (subKey === 'requests' || subKey === 'appointment-requests') {
+        renderAppointmentRequests();
+      } else if (subKey === 'approved' || subKey === 'approved-appointments') {
+        renderApprovedAppointments();
+      } else if (subKey === 'visitors' || subKey === 'visitor-register') {
+        renderVisitorRegister();
+      } else if (subKey === 'history' || subKey === 'meeting-history') {
+        renderMeetingHistory();
+      } else if (subKey === 'followup' || subKey === 'follow-up-actions') {
+        renderFollowupActions();
+      }
     } else if (moduleKey === 'fees') {
       if (subKey === 'collection' || subKey === 'fee-collection') {
         renderFeeCollection();
@@ -3246,6 +3265,13 @@ const FEE_CATEGORY_AUDIT_DATA = [
     renderTeacherLeaveRequests();
     renderFeeCollection();
     renderDefaultersTable();
+    renderAppointmentsOverview();
+    renderPrincipalsCalendar();
+    renderAppointmentRequests();
+    renderApprovedAppointments();
+    renderVisitorRegister();
+    renderMeetingHistory();
+    renderFollowupActions();
     renderFeeStructure();
     renderFeeConcessions();
     renderFeeRefunds();
@@ -23791,6 +23817,838 @@ const classData = TIMETABLE_CLASS_DATA[currentTimetableClass] || TIMETABLE_CLASS
     renderAcademicReports(filtered);
   }
 
+
+// =========================================================================
+  // APPOINTMENTS & VISITORS MODULE ENGINE (7 SUBMENUS)
+  // Submenu 1: Appointment Overview (Today's meetings, pending requests, upcoming appointments)
+  // Submenu 2: Principal's Calendar (Available slots, booked slots, blocked time, locations)
+  // Submenu 3: Appointment Requests (Requester, purpose, preferred time, priority, status)
+  // Submenu 4: Approved Appointments (Confirmed time, attendee, location, confirmation status)
+  // Submenu 5: Visitor Register (Visitor name, organization, host, check-in/out, visit purpose)
+  // Submenu 6: Meeting History (Completed, cancelled and rescheduled meetings)
+  // Submenu 7: Follow-up Actions (Action item, assigned employee, deadline, completion status)
+  // Statutory Governance: Meeting notes visible only to authorized participants or staff;
+  // Principal's private calendar blocks and confidential hearings masked from other visitors.
+  // =========================================================================
+
+  const APPOINTMENTS_OVERVIEW_DATA = {
+    todayMeetings: [
+      { time: '10:00 AM – 10:45 AM', attendee: 'Sri K. Venkat Rao', org: 'Parent of K. Sai Tharun (Class X-A)', purpose: 'Class X Board Exam preparation & Mathematics remedial progress', location: "Principal's Chamber (#101)", status: 'In Progress', meetingId: 'MTG-2026-104' },
+      { time: '11:15 AM – 12:00 PM', attendee: 'Sri B. Satyanarayana', org: 'Mandal Educational Officer (MEO Office)', purpose: 'AP State Board compliance audit & Mid-Day meal quality review', location: 'Board Room (Admin Wing)', status: 'Confirmed', meetingId: 'MTG-2026-105' },
+      { time: '02:00 PM – 02:45 PM', attendee: 'Smt. P. Madhavi', org: 'Parent of P. Charan (Class VIII-A)', purpose: 'Science fair project mentoring & inter-house athletics quota', location: "Principal's Chamber (#101)", status: 'Confirmed', meetingId: 'MTG-2026-106' },
+      { time: '03:15 PM – 04:00 PM', attendee: 'Sri M. Somasekhar', org: 'Oxford University Press / Regional Representative', purpose: 'Academic Year 2027-28 textbook syllabus evaluation', location: 'Conference Hall', status: 'Confirmed', meetingId: 'MTG-2026-107' },
+      { time: '04:15 PM – 05:00 PM', attendee: 'Sri Navva Anand & Academic Council', org: 'Vice Principal & Senior Faculty HODs', purpose: 'Formative Assessment (FA-2) tabulation moderation review', location: 'Board Room (Admin Wing)', status: 'Scheduled', meetingId: 'MTG-2026-108' }
+    ],
+    pendingRequests: [
+      { reqId: 'REQ-2026-081', requester: 'Smt. D. Lakshmi', phone: '+91 98490 66778', org: 'Parent of D. Bhavani (Class VII-A)', purpose: 'Bus Route 4 pick-up timing adjustment & safety inquiry', slot: '30 Oct, 11:30 AM', priority: 'Medium', status: 'Awaiting Review' },
+      { reqId: 'REQ-2026-082', requester: 'Sri G. Ramachandra Rao', phone: '+91 94401 55667', org: 'Town Municipal Health Inspector', purpose: 'Campus drinking water & monsoon sanitation certification review', slot: '30 Oct, 03:00 PM', priority: 'High Priority', status: 'Awaiting Review' },
+      { reqId: 'REQ-2026-083', requester: 'Sri T. Jagadeesh', phone: '+91 91772 33445', org: 'NextGen Robotics Lab Solutions', purpose: 'STEM robotics lab demonstration proposal for High School Wing', slot: '02 Nov, 02:30 PM', priority: 'Normal', status: 'Awaiting Review' }
+    ],
+    upcomingAppointments: [
+      { date: '30 Oct 2026', time: '10:30 AM – 11:15 AM', attendee: 'Sri V. Suresh Babu (Parent of V. Aditya, Cl. II)', purpose: 'Foundational literacy curriculum progression', location: "Principal's Chamber (#101)", status: 'Confirmed' },
+      { date: '30 Oct 2026', time: '02:30 PM – 03:30 PM', attendee: 'District Sports Authority Delegation', purpose: 'AP Inter-School Kho-Kho Tournament hosting venue inspection', location: 'Sports Complex / Chamber', status: 'Confirmed' },
+      { date: '31 Oct 2026', time: '11:00 AM – 11:45 AM', attendee: 'Smt. CH. Sunitha (Parent & Faculty)', purpose: 'Staff ward fee concession renewal & academic docket review', location: "Principal's Chamber (#101)", status: 'Confirmed' },
+      { date: '02 Nov 2026', time: '10:00 AM – 11:00 AM', attendee: 'Alumni Association Steering Committee', purpose: 'Silver Jubilee Annual Day celebration planning', location: 'Board Room', status: 'Confirmed' }
+    ]
+  };
+
+  const PRINCIPALS_CALENDAR_DATA = [
+    { slot: '09:00 AM – 10:00 AM', type: 'Blocked', agenda: 'Morning Campus Assembly Supervision & Class Inspections', location: 'Campus Grounds & Academic Wings', status: 'Blocked Institutional Time', host: 'Principal Smt. Gorle Varalakshmi' },
+    { slot: '10:00 AM – 10:45 AM', type: 'Booked', agenda: 'Parent Hearing: Sri K. Venkat Rao (K. Sai Tharun, Cl. X-A) - Board Prep', location: "Principal's Chamber (#101)", status: 'Booked Consultation', host: 'Principal Smt. Gorle Varalakshmi' },
+    { slot: '11:00 AM – 11:45 AM', type: 'Available', agenda: 'Open for Parent / Official Leadership Consultation', location: "Principal's Chamber (#101)", status: 'Available Slot (Open)', host: 'Principal Smt. Gorle Varalakshmi' },
+    { slot: '11:45 AM – 12:45 PM', type: 'Booked', agenda: 'Official Inspection: Sri B. Satyanarayana, Mandal Educational Officer', location: 'Board Room (Admin Wing)', status: 'Booked Official Hearing', host: 'Principal & Vice Principal' },
+    { slot: '01:00 PM – 02:00 PM', type: 'Blocked', agenda: 'Executive Lunch & Confidential Office File Clearances', location: "Principal's Chamber (#101)", status: 'Blocked Administrative Desk', host: 'Principal Smt. Gorle Varalakshmi' },
+    { slot: '02:00 PM – 02:45 PM', type: 'Booked', agenda: 'Parent Consultation: Smt. P. Madhavi (P. Charan, Cl. VIII-A)', location: "Principal's Chamber (#101)", status: 'Booked Consultation', host: 'Principal Smt. Gorle Varalakshmi' },
+    { slot: '03:00 PM – 03:45 PM', type: 'Available', agenda: 'Open for Parent / Academic Stakeholder Meeting', location: "Principal's Chamber (#101)", status: 'Available Slot (Open)', host: 'Principal Smt. Gorle Varalakshmi' },
+    { slot: '04:15 PM – 05:00 PM', type: 'Blocked', agenda: 'Academic Council Moderation Meeting with Vice Principal Sri Navva Anand', location: 'Board Room (Admin Wing)', status: 'Blocked Executive Session', host: 'Principal Smt. Gorle Varalakshmi' }
+  ];
+
+  const APPOINTMENT_REQUESTS_DATA = [
+    { id: 'REQ-2026-081', requester: 'Smt. D. Lakshmi', phone: '+91 98490 66778', ward: 'D. Bhavani (Class VII-A)', purpose: 'Bus Route 4 pick-up timing adjustment & safety inquiry', preferred: '30 Oct 2026, 11:30 AM', priority: 'Medium', status: 'Pending Review' },
+    { id: 'REQ-2026-082', requester: 'Sri G. Ramachandra Rao', phone: '+91 94401 55667', ward: 'Town Municipal Office', purpose: 'Campus drinking water & monsoon sanitation certification review', preferred: '30 Oct 2026, 03:00 PM', priority: 'High', status: 'Pending Review' },
+    { id: 'REQ-2026-083', requester: 'Sri T. Jagadeesh', phone: '+91 91772 33445', ward: 'NextGen Robotics Lab Solutions', purpose: 'STEM robotics lab demonstration proposal for High School Wing', preferred: '02 Nov 2026, 02:30 PM', priority: 'Normal', status: 'Pending Review' },
+    { id: 'REQ-2026-080', requester: 'Sri P. Subba Rao', phone: '+91 98481 22334', ward: 'P. Hema Latha (Class X-A)', purpose: 'Guidance regarding State Board NTSE Scholarship application', preferred: '28 Oct 2026, 04:00 PM', priority: 'Medium', status: 'Approved' },
+    { id: 'REQ-2026-079', requester: 'Sri C. Nageswara Rao', phone: '+91 94402 11990', ward: 'Sri Balaji Uniform Suppliers', purpose: 'Winter uniform fabric sample review & tender submission', preferred: '27 Oct 2026, 11:00 AM', priority: 'Normal', status: 'Declined' }
+  ];
+
+  const APPROVED_APPOINTMENTS_DATA = [
+    { id: 'APP-2026-142', time: 'Today, 10:00 AM – 10:45 AM', attendee: 'Sri K. Venkat Rao', phone: '+91 98480 55667', org: 'Parent of K. Sai Tharun (Class X-A)', location: "Principal's Chamber (#101)", status: 'Confirmed & Slip Issued', passId: 'PASS-2026-1049' },
+    { id: 'APP-2026-143', time: 'Today, 11:15 AM – 12:00 PM', attendee: 'Sri B. Satyanarayana', phone: '+91 94401 88990', org: 'MEO, East Godavari District', location: 'Board Room (Admin Wing)', status: 'Confirmed & Slip Issued', passId: 'PASS-2026-1050' },
+    { id: 'APP-2026-144', time: 'Today, 02:00 PM – 02:45 PM', attendee: 'Smt. P. Madhavi', phone: '+91 89781 44556', org: 'Parent of P. Charan (Class VIII-A)', location: "Principal's Chamber (#101)", status: 'Confirmed & Slip Issued', passId: 'PASS-2026-1051' },
+    { id: 'APP-2026-145', time: 'Today, 03:15 PM – 04:00 PM', attendee: 'Sri M. Somasekhar', phone: '+91 70325 66778', org: 'Oxford University Press Rep', location: 'Conference Hall', status: 'Confirmed & Slip Issued', passId: 'PASS-2026-1052' },
+    { id: 'APP-2026-146', time: '30 Oct, 10:30 AM – 11:15 AM', attendee: 'Sri V. Suresh Babu', phone: '+91 98665 88990', org: 'Parent of V. Aditya (Class II-A)', location: "Principal's Chamber (#101)", status: 'Confirmed & Slip Issued', passId: 'PASS-2026-1053' },
+    { id: 'APP-2026-147', time: '30 Oct, 02:30 PM – 03:30 PM', attendee: 'District Sports Authority Delegation', phone: '+91 94403 77889', org: 'Sports Authority of AP', location: 'Sports Complex / Chamber', status: 'Confirmed & Slip Issued', passId: 'PASS-2026-1054' }
+  ];
+
+  const VISITOR_REGISTER_DATA = [
+    { passId: 'PASS-2026-1049', name: 'Sri K. Venkat Rao', phone: '+91 98480 55667', idType: 'Aadhaar #XXXX-8912', org: 'Parent of K. Sai Tharun (Class X-A)', host: 'Principal Smt. Gorle Varalakshmi', checkIn: '09:50 AM', checkOut: 'In Campus', purpose: 'Board Exam mathematics remediation consultation', status: 'In Campus' },
+    { passId: 'PASS-2026-1048', name: 'Sri K. Sambasiva Rao', phone: '+91 94401 23450', idType: 'Voter ID #AP-882190', org: 'Parent of K. Sai Krishna (Class VIII-A)', host: 'Sri Navva Anand (Vice Principal)', checkIn: '10:15 AM', checkOut: 'In Campus', purpose: 'Medical leave certificate submission & assignment collection', status: 'In Campus' },
+    { passId: 'PASS-2026-1047', name: 'Smt. M. Venkataratnam', phone: '+91 98480 55122', idType: 'Aadhaar #XXXX-4410', org: 'Prospective Parent', host: 'Accounts Desk (Office Admin)', checkIn: '09:40 AM', checkOut: 'In Campus', purpose: 'New Admission Inquiry & Fee Structure for Class VI', status: 'In Campus' },
+    { passId: 'PASS-2026-1046', name: 'Sri B. Srinivas', phone: '+91 99881 12044', idType: 'DL #AP-05-2019-338', org: 'Precision Lab Equipments Ltd', host: 'Sri K. Rajesh (Science HOD)', checkIn: '08:50 AM', checkOut: '10:10 AM', purpose: 'Composite Science Lab microscope calibration and servicing', status: 'Exited' },
+    { passId: 'PASS-2026-1045', name: 'Sri N. Ramanjaneyulu', phone: '+91 94405 88990', idType: 'Govt Service ID #APED-982', org: 'State Postal Dept', host: 'Principal Smt. Gorle Varalakshmi', checkIn: '08:30 AM', checkOut: '09:15 AM', purpose: 'Delivery of official SSC Board confidential examination correspondence', status: 'Exited' }
+  ];
+
+  const MEETING_HISTORY_DATA = [
+    { meetingId: 'MTG-2026-098', date: '28 Oct 2026, 11:30 AM', attendee: 'Sri K. Venkat Rao (Parent)', host: 'Principal Smt. Gorle Varalakshmi', purpose: 'Class X academic remediation & evening coaching schedule', outcome: 'Sanctioned zero-fee remedial coaching with Sri M. Raju; parent committed to weekly diary review.', status: 'Completed', notes: 'Meeting convened in Chamber. Smt. Gorle Varalakshmi reviewed K. Sai Tharun marks. Approved evening study slot under physics master.' },
+    { meetingId: 'MTG-2026-097', date: '27 Oct 2026, 03:00 PM', attendee: 'Smt. R. Sunitha & PTA Members', host: 'Principal & Vice Principal', purpose: 'Review of Dussehra assignment completion & campus sanitation', outcome: 'PTA appreciated campus fogging & clean water test reports; resolved to hold Science Expo on Childrens Day.', status: 'Completed', notes: 'PTA members unanimously ratified science exhibition date for Nov 14. Corresponded with local municipal authorities for traffic safety.' },
+    { meetingId: 'MTG-2026-096', date: '26 Oct 2026, 02:30 PM', attendee: 'Sri T. Harikrishna (Transport Contractor)', host: 'Vice Principal Sri Navva Anand', purpose: 'Bus Route 3 fitness certificate & speed governor verification', outcome: 'Contractor submitted RTO fitness certificate and GPS telemetry log; cleared for operation.', status: 'Completed', notes: 'All 6 vehicles inspected at gate. Route 3 GPS unit recalibrated. Driver biometric attendance verified.' },
+    { meetingId: 'MTG-2026-095', date: '25 Oct 2026, 11:00 AM', attendee: 'Sri G. Appa Rao (Parent of G. Harsha)', host: 'Principal Smt. Gorle Varalakshmi', purpose: 'Fee dues clearance timeline & transport pass renewal', outcome: 'Rescheduled to 30 Oct 2026 upon parent request due to medical emergency.', status: 'Rescheduled', notes: 'Parent notified office via SMS of hospital visit. Office granted 5-day grace extension on bus pass.' },
+    { meetingId: 'MTG-2026-094', date: '24 Oct 2026, 04:00 PM', attendee: 'SmartTech Interactive Boards Demo', host: 'Academic Council', purpose: 'Demonstration of interactive flat panel smartboards', outcome: 'Cancelled by vendor due to technical transit delay; rescheduled for next quarter.', status: 'Cancelled', notes: 'Vendor delivery vehicle broke down near Rajahmundry. Meeting postponed to Term 3 budget cycle.' }
+  ];
+
+  const FOLLOWUP_ACTIONS_DATA = [
+    { id: 'ACT-2026-041', task: 'Implement Class X Physics & Math evening remedial study roster for 12 identified scholars', assignee: 'Sri M. Raju (Physics Faculty)', deadline: '31 Oct 2026', status: 'In Progress', priority: 'High', refMeeting: 'MTG-2026-098' },
+    { id: 'ACT-2026-042', task: 'Issue revised Route 4 transportation pickup schedule incorporating parent feedback', assignee: 'Sri Navva Anand (Vice Principal)', deadline: '01 Nov 2026', status: 'Pending', priority: 'High', refMeeting: 'MTG-2026-096' },
+    { id: 'ACT-2026-043', task: 'Compile student science fair robotics projects and prepare exhibition layout in auditorium', assignee: 'Sri K. Rajesh (Science HOD)', deadline: '05 Nov 2026', status: 'In Progress', priority: 'Medium', refMeeting: 'MTG-2026-097' },
+    { id: 'ACT-2026-044', task: 'Dispatch official compliance inspection acknowledgment dossier to Mandal Educational Officer', assignee: 'S. Ramu (Accounts / Office Desk)', deadline: '02 Nov 2026', status: 'Pending', priority: 'Normal', refMeeting: 'MTG-2026-105' },
+    { id: 'ACT-2026-040', task: 'Submit Composite Science Lab microscope calibration certificate to District Education Office', assignee: 'Sri K. Rajesh (Science HOD)', deadline: '28 Oct 2026', status: 'Completed', priority: 'Normal', refMeeting: 'MTG-2026-096' }
+  ];
+
+  // Active in-memory collections
+  let appointmentRequestsData = [...APPOINTMENT_REQUESTS_DATA];
+  let approvedAppointmentsData = [...APPROVED_APPOINTMENTS_DATA];
+  let visitorRegisterData = [...VISITOR_REGISTER_DATA];
+  let meetingHistoryData = [...MEETING_HISTORY_DATA];
+  let followupActionsData = [...FOLLOWUP_ACTIONS_DATA];
+  let activeCalendarFilter = 'all';
+  let activeHistoryFilter = 'all';
+
+  // -------------------------------------------------------------------------
+  // SUBMENU 1: APPOINTMENT OVERVIEW
+  // Displays: Today's meetings, pending requests and upcoming appointments
+  // -------------------------------------------------------------------------
+  function renderAppointmentsOverview() {
+    const todayTbody = document.getElementById('overviewTodayMeetingsTableBody');
+    const pendingTbody = document.getElementById('overviewPendingRequestsTableBody');
+    const upcomingTbody = document.getElementById('overviewUpcomingAppointmentsTableBody');
+
+    if (todayTbody) {
+      todayTbody.innerHTML = APPOINTMENTS_OVERVIEW_DATA.todayMeetings.map(m => `
+        <tr>
+          <td>
+            <strong style="color: var(--color-text-dark);"><i class="fa-regular fa-clock mr-1 text-primary"></i>${m.time}</strong>
+          </td>
+          <td>
+            <strong style="color: var(--color-text-dark);">${m.attendee}</strong>
+          </td>
+          <td>
+            <small class="text-muted">${m.org}</small>
+          </td>
+          <td>
+            <span style="font-size: 0.86rem; color: #334155;">${m.purpose}</span>
+          </td>
+          <td>
+            <span class="portal-badge badge-neutral"><i class="fa-solid fa-location-dot mr-1 text-danger"></i>${m.location}</span>
+          </td>
+          <td style="text-align: center;">
+            <span class="portal-badge ${m.status === 'In Progress' ? 'badge-primary' : (m.status === 'Confirmed' ? 'badge-success' : 'badge-warning')}">
+              ${m.status}
+            </span>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    if (pendingTbody) {
+      pendingTbody.innerHTML = appointmentRequestsData.filter(r => r.status === 'Pending Review').slice(0, 3).map(r => `
+        <tr>
+          <td>
+            <strong>${r.requester}</strong><br>
+            <small class="text-muted">${r.phone}</small>
+          </td>
+          <td>
+            <span style="font-size: 0.82rem;">${r.purpose}</span>
+          </td>
+          <td>
+            <span class="portal-badge badge-neutral">${r.preferred}</span>
+          </td>
+          <td style="text-align: center;">
+            <button class="btn btn-sm btn-outline-success" onclick="portalApp.handleApproveAppointment('${r.id}')" title="Approve Request">
+              <i class="fa-solid fa-check"></i>
+            </button>
+            <button class="btn btn-sm btn-outline-danger" onclick="portalApp.handleDeclineAppointment('${r.id}')" title="Decline">
+              <i class="fa-solid fa-xmark"></i>
+            </button>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    if (upcomingTbody) {
+      upcomingTbody.innerHTML = APPOINTMENTS_OVERVIEW_DATA.upcomingAppointments.map(u => `
+        <tr>
+          <td>
+            <strong>${u.date}</strong><br>
+            <small class="text-muted">${u.time}</small>
+          </td>
+          <td>
+            <strong>${u.attendee}</strong>
+          </td>
+          <td>
+            <span style="font-size: 0.82rem;">${u.purpose}</span>
+          </td>
+          <td style="text-align: center;">
+            <span class="portal-badge badge-primary">${u.location}</span>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    // Update pending badge in header & sidebar
+    const count = appointmentRequestsData.filter(r => r.status === 'Pending Review').length;
+    const badge = document.getElementById('apptPendingBadge');
+    const sideBadge = document.getElementById('sidebarPendingApptBadge');
+    if (badge) badge.textContent = count;
+    if (sideBadge) sideBadge.textContent = count + ' New';
+  }
+
+  // -------------------------------------------------------------------------
+  // SUBMENU 2: PRINCIPAL'S CALENDAR
+  // Displays: Available slots, booked slots, blocked time and meeting locations
+  // -------------------------------------------------------------------------
+  function renderPrincipalsCalendar(filter) {
+    const tbody = document.getElementById('principalsCalendarTableBody');
+    if (!tbody) return;
+
+    const f = filter || activeCalendarFilter;
+    let data = PRINCIPALS_CALENDAR_DATA;
+    if (f === 'available') data = data.filter(s => s.type === 'Available');
+    else if (f === 'booked') data = data.filter(s => s.type === 'Booked');
+    else if (f === 'blocked') data = data.filter(s => s.type === 'Blocked');
+
+    tbody.innerHTML = data.map(s => `
+      <tr>
+        <td>
+          <strong style="color: var(--color-text-dark);"><i class="fa-regular fa-clock mr-1 text-primary"></i>${s.slot}</strong>
+        </td>
+        <td style="text-align: center;">
+          <span class="portal-badge ${s.type === 'Available' ? 'badge-success' : (s.type === 'Booked' ? 'badge-primary' : 'badge-warning')}">
+            ${s.type === 'Available' ? '<i class="fa-solid fa-circle-check mr-1"></i>Available' : (s.type === 'Booked' ? '<i class="fa-solid fa-calendar-check mr-1"></i>Booked' : '<i class="fa-solid fa-ban mr-1"></i>Blocked Time')}
+          </span>
+        </td>
+        <td>
+          <strong style="color: var(--color-text-dark);">${s.agenda}</strong><br>
+          <small class="text-muted">Host: <strong>${s.host}</strong></small>
+        </td>
+        <td>
+          <span class="portal-badge badge-neutral"><i class="fa-solid fa-location-dot mr-1 text-danger"></i>${s.location}</span>
+        </td>
+        <td style="text-align: center;">
+          <span style="font-weight: 700; font-size: 0.85rem; color: ${s.type === 'Available' ? '#16a34a' : (s.type === 'Booked' ? '#0284c7' : '#d97706')};">
+            ${s.status}
+          </span>
+        </td>
+        <td style="text-align: center;">
+          ${s.type === 'Available' ? `
+            <button class="btn btn-sm btn-primary" onclick="portalApp.openModal('requestAppointmentModal')">
+              <i class="fa-solid fa-plus mr-1"></i> Book Slot
+            </button>
+          ` : (s.type === 'Booked' ? `
+            <button class="btn btn-sm btn-secondary" onclick="portalApp.switchSubTab('appointments', 'approved')">
+              <i class="fa-solid fa-eye"></i> View
+            </button>
+          ` : `
+            <span class="text-muted" style="font-size: 0.78rem;"><i class="fa-solid fa-lock"></i> Restricted</span>
+          `)}
+        </td>
+      </tr>
+    `).join('');
+
+    // Update filter counts
+    const countAll = document.getElementById('calCountAll');
+    const countAvail = document.getElementById('calCountAvailable');
+    const countBooked = document.getElementById('calCountBooked');
+    const countBlocked = document.getElementById('calCountBlocked');
+    if (countAll) countAll.textContent = PRINCIPALS_CALENDAR_DATA.length;
+    if (countAvail) countAvail.textContent = PRINCIPALS_CALENDAR_DATA.filter(s => s.type === 'Available').length;
+    if (countBooked) countBooked.textContent = PRINCIPALS_CALENDAR_DATA.filter(s => s.type === 'Booked').length;
+    if (countBlocked) countBlocked.textContent = PRINCIPALS_CALENDAR_DATA.filter(s => s.type === 'Blocked').length;
+  }
+
+  function setCalendarFilter(filter) {
+    activeCalendarFilter = filter;
+    ['btnCalFilterAll', 'btnCalFilterAvailable', 'btnCalFilterBooked', 'btnCalFilterBlocked'].forEach(id => {
+      const btn = document.getElementById(id);
+      if (btn) btn.classList.remove('active');
+    });
+
+    const activeBtn = document.getElementById('btnCalFilter' + filter.charAt(0).toUpperCase() + filter.slice(1));
+    if (activeBtn) activeBtn.classList.add('active');
+
+    renderPrincipalsCalendar(filter);
+  }
+
+  function filterPrincipalsCalendar() {
+    renderPrincipalsCalendar();
+  }
+
+  function printPrincipalsCalendar() {
+    window.print();
+  }
+
+  // -------------------------------------------------------------------------
+  // SUBMENU 3: APPOINTMENT REQUESTS
+  // Displays: Requester, purpose, preferred time, priority and request status
+  // -------------------------------------------------------------------------
+  function renderAppointmentRequests(list) {
+    const tbody = document.getElementById('appointmentRequestsTableBody');
+    if (!tbody) return;
+
+    const data = list || appointmentRequestsData;
+    tbody.innerHTML = data.map(r => `
+      <tr>
+        <td>
+          <strong style="color: var(--color-text-dark);">${r.requester}</strong><br>
+          <small class="text-muted"><i class="fa-solid fa-phone mr-1"></i>${r.phone}</small><br>
+          <small class="text-muted">${r.ward}</small>
+        </td>
+        <td>
+          <span style="font-weight: 500; color: #1e293b;">${r.purpose}</span><br>
+          <code style="font-size: 0.76rem; color: #1e40af;">${r.id}</code>
+        </td>
+        <td>
+          <strong style="color: var(--color-text-dark);"><i class="fa-regular fa-calendar-check mr-1 text-primary"></i>${r.preferred}</strong>
+        </td>
+        <td style="text-align: center;">
+          <span class="portal-badge ${r.priority.includes('High') ? 'badge-danger' : (r.priority === 'Medium' ? 'badge-warning' : 'badge-neutral')}">
+            ${r.priority}
+          </span>
+        </td>
+        <td style="text-align: center;">
+          <span class="portal-badge ${r.status === 'Approved' ? 'badge-success' : (r.status === 'Declined' ? 'badge-danger' : 'badge-warning')}">
+            ${r.status}
+          </span>
+        </td>
+        <td style="text-align: center;">
+          ${r.status === 'Pending Review' ? `
+            <div style="display: flex; gap: 0.35rem; justify-content: center;">
+              <button class="btn btn-sm btn-success" onclick="portalApp.handleApproveAppointment('${r.id}')" title="Approve Request">
+                <i class="fa-solid fa-check"></i>
+              </button>
+              <button class="btn btn-sm btn-outline-danger" onclick="portalApp.handleDeclineAppointment('${r.id}')" title="Decline Request">
+                <i class="fa-solid fa-xmark"></i>
+              </button>
+            </div>
+          ` : `
+            <span class="text-muted" style="font-size: 0.8rem;"><i class="fa-solid fa-check-double mr-1"></i>Action Logged</span>
+          `}
+        </td>
+      </tr>
+    `).join('');
+  }
+
+  function filterAppointmentRequests() {
+    const search = (document.getElementById('requestsSearchInput')?.value || '').toLowerCase();
+    const priority = document.getElementById('requestsPriorityFilter')?.value || 'all';
+    const status = document.getElementById('requestsStatusFilter')?.value || 'all';
+
+    const filtered = appointmentRequestsData.filter(r => {
+      const matchSearch = !search || r.requester.toLowerCase().includes(search) || r.phone.toLowerCase().includes(search) || r.purpose.toLowerCase().includes(search);
+      const matchPriority = (priority === 'all') || r.priority.toLowerCase().includes(priority.toLowerCase());
+      const matchStatus = (status === 'all') || r.status.toLowerCase().includes(status.toLowerCase());
+      return matchSearch && matchPriority && matchStatus;
+    });
+
+    renderAppointmentRequests(filtered);
+  }
+
+  function handleApproveAppointment(reqId) {
+    const req = appointmentRequestsData.find(r => r.id === reqId);
+    if (!req) return;
+
+    req.status = 'Approved';
+
+    // Add to approved appointments list
+    const newApproved = {
+      id: 'APP-2026-' + (148 + approvedAppointmentsData.length),
+      time: req.preferred,
+      attendee: req.requester,
+      phone: req.phone,
+      org: req.ward,
+      location: "Principal's Chamber (#101)",
+      status: 'Confirmed & Slip Issued',
+      passId: 'PASS-2026-' + (1055 + approvedAppointmentsData.length)
+    };
+    approvedAppointmentsData.unshift(newApproved);
+
+    renderAppointmentRequests();
+    renderApprovedAppointments();
+    renderAppointmentsOverview();
+    showToast('Appointment request ' + reqId + ' sanctioned by Principal Smt. Gorle Varalakshmi. Confirmation slip generated.', 'success');
+  }
+
+  function handleDeclineAppointment(reqId) {
+    const req = appointmentRequestsData.find(r => r.id === reqId);
+    if (!req) return;
+    req.status = 'Declined';
+    renderAppointmentRequests();
+    renderAppointmentsOverview();
+    showToast('Appointment request ' + reqId + ' declined. Notification dispatched to requester.', 'info');
+  }
+
+  function handleAppointmentRequestSubmit(e) {
+    if (e && e.preventDefault) e.preventDefault();
+    const name = document.getElementById('reqApptName')?.value || 'Guest';
+    const phone = document.getElementById('reqApptPhone')?.value || '+91 98480 00000';
+    const cat = document.getElementById('reqApptCategory')?.value || 'Parent';
+    const host = document.getElementById('reqApptHost')?.value || 'Principal Smt. Gorle Varalakshmi';
+    const date = document.getElementById('reqApptDate')?.value || '30 Oct 2026';
+    const slot = document.getElementById('reqApptSlot')?.value || '11:00 AM – 11:30 AM';
+    const priority = document.getElementById('reqApptPriority')?.value || 'Normal';
+    const purpose = document.getElementById('reqApptPurpose')?.value || 'General consultation';
+    const admNo = document.getElementById('reqApptAdmNo')?.value || '';
+
+    const newReq = {
+      id: 'REQ-2026-0' + (84 + appointmentRequestsData.length),
+      requester: name,
+      phone: phone,
+      ward: (admNo ? 'Adm: ' + admNo + ' • ' : '') + cat,
+      purpose: purpose,
+      preferred: date + ', ' + slot.split(' ')[0] + ' ' + slot.split(' ')[1],
+      priority: priority.includes('High') ? 'High' : (priority.includes('Medium') ? 'Medium' : 'Normal'),
+      status: 'Pending Review'
+    };
+
+    appointmentRequestsData.unshift(newReq);
+    renderAppointmentRequests();
+    renderAppointmentsOverview();
+    closeModal('requestAppointmentModal');
+    showToast('Appointment Request ' + newReq.id + ' successfully queued for Principal review.', 'success');
+  }
+
+  function exportAppointmentRequestsCSV() {
+    const headers = ['Request ID', 'Requester', 'Contact Phone', 'Ward / Category', 'Purpose', 'Preferred Time', 'Priority', 'Status'];
+    const rows = appointmentRequestsData.map(r => [
+      r.id,
+      '"' + r.requester + '"',
+      '"' + r.phone + '"',
+      '"' + r.ward + '"',
+      '"' + r.purpose + '"',
+      '"' + r.preferred + '"',
+      r.priority,
+      r.status
+    ]);
+    const csvContent = [headers.join(','), ...rows.map(row => row.join(','))].join('\n');
+    downloadCsvFile(csvContent, 'SriVidya_Appointment_Requests_2026-27.csv');
+    showToast('Appointment requests register exported successfully.', 'success');
+  }
+
+  // -------------------------------------------------------------------------
+  // SUBMENU 4: APPROVED APPOINTMENTS
+  // Displays: Confirmed time, attendee, location and confirmation status
+  // -------------------------------------------------------------------------
+  function renderApprovedAppointments(list) {
+    const tbody = document.getElementById('approvedAppointmentsTableBody');
+    if (!tbody) return;
+
+    const data = list || approvedAppointmentsData;
+    tbody.innerHTML = data.map(a => `
+      <tr>
+        <td>
+          <strong style="color: var(--color-text-dark);"><i class="fa-regular fa-calendar-check text-primary mr-1"></i>${a.time}</strong><br>
+          <small class="text-muted">Appointment Ref: <strong>${a.id}</strong></small>
+        </td>
+        <td>
+          <strong style="color: var(--color-text-dark);">${a.attendee}</strong><br>
+          <small class="text-muted"><i class="fa-solid fa-phone mr-1"></i>${a.phone} &bull; ${a.org}</small>
+        </td>
+        <td>
+          <span class="portal-badge badge-neutral"><i class="fa-solid fa-location-dot mr-1 text-danger"></i>${a.location}</span>
+        </td>
+        <td style="text-align: center;">
+          <span class="portal-badge badge-success">
+            <i class="fa-solid fa-circle-check mr-1"></i>${a.status}
+          </span>
+        </td>
+        <td style="text-align: center;">
+          <div style="display: flex; gap: 0.35rem; justify-content: center;">
+            <button class="btn btn-sm btn-secondary" onclick="portalApp.printAppointmentSlip('${a.id}')" title="Print Appointment Slip">
+              <i class="fa-solid fa-print"></i> Slip
+            </button>
+            <button class="btn btn-sm btn-primary" onclick="portalApp.openModal('newVisitorPassModal')" title="Fast-Track Check-In">
+              <i class="fa-solid fa-id-badge"></i> Check-in
+            </button>
+          </div>
+        </td>
+      </tr>
+    `).join('');
+  }
+
+  function filterApprovedAppointments() {
+    const search = (document.getElementById('approvedSearchInput')?.value || '').toLowerCase();
+    const loc = document.getElementById('approvedLocationFilter')?.value || 'all';
+
+    const filtered = approvedAppointmentsData.filter(a => {
+      const matchSearch = !search || a.attendee.toLowerCase().includes(search) || a.phone.toLowerCase().includes(search) || a.id.toLowerCase().includes(search);
+      const matchLoc = (loc === 'all') || a.location.toLowerCase().includes(loc.toLowerCase());
+      return matchSearch && matchLoc;
+    });
+
+    renderApprovedAppointments(filtered);
+  }
+
+  function printAppointmentSlip(apptId) {
+    showToast('Printing Official Appointment Confirmation Slip ' + apptId + ' with Executive Seal.', 'success');
+  }
+
+  function printApprovedAppointmentsRegister() {
+    window.print();
+  }
+
+  // -------------------------------------------------------------------------
+  // SUBMENU 5: VISITOR REGISTER
+  // Displays: Visitor name, organization, host, check-in/out and visit purpose
+  // -------------------------------------------------------------------------
+  function renderVisitorRegister(list) {
+    const tbody = document.getElementById('visitorRegisterTableBody');
+    if (!tbody) return;
+
+    const data = list || visitorRegisterData;
+    tbody.innerHTML = data.map(v => `
+      <tr>
+        <td>
+          <strong style="color: var(--color-text-dark);">${v.name}</strong><br>
+          <code style="font-size: 0.78rem; font-weight: 800; color: #1e40af; background: #eff6ff; padding: 2px 6px; border-radius: 4px;">${v.passId}</code>
+          <small class="text-muted ml-1">${v.idType}</small>
+        </td>
+        <td>
+          <span style="font-weight: 600; color: #334155;">${v.org}</span><br>
+          <small class="text-muted"><i class="fa-solid fa-phone mr-1"></i>${v.phone}</small>
+        </td>
+        <td>
+          <span class="portal-badge badge-primary">${v.host}</span>
+        </td>
+        <td>
+          <div style="font-size: 0.86rem; font-weight: 600; color: #166534;"><i class="fa-solid fa-arrow-right-to-bracket mr-1"></i>In: ${v.checkIn}</div>
+          <div style="font-size: 0.82rem; color: #64748b;"><i class="fa-solid fa-arrow-right-from-bracket mr-1"></i>Out: ${v.checkOut}</div>
+        </td>
+        <td>
+          <span style="font-size: 0.86rem; color: #334155;">${v.purpose}</span>
+        </td>
+        <td style="text-align: center;">
+          ${v.status === 'In Campus' ? `
+            <span class="portal-badge badge-success mb-1" style="display:inline-block;"><i class="fa-solid fa-circle-dot mr-1 text-emerald"></i>In Campus</span><br>
+            <button class="btn btn-sm btn-outline-danger" onclick="portalApp.handleMarkVisitorExit('${v.passId}')">
+              Mark Exit
+            </button>
+          ` : `
+            <span class="portal-badge badge-neutral mb-1" style="display:inline-block;"><i class="fa-solid fa-check mr-1"></i>Cleared</span><br>
+            <button class="btn btn-sm btn-secondary" onclick="portalApp.printVisitorGatePass('${v.passId}')">
+              <i class="fa-solid fa-print"></i> Pass
+            </button>
+          `}
+        </td>
+      </tr>
+    `).join('');
+  }
+
+  function filterVisitorRegister() {
+    const search = (document.getElementById('visitorSearchInput')?.value || '').toLowerCase();
+    const st = document.getElementById('visitorStatusFilter')?.value || 'all';
+    const host = document.getElementById('visitorHostFilter')?.value || 'all';
+
+    const filtered = visitorRegisterData.filter(v => {
+      const matchSearch = !search || v.name.toLowerCase().includes(search) || v.passId.toLowerCase().includes(search) || v.phone.toLowerCase().includes(search);
+      const matchStatus = (st === 'all') || (st === 'in_campus' ? v.status === 'In Campus' : v.status !== 'In Campus');
+      const matchHost = (host === 'all') || v.host.toLowerCase().includes(host.toLowerCase());
+      return matchSearch && matchStatus && matchHost;
+    });
+
+    renderVisitorRegister(filtered);
+  }
+
+  function handleMarkVisitorExit(passId) {
+    const v = visitorRegisterData.find(item => item.passId === passId);
+    if (!v) return;
+
+    const now = new Date();
+    const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    v.status = 'Exited';
+    v.checkOut = timeStr + ' (Cleared)';
+
+    renderVisitorRegister();
+    renderAppointmentsOverview();
+    showToast('Visitor gate pass ' + passId + ' marked exited at ' + timeStr + '. Security clearance logged.', 'success');
+  }
+
+  function handleCreateVisitorPass(e) {
+    if (e && e.preventDefault) e.preventDefault();
+    const name = document.getElementById('vpassName')?.value || 'Guest';
+    const phone = document.getElementById('vpassPhone')?.value || '+91 98480 00000';
+    const org = document.getElementById('vpassOrg')?.value || 'Visitor';
+    const idRef = document.getElementById('vpassIdRef')?.value || 'Govt ID Verified';
+    const host = document.getElementById('vpassHost')?.value || 'Principal Smt. Gorle Varalakshmi';
+    const purpose = document.getElementById('vpassPurpose')?.value || 'Official consultation';
+    const passId = 'PASS-2026-' + (1050 + visitorRegisterData.length);
+
+    const now = new Date();
+    const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+    const newPass = {
+      passId: passId,
+      name: name,
+      phone: phone,
+      idType: idRef,
+      org: org,
+      host: host,
+      checkIn: timeStr,
+      checkOut: 'In Campus',
+      purpose: purpose,
+      status: 'In Campus'
+    };
+
+    visitorRegisterData.unshift(newPass);
+    renderVisitorRegister();
+    renderAppointmentsOverview();
+    closeModal('newVisitorPassModal');
+    showToast('Gate Pass ' + passId + ' issued for ' + name + '. Physical security badge activated.', 'success');
+  }
+
+  function printVisitorGatePass(passId) {
+    showToast('Printing Official Main Gate Visitor Pass slip ' + passId, 'info');
+  }
+
+  function exportVisitorRegisterCSV() {
+    const headers = ['Pass ID', 'Visitor Name', 'Contact Phone', 'Govt ID Reference', 'Organization / Ward', 'Host Official', 'Check-In Time', 'Check-Out Time', 'Purpose of Visit', 'Status'];
+    const rows = visitorRegisterData.map(v => [
+      v.passId,
+      '"' + v.name + '"',
+      '"' + v.phone + '"',
+      '"' + v.idType + '"',
+      '"' + v.org + '"',
+      '"' + v.host + '"',
+      v.checkIn,
+      v.checkOut,
+      '"' + v.purpose + '"',
+      v.status
+    ]);
+    const csvContent = [headers.join(','), ...rows.map(r => r.join(','))].join('\n');
+    downloadCsvFile(csvContent, 'SriVidya_MainGate_Visitor_Register_2026-27.csv');
+    showToast('Visitor gate register exported successfully.', 'success');
+  }
+
+  // -------------------------------------------------------------------------
+  // SUBMENU 6: MEETING HISTORY
+  // Displays: Completed, cancelled and rescheduled meetings
+  // Statutory Governance: Meeting notes visible only to authorized participants or staff.
+  // -------------------------------------------------------------------------
+  function renderMeetingHistory(filter) {
+    const tbody = document.getElementById('meetingHistoryTableBody');
+    if (!tbody) return;
+
+    const f = filter || activeHistoryFilter;
+    let data = meetingHistoryData;
+    if (f === 'completed') data = data.filter(m => m.status === 'Completed');
+    else if (f === 'rescheduled') data = data.filter(m => m.status === 'Rescheduled');
+    else if (f === 'cancelled') data = data.filter(m => m.status === 'Cancelled');
+
+    tbody.innerHTML = data.map(m => `
+      <tr>
+        <td>
+          <code style="font-size: 0.82rem; font-weight: 800; color: #1e40af; background: #eff6ff; padding: 2px 6px; border-radius: 4px;">${m.meetingId}</code><br>
+          <strong style="color: var(--color-text-dark);"><i class="fa-regular fa-calendar mr-1 text-primary"></i>${m.date}</strong>
+        </td>
+        <td>
+          <strong style="color: var(--color-text-dark);">${m.attendee}</strong><br>
+          <small class="text-muted">Host: <strong>${m.host}</strong></small>
+        </td>
+        <td>
+          <span style="font-size: 0.86rem; color: #334155;">${m.purpose}</span>
+        </td>
+        <td>
+          <span style="font-size: 0.84rem; color: #475569;">${m.outcome}</span>
+        </td>
+        <td style="text-align: center;">
+          <span class="portal-badge ${m.status === 'Completed' ? 'badge-success' : (m.status === 'Rescheduled' ? 'badge-warning' : 'badge-danger')}">
+            ${m.status}
+          </span>
+        </td>
+        <td style="text-align: center;">
+          <button class="btn btn-sm btn-outline-primary" onclick="portalApp.openMeetingNotesModal('${m.meetingId}')" title="Access Meeting Minutes">
+            <i class="fa-solid fa-lock mr-1"></i> Minutes
+          </button>
+        </td>
+      </tr>
+    `).join('');
+
+    // Update filter counts
+    const countAll = document.getElementById('histCountAll');
+    const countComp = document.getElementById('histCountCompleted');
+    const countResched = document.getElementById('histCountRescheduled');
+    const countCanc = document.getElementById('histCountCancelled');
+    if (countAll) countAll.textContent = meetingHistoryData.length;
+    if (countComp) countComp.textContent = meetingHistoryData.filter(m => m.status === 'Completed').length;
+    if (countResched) countResched.textContent = meetingHistoryData.filter(m => m.status === 'Rescheduled').length;
+    if (countCanc) countCanc.textContent = meetingHistoryData.filter(m => m.status === 'Cancelled').length;
+  }
+
+  function setHistoryFilter(filter) {
+    activeHistoryFilter = filter;
+    ['btnHistFilterAll', 'btnHistFilterCompleted', 'btnHistFilterRescheduled', 'btnHistFilterCancelled'].forEach(id => {
+      const btn = document.getElementById(id);
+      if (btn) btn.classList.remove('active');
+    });
+
+    const activeBtn = document.getElementById('btnHistFilter' + filter.charAt(0).toUpperCase() + filter.slice(1));
+    if (activeBtn) activeBtn.classList.add('active');
+
+    renderMeetingHistory(filter);
+  }
+
+  function openMeetingNotesModal(meetingId) {
+    // Statutory Privacy Check:
+    // "Meeting notes must be visible only to authorized participants or staff. Do not expose the Principal's private calendar or confidential meeting details to other visitors."
+    const role = state.currentRole || 'principal';
+    if (role === 'visitor' || role === 'guest') {
+      showToast('Statutory Restriction: Meeting notes and executive dockets are restricted to authorized personnel under Principal Smt. Gorle Varalakshmi.', 'warning');
+      return;
+    }
+
+    const mtg = meetingHistoryData.find(m => m.meetingId === meetingId) || meetingHistoryData[0];
+    if (!mtg) return;
+
+    document.getElementById('noteModalMeetingId').textContent = mtg.meetingId;
+    document.getElementById('noteModalDateTime').textContent = mtg.date;
+    document.getElementById('noteModalAttendees').textContent = mtg.attendee + ' with ' + mtg.host;
+    document.getElementById('noteModalPurpose').textContent = mtg.purpose;
+    document.getElementById('noteModalContent').textContent = mtg.notes;
+    document.getElementById('noteModalAction').textContent = 'Official Resolution: ' + mtg.outcome;
+
+    openModal('viewMeetingNotesModal');
+  }
+
+  function printMeetingMinutes() {
+    window.print();
+  }
+
+  function exportMeetingHistoryCSV() {
+    const headers = ['Meeting ID', 'Date & Time', 'Attendee', 'Host Leader', 'Purpose', 'Resolution Outcome', 'Status'];
+    const rows = meetingHistoryData.map(m => [
+      m.meetingId,
+      '"' + m.date + '"',
+      '"' + m.attendee + '"',
+      '"' + m.host + '"',
+      '"' + m.purpose + '"',
+      '"' + m.outcome + '"',
+      m.status
+    ]);
+    const csvContent = [headers.join(','), ...rows.map(r => r.join(','))].join('\n');
+    downloadCsvFile(csvContent, 'SriVidya_Meeting_History_Archive_2026-27.csv');
+    showToast('Meeting history archive exported successfully.', 'success');
+  }
+
+  // -------------------------------------------------------------------------
+  // SUBMENU 7: FOLLOW-UP ACTIONS
+  // Displays: Action item, assigned employee, deadline and completion status
+  // -------------------------------------------------------------------------
+  function renderFollowupActions(list) {
+    const tbody = document.getElementById('followupActionsTableBody');
+    if (!tbody) return;
+
+    const data = list || followupActionsData;
+    tbody.innerHTML = data.map(a => `
+      <tr>
+        <td>
+          <strong style="color: var(--color-text-dark);">${a.task}</strong><br>
+          <small class="text-muted">Originating Reference: <code>${a.refMeeting}</code> &bull; Action ID: <strong>${a.id}</strong></small>
+        </td>
+        <td>
+          <span style="font-weight: 700; color: #1e40af;"><i class="fa-solid fa-user-check mr-1"></i>${a.assignee}</span>
+        </td>
+        <td>
+          <strong style="color: var(--color-text-dark);"><i class="fa-regular fa-calendar mr-1 text-danger"></i>${a.deadline}</strong>
+        </td>
+        <td style="text-align: center;">
+          <span class="portal-badge ${a.status === 'Completed' ? 'badge-success' : (a.status === 'In Progress' ? 'badge-warning' : 'badge-danger')}">
+            ${a.status}
+          </span>
+        </td>
+        <td style="text-align: center;">
+          <span class="portal-badge ${a.priority.includes('High') ? 'badge-danger' : (a.priority === 'Medium' ? 'badge-warning' : 'badge-neutral')}">
+            ${a.priority}
+          </span>
+        </td>
+        <td style="text-align: center;">
+          ${a.status !== 'Completed' ? `
+            <button class="btn btn-sm btn-outline-success" onclick="portalApp.handleCompleteFollowup('${a.id}')" title="Mark Done">
+              <i class="fa-solid fa-check"></i> Done
+            </button>
+          ` : `
+            <span class="text-muted" style="font-size: 0.8rem;"><i class="fa-solid fa-check-double text-emerald mr-1"></i>Finished</span>
+          `}
+        </td>
+      </tr>
+    `).join('');
+
+    // Update pending badge in header and sidebar
+    const pendingCount = followupActionsData.filter(a => a.status !== 'Completed').length;
+    const badge = document.getElementById('apptFollowupBadge');
+    if (badge) badge.textContent = pendingCount + ' Pending';
+  }
+
+  function filterFollowupActions() {
+    const search = (document.getElementById('followupSearchInput')?.value || '').toLowerCase();
+    const st = document.getElementById('followupStatusFilter')?.value || 'all';
+
+    const filtered = followupActionsData.filter(a => {
+      const matchSearch = !search || a.task.toLowerCase().includes(search) || a.assignee.toLowerCase().includes(search) || a.id.toLowerCase().includes(search);
+      const matchStatus = (st === 'all') || a.status.toLowerCase().includes(st.toLowerCase());
+      return matchSearch && matchStatus;
+    });
+
+    renderFollowupActions(filtered);
+  }
+
+  function handleCompleteFollowup(actionId) {
+    const item = followupActionsData.find(a => a.id === actionId);
+    if (!item) return;
+
+    item.status = 'Completed';
+    renderFollowupActions();
+    showToast('Executive action item ' + actionId + ' marked completed.', 'success');
+  }
+
+  function handleCreateFollowup(e) {
+    if (e && e.preventDefault) e.preventDefault();
+    const title = document.getElementById('fupTitle')?.value || 'Action item';
+    const assignee = document.getElementById('fupAssignee')?.value || 'Sri Navva Anand (Vice Principal)';
+    const deadline = document.getElementById('fupDeadline')?.value || '2026-11-05';
+    const priority = document.getElementById('fupPriority')?.value || 'Normal';
+    const ref = document.getElementById('fupMeetingRef')?.value || 'MTG-2026-105';
+    const actionId = 'ACT-2026-0' + (45 + followupActionsData.length);
+
+    const newItem = {
+      id: actionId,
+      task: title,
+      assignee: assignee,
+      deadline: deadline,
+      status: 'Pending',
+      priority: priority,
+      refMeeting: ref
+    };
+
+    followupActionsData.unshift(newItem);
+    renderFollowupActions();
+    closeModal('newFollowupModal');
+    showToast('Executive Action Item ' + actionId + ' assigned to ' + assignee + '.', 'success');
+  }
+
+  function exportFollowupCSV() {
+    const headers = ['Action ID', 'Task Directive', 'Assigned Employee', 'Deadline', 'Status', 'Priority', 'Originating Meeting'];
+    const rows = followupActionsData.map(a => [
+      a.id,
+      '"' + a.task + '"',
+      '"' + a.assignee + '"',
+      a.deadline,
+      a.status,
+      a.priority,
+      a.refMeeting
+    ]);
+    const csvContent = [headers.join(','), ...rows.map(r => r.join(','))].join('\n');
+    downloadCsvFile(csvContent, 'SriVidya_Executive_Followup_Register_2026-27.csv');
+    showToast('Executive follow-up action register exported successfully.', 'success');
+  }
+
   return {
     togglePassVisibility,
     saveExecutiveCreds,
@@ -24257,6 +25115,38 @@ const classData = TIMETABLE_CLASS_DATA[currentTimetableClass] || TIMETABLE_CLASS
     syncOfflineBiometricLogs,
     filterStaffAttendanceTable,
     resetStaffAttendanceFilters,
+
+      renderAppointmentsOverview,
+    renderPrincipalsCalendar,
+    setCalendarFilter,
+    filterPrincipalsCalendar,
+    printPrincipalsCalendar,
+    renderAppointmentRequests,
+    filterAppointmentRequests,
+    handleApproveAppointment,
+    handleDeclineAppointment,
+    handleAppointmentRequestSubmit,
+    exportAppointmentRequestsCSV,
+    renderApprovedAppointments,
+    filterApprovedAppointments,
+    printAppointmentSlip,
+    printApprovedAppointmentsRegister,
+    renderVisitorRegister,
+    filterVisitorRegister,
+    handleMarkVisitorExit,
+    handleCreateVisitorPass,
+    printVisitorGatePass,
+    exportVisitorRegisterCSV,
+    renderMeetingHistory,
+    setHistoryFilter,
+    openMeetingNotesModal,
+    printMeetingMinutes,
+    exportMeetingHistoryCSV,
+    renderFollowupActions,
+    filterFollowupActions,
+    handleCompleteFollowup,
+    handleCreateFollowup,
+    exportFollowupCSV,
     renderFeeCollection,
     filterFeeCollection,
     renderDefaultersTable,

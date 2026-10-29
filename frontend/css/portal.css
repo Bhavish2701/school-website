@@ -16379,3 +16379,60 @@ input:disabled + .perm-slider {
   color: #1e293b !important;
   font-size: 0.84rem !important;
 }
+
+/* ==========================================================================
+   APPOINTMENTS & VISITORS MODULE STYLES (#view-appointments)
+   ========================================================================== */
+#view-appointments .table-container {
+  overflow-x: auto !important;
+  width: 100% !important;
+  -webkit-overflow-scrolling: touch !important;
+  border: 1px solid var(--color-border) !important;
+  border-radius: 8px !important;
+  background: #ffffff !important;
+  margin-bottom: 1rem !important;
+}
+
+#view-appointments .data-table {
+  width: 100% !important;
+  border-collapse: separate !important;
+  border-spacing: 0 !important;
+  font-size: 0.85rem !important;
+  background: #ffffff !important;
+  margin: 0 !important;
+}
+
+#view-appointments .data-table thead th {
+  padding: 0.8rem 0.85rem !important;
+  font-size: 0.74rem !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.05em !important;
+  color: #475569 !important;
+  background: #f8fafc !important;
+  border-bottom: 2px solid #cbd5e1 !important;
+  border-top: none !important;
+  vertical-align: middle !important;
+  white-space: nowrap !important;
+}
+
+#view-appointments .data-table tbody tr {
+  transition: background-color 0.15s ease !important;
+  border-bottom: 1px solid #e2e8f0 !important;
+}
+
+#view-appointments .data-table tbody tr:nth-child(even) {
+  background: #fafbfc !important;
+}
+
+#view-appointments .data-table tbody tr:hover {
+  background: #f1f5f9 !important;
+}
+
+#view-appointments .data-table tbody td {
+  padding: 0.75rem 0.85rem !important;
+  vertical-align: middle !important;
+  border-bottom: 1px solid #f1f5f9 !important;
+  color: #1e293b !important;
+  font-size: 0.84rem !important;
+}
