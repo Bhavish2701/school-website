@@ -527,11 +527,28 @@
           </div>
         </div>
 
-        <!-- 16. Settings & Access Control -->
+                <!-- 17. Tasks & Approvals -->
+        <div class="nav-item" data-module="tasks" id="sidebarNavItemTasks">
+          <a href="#tasks" class="nav-link" onclick="portalApp.navigateTo('tasks');">
+            <span class="nav-icon"><i class="fa-solid fa-list-check"></i></span>
+            <span class="nav-text">17. Tasks &amp; Approvals</span>
+            <span class="nav-badge" style="background: rgba(239,68,68,0.2); color: #dc2626;" id="sidebarTasksPendingBadge">6 Pending</span>
+            <span class="nav-arrow"><i class="fa-solid fa-chevron-right"></i></span>
+          </a>
+          <div class="nav-sub">
+            <a href="#tasks-pending" class="nav-sub-link active" data-sub="pending" onclick="portalApp.switchSubTab('tasks', 'pending');">Pending Approvals</a>
+            <a href="#tasks-assigned" class="nav-sub-link" data-sub="assigned" onclick="portalApp.switchSubTab('tasks', 'assigned');">My Assigned Tasks</a>
+            <a href="#tasks-history" class="nav-sub-link" data-sub="history" onclick="portalApp.switchSubTab('tasks', 'history');">Approval History</a>
+            <a href="#tasks-escalations" class="nav-sub-link" data-sub="escalations" onclick="portalApp.switchSubTab('tasks', 'escalations');"><span>Escalations</span><span class="nav-sub-badge danger">3 Alert</span></a>
+            <a href="#tasks-workflows" class="nav-sub-link" data-sub="workflows" onclick="portalApp.switchSubTab('tasks', 'workflows');">Workflow Settings</a>
+          </div>
+        </div>
+
+        <!-- 18. Settings & Access Control -->
         <div class="nav-item" data-module="settings">
           <a href="#settings" class="nav-link" onclick="portalApp.navigateTo('settings');">
             <span class="nav-icon"><i class="fa-solid fa-user-gear"></i></span>
-            <span class="nav-text">17. Settings &amp; Access Control</span>
+            <span class="nav-text">18. Settings &amp; Access Control</span>
             <span class="nav-arrow"><i class="fa-solid fa-chevron-right"></i></span>
           </a>
           <div class="nav-sub">
@@ -11341,7 +11358,543 @@
           </div>
         </section>
 
-<section class="portal-view" id="view-settings">
+
+        <!-- 17. Tasks & Approvals View -->
+        <section class="portal-view" id="view-tasks">
+          <!-- Module Header Strip -->
+          <div class="module-header-strip mb-4">
+            <div class="mhs-title">
+              <h2><i class="fa-solid fa-list-check text-primary"></i> Unified Tasks, Decision Clearances &amp; Workflow Governance</h2>
+              <p>Centralized Decision Hub • Multi-Departmental Approvals • SLA Tracking • Statutory Delegations</p>
+            </div>
+            <div class="mhs-actions" style="display:flex; align-items:center; gap:0.75rem; flex-wrap:wrap;">
+              <span class="badge" style="background:#fee2e2; color:#dc2626; padding: 7px 14px; font-size: 0.82rem; font-weight:700; border:1px solid #fca5a5; border-radius: 6px;">
+                <i class="fa-solid fa-bell mr-1"></i> <span id="tasksPendingHeaderBadge">6 Decisions Awaiting Executive Clearance</span>
+              </span>
+              <button class="btn btn-secondary btn-sm" onclick="portalApp.openNewTaskModal()">
+                <i class="fa-solid fa-plus"></i> Assign Executive Task
+              </button>
+              <button class="btn btn-primary btn-sm" onclick="portalApp.openBulkDecisionModal()">
+                <i class="fa-solid fa-check-double"></i> Quick Approve Routine (2)
+              </button>
+            </div>
+          </div>
+
+          <!-- Protocol Notice Strip -->
+          <div class="p-3 mb-4 rounded-3 border" style="background: #eff6ff; border-color: #bfdbfe !important;">
+            <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
+              <div class="d-flex align-items-center gap-3">
+                <div style="width: 40px; height: 40px; border-radius: 8px; background: #2563eb; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 1.25rem;">
+                  <i class="fa-solid fa-sitemap"></i>
+                </div>
+                <div>
+                  <h6 class="mb-0 font-bold" style="color: #1e3a8a; font-size: 0.95rem;">Single Consolidated Institutional Approval &amp; Decision Routing Engine</h6>
+                  <p class="mb-0 text-muted" style="font-size: 0.8rem;">Provides a single unified pane for decisions previously distributed across Leaves, Fees, Indents, Student TCs, and Events. Every sign-off records an immutable cryptographic audit trail under Executive Authority of Principal <strong>Smt. Gorle Varalakshmi</strong>.</p>
+                </div>
+              </div>
+              <div class="d-flex align-items-center gap-2">
+                <span class="badge" style="background:#dbeafe; color:#1e40af; padding:6px 12px; font-weight:700;"><i class="fa-solid fa-bolt"></i> Real-Time Decision SLA</span>
+                <span class="badge" style="background:#dcfce7; color:#166534; padding:6px 12px; font-weight:700;"><i class="fa-solid fa-shield-check"></i> Segregation of Duties Enforced</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Module Tab Strip (5 Submenus) -->
+          <div class="tab-strip mb-4" id="tasksTabStrip">
+            <button class="tab-btn active" data-sub="pending" onclick="portalApp.switchSubTab('tasks', 'pending')">
+              <i class="fa-solid fa-clock text-amber mr-1"></i> Pending Approvals (<span id="tabBadgeTasksPending">6</span>)
+            </button>
+            <button class="tab-btn" data-sub="assigned" onclick="portalApp.switchSubTab('tasks', 'assigned')">
+              <i class="fa-solid fa-user-check text-primary mr-1"></i> My Assigned Tasks (<span id="tabBadgeTasksAssigned">6</span>)
+            </button>
+            <button class="tab-btn" data-sub="history" onclick="portalApp.switchSubTab('tasks', 'history')">
+              <i class="fa-solid fa-clipboard-check text-emerald mr-1"></i> Approval History (<span id="tabBadgeTasksHistory">8</span>)
+            </button>
+            <button class="tab-btn" data-sub="escalations" onclick="portalApp.switchSubTab('tasks', 'escalations')">
+              <i class="fa-solid fa-triangle-exclamation text-danger mr-1"></i> Escalations (<span id="tabBadgeTasksEscalations">3 Alert</span>)
+            </button>
+            <button class="tab-btn" data-sub="workflows" onclick="portalApp.switchSubTab('tasks', 'workflows')">
+              <i class="fa-solid fa-sliders text-purple mr-1"></i> Workflow Settings (7 Matrix)
+            </button>
+          </div>
+
+          <!-- ====================================================================
+               SUBVIEW 1: PENDING APPROVALS
+               All requests awaiting the current user's decision
+               ==================================================================== -->
+          <div class="tasks-subview active" id="subview-tasks-pending">
+            <!-- Quad Stat Cards -->
+            <div class="metrics-quad mb-4">
+              <div class="metric-card">
+                <div class="metric-icon-wrap icon-amber"><i class="fa-solid fa-hourglass-half"></i></div>
+                <div class="metric-details">
+                  <span class="metric-label">Awaiting Executive Decision</span>
+                  <div class="metric-value text-amber">6 Requests</div>
+                  <div class="metric-trend trend-down"><span>3 High Priority • 2 Financial</span></div>
+                </div>
+              </div>
+              <div class="metric-card">
+                <div class="metric-icon-wrap icon-blue"><i class="fa-solid fa-receipt"></i></div>
+                <div class="metric-details">
+                  <span class="metric-label">Financial Value Under Review</span>
+                  <div class="metric-value text-primary">₹48,500</div>
+                  <div class="metric-trend trend-steady"><span>2 Indents &amp; 1 Refund Debit</span></div>
+                </div>
+              </div>
+              <div class="metric-card">
+                <div class="metric-icon-wrap icon-purple"><i class="fa-solid fa-stopwatch"></i></div>
+                <div class="metric-details">
+                  <span class="metric-label">Average Request Age</span>
+                  <div class="metric-value text-purple">1.8 Days</div>
+                  <div class="metric-trend trend-up"><span>Within 48h Executive Target</span></div>
+                </div>
+              </div>
+              <div class="metric-card">
+                <div class="metric-icon-wrap icon-emerald"><i class="fa-solid fa-shield-check"></i></div>
+                <div class="metric-details">
+                  <span class="metric-label">Statutory Compliance Check</span>
+                  <div class="metric-value text-emerald">100% Passed</div>
+                  <div class="metric-trend trend-up"><span>Verified Against School By-laws</span></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Filter & Action Strip -->
+            <div class="report-meta-header">
+              <div class="d-flex align-items-center gap-2 flex-wrap">
+                <div class="search-input-wrap" style="width: 280px;">
+                  <i class="fa-solid fa-magnifying-glass"></i>
+                  <input type="text" class="form-control" id="searchPendingApprovalsInput" placeholder="Search requester, subject, ID..." onkeyup="portalApp.filterPendingApprovalsTable()">
+                </div>
+                <select class="form-control" style="width: 190px;" id="filterPendingCategorySelect" onchange="portalApp.filterPendingApprovalsTable()">
+                  <option value="">All Request Categories</option>
+                  <option value="Staff Leave">Staff Leave Applications</option>
+                  <option value="Fee Concession">Fee Concessions &amp; Waivers</option>
+                  <option value="Purchase Indent">Purchase Indents &amp; Lab Stores</option>
+                  <option value="Financial Refund">Financial Refunds &amp; Reversals</option>
+                  <option value="Student Transfer">Student Transfer Certificates (TC)</option>
+                  <option value="Event Permission">Event Permissions &amp; Budgets</option>
+                </select>
+                <select class="form-control" style="width: 170px;" id="filterPendingUrgencySelect" onchange="portalApp.filterPendingApprovalsTable()">
+                  <option value="">All Urgency Levels</option>
+                  <option value="Critical">Critical (Immediate)</option>
+                  <option value="High Priority">High Priority</option>
+                  <option value="Normal">Normal Standard</option>
+                </select>
+              </div>
+              <div class="report-export-buttons">
+                <button class="btn btn-secondary btn-sm" onclick="portalApp.exportPendingApprovalsCSV()">
+                  <i class="fa-solid fa-file-csv"></i> Export Queue CSV
+                </button>
+                <button class="btn btn-primary btn-sm" onclick="portalApp.openBulkDecisionModal()">
+                  <i class="fa-solid fa-check-double"></i> Batch Clear Routine
+                </button>
+              </div>
+            </div>
+
+            <!-- Table -->
+            <div class="table-responsive bg-white rounded-3 border">
+              <table class="table table-hover align-middle mb-0" id="tablePendingApprovals">
+                <thead class="table-light">
+                  <tr>
+                    <th>Request ID &amp; Category</th>
+                    <th>Requester &amp; Department</th>
+                    <th>Request Summary / Subject</th>
+                    <th>Impact / Financial Outlay</th>
+                    <th>Submitted On</th>
+                    <th>Urgency Level</th>
+                    <th class="text-end">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="tbodyPendingApprovals">
+                  <!-- Rendered dynamically -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- ====================================================================
+               SUBVIEW 2: MY ASSIGNED TASKS
+               Task, owner, deadline, priority and status
+               ==================================================================== -->
+          <div class="tasks-subview" id="subview-tasks-assigned" style="display: none;">
+            <!-- Quad Stat Cards -->
+            <div class="metrics-quad mb-4">
+              <div class="metric-card">
+                <div class="metric-icon-wrap icon-blue"><i class="fa-solid fa-list-check"></i></div>
+                <div class="metric-details">
+                  <span class="metric-label">Active Assigned Tasks</span>
+                  <div class="metric-value text-primary">6 Tasks</div>
+                  <div class="metric-trend trend-steady"><span>4 In Progress • 2 Review Ready</span></div>
+                </div>
+              </div>
+              <div class="metric-card">
+                <div class="metric-icon-wrap icon-amber"><i class="fa-solid fa-fire text-danger"></i></div>
+                <div class="metric-details">
+                  <span class="metric-label">Critical Priority Tasks</span>
+                  <div class="metric-value text-amber">2 Tasks</div>
+                  <div class="metric-trend trend-down"><span>Board Exams &amp; Fire Audit</span></div>
+                </div>
+              </div>
+              <div class="metric-card">
+                <div class="metric-icon-wrap icon-purple"><i class="fa-solid fa-calendar-day"></i></div>
+                <div class="metric-details">
+                  <span class="metric-label">Nearest Deadline Due</span>
+                  <div class="metric-value text-purple">30 Oct 2026</div>
+                  <div class="metric-trend trend-up"><span>Tomorrow • PTA Circular</span></div>
+                </div>
+              </div>
+              <div class="metric-card">
+                <div class="metric-icon-wrap icon-emerald"><i class="fa-solid fa-circle-check"></i></div>
+                <div class="metric-details">
+                  <span class="metric-label">SLA Execution Punctuality</span>
+                  <div class="metric-value text-emerald">94.2%</div>
+                  <div class="metric-trend trend-up"><span>On-Time Milestone Rate</span></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Filter & Action Strip -->
+            <div class="report-meta-header">
+              <div class="d-flex align-items-center gap-2 flex-wrap">
+                <div class="search-input-wrap" style="width: 280px;">
+                  <i class="fa-solid fa-magnifying-glass"></i>
+                  <input type="text" class="form-control" id="searchAssignedTasksInput" placeholder="Search task title, owner, assignee..." onkeyup="portalApp.filterAssignedTasksTable()">
+                </div>
+                <select class="form-control" style="width: 170px;" id="filterAssignedPrioritySelect" onchange="portalApp.filterAssignedTasksTable()">
+                  <option value="">All Priorities</option>
+                  <option value="Critical">Critical Priority</option>
+                  <option value="High">High Priority</option>
+                  <option value="Medium">Medium Priority</option>
+                </select>
+                <select class="form-control" style="width: 170px;" id="filterAssignedStatusSelect" onchange="portalApp.filterAssignedTasksTable()">
+                  <option value="">All Statuses</option>
+                  <option value="In Progress">In Progress</option>
+                  <option value="Pending Review">Pending Review</option>
+                  <option value="Completed">Completed</option>
+                </select>
+              </div>
+              <div class="report-export-buttons">
+                <button class="btn btn-secondary btn-sm" onclick="portalApp.exportAssignedTasksCSV()">
+                  <i class="fa-solid fa-file-csv"></i> Export Tasks CSV
+                </button>
+                <button class="btn btn-primary btn-sm" onclick="portalApp.openNewTaskModal()">
+                  <i class="fa-solid fa-plus"></i> New Task Assignment
+                </button>
+              </div>
+            </div>
+
+            <!-- Table -->
+            <div class="table-responsive bg-white rounded-3 border">
+              <table class="table table-hover align-middle mb-0" id="tableAssignedTasks">
+                <thead class="table-light">
+                  <tr>
+                    <th>Task ID &amp; Title</th>
+                    <th>Task Owner / Originator</th>
+                    <th>Assigned Department / Staff</th>
+                    <th>Deadline</th>
+                    <th>Priority</th>
+                    <th>Status</th>
+                    <th class="text-end">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="tbodyAssignedTasks">
+                  <!-- Rendered dynamically -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- ====================================================================
+               SUBVIEW 3: APPROVAL HISTORY
+               Approved, rejected, returned and cancelled requests
+               ==================================================================== -->
+          <div class="tasks-subview" id="subview-tasks-history" style="display: none;">
+            <!-- Quad Stat Cards -->
+            <div class="metrics-quad mb-4">
+              <div class="metric-card">
+                <div class="metric-icon-wrap icon-blue"><i class="fa-solid fa-clipboard-list"></i></div>
+                <div class="metric-details">
+                  <span class="metric-label">Total Decision History</span>
+                  <div class="metric-value text-primary">84 Decided</div>
+                  <div class="metric-trend trend-steady"><span>Term 1 &amp; 2 YTD Audit</span></div>
+                </div>
+              </div>
+              <div class="metric-card">
+                <div class="metric-icon-wrap icon-emerald"><i class="fa-solid fa-circle-check"></i></div>
+                <div class="metric-details">
+                  <span class="metric-label">Approved Clearances</span>
+                  <div class="metric-value text-emerald">72 Granted</div>
+                  <div class="metric-trend trend-up"><span>85.7% Positive Approval Rate</span></div>
+                </div>
+              </div>
+              <div class="metric-card">
+                <div class="metric-icon-wrap icon-amber"><i class="fa-solid fa-rotate-left"></i></div>
+                <div class="metric-details">
+                  <span class="metric-label">Returned for Clarification</span>
+                  <div class="metric-value text-amber">7 Returned</div>
+                  <div class="metric-trend trend-down"><span>8.3% Required More Proofs</span></div>
+                </div>
+              </div>
+              <div class="metric-card">
+                <div class="metric-icon-wrap icon-purple"><i class="fa-solid fa-ban"></i></div>
+                <div class="metric-details">
+                  <span class="metric-label">Rejected / Cancelled</span>
+                  <div class="metric-value text-purple">5 Rejected</div>
+                  <div class="metric-trend trend-steady"><span>6.0% Ineligible / Duplicate</span></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Filter & Action Strip -->
+            <div class="report-meta-header">
+              <div class="d-flex align-items-center gap-2 flex-wrap">
+                <div class="search-input-wrap" style="width: 280px;">
+                  <i class="fa-solid fa-magnifying-glass"></i>
+                  <input type="text" class="form-control" id="searchApprovalHistoryInput" placeholder="Search reference, applicant, decision..." onkeyup="portalApp.filterApprovalHistoryTable()">
+                </div>
+                <select class="form-control" style="width: 180px;" id="filterApprovalHistoryDecisionSelect" onchange="portalApp.filterApprovalHistoryTable()">
+                  <option value="">All Decisions</option>
+                  <option value="Approved">Approved Only</option>
+                  <option value="Rejected">Rejected Only</option>
+                  <option value="Returned">Returned for Modification</option>
+                  <option value="Cancelled">Cancelled Requests</option>
+                </select>
+                <select class="form-control" style="width: 170px;" id="filterApprovalHistoryMonthSelect" onchange="portalApp.filterApprovalHistoryTable()">
+                  <option value="">All Months</option>
+                  <option value="October 2026">October 2026</option>
+                  <option value="September 2026">September 2026</option>
+                  <option value="August 2026">August 2026</option>
+                </select>
+              </div>
+              <div class="report-export-buttons">
+                <button class="btn btn-secondary btn-sm" onclick="portalApp.exportApprovalHistoryCSV()">
+                  <i class="fa-solid fa-file-csv"></i> Export Audit Log CSV
+                </button>
+                <button class="btn btn-primary btn-sm" onclick="window.print()">
+                  <i class="fa-solid fa-print"></i> Print Statutory Ledger
+                </button>
+              </div>
+            </div>
+
+            <!-- Table -->
+            <div class="table-responsive bg-white rounded-3 border">
+              <table class="table table-hover align-middle mb-0" id="tableApprovalHistory">
+                <thead class="table-light">
+                  <tr>
+                    <th>Decision ID &amp; Ref</th>
+                    <th>Request Type &amp; Subject</th>
+                    <th>Applicant / In-Charge</th>
+                    <th>Action Taken</th>
+                    <th>Decision Authority</th>
+                    <th>Timestamp</th>
+                    <th>Justification / Notes</th>
+                    <th class="text-end">Audit</th>
+                  </tr>
+                </thead>
+                <tbody id="tbodyApprovalHistory">
+                  <!-- Rendered dynamically -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- ====================================================================
+               SUBVIEW 4: ESCALATIONS
+               Overdue approvals and unresolved high-priority items
+               ==================================================================== -->
+          <div class="tasks-subview" id="subview-tasks-escalations" style="display: none;">
+            <!-- Warning Banner -->
+            <div class="p-3 mb-4 rounded-3 border" style="background: #fef2f2; border-color: #fecaca !important;">
+              <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
+                <div class="d-flex align-items-center gap-3">
+                  <div style="width: 40px; height: 40px; border-radius: 8px; background: #dc2626; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 1.25rem;">
+                    <i class="fa-solid fa-triangle-exclamation"></i>
+                  </div>
+                  <div>
+                    <h6 class="mb-0 font-bold" style="color: #991b1b; font-size: 0.95rem;">Automated SLA Breach &amp; Bottleneck Escalation Monitor</h6>
+                    <p class="mb-0 text-muted" style="font-size: 0.8rem;">Requests exceeding designated 24h/48h response windows or tagged with Critical Safety Hazard tags auto-route directly to the Executive Principal Desk for expedited resolution.</p>
+                  </div>
+                </div>
+                <div>
+                  <span class="badge" style="background: #fee2e2; color: #991b1b; font-size: 0.8rem; padding: 6px 12px; font-weight: 800; border: 1px solid #f87171;">
+                    <i class="fa-solid fa-fire mr-1"></i> 3 Priority Action Bottlenecks
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Quad Stat Cards -->
+            <div class="metrics-quad mb-4">
+              <div class="metric-card">
+                <div class="metric-icon-wrap icon-amber"><i class="fa-solid fa-triangle-exclamation text-danger"></i></div>
+                <div class="metric-details">
+                  <span class="metric-label">Active Escalation Alerts</span>
+                  <div class="metric-value text-danger">3 Critical</div>
+                  <div class="metric-trend trend-down"><span>Requires Immediate Intervention</span></div>
+                </div>
+              </div>
+              <div class="metric-card">
+                <div class="metric-icon-wrap icon-purple"><i class="fa-solid fa-business-time"></i></div>
+                <div class="metric-details">
+                  <span class="metric-label">Maximum SLA Breach</span>
+                  <div class="metric-value text-purple">+4 Days</div>
+                  <div class="metric-trend trend-down"><span>Fee Default Parent Summons</span></div>
+                </div>
+              </div>
+              <div class="metric-card">
+                <div class="metric-icon-wrap icon-blue"><i class="fa-solid fa-wrench"></i></div>
+                <div class="metric-details">
+                  <span class="metric-label">Operational Impact</span>
+                  <div class="metric-value text-primary">Lab &amp; AV</div>
+                  <div class="metric-trend trend-steady"><span>Projector &amp; Chemical Disposal</span></div>
+                </div>
+              </div>
+              <div class="metric-card">
+                <div class="metric-icon-wrap icon-emerald"><i class="fa-solid fa-envelope-circle-check"></i></div>
+                <div class="metric-details">
+                  <span class="metric-label">Executive Dispatch Status</span>
+                  <div class="metric-value text-emerald">Dispatched</div>
+                  <div class="metric-trend trend-up"><span>Direct Alert to Principal WhatsApp</span></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Filter & Action Strip -->
+            <div class="report-meta-header">
+              <div class="d-flex align-items-center gap-2 flex-wrap">
+                <div class="search-input-wrap" style="width: 280px;">
+                  <i class="fa-solid fa-magnifying-glass"></i>
+                  <input type="text" class="form-control" id="searchEscalationsInput" placeholder="Search escalation issue, requester..." onkeyup="portalApp.filterEscalationsTable()">
+                </div>
+                <select class="form-control" style="width: 190px;" id="filterEscalationSeveritySelect" onchange="portalApp.filterEscalationsTable()">
+                  <option value="">All Severity Levels</option>
+                  <option value="Level 3">Level 3 (Critical SLA Breach)</option>
+                  <option value="Level 2">Level 2 (Moderate Overdue)</option>
+                  <option value="Level 1">Level 1 (Standard Warning)</option>
+                </select>
+              </div>
+              <div class="report-export-buttons">
+                <button class="btn btn-secondary btn-sm" onclick="portalApp.exportEscalationsCSV()">
+                  <i class="fa-solid fa-file-csv"></i> Export Escalations CSV
+                </button>
+                <button class="btn btn-danger btn-sm" onclick="portalApp.showToast('Emergency executive notification dispatched to designated administrators.', 'warning')">
+                  <i class="fa-solid fa-bullhorn"></i> Ping All In-Charges
+                </button>
+              </div>
+            </div>
+
+            <!-- Table -->
+            <div class="table-responsive bg-white rounded-3 border">
+              <table class="table table-hover align-middle mb-0" id="tableEscalations">
+                <thead class="table-light">
+                  <tr>
+                    <th>Escalation ID &amp; Issue</th>
+                    <th>Source Module</th>
+                    <th>Original Requester</th>
+                    <th>Overdue By</th>
+                    <th>SLA Breach Level</th>
+                    <th>Impact / Severity</th>
+                    <th>Escalated Authority</th>
+                    <th class="text-end">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="tbodyEscalations">
+                  <!-- Rendered dynamically -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- ====================================================================
+               SUBVIEW 5: WORKFLOW SETTINGS
+               Who can submit, review and approve each type of request
+               ==================================================================== -->
+          <div class="tasks-subview" id="subview-tasks-workflows" style="display: none;">
+            <!-- Quad Stat Cards -->
+            <div class="metrics-quad mb-4">
+              <div class="metric-card">
+                <div class="metric-icon-wrap icon-purple"><i class="fa-solid fa-sliders"></i></div>
+                <div class="metric-details">
+                  <span class="metric-label">Statutory Workflow Pipelines</span>
+                  <div class="metric-value text-purple">7 Pipelines</div>
+                  <div class="metric-trend trend-steady"><span>100% Institutional Decision Matrix</span></div>
+                </div>
+              </div>
+              <div class="metric-card">
+                <div class="metric-icon-wrap icon-blue"><i class="fa-solid fa-layer-group"></i></div>
+                <div class="metric-details">
+                  <span class="metric-label">Multi-Tier Hierarchy</span>
+                  <div class="metric-value text-primary">2 - 3 Tiers</div>
+                  <div class="metric-trend trend-up"><span>Dept Head -> VP -> Principal</span></div>
+                </div>
+              </div>
+              <div class="metric-card">
+                <div class="metric-icon-wrap icon-emerald"><i class="fa-solid fa-clock-rotate-left"></i></div>
+                <div class="metric-details">
+                  <span class="metric-label">Standard Turnaround SLA</span>
+                  <div class="metric-value text-emerald">24 - 48 Hrs</div>
+                  <div class="metric-trend trend-up"><span>Automated Escalation Rule</span></div>
+                </div>
+              </div>
+              <div class="metric-card">
+                <div class="metric-icon-wrap icon-amber"><i class="fa-solid fa-fingerprint"></i></div>
+                <div class="metric-details">
+                  <span class="metric-label">Cryptographic Audit Trail</span>
+                  <div class="metric-value text-amber">Immutable</div>
+                  <div class="metric-trend trend-steady"><span>Zero Silent Overwrites</span></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Filter & Action Strip -->
+            <div class="report-meta-header">
+              <div class="d-flex align-items-center gap-2 flex-wrap">
+                <div class="search-input-wrap" style="width: 280px;">
+                  <i class="fa-solid fa-magnifying-glass"></i>
+                  <input type="text" class="form-control" id="searchWorkflowSettingsInput" placeholder="Search workflow, approver, authority..." onkeyup="portalApp.filterWorkflowSettingsTable()">
+                </div>
+                <select class="form-control" style="width: 200px;" id="filterWorkflowDeptSelect" onchange="portalApp.filterWorkflowSettingsTable()">
+                  <option value="">All Workflow Domains</option>
+                  <option value="Academic">Academic &amp; Student Welfare</option>
+                  <option value="Financial">Financial, Fees &amp; Indents</option>
+                  <option value="Operational">Campus Operations &amp; Logistics</option>
+                </select>
+              </div>
+              <div class="report-export-buttons">
+                <button class="btn btn-secondary btn-sm" onclick="portalApp.exportWorkflowSettingsCSV()">
+                  <i class="fa-solid fa-file-csv"></i> Export Matrix CSV
+                </button>
+                <button class="btn btn-primary btn-sm" onclick="portalApp.openNewWorkflowModal()">
+                  <i class="fa-solid fa-plus"></i> Configure New Workflow
+                </button>
+              </div>
+            </div>
+
+            <!-- Table -->
+            <div class="table-responsive bg-white rounded-3 border">
+              <table class="table table-hover align-middle mb-0" id="tableWorkflowSettings">
+                <thead class="table-light">
+                  <tr>
+                    <th>Workflow Category &amp; Request Type</th>
+                    <th>Who Can Submit (Originator)</th>
+                    <th>First Reviewer / Verifier</th>
+                    <th>Final Approver / Executive Head</th>
+                    <th>Turnaround SLA</th>
+                    <th>Delegation &amp; Fallback Rule</th>
+                    <th class="text-end">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="tbodyWorkflowSettings">
+                  <!-- Rendered dynamically -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+
+        <section class="portal-view" id="view-settings">
           
           <!-- Vice Principal Configuration Locked Banner -->
           <div id="settingsLockedBanner" class="restricted-banner" style="display: none;">
@@ -17557,6 +18110,115 @@ Class X-A,Monday,2,09:35 AM - 10:20 AM,Physical Science,Sri Navva Anand,Room 201
           <button type="button" class="btn btn-secondary" onclick="portalApp.closeModal('reportsCustomExportModal')">Cancel</button>
           <button type="submit" class="btn btn-primary" style="font-weight:700;">
             <i class="fa-solid fa-download mr-1"></i> Generate &amp; Download Bundle
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+
+  <!-- =========================================================================
+       MODAL 1: EXECUTIVE DECISION CLEARANCE MODAL (APPROVE / RETURN / REJECT)
+       ========================================================================= -->
+  <div class="modal-backdrop" id="approvalDecisionModal" style="display:none;">
+    <div class="portal-modal" style="max-width: 750px; width: 95%;">
+      <div class="modal-header">
+        <h3><i class="fa-solid fa-stamp text-primary"></i> <span id="approvalDecisionModalTitle">Executive Decision Clearance Desk</span></h3>
+        <button class="modal-close-x" onclick="portalApp.closeModal('approvalDecisionModal')" title="Close" aria-label="Close">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <form id="approvalDecisionForm" onsubmit="portalApp.submitApprovalDecision(event)">
+        <div class="modal-body" id="approvalDecisionModalBody">
+          <!-- Populated dynamically via portalApp.openApprovalDecisionModal -->
+        </div>
+        <div class="modal-footer" style="display:flex; justify-content:space-between; flex-wrap:wrap; gap:0.5rem;">
+          <button type="button" class="btn btn-secondary" onclick="portalApp.closeModal('approvalDecisionModal')">Cancel</button>
+          <div style="display:flex; gap:0.5rem;">
+            <button type="button" class="btn btn-danger" onclick="portalApp.executeQuickDecision('Rejected')">
+              <i class="fa-solid fa-ban mr-1"></i> Reject
+            </button>
+            <button type="button" class="btn btn-warning" onclick="portalApp.executeQuickDecision('Returned')">
+              <i class="fa-solid fa-rotate-left mr-1"></i> Return for Clarification
+            </button>
+            <button type="button" class="btn btn-success" onclick="portalApp.executeQuickDecision('Approved')">
+              <i class="fa-solid fa-check mr-1"></i> Approve &amp; Clear
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       MODAL 2: ASSIGN TASK / WORKFLOW ROUTING RULE MODAL
+       ========================================================================= -->
+  <div class="modal-backdrop" id="newTaskOrWorkflowModal" style="display:none;">
+    <div class="portal-modal" style="max-width: 650px; width: 95%;">
+      <div class="modal-header">
+        <h3><i class="fa-solid fa-thumbtack text-primary"></i> <span id="newTaskModalTitle">Assign Executive Institutional Task</span></h3>
+        <button class="modal-close-x" onclick="portalApp.closeModal('newTaskOrWorkflowModal')" title="Close" aria-label="Close">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <form id="newTaskAssignmentForm" onsubmit="portalApp.handleNewTaskAssignmentSubmit(event)">
+        <div class="modal-body">
+          <div style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 8px; padding: 0.85rem 1rem; margin-bottom: 1.15rem; font-size: 0.82rem; color: #475569; line-height: 1.45;">
+            <div style="font-weight: 700; color: #1e293b; margin-bottom: 2px;">
+              <i class="fa-solid fa-shield-halved text-primary mr-1"></i> Executive Direct Delegation Authority
+            </div>
+            Assign actionable milestones to faculty or administrative in-charges. Tasks notify the assignee's portal immediately and track SLA completion.
+          </div>
+          <div class="row g-2">
+            <div class="col-12 mb-2">
+              <label class="form-label text-sm font-bold">Task Title / Milestone Name <span class="text-danger">*</span></label>
+              <input type="text" class="form-control" id="newTaskTitleInput" placeholder="e.g. Conduct SSC Pre-Board Hall Seating Verification" required>
+            </div>
+            <div class="col-md-6 mb-2">
+              <label class="form-label text-sm font-bold">Target Department <span class="text-danger">*</span></label>
+              <select class="form-control" id="newTaskDeptSelect" required>
+                <option value="Academic & Examinations">Academic &amp; Examinations</option>
+                <option value="Discipline & Welfare">Discipline &amp; Student Welfare</option>
+                <option value="Accounts & Finance">Accounts &amp; Fee Collection</option>
+                <option value="Transport Logistics">Transport &amp; Campus Logistics</option>
+                <option value="IT & Science Labs">IT &amp; Science Laboratories</option>
+                <option value="Administration Desk">Administrative &amp; General Office</option>
+              </select>
+            </div>
+            <div class="col-md-6 mb-2">
+              <label class="form-label text-sm font-bold">Assigned Staff In-Charge <span class="text-danger">*</span></label>
+              <select class="form-control" id="newTaskAssigneeSelect" required>
+                <option value="Sri Navva Anand (Vice Principal)">Sri Navva Anand (Vice Principal)</option>
+                <option value="Sri Ch. Ramesh (Senior Lecturer)">Sri Ch. Ramesh (Senior Lecturer)</option>
+                <option value="Smt. K. Anuradha (English Faculty)">Smt. K. Anuradha (English Faculty)</option>
+                <option value="Sri S. Ramu (Accounts Desk)">Sri S. Ramu (Accounts Desk)</option>
+                <option value="Sri P. Appa Rao (Store In-Charge)">Sri P. Appa Rao (Store In-Charge)</option>
+                <option value="Sri G. Venkatesh (Operations Tech)">Sri G. Venkatesh (Operations Tech)</option>
+              </select>
+            </div>
+            <div class="col-md-6 mb-2">
+              <label class="form-label text-sm font-bold">Priority Level <span class="text-danger">*</span></label>
+              <select class="form-control" id="newTaskPrioritySelect" required>
+                <option value="Critical">Critical (Immediate Milestone)</option>
+                <option value="High" selected>High Priority</option>
+                <option value="Medium">Medium Priority</option>
+                <option value="Low">Low / Standard</option>
+              </select>
+            </div>
+            <div class="col-md-6 mb-2">
+              <label class="form-label text-sm font-bold">Deadline Date <span class="text-danger">*</span></label>
+              <input type="date" class="form-control" id="newTaskDeadlineInput" value="2026-11-05" required>
+            </div>
+            <div class="col-12 mb-2">
+              <label class="form-label text-sm font-bold">Detailed Instructions &amp; Deliverables <span class="text-danger">*</span></label>
+              <textarea class="form-control" id="newTaskDescInput" rows="2" placeholder="Specify deliverables, verification protocol, and reporting expectations..." required></textarea>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="portalApp.closeModal('newTaskOrWorkflowModal')">Cancel</button>
+          <button type="submit" class="btn btn-primary" style="font-weight:700;">
+            <i class="fa-solid fa-paper-plane mr-1"></i> Dispath &amp; Assign Task
           </button>
         </div>
       </form>
