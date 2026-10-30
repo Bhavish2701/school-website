@@ -7016,59 +7016,275 @@
                Displays: Teacher, subject, planned topics, completion status and review comments
                ========================================================================= -->
           <div class="academics-subview" id="subview-academics-plans" style="display: none;">
-            <div class="card p-3 mb-3">
-              <div class="card-header-bar mb-3">
-                <div>
-                  <h3 class="card-title" style="margin:0;"><i class="fa-solid fa-chalkboard text-primary mr-2"></i>
-                    Faculty Lesson Plan Review &amp; Endorsement</h3>
-                  <p class="text-muted text-sm mt-1" style="margin:0;">Weekly lesson plan audits, topic coverage,
-                    teaching methodologies, and leadership review comments.</p>
+            
+            <!-- Page Header & Primary Actions -->
+            <div class="d-flex flex-wrap justify-content-between align-items-center mb-3 pb-3 border-bottom gap-2">
+              <div>
+                <div class="d-flex align-items-center gap-2">
+                  <h4 class="fw-bold mb-0 text-primary"><i class="bi bi-journal-bookmark-fill me-2"></i>Lesson Plan Review &amp; Curriculum Governance</h4>
+                  <span class="badge bg-primary-subtle text-primary border border-primary-subtle rounded-pill px-3 py-1">AY 2026–2027</span>
+                  <span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill px-3 py-1"><i class="bi bi-check-circle-fill me-1"></i>Term 2 Active</span>
                 </div>
-                <span class="portal-badge badge-success">Approved for Week 38</span>
+                <p class="text-muted small mb-0 mt-1">
+                  Authoritative teacher lesson plan submission desk, HOD/Principal pedagogical review, topic completion tracking, and syllabus delivery oversight.
+                </p>
               </div>
-
-              <!-- Filter Toolbar -->
-              <div class="transfers-toolbar mb-3">
-                <div class="tc-toolbar-left"
-                  style="flex:1; display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
-                  <div class="tc-search-wrap" style="min-width:240px; flex:1;">
-                    <i class="fa-solid fa-magnifying-glass search-icon"></i>
-                    <input type="text" id="plansSearchInput" class="tc-search-input"
-                      placeholder="Search by teacher, subject, topics..." oninput="portalApp.filterLessonPlans()">
-                  </div>
-                  <div class="filter-group" style="margin-bottom:0;">
-                    <select id="plansStatusFilter" class="tc-filter-select" onchange="portalApp.filterLessonPlans()">
-                      <option value="">All Review Statuses</option>
-                      <option value="Approved">Verified &amp; Approved</option>
-                      <option value="Under Review">Under Review</option>
-                    </select>
-                  </div>
-                </div>
-                <div class="tc-toolbar-right">
-                  <span class="tc-count-pill" id="plansCountPill">Showing Lesson Plans</span>
-                </div>
-              </div>
-
-              <div class="table-container">
-                <table class="staff-roster-table" id="lessonPlansMasterTable">
-                  <thead>
-                    <tr>
-                      <th style="min-width:210px;">Teacher</th>
-                      <th style="min-width:170px;">Subject</th>
-                      <th style="min-width:260px;">Planned Topics</th>
-                      <th style="min-width:170px;">Completion Status</th>
-                      <th style="min-width:280px;">Review Comments</th>
-                      <th style="text-align:center; min-width:120px;">Action</th>
-                    </tr>
-                  </thead>
-                  <tbody id="lessonPlansTableBody">
-                    <!-- Populated via portal.js -->
-                  </tbody>
-                </table>
+              <div class="d-flex flex-wrap gap-2 align-items-center">
+                <button class="btn btn-primary btn-sm px-3 shadow-sm d-flex align-items-center gap-1" onclick="portalApp.openCreateLessonPlanModal()">
+                  <i class="bi bi-plus-circle"></i> + Create Lesson Plan
+                </button>
+                <button class="btn btn-outline-info btn-sm px-3 shadow-sm d-flex align-items-center gap-1" onclick="portalApp.openSyllabusProgressReportModal()">
+                  <i class="bi bi-bar-chart-line"></i> View Syllabus Progress
+                </button>
+                <button class="btn btn-outline-secondary btn-sm px-3 shadow-sm d-flex align-items-center gap-1" onclick="portalApp.exportLessonPlansCSV()">
+                  <i class="bi bi-download"></i> Export Register
+                </button>
               </div>
             </div>
-          </div>
 
+            <!-- Summary KPI Metric Cards (5 Cards) -->
+            <div class="row g-3 mb-3">
+              <div class="col-xl-2 col-md-4 col-sm-6">
+                <div class="card border-0 shadow-sm rounded-3 h-100 border-start border-4 border-primary">
+                  <div class="card-body p-3">
+                    <div class="text-muted small fw-semibold text-uppercase">Total Lesson Plans</div>
+                    <div class="d-flex align-items-center justify-content-between mt-1">
+                      <h3 class="fw-bold mb-0 text-primary" id="kpiLpTotal">64</h3>
+                      <div class="rounded-circle bg-primary-subtle p-2 text-primary"><i class="bi bi-journal-text fs-5"></i></div>
+                    </div>
+                    <div class="small text-muted mt-2">Across All Wings</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-xl-2 col-md-4 col-sm-6">
+                <div class="card border-0 shadow-sm rounded-3 h-100 border-start border-4 border-success">
+                  <div class="card-body p-3">
+                    <div class="text-muted small fw-semibold text-uppercase">Approved Plans</div>
+                    <div class="d-flex align-items-center justify-content-between mt-1">
+                      <h3 class="fw-bold mb-0 text-success" id="kpiLpApproved">48</h3>
+                      <div class="rounded-circle bg-success-subtle p-2 text-success"><i class="bi bi-check-circle fs-5"></i></div>
+                    </div>
+                    <div class="small text-muted mt-2"><span class="badge bg-success-subtle text-success">75% Approved</span></div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-xl-2 col-md-4 col-sm-6">
+                <div class="card border-0 shadow-sm rounded-3 h-100 border-start border-4 border-warning">
+                  <div class="card-body p-3">
+                    <div class="text-muted small fw-semibold text-uppercase">Pending Review</div>
+                    <div class="d-flex align-items-center justify-content-between mt-1">
+                      <h3 class="fw-bold mb-0 text-warning" id="kpiLpPending">10</h3>
+                      <div class="rounded-circle bg-warning-subtle p-2 text-warning"><i class="bi bi-hourglass-split fs-5"></i></div>
+                    </div>
+                    <div class="small text-muted mt-2">Awaiting HOD / VP</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-xl-3 col-md-6 col-sm-6">
+                <div class="card border-0 shadow-sm rounded-3 h-100 border-start border-4 border-danger">
+                  <div class="card-body p-3">
+                    <div class="text-muted small fw-semibold text-uppercase">Returned for Revision</div>
+                    <div class="d-flex align-items-center justify-content-between mt-1">
+                      <h3 class="fw-bold mb-0 text-danger" id="kpiLpReturned">6</h3>
+                      <div class="rounded-circle bg-danger-subtle p-2 text-danger"><i class="bi bi-arrow-repeat fs-5"></i></div>
+                    </div>
+                    <div class="small text-muted mt-2">Requires Correction</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-xl-3 col-md-6 col-sm-12">
+                <div class="card border-0 shadow-sm rounded-3 h-100 border-start border-4 border-info">
+                  <div class="card-body p-3">
+                    <div class="text-muted small fw-semibold text-uppercase">Topics Delivered</div>
+                    <div class="d-flex align-items-center justify-content-between mt-1">
+                      <h4 class="fw-bold mb-0 text-info" id="kpiLpCompletedTopics">52 / 64 Topics</h4>
+                      <div class="rounded-circle bg-info-subtle p-2 text-info"><i class="bi bi-trophy fs-5"></i></div>
+                    </div>
+                    <div class="small text-muted mt-2"><strong>81%</strong> Syllabus Progress Target</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- View Selector Navigation Tabs -->
+            <div class="card border-0 shadow-sm rounded-3 mb-3">
+              <div class="card-body p-2 d-flex flex-wrap justify-content-between align-items-center gap-2">
+                <div class="lesson-plans-nav btn-group" role="group">
+                  <button type="button" class="btn btn-outline-primary lesson-plans-btn active" id="btnLpAdminView" onclick="portalApp.switchLessonPlansView('admin')">
+                    <i class="bi bi-person-check me-1"></i> Administration Review Desk
+                  </button>
+                  <button type="button" class="btn btn-outline-primary lesson-plans-btn" id="btnLpTeacherView" onclick="portalApp.switchLessonPlansView('teacher')">
+                    <i class="bi bi-mortarboard me-1"></i> Teacher Submission Desk
+                  </button>
+                  <button type="button" class="btn btn-outline-primary lesson-plans-btn" id="btnLpSyllabusView" onclick="portalApp.switchLessonPlansView('syllabus')">
+                    <i class="bi bi-bar-chart-steps me-1"></i> Syllabus Progress &amp; Delivery Report
+                  </button>
+                </div>
+                <div class="d-flex align-items-center gap-2">
+                  <span class="text-muted small d-none d-md-inline"><i class="bi bi-info-circle me-1"></i>Review Framework:</span>
+                  <span class="badge bg-light text-dark border fw-medium px-2 py-1">AP Board Pedagogical Standards</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- VIEW 1: ADMINISTRATION REVIEW DESK -->
+            <div id="lpAdminViewContainer" class="lp-view-section">
+              <div class="card border-0 shadow-sm rounded-3 mb-4">
+                <div class="card-header bg-white border-bottom py-3">
+                  <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+                    <div>
+                      <h5 class="fw-bold mb-0 text-dark"><i class="bi bi-list-check me-2 text-primary"></i>Master Lesson Plan Review &amp; Approval Queue</h5>
+                      <span class="text-muted small">Evaluate teacher lesson objectives, teaching methods, completion status, and log official feedback</span>
+                    </div>
+                    <div class="d-flex gap-2">
+                      <button class="btn btn-primary btn-sm px-3 shadow-sm" onclick="portalApp.openCreateLessonPlanModal()">
+                        <i class="bi bi-plus-lg me-1"></i> Create Lesson Plan
+                      </button>
+                    </div>
+                  </div>
+
+                  <!-- Filter Controls -->
+                  <div class="row g-2 align-items-center">
+                    <div class="col-md-3">
+                      <div class="input-group input-group-sm">
+                        <span class="input-group-text bg-light border-end-0"><i class="bi bi-search"></i></span>
+                        <input type="text" class="form-control border-start-0" id="lpSearchInput" placeholder="Search teacher, topic, chapter..." onkeyup="portalApp.filterLessonPlans()">
+                      </div>
+                    </div>
+                    <div class="col-md-2">
+                      <select class="form-select form-select-sm" id="lpClassFilter" onchange="portalApp.filterLessonPlans()">
+                        <option value="">All Classes</option>
+                        <option value="Class X-A">Class X-A</option>
+                        <option value="Class X-B">Class X-B</option>
+                        <option value="Class IX-A">Class IX-A</option>
+                        <option value="Class VIII-A">Class VIII-A</option>
+                        <option value="Class VII-A">Class VII-A</option>
+                        <option value="Class VI-A">Class VI-A</option>
+                      </select>
+                    </div>
+                    <div class="col-md-2">
+                      <select class="form-select form-select-sm" id="lpSubjectFilter" onchange="portalApp.filterLessonPlans()">
+                        <option value="">All Subjects</option>
+                        <option value="Mathematics">Mathematics</option>
+                        <option value="Physical Science">Physical Science</option>
+                        <option value="Biological Science">Biological Science</option>
+                        <option value="Social Studies">Social Studies</option>
+                        <option value="English">English</option>
+                        <option value="Telugu">Telugu</option>
+                        <option value="Computer Science">Computer Science</option>
+                      </select>
+                    </div>
+                    <div class="col-md-2">
+                      <select class="form-select form-select-sm" id="lpSubmissionStatusFilter" onchange="portalApp.filterLessonPlans()">
+                        <option value="">All Submission Statuses</option>
+                        <option value="Submitted for Review">Submitted for Review</option>
+                        <option value="Approved">Approved</option>
+                        <option value="Returned for Correction">Returned for Correction</option>
+                        <option value="Draft">Draft</option>
+                      </select>
+                    </div>
+                    <div class="col-md-2">
+                      <select class="form-select form-select-sm" id="lpCompletionStatusFilter" onchange="portalApp.filterLessonPlans()">
+                        <option value="">All Completion Statuses</option>
+                        <option value="Completed">Completed</option>
+                        <option value="In Progress">In Progress</option>
+                        <option value="Pending">Pending</option>
+                        <option value="Delayed">Delayed</option>
+                      </select>
+                    </div>
+                    <div class="col-md-1 text-end">
+                      <button class="btn btn-outline-secondary btn-sm w-100" onclick="portalApp.resetLessonPlansFilters()" title="Reset Filters">
+                        <i class="bi bi-arrow-counterclockwise"></i> Reset
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="table-responsive">
+                  <table class="table table-hover align-middle mb-0" id="lessonPlansTable">
+                    <thead class="table-light text-uppercase small text-muted">
+                      <tr>
+                        <th style="min-width: 170px;">Teacher</th>
+                        <th style="min-width: 110px;">Class</th>
+                        <th style="min-width: 140px;">Subject</th>
+                        <th style="min-width: 220px;">Planned Topics &amp; Chapter</th>
+                        <th style="min-width: 150px;">Submission Status</th>
+                        <th style="min-width: 150px;">Completion Progress</th>
+                        <th style="min-width: 220px;">Review Comments</th>
+                        <th class="text-end" style="min-width: 150px;">Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody id="lessonPlansTableBody">
+                      <!-- Populated dynamically via portal.js -->
+                    </tbody>
+                  </table>
+                </div>
+
+                <div class="card-footer bg-white border-top py-2 px-3 d-flex justify-content-between align-items-center text-muted small">
+                  <div id="lessonPlansFooterCount">Showing 0 lesson plans</div>
+                  <div>Sri Vidya E.M. High School &bull; Academic Pedagogical Oversight</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- VIEW 2: TEACHER SUBMISSION DESK -->
+            <div id="lpTeacherViewContainer" class="lp-view-section" style="display: none;">
+              <div class="card border-0 shadow-sm rounded-3 mb-4">
+                <div class="card-header bg-white border-bottom py-3">
+                  <div class="d-flex flex-wrap justify-content-between align-items-center gap-3">
+                    <div class="d-flex align-items-center gap-2">
+                      <label class="small fw-bold text-muted mb-0">Select Teacher:</label>
+                      <select id="lpTeacherFilterSelect" class="form-select form-select-sm" style="min-width: 240px;" onchange="portalApp.renderTeacherSubmissionDesk(this.value)">
+                        <option value="Sri Navva Anand" selected>Sri Navva Anand (Mathematics)</option>
+                        <option value="Sri K. Appa Rao">Sri K. Appa Rao (Physical Science)</option>
+                        <option value="Smt. M. Saraswathi">Smt. M. Saraswathi (English)</option>
+                        <option value="Smt. P. Santhoshi">Smt. P. Santhoshi (Telugu)</option>
+                        <option value="Sri G. Prasad">Sri G. Prasad (Social Studies)</option>
+                        <option value="Sri D. Suresh">Sri D. Suresh (Computer Science)</option>
+                        <option value="Smt. K. Vani">Smt. K. Vani (Biological Science)</option>
+                      </select>
+                    </div>
+                    <div>
+                      <button class="btn btn-primary btn-sm px-3 shadow-sm" onclick="portalApp.openCreateLessonPlanModal()">
+                        <i class="bi bi-file-earmark-plus me-1"></i> + New Lesson Plan
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="card-body p-3" id="lpTeacherDeskContent">
+                  <!-- Pedagogical cards rendered dynamically -->
+                </div>
+              </div>
+            </div>
+
+            <!-- VIEW 3: SYLLABUS PROGRESS & DELIVERY REPORT -->
+            <div id="lpSyllabusViewContainer" class="lp-view-section" style="display: none;">
+              <div class="card border-0 shadow-sm rounded-3 mb-4">
+                <div class="card-header bg-white border-bottom py-3 d-flex flex-wrap justify-content-between align-items-center gap-2">
+                  <div>
+                    <h5 class="fw-bold mb-0 text-dark"><i class="bi bi-bar-chart-line me-2 text-primary"></i>Syllabus Delivery Progress Report</h5>
+                    <p class="text-muted small mb-0 mt-1">Comparison of planned learning units against completed topics and board academic targets.</p>
+                  </div>
+                  <button class="btn btn-outline-secondary btn-sm" onclick="portalApp.openSyllabusProgressReportModal()">
+                    <i class="bi bi-arrows-fullscreen me-1"></i> Detailed Breakdown
+                  </button>
+                </div>
+
+                <div class="card-body p-3" id="lpSyllabusReportContent">
+                  <!-- Syllabus delivery progress bars rendered dynamically -->
+                </div>
+              </div>
+            </div>
+
+          </div>
+          <!-- =========================================================================
+               END OF SUBVIEW 5: LESSON PLAN REVIEW
+               ========================================================================= -->
           <!-- =========================================================================
                SUBVIEW 6: EXAMS SCHEDULE
                Displays: Examination name, class, subject, date, time, duration and room
@@ -29410,6 +29626,242 @@ Class X-A,Monday,2,09:35 AM - 10:20 AM,Physical Science,Sri Navva Anand,Room 201
 </div>
 <!-- =========================================================================
      END MASTER TIMETABLE MODALS
+     ========================================================================= -->
+
+
+
+<!-- =========================================================================
+     LESSON PLAN REVIEW MODALS (4 Statutory Modals)
+     ========================================================================= -->
+
+<!-- Modal 1: Create / Edit Lesson Plan -->
+<div class="modal fade" id="createLessonPlanModal" tabindex="-1" aria-labelledby="createLessonPlanModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content shadow-lg border-0">
+      <div class="modal-header bg-primary text-white py-3">
+        <h5 class="modal-title fw-bold" id="createLessonPlanModalLabel"><i class="bi bi-journal-plus me-2"></i>Create / Edit Lesson Plan</h5>
+        <button type="button" class="btn-close btn-close-white" onclick="portalApp.hideLessonPlanModal('createLessonPlanModal')" aria-label="Close"></button>
+      </div>
+      <form id="formLessonPlan" onsubmit="portalApp.handleSaveLessonPlanSubmit(event, 'Save')">
+        <input type="hidden" id="lpPlanId" value="">
+        <div class="modal-body p-4">
+          <div class="alert alert-light border small text-muted mb-3 d-flex align-items-center gap-2">
+            <i class="bi bi-info-circle-fill text-primary fs-5"></i>
+            <div>All lesson plans require explicit learning objectives, interactive teaching methods, and curriculum target mapping before statutory HOD/Principal review.</div>
+          </div>
+
+          <div class="row g-3">
+            <div class="col-md-4">
+              <label class="form-label small fw-bold">Class &amp; Section <span class="text-danger">*</span></label>
+              <select class="form-select form-select-sm" id="lpClass" required>
+                <option value="Class X-A">Class X-A</option>
+                <option value="Class X-B">Class X-B</option>
+                <option value="Class IX-A">Class IX-A</option>
+                <option value="Class VIII-A">Class VIII-A</option>
+                <option value="Class VII-A">Class VII-A</option>
+                <option value="Class VI-A">Class VI-A</option>
+              </select>
+            </div>
+
+            <div class="col-md-4">
+              <label class="form-label small fw-bold">Subject <span class="text-danger">*</span></label>
+              <select class="form-select form-select-sm" id="lpSubject" required>
+                <option value="Mathematics">Mathematics</option>
+                <option value="Physical Science">Physical Science</option>
+                <option value="Biological Science">Biological Science</option>
+                <option value="Social Studies">Social Studies</option>
+                <option value="English">English</option>
+                <option value="Telugu">Telugu</option>
+                <option value="Hindi">Hindi</option>
+                <option value="Computer Science">Computer Science</option>
+              </select>
+            </div>
+
+            <div class="col-md-4">
+              <label class="form-label small fw-bold">Assigned Teacher <span class="text-danger">*</span></label>
+              <select class="form-select form-select-sm" id="lpTeacher" required>
+                <option value="Sri Navva Anand">Sri Navva Anand (Mathematics)</option>
+                <option value="Sri K. Appa Rao">Sri K. Appa Rao (Physical Science)</option>
+                <option value="Smt. M. Saraswathi">Smt. M. Saraswathi (English)</option>
+                <option value="Smt. P. Santhoshi">Smt. P. Santhoshi (Telugu)</option>
+                <option value="Sri G. Prasad">Sri G. Prasad (Social Studies)</option>
+                <option value="Sri D. Suresh">Sri D. Suresh (Computer Science)</option>
+                <option value="Smt. K. Vani">Smt. K. Vani (Biological Science)</option>
+                <option value="Smt. T. Radha">Smt. T. Radha (Hindi)</option>
+              </select>
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label small fw-bold">Chapter / Unit <span class="text-danger">*</span></label>
+              <input type="text" class="form-control form-control-sm" id="lpChapter" placeholder="e.g., Chapter 3: Quadratic Equations" required>
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label small fw-bold">Specific Topic <span class="text-danger">*</span></label>
+              <input type="text" class="form-control form-control-sm" id="lpTopic" placeholder="e.g., Derivation of Quadratic Formula &amp; Nature of Roots" required>
+            </div>
+
+            <div class="col-12">
+              <label class="form-label small fw-bold">Learning Objectives <span class="text-danger">*</span></label>
+              <textarea class="form-control form-control-sm" id="lpObjectives" rows="3" placeholder="Specify measurable learning outcomes (e.g., Students will be able to derive the quadratic formula using completing the square and evaluate the discriminant)..." required></textarea>
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label small fw-bold">Teaching Method <span class="text-danger">*</span></label>
+              <select class="form-select form-select-sm" id="lpMethod" required>
+                <option value="Interactive Board Work &amp; Practice" selected>Interactive Board Work &amp; Practice</option>
+                <option value="Inquiry-Based Lab Activity">Inquiry-Based Lab Activity</option>
+                <option value="Direct Instruction &amp; Step-by-Step Modelling">Direct Instruction &amp; Step-by-Step Modelling</option>
+                <option value="Flipped Classroom &amp; Multimedia Discussion">Flipped Classroom &amp; Multimedia Discussion</option>
+                <option value="Group Problem Solving &amp; Peer Learning">Group Problem Solving &amp; Peer Learning</option>
+              </select>
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label small fw-bold">Required Materials / Teaching Aids</label>
+              <input type="text" class="form-control form-control-sm" id="lpMaterials" placeholder="e.g., Smart Interactive Board, Graph Sheets, Algebra Tiles, NCERT Exemplar">
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label small fw-bold">Planned Instructional Date <span class="text-danger">*</span></label>
+              <input type="date" class="form-control form-control-sm" id="lpPlannedDate" required>
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label small fw-bold">Topic Completion Status <span class="text-danger">*</span></label>
+              <select class="form-select form-select-sm" id="lpCompletionStatus" required>
+                <option value="Pending">Pending (Not Started)</option>
+                <option value="In Progress" selected>In Progress</option>
+                <option value="Completed">Completed</option>
+                <option value="Delayed">Delayed / Rescheduled</option>
+              </select>
+            </div>
+
+            <div class="col-12">
+              <label class="form-label small fw-bold">Teacher Reflections &amp; Delivery Remarks</label>
+              <textarea class="form-control form-control-sm" id="lpTeacherRemarks" rows="2" placeholder="Record classroom engagement notes, student comprehension difficulties, or homework assigned..."></textarea>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer bg-light py-2 d-flex justify-content-between">
+          <button type="button" class="btn btn-secondary btn-sm" onclick="portalApp.hideLessonPlanModal('createLessonPlanModal')">Cancel</button>
+          <div class="d-flex gap-2">
+            <button type="button" class="btn btn-outline-primary btn-sm px-3 shadow-sm" onclick="portalApp.handleSaveLessonPlanSubmit(event, 'Draft')"><i class="bi bi-save me-1"></i> Save as Draft</button>
+            <button type="button" class="btn btn-primary btn-sm px-4 shadow-sm" onclick="portalApp.handleSaveLessonPlanSubmit(event, 'Submit')"><i class="bi bi-send-check me-1"></i> Submit for Review</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Modal 2: Review & Approve Lesson Plan -->
+<div class="modal fade" id="reviewLessonPlanModal" tabindex="-1" aria-labelledby="reviewLessonPlanModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content shadow-lg border-0">
+      <div class="modal-header bg-primary text-white py-3">
+        <h5 class="modal-title fw-bold" id="reviewLessonPlanModalLabel"><i class="bi bi-person-check-fill me-2"></i>Administration Lesson Plan Review</h5>
+        <button type="button" class="btn-close btn-close-white" onclick="portalApp.hideLessonPlanModal('reviewLessonPlanModal')" aria-label="Close"></button>
+      </div>
+      <div class="modal-body p-4">
+        <input type="hidden" id="reviewPlanId" value="">
+        
+        <div class="card border rounded-3 p-3 bg-light mb-3">
+          <div class="row g-2 small">
+            <div class="col-md-4">
+              <span class="text-muted">Faculty Member:</span>
+              <div class="fw-bold text-dark" id="revPlanTeacher">Sri Navva Anand</div>
+            </div>
+            <div class="col-md-4">
+              <span class="text-muted">Class &amp; Subject:</span>
+              <div class="fw-bold text-primary" id="revPlanClassSubject">Class X-A &bull; Mathematics</div>
+            </div>
+            <div class="col-md-4">
+              <span class="text-muted">Planned Date:</span>
+              <div class="fw-bold text-dark" id="revPlanDate">Nov 04, 2026</div>
+            </div>
+            <div class="col-12 mt-2 pt-2 border-top">
+              <span class="text-muted">Chapter &amp; Topic:</span>
+              <div class="fw-bold fs-6 text-dark" id="revPlanChapterTopic">Chapter 3: Quadratic Equations</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label small fw-bold text-muted">Stated Learning Objectives</label>
+          <div class="objective-box" id="revPlanObjectivesDisplay">
+            Students will be able to derive the quadratic formula...
+          </div>
+        </div>
+
+        <div class="row g-2 mb-3 small">
+          <div class="col-md-6">
+            <span class="text-muted">Pedagogical Method:</span>
+            <div class="fw-semibold text-dark" id="revPlanMethod">Interactive Board Work &amp; Practice</div>
+          </div>
+          <div class="col-md-6">
+            <span class="text-muted">Teaching Materials:</span>
+            <div class="fw-semibold text-dark" id="revPlanMaterials">Smart Board, NCERT Exemplar</div>
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label small fw-bold">Administration Review Feedback &amp; Directives <span class="text-danger">*</span></label>
+          <textarea class="form-control form-control-sm" id="revComments" rows="3" placeholder="Provide constructive pedagogical feedback, recommend formative checks, or note corrections needed before approval..." required></textarea>
+        </div>
+      </div>
+      <div class="modal-footer bg-light py-2 d-flex justify-content-between">
+        <button type="button" class="btn btn-outline-danger btn-sm px-3" onclick="portalApp.handleApproveLessonPlan('Return')">
+          <i class="bi bi-arrow-return-left me-1"></i> Return for Correction
+        </button>
+        <div>
+          <button type="button" class="btn btn-secondary btn-sm me-2" onclick="portalApp.hideLessonPlanModal('reviewLessonPlanModal')">Cancel</button>
+          <button type="button" class="btn btn-success btn-sm px-4 shadow-sm" onclick="portalApp.handleApproveLessonPlan('Approve')">
+            <i class="bi bi-check2-circle me-1"></i> Approve Lesson Plan
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal 3: Full Pedagogical Dossier Modal -->
+<div class="modal fade" id="lessonPlanDetailModal" tabindex="-1" aria-labelledby="lessonPlanDetailModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content shadow-lg border-0">
+      <div class="modal-header bg-dark text-white py-3">
+        <h5 class="modal-title fw-bold" id="lessonPlanDetailModalLabel"><i class="bi bi-journal-richtext me-2"></i>Lesson Plan Pedagogical Dossier</h5>
+        <button type="button" class="btn-close btn-close-white" onclick="portalApp.hideLessonPlanModal('lessonPlanDetailModal')" aria-label="Close"></button>
+      </div>
+      <div class="modal-body p-4" id="lessonPlanDetailBody">
+        <!-- Rendered dynamically -->
+      </div>
+      <div class="modal-footer bg-light py-2">
+        <button type="button" class="btn btn-secondary btn-sm" onclick="portalApp.hideLessonPlanModal('lessonPlanDetailModal')">Close Dossier</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal 4: Detailed Syllabus Progress Report Modal -->
+<div class="modal fade" id="syllabusProgressReportModal" tabindex="-1" aria-labelledby="syllabusProgressReportModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content shadow-lg border-0">
+      <div class="modal-header bg-info text-white py-3">
+        <h5 class="modal-title fw-bold" id="syllabusProgressReportModalLabel"><i class="bi bi-bar-chart-steps me-2"></i>Curriculum Delivery &amp; Syllabus Progress Report</h5>
+        <button type="button" class="btn-close btn-close-white" onclick="portalApp.hideLessonPlanModal('syllabusProgressReportModal')" aria-label="Close"></button>
+      </div>
+      <div class="modal-body p-4" id="syllabusProgressModalBody">
+        <!-- Rendered dynamically -->
+      </div>
+      <div class="modal-footer bg-light py-2">
+        <button type="button" class="btn btn-secondary btn-sm" onclick="portalApp.hideLessonPlanModal('syllabusProgressReportModal')">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- =========================================================================
+     END LESSON PLAN REVIEW MODALS
      ========================================================================= -->
 
 </body>

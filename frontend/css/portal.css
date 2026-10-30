@@ -20929,3 +20929,135 @@ body.dark-mode .cal-pill-meeting { background: rgba(217, 119, 6, 0.25); color: #
   background-color: #334155;
   color: #e2e8f0;
 }
+
+
+
+/* ==========================================================================
+   LESSON PLAN REVIEW & CURRICULUM DELIVERY GOVERNANCE STYLES
+   ========================================================================== */
+
+.lesson-plans-nav {
+  display: inline-flex;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+.lesson-plans-btn {
+  font-size: 0.82rem;
+  font-weight: 600;
+  padding: 0.45rem 1rem;
+  border: 1px solid #cbd5e1;
+  background-color: #ffffff;
+  color: #475569;
+  transition: all 0.15s ease-in-out;
+}
+
+.lesson-plans-btn:hover {
+  background-color: #f1f5f9;
+  color: #1e293b;
+}
+
+.lesson-plans-btn.active {
+  background-color: #2563eb !important;
+  color: #ffffff !important;
+  border-color: #2563eb !important;
+}
+
+/* Pedagogical Cards for Teacher Submission Desk */
+.pedagogy-card {
+  background-color: #ffffff;
+  border-radius: 10px;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  overflow: hidden;
+}
+
+.pedagogy-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+.pedagogy-card-header {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid #f1f5f9;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.pedagogy-card-body {
+  padding: 1rem;
+}
+
+.objective-box {
+  background-color: #f8fafc;
+  border-left: 3px solid #3b82f6;
+  border-radius: 0 6px 6px 0;
+  padding: 0.6rem 0.85rem;
+  font-size: 0.8rem;
+  color: #334155;
+  margin: 0.5rem 0;
+}
+
+.review-feedback-box {
+  background-color: #fefce8;
+  border-left: 3px solid #eab308;
+  border-radius: 0 6px 6px 0;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.78rem;
+  color: #713f12;
+  margin-top: 0.5rem;
+}
+
+/* Syllabus Coverage Comparison Meter */
+.syllabus-meter-row {
+  background-color: #ffffff;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+  padding: 1rem;
+  margin-bottom: 0.75rem;
+  transition: all 0.15s ease;
+}
+
+.syllabus-meter-row:hover {
+  border-color: #94a3b8;
+  background-color: #fafbfc;
+}
+
+/* Dark mode overrides */
+[data-theme="dark"] .lesson-plans-btn {
+  background-color: #1e293b;
+  border-color: #334155;
+  color: #cbd5e1;
+}
+
+[data-theme="dark"] .lesson-plans-btn.active {
+  background-color: #3b82f6 !important;
+  color: #ffffff !important;
+}
+
+[data-theme="dark"] .pedagogy-card {
+  background-color: #1e293b;
+  border-color: #334155;
+}
+
+[data-theme="dark"] .pedagogy-card-header {
+  border-bottom-color: #334155;
+}
+
+[data-theme="dark"] .objective-box {
+  background-color: #0f172a;
+  color: #cbd5e1;
+}
+
+[data-theme="dark"] .review-feedback-box {
+  background-color: #422006;
+  color: #fde047;
+}
+
+[data-theme="dark"] .syllabus-meter-row {
+  background-color: #1e293b;
+  border-color: #334155;
+}

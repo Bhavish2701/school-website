@@ -41315,56 +41315,936 @@ const classData = TIMETABLE_CLASS_DATA[currentTimetableClass] || TIMETABLE_CLASS
     window.print();
   }
 
-  // Submenu 5: Lesson Plan Review
+    // =========================================================================
+  // SUBMENU 5: AUTHORITATIVE LESSON PLAN REVIEW & CURRICULUM GOVERNANCE
+  // =========================================================================
+
+  const INITIAL_LESSON_PLANS = [
+    {
+      id: 'LP-2026-001',
+      teacher: 'Sri Navva Anand',
+      empId: 'T-1021',
+      department: 'Mathematics',
+      className: 'Class X-A',
+      subject: 'Mathematics',
+      chapter: 'Chapter 3: Quadratic Equations',
+      topic: 'Derivation of Quadratic Formula & Nature of Roots',
+      objectives: 'Students will derive the quadratic formula using completing the square, calculate the discriminant D = b^2 - 4ac, classify real/equal/complex roots, and solve 5 applied word problems.',
+      method: 'Interactive Board Work & Practice',
+      materials: 'Smart Interactive Board, Graph Sheets, NCERT Exemplar',
+      plannedDate: '2026-11-04',
+      completionStatus: 'Completed',
+      submissionStatus: 'Approved',
+      completionProgress: 100,
+      teacherRemarks: 'All derivation steps completed. Group board exercises conducted; 4 students selected for remedial coaching on factoring.',
+      reviewComments: 'Approved by Vice Principal. Rigorous step-by-step mathematical demonstration. Good integration of discriminant visualization.',
+      reviewedBy: 'Sri Navva Anand (Vice Principal)',
+      reviewedAt: 'Oct 28, 2026'
+    },
+    {
+      id: 'LP-2026-002',
+      teacher: 'Sri K. Appa Rao',
+      empId: 'T-1023',
+      department: 'Physical Science',
+      className: 'Class X-A',
+      subject: 'Physical Science',
+      chapter: 'Chapter 5: Refraction of Light at Curved Surfaces',
+      topic: 'Lens Formula, Sign Convention & Ray Diagrams',
+      objectives: 'Construct geometric ray diagrams for convex and concave lenses, apply Cartesian sign conventions, and derive focal length using 1/f = 1/v - 1/u.',
+      method: 'Inquiry-Based Lab Activity',
+      materials: 'Optical Bench, Convex/Concave Lenses, Screen, Light Source, Spherometer',
+      plannedDate: '2026-11-06',
+      completionStatus: 'In Progress',
+      submissionStatus: 'Approved',
+      completionProgress: 75,
+      teacherRemarks: 'Optical bench lab setup verified with lab assistant. Ray tracing worksheet prepared for classroom session.',
+      reviewComments: 'Approved by Principal Smt. Gorle V. Ensure safety guidelines during optical bench alignment and laser pointer handling.',
+      reviewedBy: 'Smt. Gorle Varalakshmi (Principal)',
+      reviewedAt: 'Oct 29, 2026'
+    },
+    {
+      id: 'LP-2026-003',
+      teacher: 'Smt. M. Saraswathi',
+      empId: 'T-1022',
+      department: 'English',
+      className: 'Class X-A',
+      subject: 'English',
+      chapter: 'Unit 4: First Flight - Nelson Mandela',
+      topic: 'Long Walk to Freedom: Theme, Tone & Rhetorical Devices',
+      objectives: 'Analyze Mandela historical apartheid speech, identify metaphorical diction, evaluate civil rights themes, and write a 150-word analytical reflection paragraph.',
+      method: 'Flipped Classroom & Multimedia Discussion',
+      materials: 'Audio recording of 1994 inauguration, Vocabulary flashcards, Literature textbook',
+      plannedDate: '2026-11-05',
+      completionStatus: 'Completed',
+      submissionStatus: 'Approved',
+      completionProgress: 100,
+      teacherRemarks: 'Students engaged deeply with primary audio source. 95% scored above 8/10 in context question exit slips.',
+      reviewComments: 'Excellent pedagogical approach linking historical audio to textual comprehension. Exit slips well evaluated.',
+      reviewedBy: 'Sri Navva Anand (Vice Principal)',
+      reviewedAt: 'Oct 27, 2026'
+    },
+    {
+      id: 'LP-2026-004',
+      teacher: 'Smt. P. Santhoshi',
+      empId: 'T-1024',
+      department: 'Telugu',
+      className: 'Class X-A',
+      subject: 'Telugu',
+      chapter: 'Unit 3: Matrubhumi (Poetry)',
+      topic: 'Padyam Recitation, Chandassu (Matra / Gana) & Bhavam',
+      objectives: 'Chant classical Utpalamala & Champakamala verses with correct swaram and yati-prasa, parse poetic meter, and articulate patriotic sentiments.',
+      method: 'Direct Instruction & Step-by-Step Modelling',
+      materials: 'Telugu Vachakam, Prosody rule chart, Audio meter player',
+      plannedDate: '2026-11-07',
+      completionStatus: 'In Progress',
+      submissionStatus: 'Submitted for Review',
+      completionProgress: 60,
+      teacherRemarks: 'Students memorized first 3 padyams. Chandassu division exercises scheduled for tomorrow.',
+      reviewComments: 'Submitted for review; pending HOD evaluation.',
+      reviewedBy: 'Pending HOD Telugu Review',
+      reviewedAt: 'Nov 01, 2026'
+    },
+    {
+      id: 'LP-2026-005',
+      teacher: 'Sri G. Prasad',
+      empId: 'T-1025',
+      department: 'Social Studies',
+      className: 'Class X-A',
+      subject: 'Social Studies',
+      chapter: 'Chapter 8: Indian Agriculture & Food Security',
+      topic: 'Green Revolution, Crop Patterns & Minimum Support Price (MSP)',
+      objectives: 'Map major wheat and rice belts of India, compare Kharif vs Rabi season yields, and debate the socio-economic impacts of MSP policy.',
+      method: 'Group Problem Solving & Peer Learning',
+      materials: 'India Agricultural Map, ICAR yield comparison tables, Chart sheets',
+      plannedDate: '2026-11-09',
+      completionStatus: 'Pending',
+      submissionStatus: 'Submitted for Review',
+      completionProgress: 20,
+      teacherRemarks: 'Map plotting sheets prepared. Mock agricultural debate structure organized for groups.',
+      reviewComments: 'Pending administrative review.',
+      reviewedBy: 'Pending Vice Principal Review',
+      reviewedAt: 'Nov 02, 2026'
+    },
+    {
+      id: 'LP-2026-006',
+      teacher: 'Sri D. Suresh',
+      empId: 'T-1026',
+      department: 'Computer Science',
+      className: 'Class X-A',
+      subject: 'Computer Science',
+      chapter: 'Unit 3: Database Management & SQL',
+      topic: 'Relational Schema, Primary Keys & SQL SELECT Queries',
+      objectives: 'Design 3NF relational schemas, implement table definitions in MySQL, and execute multi-condition SELECT, WHERE, and ORDER BY queries.',
+      method: 'Inquiry-Based Lab Activity',
+      materials: 'Computer Science Lab, MySQL Workbench, Student terminal consoles',
+      plannedDate: '2026-11-03',
+      completionStatus: 'Completed',
+      submissionStatus: 'Approved',
+      completionProgress: 100,
+      teacherRemarks: 'All students executed 10 complex queries in lab. Lab practical logs stamped and signed.',
+      reviewComments: 'Approved by Principal. Excellent hands-on computing delivery. Ensure student terminal logs are archived.',
+      reviewedBy: 'Smt. Gorle Varalakshmi (Principal)',
+      reviewedAt: 'Oct 26, 2026'
+    },
+    {
+      id: 'LP-2026-007',
+      teacher: 'Smt. K. Vani',
+      empId: 'T-1027',
+      department: 'Biological Science',
+      className: 'Class X-B',
+      subject: 'Biological Science',
+      chapter: 'Chapter 4: Excretion - The Waste Disposing System',
+      topic: 'Nephron Microscopic Structure & Urine Formation Physiology',
+      objectives: 'Diagram the functional unit of kidney (Nephron), delineate ultrafiltration, selective reabsorption, and tubular secretion phases.',
+      method: 'Direct Instruction & Step-by-Step Modelling',
+      materials: 'Nephron biological 3D model, Compound microscopes, Permanent kidney tissue slides',
+      plannedDate: '2026-11-08',
+      completionStatus: 'In Progress',
+      submissionStatus: 'Returned for Correction',
+      completionProgress: 40,
+      teacherRemarks: 'Revised objectives to include artificial kidney (haemodialysis) comparison as requested by HOD.',
+      reviewComments: 'Returned for Correction: Please incorporate dialyzer working principles and comparative filtration diagram as per board model paper guidelines.',
+      reviewedBy: 'Sri Navva Anand (Vice Principal)',
+      reviewedAt: 'Oct 30, 2026'
+    },
+    {
+      id: 'LP-2026-008',
+      teacher: 'Sri Navva Anand',
+      empId: 'T-1021',
+      department: 'Mathematics',
+      className: 'Class IX-A',
+      subject: 'Mathematics',
+      chapter: 'Chapter 6: Lines and Angles',
+      topic: 'Transversal Theorems & Alternate Interior Angles',
+      objectives: 'Prove axiomatically that parallel lines intersected by transversal yield equal alternate interior angles; solve 8 geometric angle proof problems.',
+      method: 'Interactive Board Work & Practice',
+      materials: 'Geometry wooden board compass, GeoGebra digital interactive display',
+      plannedDate: '2026-11-10',
+      completionStatus: 'Pending',
+      submissionStatus: 'Draft',
+      completionProgress: 0,
+      teacherRemarks: 'Drafted lesson outline; integrating GeoGebra angle slider activities.',
+      reviewComments: 'Draft created by teacher; not yet submitted for review.',
+      reviewedBy: '—',
+      reviewedAt: '—'
+    },
+    {
+      id: 'LP-2026-009',
+      teacher: 'Smt. M. Saraswathi',
+      empId: 'T-1022',
+      department: 'English',
+      className: 'Class IX-A',
+      subject: 'English',
+      chapter: 'Unit 3: The Little Girl (Katherine Mansfield)',
+      topic: 'Character Transformation, Parental Psychology & Theme',
+      objectives: 'Evaluate Kezia evolving perception of her father from fear to empathy, identify mood shifts, and compose diary entry from Kezia perspective.',
+      method: 'Group Problem Solving & Peer Learning',
+      materials: 'English Reader, Character arc graphic organizer, Vocabulary prompt cards',
+      plannedDate: '2026-11-02',
+      completionStatus: 'Completed',
+      submissionStatus: 'Approved',
+      completionProgress: 100,
+      teacherRemarks: 'Diary entries written by students demonstrated deep emotional maturity and rich sensory adjectives.',
+      reviewComments: 'Approved by Vice Principal. Graphic organizer technique proved very effective for character arc comprehension.',
+      reviewedBy: 'Sri Navva Anand (Vice Principal)',
+      reviewedAt: 'Oct 25, 2026'
+    },
+    {
+      id: 'LP-2026-010',
+      teacher: 'Sri K. Appa Rao',
+      empId: 'T-1023',
+      department: 'Physical Science',
+      className: 'Class VIII-A',
+      subject: 'Physical Science',
+      chapter: 'Chapter 4: Force and Pressure',
+      topic: 'Atmospheric Pressure, Barometers & Hydraulic Principles',
+      objectives: 'Demonstrate atmospheric pressure using crushed can experiment, measure pressure with U-tube manometer, and calculate P = F/A.',
+      method: 'Inquiry-Based Lab Activity',
+      materials: 'Tin can, Bunsen burner, Cold water trough, Mercury barometer model, Syringes',
+      plannedDate: '2026-11-05',
+      completionStatus: 'Completed',
+      submissionStatus: 'Approved',
+      completionProgress: 100,
+      teacherRemarks: 'Crushed can demonstration generated immense curiosity. Students derived P = F/A calculations correctly.',
+      reviewComments: 'Approved by Principal. Excellent hands-on physics demonstration that captured student attention.',
+      reviewedBy: 'Smt. Gorle Varalakshmi (Principal)',
+      reviewedAt: 'Oct 26, 2026'
+    },
+    {
+      id: 'LP-2026-011',
+      teacher: 'Smt. T. Radha',
+      empId: 'T-1028',
+      department: 'Hindi',
+      className: 'Class X-B',
+      subject: 'Hindi',
+      chapter: 'Sparsh - Chapter 2: Diary Ka Ek Panna (Sitaram Seksaria)',
+      topic: 'Historic Jan 26, 1931 Calcutta Freedom Movement Chronicle',
+      objectives: 'Read diary entry chronologically, analyze patriotic resistance against British colonial ban, and write a report on national struggle.',
+      method: 'Flipped Classroom & Multimedia Discussion',
+      materials: 'Historical photographs of Calcutta 1931, Hindi textbook, Glossary chart',
+      plannedDate: '2026-11-11',
+      completionStatus: 'Pending',
+      submissionStatus: 'Submitted for Review',
+      completionProgress: 15,
+      teacherRemarks: 'Prepared timeline chart of 1931 civil disobedience movement for students.',
+      reviewComments: 'Under administrative review.',
+      reviewedBy: 'Pending Vice Principal Review',
+      reviewedAt: 'Nov 02, 2026'
+    },
+    {
+      id: 'LP-2026-012',
+      teacher: 'Sri G. Prasad',
+      empId: 'T-1025',
+      department: 'Social Studies',
+      className: 'Class IX-A',
+      subject: 'Social Studies',
+      chapter: 'Chapter 4: Climate of India',
+      topic: 'Monsoon Mechanism, ITCZ Shifts & Jet Streams',
+      objectives: 'Explain thermal heating differences creating summer low pressure, trace Southwest Monsoon trajectory, and interpret annual rainfall graphs.',
+      method: 'Interactive Board Work & Practice',
+      materials: 'Monsoon synoptic wind maps, Satellite weather imagery, Rainfall bar charts',
+      plannedDate: '2026-11-06',
+      completionStatus: 'In Progress',
+      submissionStatus: 'Approved',
+      completionProgress: 80,
+      teacherRemarks: 'Rainfall graph interpretation completed. Cyclonic depressions in Bay of Bengal covered.',
+      reviewComments: 'Approved by Vice Principal. Excellent use of satellite imagery to explain monsoon currents.',
+      reviewedBy: 'Sri Navva Anand (Vice Principal)',
+      reviewedAt: 'Oct 29, 2026'
+    }
+  ];
+
+  // Syllabus Delivery Progress Tracking Dataset
+  const INITIAL_SYLLABUS_PROGRESS = [
+    { subject: 'Mathematics', className: 'Class X', totalUnits: 21, completedUnits: 18, pct: 86, termTarget: 80, status: 'On Track', teacher: 'Sri Navva Anand' },
+    { subject: 'Physical Science', className: 'Class X', totalUnits: 19, completedUnits: 15, pct: 79, termTarget: 75, status: 'On Track', teacher: 'Sri K. Appa Rao' },
+    { subject: 'Biological Science', className: 'Class X', totalUnits: 19, completedUnits: 16, pct: 84, termTarget: 80, status: 'On Track', teacher: 'Smt. K. Vani' },
+    { subject: 'English', className: 'Class X', totalUnits: 25, completedUnits: 22, pct: 88, termTarget: 85, status: 'Ahead of Schedule', teacher: 'Smt. M. Saraswathi' },
+    { subject: 'Telugu', className: 'Class X', totalUnits: 22, completedUnits: 18, pct: 82, termTarget: 80, status: 'On Track', teacher: 'Smt. P. Santhoshi' },
+    { subject: 'Social Studies', className: 'Class X', totalUnits: 20, completedUnits: 16, pct: 80, termTarget: 75, status: 'On Track', teacher: 'Sri G. Prasad' },
+    { subject: 'Computer Science', className: 'Class X', totalUnits: 10, completedUnits: 9, pct: 90, termTarget: 85, status: 'Ahead of Schedule', teacher: 'Sri D. Suresh' },
+    { subject: 'Mathematics', className: 'Class IX', totalUnits: 20, completedUnits: 16, pct: 80, termTarget: 75, status: 'On Track', teacher: 'Sri Navva Anand' },
+    { subject: 'Physical Science', className: 'Class VIII', totalUnits: 18, completedUnits: 14, pct: 78, termTarget: 75, status: 'On Track', teacher: 'Sri K. Appa Rao' }
+  ];
+
+  function ensureLessonPlansState() {
+    if (!state.lessonPlansList) {
+      state.lessonPlansList = JSON.parse(JSON.stringify(INITIAL_LESSON_PLANS));
+    }
+    if (!state.syllabusProgressList) {
+      state.syllabusProgressList = JSON.parse(JSON.stringify(INITIAL_SYLLABUS_PROGRESS));
+    }
+    if (!state.activeLessonPlansView) {
+      state.activeLessonPlansView = 'admin';
+    }
+    if (!state.selectedTeacherDesk) {
+      state.selectedTeacherDesk = 'Sri Navva Anand';
+    }
+  }
+
+  function updateLessonPlansKPIs() {
+    ensureLessonPlansState();
+    const totalElem = document.getElementById('kpiLpTotal');
+    const approvedElem = document.getElementById('kpiLpApproved');
+    const pendingElem = document.getElementById('kpiLpPending');
+    const returnedElem = document.getElementById('kpiLpReturned');
+    const completedTopicsElem = document.getElementById('kpiLpCompletedTopics');
+
+    const list = state.lessonPlansList;
+    const total = list.length;
+    const approved = list.filter(p => p.submissionStatus === 'Approved').length;
+    const pending = list.filter(p => p.submissionStatus === 'Submitted for Review').length;
+    const returned = list.filter(p => p.submissionStatus === 'Returned for Correction').length;
+    const completed = list.filter(p => p.completionStatus === 'Completed').length;
+
+    if (totalElem) totalElem.textContent = total;
+    if (approvedElem) approvedElem.textContent = approved;
+    if (pendingElem) pendingElem.textContent = pending;
+    if (returnedElem) returnedElem.textContent = returned;
+    if (completedTopicsElem) {
+      const pct = Math.round((completed / total) * 100);
+      completedTopicsElem.textContent = completed + ' / ' + total + ' Topics (' + pct + '%)';
+    }
+  }
+
+  function switchLessonPlansView(viewKey) {
+    ensureLessonPlansState();
+    state.activeLessonPlansView = viewKey;
+
+    const btnAdmin = document.getElementById('btnLpAdminView');
+    const btnTeacher = document.getElementById('btnLpTeacherView');
+    const btnSyllabus = document.getElementById('btnLpSyllabusView');
+
+    const cAdmin = document.getElementById('lpAdminViewContainer');
+    const cTeacher = document.getElementById('lpTeacherViewContainer');
+    const cSyllabus = document.getElementById('lpSyllabusViewContainer');
+
+    [btnAdmin, btnTeacher, btnSyllabus].forEach(b => { if (b) b.classList.remove('active'); });
+    [cAdmin, cTeacher, cSyllabus].forEach(c => { if (c) c.style.display = 'none'; });
+
+    if (viewKey === 'admin') {
+      if (btnAdmin) btnAdmin.classList.add('active');
+      if (cAdmin) cAdmin.style.display = 'block';
+      renderAdminLessonPlansTable();
+    } else if (viewKey === 'teacher') {
+      if (btnTeacher) btnTeacher.classList.add('active');
+      if (cTeacher) cTeacher.style.display = 'block';
+      renderTeacherSubmissionDesk();
+    } else if (viewKey === 'syllabus') {
+      if (btnSyllabus) btnSyllabus.classList.add('active');
+      if (cSyllabus) cSyllabus.style.display = 'block';
+      renderSyllabusProgressReportView();
+    }
+  }
+
   function renderLessonPlanReview(filteredData) {
+    ensureLessonPlansState();
+    updateLessonPlansKPIs();
+    switchLessonPlansView(state.activeLessonPlansView || 'admin');
+  }
+
+  // --- VIEW 1: ADMINISTRATION REVIEW DESK ---
+  function renderAdminLessonPlansTable(filteredData) {
+    ensureLessonPlansState();
     const tbody = document.getElementById('lessonPlansTableBody');
+    const footerCount = document.getElementById('lessonPlansFooterCount');
     if (!tbody) return;
 
-    const data = filteredData || LESSON_PLAN_REVIEW_DATA;
+    const data = filteredData || state.lessonPlansList;
+    if (footerCount) {
+      footerCount.textContent = 'Showing ' + data.length + ' of ' + state.lessonPlansList.length + ' lesson plans';
+    }
 
-    tbody.innerHTML = data.map(lp => {
-      return `
-        <tr>
-          <td>
-            <div style="font-weight:700; color:var(--color-text-dark, #0f172a);"><i class="fa-solid fa-chalkboard-user mr-1 text-primary"></i> ${lp.teacher}</div>
-            <span class="staff-id-pill">${lp.empId}</span>
-          </td>
-          <td>
-            <span class="portal-badge badge-primary font-weight-bold">${lp.subject}</span>
-          </td>
-          <td>
-            <div style="font-size:0.85rem; line-height:1.35; font-weight:600; color:var(--color-text-dark, #0f172a);">${lp.plannedTopics}</div>
-          </td>
-          <td>
-            <span class="portal-badge ${lp.statusClass} font-weight-bold"><i class="fa-solid fa-circle-check mr-1"></i> ${lp.completionStatus}</span>
-          </td>
-          <td>
-            <div style="font-size:0.82rem; color:var(--color-text-muted, #64748b); font-style:italic; line-height:1.35;">"${lp.reviewComments}"</div>
-          </td>
-          <td style="text-align:center;">
-            <button type="button" class="btn btn-secondary btn-sm" onclick="showToast('Lesson plan endorsed for ' + '${lp.teacher}', 'success')" title="Endorse Lesson Plan">
-              <i class="fa-solid fa-stamp"></i> Endorse
-            </button>
-          </td>
-        </tr>
-      `;
-    }).join('');
+    if (data.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="8" class="text-center py-4 text-muted"><i class="bi bi-journal-x fs-3 d-block mb-2"></i>No lesson plans match your filter criteria.</td></tr>';
+      return;
+    }
 
-    const countPill = document.getElementById('plansCountPill');
-    if (countPill) countPill.textContent = 'Showing ' + data.length + ' Lesson Plans';
+    let html = '';
+    data.forEach(lp => {
+      // Submission Status Badge
+      let subBadge = '<span class="badge bg-secondary text-white px-2 py-1 rounded-pill">Draft</span>';
+      if (lp.submissionStatus === 'Submitted for Review') {
+        subBadge = '<span class="badge bg-warning text-dark px-2 py-1 rounded-pill"><i class="bi bi-hourglass-split me-1"></i>Submitted</span>';
+      } else if (lp.submissionStatus === 'Approved') {
+        subBadge = '<span class="badge bg-success text-white px-2 py-1 rounded-pill"><i class="bi bi-check-circle me-1"></i>Approved</span>';
+      } else if (lp.submissionStatus === 'Returned for Correction') {
+        subBadge = '<span class="badge bg-danger text-white px-2 py-1 rounded-pill"><i class="bi bi-arrow-return-left me-1"></i>Returned</span>';
+      }
+
+      // Completion Status & Progress Bar
+      let compPill = '<span class="badge bg-light text-muted border">Pending</span>';
+      let barColor = 'bg-secondary';
+      if (lp.completionStatus === 'Completed') {
+        compPill = '<span class="badge bg-success-subtle text-success border border-success-subtle"><i class="bi bi-check2-all me-1"></i>Completed</span>';
+        barColor = 'bg-success';
+      } else if (lp.completionStatus === 'In Progress') {
+        compPill = '<span class="badge bg-primary-subtle text-primary border border-primary-subtle"><i class="bi bi-arrow-repeat me-1"></i>In Progress</span>';
+        barColor = 'bg-primary';
+      } else if (lp.completionStatus === 'Delayed') {
+        compPill = '<span class="badge bg-danger-subtle text-danger border border-danger-subtle">Delayed</span>';
+        barColor = 'bg-danger';
+      }
+
+      // Subject badge
+      let subjBadge = '<span class="badge bg-primary-subtle text-primary border border-primary-subtle px-2 py-1">' + lp.subject + '</span>';
+      if (lp.subject.includes('Science')) subjBadge = '<span class="badge bg-success-subtle text-success border border-success-subtle px-2 py-1">' + lp.subject + '</span>';
+      else if (lp.subject.includes('English')) subjBadge = '<span class="badge bg-purple-subtle text-dark border px-2 py-1" style="background-color:#f3e8ff;">' + lp.subject + '</span>';
+      else if (lp.subject.includes('Telugu') || lp.subject.includes('Hindi')) subjBadge = '<span class="badge bg-warning-subtle text-warning border border-warning-subtle px-2 py-1">' + lp.subject + '</span>';
+      else if (lp.subject.includes('Social')) subjBadge = '<span class="badge bg-info-subtle text-info border border-info-subtle px-2 py-1">' + lp.subject + '</span>';
+      else if (lp.subject.includes('Computer')) subjBadge = '<span class="badge bg-dark text-white px-2 py-1">' + lp.subject + '</span>';
+
+      html += '<tr>';
+      html += '  <td>';
+      html += '    <div class="fw-bold text-dark d-flex align-items-center gap-1">';
+      html += '      <i class="bi bi-person-circle text-primary"></i> ' + lp.teacher;
+      html += '    </div>';
+      html += '    <div class="small text-muted font-monospace">' + lp.empId + ' &bull; ' + lp.department + '</div>';
+      html += '  </td>';
+      html += '  <td><span class="badge bg-light text-dark border">' + lp.className + '</span></td>';
+      html += '  <td>' + subjBadge + '</td>';
+      html += '  <td>';
+      html += '    <div class="fw-bold text-dark small" style="max-width:240px;">' + lp.chapter + '</div>';
+      html += '    <div class="small text-muted text-truncate" style="max-width:240px;" title="' + lp.topic + '">' + lp.topic + '</div>';
+      html += '    <div class="small text-muted font-monospace"><i class="bi bi-calendar-event me-1"></i>' + lp.plannedDate + '</div>';
+      html += '  </td>';
+      html += '  <td>' + subBadge + '</td>';
+      html += '  <td>';
+      html += '    <div class="d-flex justify-content-between align-items-center mb-1">';
+      html += '      ' + compPill;
+      html += '      <span class="small fw-bold text-dark">' + lp.completionProgress + '%</span>';
+      html += '    </div>';
+      html += '    <div class="progress" style="height: 6px;">';
+      html += '      <div class="progress-bar ' + barColor + '" role="progressbar" style="width:' + lp.completionProgress + '%;"></div>';
+      html += '    </div>';
+      html += '  </td>';
+      html += '  <td>';
+      html += '    <div class="small text-dark review-feedback-box text-truncate" style="max-width:220px;" title="' + lp.reviewComments + '">';
+      html += '      ' + lp.reviewComments;
+      html += '    </div>';
+      html += '  </td>';
+      html += '  <td class="text-end">';
+      html += '    <div class="btn-group btn-group-sm">';
+      html += '      <button class="btn btn-outline-primary btn-sm" onclick="portalApp.openReviewLessonPlanModal(\'' + lp.id + '\')" title="Review / Approve Plan"><i class="bi bi-check2-circle"></i> Review</button>';
+      html += '      <button class="btn btn-outline-info btn-sm" onclick="portalApp.openLessonPlanDetailModal(\'' + lp.id + '\')" title="View Dossier"><i class="bi bi-eye"></i></button>';
+      if (lp.completionStatus !== 'Completed') {
+        html += '      <button class="btn btn-outline-success btn-sm" onclick="portalApp.markLessonPlanTopicCompleted(\'' + lp.id + '\')" title="Mark Topic Completed"><i class="bi bi-check-lg"></i></button>';
+      }
+      html += '    </div>';
+      html += '  </td>';
+      html += '</tr>';
+    });
+
+    tbody.innerHTML = html;
   }
 
   function filterLessonPlans() {
-    const q = (document.getElementById('plansSearchInput')?.value || '').toLowerCase().trim();
-    const status = document.getElementById('plansStatusFilter')?.value || '';
+    ensureLessonPlansState();
+    const q = (document.getElementById('lpSearchInput') ? document.getElementById('lpSearchInput').value : '').toLowerCase().trim();
+    const cls = (document.getElementById('lpClassFilter') ? document.getElementById('lpClassFilter').value : '');
+    const subj = (document.getElementById('lpSubjectFilter') ? document.getElementById('lpSubjectFilter').value : '');
+    const subSt = (document.getElementById('lpSubmissionStatusFilter') ? document.getElementById('lpSubmissionStatusFilter').value : '');
+    const compSt = (document.getElementById('lpCompletionStatusFilter') ? document.getElementById('lpCompletionStatusFilter').value : '');
 
-    const filtered = LESSON_PLAN_REVIEW_DATA.filter(item => {
-      const matchQ = !q || item.teacher.toLowerCase().includes(q) || item.subject.toLowerCase().includes(q) || item.plannedTopics.toLowerCase().includes(q);
-      const matchStatus = !status || (status === 'Approved' ? item.completionStatus.includes('Completed') : !item.completionStatus.includes('Completed'));
-      return matchQ && matchStatus;
+    const filtered = state.lessonPlansList.filter(lp => {
+      const matchQ = !q || lp.teacher.toLowerCase().includes(q) || lp.topic.toLowerCase().includes(q) || lp.chapter.toLowerCase().includes(q) || lp.objectives.toLowerCase().includes(q);
+      const matchCls = !cls || lp.className === cls;
+      const matchSubj = !subj || lp.subject === subj;
+      const matchSubSt = !subSt || lp.submissionStatus === subSt;
+      const matchCompSt = !compSt || lp.completionStatus === compSt;
+      return matchQ && matchCls && matchSubj && matchSubSt && matchCompSt;
     });
 
-    renderLessonPlanReview(filtered);
+    renderAdminLessonPlansTable(filtered);
+  }
+
+  function resetLessonPlansFilters() {
+    if (document.getElementById('lpSearchInput')) document.getElementById('lpSearchInput').value = '';
+    if (document.getElementById('lpClassFilter')) document.getElementById('lpClassFilter').value = '';
+    if (document.getElementById('lpSubjectFilter')) document.getElementById('lpSubjectFilter').value = '';
+    if (document.getElementById('lpSubmissionStatusFilter')) document.getElementById('lpSubmissionStatusFilter').value = '';
+    if (document.getElementById('lpCompletionStatusFilter')) document.getElementById('lpCompletionStatusFilter').value = '';
+    renderAdminLessonPlansTable();
+  }
+
+  // --- VIEW 2: TEACHER SUBMISSION DESK ---
+  function renderTeacherSubmissionDesk(teacherName) {
+    ensureLessonPlansState();
+    const container = document.getElementById('lpTeacherDeskContent');
+    if (!container) return;
+
+    const currentTeacher = teacherName || (document.getElementById('lpTeacherFilterSelect') ? document.getElementById('lpTeacherFilterSelect').value : 'Sri Navva Anand');
+    state.selectedTeacherDesk = currentTeacher;
+
+    const teacherPlans = state.lessonPlansList.filter(p => p.teacher === currentTeacher);
+
+    if (teacherPlans.length === 0) {
+      container.innerHTML = '<div class="text-center py-5 text-muted"><i class="bi bi-journal-plus fs-1 d-block mb-2"></i>No submitted plans found for ' + currentTeacher + '. Click "+ New Lesson Plan" to draft one.</div>';
+      return;
+    }
+
+    let html = '';
+    html += '<div class="row g-3">';
+    teacherPlans.forEach(plan => {
+      let subBadge = '<span class="badge bg-secondary text-white">Draft</span>';
+      if (plan.submissionStatus === 'Submitted for Review') subBadge = '<span class="badge bg-warning text-dark"><i class="bi bi-hourglass-split me-1"></i>Under Review</span>';
+      else if (plan.submissionStatus === 'Approved') subBadge = '<span class="badge bg-success text-white"><i class="bi bi-check-circle me-1"></i>Approved</span>';
+      else if (plan.submissionStatus === 'Returned for Correction') subBadge = '<span class="badge bg-danger text-white"><i class="bi bi-arrow-return-left me-1"></i>Correction Needed</span>';
+
+      html += '<div class="col-lg-6">';
+      html += '  <div class="pedagogy-card h-100">';
+      html += '    <div class="pedagogy-card-header bg-light">';
+      html += '      <div>';
+      html += '        <span class="badge bg-primary text-white me-1">' + plan.className + '</span>';
+      html += '        <strong class="text-dark">' + plan.subject + '</strong>';
+      html += '      </div>';
+      html += '      <div>' + subBadge + '</div>';
+      html += '    </div>';
+      html += '    <div class="pedagogy-card-body">';
+      html += '      <h6 class="fw-bold text-dark mb-1">' + plan.chapter + '</h6>';
+      html += '      <div class="text-primary small fw-semibold mb-2">' + plan.topic + '</div>';
+      html += '      <div class="objective-box">';
+      html += '        <strong>Learning Objective:</strong><br>' + plan.objectives;
+      html += '      </div>';
+      html += '      <div class="row g-2 small text-muted my-2">';
+      html += '        <div class="col-6"><i class="bi bi-gear-wide-connected me-1"></i><strong>Method:</strong> ' + plan.method + '</div>';
+      html += '        <div class="col-6"><i class="bi bi-calendar3 me-1"></i><strong>Planned:</strong> ' + plan.plannedDate + '</div>';
+      html += '        <div class="col-12"><i class="bi bi-box-seam me-1"></i><strong>Aids:</strong> ' + (plan.materials || 'Standard Classroom Aids') + '</div>';
+      html += '      </div>';
+      if (plan.reviewComments) {
+        html += '      <div class="review-feedback-box">';
+        html += '        <strong>Reviewer Feedback:</strong> ' + plan.reviewComments;
+        html += '      </div>';
+      }
+      html += '    </div>';
+      html += '    <div class="card-footer bg-white border-top py-2 px-3 d-flex justify-content-between align-items-center">';
+      html += '      <span class="small text-muted"><i class="bi bi-flag me-1"></i>Status: ' + plan.completionStatus + '</span>';
+      html += '      <div class="btn-group btn-group-sm">';
+      html += '        <button class="btn btn-outline-primary btn-sm" onclick="portalApp.openCreateLessonPlanModal(\'' + plan.id + '\')"><i class="bi bi-pencil"></i> Edit</button>';
+      html += '        <button class="btn btn-outline-info btn-sm" onclick="portalApp.openLessonPlanDetailModal(\'' + plan.id + '\')"><i class="bi bi-eye"></i> View</button>';
+      html += '      </div>';
+      html += '    </div>';
+      html += '  </div>';
+      html += '</div>';
+    });
+    html += '</div>';
+
+    container.innerHTML = html;
+  }
+
+  // --- VIEW 3: SYLLABUS PROGRESS & DELIVERY REPORT ---
+  function renderSyllabusProgressReportView() {
+    ensureLessonPlansState();
+    const container = document.getElementById('lpSyllabusReportContent');
+    if (!container) return;
+
+    let html = '';
+    html += '<div class="row g-3">';
+
+    state.syllabusProgressList.forEach(sp => {
+      let statusBadge = '<span class="badge bg-success-subtle text-success border border-success-subtle"><i class="bi bi-check-circle me-1"></i>' + sp.status + '</span>';
+      if (sp.status.includes('Ahead')) {
+        statusBadge = '<span class="badge bg-primary-subtle text-primary border border-primary-subtle"><i class="bi bi-lightning-charge me-1"></i>' + sp.status + '</span>';
+      }
+
+      html += '<div class="col-lg-6">';
+      html += '  <div class="syllabus-meter-row shadow-sm">';
+      html += '    <div class="d-flex justify-content-between align-items-center mb-1">';
+      html += '      <div>';
+      html += '        <h6 class="fw-bold mb-0 text-dark">' + sp.subject + ' &bull; <span class="text-primary">' + sp.className + '</span></h6>';
+      html += '        <span class="small text-muted"><i class="bi bi-person me-1"></i>' + sp.teacher + '</span>';
+      html += '      </div>';
+      html += '      <div>' + statusBadge + '</div>';
+      html += '    </div>';
+
+      html += '    <div class="d-flex justify-content-between align-items-center small text-muted mt-2 mb-1">';
+      html += '      <span>Completed Units: <strong>' + sp.completedUnits + ' of ' + sp.totalUnits + ' Units</strong></span>';
+      html += '      <span class="fw-bold text-dark fs-6">' + sp.pct + '% Delivered</span>';
+      html += '    </div>';
+
+      html += '    <div class="progress" style="height: 10px;">';
+      html += '      <div class="progress-bar bg-success" role="progressbar" style="width:' + sp.pct + '%;"></div>';
+      html += '    </div>';
+
+      html += '    <div class="d-flex justify-content-between small text-muted mt-2">';
+      html += '      <span>Term Target: ' + sp.termTarget + '%</span>';
+      html += '      <span class="text-success"><i class="bi bi-shield-check me-1"></i>Board Syllabus Aligned</span>';
+      html += '    </div>';
+      html += '  </div>';
+      html += '</div>';
+    });
+
+    html += '</div>';
+
+    container.innerHTML = html;
+  }
+
+  // --- MODAL WORKFLOWS & INTERACTIVE ACTIONS ---
+
+  function showLessonPlanModal(modalId) {
+    const el = document.getElementById(modalId);
+    if (!el) return;
+    if (typeof bootstrap !== 'undefined' && bootstrap.Modal) {
+      try {
+        const m = bootstrap.Modal.getOrCreateInstance(el);
+        m.show();
+        return;
+      } catch (e) {}
+    }
+    el.style.display = 'block';
+    el.classList.add('show');
+    el.setAttribute('aria-modal', 'true');
+    el.removeAttribute('aria-hidden');
+    let backdrop = document.getElementById(modalId + '_backdrop');
+    if (!backdrop) {
+      backdrop = document.createElement('div');
+      backdrop.id = modalId + '_backdrop';
+      backdrop.className = 'modal-backdrop fade show';
+      document.body.appendChild(backdrop);
+    }
+    document.body.classList.add('modal-open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function hideLessonPlanModal(modalId) {
+    const el = document.getElementById(modalId);
+    if (!el) return;
+    if (typeof bootstrap !== 'undefined' && bootstrap.Modal) {
+      try {
+        const m = bootstrap.Modal.getInstance(el);
+        if (m) { m.hide(); return; }
+      } catch (e) {}
+    }
+    el.style.display = 'none';
+    el.classList.remove('show');
+    el.setAttribute('aria-hidden', 'true');
+    el.removeAttribute('aria-modal');
+    const backdrop = document.getElementById(modalId + '_backdrop');
+    if (backdrop) backdrop.remove();
+    document.body.classList.remove('modal-open');
+    document.body.style.overflow = '';
+  }
+
+  function openCreateLessonPlanModal(planId) {
+    ensureLessonPlansState();
+    const idInput = document.getElementById('lpPlanId');
+    const classInput = document.getElementById('lpClass');
+    const subjInput = document.getElementById('lpSubject');
+    const teacherInput = document.getElementById('lpTeacher');
+    const chapterInput = document.getElementById('lpChapter');
+    const topicInput = document.getElementById('lpTopic');
+    const objInput = document.getElementById('lpObjectives');
+    const methodInput = document.getElementById('lpMethod');
+    const matInput = document.getElementById('lpMaterials');
+    const dateInput = document.getElementById('lpPlannedDate');
+    const compInput = document.getElementById('lpCompletionStatus');
+    const remarksInput = document.getElementById('lpTeacherRemarks');
+    const modalTitle = document.getElementById('createLessonPlanModalLabel');
+
+    if (planId) {
+      const plan = state.lessonPlansList.find(p => p.id === planId);
+      if (plan) {
+        if (idInput) idInput.value = plan.id;
+        if (classInput) classInput.value = plan.className;
+        if (subjInput) subjInput.value = plan.subject;
+        if (teacherInput) teacherInput.value = plan.teacher;
+        if (chapterInput) chapterInput.value = plan.chapter;
+        if (topicInput) topicInput.value = plan.topic;
+        if (objInput) objInput.value = plan.objectives;
+        if (methodInput) methodInput.value = plan.method;
+        if (matInput) matInput.value = plan.materials;
+        if (dateInput) dateInput.value = plan.plannedDate;
+        if (compInput) compInput.value = plan.completionStatus;
+        if (remarksInput) remarksInput.value = plan.teacherRemarks;
+        if (modalTitle) modalTitle.innerHTML = '<i class="bi bi-pencil-square me-2"></i>Edit Lesson Plan (' + plan.id + ')';
+      }
+    } else {
+      if (idInput) idInput.value = '';
+      if (classInput) classInput.value = 'Class X-A';
+      if (subjInput) subjInput.value = 'Mathematics';
+      if (teacherInput) teacherInput.value = 'Sri Navva Anand';
+      if (chapterInput) chapterInput.value = '';
+      if (topicInput) topicInput.value = '';
+      if (objInput) objInput.value = '';
+      if (methodInput) methodInput.value = 'Interactive Board Work & Practice';
+      if (matInput) matInput.value = 'Smart Interactive Board, NCERT Exemplar';
+      if (dateInput) dateInput.value = '2026-11-12';
+      if (compInput) compInput.value = 'Pending';
+      if (remarksInput) remarksInput.value = '';
+      if (modalTitle) modalTitle.innerHTML = '<i class="bi bi-journal-plus me-2"></i>Create New Lesson Plan';
+    }
+
+    showLessonPlanModal('createLessonPlanModal');
+  }
+
+  function handleSaveLessonPlanSubmit(e, actionType) {
+    if (e && e.preventDefault) e.preventDefault();
+    ensureLessonPlansState();
+
+    const id = document.getElementById('lpPlanId').value;
+    const className = document.getElementById('lpClass').value;
+    const subject = document.getElementById('lpSubject').value;
+    const teacher = document.getElementById('lpTeacher').value;
+    const chapter = document.getElementById('lpChapter').value.trim();
+    const topic = document.getElementById('lpTopic').value.trim();
+    const objectives = document.getElementById('lpObjectives').value.trim();
+    const method = document.getElementById('lpMethod').value;
+    const materials = document.getElementById('lpMaterials').value.trim();
+    const plannedDate = document.getElementById('lpPlannedDate').value;
+    const completionStatus = document.getElementById('lpCompletionStatus').value;
+    const teacherRemarks = document.getElementById('lpTeacherRemarks').value.trim();
+
+    if (!chapter || !topic || !objectives) {
+      alert('Please fill in Chapter, Topic, and Learning Objectives.');
+      return;
+    }
+
+    const submissionStatus = (actionType === 'Submit') ? 'Submitted for Review' : 'Draft';
+    const completionProgress = (completionStatus === 'Completed') ? 100 : (completionStatus === 'In Progress' ? 50 : 0);
+
+    if (id) {
+      const idx = state.lessonPlansList.findIndex(p => p.id === id);
+      if (idx !== -1) {
+        state.lessonPlansList[idx] = {
+          ...state.lessonPlansList[idx],
+          className, subject, teacher, chapter, topic, objectives, method, materials, plannedDate,
+          completionStatus, teacherRemarks, submissionStatus, completionProgress
+        };
+      }
+    } else {
+      const newId = 'LP-2026-' + String(state.lessonPlansList.length + 1).padStart(3, '0');
+      state.lessonPlansList.unshift({
+        id: newId,
+        teacher,
+        empId: 'T-1021',
+        department: subject,
+        className,
+        subject,
+        chapter,
+        topic,
+        objectives,
+        method,
+        materials,
+        plannedDate,
+        completionStatus,
+        submissionStatus,
+        completionProgress,
+        teacherRemarks,
+        reviewComments: (actionType === 'Submit') ? 'Submitted for HOD/VP review.' : 'Draft saved by teacher.',
+        reviewedBy: '—',
+        reviewedAt: '—'
+      });
+    }
+
+    hideLessonPlanModal('createLessonPlanModal');
+    renderLessonPlanReview();
+    if (actionType === 'Submit') {
+      showToast('Lesson plan submitted for administrative review & approval.', 'success');
+    } else {
+      showToast('Lesson plan saved as draft.', 'info');
+    }
+  }
+
+  function openReviewLessonPlanModal(planId) {
+    ensureLessonPlansState();
+    const plan = state.lessonPlansList.find(p => p.id === planId);
+    if (!plan) return;
+
+    document.getElementById('reviewPlanId').value = plan.id;
+    document.getElementById('revPlanTeacher').textContent = plan.teacher + ' (' + plan.empId + ')';
+    document.getElementById('revPlanClassSubject').textContent = plan.className + ' • ' + plan.subject;
+    document.getElementById('revPlanDate').textContent = plan.plannedDate;
+    document.getElementById('revPlanChapterTopic').textContent = plan.chapter + ' — ' + plan.topic;
+    document.getElementById('revPlanObjectivesDisplay').textContent = plan.objectives;
+    document.getElementById('revPlanMethod').textContent = plan.method;
+    document.getElementById('revPlanMaterials').textContent = plan.materials || 'Standard Classroom Materials';
+    document.getElementById('revComments').value = (plan.reviewComments && !plan.reviewComments.includes('Submitted') && !plan.reviewComments.includes('Draft')) ? plan.reviewComments : '';
+
+    showLessonPlanModal('reviewLessonPlanModal');
+  }
+
+  function handleApproveLessonPlan(action) {
+    ensureLessonPlansState();
+    const planId = document.getElementById('reviewPlanId').value;
+    const comments = document.getElementById('revComments').value.trim();
+    const plan = state.lessonPlansList.find(p => p.id === planId);
+
+    if (!plan) return;
+
+    if (action === 'Approve') {
+      plan.submissionStatus = 'Approved';
+      plan.reviewComments = comments || 'Approved by Vice Principal. Pedagogical objectives meet AP Board standards.';
+      plan.reviewedBy = 'Sri Navva Anand (Vice Principal)';
+      plan.reviewedAt = 'Today';
+      showToast('Lesson plan ' + plan.id + ' approved successfully.', 'success');
+    } else {
+      plan.submissionStatus = 'Returned for Correction';
+      plan.reviewComments = comments || 'Returned for Correction: Please enrich measurable learning outcomes.';
+      plan.reviewedBy = 'Sri Navva Anand (Vice Principal)';
+      plan.reviewedAt = 'Today';
+      showToast('Lesson plan returned for correction.', 'warning');
+    }
+
+    hideLessonPlanModal('reviewLessonPlanModal');
+    renderLessonPlanReview();
+  }
+
+  function openLessonPlanDetailModal(planId) {
+    ensureLessonPlansState();
+    const plan = state.lessonPlansList.find(p => p.id === planId);
+    if (!plan) return;
+
+    const body = document.getElementById('lessonPlanDetailBody');
+    if (!body) return;
+
+    let subBadge = '<span class="badge bg-secondary text-white">Draft</span>';
+    if (plan.submissionStatus === 'Submitted for Review') subBadge = '<span class="badge bg-warning text-dark"><i class="bi bi-hourglass-split me-1"></i>Submitted for Review</span>';
+    else if (plan.submissionStatus === 'Approved') subBadge = '<span class="badge bg-success text-white"><i class="bi bi-check-circle me-1"></i>Approved by ' + plan.reviewedBy + '</span>';
+    else if (plan.submissionStatus === 'Returned for Correction') subBadge = '<span class="badge bg-danger text-white"><i class="bi bi-arrow-return-left me-1"></i>Returned for Revision</span>';
+
+    let html = '';
+    html += '<div class="card border rounded-3 p-3 bg-light mb-3">';
+    html += '  <div class="d-flex justify-content-between align-items-center mb-2">';
+    html += '    <h5 class="fw-bold mb-0 text-dark">' + plan.chapter + '</h5>';
+    html += '    <div>' + subBadge + '</div>';
+    html += '  </div>';
+    html += '  <div class="text-primary fw-bold fs-6">' + plan.topic + '</div>';
+    html += '  <div class="row g-2 mt-2 pt-2 border-top small text-muted">';
+    html += '    <div class="col-md-3"><strong>Teacher:</strong> ' + plan.teacher + '</div>';
+    html += '    <div class="col-md-3"><strong>Class:</strong> ' + plan.className + '</div>';
+    html += '    <div class="col-md-3"><strong>Subject:</strong> ' + plan.subject + '</div>';
+    html += '    <div class="col-md-3"><strong>Planned Date:</strong> ' + plan.plannedDate + '</div>';
+    html += '  </div>';
+    html += '</div>';
+
+    html += '<h6 class="fw-bold text-dark small text-uppercase mb-1"><i class="bi bi-bullseye text-primary me-1"></i> Measurable Learning Objectives</h6>';
+    html += '<div class="objective-box mb-3">' + plan.objectives + '</div>';
+
+    html += '<div class="row g-3 mb-3 small">';
+    html += '  <div class="col-md-6">';
+    html += '    <div class="card border p-2 bg-light">';
+    html += '      <strong class="text-muted">Pedagogical Strategy:</strong>';
+    html += '      <div class="fw-semibold text-dark mt-1">' + plan.method + '</div>';
+    html += '    </div>';
+    html += '  </div>';
+    html += '  <div class="col-md-6">';
+    html += '    <div class="card border p-2 bg-light">';
+    html += '      <strong class="text-muted">Instructional Materials &amp; Aids:</strong>';
+    html += '      <div class="fw-semibold text-dark mt-1">' + (plan.materials || 'Standard Classroom Board & Text') + '</div>';
+    html += '    </div>';
+    html += '  </div>';
+    html += '</div>';
+
+    html += '<h6 class="fw-bold text-dark small text-uppercase mb-1"><i class="bi bi-chat-left-text text-warning me-1"></i> Teacher Delivery Notes &amp; Reflections</h6>';
+    html += '<div class="p-3 bg-light rounded border small text-dark mb-3">' + (plan.teacherRemarks || 'No delivery notes recorded yet.') + '</div>';
+
+    html += '<h6 class="fw-bold text-dark small text-uppercase mb-1"><i class="bi bi-award text-success me-1"></i> Reviewer Assessment &amp; Directive</h6>';
+    html += '<div class="review-feedback-box mb-3">' + plan.reviewComments + '</div>';
+
+    body.innerHTML = html;
+    showLessonPlanModal('lessonPlanDetailModal');
+  }
+
+  function markLessonPlanTopicCompleted(planId) {
+    ensureLessonPlansState();
+    const plan = state.lessonPlansList.find(p => p.id === planId);
+    if (!plan) return;
+
+    plan.completionStatus = 'Completed';
+    plan.completionProgress = 100;
+    if (!plan.teacherRemarks) {
+      plan.teacherRemarks = 'Topic delivery completed successfully. Formative practice conducted.';
+    }
+
+    renderLessonPlanReview();
+    showToast('Topic marked as Completed! Syllabus progress updated.', 'success');
+  }
+
+  function openSyllabusProgressReportModal() {
+    ensureLessonPlansState();
+    const body = document.getElementById('syllabusProgressModalBody');
+    if (!body) return;
+
+    let html = '';
+    html += '<div class="alert alert-info border-info-subtle small mb-3">';
+    html += '  <i class="bi bi-shield-check me-1 text-info"></i> <strong>AP State Curriculum Compliance:</strong> Term 2 instructional target is <strong>80%</strong> syllabus completion by December 15, 2026.';
+    html += '</div>';
+
+    html += '<div class="table-responsive">';
+    html += '  <table class="table table-bordered align-middle small mb-0">';
+    html += '    <thead class="table-light text-uppercase text-muted">';
+    html += '      <tr>';
+    html += '        <th>Subject</th>';
+    html += '        <th>Class</th>';
+    html += '        <th>Lead Faculty</th>';
+    html += '        <th>Delivered / Total</th>';
+    html += '        <th>Syllabus %</th>';
+    html += '        <th>Term Target</th>';
+    html += '        <th>Status</th>';
+    html += '      </tr>';
+    html += '    </thead>';
+    html += '    <tbody>';
+
+    state.syllabusProgressList.forEach(sp => {
+      html += '    <tr>';
+      html += '      <td><strong>' + sp.subject + '</strong></td>';
+      html += '      <td><span class="badge bg-light text-dark border">' + sp.className + '</span></td>';
+      html += '      <td>' + sp.teacher + '</td>';
+      html += '      <td>' + sp.completedUnits + ' of ' + sp.totalUnits + ' Units</td>';
+      html += '      <td>';
+      html += '        <div class="fw-bold text-success">' + sp.pct + '%</div>';
+      html += '        <div class="progress" style="height:5px;">';
+      html += '          <div class="progress-bar bg-success" style="width:' + sp.pct + '%;"></div>';
+      html += '        </div>';
+      html += '      </td>';
+      html += '      <td>' + sp.termTarget + '%</td>';
+      html += '      <td><span class="badge bg-success-subtle text-success border">' + sp.status + '</span></td>';
+      html += '    </tr>';
+    });
+
+    html += '    </tbody>';
+    html += '  </table>';
+    html += '</div>';
+
+    body.innerHTML = html;
+    showLessonPlanModal('syllabusProgressReportModal');
+  }
+
+  function exportLessonPlansCSV() {
+    ensureLessonPlansState();
+    let csv = 'Plan ID,Teacher,Class,Subject,Chapter,Topic,Planned Date,Completion Status,Submission Status,Progress %,Review Comments\n';
+    state.lessonPlansList.forEach(p => {
+      csv += '"' + p.id + '","' + p.teacher + '","' + p.className + '","' + p.subject + '","' + p.chapter.replace(/"/g, '""') + '","' + p.topic.replace(/"/g, '""') + '","' + p.plannedDate + '","' + p.completionStatus + '","' + p.submissionStatus + '","' + p.completionProgress + '","' + p.reviewComments.replace(/"/g, '""') + '"\n';
+    });
+
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.setAttribute('download', 'Lesson_Plans_Register_AY2026_27.csv');
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    showToast('Lesson plans register exported as CSV.', 'info');
   }
 
   // Submenu 6: Exams Schedule
@@ -48400,6 +49280,27 @@ const classData = TIMETABLE_CLASS_DATA[currentTimetableClass] || TIMETABLE_CLASS
   }
 
   return {
+    // Lesson Plan Review Module Exports
+    ensureLessonPlansState: ensureLessonPlansState,
+    updateLessonPlansKPIs: updateLessonPlansKPIs,
+    switchLessonPlansView: switchLessonPlansView,
+    renderLessonPlanReview: renderLessonPlanReview,
+    renderAdminLessonPlansTable: renderAdminLessonPlansTable,
+    filterLessonPlans: filterLessonPlans,
+    resetLessonPlansFilters: resetLessonPlansFilters,
+    renderTeacherSubmissionDesk: renderTeacherSubmissionDesk,
+    renderSyllabusProgressReportView: renderSyllabusProgressReportView,
+    openCreateLessonPlanModal: openCreateLessonPlanModal,
+    handleSaveLessonPlanSubmit: handleSaveLessonPlanSubmit,
+    openReviewLessonPlanModal: openReviewLessonPlanModal,
+    handleApproveLessonPlan: handleApproveLessonPlan,
+    openLessonPlanDetailModal: openLessonPlanDetailModal,
+    markLessonPlanTopicCompleted: markLessonPlanTopicCompleted,
+    openSyllabusProgressReportModal: openSyllabusProgressReportModal,
+    exportLessonPlansCSV: exportLessonPlansCSV,
+    showLessonPlanModal: showLessonPlanModal,
+    hideLessonPlanModal: hideLessonPlanModal,
+
     // Master Timetable Module Exports
     ensureMasterTimetableState: ensureMasterTimetableState,
     runTimetableConflictCheck: runTimetableConflictCheck,
