@@ -4736,148 +4736,177 @@
 
           <!-- SUBVIEW 2: STAFF (NON-TEACHING) -->
           <!-- ========================================== -->
-          <div class="teacher-subview" id="subview-teachers-staff" style="display: none;">
-            <!-- Executive Overview KPI Bar -->
-            <div class="admissions-overview-bar mb-3">
+                    <div class="teacher-subview" id="subview-teachers-staff" style="display: none;">
+            
+            <!-- Standard Page Header -->
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1.25rem; flex-wrap: wrap; gap: 1rem;">
+              <div>
+                <div style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.8rem; color: #64748b; margin-bottom: 0.35rem;">
+                  <span>Teachers &amp; Staff</span>
+                  <i class="fa-solid fa-chevron-right" style="font-size: 0.65rem;"></i>
+                  <span style="color: #0f172a; font-weight: 600;">Non-Teaching Staff</span>
+                </div>
+                <h2 style="font-size: 1.4rem; font-weight: 800; color: #0f172a; margin: 0 0 0.25rem 0;">
+                  Non-Teaching Staff
+                </h2>
+                <p style="font-size: 0.84rem; color: #64748b; margin: 0;">
+                  Institutional administrative personnel, accounts officers, transport supervisors, librarians, campus facilities, and support staff directory.
+                </p>
+              </div>
+              <div class="faculty-header-actions">
+                <button type="button" class="btn btn-outline-secondary btn-sm" onclick="portalApp.openStaffImportModal()" style="font-weight: 600;">
+                  <i class="fa-solid fa-file-import mr-1"></i> Import Staff
+                </button>
+                <button type="button" class="btn btn-outline-primary btn-sm" onclick="portalApp.exportStaffCSV()" style="font-weight: 600;">
+                  <i class="fa-solid fa-file-csv mr-1"></i> Export Register
+                </button>
+                <button type="button" class="btn btn-primary btn-sm" onclick="portalApp.openAddNonTeachingStaffModal()" style="font-weight: 700;">
+                  <i class="fa-solid fa-user-plus mr-1"></i> + Add Staff
+                </button>
+              </div>
+            </div>
+
+            <!-- Operational Wings Policy Notice -->
+            <div class="faculty-statutory-notice" style="background:#eff6ff; border-left-color:#3b82f6; color:#1e3a8a;">
+              <i class="fa-solid fa-building-user mr-1" style="font-size: 1rem; color: #2563eb; margin-top: 2px;"></i>
+              <div>
+                <strong>Operational Department Structure &amp; Reporting Hierarchy:</strong>
+                Non-teaching personnel provide vital institutional infrastructure across Admissions, Accounts, Fleet Logistics, Library, Science Laboratories, and Campus Maintenance. Access to portal modules and sensitive financial or student records is strictly restricted to designated administrative roles.
+              </div>
+            </div>
+
+            <!-- 5 Summary KPI Cards -->
+            <div class="admissions-overview-bar" style="margin-bottom: 1.25rem;">
               <div class="adm-stat-card card-blue">
                 <div class="adm-stat-icon icon-blue"><i class="fa-solid fa-users-gear"></i></div>
                 <div class="adm-stat-info">
-                  <div class="adm-count" id="nonTeachingStatTotal">8</div>
+                  <div class="adm-count" id="nonTeachingStatTotal">12</div>
                   <div class="adm-label">Total Staff Cadre</div>
                 </div>
               </div>
               <div class="adm-stat-card card-green">
-                <div class="adm-stat-icon icon-green"><i class="fa-solid fa-id-badge"></i></div>
+                <div class="adm-stat-icon icon-green"><i class="fa-solid fa-user-check"></i></div>
                 <div class="adm-stat-info">
-                  <div class="adm-count" id="nonTeachingStatPermanent">8</div>
-                  <div class="adm-label">Permanent (100%)</div>
+                  <div class="adm-count" id="nonTeachingStatActive">11</div>
+                  <div class="adm-label">Active on Duty Today</div>
                 </div>
               </div>
               <div class="adm-stat-card card-purple">
-                <div class="adm-stat-icon icon-purple"><i class="fa-solid fa-building-user"></i></div>
+                <div class="adm-stat-icon icon-purple"><i class="fa-solid fa-building-columns"></i></div>
                 <div class="adm-stat-info">
                   <div class="adm-count" id="nonTeachingStatDepts">6</div>
                   <div class="adm-label">Operational Wings</div>
                 </div>
               </div>
               <div class="adm-stat-card card-amber">
-                <div class="adm-stat-icon icon-amber"><i class="fa-solid fa-user-clock"></i></div>
+                <div class="adm-stat-icon icon-amber"><i class="fa-solid fa-calendar-minus"></i></div>
                 <div class="adm-stat-info">
-                  <div class="adm-count" id="nonTeachingStatActive">8 / 8</div>
-                  <div class="adm-label">Active on Duty Today</div>
+                  <div class="adm-count" id="nonTeachingStatLeave">1</div>
+                  <div class="adm-label">On Approved Leave</div>
+                </div>
+              </div>
+              <div class="adm-stat-card card-green" style="border-left: 4px solid #10b981;">
+                <div class="adm-stat-icon" style="background:#ecfdf5; color:#10b981;"><i class="fa-solid fa-shield-check"></i></div>
+                <div class="adm-stat-info">
+                  <div class="adm-count" id="nonTeachingStatPerm" style="color:#059669;">100%</div>
+                  <div class="adm-label">Statutory Compliance</div>
                 </div>
               </div>
             </div>
 
             <!-- Executive Filter Toolbar -->
-            <div class="transfers-toolbar mb-3">
-              <div class="tc-toolbar-left"
-                style="flex: 1; display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
-                <div class="tc-search-wrap" style="min-width: 260px; flex: 1;">
-                  <i class="fa-solid fa-magnifying-glass search-icon"></i>
+            <div class="transfers-toolbar" style="margin-bottom: 1rem;">
+              <div class="tc-toolbar-left" style="display:flex; align-items:center; gap:0.5rem; flex-wrap:wrap; flex:1;">
+                
+                <!-- Search input -->
+                <div class="tc-search-wrap" style="position:relative; min-width:240px; flex: 1;">
+                  <i class="fa-solid fa-magnifying-glass search-icon" style="position:absolute; left:10px; top:50%; transform:translateY(-50%); color:#94a3b8; font-size:0.85rem;"></i>
                   <input type="text" id="staffFilterInput" class="tc-search-input"
-                    placeholder="Search by Employee ID, Name, Department, Designation, Phone..."
-                    oninput="portalApp.filterNonTeachingStaff()">
+                    placeholder="Search by Employee ID, Name, Department, Designation, Reporting Manager, Responsibilities..."
+                    oninput="portalApp.filterNonTeachingStaff()"
+                    style="padding-left:32px; padding-right:28px; width:100%; height:36px; border:1px solid #cbd5e1; border-radius:6px; font-size:0.83rem;">
                   <button type="button" class="tc-clear-btn" id="staffClearSearchBtn"
                     onclick="document.getElementById('staffFilterInput').value=''; portalApp.filterNonTeachingStaff();"
-                    title="Clear Search">
+                    title="Clear Search" style="position:absolute; right:8px; top:50%; transform:translateY(-50%); background:none; border:none; color:#94a3b8; cursor:pointer;">
                     <i class="fa-solid fa-xmark"></i>
                   </button>
                 </div>
-                <div class="filter-group" style="margin-bottom: 0;">
-                  <select id="staffDeptFilter" class="tc-filter-select" onchange="portalApp.filterNonTeachingStaff()"
-                    title="Filter by Department">
-                    <option value="">All Departments</option>
-                    <option value="Administrative Office">Administrative Office</option>
-                    <option value="Finance &amp; Accounts">Finance &amp; Accounts</option>
-                    <option value="Science Laboratories">Science Laboratories</option>
-                    <option value="Library">Library &amp; Learning Resource</option>
-                    <option value="Student Services">Student Services &amp; Welfare</option>
-                    <option value="Information Technology">Information Technology (IT)</option>
-                    <option value="Transport Operations">Transport Operations</option>
-                    <option value="Campus Facilities">Campus Facilities &amp; Maintenance</option>
-                  </select>
-                </div>
-                <div class="filter-group" style="margin-bottom: 0;">
-                  <select id="staffStatusFilter" class="tc-filter-select" onchange="portalApp.filterNonTeachingStaff()"
-                    title="Filter by Employment Status">
-                    <option value="">All Employment Statuses</option>
-                    <option value="Permanent">Permanent (Full Time)</option>
-                    <option value="Probation">Probation</option>
-                    <option value="Contract">Contractual</option>
-                  </select>
-                </div>
+
+                <!-- 1. Department Filter -->
+                <select id="staffDeptFilter" class="tc-filter-select" onchange="portalApp.filterNonTeachingStaff()" title="Filter by Operational Wing" style="height:36px; padding:0 0.65rem; border:1px solid #cbd5e1; border-radius:6px; font-size:0.83rem;">
+                  <option value="">All Departments</option>
+                  <option value="Administrative Office">Administrative Office</option>
+                  <option value="Finance & Accounts">Finance &amp; Accounts</option>
+                  <option value="Transport Operations">Transport Operations</option>
+                  <option value="Library & Learning Resource">Library &amp; Learning Resource</option>
+                  <option value="Science Laboratories">Science Laboratories</option>
+                  <option value="Information Technology">Information Technology (IT)</option>
+                  <option value="Facilities & Security">Facilities &amp; Security</option>
+                  <option value="Student Services">Student Services &amp; Welfare</option>
+                </select>
+
+                <!-- 2. Employment Status Filter -->
+                <select id="staffStatusFilter" class="tc-filter-select" onchange="portalApp.filterNonTeachingStaff()" title="Filter by Employment Status" style="height:36px; padding:0 0.65rem; border:1px solid #cbd5e1; border-radius:6px; font-size:0.83rem;">
+                  <option value="">All Employment Statuses</option>
+                  <option value="Active">Active (On Duty)</option>
+                  <option value="Probation">Probationary</option>
+                  <option value="Leave">On Leave</option>
+                  <option value="Notice">Notice Period</option>
+                  <option value="Archived">Archived</option>
+                </select>
               </div>
 
-              <div class="tc-toolbar-right" style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
-                <span class="tc-count-pill" id="staffCountPill">
-                  <i class="fa-solid fa-list-check text-primary"></i> Showing <strong id="staffFilteredCount">8</strong>
-                  of <strong id="staffTotalCount">8</strong> Staff
+              <div class="tc-toolbar-right" style="display:flex; align-items:center; gap:0.5rem; flex-wrap:wrap;">
+                <span class="tc-count-pill" id="staffCountPill" style="font-size:0.8rem; background:#f1f5f9; padding:0.4rem 0.75rem; border-radius:6px; border:1px solid #e2e8f0;">
+                  <i class="fa-solid fa-id-badge text-primary mr-1"></i> Showing <strong id="staffFilteredCount">12</strong> of
+                  <strong id="staffTotalCount">12</strong> Staff
                 </span>
-                <button type="button" class="btn btn-outline-secondary btn-sm" onclick="portalApp.resetStaffFilters()"
-                  title="Reset all filters">
+                <button type="button" class="btn btn-outline-secondary btn-sm" onclick="portalApp.resetStaffFilters()" title="Reset all filters">
                   <i class="fa-solid fa-rotate-left"></i> Reset
                 </button>
-                <button type="button" class="btn btn-outline-primary btn-sm" onclick="portalApp.exportStaffCSV()"
-                  title="Export Non-Teaching Staff Roster to CSV">
-                  <i class="fa-solid fa-file-csv"></i> Export CSV
-                </button>
-                <button type="button" class="btn btn-outline-primary btn-sm" onclick="portalApp.printStaffTable()"
-                  title="Print Non-Teaching Staff Roster">
-                  <i class="fa-solid fa-print"></i> Print
-                </button>
-                <div class="staff-table-view-toggle">
+                <div class="staff-table-view-toggle" style="margin-left:0.25rem;">
                   <button type="button" class="staff-view-btn active" id="btnStaffViewTable"
-                    onclick="portalApp.toggleStaffView('table')">
-                    <i class="fa-solid fa-table-list"></i> Table Roster
+                    onclick="portalApp.toggleStaffView('table')" title="Table View">
+                    <i class="fa-solid fa-table-list"></i>
                   </button>
                   <button type="button" class="staff-view-btn" id="btnStaffViewCards"
-                    onclick="portalApp.toggleStaffView('cards')">
-                    <i class="fa-solid fa-grip"></i> Cards
+                    onclick="portalApp.toggleStaffView('cards')" title="Card View">
+                    <i class="fa-solid fa-grip"></i>
                   </button>
                 </div>
               </div>
             </div>
 
-            <!-- Table Roster View -->
-            <div id="staffTableWrapper" class="staff-table-card">
-              <div class="table-container" style="overflow-x: auto;">
-                <table class="staff-roster-table non-teaching-roster-table" id="nonTeachingStaffTable">
+            <!-- Authoritative Master Non-Teaching Table -->
+            <div id="staffTableWrapper" class="parent-table-wrap" style="margin-top:0;">
+              <div class="parent-table-scroll">
+                <table class="parent-table non-teaching-roster-table" id="nonTeachingStaffTable">
                   <thead>
                     <tr>
-                      <th style="width: 110px; text-align: left;"><i class="fa-solid fa-id-badge text-primary"></i>
-                        Employee ID</th>
-                      <th style="min-width: 220px; text-align: left;"><i class="fa-solid fa-user-tie text-primary"></i>
-                        Staff Name &amp; Contact</th>
-                      <th style="min-width: 180px; text-align: left;"><i class="fa-solid fa-building text-primary"></i>
-                        Department</th>
-                      <th style="min-width: 220px; text-align: left;"><i class="fa-solid fa-briefcase text-primary"></i>
-                        Designation</th>
-                      <th style="width: 140px; text-align: left;"><i
-                          class="fa-regular fa-calendar-check text-primary"></i> Joining Date</th>
-                      <th style="width: 165px; text-align: center;"><i
-                          class="fa-solid fa-circle-check text-primary"></i> Employment Status</th>
-                      <th style="min-width: 190px; text-align: left;"><i
-                          class="fa-solid fa-shield-halved text-primary"></i> Confidential Details</th>
-                      <th style="text-align: center; width: 140px;"><i class="fa-solid fa-sliders text-primary"></i>
-                        Actions</th>
+                      <th class="th-empid" style="min-width: 120px;"><i class="fa-solid fa-id-badge"></i> Employee ID</th>
+                      <th class="th-name" style="min-width: 190px;"><i class="fa-solid fa-user-tie"></i> Staff Name</th>
+                      <th class="th-dept" style="min-width: 170px;"><i class="fa-solid fa-building-columns"></i> Department</th>
+                      <th class="th-desig" style="min-width: 180px;"><i class="fa-solid fa-briefcase"></i> Designation</th>
+                      <th class="th-manager" style="min-width: 180px;"><i class="fa-solid fa-user-shield"></i> Reporting Manager</th>
+                      <th class="th-resp" style="min-width: 220px;"><i class="fa-solid fa-list-check"></i> Assigned Responsibilities</th>
+                      <th class="th-joining" style="min-width: 120px;"><i class="fa-solid fa-calendar-check"></i> Joining Date</th>
+                      <th class="th-status" style="min-width: 140px;"><i class="fa-solid fa-circle-check"></i> Account &amp; Status</th>
+                      <th class="th-actions" style="text-align: center; min-width: 180px;"><i class="fa-solid fa-sliders"></i> Actions</th>
                     </tr>
                   </thead>
                   <tbody id="nonTeachingStaffTableBody">
-                    <!-- Populated via portal.js -->
+                    <!-- Populated dynamically via portal.js -->
                   </tbody>
                 </table>
               </div>
             </div>
 
-            <!-- Cards Grid -->
+            <!-- Cards Grid (Alternate View) -->
             <div class="staff-grid" id="nonTeachingStaffContainer" style="display:none; margin-top:1rem;">
-              <!-- Populated via portal.js -->
+              <!-- Populated dynamically via portal.js -->
             </div>
           </div>
 
-          <!-- ========================================== -->
-          <!-- SUBVIEW 3: STAFF ATTENDANCE -->
           <!-- ========================================== -->
           <div class="teacher-subview" id="subview-teachers-attendance" style="display: none;">
             <!-- Executive Metrics Quad -->
@@ -22625,6 +22654,508 @@ Class X-A,Monday,2,09:35 AM - 10:20 AM,Physical Science,Sri Navva Anand,Room 201
         <div class="portal-modal-footer">
           <button type="button" class="btn btn-outline-secondary" onclick="portalApp.closeModal('linkStudentModal')">Cancel</button>
           <button type="submit" class="btn btn-primary" style="font-weight:700;"><i class="fa-solid fa-check mr-1"></i> Link Student</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+
+  
+  <!-- =========================================================================
+       MODALS: NON-TEACHING STAFF MANAGEMENT MODULE
+       ========================================================================= -->
+
+  <!-- 1. Add Non-Teaching Staff Modal -->
+  <div class="portal-modal-backdrop" id="addNonTeachingStaffModal" style="display:none;">
+    <div class="portal-modal-dialog staff-modal-dialog">
+      <div class="portal-modal-header">
+        <div class="modal-title-wrap">
+          <i class="fa-solid fa-user-plus text-primary"></i>
+          <div>
+            <h3>+ Add Non-Teaching Staff Member</h3>
+            <p>Establish authoritative operational staff record with department, reporting manager, and duties</p>
+          </div>
+        </div>
+        <button type="button" class="portal-modal-close" onclick="portalApp.closeModal('addNonTeachingStaffModal')">&times;</button>
+      </div>
+
+      <form id="addNonTeachingStaffForm" onsubmit="portalApp.handleAddNonTeachingStaff(event)">
+        <div class="portal-modal-body" style="max-height: 74vh; overflow-y: auto; padding: 1.25rem;">
+          
+          <div style="background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 8px; padding: 0.85rem 1rem; margin-bottom: 1.25rem; font-size: 0.82rem; color: #1e40af;">
+            <i class="fa-solid fa-shield-halved mr-1"></i>
+            <strong>Operational Cadre Registration:</strong> Employee ID is generated in sequence (<code>SV-STF-02XX</code>). System authorization will follow the designated operational department and reporting hierarchy.
+          </div>
+
+          <!-- Section 1: Personal & Designation -->
+          <h4 style="font-size: 0.92rem; font-weight: 700; color: #0f172a; margin-bottom: 0.85rem; border-bottom: 1px solid #e2e8f0; padding-bottom: 0.35rem;">
+            1. Staff Particulars &amp; Operational Hierarchy
+          </h4>
+
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin-bottom: 1rem;">
+            <div>
+              <label style="display:block; font-size:0.75rem; font-weight:700; color:#475569; margin-bottom:0.25rem;">Full Legal Name *</label>
+              <input type="text" id="ntFullName" required placeholder="e.g., Sri K. Venkata Ramana" class="tc-filter-select" style="width:100%; height:36px; padding:0 0.65rem; border:1px solid #cbd5e1; border-radius:6px; font-size:0.83rem;">
+            </div>
+            <div>
+              <label style="display:block; font-size:0.75rem; font-weight:700; color:#475569; margin-bottom:0.25rem;">Employee ID (Policy Generated)</label>
+              <input type="text" id="ntEmployeeId" readonly value="SV-STF-0209" class="tc-filter-select" style="width:100%; height:36px; padding:0 0.65rem; background:#f1f5f9; border:1px solid #cbd5e1; border-radius:6px; font-size:0.83rem; font-weight:700; color:#1d4ed8;">
+            </div>
+            <div>
+              <label style="display:block; font-size:0.75rem; font-weight:700; color:#475569; margin-bottom:0.25rem;">Department *</label>
+              <select id="ntDepartment" required class="tc-filter-select" style="width:100%; height:36px; padding:0 0.65rem; border:1px solid #cbd5e1; border-radius:6px; font-size:0.83rem;">
+                <option value="Administrative Office" selected>Administrative Office</option>
+                <option value="Finance & Accounts">Finance &amp; Accounts</option>
+                <option value="Transport Operations">Transport Operations</option>
+                <option value="Library & Learning Resource">Library &amp; Learning Resource</option>
+                <option value="Science Laboratories">Science Laboratories</option>
+                <option value="Information Technology">Information Technology (IT)</option>
+                <option value="Facilities & Security">Facilities &amp; Security</option>
+                <option value="Student Services">Student Services &amp; Welfare</option>
+              </select>
+            </div>
+            <div>
+              <label style="display:block; font-size:0.75rem; font-weight:700; color:#475569; margin-bottom:0.25rem;">Designation / Title *</label>
+              <input type="text" id="ntDesignation" required placeholder="e.g., Accounts Officer &amp; Cashier" class="tc-filter-select" style="width:100%; height:36px; padding:0 0.65rem; border:1px solid #cbd5e1; border-radius:6px; font-size:0.83rem;">
+            </div>
+            <div>
+              <label style="display:block; font-size:0.75rem; font-weight:700; color:#475569; margin-bottom:0.25rem;">Reporting Manager *</label>
+              <select id="ntReportingManager" required class="tc-filter-select" style="width:100%; height:36px; padding:0 0.65rem; border:1px solid #cbd5e1; border-radius:6px; font-size:0.83rem;">
+                <option value="Principal Smt. Gorle Varalakshmi" selected>Principal Smt. Gorle Varalakshmi</option>
+                <option value="Vice Principal Sri Navva Anand">Vice Principal Sri Navva Anand</option>
+                <option value="Administrative Officer Sri M. Srinivas">Administrative Officer Sri M. Srinivas</option>
+                <option value="Bursar / Accounts Head Sri B. Kishore">Bursar / Accounts Head Sri B. Kishore</option>
+              </select>
+            </div>
+            <div>
+              <label style="display:block; font-size:0.75rem; font-weight:700; color:#475569; margin-bottom:0.25rem;">Employment Type *</label>
+              <select id="ntEmploymentType" required class="tc-filter-select" style="width:100%; height:36px; padding:0 0.65rem; border:1px solid #cbd5e1; border-radius:6px; font-size:0.83rem;">
+                <option value="Permanent (Full Time)" selected>Permanent (Full Time)</option>
+                <option value="Probationary">Probationary (New Joiner)</option>
+                <option value="Contractual">Contractual Support</option>
+                <option value="Support Staff">Support Cadre</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Section 2: Contact & Dates -->
+          <h4 style="font-size: 0.92rem; font-weight: 700; color: #0f172a; margin-bottom: 0.85rem; border-bottom: 1px solid #e2e8f0; padding-bottom: 0.35rem;">
+            2. Contact &amp; Schedule Particulars
+          </h4>
+
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin-bottom: 1rem;">
+            <div>
+              <label style="display:block; font-size:0.75rem; font-weight:700; color:#475569; margin-bottom:0.25rem;">Contact Mobile Phone *</label>
+              <input type="tel" id="ntPhone" required placeholder="10-digit mobile number" class="tc-filter-select" style="width:100%; height:36px; padding:0 0.65rem; border:1px solid #cbd5e1; border-radius:6px; font-size:0.83rem;">
+            </div>
+            <div>
+              <label style="display:block; font-size:0.75rem; font-weight:700; color:#475569; margin-bottom:0.25rem;">Official Email Address *</label>
+              <input type="email" id="ntEmail" required placeholder="staff.admin@srividya.edu.in" class="tc-filter-select" style="width:100%; height:36px; padding:0 0.65rem; border:1px solid #cbd5e1; border-radius:6px; font-size:0.83rem;">
+            </div>
+            <div>
+              <label style="display:block; font-size:0.75rem; font-weight:700; color:#475569; margin-bottom:0.25rem;">Joining Date *</label>
+              <input type="date" id="ntJoiningDate" required value="2025-06-12" class="tc-filter-select" style="width:100%; height:36px; padding:0 0.65rem; border:1px solid #cbd5e1; border-radius:6px; font-size:0.83rem;">
+            </div>
+            <div>
+              <label style="display:block; font-size:0.75rem; font-weight:700; color:#475569; margin-bottom:0.25rem;">Duty Shift Timings</label>
+              <input type="text" id="ntShift" value="08:00 AM - 04:30 PM (Main Campus)" class="tc-filter-select" style="width:100%; height:36px; padding:0 0.65rem; border:1px solid #cbd5e1; border-radius:6px; font-size:0.83rem;">
+            </div>
+          </div>
+
+          <!-- Section 3: Assigned Responsibilities -->
+          <h4 style="font-size: 0.92rem; font-weight: 700; color: #0f172a; margin-bottom: 0.85rem; border-bottom: 1px solid #e2e8f0; padding-bottom: 0.35rem;">
+            3. Assigned Operational Responsibilities
+          </h4>
+
+          <div style="margin-bottom: 1rem;">
+            <label style="display:block; font-size:0.75rem; font-weight:700; color:#475569; margin-bottom:0.25rem;">Specific Operational Duties &amp; Custody *</label>
+            <textarea id="ntResponsibilities" required placeholder="Describe core duties (e.g., Tuition Fee Collection, AP State Scholarship Dockets, Vendor Auditing &amp; Staff Payroll)..." style="width:100%; min-height:65px; padding:0.5rem; border:1px solid #cbd5e1; border-radius:6px; font-size:0.83rem;"></textarea>
+          </div>
+
+          <!-- Section 4: Documents & Portal Link -->
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
+            <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; padding:0.85rem;">
+              <span style="font-size:0.75rem; font-weight:700; color:#475569; display:block; margin-bottom:0.4rem;">Statutory Documents:</span>
+              <label style="display:flex; align-items:center; gap:0.4rem; font-size:0.78rem; margin-bottom:0.25rem;">
+                <input type="checkbox" checked> Aadhaar &amp; PAN Card
+              </label>
+              <label style="display:flex; align-items:center; gap:0.4rem; font-size:0.78rem; margin-bottom:0.25rem;">
+                <input type="checkbox" checked> Professional Qualifications / Degrees
+              </label>
+              <label style="display:flex; align-items:center; gap:0.4rem; font-size:0.78rem;">
+                <input type="checkbox" checked> Police Clearance &amp; Service Undertaking
+              </label>
+            </div>
+            <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; padding:0.85rem;">
+              <span style="font-size:0.75rem; font-weight:700; color:#475569; display:block; margin-bottom:0.4rem;">Portal Account Provisioning:</span>
+              <label style="display:flex; align-items:center; gap:0.4rem; font-size:0.8rem; margin-bottom:0.4rem; font-weight:600; color:#0f172a;">
+                <input type="checkbox" id="ntCreateAccount" checked> Provision Staff Portal Login Account
+              </label>
+              <p style="font-size:0.74rem; color:#64748b; margin:0;">
+                Role will be assigned as <code>staff</code> with access restricted strictly to operational department functions.
+              </p>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="portal-modal-footer">
+          <button type="button" class="btn btn-outline-secondary" onclick="portalApp.closeModal('addNonTeachingStaffModal')">Cancel</button>
+          <button type="submit" class="btn btn-primary" style="font-weight:700;"><i class="fa-solid fa-check mr-1"></i> Save Staff Record</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- 2. Non-Teaching Staff Detail Dossier Modal (7 Comprehensive Tabs) -->
+  <div class="portal-modal-backdrop" id="staffDetailModal" style="display:none;">
+    <div class="portal-modal-dialog staff-modal-dialog">
+      <div class="portal-modal-header" style="flex-wrap: wrap; gap: 0.75rem;">
+        <div class="modal-title-wrap">
+          <i class="fa-solid fa-id-card-clip text-primary"></i>
+          <div>
+            <h3 id="sdDossierName">Staff Member Dossier</h3>
+            <p id="sdDossierMeta">Operational Personnel · Department · Assigned Responsibilities</p>
+          </div>
+        </div>
+        <div style="display:flex; align-items:center; gap:0.5rem; flex-wrap:wrap;">
+          <button type="button" class="btn btn-outline-primary btn-sm" onclick="portalApp.openAssignStaffDepartmentModal()" style="font-size:0.76rem;">
+            <i class="fa-solid fa-building-columns mr-1"></i> Assign Dept
+          </button>
+          <button type="button" class="btn btn-outline-secondary btn-sm" onclick="portalApp.inviteStaffToPortal()" style="font-size:0.76rem;">
+            <i class="fa-solid fa-paper-plane mr-1"></i> Portal Invite
+          </button>
+          <button type="button" class="btn btn-outline-amber btn-sm" onclick="portalApp.openChangeStaffStatusModal()" style="font-size:0.76rem; border-color:#f59e0b; color:#b45309;">
+            <i class="fa-solid fa-user-pen mr-1"></i> Change Status
+          </button>
+          <button type="button" class="btn btn-outline-danger btn-sm" onclick="portalApp.archiveStaffRecord()" style="font-size:0.76rem;">
+            <i class="fa-solid fa-box-archive mr-1"></i> Archive
+          </button>
+          <button type="button" class="portal-modal-close" onclick="portalApp.closeModal('staffDetailModal')">&times;</button>
+        </div>
+      </div>
+
+      <div class="portal-modal-body" style="max-height: 75vh; overflow-y: auto; padding: 1.25rem;">
+        
+        <!-- Status Banner -->
+        <div style="display: flex; justify-content: space-between; align-items: center; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 0.75rem 1rem; margin-bottom: 1.25rem; flex-wrap: wrap; gap: 0.5rem;">
+          <div style="display:flex; align-items:center; gap:0.5rem;">
+            <span id="sdDeptBadge" class="faculty-dept-badge">Administrative Office</span>
+            <span id="sdStatusBadge" class="faculty-status-badge active">Active (On Duty)</span>
+            <span id="sdAccountBadge" class="portal-status-badge active">Portal Active</span>
+          </div>
+          <div style="font-size: 0.8rem; color: #64748b;">
+            Employee ID: <strong id="sdEmployeeId" style="color:#0f172a; font-family:monospace;">SV-STF-0201</strong>
+          </div>
+        </div>
+
+        <!-- 7 Navigation Tabs -->
+        <div class="staff-detail-nav">
+          <button type="button" class="staff-detail-tab-btn active" onclick="portalApp.switchStaffDetailTab('profile')">
+            <i class="fa-solid fa-user"></i> Personal Profile
+          </button>
+          <button type="button" class="staff-detail-tab-btn" onclick="portalApp.switchStaffDetailTab('hierarchy')">
+            <i class="fa-solid fa-sitemap"></i> Department &amp; Manager
+          </button>
+          <button type="button" class="staff-detail-tab-btn" onclick="portalApp.switchStaffDetailTab('responsibilities')">
+            <i class="fa-solid fa-list-check"></i> Responsibilities
+          </button>
+          <button type="button" class="staff-detail-tab-btn" onclick="portalApp.switchStaffDetailTab('documents')">
+            <i class="fa-solid fa-folder-closed"></i> Documents
+          </button>
+          <button type="button" class="staff-detail-tab-btn" onclick="portalApp.switchStaffDetailTab('attendance')">
+            <i class="fa-solid fa-clipboard-user"></i> Attendance &amp; Shift
+          </button>
+          <button type="button" class="staff-detail-tab-btn" onclick="portalApp.switchStaffDetailTab('leave')">
+            <i class="fa-solid fa-calendar-minus"></i> Leave Entitlements
+          </button>
+          <button type="button" class="staff-detail-tab-btn" onclick="portalApp.switchStaffDetailTab('portal')">
+            <i class="fa-solid fa-key"></i> Portal Account
+          </button>
+        </div>
+
+        <!-- Tab 1: Profile -->
+        <div class="staff-detail-pane active" id="staffPane-profile">
+          <div class="teacher-profile-card">
+            <div class="teacher-avatar-lg" id="sdAvatar" style="background:linear-gradient(135deg, #0f766e, #0d9488);">V</div>
+            <div style="flex:1; display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:1rem;">
+              <div>
+                <label style="font-size:0.72rem; font-weight:700; color:#64748b; text-transform:uppercase;">Full Legal Name</label>
+                <div style="font-size:0.92rem; font-weight:700; color:#0f172a;" id="sdValName">-</div>
+              </div>
+              <div>
+                <label style="font-size:0.72rem; font-weight:700; color:#64748b; text-transform:uppercase;">Designation</label>
+                <div style="font-size:0.92rem; font-weight:600; color:#0f172a;" id="sdValRole">-</div>
+              </div>
+              <div>
+                <label style="font-size:0.72rem; font-weight:700; color:#64748b; text-transform:uppercase;">Department</label>
+                <div style="font-size:0.92rem; font-weight:600; color:#0f172a;" id="sdValDept">-</div>
+              </div>
+              <div>
+                <label style="font-size:0.72rem; font-weight:700; color:#64748b; text-transform:uppercase;">Contact Phone</label>
+                <div style="font-size:0.92rem; font-weight:600; color:#0f172a;" id="sdValPhone">-</div>
+              </div>
+              <div>
+                <label style="font-size:0.72rem; font-weight:700; color:#64748b; text-transform:uppercase;">Official Email</label>
+                <div style="font-size:0.92rem; font-weight:600; color:#0f172a;" id="sdValEmail">-</div>
+              </div>
+              <div>
+                <label style="font-size:0.72rem; font-weight:700; color:#64748b; text-transform:uppercase;">Joining Date</label>
+                <div style="font-size:0.92rem; font-weight:600; color:#0f172a;" id="sdValJoiningDate">-</div>
+              </div>
+              <div>
+                <label style="font-size:0.72rem; font-weight:700; color:#64748b; text-transform:uppercase;">Employment Type</label>
+                <div style="font-size:0.88rem; color:#334155;" id="sdValEmpType">Permanent (Full Time)</div>
+              </div>
+              <div>
+                <label style="font-size:0.72rem; font-weight:700; color:#64748b; text-transform:uppercase;">Qualifications</label>
+                <div style="font-size:0.88rem; color:#334155;" id="sdValQual">M.Com, PGDCA</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tab 2: Department & Manager -->
+        <div class="staff-detail-pane" id="staffPane-hierarchy">
+          <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; padding:1.25rem; margin-bottom:1rem;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.75rem;">
+              <div>
+                <span style="font-size:0.72rem; font-weight:700; color:#64748b; text-transform:uppercase;">Operational Wing</span>
+                <h4 style="margin:0.25rem 0 0 0; font-size:1.1rem; font-weight:800; color:#0f172a;" id="sdHierarchyDept">Administrative Office</h4>
+              </div>
+              <span class="tc-count-pill" id="sdHierarchyType">Core Administrative</span>
+            </div>
+            <div style="border-top:1px solid #e2e8f0; padding-top:0.75rem; margin-top:0.75rem;">
+              <span style="font-size:0.72rem; font-weight:700; color:#64748b; text-transform:uppercase;">Direct Reporting Manager</span>
+              <div style="font-size:0.95rem; font-weight:700; color:#1d4ed8; margin-top:0.2rem;" id="sdValManager">
+                <i class="fa-solid fa-user-shield mr-1"></i> Principal Smt. Gorle Varalakshmi
+              </div>
+              <div style="font-size:0.78rem; color:#64748b; margin-top:0.2rem;">All leave slips, financial disbursements, and operational requisitions require approval from this reporting officer.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tab 3: Assigned Responsibilities -->
+        <div class="staff-detail-pane" id="staffPane-responsibilities">
+          <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; padding:1rem; margin-bottom:1rem;">
+            <h5 style="margin:0 0 0.5rem 0; font-size:0.88rem; font-weight:700; color:#0f172a;"><i class="fa-solid fa-list-check text-primary mr-1"></i> Designated Institutional Duties</h5>
+            <div style="font-size:0.85rem; color:#334155; line-height:1.6;" id="sdValResponsibilities">
+              Official Admission Register, Board Affiliation Documentation, Transfer Certificate Processing &amp; Government Liaison.
+            </div>
+          </div>
+        </div>
+
+        <!-- Tab 4: Documents -->
+        <div class="staff-detail-pane" id="staffPane-documents">
+          <h5 style="font-size:0.85rem; font-weight:700; color:#0f172a; margin-bottom:0.5rem;">Statutory Employment Documents</h5>
+          <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:0.75rem;">
+            <div class="clearance-checklist-card">
+              <div>
+                <strong>1. Aadhaar UID &amp; Identity Record</strong>
+                <div style="font-size:0.75rem; color:#64748b;">Statutory identity verification on file</div>
+              </div>
+              <span class="verify-status-badge verified"><i class="fa-solid fa-check"></i> Verified</span>
+            </div>
+            <div class="clearance-checklist-card">
+              <div>
+                <strong>2. PAN Card &amp; EPF Linkage</strong>
+                <div style="font-size:0.75rem; color:#64748b;">Income Tax PAN &amp; Provident Fund verified</div>
+              </div>
+              <span class="verify-status-badge verified"><i class="fa-solid fa-check"></i> Verified</span>
+            </div>
+            <div class="clearance-checklist-card">
+              <div>
+                <strong>3. Professional Credentials &amp; Degrees</strong>
+                <div style="font-size:0.75rem; color:#64748b;">Certified educational / technical transcripts</div>
+              </div>
+              <span class="verify-status-badge verified"><i class="fa-solid fa-check"></i> Verified</span>
+            </div>
+            <div class="clearance-checklist-card">
+              <div>
+                <strong>4. Police Verification &amp; Service Book</strong>
+                <div style="font-size:0.75rem; color:#64748b;">Institutional service record book entry confirmed</div>
+              </div>
+              <span class="verify-status-badge verified"><i class="fa-solid fa-check"></i> Verified</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tab 5: Attendance & Shift -->
+        <div class="staff-detail-pane" id="staffPane-attendance">
+          <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:1rem; margin-bottom:1rem;">
+            <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; padding:1rem; text-align:center;">
+              <div style="font-size:1.4rem; font-weight:800; color:#15803d;">25 / 26</div>
+              <div style="font-size:0.75rem; color:#64748b;">Days Present This Month</div>
+            </div>
+            <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; padding:1rem; text-align:center;">
+              <div style="font-size:1.4rem; font-weight:800; color:#2563eb;">96.2%</div>
+              <div style="font-size:0.75rem; color:#64748b;">Biometric Punctuality Rating</div>
+            </div>
+            <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; padding:1rem; text-align:center;">
+              <div style="font-size:1.2rem; font-weight:700; color:#0f172a;" id="sdValShift">08:00 AM - 04:30 PM</div>
+              <div style="font-size:0.75rem; color:#64748b;">Designated Shift Hours</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tab 6: Leave Entitlements -->
+        <div class="staff-detail-pane" id="staffPane-leave">
+          <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:1rem;">
+            <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; padding:0.85rem; text-align:center;">
+              <span style="font-size:0.75rem; color:#64748b; font-weight:700;">Casual Leave (CL)</span>
+              <div style="font-size:1.3rem; font-weight:800; color:#0f172a;">8 Bal / 12</div>
+            </div>
+            <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; padding:0.85rem; text-align:center;">
+              <span style="font-size:0.75rem; color:#64748b; font-weight:700;">Medical Leave (ML)</span>
+              <div style="font-size:1.3rem; font-weight:800; color:#0f172a;">10 Bal / 10</div>
+            </div>
+            <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; padding:0.85rem; text-align:center;">
+              <span style="font-size:0.75rem; color:#64748b; font-weight:700;">Earned Leave (EL)</span>
+              <div style="font-size:1.3rem; font-weight:800; color:#0f172a;">15 Bal</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tab 7: Portal Account & Access -->
+        <div class="staff-detail-pane" id="staffPane-portal">
+          <div class="permissions-scope-box" style="background:#eff6ff; border-color:#bfdbfe; border-left-color:#2563eb;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.5rem;">
+              <strong style="color:#1e40af;"><i class="fa-solid fa-key mr-1"></i> Staff Portal Access Linkage</strong>
+              <span class="verify-status-badge verified" id="sdPortalAccountStatus">Account Active</span>
+            </div>
+            <p style="font-size:0.82rem; color:#1e3a8a; margin:0 0 0.5rem 0;">
+              This user account is provisioned under the <code>staff</code> role with permissions restricted strictly to departmental operational queues.
+            </p>
+            <div style="display:flex; gap:0.5rem; flex-wrap:wrap; margin-top:0.75rem;">
+              <button type="button" class="btn btn-outline-primary btn-sm" onclick="portalApp.inviteStaffToPortal()" style="font-size:0.75rem;">
+                <i class="fa-solid fa-paper-plane mr-1"></i> Resend Login Invitation
+              </button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="portal-modal-footer">
+        <button type="button" class="btn btn-secondary" onclick="portalApp.closeModal('staffDetailModal')">Close Dossier</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. Assign Staff Department & Reporting Manager Modal -->
+  <div class="portal-modal-backdrop" id="assignStaffDepartmentModal" style="display:none;">
+    <div class="portal-modal-dialog" style="max-width: 580px; width: 95vw;">
+      <div class="portal-modal-header">
+        <div class="modal-title-wrap">
+          <i class="fa-solid fa-building-columns text-primary"></i>
+          <div>
+            <h3>Assign Department &amp; Hierarchy</h3>
+            <p>Configure operational wing, title, and direct reporting manager</p>
+          </div>
+        </div>
+        <button type="button" class="portal-modal-close" onclick="portalApp.closeModal('assignStaffDepartmentModal')">&times;</button>
+      </div>
+
+      <form id="assignStaffDeptForm" onsubmit="portalApp.submitAssignStaffDepartment(event)">
+        <div class="portal-modal-body" style="padding: 1.25rem;">
+          
+          <div style="margin-bottom: 1rem;">
+            <label style="display:block; font-size:0.75rem; font-weight:700; color:#475569; margin-bottom:0.25rem;">Staff Member</label>
+            <input type="text" id="asdStaffName" readonly class="tc-filter-select" style="width:100%; height:36px; padding:0 0.65rem; background:#f1f5f9; border:1px solid #cbd5e1; border-radius:6px; font-size:0.83rem;">
+          </div>
+
+          <div style="margin-bottom: 1rem;">
+            <label style="display:block; font-size:0.75rem; font-weight:700; color:#475569; margin-bottom:0.25rem;">Operational Department *</label>
+            <select id="asdDepartment" required class="tc-filter-select" style="width:100%; height:36px; padding:0 0.65rem; border:1px solid #cbd5e1; border-radius:6px; font-size:0.83rem;">
+              <option value="Administrative Office">Administrative Office</option>
+              <option value="Finance & Accounts">Finance &amp; Accounts</option>
+              <option value="Transport Operations">Transport Operations</option>
+              <option value="Library & Learning Resource">Library &amp; Learning Resource</option>
+              <option value="Science Laboratories">Science Laboratories</option>
+              <option value="Information Technology">Information Technology (IT)</option>
+              <option value="Facilities & Security">Facilities &amp; Security</option>
+              <option value="Student Services">Student Services &amp; Welfare</option>
+            </select>
+          </div>
+
+          <div style="margin-bottom: 1rem;">
+            <label style="display:block; font-size:0.75rem; font-weight:700; color:#475569; margin-bottom:0.25rem;">Designation / Title *</label>
+            <input type="text" id="asdDesignation" required class="tc-filter-select" style="width:100%; height:36px; padding:0 0.65rem; border:1px solid #cbd5e1; border-radius:6px; font-size:0.83rem;">
+          </div>
+
+          <div style="margin-bottom: 1rem;">
+            <label style="display:block; font-size:0.75rem; font-weight:700; color:#475569; margin-bottom:0.25rem;">Direct Reporting Manager *</label>
+            <select id="asdManager" required class="tc-filter-select" style="width:100%; height:36px; padding:0 0.65rem; border:1px solid #cbd5e1; border-radius:6px; font-size:0.83rem;">
+              <option value="Principal Smt. Gorle Varalakshmi">Principal Smt. Gorle Varalakshmi</option>
+              <option value="Vice Principal Sri Navva Anand">Vice Principal Sri Navva Anand</option>
+              <option value="Administrative Officer Sri M. Srinivas">Administrative Officer Sri M. Srinivas</option>
+              <option value="Bursar / Accounts Head Sri B. Kishore">Bursar / Accounts Head Sri B. Kishore</option>
+            </select>
+          </div>
+
+          <div>
+            <label style="display:block; font-size:0.75rem; font-weight:700; color:#475569; margin-bottom:0.25rem;">Updated Operational Responsibilities</label>
+            <textarea id="asdResponsibilities" style="width:100%; min-height:65px; padding:0.5rem; border:1px solid #cbd5e1; border-radius:6px; font-size:0.83rem;"></textarea>
+          </div>
+
+        </div>
+
+        <div class="portal-modal-footer">
+          <button type="button" class="btn btn-outline-secondary" onclick="portalApp.closeModal('assignStaffDepartmentModal')">Cancel</button>
+          <button type="submit" class="btn btn-primary" style="font-weight:700;"><i class="fa-solid fa-check mr-1"></i> Save Department &amp; Hierarchy</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- 4. Change Staff Status Modal -->
+  <div class="portal-modal-backdrop" id="changeStaffStatusModal" style="display:none;">
+    <div class="portal-modal-dialog" style="max-width: 550px; width: 95vw;">
+      <div class="portal-modal-header">
+        <div class="modal-title-wrap">
+          <i class="fa-solid fa-user-pen text-amber"></i>
+          <div>
+            <h3>Change Staff Employment Status</h3>
+            <p>Authoritative staff service lifecycle update</p>
+          </div>
+        </div>
+        <button type="button" class="portal-modal-close" onclick="portalApp.closeModal('changeStaffStatusModal')">&times;</button>
+      </div>
+
+      <form id="changeStaffStatusForm" onsubmit="portalApp.submitChangeStaffStatus(event)">
+        <div class="portal-modal-body" style="padding: 1.25rem;">
+          
+          <div style="margin-bottom: 1rem;">
+            <label style="display:block; font-size:0.75rem; font-weight:700; color:#475569; margin-bottom:0.25rem;">Staff Member</label>
+            <input type="text" id="cssStaffName" readonly class="tc-filter-select" style="width:100%; height:36px; padding:0 0.65rem; background:#f1f5f9; border:1px solid #cbd5e1; border-radius:6px; font-size:0.83rem;">
+          </div>
+
+          <div style="margin-bottom: 1rem;">
+            <label style="display:block; font-size:0.75rem; font-weight:700; color:#475569; margin-bottom:0.25rem;">New Employment Status *</label>
+            <select id="cssNewStatus" required class="tc-filter-select" style="width:100%; height:36px; padding:0 0.65rem; border:1px solid #cbd5e1; border-radius:6px; font-size:0.83rem;">
+              <option value="Active">Active (On Duty)</option>
+              <option value="Probation">Probationary Cadre</option>
+              <option value="Leave">On Approved Leave</option>
+              <option value="Notice">Notice Period</option>
+              <option value="Archived">Archived / Relieved Service</option>
+            </select>
+          </div>
+
+          <div style="margin-bottom: 1rem;">
+            <label style="display:block; font-size:0.75rem; font-weight:700; color:#475569; margin-bottom:0.25rem;">Effective Date *</label>
+            <input type="date" id="cssEffectiveDate" required value="2025-11-01" class="tc-filter-select" style="width:100%; height:36px; padding:0 0.65rem; border:1px solid #cbd5e1; border-radius:6px; font-size:0.83rem;">
+          </div>
+
+          <div>
+            <label style="display:block; font-size:0.75rem; font-weight:700; color:#475569; margin-bottom:0.25rem;">Administrative Note / Order Reference *</label>
+            <textarea id="cssReason" required placeholder="Administrative order number or managing committee resolution..." style="width:100%; min-height:70px; padding:0.5rem; border:1px solid #cbd5e1; border-radius:6px; font-size:0.83rem;"></textarea>
+          </div>
+
+        </div>
+
+        <div class="portal-modal-footer">
+          <button type="button" class="btn btn-outline-secondary" onclick="portalApp.closeModal('changeStaffStatusModal')">Cancel</button>
+          <button type="submit" class="btn btn-primary" style="font-weight:700;"><i class="fa-solid fa-check mr-1"></i> Update Status</button>
         </div>
       </form>
     </div>

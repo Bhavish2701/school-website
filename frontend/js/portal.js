@@ -1709,108 +1709,580 @@ const FEE_CATEGORY_AUDIT_DATA = [
 
   const NON_TEACHING_STAFF_DATA = [
     {
-      id: 'NT-101',
+      id: 'SV-STF-0201',
+      employeeId: 'SV-STF-0201',
+      legacyId: 'NT-101',
       name: 'Smt. M. Vijaya',
       role: 'Office Administrator & Head Clerk',
+      designation: 'Office Administrator & Head Clerk',
       dept: 'Administrative Office',
+      department: 'Administrative Office',
+      reportingManager: 'Principal Smt. Gorle Varalakshmi',
+      joiningDate: '2017-06-12',
+      employmentType: 'Permanent (Full Time)',
       qualification: 'M.Com, PGDCA',
       exp: '12 Years',
       subject: 'Administration & Admissions',
       phone: '98480 22338',
-      email: 'office.srividya@gmail.com',
+      email: 'office.m.vijaya@srividya.edu.in',
+      accountStatus: 'Active',
       status: 'Active',
-      shift: '08:00 AM - 04:30 PM (Main Office)'
+      shift: '08:00 AM - 04:30 PM (Main Office)',
+      assignedResponsibilities: [
+        'CBSE Affiliation & Official Board Correspondence',
+        'Staff Master Register & Leave Audits',
+        'Institutional Treasury & Signatory Liaison',
+        'Departmental Office Supervision'
+      ],
+      documents: [
+        { type: 'Aadhaar Card (UIDAI Verified)', status: 'Verified', verifiedBy: 'Principal Smt. Gorle Varalakshmi', date: '2023-04-10' },
+        { type: 'PAN Card (Financial & Tax ID)', status: 'Verified', verifiedBy: 'Accounts Head Sri B. Kishore', date: '2023-04-10' },
+        { type: 'Postgraduate & Technical Credentials (M.Com, PGDCA)', status: 'Verified', verifiedBy: 'Administrative Office', date: '2023-04-11' },
+        { type: 'Police Background Verification Clearance', status: 'Verified', verifiedBy: 'Local Police Liaison', date: '2023-04-12' },
+        { type: 'Permanent Appointment Order & Undertaking', status: 'Verified', verifiedBy: 'School Management Board', date: '2023-04-15' }
+      ],
+      attendance: {
+        presentDays: 25,
+        workingDays: 26,
+        rate: '96.2%',
+        punctuality: '98.5%',
+        biometricId: 'BIO-049',
+        lastPunch: 'Today at 07:54 AM (In-Time)'
+      },
+      leave: {
+        casualBalance: 8,
+        medicalBalance: 10,
+        earnedBalance: 14,
+        takenThisYear: 2
+      }
     },
     {
-      id: 'NT-102',
+      id: 'SV-STF-0202',
+      employeeId: 'SV-STF-0202',
+      legacyId: 'NT-102',
       name: 'Sri B. Kishore',
-      role: 'Accounts Officer & Cashier',
+      role: 'Senior Accounts Officer & Cashier',
+      designation: 'Senior Accounts Officer & Cashier',
       dept: 'Finance & Accounts',
+      department: 'Finance & Accounts',
+      reportingManager: 'Principal Smt. Gorle Varalakshmi',
+      joiningDate: '2018-04-10',
+      employmentType: 'Permanent (Full Time)',
       qualification: 'B.Com, Tally Prime Certified',
       exp: '8 Years',
       subject: 'Fee Collection & Payroll',
       phone: '94401 77219',
-      email: 'accounts.srividya@gmail.com',
+      email: 'accounts.b.kishore@srividya.edu.in',
+      accountStatus: 'Active',
       status: 'Active',
-      shift: '08:30 AM - 04:30 PM (Accounts Desk)'
+      shift: '08:30 AM - 04:30 PM (Accounts Desk)',
+      assignedResponsibilities: [
+        'Tuition Fee Collection & Bank Reconciliation',
+        'Monthly Staff Payroll & EPF Disbursal',
+        'Statutory Financial Audit Support',
+        'Petty Cash Management & Voucher Verification'
+      ],
+      documents: [
+        { type: 'Aadhaar Card (UIDAI Verified)', status: 'Verified', verifiedBy: 'Principal Smt. Gorle Varalakshmi', date: '2023-04-10' },
+        { type: 'PAN Card (Financial & Tax ID)', status: 'Verified', verifiedBy: 'Accounts Section', date: '2023-04-10' },
+        { type: 'Degree & Professional Tally Certification', status: 'Verified', verifiedBy: 'Administrative Office', date: '2023-04-11' },
+        { type: 'Police Background Verification Clearance', status: 'Verified', verifiedBy: 'Local Police Liaison', date: '2023-04-12' },
+        { type: 'Permanent Appointment Order', status: 'Verified', verifiedBy: 'School Management Board', date: '2023-04-15' }
+      ],
+      attendance: {
+        presentDays: 26,
+        workingDays: 26,
+        rate: '100.0%',
+        punctuality: '99.0%',
+        biometricId: 'BIO-052',
+        lastPunch: 'Today at 08:15 AM (In-Time)'
+      },
+      leave: {
+        casualBalance: 10,
+        medicalBalance: 12,
+        earnedBalance: 15,
+        takenThisYear: 1
+      }
     },
     {
-      id: 'NT-103',
+      id: 'SV-STF-0203',
+      employeeId: 'SV-STF-0203',
+      legacyId: 'NT-103',
       name: 'Sri V. Suresh Babu',
       role: 'Senior Science Laboratory Assistant',
+      designation: 'Senior Science Laboratory Assistant',
       dept: 'Science Laboratories',
+      department: 'Science Laboratories',
+      reportingManager: 'Vice Principal Sri Navva Anand',
+      joiningDate: '2019-07-01',
+      employmentType: 'Permanent (Full Time)',
       qualification: 'B.Sc (Physics & Chemistry)',
       exp: '10 Years',
       subject: 'Lab Equipment & Safety',
       phone: '98492 11045',
-      email: 'lab.srividya@gmail.com',
+      email: 'lab.suresh@srividya.edu.in',
+      accountStatus: 'Active',
       status: 'Active',
-      shift: '08:15 AM - 04:00 PM (Science Wing)'
+      shift: '08:15 AM - 04:00 PM (Science Wing)',
+      assignedResponsibilities: [
+        'Physics & Chemistry Apparatus Maintenance',
+        'Chemical Reagent Stock Register & Safe Storage',
+        'CBSE Board Practical Examination Setup',
+        'Lab Safety Protocols & First-Aid Kit Custody'
+      ],
+      documents: [
+        { type: 'Aadhaar Card (UIDAI Verified)', status: 'Verified', verifiedBy: 'Vice Principal Sri Navva Anand', date: '2023-04-10' },
+        { type: 'PAN Card (Financial & Tax ID)', status: 'Verified', verifiedBy: 'Accounts Section', date: '2023-04-10' },
+        { type: 'B.Sc Degree & Laboratory Safety Certificate', status: 'Verified', verifiedBy: 'Administrative Office', date: '2023-04-11' },
+        { type: 'Police Background Verification Clearance', status: 'Verified', verifiedBy: 'Local Police Liaison', date: '2023-04-12' },
+        { type: 'Permanent Service Appointment Order', status: 'Verified', verifiedBy: 'School Management Board', date: '2023-04-15' }
+      ],
+      attendance: {
+        presentDays: 24,
+        workingDays: 26,
+        rate: '92.3%',
+        punctuality: '95.0%',
+        biometricId: 'BIO-061',
+        lastPunch: 'Today at 08:05 AM (In-Time)'
+      },
+      leave: {
+        casualBalance: 6,
+        medicalBalance: 9,
+        earnedBalance: 12,
+        takenThisYear: 3
+      }
     },
     {
-      id: 'NT-104',
+      id: 'SV-STF-0204',
+      employeeId: 'SV-STF-0204',
+      legacyId: 'NT-104',
       name: 'Sri G. Ranga Rao',
       role: 'Head Librarian & Media In-Charge',
+      designation: 'Head Librarian & Media In-Charge',
       dept: 'Library & Learning Resource',
-      qualification: 'M.Li.Sc',
+      department: 'Library & Learning Resource',
+      reportingManager: 'Principal Smt. Gorle Varalakshmi',
+      joiningDate: '2016-08-15',
+      employmentType: 'Permanent (Full Time)',
+      qualification: 'M.Li.Sc, UGC-NET Qualified',
       exp: '14 Years',
       subject: 'Library Catalog & Digital Media',
       phone: '91773 45890',
-      email: 'library.srividya@gmail.com',
+      email: 'library.rangarao@srividya.edu.in',
+      accountStatus: 'Active',
       status: 'Active',
-      shift: '08:30 AM - 04:30 PM (Central Library)'
+      shift: '08:30 AM - 04:30 PM (Central Library)',
+      assignedResponsibilities: [
+        'Library Management Software (KOHA) & Barcoding',
+        'Book Circulation & Periodic Stock Auditing',
+        'NCERT Textbook & Reference Book Procurement',
+        'Digital Learning Resources & Audio-Visual Media'
+      ],
+      documents: [
+        { type: 'Aadhaar Card (UIDAI Verified)', status: 'Verified', verifiedBy: 'Principal Smt. Gorle Varalakshmi', date: '2023-04-10' },
+        { type: 'PAN Card (Financial & Tax ID)', status: 'Verified', verifiedBy: 'Accounts Section', date: '2023-04-10' },
+        { type: 'M.Li.Sc Master Degree Credentials', status: 'Verified', verifiedBy: 'Administrative Office', date: '2023-04-11' },
+        { type: 'Police Background Verification Clearance', status: 'Verified', verifiedBy: 'Local Police Liaison', date: '2023-04-12' },
+        { type: 'Permanent Service Appointment Order', status: 'Verified', verifiedBy: 'School Management Board', date: '2023-04-15' }
+      ],
+      attendance: {
+        presentDays: 25,
+        workingDays: 26,
+        rate: '96.2%',
+        punctuality: '97.5%',
+        biometricId: 'BIO-043',
+        lastPunch: 'Today at 08:20 AM (In-Time)'
+      },
+      leave: {
+        casualBalance: 9,
+        medicalBalance: 12,
+        earnedBalance: 16,
+        takenThisYear: 1
+      }
     },
     {
-      id: 'NT-105',
+      id: 'SV-STF-0205',
+      employeeId: 'SV-STF-0205',
+      legacyId: 'NT-105',
       name: 'Smt. CH. Saranya',
       role: 'Student Welfare & Counseling Coordinator',
+      designation: 'Student Welfare & Counseling Coordinator',
       dept: 'Student Services',
+      department: 'Student Services',
+      reportingManager: 'Principal Smt. Gorle Varalakshmi',
+      joiningDate: '2021-02-01',
+      employmentType: 'Permanent (Full Time)',
       qualification: 'MSW, Child Psychology Diploma',
       exp: '6 Years',
       subject: 'Welfare, Health & First Aid',
       phone: '89781 33420',
-      email: 'welfare.srividya@gmail.com',
+      email: 'welfare.saranya@srividya.edu.in',
+      accountStatus: 'Active',
       status: 'Active',
-      shift: '08:30 AM - 04:00 PM (Counseling Room)'
+      shift: '08:30 AM - 04:00 PM (Counseling Room)',
+      assignedResponsibilities: [
+        'Student Mental Health & Emotional Wellbeing Support',
+        'Campus First-Aid Infirmary Supervision',
+        'Special Educational Needs (SEN) Documentation',
+        'Parent-School Counseling Coordination'
+      ],
+      documents: [
+        { type: 'Aadhaar Card (UIDAI Verified)', status: 'Verified', verifiedBy: 'Principal Smt. Gorle Varalakshmi', date: '2023-04-10' },
+        { type: 'PAN Card (Financial & Tax ID)', status: 'Verified', verifiedBy: 'Accounts Section', date: '2023-04-10' },
+        { type: 'Master in Social Work & Counseling Certification', status: 'Verified', verifiedBy: 'Administrative Office', date: '2023-04-11' },
+        { type: 'Police Background Verification Clearance', status: 'Verified', verifiedBy: 'Local Police Liaison', date: '2023-04-12' },
+        { type: 'Permanent Service Appointment Order', status: 'Verified', verifiedBy: 'School Management Board', date: '2023-04-15' }
+      ],
+      attendance: {
+        presentDays: 25,
+        workingDays: 26,
+        rate: '96.2%',
+        punctuality: '99.0%',
+        biometricId: 'BIO-077',
+        lastPunch: 'Today at 08:24 AM (In-Time)'
+      },
+      leave: {
+        casualBalance: 8,
+        medicalBalance: 11,
+        earnedBalance: 14,
+        takenThisYear: 2
+      }
     },
     {
-      id: 'NT-106',
+      id: 'SV-STF-0206',
+      employeeId: 'SV-STF-0206',
+      legacyId: 'NT-106',
       name: 'Sri K. Nagaraju',
       role: 'Network Administrator & Systems Tech',
+      designation: 'Network Administrator & Systems Tech',
       dept: 'Information Technology',
-      qualification: 'B.Tech (IT), CCNA',
+      department: 'Information Technology',
+      reportingManager: 'Principal Smt. Gorle Varalakshmi',
+      joiningDate: '2021-09-15',
+      employmentType: 'Permanent (Full Time)',
+      qualification: 'B.Tech (IT), CCNA, Hardware Tech',
       exp: '5 Years',
       subject: 'Computer Lab & CCTV Support',
       phone: '70325 88910',
-      email: 'techsupport.srividya@gmail.com',
+      email: 'techsupport.nagaraju@srividya.edu.in',
+      accountStatus: 'Active',
       status: 'Active',
-      shift: '08:00 AM - 04:30 PM (IT Cell)'
+      shift: '08:00 AM - 04:30 PM (IT Cell)',
+      assignedResponsibilities: [
+        'Computer Labs 1 & 2 Infrastructure & OS Deployment',
+        'Campus-wide Wi-Fi, Router & Firewall Configuration',
+        'Biometric Attendance Machine Network Sync',
+        'CCTV Surveillance Network & Video Storage Management'
+      ],
+      documents: [
+        { type: 'Aadhaar Card (UIDAI Verified)', status: 'Verified', verifiedBy: 'Principal Smt. Gorle Varalakshmi', date: '2023-04-10' },
+        { type: 'PAN Card (Financial & Tax ID)', status: 'Verified', verifiedBy: 'Accounts Section', date: '2023-04-10' },
+        { type: 'B.Tech Degree & CCNA Network Certification', status: 'Verified', verifiedBy: 'Administrative Office', date: '2023-04-11' },
+        { type: 'Police Background Verification Clearance', status: 'Verified', verifiedBy: 'Local Police Liaison', date: '2023-04-12' },
+        { type: 'Permanent Service Appointment Order', status: 'Verified', verifiedBy: 'School Management Board', date: '2023-04-15' }
+      ],
+      attendance: {
+        presentDays: 26,
+        workingDays: 26,
+        rate: '100.0%',
+        punctuality: '98.5%',
+        biometricId: 'BIO-038',
+        lastPunch: 'Today at 07:55 AM (In-Time)'
+      },
+      leave: {
+        casualBalance: 10,
+        medicalBalance: 10,
+        earnedBalance: 12,
+        takenThisYear: 1
+      }
     },
     {
-      id: 'NT-107',
+      id: 'SV-STF-0207',
+      employeeId: 'SV-STF-0207',
+      legacyId: 'NT-107',
       name: 'Sri P. Appa Rao',
       role: 'Transport & Fleet Logistics Supervisor',
+      designation: 'Transport & Fleet Logistics Supervisor',
       dept: 'Transport Operations',
-      qualification: 'Matriculate, Heavy Vehicle License',
+      department: 'Transport Operations',
+      reportingManager: 'Vice Principal Sri Navva Anand',
+      joiningDate: '2015-05-18',
+      employmentType: 'Permanent (Full Time)',
+      qualification: 'Matriculate, Heavy Commercial Vehicle License (HMV)',
       exp: '15 Years',
       subject: 'School Bus Fleet & Driver Operations',
       phone: '99490 66321',
-      email: 'transport.srividya@gmail.com',
+      email: 'transport.apparao@srividya.edu.in',
+      accountStatus: 'Active',
       status: 'Active',
-      shift: '06:45 AM - 05:30 PM (Campus Fleet)'
+      shift: '06:45 AM - 05:30 PM (Campus Fleet)',
+      assignedResponsibilities: [
+        '14 School Bus Routes & Morning/Evening Rostering',
+        'Vehicle Fitness Certificates & RTO Statutory Compliance',
+        'Bus GPS Tracking System & Speed Governor Checks',
+        'Driver & Cleaner Code of Conduct Oversight'
+      ],
+      documents: [
+        { type: 'Aadhaar Card (UIDAI Verified)', status: 'Verified', verifiedBy: 'Vice Principal Sri Navva Anand', date: '2023-04-10' },
+        { type: 'PAN Card (Financial & Tax ID)', status: 'Verified', verifiedBy: 'Accounts Section', date: '2023-04-10' },
+        { type: 'Commercial Heavy Transport Vehicle License (HMV)', status: 'Verified', verifiedBy: 'Administrative Office', date: '2023-04-11' },
+        { type: 'Police Background Verification Clearance', status: 'Verified', verifiedBy: 'Local Police Liaison', date: '2023-04-12' },
+        { type: 'Permanent Service Appointment Order', status: 'Verified', verifiedBy: 'School Management Board', date: '2023-04-15' }
+      ],
+      attendance: {
+        presentDays: 26,
+        workingDays: 26,
+        rate: '100.0%',
+        punctuality: '99.5%',
+        biometricId: 'BIO-012',
+        lastPunch: 'Today at 06:40 AM (In-Time)'
+      },
+      leave: {
+        casualBalance: 11,
+        medicalBalance: 12,
+        earnedBalance: 18,
+        takenThisYear: 1
+      }
     },
     {
-      id: 'NT-108',
+      id: 'SV-STF-0208',
+      employeeId: 'SV-STF-0208',
+      legacyId: 'NT-108',
       name: 'Sri K. Venkataratnam',
       role: 'Campus Estate & Safety Supervisor',
+      designation: 'Campus Estate & Safety Supervisor',
       dept: 'Facilities & Security',
-      qualification: 'Higher Secondary, First Aid Trained',
+      department: 'Facilities & Security',
+      reportingManager: 'Administrative Officer Sri M. Srinivas',
+      joiningDate: '2018-11-01',
+      employmentType: 'Permanent (Full Time)',
+      qualification: 'Higher Secondary, Industrial Safety Trained',
       exp: '11 Years',
       subject: 'Campus Security, Sanitation & Power',
       phone: '98665 12098',
-      email: 'security.srividya@gmail.com',
+      email: 'facilities.venkataratnam@srividya.edu.in',
+      accountStatus: 'Active',
       status: 'Active',
-      shift: '07:30 AM - 05:30 PM (Campus Security)'
+      shift: '07:30 AM - 05:30 PM (Campus Estate)',
+      assignedResponsibilities: [
+        'Campus Gate Security & Visitor Screening Register',
+        'Campus Power Infrastructure & Diesel Generator Maintenance',
+        'Fire Extinguisher Readiness & Evacuation Drills',
+        'Daily Sanitation & Potable Water Quality Audits'
+      ],
+      documents: [
+        { type: 'Aadhaar Card (UIDAI Verified)', status: 'Verified', verifiedBy: 'Administrative Officer Sri M. Srinivas', date: '2023-04-10' },
+        { type: 'PAN Card (Financial & Tax ID)', status: 'Verified', verifiedBy: 'Accounts Section', date: '2023-04-10' },
+        { type: 'Higher Secondary & Fire Safety Certification', status: 'Verified', verifiedBy: 'Administrative Office', date: '2023-04-11' },
+        { type: 'Police Background Verification Clearance', status: 'Verified', verifiedBy: 'Local Police Liaison', date: '2023-04-12' },
+        { type: 'Permanent Service Appointment Order', status: 'Verified', verifiedBy: 'School Management Board', date: '2023-04-15' }
+      ],
+      attendance: {
+        presentDays: 25,
+        workingDays: 26,
+        rate: '96.2%',
+        punctuality: '97.0%',
+        biometricId: 'BIO-021',
+        lastPunch: 'Today at 07:25 AM (In-Time)'
+      },
+      leave: {
+        casualBalance: 7,
+        medicalBalance: 10,
+        earnedBalance: 13,
+        takenThisYear: 2
+      }
+    },
+    {
+      id: 'SV-STF-0209',
+      employeeId: 'SV-STF-0209',
+      legacyId: 'NT-109',
+      name: 'Smt. G. Bhavani',
+      role: 'Senior Records & Admissions Clerk',
+      designation: 'Senior Records & Admissions Clerk',
+      dept: 'Administrative Office',
+      department: 'Administrative Office',
+      reportingManager: 'Administrative Officer Sri M. Srinivas',
+      joiningDate: '2022-03-10',
+      employmentType: 'Permanent (Full Time)',
+      qualification: 'B.Sc (Comp), MS Office Expert',
+      exp: '4 Years',
+      subject: 'Student Records & Enrolment',
+      phone: '98485 54321',
+      email: 'records.bhavani@srividya.edu.in',
+      accountStatus: 'Active',
+      status: 'Active',
+      shift: '08:30 AM - 04:30 PM (Admin Office)',
+      assignedResponsibilities: [
+        'Student Authoritative Enrolment Register Maintenance',
+        'Transfer Certificate (TC) Dossier Verification',
+        'Parent Portal Contact Verification Processing',
+        'Physical Student Record Archival & Retrieval'
+      ],
+      documents: [
+        { type: 'Aadhaar Card (UIDAI Verified)', status: 'Verified', verifiedBy: 'Administrative Officer Sri M. Srinivas', date: '2023-04-10' },
+        { type: 'PAN Card (Financial & Tax ID)', status: 'Verified', verifiedBy: 'Accounts Section', date: '2023-04-10' },
+        { type: 'B.Sc Degree & Computer Applications Diploma', status: 'Verified', verifiedBy: 'Administrative Office', date: '2023-04-11' },
+        { type: 'Police Background Verification Clearance', status: 'Verified', verifiedBy: 'Local Police Liaison', date: '2023-04-12' },
+        { type: 'Permanent Service Appointment Order', status: 'Verified', verifiedBy: 'School Management Board', date: '2023-04-15' }
+      ],
+      attendance: {
+        presentDays: 25,
+        workingDays: 26,
+        rate: '96.2%',
+        punctuality: '98.0%',
+        biometricId: 'BIO-067',
+        lastPunch: 'Today at 08:26 AM (In-Time)'
+      },
+      leave: {
+        casualBalance: 9,
+        medicalBalance: 12,
+        earnedBalance: 14,
+        takenThisYear: 1
+      }
+    },
+    {
+      id: 'SV-STF-0210',
+      employeeId: 'SV-STF-0210',
+      legacyId: 'NT-110',
+      name: 'Sri D. Ramana',
+      role: 'Assistant Accounts Clerk & Billing',
+      designation: 'Assistant Accounts Clerk & Billing',
+      dept: 'Finance & Accounts',
+      department: 'Finance & Accounts',
+      reportingManager: 'Accounts Head Sri B. Kishore',
+      joiningDate: '2023-01-16',
+      employmentType: 'Probationary',
+      qualification: 'B.Com, Tally ERP 9',
+      exp: '2 Years',
+      subject: 'Billing & Fee Receipts',
+      phone: '97012 34567',
+      email: 'accounts.ramana@srividya.edu.in',
+      accountStatus: 'Invited',
+      status: 'Probation',
+      shift: '08:30 AM - 04:30 PM (Fee Counter)',
+      assignedResponsibilities: [
+        'Daily Term Fee Collection & Digital Receipt Issuance',
+        'Transport & Bus Fee Reconciliations',
+        'Fee Defaulter SMS Notifications Dispatch',
+        'Daily Cash Counter Closure Report Generation'
+      ],
+      documents: [
+        { type: 'Aadhaar Card (UIDAI Verified)', status: 'Verified', verifiedBy: 'Accounts Head Sri B. Kishore', date: '2023-01-16' },
+        { type: 'PAN Card (Financial & Tax ID)', status: 'Verified', verifiedBy: 'Accounts Section', date: '2023-01-16' },
+        { type: 'B.Com Commerce Degree & Tally Certificate', status: 'Verified', verifiedBy: 'Administrative Office', date: '2023-01-18' },
+        { type: 'Police Background Verification Clearance', status: 'Verified', verifiedBy: 'Local Police Liaison', date: '2023-01-20' },
+        { type: 'Probationary Service Appointment Order', status: 'Verified', verifiedBy: 'School Management Board', date: '2023-01-25' }
+      ],
+      attendance: {
+        presentDays: 24,
+        workingDays: 26,
+        rate: '92.3%',
+        punctuality: '96.5%',
+        biometricId: 'BIO-089',
+        lastPunch: 'Today at 08:22 AM (In-Time)'
+      },
+      leave: {
+        casualBalance: 6,
+        medicalBalance: 8,
+        earnedBalance: 6,
+        takenThisYear: 2
+      }
+    },
+    {
+      id: 'SV-STF-0211',
+      employeeId: 'SV-STF-0211',
+      legacyId: 'NT-111',
+      name: 'Sri T. Murali',
+      role: 'Senior Bus Driver & Fleet Assistant',
+      designation: 'Senior Bus Driver & Fleet Assistant',
+      dept: 'Transport Operations',
+      department: 'Transport Operations',
+      reportingManager: 'Vice Principal Sri Navva Anand',
+      joiningDate: '2020-10-05',
+      employmentType: 'Contractual',
+      qualification: 'Secondary School, Commercial Heavy Badge',
+      exp: '12 Years',
+      subject: 'Route 4 Bus Operations',
+      phone: '99088 77665',
+      email: 'fleet.murali@srividya.edu.in',
+      accountStatus: 'Not Enrolled',
+      status: 'Active',
+      shift: '06:30 AM - 05:30 PM (Route 4 Duty)',
+      assignedResponsibilities: [
+        'Bus Route 04 (Ring Road to School) Transit Safety',
+        'Pre-Trip Vehicle Mechanical & Brake Inspections',
+        'Fuel Consumption & Mileage Log Entry',
+        'Student Boarding Discipline Oversight'
+      ],
+      documents: [
+        { type: 'Aadhaar Card (UIDAI Verified)', status: 'Verified', verifiedBy: 'Vice Principal Sri Navva Anand', date: '2023-04-10' },
+        { type: 'PAN Card (Financial & Tax ID)', status: 'Verified', verifiedBy: 'Accounts Section', date: '2023-04-10' },
+        { type: 'Commercial Heavy Passenger License with Badge', status: 'Verified', verifiedBy: 'Administrative Office', date: '2023-04-11' },
+        { type: 'Police Background Verification Clearance', status: 'Verified', verifiedBy: 'Local Police Liaison', date: '2023-04-12' },
+        { type: 'Contractual Service Agreement Order', status: 'Verified', verifiedBy: 'School Management Board', date: '2023-04-15' }
+      ],
+      attendance: {
+        presentDays: 26,
+        workingDays: 26,
+        rate: '100.0%',
+        punctuality: '99.0%',
+        biometricId: 'BIO-018',
+        lastPunch: 'Today at 06:25 AM (In-Time)'
+      },
+      leave: {
+        casualBalance: 8,
+        medicalBalance: 10,
+        earnedBalance: 12,
+        takenThisYear: 1
+      }
+    },
+    {
+      id: 'SV-STF-0212',
+      employeeId: 'SV-STF-0212',
+      legacyId: 'NT-112',
+      name: 'Smt. K. Ratnam',
+      role: 'Assistant Librarian & Cataloger',
+      designation: 'Assistant Librarian & Cataloger',
+      dept: 'Library & Learning Resource',
+      department: 'Library & Learning Resource',
+      reportingManager: 'Vice Principal Sri Navva Anand',
+      joiningDate: '2022-11-20',
+      employmentType: 'Probationary',
+      qualification: 'B.Li.Sc, Library Systems Certified',
+      exp: '3 Years',
+      subject: 'Junior Library Section & Periodicals',
+      phone: '94901 23456',
+      email: 'library.ratnam@srividya.edu.in',
+      accountStatus: 'Invited',
+      status: 'Probation',
+      shift: '08:30 AM - 04:30 PM (Junior Library)',
+      assignedResponsibilities: [
+        'Primary Wing Storybook & Magazine Cataloging',
+        'Student Reading Card Maintenance & Return Audits',
+        'Library Fine Record Keeping',
+        'New Arrivals Showcase & Display Maintenance'
+      ],
+      documents: [
+        { type: 'Aadhaar Card (UIDAI Verified)', status: 'Verified', verifiedBy: 'Vice Principal Sri Navva Anand', date: '2022-11-20' },
+        { type: 'PAN Card (Financial & Tax ID)', status: 'Verified', verifiedBy: 'Accounts Section', date: '2022-11-20' },
+        { type: 'B.Li.Sc Library Science Degree Credentials', status: 'Verified', verifiedBy: 'Administrative Office', date: '2022-11-22' },
+        { type: 'Police Background Verification Clearance', status: 'Verified', verifiedBy: 'Local Police Liaison', date: '2022-11-25' },
+        { type: 'Probationary Service Appointment Order', status: 'Verified', verifiedBy: 'School Management Board', date: '2022-11-28' }
+      ],
+      attendance: {
+        presentDays: 24,
+        workingDays: 26,
+        rate: '92.3%',
+        punctuality: '97.0%',
+        biometricId: 'BIO-093',
+        lastPunch: 'Today at 08:24 AM (In-Time)'
+      },
+      leave: {
+        casualBalance: 6,
+        medicalBalance: 8,
+        earnedBalance: 7,
+        takenThisYear: 2
+      }
     }
   ];
 
@@ -15782,348 +16254,770 @@ const FEE_CATEGORY_AUDIT_DATA = [
     return gradients[idx % gradients.length];
   }
 
-  function renderNonTeachingStaff(list) {
-    ensureTeachersEnriched();
-    updateTeachersConfidentialityBanner();
+  
+  // =========================================================================
+  // AUTHORITATIVE NON-TEACHING STAFF MODULE (SRI VIDYA E.M. HIGH SCHOOL)
+  // Standard Staff Management Foundation with Administrative / Operational Wings
+  // =========================================================================
 
-    let allStaff = NON_TEACHING_STAFF_DATA || [];
-    let data = list || allStaff;
-    const searchInput = document.getElementById('staffFilterInput');
-    const deptFilter = document.getElementById('staffDeptFilter');
-    const statusFilter = document.getElementById('staffStatusFilter');
+  let nonTeachingStaffCurrentView = 'table';
+  let activeStaffDossierId = null;
 
-    const searchVal = searchInput ? searchInput.value.toLowerCase().trim() : '';
-    const deptVal = deptFilter ? deptFilter.value.toLowerCase().trim() : '';
-    const statusVal = statusFilter ? statusFilter.value.toLowerCase().trim() : '';
-
-    if (searchVal || deptVal || statusVal) {
-      data = allStaff.filter(s => {
-        const matchesSearch = !searchVal ||
-          (s.name && s.name.toLowerCase().includes(searchVal)) ||
-          (s.id && s.id.toLowerCase().includes(searchVal)) ||
-          (s.department && s.department.toLowerCase().includes(searchVal)) ||
-          (s.designation && s.designation.toLowerCase().includes(searchVal)) ||
-          (s.employmentStatus && s.employmentStatus.toLowerCase().includes(searchVal)) ||
-          (s.phone && s.phone.toLowerCase().includes(searchVal));
-
-        const matchesDept = !deptVal || (s.department && s.department.toLowerCase().includes(deptVal));
-        const matchesStatus = !statusVal || (s.employmentStatus && s.employmentStatus.toLowerCase().includes(statusVal));
-        return matchesSearch && matchesDept && matchesStatus;
-      });
-    }
-
-    // Update KPI counts
-    const statTotalEl = document.getElementById('nonTeachingStatTotal');
-    if (statTotalEl) statTotalEl.textContent = allStaff.length;
-    const statPermEl = document.getElementById('nonTeachingStatPermanent');
-    if (statPermEl) statPermEl.textContent = allStaff.filter(s => (s.employmentStatus || '').includes('Permanent')).length;
-    const statDeptsEl = document.getElementById('nonTeachingStatDepts');
-    if (statDeptsEl) {
-      const depts = new Set(allStaff.map(s => s.department));
-      statDeptsEl.textContent = depts.size;
-    }
-    const statActiveEl = document.getElementById('nonTeachingStatActive');
-    if (statActiveEl) statActiveEl.textContent = allStaff.length + ' / ' + allStaff.length;
-
-    // Filtered count pill
-    const filteredCountEl = document.getElementById('staffFilteredCount');
-    if (filteredCountEl) filteredCountEl.textContent = data.length;
-    const totalCountEl = document.getElementById('staffTotalCount');
-    if (totalCountEl) totalCountEl.textContent = allStaff.length;
-
-    const isAuthorized = isStaffAuthorized();
-
-    const tbody = document.getElementById('nonTeachingStaffTableBody');
-    if (tbody) {
-      if (data.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="8" class="text-center py-5 text-muted"><i class="fa-solid fa-users-slash fa-2x mb-2 text-slate-400 d-block"></i>No non-teaching staff found matching your filter criteria.<br><button type="button" class="btn btn-outline-primary btn-sm mt-2" onclick="portalApp.resetStaffFilters()"><i class="fa-solid fa-rotate-left"></i> Reset Filters</button></td></tr>';
+  function ensureNonTeachingStaffState() {
+    if (!state.nonTeachingStaff || state.nonTeachingStaff.length === 0) {
+      if (Array.isArray(NON_TEACHING_STAFF_DATA) && NON_TEACHING_STAFF_DATA.length > 0) {
+        state.nonTeachingStaff = JSON.parse(JSON.stringify(NON_TEACHING_STAFF_DATA));
       } else {
-        tbody.innerHTML = data.map((s, idx) => {
-          const initials = (s.name || 'Staff').replace(/^(Smt.|Sri.|Ms.|Mr.)\s*/, '').split(' ').map(n => n[0]).join('').slice(0, 2) || 'ST';
-          const avatarGradient = getStaffAvatarGradient(idx);
-          const deptIcon = getDeptIcon(s.department);
-
-          // Calculate tenure
-          let tenureText = '5+ yrs service';
-          if (s.joiningDate) {
-            const matchYear = s.joiningDate.match(/\d{4}/);
-            if (matchYear) {
-              const yrs = new Date().getFullYear() - parseInt(matchYear[0], 10);
-              tenureText = yrs + ' yrs service';
-            }
-          }
-
-          // Confidential Remuneration & Identity
-          const confidentialCell = isAuthorized
-            ? '<div class="staff-confidential-box">' +
-                '<span class="staff-salary-amount"><i class="fa-solid fa-indian-rupee-sign"></i> ' + s.salary + '</span>' +
-                '<span class="staff-uid-sub" title="Unmasked UID for Authorized Executive"><i class="fa-solid fa-id-card text-emerald"></i> ' + s.aadhaar + '</span>' +
-              '</div>'
-            : '<div class="staff-confidential-box">' +
-                '<span class="confidential-lock" title="Remuneration restricted to Authorized Principal / VP"><i class="fa-solid fa-lock"></i> Restricted (Salary)</span>' +
-                '<span class="staff-uid-sub" style="color:#94a3b8;"><i class="fa-solid fa-shield-halved"></i> UID: Masked</span>' +
-              '</div>';
-
-          // Employment Status Badge (Guaranteed nowrap)
-          const isPerm = (s.employmentStatus || '').includes('Permanent');
-          const statusClass = isPerm ? 'status-permanent' : 'status-contract';
-          const statusBadge = '<span class="staff-status-badge ' + statusClass + '">' +
-            '<i class="fa-solid fa-circle-check"></i> ' + s.employmentStatus +
-          '</span>';
-
-          return '<tr>' +
-            '<!-- Column 1: Employee ID -->' +
-            '<td><span class="staff-id-pill"><i class="fa-solid fa-hashtag text-slate-400"></i>' + s.id + '</span></td>' +
-
-            '<!-- Column 2: Staff Name & Contact -->' +
-            '<td>' +
-              '<div class="staff-member-cell">' +
-                '<div class="staff-avatar-circle" style="background:' + avatarGradient + ';" title="' + s.name + '">' + initials + '</div>' +
-                '<div class="staff-meta">' +
-                  '<span class="staff-meta-name">' + s.name + '</span>' +
-                  '<div class="staff-meta-sub">' +
-                    '<span class="staff-qualification-pill"><i class="fa-solid fa-graduation-cap"></i> ' + (s.qualification || s.qualifications || 'Graduate') + '</span>' +
-                    '<a href="tel:' + s.phone + '" class="staff-phone-pill" title="Call staff"><i class="fa-solid fa-phone"></i> ' + s.phone + '</a>' +
-                  '</div>' +
-                '</div>' +
-              '</div>' +
-            '</td>' +
-
-            '<!-- Column 3: Department -->' +
-            '<td>' +
-              '<span class="staff-dept-badge"><i class="fa-solid ' + deptIcon + '"></i> ' + s.department + '</span>' +
-            '</td>' +
-
-            '<!-- Column 4: Designation -->' +
-            '<td>' +
-              '<div class="staff-designation-box">' +
-                '<span class="staff-designation-title">' + s.designation + '</span>' +
-                '<span class="staff-shift-sub"><i class="fa-solid fa-clock text-slate-400"></i> ' + (s.shift || '08:00 AM - 04:30 PM') + '</span>' +
-              '</div>' +
-            '</td>' +
-
-            '<!-- Column 5: Joining Date -->' +
-            '<td>' +
-              '<div class="staff-date-box">' +
-                '<span class="staff-date-text"><i class="fa-regular fa-calendar-check text-primary"></i> ' + s.joiningDate + '</span>' +
-                '<span class="staff-tenure-tag"><i class="fa-solid fa-business-time"></i> ' + tenureText + '</span>' +
-              '</div>' +
-            '</td>' +
-
-            '<!-- Column 6: Employment Status -->' +
-            '<td style="text-align:center;">' + statusBadge + '</td>' +
-
-            '<!-- Column 7: Confidential Details -->' +
-            '<td>' + confidentialCell + '</td>' +
-
-            '<!-- Column 8: Actions -->' +
-            '<td style="text-align:center;">' +
-              '<div class="staff-actions-group">' +
-                '<button type="button" class="staff-act-btn primary" onclick="portalApp.openStaffDossier(\'' + s.id + '\')" title="View Complete Institutional Staff Dossier">' +
-                  '<i class="fa-solid fa-id-card-clip"></i> Dossier' +
-                '</button>' +
-                '<button type="button" class="staff-act-btn" onclick="portalApp.assignStaffShift(\'' + s.id + '\')" title="Duty Shift & Attendance Log">' +
-                  '<i class="fa-solid fa-calendar-days text-slate-500"></i>' +
-                '</button>' +
-              '</div>' +
-            '</td>' +
-          '</tr>';
-        }).join('');
+        state.nonTeachingStaff = [];
       }
     }
+  }
 
-    const container = document.getElementById('nonTeachingStaffContainer');
-    if (container) {
-      container.innerHTML = data.map((staff, idx) => {
-        const initials = staff.name.replace(/^(Smt.|Sri.)\s*/, '').split(' ').map(n => n[0]).join('').slice(0, 2);
-        const avatarGradient = getStaffAvatarGradient(idx);
-        const deptIcon = getDeptIcon(staff.department);
+  function updateNonTeachingStaffKPIs(dataList) {
+    ensureNonTeachingStaffState();
+    const list = dataList || state.nonTeachingStaff || [];
+    const all = state.nonTeachingStaff || [];
 
-        return '<div class="staff-card" data-staff-id="' + staff.id + '">' +
-          '<div class="staff-card-header">' +
-            '<div class="staff-avatar" style="background:' + avatarGradient + '; font-weight:800;">' + initials + '</div>' +
-            '<div class="staff-header-info">' +
-              '<div style="display:flex; align-items:center; justify-content:space-between; gap:6px;">' +
-                '<h3 class="staff-name" style="margin-bottom:0;">' + staff.name + '</h3>' +
-                '<span class="staff-id-pill">' + staff.id + '</span>' +
+    const totalCadre = all.length;
+    const activeToday = all.filter(s => (s.status || 'Active') === 'Active' || (s.status || '') === 'Probation').length;
+    
+    // Unique operational departments
+    const depts = new Set(all.map(s => s.dept || s.department || 'Administrative Office'));
+    const wingsCount = depts.size;
+
+    const onLeave = all.filter(s => (s.status || '') === 'On Leave').length;
+
+    // Statutory compliance: staff with all verified documents
+    const compliantCount = all.filter(s => {
+      const docs = s.documents || [];
+      return docs.length >= 4 && docs.every(d => d.status === 'Verified');
+    }).length;
+    const complianceRate = totalCadre > 0 ? Math.round((compliantCount / totalCadre) * 100) : 100;
+
+    const setEl = (id, val) => {
+      const el = document.getElementById(id);
+      if (el) el.textContent = val;
+    };
+
+    setEl('ntStaffTotalCadreCount', totalCadre);
+    setEl('ntStaffActiveTodayCount', activeToday);
+    setEl('ntStaffWingsCount', wingsCount);
+    setEl('ntStaffOnLeaveCount', onLeave);
+    setEl('ntStaffComplianceRate', complianceRate + '%');
+
+    // Count Pill
+    const pill = document.getElementById('nonTeachingFilteredCountPill');
+    if (pill) {
+      pill.textContent = 'Showing ' + list.length + ' of ' + totalCadre + ' Non-Teaching Staff';
+    }
+  }
+
+  function renderNonTeachingStaff(list) {
+    ensureTeachersEnriched();
+    ensureNonTeachingStaffState();
+
+    const allStaff = state.nonTeachingStaff || [];
+    const data = list || allStaff;
+
+    const tbody = document.getElementById('nonTeachingStaffTableBody');
+    const cardsContainer = document.getElementById('nonTeachingStaffCardsContainer');
+
+    if (!tbody) {
+      console.warn('nonTeachingStaffTableBody element not found');
+      return;
+    }
+
+    if (data.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="9" class="text-center py-5 text-muted">' +
+        '<i class="fa-solid fa-users-slash fa-2x mb-3 text-secondary" style="opacity:0.4;"></i>' +
+        '<div style="font-weight:600; font-size:1rem;">No non-teaching staff found</div>' +
+        '<div style="font-size:0.85rem;">Adjust search filters or click Reset Filters to view the full staff register.</div>' +
+        '</td></tr>';
+      if (cardsContainer) cardsContainer.innerHTML = '<div class="col-12 text-center py-5 text-muted">No matching staff records found.</div>';
+      updateNonTeachingStaffKPIs(data);
+      return;
+    }
+
+    // Build Table Rows
+    let rowsHtml = '';
+    data.forEach(staff => {
+      const empId = staff.employeeId || staff.id || 'SV-STF-0200';
+      const name = staff.name || 'Unnamed Staff';
+      const dept = staff.dept || staff.department || 'Administrative Office';
+      const designation = staff.role || staff.designation || 'Staff Member';
+      const shift = staff.shift || '08:00 AM - 04:30 PM (Main Office)';
+      const reportingManager = staff.reportingManager || 'Principal Smt. Gorle Varalakshmi';
+      const joinDate = staff.joiningDate || '2020-06-01';
+      const empType = staff.employmentType || 'Permanent (Full Time)';
+      const accountStatus = staff.accountStatus || 'Active';
+      const status = staff.status || 'Active';
+      const phone = staff.phone || '98480 22338';
+      const email = staff.email || 'staff@srividya.edu.in';
+      const responsibilities = staff.assignedResponsibilities || ['Administrative Support', 'Institutional Operations'];
+
+      // Department badge styling
+      let deptColor = '#475569';
+      let deptBg = '#f1f5f9';
+      let deptIcon = 'fa-building';
+      if (dept.includes('Administrative')) { deptColor = '#0369a1'; deptBg = '#e0f2fe'; deptIcon = 'fa-briefcase'; }
+      else if (dept.includes('Finance') || dept.includes('Accounts')) { deptColor = '#15803d'; deptBg = '#dcfce7'; deptIcon = 'fa-file-invoice-dollar'; }
+      else if (dept.includes('Transport')) { deptColor = '#b45309'; deptBg = '#fef3c7'; deptIcon = 'fa-bus'; }
+      else if (dept.includes('Library')) { deptColor = '#7e22ce'; deptBg = '#f3e8ff'; deptIcon = 'fa-book-open'; }
+      else if (dept.includes('Laboratories')) { deptColor = '#0e7490'; deptBg = '#cffafe'; deptIcon = 'fa-flask'; }
+      else if (dept.includes('Information') || dept.includes('IT')) { deptColor = '#4338ca'; deptBg = '#e0e7ff'; deptIcon = 'fa-network-wired'; }
+      else if (dept.includes('Facilities') || dept.includes('Security')) { deptColor = '#b91c1c'; deptBg = '#fee2e2'; deptIcon = 'fa-shield-halved'; }
+      else if (dept.includes('Student')) { deptColor = '#047857'; deptBg = '#d1fae5'; deptIcon = 'fa-hand-holding-heart'; }
+
+      // Account Status Badge
+      let accountBadge = '<span class="badge badge-success" style="font-size:0.75rem;"><i class="fa-solid fa-circle-check mr-1"></i> Active</span>';
+      if (accountStatus === 'Invited') {
+        accountBadge = '<span class="badge badge-warning" style="font-size:0.75rem;"><i class="fa-solid fa-envelope mr-1"></i> Invited</span>';
+      } else if (accountStatus === 'Suspended') {
+        accountBadge = '<span class="badge badge-danger" style="font-size:0.75rem;"><i class="fa-solid fa-ban mr-1"></i> Suspended</span>';
+      } else if (accountStatus === 'Not Enrolled') {
+        accountBadge = '<span class="badge badge-secondary" style="font-size:0.75rem;"><i class="fa-solid fa-circle-minus mr-1"></i> Not Enrolled</span>';
+      }
+
+      // Employment Status Badge
+      let statusBadge = '<span class="badge badge-success" style="font-size:0.75rem;">Active</span>';
+      if (status === 'Probation') {
+        statusBadge = '<span class="badge badge-info" style="font-size:0.75rem;">Probation</span>';
+      } else if (status === 'On Leave') {
+        statusBadge = '<span class="badge badge-warning" style="font-size:0.75rem;">On Leave</span>';
+      } else if (status === 'Notice') {
+        statusBadge = '<span class="badge badge-danger" style="font-size:0.75rem;">Notice</span>';
+      } else if (status === 'Archived') {
+        statusBadge = '<span class="badge badge-secondary" style="font-size:0.75rem;">Archived</span>';
+      }
+
+      // Responsibilities tags preview (first 2, then +count)
+      let respHtml = '';
+      const previewResps = responsibilities.slice(0, 2);
+      previewResps.forEach(r => {
+        respHtml += '<span class="staff-resp-tag">' + r + '</span>';
+      });
+      if (responsibilities.length > 2) {
+        respHtml += '<span class="staff-resp-tag" style="background:#e2e8f0; color:#475569;" title="' + responsibilities.slice(2).join(', ') + '">+' + (responsibilities.length - 2) + ' more</span>';
+      }
+
+      rowsHtml += '<tr data-staff-id="' + empId + '">' +
+        // 1. Employee ID
+        '<td>' +
+          '<div style="display:flex; align-items:center; gap:6px;">' +
+            '<span class="badge badge-light font-mono font-weight-bold" style="background:#f1f5f9; color:#0f172a; border:1px solid #cbd5e1; font-size:0.8rem; padding:4px 8px; letter-spacing:0.5px;">' + empId + '</span>' +
+          '</div>' +
+        '</td>' +
+        // 2. Staff Name
+        '<td>' +
+          '<div style="display:flex; align-items:center; gap:10px;">' +
+            '<div style="width:36px; height:36px; border-radius:50%; background:linear-gradient(135deg, #1e3a8a, #3b82f6); color:#fff; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:0.85rem; flex-shrink:0;">' +
+              name.split(' ').map(n => n[0]).filter(c => /[A-Za-z]/.test(c)).slice(0, 2).join('') +
+            '</div>' +
+            '<div>' +
+              '<div style="font-weight:700; color:#1e293b; font-size:0.92rem;">' +
+                '<a href="javascript:void(0)" onclick="portalApp.openStaffDetailModal(\'' + empId + '\')" style="color:inherit; text-decoration:none;" class="hover-primary">' + name + '</a>' +
               '</div>' +
-              '<span class="staff-role">' + staff.designation + '</span>' +
-              '<div style="display:flex; align-items:center; gap:6px; margin-top:4px; flex-wrap:wrap;">' +
-                '<span class="staff-status-badge status-permanent"><i class="fa-solid fa-circle-check"></i> ' + staff.employmentStatus + '</span>' +
-                (isAuthorized ? '<span class="confidential-unlocked" style="font-size:0.72rem;"><i class="fa-solid fa-indian-rupee-sign"></i> ' + staff.salary + '</span>' : '<span class="confidential-lock" style="font-size:0.72rem;"><i class="fa-solid fa-lock"></i> Restricted</span>') +
+              '<div style="font-size:0.78rem; color:#64748b; display:flex; align-items:center; gap:8px; margin-top:2px;">' +
+                '<span><i class="fa-solid fa-phone mr-1" style="font-size:0.7rem;"></i>' + phone + '</span>' +
               '</div>' +
             '</div>' +
           '</div>' +
-          '<div class="staff-details">' +
-            '<div class="staff-detail-row"><span class="detail-label"><i class="fa-solid ' + deptIcon + '"></i> Department:</span><span class="detail-val font-semibold">' + staff.department + '</span></div>' +
-            '<div class="staff-detail-row"><span class="detail-label"><i class="fa-solid fa-briefcase"></i> Designation:</span><span class="detail-val">' + staff.designation + '</span></div>' +
-            '<div class="staff-detail-row"><span class="detail-label"><i class="fa-regular fa-calendar-check"></i> Joining Date:</span><span class="detail-val"><strong>' + staff.joiningDate + '</strong></span></div>' +
-            '<div class="staff-detail-row"><span class="detail-label"><i class="fa-solid fa-graduation-cap"></i> Qualifications:</span><span class="detail-val">' + (staff.qualification || staff.qualifications || 'Graduate') + '</span></div>' +
-            '<div class="staff-detail-row"><span class="detail-label"><i class="fa-solid fa-clock"></i> Duty Shift:</span><span class="detail-val">' + (staff.shift || '08:00 AM - 04:30 PM') + '</span></div>' +
-            '<div class="staff-detail-row"><span class="detail-label"><i class="fa-solid fa-phone"></i> Contact:</span><span class="detail-val"><a href="tel:' + staff.phone + '" class="staff-phone-pill">' + staff.phone + '</a></span></div>' +
+        '</td>' +
+        // 3. Department
+        '<td>' +
+          '<span class="badge" style="background:' + deptBg + '; color:' + deptColor + '; font-size:0.8rem; padding:5px 9px; font-weight:600; display:inline-flex; align-items:center; gap:5px; border-radius:6px;">' +
+            '<i class="fa-solid ' + deptIcon + '"></i> ' + dept +
+          '</span>' +
+        '</td>' +
+        // 4. Designation & Shift
+        '<td>' +
+          '<div style="font-weight:600; font-size:0.88rem; color:#1e293b;">' + designation + '</div>' +
+          '<div style="font-size:0.76rem; color:#64748b; margin-top:3px; display:inline-flex; align-items:center; gap:4px; background:#f8fafc; padding:2px 6px; border-radius:4px; border:1px solid #e2e8f0;">' +
+            '<i class="fa-solid fa-clock" style="font-size:0.7rem; color:#94a3b8;"></i> ' + shift +
           '</div>' +
-          '<div class="staff-footer">' +
-            '<button type="button" class="btn-staff-action" onclick="portalApp.openStaffDossier(\'' + staff.id + '\')"><i class="fa-solid fa-id-card-clip"></i> Full Dossier</button>' +
-            '<button type="button" class="btn-staff-action outline" onclick="portalApp.assignStaffShift(\'' + staff.id + '\')"><i class="fa-solid fa-calendar-check"></i> Shift Log</button>' +
+        '</td>' +
+        // 5. Reporting Manager
+        '<td>' +
+          '<div class="staff-manager-pill">' +
+            '<i class="fa-solid fa-sitemap mr-1" style="color:#2563eb;"></i>' +
+            '<span style="font-weight:600;">' + reportingManager + '</span>' +
+          '</div>' +
+        '</td>' +
+        // 6. Assigned Responsibilities
+        '<td>' +
+          '<div style="max-width:240px; display:flex; flex-wrap:wrap; gap:4px;">' + respHtml + '</div>' +
+        '</td>' +
+        // 7. Joining Date & Employment Type
+        '<td>' +
+          '<div style="font-weight:600; font-size:0.84rem; color:#334155;">' + joinDate + '</div>' +
+          '<div style="font-size:0.76rem; color:#64748b; margin-top:2px;">' + empType + '</div>' +
+        '</td>' +
+        // 8. Account & Status
+        '<td>' +
+          '<div style="display:flex; flex-direction:column; gap:4px; align-items:flex-start;">' +
+            accountBadge +
+            statusBadge +
+          '</div>' +
+        '</td>' +
+        // 9. Actions
+        '<td class="text-right">' +
+          '<div class="dropdown d-inline-block">' +
+            '<button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="font-size:0.82rem; padding:3px 8px;">' +
+              '<i class="fa-solid fa-ellipsis-vertical"></i>' +
+            '</button>' +
+            '<div class="dropdown-menu dropdown-menu-right shadow-sm" style="font-size:0.85rem;">' +
+              '<a class="dropdown-item" href="javascript:void(0)" onclick="portalApp.openStaffDetailModal(\'' + empId + '\')"><i class="fa-solid fa-id-card mr-2 text-primary"></i> View Dossier</a>' +
+              '<a class="dropdown-item" href="javascript:void(0)" onclick="portalApp.openEditStaffModal(\'' + empId + '\')"><i class="fa-solid fa-pen-to-square mr-2 text-info"></i> Edit Particulars</a>' +
+              '<a class="dropdown-item" href="javascript:void(0)" onclick="portalApp.openAssignStaffDepartmentModal(\'' + empId + '\')"><i class="fa-solid fa-sitemap mr-2 text-secondary"></i> Assign Department</a>' +
+              '<a class="dropdown-item" href="javascript:void(0)" onclick="portalApp.inviteStaffToPortal(\'' + empId + '\')"><i class="fa-solid fa-paper-plane mr-2 text-success"></i> Invite to Portal</a>' +
+              '<a class="dropdown-item" href="javascript:void(0)" onclick="portalApp.openChangeStaffStatusModal(\'' + empId + '\')"><i class="fa-solid fa-user-gear mr-2 text-warning"></i> Change Status</a>' +
+              '<div class="dropdown-divider"></div>' +
+              '<a class="dropdown-item text-danger" href="javascript:void(0)" onclick="portalApp.archiveStaffRecord(\'' + empId + '\')"><i class="fa-solid fa-box-archive mr-2"></i> Archive Record</a>' +
+            '</div>' +
+          '</div>' +
+        '</td>' +
+      '</tr>';
+    });
+
+    tbody.innerHTML = rowsHtml;
+
+    // Build Cards View
+    if (cardsContainer) {
+      let cardsHtml = '';
+      data.forEach(staff => {
+        const empId = staff.employeeId || staff.id;
+        const name = staff.name;
+        const dept = staff.dept || staff.department;
+        const designation = staff.role || staff.designation;
+        const shift = staff.shift || '08:00 AM - 04:30 PM';
+        const reportingManager = staff.reportingManager || 'Principal Smt. Gorle Varalakshmi';
+        const responsibilities = staff.assignedResponsibilities || [];
+
+        cardsHtml += '<div class="col-xl-4 col-md-6 mb-4">' +
+          '<div class="card h-100 shadow-sm border-0" style="border-radius:10px; border-top:3px solid #2563eb !important; background:#fff;">' +
+            '<div class="card-body p-3">' +
+              '<div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:12px;">' +
+                '<div style="display:flex; align-items:center; gap:10px;">' +
+                  '<div style="width:40px; height:40px; border-radius:50%; background:linear-gradient(135deg, #1e3a8a, #3b82f6); color:#fff; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:0.95rem;">' +
+                    name.split(' ').map(n => n[0]).filter(c => /[A-Za-z]/.test(c)).slice(0, 2).join('') +
+                  '</div>' +
+                  '<div>' +
+                    '<h6 class="mb-0" style="font-weight:700; font-size:0.95rem; color:#1e293b;">' + name + '</h6>' +
+                    '<span class="badge badge-light font-mono" style="font-size:0.75rem; background:#f1f5f9;">' + empId + '</span>' +
+                  '</div>' +
+                '</div>' +
+                '<span class="badge badge-success" style="font-size:0.75rem;">' + (staff.status || 'Active') + '</span>' +
+              '</div>' +
+              '<div class="mb-2">' +
+                '<div style="font-weight:600; font-size:0.86rem; color:#334155;">' + designation + '</div>' +
+                '<div style="font-size:0.78rem; color:#64748b;"><i class="fa-solid fa-building mr-1"></i> ' + dept + '</div>' +
+              '</div>' +
+              '<div style="font-size:0.78rem; background:#f8fafc; padding:6px 10px; border-radius:6px; border:1px solid #e2e8f0; margin-bottom:10px;">' +
+                '<div style="color:#64748b; font-size:0.72rem; text-transform:uppercase; font-weight:600;">Reports To:</div>' +
+                '<div style="font-weight:600; color:#1e293b;"><i class="fa-solid fa-sitemap mr-1 text-primary"></i> ' + reportingManager + '</div>' +
+              '</div>' +
+              '<div style="font-size:0.76rem; color:#64748b; margin-bottom:12px;">' +
+                '<i class="fa-solid fa-clock mr-1 text-muted"></i> Shift: ' + shift +
+              '</div>' +
+              '<div style="display:flex; flex-wrap:wrap; gap:4px; margin-bottom:12px;">' +
+                responsibilities.slice(0, 3).map(r => '<span class="staff-resp-tag">' + r + '</span>').join('') +
+              '</div>' +
+              '<div style="display:flex; gap:8px; border-top:1px solid #f1f5f9; padding-top:10px; margin-top:auto;">' +
+                '<button class="btn btn-sm btn-primary btn-block" onclick="portalApp.openStaffDetailModal(\'' + empId + '\')"><i class="fa-solid fa-id-card mr-1"></i> View Dossier</button>' +
+                '<button class="btn btn-sm btn-outline-secondary" onclick="portalApp.openAssignStaffDepartmentModal(\'' + empId + '\')" title="Assign Department"><i class="fa-solid fa-sitemap"></i></button>' +
+              '</div>' +
+            '</div>' +
           '</div>' +
         '</div>';
-      }).join('');
+      });
+      cardsContainer.innerHTML = cardsHtml;
     }
+
+    updateNonTeachingStaffKPIs(data);
   }
 
   function filterNonTeachingStaff() {
-    renderNonTeachingStaff();
+    ensureNonTeachingStaffState();
+    const searchInput = document.getElementById('ntStaffSearchInput');
+    const deptFilter = document.getElementById('ntStaffDeptFilter');
+    const statusFilter = document.getElementById('ntStaffStatusFilter');
+
+    const query = searchInput ? searchInput.value.trim().toLowerCase() : '';
+    const dept = deptFilter ? deptFilter.value : 'all';
+    const status = statusFilter ? statusFilter.value : 'all';
+
+    const all = state.nonTeachingStaff || [];
+    const filtered = all.filter(staff => {
+      const empId = (staff.employeeId || staff.id || '').toLowerCase();
+      const name = (staff.name || '').toLowerCase();
+      const phone = (staff.phone || '').toLowerCase();
+      const designation = (staff.role || staff.designation || '').toLowerCase();
+      const duties = (staff.assignedResponsibilities || []).join(' ').toLowerCase();
+
+      // Search match
+      const matchesQuery = !query ||
+        empId.includes(query) ||
+        name.includes(query) ||
+        phone.includes(query) ||
+        designation.includes(query) ||
+        duties.includes(query);
+
+      // Dept match
+      const staffDept = staff.dept || staff.department || '';
+      const matchesDept = (dept === 'all') || (staffDept === dept);
+
+      // Status match
+      const staffStatus = staff.status || 'Active';
+      const matchesStatus = (status === 'all') || (staffStatus === status);
+
+      return matchesQuery && matchesDept && matchesStatus;
+    });
+
+    renderNonTeachingStaff(filtered);
   }
 
   function resetStaffFilters() {
-    const search = document.getElementById('staffFilterInput');
-    const dept = document.getElementById('staffDeptFilter');
-    const status = document.getElementById('staffStatusFilter');
-    if (search) search.value = '';
-    if (dept) dept.value = '';
-    if (status) status.value = '';
+    const sInput = document.getElementById('ntStaffSearchInput');
+    if (sInput) sInput.value = '';
+    const dSelect = document.getElementById('ntStaffDeptFilter');
+    if (dSelect) dSelect.value = 'all';
+    const stSelect = document.getElementById('ntStaffStatusFilter');
+    if (stSelect) stSelect.value = 'all';
     renderNonTeachingStaff();
-    showToast('Staff filters reset', 'info');
   }
 
-  function exportStaffCSV() {
-    ensureTeachersEnriched();
-    const data = NON_TEACHING_STAFF_DATA || [];
-    const isAuthorized = isStaffAuthorized();
-    let csv = 'Employee ID,Name,Department,Designation,Joining Date,Employment Status,Shift,Phone,Email';
-    if (isAuthorized) {
-      csv += ',Salary,Aadhaar,PAN';
-    }
-    csv += '\r\r\n';
+  function toggleStaffView(mode) {
+    nonTeachingStaffCurrentView = mode;
+    const tableView = document.getElementById('nonTeachingStaffTableView');
+    const cardsView = document.getElementById('nonTeachingStaffCardsView');
+    const btnTable = document.getElementById('ntViewToggleTable');
+    const btnCards = document.getElementById('ntViewToggleCards');
 
-    data.forEach(s => {
-      let row = [
-        '"' + (s.id || '') + '"',
-        '"' + (s.name || '').replace(/"/g, '""') + '"',
-        '"' + (s.department || '').replace(/"/g, '""') + '"',
-        '"' + (s.designation || '').replace(/"/g, '""') + '"',
-        '"' + (s.joiningDate || '') + '"',
-        '"' + (s.employmentStatus || '') + '"',
-        '"' + (s.shift || '').replace(/"/g, '""') + '"',
-        '"' + (s.phone || '') + '"',
-        '"' + (s.email || '') + '"'
-      ];
-      if (isAuthorized) {
-        row.push('"' + (s.salary || '') + '"');
-        row.push('"' + (s.aadhaar || '') + '"');
-        row.push('"' + (s.pan || '') + '"');
+    if (mode === 'cards') {
+      if (tableView) tableView.style.display = 'none';
+      if (cardsView) cardsView.style.display = 'flex';
+      if (btnTable) btnTable.classList.remove('active');
+      if (btnCards) btnCards.classList.add('active');
+    } else {
+      if (tableView) tableView.style.display = 'block';
+      if (cardsView) cardsView.style.display = 'none';
+      if (btnTable) btnTable.classList.add('active');
+      if (btnCards) btnCards.classList.remove('active');
+    }
+  }
+
+  function openAddNonTeachingStaffModal() {
+    ensureNonTeachingStaffState();
+    const all = state.nonTeachingStaff || [];
+    
+    // Generate next policy employee ID: SV-STF-02XX
+    let nextNum = 201;
+    all.forEach(s => {
+      const match = (s.employeeId || s.id || '').match(/SV-STF-(\d+)/);
+      if (match) {
+        const n = parseInt(match[1], 10);
+        if (n >= nextNum) nextNum = n + 1;
       }
-      csv += row.join(',') + '\r\r\n';
+    });
+    const nextId = 'SV-STF-0' + nextNum;
+
+    const idInput = document.getElementById('newStaffEmployeeId');
+    if (idInput) idInput.value = nextId;
+
+    const form = document.getElementById('addNonTeachingStaffForm');
+    if (form) {
+      form.reset();
+      if (idInput) idInput.value = nextId;
+      const joinInput = document.getElementById('newStaffJoiningDate');
+      if (joinInput) joinInput.value = new Date().toISOString().split('T')[0];
+    }
+
+    openModal('addNonTeachingStaffModal');
+  }
+
+  function handleAddNonTeachingStaff(event) {
+    if (event) event.preventDefault();
+    ensureNonTeachingStaffState();
+
+    const empId = document.getElementById('newStaffEmployeeId').value.trim();
+    const name = document.getElementById('newStaffFullName').value.trim();
+    const gender = document.getElementById('newStaffGender').value;
+    const phone = document.getElementById('newStaffMobile').value.trim();
+    const email = document.getElementById('newStaffEmail').value.trim();
+    const dept = document.getElementById('newStaffDept').value;
+    const designation = document.getElementById('newStaffDesignation').value.trim();
+    const reportingManager = document.getElementById('newStaffReportingManager').value;
+    const joinDate = document.getElementById('newStaffJoiningDate').value;
+    const empType = document.getElementById('newStaffEmploymentType').value;
+    const shift = document.getElementById('newStaffShiftHours').value;
+    const qualification = document.getElementById('newStaffQualification').value.trim() || 'Matriculate / Technical Credential';
+    const dutiesInput = document.getElementById('newStaffResponsibilities').value.trim();
+    const accountStatus = document.getElementById('newStaffAccountStatus').value;
+
+    if (!name || !dept || !designation || !reportingManager) {
+      showToast('Validation Error', 'Please complete all required staff fields.', 'error');
+      return;
+    }
+
+    const assignedResponsibilities = dutiesInput 
+      ? dutiesInput.split(',').map(d => d.trim()).filter(Boolean)
+      : ['Operational Support', 'Departmental Duty Execution'];
+
+    const newStaff = {
+      id: empId,
+      employeeId: empId,
+      name: name,
+      gender: gender,
+      phone: phone || '98480 00000',
+      email: email || (empId.toLowerCase().replace(/[^a-z0-9]/g, '') + '@srividya.edu.in'),
+      dept: dept,
+      department: dept,
+      role: designation,
+      designation: designation,
+      reportingManager: reportingManager,
+      joiningDate: joinDate || new Date().toISOString().split('T')[0],
+      employmentType: empType,
+      shift: shift,
+      qualification: qualification,
+      assignedResponsibilities: assignedResponsibilities,
+      accountStatus: accountStatus,
+      status: 'Active',
+      isTeaching: false,
+      attendance: {
+        presentDays: 24,
+        workingDays: 26,
+        rate: '92.3%',
+        punctuality: '96.0%',
+        biometricId: 'BIO-' + Math.floor(100 + Math.random() * 900),
+        lastPunch: 'Today at 07:58 AM'
+      },
+      leave: {
+        casualBalance: 8,
+        medicalBalance: 10,
+        earnedBalance: 14,
+        takenThisYear: 0
+      },
+      documents: [
+        { type: 'Aadhaar Card (Identity & Residential)', status: 'Verified', verifiedBy: reportingManager, date: joinDate },
+        { type: 'PAN Card (Financial & Tax ID)', status: 'Verified', verifiedBy: 'Accounts Section', date: joinDate },
+        { type: 'Technical / Educational Credentials', status: 'Verified', verifiedBy: 'Administrative Office', date: joinDate },
+        { type: 'Police Verification Clearance', status: 'Verified', verifiedBy: 'Local Police Liaison', date: joinDate },
+        { type: 'Appointment Order & Service Undertaking', status: 'Verified', verifiedBy: 'Principal Smt. Gorle Varalakshmi', date: joinDate }
+      ]
+    };
+
+    state.nonTeachingStaff.unshift(newStaff);
+    if (Array.isArray(NON_TEACHING_STAFF_DATA)) {
+      NON_TEACHING_STAFF_DATA.unshift(newStaff);
+    }
+
+    closeModal('addNonTeachingStaffModal');
+    renderNonTeachingStaff();
+    showToast('Staff Enrolled', 'Non-teaching staff member ' + name + ' (' + empId + ') successfully added to the authoritative register.', 'success');
+  }
+
+  function findStaffById(staffId) {
+    ensureNonTeachingStaffState();
+    const all = state.nonTeachingStaff || [];
+    return all.find(s => s.id === staffId || s.employeeId === staffId || s.legacyId === staffId) || null;
+  }
+
+  function openStaffDetailModal(staffId) {
+    const staff = findStaffById(staffId);
+    if (!staff) {
+      showToast('Error', 'Staff record not found for ID: ' + staffId, 'error');
+      return;
+    }
+
+    activeStaffDossierId = staff.id || staff.employeeId;
+
+    // Header info
+    const nameEl = document.getElementById('staffDetailModalName');
+    if (nameEl) nameEl.textContent = staff.name;
+
+    const idEl = document.getElementById('staffDetailModalEmpId');
+    if (idEl) idEl.textContent = staff.employeeId || staff.id;
+
+    const deptEl = document.getElementById('staffDetailModalDept');
+    if (deptEl) deptEl.textContent = staff.dept || staff.department || 'Administrative Office';
+
+    const statusEl = document.getElementById('staffDetailModalStatus');
+    if (statusEl) statusEl.textContent = staff.status || 'Active';
+
+    // TAB 1: Profile & Particulars
+    const setT1 = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
+    setT1('stDetailFullName', staff.name);
+    setT1('stDetailGender', staff.gender || 'Not Specified');
+    setT1('stDetailDob', staff.dob || '15-Aug-1984');
+    setT1('stDetailBlood', staff.bloodGroup || 'O+ (Emergency Authorized)');
+    setT1('stDetailPhone', staff.phone || '98480 22338');
+    setT1('stDetailEmail', staff.email || 'staff@srividya.edu.in');
+    setT1('stDetailAddress', staff.address || 'Sri Vidya Campus Staff Quarters, Tilak Road, Vizianagaram');
+    setT1('stDetailEmergency', staff.emergencyContact || 'Spouse / Next-of-Kin (98480 99887)');
+    setT1('stDetailJoinDate', staff.joiningDate || '2018-06-12');
+    setT1('stDetailEmpType', staff.employmentType || 'Permanent (Full Time)');
+    setT1('stDetailQualifications', staff.qualification || staff.qualifications || 'Graduate');
+
+    // TAB 2: Department & Reporting Hierarchy
+    setT1('stDetailDeptWing', staff.dept || staff.department || 'Administrative Office');
+    setT1('stDetailDesignation', staff.role || staff.designation || 'Staff Member');
+    setT1('stDetailReportingManager', staff.reportingManager || 'Principal Smt. Gorle Varalakshmi');
+    setT1('stDetailOfficeLocation', staff.workstation || 'Central Administrative Wing, Ground Floor');
+    setT1('stDetailShiftHours', staff.shift || '08:00 AM - 04:30 PM (Main Office)');
+
+    // TAB 3: Assigned Operational Responsibilities
+    const respContainer = document.getElementById('stDetailResponsibilitiesList');
+    if (respContainer) {
+      const responsibilities = staff.assignedResponsibilities || ['Administrative and operational duties as assigned.'];
+      let html = '<div class="list-group">';
+      responsibilities.forEach((resp, index) => {
+        html += '<div class="list-group-item d-flex align-items-center" style="padding:12px 16px; border-left:4px solid #2563eb; margin-bottom:8px; border-radius:6px; background:#f8fafc;">' +
+          '<div style="width:28px; height:28px; border-radius:50%; background:#e0f2fe; color:#0369a1; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:0.8rem; margin-right:12px; flex-shrink:0;">' + (index + 1) + '</div>' +
+          '<div style="flex-grow:1;">' +
+            '<div style="font-weight:600; font-size:0.9rem; color:#1e293b;">' + resp + '</div>' +
+            '<div style="font-size:0.78rem; color:#64748b;">Statutory institutional duty assigned under ' + (staff.dept || 'Administrative') + ' wing.</div>' +
+          '</div>' +
+          '<span class="badge badge-success" style="font-size:0.75rem;"><i class="fa-solid fa-check mr-1"></i> Authoritative</span>' +
+        '</div>';
+      });
+      html += '</div>';
+      respContainer.innerHTML = html;
+    }
+
+    // TAB 4: Statutory Documents
+    const docsContainer = document.getElementById('stDetailDocumentsTbody');
+    if (docsContainer) {
+      const docs = staff.documents || [
+        { type: 'Aadhaar Card (UIDAI Verified)', status: 'Verified', verifiedBy: 'Smt. Gorle Varalakshmi', date: '2023-04-10' },
+        { type: 'PAN Card (Income Tax Dept)', status: 'Verified', verifiedBy: 'Accounts Section', date: '2023-04-10' },
+        { type: 'Technical / Academic Credentials', status: 'Verified', verifiedBy: 'Administrative Office', date: '2023-04-11' },
+        { type: 'Police Background Verification', status: 'Verified', verifiedBy: 'Local Police Station', date: '2023-04-12' },
+        { type: 'Appointment Order & Service Undertaking', status: 'Verified', verifiedBy: 'Management Board', date: '2023-04-15' }
+      ];
+      let dHtml = '';
+      docs.forEach(doc => {
+        dHtml += '<tr>' +
+          '<td style="font-weight:600; font-size:0.85rem; color:#1e293b;"><i class="fa-solid fa-file-shield mr-2 text-primary"></i>' + doc.type + '</td>' +
+          '<td><span class="badge badge-success" style="font-size:0.78rem;"><i class="fa-solid fa-circle-check mr-1"></i>' + doc.status + '</span></td>' +
+          '<td style="font-size:0.82rem; color:#475569;">' + doc.verifiedBy + '</td>' +
+          '<td style="font-size:0.82rem; color:#64748b;">' + doc.date + '</td>' +
+          '<td><button class="btn btn-xs btn-outline-primary" onclick="portalApp.showToast(\'Document Preview\', \'Viewing certified copy of ' + doc.type + '\', \'info\')"><i class="fa-solid fa-eye"></i></button></td>' +
+        '</tr>';
+      });
+      docsContainer.innerHTML = dHtml;
+    }
+
+    // TAB 5: Biometric Attendance & Shift Hours
+    const att = staff.attendance || { presentDays: 25, workingDays: 26, rate: '96.2%', punctuality: '98.5%', biometricId: 'BIO-049', lastPunch: 'Today at 07:54 AM' };
+    setT1('stDetailBiometricId', att.biometricId);
+    setT1('stDetailPresentDays', att.presentDays + ' / ' + att.workingDays + ' Days');
+    setT1('stDetailAttendanceRate', att.rate);
+    setT1('stDetailPunctuality', att.punctuality);
+    setT1('stDetailLastPunch', att.lastPunch);
+
+    // TAB 6: Leave Balances
+    const lev = staff.leave || { casualBalance: 8, medicalBalance: 10, earnedBalance: 14, takenThisYear: 2 };
+    setT1('stDetailCasualLeave', lev.casualBalance + ' Days Available');
+    setT1('stDetailMedicalLeave', lev.medicalBalance + ' Days Available');
+    setT1('stDetailEarnedLeave', lev.earnedBalance + ' Days Available');
+    setT1('stDetailTakenLeave', (lev.takenThisYear || 2) + ' Days Availed this Academic Year');
+
+    // TAB 7: Portal Account & Audit Log
+    const accStatus = staff.accountStatus || 'Active';
+    setT1('stDetailAccountStatus', accStatus);
+    setT1('stDetailPortalUsername', staff.email || (staff.id.toLowerCase() + '@srividya.edu.in'));
+    setT1('stDetailPortalAuth', 'Institutional Google Workspace SSO / Two-Factor Authentication');
+    setT1('stDetailAccessScope', 'Operational Role: ' + (staff.role || staff.designation) + ' (Restricted by Department Scope)');
+
+    // Switch to first tab by default
+    switchStaffDetailTab('tab-staff-profile');
+
+    openModal('staffDetailModal');
+  }
+
+  function switchStaffDetailTab(tabId) {
+    const navBtns = document.querySelectorAll('.staff-detail-tab-btn');
+    navBtns.forEach(btn => {
+      if (btn.getAttribute('data-tab') === tabId) {
+        btn.classList.add('active');
+      } else {
+        btn.classList.remove('active');
+      }
     });
 
-    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-    const link = document.createElement('a');
-    link.href = URL.createObjectURL(blob);
-    link.download = 'Sri_Vidya_Non_Teaching_Staff_Roster.csv';
-    link.click();
-    showToast('Non-Teaching Staff roster exported to CSV', 'success');
+    const panes = document.querySelectorAll('.staff-detail-pane');
+    panes.forEach(pane => {
+      if (pane.id === tabId) {
+        pane.style.display = 'block';
+      } else {
+        pane.style.display = 'none';
+      }
+    });
   }
 
-  function printStaffTable() {
-    window.print();
-  }
-
-  function assignStaffShift(staffId) {
-    const staff = (NON_TEACHING_STAFF_DATA || []).find(s => s.id === staffId);
-    const name = staff ? staff.name : staffId;
-    const shift = staff ? staff.shift : '08:00 AM - 04:30 PM';
-    showToast('Current shift for ' + name + ': ' + shift, 'info');
-  }
-
-  function openStaffDossier(staffId) {
-    ensureTeachersEnriched();
-    const staff = (NON_TEACHING_STAFF_DATA || []).find(s => s.id === staffId);
+  function openAssignStaffDepartmentModal(staffId) {
+    const targetId = staffId || activeStaffDossierId;
+    const staff = findStaffById(targetId);
     if (!staff) {
-      showToast('Staff record not found for ' + staffId, 'warning');
+      showToast('Error', 'Staff record not found.', 'error');
       return;
     }
 
-    const modal = document.getElementById('facultyDossierModal');
-    const container = document.getElementById('facultyDossierBody');
-    if (!container) {
-      showToast('Staff Dossier: ' + staff.name + ' (' + staff.designation + ')', 'info');
-      return;
+    const idInput = document.getElementById('assignDeptStaffId');
+    if (idInput) idInput.value = staff.employeeId || staff.id;
+
+    const nameEl = document.getElementById('assignDeptStaffName');
+    if (nameEl) nameEl.textContent = staff.name + ' (' + (staff.employeeId || staff.id) + ')';
+
+    const deptSelect = document.getElementById('assignDeptSelect');
+    if (deptSelect) deptSelect.value = staff.dept || staff.department || 'Administrative Office';
+
+    const desigInput = document.getElementById('assignDeptDesignation');
+    if (desigInput) desigInput.value = staff.role || staff.designation || '';
+
+    const mgrSelect = document.getElementById('assignDeptReportingManager');
+    if (mgrSelect) mgrSelect.value = staff.reportingManager || 'Principal Smt. Gorle Varalakshmi';
+
+    const shiftSelect = document.getElementById('assignDeptShift');
+    if (shiftSelect) shiftSelect.value = staff.shift || '08:00 AM - 04:30 PM (Main Office)';
+
+    openModal('assignStaffDepartmentModal');
+  }
+
+  function submitAssignStaffDepartment(event) {
+    if (event) event.preventDefault();
+    const staffId = document.getElementById('assignDeptStaffId').value;
+    const staff = findStaffById(staffId);
+    if (!staff) return;
+
+    const newDept = document.getElementById('assignDeptSelect').value;
+    const newDesig = document.getElementById('assignDeptDesignation').value.trim();
+    const newMgr = document.getElementById('assignDeptReportingManager').value;
+    const newShift = document.getElementById('assignDeptShift').value;
+
+    staff.dept = newDept;
+    staff.department = newDept;
+    if (newDesig) {
+      staff.role = newDesig;
+      staff.designation = newDesig;
     }
+    staff.reportingManager = newMgr;
+    staff.shift = newShift;
 
-    const initials = (staff.name || 'Staff').replace(/^(Smt.|Sri.|Ms.|Mr.)\s*/, '').split(' ').map(n => n[0]).join('').slice(0, 2) || 'ST';
-    const isAuthorized = isStaffAuthorized();
-    const salaryDisplay = isAuthorized ? staff.salary : '<span class="confidential-lock"><i class="fa-solid fa-lock"></i> Restricted (Executive Only)</span>';
-    const aadhaarDisplay = isAuthorized ? staff.aadhaar : 'XXXX-XXXX-' + (staff.aadhaar || '6710').slice(-4) + ' [Masked]';
-    const panDisplay = isAuthorized ? staff.pan : 'XXXXX' + (staff.pan || '5670K').slice(-4) + ' [Masked]';
+    closeModal('assignStaffDepartmentModal');
+    renderNonTeachingStaff();
+    if (activeStaffDossierId === (staff.id || staff.employeeId)) {
+      openStaffDetailModal(staff.id || staff.employeeId);
+    }
+    showToast('Department Assigned', 'Updated department & reporting hierarchy for ' + staff.name + '.', 'success');
+  }
 
-    container.innerHTML = 
-      '<div class="faculty-dossier-wrapper" style="font-size:0.88rem; color:#0f172a; line-height:1.5;">' +
-        '<!-- Header Banner -->' +
-        '<div style="display:flex; align-items:center; gap:16px; background:linear-gradient(135deg, #f0f9ff, #e0f2fe); border:1px solid #bae6fd; border-radius:10px; padding:18px; margin-bottom:16px;">' +
-          '<div style="width:68px; height:68px; border-radius:50%; background:linear-gradient(135deg, #0284c7, #0369a1); color:#fff; display:flex; align-items:center; justify-content:center; font-size:1.5rem; font-weight:800; box-shadow:0 4px 10px rgba(2,132,199,0.25); flex-shrink:0;">' +
-            initials +
-          '</div>' +
-          '<div style="flex:1;">' +
-            '<div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:8px;">' +
-              '<h2 style="margin:0; font-size:1.3rem; font-weight:800; color:#0f172a;">' + staff.name + '</h2>' +
-              '<span class="staff-id-pill" style="font-size:0.92rem; padding:4px 12px;">' + staff.id + '</span>' +
-            '</div>' +
-            '<div style="color:#0369a1; font-weight:700; margin-top:3px; font-size:0.95rem;">' + staff.designation + ' &bull; ' + staff.department + '</div>' +
-            '<div style="display:flex; align-items:center; gap:8px; margin-top:6px; flex-wrap:wrap;">' +
-              '<span class="staff-status-badge status-permanent"><i class="fa-solid fa-circle-check"></i> ' + staff.employmentStatus + '</span>' +
-              '<span style="display:inline-flex; align-items:center; gap:5px; background:#eff6ff; color:#1d4ed8; border:1px solid #bfdbfe; padding:2px 8px; border-radius:4px; font-size:0.75rem; font-weight:700;"><i class="fa-solid fa-clock"></i> ' + (staff.shift || '08:00 AM - 04:30 PM') + '</span>' +
-            '</div>' +
-          '</div>' +
-        '</div>' +
+  function openChangeStaffStatusModal(staffId) {
+    const targetId = staffId || activeStaffDossierId;
+    const staff = findStaffById(targetId);
+    if (!staff) return;
 
-        '<!-- 2-Column Info Grid -->' +
-        '<div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap:14px; margin-bottom:14px;">' +
-          '<!-- Operational Card -->' +
-          '<div style="background:#fff; border:1px solid #e2e8f0; border-radius:8px; padding:14px;">' +
-            '<h4 style="margin:0 0 10px 0; font-size:0.85rem; font-weight:800; color:#475569; text-transform:uppercase; letter-spacing:0.5px; border-bottom:1px solid #f1f5f9; padding-bottom:6px;"><i class="fa-solid fa-briefcase text-primary"></i> Administrative Cadre</h4>' +
-            '<div style="display:flex; flex-direction:column; gap:8px;">' +
-              '<div><small style="color:#64748b; font-weight:600;">Department:</small><br><strong>' + staff.department + '</strong></div>' +
-              '<div><small style="color:#64748b; font-weight:600;">Designation:</small><br><strong>' + staff.designation + '</strong></div>' +
-              '<div><small style="color:#64748b; font-weight:600;">Core Responsibility:</small><br><strong>' + (staff.subject || staff.role || 'Campus Administration') + '</strong></div>' +
-              '<div><small style="color:#64748b; font-weight:600;">Joining Date & Tenure:</small><br><strong>' + staff.joiningDate + '</strong></div>' +
-              '<div><small style="color:#64748b; font-weight:600;">Qualifications:</small><br><strong>' + (staff.qualification || 'Graduate') + ' (' + (staff.exp || '5+ Years') + ')</strong></div>' +
-            '</div>' +
-          '</div>' +
+    const idInput = document.getElementById('changeStatusStaffId');
+    if (idInput) idInput.value = staff.employeeId || staff.id;
 
-          '<!-- Contact & Confidential Card -->' +
-          '<div style="background:#fff; border:1px solid #e2e8f0; border-radius:8px; padding:14px;">' +
-            '<h4 style="margin:0 0 10px 0; font-size:0.85rem; font-weight:800; color:#475569; text-transform:uppercase; letter-spacing:0.5px; border-bottom:1px solid #f1f5f9; padding-bottom:6px;"><i class="fa-solid fa-shield-halved text-primary"></i> Contact & Confidential HR</h4>' +
-            '<div style="display:flex; flex-direction:column; gap:8px;">' +
-              '<div><small style="color:#64748b; font-weight:600;">Official Contact Phone:</small><br><strong class="text-primary">' + staff.phone + '</strong></div>' +
-              '<div><small style="color:#64748b; font-weight:600;">Institutional Email:</small><br><strong>' + staff.email + '</strong></div>' +
-              '<div><small style="color:#64748b; font-weight:600;">Monthly Remuneration:</small><br><strong>' + salaryDisplay + '</strong></div>' +
-              '<div><small style="color:#64748b; font-weight:600;">Aadhaar UID:</small><br><code>' + aadhaarDisplay + '</code></div>' +
-              '<div><small style="color:#64748b; font-weight:600;">PAN Number:</small><br><code>' + panDisplay + '</code></div>' +
-            '</div>' +
-          '</div>' +
-        '</div>' +
+    const nameEl = document.getElementById('changeStatusStaffName');
+    if (nameEl) nameEl.textContent = staff.name + ' (' + (staff.employeeId || staff.id) + ')';
 
-        '<!-- Document Verification Status -->' +
-        '<div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; padding:12px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:8px;">' +
-          '<div>' +
-            '<strong style="color:#166534;"><i class="fa-solid fa-circle-check"></i> Statutory Documents Verified</strong>' +
-            '<div style="font-size:0.75rem; color:#64748b;">Aadhaar, Service Order, Qualifications, Police Verification</div>' +
-          '</div>' +
-          '<span class="portal-badge badge-success"><i class="fa-solid fa-stamp"></i> Fully Verified</span>' +
-        '</div>' +
-      '</div>';
+    const statusSelect = document.getElementById('changeStatusSelect');
+    if (statusSelect) statusSelect.value = staff.status || 'Active';
 
-    handleStatusSelectChange(curStatus);
+    openModal('changeStaffStatusModal');
+  }
 
-    if (modal) {
-      modal.style.display = 'flex';
-      modal.classList.add('active');
-      modal.classList.add('open');
-      modal.classList.add('show');
-      modal.style.display = 'flex';
-      document.body.style.overflow = 'hidden';
+  function submitChangeStaffStatus(event) {
+    if (event) event.preventDefault();
+    const staffId = document.getElementById('changeStatusStaffId').value;
+    const staff = findStaffById(staffId);
+    if (!staff) return;
+
+    const newStatus = document.getElementById('changeStatusSelect').value;
+    const remarks = document.getElementById('changeStatusRemarks').value;
+
+    staff.status = newStatus;
+    closeModal('changeStaffStatusModal');
+    renderNonTeachingStaff();
+    if (activeStaffDossierId === (staff.id || staff.employeeId)) {
+      openStaffDetailModal(staff.id || staff.employeeId);
+    }
+    showToast('Status Updated', staff.name + ' employment status transitioned to ' + newStatus + '.', 'success');
+  }
+
+  function inviteStaffToPortal(staffId) {
+    const targetId = staffId || activeStaffDossierId;
+    const staff = findStaffById(targetId);
+    if (!staff) return;
+
+    staff.accountStatus = 'Active';
+    renderNonTeachingStaff();
+    if (activeStaffDossierId === (staff.id || staff.employeeId)) {
+      openStaffDetailModal(staff.id || staff.employeeId);
+    }
+    showToast('Portal Invitation Issued', 'Single Sign-On activation link dispatched to ' + (staff.email || staff.name) + '.', 'success');
+  }
+
+  function openEditStaffModal(staffId) {
+    // Open dossier in edit-accessible mode or assign department
+    openAssignStaffDepartmentModal(staffId);
+  }
+
+  function archiveStaffRecord(staffId) {
+    const staff = findStaffById(staffId);
+    if (!staff) return;
+
+    if (confirm('Are you sure you want to archive the official record for ' + staff.name + ' (' + (staff.employeeId || staff.id) + ')? Historical records will remain accessible in compliance with institutional guidelines.')) {
+      staff.status = 'Archived';
+      renderNonTeachingStaff();
+      showToast('Record Archived', 'Employee file for ' + staff.name + ' retained in permanent archives.', 'info');
     }
   }
+
+  function exportNonTeachingStaffCSV() {
+    ensureNonTeachingStaffState();
+    const list = state.nonTeachingStaff || [];
+    if (list.length === 0) {
+      showToast('Export', 'No staff records available for export.', 'warning');
+      return;
+    }
+
+    const headers = ['Employee ID', 'Staff Name', 'Department', 'Designation', 'Reporting Manager', 'Joining Date', 'Employment Type', 'Shift Hours', 'Account Status', 'Status', 'Phone', 'Official Email'];
+    const rows = list.map(s => [
+      '"' + (s.employeeId || s.id || '') + '"',
+      '"' + (s.name || '').replace(/"/g, '""') + '"',
+      '"' + (s.dept || s.department || '').replace(/"/g, '""') + '"',
+      '"' + (s.role || s.designation || '').replace(/"/g, '""') + '"',
+      '"' + (s.reportingManager || '').replace(/"/g, '""') + '"',
+      '"' + (s.joiningDate || '') + '"',
+      '"' + (s.employmentType || '') + '"',
+      '"' + (s.shift || '') + '"',
+      '"' + (s.accountStatus || 'Active') + '"',
+      '"' + (s.status || 'Active') + '"',
+      '"' + (s.phone || '') + '"',
+      '"' + (s.email || '') + '"'
+    ]);
+
+    const csvContent = 'data:text/csv;charset=utf-8,' + [headers.join(','), ...rows.map(e => e.join(','))].join('\n');
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement('a');
+    link.setAttribute('href', encodedUri);
+    link.setAttribute('download', 'Sri_Vidya_Non_Teaching_Staff_Register_' + new Date().toISOString().slice(0, 10) + '.csv');
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+
+    showToast('Export Complete', 'Exported ' + list.length + ' staff records to official CSV register.', 'success');
+  }
+
+  // Aliases for compatibility
+  function exportStaffCSV() { exportNonTeachingStaffCSV(); }
+  function printStaffTable() { window.print(); }
+  function assignStaffShift(id) { openAssignStaffDepartmentModal(id); }
+  function openStaffDossier(id) { openStaffDetailModal(id); }
+
 
     let leaveFilterSearchQuery = '';
   let leaveFilterCategory = '';
@@ -40028,6 +40922,18 @@ const classData = TIMETABLE_CLASS_DATA[currentTimetableClass] || TIMETABLE_CLASS
   }
 
   return {
+    openAddNonTeachingStaffModal: openAddNonTeachingStaffModal,
+    handleAddNonTeachingStaff: handleAddNonTeachingStaff,
+    openStaffDetailModal: openStaffDetailModal,
+    switchStaffDetailTab: switchStaffDetailTab,
+    openAssignStaffDepartmentModal: openAssignStaffDepartmentModal,
+    submitAssignStaffDepartment: submitAssignStaffDepartment,
+    openChangeStaffStatusModal: openChangeStaffStatusModal,
+    submitChangeStaffStatus: submitChangeStaffStatus,
+    inviteStaffToPortal: inviteStaffToPortal,
+    openEditStaffModal: openEditStaffModal,
+    archiveStaffRecord: archiveStaffRecord,
+    exportNonTeachingStaffCSV: exportNonTeachingStaffCSV,
     // Standard Approval Status Model API
     STANDARD_APPROVAL_STATUSES,
     getStandardStatusBadgeHtml,

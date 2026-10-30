@@ -19521,3 +19521,119 @@ input:disabled + .perm-slider {
   border-color: #d97706;
   color: #fde68a;
 }
+
+/* ==========================================================================
+   AUTHORITATIVE NON-TEACHING STAFF MODULE
+   Compliant with Operational Wings, Reporting Hierarchy & Responsibilities
+   ========================================================================== */
+
+.staff-manager-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  background: #f1f5f9;
+  border: 1px solid #cbd5e1;
+  color: #1e293b;
+  padding: 0.2rem 0.55rem;
+  border-radius: 6px;
+  font-size: 0.74rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.staff-manager-pill i {
+  color: #2563eb;
+  font-size: 0.7rem;
+}
+
+.staff-resp-tag {
+  display: inline-block;
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
+  color: #1e40af;
+  padding: 0.15rem 0.45rem;
+  border-radius: 4px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  margin: 0.1rem 0.2rem 0.1rem 0;
+  white-space: nowrap;
+}
+
+.staff-modal-dialog {
+  max-width: 960px;
+  width: 95vw;
+}
+
+.staff-detail-nav {
+  display: flex;
+  gap: 0.4rem;
+  border-bottom: 2px solid #e2e8f0;
+  margin-bottom: 1.25rem;
+  overflow-x: auto;
+  padding-bottom: 0.25rem;
+}
+
+.staff-detail-tab-btn {
+  background: none;
+  border: none;
+  padding: 0.55rem 0.85rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #64748b;
+  cursor: pointer;
+  border-radius: 6px 6px 0 0;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.staff-detail-tab-btn:hover {
+  color: #1e293b;
+  background: #f8fafc;
+}
+
+.staff-detail-tab-btn.active {
+  color: #2563eb;
+  border-bottom: 2px solid #2563eb;
+  background: #eff6ff;
+  font-weight: 700;
+}
+
+.staff-detail-pane {
+  display: none;
+}
+
+.staff-detail-pane.active {
+  display: block;
+  animation: fadeIn 0.2s ease-in-out;
+}
+
+/* Dark Mode Support */
+[data-theme="dark"] .staff-manager-pill {
+  background: #1e293b;
+  border-color: #334155;
+  color: #f1f5f9;
+}
+
+[data-theme="dark"] .staff-resp-tag {
+  background: #1e3a8a;
+  border-color: #2563eb;
+  color: #bfdbfe;
+}
+
+[data-theme="dark"] .staff-detail-tab-btn {
+  color: #94a3b8;
+}
+
+[data-theme="dark"] .staff-detail-tab-btn:hover {
+  background: #334155;
+  color: #f8fafc;
+}
+
+[data-theme="dark"] .staff-detail-tab-btn.active {
+  background: #1e3a8a;
+  color: #60a5fa;
+  border-bottom-color: #60a5fa;
+}
