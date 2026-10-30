@@ -47,12 +47,15 @@ const portalApp = (function () {
       : [],
 
     admissions: [
-      { appId: 'SV202600001', name: 'K. Sai Tharun', studentName: 'K. Sai Tharun', dob: '2012-04-18', gender: 'Male', class: 'VIII', grade: 'Class VIII', prevSchool: "St. Ann's High School", parent: 'K. Narayana', parentName: 'K. Narayana', phone: '9848011223', email: 'narayana.k@gmail.com', address: 'D.No 4-12, Main Road, Srikakulam', score: '88% (Distinction)', docStatus: 'Verified', status: 'Pending Principal Review', submissionDate: '12 Oct 2026', submissionTime: '10:30 AM' },
-      { appId: 'SV202600002', name: 'B. Vennela', studentName: 'B. Vennela', dob: '2014-07-22', gender: 'Female', class: 'VI', grade: 'Class VI', prevSchool: 'Kendriya Vidyalaya', parent: 'B. Srinivas', parentName: 'B. Srinivas', phone: '9848022334', email: 'srinivas.b@gmail.com', address: 'Plot 45, Vidya Nagar, Rajam', score: '92% (Top Tier)', docStatus: 'Verified', status: 'Approved - Fee Due', submissionDate: '14 Oct 2026', submissionTime: '11:15 AM' },
-      { appId: 'SV202600003', name: 'M. Dinesh Kumar', studentName: 'M. Dinesh Kumar', dob: '2016-11-05', gender: 'Male', class: 'IV', grade: 'Class IV', prevSchool: 'Ravindra Bharathi', parent: 'M. Jagannath', parentName: 'M. Jagannath', phone: '9848033445', email: 'jagannath.m@gmail.com', address: 'H.No 12-88, NGO Colony, Srikakulam', score: '78% (Pass)', docStatus: 'Pending TC Transfer', status: 'Document Review', submissionDate: '15 Oct 2026', submissionTime: '02:40 PM' },
-      { appId: 'SV202600004', name: 'CH. Charitha', studentName: 'CH. Charitha', dob: '2019-09-14', gender: 'Female', class: '1', grade: '1 class', prevSchool: 'Bright Stars Play School', parent: 'CH. Mohan', parentName: 'CH. Mohan', phone: '9848044556', email: 'mohan.ch@gmail.com', address: 'Flat 202, Sri Sai Nilayam, Rajam', score: 'Interview Cleared', docStatus: 'Verified', status: 'Ready for Enrolment', submissionDate: '16 Oct 2026', submissionTime: '09:20 AM' },
-      { appId: 'SV202600005', name: 'V. Aditya', studentName: 'V. Aditya', dob: '2011-03-30', gender: 'Male', class: 'IX', grade: 'Class IX', prevSchool: 'Bhashyam Public School', parent: 'V. Suresh Babu', parentName: 'V. Suresh Babu', phone: '9848055667', email: 'sureshbabu.v@gmail.com', address: 'Door 8-19, RTC Complex Road, Srikakulam', score: '84% (Distinction)', docStatus: 'Verified', status: 'Pending Interview', submissionDate: '18 Oct 2026', submissionTime: '04:10 PM' },
-      { appId: 'SV202600006', name: 'S. Harini', studentName: 'S. Harini', dob: '2021-06-12', gender: 'Female', class: 'LKG', grade: 'LKG', prevSchool: 'Little Angels Play School', parent: 'S. Venkatesh', parentName: 'S. Venkatesh', phone: '9848066778', email: 'venkatesh.s@gmail.com', address: 'Beside Post Office, Main Road, Ponduru', score: 'Direct Admission', docStatus: 'Verified', status: 'Ready for Enrolment', submissionDate: '19 Oct 2026', submissionTime: '11:00 AM' }
+      { appId: 'SV202600001', name: 'K. Sai Tharun', studentName: 'K. Sai Tharun', dob: '2012-04-18', gender: 'Male', class: 'VIII', grade: 'Class VIII', prevSchool: "St. Ann's High School", parent: 'K. Narayana', parentName: 'K. Narayana', phone: '9848011223', email: 'narayana.k@gmail.com', address: 'D.No 4-12, Main Road, Srikakulam', score: '88% (Distinction)', docStatus: 'Verified', status: 'Under Review', submissionDate: '12 Oct 2026', submissionTime: '10:30 AM' },
+      { appId: 'SV202600002', name: 'B. Vennela', studentName: 'B. Vennela', dob: '2014-07-22', gender: 'Female', class: 'VI', grade: 'Class VI', prevSchool: 'Kendriya Vidyalaya', parent: 'B. Srinivas', parentName: 'B. Srinivas', phone: '9848022334', email: 'srinivas.b@gmail.com', address: 'Plot 45, Vidya Nagar, Rajam', score: '92% (Top Tier)', docStatus: 'Verified', status: 'Offered', submissionDate: '14 Oct 2026', submissionTime: '11:15 AM' },
+      { appId: 'SV202600003', name: 'M. Dinesh Kumar', studentName: 'M. Dinesh Kumar', dob: '2016-11-05', gender: 'Male', class: 'IV', grade: 'Class IV', prevSchool: 'Ravindra Bharathi', parent: 'M. Jagannath', parentName: 'M. Jagannath', phone: '9848033445', email: 'jagannath.m@gmail.com', address: 'H.No 12-88, NGO Colony, Srikakulam', score: '78% (Pass)', docStatus: 'Documents Pending', status: 'Documents Pending', submissionDate: '15 Oct 2026', submissionTime: '02:40 PM' },
+      { appId: 'SV202600004', name: 'CH. Charitha', studentName: 'CH. Charitha', dob: '2019-09-14', gender: 'Female', class: '1', grade: '1 class', prevSchool: 'Bright Stars Play School', parent: 'CH. Mohan', parentName: 'CH. Mohan', phone: '9848044556', email: 'mohan.ch@gmail.com', address: 'Flat 202, Sri Sai Nilayam, Rajam', score: 'Interview Cleared', docStatus: 'Verified', status: 'Accepted', submissionDate: '16 Oct 2026', submissionTime: '09:20 AM' },
+      { appId: 'SV202600005', name: 'V. Aditya', studentName: 'V. Aditya', dob: '2011-03-30', gender: 'Male', class: 'IX', grade: 'Class IX', prevSchool: 'Bhashyam Public School', parent: 'V. Suresh Babu', parentName: 'V. Suresh Babu', phone: '9848055667', email: 'sureshbabu.v@gmail.com', address: 'Door 8-19, RTC Complex Road, Srikakulam', score: '84% (Distinction)', docStatus: 'Verified', status: 'Submitted', submissionDate: '18 Oct 2026', submissionTime: '04:10 PM' },
+      { appId: 'SV202600006', name: 'S. Harini', studentName: 'S. Harini', dob: '2021-06-12', gender: 'Female', class: 'LKG', grade: 'LKG', prevSchool: 'Little Angels Play School', parent: 'S. Venkatesh', parentName: 'S. Venkatesh', phone: '9848066778', email: 'venkatesh.s@gmail.com', address: 'Beside Post Office, Main Road, Ponduru', score: 'Direct Admission', docStatus: 'Verified', status: 'Enrolled', enrolled: true, enrolledAdmNo: 'SV-0502', enrolledClass: 'Class LKG-A', submissionDate: '19 Oct 2026', submissionTime: '11:00 AM' },
+      { appId: 'SV202600007', name: 'K. Sai Ruthvik', studentName: 'K. Sai Ruthvik', dob: '2021-12-05', gender: 'Male', class: 'I', grade: 'Class I', prevSchool: 'Little Tots Nursery', parent: 'K. Ramesh', parentName: 'K. Ramesh', phone: '9848077889', email: 'ramesh.k@gmail.com', address: 'D.No 2-15, Main Bazaar, Srikakulam', score: 'Age Below Cutoff', docStatus: 'Rejected', status: 'Rejected', rejectionReason: 'Candidate age below statutory cut-off for Class I admission under AP Education Code.', submissionDate: '20 Oct 2026', submissionTime: '01:30 PM' },
+      { appId: 'SV202600008', name: 'T. Hemanth', studentName: 'T. Hemanth', dob: '2015-08-19', gender: 'Male', class: 'V', grade: 'Class V', prevSchool: 'Nagarjuna Public School', parent: 'T. Prakash', parentName: 'T. Prakash', phone: '9848088990', email: 'prakash.t@gmail.com', address: 'Plot 18, Housing Board Colony, Rajam', score: 'Withdrawn by Parent', docStatus: 'Cancelled', status: 'Cancelled', cancellationReason: 'Parent relocated out of state (Bangalore transfer). Formal withdrawal letter on file.', submissionDate: '21 Oct 2026', submissionTime: '11:45 AM' },
+      { appId: 'SV202600009', name: 'P. Bhavya Sree', studentName: 'P. Bhavya Sree', dob: '2013-05-14', gender: 'Female', class: 'VII', grade: 'Class VII', prevSchool: 'Vikas Vidya Niketan', parent: 'P. Venkat Rao', parentName: 'P. Venkat Rao', phone: '9848099001', email: 'venkat.p@gmail.com', address: 'H.No 6-44, Palakonda Road, Rajam', score: 'Archive Dossier', docStatus: 'Archived', status: 'Archived', archivalReason: 'Prior academic session application archived to permanent audit vault.', submissionDate: '05 Sep 2026', submissionTime: '03:15 PM' }
     ],
     transfers: [
       { tcNo: 'TC-2026-001', name: 'P. Kiran Kumar', admNo: 'SV-0082', class: 'Class VIII-A', reason: 'Parent Job Transfer (To Hyderabad)', dues: 'Cleared (No Dues)', conduct: 'Exemplary', status: 'Issued', date: '18 Sep 2026' },
@@ -5279,9 +5282,7 @@ const FEE_CATEGORY_AUDIT_DATA = [
         <td><span class="portal-badge badge-info">${item.score || 'Awaiting Entrance / Direct'}</span></td>
         <td><span class="portal-badge ${(item.docStatus || '').includes('Verified') ? 'badge-success' : 'badge-warning'}">${item.docStatus || 'Submitted'}</span></td>
         <td>
-          <span class="portal-badge ${isApproved ? 'badge-success' : 'badge-warning'}">
-            ${isApproved ? '<i class="fa-solid fa-circle-check"></i> Approved & Enrolled' : (item.status || 'Under Review')}
-          </span>
+          ${portalApp.getStandardStatusBadgeHtml(item.status || (isApproved ? 'Enrolled' : 'Under Review'))}
           ${isApproved ? `
             <div style="font-size: 0.75rem; color: #047857; font-weight: 700; margin-top: 0.3rem;">
               <i class="fa-solid fa-graduation-cap"></i> Enrolled: ${item.enrolledClass || ('Class ' + targetClassKey + '-A')} (${item.enrolledAdmNo || 'Adm No Issued'})
@@ -30568,6 +30569,7 @@ const classData = TIMETABLE_CLASS_DATA[currentTimetableClass] || TIMETABLE_CLASS
       submittedOn: '28 Oct 2026, 04:15 PM',
       urgency: 'High Priority',
       badgeClass: 'warning',
+      status: 'Under Review',
       docs: 'Medical Prescription & Hospital Discharge Summary Verified',
       amount: '-'
     },
@@ -30581,6 +30583,7 @@ const classData = TIMETABLE_CLASS_DATA[currentTimetableClass] || TIMETABLE_CLASS
       submittedOn: '27 Oct 2026, 11:30 AM',
       urgency: 'High Priority',
       badgeClass: 'warning',
+      status: 'Submitted',
       docs: 'Parent Income Declaration & Previous Year Mark Sheet (9.8 GPA)',
       amount: '₹12,000'
     },
@@ -30594,6 +30597,7 @@ const classData = TIMETABLE_CLASS_DATA[currentTimetableClass] || TIMETABLE_CLASS
       submittedOn: '28 Oct 2026, 02:45 PM',
       urgency: 'Critical',
       badgeClass: 'danger',
+      status: 'Under Review',
       docs: '3 Comparative Vendor Quotations (Sri Krishna Book Depot Lowest L1)',
       amount: '₹14,200'
     },
@@ -30607,6 +30611,7 @@ const classData = TIMETABLE_CLASS_DATA[currentTimetableClass] || TIMETABLE_CLASS
       submittedOn: '29 Oct 2026, 10:15 AM',
       urgency: 'Critical',
       badgeClass: 'danger',
+      status: 'Returned for Correction',
       docs: 'SBI Banking Gateway UTR 904128 & Parent Bank Passbook Statement',
       amount: '₹16,000'
     },
@@ -30618,6 +30623,9 @@ const classData = TIMETABLE_CLASS_DATA[currentTimetableClass] || TIMETABLE_CLASS
       summary: 'Official Transfer Certificate (TC) Issue for Master K. Tarun (Class X)',
       impact: 'Clearance Memo & CBSE Relocation',
       submittedOn: '26 Oct 2026, 03:00 PM',
+      urgency: 'Normal',
+      badgeClass: 'info',
+      status: 'Draft',
       urgency: 'Normal',
       badgeClass: 'info',
       docs: 'Father Central Govt Transfer Order (Hyderabad) & All Dues Cleared',
@@ -30961,9 +30969,12 @@ const classData = TIMETABLE_CLASS_DATA[currentTimetableClass] || TIMETABLE_CLASS
           <div style="font-size: 0.82rem; color: #475569;">${item.submittedOn}</div>
         </td>
         <td>
-          <span class="badge" style="background: ${item.badgeClass === 'danger' ? '#fee2e2; color: #991b1b' : (item.badgeClass === 'warning' ? '#fef3c7; color: #92400e' : '#e0e7ff; color: #3730a3')}; font-weight: 700;">
-            ${item.urgency}
-          </span>
+          <div style="display:flex; flex-direction:column; gap:4px;">
+            <div>${portalApp.getStandardStatusBadgeHtml(item.status || 'Under Review')}</div>
+            <span class="badge" style="background: ${item.badgeClass === 'danger' ? '#fee2e2; color: #991b1b' : (item.badgeClass === 'warning' ? '#fef3c7; color: #92400e' : '#e0e7ff; color: #3730a3')}; font-weight: 700; font-size:0.75rem;">
+              ${item.urgency}
+            </span>
+          </div>
         </td>
         <td class="text-end">
           <div class="record-actions-wrap" style="justify-content:flex-end;">
@@ -31094,9 +31105,7 @@ const classData = TIMETABLE_CLASS_DATA[currentTimetableClass] || TIMETABLE_CLASS
         </td>
         <td>${item.applicant}</td>
         <td>
-          <span class="badge" style="background: ${item.actionClass === 'success' ? '#dcfce7; color: #166534' : (item.actionClass === 'warning' ? '#fef3c7; color: #92400e' : (item.actionClass === 'danger' ? '#fee2e2; color: #991b1b' : '#f1f5f9; color: #475569'))}; font-weight: 800; font-size: 0.85rem;">
-            ${item.action}
-          </span>
+          ${portalApp.getStandardStatusBadgeHtml(item.action)}
         </td>
         <td>${item.authority}</td>
         <td><small class="text-muted">${item.timestamp}</small></td>
@@ -32843,6 +32852,158 @@ const classData = TIMETABLE_CLASS_DATA[currentTimetableClass] || TIMETABLE_CLASS
   }
 
 
+
+  // ==========================================================================
+  // STANDARD APPROVAL STATUS MODEL & ENGINE
+  // ==========================================================================
+  const STANDARD_APPROVAL_STATUSES = {
+    'Draft': {
+      meaning: 'Created but not submitted',
+      badgeClass: 'badge-status-draft',
+      icon: 'fa-solid fa-pen-ruler',
+      category: 'core'
+    },
+    'Submitted': {
+      meaning: 'Waiting for review',
+      badgeClass: 'badge-status-submitted',
+      icon: 'fa-solid fa-paper-plane',
+      category: 'core'
+    },
+    'Under Review': {
+      meaning: 'Being verified',
+      badgeClass: 'badge-status-under-review',
+      icon: 'fa-solid fa-magnifying-glass',
+      category: 'core',
+      hasDot: true
+    },
+    'Returned for Correction': {
+      meaning: 'More information is required',
+      badgeClass: 'badge-status-returned-for-correction',
+      icon: 'fa-solid fa-arrow-rotate-left',
+      category: 'core'
+    },
+    'Approved': {
+      meaning: 'Authorized to proceed',
+      badgeClass: 'badge-status-approved',
+      icon: 'fa-solid fa-circle-check',
+      category: 'core'
+    },
+    'Rejected': {
+      meaning: 'Request declined',
+      badgeClass: 'badge-status-rejected',
+      icon: 'fa-solid fa-circle-xmark',
+      category: 'core'
+    },
+    'Completed': {
+      meaning: 'Process finished',
+      badgeClass: 'badge-status-completed',
+      icon: 'fa-solid fa-check-double',
+      category: 'core'
+    },
+    'Cancelled': {
+      meaning: 'Process cancelled with a recorded reason',
+      badgeClass: 'badge-status-cancelled',
+      icon: 'fa-solid fa-ban',
+      category: 'core'
+    },
+    'Archived': {
+      meaning: 'Retained but no longer active',
+      badgeClass: 'badge-status-archived',
+      icon: 'fa-solid fa-box-archive',
+      category: 'core'
+    },
+
+    // Domain Specific: Admissions Lifecycle
+    'Documents Pending': {
+      meaning: 'Missing mandatory certificates or credentials',
+      badgeClass: 'badge-status-documents-pending',
+      icon: 'fa-solid fa-file-circle-exclamation',
+      category: 'admissions'
+    },
+    'Offered': {
+      meaning: 'Provisional admission offer issued to candidate',
+      badgeClass: 'badge-status-offered',
+      icon: 'fa-solid fa-envelope-open-text',
+      category: 'admissions'
+    },
+    'Accepted': {
+      meaning: 'Seat offer accepted by parent with fee deposit',
+      badgeClass: 'badge-status-accepted',
+      icon: 'fa-solid fa-handshake',
+      category: 'admissions'
+    },
+    'Enrolled': {
+      meaning: 'Formally enrolled with permanent admission number and class allotment',
+      badgeClass: 'badge-status-enrolled',
+      icon: 'fa-solid fa-graduation-cap',
+      category: 'admissions'
+    },
+
+    // Domain Specific: Financial Lifecycle
+    'Pending': {
+      meaning: 'Payment due or pending clearance',
+      badgeClass: 'badge-status-returned',
+      icon: 'fa-solid fa-clock',
+      category: 'financial'
+    },
+    'Partial': {
+      meaning: 'Partially settled installment',
+      badgeClass: 'badge-status-partial',
+      icon: 'fa-solid fa-chart-pie',
+      category: 'financial'
+    },
+    'Paid': {
+      meaning: 'Full payment received and reconciled',
+      badgeClass: 'badge-status-completed',
+      icon: 'fa-solid fa-circle-check',
+      category: 'financial'
+    },
+    'Reversed': {
+      meaning: 'Payment reversed via authorized credit note docket',
+      badgeClass: 'badge-status-reversed',
+      icon: 'fa-solid fa-receipt',
+      category: 'financial'
+    }
+  };
+
+  function getStandardStatusBadgeHtml(statusText, options = {}) {
+    if (!statusText) return '';
+    const cleanStatus = String(statusText).trim();
+
+    let match = STANDARD_APPROVAL_STATUSES[cleanStatus];
+    if (!match) {
+      const lower = cleanStatus.toLowerCase();
+      if (lower === 'draft' || lower.includes('draft')) match = STANDARD_APPROVAL_STATUSES['Draft'];
+      else if (lower === 'submitted' || lower.includes('submit')) match = STANDARD_APPROVAL_STATUSES['Submitted'];
+      else if (lower.includes('review') || lower.includes('verif') || lower.includes('pending principal')) match = STANDARD_APPROVAL_STATUSES['Under Review'];
+      else if (lower.includes('returned') || lower.includes('clarif') || lower.includes('correct')) match = STANDARD_APPROVAL_STATUSES['Returned for Correction'];
+      else if (lower.includes('approved') || lower.includes('authorized')) match = STANDARD_APPROVAL_STATUSES['Approved'];
+      else if (lower.includes('rejected') || lower.includes('declin')) match = STANDARD_APPROVAL_STATUSES['Rejected'];
+      else if (lower.includes('enrolled') || lower.includes('ready for enrolment')) match = STANDARD_APPROVAL_STATUSES['Enrolled'];
+      else if (lower.includes('offered') || lower.includes('offer')) match = STANDARD_APPROVAL_STATUSES['Offered'];
+      else if (lower.includes('accepted') || lower.includes('accept')) match = STANDARD_APPROVAL_STATUSES['Accepted'];
+      else if (lower.includes('documents pending') || lower.includes('pending tc')) match = STANDARD_APPROVAL_STATUSES['Documents Pending'];
+      else if (lower.includes('completed') || lower.includes('finished')) match = STANDARD_APPROVAL_STATUSES['Completed'];
+      else if (lower.includes('cancelled') || lower.includes('canceled')) match = STANDARD_APPROVAL_STATUSES['Cancelled'];
+      else if (lower.includes('archived') || lower.includes('purged') || lower.includes('retired')) match = STANDARD_APPROVAL_STATUSES['Archived'];
+      else if (lower.includes('paid')) match = STANDARD_APPROVAL_STATUSES['Paid'];
+      else if (lower.includes('revers')) match = STANDARD_APPROVAL_STATUSES['Reversed'];
+      else {
+        match = {
+          meaning: cleanStatus,
+          badgeClass: 'badge-status-draft',
+          icon: 'fa-solid fa-circle-info'
+        };
+      }
+    }
+
+    const dotHtml = match.hasDot ? '<span class="status-dot"></span>' : '';
+    const iconHtml = match.icon ? `<i class="${match.icon}"></i>` : '';
+    const tooltip = ` title="${match.meaning}"`;
+
+    return `<span class="portal-status-badge ${match.badgeClass}"${tooltip}>${dotHtml}${iconHtml}<span>${cleanStatus}</span></span>`;
+  }
+
   // ==========================================================================
   // STANDARD RECORD ACTIONS ENGINE
   // ==========================================================================
@@ -33429,6 +33590,10 @@ const classData = TIMETABLE_CLASS_DATA[currentTimetableClass] || TIMETABLE_CLASS
   }
 
   return {
+    // Standard Approval Status Model API
+    STANDARD_APPROVAL_STATUSES,
+    getStandardStatusBadgeHtml,
+    
     // Standard Record Actions API
     toggleRecordMoreMenu,
     executeStandardAction,

@@ -3427,7 +3427,7 @@ var teacherApp = (function () {
         <td>${lv.dates}</td>
         <td>${lv.substitute}</td>
         <td>${lv.reason}</td>
-        <td><span class="portal-badge ${lv.status.includes('Approved') ? 'badge-success' : 'badge-warning'}">${lv.status}</span></td>
+        <td>${getStandardStatusBadgeHtml(lv.status)}</td>
       </tr>
     `).join('');
   }
@@ -3750,6 +3750,34 @@ var teacherApp = (function () {
   function closeModal(id) {
     const modal = document.getElementById(id);
     if (modal) modal.classList.remove('active');
+  }
+
+  
+  function getStandardStatusBadgeHtml(statusText) {
+    if (!statusText) return '';
+    const clean = String(statusText).trim();
+    const lower = clean.toLowerCase();
+    let cls = 'badge-status-submitted';
+    let icon = 'fa-solid fa-paper-plane';
+    let dot = '';
+    if (lower.includes('draft')) {
+      cls = 'badge-status-draft'; icon = 'fa-solid fa-pen-ruler';
+    } else if (lower.includes('review') || lower.includes('pending')) {
+      cls = 'badge-status-under-review'; icon = 'fa-solid fa-magnifying-glass'; dot = '<span class="status-dot"></span>';
+    } else if (lower.includes('return') || lower.includes('correct')) {
+      cls = 'badge-status-returned-for-correction'; icon = 'fa-solid fa-arrow-rotate-left';
+    } else if (lower.includes('approv')) {
+      cls = 'badge-status-approved'; icon = 'fa-solid fa-circle-check';
+    } else if (lower.includes('reject')) {
+      cls = 'badge-status-rejected'; icon = 'fa-solid fa-circle-xmark';
+    } else if (lower.includes('complet')) {
+      cls = 'badge-status-completed'; icon = 'fa-solid fa-check-double';
+    } else if (lower.includes('cancel')) {
+      cls = 'badge-status-cancelled'; icon = 'fa-solid fa-ban';
+    } else if (lower.includes('archiv')) {
+      cls = 'badge-status-archived'; icon = 'fa-solid fa-box-archive';
+    }
+    return `<span class="portal-status-badge ${cls}">${dot}<i class="${icon}"></i> <span>${clean}</span></span>`;
   }
 
   function showToast(message, type = 'info') {
