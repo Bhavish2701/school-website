@@ -2945,12 +2945,8 @@ const FEE_CATEGORY_AUDIT_DATA = [
     allViews.forEach(v => v.classList.remove('active'));
     targetView.classList.add('active');
 
-    // Update breadcrumb
-    const crumb = document.getElementById('currentPageCrumb');
-    if (crumb) {
-      const moduleName = moduleKey.charAt(0).toUpperCase() + moduleKey.slice(1);
-      crumb.textContent = moduleKey === 'dashboard' ? `${roleConfigs[state.currentRole].title} Dashboard` : moduleName;
-    }
+    // Update standard breadcrumb
+    updateBreadcrumb(moduleKey, subKey || (typeof getDefaultSubTab === 'function' ? getDefaultSubTab(moduleKey) : ''));
 
     // Scroll to top
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -2968,6 +2964,11 @@ const FEE_CATEGORY_AUDIT_DATA = [
     state.activeSubTab[moduleKey] = subKey;
     const moduleSection = document.getElementById(`view-${moduleKey}`);
     if (!moduleSection) return;
+    
+    // Standard Breadcrumb Synchronization
+    if (typeof updateBreadcrumb === 'function') {
+      updateBreadcrumb(moduleKey, subKey);
+    }
 
     // 1. Toggle active class on all tab-strip buttons in this module
     const tabStrip = moduleSection.querySelector('.tab-strip');
@@ -5414,6 +5415,7 @@ const FEE_CATEGORY_AUDIT_DATA = [
     }
 
     if (modal) {
+      modal.style.display = 'flex';
       modal.classList.add('active');
     }
   }
@@ -6851,6 +6853,7 @@ const FEE_CATEGORY_AUDIT_DATA = [
           secInput.value = 'A';
         }
       }
+      modal.style.display = 'flex';
       modal.classList.add('active');
       document.body.style.overflow = 'hidden';
     }
@@ -10514,6 +10517,7 @@ const FEE_CATEGORY_AUDIT_DATA = [
     handleStatusSelectChange(curStatus);
 
     if (modal) {
+      modal.style.display = 'flex';
       modal.classList.add('active');
       modal.classList.add('open');
       modal.classList.add('show');
@@ -24649,6 +24653,7 @@ const classData = TIMETABLE_CLASS_DATA[currentTimetableClass] || TIMETABLE_CLASS
     handleStatusSelectChange(curStatus);
 
     if (modal) {
+      modal.style.display = 'flex';
       modal.classList.add('active');
       modal.classList.add('open');
       modal.classList.add('show');
@@ -32221,7 +32226,570 @@ const classData = TIMETABLE_CLASS_DATA[currentTimetableClass] || TIMETABLE_CLASS
     showToast('Editing configuration for ' + role.name + '. (Assignees: ' + role.assignedUsers.join(', ') + ')', 'info');
   }
 
+  
+  /* =========================================================================
+     STANDARD PAGE LAYOUT ARCHITECTURE & REUSABLE UI ENGINE
+     Spec: Breadcrumb, Page title, Description, Primary action, Summary cards,
+           Search, Filters, Records table, Row actions, Bulk actions, Pagination,
+           Export/Print, Activity history, Empty state, Loading & error states
+     ========================================================================= */
+
+  function updateBreadcrumb(moduleKey, subKey) {
+    const crumb = document.getElementById('currentPageCrumb');
+    if (!crumb) return;
+
+    if (!moduleKey || moduleKey === 'dashboard') {
+      const roleTitle = (typeof roleConfigs !== 'undefined' && roleConfigs[state.currentRole]?.title) ? roleConfigs[state.currentRole].title : 'Principal';
+      crumb.innerHTML = `<span class="crumb-current">${roleTitle} Dashboard</span>`;
+      return;
+    }
+
+    const moduleNames = {
+      'students': 'Students',
+      'teachers': 'Staff & HR',
+      'academics': 'Academics',
+      'attendance': 'Attendance',
+      'timetable': 'Timetable',
+      'examinations': 'Examinations',
+      'discipline': 'Discipline & Student Welfare',
+      'leaves': 'Leave Management',
+      'fees': 'Fees & Finance',
+      'appointments': 'Appointments & Visitors',
+      'communication': 'Communication',
+      'events': 'Events & Activities',
+      'reports': 'Reports & Analytics',
+      'tasks': 'Tasks & Approvals',
+      'settings': 'Settings & Access Control',
+      'transport': 'Transport & Facilities',
+      'inventory': 'Inventory & Assets',
+      'documents': 'Official Documents'
+    };
+
+    const subTitlesMap = {
+      'students': {
+        'profiles': 'Student Profiles',
+        'documents': 'Documents Repository',
+        'admissions': 'Admissions Intake',
+        'transfers': 'Transfer Certificates',
+        'performance': 'Academic Performance',
+        'parents': 'Parent Records'
+      },
+      'teachers': {
+        'faculty': 'Faculty Directory',
+        'non-teaching': 'Administrative & Support Staff',
+        'attendance': 'Staff Attendance',
+        'leaves': 'Leave Approvals',
+        'appraisals': 'Performance Appraisals',
+        'workload': 'Teaching Workload',
+        'documents': 'Staff Documents'
+      },
+      'academics': {
+        'classes': 'Classes & Sections',
+        'subjects': 'Subject Catalog',
+        'calendar': 'Academic Calendar',
+        'timetable': 'Master Timetable',
+        'lesson-plans': 'Lesson Plans',
+        'exams': 'Academic Examinations',
+        'results': 'Results Tabulation',
+        'reports': 'Academic Reports'
+      },
+      'attendance': {
+        'student': 'Classroom Attendance',
+        'daily': 'Daily Attendance Summary',
+        'monthly': 'Monthly Register',
+        'absentee': 'Absentee Alerts',
+        'gate': 'Gate Late Register'
+      },
+      'timetable': {
+        'class-schedules': 'Class Timetables',
+        'faculty-allocations': 'Teacher Allocations',
+        'substitution': 'Daily Substitution',
+        'room-allocations': 'Room Matrix'
+      },
+      'examinations': {
+        'schedule': 'Examination Schedule',
+        'duties': 'Invigilation Duties',
+        'marks': 'Tabulation & Marks',
+        'approval': 'Result Approvals'
+      },
+      'discipline': {
+        'incidents': 'Incident Records',
+        'gate-late': 'Late-Coming Register',
+        'merit': 'Merit & Achievements',
+        'parent-meetings': 'Parent Meetings',
+        'counselling': 'Counselling Referrals'
+      },
+      'leaves': {
+        'faculty': 'Staff Leave Approvals',
+        'student': 'Student Leave Requests',
+        'balances': 'Leave Balances & Entitlements',
+        'history': 'Leave History'
+      },
+      'fees': {
+        'collection': 'Fee Collection',
+        'dues': 'Pending Dues',
+        'structure': 'Fee Structure',
+        'concessions': 'Concessions & Scholarships',
+        'refunds': 'Refunds & Reversals',
+        'reports': 'Fee Reports',
+        'ledger': 'Transactions Ledger'
+      },
+      'appointments': {
+        'overview': 'Appointment Overview',
+        'calendar': "Principal's Calendar",
+        'requests': 'Appointment Requests',
+        'approved': 'Approved Appointments',
+        'visitors': 'Visitor Register',
+        'history': 'Meeting History',
+        'actions': 'Follow-up Actions'
+      },
+      'communication': {
+        'announcements': 'Announcements',
+        'circulars': 'Official Circulars',
+        'sms': 'SMS Broadcast',
+        'email': 'Email Dispatch',
+        'push': 'Mobile Push',
+        'enquiries': 'Parent Enquiries',
+        'templates': 'Message Templates'
+      },
+      'events': {
+        'calendar': 'Annual Calendar',
+        'events': 'School Events',
+        'competitions': 'Competitions',
+        'clubs': 'Clubs & Sports',
+        'permissions': 'Event Permissions',
+        'reports': 'Event Reports'
+      },
+      'reports': {
+        'academic': 'Academic Analytics',
+        'attendance': 'Attendance Records',
+        'financial': 'Financial Statements',
+        'payroll': 'Staff Payroll & Audits',
+        'demographics': 'Student Demographics',
+        'admissions': 'Admissions Analytics',
+        'operational': 'Operational Reports'
+      },
+      'tasks': {
+        'pending': 'Pending Approvals',
+        'assigned': 'My Assigned Tasks',
+        'history': 'Approval History',
+        'escalations': 'Escalations Register',
+        'settings': 'Workflow Settings'
+      },
+      'settings': {
+        'profile': 'School Profile',
+        'year': 'Academic Year',
+        'roles': 'Role Management',
+        'permissions': 'Access Permissions',
+        'workflows': 'Approval Workflows',
+        'notifications': 'Notifications',
+        'security': 'Security Settings',
+        'audit': 'Audit Logs',
+        'backup': 'Data & Backup'
+      },
+      'transport': {
+        'routes': 'Routes & Stops',
+        'vehicles': 'Vehicles Fleet',
+        'drivers': 'Drivers & Attendants',
+        'allocations': 'Transport Allocation',
+        'maintenance': 'Maintenance Register',
+        'safety': 'Safety Inspections'
+      },
+      'inventory': {
+        'assets': 'Asset Register',
+        'stock': 'Stock Management',
+        'purchases': 'Purchase Requests',
+        'vendors': 'Vendors Directory',
+        'issuereturn': 'Issue & Return Desk',
+        'maintenance': 'Asset Maintenance'
+      },
+      'documents': {
+        'certificates': 'Official Certificates',
+        'verification': 'Document Verification'
+      }
+    };
+
+    const modTitle = moduleNames[moduleKey] || (moduleKey.charAt(0).toUpperCase() + moduleKey.slice(1));
+    const subTitle = (subTitlesMap[moduleKey] && subTitlesMap[moduleKey][subKey]) ? subTitlesMap[moduleKey][subKey] : (subKey ? (subKey.charAt(0).toUpperCase() + subKey.slice(1)) : '');
+
+    if (subTitle && subTitle.toLowerCase() !== modTitle.toLowerCase() && subTitle.toLowerCase() !== 'all') {
+      crumb.innerHTML = `<a href="#${moduleKey}" class="crumb-link" onclick="portalApp.navigateTo('${moduleKey}'); return false;">${modTitle}</a> <i class="fa-solid fa-chevron-right crumb-sep"></i> <span class="crumb-current">${subTitle}</span>`;
+    } else {
+      crumb.innerHTML = `<span class="crumb-current">${modTitle}</span>`;
+    }
+  }
+
+  // Universal Bulk Actions State & Handlers
+  let activeBulkSelection = {
+    tableId: null,
+    selectedRows: []
+  };
+
+  function handleTableCheckboxChange(tableId) {
+    const table = document.getElementById(tableId);
+    if (!table) return;
+
+    const checkboxes = table.querySelectorAll('tbody input[type="checkbox"].row-checkbox, tbody input[type="checkbox"].student-checkbox, tbody input[type="checkbox"].select-checkbox');
+    const checked = Array.from(checkboxes).filter(cb => cb.checked);
+    activeBulkSelection.tableId = tableId;
+    activeBulkSelection.selectedRows = checked.map(cb => cb.closest('tr'));
+
+    const toolbar = document.getElementById('portalBulkActionsToolbar');
+    const countEl = document.getElementById('bulkSelectedCount');
+    if (toolbar && countEl) {
+      countEl.textContent = checked.length;
+      if (checked.length > 0) {
+        toolbar.classList.add('active');
+      } else {
+        toolbar.classList.remove('active');
+      }
+    }
+
+    const selectAllCb = table.querySelector('thead input[type="checkbox"].select-all-checkbox, thead input[type="checkbox"]#selectAllStudents');
+    if (selectAllCb) {
+      if (checked.length === 0) {
+        selectAllCb.checked = false;
+        selectAllCb.indeterminate = false;
+      } else if (checked.length === checkboxes.length) {
+        selectAllCb.checked = true;
+        selectAllCb.indeterminate = false;
+      } else {
+        selectAllCb.checked = false;
+        selectAllCb.indeterminate = true;
+      }
+    }
+  }
+
+  function toggleSelectAll(tableId, isChecked) {
+    const table = document.getElementById(tableId);
+    if (!table) return;
+
+    const checkboxes = table.querySelectorAll('tbody input[type="checkbox"].row-checkbox, tbody input[type="checkbox"].student-checkbox, tbody input[type="checkbox"].select-checkbox');
+    checkboxes.forEach(cb => { cb.checked = isChecked; });
+    handleTableCheckboxChange(tableId);
+  }
+
+  function clearBulkSelection(tableId) {
+    const targetTableId = tableId || activeBulkSelection.tableId;
+    if (targetTableId) {
+      const table = document.getElementById(targetTableId);
+      if (table) {
+        const checkboxes = table.querySelectorAll('input[type="checkbox"]');
+        checkboxes.forEach(cb => { cb.checked = false; cb.indeterminate = false; });
+      }
+    }
+    const toolbar = document.getElementById('portalBulkActionsToolbar');
+    if (toolbar) toolbar.classList.remove('active');
+    activeBulkSelection.selectedRows = [];
+  }
+
+  function handleBulkAction(actionType) {
+    const count = activeBulkSelection.selectedRows.length;
+    if (count === 0) {
+      showToast('No records selected for batch operation.', 'warning');
+      return;
+    }
+
+    if (actionType === 'export') {
+      showToast(`Exporting ${count} selected records to CSV dataset...`, 'success');
+      clearBulkSelection();
+    } else if (actionType === 'print') {
+      showToast(`Preparing institutional print docket for ${count} selected records...`, 'info');
+      window.print();
+    } else if (actionType === 'approve') {
+      showToast(`Batch authorization verified: ${count} records marked approved by Executive Desk.`, 'success');
+      clearBulkSelection();
+    } else if (actionType === 'archive') {
+      showToast(`Safely archived ${count} selected records to historical audit vault.`, 'info');
+      clearBulkSelection();
+    }
+  }
+
+  // Universal Pagination Renderer
+  function renderTablePagination(containerId, options = {}) {
+    const container = document.getElementById(containerId);
+    if (!container) return;
+
+    const {
+      currentPage = 1,
+      totalRecords = 0,
+      pageSize = 10,
+      onPageChange = 'portalApp.handleGenericPageChange',
+      onPageSizeChange = 'portalApp.handleGenericPageSizeChange'
+    } = options;
+
+    if (totalRecords === 0) {
+      container.innerHTML = '';
+      return;
+    }
+
+    const totalPages = Math.ceil(totalRecords / pageSize) || 1;
+    const startRecord = Math.min((currentPage - 1) * pageSize + 1, totalRecords);
+    const endRecord = Math.min(currentPage * pageSize, totalRecords);
+
+    let pageButtonsHtml = '';
+    const maxButtons = 5;
+    let startPage = Math.max(1, currentPage - 2);
+    let endPage = Math.min(totalPages, startPage + maxButtons - 1);
+    if (endPage - startPage < maxButtons - 1) {
+      startPage = Math.max(1, endPage - maxButtons + 1);
+    }
+
+    pageButtonsHtml += `<button type="button" class="page-btn" ${currentPage === 1 ? 'disabled' : ''} onclick="${onPageChange}(1)" title="First Page"><i class="fa-solid fa-angles-left"></i></button>`;
+    pageButtonsHtml += `<button type="button" class="page-btn" ${currentPage === 1 ? 'disabled' : ''} onclick="${onPageChange}(${currentPage - 1})" title="Previous Page"><i class="fa-solid fa-chevron-left"></i></button>`;
+
+    for (let p = startPage; p <= endPage; p++) {
+      pageButtonsHtml += `<button type="button" class="page-btn ${p === currentPage ? 'active' : ''}" onclick="${onPageChange}(${p})">${p}</button>`;
+    }
+
+    pageButtonsHtml += `<button type="button" class="page-btn" ${currentPage === totalPages ? 'disabled' : ''} onclick="${onPageChange}(${currentPage + 1})" title="Next Page"><i class="fa-solid fa-chevron-right"></i></button>`;
+    pageButtonsHtml += `<button type="button" class="page-btn" ${currentPage === totalPages ? 'disabled' : ''} onclick="${onPageChange}(${totalPages})" title="Last Page"><i class="fa-solid fa-angles-right"></i></button>`;
+
+    container.innerHTML = `
+      <div class="portal-pagination">
+        <div class="pagination-info-wrap">
+          <span>Showing <strong>${startRecord}</strong> to <strong>${endRecord}</strong> of <strong>${totalRecords}</strong> entries</span>
+          <div class="pagination-page-size">
+            <label>Per page:</label>
+            <select onchange="${onPageSizeChange}(parseInt(this.value, 10))">
+              <option value="10" ${pageSize === 10 ? 'selected' : ''}>10</option>
+              <option value="25" ${pageSize === 25 ? 'selected' : ''}>25</option>
+              <option value="50" ${pageSize === 50 ? 'selected' : ''}>50</option>
+              <option value="100" ${pageSize === 100 ? 'selected' : ''}>100</option>
+            </select>
+          </div>
+        </div>
+        <div class="pagination-nav">
+          ${pageButtonsHtml}
+        </div>
+      </div>
+    `;
+  }
+
+  function handleGenericPageChange(newPage) {
+    showToast('Navigated to page ' + newPage, 'info');
+  }
+
+  function handleGenericPageSizeChange(newSize) {
+    showToast('Adjusted records view to ' + newSize + ' per page', 'info');
+  }
+
+  // Universal Activity History / Audit Timeline
+  const ACTIVITY_HISTORY_DATABASE = [
+    {
+      actor: 'Dr. M. R. Krishna (Principal)',
+      time: 'Today, 11:45 AM',
+      type: 'approved',
+      badge: 'APPROVED',
+      action: 'Authorized fee concession waiver of 25% (₹3,000) for Roll #804 D. Divya under Merit Scholarship Docket #MS-2026-08.'
+    },
+    {
+      actor: 'Sri Navva Anand (Vice Principal)',
+      time: 'Today, 10:30 AM',
+      type: 'approved',
+      badge: 'MODERATED',
+      action: 'Verified and signed off Term 1 Mathematics Unit Test 2 marks curve for Class 8A (42/42 students evaluated).'
+    },
+    {
+      actor: 'G. Sridhar (Senior Accounts Officer)',
+      time: 'Today, 09:15 AM',
+      type: 'created',
+      badge: 'TRANSACTION',
+      action: 'Issued official Fee Receipt #REC-2026-089 for ₹12,000 via UPI Reference #984812399812 with automatic ledger reconciliation.'
+    },
+    {
+      actor: 'Ms. Anjali (Class Teacher 8A)',
+      time: 'Today, 08:50 AM',
+      type: 'created',
+      badge: 'ATTENDANCE',
+      action: 'Submitted morning attendance register for Class 8A (39 Present, 2 Absent, 1 Late).'
+    },
+    {
+      actor: 'Disciplinary Committee',
+      time: 'Yesterday, 04:15 PM',
+      type: 'approved',
+      badge: 'RESOLVED',
+      action: 'Concluded parent consultation regarding late bus arrival and recorded gate pass waiver.'
+    },
+    {
+      actor: 'System Automation Desk',
+      time: 'Yesterday, 06:00 PM',
+      type: 'created',
+      badge: 'BACKUP',
+      action: 'Automated encrypted daily database snapshot completed successfully (SHA256: 7d4a...b38e).'
+    }
+  ];
+
+  function openActivityHistory(contextTitle, subtext) {
+    const modal = document.getElementById('activityHistoryModal');
+    if (!modal) return;
+
+    const titleEl = document.getElementById('activityHistoryTitleText');
+    const ctxEl = document.getElementById('activityHistoryContext');
+    const subEl = document.getElementById('activityHistorySubtext');
+    const container = document.getElementById('activityHistoryTimelineContainer');
+
+    if (titleEl) titleEl.textContent = (contextTitle ? `${contextTitle} — Activity History` : 'Institutional Activity History');
+    if (ctxEl) ctxEl.textContent = `Scope: ${contextTitle || 'All Modules'} Audit Ledger`;
+    if (subEl) subEl.textContent = subtext || 'Chronological log of administrative changes, approvals, and transaction reversals';
+
+    if (container) {
+      container.innerHTML = ACTIVITY_HISTORY_DATABASE.map(item => `
+        <div class="timeline-item">
+          <div class="timeline-dot dot-${item.type}"></div>
+          <div class="timeline-content">
+            <div class="timeline-header">
+              <span class="timeline-actor"><i class="fa-solid fa-user-shield text-primary mr-1"></i> ${item.actor}</span>
+              <span class="timeline-time"><i class="fa-regular fa-clock mr-1"></i> ${item.time}</span>
+            </div>
+            <div class="timeline-action">
+              <span class="portal-badge badge-${item.type === 'approved' ? 'success' : (item.type === 'rejected' ? 'danger' : 'primary')}" style="font-size: 0.7rem; padding: 2px 7px; margin-right: 6px;">
+                ${item.badge}
+              </span>
+              ${item.action}
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    openModal('activityHistoryModal');
+  }
+
+  function exportActivityHistoryCSV() {
+    let csv = 'Timestamp,Actor,Status,Action Detail\n';
+    ACTIVITY_HISTORY_DATABASE.forEach(item => {
+      csv += `"${item.time}","${item.actor}","${item.badge}","${item.action.replace(/"/g, '""')}"\n`;
+    });
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = `Sri_Vidya_Activity_History_${Date.now()}.csv`;
+    link.click();
+    showToast('Activity history audit log exported to CSV.', 'success');
+  }
+
+  // Universal Empty State Generator
+  function getEmptyStateHtml(options = {}) {
+    const {
+      icon = 'fa-folder-open',
+      title = 'No records found',
+      desc = 'No entries match your search query or active filters. Try adjusting your filters or record a new entry.',
+      clearFilterFn = 'portalApp.resetActiveFilters()',
+      actionText = 'Clear All Filters',
+      actionIcon = 'fa-rotate-left'
+    } = options;
+
+    return `
+      <div class="empty-state">
+        <div class="empty-state-icon">
+          <i class="fa-solid ${icon}"></i>
+        </div>
+        <h4 class="empty-state-title">${title}</h4>
+        <p class="empty-state-desc">${desc}</p>
+        <div class="empty-state-actions">
+          <button type="button" class="btn btn-secondary btn-sm" onclick="${clearFilterFn}">
+            <i class="fa-solid ${actionIcon} mr-1"></i> ${actionText}
+          </button>
+        </div>
+      </div>
+    `;
+  }
+
+  function renderEmptyState(target, options = {}) {
+    const el = typeof target === 'string' ? document.getElementById(target) : target;
+    if (!el) return;
+
+    const html = getEmptyStateHtml(options);
+    if (el.tagName.toLowerCase() === 'tbody') {
+      const colCount = el.closest('table')?.querySelectorAll('thead th')?.length || 8;
+      el.innerHTML = `<tr><td colspan="${colCount}" style="padding:0; border:none;">${html}</td></tr>`;
+    } else {
+      el.innerHTML = html;
+    }
+  }
+
+  function resetActiveFilters() {
+    document.querySelectorAll('.standard-filter-toolbar input, .filter-toolbar input').forEach(input => { input.value = ''; });
+    document.querySelectorAll('.standard-filter-toolbar select, .filter-toolbar select').forEach(select => { select.selectedIndex = 0; });
+    showToast('All search queries and filters reset.', 'info');
+    if (typeof filterStudentProfiles === 'function') filterStudentProfiles();
+    if (typeof filterFeesTable === 'function') filterFeesTable();
+  }
+
+  // Universal Loading & Error State Generator
+  function getLoadingStateHtml(message = 'Retrieving institutional records from secure database...') {
+    return `
+      <div class="loading-state">
+        <div class="loading-spinner"></div>
+        <div class="loading-text">${message}</div>
+      </div>
+    `;
+  }
+
+  function renderLoadingState(target, message) {
+    const el = typeof target === 'string' ? document.getElementById(target) : target;
+    if (!el) return;
+
+    const html = getLoadingStateHtml(message);
+    if (el.tagName.toLowerCase() === 'tbody') {
+      const colCount = el.closest('table')?.querySelectorAll('thead th')?.length || 8;
+      el.innerHTML = `<tr><td colspan="${colCount}" style="padding:0; border:none;">${html}</td></tr>`;
+    } else {
+      el.innerHTML = html;
+    }
+  }
+
+  function getErrorStateHtml(message = 'An error occurred while loading records.', retryFn = 'location.reload()') {
+    return `
+      <div class="error-state">
+        <div class="error-state-icon">
+          <i class="fa-solid fa-triangle-exclamation"></i>
+        </div>
+        <h4 class="error-state-title">Unable to Load Records</h4>
+        <p class="error-state-desc">${message}</p>
+        <div>
+          <button type="button" class="btn btn-primary btn-sm" onclick="${retryFn}">
+            <i class="fa-solid fa-rotate mr-1"></i> Retry Operation
+          </button>
+        </div>
+      </div>
+    `;
+  }
+
+  function renderErrorState(target, message, retryFn) {
+    const el = typeof target === 'string' ? document.getElementById(target) : target;
+    if (!el) return;
+
+    const html = getErrorStateHtml(message, retryFn);
+    if (el.tagName.toLowerCase() === 'tbody') {
+      const colCount = el.closest('table')?.querySelectorAll('thead th')?.length || 8;
+      el.innerHTML = `<tr><td colspan="${colCount}" style="padding:0; border:none;">${html}</td></tr>`;
+    } else {
+      el.innerHTML = html;
+    }
+  }
+
   return {
+    // Standard Page Layout Engine API
+    updateBreadcrumb,
+    handleTableCheckboxChange,
+    toggleSelectAll,
+    clearBulkSelection,
+    handleBulkAction,
+    renderTablePagination,
+    handleGenericPageChange,
+    handleGenericPageSizeChange,
+    openActivityHistory,
+    exportActivityHistoryCSV,
+    getEmptyStateHtml,
+    renderEmptyState,
+    resetActiveFilters,
+    getLoadingStateHtml,
+    renderLoadingState,
+    getErrorStateHtml,
+    renderErrorState,
+
     // Inventory & Assets
     renderInventoryAssetsTable,
     filterInventoryAssets,

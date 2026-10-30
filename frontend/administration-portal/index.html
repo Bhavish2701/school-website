@@ -18450,5 +18450,64 @@ Class X-A,Monday,2,09:35 AM - 10:20 AM,Physical Science,Sri Navva Anand,Room 201
     </div>
   </div>
 
+
+  <!-- =========================================================================
+       UNIVERSAL STANDARD PAGE LAYOUT COMPONENTS
+       ========================================================================= -->
+
+  <!-- Universal Floating Bulk Actions Toolbar -->
+  <div class="bulk-actions-toolbar" id="portalBulkActionsToolbar" role="toolbar" aria-label="Bulk actions toolbar">
+    <div class="bulk-selection-count">
+      <i class="fa-solid fa-circle-check" style="color: #10b981;"></i>
+      <span id="bulkSelectedCount">0</span> selected
+    </div>
+    <div class="bulk-action-buttons">
+      <button type="button" class="btn-bulk-action" onclick="portalApp.handleBulkAction('export')">
+        <i class="fa-solid fa-file-csv"></i> Export CSV
+      </button>
+      <button type="button" class="btn-bulk-action" onclick="portalApp.handleBulkAction('print')">
+        <i class="fa-solid fa-print"></i> Print
+      </button>
+      <button type="button" class="btn-bulk-action" id="bulkApproveBtn" onclick="portalApp.handleBulkAction('approve')">
+        <i class="fa-solid fa-check-double"></i> Batch Approve
+      </button>
+      <button type="button" class="btn-bulk-action" onclick="portalApp.handleBulkAction('archive')">
+        <i class="fa-solid fa-box-archive"></i> Archive
+      </button>
+      <button type="button" class="btn-bulk-clear" onclick="portalApp.clearBulkSelection()" title="Clear Selection">
+        <i class="fa-solid fa-xmark"></i> Deselect
+      </button>
+    </div>
+  </div>
+
+  <!-- Universal Activity History & Audit Modal -->
+  <div class="modal-backdrop" id="activityHistoryModal" role="dialog" aria-modal="true" aria-labelledby="activityHistoryModalTitle">
+    <div class="portal-modal" style="max-width: 720px; width: 95%;">
+      <div class="modal-header">
+        <h3 id="activityHistoryModalTitle"><i class="fa-solid fa-clock-rotate-left text-primary"></i> <span id="activityHistoryTitleText">Activity &amp; Approval History</span></h3>
+        <button class="modal-close-x" onclick="portalApp.closeModal('activityHistoryModal')" title="Close" aria-label="Close">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="d-flex justify-content-between align-items-center mb-3 p-2 rounded" style="background: var(--color-bg-subtle, #f8fafc); border: 1px solid var(--color-border, #e2e8f0); flex-wrap:wrap; gap:8px;">
+          <div>
+            <span class="text-xs text-muted" id="activityHistoryContext">Scope: Institutional Record Lifecycle</span>
+            <div class="text-xs font-weight-bold" style="color: var(--color-text-dark, #0f172a);" id="activityHistorySubtext">Track all system modifications, state changes, and staff decisions</div>
+          </div>
+          <button type="button" class="btn btn-sm btn-secondary" onclick="portalApp.exportActivityHistoryCSV()">
+            <i class="fa-solid fa-file-export mr-1"></i> Export Audit Log
+          </button>
+        </div>
+        <div id="activityHistoryTimelineContainer" class="activity-timeline">
+          <!-- Populated dynamically via portalApp.openActivityHistory -->
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" onclick="portalApp.closeModal('activityHistoryModal')">Close</button>
+      </div>
+    </div>
+  </div>
+
 </body>
 </html>
