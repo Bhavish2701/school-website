@@ -111,7 +111,7 @@
 }
 
 .login-theme-mgmt::before {
-  background: linear-gradient(90deg, #1D4ED8 0%, #60A5FA 50%, #0F172A 100%);
+  background: linear-gradient(90deg, #1D4ED8 0%, #2563EB 50%, #60A5FA 100%);
 }
 
 .login-theme-teacher::before {
@@ -408,12 +408,12 @@
   padding: 2.75rem 2.5rem 2.25rem;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: flex-start;
   box-sizing: border-box;
 }
 
 .login-form-header {
-  margin-bottom: 1.5rem;
+  margin-bottom: 1.25rem;
 }
 
 /* Distinct Portal Badges */
@@ -475,7 +475,7 @@
   display: flex;
   flex-direction: column;
   gap: 1.15rem;
-  margin-bottom: 1.25rem;
+  margin-bottom: 0;
 }
 
 .login-field {
@@ -501,11 +501,17 @@
 
 .login-input-icon {
   position: absolute;
-  left: 0.95rem;
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
   color: #94A3B8;
   font-size: 0.95rem;
   pointer-events: none;
   transition: color 0.2s ease;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .login-input {
@@ -555,6 +561,8 @@
 .login-password-toggle {
   position: absolute;
   right: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
   background: none;
   border: none;
   color: #94A3B8;
@@ -562,6 +570,10 @@
   padding: 0.45rem;
   font-size: 0.95rem;
   transition: color 0.18s ease;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .login-password-toggle:hover {
@@ -570,11 +582,11 @@
 
 .login-select {
   width: 100%;
-  padding: 0.82rem 0.95rem 0.82rem 2.65rem;
+  padding: 0.82rem 2.4rem 0.82rem 2.65rem;
   border-radius: 12px;
   border: 1.5px solid #CBD5E1;
-  background: #F8FAFC;
-  font-size: 0.9rem;
+  background-color: #F8FAFC;
+  font-size: 0.88rem;
   font-weight: 600;
   color: #0F172A;
   font-family: inherit;
@@ -582,10 +594,17 @@
   transition: all 0.2s ease;
   box-sizing: border-box;
   cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2364748B'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.95rem center;
+  background-size: 1.15rem;
 }
 
 .login-select:focus {
-  background: #FFFFFF;
+  background-color: #FFFFFF;
   border-color: #2563EB;
   box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
 }
@@ -687,24 +706,41 @@
   background: #F8FAFC;
   border: 1px solid #E2E8F0;
   border-radius: 12px;
-  padding: 0.7rem 0.9rem;
-  margin-top: 0.25rem;
+  padding: 0.55rem 0.85rem;
+  margin-top: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  box-sizing: border-box;
 }
 
 .switch-label {
-  display: block;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
   font-size: 0.72rem;
   font-weight: 800;
   text-transform: uppercase;
-  letter-spacing: 0.6px;
+  letter-spacing: 0.5px;
   color: #64748B;
-  margin-bottom: 0.45rem;
+  white-space: nowrap;
+}
+
+.switch-label i {
+  color: #3B82F6;
+  font-size: 0.78rem;
+}
+
+.login-theme-teacher .switch-label i {
+  color: #10B981;
 }
 
 .switch-links {
   display: flex;
-  flex-wrap: wrap;
-  gap: 0.4rem;
+  align-items: center;
+  gap: 0.45rem;
+  flex-shrink: 0;
 }
 
 .switch-chip {
@@ -712,21 +748,41 @@
   align-items: center;
   gap: 0.35rem;
   padding: 0.3rem 0.65rem;
-  border-radius: 6px;
-  font-size: 0.76rem;
+  border-radius: 7px;
+  font-size: 0.75rem;
   font-weight: 700;
   text-decoration: none;
   background: #FFFFFF;
-  border: 1px solid #CBD5E1;
-  color: #334155;
-  transition: all 0.18s ease;
+  border: 1.5px solid #CBD5E1;
+  color: #1E293B;
+  transition: all 0.2s ease;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+  white-space: nowrap;
+}
+
+.switch-chip i {
+  color: #2563EB;
+  font-size: 0.8rem;
+}
+
+.login-theme-teacher .switch-chip i {
+  color: #059669;
 }
 
 .switch-chip:hover {
-  background: #0F172A;
+  background: #1E293B;
   color: #FFFFFF;
-  border-color: #0F172A;
+  border-color: #1E293B;
   transform: translateY(-1px);
+  box-shadow: 0 3px 8px rgba(15, 23, 42, 0.15);
+}
+
+.switch-chip:hover i {
+  color: #60A5FA;
+}
+
+.login-theme-teacher .switch-chip:hover i {
+  color: #34D399;
 }
 
 .switch-chip.active {
@@ -738,13 +794,13 @@
 
 /* Bottom Footer */
 .login-card-footer {
-  margin-top: 1.25rem;
-  padding-top: 1.15rem;
+  margin-top: auto;
+  padding-top: 1.25rem;
   border-top: 1px solid #E2E8F0;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  font-size: 0.8rem;
+  font-size: 0.82rem;
   color: #64748B;
 }
 
