@@ -4908,155 +4908,226 @@
           </div>
 
           <!-- ========================================== -->
+          <!-- ========================================================================= -->
+          <!-- SUBVIEW 3: AUTHORITATIVE STAFF ATTENDANCE MODULE -->
+          <!-- ========================================================================= -->
           <div class="teacher-subview" id="subview-teachers-attendance" style="display: none;">
-            <!-- Executive Metrics Quad -->
-            <div class="metrics-quad mb-3" style="margin-top:1rem;">
-              <div class="metric-card">
-                <div class="metric-icon-wrap icon-blue"><i class="fa-solid fa-users"></i></div>
-                <div class="metric-details">
-                  <span class="metric-label">Total Staff Cadre</span>
-                  <div class="metric-value" id="attTotalStaff">38</div>
-                  <div class="metric-trend trend-steady"><span>30 Teaching + 8 Non-Teaching</span></div>
-                </div>
-              </div>
-              <div class="metric-card">
-                <div class="metric-icon-wrap icon-emerald"><i class="fa-solid fa-user-check"></i></div>
-                <div class="metric-details">
-                  <span class="metric-label">Present Today</span>
-                  <div class="metric-value text-emerald" id="attPresentStaff">35</div>
-                  <div class="metric-trend trend-up"><span>92.1% Biometric / RFID Verified</span></div>
-                </div>
-              </div>
-              <div class="metric-card">
-                <div class="metric-icon-wrap icon-amber"><i class="fa-solid fa-clock"></i></div>
-                <div class="metric-details">
-                  <span class="metric-label">Late Arrivals</span>
-                  <div class="metric-value text-amber" id="attLateStaff">2</div>
-                  <div class="metric-trend trend-down"><span>Arrived after 08:35 AM</span></div>
-                </div>
-              </div>
-              <div class="metric-card">
-                <div class="metric-icon-wrap" style="background:#fee2e2; color:#ef4444;"><i
-                    class="fa-solid fa-user-xmark"></i></div>
-                <div class="metric-details">
-                  <span class="metric-label">Absences / On Leave</span>
-                  <div class="metric-value" style="color:#ef4444;" id="attAbsentStaff">1</div>
-                  <div class="metric-trend"><span>Substitution Deployed</span></div>
-                </div>
-              </div>
-            </div>
 
-            <!-- School Offline Mode Status Banner -->
-            <div class="offline-attendance-banner mb-3">
-              <div class="offline-banner-left">
-                <div class="offline-pulse-indicator">
-                  <span class="pulse-dot"></span>
-                  <strong>School Offline Mode Active</strong>
+            <!-- Page Header -->
+            <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap" style="gap:15px; border-bottom: 1px solid #e2e8f0; padding-bottom: 1.25rem;">
+              <div>
+                <div class="text-xs text-uppercase font-weight-bold text-muted mb-1" style="letter-spacing: 0.5px;">
+                  <i class="fa-solid fa-users-gear mr-1 text-primary"></i> Teachers &amp; Staff &gt; Staff Attendance
                 </div>
-                <span class="offline-sync-detail"><i class="fa-solid fa-fingerprint text-emerald"></i> Local Biometric
-                  Gate Buffer &bull; Working Hours: 08:30 AM – 04:30 PM &bull; Zero Cloud Dependency</span>
+                <h2 class="h3 font-weight-bold text-gray-800 mb-1" style="color: #1e293b; margin: 0;">Staff Attendance</h2>
+                <p class="text-muted mb-0" style="font-size: 0.9rem;">Authoritative daily check-in, check-out, biometric device synchronization, attendance validation, correction requests, and monthly muster rolls.</p>
               </div>
-              <div class="offline-banner-actions">
-                <button type="button" class="btn btn-outline-success btn-sm"
-                  onclick="portalApp.syncOfflineBiometricLogs()" title="Sync local offline punch records">
-                  <i class="fa-solid fa-arrows-rotate"></i> Sync Offline Punches
+              <div class="d-flex align-items-center flex-wrap" style="gap: 8px;">
+                <button type="button" class="btn btn-outline-primary btn-sm" onclick="portalApp.openDailyRegisterModal()" title="View and print official daily muster roll register">
+                  <i class="fa-solid fa-clipboard-list mr-1"></i> View Daily Register
                 </button>
-                <button type="button" class="btn btn-primary btn-sm" onclick="portalApp.openTeacherAttendanceModal()"
-                  title="Mark daily attendance register">
-                  <i class="fa-solid fa-pen-to-square"></i> Mark / Log Attendance
+                <button type="button" class="btn btn-outline-info btn-sm" onclick="portalApp.openMonthlyReportModal()" title="Generate aggregated monthly attendance muster roll">
+                  <i class="fa-solid fa-calendar-days mr-1"></i> Generate Monthly Report
+                </button>
+                <button type="button" class="btn btn-outline-warning btn-sm" onclick="portalApp.openAttendanceCorrectionsModal()" title="Review and approve pending attendance corrections">
+                  <i class="fa-solid fa-user-check mr-1"></i> Approve Corrections <span class="badge badge-warning ml-1" id="attPendingCorrectionsBadge" style="font-size:0.75rem;">1</span>
+                </button>
+                <button type="button" class="btn btn-outline-secondary btn-sm" onclick="portalApp.openImportStaffAttendanceModal()" title="Import attendance records from biometric device log or CSV">
+                  <i class="fa-solid fa-file-import mr-1"></i> Import Attendance
+                </button>
+                <button type="button" class="btn btn-primary btn-sm" onclick="portalApp.openRecordStaffAttendanceModal()" style="font-weight:600;" title="Record manual attendance or gate punch">
+                  <i class="fa-solid fa-plus-circle mr-1"></i> Record Attendance
                 </button>
               </div>
             </div>
 
-            <!-- Executive Attendance Filter Toolbar -->
-            <div class="transfers-toolbar mb-3">
-              <div class="tc-toolbar-left"
-                style="flex: 1; display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
-                <div class="tc-search-wrap" style="min-width: 240px; flex: 1;">
-                  <i class="fa-solid fa-magnifying-glass search-icon"></i>
-                  <input type="text" id="attStaffSearchInput" class="tc-search-input"
-                    placeholder="Search staff by Employee ID, Name, Department..."
-                    oninput="portalApp.filterStaffAttendanceTable()">
-                  <button type="button" class="tc-clear-btn" id="attClearSearchBtn"
-                    onclick="document.getElementById('attStaffSearchInput').value=''; portalApp.filterStaffAttendanceTable();"
-                    title="Clear Search">
-                    <i class="fa-solid fa-xmark"></i>
-                  </button>
+            <!-- Policy & Validation Notice -->
+            <div style="background: #eff6ff; border: 1px solid #bfdbfe; border-left: 4px solid #2563eb; border-radius: 8px; padding: 12px 16px; margin-bottom: 20px;">
+              <div style="display: flex; align-items: flex-start; gap: 12px;">
+                <i class="fa-solid fa-shield-halved" style="color: #2563eb; font-size: 1.25rem; margin-top: 2px;"></i>
+                <div style="flex-grow: 1;">
+                  <strong style="color: #1e40af; font-size: 0.9rem;">Authoritative Attendance Policy &amp; Validation Protocol:</strong>
+                  <div style="color: #3b82f6; font-size: 0.82rem; margin-top: 2px; line-height: 1.45;">
+                    Official school working hours: <strong>08:30 AM – 04:30 PM</strong> (Morning shift from 06:45 AM for Transport; Office from 08:00 AM).
+                    Arrivals after the 10-minute grace period (08:40 AM) are automatically flagged as <strong>Late Arrival</strong> with calculated duration.
+                    The system strictly validates duplicate entries and permitted time ranges. Any correction submitted by staff or authorized managers requires designated review by the Principal or Administrative Officer with full audit trail retention.
+                  </div>
                 </div>
-                <div class="filter-group" style="margin-bottom:0;">
-                  <input type="date" id="staffAttDate" class="tc-filter-select"
-                    onchange="portalApp.renderStaffAttendanceTable()" title="Attendance Date">
-                </div>
-                <div class="filter-group" style="margin-bottom:0;">
-                  <select id="attCategoryFilter" class="tc-filter-select"
-                    onchange="portalApp.filterStaffAttendanceTable()" title="Filter by Staff Category">
-                    <option value="">All Staff (38)</option>
-                    <option value="Teaching">Teaching Faculty (30)</option>
-                    <option value="Non-Teaching">Non-Teaching Staff (8)</option>
-                  </select>
-                </div>
-                <div class="filter-group" style="margin-bottom:0;">
-                  <select id="attStatusFilter" class="tc-filter-select"
-                    onchange="portalApp.filterStaffAttendanceTable()" title="Filter by Attendance Status">
-                    <option value="">All Statuses</option>
-                    <option value="Present">Present (Verified)</option>
-                    <option value="Late">Late Arrivals</option>
-                    <option value="Leave">On Leave</option>
-                    <option value="Absent">Absent</option>
-                  </select>
-                </div>
-              </div>
-
-              <div class="tc-toolbar-right" style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
-                <span class="tc-count-pill" id="attStaffCountPill">
-                  <i class="fa-solid fa-list-check text-primary"></i> Showing <strong id="attFilteredCount">38</strong>
-                  of <strong id="attTotalCount">38</strong>
-                </span>
-                <button type="button" class="btn btn-outline-secondary btn-sm"
-                  onclick="portalApp.resetStaffAttendanceFilters()" title="Reset Filters">
-                  <i class="fa-solid fa-rotate-left"></i> Reset
-                </button>
-                <button type="button" class="btn btn-outline-primary btn-sm"
-                  onclick="portalApp.exportStaffAttendanceCSV()" title="Export Daily Attendance Register to CSV">
-                  <i class="fa-solid fa-file-csv"></i> Export CSV
-                </button>
-                <button type="button" class="btn btn-outline-primary btn-sm"
-                  onclick="portalApp.printStaffAttendanceRegister()" title="Print Today's Attendance Register">
-                  <i class="fa-solid fa-print"></i> Print
-                </button>
               </div>
             </div>
 
-            <!-- Attendance Table Card -->
-            <div class="staff-table-card">
-              <div class="table-container" style="overflow-x: auto;">
-                <table class="staff-roster-table non-teaching-roster-table" id="staffAttendanceMasterTable">
-                  <thead>
+            <!-- Executive KPI Cards -->
+            <div class="row mb-4" id="staffAttendanceMetricsRow">
+              <div class="col-xl-2 col-md-4 col-sm-6 mb-3">
+                <div class="card h-100 shadow-sm border-0" style="border-left: 4px solid #3b82f6 !important; border-radius: 8px;">
+                  <div class="card-body p-3">
+                    <div class="d-flex align-items-center justify-content-between mb-1">
+                      <span class="text-xs font-weight-bold text-muted text-uppercase">Total Cadre</span>
+                      <i class="fa-solid fa-users text-primary" style="font-size: 1.1rem;"></i>
+                    </div>
+                    <div class="h4 mb-0 font-weight-bold text-gray-800" id="attTotalStaffCadre">42</div>
+                    <div class="text-xs text-muted mt-1">30 Faculty + 12 Staff</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-xl-3 col-md-4 col-sm-6 mb-3">
+                <div class="card h-100 shadow-sm border-0" style="border-left: 4px solid #10b981 !important; border-radius: 8px;">
+                  <div class="card-body p-3">
+                    <div class="d-flex align-items-center justify-content-between mb-1">
+                      <span class="text-xs font-weight-bold text-muted text-uppercase">Present Today</span>
+                      <i class="fa-solid fa-user-check text-success" style="font-size: 1.1rem;"></i>
+                    </div>
+                    <div class="h4 mb-0 font-weight-bold text-success" id="attPresentTodayCount">38</div>
+                    <div class="text-xs text-success mt-1"><i class="fa-solid fa-fingerprint mr-1"></i> 90.5% Biometric Verified</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-xl-2 col-md-4 col-sm-6 mb-3">
+                <div class="card h-100 shadow-sm border-0" style="border-left: 4px solid #f59e0b !important; border-radius: 8px;">
+                  <div class="card-body p-3">
+                    <div class="d-flex align-items-center justify-content-between mb-1">
+                      <span class="text-xs font-weight-bold text-muted text-uppercase">Late Arrivals</span>
+                      <i class="fa-solid fa-clock text-warning" style="font-size: 1.1rem;"></i>
+                    </div>
+                    <div class="h4 mb-0 font-weight-bold text-warning" id="attLateArrivalsCount">3</div>
+                    <div class="text-xs text-muted mt-1">Past Grace Buffer</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-xl-2 col-md-6 col-sm-6 mb-3">
+                <div class="card h-100 shadow-sm border-0" style="border-left: 4px solid #ef4444 !important; border-radius: 8px;">
+                  <div class="card-body p-3">
+                    <div class="d-flex align-items-center justify-content-between mb-1">
+                      <span class="text-xs font-weight-bold text-muted text-uppercase">Missing Check-Out</span>
+                      <i class="fa-solid fa-person-circle-exclamation text-danger" style="font-size: 1.1rem;"></i>
+                    </div>
+                    <div class="h4 mb-0 font-weight-bold text-danger" id="attMissingCheckOutCount">1</div>
+                    <div class="text-xs text-muted mt-1">Pending Exit Punch</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-xl-3 col-md-6 col-sm-6 mb-3">
+                <div class="card h-100 shadow-sm border-0" style="border-left: 4px solid #8b5cf6 !important; border-radius: 8px;">
+                  <div class="card-body p-3">
+                    <div class="d-flex align-items-center justify-content-between mb-1">
+                      <span class="text-xs font-weight-bold text-muted text-uppercase">Pending Corrections</span>
+                      <i class="fa-solid fa-file-pen text-purple" style="font-size: 1.1rem; color:#8b5cf6;"></i>
+                    </div>
+                    <div class="h4 mb-0 font-weight-bold" style="color:#7c3aed;" id="attPendingCorrectionsCount">1</div>
+                    <div class="text-xs text-muted mt-1">Awaiting Approval</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Executive Search & Filter Toolbar -->
+            <div class="card mb-4 shadow-sm border-0" style="border-radius: 8px; background: #fff;">
+              <div class="card-body p-3">
+                <div class="d-flex align-items-center justify-content-between flex-wrap" style="gap: 12px;">
+                  
+                  <div class="d-flex align-items-center flex-wrap" style="gap: 10px; flex: 1;">
+                    <!-- Search Input -->
+                    <div style="position: relative; min-width: 250px; flex: 1;">
+                      <i class="fa-solid fa-magnifying-glass" style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: #94a3b8; font-size: 0.85rem;"></i>
+                      <input type="text" id="attStaffSearchInput" class="form-control form-control-sm" style="padding-left: 34px; border-radius: 6px;" placeholder="Search by Employee ID, Name, Department..." oninput="portalApp.filterStaffAttendanceTable()">
+                    </div>
+
+                    <!-- Date Filter -->
+                    <div style="min-width: 150px;">
+                      <input type="date" id="staffAttDate" class="form-control form-control-sm" style="border-radius: 6px;" onchange="portalApp.renderStaffAttendanceTable()" title="Attendance Date">
+                    </div>
+
+                    <!-- Department Filter -->
+                    <div style="min-width: 170px;">
+                      <select id="attDeptFilter" class="form-control form-control-sm" style="border-radius: 6px;" onchange="portalApp.filterStaffAttendanceTable()">
+                        <option value="all">All Departments (8)</option>
+                        <option value="Administrative Office">Administrative Office</option>
+                        <option value="Finance &amp; Accounts">Finance &amp; Accounts</option>
+                        <option value="Mathematics">Mathematics</option>
+                        <option value="Physical Science">Physical Science</option>
+                        <option value="Biological Science">Biological Science</option>
+                        <option value="Social Studies">Social Studies</option>
+                        <option value="English">English</option>
+                        <option value="Telugu Language">Telugu Language</option>
+                        <option value="Hindi Language">Hindi Language</option>
+                        <option value="Transport Operations">Transport Operations</option>
+                        <option value="Library &amp; Learning Resource">Library &amp; Learning Resource</option>
+                        <option value="Science Laboratories">Science Laboratories</option>
+                        <option value="Information Technology">Information Technology</option>
+                        <option value="Facilities &amp; Security">Facilities &amp; Security</option>
+                        <option value="Student Services">Student Services</option>
+                      </select>
+                    </div>
+
+                    <!-- Status Filter -->
+                    <div style="min-width: 150px;">
+                      <select id="attStatusFilter" class="form-control form-control-sm" style="border-radius: 6px;" onchange="portalApp.filterStaffAttendanceTable()">
+                        <option value="all">All Statuses</option>
+                        <option value="Present">Present (Verified)</option>
+                        <option value="Late Arrival">Late Arrival</option>
+                        <option value="Half Day">Half Day</option>
+                        <option value="Absent">Absent</option>
+                        <option value="On Duty / Leave">On Duty / Leave</option>
+                      </select>
+                    </div>
+
+                    <!-- Source Filter -->
+                    <div style="min-width: 160px;">
+                      <select id="attSourceFilter" class="form-control form-control-sm" style="border-radius: 6px;" onchange="portalApp.filterStaffAttendanceTable()">
+                        <option value="all">All Sources</option>
+                        <option value="Biometric Device">Biometric Device</option>
+                        <option value="Manual Entry">Manual Entry</option>
+                        <option value="Correction Override">Correction Override</option>
+                        <option value="Mobile Geo-Punch">Mobile Geo-Punch</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div class="d-flex align-items-center" style="gap: 8px;">
+                    <span class="badge badge-light font-weight-normal py-2 px-3" id="attStaffCountPill" style="background: #f1f5f9; color: #334155; font-size: 0.82rem; border: 1px solid #e2e8f0;">
+                      Showing 42 of 42 Attendance Records
+                    </span>
+                    <button type="button" class="btn btn-outline-secondary btn-sm" onclick="portalApp.resetStaffAttendanceFilters()" title="Reset Filters">
+                      <i class="fa-solid fa-rotate-left mr-1"></i> Reset
+                    </button>
+                    <button type="button" class="btn btn-outline-primary btn-sm" onclick="portalApp.exportStaffAttendanceCSV()" title="Export Daily Attendance Register to CSV">
+                      <i class="fa-solid fa-file-csv mr-1"></i> Export CSV
+                    </button>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+
+            <!-- Authoritative 10-Column Master Attendance Register Table -->
+            <div class="card shadow-sm border-0 mb-4" style="border-radius: 8px; overflow: hidden; background: #fff;">
+              <div class="table-responsive">
+                <table class="table table-hover mb-0" id="staffAttendanceMasterTable" style="vertical-align: middle;">
+                  <thead style="background: #f8fafc; border-bottom: 2px solid #e2e8f0;">
                     <tr>
-                      <th style="min-width: 220px; text-align: left;"><i class="fa-solid fa-user-tie text-primary"></i>
-                        Staff Member</th>
-                      <th style="min-width: 170px; text-align: left;"><i
-                          class="fa-solid fa-layer-group text-primary"></i> Category &amp; Dept</th>
-                      <th style="width: 140px; text-align: center;"><i
-                          class="fa-solid fa-circle-check text-primary"></i> Daily Status</th>
-                      <th style="min-width: 230px; text-align: left;"><i class="fa-solid fa-clock text-primary"></i>
-                        Offline Check-In &amp; Check-Out</th>
-                      <th style="width: 145px; text-align: left;"><i class="fa-solid fa-business-time text-primary"></i>
-                        Punctuality / Late</th>
-                      <th style="width: 125px; text-align: center;"><i
-                          class="fa-solid fa-calendar-xmark text-primary"></i> Monthly Absences</th>
-                      <th style="min-width: 165px; text-align: left;"><i
-                          class="fa-solid fa-chart-line text-primary"></i> Monthly Summary</th>
-                      <th style="text-align: center; width: 130px;"><i class="fa-solid fa-sliders text-primary"></i>
-                        Action</th>
+                      <th style="font-size: 0.8rem; text-transform: uppercase; color: #475569; letter-spacing: 0.5px; padding: 12px 14px;">Employee ID</th>
+                      <th style="font-size: 0.8rem; text-transform: uppercase; color: #475569; letter-spacing: 0.5px; padding: 12px 14px;">Employee Name</th>
+                      <th style="font-size: 0.8rem; text-transform: uppercase; color: #475569; letter-spacing: 0.5px; padding: 12px 14px;">Department</th>
+                      <th style="font-size: 0.8rem; text-transform: uppercase; color: #475569; letter-spacing: 0.5px; padding: 12px 14px;">Date</th>
+                      <th style="font-size: 0.8rem; text-transform: uppercase; color: #475569; letter-spacing: 0.5px; padding: 12px 14px;">Check-In</th>
+                      <th style="font-size: 0.8rem; text-transform: uppercase; color: #475569; letter-spacing: 0.5px; padding: 12px 14px;">Check-Out</th>
+                      <th style="font-size: 0.8rem; text-transform: uppercase; color: #475569; letter-spacing: 0.5px; padding: 12px 14px;">Attendance Status</th>
+                      <th style="font-size: 0.8rem; text-transform: uppercase; color: #475569; letter-spacing: 0.5px; padding: 12px 14px;">Late Duration</th>
+                      <th style="font-size: 0.8rem; text-transform: uppercase; color: #475569; letter-spacing: 0.5px; padding: 12px 14px;">Source</th>
+                      <th style="font-size: 0.8rem; text-transform: uppercase; color: #475569; letter-spacing: 0.5px; padding: 12px 14px; text-align: right;">Actions</th>
                     </tr>
                   </thead>
                   <tbody id="staffAttendanceTableBody">
-                    <!-- Populated via portal.js -->
+                    <!-- Populated dynamically via portalApp.renderStaffAttendanceTable() -->
                   </tbody>
                 </table>
               </div>
             </div>
+
           </div>
 
           <!-- ========================================== -->
@@ -23158,6 +23229,496 @@ Class X-A,Monday,2,09:35 AM - 10:20 AM,Physical Science,Sri Navva Anand,Room 201
           <button type="submit" class="btn btn-primary" style="font-weight:700;"><i class="fa-solid fa-check mr-1"></i> Update Status</button>
         </div>
       </form>
+    </div>
+  </div>
+
+
+  
+  <!-- ========================================================================= -->
+  <!-- MODAL 1: RECORD STAFF ATTENDANCE MODAL (WITH DUPLICATE & RANGE VALIDATION) -->
+  <!-- ========================================================================= -->
+  <div class="portal-modal-backdrop" id="recordStaffAttendanceModal" style="display:none;">
+    <div class="portal-modal-dialog" style="max-width: 680px;">
+      <div class="portal-modal-header">
+        <div>
+          <h5 class="portal-modal-title" style="color:#1e293b; font-weight:700;">
+            <i class="fa-solid fa-clock-rotate-left mr-2 text-primary"></i> Record Staff Attendance
+          </h5>
+          <p class="text-muted mb-0" style="font-size:0.84rem;">Manual check-in/out entry with strict duplicate prevention and permitted time range validation.</p>
+        </div>
+        <button type="button" class="portal-modal-close" onclick="portalApp.closeModal('recordStaffAttendanceModal')">&times;</button>
+      </div>
+
+      <form id="recordStaffAttendanceForm" onsubmit="portalApp.handleRecordStaffAttendance(event)">
+        <div class="portal-modal-body" style="padding: 20px;">
+
+          <!-- Duplicate Warning Banner -->
+          <div id="recordAttDuplicateNotice" style="display:none; background:#fffbeb; border:1px solid #fde68a; border-left:4px solid #f59e0b; border-radius:6px; padding:10px 14px; margin-bottom:16px;">
+            <div style="display:flex; align-items:center; gap:8px;">
+              <i class="fa-solid fa-triangle-exclamation text-warning" style="font-size:1.1rem;"></i>
+              <div style="font-size:0.85rem; color:#92400e;">
+                <strong>Duplicate Record Detected:</strong> An attendance entry already exists for this employee on the selected date. Saving will update the existing entry with audit tracking.
+              </div>
+            </div>
+          </div>
+
+          <!-- Permitted Time Range Validation Message -->
+          <div id="recordAttValidationMsg" style="display:none; background:#fee2e2; border:1px solid #fecaca; border-left:4px solid #ef4444; border-radius:6px; padding:10px 14px; margin-bottom:16px;">
+            <div style="display:flex; align-items:center; gap:8px;">
+              <i class="fa-solid fa-circle-xmark text-danger" style="font-size:1.1rem;"></i>
+              <div id="recordAttValidationMsgText" style="font-size:0.85rem; color:#991b1b;"></div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-7 mb-3">
+              <label style="font-weight:600; font-size:0.85rem; color:#334155;">Staff Member <span class="text-danger">*</span></label>
+              <select class="form-control form-control-sm" id="recordAttEmployeeId" required onchange="portalApp.checkAttendanceDuplicate()">
+                <option value="">-- Select Staff Member --</option>
+                <!-- Populated dynamically via JS -->
+              </select>
+            </div>
+
+            <div class="col-md-5 mb-3">
+              <label style="font-weight:600; font-size:0.85rem; color:#334155;">Attendance Date <span class="text-danger">*</span></label>
+              <input type="date" class="form-control form-control-sm" id="recordAttDate" required onchange="portalApp.checkAttendanceDuplicate()">
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label style="font-weight:600; font-size:0.85rem; color:#334155;">Check-In Time <span class="text-danger">*</span></label>
+              <input type="time" class="form-control form-control-sm" id="recordAttCheckIn" value="08:25" required onchange="portalApp.calculateRecordLateStatus()">
+              <small class="text-muted" style="font-size:0.75rem;">Standard school start: 08:30 AM (10 min grace buffer)</small>
+            </div>
+
+            <div class="col-md-6 mb-3">
+              <label style="font-weight:600; font-size:0.85rem; color:#334155;">Check-Out Time</label>
+              <input type="time" class="form-control form-control-sm" id="recordAttCheckOut" value="16:30">
+              <small class="text-muted" style="font-size:0.75rem;">Standard school close: 04:30 PM (Leave empty if ongoing)</small>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label style="font-weight:600; font-size:0.85rem; color:#334155;">Attendance Status <span class="text-danger">*</span></label>
+              <select class="form-control form-control-sm" id="recordAttStatus" required>
+                <option value="Present">Present (Full Day)</option>
+                <option value="Late Arrival">Late Arrival</option>
+                <option value="Half Day">Half Day</option>
+                <option value="Absent">Absent</option>
+                <option value="On Duty / Leave">On Duty / Approved Leave</option>
+              </select>
+            </div>
+
+            <div class="col-md-6 mb-3">
+              <label style="font-weight:600; font-size:0.85rem; color:#334155;">Recording Source <span class="text-danger">*</span></label>
+              <select class="form-control form-control-sm" id="recordAttSource" required>
+                <option value="Manual Entry">Manual Entry (Administrative Desk)</option>
+                <option value="Biometric Device">Biometric Device Fallback</option>
+                <option value="Gate Register Entry">Gate Register Manual Entry</option>
+                <option value="Mobile Geo-Punch">Mobile Geo-Punch Override</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="mb-2">
+            <label style="font-weight:600; font-size:0.85rem; color:#334155;">Remarks / Reason for Manual Entry</label>
+            <input type="text" class="form-control form-control-sm" id="recordAttNotes" placeholder="e.g. Biometric sensor verification fallback / Special morning gate roster">
+          </div>
+
+        </div>
+
+        <div class="portal-modal-footer" style="padding: 12px 20px; background:#f8fafc; border-top:1px solid #e2e8f0; display:flex; justify-content:flex-end; gap:8px;">
+          <button type="button" class="btn btn-outline-secondary btn-sm" onclick="portalApp.closeModal('recordStaffAttendanceModal')">Cancel</button>
+          <button type="submit" class="btn btn-primary btn-sm" style="font-weight:600;">
+            <i class="fa-solid fa-check mr-1"></i> Save Attendance Record
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+
+  <!-- ========================================================================= -->
+  <!-- MODAL 2: IMPORT ATTENDANCE MODAL (CSV & DEVICE LOG WITH DUPLICATE DETECTION) -->
+  <!-- ========================================================================= -->
+  <div class="portal-modal-backdrop" id="importStaffAttendanceModal" style="display:none;">
+    <div class="portal-modal-dialog" style="max-width: 720px;">
+      <div class="portal-modal-header">
+        <div>
+          <h5 class="portal-modal-title" style="color:#1e293b; font-weight:700;">
+            <i class="fa-solid fa-file-import mr-2 text-primary"></i> Import Biometric Attendance Logs
+          </h5>
+          <p class="text-muted mb-0" style="font-size:0.84rem;">Upload CSV files or paste raw machine punch logs with automatic duplicate detection.</p>
+        </div>
+        <button type="button" class="portal-modal-close" onclick="portalApp.closeModal('importStaffAttendanceModal')">&times;</button>
+      </div>
+
+      <div class="portal-modal-body" style="padding: 20px;">
+        <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:6px; padding:12px; margin-bottom:16px;">
+          <div style="font-size:0.82rem; color:#475569;">
+            <strong>Expected Columns:</strong> <code>EmployeeID, Date, CheckIn, CheckOut, DeviceID</code><br>
+            <strong>Sample Format:</strong> <code>SV-FAC-0101, 2026-10-30, 07:54, 16:32, BIO-049</code>
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label style="font-weight:600; font-size:0.85rem; color:#334155;">Upload CSV File</label>
+          <input type="file" class="form-control-file" id="importAttFileInput" accept=".csv, .txt" onchange="portalApp.handleAttendanceCsvFile(event)">
+        </div>
+
+        <div class="mb-3">
+          <div class="d-flex justify-content-between align-items-center mb-1">
+            <label style="font-weight:600; font-size:0.85rem; color:#334155; margin:0;">Or Paste Machine Punch Log</label>
+            <button type="button" class="btn btn-xs btn-outline-info" onclick="portalApp.loadSampleAttendanceLog()">Load Sample Logs</button>
+          </div>
+          <textarea class="form-control" id="importAttTextarea" rows="4" style="font-family:monospace; font-size:0.82rem;" placeholder="Paste punch rows here..."></textarea>
+        </div>
+
+        <button type="button" class="btn btn-outline-primary btn-sm mb-3" onclick="portalApp.parseAttendanceImportPreview()">
+          <i class="fa-solid fa-list-check mr-1"></i> Validate &amp; Preview Records
+        </button>
+
+        <div id="importAttPreviewContainer" style="display:none; max-height:220px; overflow-y:auto; border:1px solid #e2e8f0; border-radius:6px;">
+          <table class="table table-sm table-hover mb-0" style="font-size:0.82rem;">
+            <thead style="background:#f1f5f9; position:sticky; top:0;">
+              <tr>
+                <th>Emp ID</th>
+                <th>Name</th>
+                <th>Date</th>
+                <th>In</th>
+                <th>Out</th>
+                <th>Status</th>
+                <th>Validation</th>
+              </tr>
+            </thead>
+            <tbody id="importAttPreviewTbody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="portal-modal-footer" style="padding: 12px 20px; background:#f8fafc; border-top:1px solid #e2e8f0; display:flex; justify-content:flex-end; gap:8px;">
+        <button type="button" class="btn btn-outline-secondary btn-sm" onclick="portalApp.closeModal('importStaffAttendanceModal')">Cancel</button>
+        <button type="button" class="btn btn-success btn-sm" id="btnConfirmImportAttendance" disabled onclick="portalApp.confirmAttendanceImport()">
+          <i class="fa-solid fa-file-arrow-up mr-1"></i> Import Validated Punches
+        </button>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ========================================================================= -->
+  <!-- MODAL 3: SUBMIT ATTENDANCE CORRECTION MODAL (SIDE-BY-SIDE ORIGINAL VS REVISED) -->
+  <!-- ========================================================================= -->
+  <div class="portal-modal-backdrop" id="submitAttendanceCorrectionModal" style="display:none;">
+    <div class="portal-modal-dialog" style="max-width: 650px;">
+      <div class="portal-modal-header">
+        <div>
+          <h5 class="portal-modal-title" style="color:#1e293b; font-weight:700;">
+            <i class="fa-solid fa-pen-to-square mr-2 text-warning"></i> Submit Attendance Correction Request
+          </h5>
+          <p class="text-muted mb-0" style="font-size:0.84rem;">Employees or authorized managers submit corrections for review by designated approver.</p>
+        </div>
+        <button type="button" class="portal-modal-close" onclick="portalApp.closeModal('submitAttendanceCorrectionModal')">&times;</button>
+      </div>
+
+      <form id="submitAttendanceCorrectionForm" onsubmit="portalApp.handleSubmitAttendanceCorrection(event)">
+        <input type="hidden" id="corrRecordId">
+        <input type="hidden" id="corrEmployeeId">
+
+        <div class="portal-modal-body" style="padding: 20px;">
+          <div class="mb-3">
+            <div style="font-weight:700; font-size:0.95rem; color:#1e293b;" id="corrStaffHeading">Smt. Gorle Varalakshmi (SV-FAC-0101)</div>
+            <div style="font-size:0.82rem; color:#64748b;" id="corrStaffSub">Administration &amp; Mathematics &bull; Date: 2026-10-30</div>
+          </div>
+
+          <!-- Side-by-side comparison box -->
+          <div class="att-compare-box">
+            <div class="att-compare-grid">
+              <div>
+                <div style="font-weight:700; font-size:0.78rem; text-transform:uppercase; color:#991b1b; margin-bottom:6px;">
+                  <i class="fa-solid fa-clock-rotate-left mr-1"></i> Current Original Values
+                </div>
+                <div class="att-val-old">
+                  <div><strong>Check-In:</strong> <span id="corrOrigCheckIn">09:15 AM</span></div>
+                  <div style="margin-top:3px;"><strong>Check-Out:</strong> <span id="corrOrigCheckOut">04:30 PM</span></div>
+                  <div style="margin-top:3px;"><strong>Status:</strong> <span id="corrOrigStatus">Late Arrival (35m)</span></div>
+                  <div style="margin-top:3px;"><strong>Source:</strong> <span id="corrOrigSource">Biometric Device</span></div>
+                </div>
+              </div>
+
+              <div>
+                <div style="font-weight:700; font-size:0.78rem; text-transform:uppercase; color:#166534; margin-bottom:6px;">
+                  <i class="fa-solid fa-pen-nib mr-1"></i> Proposed Revised Values
+                </div>
+                <div class="att-val-new">
+                  <div class="mb-2">
+                    <label style="font-size:0.78rem; font-weight:700; margin-bottom:2px; display:block;">Revised Check-In *</label>
+                    <input type="time" class="form-control form-control-sm" id="corrRevCheckIn" required>
+                  </div>
+                  <div class="mb-2">
+                    <label style="font-size:0.78rem; font-weight:700; margin-bottom:2px; display:block;">Revised Check-Out *</label>
+                    <input type="time" class="form-control form-control-sm" id="corrRevCheckOut" required>
+                  </div>
+                  <div>
+                    <label style="font-size:0.78rem; font-weight:700; margin-bottom:2px; display:block;">Revised Status *</label>
+                    <select class="form-control form-control-sm" id="corrRevStatus" required>
+                      <option value="Present">Present (Full Day)</option>
+                      <option value="Late Arrival">Late Arrival</option>
+                      <option value="Half Day">Half Day</option>
+                      <option value="On Duty / Leave">On Duty / Approved Movement</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label style="font-weight:600; font-size:0.85rem; color:#334155;">Reason for Correction <span class="text-danger">*</span></label>
+            <textarea class="form-control form-control-sm" id="corrReason" rows="3" required placeholder="Mandatory explanation: e.g. Biometric sensor failure at Gate 1, Official duty at CBSE Regional Office, or Deputation off campus..."></textarea>
+          </div>
+
+          <div class="mb-2">
+            <label style="font-weight:600; font-size:0.85rem; color:#334155;">Supporting Document Reference / Movement Slip</label>
+            <input type="text" class="form-control form-control-sm" id="corrSupportingDoc" placeholder="e.g. CBSE Duty Slip Ref #CBSE-2026-09 or Gate Register Entry #44">
+          </div>
+        </div>
+
+        <div class="portal-modal-footer" style="padding: 12px 20px; background:#f8fafc; border-top:1px solid #e2e8f0; display:flex; justify-content:flex-end; gap:8px;">
+          <button type="button" class="btn btn-outline-secondary btn-sm" onclick="portalApp.closeModal('submitAttendanceCorrectionModal')">Cancel</button>
+          <button type="submit" class="btn btn-warning btn-sm" style="font-weight:700; color:#1e293b;">
+            <i class="fa-solid fa-paper-plane mr-1"></i> Submit for Approval
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+
+  <!-- ========================================================================= -->
+  <!-- MODAL 4: ATTENDANCE CORRECTIONS APPROVAL MODAL (DESIGNATED APPROVER REVIEW) -->
+  <!-- ========================================================================= -->
+  <div class="portal-modal-backdrop" id="attendanceCorrectionsModal" style="display:none;">
+    <div class="portal-modal-dialog" style="max-width: 840px;">
+      <div class="portal-modal-header">
+        <div>
+          <h5 class="portal-modal-title" style="color:#1e293b; font-weight:700;">
+            <i class="fa-solid fa-user-check mr-2 text-warning"></i> Attendance Correction Requests &amp; Approvals
+          </h5>
+          <p class="text-muted mb-0" style="font-size:0.84rem;">Designated approver review: original and revised values are retained in permanent audit history.</p>
+        </div>
+        <button type="button" class="portal-modal-close" onclick="portalApp.closeModal('attendanceCorrectionsModal')">&times;</button>
+      </div>
+
+      <div class="portal-modal-body" style="padding: 20px;">
+        <div id="attendanceCorrectionsList">
+          <!-- Populated dynamically via JS -->
+        </div>
+      </div>
+
+      <div class="portal-modal-footer" style="padding: 12px 20px; background:#f8fafc; border-top:1px solid #e2e8f0; display:flex; justify-content:flex-end;">
+        <button type="button" class="btn btn-secondary btn-sm" onclick="portalApp.closeModal('attendanceCorrectionsModal')">Close</button>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ========================================================================= -->
+  <!-- MODAL 5: ATTENDANCE AUDIT HISTORY MODAL (IMMUTABLE AUDIT TRAIL) -->
+  <!-- ========================================================================= -->
+  <div class="portal-modal-backdrop" id="attendanceAuditHistoryModal" style="display:none;">
+    <div class="portal-modal-dialog" style="max-width: 620px;">
+      <div class="portal-modal-header">
+        <div>
+          <h5 class="portal-modal-title" style="color:#1e293b; font-weight:700;">
+            <i class="fa-solid fa-timeline mr-2 text-primary"></i> Attendance Record Audit History
+          </h5>
+          <p class="text-muted mb-0" style="font-size:0.84rem;" id="auditStaffSubHeading">Employee ID &bull; Date</p>
+        </div>
+        <button type="button" class="portal-modal-close" onclick="portalApp.closeModal('attendanceAuditHistoryModal')">&times;</button>
+      </div>
+
+      <div class="portal-modal-body" style="padding: 20px;">
+        <div class="att-audit-timeline" id="attendanceAuditTimeline">
+          <!-- Populated dynamically via JS -->
+        </div>
+      </div>
+
+      <div class="portal-modal-footer" style="padding: 12px 20px; background:#f8fafc; border-top:1px solid #e2e8f0; display:flex; justify-content:flex-end;">
+        <button type="button" class="btn btn-secondary btn-sm" onclick="portalApp.closeModal('attendanceAuditHistoryModal')">Close</button>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ========================================================================= -->
+  <!-- MODAL 6: DAILY MUSTER ROLL REGISTER MODAL (VIEW & PRINT REGISTER) -->
+  <!-- ========================================================================= -->
+  <div class="portal-modal-backdrop" id="dailyRegisterModal" style="display:none;">
+    <div class="portal-modal-dialog" style="max-width: 900px;">
+      <div class="portal-modal-header">
+        <div>
+          <h5 class="portal-modal-title" style="color:#1e293b; font-weight:700;">
+            <i class="fa-solid fa-clipboard-list mr-2 text-primary"></i> Daily Staff Attendance Muster Roll Register
+          </h5>
+          <p class="text-muted mb-0" style="font-size:0.84rem;">Authoritative institutional daily muster roll view with verification sign-off.</p>
+        </div>
+        <button type="button" class="portal-modal-close" onclick="portalApp.closeModal('dailyRegisterModal')">&times;</button>
+      </div>
+
+      <div class="portal-modal-body" style="padding: 24px;">
+        <div class="muster-roll-sheet" id="dailyRegisterPrintArea">
+          <div class="text-center mb-4" style="border-bottom: 2px solid #0f172a; padding-bottom: 12px;">
+            <h4 style="margin:0; font-weight:800; color:#0f172a; letter-spacing:0.5px;">SRI VIDYA ENGLISH MEDIUM HIGH SCHOOL</h4>
+            <div style="font-size:0.82rem; color:#475569; margin-top:2px;">Recognized by Govt. of Andhra Pradesh &bull; Tilak Road, Vizianagaram</div>
+            <div style="font-weight:700; font-size:0.95rem; color:#2563eb; margin-top:6px; text-transform:uppercase;">
+              Official Daily Staff Attendance Register (Muster Roll)
+            </div>
+            <div style="font-size:0.85rem; color:#334155; margin-top:3px;">
+              Date: <strong id="musterRollDateDisplay">2026-10-30</strong> &bull; Total Staff Cadre: <strong>42 (30 Faculty + 12 Staff)</strong>
+            </div>
+          </div>
+
+          <div class="table-responsive">
+            <table class="table table-bordered table-sm muster-roll-table mb-0">
+              <thead>
+                <tr>
+                  <th style="width:40px; text-align:center;">#</th>
+                  <th>Emp ID</th>
+                  <th>Staff Name</th>
+                  <th>Department</th>
+                  <th style="text-align:center;">In Time</th>
+                  <th style="text-align:center;">Out Time</th>
+                  <th style="text-align:center;">Status</th>
+                  <th>Source / Verification</th>
+                  <th style="width:90px; text-align:center;">Signature</th>
+                </tr>
+              </thead>
+              <tbody id="dailyRegisterTableBody">
+                <!-- Populated dynamically via JS -->
+              </tbody>
+            </table>
+          </div>
+
+          <div class="d-flex justify-content-between align-items-center mt-4 pt-3" style="border-top:1px dashed #cbd5e1; font-size:0.82rem; color:#475569;">
+            <div>Compiled by: <strong>Office Superintendent Smt. M. Vijaya</strong></div>
+            <div>Verified by: <strong>Vice Principal Sri Navva Anand</strong></div>
+            <div>Approved by: <strong>Principal Smt. Gorle Varalakshmi</strong></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="portal-modal-footer" style="padding: 12px 20px; background:#f8fafc; border-top:1px solid #e2e8f0; display:flex; justify-content:flex-end; gap:8px;">
+        <button type="button" class="btn btn-outline-secondary btn-sm" onclick="portalApp.closeModal('dailyRegisterModal')">Close</button>
+        <button type="button" class="btn btn-primary btn-sm" onclick="window.print()">
+          <i class="fa-solid fa-print mr-1"></i> Print Muster Roll
+        </button>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ========================================================================= -->
+  <!-- MODAL 7: MONTHLY REPORT MODAL (GENERATE MONTHLY MUSTER ROLL REPORT) -->
+  <!-- ========================================================================= -->
+  <div class="portal-modal-backdrop" id="monthlyReportModal" style="display:none;">
+    <div class="portal-modal-dialog" style="max-width: 880px;">
+      <div class="portal-modal-header">
+        <div>
+          <h5 class="portal-modal-title" style="color:#1e293b; font-weight:700;">
+            <i class="fa-solid fa-calendar-days mr-2 text-info"></i> Generate Monthly Attendance Muster Roll Report
+          </h5>
+          <p class="text-muted mb-0" style="font-size:0.84rem;">Aggregated monthly working days, presence, punctuality, and absenteeism summary.</p>
+        </div>
+        <button type="button" class="portal-modal-close" onclick="portalApp.closeModal('monthlyReportModal')">&times;</button>
+      </div>
+
+      <div class="portal-modal-body" style="padding: 20px;">
+        <div class="row mb-3">
+          <div class="col-md-5">
+            <label style="font-weight:600; font-size:0.85rem; color:#334155;">Report Month &amp; Year</label>
+            <input type="month" class="form-control form-control-sm" id="monthlyReportMonth" value="2026-10" onchange="portalApp.generateMonthlyAttendanceReport()">
+          </div>
+
+          <div class="col-md-5">
+            <label style="font-weight:600; font-size:0.85rem; color:#334155;">Department Filter</label>
+            <select class="form-control form-control-sm" id="monthlyReportDept" onchange="portalApp.generateMonthlyAttendanceReport()">
+              <option value="all">All Operational Wings (8 Wings)</option>
+              <option value="Administrative Office">Administrative Office</option>
+              <option value="Finance &amp; Accounts">Finance &amp; Accounts</option>
+              <option value="Teaching Faculty">All Teaching Faculty</option>
+              <option value="Transport Operations">Transport Operations</option>
+              <option value="Facilities &amp; Security">Facilities &amp; Security</option>
+            </select>
+          </div>
+
+          <div class="col-md-2 d-flex align-items-end">
+            <button type="button" class="btn btn-outline-primary btn-sm btn-block" onclick="portalApp.generateMonthlyAttendanceReport()">
+              <i class="fa-solid fa-arrows-rotate mr-1"></i> Refresh
+            </button>
+          </div>
+        </div>
+
+        <!-- Monthly KPI Badges -->
+        <div class="row mb-3" id="monthlyReportMetricsRow">
+          <div class="col-md-3 col-6 mb-2">
+            <div style="background:#f1f5f9; border-radius:6px; padding:10px; text-align:center;">
+              <div style="font-size:0.75rem; text-transform:uppercase; color:#64748b; font-weight:600;">Working Days</div>
+              <div style="font-size:1.15rem; font-weight:800; color:#1e293b;" id="mRepWorkingDays">26 Days</div>
+            </div>
+          </div>
+          <div class="col-md-3 col-6 mb-2">
+            <div style="background:#dcfce7; border-radius:6px; padding:10px; text-align:center;">
+              <div style="font-size:0.75rem; text-transform:uppercase; color:#166534; font-weight:600;">Cadre Attendance</div>
+              <div style="font-size:1.15rem; font-weight:800; color:#166534;" id="mRepAvgAttendance">94.8%</div>
+            </div>
+          </div>
+          <div class="col-md-3 col-6 mb-2">
+            <div style="background:#fef3c7; border-radius:6px; padding:10px; text-align:center;">
+              <div style="font-size:0.75rem; text-transform:uppercase; color:#92400e; font-weight:600;">Late Instances</div>
+              <div style="font-size:1.15rem; font-weight:800; color:#92400e;" id="mRepTotalLate">14</div>
+            </div>
+          </div>
+          <div class="col-md-3 col-6 mb-2">
+            <div style="background:#fee2e2; border-radius:6px; padding:10px; text-align:center;">
+              <div style="font-size:0.75rem; text-transform:uppercase; color:#991b1b; font-weight:600;">Leaves / Absences</div>
+              <div style="font-size:1.15rem; font-weight:800; color:#991b1b;" id="mRepTotalAbsences">8</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="table-responsive" style="max-height: 280px; overflow-y:auto; border:1px solid #e2e8f0; border-radius:6px;">
+          <table class="table table-sm table-hover mb-0" style="font-size:0.83rem;">
+            <thead style="background:#f8fafc; position:sticky; top:0;">
+              <tr>
+                <th>Emp ID</th>
+                <th>Staff Name</th>
+                <th>Department</th>
+                <th style="text-align:center;">Work Days</th>
+                <th style="text-align:center;">Present</th>
+                <th style="text-align:center;">Late</th>
+                <th style="text-align:center;">Leaves</th>
+                <th style="text-align:center;">Rate</th>
+              </tr>
+            </thead>
+            <tbody id="monthlyReportTableBody">
+              <!-- Populated dynamically via JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="portal-modal-footer" style="padding: 12px 20px; background:#f8fafc; border-top:1px solid #e2e8f0; display:flex; justify-content:flex-end; gap:8px;">
+        <button type="button" class="btn btn-outline-secondary btn-sm" onclick="portalApp.closeModal('monthlyReportModal')">Close</button>
+        <button type="button" class="btn btn-outline-primary btn-sm" onclick="portalApp.exportMonthlyAttendanceCSV()">
+          <i class="fa-solid fa-file-csv mr-1"></i> Export Monthly CSV
+        </button>
+        <button type="button" class="btn btn-primary btn-sm" onclick="window.print()">
+          <i class="fa-solid fa-print mr-1"></i> Print Monthly Summary
+        </button>
+      </div>
     </div>
   </div>
 
