@@ -18522,3 +18522,250 @@ input:disabled + .perm-slider {
   border-color: #1e40af;
   color: #bfdbfe;
 }
+
+/* =========================================================================
+   AUTHORITATIVE STUDENT PERFORMANCE & SCHOLASTIC GOVERNANCE STYLES
+   Compliant with AP SSC / CCE Evaluation & Publication Standards
+   ========================================================================= */
+
+.perf-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
+/* Publication Status Badges */
+.perf-status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.22rem 0.65rem;
+  border-radius: 20px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.perf-status-badge.published {
+  background: #ecfdf5;
+  color: #065f46;
+  border: 1px solid #a7f3d0;
+}
+
+.perf-status-badge.draft {
+  background: #fffbeb;
+  color: #b45309;
+  border: 1px dashed #f59e0b;
+  font-style: italic;
+}
+
+.perf-status-badge.moderation {
+  background: #f1f5f9;
+  color: #475569;
+  border: 1px solid #cbd5e1;
+}
+
+/* Assessment Comparison Pills */
+.perf-cmp-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.perf-cmp-pill.up {
+  background: #ecfdf5;
+  color: #059669;
+}
+
+.perf-cmp-pill.down {
+  background: #fef2f2;
+  color: #dc2626;
+}
+
+.perf-cmp-pill.stable {
+  background: #f1f5f9;
+  color: #64748b;
+}
+
+/* Performance Detail Dossier Tabs */
+.perf-detail-nav {
+  display: flex;
+  background: #f1f5f9;
+  border-bottom: 1px solid #cbd5e1;
+  padding: 0.35rem 0.75rem 0;
+  gap: 0.5rem;
+  overflow-x: auto;
+}
+
+.perf-detail-tab-btn {
+  padding: 0.6rem 0.95rem;
+  border: 1px solid transparent;
+  border-bottom: none;
+  border-top-left-radius: 6px;
+  border-top-right-radius: 6px;
+  background: transparent;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #64748b;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  white-space: nowrap;
+  transition: all 0.15s ease;
+}
+
+.perf-detail-tab-btn:hover {
+  background: #e2e8f0;
+  color: #1e293b;
+}
+
+.perf-detail-tab-btn.active {
+  background: #ffffff;
+  color: #1d4ed8;
+  border-color: #cbd5e1 #cbd5e1 #ffffff;
+  box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.03);
+}
+
+.perf-detail-pane {
+  display: none;
+  padding: 1.25rem;
+}
+
+.perf-detail-pane.active {
+  display: block;
+  animation: fadeInPerfPane 0.2s ease-in-out;
+}
+
+@keyframes fadeInPerfPane {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Subject Marks Table */
+.perf-marks-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.82rem;
+  margin-top: 0.75rem;
+}
+
+.perf-marks-table th {
+  background: #f8fafc;
+  padding: 0.6rem 0.75rem;
+  text-align: left;
+  font-weight: 700;
+  color: #475569;
+  border-bottom: 2px solid #e2e8f0;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+}
+
+.perf-marks-table td {
+  padding: 0.6rem 0.75rem;
+  border-bottom: 1px solid #f1f5f9;
+  color: #1e293b;
+}
+
+.perf-marks-table tr:hover {
+  background: #f8fafc;
+}
+
+/* Learning Objectives Checklist */
+.learning-obj-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+}
+
+.learning-obj-card {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  padding: 0.75rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+}
+
+.learning-obj-card.mastered {
+  border-left: 4px solid #10b981;
+}
+
+.learning-obj-card.developing {
+  border-left: 4px solid #f59e0b;
+}
+
+.learning-obj-card.needs-support {
+  border-left: 4px solid #ef4444;
+}
+
+/* Remedial Intervention Plan Box */
+.intervention-docket-card {
+  background: #fefce8;
+  border: 1px solid #fef08a;
+  border-left: 4px solid #ca8a04;
+  border-radius: 8px;
+  padding: 1rem;
+  margin-top: 0.75rem;
+}
+
+/* PTM Interaction History Item */
+.ptm-history-row {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  padding: 0.75rem;
+  margin-bottom: 0.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+[data-theme="dark"] .perf-detail-nav {
+  background: #0f172a;
+  border-bottom-color: #334155;
+}
+
+[data-theme="dark"] .perf-detail-tab-btn {
+  color: #94a3b8;
+}
+
+[data-theme="dark"] .perf-detail-tab-btn:hover {
+  background: #1e293b;
+  color: #f1f5f9;
+}
+
+[data-theme="dark"] .perf-detail-tab-btn.active {
+  background: #1e293b;
+  color: #60a5fa;
+  border-color: #334155 #334155 #1e293b;
+}
+
+[data-theme="dark"] .perf-marks-table th {
+  background: #1e293b;
+  color: #94a3b8;
+  border-bottom-color: #334155;
+}
+
+[data-theme="dark"] .perf-marks-table td {
+  border-bottom-color: #334155;
+  color: #e2e8f0;
+}
+
+[data-theme="dark"] .learning-obj-card {
+  background: #1e293b;
+  border-color: #334155;
+}
+
+[data-theme="dark"] .ptm-history-row {
+  background: #1e293b;
+  border-color: #334155;
+}

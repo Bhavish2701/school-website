@@ -6375,14 +6375,19 @@ const FEE_CATEGORY_AUDIT_DATA = [
     showToast(`Prepared communication broadcast for ${name} (${phone})`, 'info');
   }
 
-  // ==========================================================================
-  // SUBVIEW 5: STUDENT ACADEMIC PERFORMANCE REGISTER TABLE
-  // ==========================================================================
+  
+  /* =========================================================================
+     AUTHORITATIVE STUDENT PERFORMANCE & SCHOLASTIC GOVERNANCE
+     Compliant with AP SSC / CCE Evaluation & Publication Standards
+     ========================================================================= */
+
   let perfCurrentPage = 1;
   const perfPageSize = 25;
+  let activePerfAdmNo = 'SV-0001';
 
   function initPerformanceRecords() {
-    if (state.performanceRecords && state.performanceRecords.length === 500) return;
+    if (state.performanceRecords && state.performanceRecords.length >= 25 && state.performanceRecords[0].subjectMarks) return;
+
     if ((!state.students || state.students.length === 0) && typeof window !== 'undefined' && Array.isArray(window.STUDENT_ROSTER)) {
       state.students = [...window.STUDENT_ROSTER];
     }
@@ -6396,63 +6401,166 @@ const FEE_CATEGORY_AUDIT_DATA = [
       'Outstanding laboratory practical score; disciplined problem solver.',
       'Well-balanced performance; shows commendable improvement across all subjects.',
       'Strong conceptual foundation; recommended for National Science Olympiad.',
-      'Conscientious effort observed; extra practice recommended in advanced calculus.'
+      'Conscientious effort observed; extra practice recommended in advanced calculus.',
+      'Requires reinforcement in descriptive answers; participating in after-school remedial sessions.',
+      'Steady focus and positive attitude; demonstrates high potential in social sciences.'
     ];
 
     state.performanceRecords = students.map((s, idx) => {
       const gpa = parseFloat(s.gpa) || 8.5;
-      const baseMark = Math.min(98, Math.max(68, Math.round(gpa * 9.8)));
-      const math = Math.min(100, baseMark + (idx % 5) - 2);
-      const sci = Math.min(100, baseMark + (idx % 7) - 3);
-      const eng = Math.min(100, baseMark + (idx % 3) - 1);
-      const soc = Math.min(100, baseMark + (idx % 4) - 2);
-      const lang1 = Math.min(100, baseMark + (idx % 6) - 1);
-      const totalMarks = math + sci + eng + soc + lang1;
-      const maxMarks = 500;
-      const pct = ((totalMarks / maxMarks) * 100).toFixed(1);
+      const baseMark = Math.min(98, Math.max(58, Math.round(gpa * 9.8)));
+      
+      const math = Math.min(100, Math.max(35, baseMark + (idx % 5) - 2));
+      const sci = Math.min(100, Math.max(35, baseMark + (idx % 7) - 3));
+      const eng = Math.min(100, Math.max(40, baseMark + (idx % 3) - 1));
+      const soc = Math.min(100, Math.max(38, baseMark + (idx % 4) - 2));
+      const lang1 = Math.min(100, Math.max(42, baseMark + (idx % 6) - 1));
+      const lang2 = Math.min(100, Math.max(40, baseMark + (idx % 8) - 2));
+
+      const totalMarks = math + sci + eng + soc + lang1 + lang2;
+      const maxMarks = 600;
+      const pct = parseFloat(((totalMarks / maxMarks) * 100).toFixed(1));
 
       let grade = 'A1';
       if (pct < 91 && pct >= 81) grade = 'A2';
       else if (pct < 81 && pct >= 71) grade = 'B1';
       else if (pct < 71 && pct >= 61) grade = 'B2';
-      else if (pct < 61) grade = 'C';
+      else if (pct < 61 && pct >= 51) grade = 'C1';
+      else if (pct < 51 && pct >= 35) grade = 'C2';
+      else if (pct < 35) grade = 'D';
 
       let trend = 'up';
-      let trendLabel = '+3.8%';
+      let trendLabel = '+3.8% vs FA-1';
       if (idx % 3 === 1) {
         trend = 'stable';
-        trendLabel = '+0.4%';
-      } else if (idx % 9 === 3) {
-        trend = 'focus';
-        trendLabel = '-1.2%';
+        trendLabel = '+0.4% vs FA-1';
+      } else if (idx % 5 === 2) {
+        trend = 'down';
+        trendLabel = '-1.8% vs FA-1';
+      }
+
+      // Statutory Publication Status: 90% published, 10% draft/moderation to demonstrate visual distinction
+      let publicationStatus = 'Published';
+      if (idx === 3 || idx === 11 || idx === 22) {
+        publicationStatus = 'Draft (Unapproved)';
+      } else if (idx === 7 || idx === 19) {
+        publicationStatus = 'Moderation Pending';
       }
 
       const remarks = remarksPool[idx % remarksPool.length];
+      const needsSupport = pct < 65 || grade.startsWith('C') || grade === 'D';
 
       return {
         admNo: s.admNo,
         name: s.name,
-        class: s.class,
+        class: s.class || s.currentClass || 'Class X',
         section: s.section || 'A',
-        rollNo: s.rollNo,
-        parent: s.parent,
-        phone: s.phone,
-        math: math,
-        sci: sci,
-        eng: eng,
-        soc: soc,
-        lang1: lang1,
+        rollNo: s.rollNo || (idx + 1).toString().padStart(2, '0'),
+        parent: s.parent || s.guardian || 'Parent/Guardian',
+        phone: s.phone || '9848011223',
+        academicYear: '2025-2026',
+        exam: 'Quarterly (SA-1)',
+        subjectMarks: {
+          math: { written: Math.round(math * 0.8), internal: Math.round(math * 0.2), total: math, grade: math >= 90 ? 'A1' : (math >= 80 ? 'A2' : (math >= 70 ? 'B1' : 'B2')), gp: Math.min(10, Math.max(4, Math.round(math / 10))) },
+          sci: { written: Math.round(sci * 0.8), internal: Math.round(sci * 0.2), total: sci, grade: sci >= 90 ? 'A1' : (sci >= 80 ? 'A2' : (sci >= 70 ? 'B1' : 'B2')), gp: Math.min(10, Math.max(4, Math.round(sci / 10))) },
+          eng: { written: Math.round(eng * 0.8), internal: Math.round(eng * 0.2), total: eng, grade: eng >= 90 ? 'A1' : (eng >= 80 ? 'A2' : (eng >= 70 ? 'B1' : 'B2')), gp: Math.min(10, Math.max(4, Math.round(eng / 10))) },
+          soc: { written: Math.round(soc * 0.8), internal: Math.round(soc * 0.2), total: soc, grade: soc >= 90 ? 'A1' : (soc >= 80 ? 'A2' : (soc >= 70 ? 'B1' : 'B2')), gp: Math.min(10, Math.max(4, Math.round(soc / 10))) },
+          lang1: { written: Math.round(lang1 * 0.8), internal: Math.round(lang1 * 0.2), total: lang1, grade: lang1 >= 90 ? 'A1' : (lang1 >= 80 ? 'A2' : (lang1 >= 70 ? 'B1' : 'B2')), gp: Math.min(10, Math.max(4, Math.round(lang1 / 10))) },
+          lang2: { written: Math.round(lang2 * 0.8), internal: Math.round(lang2 * 0.2), total: lang2, grade: lang2 >= 90 ? 'A1' : (lang2 >= 80 ? 'A2' : (lang2 >= 70 ? 'B1' : 'B2')), gp: Math.min(10, Math.max(4, Math.round(lang2 / 10))) }
+        },
         totalMarks: totalMarks,
         maxMarks: maxMarks,
         pct: pct,
         gpa: gpa,
         grade: grade,
         attendance: s.attendance || '94.5%',
+        daysPresent: 182,
+        totalDays: 190,
         trend: trend,
         trendLabel: trendLabel,
-        remarks: remarks
+        publicationStatus: publicationStatus,
+        remarks: remarks,
+        needsSupport: needsSupport,
+        assessmentHistory: [
+          { exam: 'FA-1 (July)', marks: Math.round(totalMarks * 0.98 / 6) + ' / 100', pct: (pct - 1.5).toFixed(1) + '%', grade: grade, gpa: (gpa - 0.2).toFixed(1), status: 'Published' },
+          { exam: 'FA-2 (August)', marks: Math.round(totalMarks * 0.99 / 6) + ' / 100', pct: (pct - 0.5).toFixed(1) + '%', grade: grade, gpa: (gpa - 0.1).toFixed(1), status: 'Published' },
+          { exam: 'Quarterly (SA-1)', marks: totalMarks + ' / 600', pct: pct + '%', grade: grade, gpa: gpa.toFixed(1), status: publicationStatus },
+          { exam: 'FA-3 (November)', marks: 'Pending Tabulation', pct: '—', grade: '—', gpa: '—', status: 'Draft' }
+        ],
+        attendanceTrends: {
+          overallPct: s.attendance || '94.5%',
+          daysPresent: 182,
+          totalDays: 190,
+          authorizedLeaves: 8,
+          monthly: [
+            { month: 'Jun', pct: 96 },
+            { month: 'Jul', pct: 94 },
+            { month: 'Aug', pct: 92 },
+            { month: 'Sep', pct: 96 },
+            { month: 'Oct', pct: 94 }
+          ]
+        },
+        teacherFeedback: {
+          cognitive: 'Demonstrates deep conceptual understanding in physical sciences and algebraic structures.',
+          coCurricular: 'Active participant in school Science Exhibition and Inter-House Quiz Competition.',
+          behavioral: 'Well-mannered, highly cooperative, and regularly assists peers with problem-solving.'
+        },
+        learningObjectives: [
+          { code: 'LO-M01', subject: 'Mathematics', desc: 'Solves quadratic equations using graphical and algebraic methods', status: math >= 80 ? 'Mastered' : (math >= 60 ? 'Developing' : 'Needs Support') },
+          { code: 'LO-S02', subject: 'Science', desc: 'Applies laws of reflection and refraction in ray diagrams', status: sci >= 80 ? 'Mastered' : (sci >= 60 ? 'Developing' : 'Needs Support') },
+          { code: 'LO-E03', subject: 'English', desc: 'Composes formal letters with appropriate register and precision', status: eng >= 80 ? 'Mastered' : (eng >= 60 ? 'Developing' : 'Needs Support') },
+          { code: 'LO-SS04', subject: 'Social Studies', desc: 'Interprets thematic maps and geographical terrain features', status: soc >= 80 ? 'Mastered' : (soc >= 60 ? 'Developing' : 'Needs Support') }
+        ],
+        improvementAreas: [
+          { area: 'Time Management in Descriptive Answers', recommendation: 'Practice timed past-paper mock sections to optimize word count.' },
+          { area: 'Advanced Geometric Proofs', recommendation: 'Solve supplementary theorem exercises from NCERT exemplar.' }
+        ],
+        interventionPlan: {
+          required: needsSupport,
+          tier: needsSupport ? 'Level 1: Concept Reinforcement' : 'Enrichment Track',
+          assignedMentor: 'Sri Ch. Ramesh (Academic Dean)',
+          schedule: 'Tuesday & Thursday (3:45 PM – 4:30 PM)',
+          targetMilestone: 'Attain 75%+ in core concepts by FA-3 Assessment',
+          status: 'On Track'
+        },
+        parentMeetingHistory: [
+          { date: '18-Aug-2026', meeting: 'Term I Mid-Term PTM', attendees: `${s.guardian || 'Father'} with Class Teacher`, notes: 'Discussed board preparation roadmap. Parent expressed satisfaction with school discipline.' }
+        ]
       };
     });
+  }
+
+  function updatePerformanceKPIs(data) {
+    initPerformanceRecords();
+    const records = data || state.performanceRecords || [];
+
+    if (records.length === 0) return;
+
+    // 1. Class Average
+    const sumPct = records.reduce((acc, r) => acc + (parseFloat(r.pct) || 0), 0);
+    const avgPct = (sumPct / records.length).toFixed(1);
+    const sumGpa = records.reduce((acc, r) => acc + (parseFloat(r.gpa) || 0), 0);
+    const avgGpa = (sumGpa / records.length).toFixed(1);
+
+    // 2. Pass Rate (pct >= 35%)
+    const passedCount = records.filter(r => r.pct >= 35).length;
+    const passRate = ((passedCount / records.length) * 100).toFixed(1);
+
+    // 3. Students Requiring Support
+    const supportCount = records.filter(r => r.needsSupport || r.pct < 65).length;
+
+    // 4. Missing Marks Entries (draft or missing)
+    const missingCount = records.filter(r => r.publicationStatus !== 'Published').length;
+
+    const elAvg = document.getElementById('perfKpiClassAvg');
+    const elPass = document.getElementById('perfKpiPassRate');
+    const elSupp = document.getElementById('perfKpiSupport');
+    const elMiss = document.getElementById('perfKpiMissing');
+
+    if (elAvg) elAvg.textContent = `${avgPct}% (${avgGpa} GPA)`;
+    if (elPass) elPass.textContent = `${passRate}%`;
+    if (elSupp) elSupp.textContent = `${supportCount}`;
+    if (elMiss) elMiss.textContent = `${missingCount}`;
   }
 
   function renderStudentPerformanceRegister(list, page) {
@@ -6462,6 +6570,8 @@ const FEE_CATEGORY_AUDIT_DATA = [
 
     if (page !== undefined) perfCurrentPage = page;
     const data = list || state.performanceRecords || [];
+
+    updatePerformanceKPIs(data);
 
     const total = data.length;
     const showingCount = document.getElementById('perfShowingCount');
@@ -6480,9 +6590,9 @@ const FEE_CATEGORY_AUDIT_DATA = [
     if (pageItems.length === 0) {
       tbody.innerHTML = `
         <tr>
-          <td colspan="7" style="text-align:center; padding:3rem; color:var(--color-text-muted);">
+          <td colspan="8" style="text-align:center; padding:3rem; color:var(--color-text-muted);">
             <i class="fa-solid fa-chart-line" style="font-size:2rem; margin-bottom:0.75rem; display:block; color:#94a3b8;"></i>
-            No student academic records matched your search filters.
+            No student academic records matched your active search filters.
           </td>
         </tr>`;
       return;
@@ -6498,68 +6608,108 @@ const FEE_CATEGORY_AUDIT_DATA = [
 
       const attNum = parseFloat(p.attendance) || 92;
 
+      // Statutory Publication Distinction
+      const isOfficial = p.publicationStatus === 'Published';
+      const statusPill = isOfficial
+        ? `<span class="perf-status-badge published"><i class="fa-solid fa-circle-check"></i> Published (Official)</span>`
+        : (p.publicationStatus.includes('Draft')
+          ? `<span class="perf-status-badge draft" title="Draft / Unapproved marks: Not an official result"><i class="fa-solid fa-triangle-exclamation"></i> Draft (Unapproved)</span>`
+          : `<span class="perf-status-badge moderation"><i class="fa-solid fa-clock-rotate-left"></i> Moderation Pending</span>`);
+
+      // Delta comparison styling
+      let cmpClass = 'stable';
+      let cmpIcon = 'fa-minus';
+      if (p.trend === 'up') {
+        cmpClass = 'up';
+        cmpIcon = 'fa-arrow-trend-up';
+      } else if (p.trend === 'down') {
+        cmpClass = 'down';
+        cmpIcon = 'fa-arrow-trend-down';
+      }
+
       return `
-        <tr>
+        <tr style="${!isOfficial ? 'background: rgba(254, 243, 199, 0.25);' : ''}">
+          <!-- 1. Student -->
           <td>
             <div class="perf-student-cell">
               <div class="perf-student-avatar">${p.name.charAt(0)}</div>
               <div>
-                <div class="perf-student-name">${p.name}</div>
+                <a href="javascript:void(0)" onclick="portalApp.openStudentPerformanceModal('${p.admNo}')" style="font-weight:700; color:#0f172a; text-decoration:none;">
+                  ${p.name}
+                </a>
                 <div class="perf-student-meta">
                   <span class="perf-admno-badge">${p.admNo}</span>
-                  <span class="profile-tag tag-primary">Class ${p.class}-${p.section}</span>
-                  <span>#${p.rollNo}</span>
+                  <span>Roll: #${p.rollNo}</span>
                 </div>
               </div>
             </div>
           </td>
+
+          <!-- 2. Class / Section -->
           <td>
-            <div class="perf-marks-grid">
-              <span class="perf-subject-chip ${getChipClass(p.math)}">M: ${p.math}</span>
-              <span class="perf-subject-chip ${getChipClass(p.sci)}">Sci: ${p.sci}</span>
-              <span class="perf-subject-chip ${getChipClass(p.eng)}">Eng: ${p.eng}</span>
-              <span class="perf-subject-chip ${getChipClass(p.soc)}">Soc: ${p.soc}</span>
-              <span class="perf-subject-chip ${getChipClass(p.lang1)}">Lang: ${p.lang1}</span>
-            </div>
+            <span class="portal-badge badge-blue">Class ${p.class}-${p.section}</span>
           </td>
-          <td>
-            <div class="perf-gpa-cell">
-              <div class="perf-gpa-score"><strong>${p.totalMarks}</strong> / ${p.maxMarks} (${p.pct}%)</div>
-              <div class="perf-gpa-row">
-                <span class="perf-gpa-badge">${p.gpa} GPA</span>
-                <span class="perf-grade-pill ${p.grade}">${p.grade}</span>
-              </div>
-            </div>
-          </td>
+
+          <!-- 3. Attendance -->
           <td>
             <div class="perf-att-cell">
               <div class="perf-att-row">
                 <span class="perf-att-pct">${p.attendance}</span>
-                <span class="perf-att-days">182 / 190 Days</span>
+                <span class="perf-att-days">${p.daysPresent} / ${p.totalDays} Days</span>
               </div>
               <div class="perf-att-track">
                 <div class="perf-att-bar" style="width: ${attNum}%;"></div>
               </div>
             </div>
           </td>
+
+          <!-- 4. Subject Marks -->
           <td>
-            <div class="perf-trend-cell">
-              <span class="perf-trend-pill ${p.trend}">
-                <i class="fa-solid ${p.trend === 'up' ? 'fa-arrow-trend-up' : (p.trend === 'stable' ? 'fa-minus' : 'fa-arrow-trend-down')}"></i>
-                ${p.trendLabel}
-              </span>
+            <div class="perf-marks-grid">
+              <span class="perf-subject-chip ${getChipClass(p.subjectMarks.math.total)}">M: ${p.subjectMarks.math.total}</span>
+              <span class="perf-subject-chip ${getChipClass(p.subjectMarks.sci.total)}">Sci: ${p.subjectMarks.sci.total}</span>
+              <span class="perf-subject-chip ${getChipClass(p.subjectMarks.eng.total)}">Eng: ${p.subjectMarks.eng.total}</span>
+              <span class="perf-subject-chip ${getChipClass(p.subjectMarks.soc.total)}">Soc: ${p.subjectMarks.soc.total}</span>
+              <span class="perf-subject-chip ${getChipClass(p.subjectMarks.lang1.total)}">Tel: ${p.subjectMarks.lang1.total}</span>
+              <span class="perf-subject-chip ${getChipClass(p.subjectMarks.lang2.total)}">Hin: ${p.subjectMarks.lang2.total}</span>
             </div>
           </td>
+
+          <!-- 5. Overall Result (with Publication Status) -->
           <td>
-            <div class="perf-remarks-cell">${p.remarks}</div>
+            <div class="perf-gpa-cell">
+              <div class="perf-gpa-score"><strong>${p.totalMarks}</strong> / ${p.maxMarks} (${p.pct}%)</div>
+              <div class="perf-gpa-row" style="margin: 3px 0;">
+                <span class="perf-gpa-badge">${p.gpa} GPA</span>
+                <span class="perf-grade-pill ${p.grade}">${p.grade}</span>
+              </div>
+              <div>${statusPill}</div>
+            </div>
           </td>
+
+          <!-- 6. Previous Assessment Comparison -->
+          <td>
+            <span class="perf-cmp-pill ${cmpClass}">
+              <i class="fa-solid ${cmpIcon}"></i> ${p.trendLabel}
+            </span>
+          </td>
+
+          <!-- 7. Teacher Remarks -->
+          <td>
+            <div class="perf-remarks-cell" title="${p.remarks}">${p.remarks}</div>
+          </td>
+
+          <!-- 8. Action -->
           <td style="text-align: center;">
-            <div class="perf-actions-cell">
-              <button type="button" class="perf-btn-view" onclick="portalApp.generateReportCard('${p.admNo}')" title="Generate Term Report Card">
-                <i class="fa-solid fa-file-invoice"></i> Report
+            <div class="table-action-btns" style="justify-content: center; gap: 0.35rem;">
+              <button class="action-icon-btn" onclick="portalApp.openStudentPerformanceModal('${p.admNo}')" title="View 8-Section Performance Dossier">
+                <i class="fa-solid fa-eye text-primary"></i>
               </button>
-              <button type="button" class="btn btn-secondary btn-sm" onclick="portalApp.viewStudentProfile('${p.admNo}')" title="View Student Profile">
-                <i class="fa-regular fa-eye"></i>
+              <button class="action-icon-btn" onclick="portalApp.generateReportCardForStudent('${p.admNo}')" title="Generate Report Card">
+                <i class="fa-solid fa-file-invoice text-emerald"></i>
+              </button>
+              <button class="action-icon-btn" onclick="portalApp.openStudentPerformanceModal('${p.admNo}'); portalApp.switchPerfDetailTab('intervention');" title="Remedial Intervention Plan">
+                <i class="fa-solid fa-user-shield text-warning"></i>
               </button>
             </div>
           </td>
@@ -6578,19 +6728,30 @@ const FEE_CATEGORY_AUDIT_DATA = [
     if (resetPage) perfCurrentPage = 1;
 
     const query = (document.getElementById('perfStudentSearchInput')?.value || '').toLowerCase().trim();
+    const yearVal = document.getElementById('perfAcademicYearFilter')?.value || '';
     const classVal = document.getElementById('perfClassFilter')?.value || '';
-    const gradeVal = document.getElementById('perfGradeFilter')?.value || '';
+    const secVal = document.getElementById('perfSectionFilter')?.value || '';
+    const examVal = document.getElementById('perfExamFilter')?.value || '';
+    const subjectVal = document.getElementById('perfSubjectFilter')?.value || '';
 
     const filtered = state.performanceRecords.filter(p => {
+      // 1. Search Query
       const matchQuery = !query ||
         p.name.toLowerCase().includes(query) ||
         p.admNo.toLowerCase().includes(query) ||
-        p.rollNo.includes(query);
+        p.rollNo.includes(query) ||
+        (p.parent && p.parent.toLowerCase().includes(query));
 
-      const matchClass = !classVal || p.class === classVal;
-      const matchGrade = !gradeVal || p.grade === gradeVal;
+      if (!matchQuery) return false;
 
-      return matchQuery && matchClass && matchGrade;
+      // 2. Class Filter
+      if (classVal && !p.class.includes(classVal)) return false;
+
+      // 3. Section Filter
+      if (secVal && p.section !== secVal) return false;
+
+      // 4. Subject filter (if specific subject requested, optionally check benchmark)
+      return true;
     });
 
     renderStudentPerformanceRegister(filtered, perfCurrentPage);
@@ -6598,24 +6759,383 @@ const FEE_CATEGORY_AUDIT_DATA = [
 
   function resetPerformanceFilters() {
     const q = document.getElementById('perfStudentSearchInput');
+    const y = document.getElementById('perfAcademicYearFilter');
     const c = document.getElementById('perfClassFilter');
-    const g = document.getElementById('perfGradeFilter');
+    const s = document.getElementById('perfSectionFilter');
+    const e = document.getElementById('perfExamFilter');
+    const sub = document.getElementById('perfSubjectFilter');
+
     if (q) q.value = '';
+    if (y) y.value = '2025-2026';
     if (c) c.value = '';
-    if (g) g.value = '';
+    if (s) s.value = '';
+    if (e) e.value = 'Quarterly (SA-1)';
+    if (sub) sub.value = '';
+
     perfCurrentPage = 1;
-    renderStudentPerformanceRegister();
-    showToast('Performance register filters reset', 'info');
+    renderStudentPerformanceRegister(state.performanceRecords);
+    showToast('Performance register filters reset to default.', 'info');
+  }
+
+  function openPerformanceStudentPicker() {
+    initPerformanceRecords();
+    const select = document.getElementById('perfPickerSelect');
+    if (select) {
+      select.innerHTML = state.performanceRecords.slice(0, 150).map(p => `
+        <option value="${p.admNo}">${p.name} (${p.admNo} &bull; ${p.class}-${p.section} &bull; ${p.gpa} GPA)</option>
+      `).join('');
+    }
+    openModal('performanceStudentPickerModal');
+  }
+
+  function onConfirmPerformancePicker() {
+    const select = document.getElementById('perfPickerSelect');
+    if (!select || !select.value) return;
+    const admNo = select.value;
+    closeModal('performanceStudentPickerModal');
+    openStudentPerformanceModal(admNo);
+  }
+
+  function openStudentPerformanceModal(admNo) {
+    initPerformanceRecords();
+    activePerfAdmNo = admNo || 'SV-0001';
+    const rec = state.performanceRecords.find(p => p.admNo === activePerfAdmNo) || state.performanceRecords[0];
+    if (!rec) return;
+
+    // Header info
+    const nameEl = document.getElementById('perfModalStudentName');
+    const badgeEl = document.getElementById('perfModalPublishBadge');
+    const classBadgeEl = document.getElementById('perfModalClassBadge');
+    const subEl = document.getElementById('perfModalSubtitle');
+
+    if (nameEl) nameEl.textContent = rec.name;
+    if (badgeEl) {
+      if (rec.publicationStatus === 'Published') {
+        badgeEl.className = 'perf-status-badge published';
+        badgeEl.innerHTML = '<i class="fa-solid fa-circle-check"></i> Published (Official)';
+      } else {
+        badgeEl.className = 'perf-status-badge draft';
+        badgeEl.innerHTML = '<i class="fa-solid fa-triangle-exclamation"></i> Draft (Unapproved)';
+      }
+    }
+    if (classBadgeEl) classBadgeEl.textContent = `Class ${rec.class}-${rec.section}`;
+    if (subEl) subEl.textContent = `Adm No: ${rec.admNo} • Roll No: ${rec.rollNo} • Academic Year: ${rec.academicYear} • Exam: ${rec.exam}`;
+
+    // Pane 1: Assessment History
+    const histContainer = document.getElementById('perfAssessmentHistoryContainer');
+    if (histContainer) {
+      histContainer.innerHTML = `
+        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(180px, 1fr)); gap:0.75rem;">
+          ${(rec.assessmentHistory || []).map(h => `
+            <div style="background:#fff; border:1px solid ${h.status === 'Published' ? '#cbd5e1' : '#fcd34d'}; border-radius:6px; padding:0.75rem; text-align:center;">
+              <div style="font-size:0.75rem; font-weight:700; color:#64748b;">${h.exam}</div>
+              <div style="font-size:1.15rem; font-weight:900; color:#1d4ed8; margin:3px 0;">${h.marks}</div>
+              <div style="display:flex; justify-content:center; gap:0.4rem; align-items:center;">
+                <span class="portal-badge badge-blue">${h.pct}</span>
+                <span class="perf-status-badge ${h.status === 'Published' ? 'published' : 'draft'}">${h.status}</span>
+              </div>
+            </div>
+          `).join('')}
+        </div>
+      `;
+    }
+
+    // Pane 2: Subject Marks Table
+    const marksTbody = document.getElementById('perfModalMarksTbody');
+    const aggPill = document.getElementById('perfAggregatePill');
+    if (aggPill) aggPill.textContent = `Total: ${rec.totalMarks} / ${rec.maxMarks} (${rec.pct}% • ${rec.gpa} GPA • Grade ${rec.grade})`;
+    if (marksTbody) {
+      const subKeys = [
+        { key: 'math', name: 'Mathematics (Paper I & II)' },
+        { key: 'sci', name: 'General Science (Physical & Biological)' },
+        { key: 'eng', name: 'English (First Language Reading/Writing)' },
+        { key: 'soc', name: 'Social Studies' },
+        { key: 'lang1', name: 'First Language (Telugu)' },
+        { key: 'lang2', name: 'Second Language (Hindi)' }
+      ];
+
+      marksTbody.innerHTML = subKeys.map(sk => {
+        const sm = rec.subjectMarks[sk.key] || { written: 70, internal: 18, total: 88, grade: 'A2', gp: 9 };
+        const standing = sm.total >= 85 ? '<span class="text-success font-weight-bold">Distinction</span>' : '<span class="text-primary font-weight-bold">Merit</span>';
+        return `
+          <tr>
+            <td><strong>${sk.name}</strong></td>
+            <td>${sm.written} / 80</td>
+            <td>${sm.internal} / 20</td>
+            <td><strong style="color:#1d4ed8; font-size:0.9rem;">${sm.total} / 100</strong></td>
+            <td><span class="perf-grade-pill ${sm.grade}">${sm.grade}</span></td>
+            <td>${sm.gp}.0</td>
+            <td>78.5 / 100</td>
+            <td>${standing}</td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    // Pane 3: Attendance
+    const attNum = document.getElementById('perfAttRateNumber');
+    const attPres = document.getElementById('perfAttDaysPresent');
+    const attLvs = document.getElementById('perfAttLeaves');
+    if (attNum) attNum.textContent = rec.attendance;
+    if (attPres) attPres.textContent = `${rec.daysPresent} Days`;
+    if (attLvs) attLvs.textContent = '8 Days';
+
+    // Pane 4: Teacher Feedback
+    const fbContainer = document.getElementById('perfTeacherFeedbackContainer');
+    if (fbContainer) {
+      fbContainer.innerHTML = `
+        <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; padding:1rem;">
+          <h5 style="margin:0 0 0.4rem 0; font-size:0.85rem; font-weight:800; color:#1e3a8a;"><i class="fa-solid fa-brain mr-1"></i> Cognitive &amp; Scholastic Aptitude</h5>
+          <p style="font-size:0.82rem; color:#334155; margin:0;">${rec.teacherFeedback?.cognitive || 'Demonstrates deep analytical conceptual clarity.'}</p>
+        </div>
+        <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; padding:1rem;">
+          <h5 style="margin:0 0 0.4rem 0; font-size:0.85rem; font-weight:800; color:#059669;"><i class="fa-solid fa-palette mr-1"></i> Co-Curricular &amp; Creative Domain</h5>
+          <p style="font-size:0.82rem; color:#334155; margin:0;">${rec.teacherFeedback?.coCurricular || 'Active participant in school competitions and science exhibits.'}</p>
+        </div>
+        <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; padding:1rem;">
+          <h5 style="margin:0 0 0.4rem 0; font-size:0.85rem; font-weight:800; color:#d97706;"><i class="fa-solid fa-hand-holding-heart mr-1"></i> Behavioral &amp; Social Development</h5>
+          <p style="font-size:0.82rem; color:#334155; margin:0;">${rec.teacherFeedback?.behavioral || 'Courteous, helpful, maintains exemplary personal discipline.'}</p>
+        </div>
+      `;
+    }
+
+    // Pane 5: Learning Objectives
+    const objContainer = document.getElementById('perfLearningObjectivesContainer');
+    if (objContainer) {
+      objContainer.innerHTML = (rec.learningObjectives || []).map(lo => `
+        <div class="learning-obj-card ${lo.status.toLowerCase().replace(/\s+/g, '-')}">
+          <div style="font-size:1.1rem; color:${lo.status === 'Mastered' ? '#10b981' : '#f59e0b'};">
+            <i class="fa-solid ${lo.status === 'Mastered' ? 'fa-circle-check' : 'fa-clock'}"></i>
+          </div>
+          <div>
+            <div style="font-size:0.75rem; font-weight:700; color:#64748b;">${lo.code} &bull; ${lo.subject}</div>
+            <div style="font-size:0.8rem; font-weight:700; color:#1e293b; margin:2px 0;">${lo.desc}</div>
+            <span class="portal-badge ${lo.status === 'Mastered' ? 'badge-success' : 'badge-warning'}">${lo.status}</span>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // Pane 6: Improvement Areas
+    const impContainer = document.getElementById('perfImprovementContainer');
+    if (impContainer) {
+      impContainer.innerHTML = (rec.improvementAreas || []).map(ia => `
+        <div style="background:#fff; border:1px solid #cbd5e1; border-left:4px solid #f59e0b; border-radius:6px; padding:0.85rem;">
+          <div style="font-size:0.85rem; font-weight:800; color:#0f172a;"><i class="fa-solid fa-bullseye text-warning mr-1"></i> ${ia.area}</div>
+          <div style="font-size:0.82rem; color:#475569; margin-top:4px;"><strong>Recommended Strategy:</strong> ${ia.recommendation}</div>
+        </div>
+      `).join('');
+    }
+
+    // Pane 7: Intervention Plan
+    const intervContent = document.getElementById('perfInterventionPlanContent');
+    const intervBadge = document.getElementById('perfInterventionTierBadge');
+    if (intervBadge) {
+      intervBadge.textContent = rec.interventionPlan?.tier || 'General Mentorship';
+      intervBadge.className = rec.needsSupport ? 'portal-badge badge-warning' : 'portal-badge badge-success';
+    }
+    if (intervContent) {
+      intervContent.innerHTML = `
+        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:0.75rem; font-size:0.82rem;">
+          <div><span style="color:#713f12;">Assigned Academic Mentor:</span><br><strong>${rec.interventionPlan?.assignedMentor || 'Sri Ch. Ramesh'}</strong></div>
+          <div><span style="color:#713f12;">Remedial Schedule:</span><br><strong>${rec.interventionPlan?.schedule || 'Weekly Concept Clinic'}</strong></div>
+          <div><span style="color:#713f12;">Target Milestone:</span><br><strong>${rec.interventionPlan?.targetMilestone || 'Maintain 85%+ in FA-3'}</strong></div>
+          <div><span style="color:#713f12;">Plan Status:</span><br><strong class="text-success">${rec.interventionPlan?.status || 'Active & Monitored'}</strong></div>
+        </div>
+      `;
+    }
+
+    // Pane 8: Parent Meetings
+    const ptmContainer = document.getElementById('perfPtmHistoryContainer');
+    if (ptmContainer) {
+      ptmContainer.innerHTML = (rec.parentMeetingHistory || []).map(ptm => `
+        <div class="ptm-history-row">
+          <div>
+            <div style="font-size:0.85rem; font-weight:800; color:#0f172a;"><i class="fa-solid fa-users text-primary mr-1"></i> ${ptm.meeting}</div>
+            <div style="font-size:0.78rem; color:#64748b;">Attendees: ${ptm.attendees}</div>
+            <div style="font-size:0.8rem; color:#334155; margin-top:4px;"><strong>Discussion Points:</strong> ${ptm.notes}</div>
+          </div>
+          <div style="text-align:right; font-size:0.78rem; color:#64748b; font-weight:700;">
+            ${ptm.date}
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // Toggle button style
+    const toggleBtn = document.getElementById('btnTogglePublication');
+    if (toggleBtn) {
+      if (rec.publicationStatus === 'Published') {
+        toggleBtn.className = 'btn btn-outline-warning btn-sm';
+        toggleBtn.innerHTML = '<i class="fa-solid fa-rotate-left mr-1"></i> Revoke to Draft';
+      } else {
+        toggleBtn.className = 'btn btn-success btn-sm';
+        toggleBtn.innerHTML = '<i class="fa-solid fa-stamp mr-1"></i> Publish as Official Result';
+      }
+    }
+
+    switchPerfDetailTab('history');
+    openModal('studentPerformanceModal');
+  }
+
+  function switchPerfDetailTab(tabId) {
+    const tabs = document.querySelectorAll('.perf-detail-tab-btn');
+    tabs.forEach(btn => {
+      if (btn.getAttribute('data-tab') === tabId) {
+        btn.classList.add('active');
+      } else {
+        btn.classList.remove('active');
+      }
+    });
+
+    const panes = document.querySelectorAll('.perf-detail-pane');
+    panes.forEach(pane => {
+      if (pane.id === `perfPane-${tabId}`) {
+        pane.classList.add('active');
+      } else {
+        pane.classList.remove('active');
+      }
+    });
+  }
+
+  function toggleStudentResultPublication() {
+    initPerformanceRecords();
+    const rec = state.performanceRecords.find(p => p.admNo === activePerfAdmNo);
+    if (!rec) return;
+
+    if (rec.publicationStatus === 'Published') {
+      rec.publicationStatus = 'Draft (Unapproved)';
+      showToast(`Results for ${rec.name} reverted to Draft. Marks will be visibly distinguished from official grades.`, 'warning');
+    } else {
+      rec.publicationStatus = 'Published';
+      showToast(`Official Result for ${rec.name} published under Principal authority.`, 'success');
+    }
+
+    openStudentPerformanceModal(rec.admNo);
+    filterPerformanceRegister(false);
+  }
+
+  function openCompareAssessmentsModal() {
+    renderAssessmentComparison();
+    openModal('compareAssessmentsModal');
+  }
+
+  function renderAssessmentComparison() {
+    const base = document.getElementById('cmpBaseExamSelect')?.value || 'FA-2';
+    const target = document.getElementById('cmpTargetExamSelect')?.value || 'SA-1';
+    const cls = document.getElementById('cmpClassSelect')?.value || 'All';
+
+    const container = document.getElementById('cmpMetricsResultsContainer');
+    if (!container) return;
+
+    container.innerHTML = `
+      <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:1rem; margin-bottom:1.25rem;">
+        <div style="background:#f8fafc; border:1px solid #cbd5e1; border-radius:8px; padding:1rem; text-align:center;">
+          <div style="font-size:0.8rem; font-weight:700; color:#64748b;">Class Average Delta</div>
+          <div style="font-size:1.6rem; font-weight:900; color:#059669; margin:4px 0;">+4.2% &bull; +0.4 GPA</div>
+          <span class="portal-badge badge-success">81.4% (Target) vs 77.2% (Base)</span>
+        </div>
+        <div style="background:#f8fafc; border:1px solid #cbd5e1; border-radius:8px; padding:1rem; text-align:center;">
+          <div style="font-size:0.8rem; font-weight:700; color:#64748b;">Distinction Cohort Shift</div>
+          <div style="font-size:1.6rem; font-weight:900; color:#1d4ed8; margin:4px 0;">+14 Students</div>
+          <span class="portal-badge badge-blue">A1/A2 Distinction Expansion</span>
+        </div>
+        <div style="background:#f8fafc; border:1px solid #cbd5e1; border-radius:8px; padding:1rem; text-align:center;">
+          <div style="font-size:0.8rem; font-weight:700; color:#64748b;">Remedial Support Contraction</div>
+          <div style="font-size:1.6rem; font-weight:900; color:#d97706; margin:4px 0;">-6 Students</div>
+          <span class="portal-badge badge-warning">Remedial Interventions Successful</span>
+        </div>
+      </div>
+
+      <h5 style="margin:0 0 0.5rem 0; font-size:0.85rem; font-weight:800; color:#1e3a8a;"><i class="fa-solid fa-list-ol mr-1"></i> Subject-Wise Comparative Shift (${base} &rarr; ${target})</h5>
+      <table class="perf-marks-table">
+        <thead>
+          <tr>
+            <th>Subject</th>
+            <th>${base} Mean</th>
+            <th>${target} Mean</th>
+            <th>Net Shift</th>
+            <th>Pedagogical Evaluation</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Mathematics</strong></td>
+            <td>76.4%</td>
+            <td>81.2%</td>
+            <td><strong class="text-success">+4.8%</strong></td>
+            <td><span class="portal-badge badge-success">Strong Concept Retention</span></td>
+          </tr>
+          <tr>
+            <td><strong>General Science</strong></td>
+            <td>78.0%</td>
+            <td>83.5%</td>
+            <td><strong class="text-success">+5.5%</strong></td>
+            <td><span class="portal-badge badge-success">Laboratory Practicals Boost</span></td>
+          </tr>
+          <tr>
+            <td><strong>English</strong></td>
+            <td>82.1%</td>
+            <td>84.0%</td>
+            <td><strong class="text-success">+1.9%</strong></td>
+            <td><span class="portal-badge badge-blue">Consistent Performance</span></td>
+          </tr>
+          <tr>
+            <td><strong>Social Studies</strong></td>
+            <td>74.2%</td>
+            <td>77.6%</td>
+            <td><strong class="text-success">+3.4%</strong></td>
+            <td><span class="portal-badge badge-blue">Map Work Improved</span></td>
+          </tr>
+        </tbody>
+      </table>
+    `;
+  }
+
+  function openGenerateReportModal() {
+    openModal('generateReportModal');
+  }
+
+  function submitGenerateReport(e) {
+    if (e && e.preventDefault) e.preventDefault();
+    const scope = document.getElementById('repScopeSelect')?.value || 'Active Student';
+    const exam = document.getElementById('repExamSelect')?.value || 'Quarterly (SA-1)';
+    const format = document.getElementById('repFormatSelect')?.value || 'AP SSC CCE Format';
+
+    closeModal('generateReportModal');
+    showToast(`Generating ${format} for ${scope} (${exam}). Opening printable document...`, 'success');
+    window.print();
+  }
+
+  function generateReportCardForStudent(admNo) {
+    initPerformanceRecords();
+    activePerfAdmNo = admNo;
+    openGenerateReportModal();
+  }
+
+  function generateReportCardForActiveStudent() {
+    generateReportCardForStudent(activePerfAdmNo);
+  }
+
+  function openAddPtmLogModal() {
+    showToast('PTM Log form opened: Parent consultation logged to authoritative student file.', 'info');
   }
 
   function exportPerformanceCSV() {
     initPerformanceRecords();
-    let csv = 'AdmissionNo,StudentName,Class,Section,RollNo,Mathematics,Science,English,Social,Language,TotalMarks,MaxMarks,Percentage,GPA,GradeTier,Attendance,Trend,Remarks\n';
+    let csv = 'AdmissionNo,StudentName,Class,Section,RollNo,Exam,PublicationStatus,Attendance,Telugu,Hindi,English,Mathematics,Science,Social,TotalMarks,MaxMarks,Percentage,OverallResult,PreviousComparison,TeacherRemarks,InterventionRequired\n';
     state.performanceRecords.forEach(p => {
-      csv += `"${p.admNo}","${p.name}","${p.class}","${p.section}","${p.rollNo}",${p.math},${p.sci},${p.eng},${p.soc},${p.lang1},${p.totalMarks},${p.maxMarks},"${p.pct}%",${p.gpa},"${p.grade}","${p.attendance}","${p.trendLabel}","${p.remarks.replace(/"/g, '""')}"\n`;
+      const s = p.subjects || {};
+      const t = s.telugu ? s.telugu.total : '';
+      const h = s.hindi ? s.hindi.total : '';
+      const e = s.english ? s.english.total : '';
+      const m = s.math ? s.math.total : '';
+      const sc = s.science ? s.science.total : '';
+      const so = s.social ? s.social.total : '';
+      csv += '"' + p.admNo + '","' + p.name + '","' + p.class + '","' + p.section + '","' + p.rollNo + '","' + (p.exam || 'Quarterly (FA-1 + FA-2 + SA-1)') + '","' + p.publicationStatus + '","' + p.attendance + '%",' + t + ',' + h + ',' + e + ',' + m + ',' + sc + ',' + so + ',' + p.totalMarks + ',' + p.maxMarks + ',"' + p.pct + '%","' + p.overallResult + '","' + (p.prevComparisonLabel || '') + '","' + (p.remarks || '').replace(/"/g, '""') + '","' + (p.interventionRequired ? 'YES' : 'NO') + '"\n';
     });
-    downloadCsvFile(csv, 'sri_vidya_academic_performance_register.csv');
-    showToast('Academic Performance Register exported to CSV', 'success');
+    downloadCsvFile(csv, 'sri_vidya_student_performance_authoritative_register.csv');
+    showToast('Authoritative Performance Register exported to CSV', 'success');
   }
 
   function printPerformanceTable() {
@@ -6623,17 +7143,16 @@ const FEE_CATEGORY_AUDIT_DATA = [
   }
 
   function generateReportCard(admNo) {
-    initPerformanceRecords();
-    const record = state.performanceRecords.find(p => p.admNo === admNo);
-    if (record) {
-      showToast(`Generating Term Report Card for ${record.name} (GPA ${record.gpa})...`, 'info');
-      setTimeout(() => {
-        window.open(`/merit-certificate?admNo=${record.admNo}&name=${encodeURIComponent(record.name)}&class=${record.class}&gpa=${record.gpa}`, '_blank');
-      }, 350);
+    if (!admNo && activePerfAdmNo) admNo = activePerfAdmNo;
+    if (admNo) {
+      generateReportCardForStudent(admNo);
+    } else {
+      openGenerateReportModal();
     }
   }
 
-  // ==========================================================================
+
+// ==========================================================================
   // Respective Class Teachers Register & Direct Student Auto-Enrollment Module
   // ==========================================================================
   const CLASS_TEACHERS = {
@@ -38944,9 +39463,22 @@ const classData = TIMETABLE_CLASS_DATA[currentTimetableClass] || TIMETABLE_CLASS
     callGuardian,
     messageGuardian,
     initPerformanceRecords,
+    updatePerformanceKPIs,
     renderStudentPerformanceRegister,
     filterPerformanceRegister,
     resetPerformanceFilters,
+    openPerformanceStudentPicker,
+    onConfirmPerformancePicker,
+    openStudentPerformanceModal,
+    switchPerfDetailTab,
+    toggleStudentResultPublication,
+    openCompareAssessmentsModal,
+    renderAssessmentComparison,
+    openGenerateReportModal,
+    submitGenerateReport,
+    generateReportCardForStudent,
+    generateReportCardForActiveStudent,
+    openAddPtmLogModal,
     exportPerformanceCSV,
     printPerformanceTable,
     generateReportCard,

@@ -4144,116 +4144,105 @@
                SUBVIEW 5: STUDENT PERFORMANCE
                Display: Subject-wise marks, grades, attendance, progress trends and teacher remarks
                ================================================================= -->
+          <!-- =================================================================
+               SUBVIEW 5: STUDENT PERFORMANCE (AUTHORITATIVE GOVERNANCE)
+               Compliant with AP SSC / CCE Evaluation & Publication Standards
+               ================================================================= -->
           <div class="student-subview" id="subview-students-performance" style="display:none;">
-            <!-- Performance Executive Banner -->
-            <div class="perf-header-banner">
-              <div class="perf-banner-title">
-                <h3><i class="fa-solid fa-award"></i> Student Academic Performance &amp; Scholastic Analytics</h3>
-                <p>Subject-wise marks breakdowns, term grades, attendance correlations, progress trends, and faculty
-                  remarks.</p>
+            
+            <!-- Standard Page Header -->
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1.25rem; flex-wrap: wrap; gap: 1rem;">
+              <div>
+                <div style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.8rem; color: #64748b; margin-bottom: 0.35rem;">
+                  <span>Students</span>
+                  <i class="fa-solid fa-chevron-right" style="font-size: 0.65rem;"></i>
+                  <span style="color: #0f172a; font-weight: 600;">Student Performance</span>
+                </div>
+                <h2 style="font-size: 1.4rem; font-weight: 800; color: #0f172a; margin: 0 0 0.25rem 0;">
+                  Student Performance
+                </h2>
+                <p style="font-size: 0.84rem; color: #64748b; margin: 0;">
+                  Scholastic analytics, assessment tracking, learning objectives, and student intervention records.
+                </p>
               </div>
-              <div class="perf-kpi-row">
-                <div class="perf-kpi-item">
-                  <div class="perf-kpi-num">9.38</div>
-                  <div class="perf-kpi-label">School Avg GPA</div>
+              <div class="perf-header-actions">
+                <button type="button" class="btn btn-outline-secondary btn-sm" onclick="portalApp.openCompareAssessmentsModal()" style="font-weight: 600;">
+                  <i class="fa-solid fa-code-compare mr-1"></i> Compare Assessments
+                </button>
+                <button type="button" class="btn btn-outline-primary btn-sm" onclick="portalApp.openGenerateReportModal()" style="font-weight: 600;">
+                  <i class="fa-solid fa-file-invoice mr-1"></i> Generate Report
+                </button>
+                <button type="button" class="btn btn-primary btn-sm" onclick="portalApp.openPerformanceStudentPicker()" style="font-weight: 700;">
+                  <i class="fa-solid fa-eye mr-1"></i> View Student
+                </button>
+              </div>
+            </div>
+
+            <!-- Statutory Result Publication Policy Notice -->
+            <div class="tc-statutory-notice" style="background:#eff6ff; border-left-color:#3b82f6; color:#1e3a8a;">
+              <i class="fa-solid fa-certificate mr-1" style="font-size: 0.95rem;"></i>
+              <strong>Statutory Publication Protocol:</strong> Only formally published results carry authoritative official status. Draft, tabulating, or unapproved marks are visibly watermarked and distinguished from finalized institutional grades to prevent unauthorized early dissemination.
+            </div>
+
+            <!-- 4 Summary KPI Cards -->
+            <div class="admissions-overview-bar" style="margin-bottom: 1.25rem;">
+              <div class="adm-stat-card card-blue">
+                <div class="adm-stat-icon icon-blue"><i class="fa-solid fa-chart-line"></i></div>
+                <div class="adm-stat-info">
+                  <div class="adm-count" id="perfKpiClassAvg">81.4%</div>
+                  <div class="adm-label">Class Average (8.6 GPA)</div>
                 </div>
-                <div class="perf-kpi-item">
-                  <div class="perf-kpi-num">100%</div>
-                  <div class="perf-kpi-label">Board Pass Rate</div>
+              </div>
+              <div class="adm-stat-card card-green">
+                <div class="adm-stat-icon icon-green"><i class="fa-solid fa-graduation-cap"></i></div>
+                <div class="adm-stat-info">
+                  <div class="adm-count" id="perfKpiPassRate">98.2%</div>
+                  <div class="adm-label">Pass Rate (School Target: 100%)</div>
                 </div>
-                <div class="perf-kpi-item">
-                  <div class="perf-kpi-num">28</div>
-                  <div class="perf-kpi-label">10.0 CGPA Stars</div>
+              </div>
+              <div class="adm-stat-card card-amber">
+                <div class="adm-stat-icon icon-amber"><i class="fa-solid fa-user-shield"></i></div>
+                <div class="adm-stat-info">
+                  <div class="adm-count" id="perfKpiSupport">18</div>
+                  <div class="adm-label">Students Requiring Support</div>
                 </div>
-                <div class="perf-kpi-item">
-                  <div class="perf-kpi-num">76%</div>
-                  <div class="perf-kpi-label">Distinction Tier</div>
+              </div>
+              <div class="adm-stat-card card-purple" style="border-left: 4px solid #ef4444;">
+                <div class="adm-stat-icon" style="background:#fef2f2; color:#ef4444;"><i class="fa-solid fa-clipboard-question"></i></div>
+                <div class="adm-stat-info">
+                  <div class="adm-count" id="perfKpiMissing" style="color:#ef4444;">4</div>
+                  <div class="adm-label">Missing Marks Entries</div>
                 </div>
               </div>
             </div>
 
-            <!-- Dual Charts: Distribution Donut Chart + GPA Bar Graph -->
-            <div class="charts-dual-grid">
-              <!-- Chart 1: Donut/Pie Chart -->
-              <div class="chart-panel-card">
-                <div class="chart-panel-header">
-                  <h4><i class="fa-solid fa-chart-pie text-primary"></i> Grade Tier Distribution (Donut Chart)</h4>
-                  <span class="portal-badge badge-success">Academic Year 2025-26</span>
-                </div>
-                <div class="donut-chart-box">
-                  <div class="donut-svg-wrapper">
-                    <svg viewBox="0 0 100 100">
-                      <circle cx="50" cy="50" r="35" fill="none" stroke="#E2E8F0" stroke-width="18"></circle>
-                      <circle class="donut-segment" cx="50" cy="50" r="35" stroke="#10B981"
-                        stroke-dasharray="96.76 123.15" stroke-dashoffset="0" title="A1 Distinction: 44%"></circle>
-                      <circle class="donut-segment" cx="50" cy="50" r="35" stroke="#2563EB"
-                        stroke-dasharray="70.37 149.54" stroke-dashoffset="-96.76" title="A2 Merit: 32%"></circle>
-                      <circle class="donut-segment" cx="50" cy="50" r="35" stroke="#F59E0B"
-                        stroke-dasharray="35.19 184.72" stroke-dashoffset="-167.13" title="B1 First Class: 16%">
-                      </circle>
-                      <circle class="donut-segment" cx="50" cy="50" r="35" stroke="#8B5CF6"
-                        stroke-dasharray="17.59 202.32" stroke-dashoffset="-202.32" title="B2 Second Class: 8%">
-                      </circle>
-                    </svg>
-                    <div class="donut-hole-center">
-                      <div class="donut-hole-val">100%</div>
-                      <div class="donut-hole-sub">Pass Rate</div>
-                    </div>
-                  </div>
-                  <div class="donut-legend-list">
-                    <div class="donut-legend-item">
-                      <div class="legend-label-col"><span class="legend-dot" style="background:#10B981;"></span><span>A1
-                          Distinction (91–100%)</span></div>
-                      <div class="legend-num-col">44% (132)</div>
-                    </div>
-                    <div class="donut-legend-item">
-                      <div class="legend-label-col"><span class="legend-dot" style="background:#2563EB;"></span><span>A2
-                          Merit (81–90%)</span></div>
-                      <div class="legend-num-col">32% (96)</div>
-                    </div>
-                    <div class="donut-legend-item">
-                      <div class="legend-label-col"><span class="legend-dot" style="background:#F59E0B;"></span><span>B1
-                          First Class (71–80%)</span></div>
-                      <div class="legend-num-col">16% (48)</div>
-                    </div>
-                    <div class="donut-legend-item">
-                      <div class="legend-label-col"><span class="legend-dot" style="background:#8B5CF6;"></span><span>B2
-                          Second Class (61–70%)</span></div>
-                      <div class="legend-num-col">8% (24)</div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <!-- Chart 2: Vertical Bar Graph -->
-              <div class="chart-panel-card">
-                <div class="chart-panel-header">
-                  <h4><i class="fa-solid fa-chart-column text-primary"></i> Class-wise GPA Benchmark (Bar Graph)</h4>
-                  <span class="portal-badge badge-primary">Benchmark: 9.0+</span>
-                </div>
-                <div class="v-bar-chart-container" id="classGpaBarChart">
-                  <!-- Rendered dynamically via portal.js -->
-                </div>
-              </div>
-            </div>
-
-            <!-- Student Performance Register Filter Toolbar -->
-            <div class="admissions-toolbar">
-              <div class="adm-toolbar-left">
-                <div class="adm-search-wrap">
-                  <i class="fa-solid fa-magnifying-glass search-icon"></i>
-                  <input type="text" id="perfStudentSearchInput" class="adm-search-input"
-                    placeholder="Search by student name, admission no, roll..."
-                    oninput="portalApp.filterPerformanceRegister()">
-                  <button type="button" class="adm-clear-btn" id="perfClearSearchBtn"
+            <!-- Executive Toolbar & 5 Standard Filters -->
+            <div class="transfers-toolbar" style="margin-bottom: 1rem;">
+              <div class="tc-toolbar-left" style="display:flex; align-items:center; gap:0.5rem; flex-wrap:wrap; flex:1;">
+                
+                <!-- Search input -->
+                <div class="tc-search-wrap" style="position:relative; min-width:230px;">
+                  <i class="fa-solid fa-magnifying-glass search-icon" style="position:absolute; left:10px; top:50%; transform:translateY(-50%); color:#94a3b8; font-size:0.85rem;"></i>
+                  <input type="text" id="perfStudentSearchInput" class="tc-search-input"
+                    placeholder="Search student, admission no, roll..."
+                    oninput="portalApp.filterPerformanceRegister()"
+                    style="padding-left:32px; padding-right:28px; width:100%; height:36px; border:1px solid #cbd5e1; border-radius:6px; font-size:0.83rem;">
+                  <button type="button" class="tc-clear-btn" id="perfClearSearchBtn"
                     onclick="document.getElementById('perfStudentSearchInput').value=''; portalApp.filterPerformanceRegister();"
-                    title="Clear Search">
+                    title="Clear Search" style="position:absolute; right:8px; top:50%; transform:translateY(-50%); background:none; border:none; color:#94a3b8; cursor:pointer;">
                     <i class="fa-solid fa-xmark"></i>
                   </button>
                 </div>
 
-                <select id="perfClassFilter" class="adm-filter-select" onchange="portalApp.filterPerformanceRegister()"
-                  title="Filter by Class">
+                <!-- 1. Academic Year Filter -->
+                <select id="perfAcademicYearFilter" class="tc-filter-select" onchange="portalApp.filterPerformanceRegister()" title="Filter by Academic Year" style="height:36px; padding:0 0.65rem; border:1px solid #cbd5e1; border-radius:6px; font-size:0.83rem;">
+                  <option value="2025-2026" selected>AY 2025–2026</option>
+                  <option value="2024-2025">AY 2024–2025</option>
+                  <option value="2026-2027">AY 2026–2027</option>
+                </select>
+
+                <!-- 2. Class Filter -->
+                <select id="perfClassFilter" class="tc-filter-select" onchange="portalApp.filterPerformanceRegister()" title="Filter by Class" style="height:36px; padding:0 0.65rem; border:1px solid #cbd5e1; border-radius:6px; font-size:0.83rem;">
                   <option value="">All Classes</option>
                   <option value="X">Class X</option>
                   <option value="IX">Class IX</option>
@@ -4265,69 +4254,77 @@
                   <option value="III">Class III</option>
                   <option value="II">Class II</option>
                   <option value="I">Class I</option>
-                  <option value="PP">Pre-Primary</option>
                 </select>
 
-                <select id="perfTermFilter" class="adm-filter-select" onchange="portalApp.filterPerformanceRegister()"
-                  title="Filter by Examination">
-                  <option value="quarterly-2026">Quarterly Assessment (SA-1)</option>
-                  <option value="unit-test-2">Formative Assessment 2 (FA-2)</option>
-                  <option value="unit-test-1">Formative Assessment 1 (FA-1)</option>
+                <!-- 3. Section Filter -->
+                <select id="perfSectionFilter" class="tc-filter-select" onchange="portalApp.filterPerformanceRegister()" title="Filter by Section" style="height:36px; padding:0 0.65rem; border:1px solid #cbd5e1; border-radius:6px; font-size:0.83rem;">
+                  <option value="">All Sections</option>
+                  <option value="A">Section A</option>
+                  <option value="B">Section B</option>
+                  <option value="C">Section C</option>
                 </select>
 
-                <select id="perfGradeFilter" class="adm-filter-select" onchange="portalApp.filterPerformanceRegister()"
-                  title="Filter by Grade Tier">
-                  <option value="">All Grade Tiers</option>
-                  <option value="A1">A1 Distinction (91–100%)</option>
-                  <option value="A2">A2 Merit (81–90%)</option>
-                  <option value="B1">B1 First Class (71–80%)</option>
-                  <option value="B2">B2 Second Class (61–70%)</option>
+                <!-- 4. Exam Filter -->
+                <select id="perfExamFilter" class="tc-filter-select" onchange="portalApp.filterPerformanceRegister()" title="Filter by Examination" style="height:36px; padding:0 0.65rem; border:1px solid #cbd5e1; border-radius:6px; font-size:0.83rem;">
+                  <option value="Quarterly (SA-1)" selected>Quarterly (SA-1)</option>
+                  <option value="Formative Assessment 2 (FA-2)">FA-2 Assessment</option>
+                  <option value="Formative Assessment 1 (FA-1)">FA-1 Assessment</option>
+                  <option value="Half-Yearly Examination">Half-Yearly Exam</option>
+                  <option value="Pre-Board / Annual Examination">Pre-Board / Annual</option>
+                </select>
+
+                <!-- 5. Subject Filter -->
+                <select id="perfSubjectFilter" class="tc-filter-select" onchange="portalApp.filterPerformanceRegister()" title="Filter by Subject" style="height:36px; padding:0 0.65rem; border:1px solid #cbd5e1; border-radius:6px; font-size:0.83rem;">
+                  <option value="">All Subjects</option>
+                  <option value="Mathematics">Mathematics</option>
+                  <option value="General Science">General Science</option>
+                  <option value="English">English</option>
+                  <option value="Social Studies">Social Studies</option>
+                  <option value="First Language (Telugu)">First Lang (Telugu)</option>
+                  <option value="Second Language (Hindi)">Second Lang (Hindi)</option>
                 </select>
               </div>
 
-              <div class="adm-toolbar-right">
-                <span class="adm-count-pill" id="perfFilterCountDisplay">
-                  <i class="fa-solid fa-chart-simple text-primary"></i> Evaluated: <strong
-                    id="perfShowingCount">0</strong> / <strong id="perfTotalCount">0</strong>
+              <div class="tc-toolbar-right" style="display:flex; align-items:center; gap:0.5rem; flex-wrap:wrap;">
+                <span class="tc-count-pill" id="perfFilterCountDisplay" style="font-size:0.8rem; background:#f1f5f9; padding:0.4rem 0.75rem; border-radius:6px; border:1px solid #e2e8f0;">
+                  <i class="fa-solid fa-chart-simple text-primary mr-1"></i> Showing <strong id="perfShowingCount">0</strong> of
+                  <strong id="perfTotalCount">0</strong>
                 </span>
-                <button type="button" class="btn btn-outline-secondary btn-sm"
-                  onclick="portalApp.resetPerformanceFilters()" title="Reset all filters">
+                <button type="button" class="btn btn-outline-secondary btn-sm" onclick="portalApp.resetPerformanceFilters()" title="Reset all filters">
                   <i class="fa-solid fa-rotate-left"></i> Reset
                 </button>
-                <button type="button" class="btn btn-outline-primary btn-sm" onclick="portalApp.exportPerformanceCSV()"
-                  title="Export performance dataset to CSV">
-                  <i class="fa-solid fa-file-csv"></i> Export CSV
+                <button type="button" class="btn btn-outline-primary btn-sm" onclick="portalApp.exportPerformanceCSV()" title="Export performance dataset to CSV">
+                  <i class="fa-solid fa-file-csv mr-1"></i> Export CSV
                 </button>
-                <button type="button" class="btn btn-outline-primary btn-sm" onclick="portalApp.printPerformanceTable()"
-                  title="Print performance table">
-                  <i class="fa-solid fa-print"></i> Print
+                <button type="button" class="btn btn-outline-primary btn-sm" onclick="portalApp.printPerformanceTable()" title="Print performance table">
+                  <i class="fa-solid fa-print mr-1"></i> Print
                 </button>
               </div>
             </div>
 
-            <!-- Comprehensive Student Academic Performance Register Table -->
+            <!-- Authoritative 8-Column Master Performance Table -->
             <div class="perf-table-wrap" id="perfTableContainer">
               <div class="perf-table-scroll">
                 <table class="perf-table" id="studentPerformanceTable">
                   <thead>
                     <tr>
-                      <th class="th-student"><i class="fa-solid fa-user-graduate"></i> Student Details</th>
-                      <th class="th-marks"><i class="fa-solid fa-book-open"></i> Subject-Wise Marks</th>
-                      <th class="th-gpa"><i class="fa-solid fa-award"></i> Aggregate &amp; GPA</th>
-                      <th class="th-attendance"><i class="fa-solid fa-clipboard-user"></i> Attendance</th>
-                      <th class="th-trend"><i class="fa-solid fa-arrow-trend-up"></i> Progress Trend</th>
-                      <th class="th-remarks"><i class="fa-solid fa-comment-dots"></i> Teacher Remarks</th>
-                      <th class="th-actions" style="text-align: center;"><i class="fa-solid fa-sliders"></i> Actions
-                      </th>
+                      <th class="th-student" style="min-width: 190px;"><i class="fa-solid fa-user-graduate"></i> Student</th>
+                      <th class="th-class" style="min-width: 100px;"><i class="fa-solid fa-school"></i> Class / Section</th>
+                      <th class="th-attendance" style="min-width: 130px;"><i class="fa-solid fa-clipboard-user"></i> Attendance</th>
+                      <th class="th-marks" style="min-width: 220px;"><i class="fa-solid fa-book-open"></i> Subject Marks</th>
+                      <th class="th-result" style="min-width: 170px;"><i class="fa-solid fa-award"></i> Overall Result</th>
+                      <th class="th-comparison" style="min-width: 140px;"><i class="fa-solid fa-code-compare"></i> Previous Assessment Comparison</th>
+                      <th class="th-remarks" style="min-width: 190px;"><i class="fa-solid fa-comment-dots"></i> Teacher Remarks</th>
+                      <th class="th-actions" style="text-align: center; min-width: 130px;"><i class="fa-solid fa-sliders"></i> Action</th>
                     </tr>
                   </thead>
                   <tbody id="studentPerformanceTableBody">
-                    <!-- Rendered dynamically via portal.js -->
+                    <!-- Populated dynamically via portalApp.renderStudentPerformanceRegister -->
                   </tbody>
                 </table>
               </div>
               <!-- Pagination Controls -->
-              <div class="perf-pagination-bar" id="perfPagination"></div>
+              <div class="perf-pagination-bar" id="perfPagination" style="margin-top: 1rem; display:flex; justify-content:space-between; align-items:center;"></div>
             </div>
           </div>
 
@@ -20976,6 +20973,377 @@ Class X-A,Monday,2,09:35 AM - 10:20 AM,Physical Science,Sri Navva Anand,Room 201
           </div>
         </div>
       </form>
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       MODAL 1: 8-SECTION STUDENT PERFORMANCE DOSSIER & DETAIL PAGE
+       ========================================================================= -->
+  <div class="modal-backdrop" id="studentPerformanceModal" style="display:none;">
+    <div class="portal-modal" style="max-width: 980px; width: 95%;">
+      <div class="modal-header" style="border-bottom: 1px solid #e2e8f0; padding-bottom: 0.85rem;">
+        <div style="display: flex; align-items: center; gap: 0.85rem;">
+          <div style="width: 46px; height: 46px; border-radius: 10px; background: #eff6ff; color: #1d4ed8; display: flex; align-items: center; justify-content: center; font-size: 1.35rem; border: 1px solid #bfdbfe;">
+            <i class="fa-solid fa-chart-line"></i>
+          </div>
+          <div>
+            <div style="display: flex; align-items: center; gap: 0.6rem; flex-wrap: wrap;">
+              <h3 style="margin: 0; font-size: 1.25rem; font-weight: 800; color: #0f172a;" id="perfModalStudentName">Aarav Sharma</h3>
+              <span class="perf-status-badge published" id="perfModalPublishBadge"><i class="fa-solid fa-circle-check"></i> Published (Official)</span>
+              <span class="portal-badge badge-blue" id="perfModalClassBadge">Class X-A</span>
+            </div>
+            <p style="margin: 3px 0 0; font-size: 0.82rem; color: #64748b;" id="perfModalSubtitle">
+              Adm No: SV-0001 &bull; Roll No: 01 &bull; Academic Year: 2025–2026 &bull; Exam: Quarterly (SA-1)
+            </p>
+          </div>
+        </div>
+        <button type="button" class="modal-close-x" onclick="portalApp.closeModal('studentPerformanceModal')" title="Close">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <!-- 8-Section Navigation Tabs -->
+      <div class="perf-detail-nav">
+        <button type="button" class="perf-detail-tab-btn active" data-tab="history" onclick="portalApp.switchPerfDetailTab('history')">
+          <i class="fa-solid fa-clock-rotate-left"></i> Assessment History
+        </button>
+        <button type="button" class="perf-detail-tab-btn" data-tab="subjects" onclick="portalApp.switchPerfDetailTab('subjects')">
+          <i class="fa-solid fa-book-open"></i> Subject Marks &amp; Grades
+        </button>
+        <button type="button" class="perf-detail-tab-btn" data-tab="attendance" onclick="portalApp.switchPerfDetailTab('attendance')">
+          <i class="fa-solid fa-clipboard-user"></i> Attendance Trends
+        </button>
+        <button type="button" class="perf-detail-tab-btn" data-tab="feedback" onclick="portalApp.switchPerfDetailTab('feedback')">
+          <i class="fa-solid fa-comment-dots"></i> Teacher Feedback
+        </button>
+        <button type="button" class="perf-detail-tab-btn" data-tab="objectives" onclick="portalApp.switchPerfDetailTab('objectives')">
+          <i class="fa-solid fa-list-check"></i> Learning Objectives
+        </button>
+        <button type="button" class="perf-detail-tab-btn" data-tab="improvement" onclick="portalApp.switchPerfDetailTab('improvement')">
+          <i class="fa-solid fa-arrow-trend-up"></i> Improvement Areas
+        </button>
+        <button type="button" class="perf-detail-tab-btn" data-tab="intervention" onclick="portalApp.switchPerfDetailTab('intervention')">
+          <i class="fa-solid fa-user-shield"></i> Intervention Plan
+        </button>
+        <button type="button" class="perf-detail-tab-btn" data-tab="ptm" onclick="portalApp.switchPerfDetailTab('ptm')">
+          <i class="fa-solid fa-users"></i> Parent Meetings
+        </button>
+      </div>
+
+      <div class="modal-body" style="padding: 0; max-height: calc(85vh - 170px); overflow-y: auto;">
+        
+        <!-- PANE 1: ASSESSMENT HISTORY -->
+        <div class="perf-detail-pane active" id="perfPane-history">
+          <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 1rem; margin-bottom: 1rem;">
+            <h4 style="margin: 0 0 0.5rem 0; font-size: 0.88rem; font-weight: 800; color: #1e3a8a; text-transform: uppercase;">
+              <i class="fa-solid fa-timeline mr-1"></i> Longitudinal Academic Progress Record
+            </h4>
+            <p style="font-size: 0.8rem; color: #64748b; margin: 0 0 0.75rem 0;">
+              Assessment trend analysis across Formative (FA) and Summative (SA) evaluations for the active academic session.
+            </p>
+            <div id="perfAssessmentHistoryContainer">
+              <!-- Dynamically populated via portalApp.renderPerfHistoryPane -->
+            </div>
+          </div>
+        </div>
+
+        <!-- PANE 2: SUBJECT-WISE MARKS & GRADES -->
+        <div class="perf-detail-pane" id="perfPane-subjects">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem; background: #f8fafc; padding: 0.6rem 0.85rem; border-radius: 6px; border: 1px solid #e2e8f0;">
+            <div style="font-size: 0.84rem; font-weight: 700; color: #1e3a8a;">
+              <i class="fa-solid fa-table-list mr-1"></i> Curricular Marks Breakdown &bull; Quarterly Assessment (SA-1)
+            </div>
+            <div>
+              <span class="portal-badge badge-success" id="perfAggregatePill">Total: 462 / 500 (92.4% &bull; 9.4 GPA)</span>
+            </div>
+          </div>
+          <div style="overflow-x: auto;">
+            <table class="perf-marks-table" id="perfModalMarksTable">
+              <thead>
+                <tr>
+                  <th>Subject</th>
+                  <th>Written (80M)</th>
+                  <th>Internal / FA (20M)</th>
+                  <th>Total Marks (100M)</th>
+                  <th>Grade</th>
+                  <th>Grade Points</th>
+                  <th>Class Average</th>
+                  <th>Standing</th>
+                </tr>
+              </thead>
+              <tbody id="perfModalMarksTbody">
+                <!-- Dynamically populated via portalApp.renderPerfSubjectsPane -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- PANE 3: ATTENDANCE TRENDS -->
+        <div class="perf-detail-pane" id="perfPane-attendance">
+          <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 1rem;">
+            <h4 style="margin: 0 0 0.5rem 0; font-size: 0.88rem; font-weight: 800; color: #1e3a8a; text-transform: uppercase;">
+              <i class="fa-solid fa-calendar-check mr-1"></i> Attendance Correlation &amp; Monthly Trends
+            </h4>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin: 1rem 0;">
+              <div style="background:#fff; border:1px solid #cbd5e1; border-radius:8px; padding:0.85rem; text-align:center;">
+                <div style="font-size:1.4rem; font-weight:900; color:#1d4ed8;" id="perfAttRateNumber">94.5%</div>
+                <div style="font-size:0.75rem; color:#64748b; font-weight:700;">Overall Attendance</div>
+              </div>
+              <div style="background:#fff; border:1px solid #cbd5e1; border-radius:8px; padding:0.85rem; text-align:center;">
+                <div style="font-size:1.4rem; font-weight:900; color:#059669;" id="perfAttDaysPresent">182 Days</div>
+                <div style="font-size:0.75rem; color:#64748b; font-weight:700;">Working Days Present</div>
+              </div>
+              <div style="background:#fff; border:1px solid #cbd5e1; border-radius:8px; padding:0.85rem; text-align:center;">
+                <div style="font-size:1.4rem; font-weight:900; color:#d97706;" id="perfAttLeaves">8 Days</div>
+                <div style="font-size:0.75rem; color:#64748b; font-weight:700;">Authorized Leaves</div>
+              </div>
+            </div>
+            <div id="perfMonthlyAttendanceBars">
+              <!-- Rendered via JS -->
+            </div>
+          </div>
+        </div>
+
+        <!-- PANE 4: TEACHER FEEDBACK -->
+        <div class="perf-detail-pane" id="perfPane-feedback">
+          <div style="display: flex; flex-direction: column; gap: 0.85rem;" id="perfTeacherFeedbackContainer">
+            <!-- Dynamically populated via portalApp.renderPerfFeedbackPane -->
+          </div>
+        </div>
+
+        <!-- PANE 5: LEARNING OBJECTIVES -->
+        <div class="perf-detail-pane" id="perfPane-objectives">
+          <div style="margin-bottom: 0.75rem; font-size: 0.82rem; color: #64748b;">
+            Competency-based learning objectives evaluation per Andhra Pradesh State Board &amp; NCERT learning outcomes:
+          </div>
+          <div class="learning-obj-grid" id="perfLearningObjectivesContainer">
+            <!-- Dynamically populated via portalApp.renderPerfObjectivesPane -->
+          </div>
+        </div>
+
+        <!-- PANE 6: IMPROVEMENT AREAS -->
+        <div class="perf-detail-pane" id="perfPane-improvement">
+          <div style="display: flex; flex-direction: column; gap: 0.85rem;" id="perfImprovementContainer">
+            <!-- Dynamically populated via portalApp.renderPerfImprovementPane -->
+          </div>
+        </div>
+
+        <!-- PANE 7: INTERVENTION PLAN, WHERE AUTHORIZED -->
+        <div class="perf-detail-pane" id="perfPane-intervention">
+          <div class="intervention-docket-card">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.5rem;">
+              <h4 style="margin:0; font-size:0.9rem; font-weight:800; color:#854d0e;">
+                <i class="fa-solid fa-user-shield mr-1"></i> Authorized Remedial Academic Intervention Plan
+              </h4>
+              <span class="portal-badge badge-warning" id="perfInterventionTierBadge">Active Support Docket</span>
+            </div>
+            <p style="font-size:0.8rem; color:#713f12; margin:0 0 0.75rem 0;">
+              Confidential remedial and skill reinforcement roadmap authorized by Principal and Head of Academics.
+            </p>
+            <div id="perfInterventionPlanContent">
+              <!-- Populated via JS -->
+            </div>
+          </div>
+        </div>
+
+        <!-- PANE 8: PARENT MEETING HISTORY, WHERE AUTHORIZED -->
+        <div class="perf-detail-pane" id="perfPane-ptm">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.75rem;">
+            <div style="font-size:0.84rem; font-weight:700; color:#1e3a8a;">
+              <i class="fa-solid fa-comments mr-1"></i> Parent-Teacher Meeting (PTM) Interaction Log
+            </div>
+            <button type="button" class="btn btn-outline-primary btn-sm" onclick="portalApp.openAddPtmLogModal()">
+              <i class="fa-solid fa-plus mr-1"></i> Log Parent Interaction
+            </button>
+          </div>
+          <div id="perfPtmHistoryContainer">
+            <!-- Populated via JS -->
+          </div>
+        </div>
+
+      </div>
+
+      <div class="modal-footer" style="display:flex; justify-content:space-between; align-items:center; background:#f8fafc; border-top:1px solid #e2e8f0; padding:0.85rem 1.25rem;">
+        <div>
+          <!-- Publication Authority Control Toggle (Principal / VP Authorized) -->
+          <button type="button" class="btn btn-sm" id="btnTogglePublication" onclick="portalApp.toggleStudentResultPublication()" style="font-weight:700;">
+            <i class="fa-solid fa-stamp mr-1"></i> Toggle Official Publication
+          </button>
+        </div>
+        <div style="display:flex; gap:0.5rem;">
+          <button type="button" class="btn btn-secondary btn-sm" onclick="portalApp.closeModal('studentPerformanceModal')">Close</button>
+          <button type="button" class="btn btn-primary btn-sm" onclick="portalApp.generateReportCardForActiveStudent()">
+            <i class="fa-solid fa-file-pdf mr-1"></i> Print Report Card
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       MODAL 2: COMPARE ASSESSMENTS
+       ========================================================================= -->
+  <div class="modal-backdrop" id="compareAssessmentsModal" style="display:none;">
+    <div class="portal-modal" style="max-width: 820px; width: 95%;">
+      <div class="modal-header">
+        <div style="display: flex; align-items: center; gap: 0.75rem;">
+          <div style="width: 42px; height: 42px; border-radius: 8px; background: #eff6ff; color: #1d4ed8; display: flex; align-items: center; justify-content: center; font-size: 1.25rem; border: 1px solid #bfdbfe;">
+            <i class="fa-solid fa-code-compare"></i>
+          </div>
+          <div>
+            <h3 style="margin: 0; font-size: 1.15rem; font-weight: 800; color: #0f172a;">Compare Assessment Cycles</h3>
+            <p style="margin: 2px 0 0; font-size: 0.8rem; color: #64748b;">Cross-term scholastic progression, GPA shifts, and subject improvement curves.</p>
+          </div>
+        </div>
+        <button type="button" class="modal-close-x" onclick="portalApp.closeModal('compareAssessmentsModal')" title="Close">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <div class="modal-body" style="padding: 1.25rem; max-height: calc(85vh - 140px); overflow-y: auto;">
+        
+        <div class="form-row" style="display: flex; gap: 1rem; margin-bottom: 1rem;">
+          <div class="form-group" style="flex: 1;">
+            <label style="font-weight: 700; font-size: 0.82rem; color: #1e293b; margin-bottom: 3px; display: block;">Base Assessment Cycle *</label>
+            <select id="cmpBaseExamSelect" class="form-control" onchange="portalApp.renderAssessmentComparison()" style="width:100%; padding:0.45rem 0.65rem; border:1px solid #cbd5e1; border-radius:6px; font-size:0.85rem;">
+              <option value="FA-1">Formative Assessment 1 (FA-1)</option>
+              <option value="FA-2" selected>Formative Assessment 2 (FA-2)</option>
+            </select>
+          </div>
+          <div class="form-group" style="flex: 1;">
+            <label style="font-weight: 700; font-size: 0.82rem; color: #1e293b; margin-bottom: 3px; display: block;">Target Comparative Cycle *</label>
+            <select id="cmpTargetExamSelect" class="form-control" onchange="portalApp.renderAssessmentComparison()" style="width:100%; padding:0.45rem 0.65rem; border:1px solid #cbd5e1; border-radius:6px; font-size:0.85rem;">
+              <option value="SA-1" selected>Quarterly Assessment (SA-1)</option>
+              <option value="Pre-Board">Pre-Board Examination</option>
+            </select>
+          </div>
+          <div class="form-group" style="flex: 1;">
+            <label style="font-weight: 700; font-size: 0.82rem; color: #1e293b; margin-bottom: 3px; display: block;">Filter Class</label>
+            <select id="cmpClassSelect" class="form-control" onchange="portalApp.renderAssessmentComparison()" style="width:100%; padding:0.45rem 0.65rem; border:1px solid #cbd5e1; border-radius:6px; font-size:0.85rem;">
+              <option value="All" selected>All Classes</option>
+              <option value="Class X">Class X</option>
+              <option value="Class IX">Class IX</option>
+              <option value="Class VIII">Class VIII</option>
+              <option value="Class VII">Class VII</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Comparative Metrics Grid -->
+        <div id="cmpMetricsResultsContainer">
+          <!-- Rendered dynamically via portalApp.renderAssessmentComparison -->
+        </div>
+
+      </div>
+      <div class="modal-footer" style="display:flex; justify-content:space-between; align-items:center; background:#f8fafc; border-top:1px solid #e2e8f0; padding:0.85rem 1.25rem;">
+        <span style="font-size: 0.75rem; color: #64748b;"><i class="fa-solid fa-chart-column text-primary mr-1"></i> Comparative data calculated across verified student cohorts</span>
+        <button type="button" class="btn btn-secondary btn-sm" onclick="portalApp.closeModal('compareAssessmentsModal')">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       MODAL 3: GENERATE REPORT CARD & ANALYTICS
+       ========================================================================= -->
+  <div class="modal-backdrop" id="generateReportModal" style="display:none;">
+    <div class="portal-modal" style="max-width: 620px; width: 95%;">
+      <div class="modal-header">
+        <div style="display: flex; align-items: center; gap: 0.75rem;">
+          <div style="width: 42px; height: 42px; border-radius: 8px; background: #ecfdf5; color: #059669; display: flex; align-items: center; justify-content: center; font-size: 1.25rem; border: 1px solid #a7f3d0;">
+            <i class="fa-solid fa-file-invoice"></i>
+          </div>
+          <div>
+            <h3 style="margin: 0; font-size: 1.15rem; font-weight: 800; color: #0f172a;">Generate Scholastic Report Cards</h3>
+            <p style="margin: 2px 0 0; font-size: 0.8rem; color: #64748b;">Produce official cumulative progress reports per AP Board guidelines.</p>
+          </div>
+        </div>
+        <button type="button" class="modal-close-x" onclick="portalApp.closeModal('generateReportModal')" title="Close">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <form onsubmit="portalApp.submitGenerateReport(event)">
+        <div class="modal-body" style="padding: 1.25rem; display: flex; flex-direction: column; gap: 1rem;">
+          
+          <div class="form-group">
+            <label style="font-weight: 700; font-size: 0.82rem; color: #1e293b; margin-bottom: 3px; display: block;">Report Scope *</label>
+            <select id="repScopeSelect" class="form-control" required style="width:100%; padding:0.45rem 0.65rem; border:1px solid #cbd5e1; border-radius:6px; font-size:0.85rem;">
+              <option value="Active Student" selected>Selected Individual Student</option>
+              <option value="Entire Class Cohort">Entire Class Cohort (Bulk Report Cards)</option>
+              <option value="Remedial Intervention Roster">Remedial Intervention Group Only</option>
+            </select>
+          </div>
+
+          <div class="form-row" style="display: flex; gap: 1rem;">
+            <div class="form-group" style="flex: 1.2;">
+              <label style="font-weight: 700; font-size: 0.82rem; color: #1e293b; margin-bottom: 3px; display: block;">Examination Cycle *</label>
+              <select id="repExamSelect" class="form-control" required style="width:100%; padding:0.45rem 0.65rem; border:1px solid #cbd5e1; border-radius:6px; font-size:0.85rem;">
+                <option value="Quarterly (SA-1)" selected>Quarterly Assessment (SA-1)</option>
+                <option value="FA-1 + FA-2 + SA-1 Cumulative">Cumulative Progressive Report (FA1 + FA2 + SA1)</option>
+                <option value="Pre-Board Annual">Pre-Board / Final Annual Assessment</option>
+              </select>
+            </div>
+            <div class="form-group" style="flex: 1;">
+              <label style="font-weight: 700; font-size: 0.82rem; color: #1e293b; margin-bottom: 3px; display: block;">Report Format *</label>
+              <select id="repFormatSelect" class="form-control" required style="width:100%; padding:0.45rem 0.65rem; border:1px solid #cbd5e1; border-radius:6px; font-size:0.85rem;">
+                <option value="AP SSC CCE Format" selected>AP SSC / CCE Official Format</option>
+                <option value="Analytics Summary">Teacher Analytics Summary</option>
+                <option value="Parent PTM Slip">Parent PTM Consultation Slip</option>
+              </select>
+            </div>
+          </div>
+
+          <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; padding: 0.75rem;">
+            <div style="font-size: 0.8rem; font-weight: 700; color: #1e293b; margin-bottom: 0.4rem;">Include In Report:</div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.4rem; font-size: 0.8rem;">
+              <label style="display:flex; align-items:center; gap:0.4rem; cursor:pointer;"><input type="checkbox" id="chkIncAttendance" checked> Attendance Standing</label>
+              <label style="display:flex; align-items:center; gap:0.4rem; cursor:pointer;"><input type="checkbox" id="chkIncFeedback" checked> Qualitative Faculty Feedback</label>
+              <label style="display:flex; align-items:center; gap:0.4rem; cursor:pointer;"><input type="checkbox" id="chkIncObjectives" checked> Competency Objectives</label>
+              <label style="display:flex; align-items:center; gap:0.4rem; cursor:pointer;"><input type="checkbox" id="chkIncWatermark" checked> Official Institutional Seal</label>
+            </div>
+          </div>
+
+        </div>
+        <div class="modal-footer" style="display:flex; justify-content:space-between; align-items:center; background:#f8fafc; border-top:1px solid #e2e8f0; padding:0.85rem 1.25rem;">
+          <span style="font-size: 0.75rem; color: #64748b;"><i class="fa-solid fa-stamp text-success mr-1"></i> Formally verified report format</span>
+          <div style="display:flex; gap:0.5rem;">
+            <button type="button" class="btn btn-secondary btn-sm" onclick="portalApp.closeModal('generateReportModal')">Cancel</button>
+            <button type="submit" class="btn btn-primary btn-sm"><i class="fa-solid fa-print mr-1"></i> Generate &amp; Print</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       MODAL 4: QUICK STUDENT PERFORMANCE SELECTOR PICKER
+       ========================================================================= -->
+  <div class="modal-backdrop" id="performanceStudentPickerModal" style="display:none;">
+    <div class="portal-modal" style="max-width: 540px; width: 95%;">
+      <div class="modal-header">
+        <div style="display: flex; align-items: center; gap: 0.75rem;">
+          <div style="width: 42px; height: 42px; border-radius: 8px; background: #eff6ff; color: #1d4ed8; display: flex; align-items: center; justify-content: center; font-size: 1.25rem; border: 1px solid #bfdbfe;">
+            <i class="fa-solid fa-user-graduate"></i>
+          </div>
+          <div>
+            <h3 style="margin: 0; font-size: 1.15rem; font-weight: 800; color: #0f172a;">Select Student for Performance Review</h3>
+            <p style="margin: 2px 0 0; font-size: 0.8rem; color: #64748b;">Direct lookup across all registered academic cohorts.</p>
+          </div>
+        </div>
+        <button type="button" class="modal-close-x" onclick="portalApp.closeModal('performanceStudentPickerModal')" title="Close">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <div class="modal-body" style="padding: 1.25rem;">
+        <div class="form-group" style="margin-bottom: 1rem;">
+          <label style="font-weight: 700; font-size: 0.82rem; color: #1e293b; margin-bottom: 4px; display: block;">Search or Select Student *</label>
+          <select id="perfPickerSelect" class="form-control" style="width:100%; padding:0.5rem 0.75rem; border:1px solid #cbd5e1; border-radius:6px; font-size:0.85rem;">
+            <!-- Populated dynamically via JS -->
+          </select>
+        </div>
+      </div>
+      <div class="modal-footer" style="display:flex; justify-content:flex-end; gap:0.5rem; background:#f8fafc; border-top:1px solid #e2e8f0; padding:0.85rem 1.25rem;">
+        <button type="button" class="btn btn-secondary btn-sm" onclick="portalApp.closeModal('performanceStudentPickerModal')">Cancel</button>
+        <button type="button" class="btn btn-primary btn-sm" onclick="portalApp.onConfirmPerformancePicker()"><i class="fa-solid fa-eye mr-1"></i> Open Performance Dossier</button>
+      </div>
     </div>
   </div>
 
