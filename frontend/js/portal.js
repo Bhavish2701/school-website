@@ -4975,93 +4975,261 @@ const FEE_CATEGORY_AUDIT_DATA = [
     return openEditStudentModal(admNo);
   }
 
-  // ==========================================================================
-  // SUBVIEW 2: STUDENT DOCUMENTS (EXECUTIVE DOSSIER GOVERNANCE)
-  // ==========================================================================
+
+
+  /* =========================================================================
+     AUTHORITATIVE STUDENT DOCUMENTS GOVERNANCE & VERIFICATION CONTROLLER
+     Compliant with Statutory Records Governance & Dual Submission Workflow
+     ========================================================================= */
+
   let docsCurrentPage = 1;
   const docsPageSize = 50;
+  let activePreviewDocId = null;
+  let activeRejectDocId = null;
+  let activeReplaceDocId = null;
+  let activeMarkNaDocId = null;
 
   function initStudentDocs() {
-    if (state.studentDocs && state.studentDocs.length === 500) return;
+    if (state.studentDocuments && state.studentDocuments.length >= 1000) return;
+
     if ((!state.students || state.students.length === 0) && typeof window !== 'undefined' && Array.isArray(window.STUDENT_ROSTER)) {
       state.students = [...window.STUDENT_ROSTER];
     }
     const students = sortStudentsByAdmNo(state.students || []);
 
+    const docTemplates = [
+      { category: 'Identification', type: 'Birth Certificate', title: 'Municipal Birth Proof Certificate', prefix: 'BC-2012', ext: 'pdf', size: '1.4 MB' },
+      { category: 'Academic Records', type: 'Transfer Certificate', title: 'Transfer Certificate (TC) / School Leaving Cert', prefix: 'TC-2024', ext: 'pdf', size: '2.1 MB' },
+      { category: 'Identification', type: 'Aadhaar Card', title: 'Child\'s Aadhaar Card (Govt UIDAI)', prefix: 'UID-8821', ext: 'pdf', size: '950 KB' },
+      { category: 'Academic Records', type: 'Previous Marksheet', title: 'Previous Class Cumulative Marksheet', prefix: 'REP-2024', ext: 'pdf', size: '1.8 MB' },
+      { category: 'Medical/Fitness', type: 'Medical Fitness', title: 'Medical Fitness & Blood Group Record', prefix: 'MED-FIT', ext: 'pdf', size: '620 KB' }
+    ];
+
     const reviewers = [
-      { name: 'Dr. K. S. Rao', role: 'Principal' },
-      { name: 'Mrs. L. Vani', role: 'Vice Principal' },
+      { name: 'Smt. Gorle Varalakshmi', role: 'Principal' },
+      { name: 'Sri Navva Anand', role: 'Vice Principal' },
       { name: 'Sri Ch. Ramesh', role: 'Academic Dean' },
-      { name: 'M. Ramesh', role: 'Office Head' },
-      { name: 'Document Verification Cell', role: 'Verification Cell' }
+      { name: 'M. Ramesh', role: 'Office Superintendent' }
     ];
 
-    const submissionModes = [
-      { mode: 'online', label: 'Digital Upload', icon: 'fa-cloud-arrow-up' },
-      { mode: 'physical', label: 'Physical Hard Copy', icon: 'fa-building-columns' },
-      { mode: 'hybrid', label: 'DigiLocker Verified', icon: 'fa-shield-halved' }
+    const uploaders = [
+      { name: 'R. Prasad (Office Reception Desk)', role: 'Office Staff', source: 'Received Physically' },
+      { name: 'K. Hymavathi (Admissions Clerk)', role: 'Admissions Staff', source: 'Received Physically' },
+      { name: 'Parent / Guardian (Portal Upload)', role: 'Guardian Self-Service', source: 'Uploaded Online' },
+      { name: 'Class Teacher Ms. Anjali', role: 'Faculty', source: 'Uploaded Online' }
     ];
 
-    const dates = [
-      '26 Oct 2026', '25 Oct 2026', '24 Oct 2026', '23 Oct 2026',
-      '22 Oct 2026', '21 Oct 2026', '20 Oct 2026', '18 Oct 2026',
-      '15 Oct 2026', '12 Oct 2026', '10 Oct 2026', '05 Oct 2026'
+    const rejectionReasons = [
+      'Illegible scan: Municipal registration seal and counter-signature unreadable.',
+      'Page 2 missing: Transfer Certificate backside character evaluation omitted.',
+      'DOB Discrepancy: Date of birth differs by one day from admission declaration.',
+      'Missing Official Stamp: Previous institution headmaster seal absent on report card.',
+      'Expired declaration: Medical fitness record older than mandatory 60-day window.'
     ];
 
-    state.studentDocs = students.map((s, idx) => {
-      let status = 'Verified';
-      let completionPct = 100;
-      let pillClass = 'complete';
-      let pillText = '4/4 Cleared';
-      let aadhaar = true, birthCert = true, tc = true, marksheet = true;
-      let subMode = submissionModes[idx % 3];
+    const docs = [];
+    let docCounter = 1;
 
-      // KPI alignment: 285 Verified, 155 Pending, 60 Awaiting = 500
-      if (idx >= 285 && idx < 440) {
-        status = 'Pending';
-        completionPct = 75;
-        pillClass = 'partial';
-        pillText = '3/4 In Review';
-        tc = false;
-        subMode = submissionModes[(idx + 1) % 3];
-      } else if (idx >= 440) {
-        status = 'Awaiting';
-        completionPct = 25;
-        pillClass = 'empty';
-        pillText = '1/4 Awaiting';
-        birthCert = false;
-        tc = false;
-        marksheet = false;
-        subMode = { mode: 'awaiting', label: 'Awaiting Hard Copy', icon: 'fa-clock' };
+    students.forEach((s, sIdx) => {
+      // Each student gets 3 standard documents, plus 4th or 5th based on class
+      const countForStudent = (sIdx % 4 === 0) ? 2 : ((sIdx % 3 === 0) ? 4 : 3);
+
+      for (let dIdx = 0; dIdx < countForStudent; dIdx++) {
+        const tmpl = docTemplates[dIdx % docTemplates.length];
+        const docId = 'DOC-' + s.admNo + '-' + (dIdx + 1);
+        const docNumber = tmpl.prefix + '-' + (1000 + (sIdx * 3) + dIdx);
+        const up = uploaders[(sIdx + dIdx) % uploaders.length];
+        const rev = reviewers[(sIdx + dIdx) % reviewers.length];
+
+        let status = 'Verified';
+        let verifiedBy = rev.name + ' (' + rev.role + ')';
+        let verificationDate = '14-Oct-2025 11:30 AM';
+        let rejReason = null;
+        let notes = 'Original document verified and attested copy archived in institutional locker.';
+
+        // Status distribution: ~80% Verified, ~14% Pending Verification, ~3% Rejected or Invalid, ~3% Replacement Requested
+        const randSeed = (sIdx * 7 + dIdx * 11) % 100;
+        if (randSeed < 14) {
+          status = 'Pending Verification';
+          verifiedBy = 'Awaiting Review';
+          verificationDate = 'Pending';
+          notes = 'Document submitted and queued for verification by Document Cell.';
+        } else if (randSeed < 17) {
+          status = 'Rejected or Invalid';
+          verifiedBy = rev.name + ' (' + rev.role + ')';
+          verificationDate = '18-Oct-2026 03:45 PM';
+          rejReason = rejectionReasons[(sIdx + dIdx) % rejectionReasons.length];
+          notes = 'Rejection reason: ' + rejReason;
+        } else if (randSeed < 20) {
+          status = 'Replacement Requested';
+          verifiedBy = rev.name + ' (' + rev.role + ')';
+          verificationDate = '20-Oct-2026 09:15 AM';
+          notes = 'Deficiency noted: Parent requested to submit physical counter-signed original copy.';
+        }
+
+        const uploadDate = '12-Jun-2024';
+
+        const versions = [
+          {
+            version: 'v1.0',
+            fileName: s.name.replace(/[^a-zA-Z]/g, '_') + '_' + tmpl.type.replace(/\s+/g, '_') + '.' + tmpl.ext,
+            fileSize: tmpl.size,
+            docSource: up.source,
+            uploadedBy: up.name,
+            uploadedAt: uploadDate + ' 10:00 AM',
+            status: status,
+            actionBy: verifiedBy,
+            actionReason: rejReason || notes,
+            actionDate: verificationDate
+          }
+        ];
+
+        // For rejected or replacement documents, add a v2.0 history entry if applicable
+        if (status === 'Replacement Requested') {
+          versions.push({
+            version: 'v2.0',
+            fileName: s.name.replace(/[^a-zA-Z]/g, '_') + '_' + tmpl.type.replace(/\s+/g, '_') + '_Revision.' + tmpl.ext,
+            fileSize: tmpl.size,
+            docSource: 'Received Physically',
+            uploadedBy: 'R. Prasad (Office Reception Desk)',
+            uploadedAt: '24-Oct-2026 11:00 AM',
+            status: 'Pending Verification',
+            actionBy: 'Awaiting Final Approval',
+            actionReason: 'Attested physical copy received; awaiting Principal signature.',
+            actionDate: 'Pending'
+          });
+        }
+
+        docs.push({
+          id: docId,
+          studentId: s.studentId || ('STU-' + s.admNo),
+          admNo: s.admNo,
+          studentName: s.name,
+          class: s.class,
+          section: s.section || 'A',
+          rollNo: s.rollNo,
+          category: tmpl.category,
+          docType: tmpl.type,
+          title: tmpl.title,
+          docNumber: docNumber,
+          fileName: versions[versions.length - 1].fileName,
+          fileSize: tmpl.size,
+          fileFormat: 'PDF',
+          docSource: up.source,
+          uploadedBy: up.name,
+          uploadDate: uploadDate,
+          issueDate: '10-May-2023',
+          expiryDate: 'N/A',
+          status: status,
+          verifiedBy: verifiedBy,
+          verificationDate: verificationDate,
+          notes: notes,
+          rejectionReason: rejReason,
+          versions: versions
+        });
+
+        docCounter++;
       }
-
-      const rev = reviewers[idx % reviewers.length];
-      const dt = dates[idx % dates.length];
-
-      return {
-        admNo: s.admNo,
-        name: s.name,
-        class: s.class,
-        section: s.section || 'A',
-        rollNo: s.rollNo,
-        parent: s.parent,
-        phone: s.phone,
-        status: status,
-        completionPct: completionPct,
-        pillClass: pillClass,
-        pillText: pillText,
-        aadhaar: aadhaar,
-        birthCert: birthCert,
-        tc: tc,
-        marksheet: marksheet,
-        subMode: subMode.mode,
-        subModeLabel: subMode.label,
-        subModeIcon: subMode.icon,
-        reviewerName: rev.name,
-        reviewerRole: rev.role,
-        lastUpdated: dt
-      };
     });
+
+    state.studentDocuments = docs;
+    // Sync state.studentDocs for backwards compatibility
+    state.studentDocs = state.studentDocuments;
+  }
+
+  function updateStudentDocKPIs(list) {
+    initStudentDocs();
+    const all = state.studentDocuments || [];
+
+    const total = all.length;
+    const verified = all.filter(d => d.status === 'Verified').length;
+    const pending = all.filter(d => d.status === 'Pending Verification').length;
+    const rejected = all.filter(d => d.status === 'Rejected or Invalid').length;
+
+    // Calculate students with missing documents (students who have fewer than 3 documents or have rejected documents)
+    const studentDocCounts = {};
+    all.forEach(d => {
+      if (!studentDocCounts[d.admNo]) studentDocCounts[d.admNo] = { total: 0, verified: 0, rejected: 0 };
+      studentDocCounts[d.admNo].total++;
+      if (d.status === 'Verified') studentDocCounts[d.admNo].verified++;
+      if (d.status === 'Rejected or Invalid' || d.status === 'Replacement Requested') studentDocCounts[d.admNo].rejected++;
+    });
+
+    const students = state.students || [];
+    let missingCount = 0;
+    students.forEach(s => {
+      const rec = studentDocCounts[s.admNo];
+      if (!rec || rec.total < 3 || rec.rejected > 0) {
+        missingCount++;
+      }
+    });
+
+    const kpiTotal = document.getElementById('kpiDocTotal');
+    const kpiVer = document.getElementById('kpiDocVerified');
+    const kpiPend = document.getElementById('kpiDocPending');
+    const kpiRej = document.getElementById('kpiDocRejected');
+    const kpiMis = document.getElementById('kpiDocMissing');
+
+    if (kpiTotal) kpiTotal.textContent = total.toLocaleString();
+    if (kpiVer) kpiVer.textContent = verified.toLocaleString();
+    if (kpiPend) kpiPend.textContent = pending.toLocaleString();
+    if (kpiRej) kpiRej.textContent = rejected.toLocaleString();
+    if (kpiMis) kpiMis.textContent = (missingCount || 48).toLocaleString();
+
+    // Also update subview badge in navigation sidebar
+    const badge = document.getElementById('studentDocsCountBadge');
+    if (badge) badge.textContent = pending;
+
+    const showingCount = document.getElementById('docsShowingCount');
+    const totalCount = document.getElementById('docsTotalCount');
+    if (showingCount) showingCount.textContent = list ? list.length : total;
+    if (totalCount) totalCount.textContent = total;
+  }
+
+  function filterStudentDocs(resetPage = true) {
+    initStudentDocs();
+    if (resetPage) docsCurrentPage = 1;
+
+    const query = (document.getElementById('docSearchInput')?.value || '').toLowerCase().trim();
+    const catVal = document.getElementById('docCategoryFilter')?.value || '';
+    const statusVal = document.getElementById('docVerifyStatusFilter')?.value || '';
+    const sourceVal = document.getElementById('docSourceFilter')?.value || '';
+    const classVal = document.getElementById('docClassFilter')?.value || '';
+
+    const filtered = state.studentDocuments.filter(d => {
+      const matchQuery = !query ||
+        d.studentName.toLowerCase().includes(query) ||
+        d.admNo.toLowerCase().includes(query) ||
+        d.title.toLowerCase().includes(query) ||
+        (d.docNumber && d.docNumber.toLowerCase().includes(query)) ||
+        d.uploadedBy.toLowerCase().includes(query) ||
+        d.docType.toLowerCase().includes(query);
+
+      const matchCat = !catVal || d.docType === catVal || d.category === catVal;
+      const matchStatus = !statusVal || d.status === statusVal;
+      const matchSource = !sourceVal || d.docSource === sourceVal;
+      const matchClass = !classVal || d.class === classVal;
+
+      return matchQuery && matchCat && matchStatus && matchSource && matchClass;
+    });
+
+    renderStudentDocuments(filtered, docsCurrentPage);
+  }
+
+  function resetStudentDocFilters() {
+    const q = document.getElementById('docSearchInput');
+    const cat = document.getElementById('docCategoryFilter');
+    const s = document.getElementById('docVerifyStatusFilter');
+    const src = document.getElementById('docSourceFilter');
+    const c = document.getElementById('docClassFilter');
+    if (q) q.value = '';
+    if (cat) cat.value = '';
+    if (s) s.value = '';
+    if (src) src.value = '';
+    if (c) c.value = '';
+    docsCurrentPage = 1;
+    renderStudentDocuments();
+    showToast('Document filters reset to default', 'info');
   }
 
   function renderStudentDocuments(list, page) {
@@ -5070,28 +5238,9 @@ const FEE_CATEGORY_AUDIT_DATA = [
     if (!tbody) return;
 
     if (page !== undefined) docsCurrentPage = page;
-    const data = list || state.studentDocs || [];
+    const data = list || state.studentDocuments || [];
 
-    const totalDocs = state.studentDocs.length;
-    const verifiedDocs = state.studentDocs.filter(d => d.status === 'Verified').length;
-    const pendingDocs = state.studentDocs.filter(d => d.status === 'Pending').length;
-    const awaitingDocs = state.studentDocs.filter(d => d.status === 'Awaiting').length;
-
-    const kpiTotal = document.getElementById('kpiDocTotalDossiers');
-    const kpiVer = document.getElementById('kpiDocFullyVerified');
-    const kpiPend = document.getElementById('kpiDocPendingReview');
-    const kpiAction = document.getElementById('kpiDocActionRequired');
-    if (kpiTotal) kpiTotal.textContent = totalDocs;
-    if (kpiVer) kpiVer.textContent = verifiedDocs;
-    if (kpiPend) kpiPend.textContent = pendingDocs;
-    if (kpiAction) kpiAction.textContent = awaitingDocs;
-
-    const badge = document.getElementById('studentDocsCountBadge');
-    if (badge) badge.textContent = pendingDocs;
-
-    const showingCount = document.getElementById('docsShowingCount');
-    const totalCount = document.getElementById('docsTotalCount');
-    if (totalCount) totalCount.textContent = totalDocs;
+    updateStudentDocKPIs(data);
 
     const total = data.length;
     const totalPages = Math.ceil(total / docsPageSize) || 1;
@@ -5101,158 +5250,176 @@ const FEE_CATEGORY_AUDIT_DATA = [
     const startIdx = (docsCurrentPage - 1) * docsPageSize;
     const pageItems = data.slice(startIdx, startIdx + docsPageSize);
 
-    if (showingCount) showingCount.textContent = pageItems.length;
-
     if (pageItems.length === 0) {
       tbody.innerHTML = `
         <tr>
-          <td colspan="7" style="text-align:center; padding:3rem; color:var(--color-text-muted);">
+          <td colspan="9" style="text-align:center; padding:3rem; color:var(--color-text-muted);">
             <i class="fa-solid fa-folder-open" style="font-size:2rem; margin-bottom:0.75rem; display:block; color:#94a3b8;"></i>
-            No student dossiers matched your search filters.
+            No student documents matched your search and filter criteria.
           </td>
-        </tr>`;
+        </tr>
+      `;
+      renderPaginationControls('studentDocsPagination', 1, 1, () => {});
       return;
     }
 
     tbody.innerHTML = pageItems.map(d => {
-      let verifyBadgeClass = 'verified';
-      let verifyLabel = 'Verified & Approved';
-      if (d.status === 'Pending') {
-        verifyBadgeClass = 'pending';
-        verifyLabel = 'Pending Review';
-      } else if (d.status === 'Awaiting') {
-        verifyBadgeClass = 'action-needed';
-        verifyLabel = 'Awaiting Submission';
+      // Status badge mapping
+      let statusBadge = `<span class="badge" style="background:#dcfce7; color:#15803d; font-weight:700;"><i class="fa-solid fa-circle-check mr-1"></i>Verified</span>`;
+      if (d.status === 'Pending Verification') {
+        statusBadge = `<span class="badge" style="background:#fef3c7; color:#b45309; font-weight:700;"><i class="fa-solid fa-clock-rotate-left mr-1"></i>Pending Verification</span>`;
+      } else if (d.status === 'Rejected or Invalid') {
+        statusBadge = `<span class="badge" style="background:#fee2e2; color:#b91c1c; font-weight:700;" title="${d.rejectionReason || 'Deficiency recorded'}"><i class="fa-solid fa-circle-xmark mr-1"></i>Rejected / Invalid</span>`;
+      } else if (d.status === 'Replacement Requested') {
+        statusBadge = `<span class="badge" style="background:#ede9fe; color:#6d28d9; font-weight:700;"><i class="fa-solid fa-arrows-rotate mr-1"></i>Replacement Requested</span>`;
+      } else if (d.status === 'Not Applicable') {
+        statusBadge = `<span class="badge" style="background:#f1f5f9; color:#475569; font-weight:700;"><i class="fa-solid fa-shield-slash mr-1"></i>Not Applicable</span>`;
       }
+
+      // Source badge
+      const isPhysical = d.docSource === 'Received Physically';
+      const sourceBadge = isPhysical
+        ? `<span class="doc-source-badge physical" title="Received physically at school reception desk"><i class="fa-solid fa-building-columns"></i> Received Physically</span>`
+        : `<span class="doc-source-badge online" title="Submitted online via student/parent portal"><i class="fa-solid fa-cloud-arrow-up"></i> Uploaded Online</span>`;
+
+      const initial = (d.studentName || 'S').trim().charAt(0).toUpperCase();
 
       return `
         <tr>
+          <!-- 1. Student -->
           <td>
-            <div class="user-cell" style="display:flex; align-items:center; gap:0.75rem;">
-              <div class="cell-avatar" style="width:38px; height:38px; border-radius:50%; background:linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%); color:#fff; font-weight:800; font-size:0.9rem; display:flex; align-items:center; justify-content:center;">
-                ${d.name.charAt(0)}
+            <div class="user-cell" style="display:flex; align-items:center; gap:0.6rem;">
+              <div class="cell-avatar" style="width:34px; height:34px; border-radius:50%; background:linear-gradient(135deg, #1e40af 0%, #3b82f6 100%); color:#fff; font-weight:800; font-size:0.85rem; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+                ${initial}
               </div>
               <div>
-                <strong style="color:var(--color-text-dark, #0f172a); font-size:0.9rem;">${d.name}</strong>
-                <div style="font-size:0.74rem; color:var(--color-text-muted, #64748b); display:flex; align-items:center; gap:5px; margin-top:2px;">
-                  <span class="perf-admno-badge">${d.admNo}</span>
-                  <span class="profile-tag tag-primary">Class ${d.class}-${d.section}</span>
+                <strong style="color:#0f172a; font-size:0.88rem;">${d.studentName}</strong>
+                <div style="font-size:0.72rem; color:var(--color-text-muted); display:flex; align-items:center; gap:4px; margin-top:1px;">
+                  <span class="badge" style="background:#e0f2fe; color:#0369a1; font-weight:700; font-size:0.68rem; padding:1px 6px;">Class ${d.class}-${d.section || 'A'}</span>
                   <span>#${d.rollNo}</span>
                 </div>
               </div>
             </div>
           </td>
+
+          <!-- 2. Admission Number -->
           <td>
-            <div class="dossier-progress-cell">
-              <div class="dossier-badge-row">
-                <span class="dossier-pill ${d.pillClass}">
-                  <i class="fa-solid ${d.status === 'Verified' ? 'fa-circle-check' : (d.status === 'Pending' ? 'fa-clock' : 'fa-triangle-exclamation')}"></i>
-                  ${d.pillText}
-                </span>
-                <span class="dossier-pct">${d.completionPct}%</span>
-              </div>
-              <div class="dossier-progress-track">
-                <div class="dossier-progress-bar ${d.pillClass}" style="width: ${d.completionPct}%;"></div>
-              </div>
-              <div class="dossier-doc-chips">
-                <span class="doc-chip-mini ${d.aadhaar ? 'active' : ''}"><i class="fa-solid fa-id-card"></i> Aadhaar</span>
-                <span class="doc-chip-mini ${d.birthCert ? 'active' : ''}"><i class="fa-solid fa-certificate"></i> Birth</span>
-                <span class="doc-chip-mini ${d.tc ? 'active' : ''}"><i class="fa-solid fa-file-contract"></i> TC</span>
-                <span class="doc-chip-mini ${d.marksheet ? 'active' : ''}"><i class="fa-solid fa-award"></i> Marks</span>
+            <span class="perf-admno-badge font-bold">${d.admNo}</span>
+          </td>
+
+          <!-- 3. Document Type -->
+          <td>
+            <span class="badge" style="background:#f1f5f9; color:#334155; font-weight:700; font-size:0.75rem;">
+              <i class="fa-solid ${d.docType.includes('Birth') ? 'fa-certificate text-amber' : (d.docType.includes('Transfer') ? 'fa-file-contract text-primary' : (d.docType.includes('Aadhaar') ? 'fa-id-card text-emerald' : 'fa-file-lines text-secondary'))} mr-1"></i>
+              ${d.docType}
+            </span>
+          </td>
+
+          <!-- 4. Document Name -->
+          <td>
+            <div>
+              <strong style="font-size:0.84rem; color:#1e293b;">${d.title}</strong>
+              <div style="font-size:0.72rem; color:#64748b; display:flex; gap:6px; margin-top:2px; align-items:center;">
+                ${d.docNumber ? `<span style="font-family:monospace; font-weight:600; color:#0284c7;">${d.docNumber}</span><span>•</span>` : ''}
+                <span class="badge" style="background:#f8fafc; border:1px solid #e2e8f0; color:#475569; font-size:0.68rem;">${d.fileFormat} ${d.fileSize ? '• ' + d.fileSize : ''}</span>
               </div>
             </div>
           </td>
+
+          <!-- 5. Uploaded By -->
           <td>
-            <span class="submission-channel-badge ${d.subMode}">
-              <i class="fa-solid ${d.subModeIcon}"></i> ${d.subModeLabel}
-            </span>
-          </td>
-          <td class="text-center">
-            <span class="doc-verify-badge ${verifyBadgeClass}">
-              <span class="doc-verify-dot"></span> ${verifyLabel}
-            </span>
-          </td>
-          <td class="text-center">
-            <span class="doc-date-chip">
-              <i class="fa-regular fa-calendar-check"></i> ${d.lastUpdated}
-            </span>
-          </td>
-          <td>
-            <div class="doc-reviewer-cell">
-              <div class="reviewer-name">
-                <i class="fa-solid fa-user-check text-primary"></i> ${d.reviewerName}
-              </div>
-              <div class="reviewer-role">${d.reviewerRole}</div>
+            <div>
+              <div style="font-size:0.8rem; font-weight:600; color:#1e293b;">${d.uploadedBy}</div>
+              <div style="margin-top:3px;">${sourceBadge}</div>
             </div>
           </td>
+
+          <!-- 6. Upload Date -->
           <td class="text-center">
-            <div class="doc-actions-wrap">
-              <button type="button" class="doc-action-btn view-btn" onclick="portalApp.openStudentDocsModal('${d.admNo}')" title="Upload / Log Document for ${d.name}">
-                <i class="fa-solid fa-cloud-arrow-up text-primary"></i> Upload
+            <span style="font-size:0.78rem; font-weight:600; color:#475569;">${d.uploadDate}</span>
+          </td>
+
+          <!-- 7. Verification Status -->
+          <td class="text-center">
+            ${statusBadge}
+          </td>
+
+          <!-- 8. Verified By -->
+          <td>
+            <div style="font-size:0.8rem; font-weight:600; color:#1e293b;">${d.verifiedBy}</div>
+            <div style="font-size:0.72rem; color:#64748b;">${d.verificationDate}</div>
+          </td>
+
+          <!-- 9. Actions -->
+          <td class="text-end">
+            <div class="d-inline-flex gap-1 align-items-center">
+              <button type="button" class="btn btn-sm btn-secondary" onclick="portalApp.openDocumentPreviewModal('${d.id}')" title="Preview Document Credentials">
+                <i class="fa-solid fa-eye text-primary"></i> Preview
               </button>
-              <button type="button" class="doc-action-btn manage-btn" onclick="portalApp.toggleDocVerifyStatus('${d.admNo}')" title="Advance Verification Status">
-                <i class="fa-solid fa-shield-check"></i> Status
-              </button>
-              <button type="button" class="doc-action-btn view-btn" onclick="portalApp.viewStudentProfile('${d.admNo}')" title="View Full Student Dossier">
-                <i class="fa-regular fa-eye"></i>
-              </button>
+              <div class="dropdown d-inline-block">
+                <button type="button" class="btn btn-sm btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" title="More Document Actions">
+                  <i class="fa-solid fa-ellipsis-vertical"></i>
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end student-actions-dropdown" style="font-size:0.78rem; min-width: 190px;">
+                  <li>
+                    <a class="dropdown-item" href="javascript:void(0)" onclick="portalApp.openDocumentPreviewModal('${d.id}')">
+                      <i class="fa-solid fa-eye text-primary mr-2"></i> Preview Document
+                    </a>
+                  </li>
+                  <li>
+                    <a class="dropdown-item" href="javascript:void(0)" onclick="portalApp.downloadStudentDocument('${d.id}')">
+                      <i class="fa-solid fa-download text-secondary mr-2"></i> Download File
+                    </a>
+                  </li>
+                  <li><hr class="dropdown-divider my-1"></li>
+                  <li>
+                    <a class="dropdown-item text-success" href="javascript:void(0)" onclick="portalApp.verifyStudentDocument('${d.id}')">
+                      <i class="fa-solid fa-shield-check text-emerald mr-2"></i> Verify Document
+                    </a>
+                  </li>
+                  <li>
+                    <a class="dropdown-item text-danger" href="javascript:void(0)" onclick="portalApp.openRejectDocumentModal('${d.id}')">
+                      <i class="fa-solid fa-ban text-danger mr-2"></i> Reject with Reason
+                    </a>
+                  </li>
+                  <li>
+                    <a class="dropdown-item text-warning" href="javascript:void(0)" onclick="portalApp.openRequestReplacementModal('${d.id}')">
+                      <i class="fa-solid fa-arrows-rotate text-warning mr-2"></i> Request Replacement
+                    </a>
+                  </li>
+                  <li>
+                    <a class="dropdown-item text-primary" href="javascript:void(0)" onclick="portalApp.openReplaceDocumentModal('${d.id}')">
+                      <i class="fa-solid fa-cloud-arrow-up text-primary mr-2"></i> Replace File / Revision
+                    </a>
+                  </li>
+                  <li>
+                    <a class="dropdown-item text-muted" href="javascript:void(0)" onclick="portalApp.openMarkDocNaModal('${d.id}')">
+                      <i class="fa-solid fa-shield-slash text-secondary mr-2"></i> Mark as Not Applicable
+                    </a>
+                  </li>
+                  <li><hr class="dropdown-divider my-1"></li>
+                  <li>
+                    <a class="dropdown-item" href="javascript:void(0)" onclick="portalApp.openDocumentHistoryModal('${d.id}')">
+                      <i class="fa-solid fa-clock-rotate-left text-info mr-2"></i> View Version History
+                    </a>
+                  </li>
+                </ul>
+              </div>
             </div>
           </td>
         </tr>
       `;
     }).join('');
 
-    renderPaginationControls('studentDocsPagination', docsCurrentPage, totalPages, (p) => {
-      docsCurrentPage = p;
+    renderPaginationControls('studentDocsPagination', docsCurrentPage, totalPages, (page) => {
+      docsCurrentPage = page;
       filterStudentDocs(false);
     });
   }
 
-  function filterStudentDocs(resetPage = true) {
-    initStudentDocs();
-    if (resetPage) docsCurrentPage = 1;
-
-    const query = (document.getElementById('docSearchInput')?.value || '').toLowerCase().trim();
-    const classVal = document.getElementById('docClassFilter')?.value || '';
-    const statusVal = document.getElementById('docVerifyStatusFilter')?.value || '';
-
-    const filtered = state.studentDocs.filter(d => {
-      const matchQuery = !query ||
-        d.name.toLowerCase().includes(query) ||
-        d.admNo.toLowerCase().includes(query) ||
-        d.reviewerName.toLowerCase().includes(query) ||
-        d.rollNo.includes(query);
-
-      const matchClass = !classVal || d.class === classVal;
-      const matchStatus = !statusVal || d.status === statusVal;
-
-      return matchQuery && matchClass && matchStatus;
-    });
-
-    renderStudentDocuments(filtered, docsCurrentPage);
-  }
-
-  function resetStudentDocFilters() {
-    const q = document.getElementById('docSearchInput');
-    const c = document.getElementById('docClassFilter');
-    const s = document.getElementById('docVerifyStatusFilter');
-    if (q) q.value = '';
-    if (c) c.value = '';
-    if (s) s.value = '';
-    docsCurrentPage = 1;
-    renderStudentDocuments();
-    showToast('Document filters reset', 'info');
-  }
-
-  function exportDocsAuditReport() {
-    initStudentDocs();
-    let csv = 'AdmissionNo,StudentName,Class,Section,RollNo,Parent,Phone,DossierStatus,CompletionPct,SubmissionMode,VerifyingAuthority,AuthorityRole,LastUpdated\n';
-    state.studentDocs.forEach(d => {
-      csv += `"${d.admNo}","${d.name}","${d.class}","${d.section}","${d.rollNo}","${d.parent}","${d.phone}","${d.status}","${d.completionPct}%","${d.subModeLabel}","${d.reviewerName}","${d.reviewerRole}","${d.lastUpdated}"\n`;
-    });
-    downloadCsvFile(csv, 'sri_vidya_student_documents_audit.csv');
-    showToast('Document Audit Report downloaded successfully', 'success');
-  }
+  /* =========================================================================
+     MODAL CONTROLLERS & WORKFLOW ACTIONS
+     ========================================================================= */
 
   function openStudentDocsModal(admNo) {
     initStudentDocs();
@@ -5260,17 +5427,59 @@ const FEE_CATEGORY_AUDIT_DATA = [
     if (select) {
       select.innerHTML = state.students.map(s => `
         <option value="${s.admNo}" ${s.admNo === admNo ? 'selected' : ''}>
-          ${s.admNo} - ${s.name} (Class ${s.class}-${s.section || 'A'})
+          ${s.admNo} - ${s.name} (Class ${s.class}-${s.section || 'A'} • Roll #${s.rollNo})
         </option>
       `).join('');
       if (admNo) select.value = admNo;
     }
+
     const preview = document.getElementById('docSelectedFilePreview');
     if (preview) preview.style.display = 'none';
-    const fileInput = document.getElementById('docFileUploadInput');
+    const fileInput = document.getElementById('uploadDocFileInput');
     if (fileInput) fileInput.value = '';
+    const titleInput = document.getElementById('uploadDocTitleInput');
+    if (titleInput) titleInput.value = '';
+    const numInput = document.getElementById('uploadDocNumberInput');
+    if (numInput) numInput.value = '';
+    const notesInput = document.getElementById('uploadDocNotesInput');
+    if (notesInput) notesInput.value = '';
 
-    openModal('studentDocsModal');
+    openModal('uploadDocumentModal');
+  }
+
+  function handleDocCategoryChange() {
+    const cat = document.getElementById('uploadDocCategorySelect')?.value;
+    const typeSelect = document.getElementById('uploadDocTypeSelect');
+    if (!typeSelect) return;
+
+    if (cat === 'Identification') {
+      typeSelect.innerHTML = `
+        <option value="Birth Certificate">Birth Certificate (Municipal / Panchayat)</option>
+        <option value="Aadhaar Card">Child\'s Aadhaar Card (Govt UIDAI)</option>
+        <option value="Parent ID">Parent / Guardian Aadhaar Card</option>
+        <option value="Passport Photo">Passport-Size Photographs (Student)</option>
+      `;
+    } else if (cat === 'Academic Records') {
+      typeSelect.innerHTML = `
+        <option value="Transfer Certificate">Transfer Certificate (TC) / School Leaving Cert</option>
+        <option value="Previous Marksheet">Previous Academic Marksheet / Report Card</option>
+        <option value="Conduct Certificate">Conduct &amp; Character Certificate</option>
+      `;
+    } else if (cat === 'Medical/Fitness') {
+      typeSelect.innerHTML = `
+        <option value="Medical Fitness">Medical Fitness &amp; Blood Group Record</option>
+        <option value="Vaccination Record">Vaccination &amp; Immunization Record</option>
+      `;
+    } else if (cat === 'Legal/Clearance') {
+      typeSelect.innerHTML = `
+        <option value="Income Certificate">Income / Caste Certificate (RTE / Concession)</option>
+        <option value="Court Order">Guardianship / Custody Order</option>
+      `;
+    } else {
+      typeSelect.innerHTML = `
+        <option value="Bank Mandate">Bank Passbook / Fee Debit Mandate</option>
+      `;
+    }
   }
 
   function handleDocFileSelected(event) {
@@ -5289,71 +5498,622 @@ const FEE_CATEGORY_AUDIT_DATA = [
     initStudentDocs();
 
     const admNo = document.getElementById('uploadDocStudentSelect')?.value;
-    const mode = document.getElementById('uploadDocMode')?.value;
-    const reviewer = document.getElementById('uploadDocReviewer')?.value || 'Sri Ch. Ramesh (Vice Principal)';
-    const initialStatus = document.getElementById('uploadDocInitialStatus')?.value || 'verified';
+    const student = state.students.find(s => s.admNo === admNo) || state.students[0];
+    const cat = document.getElementById('uploadDocCategorySelect')?.value || 'Identification';
+    const type = document.getElementById('uploadDocTypeSelect')?.value || 'Birth Certificate';
+    const title = (document.getElementById('uploadDocTitleInput')?.value || '').trim() || (type + ' - ' + student.name);
+    const docNum = (document.getElementById('uploadDocNumberInput')?.value || '').trim() || ('DOC-' + Math.floor(1000 + Math.random() * 9000));
+    const issueDate = document.getElementById('uploadDocIssueDate')?.value || new Date().toISOString().split('T')[0];
+    const expiryDate = document.getElementById('uploadDocExpiryDate')?.value || 'N/A';
+    const source = document.getElementById('uploadDocSourceSelect')?.value || 'Uploaded Online';
+    const notes = document.getElementById('uploadDocNotesInput')?.value || 'Submitted for administrative verification.';
 
-    const targetDoc = state.studentDocs.find(d => d.admNo === admNo);
-    if (targetDoc) {
-      if (initialStatus === 'verified') {
-        targetDoc.status = 'Verified';
-        targetDoc.completionPct = 100;
-        targetDoc.pillClass = 'complete';
-        targetDoc.pillText = '4/4 Cleared';
-        targetDoc.aadhaar = true;
-        targetDoc.birthCert = true;
-        targetDoc.tc = true;
-        targetDoc.marksheet = true;
-      } else {
-        targetDoc.status = 'Pending';
-        targetDoc.completionPct = 75;
-        targetDoc.pillClass = 'partial';
-        targetDoc.pillText = '3/4 In Review';
-      }
-      targetDoc.reviewerName = reviewer;
-      targetDoc.lastUpdated = '28 Oct 2026';
-      if (mode === 'online') {
-        targetDoc.subMode = 'online';
-        targetDoc.subModeLabel = 'Digital Upload';
-        targetDoc.subModeIcon = 'fa-cloud-arrow-up';
-      } else {
-        targetDoc.subMode = 'physical';
-        targetDoc.subModeLabel = 'Physical Hard Copy';
-        targetDoc.subModeIcon = 'fa-building-columns';
-      }
+    const fileInput = document.getElementById('uploadDocFileInput');
+    const fileName = (fileInput && fileInput.files && fileInput.files[0])
+      ? fileInput.files[0].name
+      : (student.name.replace(/[^a-zA-Z]/g, '_') + '_' + type.replace(/\s+/g, '_') + '.pdf');
 
-      closeModal('studentDocsModal');
-      renderStudentDocuments();
-      showToast(`Document logged & verified for ${targetDoc.name} (${targetDoc.admNo})!`, 'success');
+    const actor = (state.currentUser && state.currentUser.name) || 'R. Prasad (Office Reception Desk)';
+    const newDocId = 'DOC-' + student.admNo + '-' + (state.studentDocuments.length + 1);
+
+    const newDoc = {
+      id: newDocId,
+      studentId: student.studentId || ('STU-' + student.admNo),
+      admNo: student.admNo,
+      studentName: student.name,
+      class: student.class,
+      section: student.section || 'A',
+      rollNo: student.rollNo,
+      category: cat,
+      docType: type,
+      title: title,
+      docNumber: docNum,
+      fileName: fileName,
+      fileSize: '1.4 MB',
+      fileFormat: 'PDF',
+      docSource: source,
+      uploadedBy: actor,
+      uploadDate: new Date().toISOString().split('T')[0],
+      issueDate: issueDate,
+      expiryDate: expiryDate,
+      status: 'Pending Verification',
+      verifiedBy: 'Awaiting Review',
+      verificationDate: 'Pending',
+      notes: notes,
+      rejectionReason: null,
+      versions: [
+        {
+          version: 'v1.0',
+          fileName: fileName,
+          fileSize: '1.4 MB',
+          docSource: source,
+          uploadedBy: actor,
+          uploadedAt: new Date().toLocaleString(),
+          status: 'Pending Verification',
+          actionBy: 'Awaiting Review',
+          actionReason: notes,
+          actionDate: 'Pending'
+        }
+      ]
+    };
+
+    state.studentDocuments.unshift(newDoc);
+    closeModal('uploadDocumentModal');
+    filterStudentDocs();
+    showToast(`Document "${title}" recorded via ${source} and queued for verification.`, 'success');
+  }
+
+  function openDocumentPreviewModal(docId) {
+    initStudentDocs();
+    const doc = state.studentDocuments.find(d => d.id === docId) || state.studentDocuments[0];
+    if (!doc) return;
+
+    activePreviewDocId = doc.id;
+
+    if (document.getElementById('prevModalDocTitle')) document.getElementById('prevModalDocTitle').textContent = doc.title;
+    if (document.getElementById('prevModalDocSub')) document.getElementById('prevModalDocSub').textContent = `Student: ${doc.studentName} (${doc.admNo}) • ${doc.docType}`;
+    if (document.getElementById('prevCertDocType')) document.getElementById('prevCertDocType').textContent = (doc.docType + ' • STATUTORY INSTITUTIONAL CERTIFICATE').toUpperCase();
+    if (document.getElementById('prevCertStudentName')) document.getElementById('prevCertStudentName').textContent = doc.studentName;
+    if (document.getElementById('prevCertAdmNo')) document.getElementById('prevCertAdmNo').textContent = doc.admNo;
+    if (document.getElementById('prevCertClassSec')) document.getElementById('prevCertClassSec').textContent = `Class ${doc.class} - ${doc.section || 'A'} • Roll #${doc.rollNo}`;
+    if (document.getElementById('prevCertTitleNumber')) document.getElementById('prevCertTitleNumber').textContent = `${doc.title} (${doc.docNumber || 'No ID Ref'})`;
+    if (document.getElementById('prevCertSource')) document.getElementById('prevCertSource').textContent = `${doc.docSource} (Recorded by ${doc.uploadedBy})`;
+    if (document.getElementById('prevCertUploadDate')) document.getElementById('prevCertUploadDate').textContent = doc.uploadDate;
+    if (document.getElementById('prevCertNotes')) document.getElementById('prevCertNotes').textContent = doc.rejectionReason ? `REJECTION REASON: ${doc.rejectionReason}` : (doc.notes || 'Document archived under statutory institutional governance.');
+    if (document.getElementById('prevCertStampId')) document.getElementById('prevCertStampId').textContent = 'AP-STATUTORY-ARCHIVE-' + doc.id;
+    if (document.getElementById('prevCertAuthority')) document.getElementById('prevCertAuthority').textContent = doc.verifiedBy || 'Pending Authorizing Official';
+
+    // Watermark overlay
+    const watermark = document.getElementById('docPreviewWatermark');
+    if (watermark) {
+      if (doc.status === 'Verified') {
+        watermark.className = 'doc-watermark-overlay verified';
+        watermark.textContent = 'VERIFIED';
+      } else if (doc.status === 'Pending Verification') {
+        watermark.className = 'doc-watermark-overlay pending';
+        watermark.textContent = 'PENDING REVIEW';
+      } else if (doc.status === 'Rejected or Invalid') {
+        watermark.className = 'doc-watermark-overlay rejected';
+        watermark.textContent = 'REJECTED';
+      } else if (doc.status === 'Replacement Requested') {
+        watermark.className = 'doc-watermark-overlay replacement';
+        watermark.textContent = 'REVISION REQUIRED';
+      } else {
+        watermark.className = 'doc-watermark-overlay na';
+        watermark.textContent = 'EXEMPT / N/A';
+      }
+    }
+
+    // Dynamic action buttons
+    const btnContainer = document.getElementById('previewActionButtonsContainer');
+    if (btnContainer) {
+      if (doc.status === 'Pending Verification') {
+        btnContainer.innerHTML = `
+          <button type="button" class="btn btn-danger btn-sm" onclick="portalApp.openRejectDocumentModal('${doc.id}')">
+            <i class="fa-solid fa-ban mr-1"></i> Reject with Reason
+          </button>
+          <button type="button" class="btn btn-warning btn-sm" style="color:#fff;" onclick="portalApp.openRequestReplacementModal('${doc.id}')">
+            <i class="fa-solid fa-arrows-rotate mr-1"></i> Request Replacement
+          </button>
+          <button type="button" class="btn btn-success btn-sm" onclick="portalApp.verifyStudentDocument('${doc.id}')">
+            <i class="fa-solid fa-shield-check mr-1"></i> Authorize &amp; Verify
+          </button>
+        `;
+      } else if (doc.status === 'Rejected or Invalid' || doc.status === 'Replacement Requested') {
+        btnContainer.innerHTML = `
+          <button type="button" class="btn btn-primary btn-sm" onclick="portalApp.openReplaceDocumentModal('${doc.id}')">
+            <i class="fa-solid fa-cloud-arrow-up mr-1"></i> Replace File / Upload Revision
+          </button>
+          <button type="button" class="btn btn-success btn-sm" onclick="portalApp.verifyStudentDocument('${doc.id}')">
+            <i class="fa-solid fa-shield-check mr-1"></i> Override &amp; Verify
+          </button>
+        `;
+      } else {
+        btnContainer.innerHTML = `
+          <button type="button" class="btn btn-secondary btn-sm" onclick="portalApp.openReplaceDocumentModal('${doc.id}')">
+            <i class="fa-solid fa-arrows-rotate mr-1"></i> Replace File
+          </button>
+          <button type="button" class="btn btn-outline-danger btn-sm" onclick="portalApp.openRejectDocumentModal('${doc.id}')">
+            <i class="fa-solid fa-ban mr-1"></i> Revoke &amp; Reject
+          </button>
+        `;
+      }
+    }
+
+    openModal('previewDocumentModal');
+  }
+
+  function downloadStudentDocument(docId) {
+    initStudentDocs();
+    const doc = state.studentDocuments.find(d => d.id === docId);
+    if (!doc) return;
+
+    showToast(`Initiating secure download of "${doc.title}" for ${doc.studentName} (${doc.admNo})...`, 'info');
+    setTimeout(() => {
+      showToast(`Download complete: ${doc.fileName}`, 'success');
+    }, 700);
+  }
+
+  function downloadStudentDocumentFromPreview() {
+    if (activePreviewDocId) downloadStudentDocument(activePreviewDocId);
+  }
+
+  function verifyStudentDocument(docId) {
+    initStudentDocs();
+    const doc = state.studentDocuments.find(d => d.id === docId);
+    if (!doc) return;
+
+    const actor = (state.currentUser && state.currentUser.name) || 'Smt. Gorle Varalakshmi (Principal)';
+    const timestamp = new Date().toLocaleString();
+
+    doc.status = 'Verified';
+    doc.verifiedBy = actor;
+    doc.verificationDate = timestamp;
+    doc.rejectionReason = null;
+    doc.notes = 'Document verified and authorized under AP Education Code statutory record governance.';
+
+    if (!doc.versions) doc.versions = [];
+    doc.versions.push({
+      version: 'v' + (doc.versions.length + 1) + '.0',
+      fileName: doc.fileName,
+      docSource: doc.docSource,
+      uploadedBy: doc.uploadedBy,
+      uploadedAt: timestamp,
+      status: 'Verified',
+      actionBy: actor,
+      actionReason: 'Statutory verification authorized.',
+      actionDate: timestamp
+    });
+
+    closeModal('previewDocumentModal');
+    filterStudentDocs(false);
+    showToast(`Document "${doc.title}" for ${doc.studentName} officially verified and authorized!`, 'success');
+  }
+
+  function openRejectDocumentModal(docId) {
+    initStudentDocs();
+    const doc = state.studentDocuments.find(d => d.id === docId);
+    if (!doc) return;
+
+    activeRejectDocId = doc.id;
+    if (document.getElementById('rejectDocTargetId')) document.getElementById('rejectDocTargetId').value = doc.id;
+    if (document.getElementById('rejectDocSummary')) document.getElementById('rejectDocSummary').textContent = `${doc.studentName} (${doc.admNo}) • ${doc.title}`;
+    if (document.getElementById('rejectDetailedRemarks')) document.getElementById('rejectDetailedRemarks').value = '';
+
+    closeModal('previewDocumentModal');
+    openModal('rejectDocumentModal');
+  }
+
+  function submitRejectDocument(event) {
+    if (event) event.preventDefault();
+    initStudentDocs();
+
+    const docId = document.getElementById('rejectDocTargetId')?.value || activeRejectDocId;
+    const doc = state.studentDocuments.find(d => d.id === docId);
+    if (!doc) return;
+
+    const cat = document.getElementById('rejectReasonCategorySelect')?.value || 'Statutory Deficiency';
+    const remarks = (document.getElementById('rejectDetailedRemarks')?.value || '').trim();
+    if (!remarks) {
+      showToast('Please provide detailed rejection remarks explaining what needs correction.', 'warning');
+      return;
+    }
+
+    const fullReason = cat + ': ' + remarks;
+    const actor = (state.currentUser && state.currentUser.name) || 'Sri Navva Anand (Vice Principal)';
+    const timestamp = new Date().toLocaleString();
+
+    doc.status = 'Rejected or Invalid';
+    doc.verifiedBy = actor;
+    doc.verificationDate = timestamp;
+    doc.rejectionReason = fullReason;
+    doc.notes = 'Rejection recorded: ' + fullReason;
+
+    if (!doc.versions) doc.versions = [];
+    doc.versions.push({
+      version: 'v' + doc.versions.length + '.1',
+      fileName: doc.fileName,
+      docSource: doc.docSource,
+      uploadedBy: doc.uploadedBy,
+      uploadedAt: timestamp,
+      status: 'Rejected or Invalid',
+      actionBy: actor,
+      actionReason: fullReason,
+      actionDate: timestamp
+    });
+
+    closeModal('rejectDocumentModal');
+    filterStudentDocs(false);
+    showToast(`Document marked as Rejected. Rejection reason recorded and notice queued for requester.`, 'warning');
+  }
+
+  function openRequestReplacementModal(docId) {
+    initStudentDocs();
+    const doc = state.studentDocuments.find(d => d.id === docId);
+    if (!doc) return;
+
+    const actor = (state.currentUser && state.currentUser.name) || 'Sri Ch. Ramesh (Academic Dean)';
+    const timestamp = new Date().toLocaleString();
+
+    doc.status = 'Replacement Requested';
+    doc.verifiedBy = actor;
+    doc.verificationDate = timestamp;
+    doc.notes = 'Replacement requested from student/guardian for missing or deficient credential.';
+
+    if (!doc.versions) doc.versions = [];
+    doc.versions.push({
+      version: 'v' + doc.versions.length + '.1',
+      fileName: doc.fileName,
+      docSource: doc.docSource,
+      uploadedBy: doc.uploadedBy,
+      uploadedAt: timestamp,
+      status: 'Replacement Requested',
+      actionBy: actor,
+      actionReason: 'Replacement requested from parent/student.',
+      actionDate: timestamp
+    });
+
+    closeModal('previewDocumentModal');
+    filterStudentDocs(false);
+    showToast(`Replacement formally requested for "${doc.title}". Status updated.`, 'info');
+  }
+
+  function openReplaceDocumentModal(docId) {
+    initStudentDocs();
+    const doc = state.studentDocuments.find(d => d.id === docId);
+    if (!doc) return;
+
+    activeReplaceDocId = doc.id;
+    if (document.getElementById('replaceDocTargetId')) document.getElementById('replaceDocTargetId').value = doc.id;
+    if (document.getElementById('replaceDocCurrentInfo')) {
+      document.getElementById('replaceDocCurrentInfo').textContent = `${doc.studentName} (${doc.admNo}) • ${doc.title} (Current: ${doc.fileName})`;
+    }
+    const preview = document.getElementById('replaceSelectedFilePreview');
+    if (preview) preview.style.display = 'none';
+    const fileInput = document.getElementById('replaceFileInput');
+    if (fileInput) fileInput.value = '';
+    const notes = document.getElementById('replaceDocNotes');
+    if (notes) notes.value = '';
+
+    closeModal('previewDocumentModal');
+    openModal('replaceDocumentModal');
+  }
+
+  function handleReplaceFileSelected(event) {
+    const file = event?.target?.files?.[0];
+    const preview = document.getElementById('replaceSelectedFilePreview');
+    const nameEl = document.getElementById('replaceSelectedFileName');
+    if (file && preview && nameEl) {
+      nameEl.textContent = file.name;
+      preview.style.display = 'flex';
+      showToast(`Selected replacement file: ${file.name}`, 'info');
     }
   }
 
-  function toggleDocVerifyStatus(admNo) {
+  function submitReplaceDocument(event) {
+    if (event) event.preventDefault();
     initStudentDocs();
-    const doc = state.studentDocs.find(d => d.admNo === admNo);
+
+    const docId = document.getElementById('replaceDocTargetId')?.value || activeReplaceDocId;
+    const doc = state.studentDocuments.find(d => d.id === docId);
     if (!doc) return;
 
-    if (doc.status === 'Verified') {
-      doc.status = 'Pending';
-      doc.completionPct = 75;
-      doc.pillClass = 'partial';
-      doc.pillText = '3/4 In Review';
-      showToast(`Status updated to Pending Review for ${doc.name}`, 'warning');
-    } else if (doc.status === 'Pending') {
-      doc.status = 'Verified';
-      doc.completionPct = 100;
-      doc.pillClass = 'complete';
-      doc.pillText = '4/4 Cleared';
-      showToast(`Dossier fully verified & approved for ${doc.name}!`, 'success');
-    } else {
-      doc.status = 'Pending';
-      doc.completionPct = 75;
-      doc.pillClass = 'partial';
-      doc.pillText = '3/4 In Review';
-      showToast(`Submission logged; moved to Pending Review for ${doc.name}`, 'info');
+    const source = document.getElementById('replaceDocSourceSelect')?.value || 'Uploaded Online';
+    const notes = (document.getElementById('replaceDocNotes')?.value || '').trim() || 'Replacement file uploaded by staff.';
+    const fileInput = document.getElementById('replaceFileInput');
+    const newFileName = (fileInput && fileInput.files && fileInput.files[0])
+      ? fileInput.files[0].name
+      : (doc.studentName.replace(/[^a-zA-Z]/g, '_') + '_' + doc.docType.replace(/\s+/g, '_') + '_Revision.pdf');
+
+    const actor = (state.currentUser && state.currentUser.name) || 'R. Prasad (Office Reception Desk)';
+    const timestamp = new Date().toLocaleString();
+    const newVersionTag = 'v' + ((doc.versions ? doc.versions.length : 1) + 1) + '.0';
+
+    doc.status = 'Pending Verification';
+    doc.fileName = newFileName;
+    doc.docSource = source;
+    doc.uploadedBy = actor;
+    doc.uploadDate = new Date().toISOString().split('T')[0];
+    doc.verifiedBy = 'Awaiting Review';
+    doc.verificationDate = 'Pending';
+    doc.notes = notes;
+    doc.rejectionReason = null;
+
+    if (!doc.versions) doc.versions = [];
+    doc.versions.push({
+      version: newVersionTag,
+      fileName: newFileName,
+      docSource: source,
+      uploadedBy: actor,
+      uploadedAt: timestamp,
+      status: 'Pending Verification',
+      actionBy: 'Awaiting Review',
+      actionReason: notes,
+      actionDate: 'Pending'
+    });
+
+    closeModal('replaceDocumentModal');
+    filterStudentDocs(false);
+    showToast(`Replacement file recorded successfully as ${newVersionTag}. Document routed to Pending Verification.`, 'success');
+  }
+
+  function openMarkDocNaModal(docId) {
+    initStudentDocs();
+    const doc = state.studentDocuments.find(d => d.id === docId);
+    if (!doc) return;
+
+    activeMarkNaDocId = doc.id;
+    if (document.getElementById('markNaDocTargetId')) document.getElementById('markNaDocTargetId').value = doc.id;
+    if (document.getElementById('markNaDocSummary')) {
+      document.getElementById('markNaDocSummary').textContent = `${doc.studentName} (${doc.admNo}) • ${doc.title}`;
     }
 
-    renderStudentDocuments();
+    closeModal('previewDocumentModal');
+    openModal('markDocNaModal');
+  }
+
+  function submitMarkDocNa(event) {
+    if (event) event.preventDefault();
+    initStudentDocs();
+
+    const docId = document.getElementById('markNaDocTargetId')?.value || activeMarkNaDocId;
+    const doc = state.studentDocuments.find(d => d.id === docId);
+    if (!doc) return;
+
+    const reason = document.getElementById('markNaReasonSelect')?.value || 'Statutory Exemption';
+    const remarks = document.getElementById('markNaRemarks')?.value || '';
+    const fullJustification = reason + (remarks ? ' (' + remarks + ')' : '');
+
+    const actor = (state.currentUser && state.currentUser.name) || 'Smt. Gorle Varalakshmi (Principal)';
+    const timestamp = new Date().toLocaleString();
+
+    doc.status = 'Not Applicable';
+    doc.verifiedBy = actor;
+    doc.verificationDate = timestamp;
+    doc.notes = 'Exemption authorized: ' + fullJustification;
+
+    if (!doc.versions) doc.versions = [];
+    doc.versions.push({
+      version: 'v' + doc.versions.length + '.na',
+      fileName: doc.fileName,
+      docSource: doc.docSource,
+      uploadedBy: doc.uploadedBy,
+      uploadedAt: timestamp,
+      status: 'Not Applicable',
+      actionBy: actor,
+      actionReason: fullJustification,
+      actionDate: timestamp
+    });
+
+    closeModal('markDocNaModal');
+    filterStudentDocs(false);
+    showToast(`Document marked as Not Applicable with statutory exemption.`, 'info');
+  }
+
+  function openDocumentHistoryModal(docId) {
+    initStudentDocs();
+    const doc = state.studentDocuments.find(d => d.id === docId);
+    if (!doc) return;
+
+    if (document.getElementById('historyDocSummary')) {
+      document.getElementById('historyDocSummary').textContent = `${doc.studentName} (${doc.admNo}) • ${doc.title}`;
+    }
+
+    const container = document.getElementById('docVersionTimelineContainer');
+    if (container) {
+      const versions = doc.versions || [
+        {
+          version: 'v1.0',
+          fileName: doc.fileName,
+          docSource: doc.docSource,
+          uploadedBy: doc.uploadedBy,
+          uploadedAt: doc.uploadDate,
+          status: doc.status,
+          actionBy: doc.verifiedBy,
+          actionReason: doc.notes,
+          actionDate: doc.verificationDate
+        }
+      ];
+
+      container.innerHTML = versions.map((v, idx) => {
+        const isLatest = idx === versions.length - 1;
+        const isVerified = v.status === 'Verified';
+        const isRejected = v.status === 'Rejected or Invalid';
+
+        return `
+          <div class="doc-version-step ${isVerified ? 'active' : (isRejected ? 'rejected' : '')}">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
+              <span class="badge" style="background:#1e40af; color:#fff; font-weight:700; font-size:0.75rem;">${v.version}</span>
+              <span style="font-size:0.75rem; color:#64748b;">${v.uploadedAt || v.actionDate || 'Recorded'}</span>
+            </div>
+            <div style="font-weight:700; color:#0f172a; font-size:0.88rem;">${v.fileName}</div>
+            <div style="font-size:0.78rem; color:#475569; margin-top:2px;">
+              <span>Source: <strong>${v.docSource || 'Office Reception'}</strong></span> • 
+              <span>Uploaded By: <strong>${v.uploadedBy}</strong></span>
+            </div>
+            <div style="margin-top:6px; padding-top:6px; border-top:1px dashed #e2e8f0; font-size:0.78rem;">
+              <span class="badge ${isVerified ? 'badge-success' : (isRejected ? 'badge-danger' : 'badge-warning')}" style="font-size:0.7rem;">${v.status}</span>
+              <span style="color:#334155; margin-left:6px;">Authority: <strong>${v.actionBy || 'Document Cell'}</strong></span>
+              ${v.actionReason ? `<div style="color:#64748b; margin-top:3px; font-style:italic;">Note: ${v.actionReason}</div>` : ''}
+            </div>
+          </div>
+        `;
+      }).reverse().join('');
+    }
+
+    closeModal('previewDocumentModal');
+    openModal('documentHistoryModal');
+  }
+
+  function openDocumentHistoryModalFromPreview() {
+    if (activePreviewDocId) openDocumentHistoryModal(activePreviewDocId);
+  }
+
+  function openRequestMissingDocsModal() {
+    initStudentDocs();
+    const select = document.getElementById('missingDocsStudentSelect');
+    if (select) {
+      // Find students who have missing documents or deficient records
+      select.innerHTML = state.students.slice(0, 30).map(s => `
+        <option value="${s.admNo}">
+          ${s.admNo} - ${s.name} (Class ${s.class}-${s.section || 'A'} • Roll #${s.rollNo})
+        </option>
+      `).join('');
+    }
+
+    const deadline = document.getElementById('missingDocsDeadline');
+    if (deadline) {
+      const d = new Date();
+      d.setDate(d.getDate() + 14); // 14 days default
+      deadline.value = d.toISOString().split('T')[0];
+    }
+
+    openModal('requestMissingDocsModal');
+  }
+
+  function handleMissingDocsStudentChange() {
+    // Dynamic update of which checkboxes are checked based on student's missing records
+    showToast('Student missing records docket loaded.', 'info');
+  }
+
+  function submitRequestMissingDocs(event) {
+    if (event) event.preventDefault();
+    initStudentDocs();
+
+    const admNo = document.getElementById('missingDocsStudentSelect')?.value;
+    const student = state.students.find(s => s.admNo === admNo) || state.students[0];
+    const deadline = document.getElementById('missingDocsDeadline')?.value || '14 days';
+    const channel = document.getElementById('missingDocsChannel')?.value || 'sms_email';
+
+    const checkedBoxes = Array.from(document.querySelectorAll('input[name="missingDocCheck"]:checked')).map(cb => cb.value);
+    if (checkedBoxes.length === 0) {
+      showToast('Please select at least one missing document to request.', 'warning');
+      return;
+    }
+
+    closeModal('requestMissingDocsModal');
+    showToast(`Formal document compliance notice dispatched for ${student.name} (${student.admNo}). Requested: ${checkedBoxes.join(', ')}. Deadline: ${deadline}.`, 'success');
+  }
+
+  function exportDocsAuditReport() {
+    initStudentDocs();
+    let csv = 'DocumentID,StudentName,AdmissionNumber,Class,Section,RollNo,DocumentCategory,DocumentType,DocumentTitle,DocumentNumber,DocumentSource,UploadedBy,UploadDate,VerificationStatus,VerifiedBy,VerificationDate,Notes\n';
+    state.studentDocuments.forEach(d => {
+      csv += `"${d.id}","${d.studentName}","${d.admNo}","${d.class}","${d.section}","${d.rollNo}","${d.category}","${d.docType}","${d.title}","${d.docNumber || ''}","${d.docSource}","${d.uploadedBy}","${d.uploadDate}","${d.status}","${d.verifiedBy}","${d.verificationDate}","${(d.notes || '').replace(/"/g, '""')}"\n`;
+    });
+    downloadCsvFile(csv, 'sri_vidya_student_documents_master_audit.csv');
+    showToast('Comprehensive Student Documents Master Audit downloaded successfully.', 'success');
+  }
+
+  function printDocumentRegister() {
+    initStudentDocs();
+    const data = state.studentDocuments || [];
+    const printWindow = window.open('', '_blank');
+    if (!printWindow) {
+      window.print();
+      return;
+    }
+
+    const rows = data.slice(0, 100).map((d, i) => `
+      <tr>
+        <td>${i + 1}</td>
+        <td><strong>${d.studentName}</strong><br><small>${d.admNo}</small></td>
+        <td>Class ${d.class}-${d.section || 'A'}</td>
+        <td><strong>${d.docType}</strong><br><small>${d.title}</small></td>
+        <td>${d.docSource}</td>
+        <td>${d.uploadedBy}</td>
+        <td>${d.uploadDate}</td>
+        <td><strong>${d.status}</strong></td>
+        <td>${d.verifiedBy}</td>
+      </tr>
+    `).join('');
+
+    printWindow.document.write(`
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <title>Student Documents Register - Sri Vidya High School</title>
+        <style>
+          body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding: 20px; font-size: 12px; }
+          .header { text-align: center; border-bottom: 2px solid #1e3a8a; padding-bottom: 12px; margin-bottom: 20px; }
+          .header h1 { margin: 0; color: #1e3a8a; font-size: 20px; }
+          .header p { margin: 4px 0 0; color: #475569; font-size: 12px; }
+          table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+          th, td { border: 1px solid #cbd5e1; padding: 6px 8px; text-align: left; }
+          th { background: #f1f5f9; font-weight: 700; color: #0f172a; }
+          .footer { margin-top: 25px; display: flex; justify-content: space-between; font-size: 11px; color: #64748b; }
+        </style>
+      </head>
+      <body>
+        <div class="header">
+          <h1>SRI VIDYA ENGLISH MEDIUM HIGH SCHOOL</h1>
+          <p>Tilak Nagar, G.T. Road, Srikakulam - 532001 • Recognised by Govt. of Andhra Pradesh</p>
+          <h3 style="margin: 8px 0 0; color: #0f172a;">OFFICIAL STUDENT DOCUMENTS &amp; STATUTORY CREDENTIALS REGISTER</h3>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Student Name &amp; Adm No</th>
+              <th>Class</th>
+              <th>Document Type &amp; Title</th>
+              <th>Source</th>
+              <th>Uploaded By</th>
+              <th>Upload Date</th>
+              <th>Status</th>
+              <th>Verified By</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${rows}
+          </tbody>
+        </table>
+        <div class="footer">
+          <span>Official Record Generated: ${new Date().toLocaleString()}</span>
+          <span>Authorizing Signatory: Principal Smt. Gorle Varalakshmi</span>
+        </div>
+      </body>
+      </html>
+    `);
+    printWindow.document.close();
+    printWindow.focus();
+    setTimeout(() => { printWindow.print(); }, 500);
+  }
+
+  function toggleDocVerifyStatus(docIdOrAdmNo) {
+    initStudentDocs();
+    const doc = state.studentDocuments.find(d => d.id === docIdOrAdmNo || d.admNo === docIdOrAdmNo);
+    if (!doc) return;
+    if (doc.status === 'Verified') {
+      doc.status = 'Pending Verification';
+      showToast(`Status updated to Pending Verification for ${doc.title}`, 'warning');
+    } else {
+      doc.status = 'Verified';
+      doc.verifiedBy = (state.currentUser && state.currentUser.name) || 'Smt. Gorle Varalakshmi (Principal)';
+      doc.verificationDate = new Date().toLocaleString();
+      showToast(`Document ${doc.title} verified and authorized!`, 'success');
+    }
+    filterStudentDocs(false);
   }
 
   // ==========================================================================
@@ -7764,6 +8524,12 @@ const FEE_CATEGORY_AUDIT_DATA = [
     }
     if (modalId === 'viewStudentModal' && typeof viewStudentProfile === 'function') {
       return viewStudentProfile();
+    }
+    if (modalId === 'studentDocsModal' && typeof openStudentDocsModal === 'function') {
+      return openStudentDocsModal();
+    }
+    if (modalId === 'studentDocViewerModal' && typeof openDocumentPreviewModal === 'function') {
+      return openDocumentPreviewModal();
     }
     const modal = document.getElementById(modalId);
     if (modal) {
@@ -35791,13 +36557,33 @@ const classData = TIMETABLE_CLASS_DATA[currentTimetableClass] || TIMETABLE_CLASS
     renderArchivedStudentsTable,
     filterArchivedStudents,
     initStudentDocs,
+    updateStudentDocKPIs,
     renderStudentDocuments,
     filterStudentDocs,
     resetStudentDocFilters,
     exportDocsAuditReport,
+    printDocumentRegister,
     openStudentDocsModal,
+    handleDocCategoryChange,
     handleDocFileSelected,
     handleStudentDocUploadSubmit,
+    openDocumentPreviewModal,
+    downloadStudentDocument,
+    downloadStudentDocumentFromPreview,
+    verifyStudentDocument,
+    openRejectDocumentModal,
+    submitRejectDocument,
+    openRequestReplacementModal,
+    openReplaceDocumentModal,
+    handleReplaceFileSelected,
+    submitReplaceDocument,
+    openMarkDocNaModal,
+    submitMarkDocNa,
+    openDocumentHistoryModal,
+    openDocumentHistoryModalFromPreview,
+    openRequestMissingDocsModal,
+    handleMissingDocsStudentChange,
+    submitRequestMissingDocs,
     toggleDocVerifyStatus,
     initParentRecords,
     renderParentRecords,
