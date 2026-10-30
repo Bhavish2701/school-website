@@ -36038,72 +36038,1523 @@ const classData = TIMETABLE_CLASS_DATA[currentTimetableClass] || TIMETABLE_CLASS
   // RENDERER IMPLEMENTATIONS FOR ALL 8 SUBMENUS
   // =========================================================================
 
-  // Submenu 1: Classes & Sections
+  
+  // =========================================================================
+  // SUBMENU 1: CLASSES & SECTIONS (AUTHORITATIVE AP SSC STANDARD)
+  // Standardized grade allocations, class teachers, sanctioned capacity,
+  // subject curriculum, and student promotion governance.
+  // =========================================================================
+
+  let academicClassesRegistry = null;
+  let activeDetailClassId = 'CLS-2026-X-A';
+  let activePromotionSourceClassId = 'CLS-2025-IX-A';
+  let activePromotionStep = 1;
+
+  function ensureAcademicClassesState() {
+    if (academicClassesRegistry) return academicClassesRegistry;
+
+    academicClassesRegistry = [
+      {
+        id: 'CLS-2026-X-A',
+        year: '2026–27',
+        className: 'Class X',
+        section: 'Section A',
+        wing: 'High School',
+        room: 'Room 204',
+        shift: 'Morning Session (08:30 AM – 03:45 PM)',
+        capacity: 50,
+        enrolled: 44,
+        status: 'Active',
+        teacher: 'Sri B. Narayana (M.Sc, B.Ed)',
+        teacherDetails: {
+          name: 'Sri B. Narayana',
+          empId: 'EMP-T01',
+          designation: 'Senior Mathematics Master & Class Coordinator',
+          qualification: 'M.Sc (Mathematics), B.Ed (Gold Medalist)',
+          phone: '+91 98480 22331',
+          email: 'b.narayana@srividya.edu.in',
+          experience: '16 Years Teaching Excellence in AP SSC Curricula'
+        },
+        subjects: [
+          { code: 'MTH-101', name: 'Mathematics & Vedic Arithmetic', periods: 8, faculty: 'Sri B. Narayana (EMP-T01)', textbook: 'AP SCERT Class X Maths Vol 1 & 2' },
+          { code: 'SCI-102', name: 'Physical Science & Practical Lab', periods: 7, faculty: 'Sri M. Raju (EMP-T03)', textbook: 'AP SCERT Physical Sciences X' },
+          { code: 'BIO-103', name: 'Biological Sciences & Microscopy', periods: 5, faculty: 'Smt. N. Sirisha (EMP-T06)', textbook: 'AP SCERT Biological Sciences X' },
+          { code: 'ENG-104', name: 'English First Language & Grammar', periods: 6, faculty: 'Smt. T. Padmavathi (EMP-T02)', textbook: 'Our World Through English Class X' },
+          { code: 'TEL-105', name: 'Telugu Mother Tongue (First Lang)', periods: 6, faculty: 'Sri CH. Venkateswara Rao (EMP-T05)', textbook: 'Singidi Class X Telugu' },
+          { code: 'SOC-106', name: 'Social Studies & Contemporary World', periods: 6, faculty: 'Smt. V. Jyothsna (EMP-T04)', textbook: 'AP SCERT Social Studies X' },
+          { code: 'HIN-107', name: 'Hindi Second Language', periods: 4, faculty: 'Smt. R. Kavitha (EMP-T08)', textbook: 'Lokbharti Hindi Class X' },
+          { code: 'COM-108', name: 'Computer Applications & Coding Lab', periods: 3, faculty: 'Sri S. Gopal (EMP-T09)', textbook: 'Modern Informatics & Python Basics' }
+        ],
+        attendance: {
+          todayPresent: 41,
+          total: 44,
+          avgRate: '93.4%',
+          trend: '+1.8% vs last month',
+          defaulters: [
+            { admNo: 'ADM-2024-038', name: 'V. Sai Kumar', rate: '71.2%', absentDays: 14, status: 'Parent Meeting Scheduled' },
+            { admNo: 'ADM-2024-041', name: 'K. Durga Prasad', rate: '69.5%', absentDays: 16, status: 'Medical Certificate Verification' }
+          ]
+        },
+        exams: [
+          { name: 'FA-1 (Formative Assessment 1)', window: '15-Jul-2026 to 20-Jul-2026', maxMarks: 50, status: 'Completed', meanScore: '44.2 / 50 (88.4%)', passRate: '100%' },
+          { name: 'FA-2 (Formative Assessment 2)', window: '22-Aug-2026 to 27-Aug-2026', maxMarks: 50, status: 'Completed', meanScore: '45.1 / 50 (90.2%)', passRate: '100%' },
+          { name: 'SA-1 (Summative Assessment 1)', window: '20-Oct-2026 to 28-Oct-2026', maxMarks: 100, status: 'Completed', meanScore: '89.4 / 100 (89.4%)', passRate: '97.7%' },
+          { name: 'Pre-Final Board Mock 1', window: '15-Dec-2026 to 23-Dec-2026', maxMarks: 100, status: 'Scheduled', meanScore: 'Pending', passRate: 'Pending' },
+          { name: 'AP SSC Public Final Board Exam', window: 'Mar-2027 (Official State Schedule)', maxMarks: 600, status: 'Scheduled', meanScore: 'Target GPA 9.6+', passRate: 'Target 100%' }
+        ],
+        history: {
+          passRatePrevYear: '100% (42/42 Promoted)',
+          distinctionsPrevYear: '64.3% (27 Distinctions)',
+          topGpa: '9.8 / 10.0'
+        },
+        roster: [
+          { roll: 1, admNo: 'ADM-2024-001', name: 'K. Sai Teja', gender: 'Male', att: '96.4%', res: '94.2%', elig: 'Eligible', exception: 'Standard Promotion' },
+          { roll: 2, admNo: 'ADM-2024-002', name: 'M. Bhavishya', gender: 'Female', att: '97.8%', res: '96.5%', elig: 'Eligible', exception: 'Standard Promotion' },
+          { roll: 3, admNo: 'ADM-2024-003', name: 'P. Tarun Kumar', gender: 'Male', att: '94.1%', res: '91.0%', elig: 'Eligible', exception: 'Standard Promotion' },
+          { roll: 4, admNo: 'ADM-2024-004', name: 'G. Haritha', gender: 'Female', att: '98.2%', res: '97.2%', elig: 'Eligible', exception: 'Standard Promotion' },
+          { roll: 5, admNo: 'ADM-2024-005', name: 'S. Vamsi Krishna', gender: 'Male', att: '92.5%', res: '88.4%', elig: 'Eligible', exception: 'Standard Promotion' },
+          { roll: 6, admNo: 'ADM-2024-006', name: 'D. Keerthi', gender: 'Female', att: '95.0%', res: '92.8%', elig: 'Eligible', exception: 'Standard Promotion' },
+          { roll: 7, admNo: 'ADM-2024-007', name: 'R. Rajesh', gender: 'Male', att: '89.6%', res: '84.0%', elig: 'Eligible', exception: 'Standard Promotion' },
+          { roll: 8, admNo: 'ADM-2024-008', name: 'T. Lavanya', gender: 'Female', att: '96.1%', res: '93.5%', elig: 'Eligible', exception: 'Standard Promotion' },
+          { roll: 9, admNo: 'ADM-2024-009', name: 'B. Manoj Kumar', gender: 'Male', att: '85.4%', res: '79.2%', elig: 'Eligible', exception: 'Standard Promotion' },
+          { roll: 10, admNo: 'ADM-2024-010', name: 'A. Sandhya', gender: 'Female', att: '93.2%', res: '90.4%', elig: 'Eligible', exception: 'Standard Promotion' },
+          { roll: 11, admNo: 'ADM-2024-011', name: 'CH. Suresh', gender: 'Male', att: '82.0%', res: '74.5%', elig: 'Conditional', exception: 'Principal Grace / Remedial Undertaking' },
+          { roll: 12, admNo: 'ADM-2024-012', name: 'V. Sai Kumar', gender: 'Male', att: '71.2%', res: '68.0%', elig: 'Conditional', exception: 'Parental Agreement & Attendance Remedial' }
+        ]
+      },
+      {
+        id: 'CLS-2026-X-B',
+        year: '2026–27',
+        className: 'Class X',
+        section: 'Section B',
+        wing: 'High School',
+        room: 'Room 203',
+        shift: 'Morning Session (08:30 AM – 03:45 PM)',
+        capacity: 45,
+        enrolled: 41,
+        status: 'Active',
+        teacher: 'Smt. T. Padmavathi (M.A, B.Ed)',
+        teacherDetails: {
+          name: 'Smt. T. Padmavathi',
+          empId: 'EMP-T02',
+          designation: 'Senior English Faculty & Cultural Head',
+          qualification: 'M.A (English), B.Ed',
+          phone: '+91 98480 33442',
+          email: 't.padmavathi@srividya.edu.in',
+          experience: '14 Years in Secondary Language Pedagogy'
+        },
+        subjects: [],
+        attendance: { todayPresent: 39, total: 41, avgRate: '94.1%', trend: '+0.9%', defaulters: [] },
+        exams: [],
+        history: { passRatePrevYear: '100%', distinctionsPrevYear: '58.0%', topGpa: '9.7' },
+        roster: []
+      },
+      {
+        id: 'CLS-2026-IX-A',
+        year: '2026–27',
+        className: 'Class IX',
+        section: 'Section A',
+        wing: 'High School',
+        room: 'Room 202',
+        shift: 'Morning Session (08:30 AM – 03:45 PM)',
+        capacity: 50,
+        enrolled: 46,
+        status: 'Active',
+        teacher: 'Sri M. Raju (M.Sc, B.Ed)',
+        teacherDetails: {
+          name: 'Sri M. Raju',
+          empId: 'EMP-T03',
+          designation: 'Physical Science Faculty & STEM Mentor',
+          qualification: 'M.Sc (Physics), B.Ed',
+          phone: '+91 98480 44553',
+          email: 'm.raju@srividya.edu.in',
+          experience: '11 Years Lab & Classroom Instruction'
+        },
+        subjects: [],
+        attendance: { todayPresent: 44, total: 46, avgRate: '92.8%', trend: '+1.2%', defaulters: [] },
+        exams: [],
+        history: { passRatePrevYear: '98.0%', distinctionsPrevYear: '60.0%', topGpa: '9.6' },
+        roster: []
+      },
+      {
+        id: 'CLS-2026-IX-B',
+        year: '2026–27',
+        className: 'Class IX',
+        section: 'Section B',
+        wing: 'High School',
+        room: 'Room 201',
+        shift: 'Morning Session (08:30 AM – 03:45 PM)',
+        capacity: 45,
+        enrolled: 43,
+        status: 'Active',
+        teacher: 'Smt. V. Jyothsna (M.A, B.Ed)',
+        teacherDetails: {
+          name: 'Smt. V. Jyothsna',
+          empId: 'EMP-T04',
+          designation: 'Social Sciences Master & Heritage Club Advisor',
+          qualification: 'M.A (History), B.Ed',
+          phone: '+91 98480 55664',
+          email: 'v.jyothsna@srividya.edu.in',
+          experience: '12 Years Teaching Experience'
+        },
+        subjects: [],
+        attendance: { todayPresent: 41, total: 43, avgRate: '93.0%', trend: '+0.5%', defaulters: [] },
+        exams: [],
+        history: { passRatePrevYear: '97.5%', distinctionsPrevYear: '55.0%', topGpa: '9.5' },
+        roster: []
+      },
+      {
+        id: 'CLS-2026-VIII-A',
+        year: '2026–27',
+        className: 'Class VIII',
+        section: 'Section A',
+        wing: 'High School',
+        room: 'Room 105',
+        shift: 'Morning Session (08:30 AM – 03:45 PM)',
+        capacity: 50,
+        enrolled: 45,
+        status: 'Active',
+        teacher: 'Sri CH. Venkateswara Rao (M.Sc, B.Ed)',
+        teacherDetails: {
+          name: 'Sri CH. Venkateswara Rao',
+          empId: 'EMP-T05',
+          designation: 'Telugu Language Head & Literary Coordinator',
+          qualification: 'M.A (Telugu), B.Ed',
+          phone: '+91 98480 66775',
+          email: 'ch.venkateswara@srividya.edu.in',
+          experience: '15 Years in Mother Tongue Pedagogy'
+        },
+        subjects: [],
+        attendance: { todayPresent: 43, total: 45, avgRate: '95.2%', trend: '+2.1%', defaulters: [] },
+        exams: [],
+        history: { passRatePrevYear: '98.2%', distinctionsPrevYear: '62.0%', topGpa: '9.6' },
+        roster: []
+      },
+      {
+        id: 'CLS-2026-VII-A',
+        year: '2026–27',
+        className: 'Class VII',
+        section: 'Section A',
+        wing: 'High School',
+        room: 'Room 104',
+        shift: 'Morning Session (08:30 AM – 03:45 PM)',
+        capacity: 45,
+        enrolled: 42,
+        status: 'Active',
+        teacher: 'Smt. N. Sirisha (B.Sc, B.Ed)',
+        teacherDetails: {
+          name: 'Smt. N. Sirisha',
+          empId: 'EMP-T06',
+          designation: 'Biological Sciences Faculty & Eco Club Incharge',
+          qualification: 'B.Sc (BZC), B.Ed',
+          phone: '+91 98480 77886',
+          email: 'n.sirisha@srividya.edu.in',
+          experience: '9 Years Science Instruction'
+        },
+        subjects: [],
+        attendance: { todayPresent: 40, total: 42, avgRate: '94.0%', trend: '+1.0%', defaulters: [] },
+        exams: [],
+        history: { passRatePrevYear: '99.0%', distinctionsPrevYear: '59.0%', topGpa: '9.7' },
+        roster: []
+      },
+      {
+        id: 'CLS-2026-VI-A',
+        year: '2026–27',
+        className: 'Class VI',
+        section: 'Section A',
+        wing: 'High School',
+        room: 'Room 103',
+        shift: 'Morning Session (08:30 AM – 03:45 PM)',
+        capacity: 45,
+        enrolled: 40,
+        status: 'Active',
+        teacher: 'Sri A. Prasad (B.Sc, B.Ed)',
+        teacherDetails: {
+          name: 'Sri A. Prasad',
+          empId: 'EMP-T07',
+          designation: 'Middle School Science Master',
+          qualification: 'B.Sc, B.Ed',
+          phone: '+91 98480 88997',
+          email: 'a.prasad@srividya.edu.in',
+          experience: '8 Years Elementary & Middle School'
+        },
+        subjects: [],
+        attendance: { todayPresent: 38, total: 40, avgRate: '93.5%', trend: '+0.7%', defaulters: [] },
+        exams: [],
+        history: { passRatePrevYear: '97.0%', distinctionsPrevYear: '54.0%', topGpa: '9.4' },
+        roster: []
+      },
+      {
+        id: 'CLS-2026-V-A',
+        year: '2026–27',
+        className: 'Class V',
+        section: 'Section A',
+        wing: 'Primary',
+        room: 'Room 102',
+        shift: 'Primary Session (08:45 AM – 03:30 PM)',
+        capacity: 45,
+        enrolled: 38,
+        status: 'Active',
+        teacher: 'Smt. R. Kavitha (B.A, D.Ed)',
+        teacherDetails: {
+          name: 'Smt. R. Kavitha',
+          empId: 'EMP-T08',
+          designation: 'Primary Section Coordinator',
+          qualification: 'B.A, D.Ed',
+          phone: '+91 98480 99008',
+          email: 'r.kavitha@srividya.edu.in',
+          experience: '13 Years Primary Education'
+        },
+        subjects: [],
+        attendance: { todayPresent: 36, total: 38, avgRate: '94.8%', trend: '+1.5%', defaulters: [] },
+        exams: [],
+        history: { passRatePrevYear: '100%', distinctionsPrevYear: '65.0%', topGpa: '9.8' },
+        roster: []
+      },
+      {
+        id: 'CLS-2026-IV-A',
+        year: '2026–27',
+        className: 'Class IV',
+        section: 'Section A',
+        wing: 'Primary',
+        room: 'Room 101',
+        shift: 'Primary Session (08:45 AM – 03:30 PM)',
+        capacity: 45,
+        enrolled: 44,
+        status: 'Active',
+        teacher: 'Sri S. Gopal (B.Sc, B.Ed)',
+        teacherDetails: {
+          name: 'Sri S. Gopal',
+          empId: 'EMP-T09',
+          designation: 'Primary Maths & Activities Lead',
+          qualification: 'B.Sc, B.Ed',
+          phone: '+91 98481 00119',
+          email: 's.gopal@srividya.edu.in',
+          experience: '7 Years Experience'
+        },
+        subjects: [],
+        attendance: { todayPresent: 42, total: 44, avgRate: '95.0%', trend: '+1.2%', defaulters: [] },
+        exams: [],
+        history: { passRatePrevYear: '100%', distinctionsPrevYear: '60.0%', topGpa: '9.6' },
+        roster: []
+      },
+      {
+        id: 'CLS-2026-III-A',
+        year: '2026–27',
+        className: 'Class III',
+        section: 'Section A',
+        wing: 'Primary',
+        room: 'Room 004',
+        shift: 'Primary Session (08:45 AM – 03:30 PM)',
+        capacity: 45,
+        enrolled: 45,
+        status: 'Full / At Capacity',
+        teacher: 'Smt. Y. Anusha (B.A, D.Ed)',
+        teacherDetails: {
+          name: 'Smt. Y. Anusha',
+          empId: 'EMP-T10',
+          designation: 'Primary Faculty & Arts Mentor',
+          qualification: 'B.A, D.Ed',
+          phone: '+91 98481 11220',
+          email: 'y.anusha@srividya.edu.in',
+          experience: '6 Years Early Pedagogy'
+        },
+        subjects: [],
+        attendance: { todayPresent: 44, total: 45, avgRate: '96.2%', trend: '+2.0%', defaulters: [] },
+        exams: [],
+        history: { passRatePrevYear: '100%', distinctionsPrevYear: '68.0%', topGpa: '9.9' },
+        roster: []
+      },
+      {
+        id: 'CLS-2026-II-A',
+        year: '2026–27',
+        className: 'Class II',
+        section: 'Section A',
+        wing: 'Primary',
+        room: 'Room 003',
+        shift: 'Primary Session (08:45 AM – 03:30 PM)',
+        capacity: 40,
+        enrolled: 36,
+        status: 'Active',
+        teacher: 'Smt. G. Lakshmi (B.Sc, D.Ed)',
+        teacherDetails: {
+          name: 'Smt. G. Lakshmi',
+          empId: 'EMP-T11',
+          designation: 'Foundational Stage Educator',
+          qualification: 'B.Sc, D.Ed',
+          phone: '+91 98481 22331',
+          email: 'g.lakshmi@srividya.edu.in',
+          experience: '5 Years Primary Instruction'
+        },
+        subjects: [],
+        attendance: { todayPresent: 34, total: 36, avgRate: '94.5%', trend: '+0.8%', defaulters: [] },
+        exams: [],
+        history: { passRatePrevYear: '100%', distinctionsPrevYear: '70.0%', topGpa: '9.9' },
+        roster: []
+      },
+      {
+        id: 'CLS-2026-I-A',
+        year: '2026–27',
+        className: 'Class I',
+        section: 'Section A',
+        wing: 'Primary',
+        room: 'Room 002',
+        shift: 'Primary Session (08:45 AM – 03:30 PM)',
+        capacity: 40,
+        enrolled: 39,
+        status: 'Active',
+        teacher: 'Smt. P. Sunitha (B.A, D.Ed)',
+        teacherDetails: {
+          name: 'Smt. P. Sunitha',
+          empId: 'EMP-T12',
+          designation: 'Class I Lead Educator',
+          qualification: 'B.A, D.Ed',
+          phone: '+91 98481 33442',
+          email: 'p.sunitha@srividya.edu.in',
+          experience: '9 Years Early Literacy'
+        },
+        subjects: [],
+        attendance: { todayPresent: 37, total: 39, avgRate: '95.5%', trend: '+1.6%', defaulters: [] },
+        exams: [],
+        history: { passRatePrevYear: '100%', distinctionsPrevYear: '72.0%', topGpa: '10.0' },
+        roster: []
+      },
+      {
+        id: 'CLS-2026-UKG-A',
+        year: '2026–27',
+        className: 'UKG',
+        section: 'Section A',
+        wing: 'Pre-Primary',
+        room: 'KG Block - Room 1',
+        shift: 'Pre-Primary Shift (09:00 AM – 01:00 PM)',
+        capacity: 35,
+        enrolled: 32,
+        status: 'Active',
+        teacher: 'Smt. K. Bhavani (B.A, PPT)',
+        teacherDetails: {
+          name: 'Smt. K. Bhavani',
+          empId: 'EMP-T13',
+          designation: 'Upper Kindergarten Lead Teacher',
+          qualification: 'B.A, Pre-Primary Training (PPT)',
+          phone: '+91 98481 44553',
+          email: 'k.bhavani@srividya.edu.in',
+          experience: '10 Years Kindergarten Pedagogy'
+        },
+        subjects: [],
+        attendance: { todayPresent: 30, total: 32, avgRate: '93.8%', trend: '+0.5%', defaulters: [] },
+        exams: [],
+        history: { passRatePrevYear: '100%', distinctionsPrevYear: '80.0%', topGpa: '10.0' },
+        roster: []
+      },
+      {
+        id: 'CLS-2026-LKG-A',
+        year: '2026–27',
+        className: 'LKG',
+        section: 'Section A',
+        wing: 'Pre-Primary',
+        room: 'KG Block - Room 2',
+        shift: 'Pre-Primary Shift (09:00 AM – 01:00 PM)',
+        capacity: 35,
+        enrolled: 30,
+        status: 'Enrolment Open',
+        teacher: 'Smt. M. Lavanya (B.A, PPT)',
+        teacherDetails: {
+          name: 'Smt. M. Lavanya',
+          empId: 'EMP-T14',
+          designation: 'Lower Kindergarten Lead Teacher',
+          qualification: 'B.A, Montessori & PPT Certified',
+          phone: '+91 98481 55664',
+          email: 'm.lavanya@srividya.edu.in',
+          experience: '8 Years Early Childhood Instruction'
+        },
+        subjects: [],
+        attendance: { todayPresent: 28, total: 30, avgRate: '93.0%', trend: '+1.0%', defaulters: [] },
+        exams: [],
+        history: { passRatePrevYear: '100%', distinctionsPrevYear: '85.0%', topGpa: '10.0' },
+        roster: []
+      },
+      {
+        id: 'CLS-2025-X-A',
+        year: '2025–26',
+        className: 'Class X',
+        section: 'Section A',
+        wing: 'High School',
+        room: 'Room 204',
+        shift: 'Morning Session (08:30 AM – 03:45 PM)',
+        capacity: 45,
+        enrolled: 45,
+        status: 'Archived / Completed',
+        teacher: 'Sri B. Narayana (M.Sc, B.Ed)',
+        teacherDetails: {
+          name: 'Sri B. Narayana',
+          empId: 'EMP-T01',
+          designation: 'Senior Mathematics Master',
+          qualification: 'M.Sc, B.Ed',
+          phone: '+91 98480 22331',
+          email: 'b.narayana@srividya.edu.in',
+          experience: '16 Years Teaching Excellence'
+        },
+        subjects: [],
+        attendance: { todayPresent: 45, total: 45, avgRate: '96.5%', trend: 'Finalized', defaulters: [] },
+        exams: [],
+        history: { passRatePrevYear: '100%', distinctionsPrevYear: '64.3%', topGpa: '9.8' },
+        roster: []
+      },
+      {
+        id: 'CLS-2025-IX-A',
+        year: '2025–26',
+        className: 'Class IX',
+        section: 'Section A',
+        wing: 'High School',
+        room: 'Room 202',
+        shift: 'Morning Session (08:30 AM – 03:45 PM)',
+        capacity: 45,
+        enrolled: 44,
+        status: 'Archived / Completed',
+        teacher: 'Sri M. Raju (M.Sc, B.Ed)',
+        teacherDetails: {
+          name: 'Sri M. Raju',
+          empId: 'EMP-T03',
+          designation: 'Physical Science Faculty',
+          qualification: 'M.Sc, B.Ed',
+          phone: '+91 98480 44553',
+          email: 'm.raju@srividya.edu.in',
+          experience: '11 Years Lab Instruction'
+        },
+        subjects: [],
+        attendance: { todayPresent: 42, total: 44, avgRate: '94.2%', trend: 'Finalized', defaulters: [] },
+        exams: [],
+        history: { passRatePrevYear: '98.0%', distinctionsPrevYear: '60.0%', topGpa: '9.6' },
+        roster: [
+          { roll: 1, admNo: 'ADM-2023-010', name: 'K. Sai Teja', gender: 'Male', att: '96.2%', res: '93.5%', elig: 'Eligible', exception: 'Standard Promotion' },
+          { roll: 2, admNo: 'ADM-2023-011', name: 'M. Bhavishya', gender: 'Female', att: '97.4%', res: '95.8%', elig: 'Eligible', exception: 'Standard Promotion' },
+          { roll: 3, admNo: 'ADM-2023-012', name: 'P. Tarun Kumar', gender: 'Male', att: '93.8%', res: '89.5%', elig: 'Eligible', exception: 'Standard Promotion' },
+          { roll: 4, admNo: 'ADM-2023-013', name: 'G. Haritha', gender: 'Female', att: '98.0%', res: '96.4%', elig: 'Eligible', exception: 'Standard Promotion' },
+          { roll: 5, admNo: 'ADM-2023-014', name: 'S. Vamsi Krishna', gender: 'Male', att: '91.8%', res: '87.2%', elig: 'Eligible', exception: 'Standard Promotion' },
+          { roll: 6, admNo: 'ADM-2023-015', name: 'D. Keerthi', gender: 'Female', att: '94.5%', res: '91.6%', elig: 'Eligible', exception: 'Standard Promotion' },
+          { roll: 7, admNo: 'ADM-2023-016', name: 'R. Rajesh', gender: 'Male', att: '88.9%', res: '82.5%', elig: 'Eligible', exception: 'Standard Promotion' },
+          { roll: 8, admNo: 'ADM-2023-017', name: 'T. Lavanya', gender: 'Female', att: '95.6%', res: '92.0%', elig: 'Eligible', exception: 'Standard Promotion' },
+          { roll: 9, admNo: 'ADM-2023-018', name: 'B. Manoj Kumar', gender: 'Male', att: '84.8%', res: '78.0%', elig: 'Eligible', exception: 'Standard Promotion' },
+          { roll: 10, admNo: 'ADM-2023-019', name: 'A. Sandhya', gender: 'Female', att: '92.5%', res: '89.0%', elig: 'Eligible', exception: 'Standard Promotion' },
+          { roll: 11, admNo: 'ADM-2023-020', name: 'CH. Suresh', gender: 'Male', att: '81.5%', res: '73.0%', elig: 'Conditional', exception: 'Principal Grace / Remedial Undertaking' },
+          { roll: 12, admNo: 'ADM-2023-021', name: 'V. Sai Kumar', gender: 'Male', att: '70.8%', res: '66.5%', elig: 'Conditional', exception: 'Parental Agreement & Attendance Remedial' }
+        ]
+      }
+    ];
+
+    return academicClassesRegistry;
+  }
+
+  function updateAcademicClassesKPIs() {
+    const list = ensureAcademicClassesState();
+    const activeList = list.filter(c => c.status !== 'Archived / Completed');
+
+    const uniqueClasses = new Set(activeList.map(c => c.className)).size;
+    const totalSections = activeList.length;
+    const totalCapacity = activeList.reduce((acc, c) => acc + (c.capacity || 0), 0);
+    const totalEnrolled = activeList.reduce((acc, c) => acc + (c.enrolled || 0), 0);
+    const ratio = totalCapacity > 0 ? ((totalEnrolled / totalCapacity) * 100).toFixed(1) : 0;
+    const promoEligible = Math.round(totalEnrolled * 0.964);
+
+    const elClasses = document.getElementById('kpiClassesCount');
+    const elSections = document.getElementById('kpiSectionsCount');
+    const elCapacity = document.getElementById('kpiCapacityCount');
+    const elEnrolled = document.getElementById('kpiEnrolledCount');
+    const elPromo = document.getElementById('kpiPromotionEligible');
+    const elRatio = document.getElementById('kpiRatioText');
+
+    if (elClasses) elClasses.textContent = uniqueClasses;
+    if (elSections) elSections.textContent = totalSections;
+    if (elCapacity) elCapacity.textContent = totalCapacity + ' Seats';
+    if (elEnrolled) elEnrolled.textContent = totalEnrolled;
+    if (elPromo) elPromo.textContent = promoEligible;
+    if (elRatio) elRatio.textContent = ratio + '% Intake Ratio';
+  }
+
   function renderAcademicClasses(filteredData) {
     const tbody = document.getElementById('academicClassesTableBody');
     if (!tbody) return;
 
-    const data = filteredData || ACADEMIC_CLASSES_SECTIONS_DATA;
+    const data = filteredData || ensureAcademicClassesState();
+    updateAcademicClassesKPIs();
 
     tbody.innerHTML = data.map(c => {
-      const occPct = Math.round((c.enrolled / c.capacity) * 100);
+      const occPct = Math.round((c.enrolled / (c.capacity || 1)) * 100);
       const barClass = occPct >= 95 ? 'full' : (occPct >= 85 ? 'high' : '');
+
+      let statusBadgeClass = 'class-status-active';
+      if (c.status === 'Enrolment Open') statusBadgeClass = 'class-status-open';
+      else if (c.status === 'Full / At Capacity') statusBadgeClass = 'class-status-full';
+      else if (c.status === 'Archived / Completed') statusBadgeClass = 'class-status-archived';
 
       return `
         <tr>
+          <!-- 1. Academic Year -->
           <td>
-            <div style="font-weight:800; font-size:0.95rem; color:var(--color-text-dark, #0f172a);"><i class="fa-solid fa-shapes text-primary mr-1"></i> ${c.className}</div>
+            <span class="portal-badge badge-primary font-weight-bold">
+              <i class="fa-regular fa-calendar-check mr-1"></i>${c.year}
+            </span>
+          </td>
+
+          <!-- 2. Class -->
+          <td>
+            <div style="font-weight:800; font-size:0.95rem; color:var(--color-text-dark, #0f172a);">
+              <i class="fa-solid fa-shapes text-primary mr-1"></i>${c.className}
+            </div>
             <small class="text-muted">${c.wing}</small>
           </td>
+
+          <!-- 3. Section -->
           <td>
-            <span class="portal-badge badge-primary font-weight-bold">${c.section}</span>
+            <span class="portal-badge badge-neutral font-weight-bold" style="border:1px solid #cbd5e1;">${c.section}</span>
           </td>
+
+          <!-- 4. Class Teacher -->
           <td>
-            <div style="font-weight:700; color:var(--color-text-dark, #0f172a);"><i class="fa-solid fa-chalkboard-user text-muted mr-1"></i> ${c.teacher}</div>
-            <small class="text-muted"><i class="fa-solid fa-door-open mr-1"></i> ${c.room}</small>
+            <div style="font-weight:700; color:var(--color-text-dark, #0f172a);">
+              <i class="fa-solid fa-chalkboard-user text-muted mr-1"></i>${c.teacher}
+            </div>
+            <small class="text-muted"><i class="fa-solid fa-door-open mr-1"></i>${c.room}</small>
           </td>
+
+          <!-- 5. Capacity -->
           <td>
             <span class="portal-badge badge-neutral font-weight-bold">${c.capacity} Seats</span>
           </td>
+
+          <!-- 6. Enrolled Students -->
           <td>
-            <div class="capacity-progress-wrap">
+            <div class="capacity-progress-wrap" style="min-width:140px;">
               <div style="display:flex; justify-content:space-between; font-size:0.8rem;">
                 <strong>${c.enrolled} Students</strong>
-                <span class="text-muted">${occPct}% Full</span>
+                <span class="text-muted">${occPct}%</span>
               </div>
               <div class="capacity-progress-bar">
                 <div class="capacity-progress-fill ${barClass}" style="width:${occPct}%;"></div>
               </div>
             </div>
           </td>
+
+          <!-- 7. Status -->
           <td>
-            <span class="portal-badge badge-primary font-weight-bold"><i class="fa-regular fa-calendar-check mr-1"></i> ${c.year}</span>
+            <span class="class-status-badge ${statusBadgeClass}">
+              <i class="fa-solid fa-circle" style="font-size:0.45rem;"></i>${c.status}
+            </span>
           </td>
+
+          <!-- 8. Actions -->
           <td style="text-align:center;">
-            <button type="button" class="btn btn-secondary btn-sm" onclick="portalApp.switchSubTab('academics', 'timetable'); portalApp.switchTimetableClass('${c.className}-${c.section.slice(-1)}')" title="View Class Timetable">
-              <i class="fa-solid fa-calendar-days"></i> Timetable
-            </button>
+            <div style="display:inline-flex; gap:4px; flex-wrap:wrap; justify-content:center;">
+              <button type="button" class="btn btn-secondary btn-sm" onclick="portalApp.openClassDetailModal('${c.id}')" title="View Class Dossier & Roster">
+                <i class="fa-solid fa-eye text-primary"></i>
+              </button>
+              <button type="button" class="btn btn-secondary btn-sm" onclick="portalApp.openAssignClassTeacherModal('${c.id}')" title="Assign Class Teacher">
+                <i class="fa-solid fa-chalkboard-user"></i>
+              </button>
+              <button type="button" class="btn btn-secondary btn-sm" onclick="portalApp.openSetClassCapacityModal('${c.id}')" title="Set Sanctioned Capacity">
+                <i class="fa-solid fa-chart-pie"></i>
+              </button>
+              <button type="button" class="btn btn-secondary btn-sm" onclick="portalApp.openPromoteStudentsModal('${c.id}')" title="Promote Class Cohort">
+                <i class="fa-solid fa-graduation-cap text-success"></i>
+              </button>
+              ${c.status === 'Archived / Completed' ? `
+                <button type="button" class="btn btn-secondary btn-sm" onclick="portalApp.restoreClass('${c.id}')" title="Restore to Active">
+                  <i class="fa-solid fa-box-open text-info"></i>
+                </button>
+              ` : `
+                <button type="button" class="btn btn-secondary btn-sm" onclick="portalApp.archiveClass('${c.id}')" title="Archive for Completed Year">
+                  <i class="fa-solid fa-box-archive text-warning"></i>
+                </button>
+              `}
+            </div>
           </td>
         </tr>
       `;
     }).join('');
 
     const countPill = document.getElementById('classesCountPill');
-    if (countPill) countPill.textContent = 'Showing ' + data.length + ' Classes';
+    if (countPill) countPill.textContent = 'Showing ' + data.length + ' Records';
   }
 
   function filterAcademicClasses() {
-    const q = (document.getElementById('classesSearchInput')?.value || '').toLowerCase().trim();
-    const wing = document.getElementById('classesWingFilter')?.value || '';
+    const q = (document.getElementById('classSearchInput')?.value || '').toLowerCase().trim();
+    const year = document.getElementById('classYearFilter')?.value || '';
+    const wing = document.getElementById('classWingFilter')?.value || '';
+    const status = document.getElementById('classStatusFilter')?.value || '';
 
-    const filtered = ACADEMIC_CLASSES_SECTIONS_DATA.filter(item => {
-      const matchQ = !q || item.className.toLowerCase().includes(q) || item.section.toLowerCase().includes(q) || item.teacher.toLowerCase().includes(q);
+    const list = ensureAcademicClassesState();
+    const filtered = list.filter(item => {
+      const matchQ = !q ||
+        item.className.toLowerCase().includes(q) ||
+        item.section.toLowerCase().includes(q) ||
+        item.teacher.toLowerCase().includes(q) ||
+        item.room.toLowerCase().includes(q);
+      const matchYear = !year || item.year.includes(year);
       const matchWing = !wing || item.wing === wing;
-      return matchQ && matchWing;
+      const matchStatus = !status || item.status === status;
+      return matchQ && matchYear && matchWing && matchStatus;
     });
 
     renderAcademicClasses(filtered);
   }
+
+  function resetAcademicClassesFilters() {
+    const q = document.getElementById('classSearchInput');
+    const y = document.getElementById('classYearFilter');
+    const w = document.getElementById('classWingFilter');
+    const s = document.getElementById('classStatusFilter');
+    if (q) q.value = '';
+    if (y) y.value = '';
+    if (w) w.value = '';
+    if (s) s.value = '';
+    renderAcademicClasses();
+    showToast('Filters reset to show all class records', 'info');
+  }
+
+  // --- DETAIL PAGE MODAL (9 SECTIONS) ---
+  function openClassDetailModal(classId, initialTab = 'overview') {
+    const list = ensureAcademicClassesState();
+    const cls = list.find(c => c.id === classId) || list[0];
+    if (!cls) return;
+
+    activeDetailClassId = cls.id;
+
+    // Header updates
+    const titleEl = document.getElementById('classDetailModalTitle');
+    const yearBadge = document.getElementById('classDetailYearBadge');
+    const statusBadge = document.getElementById('classDetailStatusBadge');
+    const subTitle = document.getElementById('classDetailSubtitle');
+
+    if (titleEl) titleEl.textContent = `${cls.className} - ${cls.section}`;
+    if (yearBadge) yearBadge.textContent = `AY ${cls.year}`;
+    if (statusBadge) {
+      statusBadge.textContent = cls.status;
+      statusBadge.className = 'class-status-badge ' + (
+        cls.status === 'Active' ? 'class-status-active' :
+        cls.status === 'Enrolment Open' ? 'class-status-open' :
+        cls.status === 'Full / At Capacity' ? 'class-status-full' : 'class-status-archived'
+      );
+    }
+    if (subTitle) subTitle.textContent = `${cls.wing} Wing • ${cls.room} • ${cls.shift} • AP SSC Board`;
+
+    // Overview Stats
+    const elCap = document.getElementById('detailOverviewCapacity');
+    const elEnr = document.getElementById('detailOverviewEnrolled');
+    const elAtt = document.getElementById('detailOverviewAttendance');
+    const elPromo = document.getElementById('detailOverviewPromoReady');
+    const elOcc = document.getElementById('detailOverviewOccupancy');
+
+    if (elCap) elCap.textContent = `${cls.capacity} Seats`;
+    if (elEnr) elEnr.textContent = `${cls.enrolled} Active`;
+    if (elAtt) elAtt.textContent = cls.attendance ? cls.attendance.avgRate : '93.4%';
+    if (elPromo) elPromo.textContent = `${Math.max(1, cls.enrolled - 2)} / ${cls.enrolled}`;
+    if (elOcc) elOcc.textContent = `${Math.round((cls.enrolled / cls.capacity) * 100)}% Utilized`;
+
+    // Overview Parameters
+    const pYear = document.getElementById('detailParamYear');
+    const pWing = document.getElementById('detailParamWing');
+    const pRoom = document.getElementById('detailParamRoom');
+    const pShift = document.getElementById('detailParamShift');
+    if (pYear) pYear.textContent = `AY ${cls.year} (AP SCERT Syllabus)`;
+    if (pWing) pWing.textContent = `${cls.wing} Wing (${cls.className})`;
+    if (pRoom) pRoom.textContent = `${cls.room} (Academic Block B)`;
+    if (pShift) pShift.textContent = cls.shift;
+
+    // Assigned Subjects Table
+    renderDetailSubjectsTable(cls);
+
+    // Class Teacher Card
+    renderDetailClassTeacherCard(cls);
+
+    // Subject Teachers Grid
+    renderDetailSubjectTeachersGrid(cls);
+
+    // Enrolled Students Roster
+    renderDetailStudentsRoster(cls);
+
+    // Timetable
+    renderDetailTimetable(cls);
+
+    // Attendance
+    renderDetailAttendance(cls);
+
+    // Exams
+    renderDetailExams(cls);
+
+    // Tab Switch
+    switchClassDetailTab(initialTab);
+
+    openModal('classDetailModal');
+  }
+
+  function switchClassDetailTab(tabId) {
+    const navButtons = document.querySelectorAll('.class-detail-nav-btn');
+    navButtons.forEach(btn => {
+      if (btn.getAttribute('data-pane') === tabId) {
+        btn.classList.add('active');
+      } else {
+        btn.classList.remove('active');
+      }
+    });
+
+    const panes = document.querySelectorAll('.class-detail-pane');
+    panes.forEach(pane => {
+      if (pane.id === `pane-class-${tabId}`) {
+        pane.classList.add('active');
+        pane.style.display = 'block';
+      } else {
+        pane.classList.remove('active');
+        pane.style.display = 'none';
+      }
+    });
+  }
+
+  function renderDetailSubjectsTable(cls) {
+    const tbody = document.getElementById('detailSubjectsTableBody');
+    if (!tbody) return;
+
+    const subjects = cls.subjects && cls.subjects.length > 0 ? cls.subjects : [
+      { code: 'MTH-101', name: 'Mathematics & Mental Arithmetic', periods: 8, faculty: cls.teacher, textbook: 'SCERT Mathematics' },
+      { code: 'SCI-102', name: 'General & Physical Sciences', periods: 7, faculty: 'Sri M. Raju (EMP-T03)', textbook: 'SCERT Science' },
+      { code: 'ENG-104', name: 'English First Language & Phonetics', periods: 6, faculty: 'Smt. T. Padmavathi (EMP-T02)', textbook: 'Our World Through English' },
+      { code: 'TEL-105', name: 'Telugu Mother Tongue', periods: 6, faculty: 'Sri CH. Venkateswara Rao (EMP-T05)', textbook: 'Singidi Telugu SCERT' },
+      { code: 'SOC-106', name: 'Social Studies & Geography', periods: 6, faculty: 'Smt. V. Jyothsna (EMP-T04)', textbook: 'SCERT Social Studies' }
+    ];
+
+    tbody.innerHTML = subjects.map(s => `
+      <tr>
+        <td><span class="staff-id-pill">${s.code}</span></td>
+        <td><strong>${s.name}</strong></td>
+        <td>${s.periods} Periods / Wk</td>
+        <td><i class="fa-solid fa-user-tie text-muted mr-1"></i>${s.faculty}</td>
+        <td><small class="text-muted">${s.textbook}</small></td>
+      </tr>
+    `).join('');
+  }
+
+  function renderDetailClassTeacherCard(cls) {
+    const card = document.getElementById('detailClassTeacherCard');
+    if (!card) return;
+
+    const t = cls.teacherDetails || {
+      name: cls.teacher,
+      empId: 'EMP-T01',
+      designation: 'Senior Faculty & Class Coordinator',
+      qualification: 'M.Sc, B.Ed',
+      phone: '+91 98480 22331',
+      email: 'faculty@srividya.edu.in',
+      experience: '12 Years Teaching Experience'
+    };
+
+    card.innerHTML = `
+      <div class="class-teacher-avatar">${t.name.split(' ').map(p => p[0]).slice(0, 2).join('')}</div>
+      <div class="class-teacher-meta">
+        <div class="class-teacher-name">${t.name} <span class="staff-id-pill ml-2">${t.empId}</span></div>
+        <div class="text-sm text-primary font-weight-bold mt-1">${t.designation}</div>
+        <div class="class-teacher-tags">
+          <span class="portal-badge badge-neutral"><i class="fa-solid fa-graduation-cap mr-1"></i>${t.qualification}</span>
+          <span class="portal-badge badge-neutral"><i class="fa-solid fa-phone mr-1"></i>${t.phone}</span>
+          <span class="portal-badge badge-neutral"><i class="fa-solid fa-envelope mr-1"></i>${t.email}</span>
+          <span class="portal-badge badge-neutral"><i class="fa-solid fa-award mr-1"></i>${t.experience}</span>
+        </div>
+      </div>
+    `;
+  }
+
+  function renderDetailSubjectTeachersGrid(cls) {
+    const grid = document.getElementById('detailSubjectTeachersGrid');
+    if (!grid) return;
+
+    const subjects = cls.subjects && cls.subjects.length > 0 ? cls.subjects : [
+      { code: 'MTH-101', name: 'Mathematics', faculty: cls.teacher },
+      { code: 'SCI-102', name: 'Physical Science', faculty: 'Sri M. Raju (EMP-T03)' },
+      { code: 'ENG-104', name: 'English', faculty: 'Smt. T. Padmavathi (EMP-T02)' },
+      { code: 'TEL-105', name: 'Telugu', faculty: 'Sri CH. Venkateswara Rao (EMP-T05)' },
+      { code: 'SOC-106', name: 'Social Studies', faculty: 'Smt. V. Jyothsna (EMP-T04)' }
+    ];
+
+    grid.innerHTML = subjects.map(s => `
+      <div class="subject-teacher-card">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <span class="staff-id-pill">${s.code}</span>
+          <span class="portal-badge badge-primary">Prescribed</span>
+        </div>
+        <div style="font-weight:700; color:var(--color-text-dark, #0f172a); font-size:0.9rem;">${s.name}</div>
+        <div class="text-sm text-muted"><i class="fa-solid fa-chalkboard-user mr-1 text-primary"></i>${s.faculty}</div>
+      </div>
+    `).join('');
+  }
+
+  function renderDetailStudentsRoster(cls, searchQuery = '') {
+    const tbody = document.getElementById('detailStudentsTableBody');
+    const totalEl = document.getElementById('detailRosterTotal');
+    const navCount = document.getElementById('detailRosterCount');
+    if (!tbody) return;
+
+    // Generate roster if missing
+    let roster = cls.roster;
+    if (!roster || roster.length === 0) {
+      roster = [];
+      const count = cls.enrolled || 40;
+      for (let i = 1; i <= count; i++) {
+        const num = (i < 10 ? '0' + i : '' + i);
+        roster.push({
+          roll: i,
+          admNo: `ADM-2024-${num}`,
+          name: i % 2 === 0 ? `Student ${cls.className} ${num} (G)` : `Student ${cls.className} ${num} (B)`,
+          gender: i % 2 === 0 ? 'Female' : 'Male',
+          att: (90 + (i % 9)) + '.2%',
+          res: (82 + (i % 16)) + '.0%',
+          elig: i === 11 || i === 23 ? 'Conditional' : 'Eligible',
+          exception: i === 11 ? 'Principal Grace Granted' : 'Standard Promotion'
+        });
+      }
+      cls.roster = roster;
+    }
+
+    if (totalEl) totalEl.textContent = roster.length;
+    if (navCount) navCount.textContent = roster.length;
+
+    const filtered = roster.filter(s => {
+      if (!searchQuery) return true;
+      const q = searchQuery.toLowerCase();
+      return s.name.toLowerCase().includes(q) || s.admNo.toLowerCase().includes(q) || ('' + s.roll).includes(q);
+    });
+
+    tbody.innerHTML = filtered.map(s => {
+      const isElig = s.elig === 'Eligible';
+      return `
+        <tr>
+          <td><strong>#${s.roll}</strong></td>
+          <td><span class="staff-id-pill">${s.admNo}</span></td>
+          <td><strong>${s.name}</strong></td>
+          <td>${s.gender}</td>
+          <td>${s.att}</td>
+          <td>${s.res}</td>
+          <td>
+            <span class="${isElig ? 'promo-badge-eligible' : 'promo-badge-conditional'}">
+              <i class="fa-solid ${isElig ? 'fa-circle-check' : 'fa-triangle-exclamation'}"></i>${s.elig}
+            </span>
+          </td>
+        </tr>
+      `;
+    }).join('');
+  }
+
+  function filterClassRoster() {
+    const q = document.getElementById('rosterSearchInput')?.value || '';
+    const list = ensureAcademicClassesState();
+    const cls = list.find(c => c.id === activeDetailClassId);
+    if (cls) renderDetailStudentsRoster(cls, q);
+  }
+
+  function renderDetailTimetable(cls) {
+    const tbody = document.getElementById('detailTimetableBody');
+    if (!tbody) return;
+
+    const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+    const subs = ['Maths', 'Physics', 'Telugu', 'English', 'Biology', 'Social', 'Hindi', 'Games / Lab'];
+
+    tbody.innerHTML = days.map((day, idx) => `
+      <tr>
+        <td style="font-weight:700;">${day}</td>
+        <td>${subs[(idx + 0) % 8]}</td>
+        <td>${subs[(idx + 1) % 8]}</td>
+        <td>${subs[(idx + 2) % 8]}</td>
+        <td>${subs[(idx + 3) % 8]}</td>
+        <td>${subs[(idx + 4) % 8]}</td>
+        <td>${subs[(idx + 5) % 8]}</td>
+        <td>${subs[(idx + 6) % 8]}</td>
+        <td>${subs[(idx + 7) % 8]}</td>
+      </tr>
+    `).join('');
+  }
+
+  function renderDetailAttendance(cls) {
+    const att = cls.attendance || { todayPresent: 41, total: 44, avgRate: '93.4%', defaulters: [] };
+    const elToday = document.getElementById('detailAttToday');
+    const elTerm = document.getElementById('detailAttTerm');
+    const elDefCount = document.getElementById('detailAttDefaulters');
+    const tbody = document.getElementById('detailDefaultersBody');
+
+    if (elToday) elToday.textContent = `${att.todayPresent} / ${att.total} Present`;
+    if (elTerm) elTerm.textContent = att.avgRate;
+    if (elDefCount) elDefCount.textContent = (att.defaulters ? att.defaulters.length : 2) + ' Students';
+
+    if (tbody) {
+      const defs = att.defaulters && att.defaulters.length > 0 ? att.defaulters : [
+        { admNo: 'ADM-2024-038', name: 'V. Sai Kumar', rate: '71.2%', absentDays: 14, status: 'Parent Meeting Scheduled' },
+        { admNo: 'ADM-2024-041', name: 'K. Durga Prasad', rate: '69.5%', absentDays: 16, status: 'Medical Certificate Verification' }
+      ];
+
+      tbody.innerHTML = defs.map(d => `
+        <tr>
+          <td><span class="staff-id-pill">${d.admNo}</span></td>
+          <td><strong>${d.name}</strong></td>
+          <td><span class="text-danger font-weight-bold">${d.rate}</span></td>
+          <td>${d.absentDays} Days</td>
+          <td><span class="portal-badge badge-warning">${d.status}</span></td>
+        </tr>
+      `).join('');
+    }
+  }
+
+  function renderDetailExams(cls) {
+    const tbody = document.getElementById('detailExamsBody');
+    if (!tbody) return;
+
+    const exams = cls.exams && cls.exams.length > 0 ? cls.exams : [
+      { name: 'FA-1 (Formative Assessment 1)', window: '15-Jul-2026 to 20-Jul-2026', maxMarks: 50, status: 'Completed', meanScore: '44.2 / 50', passRate: '100%' },
+      { name: 'FA-2 (Formative Assessment 2)', window: '22-Aug-2026 to 27-Aug-2026', maxMarks: 50, status: 'Completed', meanScore: '45.1 / 50', passRate: '100%' },
+      { name: 'SA-1 (Summative Assessment 1)', window: '20-Oct-2026 to 28-Oct-2026', maxMarks: 100, status: 'Completed', meanScore: '89.4 / 100', passRate: '97.7%' },
+      { name: 'Pre-Final Board Mock 1', window: '15-Dec-2026 to 23-Dec-2026', maxMarks: 100, status: 'Scheduled', meanScore: 'Pending', passRate: 'Pending' }
+    ];
+
+    tbody.innerHTML = exams.map(e => `
+      <tr>
+        <td><strong>${e.name}</strong></td>
+        <td><small class="text-muted">${e.window}</small></td>
+        <td>${e.maxMarks}</td>
+        <td><span class="portal-badge ${e.status === 'Completed' ? 'badge-success' : 'badge-primary'}">${e.status}</span></td>
+        <td>${e.meanScore}</td>
+        <td>${e.passRate}</td>
+      </tr>
+    `).join('');
+  }
+
+  // --- CREATE CLASS / ADD SECTION ACTIONS ---
+  function openCreateClassSectionModal(isSectionMode = false, defaultClassId = null) {
+    const titleEl = document.getElementById('createClassModalTitle');
+    const classNameInput = document.getElementById('newClassName');
+    const sectionInput = document.getElementById('newClassSection');
+
+    if (titleEl) {
+      titleEl.innerHTML = isSectionMode
+        ? '<i class="fa-solid fa-plus-circle text-primary mr-2"></i>Add New Section to Existing Grade'
+        : '<i class="fa-solid fa-plus-circle text-primary mr-2"></i>Create New Academic Class / Section';
+    }
+
+    if (defaultClassId) {
+      const list = ensureAcademicClassesState();
+      const cls = list.find(c => c.id === defaultClassId);
+      if (cls && classNameInput) {
+        classNameInput.value = cls.className;
+        if (sectionInput) sectionInput.value = 'Section B';
+      }
+    } else {
+      if (classNameInput) classNameInput.value = '';
+      if (sectionInput) sectionInput.value = 'Section A';
+    }
+
+    openModal('createClassSectionModal');
+  }
+
+  function handleCreateClassSectionSubmit(e) {
+    if (e && e.preventDefault) e.preventDefault();
+
+    const year = document.getElementById('newClassYear')?.value || '2026–27';
+    const wing = document.getElementById('newClassWing')?.value || 'High School';
+    const className = document.getElementById('newClassName')?.value || 'Class';
+    const section = document.getElementById('newClassSection')?.value || 'Section A';
+    const teacher = document.getElementById('newClassTeacher')?.value || 'Sri B. Narayana (M.Sc, B.Ed)';
+    const room = document.getElementById('newClassRoom')?.value || 'Room 205';
+    const capacity = parseInt(document.getElementById('newClassCapacity')?.value || '45', 10);
+    const status = document.getElementById('newClassStatus')?.value || 'Active';
+
+    const list = ensureAcademicClassesState();
+    const cleanName = className.replace(/\s+/g, '-');
+    const cleanSec = section.replace(/\s+/g, '-');
+    const cleanYear = year.replace(/[^0-9]/g, '').slice(0, 4);
+    const newId = `CLS-${cleanYear}-${cleanName}-${cleanSec}`;
+
+    const newClass = {
+      id: newId,
+      year: year,
+      className: className,
+      section: section,
+      wing: wing,
+      room: room,
+      shift: wing === 'Pre-Primary' ? 'Pre-Primary Shift (09:00 AM – 01:00 PM)' : 'Morning Session (08:30 AM – 03:45 PM)',
+      capacity: capacity,
+      enrolled: 0,
+      status: status,
+      teacher: teacher,
+      teacherDetails: {
+        name: teacher.split(' (')[0],
+        empId: 'EMP-T' + Math.floor(10 + Math.random() * 50),
+        designation: `Class Teacher & Coordinator (${className})`,
+        qualification: teacher.includes('(') ? teacher.split('(')[1].replace(')', '') : 'B.Ed',
+        phone: '+91 98480 ' + Math.floor(10000 + Math.random() * 90000),
+        email: 'faculty@srividya.edu.in',
+        experience: 'Certified AP SSC Educator'
+      },
+      subjects: [],
+      attendance: { todayPresent: 0, total: 0, avgRate: '100%', defaulters: [] },
+      exams: [],
+      history: { passRatePrevYear: 'New Cohort', distinctionsPrevYear: 'N/A', topGpa: 'N/A' },
+      roster: []
+    };
+
+    list.unshift(newClass);
+    closeModal('createClassSectionModal');
+    renderAcademicClasses();
+    showToast(`Created ${className} ${section} for AY ${year} successfully!`, 'success');
+  }
+
+  // --- ASSIGN CLASS TEACHER ACTIONS ---
+  function openAssignClassTeacherModal(classId) {
+    const list = ensureAcademicClassesState();
+    const cls = list.find(c => c.id === (classId || activeDetailClassId)) || list[0];
+    if (!cls) return;
+
+    const idInput = document.getElementById('assignTeacherClassId');
+    const displayInput = document.getElementById('assignTeacherClassDisplay');
+    const selectEl = document.getElementById('assignTeacherSelect');
+
+    if (idInput) idInput.value = cls.id;
+    if (displayInput) displayInput.value = `${cls.className} - ${cls.section} (Current: ${cls.teacher})`;
+
+    if (selectEl) {
+      const teachers = [
+        'Sri B. Narayana (M.Sc, B.Ed) - Mathematics',
+        'Smt. T. Padmavathi (M.A, B.Ed) - English',
+        'Sri M. Raju (M.Sc, B.Ed) - Physical Science',
+        'Smt. V. Jyothsna (M.A, B.Ed) - Social Studies',
+        'Sri CH. Venkateswara Rao (M.Sc, B.Ed) - Telugu',
+        'Smt. N. Sirisha (B.Sc, B.Ed) - Biology',
+        'Sri A. Prasad (B.Sc, B.Ed) - General Science',
+        'Smt. R. Kavitha (B.A, D.Ed) - Primary Coordinator',
+        'Sri S. Gopal (B.Sc, B.Ed) - Mathematics',
+        'Smt. Y. Anusha (B.A, D.Ed) - Primary Faculty'
+      ];
+      selectEl.innerHTML = teachers.map(t => `<option value="${t}">${t}</option>`).join('');
+    }
+
+    openModal('assignClassTeacherModal');
+  }
+
+  function handleAssignClassTeacherSubmit(e) {
+    if (e && e.preventDefault) e.preventDefault();
+    const classId = document.getElementById('assignTeacherClassId')?.value;
+    const newTeacher = document.getElementById('assignTeacherSelect')?.value;
+
+    const list = ensureAcademicClassesState();
+    const cls = list.find(c => c.id === classId);
+    if (cls && newTeacher) {
+      cls.teacher = newTeacher;
+      cls.teacherDetails = {
+        name: newTeacher.split(' (')[0],
+        empId: 'EMP-T' + Math.floor(10 + Math.random() * 50),
+        designation: `Designated Class Teacher (${cls.className})`,
+        qualification: newTeacher.includes('(') ? newTeacher.split('(')[1].replace(')', '') : 'B.Ed',
+        phone: '+91 98480 ' + Math.floor(10000 + Math.random() * 90000),
+        email: 'faculty@srividya.edu.in',
+        experience: 'Experienced Faculty'
+      };
+      closeModal('assignClassTeacherModal');
+      renderAcademicClasses();
+      if (document.getElementById('classDetailModal')?.classList.contains('show')) {
+        renderDetailClassTeacherCard(cls);
+      }
+      showToast(`Assigned ${cls.teacher} to ${cls.className} ${cls.section}`, 'success');
+    }
+  }
+
+  // --- SET CAPACITY ACTIONS ---
+  function openSetClassCapacityModal(classId) {
+    const list = ensureAcademicClassesState();
+    const cls = list.find(c => c.id === (classId || activeDetailClassId)) || list[0];
+    if (!cls) return;
+
+    const idInput = document.getElementById('setCapacityClassId');
+    const displayInput = document.getElementById('setCapacityClassDisplay');
+    const enrInput = document.getElementById('setCapacityEnrolledDisplay');
+    const newInput = document.getElementById('setCapacityNewInput');
+
+    if (idInput) idInput.value = cls.id;
+    if (displayInput) displayInput.value = `${cls.className} - ${cls.section} (AY ${cls.year})`;
+    if (enrInput) enrInput.value = `${cls.enrolled} Students`;
+    if (newInput) {
+      newInput.value = cls.capacity;
+      newInput.min = Math.max(10, cls.enrolled);
+    }
+
+    openModal('setClassCapacityModal');
+  }
+
+  function handleSetClassCapacitySubmit(e) {
+    if (e && e.preventDefault) e.preventDefault();
+    const classId = document.getElementById('setCapacityClassId')?.value;
+    const newCap = parseInt(document.getElementById('setCapacityNewInput')?.value || '45', 10);
+
+    const list = ensureAcademicClassesState();
+    const cls = list.find(c => c.id === classId);
+    if (cls) {
+      cls.capacity = newCap;
+      if (cls.enrolled >= cls.capacity) {
+        cls.status = 'Full / At Capacity';
+      } else if (cls.status === 'Full / At Capacity') {
+        cls.status = 'Active';
+      }
+      closeModal('setClassCapacityModal');
+      renderAcademicClasses();
+      showToast(`Updated sanctioned capacity for ${cls.className} to ${newCap} seats`, 'success');
+    }
+  }
+
+  // --- ASSIGN SUBJECTS ACTIONS ---
+  function openAssignClassSubjectsModal(classId) {
+    const list = ensureAcademicClassesState();
+    const cls = list.find(c => c.id === (classId || activeDetailClassId)) || list[0];
+    if (!cls) return;
+
+    const idInput = document.getElementById('assignSubjectsClassId');
+    const displayInput = document.getElementById('assignSubjectsClassDisplay');
+    const tbody = document.getElementById('assignSubjectsTableBody');
+
+    if (idInput) idInput.value = cls.id;
+    if (displayInput) displayInput.value = `${cls.className} - ${cls.section}`;
+
+    const subjects = cls.subjects && cls.subjects.length > 0 ? cls.subjects : [
+      { code: 'MTH-101', name: 'Mathematics', periods: 8, faculty: cls.teacher },
+      { code: 'SCI-102', name: 'Physical Science', periods: 7, faculty: 'Sri M. Raju' },
+      { code: 'ENG-104', name: 'English', periods: 6, faculty: 'Smt. T. Padmavathi' },
+      { code: 'TEL-105', name: 'Telugu', periods: 6, faculty: 'Sri CH. Venkateswara Rao' },
+      { code: 'SOC-106', name: 'Social Studies', periods: 6, faculty: 'Smt. V. Jyothsna' }
+    ];
+
+    if (tbody) {
+      tbody.innerHTML = subjects.map((s, idx) => `
+        <tr>
+          <td><strong>${s.name}</strong></td>
+          <td><span class="staff-id-pill">${s.code}</span></td>
+          <td>
+            <input type="number" class="form-control form-control-sm" value="${s.periods}" style="width:70px;">
+          </td>
+          <td>
+            <input type="text" class="form-control form-control-sm" value="${s.faculty}">
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    openModal('assignClassSubjectsModal');
+  }
+
+  function handleAssignClassSubjectsSubmit(e) {
+    if (e && e.preventDefault) e.preventDefault();
+    closeModal('assignClassSubjectsModal');
+    showToast('Saved subject and faculty allocations successfully!', 'success');
+  }
+
+  // --- ARCHIVE / RESTORE CLASS ---
+  function archiveClass(classId) {
+    const list = ensureAcademicClassesState();
+    const cls = list.find(c => c.id === classId);
+    if (!cls) return;
+
+    cls.status = 'Archived / Completed';
+    renderAcademicClasses();
+    showToast(`Closed and archived ${cls.className} ${cls.section} for completed academic term`, 'info');
+  }
+
+  function restoreClass(classId) {
+    const list = ensureAcademicClassesState();
+    const cls = list.find(c => c.id === classId);
+    if (!cls) return;
+
+    cls.status = 'Active';
+    renderAcademicClasses();
+    showToast(`Restored ${cls.className} ${cls.section} to Active status`, 'success');
+  }
+
+  // --- STUDENT PROMOTION WORKFLOW ENGINE ---
+  function openPromoteStudentsModal(sourceClassId = null) {
+    const list = ensureAcademicClassesState();
+    const sourceCls = sourceClassId ? list.find(c => c.id === sourceClassId) : list.find(c => c.id === 'CLS-2025-IX-A') || list[0];
+    if (sourceCls) {
+      activePromotionSourceClassId = sourceCls.id;
+    }
+
+    // Populate source year and class dropdowns
+    const sYear = document.getElementById('promoSourceYear');
+    const sClass = document.getElementById('promoSourceClass');
+    if (sYear && sourceCls) sYear.value = sourceCls.year.includes('2025') ? '2025–26' : '2026–27';
+
+    switchPromotionStep(1);
+    updatePromotionCandidates();
+    updatePromotionPreview();
+
+    openModal('promoteStudentsModal');
+  }
+
+  function switchPromotionStep(stepNum) {
+    activePromotionStep = stepNum;
+
+    // Update wizard nodes
+    for (let i = 1; i <= 4; i++) {
+      const node = document.getElementById(`pnode-${i}`);
+      const pane = document.getElementById(`step-pane-${i}`);
+      if (node) {
+        if (i === stepNum) {
+          node.className = 'promotion-step-node active';
+        } else if (i < stepNum) {
+          node.className = 'promotion-step-node completed';
+        } else {
+          node.className = 'promotion-step-node';
+        }
+      }
+      if (pane) {
+        pane.style.display = (i === stepNum) ? 'block' : 'none';
+      }
+    }
+
+    if (stepNum === 2) {
+      updatePromotionCandidates();
+    } else if (stepNum === 3) {
+      updatePromotionPreview();
+    }
+  }
+
+  function onPromoSourceYearChange() {
+    updatePromotionCandidates();
+    updatePromotionPreview();
+  }
+
+  function onPromoSourceClassChange() {
+    updatePromotionCandidates();
+    updatePromotionPreview();
+  }
+
+  function updatePromotionCandidates() {
+    const tbody = document.getElementById('promoCandidatesTableBody');
+    if (!tbody) return;
+
+    const list = ensureAcademicClassesState();
+    const sourceClassSel = document.getElementById('promoSourceClass')?.value || 'Class IX-A';
+    const sourceYearSel = document.getElementById('promoSourceYear')?.value || '2025–26';
+
+    let found = list.find(c => c.year.includes(sourceYearSel.slice(0, 4)) && (c.className + '-' + c.section.slice(-1) === sourceClassSel));
+    if (!found) found = list.find(c => c.id === 'CLS-2025-IX-A') || list[0];
+
+    const roster = (found && found.roster && found.roster.length > 0) ? found.roster : [
+      { roll: 1, admNo: 'ADM-2023-010', name: 'K. Sai Teja', res: '94.2%', att: '96.2%', elig: 'Eligible', exception: 'Standard Promotion' },
+      { roll: 2, admNo: 'ADM-2023-011', name: 'M. Bhavishya', res: '96.5%', att: '97.4%', elig: 'Eligible', exception: 'Standard Promotion' },
+      { roll: 3, admNo: 'ADM-2023-012', name: 'P. Tarun Kumar', res: '91.0%', att: '93.8%', elig: 'Eligible', exception: 'Standard Promotion' },
+      { roll: 4, admNo: 'ADM-2023-013', name: 'G. Haritha', res: '97.2%', att: '98.0%', elig: 'Eligible', exception: 'Standard Promotion' },
+      { roll: 5, admNo: 'ADM-2023-014', name: 'S. Vamsi Krishna', res: '88.4%', att: '91.8%', elig: 'Eligible', exception: 'Standard Promotion' },
+      { roll: 6, admNo: 'ADM-2023-015', name: 'D. Keerthi', res: '92.8%', att: '94.5%', elig: 'Eligible', exception: 'Standard Promotion' },
+      { roll: 7, admNo: 'ADM-2023-016', name: 'R. Rajesh', res: '84.0%', att: '88.9%', elig: 'Eligible', exception: 'Standard Promotion' },
+      { roll: 8, admNo: 'ADM-2023-017', name: 'T. Lavanya', res: '93.5%', att: '95.6%', elig: 'Eligible', exception: 'Standard Promotion' },
+      { roll: 9, admNo: 'ADM-2023-018', name: 'B. Manoj Kumar', res: '79.2%', att: '84.8%', elig: 'Eligible', exception: 'Standard Promotion' },
+      { roll: 10, admNo: 'ADM-2023-019', name: 'A. Sandhya', res: '90.4%', att: '92.5%', elig: 'Eligible', exception: 'Standard Promotion' },
+      { roll: 11, admNo: 'ADM-2023-020', name: 'CH. Suresh', res: '74.5%', att: '81.5%', elig: 'Conditional', exception: 'Principal Grace / Remedial Undertaking' },
+      { roll: 12, admNo: 'ADM-2023-021', name: 'V. Sai Kumar', res: '68.0%', att: '70.8%', elig: 'Conditional', exception: 'Parental Agreement & Attendance Remedial' }
+    ];
+
+    tbody.innerHTML = roster.map(s => {
+      const isElig = s.elig === 'Eligible';
+      return `
+        <tr>
+          <td style="text-align:center;">
+            <input type="checkbox" class="promo-candidate-check" data-adm="${s.admNo}" data-name="${s.name}" checked>
+          </td>
+          <td><span class="staff-id-pill">${s.admNo}</span></td>
+          <td><strong>${s.name}</strong></td>
+          <td>${s.res}</td>
+          <td>${s.att}</td>
+          <td>
+            <span class="${isElig ? 'promo-badge-eligible' : 'promo-badge-conditional'}">
+              <i class="fa-solid ${isElig ? 'fa-circle-check' : 'fa-triangle-exclamation'}"></i>${s.elig}
+            </span>
+          </td>
+          <td>
+            <select class="form-control form-control-sm promo-exception-select" style="font-size:0.8rem;">
+              <option value="Standard Promotion" ${s.exception.includes('Standard') ? 'selected' : ''}>Standard Promotion (Merit Cleared)</option>
+              <option value="Principal Grace / Remedial Undertaking" ${s.exception.includes('Principal') ? 'selected' : ''}>Principal Grace / Remedial Undertaking</option>
+              <option value="Parental Agreement" ${s.exception.includes('Parental') ? 'selected' : ''}>Parental Consultation Agreement</option>
+              <option value="Retain in Same Class">Retain in Same Class (Academic Policy)</option>
+            </select>
+          </td>
+        </tr>
+      `;
+    }).join('');
+  }
+
+  function toggleAllPromotionCheckboxes(checked) {
+    const checks = document.querySelectorAll('.promo-candidate-check');
+    checks.forEach(c => c.checked = checked);
+    const master = document.getElementById('promoSelectAllMaster');
+    if (master) master.checked = checked;
+    updatePromotionPreview();
+  }
+
+  function updatePromotionPreview() {
+    const checks = document.querySelectorAll('.promo-candidate-check:checked');
+    const selectedCount = checks.length;
+
+    const sourceClassSel = document.getElementById('promoSourceClass')?.value || 'Class IX-A';
+    const sourceYearSel = document.getElementById('promoSourceYear')?.value || '2025–26';
+    const targetClassSel = document.getElementById('promoTargetClass')?.value || 'Class X-A';
+    const targetYearSel = document.getElementById('promoTargetYear')?.value || '2026–27';
+
+    const pCount = document.getElementById('previewSelectedCount');
+    const pSource = document.getElementById('previewSourceCohortLabel');
+    const pTarget = document.getElementById('previewTargetClassLabel');
+    const pYear = document.getElementById('previewTargetYearLabel');
+    const pCap = document.getElementById('previewTargetCapacity');
+    const pRem = document.getElementById('previewRemainingSeats');
+    const pBadge = document.getElementById('previewFeasibilityBadge');
+    const manifestBody = document.getElementById('promoManifestPreviewBody');
+
+    const targetCapacity = 50;
+    const remaining = targetCapacity - selectedCount;
+
+    if (pCount) pCount.textContent = `${selectedCount} Students`;
+    if (pSource) pSource.textContent = `From ${sourceClassSel} (${sourceYearSel})`;
+    if (pTarget) pTarget.textContent = targetClassSel;
+    if (pYear) pYear.textContent = `AY ${targetYearSel}`;
+    if (pCap) pCap.textContent = `${targetCapacity} Seats`;
+    if (pRem) {
+      pRem.textContent = remaining >= 0 ? `${remaining} Vacant Seats` : `Deficit: ${Math.abs(remaining)} Over Capacity`;
+      pRem.className = remaining >= 0 ? 'text-success font-weight-bold' : 'text-danger font-weight-bold';
+    }
+
+    if (pBadge) {
+      if (remaining >= 0) {
+        pBadge.innerHTML = '<span class="portal-badge badge-success" style="font-size:0.85rem;"><i class="fa-solid fa-circle-check mr-1"></i> Capacity Cleared</span>';
+      } else {
+        pBadge.innerHTML = '<span class="portal-badge badge-warning" style="font-size:0.85rem;"><i class="fa-solid fa-triangle-exclamation mr-1"></i> Sanction Review Needed</span>';
+      }
+    }
+
+    if (manifestBody) {
+      const candidates = [];
+      checks.forEach((chk, idx) => {
+        candidates.push({
+          roll: idx + 1,
+          adm: chk.getAttribute('data-adm') || 'ADM-00' + (idx + 1),
+          name: chk.getAttribute('data-name') || 'Student ' + (idx + 1),
+          prev: `${sourceClassSel} (${sourceYearSel})`,
+          next: `${targetClassSel} (${targetYearSel})`,
+          type: 'Annual Promotion Cleared'
+        });
+      });
+
+      manifestBody.innerHTML = candidates.map(c => `
+        <tr>
+          <td><strong>#${c.roll}</strong></td>
+          <td><span class="staff-id-pill">${c.adm}</span></td>
+          <td><strong>${c.name}</strong></td>
+          <td>${c.prev}</td>
+          <td><strong class="text-primary">${c.next}</strong></td>
+          <td><span class="portal-badge badge-success">${c.type}</span></td>
+        </tr>
+      `).join('');
+    }
+  }
+
+  function executeStudentPromotion() {
+    const complianceCheck = document.getElementById('promoNonOverwriteCompliance');
+    if (complianceCheck && !complianceCheck.checked) {
+      showToast('You must confirm the statutory non-overwrite compliance rule.', 'warning');
+      return;
+    }
+
+    const sourceClassSel = document.getElementById('promoSourceClass')?.value || 'Class IX-A';
+    const sourceYearSel = document.getElementById('promoSourceYear')?.value || '2025–26';
+    const targetClassSel = document.getElementById('promoTargetClass')?.value || 'Class X-A';
+    const targetYearSel = document.getElementById('promoTargetYear')?.value || '2026–27';
+    const approver = document.getElementById('promoApprover')?.value || 'Smt. Gorle Varalakshmi (Principal)';
+    const orderRef = document.getElementById('promoOrderRef')?.value || 'SV/PROM/2026-27/084';
+
+    const checks = document.querySelectorAll('.promo-candidate-check:checked');
+    const promotedCount = checks.length;
+
+    // STATUTORY NON-OVERWRITE PRESERVATION:
+    // Append previous enrolment to enrolmentHistory array for each promoted student
+    if (state.students && Array.isArray(state.students)) {
+      checks.forEach(chk => {
+        const adm = chk.getAttribute('data-adm');
+        const st = state.students.find(s => s.admissionNo === adm || s.id === adm);
+        if (st) {
+          if (!st.enrolmentHistory) st.enrolmentHistory = [];
+          // Preserve historical record
+          st.enrolmentHistory.push({
+            ay: sourceYearSel,
+            class: sourceClassSel.split('-')[0],
+            sec: sourceClassSel.split('-')[1] || 'A',
+            teacher: 'Sri M. Raju',
+            result: 'Promoted with Board Clearance',
+            orderRef: orderRef,
+            promotedDate: new Date().toLocaleDateString('en-GB')
+          });
+          // Set new active class for the target AY
+          st.class = targetClassSel.split('-')[0];
+          st.section = targetClassSel.split('-')[1] || 'A';
+          st.academicYear = targetYearSel;
+        }
+      });
+    }
+
+    // Update target class enrollment count in the registry
+    const list = ensureAcademicClassesState();
+    const targetCls = list.find(c => c.year.includes(targetYearSel.slice(0, 4)) && (c.className + '-' + c.section.slice(-1) === targetClassSel));
+    if (targetCls) {
+      targetCls.enrolled = Math.min(targetCls.capacity, targetCls.enrolled + promotedCount);
+    }
+
+    closeModal('promoteStudentsModal');
+    renderAcademicClasses();
+    showToast(`Successfully promoted ${promotedCount} students to ${targetClassSel} (AY ${targetYearSel}) with enrolment history preserved!`, 'success');
+  }
+
+  // --- CSV EXPORT FUNCTIONS ---
+  function exportClassRegisterCSV() {
+    const list = ensureAcademicClassesState();
+    let csv = 'Academic Year,Class,Section,Wing,Class Teacher,Room,Capacity,Enrolled Students,Occupancy %,Status\n';
+    list.forEach(c => {
+      const occ = Math.round((c.enrolled / (c.capacity || 1)) * 100);
+      csv += `"${c.year}","${c.className}","${c.section}","${c.wing}","${c.teacher}","${c.room}","${c.capacity}","${c.enrolled}","${occ}%","${c.status}"\n`;
+    });
+
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.setAttribute('download', `Sri_Vidya_Classes_Sections_Register_${new Date().toISOString().slice(0, 10)}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    showToast('Exported Institutional Classes & Sections Register CSV', 'success');
+  }
+
+  function exportClassRosterCSV(classId) {
+    const list = ensureAcademicClassesState();
+    const cls = list.find(c => c.id === (classId || activeDetailClassId)) || list[0];
+    if (!cls) return;
+
+    let csv = `Class Roster: ${cls.className} ${cls.section} (AY ${cls.year})\n`;
+    csv += 'Roll No,Admission No,Student Name,Gender,Attendance %,Exam Result %,Eligibility,Exception Resolution\n';
+
+    const roster = cls.roster || [];
+    roster.forEach(s => {
+      csv += `"${s.roll}","${s.admNo}","${s.name}","${s.gender}","${s.att}","${s.res}","${s.elig}","${s.exception}"\n`;
+    });
+
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.setAttribute('download', `Roster_${cls.className.replace(/\s+/g, '_')}_${cls.section.replace(/\s+/g, '_')}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    showToast(`Exported ${cls.className} ${cls.section} student roster CSV`, 'success');
+  }
+
+  function exportCurrentClassRosterCSV() {
+    exportClassRosterCSV(activeDetailClassId);
+  }
+
 
   // Submenu 2: Subjects & Syllabus
   function renderAcademicSubjects(filteredData) {
@@ -43378,6 +44829,34 @@ const classData = TIMETABLE_CLASS_DATA[currentTimetableClass] || TIMETABLE_CLASS
   }
 
   return {
+    ensureAcademicClassesState: ensureAcademicClassesState,
+    updateAcademicClassesKPIs: updateAcademicClassesKPIs,
+    renderAcademicClasses: renderAcademicClasses,
+    filterAcademicClasses: filterAcademicClasses,
+    resetAcademicClassesFilters: resetAcademicClassesFilters,
+    openClassDetailModal: openClassDetailModal,
+    switchClassDetailTab: switchClassDetailTab,
+    filterClassRoster: filterClassRoster,
+    exportCurrentClassRosterCSV: exportCurrentClassRosterCSV,
+    openCreateClassSectionModal: openCreateClassSectionModal,
+    handleCreateClassSectionSubmit: handleCreateClassSectionSubmit,
+    openAssignClassTeacherModal: openAssignClassTeacherModal,
+    handleAssignClassTeacherSubmit: handleAssignClassTeacherSubmit,
+    openSetClassCapacityModal: openSetClassCapacityModal,
+    handleSetClassCapacitySubmit: handleSetClassCapacitySubmit,
+    openAssignClassSubjectsModal: openAssignClassSubjectsModal,
+    handleAssignClassSubjectsSubmit: handleAssignClassSubjectsSubmit,
+    archiveClass: archiveClass,
+    restoreClass: restoreClass,
+    openPromoteStudentsModal: openPromoteStudentsModal,
+    switchPromotionStep: switchPromotionStep,
+    onPromoSourceYearChange: onPromoSourceYearChange,
+    onPromoSourceClassChange: onPromoSourceClassChange,
+    toggleAllPromotionCheckboxes: toggleAllPromotionCheckboxes,
+    updatePromotionPreview: updatePromotionPreview,
+    executeStudentPromotion: executeStudentPromotion,
+    exportClassRegisterCSV: exportClassRegisterCSV,
+    exportClassRosterCSV: exportClassRosterCSV,
     filterAppraisals: filterAppraisals,
     resetAppraisalFilters: resetAppraisalFilters,
     populateStartReviewStaffDropdown: populateStartReviewStaffDropdown,
