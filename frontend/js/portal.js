@@ -32930,41 +32930,854 @@ const classData = TIMETABLE_CLASS_DATA[currentTimetableClass] || TIMETABLE_CLASS
     handleRecordStaffAttendance(e);
   }
 
-  function renderFacultyAppraisals() {
+  // =========================================================================
+  // AUTHORITATIVE APPRAISAL & FEEDBACK MODULE CONTROLLER
+  // Sri Vidya E.M. High School - Confidential Performance Evaluation Engine
+  // =========================================================================
+
+  let activeAppraisalDossierId = null;
+
+  function ensureAppraisalState() {
     ensureTeachersEnriched();
-    updateTeachersConfidentialityBanner();
+    if (!state.appraisals || state.appraisals.length === 0) {
+      state.appraisals = [
+        {
+          id: 'APP-2026-001',
+          employeeId: 'SV-FAC-0105',
+          employeeName: 'Sri M. Srinivas',
+          department: 'Social Studies',
+          designation: 'Faculty Member',
+          isTeaching: true,
+          reviewPeriod: 'Academic Year 2025–26',
+          reviewer: 'Principal Smt. Gorle Varalakshmi',
+          reviewerRole: 'Principal & Executive Evaluator',
+          objectives: 'CBSE Class X Social Studies pass rate > 95% with zero academic failures; complete digital pedagogy workshops.',
+          criteria: 'Curriculum Delivery (5/5), Student Engagement (4.5/5), Formative Feedback (4.5/5), Classroom Discipline (5/5), Professional Development (4.5/5)',
+          selfAssessment: {
+            rating: '4.5 / 5.0',
+            reflection: 'Conducted weekly remedial doubt clinics and utilized smart interactive displays for map analysis.',
+            evidenceDoc: 'CBSE_Board_Pass_Percentages_2026.pdf',
+            submittedAt: '2026-10-15'
+          },
+          reviewerComments: 'Demonstrated exceptional pedagogical leadership. Student engagement and exam preparedness exceeded board standards.',
+          meetingDate: '2026-10-24 15:30',
+          meetingDateFormatted: '2026-10-24 at 03:30 PM (Chamber)',
+          developmentGoals: 'Attend CBSE National Pedagogy Workshop; lead secondary school curriculum committee.',
+          status: 'Completed',
+          rating: '4.8 - Outstanding',
+          acknowledgement: {
+            employee: 'Signed & Acknowledged by Sri M. Srinivas on 2026-10-25',
+            reviewer: 'Authorized by Principal Smt. Gorle Varalakshmi on 2026-10-26'
+          }
+        },
+        {
+          id: 'APP-2026-002',
+          employeeId: 'SV-STF-0201',
+          employeeName: 'Smt. M. Vijaya',
+          department: 'Administrative Office',
+          designation: 'Office Administrator & Head Clerk',
+          isTeaching: false,
+          reviewPeriod: 'Academic Year 2025–26',
+          reviewer: 'Principal Smt. Gorle Varalakshmi',
+          reviewerRole: 'Principal & Executive Evaluator',
+          objectives: 'CBSE Affiliation portal annual compliance renewal; statutory staff attendance audit with zero non-conformances.',
+          criteria: 'Process Efficiency (5/5), Timely Record Keeping (5/5), Asset Custody (4.5/5), Punctuality & Shift Adherence (5/5), Inter-Departmental Collaboration (5/5)',
+          selfAssessment: {
+            rating: '4.8 / 5.0',
+            reflection: 'Streamlined CBSE affiliation dossier submission 15 days ahead of deadline.',
+            evidenceDoc: 'CBSE_Affiliation_Filing_Confirmation.pdf',
+            submittedAt: '2026-10-18'
+          },
+          reviewerComments: 'Exemplary administrative vigilance. Office workflows and board liaison executed with utmost precision.',
+          meetingDate: '2026-10-26 14:00',
+          meetingDateFormatted: '2026-10-26 at 02:00 PM (Admin Office)',
+          developmentGoals: 'Master Advanced School ERP Data Security protocols and staff portal credentialing.',
+          status: 'Completed',
+          rating: '4.9 - Outstanding',
+          acknowledgement: {
+            employee: 'Signed & Acknowledged by Smt. M. Vijaya on 2026-10-26',
+            reviewer: 'Authorized by Principal Smt. Gorle Varalakshmi on 2026-10-27'
+          }
+        },
+        {
+          id: 'APP-2026-003',
+          employeeId: 'SV-FAC-0103',
+          employeeName: 'Sri K. Anand Kumar',
+          department: 'English',
+          designation: 'Faculty Member',
+          isTeaching: true,
+          reviewPeriod: 'Academic Year 2025–26',
+          reviewer: 'Vice Principal Sri Navva Anand',
+          reviewerRole: 'Vice Principal & Academic Evaluator',
+          objectives: 'Class X English communicative language fluency & creative writing portfolio development.',
+          criteria: 'Curriculum Delivery (4/5), Student Engagement (4/5), Formative Feedback (4/5), Classroom Discipline (4.5/5), Professional Development (4/5)',
+          selfAssessment: {
+            rating: '4.0 / 5.0',
+            reflection: 'Organized inter-school debate and school magazine editorial club.',
+            evidenceDoc: 'School_Literary_Club_Report.pdf',
+            submittedAt: '2026-10-20'
+          },
+          reviewerComments: 'Solid linguistic instruction. Recommended to incorporate more structured grammar drills for slow learners.',
+          meetingDate: '2026-10-28 11:30',
+          meetingDateFormatted: '2026-10-28 at 11:30 AM (VP Office)',
+          developmentGoals: 'Complete British Council Secondary English Teaching Certification.',
+          status: 'Under Review',
+          rating: '4.1 - Very Good',
+          acknowledgement: null
+        },
+        {
+          id: 'APP-2026-004',
+          employeeId: 'SV-STF-0203',
+          employeeName: 'Sri V. Suresh Babu',
+          department: 'Science Laboratories',
+          designation: 'Senior Science Laboratory Assistant',
+          isTeaching: false,
+          reviewPeriod: 'Academic Year 2025–26',
+          reviewer: 'Vice Principal Sri Navva Anand',
+          reviewerRole: 'Vice Principal & Academic Evaluator',
+          objectives: 'Physics & Chemistry laboratory apparatus readiness, chemical storage safety audits, and CBSE practicals setup.',
+          criteria: 'Lab Safety & Chemical Custody (5/5), Apparatus Calibration (4.5/5), Practical Exam Setup (5/5), Punctuality (4.5/5)',
+          selfAssessment: {
+            rating: '4.5 / 5.0',
+            reflection: 'Maintained zero glass breakage during term practicals; updated MSDS sheets for all reagents.',
+            evidenceDoc: 'Lab_Safety_Audit_Report_2026.pdf',
+            submittedAt: '2026-10-22'
+          },
+          reviewerComments: 'Awaiting formal review meeting with Vice Principal scheduled for tomorrow morning.',
+          meetingDate: '2026-10-31 10:30',
+          meetingDateFormatted: '2026-10-31 at 10:30 AM (Science Lab)',
+          developmentGoals: 'Procure digital sensor-based physics apparatus and attend chemical disposal training.',
+          status: 'Under Review',
+          rating: '4.6 - Excellent',
+          acknowledgement: null
+        },
+        {
+          id: 'APP-2026-005',
+          employeeId: 'SV-STF-0210',
+          employeeName: 'Sri D. Ramana',
+          department: 'Finance & Accounts',
+          designation: 'Assistant Accounts Clerk & Billing',
+          isTeaching: false,
+          reviewPeriod: 'Academic Year 2025–26',
+          reviewer: 'Principal Smt. Gorle Varalakshmi',
+          reviewerRole: 'Principal & Executive Evaluator',
+          objectives: 'Daily fee reconciliation, Tally Prime accounting entries, and fee receipt dispatch.',
+          criteria: 'Billing Accuracy (4/5), Cash Counter Punctuality (4.5/5), Parent Communication (4/5)',
+          selfAssessment: {
+            rating: '4.0 / 5.0',
+            reflection: 'Processed over 1,500 fee receipts with zero accounting discrepancies.',
+            evidenceDoc: 'Fee_Receipt_Reconciliation_Ledger.pdf',
+            submittedAt: '2026-10-25'
+          },
+          reviewerComments: 'Interim review draft saved. Scheduled for discussion.',
+          meetingDate: null,
+          meetingDateFormatted: 'To be scheduled',
+          developmentGoals: 'Undergo Tally Prime Advanced GST Taxation Training.',
+          status: 'Self-Assessment Submitted',
+          rating: '4.0 - Very Good',
+          acknowledgement: null
+        },
+        {
+          id: 'APP-2026-006',
+          employeeId: 'SV-STF-0207',
+          employeeName: 'Sri P. Appa Rao',
+          department: 'Transport Operations',
+          designation: 'Transport & Fleet Logistics Supervisor',
+          isTeaching: false,
+          reviewPeriod: 'Academic Year 2025–26',
+          reviewer: 'Vice Principal Sri Navva Anand',
+          reviewerRole: 'Vice Principal & Academic Evaluator',
+          objectives: '14 school bus fleet roadworthiness, driver punctuality, and zero transit incidents.',
+          criteria: 'Fleet Fitness & RTO Compliance (4.5/5), Route Timing Adherence (4.5/5), Student Safety (5/5)',
+          selfAssessment: {
+            rating: '4.0 / 5.0',
+            reflection: 'Conducted bi-monthly bus mechanical fitness inspections; GPS units active 100%.',
+            evidenceDoc: 'Fleet_Inspection_Log_2026.pdf',
+            submittedAt: '2026-10-10'
+          },
+          reviewerComments: 'Please attach certified driver medical fitness test certificates before final closure.',
+          meetingDate: '2026-10-22 16:00',
+          meetingDateFormatted: '2026-10-22 at 04:00 PM',
+          developmentGoals: 'Implement digital driver breathalyzer logging terminal.',
+          status: 'Returned for Revision',
+          rating: 'Pending Revision',
+          acknowledgement: null
+        },
+        {
+          id: 'APP-2026-007',
+          employeeId: 'SV-STF-0204',
+          employeeName: 'Sri G. Ranga Rao',
+          department: 'Library & Learning Resource',
+          designation: 'Head Librarian & Media In-Charge',
+          isTeaching: false,
+          reviewPeriod: 'Academic Year 2025–26',
+          reviewer: 'Principal Smt. Gorle Varalakshmi',
+          reviewerRole: 'Principal & Executive Evaluator',
+          objectives: 'Library automation, digital cataloging, and reading circle engagement.',
+          criteria: 'Catalog System (4.5/5), Book Circulation (4.5/5), Student Reading Hours (5/5)',
+          selfAssessment: {
+            rating: '4.5 / 5.0',
+            reflection: 'Cataloged 1,200 new reference books and launched weekend reading club.',
+            evidenceDoc: 'Library_Circulation_Ledger_2026.pdf',
+            submittedAt: '2026-10-24'
+          },
+          reviewerComments: 'Excellent book circulation management and positive student reading club outcomes.',
+          meetingDate: '2026-10-27 15:00',
+          meetingDateFormatted: '2026-10-27 at 03:00 PM',
+          developmentGoals: 'Integrate RFID self-checkout kiosk.',
+          status: 'Completed',
+          rating: '4.7 - Outstanding',
+          acknowledgement: {
+            employee: 'Signed & Acknowledged by Sri G. Ranga Rao on 2026-10-27',
+            reviewer: 'Authorized by Principal Smt. Gorle Varalakshmi on 2026-10-28'
+          }
+        },
+        {
+          id: 'APP-2026-008',
+          employeeId: 'SV-FAC-0104',
+          employeeName: 'Smt. S. Aruna',
+          department: 'Biological Science',
+          designation: 'Faculty Member',
+          isTeaching: true,
+          reviewPeriod: 'Academic Year 2026–27',
+          reviewer: 'Vice Principal Sri Navva Anand',
+          reviewerRole: 'Vice Principal & Academic Evaluator',
+          objectives: 'High school biology practical experiment mastery and eco-club botanical garden maintenance.',
+          criteria: 'Instructional Clarity (4.5/5), Lab Demonstration (4.5/5), Remedial Biology (4/5)',
+          selfAssessment: null,
+          reviewerComments: 'Draft review initiated for upcoming mid-term evaluation.',
+          meetingDate: null,
+          meetingDateFormatted: 'Not Scheduled',
+          developmentGoals: 'Organize inter-school science exhibition.',
+          status: 'Draft',
+          rating: 'Draft In Progress',
+          acknowledgement: null
+        }
+      ];
+    }
+  }
+
+  function updateAppraisalKPIs(dataList) {
+    ensureAppraisalState();
+    const all = state.appraisals || [];
+    const list = dataList || all;
+
+    const total = all.length;
+    const completed = all.filter(a => a.status === 'Completed').length;
+    const active = all.filter(a => a.status === 'Under Review').length;
+    const selfPending = all.filter(a => a.status === 'Draft' || a.status === 'Self-Assessment Submitted').length;
+    const revision = all.filter(a => a.status === 'Returned for Revision').length;
+
+    const setEl = (id, val) => {
+      const el = document.getElementById(id);
+      if (el) el.textContent = val;
+    };
+
+    setEl('kpiTotalAppraisals', total);
+    setEl('kpiCompletedAppraisals', completed);
+    setEl('kpiActiveAppraisals', active);
+    setEl('kpiSelfAssessmentPending', selfPending);
+    setEl('kpiRevisionDueAppraisals', revision);
+
+    const pill = document.getElementById('appraisalCountPill');
+    if (pill) {
+      pill.textContent = 'Showing ' + list.length + ' of ' + total + ' Appraisal Reviews';
+    }
+  }
+
+  function renderFacultyAppraisals(customList) {
+    ensureTeachersEnriched();
+    ensureAppraisalState();
 
     const tbody = document.getElementById('facultyAppraisalsTableBody');
     if (!tbody) return;
 
-    const list = state.faculty || [];
+    const allAppraisals = state.appraisals || [];
+    const data = customList || allAppraisals;
     const isAuthorized = isStaffAuthorized();
 
-    tbody.innerHTML = list.slice(0, 15).map((s, idx) => {
-      const ap = s.appraisal || {};
+    // Update privacy auth badge
+    const authBadge = document.getElementById('appraisalAuthBadge');
+    if (authBadge) {
+      if (isAuthorized) {
+        authBadge.innerHTML = '<span class="badge badge-success py-2 px-3" style="font-size:0.78rem;"><i class="fa-solid fa-lock-open mr-1"></i> Executive Access Active</span>';
+      } else {
+        authBadge.innerHTML = '<span class="badge badge-danger py-2 px-3" style="font-size:0.78rem;"><i class="fa-solid fa-lock mr-1"></i> Confidential View Locked</span>';
+      }
+    }
 
-      const authorizedRatingCell = isAuthorized
-        ? '<span class="portal-badge badge-warning font-weight-bold" style="font-size:0.85rem;"><i class="fa-solid fa-star"></i> ' + ap.rating + '</span>'
-        : '<span class="confidential-lock" title="Appraisal ratings restricted to Principal / VP"><i class="fa-solid fa-lock"></i> Confidential Rating</span>';
+    if (data.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="11" class="text-center py-5 text-muted">' +
+        '<i class="fa-solid fa-folder-closed fa-2x mb-3 text-secondary" style="opacity:0.4;"></i>' +
+        '<div style="font-weight:600; font-size:1rem;">No appraisal evaluations found</div>' +
+        '<div style="font-size:0.85rem;">Adjust search filters or start a new performance review.</div>' +
+        '</td></tr>';
+      updateAppraisalKPIs(data);
+      return;
+    }
 
-      const feedbackCell = isAuthorized
-        ? '<small class="text-muted" style="line-height:1.4; display:block;">' + ap.feedback + '</small>'
-        : '<span class="confidential-lock" style="font-size:0.75rem;"><i class="fa-solid fa-lock"></i> Restricted HR Review</span>';
+    let rowsHtml = '';
+    data.forEach(app => {
+      const empId = app.employeeId;
+      const name = app.employeeName;
+      const dept = app.department;
+      const period = app.reviewPeriod;
+      const reviewer = app.reviewer;
+      const objectives = app.objectives;
+      const criteria = app.criteria;
+      const self = app.selfAssessment;
+      const comments = app.reviewerComments;
+      const meeting = app.meetingDateFormatted || app.meetingDate || 'To be scheduled';
+      const goals = app.developmentGoals || '-';
+      const status = app.status;
+      const rating = app.rating;
+      const ack = app.acknowledgement;
 
-      const hrAction = isAuthorized
-        ? '<button type="button" class="btn btn-secondary btn-sm" onclick="portalApp.showToast(\'Official Appraisal Certificate for ' + s.name + ' ready for download\', \'success\')" title="Download Signed Appraisal Form"><i class="fa-solid fa-file-signature"></i> Dossier</button>'
-        : '<button type="button" class="btn btn-secondary btn-sm" disabled style="opacity:0.6;"><i class="fa-solid fa-lock"></i> Locked</button>';
+      // Status Badge
+      let statusBadge = '<span class="appraisal-status-draft">Draft</span>';
+      if (status === 'Completed') {
+        statusBadge = '<span class="appraisal-status-completed"><i class="fa-solid fa-circle-check mr-1"></i> Completed</span>';
+      } else if (status === 'Under Review') {
+        statusBadge = '<span class="appraisal-status-review"><i class="fa-solid fa-clock mr-1"></i> Under Review</span>';
+      } else if (status === 'Self-Assessment Submitted') {
+        statusBadge = '<span class="appraisal-status-self"><i class="fa-solid fa-user-pen mr-1"></i> Self-Assessed</span>';
+      } else if (status === 'Returned for Revision') {
+        statusBadge = '<span class="appraisal-status-returned"><i class="fa-solid fa-rotate-left mr-1"></i> Returned for Info</span>';
+      }
 
-      return '<tr>' +
-        '<td><strong style="color:var(--color-text-dark, #0f172a); font-size:0.9rem;">' + s.name + '</strong><br><small class="text-muted"><span class="teacher-id-badge" style="font-size:0.7rem; padding:1px 5px;">' + s.id + '</span> ' + s.subjects + '</small></td>' +
-        '<td><span class="portal-badge badge-primary"><i class="fa-solid fa-calendar"></i> ' + (ap.period || 'AY 2025–26') + '</span></td>' +
-        '<td style="max-width:240px;"><span style="font-size:0.83rem; color:#334155; line-height:1.4; display:block;">' + ap.goals + '</span></td>' +
-        '<td><span class="portal-badge badge-success"><i class="fa-solid fa-circle-check"></i> ' + ap.status + '</span></td>' +
-        '<td style="max-width:240px;">' + feedbackCell + '</td>' +
-        '<td>' + authorizedRatingCell + '</td>' +
-        '<td style="text-align:center;">' + hrAction + '</td>' +
+      // Self-Assessment Cell (Privacy Aware)
+      let selfCell = '<span class="text-muted" style="font-size:0.78rem;">Not Submitted</span>';
+      if (self) {
+        selfCell = isAuthorized ?
+          '<div>' +
+            '<span class="badge badge-light" style="font-weight:700; color:#1d4ed8; background:#eff6ff; border:1px solid #bfdbfe;">' + self.rating + '</span>' +
+            '<div style="font-size:0.75rem; color:#475569; margin-top:2px; max-width:170px;">' + self.reflection.slice(0, 50) + '...</div>' +
+            (self.evidenceDoc ? '<div style="margin-top:2px;"><span class="badge badge-light" style="font-size:0.7rem; background:#f1f5f9;"><i class="fa-solid fa-paperclip mr-1"></i>Doc Attached</span></div>' : '') +
+          '</div>' :
+          '<span class="confidential-lock" title="Confidential self-assessment restricted"><i class="fa-solid fa-lock"></i> Confidential</span>';
+      }
+
+      // Reviewer Comments Cell (Privacy Aware)
+      let commentsCell = '<span class="text-muted" style="font-size:0.78rem;">None recorded</span>';
+      if (comments) {
+        commentsCell = isAuthorized ?
+          '<div style="max-width:200px; font-size:0.82rem; color:#334155; line-height:1.4;">' +
+            (rating !== '-' && !rating.includes('Pending') ? '<div class="appraisal-rating-pill mb-1"><i class="fa-solid fa-star"></i> ' + rating + '</div>' : '') +
+            '<div>' + comments + '</div>' +
+          '</div>' :
+          '<span class="confidential-lock" title="Evaluator feedback restricted to Principal / VP"><i class="fa-solid fa-lock"></i> Restricted HR Review</span>';
+      }
+
+      // Development Goals Cell (Privacy Aware)
+      let goalsCell = isAuthorized ?
+        '<div style="max-width:180px; font-size:0.82rem; color:#334155;">' + goals + '</div>' :
+        '<span class="confidential-lock"><i class="fa-solid fa-lock"></i> Restricted</span>';
+
+      // Acknowledgement Seal
+      let ackCell = '<span class="text-muted" style="font-size:0.76rem;">Pending Mutual Sign-off</span>';
+      if (ack && ack.employee) {
+        ackCell = '<div class="appraisal-ack-seal"><i class="fa-solid fa-signature"></i> Sealed &bull; ' + (status === 'Completed' ? 'Closed' : 'Signed') + '</div>';
+      }
+
+      // Actions (Privacy Aware)
+      let actionsHtml = '';
+      if (isAuthorized) {
+        actionsHtml = '<div class="dropdown d-inline-block">' +
+          '<button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="font-size:0.8rem; padding:3px 8px;">' +
+            '<i class="fa-solid fa-ellipsis-vertical"></i>' +
+          '</button>' +
+          '<div class="dropdown-menu dropdown-menu-right shadow-sm" style="font-size:0.84rem;">' +
+            '<a class="dropdown-item text-primary font-weight-bold" href="javascript:void(0)" onclick="portalApp.openViewAppraisalDossierModal(\'' + app.id + '\')">' +
+              '<i class="fa-solid fa-id-card-clip mr-2"></i> View Authorized Dossier' +
+            '</a>' +
+            '<a class="dropdown-item" href="javascript:void(0)" onclick="portalApp.openConductReviewModal(\'' + app.id + '\')">' +
+              '<i class="fa-solid fa-gavel mr-2 text-warning"></i> Conduct / Complete Review' +
+            '</a>' +
+            (!self ?
+              '<a class="dropdown-item" href="javascript:void(0)" onclick="portalApp.openSubmitSelfAssessmentModal(\'' + app.id + '\')">' +
+                '<i class="fa-solid fa-user-pen mr-2 text-info"></i> Submit Self-Assessment' +
+              '</a>' : '') +
+            (status !== 'Completed' ?
+              '<a class="dropdown-item text-warning" href="javascript:void(0)" onclick="portalApp.openReturnRevisionModal(\'' + app.id + '\')">' +
+                '<i class="fa-solid fa-rotate-left mr-2"></i> Return for Revision' +
+              '</a>' : '') +
+            '<div class="dropdown-divider"></div>' +
+            '<a class="dropdown-item text-success" href="javascript:void(0)" onclick="portalApp.openViewAppraisalDossierModal(\'' + app.id + '\')">' +
+              '<i class="fa-solid fa-file-arrow-down mr-2"></i> Export Authorized Review' +
+            '</a>' +
+          '</div>' +
+        '</div>';
+      } else {
+        actionsHtml = '<button class="btn btn-sm btn-outline-secondary" disabled style="opacity:0.5; font-size:0.75rem;" title="Restricted to authorized executive reviewers"><i class="fa-solid fa-lock"></i> Locked</button>';
+      }
+
+      rowsHtml += '<tr data-appraisal-id="' + app.id + '">' +
+        // 1. Review Period
+        '<td><span class="badge badge-light" style="background:#f1f5f9; border:1px solid #cbd5e1; font-size:0.78rem; font-weight:700; color:#1e293b;"><i class="fa-solid fa-calendar mr-1 text-primary"></i>' + period + '</span></td>' +
+        // 2. Employee
+        '<td>' +
+          '<div style="display:flex; align-items:center; gap:8px;">' +
+            '<div style="width:32px; height:32px; border-radius:50%; background:linear-gradient(135deg, #1e3a8a, #3b82f6); color:#fff; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:0.75rem; flex-shrink:0;">' +
+              name.split(' ').map(n => n[0]).filter(c => /[A-Za-z]/.test(c)).slice(0, 2).join('') +
+            '</div>' +
+            '<div>' +
+              '<div style="font-weight:700; color:#1e293b; font-size:0.88rem;">' + name + '</div>' +
+              '<div style="font-size:0.74rem; color:#64748b;"><code>' + empId + '</code> &bull; ' + dept + '</div>' +
+            '</div>' +
+          '</div>' +
+        '</td>' +
+        // 3. Reviewer
+        '<td>' +
+          '<div style="font-weight:600; font-size:0.84rem; color:#1e293b;">' + reviewer + '</div>' +
+          '<div style="font-size:0.74rem; color:#64748b;">' + (app.reviewerRole || 'Reviewer') + '</div>' +
+        '</td>' +
+        // 4. Performance Objectives
+        '<td><div style="max-width:200px; font-size:0.82rem; color:#334155; line-height:1.4;">' + objectives + '</div></td>' +
+        // 5. Criteria
+        '<td><div style="max-width:180px; font-size:0.78rem; color:#475569; line-height:1.35;">' + criteria + '</div></td>' +
+        // 6. Self-Assessment
+        '<td>' + selfCell + '</td>' +
+        // 7. Reviewer Comments
+        '<td>' + commentsCell + '</td>' +
+        // 8. Meeting Date
+        '<td><div style="font-size:0.8rem; font-weight:600; color:#1e293b;"><i class="fa-solid fa-clock mr-1 text-muted"></i>' + meeting + '</div></td>' +
+        // 9. Development Goals
+        '<td>' + goalsCell + '</td>' +
+        // 10. Status & Ack
+        '<td>' +
+          '<div>' + statusBadge + '</div>' +
+          '<div style="margin-top:4px;">' + ackCell + '</div>' +
+        '</td>' +
+        // 11. Actions
+        '<td class="text-right">' + actionsHtml + '</td>' +
       '</tr>';
-    }).join('');
+    });
+
+    tbody.innerHTML = rowsHtml;
+    updateAppraisalKPIs(data);
+  }
+
+  function filterAppraisals() {
+    ensureAppraisalState();
+
+    const searchInput = document.getElementById('appraisalSearchInput');
+    const periodFilter = document.getElementById('appraisalPeriodFilter');
+    const deptFilter = document.getElementById('appraisalDeptFilter');
+    const statusFilter = document.getElementById('appraisalStatusFilter');
+
+    const query = searchInput ? searchInput.value.trim().toLowerCase() : '';
+    const period = periodFilter ? periodFilter.value : 'all';
+    const dept = deptFilter ? deptFilter.value : 'all';
+    const status = statusFilter ? statusFilter.value : 'all';
+
+    const all = state.appraisals || [];
+    const filtered = all.filter(a => {
+      const empId = (a.employeeId || '').toLowerCase();
+      const name = (a.employeeName || '').toLowerCase();
+      const rDept = (a.department || '').toLowerCase();
+      const rev = (a.reviewer || '').toLowerCase();
+      const obj = (a.objectives || '').toLowerCase();
+
+      const matchesQuery = !query || empId.includes(query) || name.includes(query) || rDept.includes(query) || rev.includes(query) || obj.includes(query);
+      const matchesPeriod = (period === 'all') || (a.reviewPeriod === period);
+      const matchesDept = (dept === 'all') || (a.department === dept);
+      const matchesStatus = (status === 'all') || (a.status === status);
+
+      return matchesQuery && matchesPeriod && matchesDept && matchesStatus;
+    });
+
+    renderFacultyAppraisals(filtered);
+  }
+
+  function resetAppraisalFilters() {
+    const sInput = document.getElementById('appraisalSearchInput');
+    if (sInput) sInput.value = '';
+    const pSelect = document.getElementById('appraisalPeriodFilter');
+    if (pSelect) pSelect.value = 'all';
+    const dSelect = document.getElementById('appraisalDeptFilter');
+    if (dSelect) dSelect.value = 'all';
+    const stSelect = document.getElementById('appraisalStatusFilter');
+    if (stSelect) stSelect.value = 'all';
+
+    renderFacultyAppraisals();
+  }
+
+  function populateStartReviewStaffDropdown() {
+    const select = document.getElementById('startReviewEmployeeId');
+    if (!select) return;
+
+    select.innerHTML = '<option value="">-- Select Staff Member (42 Total) --</option>';
+
+    const facultyList = state.faculty || [];
+    const nonTeachingList = state.nonTeachingStaff || NON_TEACHING_STAFF_DATA || [];
+
+    const facGroup = document.createElement('optgroup');
+    facGroup.label = 'Teaching Faculty (30)';
+    facultyList.forEach(f => {
+      const opt = document.createElement('option');
+      opt.value = f.employeeId || f.id;
+      opt.textContent = (f.employeeId || f.id) + ' - ' + f.name + ' (' + (f.department || 'Faculty') + ')';
+      facGroup.appendChild(opt);
+    });
+
+    const ntGroup = document.createElement('optgroup');
+    ntGroup.label = 'Non-Teaching Staff (12)';
+    nonTeachingList.forEach(nt => {
+      const opt = document.createElement('option');
+      opt.value = nt.employeeId || nt.id;
+      opt.textContent = (nt.employeeId || nt.id) + ' - ' + nt.name + ' (' + (nt.dept || nt.department || 'Staff') + ')';
+      ntGroup.appendChild(opt);
+    });
+
+    select.appendChild(facGroup);
+    select.appendChild(ntGroup);
+  }
+
+  function onAppraisalEmployeeChange() {
+    const empId = document.getElementById('startReviewEmployeeId').value;
+    const critInput = document.getElementById('startReviewCriteria');
+    if (!critInput || !empId) return;
+
+    // Adapt criteria presets based on teaching vs non-teaching
+    if (empId.startsWith('SV-STF') || empId.startsWith('NT')) {
+      critInput.value = 'Process Efficiency, Timely Record Maintenance, Asset Custody, Punctuality & Shift Adherence, Inter-Departmental Collaboration';
+    } else {
+      critInput.value = 'Curriculum Delivery, Student Engagement, Formative Feedback, Classroom Discipline, Professional Development';
+    }
+  }
+
+  function openStartReviewModal() {
+    populateStartReviewStaffDropdown();
+    openModal('startReviewModal');
+  }
+
+  function handleStartReviewSubmit(event) {
+    if (event) event.preventDefault();
+
+    const empId = document.getElementById('startReviewEmployeeId').value;
+    const period = document.getElementById('startReviewPeriod').value;
+    const reviewer = document.getElementById('startReviewReviewer').value;
+    const objectives = document.getElementById('startReviewObjectives').value.trim();
+    const criteria = document.getElementById('startReviewCriteria').value.trim();
+    const goals = document.getElementById('startReviewGoals').value.trim();
+
+    // Lookup staff
+    let staffName = 'Staff Member';
+    let dept = 'Administrative Office';
+    let isTeaching = false;
+    let desig = 'Staff';
+
+    const fac = (state.faculty || []).find(f => (f.employeeId || f.id) === empId);
+    if (fac) {
+      staffName = fac.name;
+      dept = fac.department || 'Faculty';
+      desig = fac.designation || 'Faculty Member';
+      isTeaching = true;
+    } else {
+      const nt = (state.nonTeachingStaff || NON_TEACHING_STAFF_DATA || []).find(n => (n.employeeId || n.id) === empId);
+      if (nt) {
+        staffName = nt.name;
+        dept = nt.dept || nt.department || 'Staff';
+        desig = nt.role || nt.designation || 'Staff Member';
+      }
+    }
+
+    const nextId = 'APP-2026-0' + ((state.appraisals ? state.appraisals.length : 0) + 9);
+
+    const newAppraisal = {
+      id: nextId,
+      employeeId: empId,
+      employeeName: staffName,
+      department: dept,
+      designation: desig,
+      isTeaching: isTeaching,
+      reviewPeriod: period,
+      reviewer: reviewer,
+      reviewerRole: reviewer.includes('Principal') ? 'Principal & Executive Evaluator' : 'Vice Principal & Academic Evaluator',
+      objectives: objectives,
+      criteria: criteria || 'Core institutional role criteria and standards adherence',
+      selfAssessment: null,
+      reviewerComments: 'Review cycle initiated. Awaiting employee self-assessment and formal discussion.',
+      meetingDate: null,
+      meetingDateFormatted: 'To be scheduled',
+      developmentGoals: goals || 'Target development goals established during review discussion.',
+      status: 'Draft',
+      rating: 'Draft In Progress',
+      acknowledgement: null
+    };
+
+    ensureAppraisalState();
+    state.appraisals.unshift(newAppraisal);
+
+    closeModal('startReviewModal');
+    renderFacultyAppraisals();
+    showToast('Review Cycle Started', 'Formal appraisal cycle ' + nextId + ' initiated for ' + staffName + '.', 'success');
+  }
+
+  function openSubmitSelfAssessmentModal(appraisalId) {
+    ensureAppraisalState();
+    const app = (state.appraisals || []).find(a => a.id === appraisalId);
+    if (!app) return;
+
+    document.getElementById('selfAppraisalId').value = app.id;
+
+    const heading = document.getElementById('selfStaffHeading');
+    if (heading) heading.textContent = app.employeeName + ' (' + app.employeeId + ')';
+
+    const sub = document.getElementById('selfPeriodSub');
+    if (sub) sub.textContent = app.department + ' • Review Period: ' + app.reviewPeriod;
+
+    const refl = document.getElementById('selfReflectionText');
+    if (refl) {
+      refl.value = app.selfAssessment ? app.selfAssessment.reflection : '';
+    }
+
+    const doc = document.getElementById('selfEvidenceDoc');
+    if (doc) {
+      doc.value = app.selfAssessment ? (app.selfAssessment.evidenceDoc || '') : '';
+    }
+
+    openModal('submitSelfAssessmentModal');
+  }
+
+  function handleSelfAssessmentSubmit(event) {
+    if (event) event.preventDefault();
+
+    const appDraftId = document.getElementById('selfAppraisalId').value;
+    const rating = document.getElementById('selfRatingSelect').value;
+    const reflection = document.getElementById('selfReflectionText').value.trim();
+    const evidenceDoc = document.getElementById('selfEvidenceDoc').value.trim();
+
+    ensureAppraisalState();
+    const app = (state.appraisals || []).find(a => a.id === appDraftId);
+    if (!app) return;
+
+    app.selfAssessment = {
+      rating: rating.split(' ')[0],
+      reflection: reflection,
+      evidenceDoc: evidenceDoc || null,
+      submittedAt: new Date().toISOString().split('T')[0]
+    };
+    app.status = 'Self-Assessment Submitted';
+
+    closeModal('submitSelfAssessmentModal');
+    renderFacultyAppraisals();
+    showToast('Self-Assessment Submitted', 'Self-evaluation recorded and forwarded to ' + app.reviewer + '.', 'success');
+  }
+
+  function openConductReviewModal(appraisalId) {
+    ensureAppraisalState();
+    const app = (state.appraisals || []).find(a => a.id === appraisalId);
+    if (!app) return;
+
+    document.getElementById('conductAppraisalId').value = app.id;
+
+    const heading = document.getElementById('conductStaffHeading');
+    if (heading) heading.textContent = app.employeeName + ' (' + app.employeeId + ')';
+
+    const sub = document.getElementById('conductPeriodSub');
+    if (sub) sub.textContent = app.department + ' • ' + app.reviewPeriod;
+
+    const obj = document.getElementById('conductObjectivesText');
+    if (obj) obj.innerHTML = '<strong>Objectives:</strong> ' + app.objectives;
+
+    const selfBox = document.getElementById('conductSelfAssessmentBox');
+    if (selfBox) {
+      if (app.selfAssessment) {
+        selfBox.style.display = 'block';
+        document.getElementById('conductSelfScore').textContent = app.selfAssessment.rating;
+        document.getElementById('conductSelfText').textContent = '"' + app.selfAssessment.reflection + '"';
+      } else {
+        selfBox.style.display = 'none';
+      }
+    }
+
+    const comm = document.getElementById('conductReviewerComments');
+    if (comm) comm.value = app.reviewerComments || '';
+
+    const goals = document.getElementById('conductDevGoals');
+    if (goals) goals.value = app.developmentGoals || '';
+
+    const meetDate = document.getElementById('conductMeetingDate');
+    if (meetDate) {
+      meetDate.value = app.meetingDate ? app.meetingDate.replace(' ', 'T') : new Date().toISOString().slice(0, 16);
+    }
+
+    const statusSel = document.getElementById('conductStatusSelect');
+    if (statusSel) {
+      statusSel.value = app.status === 'Completed' ? 'Completed' : 'Under Review';
+    }
+
+    openModal('conductReviewModal');
+  }
+
+  function saveAppraisalDraft() {
+    const appDraftId = document.getElementById('conductAppraisalId').value;
+    const comm = document.getElementById('conductReviewerComments').value.trim();
+    const goals = document.getElementById('conductDevGoals').value.trim();
+
+    ensureAppraisalState();
+    const app = (state.appraisals || []).find(a => a.id === appDraftId);
+    if (!app) return;
+
+    app.reviewerComments = comm;
+    app.developmentGoals = goals;
+    app.status = 'Draft';
+
+    closeModal('conductReviewModal');
+    renderFacultyAppraisals();
+    showToast('Draft Saved', 'Interim appraisal notes saved in draft mode.', 'info');
+  }
+
+  function submitConductReview(event) {
+    if (event) event.preventDefault();
+
+    const appDraftId = document.getElementById('conductAppraisalId').value;
+    const rating = document.getElementById('conductRatingSelect').value;
+    const meetDate = document.getElementById('conductMeetingDate').value;
+    const comments = document.getElementById('conductReviewerComments').value.trim();
+    const goals = document.getElementById('conductDevGoals').value.trim();
+    const status = document.getElementById('conductStatusSelect').value;
+
+    ensureAppraisalState();
+    const app = (state.appraisals || []).find(a => a.id === appDraftId);
+    if (!app) return;
+
+    app.rating = rating;
+    app.meetingDate = meetDate;
+    app.meetingDateFormatted = meetDate ? meetDate.replace('T', ' at ') : 'Conducted';
+    app.reviewerComments = comments;
+    app.developmentGoals = goals;
+    app.status = status;
+
+    if (status === 'Completed') {
+      app.acknowledgement = {
+        employee: 'Signed & Acknowledged by ' + app.employeeName + ' on ' + new Date().toISOString().split('T')[0],
+        reviewer: 'Authorized by ' + app.reviewer + ' on ' + new Date().toISOString().split('T')[0]
+      };
+    }
+
+    closeModal('conductReviewModal');
+    renderFacultyAppraisals();
+    showToast('Review Finalized', 'Appraisal review for ' + app.employeeName + ' transitioned to ' + status + '.', 'success');
+  }
+
+  function openReturnRevisionFromConduct() {
+    const appDraftId = document.getElementById('conductAppraisalId').value;
+    closeModal('conductReviewModal');
+    openReturnRevisionModal(appDraftId);
+  }
+
+  function openReturnRevisionModal(appraisalId) {
+    document.getElementById('returnRevisionAppraisalId').value = appraisalId;
+    document.getElementById('returnRevisionReason').value = '';
+    openModal('returnRevisionModal');
+  }
+
+  function handleReturnRevisionSubmit(event) {
+    if (event) event.preventDefault();
+
+    const appId = document.getElementById('returnRevisionAppraisalId').value;
+    const reason = document.getElementById('returnRevisionReason').value.trim();
+
+    ensureAppraisalState();
+    const app = (state.appraisals || []).find(a => a.id === appId);
+    if (!app) return;
+
+    app.status = 'Returned for Revision';
+    app.reviewerComments = 'Returned for revision: ' + reason;
+
+    closeModal('returnRevisionModal');
+    renderFacultyAppraisals();
+    showToast('Returned for Revision', 'Appraisal returned to ' + app.employeeName + ' for requested evidence.', 'warning');
+  }
+
+  function openViewAppraisalDossierModal(appraisalId) {
+    ensureAppraisalState();
+    const app = (state.appraisals || []).find(a => a.id === appraisalId);
+    if (!app) return;
+
+    activeAppraisalDossierId = app.id;
+
+    const setT = (id, val) => {
+      const el = document.getElementById(id);
+      if (el) el.textContent = val;
+    };
+
+    setT('dosReviewPeriod', app.reviewPeriod);
+    setT('dosEmployeeName', app.employeeName);
+    setT('dosEmployeeDetails', app.employeeId + ' • ' + app.department + ' (' + (app.designation || 'Staff') + ')');
+    setT('dosReviewerName', app.reviewer);
+    setT('dosMeetingDate', 'Meeting Date: ' + (app.meetingDateFormatted || 'To be scheduled'));
+    setT('dosObjectives', app.objectives);
+    setT('dosCriteria', app.criteria);
+
+    const selfEl = document.getElementById('dosSelfAssessment');
+    if (selfEl) {
+      if (app.selfAssessment) {
+        selfEl.innerHTML = '<strong>Self-Rating: ' + app.selfAssessment.rating + '</strong> &bull; "' + app.selfAssessment.reflection + '"' +
+          (app.selfAssessment.evidenceDoc ? '<div style="margin-top:4px;"><i class="fa-solid fa-paperclip mr-1 text-primary"></i> Supporting Document: ' + app.selfAssessment.evidenceDoc + '</div>' : '');
+      } else {
+        selfEl.textContent = 'Self-assessment not submitted for this cycle.';
+      }
+    }
+
+    const ratingEl = document.getElementById('dosRating');
+    if (ratingEl) {
+      ratingEl.innerHTML = '<i class="fa-solid fa-star mr-1"></i> ' + (app.rating || 'In Progress');
+    }
+
+    setT('dosReviewerComments', app.reviewerComments || 'Formal qualitative comments pending completion.');
+    setT('dosDevGoals', app.developmentGoals || 'Development milestones to be finalized during appraisal.');
+
+    const empSign = document.getElementById('dosEmployeeSign');
+    if (empSign) {
+      empSign.textContent = app.acknowledgement ? app.acknowledgement.employee : 'Pending Employee Acknowledgement';
+    }
+
+    const revSign = document.getElementById('dosReviewerSign');
+    if (revSign) {
+      revSign.textContent = app.acknowledgement ? app.acknowledgement.reviewer : app.reviewer;
+    }
+
+    openModal('viewAppraisalDossierModal');
+  }
+
+  function exportAllAppraisalsCSV() {
+    if (!isStaffAuthorized()) {
+      showToast('Access Restricted', 'Exporting appraisal dossiers is restricted to executive leadership.', 'error');
+      return;
+    }
+
+    ensureAppraisalState();
+    const list = state.appraisals || [];
+
+    const headers = ['Appraisal ID', 'Employee ID', 'Employee Name', 'Department', 'Review Period', 'Reviewer', 'Objectives', 'Self Rating', 'Overall Rating', 'Meeting Date', 'Development Goals', 'Status'];
+    const rows = list.map(a => [
+      '"' + (a.id || '') + '"',
+      '"' + (a.employeeId || '') + '"',
+      '"' + (a.employeeName || '').replace(/"/g, '""') + '"',
+      '"' + (a.department || '').replace(/"/g, '""') + '"',
+      '"' + (a.reviewPeriod || '') + '"',
+      '"' + (a.reviewer || '').replace(/"/g, '""') + '"',
+      '"' + (a.objectives || '').replace(/"/g, '""') + '"',
+      '"' + (a.selfAssessment ? a.selfAssessment.rating : 'None') + '"',
+      '"' + (a.rating || '') + '"',
+      '"' + (a.meetingDateFormatted || '') + '"',
+      '"' + (a.developmentGoals || '').replace(/"/g, '""') + '"',
+      '"' + (a.status || '') + '"'
+    ]);
+
+    const csvContent = 'data:text/csv;charset=utf-8,' + [headers.join(','), ...rows.map(e => e.join(','))].join('\n');
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement('a');
+    link.setAttribute('href', encodedUri);
+    link.setAttribute('download', 'Sri_Vidya_Staff_Appraisal_Register_' + new Date().toISOString().slice(0, 10) + '.csv');
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+
+    showToast('Export Complete', 'Exported ' + list.length + ' authorized appraisal reviews to CSV.', 'success');
   }
 
   function renderFacultyWorkload(list) {
@@ -42565,6 +43378,22 @@ const classData = TIMETABLE_CLASS_DATA[currentTimetableClass] || TIMETABLE_CLASS
   }
 
   return {
+    filterAppraisals: filterAppraisals,
+    resetAppraisalFilters: resetAppraisalFilters,
+    populateStartReviewStaffDropdown: populateStartReviewStaffDropdown,
+    onAppraisalEmployeeChange: onAppraisalEmployeeChange,
+    openStartReviewModal: openStartReviewModal,
+    handleStartReviewSubmit: handleStartReviewSubmit,
+    openSubmitSelfAssessmentModal: openSubmitSelfAssessmentModal,
+    handleSelfAssessmentSubmit: handleSelfAssessmentSubmit,
+    openConductReviewModal: openConductReviewModal,
+    saveAppraisalDraft: saveAppraisalDraft,
+    submitConductReview: submitConductReview,
+    openReturnRevisionFromConduct: openReturnRevisionFromConduct,
+    openReturnRevisionModal: openReturnRevisionModal,
+    handleReturnRevisionSubmit: handleReturnRevisionSubmit,
+    openViewAppraisalDossierModal: openViewAppraisalDossierModal,
+    exportAllAppraisalsCSV: exportAllAppraisalsCSV,
     switchLeaveViewMode: switchLeaveViewMode,
     openSubmitLeaveRequestModal: openSubmitLeaveRequestModal,
     onLeaveEmployeeChange: onLeaveEmployeeChange,

@@ -5394,50 +5394,205 @@
           <!-- ==========================================
           <!-- SUBVIEW 5: APPRAISAL & FEEDBACK -->
           <!-- ========================================== -->
+          <!-- ========================================================================= -->
+          <!-- SUBVIEW 5: AUTHORITATIVE APPRAISAL & FEEDBACK MODULE -->
+          <!-- ========================================================================= -->
           <div class="teacher-subview" id="subview-teachers-performance" style="display: none;">
-            <div class="card p-4">
-              <div class="card-header-flex mb-3">
-                <div>
-                  <h3 style="margin:0;"><i class="fa-solid fa-award text-purple"></i> Appraisal &amp; Feedback
-                    Management</h3>
-                  <p class="text-muted" style="margin:0; font-size:0.85rem;">Evaluation periods, performance goals,
-                    review milestones, parent/peer feedback, and authorized ratings.</p>
+
+            <!-- Page Header -->
+            <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap" style="gap:15px; border-bottom: 1px solid #e2e8f0; padding-bottom: 1.25rem;">
+              <div>
+                <div class="text-xs text-uppercase font-weight-bold text-muted mb-1" style="letter-spacing: 0.5px;">
+                  <i class="fa-solid fa-award mr-1 text-primary"></i> Teachers &amp; Staff &gt; Appraisal &amp; Feedback
                 </div>
-                <div style="display:flex; align-items:center; gap:8px;">
-                  <span class="portal-badge badge-primary">Academic Cycle 2025–2026</span>
-                  <button type="button" class="btn btn-secondary btn-sm" onclick="portalApp.printPerformanceTable()">
-                    <i class="fa-solid fa-print"></i> Print Register
-                  </button>
+                <h2 class="h3 font-weight-bold text-gray-800 mb-1" style="color: #1e293b; margin: 0;">Appraisal &amp; Feedback</h2>
+                <p class="text-muted mb-0" style="font-size: 0.9rem;">Confidential institutional performance evaluations, teaching &amp; role-related criteria rubrics, self-assessments, executive reviews, and professional development goals.</p>
+              </div>
+              <div class="d-flex align-items-center flex-wrap" style="gap: 8px;">
+                <button type="button" class="btn btn-outline-primary btn-sm" onclick="portalApp.exportAllAppraisalsCSV()" title="Export authorized review records to official CSV">
+                  <i class="fa-solid fa-file-csv mr-1"></i> Export Authorized Reviews
+                </button>
+                <button type="button" class="btn btn-primary btn-sm" onclick="portalApp.openStartReviewModal()" style="font-weight:600;" title="Initiate formal appraisal review for a staff member">
+                  <i class="fa-solid fa-plus-circle mr-1"></i> + Start Review
+                </button>
+              </div>
+            </div>
+
+            <!-- Confidentiality & RBAC Privacy Banner -->
+            <div class="confidential-banner mb-4">
+              <div class="d-flex align-items-start" style="gap: 12px;">
+                <i class="fa-solid fa-user-shield text-danger" style="font-size: 1.35rem; margin-top: 2px;"></i>
+                <div style="flex-grow: 1;">
+                  <strong style="color: #991b1b; font-size: 0.92rem;">Confidential Human Resources Protocol &bull; Restricted Access Enforced:</strong>
+                  <div style="color: #7f1d1d; font-size: 0.83rem; margin-top: 2px; line-height: 1.45;">
+                    Appraisal evaluations, reviewer ratings, self-assessments, and qualitative comments are strictly private.
+                    General office staff and unauthorized accounts are prohibited from browsing confidential HR dossiers. Detailed scoring and feedback are locked to the Principal, Vice Principal, and designated administrative reviewers.
+                  </div>
+                </div>
+                <div id="appraisalAuthBadge">
+                  <span class="badge badge-success py-2 px-3" style="font-size:0.78rem;">
+                    <i class="fa-solid fa-lock-open mr-1"></i> Executive Access Active
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Executive KPI Cards -->
+            <div class="row mb-4">
+              <div class="col-xl-2 col-md-4 col-sm-6 mb-3">
+                <div class="card h-100 shadow-sm border-0" style="border-left: 4px solid #3b82f6 !important; border-radius: 8px;">
+                  <div class="card-body p-3">
+                    <div class="d-flex align-items-center justify-content-between mb-1">
+                      <span class="text-xs font-weight-bold text-muted text-uppercase">Cadre Reviews</span>
+                      <i class="fa-solid fa-clipboard-user text-primary" style="font-size: 1.1rem;"></i>
+                    </div>
+                    <div class="h4 mb-0 font-weight-bold text-gray-800" id="kpiTotalAppraisals">8</div>
+                    <div class="text-xs text-muted mt-1">Teaching &amp; Staff Cadre</div>
+                  </div>
                 </div>
               </div>
 
-              <div id="appraisalConfidentialityLockNotice" style="display:none;" class="confidential-notice">
-                <i class="fa-solid fa-shield-halved"></i>
-                <div>
-                  <strong>Confidential HR Notice:</strong> Individual teacher evaluation ratings, pass percentages, and
-                  supervisory feedback are restricted to Principal and Vice-Principal authorized personnel.
+              <div class="col-xl-3 col-md-4 col-sm-6 mb-3">
+                <div class="card h-100 shadow-sm border-0" style="border-left: 4px solid #10b981 !important; border-radius: 8px;">
+                  <div class="card-body p-3">
+                    <div class="d-flex align-items-center justify-content-between mb-1">
+                      <span class="text-xs font-weight-bold text-muted text-uppercase">Completed Reviews</span>
+                      <i class="fa-solid fa-circle-check text-success" style="font-size: 1.1rem;"></i>
+                    </div>
+                    <div class="h4 mb-0 font-weight-bold text-success" id="kpiCompletedAppraisals">4</div>
+                    <div class="text-xs text-success mt-1"><i class="fa-solid fa-signature mr-1"></i> Mutually Acknowledged</div>
+                  </div>
                 </div>
               </div>
 
-              <div class="table-container">
-                <table class="staff-roster-table" id="facultyAppraisalsTable">
-                  <thead>
+              <div class="col-xl-2 col-md-4 col-sm-6 mb-3">
+                <div class="card h-100 shadow-sm border-0" style="border-left: 4px solid #f59e0b !important; border-radius: 8px;">
+                  <div class="card-body p-3">
+                    <div class="d-flex align-items-center justify-content-between mb-1">
+                      <span class="text-xs font-weight-bold text-muted text-uppercase">Under Review</span>
+                      <i class="fa-solid fa-hourglass-half text-warning" style="font-size: 1.1rem;"></i>
+                    </div>
+                    <div class="h4 mb-0 font-weight-bold text-warning" id="kpiActiveAppraisals">2</div>
+                    <div class="text-xs text-muted mt-1">Discussion In Progress</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-xl-3 col-md-6 col-sm-6 mb-3">
+                <div class="card h-100 shadow-sm border-0" style="border-left: 4px solid #8b5cf6 !important; border-radius: 8px;">
+                  <div class="card-body p-3">
+                    <div class="d-flex align-items-center justify-content-between mb-1">
+                      <span class="text-xs font-weight-bold text-muted text-uppercase">Self-Assessment Due</span>
+                      <i class="fa-solid fa-user-pen text-purple" style="font-size: 1.1rem; color:#8b5cf6;"></i>
+                    </div>
+                    <div class="h4 mb-0 font-weight-bold" style="color:#7c3aed;" id="kpiSelfAssessmentPending">1</div>
+                    <div class="text-xs text-muted mt-1">Awaiting Employee Submission</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-xl-2 col-md-6 col-sm-6 mb-3">
+                <div class="card h-100 shadow-sm border-0" style="border-left: 4px solid #ea580c !important; border-radius: 8px;">
+                  <div class="card-body p-3">
+                    <div class="d-flex align-items-center justify-content-between mb-1">
+                      <span class="text-xs font-weight-bold text-muted text-uppercase">Revisions Due</span>
+                      <i class="fa-solid fa-rotate-left" style="font-size: 1.1rem; color:#ea580c;"></i>
+                    </div>
+                    <div class="h4 mb-0 font-weight-bold" style="color:#c2410c;" id="kpiRevisionDueAppraisals">1</div>
+                    <div class="text-xs text-muted mt-1">Returned for Evidence</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Executive Filter Toolbar -->
+            <div class="card mb-4 shadow-sm border-0" style="border-radius: 8px; background: #fff;">
+              <div class="card-body p-3">
+                <div class="d-flex align-items-center justify-content-between flex-wrap" style="gap: 12px;">
+                  
+                  <div class="d-flex align-items-center flex-wrap" style="gap: 10px; flex: 1;">
+                    <!-- Search Input -->
+                    <div style="position: relative; min-width: 250px; flex: 1;">
+                      <i class="fa-solid fa-magnifying-glass" style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: #94a3b8; font-size: 0.85rem;"></i>
+                      <input type="text" id="appraisalSearchInput" class="form-control form-control-sm" style="padding-left: 34px; border-radius: 6px;" placeholder="Search employee, reviewer, objectives, department..." oninput="portalApp.filterAppraisals()">
+                    </div>
+
+                    <!-- Review Period Filter -->
+                    <div style="min-width: 180px;">
+                      <select id="appraisalPeriodFilter" class="form-control form-control-sm" style="border-radius: 6px;" onchange="portalApp.filterAppraisals()">
+                        <option value="all">All Review Periods</option>
+                        <option value="Academic Year 2025–26">Academic Year 2025–26 (Annual)</option>
+                        <option value="Academic Year 2026–27">Academic Year 2026–27 (Mid-Term)</option>
+                      </select>
+                    </div>
+
+                    <!-- Department Filter -->
+                    <div style="min-width: 170px;">
+                      <select id="appraisalDeptFilter" class="form-control form-control-sm" style="border-radius: 6px;" onchange="portalApp.filterAppraisals()">
+                        <option value="all">All Departments</option>
+                        <option value="Mathematics">Mathematics</option>
+                        <option value="Physical Science">Physical Science</option>
+                        <option value="Administrative Office">Administrative Office</option>
+                        <option value="Finance &amp; Accounts">Finance &amp; Accounts</option>
+                        <option value="Science Laboratories">Science Laboratories</option>
+                        <option value="Library &amp; Learning Resource">Library &amp; Learning Resource</option>
+                        <option value="Social Studies">Social Studies</option>
+                        <option value="English">English</option>
+                      </select>
+                    </div>
+
+                    <!-- Status Filter -->
+                    <div style="min-width: 170px;">
+                      <select id="appraisalStatusFilter" class="form-control form-control-sm" style="border-radius: 6px;" onchange="portalApp.filterAppraisals()">
+                        <option value="all">All Review Statuses</option>
+                        <option value="Completed">Completed</option>
+                        <option value="Under Review">Under Review</option>
+                        <option value="Self-Assessment Submitted">Self-Assessment Submitted</option>
+                        <option value="Returned for Revision">Returned for Revision</option>
+                        <option value="Draft">Draft</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div class="d-flex align-items-center" style="gap: 8px;">
+                    <span class="badge badge-light font-weight-normal py-2 px-3" id="appraisalCountPill" style="background:#f1f5f9; color:#334155; font-size:0.82rem; border:1px solid #e2e8f0;">
+                      Showing 8 of 8 Appraisal Reviews
+                    </span>
+                    <button type="button" class="btn btn-outline-secondary btn-sm" onclick="portalApp.resetAppraisalFilters()" title="Reset Filters">
+                      <i class="fa-solid fa-rotate-left mr-1"></i> Reset
+                    </button>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+
+            <!-- Authoritative 11-Column Master Appraisal Table -->
+            <div class="card shadow-sm border-0 mb-4" style="border-radius: 8px; overflow: hidden; background: #fff;">
+              <div class="table-responsive">
+                <table class="table table-hover mb-0" id="facultyAppraisalsTable" style="vertical-align: middle;">
+                  <thead style="background: #f8fafc; border-bottom: 2px solid #e2e8f0;">
                     <tr>
-                      <th>Employee</th>
-                      <th>Evaluation Period</th>
-                      <th>Performance Goals</th>
-                      <th>Review Status</th>
-                      <th>Feedback Summary</th>
-                      <th>Authorized Ratings</th>
-                      <th style="text-align:center; width:110px;">HR Review</th>
+                      <th style="font-size: 0.8rem; text-transform: uppercase; color: #475569; letter-spacing: 0.5px; padding: 12px 14px;">Review Period</th>
+                      <th style="font-size: 0.8rem; text-transform: uppercase; color: #475569; letter-spacing: 0.5px; padding: 12px 14px;">Employee</th>
+                      <th style="font-size: 0.8rem; text-transform: uppercase; color: #475569; letter-spacing: 0.5px; padding: 12px 14px;">Reviewer</th>
+                      <th style="font-size: 0.8rem; text-transform: uppercase; color: #475569; letter-spacing: 0.5px; padding: 12px 14px;">Performance Objectives</th>
+                      <th style="font-size: 0.8rem; text-transform: uppercase; color: #475569; letter-spacing: 0.5px; padding: 12px 14px;">Role-Related Criteria</th>
+                      <th style="font-size: 0.8rem; text-transform: uppercase; color: #475569; letter-spacing: 0.5px; padding: 12px 14px;">Self-Assessment</th>
+                      <th style="font-size: 0.8rem; text-transform: uppercase; color: #475569; letter-spacing: 0.5px; padding: 12px 14px;">Reviewer Comments</th>
+                      <th style="font-size: 0.8rem; text-transform: uppercase; color: #475569; letter-spacing: 0.5px; padding: 12px 14px;">Meeting Date</th>
+                      <th style="font-size: 0.8rem; text-transform: uppercase; color: #475569; letter-spacing: 0.5px; padding: 12px 14px;">Development Goals</th>
+                      <th style="font-size: 0.8rem; text-transform: uppercase; color: #475569; letter-spacing: 0.5px; padding: 12px 14px;">Status &amp; Ack</th>
+                      <th style="font-size: 0.8rem; text-transform: uppercase; color: #475569; letter-spacing: 0.5px; padding: 12px 14px; text-align: right;">Actions</th>
                     </tr>
                   </thead>
                   <tbody id="facultyAppraisalsTableBody">
-                    <!-- Populated via portal.js -->
+                    <!-- Populated dynamically via portalApp.renderFacultyAppraisals() -->
                   </tbody>
                 </table>
               </div>
             </div>
+
           </div>
 
           <!-- ========================================== -->
@@ -24060,6 +24215,367 @@ Class X-A,Monday,2,09:35 AM - 10:20 AM,Physical Science,Sri Navva Anand,Room 201
 
       <div class="portal-modal-footer" style="padding: 12px 20px; background:#f8fafc; border-top:1px solid #e2e8f0; display:flex; justify-content:flex-end;">
         <button type="button" class="btn btn-secondary btn-sm" onclick="portalApp.closeModal('viewLeaveBalancesModal')">Close</button>
+      </div>
+    </div>
+  </div>
+
+
+  
+  <!-- ========================================================================= -->
+  <!-- MODAL 1: START REVIEW MODAL (INITIATE APPRAISAL CYCLE) -->
+  <!-- ========================================================================= -->
+  <div class="portal-modal-backdrop" id="startReviewModal" style="display:none;">
+    <div class="portal-modal-dialog" style="max-width: 720px;">
+      <div class="portal-modal-header">
+        <div>
+          <h5 class="portal-modal-title" style="color:#1e293b; font-weight:700;">
+            <i class="fa-solid fa-flag-checkered mr-2 text-primary"></i> Initiate Employee Performance Review
+          </h5>
+          <p class="text-muted mb-0" style="font-size:0.84rem;">Establish review period, designated reviewer, performance objectives, and evaluation criteria.</p>
+        </div>
+        <button type="button" class="portal-modal-close" onclick="portalApp.closeModal('startReviewModal')">&times;</button>
+      </div>
+
+      <form id="startReviewForm" onsubmit="portalApp.handleStartReviewSubmit(event)">
+        <div class="portal-modal-body" style="padding: 20px;">
+          <div class="row">
+            <div class="col-md-7 mb-3">
+              <label style="font-weight:600; font-size:0.85rem; color:#334155;">Employee Being Evaluated <span class="text-danger">*</span></label>
+              <select class="form-control form-control-sm" id="startReviewEmployeeId" required onchange="portalApp.onAppraisalEmployeeChange()">
+                <option value="">-- Select Staff Member (42 Total) --</option>
+                <!-- Injected dynamically via JS -->
+              </select>
+            </div>
+
+            <div class="col-md-5 mb-3">
+              <label style="font-weight:600; font-size:0.85rem; color:#334155;">Review Period <span class="text-danger">*</span></label>
+              <select class="form-control form-control-sm" id="startReviewPeriod" required>
+                <option value="Academic Year 2025–26">Academic Year 2025–26 (Annual)</option>
+                <option value="Academic Year 2026–27">Academic Year 2026–27 (Mid-Term Review)</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label style="font-weight:600; font-size:0.85rem; color:#334155;">Designated Executive Reviewer <span class="text-danger">*</span></label>
+            <select class="form-control form-control-sm" id="startReviewReviewer" required>
+              <option value="Principal Smt. Gorle Varalakshmi">Principal Smt. Gorle Varalakshmi (Executive Evaluator)</option>
+              <option value="Vice Principal Sri Navva Anand">Vice Principal Sri Navva Anand (Academic Faculty Reviewer)</option>
+              <option value="Administrative Officer Sri M. Srinivas">Administrative Officer Sri M. Srinivas (Support Staff Evaluator)</option>
+            </select>
+          </div>
+
+          <div class="mb-3">
+            <label style="font-weight:600; font-size:0.85rem; color:#334155;">Key Performance Objectives (Target Milestones) <span class="text-danger">*</span></label>
+            <textarea class="form-control form-control-sm" id="startReviewObjectives" rows="2" required placeholder="e.g. CBSE Class X Board pass rate > 95%, ICT smart classroom integration, zero safety incidents..."></textarea>
+          </div>
+
+          <div class="mb-3">
+            <label style="font-weight:600; font-size:0.85rem; color:#334155;">Teaching or Role-Related Criteria Focus</label>
+            <input type="text" class="form-control form-control-sm" id="startReviewCriteria" value="Curriculum Delivery, Formative Feedback, Classroom Management, Professional Development">
+          </div>
+
+          <div class="mb-2">
+            <label style="font-weight:600; font-size:0.85rem; color:#334155;">Target Development Goals</label>
+            <input type="text" class="form-control form-control-sm" id="startReviewGoals" placeholder="e.g. Attend CBSE National Pedagogy Workshop; Complete Advanced Laboratory Safety Certification">
+          </div>
+        </div>
+
+        <div class="portal-modal-footer" style="padding: 12px 20px; background:#f8fafc; border-top:1px solid #e2e8f0; display:flex; justify-content:flex-end; gap:8px;">
+          <button type="button" class="btn btn-outline-secondary btn-sm" onclick="portalApp.closeModal('startReviewModal')">Cancel</button>
+          <button type="submit" class="btn btn-primary btn-sm" style="font-weight:600;">
+            <i class="fa-solid fa-play mr-1"></i> Start Review Cycle
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+
+  <!-- ========================================================================= -->
+  <!-- MODAL 2: CONDUCT / COMPLETE EXECUTIVE REVIEW MODAL -->
+  <!-- ========================================================================= -->
+  <div class="portal-modal-backdrop" id="conductReviewModal" style="display:none;">
+    <div class="portal-modal-dialog" style="max-width: 780px;">
+      <div class="portal-modal-header">
+        <div>
+          <h5 class="portal-modal-title" style="color:#1e293b; font-weight:700;">
+            <i class="fa-solid fa-gavel mr-2 text-warning"></i> Conduct / Complete Performance Review
+          </h5>
+          <p class="text-muted mb-0" style="font-size:0.84rem;">Confidential evaluator scoring, reviewer feedback, meeting minutes, and development plan.</p>
+        </div>
+        <button type="button" class="portal-modal-close" onclick="portalApp.closeModal('conductReviewModal')">&times;</button>
+      </div>
+
+      <form id="conductReviewForm" onsubmit="portalApp.submitConductReview(event)">
+        <input type="hidden" id="conductAppraisalId">
+
+        <div class="portal-modal-body" style="padding: 20px;">
+          <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:6px; padding:12px; margin-bottom:16px;">
+            <div style="font-weight:700; font-size:0.95rem; color:#1e293b;" id="conductStaffHeading">Sri M. Srinivas (SV-FAC-0105)</div>
+            <div style="font-size:0.82rem; color:#64748b;" id="conductPeriodSub">Social Studies &bull; Review Period: Academic Year 2025–26</div>
+            <div style="font-size:0.83rem; color:#334155; margin-top:6px;" id="conductObjectivesText">
+              <strong>Objectives:</strong> CBSE Class X Social Studies distinction rate &gt; 85%.
+            </div>
+            <div id="conductSelfAssessmentBox" style="margin-top:8px; font-size:0.82rem; background:#eff6ff; padding:8px 10px; border-radius:5px; border:1px solid #bfdbfe;">
+              <strong>Employee Self-Assessment:</strong> <span id="conductSelfScore">4.5 / 5.0</span> &bull; <span id="conductSelfText">"Implemented interactive digital maps and conducted 4 remedial doubt sessions."</span>
+            </div>
+          </div>
+
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <label style="font-weight:600; font-size:0.85rem; color:#334155;">Overall Performance Rating <span class="text-danger">*</span></label>
+              <select class="form-control form-control-sm" id="conductRatingSelect" required>
+                <option value="5.0 - Outstanding">5.0 - Outstanding (Consistently Exceeds Standards)</option>
+                <option value="4.5 - Excellent" selected>4.5 - Excellent (High Impact Contribution)</option>
+                <option value="4.0 - Very Good">4.0 - Very Good (Meets All Institutional Objectives)</option>
+                <option value="3.5 - Satisfactory">3.5 - Satisfactory (Competent Performance)</option>
+                <option value="2.5 - Needs Improvement">2.5 - Needs Improvement (Development Plan Required)</option>
+              </select>
+            </div>
+
+            <div class="col-md-6">
+              <label style="font-weight:600; font-size:0.85rem; color:#334155;">Formal Meeting Date &amp; Time <span class="text-danger">*</span></label>
+              <input type="datetime-local" class="form-control form-control-sm" id="conductMeetingDate" required>
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label style="font-weight:600; font-size:0.85rem; color:#334155;">Reviewer Qualitative Comments &amp; Evaluation <span class="text-danger">*</span></label>
+            <textarea class="form-control form-control-sm" id="conductReviewerComments" rows="3" required placeholder="Detailed executive observations on lesson delivery, subject mastery, student mentor engagement, and institutional contribution..."></textarea>
+          </div>
+
+          <div class="mb-3">
+            <label style="font-weight:600; font-size:0.85rem; color:#334155;">Agreed Professional Development Goals <span class="text-danger">*</span></label>
+            <textarea class="form-control form-control-sm" id="conductDevGoals" rows="2" required placeholder="Specific goals agreed during the appraisal meeting..."></textarea>
+          </div>
+
+          <div class="mb-2">
+            <label style="font-weight:600; font-size:0.85rem; color:#334155;">Review Status Transition</label>
+            <select class="form-control form-control-sm" id="conductStatusSelect" required>
+              <option value="Completed">Completed (Final Mutual Acknowledgement Sealed)</option>
+              <option value="Under Review">Under Review (Meeting Conducted, Pending Acknowledgement)</option>
+              <option value="Draft">Draft (Save Interim Work)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="portal-modal-footer" style="padding: 12px 20px; background:#f8fafc; border-top:1px solid #e2e8f0; display:flex; justify-content:space-between; align-items:center;">
+          <button type="button" class="btn btn-outline-warning btn-sm" onclick="portalApp.openReturnRevisionFromConduct()">
+            <i class="fa-solid fa-rotate-left mr-1"></i> Return for Revision
+          </button>
+          <div style="display:flex; gap:8px;">
+            <button type="button" class="btn btn-outline-secondary btn-sm" onclick="portalApp.closeModal('conductReviewModal')">Cancel</button>
+            <button type="button" class="btn btn-secondary btn-sm" onclick="portalApp.saveAppraisalDraft()">
+              <i class="fa-solid fa-floppy-disk mr-1"></i> Save Draft
+            </button>
+            <button type="submit" class="btn btn-success btn-sm" style="font-weight:700;">
+              <i class="fa-solid fa-circle-check mr-1"></i> Submit / Complete Review
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+
+  <!-- ========================================================================= -->
+  <!-- MODAL 3: SUBMIT EMPLOYEE SELF-ASSESSMENT MODAL -->
+  <!-- ========================================================================= -->
+  <div class="portal-modal-backdrop" id="submitSelfAssessmentModal" style="display:none;">
+    <div class="portal-modal-dialog" style="max-width: 650px;">
+      <div class="portal-modal-header">
+        <div>
+          <h5 class="portal-modal-title" style="color:#1e293b; font-weight:700;">
+            <i class="fa-solid fa-user-pen mr-2 text-info"></i> Submit Employee Self-Assessment
+          </h5>
+          <p class="text-muted mb-0" style="font-size:0.84rem;">Employee self-reflection on achievements, pedagogical innovations, and portfolio evidence.</p>
+        </div>
+        <button type="button" class="portal-modal-close" onclick="portalApp.closeModal('submitSelfAssessmentModal')">&times;</button>
+      </div>
+
+      <form id="submitSelfAssessmentForm" onsubmit="portalApp.handleSelfAssessmentSubmit(event)">
+        <input type="hidden" id="selfAppraisalId">
+
+        <div class="portal-modal-body" style="padding: 20px;">
+          <div style="font-weight:700; font-size:0.95rem; color:#1e293b;" id="selfStaffHeading">Smt. M. Vijaya (SV-STF-0201)</div>
+          <div style="font-size:0.82rem; color:#64748b; margin-bottom:14px;" id="selfPeriodSub">Administrative Office &bull; AY 2025–26</div>
+
+          <div class="mb-3">
+            <label style="font-weight:600; font-size:0.85rem; color:#334155;">Self-Evaluation Rating <span class="text-danger">*</span></label>
+            <select class="form-control form-control-sm" id="selfRatingSelect" required>
+              <option value="5.0 / 5.0 (Exemplary Performance)">5.0 / 5.0 (Exemplary Performance)</option>
+              <option value="4.5 / 5.0 (Consistently Exceeds)" selected>4.5 / 5.0 (Consistently Exceeds Expectations)</option>
+              <option value="4.0 / 5.0 (Meets All Objectives)">4.0 / 5.0 (Meets All Objectives)</option>
+              <option value="3.5 / 5.0 (Satisfactory Contribution)">3.5 / 5.0 (Satisfactory Contribution)</option>
+            </select>
+          </div>
+
+          <div class="mb-3">
+            <label style="font-weight:600; font-size:0.85rem; color:#334155;">Self-Reflection: Accomplishments &amp; Initiatives <span class="text-danger">*</span></label>
+            <textarea class="form-control form-control-sm" id="selfReflectionText" rows="3" required placeholder="Outline key milestones achieved against objectives, pedagogical innovations, remedial student support, or administrative accomplishments..."></textarea>
+          </div>
+
+          <div class="mb-2">
+            <label style="font-weight:600; font-size:0.85rem; color:#334155;">Evidence or Supporting Documents</label>
+            <input type="text" class="form-control form-control-sm" id="selfEvidenceDoc" placeholder="e.g. CBSE_Board_Pass_Percentages_2026.pdf or Lesson_Plan_Innovations_Portfolio.pdf">
+          </div>
+        </div>
+
+        <div class="portal-modal-footer" style="padding: 12px 20px; background:#f8fafc; border-top:1px solid #e2e8f0; display:flex; justify-content:flex-end; gap:8px;">
+          <button type="button" class="btn btn-outline-secondary btn-sm" onclick="portalApp.closeModal('submitSelfAssessmentModal')">Cancel</button>
+          <button type="submit" class="btn btn-primary btn-sm" style="font-weight:600;">
+            <i class="fa-solid fa-paper-plane mr-1"></i> Submit Self-Assessment
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+
+  <!-- ========================================================================= -->
+  <!-- MODAL 4: RETURN FOR REVISION MODAL -->
+  <!-- ========================================================================= -->
+  <div class="portal-modal-backdrop" id="returnRevisionModal" style="display:none;">
+    <div class="portal-modal-dialog" style="max-width: 560px;">
+      <div class="portal-modal-header">
+        <div>
+          <h5 class="portal-modal-title" style="color:#1e293b; font-weight:700;">
+            <i class="fa-solid fa-rotate-left mr-2 text-warning"></i> Return Appraisal for Revision
+          </h5>
+          <p class="text-muted mb-0" style="font-size:0.84rem;">Request additional evidence, clarification, or portfolio revisions from employee.</p>
+        </div>
+        <button type="button" class="portal-modal-close" onclick="portalApp.closeModal('returnRevisionModal')">&times;</button>
+      </div>
+
+      <form id="returnRevisionForm" onsubmit="portalApp.handleReturnRevisionSubmit(event)">
+        <input type="hidden" id="returnRevisionAppraisalId">
+
+        <div class="portal-modal-body" style="padding: 20px;">
+          <div class="mb-3">
+            <label style="font-weight:600; font-size:0.85rem; color:#334155;">Reason for Revision Request <span class="text-danger">*</span></label>
+            <textarea class="form-control form-control-sm" id="returnRevisionReason" rows="3" required placeholder="Specify missing information or additional evidence required (e.g. Please attach stamped lesson observation checklist and term exam answer script audit)..."></textarea>
+          </div>
+        </div>
+
+        <div class="portal-modal-footer" style="padding: 12px 20px; background:#f8fafc; border-top:1px solid #e2e8f0; display:flex; justify-content:flex-end; gap:8px;">
+          <button type="button" class="btn btn-outline-secondary btn-sm" onclick="portalApp.closeModal('returnRevisionModal')">Cancel</button>
+          <button type="submit" class="btn btn-warning btn-sm" style="font-weight:700; color:#1e293b;">
+            <i class="fa-solid fa-rotate-left mr-1"></i> Confirm Return for Revision
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+
+  <!-- ========================================================================= -->
+  <!-- MODAL 5: VIEW CONFIDENTIAL APPRAISAL DOSSIER MODAL -->
+  <!-- ========================================================================= -->
+  <div class="portal-modal-backdrop" id="viewAppraisalDossierModal" style="display:none;">
+    <div class="portal-modal-dialog" style="max-width: 820px;">
+      <div class="portal-modal-header">
+        <div>
+          <h5 class="portal-modal-title" style="color:#1e293b; font-weight:700;">
+            <i class="fa-solid fa-award mr-2 text-primary"></i> Confidential Performance Evaluation Dossier
+          </h5>
+          <p class="text-muted mb-0" style="font-size:0.84rem;">Authoritative institutional appraisal certificate with mutual acknowledgement.</p>
+        </div>
+        <button type="button" class="portal-modal-close" onclick="portalApp.closeModal('viewAppraisalDossierModal')">&times;</button>
+      </div>
+
+      <div class="portal-modal-body" style="padding: 24px;" id="appraisalDossierPrintArea">
+        <div class="muster-roll-sheet">
+          <div class="text-center mb-4" style="border-bottom: 2px solid #0f172a; padding-bottom: 12px;">
+            <h4 style="margin:0; font-weight:800; color:#0f172a; letter-spacing:0.5px;">SRI VIDYA ENGLISH MEDIUM HIGH SCHOOL</h4>
+            <div style="font-size:0.82rem; color:#475569; margin-top:2px;">Tilak Road, Vizianagaram &bull; Recognized by Govt. of Andhra Pradesh</div>
+            <div style="font-weight:800; font-size:1rem; color:#2563eb; margin-top:6px; text-transform:uppercase;">
+              Official Staff Performance Appraisal Dossier &bull; <span id="dosReviewPeriod">AY 2025–26</span>
+            </div>
+            <div style="font-size:0.8rem; color:#dc2626; margin-top:2px; font-weight:700;">
+              <i class="fa-solid fa-lock mr-1"></i> RESTRICTED &amp; CONFIDENTIAL HR DOCUMENT
+            </div>
+          </div>
+
+          <!-- Employee & Reviewer Header -->
+          <div class="row mb-3" style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:6px; padding:12px; margin:0 0 16px 0;">
+            <div class="col-md-6">
+              <div style="font-size:0.75rem; text-transform:uppercase; color:#64748b; font-weight:600;">Employee Particulars</div>
+              <div style="font-size:1rem; font-weight:800; color:#1e293b;" id="dosEmployeeName">Sri M. Srinivas</div>
+              <div style="font-size:0.82rem; color:#475569;" id="dosEmployeeDetails">SV-FAC-0105 &bull; Social Studies Faculty</div>
+            </div>
+            <div class="col-md-6 text-md-right">
+              <div style="font-size:0.75rem; text-transform:uppercase; color:#64748b; font-weight:600;">Designated Reviewer</div>
+              <div style="font-size:1rem; font-weight:800; color:#1e293b;" id="dosReviewerName">Principal Smt. Gorle Varalakshmi</div>
+              <div style="font-size:0.82rem; color:#475569;" id="dosMeetingDate">Appraisal Meeting: 2026-10-24 at 03:30 PM</div>
+            </div>
+          </div>
+
+          <!-- Objectives -->
+          <div class="mb-3">
+            <h6 style="font-weight:700; color:#1e293b; font-size:0.9rem; border-bottom:1px solid #e2e8f0; padding-bottom:4px;">1. Performance Objectives</h6>
+            <div style="font-size:0.85rem; color:#334155; line-height:1.5;" id="dosObjectives">
+              CBSE Class X Social Studies board pass rate &gt; 90% with zero academic failures; complete digital pedagogy workshops.
+            </div>
+          </div>
+
+          <!-- Criteria -->
+          <div class="mb-3">
+            <h6 style="font-weight:700; color:#1e293b; font-size:0.9rem; border-bottom:1px solid #e2e8f0; padding-bottom:4px;">2. Teaching &amp; Role-Related Criteria Evaluation</h6>
+            <div style="font-size:0.85rem; color:#334155; line-height:1.5;" id="dosCriteria">
+              Curriculum Delivery (5/5), Student Engagement (4.5/5), Formative Feedback (4.5/5), Classroom Discipline (5/5), Professional Development (4.5/5).
+            </div>
+          </div>
+
+          <!-- Self Assessment -->
+          <div class="mb-3">
+            <h6 style="font-weight:700; color:#1e293b; font-size:0.9rem; border-bottom:1px solid #e2e8f0; padding-bottom:4px;">3. Employee Self-Assessment &amp; Evidence</h6>
+            <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:6px; padding:10px; font-size:0.84rem; color:#334155;" id="dosSelfAssessment">
+              Self-Rating: 4.5/5.0 &bull; "Conducted weekly remedial doubt clinics and utilized smart interactive displays."
+            </div>
+          </div>
+
+          <!-- Reviewer Comments & Rating -->
+          <div class="mb-3">
+            <h6 style="font-weight:700; color:#1e293b; font-size:0.9rem; border-bottom:1px solid #e2e8f0; padding-bottom:4px;">4. Official Reviewer Evaluation &amp; Rating</h6>
+            <div style="background:#eff6ff; border:1px solid #bfdbfe; border-radius:6px; padding:10px; margin-bottom:8px;">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
+                <span style="font-weight:700; font-size:0.85rem; color:#1e40af;">Final Overall Performance Rating:</span>
+                <span class="appraisal-rating-pill" id="dosRating"><i class="fa-solid fa-star"></i> 4.8 / 5.0 - Outstanding</span>
+              </div>
+              <div style="font-size:0.84rem; color:#1e3a8a;" id="dosReviewerComments">
+                "Demonstrated exceptional pedagogical leadership. Student engagement and exam preparedness exceeded board standards."
+              </div>
+            </div>
+          </div>
+
+          <!-- Development Goals -->
+          <div class="mb-4">
+            <h6 style="font-weight:700; color:#1e293b; font-size:0.9rem; border-bottom:1px solid #e2e8f0; padding-bottom:4px;">5. Agreed Professional Development Goals</h6>
+            <div style="font-size:0.85rem; color:#334155;" id="dosDevGoals">
+              Attend CBSE National Pedagogy Workshop; lead secondary school social studies curriculum committee.
+            </div>
+          </div>
+
+          <!-- Mutual Sign-off -->
+          <div class="d-flex justify-content-between align-items-center pt-3" style="border-top:2px solid #0f172a; font-size:0.82rem; color:#334155;">
+            <div>
+              <div class="appraisal-ack-seal mb-1"><i class="fa-solid fa-check-circle"></i> Employee Acknowledged</div>
+              <div style="color:#64748b;" id="dosEmployeeSign">Signed on 2026-10-25</div>
+            </div>
+            <div class="text-right">
+              <div class="appraisal-ack-seal mb-1"><i class="fa-solid fa-signature"></i> Reviewer Authorized</div>
+              <div style="color:#64748b;" id="dosReviewerSign">Principal Smt. Gorle Varalakshmi</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="portal-modal-footer" style="padding: 12px 20px; background:#f8fafc; border-top:1px solid #e2e8f0; display:flex; justify-content:flex-end; gap:8px;">
+        <button type="button" class="btn btn-outline-secondary btn-sm" onclick="portalApp.closeModal('viewAppraisalDossierModal')">Close</button>
+        <button type="button" class="btn btn-primary btn-sm" onclick="window.print()">
+          <i class="fa-solid fa-print mr-1"></i> Print Authorized Dossier
+        </button>
       </div>
     </div>
   </div>
