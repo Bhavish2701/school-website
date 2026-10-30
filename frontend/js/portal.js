@@ -37556,44 +37556,657 @@ const classData = TIMETABLE_CLASS_DATA[currentTimetableClass] || TIMETABLE_CLASS
   }
 
 
-  // Submenu 2: Subjects & Syllabus
+  
+  // =========================================================================
+  // SUBMENU 2: SUBJECTS & SYLLABUS (AUTHORITATIVE AP SCERT STANDARD)
+  // Curricula standards, learning objectives, chapter units, teacher allocations,
+  // completion pacing, and syllabus archives.
+  // =========================================================================
+
+  let academicSubjectsRegistry = null;
+  let activeDetailSubjectId = 'SUBJ-MTH-101-X';
+
+  function ensureAcademicSubjectsState() {
+    if (academicSubjectsRegistry) return academicSubjectsRegistry;
+
+    academicSubjectsRegistry = [
+      {
+        id: 'SUBJ-MTH-101-X',
+        code: 'MTH-101',
+        name: 'Mathematics & Vedic Arithmetic',
+        className: 'Class X',
+        year: '2026–27',
+        teacher: 'Sri B. Narayana (M.Sc, B.Ed)',
+        teacherDetails: {
+          name: 'Sri B. Narayana',
+          empId: 'EMP-T01',
+          designation: 'Senior Mathematics Master & Class Coordinator',
+          qualification: 'M.Sc (Mathematics), B.Ed',
+          phone: '+91 98480 22331',
+          email: 'b.narayana@srividya.edu.in',
+          experience: '16 Years Teaching Experience'
+        },
+        version: 'v4.2 (AP SCERT)',
+        completionPct: 85,
+        status: 'On Track',
+        periods: 8,
+        textbook: 'AP SCERT Class X Mathematics Part 1 & Part 2',
+        passingMarks: '35 / 100',
+        targets: { fa1: 25, fa2: 50, sa1: 75, annual: 100 },
+        learningObjectives: [
+          'Master real numbers, fundamental theorem of arithmetic, and logarithmic operations.',
+          'Formulate and solve quadratic equations, progressions, and polynomial roots.',
+          'Apply trigonometry ratios, specific angles, identities, and heights & distances calculations.',
+          'Analyze coordinate geometry, tangents & secants to circles, and mensuration volumes.',
+          'Evaluate statistical measures (mean, median, mode) and compound probability problems.'
+        ],
+        chapters: [
+          { num: 'Unit 1', title: 'Real Numbers & Logarithms', periods: 14, completed: true, date: '12-Jul-2026' },
+          { num: 'Unit 2', title: 'Sets & Set Operations', periods: 10, completed: true, date: '25-Jul-2026' },
+          { num: 'Unit 3', title: 'Polynomials & Geometric Meaning of Zeroes', periods: 16, completed: true, date: '10-Aug-2026' },
+          { num: 'Unit 4', title: 'Pair of Linear Equations in Two Variables', periods: 18, completed: true, date: '28-Aug-2026' },
+          { num: 'Unit 5', title: 'Quadratic Equations & Roots', periods: 16, completed: true, date: '14-Sep-2026' },
+          { num: 'Unit 6', title: 'Progressions (AP & GP)', periods: 15, completed: true, date: '29-Sep-2026' },
+          { num: 'Unit 7', title: 'Coordinate Geometry & Distance Formula', periods: 16, completed: true, date: '12-Oct-2026' },
+          { num: 'Unit 8', title: 'Similar Triangles & Pythagoras Theorem', periods: 18, completed: true, date: '26-Oct-2026' },
+          { num: 'Unit 9', title: 'Trigonometry & Specific Angles', periods: 18, completed: false, date: 'Target: 20-Nov-2026' },
+          { num: 'Unit 10', title: 'Statistics & Ogive Curves', periods: 15, completed: false, date: 'Target: 15-Dec-2026' }
+        ],
+        lessonPlans: [
+          { code: 'LP-MTH-101-08', unit: 'Unit 8: Similar Triangles', window: '15-Oct to 26-Oct-2026', periods: 18, status: 'Approved', verifiedBy: 'Principal Varalakshmi' },
+          { code: 'LP-MTH-101-09', unit: 'Unit 9: Trigonometry Foundation', window: '28-Oct to 14-Nov-2026', periods: 18, status: 'Under Review', verifiedBy: 'VP Navva Anand' }
+        ],
+        history: [
+          { date: '15-Jul-2026', milestone: 'FA-1 Milestone Audit', target: '25%', actual: '26.5%', variance: '+1.5%', pace: 'Ahead of Pace', authority: 'Sri Navva Anand (VP)' },
+          { date: '28-Aug-2026', milestone: 'FA-2 Milestone Audit', target: '50%', actual: '51.0%', variance: '+1.0%', pace: 'On Track', authority: 'Smt. Gorle Varalakshmi' },
+          { date: '24-Oct-2026', milestone: 'SA-1 Half-Yearly Audit', target: '75%', actual: '85.0%', variance: '+10.0%', pace: 'Accelerated', authority: 'Principal Varalakshmi' }
+        ]
+      },
+      {
+        id: 'SUBJ-SCI-102-X',
+        code: 'SCI-102',
+        name: 'Physical Science & Practical Lab',
+        className: 'Class X',
+        year: '2026–27',
+        teacher: 'Sri M. Raju (M.Sc, B.Ed)',
+        teacherDetails: {
+          name: 'Sri M. Raju',
+          empId: 'EMP-T03',
+          designation: 'Physical Science Faculty & STEM Mentor',
+          qualification: 'M.Sc (Physics), B.Ed',
+          phone: '+91 98480 44553',
+          email: 'm.raju@srividya.edu.in',
+          experience: '11 Years Lab Instruction'
+        },
+        version: 'v4.2 (AP SCERT)',
+        completionPct: 82,
+        status: 'On Track',
+        periods: 7,
+        textbook: 'AP SCERT Physical Sciences Class X',
+        passingMarks: '35 / 100',
+        targets: { fa1: 25, fa2: 50, sa1: 75, annual: 100 },
+        learningObjectives: [
+          'Investigate light reflection and refraction at curved mirrors and lenses.',
+          'Demonstrate chemical reactions, balancing equations, acids, bases and salts.',
+          'Calculate electric current, Ohm\'s law, resistance combinations, and magnetic effects.'
+        ],
+        chapters: [
+          { num: 'Unit 1', title: 'Chemical Reactions & Equations', periods: 14, completed: true, date: '14-Jul-2026' },
+          { num: 'Unit 2', title: 'Acids, Bases & Salts', periods: 16, completed: true, date: '04-Aug-2026' },
+          { num: 'Unit 3', title: 'Refraction of Light at Plane Surfaces', periods: 15, completed: true, date: '25-Aug-2026' },
+          { num: 'Unit 4', title: 'Refraction of Light at Curved Surfaces', periods: 16, completed: true, date: '18-Sep-2026' },
+          { num: 'Unit 5', title: 'Human Eye & Colourful World', periods: 14, completed: true, date: '10-Oct-2026' },
+          { num: 'Unit 6', title: 'Structure of Atom & Bohr\'s Model', periods: 15, completed: true, date: '26-Oct-2026' },
+          { num: 'Unit 7', title: 'Classification of Elements: Periodic Table', periods: 16, completed: false, date: 'Target: 18-Nov-2026' },
+          { num: 'Unit 8', title: 'Chemical Bonding & Electronegativity', periods: 15, completed: false, date: 'Target: 10-Dec-2026' }
+        ],
+        lessonPlans: [
+          { code: 'LP-SCI-102-05', unit: 'Unit 5: Human Eye & Optics', window: '28-Sep to 10-Oct-2026', periods: 14, status: 'Approved', verifiedBy: 'Principal Varalakshmi' }
+        ],
+        history: [
+          { date: '15-Jul-2026', milestone: 'FA-1 Milestone Audit', target: '25%', actual: '25.0%', variance: '0.0%', pace: 'On Track', authority: 'VP Navva Anand' },
+          { date: '24-Oct-2026', milestone: 'SA-1 Half-Yearly Audit', target: '75%', actual: '82.0%', variance: '+7.0%', pace: 'On Track', authority: 'Principal Varalakshmi' }
+        ]
+      },
+      {
+        id: 'SUBJ-BIO-103-X',
+        code: 'BIO-103',
+        name: 'Biological Sciences & Physiology',
+        className: 'Class X',
+        year: '2026–27',
+        teacher: 'Smt. N. Sirisha (B.Sc, B.Ed)',
+        teacherDetails: {
+          name: 'Smt. N. Sirisha',
+          empId: 'EMP-T06',
+          designation: 'Biological Sciences Faculty',
+          qualification: 'B.Sc (BZC), B.Ed',
+          phone: '+91 98480 77886',
+          email: 'n.sirisha@srividya.edu.in',
+          experience: '9 Years Teaching'
+        },
+        version: 'v4.2 (AP SCERT)',
+        completionPct: 88,
+        status: 'Ahead of Schedule',
+        periods: 5,
+        textbook: 'AP SCERT Biological Sciences Class X',
+        passingMarks: '35 / 100',
+        targets: { fa1: 25, fa2: 50, sa1: 75, annual: 100 },
+        learningObjectives: [
+          'Examine human nutrition, respiration, transportation, and excretory systems.',
+          'Understand nervous coordination and endocrine chemical regulation.',
+          'Analyze reproduction modes, heredity principles, and environmental conservation.'
+        ],
+        chapters: [
+          { num: 'Unit 1', title: 'Nutrition - The Food Supplying System', periods: 12, completed: true, date: '10-Jul-2026' },
+          { num: 'Unit 2', title: 'Respiration - The Energy Releasing System', periods: 12, completed: true, date: '30-Jul-2026' },
+          { num: 'Unit 3', title: 'Transportation - The Circulatory System', periods: 14, completed: true, date: '22-Aug-2026' },
+          { num: 'Unit 4', title: 'Excretion - The Waste Disposing System', periods: 12, completed: true, date: '15-Sep-2026' },
+          { num: 'Unit 5', title: 'Coordination - The Linking System', periods: 14, completed: true, date: '05-Oct-2026' },
+          { num: 'Unit 6', title: 'Reproduction - The Generating System', periods: 14, completed: true, date: '24-Oct-2026' },
+          { num: 'Unit 7', title: 'Coordination in Life Processes', periods: 10, completed: false, date: 'Target: 16-Nov-2026' },
+          { num: 'Unit 8', title: 'Heredity - From Parent to Progeny', periods: 12, completed: false, date: 'Target: 08-Dec-2026' }
+        ],
+        lessonPlans: [],
+        history: []
+      },
+      {
+        id: 'SUBJ-ENG-104-X',
+        code: 'ENG-104',
+        name: 'English First Language & Grammar',
+        className: 'Class X',
+        year: '2026–27',
+        teacher: 'Smt. T. Padmavathi (M.A, B.Ed)',
+        teacherDetails: {
+          name: 'Smt. T. Padmavathi',
+          empId: 'EMP-T02',
+          designation: 'Senior English Faculty',
+          qualification: 'M.A (English), B.Ed',
+          phone: '+91 98480 33442',
+          email: 't.padmavathi@srividya.edu.in',
+          experience: '14 Years Experience'
+        },
+        version: 'v4.1 (AP SCERT)',
+        completionPct: 80,
+        status: 'On Track',
+        periods: 6,
+        textbook: 'Our World Through English Class X',
+        passingMarks: '35 / 100',
+        targets: { fa1: 25, fa2: 50, sa1: 75, annual: 100 },
+        learningObjectives: [
+          'Develop critical reading comprehension and analytical prose appreciation.',
+          'Demonstrate advanced grammar mastery: passive voice, report speech, prepositions.',
+          'Author structured discourses: formal petitions, editorial letters, and speeches.'
+        ],
+        chapters: [
+          { num: 'Unit 1', title: 'Personality Development (Attitude is Altitude)', periods: 14, completed: true, date: '15-Jul-2026' },
+          { num: 'Unit 2', title: 'Wit and Humour (The Dear Departed)', periods: 15, completed: true, date: '08-Aug-2026' },
+          { num: 'Unit 3', title: 'Human Relations (The Journey)', periods: 14, completed: true, date: '02-Sep-2026' },
+          { num: 'Unit 4', title: 'Films and Theatre (Rendezvous with Ray)', periods: 16, completed: true, date: '28-Sep-2026' },
+          { num: 'Unit 5', title: 'Social Issues (The Storeyed House)', periods: 14, completed: true, date: '22-Oct-2026' },
+          { num: 'Unit 6', title: 'Bio-diversity (Environment)', periods: 14, completed: false, date: 'Target: 18-Nov-2026' }
+        ],
+        lessonPlans: [],
+        history: []
+      },
+      {
+        id: 'SUBJ-TEL-105-X',
+        code: 'TEL-105',
+        name: 'Telugu Mother Tongue (First Lang)',
+        className: 'Class X',
+        year: '2026–27',
+        teacher: 'Sri CH. Venkateswara Rao (M.Sc, B.Ed)',
+        teacherDetails: {
+          name: 'Sri CH. Venkateswara Rao',
+          empId: 'EMP-T05',
+          designation: 'Telugu Department Head',
+          qualification: 'M.A (Telugu), B.Ed',
+          phone: '+91 98480 66775',
+          email: 'ch.venkateswara@srividya.edu.in',
+          experience: '15 Years Experience'
+        },
+        version: 'v4.2 (AP SCERT)',
+        completionPct: 90,
+        status: 'Ahead of Schedule',
+        periods: 6,
+        textbook: 'Singidi Class X Telugu SCERT',
+        passingMarks: '35 / 100',
+        targets: { fa1: 25, fa2: 50, sa1: 75, annual: 100 },
+        learningObjectives: [
+          'Appreciate classical and modern Telugu poetry and prose selections.',
+          'Master Sandhi, Samasa, Chandassu, and Alankaras per SSC pattern.',
+          'Compose essays, letters, and summary reviews in chaste Telugu.'
+        ],
+        chapters: [
+          { num: 'Unit 1', title: 'Daanasheelta (Classical Poetry)', periods: 12, completed: true, date: '10-Jul-2026' },
+          { num: 'Unit 2', title: 'Edi Lakshyam (Modern Prose)', periods: 12, completed: true, date: '28-Jul-2026' },
+          { num: 'Unit 3', title: 'Veera Telangana (Poetry)', periods: 12, completed: true, date: '18-Aug-2026' },
+          { num: 'Unit 4', title: 'Kotha Baata (Short Story)', periods: 12, completed: true, date: '08-Sep-2026' },
+          { num: 'Unit 5', title: 'Nagara Geetham (Modern Verse)', periods: 10, completed: true, date: '25-Sep-2026' },
+          { num: 'Unit 6', title: 'Bhaagyodayam (Inspirational Biography)', periods: 12, completed: true, date: '16-Oct-2026' },
+          { num: 'Unit 7', title: 'Sataka Madhurima (Moral Stanzas)', periods: 12, completed: false, date: 'Target: 12-Nov-2026' }
+        ],
+        lessonPlans: [],
+        history: []
+      },
+      {
+        id: 'SUBJ-SOC-106-X',
+        code: 'SOC-106',
+        name: 'Social Studies & Contemporary World',
+        className: 'Class X',
+        year: '2026–27',
+        teacher: 'Smt. V. Jyothsna (M.A, B.Ed)',
+        teacherDetails: {
+          name: 'Smt. V. Jyothsna',
+          empId: 'EMP-T04',
+          designation: 'Social Sciences Master',
+          qualification: 'M.A (History), B.Ed',
+          phone: '+91 98480 55664',
+          email: 'v.jyothsna@srividya.edu.in',
+          experience: '12 Years Experience'
+        },
+        version: 'v4.0 (AP SCERT)',
+        completionPct: 74,
+        status: 'Behind Target',
+        periods: 6,
+        textbook: 'AP SCERT Social Studies Class X',
+        passingMarks: '35 / 100',
+        targets: { fa1: 25, fa2: 50, sa1: 75, annual: 100 },
+        learningObjectives: [
+          'Examine physical geography of India: relief features, climate, and rivers.',
+          'Understand national income, production, employment, and sustainable development.',
+          'Analyze the world between wars, democratic movements, and post-war politics.'
+        ],
+        chapters: [
+          { num: 'Unit 1', title: 'India: Relief Features', periods: 14, completed: true, date: '16-Jul-2026' },
+          { num: 'Unit 2', title: 'Ideas of Development', periods: 12, completed: true, date: '05-Aug-2026' },
+          { num: 'Unit 3', title: 'Production and Employment', periods: 14, completed: true, date: '28-Aug-2026' },
+          { num: 'Unit 4', title: 'Climate of India', periods: 14, completed: true, date: '20-Sep-2026' },
+          { num: 'Unit 5', title: 'Indian Rivers and Water Resources', periods: 12, completed: true, date: '18-Oct-2026' },
+          { num: 'Unit 6', title: 'People and Population Dynamics', periods: 14, completed: false, date: 'Target: 15-Nov-2026' },
+          { num: 'Unit 7', title: 'Settlements and Migrations', periods: 12, completed: false, date: 'Target: 05-Dec-2026' }
+        ],
+        lessonPlans: [],
+        history: []
+      },
+      {
+        id: 'SUBJ-HIN-107-X',
+        code: 'HIN-107',
+        name: 'Hindi Second Language',
+        className: 'Class X',
+        year: '2026–27',
+        teacher: 'Smt. R. Kavitha (B.A, D.Ed)',
+        teacherDetails: {
+          name: 'Smt. R. Kavitha',
+          empId: 'EMP-T08',
+          designation: 'Language Educator',
+          qualification: 'B.A (Hindi), D.Ed',
+          phone: '+91 98480 99008',
+          email: 'r.kavitha@srividya.edu.in',
+          experience: '13 Years'
+        },
+        version: 'v4.2 (AP SCERT)',
+        completionPct: 86,
+        status: 'On Track',
+        periods: 4,
+        textbook: 'Lokbharti Hindi Class X SCERT',
+        passingMarks: '35 / 100',
+        targets: { fa1: 25, fa2: 50, sa1: 75, annual: 100 },
+        learningObjectives: [
+          'Develop Hindi reading comprehension, poetic recitation, and prose analysis.',
+          'Master Hindi grammar: Karak, Kaal, Sandhi, Samas, and Idioms.',
+          'Express ideas in Hindi through dialogue writing, essays, and letters.'
+        ],
+        chapters: [
+          { num: 'Unit 1', title: 'Baraste Badal (Poem)', periods: 10, completed: true, date: '12-Jul-2026' },
+          { num: 'Unit 2', title: 'Idgah (Story by Premchand)', periods: 12, completed: true, date: '04-Aug-2026' },
+          { num: 'Unit 3', title: 'Maa Mujhe Aane De', periods: 10, completed: true, date: '28-Aug-2026' },
+          { num: 'Unit 4', title: 'Kan-Kan Ka Adhikari', periods: 10, completed: true, date: '22-Sep-2026' },
+          { num: 'Unit 5', title: 'Lokgeet (Essays on Folklore)', periods: 10, completed: true, date: '18-Oct-2026' },
+          { num: 'Unit 6', title: 'Antarrashtriya Star Par Hindi', periods: 10, completed: false, date: 'Target: 20-Nov-2026' }
+        ],
+        lessonPlans: [],
+        history: []
+      },
+      {
+        id: 'SUBJ-COM-108-X',
+        code: 'COM-108',
+        name: 'Computer Applications & Coding Lab',
+        className: 'Class X',
+        year: '2026–27',
+        teacher: 'Sri S. Gopal (B.Sc, B.Ed)',
+        teacherDetails: {
+          name: 'Sri S. Gopal',
+          empId: 'EMP-T09',
+          designation: 'Informatics & Technology Lead',
+          qualification: 'B.Sc, B.Ed',
+          phone: '+91 98481 00119',
+          email: 's.gopal@srividya.edu.in',
+          experience: '7 Years'
+        },
+        version: 'v3.9 (Modern Tech)',
+        completionPct: 92,
+        status: 'Ahead of Schedule',
+        periods: 3,
+        textbook: 'Modern Informatics & Python Basics X',
+        passingMarks: '40 / 100',
+        targets: { fa1: 25, fa2: 50, sa1: 75, annual: 100 },
+        learningObjectives: [
+          'Understand database management fundamentals and SQL query commands.',
+          'Write Python scripts: conditionals, loops, functions, and data structures.',
+          'Demonstrate web authoring using semantic HTML5 and CSS styling.'
+        ],
+        chapters: [
+          { num: 'Unit 1', title: 'Computer Networks & Internet Protocols', periods: 8, completed: true, date: '15-Jul-2026' },
+          { num: 'Unit 2', title: 'Relational Database Concepts & MySQL', periods: 10, completed: true, date: '12-Aug-2026' },
+          { num: 'Unit 3', title: 'Python Programming Essentials', periods: 12, completed: true, date: '10-Sep-2026' },
+          { num: 'Unit 4', title: 'Cyber Ethics, Safety & Copyrights', periods: 8, completed: true, date: '14-Oct-2026' },
+          { num: 'Unit 5', title: 'Web Authoring with HTML5 & CSS', periods: 10, completed: false, date: 'Target: 25-Nov-2026' }
+        ],
+        lessonPlans: [],
+        history: []
+      },
+      {
+        id: 'SUBJ-MTH-201-IX',
+        code: 'MTH-201',
+        name: 'Mathematics & Foundation Geometry',
+        className: 'Class IX',
+        year: '2026–27',
+        teacher: 'Sri B. Narayana (M.Sc, B.Ed)',
+        teacherDetails: { name: 'Sri B. Narayana', empId: 'EMP-T01', designation: 'Senior Faculty', qualification: 'M.Sc, B.Ed', phone: '+91 98480 22331', email: 'b.narayana@srividya.edu.in', experience: '16 Yrs' },
+        version: 'v4.1 (AP SCERT)',
+        completionPct: 84,
+        status: 'On Track',
+        periods: 8,
+        textbook: 'AP SCERT Class IX Mathematics',
+        passingMarks: '35 / 100',
+        targets: { fa1: 25, fa2: 50, sa1: 75, annual: 100 },
+        learningObjectives: ['Number systems, polynomials, coordinate geometry, linear equations.'],
+        chapters: [
+          { num: 'Unit 1', title: 'Real Numbers', periods: 12, completed: true, date: '14-Jul-2026' },
+          { num: 'Unit 2', title: 'Polynomials & Factorisation', periods: 14, completed: true, date: '12-Aug-2026' },
+          { num: 'Unit 3', title: 'Coordinate Geometry', periods: 10, completed: true, date: '10-Sep-2026' },
+          { num: 'Unit 4', title: 'Linear Equations in Two Variables', periods: 12, completed: true, date: '15-Oct-2026' },
+          { num: 'Unit 5', title: 'Lines and Angles', periods: 14, completed: false, date: 'Target: 22-Nov-2026' }
+        ],
+        lessonPlans: [],
+        history: []
+      },
+      {
+        id: 'SUBJ-SCI-202-IX',
+        code: 'SCI-202',
+        name: 'Physical Science & Chemistry',
+        className: 'Class IX',
+        year: '2026–27',
+        teacher: 'Sri M. Raju (M.Sc, B.Ed)',
+        teacherDetails: { name: 'Sri M. Raju', empId: 'EMP-T03', designation: 'Science Master', qualification: 'M.Sc, B.Ed', phone: '+91 98480 44553', email: 'm.raju@srividya.edu.in', experience: '11 Yrs' },
+        version: 'v4.1 (AP SCERT)',
+        completionPct: 81,
+        status: 'On Track',
+        periods: 7,
+        textbook: 'AP SCERT Physical Sciences Class IX',
+        passingMarks: '35 / 100',
+        targets: { fa1: 25, fa2: 50, sa1: 75, annual: 100 },
+        learningObjectives: ['Motion, laws of motion, gravitation, atoms and molecules.'],
+        chapters: [
+          { num: 'Unit 1', title: 'Matter Around Us', periods: 12, completed: true, date: '16-Jul-2026' },
+          { num: 'Unit 2', title: 'Motion & Speed Dynamics', periods: 14, completed: true, date: '15-Aug-2026' },
+          { num: 'Unit 3', title: 'Laws of Motion', periods: 14, completed: true, date: '18-Sep-2026' },
+          { num: 'Unit 4', title: 'Refraction at Curved Surfaces', periods: 12, completed: true, date: '20-Oct-2026' },
+          { num: 'Unit 5', title: 'Gravitation', periods: 14, completed: false, date: 'Target: 25-Nov-2026' }
+        ],
+        lessonPlans: [],
+        history: []
+      },
+      {
+        id: 'SUBJ-ENG-204-IX',
+        code: 'ENG-204',
+        name: 'English Language & Literature',
+        className: 'Class IX',
+        year: '2026–27',
+        teacher: 'Smt. T. Padmavathi (M.A, B.Ed)',
+        teacherDetails: { name: 'Smt. T. Padmavathi', empId: 'EMP-T02', designation: 'English Master', qualification: 'M.A, B.Ed', phone: '+91 98480 33442', email: 't.padmavathi@srividya.edu.in', experience: '14 Yrs' },
+        version: 'v4.1 (AP SCERT)',
+        completionPct: 78,
+        status: 'On Track',
+        periods: 6,
+        textbook: 'Our World Through English Class IX',
+        passingMarks: '35 / 100',
+        targets: { fa1: 25, fa2: 50, sa1: 75, annual: 100 },
+        learningObjectives: ['Prose comprehension, poetry themes, vocabulary and creative discourses.'],
+        chapters: [
+          { num: 'Unit 1', title: 'Humour (The Snake and the Mirror)', periods: 12, completed: true, date: '18-Jul-2026' },
+          { num: 'Unit 2', title: 'Games and Sports (True Height)', periods: 14, completed: true, date: '16-Aug-2026' },
+          { num: 'Unit 3', title: 'School Life (Swami is Expelled from School)', periods: 12, completed: true, date: '22-Sep-2026' },
+          { num: 'Unit 4', title: 'Environment (What is Man Without the Beasts?)', periods: 12, completed: false, date: 'Target: 20-Nov-2026' }
+        ],
+        lessonPlans: [],
+        history: []
+      },
+      {
+        id: 'SUBJ-SOC-206-IX',
+        code: 'SOC-206',
+        name: 'Social Studies & Civics',
+        className: 'Class IX',
+        year: '2026–27',
+        teacher: 'Smt. V. Jyothsna (M.A, B.Ed)',
+        teacherDetails: { name: 'Smt. V. Jyothsna', empId: 'EMP-T04', designation: 'Social Master', qualification: 'M.A, B.Ed', phone: '+91 98480 55664', email: 'v.jyothsna@srividya.edu.in', experience: '12 Yrs' },
+        version: 'v4.0 (AP SCERT)',
+        completionPct: 72,
+        status: 'Behind Target',
+        periods: 6,
+        textbook: 'AP SCERT Social Studies Class IX',
+        passingMarks: '35 / 100',
+        targets: { fa1: 25, fa2: 50, sa1: 75, annual: 100 },
+        learningObjectives: ['Our Earth, atmosphere, democratic constitution, and agrarian economy.'],
+        chapters: [
+          { num: 'Unit 1', title: 'Our Earth and Crust Dynamics', periods: 12, completed: true, date: '20-Jul-2026' },
+          { num: 'Unit 2', title: 'The Natural Realms of the Earth', periods: 14, completed: true, date: '20-Aug-2026' },
+          { num: 'Unit 3', title: 'Hydrosphere and Marine Resources', periods: 12, completed: true, date: '25-Sep-2026' },
+          { num: 'Unit 4', title: 'Atmosphere and Weather', periods: 14, completed: false, date: 'Target: 18-Nov-2026' }
+        ],
+        lessonPlans: [],
+        history: []
+      },
+      {
+        id: 'SUBJ-PRM-501-V',
+        code: 'PRM-501',
+        name: 'Primary Environmental Studies & Maths',
+        className: 'Class V',
+        year: '2026–27',
+        teacher: 'Smt. R. Kavitha (B.A, D.Ed)',
+        teacherDetails: { name: 'Smt. R. Kavitha', empId: 'EMP-T08', designation: 'Primary Coordinator', qualification: 'B.A, D.Ed', phone: '+91 98480 99008', email: 'r.kavitha@srividya.edu.in', experience: '13 Yrs' },
+        version: 'v4.2 (SCERT Primary)',
+        completionPct: 89,
+        status: 'Ahead of Schedule',
+        periods: 8,
+        textbook: 'We and Our Environment Class V',
+        passingMarks: '40 / 100',
+        targets: { fa1: 25, fa2: 50, sa1: 75, annual: 100 },
+        learningObjectives: ['Community living, plants and animal adaptations, basic fractions, geometry.'],
+        chapters: [
+          { num: 'Unit 1', title: 'Animals: The Wonders of Senses', periods: 10, completed: true, date: '10-Jul-2026' },
+          { num: 'Unit 2', title: 'A Snake Charmer\'s Story', periods: 10, completed: true, date: '28-Jul-2026' },
+          { num: 'Unit 3', title: 'From Tasting to Digesting', periods: 12, completed: true, date: '20-Aug-2026' },
+          { num: 'Unit 4', title: 'Mangoes Round the Year', periods: 10, completed: true, date: '15-Sep-2026' },
+          { num: 'Unit 5', title: 'Seeds and Seeds', periods: 12, completed: true, date: '12-Oct-2026' },
+          { num: 'Unit 6', title: 'Every Drop Counts (Water Conservation)', periods: 10, completed: false, date: 'Target: 20-Nov-2026' }
+        ],
+        lessonPlans: [],
+        history: []
+      },
+      {
+        id: 'SUBJ-MTH-101-25',
+        code: 'MTH-101',
+        name: 'Class X Mathematics (AY 2025–26 Archive)',
+        className: 'Class X',
+        year: '2025–26',
+        teacher: 'Sri B. Narayana (M.Sc, B.Ed)',
+        teacherDetails: { name: 'Sri B. Narayana', empId: 'EMP-T01', designation: 'Senior Master', qualification: 'M.Sc, B.Ed', phone: '+91 98480 22331', email: 'b.narayana@srividya.edu.in', experience: '16 Yrs' },
+        version: 'v4.0 (Completed)',
+        completionPct: 100,
+        status: 'Archived / Inactive',
+        periods: 8,
+        textbook: 'AP SCERT Class X Mathematics 2025 Ed.',
+        passingMarks: '35 / 100',
+        targets: { fa1: 25, fa2: 50, sa1: 75, annual: 100 },
+        learningObjectives: ['Complete AP SSC 2025–26 Mathematics Syllabi.'],
+        chapters: [
+          { num: 'All Units', title: 'Units 1 through 14 Fully Delivered', periods: 160, completed: true, date: '25-Feb-2026' }
+        ],
+        lessonPlans: [],
+        history: []
+      },
+      {
+        id: 'SUBJ-ELE-ROB-01',
+        code: 'ELE-ROB-01',
+        name: 'Robotics & Embedded Electronics Club',
+        className: 'Class IX',
+        year: '2025–26',
+        teacher: 'Sri S. Gopal (B.Sc, B.Ed)',
+        teacherDetails: { name: 'Sri S. Gopal', empId: 'EMP-T09', designation: 'Robotics Lead', qualification: 'B.Sc, B.Ed', phone: '+91 98481 00119', email: 's.gopal@srividya.edu.in', experience: '7 Yrs' },
+        version: 'v1.2 (Elective)',
+        completionPct: 100,
+        status: 'Archived / Inactive',
+        periods: 2,
+        textbook: 'Hands-on Arduino & Robotics Kit',
+        passingMarks: '50 / 100',
+        targets: { fa1: 25, fa2: 50, sa1: 75, annual: 100 },
+        learningObjectives: ['Microcontroller programming, sensor integration, robotic chassis building.'],
+        chapters: [
+          { num: 'Full Modules', title: 'Arduino Robotics Project Track Completed', periods: 40, completed: true, date: '10-Mar-2026' }
+        ],
+        lessonPlans: [],
+        history: []
+      }
+    ];
+
+    return academicSubjectsRegistry;
+  }
+
+  function updateAcademicSubjectsKPIs() {
+    const list = ensureAcademicSubjectsState();
+    const activeList = list.filter(s => s.status !== 'Archived / Inactive');
+
+    const totalSubjs = list.length;
+    const uniqueClasses = new Set(activeList.map(s => s.className)).size;
+    const avgComp = activeList.length > 0 ? (activeList.reduce((acc, s) => acc + s.completionPct, 0) / activeList.length).toFixed(1) : 0;
+    const onTrackOrAhead = activeList.filter(s => s.status === 'On Track' || s.status === 'Ahead of Schedule').length;
+
+    const elTotal = document.getElementById('kpiTotalSubjects');
+    const elCls = document.getElementById('kpiSubjectClasses');
+    const elComp = document.getElementById('kpiAvgCompletion');
+    const elPace = document.getElementById('kpiPaceSummary');
+
+    if (elTotal) elTotal.textContent = totalSubjs;
+    if (elCls) elCls.textContent = uniqueClasses;
+    if (elComp) elComp.textContent = avgComp + '%';
+    if (elPace) elPace.textContent = `${onTrackOrAhead} / ${activeList.length}`;
+  }
+
   function renderAcademicSubjects(filteredData) {
     const tbody = document.getElementById('academicSubjectsTableBody');
     if (!tbody) return;
 
-    const data = filteredData || ACADEMIC_SUBJECTS_SYLLABUS_DATA;
+    const data = filteredData || ensureAcademicSubjectsState();
+    updateAcademicSubjectsKPIs();
 
     tbody.innerHTML = data.map(s => {
+      let statusBadgeClass = 'subj-status-ontrack';
+      if (s.status === 'Ahead of Schedule') statusBadgeClass = 'subj-status-ahead';
+      else if (s.status === 'Behind Target') statusBadgeClass = 'subj-status-behind';
+      else if (s.status === 'Archived / Inactive') statusBadgeClass = 'subj-status-archived';
+
+      const barClass = s.completionPct >= 85 ? 'high' : (s.completionPct >= 70 ? '' : 'low');
+
       return `
         <tr>
+          <!-- 1. Subject Code -->
           <td>
-            <span class="staff-id-pill" style="font-size:0.85rem;"><i class="fa-solid fa-barcode mr-1"></i> ${s.code}</span>
+            <span class="staff-id-pill" style="font-size:0.85rem; font-weight:800;">
+              <i class="fa-solid fa-barcode mr-1"></i>${s.code}
+            </span>
           </td>
+
+          <!-- 2. Subject Name -->
           <td>
-            <div style="font-weight:700; font-size:0.92rem; color:var(--color-text-dark, #0f172a);">${s.name}</div>
-            <small class="text-muted"><i class="fa-solid fa-user-tie mr-1"></i> ${s.faculty}</small>
+            <div style="font-weight:800; font-size:0.92rem; color:var(--color-text-dark, #0f172a);">
+              ${s.name}
+            </div>
+            <small class="text-muted"><i class="fa-solid fa-book mr-1"></i>${s.periods} Periods / Wk</small>
           </td>
+
+          <!-- 3. Class -->
           <td>
-            <span class="portal-badge badge-neutral font-weight-bold">${s.assignedClass}</span>
+            <span class="portal-badge badge-neutral font-weight-bold" style="border:1px solid #cbd5e1;">${s.className}</span>
           </td>
+
+          <!-- 4. Academic Year -->
           <td>
-            <span class="portal-badge badge-primary font-weight-bold">${s.units}</span>
+            <span class="portal-badge badge-primary font-weight-bold">
+              <i class="fa-regular fa-calendar-check mr-1"></i>${s.year}
+            </span>
           </td>
+
+          <!-- 5. Assigned Teacher -->
           <td>
-            <div class="capacity-progress-wrap">
+            <div style="font-weight:700; color:var(--color-text-dark, #0f172a);">
+              <i class="fa-solid fa-chalkboard-user text-muted mr-1"></i>${s.teacher}
+            </div>
+          </td>
+
+          <!-- 6. Syllabus Version -->
+          <td>
+            <span class="portal-badge badge-info" style="font-weight:700;">${s.version}</span>
+          </td>
+
+          <!-- 7. Completion Percentage -->
+          <td>
+            <div class="capacity-progress-wrap" style="min-width:140px;">
               <div style="display:flex; justify-content:space-between; font-size:0.8rem;">
-                <strong class="text-success">${s.progress} Covered</strong>
-                <span class="portal-badge badge-success" style="font-size:0.7rem; padding:0.15rem 0.4rem;">${s.pace}</span>
+                <strong class="text-success">${s.completionPct}% Covered</strong>
+                <span class="text-muted">${s.chapters ? s.chapters.filter(c => c.completed).length : 0}/${s.chapters ? s.chapters.length : 0} Units</span>
               </div>
               <div class="capacity-progress-bar">
-                <div class="capacity-progress-fill high" style="width:${s.progress};"></div>
+                <div class="capacity-progress-fill ${barClass}" style="width:${s.completionPct}%;"></div>
               </div>
             </div>
           </td>
+
+          <!-- 8. Status -->
+          <td>
+            <span class="subj-status-badge ${statusBadgeClass}">
+              <i class="fa-solid fa-circle" style="font-size:0.45rem;"></i>${s.status}
+            </span>
+          </td>
+
+          <!-- 9. Actions -->
           <td style="text-align:center;">
-            <button type="button" class="btn btn-secondary btn-sm" onclick="showToast('Syllabus blueprint verified for ' + '${s.name}', 'info')" title="View Syllabus Blueprint">
-              <i class="fa-solid fa-book-open"></i> Blueprint
-            </button>
+            <div style="display:inline-flex; gap:4px; flex-wrap:wrap; justify-content:center;">
+              <button type="button" class="btn btn-secondary btn-sm" onclick="portalApp.openSubjectDetailModal('${s.id}')" title="View Subject Dossier">
+                <i class="fa-solid fa-eye text-primary"></i>
+              </button>
+              <button type="button" class="btn btn-secondary btn-sm" onclick="portalApp.openManageChaptersModal('${s.id}')" title="Manage Chapters & Units">
+                <i class="fa-solid fa-list-check text-info"></i>
+              </button>
+              <button type="button" class="btn btn-secondary btn-sm" onclick="portalApp.openAssignSubjectTeacherModal('${s.id}')" title="Assign Teacher & Class">
+                <i class="fa-solid fa-chalkboard-user"></i>
+              </button>
+              <button type="button" class="btn btn-secondary btn-sm" onclick="portalApp.openUploadSyllabusModal('${s.id}')" title="Upload Syllabus Document">
+                <i class="fa-solid fa-file-arrow-up"></i>
+              </button>
+              <button type="button" class="btn btn-secondary btn-sm" onclick="portalApp.openSetCompletionTargetsModal('${s.id}')" title="Set Completion Targets">
+                <i class="fa-solid fa-bullseye"></i>
+              </button>
+              ${s.status === 'Archived / Inactive' ? `
+                <button type="button" class="btn btn-secondary btn-sm" onclick="portalApp.restoreSubject('${s.id}')" title="Restore Subject">
+                  <i class="fa-solid fa-box-open text-success"></i>
+                </button>
+              ` : `
+                <button type="button" class="btn btn-secondary btn-sm" onclick="portalApp.archiveSubject('${s.id}')" title="Archive Unused Subject">
+                  <i class="fa-solid fa-box-archive text-warning"></i>
+                </button>
+              `}
+            </div>
           </td>
         </tr>
       `;
@@ -37604,17 +38217,584 @@ const classData = TIMETABLE_CLASS_DATA[currentTimetableClass] || TIMETABLE_CLASS
   }
 
   function filterAcademicSubjects() {
-    const q = (document.getElementById('subjectsSearchInput')?.value || '').toLowerCase().trim();
-    const cls = document.getElementById('subjectsClassFilter')?.value || '';
+    const q = (document.getElementById('subjectSearchInput')?.value || '').toLowerCase().trim();
+    const cls = document.getElementById('subjectClassFilter')?.value || '';
+    const yr = document.getElementById('subjectYearFilter')?.value || '';
+    const st = document.getElementById('subjectStatusFilter')?.value || '';
 
-    const filtered = ACADEMIC_SUBJECTS_SYLLABUS_DATA.filter(item => {
-      const matchQ = !q || item.code.toLowerCase().includes(q) || item.name.toLowerCase().includes(q) || item.assignedClass.toLowerCase().includes(q);
-      const matchCls = !cls || item.assignedClass === cls;
-      return matchQ && matchCls;
+    const list = ensureAcademicSubjectsState();
+    const filtered = list.filter(item => {
+      const matchQ = !q ||
+        item.code.toLowerCase().includes(q) ||
+        item.name.toLowerCase().includes(q) ||
+        item.teacher.toLowerCase().includes(q) ||
+        (item.textbook && item.textbook.toLowerCase().includes(q));
+      const matchCls = !cls || item.className.includes(cls);
+      const matchYr = !yr || item.year.includes(yr);
+      const matchSt = !st || item.status === st;
+      return matchQ && matchCls && matchYr && matchSt;
     });
 
     renderAcademicSubjects(filtered);
   }
+
+  function resetAcademicSubjectsFilters() {
+    const q = document.getElementById('subjectSearchInput');
+    const c = document.getElementById('subjectClassFilter');
+    const y = document.getElementById('subjectYearFilter');
+    const s = document.getElementById('subjectStatusFilter');
+    if (q) q.value = '';
+    if (c) c.value = '';
+    if (y) y.value = '';
+    if (s) s.value = '';
+    renderAcademicSubjects();
+    showToast('Filters reset to show all subjects', 'info');
+  }
+
+  // --- SUBJECT DETAIL PAGE (7 EXACT SECTIONS) ---
+  function openSubjectDetailModal(subjectId, initialTab = 'info') {
+    const list = ensureAcademicSubjectsState();
+    const subj = list.find(s => s.id === subjectId) || list[0];
+    if (!subj) return;
+
+    activeDetailSubjectId = subj.id;
+
+    // Header updates
+    const titleEl = document.getElementById('subjDetailModalTitle');
+    const codeBadge = document.getElementById('subjDetailCodeBadge');
+    const statusBadge = document.getElementById('subjDetailStatusBadge');
+    const subTitle = document.getElementById('subjDetailSubtitle');
+
+    if (titleEl) titleEl.textContent = subj.name;
+    if (codeBadge) codeBadge.textContent = subj.code;
+    if (statusBadge) {
+      statusBadge.textContent = subj.status;
+      statusBadge.className = 'subj-status-badge ' + (
+        subj.status === 'On Track' ? 'subj-status-ontrack' :
+        subj.status === 'Ahead of Schedule' ? 'subj-status-ahead' :
+        subj.status === 'Behind Target' ? 'subj-status-behind' : 'subj-status-archived'
+      );
+    }
+    if (subTitle) subTitle.textContent = `${subj.className} • AY ${subj.year} • Syllabus ${subj.version}`;
+
+    // Overview Stats
+    const pProg = document.getElementById('subjInfoProgress');
+    const pCovered = document.getElementById('subjInfoUnitsCovered');
+    const pPeriods = document.getElementById('subjInfoPeriods');
+    const pPass = document.getElementById('subjInfoPassing');
+    const pPace = document.getElementById('subjInfoPace');
+
+    const completedUnits = subj.chapters ? subj.chapters.filter(c => c.completed).length : 0;
+    const totalUnits = subj.chapters ? subj.chapters.length : 10;
+
+    if (pProg) pProg.textContent = `${subj.completionPct}%`;
+    if (pCovered) pCovered.textContent = `${completedUnits} of ${totalUnits} Units Covered`;
+    if (pPeriods) pPeriods.textContent = `${subj.periods} / Wk`;
+    if (pPass) pPass.textContent = subj.passingMarks || '35 / 100';
+    if (pPace) pPace.textContent = subj.status;
+
+    // Overview Specs
+    const sCode = document.getElementById('subjInfoCodeText');
+    const sYear = document.getElementById('subjInfoYearText');
+    const sClass = document.getElementById('subjInfoClassText');
+    const sWing = document.getElementById('subjInfoWingText');
+    const sVer = document.getElementById('subjInfoVersionText');
+    const sBook = document.getElementById('subjInfoTextbookText');
+
+    if (sCode) sCode.textContent = subj.code;
+    if (sYear) sYear.textContent = `AY ${subj.year}`;
+    if (sClass) sClass.textContent = subj.className;
+    if (sWing) sWing.textContent = subj.className.includes('X') || subj.className.includes('IX') ? 'High School' : 'Primary Wing';
+    if (sVer) sVer.textContent = subj.version;
+    if (sBook) sBook.textContent = subj.textbook || 'AP SCERT Official Reader';
+
+    // Learning Objectives
+    renderDetailObjectives(subj);
+
+    // Chapters & Units
+    renderDetailChapters(subj);
+
+    // Teacher Allocation
+    renderDetailTeacher(subj);
+
+    // Lesson Plans
+    renderDetailLessonPlans(subj);
+
+    // History
+    renderDetailHistory(subj);
+
+    switchSubjectDetailTab(initialTab);
+    openModal('subjectDetailModal');
+  }
+
+  function switchSubjectDetailTab(tabId) {
+    const navButtons = document.querySelectorAll('.subject-detail-nav-btn');
+    navButtons.forEach(btn => {
+      if (btn.getAttribute('data-pane') === tabId) {
+        btn.classList.add('active');
+      } else {
+        btn.classList.remove('active');
+      }
+    });
+
+    const panes = document.querySelectorAll('.subject-detail-pane');
+    panes.forEach(pane => {
+      if (pane.id === `pane-subj-${tabId}`) {
+        pane.classList.add('active');
+        pane.style.display = 'block';
+      } else {
+        pane.classList.remove('active');
+        pane.style.display = 'none';
+      }
+    });
+  }
+
+  function renderDetailObjectives(subj) {
+    const container = document.getElementById('subjObjectivesList');
+    if (!container) return;
+
+    const objs = subj.learningObjectives && subj.learningObjectives.length > 0 ? subj.learningObjectives : [
+      'Master core subject theoretical principles and practical competencies per AP SCERT syllabus.',
+      'Demonstrate analytical problem-solving and systematic algorithmic reasoning.',
+      'Apply knowledge to laboratory experiments and real-world institutional problem scenarios.'
+    ];
+
+    container.innerHTML = objs.map((obj, idx) => `
+      <div class="learning-obj-item">
+        <div style="font-weight:800; color:var(--color-primary, #1e40af); font-size:1rem;">${idx + 1}.</div>
+        <div style="font-size:0.9rem; color:var(--color-text-dark, #0f172a); font-weight:600;">${obj}</div>
+      </div>
+    `).join('');
+  }
+
+  function renderDetailChapters(subj) {
+    const container = document.getElementById('subjChaptersContainer');
+    const badgeCount = document.getElementById('subjDetailChaptersCount');
+    if (!container) return;
+
+    const chapters = subj.chapters || [];
+    if (badgeCount) badgeCount.textContent = chapters.length;
+
+    container.innerHTML = chapters.map((c, idx) => `
+      <div class="chapter-unit-card ${c.completed ? 'completed' : ''}">
+        <div style="display:flex; align-items:center; gap:12px;">
+          <input type="checkbox" ${c.completed ? 'checked' : ''} onchange="portalApp.toggleChapterComplete('${subj.id}', ${idx})" style="width:18px; height:18px; cursor:pointer;">
+          <div>
+            <div style="font-weight:700; color:var(--color-text-dark, #0f172a);">
+              <span class="portal-badge badge-primary mr-1">${c.num}</span> ${c.title}
+            </div>
+            <small class="text-muted">${c.periods} Contact Periods • Date/Milestone: ${c.date}</small>
+          </div>
+        </div>
+        <div>
+          <span class="portal-badge ${c.completed ? 'badge-success' : 'badge-neutral'}">
+            <i class="fa-solid ${c.completed ? 'fa-check' : 'fa-hourglass-half'} mr-1"></i>${c.completed ? 'Completed' : 'Pending'}
+          </span>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  function renderDetailTeacher(subj) {
+    const card = document.getElementById('subjTeacherCard');
+    if (!card) return;
+
+    const t = subj.teacherDetails || {
+      name: subj.teacher,
+      empId: 'EMP-T01',
+      designation: 'Senior Faculty',
+      qualification: 'M.Sc, B.Ed',
+      phone: '+91 98480 22331',
+      email: 'faculty@srividya.edu.in',
+      experience: '12 Years Teaching Experience'
+    };
+
+    card.innerHTML = `
+      <div class="class-teacher-avatar">${t.name.split(' ').map(p => p[0]).slice(0, 2).join('')}</div>
+      <div class="class-teacher-meta">
+        <div class="class-teacher-name">${t.name} <span class="staff-id-pill ml-2">${t.empId}</span></div>
+        <div class="text-sm text-primary font-weight-bold mt-1">${t.designation} (${subj.name})</div>
+        <div class="class-teacher-tags">
+          <span class="portal-badge badge-neutral"><i class="fa-solid fa-graduation-cap mr-1"></i>${t.qualification}</span>
+          <span class="portal-badge badge-neutral"><i class="fa-solid fa-phone mr-1"></i>${t.phone}</span>
+          <span class="portal-badge badge-neutral"><i class="fa-solid fa-envelope mr-1"></i>${t.email}</span>
+          <span class="portal-badge badge-neutral"><i class="fa-solid fa-award mr-1"></i>${t.experience}</span>
+        </div>
+      </div>
+    `;
+  }
+
+  function renderDetailLessonPlans(subj) {
+    const tbody = document.getElementById('subjPlansTableBody');
+    if (!tbody) return;
+
+    const plans = subj.lessonPlans && subj.lessonPlans.length > 0 ? subj.lessonPlans : [
+      { code: `LP-${subj.code}-01`, unit: 'Unit 1: Foundational Topics', window: 'Jul-2026', periods: 14, status: 'Approved', verifiedBy: 'Principal Smt. Varalakshmi' },
+      { code: `LP-${subj.code}-02`, unit: 'Unit 2: Advanced Applications', window: 'Aug-2026', periods: 16, status: 'Approved', verifiedBy: 'VP Sri Navva Anand' }
+    ];
+
+    tbody.innerHTML = plans.map(p => `
+      <tr>
+        <td><span class="staff-id-pill">${p.code}</span></td>
+        <td><strong>${p.unit}</strong></td>
+        <td>${p.window}</td>
+        <td>${p.periods} Periods</td>
+        <td><span class="portal-badge ${p.status === 'Approved' ? 'badge-success' : 'badge-warning'}">${p.status}</span></td>
+        <td>${p.verifiedBy}</td>
+      </tr>
+    `).join('');
+  }
+
+  function renderDetailHistory(subj) {
+    const tbody = document.getElementById('subjHistoryTableBody');
+    if (!tbody) return;
+
+    const history = subj.history && subj.history.length > 0 ? subj.history : [
+      { date: '15-Jul-2026', milestone: 'FA-1 Milestone Audit', target: '25%', actual: '26.0%', variance: '+1.0%', pace: 'Ahead of Pace', authority: 'VP Navva Anand' },
+      { date: '28-Aug-2026', milestone: 'FA-2 Milestone Audit', target: '50%', actual: '50.5%', variance: '+0.5%', pace: 'On Track', authority: 'Smt. Gorle Varalakshmi' },
+      { date: '24-Oct-2026', milestone: 'SA-1 Half-Yearly Audit', target: '75%', actual: `${subj.completionPct}%`, variance: `${subj.completionPct - 75 >= 0 ? '+' : ''}${subj.completionPct - 75}%`, pace: subj.status, authority: 'Principal Varalakshmi' }
+    ];
+
+    tbody.innerHTML = history.map(h => `
+      <tr>
+        <td>${h.date}</td>
+        <td><strong>${h.milestone}</strong></td>
+        <td>${h.target}</td>
+        <td><strong class="text-primary">${h.actual}</strong></td>
+        <td><span class="${h.variance.includes('+') ? 'text-success' : 'text-danger'} font-weight-bold">${h.variance}</span></td>
+        <td><span class="portal-badge ${h.pace.includes('Behind') ? 'badge-warning' : 'badge-success'}">${h.pace}</span></td>
+        <td>${h.authority}</td>
+      </tr>
+    `).join('');
+  }
+
+  // --- CHAPTER / UNIT MANAGEMENT ---
+  function openManageChaptersModal(subjectId = null) {
+    const list = ensureAcademicSubjectsState();
+    const subj = list.find(s => s.id === (subjectId || activeDetailSubjectId)) || list[0];
+    if (!subj) return;
+
+    activeDetailSubjectId = subj.id;
+
+    const idInput = document.getElementById('manageChaptersSubjectId');
+    const displayInput = document.getElementById('manageChaptersSubjDisplay');
+    const tbody = document.getElementById('manageChaptersTableBody');
+
+    if (idInput) idInput.value = subj.id;
+    if (displayInput) displayInput.value = `${subj.code} - ${subj.name} (${subj.className})`;
+
+    if (tbody) {
+      tbody.innerHTML = (subj.chapters || []).map((c, idx) => `
+        <tr>
+          <td style="text-align:center;">
+            <input type="checkbox" ${c.completed ? 'checked' : ''} onchange="portalApp.toggleChapterComplete('${subj.id}', ${idx})">
+          </td>
+          <td><span class="portal-badge badge-primary">${c.num}</span></td>
+          <td><strong>${c.title}</strong></td>
+          <td>${c.periods} Periods</td>
+          <td><span class="portal-badge ${c.completed ? 'badge-success' : 'badge-neutral'}">${c.completed ? 'Completed' : 'Pending'}</span></td>
+        </tr>
+      `).join('');
+    }
+
+    openModal('manageChaptersModal');
+  }
+
+  function handleAddChapterSubmit(e) {
+    if (e && e.preventDefault) e.preventDefault();
+
+    const subjId = document.getElementById('manageChaptersSubjectId')?.value;
+    const num = document.getElementById('newChapterNum')?.value || 'Unit New';
+    const title = document.getElementById('newChapterTitle')?.value;
+    const periods = parseInt(document.getElementById('newChapterPeriods')?.value || '12', 10);
+
+    const list = ensureAcademicSubjectsState();
+    const subj = list.find(s => s.id === subjId);
+    if (subj && title) {
+      if (!subj.chapters) subj.chapters = [];
+      subj.chapters.push({
+        num: num,
+        title: title,
+        periods: periods,
+        completed: false,
+        date: `Target: ${new Date().toLocaleDateString('en-GB')}`
+      });
+
+      // Recalculate completion
+      recalculateSubjectProgress(subj);
+      openManageChaptersModal(subj.id);
+      renderAcademicSubjects();
+      if (document.getElementById('subjectDetailModal')?.classList.contains('show')) {
+        renderDetailChapters(subj);
+      }
+      showToast(`Added ${num}: ${title} to ${subj.name}`, 'success');
+    }
+  }
+
+  function toggleChapterComplete(subjectId, chapterIdx) {
+    const list = ensureAcademicSubjectsState();
+    const subj = list.find(s => s.id === subjectId);
+    if (subj && subj.chapters && subj.chapters[chapterIdx]) {
+      subj.chapters[chapterIdx].completed = !subj.chapters[chapterIdx].completed;
+      if (subj.chapters[chapterIdx].completed) {
+        subj.chapters[chapterIdx].date = new Date().toLocaleDateString('en-GB');
+      }
+
+      recalculateSubjectProgress(subj);
+      renderAcademicSubjects();
+
+      if (document.getElementById('subjectDetailModal')?.classList.contains('show')) {
+        renderDetailChapters(subj);
+      }
+      if (document.getElementById('manageChaptersModal')?.classList.contains('show')) {
+        openManageChaptersModal(subjectId);
+      }
+      showToast(`Updated completion status for ${subj.chapters[chapterIdx].title}`, 'info');
+    }
+  }
+
+  function recalculateSubjectProgress(subj) {
+    if (!subj.chapters || subj.chapters.length === 0) return;
+    const completed = subj.chapters.filter(c => c.completed).length;
+    subj.completionPct = Math.round((completed / subj.chapters.length) * 100);
+
+    if (subj.completionPct >= 85) subj.status = 'Ahead of Schedule';
+    else if (subj.completionPct >= 75) subj.status = 'On Track';
+    else subj.status = 'Behind Target';
+  }
+
+  // --- CREATE SUBJECT ACTIONS ---
+  function openCreateSubjectModal() {
+    openModal('createSubjectModal');
+  }
+
+  function handleCreateSubjectSubmit(e) {
+    if (e && e.preventDefault) e.preventDefault();
+
+    const code = document.getElementById('newSubjCode')?.value || 'MTH-102';
+    const name = document.getElementById('newSubjName')?.value || 'Subject';
+    const className = document.getElementById('newSubjClass')?.value || 'Class X';
+    const year = document.getElementById('newSubjYear')?.value || '2026–27';
+    const teacher = document.getElementById('newSubjTeacher')?.value || 'Sri B. Narayana (M.Sc, B.Ed)';
+    const version = document.getElementById('newSubjVersion')?.value || 'v4.2 (AP SCERT)';
+    const periods = parseInt(document.getElementById('newSubjPeriods')?.value || '6', 10);
+    const textbook = document.getElementById('newSubjTextbook')?.value || 'AP SCERT Reader';
+
+    const list = ensureAcademicSubjectsState();
+    const newId = `SUBJ-${code}-${className.replace(/\s+/g, '')}`;
+
+    const newSubject = {
+      id: newId,
+      code: code,
+      name: name,
+      className: className,
+      year: year,
+      teacher: teacher,
+      teacherDetails: {
+        name: teacher.split(' (')[0],
+        empId: 'EMP-T' + Math.floor(10 + Math.random() * 50),
+        designation: `Faculty in ${name}`,
+        qualification: teacher.includes('(') ? teacher.split('(')[1].replace(')', '') : 'B.Ed',
+        phone: '+91 98480 ' + Math.floor(10000 + Math.random() * 90000),
+        email: 'faculty@srividya.edu.in',
+        experience: 'Certified SCERT Faculty'
+      },
+      version: version,
+      completionPct: 0,
+      status: 'On Track',
+      periods: periods,
+      textbook: textbook,
+      passingMarks: '35 / 100',
+      targets: { fa1: 25, fa2: 50, sa1: 75, annual: 100 },
+      learningObjectives: [
+        `Master comprehensive ${name} curricular standards for ${className}.`,
+        'Complete classroom instruction, formative tests, and practical exercises.'
+      ],
+      chapters: [
+        { num: 'Unit 1', title: 'Curricular Introduction & Fundamentals', periods: 12, completed: false, date: 'Target: 30-Nov-2026' }
+      ],
+      lessonPlans: [],
+      history: []
+    };
+
+    list.unshift(newSubject);
+    closeModal('createSubjectModal');
+    renderAcademicSubjects();
+    showToast(`Created ${code}: ${name} for ${className} successfully!`, 'success');
+  }
+
+  // --- UPLOAD SYLLABUS ACTIONS ---
+  function openUploadSyllabusModal(subjectId = null) {
+    const list = ensureAcademicSubjectsState();
+    const selectEl = document.getElementById('uploadSyllabusSubject');
+
+    if (selectEl) {
+      selectEl.innerHTML = list.map(s => `
+        <option value="${s.id}" ${s.id === (subjectId || activeDetailSubjectId) ? 'selected' : ''}>
+          ${s.code} - ${s.name} (${s.className})
+        </option>
+      `).join('');
+    }
+
+    openModal('uploadSyllabusModal');
+  }
+
+  function handleUploadSyllabusSubmit(e) {
+    if (e && e.preventDefault) e.preventDefault();
+
+    const subjId = document.getElementById('uploadSyllabusSubject')?.value;
+    const version = document.getElementById('uploadSyllabusVersion')?.value || 'v4.3';
+    const gazette = document.getElementById('uploadSyllabusGazette')?.value || 'AP SCERT 2026';
+
+    const list = ensureAcademicSubjectsState();
+    const subj = list.find(s => s.id === subjId);
+    if (subj) {
+      subj.version = version;
+      closeModal('uploadSyllabusModal');
+      renderAcademicSubjects();
+      showToast(`Activated ${version} syllabus document for ${subj.code} (Ref: ${gazette})`, 'success');
+    }
+  }
+
+  // --- SET COMPLETION TARGETS ACTIONS ---
+  function openSetCompletionTargetsModal(subjectId = null) {
+    const list = ensureAcademicSubjectsState();
+    const selectEl = document.getElementById('targetSelectSubject');
+
+    if (selectEl) {
+      selectEl.innerHTML = list.map(s => `
+        <option value="${s.id}" ${s.id === (subjectId || activeDetailSubjectId) ? 'selected' : ''}>
+          ${s.code} - ${s.name} (${s.className})
+        </option>
+      `).join('');
+    }
+
+    openModal('setCompletionTargetsModal');
+  }
+
+  function handleSetCompletionTargetsSubmit(e) {
+    if (e && e.preventDefault) e.preventDefault();
+
+    const subjId = document.getElementById('targetSelectSubject')?.value;
+    const fa1 = parseInt(document.getElementById('targetFa1')?.value || '25', 10);
+    const fa2 = parseInt(document.getElementById('targetFa2')?.value || '50', 10);
+    const sa1 = parseInt(document.getElementById('targetSa1')?.value || '75', 10);
+    const annual = parseInt(document.getElementById('targetAnnual')?.value || '100', 10);
+
+    const list = ensureAcademicSubjectsState();
+    const subj = list.find(s => s.id === subjId);
+    if (subj) {
+      subj.targets = { fa1, fa2, sa1, annual };
+      closeModal('setCompletionTargetsModal');
+      showToast(`Updated term completion targets for ${subj.code}`, 'success');
+    }
+  }
+
+  // --- ASSIGN SUBJECT TEACHER ACTIONS ---
+  function openAssignSubjectTeacherModal(subjectId = null) {
+    const list = ensureAcademicSubjectsState();
+    const subj = list.find(s => s.id === (subjectId || activeDetailSubjectId)) || list[0];
+    if (!subj) return;
+
+    activeDetailSubjectId = subj.id;
+
+    const idInput = document.getElementById('assignSubjId');
+    const displayInput = document.getElementById('assignSubjDisplay');
+    const teacherSelect = document.getElementById('assignSubjTeacherSelect');
+    const classSelect = document.getElementById('assignSubjClassSelect');
+
+    if (idInput) idInput.value = subj.id;
+    if (displayInput) displayInput.value = `${subj.code} - ${subj.name} (Current: ${subj.teacher})`;
+
+    if (teacherSelect) {
+      const teachers = [
+        'Sri B. Narayana (M.Sc, B.Ed) - Mathematics',
+        'Smt. T. Padmavathi (M.A, B.Ed) - English',
+        'Sri M. Raju (M.Sc, B.Ed) - Physical Science',
+        'Smt. V. Jyothsna (M.A, B.Ed) - Social Studies',
+        'Sri CH. Venkateswara Rao (M.Sc, B.Ed) - Telugu',
+        'Smt. N. Sirisha (B.Sc, B.Ed) - Biology',
+        'Sri A. Prasad (B.Sc, B.Ed) - Science',
+        'Smt. R. Kavitha (B.A, D.Ed) - Primary',
+        'Sri S. Gopal (B.Sc, B.Ed) - Mathematics & Coding'
+      ];
+      teacherSelect.innerHTML = teachers.map(t => `<option value="${t}">${t}</option>`).join('');
+    }
+
+    if (classSelect) classSelect.value = subj.className;
+
+    openModal('assignSubjectTeacherModal');
+  }
+
+  function handleAssignSubjectTeacherSubmit(e) {
+    if (e && e.preventDefault) e.preventDefault();
+
+    const subjId = document.getElementById('assignSubjId')?.value;
+    const newTeacher = document.getElementById('assignSubjTeacherSelect')?.value;
+    const newClass = document.getElementById('assignSubjClassSelect')?.value;
+
+    const list = ensureAcademicSubjectsState();
+    const subj = list.find(s => s.id === subjId);
+    if (subj && newTeacher) {
+      subj.teacher = newTeacher;
+      subj.className = newClass;
+      subj.teacherDetails = {
+        name: newTeacher.split(' (')[0],
+        empId: 'EMP-T' + Math.floor(10 + Math.random() * 50),
+        designation: `Faculty in ${subj.name}`,
+        qualification: newTeacher.includes('(') ? newTeacher.split('(')[1].replace(')', '') : 'B.Ed',
+        phone: '+91 98480 ' + Math.floor(10000 + Math.random() * 90000),
+        email: 'faculty@srividya.edu.in',
+        experience: 'Certified SCERT Faculty'
+      };
+      closeModal('assignSubjectTeacherModal');
+      renderAcademicSubjects();
+      if (document.getElementById('subjectDetailModal')?.classList.contains('show')) {
+        renderDetailTeacher(subj);
+      }
+      showToast(`Assigned ${newTeacher} to ${subj.name} (${newClass})`, 'success');
+    }
+  }
+
+  // --- ARCHIVE / RESTORE SUBJECT ---
+  function archiveSubject(subjectId) {
+    const list = ensureAcademicSubjectsState();
+    const subj = list.find(s => s.id === subjectId);
+    if (!subj) return;
+
+    subj.status = 'Archived / Inactive';
+    renderAcademicSubjects();
+    showToast(`Archived subject ${subj.code}: ${subj.name}`, 'info');
+  }
+
+  function restoreSubject(subjectId) {
+    const list = ensureAcademicSubjectsState();
+    const subj = list.find(s => s.id === subjectId);
+    if (!subj) return;
+
+    subj.status = 'On Track';
+    renderAcademicSubjects();
+    showToast(`Restored ${subj.code}: ${subj.name} to active curriculum`, 'success');
+  }
+
+  // --- EXPORT CSV ---
+  function exportSyllabusRegisterCSV() {
+    const list = ensureAcademicSubjectsState();
+    let csv = 'Subject Code,Subject Name,Class,Academic Year,Assigned Teacher,Syllabus Version,Completion %,Status,Weekly Periods,Textbook\n';
+    list.forEach(s => {
+      csv += `"${s.code}","${s.name}","${s.className}","${s.year}","${s.teacher}","${s.version}","${s.completionPct}%","${s.status}","${s.periods}","${s.textbook}"\n`;
+    });
+
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.setAttribute('download', `Sri_Vidya_Subjects_Syllabus_Register_${new Date().toISOString().slice(0, 10)}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    showToast('Exported Subjects & Syllabus Register CSV', 'success');
+  }
+
 
   // Submenu 3: Academic Calendar
   function renderAcademicCalendar(filteredData) {
@@ -44829,6 +46009,27 @@ const classData = TIMETABLE_CLASS_DATA[currentTimetableClass] || TIMETABLE_CLASS
   }
 
   return {
+    ensureAcademicSubjectsState: ensureAcademicSubjectsState,
+    updateAcademicSubjectsKPIs: updateAcademicSubjectsKPIs,
+    renderAcademicSubjects: renderAcademicSubjects,
+    filterAcademicSubjects: filterAcademicSubjects,
+    resetAcademicSubjectsFilters: resetAcademicSubjectsFilters,
+    openSubjectDetailModal: openSubjectDetailModal,
+    switchSubjectDetailTab: switchSubjectDetailTab,
+    openManageChaptersModal: openManageChaptersModal,
+    handleAddChapterSubmit: handleAddChapterSubmit,
+    toggleChapterComplete: toggleChapterComplete,
+    openCreateSubjectModal: openCreateSubjectModal,
+    handleCreateSubjectSubmit: handleCreateSubjectSubmit,
+    openUploadSyllabusModal: openUploadSyllabusModal,
+    handleUploadSyllabusSubmit: handleUploadSyllabusSubmit,
+    openSetCompletionTargetsModal: openSetCompletionTargetsModal,
+    handleSetCompletionTargetsSubmit: handleSetCompletionTargetsSubmit,
+    openAssignSubjectTeacherModal: openAssignSubjectTeacherModal,
+    handleAssignSubjectTeacherSubmit: handleAssignSubjectTeacherSubmit,
+    archiveSubject: archiveSubject,
+    restoreSubject: restoreSubject,
+    exportSyllabusRegisterCSV: exportSyllabusRegisterCSV,
     ensureAcademicClassesState: ensureAcademicClassesState,
     updateAcademicClassesKPIs: updateAcademicClassesKPIs,
     renderAcademicClasses: renderAcademicClasses,
