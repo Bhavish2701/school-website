@@ -20673,3 +20673,259 @@ body.dark-mode .cal-pill-holiday { background: rgba(220, 38, 38, 0.25); color: #
 body.dark-mode .cal-pill-exam { background: rgba(147, 51, 234, 0.25); color: #d8b4fe; }
 body.dark-mode .cal-pill-event { background: rgba(22, 163, 74, 0.25); color: #86efac; }
 body.dark-mode .cal-pill-meeting { background: rgba(217, 119, 6, 0.25); color: #fde047; }
+
+
+
+/* ==========================================================================
+   MASTER TIMETABLE & SCHEDULING GOVERNANCE STYLES
+   ========================================================================== */
+
+.timetable-view-nav {
+  display: inline-flex;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+.timetable-view-btn {
+  font-size: 0.82rem;
+  font-weight: 600;
+  padding: 0.45rem 1rem;
+  border: 1px solid #cbd5e1;
+  background-color: #ffffff;
+  color: #475569;
+  transition: all 0.15s ease-in-out;
+}
+
+.timetable-view-btn:hover {
+  background-color: #f1f5f9;
+  color: #1e293b;
+}
+
+.timetable-view-btn.active {
+  background-color: #2563eb !important;
+  color: #ffffff !important;
+  border-color: #2563eb !important;
+}
+
+/* Master Weekly Grid Matrix */
+.weekly-matrix-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: 0.8rem;
+}
+
+.weekly-matrix-table th {
+  background-color: #f8fafc;
+  color: #334155;
+  font-weight: 700;
+  text-align: center;
+  padding: 0.65rem 0.5rem;
+  border: 1px solid #e2e8f0;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  letter-spacing: 0.025em;
+}
+
+.weekly-matrix-table td {
+  border: 1px solid #e2e8f0;
+  padding: 0.4rem;
+  vertical-align: top;
+  min-width: 120px;
+  height: 80px;
+  background-color: #ffffff;
+  transition: background-color 0.15s ease;
+}
+
+.weekly-matrix-table td:hover {
+  background-color: #f8fafc;
+}
+
+.weekly-matrix-table td.break-column {
+  background-color: #f1f5f9;
+  text-align: center;
+  vertical-align: middle;
+  min-width: 45px;
+  max-width: 55px;
+  color: #64748b;
+  font-weight: 700;
+  font-size: 0.72rem;
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  letter-spacing: 0.1em;
+}
+
+.matrix-period-card {
+  background-color: #ffffff;
+  border-radius: 6px;
+  padding: 0.4rem 0.5rem;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.matrix-period-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 3px 6px rgba(0,0,0,0.08);
+}
+
+.matrix-period-card.card-math { border-left: 3px solid #2563eb; }
+.matrix-period-card.card-science { border-left: 3px solid #16a34a; }
+.matrix-period-card.card-english { border-left: 3px solid #9333ea; }
+.matrix-period-card.card-telugu { border-left: 3px solid #ea580c; }
+.matrix-period-card.card-hindi { border-left: 3px solid #d97706; }
+.matrix-period-card.card-social { border-left: 3px solid #0891b2; }
+.matrix-period-card.card-computer { border-left: 3px solid #4f46e5; }
+.matrix-period-card.card-pe { border-left: 3px solid #10b981; }
+
+.matrix-subject-name {
+  font-weight: 700;
+  color: #0f172a;
+  font-size: 0.8rem;
+  line-height: 1.2;
+}
+
+.matrix-teacher-name {
+  font-size: 0.72rem;
+  color: #64748b;
+  margin-top: 2px;
+}
+
+.matrix-room-pill {
+  font-size: 0.68rem;
+  background-color: #f1f5f9;
+  color: #475569;
+  border-radius: 4px;
+  padding: 1px 4px;
+  font-weight: 600;
+  display: inline-block;
+  margin-top: 4px;
+}
+
+/* Teacher Workload Gauge */
+.workload-gauge-card {
+  background: #ffffff;
+  border-radius: 10px;
+  border: 1px solid #e2e8f0;
+  padding: 1rem;
+}
+
+.workload-progress-bar {
+  height: 8px;
+  border-radius: 4px;
+  background-color: #e2e8f0;
+  overflow: hidden;
+}
+
+.workload-fill {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 0.3s ease;
+}
+
+.workload-fill-normal { background-color: #10b981; }
+.workload-fill-warning { background-color: #f59e0b; }
+.workload-fill-danger { background-color: #ef4444; }
+
+/* Conflict Scanner Box */
+.conflict-scanner-box {
+  background-color: #f0fdf4;
+  border: 1px solid #86efac;
+  border-radius: 10px;
+  padding: 0.85rem 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.conflict-scanner-box.has-conflicts {
+  background-color: #fef2f2;
+  border-color: #fca5a5;
+}
+
+.conflict-pill-active {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background-color: #22c55e;
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 0.78rem;
+  padding: 0.25rem 0.65rem;
+  border-radius: 9999px;
+}
+
+.conflict-pill-active.has-clashes {
+  background-color: #ef4444;
+}
+
+/* Room Occupancy Chips */
+.room-status-occupied {
+  background-color: #fee2e2;
+  color: #b91c1c;
+  border: 1px solid #fecaca;
+  font-size: 0.72rem;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-weight: 600;
+}
+
+.room-status-free {
+  background-color: #dcfce7;
+  color: #15803d;
+  border: 1px solid #bbf7d0;
+  font-size: 0.72rem;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-weight: 600;
+}
+
+/* Dark mode overrides */
+[data-theme="dark"] .timetable-view-btn {
+  background-color: #1e293b;
+  border-color: #334155;
+  color: #cbd5e1;
+}
+
+[data-theme="dark"] .timetable-view-btn.active {
+  background-color: #3b82f6 !important;
+  color: #ffffff !important;
+}
+
+[data-theme="dark"] .weekly-matrix-table th {
+  background-color: #0f172a;
+  border-color: #334155;
+  color: #f1f5f9;
+}
+
+[data-theme="dark"] .weekly-matrix-table td {
+  background-color: #1e293b;
+  border-color: #334155;
+}
+
+[data-theme="dark"] .weekly-matrix-table td.break-column {
+  background-color: #0f172a;
+  color: #94a3b8;
+}
+
+[data-theme="dark"] .matrix-period-card {
+  background-color: #0f172a;
+  border-color: #334155;
+}
+
+[data-theme="dark"] .matrix-subject-name {
+  color: #f8fafc;
+}
+
+[data-theme="dark"] .matrix-room-pill {
+  background-color: #334155;
+  color: #e2e8f0;
+}
