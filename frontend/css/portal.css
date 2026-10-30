@@ -18769,3 +18769,399 @@ input:disabled + .perm-slider {
   background: #1e293b;
   border-color: #334155;
 }
+
+/* ==========================================================================
+   AUTHORITATIVE PARENT AND GUARDIAN RECORDS MODULE
+   Compliant with Student Register, Contact Verification & Future Parent Portal
+   ========================================================================== */
+
+.guardian-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  flex-wrap: wrap;
+}
+
+.guardian-statutory-notice {
+  background: #f0fdf4;
+  border-left: 4px solid #10b981;
+  color: #065f46;
+  padding: 0.85rem 1.15rem;
+  border-radius: 6px;
+  font-size: 0.82rem;
+  line-height: 1.5;
+  margin-bottom: 1.25rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+}
+
+/* Portal Account Status Badges */
+.portal-status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.28rem 0.65rem;
+  border-radius: 9999px;
+  font-size: 0.74rem;
+  font-weight: 700;
+  white-space: nowrap;
+  letter-spacing: 0.02em;
+  border: 1px solid transparent;
+}
+
+.portal-status-badge.active {
+  background: #ecfdf5;
+  border-color: #a7f3d0;
+  color: #047857;
+}
+
+.portal-status-badge.invited {
+  background: #eff6ff;
+  border-color: #bfdbfe;
+  color: #1d4ed8;
+}
+
+.portal-status-badge.pending {
+  background: #fffbeb;
+  border-color: #fde68a;
+  color: #b45309;
+}
+
+.portal-status-badge.unregistered {
+  background: #f8fafc;
+  border-color: #e2e8f0;
+  color: #64748b;
+}
+
+/* Verification Status Badges */
+.verify-status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.25rem 0.6rem;
+  border-radius: 6px;
+  font-size: 0.73rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.verify-status-badge.verified {
+  background: #dcfce7;
+  color: #15803d;
+  border: 1px solid #86efac;
+}
+
+.verify-status-badge.review {
+  background: #fef3c7;
+  color: #b45309;
+  border: 1px solid #fde68a;
+}
+
+.verify-status-badge.unverified {
+  background: #fee2e2;
+  color: #b91c1c;
+  border: 1px solid #fca5a5;
+}
+
+/* Linked Ward Pills */
+.linked-ward-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: #f1f5f9;
+  border: 1px solid #cbd5e1;
+  padding: 0.2rem 0.5rem;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  color: #1e293b;
+  margin: 0.15rem 0.25rem 0.15rem 0;
+  text-decoration: none;
+  transition: all 0.15s ease;
+}
+
+.linked-ward-pill:hover {
+  background: #e2e8f0;
+  border-color: #94a3b8;
+  color: #0f172a;
+}
+
+.linked-ward-pill i {
+  color: #2563eb;
+  font-size: 0.72rem;
+}
+
+/* Guardian Dossier Modal Layout */
+.guardian-modal-dialog {
+  max-width: 940px;
+  width: 95vw;
+}
+
+.guardian-detail-nav {
+  display: flex;
+  gap: 0.5rem;
+  border-bottom: 2px solid #e2e8f0;
+  margin-bottom: 1.25rem;
+  overflow-x: auto;
+  padding-bottom: 0.25rem;
+}
+
+.guardian-detail-tab-btn {
+  background: none;
+  border: none;
+  padding: 0.6rem 0.95rem;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #64748b;
+  cursor: pointer;
+  border-radius: 6px 6px 0 0;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.guardian-detail-tab-btn:hover {
+  color: #1e293b;
+  background: #f8fafc;
+}
+
+.guardian-detail-tab-btn.active {
+  color: #2563eb;
+  border-bottom: 2px solid #2563eb;
+  background: #eff6ff;
+  font-weight: 700;
+}
+
+.guardian-detail-pane {
+  display: none;
+}
+
+.guardian-detail-pane.active {
+  display: block;
+  animation: fadeIn 0.2s ease-in-out;
+}
+
+/* Profile Card */
+.guardian-profile-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 1.25rem;
+  margin-bottom: 1.25rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 1.25rem;
+  flex-wrap: wrap;
+}
+
+.guardian-avatar-lg {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: #eff6ff;
+  color: #2563eb;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.8rem;
+  font-weight: 800;
+  border: 3px solid #bfdbfe;
+  flex-shrink: 0;
+}
+
+.guardian-profile-fields {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
+  flex: 1;
+}
+
+.guardian-field-group label {
+  display: block;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #64748b;
+  margin-bottom: 0.2rem;
+  letter-spacing: 0.04em;
+}
+
+.guardian-field-group .val {
+  font-size: 0.88rem;
+  color: #0f172a;
+  font-weight: 600;
+}
+
+/* Linked Students List in Modal */
+.ward-cards-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 1rem;
+  margin-top: 0.75rem;
+}
+
+.ward-card-item {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 1rem;
+  position: relative;
+  transition: all 0.15s ease;
+}
+
+.ward-card-item:hover {
+  border-color: #cbd5e1;
+  box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+}
+
+.ward-card-item .ward-name {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin-bottom: 0.25rem;
+}
+
+.ward-card-item .ward-meta {
+  font-size: 0.78rem;
+  color: #64748b;
+  margin-bottom: 0.65rem;
+}
+
+/* Communication Preferences Grid */
+.comm-pref-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1rem;
+  margin-top: 0.75rem;
+}
+
+.comm-pref-card {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.comm-pref-card.active {
+  background: #f0fdf4;
+  border-color: #bbf7d0;
+}
+
+/* Custody & Legal Restriction Alert Box */
+.custody-alert-box {
+  background: #fff1f2;
+  border: 1px solid #fecdd3;
+  border-left: 4px solid #e11d48;
+  border-radius: 8px;
+  padding: 1rem 1.25rem;
+  color: #9f1239;
+  font-size: 0.84rem;
+  line-height: 1.5;
+  margin-top: 0.75rem;
+}
+
+/* Parent Portal Linkage Box */
+.portal-link-box {
+  background: #f0fdfa;
+  border: 1px solid #ccfbf1;
+  border-left: 4px solid #0d9488;
+  border-radius: 8px;
+  padding: 1rem 1.25rem;
+  margin-top: 0.75rem;
+}
+
+/* Parent Correction Docket */
+.parent-correction-docket {
+  background: #fffbeb;
+  border: 1px solid #fde68a;
+  border-radius: 8px;
+  padding: 1rem;
+  margin-top: 0.75rem;
+}
+
+/* Dark Mode Support */
+[data-theme="dark"] .guardian-statutory-notice {
+  background: #064e3b;
+  color: #a7f3d0;
+  border-left-color: #34d399;
+}
+
+[data-theme="dark"] .portal-status-badge.active {
+  background: #064e3b;
+  border-color: #059669;
+  color: #a7f3d0;
+}
+
+[data-theme="dark"] .portal-status-badge.invited {
+  background: #1e3a8a;
+  border-color: #2563eb;
+  color: #bfdbfe;
+}
+
+[data-theme="dark"] .portal-status-badge.pending {
+  background: #78350f;
+  border-color: #d97706;
+  color: #fde68a;
+}
+
+[data-theme="dark"] .portal-status-badge.unregistered {
+  background: #1e293b;
+  border-color: #334155;
+  color: #94a3b8;
+}
+
+[data-theme="dark"] .guardian-profile-card,
+[data-theme="dark"] .ward-card-item,
+[data-theme="dark"] .comm-pref-card {
+  background: #1e293b;
+  border-color: #334155;
+}
+
+[data-theme="dark"] .guardian-avatar-lg {
+  background: #1e3a8a;
+  border-color: #3b82f6;
+  color: #93c5fd;
+}
+
+[data-theme="dark"] .guardian-field-group .val,
+[data-theme="dark"] .ward-card-item .ward-name {
+  color: #f8fafc;
+}
+
+[data-theme="dark"] .guardian-detail-tab-btn {
+  color: #94a3b8;
+}
+
+[data-theme="dark"] .guardian-detail-tab-btn:hover {
+  background: #334155;
+  color: #f8fafc;
+}
+
+[data-theme="dark"] .guardian-detail-tab-btn.active {
+  background: #1e3a8a;
+  color: #60a5fa;
+  border-bottom-color: #60a5fa;
+}
+
+[data-theme="dark"] .linked-ward-pill {
+  background: #334155;
+  border-color: #475569;
+  color: #e2e8f0;
+}
+
+[data-theme="dark"] .portal-link-box {
+  background: #134e4a;
+  border-color: #115e59;
+  color: #ccfbf1;
+}
+
+[data-theme="dark"] .custody-alert-box {
+  background: #4c0519;
+  border-color: #881337;
+  color: #fecdd3;
+}

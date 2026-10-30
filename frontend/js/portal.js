@@ -6116,65 +6116,196 @@ const FEE_CATEGORY_AUDIT_DATA = [
     filterStudentDocs(false);
   }
 
-  // ==========================================================================
-  // SUBVIEW 6: PARENT / GUARDIAN RECORDS
+    // ==========================================================================
+  // SUBVIEW 6: PARENT AND GUARDIAN RECORDS MODULE
+  // Compliant with Independent Guardian Entity, Contact Verification & Future Parent Portal
   // ==========================================================================
   let parentCurrentPage = 1;
   const parentPageSize = 25;
+  let activeGuardianId = null;
 
   function initParentRecords() {
-    if (state.parentRecords && state.parentRecords.length === 500) return;
+    if (state.parentRecords && state.parentRecords.length >= 450) return;
     if ((!state.students || state.students.length === 0) && typeof window !== 'undefined' && Array.isArray(window.STUDENT_ROSTER)) {
       state.students = [...window.STUDENT_ROSTER];
     }
     const students = sortStudentsByAdmNo(state.students || []);
 
     const occupations = [
-      'Senior Software Architect, TCS',
-      'Govt Revenue Officer, AP Govt',
+      'Senior Software Architect, TCS Vizag',
+      'Govt Revenue Officer, AP Revenue Dept',
       'Business Proprietor, Srikakulam',
-      'Chartered Accountant, FCA',
-      'Professor / Lecturer, Govt College',
+      'Chartered Accountant, FCA Vizianagaram',
+      'Professor / Lecturer, Govt Degree College',
       'Advocate, District High Court',
       'Senior Branch Manager, SBI',
-      'Agricultural Landholder / Farm Owner',
-      'Mechanical Engineer, Vizag Steel',
-      'Medical Practitioner / Doctor',
-      'Civil Contractor & Builder',
-      'Headmaster, Z.P. High School'
+      'Agricultural Landholder & Agri-Business',
+      'Mechanical Engineer, Vizag Steel Plant',
+      'Medical Practitioner / MD General Physician',
+      'Civil Contractor & Infrastructure Builder',
+      'Headmaster, Zilla Parishad High School',
+      'Senior Postal Superintendent, AP Circle',
+      'Commercial Tax Officer, AP State Services',
+      'Merchant Navy Chief Engineer'
     ];
 
-    state.parentRecords = students.map((s, idx) => {
+    const addresses = [
+      'Door No. 4-21, MVP Colony, Sector 3, Visakhapatnam',
+      'Flat 302, Sri Krishna Enclave, Seethammadhara, Vizag',
+      'H.No. 12-84, Main Road, Srikakulam Town',
+      'Door No. 7-19, Cantonment Area, Vizianagaram',
+      'Plot 45, Gajuwaka Steel Plant Township, Visakhapatnam',
+      'Door No. 2-15, Dwaraka Nagar 2nd Lane, Visakhapatnam',
+      'H.No. 8-112, KGH Down Road, Maharanipeta, Visakhapatnam',
+      'D.No. 14-3, Palakonda Road, Amadalavalasa, Srikakulam',
+      'Flat 104, Sai Balaji Residency, Madhurawada, Vizag',
+      'Door No. 3-88, Phool Baugh, Vizianagaram Town'
+    ];
+
+    // Build guardians by grouping potential siblings (multi-child families)
+    const guardianMap = new Map();
+    const records = [];
+
+    students.forEach((s, idx) => {
+      // Create multi-child families for ~36 students sharing parents
+      let famKey = s.parent.toLowerCase().trim();
+      if (idx % 14 === 3 && idx > 14) {
+        // Share guardian with student (idx - 14)
+        const sibling = students[idx - 14];
+        if (sibling) famKey = sibling.parent.toLowerCase().trim();
+      }
+
       let relation = 'Father';
       if (idx % 7 === 2) relation = 'Mother';
-      if (idx % 19 === 5) relation = 'Legal Guardian';
+      if (idx % 23 === 5) relation = 'Legal Guardian';
 
-      // Exactly matching the KPI cards: 488 Verified, 12 Review Due
-      const isReviewDue = (idx % 42 === 7) && idx < 500;
-      const status = isReviewDue ? 'Review Due' : 'Verified';
-      const occ = occupations[idx % occupations.length];
-      const cleanEmail = s.name.toLowerCase().replace(/[^a-z]/g, '').slice(0, 10) + '.parent@srividya.edu.in';
-
-      return {
-        guardianName: s.parent,
-        phone: s.phone,
-        email: cleanEmail,
-        relation: relation,
-        occupation: occ,
-        address: s.address || 'Door No. 4-21, MVP Colony, Visakhapatnam',
-        wardAdmNo: s.admNo,
-        wardName: s.name,
-        wardClass: s.class,
-        wardSection: s.section || 'A',
-        wardRollNo: s.rollNo,
-        status: status,
-        lastUpdated: isReviewDue ? 'Review Pending' : 'Verified 2026-27'
+      const wardObj = {
+        admNo: s.admNo,
+        name: s.name,
+        class: s.class,
+        section: s.section || 'A',
+        rollNo: s.rollNo,
+        relationship: relation,
+        isPrimary: true,
+        canPickup: true,
+        legalCustody: true
       };
+
+      if (guardianMap.has(famKey)) {
+        // Existing multi-child guardian!
+        const existing = guardianMap.get(famKey);
+        wardObj.isPrimary = (existing.linkedStudents.length === 0);
+        existing.linkedStudents.push(wardObj);
+        if (existing.portalAccount && existing.portalAccount.authorizedChildren) {
+          existing.portalAccount.authorizedChildren.push(s.admNo);
+        }
+      } else {
+        const grdIndex = records.length + 1;
+        const padIndex = String(grdIndex).padStart(4, '0');
+        const guardianId = `GRD-2025-${padIndex}`;
+
+        // 14 Review Due, 468 Verified
+        const isReviewDue = (grdIndex % 35 === 7) && grdIndex <= 490;
+        const verificationStatus = isReviewDue ? 'Review Due' : 'Verified';
+        const occ = occupations[grdIndex % occupations.length];
+        const addr = addresses[grdIndex % addresses.length];
+        const cleanEmail = s.name.toLowerCase().replace(/[^a-z]/g, '').slice(0, 10) + '.parent@srividya.edu.in';
+
+        // Portal Account Status: Active (412), Invitation Sent (35), Pending Verification (21), Not Enrolled (14)
+        let portalStatus = 'Active';
+        if (grdIndex > 468) portalStatus = 'Not Enrolled';
+        else if (grdIndex > 447) portalStatus = 'Pending Verification';
+        else if (grdIndex > 412) portalStatus = 'Invitation Sent';
+
+        const parentRecord = {
+          guardianId: guardianId,
+          guardianName: s.parent,
+          relation: relation,
+          occupation: occ,
+          address: s.address || addr,
+          phone: s.phone,
+          altPhone: `+91 9440${Math.floor(100000 + Math.random() * 900000)}`,
+          email: cleanEmail,
+          phoneVerified: !isReviewDue,
+          emailVerified: true,
+          verificationStatus: verificationStatus,
+          verificationMethod: isReviewDue ? 'Pending Office Inspection' : 'Aadhaar Card / e-KYC',
+          verifiedBy: isReviewDue ? 'Unverified' : 'Smt. K. Hymavathi (Admin Desk)',
+          lastVerifiedDate: isReviewDue ? 'Verification Due' : '14-Aug-2025',
+          linkedStudents: [wardObj],
+          isPrimaryContact: true,
+          emergencyPriority: (grdIndex % 5 === 0) ? 'Priority 2' : 'Priority 1',
+          canPickupFromCampus: true,
+          medicalConsentAuthorized: true,
+          communicationPreferences: {
+            preferredLang: (grdIndex % 4 === 1) ? 'English' : ((grdIndex % 8 === 3) ? 'Hindi' : 'Telugu'),
+            sms: true,
+            whatsapp: true,
+            email: true,
+            emergencyPhone: true
+          },
+          custodyRestrictions: {
+            hasRestriction: false,
+            details: 'Standard Full Access (No judicial restriction orders on file)',
+            courtOrderRef: null
+          },
+          portalAccount: {
+            status: portalStatus,
+            accountUid: `PRNT-2025-${padIndex}`,
+            username: s.phone,
+            linkedAt: portalStatus === 'Active' ? '18-Aug-2025, 09:30 AM' : 'Pending',
+            authorizedChildren: [s.admNo],
+            lastLogin: portalStatus === 'Active' ? '29-Oct-2026, 07:15 PM' : 'Never'
+          },
+          correctionRequests: [
+            {
+              requestId: `REQ-${grdIndex}`,
+              field: 'Residential Address',
+              oldValue: addr,
+              requestedValue: addr,
+              reason: 'Annual verification confirmation',
+              submittedAt: '12-Aug-2025',
+              status: isReviewDue ? 'Pending Review' : 'Approved'
+            }
+          ]
+        };
+
+        guardianMap.set(famKey, parentRecord);
+        records.push(parentRecord);
+      }
     });
+
+    state.parentRecords = records;
+    if (!activeGuardianId && state.parentRecords.length > 0) {
+      activeGuardianId = state.parentRecords[0].guardianId;
+    }
+  }
+
+  function updateParentKPIs() {
+    initParentRecords();
+    const data = state.parentRecords || [];
+    const total = data.length;
+    const verified = data.filter(p => p.verificationStatus === 'Verified').length;
+    const review = data.filter(p => p.verificationStatus === 'Review Due').length;
+    const portalReady = data.filter(p => p.portalAccount && p.portalAccount.status === 'Active').length;
+
+    const elTotal = document.getElementById('parentSummaryTotal');
+    const elVer = document.getElementById('parentSummaryVerified');
+    const elRev = document.getElementById('parentSummaryReview');
+    const elPortal = document.getElementById('parentSummaryPortal');
+    const elTotalCount = document.getElementById('parentTotalCount');
+
+    if (elTotal) elTotal.textContent = total;
+    if (elVer) elVer.textContent = `${verified} (${Math.round((verified/total)*100)}%)`;
+    if (elRev) elRev.textContent = review;
+    if (elPortal) elPortal.textContent = portalReady;
+    if (elTotalCount) elTotalCount.textContent = total;
   }
 
   function renderParentRecords(list, page) {
     initParentRecords();
+    updateParentKPIs();
+
     const tbody = document.getElementById('parentRecordsTableBody');
     if (!tbody) return;
 
@@ -6182,25 +6313,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
     const data = list || state.parentRecords || [];
 
     const total = data.length;
-    const verified = state.parentRecords.filter(p => p.status === 'Verified').length;
-    const review = state.parentRecords.filter(p => p.status === 'Review Due').length;
-
-    const summaryTotal = document.getElementById('parentSummaryTotal');
-    const summaryVer = document.getElementById('parentSummaryVerified');
-    const summaryRev = document.getElementById('parentSummaryReview');
-    const summarySib = document.getElementById('parentSummarySiblings');
-    if (summaryTotal) summaryTotal.textContent = state.parentRecords.length;
-    if (summaryVer) summaryVer.textContent = verified;
-    if (summaryRev) summaryRev.textContent = review;
-    if (summarySib) summarySib.textContent = 42;
-
-    const badge = document.getElementById('parentRecordsCountBadge');
-    if (badge) badge.textContent = review;
-
-    const showingCount = document.getElementById('parentShowingCount');
-    const totalCount = document.getElementById('parentTotalCount');
-    if (totalCount) totalCount.textContent = state.parentRecords.length;
-
     const totalPages = Math.ceil(total / parentPageSize) || 1;
     if (parentCurrentPage > totalPages) parentCurrentPage = totalPages;
     if (parentCurrentPage < 1) parentCurrentPage = 1;
@@ -6208,14 +6320,16 @@ const FEE_CATEGORY_AUDIT_DATA = [
     const startIdx = (parentCurrentPage - 1) * parentPageSize;
     const pageItems = data.slice(startIdx, startIdx + parentPageSize);
 
+    const showingCount = document.getElementById('parentShowingCount');
     if (showingCount) showingCount.textContent = pageItems.length;
 
     if (pageItems.length === 0) {
       tbody.innerHTML = `
         <tr>
-          <td colspan="6" style="text-align:center; padding:3rem; color:var(--color-text-muted);">
+          <td colspan="8" style="text-align:center; padding:3rem; color:var(--color-text-muted);">
             <i class="fa-solid fa-users-slash" style="font-size:2rem; margin-bottom:0.75rem; display:block; color:#94a3b8;"></i>
-            No parent or guardian dossiers matched your filters.
+            <strong>No parent or guardian dossiers matched your active filters.</strong>
+            <div style="margin-top:0.5rem; font-size:0.8rem;">Try clearing search keywords or resetting filter parameters.</div>
           </td>
         </tr>`;
       return;
@@ -6232,7 +6346,34 @@ const FEE_CATEGORY_AUDIT_DATA = [
         relIcon = 'fa-user-shield';
       }
 
-      const isVerified = p.status === 'Verified';
+      // Verification Badge
+      const isVerified = p.verificationStatus === 'Verified';
+      const verifyBadgeHtml = isVerified
+        ? `<span class="verify-status-badge verified" title="Verified via ${p.verificationMethod}"><i class="fa-solid fa-circle-check"></i> Verified</span>`
+        : (p.verificationStatus === 'Review Due'
+            ? `<span class="verify-status-badge review" title="Contact Verification Review Due"><i class="fa-solid fa-clock-rotate-left"></i> Review Due</span>`
+            : `<span class="verify-status-badge unverified" title="Unverified Record"><i class="fa-solid fa-triangle-exclamation"></i> Unverified</span>`);
+
+      // Portal Badge
+      const pStatus = p.portalAccount ? p.portalAccount.status : 'Not Enrolled';
+      let portalBadgeHtml = '';
+      if (pStatus === 'Active') {
+        portalBadgeHtml = `<span class="portal-status-badge active"><i class="fa-solid fa-circle-check"></i> Portal Active</span>`;
+      } else if (pStatus === 'Invitation Sent') {
+        portalBadgeHtml = `<span class="portal-status-badge invited"><i class="fa-solid fa-paper-plane"></i> Invitation Sent</span>`;
+      } else if (pStatus === 'Pending Verification') {
+        portalBadgeHtml = `<span class="portal-status-badge pending"><i class="fa-solid fa-user-clock"></i> Identity Due</span>`;
+      } else {
+        portalBadgeHtml = `<span class="portal-status-badge unregistered"><i class="fa-solid fa-user-xmark"></i> Not Enrolled</span>`;
+      }
+
+      // Linked Students HTML pills
+      const wardsHtml = (p.linkedStudents || []).map(w => `
+        <a href="#students-profiles" class="linked-ward-pill" onclick="portalApp.switchSubTab('students', 'profiles'); portalApp.viewStudentProfile('${w.admNo}');" title="${w.name} (Class ${w.class}-${w.section})">
+          <i class="fa-solid fa-graduation-cap"></i>
+          <strong>${w.name.split(' ')[0]}</strong> (${w.class}-${w.section})
+        </a>
+      `).join('');
 
       return `
         <tr>
@@ -6240,25 +6381,16 @@ const FEE_CATEGORY_AUDIT_DATA = [
             <div class="parent-details-cell">
               <div class="parent-avatar">${p.guardianName.charAt(0)}</div>
               <div>
-                <div class="parent-info-name">${p.guardianName}</div>
+                <div class="parent-info-name">
+                  <a href="javascript:void(0)" onclick="portalApp.openGuardianDetailModal('${p.guardianId}')" style="color:inherit; text-decoration:none; font-weight:700;">
+                    ${p.guardianName}
+                  </a>
+                </div>
                 <div class="parent-info-meta">
                   <span><i class="fa-solid fa-briefcase text-primary"></i> ${p.occupation}</span>
-                  <span><i class="fa-solid fa-location-dot text-danger"></i> ${p.address}</span>
+                  <span style="display:block; max-width:200px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;"><i class="fa-solid fa-location-dot text-danger"></i> ${p.address}</span>
                 </div>
               </div>
-            </div>
-          </td>
-          <td>
-            <div class="parent-contact-cell">
-              <a href="tel:${p.phone}" class="parent-phone-pill">
-                <i class="fa-solid fa-phone-volume"></i> ${p.phone}
-              </a>
-              <a href="mailto:${p.email}" class="parent-email-link">
-                <i class="fa-regular fa-envelope"></i> ${p.email}
-              </a>
-              <span class="parent-wa-chip">
-                <i class="fa-brands fa-whatsapp"></i> WhatsApp Active
-              </span>
             </div>
           </td>
           <td>
@@ -6266,34 +6398,48 @@ const FEE_CATEGORY_AUDIT_DATA = [
               <span class="parent-relation-badge ${relBadgeClass}">
                 <i class="fa-solid ${relIcon}"></i> ${p.relation}
               </span>
-              <span class="parent-primary-badge">
-                <i class="fa-solid fa-shield-halved"></i> Primary Guardian
+              ${p.isPrimaryContact ? '<span class="parent-primary-badge"><i class="fa-solid fa-shield-halved"></i> Primary</span>' : ''}
+            </div>
+          </td>
+          <td>
+            <div style="display:flex; flex-direction:column; gap:0.2rem;">
+              ${wardsHtml}
+            </div>
+          </td>
+          <td>
+            <div class="parent-contact-cell">
+              <a href="tel:${p.phone}" class="parent-phone-pill" title="Click to call">
+                <i class="fa-solid fa-phone-volume"></i> ${p.phone}
+              </a>
+              <span class="parent-wa-chip" style="margin-top:0.25rem;">
+                <i class="fa-brands fa-whatsapp"></i> WhatsApp
               </span>
             </div>
           </td>
           <td>
-            <div class="parent-child-cell">
-              <div class="parent-child-name">${p.wardName}</div>
-              <div class="parent-child-meta">
-                <span class="parent-child-admno">${p.wardAdmNo}</span>
-                <span class="parent-child-class">Class ${p.wardClass}-${p.wardSection}</span>
-                <span style="font-size:0.72rem; color:var(--color-text-muted);">#${p.wardRollNo}</span>
-              </div>
-            </div>
+            <a href="mailto:${p.email}" class="parent-email-link" title="Click to send email">
+              <i class="fa-regular fa-envelope"></i> ${p.email}
+            </a>
           </td>
           <td>
             <div class="parent-status-cell">
-              <span class="parent-status-pill ${isVerified ? 'status-verified' : 'status-review'}">
-                <i class="fa-solid ${isVerified ? 'fa-circle-check' : 'fa-clock-rotate-left'}"></i>
-                ${p.status}
-              </span>
-              <span class="parent-status-time">${p.lastUpdated}</span>
+              ${verifyBadgeHtml}
+              <span class="parent-status-time" style="margin-top:0.25rem;">${p.lastVerifiedDate}</span>
+            </div>
+          </td>
+          <td>
+            <div style="display:flex; flex-direction:column; gap:0.25rem;">
+              ${portalBadgeHtml}
+              <span style="font-size:0.7rem; color:#64748b;">${p.portalAccount ? p.portalAccount.accountUid : ''}</span>
             </div>
           </td>
           <td style="text-align: center;">
-            <div class="parent-actions-cell">
-              <button type="button" class="parent-btn-dossier" onclick="portalApp.viewStudentProfile('${p.wardAdmNo}')" title="Open Ward Dossier">
-                <i class="fa-solid fa-user-graduate text-primary"></i> Ward
+            <div class="parent-actions-cell" style="justify-content:center;">
+              <button type="button" class="parent-btn-dossier" onclick="portalApp.openGuardianDetailModal('${p.guardianId}')" title="Open Complete Guardian Dossier">
+                <i class="fa-solid fa-id-card text-primary"></i> Dossier
+              </button>
+              <button type="button" class="parent-btn-edit" onclick="portalApp.openVerifyContactModal('${p.guardianId}')" title="Verify Contact Number / Identity">
+                <i class="fa-solid fa-user-check text-success"></i>
               </button>
               <button type="button" class="parent-btn-edit" onclick="portalApp.callGuardian('${p.phone}')" title="Place Direct Phone Call">
                 <i class="fa-solid fa-phone text-emerald"></i>
@@ -6320,19 +6466,24 @@ const FEE_CATEGORY_AUDIT_DATA = [
     const query = (document.getElementById('parentFilterInput')?.value || '').toLowerCase().trim();
     const relVal = document.getElementById('parentRelationFilter')?.value || '';
     const statusVal = document.getElementById('parentVerifyFilter')?.value || '';
+    const portalVal = document.getElementById('parentPortalFilter')?.value || '';
 
     const filtered = state.parentRecords.filter(p => {
       const matchQuery = !query ||
         p.guardianName.toLowerCase().includes(query) ||
         p.phone.includes(query) ||
-        p.wardName.toLowerCase().includes(query) ||
-        p.wardAdmNo.toLowerCase().includes(query) ||
-        p.occupation.toLowerCase().includes(query);
+        p.email.toLowerCase().includes(query) ||
+        p.occupation.toLowerCase().includes(query) ||
+        (p.linkedStudents && p.linkedStudents.some(w => 
+          w.name.toLowerCase().includes(query) || 
+          w.admNo.toLowerCase().includes(query)
+        ));
 
       const matchRel = !relVal || p.relation === relVal;
-      const matchStatus = !statusVal || p.status === statusVal;
+      const matchStatus = !statusVal || p.verificationStatus === statusVal;
+      const matchPortal = !portalVal || (p.portalAccount && p.portalAccount.status === portalVal);
 
-      return matchQuery && matchRel && matchStatus;
+      return matchQuery && matchRel && matchStatus && matchPortal;
     });
 
     renderParentRecords(filtered, parentCurrentPage);
@@ -6342,22 +6493,423 @@ const FEE_CATEGORY_AUDIT_DATA = [
     const q = document.getElementById('parentFilterInput');
     const r = document.getElementById('parentRelationFilter');
     const s = document.getElementById('parentVerifyFilter');
+    const p = document.getElementById('parentPortalFilter');
     if (q) q.value = '';
     if (r) r.value = '';
     if (s) s.value = '';
+    if (p) p.value = '';
     parentCurrentPage = 1;
     renderParentRecords();
-    showToast('Parent directory filters reset', 'info');
+    showToast('Parent directory filters reset to default view', 'info');
+  }
+
+  // --- GUARDIAN DETAIL DOSSIER ---
+  function openGuardianDetailModal(guardianId) {
+    initParentRecords();
+    if (!guardianId && activeGuardianId) guardianId = activeGuardianId;
+    const record = state.parentRecords.find(p => p.guardianId === guardianId) || state.parentRecords[0];
+    if (!record) return;
+
+    activeGuardianId = record.guardianId;
+
+    // Header info
+    document.getElementById('dossierGuardianName').textContent = record.guardianName;
+    document.getElementById('dossierGuardianId').textContent = record.guardianId;
+    document.getElementById('dossierGuardianMeta').textContent = `${record.relation} · ${record.occupation} · ${record.address}`;
+    document.getElementById('dossierAvatar').textContent = record.guardianName.charAt(0);
+
+    // Badges
+    const relBadge = document.getElementById('dossierRelationBadge');
+    if (relBadge) {
+      relBadge.className = `parent-relation-badge relation-${record.relation.toLowerCase().replace(' ', '-')}`;
+      relBadge.textContent = record.relation;
+    }
+    const verBadge = document.getElementById('dossierVerifyBadge');
+    if (verBadge) {
+      verBadge.className = `verify-status-badge ${record.verificationStatus === 'Verified' ? 'verified' : 'review'}`;
+      verBadge.textContent = record.verificationStatus;
+    }
+    const portBadge = document.getElementById('dossierPortalBadge');
+    if (portBadge) {
+      const pStat = record.portalAccount ? record.portalAccount.status : 'Not Enrolled';
+      portBadge.className = `portal-status-badge ${pStat === 'Active' ? 'active' : (pStat === 'Invitation Sent' ? 'invited' : 'pending')}`;
+      portBadge.textContent = `Portal ${pStat}`;
+    }
+
+    // Tab 1: Profile & Contacts
+    document.getElementById('dossierValName').textContent = record.guardianName;
+    document.getElementById('dossierValRelation').textContent = record.relation;
+    document.getElementById('dossierValOccupation').textContent = record.occupation;
+    document.getElementById('dossierValAddress').textContent = record.address;
+    document.getElementById('dossierValPhone').textContent = record.phone;
+    document.getElementById('dossierValEmail').textContent = record.email;
+    document.getElementById('dossierValAltPhone').textContent = record.altPhone || 'None Provided';
+    document.getElementById('dossierValVerifyInfo').textContent = `${record.verificationMethod} (Verified on ${record.lastVerifiedDate})`;
+
+    // Tab 2: Linked Students
+    const wardsList = document.getElementById('dossierWardsList');
+    if (wardsList) {
+      wardsList.innerHTML = (record.linkedStudents || []).map(w => `
+        <div class="ward-card-item">
+          <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+            <div class="ward-name">${w.name}</div>
+            <span class="tc-count-pill" style="font-size:0.72rem;">${w.admNo}</span>
+          </div>
+          <div class="ward-meta">
+            Class ${w.class}-${w.section} · Roll No: ${w.rollNo} · ${w.relationship}
+          </div>
+          <div style="display:flex; gap:0.4rem; flex-wrap:wrap; margin-bottom:0.75rem;">
+            ${w.isPrimary ? '<span class="parent-primary-badge"><i class="fa-solid fa-star"></i> Primary Contact</span>' : ''}
+            ${w.canPickup ? '<span class="verify-status-badge verified"><i class="fa-solid fa-check"></i> Campus Pickup Authorized</span>' : ''}
+          </div>
+          <button type="button" class="btn btn-outline-primary btn-sm" onclick="portalApp.closeModal('guardianDetailModal'); portalApp.switchSubTab('students', 'profiles'); portalApp.viewStudentProfile('${w.admNo}');" style="width:100%; font-size:0.75rem;">
+            <i class="fa-solid fa-user-graduate mr-1"></i> Open Student Profile
+          </button>
+        </div>
+      `).join('');
+    }
+
+    // Tab 3: Authorizations
+    document.getElementById('dossierEmergencyPriority').textContent = `${record.emergencyPriority} (Designated call priority during campus emergencies)`;
+
+    // Tab 4: Communication
+    document.getElementById('dossierCommLang').textContent = `${record.communicationPreferences.preferredLang} (Institutional Circulars)`;
+
+    // Tab 5: Custody
+    document.getElementById('dossierCustodyStatus').textContent = record.custodyRestrictions.details;
+
+    // Tab 6: Portal
+    const portAcc = record.portalAccount || {};
+    document.getElementById('dossierPortalAccountTitle').textContent = `Parent Portal Status: ${portAcc.status}`;
+    document.getElementById('dossierPortalUserId').textContent = portAcc.accountUid || 'PRNT-PENDING';
+    document.getElementById('dossierPortalAuthorizedChildren').textContent = (portAcc.authorizedChildren || []).join(', ');
+
+    // Tab 7: Correction Requests
+    const docket = document.getElementById('dossierCorrectionDocket');
+    if (docket) {
+      docket.innerHTML = (record.correctionRequests || []).map(r => `
+        <div class="parent-correction-docket" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.5rem;">
+          <div>
+            <div style="font-weight:700; color:#0f172a; font-size:0.85rem;">${r.field}</div>
+            <div style="font-size:0.78rem; color:#64748b;">
+              Current: <code>${r.oldValue}</code> &rarr; Requested: <strong style="color:#0f172a;">${r.requestedValue}</strong>
+            </div>
+            <div style="font-size:0.72rem; color:#94a3b8; margin-top:0.2rem;">Submitted: ${r.submittedAt} · Reason: ${r.reason}</div>
+          </div>
+          <span class="verify-status-badge ${r.status === 'Approved' ? 'verified' : 'review'}">${r.status}</span>
+        </div>
+      `).join('');
+    }
+
+    // Default to tab 1
+    switchGuardianDetailTab('profile');
+    openModal('guardianDetailModal');
+  }
+
+  function switchGuardianDetailTab(tabId) {
+    const tabs = document.querySelectorAll('.guardian-detail-tab-btn');
+    tabs.forEach(t => t.classList.remove('active'));
+
+    const panes = document.querySelectorAll('.guardian-detail-pane');
+    panes.forEach(p => p.classList.remove('active'));
+
+    const targetPane = document.getElementById(`guardianPane-${tabId}`);
+    if (targetPane) targetPane.classList.add('active');
+
+    // Highlight button
+    tabs.forEach(btn => {
+      if (btn.getAttribute('onclick') && btn.getAttribute('onclick').includes(tabId)) {
+        btn.classList.add('active');
+      }
+    });
+  }
+
+  // --- ADD GUARDIAN WORKFLOW ---
+  function openAddGuardianModal() {
+    openModal('addGuardianModal');
+  }
+
+  function submitAddGuardian(e) {
+    if (e && e.preventDefault) e.preventDefault();
+    initParentRecords();
+
+    const name = document.getElementById('addGrdName')?.value || '';
+    const relation = document.getElementById('addGrdRelation')?.value || 'Father';
+    const occupation = document.getElementById('addGrdOccupation')?.value || '';
+    const phone = document.getElementById('addGrdPhone')?.value || '';
+    const altPhone = document.getElementById('addGrdAltPhone')?.value || '';
+    const email = document.getElementById('addGrdEmail')?.value || '';
+    const address = document.getElementById('addGrdAddress')?.value || '';
+    const studentAdm = document.getElementById('addGrdStudentAdm')?.value || 'SV2024-X-001';
+    const emergencyPriority = document.getElementById('addGrdEmergencyPriority')?.value || 'Priority 1';
+    const lang = document.getElementById('addGrdLanguage')?.value || 'Telugu';
+    const verifyMethod = document.getElementById('addGrdVerifyMethod')?.value || 'Office Physical Verification';
+    const isPrimary = document.getElementById('addGrdIsPrimary')?.checked !== false;
+    const canPickup = document.getElementById('addGrdCanPickup')?.checked !== false;
+
+    // Find student name if exists
+    let studentName = 'Linked Ward';
+    let studentClass = 'X';
+    let studentSec = 'A';
+    let studentRoll = '1';
+    const sObj = (state.students || []).find(s => s.admNo === studentAdm);
+    if (sObj) {
+      studentName = sObj.name;
+      studentClass = sObj.class;
+      studentSec = sObj.section || 'A';
+      studentRoll = sObj.rollNo;
+    }
+
+    const padIndex = String(state.parentRecords.length + 1).padStart(4, '0');
+    const newGuardian = {
+      guardianId: `GRD-2025-${padIndex}`,
+      guardianName: name,
+      relation: relation,
+      occupation: occupation,
+      address: address,
+      phone: phone,
+      altPhone: altPhone,
+      email: email,
+      phoneVerified: true,
+      emailVerified: true,
+      verificationStatus: 'Verified',
+      verificationMethod: verifyMethod,
+      verifiedBy: 'Smt. K. Hymavathi (Admin Desk)',
+      lastVerifiedDate: 'Just Now',
+      linkedStudents: [
+        {
+          admNo: studentAdm,
+          name: studentName,
+          class: studentClass,
+          section: studentSec,
+          rollNo: studentRoll,
+          relationship: relation,
+          isPrimary: isPrimary,
+          canPickup: canPickup,
+          legalCustody: true
+        }
+      ],
+      isPrimaryContact: isPrimary,
+      emergencyPriority: emergencyPriority,
+      canPickupFromCampus: canPickup,
+      medicalConsentAuthorized: true,
+      communicationPreferences: {
+        preferredLang: lang,
+        sms: true,
+        whatsapp: true,
+        email: true,
+        emergencyPhone: true
+      },
+      custodyRestrictions: {
+        hasRestriction: false,
+        details: 'Standard Full Access (No judicial restriction orders on file)',
+        courtOrderRef: null
+      },
+      portalAccount: {
+        status: 'Not Enrolled',
+        accountUid: `PRNT-2025-${padIndex}`,
+        username: phone,
+        linkedAt: 'Pending',
+        authorizedChildren: [studentAdm],
+        lastLogin: 'Never'
+      },
+      correctionRequests: []
+    };
+
+    state.parentRecords.unshift(newGuardian);
+    closeModal('addGuardianModal');
+    renderParentRecords();
+    showToast(`Authoritative Guardian Dossier created for ${name} linked to ${studentName} (${studentAdm})`, 'success');
+  }
+
+  // --- VERIFY CONTACT WORKFLOW ---
+  function openVerifyContactModal(guardianId) {
+    initParentRecords();
+    if (!guardianId && activeGuardianId) guardianId = activeGuardianId;
+    const select = document.getElementById('verifyContactSelect');
+    if (select) {
+      select.innerHTML = state.parentRecords.slice(0, 50).map(p => `
+        <option value="${p.guardianId}" ${p.guardianId === guardianId ? 'selected' : ''}>
+          ${p.guardianName} (${p.relation}) - ${p.phone}
+        </option>
+      `).join('');
+    }
+    onVerifyGuardianSelectChange();
+    openModal('verifyContactModal');
+  }
+
+  function onVerifyGuardianSelectChange() {
+    const select = document.getElementById('verifyContactSelect');
+    if (!select) return;
+    const gid = select.value;
+    const rec = state.parentRecords.find(p => p.guardianId === gid);
+    if (rec) {
+      const dispPhone = document.getElementById('verifyDispPhone');
+      if (dispPhone) dispPhone.textContent = `+91 ${rec.phone} · ${rec.email}`;
+    }
+  }
+
+  function submitVerifyContact(e) {
+    if (e && e.preventDefault) e.preventDefault();
+    const select = document.getElementById('verifyContactSelect');
+    const gid = select ? select.value : activeGuardianId;
+    const rec = state.parentRecords.find(p => p.guardianId === gid);
+    const method = document.getElementById('verifyMethodSelect')?.value || 'OTP SMS Verification';
+    const officer = document.getElementById('verifyOfficerInput')?.value || 'Admin Desk';
+
+    if (rec) {
+      rec.verificationStatus = 'Verified';
+      rec.phoneVerified = true;
+      rec.emailVerified = true;
+      rec.verificationMethod = method;
+      rec.verifiedBy = officer;
+      rec.lastVerifiedDate = 'Just Now (Verified)';
+    }
+
+    closeModal('verifyContactModal');
+    renderParentRecords();
+    if (rec) {
+      showToast(`Statutory contact verification confirmed for ${rec.guardianName} via ${method}`, 'success');
+    }
+  }
+
+  // --- PARENT INFORMATION CORRECTION REQUEST WORKFLOW ---
+  function openParentCorrectionModal(guardianId) {
+    initParentRecords();
+    if (!guardianId && activeGuardianId) guardianId = activeGuardianId;
+    const rec = state.parentRecords.find(p => p.guardianId === guardianId) || state.parentRecords[0];
+    if (!rec) return;
+
+    document.getElementById('corrGuardianName').value = `${rec.guardianName} (${rec.guardianId})`;
+    onCorrectionFieldChange();
+    openModal('parentCorrectionRequestModal');
+  }
+
+  function onCorrectionFieldChange() {
+    const rec = state.parentRecords.find(p => p.guardianId === activeGuardianId) || state.parentRecords[0];
+    if (!rec) return;
+    const field = document.getElementById('corrFieldSelect')?.value || 'Primary Mobile Number';
+    const currInput = document.getElementById('corrCurrentVal');
+    if (currInput) {
+      if (field === 'Primary Mobile Number') currInput.value = rec.phone;
+      else if (field === 'Email Address') currInput.value = rec.email;
+      else if (field === 'Residential Address') currInput.value = rec.address;
+      else if (field === 'Occupation / Employer') currInput.value = rec.occupation;
+      else if (field === 'Alternate Emergency Contact') currInput.value = rec.altPhone || 'None';
+    }
+  }
+
+  function submitParentCorrectionRequest(e) {
+    if (e && e.preventDefault) e.preventDefault();
+    const rec = state.parentRecords.find(p => p.guardianId === activeGuardianId) || state.parentRecords[0];
+    if (!rec) return;
+
+    const field = document.getElementById('corrFieldSelect')?.value || 'Primary Mobile Number';
+    const currVal = document.getElementById('corrCurrentVal')?.value || '';
+    const newVal = document.getElementById('corrNewVal')?.value || '';
+    const reason = document.getElementById('corrReason')?.value || '';
+
+    if (!rec.correctionRequests) rec.correctionRequests = [];
+    rec.correctionRequests.unshift({
+      requestId: `REQ-${Math.floor(1000 + Math.random() * 9000)}`,
+      field: field,
+      oldValue: currVal,
+      requestedValue: newVal,
+      reason: reason,
+      submittedAt: 'Today',
+      status: 'Pending Review'
+    });
+
+    closeModal('parentCorrectionRequestModal');
+    showToast(`Audit-safe correction request submitted for ${field}. Verified school records remain unchanged until documentary review.`, 'info');
+    if (activeGuardianId) openGuardianDetailModal(activeGuardianId);
+  }
+
+  // --- MULTI-CHILD STUDENT LINKAGE ---
+  function openLinkStudentModal(guardianId) {
+    initParentRecords();
+    if (!guardianId && activeGuardianId) guardianId = activeGuardianId;
+    const rec = state.parentRecords.find(p => p.guardianId === guardianId) || state.parentRecords[0];
+    if (!rec) return;
+
+    document.getElementById('linkGrdName').value = `${rec.guardianName} (${rec.guardianId})`;
+    const sel = document.getElementById('linkStudentSelect');
+    if (sel && state.students) {
+      sel.innerHTML = state.students.slice(0, 100).map(s => `
+        <option value="${s.admNo}">${s.name} (${s.admNo} - Class ${s.class}${s.section ? '-' + s.section : ''})</option>
+      `).join('');
+    }
+    openModal('linkStudentModal');
+  }
+
+  function submitLinkStudent(e) {
+    if (e && e.preventDefault) e.preventDefault();
+    const rec = state.parentRecords.find(p => p.guardianId === activeGuardianId) || state.parentRecords[0];
+    if (!rec) return;
+
+    const admNo = document.getElementById('linkStudentSelect')?.value || '';
+    const rel = document.getElementById('linkRelationSelect')?.value || 'Father';
+    const isPrimary = document.getElementById('linkIsPrimary')?.checked !== false;
+    const canPickup = document.getElementById('linkCanPickup')?.checked !== false;
+
+    const sObj = (state.students || []).find(s => s.admNo === admNo);
+    const wardObj = {
+      admNo: admNo,
+      name: sObj ? sObj.name : 'Linked Student',
+      class: sObj ? sObj.class : 'X',
+      section: sObj ? (sObj.section || 'A') : 'A',
+      rollNo: sObj ? sObj.rollNo : '1',
+      relationship: rel,
+      isPrimary: isPrimary,
+      canPickup: canPickup,
+      legalCustody: true
+    };
+
+    if (!rec.linkedStudents) rec.linkedStudents = [];
+    rec.linkedStudents.push(wardObj);
+    if (rec.portalAccount && rec.portalAccount.authorizedChildren) {
+      if (!rec.portalAccount.authorizedChildren.includes(admNo)) {
+        rec.portalAccount.authorizedChildren.push(admNo);
+      }
+    }
+
+    closeModal('linkStudentModal');
+    renderParentRecords();
+    showToast(`Successfully linked ${wardObj.name} (${admNo}) to guardian ${rec.guardianName}. Access scope updated.`, 'success');
+    if (activeGuardianId) openGuardianDetailModal(activeGuardianId);
+  }
+
+  // --- PROVISION PARENT PORTAL ACCOUNT ---
+  function provisionParentPortalAccount(guardianId) {
+    initParentRecords();
+    if (!guardianId && activeGuardianId) guardianId = activeGuardianId;
+    const rec = state.parentRecords.find(p => p.guardianId === guardianId) || state.parentRecords[0];
+    if (!rec) return;
+
+    if (!rec.portalAccount) {
+      rec.portalAccount = {
+        accountUid: `PRNT-2025-${rec.guardianId.split('-')[2]}`,
+        username: rec.phone,
+        authorizedChildren: rec.linkedStudents.map(w => w.admNo)
+      };
+    }
+
+    rec.portalAccount.status = 'Active';
+    rec.portalAccount.linkedAt = 'Today, Just Now';
+    renderParentRecords();
+    showToast(`Parent Portal credentials provisioned for ${rec.guardianName}. Access bound exclusively to authorized wards: ${rec.portalAccount.authorizedChildren.join(', ')}`, 'success');
+    if (activeGuardianId) openGuardianDetailModal(activeGuardianId);
   }
 
   function exportParentCSV() {
     initParentRecords();
-    let csv = 'GuardianName,Relationship,Occupation,Phone,Email,Address,WardAdmNo,WardName,WardClass,WardSection,VerificationStatus\n';
+    let csv = 'GuardianID,GuardianName,Relationship,Occupation,Phone,Email,Address,VerificationStatus,VerificationMethod,PortalStatus,LinkedStudents,EmergencyPriority\n';
     state.parentRecords.forEach(p => {
-      csv += `"${p.guardianName}","${p.relation}","${p.occupation}","${p.phone}","${p.email}","${(p.address || '').replace(/"/g, '""')}","${p.wardAdmNo}","${p.wardName}","${p.wardClass}","${p.wardSection}","${p.status}"\n`;
+      const wards = (p.linkedStudents || []).map(w => `${w.name} (${w.admNo})`).join('; ');
+      csv += `"${p.guardianId}","${p.guardianName}","${p.relation}","${p.occupation}","${p.phone}","${p.email}","${(p.address || '').replace(/"/g, '""')}","${p.verificationStatus}","${p.verificationMethod}","${p.portalAccount ? p.portalAccount.status : 'Not Enrolled'}","${wards}","${p.emergencyPriority}"\n`;
     });
-    downloadCsvFile(csv, 'sri_vidya_parent_guardian_directory.csv');
-    showToast('Guardian Directory exported to CSV', 'success');
+    downloadCsvFile(csv, 'sri_vidya_parent_guardian_authoritative_register.csv');
+    showToast('Authoritative Parent & Guardian Directory exported to CSV', 'success');
   }
 
   function printParentDirectory() {
@@ -6375,7 +6927,7 @@ const FEE_CATEGORY_AUDIT_DATA = [
     showToast(`Prepared communication broadcast for ${name} (${phone})`, 'info');
   }
 
-  
+
   /* =========================================================================
      AUTHORITATIVE STUDENT PERFORMANCE & SCHOLASTIC GOVERNANCE
      Compliant with AP SSC / CCE Evaluation & Publication Standards
@@ -39455,9 +40007,23 @@ const classData = TIMETABLE_CLASS_DATA[currentTimetableClass] || TIMETABLE_CLASS
     submitRequestMissingDocs,
     toggleDocVerifyStatus,
     initParentRecords,
+    updateParentKPIs,
     renderParentRecords,
     filterParentRecords,
     resetParentFilters,
+    openGuardianDetailModal,
+    switchGuardianDetailTab,
+    openAddGuardianModal,
+    submitAddGuardian,
+    openVerifyContactModal,
+    onVerifyGuardianSelectChange,
+    submitVerifyContact,
+    openParentCorrectionModal,
+    onCorrectionFieldChange,
+    submitParentCorrectionRequest,
+    openLinkStudentModal,
+    submitLinkStudent,
+    provisionParentPortalAccount,
     exportParentCSV,
     printParentDirectory,
     callGuardian,
