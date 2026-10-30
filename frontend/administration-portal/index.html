@@ -3963,124 +3963,180 @@
                SUBVIEW 4: TRANSFERS (TC) (EXECUTIVE MANAGEMENT)
                Display: TC Number & Date, Student Details, Class, Reason, Clearance Status, Conduct, Approval Status, and Actions
                ================================================================= -->
+          <!-- =================================================================
+               SUBVIEW 4: TRANSFERS AND TRANSFER CERTIFICATES (AUTHORITATIVE GOVERNANCE)
+               Compliant with AP Education Code Statutory Clearance & TC Regulations
+               ================================================================= -->
           <div class="student-subview" id="subview-students-transfers" style="display:none;">
-            <!-- Transfers Summary Stats Bar -->
-            <div class="admissions-overview-bar">
+            
+            <!-- Standard Page Header -->
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1.25rem; flex-wrap: wrap; gap: 1rem;">
+              <div>
+                <div style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.8rem; color: #64748b; margin-bottom: 0.35rem;">
+                  <span>Students</span>
+                  <i class="fa-solid fa-chevron-right" style="font-size: 0.65rem;"></i>
+                  <span style="color: #0f172a; font-weight: 600;">Transfers and Transfer Certificates</span>
+                </div>
+                <h2 style="font-size: 1.4rem; font-weight: 800; color: #0f172a; margin: 0 0 0.25rem 0;">
+                  Transfers and Transfer Certificates
+                </h2>
+                <p style="font-size: 0.84rem; color: #64748b; margin: 0;">
+                  Manage student transfer requests, multi-department statutory clearances, and official Transfer Certificate (TC) issuance.
+                </p>
+              </div>
+              <div class="tc-header-actions">
+                <button type="button" class="btn btn-outline-secondary btn-sm" onclick="portalApp.openRecordExternalTransferModal()" style="font-weight: 600;">
+                  <i class="fa-solid fa-right-left mr-1"></i> Record External Transfer
+                </button>
+                <button type="button" class="btn btn-primary btn-sm" onclick="portalApp.openNewTcRequestModal()" style="font-weight: 700;">
+                  <i class="fa-solid fa-plus mr-1"></i> New TC Request
+                </button>
+              </div>
+            </div>
+
+            <!-- Statutory Non-Blocking Policy Banner -->
+            <div class="tc-statutory-notice">
+              <i class="fa-solid fa-scale-balanced mr-1" style="font-size: 0.95rem;"></i>
+              <strong>Statutory Compliance Mandate:</strong> In accordance with Andhra Pradesh Educational Rules (Rule 99, Chapter III) and state governance orders, a legally required Transfer Certificate shall not be withheld solely due to fee clearance disputes or internal software locks. Where applicable, statutory parental undertakings allow certificate issuance while preserving institutional debt recovery.
+            </div>
+
+            <!-- Summary KPI Cards -->
+            <div class="admissions-overview-bar" style="margin-bottom: 1.25rem;">
               <div class="adm-stat-card card-blue">
                 <div class="adm-stat-icon icon-blue"><i class="fa-solid fa-file-export"></i></div>
                 <div class="adm-stat-info">
-                  <div class="adm-count" id="tcQueueStatCount">4</div>
-                  <div class="adm-label">Active TC Records</div>
-                </div>
-              </div>
-              <div class="adm-stat-card card-green">
-                <div class="adm-stat-icon icon-green"><i class="fa-solid fa-stamp"></i></div>
-                <div class="adm-stat-info">
-                  <div class="adm-count" id="tcKpiCleared">3</div>
-                  <div class="adm-label">Cleared for Issue</div>
+                  <div class="adm-count" id="tcKpiActive">8</div>
+                  <div class="adm-label">Active TC Requests</div>
                 </div>
               </div>
               <div class="adm-stat-card card-amber">
-                <div class="adm-stat-icon icon-amber"><i class="fa-solid fa-hourglass-half"></i></div>
+                <div class="adm-stat-icon icon-amber"><i class="fa-solid fa-clock-rotate-left"></i></div>
                 <div class="adm-stat-info">
-                  <div class="adm-count" id="tcKpiPendingDues">1</div>
-                  <div class="adm-label">Pending Dues Clearance</div>
+                  <div class="adm-count" id="tcKpiClearance">3</div>
+                  <div class="adm-label">Under Clearance</div>
                 </div>
               </div>
               <div class="adm-stat-card card-purple">
-                <div class="adm-stat-icon icon-purple"><i class="fa-solid fa-signature"></i></div>
+                <div class="adm-stat-icon icon-purple"><i class="fa-solid fa-stamp"></i></div>
                 <div class="adm-stat-info">
-                  <div class="adm-count" id="tcKpiAuthorized">3</div>
-                  <div class="adm-label">Principal Authorized / Issued</div>
+                  <div class="adm-count" id="tcKpiApproved">2</div>
+                  <div class="adm-label">Approved for Issue</div>
+                </div>
+              </div>
+              <div class="adm-stat-card card-green">
+                <div class="adm-stat-icon icon-green"><i class="fa-solid fa-circle-check"></i></div>
+                <div class="adm-stat-info">
+                  <div class="adm-count" id="tcKpiIssued">4</div>
+                  <div class="adm-label">Issued &amp; Transferred</div>
+                </div>
+              </div>
+              <div class="adm-stat-card card-blue" style="border-left: 4px solid #0284c7;">
+                <div class="adm-stat-icon" style="background:#e0f2fe; color:#0284c7;"><i class="fa-solid fa-arrow-right-arrow-left"></i></div>
+                <div class="adm-stat-info">
+                  <div class="adm-count" id="tcKpiExternal">3</div>
+                  <div class="adm-label">External Transfers</div>
                 </div>
               </div>
             </div>
 
-            <!-- Transfers Executive Toolbar & Filters -->
-            <div class="transfers-toolbar">
-              <div class="tc-toolbar-left">
-                <div class="tc-search-wrap">
-                  <i class="fa-solid fa-magnifying-glass search-icon"></i>
+            <!-- Executive Toolbar & Multi-field Filters -->
+            <div class="transfers-toolbar" style="margin-bottom: 1rem;">
+              <div class="tc-toolbar-left" style="display:flex; align-items:center; gap:0.6rem; flex-wrap:wrap; flex:1;">
+                <div class="tc-search-wrap" style="position:relative; min-width:260px;">
+                  <i class="fa-solid fa-magnifying-glass search-icon" style="position:absolute; left:10px; top:50%; transform:translateY(-50%); color:#94a3b8; font-size:0.85rem;"></i>
                   <input type="text" id="tcSearchInput" class="tc-search-input"
-                    placeholder="Search by TC No, student, admission no, reason..."
-                    oninput="portalApp.filterTransfers()">
+                    placeholder="Search by Request ID, Student, Adm No, TC No, Reason..."
+                    oninput="portalApp.filterTransfers()"
+                    style="padding-left:32px; padding-right:28px; width:100%; height:36px; border:1px solid #cbd5e1; border-radius:6px; font-size:0.83rem;">
                   <button type="button" class="tc-clear-btn" id="tcClearSearchBtn"
                     onclick="document.getElementById('tcSearchInput').value=''; portalApp.filterTransfers();"
-                    title="Clear Search">
+                    title="Clear Search" style="position:absolute; right:8px; top:50%; transform:translateY(-50%); background:none; border:none; color:#94a3b8; cursor:pointer;">
                     <i class="fa-solid fa-xmark"></i>
                   </button>
                 </div>
 
-                <select id="tcClassFilter" class="tc-filter-select" onchange="portalApp.filterTransfers()"
-                  title="Filter by Class">
+                <select id="tcClassFilter" class="tc-filter-select" onchange="portalApp.filterTransfers()" title="Filter by Class" style="height:36px; padding:0 0.65rem; border:1px solid #cbd5e1; border-radius:6px; font-size:0.83rem;">
                   <option value="">All Classes</option>
+                  <option value="I">Class I</option>
+                  <option value="II">Class II</option>
+                  <option value="III">Class III</option>
+                  <option value="IV">Class IV</option>
                   <option value="V">Class V</option>
+                  <option value="VI">Class VI</option>
+                  <option value="VII">Class VII</option>
                   <option value="VIII">Class VIII</option>
                   <option value="IX">Class IX</option>
                   <option value="X">Class X</option>
                 </select>
 
-                <select id="tcDuesFilter" class="tc-filter-select" onchange="portalApp.filterTransfers()"
-                  title="Filter by Clearance Dues">
-                  <option value="">All Clearance States</option>
-                  <option value="cleared">Cleared (No Dues)</option>
-                  <option value="pending">Dues Pending</option>
+                <select id="tcAcademicClearanceFilter" class="tc-filter-select" onchange="portalApp.filterTransfers()" title="Filter by Academic Clearance" style="height:36px; padding:0 0.65rem; border:1px solid #cbd5e1; border-radius:6px; font-size:0.83rem;">
+                  <option value="">All Academic Clearance</option>
+                  <option value="Cleared">Academic Cleared</option>
+                  <option value="Pending">Academic Pending</option>
                 </select>
 
-                <select id="tcStatusFilter" class="tc-filter-select" onchange="portalApp.filterTransfers()"
-                  title="Filter by Approval Status">
+                <select id="tcFinancialClearanceFilter" class="tc-filter-select" onchange="portalApp.filterTransfers()" title="Filter by Financial Clearance" style="height:36px; padding:0 0.65rem; border:1px solid #cbd5e1; border-radius:6px; font-size:0.83rem;">
+                  <option value="">All Financial States</option>
+                  <option value="Cleared (No Dues)">Cleared (No Dues)</option>
+                  <option value="Dues Pending">Dues Pending</option>
+                  <option value="Statutory Undertaking">Statutory Undertaking</option>
+                </select>
+
+                <select id="tcApprovalStatusFilter" class="tc-filter-select" onchange="portalApp.filterTransfers()" title="Filter by Approval Status" style="height:36px; padding:0 0.65rem; border:1px solid #cbd5e1; border-radius:6px; font-size:0.83rem;">
                   <option value="">All Approval Statuses</option>
-                  <option value="issued">Issued</option>
-                  <option value="pending">Pending Principal Sign</option>
-                  <option value="dispatch">Ready for Dispatch</option>
-                  <option value="hold">On Hold</option>
+                  <option value="Draft">Draft</option>
+                  <option value="Submitted">Submitted</option>
+                  <option value="Under Review">Under Review</option>
+                  <option value="Approved">Approved</option>
+                  <option value="Issued">Issued</option>
+                  <option value="On Hold">On Hold</option>
+                  <option value="Rejected">Rejected</option>
                 </select>
               </div>
 
-              <div class="tc-toolbar-right">
-                <span class="tc-count-pill" id="tcFilterCountDisplay">
-                  <i class="fa-solid fa-list-check text-primary"></i> Showing <strong id="tcFilteredCount">4</strong> of
-                  <strong id="tcTotalCount">4</strong>
+              <div class="tc-toolbar-right" style="display:flex; align-items:center; gap:0.5rem; flex-wrap:wrap;">
+                <span class="tc-count-pill" id="tcFilterCountDisplay" style="font-size:0.8rem; background:#f1f5f9; padding:0.4rem 0.75rem; border-radius:6px; border:1px solid #e2e8f0;">
+                  <i class="fa-solid fa-list-check text-primary mr-1"></i> Showing <strong id="tcFilteredCount">8</strong> of
+                  <strong id="tcTotalCount">8</strong>
                 </span>
-                <button type="button" class="btn btn-outline-secondary btn-sm"
-                  onclick="portalApp.resetTransfersFilters()" title="Reset all filters">
+                <button type="button" class="btn btn-outline-secondary btn-sm" onclick="portalApp.resetTransfersFilters()" title="Reset all filters">
                   <i class="fa-solid fa-rotate-left"></i> Reset
                 </button>
-                <button type="button" class="btn btn-outline-primary btn-sm" onclick="portalApp.exportTransfersCSV()"
-                  title="Export current TC records to CSV">
-                  <i class="fa-solid fa-file-csv"></i> Export CSV
+                <button type="button" class="btn btn-outline-primary btn-sm" onclick="portalApp.exportTransfersCSV()" title="Export current TC records to CSV">
+                  <i class="fa-solid fa-file-csv mr-1"></i> Export Register
                 </button>
-                <button type="button" class="btn btn-outline-primary btn-sm" onclick="portalApp.printTransfersTable()"
-                  title="Print transfers table">
-                  <i class="fa-solid fa-print"></i> Print
+                <button type="button" class="btn btn-outline-primary btn-sm" onclick="portalApp.printTransfersTable()" title="Print transfers table">
+                  <i class="fa-solid fa-print mr-1"></i> Print
                 </button>
               </div>
             </div>
 
-            <!-- Transfers Master Table -->
+            <!-- Authoritative 10-Column Master Register Table -->
             <div class="transfers-wrap" id="transfersTableContainer">
               <div class="transfers-table-scroll">
                 <table class="transfers-table" id="transfersTable">
                   <thead>
                     <tr>
-                      <th class="th-tc-no"><i class="fa-solid fa-file-contract"></i> TC Number & Date</th>
-                      <th class="th-student"><i class="fa-solid fa-user-graduate"></i> Student Details</th>
-                      <th class="th-class"><i class="fa-solid fa-school"></i> Class & Section</th>
-                      <th class="th-reason"><i class="fa-solid fa-compass"></i> Reason for Leaving</th>
-                      <th class="th-dues"><i class="fa-solid fa-receipt"></i> Clearance Status</th>
-                      <th class="th-conduct"><i class="fa-solid fa-medal"></i> Conduct & Character</th>
-                      <th class="th-status"><i class="fa-solid fa-stamp"></i> Approval Status</th>
-                      <th class="th-actions" style="text-align: center;"><i class="fa-solid fa-sliders"></i> Actions
-                      </th>
+                      <th class="th-tc-id" style="min-width: 140px;"><i class="fa-solid fa-hashtag"></i> TC Request ID</th>
+                      <th class="th-student" style="min-width: 180px;"><i class="fa-solid fa-user-graduate"></i> Student</th>
+                      <th class="th-adm-no" style="min-width: 120px;"><i class="fa-solid fa-id-card"></i> Admission Number</th>
+                      <th class="th-class" style="min-width: 100px;"><i class="fa-solid fa-school"></i> Class</th>
+                      <th class="th-req-date" style="min-width: 120px;"><i class="fa-solid fa-calendar-day"></i> Request Date</th>
+                      <th class="th-reason" style="min-width: 180px;"><i class="fa-solid fa-compass"></i> Reason</th>
+                      <th class="th-acad-clear" style="min-width: 140px;"><i class="fa-solid fa-book-bookmark"></i> Academic Clearance</th>
+                      <th class="th-fin-clear" style="min-width: 160px;"><i class="fa-solid fa-receipt"></i> Financial Clearance</th>
+                      <th class="th-status" style="min-width: 130px;"><i class="fa-solid fa-stamp"></i> Approval Status</th>
+                      <th class="th-tc-no" style="min-width: 130px;"><i class="fa-solid fa-certificate"></i> TC Number</th>
+                      <th class="th-actions" style="text-align: center; min-width: 140px;"><i class="fa-solid fa-sliders"></i> Actions</th>
                     </tr>
                   </thead>
                   <tbody id="transfersTableBody">
-                    <!-- Rendered via portal.js -->
+                    <!-- Populated dynamically via portalApp.renderTransfersTable -->
                   </tbody>
                 </table>
               </div>
               <!-- Pagination Controls -->
-              <div class="transfers-pagination-bar" id="transfersPagination"></div>
+              <div class="transfers-pagination-bar" id="transfersPagination" style="margin-top: 1rem; display:flex; justify-content:space-between; align-items:center;"></div>
             </div>
           </div>
 
@@ -20297,6 +20353,627 @@ Class X-A,Monday,2,09:35 AM - 10:20 AM,Physical Science,Sri Navva Anand,Room 201
             onclick="portalApp.closeModal('studentDocsModal')">Cancel</button>
           <button type="submit" class="btn btn-primary btn-sm"><i class="fa-solid fa-check"></i> Save &amp; Log to
             Dossier</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       MODAL 1: NEW TC REQUEST
+       ========================================================================= -->
+  <div class="modal-backdrop" id="newTcRequestModal" style="display:none;">
+    <div class="portal-modal" style="max-width: 680px; width: 95%;">
+      <div class="modal-header">
+        <div style="display: flex; align-items: center; gap: 0.75rem;">
+          <div style="width: 42px; height: 42px; border-radius: 8px; background: #eff6ff; color: #1d4ed8; display: flex; align-items: center; justify-content: center; font-size: 1.25rem; border: 1px solid #bfdbfe;">
+            <i class="fa-solid fa-file-signature"></i>
+          </div>
+          <div>
+            <h3 style="margin: 0; font-size: 1.15rem; font-weight: 800; color: #0f172a;">New Transfer Certificate (TC) Request</h3>
+            <p style="margin: 2px 0 0; font-size: 0.8rem; color: #64748b;">Submit student withdrawal request and initiate multi-department clearance.</p>
+          </div>
+        </div>
+        <button type="button" class="modal-close-x" onclick="portalApp.closeModal('newTcRequestModal')" title="Close">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <form onsubmit="portalApp.submitNewTcRequest(event)">
+        <div class="modal-body" style="padding: 1.25rem; display: flex; flex-direction: column; gap: 1rem; max-height: calc(85vh - 140px); overflow-y: auto;">
+          
+          <div class="form-group">
+            <label style="font-weight: 700; font-size: 0.82rem; color: #1e293b; margin-bottom: 3px; display: block;">Select Student *</label>
+            <select id="tcStudentSelect" class="form-control" required onchange="portalApp.onTcStudentSelectChange(this.value)" style="width:100%; padding:0.45rem 0.65rem; border:1px solid #cbd5e1; border-radius:6px; font-size:0.85rem;">
+              <option value="">-- Choose active enrolled student --</option>
+              <!-- Populated via portalApp.populateTcStudentDropdown -->
+            </select>
+          </div>
+
+          <!-- Student Quick Snapshot Card -->
+          <div id="tcStudentSnapshotCard" style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 0.85rem; display: none;">
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 0.5rem; font-size: 0.82rem;">
+              <div><span style="color: #64748b;">Admission No:</span> <strong id="tcSnapAdmNo" class="text-primary">-</strong></div>
+              <div><span style="color: #64748b;">Class &amp; Section:</span> <strong id="tcSnapClass">-</strong></div>
+              <div><span style="color: #64748b;">Roll Number:</span> <strong id="tcSnapRoll">-</strong></div>
+              <div><span style="color: #64748b;">Guardian:</span> <strong id="tcSnapGuardian">-</strong></div>
+              <div><span style="color: #64748b;">Contact:</span> <strong id="tcSnapPhone">-</strong></div>
+              <div><span style="color: #64748b;">Date of Enrolment:</span> <strong id="tcSnapAdmDate">-</strong></div>
+            </div>
+          </div>
+
+          <div class="form-row" style="display: flex; gap: 1rem;">
+            <div class="form-group" style="flex: 1.2;">
+              <label style="font-weight: 700; font-size: 0.82rem; color: #1e293b; margin-bottom: 3px; display: block;">Parent / Requester Name *</label>
+              <input type="text" id="tcRequesterName" class="form-control" required placeholder="Full name of parent/guardian" style="width:100%; padding:0.45rem 0.65rem; border:1px solid #cbd5e1; border-radius:6px; font-size:0.85rem;">
+            </div>
+            <div class="form-group" style="flex: 1;">
+              <label style="font-weight: 700; font-size: 0.82rem; color: #1e293b; margin-bottom: 3px; display: block;">Relationship *</label>
+              <select id="tcRequesterRelationship" class="form-control" required style="width:100%; padding:0.45rem 0.65rem; border:1px solid #cbd5e1; border-radius:6px; font-size:0.85rem;">
+                <option value="Father" selected>Father</option>
+                <option value="Mother">Mother</option>
+                <option value="Legal Guardian">Legal Guardian</option>
+                <option value="School Authority (Internal)">School Authority (Internal)</option>
+              </select>
+            </div>
+            <div class="form-group" style="flex: 1;">
+              <label style="font-weight: 700; font-size: 0.82rem; color: #1e293b; margin-bottom: 3px; display: block;">Contact Phone *</label>
+              <input type="tel" id="tcRequesterPhone" class="form-control" required placeholder="10-digit mobile" style="width:100%; padding:0.45rem 0.65rem; border:1px solid #cbd5e1; border-radius:6px; font-size:0.85rem;">
+            </div>
+          </div>
+
+          <div class="form-row" style="display: flex; gap: 1rem;">
+            <div class="form-group" style="flex: 1.2;">
+              <label style="font-weight: 700; font-size: 0.82rem; color: #1e293b; margin-bottom: 3px; display: block;">Reason for Leaving *</label>
+              <select id="tcReasonSelect" class="form-control" required style="width:100%; padding:0.45rem 0.65rem; border:1px solid #cbd5e1; border-radius:6px; font-size:0.85rem;">
+                <option value="Parent Job Transfer (To Another Station)" selected>Parent Job Transfer (To Another Station)</option>
+                <option value="Family Relocation / Residence Change">Family Relocation / Residence Change</option>
+                <option value="Higher Secondary / Intermediate Studies">Higher Secondary / Intermediate Studies (Class X Passed)</option>
+                <option value="Admission into Specialized Sports/Residential Academy">Admission into Specialized Sports/Residential Academy</option>
+                <option value="Distance / Transport Constraints">Distance / Transport Constraints</option>
+                <option value="Change of Curriculum / Board Migration">Change of Curriculum / Board Migration (State to CBSE/ICSE)</option>
+                <option value="Other Legitimate Domestic Reason">Other Legitimate Domestic Reason</option>
+              </select>
+            </div>
+            <div class="form-group" style="flex: 1;">
+              <label style="font-weight: 700; font-size: 0.82rem; color: #1e293b; margin-bottom: 3px; display: block;">Last Date of Attendance *</label>
+              <input type="date" id="tcLastAttendanceDate" class="form-control" required style="width:100%; padding:0.45rem 0.65rem; border:1px solid #cbd5e1; border-radius:6px; font-size:0.85rem;">
+            </div>
+          </div>
+
+          <div class="form-row" style="display: flex; gap: 1rem;">
+            <div class="form-group" style="flex: 1.2;">
+              <label style="font-weight: 700; font-size: 0.82rem; color: #1e293b; margin-bottom: 3px; display: block;">Destination Institution Name</label>
+              <input type="text" id="tcDestSchool" class="form-control" placeholder="Receiving school or college name" style="width:100%; padding:0.45rem 0.65rem; border:1px solid #cbd5e1; border-radius:6px; font-size:0.85rem;">
+            </div>
+            <div class="form-group" style="flex: 1;">
+              <label style="font-weight: 700; font-size: 0.82rem; color: #1e293b; margin-bottom: 3px; display: block;">Destination Town / City</label>
+              <input type="text" id="tcDestCity" class="form-control" placeholder="e.g. Hyderabad, Visakhapatnam" style="width:100%; padding:0.45rem 0.65rem; border:1px solid #cbd5e1; border-radius:6px; font-size:0.85rem;">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label style="font-weight: 700; font-size: 0.82rem; color: #1e293b; margin-bottom: 3px; display: block;">Govt Transfer Order / Docket Reference (Optional)</label>
+            <input type="text" id="tcTransferOrderRef" class="form-control" placeholder="e.g. RC.No. 412/A3/2026 or Parent Written Request Ref" style="width:100%; padding:0.45rem 0.65rem; border:1px solid #cbd5e1; border-radius:6px; font-size:0.85rem;">
+          </div>
+
+          <div class="form-group">
+            <label style="font-weight: 700; font-size: 0.82rem; color: #1e293b; margin-bottom: 3px; display: block;">Additional Remarks / Instructions</label>
+            <textarea id="tcRequestRemarks" class="form-control" rows="2" placeholder="State any specific urgency or certificates required with TC..." style="width:100%; padding:0.45rem 0.65rem; border:1px solid #cbd5e1; border-radius:6px; font-size:0.85rem;"></textarea>
+          </div>
+
+        </div>
+        <div class="modal-footer" style="display:flex; justify-content:space-between; align-items:center; background:#f8fafc; border-top:1px solid #e2e8f0; padding:0.85rem 1.25rem;">
+          <span style="font-size: 0.75rem; color: #64748b;"><i class="fa-solid fa-bell text-primary mr-1"></i> Notifies Class Teacher, Librarian, and Accounts for clearances</span>
+          <div style="display:flex; gap:0.5rem;">
+            <button type="button" class="btn btn-secondary btn-sm" onclick="portalApp.closeModal('newTcRequestModal')">Cancel</button>
+            <button type="submit" class="btn btn-primary btn-sm"><i class="fa-solid fa-paper-plane mr-1"></i> Submit TC Request</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       MODAL 2: RECORD EXTERNAL TRANSFER
+       ========================================================================= -->
+  <div class="modal-backdrop" id="recordExternalTransferModal" style="display:none;">
+    <div class="portal-modal" style="max-width: 640px; width: 95%;">
+      <div class="modal-header">
+        <div style="display: flex; align-items: center; gap: 0.75rem;">
+          <div style="width: 42px; height: 42px; border-radius: 8px; background: #ecfdf5; color: #059669; display: flex; align-items: center; justify-content: center; font-size: 1.25rem; border: 1px solid #a7f3d0;">
+            <i class="fa-solid fa-right-left"></i>
+          </div>
+          <div>
+            <h3 style="margin: 0; font-size: 1.15rem; font-weight: 800; color: #0f172a;">Record External Transfer</h3>
+            <p style="margin: 2px 0 0; font-size: 0.8rem; color: #64748b;">Record incoming TC from previous school or external board migration.</p>
+          </div>
+        </div>
+        <button type="button" class="modal-close-x" onclick="portalApp.closeModal('recordExternalTransferModal')" title="Close">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <form onsubmit="portalApp.submitRecordExternalTransfer(event)">
+        <div class="modal-body" style="padding: 1.25rem; display: flex; flex-direction: column; gap: 1rem; max-height: calc(85vh - 140px); overflow-y: auto;">
+          
+          <div class="form-group">
+            <label style="font-weight: 700; font-size: 0.82rem; color: #1e293b; margin-bottom: 3px; display: block;">Transfer Direction *</label>
+            <select id="extTransferDirection" class="form-control" required style="width:100%; padding:0.45rem 0.65rem; border:1px solid #cbd5e1; border-radius:6px; font-size:0.85rem;">
+              <option value="Inward (Joining Sri Vidya with External TC)" selected>Inward: New Student Joining Sri Vidya with External School TC</option>
+              <option value="Outward (Transfer to Interstate / CBSE / ICSE Board)">Outward: Pupil Migrating to Interstate / CBSE / ICSE Board</option>
+            </select>
+          </div>
+
+          <div class="form-row" style="display: flex; gap: 1rem;">
+            <div class="form-group" style="flex: 1.3;">
+              <label style="font-weight: 700; font-size: 0.82rem; color: #1e293b; margin-bottom: 3px; display: block;">Student Full Name *</label>
+              <input type="text" id="extStudentName" class="form-control" required placeholder="Legal full name" style="width:100%; padding:0.45rem 0.65rem; border:1px solid #cbd5e1; border-radius:6px; font-size:0.85rem;">
+            </div>
+            <div class="form-group" style="flex: 1;">
+              <label style="font-weight: 700; font-size: 0.82rem; color: #1e293b; margin-bottom: 3px; display: block;">Class Admitted / Left *</label>
+              <select id="extStudentClass" class="form-control" required style="width:100%; padding:0.45rem 0.65rem; border:1px solid #cbd5e1; border-radius:6px; font-size:0.85rem;">
+                <option value="Class I">Class I</option>
+                <option value="Class II">Class II</option>
+                <option value="Class III">Class III</option>
+                <option value="Class IV">Class IV</option>
+                <option value="Class V">Class V</option>
+                <option value="Class VI">Class VI</option>
+                <option value="Class VII">Class VII</option>
+                <option value="Class VIII" selected>Class VIII</option>
+                <option value="Class IX">Class IX</option>
+                <option value="Class X">Class X</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-row" style="display: flex; gap: 1rem;">
+            <div class="form-group" style="flex: 1.3;">
+              <label style="font-weight: 700; font-size: 0.82rem; color: #1e293b; margin-bottom: 3px; display: block;">External School / College Name *</label>
+              <input type="text" id="extSchoolName" class="form-control" required placeholder="e.g. Kendriya Vidyalaya Srikakulam" style="width:100%; padding:0.45rem 0.65rem; border:1px solid #cbd5e1; border-radius:6px; font-size:0.85rem;">
+            </div>
+            <div class="form-group" style="flex: 1;">
+              <label style="font-weight: 700; font-size: 0.82rem; color: #1e293b; margin-bottom: 3px; display: block;">Affiliation Board *</label>
+              <select id="extBoardSelect" class="form-control" required style="width:100%; padding:0.45rem 0.65rem; border:1px solid #cbd5e1; border-radius:6px; font-size:0.85rem;">
+                <option value="Andhra Pradesh State Board" selected>AP State Board</option>
+                <option value="CBSE New Delhi">CBSE New Delhi</option>
+                <option value="CISCE (ICSE)">CISCE (ICSE)</option>
+                <option value="Other Recognized State Board">Other State Board</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-row" style="display: flex; gap: 1rem;">
+            <div class="form-group" style="flex: 1;">
+              <label style="font-weight: 700; font-size: 0.82rem; color: #1e293b; margin-bottom: 3px; display: block;">External TC / Reference No *</label>
+              <input type="text" id="extTcNumber" class="form-control" required placeholder="e.g. KVS/2026/089" style="width:100%; padding:0.45rem 0.65rem; border:1px solid #cbd5e1; border-radius:6px; font-size:0.85rem;">
+            </div>
+            <div class="form-group" style="flex: 1;">
+              <label style="font-weight: 700; font-size: 0.82rem; color: #1e293b; margin-bottom: 3px; display: block;">TC Issue Date *</label>
+              <input type="date" id="extTcIssueDate" class="form-control" required style="width:100%; padding:0.45rem 0.65rem; border:1px solid #cbd5e1; border-radius:6px; font-size:0.85rem;">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label style="font-weight: 700; font-size: 0.82rem; color: #1e293b; margin-bottom: 3px; display: block;">Verification / Countersignature Status *</label>
+            <select id="extVerificationStatus" class="form-control" required style="width:100%; padding:0.45rem 0.65rem; border:1px solid #cbd5e1; border-radius:6px; font-size:0.85rem;">
+              <option value="Verified by DEO / Competent Inspector" selected>Verified by DEO / Competent Inspector</option>
+              <option value="Exempted under RTE Act Rules">Exempted under RTE Act Rules</option>
+              <option value="Provisional — Awaiting DEO Countersignature">Provisional — Awaiting DEO Countersignature</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label style="font-weight: 700; font-size: 0.82rem; color: #1e293b; margin-bottom: 3px; display: block;">Internal Verification Remarks</label>
+            <textarea id="extRemarks" class="form-control" rows="2" placeholder="Record physical file docket number or inspection officer notes..." style="width:100%; padding:0.45rem 0.65rem; border:1px solid #cbd5e1; border-radius:6px; font-size:0.85rem;"></textarea>
+          </div>
+
+        </div>
+        <div class="modal-footer" style="display:flex; justify-content:space-between; align-items:center; background:#f8fafc; border-top:1px solid #e2e8f0; padding:0.85rem 1.25rem;">
+          <span style="font-size: 0.75rem; color: #64748b;"><i class="fa-solid fa-shield-halved text-emerald mr-1"></i> Recorded in school external transfer ledger</span>
+          <div style="display:flex; gap:0.5rem;">
+            <button type="button" class="btn btn-secondary btn-sm" onclick="portalApp.closeModal('recordExternalTransferModal')">Cancel</button>
+            <button type="submit" class="btn btn-success btn-sm"><i class="fa-solid fa-circle-check mr-1"></i> Save External Transfer</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       MODAL 3: 11-SECTION TC DETAIL DOSSIER & WORKFLOW PAGE
+       ========================================================================= -->
+  <div class="modal-backdrop" id="tcDetailModal" style="display:none;">
+    <div class="portal-modal" style="max-width: 960px; width: 95%;">
+      <div class="modal-header" style="border-bottom: 1px solid #e2e8f0; padding-bottom: 0.85rem;">
+        <div style="display: flex; align-items: center; gap: 0.85rem;">
+          <div style="width: 46px; height: 46px; border-radius: 10px; background: #eff6ff; color: #1d4ed8; display: flex; align-items: center; justify-content: center; font-size: 1.35rem; border: 1px solid #bfdbfe;">
+            <i class="fa-solid fa-graduation-cap"></i>
+          </div>
+          <div>
+            <div style="display: flex; align-items: center; gap: 0.6rem;">
+              <h3 style="margin: 0; font-size: 1.25rem; font-weight: 800; color: #0f172a;" id="tcDetailModalTitle">P. Kiran Kumar</h3>
+              <span class="portal-badge badge-primary" id="tcDetailStatusBadge">Issued</span>
+              <span class="tc-id-pill" id="tcDetailRequestIdPill">TC-REQ-2026-0041</span>
+            </div>
+            <p style="margin: 3px 0 0; font-size: 0.82rem; color: #64748b;" id="tcDetailModalSubtitle">
+              Adm No: SV-0082 &bull; Class X-A &bull; Transfer Certificate Docket
+            </p>
+          </div>
+        </div>
+        <button type="button" class="modal-close-x" onclick="portalApp.closeModal('tcDetailModal')" title="Close">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <!-- Tab Navigation Strip (11-Section Dossier Architecture) -->
+      <div class="tc-detail-nav">
+        <button type="button" class="tc-detail-tab-btn active" data-tab="profile" onclick="portalApp.switchTcDetailTab('profile')">
+          <i class="fa-solid fa-user-graduate"></i> Student &amp; Request Profile
+        </button>
+        <button type="button" class="tc-detail-tab-btn" data-tab="clearance" onclick="portalApp.switchTcDetailTab('clearance')">
+          <i class="fa-solid fa-clipboard-check"></i> Department Clearances
+        </button>
+        <button type="button" class="tc-detail-tab-btn" data-tab="preview" onclick="portalApp.switchTcDetailTab('preview')">
+          <i class="fa-solid fa-stamp"></i> Official TC Preview
+        </button>
+        <button type="button" class="tc-detail-tab-btn" data-tab="issuance" onclick="portalApp.switchTcDetailTab('issuance')">
+          <i class="fa-solid fa-signature"></i> Signatures &amp; Audit Trail
+        </button>
+      </div>
+
+      <div class="modal-body" style="padding: 0; max-height: calc(85vh - 170px); overflow-y: auto;">
+        
+        <!-- PANE 1: STUDENT & REQUEST PROFILE -->
+        <div class="tc-detail-pane active" id="tcPane-profile">
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem;">
+            
+            <!-- Section 1: Student Profile -->
+            <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 1rem;">
+              <h4 style="margin: 0 0 0.75rem 0; font-size: 0.85rem; font-weight: 800; color: #1e3a8a; text-transform: uppercase;">
+                <i class="fa-solid fa-id-card mr-1"></i> 1. Student Profile
+              </h4>
+              <div style="display: flex; flex-direction: column; gap: 0.45rem; font-size: 0.82rem;">
+                <div><span style="color:#64748b;">Full Legal Name:</span> <strong id="tcDossierName">-</strong></div>
+                <div><span style="color:#64748b;">Official Admission No:</span> <strong id="tcDossierAdmNo" class="text-primary">-</strong></div>
+                <div><span style="color:#64748b;">Permanent Student ID:</span> <strong id="tcDossierStudentId">-</strong></div>
+                <div><span style="color:#64748b;">PEN Number:</span> <strong id="tcDossierPenNo">-</strong></div>
+                <div><span style="color:#64748b;">Aadhaar Number:</span> <strong id="tcDossierAadhaar">-</strong></div>
+                <div><span style="color:#64748b;">Class &amp; Section:</span> <strong id="tcDossierClass">-</strong></div>
+                <div><span style="color:#64748b;">Date of Birth:</span> <strong id="tcDossierDob">-</strong></div>
+                <div><span style="color:#64748b;">Father's Name:</span> <strong id="tcDossierFather">-</strong></div>
+                <div><span style="color:#64748b;">Mother's Name:</span> <strong id="tcDossierMother">-</strong></div>
+              </div>
+            </div>
+
+            <!-- Section 2: Parent/Guardian Request -->
+            <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 1rem;">
+              <h4 style="margin: 0 0 0.75rem 0; font-size: 0.85rem; font-weight: 800; color: #1e3a8a; text-transform: uppercase;">
+                <i class="fa-solid fa-user-group mr-1"></i> 2. Parent / Guardian Request
+              </h4>
+              <div style="display: flex; flex-direction: column; gap: 0.45rem; font-size: 0.82rem;">
+                <div><span style="color:#64748b;">Requester Name:</span> <strong id="tcDossierRequester">-</strong></div>
+                <div><span style="color:#64748b;">Relationship:</span> <strong id="tcDossierRelation">-</strong></div>
+                <div><span style="color:#64748b;">Contact Mobile:</span> <strong id="tcDossierPhone">-</strong></div>
+                <div><span style="color:#64748b;">Request Submission Date:</span> <strong id="tcDossierReqDate">-</strong></div>
+                <div><span style="color:#64748b;">Application Channel:</span> <span class="portal-badge badge-blue">Parent Portal / Office Intake</span></div>
+                <div><span style="color:#64748b;">Govt Order / Reference:</span> <strong id="tcDossierOrderRef">-</strong></div>
+              </div>
+            </div>
+
+            <!-- Section 3 & 4: Reason for Leaving & Last Date of Attendance -->
+            <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 1rem; grid-column: 1 / -1;">
+              <h4 style="margin: 0 0 0.75rem 0; font-size: 0.85rem; font-weight: 800; color: #1e3a8a; text-transform: uppercase;">
+                <i class="fa-solid fa-calendar-check mr-1"></i> 3 &amp; 4. Reason for Leaving &amp; Attendance Standing
+              </h4>
+              <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 0.75rem; font-size: 0.82rem;">
+                <div><span style="color:#64748b;">Reason for Leaving:</span> <br><strong id="tcDossierReason" style="font-size:0.86rem; color:#0f172a;">-</strong></div>
+                <div><span style="color:#64748b;">Destination Institution:</span> <br><strong id="tcDossierDest">-</strong></div>
+                <div><span style="color:#64748b;">Last Date of Attendance:</span> <br><strong id="tcDossierLastDate" class="text-primary">-</strong></div>
+                <div><span style="color:#64748b;">Working Days Attended:</span> <br><strong id="tcDossierAttendance">-</strong></div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- PANE 2: CLEARANCE CHECKS & REQUIRED APPROVALS -->
+        <div class="tc-detail-pane" id="tcPane-clearance">
+          
+          <div class="tc-statutory-notice">
+            <i class="fa-solid fa-circle-info mr-1"></i>
+            <strong>Multi-Department Clearance Workflow:</strong>
+            All department heads (Academics, Library, Science/Sports, and Accounts) review the pupil's standing. Where fee arrears exist, <em>Statutory Parent Undertaking</em> can be executed under AP Educational Rules to avoid unconstitutionally blocking educational progression.
+          </div>
+
+          <div class="tc-clearance-grid">
+            
+            <!-- Section 5: Academic History & Class Teacher Clearance -->
+            <div class="tc-clearance-card" id="cardClearanceAcad">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.5rem;">
+                <h5 style="margin:0; font-size:0.84rem; font-weight:800; color:#1e293b;">
+                  <i class="fa-solid fa-graduation-cap text-primary mr-1"></i> 5. Academic History &amp; Class Teacher
+                </h5>
+                <span class="clearance-pill cleared" id="pillClearanceAcad">Cleared</span>
+              </div>
+              <div style="font-size:0.8rem; color:#475569; display:flex; flex-direction:column; gap:0.35rem;">
+                <div>Last Examination: <strong id="tcDossierExam">-</strong></div>
+                <div>Result &amp; Conduct: <strong id="tcDossierConduct">-</strong></div>
+                <div>Promotion Status: <strong id="tcDossierPromotion">-</strong></div>
+                <div>Class Teacher Sign-off: <strong id="tcDossierTeacherSign">-</strong></div>
+              </div>
+            </div>
+
+            <!-- Section 6: Outstanding Library Books & Assets -->
+            <div class="tc-clearance-card" id="cardClearanceLib">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.5rem;">
+                <h5 style="margin:0; font-size:0.84rem; font-weight:800; color:#1e293b;">
+                  <i class="fa-solid fa-book-open-reader text-warning mr-1"></i> 6. Library &amp; Physical Assets
+                </h5>
+                <span class="clearance-pill cleared" id="pillClearanceLib">Cleared</span>
+              </div>
+              <div style="font-size:0.8rem; color:#475569; display:flex; flex-direction:column; gap:0.35rem;">
+                <div>Library Books: <strong id="tcDossierLibBooks">-</strong></div>
+                <div>Science Lab Clearance: <strong id="tcDossierLab">-</strong></div>
+                <div>Sports Equipment &amp; Kit: <strong id="tcDossierSports">-</strong></div>
+                <div>Librarian Sign-off: <strong id="tcDossierLibrarianSign">-</strong></div>
+              </div>
+            </div>
+
+            <!-- Section 7: Fee Clearance Status -->
+            <div class="tc-clearance-card" id="cardClearanceFee">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.5rem;">
+                <h5 style="margin:0; font-size:0.84rem; font-weight:800; color:#1e293b;">
+                  <i class="fa-solid fa-receipt text-emerald mr-1"></i> 7. Fee &amp; Financial Clearance
+                </h5>
+                <span class="clearance-pill cleared" id="pillClearanceFee">Fee Cleared</span>
+              </div>
+              <div style="font-size:0.8rem; color:#475569; display:flex; flex-direction:column; gap:0.35rem;">
+                <div>Tuition &amp; Term Dues: <strong id="tcDossierDues">-</strong></div>
+                <div>No-Dues Receipt Ref: <strong id="tcDossierNdcRef">-</strong></div>
+                <div>Statutory Override Status: <strong id="tcDossierStatutoryStatus">-</strong></div>
+                <div>Bursar / Accounts Sign-off: <strong id="tcDossierBursarSign">-</strong></div>
+              </div>
+            </div>
+
+            <!-- Section 8: Required Executive Approvals -->
+            <div class="tc-clearance-card" id="cardClearancePrincipal">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.5rem;">
+                <h5 style="margin:0; font-size:0.84rem; font-weight:800; color:#1e293b;">
+                  <i class="fa-solid fa-stamp text-purple mr-1"></i> 8. Designated Authority Approval
+                </h5>
+                <span class="clearance-pill cleared" id="pillClearancePrincipal">Principal Authorized</span>
+              </div>
+              <div style="font-size:0.8rem; color:#475569; display:flex; flex-direction:column; gap:0.35rem;">
+                <div>Designated Approver: <strong>Smt. Gorle Varalakshmi (Principal)</strong></div>
+                <div>Approval Status: <strong id="tcDossierPrincipalStatus">Approved</strong></div>
+                <div>Statutory Compliance: <strong class="text-success">Verified under AP Education Code</strong></div>
+                <div>Approval Date: <strong id="tcDossierPrincipalDate">-</strong></div>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Quick Department Action Buttons -->
+          <div style="margin-top: 1.25rem; display: flex; justify-content: flex-end; gap: 0.6rem;">
+            <button type="button" class="btn btn-outline-primary btn-sm" onclick="portalApp.openDepartmentClearanceModal()">
+              <i class="fa-solid fa-pen-to-square mr-1"></i> Update Department Clearance
+            </button>
+          </div>
+        </div>
+
+        <!-- PANE 3: TC PREVIEW (APPENDIX 16 OFFICIAL SHEET) -->
+        <div class="tc-detail-pane" id="tcPane-preview">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem; background: #f8fafc; padding: 0.6rem 0.85rem; border-radius: 6px; border: 1px solid #e2e8f0;">
+            <div style="font-size: 0.82rem; font-weight: 700; color: #1e3a8a;">
+              <i class="fa-solid fa-print mr-1"></i> 9. Transfer Certificate Preview (Appendix 16 Standard Format)
+            </div>
+            <div style="display: flex; gap: 0.5rem;">
+              <button type="button" class="btn btn-secondary btn-sm" onclick="portalApp.printCurrentDossierTC()">
+                <i class="fa-solid fa-print mr-1"></i> Print Official TC
+              </button>
+            </div>
+          </div>
+          <div id="tcDossierDocContainer" style="overflow-x: auto; background: #e2e8f0; padding: 1rem; border-radius: 8px;">
+            <!-- Rendered via portalApp.renderDossierTCDocument -->
+          </div>
+        </div>
+
+        <!-- PANE 4: ISSUANCE, SIGNATURES & AUDIT TRAIL -->
+        <div class="tc-detail-pane" id="tcPane-issuance">
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem;">
+            
+            <!-- Section 10 & 11: Issue Date & Authorized Signatures -->
+            <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 1rem;">
+              <h4 style="margin: 0 0 0.75rem 0; font-size: 0.85rem; font-weight: 800; color: #1e3a8a; text-transform: uppercase;">
+                <i class="fa-solid fa-signature mr-1"></i> 10 &amp; 11. Issue Date &amp; Signatures
+              </h4>
+              <div style="display: flex; flex-direction: column; gap: 0.45rem; font-size: 0.82rem;">
+                <div><span style="color:#64748b;">Official TC Number:</span> <strong id="tcDossierFinalNo" class="text-primary">-</strong></div>
+                <div><span style="color:#64748b;">Official Date of Issue:</span> <strong id="tcDossierFinalDate">-</strong></div>
+                <div><span style="color:#64748b;">Authorized Signatory:</span> <strong id="tcDossierSignatory">-</strong></div>
+                <div><span style="color:#64748b;">Digital Verification Hash:</span> <code id="tcDossierHash" style="font-size:0.75rem; background:#e2e8f0; padding:2px 4px; border-radius:3px;">-</code></div>
+                <div><span style="color:#64748b;">Enrolment Transition:</span> <span class="portal-badge badge-warning" id="tcDossierStatusTransition">Active &rarr; Transferred</span></div>
+              </div>
+            </div>
+
+            <!-- Historical Data Preservation Notice -->
+            <div style="background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px; padding: 1rem;">
+              <h4 style="margin: 0 0 0.75rem 0; font-size: 0.85rem; font-weight: 800; color: #166534; text-transform: uppercase;">
+                <i class="fa-solid fa-database mr-1"></i> Historical Records Retention
+              </h4>
+              <p style="font-size: 0.8rem; color: #15803d; line-height: 1.4; margin: 0 0 0.5rem 0;">
+                In compliance with statutory rules, issuance of this Transfer Certificate updates the student register status to <strong>Transferred</strong>. Historical academic grades, term report cards, attendance logs, and fee ledger receipts remain fully accessible to authorized faculty.
+              </p>
+              <div style="font-size: 0.78rem; color: #166534;">
+                <i class="fa-solid fa-circle-check mr-1"></i> Permanent student record preserved under ID: <strong id="tcDossierPermId">-</strong>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+
+      <div class="modal-footer" style="display:flex; justify-content:space-between; align-items:center; background:#f8fafc; border-top:1px solid #e2e8f0; padding:0.85rem 1.25rem;">
+        <div>
+          <button type="button" class="btn btn-secondary btn-sm" onclick="portalApp.printCurrentDossierTC()">
+            <i class="fa-solid fa-print mr-1"></i> Print TC Sheet
+          </button>
+        </div>
+        <div style="display:flex; gap:0.5rem;" id="tcDetailFooterActionBtns">
+          <!-- Populated dynamically via portalApp.renderTcDetailActions -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       MODAL 4: RECORD DEPARTMENT CLEARANCE (ACADEMIC, LIBRARY, FEE & STATUTORY)
+       ========================================================================= -->
+  <div class="modal-backdrop" id="departmentClearanceModal" style="display:none;">
+    <div class="portal-modal" style="max-width: 580px; width: 95%;">
+      <div class="modal-header">
+        <div style="display: flex; align-items: center; gap: 0.75rem;">
+          <div style="width: 42px; height: 42px; border-radius: 8px; background: #fef3c7; color: #d97706; display: flex; align-items: center; justify-content: center; font-size: 1.25rem; border: 1px solid #fde68a;">
+            <i class="fa-solid fa-clipboard-check"></i>
+          </div>
+          <div>
+            <h3 style="margin: 0; font-size: 1.15rem; font-weight: 800; color: #0f172a;">Department Clearance Sign-off</h3>
+            <p style="margin: 2px 0 0; font-size: 0.8rem; color: #64748b;" id="clearanceModalSubtitle">Applicant: P. Kiran Kumar</p>
+          </div>
+        </div>
+        <button type="button" class="modal-close-x" onclick="portalApp.closeModal('departmentClearanceModal')" title="Close">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <form onsubmit="portalApp.submitDepartmentClearance(event)">
+        <input type="hidden" id="clearanceTargetRequestId">
+        <div class="modal-body" style="padding: 1.25rem; display: flex; flex-direction: column; gap: 1rem;">
+          
+          <div class="form-group">
+            <label style="font-weight: 700; font-size: 0.82rem; color: #1e293b; margin-bottom: 3px; display: block;">Department / Domain *</label>
+            <select id="clearanceDepartment" class="form-control" required onchange="portalApp.onClearanceDeptChange(this.value)" style="width:100%; padding:0.45rem 0.65rem; border:1px solid #cbd5e1; border-radius:6px; font-size:0.85rem;">
+              <option value="Accounts" selected>Accounts &amp; Financial Clearance</option>
+              <option value="Academic">Academic (Class Teacher Clearance)</option>
+              <option value="Library">Library &amp; Textbook Clearance</option>
+              <option value="SportsLab">Science Lab &amp; Sports Assets</option>
+            </select>
+          </div>
+
+          <div class="form-row" style="display: flex; gap: 1rem;">
+            <div class="form-group" style="flex: 1.2;">
+              <label style="font-weight: 700; font-size: 0.82rem; color: #1e293b; margin-bottom: 3px; display: block;">Clearance Decision *</label>
+              <select id="clearanceStatusDecision" class="form-control" required style="width:100%; padding:0.45rem 0.65rem; border:1px solid #cbd5e1; border-radius:6px; font-size:0.85rem;">
+                <option value="Cleared" selected>Fully Cleared (No Dues)</option>
+                <option value="Dues Pending">Dues Pending (Fee / Asset Unreturned)</option>
+                <option value="Statutory Undertaking">Statutory Undertaking (Non-Blocking Clearance)</option>
+              </select>
+            </div>
+            <div class="form-group" style="flex: 1.2;">
+              <label style="font-weight: 700; font-size: 0.82rem; color: #1e293b; margin-bottom: 3px; display: block;">Verifying Officer *</label>
+              <input type="text" id="clearanceOfficer" class="form-control" required value="Sri P. Srinivas (Bursar)" style="width:100%; padding:0.45rem 0.65rem; border:1px solid #cbd5e1; border-radius:6px; font-size:0.85rem;">
+            </div>
+          </div>
+
+          <!-- Statutory Undertaking Section for Accounts/Financial Clearance -->
+          <div id="statutoryUndertakingBox" style="background: #f5f3ff; border: 1px solid #ddd6fe; border-radius: 8px; padding: 0.85rem;">
+            <div style="font-size: 0.82rem; font-weight: 700; color: #6b21a8; margin-bottom: 0.35rem;">
+              <i class="fa-solid fa-scale-balanced mr-1"></i> Statutory Non-Blocking Policy (Rule 99 AP Code)
+            </div>
+            <p style="font-size: 0.78rem; color: #581c87; margin: 0 0 0.5rem 0; line-height: 1.4;">
+              If the pupil has pending tuition or term dues, checking <strong>Statutory Undertaking</strong> records parent promissory undertaking. This ensures the legally mandated Transfer Certificate is not blocked solely by financial software gates.
+            </p>
+            <div class="form-group" style="margin: 0;">
+              <label style="font-weight: 700; font-size: 0.8rem; color: #581c87; margin-bottom: 3px; display: block;">Promissory Bond / Undertaking Reference</label>
+              <input type="text" id="statutoryUndertakingRef" class="form-control" placeholder="e.g. BOND-AP-2026/89 — Parent promissory letter on file" style="width:100%; padding:0.4rem 0.6rem; border:1px solid #c4b5fd; border-radius:6px; font-size:0.82rem;">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label style="font-weight: 700; font-size: 0.82rem; color: #1e293b; margin-bottom: 3px; display: block;">Verification Notes / Specific Remarks *</label>
+            <textarea id="clearanceRemarks" class="form-control" required rows="2" placeholder="Record verification observations, book titles returned, or fee receipt..." style="width:100%; padding:0.45rem 0.65rem; border:1px solid #cbd5e1; border-radius:6px; font-size:0.85rem;">All institutional dues fully cleared. Student eligible for issuance of formal Transfer Certificate.</textarea>
+          </div>
+
+        </div>
+        <div class="modal-footer" style="display:flex; justify-content:space-between; align-items:center; background:#f8fafc; border-top:1px solid #e2e8f0; padding:0.85rem 1.25rem;">
+          <span style="font-size: 0.75rem; color: #64748b;"><i class="fa-solid fa-check text-success mr-1"></i> Logs verification stamp directly to TC audit docket</span>
+          <div style="display:flex; gap:0.5rem;">
+            <button type="button" class="btn btn-secondary btn-sm" onclick="portalApp.closeModal('departmentClearanceModal')">Cancel</button>
+            <button type="submit" class="btn btn-primary btn-sm"><i class="fa-solid fa-stamp mr-1"></i> Save Clearance</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       MODAL 5: FORMAL TC APPROVAL & ISSUANCE
+       ========================================================================= -->
+  <div class="modal-backdrop" id="issueTcModal" style="display:none;">
+    <div class="portal-modal" style="max-width: 600px; width: 95%;">
+      <div class="modal-header">
+        <div style="display: flex; align-items: center; gap: 0.75rem;">
+          <div style="width: 42px; height: 42px; border-radius: 8px; background: #ecfdf5; color: #059669; display: flex; align-items: center; justify-content: center; font-size: 1.25rem; border: 1px solid #a7f3d0;">
+            <i class="fa-solid fa-award"></i>
+          </div>
+          <div>
+            <h3 style="margin: 0; font-size: 1.15rem; font-weight: 800; color: #0f172a;">Formally Issue Transfer Certificate</h3>
+            <p style="margin: 2px 0 0; font-size: 0.8rem; color: #64748b;" id="issueModalSubtitle">Applicant: P. Kiran Kumar</p>
+          </div>
+        </div>
+        <button type="button" class="modal-close-x" onclick="portalApp.closeModal('issueTcModal')" title="Close">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <form onsubmit="portalApp.submitIssueTc(event)">
+        <input type="hidden" id="issueTargetRequestId">
+        <div class="modal-body" style="padding: 1.25rem; display: flex; flex-direction: column; gap: 1rem;">
+          
+          <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 0.85rem;">
+            <div style="font-size: 0.82rem; font-weight: 800; color: #1e3a8a; text-transform: uppercase; margin-bottom: 0.5rem;">
+              <i class="fa-solid fa-certificate mr-1"></i> Allocated TC Number &amp; Signatory
+            </div>
+            <div class="form-row" style="display: flex; gap: 1rem; margin-bottom: 0.5rem;">
+              <div class="form-group" style="flex: 1;">
+                <label style="font-weight: 700; font-size: 0.8rem; color: #1e293b; margin-bottom: 3px; display: block;">Official TC Number *</label>
+                <input type="text" id="issueAllocatedTcNo" class="form-control" readonly style="width:100%; padding:0.45rem 0.65rem; border:1px solid #cbd5e1; border-radius:6px; font-size:0.85rem; font-weight:800; color:#1d4ed8; background:#eff6ff;">
+              </div>
+              <div class="form-group" style="flex: 1;">
+                <label style="font-weight: 700; font-size: 0.8rem; color: #1e293b; margin-bottom: 3px; display: block;">Official Date of Issue *</label>
+                <input type="date" id="issueRecordedDate" class="form-control" required style="width:100%; padding:0.45rem 0.65rem; border:1px solid #cbd5e1; border-radius:6px; font-size:0.85rem; font-weight:700;">
+              </div>
+            </div>
+            <div class="form-group">
+              <label style="font-weight: 700; font-size: 0.8rem; color: #1e293b; margin-bottom: 3px; display: block;">Authorized Signatory *</label>
+              <input type="text" id="issueSignatory" class="form-control" readonly value="Smt. Gorle Varalakshmi (Executive Principal)" style="width:100%; padding:0.45rem 0.65rem; border:1px solid #cbd5e1; border-radius:6px; font-size:0.85rem; font-weight:700;">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label style="font-weight: 700; font-size: 0.82rem; color: #1e293b; margin-bottom: 3px; display: block;">Student General Conduct &amp; Character *</label>
+            <select id="issueConduct" class="form-control" required style="width:100%; padding:0.45rem 0.65rem; border:1px solid #cbd5e1; border-radius:6px; font-size:0.85rem;">
+              <option value="EXEMPLARY • TOP MERIT SCHOLAR" selected>EXEMPLARY • TOP MERIT SCHOLAR</option>
+              <option value="VERY GOOD • WELL-MANNERED">VERY GOOD • WELL-MANNERED</option>
+              <option value="GOOD • OBEDIENT AND DILIGENT">GOOD • OBEDIENT AND DILIGENT</option>
+              <option value="SATISFACTORY">SATISFACTORY</option>
+            </select>
+          </div>
+
+          <!-- Student Enrolment Status Transition Checkbox -->
+          <div style="background: #ecfdf5; border: 1px solid #a7f3d0; border-radius: 6px; padding: 0.75rem;">
+            <label style="display: flex; align-items: flex-start; gap: 0.5rem; font-size: 0.82rem; color: #065f46; cursor: pointer; margin: 0;">
+              <input type="checkbox" id="issueTransitionEnrolmentCheckbox" checked required style="margin-top: 3px;">
+              <span>
+                <strong>Confirm Enrolment Transition:</strong> Update student's official status in master school register from <strong>Active</strong> to <strong>Transferred</strong> (effective on withdrawal date). Historical marks, term exams, and fee receipts will remain permanently preserved.
+              </span>
+            </label>
+          </div>
+
+        </div>
+        <div class="modal-footer" style="display:flex; justify-content:space-between; align-items:center; background:#f8fafc; border-top:1px solid #e2e8f0; padding:0.85rem 1.25rem;">
+          <span style="font-size: 0.75rem; color: #64748b;"><i class="fa-solid fa-graduation-cap text-success mr-1"></i> Formally concludes student withdrawal</span>
+          <div style="display:flex; gap:0.5rem;">
+            <button type="button" class="btn btn-secondary btn-sm" onclick="portalApp.closeModal('issueTcModal')">Cancel</button>
+            <button type="submit" class="btn btn-success btn-sm"><i class="fa-solid fa-circle-check mr-1"></i> Authorize &amp; Issue TC</button>
+          </div>
         </div>
       </form>
     </div>

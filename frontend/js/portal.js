@@ -8584,212 +8584,1471 @@ const FEE_CATEGORY_AUDIT_DATA = [
     }
   }
 
-  // Transfers (TC) Subview
+
+  /* =========================================================================
+     AUTHORITATIVE TRANSFERS AND TRANSFER CERTIFICATES GOVERNANCE
+     Compliant with AP Education Code Statutory Clearance & TC Regulations
+     ========================================================================= */
+
+  let activeDossierRequestId = 'TC-REQ-2026-0041';
+  let activeClearanceTargetId = null;
+  let activeIssueTargetId = null;
+
+  function initTransfers() {
+    if (state.transfers && state.transfers.length >= 8 && state.transfers[0].requestId) return;
+
+    // Authoritative Seed Records with complete statutory fields
+    const seedTransfers = [
+      {
+        requestId: 'TC-REQ-2026-0041',
+        tcNo: 'SV/2026/041',
+        admNo: 'SV-0082',
+        studentId: 'STU-SV-0082',
+        name: 'P. Kiran Kumar',
+        class: 'Class X-A',
+        section: 'A',
+        rollNo: '12',
+        gender: 'Male',
+        dob: '2011-04-07',
+        dobWords: 'Seventh April Two Thousand Eleven',
+        father: 'P. Venkata Ramana',
+        mother: 'P. Lakshmi Devi',
+        guardianContact: '9848011223',
+        address: 'Plot 14, Santhinagar, Srikakulam',
+        requestDate: '12-Apr-2026',
+        requesterName: 'P. Venkata Ramana',
+        requesterRelationship: 'Father',
+        requesterPhone: '9848011223',
+        reason: 'Parent Job Transfer (To Hyderabad)',
+        destinationSchool: 'Hyderabad Public School, Begumpet',
+        destinationCity: 'Hyderabad',
+        transferOrderRef: 'GO-MS-891/2026 (Govt Transfer)',
+        lastDateAttendance: '18-Apr-2026',
+        attendanceRecord: '204 / 220 Days (92.7%)',
+        academicClearance: 'Cleared',
+        financialClearance: 'Cleared (No Dues)',
+        approvalStatus: 'Issued',
+        academicHistory: {
+          lastExam: 'SSC Board Class X Examination',
+          result: 'Passed with 9.8 GPA (First Class with Distinction)',
+          qualifiedForPromotion: 'Yes, Qualified for Class XI / Intermediate',
+          conduct: 'EXEMPLARY • TOP MERIT SCHOLAR',
+          teacherSign: 'Sri K. V. Raman (Approved on 14-Apr-2026)'
+        },
+        libraryAssets: {
+          booksStatus: 'All 4 library books returned intact',
+          labClearance: 'Science Lab clearance verified (No dues)',
+          sportsKit: 'Sports kit returned in full',
+          librarianSign: 'Smt. S. Padma (Approved on 15-Apr-2026)'
+        },
+        feeClearance: {
+          status: 'Cleared (No Dues)',
+          duesAmount: '₹0 (Fully Paid)',
+          noDuesRef: 'NDC-2026-081',
+          isStatutoryOverride: false,
+          statutoryRemarks: 'N/A — No dues remaining',
+          bursarSign: 'Sri P. Srinivas (Bursar) (Approved on 16-Apr-2026)'
+        },
+        approvals: {
+          principalStatus: 'Approved & Signed',
+          principalDate: '18-Apr-2026',
+          principalSign: 'Smt. Gorle Varalakshmi (Executive Principal)'
+        },
+        issueDate: '18-Apr-2026',
+        authorizedSignatory: 'Smt. Gorle Varalakshmi (Executive Principal)',
+        digitalSignHash: 'SV-DIGISIGN-78A92BC01E4'
+      },
+      {
+        requestId: 'TC-REQ-2026-0042',
+        tcNo: 'SV/2026/042',
+        admNo: 'SV-0119',
+        studentId: 'STU-SV-0119',
+        name: 'R. Divya',
+        class: 'Class V-A',
+        section: 'A',
+        rollNo: '08',
+        gender: 'Female',
+        dob: '2015-05-22',
+        dobWords: 'Twenty Second May Two Thousand Fifteen',
+        father: 'R. Subba Rao',
+        mother: 'R. Padmavathi',
+        guardianContact: '9848022334',
+        address: 'Seven Hills Colony, Srikakulam',
+        requestDate: '14-Apr-2026',
+        requesterName: 'R. Subba Rao',
+        requesterRelationship: 'Father',
+        requesterPhone: '9848022334',
+        reason: 'Family Relocation / Residence Change',
+        destinationSchool: 'Atkinson High School, Vijayawada',
+        destinationCity: 'Vijayawada',
+        transferOrderRef: 'Domestic Relocation Request #114',
+        lastDateAttendance: '18-Apr-2026',
+        attendanceRecord: '208 / 220 Days (94.5%)',
+        academicClearance: 'Cleared',
+        financialClearance: 'Cleared (No Dues)',
+        approvalStatus: 'Approved',
+        academicHistory: {
+          lastExam: 'Class V Annual Scholastic Assessment',
+          result: 'Passed with A1 Distinction (94%)',
+          qualifiedForPromotion: 'Yes, Qualified for Class VI',
+          conduct: 'VERY GOOD • WELL-MANNERED',
+          teacherSign: 'Smt. K. Hymavathi (Approved on 15-Apr-2026)'
+        },
+        libraryAssets: {
+          booksStatus: 'All primary readers returned',
+          labClearance: 'Junior STEM lab cleared',
+          sportsKit: 'Athletic kit returned',
+          librarianSign: 'Smt. S. Padma (Approved on 16-Apr-2026)'
+        },
+        feeClearance: {
+          status: 'Cleared (No Dues)',
+          duesAmount: '₹0 (No Dues)',
+          noDuesRef: 'NDC-2026-094',
+          isStatutoryOverride: false,
+          statutoryRemarks: 'Full term fee remitted',
+          bursarSign: 'Sri P. Srinivas (Bursar) (Approved on 17-Apr-2026)'
+        },
+        approvals: {
+          principalStatus: 'Approved for Issue',
+          principalDate: '19-Apr-2026',
+          principalSign: 'Smt. Gorle Varalakshmi (Executive Principal)'
+        },
+        issueDate: 'Pending Formal Dispatch',
+        authorizedSignatory: 'Smt. Gorle Varalakshmi (Executive Principal)',
+        digitalSignHash: 'SV-DIGISIGN-61C39FE4092'
+      },
+      {
+        requestId: 'TC-REQ-2026-0043',
+        tcNo: 'Pending Issue',
+        admNo: 'SV-0214',
+        studentId: 'STU-SV-0214',
+        name: 'G. Harsha Vardhan',
+        class: 'Class IX-A',
+        section: 'A',
+        rollNo: '19',
+        gender: 'Male',
+        dob: '2011-11-09',
+        dobWords: 'Ninth November Two Thousand Eleven',
+        father: 'G. Prasad',
+        mother: 'G. Bhavani',
+        guardianContact: '9848033445',
+        address: 'Arasavalli Junction, Srikakulam',
+        requestDate: '10-Apr-2026',
+        requesterName: 'G. Prasad',
+        requesterRelationship: 'Father',
+        requesterPhone: '9848033445',
+        reason: 'Admission into Specialized Sports/Residential Academy',
+        destinationSchool: 'AP Sports Excellence Academy, Guntur',
+        destinationCity: 'Guntur',
+        transferOrderRef: 'APSA-SELECT-2026-88',
+        lastDateAttendance: '17-Apr-2026',
+        attendanceRecord: '198 / 220 Days (90.0%)',
+        academicClearance: 'Cleared',
+        financialClearance: 'Dues Pending (₹3,200)',
+        approvalStatus: 'Under Review',
+        academicHistory: {
+          lastExam: 'Class IX Cumulative Term Evaluation',
+          result: 'Passed with B1 (82%)',
+          qualifiedForPromotion: 'Yes, Qualified for Class X',
+          conduct: 'GOOD • PROMPT AND OBEDIENT',
+          teacherSign: 'Sri M. Ramesh (Approved on 12-Apr-2026)'
+        },
+        libraryAssets: {
+          booksStatus: '2 library books pending return',
+          labClearance: 'Physics lab cleared',
+          sportsKit: 'Cricket academy gear on loan',
+          librarianSign: 'Pending Asset Handover'
+        },
+        feeClearance: {
+          status: 'Dues Pending',
+          duesAmount: '₹3,200 (Term II Transport & Special Coaching)',
+          noDuesRef: 'Pending Payment / Statutory Undertaking',
+          isStatutoryOverride: false,
+          statutoryRemarks: 'Accounts clearance awaiting parent settlement or statutory promissory bond',
+          bursarSign: 'Under Clearance Review'
+        },
+        approvals: {
+          principalStatus: 'Awaiting Clearances',
+          principalDate: 'Pending',
+          principalSign: 'Pending Clearance Sign-off'
+        },
+        issueDate: 'Pending Issue',
+        authorizedSignatory: 'Smt. Gorle Varalakshmi',
+        digitalSignHash: 'SV-PENDING-HASH'
+      },
+      {
+        requestId: 'TC-REQ-2026-0044',
+        tcNo: 'SV/2026/044',
+        admNo: 'SV-0309',
+        studentId: 'STU-SV-0309',
+        name: 'A. Deepthi',
+        class: 'Class X-A',
+        section: 'A',
+        rollNo: '02',
+        gender: 'Female',
+        dob: '2010-02-03',
+        dobWords: 'Third February Two Thousand Ten',
+        father: 'A. Satyanarayana',
+        mother: 'A. Sarada',
+        guardianContact: '9848044556',
+        address: 'Day & Night Junction, Srikakulam',
+        requestDate: '14-Apr-2026',
+        requesterName: 'A. Satyanarayana',
+        requesterRelationship: 'Father',
+        requesterPhone: '9848044556',
+        reason: 'Higher Secondary / Intermediate Studies (Class X Passed)',
+        destinationSchool: 'Government Junior College for Girls, Srikakulam',
+        destinationCity: 'Srikakulam',
+        transferOrderRef: 'SSC-PASS-MEMO-2026-44',
+        lastDateAttendance: '19-Apr-2026',
+        attendanceRecord: '214 / 220 Days (97.3%)',
+        academicClearance: 'Cleared',
+        financialClearance: 'Cleared (No Dues)',
+        approvalStatus: 'Approved',
+        academicHistory: {
+          lastExam: 'SSC Public Board Examination March 2026',
+          result: 'Passed with 10.0 CGPA (School Topper)',
+          qualifiedForPromotion: 'Yes, Qualified for Intermediate First Year',
+          conduct: 'EXEMPLARY • TOP MERIT SCHOLAR',
+          teacherSign: 'Sri K. V. Raman (Approved on 16-Apr-2026)'
+        },
+        libraryAssets: {
+          booksStatus: 'All 6 reference textbooks returned in mint condition',
+          labClearance: 'Chemistry and Biology lab verified',
+          sportsKit: 'Badminton kit returned',
+          librarianSign: 'Smt. S. Padma (Approved on 17-Apr-2026)'
+        },
+        feeClearance: {
+          status: 'Cleared (No Dues)',
+          duesAmount: '₹0 (Government Merit Scholar)',
+          noDuesRef: 'NDC-2026-102',
+          isStatutoryOverride: false,
+          statutoryRemarks: 'Merit scholarship recipient — No institutional dues',
+          bursarSign: 'Sri P. Srinivas (Bursar) (Approved on 18-Apr-2026)'
+        },
+        approvals: {
+          principalStatus: 'Approved for Issue',
+          principalDate: '19-Apr-2026',
+          principalSign: 'Smt. Gorle Varalakshmi (Executive Principal)'
+        },
+        issueDate: '19-Apr-2026',
+        authorizedSignatory: 'Smt. Gorle Varalakshmi (Executive Principal)',
+        digitalSignHash: 'SV-DIGISIGN-49B81AC9203'
+      },
+      {
+        requestId: 'TC-REQ-2026-0045',
+        tcNo: 'Pending Issue',
+        admNo: 'SV-0145',
+        studentId: 'STU-SV-0145',
+        name: 'V. Sai Teja',
+        class: 'Class VII-B',
+        section: 'B',
+        rollNo: '24',
+        gender: 'Male',
+        dob: '2013-08-14',
+        dobWords: 'Fourteenth August Two Thousand Thirteen',
+        father: 'V. Ramanamurthy',
+        mother: 'V. Annapurna',
+        guardianContact: '9848055667',
+        address: 'Palakonda Road, Srikakulam',
+        requestDate: '21-Oct-2026',
+        requesterName: 'V. Ramanamurthy',
+        requesterRelationship: 'Father',
+        requesterPhone: '9848055667',
+        reason: 'Parent Job Transfer (To Another Station)',
+        destinationSchool: 'Sainik School, Korukonda',
+        destinationCity: 'Korukonda / Vizianagaram',
+        transferOrderRef: 'DEF-TRF-ORDER-2026/89',
+        lastDateAttendance: '24-Oct-2026',
+        attendanceRecord: '192 / 210 Days (91.4%)',
+        academicClearance: 'Cleared',
+        financialClearance: 'Statutory Undertaking (Rule 99 AP Code)',
+        approvalStatus: 'Approved',
+        academicHistory: {
+          lastExam: 'Term I Scholastic Assessment',
+          result: 'Passed with A2 Merit (88%)',
+          qualifiedForPromotion: 'Yes, Progress Satisfactory',
+          conduct: 'EXEMPLARY • DISCIPLINED CADET',
+          teacherSign: 'Smt. G. Bhavani (Approved on 22-Oct-2026)'
+        },
+        libraryAssets: {
+          booksStatus: 'All library books returned',
+          labClearance: 'Junior science lab cleared',
+          sportsKit: 'Athletic uniform surrendered',
+          librarianSign: 'Smt. S. Padma (Approved on 23-Oct-2026)'
+        },
+        feeClearance: {
+          status: 'Statutory Undertaking (Rule 99 AP Code)',
+          duesAmount: '₹2,500 (Term II installment deferred)',
+          noDuesRef: 'BOND-AP-2026/89',
+          isStatutoryOverride: true,
+          statutoryRemarks: 'Statutory undertaking executed by parent per AP Education Code; non-blocking clearance authorized.',
+          bursarSign: 'Sri P. Srinivas (Conditional Undertaking Accepted)'
+        },
+        approvals: {
+          principalStatus: 'Principal Authorized under Statutory Mandate',
+          principalDate: '25-Oct-2026',
+          principalSign: 'Smt. Gorle Varalakshmi (Executive Principal)'
+        },
+        issueDate: 'Pending Formal Dispatch',
+        authorizedSignatory: 'Smt. Gorle Varalakshmi',
+        digitalSignHash: 'SV-DIGISIGN-STAT-9981'
+      },
+      {
+        requestId: 'TC-REQ-2026-0046',
+        tcNo: 'Pending Issue',
+        admNo: 'SV-0288',
+        studentId: 'STU-SV-0288',
+        name: 'K. Manasa',
+        class: 'Class IV-A',
+        section: 'A',
+        rollNo: '15',
+        gender: 'Female',
+        dob: '2016-09-18',
+        dobWords: 'Eighteenth September Two Thousand Sixteen',
+        father: 'K. Simhachalam',
+        mother: 'K. Lakshmi',
+        guardianContact: '9848066778',
+        address: 'GT Road, Srikakulam',
+        requestDate: '24-Oct-2026',
+        requesterName: 'K. Simhachalam',
+        requesterRelationship: 'Father',
+        requesterPhone: '9848066778',
+        reason: 'Family Relocation / Residence Change',
+        destinationSchool: 'St. Mary English Medium School, Rajahmundry',
+        destinationCity: 'Rajahmundry',
+        transferOrderRef: 'Parent Request Form Ref 418',
+        lastDateAttendance: '28-Oct-2026',
+        attendanceRecord: '196 / 210 Days (93.3%)',
+        academicClearance: 'Pending',
+        financialClearance: 'Cleared (No Dues)',
+        approvalStatus: 'Submitted',
+        academicHistory: {
+          lastExam: 'Mid-term Primary Evaluation',
+          result: 'Passed with A1',
+          qualifiedForPromotion: 'Yes',
+          conduct: 'GOOD • PROMPT ATTENDANCE',
+          teacherSign: 'Pending Class Teacher Verification'
+        },
+        libraryAssets: {
+          booksStatus: 'Library card verified',
+          labClearance: 'N/A (Primary)',
+          sportsKit: 'Cleared',
+          librarianSign: 'Smt. S. Padma (Approved on 25-Oct-2026)'
+        },
+        feeClearance: {
+          status: 'Cleared (No Dues)',
+          duesAmount: '₹0',
+          noDuesRef: 'NDC-2026-119',
+          isStatutoryOverride: false,
+          statutoryRemarks: 'Dues cleared in full',
+          bursarSign: 'Sri P. Srinivas (Approved on 25-Oct-2026)'
+        },
+        approvals: {
+          principalStatus: 'Awaiting Class Teacher Review',
+          principalDate: 'Pending',
+          principalSign: 'Pending'
+        },
+        issueDate: 'Pending Issue',
+        authorizedSignatory: 'Smt. Gorle Varalakshmi',
+        digitalSignHash: 'SV-PENDING-HASH'
+      },
+      {
+        requestId: 'TC-REQ-2026-0047',
+        tcNo: 'SV/2026/047',
+        admNo: 'SV-0367',
+        studentId: 'STU-SV-0367',
+        name: 'B. Tarun',
+        class: 'Class VI-B',
+        section: 'B',
+        rollNo: '29',
+        gender: 'Male',
+        dob: '2014-06-30',
+        dobWords: 'Thirtieth June Two Thousand Fourteen',
+        father: 'B. Jagannadham',
+        mother: 'B. Parvathi',
+        guardianContact: '9848077889',
+        address: 'Illisipuram, Srikakulam',
+        requestDate: '18-Oct-2026',
+        requesterName: 'B. Jagannadham',
+        requesterRelationship: 'Father',
+        requesterPhone: '9848077889',
+        reason: 'Change of Curriculum / Board Migration (State to CBSE/ICSE)',
+        destinationSchool: 'Delhi Public School, Visakhapatnam',
+        destinationCity: 'Visakhapatnam',
+        transferOrderRef: 'CBSE-INTAKE-2026-90',
+        lastDateAttendance: '22-Oct-2026',
+        attendanceRecord: '201 / 215 Days (93.5%)',
+        academicClearance: 'Cleared',
+        financialClearance: 'Cleared (No Dues)',
+        approvalStatus: 'Issued',
+        academicHistory: {
+          lastExam: 'Class VI Term I Assessment',
+          result: 'Passed with A2 (89%)',
+          qualifiedForPromotion: 'Yes, Qualified for Class VII',
+          conduct: 'EXEMPLARY • ACTIVE IN SPORTS',
+          teacherSign: 'Sri Ch. Appa Rao (Approved on 20-Oct-2026)'
+        },
+        libraryAssets: {
+          booksStatus: 'All books returned',
+          labClearance: 'Science lab cleared',
+          sportsKit: 'Athletic kit returned',
+          librarianSign: 'Smt. S. Padma (Approved on 21-Oct-2026)'
+        },
+        feeClearance: {
+          status: 'Cleared (No Dues)',
+          duesAmount: '₹0',
+          noDuesRef: 'NDC-2026-112',
+          isStatutoryOverride: false,
+          statutoryRemarks: 'All dues remitted prior to TC request',
+          bursarSign: 'Sri P. Srinivas (Approved on 21-Oct-2026)'
+        },
+        approvals: {
+          principalStatus: 'Approved & Signed',
+          principalDate: '22-Oct-2026',
+          principalSign: 'Smt. Gorle Varalakshmi (Executive Principal)'
+        },
+        issueDate: '22-Oct-2026',
+        authorizedSignatory: 'Smt. Gorle Varalakshmi (Executive Principal)',
+        digitalSignHash: 'SV-DIGISIGN-51A78DE9901'
+      },
+      {
+        requestId: 'TC-REQ-2026-0048',
+        tcNo: 'Pending Issue',
+        admNo: 'SV-0412',
+        studentId: 'STU-SV-0412',
+        name: 'M. Akhila',
+        class: 'Class III-A',
+        section: 'A',
+        rollNo: '04',
+        gender: 'Female',
+        dob: '2017-03-12',
+        dobWords: 'Twelfth March Two Thousand Seventeen',
+        father: 'M. Sanyasi Rao',
+        mother: 'M. Saraswathi',
+        guardianContact: '9848088990',
+        address: 'Old Bus Stand Road, Srikakulam',
+        requestDate: '25-Oct-2026',
+        requesterName: 'M. Sanyasi Rao',
+        requesterRelationship: 'Father',
+        requesterPhone: '9848088990',
+        reason: 'Distance / Transport Constraints',
+        destinationSchool: 'Geethanjali Olympiad School, Srikakulam',
+        destinationCity: 'Srikakulam',
+        transferOrderRef: 'Parent Request Form Ref 429',
+        lastDateAttendance: '29-Oct-2026',
+        attendanceRecord: '190 / 210 Days (90.5%)',
+        academicClearance: 'Pending',
+        financialClearance: 'Dues Pending (₹1,500)',
+        approvalStatus: 'Draft',
+        academicHistory: {
+          lastExam: 'Primary Periodic Test 2',
+          result: 'Passed with B1',
+          qualifiedForPromotion: 'Yes',
+          conduct: 'GOOD • PROMPT ATTENDANCE',
+          teacherSign: 'Pending Evaluation'
+        },
+        libraryAssets: {
+          booksStatus: '1 storybook pending return',
+          labClearance: 'N/A',
+          sportsKit: 'Cleared',
+          librarianSign: 'Pending'
+        },
+        feeClearance: {
+          status: 'Dues Pending',
+          duesAmount: '₹1,500 (Term II transport fee)',
+          noDuesRef: 'Pending Payment',
+          isStatutoryOverride: false,
+          statutoryRemarks: 'Parent requested 10 days to clear dues',
+          bursarSign: 'Under Review'
+        },
+        approvals: {
+          principalStatus: 'Draft Request',
+          principalDate: 'Pending',
+          principalSign: 'Pending'
+        },
+        issueDate: 'Pending Issue',
+        authorizedSignatory: 'Smt. Gorle Varalakshmi',
+        digitalSignHash: 'SV-PENDING-HASH'
+      }
+    ];
+
+    state.transfers = seedTransfers;
+
+    // External transfers ledger
+    if (!state.externalTransfers) {
+      state.externalTransfers = [
+        {
+          direction: 'Inward',
+          name: 'N. Sai Krishna',
+          class: 'Class VIII',
+          school: 'Bhashyam Public School, Visakhapatnam',
+          board: 'AP State Board',
+          extTcNo: 'BPS/2026/891',
+          issueDate: '15-Jun-2025',
+          verification: 'Verified by DEO / Competent Inspector',
+          notes: 'Original TC verified and enclosed with Admission SV-0498'
+        },
+        {
+          direction: 'Inward',
+          name: 'K. Sneha Latha',
+          class: 'Class VII',
+          school: 'Sri Chaitanya Techno School',
+          board: 'CBSE New Delhi',
+          extTcNo: 'TC-2024-699',
+          issueDate: '18-Jun-2025',
+          verification: 'Verified by DEO / Competent Inspector',
+          notes: 'Admitted into Class VII-B; countersignature attested.'
+        },
+        {
+          direction: 'Outward',
+          name: 'B. Tarun',
+          class: 'Class VI',
+          school: 'Delhi Public School, Visakhapatnam',
+          board: 'CBSE New Delhi',
+          extTcNo: 'SV/2026/047',
+          issueDate: '22-Oct-2026',
+          verification: 'Verified by DEO / Competent Inspector',
+          notes: 'Migration certificate issued with TC SV/2026/047.'
+        }
+      ];
+    }
+  }
+
+  function updateTransfersKPIs(list) {
+    initTransfers();
+    const all = list || state.transfers || [];
+
+    const activeCount = all.filter(t => t.approvalStatus !== 'Rejected').length;
+    const underClearance = all.filter(t => t.academicClearance === 'Pending' || t.financialClearance.includes('Pending') || t.approvalStatus === 'Under Review' || t.approvalStatus === 'Submitted').length;
+    const approvedCount = all.filter(t => t.approvalStatus === 'Approved').length;
+    const issuedCount = all.filter(t => t.approvalStatus === 'Issued').length;
+    const extCount = (state.externalTransfers && state.externalTransfers.length) || 3;
+
+    const elActive = document.getElementById('tcKpiActive');
+    const elClear = document.getElementById('tcKpiClearance');
+    const elAppr = document.getElementById('tcKpiApproved');
+    const elIss = document.getElementById('tcKpiIssued');
+    const elExt = document.getElementById('tcKpiExternal');
+
+    if (elActive) elActive.textContent = activeCount;
+    if (elClear) elClear.textContent = underClearance;
+    if (elAppr) elAppr.textContent = approvedCount;
+    if (elIss) elIss.textContent = issuedCount;
+    if (elExt) elExt.textContent = extCount;
+
+    // Badge updates in sidebar & navigation
+    const countBadge = document.getElementById('transfersCountBadge');
+    if (countBadge) countBadge.textContent = activeCount;
+
+    const statCount = document.getElementById('tcQueueStatCount');
+    if (statCount) statCount.textContent = activeCount;
+  }
+
   function renderTransfersTable(list) {
+    initTransfers();
+    list = list || state.transfers || [];
+
     const tbody = document.getElementById('transfersTableBody');
     if (!tbody) return;
 
-    const countBadge = document.getElementById('transfersCountBadge');
-    if (countBadge) countBadge.textContent = list.length;
+    updateTransfersKPIs(list);
 
-    const statCount = document.getElementById('tcQueueStatCount');
-    if (statCount) statCount.textContent = list.length;
+    // Update filter count display
+    const filteredCountEl = document.getElementById('tcFilteredCount');
+    const totalCountEl = document.getElementById('tcTotalCount');
+    if (filteredCountEl) filteredCountEl.textContent = list.length;
+    if (totalCountEl) totalCountEl.textContent = (state.transfers || []).length;
 
     if (list.length === 0) {
-      tbody.innerHTML = `<tr><td colspan="9" style="text-align:center; padding: 2.5rem; color: var(--color-text-muted);">No active Transfer Certificate requests.</td></tr>`;
+      tbody.innerHTML = `
+        <tr>
+          <td colspan="11" style="text-align:center; padding: 3rem 1.5rem; color: #64748b;">
+            <div style="font-size: 2rem; color: #cbd5e1; margin-bottom: 0.5rem;"><i class="fa-solid fa-file-excel"></i></div>
+            <div style="font-size: 0.95rem; font-weight: 700; color: #1e293b; margin-bottom: 0.25rem;">No Transfer Certificate Records Found</div>
+            <div style="font-size: 0.82rem; color: #64748b; margin-bottom: 1rem;">No TC requests match the active filter criteria.</div>
+            <button type="button" class="btn btn-outline-secondary btn-sm" onclick="portalApp.resetTransfersFilters()">
+              <i class="fa-solid fa-rotate-left mr-1"></i> Reset Filters
+            </button>
+          </td>
+        </tr>`;
       return;
     }
 
-    tbody.innerHTML = list.map(item => `
-      <tr>
-        <td><strong class="text-primary">${item.tcNo}</strong></td>
-        <td><strong>${item.name}</strong></td>
-        <td><small class="text-muted">${item.admNo}</small></td>
-        <td>${item.class}</td>
-        <td>${item.reason}</td>
-        <td>
-          <span class="portal-badge ${item.dues.includes('Cleared') ? 'badge-success' : 'badge-warning'}">
-            ${item.dues}
-          </span>
-        </td>
-        <td><strong>${item.conduct}</strong></td>
-        <td>
-          <span class="portal-badge ${item.status === 'Issued' ? 'badge-success' : item.status === 'On Hold (Library Due)' ? 'badge-danger' : 'badge-warning'}">
-            ${item.status}
-          </span>
-        </td>
-        <td>
-          <div class="table-action-btns">
-            <button class="btn btn-primary btn-sm" onclick="portalApp.printTC('${item.tcNo}')" title="Print Official TC Document">
-              <i class="fa-solid fa-print"></i> Print TC
-            </button>
-            <button class="action-icon-btn" onclick="portalApp.downloadTCPdf('${item.tcNo}')" title="Download Signed PDF">
-              <i class="fa-solid fa-file-arrow-down"></i>
-            </button>
-          </div>
-        </td>
-      </tr>
-    `).join('');
+    tbody.innerHTML = list.map(item => {
+      // Academic clearance badge
+      const isAcadCleared = item.academicClearance === 'Cleared';
+      const acadBadge = isAcadCleared
+        ? `<span class="clearance-pill cleared"><i class="fa-solid fa-circle-check"></i> Cleared</span>`
+        : `<span class="clearance-pill pending"><i class="fa-solid fa-clock"></i> Pending</span>`;
+
+      // Financial clearance badge
+      let finBadge = '';
+      if (item.financialClearance.includes('Cleared') || item.financialClearance.includes('No Dues')) {
+        finBadge = `<span class="clearance-pill cleared"><i class="fa-solid fa-receipt"></i> No Dues</span>`;
+      } else if (item.financialClearance.includes('Statutory')) {
+        finBadge = `<span class="clearance-pill statutory-override" title="Cleared under statutory non-blocking undertaking (Rule 99 AP Code)"><i class="fa-solid fa-scale-balanced"></i> Statutory Undertaking</span>`;
+      } else {
+        finBadge = `<span class="clearance-pill dues"><i class="fa-solid fa-circle-exclamation"></i> ${item.financialClearance}</span>`;
+      }
+
+      // Approval Status Badge
+      let statusClass = 'badge-secondary';
+      if (item.approvalStatus === 'Issued') statusClass = 'badge-success';
+      else if (item.approvalStatus === 'Approved') statusClass = 'badge-purple';
+      else if (item.approvalStatus === 'Under Review' || item.approvalStatus === 'Submitted') statusClass = 'badge-warning';
+      else if (item.approvalStatus === 'On Hold') statusClass = 'badge-danger';
+      else if (item.approvalStatus === 'Draft') statusClass = 'badge-secondary';
+
+      const statusBadge = `<span class="portal-badge ${statusClass}">${item.approvalStatus}</span>`;
+
+      // TC Number Badge
+      const isTcIssued = item.tcNo && item.tcNo !== 'Pending Issue';
+      const tcNumberBadge = isTcIssued
+        ? `<span class="tc-id-pill" onclick="portalApp.openTcDetailModal('${item.requestId}')" style="cursor:pointer;" title="View Official TC"><i class="fa-solid fa-certificate text-primary mr-1"></i>${item.tcNo}</span>`
+        : `<span style="font-size:0.75rem; color:#94a3b8; font-style:italic;"><i class="fa-solid fa-clock-rotate-left mr-1"></i>Pending Issue</span>`;
+
+      return `
+        <tr>
+          <!-- 1. TC Request ID -->
+          <td>
+            <span class="tc-id-pill" onclick="portalApp.openTcDetailModal('${item.requestId}')" style="cursor:pointer; font-weight:700;">
+              ${item.requestId}
+            </span>
+          </td>
+
+          <!-- 2. Student -->
+          <td>
+            <div style="display:flex; align-items:center; gap:0.6rem;">
+              <div style="width:34px; height:34px; border-radius:50%; background:#eff6ff; color:#1d4ed8; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:0.8rem; border:1px solid #bfdbfe;">
+                ${item.name.charAt(0)}
+              </div>
+              <div>
+                <a href="javascript:void(0)" onclick="portalApp.openTcDetailModal('${item.requestId}')" style="font-weight:700; color:#1e293b; text-decoration:none;">
+                  ${item.name}
+                </a>
+                <div style="font-size:0.72rem; color:#64748b;">Roll No: ${item.rollNo || '-'}</div>
+              </div>
+            </div>
+          </td>
+
+          <!-- 3. Admission Number -->
+          <td>
+            <span class="text-primary font-mono" style="font-weight:700; font-size:0.82rem;">${item.admNo}</span>
+          </td>
+
+          <!-- 4. Class -->
+          <td>
+            <span class="portal-badge badge-blue">${item.class}</span>
+          </td>
+
+          <!-- 5. Request Date -->
+          <td>
+            <span style="font-size:0.8rem; color:#475569;">${item.requestDate}</span>
+          </td>
+
+          <!-- 6. Reason -->
+          <td>
+            <div style="font-size:0.8rem; color:#1e293b; max-width:180px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;" title="${item.reason}">
+              ${item.reason}
+            </div>
+          </td>
+
+          <!-- 7. Academic Clearance -->
+          <td>
+            ${acadBadge}
+          </td>
+
+          <!-- 8. Financial Clearance -->
+          <td>
+            ${finBadge}
+          </td>
+
+          <!-- 9. Approval Status -->
+          <td>
+            ${statusBadge}
+          </td>
+
+          <!-- 10. TC Number -->
+          <td>
+            ${tcNumberBadge}
+          </td>
+
+          <!-- Actions -->
+          <td style="text-align: center;">
+            <div class="table-action-btns" style="justify-content: center; gap: 0.35rem;">
+              <button class="action-icon-btn" onclick="portalApp.openTcDetailModal('${item.requestId}')" title="View Full 11-Section Dossier">
+                <i class="fa-solid fa-eye text-primary"></i>
+              </button>
+              <button class="action-icon-btn" onclick="portalApp.openDepartmentClearanceModal('${item.requestId}')" title="Department Clearance & Statutory Waiver">
+                <i class="fa-solid fa-clipboard-check text-warning"></i>
+              </button>
+              ${item.approvalStatus !== 'Issued' ? `
+                <button class="action-icon-btn" onclick="portalApp.openIssueTcModal('${item.requestId}')" title="Approve & Issue TC">
+                  <i class="fa-solid fa-stamp text-success"></i>
+                </button>
+              ` : `
+                <button class="action-icon-btn" onclick="portalApp.printTC('${item.requestId}')" title="Print Official Appendix 16 TC">
+                  <i class="fa-solid fa-print text-primary"></i>
+                </button>
+              `}
+            </div>
+          </td>
+        </tr>
+      `;
+    }).join('');
   }
 
+  function filterTransfers() {
+    initTransfers();
+    const all = state.transfers || [];
 
-  // =========================================================================
-  // OFFICIAL TRANSFER CERTIFICATE WORKFLOWS (APPENDIX 16)
-  // =========================================================================
+    const searchVal = (document.getElementById('tcSearchInput')?.value || '').toLowerCase().trim();
+    const classVal = document.getElementById('tcClassFilter')?.value || '';
+    const acadVal = document.getElementById('tcAcademicClearanceFilter')?.value || '';
+    const finVal = document.getElementById('tcFinancialClearanceFilter')?.value || '';
+    const statusVal = document.getElementById('tcApprovalStatusFilter')?.value || '';
 
-  const TC_OFFICIAL_RECORDS = {
-    'TC-2026-001': {
-      tcNo: 'V/2026/041',
-      admNo: 'SV-0082',
-      penNo: '12059048123',
-      aadhaar: '435784109235',
-      name: 'P. KIRAN KUMAR',
-      father: 'P. VENKATA RAMANA',
-      mother: 'P. LAKSHMI DEVI',
-      guardian: 'N/A (UNDER PARENTAL CUSTODY)',
-      nationalityReligion: 'INDIAN / HINDU',
-      caste: 'BC-D (YADAVA) — SOCIAL & EDUCATIONALLY BACKWARD CLASS',
-      dobWords: '07-04-2011 (SEVENTH APRIL TWO THOUSAND ELEVEN)',
-      classLeaving: 'CLASS X (TENTH STANDARD)',
-      lang1: 'TELUGU',
-      lang2: 'HINDI',
-      course: 'ACADEMIC (GENERAL HIGH SCHOOL STREAM)',
-      motherTongueMedium: 'Mother Tongue: TELUGU • Medium of Instruction: ENGLISH',
-      admPromotionDate: '12-06-2025 (TWELVE JUNE TWO THOUSAND TWENTY FIVE)',
-      firstAdmClassYear: 'CLASS I (ACADEMIC YEAR 2016–2017)',
-      promotion: 'YES, QUALIFIED FOR PROMOTION TO CLASS XI / INTERMEDIATE',
-      feesPaid: 'YES, ALL INSTITUTIONAL DUES FULLY CLEARED (NO DUES)',
-      scholarship: 'NIL',
-      concession: 'NIL',
-      medical: 'YES, ANNUAL INSTITUTIONAL HEALTH INSPECTION SATISFACTORY',
-      mole1: 'A mole below lower jaw',
-      mole2: 'A mole on right collar bone',
-      dateLeft: '18-04-2026',
-      appDate: '12-04-2026',
-      issueDate: '18-04-2026',
-      conduct: 'EXEMPLARY • SATISFACTORY IN ALL RESPECTS',
-      attendance: '204 / 220 DAYS (92.7% CUMULATIVE ATTENDANCE)'
-    },
-    'TC-2026-002': {
-      tcNo: 'V/2026/042',
-      admNo: 'SV-0119',
-      penNo: '12059048245',
-      aadhaar: '561234908124',
-      name: 'R. DIVYA',
-      father: 'R. SUBBA RAO',
-      mother: 'R. PADMAVATHI',
-      guardian: 'N/A',
-      nationalityReligion: 'INDIAN / HINDU',
-      caste: 'OC (GENERAL)',
-      dobWords: '22-05-2015 (TWENTY SECOND MAY TWO THOUSAND FIFTEEN)',
-      classLeaving: 'CLASS V (FIFTH STANDARD)',
-      lang1: 'TELUGU',
-      lang2: 'HINDI',
-      course: 'ACADEMIC (PRIMARY WING)',
-      motherTongueMedium: 'Mother Tongue: TELUGU • Medium of Instruction: ENGLISH',
-      admPromotionDate: '10-06-2025 (TENTH JUNE TWO THOUSAND TWENTY FIVE)',
-      firstAdmClassYear: 'CLASS I (ACADEMIC YEAR 2021–2022)',
-      promotion: 'YES, QUALIFIED FOR PROMOTION TO CLASS VI',
-      feesPaid: 'YES, ALL DUES CLEARED (NO DUES)',
-      scholarship: 'NIL',
-      concession: 'NIL',
-      medical: 'YES, ANNUAL INSPECTION COMPLETED',
-      mole1: 'A small mole on left cheek',
-      mole2: 'A birthmark on right forearm',
-      dateLeft: '18-04-2026',
-      appDate: '14-04-2026',
-      issueDate: '18-04-2026',
-      conduct: 'VERY GOOD • WELL-MANNERED',
-      attendance: '208 / 220 DAYS (94.5% CUMULATIVE ATTENDANCE)'
-    },
-    'TC-2026-003': {
-      tcNo: 'V/2026/043',
-      admNo: 'SV-0214',
-      penNo: '12059048389',
-      aadhaar: '890123456789',
-      name: 'G. HARSHA VARDHAN',
-      father: 'G. PRASAD',
-      mother: 'G. BHAVANI',
-      guardian: 'N/A',
-      nationalityReligion: 'INDIAN / HINDU',
-      caste: 'BC-A (AGNIKULA KSHATRIYA)',
-      dobWords: '09-11-2011 (NINTH NOVEMBER TWO THOUSAND ELEVEN)',
-      classLeaving: 'CLASS IX (NINTH STANDARD)',
-      lang1: 'TELUGU',
-      lang2: 'HINDI',
-      course: 'ACADEMIC (HIGH SCHOOL STREAM)',
-      motherTongueMedium: 'Mother Tongue: TELUGU • Medium of Instruction: ENGLISH',
-      admPromotionDate: '12-06-2025 (TWELVE JUNE TWO THOUSAND TWENTY FIVE)',
-      firstAdmClassYear: 'CLASS I (ACADEMIC YEAR 2018–2019)',
-      promotion: 'YES, QUALIFIED FOR PROMOTION TO CLASS X',
-      feesPaid: 'YES, ALL DUES CLEARED (NO DUES)',
-      scholarship: 'NIL',
-      concession: 'NIL',
-      medical: 'YES, ANNUAL HEALTH CHECKUP SATISFACTORY',
-      mole1: 'A scar on left forehead',
-      mole2: 'A mole on right shoulder blade',
-      dateLeft: '17-04-2026',
-      appDate: '10-04-2026',
-      issueDate: '17-04-2026',
-      conduct: 'GOOD • PROMPT AND OBEDIENT',
-      attendance: '198 / 220 DAYS (90.0% CUMULATIVE ATTENDANCE)'
-    },
-    'TC-2026-004': {
-      tcNo: 'V/2026/044',
-      admNo: 'SV-0309',
-      penNo: '12059048512',
-      aadhaar: '345678901234',
-      name: 'A. DEEPTHI',
-      father: 'A. SATYANARAYANA',
-      mother: 'A. SARADA',
-      guardian: 'N/A',
-      nationalityReligion: 'INDIAN / HINDU',
-      caste: 'SC (SCHEDULED CASTE)',
-      dobWords: '03-02-2010 (THIRD FEBRUARY TWO THOUSAND TEN)',
-      classLeaving: 'CLASS X (TENTH STANDARD)',
-      lang1: 'TELUGU',
-      lang2: 'HINDI',
-      course: 'ACADEMIC (SSC PUBLIC STREAM)',
-      motherTongueMedium: 'Mother Tongue: TELUGU • Medium of Instruction: ENGLISH',
-      admPromotionDate: '12-06-2025 (TWELVE JUNE TWO THOUSAND TWENTY FIVE)',
-      firstAdmClassYear: 'CLASS I (ACADEMIC YEAR 2016–2017)',
-      promotion: 'YES, QUALIFIED FOR HIGHER EDUCATION / INTERMEDIATE',
-      feesPaid: 'YES, NO DUES REMAINING',
-      scholarship: 'GOVERNMENT POST-MATRIC MERIT SCHOLARSHIP RECIPIENT',
-      concession: 'FEE CONCESSION GRANTED UNDER MERIT CATEGORY',
-      medical: 'YES, SATISFACTORY HEALTH STANDING',
-      mole1: 'A mole on chin right side',
-      mole2: 'A mole on left wrist',
-      dateLeft: '19-04-2026',
-      appDate: '14-04-2026',
-      issueDate: '19-04-2026',
-      conduct: 'EXEMPLARY • TOP MERIT SCHOLAR',
-      attendance: '214 / 220 DAYS (97.3% CUMULATIVE ATTENDANCE)'
+    const filtered = all.filter(t => {
+      // 1. Search Match
+      const matchesSearch = !searchVal ||
+        (t.requestId && t.requestId.toLowerCase().includes(searchVal)) ||
+        (t.name && t.name.toLowerCase().includes(searchVal)) ||
+        (t.admNo && t.admNo.toLowerCase().includes(searchVal)) ||
+        (t.tcNo && t.tcNo.toLowerCase().includes(searchVal)) ||
+        (t.reason && t.reason.toLowerCase().includes(searchVal)) ||
+        (t.requesterName && t.requesterName.toLowerCase().includes(searchVal));
+
+      if (!matchesSearch) return false;
+
+      // 2. Class Filter
+      if (classVal && !t.class.includes(classVal)) return false;
+
+      // 3. Academic Clearance Filter
+      if (acadVal && t.academicClearance !== acadVal) return false;
+
+      // 4. Financial Clearance Filter
+      if (finVal) {
+        if (finVal === 'Cleared (No Dues)' && (!t.financialClearance.includes('Cleared') && !t.financialClearance.includes('No Dues'))) return false;
+        if (finVal === 'Dues Pending' && !t.financialClearance.includes('Dues Pending')) return false;
+        if (finVal === 'Statutory Undertaking' && !t.financialClearance.includes('Statutory')) return false;
+      }
+
+      // 5. Approval Status Filter
+      if (statusVal && t.approvalStatus !== statusVal) return false;
+
+      return true;
+    });
+
+    renderTransfersTable(filtered);
+  }
+
+  function resetTransfersFilters() {
+    const s = document.getElementById('tcSearchInput');
+    const c = document.getElementById('tcClassFilter');
+    const a = document.getElementById('tcAcademicClearanceFilter');
+    const f = document.getElementById('tcFinancialClearanceFilter');
+    const st = document.getElementById('tcApprovalStatusFilter');
+
+    if (s) s.value = '';
+    if (c) c.value = '';
+    if (a) a.value = '';
+    if (f) f.value = '';
+    if (st) st.value = '';
+
+    renderTransfersTable(state.transfers);
+    showToast('Transfers filters reset.', 'info');
+  }
+
+  function populateTcStudentDropdown() {
+    const select = document.getElementById('tcStudentSelect');
+    if (!select) return;
+
+    const students = state.students || (typeof window !== 'undefined' && window.STUDENT_ROSTER) || [];
+    const activeStudents = students.filter(s => s.status !== 'Transferred' && s.status !== 'Withdrawn');
+
+    let html = '<option value="">-- Choose active enrolled student --</option>';
+    activeStudents.slice(0, 150).forEach(s => {
+      html += `<option value="${s.id || s.studentId || s.admNo}">${s.name} (${s.admNo} • ${s.class || s.currentClass || 'Class X'})</option>`;
+    });
+
+    select.innerHTML = html;
+  }
+
+  function onTcStudentSelectChange(studentKey) {
+    const card = document.getElementById('tcStudentSnapshotCard');
+    if (!studentKey) {
+      if (card) card.style.display = 'none';
+      return;
     }
-  };
 
-  let activeModalTcKey = 'TC-2026-001';
-  let isModalAadhaarMasked = true;
-  let activeModalCopyType = 'ORIGINAL';
+    const students = state.students || (typeof window !== 'undefined' && window.STUDENT_ROSTER) || [];
+    const student = students.find(s => (s.id === studentKey || s.studentId === studentKey || s.admNo === studentKey));
 
-  function printTC(tcNo) {
-    activeModalTcKey = tcNo || 'TC-2026-001';
-    renderModalTCDocument();
-    openModal('viewTransferCertificateModal');
+    if (!student) {
+      if (card) card.style.display = 'none';
+      return;
+    }
 
-    const selectEl = document.getElementById('modalTcSelect');
-    if (selectEl) selectEl.value = activeModalTcKey;
+    if (card) card.style.display = 'block';
 
-    showToast(`Official Transfer Certificate loaded for ${tcNo}`, 'info');
+    const admEl = document.getElementById('tcSnapAdmNo');
+    const clsEl = document.getElementById('tcSnapClass');
+    const rollEl = document.getElementById('tcSnapRoll');
+    const gEl = document.getElementById('tcSnapGuardian');
+    const pEl = document.getElementById('tcSnapPhone');
+    const dEl = document.getElementById('tcSnapAdmDate');
+
+    if (admEl) admEl.textContent = student.admNo || '-';
+    if (clsEl) clsEl.textContent = (student.class || student.currentClass || '-') + (student.section ? '-' + student.section : '');
+    if (rollEl) rollEl.textContent = student.rollNo || student.roll || '12';
+    if (gEl) gEl.textContent = student.guardian || student.father || student.parent || 'Parent/Guardian';
+    if (pEl) pEl.textContent = student.phone || student.contact || '9848011223';
+    if (dEl) dEl.textContent = student.admissionDate || student.enrolDate || '12-Jun-2022';
+
+    // Auto-fill requester fields
+    const reqName = document.getElementById('tcRequesterName');
+    const reqPhone = document.getElementById('tcRequesterPhone');
+    if (reqName) reqName.value = student.guardian || student.father || student.parent || '';
+    if (reqPhone) reqPhone.value = student.phone || student.contact || '';
   }
 
-  function downloadTCPdf(tcNo) {
-    printTC(tcNo);
+  function openNewTcRequestModal() {
+    populateTcStudentDropdown();
+
+    const todayStr = new Date().toISOString().split('T')[0];
+    const dateInput = document.getElementById('tcLastAttendanceDate');
+    if (dateInput) dateInput.value = todayStr;
+
+    openModal('newTcRequestModal');
+  }
+
+  function submitNewTcRequest(e) {
+    if (e && e.preventDefault) e.preventDefault();
+    initTransfers();
+
+    const studentKey = document.getElementById('tcStudentSelect')?.value;
+    const requesterName = (document.getElementById('tcRequesterName')?.value || '').trim();
+    const requesterRel = document.getElementById('tcRequesterRelationship')?.value || 'Father';
+    const requesterPhone = (document.getElementById('tcRequesterPhone')?.value || '').trim();
+    const reason = document.getElementById('tcReasonSelect')?.value || 'Parent Job Transfer';
+    const lastDate = document.getElementById('tcLastAttendanceDate')?.value || new Date().toISOString().split('T')[0];
+    const destSchool = (document.getElementById('tcDestSchool')?.value || 'Authorized Receiving Institution').trim();
+    const destCity = (document.getElementById('tcDestCity')?.value || 'Hyderabad').trim();
+    const orderRef = (document.getElementById('tcTransferOrderRef')?.value || 'Regular Parent Request').trim();
+    const remarks = (document.getElementById('tcRequestRemarks')?.value || '').trim();
+
+    if (!studentKey || !requesterName || !requesterPhone) {
+      showToast('Please select a student and provide complete requester details.', 'warning');
+      return;
+    }
+
+    const students = state.students || (typeof window !== 'undefined' && window.STUDENT_ROSTER) || [];
+    const student = students.find(s => (s.id === studentKey || s.studentId === studentKey || s.admNo === studentKey)) || {
+      name: 'Selected Student',
+      admNo: 'SV-0500',
+      studentId: 'STU-SV-0500',
+      class: 'Class VIII-A',
+      section: 'A',
+      rollNo: '14',
+      gender: 'Male',
+      dob: '2012-05-10',
+      father: requesterName
+    };
+
+    const newReqSeq = (state.transfers.length + 41).toString().padStart(4, '0');
+    const newReqId = `TC-REQ-2026-${newReqSeq}`;
+
+    const newTcRecord = {
+      requestId: newReqId,
+      tcNo: 'Pending Issue',
+      admNo: student.admNo || 'SV-0500',
+      studentId: student.studentId || `STU-${student.admNo}`,
+      name: student.name,
+      class: student.class || student.currentClass || 'Class VIII-A',
+      section: student.section || 'A',
+      rollNo: student.rollNo || '14',
+      gender: student.gender || 'Male',
+      dob: student.dob || '2012-05-10',
+      dobWords: 'Tenth May Two Thousand Twelve',
+      father: student.father || requesterName,
+      mother: student.mother || 'Smt. Mother',
+      guardianContact: requesterPhone,
+      address: student.address || 'Srikakulam Municipal Limits',
+      requestDate: new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }),
+      requesterName: requesterName,
+      requesterRelationship: requesterRel,
+      requesterPhone: requesterPhone,
+      reason: reason,
+      destinationSchool: destSchool,
+      destinationCity: destCity,
+      transferOrderRef: orderRef,
+      lastDateAttendance: lastDate,
+      attendanceRecord: '202 / 218 Days (92.6%)',
+      academicClearance: 'Pending',
+      financialClearance: 'Cleared (No Dues)',
+      approvalStatus: 'Submitted',
+      academicHistory: {
+        lastExam: 'Term Evaluation',
+        result: 'Satisfactory Standing',
+        qualifiedForPromotion: 'Yes',
+        conduct: 'GOOD • REGULAR AND OBEDIENT',
+        teacherSign: 'Pending Class Teacher Verification'
+      },
+      libraryAssets: {
+        booksStatus: 'Awaiting Library Clearance',
+        labClearance: 'Awaiting Lab Clearance',
+        sportsKit: 'Awaiting Equipment Check',
+        librarianSign: 'Pending'
+      },
+      feeClearance: {
+        status: 'Cleared (No Dues)',
+        duesAmount: '₹0',
+        noDuesRef: 'NDC-AUTO-VERIFIED',
+        isStatutoryOverride: false,
+        statutoryRemarks: 'Accounts pre-verification complete',
+        bursarSign: 'Under Office Review'
+      },
+      approvals: {
+        principalStatus: 'Awaiting Department Clearances',
+        principalDate: 'Pending',
+        principalSign: 'Pending'
+      },
+      issueDate: 'Pending Issue',
+      authorizedSignatory: 'Smt. Gorle Varalakshmi',
+      digitalSignHash: 'SV-PENDING-HASH'
+    };
+
+    state.transfers.unshift(newTcRecord);
+    closeModal('newTcRequestModal');
+    filterTransfers();
+
+    showToast(`Transfer Certificate Request ${newReqId} created for ${student.name}. Department clearance notifications dispatched.`, 'success');
+  }
+
+  function openRecordExternalTransferModal() {
+    const todayStr = new Date().toISOString().split('T')[0];
+    const dateInput = document.getElementById('extTcIssueDate');
+    if (dateInput) dateInput.value = todayStr;
+
+    openModal('recordExternalTransferModal');
+  }
+
+  function submitRecordExternalTransfer(e) {
+    if (e && e.preventDefault) e.preventDefault();
+    initTransfers();
+
+    const direction = document.getElementById('extTransferDirection')?.value || 'Inward';
+    const studentName = (document.getElementById('extStudentName')?.value || '').trim();
+    const studentClass = document.getElementById('extStudentClass')?.value || 'Class VIII';
+    const schoolName = (document.getElementById('extSchoolName')?.value || '').trim();
+    const board = document.getElementById('extBoardSelect')?.value || 'AP State Board';
+    const tcNo = (document.getElementById('extTcNumber')?.value || '').trim();
+    const issueDate = document.getElementById('extTcIssueDate')?.value || '';
+    const verification = document.getElementById('extVerificationStatus')?.value || 'Verified by DEO';
+    const remarks = (document.getElementById('extRemarks')?.value || '').trim();
+
+    if (!studentName || !schoolName || !tcNo) {
+      showToast('Please provide pupil name, external institution, and TC number.', 'warning');
+      return;
+    }
+
+    if (!state.externalTransfers) state.externalTransfers = [];
+    state.externalTransfers.unshift({
+      direction: direction.includes('Inward') ? 'Inward' : 'Outward',
+      name: studentName,
+      class: studentClass,
+      school: schoolName,
+      board: board,
+      extTcNo: tcNo,
+      issueDate: issueDate,
+      verification: verification,
+      notes: remarks || 'Recorded in external transfer ledger.'
+    });
+
+    closeModal('recordExternalTransferModal');
+    updateTransfersKPIs();
+    showToast(`External Transfer for ${studentName} (${tcNo}) recorded successfully in institutional register.`, 'success');
+  }
+
+  function openTcDetailModal(requestId) {
+    initTransfers();
+    activeDossierRequestId = requestId || 'TC-REQ-2026-0041';
+    const rec = (state.transfers || []).find(t => t.requestId === activeDossierRequestId) || state.transfers[0];
+    if (!rec) return;
+
+    // Header info
+    const titleEl = document.getElementById('tcDetailModalTitle');
+    const badgeEl = document.getElementById('tcDetailStatusBadge');
+    const reqPillEl = document.getElementById('tcDetailRequestIdPill');
+    const subEl = document.getElementById('tcDetailModalSubtitle');
+
+    if (titleEl) titleEl.textContent = rec.name;
+    if (badgeEl) {
+      badgeEl.textContent = rec.approvalStatus;
+      badgeEl.className = `portal-badge ${rec.approvalStatus === 'Issued' ? 'badge-success' : rec.approvalStatus === 'Approved' ? 'badge-purple' : 'badge-warning'}`;
+    }
+    if (reqPillEl) reqPillEl.textContent = rec.requestId;
+    if (subEl) subEl.textContent = `Adm No: ${rec.admNo} • ${rec.class} • Reason: ${rec.reason}`;
+
+    // Section 1: Student Profile
+    const nEl = document.getElementById('tcDossierName');
+    const admEl = document.getElementById('tcDossierAdmNo');
+    const stuIdEl = document.getElementById('tcDossierStudentId');
+    const penEl = document.getElementById('tcDossierPenNo');
+    const aadhEl = document.getElementById('tcDossierAadhaar');
+    const clsEl = document.getElementById('tcDossierClass');
+    const dobEl = document.getElementById('tcDossierDob');
+    const fEl = document.getElementById('tcDossierFather');
+    const mEl = document.getElementById('tcDossierMother');
+
+    if (nEl) nEl.textContent = rec.name;
+    if (admEl) admEl.textContent = rec.admNo;
+    if (stuIdEl) stuIdEl.textContent = rec.studentId || `STU-${rec.admNo}`;
+    if (penEl) penEl.textContent = '12059048' + (rec.admNo.replace(/D/g, '').padEnd(3, '0'));
+    if (aadhEl) aadhEl.textContent = 'XXXX-XXXX-' + (rec.admNo.replace(/D/g, '').padEnd(4, '8'));
+    if (clsEl) clsEl.textContent = rec.class;
+    if (dobEl) dobEl.textContent = `${rec.dob} (${rec.dobWords || ''})`;
+    if (fEl) fEl.textContent = rec.father;
+    if (mEl) mEl.textContent = rec.mother;
+
+    // Section 2: Requester
+    const rEl = document.getElementById('tcDossierRequester');
+    const relEl = document.getElementById('tcDossierRelation');
+    const pEl = document.getElementById('tcDossierPhone');
+    const rdEl = document.getElementById('tcDossierReqDate');
+    const ordEl = document.getElementById('tcDossierOrderRef');
+
+    if (rEl) rEl.textContent = rec.requesterName || rec.father;
+    if (relEl) relEl.textContent = rec.requesterRelationship || 'Parent/Guardian';
+    if (pEl) pEl.textContent = rec.requesterPhone || rec.guardianContact || '9848011223';
+    if (rdEl) rdEl.textContent = rec.requestDate;
+    if (ordEl) ordEl.textContent = rec.transferOrderRef || 'Parent Application on File';
+
+    // Section 3 & 4: Reason & Attendance
+    const reasEl = document.getElementById('tcDossierReason');
+    const destEl = document.getElementById('tcDossierDest');
+    const lastEl = document.getElementById('tcDossierLastDate');
+    const attEl = document.getElementById('tcDossierAttendance');
+
+    if (reasEl) reasEl.textContent = rec.reason;
+    if (destEl) destEl.textContent = `${rec.destinationSchool || '-'} (${rec.destinationCity || '-'})`;
+    if (lastEl) lastEl.textContent = rec.lastDateAttendance;
+    if (attEl) attEl.textContent = rec.attendanceRecord || '204 / 220 Days';
+
+    // Section 5: Academic History
+    const exEl = document.getElementById('tcDossierExam');
+    const cEl = document.getElementById('tcDossierConduct');
+    const promEl = document.getElementById('tcDossierPromotion');
+    const tsEl = document.getElementById('tcDossierTeacherSign');
+
+    if (exEl) exEl.textContent = rec.academicHistory?.lastExam || 'Scholastic Assessment';
+    if (cEl) cEl.textContent = rec.academicHistory?.conduct || 'GOOD';
+    if (promEl) promEl.textContent = rec.academicHistory?.qualifiedForPromotion || 'Yes';
+    if (tsEl) tsEl.textContent = rec.academicHistory?.teacherSign || 'Class Teacher Sign-off Complete';
+
+    // Section 6: Library & Assets
+    const lbEl = document.getElementById('tcDossierLibBooks');
+    const labEl = document.getElementById('tcDossierLab');
+    const spEl = document.getElementById('tcDossierSports');
+    const lsEl = document.getElementById('tcDossierLibrarianSign');
+
+    if (lbEl) lbEl.textContent = rec.libraryAssets?.booksStatus || 'All books returned';
+    if (labEl) labEl.textContent = rec.libraryAssets?.labClearance || 'Laboratory cleared';
+    if (spEl) spEl.textContent = rec.libraryAssets?.sportsKit || 'Sports gear surrendered';
+    if (lsEl) lsEl.textContent = rec.libraryAssets?.librarianSign || 'Librarian Sign-off Complete';
+
+    // Section 7: Fee Clearance
+    const dEl = document.getElementById('tcDossierDues');
+    const ndcEl = document.getElementById('tcDossierNdcRef');
+    const statEl = document.getElementById('tcDossierStatutoryStatus');
+    const bsEl = document.getElementById('tcDossierBursarSign');
+
+    if (dEl) dEl.textContent = rec.feeClearance?.duesAmount || '₹0 (No Dues)';
+    if (ndcEl) ndcEl.textContent = rec.feeClearance?.noDuesRef || 'NDC-VERIFIED';
+    if (statEl) {
+      statEl.textContent = rec.feeClearance?.isStatutoryOverride ? 'Statutory Undertaking Active (Non-Blocking Clearance)' : 'Direct Institutional Clearance';
+      statEl.className = rec.feeClearance?.isStatutoryOverride ? 'text-purple font-weight-bold' : 'text-success font-weight-bold';
+    }
+    if (bsEl) bsEl.textContent = rec.feeClearance?.bursarSign || 'Bursar Sign-off Complete';
+
+    // Section 8: Principal Approval
+    const psEl = document.getElementById('tcDossierPrincipalStatus');
+    const pdEl = document.getElementById('tcDossierPrincipalDate');
+    if (psEl) psEl.textContent = rec.approvals?.principalStatus || 'Approved';
+    if (pdEl) pdEl.textContent = rec.approvals?.principalDate || rec.issueDate || 'Pending';
+
+    // Section 10 & 11: Final Issuance & Signatures
+    const fnEl = document.getElementById('tcDossierFinalNo');
+    const fdEl = document.getElementById('tcDossierFinalDate');
+    const sigEl = document.getElementById('tcDossierSignatory');
+    const hEl = document.getElementById('tcDossierHash');
+    const permEl = document.getElementById('tcDossierPermId');
+
+    if (fnEl) fnEl.textContent = rec.tcNo || 'Pending Issue';
+    if (fdEl) fdEl.textContent = rec.issueDate || 'Pending Issue';
+    if (sigEl) sigEl.textContent = rec.authorizedSignatory || 'Smt. Gorle Varalakshmi (Executive Principal)';
+    if (hEl) hEl.textContent = rec.digitalSignHash || 'SV-DIGISIGN-RECORD';
+    if (permEl) permEl.textContent = rec.studentId || `STU-${rec.admNo}`;
+
+    // Render Preview TC Document
+    renderDossierTCDocument(rec);
+
+    // Render Actions
+    renderTcDetailActions(rec);
+
+    // Open first tab by default
+    switchTcDetailTab('profile');
+
+    openModal('tcDetailModal');
+  }
+
+  function switchTcDetailTab(tabId) {
+    const tabs = document.querySelectorAll('.tc-detail-tab-btn');
+    tabs.forEach(btn => {
+      if (btn.getAttribute('data-tab') === tabId) {
+        btn.classList.add('active');
+      } else {
+        btn.classList.remove('active');
+      }
+    });
+
+    const panes = document.querySelectorAll('.tc-detail-pane');
+    panes.forEach(pane => {
+      if (pane.id === `tcPane-${tabId}`) {
+        pane.classList.add('active');
+      } else {
+        pane.classList.remove('active');
+      }
+    });
+  }
+
+  function renderDossierTCDocument(rec) {
+    const container = document.getElementById('tcDossierDocContainer');
+    if (!container) return;
+
+    container.innerHTML = `
+      <div class="modal-tc-sheet" style="background:#fff; padding:1.5rem; border:1px solid #cbd5e1; border-radius:6px; max-width:850px; margin:0 auto; box-shadow:0 4px 12px rgba(0,0,0,0.05); font-family:serif; color:#111;">
+        <!-- Authority Header -->
+        <div style="text-align: center; font-size: 0.74rem; line-height: 1.3; color: #222; border-bottom: 1.5px solid #111; padding-bottom: 4px; margin-bottom: 5px;">
+          <div style="font-weight: 600;">Supplied by the District Common Examination Board, Visakhapatnam / Srikakulam.</div>
+          <div style="font-weight: 700;">Proceedings of the District Educational Officer, R.C.No. 72 B1 / 79 Dt. 30-5-80</div>
+          <div style="font-weight: 800; font-size: 0.85rem; letter-spacing: 1px; margin-top: 2px;">APPENDIX 16 (Rules 99, Chapter III)</div>
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 3px; font-size: 0.76rem; font-weight: 700;">
+            <span style="color: #1e3a8a;">Recognised by RJD of School Education, VSP</span>
+            <span style="border: 1px solid #111; padding: 1px 8px; border-radius: 3px; font-weight: 800;">OFFICIAL RECORD</span>
+            <span>PC NO: <strong>28132510004 1036601</strong></span>
+          </div>
+        </div>
+
+        <!-- Document Title -->
+        <div style="font-size: 1.25rem; font-weight: 900; text-align: center; letter-spacing: 1.5px; margin: 8px 0 4px; color: #0b1d3a; text-transform: uppercase;">
+          Form of Transfer Certificate
+        </div>
+        <div style="text-align:center; font-size:0.85rem; font-weight:700; color:#1e40af; margin-bottom:10px;">
+          SRI VIDYA ENGLISH MEDIUM HIGH SCHOOL (ESTD. 2017)
+        </div>
+
+        <!-- Metadata Row -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; border-bottom: 1px solid #222; padding-bottom: 6px; margin-bottom: 10px; font-size: 0.82rem; font-weight: 700;">
+          <div>TC No: <span style="color:#1d4ed8; font-weight:900;">${rec.tcNo}</span></div>
+          <div style="text-align:center;">Admission No: <strong>${rec.admNo}</strong></div>
+          <div style="text-align:right;">Date of Issue: <strong>${rec.issueDate}</strong></div>
+        </div>
+
+        <!-- Core Statutory Fields Table -->
+        <table style="width:100%; border-collapse:collapse; font-size:0.82rem; line-height:1.4;">
+          <tbody>
+            <tr style="border-bottom:1px solid #e2e8f0;"><td style="padding:4px 0; width:45%;">1. Name of the Pupil (in Block Letters):</td><td style="padding:4px 0; font-weight:800; text-transform:uppercase;">${rec.name}</td></tr>
+            <tr style="border-bottom:1px solid #e2e8f0;"><td style="padding:4px 0;">2. Name of the Father:</td><td style="padding:4px 0; font-weight:700;">${rec.father}</td></tr>
+            <tr style="border-bottom:1px solid #e2e8f0;"><td style="padding:4px 0;">3. Name of the Mother:</td><td style="padding:4px 0; font-weight:700;">${rec.mother}</td></tr>
+            <tr style="border-bottom:1px solid #e2e8f0;"><td style="padding:4px 0;">4. Nationality &amp; Religion:</td><td style="padding:4px 0;">INDIAN / HINDU</td></tr>
+            <tr style="border-bottom:1px solid #e2e8f0;"><td style="padding:4px 0;">5. Date of Birth (in Christian Era):</td><td style="padding:4px 0; font-weight:700;">${rec.dob} (${rec.dobWords || ''})</td></tr>
+            <tr style="border-bottom:1px solid #e2e8f0;"><td style="padding:4px 0;">6. Class in which the pupil was reading at leaving:</td><td style="padding:4px 0; font-weight:800; color:#1e3a8a;">${rec.class}</td></tr>
+            <tr style="border-bottom:1px solid #e2e8f0;"><td style="padding:4px 0;">7. Medium of Instruction:</td><td style="padding:4px 0;">ENGLISH (First Lang: TELUGU, Second Lang: HINDI)</td></tr>
+            <tr style="border-bottom:1px solid #e2e8f0;"><td style="padding:4px 0;">8. Qualified for Promotion to Higher Class:</td><td style="padding:4px 0; font-weight:700;">${rec.academicHistory?.qualifiedForPromotion || 'Yes'}</td></tr>
+            <tr style="border-bottom:1px solid #e2e8f0;"><td style="padding:4px 0;">9. Whether all dues to the school have been paid:</td><td style="padding:4px 0; font-weight:700;">${rec.financialClearance.includes('Cleared') ? 'YES, ALL DUES CLEARED (NO DUES)' : rec.financialClearance}</td></tr>
+            <tr style="border-bottom:1px solid #e2e8f0;"><td style="padding:4px 0;">10. Total Number of Working Days Attended:</td><td style="padding:4px 0;">${rec.attendanceRecord || '204 / 220 Days'}</td></tr>
+            <tr style="border-bottom:1px solid #e2e8f0;"><td style="padding:4px 0;">11. Date on which pupil actually left the school:</td><td style="padding:4px 0; font-weight:700;">${rec.lastDateAttendance}</td></tr>
+            <tr style="border-bottom:1px solid #e2e8f0;"><td style="padding:4px 0;">12. Date of application for Transfer Certificate:</td><td style="padding:4px 0;">${rec.requestDate}</td></tr>
+            <tr style="border-bottom:1px solid #e2e8f0;"><td style="padding:4px 0;">13. Date of issue of Transfer Certificate:</td><td style="padding:4px 0; font-weight:800; color:#1d4ed8;">${rec.issueDate}</td></tr>
+            <tr style="border-bottom:1px solid #e2e8f0;"><td style="padding:4px 0;">14. Reason for leaving the school:</td><td style="padding:4px 0; font-weight:700;">${rec.reason}</td></tr>
+            <tr><td style="padding:4px 0;">15. General Conduct &amp; Character:</td><td style="padding:4px 0; font-weight:800; color:#15803d;">${rec.academicHistory?.conduct || 'EXEMPLARY'}</td></tr>
+          </tbody>
+        </table>
+
+        <!-- Signature Block -->
+        <div style="display:flex; justify-content:space-between; align-items:flex-end; margin-top:2.5rem; padding-top:1rem; border-top:1px dashed #94a3b8;">
+          <div style="text-align:center;">
+            <div style="font-size:0.75rem; color:#475569;">Prepared &amp; Verified By</div>
+            <div style="font-weight:700; font-size:0.8rem; margin-top:2px;">Head Clerk / Office Staff</div>
+          </div>
+          <div style="text-align:center;">
+            <div style="width:70px; height:70px; border-radius:50%; border:2px solid #1e3a8a; display:flex; align-items:center; justify-content:center; color:#1e3a8a; font-size:0.68rem; font-weight:800; margin:0 auto; text-transform:uppercase; text-align:center; padding:4px;">
+              School Seal
+            </div>
+          </div>
+          <div style="text-align:center;">
+            <div style="font-size:0.75rem; color:#475569;">Authorized Signature</div>
+            <div style="font-weight:800; font-size:0.82rem; color:#0f172a; margin-top:2px;">Smt. Gorle Varalakshmi</div>
+            <div style="font-size:0.7rem; color:#64748b;">Executive Principal &amp; Headmistress</div>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  function renderTcDetailActions(rec) {
+    const container = document.getElementById('tcDetailFooterActionBtns');
+    if (!container) return;
+
+    if (rec.approvalStatus === 'Issued') {
+      container.innerHTML = `
+        <button type="button" class="btn btn-secondary btn-sm" onclick="portalApp.closeModal('tcDetailModal')">Close</button>
+        <button type="button" class="btn btn-primary btn-sm" onclick="portalApp.printTC('${rec.requestId}')">
+          <i class="fa-solid fa-print mr-1"></i> Print Official TC
+        </button>
+      `;
+    } else if (rec.approvalStatus === 'Approved') {
+      container.innerHTML = `
+        <button type="button" class="btn btn-secondary btn-sm" onclick="portalApp.closeModal('tcDetailModal')">Close</button>
+        <button type="button" class="btn btn-outline-warning btn-sm" onclick="portalApp.openDepartmentClearanceModal('${rec.requestId}')">
+          <i class="fa-solid fa-clipboard-check mr-1"></i> Edit Clearances
+        </button>
+        <button type="button" class="btn btn-success btn-sm" onclick="portalApp.openIssueTcModal('${rec.requestId}')">
+          <i class="fa-solid fa-circle-check mr-1"></i> Issue Official TC
+        </button>
+      `;
+    } else {
+      container.innerHTML = `
+        <button type="button" class="btn btn-secondary btn-sm" onclick="portalApp.closeModal('tcDetailModal')">Close</button>
+        <button type="button" class="btn btn-warning btn-sm" onclick="portalApp.openDepartmentClearanceModal('${rec.requestId}')">
+          <i class="fa-solid fa-clipboard-check mr-1"></i> Department Clearances
+        </button>
+        <button type="button" class="btn btn-primary btn-sm" onclick="portalApp.openIssueTcModal('${rec.requestId}')">
+          <i class="fa-solid fa-stamp mr-1"></i> Approve &amp; Issue TC
+        </button>
+      `;
+    }
+  }
+
+  function openDepartmentClearanceModal(requestId) {
+    initTransfers();
+    activeClearanceTargetId = requestId || activeDossierRequestId || 'TC-REQ-2026-0041';
+    const rec = (state.transfers || []).find(t => t.requestId === activeClearanceTargetId);
+    if (!rec) return;
+
+    const subEl = document.getElementById('clearanceModalSubtitle');
+    if (subEl) subEl.textContent = `Pupil: ${rec.name} (${rec.admNo} • ${rec.class})`;
+
+    const hiddenInput = document.getElementById('clearanceTargetRequestId');
+    if (hiddenInput) hiddenInput.value = rec.requestId;
+
+    // Show/hide statutory undertaking box based on dept
+    onClearanceDeptChange('Accounts');
+
+    openModal('departmentClearanceModal');
+  }
+
+  function onClearanceDeptChange(dept) {
+    const box = document.getElementById('statutoryUndertakingBox');
+    const officerInput = document.getElementById('clearanceOfficer');
+
+    if (dept === 'Accounts') {
+      if (box) box.style.display = 'block';
+      if (officerInput) officerInput.value = 'Sri P. Srinivas (Bursar)';
+    } else if (dept === 'Academic') {
+      if (box) box.style.display = 'none';
+      if (officerInput) officerInput.value = 'Sri K. V. Raman (Class Teacher)';
+    } else if (dept === 'Library') {
+      if (box) box.style.display = 'none';
+      if (officerInput) officerInput.value = 'Smt. S. Padma (Librarian)';
+    } else {
+      if (box) box.style.display = 'none';
+      if (officerInput) officerInput.value = 'Sri B. Appa Rao (Sports / Lab Incharge)';
+    }
+  }
+
+  function submitDepartmentClearance(e) {
+    if (e && e.preventDefault) e.preventDefault();
+    initTransfers();
+
+    const reqId = document.getElementById('clearanceTargetRequestId')?.value || activeClearanceTargetId;
+    const rec = (state.transfers || []).find(t => t.requestId === reqId);
+    if (!rec) return;
+
+    const dept = document.getElementById('clearanceDepartment')?.value || 'Accounts';
+    const decision = document.getElementById('clearanceStatusDecision')?.value || 'Cleared';
+    const officer = (document.getElementById('clearanceOfficer')?.value || 'Department Officer').trim();
+    const undertakingRef = (document.getElementById('statutoryUndertakingRef')?.value || '').trim();
+    const remarks = (document.getElementById('clearanceRemarks')?.value || '').trim();
+
+    const nowStr = new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+
+    if (dept === 'Academic') {
+      rec.academicClearance = (decision === 'Cleared') ? 'Cleared' : 'Pending';
+      if (!rec.academicHistory) rec.academicHistory = {};
+      rec.academicHistory.teacherSign = `${officer} (${decision} on ${nowStr})`;
+    } else if (dept === 'Library' || dept === 'SportsLab') {
+      if (!rec.libraryAssets) rec.libraryAssets = {};
+      rec.libraryAssets.booksStatus = (decision === 'Cleared') ? 'All library books returned in full' : 'Assets pending handover';
+      rec.libraryAssets.librarianSign = `${officer} (${decision} on ${nowStr})`;
+    } else if (dept === 'Accounts') {
+      if (decision === 'Statutory Undertaking') {
+        rec.financialClearance = 'Statutory Undertaking (Rule 99 AP Code)';
+        if (!rec.feeClearance) rec.feeClearance = {};
+        rec.feeClearance.isStatutoryOverride = true;
+        rec.feeClearance.statutoryRemarks = undertakingRef ? `Promissory Bond ${undertakingRef}` : 'Statutory non-blocking parent undertaking on file';
+        rec.feeClearance.bursarSign = `${officer} (Conditional Undertaking Accepted on ${nowStr})`;
+        showToast('Statutory Non-Blocking Clearance recorded: TC issuance will not be held by fee disputes.', 'warning');
+      } else if (decision === 'Cleared') {
+        rec.financialClearance = 'Cleared (No Dues)';
+        if (!rec.feeClearance) rec.feeClearance = {};
+        rec.feeClearance.duesAmount = '₹0 (No Dues)';
+        rec.feeClearance.bursarSign = `${officer} (Cleared on ${nowStr})`;
+      } else {
+        rec.financialClearance = 'Dues Pending';
+        if (!rec.feeClearance) rec.feeClearance = {};
+        rec.feeClearance.bursarSign = `${officer} (Dues Pending recorded on ${nowStr})`;
+      }
+    }
+
+    // Auto promote to Approved if both Academic and Financial are Cleared or Statutory
+    if (rec.academicClearance === 'Cleared' && (rec.financialClearance.includes('Cleared') || rec.financialClearance.includes('Statutory')) && rec.approvalStatus !== 'Issued') {
+      rec.approvalStatus = 'Approved';
+      if (!rec.approvals) rec.approvals = {};
+      rec.approvals.principalStatus = 'Approved for Issuance';
+      rec.approvals.principalDate = nowStr;
+    }
+
+    closeModal('departmentClearanceModal');
+    filterTransfers();
+
+    // Re-render dossier if open
+    const detailModal = document.getElementById('tcDetailModal');
+    if (detailModal && detailModal.classList.contains('active')) {
+      openTcDetailModal(reqId);
+    }
+
+    showToast(`${dept} Clearance updated successfully for ${rec.name}.`, 'success');
+  }
+
+  function openIssueTcModal(requestId) {
+    initTransfers();
+    activeIssueTargetId = requestId || activeDossierRequestId || 'TC-REQ-2026-0041';
+    const rec = (state.transfers || []).find(t => t.requestId === activeIssueTargetId);
+    if (!rec) return;
+
+    const subEl = document.getElementById('issueModalSubtitle');
+    if (subEl) subEl.textContent = `Pupil: ${rec.name} (${rec.admNo} • ${rec.class})`;
+
+    const hiddenInput = document.getElementById('issueTargetRequestId');
+    if (hiddenInput) hiddenInput.value = rec.requestId;
+
+    // Allocate sequential TC Number if pending
+    let tcNo = rec.tcNo;
+    if (!tcNo || tcNo === 'Pending Issue') {
+      const issuedCount = (state.transfers.filter(t => t.tcNo && t.tcNo !== 'Pending Issue').length + 41);
+      tcNo = `SV/2026/${issuedCount.toString().padStart(3, '0')}`;
+    }
+
+    const tcNoInput = document.getElementById('issueAllocatedTcNo');
+    if (tcNoInput) tcNoInput.value = tcNo;
+
+    const todayStr = new Date().toISOString().split('T')[0];
+    const dateInput = document.getElementById('issueRecordedDate');
+    if (dateInput) dateInput.value = todayStr;
+
+    openModal('issueTcModal');
+  }
+
+  function submitIssueTc(e) {
+    if (e && e.preventDefault) e.preventDefault();
+    initTransfers();
+
+    const reqId = document.getElementById('issueTargetRequestId')?.value || activeIssueTargetId;
+    const rec = (state.transfers || []).find(t => t.requestId === reqId);
+    if (!rec) return;
+
+    const allocatedTcNo = document.getElementById('issueAllocatedTcNo')?.value || `SV/2026/049`;
+    const issueDate = document.getElementById('issueRecordedDate')?.value || new Date().toISOString().split('T')[0];
+    const conduct = document.getElementById('issueConduct')?.value || 'EXEMPLARY • TOP MERIT SCHOLAR';
+    const transitionChecked = document.getElementById('issueTransitionEnrolmentCheckbox')?.checked;
+
+    rec.tcNo = allocatedTcNo;
+    rec.issueDate = issueDate;
+    rec.approvalStatus = 'Issued';
+    if (!rec.academicHistory) rec.academicHistory = {};
+    rec.academicHistory.conduct = conduct;
+    rec.authorizedSignatory = 'Smt. Gorle Varalakshmi (Executive Principal)';
+    rec.digitalSignHash = 'SV-DIGISIGN-' + Math.random().toString(36).substring(2, 10).toUpperCase();
+
+    // TRANSITION STUDENT TO TRANSFERRED STATUS WHILE PRESERVING HISTORICAL DATA
+    if (transitionChecked) {
+      const students = state.students || (typeof window !== 'undefined' && window.STUDENT_ROSTER) || [];
+      const student = students.find(s => (s.id === rec.admNo || s.studentId === rec.studentId || s.admNo === rec.admNo || s.name === rec.name));
+      if (student) {
+        student.status = 'Transferred';
+        student.effectiveWithdrawalDate = issueDate;
+        student.tcNumber = allocatedTcNo;
+      }
+    }
+
+    closeModal('issueTcModal');
+    filterTransfers();
+
+    // Re-render dossier if open
+    const detailModal = document.getElementById('tcDetailModal');
+    if (detailModal && detailModal.classList.contains('active')) {
+      openTcDetailModal(reqId);
+    }
+
+    showToast(`Transfer Certificate ${allocatedTcNo} formally issued for ${rec.name}. Student status updated to Transferred; historical records retained.`, 'success');
+  }
+
+  function exportTransfersCSV() {
+    initTransfers();
+    const all = state.transfers || [];
+    let csv = 'TCRequestID,StudentName,AdmissionNumber,Class,RequestDate,Reason,AcademicClearance,FinancialClearance,ApprovalStatus,TCNumber,IssueDate,LastAttendanceDate\n';
+    all.forEach(t => {
+      csv += `"${t.requestId}","${t.name}","${t.admNo}","${t.class}","${t.requestDate}","${t.reason}","${t.academicClearance}","${t.financialClearance}","${t.approvalStatus}","${t.tcNo}","${t.issueDate}","${t.lastDateAttendance}"\n`;
+    });
+    downloadCsvFile(csv, 'sri_vidya_transfers_master_register.csv');
+    showToast('Transfers Master Register exported to CSV successfully.', 'success');
+  }
+
+  function printTransfersTable() {
+    initTransfers();
+    window.print();
+  }
+
+  function printCurrentDossierTC() {
+    const rec = (state.transfers || []).find(t => t.requestId === activeDossierRequestId) || state.transfers[0];
+    if (rec) {
+      printTC(rec.requestId);
+    }
+  }
+
+  // Backwards-compatible printTC using Appendix 16 layout
+  function printTC(tcKeyOrReqId) {
+    initTransfers();
+    let rec = (state.transfers || []).find(t => t.requestId === tcKeyOrReqId || t.tcNo === tcKeyOrReqId);
+    if (!rec) {
+      rec = state.transfers[0];
+    }
+
+    activeModalTcKey = rec.requestId || 'TC-2026-001';
+    renderDossierTCDocument(rec);
+    openTcDetailModal(rec.requestId);
+    switchTcDetailTab('preview');
+  }
+
+  function downloadTCPdf(tcKeyOrReqId) {
+    printTC(tcKeyOrReqId);
   }
 
   function onModalTCChange(val) {
-    activeModalTcKey = val;
-    renderModalTCDocument();
+    openTcDetailModal(val);
   }
 
   function onModalCopyTypeChange(val) {
@@ -8807,269 +10066,17 @@ const FEE_CATEGORY_AUDIT_DATA = [
   }
 
   function renderModalTCDocument() {
-    const container = document.getElementById('tcModalDocumentContainer');
-    if (!container) return;
-
-    const rec = TC_OFFICIAL_RECORDS[activeModalTcKey] || TC_OFFICIAL_RECORDS['TC-2026-001'];
-
-    // Format 12-box Aadhaar
-    const digits = (rec.aadhaar || '435784109235').replace(/\D/g, '').padEnd(12, 'X');
-    let aadhaarBoxes = '';
-    for (let i = 0; i < 12; i++) {
-      if (i === 4 || i === 8) {
-        aadhaarBoxes += '<span style="width: 4px; display:inline-block;"></span>';
-      }
-      let char = digits[i];
-      if (isModalAadhaarMasked && i < 8) {
-        char = '&bull;';
-      }
-      aadhaarBoxes += `<span style="width: 15px; height: 16px; border: 1px solid #222; display: inline-flex; align-items: center; justify-content: center; font-family: sans-serif; font-size: 0.76rem; font-weight: 700; background: #fafafa; margin: 0 1px;">${char}</span>`;
-    }
-
-    container.innerHTML = `
-      <div class="modal-tc-sheet" id="printableTcDoc">
-        <div class="modal-tc-inner">
-          <!-- Authority Header -->
-          <div style="text-align: center; font-size: 0.74rem; line-height: 1.3; color: #222; border-bottom: 1.5px solid #111; padding-bottom: 4px; margin-bottom: 5px;">
-            <div style="font-weight: 600;">Supplied by the District Common Examination Board, Visakhapatnam.</div>
-            <div style="font-weight: 700;">Proceedings of the District Educational Officer, Visakhapatnam R.C.No. 72 B1 / 79 Dt. 30-5-80</div>
-            <div style="font-weight: 800; font-size: 0.8rem; letter-spacing: 1px; margin-top: 2px;">APPENDIX 16 (Rules 99, Chapter III)</div>
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 3px; font-size: 0.74rem; font-weight: 700;">
-              <span style="color: #1e3a8a;">Recognised by RJD of School Education, VSP</span>
-              <span style="border: 1px solid #111; padding: 1px 8px; border-radius: 3px; font-family: serif; font-weight: 800;">${activeModalCopyType}</span>
-              <span>PC NO: <strong>28132510004 1036601</strong></span>
-            </div>
-          </div>
-
-          <!-- Document Title -->
-          <div style="font-family: serif; font-size: 1.15rem; font-weight: 900; text-align: center; letter-spacing: 1.5px; margin: 4px 0 2px; color: #0b1d3a; text-transform: uppercase;">
-            Form of Transfer Certificate
-          </div>
-
-          <!-- Meta Reference Row -->
-          <div style="display: grid; grid-template-columns: 1.4fr 1.1fr 1.3fr; align-items: center; border-bottom: 1px solid #222; padding: 3px 0 5px; margin-bottom: 6px; font-size: 0.8rem; font-weight: 700;">
-            <span>Transfer Certificate No. : <strong style="color:#0b1d3a; font-family:sans-serif;">${rec.tcNo}</strong></span>
-            <span>Admn. No. : <strong style="color:#0b1d3a; font-family:sans-serif;">${rec.admNo}</strong></span>
-            <span>PEN No. : <strong style="color:#0b1d3a; font-family:sans-serif;">${rec.penNo}</strong></span>
-          </div>
-
-          <!-- 21 Numbered Items -->
-          <div style="display: flex; flex-direction: column; gap: 3.5px; font-size: 0.825rem; line-height: 1.32;">
-            <div style="display: flex; align-items: baseline;">
-              <span style="font-weight: 700; flex-shrink: 0;">1. Name of the School (Place and District) &amp; UDISE Code :</span>
-              <span style="flex: 1; border-bottom: 1px dotted #333; padding: 0 4px; font-weight: 700; color: #0b1d3a; font-family: sans-serif; font-size: 0.8rem;">SRI VIDYA E.M HIGH SCHOOL, SRIHARIPURAM, VISAKHAPATNAM - 530026 (UDISE: 28132510004)</span>
-            </div>
-
-            <div style="display: flex; align-items: baseline; flex-wrap: wrap;">
-              <span style="font-weight: 700; flex-shrink: 0;">2. Name of the Pupil :</span>
-              <span style="flex: 1; border-bottom: 1px dotted #333; padding: 0 4px; font-weight: 700; color: #0b1d3a; font-family: sans-serif; font-size: 0.8rem; min-width: 200px;">${rec.name}</span>
-              <div style="display: inline-flex; align-items: baseline; margin-left: 8px;">
-                <span style="font-weight: 700; font-size: 0.78rem;">AADHAAR NO. :</span>
-                <div style="display: inline-flex; align-items: center; margin-left: 6px;">${aadhaarBoxes}</div>
-              </div>
-            </div>
-
-            <div style="display: flex; align-items: baseline;">
-              <span style="font-weight: 700; flex-shrink: 0;">3. a) Name of the Father :</span>
-              <span style="flex: 1; border-bottom: 1px dotted #333; padding: 0 4px; font-weight: 700; color: #0b1d3a; font-family: sans-serif; font-size: 0.8rem;">${rec.father}</span>
-            </div>
-            <div style="display: flex; align-items: baseline; margin-left: 1.25rem;">
-              <span style="font-weight: 700; flex-shrink: 0;">b) Name of the Mother :</span>
-              <span style="flex: 1; border-bottom: 1px dotted #333; padding: 0 4px; font-weight: 700; color: #0b1d3a; font-family: sans-serif; font-size: 0.8rem;">${rec.mother}</span>
-            </div>
-            <div style="display: flex; align-items: baseline; margin-left: 1.25rem;">
-              <span style="font-weight: 700; flex-shrink: 0;">c) Name of the Guardian :</span>
-              <span style="flex: 1; border-bottom: 1px dotted #333; padding: 0 4px; font-weight: 700; color: #0b1d3a; font-family: sans-serif; font-size: 0.8rem;">${rec.guardian}</span>
-            </div>
-
-            <div style="display: flex; align-items: baseline;">
-              <span style="font-weight: 700; flex-shrink: 0;">4. Nationality and Religion :</span>
-              <span style="flex: 1; border-bottom: 1px dotted #333; padding: 0 4px; font-weight: 700; color: #0b1d3a; font-family: sans-serif; font-size: 0.8rem;">${rec.nationalityReligion}</span>
-            </div>
-
-            <div style="display: flex; align-items: flex-start;">
-              <span style="font-weight: 700; flex-shrink: 0; max-width: 48%; line-height: 1.25;">5. Whether the candidate belongs to SCs or STs or Vimuktha Jathis or other socially and Educationally Backward classes specified in the A.P. Educational Rules :</span>
-              <span style="flex: 1; border-bottom: 1px dotted #333; padding: 0 4px; font-weight: 700; color: #0b1d3a; font-family: sans-serif; font-size: 0.8rem; margin-top: 4px;">${rec.caste}</span>
-            </div>
-
-            <div style="display: flex; align-items: baseline;">
-              <span style="font-weight: 700; flex-shrink: 0;">6. Date of birth (in words) as entered in the Admission Register :</span>
-              <span style="flex: 1; border-bottom: 1px dotted #333; padding: 0 4px; font-weight: 700; color: #0b1d3a; font-family: sans-serif; font-size: 0.8rem;">${rec.dobWords}</span>
-            </div>
-
-            <div style="display: flex; align-items: baseline;">
-              <span style="font-weight: 700; flex-shrink: 0;">7. (a) Class in which the pupil was reading at the time of leaving (in words) :</span>
-              <span style="flex: 1; border-bottom: 1px dotted #333; padding: 0 4px; font-weight: 700; color: #0b1d3a; font-family: sans-serif; font-size: 0.8rem;">${rec.classLeaving}</span>
-            </div>
-            <div style="display: flex; align-items: baseline; margin-left: 1.25rem;">
-              <span style="font-weight: 700; flex-shrink: 0;">(b) (i) First Language :</span>
-              <span style="flex: 1; border-bottom: 1px dotted #333; padding: 0 4px; font-weight: 700; color: #0b1d3a; font-family: sans-serif; font-size: 0.8rem; max-width: 140px;">${rec.lang1}</span>
-              <span style="font-weight: 700; margin-left: 12px; flex-shrink: 0;">(ii) Second Language :</span>
-              <span style="flex: 1; border-bottom: 1px dotted #333; padding: 0 4px; font-weight: 700; color: #0b1d3a; font-family: sans-serif; font-size: 0.8rem;">${rec.lang2}</span>
-            </div>
-            <div style="display: flex; align-items: baseline; margin-left: 1.25rem;">
-              <span style="font-weight: 700; flex-shrink: 0;">(c) Course offered i.e. whether academic or bifurcated :</span>
-              <span style="flex: 1; border-bottom: 1px dotted #333; padding: 0 4px; font-weight: 700; color: #0b1d3a; font-family: sans-serif; font-size: 0.8rem;">${rec.course}</span>
-            </div>
-
-            <div style="display: flex; align-items: baseline;">
-              <span style="font-weight: 700; flex-shrink: 0;">8. Mother Tongue &ndash; Medium of instruction Optional :</span>
-              <span style="flex: 1; border-bottom: 1px dotted #333; padding: 0 4px; font-weight: 700; color: #0b1d3a; font-family: sans-serif; font-size: 0.8rem;">${rec.motherTongueMedium}</span>
-            </div>
-
-            <div style="display: flex; align-items: baseline;">
-              <span style="font-weight: 700; flex-shrink: 0;">9. Date of admission or promotion to that class (year in words) :</span>
-              <span style="flex: 1; border-bottom: 1px dotted #333; padding: 0 4px; font-weight: 700; color: #0b1d3a; font-family: sans-serif; font-size: 0.8rem;">${rec.admPromotionDate}</span>
-            </div>
-
-            <div style="display: flex; align-items: baseline;">
-              <span style="font-weight: 700; flex-shrink: 0;">10. Class and year in which the pupil was first admitted into the school :</span>
-              <span style="flex: 1; border-bottom: 1px dotted #333; padding: 0 4px; font-weight: 700; color: #0b1d3a; font-family: sans-serif; font-size: 0.8rem;">${rec.firstAdmClassYear}</span>
-            </div>
-
-            <div style="display: flex; align-items: baseline;">
-              <span style="font-weight: 700; flex-shrink: 0;">11. Whether qualified for promotion to a Higher Class :</span>
-              <span style="flex: 1; border-bottom: 1px dotted #333; padding: 0 4px; font-weight: 700; color: #0b1d3a; font-family: sans-serif; font-size: 0.8rem;">${rec.promotion}</span>
-            </div>
-
-            <div style="display: flex; align-items: baseline;">
-              <span style="font-weight: 700; flex-shrink: 0;">12. Whether the pupil has paid all the fees due to the school :</span>
-              <span style="flex: 1; border-bottom: 1px dotted #333; padding: 0 4px; font-weight: 700; color: #0b1d3a; font-family: sans-serif; font-size: 0.8rem;">${rec.feesPaid}</span>
-            </div>
-
-            <div style="display: flex; align-items: baseline;">
-              <span style="font-weight: 700; flex-shrink: 0;">13. (a) Whether in receipt of any scholarship (Nature specified) :</span>
-              <span style="flex: 1; border-bottom: 1px dotted #333; padding: 0 4px; font-weight: 700; color: #0b1d3a; font-family: sans-serif; font-size: 0.8rem;">${rec.scholarship}</span>
-            </div>
-            <div style="display: flex; align-items: baseline; margin-left: 1.25rem;">
-              <span style="font-weight: 700; flex-shrink: 0;">(b) Whether in receipt of any concession (Nature specified) :</span>
-              <span style="flex: 1; border-bottom: 1px dotted #333; padding: 0 4px; font-weight: 700; color: #0b1d3a; font-family: sans-serif; font-size: 0.8rem;">${rec.concession}</span>
-            </div>
-
-            <div style="display: flex; align-items: baseline;">
-              <span style="font-weight: 700; flex-shrink: 0;">14. Whether the pupil has undergone medical inspection :</span>
-              <span style="flex: 1; border-bottom: 1px dotted #333; padding: 0 4px; font-weight: 700; color: #0b1d3a; font-family: sans-serif; font-size: 0.8rem;">${rec.medical}</span>
-            </div>
-
-            <div style="display: flex; align-items: baseline;">
-              <span style="font-weight: 700; flex-shrink: 0;">15. Personal marks of identification :</span>
-            </div>
-            <div style="display: flex; align-items: baseline; margin-left: 1.25rem;">
-              <span style="font-weight: 700; flex-shrink: 0;">(i)</span>
-              <span style="flex: 1; border-bottom: 1px dotted #333; padding: 0 4px; font-weight: 700; color: #0b1d3a; font-family: sans-serif; font-size: 0.8rem;">${rec.mole1}</span>
-            </div>
-            <div style="display: flex; align-items: baseline; margin-left: 1.25rem;">
-              <span style="font-weight: 700; flex-shrink: 0;">(ii)</span>
-              <span style="flex: 1; border-bottom: 1px dotted #333; padding: 0 4px; font-weight: 700; color: #0b1d3a; font-family: sans-serif; font-size: 0.8rem;">${rec.mole2}</span>
-            </div>
-
-            <div style="display: flex; align-items: baseline;">
-              <span style="font-weight: 700; flex-shrink: 0;">16. Date on which the pupil actually left the School :</span>
-              <span style="flex: 1; border-bottom: 1px dotted #333; padding: 0 4px; font-weight: 700; color: #0b1d3a; font-family: sans-serif; font-size: 0.8rem;">${rec.dateLeft}</span>
-            </div>
-
-            <div style="display: flex; align-items: baseline;">
-              <span style="font-weight: 700; flex-shrink: 0;">17. Date on which application for TC was made by Parent/Guardian :</span>
-              <span style="flex: 1; border-bottom: 1px dotted #333; padding: 0 4px; font-weight: 700; color: #0b1d3a; font-family: sans-serif; font-size: 0.8rem;">${rec.appDate}</span>
-            </div>
-
-            <div style="display: flex; align-items: baseline;">
-              <span style="font-weight: 700; flex-shrink: 0;">18. Date of the Transfer Certificate :</span>
-              <span style="flex: 1; border-bottom: 1px dotted #333; padding: 0 4px; font-weight: 700; color: #0b1d3a; font-family: sans-serif; font-size: 0.8rem;">${rec.issueDate}</span>
-            </div>
-
-            <div style="display: flex; align-items: baseline;">
-              <span style="font-weight: 700; flex-shrink: 0;">19. CONDUCT :</span>
-              <span style="flex: 1; border-bottom: 1px dotted #333; padding: 0 4px; font-weight: 800; color: #166534; font-family: sans-serif; font-size: 0.8rem;">${rec.conduct}</span>
-            </div>
-
-            <div style="display: flex; align-items: baseline;">
-              <span style="font-weight: 700; flex-shrink: 0;">20. Attendance in the Class of leaving days Present / Total working days :</span>
-              <span style="flex: 1; border-bottom: 1px dotted #333; padding: 0 4px; font-weight: 700; color: #0b1d3a; font-family: sans-serif; font-size: 0.8rem;">${rec.attendance}</span>
-            </div>
-
-            <div style="display: flex; align-items: baseline;">
-              <span style="font-weight: 700; flex-shrink: 0;">21. Signature of the Head of the School :</span>
-              <span style="flex: 1; color: #475569; font-style: italic; font-size: 0.78rem;">(Affixed Below with Institutional Seal)</span>
-            </div>
-          </div>
-
-          <!-- Signatures Section -->
-          <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-top: 10px; padding-top: 8px; border-top: 1px solid #444;">
-            <div style="text-align: left; font-size: 0.76rem;">
-              <div style="height: 28px; display: flex; align-items: flex-end;">
-                <span style="font-family: serif; font-size: 1.05rem; font-weight: 700; color: #1e3a8a;">B. Narayana</span>
-              </div>
-              <div style="font-family: serif; font-size: 0.82rem; font-weight: 800; color: #0b1d3a;">Prepared &amp; Verified By</div>
-              <div style="font-size: 0.68rem; color: #475569;">Senior Academic In-Charge</div>
-            </div>
-
-            <div style="text-align: center;">
-              <div style="width: 58px; height: 58px; border: 2px dashed #0b1d3a; border-radius: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 0.42rem; font-weight: 800; text-transform: uppercase; text-align: center; padding: 2px; color: #0b1d3a; background: #fafbfc; line-height: 1.15;">
-                SRI VIDYA E.M.<br>HIGH SCHOOL<br>VISAKHAPATNAM
-              </div>
-              <div style="font-size: 0.68rem; color: #475569; margin-top: 3px;">Institutional Seal</div>
-            </div>
-
-            <div style="text-align: right; font-size: 0.76rem;">
-              <div style="height: 28px; display: flex; align-items: flex-end; justify-content: flex-end;">
-                <span style="font-family: serif; font-size: 0.95rem; font-weight: 900; color: #0b1d3a;">G. Varalakshmi</span>
-              </div>
-              <div style="font-family: serif; font-size: 0.82rem; font-weight: 800; color: #0b1d3a;">Head of the School</div>
-              <div style="font-size: 0.68rem; color: #475569;">Principal &amp; Academic Director</div>
-            </div>
-          </div>
-
-          <!-- Mandatory Statutory Notes -->
-          <div style="margin-top: 8px; padding-top: 4px; border-top: 1px solid #666; font-size: 0.64rem; line-height: 1.25; color: #333;">
-            <strong>Note :</strong>
-            <ol style="margin-left: 1.25rem; padding-left: 0;">
-              <li>Schools under private management shall have the word "Recognised under the Andhra Pradesh Educational Rules" printed in the Transfer Certificate to be issued by them.</li>
-              <li>Transfer Certificate issued by Secondary Schools under private management without the words "Recognised under the Andhra Pradesh Educational Rules" shall not be considered valid for purposes of admission.</li>
-              <li>In case the pupil is leaving the State of Andhra Pradesh this certificate will not be valid without the counter-signature of the Inspecting Officer concerned.</li>
-            </ol>
-          </div>
-        </div>
-      </div>
-    `;
+    const rec = (state.transfers || []).find(t => t.requestId === activeModalTcKey || t.tcNo === activeModalTcKey) || state.transfers[0];
+    renderDossierTCDocument(rec);
   }
 
   function printCurrentModalTC() {
-    const content = document.getElementById('tcModalDocumentContainer')?.innerHTML;
-    if (!content) return;
-
-    const printWin = window.open('', '_blank');
-    if (!printWin) {
-      window.print();
-      return;
-    }
-
-    printWin.document.write(`
-      <!DOCTYPE html>
-      <html>
-      <head>
-        <title>Official Form of Transfer Certificate</title>
-        <link rel="stylesheet" href="css/portal.css">
-        <style>
-          @page { size: A4 portrait; margin: 8mm; }
-          body { font-family: 'EB Garamond', serif; background: #fff; color: #000; padding: 10px; margin: 0; }
-          .modal-tc-sheet { border: 2px solid #222 !important; box-shadow: none !important; width: 100% !important; }
-        </style>
-      </head>
-      <body>
-        ${content}
-        <script>window.onload = function() { window.print(); window.close(); }</script>
-      </body>
-      </html>
-    `);
-    printWin.document.close();
+    window.print();
   }
 
   function downloadCurrentModalTCPdf() {
-    showToast('Exporting certified digital Transfer Certificate to PDF...', 'info');
-    printCurrentModalTC();
+    window.print();
   }
-
 
   // Academic Performance & Charts Subview
   function renderAcademicPerformance() {
@@ -37722,6 +38729,29 @@ const classData = TIMETABLE_CLASS_DATA[currentTimetableClass] || TIMETABLE_CLASS
     markAllNotificationsAsRead,
     addNewNotification,
     printTC,
+    initTransfers,
+    updateTransfersKPIs,
+    renderTransfersTable,
+    filterTransfers,
+    resetTransfersFilters,
+    openNewTcRequestModal,
+    populateTcStudentDropdown,
+    onTcStudentSelectChange,
+    submitNewTcRequest,
+    openRecordExternalTransferModal,
+    submitRecordExternalTransfer,
+    openTcDetailModal,
+    switchTcDetailTab,
+    renderDossierTCDocument,
+    renderTcDetailActions,
+    openDepartmentClearanceModal,
+    onClearanceDeptChange,
+    submitDepartmentClearance,
+    openIssueTcModal,
+    submitIssueTc,
+    exportTransfersCSV,
+    printTransfersTable,
+    printCurrentDossierTC,
     downloadTCPdf,
     onModalTCChange,
     onModalCopyTypeChange,
