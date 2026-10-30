@@ -17732,3 +17732,233 @@ input:disabled + .perm-slider {
   background: #eff6ff;
   border-color: #93c5fd;
 }
+
+/* ==========================================================================
+   STUDENT PROFILES SPECIFICATION - ENHANCED STYLING
+   Authoritative Student Register, 14-Tab Dossier, Multi-Step Wizard,
+   Clearance Checklist, Duplicate Scanner, and Audit Modals
+   ========================================================================== */
+
+/* Multi-Step Wizard Stepper */
+.wizard-stepper-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+  margin-bottom: 1.5rem;
+  padding: 0 0.5rem;
+}
+
+.wizard-stepper-wrap::before {
+  content: '';
+  position: absolute;
+  top: 18px;
+  left: 25px;
+  right: 25px;
+  height: 3px;
+  background: #e2e8f0;
+  z-index: 1;
+}
+
+.wizard-step-node {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  background: transparent;
+  cursor: pointer;
+  border: none;
+  padding: 0;
+}
+
+.wizard-step-bubble {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #ffffff;
+  border: 2px solid #cbd5e1;
+  color: #64748b;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.85rem;
+  font-weight: 700;
+  transition: all 0.25s ease;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.wizard-step-node.active .wizard-step-bubble {
+  background: #1e40af;
+  border-color: #1e40af;
+  color: #ffffff;
+  box-shadow: 0 0 0 4px rgba(30, 64, 175, 0.2);
+}
+
+.wizard-step-node.completed .wizard-step-bubble {
+  background: #10b981;
+  border-color: #10b981;
+  color: #ffffff;
+}
+
+.wizard-step-label {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #64748b;
+  text-align: center;
+  max-width: 80px;
+  line-height: 1.2;
+}
+
+.wizard-step-node.active .wizard-step-label {
+  color: #1e40af;
+  font-weight: 700;
+}
+
+.wizard-step-node.completed .wizard-step-label {
+  color: #047857;
+}
+
+/* 14-Tab Dossier Navigation */
+.dossier-tab-strip {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  overflow-x: auto;
+  border-bottom: 2px solid #e2e8f0;
+  padding-bottom: 2px;
+  margin-bottom: 1.25rem;
+  scrollbar-width: thin;
+}
+
+.dossier-tab-strip::-webkit-scrollbar {
+  height: 4px;
+}
+
+.dossier-tab-strip::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+
+.dossier-tab-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #64748b;
+  background: transparent;
+  border: none;
+  border-bottom: 3px solid transparent;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border-radius: 6px 6px 0 0;
+}
+
+.dossier-tab-item:hover {
+  color: #1e40af;
+  background: #f8fafc;
+}
+
+.dossier-tab-item.active {
+  color: #1e40af;
+  font-weight: 700;
+  border-bottom-color: #1e40af;
+  background: #eff6ff;
+}
+
+.dossier-tab-pane {
+  display: none;
+}
+
+.dossier-tab-pane.active {
+  display: block;
+  animation: fadeIn 0.2s ease-in;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Duplicate Student Detection Alert */
+.duplicate-alert-box {
+  border-radius: 8px;
+  padding: 12px 16px;
+  margin-bottom: 1.25rem;
+  font-size: 0.85rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.duplicate-alert-clean {
+  background: #ecfdf5;
+  border: 1px solid #a7f3d0;
+  color: #065f46;
+}
+
+.duplicate-alert-warning {
+  background: #fffbeb;
+  border: 1px solid #fde68a;
+  color: #92400e;
+}
+
+/* Formal Transfer & Clearance Checklist */
+.clearance-check-card {
+  background: #f8fafc;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 12px 14px;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.clearance-check-card.checked {
+  background: #f0fdf4;
+  border-color: #86efac;
+}
+
+.clearance-status-tag {
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+
+/* Action Dropdown Menu */
+.student-actions-dropdown {
+  min-width: 210px;
+  box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1), 0 8px 10px -6px rgba(0,0,0,0.1);
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 6px;
+  z-index: 1050;
+}
+
+.student-actions-dropdown .dropdown-item {
+  font-size: 0.8rem;
+  font-weight: 500;
+  padding: 8px 12px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #334155;
+  transition: all 0.15s ease;
+}
+
+.student-actions-dropdown .dropdown-item:hover {
+  background: #f1f5f9;
+  color: #0f172a;
+}
+
+.student-actions-dropdown .dropdown-item.text-danger:hover {
+  background: #fee2e2;
+  color: #b91c1c;
+}
