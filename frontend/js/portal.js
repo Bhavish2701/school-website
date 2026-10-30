@@ -17019,282 +17019,1005 @@ const FEE_CATEGORY_AUDIT_DATA = [
   function openStaffDossier(id) { openStaffDetailModal(id); }
 
 
-    let leaveFilterSearchQuery = '';
-  let leaveFilterCategory = '';
-  let leaveFilterType = '';
-  let leaveFilterStatus = '';
+    // =========================================================================
+  // AUTHORITATIVE LEAVE REQUESTS & LEAVE HISTORY MODULE CONTROLLER
+  // Sri Vidya E.M. High School - Standard Leave & Substitution System
+  // =========================================================================
+
+  let leaveCurrentViewMode = 'table';
+
+  function ensureStaffLeaveState() {
+    ensureTeachersEnriched();
+    if (!state.staffLeaveBalances) {
+      state.staffLeaveBalances = {};
+    }
+
+    // Build balances for all 42 staff if not yet populated
+    const facultyList = (state.faculty || []).map(f => ({
+      id: f.employeeId || f.id,
+      name: f.name,
+      department: f.department || 'Academic Instruction',
+      isTeaching: true
+    }));
+
+    const nonTeachingList = (state.nonTeachingStaff || NON_TEACHING_STAFF_DATA || []).map(nt => ({
+      id: nt.employeeId || nt.id,
+      name: nt.name,
+      department: nt.dept || nt.department || 'Administrative Office',
+      isTeaching: false
+    }));
+
+    const fullCadre = [...facultyList, ...nonTeachingList];
+
+    fullCadre.forEach((s, idx) => {
+      if (!state.staffLeaveBalances[s.id]) {
+        state.staffLeaveBalances[s.id] = {
+          casualTotal: 12,
+          casualBalance: Math.max(6, 12 - (idx % 5)),
+          medicalTotal: 12,
+          medicalBalance: Math.max(7, 12 - (idx % 4)),
+          earnedTotal: 15,
+          earnedBalance: Math.max(10, 15 - (idx % 3)),
+          availedThisYear: (idx % 5) + 1
+        };
+      }
+    });
+
+    if (!state.leaveRequests || state.leaveRequests.length === 0) {
+      state.leaveRequests = [
+        {
+          id: 'LV-2026-001',
+          employeeId: 'SV-STF-0201',
+          employeeName: 'Smt. M. Vijaya',
+          department: 'Administrative Office',
+          isTeaching: false,
+          leaveType: 'Casual Leave',
+          startDate: '2026-11-02',
+          endDate: '2026-11-03',
+          duration: '2 Days',
+          durationDays: 2,
+          reason: 'Family religious function and domestic ceremonies in native village.',
+          supportingDoc: null,
+          hasSubstitute: true,
+          substituteId: 'SV-STF-0209',
+          substituteName: 'Smt. G. Bhavani',
+          classesCovered: 'Admissions & Student Master Records Desk',
+          approver: 'Principal Smt. Gorle Varalakshmi',
+          decision: 'Pending Sign-off',
+          remarks: 'Substitute confirmed. Awaiting final executive approval.',
+          submittedAt: '2026-10-29T09:30:00Z',
+          reviewedAt: null,
+          reviewedBy: null
+        },
+        {
+          id: 'LV-2026-002',
+          employeeId: 'SV-STF-0203',
+          employeeName: 'Sri V. Suresh Babu',
+          department: 'Science Laboratories',
+          isTeaching: false,
+          leaveType: 'Medical Leave',
+          startDate: '2026-11-04',
+          endDate: '2026-11-06',
+          duration: '3 Days',
+          durationDays: 3,
+          reason: 'Severe seasonal viral fever and acute bronchitis; bed rest advised by physician.',
+          supportingDoc: 'Medical_Certificate_Dr_Rao_Vizianagaram.pdf',
+          hasSubstitute: true,
+          substituteId: 'SV-STF-0206',
+          substituteName: 'Sri K. Nagaraju',
+          classesCovered: 'Science Lab 1 Practical Apparatus Oversight',
+          approver: 'Vice Principal Sri Navva Anand',
+          decision: 'Pending Sign-off',
+          remarks: 'Medical certificate attached. Practical revision schedule adjusted.',
+          submittedAt: '2026-10-30T08:15:00Z',
+          reviewedAt: null,
+          reviewedBy: null
+        },
+        {
+          id: 'LV-2026-003',
+          employeeId: 'SV-STF-0210',
+          employeeName: 'Sri D. Ramana',
+          department: 'Finance & Accounts',
+          isTeaching: false,
+          leaveType: 'Casual Leave',
+          startDate: '2026-10-28',
+          endDate: '2026-10-29',
+          duration: '2 Days',
+          durationDays: 2,
+          reason: 'Personal land registration work at Mandal Revenue Office.',
+          supportingDoc: null,
+          hasSubstitute: true,
+          substituteId: 'SV-STF-0202',
+          substituteName: 'Sri B. Kishore',
+          classesCovered: 'Tuition Fee Counter 2 Cash Collections',
+          approver: 'Principal Smt. Gorle Varalakshmi',
+          decision: 'Approved',
+          remarks: 'Approved. Fee counter operations covered by Accounts Head Sri B. Kishore.',
+          submittedAt: '2026-10-26T11:00:00Z',
+          reviewedAt: '2026-10-27T10:00:00Z',
+          reviewedBy: 'Principal Smt. Gorle Varalakshmi'
+        },
+        {
+          id: 'LV-2026-004',
+          employeeId: 'SV-FAC-0105',
+          employeeName: 'Sri M. Srinivas',
+          department: 'Social Studies',
+          isTeaching: true,
+          leaveType: 'On Duty (OD)',
+          startDate: '2026-10-25',
+          endDate: '2026-10-26',
+          duration: '2 Days',
+          durationDays: 2,
+          reason: 'Deputed to CBSE Regional Office for official school affiliation inspection.',
+          supportingDoc: 'CBSE_Deputation_Order_2026.pdf',
+          hasSubstitute: true,
+          substituteId: 'SV-FAC-0103',
+          substituteName: 'Sri K. Anand Kumar',
+          classesCovered: 'Class X-A & IX-A Social Studies Periods',
+          approver: 'Principal Smt. Gorle Varalakshmi',
+          decision: 'Approved',
+          remarks: 'Official board duty approved. Duty certificate to be submitted upon return.',
+          submittedAt: '2026-10-22T09:00:00Z',
+          reviewedAt: '2026-10-23T14:30:00Z',
+          reviewedBy: 'Principal Smt. Gorle Varalakshmi'
+        },
+        {
+          id: 'LV-2026-005',
+          employeeId: 'SV-STF-0207',
+          employeeName: 'Sri P. Appa Rao',
+          department: 'Transport Operations',
+          isTeaching: false,
+          leaveType: 'Medical Leave',
+          startDate: '2026-10-15',
+          endDate: '2026-10-17',
+          duration: '3 Days',
+          durationDays: 3,
+          reason: 'Spinal physiotherapy and diagnostic tests at District Govt Hospital.',
+          supportingDoc: 'Hospital_Physio_Referral.pdf',
+          hasSubstitute: true,
+          substituteId: 'SV-STF-0211',
+          substituteName: 'Sri T. Murali',
+          classesCovered: 'Bus Route 04 (Ring Road to School) Driver Duty',
+          approver: 'Vice Principal Sri Navva Anand',
+          decision: 'Approved',
+          remarks: 'Approved. Bus Route 4 operated by Senior Driver Sri T. Murali.',
+          submittedAt: '2026-10-13T16:00:00Z',
+          reviewedAt: '2026-10-14T09:30:00Z',
+          reviewedBy: 'Vice Principal Sri Navva Anand'
+        },
+        {
+          id: 'LV-2026-006',
+          employeeId: 'SV-STF-0208',
+          employeeName: 'Sri K. Venkataratnam',
+          department: 'Facilities & Security',
+          isTeaching: false,
+          leaveType: 'Casual Leave',
+          startDate: '2026-11-08',
+          endDate: '2026-11-10',
+          duration: '3 Days',
+          durationDays: 3,
+          reason: 'Ancestral property partition and documentation in native village.',
+          supportingDoc: null,
+          hasSubstitute: true,
+          substituteId: 'SV-STF-0211',
+          substituteName: 'Sri T. Murali',
+          classesCovered: 'Night Security Shift Handover',
+          approver: 'Administrative Officer Sri M. Srinivas',
+          decision: 'Returned for Correction',
+          remarks: 'Please submit written handover certificate endorsed by day-shift security supervisor.',
+          submittedAt: '2026-10-28T14:00:00Z',
+          reviewedAt: '2026-10-29T11:00:00Z',
+          reviewedBy: 'Administrative Officer Sri M. Srinivas'
+        }
+      ];
+    }
+  }
+
+  function updateLeaveKPIs(dataList) {
+    ensureStaffLeaveState();
+    const all = state.leaveRequests || [];
+    const list = dataList || all;
+
+    const total = all.length;
+    const pending = all.filter(r => r.decision === 'Pending Sign-off').length;
+    const approved = all.filter(r => r.decision === 'Approved').length;
+    const subs = all.filter(r => r.decision === 'Approved' && r.hasSubstitute).length;
+    const returned = all.filter(r => r.decision === 'Returned for Correction').length;
+
+    const setEl = (id, val) => {
+      const el = document.getElementById(id);
+      if (el) el.textContent = val;
+    };
+
+    setEl('kpiTotalLeaveApps', total);
+    setEl('kpiPendingLeaveApps', pending);
+    setEl('kpiApprovedLeaveApps', approved);
+    setEl('kpiSubstitutionsDeployed', subs);
+    setEl('kpiReturnedLeaveApps', returned);
+
+    const pill = document.getElementById('leaveCountPill');
+    if (pill) {
+      pill.textContent = 'Showing ' + list.length + ' of ' + total + ' Leave Requests';
+    }
+  }
+
+  function renderTeacherLeaveRequests(customList) {
+    ensureStaffLeaveState();
+
+    const tbody = document.getElementById('teacherLeavesTableBody');
+    const cardsContainer = document.getElementById('facultyLeavesContainer');
+    const balancesTbody = document.getElementById('cadreLeaveBalancesTableBody');
+
+    const allRequests = state.leaveRequests || [];
+    const data = customList || allRequests;
+
+    if (tbody) {
+      if (data.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="10" class="text-center py-5 text-muted">' +
+          '<i class="fa-solid fa-calendar-xmark fa-2x mb-3 text-secondary" style="opacity:0.4;"></i>' +
+          '<div style="font-weight:600; font-size:1rem;">No leave applications found</div>' +
+          '<div style="font-size:0.85rem;">Adjust search filters or submit a new leave request.</div>' +
+          '</td></tr>';
+      } else {
+        let rowsHtml = '';
+        data.forEach(req => {
+          const empId = req.employeeId;
+          const name = req.employeeName;
+          const dept = req.department;
+          const type = req.leaveType;
+          const dates = req.startDate + ' to ' + req.endDate;
+          const duration = req.duration;
+          const reason = req.reason;
+          const doc = req.supportingDoc;
+          const subName = req.substituteName;
+          const classes = req.classesCovered;
+          const approver = req.approver;
+          const decision = req.decision;
+          const remarks = req.remarks || '-';
+
+          // Status Badge
+          let statusBadge = '<span class="leave-status-pending"><i class="fa-solid fa-clock mr-1"></i> Pending Sign-off</span>';
+          if (decision === 'Approved') {
+            statusBadge = '<span class="leave-status-approved"><i class="fa-solid fa-circle-check mr-1"></i> Approved</span>';
+          } else if (decision === 'Rejected') {
+            statusBadge = '<span class="leave-status-rejected"><i class="fa-solid fa-circle-xmark mr-1"></i> Rejected</span>';
+          } else if (decision === 'Returned for Correction') {
+            statusBadge = '<span class="leave-status-returned"><i class="fa-solid fa-rotate-left mr-1"></i> Returned for Info</span>';
+          } else if (decision === 'Cancelled') {
+            statusBadge = '<span class="leave-status-cancelled"><i class="fa-solid fa-ban mr-1"></i> Cancelled</span>';
+          }
+
+          // Substitute tag
+          let subHtml = '<span class="text-muted" style="font-size:0.78rem;">None Required</span>';
+          if (req.hasSubstitute && subName) {
+            subHtml = '<div>' +
+              '<span class="leave-sub-tag"><i class="fa-solid fa-user-clock"></i> ' + subName + '</span>' +
+              '<div style="font-size:0.74rem; color:#64748b; margin-top:3px;">' + (classes || 'Duty Handover') + '</div>' +
+            '</div>';
+          }
+
+          // Doc display
+          let docHtml = '';
+          if (doc) {
+            docHtml = '<div style="margin-top:3px;"><span class="badge badge-light" style="font-size:0.73rem; background:#f1f5f9; color:#0369a1; border:1px solid #bae6fd;"><i class="fa-solid fa-paperclip mr-1"></i>' + doc + '</span></div>';
+          }
+
+          rowsHtml += '<tr data-leave-id="' + req.id + '">' +
+            // 1. Leave ID
+            '<td><span class="badge badge-light font-mono font-weight-bold" style="background:#f1f5f9; color:#0f172a; border:1px solid #cbd5e1; font-size:0.8rem; padding:4px 8px;">' + req.id + '</span></td>' +
+            // 2. Staff Member
+            '<td>' +
+              '<div style="display:flex; align-items:center; gap:8px;">' +
+                '<div style="width:32px; height:32px; border-radius:50%; background:linear-gradient(135deg, #1e3a8a, #3b82f6); color:#fff; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:0.75rem; flex-shrink:0;">' +
+                  name.split(' ').map(n => n[0]).filter(c => /[A-Za-z]/.test(c)).slice(0, 2).join('') +
+                '</div>' +
+                '<div>' +
+                  '<div style="font-weight:700; color:#1e293b; font-size:0.88rem;">' + name + '</div>' +
+                  '<div style="font-size:0.75rem; color:#64748b;">' + empId + '</div>' +
+                '</div>' +
+              '</div>' +
+            '</td>' +
+            // 3. Department
+            '<td><span class="badge badge-light" style="background:#f8fafc; border:1px solid #e2e8f0; font-size:0.8rem; padding:4px 8px; color:#334155;">' + dept + '</span></td>' +
+            // 4. Leave Type
+            '<td><span style="font-weight:700; font-size:0.85rem; color:#1e293b;">' + type + '</span></td>' +
+            // 5. Dates & Duration
+            '<td>' +
+              '<div style="font-weight:600; font-size:0.84rem; color:#1e293b;">' + dates + '</div>' +
+              '<div style="font-size:0.76rem; color:#2563eb; font-weight:700;">' + duration + '</div>' +
+            '</td>' +
+            // 6. Reason & Document
+            '<td>' +
+              '<div style="max-width:220px; font-size:0.82rem; color:#334155; line-height:1.4;">' + reason + '</div>' +
+              docHtml +
+            '</td>' +
+            // 7. Substitute Arrangements
+            '<td>' + subHtml + '</td>' +
+            // 8. Approver
+            '<td><div style="font-size:0.82rem; font-weight:600; color:#1e293b;">' + approver + '</div></td>' +
+            // 9. Status & Remarks
+            '<td>' +
+              '<div>' + statusBadge + '</div>' +
+              (remarks && remarks !== '-' ? '<div style="font-size:0.74rem; color:#64748b; margin-top:3px; max-width:180px;">' + remarks + '</div>' : '') +
+            '</td>' +
+            // 10. Actions
+            '<td class="text-right">' +
+              '<div class="dropdown d-inline-block">' +
+                '<button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="font-size:0.8rem; padding:3px 8px;">' +
+                  '<i class="fa-solid fa-ellipsis-vertical"></i>' +
+                '</button>' +
+                '<div class="dropdown-menu dropdown-menu-right shadow-sm" style="font-size:0.84rem;">' +
+                  (decision === 'Pending Sign-off' || decision === 'Returned for Correction' ?
+                    '<a class="dropdown-item text-success font-weight-bold" href="javascript:void(0)" onclick="portalApp.openLeaveDecisionModal(\'' + req.id + '\', \'Approved\')">' +
+                      '<i class="fa-solid fa-check mr-2"></i> Approve Request' +
+                    '</a>' +
+                    '<a class="dropdown-item text-danger" href="javascript:void(0)" onclick="portalApp.openLeaveDecisionModal(\'' + req.id + '\', \'Rejected\')">' +
+                      '<i class="fa-solid fa-xmark mr-2"></i> Reject with Reason' +
+                    '</a>' +
+                    '<a class="dropdown-item text-warning" href="javascript:void(0)" onclick="portalApp.openLeaveDecisionModal(\'' + req.id + '\', \'Returned for Correction\')">' +
+                      '<i class="fa-solid fa-rotate-left mr-2"></i> Return for Correction' +
+                    '</a>' +
+                    '<div class="dropdown-divider"></div>' : '') +
+                  (decision !== 'Cancelled' ?
+                    '<a class="dropdown-item text-muted" href="javascript:void(0)" onclick="portalApp.cancelLeaveRequest(\'' + req.id + '\')">' +
+                      '<i class="fa-solid fa-ban mr-2"></i> Cancel according to policy' +
+                    '</a>' : '') +
+                '</div>' +
+              '</div>' +
+            '</td>' +
+          '</tr>';
+        });
+        tbody.innerHTML = rowsHtml;
+      }
+    }
+
+    // Populate Pending Cards View
+    if (cardsContainer) {
+      const pendingCards = allRequests.filter(r => r.decision === 'Pending Sign-off');
+      if (pendingCards.length === 0) {
+        cardsContainer.innerHTML = '<div class="col-12 text-center py-5 text-muted">' +
+          '<i class="fa-solid fa-check-double fa-3x mb-3 text-success" style="opacity:0.4;"></i>' +
+          '<div style="font-weight:700; font-size:1.1rem; color:#1e293b;">Zero Pending Leave Requests</div>' +
+          '<div style="font-size:0.85rem;">All faculty and staff leave requests have been reviewed and decided.</div>' +
+          '</div>';
+      } else {
+        let cardsHtml = '';
+        pendingCards.forEach(req => {
+          cardsHtml += '<div class="col-xl-4 col-md-6 mb-3">' +
+            '<div class="card h-100 shadow-sm border-0" style="border-left:4px solid #f59e0b !important; border-radius:8px; background:#fff;">' +
+              '<div class="card-body p-3">' +
+                '<div class="d-flex justify-content-between align-items-start mb-2">' +
+                  '<div>' +
+                    '<h6 class="mb-0 font-weight-bold" style="color:#1e293b;">' + req.employeeName + '</h6>' +
+                    '<div style="font-size:0.75rem; color:#64748b;">' + req.employeeId + ' &bull; ' + req.department + '</div>' +
+                  '</div>' +
+                  '<span class="badge badge-warning" style="color:#1e293b;">' + req.leaveType + '</span>' +
+                '</div>' +
+                '<div style="font-size:0.82rem; color:#1e40af; font-weight:700; background:#eff6ff; padding:5px 8px; border-radius:5px; margin-bottom:8px;">' +
+                  '<i class="fa-solid fa-calendar mr-1"></i> ' + req.startDate + ' to ' + req.endDate + ' (' + req.duration + ')' +
+                '</div>' +
+                '<div style="font-size:0.82rem; color:#334155; margin-bottom:8px;">' +
+                  '<strong>Reason:</strong> ' + req.reason +
+                '</div>' +
+                (req.hasSubstitute ?
+                  '<div style="font-size:0.78rem; background:#f8fafc; border:1px solid #e2e8f0; padding:6px 10px; border-radius:6px; margin-bottom:12px;">' +
+                    '<div style="color:#64748b; font-weight:600;">Substitute Arrangement:</div>' +
+                    '<div style="font-weight:700; color:#1e293b;"><i class="fa-solid fa-user-clock mr-1 text-primary"></i> ' + req.substituteName + '</div>' +
+                    '<div style="font-size:0.74rem; color:#64748b;">' + (req.classesCovered || 'All duties covered') + '</div>' +
+                  '</div>' : '') +
+                '<div class="d-flex justify-content-between align-items-center pt-2" style="border-top:1px solid #f1f5f9;">' +
+                  '<button class="btn btn-sm btn-outline-danger" onclick="portalApp.openLeaveDecisionModal(\'' + req.id + '\', \'Rejected\')"><i class="fa-solid fa-xmark mr-1"></i> Reject</button>' +
+                  '<button class="btn btn-sm btn-outline-warning" onclick="portalApp.openLeaveDecisionModal(\'' + req.id + '\', \'Returned for Correction\')"><i class="fa-solid fa-rotate-left mr-1"></i> Return</button>' +
+                  '<button class="btn btn-sm btn-success" onclick="portalApp.openLeaveDecisionModal(\'' + req.id + '\', \'Approved\')"><i class="fa-solid fa-check mr-1"></i> Approve</button>' +
+                '</div>' +
+              '</div>' +
+            '</div>' +
+          '</div>';
+        });
+        cardsContainer.innerHTML = cardsHtml;
+      }
+    }
+
+    // Populate Cadre Leave Balances Table
+    if (balancesTbody) {
+      const facultyList = (state.faculty || []).map(f => ({ id: f.employeeId || f.id, name: f.name, department: f.department || 'Faculty' }));
+      const nonTeachingList = (state.nonTeachingStaff || NON_TEACHING_STAFF_DATA || []).map(nt => ({ id: nt.employeeId || nt.id, name: nt.name, department: nt.dept || nt.department || 'Staff' }));
+      const allCadre = [...facultyList, ...nonTeachingList];
+
+      let balHtml = '';
+      allCadre.forEach(s => {
+        const bal = state.staffLeaveBalances[s.id] || { casualBalance: 8, medicalBalance: 10, earnedBalance: 14, availedThisYear: 2 };
+        balHtml += '<tr>' +
+          '<td><code>' + s.id + '</code></td>' +
+          '<td style="font-weight:700;">' + s.name + '</td>' +
+          '<td>' + s.department + '</td>' +
+          '<td style="text-align:center;"><span class="leave-bal-pill">' + bal.casualBalance + ' / 12 Days</span></td>' +
+          '<td style="text-align:center;"><span class="leave-bal-pill">' + bal.medicalBalance + ' / 12 Days</span></td>' +
+          '<td style="text-align:center;"><span class="leave-bal-pill">' + bal.earnedBalance + ' / 15 Days</span></td>' +
+          '<td style="text-align:center; font-weight:700; color:#dc2626;">' + bal.availedThisYear + ' Days</td>' +
+          '<td class="text-right"><button class="btn btn-xs btn-outline-primary" onclick="portalApp.openStaffLeaveLedger(\'' + s.id + '\')"><i class="fa-solid fa-eye"></i> View</button></td>' +
+        '</tr>';
+      });
+      balancesTbody.innerHTML = balHtml;
+    }
+
+    updateLeaveKPIs(data);
+  }
+
+  function switchLeaveViewMode(mode) {
+    leaveCurrentViewMode = mode;
+    const tableContainer = document.getElementById('leaveTableViewContainer');
+    const cardsContainer = document.getElementById('leaveCardsViewContainer');
+    const balancesContainer = document.getElementById('leaveBalancesViewContainer');
+    const filterCard = document.getElementById('leaveFilterToolbarCard');
+
+    const btnAll = document.getElementById('leaveTabAllBtn');
+    const btnPending = document.getElementById('leaveTabPendingBtn');
+    const btnBalances = document.getElementById('leaveTabBalancesBtn');
+
+    [btnAll, btnPending, btnBalances].forEach(b => {
+      if (b) { b.classList.remove('btn-primary'); b.classList.add('btn-outline-secondary'); }
+    });
+
+    if (mode === 'cards') {
+      if (tableContainer) tableContainer.style.display = 'none';
+      if (cardsContainer) cardsContainer.style.display = 'block';
+      if (balancesContainer) balancesContainer.style.display = 'none';
+      if (filterCard) filterCard.style.display = 'none';
+      if (btnPending) { btnPending.classList.add('btn-primary'); btnPending.classList.remove('btn-outline-secondary'); }
+    } else if (mode === 'balances') {
+      if (tableContainer) tableContainer.style.display = 'none';
+      if (cardsContainer) cardsContainer.style.display = 'none';
+      if (balancesContainer) balancesContainer.style.display = 'block';
+      if (filterCard) filterCard.style.display = 'none';
+      if (btnBalances) { btnBalances.classList.add('btn-primary'); btnBalances.classList.remove('btn-outline-secondary'); }
+    } else {
+      if (tableContainer) tableContainer.style.display = 'block';
+      if (cardsContainer) cardsContainer.style.display = 'none';
+      if (balancesContainer) balancesContainer.style.display = 'none';
+      if (filterCard) filterCard.style.display = 'block';
+      if (btnAll) { btnAll.classList.add('btn-primary'); btnAll.classList.remove('btn-outline-secondary'); }
+    }
+  }
 
   function filterLeaveRequests() {
-    const sInput = document.getElementById('leaveSearchInput');
-    const cInput = document.getElementById('leaveCategoryFilter');
-    const tInput = document.getElementById('leaveTypeFilter');
-    const stInput = document.getElementById('leaveStatusFilter');
+    ensureStaffLeaveState();
 
-    leaveFilterSearchQuery = sInput ? sInput.value.toLowerCase().trim() : '';
-    leaveFilterCategory = cInput ? cInput.value.trim() : '';
-    leaveFilterType = tInput ? tInput.value.trim() : '';
-    leaveFilterStatus = stInput ? stInput.value.trim() : '';
+    const searchInput = document.getElementById('leaveSearchInput');
+    const deptFilter = document.getElementById('leaveDeptFilter');
+    const typeFilter = document.getElementById('leaveTypeFilter');
+    const statusFilter = document.getElementById('leaveStatusFilter');
 
-    renderTeacherLeaveRequests();
+    const query = searchInput ? searchInput.value.trim().toLowerCase() : '';
+    const dept = deptFilter ? deptFilter.value : 'all';
+    const type = typeFilter ? typeFilter.value : 'all';
+    const status = statusFilter ? statusFilter.value : 'all';
+
+    const all = state.leaveRequests || [];
+    const filtered = all.filter(r => {
+      const empId = (r.employeeId || '').toLowerCase();
+      const name = (r.employeeName || '').toLowerCase();
+      const rDept = (r.department || '').toLowerCase();
+      const reason = (r.reason || '').toLowerCase();
+
+      const matchesQuery = !query || empId.includes(query) || name.includes(query) || rDept.includes(query) || reason.includes(query);
+      const matchesDept = (dept === 'all') || (r.department === dept);
+      const matchesType = (type === 'all') || (r.leaveType.toLowerCase().includes(type.toLowerCase()));
+      const matchesStatus = (status === 'all') || (r.decision === status);
+
+      return matchesQuery && matchesDept && matchesType && matchesStatus;
+    });
+
+    renderTeacherLeaveRequests(filtered);
   }
 
   function resetLeaveFilters() {
-    leaveFilterSearchQuery = '';
-    leaveFilterCategory = '';
-    leaveFilterType = '';
-    leaveFilterStatus = '';
-
     const sInput = document.getElementById('leaveSearchInput');
-    const cInput = document.getElementById('leaveCategoryFilter');
-    const tInput = document.getElementById('leaveTypeFilter');
-    const stInput = document.getElementById('leaveStatusFilter');
-
     if (sInput) sInput.value = '';
-    if (cInput) cInput.value = '';
-    if (tInput) tInput.value = '';
-    if (stInput) stInput.value = '';
+    const dSelect = document.getElementById('leaveDeptFilter');
+    if (dSelect) dSelect.value = 'all';
+    const tSelect = document.getElementById('leaveTypeFilter');
+    if (tSelect) tSelect.value = 'all';
+    const stSelect = document.getElementById('leaveStatusFilter');
+    if (stSelect) stSelect.value = 'all';
 
     renderTeacherLeaveRequests();
-    showToast('Leave request filters reset', 'info');
   }
 
-  function handleLeaveDecision(id, decision) {
-    ensureTeachersEnriched();
-    const list = state.facultyLeaves || [];
-    const req = list.find(l => String(l.id) === String(id));
-    if (!req) {
-      showToast('Leave record not found: ' + id, 'warning');
+  function populateSubmitLeaveModalDropdowns() {
+    const staffSelect = document.getElementById('leaveReqEmployeeId');
+    const subSelect = document.getElementById('leaveReqSubstituteId');
+    if (!staffSelect || !subSelect) return;
+
+    staffSelect.innerHTML = '<option value="">-- Select Staff Member (42 Total) --</option>';
+    subSelect.innerHTML = '<option value="">-- Select Substitute Colleague --</option>';
+
+    const facultyList = state.faculty || [];
+    const nonTeachingList = state.nonTeachingStaff || NON_TEACHING_STAFF_DATA || [];
+
+    const facGroup = document.createElement('optgroup');
+    facGroup.label = 'Teaching Faculty (30)';
+    const facSubGroup = document.createElement('optgroup');
+    facSubGroup.label = 'Teaching Faculty (30)';
+
+    facultyList.forEach(f => {
+      const opt = document.createElement('option');
+      opt.value = f.employeeId || f.id;
+      opt.textContent = (f.employeeId || f.id) + ' - ' + f.name + ' (' + (f.department || 'Faculty') + ')';
+      facGroup.appendChild(opt);
+
+      const subOpt = document.createElement('option');
+      subOpt.value = f.employeeId || f.id;
+      subOpt.textContent = (f.employeeId || f.id) + ' - ' + f.name + ' (' + (f.department || 'Faculty') + ')';
+      facSubGroup.appendChild(subOpt);
+    });
+
+    const ntGroup = document.createElement('optgroup');
+    ntGroup.label = 'Non-Teaching Staff (12)';
+    const ntSubGroup = document.createElement('optgroup');
+    ntSubGroup.label = 'Non-Teaching Staff (12)';
+
+    nonTeachingList.forEach(nt => {
+      const opt = document.createElement('option');
+      opt.value = nt.employeeId || nt.id;
+      opt.textContent = (nt.employeeId || nt.id) + ' - ' + nt.name + ' (' + (nt.dept || nt.department || 'Staff') + ')';
+      ntGroup.appendChild(opt);
+
+      const subOpt = document.createElement('option');
+      subOpt.value = nt.employeeId || nt.id;
+      subOpt.textContent = (nt.employeeId || nt.id) + ' - ' + nt.name + ' (' + (nt.dept || nt.department || 'Staff') + ')';
+      ntSubGroup.appendChild(subOpt);
+    });
+
+    staffSelect.appendChild(facGroup);
+    staffSelect.appendChild(ntGroup);
+    subSelect.appendChild(facSubGroup);
+    subSelect.appendChild(ntSubGroup);
+  }
+
+  function onLeaveEmployeeChange() {
+    const empId = document.getElementById('leaveReqEmployeeId').value;
+    const type = document.getElementById('leaveReqType').value;
+    const balDisp = document.getElementById('leaveReqBalanceDisplay');
+
+    if (!empId) {
+      if (balDisp) balDisp.textContent = '';
       return;
     }
 
-    req.status = (decision === 'approve') ? 'Approved' : 'Declined';
+    ensureStaffLeaveState();
+    const bal = state.staffLeaveBalances[empId] || { casualBalance: 8, medicalBalance: 10, earnedBalance: 14 };
 
-    // Persist to localStorage
-    try {
-      localStorage.setItem('sv_faculty_leaves_data', JSON.stringify(list));
-    } catch (e) {}
-
-    renderTeacherLeaveRequests();
-
-    if (decision === 'approve') {
-      showToast('Leave approved for ' + req.name + ' (' + req.dates + '). Substitute coverage confirmed.', 'success');
-    } else {
-      showToast('Leave application declined for ' + req.name + '.', 'warning');
+    if (balDisp) {
+      if (type === 'Casual Leave') {
+        balDisp.textContent = 'Available Casual Leave Balance: ' + bal.casualBalance + ' Days';
+      } else if (type === 'Medical Leave') {
+        balDisp.textContent = 'Available Medical Leave Balance: ' + bal.medicalBalance + ' Days';
+      } else if (type === 'Earned Leave') {
+        balDisp.textContent = 'Available Earned Leave Balance: ' + bal.earnedBalance + ' Days';
+      } else {
+        balDisp.textContent = 'Duty Deputation (Subject to Management Approval)';
+      }
     }
+
+    checkLeaveOverlap();
   }
 
-  function revertLeaveStatus(id) {
-    ensureTeachersEnriched();
-    const list = state.facultyLeaves || [];
-    const req = list.find(l => String(l.id) === String(id));
-    if (!req) return;
-
-    req.status = 'Pending Sign-off';
-    try {
-      localStorage.setItem('sv_faculty_leaves_data', JSON.stringify(list));
-    } catch (e) {}
-
-    renderTeacherLeaveRequests();
-    showToast('Leave status for ' + req.name + ' reverted to Pending Sign-off.', 'info');
+  function onLeaveTypeChange() {
+    onLeaveEmployeeChange();
   }
 
-  function renderTeacherLeaveRequests(list) {
-    ensureTeachersEnriched();
+  function calculateLeaveDuration() {
+    const sDate = document.getElementById('leaveReqStartDate').value;
+    const eDate = document.getElementById('leaveReqEndDate').value;
+    const durDisp = document.getElementById('leaveReqDurationDisplay');
 
-    // Check localStorage cache first
-    try {
-      const cached = localStorage.getItem('sv_faculty_leaves_data');
-      if (cached && !list) {
-        state.facultyLeaves = JSON.parse(cached);
-      }
-    } catch (e) {}
+    if (!sDate || !eDate) return;
 
-    const allLeaves = list || (state && state.facultyLeaves) || [];
+    const start = new Date(sDate);
+    const end = new Date(eDate);
 
-    // Calculate metrics across all leaves
-    const totalApps = allLeaves.length;
-    const pendingApps = allLeaves.filter(l => l.status === 'Pending Sign-off').length;
-    const approvedApps = allLeaves.filter(l => l.status === 'Approved').length;
-    const activeSubs = allLeaves.filter(l => l.substitute && l.status !== 'Declined').length;
+    if (end < start) {
+      if (durDisp) durDisp.value = 'Invalid';
+      return;
+    }
 
-    const kpiTotal = document.getElementById('kpiTotalLeaveApps');
-    const kpiPending = document.getElementById('kpiPendingLeaveApps');
-    const kpiApproved = document.getElementById('kpiApprovedLeaveApps');
-    const kpiSubs = document.getElementById('kpiSubstitutionsDeployed');
+    // Days difference inclusive
+    const diffTime = Math.abs(end - start);
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
 
-    if (kpiTotal) kpiTotal.textContent = totalApps;
-    if (kpiPending) kpiPending.textContent = pendingApps;
-    if (kpiApproved) kpiApproved.textContent = approvedApps;
-    if (kpiSubs) kpiSubs.textContent = activeSubs;
+    if (durDisp) {
+      durDisp.value = diffDays + (diffDays === 1 ? ' Day' : ' Days');
+    }
 
-    // Submenu tab count pill
-    const countBadge = document.getElementById('teacherLeaveCountBadge');
-    if (countBadge) countBadge.textContent = pendingApps;
+    checkLeaveOverlap();
+  }
 
-    // Filter leaves
-    const filtered = allLeaves.filter(req => {
-      if (leaveFilterCategory && req.category !== leaveFilterCategory) return false;
-      if (leaveFilterType && req.type !== leaveFilterType) return false;
-      if (leaveFilterStatus && req.status !== leaveFilterStatus) return false;
-      if (leaveFilterSearchQuery) {
-        const q = leaveFilterSearchQuery;
-        const matchName = req.name && req.name.toLowerCase().includes(q);
-        const matchDept = req.dept && req.dept.toLowerCase().includes(q);
-        const matchReason = req.reason && req.reason.toLowerCase().includes(q);
-        const matchId = (req.staffId || req.id || '').toLowerCase().includes(q);
-        if (!matchName && !matchDept && !matchReason && !matchId) return false;
-      }
-      return true;
+  function checkLeaveOverlap() {
+    const empId = document.getElementById('leaveReqEmployeeId').value;
+    const sDate = document.getElementById('leaveReqStartDate').value;
+    const eDate = document.getElementById('leaveReqEndDate').value;
+    const notice = document.getElementById('leaveReqOverlapNotice');
+    const btnSubmit = document.getElementById('btnSubmitLeaveRequest');
+
+    if (!empId || !sDate || !eDate) {
+      if (notice) notice.style.display = 'none';
+      if (btnSubmit) btnSubmit.disabled = false;
+      return false;
+    }
+
+    ensureStaffLeaveState();
+    const requests = state.leaveRequests || [];
+
+    // Check overlap with existing approved or pending requests for same staff
+    const reqStart = new Date(sDate);
+    const reqEnd = new Date(eDate);
+
+    const overlap = requests.find(r => {
+      if (r.employeeId !== empId) return false;
+      if (r.decision === 'Rejected' || r.decision === 'Cancelled') return false;
+
+      const exStart = new Date(r.startDate);
+      const exEnd = new Date(r.endDate);
+
+      return (reqStart <= exEnd && reqEnd >= exStart);
     });
 
-    const pill = document.getElementById('leaveCountPill');
-    if (pill) pill.textContent = 'Showing ' + filtered.length + ' of ' + totalApps + ' requests';
-
-    const isAuthorized = isStaffAuthorized();
-
-    // 1. Render Table Rows
-    const tbody = document.getElementById('teacherLeavesTableBody');
-    if (tbody) {
-      if (filtered.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="7" class="text-center py-5 text-muted"><i class="fa-solid fa-calendar-check fa-2x mb-2 text-slate-400 d-block"></i>No staff leave applications matching selected criteria.<br><button type="button" class="btn btn-outline-primary btn-sm mt-2" onclick="portalApp.resetLeaveFilters()"><i class="fa-solid fa-rotate-left"></i> Reset Filters</button></td></tr>';
-      } else {
-        tbody.innerHTML = filtered.map(req => {
-          const initials = (req.name || 'Staff').replace(/^(Smt\.|Sri\.|Ms\.|Mr\.)\s*/, '').split(' ').map(n => n[0]).join('').slice(0, 2) || 'ST';
-          const isTeaching = (req.category === 'Teaching');
-
-          // Leave Type Badge
-          let typeBadge = '<span class="leave-badge-casual"><i class="fa-solid fa-calendar-day"></i> ' + req.type + '</span>';
-          if (req.type === 'Medical Leave') {
-            typeBadge = '<span class="leave-badge-medical"><i class="fa-solid fa-notes-medical"></i> Medical Leave</span>';
-          } else if (req.type.includes('On Duty') || req.type.includes('OD')) {
-            typeBadge = '<span class="leave-badge-od"><i class="fa-solid fa-briefcase"></i> On Duty (OD)</span>';
-          } else if (req.type === 'Earned Leave') {
-            typeBadge = '<span class="leave-badge-earned"><i class="fa-solid fa-award"></i> Earned Leave</span>';
-          }
-
-          // Balance Display Badge
-          let balText = req.balance;
-          if (!balText) {
-            if (req.type === 'Medical Leave') balText = 'Medical: 8 / 10 left';
-            else if (req.type.includes('OD') || req.type.includes('On Duty')) balText = 'OD: Official Exemption';
-            else balText = 'Casual: 7 / 12 left';
-          }
-
-          // Status Badge
-          let statusBadge = '<span class="portal-badge badge-amber"><i class="fa-solid fa-clock"></i> Pending Sign-off</span>';
-          if (req.status === 'Approved') {
-            statusBadge = '<span class="portal-badge badge-success"><i class="fa-solid fa-circle-check"></i> Approved</span>';
-          } else if (req.status === 'Declined') {
-            statusBadge = '<span class="portal-badge badge-danger"><i class="fa-solid fa-circle-xmark"></i> Declined</span>';
-          }
-
-          // Action Buttons
-          let actionButtons = '';
-          if (req.status === 'Pending Sign-off') {
-            actionButtons = isAuthorized
-              ? '<div style="display:inline-flex; gap:6px; align-items:center;">' +
-                  '<button type="button" class="btn btn-primary btn-sm" onclick="portalApp.handleLeaveDecision(\'' + req.id + '\', \'approve\')" title="Approve Leave Application"><i class="fa-solid fa-check"></i> Approve</button>' +
-                  '<button type="button" class="btn btn-outline-danger btn-sm" onclick="portalApp.handleLeaveDecision(\'' + req.id + '\', \'decline\')" title="Decline Leave Application"><i class="fa-solid fa-xmark"></i></button>' +
-                '</div>'
-              : '<span class="text-muted" style="font-size:0.8rem; font-weight:600;"><i class="fa-solid fa-lock text-amber"></i> Review Required</span>';
-          } else if (req.status === 'Approved') {
-            actionButtons = '<div style="display:inline-flex; gap:6px; align-items:center;">' +
-              '<span class="text-emerald font-semibold" style="font-size:0.8rem;"><i class="fa-solid fa-check-double"></i> Active</span>' +
-              (isAuthorized ? '<button type="button" class="btn btn-xs btn-outline-secondary" onclick="portalApp.revertLeaveStatus(\'' + req.id + '\')" title="Revert to Pending"><i class="fa-solid fa-rotate-left"></i></button>' : '') +
-            '</div>';
-          } else {
-            actionButtons = '<div style="display:inline-flex; gap:6px; align-items:center;">' +
-              '<span class="text-danger font-semibold" style="font-size:0.8rem;"><i class="fa-solid fa-ban"></i> Rejected</span>' +
-              (isAuthorized ? '<button type="button" class="btn btn-xs btn-outline-secondary" onclick="portalApp.revertLeaveStatus(\'' + req.id + '\')" title="Re-open"><i class="fa-solid fa-rotate-left"></i></button>' : '') +
-            '</div>';
-          }
-
-          return '<tr>' +
-            '<td>' +
-              '<div style="display:flex; align-items:center; gap:9px;">' +
-                '<div style="width:34px; height:34px; border-radius:50%; background:' + (isTeaching ? '#eff6ff' : '#f0fdf4') + '; color:' + (isTeaching ? '#1d4ed8' : '#15803d') + '; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:0.78rem; flex-shrink:0;">' +
-                  initials +
-                '</div>' +
-                '<div>' +
-                  '<strong style="color:var(--color-text-dark, #0f172a); font-size:0.9rem; display:block;">' + req.name + '</strong>' +
-                  '<div style="display:flex; align-items:center; gap:5px; margin-top:2px; flex-wrap:wrap;">' +
-                    '<span class="staff-id-pill" style="font-size:0.68rem; padding:1px 5px;">' + (req.staffId || 'SV-Staff') + '</span>' +
-                    '<span class="' + (isTeaching ? 'category-badge-teaching' : 'category-badge-nonteaching') + '" style="font-size:0.65rem; padding:1px 5px;">' + (isTeaching ? 'Teaching' : 'Staff') + '</span>' +
-                    '<span class="text-muted" style="font-size:0.75rem;">' + (req.dept || '') + '</span>' +
-                  '</div>' +
-                '</div>' +
-              '</div>' +
-            '</td>' +
-            '<td>' + typeBadge + '</td>' +
-            '<td>' +
-              '<strong style="font-size:0.86rem; color:#0f172a;"><i class="fa-regular fa-calendar text-primary"></i> ' + req.dates + '</strong>' +
-              '<div style="font-size:0.75rem; color:#64748b; margin-top:2px;"><span class="portal-badge badge-neutral" style="font-size:0.7rem; padding:1px 6px;">' + (req.days || '1 Working Day') + '</span></div>' +
-            '</td>' +
-            '<td style="max-width:260px;">' +
-              '<span style="font-size:0.84rem; color:#334155; line-height:1.45; display:block;">' + req.reason + '</span>' +
-            '</td>' +
-            '<td>' +
-              '<span class="leave-balance-chip"><i class="fa-solid fa-chart-pie text-primary"></i> ' + balText + '</span>' +
-            '</td>' +
-            '<td>' + statusBadge + '</td>' +
-            '<td style="text-align:center;">' + actionButtons + '</td>' +
-          '</tr>';
-        }).join('');
+    if (overlap) {
+      if (notice) {
+        notice.style.display = 'block';
+        const txt = document.getElementById('leaveReqOverlapNoticeText');
+        if (txt) {
+          txt.innerHTML = '<strong>Policy Violation: Overlapping Leave Detected!</strong> Staff member ' + overlap.employeeName + ' already has an existing leave application (<code>' + overlap.id + '</code>: ' + overlap.startDate + ' to ' + overlap.endDate + ' - <em>' + overlap.decision + '</em>) covering these dates.';
+        }
       }
-    }
-
-    // 2. Render Responsive Cards Grid
-    const container = document.getElementById('facultyLeavesContainer');
-    if (container) {
-      const pendingCards = filtered.filter(l => l.status === 'Pending Sign-off');
-      if (pendingCards.length === 0) {
-        container.innerHTML = '<div style="grid-column:1/-1; background:#f8fafc; border-radius:10px; border:1px dashed #cbd5e1; padding:2rem; text-align:center;"><i class="fa-solid fa-circle-check text-emerald fa-2x mb-2 d-block"></i><h4 style="color:#0f172a; margin-bottom:0.25rem;">No Pending Sign-offs</h4><p class="text-muted" style="margin:0; font-size:0.85rem;">All employee leave applications are currently processed and substitution assignments confirmed.</p></div>';
-      } else {
-        container.innerHTML = pendingCards.map(req => {
-          const isTeaching = (req.category === 'Teaching');
-          let typeBadge = '<span class="leave-badge-casual">' + req.type + '</span>';
-          if (req.type === 'Medical Leave') typeBadge = '<span class="leave-badge-medical">Medical Leave</span>';
-          else if (req.type.includes('OD') || req.type.includes('On Duty')) typeBadge = '<span class="leave-badge-od">On Duty (OD)</span>';
-
-          return '<div class="leave-approval-card" id="faculty-leave-card-' + req.id + '">' +
-            '<div>' +
-              '<div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:0.6rem; gap:8px;">' +
-                '<div>' +
-                  '<div style="display:flex; align-items:center; gap:6px; flex-wrap:wrap;">' +
-                    '<span class="staff-id-pill">' + (req.staffId || 'STAFF') + '</span>' +
-                    '<span class="' + (isTeaching ? 'category-badge-teaching' : 'category-badge-nonteaching') + '">' + (isTeaching ? 'Teaching' : 'Staff') + '</span>' +
-                    '<strong style="font-size:1.02rem; color:#0f172a;">' + req.name + '</strong>' +
-                  '</div>' +
-                  '<div style="font-size:0.78rem; color:#64748b; margin-top:2px;">' + (req.role || 'Personnel') + ' &bull; ' + req.dept + '</div>' +
-                '</div>' +
-                '<div>' + typeBadge + '</div>' +
-              '</div>' +
-
-              '<div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; padding:0.6rem 0.75rem; margin-bottom:0.6rem; font-size:0.82rem;">' +
-                '<div style="display:flex; justify-content:space-between; margin-bottom:3px;">' +
-                  '<span><strong>Duration:</strong> ' + req.dates + ' (' + (req.days || '1 Day') + ')</span>' +
-                  '<span class="text-primary font-semibold">' + (req.balance || 'Available') + '</span>' +
-                '</div>' +
-                '<div style="color:#475569; margin-top:3px;"><strong>Reason:</strong> ' + req.reason + '</div>' +
-              '</div>' +
-
-              '<div class="leave-sub-box">' +
-                '<i class="fa-solid fa-user-clock text-emerald"></i>' +
-                '<span><strong>Substitution Assigned:</strong> ' + (req.substitute || 'Department Peer Coverage') + '</span>' +
-              '</div>' +
-            '</div>' +
-
-            '<div style="display:flex; justify-content:flex-end; gap:8px; margin-top:1rem; padding-top:0.75rem; border-top:1px solid #f1f5f9;">' +
-              (isAuthorized ? (
-                '<button type="button" class="btn btn-outline-danger btn-sm" onclick="portalApp.handleLeaveDecision(\'' + req.id + '\', \'decline\')"><i class="fa-solid fa-xmark"></i> Decline</button>' +
-                '<button type="button" class="btn btn-primary btn-sm" onclick="portalApp.handleLeaveDecision(\'' + req.id + '\', \'approve\')"><i class="fa-solid fa-check"></i> Approve &amp; Deploy Sub</button>'
-              ) : '<span class="confidential-lock"><i class="fa-solid fa-lock"></i> Executive Sign-off Required</span>') +
-            '</div>' +
-          '</div>';
-        }).join('');
-      }
+      if (btnSubmit) btnSubmit.disabled = true;
+      return true;
+    } else {
+      if (notice) notice.style.display = 'none';
+      if (btnSubmit) btnSubmit.disabled = false;
+      return false;
     }
   }
+
+  function toggleSubstituteFields() {
+    const chk = document.getElementById('leaveReqHasSubstitute');
+    const fields = document.getElementById('leaveReqSubstituteFields');
+    if (fields) {
+      fields.style.display = (chk && chk.checked) ? 'block' : 'none';
+    }
+  }
+
+  function openSubmitLeaveRequestModal() {
+    populateSubmitLeaveModalDropdowns();
+
+    // Default dates: tomorrow to day after tomorrow
+    const today = new Date();
+    const tomorrow = new Date(today);
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    const dayAfter = new Date(today);
+    dayAfter.setDate(dayAfter.getDate() + 2);
+
+    const sInput = document.getElementById('leaveReqStartDate');
+    const eInput = document.getElementById('leaveReqEndDate');
+    if (sInput) sInput.value = tomorrow.toISOString().split('T')[0];
+    if (eInput) eInput.value = dayAfter.toISOString().split('T')[0];
+
+    calculateLeaveDuration();
+
+    const notice = document.getElementById('leaveReqOverlapNotice');
+    if (notice) notice.style.display = 'none';
+
+    openModal('submitLeaveRequestModal');
+  }
+
+  function handleSubmitLeaveRequest(event) {
+    if (event) event.preventDefault();
+
+    if (checkLeaveOverlap()) {
+      showToast('Validation Blocked', 'Overlapping leave dates are not permitted by policy.', 'error');
+      return;
+    }
+
+    const empId = document.getElementById('leaveReqEmployeeId').value;
+    const leaveType = document.getElementById('leaveReqType').value;
+    const startDate = document.getElementById('leaveReqStartDate').value;
+    const endDate = document.getElementById('leaveReqEndDate').value;
+    const reason = document.getElementById('leaveReqReason').value.trim();
+    const doc = document.getElementById('leaveReqDoc').value.trim();
+    const hasSub = document.getElementById('leaveReqHasSubstitute').checked;
+    const subId = document.getElementById('leaveReqSubstituteId').value;
+    const classes = document.getElementById('leaveReqClassesCovered').value.trim();
+    const approver = document.getElementById('leaveReqApprover').value;
+
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+    const diffDays = Math.ceil(Math.abs(end - start) / (1000 * 60 * 60 * 24)) + 1;
+    const durationStr = diffDays + (diffDays === 1 ? ' Day' : ' Days');
+
+    // Medical leave check: if > 2 days, doctor certificate recommended/mandatory
+    if (leaveType === 'Medical Leave' && diffDays > 2 && !doc) {
+      showToast('Document Requirement', 'Policy Notice: Medical leave exceeding 2 days requires a medical certificate.', 'warning');
+    }
+
+    // Lookup staff info
+    let staffName = 'Staff Member';
+    let dept = 'Administrative Office';
+    let isTeaching = false;
+
+    const fac = (state.faculty || []).find(f => (f.employeeId || f.id) === empId);
+    if (fac) {
+      staffName = fac.name;
+      dept = fac.department || 'Faculty';
+      isTeaching = true;
+    } else {
+      const nt = (state.nonTeachingStaff || NON_TEACHING_STAFF_DATA || []).find(n => (n.employeeId || n.id) === empId);
+      if (nt) {
+        staffName = nt.name;
+        dept = nt.dept || nt.department || 'Staff';
+      }
+    }
+
+    // Lookup substitute info
+    let subName = null;
+    if (hasSub && subId) {
+      const subFac = (state.faculty || []).find(f => (f.employeeId || f.id) === subId);
+      if (subFac) subName = subFac.name;
+      else {
+        const subNt = (state.nonTeachingStaff || NON_TEACHING_STAFF_DATA || []).find(n => (n.employeeId || n.id) === subId);
+        if (subNt) subName = subNt.name;
+      }
+    }
+
+    const nextId = 'LV-2026-0' + ((state.leaveRequests ? state.leaveRequests.length : 0) + 7);
+
+    const newReq = {
+      id: nextId,
+      employeeId: empId,
+      employeeName: staffName,
+      department: dept,
+      isTeaching: isTeaching,
+      leaveType: leaveType,
+      startDate: startDate,
+      endDate: endDate,
+      duration: durationStr,
+      durationDays: diffDays,
+      reason: reason,
+      supportingDoc: doc || null,
+      hasSubstitute: hasSub,
+      substituteId: subId || null,
+      substituteName: subName,
+      classesCovered: classes || null,
+      approver: approver,
+      decision: 'Pending Sign-off',
+      remarks: 'Submitted for executive authorization.',
+      submittedAt: new Date().toISOString(),
+      reviewedAt: null,
+      reviewedBy: null
+    };
+
+    ensureStaffLeaveState();
+    state.leaveRequests.unshift(newReq);
+
+    closeModal('submitLeaveRequestModal');
+    renderTeacherLeaveRequests();
+    showToast('Leave Request Submitted', 'Application ' + nextId + ' for ' + staffName + ' routed to ' + approver + '.', 'success');
+  }
+
+  function openLeaveDecisionModal(leaveId, presetAction) {
+    ensureStaffLeaveState();
+    const req = (state.leaveRequests || []).find(r => r.id === leaveId);
+    if (!req) return;
+
+    document.getElementById('decLeaveId').value = req.id;
+
+    const heading = document.getElementById('decStaffHeading');
+    if (heading) heading.textContent = req.employeeName + ' (' + req.employeeId + ')';
+
+    const sub = document.getElementById('decLeaveSub');
+    if (sub) sub.textContent = req.leaveType + ' • ' + req.startDate + ' to ' + req.endDate + ' (' + req.duration + ')';
+
+    const rText = document.getElementById('decReason');
+    if (rText) rText.textContent = req.reason;
+
+    const subInfo = document.getElementById('decSubstituteInfo');
+    if (subInfo) {
+      if (req.hasSubstitute && req.substituteName) {
+        subInfo.style.display = 'block';
+        subInfo.innerHTML = '<i class="fa-solid fa-user-clock mr-1"></i> Substitute: <strong>' + req.substituteName + '</strong> (' + (req.classesCovered || 'All duties') + ')';
+      } else {
+        subInfo.style.display = 'none';
+      }
+    }
+
+    const sel = document.getElementById('decActionSelect');
+    if (sel && presetAction) {
+      sel.value = presetAction;
+    }
+
+    const rem = document.getElementById('decRemarks');
+    if (rem) {
+      if (presetAction === 'Approved') rem.value = 'Approved. Substitute arrangements and timetable coverage confirmed.';
+      else if (presetAction === 'Rejected') rem.value = 'Declined due to ongoing academic examination revision schedule.';
+      else if (presetAction === 'Returned for Correction') rem.value = 'Please provide medical fitness certificate from registered practitioner.';
+      else rem.value = '';
+    }
+
+    onDecisionActionChange();
+    openModal('leaveDecisionModal');
+  }
+
+  function onDecisionActionChange() {
+    const act = document.getElementById('decActionSelect').value;
+    const star = document.getElementById('decRemarksReqStar');
+    if (star) {
+      star.style.display = (act === 'Rejected' || act === 'Returned for Correction') ? 'inline' : 'none';
+    }
+  }
+
+  function submitLeaveDecision(event) {
+    if (event) event.preventDefault();
+
+    const leaveId = document.getElementById('decLeaveId').value;
+    const action = document.getElementById('decActionSelect').value;
+    const remarks = document.getElementById('decRemarks').value.trim();
+
+    if ((action === 'Rejected' || action === 'Returned for Correction') && !remarks) {
+      showToast('Validation Error', 'Institutional remarks are mandatory when rejecting or returning leave for correction.', 'error');
+      return;
+    }
+
+    ensureStaffLeaveState();
+    const req = (state.leaveRequests || []).find(r => r.id === leaveId);
+    if (!req) return;
+
+    req.decision = action;
+    req.remarks = remarks || (action === 'Approved' ? 'Approved by executive authority.' : 'Decision recorded.');
+    req.reviewedAt = new Date().toISOString();
+    req.reviewedBy = req.approver || 'Principal Smt. Gorle Varalakshmi';
+
+    // 1. If Approved: Deduct leave balance
+    if (action === 'Approved') {
+      const bal = state.staffLeaveBalances[req.employeeId];
+      if (bal) {
+        const days = req.durationDays || 1;
+        if (req.leaveType === 'Casual Leave') {
+          bal.casualBalance = Math.max(0, bal.casualBalance - days);
+        } else if (req.leaveType === 'Medical Leave') {
+          bal.medicalBalance = Math.max(0, bal.medicalBalance - days);
+        } else if (req.leaveType === 'Earned Leave') {
+          bal.earnedBalance = Math.max(0, bal.earnedBalance - days);
+        }
+        bal.availedThisYear = (bal.availedThisYear || 0) + days;
+      }
+
+      // 2. Attendance reference: If daily attendance records exist for those dates, reference approved leave
+      if (state.staffAttendanceRecords) {
+        Object.keys(state.staffAttendanceRecords).forEach(dateStr => {
+          if (dateStr >= req.startDate && dateStr <= req.endDate) {
+            const dayRecords = state.staffAttendanceRecords[dateStr];
+            const att = dayRecords.find(a => a.employeeId === req.employeeId);
+            if (att) {
+              att.status = 'On Duty / Leave';
+              att.notes = 'Approved Leave (' + req.id + ': ' + req.leaveType + ')';
+              if (!att.auditHistory) att.auditHistory = [];
+              att.auditHistory.push({
+                action: 'Leave Synchronized to Attendance',
+                timestamp: new Date().toISOString(),
+                recordedBy: 'Leave Approval Engine',
+                details: 'Attendance referenced approved leave ' + req.id + ' without overwriting punch records.'
+              });
+            }
+          }
+        });
+      }
+    }
+
+    closeModal('leaveDecisionModal');
+    renderTeacherLeaveRequests();
+    showToast('Decision Recorded', 'Leave request ' + leaveId + ' ' + action + ' successfully.', 'success');
+  }
+
+  function cancelLeaveRequest(leaveId) {
+    ensureStaffLeaveState();
+    const req = (state.leaveRequests || []).find(r => r.id === leaveId);
+    if (!req) return;
+
+    if (confirm('Cancel leave request ' + req.id + ' for ' + req.employeeName + ' according to policy? If previously approved, deducted leave days will be restored to available balance.')) {
+      // If was approved, restore balance
+      if (req.decision === 'Approved') {
+        const bal = state.staffLeaveBalances[req.employeeId];
+        if (bal) {
+          const days = req.durationDays || 1;
+          if (req.leaveType === 'Casual Leave') bal.casualBalance += days;
+          else if (req.leaveType === 'Medical Leave') bal.medicalBalance += days;
+          else if (req.leaveType === 'Earned Leave') bal.earnedBalance += days;
+          bal.availedThisYear = Math.max(0, (bal.availedThisYear || 0) - days);
+        }
+      }
+
+      req.decision = 'Cancelled';
+      req.remarks = 'Cancelled by applicant / administrative office per institutional policy.';
+      renderTeacherLeaveRequests();
+      showToast('Leave Cancelled', 'Request ' + req.id + ' cancelled and balance restored.', 'info');
+    }
+  }
+
+  function openViewLeaveBalancesModal() {
+    ensureStaffLeaveState();
+    const tbody = document.getElementById('modalLeaveBalancesTbody');
+    if (!tbody) return;
+
+    const facultyList = (state.faculty || []).map(f => ({ id: f.employeeId || f.id, name: f.name, department: f.department || 'Faculty' }));
+    const nonTeachingList = (state.nonTeachingStaff || NON_TEACHING_STAFF_DATA || []).map(nt => ({ id: nt.employeeId || nt.id, name: nt.name, department: nt.dept || nt.department || 'Staff' }));
+    const allCadre = [...facultyList, ...nonTeachingList];
+
+    let html = '';
+    allCadre.forEach(s => {
+      const bal = state.staffLeaveBalances[s.id] || { casualBalance: 8, medicalBalance: 10, earnedBalance: 14, availedThisYear: 2 };
+      html += '<tr>' +
+        '<td><code>' + s.id + '</code></td>' +
+        '<td style="font-weight:700;">' + s.name + '</td>' +
+        '<td>' + s.department + '</td>' +
+        '<td style="text-align:center;"><span class="badge badge-light" style="border:1px solid #cbd5e1;">' + bal.casualBalance + ' / 12</span></td>' +
+        '<td style="text-align:center;"><span class="badge badge-light" style="border:1px solid #cbd5e1;">' + bal.medicalBalance + ' / 12</span></td>' +
+        '<td style="text-align:center;"><span class="badge badge-light" style="border:1px solid #cbd5e1;">' + bal.earnedBalance + ' / 15</span></td>' +
+        '<td style="text-align:center; font-weight:700; color:#dc2626;">' + bal.availedThisYear + ' Days</td>' +
+        '<td style="text-align:center;"><span class="badge badge-success">Good Standing</span></td>' +
+      '</tr>';
+    });
+
+    tbody.innerHTML = html;
+    openModal('viewLeaveBalancesModal');
+  }
+
+  function openStaffLeaveLedger(staffId) {
+    openViewLeaveBalancesModal();
+  }
+
+  function exportLeaveRegisterCSV() {
+    ensureStaffLeaveState();
+    const list = state.leaveRequests || [];
+
+    if (list.length === 0) {
+      showToast('Export', 'No leave applications available for export.', 'warning');
+      return;
+    }
+
+    const headers = ['Leave ID', 'Employee ID', 'Staff Name', 'Department', 'Leave Type', 'Start Date', 'End Date', 'Duration', 'Reason', 'Supporting Document', 'Substitute Colleague', 'Approver', 'Decision Status', 'Remarks'];
+    const rows = list.map(r => [
+      '"' + (r.id || '') + '"',
+      '"' + (r.employeeId || '') + '"',
+      '"' + (r.employeeName || '').replace(/"/g, '""') + '"',
+      '"' + (r.department || '').replace(/"/g, '""') + '"',
+      '"' + (r.leaveType || '') + '"',
+      '"' + (r.startDate || '') + '"',
+      '"' + (r.endDate || '') + '"',
+      '"' + (r.duration || '') + '"',
+      '"' + (r.reason || '').replace(/"/g, '""') + '"',
+      '"' + (r.supportingDoc || 'None') + '"',
+      '"' + (r.substituteName || 'None') + '"',
+      '"' + (r.approver || '') + '"',
+      '"' + (r.decision || '') + '"',
+      '"' + (r.remarks || '').replace(/"/g, '""') + '"'
+    ]);
+
+    const csvContent = 'data:text/csv;charset=utf-8,' + [headers.join(','), ...rows.map(e => e.join(','))].join('\n');
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement('a');
+    link.setAttribute('href', encodedUri);
+    link.setAttribute('download', 'Sri_Vidya_Staff_Leave_Register_' + new Date().toISOString().slice(0, 10) + '.csv');
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+
+    showToast('Export Complete', 'Exported ' + list.length + ' leave records to official CSV register.', 'success');
+  }
+
+  // Compatibility aliases
+  function handleLeaveDecision(id, action) { openLeaveDecisionModal(id, action); }
+  function revertLeaveStatus(id) { cancelLeaveRequest(id); }
+  function openApplyTeacherLeaveModal() { openSubmitLeaveRequestModal(); }
 
   function renderStaffImportPreview() {
     const preview = document.getElementById('staffImportPreview');
@@ -41842,6 +42565,21 @@ const classData = TIMETABLE_CLASS_DATA[currentTimetableClass] || TIMETABLE_CLASS
   }
 
   return {
+    switchLeaveViewMode: switchLeaveViewMode,
+    openSubmitLeaveRequestModal: openSubmitLeaveRequestModal,
+    onLeaveEmployeeChange: onLeaveEmployeeChange,
+    onLeaveTypeChange: onLeaveTypeChange,
+    calculateLeaveDuration: calculateLeaveDuration,
+    checkLeaveOverlap: checkLeaveOverlap,
+    toggleSubstituteFields: toggleSubstituteFields,
+    handleSubmitLeaveRequest: handleSubmitLeaveRequest,
+    openLeaveDecisionModal: openLeaveDecisionModal,
+    onDecisionActionChange: onDecisionActionChange,
+    submitLeaveDecision: submitLeaveDecision,
+    cancelLeaveRequest: cancelLeaveRequest,
+    openViewLeaveBalancesModal: openViewLeaveBalancesModal,
+    openStaffLeaveLedger: openStaffLeaveLedger,
+    exportLeaveRegisterCSV: exportLeaveRegisterCSV,
     checkAttendanceDuplicate: checkAttendanceDuplicate,
     calculateRecordLateStatus: calculateRecordLateStatus,
     openRecordStaffAttendanceModal: openRecordStaffAttendanceModal,

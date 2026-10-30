@@ -5133,148 +5133,262 @@
           <!-- ========================================== -->
           <!-- SUBVIEW 4: LEAVE REQUESTS -->
           <!-- ========================================== -->
+          <!-- ========================================================================= -->
+          <!-- SUBVIEW 4: AUTHORITATIVE LEAVE REQUESTS & LEAVE HISTORY MODULE -->
+          <!-- ========================================================================= -->
           <div class="teacher-subview" id="subview-teachers-leave" style="display: none;">
-            <!-- Executive Metrics Quad -->
-            <div class="metrics-quad mb-3" style="margin-top:1rem;">
-              <div class="metric-card">
-                <div class="metric-icon-wrap icon-blue"><i class="fa-solid fa-folder-open"></i></div>
-                <div class="metric-details">
-                  <span class="metric-label">Total Applications</span>
-                  <div class="metric-value" id="kpiTotalLeaveApps">4</div>
-                  <div class="metric-trend trend-steady"><span>Teaching &amp; Staff Cadre</span></div>
+
+            <!-- Page Header -->
+            <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap" style="gap:15px; border-bottom: 1px solid #e2e8f0; padding-bottom: 1.25rem;">
+              <div>
+                <div class="text-xs text-uppercase font-weight-bold text-muted mb-1" style="letter-spacing: 0.5px;">
+                  <i class="fa-solid fa-calendar-check mr-1 text-primary"></i> Teachers &amp; Staff &gt; Leave Requests &amp; Leave History
                 </div>
+                <h2 class="h3 font-weight-bold text-gray-800 mb-1" style="color: #1e293b; margin: 0;">Leave Requests and Leave History</h2>
+                <p class="text-muted mb-0" style="font-size: 0.9rem;">Statutory faculty and staff leave management, policy limit verification, substitute coverage coordination, multi-tier approvals, and leave balance ledger.</p>
               </div>
-              <div class="metric-card">
-                <div class="metric-icon-wrap icon-amber"><i class="fa-solid fa-clock"></i></div>
-                <div class="metric-details">
-                  <span class="metric-label">Pending Sign-off</span>
-                  <div class="metric-value text-amber" id="kpiPendingLeaveApps">4</div>
-                  <div class="metric-trend trend-down"><span>Awaiting Principal / VP Sign-off</span></div>
-                </div>
+              <div class="d-flex align-items-center flex-wrap" style="gap: 8px;">
+                <button type="button" class="btn btn-outline-info btn-sm" onclick="portalApp.openViewLeaveBalancesModal()" title="View comprehensive cadre leave balances">
+                  <i class="fa-solid fa-scale-balanced mr-1"></i> View Leave Balances
+                </button>
+                <button type="button" class="btn btn-outline-primary btn-sm" onclick="portalApp.exportLeaveRegisterCSV()" title="Export official staff leave register to CSV">
+                  <i class="fa-solid fa-file-csv mr-1"></i> Export Leave Register
+                </button>
+                <button type="button" class="btn btn-primary btn-sm" onclick="portalApp.openSubmitLeaveRequestModal()" style="font-weight:600;" title="Submit new staff leave request">
+                  <i class="fa-solid fa-plus-circle mr-1"></i> + Submit Leave Request
+                </button>
               </div>
-              <div class="metric-card">
-                <div class="metric-icon-wrap icon-emerald"><i class="fa-solid fa-circle-check"></i></div>
-                <div class="metric-details">
-                  <span class="metric-label">Approved Leaves</span>
-                  <div class="metric-value text-emerald" id="kpiApprovedLeaveApps">0</div>
-                  <div class="metric-trend trend-up"><span>Recorded in Staff Register</span></div>
-                </div>
-              </div>
-              <div class="metric-card">
-                <div class="metric-icon-wrap icon-purple"><i class="fa-solid fa-user-clock"></i></div>
-                <div class="metric-details">
-                  <span class="metric-label">Active Substitutions</span>
-                  <div class="metric-value text-purple" id="kpiSubstitutionsDeployed">4</div>
-                  <div class="metric-trend"><span>Classroom Continuity Assured</span></div>
+            </div>
+
+            <!-- Policy & Rules Banner -->
+            <div style="background: #eff6ff; border: 1px solid #bfdbfe; border-left: 4px solid #2563eb; border-radius: 8px; padding: 12px 16px; margin-bottom: 20px;">
+              <div style="display: flex; align-items: flex-start; gap: 12px;">
+                <i class="fa-solid fa-scale-unbalanced-flip" style="color: #2563eb; font-size: 1.25rem; margin-top: 2px;"></i>
+                <div style="flex-grow: 1;">
+                  <strong style="color: #1e40af; font-size: 0.9rem;">Statutory School Leave Policy &amp; Approval Guidelines:</strong>
+                  <div style="color: #3b82f6; font-size: 0.82rem; margin-top: 2px; line-height: 1.45;">
+                    Annual entitlements: <strong>Casual Leave (12 days)</strong>, <strong>Medical Leave (12 days)</strong>, and <strong>Earned Leave (15 days)</strong>.
+                    Submitting leave triggers automated policy limit and overlapping request checks. Medical leaves exceeding 2 consecutive days require a physician certificate.
+                    Approval by designated authority (Principal / Vice Principal / AO) automatically updates the staff balance, syncs substitute timetable coverage, and flags daily attendance records without silent overwrite.
+                  </div>
                 </div>
               </div>
             </div>
 
-            <!-- Master Leave Requests Card -->
-            <div class="card p-4">
-              <div class="card-header-flex mb-3">
-                <div>
-                  <h3 style="margin:0;"><i class="fa-solid fa-calendar-minus text-amber"></i> Faculty &amp; Staff Leave
-                    Requests</h3>
-                  <p class="text-muted" style="margin:0; font-size:0.85rem;">Statutory leave review, balance
-                    verification, substitute coverage, and executive authorization.</p>
-                </div>
-                <div style="display:flex; gap:8px;">
-                  <button type="button" class="btn btn-secondary btn-sm"
-                    onclick="portalApp.openModal('assignSubstitutionModal')">
-                    <i class="fa-solid fa-user-clock"></i> Assign Substitution
-                  </button>
-                  <button type="button" class="btn btn-primary btn-sm" onclick="portalApp.openApplyTeacherLeaveModal()">
-                    <i class="fa-solid fa-plus"></i> Submit Leave Request
-                  </button>
+            <!-- Executive KPI Cards -->
+            <div class="row mb-4">
+              <div class="col-xl-2 col-md-4 col-sm-6 mb-3">
+                <div class="card h-100 shadow-sm border-0" style="border-left: 4px solid #3b82f6 !important; border-radius: 8px;">
+                  <div class="card-body p-3">
+                    <div class="d-flex align-items-center justify-content-between mb-1">
+                      <span class="text-xs font-weight-bold text-muted text-uppercase">Total Applications</span>
+                      <i class="fa-solid fa-folder-open text-primary" style="font-size: 1.1rem;"></i>
+                    </div>
+                    <div class="h4 mb-0 font-weight-bold text-gray-800" id="kpiTotalLeaveApps">6</div>
+                    <div class="text-xs text-muted mt-1">Teaching &amp; Non-Teaching</div>
+                  </div>
                 </div>
               </div>
 
-              <!-- Executive Attendance / Leave Filter Toolbar -->
-              <div class="transfers-toolbar mb-3">
-                <div class="tc-toolbar-left"
-                  style="flex:1; display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
-                  <div class="tc-search-wrap" style="min-width:260px; flex:1;">
-                    <i class="fa-solid fa-magnifying-glass search-icon"></i>
-                    <input type="text" id="leaveSearchInput" class="tc-search-input"
-                      placeholder="Search by staff name, ID, department, reason..."
-                      oninput="portalApp.filterLeaveRequests()">
-                    <button type="button" class="tc-clear-btn"
-                      onclick="document.getElementById('leaveSearchInput').value=''; portalApp.filterLeaveRequests();"
-                      title="Clear Search">
-                      <i class="fa-solid fa-xmark"></i>
+              <div class="col-xl-3 col-md-4 col-sm-6 mb-3">
+                <div class="card h-100 shadow-sm border-0" style="border-left: 4px solid #f59e0b !important; border-radius: 8px;">
+                  <div class="card-body p-3">
+                    <div class="d-flex align-items-center justify-content-between mb-1">
+                      <span class="text-xs font-weight-bold text-muted text-uppercase">Pending Sign-off</span>
+                      <i class="fa-solid fa-clock text-warning" style="font-size: 1.1rem;"></i>
+                    </div>
+                    <div class="h4 mb-0 font-weight-bold text-warning" id="kpiPendingLeaveApps">2</div>
+                    <div class="text-xs text-muted mt-1">Awaiting Executive Review</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-xl-2 col-md-4 col-sm-6 mb-3">
+                <div class="card h-100 shadow-sm border-0" style="border-left: 4px solid #10b981 !important; border-radius: 8px;">
+                  <div class="card-body p-3">
+                    <div class="d-flex align-items-center justify-content-between mb-1">
+                      <span class="text-xs font-weight-bold text-muted text-uppercase">Approved Leaves</span>
+                      <i class="fa-solid fa-circle-check text-success" style="font-size: 1.1rem;"></i>
+                    </div>
+                    <div class="h4 mb-0 font-weight-bold text-success" id="kpiApprovedLeaveApps">3</div>
+                    <div class="text-xs text-success mt-1">Recorded in Register</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-xl-3 col-md-6 col-sm-6 mb-3">
+                <div class="card h-100 shadow-sm border-0" style="border-left: 4px solid #8b5cf6 !important; border-radius: 8px;">
+                  <div class="card-body p-3">
+                    <div class="d-flex align-items-center justify-content-between mb-1">
+                      <span class="text-xs font-weight-bold text-muted text-uppercase">Active Substitutions</span>
+                      <i class="fa-solid fa-user-clock text-purple" style="font-size: 1.1rem; color:#8b5cf6;"></i>
+                    </div>
+                    <div class="h4 mb-0 font-weight-bold" style="color:#7c3aed;" id="kpiSubstitutionsDeployed">2</div>
+                    <div class="text-xs text-muted mt-1">Classroom Continuity Active</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-xl-2 col-md-6 col-sm-6 mb-3">
+                <div class="card h-100 shadow-sm border-0" style="border-left: 4px solid #ea580c !important; border-radius: 8px;">
+                  <div class="card-body p-3">
+                    <div class="d-flex align-items-center justify-content-between mb-1">
+                      <span class="text-xs font-weight-bold text-muted text-uppercase">Correction Due</span>
+                      <i class="fa-solid fa-rotate-left" style="font-size: 1.1rem; color:#ea580c;"></i>
+                    </div>
+                    <div class="h4 mb-0 font-weight-bold" style="color:#c2410c;" id="kpiReturnedLeaveApps">1</div>
+                    <div class="text-xs text-muted mt-1">Returned for Info</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- View Mode Tabs -->
+            <div class="d-flex align-items-center justify-content-between mb-3 flex-wrap" style="gap:10px; border-bottom: 2px solid #e2e8f0; padding-bottom: 4px;">
+              <div class="nav nav-pills" style="gap:6px;">
+                <button type="button" class="btn btn-sm btn-primary" id="leaveTabAllBtn" onclick="portalApp.switchLeaveViewMode('table')">
+                  <i class="fa-solid fa-table-list mr-1"></i> All Leave Applications
+                </button>
+                <button type="button" class="btn btn-sm btn-outline-secondary" id="leaveTabPendingBtn" onclick="portalApp.switchLeaveViewMode('cards')">
+                  <i class="fa-solid fa-clock-rotate-left mr-1"></i> Pending Sign-off Cards
+                </button>
+                <button type="button" class="btn btn-sm btn-outline-secondary" id="leaveTabBalancesBtn" onclick="portalApp.switchLeaveViewMode('balances')">
+                  <i class="fa-solid fa-scale-balanced mr-1"></i> Leave Balances Ledger
+                </button>
+              </div>
+
+              <div>
+                <span class="badge badge-light font-weight-normal py-2 px-3" id="leaveCountPill" style="background:#f1f5f9; color:#334155; font-size:0.82rem; border:1px solid #e2e8f0;">
+                  Showing 6 of 6 Leave Requests
+                </span>
+              </div>
+            </div>
+
+            <!-- Executive Filter Toolbar -->
+            <div class="card mb-4 shadow-sm border-0" style="border-radius: 8px; background: #fff;" id="leaveFilterToolbarCard">
+              <div class="card-body p-3">
+                <div class="d-flex align-items-center justify-content-between flex-wrap" style="gap: 12px;">
+                  
+                  <div class="d-flex align-items-center flex-wrap" style="gap: 10px; flex: 1;">
+                    <!-- Search Input -->
+                    <div style="position: relative; min-width: 250px; flex: 1;">
+                      <i class="fa-solid fa-magnifying-glass" style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: #94a3b8; font-size: 0.85rem;"></i>
+                      <input type="text" id="leaveSearchInput" class="form-control form-control-sm" style="padding-left: 34px; border-radius: 6px;" placeholder="Search staff name, ID, department, reason..." oninput="portalApp.filterLeaveRequests()">
+                    </div>
+
+                    <!-- Department Filter -->
+                    <div style="min-width: 170px;">
+                      <select id="leaveDeptFilter" class="form-control form-control-sm" style="border-radius: 6px;" onchange="portalApp.filterLeaveRequests()">
+                        <option value="all">All Departments</option>
+                        <option value="Administrative Office">Administrative Office</option>
+                        <option value="Finance &amp; Accounts">Finance &amp; Accounts</option>
+                        <option value="Mathematics">Mathematics</option>
+                        <option value="Physical Science">Physical Science</option>
+                        <option value="Biological Science">Biological Science</option>
+                        <option value="Social Studies">Social Studies</option>
+                        <option value="English">English</option>
+                        <option value="Telugu Language">Telugu Language</option>
+                        <option value="Transport Operations">Transport Operations</option>
+                        <option value="Library &amp; Learning Resource">Library &amp; Learning Resource</option>
+                      </select>
+                    </div>
+
+                    <!-- Leave Type Filter -->
+                    <div style="min-width: 160px;">
+                      <select id="leaveTypeFilter" class="form-control form-control-sm" style="border-radius: 6px;" onchange="portalApp.filterLeaveRequests()">
+                        <option value="all">All Leave Types</option>
+                        <option value="Casual Leave">Casual Leave (CL)</option>
+                        <option value="Medical Leave">Medical Leave (ML)</option>
+                        <option value="Earned Leave">Earned Leave (EL)</option>
+                        <option value="On Duty (OD)">On Duty (OD) / Deputation</option>
+                        <option value="Maternity / Paternity">Maternity / Paternity</option>
+                      </select>
+                    </div>
+
+                    <!-- Status Filter -->
+                    <div style="min-width: 170px;">
+                      <select id="leaveStatusFilter" class="form-control form-control-sm" style="border-radius: 6px;" onchange="portalApp.filterLeaveRequests()">
+                        <option value="all">All Statuses</option>
+                        <option value="Pending Sign-off">Pending Sign-off</option>
+                        <option value="Approved">Approved</option>
+                        <option value="Rejected">Rejected</option>
+                        <option value="Returned for Correction">Returned for Correction</option>
+                        <option value="Cancelled">Cancelled</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div class="d-flex align-items-center" style="gap: 8px;">
+                    <button type="button" class="btn btn-outline-secondary btn-sm" onclick="portalApp.resetLeaveFilters()" title="Reset Filters">
+                      <i class="fa-solid fa-rotate-left mr-1"></i> Reset
                     </button>
                   </div>
-                  <div class="filter-group" style="margin-bottom:0;">
-                    <select id="leaveCategoryFilter" class="tc-filter-select" onchange="portalApp.filterLeaveRequests()"
-                      title="Filter by Staff Category">
-                      <option value="">All Cadres (38 Staff)</option>
-                      <option value="Teaching">Teaching Faculty (30)</option>
-                      <option value="Non-Teaching">Non-Teaching Staff (8)</option>
-                    </select>
-                  </div>
-                  <div class="filter-group" style="margin-bottom:0;">
-                    <select id="leaveTypeFilter" class="tc-filter-select" onchange="portalApp.filterLeaveRequests()"
-                      title="Filter by Leave Type">
-                      <option value="">All Leave Types</option>
-                      <option value="Medical Leave">Medical Leave</option>
-                      <option value="Casual Leave">Casual Leave</option>
-                      <option value="On Duty (OD)">On Duty (OD)</option>
-                      <option value="Earned Leave">Earned Leave</option>
-                    </select>
-                  </div>
-                  <div class="filter-group" style="margin-bottom:0;">
-                    <select id="leaveStatusFilter" class="tc-filter-select" onchange="portalApp.filterLeaveRequests()"
-                      title="Filter by Approval Status">
-                      <option value="">All Statuses</option>
-                      <option value="Pending Sign-off">Pending Sign-off</option>
-                      <option value="Approved">Approved</option>
-                      <option value="Declined">Declined</option>
-                    </select>
-                  </div>
-                </div>
-                <div class="tc-toolbar-right" style="display:flex; align-items:center; gap:8px;">
-                  <span class="tc-count-pill" id="leaveCountPill">Showing 4 of 4 requests</span>
-                  <button type="button" class="btn btn-outline-secondary btn-sm" onclick="portalApp.resetLeaveFilters()"
-                    title="Reset Filters">
-                    <i class="fa-solid fa-rotate-left"></i> Reset
-                  </button>
+
                 </div>
               </div>
+            </div>
 
-              <!-- Leave Requests Data Table -->
-              <div class="table-container mb-4">
-                <table class="staff-roster-table" id="teacherLeavesTable">
-                  <thead>
+            <!-- VIEW 1: All Leave Applications Table -->
+            <div id="leaveTableViewContainer" class="card shadow-sm border-0 mb-4" style="border-radius: 8px; overflow: hidden; background: #fff;">
+              <div class="table-responsive">
+                <table class="table table-hover mb-0" id="teacherLeavesTable" style="vertical-align: middle;">
+                  <thead style="background: #f8fafc; border-bottom: 2px solid #e2e8f0;">
                     <tr>
-                      <th style="min-width:220px;">Staff Member</th>
-                      <th style="min-width:130px;">Leave Type</th>
-                      <th style="min-width:170px;">Dates &amp; Duration</th>
-                      <th style="min-width:240px;">Reason &amp; Purpose</th>
-                      <th style="min-width:170px;">Available Balance</th>
-                      <th style="min-width:150px;">Approval Status</th>
-                      <th style="text-align:center; min-width:170px;">Authorized Action</th>
+                      <th style="font-size: 0.8rem; text-transform: uppercase; color: #475569; letter-spacing: 0.5px; padding: 12px 14px;">Leave ID</th>
+                      <th style="font-size: 0.8rem; text-transform: uppercase; color: #475569; letter-spacing: 0.5px; padding: 12px 14px;">Staff Member</th>
+                      <th style="font-size: 0.8rem; text-transform: uppercase; color: #475569; letter-spacing: 0.5px; padding: 12px 14px;">Department</th>
+                      <th style="font-size: 0.8rem; text-transform: uppercase; color: #475569; letter-spacing: 0.5px; padding: 12px 14px;">Leave Type</th>
+                      <th style="font-size: 0.8rem; text-transform: uppercase; color: #475569; letter-spacing: 0.5px; padding: 12px 14px;">Dates &amp; Duration</th>
+                      <th style="font-size: 0.8rem; text-transform: uppercase; color: #475569; letter-spacing: 0.5px; padding: 12px 14px;">Reason &amp; Document</th>
+                      <th style="font-size: 0.8rem; text-transform: uppercase; color: #475569; letter-spacing: 0.5px; padding: 12px 14px;">Substitute Arrangements</th>
+                      <th style="font-size: 0.8rem; text-transform: uppercase; color: #475569; letter-spacing: 0.5px; padding: 12px 14px;">Approver</th>
+                      <th style="font-size: 0.8rem; text-transform: uppercase; color: #475569; letter-spacing: 0.5px; padding: 12px 14px;">Status &amp; Remarks</th>
+                      <th style="font-size: 0.8rem; text-transform: uppercase; color: #475569; letter-spacing: 0.5px; padding: 12px 14px; text-align: right;">Actions</th>
                     </tr>
                   </thead>
                   <tbody id="teacherLeavesTableBody">
+                    <!-- Populated dynamically via portalApp.renderTeacherLeaveRequests() -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- VIEW 2: Pending Approval & Substitute Cards View -->
+            <div id="leaveCardsViewContainer" style="display: none;" class="mb-4">
+              <div class="row" id="facultyLeavesContainer">
+                <!-- Injected via portal.js -->
+              </div>
+            </div>
+
+            <!-- VIEW 3: Leave Balances Ledger View -->
+            <div id="leaveBalancesViewContainer" style="display: none;" class="card shadow-sm border-0 mb-4" style="border-radius: 8px; overflow: hidden; background: #fff;">
+              <div class="card-header bg-white py-3 border-bottom d-flex justify-content-between align-items-center">
+                <h5 class="mb-0 font-weight-bold" style="color:#1e293b;">
+                  <i class="fa-solid fa-scale-balanced mr-2 text-primary"></i> Staff Cadre Leave Entitlement &amp; Balance Ledger
+                </h5>
+                <span class="text-muted text-xs">Statutory Annual Allocation: Casual (12), Medical (12), Earned (15)</span>
+              </div>
+              <div class="table-responsive">
+                <table class="table table-hover mb-0" id="cadreLeaveBalancesTable" style="font-size:0.86rem;">
+                  <thead style="background:#f8fafc;">
+                    <tr>
+                      <th>Employee ID</th>
+                      <th>Staff Name</th>
+                      <th>Department</th>
+                      <th>Casual Leave (CL)</th>
+                      <th>Medical Leave (ML)</th>
+                      <th>Earned Leave (EL)</th>
+                      <th>Availed This Year</th>
+                      <th class="text-right">Action</th>
+                    </tr>
+                  </thead>
+                  <tbody id="cadreLeaveBalancesTableBody">
                     <!-- Populated via portal.js -->
                   </tbody>
                 </table>
               </div>
-
-              <!-- Pending Approvals & Substitutions Cards -->
-              <div
-                style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.75rem; flex-wrap:wrap; gap:8px;">
-                <h4 style="font-size:0.95rem; font-weight:700; color:#334155; margin:0;">
-                  <i class="fa-solid fa-clock-rotate-left text-primary"></i> Pending Substitution &amp; Sign-off Cards
-                </h4>
-                <span class="text-muted" style="font-size:0.8rem;">Click Approve on card to activate substitute
-                  timetable coverage</span>
-              </div>
-              <div class="leave-card-grid" id="facultyLeavesContainer">
-                <!-- Injected via portal.js -->
-              </div>
             </div>
+
           </div>
 
           <!-- ==========================================
@@ -23718,6 +23832,234 @@ Class X-A,Monday,2,09:35 AM - 10:20 AM,Physical Science,Sri Navva Anand,Room 201
         <button type="button" class="btn btn-primary btn-sm" onclick="window.print()">
           <i class="fa-solid fa-print mr-1"></i> Print Monthly Summary
         </button>
+      </div>
+    </div>
+  </div>
+
+
+  
+  <!-- ========================================================================= -->
+  <!-- MODAL 1: SUBMIT STAFF LEAVE REQUEST MODAL (WITH POLICY & OVERLAP CHECKS) -->
+  <!-- ========================================================================= -->
+  <div class="portal-modal-backdrop" id="submitLeaveRequestModal" style="display:none;">
+    <div class="portal-modal-dialog" style="max-width: 740px;">
+      <div class="portal-modal-header">
+        <div>
+          <h5 class="portal-modal-title" style="color:#1e293b; font-weight:700;">
+            <i class="fa-solid fa-calendar-plus mr-2 text-primary"></i> Submit Staff Leave Request
+          </h5>
+          <p class="text-muted mb-0" style="font-size:0.84rem;">Automated policy limits check, overlapping request detection, and substitute coverage arrangement.</p>
+        </div>
+        <button type="button" class="portal-modal-close" onclick="portalApp.closeModal('submitLeaveRequestModal')">&times;</button>
+      </div>
+
+      <form id="submitLeaveRequestForm" onsubmit="portalApp.handleSubmitLeaveRequest(event)">
+        <div class="portal-modal-body" style="padding: 20px;">
+
+          <!-- Overlap Warning Banner -->
+          <div id="leaveReqOverlapNotice" style="display:none; background:#fee2e2; border:1px solid #fecaca; border-left:4px solid #ef4444; border-radius:6px; padding:10px 14px; margin-bottom:16px;">
+            <div style="display:flex; align-items:center; gap:8px;">
+              <i class="fa-solid fa-triangle-exclamation text-danger" style="font-size:1.1rem;"></i>
+              <div id="leaveReqOverlapNoticeText" style="font-size:0.85rem; color:#991b1b;">
+                <strong>Policy Violation: Overlapping Request Detected!</strong> This staff member already has an active or approved leave covering the selected dates.
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-7 mb-3">
+              <label style="font-weight:600; font-size:0.85rem; color:#334155;">Staff Member <span class="text-danger">*</span></label>
+              <select class="form-control form-control-sm" id="leaveReqEmployeeId" required onchange="portalApp.onLeaveEmployeeChange()">
+                <option value="">-- Select Staff Member (42 Total) --</option>
+                <!-- Injected dynamically via JS -->
+              </select>
+            </div>
+
+            <div class="col-md-5 mb-3">
+              <label style="font-weight:600; font-size:0.85rem; color:#334155;">Leave Type <span class="text-danger">*</span></label>
+              <select class="form-control form-control-sm" id="leaveReqType" required onchange="portalApp.onLeaveTypeChange()">
+                <option value="Casual Leave">Casual Leave (CL)</option>
+                <option value="Medical Leave">Medical Leave (ML)</option>
+                <option value="Earned Leave">Earned Leave (EL)</option>
+                <option value="On Duty (OD)">On Duty (OD) / Deputation</option>
+                <option value="Maternity / Paternity">Maternity / Paternity Leave</option>
+              </select>
+              <div id="leaveReqBalanceDisplay" style="font-size:0.76rem; color:#2563eb; margin-top:3px; font-weight:600;">
+                Available Casual Balance: 8 Days
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-5 mb-3">
+              <label style="font-weight:600; font-size:0.85rem; color:#334155;">Start Date <span class="text-danger">*</span></label>
+              <input type="date" class="form-control form-control-sm" id="leaveReqStartDate" required onchange="portalApp.calculateLeaveDuration()">
+            </div>
+
+            <div class="col-md-5 mb-3">
+              <label style="font-weight:600; font-size:0.85rem; color:#334155;">End Date <span class="text-danger">*</span></label>
+              <input type="date" class="form-control form-control-sm" id="leaveReqEndDate" required onchange="portalApp.calculateLeaveDuration()">
+            </div>
+
+            <div class="col-md-2 mb-3">
+              <label style="font-weight:600; font-size:0.85rem; color:#334155;">Duration</label>
+              <input type="text" class="form-control form-control-sm font-weight-bold" id="leaveReqDurationDisplay" value="1 Day" readonly style="background:#f1f5f9; text-align:center;">
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label style="font-weight:600; font-size:0.85rem; color:#334155;">Reason &amp; Institutional Justification <span class="text-danger">*</span></label>
+            <textarea class="form-control form-control-sm" id="leaveReqReason" rows="2" required placeholder="Detailed reason for leave request..."></textarea>
+          </div>
+
+          <div class="mb-3">
+            <label style="font-weight:600; font-size:0.85rem; color:#334155;">Supporting Document / Medical Certificate</label>
+            <input type="text" class="form-control form-control-sm" id="leaveReqDoc" placeholder="e.g. Medical_Certificate_Dr_Rao.pdf or Deputation_Order_CBSE_2026.pdf (Required for ML > 2 days)">
+          </div>
+
+          <!-- Section: Substitute Arrangements -->
+          <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:6px; padding:12px; margin-bottom:16px;">
+            <div class="custom-control custom-checkbox mb-2">
+              <input type="checkbox" class="custom-control-input" id="leaveReqHasSubstitute" checked onchange="portalApp.toggleSubstituteFields()">
+              <label class="custom-control-label font-weight-bold" for="leaveReqHasSubstitute" style="font-size:0.85rem; color:#1e293b;">
+                Assign Colleague for Substitute Classroom / Work Coverage
+              </label>
+            </div>
+
+            <div id="leaveReqSubstituteFields">
+              <div class="row">
+                <div class="col-md-6 mb-2">
+                  <label style="font-size:0.78rem; font-weight:600; color:#475569;">Substitute Colleague</label>
+                  <select class="form-control form-control-sm" id="leaveReqSubstituteId">
+                    <option value="">-- Select Substitute Colleague --</option>
+                    <!-- Injected dynamically via JS -->
+                  </select>
+                </div>
+                <div class="col-md-6 mb-2">
+                  <label style="font-size:0.78rem; font-weight:600; color:#475569;">Classes / Duties Covered</label>
+                  <input type="text" class="form-control form-control-sm" id="leaveReqClassesCovered" placeholder="e.g. Class X-B (Physics), Class IX-A (Science Lab)">
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="mb-2">
+            <label style="font-weight:600; font-size:0.85rem; color:#334155;">Designated Approving Authority <span class="text-danger">*</span></label>
+            <select class="form-control form-control-sm" id="leaveReqApprover" required>
+              <option value="Principal Smt. Gorle Varalakshmi">Principal Smt. Gorle Varalakshmi (Executive Sanction)</option>
+              <option value="Vice Principal Sri Navva Anand">Vice Principal Sri Navva Anand (Academic Faculty Coverage)</option>
+              <option value="Administrative Officer Sri M. Srinivas">Administrative Officer Sri M. Srinivas (Support Staff Cadre)</option>
+            </select>
+          </div>
+
+        </div>
+
+        <div class="portal-modal-footer" style="padding: 12px 20px; background:#f8fafc; border-top:1px solid #e2e8f0; display:flex; justify-content:flex-end; gap:8px;">
+          <button type="button" class="btn btn-outline-secondary btn-sm" onclick="portalApp.closeModal('submitLeaveRequestModal')">Cancel</button>
+          <button type="submit" class="btn btn-primary btn-sm" id="btnSubmitLeaveRequest" style="font-weight:600;">
+            <i class="fa-solid fa-paper-plane mr-1"></i> Submit Leave Request
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+
+  <!-- ========================================================================= -->
+  <!-- MODAL 2: LEAVE DECISION MODAL (APPROVE / REJECT WITH REASON / RETURN) -->
+  <!-- ========================================================================= -->
+  <div class="portal-modal-backdrop" id="leaveDecisionModal" style="display:none;">
+    <div class="portal-modal-dialog" style="max-width: 600px;">
+      <div class="portal-modal-header">
+        <div>
+          <h5 class="portal-modal-title" style="color:#1e293b; font-weight:700;">
+            <i class="fa-solid fa-gavel mr-2 text-warning"></i> Leave Request Authorization &amp; Decision
+          </h5>
+          <p class="text-muted mb-0" style="font-size:0.84rem;">Review request particulars, substitute arrangements, and record executive decision.</p>
+        </div>
+        <button type="button" class="portal-modal-close" onclick="portalApp.closeModal('leaveDecisionModal')">&times;</button>
+      </div>
+
+      <form id="leaveDecisionForm" onsubmit="portalApp.submitLeaveDecision(event)">
+        <input type="hidden" id="decLeaveId">
+
+        <div class="portal-modal-body" style="padding: 20px;">
+          <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:6px; padding:12px; margin-bottom:16px;">
+            <div style="font-weight:700; font-size:0.95rem; color:#1e293b;" id="decStaffHeading">Smt. M. Vijaya (SV-STF-0201)</div>
+            <div style="font-size:0.82rem; color:#64748b;" id="decLeaveSub">Casual Leave &bull; 2026-11-02 to 2026-11-03 (2 Days)</div>
+            <div style="font-size:0.84rem; color:#334155; margin-top:8px;">
+              <strong>Reason:</strong> <span id="decReason">Family emergency in native place.</span>
+            </div>
+            <div style="font-size:0.82rem; color:#2563eb; margin-top:4px;" id="decSubstituteInfo">
+              <i class="fa-solid fa-user-clock mr-1"></i> Substitute: Smt. G. Bhavani (Admissions &amp; Records Desk)
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label style="font-weight:600; font-size:0.85rem; color:#334155;">Executive Decision <span class="text-danger">*</span></label>
+            <select class="form-control form-control-sm" id="decActionSelect" required onchange="portalApp.onDecisionActionChange()">
+              <option value="Approved">Approve Leave Request (Deduct balance &amp; sync schedule)</option>
+              <option value="Rejected">Reject Request (Decline with recorded institutional reason)</option>
+              <option value="Returned for Correction">Return for Correction (Request more info / document)</option>
+            </select>
+          </div>
+
+          <div class="mb-2">
+            <label style="font-weight:600; font-size:0.85rem; color:#334155;">Decision Remarks &amp; Notes <span id="decRemarksReqStar" class="text-danger" style="display:none;">*</span></label>
+            <textarea class="form-control form-control-sm" id="decRemarks" rows="3" placeholder="Executive remarks, conditions of approval, or reason for rejection..."></textarea>
+          </div>
+        </div>
+
+        <div class="portal-modal-footer" style="padding: 12px 20px; background:#f8fafc; border-top:1px solid #e2e8f0; display:flex; justify-content:flex-end; gap:8px;">
+          <button type="button" class="btn btn-outline-secondary btn-sm" onclick="portalApp.closeModal('leaveDecisionModal')">Cancel</button>
+          <button type="submit" class="btn btn-primary btn-sm" style="font-weight:700;">
+            <i class="fa-solid fa-check-double mr-1"></i> Record Official Decision
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+
+  <!-- ========================================================================= -->
+  <!-- MODAL 3: VIEW LEAVE BALANCES MODAL (CADRE SUMMARY & EMPLOYEE DETAIL) -->
+  <!-- ========================================================================= -->
+  <div class="portal-modal-backdrop" id="viewLeaveBalancesModal" style="display:none;">
+    <div class="portal-modal-dialog" style="max-width: 860px;">
+      <div class="portal-modal-header">
+        <div>
+          <h5 class="portal-modal-title" style="color:#1e293b; font-weight:700;">
+            <i class="fa-solid fa-scale-balanced mr-2 text-info"></i> Staff Cadre Leave Entitlement &amp; Balance Ledger
+          </h5>
+          <p class="text-muted mb-0" style="font-size:0.84rem;">Statutory leave allocations: Casual Leave (12), Medical Leave (12), Earned Leave (15).</p>
+        </div>
+        <button type="button" class="portal-modal-close" onclick="portalApp.closeModal('viewLeaveBalancesModal')">&times;</button>
+      </div>
+
+      <div class="portal-modal-body" style="padding: 20px;">
+        <div class="table-responsive" style="max-height: 420px; overflow-y:auto; border:1px solid #e2e8f0; border-radius:6px;">
+          <table class="table table-sm table-hover mb-0" style="font-size:0.84rem;">
+            <thead style="background:#f8fafc; position:sticky; top:0;">
+              <tr>
+                <th>Emp ID</th>
+                <th>Staff Name</th>
+                <th>Department</th>
+                <th style="text-align:center;">Casual (CL)</th>
+                <th style="text-align:center;">Medical (ML)</th>
+                <th style="text-align:center;">Earned (EL)</th>
+                <th style="text-align:center;">Availed This Yr</th>
+                <th style="text-align:center;">Status</th>
+              </tr>
+            </thead>
+            <tbody id="modalLeaveBalancesTbody">
+              <!-- Injected dynamically via JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="portal-modal-footer" style="padding: 12px 20px; background:#f8fafc; border-top:1px solid #e2e8f0; display:flex; justify-content:flex-end;">
+        <button type="button" class="btn btn-secondary btn-sm" onclick="portalApp.closeModal('viewLeaveBalancesModal')">Close</button>
       </div>
     </div>
   </div>
