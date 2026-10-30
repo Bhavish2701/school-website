@@ -741,7 +741,7 @@ var teacherApp = (function () {
   function notifyNonClassTeacherAttempt(name, className) {
     const msgEl = document.getElementById('nonClassTeacherMsg');
     if (msgEl) {
-      msgEl.innerHTML = `Student <strong>${name}</strong> is enrolled in <strong>Class ${className}</strong>.<br><br>Under Sri Vidya statutory policy, only the officially designated <strong>Class Teacher of Class ${className}</strong> possesses authority to withdraw or delete a student from school records. As subject/remedial faculty, you cannot delete this student.`;
+      msgEl.innerHTML = `Student <strong>${name}</strong> is enrolled in <strong>Class ${className}</strong>.<br><br>Under Sri Vidya statutory policy, only the officially designated <strong>Class Teacher of Class ${className}</strong> possesses authority to submit a student withdrawal or archival request. As subject/remedial faculty, you cannot withdraw or archive this student.`;
     }
     openModal('nonClassTeacherRestrictedModal');
   }
@@ -842,7 +842,7 @@ var teacherApp = (function () {
     const mainDeptNotice = {
       id: 'notif-wd-' + Date.now(),
       title: `Student Departure: ${studentName} (Class ${className})`,
-      text: `Class Teacher ${state.teacher.name} has withdrawn student ${studentName} (Roll #${roll}, Class ${className}) from class roster. Reason: ${reason}${newSchool ? ' (Joining ' + newSchool + ')' : ''}. Awaiting Principal / Vice Principal permanent record deletion & TC clearance.`,
+      text: `Class Teacher ${state.teacher.name} has withdrawn student ${studentName} (Roll #${roll}, Class ${className}) from class roster. Reason: ${reason}${newSchool ? ' (Joining ' + newSchool + ')' : ''}. Awaiting Principal / Vice Principal controlled record archival & TC clearance.`,
       type: 'warning',
       unread: true,
       time: 'Just now',

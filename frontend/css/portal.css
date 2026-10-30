@@ -17118,3 +17118,233 @@ input:disabled + .perm-slider {
   color: #334155;
   line-height: 1.45;
 }
+
+/* ==========================================================================
+   10. STANDARD RECORD ACTIONS (VIEW, EDIT, SUBMIT, APPROVE, REJECT,
+       RETURN FOR CORRECTION, ARCHIVE, RESTORE, DOWNLOAD, PRINT, HISTORY, MORE)
+   ========================================================================== */
+.record-actions-wrap {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  position: relative;
+}
+
+.record-action-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  padding: 4px 8px;
+  min-height: 28px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  border-radius: 6px;
+  border: 1px solid var(--color-border, #e2e8f0);
+  background: var(--color-bg-surface, #ffffff);
+  color: var(--color-text, #334155);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+}
+.record-action-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.06);
+}
+
+.record-action-btn.btn-action-view {
+  color: #1d4ed8;
+  background: #eff6ff;
+  border-color: #bfdbfe;
+}
+.record-action-btn.btn-action-view:hover {
+  background: #dbeafe;
+  border-color: #93c5fd;
+}
+
+.record-action-btn.btn-action-edit {
+  color: #4f46e5;
+  background: #eef2ff;
+  border-color: #c7d2fe;
+}
+.record-action-btn.btn-action-edit:hover {
+  background: #e0e7ff;
+  border-color: #a5b4fc;
+}
+
+.record-action-btn.btn-action-submit {
+  color: #0284c7;
+  background: #f0f9ff;
+  border-color: #bae6fd;
+}
+.record-action-btn.btn-action-submit:hover {
+  background: #e0f2fe;
+  border-color: #7dd3fc;
+}
+
+.record-action-btn.btn-action-approve {
+  color: #15803d;
+  background: #f0fdf4;
+  border-color: #bbf7d0;
+}
+.record-action-btn.btn-action-approve:hover {
+  background: #dcfce7;
+  border-color: #86efac;
+}
+
+.record-action-btn.btn-action-reject {
+  color: #b91c1c;
+  background: #fef2f2;
+  border-color: #fecaca;
+}
+.record-action-btn.btn-action-reject:hover {
+  background: #fee2e2;
+  border-color: #fca5a5;
+}
+
+.record-action-btn.btn-action-return {
+  color: #b45309;
+  background: #fffbeb;
+  border-color: #fde68a;
+}
+.record-action-btn.btn-action-return:hover {
+  background: #fef3c7;
+  border-color: #fcd34d;
+}
+
+.record-action-btn.btn-action-archive {
+  color: #475569;
+  background: #f8fafc;
+  border-color: #cbd5e1;
+}
+.record-action-btn.btn-action-archive:hover {
+  background: #f1f5f9;
+  color: #334155;
+}
+
+.record-action-btn.btn-action-restore {
+  color: #059669;
+  background: #ecfdf5;
+  border-color: #a7f3d0;
+}
+.record-action-btn.btn-action-restore:hover {
+  background: #d1fae5;
+}
+
+.record-action-btn.btn-action-download {
+  color: #7c3aed;
+  background: #faf5ff;
+  border-color: #e9d5ff;
+}
+.record-action-btn.btn-action-download:hover {
+  background: #f3e8ff;
+}
+
+.record-action-btn.btn-action-print {
+  color: #334155;
+  background: #f8fafc;
+  border-color: #cbd5e1;
+}
+.record-action-btn.btn-action-print:hover {
+  background: #f1f5f9;
+}
+
+.record-action-btn.btn-action-history {
+  color: #0369a1;
+  background: #f0f9ff;
+  border-color: #bae6fd;
+}
+.record-action-btn.btn-action-history:hover {
+  background: #e0f2fe;
+}
+
+.record-action-btn.btn-action-more {
+  padding: 4px 7px;
+  color: #64748b;
+  border-color: #e2e8f0;
+}
+.record-action-btn.btn-action-more:hover {
+  background: #f1f5f9;
+  color: #1e293b;
+}
+
+/* More Actions Floating Dropdown Menu */
+.record-more-menu {
+  display: none;
+  position: absolute;
+  top: 100%;
+  right: 0;
+  margin-top: 4px;
+  min-width: 195px;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.12), 0 8px 10px -6px rgba(15, 23, 42, 0.08);
+  padding: 4px;
+  z-index: 1050;
+  text-align: left;
+}
+.record-more-menu.open {
+  display: block !important;
+  animation: fadeInRecordMenu 0.12s ease-out;
+}
+@keyframes fadeInRecordMenu {
+  from { opacity: 0; transform: translateY(-3px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.record-more-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 6px 10px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: #334155;
+  background: transparent;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.1s ease;
+  text-decoration: none;
+}
+.record-more-item:hover {
+  background: #f1f5f9;
+  color: #0f172a;
+}
+.record-more-item i {
+  width: 16px;
+  text-align: center;
+  font-size: 0.82rem;
+  color: #64748b;
+}
+.record-more-item:hover i {
+  color: #1d4ed8;
+}
+.record-more-item.item-archive:hover {
+  background: #fff7ed;
+  color: #c2410c;
+}
+.record-more-item.item-archive:hover i {
+  color: #ea580c;
+}
+.record-more-item.item-restore:hover {
+  background: #f0fdf4;
+  color: #15803d;
+}
+.record-more-item.item-restore:hover i {
+  color: #16a34a;
+}
+.record-more-item.item-reversal:hover {
+  background: #fef2f2;
+  color: #b91c1c;
+}
+.record-more-item.item-reversal:hover i {
+  color: #dc2626;
+}
+.record-more-divider {
+  height: 1px;
+  background: #e2e8f0;
+  margin: 4px 0;
+}

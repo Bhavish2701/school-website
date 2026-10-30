@@ -3495,16 +3495,31 @@ const FEE_CATEGORY_AUDIT_DATA = [
           </td>
           <td><span class="portal-badge ${badgeClass}">${student.feeStatus}</span></td>
           <td>
-            <div class="table-action-btns">
-              <button class="action-icon-btn" onclick="portalApp.viewStudentProfile('${student.admNo}')" title="View Full Dossier">
-                <i class="fa-regular fa-eye"></i>
+            <div class="record-actions-wrap">
+              <button type="button" class="record-action-btn btn-action-view" onclick="portalApp.executeStandardAction('view', { module: 'students', id: '${student.admNo}' })" title="View Full Dossier">
+                <i class="fa-regular fa-eye"></i> View
               </button>
-              <button class="action-icon-btn" onclick="portalApp.openStudentIdCard('${student.admNo}')" title="Generate Student ID Card">
-                <i class="fa-solid fa-id-card"></i>
+              <button type="button" class="record-action-btn btn-action-edit" onclick="portalApp.executeStandardAction('edit', { module: 'students', id: '${student.admNo}' })" title="Edit Permitted Fields">
+                <i class="fa-solid fa-pen-to-square"></i> Edit
               </button>
-              <button class="action-icon-btn action-icon-btn-delete" onclick="portalApp.handleStudentDeleteClick('${student.admNo}')" style="color: #ef4444;" title="Permanently Delete (Principal/VP Only)">
-                <i class="fa-solid fa-trash-can"></i>
+              <button type="button" class="record-action-btn btn-action-more" onclick="portalApp.toggleRecordMoreMenu(this, event)" title="More Actions">
+                <i class="fa-solid fa-ellipsis-vertical"></i>
               </button>
+              <div class="record-more-menu">
+                <button type="button" class="record-more-item" onclick="portalApp.executeStandardAction('download', { module: 'students', id: '${student.admNo}' })">
+                  <i class="fa-solid fa-id-card"></i> Student ID Card
+                </button>
+                <button type="button" class="record-more-item" onclick="portalApp.executeStandardAction('print', { module: 'students', id: '${student.admNo}' })">
+                  <i class="fa-solid fa-print"></i> Print Dossier
+                </button>
+                <button type="button" class="record-more-item" onclick="portalApp.executeStandardAction('history', { module: 'students', id: '${student.admNo}', title: '${student.name} (${student.admNo})' })">
+                  <i class="fa-solid fa-clock-rotate-left"></i> History &amp; Audits
+                </button>
+                <div class="record-more-divider"></div>
+                <button type="button" class="record-more-item item-archive" onclick="portalApp.executeStandardAction('archive', { module: 'students', id: '${student.admNo}' })">
+                  <i class="fa-solid fa-box-archive"></i> Archive Record
+                </button>
+              </div>
             </div>
           </td>
         </tr>
@@ -3849,13 +3864,31 @@ const FEE_CATEGORY_AUDIT_DATA = [
             <div style="font-size:0.74rem;"><a href="tel:${s.phone}" class="phone-link"><i class="fa-solid fa-phone"></i> ${s.phone}</a></div>
           </td>
           <td class="text-center">
-            <div style="display:inline-flex; gap:4px;">
-              <button class="btn btn-secondary btn-sm" onclick="portalApp.viewStudentProfile('${s.admNo}')" title="View Full Dossier">
-                <i class="fa-regular fa-eye"></i>
+            <div class="record-actions-wrap" style="justify-content:center;">
+              <button type="button" class="record-action-btn btn-action-view" onclick="portalApp.executeStandardAction('view', { module: 'students', id: '${s.admNo}' })" title="View Full Dossier">
+                <i class="fa-regular fa-eye"></i> View
               </button>
-              <button class="btn btn-primary btn-sm" onclick="portalApp.openStudentIdCard('${s.admNo}')" title="Print Student ID Card">
-                <i class="fa-solid fa-id-card"></i>
+              <button type="button" class="record-action-btn btn-action-edit" onclick="portalApp.executeStandardAction('edit', { module: 'students', id: '${s.admNo}' })" title="Edit Permitted Fields">
+                <i class="fa-solid fa-pen-to-square"></i> Edit
               </button>
+              <button type="button" class="record-action-btn btn-action-more" onclick="portalApp.toggleRecordMoreMenu(this, event)" title="More Actions">
+                <i class="fa-solid fa-ellipsis-vertical"></i>
+              </button>
+              <div class="record-more-menu">
+                <button type="button" class="record-more-item" onclick="portalApp.executeStandardAction('download', { module: 'students', id: '${s.admNo}' })">
+                  <i class="fa-solid fa-id-card"></i> Student ID Card
+                </button>
+                <button type="button" class="record-more-item" onclick="portalApp.executeStandardAction('print', { module: 'students', id: '${s.admNo}' })">
+                  <i class="fa-solid fa-print"></i> Print Dossier
+                </button>
+                <button type="button" class="record-more-item" onclick="portalApp.executeStandardAction('history', { module: 'students', id: '${s.admNo}', title: '${s.name} (${s.admNo})' })">
+                  <i class="fa-solid fa-clock-rotate-left"></i> History &amp; Audits
+                </button>
+                <div class="record-more-divider"></div>
+                <button type="button" class="record-more-item item-archive" onclick="portalApp.executeStandardAction('archive', { module: 'students', id: '${s.admNo}' })">
+                  <i class="fa-solid fa-box-archive"></i> Archive Record
+                </button>
+              </div>
             </div>
           </td>
         </tr>
@@ -9178,6 +9211,11 @@ const FEE_CATEGORY_AUDIT_DATA = [
               </td>
               <td><strong class="text-primary">${item.deletedBy}</strong></td>
               <td>${item.dateFormatted || 'Recorded'}</td>
+              <td class="text-center">
+                <button type="button" class="record-action-btn btn-action-restore" onclick="portalApp.restoreArchivedStudent('${item.admNo}')" title="Reactivate Record to Active Roster">
+                  <i class="fa-solid fa-rotate-right mr-1"></i> Restore
+                </button>
+              </td>
             </tr>
           `;
         }).join('');
@@ -18105,9 +18143,29 @@ const FEE_CATEGORY_AUDIT_DATA = [
           <small class="text-muted">${tx.date}</small>
         </td>
         <td style="text-align: center;">
-          <button class="btn btn-secondary btn-sm" onclick="portalApp.printFeeReceiptSlip('${tx.receiptNo}')" title="Print Fee Receipt">
-            <i class="fa-solid fa-receipt mr-1"></i> ${tx.receiptNo}
-          </button>
+          <div class="record-actions-wrap" style="justify-content:center;">
+            <button type="button" class="record-action-btn btn-action-print" onclick="portalApp.executeStandardAction('print', { module: 'fees', id: '${tx.receiptNo}' })" title="Print Fee Receipt">
+              <i class="fa-solid fa-receipt mr-1"></i> ${tx.receiptNo}
+            </button>
+            <button type="button" class="record-action-btn btn-action-more" onclick="portalApp.toggleRecordMoreMenu(this, event)" title="More Actions">
+              <i class="fa-solid fa-ellipsis-vertical"></i>
+            </button>
+            <div class="record-more-menu">
+              <button type="button" class="record-more-item" onclick="portalApp.executeStandardAction('view', { module: 'fees', id: '${tx.receiptNo}' })">
+                <i class="fa-regular fa-eye"></i> View Invoice Dossier
+              </button>
+              <button type="button" class="record-more-item" onclick="portalApp.executeStandardAction('download', { module: 'fees', id: '${tx.receiptNo}' })">
+                <i class="fa-solid fa-file-invoice"></i> Download PDF Receipt
+              </button>
+              <button type="button" class="record-more-item" onclick="portalApp.executeStandardAction('history', { module: 'fees', id: '${tx.receiptNo}', title: 'Receipt ${tx.receiptNo} (${tx.student})' })">
+                <i class="fa-solid fa-clock-rotate-left"></i> Transaction History
+              </button>
+              <div class="record-more-divider"></div>
+              <button type="button" class="record-more-item item-reversal" onclick="portalApp.openFeeReversalModal('${tx.receiptNo}')">
+                <i class="fa-solid fa-ban"></i> Controlled Reversal Docket
+              </button>
+            </div>
+          </div>
         </td>
       </tr>
     `).join('');
@@ -30908,16 +30966,30 @@ const classData = TIMETABLE_CLASS_DATA[currentTimetableClass] || TIMETABLE_CLASS
           </span>
         </td>
         <td class="text-end">
-          <div style="display:flex; justify-content:flex-end; gap:0.35rem;">
-            <button class="btn btn-secondary btn-sm" onclick="portalApp.openApprovalDecisionModal('${item.id}')" title="Review Dossier">
-              <i class="fa-solid fa-eye"></i>
+          <div class="record-actions-wrap" style="justify-content:flex-end;">
+            <button type="button" class="record-action-btn btn-action-view" onclick="portalApp.openApprovalDecisionModal('${item.id}')" title="Review Dossier">
+              <i class="fa-regular fa-eye"></i> View
             </button>
-            <button class="btn btn-warning btn-sm" onclick="portalApp.quickDecisionAction('${item.id}', 'Returned')" title="Return for Clarification">
-              <i class="fa-solid fa-rotate-left"></i>
+            <button type="button" class="record-action-btn btn-action-approve" onclick="portalApp.executeStandardAction('approve', { module: 'tasks', id: '${item.id}' })" title="Authorize Request">
+              <i class="fa-solid fa-check"></i> Approve
             </button>
-            <button class="btn btn-success btn-sm" onclick="portalApp.quickDecisionAction('${item.id}', 'Approved')" title="Quick Approve">
-              <i class="fa-solid fa-check"></i>
+            <button type="button" class="record-action-btn btn-action-reject" onclick="portalApp.executeStandardAction('reject', { module: 'tasks', id: '${item.id}', scope: '${item.category}' })" title="Decline with Reason">
+              <i class="fa-solid fa-xmark"></i> Reject
             </button>
+            <button type="button" class="record-action-btn btn-action-return" onclick="portalApp.executeStandardAction('return_correction', { module: 'tasks', id: '${item.id}', scope: '${item.category}' })" title="Return for Correction">
+              <i class="fa-solid fa-rotate-left"></i> Return
+            </button>
+            <button type="button" class="record-action-btn btn-action-more" onclick="portalApp.toggleRecordMoreMenu(this, event)" title="More Actions">
+              <i class="fa-solid fa-ellipsis-vertical"></i>
+            </button>
+            <div class="record-more-menu">
+              <button type="button" class="record-more-item" onclick="portalApp.executeStandardAction('history', { module: 'tasks', id: '${item.id}', title: 'Workflow Request ${item.id}' })">
+                <i class="fa-solid fa-clock-rotate-left"></i> Approval History
+              </button>
+              <button type="button" class="record-more-item" onclick="portalApp.executeStandardAction('print', { module: 'tasks', id: '${item.id}' })">
+                <i class="fa-solid fa-print"></i> Print Docket
+              </button>
+            </div>
           </div>
         </td>
       </tr>
@@ -32770,8 +32842,607 @@ const classData = TIMETABLE_CLASS_DATA[currentTimetableClass] || TIMETABLE_CLASS
     }
   }
 
+
+  // ==========================================================================
+  // STANDARD RECORD ACTIONS ENGINE
+  // ==========================================================================
+  let activeStandardDecisionConfig = null;
+
+  function toggleRecordMoreMenu(btn, e) {
+    if (e && e.stopPropagation) e.stopPropagation();
+    const wrap = btn.closest('.record-actions-wrap');
+    if (!wrap) return;
+    const menu = wrap.querySelector('.record-more-menu');
+    if (!menu) return;
+
+    document.querySelectorAll('.record-more-menu.open').forEach(m => {
+      if (m !== menu) m.classList.remove('open');
+    });
+
+    menu.classList.toggle('open');
+  }
+
+  // Global dismissal when clicking outside any open more-menu
+  if (typeof document !== 'undefined') {
+    document.addEventListener('click', (e) => {
+      if (!e.target.closest('.record-actions-wrap')) {
+        document.querySelectorAll('.record-more-menu.open').forEach(m => m.classList.remove('open'));
+      }
+    });
+  }
+
+  function executeStandardAction(action, context = {}) {
+    if (typeof document !== 'undefined') {
+      document.querySelectorAll('.record-more-menu.open').forEach(m => m.classList.remove('open'));
+    }
+
+    const { module = 'general', id = '', title = '' } = context;
+
+    switch (action) {
+      case 'view':
+        if (module === 'students') {
+          viewStudentProfile(id);
+        } else if (module === 'fees') {
+          printFeeReceiptSlip(id);
+        } else if (module === 'tasks') {
+          openApprovalDecisionModal(id);
+        } else {
+          showToast(`Opening complete record dossier for [${id}]...`, 'info');
+        }
+        break;
+
+      case 'edit':
+        if (module === 'students') {
+          openModal('addStudentModal');
+          const nameInput = document.getElementById('mStudentName');
+          const admInput = document.getElementById('mAdmNo');
+          const student = state.students.find(s => s.admNo === id);
+          if (student && nameInput && admInput) {
+            nameInput.value = student.name;
+            admInput.value = student.admNo;
+            admInput.readOnly = true;
+          }
+          showToast(`Editing permitted fields for ${student ? student.name : id} (Statutory Adm No locked).`, 'info');
+        } else if (module === 'marks') {
+          openMarksCorrectionModal(id, context.examId, context.subject);
+        } else {
+          showToast(`Opening permitted field editor for [${id}]...`, 'info');
+        }
+        break;
+
+      case 'submit':
+        showToast(`Record ${id} sent for institutional review. Workflow state: Pending Approval.`, 'success');
+        addNewNotification('Record Submitted for Review', `Request ${id} has been dispatched to authorized reviewers.`, 'info');
+        break;
+
+      case 'approve':
+        if (module === 'tasks') {
+          quickDecisionAction(id, 'Approved');
+        } else {
+          showToast(`Authorization granted for record ${id}. Marked as Approved.`, 'success');
+          addNewNotification('Request Authorized', `Record ${id} signed off by ${state.currentRole === 'vice-principal' ? 'Vice Principal Sri Navva Anand' : 'Principal Smt. Gorle Varalakshmi'}.`, 'success');
+        }
+        break;
+
+      case 'reject':
+        openStandardRecordDecisionModal('reject', id, module, title, context.scope);
+        break;
+
+      case 'return_correction':
+        openStandardRecordDecisionModal('return', id, module, title, context.scope);
+        break;
+
+      case 'archive':
+        if (module === 'students') {
+          handleStudentArchiveClick(id);
+        } else {
+          showToast(`Record ${id} safely retained and archived in institutional vault.`, 'info');
+        }
+        break;
+
+      case 'restore':
+        if (module === 'students') {
+          restoreArchivedStudent(id);
+        } else {
+          showToast(`Archived record ${id} reactivated to active operational status.`, 'success');
+        }
+        break;
+
+      case 'download':
+        if (module === 'students') {
+          openStudentIdCard(id);
+          showToast(`Downloading official student document docket for ${id}...`, 'success');
+        } else if (module === 'fees') {
+          printFeeReceiptSlip(id);
+        } else {
+          showToast(`Preparing authorized document download for ${id}...`, 'info');
+        }
+        break;
+
+      case 'print':
+        if (module === 'students') {
+          printStudentDossier();
+        } else if (module === 'fees') {
+          printFeeReceiptSlip(id);
+        } else {
+          window.print();
+        }
+        break;
+
+      case 'history':
+        openActivityHistory(title || `Record ${id}`, `Audit trail of status transitions, modifications, and executive clearances for ${id}`);
+        break;
+
+      default:
+        console.warn('Unknown standard record action:', action);
+    }
+  }
+
+  function openStandardRecordDecisionModal(actionType, recordId, moduleKey, title, scope) {
+    activeStandardDecisionConfig = { actionType, recordId, moduleKey, title, scope };
+
+    const typeInput = document.getElementById('standardDecisionActionType');
+    const idInput = document.getElementById('standardDecisionRecordId');
+    const modInput = document.getElementById('standardDecisionModuleKey');
+    const refLabel = document.getElementById('standardDecisionRefLabel');
+    const scopeLabel = document.getElementById('standardDecisionScopeLabel');
+    const titleText = document.getElementById('standardDecisionTitleText');
+    const iconEl = document.getElementById('standardDecisionIcon');
+    const reasonLabel = document.getElementById('standardDecisionReasonLabel');
+    const reasonInput = document.getElementById('standardDecisionReasonInput');
+    const submitBtn = document.getElementById('standardDecisionSubmitBtn');
+
+    if (typeInput) typeInput.value = actionType;
+    if (idInput) idInput.value = recordId;
+    if (modInput) modInput.value = moduleKey || 'general';
+    if (refLabel) refLabel.textContent = recordId;
+    if (scopeLabel) scopeLabel.textContent = scope || title || 'Institutional Request';
+    if (reasonInput) reasonInput.value = '';
+
+    if (actionType === 'reject') {
+      if (titleText) titleText.textContent = `Decline Request: ${recordId}`;
+      if (iconEl) iconEl.className = 'fa-solid fa-circle-xmark text-danger';
+      if (reasonLabel) reasonLabel.innerHTML = 'Mandatory Grounds for Rejection <span class="text-danger">*</span>';
+      if (submitBtn) {
+        submitBtn.className = 'btn btn-danger';
+        submitBtn.innerHTML = '<i class="fa-solid fa-circle-xmark mr-1"></i> Confirm Rejection';
+      }
+    } else {
+      if (titleText) titleText.textContent = `Return for Correction: ${recordId}`;
+      if (iconEl) iconEl.className = 'fa-solid fa-arrow-rotate-left text-warning';
+      if (reasonLabel) reasonLabel.innerHTML = 'Required Corrections &amp; Guidance for Requester <span class="text-danger">*</span>';
+      if (submitBtn) {
+        submitBtn.className = 'btn btn-warning';
+        submitBtn.style.background = '#d97706';
+        submitBtn.style.borderColor = '#b45309';
+        submitBtn.style.color = '#fff';
+        submitBtn.innerHTML = '<i class="fa-solid fa-arrow-rotate-left mr-1"></i> Return for Correction';
+      }
+    }
+
+    openModal('standardRecordDecisionModal');
+  }
+
+  function confirmStandardRecordDecision() {
+    if (!activeStandardDecisionConfig) return;
+    const { actionType, recordId, moduleKey } = activeStandardDecisionConfig;
+    const reason = (document.getElementById('standardDecisionReasonInput')?.value || '').trim();
+
+    if (!reason || reason.length < 5) {
+      showToast('Mandatory Reason Required: Please specify detailed grounds or revision guidance.', 'danger');
+      return;
+    }
+
+    const executingRole = state.currentRole === 'vice-principal' ? 'Vice Principal Sri Navva Anand' : 'Principal Smt. Gorle Varalakshmi';
+    const statusLabel = actionType === 'reject' ? 'Rejected' : 'Returned for Correction';
+
+    const pIdx = TASKS_PENDING_DATA.findIndex(x => x.id === recordId);
+    if (pIdx !== -1) {
+      const item = TASKS_PENDING_DATA[pIdx];
+      TASKS_HISTORY_DATA.unshift({
+        id: 'DEC-2026-0' + (TASKS_HISTORY_DATA.length + 80),
+        ref: item.id,
+        type: item.category,
+        applicant: item.requester,
+        action: actionType === 'reject' ? 'Rejected' : 'Returned',
+        actionClass: actionType === 'reject' ? 'danger' : 'warning',
+        authority: executingRole,
+        timestamp: 'Just now',
+        notes: reason,
+        audit: 'AP-AUD-' + Math.floor(1000 + Math.random() * 9000)
+      });
+      TASKS_PENDING_DATA.splice(pIdx, 1);
+      renderPendingApprovalsTable();
+      renderApprovalHistoryTable();
+    }
+
+    closeModal('standardRecordDecisionModal');
+    showToast(`Request ${recordId} marked as: ${statusLabel}. Written reason recorded in audit log.`, actionType === 'reject' ? 'danger' : 'warning');
+  }
+
+  // --- Controlled Student Archival & Restoration Workflow ---
+  function archiveActiveDossierStudent() {
+    const student = state.activeDossierStudent || state.students[0];
+    if (student) {
+      closeModal('viewStudentModal');
+      handleStudentArchiveClick(student.admNo);
+    }
+  }
+
+  function handleStudentArchiveClick(admNo) {
+    if (!admNo) return;
+    const student = state.students.find(s => s.admNo === admNo);
+    if (!student) {
+      showToast('Student record not found in active directory.', 'warning');
+      return;
+    }
+
+    if (state.currentRole !== 'principal' && state.currentRole !== 'vice-principal') {
+      openModal('archivePermissionRestrictedModal');
+      return;
+    }
+
+    const nameEl = document.getElementById('delStudentName');
+    const admEl = document.getElementById('delStudentAdmNo');
+    const classEl = document.getElementById('delStudentClassRoll');
+    const parentEl = document.getElementById('delStudentParent');
+    const authEl = document.getElementById('delExecutingAuthority');
+    const inputAdm = document.getElementById('delStudentAdmNoInput');
+    const tcRefInput = document.getElementById('delTcReferenceInput');
+    const remarksInput = document.getElementById('delExecutiveRemarks');
+
+    if (nameEl) nameEl.textContent = student.name;
+    if (admEl) admEl.textContent = student.admNo;
+    if (classEl) classEl.textContent = `Class ${student.class}-${student.section || 'A'} • Roll #${student.rollNo}`;
+    if (parentEl) parentEl.textContent = student.parent || '—';
+    if (authEl) authEl.textContent = state.currentRole === 'vice-principal' ? 'Vice Principal Sri Navva Anand' : 'Principal Smt. Gorle Varalakshmi';
+    if (inputAdm) inputAdm.value = student.admNo;
+    if (tcRefInput) tcRefInput.value = `TC-2026-${student.admNo.replace('SV-', '')}`;
+    if (remarksInput) {
+      remarksInput.value = '';
+      remarksInput.style.borderColor = '#cbd5e1';
+      remarksInput.style.boxShadow = 'none';
+    }
+
+    openModal('controlledStudentArchiveModal');
+  }
+
+  function confirmControlledStudentArchive() {
+    const admNo = document.getElementById('delStudentAdmNoInput')?.value;
+    if (!admNo) return;
+
+    if (state.currentRole !== 'principal' && state.currentRole !== 'vice-principal') {
+      showToast('Unauthorized: Only Principal or Vice Principal can archive student records.', 'danger');
+      return;
+    }
+
+    const remarksInput = document.getElementById('delExecutiveRemarks');
+    const remarks = (remarksInput?.value || '').trim();
+    if (!remarks || remarks.length < 5) {
+      showToast('Mandatory Remark Required: Please specify why you are archiving this student record.', 'danger');
+      if (remarksInput) {
+        remarksInput.focus();
+        remarksInput.style.borderColor = '#dc2626';
+        remarksInput.style.boxShadow = '0 0 0 3px rgba(220, 38, 38, 0.2)';
+      }
+      return;
+    }
+
+    const executingRoleTitle = state.currentRole === 'vice-principal' ? 'Vice Principal Sri Navva Anand' : 'Principal Smt. Gorle Varalakshmi';
+    const reason = document.getElementById('delReasonSelect')?.value || 'Quit school in middle of academic year / Joined another school';
+    const tcRef = (document.getElementById('delTcReferenceInput')?.value || `TC-2026-${admNo.replace('SV-', '')}`).trim();
+
+    const sIdx = state.students.findIndex(s => s.admNo === admNo);
+    if (sIdx === -1) {
+      closeModal('controlledStudentArchiveModal');
+      return;
+    }
+
+    const student = state.students[sIdx];
+    const studentName = student.name;
+
+    // 1. Archive student record safely in institutional archive vault
+    const deletedArchive = JSON.parse(localStorage.getItem('sv_deleted_students_archive') || '[]');
+    deletedArchive.unshift({
+      admNo: student.admNo,
+      name: studentName,
+      class: student.class,
+      section: student.section,
+      rollNo: student.rollNo,
+      parent: student.parent,
+      phone: student.phone,
+      reason,
+      tcRef,
+      remarks,
+      deletedBy: executingRoleTitle,
+      deletedAt: new Date().toISOString(),
+      dateFormatted: new Date().toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })
+    });
+    localStorage.setItem('sv_deleted_students_archive', JSON.stringify(deletedArchive));
+
+    // 2. Track retired admission number
+    const deletedAdmNos = JSON.parse(localStorage.getItem('sv_deleted_student_adm_nos') || '[]');
+    if (!deletedAdmNos.includes(admNo)) {
+      deletedAdmNos.push(admNo);
+      localStorage.setItem('sv_deleted_student_adm_nos', JSON.stringify(deletedAdmNos));
+    }
+
+    // 3. Update in sv_withdrawn_students
+    try {
+      const withdrawnList = JSON.parse(localStorage.getItem('sv_withdrawn_students') || '[]');
+      let updated = false;
+      withdrawnList.forEach(w => {
+        if (w.admNo === admNo || w.name.toLowerCase() === studentName.toLowerCase()) {
+          w.permanentlyDeleted = true;
+          w.deletedBy = executingRoleTitle;
+          w.deletedAt = new Date().toISOString();
+          updated = true;
+        }
+      });
+      if (updated) localStorage.setItem('sv_withdrawn_students', JSON.stringify(withdrawnList));
+    } catch (e) {}
+
+    // 4. Remove from active state.students array (preserves immutable admission numbers of other students)
+    state.students.splice(sIdx, 1);
+    if (typeof window !== 'undefined' && Array.isArray(window.STUDENT_ROSTER)) {
+      const rIdx = window.STUDENT_ROSTER.findIndex(s => s.admNo === admNo);
+      if (rIdx !== -1) window.STUDENT_ROSTER.splice(rIdx, 1);
+    }
+
+    // 5. Dispatch notification
+    addNewNotification(
+      'Student Record Safely Archived',
+      `${studentName} (${admNo}) safely archived to permanent institutional vault by ${executingRoleTitle}. Reason: ${reason}. All remaining students retain immutable admission numbers.`,
+      'warning'
+    );
+
+    closeModal('controlledStudentArchiveModal');
+    filterStudents();
+    if (typeof filterStudentProfiles === 'function') filterStudentProfiles();
+    renderWithdrawnStudentsPage();
+
+    showToast(`Student ${studentName} (${admNo}) safely archived to historical audit vault. Zero records permanently deleted.`, 'success');
+  }
+
+  function restoreArchivedStudent(admNo) {
+    if (!admNo) return;
+    if (state.currentRole !== 'principal' && state.currentRole !== 'vice-principal') {
+      showToast('Unauthorized: Only Principal or Vice Principal can restore archived students.', 'danger');
+      return;
+    }
+
+    const deletedArchive = JSON.parse(localStorage.getItem('sv_deleted_students_archive') || '[]');
+    const aIdx = deletedArchive.findIndex(d => d.admNo === admNo);
+    if (aIdx === -1) {
+      showToast('Student record not found in archive vault.', 'warning');
+      return;
+    }
+
+    const archivedItem = deletedArchive[aIdx];
+    const studentName = archivedItem.name;
+
+    // Remove from archive list
+    deletedArchive.splice(aIdx, 1);
+    localStorage.setItem('sv_deleted_students_archive', JSON.stringify(deletedArchive));
+
+    // Remove from retired admission numbers list
+    let retiredAdmNos = JSON.parse(localStorage.getItem('sv_deleted_student_adm_nos') || '[]');
+    retiredAdmNos = retiredAdmNos.filter(x => x !== admNo);
+    localStorage.setItem('sv_deleted_student_adm_nos', JSON.stringify(retiredAdmNos));
+
+    // Restore to active state.students if not present
+    const exists = state.students.some(s => s.admNo === admNo);
+    if (!exists) {
+      const restoredStudent = {
+        admNo: archivedItem.admNo,
+        name: archivedItem.name,
+        class: archivedItem.class || 'I',
+        section: archivedItem.section || 'A',
+        rollNo: archivedItem.rollNo || 1,
+        parent: archivedItem.parent || 'Guardian',
+        phone: archivedItem.phone || '9848000000',
+        attendance: '95.0%',
+        feeStatus: 'Paid',
+        bloodGroup: 'O+',
+        gpa: '8.5',
+        status: 'Active'
+      };
+      state.students.push(restoredStudent);
+      state.students = sortStudentsByAdmNo(state.students);
+      if (typeof window !== 'undefined' && Array.isArray(window.STUDENT_ROSTER)) {
+        window.STUDENT_ROSTER.push(restoredStudent);
+      }
+    }
+
+    // Clean from withdrawn list
+    try {
+      const withdrawnList = JSON.parse(localStorage.getItem('sv_withdrawn_students') || '[]');
+      const wIdx = withdrawnList.findIndex(w => w.admNo === admNo);
+      if (wIdx !== -1) {
+        withdrawnList.splice(wIdx, 1);
+        localStorage.setItem('sv_withdrawn_students', JSON.stringify(withdrawnList));
+      }
+    } catch (e) {}
+
+    const executingRoleTitle = state.currentRole === 'vice-principal' ? 'Vice Principal Sri Navva Anand' : 'Principal Smt. Gorle Varalakshmi';
+    addNewNotification(
+      'Student Record Restored to Active Roster',
+      `${studentName} (${admNo}) reactivated and restored to active student roster by ${executingRoleTitle}.`,
+      'success'
+    );
+
+    filterStudents();
+    if (typeof filterStudentProfiles === 'function') filterStudentProfiles();
+    renderWithdrawnStudentsPage();
+    updateStudentTabBadges();
+
+    showToast(`Record for ${studentName} (${admNo}) successfully reactivated and restored to active enrollment!`, 'success');
+  }
+
+  // --- Controlled Fee Reversal & Credit Note Workflow ---
+  function openFeeReversalModal(receiptNo) {
+    if (state.currentRole !== 'principal' && state.currentRole !== 'vice-principal' && state.currentRole !== 'accountant') {
+      showToast('Unauthorized: Only Principal, Vice Principal, or Accounts Officer can issue fee reversals.', 'danger');
+      return;
+    }
+    const tx = feeCollectionData.find(t => t.receiptNo === receiptNo) || feeCollectionData[0];
+    if (!tx) {
+      showToast('Fee transaction record not found.', 'warning');
+      return;
+    }
+
+    const rInput = document.getElementById('feeReversalReceiptNoInput');
+    const rLabel = document.getElementById('reversalReceiptLabel');
+    const sLabel = document.getElementById('reversalStudentLabel');
+    const aLabel = document.getElementById('reversalAmountLabel');
+    const mLabel = document.getElementById('reversalModeLabel');
+    const remarksInput = document.getElementById('feeReversalRemarksInput');
+
+    if (rInput) rInput.value = tx.receiptNo;
+    if (rLabel) rLabel.textContent = tx.receiptNo;
+    if (sLabel) sLabel.textContent = `${tx.student} (${tx.admNo || 'Class ' + tx.class})`;
+    if (aLabel) aLabel.textContent = tx.amountPaid || tx.amount;
+    if (mLabel) mLabel.textContent = `${tx.mode} (${tx.date})`;
+    if (remarksInput) remarksInput.value = '';
+
+    openModal('controlledFeeReversalModal');
+  }
+
+  function confirmFeeReversal() {
+    const receiptNo = document.getElementById('feeReversalReceiptNoInput')?.value;
+    const reason = document.getElementById('feeReversalReasonSelect')?.value || 'Administrative Correction';
+    const remarks = (document.getElementById('feeReversalRemarksInput')?.value || '').trim();
+
+    if (!remarks || remarks.length < 5) {
+      showToast('Mandatory Remark Required: Please specify the authorization remarks and credit voucher reference.', 'danger');
+      return;
+    }
+
+    const tx = feeCollectionData.find(t => t.receiptNo === receiptNo);
+    const amount = tx ? (tx.amountPaid || tx.amount) : '₹12,000';
+    const creditVoucher = 'REV-2026-' + Math.floor(100 + Math.random() * 900);
+
+    const reversals = JSON.parse(localStorage.getItem('sv_fee_reversals_archive') || '[]');
+    reversals.unshift({
+      voucher: creditVoucher,
+      originalReceipt: receiptNo,
+      student: tx ? tx.student : 'Student',
+      amount: amount,
+      reason: reason,
+      remarks: remarks,
+      authorizedBy: state.currentRole === 'vice-principal' ? 'Vice Principal Sri Navva Anand' : 'Principal Smt. Gorle Varalakshmi',
+      timestamp: new Date().toISOString()
+    });
+    localStorage.setItem('sv_fee_reversals_archive', JSON.stringify(reversals));
+
+    closeModal('controlledFeeReversalModal');
+    showToast(`Credit Note ${creditVoucher} issued for ${receiptNo} (${amount}). Ledger adjusted with zero deletion.`, 'success');
+    renderFeeCollection();
+  }
+
+  // --- Examination Marks Correction & Historical Audit Workflow ---
+  function openMarksCorrectionModal(admNo, examId, subject) {
+    const student = state.students.find(s => s.admNo === admNo) || state.students[0];
+    const examData = getStudentExamData(student, examId || 'quarterly-2026');
+    const subjData = (examData && examData.subjects) ? (examData.subjects.find(s => s.name === subject) || examData.subjects[0]) : { name: subject || 'Mathematics', marksScored: 88 };
+
+    const admInput = document.getElementById('marksCorrectionAdmNoInput');
+    const exInput = document.getElementById('marksCorrectionExamIdInput');
+    const subInput = document.getElementById('marksCorrectionSubjectInput');
+    if (admInput) admInput.value = student.admNo;
+    if (exInput) exInput.value = examId || 'quarterly-2026';
+    if (subInput) subInput.value = subjData.name;
+
+    const sName = document.getElementById('marksCorrectionStudentName');
+    const eLabel = document.getElementById('marksCorrectionExamLabel');
+    const subjLabel = document.getElementById('marksCorrectionSubjectLabel');
+    const cMark = document.getElementById('marksCorrectionCurrentMark');
+    const newScoreInput = document.getElementById('marksCorrectionNewScoreInput');
+    const notesInput = document.getElementById('marksCorrectionNotesInput');
+
+    if (sName) sName.textContent = `${student.name} (${student.admNo})`;
+    if (eLabel) eLabel.textContent = (EXAMS_CONFIG[examId] ? EXAMS_CONFIG[examId].name : 'Quarterly Assessment');
+    if (subjLabel) subjLabel.textContent = subjData.name;
+    if (cMark) cMark.textContent = subjData.marksScored + ' / ' + (subjData.maxMarks || 100);
+    if (newScoreInput) newScoreInput.value = subjData.marksScored;
+    if (notesInput) notesInput.value = '';
+
+    openModal('marksCorrectionWorkflowModal');
+  }
+
+  function confirmMarksCorrection() {
+    const admNo = document.getElementById('marksCorrectionAdmNoInput')?.value;
+    const examId = document.getElementById('marksCorrectionExamIdInput')?.value;
+    const subjName = document.getElementById('marksCorrectionSubjectInput')?.value;
+    const newScore = parseInt(document.getElementById('marksCorrectionNewScoreInput')?.value, 10);
+    const notes = (document.getElementById('marksCorrectionNotesInput')?.value || '').trim();
+
+    if (isNaN(newScore) || newScore < 0 || newScore > 100) {
+      showToast('Invalid score: please provide a valid numerical score between 0 and 100.', 'warning');
+      return;
+    }
+    if (!notes || notes.length < 5) {
+      showToast('Mandatory Remark Required: Please specify recount or re-evaluation reason.', 'danger');
+      return;
+    }
+
+    const student = state.students.find(s => s.admNo === admNo);
+    const storageKey = `sv_exam_marks_${admNo}_${examId}`;
+    let store = null;
+    try {
+      store = JSON.parse(localStorage.getItem(storageKey) || 'null');
+    } catch (e) {}
+
+    const oldScore = store && store.subjects ? (store.subjects.find(s => s.name === subjName)?.marksScored || 'N/A') : '88';
+
+    if (!store) {
+      const defaultData = getStudentExamData(student, examId);
+      store = JSON.parse(JSON.stringify(defaultData));
+    }
+    const subjObj = store.subjects.find(s => s.name === subjName);
+    if (subjObj) {
+      subjObj.marksScored = newScore;
+      subjObj.grade = calculateGrade(newScore, subjObj.maxMarks || 100);
+    }
+    localStorage.setItem(storageKey, JSON.stringify(store));
+
+    const correctionsLog = JSON.parse(localStorage.getItem('sv_marks_corrections_log') || '[]');
+    correctionsLog.unshift({
+      admNo,
+      studentName: student ? student.name : admNo,
+      examId,
+      subject: subjName,
+      oldScore: oldScore,
+      newScore: newScore,
+      notes: notes,
+      authorizedBy: state.currentRole === 'vice-principal' ? 'Vice Principal Sri Navva Anand' : 'Principal Smt. Gorle Varalakshmi',
+      timestamp: new Date().toISOString()
+    });
+    localStorage.setItem('sv_marks_corrections_log', JSON.stringify(correctionsLog));
+
+    closeModal('marksCorrectionWorkflowModal');
+    showToast(`Published score for ${subjName} amended from ${oldScore} to ${newScore}. Revision audit recorded.`, 'success');
+
+    if (state.activeDossierStudent && state.activeDossierStudent.admNo === admNo) {
+      viewStudentProfile(admNo);
+    }
+  }
+
   return {
-    // Standard Page Layout Engine API
+    // Standard Record Actions API
+    toggleRecordMoreMenu,
+    executeStandardAction,
+    openStandardRecordDecisionModal,
+    confirmStandardRecordDecision,
+    archiveActiveDossierStudent,
+    handleStudentArchiveClick,
+    confirmControlledStudentArchive,
+    restoreArchivedStudent,
+    openFeeReversalModal,
+    confirmFeeReversal,
+    openMarksCorrectionModal,
+    confirmMarksCorrection,
+        // Standard Page Layout Engine API
     updateBreadcrumb,
     handleTableCheckboxChange,
     toggleSelectAll,
@@ -33146,7 +33817,9 @@ const classData = TIMETABLE_CLASS_DATA[currentTimetableClass] || TIMETABLE_CLASS
     openComposeBroadcastModal,
     downloadNoticePdf,
     handleStudentDeleteClick,
-    confirmPermanentStudentDelete,
+    confirmPermanentStudentDelete: confirmControlledStudentArchive,
+    deleteActiveDossierStudent: archiveActiveDossierStudent,
+    confirmControlledStudentArchive,
     renderWithdrawnStudentsPage,
     openStudentIdCard,
     printStudentIdCard,

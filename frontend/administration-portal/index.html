@@ -14282,8 +14282,8 @@
         <button type="button" class="btn btn-secondary" onclick="portalApp.openStudentIdCard()"><i class="fa-solid fa-id-card"></i> Generate ID Card</button>
         <button type="button" class="btn btn-secondary" onclick="portalApp.openEditStudentMarksModal()"><i class="fa-solid fa-pen-to-square"></i> Assign / Update Marks</button>
         <button type="button" class="btn btn-primary" onclick="portalApp.printStudentDossier()"><i class="fa-solid fa-print"></i> Print Dossier</button>
-        <button type="button" class="btn btn-danger" onclick="portalApp.deleteActiveDossierStudent()" style="background:#dc2626; border-color:#b91c1c; color:#fff;" title="Permanently Delete Student Record with Mandatory Remarks">
-          <i class="fa-solid fa-trash-can"></i> Permanently Delete Record
+        <button type="button" class="btn btn-warning" onclick="portalApp.archiveActiveDossierStudent()" style="background:#f59e0b; border-color:#d97706; color:#fff;" title="Controlled Record Archival (Retained in Historical Vault)">
+          <i class="fa-solid fa-box-archive"></i> Archive Student
         </button>
       </div>
     </div>
@@ -17502,13 +17502,13 @@ Class X-A,Monday,2,09:35 AM - 10:20 AM,Physical Science,Sri Navva Anand,Room 201
   <!-- =========================================================================
        MODAL: PERMANENT STUDENT DELETION (EXECUTIVE ONLY: PRINCIPAL OR VICE PRINCIPAL)
        ========================================================================= -->
-  <div class="modal-backdrop" id="permanentStudentDeleteModal" style="display:none;">
+  <div class="modal-backdrop" id="controlledStudentArchiveModal" style="display:none;">
     <div class="portal-modal" style="max-width: 600px; border-radius: 14px; overflow: hidden; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.35);">
       <div class="modal-header" style="background: linear-gradient(135deg, #991b1b, #b91c1c); color: #fff; padding: 1.1rem 1.4rem;">
         <h3 style="color:#fff; margin:0; display:flex; align-items:center; gap:10px; font-size:1.15rem; font-weight:700;">
-          <i class="fa-solid fa-trash-can"></i> Permanent Student Deletion (Executive Authority)
+          <i class="fa-solid fa-box-archive"></i> Controlled Student Archival &amp; Inactivation (Executive Authority)
         </h3>
-        <button class="modal-close-x" onclick="portalApp.closeModal('permanentStudentDeleteModal')" title="Close" style="color:#fff; background:transparent; border:none; font-size:1.2rem; cursor:pointer;">
+        <button class="modal-close-x" onclick="portalApp.closeModal('controlledStudentArchiveModal')" title="Close" style="color:#fff; background:transparent; border:none; font-size:1.2rem; cursor:pointer;">
           <i class="fa-solid fa-xmark"></i>
         </button>
       </div>
@@ -17540,7 +17540,7 @@ Class X-A,Monday,2,09:35 AM - 10:20 AM,Physical Science,Sri Navva Anand,Room 201
           </div>
         </div>
 
-        <form id="permanentStudentDeleteForm" onsubmit="event.preventDefault(); portalApp.confirmPermanentStudentDelete();">
+        <form id="permanentStudentDeleteForm" onsubmit="event.preventDefault(); portalApp.confirmControlledStudentArchive();">
           <input type="hidden" id="delStudentAdmNoInput">
 
           <div class="form-group mb-3">
@@ -17574,9 +17574,9 @@ Class X-A,Monday,2,09:35 AM - 10:20 AM,Physical Science,Sri Navva Anand,Room 201
           </div>
 
           <div class="modal-footer" style="padding-top:1rem; border-top:1px solid #e2e8f0; display:flex; justify-content:flex-end; gap:10px;">
-            <button type="button" class="btn btn-secondary" onclick="portalApp.closeModal('permanentStudentDeleteModal')">Cancel</button>
-            <button type="submit" class="btn btn-danger" style="background:#b91c1c; border-color:#991b1b; color:#fff; font-weight:600;">
-              <i class="fa-solid fa-trash-can"></i> Permanently Delete from School Records
+            <button type="button" class="btn btn-secondary" onclick="portalApp.closeModal('controlledStudentArchiveModal')">Cancel</button>
+            <button type="submit" class="btn btn-warning" style="background:#d97706; border-color:#b45309; color:#fff; font-weight:700;">
+              <i class="fa-solid fa-box-archive"></i> Archive &amp; Inactivate Student Record
             </button>
           </div>
         </form>
@@ -17585,13 +17585,13 @@ Class X-A,Monday,2,09:35 AM - 10:20 AM,Physical Science,Sri Navva Anand,Room 201
   </div>
 
   <!-- Delete Permission Restricted Modal (For Office Clerk / Non-Executives) -->
-  <div class="modal-backdrop" id="deletePermissionRestrictedModal" style="display:none;">
+  <div class="modal-backdrop" id="archivePermissionRestrictedModal" style="display:none;">
     <div class="portal-modal" style="max-width: 500px; border-radius: 14px; overflow:hidden;">
       <div class="modal-header" style="background:#fef2f2; border-bottom:1px solid #fee2e2; color:#991b1b; padding:1.1rem 1.4rem;">
         <h3 style="margin:0; font-size:1.15rem; display:flex; align-items:center; gap:8px;">
           <i class="fa-solid fa-shield-halved text-danger"></i> Executive Authority Required
         </h3>
-        <button class="modal-close-x" onclick="portalApp.closeModal('deletePermissionRestrictedModal')" title="Close" style="color:#991b1b; background:none; border:none; font-size:1.2rem; cursor:pointer;">
+        <button class="modal-close-x" onclick="portalApp.closeModal('archivePermissionRestrictedModal')" title="Close" style="color:#991b1b; background:none; border:none; font-size:1.2rem; cursor:pointer;">
           <i class="fa-solid fa-xmark"></i>
         </button>
       </div>
@@ -17601,11 +17601,11 @@ Class X-A,Monday,2,09:35 AM - 10:20 AM,Physical Science,Sri Navva Anand,Room 201
         </div>
         <h4 style="margin:0 0 0.6rem 0; font-size:1.15rem; color:#1e293b;">Permission Restricted: Executive Sign-Off Mandatory</h4>
         <p style="font-size:0.92rem; color:#475569; line-height:1.55; margin-bottom:1.3rem;">
-          Student records can be <strong>permanently deleted from official school registers ONLY by Principal Smt. Gorle Varalakshmi or Vice Principal Sri Navva Anand</strong>.
+          Student records can be <strong>archived or inactivated from official school registers ONLY by Principal Smt. Gorle Varalakshmi or Vice Principal Sri Navva Anand</strong>.
           <br><br>
           Office clerks and administrative staff cannot delete records. Please switch to or login with the Principal or Vice Principal account to proceed with permanent deletion.
         </p>
-        <button type="button" class="btn btn-secondary" onclick="portalApp.closeModal('deletePermissionRestrictedModal')">Understood</button>
+        <button type="button" class="btn btn-secondary" onclick="portalApp.closeModal('archivePermissionRestrictedModal')">Understood</button>
       </div>
     </div>
   </div>
@@ -18506,6 +18506,158 @@ Class X-A,Monday,2,09:35 AM - 10:20 AM,Physical Science,Sri Navva Anand,Room 201
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" onclick="portalApp.closeModal('activityHistoryModal')">Close</button>
       </div>
+    </div>
+  </div>
+
+
+  <!-- Standard Record Decision Modal (Reject / Return for Correction) -->
+  <div class="modal-backdrop" id="standardRecordDecisionModal" role="dialog" aria-modal="true" style="display:none;">
+    <div class="portal-modal" style="max-width: 620px; width: 95%;">
+      <div class="modal-header" id="standardDecisionModalHeader" style="background:#f8fafc; border-bottom:1px solid #e2e8f0; padding:1.1rem 1.4rem;">
+        <h3 style="margin:0; font-size:1.15rem; display:flex; align-items:center; gap:8px;" id="standardDecisionModalTitle">
+          <i class="fa-solid fa-circle-xmark text-danger" id="standardDecisionIcon"></i>
+          <span id="standardDecisionTitleText">Decline Request with Reason</span>
+        </h3>
+        <button class="modal-close-x" onclick="portalApp.closeModal('standardRecordDecisionModal')" title="Close" aria-label="Close">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <form id="standardRecordDecisionForm" onsubmit="event.preventDefault(); portalApp.confirmStandardRecordDecision();">
+        <input type="hidden" id="standardDecisionActionType" value="reject">
+        <input type="hidden" id="standardDecisionRecordId" value="">
+        <input type="hidden" id="standardDecisionModuleKey" value="">
+        <div class="modal-body" style="padding:1.4rem;">
+          <div id="standardDecisionContextBanner" style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; padding:0.9rem; margin-bottom:1.2rem; font-size:0.88rem;">
+            <div style="display:flex; justify-content:space-between; margin-bottom:4px;">
+              <span class="text-muted">Record Reference:</span>
+              <strong id="standardDecisionRefLabel" class="text-primary">-</strong>
+            </div>
+            <div style="display:flex; justify-content:space-between;">
+              <span class="text-muted">Workflow Scope:</span>
+              <span id="standardDecisionScopeLabel" class="font-semibold">-</span>
+            </div>
+          </div>
+          <div class="form-group mb-3">
+            <label style="display:block; font-size:0.85rem; font-weight:700; color:#334155; margin-bottom:6px;" id="standardDecisionReasonLabel">
+              Mandatory Reason &amp; Official Justification <span class="text-danger">*</span>
+            </label>
+            <textarea class="form-control" id="standardDecisionReasonInput" rows="4" required placeholder="Specify exact statutory grounds, revision instructions, or deficiency remarks..." style="width:100%; padding:0.75rem; border:1.5px solid #cbd5e1; border-radius:6px; font-size:0.9rem;"></textarea>
+            <small class="text-muted" id="standardDecisionReasonHint" style="display:block; margin-top:5px; font-size:0.75rem;">
+              This statement is recorded in the permanent audit trail and communicated directly to the requester.
+            </small>
+          </div>
+        </div>
+        <div class="modal-footer" style="padding:1rem 1.4rem; border-top:1px solid #e2e8f0; display:flex; justify-content:flex-end; gap:10px;">
+          <button type="button" class="btn btn-secondary" onclick="portalApp.closeModal('standardRecordDecisionModal')">Cancel</button>
+          <button type="submit" class="btn btn-danger" id="standardDecisionSubmitBtn" style="font-weight:700;">
+            <i class="fa-solid fa-circle-xmark mr-1"></i> Confirm Rejection
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Controlled Fee Reversal / Credit Note Modal -->
+  <div class="modal-backdrop" id="controlledFeeReversalModal" role="dialog" aria-modal="true" style="display:none;">
+    <div class="portal-modal" style="max-width: 640px; width: 95%;">
+      <div class="modal-header" style="background: linear-gradient(135deg, #1e293b, #334155); color:#fff; padding:1.1rem 1.4rem;">
+        <h3 style="margin:0; font-size:1.15rem; color:#fff; display:flex; align-items:center; gap:8px;">
+          <i class="fa-solid fa-receipt text-warning"></i> Controlled Fee Reversal &amp; Credit Note Docket
+        </h3>
+        <button class="modal-close-x" onclick="portalApp.closeModal('controlledFeeReversalModal')" title="Close" style="color:#fff;" aria-label="Close">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <form id="controlledFeeReversalForm" onsubmit="event.preventDefault(); portalApp.confirmFeeReversal();">
+        <input type="hidden" id="feeReversalReceiptNoInput" value="">
+        <div class="modal-body" style="padding:1.4rem;">
+          <div style="background:#eff6ff; border:1px solid #bfdbfe; border-radius:8px; padding:0.9rem; margin-bottom:1.2rem; display:flex; gap:10px;">
+            <i class="fa-solid fa-shield-halved text-primary" style="font-size:1.3rem; margin-top:2px;"></i>
+            <div style="font-size:0.85rem; color:#1e40af; line-height:1.45;">
+              <strong>Accounting Integrity Standard:</strong> Completed fee receipts are immutable ledger entries and cannot be deleted with an ordinary delete button. This workflow generates an official contra-reversal credit voucher (<code>REV-2026-XXX</code>), adjusts student dues, and logs statutory audit remarks.
+            </div>
+          </div>
+          <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; padding:0.9rem; margin-bottom:1.2rem; font-size:0.86rem; display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+            <div><span class="text-muted">Original Receipt:</span> <strong id="reversalReceiptLabel" class="text-primary">-</strong></div>
+            <div><span class="text-muted">Student &amp; Adm No:</span> <strong id="reversalStudentLabel">-</strong></div>
+            <div><span class="text-muted">Amount to Reverse:</span> <strong id="reversalAmountLabel" class="text-emerald font-weight-bold">-</strong></div>
+            <div><span class="text-muted">Original Mode:</span> <strong id="reversalModeLabel">-</strong></div>
+          </div>
+          <div class="form-group mb-3">
+            <label style="display:block; font-size:0.85rem; font-weight:700; color:#334155; margin-bottom:4px;">
+              Reason for Reversal / Correction <span class="text-danger">*</span>
+            </label>
+            <select class="form-control" id="feeReversalReasonSelect" required style="width:100%; padding:0.6rem; border:1px solid #cbd5e1; border-radius:6px; font-size:0.9rem;">
+              <option value="Duplicate transaction error / Double swipe" selected>Duplicate transaction error / Double swipe</option>
+              <option value="Incorrect student admission number entered">Incorrect student admission number entered</option>
+              <option value="Concession / Scholarship waiver post-facto approved">Concession / Scholarship waiver post-facto approved</option>
+              <option value="Bank chargeback / Cheque dishonor">Bank chargeback / Cheque dishonor</option>
+              <option value="Billing head correction">Billing head correction</option>
+            </select>
+          </div>
+          <div class="form-group mb-3">
+            <label style="display:block; font-size:0.85rem; font-weight:700; color:#334155; margin-bottom:4px;">
+              Executive Authorization Remarks <span class="text-danger">*</span>
+            </label>
+            <textarea class="form-control" id="feeReversalRemarksInput" rows="3" required placeholder="Mandatory: Record authorized directive and voucher reference..." style="width:100%; padding:0.65rem; border:1.5px solid #cbd5e1; border-radius:6px; font-size:0.9rem;"></textarea>
+          </div>
+        </div>
+        <div class="modal-footer" style="padding:1rem 1.4rem; border-top:1px solid #e2e8f0; display:flex; justify-content:flex-end; gap:10px;">
+          <button type="button" class="btn btn-secondary" onclick="portalApp.closeModal('controlledFeeReversalModal')">Cancel</button>
+          <button type="submit" class="btn btn-warning" style="background:#d97706; border-color:#b45309; color:#fff; font-weight:700;">
+            <i class="fa-solid fa-receipt mr-1"></i> Issue Reversal Docket
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Published Examination Marks Correction Workflow Modal -->
+  <div class="modal-backdrop" id="marksCorrectionWorkflowModal" role="dialog" aria-modal="true" style="display:none;">
+    <div class="portal-modal" style="max-width: 620px; width: 95%;">
+      <div class="modal-header" style="background:#f8fafc; border-bottom:1px solid #e2e8f0; padding:1.1rem 1.4rem;">
+        <h3 style="margin:0; font-size:1.15rem; display:flex; align-items:center; gap:8px;">
+          <i class="fa-solid fa-square-poll-vertical text-primary"></i>
+          <span>Examination Marks Correction Workflow</span>
+        </h3>
+        <button class="modal-close-x" onclick="portalApp.closeModal('marksCorrectionWorkflowModal')" title="Close" aria-label="Close">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <form id="marksCorrectionForm" onsubmit="event.preventDefault(); portalApp.confirmMarksCorrection();">
+        <input type="hidden" id="marksCorrectionAdmNoInput" value="">
+        <input type="hidden" id="marksCorrectionExamIdInput" value="">
+        <input type="hidden" id="marksCorrectionSubjectInput" value="">
+        <div class="modal-body" style="padding:1.4rem;">
+          <div style="background:#fffbeb; border:1px solid #fde68a; border-radius:8px; padding:0.9rem; margin-bottom:1.2rem; font-size:0.85rem; color:#92400e; line-height:1.45;">
+            <strong>Examination Security Rule:</strong> Published examination marks cannot be deleted or wiped. Any score amendment creates a registered revision log recording previous marks, amended marks, justification, and verifying faculty.
+          </div>
+          <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; padding:0.9rem; margin-bottom:1.2rem; font-size:0.86rem; display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+            <div><span class="text-muted">Student:</span> <strong id="marksCorrectionStudentName">-</strong></div>
+            <div><span class="text-muted">Exam:</span> <strong id="marksCorrectionExamLabel">-</strong></div>
+            <div><span class="text-muted">Subject:</span> <strong id="marksCorrectionSubjectLabel">-</strong></div>
+            <div><span class="text-muted">Current Published Mark:</span> <strong id="marksCorrectionCurrentMark" class="text-danger font-bold">-</strong></div>
+          </div>
+          <div class="form-group mb-3">
+            <label style="display:block; font-size:0.85rem; font-weight:700; color:#334155; margin-bottom:4px;">
+              Corrected / Re-evaluated Score <span class="text-danger">*</span>
+            </label>
+            <input type="number" class="form-control" id="marksCorrectionNewScoreInput" min="0" max="100" required style="width:100%; padding:0.6rem; border:1.5px solid #cbd5e1; border-radius:6px; font-size:0.95rem; font-weight:700;">
+          </div>
+          <div class="form-group mb-3">
+            <label style="display:block; font-size:0.85rem; font-weight:700; color:#334155; margin-bottom:4px;">
+              Correction Justification &amp; Evaluator Notes <span class="text-danger">*</span>
+            </label>
+            <textarea class="form-control" id="marksCorrectionNotesInput" rows="3" required placeholder="Specify recount verification, re-evaluation docket ID, or re-totaling justification..." style="width:100%; padding:0.65rem; border:1.5px solid #cbd5e1; border-radius:6px; font-size:0.9rem;"></textarea>
+          </div>
+        </div>
+        <div class="modal-footer" style="padding:1rem 1.4rem; border-top:1px solid #e2e8f0; display:flex; justify-content:flex-end; gap:10px;">
+          <button type="button" class="btn btn-secondary" onclick="portalApp.closeModal('marksCorrectionWorkflowModal')">Cancel</button>
+          <button type="submit" class="btn btn-primary" style="font-weight:700;">
+            <i class="fa-solid fa-check mr-1"></i> Authorize &amp; Update Marks
+          </button>
+        </div>
+      </form>
     </div>
   </div>
 
