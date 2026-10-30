@@ -6286,101 +6286,365 @@
                SUBVIEW 3: ACADEMIC CALENDAR
                Displays: Working days, holidays, terms, important dates and examination periods
                ========================================================================= -->
-          <div class="academics-subview" id="subview-academics-calendar" style="display: none;">
-            <div class="academics-quad">
-              <div class="academics-kpi-card">
-                <div class="academics-kpi-icon blue"><i class="fa-solid fa-calendar-day"></i></div>
-                <div class="academics-kpi-details">
-                  <div class="academics-kpi-label">Working Days</div>
-                  <div class="academics-kpi-value">224 Days</div>
-                  <div class="academics-kpi-trend"><span>Scheduled Teaching Days</span></div>
+          <div id="subview-academics-calendar" class="portal-subview" style="display: none;">
+            
+            <!-- Academic Calendar Header & Primary Actions -->
+            <div class="d-flex flex-wrap justify-content-between align-items-center mb-3 pb-3 border-bottom gap-2">
+              <div>
+                <div class="d-flex align-items-center gap-2">
+                  <h4 class="fw-bold mb-0 text-primary"><i class="bi bi-calendar3-event me-2"></i>Academic Calendar & Institutional Schedules</h4>
+                  <span class="badge bg-primary-subtle text-primary border border-primary-subtle rounded-pill px-3 py-1">AY 2026–2027</span>
+                  <span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill px-3 py-1" id="calOfficialStatusBadge"><i class="bi bi-check-circle-fill me-1"></i>Official & Published</span>
                 </div>
+                <p class="text-muted small mb-0 mt-1">
+                  Manage comprehensive term schedules, gazetted holidays, instructional working days, examination windows, and real-time community notifications.
+                </p>
               </div>
-              <div class="academics-kpi-card">
-                <div class="academics-kpi-icon amber"><i class="fa-solid fa-umbrella-beach"></i></div>
-                <div class="academics-kpi-details">
-                  <div class="academics-kpi-label">Holidays &amp; Vacations</div>
-                  <div class="academics-kpi-value">68 Days</div>
-                  <div class="academics-kpi-trend"><span>Government &amp; Festival Breaks</span></div>
-                </div>
-              </div>
-              <div class="academics-kpi-card">
-                <div class="academics-kpi-icon green"><i class="fa-solid fa-layer-group"></i></div>
-                <div class="academics-kpi-details">
-                  <div class="academics-kpi-label">Academic Terms</div>
-                  <div class="academics-kpi-value">2 Terms</div>
-                  <div class="academics-kpi-trend"><span>Term 1 (Jun–Oct) &bull; Term 2 (Nov–Apr)</span></div>
-                </div>
-              </div>
-              <div class="academics-kpi-card">
-                <div class="academics-kpi-icon rose"><i class="fa-solid fa-clock-rotate-left"></i></div>
-                <div class="academics-kpi-details">
-                  <div class="academics-kpi-label">Examination Periods</div>
-                  <div class="academics-kpi-value">4 Windows</div>
-                  <div class="academics-kpi-trend"><span>FA-1, FA-2, SA-1, Board Pre-Final</span></div>
+              <div class="d-flex flex-wrap gap-2 align-items-center">
+                <button class="btn btn-primary btn-sm px-3 shadow-sm d-flex align-items-center gap-1" onclick="portalApp.openAddCalendarEventModal()">
+                  <i class="bi bi-calendar-plus"></i> + Add Academic Event
+                </button>
+                <button class="btn btn-outline-danger btn-sm px-3 shadow-sm d-flex align-items-center gap-1" onclick="portalApp.openAddHolidayModal()">
+                  <i class="bi bi-calendar2-heart"></i> + Add Holiday
+                </button>
+                <div class="dropdown">
+                  <button class="btn btn-outline-secondary btn-sm px-3 dropdown-toggle shadow-sm d-flex align-items-center gap-1" type="button" data-bs-toggle="dropdown">
+                    <i class="bi bi-gear-wide-connected"></i> Calendar Policies
+                  </button>
+                  <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0">
+                    <li><a class="dropdown-item py-2" href="javascript:void(0)" onclick="portalApp.openDefineTermDatesModal()"><i class="bi bi-calendar-range me-2 text-primary"></i>Define Term Dates</a></li>
+                    <li><a class="dropdown-item py-2" href="javascript:void(0)" onclick="portalApp.openSetWorkingDaysModal()"><i class="bi bi-calendar-check me-2 text-success"></i>Set Working Days Policy</a></li>
+                    <li><a class="dropdown-item py-2" href="javascript:void(0)" onclick="portalApp.openAddExamDatesModal()"><i class="bi bi-clipboard2-check me-2 text-warning"></i>Add Examination Dates</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item py-2 text-success fw-semibold" href="javascript:void(0)" onclick="portalApp.openPublishCalendarModal()"><i class="bi bi-broadcast-pin me-2"></i>Publish Calendar & Notify</a></li>
+                    <li><a class="dropdown-item py-2 text-secondary" href="javascript:void(0)" onclick="portalApp.exportCalendarCSV()"><i class="bi bi-download me-2"></i>Export Calendar (CSV)</a></li>
+                  </ul>
                 </div>
               </div>
             </div>
 
-            <div class="card p-3 mb-3">
-              <div class="card-header-bar mb-3">
+            <!-- Statutory Broadcast & Synchronization Alert Banner -->
+            <div class="alert alert-info border-info-subtle shadow-sm mb-3 d-flex align-items-center justify-content-between p-3 rounded-3" id="calBroadcastAlertBanner">
+              <div class="d-flex align-items-center gap-3">
+                <div class="rounded-circle bg-info text-white d-flex align-items-center justify-content-center" style="width: 40px; height: 40px; min-width: 40px;">
+                  <i class="bi bi-megaphone-fill fs-5"></i>
+                </div>
                 <div>
-                  <h3 class="card-title" style="margin:0;"><i class="fa-solid fa-calendar-check text-primary mr-2"></i>
-                    Master Institutional Calendar 2026–27</h3>
-                  <p class="text-muted text-sm mt-1" style="margin:0;">Working days breakdown, gazetted holidays, term
-                    schedules, important institutional dates, and examination periods.</p>
-                </div>
-                <span class="portal-badge badge-primary">Official Academic Schedule</span>
-              </div>
-
-              <!-- Filter Toolbar -->
-              <div class="transfers-toolbar mb-3">
-                <div class="tc-toolbar-left"
-                  style="flex:1; display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
-                  <div class="tc-search-wrap" style="min-width:240px; flex:1;">
-                    <i class="fa-solid fa-magnifying-glass search-icon"></i>
-                    <input type="text" id="calendarSearchInput" class="tc-search-input"
-                      placeholder="Search dates, holidays, exams, terms..."
-                      oninput="portalApp.filterAcademicCalendar()">
+                  <div class="fw-bold text-dark d-flex align-items-center gap-2">
+                    <span>Notification System Active: Automatic Broadcast Dispatched</span>
+                    <span class="badge bg-success text-white px-2 py-0" style="font-size: 0.72rem;">Live Sync</span>
                   </div>
-                  <div class="filter-group" style="margin-bottom:0;">
-                    <select id="calendarTypeFilter" class="tc-filter-select"
-                      onchange="portalApp.filterAcademicCalendar()">
-                      <option value="">All Categories</option>
-                      <option value="Working Days">Working Days / Term Milestone</option>
-                      <option value="Holidays">Holidays &amp; Vacations</option>
-                      <option value="Terms">Terms Schedule</option>
-                      <option value="Important Dates">Important Institutional Dates</option>
-                      <option value="Examination Periods">Examination Periods</option>
-                    </select>
+                  <div class="small text-muted" id="calBroadcastAlertText">
+                    Official AP Board Academic Schedule (RC.No. 18021/A&I/2026) published by <strong>Smt. Gorle Varalakshmi (Principal)</strong>. All published dates notify faculty, staff and parent communication channels.
                   </div>
                 </div>
-                <div class="tc-toolbar-right">
-                  <span class="tc-count-pill" id="calendarCountPill">Showing Events</span>
-                </div>
               </div>
-
-              <div class="table-container">
-                <table class="staff-roster-table" id="academicCalendarMasterTable">
-                  <thead>
-                    <tr>
-                      <th style="min-width:170px;">Date &amp; Period</th>
-                      <th style="min-width:240px;">Important Dates &amp; Events</th>
-                      <th style="min-width:160px;">Category</th>
-                      <th style="min-width:110px;">Terms</th>
-                      <th style="min-width:140px;">Working Days</th>
-                      <th style="min-width:150px;">Examination Periods</th>
-                      <th style="text-align:center; min-width:110px;">Status</th>
-                    </tr>
-                  </thead>
-                  <tbody id="academicCalendarTableBody">
-                    <!-- Populated via portal.js -->
-                  </tbody>
-                </table>
+              <div class="text-nowrap ms-3">
+                <button class="btn btn-outline-info btn-sm bg-white" onclick="portalApp.openPublishCalendarModal()">
+                  <i class="bi bi-send-check me-1"></i>Re-sync Notifications
+                </button>
               </div>
             </div>
-          </div>
 
+            <!-- Summary KPI Metric Cards (5 Cards) -->
+            <div class="row g-3 mb-3">
+              <div class="col-xl-2 col-md-4 col-sm-6">
+                <div class="card border-0 shadow-sm rounded-3 h-100 kpi-card-calendar border-start border-4 border-primary">
+                  <div class="card-body p-3">
+                    <div class="text-muted small fw-semibold text-uppercase">Working Days</div>
+                    <div class="d-flex align-items-center justify-content-between mt-1">
+                      <h3 class="fw-bold mb-0 text-primary" id="kpiCalWorkingDays">224</h3>
+                      <div class="rounded-circle bg-primary-subtle p-2 text-primary"><i class="bi bi-briefcase fs-5"></i></div>
+                    </div>
+                    <div class="small text-muted mt-2"><i class="bi bi-shield-check text-success me-1"></i>AP Statutory Met</div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-xl-2 col-md-4 col-sm-6">
+                <div class="card border-0 shadow-sm rounded-3 h-100 kpi-card-calendar border-start border-4 border-danger">
+                  <div class="card-body p-3">
+                    <div class="text-muted small fw-semibold text-uppercase">Holidays & Vacations</div>
+                    <div class="d-flex align-items-center justify-content-between mt-1">
+                      <h3 class="fw-bold mb-0 text-danger" id="kpiCalHolidays">68</h3>
+                      <div class="rounded-circle bg-danger-subtle p-2 text-danger"><i class="bi bi-calendar2-heart fs-5"></i></div>
+                    </div>
+                    <div class="small text-muted mt-2"><span class="badge bg-danger-subtle text-danger px-1">Gazetted & Term</span></div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-xl-2 col-md-4 col-sm-6">
+                <div class="card border-0 shadow-sm rounded-3 h-100 kpi-card-calendar border-start border-4 border-info">
+                  <div class="card-body p-3">
+                    <div class="text-muted small fw-semibold text-uppercase">Academic Terms</div>
+                    <div class="d-flex align-items-center justify-content-between mt-1">
+                      <h3 class="fw-bold mb-0 text-info" id="kpiCalTerms">2</h3>
+                      <div class="rounded-circle bg-info-subtle p-2 text-info"><i class="bi bi-calendar-range fs-5"></i></div>
+                    </div>
+                    <div class="small text-muted mt-2">Term 1 & Term 2</div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-xl-3 col-md-6 col-sm-6">
+                <div class="card border-0 shadow-sm rounded-3 h-100 kpi-card-calendar border-start border-4 border-warning">
+                  <div class="card-body p-3">
+                    <div class="text-muted small fw-semibold text-uppercase">Examination Windows</div>
+                    <div class="d-flex align-items-center justify-content-between mt-1">
+                      <h3 class="fw-bold mb-0 text-warning" id="kpiCalExams">5 Windows</h3>
+                      <div class="rounded-circle bg-warning-subtle p-2 text-warning"><i class="bi bi-award fs-5"></i></div>
+                    </div>
+                    <div class="small text-muted mt-2">FA-1, FA-2, SA-1, FA-3, SA-2</div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-xl-3 col-md-6 col-sm-12">
+                <div class="card border-0 shadow-sm rounded-3 h-100 kpi-card-calendar border-start border-4 border-success">
+                  <div class="card-body p-3">
+                    <div class="text-muted small fw-semibold text-uppercase">Published Status</div>
+                    <div class="d-flex align-items-center justify-content-between mt-1">
+                      <h5 class="fw-bold mb-0 text-success" id="kpiCalPublishedStatus">Published & Synced</h5>
+                      <div class="rounded-circle bg-success-subtle p-2 text-success"><i class="bi bi-check2-all fs-5"></i></div>
+                    </div>
+                    <div class="small text-muted mt-2" id="kpiCalLastPublishedDate">By Principal Smt. Gorle V.</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Primary View Selector Navigation Tabs -->
+            <div class="card border-0 shadow-sm rounded-3 mb-3">
+              <div class="card-body p-2 d-flex flex-wrap justify-content-between align-items-center gap-2">
+                <div class="calendar-view-nav btn-group" role="group">
+                  <button type="button" class="btn btn-outline-primary calendar-view-btn active" id="btnCalViewMonthly" onclick="portalApp.switchCalendarView('monthly')">
+                    <i class="bi bi-calendar3 me-1"></i> Monthly Calendar
+                  </button>
+                  <button type="button" class="btn btn-outline-primary calendar-view-btn" id="btnCalViewTerm" onclick="portalApp.switchCalendarView('term')">
+                    <i class="bi bi-calendar-range me-1"></i> Term View
+                  </button>
+                  <button type="button" class="btn btn-outline-primary calendar-view-btn" id="btnCalViewList" onclick="portalApp.switchCalendarView('list')">
+                    <i class="bi bi-list-check me-1"></i> List View (Events Register)
+                  </button>
+                  <button type="button" class="btn btn-outline-primary calendar-view-btn" id="btnCalViewHolidays" onclick="portalApp.switchCalendarView('holidays')">
+                    <i class="bi bi-umbrella me-1"></i> Holiday Register
+                  </button>
+                </div>
+                <div class="d-flex align-items-center gap-2">
+                  <span class="text-muted small d-none d-md-inline"><i class="bi bi-info-circle me-1"></i>Active Session:</span>
+                  <span class="badge bg-light text-dark border fw-medium px-2 py-1">June 2026 – April 2027</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- VIEW 1: MONTHLY CALENDAR GRID -->
+            <div id="calViewMonthlyContainer" class="cal-view-section">
+              <div class="card border-0 shadow-sm rounded-3 mb-4">
+                <div class="card-header bg-white border-bottom py-3 d-flex flex-wrap justify-content-between align-items-center gap-2">
+                  <div class="d-flex align-items-center gap-3">
+                    <div class="btn-group shadow-sm">
+                      <button class="btn btn-outline-secondary btn-sm" onclick="portalApp.navigateCalendarMonth(-1)" title="Previous Month">
+                        <i class="bi bi-chevron-left"></i>
+                      </button>
+                      <button class="btn btn-outline-secondary btn-sm" onclick="portalApp.navigateCalendarToday()" title="Current / Jump to Today">
+                        Today
+                      </button>
+                      <button class="btn btn-outline-secondary btn-sm" onclick="portalApp.navigateCalendarMonth(1)" title="Next Month">
+                        <i class="bi bi-chevron-right"></i>
+                      </button>
+                    </div>
+                    <h5 class="fw-bold mb-0 text-dark" id="calCurrentMonthTitle">October 2026</h5>
+                    <span class="badge bg-light text-secondary border rounded-pill px-2 py-1 small" id="calCurrentMonthTermBadge">Term 1 (Mid-Term)</span>
+                  </div>
+                  <!-- Quick Legend -->
+                  <div class="d-flex flex-wrap gap-2 align-items-center small">
+                    <span class="badge bg-primary-subtle text-primary border border-primary-subtle"><span class="badge-dot bg-primary"></span> Academic</span>
+                    <span class="badge bg-warning-subtle text-warning border border-warning-subtle"><span class="badge-dot bg-warning"></span> Exam</span>
+                    <span class="badge bg-danger-subtle text-danger border border-danger-subtle"><span class="badge-dot bg-danger"></span> Holiday</span>
+                    <span class="badge bg-success-subtle text-success border border-success-subtle"><span class="badge-dot bg-success"></span> Institutional</span>
+                    <span class="badge bg-info-subtle text-info border border-info-subtle"><span class="badge-dot bg-info"></span> PTM / Meeting</span>
+                  </div>
+                </div>
+                <div class="card-body p-0">
+                  <!-- Monthly Calendar Grid will be rendered dynamically by portal.js -->
+                  <div id="calMonthlyGrid" class="calendar-grid-container p-2">
+                    <!-- Populated dynamically -->
+                  </div>
+                </div>
+                <div class="card-footer bg-light border-top py-2 px-3 d-flex justify-content-between align-items-center text-muted small">
+                  <div>
+                    <i class="bi bi-clock-history me-1"></i> Standard Timings: High School 8:45 AM – 4:15 PM | Primary 9:00 AM – 3:45 PM
+                  </div>
+                  <div>
+                    <i class="bi bi-info-circle me-1"></i> Click on any event pill to view details, edit, or cancel with notification.
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- VIEW 2: TERM VIEW -->
+            <div id="calViewTermContainer" class="cal-view-section" style="display: none;">
+              <div class="card border-0 shadow-sm rounded-3 mb-4">
+                <div class="card-header bg-white border-bottom py-3 d-flex justify-content-between align-items-center">
+                  <div>
+                    <h5 class="fw-bold mb-0 text-dark"><i class="bi bi-calendar-range me-2 text-primary"></i>Academic Term Structure & Instructional Roadmap</h5>
+                    <p class="text-muted small mb-0 mt-1">Detailed breakdown of Term 1 and Term 2 instructional working days, assessment windows, and vacations.</p>
+                  </div>
+                  <button class="btn btn-outline-primary btn-sm px-3" onclick="portalApp.openDefineTermDatesModal()">
+                    <i class="bi bi-pencil-square me-1"></i> Adjust Term Dates
+                  </button>
+                </div>
+                <div class="card-body p-3" id="calTermViewContent">
+                  <!-- Term view rendered dynamically -->
+                </div>
+              </div>
+            </div>
+
+            <!-- VIEW 3: LIST VIEW (MASTER EVENTS REGISTER) -->
+            <div id="calViewListContainer" class="cal-view-section" style="display: none;">
+              <div class="card border-0 shadow-sm rounded-3 mb-4">
+                <div class="card-header bg-white border-bottom py-3">
+                  <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+                    <div>
+                      <h5 class="fw-bold mb-0 text-dark"><i class="bi bi-list-check me-2 text-primary"></i>Master Academic Calendar Events Register</h5>
+                      <span class="text-muted small">Authoritative registry of all scheduled curriculum milestones, tests, and events</span>
+                    </div>
+                    <div class="d-flex gap-2">
+                      <button class="btn btn-primary btn-sm px-3 shadow-sm" onclick="portalApp.openAddCalendarEventModal()">
+                        <i class="bi bi-plus-circle me-1"></i> Add Academic Event
+                      </button>
+                      <button class="btn btn-outline-secondary btn-sm" onclick="portalApp.exportCalendarCSV()">
+                        <i class="bi bi-download me-1"></i> Export List
+                      </button>
+                    </div>
+                  </div>
+
+                  <!-- Filter Controls -->
+                  <div class="row g-2 align-items-center">
+                    <div class="col-md-3">
+                      <div class="input-group input-group-sm">
+                        <span class="input-group-text bg-light border-end-0"><i class="bi bi-search"></i></span>
+                        <input type="text" class="form-control border-start-0" id="calSearchInput" placeholder="Search event title, description..." onkeyup="portalApp.filterCalendarList()">
+                      </div>
+                    </div>
+                    <div class="col-md-2">
+                      <select class="form-select form-select-sm" id="calCategoryFilter" onchange="portalApp.filterCalendarList()">
+                        <option value="">All Categories</option>
+                        <option value="Academic">Academic</option>
+                        <option value="Examination">Examination</option>
+                        <option value="Holiday">Holiday / Vacation</option>
+                        <option value="Institutional Event">Institutional Event</option>
+                        <option value="Sports & Co-Curricular">Sports & Co-Curricular</option>
+                        <option value="Parent-Teacher Meeting">Parent-Teacher Meeting</option>
+                      </select>
+                    </div>
+                    <div class="col-md-2">
+                      <select class="form-select form-select-sm" id="calClassFilter" onchange="portalApp.filterCalendarList()">
+                        <option value="">All Affected Classes</option>
+                        <option value="All Classes">All Classes (Nursery–Class X)</option>
+                        <option value="High School">High School (VI–X)</option>
+                        <option value="Primary Wing">Primary Wing (I–V)</option>
+                        <option value="Class X Only">Class X Only</option>
+                      </select>
+                    </div>
+                    <div class="col-md-2">
+                      <select class="form-select form-select-sm" id="calStatusFilter" onchange="portalApp.filterCalendarList()">
+                        <option value="">All Statuses</option>
+                        <option value="Published">Published</option>
+                        <option value="Approved">Approved</option>
+                        <option value="Draft">Draft</option>
+                        <option value="Cancelled">Cancelled</option>
+                      </select>
+                    </div>
+                    <div class="col-md-2">
+                      <select class="form-select form-select-sm" id="calVisibilityFilter" onchange="portalApp.filterCalendarList()">
+                        <option value="">All Visibilities</option>
+                        <option value="Public">Public (All Students & Parents)</option>
+                        <option value="Faculty & Staff Only">Faculty & Staff Only</option>
+                        <option value="Leadership Only">Leadership Only</option>
+                      </select>
+                    </div>
+                    <div class="col-md-1 text-end">
+                      <button class="btn btn-outline-secondary btn-sm w-100" onclick="portalApp.resetCalendarListFilters()" title="Reset Filters">
+                        <i class="bi bi-arrow-counterclockwise"></i> Reset
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="table-responsive">
+                  <table class="table table-hover align-middle mb-0" id="calendarEventsTable">
+                    <thead class="table-light text-uppercase small text-muted">
+                      <tr>
+                        <th style="min-width: 200px;">Event Title</th>
+                        <th style="min-width: 140px;">Category</th>
+                        <th style="min-width: 160px;">Start & End Dates</th>
+                        <th style="min-width: 150px;">Affected Classes</th>
+                        <th style="min-width: 140px;">Visibility</th>
+                        <th style="min-width: 120px;">Approval Status</th>
+                        <th style="min-width: 180px;">Published By</th>
+                        <th class="text-end" style="min-width: 120px;">Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody id="calEventsTableBody">
+                      <!-- Populated dynamically -->
+                    </tbody>
+                  </table>
+                </div>
+
+                <div class="card-footer bg-white border-top py-2 px-3 d-flex justify-content-between align-items-center text-muted small">
+                  <div id="calEventsTableCount">Showing 0 events</div>
+                  <div>Sri Vidya E.M. High School • Academic Governance System</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- VIEW 4: HOLIDAY REGISTER -->
+            <div id="calViewHolidaysContainer" class="cal-view-section" style="display: none;">
+              <div class="card border-0 shadow-sm rounded-3 mb-4">
+                <div class="card-header bg-white border-bottom py-3 d-flex flex-wrap justify-content-between align-items-center gap-2">
+                  <div>
+                    <h5 class="fw-bold mb-0 text-dark"><i class="bi bi-umbrella me-2 text-danger"></i>Gazetted & Institutional Holiday Register</h5>
+                    <p class="text-muted small mb-0 mt-1">Official list of public holidays, seasonal vacations, and optional institutional leaves for AY 2026–2027.</p>
+                  </div>
+                  <div class="d-flex gap-2">
+                    <button class="btn btn-outline-danger btn-sm px-3 shadow-sm" onclick="portalApp.openAddHolidayModal()">
+                      <i class="bi bi-plus-circle me-1"></i> Add Holiday
+                    </button>
+                    <button class="btn btn-outline-secondary btn-sm" onclick="portalApp.exportHolidayRegisterCSV()">
+                      <i class="bi bi-download me-1"></i> Export Holiday Register
+                    </button>
+                  </div>
+                </div>
+
+                <div class="table-responsive">
+                  <table class="table table-hover align-middle mb-0" id="holidayRegisterTable">
+                    <thead class="table-light text-uppercase small text-muted">
+                      <tr>
+                        <th style="min-width: 220px;">Holiday / Vacation Name</th>
+                        <th style="min-width: 140px;">Category</th>
+                        <th style="min-width: 150px;">Date(s)</th>
+                        <th style="min-width: 100px;">Duration</th>
+                        <th style="min-width: 160px;">AP Govt GO / Reference</th>
+                        <th style="min-width: 150px;">Affected Wing</th>
+                        <th style="min-width: 130px;">Status</th>
+                        <th class="text-end" style="min-width: 110px;">Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody id="calHolidaysTableBody">
+                      <!-- Populated dynamically -->
+                    </tbody>
+                  </table>
+                </div>
+
+                <div class="card-footer bg-white border-top py-2 px-3 d-flex justify-content-between align-items-center text-muted small">
+                  <div id="calHolidaysTableCount">Total: 68 Days</div>
+                  <div>Gazetted by Andhra Pradesh State Education Department</div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+          <!-- =========================================================================
+               END OF SUBVIEW 3: ACADEMIC CALENDAR
+               ========================================================================= -->
           <!-- =========================================================================
                SUBVIEW 4: MASTER TIMETABLE
                Displays: Class-wise timetable, teacher allocations, rooms and scheduling conflicts
@@ -27943,6 +28207,509 @@ Class X-A,Monday,2,09:35 AM - 10:20 AM,Physical Science,Sri Navva Anand,Room 201
       </form>
     </div>
   </div>
+
+
+
+<!-- =========================================================================
+     ACADEMIC CALENDAR MODALS (7 Statutory Modals)
+     ========================================================================= -->
+
+<!-- Modal 1: Add / Edit Academic Event -->
+<div class="modal fade" id="addCalendarEventModal" tabindex="-1" aria-labelledby="addCalendarEventModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content shadow-lg border-0">
+      <div class="modal-header bg-primary text-white py-3">
+        <h5 class="modal-title fw-bold" id="addCalendarEventModalLabel"><i class="bi bi-calendar-event me-2"></i>Add / Edit Academic Event</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form id="formCalendarEvent" onsubmit="portalApp.handleSaveCalendarEventSubmit(event)">
+        <input type="hidden" id="calEventId" value="">
+        <div class="modal-body p-4">
+          <div class="alert alert-light border small text-muted mb-3 d-flex align-items-center gap-2">
+            <i class="bi bi-info-circle-fill text-primary fs-5"></i>
+            <div>All published calendar changes are automatically broadcasted to affected staff, and integrated into future parent & student portal dashboards.</div>
+          </div>
+
+          <div class="row g-3">
+            <div class="col-md-8">
+              <label class="form-label small fw-bold">Event Title <span class="text-danger">*</span></label>
+              <input type="text" class="form-control" id="calEventTitle" placeholder="e.g., Formative Assessment-1 (FA-1)" required>
+            </div>
+            <div class="col-md-4">
+              <label class="form-label small fw-bold">Category <span class="text-danger">*</span></label>
+              <select class="form-select" id="calEventCategory" required>
+                <option value="Academic">Academic</option>
+                <option value="Examination">Examination</option>
+                <option value="Holiday">Holiday / Vacation</option>
+                <option value="Institutional Event">Institutional Event</option>
+                <option value="Sports & Co-Curricular">Sports & Co-Curricular</option>
+                <option value="Parent-Teacher Meeting">Parent-Teacher Meeting</option>
+              </select>
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label small fw-bold">Start Date <span class="text-danger">*</span></label>
+              <input type="date" class="form-control" id="calEventStartDate" required>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label small fw-bold">End Date <span class="text-danger">*</span></label>
+              <input type="date" class="form-control" id="calEventEndDate" required>
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label small fw-bold">Affected Classes <span class="text-danger">*</span></label>
+              <select class="form-select" id="calEventAffectedClasses" required>
+                <option value="All Classes (Nursery–Class X)">All Classes (Nursery–Class X)</option>
+                <option value="High School (VI–X)">High School (VI–X)</option>
+                <option value="Primary Wing (I–V)">Primary Wing (I–V)</option>
+                <option value="Pre-Primary (Nursery, LKG, UKG)">Pre-Primary (Nursery, LKG, UKG)</option>
+                <option value="Class X Only">Class X Only (SSC Public Prep)</option>
+              </select>
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label small fw-bold">Visibility <span class="text-danger">*</span></label>
+              <select class="form-select" id="calEventVisibility" required>
+                <option value="Public (All Students & Parents)">Public (All Students & Parents)</option>
+                <option value="Faculty & Staff Only">Faculty & Staff Only</option>
+                <option value="Leadership & Examination Board Only">Leadership & Examination Board Only</option>
+              </select>
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label small fw-bold">Approval Status <span class="text-danger">*</span></label>
+              <select class="form-select" id="calEventApprovalStatus" required>
+                <option value="Published">Published (Official & Dispatched)</option>
+                <option value="Approved">Approved (Awaiting Publishing)</option>
+                <option value="Draft">Draft (Internal Planning)</option>
+                <option value="Cancelled">Cancelled</option>
+              </select>
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label small fw-bold">Published By <span class="text-danger">*</span></label>
+              <input type="text" class="form-control" id="calEventPublishedBy" value="Smt. Gorle Varalakshmi - Principal" required>
+            </div>
+
+            <div class="col-12">
+              <label class="form-label small fw-bold">Description & Instructions</label>
+              <textarea class="form-control" id="calEventDescription" rows="3" placeholder="Provide syllabus coverage details, venue, timings, or examination guidelines..."></textarea>
+            </div>
+
+            <div class="col-12">
+              <div class="form-check bg-light p-3 rounded border">
+                <input class="form-check-input ms-0 me-2" type="checkbox" id="calEventNotifyCheckbox" checked>
+                <label class="form-check-label small fw-semibold text-dark" for="calEventNotifyCheckbox">
+                  <i class="bi bi-bell-fill text-warning me-1"></i> Trigger Real-Time Notification Broadcast
+                </label>
+                <div class="text-muted small ms-4">Notify assigned faculty & non-teaching staff immediately via portal notification & SMS alert. Queues parent portal digest.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer bg-light py-2">
+          <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary btn-sm px-4 shadow-sm" id="btnSaveCalEvent"><i class="bi bi-check2-circle me-1"></i> Save Event</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Modal 2: Add Gazetted / Institutional Holiday -->
+<div class="modal fade" id="addHolidayModal" tabindex="-1" aria-labelledby="addHolidayModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-md modal-dialog-centered">
+    <div class="modal-content shadow-lg border-0">
+      <div class="modal-header bg-danger text-white py-3">
+        <h5 class="modal-title fw-bold" id="addHolidayModalLabel"><i class="bi bi-calendar2-heart me-2"></i>Add Holiday / Vacation</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form id="formHoliday" onsubmit="portalApp.handleSaveHolidaySubmit(event)">
+        <div class="modal-body p-4">
+          <div class="row g-3">
+            <div class="col-12">
+              <label class="form-label small fw-bold">Holiday Name <span class="text-danger">*</span></label>
+              <input type="text" class="form-control" id="holTitle" placeholder="e.g., Deepavali / Vijaya Dasami" required>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label small fw-bold">Category <span class="text-danger">*</span></label>
+              <select class="form-select" id="holCategory" required>
+                <option value="State Gazetted">State Gazetted Holiday</option>
+                <option value="National Holiday">National Holiday</option>
+                <option value="Vacation (Dussehra/Pongal/Summer)">Term Vacation</option>
+                <option value="Institutional Discretionary">Institutional Discretionary</option>
+              </select>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label small fw-bold">AP Govt GO / Ref</label>
+              <input type="text" class="form-control" id="holRef" placeholder="e.g., G.O.Rt.No. 248/2026" value="G.O.Rt.No. 248/2026">
+            </div>
+            <div class="col-md-6">
+              <label class="form-label small fw-bold">Start Date <span class="text-danger">*</span></label>
+              <input type="date" class="form-control" id="holStartDate" required>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label small fw-bold">End Date <span class="text-danger">*</span></label>
+              <input type="date" class="form-control" id="holEndDate" required>
+            </div>
+            <div class="col-12">
+              <label class="form-label small fw-bold">Affected Wing <span class="text-danger">*</span></label>
+              <select class="form-select" id="holAffectedClasses" required>
+                <option value="All Classes (Nursery–Class X)">All Classes (Nursery–Class X)</option>
+                <option value="Primary Wing (I–V)">Primary Wing (I–V) Only</option>
+                <option value="High School (VI–X)">High School (VI–X) Only</option>
+              </select>
+            </div>
+            <div class="col-12">
+              <label class="form-label small fw-bold">Remarks / Boarding Guidelines</label>
+              <textarea class="form-control" id="holRemarks" rows="2" placeholder="Hostel closure / reopening timings, bus routes adjustments..."></textarea>
+            </div>
+            <div class="col-12">
+              <div class="form-check bg-light p-2 rounded border">
+                <input class="form-check-input ms-0 me-2" type="checkbox" id="holNotifyCheck" checked>
+                <label class="form-check-label small fw-semibold text-dark" for="holNotifyCheck">
+                  Notify staff and school bus transport division automatically
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer bg-light py-2">
+          <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cancel</button>
+          <button type="submit" class="btn btn-danger btn-sm px-4 shadow-sm"><i class="bi bi-check-circle me-1"></i> Record Holiday</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Modal 3: Define Academic Term Dates -->
+<div class="modal fade" id="defineTermDatesModal" tabindex="-1" aria-labelledby="defineTermDatesModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content shadow-lg border-0">
+      <div class="modal-header bg-primary text-white py-3">
+        <h5 class="modal-title fw-bold" id="defineTermDatesModalLabel"><i class="bi bi-calendar-range me-2"></i>Define Academic Term Dates & Durations</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form id="formTermDates" onsubmit="portalApp.handleDefineTermDatesSubmit(event)">
+        <div class="modal-body p-4">
+          <div class="alert alert-primary-subtle border small mb-3">
+            <i class="bi bi-shield-check me-1 text-primary"></i> <strong>AP State Education Act Compliance:</strong> All recognized secondary schools must maintain a minimum of <strong>220 instructional working days</strong> per academic year. Currently scheduled: <strong id="termFormCurrentTotal">224 Days</strong>.
+          </div>
+
+          <div class="card border rounded-3 p-3 mb-3 bg-light">
+            <h6 class="fw-bold text-primary mb-2"><i class="bi bi-1-circle me-1"></i> Term 1 (First Semester)</h6>
+            <div class="row g-2">
+              <div class="col-md-4">
+                <label class="form-label small fw-semibold">Term 1 Reopening Date</label>
+                <input type="date" class="form-control form-control-sm" id="term1StartDate" value="2026-06-12" required>
+              </div>
+              <div class="col-md-4">
+                <label class="form-label small fw-semibold">Term 1 Last Working Day</label>
+                <input type="date" class="form-control form-control-sm" id="term1EndDate" value="2026-10-24" required>
+              </div>
+              <div class="col-md-4">
+                <label class="form-label small fw-semibold">Instructional Working Days</label>
+                <input type="number" class="form-control form-control-sm" id="term1Days" value="108" required>
+              </div>
+              <div class="col-12 mt-2">
+                <span class="badge bg-secondary-subtle text-dark border me-2">Dussehra Vacation: Oct 10 – Oct 20, 2026</span>
+                <span class="badge bg-warning-subtle text-dark border">Formative-1 & 2 + Summative-1 Windows</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="card border rounded-3 p-3 mb-3 bg-light">
+            <h6 class="fw-bold text-success mb-2"><i class="bi bi-2-circle me-1"></i> Term 2 (Second Semester)</h6>
+            <div class="row g-2">
+              <div class="col-md-4">
+                <label class="form-label small fw-semibold">Term 2 Reopening Date</label>
+                <input type="date" class="form-control form-control-sm" id="term2StartDate" value="2026-11-02" required>
+              </div>
+              <div class="col-md-4">
+                <label class="form-label small fw-semibold">Term 2 Last Working Day</label>
+                <input type="date" class="form-control form-control-sm" id="term2EndDate" value="2027-04-23" required>
+              </div>
+              <div class="col-md-4">
+                <label class="form-label small fw-semibold">Instructional Working Days</label>
+                <input type="number" class="form-control form-control-sm" id="term2Days" value="116" required>
+              </div>
+              <div class="col-12 mt-2">
+                <span class="badge bg-secondary-subtle text-dark border me-2">Sankranti Vacation: Jan 10 – Jan 18, 2027</span>
+                <span class="badge bg-success-subtle text-dark border">Summative-2 & SSC Public Examinations</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label class="form-label small fw-bold">Approving Board / Order Number</label>
+              <input type="text" class="form-control form-control-sm" id="termApprovalRef" value="AP-DSE/ACAD-CAL/2026-27" required>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label small fw-bold">Published Under Authority Of</label>
+              <input type="text" class="form-control form-control-sm" id="termAuthority" value="Smt. Gorle Varalakshmi - Principal" required>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer bg-light py-2">
+          <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cancel</button>
+          <button type="submit" class="btn btn-primary btn-sm px-4 shadow-sm"><i class="bi bi-save me-1"></i> Save Term Structure</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Modal 4: Set Working Days Policy -->
+<div class="modal fade" id="setWorkingDaysModal" tabindex="-1" aria-labelledby="setWorkingDaysModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-md modal-dialog-centered">
+    <div class="modal-content shadow-lg border-0">
+      <div class="modal-header bg-success text-white py-3">
+        <h5 class="modal-title fw-bold" id="setWorkingDaysModalLabel"><i class="bi bi-calendar-check me-2"></i>Set Working Days & Timing Policy</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form id="formWorkingDays" onsubmit="portalApp.handleSetWorkingDaysSubmit(event)">
+        <div class="modal-body p-4">
+          <div class="row g-3">
+            <div class="col-12">
+              <label class="form-label small fw-bold">Standard Instructional Week</label>
+              <select class="form-select form-select-sm" id="workWeekPolicy">
+                <option value="6-Day Week (Monday to Saturday)" selected>6-Day Week (Monday to Saturday)</option>
+                <option value="5-Day Week (Monday to Friday)">5-Day Week (Monday to Friday)</option>
+              </select>
+            </div>
+            <div class="col-12">
+              <label class="form-label small fw-bold">Second Saturday Policy</label>
+              <select class="form-select form-select-sm" id="secondSaturdayPolicy">
+                <option value="Holiday for Primary Wing / Half-day for High School" selected>Holiday for Primary Wing / Half-day for High School</option>
+                <option value="Full Holiday for All Wings">Full Holiday for All Wings</option>
+                <option value="Full Working Day (Compensatory)">Full Working Day (Compensatory)</option>
+              </select>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label small fw-bold">High School Hours</label>
+              <input type="text" class="form-control form-control-sm" id="highSchoolTimings" value="8:45 AM – 4:15 PM">
+            </div>
+            <div class="col-md-6">
+              <label class="form-label small fw-bold">Primary Wing Hours</label>
+              <input type="text" class="form-control form-control-sm" id="primaryWingTimings" value="9:00 AM – 3:45 PM">
+            </div>
+            <div class="col-12">
+              <label class="form-label small fw-bold">Emergency Weather & Compensatory Policy</label>
+              <textarea class="form-control form-control-sm" id="compensatoryPolicy" rows="2">Any unplanned weather or cyclone closures designated by District Collector, Anakapalli shall be compensated on designated 2nd Saturdays or term-end buffer days.</textarea>
+            </div>
+            <div class="col-12">
+              <div class="form-check bg-light p-2 rounded border">
+                <input class="form-check-input ms-0 me-2" type="checkbox" id="workPolicyBroadcast" checked>
+                <label class="form-check-label small fw-semibold text-dark" for="workPolicyBroadcast">
+                  Synchronize with Staff Biometric Attendance & Parent Bus Tracking
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer bg-light py-2">
+          <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-success btn-sm px-4 shadow-sm"><i class="bi bi-check2-circle me-1"></i> Update Policy</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Modal 5: Add Examination Dates -->
+<div class="modal fade" id="addExamDatesModal" tabindex="-1" aria-labelledby="addExamDatesModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content shadow-lg border-0">
+      <div class="modal-header bg-warning text-dark py-3">
+        <h5 class="modal-title fw-bold" id="addExamDatesModalLabel"><i class="bi bi-clipboard2-check me-2"></i>Schedule Examination Assessment Window</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form id="formExamDates" onsubmit="portalApp.handleSaveExamDatesSubmit(event)">
+        <div class="modal-body p-4">
+          <div class="row g-3">
+            <div class="col-md-8">
+              <label class="form-label small fw-bold">Assessment Window Title <span class="text-danger">*</span></label>
+              <input type="text" class="form-control" id="examWindowTitle" placeholder="e.g., Summative Assessment-1 (SA-1 Half-Yearly)" required>
+            </div>
+            <div class="col-md-4">
+              <label class="form-label small fw-bold">Assessment Type <span class="text-danger">*</span></label>
+              <select class="form-select" id="examWindowType" required>
+                <option value="FA-1">Formative Assessment-1 (FA-1)</option>
+                <option value="FA-2">Formative Assessment-2 (FA-2)</option>
+                <option value="SA-1" selected>Summative Assessment-1 (SA-1)</option>
+                <option value="FA-3">Formative Assessment-3 (FA-3)</option>
+                <option value="FA-4">Formative Assessment-4 (FA-4)</option>
+                <option value="SA-2">Summative Assessment-2 (SA-2)</option>
+                <option value="Pre-Public">SSC Pre-Public Board Examination</option>
+              </select>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label small fw-bold">Exam Start Date <span class="text-danger">*</span></label>
+              <input type="date" class="form-control" id="examStartDate" required>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label small fw-bold">Exam End Date <span class="text-danger">*</span></label>
+              <input type="date" class="form-control" id="examEndDate" required>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label small fw-bold">Hall Ticket Issuance Date</label>
+              <input type="date" class="form-control" id="examHallTicketDate">
+            </div>
+            <div class="col-md-6">
+              <label class="form-label small fw-bold">Marks Entry Submission Deadline</label>
+              <input type="date" class="form-control" id="examMarksDeadline">
+            </div>
+            <div class="col-md-6">
+              <label class="form-label small fw-bold">Affected Classes <span class="text-danger">*</span></label>
+              <select class="form-select" id="examAffectedClasses" required>
+                <option value="All Classes (Nursery–Class X)">All Classes (Nursery–Class X)</option>
+                <option value="High School (VI–X)">High School (VI–X)</option>
+                <option value="Primary Wing (I–V)">Primary Wing (I–V)</option>
+                <option value="Class X Only">Class X Only</option>
+              </select>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label small fw-bold">Result Publication Target</label>
+              <input type="date" class="form-control" id="examResultTarget">
+            </div>
+            <div class="col-12">
+              <div class="form-check bg-light p-2 rounded border">
+                <input class="form-check-input ms-0 me-2" type="checkbox" id="examNotifyStaffAndParents" checked>
+                <label class="form-check-label small fw-semibold text-dark" for="examNotifyStaffAndParents">
+                  Notify teachers for question paper readiness and broadcast circular to parents
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer bg-light py-2">
+          <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cancel</button>
+          <button type="submit" class="btn btn-warning btn-sm px-4 shadow-sm text-dark fw-bold"><i class="bi bi-calendar-check me-1"></i> Add Exam Schedule</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Modal 6: Publish Calendar & Broadcast Dispatch -->
+<div class="modal fade" id="publishCalendarModal" tabindex="-1" aria-labelledby="publishCalendarModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content shadow-lg border-0">
+      <div class="modal-header bg-success text-white py-3">
+        <h5 class="modal-title fw-bold" id="publishCalendarModalLabel"><i class="bi bi-broadcast me-2"></i>Publish Academic Calendar & Dispatch Broadcast</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form id="formPublishCalendar" onsubmit="portalApp.handlePublishCalendarSubmit(event)">
+        <div class="modal-body p-4">
+          <div class="text-center mb-3">
+            <div class="display-6 text-success mb-2"><i class="bi bi-shield-check"></i></div>
+            <h6 class="fw-bold mb-1">Confirm Official Academic Calendar Publication</h6>
+            <div class="text-muted small">Academic Year 2026–2027 • Sri Vidya E.M. High School</div>
+          </div>
+
+          <div class="card border rounded-3 p-3 bg-light mb-3">
+            <div class="d-flex justify-content-between small mb-1">
+              <span class="text-muted">Total Instructional Working Days:</span>
+              <strong class="text-primary">224 Days</strong>
+            </div>
+            <div class="d-flex justify-content-between small mb-1">
+              <span class="text-muted">Gazetted Holidays & Vacations:</span>
+              <strong class="text-danger">68 Days</strong>
+            </div>
+            <div class="d-flex justify-content-between small mb-1">
+              <span class="text-muted">Examination Assessment Windows:</span>
+              <strong class="text-warning">5 Scheduled</strong>
+            </div>
+            <div class="d-flex justify-content-between small">
+              <span class="text-muted">Statutory Minimum Required:</span>
+              <strong class="text-success">220 Days (AP Board)</strong>
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label small fw-bold">Published Under Authority of</label>
+            <input type="text" class="form-control form-control-sm" id="pubAuthority" value="Smt. Gorle Varalakshmi - Principal" required>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label small fw-bold">State Gazette / Board Order Ref</label>
+            <input type="text" class="form-control form-control-sm" id="pubOrderRef" value="AP-DSE/RC.No. 18021/A&I/2026" required>
+          </div>
+
+          <div class="form-check mb-2">
+            <input class="form-check-input" type="checkbox" id="pubNotifyStaff" checked>
+            <label class="form-check-label small" for="pubNotifyStaff">
+              <strong>Notify all teaching and non-teaching staff immediately</strong> (SMS & In-App Portal Broadcast)
+            </label>
+          </div>
+
+          <div class="form-check mb-2">
+            <input class="form-check-input" type="checkbox" id="pubNotifyParents" checked>
+            <label class="form-check-label small" for="pubNotifyParents">
+              <strong>Queue official notification for parents & students</strong> on school mobile app and notice board
+            </label>
+          </div>
+        </div>
+        <div class="modal-footer bg-light py-2">
+          <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cancel</button>
+          <button type="submit" class="btn btn-success btn-sm px-4 shadow-sm"><i class="bi bi-send-check me-1"></i> Confirm & Publish Calendar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Modal 7: Cancel Event with Notification -->
+<div class="modal fade" id="cancelEventModal" tabindex="-1" aria-labelledby="cancelEventModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content shadow-lg border-0">
+      <div class="modal-header bg-danger text-white py-3">
+        <h5 class="modal-title fw-bold" id="cancelEventModalLabel"><i class="bi bi-exclamation-triangle-fill me-2"></i>Cancel Event & Notify Community</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form id="formCancelEvent" onsubmit="portalApp.handleCancelEventSubmit(event)">
+        <input type="hidden" id="cancelEventId" value="">
+        <div class="modal-body p-4">
+          <div class="alert alert-warning-subtle border small mb-3">
+            <i class="bi bi-exclamation-circle-fill text-warning me-1"></i> Cancelling this published event triggers an emergency change notice to all affected faculty, staff, and parents.
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label small fw-bold text-muted">Target Event</label>
+            <div class="fw-bold fs-6 text-dark" id="cancelEventTitleDisplay">Event Name</div>
+            <div class="small text-muted" id="cancelEventDatesDisplay">Oct 15, 2026 – Oct 16, 2026</div>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label small fw-bold">Reason for Cancellation / Postponement <span class="text-danger">*</span></label>
+            <textarea class="form-control form-control-sm" id="cancelEventReason" rows="3" placeholder="State official reason (e.g., Heavy rain alert by DEO / Administrative reschedule)..." required></textarea>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label small fw-bold">Proposed Reschedule Date (Optional)</label>
+            <input type="text" class="form-control form-control-sm" id="cancelEventRescheduleDate" placeholder="e.g., Postponed to November 14, 2026">
+          </div>
+
+          <div class="form-check bg-light p-2 rounded border">
+            <input class="form-check-input ms-0 me-2" type="checkbox" id="cancelEventNotifyCheck" checked>
+            <label class="form-check-label small fw-bold text-danger" for="cancelEventNotifyCheck">
+              Send Urgent Cancellation Notification Broadcast to Affected Staff & Parents
+            </label>
+          </div>
+        </div>
+        <div class="modal-footer bg-light py-2">
+          <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-danger btn-sm px-4 shadow-sm"><i class="bi bi-x-circle me-1"></i> Confirm Cancellation</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<!-- =========================================================================
+     END ACADEMIC CALENDAR MODALS
+     ========================================================================= -->
 
 </body>
 

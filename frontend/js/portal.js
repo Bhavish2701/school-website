@@ -38796,56 +38796,1383 @@ const classData = TIMETABLE_CLASS_DATA[currentTimetableClass] || TIMETABLE_CLASS
   }
 
 
-  // Submenu 3: Academic Calendar
+    // =========================================================================
+  // =========================================================================
+  // SUBMENU 3: AUTHORITATIVE ACADEMIC CALENDAR CONTROLLER & STATE
+  // =========================================================================
+
+  // Initial Master Calendar Events Data (AY 2026-2027)
+  const INITIAL_ACADEMIC_CALENDAR_EVENTS = [
+    {
+      id: 'EVT-2026-001',
+      title: 'School Reopening & Academic Orientation',
+      category: 'Academic',
+      startDate: '2026-06-12',
+      endDate: '2026-06-12',
+      affectedClasses: 'All Classes (Nursery–Class X)',
+      description: 'Commencement of Academic Year 2026–27. Orientation on curriculum, textbooks, and lab protocols.',
+      visibility: 'Public (All Students & Parents)',
+      approvalStatus: 'Published',
+      publishedBy: 'Smt. Gorle Varalakshmi - Principal',
+      isGazetted: false
+    },
+    {
+      id: 'EVT-2026-002',
+      title: 'Bakrid (Eid-ul-Adha)',
+      category: 'Holiday',
+      startDate: '2026-06-17',
+      endDate: '2026-06-17',
+      affectedClasses: 'All Classes (Nursery–Class X)',
+      description: 'State Gazetted Holiday declared by AP Government (G.O.Rt.No. 248/2026).',
+      visibility: 'Public (All Students & Parents)',
+      approvalStatus: 'Published',
+      publishedBy: 'Smt. Gorle Varalakshmi - Principal',
+      isGazetted: true
+    },
+    {
+      id: 'EVT-2026-003',
+      title: 'Formative Assessment-1 (FA-1)',
+      category: 'Examination',
+      startDate: '2026-07-20',
+      endDate: '2026-07-23',
+      affectedClasses: 'All Classes (Nursery–Class X)',
+      description: 'First continuous formative evaluation covering June & July syllabi. 20 marks pen-paper test + 30 marks activities.',
+      visibility: 'Public (All Students & Parents)',
+      approvalStatus: 'Published',
+      publishedBy: 'Sri Navva Anand - Vice Principal',
+      isGazetted: false
+    },
+    {
+      id: 'EVT-2026-004',
+      title: 'Muharram',
+      category: 'Holiday',
+      startDate: '2026-07-17',
+      endDate: '2026-07-17',
+      affectedClasses: 'All Classes (Nursery–Class X)',
+      description: 'State Gazetted Holiday declared by AP Government.',
+      visibility: 'Public (All Students & Parents)',
+      approvalStatus: 'Published',
+      publishedBy: 'Smt. Gorle Varalakshmi - Principal',
+      isGazetted: true
+    },
+    {
+      id: 'EVT-2026-005',
+      title: '79th Independence Day Celebrations',
+      category: 'Institutional Event',
+      startDate: '2026-08-15',
+      endDate: '2026-08-15',
+      affectedClasses: 'All Classes (Nursery–Class X)',
+      description: 'National Flag hoisting at 7:45 AM, patriotic song recitals, parade, and prize distribution.',
+      visibility: 'Public (All Students & Parents)',
+      approvalStatus: 'Published',
+      publishedBy: 'Sri Gorle Anand Rao - Founder',
+      isGazetted: false
+    },
+    {
+      id: 'EVT-2026-006',
+      title: 'Telugu Language Day & Gidugu Jayanthi',
+      category: 'Institutional Event',
+      startDate: '2026-08-29',
+      endDate: '2026-08-29',
+      affectedClasses: 'All Classes (Nursery–Class X)',
+      description: 'Cultural literary competitions, padyam recitation, and tribute to Sri Gidugu Venkata Ramamurthy.',
+      visibility: 'Public (All Students & Parents)',
+      approvalStatus: 'Published',
+      publishedBy: 'Smt. Gorle Varalakshmi - Principal',
+      isGazetted: false
+    },
+    {
+      id: 'EVT-2026-007',
+      title: 'Formative Assessment-2 (FA-2)',
+      category: 'Examination',
+      startDate: '2026-09-14',
+      endDate: '2026-09-17',
+      affectedClasses: 'All Classes (Nursery–Class X)',
+      description: 'Second formative evaluation covering August and September units. Question papers verified by HODs.',
+      visibility: 'Public (All Students & Parents)',
+      approvalStatus: 'Published',
+      publishedBy: 'Sri Navva Anand - Vice Principal',
+      isGazetted: false
+    },
+    {
+      id: 'EVT-2026-008',
+      title: 'Mahatma Gandhi Jayanthi',
+      category: 'Holiday',
+      startDate: '2026-10-02',
+      endDate: '2026-10-02',
+      affectedClasses: 'All Classes (Nursery–Class X)',
+      description: 'National Gazetted Holiday. Swachhata Pakhwada institutional observance before 8:30 AM.',
+      visibility: 'Public (All Students & Parents)',
+      approvalStatus: 'Published',
+      publishedBy: 'Smt. Gorle Varalakshmi - Principal',
+      isGazetted: true
+    },
+    {
+      id: 'EVT-2026-009',
+      title: 'Dussehra / Vijaya Dasami Vacation',
+      category: 'Holiday',
+      startDate: '2026-10-10',
+      endDate: '2026-10-20',
+      affectedClasses: 'All Classes (Nursery–Class X)',
+      description: '11-day festive term vacation sanctioned under AP School Education calendar (RC.No. 18021/A&I/2026). School reopens Oct 21.',
+      visibility: 'Public (All Students & Parents)',
+      approvalStatus: 'Published',
+      publishedBy: 'Smt. Gorle Varalakshmi - Principal',
+      isGazetted: true
+    },
+    {
+      id: 'EVT-2026-010',
+      title: 'Term 1 Conclusion & Buffer Working Day',
+      category: 'Academic',
+      startDate: '2026-10-24',
+      endDate: '2026-10-24',
+      affectedClasses: 'All Classes (Nursery–Class X)',
+      description: 'Conclusion of Term 1 (108 Instructional Working Days achieved). Final lesson plan reconciliations.',
+      visibility: 'Faculty & Staff Only',
+      approvalStatus: 'Published',
+      publishedBy: 'Sri Navva Anand - Vice Principal',
+      isGazetted: false
+    },
+    {
+      id: 'EVT-2026-011',
+      title: 'Deepavali Festival Holiday',
+      category: 'Holiday',
+      startDate: '2026-11-01',
+      endDate: '2026-11-01',
+      affectedClasses: 'All Classes (Nursery–Class X)',
+      description: 'State Gazetted Holiday for Festival of Lights.',
+      visibility: 'Public (All Students & Parents)',
+      approvalStatus: 'Published',
+      publishedBy: 'Smt. Gorle Varalakshmi - Principal',
+      isGazetted: true
+    },
+    {
+      id: 'EVT-2026-012',
+      title: 'Term 2 Commencement',
+      category: 'Academic',
+      startDate: '2026-11-02',
+      endDate: '2026-11-02',
+      affectedClasses: 'All Classes (Nursery–Class X)',
+      description: 'Reopening for Second Semester / Term 2 (116 Instructional Working Days planned).',
+      visibility: 'Public (All Students & Parents)',
+      approvalStatus: 'Published',
+      publishedBy: 'Smt. Gorle Varalakshmi - Principal',
+      isGazetted: false
+    },
+    {
+      id: 'EVT-2026-013',
+      title: 'Summative Assessment-1 (SA-1 Half-Yearly Exams)',
+      category: 'Examination',
+      startDate: '2026-11-16',
+      endDate: '2026-11-23',
+      affectedClasses: 'All Classes (Nursery–Class X)',
+      description: 'Common Half-Yearly Summative Assessment covering 50% statewide syllabus. Centralized common question papers.',
+      visibility: 'Public (All Students & Parents)',
+      approvalStatus: 'Published',
+      publishedBy: 'Sri Navva Anand - Vice Principal',
+      isGazetted: false
+    },
+    {
+      id: 'EVT-2026-014',
+      title: 'Children\'s Day & Sri Vidya Science Fest',
+      category: 'Institutional Event',
+      startDate: '2026-11-14',
+      endDate: '2026-11-14',
+      affectedClasses: 'All Classes (Nursery–Class X)',
+      description: 'Inter-house science model exhibits, robotics demonstrations, and celebratory carnival.',
+      visibility: 'Public (All Students & Parents)',
+      approvalStatus: 'Published',
+      publishedBy: 'Smt. Gorle Varalakshmi - Principal',
+      isGazetted: false
+    },
+    {
+      id: 'EVT-2026-015',
+      title: 'Annual Sports & Athletic Championship',
+      category: 'Sports & Co-Curricular',
+      startDate: '2026-12-18',
+      endDate: '2026-12-19',
+      affectedClasses: 'All Classes (Nursery–Class X)',
+      description: 'Track and field events, inter-house tug of war, kho-kho, volleyball tournaments, and award ceremony.',
+      visibility: 'Public (All Students & Parents)',
+      approvalStatus: 'Published',
+      publishedBy: 'Sri Navva Anand - Vice Principal',
+      isGazetted: false
+    },
+    {
+      id: 'EVT-2026-016',
+      title: 'Christmas Holiday',
+      category: 'Holiday',
+      startDate: '2026-12-25',
+      endDate: '2026-12-25',
+      affectedClasses: 'All Classes (Nursery–Class X)',
+      description: 'National and State Gazetted Holiday.',
+      visibility: 'Public (All Students & Parents)',
+      approvalStatus: 'Published',
+      publishedBy: 'Smt. Gorle Varalakshmi - Principal',
+      isGazetted: true
+    },
+    {
+      id: 'EVT-2026-017',
+      title: 'Sankranti / Pongal Vacation',
+      category: 'Holiday',
+      startDate: '2027-01-10',
+      endDate: '2027-01-18',
+      affectedClasses: 'All Classes (Nursery–Class X)',
+      description: '9-day festive harvest vacation sanctioned under AP DSE orders. Reopening on January 19, 2027.',
+      visibility: 'Public (All Students & Parents)',
+      approvalStatus: 'Published',
+      publishedBy: 'Smt. Gorle Varalakshmi - Principal',
+      isGazetted: true
+    },
+    {
+      id: 'EVT-2026-018',
+      title: '78th Republic Day Celebrations',
+      category: 'Institutional Event',
+      startDate: '2027-01-26',
+      endDate: '2027-01-26',
+      affectedClasses: 'All Classes (Nursery–Class X)',
+      description: 'Flag hoisting at 8:00 AM, constitutional pledge recital, NCC drill, and patriotic cultural programs.',
+      visibility: 'Public (All Students & Parents)',
+      approvalStatus: 'Published',
+      publishedBy: 'Sri Gorle Anand Rao - Founder',
+      isGazetted: false
+    },
+    {
+      id: 'EVT-2026-019',
+      title: 'Formative Assessment-3 (FA-3)',
+      category: 'Examination',
+      startDate: '2027-02-01',
+      endDate: '2027-02-04',
+      affectedClasses: 'All Classes (Nursery–Class X)',
+      description: 'Third continuous evaluation covering Dec & Jan syllabi with experimental project evaluations.',
+      visibility: 'Public (All Students & Parents)',
+      approvalStatus: 'Published',
+      publishedBy: 'Sri Navva Anand - Vice Principal',
+      isGazetted: false
+    },
+    {
+      id: 'EVT-2026-020',
+      title: 'Class X SSC Pre-Public Board Examination',
+      category: 'Examination',
+      startDate: '2027-02-15',
+      endDate: '2027-02-24',
+      affectedClasses: 'Class X Only',
+      description: 'Statutory board replica examination under external invigilation and strict AP Board grading rubrics.',
+      visibility: 'Public (All Students & Parents)',
+      approvalStatus: 'Published',
+      publishedBy: 'Smt. Gorle Varalakshmi - Principal',
+      isGazetted: false
+    },
+    {
+      id: 'EVT-2026-021',
+      title: 'National Science Day Exhibition',
+      category: 'Institutional Event',
+      startDate: '2027-02-28',
+      endDate: '2027-02-28',
+      affectedClasses: 'High School (VI–X)',
+      description: 'Celebrating Raman Effect with scientific demonstrations, quiz contests, and alumni guest lectures.',
+      visibility: 'Public (All Students & Parents)',
+      approvalStatus: 'Published',
+      publishedBy: 'Sri Navva Anand - Vice Principal',
+      isGazetted: false
+    },
+    {
+      id: 'EVT-2026-022',
+      title: 'Maha Shivaratri',
+      category: 'Holiday',
+      startDate: '2027-03-06',
+      endDate: '2027-03-06',
+      affectedClasses: 'All Classes (Nursery–Class X)',
+      description: 'State Gazetted Holiday.',
+      visibility: 'Public (All Students & Parents)',
+      approvalStatus: 'Published',
+      publishedBy: 'Smt. Gorle Varalakshmi - Principal',
+      isGazetted: true
+    },
+    {
+      id: 'EVT-2026-023',
+      title: 'Summative Assessment-2 (SA-2 Annual Board)',
+      category: 'Examination',
+      startDate: '2027-04-05',
+      endDate: '2027-04-15',
+      affectedClasses: 'All Classes (Nursery–Class X)',
+      description: 'Year-end comprehensive summative examination for promotion to higher classes (Classes Nursery to IX).',
+      visibility: 'Public (All Students & Parents)',
+      approvalStatus: 'Published',
+      publishedBy: 'Smt. Gorle Varalakshmi - Principal',
+      isGazetted: false
+    },
+    {
+      id: 'EVT-2026-024',
+      title: 'Parent-Teacher Meeting & Final Result Declaration',
+      category: 'Parent-Teacher Meeting',
+      startDate: '2027-04-22',
+      endDate: '2027-04-22',
+      affectedClasses: 'All Classes (Nursery–Class X)',
+      description: 'Annual progress card distribution, cumulative assessment review, and next academic year re-registration.',
+      visibility: 'Public (All Students & Parents)',
+      approvalStatus: 'Published',
+      publishedBy: 'Smt. Gorle Varalakshmi - Principal',
+      isGazetted: false
+    },
+    {
+      id: 'EVT-2026-025',
+      title: 'Last Working Day & Summer Vacation Commencement',
+      category: 'Academic',
+      startDate: '2027-04-23',
+      endDate: '2027-04-23',
+      affectedClasses: 'All Classes (Nursery–Class X)',
+      description: 'Final working day of Academic Year 2026–27. Summer vacation commences April 24, 2027.',
+      visibility: 'Public (All Students & Parents)',
+      approvalStatus: 'Published',
+      publishedBy: 'Smt. Gorle Varalakshmi - Principal',
+      isGazetted: false
+    }
+  ];
+
+  // Dedicated Holiday Register Data
+  const INITIAL_ACADEMIC_HOLIDAYS = [
+    { name: 'Bakrid (Eid-ul-Adha)', category: 'State Gazetted', date: '2026-06-17', duration: '1 Day', ref: 'G.O.Rt.No. 248/2026', wing: 'All Classes (Nursery–Class X)', status: 'Gazetted' },
+    { name: 'Muharram', category: 'State Gazetted', date: '2026-07-17', duration: '1 Day', ref: 'G.O.Rt.No. 248/2026', wing: 'All Classes (Nursery–Class X)', status: 'Gazetted' },
+    { name: 'Independence Day', category: 'National Holiday', date: '2026-08-15', duration: '1 Day', ref: 'National Gazetted', wing: 'All Classes (Ceremonial)', status: 'Observed' },
+    { name: 'Sri Krishna Janmashtami', category: 'State Gazetted', date: '2026-09-04', duration: '1 Day', ref: 'G.O.Rt.No. 248/2026', wing: 'All Classes (Nursery–Class X)', status: 'Gazetted' },
+    { name: 'Vinayaka Chavithi', category: 'State Gazetted', date: '2026-09-14', duration: '1 Day', ref: 'G.O.Rt.No. 248/2026', wing: 'All Classes (Nursery–Class X)', status: 'Gazetted' },
+    { name: 'Mahatma Gandhi Jayanthi', category: 'National Holiday', date: '2026-10-02', duration: '1 Day', ref: 'National Gazetted', wing: 'All Classes (Nursery–Class X)', status: 'Gazetted' },
+    { name: 'Dussehra / Vijaya Dasami Vacation', category: 'Vacation', date: '2026-10-10 to 2026-10-20', duration: '11 Days', ref: 'AP-DSE/RC.18021/2026', wing: 'All Classes (Nursery–Class X)', status: 'Gazetted' },
+    { name: 'Deepavali', category: 'State Gazetted', date: '2026-11-01', duration: '1 Day', ref: 'G.O.Rt.No. 248/2026', wing: 'All Classes (Nursery–Class X)', status: 'Gazetted' },
+    { name: 'Kartika Poornima / Guru Nanak Jayanthi', category: 'State Gazetted', date: '2026-11-24', duration: '1 Day', ref: 'G.O.Rt.No. 248/2026', wing: 'All Classes (Nursery–Class X)', status: 'Gazetted' },
+    { name: 'Christmas', category: 'State Gazetted', date: '2026-12-25', duration: '1 Day', ref: 'G.O.Rt.No. 248/2026', wing: 'All Classes (Nursery–Class X)', status: 'Gazetted' },
+    { name: 'Sankranti / Pongal Vacation', category: 'Vacation', date: '2027-01-10 to 2027-01-18', duration: '9 Days', ref: 'AP-DSE/RC.18021/2026', wing: 'All Classes (Nursery–Class X)', status: 'Gazetted' },
+    { name: 'Republic Day', category: 'National Holiday', date: '2027-01-26', duration: '1 Day', ref: 'National Gazetted', wing: 'All Classes (Ceremonial)', status: 'Observed' },
+    { name: 'Maha Shivaratri', category: 'State Gazetted', date: '2027-03-06', duration: '1 Day', ref: 'G.O.Rt.No. 248/2026', wing: 'All Classes (Nursery–Class X)', status: 'Gazetted' },
+    { name: 'Holi', category: 'State Gazetted', date: '2027-03-22', duration: '1 Day', ref: 'G.O.Rt.No. 248/2026', wing: 'All Classes (Nursery–Class X)', status: 'Gazetted' },
+    { name: 'Good Friday', category: 'State Gazetted', date: '2027-03-26', duration: '1 Day', ref: 'G.O.Rt.No. 248/2026', wing: 'All Classes (Nursery–Class X)', status: 'Gazetted' },
+    { name: 'Babu Jagjivan Ram Jayanthi', category: 'State Gazetted', date: '2027-04-05', duration: '1 Day', ref: 'G.O.Rt.No. 248/2026', wing: 'All Classes (Nursery–Class X)', status: 'Gazetted' },
+    { name: 'Dr. B.R. Ambedkar Jayanthi', category: 'National Holiday', date: '2027-04-14', duration: '1 Day', ref: 'National Gazetted', wing: 'All Classes (Nursery–Class X)', status: 'Gazetted' },
+    { name: 'Summer Vacation', category: 'Vacation', date: '2027-04-24 to 2027-06-11', duration: '48 Days', ref: 'AP-DSE/RC.18021/2026', wing: 'All Classes (Nursery–Class X)', status: 'Gazetted' }
+  ];
+
+  // Academic Calendar Terms Structure
+  const INITIAL_ACADEMIC_TERMS = {
+    academicYear: '2026–2027',
+    term1: {
+      name: 'Term 1 (First Semester)',
+      startDate: '2026-06-12',
+      endDate: '2026-10-24',
+      workingDays: 108,
+      status: 'Completed / Active',
+      milestones: [
+        { label: 'Reopening Day', date: 'Jun 12, 2026', type: 'academic' },
+        { label: 'FA-1 Assessment', date: 'Jul 20–23, 2026', type: 'exam' },
+        { label: 'FA-2 Assessment', date: 'Sep 14–17, 2026', type: 'exam' },
+        { label: 'Dussehra Vacation', date: 'Oct 10–20, 2026', type: 'holiday' },
+        { label: 'Term 1 Last Day', date: 'Oct 24, 2026', type: 'academic' }
+      ]
+    },
+    term2: {
+      name: 'Term 2 (Second Semester)',
+      startDate: '2026-11-02',
+      endDate: '2027-04-23',
+      workingDays: 116,
+      status: 'Upcoming / Active',
+      milestones: [
+        { label: 'Term 2 Reopening', date: 'Nov 02, 2026', type: 'academic' },
+        { label: 'SA-1 Half-Yearly', date: 'Nov 16–23, 2026', type: 'exam' },
+        { label: 'Sankranti Vacation', date: 'Jan 10–18, 2027', type: 'holiday' },
+        { label: 'FA-3 Assessment', date: 'Feb 01–04, 2027', type: 'exam' },
+        { label: 'Class X Pre-Public', date: 'Feb 15–24, 2027', type: 'exam' },
+        { label: 'SA-2 Annual Board', date: 'Apr 05–15, 2027', type: 'exam' },
+        { label: 'Final Working Day', date: 'Apr 23, 2027', type: 'academic' }
+      ]
+    },
+    totalInstructionalDays: 224,
+    statutoryMinimum: 220,
+    publishedAuthority: 'Smt. Gorle Varalakshmi - Principal',
+    gazetteRef: 'AP-DSE/RC.No. 18021/A&I/2026',
+    isPublished: true,
+    lastPublishedAt: 'June 10, 2026 09:30 AM'
+  };
+
+  function ensureAcademicCalendarState() {
+    if (!state.academicCalendarEvents) {
+      state.academicCalendarEvents = JSON.parse(JSON.stringify(INITIAL_ACADEMIC_CALENDAR_EVENTS));
+    }
+    if (!state.academicCalendarHolidays) {
+      state.academicCalendarHolidays = JSON.parse(JSON.stringify(INITIAL_ACADEMIC_HOLIDAYS));
+    }
+    if (!state.academicCalendarTerms) {
+      state.academicCalendarTerms = JSON.parse(JSON.stringify(INITIAL_ACADEMIC_TERMS));
+    }
+    if (!state.calendarActiveView) {
+      state.calendarActiveView = 'monthly';
+    }
+    if (typeof state.calendarCurrentYear === 'undefined') {
+      state.calendarCurrentYear = 2026;
+    }
+    if (typeof state.calendarCurrentMonth === 'undefined') {
+      // Month index: 9 is October (0-indexed: 0=Jan, 9=Oct, 10=Nov, 11=Dec)
+      state.calendarCurrentMonth = 9;
+    }
+  }
+
+  function updateAcademicCalendarKPIs() {
+    ensureAcademicCalendarState();
+    const workingDaysElem = document.getElementById('kpiCalWorkingDays');
+    const holidaysElem = document.getElementById('kpiCalHolidays');
+    const termsElem = document.getElementById('kpiCalTerms');
+    const examsElem = document.getElementById('kpiCalExams');
+    const pubStatusElem = document.getElementById('kpiCalPublishedStatus');
+    const lastPubDateElem = document.getElementById('kpiCalLastPublishedDate');
+
+    const totalWorkingDays = state.academicCalendarTerms ? state.academicCalendarTerms.totalInstructionalDays : 224;
+    const totalHolidayDays = 68; // 68 cumulative gazetted & term vacation days
+    const termsCount = 2;
+    const examEventsCount = state.academicCalendarEvents.filter(e => e.category === 'Examination' && e.approvalStatus !== 'Cancelled').length;
+
+    if (workingDaysElem) workingDaysElem.textContent = totalWorkingDays;
+    if (holidaysElem) holidaysElem.textContent = totalHolidayDays;
+    if (termsElem) termsElem.textContent = termsCount;
+    if (examsElem) examsElem.textContent = examEventsCount + ' Windows';
+    if (pubStatusElem) {
+      if (state.academicCalendarTerms && state.academicCalendarTerms.isPublished) {
+        pubStatusElem.textContent = 'Published & Synced';
+        pubStatusElem.className = 'fw-bold mb-0 text-success';
+      } else {
+        pubStatusElem.textContent = 'Draft in Progress';
+        pubStatusElem.className = 'fw-bold mb-0 text-warning';
+      }
+    }
+    if (lastPubDateElem && state.academicCalendarTerms) {
+      lastPubDateElem.textContent = 'By ' + state.academicCalendarTerms.publishedAuthority;
+    }
+  }
+
+  function switchCalendarView(viewKey) {
+    ensureAcademicCalendarState();
+    state.calendarActiveView = viewKey;
+
+    const btnMonthly = document.getElementById('btnCalViewMonthly');
+    const btnTerm = document.getElementById('btnCalViewTerm');
+    const btnList = document.getElementById('btnCalViewList');
+    const btnHolidays = document.getElementById('btnCalViewHolidays');
+
+    const cMonthly = document.getElementById('calViewMonthlyContainer');
+    const cTerm = document.getElementById('calViewTermContainer');
+    const cList = document.getElementById('calViewListContainer');
+    const cHolidays = document.getElementById('calViewHolidaysContainer');
+
+    [btnMonthly, btnTerm, btnList, btnHolidays].forEach(b => { if (b) b.classList.remove('active'); });
+    [cMonthly, cTerm, cList, cHolidays].forEach(c => { if (c) c.style.display = 'none'; });
+
+    if (viewKey === 'monthly') {
+      if (btnMonthly) btnMonthly.classList.add('active');
+      if (cMonthly) cMonthly.style.display = 'block';
+      renderMonthlyCalendarView();
+    } else if (viewKey === 'term') {
+      if (btnTerm) btnTerm.classList.add('active');
+      if (cTerm) cTerm.style.display = 'block';
+      renderTermCalendarView();
+    } else if (viewKey === 'list') {
+      if (btnList) btnList.classList.add('active');
+      if (cList) cList.style.display = 'block';
+      renderListCalendarView();
+    } else if (viewKey === 'holidays') {
+      if (btnHolidays) btnHolidays.classList.add('active');
+      if (cHolidays) cHolidays.style.display = 'block';
+      renderHolidayRegisterView();
+    }
+  }
+
   function renderAcademicCalendar(filteredData) {
-    const tbody = document.getElementById('academicCalendarTableBody');
+    ensureAcademicCalendarState();
+    updateAcademicCalendarKPIs();
+    switchCalendarView(state.calendarActiveView || 'monthly');
+  }
+
+  // --- VIEW 1: MONTHLY CALENDAR GRID ---
+  function navigateCalendarMonth(delta) {
+    ensureAcademicCalendarState();
+    state.calendarCurrentMonth += delta;
+    if (state.calendarCurrentMonth > 11) {
+      state.calendarCurrentMonth = 0;
+      state.calendarCurrentYear += 1;
+    } else if (state.calendarCurrentMonth < 0) {
+      state.calendarCurrentMonth = 11;
+      state.calendarCurrentYear -= 1;
+    }
+    renderMonthlyCalendarView();
+  }
+
+  function navigateCalendarToday() {
+    ensureAcademicCalendarState();
+    state.calendarCurrentYear = 2026;
+    state.calendarCurrentMonth = 9; // October 2026
+    renderMonthlyCalendarView();
+  }
+
+  function renderMonthlyCalendarView() {
+    ensureAcademicCalendarState();
+    const gridContainer = document.getElementById('calMonthlyGrid');
+    const titleElem = document.getElementById('calCurrentMonthTitle');
+    const termBadgeElem = document.getElementById('calCurrentMonthTermBadge');
+    if (!gridContainer) return;
+
+    const year = state.calendarCurrentYear;
+    const month = state.calendarCurrentMonth;
+
+    const monthNames = [
+      'January', 'February', 'March', 'April', 'May', 'June',
+      'July', 'August', 'September', 'October', 'November', 'December'
+    ];
+
+    if (titleElem) {
+      titleElem.textContent = monthNames[month] + ' ' + year;
+    }
+    if (termBadgeElem) {
+      if (year === 2026 && month >= 5 && month <= 9) {
+        termBadgeElem.textContent = 'Term 1 (First Semester)';
+        termBadgeElem.className = 'badge bg-primary-subtle text-primary border border-primary-subtle rounded-pill px-2 py-1 small';
+      } else if ((year === 2026 && month >= 10) || (year === 2027 && month <= 3)) {
+        termBadgeElem.textContent = 'Term 2 (Second Semester)';
+        termBadgeElem.className = 'badge bg-success-subtle text-success border border-success-subtle rounded-pill px-2 py-1 small';
+      } else {
+        termBadgeElem.textContent = 'Summer Vacation / Term Break';
+        termBadgeElem.className = 'badge bg-secondary-subtle text-dark border rounded-pill px-2 py-1 small';
+      }
+    }
+
+    // Days calculation
+    const firstDayIndex = new Date(year, month, 1).getDay(); // 0 is Sunday
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
+    const daysInPrevMonth = new Date(year, month, 0).getDate();
+
+    let html = '';
+    // Weekday headers
+    const weekdays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+    html += '<div class="row g-1 text-center fw-bold text-muted small mb-1 py-1 border-bottom bg-light rounded-top">';
+    weekdays.forEach((day, idx) => {
+      const isSun = (idx === 0);
+      html += '<div class="col calendar-col-header ' + (isSun ? 'text-danger' : '') + '">' + day.substring(0, 3).toUpperCase() + '</div>';
+    });
+    html += '</div>';
+
+    // Calendar Cells Grid
+    html += '<div class="calendar-month-grid">';
+    let cellCount = 0;
+    let rowHtml = '<div class="row g-1 mb-1">';
+
+    // Leading days from previous month
+    for (let i = firstDayIndex - 1; i >= 0; i--) {
+      const prevDateNum = daysInPrevMonth - i;
+      rowHtml += '<div class="col calendar-day-cell is-outside">';
+      rowHtml += '  <div class="calendar-day-header"><span class="calendar-day-number text-muted">' + prevDateNum + '</span></div>';
+      rowHtml += '</div>';
+      cellCount++;
+    }
+
+    // Active month days
+    for (let day = 1; day <= daysInMonth; day++) {
+      if (cellCount % 7 === 0 && cellCount > 0) {
+        rowHtml += '</div><div class="row g-1 mb-1">';
+      }
+
+      const dayOfWeek = (cellCount % 7);
+      const isSunday = (dayOfWeek === 0);
+      const isSecondSaturday = (dayOfWeek === 6 && day >= 8 && day <= 14);
+
+      // Format date YYYY-MM-DD
+      const mm = String(month + 1).padStart(2, '0');
+      const dd = String(day).padStart(2, '0');
+      const dateStr = year + '-' + mm + '-' + dd;
+
+      // Find events on this day
+      const dayEvents = state.academicCalendarEvents.filter(evt => {
+        if (evt.approvalStatus === 'Cancelled') return false;
+        return (dateStr >= evt.startDate && dateStr <= evt.endDate);
+      });
+
+      // Check if isToday (simulate Oct 15, 2026 or real today)
+      const isToday = (year === 2026 && month === 9 && day === 15);
+
+      rowHtml += '<div class="col calendar-day-cell ' + (isSunday ? 'is-sunday' : '') + ' ' + (isSecondSaturday ? 'is-second-sat' : '') + ' ' + (isToday ? 'is-today' : '') + '">';
+      rowHtml += '  <div class="calendar-day-header d-flex justify-content-between align-items-center">';
+      rowHtml += '    <span class="calendar-day-number ' + (isSunday ? 'text-danger fw-bold' : '') + '">' + day + '</span>';
+      if (isToday) {
+        rowHtml += '    <span class="badge bg-primary text-white rounded-pill px-1 small" style="font-size: 0.65rem;">Today</span>';
+      } else if (isSecondSaturday) {
+        rowHtml += '    <span class="badge bg-light text-muted border rounded px-1 small" style="font-size: 0.62rem;">2nd Sat</span>';
+      }
+      rowHtml += '  </div>';
+
+      rowHtml += '  <div class="calendar-events-stack mt-1">';
+      dayEvents.forEach(evt => {
+        let catClass = 'pill-academic';
+        if (evt.category === 'Examination') catClass = 'pill-exam';
+        else if (evt.category === 'Holiday') catClass = 'pill-holiday';
+        else if (evt.category === 'Institutional Event') catClass = 'pill-institutional';
+        else if (evt.category === 'Sports & Co-Curricular') catClass = 'pill-sports';
+        else if (evt.category === 'Parent-Teacher Meeting') catClass = 'pill-ptm';
+
+        rowHtml += '    <div class="calendar-event-pill ' + catClass + '" onclick="portalApp.openAddCalendarEventModal(\'' + evt.id + '\')" title="' + evt.title + ' (' + evt.category + ') - ' + evt.affectedClasses + '">';
+        rowHtml += '      <span class="pill-dot"></span>';
+        rowHtml += '      <span class="pill-text">' + evt.title + '</span>';
+        rowHtml += '    </div>';
+      });
+      rowHtml += '  </div>';
+      rowHtml += '</div>';
+
+      cellCount++;
+    }
+
+    // Trailing days to finish last week row
+    const remaining = (7 - (cellCount % 7)) % 7;
+    for (let j = 1; j <= remaining; j++) {
+      rowHtml += '<div class="col calendar-day-cell is-outside">';
+      rowHtml += '  <div class="calendar-day-header"><span class="calendar-day-number text-muted">' + j + '</span></div>';
+      rowHtml += '</div>';
+      cellCount++;
+    }
+
+    rowHtml += '</div>';
+    html += rowHtml;
+    html += '</div>';
+
+    gridContainer.innerHTML = html;
+  }
+
+  // --- VIEW 2: TERM VIEW ---
+  function renderTermCalendarView() {
+    ensureAcademicCalendarState();
+    const container = document.getElementById('calTermViewContent');
+    if (!container) return;
+
+    const terms = state.academicCalendarTerms;
+
+    let html = '';
+    html += '<div class="row g-4">';
+
+    // Term 1 Card
+    html += '<div class="col-lg-6">';
+    html += '  <div class="card border rounded-3 h-100 shadow-sm">';
+    html += '    <div class="card-header bg-primary text-white py-3 d-flex justify-content-between align-items-center">';
+    html += '      <div>';
+    html += '        <h6 class="fw-bold mb-0"><i class="bi bi-1-circle-fill me-2"></i>' + terms.term1.name + '</h6>';
+    html += '        <small class="opacity-75">June 12, 2026 – October 24, 2026</small>';
+    html += '      </div>';
+    html += '      <span class="badge bg-white text-primary fw-bold px-2 py-1">' + terms.term1.workingDays + ' Working Days</span>';
+    html += '    </div>';
+    html += '    <div class="card-body p-3">';
+    html += '      <div class="mb-3">';
+    html += '        <div class="d-flex justify-content-between small text-muted mb-1">';
+    html += '          <span>Curriculum Execution Progress</span>';
+    html += '          <span class="fw-bold text-primary">100% Target Met</span>';
+    html += '        </div>';
+    html += '        <div class="progress" style="height: 8px;">';
+    html += '          <div class="progress-bar bg-primary" role="progressbar" style="width: 100%;"></div>';
+    html += '        </div>';
+    html += '      </div>';
+    html += '      <h6 class="fw-bold text-dark small text-uppercase mb-2"><i class="bi bi-flag-fill text-primary me-1"></i> Term 1 Key Milestones</h6>';
+    html += '      <ul class="list-group list-group-flush small mb-3">';
+    terms.term1.milestones.forEach(m => {
+      let icon = 'bi-circle';
+      if (m.type === 'exam') icon = 'bi-clipboard-check-fill text-warning';
+      else if (m.type === 'holiday') icon = 'bi-calendar-heart-fill text-danger';
+      else icon = 'bi-check-circle-fill text-primary';
+      html += '      <li class="list-group-item d-flex justify-content-between align-items-center px-0 py-2">';
+      html += '        <span><i class="bi ' + icon + ' me-2"></i>' + m.label + '</span>';
+      html += '        <span class="badge bg-light text-dark border">' + m.date + '</span>';
+      html += '      </li>';
+    });
+    html += '      </ul>';
+    html += '      <div class="bg-light p-2 rounded small text-muted">';
+    html += '        <i class="bi bi-info-circle me-1 text-primary"></i> <strong>Vacation Period:</strong> Dussehra Vacation observed Oct 10 – Oct 20, 2026 (11 Days).';
+    html += '      </div>';
+    html += '    </div>';
+    html += '    <div class="card-footer bg-white border-top py-2 px-3 small text-muted d-flex justify-content-between align-items-center">';
+    html += '      <span>Syllabus Covered: 50%</span>';
+    html += '      <span class="badge bg-success-subtle text-success border">Term 1 Reconciled</span>';
+    html += '    </div>';
+    html += '  </div>';
+    html += '</div>';
+
+    // Term 2 Card
+    html += '<div class="col-lg-6">';
+    html += '  <div class="card border rounded-3 h-100 shadow-sm">';
+    html += '    <div class="card-header bg-success text-white py-3 d-flex justify-content-between align-items-center">';
+    html += '      <div>';
+    html += '        <h6 class="fw-bold mb-0"><i class="bi bi-2-circle-fill me-2"></i>' + terms.term2.name + '</h6>';
+    html += '        <small class="opacity-75">November 02, 2026 – April 23, 2027</small>';
+    html += '      </div>';
+    html += '      <span class="badge bg-white text-success fw-bold px-2 py-1">' + terms.term2.workingDays + ' Working Days</span>';
+    html += '    </div>';
+    html += '    <div class="card-body p-3">';
+    html += '      <div class="mb-3">';
+    html += '        <div class="d-flex justify-content-between small text-muted mb-1">';
+    html += '          <span>Instructional Days Target</span>';
+    html += '          <span class="fw-bold text-success">116 Days Scheduled</span>';
+    html += '        </div>';
+    html += '        <div class="progress" style="height: 8px;">';
+    html += '          <div class="progress-bar bg-success" role="progressbar" style="width: 100%;"></div>';
+    html += '        </div>';
+    html += '      </div>';
+    html += '      <h6 class="fw-bold text-dark small text-uppercase mb-2"><i class="bi bi-flag-fill text-success me-1"></i> Term 2 Key Milestones</h6>';
+    html += '      <ul class="list-group list-group-flush small mb-3">';
+    terms.term2.milestones.forEach(m => {
+      let icon = 'bi-circle';
+      if (m.type === 'exam') icon = 'bi-clipboard-check-fill text-warning';
+      else if (m.type === 'holiday') icon = 'bi-calendar-heart-fill text-danger';
+      else icon = 'bi-check-circle-fill text-success';
+      html += '      <li class="list-group-item d-flex justify-content-between align-items-center px-0 py-2">';
+      html += '        <span><i class="bi ' + icon + ' me-2"></i>' + m.label + '</span>';
+      html += '        <span class="badge bg-light text-dark border">' + m.date + '</span>';
+      html += '      </li>';
+    });
+    html += '      </ul>';
+    html += '      <div class="bg-light p-2 rounded small text-muted">';
+    html += '        <i class="bi bi-info-circle me-1 text-success"></i> <strong>Vacation Periods:</strong> Sankranti (Jan 10–18, 2027) & Summer Vacation (Apr 24, 2027 onwards).';
+    html += '      </div>';
+    html += '    </div>';
+    html += '    <div class="card-footer bg-white border-top py-2 px-3 small text-muted d-flex justify-content-between align-items-center">';
+    html += '      <span>Syllabus Covered: 100% Target</span>';
+    html += '      <span class="badge bg-primary-subtle text-primary border">Statutory Audit Clear</span>';
+    html += '    </div>';
+    html += '  </div>';
+    html += '</div>';
+
+    // Board Compliance Bar
+    html += '<div class="col-12">';
+    html += '  <div class="card border rounded-3 p-3 bg-light d-flex flex-wrap justify-content-between align-items-center flex-row gap-3">';
+    html += '    <div class="d-flex align-items-center gap-3">';
+    html += '      <div class="rounded-circle bg-success text-white p-2"><i class="bi bi-shield-check fs-4"></i></div>';
+    html += '      <div>';
+    html += '        <h6 class="fw-bold mb-0 text-dark">Andhra Pradesh School Education Department Compliance</h6>';
+    html += '        <span class="small text-muted">Statutory requirement: 220 Instructional Working Days | Total Sri Vidya Calendar: <strong>' + terms.totalInstructionalDays + ' Working Days</strong> (+4 Buffer Days)</span>';
+    html += '      </div>';
+    html += '    </div>';
+    html += '    <button class="btn btn-outline-primary btn-sm px-3" onclick="portalApp.openPublishCalendarModal()"><i class="bi bi-check2-circle me-1"></i> Verify Gazette Alignment</button>';
+    html += '  </div>';
+    html += '</div>';
+
+    html += '</div>';
+
+    container.innerHTML = html;
+  }
+
+  // --- VIEW 3: LIST VIEW (MASTER EVENTS REGISTER) ---
+  function renderListCalendarView(filteredData) {
+    ensureAcademicCalendarState();
+    const tbody = document.getElementById('calEventsTableBody');
+    const countElem = document.getElementById('calEventsTableCount');
     if (!tbody) return;
 
-    const data = filteredData || ACADEMIC_CALENDAR_MASTER_DATA;
+    const events = filteredData || state.academicCalendarEvents;
+    if (countElem) {
+      countElem.textContent = 'Showing ' + events.length + ' of ' + state.academicCalendarEvents.length + ' events';
+    }
 
-    tbody.innerHTML = data.map(cal => {
-      return `
-        <tr>
-          <td>
-            <div style="font-weight:700; color:var(--color-text-dark, #0f172a);"><i class="fa-regular fa-calendar mr-1 text-primary"></i> ${cal.date}</div>
-          </td>
-          <td>
-            <div style="font-weight:700; color:var(--color-text-dark, #0f172a);">${cal.event}</div>
-          </td>
-          <td>
-            <span class="portal-badge ${cal.badge}">${cal.category}</span>
-          </td>
-          <td>
-            <span class="portal-badge badge-neutral font-weight-bold">${cal.terms}</span>
-          </td>
-          <td>
-            <div style="font-size:0.85rem; font-weight:600;"><i class="fa-solid fa-business-time mr-1 text-muted"></i> ${cal.workingDays}</div>
-          </td>
-          <td>
-            <div style="font-size:0.85rem; font-weight:700; color:#b45309;"><i class="fa-solid fa-clock-rotate-left mr-1"></i> ${cal.exams}</div>
-          </td>
-          <td style="text-align:center;">
-            <span class="portal-badge ${cal.status === 'Completed' ? 'badge-neutral' : (cal.status === 'Scheduled' ? 'badge-success' : 'badge-warning')} font-weight-bold">${cal.status}</span>
-          </td>
-        </tr>
-      `;
-    }).join('');
+    if (events.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="8" class="text-center py-4 text-muted"><i class="bi bi-calendar-x fs-3 d-block mb-2"></i>No academic events match your filter criteria.</td></tr>';
+      return;
+    }
 
-    const countPill = document.getElementById('calendarCountPill');
-    if (countPill) countPill.textContent = 'Showing ' + data.length + ' Events';
+    let html = '';
+    events.forEach(evt => {
+      // Category badge
+      let catBadge = '<span class="badge bg-primary-subtle text-primary border border-primary-subtle px-2 py-1">' + evt.category + '</span>';
+      if (evt.category === 'Examination') catBadge = '<span class="badge bg-warning-subtle text-warning border border-warning-subtle px-2 py-1"><i class="bi bi-clipboard2-check me-1"></i>Exam</span>';
+      else if (evt.category === 'Holiday') catBadge = '<span class="badge bg-danger-subtle text-danger border border-danger-subtle px-2 py-1"><i class="bi bi-heart me-1"></i>Holiday</span>';
+      else if (evt.category === 'Institutional Event') catBadge = '<span class="badge bg-success-subtle text-success border border-success-subtle px-2 py-1"><i class="bi bi-flag me-1"></i>Institutional</span>';
+      else if (evt.category === 'Sports & Co-Curricular') catBadge = '<span class="badge bg-info-subtle text-info border border-info-subtle px-2 py-1"><i class="bi bi-trophy me-1"></i>Sports</span>';
+      else if (evt.category === 'Parent-Teacher Meeting') catBadge = '<span class="badge bg-secondary-subtle text-dark border px-2 py-1"><i class="bi bi-people me-1"></i>PTM</span>';
+
+      // Status badge
+      let statusBadge = '<span class="badge bg-success text-white px-2 py-1 rounded-pill"><i class="bi bi-check-circle me-1"></i>Published</span>';
+      if (evt.approvalStatus === 'Draft') {
+        statusBadge = '<span class="badge bg-secondary text-white px-2 py-1 rounded-pill">Draft</span>';
+      } else if (evt.approvalStatus === 'Approved') {
+        statusBadge = '<span class="badge bg-info text-white px-2 py-1 rounded-pill">Approved</span>';
+      } else if (evt.approvalStatus === 'Cancelled') {
+        statusBadge = '<span class="badge bg-danger text-white px-2 py-1 rounded-pill"><i class="bi bi-x-circle me-1"></i>Cancelled</span>';
+      }
+
+      // Visibility badge
+      let visBadge = '<span class="badge bg-light text-dark border"><i class="bi bi-globe me-1"></i>Public</span>';
+      if (evt.visibility.includes('Faculty')) {
+        visBadge = '<span class="badge bg-light text-primary border"><i class="bi bi-lock me-1"></i>Faculty Only</span>';
+      } else if (evt.visibility.includes('Leadership')) {
+        visBadge = '<span class="badge bg-light text-danger border"><i class="bi bi-shield-lock me-1"></i>Board Only</span>';
+      }
+
+      // Date string format
+      let dateText = evt.startDate;
+      if (evt.startDate !== evt.endDate) {
+        dateText += ' to ' + evt.endDate;
+      }
+
+      html += '<tr class="' + (evt.approvalStatus === 'Cancelled' ? 'table-light opacity-75' : '') + '">';
+      html += '  <td>';
+      html += '    <div class="fw-bold text-dark d-flex align-items-center gap-1">';
+      html += '      <span>' + evt.title + '</span>';
+      if (evt.isGazetted) html += ' <span class="badge bg-danger-subtle text-danger px-1" style="font-size: 0.65rem;">Govt GO</span>';
+      html += '    </div>';
+      html += '    <div class="small text-muted text-truncate" style="max-width: 280px;" title="' + evt.description + '">' + evt.description + '</div>';
+      html += '  </td>';
+      html += '  <td>' + catBadge + '</td>';
+      html += '  <td>';
+      html += '    <div class="fw-semibold text-dark small"><i class="bi bi-calendar3 me-1 text-muted"></i>' + dateText + '</div>';
+      html += '  </td>';
+      html += '  <td><span class="badge bg-light text-dark border">' + evt.affectedClasses + '</span></td>';
+      html += '  <td>' + visBadge + '</td>';
+      html += '  <td>' + statusBadge + '</td>';
+      html += '  <td><span class="small text-muted"><i class="bi bi-person-check me-1"></i>' + evt.publishedBy + '</span></td>';
+      html += '  <td class="text-end">';
+      html += '    <div class="btn-group btn-group-sm">';
+      html += '      <button class="btn btn-outline-primary btn-sm" onclick="portalApp.openAddCalendarEventModal(\'' + evt.id + '\')" title="Edit Event"><i class="bi bi-pencil"></i></button>';
+      if (evt.approvalStatus !== 'Cancelled') {
+        html += '      <button class="btn btn-outline-danger btn-sm" onclick="portalApp.openCancelEventModal(\'' + evt.id + '\')" title="Cancel Event with Notification"><i class="bi bi-x-circle"></i></button>';
+      }
+      html += '    </div>';
+      html += '  </td>';
+      html += '</tr>';
+    });
+
+    tbody.innerHTML = html;
   }
 
   function filterAcademicCalendar() {
-    const q = (document.getElementById('calendarSearchInput')?.value || '').toLowerCase().trim();
-    const type = document.getElementById('calendarTypeFilter')?.value || '';
+    return filterCalendarList();
+  }
 
-    const filtered = ACADEMIC_CALENDAR_MASTER_DATA.filter(item => {
-      const matchQ = !q || item.date.toLowerCase().includes(q) || item.event.toLowerCase().includes(q) || item.terms.toLowerCase().includes(q) || item.exams.toLowerCase().includes(q);
-      const matchType = !type || item.category === type;
-      return matchQ && matchType;
+  function filterCalendarList() {
+    ensureAcademicCalendarState();
+    const q = (document.getElementById('calSearchInput') ? document.getElementById('calSearchInput').value : '').toLowerCase().trim();
+    const cat = (document.getElementById('calCategoryFilter') ? document.getElementById('calCategoryFilter').value : '');
+    const cls = (document.getElementById('calClassFilter') ? document.getElementById('calClassFilter').value : '');
+    const st = (document.getElementById('calStatusFilter') ? document.getElementById('calStatusFilter').value : '');
+    const vis = (document.getElementById('calVisibilityFilter') ? document.getElementById('calVisibilityFilter').value : '');
+
+    const filtered = state.academicCalendarEvents.filter(evt => {
+      const matchQ = !q || evt.title.toLowerCase().includes(q) || evt.description.toLowerCase().includes(q);
+      const matchCat = !cat || evt.category === cat;
+      const matchCls = !cls || evt.affectedClasses.includes(cls);
+      const matchSt = !st || evt.approvalStatus === st;
+      const matchVis = !vis || evt.visibility.includes(vis);
+      return matchQ && matchCat && matchCls && matchSt && matchVis;
     });
 
-    renderAcademicCalendar(filtered);
+    renderListCalendarView(filtered);
+  }
+
+  function resetCalendarListFilters() {
+    if (document.getElementById('calSearchInput')) document.getElementById('calSearchInput').value = '';
+    if (document.getElementById('calCategoryFilter')) document.getElementById('calCategoryFilter').value = '';
+    if (document.getElementById('calClassFilter')) document.getElementById('calClassFilter').value = '';
+    if (document.getElementById('calStatusFilter')) document.getElementById('calStatusFilter').value = '';
+    if (document.getElementById('calVisibilityFilter')) document.getElementById('calVisibilityFilter').value = '';
+    renderListCalendarView();
+  }
+
+  // --- VIEW 4: HOLIDAY REGISTER ---
+  function renderHolidayRegisterView() {
+    ensureAcademicCalendarState();
+    const tbody = document.getElementById('calHolidaysTableBody');
+    const countElem = document.getElementById('calHolidaysTableCount');
+    if (!tbody) return;
+
+    const holidays = state.academicCalendarHolidays;
+    if (countElem) {
+      countElem.textContent = 'Total: ' + holidays.length + ' Gazetted Holidays & Vacations';
+    }
+
+    let html = '';
+    holidays.forEach(h => {
+      let catBadge = '<span class="badge bg-danger-subtle text-danger border border-danger-subtle px-2 py-1">' + h.category + '</span>';
+      if (h.category === 'National Holiday') catBadge = '<span class="badge bg-primary-subtle text-primary border border-primary-subtle px-2 py-1">National Holiday</span>';
+      else if (h.category === 'Vacation') catBadge = '<span class="badge bg-warning-subtle text-warning border border-warning-subtle px-2 py-1">Term Vacation</span>';
+
+      html += '<tr>';
+      html += '  <td><strong class="text-dark">' + h.name + '</strong></td>';
+      html += '  <td>' + catBadge + '</td>';
+      html += '  <td><span class="small fw-semibold text-dark"><i class="bi bi-calendar-event me-1 text-muted"></i>' + h.date + '</span></td>';
+      html += '  <td><span class="badge bg-light text-dark border">' + h.duration + '</span></td>';
+      html += '  <td><span class="small font-monospace text-muted">' + h.ref + '</span></td>';
+      html += '  <td><span class="badge bg-light text-secondary border">' + h.wing + '</span></td>';
+      html += '  <td><span class="badge bg-success-subtle text-success border"><i class="bi bi-check-circle me-1"></i>' + h.status + '</span></td>';
+      html += '  <td class="text-end">';
+      html += '    <button class="btn btn-outline-danger btn-sm" onclick="portalApp.openCancelEventModal(\'' + h.name + '\')" title="Manage Holiday"><i class="bi bi-sliders"></i></button>';
+      html += '  </td>';
+      html += '</tr>';
+    });
+
+    tbody.innerHTML = html;
+  }
+
+  // --- MODALS & INTERACTIVE ACTIONS ---
+
+  
+  function showCalendarModal(modalId) {
+    const el = document.getElementById(modalId);
+    if (!el) return;
+    if (typeof bootstrap !== 'undefined' && bootstrap.Modal) {
+      try {
+        const m = bootstrap.Modal.getOrCreateInstance(el);
+        m.show();
+        return;
+      } catch (e) {}
+    }
+    el.style.display = 'block';
+    el.classList.add('show');
+    el.setAttribute('aria-modal', 'true');
+    el.removeAttribute('aria-hidden');
+    let backdrop = document.getElementById(modalId + '_backdrop');
+    if (!backdrop) {
+      backdrop = document.createElement('div');
+      backdrop.id = modalId + '_backdrop';
+      backdrop.className = 'modal-backdrop fade show';
+      document.body.appendChild(backdrop);
+    }
+    document.body.classList.add('modal-open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function hideCalendarModal(modalId) {
+    const el = document.getElementById(modalId);
+    if (!el) return;
+    if (typeof bootstrap !== 'undefined' && bootstrap.Modal) {
+      try {
+        const m = bootstrap.Modal.getInstance(el);
+        if (m) { m.hide(); return; }
+      } catch (e) {}
+    }
+    el.style.display = 'none';
+    el.classList.remove('show');
+    el.setAttribute('aria-hidden', 'true');
+    el.removeAttribute('aria-modal');
+    const backdrop = document.getElementById(modalId + '_backdrop');
+    if (backdrop) backdrop.remove();
+    document.body.classList.remove('modal-open');
+    document.body.style.overflow = '';
+  }
+
+  function openAddCalendarEventModal(eventId) {
+    ensureAcademicCalendarState();
+    const modalEl = document.getElementById('addCalendarEventModal');
+    if (!modalEl) return;
+
+    const idInput = document.getElementById('calEventId');
+    const titleInput = document.getElementById('calEventTitle');
+    const catInput = document.getElementById('calEventCategory');
+    const startInput = document.getElementById('calEventStartDate');
+    const endInput = document.getElementById('calEventEndDate');
+    const classesInput = document.getElementById('calEventAffectedClasses');
+    const visInput = document.getElementById('calEventVisibility');
+    const statusInput = document.getElementById('calEventApprovalStatus');
+    const pubByInput = document.getElementById('calEventPublishedBy');
+    const descInput = document.getElementById('calEventDescription');
+    const modalTitle = document.getElementById('addCalendarEventModalLabel');
+
+    if (eventId) {
+      const evt = state.academicCalendarEvents.find(e => e.id === eventId);
+      if (evt) {
+        if (idInput) idInput.value = evt.id;
+        if (titleInput) titleInput.value = evt.title;
+        if (catInput) catInput.value = evt.category;
+        if (startInput) startInput.value = evt.startDate;
+        if (endInput) endInput.value = evt.endDate;
+        if (classesInput) classesInput.value = evt.affectedClasses;
+        if (visInput) visInput.value = evt.visibility;
+        if (statusInput) statusInput.value = evt.approvalStatus;
+        if (pubByInput) pubByInput.value = evt.publishedBy;
+        if (descInput) descInput.value = evt.description;
+        if (modalTitle) modalTitle.innerHTML = '<i class="bi bi-pencil-square me-2"></i>Edit Academic Event (' + evt.id + ')';
+      }
+    } else {
+      if (idInput) idInput.value = '';
+      if (titleInput) titleInput.value = '';
+      if (catInput) catInput.value = 'Academic';
+      if (startInput) startInput.value = '2026-10-15';
+      if (endInput) endInput.value = '2026-10-15';
+      if (classesInput) classesInput.value = 'All Classes (Nursery–Class X)';
+      if (visInput) visInput.value = 'Public (All Students & Parents)';
+      if (statusInput) statusInput.value = 'Published';
+      if (pubByInput) pubByInput.value = 'Smt. Gorle Varalakshmi - Principal';
+      if (descInput) descInput.value = '';
+      if (modalTitle) modalTitle.innerHTML = '<i class="bi bi-calendar-event me-2"></i>Add Academic Event';
+    }
+
+    showCalendarModal(modalEl.id);
+  }
+
+  function handleSaveCalendarEventSubmit(e) {
+    if (e && e.preventDefault) e.preventDefault();
+    ensureAcademicCalendarState();
+
+    const id = document.getElementById('calEventId').value;
+    const title = document.getElementById('calEventTitle').value.trim();
+    const category = document.getElementById('calEventCategory').value;
+    const startDate = document.getElementById('calEventStartDate').value;
+    const endDate = document.getElementById('calEventEndDate').value;
+    const affectedClasses = document.getElementById('calEventAffectedClasses').value;
+    const visibility = document.getElementById('calEventVisibility').value;
+    const approvalStatus = document.getElementById('calEventApprovalStatus').value;
+    const publishedBy = document.getElementById('calEventPublishedBy').value.trim();
+    const description = document.getElementById('calEventDescription').value.trim();
+    const notifyCheck = document.getElementById('calEventNotifyCheckbox').checked;
+
+    if (!title || !startDate || !endDate) {
+      alert('Please fill in the Event Title and Date fields.');
+      return;
+    }
+
+    if (id) {
+      // Update existing
+      const evtIndex = state.academicCalendarEvents.findIndex(item => item.id === id);
+      if (evtIndex !== -1) {
+        state.academicCalendarEvents[evtIndex] = {
+          ...state.academicCalendarEvents[evtIndex],
+          title, category, startDate, endDate, affectedClasses, visibility, approvalStatus, publishedBy, description
+        };
+      }
+    } else {
+      // Create new
+      const newId = 'EVT-2026-' + String(state.academicCalendarEvents.length + 1).padStart(3, '0');
+      state.academicCalendarEvents.unshift({
+        id: newId,
+        title,
+        category,
+        startDate,
+        endDate,
+        affectedClasses,
+        visibility,
+        approvalStatus,
+        publishedBy,
+        description,
+        isGazetted: (category === 'Holiday')
+      });
+    }
+
+    // Close modal
+    const modalEl = document.getElementById('addCalendarEventModal');
+    if (modalEl) {
+      hideCalendarModal(modalEl.id);
+    }
+
+    // Refresh view
+    renderAcademicCalendar();
+
+    // Trigger Notification confirmation alert
+    if (notifyCheck && approvalStatus === 'Published') {
+      const alertBanner = document.getElementById('calBroadcastAlertText');
+      if (alertBanner) {
+        alertBanner.innerHTML = 'Broadcast dispatched for <strong>' + title + '</strong> (' + startDate + '). Staff & parent notification queues successfully updated.';
+      }
+      showToast('Event published & broadcasted to affected staff and parent portals.', 'success');
+    } else {
+      showToast('Academic event saved successfully.', 'info');
+    }
+  }
+
+  function openAddHolidayModal() {
+    ensureAcademicCalendarState();
+    const modalEl = document.getElementById('addHolidayModal');
+    if (!modalEl) return;
+    const form = document.getElementById('formHoliday');
+    if (form) form.reset();
+    showCalendarModal(modalEl.id);
+  }
+
+  function handleSaveHolidaySubmit(e) {
+    if (e && e.preventDefault) e.preventDefault();
+    ensureAcademicCalendarState();
+
+    const title = document.getElementById('holTitle').value.trim();
+    const category = document.getElementById('holCategory').value;
+    const ref = document.getElementById('holRef').value.trim();
+    const startDate = document.getElementById('holStartDate').value;
+    const endDate = document.getElementById('holEndDate').value;
+    const affectedClasses = document.getElementById('holAffectedClasses').value;
+    const remarks = document.getElementById('holRemarks').value.trim();
+    const notifyCheck = document.getElementById('holNotifyCheck').checked;
+
+    if (!title || !startDate || !endDate) {
+      alert('Please fill in holiday title and dates.');
+      return;
+    }
+
+    let duration = '1 Day';
+    if (startDate !== endDate) {
+      const d1 = new Date(startDate);
+      const d2 = new Date(endDate);
+      const diffDays = Math.ceil(Math.abs(d2 - d1) / (1000 * 60 * 60 * 24)) + 1;
+      duration = diffDays + ' Days';
+    }
+
+    // Add to holidays
+    state.academicCalendarHolidays.unshift({
+      name: title,
+      category,
+      date: (startDate === endDate ? startDate : startDate + ' to ' + endDate),
+      duration,
+      ref: ref || 'AP-DSE/Holiday/2026',
+      wing: affectedClasses,
+      status: 'Gazetted'
+    });
+
+    // Also add to master events
+    const newId = 'EVT-HOL-' + String(state.academicCalendarEvents.length + 1).padStart(3, '0');
+    state.academicCalendarEvents.unshift({
+      id: newId,
+      title,
+      category: 'Holiday',
+      startDate,
+      endDate,
+      affectedClasses,
+      visibility: 'Public (All Students & Parents)',
+      approvalStatus: 'Published',
+      publishedBy: 'Smt. Gorle Varalakshmi - Principal',
+      description: remarks || 'Gazetted Holiday ' + ref,
+      isGazetted: true
+    });
+
+    // Close modal
+    const modalEl = document.getElementById('addHolidayModal');
+    if (modalEl) {
+      hideCalendarModal(modalEl.id);
+    }
+
+    renderAcademicCalendar();
+    showToast('Holiday added and synced with transport & attendance schedules.', 'success');
+  }
+
+  function openDefineTermDatesModal() {
+    ensureAcademicCalendarState();
+    const modalEl = document.getElementById('defineTermDatesModal');
+    if (!modalEl) return;
+    showCalendarModal(modalEl.id);
+  }
+
+  function handleDefineTermDatesSubmit(e) {
+    if (e && e.preventDefault) e.preventDefault();
+    ensureAcademicCalendarState();
+
+    const t1Start = document.getElementById('term1StartDate').value;
+    const t1End = document.getElementById('term1EndDate').value;
+    const t1Days = parseInt(document.getElementById('term1Days').value, 10) || 108;
+
+    const t2Start = document.getElementById('term2StartDate').value;
+    const t2End = document.getElementById('term2EndDate').value;
+    const t2Days = parseInt(document.getElementById('term2Days').value, 10) || 116;
+
+    const total = t1Days + t2Days;
+    if (total < 220) {
+      alert('Statutory Warning: AP Education Department mandates at least 220 instructional days. Current total: ' + total + ' days. Please adjust dates.');
+      return;
+    }
+
+    state.academicCalendarTerms.term1.startDate = t1Start;
+    state.academicCalendarTerms.term1.endDate = t1End;
+    state.academicCalendarTerms.term1.workingDays = t1Days;
+
+    state.academicCalendarTerms.term2.startDate = t2Start;
+    state.academicCalendarTerms.term2.endDate = t2End;
+    state.academicCalendarTerms.term2.workingDays = t2Days;
+
+    state.academicCalendarTerms.totalInstructionalDays = total;
+
+    const modalEl = document.getElementById('defineTermDatesModal');
+    if (modalEl) {
+      hideCalendarModal(modalEl.id);
+    }
+
+    renderAcademicCalendar();
+    showToast('Academic term dates updated: Total ' + total + ' instructional working days.', 'success');
+  }
+
+  function openSetWorkingDaysModal() {
+    ensureAcademicCalendarState();
+    const modalEl = document.getElementById('setWorkingDaysModal');
+    if (!modalEl) return;
+    showCalendarModal(modalEl.id);
+  }
+
+  function handleSetWorkingDaysSubmit(e) {
+    if (e && e.preventDefault) e.preventDefault();
+    const modalEl = document.getElementById('setWorkingDaysModal');
+    if (modalEl) {
+      hideCalendarModal(modalEl.id);
+    }
+    showToast('Instructional week policy updated and synced with biometric systems.', 'success');
+  }
+
+  function openAddExamDatesModal() {
+    ensureAcademicCalendarState();
+    const modalEl = document.getElementById('addExamDatesModal');
+    if (!modalEl) return;
+    const form = document.getElementById('formExamDates');
+    if (form) form.reset();
+    showCalendarModal(modalEl.id);
+  }
+
+  function handleSaveExamDatesSubmit(e) {
+    if (e && e.preventDefault) e.preventDefault();
+    ensureAcademicCalendarState();
+
+    const title = document.getElementById('examWindowTitle').value.trim();
+    const type = document.getElementById('examWindowType').value;
+    const startDate = document.getElementById('examStartDate').value;
+    const endDate = document.getElementById('examEndDate').value;
+    const affectedClasses = document.getElementById('examAffectedClasses').value;
+    const hallTicketDate = document.getElementById('examHallTicketDate').value;
+    const marksDeadline = document.getElementById('examMarksDeadline').value;
+
+    if (!title || !startDate || !endDate) {
+      alert('Please provide exam window title and dates.');
+      return;
+    }
+
+    const newId = 'EVT-EXAM-' + String(state.academicCalendarEvents.length + 1).padStart(3, '0');
+    state.academicCalendarEvents.unshift({
+      id: newId,
+      title,
+      category: 'Examination',
+      startDate,
+      endDate,
+      affectedClasses,
+      visibility: 'Public (All Students & Parents)',
+      approvalStatus: 'Published',
+      publishedBy: 'Sri Navva Anand - Vice Principal',
+      description: 'Examination window for ' + type + '. Hall tickets: ' + (hallTicketDate || 'TBD') + ', Marks Entry Deadline: ' + (marksDeadline || 'TBD'),
+      isGazetted: false
+    });
+
+    const modalEl = document.getElementById('addExamDatesModal');
+    if (modalEl) {
+      hideCalendarModal(modalEl.id);
+    }
+
+    renderAcademicCalendar();
+    showToast('Examination schedule recorded and published to student examination desk.', 'success');
+  }
+
+  function openPublishCalendarModal() {
+    ensureAcademicCalendarState();
+    const modalEl = document.getElementById('publishCalendarModal');
+    if (!modalEl) return;
+    showCalendarModal(modalEl.id);
+  }
+
+  function handlePublishCalendarSubmit(e) {
+    if (e && e.preventDefault) e.preventDefault();
+    ensureAcademicCalendarState();
+
+    const authority = document.getElementById('pubAuthority').value.trim();
+    const orderRef = document.getElementById('pubOrderRef').value.trim();
+    const notifyStaff = document.getElementById('pubNotifyStaff').checked;
+    const notifyParents = document.getElementById('pubNotifyParents').checked;
+
+    state.academicCalendarTerms.isPublished = true;
+    state.academicCalendarTerms.publishedAuthority = authority;
+    state.academicCalendarTerms.gazetteRef = orderRef;
+
+    // Set all draft events to Published
+    state.academicCalendarEvents.forEach(evt => {
+      if (evt.approvalStatus === 'Draft' || evt.approvalStatus === 'Approved') {
+        evt.approvalStatus = 'Published';
+      }
+    });
+
+    const modalEl = document.getElementById('publishCalendarModal');
+    if (modalEl) {
+      hideCalendarModal(modalEl.id);
+    }
+
+    const alertBanner = document.getElementById('calBroadcastAlertText');
+    if (alertBanner) {
+      alertBanner.innerHTML = 'Official AP Board Academic Schedule (' + orderRef + ') published by <strong>' + authority + '</strong>. All ' + state.academicCalendarTerms.totalInstructionalDays + ' instructional days, holidays, and exam windows dispatched to staff & parent portals.';
+    }
+
+    renderAcademicCalendar();
+    showToast('Academic Calendar published! Broadcast notifications dispatched to staff & parent portals.', 'success');
+  }
+
+  function openCancelEventModal(eventId) {
+    ensureAcademicCalendarState();
+    const modalEl = document.getElementById('cancelEventModal');
+    if (!modalEl) return;
+
+    let targetEvt = state.academicCalendarEvents.find(e => e.id === eventId || e.title === eventId);
+    if (!targetEvt) {
+      targetEvt = { id: eventId, title: eventId, startDate: '2026-10-15', endDate: '2026-10-16' };
+    }
+
+    document.getElementById('cancelEventId').value = targetEvt.id;
+    document.getElementById('cancelEventTitleDisplay').textContent = targetEvt.title;
+    document.getElementById('cancelEventDatesDisplay').textContent = targetEvt.startDate + (targetEvt.startDate !== targetEvt.endDate ? ' to ' + targetEvt.endDate : '');
+    document.getElementById('cancelEventReason').value = '';
+
+    showCalendarModal(modalEl.id);
+  }
+
+  function handleCancelEventSubmit(e) {
+    if (e && e.preventDefault) e.preventDefault();
+    ensureAcademicCalendarState();
+
+    const eventId = document.getElementById('cancelEventId').value;
+    const reason = document.getElementById('cancelEventReason').value.trim();
+    const reschedule = document.getElementById('cancelEventRescheduleDate').value.trim();
+
+    if (!reason) {
+      alert('Please provide a statutory cancellation reason.');
+      return;
+    }
+
+    const evt = state.academicCalendarEvents.find(e => e.id === eventId || e.title === eventId);
+    if (evt) {
+      evt.approvalStatus = 'Cancelled';
+      evt.description += ' [CANCELLED: ' + reason + (reschedule ? ' - ' + reschedule : '') + ']';
+    }
+
+    const modalEl = document.getElementById('cancelEventModal');
+    if (modalEl) {
+      hideCalendarModal(modalEl.id);
+    }
+
+    renderAcademicCalendar();
+    showToast('Event marked as Cancelled. Urgent broadcast notice dispatched to affected community.', 'danger');
+  }
+
+  function exportCalendarCSV() {
+    ensureAcademicCalendarState();
+    let csv = 'Event ID,Title,Category,Start Date,End Date,Affected Classes,Visibility,Approval Status,Published By\n';
+    state.academicCalendarEvents.forEach(evt => {
+      csv += '"' + evt.id + '","' + evt.title.replace(/"/g, '""') + '","' + evt.category + '","' + evt.startDate + '","' + evt.endDate + '","' + evt.affectedClasses + '","' + evt.visibility + '","' + evt.approvalStatus + '","' + evt.publishedBy + '"\n';
+    });
+
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.setAttribute('download', 'Academic_Calendar_2026_27.csv');
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    showToast('Academic Calendar exported as CSV.', 'info');
+  }
+
+  function exportHolidayRegisterCSV() {
+    ensureAcademicCalendarState();
+    let csv = 'Holiday Name,Category,Date(s),Duration,AP Govt GO Ref,Affected Wing,Status\n';
+    state.academicCalendarHolidays.forEach(h => {
+      csv += '"' + h.name.replace(/"/g, '""') + '","' + h.category + '","' + h.date + '","' + h.duration + '","' + h.ref + '","' + h.wing + '","' + h.status + '"\n';
+    });
+
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.setAttribute('download', 'Gazetted_Holiday_Register_2026_27.csv');
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    showToast('Gazetted Holiday Register exported as CSV.', 'info');
   }
 
   // Submenu 4: Master Timetable
@@ -46009,6 +47336,37 @@ const classData = TIMETABLE_CLASS_DATA[currentTimetableClass] || TIMETABLE_CLASS
   }
 
   return {
+    showCalendarModal: showCalendarModal,
+    hideCalendarModal: hideCalendarModal,
+    // Academic Calendar Module Exports
+    ensureAcademicCalendarState: ensureAcademicCalendarState,
+    updateAcademicCalendarKPIs: updateAcademicCalendarKPIs,
+    switchCalendarView: switchCalendarView,
+    renderAcademicCalendar: renderAcademicCalendar,
+    navigateCalendarMonth: navigateCalendarMonth,
+    navigateCalendarToday: navigateCalendarToday,
+    renderMonthlyCalendarView: renderMonthlyCalendarView,
+    renderTermCalendarView: renderTermCalendarView,
+    renderListCalendarView: renderListCalendarView,
+    filterCalendarList: filterCalendarList,
+    resetCalendarListFilters: resetCalendarListFilters,
+    renderHolidayRegisterView: renderHolidayRegisterView,
+    openAddCalendarEventModal: openAddCalendarEventModal,
+    handleSaveCalendarEventSubmit: handleSaveCalendarEventSubmit,
+    openAddHolidayModal: openAddHolidayModal,
+    handleSaveHolidaySubmit: handleSaveHolidaySubmit,
+    openDefineTermDatesModal: openDefineTermDatesModal,
+    handleDefineTermDatesSubmit: handleDefineTermDatesSubmit,
+    openSetWorkingDaysModal: openSetWorkingDaysModal,
+    handleSetWorkingDaysSubmit: handleSetWorkingDaysSubmit,
+    openAddExamDatesModal: openAddExamDatesModal,
+    handleSaveExamDatesSubmit: handleSaveExamDatesSubmit,
+    openPublishCalendarModal: openPublishCalendarModal,
+    handlePublishCalendarSubmit: handlePublishCalendarSubmit,
+    openCancelEventModal: openCancelEventModal,
+    handleCancelEventSubmit: handleCancelEventSubmit,
+    exportCalendarCSV: exportCalendarCSV,
+    exportHolidayRegisterCSV: exportHolidayRegisterCSV,
     ensureAcademicSubjectsState: ensureAcademicSubjectsState,
     updateAcademicSubjectsKPIs: updateAcademicSubjectsKPIs,
     renderAcademicSubjects: renderAcademicSubjects,
