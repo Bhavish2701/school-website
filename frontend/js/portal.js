@@ -3272,6 +3272,7 @@ const FEE_CATEGORY_AUDIT_DATA = [
         renderSettingsRolesTable();
       } else if (subKey === 'permissions') {
         renderSettingsPermissionsTable();
+        runAccessSimulation();
         renderClerkPermissionsForm();
         renderSettingsAdmissionPermissionCard();
         initTeacherPermissionsView();
@@ -18523,11 +18524,19 @@ const FEE_CATEGORY_AUDIT_DATA = [
     const currentUserRole = state.currentRole || 'clerk';
     const currentUserName = (state.currentUser && state.currentUser.name) || 'S. Ramu (Accounts Clerk)';
 
-    // Statutory segregation of duties enforcement:
-    // "Do not let an employee approve their own refund or modify a financial transaction without the required authorization."
-    if (currentUserRole === 'admin' || currentUserRole === 'clerk' || (requester && requester.toLowerCase().includes(currentUserName.toLowerCase())) || (requester && currentUserName.toLowerCase().includes(requester.toLowerCase()))) {
-      showToast(`Statutory Restriction: Employee '${requester}' cannot approve their own refund or sanction disbursements. Per internal financial controls, approval requires independent audit signoff by Principal Smt. Gorle Varalakshmi.`, 'warning');
-      return;
+    // Statutory segregation of duties enforcement via Universal Permissions Engine:
+    // "An accounts employee may record payments but not approve their own refunds."
+    if (typeof canApproveRecord === 'function') {
+      const decision = canApproveRecord('fees', { id: vno, requester: requester || currentUserName, recordedBy: requester || currentUserName }, { role: currentUserRole, name: currentUserName });
+      if (!decision.allowed) {
+        showToast(decision.reason, 'warning');
+        return;
+      }
+    } else {
+      if (currentUserRole === 'admin' || currentUserRole === 'clerk' || (requester && requester.toLowerCase().includes(currentUserName.toLowerCase())) || (requester && currentUserName.toLowerCase().includes(requester.toLowerCase()))) {
+        showToast(`Statutory Restriction: Employee '${requester}' cannot approve their own refund or sanction disbursements. Per internal financial controls, approval requires independent audit signoff by Principal Smt. Gorle Varalakshmi.`, 'warning');
+        return;
+      }
     }
 
     const ref = feeRefundsData.find(x => x.vno === vno);
@@ -31547,145 +31556,441 @@ const classData = TIMETABLE_CLASS_DATA[currentTimetableClass] || TIMETABLE_CLASS
     }
   ];
 
-  const SETTINGS_PERMISSIONS_DATA = [
+/* =========================================================================
+     UNIVERSAL PERMISSIONS & RECORD SCOPE ENGINE
+     Every module independently supports:
+     1. View records
+     2. Create records
+     3. Edit records
+     4. Submit records
+     5. Approve or reject
+     6. Archive or cancel
+     7. Export or print
+     8. View sensitive information
+     9. Manage permissions
+     
+     Record Scope Limitations:
+     - Campus-Wide (ALL)
+     - Assigned Classes Only (ASSIGNED_CLASSES: e.g. Teachers 8A, 9B, 7C, 10A)
+     - Assigned Department Only (ASSIGNED_DEPARTMENT: e.g. Accounts, Transport, Inventory)
+     - Assigned Students Only (ASSIGNED_STUDENTS: e.g. Counselor)
+     - Own Records Only (OWN_RECORDS)
+     - Segregation of Duties: Accounts employees cannot approve own refunds/waivers
+     ========================================================================= */
+
+  const UNIVERSAL_PERMISSIONS_CATALOG = [
+    { key: 'view', label: 'View records', icon: 'fa-eye', desc: 'Inspect records within permitted scope' },
+    { key: 'create', label: 'Create records', icon: 'fa-plus', desc: 'Draft or initiate new records' },
+    { key: 'edit', label: 'Edit records', icon: 'fa-pen-to-square', desc: 'Modify permitted mutable fields' },
+    { key: 'submit', label: 'Submit records', icon: 'fa-paper-plane', desc: 'Send draft into approval/review workflow' },
+    { key: 'approve', label: 'Approve or reject', icon: 'fa-stamp', desc: 'Authorize or reject with mandatory logged reason' },
+    { key: 'archive', label: 'Archive or cancel', icon: 'fa-box-archive', desc: 'Controlled retention archival or cancellation with reason (zero hard deletion)' },
+    { key: 'export', label: 'Export or print', icon: 'fa-print', desc: 'Generate printable documents or export authorized CSV/PDF datasets' },
+    { key: 'sensitive', label: 'View sensitive information', icon: 'fa-user-shield', desc: 'Unmask restricted confidential fields (PAN, salary, counseling notes, medical history)' },
+    { key: 'manage', label: 'Manage permissions', icon: 'fa-shield-halved', desc: 'Configure module RBAC, adjust role scopes, and assign delegated approvers' }
+  ];
+
+  const RECORD_SCOPES = {
+    ALL: { key: 'ALL', label: 'Campus-Wide (All Records)', badgeClass: 'scope-all', icon: 'fa-building-columns' },
+    ASSIGNED_CLASSES: { key: 'ASSIGNED_CLASSES', label: 'Assigned Classes Only', badgeClass: 'scope-classes', icon: 'fa-chalkboard-user' },
+    ASSIGNED_DEPARTMENT: { key: 'ASSIGNED_DEPARTMENT', label: 'Assigned Department Only', badgeClass: 'scope-dept', icon: 'fa-diagram-project' },
+    ASSIGNED_STUDENTS: { key: 'ASSIGNED_STUDENTS', label: 'Assigned Students Only', badgeClass: 'scope-students', icon: 'fa-user-nurse' },
+    OWN_RECORDS: { key: 'OWN_RECORDS', label: 'Own Records Only', badgeClass: 'scope-own', icon: 'fa-user-lock' }
+  };
+
+  const DEFAULT_UNIVERSAL_PERMISSIONS_MATRIX = [
     {
-      module: '1. Students Management',
-      slug: 'students',
-      actions: { create: true, read: true, update: true, delete: false, export: true, approve: true },
-      scope: 'Campus-wide (All Classes)',
-      rolesWithAccess: 'Principal, VP, Clerk, Section Heads',
-      delegatedApproval: 'Admissions & TC by Principal only'
+      key: 'dashboard',
+      number: 1,
+      name: 'Executive Dashboard',
+      category: 'Executive',
+      icon: 'fa-gauge-high',
+      desc: 'Campus vital statistics, today\'s attendance, live fee collections, circulars and executive metrics.',
+      sensitiveFields: ['Real-time revenue totals', 'Staff disciplinary alerts'],
+      delegatedApproval: 'Principal Smt. Gorle Varalakshmi',
+      antiSelfApproval: false,
+      roles: {
+        principal: { permissions: { view: true, create: true, edit: true, submit: true, approve: true, archive: true, export: true, sensitive: true, manage: true }, scope: 'ALL' },
+        'vice-principal': { permissions: { view: true, create: true, edit: true, submit: true, approve: true, archive: false, export: true, sensitive: true, manage: false }, scope: 'ALL' },
+        teacher: { permissions: { view: true, create: false, edit: false, submit: false, approve: false, archive: false, export: false, sensitive: false, manage: false }, scope: 'ASSIGNED_CLASSES' },
+        bursar: { permissions: { view: true, create: false, edit: false, submit: false, approve: false, archive: false, export: true, sensitive: true, manage: false }, scope: 'ASSIGNED_DEPARTMENT' },
+        clerk: { permissions: { view: true, create: false, edit: false, submit: false, approve: false, archive: false, export: false, sensitive: false, manage: false }, scope: 'ALL' },
+        counselor: { permissions: { view: true, create: false, edit: false, submit: false, approve: false, archive: false, export: false, sensitive: false, manage: false }, scope: 'ASSIGNED_STUDENTS' }
+      }
     },
     {
-      module: '2. Teachers & Staff',
-      slug: 'teachers',
-      actions: { create: true, read: true, update: true, delete: false, export: true, approve: true },
-      scope: 'Teaching & Non-Teaching Faculty',
-      rolesWithAccess: 'Principal, Vice Principal',
-      delegatedApproval: 'Performance appraisal by Principal'
+      key: 'students',
+      number: 2,
+      name: 'Students Management',
+      category: 'Academic',
+      icon: 'fa-user-graduate',
+      desc: 'Admissions register, comprehensive student dossiers, TC processing, merit records and parent contact info.',
+      sensitiveFields: ['Aadhaar Number', 'PAN Number', 'Medical Records', 'Guardian Income Certificate'],
+      delegatedApproval: 'Admissions & TC by Principal Only',
+      antiSelfApproval: false,
+      roles: {
+        principal: { permissions: { view: true, create: true, edit: true, submit: true, approve: true, archive: true, export: true, sensitive: true, manage: true }, scope: 'ALL' },
+        'vice-principal': { permissions: { view: true, create: true, edit: true, submit: true, approve: true, archive: false, export: true, sensitive: true, manage: false }, scope: 'ALL' },
+        teacher: { permissions: { view: true, create: false, edit: true, submit: true, approve: false, archive: false, export: true, sensitive: false, manage: false }, scope: 'ASSIGNED_CLASSES' },
+        bursar: { permissions: { view: true, create: false, edit: false, submit: false, approve: false, archive: false, export: true, sensitive: false, manage: false }, scope: 'ALL' },
+        clerk: { permissions: { view: true, create: true, edit: true, submit: true, approve: false, archive: false, export: true, sensitive: false, manage: false }, scope: 'ALL' },
+        counselor: { permissions: { view: true, create: false, edit: true, submit: true, approve: false, archive: false, export: false, sensitive: true, manage: false }, scope: 'ASSIGNED_STUDENTS' }
+      }
     },
     {
-      module: '3. Academics & Curriculum',
-      slug: 'academics',
-      actions: { create: true, read: true, update: true, delete: false, export: true, approve: true },
-      scope: 'Classes LKG to X',
-      rolesWithAccess: 'Principal, VP, Academic Head',
-      delegatedApproval: 'Syllabus modification by Principal'
+      key: 'teachers',
+      number: 3,
+      name: 'Teachers & Staff',
+      category: 'Governance',
+      icon: 'fa-chalkboard-user',
+      desc: 'Staff roster, teaching qualifications, biometric attendance, workload allocation and performance appraisals.',
+      sensitiveFields: ['Basic Salary & Allowances', 'Bank Account / IFSC', 'PAN / Aadhaar', 'Performance Appraisal Ratings'],
+      delegatedApproval: 'Principal Smt. Gorle Varalakshmi',
+      antiSelfApproval: false,
+      roles: {
+        principal: { permissions: { view: true, create: true, edit: true, submit: true, approve: true, archive: true, export: true, sensitive: true, manage: true }, scope: 'ALL' },
+        'vice-principal': { permissions: { view: true, create: true, edit: true, submit: true, approve: true, archive: false, export: true, sensitive: false, manage: false }, scope: 'ALL' },
+        teacher: { permissions: { view: true, create: false, edit: false, submit: false, approve: false, archive: false, export: false, sensitive: false, manage: false }, scope: 'OWN_RECORDS' },
+        bursar: { permissions: { view: true, create: false, edit: false, submit: false, approve: false, archive: false, export: true, sensitive: true, manage: false }, scope: 'ASSIGNED_DEPARTMENT' },
+        clerk: { permissions: { view: true, create: false, edit: false, submit: false, approve: false, archive: false, export: false, sensitive: false, manage: false }, scope: 'ALL' },
+        counselor: { permissions: { view: false, create: false, edit: false, submit: false, approve: false, archive: false, export: false, sensitive: false, manage: false }, scope: 'OWN_RECORDS' }
+      }
     },
     {
-      module: '4. Attendance Tracking',
-      slug: 'attendance',
-      actions: { create: true, read: true, update: true, delete: false, export: true, approve: true },
-      scope: 'Students & Staff Registers',
-      rolesWithAccess: 'All Faculty (Own Class), VP (All)',
-      delegatedApproval: 'Retroactive edits require VP approval'
+      key: 'academics',
+      number: 4,
+      name: 'Academics & Curriculum',
+      category: 'Academic',
+      icon: 'fa-book-open',
+      desc: 'Curriculum syllabi, textbook tracking, lesson plans, class teacher assignments and academic calendar.',
+      sensitiveFields: ['Curriculum moderation notes'],
+      delegatedApproval: 'Academic Head & Vice Principal',
+      antiSelfApproval: false,
+      roles: {
+        principal: { permissions: { view: true, create: true, edit: true, submit: true, approve: true, archive: true, export: true, sensitive: true, manage: true }, scope: 'ALL' },
+        'vice-principal': { permissions: { view: true, create: true, edit: true, submit: true, approve: true, archive: true, export: true, sensitive: true, manage: false }, scope: 'ALL' },
+        teacher: { permissions: { view: true, create: true, edit: true, submit: true, approve: false, archive: false, export: true, sensitive: false, manage: false }, scope: 'ASSIGNED_CLASSES' },
+        bursar: { permissions: { view: true, create: false, edit: false, submit: false, approve: false, archive: false, export: false, sensitive: false, manage: false }, scope: 'ALL' },
+        clerk: { permissions: { view: true, create: false, edit: false, submit: false, approve: false, archive: false, export: true, sensitive: false, manage: false }, scope: 'ALL' },
+        counselor: { permissions: { view: true, create: false, edit: false, submit: false, approve: false, archive: false, export: false, sensitive: false, manage: false }, scope: 'ASSIGNED_STUDENTS' }
+      }
     },
     {
-      module: '5. Timetable & Scheduling',
-      slug: 'timetable',
-      actions: { create: true, read: true, update: true, delete: false, export: true, approve: true },
-      scope: 'Master Schedule & Substitution',
-      rolesWithAccess: 'Principal, VP, Exam Officer',
-      delegatedApproval: 'Emergency substitute by VP'
+      key: 'attendance',
+      number: 5,
+      name: 'Attendance Tracking',
+      category: 'Academic',
+      icon: 'fa-clipboard-user',
+      desc: 'Period-wise student attendance, monthly percentage summaries, daily absentees and attendance correction requests.',
+      sensitiveFields: ['Medical absence justification'],
+      delegatedApproval: 'Vice Principal Sri Navva Anand',
+      antiSelfApproval: false,
+      roles: {
+        principal: { permissions: { view: true, create: true, edit: true, submit: true, approve: true, archive: true, export: true, sensitive: true, manage: true }, scope: 'ALL' },
+        'vice-principal': { permissions: { view: true, create: true, edit: true, submit: true, approve: true, archive: true, export: true, sensitive: true, manage: false }, scope: 'ALL' },
+        teacher: { permissions: { view: true, create: true, edit: true, submit: true, approve: false, archive: false, export: true, sensitive: false, manage: false }, scope: 'ASSIGNED_CLASSES' },
+        bursar: { permissions: { view: true, create: false, edit: false, submit: false, approve: false, archive: false, export: true, sensitive: false, manage: false }, scope: 'ASSIGNED_DEPARTMENT' },
+        clerk: { permissions: { view: true, create: true, edit: true, submit: true, approve: false, archive: false, export: true, sensitive: false, manage: false }, scope: 'ALL' },
+        counselor: { permissions: { view: true, create: false, edit: false, submit: false, approve: false, archive: false, export: false, sensitive: false, manage: false }, scope: 'ASSIGNED_STUDENTS' }
+      }
     },
     {
-      module: '6. Examinations & Grading',
-      slug: 'examinations',
-      actions: { create: true, read: true, update: true, delete: false, export: true, approve: true },
-      scope: 'All Terms & Pre-Finals',
-      rolesWithAccess: 'Principal, VP, Exam Officer',
-      delegatedApproval: 'Result publication by Principal only'
+      key: 'timetable',
+      number: 6,
+      name: 'Timetable & Scheduling',
+      category: 'Operations',
+      icon: 'fa-calendar-days',
+      desc: 'Master weekly schedules, room & laboratory allocations, period timings, and emergency teacher substitution.',
+      sensitiveFields: [],
+      delegatedApproval: 'Vice Principal Sri Navva Anand',
+      antiSelfApproval: false,
+      roles: {
+        principal: { permissions: { view: true, create: true, edit: true, submit: true, approve: true, archive: true, export: true, sensitive: true, manage: true }, scope: 'ALL' },
+        'vice-principal': { permissions: { view: true, create: true, edit: true, submit: true, approve: true, archive: true, export: true, sensitive: false, manage: false }, scope: 'ALL' },
+        teacher: { permissions: { view: true, create: false, edit: false, submit: false, approve: false, archive: false, export: true, sensitive: false, manage: false }, scope: 'ASSIGNED_CLASSES' },
+        bursar: { permissions: { view: true, create: false, edit: false, submit: false, approve: false, archive: false, export: false, sensitive: false, manage: false }, scope: 'ALL' },
+        clerk: { permissions: { view: true, create: false, edit: false, submit: false, approve: false, archive: false, export: true, sensitive: false, manage: false }, scope: 'ALL' },
+        counselor: { permissions: { view: true, create: false, edit: false, submit: false, approve: false, archive: false, export: false, sensitive: false, manage: false }, scope: 'ALL' }
+      }
     },
     {
-      module: '7. Discipline & Student Welfare',
-      slug: 'discipline',
-      actions: { create: true, read: true, update: true, delete: false, export: true, approve: true },
-      scope: 'Behavioral & Counselling Dockets',
-      rolesWithAccess: 'Principal, VP, Counselor',
-      delegatedApproval: 'Counselling restricted to Designated Counselor'
+      key: 'examinations',
+      number: 7,
+      name: 'Examinations & Grading',
+      category: 'Academic',
+      icon: 'fa-file-signature',
+      desc: 'Unit tests, quarterly exam scheduling, hall ticket generation, invigilation duty roster, marks entry and grade sheets.',
+      sensitiveFields: ['Confidential Exam Question Paper Blueprints', 'Pre-publication Moderation Ledger'],
+      delegatedApproval: 'Controller of Exams & Principal',
+      antiSelfApproval: false,
+      roles: {
+        principal: { permissions: { view: true, create: true, edit: true, submit: true, approve: true, archive: true, export: true, sensitive: true, manage: true }, scope: 'ALL' },
+        'vice-principal': { permissions: { view: true, create: true, edit: true, submit: true, approve: true, archive: true, export: true, sensitive: true, manage: false }, scope: 'ALL' },
+        teacher: { permissions: { view: true, create: true, edit: true, submit: true, approve: false, archive: false, export: true, sensitive: false, manage: false }, scope: 'ASSIGNED_CLASSES' },
+        bursar: { permissions: { view: true, create: false, edit: false, submit: false, approve: false, archive: false, export: false, sensitive: false, manage: false }, scope: 'ALL' },
+        clerk: { permissions: { view: true, create: false, edit: false, submit: false, approve: false, archive: false, export: true, sensitive: false, manage: false }, scope: 'ALL' },
+        counselor: { permissions: { view: true, create: false, edit: false, submit: false, approve: false, archive: false, export: false, sensitive: false, manage: false }, scope: 'ASSIGNED_STUDENTS' }
+      }
     },
     {
-      module: '8. Leave Management',
-      slug: 'leaves',
-      actions: { create: true, read: true, update: true, delete: false, export: true, approve: true },
-      scope: 'Faculty & Student Leave Applications',
-      rolesWithAccess: 'VP (L1 Review), Principal (L2 Final)',
-      delegatedApproval: 'Medical leave > 3 days requires Principal'
+      key: 'discipline',
+      number: 8,
+      name: 'Discipline & Student Welfare',
+      category: 'Welfare',
+      icon: 'fa-scale-balanced',
+      desc: 'Behavioral incident records, late-arrival gate register, merit awards, parent convocations and confidential pastoral care.',
+      sensitiveFields: ['Psychological Counseling Notes', 'Child Safeguarding Case Records', 'Clinical Evaluation Dockets'],
+      delegatedApproval: 'Student Counselor & Principal',
+      antiSelfApproval: false,
+      roles: {
+        principal: { permissions: { view: true, create: true, edit: true, submit: true, approve: true, archive: true, export: true, sensitive: true, manage: true }, scope: 'ALL' },
+        'vice-principal': { permissions: { view: true, create: true, edit: true, submit: true, approve: true, archive: true, export: true, sensitive: true, manage: false }, scope: 'ALL' },
+        teacher: { permissions: { view: true, create: true, edit: false, submit: true, approve: false, archive: false, export: false, sensitive: false, manage: false }, scope: 'ASSIGNED_CLASSES' },
+        bursar: { permissions: { view: false, create: false, edit: false, submit: false, approve: false, archive: false, export: false, sensitive: false, manage: false }, scope: 'OWN_RECORDS' },
+        clerk: { permissions: { view: true, create: true, edit: false, submit: true, approve: false, archive: false, export: false, sensitive: false, manage: false }, scope: 'ALL' },
+        counselor: { permissions: { view: true, create: true, edit: true, submit: true, approve: true, archive: true, export: true, sensitive: true, manage: false }, scope: 'ASSIGNED_STUDENTS' }
+      }
     },
     {
-      module: '9. Fees & Finance',
-      slug: 'fees',
-      actions: { create: true, read: true, update: true, delete: false, export: true, approve: true },
-      scope: 'All Student Accounts & Ledgers',
-      rolesWithAccess: 'Principal, Head Bursar',
-      delegatedApproval: 'Refunds & Concessions require Principal'
+      key: 'leaves',
+      number: 9,
+      name: 'Leave Management',
+      category: 'Governance',
+      icon: 'fa-calendar-minus',
+      desc: 'Faculty casual & medical leave review, student medical requests, substitute assignments and institutional leave calendar.',
+      sensitiveFields: ['Medical Diagnosis Reports', 'Confidential Medical Certificates'],
+      delegatedApproval: 'Vice Principal (L1) & Principal (L2)',
+      antiSelfApproval: true,
+      segregationRule: 'Anti-Self-Approval: Teachers and staff cannot approve their own leave applications. Verification must be performed by Vice Principal or Principal.',
+      roles: {
+        principal: { permissions: { view: true, create: true, edit: true, submit: true, approve: true, archive: true, export: true, sensitive: true, manage: true }, scope: 'ALL', antiSelfApproval: false },
+        'vice-principal': { permissions: { view: true, create: true, edit: true, submit: true, approve: true, archive: false, export: true, sensitive: true, manage: false }, scope: 'ALL', antiSelfApproval: true },
+        teacher: { permissions: { view: true, create: true, edit: true, submit: true, approve: false, archive: false, export: true, sensitive: false, manage: false }, scope: 'OWN_RECORDS', antiSelfApproval: true },
+        bursar: { permissions: { view: true, create: true, edit: true, submit: true, approve: false, archive: false, export: true, sensitive: false, manage: false }, scope: 'OWN_RECORDS', antiSelfApproval: true },
+        clerk: { permissions: { view: true, create: true, edit: true, submit: true, approve: false, archive: false, export: true, sensitive: false, manage: false }, scope: 'OWN_RECORDS', antiSelfApproval: true },
+        counselor: { permissions: { view: true, create: true, edit: true, submit: true, approve: false, archive: false, export: false, sensitive: false, manage: false }, scope: 'OWN_RECORDS', antiSelfApproval: true }
+      }
     },
     {
-      module: '10. Appointments & Visitors',
-      slug: 'appointments',
-      actions: { create: true, read: true, update: true, delete: false, export: true, approve: true },
-      scope: 'Executive Calendar & Visitor Register',
-      rolesWithAccess: 'Principal, Front Desk Clerk',
-      delegatedApproval: 'Chamber bookings confirmed by Principal'
+      key: 'fees',
+      number: 10,
+      name: 'Fees & Finance',
+      category: 'Finance',
+      icon: 'fa-receipt',
+      desc: 'Fee collection counter, student dues ledgers, fee waivers, refund vouchers, payment gateways and bank reconciliation.',
+      sensitiveFields: ['Bank Account Numbers', 'IFSC Codes', 'Concession Hardship Dossiers', 'Staff Basic Pay', 'Cheque Clearance Logs'],
+      delegatedApproval: 'Principal Smt. Gorle Varalakshmi',
+      antiSelfApproval: true,
+      segregationRule: 'Statutory Segregation of Duties: Accounts employees may record payments and initiate transactions, but cannot approve their own refund vouchers or fee waiver concessions. Independent sign-off by Principal is mandatory.',
+      roles: {
+        principal: { permissions: { view: true, create: true, edit: true, submit: true, approve: true, archive: true, export: true, sensitive: true, manage: true }, scope: 'ALL', antiSelfApproval: false },
+        'vice-principal': { permissions: { view: true, create: false, edit: false, submit: false, approve: false, archive: false, export: true, sensitive: false, manage: false }, scope: 'ALL', antiSelfApproval: false },
+        teacher: { permissions: { view: false, create: false, edit: false, submit: false, approve: false, archive: false, export: false, sensitive: false, manage: false }, scope: 'OWN_RECORDS', antiSelfApproval: false },
+        bursar: { permissions: { view: true, create: true, edit: true, submit: true, approve: false, archive: false, export: true, sensitive: false, manage: false }, scope: 'ASSIGNED_DEPARTMENT', antiSelfApproval: true },
+        clerk: { permissions: { view: true, create: true, edit: true, submit: true, approve: false, archive: false, export: true, sensitive: false, manage: false }, scope: 'ASSIGNED_DEPARTMENT', antiSelfApproval: true },
+        counselor: { permissions: { view: false, create: false, edit: false, submit: false, approve: false, archive: false, export: false, sensitive: false, manage: false }, scope: 'OWN_RECORDS', antiSelfApproval: false }
+      }
     },
     {
-      module: '11. Communication & Circulars',
-      slug: 'communication',
-      actions: { create: true, read: true, update: true, delete: false, export: true, approve: true },
-      scope: 'SMS, Email, Circulars & App Push',
-      rolesWithAccess: 'Principal, VP, Clerk',
-      delegatedApproval: 'All-school SMS broadcast requires VP sign-off'
+      key: 'appointments',
+      number: 11,
+      name: 'Appointments & Visitors',
+      category: 'Operations',
+      icon: 'fa-calendar-check',
+      desc: 'Executive meeting schedule, parent meeting appointments, security gate visitor badges and campus entry register.',
+      sensitiveFields: ['Visitor Identity Verification Documents'],
+      delegatedApproval: 'Principal & Front Desk',
+      antiSelfApproval: false,
+      roles: {
+        principal: { permissions: { view: true, create: true, edit: true, submit: true, approve: true, archive: true, export: true, sensitive: true, manage: true }, scope: 'ALL' },
+        'vice-principal': { permissions: { view: true, create: true, edit: true, submit: true, approve: true, archive: true, export: true, sensitive: true, manage: false }, scope: 'ALL' },
+        teacher: { permissions: { view: true, create: true, edit: false, submit: true, approve: false, archive: false, export: false, sensitive: false, manage: false }, scope: 'ASSIGNED_CLASSES' },
+        bursar: { permissions: { view: true, create: false, edit: false, submit: false, approve: false, archive: false, export: false, sensitive: false, manage: false }, scope: 'ASSIGNED_DEPARTMENT' },
+        clerk: { permissions: { view: true, create: true, edit: true, submit: true, approve: true, archive: true, export: true, sensitive: false, manage: false }, scope: 'ALL' },
+        counselor: { permissions: { view: true, create: true, edit: true, submit: true, approve: true, archive: false, export: false, sensitive: false, manage: false }, scope: 'ASSIGNED_STUDENTS' }
+      }
     },
     {
-      module: '12. Events & Activities',
-      slug: 'events',
-      actions: { create: true, read: true, update: true, delete: false, export: true, approve: true },
-      scope: 'Academic, Sports & Competitions',
-      rolesWithAccess: 'Principal, VP, Activity Coordinator',
-      delegatedApproval: 'Budget allocations approved by Bursar & Principal'
+      key: 'communication',
+      number: 12,
+      name: 'Communication & Circulars',
+      category: 'Operations',
+      icon: 'fa-bullhorn',
+      desc: 'Administrative notices, official board circulars, DLT-registered SMS blasts, email dispatch and push notifications.',
+      sensitiveFields: ['DLT SMS Sender Authentication Keys'],
+      delegatedApproval: 'Vice Principal & Principal',
+      antiSelfApproval: false,
+      roles: {
+        principal: { permissions: { view: true, create: true, edit: true, submit: true, approve: true, archive: true, export: true, sensitive: true, manage: true }, scope: 'ALL' },
+        'vice-principal': { permissions: { view: true, create: true, edit: true, submit: true, approve: true, archive: true, export: true, sensitive: true, manage: false }, scope: 'ALL' },
+        teacher: { permissions: { view: true, create: true, edit: false, submit: true, approve: false, archive: false, export: false, sensitive: false, manage: false }, scope: 'ASSIGNED_CLASSES' },
+        bursar: { permissions: { view: true, create: false, edit: false, submit: false, approve: false, archive: false, export: false, sensitive: false, manage: false }, scope: 'ASSIGNED_DEPARTMENT' },
+        clerk: { permissions: { view: true, create: true, edit: true, submit: true, approve: false, archive: false, export: true, sensitive: false, manage: false }, scope: 'ALL' },
+        counselor: { permissions: { view: true, create: true, edit: false, submit: true, approve: false, archive: false, export: false, sensitive: false, manage: false }, scope: 'ASSIGNED_STUDENTS' }
+      }
     },
     {
-      module: '13. Transport & Facilities',
-      slug: 'transport',
-      actions: { create: true, read: true, update: true, delete: false, export: true, approve: true },
-      scope: 'Fleet, Routes, Driver Rosters & Safety',
-      rolesWithAccess: 'Transport Head, Admin Officer, VP',
-      delegatedApproval: 'Route adjustments approved by VP'
+      key: 'events',
+      number: 13,
+      name: 'Events & Activities',
+      category: 'Academic',
+      icon: 'fa-calendar-days',
+      desc: 'Institutional annual calendar, sports day, science fair, cultural celebrations, inter-school competitions and clubs.',
+      sensitiveFields: [],
+      delegatedApproval: 'Activity Coordinator & VP',
+      antiSelfApproval: false,
+      roles: {
+        principal: { permissions: { view: true, create: true, edit: true, submit: true, approve: true, archive: true, export: true, sensitive: true, manage: true }, scope: 'ALL' },
+        'vice-principal': { permissions: { view: true, create: true, edit: true, submit: true, approve: true, archive: true, export: true, sensitive: false, manage: false }, scope: 'ALL' },
+        teacher: { permissions: { view: true, create: true, edit: true, submit: true, approve: false, archive: false, export: true, sensitive: false, manage: false }, scope: 'ASSIGNED_CLASSES' },
+        bursar: { permissions: { view: true, create: false, edit: false, submit: false, approve: false, archive: false, export: false, sensitive: false, manage: false }, scope: 'ASSIGNED_DEPARTMENT' },
+        clerk: { permissions: { view: true, create: true, edit: false, submit: true, approve: false, archive: false, export: true, sensitive: false, manage: false }, scope: 'ALL' },
+        counselor: { permissions: { view: true, create: false, edit: false, submit: false, approve: false, archive: false, export: false, sensitive: false, manage: false }, scope: 'ALL' }
+      }
     },
     {
-      module: '14. Inventory & Assets',
-      slug: 'inventory',
-      actions: { create: true, read: true, update: true, delete: false, export: true, approve: true },
-      scope: 'Fixed Assets, Labs, Books & Supplies',
-      rolesWithAccess: 'Admin Officer, Bursar, Principal',
-      delegatedApproval: 'Purchase orders > ₹25,000 by Principal'
+      key: 'transport',
+      number: 14,
+      name: 'Transport & Fleet Logistics',
+      category: 'Operations',
+      icon: 'fa-bus',
+      desc: 'School bus fleet registers, driver licences, RTO fitness certificates, GPS routes, student stops and maintenance logs.',
+      sensitiveFields: ['Driver Police Verification Records', 'Vehicle Tracking GPS Telemetry'],
+      delegatedApproval: 'Fleet Logistics Head & VP',
+      antiSelfApproval: false,
+      roles: {
+        principal: { permissions: { view: true, create: true, edit: true, submit: true, approve: true, archive: true, export: true, sensitive: true, manage: true }, scope: 'ALL' },
+        'vice-principal': { permissions: { view: true, create: true, edit: true, submit: true, approve: true, archive: true, export: true, sensitive: true, manage: false }, scope: 'ALL' },
+        teacher: { permissions: { view: true, create: false, edit: false, submit: false, approve: false, archive: false, export: false, sensitive: false, manage: false }, scope: 'ASSIGNED_CLASSES' },
+        bursar: { permissions: { view: true, create: false, edit: false, submit: false, approve: false, archive: false, export: true, sensitive: false, manage: false }, scope: 'ASSIGNED_DEPARTMENT' },
+        clerk: { permissions: { view: true, create: true, edit: true, submit: true, approve: false, archive: false, export: true, sensitive: false, manage: false }, scope: 'ALL' },
+        counselor: { permissions: { view: false, create: false, edit: false, submit: false, approve: false, archive: false, export: false, sensitive: false, manage: false }, scope: 'OWN_RECORDS' }
+      }
     },
     {
-      module: '15. Reports & Analytics',
-      slug: 'reports',
-      actions: { create: false, read: true, update: false, delete: false, export: true, approve: false },
-      scope: 'Institutional BI & Regulatory Submissions',
-      rolesWithAccess: 'Principal, VP, Bursar (Finance Reports)',
-      delegatedApproval: 'Statutory board downloads restricted to Principal'
+      key: 'inventory',
+      number: 15,
+      name: 'Inventory & Assets',
+      category: 'Operations',
+      icon: 'fa-boxes-stacked',
+      desc: 'Fixed assets register, laboratory apparatus, consumable stock balances, vendor contracts, issue/return logs and maintenance.',
+      sensitiveFields: ['Vendor Bank Accounts', 'Confidential Commercial Quotes'],
+      delegatedApproval: 'Store Officer & Bursar',
+      antiSelfApproval: true,
+      segregationRule: 'Segregation of Duties: Store personnel may draft requisitions and record stock movements, but purchase approvals require independent administrative sanction.',
+      roles: {
+        principal: { permissions: { view: true, create: true, edit: true, submit: true, approve: true, archive: true, export: true, sensitive: true, manage: true }, scope: 'ALL', antiSelfApproval: false },
+        'vice-principal': { permissions: { view: true, create: true, edit: true, submit: true, approve: true, archive: true, export: true, sensitive: false, manage: false }, scope: 'ALL', antiSelfApproval: false },
+        teacher: { permissions: { view: true, create: true, edit: false, submit: true, approve: false, archive: false, export: false, sensitive: false, manage: false }, scope: 'ASSIGNED_CLASSES', antiSelfApproval: true },
+        bursar: { permissions: { view: true, create: true, edit: true, submit: true, approve: true, archive: true, export: true, sensitive: true, manage: false }, scope: 'ASSIGNED_DEPARTMENT', antiSelfApproval: true },
+        clerk: { permissions: { view: true, create: true, edit: true, submit: true, approve: false, archive: false, export: true, sensitive: false, manage: false }, scope: 'ASSIGNED_DEPARTMENT', antiSelfApproval: true },
+        counselor: { permissions: { view: false, create: false, edit: false, submit: false, approve: false, archive: false, export: false, sensitive: false, manage: false }, scope: 'OWN_RECORDS', antiSelfApproval: false }
+      }
     },
     {
-      module: '16. Tasks & Approvals',
-      slug: 'tasks',
-      actions: { create: true, read: true, update: true, delete: false, export: true, approve: true },
-      scope: 'Campus Executive Decision Engine',
-      rolesWithAccess: 'Principal, VP, Department Heads',
-      delegatedApproval: 'Hierarchy-bound per workflow settings'
+      key: 'reports',
+      number: 16,
+      name: 'Reports & Analytics',
+      category: 'Governance',
+      icon: 'fa-chart-pie',
+      desc: 'Academic grade distributions, longitudinal attendance, fee collections, payroll audits and statutory board filings.',
+      sensitiveFields: ['Consolidated Staff Payroll Summary', 'Internal Financial Balance Sheet'],
+      delegatedApproval: 'Principal Smt. Gorle Varalakshmi',
+      antiSelfApproval: false,
+      roles: {
+        principal: { permissions: { view: true, create: false, edit: false, submit: false, approve: false, archive: false, export: true, sensitive: true, manage: true }, scope: 'ALL' },
+        'vice-principal': { permissions: { view: true, create: false, edit: false, submit: false, approve: false, archive: false, export: true, sensitive: true, manage: false }, scope: 'ALL' },
+        teacher: { permissions: { view: true, create: false, edit: false, submit: false, approve: false, archive: false, export: true, sensitive: false, manage: false }, scope: 'ASSIGNED_CLASSES' },
+        bursar: { permissions: { view: true, create: false, edit: false, submit: false, approve: false, archive: false, export: true, sensitive: true, manage: false }, scope: 'ASSIGNED_DEPARTMENT' },
+        clerk: { permissions: { view: true, create: false, edit: false, submit: false, approve: false, archive: false, export: true, sensitive: false, manage: false }, scope: 'ALL' },
+        counselor: { permissions: { view: true, create: false, edit: false, submit: false, approve: false, archive: false, export: false, sensitive: false, manage: false }, scope: 'ASSIGNED_STUDENTS' }
+      }
     },
     {
-      module: '17. Settings & Access Control',
-      slug: 'settings',
-      actions: { create: true, read: true, update: true, delete: false, export: true, approve: true },
-      scope: 'System Infrastructure & Security',
-      rolesWithAccess: 'Principal Only',
-      delegatedApproval: 'No delegation permitted'
+      key: 'tasks',
+      number: 17,
+      name: 'Tasks & Approvals',
+      category: 'Governance',
+      icon: 'fa-list-check',
+      desc: 'Central executive decision engine: pending approvals, assigned work, approval history, escalations and workflow settings.',
+      sensitiveFields: ['Executive Decision Memos', 'Confidential Escalation Audits'],
+      delegatedApproval: 'Workflow Bound (Multi-Tier)',
+      antiSelfApproval: true,
+      segregationRule: 'Institutional Rule: Requesters cannot act as approvers on their own pending submissions.',
+      roles: {
+        principal: { permissions: { view: true, create: true, edit: true, submit: true, approve: true, archive: true, export: true, sensitive: true, manage: true }, scope: 'ALL', antiSelfApproval: false },
+        'vice-principal': { permissions: { view: true, create: true, edit: true, submit: true, approve: true, archive: true, export: true, sensitive: true, manage: false }, scope: 'ALL', antiSelfApproval: true },
+        teacher: { permissions: { view: true, create: true, edit: true, submit: true, approve: false, archive: false, export: true, sensitive: false, manage: false }, scope: 'OWN_RECORDS', antiSelfApproval: true },
+        bursar: { permissions: { view: true, create: true, edit: true, submit: true, approve: true, archive: false, export: true, sensitive: false, manage: false }, scope: 'ASSIGNED_DEPARTMENT', antiSelfApproval: true },
+        clerk: { permissions: { view: true, create: true, edit: true, submit: true, approve: false, archive: false, export: true, sensitive: false, manage: false }, scope: 'OWN_RECORDS', antiSelfApproval: true },
+        counselor: { permissions: { view: true, create: true, edit: true, submit: true, approve: false, archive: false, export: false, sensitive: true, manage: false }, scope: 'ASSIGNED_STUDENTS', antiSelfApproval: true }
+      }
+    },
+    {
+      key: 'settings',
+      number: 18,
+      name: 'Settings & Access Control',
+      category: 'Governance',
+      icon: 'fa-gears',
+      desc: 'School profile, academic year, role templates, access permissions matrix, security policies, audit logs and disaster recovery.',
+      sensitiveFields: ['Database Backup Passwords', 'JWT Secret Encryption Keys', 'MFA Master Reset Codes', 'Audit Trail Raw Diffs'],
+      delegatedApproval: 'Strictly Principal Only (Non-Delegable)',
+      antiSelfApproval: false,
+      roles: {
+        principal: { permissions: { view: true, create: true, edit: true, submit: true, approve: true, archive: true, export: true, sensitive: true, manage: true }, scope: 'ALL' },
+        'vice-principal': { permissions: { view: true, create: false, edit: false, submit: false, approve: false, archive: false, export: true, sensitive: false, manage: false }, scope: 'ALL' },
+        teacher: { permissions: { view: false, create: false, edit: false, submit: false, approve: false, archive: false, export: false, sensitive: false, manage: false }, scope: 'OWN_RECORDS' },
+        bursar: { permissions: { view: false, create: false, edit: false, submit: false, approve: false, archive: false, export: false, sensitive: false, manage: false }, scope: 'OWN_RECORDS' },
+        clerk: { permissions: { view: false, create: false, edit: false, submit: false, approve: false, archive: false, export: false, sensitive: false, manage: false }, scope: 'OWN_RECORDS' },
+        counselor: { permissions: { view: false, create: false, edit: false, submit: false, approve: false, archive: false, export: false, sensitive: false, manage: false }, scope: 'OWN_RECORDS' }
+      }
     }
   ];
 
+  function getUniversalPermissionsMatrix() {
+    try {
+      const saved = localStorage.getItem('sv_universal_permissions_matrix');
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed) && parsed.length === 18) {
+          return parsed;
+        }
+      }
+    } catch (e) {
+      console.warn('Could not read saved permissions matrix:', e);
+    }
+    return JSON.parse(JSON.stringify(DEFAULT_UNIVERSAL_PERMISSIONS_MATRIX));
+  }
+
+  function saveUniversalPermissionsMatrix(customMatrix) {
+    const toSave = customMatrix || activePermissionsMatrix;
+    try {
+      localStorage.setItem('sv_universal_permissions_matrix', JSON.stringify(toSave));
+      showToast('Universal Permissions Matrix successfully saved & enforced across all 18 modules!', 'success');
+      renderSettingsPermissionsTable();
+    } catch (e) {
+      console.error('Error saving permissions matrix:', e);
+      showToast('Error saving permissions matrix', 'error');
+    }
+  }
+
+  function resetUniversalPermissionsToDefault() {
+    try {
+      localStorage.removeItem('sv_universal_permissions_matrix');
+      activePermissionsMatrix = JSON.parse(JSON.stringify(DEFAULT_UNIVERSAL_PERMISSIONS_MATRIX));
+      renderSettingsPermissionsTable();
+      runAccessSimulation();
+      showToast('Permissions & scopes reset to AP Board statutory standard template.', 'info');
+    } catch (e) {
+      console.error('Error resetting permissions matrix:', e);
+    }
+  }
+
+  let activePermissionsMatrix = getUniversalPermissionsMatrix();
+  let currentPermissionsFilterRole = 'all';
+
+  // Backward compatibility alias
+  const SETTINGS_PERMISSIONS_DATA = DEFAULT_UNIVERSAL_PERMISSIONS_MATRIX;
   const SETTINGS_WORKFLOWS_DATA = [
     {
       id: 'WF-001',
@@ -31979,49 +32284,623 @@ const classData = TIMETABLE_CLASS_DATA[currentTimetableClass] || TIMETABLE_CLASS
     `).join('');
   }
 
-  function renderSettingsPermissionsTable() {
+/* =========================================================================
+     UNIVERSAL PERMISSIONS RENDERING, SCOPE EVALUATION & SIMULATION
+     Supports 9 core permissions, 5 record scopes, and statutory anti-self-approval
+     ========================================================================= */
+
+  function getActiveFilterRole() {
+    return currentPermissionsFilterRole || 'all';
+  }
+
+  function filterPermissionsMatrix(roleKey) {
+    if (roleKey) {
+      currentPermissionsFilterRole = roleKey;
+      const group = document.getElementById('permRoleFilterGroup');
+      if (group) {
+        group.querySelectorAll('button').forEach(btn => {
+          if (btn.getAttribute('data-role') === roleKey) {
+            btn.className = 'btn btn-primary';
+          } else {
+            btn.className = 'btn btn-outline-secondary';
+          }
+        });
+      }
+    }
+    const searchInput = document.getElementById('permModuleSearchInput');
+    const query = searchInput ? searchInput.value.trim().toLowerCase() : '';
+    const catSelect = document.getElementById('permCategoryFilterSelect');
+    const category = catSelect ? catSelect.value : 'all';
+
+    renderSettingsPermissionsTable(currentPermissionsFilterRole, query, category);
+  }
+
+  function renderSettingsPermissionsTable(filteredRole, searchQuery, categoryFilter) {
     const tbody = document.getElementById('tbodyAccessPermissions');
     if (!tbody) return;
 
-    tbody.innerHTML = SETTINGS_PERMISSIONS_DATA.map(p => {
-      const getActionBadge = (allowed, label) => allowed 
-        ? `<span class="badge" style="background:#dcfce7; color:#166534; font-size:0.68rem; margin:1px;">${label}</span>`
-        : `<span class="badge" style="background:#f1f5f9; color:#94a3b8; font-size:0.68rem; margin:1px;">-${label}-</span>`;
+    const role = filteredRole || currentPermissionsFilterRole || 'all';
+    const query = searchQuery !== undefined ? searchQuery : (document.getElementById('permModuleSearchInput')?.value.trim().toLowerCase() || '');
+    const category = categoryFilter || (document.getElementById('permCategoryFilterSelect')?.value || 'all');
+
+    let modules = activePermissionsMatrix || getUniversalPermissionsMatrix();
+
+    if (query) {
+      modules = modules.filter(m => m.name.toLowerCase().includes(query) || m.desc.toLowerCase().includes(query) || m.key.toLowerCase().includes(query));
+    }
+    if (category && category !== 'all') {
+      modules = modules.filter(m => m.category === category);
+    }
+
+    if (modules.length === 0) {
+      tbody.innerHTML = `
+        <tr>
+          <td colspan="6" class="text-center py-4 text-muted">
+            <i class="fa-solid fa-filter-circle-xmark fa-2x mb-2 d-block text-secondary"></i>
+            No modules match the filter criteria (Role: <strong>${role}</strong>, Query: <strong>${query || 'none'}</strong>).
+          </td>
+        </tr>
+      `;
+      return;
+    }
+
+    tbody.innerHTML = modules.map(m => {
+      const activeRoleKey = (role === 'all') ? 'principal' : role;
+      const roleConfig = (m.roles && m.roles[activeRoleKey]) ? m.roles[activeRoleKey] : (m.roles?.['principal'] || { permissions: {}, scope: 'ALL' });
+      const perms = roleConfig.permissions || {};
+      const scopeKey = roleConfig.scope || 'ALL';
+      const scopeDef = RECORD_SCOPES[scopeKey] || RECORD_SCOPES.ALL;
+
+      const roleDisplayBadge = (role === 'all')
+        ? `<span class="badge" style="background:#f1f5f9; color:#334155; font-weight:700;"><i class="fa-solid fa-users mr-1"></i>All Roles (Principal View)</span>`
+        : `<span class="badge" style="background:#eff6ff; color:#1d4ed8; font-weight:700;"><i class="fa-solid fa-user-tag mr-1"></i>${activeRoleKey.toUpperCase()}</span>`;
+
+      const renderUnivBadge = (actionKey, label, icon) => {
+        const isGranted = !!perms[actionKey];
+        if (actionKey === 'sensitive') {
+          return isGranted
+            ? `<span class="univ-perm-badge badge-sensitive-granted" title="Sensitive Information: GRANTED (Confidential records unmasked)"><i class="fa-solid ${icon}"></i> Sensitive</span>`
+            : `<span class="univ-perm-badge badge-denied" title="Sensitive Information: RESTRICTED (Confidential records masked)"><i class="fa-solid ${icon}"></i> Sensitive</span>`;
+        }
+        if (actionKey === 'manage') {
+          return isGranted
+            ? `<span class="univ-perm-badge badge-manage-granted" title="Manage Permissions: GRANTED (Can configure RBAC & delegates)"><i class="fa-solid ${icon}"></i> Manage</span>`
+            : `<span class="univ-perm-badge badge-denied" title="Manage Permissions: RESTRICTED"><i class="fa-solid ${icon}"></i> Manage</span>`;
+        }
+        return isGranted
+          ? `<span class="univ-perm-badge badge-granted" title="${label}: GRANTED"><i class="fa-solid ${icon}"></i> ${label}</span>`
+          : `<span class="univ-perm-badge badge-denied" title="${label}: DENIED"><i class="fa-solid ${icon}"></i> ${label}</span>`;
+      };
+
+      const badgesHtml = `
+        <div class="univ-perm-badge-group">
+          ${renderUnivBadge('view', 'View', 'fa-eye')}
+          ${renderUnivBadge('create', 'Create', 'fa-plus')}
+          ${renderUnivBadge('edit', 'Edit', 'fa-pen')}
+          ${renderUnivBadge('submit', 'Submit', 'fa-paper-plane')}
+          ${renderUnivBadge('approve', 'Approve/Reject', 'fa-stamp')}
+          ${renderUnivBadge('archive', 'Archive/Cancel', 'fa-box-archive')}
+          ${renderUnivBadge('export', 'Export/Print', 'fa-print')}
+          ${renderUnivBadge('sensitive', 'Sensitive', 'fa-user-shield')}
+          ${renderUnivBadge('manage', 'Manage', 'fa-shield-halved')}
+        </div>
+      `;
+
+      let scopeDetail = scopeDef.label;
+      if (activeRoleKey === 'teacher' && scopeKey === 'ASSIGNED_CLASSES') {
+        scopeDetail = 'Assigned Classes (8A, 9B, 7C, 10A)';
+      } else if (activeRoleKey === 'bursar' && scopeKey === 'ASSIGNED_DEPARTMENT') {
+        scopeDetail = 'Finance & Cash Desk';
+      } else if (activeRoleKey === 'counselor' && scopeKey === 'ASSIGNED_STUDENTS') {
+        scopeDetail = 'Pastoral Caseload';
+      }
+
+      const scopePillHtml = `
+        <span class="univ-scope-pill ${scopeDef.badgeClass}" title="${scopeDef.desc}">
+          <i class="fa-solid ${scopeDef.icon} mr-1"></i>${scopeDetail}
+        </span>
+      `;
+
+      const isAntiSelf = m.antiSelfApproval || roleConfig.antiSelfApproval;
+      const segregationHtml = isAntiSelf
+        ? `<span class="univ-segregation-pill segregation-active" title="${m.segregationRule || 'Anti-Self-Approval Active: Cannot approve own records/refunds'}">
+            <i class="fa-solid fa-handshake-slash"></i> Anti-Self-Approval Enforced
+           </span>`
+        : `<span class="univ-segregation-pill segregation-standard" title="Standard Institutional Hierarchy">
+            <i class="fa-solid fa-check"></i> Standard Audit Sign-off
+           </span>`;
 
       return `
         <tr>
           <td>
-            <strong style="color: #0f172a; font-size: 0.88rem;">${p.module}</strong>
-          </td>
-          <td>
-            <div class="d-flex flex-wrap gap-1">
-              ${getActionBadge(p.actions.create, 'CREATE')}
-              ${getActionBadge(p.actions.read, 'READ')}
-              ${getActionBadge(p.actions.update, 'UPDATE')}
-              ${getActionBadge(p.actions.delete, 'DELETE')}
-              ${getActionBadge(p.actions.export, 'EXPORT')}
-              ${getActionBadge(p.actions.approve, 'APPROVE')}
+            <div class="d-flex align-items-center gap-2">
+              <div class="metric-icon-wrap icon-blue" style="width:34px; height:34px; font-size:0.9rem; flex-shrink:0;">
+                <i class="fa-solid ${m.icon}"></i>
+              </div>
+              <div>
+                <strong style="color: #0f172a; font-size: 0.88rem;">${m.number}. ${m.name}</strong>
+                <div class="d-flex gap-1 mt-1">
+                  <span class="badge" style="background:#f1f5f9; color:#475569; font-size:0.65rem;">${m.category}</span>
+                  ${m.sensitiveFields?.length ? `<span class="badge" style="background:#fdf2f8; color:#9d174d; font-size:0.65rem;"><i class="fa-solid fa-lock mr-1"></i>${m.sensitiveFields.length} Sensitive Field(s)</span>` : ''}
+                </div>
+              </div>
             </div>
           </td>
           <td>
-            <span class="text-xs font-semibold" style="color:#334155;">${p.scope}</span>
+            ${roleDisplayBadge}
+            <div class="text-xxs text-muted mt-1"><i class="fa-solid fa-signature mr-1"></i>${m.delegatedApproval || 'Principal'}</div>
           </td>
           <td>
-            <span class="text-xs text-muted font-medium">${p.rolesWithAccess}</span>
+            ${badgesHtml}
           </td>
           <td>
-            <span class="badge" style="background:#fef3c7; color:#b45309; font-size:0.7rem; font-weight:600;">${p.delegatedApproval}</span>
+            ${scopePillHtml}
+          </td>
+          <td>
+            ${segregationHtml}
           </td>
           <td class="text-end">
-            <button class="btn btn-sm btn-secondary" onclick="portalApp.showToast('Delegation rules modified for ${p.module}', 'info')" title="Adjust Scope & Delegation">
-              <i class="fa-solid fa-sliders"></i> Adjust
-            </button>
+            <div class="btn-group btn-group-sm">
+              <button class="btn btn-outline-primary btn-sm" onclick="portalApp.openManagePermissionsModal('${m.key}', '${activeRoleKey}')" title="Configure 9 Universal Permissions & Scope">
+                <i class="fa-solid fa-sliders"></i> Manage
+              </button>
+              <button class="btn btn-outline-secondary btn-sm" onclick="portalApp.launchSimulatorForModule('${m.key}')" title="Test in Live Simulator">
+                <i class="fa-solid fa-flask"></i>
+              </button>
+            </div>
           </td>
         </tr>
       `;
     }).join('');
   }
 
+  function launchSimulatorForModule(moduleKey) {
+    const sel = document.getElementById('simModuleSelect');
+    if (sel) {
+      sel.value = moduleKey;
+      runAccessSimulation();
+      const card = document.getElementById('permSimulatorCard');
+      if (card) {
+        card.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }
+  }
+
+  function openManagePermissionsModal(moduleKey, roleKey) {
+    const matrix = activePermissionsMatrix || getUniversalPermissionsMatrix();
+    const mod = matrix.find(m => m.key === moduleKey);
+    if (!mod) {
+      showToast('Module not found in catalog', 'error');
+      return;
+    }
+
+    const modal = document.getElementById('manageModulePermissionsModal');
+    if (!modal) return;
+
+    document.getElementById('mmpmModuleKey').value = moduleKey;
+    document.getElementById('mmpmTitle').textContent = `Configure Module: ${mod.number}. ${mod.name}`;
+    document.getElementById('mmpmSubtitle').textContent = `Domain: ${mod.category} | Independent 9-action RBAC, Record Scope & Segregation of Duties.`;
+
+    const roleSelect = document.getElementById('mmpmRoleSelect');
+    if (roleSelect) {
+      roleSelect.value = roleKey || currentPermissionsFilterRole || 'teacher';
+      if (roleSelect.value === 'all') roleSelect.value = 'teacher';
+    }
+
+    loadRolePermissionsIntoModal();
+    modal.style.display = 'flex';
+  }
+
+  function loadRolePermissionsIntoModal() {
+    const moduleKey = document.getElementById('mmpmModuleKey')?.value;
+    const roleKey = document.getElementById('mmpmRoleSelect')?.value || 'teacher';
+    const matrix = activePermissionsMatrix || getUniversalPermissionsMatrix();
+    const mod = matrix.find(m => m.key === moduleKey);
+    if (!mod) return;
+
+    const roleConfig = (mod.roles && mod.roles[roleKey]) ? mod.roles[roleKey] : { permissions: {}, scope: 'ALL' };
+    const perms = roleConfig.permissions || {};
+
+    const container = document.getElementById('mmpmPermissionsGrid');
+    if (container) {
+      container.innerHTML = UNIVERSAL_PERMISSIONS_CATALOG.map(action => {
+        const isChecked = !!perms[action.key];
+        return `
+          <div class="col-md-4 col-sm-6">
+            <div class="p-2 border rounded bg-white d-flex align-items-center justify-content-between">
+              <div>
+                <strong style="font-size:0.8rem; color:#1e293b;"><i class="fa-solid ${action.icon} text-primary mr-1"></i> ${action.label}</strong>
+                <span class="d-block text-muted text-xxs">${action.desc}</span>
+              </div>
+              <div class="form-check form-switch m-0 ms-2">
+                <input class="form-check-input mmpm-perm-checkbox" type="checkbox" id="mmpm_perm_${action.key}" data-action="${action.key}" ${isChecked ? 'checked' : ''} style="cursor:pointer;">
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    const scopeVal = roleConfig.scope || 'ALL';
+    const radios = document.getElementsByName('mmpmRecordScope');
+    radios.forEach(r => {
+      r.checked = (r.value === scopeVal);
+    });
+
+    const antiSelfCheck = document.getElementById('mmpmAntiSelfApprovalCheck');
+    if (antiSelfCheck) {
+      antiSelfCheck.checked = !!(mod.antiSelfApproval || roleConfig.antiSelfApproval);
+    }
+
+    const approverInput = document.getElementById('mmpmDelegatedApprover');
+    if (approverInput) {
+      approverInput.value = mod.delegatedApproval || 'Principal Smt. Gorle Varalakshmi';
+    }
+  }
+
+  function saveModulePermissionsFromModal(e) {
+    if (e && e.preventDefault) e.preventDefault();
+
+    const moduleKey = document.getElementById('mmpmModuleKey')?.value;
+    const roleKey = document.getElementById('mmpmRoleSelect')?.value;
+    if (!moduleKey || !roleKey) return;
+
+    let matrix = activePermissionsMatrix || getUniversalPermissionsMatrix();
+    const mod = matrix.find(m => m.key === moduleKey);
+    if (!mod) return;
+
+    if (!mod.roles) mod.roles = {};
+    if (!mod.roles[roleKey]) mod.roles[roleKey] = { permissions: {}, scope: 'ALL' };
+
+    const checkBoxes = document.querySelectorAll('.mmpm-perm-checkbox');
+    const newPerms = {};
+    checkBoxes.forEach(cb => {
+      const act = cb.getAttribute('data-action');
+      if (act) newPerms[act] = cb.checked;
+    });
+    mod.roles[roleKey].permissions = newPerms;
+
+    const radios = document.getElementsByName('mmpmRecordScope');
+    let selectedScope = 'ALL';
+    radios.forEach(r => {
+      if (r.checked) selectedScope = r.value;
+    });
+    mod.roles[roleKey].scope = selectedScope;
+
+    const antiSelfCheck = document.getElementById('mmpmAntiSelfApprovalCheck');
+    if (antiSelfCheck) {
+      mod.antiSelfApproval = antiSelfCheck.checked;
+      mod.roles[roleKey].antiSelfApproval = antiSelfCheck.checked;
+    }
+
+    const approverInput = document.getElementById('mmpmDelegatedApprover');
+    if (approverInput && approverInput.value.trim()) {
+      mod.delegatedApproval = approverInput.value.trim();
+    }
+
+    saveUniversalPermissionsMatrix(matrix);
+    closeModal('manageModulePermissionsModal');
+    renderSettingsPermissionsTable();
+    runAccessSimulation();
+    showToast(`Permissions & scope updated for '${mod.name}' (${roleKey.toUpperCase()})!`, 'success');
+  }
+
+  function runAccessSimulation() {
+    const container = document.getElementById('simResultsContainer');
+    if (!container) return;
+
+    const userKey = document.getElementById('simUserSelect')?.value || 'teacher_anjali';
+    const moduleKey = document.getElementById('simModuleSelect')?.value || 'attendance';
+
+    const matrix = activePermissionsMatrix || getUniversalPermissionsMatrix();
+    const mod = matrix.find(m => m.key === moduleKey) || matrix[0];
+
+    const personas = {
+      teacher_anjali: {
+        name: 'Ms. Anjali',
+        roleKey: 'teacher',
+        roleTitle: 'Teaching Faculty & Class 8A Teacher',
+        assignedClasses: ['8A', '9B', '7C', '10A'],
+        department: 'Mathematics Academic Department'
+      },
+      bursar_ramu: {
+        name: 'Sri S. Ramu',
+        roleKey: 'bursar',
+        roleTitle: 'Accounts Clerk & Cashier',
+        assignedClasses: [],
+        department: 'Finance & Accounts Counter',
+        initiatedItems: ['REF-2026-081 (Fee Refund Voucher ₹3,500)']
+      },
+      counselor_leela: {
+        name: 'Smt. D. Leela',
+        roleKey: 'counselor',
+        roleTitle: 'Student Welfare & Confidential Counselor',
+        assignedClasses: ['Class VI to X Pastoral Care'],
+        department: 'Student Pastoral & Safeguarding Care'
+      },
+      clerk_swathi: {
+        name: 'Smt. G. Swathi',
+        roleKey: 'clerk',
+        roleTitle: 'Front Desk & Admissions Clerk',
+        assignedClasses: [],
+        department: 'Front Office & Admissions Counter'
+      },
+      vp_anand: {
+        name: 'Sri Navva Anand',
+        roleKey: 'vice-principal',
+        roleTitle: 'Vice Principal (Academic & Campus Operations)',
+        assignedClasses: ['All Classes & Sections'],
+        department: 'School Operations & Discipline'
+      },
+      principal_varalakshmi: {
+        name: 'Smt. Gorle Varalakshmi',
+        roleKey: 'principal',
+        roleTitle: 'Executive Principal (Supreme Statutory Authority)',
+        assignedClasses: ['All Classes & Sections'],
+        department: 'Executive Administration'
+      }
+    };
+
+    const user = personas[userKey] || personas.teacher_anjali;
+    const roleConfig = (mod.roles && mod.roles[user.roleKey]) ? mod.roles[user.roleKey] : { permissions: {}, scope: 'ALL' };
+    const perms = roleConfig.permissions || {};
+    const scopeKey = roleConfig.scope || 'ALL';
+    const scopeDef = RECORD_SCOPES[scopeKey] || RECORD_SCOPES.ALL;
+
+    let scopeEvaluation = '';
+    let scopeAlertClass = 'alert-info';
+    let scopeIcon = 'fa-circle-info';
+
+    if (user.roleKey === 'teacher') {
+      if (scopeKey === 'ASSIGNED_CLASSES') {
+        scopeEvaluation = `<strong>Record Scope Limit: ASSIGNED_CLASSES Only.</strong> ${user.name} is authorized to interact strictly with assigned classes: <strong>[${user.assignedClasses.join(', ')}]</strong>. Any attempt to mark attendance, enter marks, or access profiles for Class 6A or 7A is strictly blocked by the scope guardrail.`;
+        scopeAlertClass = 'alert-primary';
+        scopeIcon = 'fa-chalkboard-user';
+      } else if (scopeKey === 'OWN_RECORDS') {
+        scopeEvaluation = `<strong>Record Scope Limit: OWN_RECORDS Only.</strong> ${user.name} can only view or manage records authored by or assigned directly to them.`;
+        scopeAlertClass = 'alert-warning';
+        scopeIcon = 'fa-user-lock';
+      }
+    } else if (user.roleKey === 'bursar') {
+      if (mod.key === 'fees' && (mod.antiSelfApproval || roleConfig.antiSelfApproval)) {
+        scopeEvaluation = `<strong>Statutory Segregation of Duties Enforced:</strong> ${user.name} is an accounts employee who recorded/initiated transactions (e.g. <em>${user.initiatedItems?.[0] || 'Refund REF-2026-081'}</em>). Per institutional anti-fraud rules, <strong>employees cannot approve their own refunds, waiver concessions, or reversals</strong>. Approval requires independent audit signoff by Executive Principal Smt. Gorle Varalakshmi.`;
+        scopeAlertClass = 'alert-danger';
+        scopeIcon = 'fa-handshake-slash';
+      } else {
+        scopeEvaluation = `<strong>Record Scope Limit: ASSIGNED_DEPARTMENT.</strong> ${user.name} access is limited to operational financial registers and cashier audit batches.`;
+        scopeAlertClass = 'alert-info';
+        scopeIcon = 'fa-diagram-project';
+      }
+    } else if (user.roleKey === 'counselor') {
+      scopeEvaluation = `<strong>Record Scope Limit: ASSIGNED_STUDENTS.</strong> Smt. D. Leela possesses certified clinical clearance to access confidential student psychological dossiers for authorized pastoral cases only.`;
+      scopeAlertClass = 'alert-success';
+      scopeIcon = 'fa-user-shield';
+    } else {
+      scopeEvaluation = `<strong>Campus-Wide Jurisdiction:</strong> ${user.name} (${user.roleTitle}) holds unhindered institutional authority across all academic, financial, and operational records.`;
+      scopeAlertClass = 'alert-success';
+      scopeIcon = 'fa-building-columns';
+    }
+
+    const permTilesHtml = UNIVERSAL_PERMISSIONS_CATALOG.map(action => {
+      let isAllowed = !!perms[action.key];
+      let tileDesc = '';
+
+      if (action.key === 'view') {
+        tileDesc = isAllowed ? `Permitted within ${scopeDef.label}` : 'Access denied by role policy';
+      } else if (action.key === 'create') {
+        tileDesc = isAllowed ? 'Can initiate new draft entries' : 'Draft creation restricted';
+      } else if (action.key === 'edit') {
+        tileDesc = isAllowed ? `Permitted for ${scopeDef.label}` : 'Read-only mode enforced';
+      } else if (action.key === 'submit') {
+        tileDesc = isAllowed ? 'Can dispatch records into approval workflow' : 'Workflow dispatch restricted';
+      } else if (action.key === 'approve') {
+        if (user.roleKey === 'bursar' && mod.key === 'fees') {
+          isAllowed = false;
+          tileDesc = 'BLOCKED: Cannot approve own recorded refunds';
+        } else {
+          tileDesc = isAllowed ? 'Executive authorization rights granted' : 'Requires higher institutional authority';
+        }
+      } else if (action.key === 'archive') {
+        tileDesc = isAllowed ? 'Controlled archival with logged reason' : 'Cancellation & archival restricted';
+      } else if (action.key === 'export') {
+        tileDesc = isAllowed ? 'Authorized CSV / PDF downloads' : 'Data export privileges restricted';
+      } else if (action.key === 'sensitive') {
+        tileDesc = isAllowed ? 'Unmasked view of PAN, salary, & counseling notes' : 'Confidential fields masked (•••• ••••)';
+      } else if (action.key === 'manage') {
+        tileDesc = isAllowed ? 'Can modify RBAC matrix & delegation rules' : 'Restricted to Principal Super Admin';
+      }
+
+      return `
+        <div class="col-md-4 col-sm-6">
+          <div class="perm-sim-tile ${isAllowed ? 'sim-granted' : 'sim-denied'}">
+            <div class="perm-sim-tile-header">
+              <span><i class="fa-solid ${action.icon} mr-1"></i> ${action.label}</span>
+              ${isAllowed 
+                ? '<span class="badge bg-success" style="font-size:0.65rem;">GRANTED</span>' 
+                : '<span class="badge bg-danger" style="font-size:0.65rem;">RESTRICTED</span>'}
+            </div>
+            <div class="perm-sim-tile-desc">${tileDesc}</div>
+          </div>
+        </div>
+      `;
+    }).join('');
+
+    const sensitivePreviewHtml = perms.sensitive
+      ? `<span class="badge" style="background:#ecfdf5; color:#065f46; font-size:0.8rem; font-weight:700;"><i class="fa-solid fa-lock-open mr-1"></i> UNMASKED: State Bank of India A/C: 30981249811 (IFSC: SBIN0001824) | Aadhaar: 4821 9081 2341</span>`
+      : `<span class="badge" style="background:#fff1f2; color:#be123c; font-size:0.8rem; font-weight:700;"><i class="fa-solid fa-lock mr-1"></i> MASKED: State Bank of India A/C: ••••••••••811 (IFSC: ••••••••••) | Aadhaar: •••• •••• 2341 [Sensitive Permission Required]</span>`;
+
+    container.innerHTML = `
+      <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-3 pb-2 border-bottom">
+        <div>
+          <h6 class="font-bold mb-0" style="color:#0f172a; font-size:0.95rem;">
+            Simulation Assessment: <strong>${user.name}</strong> as <em>${user.roleTitle}</em>
+          </h6>
+          <span class="text-xs text-muted">Target Module: <strong>${mod.number}. ${mod.name}</strong> (${mod.category} Domain)</span>
+        </div>
+        <div>
+          <span class="univ-scope-pill ${scopeDef.badgeClass}">
+            <i class="fa-solid ${scopeDef.icon} mr-1"></i> Scope: ${scopeDef.label}
+          </span>
+        </div>
+      </div>
+
+      <div class="alert ${scopeAlertClass} p-3 rounded-3 mb-3 d-flex align-items-start gap-3">
+        <i class="fa-solid ${scopeIcon} fa-lg mt-1"></i>
+        <div class="text-xs" style="line-height:1.5;">${scopeEvaluation}</div>
+      </div>
+
+      <h6 class="font-bold mb-2 text-primary" style="font-size:0.85rem;">
+        <i class="fa-solid fa-shield-halved mr-1"></i> The 9 Universal Permissions Evaluation:
+      </h6>
+      <div class="row g-2 mb-3">
+        ${permTilesHtml}
+      </div>
+
+      <div class="p-3 bg-white border rounded-3 d-flex justify-content-between align-items-center flex-wrap gap-2">
+        <div>
+          <span class="font-bold text-xs" style="color:#334155;"><i class="fa-solid fa-eye-slash text-muted mr-1"></i> Data Privacy &amp; Sensitive Field Filter:</span>
+          <p class="text-xxs text-muted mb-0">Demonstrates automatic redaction of employee bank details, Aadhaar, and pastoral evaluation notes.</p>
+        </div>
+        <div>
+          ${sensitivePreviewHtml}
+        </div>
+      </div>
+    `;
+  }
+
+  function hasPermission(moduleKey, actionKey, options) {
+    const role = (options && options.role) || state.currentRole || 'principal';
+    const matrix = activePermissionsMatrix || getUniversalPermissionsMatrix();
+    const mod = matrix.find(m => m.key === moduleKey);
+    if (!mod) return false;
+
+    const roleConfig = (mod.roles && mod.roles[role]) ? mod.roles[role] : { permissions: {} };
+    return !!(roleConfig.permissions && roleConfig.permissions[actionKey]);
+  }
+
+  function can(actionKey, moduleKey, record) {
+    return hasPermission(moduleKey, actionKey, { record });
+  }
+
+  function checkRecordScope(moduleKey, record, user) {
+    const activeUser = user || state.currentUser || { role: state.currentRole || 'principal', name: 'User' };
+    const matrix = activePermissionsMatrix || getUniversalPermissionsMatrix();
+    const mod = matrix.find(m => m.key === moduleKey);
+    if (!mod) return { allowed: true, scope: 'ALL' };
+
+    const roleConfig = (mod.roles && mod.roles[activeUser.role]) ? mod.roles[activeUser.role] : { scope: 'ALL' };
+    const scopeKey = roleConfig.scope || 'ALL';
+
+    if (scopeKey === 'ALL') {
+      return { allowed: true, scope: 'ALL', reason: 'Institutional-wide access granted' };
+    }
+
+    if (scopeKey === 'ASSIGNED_CLASSES') {
+      const assigned = activeUser.assignedClasses || ['8A', '9B', '7C', '10A'];
+      const targetClass = record && (record.class || record.className || record.grade);
+      if (targetClass && !assigned.includes(targetClass)) {
+        return {
+          allowed: false,
+          scope: 'ASSIGNED_CLASSES',
+          reason: `Record Scope Restriction: Access limited to your assigned classes [${assigned.join(', ')}]. Access to Class ${targetClass} is strictly blocked.`
+        };
+      }
+      return { allowed: true, scope: 'ASSIGNED_CLASSES', reason: 'Class is within assigned teaching classes' };
+    }
+
+    if (scopeKey === 'OWN_RECORDS') {
+      const isOwner = record && (record.owner === activeUser.name || record.requester === activeUser.name || record.creator === activeUser.name || record.userId === activeUser.id);
+      if (!isOwner) {
+        return {
+          allowed: false,
+          scope: 'OWN_RECORDS',
+          reason: `Record Scope Restriction: Access limited to records created by or assigned to ${activeUser.name}.`
+        };
+      }
+      return { allowed: true, scope: 'OWN_RECORDS', reason: 'Own record verified' };
+    }
+
+    return { allowed: true, scope: scopeKey };
+  }
+
+  function canApproveRecord(moduleKey, record, user) {
+    const activeUser = user || { role: state.currentRole || 'principal', name: (state.currentUser && state.currentUser.name) || 'Executive User' };
+    const matrix = activePermissionsMatrix || getUniversalPermissionsMatrix();
+    const mod = matrix.find(m => m.key === moduleKey);
+
+    const hasApprove = hasPermission(moduleKey, 'approve', { role: activeUser.role });
+    if (!hasApprove) {
+      return {
+        allowed: false,
+        reason: `Role '${activeUser.role}' is not granted 'Approve or reject' permission in module '${mod ? mod.name : moduleKey}'.`
+      };
+    }
+
+    const isAntiSelf = mod && (mod.antiSelfApproval || (mod.roles && mod.roles[activeUser.role]?.antiSelfApproval));
+    if (isAntiSelf && record) {
+      const requester = record.requester || record.recordedBy || record.creator || record.staff || '';
+      const userName = activeUser.name || '';
+      const isRequesterSelf = (requester && userName && (requester.toLowerCase().includes(userName.toLowerCase()) || userName.toLowerCase().includes(requester.toLowerCase())));
+
+      if (isRequesterSelf || activeUser.role === 'clerk' || activeUser.role === 'bursar') {
+        return {
+          allowed: false,
+          isSelfApprovalConflict: true,
+          reason: `Statutory Segregation of Duties: Employee '${requester || userName}' cannot approve their own refund, fee waiver, or disbursement. Independent sign-off by Principal Smt. Gorle Varalakshmi required.`
+        };
+      }
+    }
+
+    return { allowed: true, reason: 'Authorized to execute executive approval' };
+  }
+
+  function maskSensitiveField(value, fieldType, moduleKey, user) {
+    const activeUser = user || { role: state.currentRole || 'principal' };
+    const canSeeSensitive = hasPermission(moduleKey, 'sensitive', { role: activeUser.role });
+    if (canSeeSensitive) return value;
+
+    if (!value) return '-';
+    const str = String(value);
+    if (fieldType === 'pan' || fieldType === 'aadhaar') {
+      const last4 = str.slice(-4);
+      return `•••• •••• ${last4}`;
+    }
+    if (fieldType === 'bank') {
+      const last3 = str.slice(-3);
+      return `••••••••${last3}`;
+    }
+    if (fieldType === 'salary') {
+      return '₹ •••••• (Confidential)';
+    }
+    if (fieldType === 'counseling') {
+      return '[Confidential Psychological Evaluation - Restricted to Certified Pastoral Counselor & Principal]';
+    }
+    return '••••••••';
+  }
+
+  function exportPermissionsSecurityAudit() {
+    const matrix = activePermissionsMatrix || getUniversalPermissionsMatrix();
+    let csv = 'Module Number,Module Name,Category,Delegated Approver,Anti-Self-Approval Enforced,Principal Permissions,Teacher Permissions & Scope,Bursar Permissions & Scope,Counselor Permissions & Scope\\n';
+
+    matrix.forEach(m => {
+      const pPerms = Object.keys(m.roles.principal.permissions).filter(k => m.roles.principal.permissions[k]).join('|');
+      const tPerms = Object.keys(m.roles.teacher.permissions).filter(k => m.roles.teacher.permissions[k]).join('|') + ' (Scope: ' + m.roles.teacher.scope + ')';
+      const bPerms = Object.keys(m.roles.bursar.permissions).filter(k => m.roles.bursar.permissions[k]).join('|') + ' (Scope: ' + m.roles.bursar.scope + ')';
+      const cPerms = Object.keys(m.roles.counselor.permissions).filter(k => m.roles.counselor.permissions[k]).join('|') + ' (Scope: ' + m.roles.counselor.scope + ')';
+
+      csv += `"${m.number}","${m.name}","${m.category}","${m.delegatedApproval}","${m.antiSelfApproval ? 'YES' : 'NO'}","${pPerms}","${tPerms}","${bPerms}","${cPerms}"\\n`;
+    });
+
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `Sri_Vidya_Universal_Permissions_Audit_AY2026.csv`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    showToast('Universal Permissions & Scope security audit exported to CSV!', 'success');
+  }
   function renderSettingsWorkflowsTable() {
     const tbody = document.getElementById('tbodySettingsWorkflows');
     if (!tbody) return;
@@ -34330,6 +35209,24 @@ const classData = TIMETABLE_CLASS_DATA[currentTimetableClass] || TIMETABLE_CLASS
 
     renderSettingsRolesTable,
     renderSettingsPermissionsTable,
+    UNIVERSAL_PERMISSIONS_CATALOG,
+    RECORD_SCOPES,
+    DEFAULT_UNIVERSAL_PERMISSIONS_MATRIX,
+    getUniversalPermissionsMatrix,
+    saveUniversalPermissionsMatrix,
+    resetUniversalPermissionsToDefault,
+    filterPermissionsMatrix,
+    openManagePermissionsModal,
+    loadRolePermissionsIntoModal,
+    saveModulePermissionsFromModal,
+    runAccessSimulation,
+    launchSimulatorForModule,
+    hasPermission,
+    can,
+    checkRecordScope,
+    canApproveRecord,
+    maskSensitiveField,
+    exportPermissionsSecurityAudit,
     renderSettingsWorkflowsTable,
     renderAuditLogsTable,
     filterAuditLogsTable,

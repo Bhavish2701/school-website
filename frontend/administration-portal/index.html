@@ -12231,43 +12231,182 @@
 
           <!-- ====================================================================
                SUBVIEW 4: ACCESS PERMISSIONS
-               Module permissions, actions, record scope and delegated approvals
+               Universal Permissions (9 Core Actions), Record Scopes & Segregation
                ==================================================================== -->
           <div class="setting-subview" id="subview-settings-permissions" style="display: none;">
+            
+            <!-- Universal Permissions KPI Metrics Quad -->
+            <div class="metrics-quad mb-4">
+              <div class="metric-card">
+                <div class="metric-icon-wrap icon-blue"><i class="fa-solid fa-cubes"></i></div>
+                <div class="metric-details">
+                  <span class="metric-label">Configured Modules</span>
+                  <div class="metric-value text-primary">18 Modules</div>
+                  <div class="metric-trend trend-steady"><span>100% Standalone Access Rules</span></div>
+                </div>
+              </div>
+              <div class="metric-card">
+                <div class="metric-icon-wrap icon-emerald"><i class="fa-solid fa-shield-halved"></i></div>
+                <div class="metric-details">
+                  <span class="metric-label">Universal Actions</span>
+                  <div class="metric-value text-emerald">9 Permissions</div>
+                  <div class="metric-trend trend-up"><span>View, Create, Edit, Submit, Approve, Archive, Export, Sensitive, Manage</span></div>
+                </div>
+              </div>
+              <div class="metric-card">
+                <div class="metric-icon-wrap icon-purple"><i class="fa-solid fa-arrows-to-eye"></i></div>
+                <div class="metric-details">
+                  <span class="metric-label">Record Scope Engine</span>
+                  <div class="metric-value text-purple">5 Granular Scopes</div>
+                  <div class="metric-trend trend-steady"><span>All, Assigned Classes, Dept, Students, Own</span></div>
+                </div>
+              </div>
+              <div class="metric-card">
+                <div class="metric-icon-wrap icon-amber"><i class="fa-solid fa-handshake-angle"></i></div>
+                <div class="metric-details">
+                  <span class="metric-label">Segregation of Duties</span>
+                  <div class="metric-value text-amber">Active Enforced</div>
+                  <div class="metric-trend trend-up"><span>Anti-Self-Approval Active</span></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Permissions Governance Card -->
             <div class="card p-4 border rounded-3 bg-white shadow-sm mb-4">
               <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-3">
                 <div>
-                  <h5 class="font-bold mb-1" style="color:#0f172a;"><i class="fa-solid fa-shield-halved text-primary mr-2"></i> Granular Module Permissions &amp; Delegation Matrix</h5>
-                  <p class="text-muted text-xs mb-0">Role-Based Access Control (RBAC) defining Create, Read, Update, Delete (CRUD) and Executive Sign-off privileges.</p>
+                  <h5 class="font-bold mb-1" style="color:#0f172a;"><i class="fa-solid fa-shield-halved text-primary mr-2"></i> Universal Permissions &amp; Record Scope Governance Matrix</h5>
+                  <p class="text-muted text-xs mb-0">Every module independently enforces 9 core permissions, granular record scopes, and statutory segregation of duties (anti-self-approval).</p>
                 </div>
                 <div class="d-flex gap-2">
-                  <button class="btn btn-secondary btn-sm" onclick="portalApp.showToast('Resetting permissions to AP Board standard template.', 'info')">
-                    <i class="fa-solid fa-rotate-left mr-1"></i> Reset Defaults
+                  <button class="btn btn-secondary btn-sm" onclick="portalApp.resetUniversalPermissionsToDefault()">
+                    <i class="fa-solid fa-rotate-left mr-1"></i> Reset Standard Defaults
                   </button>
-                  <button class="btn btn-primary btn-sm" onclick="portalApp.showToast('Permissions Matrix updated and cryptographic security tokens invalidated.', 'success')">
-                    <i class="fa-solid fa-floppy-disk mr-1"></i> Save Matrix
+                  <button class="btn btn-outline-primary btn-sm" onclick="portalApp.exportPermissionsSecurityAudit()">
+                    <i class="fa-solid fa-file-shield mr-1"></i> Export Audit PDF
+                  </button>
+                  <button class="btn btn-primary btn-sm" onclick="portalApp.saveUniversalPermissionsMatrix()">
+                    <i class="fa-solid fa-floppy-disk mr-1"></i> Save &amp; Enforce Matrix
                   </button>
                 </div>
               </div>
+
+              <!-- Role Context & Filter Bar -->
+              <div class="p-3 bg-light rounded-3 mb-3 border">
+                <div class="row g-2 align-items-center">
+                  <div class="col-lg-6">
+                    <label class="form-label text-xs font-bold text-muted mb-1 d-block">
+                      <i class="fa-solid fa-users-gear text-primary mr-1"></i> Inspect Permissions by Role Context:
+                    </label>
+                    <div class="btn-group btn-group-sm w-100 flex-wrap" role="group" id="permRoleFilterGroup">
+                      <button type="button" class="btn btn-primary" data-role="all" onclick="portalApp.filterPermissionsMatrix('all')">All Roles Overview</button>
+                      <button type="button" class="btn btn-outline-secondary" data-role="teacher" onclick="portalApp.filterPermissionsMatrix('teacher')" title="Teaching Faculty (Assigned Classes Scope)">Teaching Faculty</button>
+                      <button type="button" class="btn btn-outline-secondary" data-role="bursar" onclick="portalApp.filterPermissionsMatrix('bursar')" title="Head Bursar / Accounts Clerk (Segregated Duties)">Accounts Clerk / Bursar</button>
+                      <button type="button" class="btn btn-outline-secondary" data-role="counselor" onclick="portalApp.filterPermissionsMatrix('counselor')" title="Student Counselor (Confidential Dossiers)">Student Counselor</button>
+                      <button type="button" class="btn btn-outline-secondary" data-role="vice-principal" onclick="portalApp.filterPermissionsMatrix('vice-principal')">Vice Principal</button>
+                      <button type="button" class="btn btn-outline-secondary" data-role="principal" onclick="portalApp.filterPermissionsMatrix('principal')">Principal (Super Admin)</button>
+                    </div>
+                  </div>
+                  <div class="col-lg-4 col-md-8">
+                    <label class="form-label text-xs font-bold text-muted mb-1 d-block">
+                      <i class="fa-solid fa-magnifying-glass text-primary mr-1"></i> Search Modules:
+                    </label>
+                    <input type="text" class="form-control form-control-sm" id="permModuleSearchInput" placeholder="Filter by module name (e.g. Attendance, Fees, Students)..." oninput="portalApp.filterPermissionsMatrix()">
+                  </div>
+                  <div class="col-lg-2 col-md-4">
+                    <label class="form-label text-xs font-bold text-muted mb-1 d-block">
+                      <i class="fa-solid fa-layer-group text-primary mr-1"></i> Domain:
+                    </label>
+                    <select class="form-select form-select-sm" id="permCategoryFilterSelect" onchange="portalApp.filterPermissionsMatrix()">
+                      <option value="all">All Domains (18)</option>
+                      <option value="Academic">Academic</option>
+                      <option value="Finance">Finance &amp; Accounts</option>
+                      <option value="Operations">Operations &amp; Logistics</option>
+                      <option value="Welfare">Student Welfare</option>
+                      <option value="Governance">Institutional Governance</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+              <!-- The Universal Permissions Matrix Table -->
               <div class="table-responsive">
                 <table class="table table-hover align-middle mb-0" id="tableAccessPermissions">
                   <thead class="table-light">
                     <tr>
-                      <th>Module Name</th>
-                      <th>Principal (Super Admin)</th>
-                      <th>Vice Principal</th>
-                      <th>Teaching Faculty</th>
-                      <th>Administrative Clerk</th>
-                      <th>Record Scope</th>
-                      <th>Delegated Approvals</th>
+                      <th style="min-width: 190px;">Module &amp; Domain</th>
+                      <th style="min-width: 140px;">Role Context</th>
+                      <th style="min-width: 320px;">9 Universal Permissions</th>
+                      <th style="min-width: 160px;">Record Scope</th>
+                      <th style="min-width: 180px;">Segregation &amp; Guardrails</th>
+                      <th class="text-end" style="min-width: 110px;">Actions</th>
                     </tr>
                   </thead>
                   <tbody id="tbodyAccessPermissions">
-                    <!-- Populated dynamically -->
+                    <!-- Populated dynamically by portalApp.renderSettingsPermissionsTable() -->
                   </tbody>
                 </table>
               </div>
             </div>
+
+            <!-- Universal Permissions & Record Scope Interactive Live Testing Sandbox -->
+            <div class="card p-4 border rounded-3 bg-white shadow-sm mb-4" id="permSimulatorCard">
+              <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-3">
+                <div>
+                  <h5 class="font-bold mb-1" style="color:#1e3a8a;">
+                    <i class="fa-solid fa-laptop-code text-primary mr-2"></i> Universal Permissions &amp; Record Scope Live Testing Sandbox
+                  </h5>
+                  <p class="text-muted text-xs mb-0">
+                    Verify live access evaluations: Test teacher class-scoped attendance, accounts employee anti-self-approval on refunds, and sensitive data masking.
+                  </p>
+                </div>
+                <span class="badge" style="background:#eff6ff; color:#1d4ed8; font-weight:700; padding:6px 10px;">
+                  <i class="fa-solid fa-vial mr-1"></i> Interactive Simulator
+                </span>
+              </div>
+
+              <div class="row g-3 mb-4">
+                <div class="col-md-5">
+                  <label class="form-label text-xs font-bold text-muted">Select Active Persona / Employee Profile:</label>
+                  <select class="form-select" id="simUserSelect" onchange="portalApp.runAccessSimulation()">
+                    <option value="teacher_anjali">Teaching Faculty: Ms. Anjali (Assigned: Classes 8A, 9B, 7C, 10A)</option>
+                    <option value="bursar_ramu">Accounts Clerk: Sri S. Ramu (Cash Counter &amp; Refund Initiator)</option>
+                    <option value="counselor_leela">Student Counselor: Smt. D. Leela (Pastoral &amp; Mental Health)</option>
+                    <option value="clerk_swathi">Front Desk Clerk: Smt. G. Swathi (Admissions &amp; Visitor Desk)</option>
+                    <option value="vp_anand">Vice Principal: Sri Navva Anand (Academic &amp; Operations)</option>
+                    <option value="principal_varalakshmi">Executive Principal: Smt. Gorle Varalakshmi (Super Admin)</option>
+                  </select>
+                </div>
+                <div class="col-md-4">
+                  <label class="form-label text-xs font-bold text-muted">Select Target Module:</label>
+                  <select class="form-select" id="simModuleSelect" onchange="portalApp.runAccessSimulation()">
+                    <option value="attendance">4. Attendance Tracking</option>
+                    <option value="fees">10. Fees &amp; Finance</option>
+                    <option value="students">2. Students Management</option>
+                    <option value="teachers">3. Teachers &amp; Staff</option>
+                    <option value="academics">4. Academics &amp; Curriculum</option>
+                    <option value="examinations">7. Examinations &amp; Grading</option>
+                    <option value="discipline">8. Discipline &amp; Student Welfare</option>
+                    <option value="leaves">9. Leave Management</option>
+                    <option value="inventory">15. Inventory &amp; Assets</option>
+                    <option value="reports">16. Reports &amp; Analytics</option>
+                    <option value="tasks">17. Tasks &amp; Approvals</option>
+                    <option value="settings">18. Settings &amp; Access Control</option>
+                  </select>
+                </div>
+                <div class="col-md-3 d-flex align-items-end">
+                  <button class="btn btn-primary w-100" onclick="portalApp.runAccessSimulation()">
+                    <i class="fa-solid fa-play mr-1"></i> Re-Evaluate Access
+                  </button>
+                </div>
+              </div>
+
+              <!-- Live Simulation Results Container -->
+              <div id="simResultsContainer" class="p-3 bg-light rounded-3 border">
+                <!-- Populated dynamically by portalApp.runAccessSimulation() -->
+              </div>
+            </div>
+
           </div>
 
           <!-- ====================================================================
@@ -18655,6 +18794,135 @@ Class X-A,Monday,2,09:35 AM - 10:20 AM,Physical Science,Sri Navva Anand,Room 201
           <button type="button" class="btn btn-secondary" onclick="portalApp.closeModal('marksCorrectionWorkflowModal')">Cancel</button>
           <button type="submit" class="btn btn-primary" style="font-weight:700;">
             <i class="fa-solid fa-check mr-1"></i> Authorize &amp; Update Marks
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+
+  <!-- ====================================================================
+       MODAL: MANAGE MODULE UNIVERSAL PERMISSIONS & RECORD SCOPE
+       Enforces independent 9 core permissions, scopes, and segregation rules
+       ==================================================================== -->
+  <div class="modal-backdrop" id="manageModulePermissionsModal" role="dialog" aria-modal="true" style="display:none;">
+    <div class="modal-dialog" style="max-width: 780px; width: 95%; max-height: 90vh; overflow-y: auto;">
+      <div class="modal-header" style="background:#f8fafc; border-bottom:1px solid #e2e8f0; padding:1.2rem 1.4rem;">
+        <div>
+          <h3 style="margin:0; font-size:1.15rem; color:#0f172a; display:flex; align-items:center; gap:8px;">
+            <i class="fa-solid fa-shield-halved text-primary"></i> <span id="mmpmTitle">Configure Module Permissions</span>
+          </h3>
+          <p class="text-muted text-xs mb-0 mt-1" id="mmpmSubtitle">Manage independent 9 universal permissions, record scope, and segregation of duties.</p>
+        </div>
+        <button class="modal-close-x" onclick="portalApp.closeModal('manageModulePermissionsModal')" title="Close" aria-label="Close modal">&times;</button>
+      </div>
+      <form id="manageModulePermissionsForm" onsubmit="portalApp.saveModulePermissionsFromModal(event)">
+        <input type="hidden" id="mmpmModuleKey">
+        <div class="modal-body" style="padding:1.4rem;">
+          
+          <!-- Role Selector inside Modal -->
+          <div class="row g-3 mb-4">
+            <div class="col-md-6">
+              <label class="form-label text-xs font-bold text-muted">Configuring Permissions For Role:</label>
+              <select class="form-select" id="mmpmRoleSelect" onchange="portalApp.loadRolePermissionsIntoModal()">
+                <option value="principal">Executive Principal (Super Admin)</option>
+                <option value="vice-principal">Vice Principal (Academic &amp; Operations)</option>
+                <option value="teacher">Teaching Faculty (Class &amp; Subject Faculty)</option>
+                <option value="bursar">Head Bursar / Accounts Clerk</option>
+                <option value="clerk">Front Office / Administrative Clerk</option>
+                <option value="counselor">Student Counselor &amp; Pastoral Lead</option>
+              </select>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label text-xs font-bold text-muted">Delegated Approval Authority:</label>
+              <input type="text" class="form-control" id="mmpmDelegatedApprover" placeholder="e.g. Smt. Gorle Varalakshmi (Principal)">
+            </div>
+          </div>
+
+          <!-- The 9 Universal Permissions Toggles -->
+          <h6 class="font-bold mb-2 text-primary" style="font-size:0.9rem;">
+            <i class="fa-solid fa-list-check mr-1"></i> The 9 Universal Permissions (Independent Support)
+          </h6>
+          <p class="text-muted text-xs mb-3">Enable or disable each permission independently for this module and role combination:</p>
+          
+          <div class="row g-2 mb-4" id="mmpmPermissionsGrid">
+            <!-- 9 Toggles populated dynamically -->
+          </div>
+
+          <!-- Record Scope Configuration -->
+          <div class="p-3 bg-light rounded-3 border mb-3">
+            <h6 class="font-bold mb-1" style="font-size:0.88rem; color:#0f172a;">
+              <i class="fa-solid fa-arrows-to-eye text-primary mr-1"></i> Record Scope Limitation
+            </h6>
+            <p class="text-muted text-xs mb-3">Specify how broadly or narrowly this role can access records within this module:</p>
+            
+            <div class="row g-2">
+              <div class="col-md-6">
+                <div class="form-check p-2 bg-white rounded border">
+                  <input class="form-check-input ms-0 me-2" type="radio" name="mmpmRecordScope" id="scopeRadioAll" value="ALL">
+                  <label class="form-check-label text-xs font-bold" for="scopeRadioAll">
+                    Campus-Wide (All Records)
+                    <span class="d-block text-muted font-normal text-xxs">Unrestricted access across all classes, departments, and personnel</span>
+                  </label>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-check p-2 bg-white rounded border">
+                  <input class="form-check-input ms-0 me-2" type="radio" name="mmpmRecordScope" id="scopeRadioClasses" value="ASSIGNED_CLASSES">
+                  <label class="form-check-label text-xs font-bold" for="scopeRadioClasses">
+                    Assigned Classes Only
+                    <span class="d-block text-muted font-normal text-xxs">Restricted to teacher's assigned classes &amp; sections (e.g. 8A, 9B, 7C, 10A)</span>
+                  </label>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-check p-2 bg-white rounded border">
+                  <input class="form-check-input ms-0 me-2" type="radio" name="mmpmRecordScope" id="scopeRadioDept" value="ASSIGNED_DEPARTMENT">
+                  <label class="form-check-label text-xs font-bold" for="scopeRadioDept">
+                    Assigned Department Only
+                    <span class="d-block text-muted font-normal text-xxs">Restricted to operational unit (e.g. Accounts Counter, Transport Fleet)</span>
+                  </label>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-check p-2 bg-white rounded border">
+                  <input class="form-check-input ms-0 me-2" type="radio" name="mmpmRecordScope" id="scopeRadioStudents" value="ASSIGNED_STUDENTS">
+                  <label class="form-check-label text-xs font-bold" for="scopeRadioStudents">
+                    Assigned Students Only
+                    <span class="d-block text-muted font-normal text-xxs">Restricted to designated student caseload or pastoral care docket</span>
+                  </label>
+                </div>
+              </div>
+              <div class="col-12">
+                <div class="form-check p-2 bg-white rounded border">
+                  <input class="form-check-input ms-0 me-2" type="radio" name="mmpmRecordScope" id="scopeRadioOwn" value="OWN_RECORDS">
+                  <label class="form-check-label text-xs font-bold" for="scopeRadioOwn">
+                    Own Records Only
+                    <span class="d-block text-muted font-normal text-xxs">Strictly limited to records created by or belonging to the logged-in user</span>
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Segregation of Duties / Anti-Self-Approval -->
+          <div class="p-3 rounded-3 border" style="background:#fff1f2; border-color:#fecdd3 !important;">
+            <div class="form-check form-switch mb-1">
+              <input class="form-check-input" type="checkbox" id="mmpmAntiSelfApprovalCheck" style="cursor:pointer;">
+              <label class="form-check-label font-bold text-xs" for="mmpmAntiSelfApprovalCheck" style="color:#9f1239;">
+                <i class="fa-solid fa-handshake-slash mr-1"></i> Enforce Segregation of Duties (Anti-Self-Approval)
+              </label>
+            </div>
+            <p class="text-xs mb-0" style="color:#be123c;">
+              Statutory guardrail: Users cannot approve, reject, or reverse transactions they initiated or recorded. (e.g. An accounts employee may record payments but cannot approve their own refunds).
+            </p>
+          </div>
+
+        </div>
+        <div class="modal-footer" style="padding:1rem 1.4rem; border-top:1px solid #e2e8f0; display:flex; justify-content:flex-end; gap:10px;">
+          <button type="button" class="btn btn-secondary" onclick="portalApp.closeModal('manageModulePermissionsModal')">Cancel</button>
+          <button type="submit" class="btn btn-primary" style="font-weight:700;">
+            <i class="fa-solid fa-floppy-disk mr-1"></i> Save Permissions &amp; Scope
           </button>
         </div>
       </form>

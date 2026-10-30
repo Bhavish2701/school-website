@@ -17508,3 +17508,227 @@ input:disabled + .perm-slider {
   color: #991b1b;
   border-color: #fca5a5;
 }
+
+
+/* ==========================================================================
+   UNIVERSAL PERMISSIONS & RECORD SCOPE SYSTEM
+   Supports 9 Universal Permissions & 5 Granular Record Scopes
+   ========================================================================== */
+
+.univ-perm-badge-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  max-width: 440px;
+}
+
+.univ-perm-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 7px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  border-radius: 6px;
+  white-space: nowrap;
+  user-select: none;
+  line-height: 1.25;
+}
+
+.univ-perm-badge.badge-granted {
+  background: #ecfdf5;
+  color: #065f46;
+  border: 1px solid #a7f3d0;
+}
+
+.univ-perm-badge.badge-granted i {
+  color: #059669;
+}
+
+.univ-perm-badge.badge-denied {
+  background: #f8fafc;
+  color: #94a3b8;
+  border: 1px solid #e2e8f0;
+  text-decoration: line-through;
+  opacity: 0.75;
+}
+
+.univ-perm-badge.badge-denied i {
+  color: #cbd5e1;
+}
+
+.univ-perm-badge.badge-restricted {
+  background: #fffbeb;
+  color: #92400e;
+  border: 1px solid #fde68a;
+}
+
+.univ-perm-badge.badge-restricted i {
+  color: #d97706;
+}
+
+.univ-perm-badge.badge-sensitive-granted {
+  background: #fdf2f8;
+  color: #9d174d;
+  border: 1px solid #fbcfe8;
+  font-weight: 700;
+}
+
+.univ-perm-badge.badge-sensitive-granted i {
+  color: #db2777;
+}
+
+.univ-perm-badge.badge-manage-granted {
+  background: #eef2ff;
+  color: #3730a3;
+  border: 1px solid #c7d2fe;
+  font-weight: 700;
+}
+
+.univ-perm-badge.badge-manage-granted i {
+  color: #4f46e5;
+}
+
+/* Record Scope Badges */
+.univ-scope-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 10px;
+  font-size: 0.74rem;
+  font-weight: 700;
+  border-radius: 20px;
+  white-space: nowrap;
+  line-height: 1.3;
+}
+
+.univ-scope-pill.scope-all {
+  background: #f3e8ff;
+  color: #6b21a8;
+  border: 1px solid #d8b4fe;
+}
+
+.univ-scope-pill.scope-classes {
+  background: #eff6ff;
+  color: #1d4ed8;
+  border: 1px solid #bfdbfe;
+}
+
+.univ-scope-pill.scope-dept {
+  background: #f0fdfa;
+  color: #0f766e;
+  border: 1px solid #99f6e4;
+}
+
+.univ-scope-pill.scope-students {
+  background: #f0f9ff;
+  color: #0369a1;
+  border: 1px solid #bae6fd;
+}
+
+.univ-scope-pill.scope-own {
+  background: #fffbeb;
+  color: #b45309;
+  border: 1px solid #fde68a;
+}
+
+/* Segregation of Duties / Anti-Self-Approval Pill */
+.univ-segregation-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 9px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  border-radius: 6px;
+  background: #fff1f2;
+  color: #be123c;
+  border: 1px solid #fecdd3;
+  line-height: 1.25;
+}
+
+.univ-segregation-pill.segregation-active {
+  background: #fff1f2;
+  color: #9f1239;
+  border: 1px solid #fda4af;
+}
+
+.univ-segregation-pill.segregation-standard {
+  background: #f8fafc;
+  color: #475569;
+  border: 1px solid #e2e8f0;
+}
+
+/* Simulator Styles */
+.perm-simulator-card {
+  background: #ffffff;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+}
+
+.perm-sim-tile {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  transition: all 0.2s ease;
+}
+
+.perm-sim-tile.sim-granted {
+  background: #f0fdf4;
+  border-color: #bbf7d0;
+  border-left: 4px solid #10b981;
+}
+
+.perm-sim-tile.sim-denied {
+  background: #fff1f2;
+  border-color: #fecdd3;
+  border-left: 4px solid #f43f5e;
+}
+
+.perm-sim-tile-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: 700;
+  font-size: 0.82rem;
+}
+
+.perm-sim-tile-desc {
+  font-size: 0.72rem;
+  color: #64748b;
+  line-height: 1.3;
+}
+
+/* Manage Modal Grid */
+.perm-matrix-modal-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 12px;
+}
+
+.perm-toggle-card {
+  background: #f8fafc;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 10px 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.perm-toggle-card:hover {
+  border-color: #cbd5e1;
+  background: #f1f5f9;
+}
+
+.perm-toggle-card.active {
+  background: #eff6ff;
+  border-color: #93c5fd;
+}
