@@ -3738,43 +3738,126 @@
                SUBVIEW 3: ADMISSIONS (EXECUTIVE MANAGEMENT)
                Display: Application ID, Applicant, Class, Previous School, Parent & Contact, Entrance Score, Document Screening, Admission Decision, and Actions
                ================================================================= -->
+<!-- =================================================================
+               SUBVIEW 3: ADMISSIONS (AUTHORITATIVE LIFECYCLE MANAGEMENT)
+               Compliant with AP Education Code Statutory Intake & Enrolment
+               ================================================================= -->
           <div class="student-subview" id="subview-students-admissions" style="display:none;">
-            <!-- Admissions Overview KPI Cards -->
-            <div class="admissions-overview-bar">
+            
+            <!-- Breadcrumb Navigation -->
+            <div class="breadcrumb-bar" style="margin-bottom: 1rem; font-size: 0.85rem; color: var(--color-text-muted);">
+              <span style="cursor: pointer;" onclick="portalApp.switchSubTab('students', 'profiles');">Students</span>
+              <i class="fa-solid fa-chevron-right" style="font-size: 0.7rem; margin: 0 0.5rem; color: #94a3b8;"></i>
+              <strong style="color: var(--color-text-dark);">Admissions</strong>
+            </div>
+
+            <!-- Page Header -->
+            <div class="portal-page-header" style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1.25rem; flex-wrap: wrap; gap: 1rem;">
+              <div>
+                <h1 style="margin: 0; font-size: 1.6rem; font-weight: 800; color: #0f172a; display: flex; align-items: center; gap: 0.6rem;">
+                  <i class="fa-solid fa-user-plus text-primary"></i> Admissions
+                </h1>
+                <p style="margin: 4px 0 0; color: #64748b; font-size: 0.9rem;">
+                  Manage admission enquiries through to confirmed enrolment across statutory lifecycle stages.
+                </p>
+              </div>
+              <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                <button type="button" class="btn btn-primary" onclick="portalApp.openNewAdmissionModal()" id="btnNewAdmissionPrimary" title="Create new admission application (Online / Offline)">
+                  <i class="fa-solid fa-plus mr-1"></i> + New Admission
+                </button>
+                <button type="button" class="btn btn-secondary" onclick="portalApp.openAddEnquiryModal()" id="btnAddEnquirySecondary" title="Log prospective student enquiry">
+                  <i class="fa-solid fa-phone-volume mr-1"></i> Add Enquiry
+                </button>
+                <button type="button" class="btn btn-secondary" onclick="portalApp.openImportAdmissionsModal()" title="Import applications docket">
+                  <i class="fa-solid fa-file-import mr-1"></i> Import Applications
+                </button>
+                <button type="button" class="btn btn-secondary" onclick="portalApp.exportAdmissionsCSV()" title="Export CSV Register">
+                  <i class="fa-solid fa-file-csv mr-1"></i> Export Register
+                </button>
+              </div>
+            </div>
+
+            <!-- Summary Cards (6 KPIs) -->
+            <div class="admissions-overview-bar" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 1rem; margin-bottom: 1.25rem;">
               <div class="adm-stat-card card-blue">
-                <div class="adm-stat-icon icon-blue"><i class="fa-solid fa-user-clock"></i></div>
+                <div class="adm-stat-icon icon-blue"><i class="fa-solid fa-comments"></i></div>
                 <div class="adm-stat-info">
-                  <div class="adm-count" id="admQueueStatCount">8</div>
-                  <div class="adm-label">Pending / Intake Queue</div>
-                </div>
-              </div>
-              <div class="adm-stat-card card-green">
-                <div class="adm-stat-icon icon-green"><i class="fa-solid fa-award"></i></div>
-                <div class="adm-stat-info">
-                  <div class="adm-count" id="admKpiEntranceCleared">5</div>
-                  <div class="adm-label">Entrance Exam Cleared</div>
-                </div>
-              </div>
-              <div class="adm-stat-card card-amber">
-                <div class="adm-stat-icon icon-amber"><i class="fa-solid fa-file-circle-check"></i></div>
-                <div class="adm-stat-info">
-                  <div class="adm-count" id="admKpiDocsScreened">4</div>
-                  <div class="adm-label">Documents Screened</div>
+                  <div class="adm-count" id="kpiAdmEnquiries">0</div>
+                  <div class="adm-label">New Enquiries</div>
                 </div>
               </div>
               <div class="adm-stat-card card-purple">
-                <div class="adm-stat-icon icon-purple"><i class="fa-solid fa-graduation-cap"></i></div>
+                <div class="adm-stat-icon icon-purple"><i class="fa-solid fa-file-signature"></i></div>
                 <div class="adm-stat-info">
-                  <div class="adm-count" id="admKpiEnrolledConfirmed">3</div>
-                  <div class="adm-label">Enrolment Confirmed</div>
+                  <div class="adm-count" id="kpiAdmApplications">0</div>
+                  <div class="adm-label">Applications Received</div>
+                </div>
+              </div>
+              <div class="adm-stat-card card-amber">
+                <div class="adm-stat-icon icon-amber"><i class="fa-solid fa-file-circle-exclamation"></i></div>
+                <div class="adm-stat-info">
+                  <div class="adm-count" id="kpiAdmDocsPending">0</div>
+                  <div class="adm-label">Documents Pending</div>
+                </div>
+              </div>
+              <div class="adm-stat-card card-blue">
+                <div class="adm-stat-icon icon-blue"><i class="fa-solid fa-user-clock"></i></div>
+                <div class="adm-stat-info">
+                  <div class="adm-count" id="kpiAdmUnderReview">0</div>
+                  <div class="adm-label">Under Review</div>
+                </div>
+              </div>
+              <div class="adm-stat-card card-amber" style="border-left: 3px solid #8b5cf6;">
+                <div class="adm-stat-icon" style="background:#f5f3ff; color:#7c3aed; border:1px solid #ddd6fe;"><i class="fa-solid fa-envelope-open-text"></i></div>
+                <div class="adm-stat-info">
+                  <div class="adm-count" style="color:#6d28d9;" id="kpiAdmOffers">0</div>
+                  <div class="adm-label">Offers Issued</div>
+                </div>
+              </div>
+              <div class="adm-stat-card card-green">
+                <div class="adm-stat-icon icon-green"><i class="fa-solid fa-graduation-cap"></i></div>
+                <div class="adm-stat-info">
+                  <div class="adm-count text-emerald" id="kpiAdmConfirmed">0</div>
+                  <div class="adm-label">Confirmed Admissions</div>
                 </div>
               </div>
             </div>
 
-            <!-- Admissions Executive Toolbar & Filters -->
+            <!-- 8 Lifecycle Stage Tabs -->
+            <div class="admissions-tab-strip" id="admissionsTabStrip">
+              <button type="button" class="admissions-tab-btn active" data-tab="all" onclick="portalApp.switchAdmissionsTab('all')">
+                <i class="fa-solid fa-layer-group"></i> All Records <span class="tab-badge" id="tabBadgeAll">0</span>
+              </button>
+              <button type="button" class="admissions-tab-btn" data-tab="enquiries" onclick="portalApp.switchAdmissionsTab('enquiries')">
+                <i class="fa-solid fa-comments"></i> Enquiries <span class="tab-badge" id="tabBadgeEnquiries">0</span>
+              </button>
+              <button type="button" class="admissions-tab-btn" data-tab="applications" onclick="portalApp.switchAdmissionsTab('applications')">
+                <i class="fa-solid fa-file-signature"></i> Applications <span class="tab-badge" id="tabBadgeApplications">0</span>
+              </button>
+              <button type="button" class="admissions-tab-btn" data-tab="doc_verification" onclick="portalApp.switchAdmissionsTab('doc_verification')">
+                <i class="fa-solid fa-file-circle-check"></i> Document Verification <span class="tab-badge" id="tabBadgeDocs">0</span>
+              </button>
+              <button type="button" class="admissions-tab-btn" data-tab="eligibility" onclick="portalApp.switchAdmissionsTab('eligibility')">
+                <i class="fa-solid fa-user-check"></i> Eligibility Review <span class="tab-badge" id="tabBadgeEligibility">0</span>
+              </button>
+              <button type="button" class="admissions-tab-btn" data-tab="offers" onclick="portalApp.switchAdmissionsTab('offers')">
+                <i class="fa-solid fa-envelope-open-text"></i> Offers <span class="tab-badge" id="tabBadgeOffers">0</span>
+              </button>
+              <button type="button" class="admissions-tab-btn" data-tab="accepted" onclick="portalApp.switchAdmissionsTab('accepted')">
+                <i class="fa-solid fa-handshake"></i> Accepted Applications <span class="tab-badge" id="tabBadgeAccepted">0</span>
+              </button>
+              <button type="button" class="admissions-tab-btn" data-tab="enrolment_pending" onclick="portalApp.switchAdmissionsTab('enrolment_pending')">
+                <i class="fa-solid fa-clock-rotate-left"></i> Enrolment Pending <span class="tab-badge" id="tabBadgeEnrolment">0</span>
+              </button>
+              <button type="button" class="admissions-tab-btn" data-tab="rejected" onclick="portalApp.switchAdmissionsTab('rejected')">
+                <i class="fa-solid fa-ban"></i> Rejected / Withdrawn <span class="tab-badge" id="tabBadgeRejected">0</span>
+              </button>
+            </div>
+
+            <!-- Admissions Executive Toolbar & Granular Filters -->
             <div class="admissions-toolbar">
-              <div class="adm-toolbar-left">
-                <div class="adm-search-wrap">
+              <div class="adm-toolbar-left" style="display: flex; gap: 0.5rem; flex-wrap: wrap; align-items: center;">
+                <div class="adm-search-wrap" style="min-width: 250px;">
                   <i class="fa-solid fa-magnifying-glass search-icon"></i>
                   <input type="text" id="admSearchInput" class="adm-search-input"
                     placeholder="Search by App ID, student, parent, phone, school..."
@@ -3786,85 +3869,93 @@
                   </button>
                 </div>
 
-                <select id="admClassFilter" class="adm-filter-select" onchange="portalApp.filterAdmissions()"
-                  title="Filter by Class Applied">
-                  <option value="">All Classes</option>
+                <select id="admClassFilter" class="adm-filter-select" onchange="portalApp.filterAdmissions()" title="Filter by Class Applied">
+                  <option value="">All Classes (Nursery to X)</option>
                   <option value="Nursery">Nursery</option>
                   <option value="LKG">Class LKG</option>
                   <option value="UKG">Class UKG</option>
-                  <option value="1">Class 1st</option>
-                  <option value="2">Class 2nd</option>
-                  <option value="3">Class 3rd</option>
-                  <option value="4">Class 4th</option>
-                  <option value="5">Class 5th</option>
-                  <option value="6">Class 6th</option>
-                  <option value="7">Class 7th</option>
-                  <option value="8">Class 8th / VIII</option>
-                  <option value="9">Class 9th / IX</option>
-                  <option value="10">Class 10th / X</option>
+                  <option value="I">Class I</option>
+                  <option value="II">Class II</option>
+                  <option value="III">Class III</option>
+                  <option value="IV">Class IV</option>
+                  <option value="V">Class V</option>
+                  <option value="VI">Class VI</option>
+                  <option value="VII">Class VII</option>
+                  <option value="VIII">Class VIII</option>
+                  <option value="IX">Class IX</option>
+                  <option value="X">Class X</option>
                 </select>
 
-                <select id="admStatusFilter" class="adm-filter-select" onchange="portalApp.filterAdmissions()"
-                  title="Filter by Decision Status">
-                  <option value="">All Decision Statuses</option>
-                  <option value="approved">Approved & Enrolled</option>
-                  <option value="pending">Under Review / Pending</option>
-                  <option value="interview">Pending Interview</option>
+                <select id="admStatusFilter" class="adm-filter-select" onchange="portalApp.filterAdmissions()" title="Filter by Status">
+                  <option value="">All Lifecycle Statuses</option>
+                  <option value="New Enquiry">New Enquiry</option>
+                  <option value="Submitted">Submitted / Received</option>
+                  <option value="Documents Pending">Documents Pending</option>
+                  <option value="Under Review">Under Review</option>
+                  <option value="Eligibility Review">Eligibility Review</option>
+                  <option value="Offer Issued">Offer Issued</option>
+                  <option value="Offer Accepted">Offer Accepted</option>
+                  <option value="Enrolment Pending">Enrolment Pending</option>
+                  <option value="Confirmed Admission">Confirmed Admission</option>
+                  <option value="Rejected">Rejected</option>
+                  <option value="Withdrawn">Withdrawn</option>
                 </select>
 
-                <select id="admDocFilter" class="adm-filter-select" onchange="portalApp.filterAdmissions()"
-                  title="Filter by Document Screening">
+                <select id="admDocFilter" class="adm-filter-select" onchange="portalApp.filterAdmissions()" title="Filter by Document Screening">
                   <option value="">All Document States</option>
-                  <option value="verified">Verified & Approved</option>
-                  <option value="pending">Screening Pending</option>
+                  <option value="Complete">Complete (All Verified)</option>
+                  <option value="Pending Verification">Pending Verification</option>
+                  <option value="Deficient">Deficient / Action Required</option>
+                  <option value="Exempt">Exempt / Not Applicable</option>
+                </select>
+
+                <select id="admSourceFilter" class="adm-filter-select" onchange="portalApp.filterAdmissions()" title="Filter by Submission Channel">
+                  <option value="">All Channels (Online &amp; Walk-In)</option>
+                  <option value="Online Application">Online Portal Form</option>
+                  <option value="Offline Walk-In">Offline Walk-In (Reception Desk)</option>
                 </select>
               </div>
 
-              <div class="adm-toolbar-right">
+              <div class="adm-toolbar-right" style="display: flex; gap: 0.5rem; align-items: center;">
                 <span class="adm-count-pill" id="admFilterCountDisplay">
-                  <i class="fa-solid fa-list-check text-primary"></i> Showing <strong id="admFilteredCount">8</strong>
-                  of <strong id="admTotalCount">8</strong>
+                  <i class="fa-solid fa-list-check text-primary"></i> Showing <strong id="admFilteredCount">0</strong>
+                  of <strong id="admTotalCount">0</strong>
                 </span>
                 <button type="button" class="btn btn-outline-secondary btn-sm"
                   onclick="portalApp.resetAdmissionsFilters()" title="Reset all filters">
                   <i class="fa-solid fa-rotate-left"></i> Reset
                 </button>
-                <button type="button" class="btn btn-outline-primary btn-sm" onclick="portalApp.exportAdmissionsCSV()"
-                  title="Export current admissions to CSV">
-                  <i class="fa-solid fa-file-csv"></i> Export CSV
-                </button>
                 <button type="button" class="btn btn-outline-primary btn-sm" onclick="portalApp.printAdmissionsTable()"
-                  title="Print admissions queue">
+                  title="Print admissions docket">
                   <i class="fa-solid fa-print"></i> Print
                 </button>
               </div>
             </div>
 
-            <!-- Admissions Master Table -->
+            <!-- Admissions Master Table (9 Columns) -->
             <div class="admissions-wrap" id="admissionsTableContainer">
               <div class="admissions-table-scroll">
                 <table class="admissions-table" id="admissionsTable">
                   <thead>
                     <tr>
-                      <th class="th-app-id"><i class="fa-solid fa-hashtag"></i> Application ID</th>
-                      <th class="th-applicant"><i class="fa-solid fa-user-graduate"></i> Applicant</th>
-                      <th class="th-class"><i class="fa-solid fa-school"></i> Class Applied</th>
-                      <th class="th-school"><i class="fa-solid fa-building-columns"></i> Previous School</th>
-                      <th class="th-contact"><i class="fa-solid fa-users"></i> Parent & Contact</th>
-                      <th class="th-score"><i class="fa-solid fa-chart-line"></i> Entrance / Score</th>
-                      <th class="th-doc-status"><i class="fa-solid fa-file-circle-check"></i> Document Status</th>
-                      <th class="th-decision"><i class="fa-solid fa-circle-check"></i> Admission Decision & Class</th>
-                      <th class="th-actions" style="text-align: center;"><i class="fa-solid fa-sliders"></i> Actions
-                      </th>
+                      <th class="th-app-id" style="min-width: 130px;"><i class="fa-solid fa-hashtag"></i> Application ID</th>
+                      <th class="th-applicant" style="min-width: 190px;"><i class="fa-solid fa-user-graduate"></i> Applicant Name</th>
+                      <th class="th-class" style="min-width: 110px;"><i class="fa-solid fa-school"></i> Class Applied</th>
+                      <th class="th-contact" style="min-width: 170px;"><i class="fa-solid fa-users"></i> Parent / Guardian</th>
+                      <th class="th-timestamp" style="min-width: 140px;"><i class="fa-regular fa-calendar-days"></i> Submission Date</th>
+                      <th class="th-doc-status text-center" style="min-width: 140px;"><i class="fa-solid fa-file-circle-check"></i> Documents Status</th>
+                      <th class="th-decision text-center" style="min-width: 150px;"><i class="fa-solid fa-circle-check"></i> Application Status</th>
+                      <th class="th-officer" style="min-width: 150px;"><i class="fa-solid fa-user-tie"></i> Assigned Staff</th>
+                      <th class="th-actions text-end" style="min-width: 160px;"><i class="fa-solid fa-sliders"></i> Next Action</th>
                     </tr>
                   </thead>
                   <tbody id="admissionsTableBody">
-                    <!-- Rendered via portal.js -->
+                    <!-- Rendered via portalApp.renderAdmissionsQueue -->
                   </tbody>
                 </table>
               </div>
               <!-- Pagination Controls -->
-              <div class="admissions-pagination-bar" id="admissionsPagination"></div>
+              <div class="admissions-pagination-bar" id="admissionsPagination" style="margin-top: 1rem;"></div>
             </div>
           </div>
 
@@ -20419,6 +20510,706 @@ Class X-A,Monday,2,09:35 AM - 10:20 AM,Physical Science,Sri Navva Anand,Room 201
   </div>
 
 
+<!-- =========================================================================
+       MODAL: NEW ADMISSION INTAKE APPLICATION (ONLINE & OFFLINE)
+       ========================================================================= -->
+  <div class="modal-backdrop" id="newAdmissionModal" style="display:none;">
+    <div class="portal-modal" style="max-width: 820px; width: 95%;">
+      <div class="modal-header">
+        <div style="display: flex; align-items: center; gap: 0.75rem;">
+          <div style="width: 42px; height: 42px; border-radius: 8px; background: #eff6ff; color: #1d4ed8; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; border: 1px solid #bfdbfe;">
+            <i class="fa-solid fa-user-plus"></i>
+          </div>
+          <div>
+            <h3 style="margin: 0; font-size: 1.15rem; font-weight: 800; color: #0f172a;">New Admission Application</h3>
+            <p style="margin: 2px 0 0; font-size: 0.8rem; color: #64748b;">Unified intake supporting Online Web Form Submissions and Front-Desk Walk-Ins</p>
+          </div>
+        </div>
+        <button type="button" class="modal-close-x" onclick="portalApp.closeModal('newAdmissionModal')" title="Close">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <form id="newAdmissionForm" onsubmit="portalApp.submitNewAdmission(event)">
+        <div class="modal-body" style="padding: 1.25rem; max-height: calc(85vh - 140px); overflow-y: auto; display: flex; flex-direction: column; gap: 1rem;">
+          
+          <!-- Channel & Application Meta -->
+          <div style="background: #f1f5f9; padding: 0.85rem; border-radius: 8px; border: 1px solid #cbd5e1; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.75rem;">
+            <div style="display: flex; align-items: center; gap: 0.75rem;">
+              <label style="font-weight: 700; font-size: 0.82rem; color: #1e293b; margin: 0;">Intake Channel *</label>
+              <select id="admIntakeChannel" class="form-control" style="padding: 0.35rem 0.65rem; border-radius: 6px; font-size: 0.82rem; font-weight: 600;">
+                <option value="Offline Walk-In" selected>Offline Walk-In (School Reception Entry)</option>
+                <option value="Online Application">Online Portal Form (Parent Web Intake)</option>
+              </select>
+            </div>
+            <div style="font-size: 0.8rem; color: #64748b;">
+              Academic Year: <strong style="color: #0f172a;">2025-2026</strong>
+            </div>
+          </div>
+
+          <!-- Section 1: Applicant Profile -->
+          <div style="border: 1px solid #e2e8f0; border-radius: 8px; padding: 1rem;">
+            <div style="font-size: 0.82rem; font-weight: 800; color: #1e40af; text-transform: uppercase; margin-bottom: 0.75rem; display: flex; align-items: center; gap: 6px;">
+              <i class="fa-solid fa-user"></i> Section 1: Applicant Legal Profile
+            </div>
+            <div class="form-row" style="display: flex; gap: 1rem; margin-bottom: 0.75rem;">
+              <div class="form-group" style="flex: 2;">
+                <label style="font-weight: 700; font-size: 0.8rem; color: #1e293b; margin-bottom: 3px; display: block;">Full Legal Name *</label>
+                <input type="text" id="admFullName" class="form-control" placeholder="Student's legal name as per birth proof" required style="width:100%; padding:0.45rem 0.65rem; border:1px solid #cbd5e1; border-radius:6px; font-size:0.85rem;">
+              </div>
+              <div class="form-group" style="flex: 1;">
+                <label style="font-weight: 700; font-size: 0.8rem; color: #1e293b; margin-bottom: 3px; display: block;">Date of Birth *</label>
+                <input type="date" id="admDob" class="form-control" required style="width:100%; padding:0.45rem 0.65rem; border:1px solid #cbd5e1; border-radius:6px; font-size:0.85rem;">
+              </div>
+              <div class="form-group" style="flex: 1;">
+                <label style="font-weight: 700; font-size: 0.8rem; color: #1e293b; margin-bottom: 3px; display: block;">Gender *</label>
+                <select id="admGender" class="form-control" required style="width:100%; padding:0.45rem 0.65rem; border:1px solid #cbd5e1; border-radius:6px; font-size:0.85rem;">
+                  <option value="Male">Male</option>
+                  <option value="Female">Female</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-row" style="display: flex; gap: 1rem;">
+              <div class="form-group" style="flex: 1;">
+                <label style="font-weight: 700; font-size: 0.8rem; color: #1e293b; margin-bottom: 3px; display: block;">Blood Group</label>
+                <select id="admBloodGroup" class="form-control" style="width:100%; padding:0.45rem 0.65rem; border:1px solid #cbd5e1; border-radius:6px; font-size:0.85rem;">
+                  <option value="O+">O Positive (O+)</option>
+                  <option value="A+">A Positive (A+)</option>
+                  <option value="B+">B Positive (B+)</option>
+                  <option value="AB+">AB Positive (AB+)</option>
+                  <option value="O-">O Negative (O-)</option>
+                </select>
+              </div>
+              <div class="form-group" style="flex: 1;">
+                <label style="font-weight: 700; font-size: 0.8rem; color: #1e293b; margin-bottom: 3px; display: block;">Mother Tongue</label>
+                <input type="text" id="admMotherTongue" class="form-control" value="Telugu" style="width:100%; padding:0.45rem 0.65rem; border:1px solid #cbd5e1; border-radius:6px; font-size:0.85rem;">
+              </div>
+              <div class="form-group" style="flex: 2;">
+                <label style="font-weight: 700; font-size: 0.8rem; color: #1e293b; margin-bottom: 3px; display: block;">Residential Address *</label>
+                <input type="text" id="admAddress" class="form-control" placeholder="House No, Street, Town/City" required style="width:100%; padding:0.45rem 0.65rem; border:1px solid #cbd5e1; border-radius:6px; font-size:0.85rem;">
+              </div>
+            </div>
+          </div>
+
+          <!-- Section 2: Guardian Information -->
+          <div style="border: 1px solid #e2e8f0; border-radius: 8px; padding: 1rem;">
+            <div style="font-size: 0.82rem; font-weight: 800; color: #1e40af; text-transform: uppercase; margin-bottom: 0.75rem; display: flex; align-items: center; gap: 6px;">
+              <i class="fa-solid fa-users"></i> Section 2: Parent / Guardian Information
+            </div>
+            <div class="form-row" style="display: flex; gap: 1rem; margin-bottom: 0.75rem;">
+              <div class="form-group" style="flex: 1.5;">
+                <label style="font-weight: 700; font-size: 0.8rem; color: #1e293b; margin-bottom: 3px; display: block;">Primary Guardian Name *</label>
+                <input type="text" id="admGuardianName" class="form-control" placeholder="Parent or legal guardian name" required style="width:100%; padding:0.45rem 0.65rem; border:1px solid #cbd5e1; border-radius:6px; font-size:0.85rem;">
+              </div>
+              <div class="form-group" style="flex: 1;">
+                <label style="font-weight: 700; font-size: 0.8rem; color: #1e293b; margin-bottom: 3px; display: block;">Relationship *</label>
+                <select id="admGuardianRel" class="form-control" style="width:100%; padding:0.45rem 0.65rem; border:1px solid #cbd5e1; border-radius:6px; font-size:0.85rem;">
+                  <option value="Father">Father</option>
+                  <option value="Mother">Mother</option>
+                  <option value="Legal Guardian">Legal Guardian</option>
+                </select>
+              </div>
+              <div class="form-group" style="flex: 1.2;">
+                <label style="font-weight: 700; font-size: 0.8rem; color: #1e293b; margin-bottom: 3px; display: block;">Authorized Contact Phone *</label>
+                <input type="tel" id="admGuardianPhone" class="form-control" placeholder="10-digit mobile number" required pattern="[0-9]{10}" style="width:100%; padding:0.45rem 0.65rem; border:1px solid #cbd5e1; border-radius:6px; font-size:0.85rem;">
+              </div>
+            </div>
+            <div class="form-row" style="display: flex; gap: 1rem;">
+              <div class="form-group" style="flex: 1.5;">
+                <label style="font-weight: 700; font-size: 0.8rem; color: #1e293b; margin-bottom: 3px; display: block;">Guardian Email</label>
+                <input type="email" id="admGuardianEmail" class="form-control" placeholder="guardian@example.com" style="width:100%; padding:0.45rem 0.65rem; border:1px solid #cbd5e1; border-radius:6px; font-size:0.85rem;">
+              </div>
+              <div class="form-group" style="flex: 1.5;">
+                <label style="font-weight: 700; font-size: 0.8rem; color: #1e293b; margin-bottom: 3px; display: block;">Occupation / Employer</label>
+                <input type="text" id="admGuardianOccupation" class="form-control" placeholder="e.g. Govt Employee, Agriculture, Business" style="width:100%; padding:0.45rem 0.65rem; border:1px solid #cbd5e1; border-radius:6px; font-size:0.85rem;">
+              </div>
+            </div>
+          </div>
+
+          <!-- Section 3: Class & Enrolment Preference -->
+          <div style="border: 1px solid #e2e8f0; border-radius: 8px; padding: 1rem;">
+            <div style="font-size: 0.82rem; font-weight: 800; color: #1e40af; text-transform: uppercase; margin-bottom: 0.75rem; display: flex; align-items: center; gap: 6px;">
+              <i class="fa-solid fa-graduation-cap"></i> Section 3: Class Preference &amp; Concessions
+            </div>
+            <div class="form-row" style="display: flex; gap: 1rem;">
+              <div class="form-group" style="flex: 1;">
+                <label style="font-weight: 700; font-size: 0.8rem; color: #1e293b; margin-bottom: 3px; display: block;">Class Applied For *</label>
+                <select id="admClassApplied" class="form-control" required style="width:100%; padding:0.45rem 0.65rem; border:1px solid #cbd5e1; border-radius:6px; font-size:0.85rem; font-weight:700;">
+                  <option value="Nursery">Nursery</option>
+                  <option value="LKG">LKG</option>
+                  <option value="UKG">UKG</option>
+                  <option value="I">Class I</option>
+                  <option value="II">Class II</option>
+                  <option value="III">Class III</option>
+                  <option value="IV">Class IV</option>
+                  <option value="V">Class V</option>
+                  <option value="VI">Class VI</option>
+                  <option value="VII">Class VII</option>
+                  <option value="VIII">Class VIII</option>
+                  <option value="IX" selected>Class IX</option>
+                  <option value="X">Class X</option>
+                </select>
+              </div>
+              <div class="form-group" style="flex: 1;">
+                <label style="font-weight: 700; font-size: 0.8rem; color: #1e293b; margin-bottom: 3px; display: block;">Admission Category *</label>
+                <select id="admCategory" class="form-control" style="width:100%; padding:0.45rem 0.65rem; border:1px solid #cbd5e1; border-radius:6px; font-size:0.85rem;">
+                  <option value="General Merit" selected>General Merit</option>
+                  <option value="RTE Quota">RTE 25% Quota (Free Compulsory Education)</option>
+                  <option value="Sibling Concession">Sibling Concession</option>
+                  <option value="Staff Ward">Staff Ward Benefit</option>
+                </select>
+              </div>
+              <div class="form-group" style="flex: 1;">
+                <label style="font-weight: 700; font-size: 0.8rem; color: #1e293b; margin-bottom: 3px; display: block;">Transport Requirement</label>
+                <select id="admTransport" class="form-control" style="width:100%; padding:0.45rem 0.65rem; border:1px solid #cbd5e1; border-radius:6px; font-size:0.85rem;">
+                  <option value="Self Commute">Self Commute (No Bus)</option>
+                  <option value="Route 1">Route 1 (Old Bus Stand - High School)</option>
+                  <option value="Route 2">Route 2 (Collectorate - Day &amp; Night Jn)</option>
+                  <option value="Route 3">Route 3 (RIMS - GT Road)</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <!-- Section 4: Previous Education -->
+          <div style="border: 1px solid #e2e8f0; border-radius: 8px; padding: 1rem;">
+            <div style="font-size: 0.82rem; font-weight: 800; color: #1e40af; text-transform: uppercase; margin-bottom: 0.75rem; display: flex; align-items: center; gap: 6px;">
+              <i class="fa-solid fa-building-columns"></i> Section 4: Previous Schooling &amp; TC Details
+            </div>
+            <div class="form-row" style="display: flex; gap: 1rem;">
+              <div class="form-group" style="flex: 2;">
+                <label style="font-weight: 700; font-size: 0.8rem; color: #1e293b; margin-bottom: 3px; display: block;">Previous School Name</label>
+                <input type="text" id="admPrevSchool" class="form-control" placeholder="Institution previously attended or 'Fresh Admission'" style="width:100%; padding:0.45rem 0.65rem; border:1px solid #cbd5e1; border-radius:6px; font-size:0.85rem;">
+              </div>
+              <div class="form-group" style="flex: 1;">
+                <label style="font-weight: 700; font-size: 0.8rem; color: #1e293b; margin-bottom: 3px; display: block;">Last Class Passed</label>
+                <input type="text" id="admLastClass" class="form-control" placeholder="e.g. Class VIII" style="width:100%; padding:0.45rem 0.65rem; border:1px solid #cbd5e1; border-radius:6px; font-size:0.85rem;">
+              </div>
+              <div class="form-group" style="flex: 1;">
+                <label style="font-weight: 700; font-size: 0.8rem; color: #1e293b; margin-bottom: 3px; display: block;">TC Number</label>
+                <input type="text" id="admTcNumber" class="form-control" placeholder="TC Reference No." style="width:100%; padding:0.45rem 0.65rem; border:1px solid #cbd5e1; border-radius:6px; font-size:0.85rem;">
+              </div>
+            </div>
+          </div>
+
+          <!-- Section 5: Documents Submitted -->
+          <div style="border: 1px solid #e2e8f0; border-radius: 8px; padding: 1rem;">
+            <div style="font-size: 0.82rem; font-weight: 800; color: #1e40af; text-transform: uppercase; margin-bottom: 0.75rem; display: flex; align-items: center; gap: 6px;">
+              <i class="fa-solid fa-file-circle-check"></i> Section 5: Statutory Documents Checklist (Received at Intake)
+            </div>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 0.65rem; font-size: 0.84rem;">
+              <label style="display: flex; align-items: center; gap: 7px; cursor: pointer;">
+                <input type="checkbox" id="chkDocBirth" checked> <span>Birth Certificate (Age Proof)</span>
+              </label>
+              <label style="display: flex; align-items: center; gap: 7px; cursor: pointer;">
+                <input type="checkbox" id="chkDocTc" checked> <span>Transfer Certificate (TC)</span>
+              </label>
+              <label style="display: flex; align-items: center; gap: 7px; cursor: pointer;">
+                <input type="checkbox" id="chkDocAadhaar" checked> <span>Child &amp; Parent Aadhaar</span>
+              </label>
+              <label style="display: flex; align-items: center; gap: 7px; cursor: pointer;">
+                <input type="checkbox" id="chkDocMarks" checked> <span>Previous Class Marksheet</span>
+              </label>
+              <label style="display: flex; align-items: center; gap: 7px; cursor: pointer;">
+                <input type="checkbox" id="chkDocPhotos" checked> <span>Passport Photographs (4)</span>
+              </label>
+            </div>
+          </div>
+
+        </div>
+        <div class="modal-footer" style="display:flex; justify-content:space-between; align-items:center; background:#f8fafc; border-top:1px solid #e2e8f0; padding:0.85rem 1.25rem;">
+          <span style="font-size: 0.75rem; color: #64748b;"><i class="fa-solid fa-shield-halved text-primary mr-1"></i> Generates unique Application ID APP-2026-XXXX</span>
+          <div style="display:flex; gap:0.5rem;">
+            <button type="button" class="btn btn-secondary btn-sm" onclick="portalApp.closeModal('newAdmissionModal')">Cancel</button>
+            <button type="submit" class="btn btn-primary btn-sm"><i class="fa-solid fa-check mr-1"></i> Submit Application</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       MODAL: QUICK PROSPECTIVE ENQUIRY
+       ========================================================================= -->
+  <div class="modal-backdrop" id="addEnquiryModal" style="display:none;">
+    <div class="portal-modal" style="max-width: 580px; width: 95%;">
+      <div class="modal-header">
+        <div style="display: flex; align-items: center; gap: 0.75rem;">
+          <div style="width: 42px; height: 42px; border-radius: 8px; background: #eff6ff; color: #1d4ed8; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; border: 1px solid #bfdbfe;">
+            <i class="fa-solid fa-phone-volume"></i>
+          </div>
+          <div>
+            <h3 style="margin: 0; font-size: 1.15rem; font-weight: 800; color: #0f172a;">Log Prospective Enquiry</h3>
+            <p style="margin: 2px 0 0; font-size: 0.8rem; color: #64748b;">Capture prospective student interest from reception desk or phone enquiry</p>
+          </div>
+        </div>
+        <button type="button" class="modal-close-x" onclick="portalApp.closeModal('addEnquiryModal')" title="Close">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <form onsubmit="portalApp.submitAddEnquiry(event)">
+        <div class="modal-body" style="padding: 1.25rem; display: flex; flex-direction: column; gap: 1rem;">
+          
+          <div class="form-row" style="display: flex; gap: 1rem;">
+            <div class="form-group" style="flex: 1.5;">
+              <label style="font-weight: 700; font-size: 0.82rem; color: #1e293b; margin-bottom: 3px; display: block;">Student Name *</label>
+              <input type="text" id="enqStudentName" class="form-control" required placeholder="Prospective child's name" style="width:100%; padding:0.45rem 0.65rem; border:1px solid #cbd5e1; border-radius:6px; font-size:0.85rem;">
+            </div>
+            <div class="form-group" style="flex: 1;">
+              <label style="font-weight: 700; font-size: 0.82rem; color: #1e293b; margin-bottom: 3px; display: block;">Class of Interest *</label>
+              <select id="enqClass" class="form-control" required style="width:100%; padding:0.45rem 0.65rem; border:1px solid #cbd5e1; border-radius:6px; font-size:0.85rem;">
+                <option value="Nursery">Nursery</option>
+                <option value="LKG">LKG</option>
+                <option value="UKG">UKG</option>
+                <option value="I">Class I</option>
+                <option value="II">Class II</option>
+                <option value="III">Class III</option>
+                <option value="IV">Class IV</option>
+                <option value="V">Class V</option>
+                <option value="VI">Class VI</option>
+                <option value="VII">Class VII</option>
+                <option value="VIII">Class VIII</option>
+                <option value="IX" selected>Class IX</option>
+                <option value="X">Class X</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-row" style="display: flex; gap: 1rem;">
+            <div class="form-group" style="flex: 1.5;">
+              <label style="font-weight: 700; font-size: 0.82rem; color: #1e293b; margin-bottom: 3px; display: block;">Parent / Contact Person *</label>
+              <input type="text" id="enqParentName" class="form-control" required placeholder="Parent or guardian name" style="width:100%; padding:0.45rem 0.65rem; border:1px solid #cbd5e1; border-radius:6px; font-size:0.85rem;">
+            </div>
+            <div class="form-group" style="flex: 1.2;">
+              <label style="font-weight: 700; font-size: 0.82rem; color: #1e293b; margin-bottom: 3px; display: block;">Phone Number *</label>
+              <input type="tel" id="enqPhone" class="form-control" required placeholder="10-digit mobile" pattern="[0-9]{10}" style="width:100%; padding:0.45rem 0.65rem; border:1px solid #cbd5e1; border-radius:6px; font-size:0.85rem;">
+            </div>
+          </div>
+
+          <div class="form-row" style="display: flex; gap: 1rem;">
+            <div class="form-group" style="flex: 1;">
+              <label style="font-weight: 700; font-size: 0.82rem; color: #1e293b; margin-bottom: 3px; display: block;">Enquiry Source *</label>
+              <select id="enqSource" class="form-control" style="width:100%; padding:0.45rem 0.65rem; border:1px solid #cbd5e1; border-radius:6px; font-size:0.85rem;">
+                <option value="Walk-In (Front Desk)" selected>Walk-In (Front Desk)</option>
+                <option value="Phone Enquiry">Phone Call Enquiry</option>
+                <option value="Website Contact Form">Website Contact Form</option>
+                <option value="Parent Referral">Parent Referral</option>
+              </select>
+            </div>
+            <div class="form-group" style="flex: 1;">
+              <label style="font-weight: 700; font-size: 0.82rem; color: #1e293b; margin-bottom: 3px; display: block;">Follow-up Date</label>
+              <input type="date" id="enqFollowupDate" class="form-control" style="width:100%; padding:0.45rem 0.65rem; border:1px solid #cbd5e1; border-radius:6px; font-size:0.85rem;">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label style="font-weight: 700; font-size: 0.82rem; color: #1e293b; margin-bottom: 3px; display: block;">Enquiry Remarks / Queries</label>
+            <textarea id="enqRemarks" class="form-control" rows="2" placeholder="e.g. Parent inquired about bus facilities, English medium syllabus, and fee structure." style="width:100%; padding:0.45rem 0.65rem; border:1px solid #cbd5e1; border-radius:6px; font-size:0.85rem;"></textarea>
+          </div>
+
+        </div>
+        <div class="modal-footer" style="display:flex; justify-content:flex-end; gap:0.5rem; background:#f8fafc; border-top:1px solid #e2e8f0; padding:0.85rem 1.25rem;">
+          <button type="button" class="btn btn-secondary btn-sm" onclick="portalApp.closeModal('addEnquiryModal')">Cancel</button>
+          <button type="submit" class="btn btn-primary btn-sm"><i class="fa-solid fa-check mr-1"></i> Log Enquiry</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       MODAL: APPLICATION DETAIL DOSSIER (11 SECTIONS)
+       ========================================================================= -->
+  <div class="modal-backdrop" id="applicationDetailModal" style="display:none;">
+    <div class="portal-modal" style="max-width: 950px; width: 95%;">
+      <div class="modal-header" style="border-bottom: none; padding-bottom: 0.75rem;">
+        <div style="display: flex; align-items: center; gap: 0.75rem;">
+          <div style="width: 44px; height: 44px; border-radius: 8px; background: #eff6ff; color: #1d4ed8; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; border: 1px solid #bfdbfe;">
+            <i class="fa-solid fa-id-card"></i>
+          </div>
+          <div>
+            <div style="display: flex; align-items: center; gap: 0.5rem;">
+              <h3 style="margin: 0; font-size: 1.2rem; font-weight: 800; color: #0f172a;" id="admDetailTitle">Aarav Sharma</h3>
+              <span class="portal-badge badge-primary" id="admDetailAppId">APP-2026-0104</span>
+              <span id="admDetailStatusBadge"></span>
+            </div>
+            <p style="margin: 2px 0 0; font-size: 0.8rem; color: #64748b;" id="admDetailSub">Class IX Applied • Submitted 12-Jun-2025 via Online Form</p>
+          </div>
+        </div>
+        <button type="button" class="modal-close-x" onclick="portalApp.closeModal('applicationDetailModal')" title="Close">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <!-- Dossier Multi-Tab Navigation (11 Sections) -->
+      <div class="adm-detail-nav">
+        <button type="button" class="adm-detail-tab-btn active" data-tab="profile" onclick="portalApp.switchAdmDetailTab('profile')">
+          <i class="fa-solid fa-user"></i> Profile
+        </button>
+        <button type="button" class="adm-detail-tab-btn" data-tab="guardian" onclick="portalApp.switchAdmDetailTab('guardian')">
+          <i class="fa-solid fa-users"></i> Guardian
+        </button>
+        <button type="button" class="adm-detail-tab-btn" data-tab="academics" onclick="portalApp.switchAdmDetailTab('academics')">
+          <i class="fa-solid fa-school"></i> Class &amp; School
+        </button>
+        <button type="button" class="adm-detail-tab-btn" data-tab="documents" onclick="portalApp.switchAdmDetailTab('documents')">
+          <i class="fa-solid fa-file-circle-check"></i> Documents
+        </button>
+        <button type="button" class="adm-detail-tab-btn" data-tab="eligibility" onclick="portalApp.switchAdmDetailTab('eligibility')">
+          <i class="fa-solid fa-list-check"></i> Eligibility
+        </button>
+        <button type="button" class="adm-detail-tab-btn" data-tab="assessment" onclick="portalApp.switchAdmDetailTab('assessment')">
+          <i class="fa-solid fa-chart-line"></i> Assessment
+        </button>
+        <button type="button" class="adm-detail-tab-btn" data-tab="fees" onclick="portalApp.switchAdmDetailTab('fees')">
+          <i class="fa-solid fa-indian-rupee-sign"></i> Fee Info
+        </button>
+        <button type="button" class="adm-detail-tab-btn" data-tab="notes" onclick="portalApp.switchAdmDetailTab('notes')">
+          <i class="fa-solid fa-notes-medical"></i> Review Notes
+        </button>
+        <button type="button" class="adm-detail-tab-btn" data-tab="history" onclick="portalApp.switchAdmDetailTab('history')">
+          <i class="fa-solid fa-clock-rotate-left"></i> Decision History
+        </button>
+        <button type="button" class="adm-detail-tab-btn" data-tab="comms" onclick="portalApp.switchAdmDetailTab('comms')">
+          <i class="fa-solid fa-envelope-open-text"></i> Communication
+        </button>
+      </div>
+
+      <div class="modal-body" style="padding: 0; max-height: calc(85vh - 170px); overflow-y: auto;">
+        <div id="admDetailPanesContainer">
+          <!-- Dynamically populated via portalApp.renderAdmissionDetailPanes -->
+        </div>
+      </div>
+
+      <div class="modal-footer" style="display:flex; justify-content:space-between; align-items:center; background:#f8fafc; border-top:1px solid #e2e8f0; padding:0.85rem 1.25rem;">
+        <div>
+          <button type="button" class="btn btn-secondary btn-sm" onclick="portalApp.printAdmissionVerification()">
+            <i class="fa-solid fa-print mr-1"></i> Print Application
+          </button>
+        </div>
+        <div style="display:flex; gap:0.5rem;" id="admDetailActionButtons">
+          <!-- Populated dynamically with context-appropriate action buttons -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       MODAL: SCHEDULE INTERACTION / ASSESSMENT
+       ========================================================================= -->
+  <div class="modal-backdrop" id="scheduleAssessmentModal" style="display:none;">
+    <div class="portal-modal" style="max-width: 580px; width: 95%;">
+      <div class="modal-header">
+        <div style="display: flex; align-items: center; gap: 0.75rem;">
+          <div style="width: 42px; height: 42px; border-radius: 8px; background: #eff6ff; color: #1d4ed8; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; border: 1px solid #bfdbfe;">
+            <i class="fa-solid fa-calendar-check"></i>
+          </div>
+          <div>
+            <h3 style="margin: 0; font-size: 1.15rem; font-weight: 800; color: #0f172a;">Schedule Assessment / Interaction</h3>
+            <p style="margin: 2px 0 0; font-size: 0.8rem; color: #64748b;" id="schedModalSubtitle">Applicant: Aarav Sharma</p>
+          </div>
+        </div>
+        <button type="button" class="modal-close-x" onclick="portalApp.closeModal('scheduleAssessmentModal')" title="Close">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <form onsubmit="portalApp.submitScheduleAssessment(event)">
+        <input type="hidden" id="schedTargetAppId">
+        <div class="modal-body" style="padding: 1.25rem; display: flex; flex-direction: column; gap: 1rem;">
+          
+          <div class="form-group">
+            <label style="font-weight: 700; font-size: 0.82rem; color: #1e293b; margin-bottom: 3px; display: block;">Assessment / Interaction Type *</label>
+            <select id="schedType" class="form-control" required style="width:100%; padding:0.45rem 0.65rem; border:1px solid #cbd5e1; border-radius:6px; font-size:0.85rem;">
+              <option value="Written Aptitude Evaluation" selected>Written Aptitude &amp; Core Concept Evaluation</option>
+              <option value="Oral Interaction & General Readiness">Oral Interaction &amp; General Readiness (Early Primary)</option>
+              <option value="Principal Interview">Principal &amp; Senior Committee Interaction</option>
+            </select>
+          </div>
+
+          <div class="form-row" style="display: flex; gap: 1rem;">
+            <div class="form-group" style="flex: 1;">
+              <label style="font-weight: 700; font-size: 0.82rem; color: #1e293b; margin-bottom: 3px; display: block;">Scheduled Date *</label>
+              <input type="date" id="schedDate" class="form-control" required style="width:100%; padding:0.45rem 0.65rem; border:1px solid #cbd5e1; border-radius:6px; font-size:0.85rem;">
+            </div>
+            <div class="form-group" style="flex: 1;">
+              <label style="font-weight: 700; font-size: 0.82rem; color: #1e293b; margin-bottom: 3px; display: block;">Scheduled Time *</label>
+              <input type="time" id="schedTime" value="10:00" class="form-control" required style="width:100%; padding:0.45rem 0.65rem; border:1px solid #cbd5e1; border-radius:6px; font-size:0.85rem;">
+            </div>
+          </div>
+
+          <div class="form-row" style="display: flex; gap: 1rem;">
+            <div class="form-group" style="flex: 1.2;">
+              <label style="font-weight: 700; font-size: 0.82rem; color: #1e293b; margin-bottom: 3px; display: block;">Venue / Room *</label>
+              <input type="text" id="schedVenue" class="form-control" value="Academic Assessment Cell (Room 102)" required style="width:100%; padding:0.45rem 0.65rem; border:1px solid #cbd5e1; border-radius:6px; font-size:0.85rem;">
+            </div>
+            <div class="form-group" style="flex: 1.2;">
+              <label style="font-weight: 700; font-size: 0.82rem; color: #1e293b; margin-bottom: 3px; display: block;">Assigned Evaluator *</label>
+              <input type="text" id="schedAssessor" class="form-control" value="Sri Ch. Ramesh (Academic Dean)" required style="width:100%; padding:0.45rem 0.65rem; border:1px solid #cbd5e1; border-radius:6px; font-size:0.85rem;">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label style="font-weight: 700; font-size: 0.82rem; color: #1e293b; margin-bottom: 3px; display: block;">Instructions to Parent</label>
+            <textarea id="schedInstructions" class="form-control" rows="2" style="width:100%; padding:0.45rem 0.65rem; border:1px solid #cbd5e1; border-radius:6px; font-size:0.85rem;">Please bring the applicant with writing materials and previous academic report card 15 minutes before the scheduled time.</textarea>
+          </div>
+
+        </div>
+        <div class="modal-footer" style="display:flex; justify-content:space-between; align-items:center; background:#f8fafc; border-top:1px solid #e2e8f0; padding:0.85rem 1.25rem;">
+          <span style="font-size: 0.75rem; color: #64748b;"><i class="fa-solid fa-bell text-warning mr-1"></i> Dispatches SMS schedule reminder to parent</span>
+          <div style="display:flex; gap:0.5rem;">
+            <button type="button" class="btn btn-secondary btn-sm" onclick="portalApp.closeModal('scheduleAssessmentModal')">Cancel</button>
+            <button type="submit" class="btn btn-primary btn-sm"><i class="fa-solid fa-calendar-check mr-1"></i> Confirm Schedule</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       MODAL: RECORD ASSESSMENT OUTCOME
+       ========================================================================= -->
+  <div class="modal-backdrop" id="recordAssessmentModal" style="display:none;">
+    <div class="portal-modal" style="max-width: 580px; width: 95%;">
+      <div class="modal-header">
+        <div style="display: flex; align-items: center; gap: 0.75rem;">
+          <div style="width: 42px; height: 42px; border-radius: 8px; background: #ecfdf5; color: #059669; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; border: 1px solid #a7f3d0;">
+            <i class="fa-solid fa-chart-line"></i>
+          </div>
+          <div>
+            <h3 style="margin: 0; font-size: 1.15rem; font-weight: 800; color: #0f172a;">Record Assessment Outcome</h3>
+            <p style="margin: 2px 0 0; font-size: 0.8rem; color: #64748b;" id="recordAssSub">Applicant: Aarav Sharma</p>
+          </div>
+        </div>
+        <button type="button" class="modal-close-x" onclick="portalApp.closeModal('recordAssessmentModal')" title="Close">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <form onsubmit="portalApp.submitRecordAssessment(event)">
+        <input type="hidden" id="recordAssTargetAppId">
+        <div class="modal-body" style="padding: 1.25rem; display: flex; flex-direction: column; gap: 1rem;">
+          
+          <div class="form-row" style="display: flex; gap: 1rem;">
+            <div class="form-group" style="flex: 1;">
+              <label style="font-weight: 700; font-size: 0.82rem; color: #1e293b; margin-bottom: 3px; display: block;">Assessment Score / Percentage *</label>
+              <input type="text" id="recordAssScore" class="form-control" required placeholder="e.g. 88% (First Class)" style="width:100%; padding:0.45rem 0.65rem; border:1px solid #cbd5e1; border-radius:6px; font-size:0.85rem; font-weight:700;">
+            </div>
+            <div class="form-group" style="flex: 1.5;">
+              <label style="font-weight: 700; font-size: 0.82rem; color: #1e293b; margin-bottom: 3px; display: block;">Recommendation Outcome *</label>
+              <select id="recordAssOutcome" class="form-control" required style="width:100%; padding:0.45rem 0.65rem; border:1px solid #cbd5e1; border-radius:6px; font-size:0.85rem; font-weight:700;">
+                <option value="Recommended" selected>Recommended for Full Admission</option>
+                <option value="Conditional">Conditional (Remedial Bridge Course Required)</option>
+                <option value="Not Recommended">Not Recommended (Academic Deficiency)</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label style="font-weight: 700; font-size: 0.82rem; color: #1e293b; margin-bottom: 3px; display: block;">Evaluator Academic Observations *</label>
+            <textarea id="recordAssRemarks" class="form-control" rows="3" required placeholder="Note student's proficiency in Mathematics, English comprehension, and general behavioral readiness..." style="width:100%; padding:0.45rem 0.65rem; border:1px solid #cbd5e1; border-radius:6px; font-size:0.85rem;"></textarea>
+          </div>
+
+        </div>
+        <div class="modal-footer" style="display:flex; justify-content:flex-end; gap:0.5rem; background:#f8fafc; border-top:1px solid #e2e8f0; padding:0.85rem 1.25rem;">
+          <button type="button" class="btn btn-secondary btn-sm" onclick="portalApp.closeModal('recordAssessmentModal')">Cancel</button>
+          <button type="submit" class="btn btn-primary btn-sm"><i class="fa-solid fa-check mr-1"></i> Save Assessment Outcome</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       MODAL: ISSUE ADMISSION OFFER LETTER
+       ========================================================================= -->
+  <div class="modal-backdrop" id="issueOfferModal" style="display:none;">
+    <div class="portal-modal" style="max-width: 600px; width: 95%;">
+      <div class="modal-header">
+        <div style="display: flex; align-items: center; gap: 0.75rem;">
+          <div style="width: 42px; height: 42px; border-radius: 8px; background: #f5f3ff; color: #7c3aed; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; border: 1px solid #ddd6fe;">
+            <i class="fa-solid fa-envelope-open-text"></i>
+          </div>
+          <div>
+            <h3 style="margin: 0; font-size: 1.15rem; font-weight: 800; color: #0f172a;">Issue Formal Admission Offer</h3>
+            <p style="margin: 2px 0 0; font-size: 0.8rem; color: #64748b;" id="offerModalSub">Applicant: Aarav Sharma</p>
+          </div>
+        </div>
+        <button type="button" class="modal-close-x" onclick="portalApp.closeModal('issueOfferModal')" title="Close">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <form onsubmit="portalApp.submitIssueOffer(event)">
+        <input type="hidden" id="offerTargetAppId">
+        <div class="modal-body" style="padding: 1.25rem; display: flex; flex-direction: column; gap: 1rem;">
+          
+          <div class="form-row" style="display: flex; gap: 1rem;">
+            <div class="form-group" style="flex: 1;">
+              <label style="font-weight: 700; font-size: 0.82rem; color: #1e293b; margin-bottom: 3px; display: block;">Approved Class Offered *</label>
+              <input type="text" id="offerClass" class="form-control" readonly style="width:100%; padding:0.45rem 0.65rem; border:1px solid #cbd5e1; border-radius:6px; font-size:0.85rem; font-weight:700; background:#f8fafc;">
+            </div>
+            <div class="form-group" style="flex: 1;">
+              <label style="font-weight: 700; font-size: 0.82rem; color: #1e293b; margin-bottom: 3px; display: block;">Offer Expiry Date *</label>
+              <input type="date" id="offerExpiryDate" class="form-control" required style="width:100%; padding:0.45rem 0.65rem; border:1px solid #cbd5e1; border-radius:6px; font-size:0.85rem;">
+            </div>
+          </div>
+
+          <div class="form-row" style="display: flex; gap: 1rem;">
+            <div class="form-group" style="flex: 1;">
+              <label style="font-weight: 700; font-size: 0.82rem; color: #1e293b; margin-bottom: 3px; display: block;">Admission Fee Due (INR) *</label>
+              <input type="text" id="offerFeeAmount" class="form-control" value="₹12,500" required style="width:100%; padding:0.45rem 0.65rem; border:1px solid #cbd5e1; border-radius:6px; font-size:0.85rem; font-weight:700;">
+            </div>
+            <div class="form-group" style="flex: 1;">
+              <label style="font-weight: 700; font-size: 0.82rem; color: #1e293b; margin-bottom: 3px; display: block;">Special Concessions</label>
+              <input type="text" id="offerConcession" class="form-control" value="None (Standard Board Fee)" style="width:100%; padding:0.45rem 0.65rem; border:1px solid #cbd5e1; border-radius:6px; font-size:0.85rem;">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label style="font-weight: 700; font-size: 0.82rem; color: #1e293b; margin-bottom: 3px; display: block;">Terms &amp; Offer Conditions</label>
+            <textarea id="offerTerms" class="form-control" rows="2" style="width:100%; padding:0.45rem 0.65rem; border:1px solid #cbd5e1; border-radius:6px; font-size:0.85rem;">Admission is subject to payment of admission fee and submission of original Transfer Certificate before commencement of classes.</textarea>
+          </div>
+
+        </div>
+        <div class="modal-footer" style="display:flex; justify-content:space-between; align-items:center; background:#f8fafc; border-top:1px solid #e2e8f0; padding:0.85rem 1.25rem;">
+          <span style="font-size: 0.75rem; color: #64748b;"><i class="fa-solid fa-envelope text-primary mr-1"></i> Dispatches offer letter to parent email &amp; SMS</span>
+          <div style="display:flex; gap:0.5rem;">
+            <button type="button" class="btn btn-secondary btn-sm" onclick="portalApp.closeModal('issueOfferModal')">Cancel</button>
+            <button type="submit" class="btn btn-primary btn-sm"><i class="fa-solid fa-paper-plane mr-1"></i> Dispatch Offer Letter</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       MODAL: CONFIRM ENROLMENT & DUPLICATE PREVENTION SCANNER
+       ========================================================================= -->
+  <div class="modal-backdrop" id="confirmEnrolmentModal" style="display:none;">
+    <div class="portal-modal" style="max-width: 680px; width: 95%;">
+      <div class="modal-header">
+        <div style="display: flex; align-items: center; gap: 0.75rem;">
+          <div style="width: 42px; height: 42px; border-radius: 8px; background: #ecfdf5; color: #059669; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; border: 1px solid #a7f3d0;">
+            <i class="fa-solid fa-graduation-cap"></i>
+          </div>
+          <div>
+            <h3 style="margin: 0; font-size: 1.15rem; font-weight: 800; color: #0f172a;">Confirm Enrolment &amp; Allocate Student ID</h3>
+            <p style="margin: 2px 0 0; font-size: 0.8rem; color: #64748b;" id="enrolModalSub">Applicant: Aarav Sharma</p>
+          </div>
+        </div>
+        <button type="button" class="modal-close-x" onclick="portalApp.closeModal('confirmEnrolmentModal')" title="Close">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <form onsubmit="portalApp.submitConfirmEnrolment(event)">
+        <input type="hidden" id="enrolTargetAppId">
+        <div class="modal-body" style="padding: 1.25rem; display: flex; flex-direction: column; gap: 1rem; max-height: calc(85vh - 140px); overflow-y: auto;">
+          
+          <!-- Duplicate Prevention Scanner Result -->
+          <div id="duplicateScannerContainer">
+            <!-- Dynamically populated via portalApp.scanAdmissionsDuplicate -->
+          </div>
+
+          <!-- Official Allocation Details -->
+          <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 1rem;">
+            <div style="font-size: 0.82rem; font-weight: 800; color: #1e40af; text-transform: uppercase; margin-bottom: 0.75rem;">
+              <i class="fa-solid fa-id-card mr-1"></i> Official Enrolment Credentials
+            </div>
+            <div class="form-row" style="display: flex; gap: 1rem; margin-bottom: 0.75rem;">
+              <div class="form-group" style="flex: 1;">
+                <label style="font-weight: 700; font-size: 0.8rem; color: #1e293b; margin-bottom: 3px; display: block;">Official Admission No *</label>
+                <input type="text" id="enrolAllocatedAdmNo" class="form-control" readonly style="width:100%; padding:0.45rem 0.65rem; border:1px solid #cbd5e1; border-radius:6px; font-size:0.85rem; font-weight:800; color:#1d4ed8; background:#eff6ff;">
+              </div>
+              <div class="form-group" style="flex: 1;">
+                <label style="font-weight: 700; font-size: 0.8rem; color: #1e293b; margin-bottom: 3px; display: block;">Permanent Student ID *</label>
+                <input type="text" id="enrolAllocatedStudentId" class="form-control" readonly style="width:100%; padding:0.45rem 0.65rem; border:1px solid #cbd5e1; border-radius:6px; font-size:0.85rem; font-weight:800; color:#0f172a; background:#f1f5f9;">
+              </div>
+            </div>
+            <div class="form-row" style="display: flex; gap: 1rem;">
+              <div class="form-group" style="flex: 1;">
+                <label style="font-weight: 700; font-size: 0.8rem; color: #1e293b; margin-bottom: 3px; display: block;">Approved Class *</label>
+                <input type="text" id="enrolAllocatedClass" class="form-control" readonly style="width:100%; padding:0.45rem 0.65rem; border:1px solid #cbd5e1; border-radius:6px; font-size:0.85rem; font-weight:700;">
+              </div>
+              <div class="form-group" style="flex: 1;">
+                <label style="font-weight: 700; font-size: 0.8rem; color: #1e293b; margin-bottom: 3px; display: block;">Assigned Section *</label>
+                <input type="text" id="enrolAllocatedSection" class="form-control" value="Section A" readonly style="width:100%; padding:0.45rem 0.65rem; border:1px solid #cbd5e1; border-radius:6px; font-size:0.85rem; font-weight:700;">
+              </div>
+              <div class="form-group" style="flex: 1;">
+                <label style="font-weight: 700; font-size: 0.8rem; color: #1e293b; margin-bottom: 3px; display: block;">Assigned Class Teacher</label>
+                <input type="text" id="enrolClassTeacher" class="form-control" readonly style="width:100%; padding:0.45rem 0.65rem; border:1px solid #cbd5e1; border-radius:6px; font-size:0.85rem;">
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label style="font-weight: 700; font-size: 0.82rem; color: #1e293b; margin-bottom: 3px; display: block;">Statutory Enrolment Order Remarks</label>
+            <textarea id="enrolRemarks" class="form-control" rows="2" style="width:100%; padding:0.45rem 0.65rem; border:1px solid #cbd5e1; border-radius:6px; font-size:0.85rem;">Enrolment completed in compliance with AP Education Code statutory register regulations.</textarea>
+          </div>
+
+        </div>
+        <div class="modal-footer" style="display:flex; justify-content:space-between; align-items:center; background:#f8fafc; border-top:1px solid #e2e8f0; padding:0.85rem 1.25rem;">
+          <span style="font-size: 0.75rem; color: #64748b;"><i class="fa-solid fa-graduation-cap text-emerald mr-1"></i> Adds student directly to authoritative register &amp; class teacher</span>
+          <div style="display:flex; gap:0.5rem;">
+            <button type="button" class="btn btn-secondary btn-sm" onclick="portalApp.closeModal('confirmEnrolmentModal')">Cancel</button>
+            <button type="submit" class="btn btn-success btn-sm"><i class="fa-solid fa-circle-check mr-1"></i> Formally Enrol Student</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       MODAL: CANCEL / REJECT APPLICATION WITH REASON
+       ========================================================================= -->
+  <div class="modal-backdrop" id="cancelApplicationModal" style="display:none;">
+    <div class="portal-modal" style="max-width: 540px; width: 95%;">
+      <div class="modal-header">
+        <div style="display: flex; align-items: center; gap: 0.75rem;">
+          <div style="width: 42px; height: 42px; border-radius: 8px; background: #fee2e2; color: #b91c1c; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; border: 1px solid #fecaca;">
+            <i class="fa-solid fa-ban"></i>
+          </div>
+          <div>
+            <h3 style="margin: 0; font-size: 1.15rem; font-weight: 800; color: #0f172a;">Cancel / Reject Application</h3>
+            <p style="margin: 2px 0 0; font-size: 0.8rem; color: #64748b;" id="cancelModalSub">Applicant: Aarav Sharma</p>
+          </div>
+        </div>
+        <button type="button" class="modal-close-x" onclick="portalApp.closeModal('cancelApplicationModal')" title="Close">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <form onsubmit="portalApp.submitCancelApplication(event)">
+        <input type="hidden" id="cancelTargetAppId">
+        <div class="modal-body" style="padding: 1.25rem; display: flex; flex-direction: column; gap: 1rem;">
+          
+          <div class="form-group">
+            <label style="font-weight: 700; font-size: 0.82rem; color: #1e293b; margin-bottom: 3px; display: block;">Decision Type *</label>
+            <select id="cancelDecisionType" class="form-control" required style="width:100%; padding:0.45rem 0.65rem; border:1px solid #cbd5e1; border-radius:6px; font-size:0.85rem;">
+              <option value="Rejected">Reject Application (Institutional Decision)</option>
+              <option value="Withdrawn">Parent Formal Withdrawal (Parent Request)</option>
+              <option value="Cancelled">Administrative Cancellation (Duplicate / Non-responsive)</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label style="font-weight: 700; font-size: 0.82rem; color: #1e293b; margin-bottom: 3px; display: block;">Reason Category *</label>
+            <select id="cancelReasonCategory" class="form-control" required style="width:100%; padding:0.45rem 0.65rem; border:1px solid #cbd5e1; border-radius:6px; font-size:0.85rem;">
+              <option value="Academic Readiness Deficient">Academic Readiness Deficient / Entrance Test Below Threshold</option>
+              <option value="Document Incompletion / Non-submission">Document Incompletion / Failure to Submit Mandatory TC</option>
+              <option value="Age Eligibility Incompatible">Age Criteria Incompatible with Board Regulations</option>
+              <option value="Parent Relocation">Parent Relocation / Opted for Another Institution</option>
+              <option value="Capacity Full">Class Capacity Full / No Available Section Seats</option>
+              <option value="Other Statutory Reason">Other Statutory / Administrative Reason</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label style="font-weight: 700; font-size: 0.82rem; color: #1e293b; margin-bottom: 3px; display: block;">Detailed Explanation (Logged to History) *</label>
+            <textarea id="cancelRemarks" class="form-control" rows="3" required placeholder="State exact circumstances for rejection or withdrawal..." style="width:100%; padding:0.45rem 0.65rem; border:1px solid #cbd5e1; border-radius:6px; font-size:0.85rem;"></textarea>
+          </div>
+
+        </div>
+        <div class="modal-footer" style="display:flex; justify-content:flex-end; gap:0.5rem; background:#f8fafc; border-top:1px solid #e2e8f0; padding:0.85rem 1.25rem;">
+          <button type="button" class="btn btn-secondary btn-sm" onclick="portalApp.closeModal('cancelApplicationModal')">Cancel</button>
+          <button type="submit" class="btn btn-danger btn-sm"><i class="fa-solid fa-ban mr-1"></i> Confirm Decision</button>
+        </div>
+      </form>
+    </div>
+  </div>
   <div class="toast-container" id="toastContainer"></div>
 
   <!-- =========================================================================

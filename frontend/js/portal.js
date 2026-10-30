@@ -7018,278 +7018,1569 @@ const FEE_CATEGORY_AUDIT_DATA = [
     showToast('Permission request dispatched to Principal (Smt. Gorle Varalakshmi) and Vice Principal (Sri Navva Anand)!', 'info');
   }
 
-  // Admissions Queue Subview
+
+  /* =========================================================================
+     AUTHORITATIVE ADMISSIONS LIFECYCLE, 8 TABS & ENROLMENT GOVERNANCE
+     Compliant with AP Education Code Statutory Intake & Duplicate Prevention
+     ========================================================================= */
+
+  let currentAdmissionsTab = 'all';
+  let activeDetailAppId = null;
+
+  function initAdmissions() {
+    if (state.admissions && state.admissions.length >= 25) return;
+
+    // Check localStorage first
+    let localApps = [];
+    try {
+      localApps = JSON.parse(localStorage.getItem('sv_applications') || '[]');
+    } catch (e) {}
+
+    const seedApps = [
+      {
+        appId: 'ENQ-2026-0081',
+        name: 'Tanvi Reddy',
+        dob: '2016-04-12',
+        gender: 'Female',
+        class: 'IV',
+        grade: 'IV',
+        parent: 'M. Sreenivasa Rao',
+        phone: '9848123401',
+        email: 'sreenivas.m@gmail.com',
+        address: 'Plot 42, Santhinagar, Srikakulam',
+        prevSchool: 'Geethanjali Olympiad School',
+        lastClass: 'Class III',
+        tcNumber: 'Awaiting Intake',
+        intakeChannel: 'Offline Walk-In',
+        docStatus: 'Pending Verification',
+        status: 'New Enquiry',
+        score: 'Awaiting Interaction',
+        assignedOfficer: 'M. Ramesh (Admissions Desk)',
+        submissionDate: '26-Oct-2026',
+        submissionTime: '11:15 AM',
+        feeStatus: 'Unpaid',
+        feeAmount: '₹8,500',
+        concession: 'General Merit',
+        internalNotes: 'Parent inquired about bus route 2 and English medium coaching.',
+        decisionHistory: [
+          { timestamp: '26-Oct-2026 11:15 AM', actor: 'M. Ramesh (Admissions Desk)', action: 'Enquiry Logged', remarks: 'Parent walk-in at reception desk.' }
+        ],
+        communicationHistory: [
+          { timestamp: '26-Oct-2026 11:30 AM', channel: 'SMS', recipient: '9848123401', message: 'Thank you for inquiring at Sri Vidya High School. Prospectus Ref: ENQ-2026-0081.' }
+        ]
+      },
+      {
+        appId: 'ENQ-2026-0082',
+        name: 'Venkata Sai Teja',
+        dob: '2014-08-22',
+        gender: 'Male',
+        class: 'VI',
+        grade: 'VI',
+        parent: 'V. Ramanamurthy',
+        phone: '9848123402',
+        email: 'ramana.v@gmail.com',
+        address: 'D.No 2-18, Palakonda Road, Srikakulam',
+        prevSchool: 'Bhashyam Public School',
+        lastClass: 'Class V',
+        tcNumber: 'Pending',
+        intakeChannel: 'Offline Walk-In',
+        docStatus: 'Pending Verification',
+        status: 'New Enquiry',
+        score: 'Awaiting Entrance',
+        assignedOfficer: 'Smt. K. Hymavathi (Counselor)',
+        submissionDate: '25-Oct-2026',
+        submissionTime: '02:30 PM',
+        feeStatus: 'Unpaid',
+        feeAmount: '₹9,500',
+        concession: 'Sibling Concession',
+        internalNotes: 'Elder brother studying in Class IX at Sri Vidya.',
+        decisionHistory: [
+          { timestamp: '25-Oct-2026 02:30 PM', actor: 'Smt. K. Hymavathi (Counselor)', action: 'Enquiry Logged', remarks: 'Sibling discount eligible.' }
+        ],
+        communicationHistory: [
+          { timestamp: '25-Oct-2026 02:45 PM', channel: 'SMS', recipient: '9848123402', message: 'Enquiry registered for Class VI at Sri Vidya High School. Ref: ENQ-2026-0082.' }
+        ]
+      },
+      {
+        appId: 'APP-2026-0104',
+        name: 'Aarav Sharma',
+        dob: '2012-05-14',
+        gender: 'Male',
+        class: 'IX',
+        grade: 'IX',
+        parent: 'Ramesh Sharma',
+        phone: '9848012345',
+        email: 'ramesh.sharma@gmail.com',
+        address: 'H.No 12-4-8, Tilak Nagar, Srikakulam',
+        prevSchool: "St. Ann's High School",
+        lastClass: 'Class VIII',
+        tcNumber: 'TC-2024-892',
+        intakeChannel: 'Online Application',
+        docStatus: 'Complete',
+        status: 'Submitted',
+        score: '88% (First Class)',
+        assignedOfficer: 'Sri Ch. Ramesh (Academic Dean)',
+        submissionDate: '24-Oct-2026',
+        submissionTime: '09:20 AM',
+        feeStatus: 'Pending Deposit',
+        feeAmount: '₹12,500',
+        concession: 'General Merit',
+        internalNotes: 'Strong academic record. Previous marksheet shows 88% overall aggregate.',
+        decisionHistory: [
+          { timestamp: '24-Oct-2026 09:20 AM', actor: 'System Intake', action: 'Online Submission', remarks: 'Submitted via public admissions portal.' },
+          { timestamp: '24-Oct-2026 10:15 AM', actor: 'M. Ramesh', action: 'Assigned to Academic Dean', remarks: 'Ready for document screening.' }
+        ],
+        communicationHistory: [
+          { timestamp: '24-Oct-2026 09:21 AM', channel: 'Email & SMS', recipient: '9848012345', message: 'Application APP-2026-0104 received. Document verification in progress.' }
+        ]
+      },
+      {
+        appId: 'APP-2026-0105',
+        name: 'M. Sai Charan',
+        dob: '2013-11-04',
+        gender: 'Male',
+        class: 'VIII',
+        grade: 'VIII',
+        parent: 'M. Kameswara Rao',
+        phone: '9848023456',
+        email: 'kamesh.m@yahoo.com',
+        address: 'D.No 8-1-24, Day & Night Junction, Srikakulam',
+        prevSchool: 'Zilla Parishad High School',
+        lastClass: 'Class VII',
+        tcNumber: 'Awaiting Physical Copy',
+        intakeChannel: 'Online Application',
+        docStatus: 'Deficient',
+        status: 'Documents Pending',
+        score: 'Awaiting Entrance',
+        assignedOfficer: 'M. Ramesh (Admissions Desk)',
+        submissionDate: '23-Oct-2026',
+        submissionTime: '04:10 PM',
+        feeStatus: 'Unpaid',
+        feeAmount: '₹11,000',
+        concession: 'General Merit',
+        internalNotes: 'TC scanned page is missing counter-signature from District Educational Officer.',
+        decisionHistory: [
+          { timestamp: '23-Oct-2026 04:10 PM', actor: 'System Intake', action: 'Online Submission', remarks: 'Submitted online.' },
+          { timestamp: '24-Oct-2026 11:00 AM', actor: 'M. Ramesh', action: 'Deficiency Flagged', remarks: 'TC counter-signature deficient.' }
+        ],
+        communicationHistory: [
+          { timestamp: '24-Oct-2026 11:05 AM', channel: 'SMS', recipient: '9848023456', message: 'Deficiency notice: Please submit counter-signed original TC for APP-2026-0105.' }
+        ]
+      },
+      {
+        appId: 'APP-2026-0106',
+        name: 'P. Jahnavi',
+        dob: '2015-02-18',
+        gender: 'Female',
+        class: 'V',
+        grade: 'V',
+        parent: 'P. Jagannadha Rao',
+        phone: '9848034567',
+        email: 'jagannadh.p@gmail.com',
+        address: 'Collectorate Road, Srikakulam',
+        prevSchool: 'Kendriya Vidyalaya',
+        lastClass: 'Class IV',
+        tcNumber: 'TC-2024-512',
+        intakeChannel: 'Offline Walk-In',
+        docStatus: 'Complete',
+        status: 'Under Review',
+        score: '91% (Aptitude Cleared)',
+        assignedOfficer: 'Sri Ch. Ramesh (Academic Dean)',
+        submissionDate: '22-Oct-2026',
+        submissionTime: '10:45 AM',
+        feeStatus: 'Pending Deposit',
+        feeAmount: '₹9,000',
+        concession: 'General Merit',
+        internalNotes: 'Aptitude test conducted on 24-Oct. Mathematics: 24/25, English: 23/25.',
+        decisionHistory: [
+          { timestamp: '22-Oct-2026 10:45 AM', actor: 'Reception Desk', action: 'Intake Registered', remarks: 'Walk-in application with all documents.' },
+          { timestamp: '24-Oct-2026 02:00 PM', actor: 'Sri Ch. Ramesh', action: 'Assessment Cleared', remarks: 'Scored 91% in entrance test.' }
+        ],
+        communicationHistory: [
+          { timestamp: '24-Oct-2026 03:00 PM', channel: 'SMS', recipient: '9848034567', message: 'Congratulations! P. Jahnavi cleared entrance evaluation with 91%.' }
+        ]
+      },
+      {
+        appId: 'APP-2026-0107',
+        name: 'B. Varun Tej',
+        dob: '2011-09-30',
+        gender: 'Male',
+        class: 'X',
+        grade: 'X',
+        parent: 'B. Satyanarayana',
+        phone: '9848045678',
+        email: 'satya.b@gmail.com',
+        address: 'Near Old Bus Stand, Srikakulam',
+        prevSchool: 'Narayana High School',
+        lastClass: 'Class IX',
+        tcNumber: 'TC-2024-904',
+        intakeChannel: 'Offline Walk-In',
+        docStatus: 'Complete',
+        status: 'Eligibility Review',
+        score: '84% (Board Criteria Compliant)',
+        assignedOfficer: 'Sri Navva Anand (Vice Principal)',
+        submissionDate: '21-Oct-2026',
+        submissionTime: '11:00 AM',
+        feeStatus: 'Pending Deposit',
+        feeAmount: '₹14,000',
+        concession: 'General Merit',
+        internalNotes: 'Class X board transfer requires formal DEO endorsement under AP Secondary Education Rules.',
+        decisionHistory: [
+          { timestamp: '21-Oct-2026 11:00 AM', actor: 'Office Staff', action: 'Submission Received', remarks: 'Board transfer dossier initiated.' },
+          { timestamp: '23-Oct-2026 04:30 PM', actor: 'Sri Navva Anand', action: 'DEO Clearance Checked', remarks: 'Board eligibility criteria satisfied.' }
+        ],
+        communicationHistory: [
+          { timestamp: '23-Oct-2026 05:00 PM', channel: 'SMS', recipient: '9848045678', message: 'Eligibility review completed for Class X intake. Formal offer letter pending.' }
+        ]
+      },
+      {
+        appId: 'APP-2026-0108',
+        name: 'Ch. Divya Sree',
+        dob: '2014-06-15',
+        gender: 'Female',
+        class: 'VII',
+        grade: 'VII',
+        parent: 'Ch. Venkata Rao',
+        phone: '9848056789',
+        email: 'venkat.ch@gmail.com',
+        address: 'RIMS Road, Srikakulam',
+        prevSchool: 'Little Flower School',
+        lastClass: 'Class VI',
+        tcNumber: 'TC-2024-711',
+        intakeChannel: 'Online Application',
+        docStatus: 'Complete',
+        status: 'Offer Issued',
+        score: '89% (Recommended)',
+        assignedOfficer: 'Smt. Gorle Varalakshmi (Principal)',
+        submissionDate: '20-Oct-2026',
+        submissionTime: '01:15 PM',
+        feeStatus: 'Awaiting Parent Acceptance',
+        feeAmount: '₹10,500',
+        concession: 'RTE Quota',
+        internalNotes: 'RTE 25% quota seat authorized. Tuition fee waived under Right to Education Act.',
+        decisionHistory: [
+          { timestamp: '20-Oct-2026 01:15 PM', actor: 'System Intake', action: 'Online Submission', remarks: 'Applied under RTE category.' },
+          { timestamp: '22-Oct-2026 11:30 AM', actor: 'Smt. Gorle Varalakshmi', action: 'Offer Issued', remarks: 'Formal offer issued with RTE fee terms.' }
+        ],
+        communicationHistory: [
+          { timestamp: '22-Oct-2026 11:35 AM', channel: 'SMS & Email', recipient: '9848056789', message: 'Formal admission offer issued for Ch. Divya Sree. Please confirm acceptance by 05-Nov.' }
+        ]
+      },
+      {
+        appId: 'APP-2026-0109',
+        name: 'G. Harsha Vardhan',
+        dob: '2012-12-08',
+        gender: 'Male',
+        class: 'VIII',
+        grade: 'VIII',
+        parent: 'G. Appala Naidu',
+        phone: '9848067890',
+        email: 'appala.g@gmail.com',
+        address: 'Kalyana Mandapam Street, Srikakulam',
+        prevSchool: 'Ravindra Bharathi School',
+        lastClass: 'Class VII',
+        tcNumber: 'TC-2024-814',
+        intakeChannel: 'Offline Walk-In',
+        docStatus: 'Complete',
+        status: 'Offer Accepted',
+        score: '86% (Recommended)',
+        assignedOfficer: 'M. Ramesh (Admissions Desk)',
+        submissionDate: '19-Oct-2026',
+        submissionTime: '03:40 PM',
+        feeStatus: 'Deposit Due',
+        feeAmount: '₹11,000',
+        concession: 'General Merit',
+        internalNotes: 'Parent accepted offer on 23-Oct. Awaiting fee counter deposit.',
+        decisionHistory: [
+          { timestamp: '19-Oct-2026 03:40 PM', actor: 'Office Staff', action: 'Walk-In Intake', remarks: 'Original TC verified.' },
+          { timestamp: '21-Oct-2026 02:00 PM', actor: 'Principal', action: 'Offer Issued', remarks: 'Offer letter dispatched.' },
+          { timestamp: '23-Oct-2026 11:20 AM', actor: 'Parent (In-Person)', action: 'Offer Accepted', remarks: 'Parent signed acceptance declaration.' }
+        ],
+        communicationHistory: [
+          { timestamp: '23-Oct-2026 11:30 AM', channel: 'SMS', recipient: '9848067890', message: 'Offer acceptance recorded. Please remit admission deposit to finalize enrolment.' }
+        ]
+      },
+      {
+        appId: 'APP-2026-0110',
+        name: 'K. Sneha Latha',
+        dob: '2013-03-25',
+        gender: 'Female',
+        class: 'VII',
+        grade: 'VII',
+        parent: 'K. Simhachalam',
+        phone: '9848078901',
+        email: 'simha.k@gmail.com',
+        address: 'Seven Hills Colony, Srikakulam',
+        prevSchool: 'Sri Chaitanya Techno School',
+        lastClass: 'Class VI',
+        tcNumber: 'TC-2024-699',
+        intakeChannel: 'Online Application',
+        docStatus: 'Complete',
+        status: 'Enrolment Pending',
+        score: '92% (First Class with Distinction)',
+        assignedOfficer: 'Sri Navva Anand (Vice Principal)',
+        submissionDate: '18-Oct-2026',
+        submissionTime: '02:00 PM',
+        feeStatus: 'Paid (TXN-99812)',
+        feeAmount: '₹10,500',
+        concession: 'General Merit',
+        internalNotes: 'Fee payment verified. Ready for formal student record allocation & section placement.',
+        decisionHistory: [
+          { timestamp: '18-Oct-2026 02:00 PM', actor: 'System Intake', action: 'Application Submitted', remarks: 'All credentials uploaded.' },
+          { timestamp: '20-Oct-2026 10:00 AM', actor: 'Vice Principal', action: 'Offer Issued', remarks: 'Standard merit offer.' },
+          { timestamp: '22-Oct-2026 03:30 PM', actor: 'Parent', action: 'Offer Accepted', remarks: 'Accepted online.' },
+          { timestamp: '24-Oct-2026 10:15 AM', actor: 'Accounts Officer', action: 'Fee Remitted', remarks: 'Deposit TXN-99812 cleared in bank.' }
+        ],
+        communicationHistory: [
+          { timestamp: '24-Oct-2026 10:20 AM', channel: 'SMS & Email', recipient: '9848078901', message: 'Fee confirmed. Student record allocation in progress.' }
+        ]
+      },
+      {
+        appId: 'APP-2026-0111',
+        name: 'T. Likhitha',
+        dob: '2015-07-19',
+        gender: 'Female',
+        class: 'V',
+        grade: 'V',
+        parent: 'T. Prasad',
+        phone: '9848089012',
+        email: 'prasad.t@gmail.com',
+        address: 'GT Road, Srikakulam',
+        prevSchool: 'Mother Teresa English Medium School',
+        lastClass: 'Class IV',
+        tcNumber: 'TC-2024-401',
+        intakeChannel: 'Offline Walk-In',
+        docStatus: 'Complete',
+        status: 'Confirmed Admission',
+        score: '90% (Enrolled)',
+        assignedOfficer: 'Smt. Gorle Varalakshmi (Principal)',
+        submissionDate: '15-Oct-2026',
+        submissionTime: '10:00 AM',
+        feeStatus: 'Paid',
+        feeAmount: '₹9,000',
+        concession: 'General Merit',
+        enrolled: true,
+        enrolledAdmNo: 'SV-0003',
+        enrolledClass: 'Class V-A',
+        assignedTeacher: 'Smt. K. Hymavathi',
+        internalNotes: 'Enrolment completed. Official Admission Number SV-0003 allocated.',
+        decisionHistory: [
+          { timestamp: '15-Oct-2026 10:00 AM', actor: 'Office Staff', action: 'Intake Completed', remarks: 'Physical files verified.' },
+          { timestamp: '18-Oct-2026 11:00 AM', actor: 'Principal', action: 'Enrolment Authorized', remarks: 'Statutory admission order issued.' }
+        ],
+        communicationHistory: [
+          { timestamp: '18-Oct-2026 11:30 AM', channel: 'SMS & Email', recipient: '9848089012', message: 'Welcome to Sri Vidya High School! T. Likhitha enrolled with Adm No: SV-0003.' }
+        ]
+      },
+      {
+        appId: 'APP-2026-0112',
+        name: 'S. Bhanu Prasad',
+        dob: '2013-10-10',
+        gender: 'Male',
+        class: 'VIII',
+        grade: 'VIII',
+        parent: 'S. Appa Rao',
+        phone: '9848090123',
+        email: 'apparao.s@gmail.com',
+        address: 'Arasavalli Road, Srikakulam',
+        prevSchool: 'St. Joseph School',
+        lastClass: 'Class VII',
+        tcNumber: 'N/A',
+        intakeChannel: 'Online Application',
+        docStatus: 'Deficient',
+        status: 'Withdrawn',
+        score: '72%',
+        assignedOfficer: 'M. Ramesh (Admissions Desk)',
+        submissionDate: '12-Oct-2026',
+        submissionTime: '09:00 AM',
+        feeStatus: 'Refunded / Void',
+        feeAmount: '₹0',
+        concession: 'General Merit',
+        internalNotes: 'Parent relocated to Visakhapatnam and formally requested withdrawal of application.',
+        decisionHistory: [
+          { timestamp: '12-Oct-2026 09:00 AM', actor: 'System Intake', action: 'Submission', remarks: 'Online intake.' },
+          { timestamp: '16-Oct-2026 02:30 PM', actor: 'M. Ramesh', action: 'Formal Withdrawal', remarks: 'Parent relocation to Visakhapatnam.' }
+        ],
+        communicationHistory: [
+          { timestamp: '16-Oct-2026 02:40 PM', channel: 'SMS', recipient: '9848090123', message: 'Application APP-2026-0112 marked as Withdrawn per parent request.' }
+        ]
+      }
+    ];
+
+    // Combine localApps and seedApps
+    const combined = [...localApps];
+    seedApps.forEach(s => {
+      if (!combined.some(a => a.appId === s.appId)) {
+        combined.push(s);
+      }
+    });
+
+    state.admissions = combined;
+  }
+
+  function updateAdmissionsKPIs(list) {
+    initAdmissions();
+    const all = state.admissions || [];
+
+    const enquiries = all.filter(a => a.status === 'New Enquiry').length;
+    const applications = all.filter(a => a.status !== 'New Enquiry').length;
+    const docsPending = all.filter(a => a.docStatus === 'Pending Verification' || a.docStatus === 'Deficient' || a.status === 'Documents Pending').length;
+    const underReview = all.filter(a => a.status === 'Under Review' || a.status === 'Eligibility Review' || a.status === 'Submitted').length;
+    const offers = all.filter(a => a.status === 'Offer Issued').length;
+    const confirmed = all.filter(a => a.status === 'Confirmed Admission' || a.enrolled === true).length;
+
+    // KPI Elements
+    const kpiEnq = document.getElementById('kpiAdmEnquiries');
+    const kpiApp = document.getElementById('kpiAdmApplications');
+    const kpiDoc = document.getElementById('kpiAdmDocsPending');
+    const kpiRev = document.getElementById('kpiAdmUnderReview');
+    const kpiOff = document.getElementById('kpiAdmOffers');
+    const kpiCon = document.getElementById('kpiAdmConfirmed');
+
+    if (kpiEnq) kpiEnq.textContent = enquiries;
+    if (kpiApp) kpiApp.textContent = applications;
+    if (kpiDoc) kpiDoc.textContent = docsPending;
+    if (kpiRev) kpiRev.textContent = underReview;
+    if (kpiOff) kpiOff.textContent = offers;
+    if (kpiCon) kpiCon.textContent = confirmed;
+
+    // Update Tab Badges
+    const badgeAll = document.getElementById('tabBadgeAll');
+    const badgeEnq = document.getElementById('tabBadgeEnquiries');
+    const badgeApps = document.getElementById('tabBadgeApplications');
+    const badgeDocs = document.getElementById('tabBadgeDocs');
+    const badgeElig = document.getElementById('tabBadgeEligibility');
+    const badgeOff = document.getElementById('tabBadgeOffers');
+    const badgeAcc = document.getElementById('tabBadgeAccepted');
+    const badgeEnr = document.getElementById('tabBadgeEnrolment');
+    const badgeRej = document.getElementById('tabBadgeRejected');
+
+    if (badgeAll) badgeAll.textContent = all.length;
+    if (badgeEnq) badgeEnq.textContent = enquiries;
+    if (badgeApps) badgeApps.textContent = applications;
+    if (badgeDocs) badgeDocs.textContent = docsPending;
+    if (badgeElig) badgeElig.textContent = all.filter(a => a.status === 'Eligibility Review').length;
+    if (badgeOff) badgeOff.textContent = offers;
+    if (badgeAcc) badgeAcc.textContent = all.filter(a => a.status === 'Offer Accepted').length;
+    if (badgeEnr) badgeEnr.textContent = all.filter(a => a.status === 'Enrolment Pending').length;
+    if (badgeRej) badgeRej.textContent = all.filter(a => a.status === 'Rejected' || a.status === 'Withdrawn' || a.status === 'Cancelled').length;
+
+    // Filter count display
+    const countShowing = document.getElementById('admFilteredCount');
+    const countTotal = document.getElementById('admTotalCount');
+    if (countShowing) countShowing.textContent = list ? list.length : all.length;
+    if (countTotal) countTotal.textContent = all.length;
+
+    // Sidebar badge
+    const sidebarBadge = document.getElementById('admissionsCountBadge');
+    if (sidebarBadge) sidebarBadge.textContent = all.length;
+  }
+
+  function switchAdmissionsTab(tabId) {
+    currentAdmissionsTab = tabId;
+    const tabBtns = document.querySelectorAll('.admissions-tab-btn');
+    tabBtns.forEach(btn => {
+      if (btn.getAttribute('data-tab') === tabId) btn.classList.add('active');
+      else btn.classList.remove('active');
+    });
+
+    filterAdmissions();
+  }
+
+  function filterAdmissions() {
+    initAdmissions();
+    const query = (document.getElementById('admSearchInput')?.value || '').toLowerCase().trim();
+    const classVal = document.getElementById('admClassFilter')?.value || '';
+    const statusVal = document.getElementById('admStatusFilter')?.value || '';
+    const docVal = document.getElementById('admDocFilter')?.value || '';
+    const sourceVal = document.getElementById('admSourceFilter')?.value || '';
+
+    const all = state.admissions || [];
+
+    const filtered = all.filter(item => {
+      // 1. Tab Constraint
+      let matchTab = true;
+      if (currentAdmissionsTab === 'enquiries') {
+        matchTab = (item.status === 'New Enquiry');
+      } else if (currentAdmissionsTab === 'applications') {
+        matchTab = (item.status === 'Submitted' || item.status === 'Applications Received');
+      } else if (currentAdmissionsTab === 'doc_verification') {
+        matchTab = (item.docStatus === 'Pending Verification' || item.docStatus === 'Deficient' || item.status === 'Documents Pending');
+      } else if (currentAdmissionsTab === 'eligibility') {
+        matchTab = (item.status === 'Under Review' || item.status === 'Eligibility Review');
+      } else if (currentAdmissionsTab === 'offers') {
+        matchTab = (item.status === 'Offer Issued');
+      } else if (currentAdmissionsTab === 'accepted') {
+        matchTab = (item.status === 'Offer Accepted');
+      } else if (currentAdmissionsTab === 'enrolment_pending') {
+        matchTab = (item.status === 'Enrolment Pending');
+      } else if (currentAdmissionsTab === 'rejected') {
+        matchTab = (item.status === 'Rejected' || item.status === 'Withdrawn' || item.status === 'Cancelled');
+      }
+
+      // 2. Search Query
+      const matchQuery = !query ||
+        item.appId.toLowerCase().includes(query) ||
+        (item.name || item.studentName || '').toLowerCase().includes(query) ||
+        (item.parent || item.parentName || '').toLowerCase().includes(query) ||
+        (item.phone || '').includes(query) ||
+        (item.prevSchool || '').toLowerCase().includes(query);
+
+      // 3. Dropdown Filters
+      const matchClass = !classVal || (item.class === classVal || item.grade === classVal);
+      const matchStatus = !statusVal || (item.status === statusVal);
+      const matchDoc = !docVal || (item.docStatus === docVal || (docVal === 'Complete' && (item.docStatus || '').includes('Verified')));
+      const matchSource = !sourceVal || (item.intakeChannel === sourceVal);
+
+      return matchTab && matchQuery && matchClass && matchStatus && matchDoc && matchSource;
+    });
+
+    renderAdmissionsQueue(filtered);
+  }
+
+  function resetAdmissionsFilters() {
+    const q = document.getElementById('admSearchInput');
+    const c = document.getElementById('admClassFilter');
+    const s = document.getElementById('admStatusFilter');
+    const d = document.getElementById('admDocFilter');
+    const src = document.getElementById('admSourceFilter');
+    if (q) q.value = '';
+    if (c) c.value = '';
+    if (s) s.value = '';
+    if (d) d.value = '';
+    if (src) src.value = '';
+
+    currentAdmissionsTab = 'all';
+    const tabBtns = document.querySelectorAll('.admissions-tab-btn');
+    tabBtns.forEach(btn => {
+      if (btn.getAttribute('data-tab') === 'all') btn.classList.add('active');
+      else btn.classList.remove('active');
+    });
+
+    renderAdmissionsQueue();
+    showToast('Admissions filters reset to all records view.', 'info');
+  }
+
   function renderAdmissionsQueue(list) {
-    list = list || state.admissions || [];
-    list = sortAdmissionsDescending(list);
-
-    // Update all admission count badges across the portal
-    const countBadge = document.getElementById('admissionsCountBadge');
-    if (countBadge) countBadge.textContent = list.length;
-
-    const sidebarBadge = document.getElementById('navNewAdmissionBadge');
-    if (sidebarBadge) sidebarBadge.textContent = `${list.length} New`;
-
-    const navSubBadge = document.querySelector('.nav-sub-link[data-sub="admissions"] .nav-sub-badge');
-    if (navSubBadge) navSubBadge.textContent = `${list.length} New`;
-
-    const statCount = document.getElementById('admQueueStatCount');
-    if (statCount) statCount.textContent = list.length;
-
-    renderOfficePermissionControls();
-
-    const isOffice = (state.currentRole === 'admin');
-    const isAllowed = !isOffice || isOfficeAdmissionAllowed();
-
-    const restrictedBox = document.getElementById('officeAdmissionsRestrictedCard');
-    const tableContainer = document.getElementById('admissionsTableContainer') || (document.getElementById('admissionsTable') ? document.getElementById('admissionsTable').closest('.table-container') : null);
-    const statsBar = document.querySelector('#subview-students-admissions .admissions-overview-bar');
-
-    if (!isAllowed) {
-      if (restrictedBox) restrictedBox.style.display = 'block';
-      if (tableContainer) tableContainer.style.display = 'none';
-      if (statsBar) statsBar.style.display = 'none';
-      return;
-    }
-
-    if (restrictedBox) restrictedBox.style.display = 'none';
-    if (tableContainer) tableContainer.style.display = 'block';
-    if (statsBar) statsBar.style.display = 'grid';
-
+    initAdmissions();
     const tbody = document.getElementById('admissionsTableBody');
     if (!tbody) return;
 
-    if (list.length === 0) {
-      tbody.innerHTML = `<tr><td colspan="9" style="text-align:center; padding: 2.5rem; color: var(--color-text-muted);"><i class="fa-solid fa-circle-check text-emerald" style="font-size: 1.5rem; margin-bottom: 0.5rem; display:block;"></i>All admissions applications have been processed and confirmed.</td></tr>`;
+    const data = list || state.admissions || [];
+    updateAdmissionsKPIs(data);
+
+    if (data.length === 0) {
+      tbody.innerHTML = `
+        <tr>
+          <td colspan="9" style="text-align:center; padding:3rem; color:var(--color-text-muted);">
+            <i class="fa-solid fa-folder-open" style="font-size:2rem; margin-bottom:0.75rem; display:block; color:#94a3b8;"></i>
+            No admission records matched your search and filter criteria.
+          </td>
+        </tr>
+      `;
       return;
     }
 
-    tbody.innerHTML = list.map(item => {
-      const isApproved = (item.status || '').toLowerCase().includes('approved');
-      if (isApproved && !item.enrolled) {
-        enrollApprovedStudent(item);
+    tbody.innerHTML = data.map(item => {
+      const isApproved = (item.status === 'Confirmed Admission' || item.enrolled === true);
+      const isOnline = item.intakeChannel === 'Online Application';
+      const initial = (item.name || item.studentName || 'S').trim().charAt(0).toUpperCase();
+
+      // Doc status pill
+      let docBadge = `<span class="badge" style="background:#dcfce7; color:#15803d; font-weight:700;"><i class="fa-solid fa-circle-check mr-1"></i>Complete</span>`;
+      if ((item.docStatus || '').includes('Pending')) {
+        docBadge = `<span class="badge" style="background:#fef3c7; color:#b45309; font-weight:700;"><i class="fa-solid fa-clock-rotate-left mr-1"></i>Pending Review</span>`;
+      } else if ((item.docStatus || '').includes('Deficient')) {
+        docBadge = `<span class="badge" style="background:#fee2e2; color:#b91c1c; font-weight:700;"><i class="fa-solid fa-triangle-exclamation mr-1"></i>Deficient</span>`;
+      } else if ((item.docStatus || '').includes('Exempt')) {
+        docBadge = `<span class="badge" style="background:#f1f5f9; color:#475569; font-weight:700;"><i class="fa-solid fa-shield-slash mr-1"></i>Exempt</span>`;
       }
-      const targetClassKey = normalizeClassKey(item.class || item.grade);
-      const teacherInfo = CLASS_TEACHERS[targetClassKey] || { name: 'Smt. K. Sunitha', code: '5A', room: 'Staff Room' };
+
+      // App status badge
+      let appStatusBadge = `<span class="badge" style="background:#e0f2fe; color:#0369a1; font-weight:700;">${item.status}</span>`;
+      if (item.status === 'New Enquiry') {
+        appStatusBadge = `<span class="badge" style="background:#f1f5f9; color:#334155; font-weight:700;"><i class="fa-solid fa-comments mr-1"></i>New Enquiry</span>`;
+      } else if (item.status === 'Documents Pending') {
+        appStatusBadge = `<span class="badge" style="background:#fff7ed; color:#c2410c; font-weight:700;"><i class="fa-solid fa-file-circle-exclamation mr-1"></i>Docs Pending</span>`;
+      } else if (item.status === 'Under Review' || item.status === 'Eligibility Review') {
+        appStatusBadge = `<span class="badge" style="background:#fef3c7; color:#b45309; font-weight:700;"><i class="fa-solid fa-user-clock mr-1"></i>${item.status}</span>`;
+      } else if (item.status === 'Offer Issued') {
+        appStatusBadge = `<span class="badge" style="background:#f5f3ff; color:#7c3aed; font-weight:700;"><i class="fa-solid fa-envelope-open-text mr-1"></i>Offer Issued</span>`;
+      } else if (item.status === 'Offer Accepted') {
+        appStatusBadge = `<span class="badge" style="background:#ecfdf5; color:#059669; font-weight:700;"><i class="fa-solid fa-handshake mr-1"></i>Offer Accepted</span>`;
+      } else if (item.status === 'Enrolment Pending') {
+        appStatusBadge = `<span class="badge" style="background:#e0e7ff; color:#4338ca; font-weight:700;"><i class="fa-solid fa-hourglass-start mr-1"></i>Enrolment Pending</span>`;
+      } else if (isApproved) {
+        appStatusBadge = `<span class="badge" style="background:#dcfce7; color:#15803d; font-weight:700;"><i class="fa-solid fa-graduation-cap mr-1"></i>Confirmed (${item.enrolledAdmNo || 'Enrolled'})</span>`;
+      } else if (item.status === 'Rejected' || item.status === 'Withdrawn') {
+        appStatusBadge = `<span class="badge" style="background:#fee2e2; color:#b91c1c; font-weight:700;"><i class="fa-solid fa-ban mr-1"></i>${item.status}</span>`;
+      }
+
+      // Dynamic Contextual Next Action
+      let primaryActionBtn = '';
+      if (item.status === 'New Enquiry') {
+        primaryActionBtn = `<button type="button" class="btn btn-sm btn-primary" onclick="portalApp.openNewAdmissionModal('${item.name}', '${item.class}', '${item.parent}', '${item.phone}')" title="Convert enquiry to full application"><i class="fa-solid fa-file-signature"></i> Convert</button>`;
+      } else if (item.status === 'Submitted' || item.status === 'Documents Pending') {
+        primaryActionBtn = `<button type="button" class="btn btn-sm btn-primary" onclick="portalApp.openApplicationDetailModal('${item.appId}')" title="Verify documents & eligibility"><i class="fa-solid fa-file-circle-check"></i> Verify</button>`;
+      } else if (item.status === 'Under Review') {
+        primaryActionBtn = `<button type="button" class="btn btn-sm btn-primary" onclick="portalApp.openScheduleAssessmentModal('${item.appId}')" title="Schedule assessment or interaction"><i class="fa-solid fa-calendar-check"></i> Schedule</button>`;
+      } else if (item.status === 'Eligibility Review') {
+        primaryActionBtn = `<button type="button" class="btn btn-sm btn-primary" onclick="portalApp.openIssueOfferModal('${item.appId}')" title="Issue formal admission offer"><i class="fa-solid fa-envelope-open-text"></i> Issue Offer</button>`;
+      } else if (item.status === 'Offer Issued') {
+        primaryActionBtn = `<button type="button" class="btn btn-sm btn-success" onclick="portalApp.recordOfferAcceptance('${item.appId}')" title="Record parent offer acceptance"><i class="fa-solid fa-handshake"></i> Acceptance</button>`;
+      } else if (item.status === 'Offer Accepted') {
+        primaryActionBtn = `<button type="button" class="btn btn-sm btn-primary" onclick="portalApp.recordFeeDeposit('${item.appId}')" title="Record admission fee payment"><i class="fa-solid fa-receipt"></i> Record Fee</button>`;
+      } else if (item.status === 'Enrolment Pending') {
+        primaryActionBtn = `<button type="button" class="btn btn-sm btn-success" onclick="portalApp.openConfirmEnrolmentModal('${item.appId}')" title="Confirm formal enrolment & assign Student ID"><i class="fa-solid fa-graduation-cap"></i> Enrol</button>`;
+      } else {
+        primaryActionBtn = `<button type="button" class="btn btn-sm btn-secondary" onclick="portalApp.openApplicationDetailModal('${item.appId}')" title="View full admission dossier"><i class="fa-solid fa-eye"></i> View</button>`;
+      }
 
       return `
-      <tr id="adm-row-${item.appId}">
-        <td>
-          <strong class="text-primary" style="font-family:monospace; font-size: 0.95rem; letter-spacing:0.3px;">${item.appId}</strong>
-          <div style="font-size: 0.75rem; color: var(--color-text-muted); margin-top: 0.15rem;">${item.submissionDate || ''} ${item.submissionTime || ''}</div>
-        </td>
-        <td>
-          <div class="user-cell">
-            <div class="cell-avatar" style="background:var(--color-primary); color:#fff; font-weight:700;">${(item.name || item.studentName || 'S').charAt(0)}</div>
-            <div>
-              <strong style="color:var(--color-text-dark);">${item.name || item.studentName}</strong>
-              <div style="font-size: 0.78rem; color: var(--color-text-muted);">
-                ${item.gender ? `<span>${item.gender}</span> • ` : ''}DOB: ${item.dob || '—'}
+        <tr id="adm-row-${item.appId}">
+          <!-- 1. Application ID -->
+          <td>
+            <a href="javascript:void(0)" onclick="portalApp.openApplicationDetailModal('${item.appId}')" style="font-family:monospace; font-weight:800; font-size:0.88rem; color:#1d4ed8; text-decoration:none;">
+              ${item.appId}
+            </a>
+            <div style="font-size:0.72rem; color:#64748b; margin-top:2px;">
+              ${isOnline ? '<i class="fa-solid fa-globe text-primary"></i> Online' : '<i class="fa-solid fa-building-columns text-amber"></i> Walk-In'}
+            </div>
+          </td>
+
+          <!-- 2. Applicant Name -->
+          <td>
+            <div class="user-cell" style="display:flex; align-items:center; gap:0.6rem;">
+              <div class="cell-avatar" style="width:34px; height:34px; border-radius:50%; background:linear-gradient(135deg, #1e40af 0%, #3b82f6 100%); color:#fff; font-weight:800; font-size:0.85rem; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+                ${initial}
+              </div>
+              <div>
+                <strong style="color:#0f172a; font-size:0.88rem;">${item.name || item.studentName}</strong>
+                <div style="font-size:0.72rem; color:var(--color-text-muted); display:flex; gap:4px; margin-top:1px;">
+                  <span>${item.gender || 'Student'}</span>
+                  <span>•</span>
+                  <span>DOB: ${item.dob || '—'}</span>
+                </div>
               </div>
             </div>
-          </div>
-        </td>
-        <td><strong class="portal-badge badge-primary">Class ${item.class || item.grade || '—'}</strong></td>
-        <td><span style="font-size: 0.85rem;">${item.prevSchool || 'Fresh Admission'}</span></td>
-        <td>
-          <div style="font-weight:600; color:var(--color-text-dark);">${item.parent || item.parentName || 'Parent'}</div>
-          <a href="tel:${item.phone}" class="phone-link" style="font-size:0.84rem;"><i class="fa-solid fa-phone"></i> ${item.phone}</a>
-          ${item.email && item.email !== '—' ? `<br><a href="mailto:${item.email}" style="font-size:0.75rem; color:var(--color-text-muted);"><i class="fa-regular fa-envelope"></i> ${item.email}</a>` : ''}
-        </td>
-        <td><span class="portal-badge badge-info">${item.score || 'Awaiting Entrance / Direct'}</span></td>
-        <td><span class="portal-badge ${(item.docStatus || '').includes('Verified') ? 'badge-success' : 'badge-warning'}">${item.docStatus || 'Submitted'}</span></td>
-        <td>
-          ${portalApp.getStandardStatusBadgeHtml(item.status || (isApproved ? 'Enrolled' : 'Under Review'))}
-          ${isApproved ? `
-            <div style="font-size: 0.75rem; color: #047857; font-weight: 700; margin-top: 0.3rem;">
-              <i class="fa-solid fa-graduation-cap"></i> Enrolled: ${item.enrolledClass || ('Class ' + targetClassKey + '-A')} (${item.enrolledAdmNo || 'Adm No Issued'})
+          </td>
+
+          <!-- 3. Class Applied For -->
+          <td>
+            <span class="badge" style="background:#e0f2fe; color:#0369a1; font-weight:700; font-size:0.78rem;">
+              Class ${item.class || item.grade}
+            </span>
+          </td>
+
+          <!-- 4. Parent / Guardian -->
+          <td>
+            <div style="font-size:0.84rem; font-weight:700; color:#1e293b;">${item.parent || item.parentName || 'Parent'}</div>
+            <div style="font-size:0.78rem; margin-top:2px;">
+              <a href="tel:${item.phone}" class="phone-link"><i class="fa-solid fa-phone text-emerald mr-1"></i>${item.phone}</a>
             </div>
-            <div style="font-size: 0.72rem; color: var(--color-primary); font-weight: 600; margin-top: 0.15rem;">
-              <i class="fa-solid fa-chalkboard-user"></i> Class Teacher: <strong>${item.assignedTeacher || teacherInfo.name}</strong>
+          </td>
+
+          <!-- 5. Submission Date -->
+          <td>
+            <div style="font-size:0.8rem; font-weight:600; color:#334155;">${item.submissionDate || 'Recent'}</div>
+            <div style="font-size:0.72rem; color:#64748b;">${item.submissionTime || ''}</div>
+          </td>
+
+          <!-- 6. Documents Status -->
+          <td class="text-center">
+            ${docBadge}
+          </td>
+
+          <!-- 7. Application Status -->
+          <td class="text-center">
+            ${appStatusBadge}
+          </td>
+
+          <!-- 8. Assigned Staff -->
+          <td>
+            <div style="font-size:0.8rem; font-weight:600; color:#1e293b;">${item.assignedOfficer || 'Admissions Desk'}</div>
+          </td>
+
+          <!-- 9. Actions -->
+          <td class="text-end">
+            <div class="d-inline-flex gap-1 align-items-center">
+              ${primaryActionBtn}
+              <div class="dropdown d-inline-block">
+                <button type="button" class="btn btn-sm btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" title="More Actions">
+                  <i class="fa-solid fa-ellipsis-vertical"></i>
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end student-actions-dropdown" style="font-size:0.78rem; min-width: 190px;">
+                  <li>
+                    <a class="dropdown-item" href="javascript:void(0)" onclick="portalApp.openApplicationDetailModal('${item.appId}')">
+                      <i class="fa-solid fa-id-card text-primary mr-2"></i> View Application Dossier
+                    </a>
+                  </li>
+                  <li>
+                    <a class="dropdown-item" href="javascript:void(0)" onclick="portalApp.openScheduleAssessmentModal('${item.appId}')">
+                      <i class="fa-solid fa-calendar-check text-secondary mr-2"></i> Schedule Assessment
+                    </a>
+                  </li>
+                  <li>
+                    <a class="dropdown-item" href="javascript:void(0)" onclick="portalApp.openRecordAssessmentModal('${item.appId}')">
+                      <i class="fa-solid fa-chart-line text-info mr-2"></i> Record Assessment Outcome
+                    </a>
+                  </li>
+                  <li>
+                    <a class="dropdown-item" href="javascript:void(0)" onclick="portalApp.openIssueOfferModal('${item.appId}')">
+                      <i class="fa-solid fa-envelope-open-text text-primary mr-2"></i> Issue Admission Offer
+                    </a>
+                  </li>
+                  <li><hr class="dropdown-divider my-1"></li>
+                  <li>
+                    <a class="dropdown-item text-success" href="javascript:void(0)" onclick="portalApp.openConfirmEnrolmentModal('${item.appId}')">
+                      <i class="fa-solid fa-graduation-cap text-emerald mr-2"></i> Confirm Enrolment (Allocate ID)
+                    </a>
+                  </li>
+                  <li>
+                    <a class="dropdown-item text-danger" href="javascript:void(0)" onclick="portalApp.openCancelApplicationModal('${item.appId}')">
+                      <i class="fa-solid fa-ban text-danger mr-2"></i> Cancel / Reject Application
+                    </a>
+                  </li>
+                </ul>
+              </div>
             </div>
-          ` : ''}
-        </td>
-        <td>
-          <div class="table-action-btns">
-            ${isApproved ? `
-              <button class="btn btn-sm" style="background: rgba(16, 185, 129, 0.15); color: #059669; border: 1px solid rgba(16, 185, 129, 0.35); font-weight: 700; cursor: default; border-radius: 6px; padding: 0.35rem 0.65rem;" disabled title="Admission approved and student added to Class Teacher">
-                <i class="fa-solid fa-user-check"></i> Enrolled
-              </button>
-              <button class="action-icon-btn" onclick="portalApp.switchModule('students', 'profiles')" title="View in Class Students Directory">
-                <i class="fa-solid fa-user-graduate" style="color:var(--color-primary);"></i>
-              </button>
-            ` : `
-              <button class="btn btn-primary btn-sm" onclick="portalApp.approveAdmission('${item.appId}')" title="Approve Admission & Enroll into Class">
-                <i class="fa-solid fa-check"></i> Approve
-              </button>
-            `}
-            <button class="action-icon-btn" onclick="portalApp.reviewAdmissionDocs('${item.appId}')" title="Review Full Application Dossier & Address">
-              <i class="fa-regular fa-file-lines"></i>
-            </button>
-            <button class="action-icon-btn" onclick="portalApp.rejectAdmission('${item.appId}')" title="Reject / Archive Application" style="color:var(--color-accent-red);">
-              <i class="fa-solid fa-trash-can"></i>
-            </button>
-          </div>
-        </td>
-      </tr>
+          </td>
+        </tr>
       `;
     }).join('');
   }
 
-  function approveAdmission(appId) {
-    const applicant = state.admissions.find(a => a.appId === appId);
-    if (applicant) {
-      const approverRole = (state.currentRole === 'vice-principal') ? 'Vice Principal' : 'Principal';
-      applicant.status = 'Approved - Admission Confirmed';
-      applicant.docStatus = 'Verified & Approved';
-      applicant.approvedBy = approverRole;
-      applicant.approvedAt = new Date().toISOString();
-      applicant.statusStep = 4;
-      
-      // Directly add student details to respective class students roster & assign to Class Teacher
-      enrollApprovedStudent(applicant);
-      
-      // Update in localStorage
-      try {
-        const stored = JSON.parse(localStorage.getItem('sv_applications') || '[]');
-        const idx = stored.findIndex(a => (a.appId === appId || a.applicationNumber === appId));
-        if (idx !== -1) {
-          stored[idx] = { ...stored[idx], ...applicant };
-          localStorage.setItem('sv_applications', JSON.stringify(stored));
-        } else {
-          stored.unshift({ ...applicant });
-          localStorage.setItem('sv_applications', JSON.stringify(stored));
-        }
-        // Broadcast live storage event so website Check Status and Teacher Portal update immediately
-        window.dispatchEvent(new Event('storage'));
-      } catch (e) {}
+  /* =========================================================================
+     MODAL CONTROLLERS & WORKFLOW ACTIONS FOR ADMISSIONS
+     ========================================================================= */
 
-      renderAdmissionsQueue(state.admissions);
-      showToast(`🎉 Admission approved by ${approverRole}! ${applicant.name || applicant.studentName} has been directly added to ${applicant.enrolledClass} (Adm No: ${applicant.enrolledAdmNo}) and assigned to Class Teacher (${applicant.assignedTeacher}).`, 'success');
-    }
+  function openNewAdmissionModal(name, cls, parent, phone) {
+    if (document.getElementById('admFullName')) document.getElementById('admFullName').value = name || '';
+    if (document.getElementById('admClassApplied')) document.getElementById('admClassApplied').value = cls || 'IX';
+    if (document.getElementById('admGuardianName')) document.getElementById('admGuardianName').value = parent || '';
+    if (document.getElementById('admGuardianPhone')) document.getElementById('admGuardianPhone').value = phone || '';
+
+    openModal('newAdmissionModal');
   }
 
-  // Open & Render Student Admission Document Verification Dossier
-  function reviewAdmissionDocs(appId) {
-    const applicant = state.admissions.find(a => a.appId === appId);
-    if (!applicant) {
-      showToast(`Application ${appId} not found.`, 'error');
-      return;
+  function submitNewAdmission(event) {
+    if (event) event.preventDefault();
+    initAdmissions();
+
+    const channel = document.getElementById('admIntakeChannel')?.value || 'Offline Walk-In';
+    const fullName = (document.getElementById('admFullName')?.value || '').trim();
+    const dob = document.getElementById('admDob')?.value || '2012-05-14';
+    const gender = document.getElementById('admGender')?.value || 'Male';
+    const blood = document.getElementById('admBloodGroup')?.value || 'O+';
+    const motherTongue = document.getElementById('admMotherTongue')?.value || 'Telugu';
+    const addr = document.getElementById('admAddress')?.value || 'Srikakulam';
+    const parent = document.getElementById('admGuardianName')?.value || 'Parent / Guardian';
+    const rel = document.getElementById('admGuardianRel')?.value || 'Father';
+    const phone = document.getElementById('admGuardianPhone')?.value || '9848011223';
+    const email = document.getElementById('admGuardianEmail')?.value || 'parent@example.com';
+    const occupation = document.getElementById('admGuardianOccupation')?.value || 'Self Employed';
+    const cls = document.getElementById('admClassApplied')?.value || 'IX';
+    const cat = document.getElementById('admCategory')?.value || 'General Merit';
+    const trans = document.getElementById('admTransport')?.value || 'Self Commute';
+    const prevSchool = document.getElementById('admPrevSchool')?.value || 'Fresh Admission';
+    const lastClass = document.getElementById('admLastClass')?.value || 'Class VIII';
+    const tcNo = document.getElementById('admTcNumber')?.value || 'Pending';
+
+    const chkBirth = document.getElementById('chkDocBirth')?.checked;
+    const chkTc = document.getElementById('chkDocTc')?.checked;
+    const chkAadhaar = document.getElementById('chkDocAadhaar')?.checked;
+    const chkMarks = document.getElementById('chkDocMarks')?.checked;
+    const isDocComplete = chkBirth && chkTc && chkAadhaar && chkMarks;
+
+    const newAppId = 'APP-2026-' + String(Math.floor(1000 + Math.random() * 9000));
+    const timestamp = new Date().toISOString().split('T')[0];
+
+    const newApp = {
+      appId: newAppId,
+      name: fullName,
+      dob: dob,
+      gender: gender,
+      bloodGroup: blood,
+      motherTongue: motherTongue,
+      class: cls,
+      grade: cls,
+      parent: parent,
+      guardianRel: rel,
+      phone: phone,
+      email: email,
+      address: addr,
+      occupation: occupation,
+      prevSchool: prevSchool,
+      lastClass: lastClass,
+      tcNumber: tcNo,
+      intakeChannel: channel,
+      docStatus: isDocComplete ? 'Complete' : 'Pending Verification',
+      status: isDocComplete ? 'Under Review' : 'Documents Pending',
+      score: 'Awaiting Assessment',
+      assignedOfficer: 'M. Ramesh (Admissions Desk)',
+      submissionDate: timestamp,
+      submissionTime: '10:30 AM',
+      feeStatus: 'Unpaid',
+      feeAmount: '₹12,500',
+      concession: cat,
+      transport: trans,
+      internalNotes: `Application registered via ${channel}. Preliminary document screening: ${isDocComplete ? 'All clear' : 'Documents pending'}.`,
+      decisionHistory: [
+        { timestamp: `${timestamp} 10:30 AM`, actor: 'M. Ramesh (Admissions Desk)', action: 'Application Registered', remarks: `Intake completed via ${channel}.` }
+      ],
+      communicationHistory: [
+        { timestamp: `${timestamp} 10:31 AM`, channel: 'SMS', recipient: phone, message: `Application ${newAppId} received at Sri Vidya High School for Class ${cls}.` }
+      ]
+    };
+
+    state.admissions.unshift(newApp);
+
+    // Save to localStorage for public portal access
+    try {
+      const stored = JSON.parse(localStorage.getItem('sv_applications') || '[]');
+      stored.unshift(newApp);
+      localStorage.setItem('sv_applications', JSON.stringify(stored));
+      window.dispatchEvent(new Event('storage'));
+    } catch (e) {}
+
+    closeModal('newAdmissionModal');
+    filterAdmissions();
+    showToast(`Admission Application ${newAppId} for ${fullName} created successfully!`, 'success');
+  }
+
+  function openAddEnquiryModal() {
+    if (document.getElementById('enqFollowupDate')) {
+      const d = new Date();
+      d.setDate(d.getDate() + 3);
+      document.getElementById('enqFollowupDate').value = d.toISOString().split('T')[0];
+    }
+    openModal('addEnquiryModal');
+  }
+
+  function submitAddEnquiry(event) {
+    if (event) event.preventDefault();
+    initAdmissions();
+
+    const name = document.getElementById('enqStudentName')?.value || 'Prospective Student';
+    const cls = document.getElementById('enqClass')?.value || 'IX';
+    const parent = document.getElementById('enqParentName')?.value || 'Parent';
+    const phone = document.getElementById('enqPhone')?.value || '9848011223';
+    const src = document.getElementById('enqSource')?.value || 'Walk-In';
+    const remarks = document.getElementById('enqRemarks')?.value || 'Parent inquired about admission.';
+    const date = new Date().toISOString().split('T')[0];
+
+    const newEnqId = 'ENQ-2026-' + String(Math.floor(100 + Math.random() * 900));
+
+    const newEnquiry = {
+      appId: newEnqId,
+      name: name,
+      dob: '2014-06-15',
+      gender: 'Student',
+      class: cls,
+      grade: cls,
+      parent: parent,
+      phone: phone,
+      email: 'parent@example.com',
+      address: 'Srikakulam',
+      prevSchool: 'Local Institution',
+      lastClass: 'Previous Class',
+      tcNumber: 'N/A',
+      intakeChannel: src,
+      docStatus: 'Pending Verification',
+      status: 'New Enquiry',
+      score: 'Awaiting Assessment',
+      assignedOfficer: 'Smt. K. Hymavathi (Counselor)',
+      submissionDate: date,
+      submissionTime: '11:00 AM',
+      feeStatus: 'Unpaid',
+      feeAmount: '₹9,500',
+      concession: 'General Merit',
+      internalNotes: remarks,
+      decisionHistory: [
+        { timestamp: `${date} 11:00 AM`, actor: 'Smt. K. Hymavathi', action: 'Enquiry Registered', remarks: remarks }
+      ],
+      communicationHistory: [
+        { timestamp: `${date} 11:05 AM`, channel: 'SMS', recipient: phone, message: `Thank you for contacting Sri Vidya High School. Enquiry ref: ${newEnqId}.` }
+      ]
+    };
+
+    state.admissions.unshift(newEnquiry);
+    closeModal('addEnquiryModal');
+    filterAdmissions();
+    showToast(`Prospective Enquiry ${newEnqId} for ${name} logged successfully!`, 'success');
+  }
+
+  function openApplicationDetailModal(appId) {
+    initAdmissions();
+    const app = state.admissions.find(a => a.appId === appId) || state.admissions[0];
+    if (!app) return;
+
+    activeDetailAppId = app.appId;
+
+    if (document.getElementById('admDetailTitle')) document.getElementById('admDetailTitle').textContent = app.name || app.studentName;
+    if (document.getElementById('admDetailAppId')) document.getElementById('admDetailAppId').textContent = app.appId;
+    if (document.getElementById('admDetailSub')) {
+      document.getElementById('admDetailSub').textContent = `Class ${app.class || app.grade} Applied • Submitted ${app.submissionDate || ''} via ${app.intakeChannel || 'Portal'}`;
     }
 
-    const modal = document.getElementById('reviewAdmissionDocsModal');
-    const body = document.getElementById('reviewAdmissionDocsBody');
-    const approveBtn = document.getElementById('btnModalApproveAdmission');
+    const statusBadgeEl = document.getElementById('admDetailStatusBadge');
+    if (statusBadgeEl) {
+      statusBadgeEl.innerHTML = `<span class="badge" style="background:#e0f2fe; color:#0369a1; font-weight:700;">${app.status}</span>`;
+    }
 
-    if (body) {
-      body.innerHTML = `
-        <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:1.25rem; padding-bottom:1rem; border-bottom:1px solid var(--color-border); flex-wrap:wrap; gap:0.75rem;">
+    renderAdmissionDetailPanes(app);
+
+    // Injects context-appropriate action buttons
+    const btnContainer = document.getElementById('admDetailActionButtons');
+    if (btnContainer) {
+      if (app.status === 'Enrolment Pending') {
+        btnContainer.innerHTML = `
+          <button type="button" class="btn btn-secondary btn-sm" onclick="portalApp.openCancelApplicationModal('${app.appId}')">Reject / Cancel</button>
+          <button type="button" class="btn btn-success btn-sm" onclick="portalApp.openConfirmEnrolmentModal('${app.appId}')">
+            <i class="fa-solid fa-graduation-cap mr-1"></i> Formally Enrol Student
+          </button>
+        `;
+      } else if (app.status === 'Eligibility Review' || app.status === 'Under Review') {
+        btnContainer.innerHTML = `
+          <button type="button" class="btn btn-secondary btn-sm" onclick="portalApp.openScheduleAssessmentModal('${app.appId}')">Schedule Assessment</button>
+          <button type="button" class="btn btn-primary btn-sm" onclick="portalApp.openIssueOfferModal('${app.appId}')">
+            <i class="fa-solid fa-envelope-open-text mr-1"></i> Issue Admission Offer
+          </button>
+        `;
+      } else if (app.status === 'Offer Issued') {
+        btnContainer.innerHTML = `
+          <button type="button" class="btn btn-success btn-sm" onclick="portalApp.recordOfferAcceptance('${app.appId}')">
+            <i class="fa-solid fa-handshake mr-1"></i> Record Parent Acceptance
+          </button>
+        `;
+      } else if (app.status === 'Offer Accepted') {
+        btnContainer.innerHTML = `
+          <button type="button" class="btn btn-primary btn-sm" onclick="portalApp.recordFeeDeposit('${app.appId}')">
+            <i class="fa-solid fa-receipt mr-1"></i> Record Fee Deposit
+          </button>
+        `;
+      } else {
+        btnContainer.innerHTML = `
+          <button type="button" class="btn btn-secondary btn-sm" onclick="portalApp.openCancelApplicationModal('${app.appId}')">Reject / Cancel</button>
+          <button type="button" class="btn btn-primary btn-sm" onclick="portalApp.openScheduleAssessmentModal('${app.appId}')">
+            <i class="fa-solid fa-calendar-check mr-1"></i> Advance Stage
+          </button>
+        `;
+      }
+    }
+
+    switchAdmDetailTab('profile');
+    openModal('applicationDetailModal');
+  }
+
+  function switchAdmDetailTab(tabId) {
+    const tabBtns = document.querySelectorAll('.adm-detail-tab-btn');
+    tabBtns.forEach(btn => {
+      if (btn.getAttribute('data-tab') === tabId) btn.classList.add('active');
+      else btn.classList.remove('active');
+    });
+
+    const panes = document.querySelectorAll('.adm-detail-pane');
+    panes.forEach(p => {
+      if (p.id === 'pane-adm-' + tabId) p.classList.add('active');
+      else p.classList.remove('active');
+    });
+  }
+
+  function renderAdmissionDetailPanes(app) {
+    const container = document.getElementById('admDetailPanesContainer');
+    if (!container) return;
+
+    container.innerHTML = `
+      <!-- 1. Profile Pane -->
+      <div class="adm-detail-pane active" id="pane-adm-profile">
+        <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem;">
+          <div><span style="font-size:0.75rem; color:#64748b; font-weight:700;">FULL LEGAL NAME</span><div style="font-weight:800; font-size:0.95rem; color:#0f172a;">${app.name}</div></div>
+          <div><span style="font-size:0.75rem; color:#64748b; font-weight:700;">DATE OF BIRTH</span><div style="font-weight:700; color:#334155;">${app.dob || '—'}</div></div>
+          <div><span style="font-size:0.75rem; color:#64748b; font-weight:700;">GENDER</span><div style="font-weight:700; color:#334155;">${app.gender || '—'}</div></div>
+          <div><span style="font-size:0.75rem; color:#64748b; font-weight:700;">BLOOD GROUP</span><div style="font-weight:700; color:#dc2626;"><i class="fa-solid fa-droplet"></i> ${app.bloodGroup || 'O+'}</div></div>
+          <div><span style="font-size:0.75rem; color:#64748b; font-weight:700;">MOTHER TONGUE</span><div style="font-weight:700; color:#334155;">${app.motherTongue || 'Telugu'}</div></div>
+          <div><span style="font-size:0.75rem; color:#64748b; font-weight:700;">NATIONALITY</span><div style="font-weight:700; color:#334155;">Indian</div></div>
+        </div>
+        <div style="margin-top:1.25rem; padding-top:0.75rem; border-top:1px solid #f1f5f9;">
+          <span style="font-size:0.75rem; color:#64748b; font-weight:700;">RESIDENTIAL ADDRESS</span>
+          <div style="font-weight:600; color:#0f172a; margin-top:2px;">${app.address || 'Srikakulam'}</div>
+        </div>
+      </div>
+
+      <!-- 2. Guardian Pane -->
+      <div class="adm-detail-pane" id="pane-adm-guardian">
+        <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem;">
+          <div><span style="font-size:0.75rem; color:#64748b; font-weight:700;">PRIMARY GUARDIAN NAME</span><div style="font-weight:800; font-size:0.95rem; color:#0f172a;">${app.parent}</div></div>
+          <div><span style="font-size:0.75rem; color:#64748b; font-weight:700;">RELATIONSHIP</span><div style="font-weight:700; color:#334155;">${app.guardianRel || 'Father'}</div></div>
+          <div><span style="font-size:0.75rem; color:#64748b; font-weight:700;">CONTACT PHONE</span><div style="font-weight:700; color:#15803d;"><i class="fa-solid fa-phone mr-1"></i>${app.phone}</div></div>
+          <div><span style="font-size:0.75rem; color:#64748b; font-weight:700;">EMAIL</span><div style="font-weight:600; color:#0369a1;">${app.email || 'Not provided'}</div></div>
+          <div><span style="font-size:0.75rem; color:#64748b; font-weight:700;">OCCUPATION</span><div style="font-weight:600; color:#334155;">${app.occupation || 'Employee / Self-Employed'}</div></div>
+        </div>
+      </div>
+
+      <!-- 3. Academics & Class Preference -->
+      <div class="adm-detail-pane" id="pane-adm-academics">
+        <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem;">
+          <div><span style="font-size:0.75rem; color:#64748b; font-weight:700;">CLASS APPLIED FOR</span><div style="font-weight:800; font-size:0.95rem; color:#1d4ed8;">Class ${app.class || app.grade}</div></div>
+          <div><span style="font-size:0.75rem; color:#64748b; font-weight:700;">ACADEMIC YEAR</span><div style="font-weight:700; color:#334155;">2025-2026</div></div>
+          <div><span style="font-size:0.75rem; color:#64748b; font-weight:700;">PREVIOUS SCHOOL</span><div style="font-weight:700; color:#334155;">${app.prevSchool || 'Fresh Intake'}</div></div>
+          <div><span style="font-size:0.75rem; color:#64748b; font-weight:700;">LAST CLASS ATTENDED</span><div style="font-weight:700; color:#334155;">${app.lastClass || 'N/A'}</div></div>
+          <div><span style="font-size:0.75rem; color:#64748b; font-weight:700;">TC REFERENCE</span><div style="font-weight:700; color:#0369a1;">${app.tcNumber || 'Pending'}</div></div>
+          <div><span style="font-size:0.75rem; color:#64748b; font-weight:700;">TRANSPORT PREFERENCE</span><div style="font-weight:700; color:#334155;">${app.transport || 'Self Commute'}</div></div>
+        </div>
+      </div>
+
+      <!-- 4. Uploaded Documents -->
+      <div class="adm-detail-pane" id="pane-adm-documents">
+        <div style="font-size:0.84rem; font-weight:800; color:#0f172a; margin-bottom:0.75rem;">Mandatory Statutory Credentials Dossier</div>
+        <div style="display:flex; flex-direction:column; gap:0.5rem;">
+          <div style="display:flex; justify-content:space-between; align-items:center; background:#f8fafc; border:1px solid #e2e8f0; padding:0.6rem 0.85rem; border-radius:6px;">
+            <span><i class="fa-solid fa-certificate text-amber mr-2"></i> Birth Certificate (Municipal Age Proof)</span>
+            <span class="badge badge-success">Verified ✓</span>
+          </div>
+          <div style="display:flex; justify-content:space-between; align-items:center; background:#f8fafc; border:1px solid #e2e8f0; padding:0.6rem 0.85rem; border-radius:6px;">
+            <span><i class="fa-solid fa-file-contract text-primary mr-2"></i> Transfer Certificate (TC)</span>
+            <span class="badge ${(app.tcNumber && app.tcNumber.includes('Pending')) ? 'badge-warning' : 'badge-success'}">${(app.tcNumber && app.tcNumber.includes('Pending')) ? 'Pending Physical' : 'Verified ✓'}</span>
+          </div>
+          <div style="display:flex; justify-content:space-between; align-items:center; background:#f8fafc; border:1px solid #e2e8f0; padding:0.6rem 0.85rem; border-radius:6px;">
+            <span><i class="fa-solid fa-id-card text-emerald mr-2"></i> Student &amp; Parent Aadhaar Card Copies</span>
+            <span class="badge badge-success">Verified ✓</span>
+          </div>
+          <div style="display:flex; justify-content:space-between; align-items:center; background:#f8fafc; border:1px solid #e2e8f0; padding:0.6rem 0.85rem; border-radius:6px;">
+            <span><i class="fa-solid fa-award text-secondary mr-2"></i> Previous Class Report Card / Marksheet</span>
+            <span class="badge badge-success">Verified ✓</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 5. Eligibility Checklist -->
+      <div class="adm-detail-pane" id="pane-adm-eligibility">
+        <div style="font-size:0.84rem; font-weight:800; color:#0f172a; margin-bottom:0.75rem;">Statutory Admission Eligibility Matrix</div>
+        <div style="display:flex; flex-direction:column; gap:0.65rem;">
+          <div style="display:flex; align-items:center; gap:8px; font-size:0.85rem;"><i class="fa-solid fa-circle-check text-emerald"></i> <span><strong>Age Compliance:</strong> Satisfies AP Education Code minimum age criteria for Class ${app.class}.</span></div>
+          <div style="display:flex; align-items:center; gap:8px; font-size:0.85rem;"><i class="fa-solid fa-circle-check text-emerald"></i> <span><strong>Zoning / Commute:</strong> Residence located within approved 12 km school transit perimeter.</span></div>
+          <div style="display:flex; align-items:center; gap:8px; font-size:0.85rem;"><i class="fa-solid fa-circle-check text-emerald"></i> <span><strong>Language Eligibility:</strong> First language Telugu / Second language Hindi stream feasible.</span></div>
+          <div style="display:flex; align-items:center; gap:8px; font-size:0.85rem;"><i class="fa-solid fa-circle-check text-emerald"></i> <span><strong>Academic Preparedness:</strong> Found eligible for mainstream curriculum standards.</span></div>
+        </div>
+      </div>
+
+      <!-- 6. Assessment Results -->
+      <div class="adm-detail-pane" id="pane-adm-assessment">
+        <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; padding:1rem;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.5rem;">
+            <strong style="color:#0f172a;">Aptitude Evaluation &amp; Interview Outcome</strong>
+            <span class="assessment-outcome-badge recommended">Recommended</span>
+          </div>
+          <div style="font-size:0.88rem; color:#1e293b; margin-bottom:0.4rem;">Score: <strong>${app.score || '88% (First Class)'}</strong></div>
+          <p style="margin:0; font-size:0.82rem; color:#475569; line-height:1.4;">
+            Candidate demonstrated good communication skills, strong conceptual foundation in Mathematics, and enthusiastic interest in science club activities.
+          </p>
+        </div>
+      </div>
+
+      <!-- 7. Fee Information -->
+      <div class="adm-detail-pane" id="pane-adm-fees">
+        <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+          <div><span style="font-size:0.75rem; color:#64748b; font-weight:700;">TOTAL ANNUAL BOARD FEE</span><div style="font-weight:800; font-size:1.1rem; color:#0f172a;">${app.feeAmount || '₹12,500'}</div></div>
+          <div><span style="font-size:0.75rem; color:#64748b; font-weight:700;">CONCESSION CATEGORY</span><div style="font-weight:700; color:#0369a1;">${app.concession || 'General Merit'}</div></div>
+          <div><span style="font-size:0.75rem; color:#64748b; font-weight:700;">DEPOSIT / PAYMENT STATUS</span><div style="font-weight:700; color:#15803d;">${app.feeStatus || 'Pending'}</div></div>
+        </div>
+      </div>
+
+      <!-- 8. Review Notes -->
+      <div class="adm-detail-pane" id="pane-adm-notes">
+        <div style="background:#fffbeb; border:1px solid #fde68a; border-radius:8px; padding:1rem; font-size:0.85rem; color:#78350f;">
+          <strong>Confidential Admissions Committee Remarks:</strong>
+          <p style="margin:4px 0 0; line-height:1.4;">${app.internalNotes || 'Application verified and cleared by Admissions Desk.'}</p>
+        </div>
+      </div>
+
+      <!-- 9. Decision History -->
+      <div class="adm-detail-pane" id="pane-adm-history">
+        <div style="display:flex; flex-direction:column; gap:0.6rem;">
+          ${(app.decisionHistory || []).map(h => `
+            <div style="background:#ffffff; border:1px solid #e2e8f0; border-radius:6px; padding:0.65rem 0.85rem; font-size:0.82rem;">
+              <div style="display:flex; justify-content:space-between; margin-bottom:2px;">
+                <strong style="color:#0f172a;">${h.action}</strong>
+                <span style="color:#64748b;">${h.timestamp}</span>
+              </div>
+              <div style="color:#475569;">Actor: <strong>${h.actor}</strong> • Note: ${h.remarks}</div>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+
+      <!-- 10. Communication History -->
+      <div class="adm-detail-pane" id="pane-adm-comms">
+        <div style="display:flex; flex-direction:column; gap:0.6rem;">
+          ${(app.communicationHistory || []).map(c => `
+            <div style="background:#ffffff; border:1px solid #e2e8f0; border-radius:6px; padding:0.65rem 0.85rem; font-size:0.82rem;">
+              <div style="display:flex; justify-content:space-between; margin-bottom:2px;">
+                <strong style="color:#1d4ed8;">${c.channel} Notification</strong>
+                <span style="color:#64748b;">${c.timestamp}</span>
+              </div>
+              <div style="color:#334155; margin-top:2px;">To: ${c.recipient} — "${c.message}"</div>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+    `;
+  }
+
+  function openScheduleAssessmentModal(appId) {
+    initAdmissions();
+    const app = state.admissions.find(a => a.appId === appId) || state.admissions[0];
+    if (!app) return;
+
+    if (document.getElementById('schedTargetAppId')) document.getElementById('schedTargetAppId').value = app.appId;
+    if (document.getElementById('schedModalSubtitle')) document.getElementById('schedModalSubtitle').textContent = `Applicant: ${app.name} (${app.appId}) • Class ${app.class}`;
+
+    if (document.getElementById('schedDate')) {
+      const d = new Date();
+      d.setDate(d.getDate() + 2);
+      document.getElementById('schedDate').value = d.toISOString().split('T')[0];
+    }
+
+    closeModal('applicationDetailModal');
+    openModal('scheduleAssessmentModal');
+  }
+
+  function submitScheduleAssessment(event) {
+    if (event) event.preventDefault();
+    initAdmissions();
+
+    const appId = document.getElementById('schedTargetAppId')?.value;
+    const app = state.admissions.find(a => a.appId === appId);
+    if (!app) return;
+
+    const type = document.getElementById('schedType')?.value || 'Written Aptitude Evaluation';
+    const date = document.getElementById('schedDate')?.value || '28-Oct-2026';
+    const time = document.getElementById('schedTime')?.value || '10:00 AM';
+    const venue = document.getElementById('schedVenue')?.value || 'Room 102';
+    const assessor = document.getElementById('schedAssessor')?.value || 'Academic Dean';
+
+    app.status = 'Eligibility Review';
+    app.score = `Scheduled on ${date} at ${time}`;
+    app.assignedOfficer = assessor;
+
+    if (!app.decisionHistory) app.decisionHistory = [];
+    app.decisionHistory.unshift({
+      timestamp: new Date().toLocaleString(),
+      actor: assessor,
+      action: 'Assessment Scheduled',
+      remarks: `Scheduled for ${type} on ${date} at ${time} in ${venue}.`
+    });
+
+    if (!app.communicationHistory) app.communicationHistory = [];
+    app.communicationHistory.unshift({
+      timestamp: new Date().toLocaleString(),
+      channel: 'SMS & Email',
+      recipient: app.phone,
+      message: `Assessment scheduled for ${app.name} on ${date} at ${time} (${venue}).`
+    });
+
+    closeModal('scheduleAssessmentModal');
+    filterAdmissions();
+    showToast(`Assessment scheduled for ${app.name} on ${date}. Parent notified via SMS.`, 'success');
+  }
+
+  function openRecordAssessmentModal(appId) {
+    initAdmissions();
+    const app = state.admissions.find(a => a.appId === appId) || state.admissions[0];
+    if (!app) return;
+
+    if (document.getElementById('recordAssTargetAppId')) document.getElementById('recordAssTargetAppId').value = app.appId;
+    if (document.getElementById('recordAssSub')) document.getElementById('recordAssSub').textContent = `Applicant: ${app.name} (${app.appId}) • Class ${app.class}`;
+
+    closeModal('applicationDetailModal');
+    openModal('recordAssessmentModal');
+  }
+
+  function submitRecordAssessment(event) {
+    if (event) event.preventDefault();
+    initAdmissions();
+
+    const appId = document.getElementById('recordAssTargetAppId')?.value;
+    const app = state.admissions.find(a => a.appId === appId);
+    if (!app) return;
+
+    const score = document.getElementById('recordAssScore')?.value || '88%';
+    const outcome = document.getElementById('recordAssOutcome')?.value || 'Recommended';
+    const remarks = document.getElementById('recordAssRemarks')?.value || 'Good aptitude.';
+
+    app.status = 'Under Review';
+    app.score = `${score} (${outcome})`;
+
+    if (!app.decisionHistory) app.decisionHistory = [];
+    app.decisionHistory.unshift({
+      timestamp: new Date().toLocaleString(),
+      actor: (state.currentUser && state.currentUser.name) || 'Sri Ch. Ramesh',
+      action: 'Assessment Outcome Recorded',
+      remarks: `Score: ${score}. Outcome: ${outcome}. Observations: ${remarks}`
+    });
+
+    closeModal('recordAssessmentModal');
+    filterAdmissions();
+    showToast(`Assessment outcome recorded for ${app.name}: ${score} (${outcome}).`, 'success');
+  }
+
+  function openIssueOfferModal(appId) {
+    initAdmissions();
+    const app = state.admissions.find(a => a.appId === appId) || state.admissions[0];
+    if (!app) return;
+
+    if (document.getElementById('offerTargetAppId')) document.getElementById('offerTargetAppId').value = app.appId;
+    if (document.getElementById('offerModalSub')) document.getElementById('offerModalSub').textContent = `Applicant: ${app.name} (${app.appId})`;
+    if (document.getElementById('offerClass')) document.getElementById('offerClass').value = `Class ${app.class || app.grade} (Section A)`;
+
+    if (document.getElementById('offerExpiryDate')) {
+      const d = new Date();
+      d.setDate(d.getDate() + 10);
+      document.getElementById('offerExpiryDate').value = d.toISOString().split('T')[0];
+    }
+
+    closeModal('applicationDetailModal');
+    openModal('issueOfferModal');
+  }
+
+  function submitIssueOffer(event) {
+    if (event) event.preventDefault();
+    initAdmissions();
+
+    const appId = document.getElementById('offerTargetAppId')?.value;
+    const app = state.admissions.find(a => a.appId === appId);
+    if (!app) return;
+
+    const feeAmount = document.getElementById('offerFeeAmount')?.value || '₹12,500';
+    const expiry = document.getElementById('offerExpiryDate')?.value || '10 days';
+
+    app.status = 'Offer Issued';
+    app.feeStatus = 'Awaiting Parent Acceptance';
+    app.feeAmount = feeAmount;
+
+    if (!app.decisionHistory) app.decisionHistory = [];
+    app.decisionHistory.unshift({
+      timestamp: new Date().toLocaleString(),
+      actor: (state.currentUser && state.currentUser.name) || 'Smt. Gorle Varalakshmi (Principal)',
+      action: 'Formal Offer Issued',
+      remarks: `Admission offer issued for Class ${app.class}. Offer valid until ${expiry}.`
+    });
+
+    if (!app.communicationHistory) app.communicationHistory = [];
+    app.communicationHistory.unshift({
+      timestamp: new Date().toLocaleString(),
+      channel: 'SMS & Email',
+      recipient: app.phone,
+      message: `Congratulations! Formal Admission Offer issued for ${app.name} at Sri Vidya High School. Validity until ${expiry}.`
+    });
+
+    closeModal('issueOfferModal');
+    filterAdmissions();
+    showToast(`Formal Admission Offer Letter dispatched for ${app.name}! Parent notified.`, 'success');
+  }
+
+  function recordOfferAcceptance(appId) {
+    initAdmissions();
+    const app = state.admissions.find(a => a.appId === appId);
+    if (!app) return;
+
+    app.status = 'Offer Accepted';
+    app.feeStatus = 'Deposit Due';
+
+    if (!app.decisionHistory) app.decisionHistory = [];
+    app.decisionHistory.unshift({
+      timestamp: new Date().toLocaleString(),
+      actor: 'Parent / Guardian',
+      action: 'Offer Accepted',
+      remarks: 'Parent confirmed acceptance of admission terms and seat allocation.'
+    });
+
+    closeModal('applicationDetailModal');
+    filterAdmissions();
+    showToast(`Offer acceptance recorded for ${app.name}. Routed to deposit collection.`, 'success');
+  }
+
+  function recordFeeDeposit(appId) {
+    initAdmissions();
+    const app = state.admissions.find(a => a.appId === appId);
+    if (!app) return;
+
+    const txnRef = 'TXN-' + Math.floor(10000 + Math.random() * 90000);
+    app.status = 'Enrolment Pending';
+    app.feeStatus = `Paid (${txnRef})`;
+
+    if (!app.decisionHistory) app.decisionHistory = [];
+    app.decisionHistory.unshift({
+      timestamp: new Date().toLocaleString(),
+      actor: 'Accounts Officer M. Prasad',
+      action: 'Admission Fee Remitted',
+      remarks: `Admission fee receipt issued: ${txnRef}. Student ready for final enrolment.`
+    });
+
+    closeModal('applicationDetailModal');
+    filterAdmissions();
+    showToast(`Fee deposit confirmed (${txnRef}). ${app.name} is ready for Final Enrolment!`, 'success');
+  }
+
+  /* =========================================================================
+     DUPLICATE PREVENTION SCANNER & FINAL ENROLMENT
+     ========================================================================= */
+
+  function openConfirmEnrolmentModal(appId) {
+    initAdmissions();
+    const app = state.admissions.find(a => a.appId === appId) || state.admissions[0];
+    if (!app) return;
+
+    if (document.getElementById('enrolTargetAppId')) document.getElementById('enrolTargetAppId').value = app.appId;
+    if (document.getElementById('enrolModalSub')) document.getElementById('enrolModalSub').textContent = `Applicant: ${app.name} (${app.appId})`;
+
+    // Calculate next admission number
+    const nextNum = (state.students ? state.students.length : 500) + 1;
+    const nextAdmNo = 'SV-' + String(nextNum).padStart(4, '0');
+    const nextStudentId = 'STU-SV-' + String(nextNum).padStart(4, '0');
+
+    if (document.getElementById('enrolAllocatedAdmNo')) document.getElementById('enrolAllocatedAdmNo').value = nextAdmNo;
+    if (document.getElementById('enrolAllocatedStudentId')) document.getElementById('enrolAllocatedStudentId').value = nextStudentId;
+    if (document.getElementById('enrolAllocatedClass')) document.getElementById('enrolAllocatedClass').value = `Class ${app.class || app.grade}`;
+
+    const targetClassKey = normalizeClassKey(app.class || app.grade);
+    const teacherInfo = CLASS_TEACHERS[targetClassKey] || { name: 'Smt. K. Hymavathi', code: '5A' };
+    if (document.getElementById('enrolClassTeacher')) document.getElementById('enrolClassTeacher').value = teacherInfo.name;
+
+    // Run Duplicate Scanner
+    scanAdmissionsDuplicate(app);
+
+    closeModal('applicationDetailModal');
+    openModal('confirmEnrolmentModal');
+  }
+
+  function scanAdmissionsDuplicate(app) {
+    const container = document.getElementById('duplicateScannerContainer');
+    if (!container) return;
+
+    const students = state.students || [];
+    const appNameLower = (app.name || '').toLowerCase().trim();
+    const appPhone = (app.phone || '').trim();
+    const appDob = (app.dob || '').trim();
+
+    // Scan for potential matches: name, DOB, phone
+    const matches = students.filter(s => {
+      const matchName = (s.name || '').toLowerCase().trim() === appNameLower;
+      const matchPhone = (s.phone || '').trim() === appPhone;
+      const matchDob = (s.dob || '').trim() === appDob;
+      return matchName || matchPhone || matchDob;
+    });
+
+    if (matches.length > 0) {
+      const m = matches[0];
+      container.innerHTML = `
+        <div class="duplicate-scanner-card">
+          <div style="display:flex; align-items:center; gap:8px; font-weight:800; color:#b45309; font-size:0.9rem;">
+            <i class="fa-solid fa-triangle-exclamation"></i> Duplicate Prevention Scanner: Potential Match Detected
+          </div>
+          <div style="font-size:0.78rem; color:#78350f; margin-top:3px; line-height:1.4;">
+            <strong>Statutory Rule:</strong> Do not automatically merge records based on name alone. Verify if this is a distinct applicant or an existing student re-admission.
+          </div>
+          <div class="duplicate-match-item">
+            <div><span style="color:#64748b; font-size:0.72rem;">EXISTING STUDENT</span><br><strong>${m.name}</strong></div>
+            <div><span style="color:#64748b; font-size:0.72rem;">ADMISSION NO</span><br><strong style="color:#1d4ed8;">${m.admNo}</strong></div>
+            <div><span style="color:#64748b; font-size:0.72rem;">CURRENT CLASS</span><br><strong>Class ${m.class}-${m.section || 'A'}</strong></div>
+            <div><span style="color:#64748b; font-size:0.72rem;">GUARDIAN PHONE</span><br><strong>${m.phone}</strong></div>
+          </div>
+          <div style="margin-top:8px; font-size:0.75rem; color:#b45309;">
+            <i class="fa-solid fa-info-circle mr-1"></i> Proceeding below will create a distinct official student record with a new Admission Number.
+          </div>
+        </div>
+      `;
+    } else {
+      container.innerHTML = `
+        <div style="background:#ecfdf5; border:1px solid #a7f3d0; border-radius:8px; padding:0.85rem; display:flex; align-items:center; gap:8px;">
+          <i class="fa-solid fa-shield-check text-emerald" style="font-size:1.2rem;"></i>
           <div>
-            <div style="font-size:0.78rem; text-transform:uppercase; letter-spacing:0.5px; color:var(--color-text-muted); font-weight:700;">Official Application Reference</div>
-            <div style="display:flex; align-items:center; gap:0.5rem; margin-top:0.25rem; flex-wrap:wrap;">
-              <span style="font-family:monospace; font-size:1.35rem; font-weight:800; color:var(--color-primary); letter-spacing:0.5px;">${applicant.appId}</span>
-              <span class="portal-badge badge-primary">Class ${applicant.class || applicant.grade}</span>
-              <span class="portal-badge ${applicant.status.includes('Approved') ? 'badge-success' : 'badge-warning'}">${applicant.status}</span>
-            </div>
-          </div>
-          <div style="text-align:right;">
-            <div style="font-size:0.78rem; color:var(--color-text-muted); font-weight:600;">Registration Timestamp</div>
-            <strong style="color:var(--color-text-dark); font-size:0.95rem;">${applicant.submissionDate || 'Recent'} ${applicant.submissionTime || ''}</strong>
-          </div>
-        </div>
-
-        <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.25rem; margin-bottom: 1.5rem;">
-          <div style="background:var(--color-bg-subtle, #f8fafc); padding:1.1rem; border-radius:10px; border:1px solid var(--color-border);">
-            <div style="font-size:0.78rem; text-transform:uppercase; color:var(--color-text-muted); font-weight:800; margin-bottom:0.6rem; letter-spacing:0.4px;">
-              <i class="fa-solid fa-user-graduate text-primary"></i> Student Information
-            </div>
-            <div style="font-size:1.15rem; font-weight:800; color:var(--color-text-dark); margin-bottom:0.4rem;">${applicant.name || applicant.studentName}</div>
-            <div style="font-size:0.88rem; color:var(--color-text-muted); margin-bottom:0.25rem;"><strong>Gender:</strong> ${applicant.gender || '—'}</div>
-            <div style="font-size:0.88rem; color:var(--color-text-muted); margin-bottom:0.25rem;"><strong>Date of Birth:</strong> ${applicant.dob || '—'}</div>
-            <div style="font-size:0.88rem; color:var(--color-text-muted);"><strong>Previous School:</strong> ${applicant.prevSchool || 'Fresh Admission'}</div>
-          </div>
-
-          <div style="background:var(--color-bg-subtle, #f8fafc); padding:1.1rem; border-radius:10px; border:1px solid var(--color-border);">
-            <div style="font-size:0.78rem; text-transform:uppercase; color:var(--color-text-muted); font-weight:800; margin-bottom:0.6rem; letter-spacing:0.4px;">
-              <i class="fa-solid fa-users text-primary"></i> Parent / Guardian Contact
-            </div>
-            <div style="font-size:1.15rem; font-weight:800; color:var(--color-text-dark); margin-bottom:0.4rem;">${applicant.parent || applicant.parentName}</div>
-            <div style="font-size:0.88rem; margin-bottom:0.35rem;">
-              <strong style="color:var(--color-text-muted);">Phone:</strong> <a href="tel:${applicant.phone}" style="color:var(--color-primary); font-weight:700;"><i class="fa-solid fa-phone"></i> ${applicant.phone}</a>
-            </div>
-            <div style="font-size:0.88rem;">
-              <strong style="color:var(--color-text-muted);">Email:</strong> ${applicant.email && applicant.email !== '—' ? `<a href="mailto:${applicant.email}" style="color:var(--color-primary); font-weight:600;">${applicant.email}</a>` : '<span style="color:var(--color-text-muted);">Not provided</span>'}
-            </div>
-          </div>
-        </div>
-
-        <div style="background:var(--color-bg-subtle, #f8fafc); padding:1.1rem; border-radius:10px; border:1px solid var(--color-border); margin-bottom:1.5rem;">
-          <div style="font-size:0.78rem; text-transform:uppercase; color:var(--color-text-muted); font-weight:800; margin-bottom:0.45rem; letter-spacing:0.4px;">
-            <i class="fa-solid fa-location-dot text-primary"></i> Residential Address
-          </div>
-          <div style="font-size:0.95rem; color:var(--color-text-dark); line-height:1.55; font-weight:500;">
-            ${applicant.address || 'Door No, Street, Landmark, Town/City (Awaiting offline verification)'}
-          </div>
-        </div>
-
-        <div style="border-top:1px solid var(--color-border); padding-top:1.1rem;">
-          <div style="font-size:0.88rem; font-weight:800; color:var(--color-text-dark); margin-bottom:0.75rem; display:flex; align-items:center; gap:0.5rem;">
-            <i class="fa-solid fa-file-circle-check text-primary"></i> Official Document Verification Checklist (AP Government Recognized)
-          </div>
-          <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap:0.75rem;">
-            <label style="display:flex; align-items:center; gap:0.55rem; font-size:0.86rem; cursor:pointer; color:var(--color-text-dark);">
-              <input type="checkbox" checked style="accent-color:var(--color-primary);"> <span>Birth Certificate (Govt / MRO)</span>
-            </label>
-            <label style="display:flex; align-items:center; gap:0.55rem; font-size:0.86rem; cursor:pointer; color:var(--color-text-dark);">
-              <input type="checkbox" checked style="accent-color:var(--color-primary);"> <span>Previous School TC / Record Sheet</span>
-            </label>
-            <label style="display:flex; align-items:center; gap:0.55rem; font-size:0.86rem; cursor:pointer; color:var(--color-text-dark);">
-              <input type="checkbox" checked style="accent-color:var(--color-primary);"> <span>Student & Parent Aadhar Copies</span>
-            </label>
-            <label style="display:flex; align-items:center; gap:0.55rem; font-size:0.86rem; cursor:pointer; color:var(--color-text-dark);">
-              <input type="checkbox" checked style="accent-color:var(--color-primary);"> <span>Passport Size Photographs (4 Nos)</span>
-            </label>
+            <div style="font-size:0.85rem; font-weight:700; color:#065f46;">Duplicate Scanner: Verified Clean</div>
+            <div style="font-size:0.75rem; color:#047857;">Zero matching student records found matching this applicant's legal name, DOB, or guardian phone.</div>
           </div>
         </div>
       `;
     }
-
-    if (approveBtn) {
-      approveBtn.onclick = function() {
-        approveAdmission(applicant.appId);
-        if (typeof closeModal === 'function') {
-          closeModal('reviewAdmissionDocsModal');
-        } else if (modal) {
-          modal.classList.remove('active');
-        }
-      };
-    }
-
-    if (modal) {
-      modal.style.display = 'flex';
-      modal.classList.add('active');
-    }
   }
 
-  function printAdmissionVerification() {
+  function submitConfirmEnrolment(event) {
+    if (event) event.preventDefault();
+    initAdmissions();
+
+    const appId = document.getElementById('enrolTargetAppId')?.value;
+    const app = state.admissions.find(a => a.appId === appId);
+    if (!app) return;
+
+    const admNo = document.getElementById('enrolAllocatedAdmNo')?.value;
+    const studentId = document.getElementById('enrolAllocatedStudentId')?.value;
+    const cls = app.class || app.grade || 'IX';
+    const teacher = document.getElementById('enrolClassTeacher')?.value || 'Class Teacher';
+    const remarks = document.getElementById('enrolRemarks')?.value || 'Statutory enrolment completed.';
+
+    // 1. Update Admission record
+    app.status = 'Confirmed Admission';
+    app.enrolled = true;
+    app.enrolledAdmNo = admNo;
+    app.enrolledClass = `Class ${cls}-A`;
+    app.assignedTeacher = teacher;
+
+    if (!app.decisionHistory) app.decisionHistory = [];
+    app.decisionHistory.unshift({
+      timestamp: new Date().toLocaleString(),
+      actor: (state.currentUser && state.currentUser.name) || 'Smt. Gorle Varalakshmi (Principal)',
+      action: 'Statutory Enrolment Confirmed',
+      remarks: `Allocated Admission Number ${admNo} (${studentId}) in Class ${cls}-A.`
+    });
+
+    // 2. Formally create/link student in authoritative state.students register!
+    const newStudent = {
+      studentId: studentId,
+      admNo: admNo,
+      name: app.name,
+      class: cls,
+      section: 'A',
+      rollNo: String(Math.floor(100 + Math.random() * 900)),
+      parent: app.parent,
+      guardianRel: app.guardianRel || 'Father',
+      phone: app.phone,
+      email: app.email,
+      address: app.address,
+      dob: app.dob,
+      gender: app.gender,
+      bloodGroup: app.bloodGroup || 'O+',
+      nationality: 'Indian',
+      motherTongue: app.motherTongue || 'Telugu',
+      admissionDate: new Date().toISOString().split('T')[0],
+      academicYear: '2025-2026',
+      status: 'Active',
+      feeStatus: 'Paid',
+      admissionCategory: app.concession || 'General Merit',
+      feeCategory: 'Standard Board Fee',
+      transportAllocation: app.transport || 'Self Commute',
+      docVerificationStatus: 'Verified',
+      gpa: '8.8',
+      attendance: '100%',
+      enrolmentHistory: [
+        { ay: '2025-2026', class: cls, sec: 'A', teacher: teacher, result: 'Enrolled Active' }
+      ],
+      auditHistory: [
+        {
+          timestamp: new Date().toLocaleString(),
+          actor: (state.currentUser && state.currentUser.name) || 'Smt. Gorle Varalakshmi (Principal)',
+          role: state.currentRole || 'principal',
+          field: 'Admission Confirmed & Enrolment Completed',
+          oldValue: `Intake ${app.appId}`,
+          newValue: `Enrolled: ${admNo} (${studentId})`,
+          reason: remarks
+        }
+      ]
+    };
+
+    if (state.students) {
+      state.students.unshift(newStudent);
+      state.students.sort((a, b) => a.admNo.localeCompare(b.admNo, undefined, { numeric: true, sensitivity: 'base' }));
+    }
+
+    // Save to localStorage
+    try {
+      const stored = JSON.parse(localStorage.getItem('sv_applications') || '[]');
+      const idx = stored.findIndex(a => a.appId === appId);
+      if (idx !== -1) stored[idx] = { ...app };
+      else stored.unshift(app);
+      localStorage.setItem('sv_applications', JSON.stringify(stored));
+      window.dispatchEvent(new Event('storage'));
+    } catch (e) {}
+
+    closeModal('confirmEnrolmentModal');
+    filterAdmissions();
+    if (typeof updateStudentSummaryKPIs === 'function') updateStudentSummaryKPIs(state.students);
+    showToast(`🎉 Congratulations! ${app.name} formally enrolled. Official Admission Number: ${admNo} allocated in Class ${cls}-A!`, 'success');
+  }
+
+  function openCancelApplicationModal(appId) {
+    initAdmissions();
+    const app = state.admissions.find(a => a.appId === appId) || state.admissions[0];
+    if (!app) return;
+
+    if (document.getElementById('cancelTargetAppId')) document.getElementById('cancelTargetAppId').value = app.appId;
+    if (document.getElementById('cancelModalSub')) document.getElementById('cancelModalSub').textContent = `Applicant: ${app.name} (${app.appId})`;
+
+    closeModal('applicationDetailModal');
+    openModal('cancelApplicationModal');
+  }
+
+  function submitCancelApplication(event) {
+    if (event) event.preventDefault();
+    initAdmissions();
+
+    const appId = document.getElementById('cancelTargetAppId')?.value;
+    const app = state.admissions.find(a => a.appId === appId);
+    if (!app) return;
+
+    const dec = document.getElementById('cancelDecisionType')?.value || 'Rejected';
+    const cat = document.getElementById('cancelReasonCategory')?.value || 'Statutory Reason';
+    const remarks = (document.getElementById('cancelRemarks')?.value || '').trim();
+
+    if (!remarks) {
+      showToast('Please state a detailed reason for cancellation or rejection.', 'warning');
+      return;
+    }
+
+    const fullReason = `${cat}: ${remarks}`;
+    app.status = dec;
+
+    if (!app.decisionHistory) app.decisionHistory = [];
+    app.decisionHistory.unshift({
+      timestamp: new Date().toLocaleString(),
+      actor: (state.currentUser && state.currentUser.name) || 'Executive Principal Smt. Gorle Varalakshmi',
+      action: dec,
+      remarks: fullReason
+    });
+
+    closeModal('cancelApplicationModal');
+    filterAdmissions();
+    showToast(`Application ${appId} marked as ${dec}. Recorded justification logged to audit trail.`, 'warning');
+  }
+
+  function exportAdmissionsCSV() {
+    initAdmissions();
+    const all = state.admissions || [];
+    let csv = 'ApplicationID,ApplicantName,DOB,Gender,ClassApplied,ParentGuardian,Phone,Email,SubmissionDate,Channel,DocumentStatus,ApplicationStatus,AssignedOfficer,Score,FeeStatus\n';
+    all.forEach(a => {
+      csv += `"${a.appId}","${a.name}","${a.dob}","${a.gender}","${a.class}","${a.parent}","${a.phone}","${a.email || ''}","${a.submissionDate}","${a.intakeChannel}","${a.docStatus}","${a.status}","${a.assignedOfficer}","${a.score}","${a.feeStatus}"\n`;
+    });
+    downloadCsvFile(csv, 'sri_vidya_admissions_master_register.csv');
+    showToast('Admissions Master Register exported to CSV successfully.', 'success');
+  }
+
+  function printAdmissionsTable() {
+    initAdmissions();
     window.print();
   }
 
-  function rejectAdmission(appId) {
-    const index = state.admissions.findIndex(a => a.appId === appId);
-    if (index > -1) {
-      const name = state.admissions[index].name || state.admissions[index].studentName;
-      state.admissions.splice(index, 1);
-      
-      try {
-        const stored = JSON.parse(localStorage.getItem('sv_applications') || '[]');
-        const updated = stored.filter(a => a.appId !== appId && a.applicationNumber !== appId);
-        localStorage.setItem('sv_applications', JSON.stringify(updated));
-      } catch (e) {}
+  function openImportAdmissionsModal() {
+    showToast('Import Applications docket active: Upload CSV to bulk ingest prospective admissions.', 'info');
+  }
 
-      renderAdmissionsQueue(state.admissions);
-      if (typeof updateStudentTabBadges === 'function') updateStudentTabBadges();
-      showToast(`Application ${appId} for ${name} removed from queue.`, 'warning');
+  // Legacy admissions backwards-compatibility wrappers
+  function approveAdmission(appId) {
+    if (typeof openConfirmEnrolmentModal === 'function') {
+      openConfirmEnrolmentModal(appId);
+    }
+  }
+
+  function reviewAdmissionDocs(appId) {
+    if (typeof openApplicationDetailModal === 'function') {
+      openApplicationDetailModal(appId);
+    }
+  }
+
+  function rejectAdmission(appId) {
+    if (typeof openCancelApplicationModal === 'function') {
+      openCancelApplicationModal(appId);
     }
   }
 
@@ -36398,6 +37689,35 @@ const classData = TIMETABLE_CLASS_DATA[currentTimetableClass] || TIMETABLE_CLASS
     requestOfficeAdmissionPermission,
     syncAdmissionsFromStorage,
     printAdmissionVerification,
+    initAdmissions,
+    updateAdmissionsKPIs,
+    switchAdmissionsTab,
+    filterAdmissions,
+    resetAdmissionsFilters,
+    renderAdmissionsQueue,
+    openNewAdmissionModal,
+    submitNewAdmission,
+    openAddEnquiryModal,
+    submitAddEnquiry,
+    openApplicationDetailModal,
+    switchAdmDetailTab,
+    renderAdmissionDetailPanes,
+    openScheduleAssessmentModal,
+    submitScheduleAssessment,
+    openRecordAssessmentModal,
+    submitRecordAssessment,
+    openIssueOfferModal,
+    submitIssueOffer,
+    recordOfferAcceptance,
+    recordFeeDeposit,
+    openConfirmEnrolmentModal,
+    scanAdmissionsDuplicate,
+    submitConfirmEnrolment,
+    openCancelApplicationModal,
+    submitCancelApplication,
+    exportAdmissionsCSV,
+    printAdmissionsTable,
+    openImportAdmissionsModal,
     renderNotifications,
     markAllNotificationsAsRead,
     addNewNotification,
