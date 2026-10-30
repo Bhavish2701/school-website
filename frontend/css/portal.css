@@ -19165,3 +19165,359 @@ input:disabled + .perm-slider {
   border-color: #881337;
   color: #fecdd3;
 }
+
+/* ==========================================================================
+   AUTHORITATIVE FACULTY (TEACHING) MODULE
+   Compliant with Role-Based Record Scope, Class/Subject Allocation & Clearances
+   ========================================================================== */
+
+.faculty-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  flex-wrap: wrap;
+}
+
+.faculty-statutory-notice {
+  background: #f0fdf4;
+  border-left: 4px solid #10b981;
+  color: #065f46;
+  padding: 0.85rem 1.15rem;
+  border-radius: 6px;
+  font-size: 0.82rem;
+  line-height: 1.5;
+  margin-bottom: 1.25rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+}
+
+/* Faculty Employment Status Badges */
+.faculty-status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.25rem 0.65rem;
+  border-radius: 9999px;
+  font-size: 0.74rem;
+  font-weight: 700;
+  white-space: nowrap;
+  letter-spacing: 0.02em;
+  border: 1px solid transparent;
+}
+
+.faculty-status-badge.active {
+  background: #ecfdf5;
+  border-color: #a7f3d0;
+  color: #047857;
+}
+
+.faculty-status-badge.probation {
+  background: #eff6ff;
+  border-color: #bfdbfe;
+  color: #1d4ed8;
+}
+
+.faculty-status-badge.leave {
+  background: #fffbeb;
+  border-color: #fde68a;
+  color: #b45309;
+}
+
+.faculty-status-badge.pending {
+  background: #fef2f2;
+  border-color: #fecaca;
+  color: #b91c1c;
+}
+
+.faculty-status-badge.notice {
+  background: #faf5ff;
+  border-color: #e9d5ff;
+  color: #7e22ce;
+}
+
+.faculty-status-badge.archived {
+  background: #f8fafc;
+  border-color: #e2e8f0;
+  color: #64748b;
+}
+
+/* Department Badge */
+.faculty-dept-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  background: #f1f5f9;
+  border: 1px solid #e2e8f0;
+  color: #334155;
+  padding: 0.2rem 0.55rem;
+  border-radius: 6px;
+  font-size: 0.74rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+/* Assigned Class Pills */
+.assigned-class-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  background: #f8fafc;
+  border: 1px solid #cbd5e1;
+  color: #0f172a;
+  padding: 0.15rem 0.45rem;
+  border-radius: 4px;
+  font-size: 0.73rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.assigned-class-pill i {
+  color: #2563eb;
+  font-size: 0.68rem;
+}
+
+/* Teacher Detail Modal Layout */
+.teacher-modal-dialog {
+  max-width: 980px;
+  width: 95vw;
+}
+
+.teacher-detail-nav {
+  display: flex;
+  gap: 0.4rem;
+  border-bottom: 2px solid #e2e8f0;
+  margin-bottom: 1.25rem;
+  overflow-x: auto;
+  padding-bottom: 0.25rem;
+}
+
+.teacher-detail-tab-btn {
+  background: none;
+  border: none;
+  padding: 0.55rem 0.85rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #64748b;
+  cursor: pointer;
+  border-radius: 6px 6px 0 0;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.teacher-detail-tab-btn:hover {
+  color: #1e293b;
+  background: #f8fafc;
+}
+
+.teacher-detail-tab-btn.active {
+  color: #2563eb;
+  border-bottom: 2px solid #2563eb;
+  background: #eff6ff;
+  font-weight: 700;
+}
+
+.teacher-detail-pane {
+  display: none;
+}
+
+.teacher-detail-pane.active {
+  display: block;
+  animation: fadeIn 0.2s ease-in-out;
+}
+
+/* Teacher Profile Card */
+.teacher-profile-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 1.25rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 1.25rem;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+}
+
+.teacher-avatar-lg {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #1e3a8a, #2563eb);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.75rem;
+  font-weight: 800;
+  box-shadow: 0 4px 10px rgba(37,99,235,0.25);
+  flex-shrink: 0;
+}
+
+/* Timetable Mini Grid */
+.timetable-mini-grid {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.78rem;
+  text-align: center;
+  margin-top: 0.5rem;
+}
+
+.timetable-mini-grid th,
+.timetable-mini-grid td {
+  border: 1px solid #e2e8f0;
+  padding: 0.5rem 0.4rem;
+}
+
+.timetable-mini-grid th {
+  background: #f8fafc;
+  color: #475569;
+  font-weight: 700;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+}
+
+.timetable-mini-grid td.period-active {
+  background: #eff6ff;
+  color: #1e40af;
+  font-weight: 700;
+}
+
+.timetable-mini-grid td.period-free {
+  background: #ffffff;
+  color: #94a3b8;
+}
+
+/* Role-Based Permissions Scope Box */
+.permissions-scope-box {
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  border-left: 4px solid #16a34a;
+  border-radius: 8px;
+  padding: 1rem;
+  font-size: 0.83rem;
+  line-height: 1.5;
+  margin-bottom: 1rem;
+}
+
+/* Appraisal Restricted Card */
+.appraisal-card-restricted {
+  background: #fffbeb;
+  border: 1px solid #fde68a;
+  border-radius: 8px;
+  padding: 1rem;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Clearance Checklist */
+.clearance-checklist-card {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 0.85rem 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+}
+
+/* Dark Mode Styles */
+[data-theme="dark"] .faculty-statutory-notice {
+  background: #064e3b;
+  color: #a7f3d0;
+  border-left-color: #34d399;
+}
+
+[data-theme="dark"] .faculty-status-badge.active {
+  background: #064e3b;
+  border-color: #059669;
+  color: #a7f3d0;
+}
+
+[data-theme="dark"] .faculty-status-badge.probation {
+  background: #1e3a8a;
+  border-color: #2563eb;
+  color: #bfdbfe;
+}
+
+[data-theme="dark"] .faculty-status-badge.leave {
+  background: #78350f;
+  border-color: #d97706;
+  color: #fde68a;
+}
+
+[data-theme="dark"] .faculty-status-badge.pending {
+  background: #7f1d1d;
+  border-color: #dc2626;
+  color: #fecaca;
+}
+
+[data-theme="dark"] .faculty-status-badge.notice {
+  background: #581c87;
+  border-color: #9333ea;
+  color: #f3e8ff;
+}
+
+[data-theme="dark"] .faculty-dept-badge,
+[data-theme="dark"] .assigned-class-pill {
+  background: #1e293b;
+  border-color: #334155;
+  color: #f1f5f9;
+}
+
+[data-theme="dark"] .teacher-profile-card,
+[data-theme="dark"] .clearance-checklist-card {
+  background: #1e293b;
+  border-color: #334155;
+}
+
+[data-theme="dark"] .teacher-detail-tab-btn {
+  color: #94a3b8;
+}
+
+[data-theme="dark"] .teacher-detail-tab-btn:hover {
+  background: #334155;
+  color: #f8fafc;
+}
+
+[data-theme="dark"] .teacher-detail-tab-btn.active {
+  background: #1e3a8a;
+  color: #60a5fa;
+  border-bottom-color: #60a5fa;
+}
+
+[data-theme="dark"] .timetable-mini-grid th {
+  background: #0f172a;
+  color: #94a3b8;
+  border-color: #334155;
+}
+
+[data-theme="dark"] .timetable-mini-grid td {
+  border-color: #334155;
+}
+
+[data-theme="dark"] .timetable-mini-grid td.period-active {
+  background: #1e3a8a;
+  color: #bfdbfe;
+}
+
+[data-theme="dark"] .timetable-mini-grid td.period-free {
+  background: #1e293b;
+  color: #64748b;
+}
+
+[data-theme="dark"] .permissions-scope-box {
+  background: #064e3b;
+  border-color: #059669;
+  color: #a7f3d0;
+}
+
+[data-theme="dark"] .appraisal-card-restricted {
+  background: #78350f;
+  border-color: #d97706;
+  color: #fde68a;
+}

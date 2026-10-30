@@ -4564,18 +4564,105 @@
           <!-- ========================================== -->
           <!-- SUBVIEW 1: FACULTY (TEACHING) -->
           <!-- ========================================== -->
-          <div class="teacher-subview active" id="subview-teachers-faculty">
-            <div class="filter-toolbar mb-3">
-              <div class="filter-group search-group" style="flex:1;">
-                <i class="fa-solid fa-magnifying-glass"></i>
-                <input type="text" id="facultyFilterInput"
-                  placeholder="Filter faculty by Employee ID, Name, Subjects, Assigned Classes, Qualifications..."
-                  onkeyup="portalApp.filterFaculty()">
+                    <div class="teacher-subview active" id="subview-teachers-faculty">
+            
+            <!-- Standard Page Header -->
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1.25rem; flex-wrap: wrap; gap: 1rem;">
+              <div>
+                <div style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.8rem; color: #64748b; margin-bottom: 0.35rem;">
+                  <span>Teachers &amp; Staff</span>
+                  <i class="fa-solid fa-chevron-right" style="font-size: 0.65rem;"></i>
+                  <span style="color: #0f172a; font-weight: 600;">Faculty (Teaching)</span>
+                </div>
+                <h2 style="font-size: 1.4rem; font-weight: 800; color: #0f172a; margin: 0 0 0.25rem 0;">
+                  Faculty (Teaching)
+                </h2>
+                <p style="font-size: 0.84rem; color: #64748b; margin: 0;">
+                  Institutional faculty directory, teaching workload, class &amp; subject assignments, statutory credentials, and access control governance.
+                </p>
               </div>
-              <div class="filter-group">
-                <label for="facultyDeptFilter"><i class="fa-solid fa-filter"></i> Subject:</label>
-                <select id="facultyDeptFilter" class="filter-select" onchange="portalApp.filterFaculty()">
-                  <option value="">All Subjects</option>
+              <div class="faculty-header-actions">
+                <button type="button" class="btn btn-outline-secondary btn-sm" onclick="portalApp.openStaffImportModal()" style="font-weight: 600;">
+                  <i class="fa-solid fa-file-import mr-1"></i> Import Staff
+                </button>
+                <button type="button" class="btn btn-outline-primary btn-sm" onclick="portalApp.exportFacultyRegisterCSV()" style="font-weight: 600;">
+                  <i class="fa-solid fa-file-csv mr-1"></i> Export Register
+                </button>
+                <button type="button" class="btn btn-primary btn-sm" onclick="portalApp.openAddTeacherModal()" style="font-weight: 700;">
+                  <i class="fa-solid fa-user-plus mr-1"></i> + Add Teacher
+                </button>
+              </div>
+            </div>
+
+            <!-- Statutory Record Scope Policy Notice -->
+            <div class="faculty-statutory-notice">
+              <i class="fa-solid fa-shield-halved mr-1" style="font-size: 1rem; color: #059669; margin-top: 2px;"></i>
+              <div>
+                <strong>Role-Based Record Scope Mandate:</strong>
+                A newly appointed teacher is never granted unrestricted school-wide access to all students or all marks entries. System authorization strictly mirrors assigned classes, allocated subjects, and specific academic duties (Class Teacher / Subject In-charge) to safeguard institutional evaluation integrity.
+              </div>
+            </div>
+
+            <!-- 5 Summary KPI Cards -->
+            <div class="admissions-overview-bar" style="margin-bottom: 1.25rem;">
+              <div class="adm-stat-card card-blue">
+                <div class="adm-stat-icon icon-blue"><i class="fa-solid fa-chalkboard-user"></i></div>
+                <div class="adm-stat-info">
+                  <div class="adm-count" id="facKpiTotal">30</div>
+                  <div class="adm-label">Total Teachers</div>
+                </div>
+              </div>
+              <div class="adm-stat-card card-green">
+                <div class="adm-stat-icon icon-green"><i class="fa-solid fa-user-check"></i></div>
+                <div class="adm-stat-info">
+                  <div class="adm-count" id="facKpiActive">27</div>
+                  <div class="adm-label">Active Teachers (90%)</div>
+                </div>
+              </div>
+              <div class="adm-stat-card card-purple">
+                <div class="adm-stat-icon icon-purple"><i class="fa-solid fa-user-plus"></i></div>
+                <div class="adm-stat-info">
+                  <div class="adm-count" id="facKpiNewJoiners">3</div>
+                  <div class="adm-label">New Joiners (AY 2025-26)</div>
+                </div>
+              </div>
+              <div class="adm-stat-card card-amber">
+                <div class="adm-stat-icon icon-amber"><i class="fa-solid fa-calendar-minus"></i></div>
+                <div class="adm-stat-info">
+                  <div class="adm-count" id="facKpiOnLeave">2</div>
+                  <div class="adm-label">On Leave</div>
+                </div>
+              </div>
+              <div class="adm-stat-card card-red" style="border-left: 4px solid #ef4444;">
+                <div class="adm-stat-icon" style="background:#fef2f2; color:#ef4444;"><i class="fa-solid fa-file-circle-question"></i></div>
+                <div class="adm-stat-info">
+                  <div class="adm-count" id="facKpiPendingVerify" style="color:#ef4444;">1</div>
+                  <div class="adm-label">Pending Verification</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Executive Filter Toolbar -->
+            <div class="transfers-toolbar" style="margin-bottom: 1rem;">
+              <div class="tc-toolbar-left" style="display:flex; align-items:center; gap:0.5rem; flex-wrap:wrap; flex:1;">
+                
+                <!-- Search input -->
+                <div class="tc-search-wrap" style="position:relative; min-width:240px; flex: 1;">
+                  <i class="fa-solid fa-magnifying-glass search-icon" style="position:absolute; left:10px; top:50%; transform:translateY(-50%); color:#94a3b8; font-size:0.85rem;"></i>
+                  <input type="text" id="facultyFilterInput" class="tc-search-input"
+                    placeholder="Search by Employee ID, Name, Department, Subjects, Assigned Classes, Qualifications..."
+                    oninput="portalApp.filterFaculty()"
+                    style="padding-left:32px; padding-right:28px; width:100%; height:36px; border:1px solid #cbd5e1; border-radius:6px; font-size:0.83rem;">
+                  <button type="button" class="tc-clear-btn" id="facClearSearchBtn"
+                    onclick="document.getElementById('facultyFilterInput').value=''; portalApp.filterFaculty();"
+                    title="Clear Search" style="position:absolute; right:8px; top:50%; transform:translateY(-50%); background:none; border:none; color:#94a3b8; cursor:pointer;">
+                    <i class="fa-solid fa-xmark"></i>
+                  </button>
+                </div>
+
+                <!-- 1. Department Filter -->
+                <select id="facultyDeptFilter" class="tc-filter-select" onchange="portalApp.filterFaculty()" title="Filter by Department" style="height:36px; padding:0 0.65rem; border:1px solid #cbd5e1; border-radius:6px; font-size:0.83rem;">
+                  <option value="">All Departments</option>
                   <option value="Mathematics">Mathematics</option>
                   <option value="Science">Physical &amp; Natural Science</option>
                   <option value="English">English</option>
@@ -4585,47 +4672,57 @@
                   <option value="Computer">Computer Applications</option>
                   <option value="Primary">Primary &amp; Pre-Primary</option>
                 </select>
-              </div>
-              <div class="filter-group">
-                <label for="facultyStatusFilter"><i class="fa-solid fa-circle-check"></i> Status:</label>
-                <select id="facultyStatusFilter" class="filter-select" onchange="portalApp.filterFaculty()">
-                  <option value="">All Statuses</option>
-                  <option value="Active">Active</option>
-                  <option value="Present">Present</option>
+
+                <!-- 2. Status Filter -->
+                <select id="facultyStatusFilter" class="tc-filter-select" onchange="portalApp.filterFaculty()" title="Filter by Employment Status" style="height:36px; padding:0 0.65rem; border:1px solid #cbd5e1; border-radius:6px; font-size:0.83rem;">
+                  <option value="">All Employment Statuses</option>
+                  <option value="Active">Active (Confirmed)</option>
+                  <option value="New Joiner">New Joiner / Probation</option>
                   <option value="Leave">On Leave</option>
+                  <option value="Pending Verification">Pending Verification</option>
+                  <option value="Notice">Notice / Exit Clearance</option>
                 </select>
               </div>
-              <div class="staff-table-view-toggle">
-                <button type="button" class="staff-view-btn active" id="btnFacultyViewTable"
-                  onclick="portalApp.toggleFacultyView('table')">
-                  <i class="fa-solid fa-table-list"></i> Table Roster
+
+              <div class="tc-toolbar-right" style="display:flex; align-items:center; gap:0.5rem; flex-wrap:wrap;">
+                <span class="tc-count-pill" id="facFilterCountDisplay" style="font-size:0.8rem; background:#f1f5f9; padding:0.4rem 0.75rem; border-radius:6px; border:1px solid #e2e8f0;">
+                  <i class="fa-solid fa-chalkboard-user text-primary mr-1"></i> Showing <strong id="facShowingCount">30</strong> of
+                  <strong id="facTotalCount">30</strong> Teachers
+                </span>
+                <button type="button" class="btn btn-outline-secondary btn-sm" onclick="portalApp.resetFacultyFilters()" title="Reset all filters">
+                  <i class="fa-solid fa-rotate-left"></i> Reset
                 </button>
-                <button type="button" class="staff-view-btn" id="btnFacultyViewCards"
-                  onclick="portalApp.toggleFacultyView('cards')">
-                  <i class="fa-solid fa-grip"></i> Cards
-                </button>
+                <div class="staff-table-view-toggle" style="margin-left:0.25rem;">
+                  <button type="button" class="staff-view-btn active" id="btnFacultyViewTable"
+                    onclick="portalApp.toggleFacultyView('table')" title="Table View">
+                    <i class="fa-solid fa-table-list"></i>
+                  </button>
+                  <button type="button" class="staff-view-btn" id="btnFacultyViewCards"
+                    onclick="portalApp.toggleFacultyView('cards')" title="Card View">
+                    <i class="fa-solid fa-grip"></i>
+                  </button>
+                </div>
               </div>
             </div>
 
-            <!-- Table Roster View (Default Institutional Display) -->
-            <div id="facultyTableWrapper" class="staff-table-card">
-              <div class="table-container">
-                <table class="staff-roster-table" id="facultyRosterTable">
+            <!-- Authoritative 8-Column Master Faculty Table -->
+            <div id="facultyTableWrapper" class="parent-table-wrap" style="margin-top:0;">
+              <div class="parent-table-scroll">
+                <table class="parent-table" id="facultyRosterTable">
                   <thead>
                     <tr>
-                      <th style="width:110px;">Employee ID</th>
-                      <th>Faculty Name</th>
-                      <th>Subjects</th>
-                      <th>Assigned Classes</th>
-                      <th>Qualifications</th>
-                      <th style="width:115px;">Joining Date</th>
-                      <th style="width:90px;">Status</th>
-                      <th>Confidential HR &amp; Salary</th>
-                      <th style="text-align:center; width:130px;">Actions</th>
+                      <th class="th-empid" style="min-width: 120px;"><i class="fa-solid fa-id-badge"></i> Employee ID</th>
+                      <th class="th-name" style="min-width: 180px;"><i class="fa-solid fa-user-tie"></i> Name</th>
+                      <th class="th-dept" style="min-width: 150px;"><i class="fa-solid fa-building-columns"></i> Department</th>
+                      <th class="th-subjects" style="min-width: 160px;"><i class="fa-solid fa-book-open"></i> Subjects</th>
+                      <th class="th-classes" style="min-width: 180px;"><i class="fa-solid fa-chalkboard"></i> Assigned Classes</th>
+                      <th class="th-joining" style="min-width: 120px;"><i class="fa-solid fa-calendar-check"></i> Joining Date</th>
+                      <th class="th-status" style="min-width: 130px;"><i class="fa-solid fa-circle-check"></i> Employment Status</th>
+                      <th class="th-actions" style="text-align: center; min-width: 160px;"><i class="fa-solid fa-sliders"></i> Actions</th>
                     </tr>
                   </thead>
                   <tbody id="facultyTableBody">
-                    <!-- Populated via portal.js -->
+                    <!-- Populated dynamically via portal.js -->
                   </tbody>
                 </table>
               </div>
@@ -4633,11 +4730,10 @@
 
             <!-- Cards Grid (Alternate View) -->
             <div class="staff-grid" id="staffGridContainer" style="display:none; margin-top:1rem;">
-              <!-- Populated via portal.js -->
+              <!-- Populated dynamically via portal.js -->
             </div>
           </div>
 
-          <!-- ========================================== -->
           <!-- SUBVIEW 2: STAFF (NON-TEACHING) -->
           <!-- ========================================== -->
           <div class="teacher-subview" id="subview-teachers-staff" style="display: none;">
@@ -18074,94 +18170,668 @@
     </div>
   </div>
 
+  
   <!-- =========================================================================
-       MODAL: ADD FACULTY / TEACHER
+       MODALS: FACULTY (TEACHING) MANAGEMENT MODULE
        ========================================================================= -->
-  <div class="modal-backdrop" id="addTeacherModal">
-    <div class="portal-modal" style="max-width: 650px;">
-      <div class="modal-header">
-        <h3><i class="fa-solid fa-user-plus text-primary"></i> Add New Faculty / Staff Member</h3>
-        <button class="modal-close-x" onclick="portalApp.closeModal('addTeacherModal')" title="Close"
-          aria-label="Close">
-          <i class="fa-solid fa-xmark"></i>
-        </button>
-      </div>
-      <form id="addTeacherForm" onsubmit="portalApp.handleAddTeacher(event)">
-        <div class="modal-body">
-          <div class="form-row">
-            <div class="form-group">
-              <label>Full Name *</label>
-              <input type="text" class="form-control" id="tfFullName" required placeholder="e.g. Smt. K. Lalitha">
-            </div>
-            <div class="form-group">
-              <label>Category *</label>
-              <select class="form-control" id="tfCategory" required onchange="portalApp.handleStaffCategoryChange()">
-                <option value="Teaching" selected>Teaching Faculty</option>
-                <option value="Non-Teaching">Non-Teaching Staff</option>
-              </select>
-            </div>
-          </div>
 
-          <div class="form-row">
-            <div class="form-group">
-              <label>Designation / Role *</label>
-              <input type="text" class="form-control" id="tfRole" required
-                placeholder="e.g. Faculty - Biological Science">
-            </div>
-            <div class="form-group">
-              <label>Primary Subject / Department *</label>
-              <input type="text" class="form-control" id="tfSubject" required placeholder="e.g. Biology &amp; EVS">
-            </div>
-          </div>
-
-          <div class="form-row">
-            <div class="form-group">
-              <label>Highest Qualification *</label>
-              <input type="text" class="form-control" id="tfQualification" required
-                placeholder="e.g. M.Sc (Botany), B.Ed">
-            </div>
-            <div class="form-group">
-              <label>Years of Experience *</label>
-              <input type="text" class="form-control" id="tfExperience" required placeholder="e.g. 8 Years">
-            </div>
-          </div>
-
-          <div class="form-row">
-            <div class="form-group">
-              <label>Contact Phone *</label>
-              <input type="tel" class="form-control" id="tfPhone" required placeholder="e.g. 9848011223">
-            </div>
-            <div class="form-group">
-              <label>Personal Email Address * <span class="text-xs text-muted">(Login credentials will be sent
-                  here)</span></label>
-              <input type="email" class="form-control" id="tfEmail" required
-                placeholder="e.g. teacher.personal@gmail.com">
-            </div>
-          </div>
-
-          <div class="form-row">
-            <div class="form-group">
-              <label>Assigned Classes &amp; Sections</label>
-              <input type="text" class="form-control" id="tfAssignedClasses" placeholder="e.g. Class 9-A, Class 10-A">
-            </div>
-            <div class="form-group">
-              <label>Initial Attendance Status</label>
-              <select class="form-control" id="tfStatus">
-                <option value="Present" selected>Present</option>
-                <option value="Active">Active</option>
-                <option value="On Leave">On Leave</option>
-              </select>
-            </div>
+  <!-- 1. Upgraded Add Teacher Modal -->
+  <div class="portal-modal-backdrop" id="addTeacherModal" style="display:none;">
+    <div class="portal-modal-dialog teacher-modal-dialog">
+      <div class="portal-modal-header">
+        <div class="modal-title-wrap">
+          <i class="fa-solid fa-user-plus text-primary"></i>
+          <div>
+            <h3>+ Add Teaching Faculty Member</h3>
+            <p>Establish authoritative faculty record with class allocations, credentials, and scoped permissions</p>
           </div>
         </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary"
-            onclick="portalApp.closeModal('addTeacherModal')">Cancel</button>
-          <button type="submit" class="btn btn-primary"><i class="fa-solid fa-check"></i> Register Staff Member</button>
+        <button type="button" class="portal-modal-close" onclick="portalApp.closeModal('addTeacherModal')">&times;</button>
+      </div>
+
+      <form id="addTeacherForm" onsubmit="portalApp.handleAddTeacher(event)">
+        <div class="portal-modal-body" style="max-height: 74vh; overflow-y: auto; padding: 1.25rem;">
+          
+          <!-- Policy Notice -->
+          <div style="background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 8px; padding: 0.85rem 1rem; margin-bottom: 1.25rem; font-size: 0.82rem; color: #1e40af;">
+            <i class="fa-solid fa-shield-halved mr-1"></i>
+            <strong>Institutional Policy:</strong> Employee ID is generated automatically in sequence (<code>SV-FAC-XXXX</code>). Access permissions will strictly follow the classes and subjects assigned below.
+          </div>
+
+          <!-- Section 1: Personal & Identification -->
+          <h4 style="font-size: 0.92rem; font-weight: 700; color: #0f172a; margin-bottom: 0.85rem; border-bottom: 1px solid #e2e8f0; padding-bottom: 0.35rem;">
+            1. Personal &amp; Employment Particulars
+          </h4>
+
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin-bottom: 1rem;">
+            <div>
+              <label style="display:block; font-size:0.75rem; font-weight:700; color:#475569; margin-bottom:0.25rem;">Full Legal Name *</label>
+              <input type="text" id="tfFullName" required placeholder="e.g., Sri P. Venkata Subbarao" class="tc-filter-select" style="width:100%; height:36px; padding:0 0.65rem; border:1px solid #cbd5e1; border-radius:6px; font-size:0.83rem;">
+            </div>
+            <div>
+              <label style="display:block; font-size:0.75rem; font-weight:700; color:#475569; margin-bottom:0.25rem;">Employee ID (Policy Generated)</label>
+              <input type="text" id="tfEmployeeId" readonly value="SV-FAC-0131" class="tc-filter-select" style="width:100%; height:36px; padding:0 0.65rem; background:#f1f5f9; border:1px solid #cbd5e1; border-radius:6px; font-size:0.83rem; font-weight:700; color:#1d4ed8;">
+            </div>
+            <div>
+              <label style="display:block; font-size:0.75rem; font-weight:700; color:#475569; margin-bottom:0.25rem;">Department *</label>
+              <select id="tfDepartment" required class="tc-filter-select" style="width:100%; height:36px; padding:0 0.65rem; border:1px solid #cbd5e1; border-radius:6px; font-size:0.83rem;">
+                <option value="Department of Mathematics" selected>Department of Mathematics</option>
+                <option value="Department of Natural Sciences">Department of Natural Sciences</option>
+                <option value="Department of Languages">Department of Languages</option>
+                <option value="Department of Social Studies">Department of Social Studies</option>
+                <option value="Department of Computer Science">Department of Computer Science</option>
+                <option value="Department of Primary Education">Department of Primary Education</option>
+              </select>
+            </div>
+            <div>
+              <label style="display:block; font-size:0.75rem; font-weight:700; color:#475569; margin-bottom:0.25rem;">Subjects Taught *</label>
+              <input type="text" id="tfSubjects" required placeholder="e.g., Mathematics &amp; Statistics" class="tc-filter-select" style="width:100%; height:36px; padding:0 0.65rem; border:1px solid #cbd5e1; border-radius:6px; font-size:0.83rem;">
+            </div>
+            <div>
+              <label style="display:block; font-size:0.75rem; font-weight:700; color:#475569; margin-bottom:0.25rem;">Qualifications *</label>
+              <input type="text" id="tfQualifications" required placeholder="e.g., M.Sc (Maths), B.Ed, AP-TET" class="tc-filter-select" style="width:100%; height:36px; padding:0 0.65rem; border:1px solid #cbd5e1; border-radius:6px; font-size:0.83rem;">
+            </div>
+            <div>
+              <label style="display:block; font-size:0.75rem; font-weight:700; color:#475569; margin-bottom:0.25rem;">Employment Type *</label>
+              <select id="tfEmploymentType" required class="tc-filter-select" style="width:100%; height:36px; padding:0 0.65rem; border:1px solid #cbd5e1; border-radius:6px; font-size:0.83rem;">
+                <option value="Permanent / Confirmed" selected>Permanent / Confirmed</option>
+                <option value="Probationary">Probationary (New Joiner)</option>
+                <option value="Contract / Ad-hoc">Contract / Ad-hoc</option>
+                <option value="Visiting Faculty">Visiting Faculty</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Section 2: Contact & Residential -->
+          <h4 style="font-size: 0.92rem; font-weight: 700; color: #0f172a; margin-bottom: 0.85rem; border-bottom: 1px solid #e2e8f0; padding-bottom: 0.35rem;">
+            2. Contact &amp; Emergency Details
+          </h4>
+
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin-bottom: 1rem;">
+            <div>
+              <label style="display:block; font-size:0.75rem; font-weight:700; color:#475569; margin-bottom:0.25rem;">Contact Mobile Phone *</label>
+              <input type="tel" id="tfPhone" required placeholder="10-digit mobile number" class="tc-filter-select" style="width:100%; height:36px; padding:0 0.65rem; border:1px solid #cbd5e1; border-radius:6px; font-size:0.83rem;">
+            </div>
+            <div>
+              <label style="display:block; font-size:0.75rem; font-weight:700; color:#475569; margin-bottom:0.25rem;">Official Institutional Email *</label>
+              <input type="email" id="tfEmail" required placeholder="faculty@srividya.edu.in" class="tc-filter-select" style="width:100%; height:36px; padding:0 0.65rem; border:1px solid #cbd5e1; border-radius:6px; font-size:0.83rem;">
+            </div>
+            <div>
+              <label style="display:block; font-size:0.75rem; font-weight:700; color:#475569; margin-bottom:0.25rem;">Joining Date *</label>
+              <input type="date" id="tfJoiningDate" required value="2025-06-12" class="tc-filter-select" style="width:100%; height:36px; padding:0 0.65rem; border:1px solid #cbd5e1; border-radius:6px; font-size:0.83rem;">
+            </div>
+            <div>
+              <label style="display:block; font-size:0.75rem; font-weight:700; color:#475569; margin-bottom:0.25rem;">Emergency Contact (Name &amp; Phone) *</label>
+              <input type="text" id="tfEmergencyContact" required placeholder="Spouse / Parent: 9848099887" class="tc-filter-select" style="width:100%; height:36px; padding:0 0.65rem; border:1px solid #cbd5e1; border-radius:6px; font-size:0.83rem;">
+            </div>
+          </div>
+
+          <div style="margin-bottom: 1rem;">
+            <label style="display:block; font-size:0.75rem; font-weight:700; color:#475569; margin-bottom:0.25rem;">Residential Address</label>
+            <input type="text" id="tfAddress" placeholder="Door No, Street, Colony, Visakhapatnam, AP" class="tc-filter-select" style="width:100%; height:36px; padding:0 0.65rem; border:1px solid #cbd5e1; border-radius:6px; font-size:0.83rem;">
+          </div>
+
+          <!-- Section 3: Class Allocation & Scope -->
+          <h4 style="font-size: 0.92rem; font-weight: 700; color: #0f172a; margin-bottom: 0.85rem; border-bottom: 1px solid #e2e8f0; padding-bottom: 0.35rem;">
+            3. Class Allocations &amp; Scope of Record Access
+          </h4>
+
+          <div style="margin-bottom: 1rem;">
+            <label style="display:block; font-size:0.75rem; font-weight:700; color:#475569; margin-bottom:0.4rem;">Select Assigned Classes (Access strictly bounded to these classes) *</label>
+            <div style="display:flex; flex-wrap:wrap; gap:0.5rem; background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; padding:0.85rem;">
+              <label style="display:inline-flex; align-items:center; gap:0.35rem; font-size:0.8rem; cursor:pointer;">
+                <input type="checkbox" name="tfClassCheck" value="Class X-A" checked> <span>Class X-A</span>
+              </label>
+              <label style="display:inline-flex; align-items:center; gap:0.35rem; font-size:0.8rem; cursor:pointer;">
+                <input type="checkbox" name="tfClassCheck" value="Class X-B" checked> <span>Class X-B</span>
+              </label>
+              <label style="display:inline-flex; align-items:center; gap:0.35rem; font-size:0.8rem; cursor:pointer;">
+                <input type="checkbox" name="tfClassCheck" value="Class IX-A" checked> <span>Class IX-A</span>
+              </label>
+              <label style="display:inline-flex; align-items:center; gap:0.35rem; font-size:0.8rem; cursor:pointer;">
+                <input type="checkbox" name="tfClassCheck" value="Class IX-B"> <span>Class IX-B</span>
+              </label>
+              <label style="display:inline-flex; align-items:center; gap:0.35rem; font-size:0.8rem; cursor:pointer;">
+                <input type="checkbox" name="tfClassCheck" value="Class VIII-A"> <span>Class VIII-A</span>
+              </label>
+              <label style="display:inline-flex; align-items:center; gap:0.35rem; font-size:0.8rem; cursor:pointer;">
+                <input type="checkbox" name="tfClassCheck" value="Class VII-A"> <span>Class VII-A</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Section 4: Document Verification Checklist & User Account -->
+          <h4 style="font-size: 0.92rem; font-weight: 700; color: #0f172a; margin-bottom: 0.85rem; border-bottom: 1px solid #e2e8f0; padding-bottom: 0.35rem;">
+            4. Statutory Documents &amp; User Account Provisioning
+          </h4>
+
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem; margin-bottom:0.75rem;">
+            <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; padding:0.85rem;">
+              <span style="font-size:0.75rem; font-weight:700; color:#475569; display:block; margin-bottom:0.4rem;">Employment Documents Checklist:</span>
+              <label style="display:flex; align-items:center; gap:0.4rem; font-size:0.78rem; margin-bottom:0.25rem;">
+                <input type="checkbox" checked> Degree &amp; Post-Graduate Certificates
+              </label>
+              <label style="display:flex; align-items:center; gap:0.4rem; font-size:0.78rem; margin-bottom:0.25rem;">
+                <input type="checkbox" checked> B.Ed / Teacher Training Credentials
+              </label>
+              <label style="display:flex; align-items:center; gap:0.4rem; font-size:0.78rem; margin-bottom:0.25rem;">
+                <input type="checkbox" checked> Aadhaar &amp; PAN Identity Proof
+              </label>
+              <label style="display:flex; align-items:center; gap:0.4rem; font-size:0.78rem;">
+                <input type="checkbox" checked> Relieving Letter &amp; Service Conduct
+              </label>
+            </div>
+
+            <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; padding:0.85rem;">
+              <span style="font-size:0.75rem; font-weight:700; color:#475569; display:block; margin-bottom:0.4rem;">Account Creation Status:</span>
+              <label style="display:flex; align-items:center; gap:0.4rem; font-size:0.8rem; margin-bottom:0.5rem; font-weight:600; color:#0f172a;">
+                <input type="checkbox" id="tfCreateUserAccount" checked> Provision Teacher Portal Login Account
+              </label>
+              <p style="font-size:0.74rem; color:#64748b; margin:0;">
+                User account will be provisioned with role <code>teacher</code> and scoped strictly to assigned classes.
+              </p>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="portal-modal-footer">
+          <button type="button" class="btn btn-outline-secondary" onclick="portalApp.closeModal('addTeacherModal')">Cancel</button>
+          <button type="submit" class="btn btn-primary" style="font-weight:700;"><i class="fa-solid fa-check mr-1"></i> Save Teacher Record</button>
         </div>
       </form>
     </div>
   </div>
+
+  <!-- 2. Teacher Detail Dossier Modal (10 Comprehensive Tabs) -->
+  <div class="portal-modal-backdrop" id="teacherDetailModal" style="display:none;">
+    <div class="portal-modal-dialog teacher-modal-dialog">
+      <div class="portal-modal-header" style="flex-wrap: wrap; gap: 0.75rem;">
+        <div class="modal-title-wrap">
+          <i class="fa-solid fa-chalkboard-user text-primary"></i>
+          <div>
+            <h3 id="tdDossierName">Teacher Dossier</h3>
+            <p id="tdDossierMeta">Employee Record · Department · Academic Workload &amp; Allocations</p>
+          </div>
+        </div>
+        <div style="display:flex; align-items:center; gap:0.5rem; flex-wrap:wrap;">
+          <button type="button" class="btn btn-outline-primary btn-sm" onclick="portalApp.openAssignClassesModal()" style="font-size:0.76rem;">
+            <i class="fa-solid fa-chalkboard mr-1"></i> Assign Classes
+          </button>
+          <button type="button" class="btn btn-outline-secondary btn-sm" onclick="portalApp.generateTeacherAccountInvitation()" style="font-size:0.76rem;">
+            <i class="fa-solid fa-paper-plane mr-1"></i> Invite Account
+          </button>
+          <button type="button" class="btn btn-outline-amber btn-sm" onclick="portalApp.openEmploymentStatusModal()" style="font-size:0.76rem; border-color:#f59e0b; color:#b45309;">
+            <i class="fa-solid fa-user-pen mr-1"></i> Status Change
+          </button>
+          <button type="button" class="btn btn-outline-danger btn-sm" onclick="portalApp.openTeacherExitClearanceModal()" style="font-size:0.76rem;">
+            <i class="fa-solid fa-arrow-right-from-bracket mr-1"></i> Exit Clearance
+          </button>
+          <button type="button" class="portal-modal-close" onclick="portalApp.closeModal('teacherDetailModal')">&times;</button>
+        </div>
+      </div>
+
+      <div class="portal-modal-body" style="max-height: 75vh; overflow-y: auto; padding: 1.25rem;">
+        
+        <!-- Status Banner -->
+        <div style="display: flex; justify-content: space-between; align-items: center; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 0.75rem 1rem; margin-bottom: 1.25rem; flex-wrap: wrap; gap: 0.5rem;">
+          <div style="display:flex; align-items:center; gap:0.5rem;">
+            <span id="tdDeptBadge" class="faculty-dept-badge">Department of Mathematics</span>
+            <span id="tdStatusBadge" class="faculty-status-badge active">Active (Confirmed)</span>
+            <span id="tdScopeBadge" class="portal-status-badge active"><i class="fa-solid fa-shield-halved"></i> Scoped Record Access</span>
+          </div>
+          <div style="font-size: 0.8rem; color: #64748b;">
+            Employee ID: <strong id="tdEmployeeId" style="color:#0f172a; font-family:monospace;">SV-FAC-0101</strong>
+          </div>
+        </div>
+
+        <!-- 10 Navigation Tabs -->
+        <div class="teacher-detail-nav">
+          <button type="button" class="teacher-detail-tab-btn active" onclick="portalApp.switchTeacherDetailTab('profile')">
+            <i class="fa-solid fa-user"></i> Profile
+          </button>
+          <button type="button" class="teacher-detail-tab-btn" onclick="portalApp.switchTeacherDetailTab('docs')">
+            <i class="fa-solid fa-certificate"></i> Qualifications &amp; Docs
+          </button>
+          <button type="button" class="teacher-detail-tab-btn" onclick="portalApp.switchTeacherDetailTab('subjects')">
+            <i class="fa-solid fa-book-open"></i> Subject Allocations
+          </button>
+          <button type="button" class="teacher-detail-tab-btn" onclick="portalApp.switchTeacherDetailTab('classes')">
+            <i class="fa-solid fa-chalkboard"></i> Class Allocations
+          </button>
+          <button type="button" class="teacher-detail-tab-btn" onclick="portalApp.switchTeacherDetailTab('timetable')">
+            <i class="fa-solid fa-calendar-days"></i> Timetable
+          </button>
+          <button type="button" class="teacher-detail-tab-btn" onclick="portalApp.switchTeacherDetailTab('attendance')">
+            <i class="fa-solid fa-clipboard-user"></i> Attendance
+          </button>
+          <button type="button" class="teacher-detail-tab-btn" onclick="portalApp.switchTeacherDetailTab('leave')">
+            <i class="fa-solid fa-calendar-minus"></i> Leave
+          </button>
+          <button type="button" class="teacher-detail-tab-btn" onclick="portalApp.switchTeacherDetailTab('appraisal')">
+            <i class="fa-solid fa-award"></i> Appraisal (Restricted)
+          </button>
+          <button type="button" class="teacher-detail-tab-btn" onclick="portalApp.switchTeacherDetailTab('history')">
+            <i class="fa-solid fa-timeline"></i> History
+          </button>
+          <button type="button" class="teacher-detail-tab-btn" onclick="portalApp.switchTeacherDetailTab('permissions')">
+            <i class="fa-solid fa-key"></i> User &amp; Permissions
+          </button>
+        </div>
+
+        <!-- Tab 1: Personal Profile -->
+        <div class="teacher-detail-pane active" id="teacherPane-profile">
+          <div class="teacher-profile-card">
+            <div class="teacher-avatar-lg" id="tdAvatar">R</div>
+            <div style="flex:1; display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:1rem;">
+              <div>
+                <label style="font-size:0.72rem; font-weight:700; color:#64748b; text-transform:uppercase;">Full Name</label>
+                <div style="font-size:0.92rem; font-weight:700; color:#0f172a;" id="tdValName">-</div>
+              </div>
+              <div>
+                <label style="font-size:0.72rem; font-weight:700; color:#64748b; text-transform:uppercase;">Designation / Cadre</label>
+                <div style="font-size:0.92rem; font-weight:600; color:#0f172a;" id="tdValRole">-</div>
+              </div>
+              <div>
+                <label style="font-size:0.72rem; font-weight:700; color:#64748b; text-transform:uppercase;">Department</label>
+                <div style="font-size:0.92rem; font-weight:600; color:#0f172a;" id="tdValDept">-</div>
+              </div>
+              <div>
+                <label style="font-size:0.72rem; font-weight:700; color:#64748b; text-transform:uppercase;">Contact Mobile</label>
+                <div style="font-size:0.92rem; font-weight:600; color:#0f172a;" id="tdValPhone">-</div>
+              </div>
+              <div>
+                <label style="font-size:0.72rem; font-weight:700; color:#64748b; text-transform:uppercase;">Institutional Email</label>
+                <div style="font-size:0.92rem; font-weight:600; color:#0f172a;" id="tdValEmail">-</div>
+              </div>
+              <div>
+                <label style="font-size:0.72rem; font-weight:700; color:#64748b; text-transform:uppercase;">Joining Date</label>
+                <div style="font-size:0.92rem; font-weight:600; color:#0f172a;" id="tdValJoiningDate">-</div>
+              </div>
+              <div>
+                <label style="font-size:0.72rem; font-weight:700; color:#64748b; text-transform:uppercase;">Residential Address</label>
+                <div style="font-size:0.88rem; color:#334155;" id="tdValAddress">-</div>
+              </div>
+              <div>
+                <label style="font-size:0.72rem; font-weight:700; color:#64748b; text-transform:uppercase;">Emergency Contact</label>
+                <div style="font-size:0.88rem; color:#334155;" id="tdValEmergency">-</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tab 2: Qualifications & Documents -->
+        <div class="teacher-detail-pane" id="teacherPane-docs">
+          <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; padding:1rem; margin-bottom:1rem;">
+            <h5 style="margin:0 0 0.5rem 0; font-size:0.88rem; font-weight:700; color:#0f172a;"><i class="fa-solid fa-graduation-cap text-primary mr-1"></i> Academic Qualifications</h5>
+            <div style="font-size:0.95rem; font-weight:700; color:#1e293b;" id="tdValQualifications">M.Sc (Mathematics), B.Ed (First Class)</div>
+          </div>
+          <h5 style="font-size:0.85rem; font-weight:700; color:#0f172a; margin-bottom:0.5rem;">Statutory Employment Documents</h5>
+          <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:0.75rem;" id="tdDocumentsGrid">
+            <!-- Populated dynamically -->
+          </div>
+        </div>
+
+        <!-- Tab 3: Subject Allocations -->
+        <div class="teacher-detail-pane" id="teacherPane-subjects">
+          <p style="font-size:0.83rem; color:#64748b; margin-bottom:0.75rem;">Designated subjects and curriculum workload under the State Board syllabus:</p>
+          <div id="tdSubjectAllocationsList">
+            <!-- Populated dynamically -->
+          </div>
+        </div>
+
+        <!-- Tab 4: Class Allocations -->
+        <div class="teacher-detail-pane" id="teacherPane-classes">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.75rem;">
+            <p style="font-size:0.83rem; color:#64748b; margin:0;">Classes and sections assigned for active instruction and evaluation:</p>
+            <button type="button" class="btn btn-outline-primary btn-sm" onclick="portalApp.openAssignClassesModal()" style="font-size:0.75rem;">
+              <i class="fa-solid fa-sliders mr-1"></i> Modify Class Allocations
+            </button>
+          </div>
+          <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(240px, 1fr)); gap:0.75rem;" id="tdClassAllocationsList">
+            <!-- Populated dynamically -->
+          </div>
+        </div>
+
+        <!-- Tab 5: Timetable -->
+        <div class="teacher-detail-pane" id="teacherPane-timetable">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.5rem;">
+            <h5 style="margin:0; font-size:0.88rem; font-weight:700; color:#0f172a;">Weekly Period Instruction Schedule (Mon–Sat)</h5>
+            <span class="tc-count-pill" id="tdWeeklyPeriodsCount">24 Periods / Week</span>
+          </div>
+          <div style="overflow-x:auto;">
+            <table class="timetable-mini-grid" id="tdTimetableTable">
+              <thead>
+                <tr>
+                  <th>Day</th>
+                  <th>Period 1<br><small>09:00-09:45</small></th>
+                  <th>Period 2<br><small>09:45-10:30</small></th>
+                  <th>Period 3<br><small>10:45-11:30</small></th>
+                  <th>Period 4<br><small>11:30-12:15</small></th>
+                  <th>Period 5<br><small>01:00-01:45</small></th>
+                  <th>Period 6<br><small>01:45-02:30</small></th>
+                  <th>Period 7<br><small>02:40-03:25</small></th>
+                  <th>Period 8<br><small>03:25-04:05</small></th>
+                </tr>
+              </thead>
+              <tbody id="tdTimetableBody">
+                <!-- Populated dynamically -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Tab 6: Attendance -->
+        <div class="teacher-detail-pane" id="teacherPane-attendance">
+          <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:1rem; margin-bottom:1rem;">
+            <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; padding:1rem; text-align:center;">
+              <div style="font-size:1.4rem; font-weight:800; color:#15803d;" id="tdAttPresentDays">24 / 26</div>
+              <div style="font-size:0.75rem; color:#64748b;">Days Present This Month</div>
+            </div>
+            <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; padding:1rem; text-align:center;">
+              <div style="font-size:1.4rem; font-weight:800; color:#2563eb;" id="tdAttPercentage">92.3%</div>
+              <div style="font-size:0.75rem; color:#64748b;">Monthly Punctuality Rating</div>
+            </div>
+            <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; padding:1rem; text-align:center;">
+              <div style="font-size:1.4rem; font-weight:800; color:#0f172a;" id="tdAttBiometric">Active</div>
+              <div style="font-size:0.75rem; color:#64748b;">Biometric Terminal Link</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tab 7: Leave -->
+        <div class="teacher-detail-pane" id="teacherPane-leave">
+          <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:1rem; margin-bottom:1rem;">
+            <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; padding:0.85rem; text-align:center;">
+              <span style="font-size:0.75rem; color:#64748b; font-weight:700;">Casual Leave (CL)</span>
+              <div style="font-size:1.3rem; font-weight:800; color:#0f172a;">8 Bal / 12</div>
+            </div>
+            <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; padding:0.85rem; text-align:center;">
+              <span style="font-size:0.75rem; color:#64748b; font-weight:700;">Medical Leave (ML)</span>
+              <div style="font-size:1.3rem; font-weight:800; color:#0f172a;">10 Bal / 10</div>
+            </div>
+            <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; padding:0.85rem; text-align:center;">
+              <span style="font-size:0.75rem; color:#64748b; font-weight:700;">Earned Leave (EL)</span>
+              <div style="font-size:1.3rem; font-weight:800; color:#0f172a;">15 Bal</div>
+            </div>
+          </div>
+          <h5 style="font-size:0.85rem; font-weight:700; color:#0f172a; margin-bottom:0.5rem;">Recent Leave Approvals</h5>
+          <div id="tdRecentLeavesList">
+            <!-- Populated dynamically -->
+          </div>
+        </div>
+
+        <!-- Tab 8: Appraisal (Restricted) -->
+        <div class="teacher-detail-pane" id="teacherPane-appraisal">
+          <div class="appraisal-card-restricted">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.75rem;">
+              <div>
+                <span class="portal-badge badge-warning"><i class="fa-solid fa-lock"></i> Restricted Executive Access</span>
+                <h4 style="margin:0.35rem 0 0 0; font-size:1.05rem; font-weight:800; color:#0f172a;">Annual Performance Appraisal (AY 2025–26)</h4>
+              </div>
+              <span class="verify-status-badge verified" id="tdAppraisalRating">4.8 / 5.0 (Exemplary A+)</span>
+            </div>
+            <p style="font-size:0.84rem; color:#475569; line-height:1.5; margin-bottom:0.75rem;" id="tdAppraisalFeedback">
+              Exemplary pedagogical performance. Maintained 100% Board preparation adherence and outstanding student mentoring.
+            </p>
+            <div style="font-size:0.75rem; color:#64748b;">
+              Appraisal Officer: <strong>Principal / Academic Director</strong> · Status: <strong>Finalized &amp; Recorded</strong>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tab 9: Employment History -->
+        <div class="teacher-detail-pane" id="teacherPane-history">
+          <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; padding:1rem; margin-bottom:1rem;">
+            <h5 style="margin:0 0 0.5rem 0; font-size:0.88rem; font-weight:700; color:#0f172a;">Service Track Record &amp; Clearances</h5>
+            <div style="font-size:0.83rem; color:#475569; line-height:1.5;" id="tdValHistory">
+              Appointed as Teaching Faculty on 12-Jun-2016. Confirmed following successful probation period. Zero disciplinary infractions recorded.
+            </div>
+          </div>
+        </div>
+
+        <!-- Tab 10: User Account & Permissions -->
+        <div class="teacher-detail-pane" id="teacherPane-permissions">
+          <div class="permissions-scope-box">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.5rem;">
+              <strong style="color:#065f46;"><i class="fa-solid fa-shield-halved mr-1"></i> Scoped Access Enforcement</strong>
+              <span class="verify-status-badge verified" id="tdAccountStatus">Account Active</span>
+            </div>
+            <p style="font-size:0.82rem; color:#064e3b; margin:0 0 0.5rem 0;">
+              This user account is assigned the <code>teacher</code> role with record visibility bounded strictly to:
+              <strong id="tdScopeClassesDisplay">Class X-A, Class X-B, Class IX-A</strong>.
+              School-wide student profiles and unauthorized marks editing are prevented at the policy enforcement layer.
+            </p>
+            <div style="display:flex; gap:0.5rem; flex-wrap:wrap; margin-top:0.75rem;">
+              <button type="button" class="btn btn-outline-primary btn-sm" onclick="portalApp.generateTeacherAccountInvitation()" style="font-size:0.75rem;">
+                <i class="fa-solid fa-key mr-1"></i> Reset Password / Resend Invite
+              </button>
+              <button type="button" class="btn btn-outline-danger btn-sm" onclick="portalApp.toggleTeacherAccountAccess()" style="font-size:0.75rem;">
+                <i class="fa-solid fa-user-slash mr-1"></i> Suspend Portal Access
+              </button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="portal-modal-footer">
+        <button type="button" class="btn btn-secondary" onclick="portalApp.closeModal('teacherDetailModal')">Close Dossier</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. Assign Classes Modal -->
+  <div class="portal-modal-backdrop" id="assignClassesModal" style="display:none;">
+    <div class="portal-modal-dialog" style="max-width: 600px; width: 95vw;">
+      <div class="portal-modal-header">
+        <div class="modal-title-wrap">
+          <i class="fa-solid fa-chalkboard text-primary"></i>
+          <div>
+            <h3>Assign Subjects and Classes</h3>
+            <p>Allocate teaching responsibility and configure scoped record access</p>
+          </div>
+        </div>
+        <button type="button" class="portal-modal-close" onclick="portalApp.closeModal('assignClassesModal')">&times;</button>
+      </div>
+
+      <form id="assignClassesForm" onsubmit="portalApp.submitAssignClasses(event)">
+        <div class="portal-modal-body" style="padding: 1.25rem;">
+          
+          <div style="margin-bottom: 1rem;">
+            <label style="display:block; font-size:0.75rem; font-weight:700; color:#475569; margin-bottom:0.25rem;">Faculty Member</label>
+            <input type="text" id="asTeacherName" readonly class="tc-filter-select" style="width:100%; height:36px; padding:0 0.65rem; background:#f1f5f9; border:1px solid #cbd5e1; border-radius:6px; font-size:0.83rem;">
+          </div>
+
+          <div style="margin-bottom: 1rem;">
+            <label style="display:block; font-size:0.75rem; font-weight:700; color:#475569; margin-bottom:0.25rem;">Primary Teaching Subject *</label>
+            <input type="text" id="asSubject" required class="tc-filter-select" style="width:100%; height:36px; padding:0 0.65rem; border:1px solid #cbd5e1; border-radius:6px; font-size:0.83rem;">
+          </div>
+
+          <div style="margin-bottom: 1rem;">
+            <label style="display:block; font-size:0.75rem; font-weight:700; color:#475569; margin-bottom:0.4rem;">Select Allocated Classes (Enforces Data Scope) *</label>
+            <div style="display:flex; flex-wrap:wrap; gap:0.5rem; background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; padding:0.85rem;" id="asClassesCheckboxContainer">
+              <!-- Dynamically populated or standard set -->
+              <label style="display:inline-flex; align-items:center; gap:0.35rem; font-size:0.8rem; cursor:pointer;">
+                <input type="checkbox" name="asClassCheck" value="Class X-A"> <span>Class X-A</span>
+              </label>
+              <label style="display:inline-flex; align-items:center; gap:0.35rem; font-size:0.8rem; cursor:pointer;">
+                <input type="checkbox" name="asClassCheck" value="Class X-B"> <span>Class X-B</span>
+              </label>
+              <label style="display:inline-flex; align-items:center; gap:0.35rem; font-size:0.8rem; cursor:pointer;">
+                <input type="checkbox" name="asClassCheck" value="Class IX-A"> <span>Class IX-A</span>
+              </label>
+              <label style="display:inline-flex; align-items:center; gap:0.35rem; font-size:0.8rem; cursor:pointer;">
+                <input type="checkbox" name="asClassCheck" value="Class IX-B"> <span>Class IX-B</span>
+              </label>
+              <label style="display:inline-flex; align-items:center; gap:0.35rem; font-size:0.8rem; cursor:pointer;">
+                <input type="checkbox" name="asClassCheck" value="Class VIII-A"> <span>Class VIII-A</span>
+              </label>
+              <label style="display:inline-flex; align-items:center; gap:0.35rem; font-size:0.8rem; cursor:pointer;">
+                <input type="checkbox" name="asClassCheck" value="Class VII-A"> <span>Class VII-A</span>
+              </label>
+            </div>
+          </div>
+
+          <div style="margin-bottom: 1rem;">
+            <label style="display:block; font-size:0.75rem; font-weight:700; color:#475569; margin-bottom:0.25rem;">Designate as Class Teacher (Optional)</label>
+            <select id="asClassTeacherSelect" class="tc-filter-select" style="width:100%; height:36px; padding:0 0.65rem; border:1px solid #cbd5e1; border-radius:6px; font-size:0.83rem;">
+              <option value="">None (Subject Teacher Only)</option>
+              <option value="Class X-A">Class Teacher for Class X-A</option>
+              <option value="Class X-B">Class Teacher for Class X-B</option>
+              <option value="Class IX-A">Class Teacher for Class IX-A</option>
+              <option value="Class IX-B">Class Teacher for Class IX-B</option>
+            </select>
+          </div>
+
+        </div>
+
+        <div class="portal-modal-footer">
+          <button type="button" class="btn btn-outline-secondary" onclick="portalApp.closeModal('assignClassesModal')">Cancel</button>
+          <button type="submit" class="btn btn-primary" style="font-weight:700;"><i class="fa-solid fa-check mr-1"></i> Save Class Allocations</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- 4. Employment Status Change Modal -->
+  <div class="portal-modal-backdrop" id="employmentStatusModal" style="display:none;">
+    <div class="portal-modal-dialog" style="max-width: 550px; width: 95vw;">
+      <div class="portal-modal-header">
+        <div class="modal-title-wrap">
+          <i class="fa-solid fa-user-pen text-amber"></i>
+          <div>
+            <h3>Record Employment Status Transition</h3>
+            <p>Authoritative faculty service lifecycle record</p>
+          </div>
+        </div>
+        <button type="button" class="portal-modal-close" onclick="portalApp.closeModal('employmentStatusModal')">&times;</button>
+      </div>
+
+      <form id="employmentStatusForm" onsubmit="portalApp.submitEmploymentStatusChange(event)">
+        <div class="portal-modal-body" style="padding: 1.25rem;">
+          
+          <div style="margin-bottom: 1rem;">
+            <label style="display:block; font-size:0.75rem; font-weight:700; color:#475569; margin-bottom:0.25rem;">Faculty Member</label>
+            <input type="text" id="esTeacherName" readonly class="tc-filter-select" style="width:100%; height:36px; padding:0 0.65rem; background:#f1f5f9; border:1px solid #cbd5e1; border-radius:6px; font-size:0.83rem;">
+          </div>
+
+          <div style="margin-bottom: 1rem;">
+            <label style="display:block; font-size:0.75rem; font-weight:700; color:#475569; margin-bottom:0.25rem;">New Employment Status *</label>
+            <select id="esNewStatus" required class="tc-filter-select" style="width:100%; height:36px; padding:0 0.65rem; border:1px solid #cbd5e1; border-radius:6px; font-size:0.83rem;">
+              <option value="Active">Active (Confirmed Regular Faculty)</option>
+              <option value="New Joiner">Probationary / New Joiner</option>
+              <option value="Leave">On Approved Leave</option>
+              <option value="Pending Verification">Pending Document Verification</option>
+              <option value="Notice">Notice Period / Exit Clearance Initiated</option>
+              <option value="Archived">Archived / Relieved Service</option>
+            </select>
+          </div>
+
+          <div style="margin-bottom: 1rem;">
+            <label style="display:block; font-size:0.75rem; font-weight:700; color:#475569; margin-bottom:0.25rem;">Effective Date *</label>
+            <input type="date" id="esEffectiveDate" required value="2025-11-01" class="tc-filter-select" style="width:100%; height:36px; padding:0 0.65rem; border:1px solid #cbd5e1; border-radius:6px; font-size:0.83rem;">
+          </div>
+
+          <div>
+            <label style="display:block; font-size:0.75rem; font-weight:700; color:#475569; margin-bottom:0.25rem;">Administrative Order / Justification *</label>
+            <textarea id="esReason" required placeholder="State managing committee minute number or executive approval reference..." style="width:100%; min-height:75px; padding:0.5rem; border:1px solid #cbd5e1; border-radius:6px; font-size:0.83rem;"></textarea>
+          </div>
+
+        </div>
+
+        <div class="portal-modal-footer">
+          <button type="button" class="btn btn-outline-secondary" onclick="portalApp.closeModal('employmentStatusModal')">Cancel</button>
+          <button type="submit" class="btn btn-primary" style="font-weight:700;"><i class="fa-solid fa-check mr-1"></i> Update Status Record</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- 5. Teacher Exit Clearance Workflow Modal -->
+  <div class="portal-modal-backdrop" id="teacherExitClearanceModal" style="display:none;">
+    <div class="portal-modal-dialog" style="max-width: 650px; width: 95vw;">
+      <div class="portal-modal-header">
+        <div class="modal-title-wrap">
+          <i class="fa-solid fa-arrow-right-from-bracket text-danger"></i>
+          <div>
+            <h3>Initiate Exit &amp; Departmental Clearance Workflow</h3>
+            <p>Statutory institutional clearance before employee relieving and record archival</p>
+          </div>
+        </div>
+        <button type="button" class="portal-modal-close" onclick="portalApp.closeModal('teacherExitClearanceModal')">&times;</button>
+      </div>
+
+      <form id="teacherExitClearanceForm" onsubmit="portalApp.submitTeacherExitClearance(event)">
+        <div class="portal-modal-body" style="padding: 1.25rem;">
+          
+          <div style="background: #fef2f2; border: 1px solid #fecaca; border-radius: 8px; padding: 0.85rem; font-size: 0.82rem; color: #991b1b; margin-bottom: 1rem;">
+            <i class="fa-solid fa-triangle-exclamation mr-1"></i>
+            <strong>Clearance Undertaking:</strong> Relieving letters and service certificates may only be issued once all departmental clearances are verified. System credentials will be suspended upon completion.
+          </div>
+
+          <div style="margin-bottom: 1rem;">
+            <label style="display:block; font-size:0.75rem; font-weight:700; color:#475569; margin-bottom:0.25rem;">Faculty Member</label>
+            <input type="text" id="exTeacherName" readonly class="tc-filter-select" style="width:100%; height:36px; padding:0 0.65rem; background:#f1f5f9; border:1px solid #cbd5e1; border-radius:6px; font-size:0.83rem;">
+          </div>
+
+          <h5 style="font-size:0.85rem; font-weight:700; color:#0f172a; margin-bottom:0.5rem;">Department Clearance Checklist</h5>
+
+          <div class="clearance-checklist-card">
+            <div>
+              <strong>1. Academic Library Clearance</strong>
+              <div style="font-size:0.75rem; color:#64748b;">No outstanding textbooks or teacher reference manuals</div>
+            </div>
+            <label style="display:flex; align-items:center; gap:0.35rem; font-size:0.82rem; font-weight:700; color:#15803d; cursor:pointer;">
+              <input type="checkbox" id="exCheckLib" checked> Cleared
+            </label>
+          </div>
+
+          <div class="clearance-checklist-card">
+            <div>
+              <strong>2. Science &amp; Computer Laboratory Clearance</strong>
+              <div style="font-size:0.75rem; color:#64748b;">Laboratory apparatus, equipment &amp; computing assets handed over</div>
+            </div>
+            <label style="display:flex; align-items:center; gap:0.35rem; font-size:0.82rem; font-weight:700; color:#15803d; cursor:pointer;">
+              <input type="checkbox" id="exCheckLab" checked> Cleared
+            </label>
+          </div>
+
+          <div class="clearance-checklist-card">
+            <div>
+              <strong>3. Examination &amp; Evaluation Department Clearance</strong>
+              <div style="font-size:0.75rem; color:#64748b;">All marks entries submitted; question papers &amp; answer scripts returned</div>
+            </div>
+            <label style="display:flex; align-items:center; gap:0.35rem; font-size:0.82rem; font-weight:700; color:#15803d; cursor:pointer;">
+              <input type="checkbox" id="exCheckExam" checked> Cleared
+            </label>
+          </div>
+
+          <div class="clearance-checklist-card">
+            <div>
+              <strong>4. Accounts &amp; Salary Final Settlement Clearance</strong>
+              <div style="font-size:0.75rem; color:#64748b;">Advance recovery, provident fund settlement &amp; final pay slip cleared</div>
+            </div>
+            <label style="display:flex; align-items:center; gap:0.35rem; font-size:0.82rem; font-weight:700; color:#15803d; cursor:pointer;">
+              <input type="checkbox" id="exCheckAcct" checked> Cleared
+            </label>
+          </div>
+
+          <div style="margin-top: 1rem;">
+            <label style="display:block; font-size:0.75rem; font-weight:700; color:#475569; margin-bottom:0.25rem;">Relieving Date &amp; Service Certificate Ref</label>
+            <input type="text" id="exRelievingRef" value="REL-2025-084 / Issued on Nov 01, 2025" class="tc-filter-select" style="width:100%; height:36px; padding:0 0.65rem; border:1px solid #cbd5e1; border-radius:6px; font-size:0.83rem;">
+          </div>
+
+        </div>
+
+        <div class="portal-modal-footer">
+          <button type="button" class="btn btn-outline-secondary" onclick="portalApp.closeModal('teacherExitClearanceModal')">Cancel</button>
+          <button type="submit" class="btn btn-danger" style="font-weight:700;"><i class="fa-solid fa-box-archive mr-1"></i> Complete Clearance &amp; Archive Record</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
 
   <!-- =========================================================================
        MODAL: LOG STAFF ATTENDANCE

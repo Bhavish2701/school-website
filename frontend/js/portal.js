@@ -11205,9 +11205,41 @@ const FEE_CATEGORY_AUDIT_DATA = [
     renderStudentPerformanceRegister();
   }
 
+    // ==========================================================================
+  // FACULTY (TEACHING) MANAGEMENT MODULE
+  // Compliant with Role-Based Record Scope, Class & Subject Allocation & Exit Clearances
+  // ==========================================================================
+
+  let activeTeacherDossierId = 'SV-FAC-0101';
+
+  function updateFacultyKPIs() {
+    ensureTeachersEnriched();
+    const data = state.faculty || [];
+    const total = data.length;
+    const active = data.filter(f => f.employmentStatus === 'Active' || f.status === 'Active' || f.status === 'Present').length;
+    const newJoiners = data.filter(f => f.employmentStatus === 'New Joiner' || f.status === 'New Joiner' || (f.joiningDate && f.joiningDate.includes('2025'))).length;
+    const onLeave = data.filter(f => f.employmentStatus === 'Leave' || f.status === 'Leave' || f.status === 'On Leave').length;
+    const pendingVerify = data.filter(f => f.employmentStatus === 'Pending Verification' || f.status === 'Pending Verification').length;
+
+    const elTotal = document.getElementById('facKpiTotal');
+    const elActive = document.getElementById('facKpiActive');
+    const elJoiners = document.getElementById('facKpiNewJoiners');
+    const elLeave = document.getElementById('facKpiOnLeave');
+    const elPending = document.getElementById('facKpiPendingVerify');
+    const elTotalCount = document.getElementById('facTotalCount');
+
+    if (elTotal) elTotal.textContent = total;
+    if (elActive) elActive.textContent = `${active} (${Math.round((active / (total || 1)) * 100)}%)`;
+    if (elJoiners) elJoiners.textContent = newJoiners;
+    if (elLeave) elLeave.textContent = onLeave;
+    if (elPending) elPending.textContent = pendingVerify;
+    if (elTotalCount) elTotalCount.textContent = total;
+  }
+
   function renderStaffGrid(list) {
     ensureTeachersEnriched();
     updateTeachersConfidentialityBanner();
+    updateFacultyKPIs();
 
     let data = list || state.faculty || [];
     const searchInput = document.getElementById('facultyFilterInput');
@@ -11223,93 +11255,178 @@ const FEE_CATEGORY_AUDIT_DATA = [
         const matchesSearch = !searchVal || 
           (f.name && f.name.toLowerCase().includes(searchVal)) ||
           (f.id && f.id.toLowerCase().includes(searchVal)) ||
+          (f.department && f.department.toLowerCase().includes(searchVal)) ||
           (f.subjects && f.subjects.toLowerCase().includes(searchVal)) ||
           (f.qualifications && f.qualifications.toLowerCase().includes(searchVal)) ||
           ((f.assignedClasses || []).some(c => c.toLowerCase().includes(searchVal)));
 
-        const matchesDept = !deptVal || (f.subjects && f.subjects.toLowerCase().includes(deptVal));
-        const matchesStatus = !statusVal || (f.status && f.status.toLowerCase() === statusVal);
+        const matchesDept = !deptVal || 
+          (f.department && f.department.toLowerCase().includes(deptVal.toLowerCase())) ||
+          (f.subjects && f.subjects.toLowerCase().includes(deptVal.toLowerCase()));
+
+        const matchesStatus = !statusVal || 
+          (f.employmentStatus && f.employmentStatus.toLowerCase() === statusVal.toLowerCase()) ||
+          (f.status && f.status.toLowerCase() === statusVal.toLowerCase());
 
         return matchesSearch && matchesDept && matchesStatus;
       });
     }
 
+    const showingCount = document.getElementById('facShowingCount');
+    if (showingCount) showingCount.textContent = data.length;
+
     const countBadge = document.getElementById('facultyCountBadge');
     if (countBadge) countBadge.textContent = data.length;
 
-    const isAuthorized = isStaffAuthorized();
-
-    // 1. Render Table Roster Body
+    // 1. Render Table Roster Body (Authoritative 8 Columns)
     const tbody = document.getElementById('facultyTableBody');
     if (tbody) {
       if (data.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="9" class="text-center py-4 text-muted">No faculty members found matching your search criteria.</td></tr>';
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="8" style="text-align:center; padding:3rem; color:var(--color-text-muted);">
+              <i class="fa-solid fa-chalkboard-user" style="font-size:2rem; margin-bottom:0.75rem; display:block; color:#94a3b8;"></i>
+              <strong>No faculty members found matching your search parameters.</strong>
+              <div style="margin-top:0.5rem; font-size:0.8rem;">Try clearing search keywords or resetting filter parameters.</div>
+            </td>
+          </tr>`;
       } else {
         tbody.innerHTML = data.map(f => {
-          const classesChips = (f.assignedClasses || []).map(c => '<span class="class-allocation-chip"><i class="fa-solid fa-chalkboard"></i> ' + c + '</span>').join(' ');
-          const statusBadge = f.status === 'Active' || f.status === 'Present'
-            ? '<span class="portal-badge badge-success"><i class="fa-solid fa-circle-check"></i> Active</span>'
-            : '<span class="portal-badge badge-warning"><i class="fa-solid fa-clock"></i> ' + f.status + '</span>';
+          // Standardize ID
+          const displayId = f.id.startsWith('SV-FAC-') ? f.id : `SV-FAC-0${f.id.replace(/[^0-9]/g, '').slice(-3) || '101'}`;
 
-          const confidentialCell = isAuthorized
-            ? '<div><strong class="text-emerald" style="font-size:0.85rem;"><i class="fa-solid fa-indian-rupee-sign"></i> ' + f.salary + '</strong><br><small class="text-muted" style="font-size:0.75rem;"><i class="fa-solid fa-user-shield"></i> ' + f.hrNotes + '</small></div>'
-            : '<span class="confidential-lock" title="Restricted: Authorized Personnel Only"><i class="fa-solid fa-lock"></i> Restricted (₹ Confidential)</span>';
+          // Department display
+          const dept = f.department || (f.subjects && f.subjects.toLowerCase().includes('math') ? 'Department of Mathematics' : (f.subjects && f.subjects.toLowerCase().includes('sci') ? 'Department of Natural Sciences' : 'Department of Languages'));
 
-          return '<tr>' +
-            '<td><span class="teacher-id-badge">' + f.id + '</span></td>' +
-            '<td><strong style="color:var(--color-text-dark, #0f172a); font-size:0.9rem;">' + f.name + '</strong><br><small class="text-muted">' + (f.role || 'Teaching Faculty') + '</small></td>' +
-            '<td><span class="subject-pill">' + f.subjects + '</span></td>' +
-            '<td><div style="display:flex; flex-wrap:wrap; gap:3px;">' + classesChips + '</div></td>' +
-            '<td><span style="font-weight:600; color:#334155; font-size:0.82rem;">' + f.qualifications + '</span></td>' +
-            '<td><strong>' + f.joiningDate + '</strong></td>' +
-            '<td>' + statusBadge + '</td>' +
-            '<td>' + confidentialCell + '</td>' +
-            '<td style="text-align:center;">' +
-              '<div style="display:inline-flex; gap:6px;">' +
-                '<button type="button" class="btn btn-secondary btn-sm" onclick="portalApp.openFacultyDossier(\'' + f.id + '\')" title="View Comprehensive Faculty Dossier"><i class="fa-regular fa-folder-open"></i> Dossier</button>' +
-                '<button type="button" class="btn btn-secondary btn-sm" onclick="portalApp.openTeacherPermissionsConfig(\'' + f.id + '\')" title="Configure Teacher Permissions"><i class="fa-solid fa-shield-halved"></i></button>' +
-              '</div>' +
-            '</td>' +
-          '</tr>';
+          // Assigned classes pills
+          const classesChips = (f.assignedClasses || []).map(c => `
+            <span class="assigned-class-pill" title="Record access strictly scoped to ${c}">
+              <i class="fa-solid fa-chalkboard"></i> ${c}
+            </span>
+          `).join(' ');
+
+          // Employment Status Badge
+          let statusBadgeClass = 'active';
+          let statusLabel = 'Active (Confirmed)';
+          const st = (f.employmentStatus || f.status || 'Active').toLowerCase();
+
+          if (st.includes('new') || st.includes('probation')) {
+            statusBadgeClass = 'probation';
+            statusLabel = 'New Joiner / Probation';
+          } else if (st.includes('leave')) {
+            statusBadgeClass = 'leave';
+            statusLabel = 'On Leave';
+          } else if (st.includes('pending')) {
+            statusBadgeClass = 'pending';
+            statusLabel = 'Pending Verification';
+          } else if (st.includes('notice')) {
+            statusBadgeClass = 'notice';
+            statusLabel = 'Notice Period';
+          } else if (st.includes('archive')) {
+            statusBadgeClass = 'archived';
+            statusLabel = 'Archived';
+          }
+
+          const statusBadgeHtml = `<span class="faculty-status-badge ${statusBadgeClass}"><i class="fa-solid fa-circle-check"></i> ${statusLabel}</span>`;
+
+          return `
+            <tr>
+              <td>
+                <span class="teacher-id-badge" style="font-family:monospace; font-weight:700; color:#1d4ed8; background:#eff6ff; padding:0.25rem 0.5rem; border-radius:4px; border:1px solid #bfdbfe;">
+                  ${displayId}
+                </span>
+              </td>
+              <td>
+                <div style="display:flex; align-items:center; gap:0.65rem;">
+                  <div style="width:34px; height:34px; border-radius:50%; background:#eff6ff; color:#2563eb; font-weight:700; display:flex; align-items:center; justify-content:center; border:1px solid #bfdbfe; flex-shrink:0;">
+                    ${f.name.replace(/^(Smt\.|Sri\.|Ms\.|Mr\.|Dr\.)\s*/, '').charAt(0) || 'F'}
+                  </div>
+                  <div>
+                    <a href="javascript:void(0)" onclick="portalApp.openTeacherDetailModal('${f.id}')" style="color:var(--color-text-dark, #0f172a); font-weight:700; text-decoration:none; font-size:0.88rem;">
+                      ${f.name}
+                    </a>
+                    <div style="font-size:0.75rem; color:#64748b;">${f.role || 'Teaching Faculty'}</div>
+                  </div>
+                </div>
+              </td>
+              <td>
+                <span class="faculty-dept-badge">
+                  <i class="fa-solid fa-building-columns text-primary"></i> ${dept.replace('Department of ', '')}
+                </span>
+              </td>
+              <td>
+                <span class="subject-pill">${f.subjects || f.subject || 'Academics'}</span>
+              </td>
+              <td>
+                <div style="display:flex; flex-wrap:wrap; gap:4px; max-width:260px;">
+                  ${classesChips || '<span class="text-muted text-xs">No classes allocated</span>'}
+                </div>
+              </td>
+              <td>
+                <strong style="font-size:0.82rem; color:#334155;">${f.joiningDate || '12-Jun-2018'}</strong>
+              </td>
+              <td>
+                ${statusBadgeHtml}
+              </td>
+              <td style="text-align:center;">
+                <div style="display:inline-flex; gap:5px; flex-wrap:wrap; justify-content:center;">
+                  <button type="button" class="btn btn-secondary btn-sm" onclick="portalApp.openTeacherDetailModal('${f.id}')" title="View Full Teacher Detail Dossier" style="font-size:0.75rem; padding:0.25rem 0.55rem;">
+                    <i class="fa-regular fa-folder-open text-primary mr-1"></i> Dossier
+                  </button>
+                  <button type="button" class="btn btn-secondary btn-sm" onclick="portalApp.openAssignClassesModal('${f.id}')" title="Assign Subjects &amp; Classes" style="font-size:0.75rem; padding:0.25rem 0.45rem;">
+                    <i class="fa-solid fa-chalkboard text-primary"></i>
+                  </button>
+                  <button type="button" class="btn btn-secondary btn-sm" onclick="portalApp.openEmploymentStatusModal('${f.id}')" title="Transition Status / Lifecycle" style="font-size:0.75rem; padding:0.25rem 0.45rem;">
+                    <i class="fa-solid fa-user-pen text-amber"></i>
+                  </button>
+                  <button type="button" class="btn btn-secondary btn-sm" onclick="portalApp.openTeacherExitClearanceModal('${f.id}')" title="Departmental Exit Clearance" style="font-size:0.75rem; padding:0.25rem 0.45rem;">
+                    <i class="fa-solid fa-arrow-right-from-bracket text-danger"></i>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          `;
         }).join('');
       }
     }
 
-    // 2. Render Cards Grid
+    // 2. Render Cards Grid (Alternate View)
     const cardsContainer = document.getElementById('staffGridContainer');
     if (cardsContainer) {
       cardsContainer.innerHTML = data.map(member => {
         const initials = (member.name || '').replace(/^(Smt\.|Sri\.|Ms\.|Mr\.|Dr\.)\s*/, '').split(' ').map(n => n[0]).join('').slice(0, 2) || 'TC';
         const isLead = (member.role || '').includes('Principal');
-        const classesChips = (member.assignedClasses || []).map(c => '<span class="class-allocation-chip">' + c + '</span>').join(' ');
+        const classesChips = (member.assignedClasses || []).map(c => `<span class="assigned-class-pill"><i class="fa-solid fa-chalkboard"></i> ${c}</span>`).join(' ');
 
-        return '<div class="staff-card ' + (isLead ? 'lead-card' : '') + '">' +
-          '<div class="staff-card-header">' +
-            '<div class="staff-avatar">' + initials + '</div>' +
-            '<div class="staff-header-info">' +
-              '<div style="display:flex; align-items:center; justify-content:space-between; gap:6px;">' +
-                '<h3 class="staff-name" style="margin-bottom:0;">' + member.name + '</h3>' +
-                '<span class="teacher-id-badge">' + member.id + '</span>' +
-              '</div>' +
-              '<span class="staff-role">' + member.role + '</span>' +
-              '<div style="display:flex; align-items:center; gap:6px; margin-top:4px; flex-wrap:wrap;">' +
-                '<span class="portal-badge ' + (member.status === 'Present' || member.status === 'Active' ? 'badge-success' : 'badge-warning') + '">' + (member.status || 'Active') + '</span>' +
-                (isAuthorized ? '<span class="confidential-unlocked" style="font-size:0.72rem;"><i class="fa-solid fa-indian-rupee-sign"></i> ' + member.salary + '</span>' : '<span class="confidential-lock" style="font-size:0.72rem;"><i class="fa-solid fa-lock"></i> Salary Restricted</span>') +
-              '</div>' +
-            '</div>' +
-          '</div>' +
-          '<div class="staff-details">' +
-            '<div class="staff-detail-row"><span class="detail-label"><i class="fa-solid fa-graduation-cap"></i> Qualifications:</span><span class="detail-val">' + (member.qualifications || 'B.Ed, Graduate') + '</span></div>' +
-            '<div class="staff-detail-row"><span class="detail-label"><i class="fa-solid fa-book"></i> Subjects:</span><span class="detail-val font-semibold">' + (member.subjects || 'Academics') + '</span></div>' +
-            '<div class="staff-detail-row"><span class="detail-label"><i class="fa-solid fa-chalkboard"></i> Assigned Classes:</span><span class="detail-val">' + classesChips + '</span></div>' +
-            '<div class="staff-detail-row"><span class="detail-label"><i class="fa-solid fa-calendar-check"></i> Joining Date:</span><span class="detail-val"><strong>' + member.joiningDate + '</strong></span></div>' +
-            '<div class="staff-detail-row"><span class="detail-label"><i class="fa-solid fa-phone"></i> Contact:</span><span class="detail-val"><a href="tel:' + member.phone + '">' + (member.phone || '—') + '</a></span></div>' +
-          '</div>' +
-          '<div class="staff-footer">' +
-            '<button class="btn-staff-action outline" onclick="portalApp.openTeacherPermissionsConfig(\'' + member.id + '\')" title="Configure Permissions"><i class="fa-solid fa-shield-halved"></i> Permissions</button>' +
-            '<button class="btn-staff-action outline" onclick="portalApp.openFacultyDossier(\'' + member.id + '\')" title="View Dossier"><i class="fa-regular fa-folder-open"></i> Dossier</button>' +
-          '</div>' +
-        '</div>';
+        return `
+          <div class="staff-card ${isLead ? 'lead-card' : ''}">
+            <div class="staff-card-header">
+              <div class="staff-avatar">${initials}</div>
+              <div class="staff-header-info">
+                <div style="display:flex; align-items:center; justify-content:space-between; gap:6px;">
+                  <h3 class="staff-name" style="margin-bottom:0;">${member.name}</h3>
+                  <span class="teacher-id-badge">${member.id}</span>
+                </div>
+                <span class="staff-role">${member.role || 'Teaching Faculty'}</span>
+                <div style="display:flex; align-items:center; gap:6px; margin-top:4px; flex-wrap:wrap;">
+                  <span class="portal-badge badge-success">${member.status || 'Active'}</span>
+                  <span class="faculty-dept-badge">${member.department || 'Academics'}</span>
+                </div>
+              </div>
+            </div>
+            <div class="staff-details">
+              <div class="staff-detail-row"><span class="detail-label"><i class="fa-solid fa-graduation-cap"></i> Qualifications:</span><span class="detail-val">${member.qualifications || 'M.Sc, B.Ed'}</span></div>
+              <div class="staff-detail-row"><span class="detail-label"><i class="fa-solid fa-book"></i> Subjects:</span><span class="detail-val font-semibold">${member.subjects || 'Academics'}</span></div>
+              <div class="staff-detail-row"><span class="detail-label"><i class="fa-solid fa-chalkboard"></i> Assigned Classes:</span><span class="detail-val">${classesChips}</span></div>
+              <div class="staff-detail-row"><span class="detail-label"><i class="fa-solid fa-calendar-check"></i> Joining Date:</span><span class="detail-val"><strong>${member.joiningDate || '12-Jun-2018'}</strong></span></div>
+              <div class="staff-detail-row"><span class="detail-label"><i class="fa-solid fa-phone"></i> Contact:</span><span class="detail-val"><a href="tel:${member.phone}">${member.phone || '9848011001'}</a></span></div>
+            </div>
+            <div class="staff-footer" style="display:flex; gap:0.5rem; justify-content:flex-end;">
+              <button class="btn btn-secondary btn-sm" onclick="portalApp.openAssignClassesModal('${member.id}')" title="Assign Classes"><i class="fa-solid fa-chalkboard"></i> Allocations</button>
+              <button class="btn btn-primary btn-sm" onclick="portalApp.openTeacherDetailModal('${member.id}')" title="View Full Dossier"><i class="fa-regular fa-folder-open"></i> Dossier</button>
+            </div>
+          </div>
+        `;
       }).join('');
     }
   }
@@ -11317,6 +11434,422 @@ const FEE_CATEGORY_AUDIT_DATA = [
   function filterFaculty() {
     renderStaffGrid(state.faculty);
   }
+
+  function resetFacultyFilters() {
+    const sInput = document.getElementById('facultyFilterInput');
+    const dFilter = document.getElementById('facultyDeptFilter');
+    const stFilter = document.getElementById('facultyStatusFilter');
+    if (sInput) sInput.value = '';
+    if (dFilter) dFilter.value = '';
+    if (stFilter) stFilter.value = '';
+    renderStaffGrid(state.faculty);
+    showToast('Faculty directory filters reset to full view', 'info');
+  }
+
+  // --- ADD TEACHER MODAL & WORKFLOW ---
+  function openAddTeacherModal() {
+    ensureTeachersEnriched();
+    // Generate next sequence Employee ID
+    const count = (state.faculty || []).length + 1;
+    const nextId = `SV-FAC-0${100 + count}`;
+    const idInput = document.getElementById('tfEmployeeId');
+    if (idInput) idInput.value = nextId;
+
+    openModal('addTeacherModal');
+  }
+
+  function handleAddTeacher(e) {
+    if (e && e.preventDefault) e.preventDefault();
+    ensureTeachersEnriched();
+
+    const name = document.getElementById('tfFullName')?.value || 'New Faculty';
+    const empId = document.getElementById('tfEmployeeId')?.value || `SV-FAC-0${100 + state.faculty.length + 1}`;
+    const dept = document.getElementById('tfDepartment')?.value || 'Department of Mathematics';
+    const subj = document.getElementById('tfSubjects')?.value || 'Mathematics';
+    const qual = document.getElementById('tfQualifications')?.value || 'M.Sc, B.Ed';
+    const empType = document.getElementById('tfEmploymentType')?.value || 'Permanent / Confirmed';
+    const phone = document.getElementById('tfPhone')?.value || '9848011223';
+    const email = document.getElementById('tfEmail')?.value || 'faculty@srividya.edu.in';
+    const joinDate = document.getElementById('tfJoiningDate')?.value || '2025-06-12';
+    const emergency = document.getElementById('tfEmergencyContact')?.value || 'Spouse: 9848099887';
+    const address = document.getElementById('tfAddress')?.value || 'Visakhapatnam, AP';
+    const createAccount = document.getElementById('tfCreateUserAccount')?.checked !== false;
+
+    // Collect checked assigned classes
+    const classCheckboxes = document.querySelectorAll('input[name="tfClassCheck"]:checked');
+    const assignedClasses = Array.from(classCheckboxes).map(cb => cb.value);
+    if (assignedClasses.length === 0) {
+      assignedClasses.push('Class X-A');
+    }
+
+    const newTeacher = {
+      id: empId,
+      name: name,
+      department: dept,
+      subject: subj,
+      subjects: subj,
+      role: `Faculty (${subj})`,
+      qualifications: qual,
+      qualification: qual,
+      employmentType: empType,
+      employmentStatus: 'Active',
+      status: 'Active',
+      phone: phone,
+      email: email,
+      personalEmail: email,
+      joiningDate: joinDate,
+      address: address,
+      emergency: emergency,
+      assignedClasses: assignedClasses,
+      isTeaching: true,
+      weeklyPeriods: 22,
+      salary: '₹ 45,000 / mo',
+      documents: {
+        qualifications: [{ name: 'Degree & Master Certificate', status: 'Verified' }, { name: 'B.Ed Certificate', status: 'Verified' }],
+        identity: [{ name: 'Aadhaar UID Card', status: 'Verified' }, { name: 'PAN Card', status: 'Verified' }],
+        employment: [{ name: 'Appointment Order', status: 'Verified' }],
+        overallStatus: 'Fully Verified'
+      },
+      timetable: {
+        mon: ['Class X-A', 'Free', 'Class IX-A', 'Class X-B', 'Class VIII-A', 'Free', 'Remedial', 'Staff Prep'],
+        tue: ['Class X-B', 'Class X-A', 'Free', 'Class IX-A', 'Free', 'Class VIII-A', 'Class X-A', 'Free'],
+        wed: ['Free', 'Class X-A', 'Class IX-A', 'Free', 'Class X-B', 'Class VIII-A', 'Class X-A', 'Lab'],
+        thu: ['Class X-A', 'Class X-B', 'Free', 'Class IX-A', 'Class VIII-A', 'Free', 'Class X-A', 'Staff Prep'],
+        fri: ['Class IX-A', 'Free', 'Class X-A', 'Class X-B', 'Free', 'Class VIII-A', 'Class X-A', 'Review'],
+        sat: ['Class X-A', 'Class X-B', 'Class IX-A', 'Free', 'Staff Meeting', 'Free', 'Free', 'Free']
+      },
+      attendance: { presentDays: 25, totalDays: 26, percentage: '96.1%', biometricStatus: 'Active' },
+      leave: { clBalance: 12, mlBalance: 10, elBalance: 15, recentLeaves: [] },
+      appraisal: {
+        period: 'AY 2025–2026',
+        rating: '4.8 / 5.0 (Exemplary A+)',
+        feedback: 'Newly appointed faculty member with outstanding academic credentials and enthusiastic pedagogical dedication.'
+      },
+      userAccount: {
+        username: empId.toLowerCase().replace(/[^a-z0-9]/g, ''),
+        status: createAccount ? 'Active' : 'Invited',
+        role: 'teacher',
+        recordScope: 'Assigned Classes Only',
+        authorizedClasses: assignedClasses
+      }
+    };
+
+    state.faculty.unshift(newTeacher);
+    closeModal('addTeacherModal');
+    renderStaffGrid(state.faculty);
+    showToast(`Faculty member ${name} (${empId}) registered. Scoped access restricted to: ${assignedClasses.join(', ')}`, 'success');
+  }
+
+  // --- 10-TAB TEACHER DOSSIER ---
+  function openTeacherDetailModal(teacherId) {
+    ensureTeachersEnriched();
+    if (!teacherId && activeTeacherDossierId) teacherId = activeTeacherDossierId;
+    const member = (state.faculty || []).find(f => f.id === teacherId) || state.faculty[0];
+    if (!member) return;
+
+    activeTeacherDossierId = member.id;
+
+    // Header info
+    document.getElementById('tdDossierName').textContent = member.name;
+    document.getElementById('tdEmployeeId').textContent = member.id;
+    document.getElementById('tdDossierMeta').textContent = `${member.role || 'Faculty'} · ${member.department || 'Academics'} · Joining: ${member.joiningDate || '12-Jun-2018'}`;
+    document.getElementById('tdAvatar').textContent = member.name.replace(/^(Smt\.|Sri\.|Ms\.|Mr\.|Dr\.)\s*/, '').charAt(0) || 'F';
+    document.getElementById('tdDeptBadge').textContent = member.department || 'Department of Mathematics';
+    
+    // Status badge
+    const stBadge = document.getElementById('tdStatusBadge');
+    if (stBadge) {
+      stBadge.textContent = member.employmentStatus || member.status || 'Active (Confirmed)';
+    }
+
+    // Tab 1: Profile
+    document.getElementById('tdValName').textContent = member.name;
+    document.getElementById('tdValRole').textContent = member.role || 'Teaching Faculty';
+    document.getElementById('tdValDept').textContent = member.department || 'Department of Mathematics';
+    document.getElementById('tdValPhone').textContent = member.phone || '9848011001';
+    document.getElementById('tdValEmail').textContent = member.email || member.personalEmail || 'faculty@srividya.edu.in';
+    document.getElementById('tdValJoiningDate').textContent = member.joiningDate || '12-Jun-2018';
+    document.getElementById('tdValAddress').textContent = member.address || 'Door No. 4-21, MVP Colony, Visakhapatnam, AP';
+    document.getElementById('tdValEmergency').textContent = member.emergency || 'Spouse: 9848099887';
+
+    // Tab 2: Qualifications & Docs
+    document.getElementById('tdValQualifications').textContent = member.qualifications || 'M.Sc (Mathematics), B.Ed (First Class)';
+    const docsGrid = document.getElementById('tdDocumentsGrid');
+    if (docsGrid) {
+      docsGrid.innerHTML = `
+        <div class="clearance-checklist-card">
+          <div>
+            <strong>1. Post-Graduate Degree Certificate</strong>
+            <div style="font-size:0.75rem; color:#64748b;">M.Sc / M.A University Convocation Certificate</div>
+          </div>
+          <span class="verify-status-badge verified"><i class="fa-solid fa-check"></i> Verified</span>
+        </div>
+        <div class="clearance-checklist-card">
+          <div>
+            <strong>2. B.Ed / Teacher Education Credential</strong>
+            <div style="font-size:0.75rem; color:#64748b;">NCTE Approved Institution Certificate &amp; Methodologies</div>
+          </div>
+          <span class="verify-status-badge verified"><i class="fa-solid fa-check"></i> Verified</span>
+        </div>
+        <div class="clearance-checklist-card">
+          <div>
+            <strong>3. Statutory Identity (Aadhaar &amp; PAN)</strong>
+            <div style="font-size:0.75rem; color:#64748b;">Identity verification &amp; EPFO linkage recorded</div>
+          </div>
+          <span class="verify-status-badge verified"><i class="fa-solid fa-check"></i> Verified</span>
+        </div>
+        <div class="clearance-checklist-card">
+          <div>
+            <strong>4. Service Book &amp; Police Verification</strong>
+            <div style="font-size:0.75rem; color:#64748b;">Character verification &amp; institutional service book entry</div>
+          </div>
+          <span class="verify-status-badge verified"><i class="fa-solid fa-check"></i> Verified</span>
+        </div>
+      `;
+    }
+
+    // Tab 3: Subject Allocations
+    const subjList = document.getElementById('tdSubjectAllocationsList');
+    if (subjList) {
+      subjList.innerHTML = `
+        <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; padding:1rem; margin-bottom:0.75rem;">
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <div>
+              <strong style="font-size:0.95rem; color:#0f172a;">${member.subjects || 'Mathematics & Board Preparation'}</strong>
+              <div style="font-size:0.78rem; color:#64748b;">Andhra Pradesh Board Secondary Curriculum Standard</div>
+            </div>
+            <span class="tc-count-pill">${member.weeklyPeriods || 22} Teaching Periods / Wk</span>
+          </div>
+        </div>
+      `;
+    }
+
+    // Tab 4: Class Allocations
+    const classList = document.getElementById('tdClassAllocationsList');
+    if (classList) {
+      classList.innerHTML = (member.assignedClasses || ['Class X-A', 'Class X-B', 'Class IX-A']).map((c, idx) => `
+        <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; padding:0.85rem;">
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <strong style="color:#0f172a;"><i class="fa-solid fa-chalkboard text-primary mr-1"></i> ${c}</strong>
+            ${idx === 0 ? '<span class="parent-primary-badge" style="font-size:0.68rem;"><i class="fa-solid fa-star"></i> Class Teacher</span>' : ''}
+          </div>
+          <div style="font-size:0.75rem; color:#64748b; margin-top:0.35rem;">Assigned Section Instruction &amp; Evaluation</div>
+        </div>
+      `).join('');
+    }
+
+    // Tab 5: Timetable
+    const ttBody = document.getElementById('tdTimetableBody');
+    if (ttBody) {
+      const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+      const tt = member.timetable || {
+        mon: ['Class X-A', 'Free', 'Class IX-A', 'Class X-B', 'Class VIII-A', 'Free', 'Remedial', 'Staff Prep'],
+        tue: ['Class X-B', 'Class X-A', 'Free', 'Class IX-A', 'Free', 'Class VIII-A', 'Class X-A', 'Free'],
+        wed: ['Free', 'Class X-A', 'Class IX-A', 'Free', 'Class X-B', 'Class VIII-A', 'Class X-A', 'Lab'],
+        thu: ['Class X-A', 'Class X-B', 'Free', 'Class IX-A', 'Class VIII-A', 'Free', 'Class X-A', 'Staff Prep'],
+        fri: ['Class IX-A', 'Free', 'Class X-A', 'Class X-B', 'Free', 'Class VIII-A', 'Class X-A', 'Review'],
+        sat: ['Class X-A', 'Class X-B', 'Class IX-A', 'Free', 'Staff Meeting', 'Free', 'Free', 'Free']
+      };
+
+      const dayKeys = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
+      ttBody.innerHTML = days.map((d, i) => {
+        const row = tt[dayKeys[i]] || ['Class X-A', 'Free', 'Class IX-A', 'Class X-B', 'Free', 'Free', 'Free', 'Free'];
+        const cells = row.map(period => {
+          const isFree = period === 'Free';
+          return `<td class="${isFree ? 'period-free' : 'period-active'}">${period}</td>`;
+        }).join('');
+        return `<tr><td style="font-weight:700; background:#f8fafc;">${d}</td>${cells}</tr>`;
+      }).join('');
+    }
+
+    // Tab 8: Appraisal
+    const app = member.appraisal || {};
+    document.getElementById('tdAppraisalRating').textContent = app.rating || '4.8 / 5.0 (Exemplary A+)';
+    document.getElementById('tdAppraisalFeedback').textContent = app.feedback || 'Exemplary pedagogical performance. Maintained 100% Board preparation adherence.';
+
+    // Tab 10: Scope & Permissions
+    document.getElementById('tdScopeClassesDisplay').textContent = (member.assignedClasses || []).join(', ') || 'Class X-A, Class X-B';
+
+    // Default to tab 1
+    switchTeacherDetailTab('profile');
+    openModal('teacherDetailModal');
+  }
+
+  function switchTeacherDetailTab(tabId) {
+    const tabs = document.querySelectorAll('.teacher-detail-tab-btn');
+    tabs.forEach(t => t.classList.remove('active'));
+
+    const panes = document.querySelectorAll('.teacher-detail-pane');
+    panes.forEach(p => p.classList.remove('active'));
+
+    const targetPane = document.getElementById(`teacherPane-${tabId}`);
+    if (targetPane) targetPane.classList.add('active');
+
+    tabs.forEach(btn => {
+      if (btn.getAttribute('onclick') && btn.getAttribute('onclick').includes(tabId)) {
+        btn.classList.add('active');
+      }
+    });
+  }
+
+  // --- ASSIGN CLASSES WORKFLOW ---
+  function openAssignClassesModal(teacherId) {
+    ensureTeachersEnriched();
+    if (!teacherId && activeTeacherDossierId) teacherId = activeTeacherDossierId;
+    const member = (state.faculty || []).find(f => f.id === teacherId) || state.faculty[0];
+    if (!member) return;
+
+    activeTeacherDossierId = member.id;
+    document.getElementById('asTeacherName').value = `${member.name} (${member.id})`;
+    document.getElementById('asSubject').value = member.subjects || 'Mathematics';
+
+    // Checkboxes
+    const container = document.getElementById('asClassesCheckboxContainer');
+    if (container) {
+      const allClassOptions = ['Class X-A', 'Class X-B', 'Class IX-A', 'Class IX-B', 'Class VIII-A', 'Class VIII-B', 'Class VII-A', 'Class VII-B', 'Class VI-A'];
+      container.innerHTML = allClassOptions.map(c => {
+        const isChecked = (member.assignedClasses || []).includes(c);
+        return `
+          <label style="display:inline-flex; align-items:center; gap:0.35rem; font-size:0.8rem; cursor:pointer;">
+            <input type="checkbox" name="asClassCheck" value="${c}" ${isChecked ? 'checked' : ''}> <span>${c}</span>
+          </label>
+        `;
+      }).join('');
+    }
+
+    openModal('assignClassesModal');
+  }
+
+  function submitAssignClasses(e) {
+    if (e && e.preventDefault) e.preventDefault();
+    const member = (state.faculty || []).find(f => f.id === activeTeacherDossierId);
+    if (!member) return;
+
+    const subj = document.getElementById('asSubject')?.value || member.subjects;
+    const classCheckboxes = document.querySelectorAll('input[name="asClassCheck"]:checked');
+    const newClasses = Array.from(classCheckboxes).map(cb => cb.value);
+
+    member.subjects = subj;
+    member.subject = subj;
+    member.assignedClasses = newClasses.length > 0 ? newClasses : ['Class X-A'];
+    if (member.userAccount) {
+      member.userAccount.authorizedClasses = member.assignedClasses;
+    }
+
+    closeModal('assignClassesModal');
+    renderStaffGrid(state.faculty);
+    showToast(`Updated subject & class assignments for ${member.name}. Record scope updated to: ${member.assignedClasses.join(', ')}`, 'success');
+    if (activeTeacherDossierId) openTeacherDetailModal(activeTeacherDossierId);
+  }
+
+  // --- EMPLOYMENT STATUS TRANSITIONS ---
+  function openEmploymentStatusModal(teacherId) {
+    ensureTeachersEnriched();
+    if (!teacherId && activeTeacherDossierId) teacherId = activeTeacherDossierId;
+    const member = (state.faculty || []).find(f => f.id === teacherId) || state.faculty[0];
+    if (!member) return;
+
+    activeTeacherDossierId = member.id;
+    document.getElementById('esTeacherName').value = `${member.name} (${member.id})`;
+    const sel = document.getElementById('esNewStatus');
+    if (sel) sel.value = member.employmentStatus || member.status || 'Active';
+
+    openModal('employmentStatusModal');
+  }
+
+  function submitEmploymentStatusChange(e) {
+    if (e && e.preventDefault) e.preventDefault();
+    const member = (state.faculty || []).find(f => f.id === activeTeacherDossierId);
+    if (!member) return;
+
+    const newStatus = document.getElementById('esNewStatus')?.value || 'Active';
+    const effDate = document.getElementById('esEffectiveDate')?.value || '2025-11-01';
+    const reason = document.getElementById('esReason')?.value || 'Administrative transition';
+
+    member.employmentStatus = newStatus;
+    member.status = newStatus;
+
+    closeModal('employmentStatusModal');
+    renderStaffGrid(state.faculty);
+    showToast(`Employment status transitioned to ${newStatus} for ${member.name} effective ${effDate}`, 'success');
+    if (activeTeacherDossierId) openTeacherDetailModal(activeTeacherDossierId);
+  }
+
+  // --- EXIT CLEARANCE WORKFLOW ---
+  function openTeacherExitClearanceModal(teacherId) {
+    ensureTeachersEnriched();
+    if (!teacherId && activeTeacherDossierId) teacherId = activeTeacherDossierId;
+    const member = (state.faculty || []).find(f => f.id === teacherId) || state.faculty[0];
+    if (!member) return;
+
+    activeTeacherDossierId = member.id;
+    document.getElementById('exTeacherName').value = `${member.name} (${member.id})`;
+    openModal('teacherExitClearanceModal');
+  }
+
+  function submitTeacherExitClearance(e) {
+    if (e && e.preventDefault) e.preventDefault();
+    const member = (state.faculty || []).find(f => f.id === activeTeacherDossierId);
+    if (!member) return;
+
+    const ref = document.getElementById('exRelievingRef')?.value || 'REL-2025-084';
+    member.employmentStatus = 'Archived';
+    member.status = 'Archived';
+    if (member.userAccount) member.userAccount.status = 'Suspended';
+
+    closeModal('teacherExitClearanceModal');
+    renderStaffGrid(state.faculty);
+    showToast(`Departmental exit clearances finalized for ${member.name}. Relieving order issued (${ref}). Record moved to archive.`, 'info');
+  }
+
+  // --- ACCOUNT INVITATION & ACCESS CONTROL ---
+  function generateTeacherAccountInvitation(teacherId) {
+    ensureTeachersEnriched();
+    if (!teacherId && activeTeacherDossierId) teacherId = activeTeacherDossierId;
+    const member = (state.faculty || []).find(f => f.id === teacherId) || state.faculty[0];
+    if (!member) return;
+
+    showToast(`Teacher portal invitation & scoped credentials dispatched to ${member.email || 'faculty inbox'}`, 'success');
+  }
+
+  function toggleTeacherAccountAccess(teacherId) {
+    ensureTeachersEnriched();
+    if (!teacherId && activeTeacherDossierId) teacherId = activeTeacherDossierId;
+    const member = (state.faculty || []).find(f => f.id === teacherId) || state.faculty[0];
+    if (!member) return;
+
+    const curr = member.userAccount ? member.userAccount.status : 'Active';
+    const next = curr === 'Active' ? 'Suspended' : 'Active';
+    if (!member.userAccount) member.userAccount = { status: next };
+    member.userAccount.status = next;
+
+    showToast(`Teacher Portal user account access for ${member.name} has been ${next.toUpperCase()}`, next === 'Active' ? 'success' : 'warning');
+    if (activeTeacherDossierId) openTeacherDetailModal(activeTeacherDossierId);
+  }
+
+  function archiveTeacherRecord(teacherId) {
+    ensureTeachersEnriched();
+    if (!teacherId && activeTeacherDossierId) teacherId = activeTeacherDossierId;
+    const member = (state.faculty || []).find(f => f.id === teacherId) || state.faculty[0];
+    if (!member) return;
+
+    member.employmentStatus = 'Archived';
+    member.status = 'Archived';
+    renderStaffGrid(state.faculty);
+    showToast(`Faculty record for ${member.name} moved to archival retainment register.`, 'info');
+  }
+
+  function exportFacultyRegisterCSV() {
+    ensureTeachersEnriched();
+    let csv = 'EmployeeID,Name,Department,Subjects,AssignedClasses,Qualifications,JoiningDate,EmploymentStatus,ContactPhone,Email\n';
+    (state.faculty || []).forEach(f => {
+      const classes = (f.assignedClasses || []).join('; ');
+      csv += `"${f.id}","${f.name}","${f.department || 'Department of Mathematics'}","${f.subjects || f.subject}","${classes}","${f.qualifications || f.qualification}","${f.joiningDate || '12-Jun-2018'}","${f.employmentStatus || f.status}","${f.phone}","${f.email || f.personalEmail}"\n`;
+    });
+    downloadCsvFile(csv, 'sri_vidya_faculty_teaching_authoritative_register.csv');
+    showToast('Authoritative Faculty Register exported to CSV', 'success');
+  }
+
 
   function renderFeeTransactions(list) {
     renderFeeCollection(list);
@@ -40213,6 +40746,21 @@ const classData = TIMETABLE_CLASS_DATA[currentTimetableClass] || TIMETABLE_CLASS
     renderTeacherLeaveRequests,
     renderNonTeachingStaff,
     renderStaffGrid,
+    updateFacultyKPIs,
+    resetFacultyFilters,
+    openAddTeacherModal,
+    openTeacherDetailModal,
+    switchTeacherDetailTab,
+    openAssignClassesModal,
+    submitAssignClasses,
+    generateTeacherAccountInvitation,
+    toggleTeacherAccountAccess,
+    openEmploymentStatusModal,
+    submitEmploymentStatusChange,
+    openTeacherExitClearanceModal,
+    submitTeacherExitClearance,
+    archiveTeacherRecord,
+    exportFacultyRegisterCSV,
     resetStaffFilters,
     exportStaffCSV,
     printStaffTable,
