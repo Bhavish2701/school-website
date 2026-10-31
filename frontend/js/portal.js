@@ -5019,28 +5019,71 @@ const FEE_CATEGORY_AUDIT_DATA = [
           </div>
         </div>
 
-        <div class="row g-3">
-          <div class="col-md-6">
-            <div class="card p-3 border rounded-3 bg-light h-100">
-              <h6 class="font-bold text-dark mb-2"><i class="fa-solid fa-address-card text-primary mr-1"></i> Quick Demographic Profile</h6>
-              <div class="row g-2 text-xs">
-                <div class="col-6"><span class="text-muted d-block">Gender:</span> <strong>${(s.gender || 'Male').toUpperCase()}</strong></div>
-                <div class="col-6"><span class="text-muted d-block">Blood Group:</span> <strong><i class="fa-solid fa-droplet text-danger"></i> ${s.bloodGroup || 'O+'}</strong></div>
-                <div class="col-6"><span class="text-muted d-block">Date of Birth:</span> <strong>${s.dob || '15-Aug-2012'}</strong></div>
-                <div class="col-6"><span class="text-muted d-block">Mother Tongue:</span> <strong>${s.motherTongue || 'Telugu'}</strong></div>
-                <div class="col-12"><span class="text-muted d-block">Residential Address:</span> <strong>${s.address || 'Srikakulam'}</strong></div>
+        <div class="dossier-cards-grid">
+          <div class="dossier-section-card">
+            <div class="dossier-section-title">
+              <i class="fa-solid fa-address-card text-primary"></i>
+              <span>Quick Demographic Profile</span>
+            </div>
+            <div class="dossier-meta-grid">
+              <div class="dossier-meta-item">
+                <span class="dossier-meta-label">Gender</span>
+                <span class="dossier-meta-value">${(s.gender || 'Male').toUpperCase()}</span>
+              </div>
+              <div class="dossier-meta-item">
+                <span class="dossier-meta-label">Blood Group</span>
+                <span class="dossier-meta-value">
+                  <span class="dossier-blood-pill"><i class="fa-solid fa-droplet text-danger"></i> ${s.bloodGroup || 'O+'}</span>
+                </span>
+              </div>
+              <div class="dossier-meta-item">
+                <span class="dossier-meta-label">Date of Birth</span>
+                <span class="dossier-meta-value">${s.dob || '15-Aug-2012'}</span>
+              </div>
+              <div class="dossier-meta-item">
+                <span class="dossier-meta-label">Mother Tongue</span>
+                <span class="dossier-meta-value">${s.motherTongue || 'Telugu'}</span>
+              </div>
+              <div class="dossier-meta-item full-width">
+                <span class="dossier-meta-label">Residential Address</span>
+                <span class="dossier-meta-value"><i class="fa-solid fa-location-dot text-muted"></i> ${s.address || 'Srikakulam'}</span>
               </div>
             </div>
           </div>
-          <div class="col-md-6">
-            <div class="card p-3 border rounded-3 bg-light h-100">
-              <h6 class="font-bold text-dark mb-2"><i class="fa-solid fa-user-shield text-success mr-1"></i> Guardian &amp; Authorized Contacts</h6>
-              <div class="row g-2 text-xs">
-                <div class="col-6"><span class="text-muted d-block">Primary Guardian:</span> <strong>${s.parent}</strong></div>
-                <div class="col-6"><span class="text-muted d-block">Relationship:</span> <strong>${s.guardianRel || 'Father'}</strong></div>
-                <div class="col-6"><span class="text-muted d-block">Mobile Phone:</span> <a href="tel:${s.phone}" class="phone-link font-bold text-primary">${s.phone}</a></div>
-                <div class="col-6"><span class="text-muted d-block">Email:</span> <a href="mailto:${s.email}">${s.email}</a></div>
-                <div class="col-12"><span class="text-muted d-block">Consent Status:</span> <span class="badge bg-success text-white"><i class="fa-solid fa-check mr-1"></i>Verified Legal Representative</span></div>
+
+          <div class="dossier-section-card">
+            <div class="dossier-section-title">
+              <i class="fa-solid fa-user-shield text-success"></i>
+              <span>Guardian &amp; Authorized Contacts</span>
+            </div>
+            <div class="dossier-meta-grid">
+              <div class="dossier-meta-item">
+                <span class="dossier-meta-label">Primary Guardian</span>
+                <span class="dossier-meta-value">${s.parent}</span>
+              </div>
+              <div class="dossier-meta-item">
+                <span class="dossier-meta-label">Relationship</span>
+                <span class="dossier-meta-value"><span class="badge-role-tag">${s.guardianRel || 'Father'}</span></span>
+              </div>
+              <div class="dossier-meta-item">
+                <span class="dossier-meta-label">Mobile Phone</span>
+                <span class="dossier-meta-value">
+                  <a href="tel:${s.phone}" class="phone-link"><i class="fa-solid fa-phone text-primary"></i> ${s.phone}</a>
+                </span>
+              </div>
+              <div class="dossier-meta-item">
+                <span class="dossier-meta-label">Email Address</span>
+                <span class="dossier-meta-value">
+                  <a href="mailto:${s.email}" class="email-link" title="${s.email}"><i class="fa-regular fa-envelope text-primary"></i> ${s.email}</a>
+                </span>
+              </div>
+              <div class="dossier-meta-item full-width">
+                <span class="dossier-meta-label">Consent Status</span>
+                <span class="dossier-meta-value">
+                  <span class="dossier-consent-pill verified">
+                    <i class="fa-solid fa-circle-check"></i> Verified Legal Representative
+                  </span>
+                </span>
               </div>
             </div>
           </div>
@@ -5070,28 +5113,61 @@ const FEE_CATEGORY_AUDIT_DATA = [
       <!-- TAB 3: PARENTS AND GUARDIANS -->
       <div class="dossier-tab-pane" id="pane-dossier-parents">
         <h6 class="font-bold text-dark mb-3"><i class="fa-solid fa-users text-primary mr-1"></i> Parents &amp; Authorized Legal Guardians</h6>
-        <div class="row g-3">
-          <div class="col-md-6">
-            <div class="card p-3 border rounded-3 bg-light">
-              <span class="badge bg-primary text-white mb-2" style="width:fit-content;">Primary Guardian</span>
-              <h6 class="font-bold mb-1">${s.parent}</h6>
-              <p class="text-xs text-muted mb-2">Relationship: ${s.guardianRel || 'Father'} • Designated School Representative</p>
-              <div class="text-xs">
-                <div><i class="fa-solid fa-phone text-success mr-1"></i> <a href="tel:${s.phone}">${s.phone}</a></div>
-                <div class="mt-1"><i class="fa-solid fa-envelope text-primary mr-1"></i> <a href="mailto:${s.email}">${s.email}</a></div>
-                <div class="mt-1"><i class="fa-solid fa-location-dot text-secondary mr-1"></i> ${s.address}</div>
+        <div class="dossier-cards-grid">
+          <div class="dossier-section-card">
+            <div class="dossier-section-title">
+              <i class="fa-solid fa-user-tie text-primary"></i>
+              <span>Primary Guardian</span>
+            </div>
+            <div class="dossier-meta-grid">
+              <div class="dossier-meta-item">
+                <span class="dossier-meta-label">Full Name</span>
+                <span class="dossier-meta-value">${s.parent}</span>
+              </div>
+              <div class="dossier-meta-item">
+                <span class="dossier-meta-label">Relationship</span>
+                <span class="dossier-meta-value"><span class="badge-role-tag">${s.guardianRel || 'Father'}</span></span>
+              </div>
+              <div class="dossier-meta-item">
+                <span class="dossier-meta-label">Mobile Phone</span>
+                <span class="dossier-meta-value"><a href="tel:${s.phone}" class="phone-link"><i class="fa-solid fa-phone text-primary"></i> ${s.phone}</a></span>
+              </div>
+              <div class="dossier-meta-item">
+                <span class="dossier-meta-label">Email Address</span>
+                <span class="dossier-meta-value"><a href="mailto:${s.email}" class="email-link"><i class="fa-regular fa-envelope text-primary"></i> ${s.email}</a></span>
+              </div>
+              <div class="dossier-meta-item full-width">
+                <span class="dossier-meta-label">Residential Address</span>
+                <span class="dossier-meta-value"><i class="fa-solid fa-location-dot text-muted"></i> ${s.address}</span>
               </div>
             </div>
           </div>
-          <div class="col-md-6">
-            <div class="card p-3 border rounded-3 bg-light">
-              <span class="badge bg-secondary text-white mb-2" style="width:fit-content;">Secondary / Emergency Contact</span>
-              <h6 class="font-bold mb-1">Smt. ${s.parent.split(' ').slice(1).join(' ') || 'Lakshmi'}</h6>
-              <p class="text-xs text-muted mb-2">Relationship: Mother • Authorized Emergency Contact</p>
-              <div class="text-xs">
-                <div><i class="fa-solid fa-phone text-success mr-1"></i> 9848099881</div>
-                <div class="mt-1"><i class="fa-solid fa-shield-check text-success mr-1"></i> KYC &amp; Aadhaar Identity Verified</div>
-                <div class="mt-1 text-muted">Authorized to receive report cards, attend PTMs, and sign student departure logs.</div>
+
+          <div class="dossier-section-card">
+            <div class="dossier-section-title">
+              <i class="fa-solid fa-heart text-danger"></i>
+              <span>Secondary / Emergency Contact</span>
+            </div>
+            <div class="dossier-meta-grid">
+              <div class="dossier-meta-item">
+                <span class="dossier-meta-label">Full Name</span>
+                <span class="dossier-meta-value">Smt. ${s.parent.split(' ').slice(1).join(' ') || 'Lakshmi'}</span>
+              </div>
+              <div class="dossier-meta-item">
+                <span class="dossier-meta-label">Relationship</span>
+                <span class="dossier-meta-value"><span class="badge-role-tag">Mother</span></span>
+              </div>
+              <div class="dossier-meta-item">
+                <span class="dossier-meta-label">Mobile Phone</span>
+                <span class="dossier-meta-value"><a href="tel:9848099881" class="phone-link"><i class="fa-solid fa-phone text-primary"></i> 9848099881</a></span>
+              </div>
+              <div class="dossier-meta-item">
+                <span class="dossier-meta-label">Identity Verification</span>
+                <span class="dossier-meta-value"><span class="dossier-consent-pill verified"><i class="fa-solid fa-circle-check"></i> Aadhaar KYC Verified</span></span>
+              </div>
+              <div class="dossier-meta-item full-width">
+                <span class="dossier-meta-label">Authorized Delegation</span>
+                <span class="dossier-meta-value text-muted" style="font-size:0.8rem; font-weight:400;">Authorized to receive report cards, attend PTMs, and sign student departure logs.</span>
               </div>
             </div>
           </div>
@@ -5183,11 +5259,23 @@ const FEE_CATEGORY_AUDIT_DATA = [
       <!-- TAB 7: ATTENDANCE -->
       <div class="dossier-tab-pane" id="pane-dossier-attendance">
         <h6 class="font-bold text-dark mb-3"><i class="fa-solid fa-calendar-check text-primary mr-1"></i> Monthly &amp; Period Attendance Breakdown</h6>
-        <div class="row g-2 mb-3 text-xs">
-          <div class="col-3"><div class="p-2 bg-light border rounded text-center">Working Days: <strong>${s.attendanceStats?.workingDays || 182}</strong></div></div>
-          <div class="col-3"><div class="p-2 bg-light border rounded text-center text-success">Present Days: <strong>${s.attendanceStats?.presentDays || 172}</strong></div></div>
-          <div class="col-3"><div class="p-2 bg-light border rounded text-center text-danger">Absent Days: <strong>${s.attendanceStats?.absentDays || 7}</strong></div></div>
-          <div class="col-3"><div class="p-2 bg-light border rounded text-center text-primary">Attendance Rate: <strong>${s.attendanceStats?.pct || s.attendance}</strong></div></div>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin-bottom: 1.25rem;">
+          <div class="p-3 bg-light border rounded-3 text-center">
+            <span class="dossier-meta-label d-block mb-1">Working Days</span>
+            <strong style="font-size: 1.25rem; color: #1e293b; display: block;">${s.attendanceStats?.workingDays || 182}</strong>
+          </div>
+          <div class="p-3 bg-light border rounded-3 text-center">
+            <span class="dossier-meta-label d-block mb-1">Present Days</span>
+            <strong style="font-size: 1.25rem; color: #10b981; display: block;">${s.attendanceStats?.presentDays || 172}</strong>
+          </div>
+          <div class="p-3 bg-light border rounded-3 text-center">
+            <span class="dossier-meta-label d-block mb-1">Absent Days</span>
+            <strong style="font-size: 1.25rem; color: #ef4444; display: block;">${s.attendanceStats?.absentDays || 7}</strong>
+          </div>
+          <div class="p-3 bg-light border rounded-3 text-center">
+            <span class="dossier-meta-label d-block mb-1">Attendance Rate</span>
+            <strong style="font-size: 1.25rem; color: #2563eb; display: block;">${s.attendanceStats?.pct || s.attendance}</strong>
+          </div>
         </div>
       </div>
 

@@ -18138,43 +18138,43 @@
        ==================================================================== -->
   <div class="modal-backdrop" id="studentDossierModal" role="dialog" aria-modal="true" style="display:none;">
     <div class="portal-modal" style="max-width: 1040px; width: 96%; max-height: 92vh;">
-      <div class="modal-header d-flex justify-content-between align-items-center pb-2">
-        <div class="d-flex align-items-center gap-3">
-          <div id="dossierAvatar" class="cell-avatar" style="width:48px; height:48px; font-size:1.2rem; border-radius:50%; background:linear-gradient(135deg, #1e40af 0%, #3b82f6 100%); color:#fff; display:flex; align-items:center; justify-content:center; font-weight:700;">
+      <div class="modal-header dossier-modal-header">
+        <div class="dossier-header-identity">
+          <div id="dossierAvatar" class="cell-avatar" style="width:48px; height:48px; min-width:48px; font-size:1.2rem; border-radius:50%; background:linear-gradient(135deg, #1e40af 0%, #3b82f6 100%); color:#fff; display:flex; align-items:center; justify-content:center; font-weight:700; box-shadow:0 2px 6px rgba(37,99,235,0.25);">
             K
           </div>
           <div>
-            <div class="d-flex align-items-center gap-2">
-              <h3 class="mb-0" id="dossierStudentName" style="font-size: 1.25rem; color:#0f172a;">K. Sai Tharun</h3>
-              <span id="dossierStatusBadge" class="badge" style="background:#dcfce7; color:#15803d; font-weight:700;">Active</span>
+            <div class="dossier-header-name-row">
+              <h3 class="mb-0" id="dossierStudentName" style="font-size: 1.25rem; font-weight:700; color:#0f172a; margin:0;">K. Sai Tharun</h3>
+              <span id="dossierStatusBadge" class="badge" style="background:#dcfce7; color:#15803d; font-weight:700; padding:3px 10px; border-radius:12px; font-size:0.75rem;">Active</span>
             </div>
-            <div class="text-xs text-muted mt-1 d-flex flex-wrap gap-2">
+            <div class="dossier-identity-sub">
               <span>Student ID: <strong id="dossierStudentId" style="font-family:monospace; color:#1e40af;">STU-SV-0001</strong></span>
-              <span>•</span>
+              <span class="text-muted">•</span>
               <span>Admission No: <strong id="dossierAdmNo" style="color:#0f172a;">SV-0001</strong></span>
-              <span>•</span>
+              <span class="text-muted">•</span>
               <span>Class: <strong id="dossierClassSec">Class VIII - A</strong></span>
-              <span>•</span>
+              <span class="text-muted">•</span>
               <span>Roll: <strong id="dossierRollNo">#801</strong></span>
             </div>
           </div>
         </div>
 
-        <div class="d-flex align-items-center gap-2">
+        <div class="dossier-header-actions">
           <button type="button" class="btn btn-outline-secondary btn-sm" onclick="portalApp.openStudentIdCard(portalApp.getActiveDossierStudent()?.admNo)">
-            <i class="fa-solid fa-id-badge mr-1"></i> ID Card
+            <i class="fa-solid fa-id-badge"></i> <span>ID Card</span>
           </button>
           <button type="button" class="btn btn-primary btn-sm" onclick="portalApp.printStudentDossier()">
-            <i class="fa-solid fa-print mr-1"></i> Print Dossier
+            <i class="fa-solid fa-print"></i> <span>Print Dossier</span>
           </button>
-          <button type="button" class="modal-close-x ml-2" onclick="portalApp.closeModal('studentDossierModal')" title="Close" aria-label="Close">
+          <button type="button" class="modal-close-x" onclick="portalApp.closeModal('studentDossierModal')" title="Close" aria-label="Close">
             <i class="fa-solid fa-xmark"></i>
           </button>
         </div>
       </div>
 
       <!-- 14-Tab Horizontal Navigation Strip -->
-      <div class="px-3 pt-2 bg-light border-bottom">
+      <div class="dossier-tab-strip-wrapper">
         <div class="dossier-tab-strip" id="dossierTabStrip">
           <button type="button" class="dossier-tab-item active" data-tab="overview" onclick="portalApp.switchDossierTab('overview')">
             <i class="fa-solid fa-gauge-high"></i> Overview
@@ -18226,8 +18226,8 @@
         <!-- Injected dynamically by portalApp.renderDossierTabs() -->
       </div>
 
-      <div class="modal-footer d-flex justify-content-between align-items-center bg-light p-3 border-top">
-        <div class="d-flex align-items-center gap-2">
+      <div class="modal-footer dossier-modal-footer">
+        <div class="dossier-footer-left">
           <button type="button" class="btn btn-outline-warning btn-sm" onclick="portalApp.openStudentTransferModal(portalApp.getActiveDossierStudent()?.admNo)">
             <i class="fa-solid fa-arrow-right-from-bracket mr-1"></i> Formal Transfer / Withdrawal (TC)
           </button>
@@ -18235,9 +18235,11 @@
             <i class="fa-solid fa-box-archive mr-1"></i> Controlled Archival
           </button>
         </div>
-        <button type="button" class="btn btn-secondary btn-sm" onclick="portalApp.closeModal('studentDossierModal')">
-          Close Dossier
-        </button>
+        <div class="dossier-footer-right">
+          <button type="button" class="btn btn-secondary btn-sm" onclick="portalApp.closeModal('studentDossierModal')">
+            Close Dossier
+          </button>
+        </div>
       </div>
     </div>
   </div>
