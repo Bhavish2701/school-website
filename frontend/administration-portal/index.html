@@ -18373,13 +18373,18 @@
        EDIT STUDENT RECORD MODAL WITH SENSITIVE FIELD AUDIT REASON
        ==================================================================== -->
   <div class="modal-backdrop" id="editStudentModal" role="dialog" aria-modal="true" style="display:none;">
-    <div class="portal-modal" style="max-width: 700px; width: 95%;">
+    <div class="portal-modal" style="max-width: 720px; width: 95%;">
       <div class="modal-header d-flex justify-content-between align-items-center">
-        <div>
-          <h3 class="mb-0" style="font-size: 1.15rem; color:#0f172a;">
-            <i class="fa-solid fa-user-pen text-primary mr-1"></i> Edit Student Record
-          </h3>
-          <p class="text-muted text-xs mb-0 mt-1">Changes to sensitive records require a recorded justification in the permanent audit trail.</p>
+        <div class="d-flex align-items-center gap-3">
+          <div style="width:42px; height:42px; border-radius:10px; background:#eff6ff; color:#2563eb; display:flex; align-items:center; justify-content:center; font-size:1.15rem; flex-shrink:0;">
+            <i class="fa-solid fa-user-pen"></i>
+          </div>
+          <div>
+            <h3 class="mb-0" style="font-size: 1.2rem; font-weight:700; color:#0f172a; margin:0;">
+              Edit Student Record
+            </h3>
+            <p class="text-muted text-xs mb-0 mt-1">Changes to sensitive records require a recorded justification in the permanent audit trail.</p>
+          </div>
         </div>
         <button type="button" class="modal-close-x" onclick="portalApp.closeModal('editStudentModal')" title="Close" aria-label="Close">
           <i class="fa-solid fa-xmark"></i>
@@ -18387,19 +18392,32 @@
       </div>
       <form id="editStudentForm" onsubmit="portalApp.saveStudentEdit(event)">
         <input type="hidden" id="editOriginalAdmNo">
-        <div class="modal-body p-4">
-          <div class="row g-3 mb-3">
-            <div class="col-md-8">
-              <label class="form-label text-xs font-bold text-muted">Full Legal Name * <span class="badge bg-warning text-dark ml-1" style="font-size:0.65rem;">Sensitive</span></label>
-              <input type="text" class="form-control" id="editStudentName" required>
+        <div class="modal-body p-4 edit-student-modal-body">
+          <div class="edit-student-grid">
+            <!-- Full Legal Name -->
+            <div class="portal-form-group">
+              <label class="portal-form-label" for="editStudentName">
+                <span>Full Legal Name <span class="req">*</span></span>
+                <span class="sensitive-pill"><i class="fa-solid fa-lock"></i> Sensitive</span>
+              </label>
+              <input type="text" class="form-control" id="editStudentName" required placeholder="Enter student's full name">
             </div>
-            <div class="col-md-4">
-              <label class="form-label text-xs font-bold text-muted">Date of Birth * <span class="badge bg-warning text-dark ml-1" style="font-size:0.65rem;">Sensitive</span></label>
-              <input type="text" class="form-control" id="editStudentDob" required>
+
+            <!-- Date of Birth -->
+            <div class="portal-form-group">
+              <label class="portal-form-label" for="editStudentDob">
+                <span>Date of Birth <span class="req">*</span></span>
+                <span class="sensitive-pill"><i class="fa-solid fa-lock"></i> Sensitive</span>
+              </label>
+              <input type="text" class="form-control" id="editStudentDob" required placeholder="e.g. 15-Aug-2012">
             </div>
-            <div class="col-md-6">
-              <label class="form-label text-xs font-bold text-muted">Class &amp; Section *</label>
-              <div class="input-group">
+
+            <!-- Class & Section -->
+            <div class="portal-form-group">
+              <label class="portal-form-label" for="editStudentClass">
+                <span>Class &amp; Section <span class="req">*</span></span>
+              </label>
+              <div class="class-section-group">
                 <select class="form-select" id="editStudentClass" required>
                   <option value="X">Class X</option>
                   <option value="IX">Class IX</option>
@@ -18413,27 +18431,43 @@
                   <option value="I">Class I</option>
                   <option value="PP">Pre-Primary</option>
                 </select>
-                <select class="form-select" id="editStudentSection" style="max-width: 90px;">
+                <select class="form-select" id="editStudentSection" required>
                   <option value="A">Sec A</option>
                   <option value="B">Sec B</option>
                   <option value="C">Sec C</option>
                 </select>
               </div>
             </div>
-            <div class="col-md-6">
-              <label class="form-label text-xs font-bold text-muted">Roll Number *</label>
-              <input type="text" class="form-control" id="editStudentRollNo" required>
+
+            <!-- Roll Number -->
+            <div class="portal-form-group">
+              <label class="portal-form-label" for="editStudentRollNo">
+                <span>Roll Number <span class="req">*</span></span>
+              </label>
+              <input type="text" class="form-control" id="editStudentRollNo" required placeholder="e.g. 1001">
             </div>
-            <div class="col-md-6">
-              <label class="form-label text-xs font-bold text-muted">Primary Guardian *</label>
-              <input type="text" class="form-control" id="editStudentGuardian" required>
+
+            <!-- Primary Guardian -->
+            <div class="portal-form-group">
+              <label class="portal-form-label" for="editStudentGuardian">
+                <span>Primary Guardian <span class="req">*</span></span>
+              </label>
+              <input type="text" class="form-control" id="editStudentGuardian" required placeholder="Parent or guardian name">
             </div>
-            <div class="col-md-6">
-              <label class="form-label text-xs font-bold text-muted">Contact Phone (10 digits) *</label>
-              <input type="tel" class="form-control" id="editStudentPhone" required>
+
+            <!-- Contact Phone -->
+            <div class="portal-form-group">
+              <label class="portal-form-label" for="editStudentPhone">
+                <span>Contact Phone (10 digits) <span class="req">*</span></span>
+              </label>
+              <input type="tel" class="form-control" id="editStudentPhone" required placeholder="e.g. 9848012345">
             </div>
-            <div class="col-md-6">
-              <label class="form-label text-xs font-bold text-muted">Student Status *</label>
+
+            <!-- Student Status -->
+            <div class="portal-form-group">
+              <label class="portal-form-label" for="editStudentStatus">
+                <span>Student Status <span class="req">*</span></span>
+              </label>
               <select class="form-select" id="editStudentStatus">
                 <option value="Active">Active</option>
                 <option value="Pending">Pending</option>
@@ -18441,35 +18475,44 @@
                 <option value="Withdrawn">Withdrawn</option>
               </select>
             </div>
-            <div class="col-md-6">
-              <label class="form-label text-xs font-bold text-muted">Fee Status</label>
+
+            <!-- Fee Clearance Status -->
+            <div class="portal-form-group">
+              <label class="portal-form-label" for="editStudentFeeStatus">
+                <span>Fee Clearance Status</span>
+              </label>
               <select class="form-select" id="editStudentFeeStatus">
-                <option value="Paid">Paid</option>
-                <option value="Partial">Partial</option>
-                <option value="Pending">Pending</option>
+                <option value="Paid">Paid in Full</option>
+                <option value="Partial">Partial Dues</option>
+                <option value="Pending">Pending Payment</option>
               </select>
             </div>
-            <div class="col-12">
-              <label class="form-label text-xs font-bold text-muted">Residential Address</label>
-              <input type="text" class="form-control" id="editStudentAddress">
+
+            <!-- Residential Address (Full Width) -->
+            <div class="portal-form-group full-width">
+              <label class="portal-form-label" for="editStudentAddress">
+                <span>Residential Address</span>
+              </label>
+              <input type="text" class="form-control" id="editStudentAddress" placeholder="Complete residential address">
             </div>
           </div>
 
           <!-- Mandatory Reason for Changes to Sensitive Fields -->
-          <div class="p-3 bg-light rounded-3 border">
-            <label class="form-label text-xs font-bold text-danger d-block mb-1">
-              <i class="fa-solid fa-triangle-exclamation mr-1"></i> Recorded Justification for Audit Log * (Mandatory):
-            </label>
-            <input type="text" class="form-control form-control-sm" id="editAuditReason" required placeholder="State exact reason for modification (e.g. Gazette name spelling correction, updated parent mobile number, class section re-allocation)">
-            <span class="text-xs text-muted mt-1 d-block">
-              Logged automatically with current user timestamp and operator credentials in the permanent Audit History.
-            </span>
+          <div class="audit-justification-card">
+            <div class="audit-justification-header">
+              <i class="fa-solid fa-triangle-exclamation text-amber"></i>
+              <span class="audit-title">Recorded Justification for Audit Log <span class="req">* (Mandatory)</span></span>
+            </div>
+            <input type="text" class="form-control audit-reason-input" id="editAuditReason" required placeholder="State exact reason for modification (e.g. Gazette name spelling correction, updated parent mobile, class re-allocation)...">
+            <div class="audit-hint">
+              <i class="fa-solid fa-shield-halved"></i> Logged automatically with current operator credentials and timestamp in the permanent statutory Audit History.
+            </div>
           </div>
         </div>
 
-        <div class="modal-footer d-flex justify-content-between align-items-center bg-light p-3 border-top">
-          <button type="button" class="btn btn-secondary btn-sm" onclick="portalApp.closeModal('editStudentModal')">Cancel</button>
-          <button type="submit" class="btn btn-primary btn-sm">
+        <div class="modal-footer edit-modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="portalApp.closeModal('editStudentModal')">Cancel</button>
+          <button type="submit" class="btn btn-primary">
             <i class="fa-solid fa-floppy-disk mr-1"></i> Save Changes &amp; Log Audit
           </button>
         </div>
