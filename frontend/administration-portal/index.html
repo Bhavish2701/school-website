@@ -3487,14 +3487,19 @@
                ================================================================= -->
           <div class="student-subview active" id="subview-students-profiles">
             <!-- Filter Toolbar -->
-            <div class="filter-toolbar">
-              <div class="filter-left-controls">
+            <div class="enterprise-toolbar">
+              <!-- Tier 1: Search & Active Filter Parameters -->
+              <div class="enterprise-toolbar-tier toolbar-filter-row">
                 <div class="filter-group search-group">
                   <i class="fa-solid fa-magnifying-glass"></i>
                   <input type="text" id="profileSearchInput"
-                    placeholder="Search by admission number, student name, roll, guardian..."
+                    placeholder="Search by admission no, student name, roll, guardian, phone..."
                     oninput="portalApp.filterStudentProfiles()" onkeyup="portalApp.filterStudentProfiles()">
+                  <button type="button" class="search-clear-btn" onclick="const el=document.getElementById('profileSearchInput'); if(el){el.value=''; portalApp.filterStudentProfiles();}" title="Clear search">
+                    <i class="fa-solid fa-xmark"></i>
+                  </button>
                 </div>
+
                 <div class="filter-group">
                   <label for="profileClassFilter"><i class="fa-solid fa-graduation-cap"></i> Class:</label>
                   <select id="profileClassFilter" class="filter-select" onchange="portalApp.filterStudentProfiles()">
@@ -3512,6 +3517,7 @@
                     <option value="PP">Pre-Primary</option>
                   </select>
                 </div>
+
                 <div class="filter-group">
                   <label for="profileStatusFilter"><i class="fa-solid fa-circle-check"></i> Status:</label>
                   <select id="profileStatusFilter" class="filter-select" onchange="portalApp.filterStudentProfiles()">
@@ -3522,34 +3528,42 @@
                     <option value="Pending">Fee Pending</option>
                   </select>
                 </div>
-              </div>
-              <div class="filter-right-stats">
-                <!-- View Mode Toggle: Cards Grid vs Full Table View -->
-                <div class="btn-group"
-                  style="display:inline-flex; border:1px solid var(--color-border); border-radius:var(--radius-md); overflow:hidden;">
-                  <button type="button" id="btnProfileViewCards" class="btn btn-sm btn-secondary active"
-                    onclick="portalApp.setProfileViewMode('cards')" title="Card Dossiers View">
-                    <i class="fa-solid fa-grip"></i> Cards
-                  </button>
-                  <button type="button" id="btnProfileViewTable" class="btn btn-sm btn-secondary"
-                    onclick="portalApp.setProfileViewMode('table')" title="Table View">
-                    <i class="fa-solid fa-table-list"></i> Table Roster
-                  </button>
-                </div>
-                <span class="filter-count-pill">
-                  <i class="fa-solid fa-id-card"></i> Showing: <strong id="profilesShowingCount">500</strong> of <strong
-                    id="profilesTotalCount">500</strong>
-                </span>
-                <button type="button" class="btn btn-outline-danger btn-sm"
-                  onclick="portalApp.openDeletedStudentsArchiveModal()"
-                  title="View Permanent Deletion Log & Executive Remarks Archive"
-                  style="display:inline-flex; align-items:center; gap:5px;">
-                  <i class="fa-solid fa-clock-rotate-left"></i> Deletion Remarks Log
-                </button>
-                <button type="button" class="btn-filter-reset" onclick="portalApp.resetStudentFilters(); return false;"
-                  title="Reset filters">
+
+                <button type="button" class="btn-filter-reset" onclick="portalApp.resetStudentFilters(); return false;" title="Reset all filters">
                   <i class="fa-solid fa-rotate-left"></i> Reset
                 </button>
+              </div>
+
+              <!-- Tier 2: Governance Indicators, View Mode Toggles, and Administrative Remarks -->
+              <div class="enterprise-toolbar-tier toolbar-actions-row">
+                <div class="toolbar-stats-left">
+                  <span class="filter-count-pill">
+                    <i class="fa-solid fa-users-viewfinder"></i> Showing: <strong id="profilesShowingCount">500</strong> of <strong id="profilesTotalCount">500</strong> Enrolled Students
+                  </span>
+                  <span class="toolbar-tag-pill">
+                    <i class="fa-solid fa-calendar-check text-primary"></i> Academic Year 2026–27
+                  </span>
+                </div>
+
+                <div class="toolbar-actions-right">
+                  <!-- Segmented View Toggle -->
+                  <div class="view-segmented-control">
+                    <button type="button" id="btnProfileViewCards" class="view-segment-btn active"
+                      onclick="portalApp.setProfileViewMode('cards')" title="Card Dossiers View">
+                      <i class="fa-solid fa-grip"></i> Cards
+                    </button>
+                    <button type="button" id="btnProfileViewTable" class="view-segment-btn"
+                      onclick="portalApp.setProfileViewMode('table')" title="Table View">
+                      <i class="fa-solid fa-table-list"></i> Table Roster
+                    </button>
+                  </div>
+
+                  <button type="button" class="btn-deletion-archive"
+                    onclick="portalApp.openDeletedStudentsArchiveModal()"
+                    title="View Permanent Deletion Log & Executive Remarks Archive">
+                    <i class="fa-solid fa-clock-rotate-left"></i> Deletion Remarks Log
+                  </button>
+                </div>
               </div>
             </div>
 
