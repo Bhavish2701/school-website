@@ -4391,35 +4391,46 @@ const FEE_CATEGORY_AUDIT_DATA = [
 
     grid.innerHTML = sortedList.map(student => {
       let badgeClass = 'badge-success';
-      if (student.status === 'Pending') badgeClass = 'badge-warning';
-      if (student.status === 'Withdrawn' || student.status === 'Transferred') badgeClass = 'badge-danger';
+      let badgeIcon = 'fa-circle-check';
+      if (student.status === 'Pending') {
+        badgeClass = 'badge-warning';
+        badgeIcon = 'fa-clock';
+      } else if (student.status === 'Withdrawn' || student.status === 'Transferred') {
+        badgeClass = 'badge-danger';
+        badgeIcon = 'fa-circle-xmark';
+      }
+      const isFemale = (student.gender || '').toLowerCase() === 'female';
+      const initial = (student.name || 'S').trim().charAt(0).toUpperCase();
 
       return `
         <div class="student-profile-card">
           <div class="profile-card-top">
-            <div class="cell-avatar">${student.name.charAt(0)}</div>
+            <div class="profile-card-avatar ${isFemale ? 'avatar-female' : 'avatar-male'}">${initial}</div>
             <div class="profile-card-meta">
-              <h4>${student.name}</h4>
-              <p>Adm: <strong>${student.admNo}</strong> | Roll: <strong>${student.rollNo}</strong></p>
+              <h4 title="${student.name}">${student.name}</h4>
+              <p class="adm-roll-line">Adm: <strong>${student.admNo}</strong> &bull; Roll: <strong>${student.rollNo}</strong></p>
             </div>
-            <span class="portal-badge ${badgeClass}">${student.status}</span>
+            <span class="portal-badge ${badgeClass}"><i class="fa-solid ${badgeIcon}"></i> ${student.status}</span>
           </div>
           <div class="profile-card-body">
             <div class="profile-card-field">
-              <span class="field-label">Class &amp; Section</span>
-              <span class="field-value">Class ${student.class} - ${student.section || 'A'}</span>
+              <span class="field-label"><i class="fa-solid fa-graduation-cap"></i> Class &amp; Sec</span>
+              <span class="field-value"><span class="class-pill">Class ${student.class} - ${student.section || 'A'}</span></span>
             </div>
             <div class="profile-card-field">
-              <span class="field-label">Parent / Guardian</span>
-              <span class="field-value">${student.parent}</span>
+              <span class="field-label"><i class="fa-solid fa-user-group"></i> Guardian</span>
+              <span class="field-value" title="${student.parent}">${student.parent}</span>
             </div>
             <div class="profile-card-field">
-              <span class="field-label">Contact Phone</span>
-              <span class="field-value"><a href="tel:${student.phone}" class="phone-link">${student.phone}</a></span>
+              <span class="field-label"><i class="fa-solid fa-phone"></i> Contact</span>
+              <span class="field-value"><a href="tel:${student.phone}" class="phone-link"><i class="fa-solid fa-phone-volume"></i> ${student.phone}</a></span>
             </div>
             <div class="profile-card-field">
-              <span class="field-label">Academic Standing</span>
-              <span class="field-value">GPA: <strong>${student.gpa || '8.5'}</strong> | Att: <strong>${student.attendance || '95%'}</strong></span>
+              <span class="field-label"><i class="fa-solid fa-chart-line"></i> Standing</span>
+              <span class="field-value">
+                <span class="standing-pill gpa-pill"><i class="fa-solid fa-star"></i> GPA <strong>${student.gpa || '8.5'}</strong></span>
+                <span class="standing-pill att-pill"><i class="fa-solid fa-chart-simple"></i> Att <strong>${student.attendance || '95%'}</strong></span>
+              </span>
             </div>
           </div>
           <div class="profile-card-actions">
@@ -10663,7 +10674,7 @@ const FEE_CATEGORY_AUDIT_DATA = [
     const all = list || state.transfers || [];
 
     const activeCount = all.filter(t => t.approvalStatus !== 'Rejected').length;
-    const underClearance = all.filter(t => t.academicClearance === 'Pending' || t.financialClearance.includes('Pending') || t.approvalStatus === 'Under Review' || t.approvalStatus === 'Submitted').length;
+    const underClearance = all.filter(t => t.academicClearance === 'Pending' || (t.financialClearance && t.financialClearance.includes('Pending')) || t.approvalStatus === 'Under Review' || t.approvalStatus === 'Submitted').length;
     const approvedCount = all.filter(t => t.approvalStatus === 'Approved').length;
     const issuedCount = all.filter(t => t.approvalStatus === 'Issued').length;
     const extCount = (state.externalTransfers && state.externalTransfers.length) || 3;
@@ -10727,12 +10738,13 @@ const FEE_CATEGORY_AUDIT_DATA = [
 
       // Financial clearance badge
       let finBadge = '';
-      if (item.financialClearance.includes('Cleared') || item.financialClearance.includes('No Dues')) {
+      const finClr = String(item.financialClearance || '');
+      if (finClr.includes('Cleared') || finClr.includes('No Dues')) {
         finBadge = `<span class="clearance-pill cleared"><i class="fa-solid fa-receipt"></i> No Dues</span>`;
-      } else if (item.financialClearance.includes('Statutory')) {
+      } else if (finClr.includes('Statutory')) {
         finBadge = `<span class="clearance-pill statutory-override" title="Cleared under statutory non-blocking undertaking (Rule 99 AP Code)"><i class="fa-solid fa-scale-balanced"></i> Statutory Undertaking</span>`;
       } else {
-        finBadge = `<span class="clearance-pill dues"><i class="fa-solid fa-circle-exclamation"></i> ${item.financialClearance}</span>`;
+        finBadge = `<span class="clearance-pill dues"><i class="fa-solid fa-circle-exclamation"></i> ${finClr || 'Pending Dues'}</span>`;
       }
 
       // Approval Status Badge
