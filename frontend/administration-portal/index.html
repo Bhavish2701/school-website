@@ -17711,35 +17711,230 @@
        MODALS
        ========================================== -->
 
-  <!-- Add Student / Admission Modal -->
-  <div class="modal-backdrop" id="addStudentModal">
-    <div class="portal-modal">
-      <div class="modal-header">
-        <h3><i class="fa-solid fa-user-plus text-primary"></i> New Student Admission</h3>
-        <button class="modal-close-x" onclick="portalApp.closeModal('addStudentModal')" title="Close"
-          aria-label="Close">
+  <!-- ====================================================================
+       MULTI-STEP ADD STUDENT WIZARD MODAL (STEPS 1 - 6)
+       ==================================================================== -->
+  <div class="modal-backdrop" id="addStudentWizardModal" role="dialog" aria-modal="true" style="display:none;">
+    <div class="portal-modal" style="max-width: 860px; width: 95%;">
+      <div class="modal-header d-flex justify-content-between align-items-center">
+        <div>
+          <h3 class="mb-0" style="font-size: 1.15rem; color: #1e3a8a;">
+            <i class="fa-solid fa-user-plus text-primary mr-1"></i> Authoritative Student Registration &amp; Enrolment
+          </h3>
+          <p class="text-muted text-xs mb-0 mt-1">Multi-step statutory intake wizard per AP Education Code regulations.</p>
+        </div>
+        <button type="button" class="modal-close-x" onclick="portalApp.closeModal('addStudentWizardModal')" title="Close" aria-label="Close">
           <i class="fa-solid fa-xmark"></i>
         </button>
       </div>
-      <form id="newStudentForm" onsubmit="portalApp.handleNewStudent(event)">
-        <div class="modal-body">
-          <div class="form-row">
-            <div class="form-group">
-              <label>Full Name *</label>
-              <input type="text" class="form-control" id="mStudentName" required placeholder="e.g. M. Rajesh">
+
+      <!-- Wizard Stepper Indicator -->
+      <div class="p-3 bg-light border-bottom">
+        <div class="wizard-stepper-wrap mb-0">
+          <div class="wizard-step-node active" id="wizNode1" onclick="portalApp.goToWizardStep(1)">
+            <div class="wizard-step-bubble"><i class="fa-solid fa-user"></i></div>
+            <span class="wizard-step-label">1. Personal</span>
+          </div>
+          <div class="wizard-step-node" id="wizNode2" onclick="portalApp.goToWizardStep(2)">
+            <div class="wizard-step-bubble"><i class="fa-solid fa-users"></i></div>
+            <span class="wizard-step-label">2. Guardians</span>
+          </div>
+          <div class="wizard-step-node" id="wizNode3" onclick="portalApp.goToWizardStep(3)">
+            <div class="wizard-step-bubble"><i class="fa-solid fa-school"></i></div>
+            <span class="wizard-step-label">3. Previous Ed</span>
+          </div>
+          <div class="wizard-step-node" id="wizNode4" onclick="portalApp.goToWizardStep(4)">
+            <div class="wizard-step-bubble"><i class="fa-solid fa-id-card"></i></div>
+            <span class="wizard-step-label">4. Enrolment</span>
+          </div>
+          <div class="wizard-step-node" id="wizNode5" onclick="portalApp.goToWizardStep(5)">
+            <div class="wizard-step-bubble"><i class="fa-solid fa-folder-open"></i></div>
+            <span class="wizard-step-label">5. Documents</span>
+          </div>
+          <div class="wizard-step-node" id="wizNode6" onclick="portalApp.goToWizardStep(6)">
+            <div class="wizard-step-bubble"><i class="fa-solid fa-clipboard-check"></i></div>
+            <span class="wizard-step-label">6. Review</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-body p-4" style="max-height: 70vh; overflow-y: auto;">
+        <!-- STEP 1: Personal Information -->
+        <div class="wizard-pane active" id="wizPane1">
+          <h5 class="font-bold text-dark mb-3"><i class="fa-solid fa-user text-primary mr-1"></i> Step 1: Personal Information</h5>
+          <div class="row g-3">
+            <div class="col-md-8">
+              <label class="form-label text-xs font-bold text-muted">Full Legal Name *</label>
+              <input type="text" class="form-control" id="wizFullName" required placeholder="e.g. K. Sai Tharun (per Birth Certificate / Aadhaar)">
             </div>
-            <div class="form-group">
-              <label>Admission No *</label>
-              <input type="text" class="form-control" id="mAdmNo" required placeholder="e.g. SV-0016">
+            <div class="col-md-4">
+              <label class="form-label text-xs font-bold text-muted">Date of Birth *</label>
+              <input type="date" class="form-control" id="wizDob" required>
+            </div>
+            <div class="col-md-4">
+              <label class="form-label text-xs font-bold text-muted">Gender *</label>
+              <select class="form-select" id="wizGender" required>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+            <div class="col-md-4">
+              <label class="form-label text-xs font-bold text-muted">Nationality</label>
+              <input type="text" class="form-control" id="wizNationality" value="Indian">
+            </div>
+            <div class="col-md-4">
+              <label class="form-label text-xs font-bold text-muted">Blood Group (Medical Record)</label>
+              <select class="form-select" id="wizBloodGroup">
+                <option value="O+">O+ (Universal Donor)</option>
+                <option value="A+">A+</option>
+                <option value="B+">B+</option>
+                <option value="AB+">AB+</option>
+                <option value="O-">O-</option>
+                <option value="A-">A-</option>
+                <option value="B-">B-</option>
+                <option value="AB-">AB-</option>
+                <option value="Unknown">Pending Lab Test</option>
+              </select>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label text-xs font-bold text-muted">Student Photograph (Upload / Preview)</label>
+              <input type="file" class="form-control form-control-sm" id="wizPhotoInput" accept="image/*">
+            </div>
+            <div class="col-md-6">
+              <label class="form-label text-xs font-bold text-muted">Mother Tongue</label>
+              <input type="text" class="form-control form-control-sm" id="wizMotherTongue" value="Telugu" placeholder="Telugu, Hindi, Odia, English...">
+            </div>
+            <div class="col-12">
+              <div class="p-3 bg-light rounded-3 border">
+                <label class="form-label text-xs font-bold text-muted d-block">
+                  <i class="fa-solid fa-universal-access text-primary mr-1"></i> Relevant Accessibility or Support Information (Restricted Access):
+                </label>
+                <textarea class="form-control form-control-sm" id="wizSupportInfo" rows="2" placeholder="Restricted clinical/pastoral notes (e.g. Mild asthma inhaler requirement, visual assistance, dietary allergies). Visible only to authorized medical and counselor staff."></textarea>
+              </div>
             </div>
           </div>
-          <div class="form-row">
-            <div class="form-group">
-              <label>Class *</label>
-              <select class="form-control" id="mClass" required>
+        </div>
+
+        <!-- STEP 2: Parent & Guardian Information -->
+        <div class="wizard-pane" id="wizPane2" style="display:none;">
+          <h5 class="font-bold text-dark mb-3"><i class="fa-solid fa-users text-primary mr-1"></i> Step 2: Parent &amp; Guardian Information</h5>
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label class="form-label text-xs font-bold text-muted">Primary Guardian Name *</label>
+              <input type="text" class="form-control" id="wizGuardianName" required placeholder="e.g. K. Narayana">
+            </div>
+            <div class="col-md-6">
+              <label class="form-label text-xs font-bold text-muted">Relationship to Student *</label>
+              <select class="form-select" id="wizGuardianRel" required>
+                <option value="Father">Father</option>
+                <option value="Mother">Mother</option>
+                <option value="Legal Guardian">Legal Guardian</option>
+                <option value="Grandparent">Grandparent</option>
+              </select>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label text-xs font-bold text-muted">Primary Contact Phone (10-digits) *</label>
+              <input type="tel" class="form-control" id="wizGuardianPhone" required placeholder="9848011223" pattern="[0-9]{10}">
+            </div>
+            <div class="col-md-6">
+              <label class="form-label text-xs font-bold text-muted">Authorized Email</label>
+              <input type="email" class="form-control" id="wizGuardianEmail" placeholder="guardian@gmail.com">
+            </div>
+            <div class="col-12">
+              <label class="form-label text-xs font-bold text-muted">Residential Address *</label>
+              <input type="text" class="form-control" id="wizResidentialAddress" required placeholder="Door No, Street Name, Landmark, Mandal, District">
+            </div>
+            <div class="col-md-6">
+              <label class="form-label text-xs font-bold text-muted">Emergency Contact Name</label>
+              <input type="text" class="form-control form-control-sm" id="wizEmergName" placeholder="Secondary contact (e.g. Mother / Uncle)">
+            </div>
+            <div class="col-md-6">
+              <label class="form-label text-xs font-bold text-muted">Emergency Phone</label>
+              <input type="tel" class="form-control form-control-sm" id="wizEmergPhone" placeholder="Emergency mobile number">
+            </div>
+            <div class="col-12">
+              <div class="form-check form-switch mt-2">
+                <input class="form-check-input" type="checkbox" id="wizGuardianDesignation" checked>
+                <label class="form-check-label text-xs font-semibold text-dark" for="wizGuardianDesignation">
+                  Designate as Authorized Primary Legal Representative for School Notices &amp; Clearances
+                </label>
+              </div>
+              <div class="form-check form-switch mt-1">
+                <input class="form-check-input" type="checkbox" id="wizConsentVerified" checked>
+                <label class="form-check-label text-xs font-semibold text-dark" for="wizConsentVerified">
+                  Statutory Parental Consent Signed &amp; Identity Document Verified
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- STEP 3: Previous Education -->
+        <div class="wizard-pane" id="wizPane3" style="display:none;">
+          <h5 class="font-bold text-dark mb-3"><i class="fa-solid fa-school text-primary mr-1"></i> Step 3: Previous Education &amp; Transfer Details</h5>
+          <div class="row g-3">
+            <div class="col-md-8">
+              <label class="form-label text-xs font-bold text-muted">Previous School Name</label>
+              <input type="text" class="form-control" id="wizPrevSchool" placeholder="e.g. St. Ann's High School / Kendriya Vidyalaya (leave blank if Pre-Primary)">
+            </div>
+            <div class="col-md-4">
+              <label class="form-label text-xs font-bold text-muted">Last Class Attended</label>
+              <select class="form-select" id="wizLastClass">
+                <option value="None">None / Direct Entry</option>
+                <option value="PP">Pre-Primary</option>
+                <option value="I">Class I</option>
+                <option value="II">Class II</option>
+                <option value="III">Class III</option>
+                <option value="IV">Class IV</option>
+                <option value="V">Class V</option>
+                <option value="VI">Class VI</option>
+                <option value="VII">Class VII</option>
+                <option value="VIII">Class VIII</option>
+                <option value="IX">Class IX</option>
+              </select>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label text-xs font-bold text-muted">Transfer Certificate (TC) Number</label>
+              <input type="text" class="form-control form-control-sm" id="wizTcNumber" placeholder="e.g. TC-2025-0894">
+            </div>
+            <div class="col-md-6">
+              <label class="form-label text-xs font-bold text-muted">TC Date of Issue</label>
+              <input type="date" class="form-control form-control-sm" id="wizTcIssueDate">
+            </div>
+            <div class="col-md-6">
+              <label class="form-label text-xs font-bold text-muted">Previous Academic Score / Percentage</label>
+              <input type="text" class="form-control form-control-sm" id="wizPrevScore" placeholder="e.g. 88.5% (Grade A1)">
+            </div>
+            <div class="col-md-6">
+              <label class="form-label text-xs font-bold text-muted">Board of Previous School</label>
+              <select class="form-select form-select-sm" id="wizPrevBoard">
+                <option value="AP State Board">AP State Board</option>
+                <option value="CBSE">CBSE</option>
+                <option value="ICSE">ICSE</option>
+                <option value="Other">Other / International</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- STEP 4: Admission and Enrolment -->
+        <div class="wizard-pane" id="wizPane4" style="display:none;">
+          <h5 class="font-bold text-dark mb-3"><i class="fa-solid fa-id-card text-primary mr-1"></i> Step 4: Admission and Enrolment Configuration</h5>
+          <div class="row g-3">
+            <div class="col-md-4">
+              <label class="form-label text-xs font-bold text-muted">Academic Year *</label>
+              <select class="form-select" id="wizEnrolAY" required>
+                <option value="2025-2026" selected>2025–2026 (Current Session)</option>
+                <option value="2026-2027">2026–2027 (Advance Intake)</option>
+              </select>
+            </div>
+            <div class="col-md-4">
+              <label class="form-label text-xs font-bold text-muted">Class Applied For *</label>
+              <select class="form-select" id="wizClassApplied" required onchange="document.getElementById('wizApprovedClass').value = this.value">
                 <option value="X">Class X</option>
                 <option value="IX">Class IX</option>
-                <option value="VIII">Class VIII</option>
+                <option value="VIII" selected>Class VIII</option>
                 <option value="VII">Class VII</option>
                 <option value="VI">Class VI</option>
                 <option value="V">Class V</option>
@@ -17750,88 +17945,588 @@
                 <option value="PP">Pre-Primary</option>
               </select>
             </div>
-            <div class="form-group">
-              <label>Section *</label>
-              <select class="form-control" id="mSection" required>
-                <option value="A" selected>Section A (Single Section)</option>
-              </select>
-            </div>
-          </div>
-          <div class="form-row">
-            <div class="form-group">
-              <label>Parent / Guardian Name *</label>
-              <input type="text" class="form-control" id="mParentName" required placeholder="e.g. M. Srinivasa Rao">
-            </div>
-            <div class="form-group">
-              <label>Parent Contact Phone *</label>
-              <input type="tel" class="form-control" id="mParentPhone" required placeholder="10-digit mobile number">
-            </div>
-          </div>
-          <div class="form-group">
-            <label>Residential Address</label>
-            <input type="text" class="form-control" id="mAddress" placeholder="Street, Area, Mandal, District">
-          </div>
-          <div class="form-row">
-            <div class="form-group">
-              <label>Admission Fee Status
-                <span style="font-size:0.78rem; font-weight:400; color:var(--color-text-muted); margin-left:4px;">(at
-                  time of enrolment)</span>
-              </label>
-              <select class="form-control" id="mFeeStatus">
-                <option value="Paid" selected>&#10003; Paid – Fee Collected in Full</option>
-                <option value="Partial">&#9716; Partial – Partial Fee Paid</option>
-                <option value="Pending">&#9888; Pending – Fee Not Yet Paid</option>
-              </select>
-            </div>
-            <div class="form-group" style="display:flex; align-items:flex-end;">
-              <div class="fee-note-box">
-                <i class="fa-solid fa-circle-info" style="color:var(--color-accent-blue);"></i>
-                <span>Fee status can be updated later from the Fees &amp; Finance module.</span>
+            <div class="col-md-4">
+              <label class="form-label text-xs font-bold text-muted">Approved Class &amp; Section *</label>
+              <div class="input-group">
+                <input type="text" class="form-control" id="wizApprovedClass" value="VIII" readonly style="max-width: 80px;">
+                <select class="form-select" id="wizApprovedSection">
+                  <option value="A" selected>Section A</option>
+                  <option value="B">Section B</option>
+                  <option value="C">Section C</option>
+                </select>
               </div>
+            </div>
+            <div class="col-md-4">
+              <label class="form-label text-xs font-bold text-muted">Admission Date *</label>
+              <input type="date" class="form-control" id="wizAdmDate" required>
+            </div>
+            <div class="col-md-4">
+              <label class="form-label text-xs font-bold text-muted">Admission Category</label>
+              <select class="form-select" id="wizAdmCategory">
+                <option value="General Merit">General Merit</option>
+                <option value="RTE Quota">RTE 25% Statutory Free Quota</option>
+                <option value="Sibling Concession">Sibling Concession</option>
+                <option value="Staff Ward">Staff Ward (Institutional)</option>
+              </select>
+            </div>
+            <div class="col-md-4">
+              <label class="form-label text-xs font-bold text-muted">Fee Category</label>
+              <select class="form-select" id="wizFeeCategory">
+                <option value="Standard Board Fee">Standard Board Fee</option>
+                <option value="RTE Compliant">RTE 100% Waiver</option>
+                <option value="Merit Scholarship">Merit Scholarship (25% Waiver)</option>
+                <option value="Staff Concession">Staff Concession (50% Waiver)</option>
+              </select>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label text-xs font-bold text-muted">Transport Requirement</label>
+              <select class="form-select" id="wizTransportReq">
+                <option value="Self Commute">No – Private / Self Commute</option>
+                <option value="Route 1">Yes – Route 1 (RTC Complex / Srikakulam)</option>
+                <option value="Route 2">Yes – Route 2 (Gajuwaka / Steel Plant)</option>
+                <option value="Route 3">Yes – Route 3 (Jagannadhapuram / Old Town)</option>
+                <option value="Hostel">Hostel Resident (Campus Boarder)</option>
+              </select>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label text-xs font-bold text-muted">Initial Enrolment Status</label>
+              <select class="form-select" id="wizInitialStatus">
+                <option value="Active" selected>Active – Complete Enrolment &amp; Issue Adm No.</option>
+                <option value="Pending">Pending – Awaiting Final Document Verification</option>
+              </select>
             </div>
           </div>
         </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary"
-            onclick="portalApp.closeModal('addStudentModal')">Cancel</button>
-          <button type="submit" class="btn btn-primary"><i class="fa-solid fa-user-check"></i> Complete
-            Enrolment</button>
+
+        <!-- STEP 5: Documents -->
+        <div class="wizard-pane" id="wizPane5" style="display:none;">
+          <h5 class="font-bold text-dark mb-3"><i class="fa-solid fa-folder-open text-primary mr-1"></i> Step 5: Verification of Statutory Documents</h5>
+          <div class="p-3 bg-light rounded-3 border mb-3">
+            <div class="d-flex align-items-center justify-content-between mb-2">
+              <span class="text-xs font-bold text-dark"><i class="fa-solid fa-certificate text-primary mr-1"></i> 1. Birth Certificate / Accepted Age Proof *</span>
+              <span class="badge" style="background:#dcfce7; color:#15803d;"><i class="fa-solid fa-check mr-1"></i> Mandatory Proof</span>
+            </div>
+            <div class="input-group input-group-sm">
+              <input type="text" class="form-control" id="wizDocBirthCert" placeholder="Birth Cert Reg No (e.g. BC-2012-90812)">
+              <button class="btn btn-outline-secondary" type="button"><i class="fa-solid fa-upload mr-1"></i> Upload</button>
+            </div>
+          </div>
+
+          <div class="p-3 bg-light rounded-3 border mb-3">
+            <div class="d-flex align-items-center justify-content-between mb-2">
+              <span class="text-xs font-bold text-dark"><i class="fa-solid fa-file-contract text-primary mr-1"></i> 2. Transfer Certificate (TC) from Previous School</span>
+              <span class="badge" style="background:#f1f5f9; color:#475569;">Conditional (Class II+)</span>
+            </div>
+            <div class="input-group input-group-sm">
+              <input type="text" class="form-control" id="wizDocTcCert" placeholder="Original TC Certificate Docket No.">
+              <button class="btn btn-outline-secondary" type="button"><i class="fa-solid fa-upload mr-1"></i> Upload</button>
+            </div>
+          </div>
+
+          <div class="p-3 bg-light rounded-3 border mb-3">
+            <div class="d-flex align-items-center justify-content-between mb-2">
+              <span class="text-xs font-bold text-dark"><i class="fa-solid fa-id-card text-primary mr-1"></i> 3. Aadhaar Proof of Identity</span>
+              <span class="badge" style="background:#dcfce7; color:#15803d;"><i class="fa-solid fa-check mr-1"></i> Verified</span>
+            </div>
+            <div class="input-group input-group-sm">
+              <input type="text" class="form-control" id="wizDocAadhaar" placeholder="12-digit Aadhaar UID (Masked in Public Views)">
+              <button class="btn btn-outline-secondary" type="button"><i class="fa-solid fa-upload mr-1"></i> Upload</button>
+            </div>
+          </div>
+
+          <div class="p-3 bg-light rounded-3 border">
+            <div class="d-flex align-items-center justify-content-between mb-2">
+              <span class="text-xs font-bold text-dark"><i class="fa-solid fa-camera text-primary mr-1"></i> 4. Student &amp; Guardian Passport Photographs</span>
+              <span class="badge" style="background:#dcfce7; color:#15803d;"><i class="fa-solid fa-check mr-1"></i> Required</span>
+            </div>
+            <div class="input-group input-group-sm">
+              <input type="text" class="form-control" id="wizDocPhoto" value="4 Copies Received" placeholder="Photograph physical status">
+              <button class="btn btn-outline-secondary" type="button"><i class="fa-solid fa-upload mr-1"></i> Upload</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- STEP 6: Review, Duplicate Detection, and Save -->
+        <div class="wizard-pane" id="wizPane6" style="display:none;">
+          <h5 class="font-bold text-dark mb-2"><i class="fa-solid fa-clipboard-check text-primary mr-1"></i> Step 6: Review, Duplicate Check &amp; Enrolment Authorization</h5>
+          <p class="text-muted text-xs mb-3">Institutional validation guardrails verify zero record duplicates before admission number issuance.</p>
+
+          <!-- Duplicate Record Scanner Alert Box -->
+          <div id="wizardDuplicateScannerBox" class="duplicate-alert-box duplicate-alert-clean mb-3">
+            <i class="fa-solid fa-shield-check fa-lg text-emerald mt-1"></i>
+            <div>
+              <strong id="wizDupTitle" class="d-block mb-1">Duplicate Scanner: Verified Clean</strong>
+              <span id="wizDupDesc" class="text-xs">No duplicate student records detected in the active register matching this legal name, DOB, or guardian contact phone.</span>
+            </div>
+          </div>
+
+          <!-- Summary Preview Card -->
+          <div class="card p-3 border rounded-3 bg-light mb-3" id="wizSummaryPreviewCard">
+            <div class="row g-2 text-xs">
+              <div class="col-md-6">
+                <span class="text-muted d-block">Student Full Legal Name:</span>
+                <strong class="text-dark" id="prevStudentName">--</strong>
+              </div>
+              <div class="col-md-3">
+                <span class="text-muted d-block">Date of Birth:</span>
+                <strong class="text-dark" id="prevDob">--</strong>
+              </div>
+              <div class="col-md-3">
+                <span class="text-muted d-block">Gender / Blood:</span>
+                <strong class="text-dark" id="prevGenderBlood">--</strong>
+              </div>
+              <div class="col-md-6">
+                <span class="text-muted d-block">Primary Guardian &amp; Relationship:</span>
+                <strong class="text-dark" id="prevGuardian">--</strong>
+              </div>
+              <div class="col-md-6">
+                <span class="text-muted d-block">Contact Phone &amp; Email:</span>
+                <strong class="text-dark" id="prevContact">--</strong>
+              </div>
+              <div class="col-md-4">
+                <span class="text-muted d-block">Enrolment Class &amp; Section:</span>
+                <span class="badge" style="background:#e0f2fe; color:#0369a1; font-weight:700;" id="prevClassSec">--</span>
+              </div>
+              <div class="col-md-4">
+                <span class="text-muted d-block">Admission Category:</span>
+                <strong class="text-dark" id="prevAdmCat">--</strong>
+              </div>
+              <div class="col-md-4">
+                <span class="text-muted d-block">Transport Allocation:</span>
+                <strong class="text-dark" id="prevTransport">--</strong>
+              </div>
+            </div>
+          </div>
+
+          <!-- Admission Policy Notice -->
+          <div class="p-3 bg-white border border-primary rounded-3 text-xs mb-2">
+            <i class="fa-solid fa-circle-info text-primary mr-1"></i>
+            <strong>Admission Policy Rule:</strong> A draft application receives a temporary Application ID (e.g. <code>APP-2026-XXXX</code>). Official Admission Numbers (<code>SV-XXXX</code>) are allocated exclusively upon institutional approval and enrolment confirmation.
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer d-flex justify-content-between align-items-center bg-light p-3 border-top">
+        <button type="button" class="btn btn-secondary btn-sm" id="btnWizPrev" onclick="portalApp.stepWizardBack()" disabled>
+          <i class="fa-solid fa-chevron-left mr-1"></i> Previous
+        </button>
+        
+        <div class="d-flex align-items-center gap-2">
+          <!-- Draft save button (Only on Step 6 or any step) -->
+          <button type="button" class="btn btn-outline-secondary btn-sm" onclick="portalApp.saveStudentDraft()">
+            <i class="fa-solid fa-file-pen mr-1"></i> Save as Draft (Application ID)
+          </button>
+          
+          <!-- Next / Complete button -->
+          <button type="button" class="btn btn-primary btn-sm" id="btnWizNext" onclick="portalApp.stepWizardNext()">
+            Next Step <i class="fa-solid fa-chevron-right ml-1"></i>
+          </button>
+          <button type="button" class="btn btn-success btn-sm" id="btnWizComplete" style="display:none;" onclick="portalApp.submitStudentAdmission()">
+            <i class="fa-solid fa-user-check mr-1"></i> Submit for Approval &amp; Enrol
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ====================================================================
+       14-TAB STUDENT PROFILE DETAIL DOSSIER MODAL
+       Tabs: Overview, Personal Information, Parents and Guardians, Admission History,
+       Enrolment and Class History, Documents, Attendance, Academic Performance,
+       Examination Results, Fees and Payments, Transport, Discipline and Welfare,
+       Communication History, Audit History.
+       ==================================================================== -->
+  <div class="modal-backdrop" id="studentDossierModal" role="dialog" aria-modal="true" style="display:none;">
+    <div class="portal-modal" style="max-width: 1040px; width: 96%; max-height: 92vh;">
+      <div class="modal-header d-flex justify-content-between align-items-center pb-2">
+        <div class="d-flex align-items-center gap-3">
+          <div id="dossierAvatar" class="cell-avatar" style="width:48px; height:48px; font-size:1.2rem; border-radius:50%; background:linear-gradient(135deg, #1e40af 0%, #3b82f6 100%); color:#fff; display:flex; align-items:center; justify-content:center; font-weight:700;">
+            K
+          </div>
+          <div>
+            <div class="d-flex align-items-center gap-2">
+              <h3 class="mb-0" id="dossierStudentName" style="font-size: 1.25rem; color:#0f172a;">K. Sai Tharun</h3>
+              <span id="dossierStatusBadge" class="badge" style="background:#dcfce7; color:#15803d; font-weight:700;">Active</span>
+            </div>
+            <div class="text-xs text-muted mt-1 d-flex flex-wrap gap-2">
+              <span>Student ID: <strong id="dossierStudentId" style="font-family:monospace; color:#1e40af;">STU-SV-0001</strong></span>
+              <span>•</span>
+              <span>Admission No: <strong id="dossierAdmNo" style="color:#0f172a;">SV-0001</strong></span>
+              <span>•</span>
+              <span>Class: <strong id="dossierClassSec">Class VIII - A</strong></span>
+              <span>•</span>
+              <span>Roll: <strong id="dossierRollNo">#801</strong></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="d-flex align-items-center gap-2">
+          <button type="button" class="btn btn-outline-secondary btn-sm" onclick="portalApp.openStudentIdCard(portalApp.getActiveDossierStudent()?.admNo)">
+            <i class="fa-solid fa-id-badge mr-1"></i> ID Card
+          </button>
+          <button type="button" class="btn btn-primary btn-sm" onclick="portalApp.printStudentDossier()">
+            <i class="fa-solid fa-print mr-1"></i> Print Dossier
+          </button>
+          <button type="button" class="modal-close-x ml-2" onclick="portalApp.closeModal('studentDossierModal')" title="Close" aria-label="Close">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- 14-Tab Horizontal Navigation Strip -->
+      <div class="px-3 pt-2 bg-light border-bottom">
+        <div class="dossier-tab-strip" id="dossierTabStrip">
+          <button type="button" class="dossier-tab-item active" data-tab="overview" onclick="portalApp.switchDossierTab('overview')">
+            <i class="fa-solid fa-gauge-high"></i> Overview
+          </button>
+          <button type="button" class="dossier-tab-item" data-tab="personal" onclick="portalApp.switchDossierTab('personal')">
+            <i class="fa-solid fa-user"></i> Personal Info
+          </button>
+          <button type="button" class="dossier-tab-item" data-tab="parents" onclick="portalApp.switchDossierTab('parents')">
+            <i class="fa-solid fa-users"></i> Parents &amp; Guardians
+          </button>
+          <button type="button" class="dossier-tab-item" data-tab="admission" onclick="portalApp.switchDossierTab('admission')">
+            <i class="fa-solid fa-file-signature"></i> Admission History
+          </button>
+          <button type="button" class="dossier-tab-item" data-tab="enrolment" onclick="portalApp.switchDossierTab('enrolment')">
+            <i class="fa-solid fa-timeline"></i> Enrolment &amp; Class History
+          </button>
+          <button type="button" class="dossier-tab-item" data-tab="documents" onclick="portalApp.switchDossierTab('documents')">
+            <i class="fa-solid fa-folder-tree"></i> Documents
+          </button>
+          <button type="button" class="dossier-tab-item" data-tab="attendance" onclick="portalApp.switchDossierTab('attendance')">
+            <i class="fa-solid fa-calendar-check"></i> Attendance
+          </button>
+          <button type="button" class="dossier-tab-item" data-tab="performance" onclick="portalApp.switchDossierTab('performance')">
+            <i class="fa-solid fa-chart-line"></i> Academic Performance
+          </button>
+          <button type="button" class="dossier-tab-item" data-tab="results" onclick="portalApp.switchDossierTab('results')">
+            <i class="fa-solid fa-square-poll-vertical"></i> Exam Results
+          </button>
+          <button type="button" class="dossier-tab-item" data-tab="fees" onclick="portalApp.switchDossierTab('fees')">
+            <i class="fa-solid fa-receipt"></i> Fees &amp; Payments
+          </button>
+          <button type="button" class="dossier-tab-item" data-tab="transport" onclick="portalApp.switchDossierTab('transport')">
+            <i class="fa-solid fa-bus"></i> Transport
+          </button>
+          <button type="button" class="dossier-tab-item" data-tab="discipline" onclick="portalApp.switchDossierTab('discipline')">
+            <i class="fa-solid fa-user-shield"></i> Discipline &amp; Welfare
+          </button>
+          <button type="button" class="dossier-tab-item" data-tab="communication" onclick="portalApp.switchDossierTab('communication')">
+            <i class="fa-solid fa-comments"></i> Communication
+          </button>
+          <button type="button" class="dossier-tab-item" data-tab="audit" onclick="portalApp.switchDossierTab('audit')">
+            <i class="fa-solid fa-clock-rotate-left"></i> Audit History
+          </button>
+        </div>
+      </div>
+
+      <!-- Tab Panes Container -->
+      <div class="modal-body p-4" id="dossierTabPanesContainer" style="max-height: 65vh; overflow-y: auto;">
+        <!-- Injected dynamically by portalApp.renderDossierTabs() -->
+      </div>
+
+      <div class="modal-footer d-flex justify-content-between align-items-center bg-light p-3 border-top">
+        <div class="d-flex align-items-center gap-2">
+          <button type="button" class="btn btn-outline-warning btn-sm" onclick="portalApp.openStudentTransferModal(portalApp.getActiveDossierStudent()?.admNo)">
+            <i class="fa-solid fa-arrow-right-from-bracket mr-1"></i> Formal Transfer / Withdrawal (TC)
+          </button>
+          <button type="button" class="btn btn-outline-danger btn-sm" onclick="portalApp.archiveActiveDossierStudent()">
+            <i class="fa-solid fa-box-archive mr-1"></i> Controlled Archival
+          </button>
+        </div>
+        <button type="button" class="btn btn-secondary btn-sm" onclick="portalApp.closeModal('studentDossierModal')">
+          Close Dossier
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ====================================================================
+       FORMAL TRANSFER & WITHDRAWAL WORKFLOW MODAL
+       Clearance Checklist, Transfer Certificate Generation, Zero Deletion
+       ==================================================================== -->
+  <div class="modal-backdrop" id="studentTransferWithdrawalModal" role="dialog" aria-modal="true" style="display:none;">
+    <div class="portal-modal" style="max-width: 640px; width: 95%;">
+      <div class="modal-header d-flex justify-content-between align-items-center">
+        <div>
+          <h3 class="mb-0 text-danger" style="font-size: 1.15rem;">
+            <i class="fa-solid fa-arrow-right-from-bracket mr-1"></i> Formal Student Transfer &amp; Withdrawal Clearance
+          </h3>
+          <p class="text-muted text-xs mb-0 mt-1">Multi-department statutory clearances required prior to issuing official Transfer Certificate (TC).</p>
+        </div>
+        <button type="button" class="modal-close-x" onclick="portalApp.closeModal('studentTransferWithdrawalModal')" title="Close" aria-label="Close">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <form id="studentTransferForm" onsubmit="portalApp.submitStudentTransfer(event)">
+        <div class="modal-body p-4">
+          <!-- Student Info Strip -->
+          <div class="p-3 bg-light rounded-3 border mb-3">
+            <div class="d-flex justify-content-between align-items-center">
+              <div>
+                <strong id="tcStudentName" class="d-block" style="font-size:1rem; color:#0f172a;">Student Name</strong>
+                <span class="text-xs text-muted" id="tcStudentMeta">Adm No: SV-0001 | Class: Class VIII - A</span>
+              </div>
+              <span class="badge" style="background:#fee2e2; color:#b91c1c; font-weight:700;">Initiating Withdrawal</span>
+            </div>
+          </div>
+
+          <div class="row g-3 mb-3">
+            <div class="col-md-6">
+              <label class="form-label text-xs font-bold text-muted">Date of Leaving *</label>
+              <input type="date" class="form-control" id="tcLeavingDate" required>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label text-xs font-bold text-muted">Reason for Withdrawal *</label>
+              <select class="form-select" id="tcReason" required>
+                <option value="Parent Job Transfer / Family Relocation">Parent Job Transfer / Family Relocation</option>
+                <option value="Completed Class X Course">Completed Class X Course</option>
+                <option value="Admission to Junior College">Admission to Junior College</option>
+                <option value="Joining Sports Academy">Joining Sports Academy</option>
+                <option value="Financial / Personal Constraints">Financial / Personal Constraints</option>
+                <option value="Other">Other Institutional Reason</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Mandatory Clearances Checklist -->
+          <label class="form-label text-xs font-bold text-muted mb-2 d-block">
+            <i class="fa-solid fa-list-check text-primary mr-1"></i> Statutory Department Clearance Checklist (Mandatory):
+          </label>
+
+          <div class="clearance-check-card checked mb-2">
+            <div class="d-flex align-items-center gap-2">
+              <input class="form-check-input" type="checkbox" id="tcClearLibrary" checked required>
+              <label class="form-check-label text-xs font-bold text-dark" for="tcClearLibrary">
+                <i class="fa-solid fa-book-bookmark text-primary mr-1"></i> Library Clearance: All borrowed books returned &amp; zero fines.
+              </label>
+            </div>
+            <span class="clearance-status-tag" style="background:#dcfce7; color:#15803d;">CLEARED</span>
+          </div>
+
+          <div class="clearance-check-card checked mb-2">
+            <div class="d-flex align-items-center gap-2">
+              <input class="form-check-input" type="checkbox" id="tcClearAccounts" checked required>
+              <label class="form-check-label text-xs font-bold text-dark" for="tcClearAccounts">
+                <i class="fa-solid fa-receipt text-success mr-1"></i> Accounts &amp; Fee Clearance: All tuition &amp; transport dues settled.
+              </label>
+            </div>
+            <span class="clearance-status-tag" style="background:#dcfce7; color:#15803d;">CLEARED</span>
+          </div>
+
+          <div class="clearance-check-card checked mb-2">
+            <div class="d-flex align-items-center gap-2">
+              <input class="form-check-input" type="checkbox" id="tcClearLabs" checked required>
+              <label class="form-check-label text-xs font-bold text-dark" for="tcClearLabs">
+                <i class="fa-solid fa-flask text-purple mr-1"></i> Science Labs &amp; Sports Clearance: Apparatus and kit returned in good order.
+              </label>
+            </div>
+            <span class="clearance-status-tag" style="background:#dcfce7; color:#15803d;">CLEARED</span>
+          </div>
+
+          <div class="clearance-check-card checked mb-3">
+            <div class="d-flex align-items-center gap-2">
+              <input class="form-check-input" type="checkbox" id="tcClearAcademic" checked required>
+              <label class="form-check-label text-xs font-bold text-dark" for="tcClearAcademic">
+                <i class="fa-solid fa-graduation-cap text-amber mr-1"></i> Academic Progress Clearance: Final term marks logged &amp; verified.
+              </label>
+            </div>
+            <span class="clearance-status-tag" style="background:#dcfce7; color:#15803d;">CLEARED</span>
+          </div>
+
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label class="form-label text-xs font-bold text-muted">Conduct &amp; Character Evaluation *</label>
+              <select class="form-select" id="tcConduct" required>
+                <option value="Exemplary" selected>Exemplary</option>
+                <option value="Very Good">Very Good</option>
+                <option value="Good">Good</option>
+                <option value="Satisfactory">Satisfactory</option>
+              </select>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label text-xs font-bold text-muted">Transfer Certificate No. (Auto-Generated)</label>
+              <input type="text" class="form-control" id="tcGeneratedNumber" readonly style="font-family:monospace; font-weight:700; color:#1e40af;">
+            </div>
+          </div>
+
+          <div class="p-3 bg-light rounded-3 border mt-3 text-xs text-muted">
+            <i class="fa-solid fa-shield-halved text-primary mr-1"></i>
+            <strong>Zero History Deletion Guardrail:</strong> Issuing this Transfer Certificate transitions the student status to <em>Withdrawn</em>. All historical fee receipts, exam grades, attendance logs, and dossier documents remain permanently preserved in the statutory archive.
+          </div>
+        </div>
+
+        <div class="modal-footer d-flex justify-content-between align-items-center bg-light p-3 border-top">
+          <button type="button" class="btn btn-secondary btn-sm" onclick="portalApp.closeModal('studentTransferWithdrawalModal')">Cancel</button>
+          <button type="submit" class="btn btn-danger btn-sm">
+            <i class="fa-solid fa-file-signature mr-1"></i> Issue Official TC &amp; Record Withdrawal
+          </button>
         </div>
       </form>
     </div>
   </div>
 
-  <!-- Student Profile View Modal -->
-  <div class="modal-backdrop" id="viewStudentModal">
-    <div class="portal-modal">
-      <div class="modal-header">
-        <h3><i class="fa-solid fa-id-card text-primary"></i> Student Profile Dossier</h3>
-        <button class="modal-close-x" onclick="portalApp.closeModal('viewStudentModal')" title="Close"
-          aria-label="Close">
+  <!-- ====================================================================
+       EDIT STUDENT RECORD MODAL WITH SENSITIVE FIELD AUDIT REASON
+       ==================================================================== -->
+  <div class="modal-backdrop" id="editStudentModal" role="dialog" aria-modal="true" style="display:none;">
+    <div class="portal-modal" style="max-width: 700px; width: 95%;">
+      <div class="modal-header d-flex justify-content-between align-items-center">
+        <div>
+          <h3 class="mb-0" style="font-size: 1.15rem; color:#0f172a;">
+            <i class="fa-solid fa-user-pen text-primary mr-1"></i> Edit Student Record
+          </h3>
+          <p class="text-muted text-xs mb-0 mt-1">Changes to sensitive records require a recorded justification in the permanent audit trail.</p>
+        </div>
+        <button type="button" class="modal-close-x" onclick="portalApp.closeModal('editStudentModal')" title="Close" aria-label="Close">
           <i class="fa-solid fa-xmark"></i>
         </button>
       </div>
-      <div class="modal-body" id="viewStudentModalBody">
-        <!-- Injected dynamically -->
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary"
-          onclick="portalApp.closeModal('viewStudentModal')">Close</button>
-        <button type="button" class="btn btn-secondary" onclick="portalApp.openStudentIdCard()"><i
-            class="fa-solid fa-id-card"></i> Generate ID Card</button>
-        <button type="button" class="btn btn-secondary" onclick="portalApp.openEditStudentMarksModal()"><i
-            class="fa-solid fa-pen-to-square"></i> Assign / Update Marks</button>
-        <button type="button" class="btn btn-primary" onclick="portalApp.printStudentDossier()"><i
-            class="fa-solid fa-print"></i> Print Dossier</button>
-        <button type="button" class="btn btn-warning" onclick="portalApp.archiveActiveDossierStudent()"
-          style="background:#f59e0b; border-color:#d97706; color:#fff;"
-          title="Controlled Record Archival (Retained in Historical Vault)">
-          <i class="fa-solid fa-box-archive"></i> Archive Student
-        </button>
-      </div>
+      <form id="editStudentForm" onsubmit="portalApp.saveStudentEdit(event)">
+        <input type="hidden" id="editOriginalAdmNo">
+        <div class="modal-body p-4">
+          <div class="row g-3 mb-3">
+            <div class="col-md-8">
+              <label class="form-label text-xs font-bold text-muted">Full Legal Name * <span class="badge bg-warning text-dark ml-1" style="font-size:0.65rem;">Sensitive</span></label>
+              <input type="text" class="form-control" id="editStudentName" required>
+            </div>
+            <div class="col-md-4">
+              <label class="form-label text-xs font-bold text-muted">Date of Birth * <span class="badge bg-warning text-dark ml-1" style="font-size:0.65rem;">Sensitive</span></label>
+              <input type="text" class="form-control" id="editStudentDob" required>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label text-xs font-bold text-muted">Class &amp; Section *</label>
+              <div class="input-group">
+                <select class="form-select" id="editStudentClass" required>
+                  <option value="X">Class X</option>
+                  <option value="IX">Class IX</option>
+                  <option value="VIII">Class VIII</option>
+                  <option value="VII">Class VII</option>
+                  <option value="VI">Class VI</option>
+                  <option value="V">Class V</option>
+                  <option value="IV">Class IV</option>
+                  <option value="III">Class III</option>
+                  <option value="II">Class II</option>
+                  <option value="I">Class I</option>
+                  <option value="PP">Pre-Primary</option>
+                </select>
+                <select class="form-select" id="editStudentSection" style="max-width: 90px;">
+                  <option value="A">Sec A</option>
+                  <option value="B">Sec B</option>
+                  <option value="C">Sec C</option>
+                </select>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label text-xs font-bold text-muted">Roll Number *</label>
+              <input type="text" class="form-control" id="editStudentRollNo" required>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label text-xs font-bold text-muted">Primary Guardian *</label>
+              <input type="text" class="form-control" id="editStudentGuardian" required>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label text-xs font-bold text-muted">Contact Phone (10 digits) *</label>
+              <input type="tel" class="form-control" id="editStudentPhone" required>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label text-xs font-bold text-muted">Student Status *</label>
+              <select class="form-select" id="editStudentStatus">
+                <option value="Active">Active</option>
+                <option value="Pending">Pending</option>
+                <option value="Transferred">Transferred</option>
+                <option value="Withdrawn">Withdrawn</option>
+              </select>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label text-xs font-bold text-muted">Fee Status</label>
+              <select class="form-select" id="editStudentFeeStatus">
+                <option value="Paid">Paid</option>
+                <option value="Partial">Partial</option>
+                <option value="Pending">Pending</option>
+              </select>
+            </div>
+            <div class="col-12">
+              <label class="form-label text-xs font-bold text-muted">Residential Address</label>
+              <input type="text" class="form-control" id="editStudentAddress">
+            </div>
+          </div>
+
+          <!-- Mandatory Reason for Changes to Sensitive Fields -->
+          <div class="p-3 bg-light rounded-3 border">
+            <label class="form-label text-xs font-bold text-danger d-block mb-1">
+              <i class="fa-solid fa-triangle-exclamation mr-1"></i> Recorded Justification for Audit Log * (Mandatory):
+            </label>
+            <input type="text" class="form-control form-control-sm" id="editAuditReason" required placeholder="State exact reason for modification (e.g. Gazette name spelling correction, updated parent mobile number, class section re-allocation)">
+            <span class="text-xs text-muted mt-1 d-block">
+              Logged automatically with current user timestamp and operator credentials in the permanent Audit History.
+            </span>
+          </div>
+        </div>
+
+        <div class="modal-footer d-flex justify-content-between align-items-center bg-light p-3 border-top">
+          <button type="button" class="btn btn-secondary btn-sm" onclick="portalApp.closeModal('editStudentModal')">Cancel</button>
+          <button type="submit" class="btn btn-primary btn-sm">
+            <i class="fa-solid fa-floppy-disk mr-1"></i> Save Changes &amp; Log Audit
+          </button>
+        </div>
+      </form>
     </div>
   </div>
 
+  <!-- ====================================================================
+       ARCHIVED STUDENTS PERMANENT REPOSITORY DRAWER / MODAL
+       ==================================================================== -->
+  <div class="modal-backdrop" id="archivedStudentsModal" role="dialog" aria-modal="true" style="display:none;">
+    <div class="portal-modal" style="max-width: 980px; width: 95%;">
+      <div class="modal-header d-flex justify-content-between align-items-center">
+        <div>
+          <h3 class="mb-0 text-dark" style="font-size: 1.2rem;">
+            <i class="fa-solid fa-box-archive text-warning mr-1"></i> Permanent Student Archive &amp; Clearance Records
+          </h3>
+          <p class="text-muted text-xs mb-0 mt-1">Authoritative repository of transferred and withdrawn students with full historical continuity.</p>
+        </div>
+        <button type="button" class="modal-close-x" onclick="portalApp.closeModal('archivedStudentsModal')" title="Close" aria-label="Close">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <div class="modal-body p-4">
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-3">
+          <div class="d-flex align-items-center gap-2">
+            <input type="text" class="form-control form-control-sm" id="archivedSearchInput" placeholder="Search archive by student name, TC number, admission no..." oninput="portalApp.filterArchivedStudents()" style="min-width: 320px;">
+          </div>
+          <span class="badge" style="background:#f1f5f9; color:#475569; font-size:0.75rem;">
+            <i class="fa-solid fa-vault mr-1"></i> Statutory Retention: 100% History Retained
+          </span>
+        </div>
+
+        <div class="table-responsive">
+          <table class="table table-hover align-middle mb-0" id="tableArchivedStudents">
+            <thead class="table-light">
+              <tr>
+                <th>Admission No.</th>
+                <th>Student Name</th>
+                <th>Final Class</th>
+                <th>Leaving Date</th>
+                <th>Reason for Leaving</th>
+                <th>TC Number</th>
+                <th>Clearance Status</th>
+                <th class="text-end">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="tbodyArchivedStudents">
+              <!-- Rendered dynamically -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="modal-footer bg-light p-3 border-top text-end">
+        <button type="button" class="btn btn-secondary btn-sm" onclick="portalApp.closeModal('archivedStudentsModal')">Close</button>
+      </div>
+    </div>
+  </div>
+  
   <!-- Edit / Assign Student Examination Marks Modal -->
   <div class="modal-backdrop" id="editStudentMarksModal">
     <div class="portal-modal" style="max-width: 680px;">
