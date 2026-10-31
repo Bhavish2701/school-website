@@ -704,7 +704,7 @@ body {
 }
 
 .notif-header {
-  padding: 0.85rem 1rem;
+  padding: 0.7rem 0.65rem;
   border-bottom: 1px solid var(--color-border);
   display: flex;
   justify-content: space-between;
@@ -2259,6 +2259,7 @@ body {
 
 .student-roster-table {
   width: 100%;
+  min-width: 1040px;
   border-collapse: separate;
   border-spacing: 0;
   text-align: left;
@@ -2273,7 +2274,7 @@ body {
 }
 
 .student-roster-table thead th {
-  padding: 0.95rem 1rem;
+  padding: 0.75rem 0.65rem;
   font-size: 0.72rem;
   font-weight: 700;
   text-transform: uppercase;
@@ -21921,4 +21922,103 @@ button.close:hover,
   background: #f8fafc;
   border: 1px solid #e2e8f0;
   border-radius: var(--radius-full, 9999px);
+}
+
+
+/* Universal Dropdown Architecture */
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-menu {
+  display: none !important;
+  position: absolute;
+  right: 0;
+  top: calc(100% + 4px);
+  background: #ffffff;
+  min-width: 200px;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.15), 0 8px 10px -6px rgba(0, 0, 0, 0.08);
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  padding: 6px;
+  list-style: none !important;
+  margin: 0;
+  z-index: 1050;
+  text-align: left;
+}
+
+.dropdown-menu.show {
+  display: block !important;
+}
+
+.dropdown-menu li {
+  list-style: none !important;
+  margin: 0;
+  padding: 0;
+}
+
+.dropdown-menu .dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 12px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: #334155;
+  border-radius: 6px;
+  text-decoration: none;
+  transition: all 0.15s ease;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.dropdown-menu .dropdown-item:hover {
+  background: #f1f5f9;
+  color: #0f172a;
+}
+
+.dropdown-menu .dropdown-item.text-warning {
+  color: #b45309 !important;
+}
+
+.dropdown-menu .dropdown-item.text-warning:hover {
+  background: #fffbeb;
+  color: #92400e !important;
+}
+
+.dropdown-menu .dropdown-item.text-danger {
+  color: #dc2626 !important;
+}
+
+.dropdown-menu .dropdown-item.text-danger:hover {
+  background: #fee2e2;
+  color: #991b1b !important;
+}
+
+.dropdown-menu .dropdown-divider {
+  height: 1px;
+  margin: 4px 0;
+  overflow: hidden;
+  background-color: #e2e8f0;
+  border: none;
+}
+
+[data-theme="dark"] .dropdown-menu {
+  background: #1e293b !important;
+  border-color: #334155 !important;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5) !important;
+}
+
+[data-theme="dark"] .dropdown-menu .dropdown-item {
+  color: #cbd5e1 !important;
+}
+
+[data-theme="dark"] .dropdown-menu .dropdown-item:hover {
+  background: #334155 !important;
+  color: #ffffff !important;
+}
+
+[data-theme="dark"] .dropdown-menu .dropdown-divider {
+  background-color: #334155 !important;
 }

@@ -4464,7 +4464,7 @@ const FEE_CATEGORY_AUDIT_DATA = [
     if (pageItems.length === 0) {
       tbody.innerHTML = `
         <tr>
-          <td colspan="11" class="text-center py-4 text-muted">
+          <td colspan="9" class="text-center py-4 text-muted">
             <i class="fa-solid fa-user-slash fa-2x mb-2 d-block text-secondary"></i>
             No student dossiers matched your search or filter criteria.
           </td>
@@ -4475,82 +4475,118 @@ const FEE_CATEGORY_AUDIT_DATA = [
     }
 
     tbody.innerHTML = pageItems.map(s => {
-      let statusBadge = `<span class="badge" style="background:#dcfce7; color:#15803d; font-weight:700;"><i class="fa-solid fa-circle-check mr-1"></i>Active</span>`;
+      let statusBadge = `<span class="roster-status-badge status-active"><span class="roster-status-dot"></span>Active</span>`;
       if (s.status === 'Pending') {
-        statusBadge = `<span class="badge" style="background:#fef3c7; color:#b45309; font-weight:700;"><i class="fa-solid fa-clock mr-1"></i>Pending</span>`;
+        statusBadge = `<span class="roster-status-badge status-partial"><span class="roster-status-dot"></span>Pending</span>`;
       } else if (s.status === 'Transferred') {
-        statusBadge = `<span class="badge" style="background:#e0e7ff; color:#4338ca; font-weight:700;"><i class="fa-solid fa-file-contract mr-1"></i>Transferred</span>`;
+        statusBadge = `<span class="roster-status-badge" style="background:#e0e7ff; color:#4338ca; border:1px solid #c7d2fe;"><span class="roster-status-dot" style="background:#6366f1;"></span>Transferred</span>`;
       } else if (s.status === 'Withdrawn') {
-        statusBadge = `<span class="badge" style="background:#fee2e2; color:#b91c1c; font-weight:700;"><i class="fa-solid fa-arrow-right-from-bracket mr-1"></i>Withdrawn</span>`;
+        statusBadge = `<span class="roster-status-badge status-pending"><span class="roster-status-dot"></span>Withdrawn</span>`;
       }
 
       const initial = (s.name || 'S').trim().charAt(0).toUpperCase();
 
       return `
         <tr>
+          <!-- 1. Adm No & Student ID -->
           <td>
-            <span class="badge" style="background:#f1f5f9; color:#1e293b; font-family:monospace; font-weight:700; font-size:0.75rem;">
+            <div class="roster-adm-code">${s.admNo}</div>
+            <div style="font-family:monospace; font-size:0.7rem; color:#64748b; font-weight:600; margin-top:2px; white-space:nowrap;">
               ${s.studentId}
-            </span>
-          </td>
-          <td class="text-center">
-            <div class="cell-avatar" style="margin: 0 auto; width:34px; height:34px; font-size:0.85rem; border-radius:50%; background:linear-gradient(135deg, #1e40af 0%, #3b82f6 100%); color:#fff; display:flex; align-items:center; justify-content:center; font-weight:700;">
-              ${initial}
             </div>
           </td>
+
+          <!-- 2. Student Profile & Demographics -->
           <td>
-            <span class="perf-admno-badge font-bold">${s.admNo}</span>
-          </td>
-          <td>
-            <div class="user-cell" style="gap:0.5rem;">
-              <div>
-                <strong style="color:#0f172a; font-size:0.88rem;">${s.name}</strong>
-                <div style="font-size:0.7rem; color:var(--color-text-muted); display:flex; gap:6px; margin-top:2px;">
-                  <span>${(s.gender || 'male').toUpperCase()}</span>
-                  <span>•</span>
-                  <span><i class="fa-solid fa-droplet text-danger"></i> ${s.bloodGroup || 'O+'}</span>
-                  <span>•</span>
-                  <span><i class="fa-solid fa-award text-emerald"></i> GPA: ${s.gpa || '8.5'}</span>
+            <div style="display:flex; align-items:center; gap:9px;">
+              <div class="cell-avatar" style="width:34px; height:34px; min-width:34px; font-size:0.82rem; border-radius:50%; background:linear-gradient(135deg, #1e40af 0%, #3b82f6 100%); color:#fff; display:flex; align-items:center; justify-content:center; font-weight:700; box-shadow:0 2px 4px rgba(30,64,175,0.18);">
+                ${initial}
+              </div>
+              <div class="roster-name-cell" style="gap:2px;">
+                <div class="roster-student-name" style="font-weight:700; color:#0f172a; font-size:0.88rem; line-height:1.2;">
+                  ${s.name}
+                </div>
+                <div class="roster-student-chips" style="display:flex; gap:4px; align-items:center; margin-top:2px; flex-wrap:wrap;">
+                  <span class="roster-stat-chip" style="background:#f1f5f9; color:#475569; border:1px solid #e2e8f0; font-size:0.68rem; padding:1px 5px;">
+                    <i class="fa-solid fa-venus-mars text-primary"></i> ${(s.gender || 'male').toUpperCase()}
+                  </span>
+                  <span class="roster-stat-chip" style="background:#fef2f2; color:#b91c1c; border:1px solid #fecaca; font-size:0.68rem; padding:1px 5px;">
+                    <i class="fa-solid fa-droplet text-danger"></i> ${s.bloodGroup || 'O+'}
+                  </span>
+                  <span class="roster-stat-chip gpa" style="font-size:0.68rem; padding:1px 5px;">
+                    <i class="fa-solid fa-award text-emerald"></i> GPA: ${s.gpa || '8.5'}
+                  </span>
                 </div>
               </div>
             </div>
           </td>
+
+          <!-- 3. Class & Section -->
           <td class="text-center">
-            <span class="badge" style="background:#e0f2fe; color:#0369a1; font-weight:700; font-size:0.75rem;">
+            <span class="roster-pill roster-pill-primary" style="font-size:0.75rem; padding:3px 8px;">
               Class ${s.class} - ${s.section || 'A'}
             </span>
           </td>
+
+          <!-- 4. Roll No -->
           <td class="text-center">
-            <strong style="color:#334155;">#${s.rollNo}</strong>
+            <span class="roster-roll-code" style="font-size:0.78rem; padding:2px 7px;">#${s.rollNo}</span>
           </td>
+
+          <!-- 5. Parent / Guardian -->
           <td>
-            <div style="font-size:0.82rem; font-weight:600; color:#1e293b;">${s.parent}</div>
-            <div class="text-xs text-muted">${s.guardianRel || 'Father'}</div>
-          </td>
-          <td>
-            <div style="font-size:0.8rem;">
-              <a href="tel:${s.phone}" class="phone-link"><i class="fa-solid fa-phone-volume text-success mr-1"></i>${s.phone}</a>
+            <div class="roster-guardian-cell" style="gap:2px;">
+              <div class="roster-parent-name" style="font-weight:600; color:#1e293b; font-size:0.83rem;">
+                <i class="fa-solid fa-user-tie text-secondary mr-1"></i>${s.parent}
+              </div>
+              <div style="font-size:0.7rem; color:var(--color-text-muted); font-weight:600;">
+                <span class="badge" style="background:#f1f5f9; color:#475569; font-size:0.66rem; padding:2px 6px; border:1px solid #e2e8f0;">
+                  ${s.guardianRel || 'Father'}
+                </span>
+              </div>
             </div>
-            <div class="text-xs text-muted" style="max-width:140px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">
-              <a href="mailto:${s.email}" style="color:inherit; text-decoration:none;">${s.email}</a>
+          </td>
+
+          <!-- 6. Contact Details -->
+          <td>
+            <div style="display:flex; flex-direction:column; gap:2px;">
+              <a href="tel:${s.phone}" class="roster-phone-pill" style="font-size:0.72rem; padding:2px 6px;">
+                <i class="fa-solid fa-phone-volume text-success"></i> ${s.phone}
+              </a>
+              <div class="text-xs text-muted" style="max-width:140px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-size:0.72rem;">
+                <a href="mailto:${s.email}" style="color:var(--color-text-muted); text-decoration:none;" title="${s.email}">
+                  <i class="fa-regular fa-envelope text-secondary mr-1"></i>${s.email}
+                </a>
+              </div>
             </div>
           </td>
-          <td>
-            <span class="text-xs font-semibold text-secondary">${s.admissionDate || '12-Jun-2023'}</span>
+
+          <!-- 7. Enrolled Date -->
+          <td class="text-center">
+            <div style="font-size:0.78rem; font-weight:600; color:#334155; white-space:nowrap;">
+              ${s.admissionDate || '12-Jun-2023'}
+            </div>
+            <div class="text-xs text-muted" style="font-size:0.66rem;">
+              AY ${s.academicYear || '2025-2026'}
+            </div>
           </td>
+
+          <!-- 8. Status -->
           <td class="text-center">
             ${statusBadge}
           </td>
-          <td class="text-end">
-            <div class="d-inline-flex gap-1 align-items-center">
-              <button type="button" class="btn btn-sm btn-secondary" onclick="portalApp.viewStudentProfile('${s.admNo}')" title="View 14-Tab Complete Dossier">
+
+          <!-- 9. Actions -->
+          <td class="text-center">
+            <div class="d-inline-flex gap-1 align-items-center justify-content-center">
+              <button type="button" class="btn btn-sm btn-secondary" onclick="portalApp.viewStudentProfile('${s.admNo}')" title="View 14-Tab Complete Dossier" style="padding:3px 7px; font-size:0.72rem; font-weight:600;">
                 <i class="fa-solid fa-eye text-primary"></i> View
               </button>
-              <button type="button" class="btn btn-sm btn-secondary" onclick="portalApp.openEditStudentModal('${s.admNo}')" title="Edit Student Record">
+              <button type="button" class="btn btn-sm btn-secondary" onclick="portalApp.openEditStudentModal('${s.admNo}')" title="Edit Student Record" style="padding:3px 7px; font-size:0.72rem; font-weight:600;">
                 <i class="fa-solid fa-pen text-secondary"></i> Edit
               </button>
               <div class="dropdown d-inline-block">
-                <button type="button" class="btn btn-sm btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" title="More Actions">
+                <button type="button" class="btn btn-sm btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" title="More Actions" style="padding:3px 6px; font-size:0.72rem;">
                   <i class="fa-solid fa-ellipsis-vertical"></i>
                 </button>
                 <ul class="dropdown-menu dropdown-menu-end student-actions-dropdown" style="font-size:0.78rem;">
@@ -4564,10 +4600,10 @@ const FEE_CATEGORY_AUDIT_DATA = [
                       <i class="fa-solid fa-print text-secondary mr-2"></i> Print Official Dossier
                     </a>
                   </li>
-                  <li><hr class="dropdown-divider my-1"></li>
+                  <li><hr class="dropdown-divider my-1" style="border-top:1px solid #e2e8f0; margin:4px 0;"></li>
                   <li>
                     <a class="dropdown-item text-warning" href="javascript:void(0)" onclick="portalApp.openStudentTransferModal('${s.admNo}')">
-                      <i class="fa-solid fa-arrow-right-from-bracket text-warning mr-2"></i> Formal Transfer / Issue TC
+                      <i class="fa-solid fa-arrow-right-from-bracket text-warning mr-2"></i> Formal Transfer (TC)
                     </a>
                   </li>
                   <li>
@@ -48728,8 +48764,28 @@ const classData = TIMETABLE_CLASS_DATA[currentTimetableClass] || TIMETABLE_CLASS
   // Global dismissal when clicking outside any open more-menu
   if (typeof document !== 'undefined') {
     document.addEventListener('click', (e) => {
+      // 1. Existing record-actions-wrap dismissal
       if (!e.target.closest('.record-actions-wrap')) {
         document.querySelectorAll('.record-more-menu.open').forEach(m => m.classList.remove('open'));
+      }
+
+      // 2. Universal dropdown menu toggle & outside-click dismissal
+      const toggle = e.target.closest('[data-bs-toggle="dropdown"], [data-toggle="dropdown"]');
+      const openDropdowns = document.querySelectorAll('.dropdown-menu.show');
+
+      if (toggle) {
+        e.preventDefault();
+        e.stopPropagation();
+        const parent = toggle.closest('.dropdown');
+        const menu = parent ? parent.querySelector('.dropdown-menu') : null;
+        const isAlreadyOpen = menu && menu.classList.contains('show');
+
+        openDropdowns.forEach(m => m.classList.remove('show'));
+        if (menu && !isAlreadyOpen) {
+          menu.classList.add('show');
+        }
+      } else if (!e.target.closest('.dropdown-menu')) {
+        openDropdowns.forEach(m => m.classList.remove('show'));
       }
     });
   }
