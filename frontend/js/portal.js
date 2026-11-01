@@ -6224,14 +6224,21 @@ const FEE_CATEGORY_AUDIT_DATA = [
               <i class="fa-solid fa-award text-amber"></i>
               <span>Commendations &amp; Honors</span>
             </div>
-            <div class="dossier-meta-grid">
-              <div class="dossier-meta-item full-width">
-                <span class="dossier-meta-label">Scholastic Commendation</span>
-                <span class="dossier-meta-value"><i class="fa-solid fa-star text-amber me-1"></i>Star Student Award for District Mathematics Olympiad Achievement.</span>
-              </div>
-              <div class="dossier-meta-item full-width">
-                <span class="dossier-meta-label">Disciplinary Standing</span>
-                <span class="dossier-meta-value"><span class="badge" style="background:#ecfdf5; color:#065f46; border:1px solid #a7f3d0; font-size:0.78rem; font-weight:700; padding:4px 8px; border-radius:6px;"><i class="fa-solid fa-circle-check text-success me-1"></i>Exemplary Conduct &bull; Zero Infractions</span></span>
+            <div class="dossier-dispatch-list">
+              <div class="dossier-dispatch-item">
+                <div class="dossier-dispatch-header">
+                  <span class="badge" style="background:#fef3c7; color:#92400e; border:1px solid #fde68a; font-size:0.74rem; font-weight:700;">
+                    <i class="fa-solid fa-star text-warning me-1"></i>Academic Olympiad Distinction
+                  </span>
+                  <span class="font-monospace text-muted" style="font-size:0.76rem;">AY 2025-26</span>
+                </div>
+                <p class="dossier-dispatch-body">
+                  Conferred <strong>Star Student Commendation</strong> by the Academic Council for distinguished performance in District Mathematics Olympiad.
+                </p>
+                <div class="dossier-dispatch-footer">
+                  <span class="text-success" style="font-weight:600;"><i class="fa-solid fa-circle-check me-1"></i>Exemplary Conduct &bull; Zero Infractions</span>
+                  <span class="text-muted font-monospace">HON-2025-081</span>
+                </div>
               </div>
             </div>
           </div>
@@ -6241,18 +6248,21 @@ const FEE_CATEGORY_AUDIT_DATA = [
               <i class="fa-solid fa-user-nurse text-primary"></i>
               <span>Pastoral Care &amp; Counseling</span>
             </div>
-            <div class="dossier-meta-grid">
-              <div class="dossier-meta-item full-width">
-                <span class="dossier-meta-label">Counselor Periodic Assessment</span>
-                <span class="dossier-meta-value text-muted" style="font-size:0.84rem; line-height:1.45;">Routine developmental assessment completed by Smt. D. Leela (Head Counselor). Well-adjusted peer relationships and positive classroom participation.</span>
-              </div>
-              <div class="dossier-meta-item">
-                <span class="dossier-meta-label">Assessment Date</span>
-                <span class="dossier-meta-value">22-Jul-2025</span>
-              </div>
-              <div class="dossier-meta-item">
-                <span class="dossier-meta-label">Review Status</span>
-                <span class="dossier-meta-value"><span class="badge" style="background:#eff6ff; color:#1e40af; border:1px solid #bfdbfe; font-size:0.76rem; font-weight:600; padding:3px 8px; border-radius:4px;">Closed / Satisfactory</span></span>
+            <div class="dossier-dispatch-list">
+              <div class="dossier-dispatch-item">
+                <div class="dossier-dispatch-header">
+                  <span class="badge" style="background:#eff6ff; color:#1e40af; border:1px solid #bfdbfe; font-size:0.74rem; font-weight:700;">
+                    <i class="fa-solid fa-clipboard-check me-1"></i>Developmental Assessment
+                  </span>
+                  <span class="font-monospace text-muted" style="font-size:0.76rem;">22-Jul-2025</span>
+                </div>
+                <p class="dossier-dispatch-body">
+                  Routine pastoral welfare assessment completed by <strong>Smt. D. Leela (Head Counselor)</strong>. Student demonstrates positive peer collaboration, emotional resilience, and active class participation.
+                </p>
+                <div class="dossier-dispatch-footer">
+                  <span class="text-success" style="font-weight:600;"><i class="fa-solid fa-circle-check me-1"></i>Status: Satisfactory &bull; File Closed</span>
+                  <span class="text-muted font-monospace">REF #COU-2025-14</span>
+                </div>
               </div>
             </div>
           </div>
@@ -6270,47 +6280,85 @@ const FEE_CATEGORY_AUDIT_DATA = [
             <p class="dossier-header-strip-desc">Audited record of SMS broadcasts, automated attendance dispatches, and Parent-Teacher meetings</p>
           </div>
           <div class="dossier-header-strip-badges">
-            <span class="badge" style="background: #eff6ff; color: #1e40af; border: 1px solid #bfdbfe; font-size: 0.76rem; font-weight: 600; padding: 5px 10px; border-radius: 6px;">
-              <i class="fa-solid fa-tower-broadcast me-1"></i>SMS Gateway Active
+            <span class="badge" style="background: #ecfdf5; color: #065f46; border: 1px solid #a7f3d0; font-size: 0.76rem; font-weight: 600; padding: 5px 10px; border-radius: 6px;">
+              <i class="fa-solid fa-signal me-1"></i>SMS Gateway Active
             </span>
           </div>
         </div>
 
         <div class="dossier-cards-grid">
+          <!-- Card 1: Automated Broadcast & Dispatch Records -->
           <div class="dossier-section-card">
             <div class="dossier-section-title">
-              <i class="fa-solid fa-comment-sms text-success"></i>
-              <span>Automated Dispatches</span>
+              <i class="fa-solid fa-paper-plane text-success"></i>
+              <span>Automated Dispatches &amp; Notices</span>
             </div>
-            <div class="dossier-meta-grid">
-              <div class="dossier-meta-item full-width">
-                <span class="dossier-meta-label">Today's Attendance Notification</span>
-                <span class="dossier-meta-value" style="font-size:0.84rem;"><i class="fa-solid fa-circle-check text-success me-1"></i>Daily attendance SMS dispatched to <strong>${s.phone}</strong> at 09:15 AM today.</span>
+            <div class="dossier-dispatch-list">
+              <div class="dossier-dispatch-item">
+                <div class="dossier-dispatch-header">
+                  <span class="badge" style="background: #eff6ff; color: #1e40af; border: 1px solid #bfdbfe; font-size: 0.74rem; font-weight: 700;">
+                    <i class="fa-solid fa-comment-sms me-1"></i>SMS Attendance Alert
+                  </span>
+                  <span class="font-monospace text-muted" style="font-size: 0.76rem;">
+                    <i class="fa-regular fa-clock me-1"></i>Today, 09:15 AM
+                  </span>
+                </div>
+                <p class="dossier-dispatch-body">
+                  Daily morning attendance status dispatched to registered guardian mobile <strong class="font-monospace" style="color: #0f172a;">${s.phone}</strong>.
+                </p>
+                <div class="dossier-dispatch-footer">
+                  <span class="text-success" style="font-weight: 600;"><i class="fa-solid fa-circle-check me-1"></i>Delivered via AP-EDUSMS Gateway</span>
+                  <span class="text-muted font-monospace">ACK #SMS-90184</span>
+                </div>
               </div>
-              <div class="dossier-meta-item full-width">
-                <span class="dossier-meta-label">Terminal Fee Advisory</span>
-                <span class="dossier-meta-value" style="font-size:0.84rem;"><i class="fa-solid fa-envelope-circle-check text-primary me-1"></i>Term 1 Fee Clearance digital receipt delivered to <strong>${s.email}</strong>.</span>
+
+              <div class="dossier-dispatch-item">
+                <div class="dossier-dispatch-header">
+                  <span class="badge" style="background: #f8fafc; color: #475569; border: 1px solid #cbd5e1; font-size: 0.74rem; font-weight: 700;">
+                    <i class="fa-regular fa-envelope me-1"></i>Email Advisory
+                  </span>
+                  <span class="font-monospace text-muted" style="font-size: 0.76rem;">
+                    <i class="fa-regular fa-calendar me-1"></i>15-Oct-2025
+                  </span>
+                </div>
+                <p class="dossier-dispatch-body">
+                  Term 1 Fee Clearance digital receipt &amp; quarterly academic circular delivered to <strong style="color: #0f172a;">${s.email}</strong>.
+                </p>
+                <div class="dossier-dispatch-footer">
+                  <span class="text-primary" style="font-weight: 600;"><i class="fa-solid fa-envelope-circle-check me-1"></i>Opened by Guardian</span>
+                  <span class="text-muted font-monospace">MSG #EML-4819</span>
+                </div>
               </div>
             </div>
           </div>
 
+          <!-- Card 2: Parent-Teacher Meetings (PTM) -->
           <div class="dossier-section-card">
             <div class="dossier-section-title">
               <i class="fa-solid fa-handshake text-primary"></i>
               <span>Parent-Teacher Meetings (PTM)</span>
             </div>
-            <div class="dossier-meta-grid">
-              <div class="dossier-meta-item full-width">
-                <span class="dossier-meta-label">Term 1 PTM Interaction</span>
-                <span class="dossier-meta-value" style="font-size:0.84rem;"><i class="fa-solid fa-calendar-check text-primary me-1"></i>Attended by <strong>${s.parent}</strong> with Class Teacher Smt. K. Hymavathi on 14-Aug-2025.</span>
-              </div>
-              <div class="dossier-meta-item">
-                <span class="dossier-meta-label">Discussion Focus</span>
-                <span class="dossier-meta-value">Academic Excellence &amp; Olympiad Training</span>
-              </div>
-              <div class="dossier-meta-item">
-                <span class="dossier-meta-label">Parent Feedback</span>
-                <span class="dossier-meta-value"><span class="badge" style="background:#ecfdf5; color:#065f46; font-size:0.75rem; padding:3px 8px; border-radius:4px;">Highly Satisfied</span></span>
+            <div class="dossier-dispatch-list">
+              <div class="dossier-dispatch-item">
+                <div class="dossier-dispatch-header">
+                  <span class="badge" style="background: #f0fdf4; color: #166534; border: 1px solid #bbf7d0; font-size: 0.74rem; font-weight: 700;">
+                    <i class="fa-solid fa-users-rectangle me-1"></i>Term 1 Formal PTM
+                  </span>
+                  <span class="font-monospace text-muted" style="font-size: 0.76rem;">
+                    <i class="fa-regular fa-calendar-check me-1"></i>14-Aug-2025
+                  </span>
+                </div>
+                <p class="dossier-dispatch-body">
+                  Attended in person by primary guardian <strong style="color: #0f172a;">${s.parent}</strong> with Class Teacher <strong style="color: #0f172a;">Smt. K. Hymavathi</strong>.
+                </p>
+                <div class="p-2 bg-white border rounded" style="font-size: 0.78rem; color: #475569; margin: 4px 0;">
+                  <div><strong>Focus:</strong> Academic excellence &amp; Mathematics Olympiad preparation.</div>
+                  <div class="mt-1"><strong>Guardian Feedback:</strong> Highly satisfied with teaching methodology and campus safety.</div>
+                </div>
+                <div class="dossier-dispatch-footer">
+                  <span class="text-success" style="font-weight: 600;"><i class="fa-solid fa-signature me-1"></i>Signed Attendance Register</span>
+                  <span class="text-muted font-monospace">PTM-AY25-T1</span>
+                </div>
               </div>
             </div>
           </div>
