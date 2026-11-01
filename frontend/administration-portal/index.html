@@ -3671,77 +3671,96 @@
               </div>
             </div>
 
-            <!-- Enhanced Filter Toolbar -->
-            <div class="filter-toolbar">
-              <div class="filter-left-controls">
-                <div class="filter-group search-group">
+            <!-- Enhanced Executive Filter Toolbar for Documents -->
+            <div class="enterprise-filter-toolbar">
+              <!-- Tier 1: Search and Primary Parametric Selectors -->
+              <div class="enterprise-toolbar-tier toolbar-filters-row">
+                <div class="filter-group search-group" style="flex: 1 1 340px; min-width: 280px;">
                   <i class="fa-solid fa-magnifying-glass"></i>
                   <input type="text" id="docSearchInput" placeholder="Search student name, admission no (SV-0001)..."
                     oninput="portalApp.filterStudentDocs()" onkeyup="portalApp.filterStudentDocs()">
                 </div>
-                <div class="filter-group">
-                  <label for="docClassFilter"><i class="fa-solid fa-graduation-cap"></i> Class:</label>
-                  <select id="docClassFilter" class="filter-select" onchange="portalApp.filterStudentDocs()">
-                    <option value="">All Classes (PP to X)</option>
-                    <option value="X">Class X</option>
-                    <option value="IX">Class IX</option>
-                    <option value="VIII">Class VIII</option>
-                    <option value="VII">Class VII</option>
-                    <option value="VI">Class VI</option>
-                    <option value="V">Class V</option>
-                    <option value="IV">Class IV</option>
-                    <option value="III">Class III</option>
-                    <option value="II">Class II</option>
-                    <option value="I">Class I</option>
-                    <option value="PP">Pre-Primary</option>
-                  </select>
-                </div>
-                <div class="filter-group">
-                  <label for="docVerifyStatusFilter"><i class="fa-solid fa-shield-halved"></i> Verification:</label>
-                  <select id="docVerifyStatusFilter" class="filter-select" onchange="portalApp.filterStudentDocs()">
-                    <option value="">All Verification Statuses</option>
-                    <option value="Verified">Verified &amp; Approved ✓</option>
-                    <option value="Pending">Pending Review ⏳</option>
-                    <option value="Awaiting">Awaiting Submission ⚠️</option>
-                  </select>
+
+                <div class="toolbar-filter-controls">
+                  <div class="filter-group filter-pill-item">
+                    <label for="docClassFilter"><i class="fa-solid fa-graduation-cap text-primary"></i> Class:</label>
+                    <select id="docClassFilter" class="filter-select" onchange="portalApp.filterStudentDocs()">
+                      <option value="">All Classes (PP to X)</option>
+                      <option value="X">Class X</option>
+                      <option value="IX">Class IX</option>
+                      <option value="VIII">Class VIII</option>
+                      <option value="VII">Class VII</option>
+                      <option value="VI">Class VI</option>
+                      <option value="V">Class V</option>
+                      <option value="IV">Class IV</option>
+                      <option value="III">Class III</option>
+                      <option value="II">Class II</option>
+                      <option value="I">Class I</option>
+                      <option value="PP">Pre-Primary</option>
+                    </select>
+                  </div>
+
+                  <div class="filter-group filter-pill-item">
+                    <label for="docVerifyStatusFilter"><i class="fa-solid fa-shield-halved text-primary"></i> Verification:</label>
+                    <select id="docVerifyStatusFilter" class="filter-select" onchange="portalApp.filterStudentDocs()">
+                      <option value="">All Verification Statuses</option>
+                      <option value="Verified">Verified &amp; Approved ✓</option>
+                      <option value="Pending Verification">Pending Review ⏳</option>
+                      <option value="Awaiting Documents">Awaiting Submission ⚠️</option>
+                      <option value="Rejected or Invalid">Rejected / Invalid ✕</option>
+                      <option value="Replacement Requested">Replacement Requested 🔄</option>
+                    </select>
+                  </div>
+
+                  <button type="button" class="btn-filter-reset"
+                    onclick="portalApp.resetStudentDocFilters(); return false;" title="Reset document filters">
+                    <i class="fa-solid fa-rotate-left"></i> Reset
+                  </button>
                 </div>
               </div>
-              <div class="filter-right-stats">
-                <span class="filter-count-pill">
-                  <i class="fa-solid fa-folder-closed"></i> Dossiers: <strong id="docsShowingCount">50</strong> of
-                  <strong id="docsTotalCount">500</strong>
-                </span>
-                <button type="button" class="btn-filter-reset"
-                  onclick="portalApp.resetStudentDocFilters(); return false;" title="Reset document filters">
-                  <i class="fa-solid fa-rotate-left"></i> Reset
-                </button>
-                <button type="button" class="btn btn-secondary btn-sm" onclick="portalApp.exportDocsAuditReport()"
-                  title="Export Document Audit Report">
-                  <i class="fa-solid fa-file-csv text-primary"></i> Export Audit
-                </button>
-                <button type="button" class="btn btn-primary btn-sm" onclick="portalApp.openStudentDocsModal()"
-                  title="Upload or Receive New Student Document">
-                  <i class="fa-solid fa-cloud-arrow-up"></i> Upload Document
-                </button>
+
+              <!-- Tier 2: Governance Indicators and Document Operations -->
+              <div class="enterprise-toolbar-tier toolbar-actions-row">
+                <div class="toolbar-stats-left">
+                  <span class="filter-count-pill">
+                    <i class="fa-solid fa-folder-closed text-primary"></i> Dossiers: <strong id="docsShowingCount">50</strong> of
+                    <strong id="docsTotalCount">500</strong>
+                  </span>
+                  <span class="toolbar-tag-pill">
+                    <i class="fa-solid fa-calendar-check text-primary"></i> Academic Year 2025–2026
+                  </span>
+                  <span class="toolbar-tag-pill stat-badge-verified">
+                    <i class="fa-solid fa-shield-check text-success"></i> AP Board Verified
+                  </span>
+                </div>
+
+                <div class="toolbar-actions-right">
+                  <button type="button" class="btn btn-secondary btn-sm" onclick="portalApp.exportDocsAuditReport()"
+                    title="Export Document Audit Report">
+                    <i class="fa-solid fa-file-csv text-primary"></i> Export Audit
+                  </button>
+                  <button type="button" class="btn btn-primary btn-sm" onclick="portalApp.openStudentDocsModal()"
+                    title="Upload or Receive New Student Document">
+                    <i class="fa-solid fa-cloud-arrow-up"></i> Upload Document
+                  </button>
+                </div>
               </div>
             </div>
 
             <!-- Student Documents Master Table Container -->
-            <div class="table-container student-docs-wrap">
-              <table class="data-table student-docs-table" id="studentDocsTable">
+            <div class="table-container student-docs-wrap" style="overflow-x: auto;">
+              <table class="data-table student-docs-table" id="studentDocsTable" style="width: 100%; min-width: 1100px;">
                 <thead>
                   <tr>
-                    <th style="min-width: 220px;"><i class="fa-solid fa-user-graduate text-primary"></i> Student
-                      Identity</th>
-                    <th style="min-width: 240px;"><i class="fa-solid fa-folder-open"></i> Institutional Dossier Status
-                    </th>
-                    <th style="min-width: 170px;"><i class="fa-solid fa-cloud-arrow-up"></i> Submission Mode</th>
-                    <th class="text-center" style="min-width: 170px;"><i class="fa-solid fa-shield-check"></i>
-                      Verification Status</th>
-                    <th class="text-center" style="min-width: 130px;"><i class="fa-regular fa-calendar-check"></i> Last
-                      Updated</th>
-                    <th style="min-width: 180px;"><i class="fa-solid fa-user-check"></i> Verifying Authority</th>
-                    <th class="text-center" style="min-width: 180px;"><i class="fa-solid fa-sliders"></i> Actions</th>
+                    <th style="min-width: 190px;"><i class="fa-solid fa-user-graduate text-primary me-1"></i> Student Identity</th>
+                    <th class="text-center" style="min-width: 110px;"><i class="fa-solid fa-id-badge text-secondary me-1"></i> Admission No</th>
+                    <th style="min-width: 150px;"><i class="fa-solid fa-file-contract text-amber me-1"></i> Document Type</th>
+                    <th style="min-width: 220px;"><i class="fa-solid fa-file-lines text-info me-1"></i> Document Particulars &amp; Ref</th>
+                    <th style="min-width: 190px;"><i class="fa-solid fa-cloud-arrow-up text-primary me-1"></i> Submission Mode &amp; Staff</th>
+                    <th class="text-center" style="min-width: 120px;"><i class="fa-regular fa-calendar-check text-muted me-1"></i> Last Updated</th>
+                    <th class="text-center" style="min-width: 160px;"><i class="fa-solid fa-shield-check text-success me-1"></i> Verification Status</th>
+                    <th style="min-width: 160px;"><i class="fa-solid fa-user-check text-dark me-1"></i> Verifying Authority</th>
+                    <th class="text-end" style="min-width: 130px;"><i class="fa-solid fa-sliders me-1"></i> Actions</th>
                   </tr>
                 </thead>
                 <tbody id="studentDocsTableBody">
@@ -17976,7 +17995,7 @@
               <label class="form-label" style="font-size: 0.74rem; font-weight: 700; color: #475569; text-transform: uppercase; letter-spacing: 0.03em; margin-bottom: 6px; display: block;">
                 Statutory Reason for Withdrawal *
               </label>
-              <select class="form-select" id="tcReason" required style="border: 1px solid #cbd5e1; border-radius: 8px; padding: 9px 12px; font-size: 0.85rem; color: #0f172a;">
+              <select class="form-select" id="tcReason" required style="border: 1px solid #cbd5e1; border-radius: 8px; padding: 9px 36px 9px 12px; font-size: 0.85rem; color: #0f172a;">
                 <option value="Parent Job Transfer / Family Relocation">Parent Job Transfer / Family Relocation</option>
                 <option value="Completed Class X Course">Completed Class X Course</option>
                 <option value="Admission to Junior College">Admission to Junior College</option>

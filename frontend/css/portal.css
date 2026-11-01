@@ -3010,8 +3010,10 @@ body {
   border: 1px solid var(--color-border, #E2E8F0);
   border-radius: var(--radius-lg, 12px);
   box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.05);
-  overflow: hidden;
+  overflow-x: auto;
+  overflow-y: hidden;
   margin-top: 1rem;
+  -webkit-overflow-scrolling: touch;
 }
 
 .student-docs-table {
@@ -25540,4 +25542,41 @@ button.close:hover,
     background: #ffffff !important;
     z-index: 9999999 !important;
   }
+}
+
+/* Student Documents Professional Column Alignment & Layout */
+.student-docs-table th.text-center,
+.student-docs-table td.text-center {
+  text-align: center !important;
+}
+
+.student-docs-table th.text-end,
+.student-docs-table td.text-end {
+  text-align: right !important;
+}
+
+.student-docs-table th {
+  letter-spacing: 0.05em;
+  font-weight: 700;
+  vertical-align: middle;
+}
+
+.student-docs-table td {
+  vertical-align: middle;
+}
+
+.student-docs-table .perf-admno-badge {
+  display: inline-block;
+  padding: 3px 8px;
+  background: #eff6ff;
+  color: #1d4ed8;
+  border: 1px solid #bfdbfe;
+  border-radius: 6px;
+  font-family: 'JetBrains Mono', 'Fira Code', monospace;
+  font-size: 0.78rem;
+  letter-spacing: 0.02em;
+}
+
+#docSearchInput {
+  min-width: 260px;
 }

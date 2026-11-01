@@ -5803,7 +5803,7 @@ const FEE_CATEGORY_AUDIT_DATA = [
 
         <!-- Enrolment Table Card -->
         <div class="table-responsive" style="border: 1px solid #e2e8f0; border-radius: 10px; overflow-x: auto; overflow-y: hidden; background: #ffffff; box-shadow: 0 1px 3px rgba(15,23,42,0.04);">
-          <table class="dossier-data-table table mb-0" style="min-width: 680px; width: 100%; margin-bottom: 0 !important; border: none !important;">
+          <table class="dossier-data-table table mb-0" style="width: 100%; min-width: 650px; margin-bottom: 0 !important; border: none !important;">
             <thead>
               <tr>
                 <th style="width: 16%; white-space: nowrap;">Academic Year</th>
@@ -6281,7 +6281,7 @@ const FEE_CATEGORY_AUDIT_DATA = [
           </div>
           <div class="dossier-header-strip-badges">
             <span class="badge" style="background: #ecfdf5; color: #065f46; border: 1px solid #a7f3d0; font-size: 0.76rem; font-weight: 600; padding: 5px 10px; border-radius: 6px;">
-              <i class="fa-solid fa-signal me-1"></i>SMS Gateway Active
+              <i class="fa-solid fa-tower-broadcast text-success me-1"></i>SMS Gateway Active
             </span>
           </div>
         </div>
@@ -8049,7 +8049,7 @@ const FEE_CATEGORY_AUDIT_DATA = [
         d.docType.toLowerCase().includes(query);
 
       const matchCat = !catVal || d.docType === catVal || d.category === catVal;
-      const matchStatus = !statusVal || d.status === statusVal;
+      const matchStatus = !statusVal || d.status === statusVal || (statusVal === 'Pending Verification' && d.status.includes('Pending'));
       const matchSource = !sourceVal || d.docSource === sourceVal;
       const matchClass = !classVal || d.class === classVal;
 
@@ -8146,7 +8146,7 @@ const FEE_CATEGORY_AUDIT_DATA = [
           </td>
 
           <!-- 2. Admission Number -->
-          <td>
+          <td class="text-center">
             <span class="perf-admno-badge font-bold">${d.admNo}</span>
           </td>
 
