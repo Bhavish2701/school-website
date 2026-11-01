@@ -5321,13 +5321,31 @@ const FEE_CATEGORY_AUDIT_DATA = [
     container.innerHTML = `
       <!-- TAB 1: OVERVIEW -->
       <div class="dossier-tab-pane active" id="pane-dossier-overview">
-        <div class="metrics-quad mb-3" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 12px;">
+        <div class="dossier-header-strip">
+          <div>
+            <div class="dossier-header-strip-sub">Executive Summary • Cumulative Record</div>
+            <h6 class="dossier-header-strip-title">
+              <i class="fa-solid fa-gauge-high text-primary"></i>Authoritative Student Academic &amp; Administrative Dossier
+            </h6>
+            <p class="dossier-header-strip-desc">Consolidated institutional record of academic standing, attendance compliance, and clearance status</p>
+          </div>
+          <div class="dossier-header-strip-badges">
+            <span class="badge" style="background: #eff6ff; color: #1e40af; border: 1px solid #bfdbfe; font-size: 0.76rem; font-weight: 600; padding: 5px 10px; border-radius: 6px;">
+              <i class="fa-solid fa-certificate me-1"></i>AP Board Recognized
+            </span>
+            <span class="badge" style="background: #ecfdf5; color: #065f46; border: 1px solid #a7f3d0; font-size: 0.76rem; font-weight: 600; padding: 5px 10px; border-radius: 6px;">
+              <i class="fa-solid fa-shield-check me-1"></i>Enrolment Validated
+            </span>
+          </div>
+        </div>
+
+        <div class="metrics-quad mb-3" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 14px;">
           <div class="metric-card">
             <div class="metric-icon-wrap icon-blue"><i class="fa-solid fa-award"></i></div>
             <div class="metric-details">
               <span class="metric-label">Cumulative GPA</span>
               <div class="metric-value text-primary">${s.gpa || '8.8'} <span class="text-xs text-muted">/ 10.0</span></div>
-              <div class="metric-trend trend-up"><span>Top 10% in Class</span></div>
+              <div class="metric-trend trend-up"><span>Top 10% in Class ${s.class}</span></div>
             </div>
           </div>
           <div class="metric-card">
@@ -5360,12 +5378,12 @@ const FEE_CATEGORY_AUDIT_DATA = [
           <div class="dossier-section-card">
             <div class="dossier-section-title">
               <i class="fa-solid fa-address-card text-primary"></i>
-              <span>Quick Demographic Profile</span>
+              <span>Quick Demographic Baseline</span>
             </div>
             <div class="dossier-meta-grid">
               <div class="dossier-meta-item">
                 <span class="dossier-meta-label">Gender</span>
-                <span class="dossier-meta-value">${(s.gender || 'Male').toUpperCase()}</span>
+                <span class="dossier-meta-value"><span class="badge" style="background:#eff6ff; color:#1e40af; font-weight:700; padding:3px 8px; border-radius:4px;">${(s.gender || 'Male').toUpperCase()}</span></span>
               </div>
               <div class="dossier-meta-item">
                 <span class="dossier-meta-label">Blood Group</span>
@@ -5375,7 +5393,7 @@ const FEE_CATEGORY_AUDIT_DATA = [
               </div>
               <div class="dossier-meta-item">
                 <span class="dossier-meta-label">Date of Birth</span>
-                <span class="dossier-meta-value">${s.dob || '15-Aug-2012'}</span>
+                <span class="dossier-meta-value">${s.dob || '15-Aug-2012'} <span class="text-muted text-xs">(13 Yrs)</span></span>
               </div>
               <div class="dossier-meta-item">
                 <span class="dossier-meta-label">Mother Tongue</span>
@@ -5383,7 +5401,7 @@ const FEE_CATEGORY_AUDIT_DATA = [
               </div>
               <div class="dossier-meta-item full-width">
                 <span class="dossier-meta-label">Residential Address</span>
-                <span class="dossier-meta-value"><i class="fa-solid fa-location-dot text-muted"></i> ${s.address || 'Srikakulam'}</span>
+                <span class="dossier-meta-value"><i class="fa-solid fa-location-dot text-danger"></i> ${s.address || 'Lawsons Bay Colony, Visakhapatnam'}</span>
               </div>
             </div>
           </div>
@@ -5429,27 +5447,193 @@ const FEE_CATEGORY_AUDIT_DATA = [
 
       <!-- TAB 2: PERSONAL INFORMATION -->
       <div class="dossier-tab-pane" id="pane-dossier-personal">
-        <h6 class="font-bold text-dark mb-3"><i class="fa-solid fa-user text-primary mr-1"></i> Comprehensive Personal &amp; Demographic Profile</h6>
-        <div class="table-responsive">
-          <table class="table table-bordered text-xs">
-            <tbody>
-              <tr><th style="width:25%; background:#f8fafc;">Full Legal Name</th><td><strong>${s.name}</strong> (per official birth certificate)</td></tr>
-              <tr><th style="background:#f8fafc;">Permanent Student ID</th><td><code>${s.studentId}</code></td></tr>
-              <tr><th style="background:#f8fafc;">Official Admission Number</th><td><strong>${s.admNo}</strong></td></tr>
-              <tr><th style="background:#f8fafc;">Date of Birth &amp; Age</th><td>${s.dob || '15-Aug-2012'} (13 years)</td></tr>
-              <tr><th style="background:#f8fafc;">Gender &amp; Nationality</th><td>${(s.gender || 'male').toUpperCase()} • ${s.nationality || 'Indian'}</td></tr>
-              <tr><th style="background:#f8fafc;">Blood Group</th><td><span class="badge bg-danger text-white">${s.bloodGroup || 'O+'}</span> (Medical Emergency Record)</td></tr>
-              <tr><th style="background:#f8fafc;">Mother Tongue</th><td>${s.motherTongue || 'Telugu'}</td></tr>
-              <tr><th style="background:#f8fafc;">Residential Address</th><td>${s.address || 'D.No 4-12, Main Road, Srikakulam'}</td></tr>
-              <tr><th style="background:#f8fafc;">Support &amp; Accessibility (Restricted)</th><td><span class="text-muted">${s.supportInfo}</span></td></tr>
-            </tbody>
-          </table>
+        <div class="dossier-header-strip">
+          <div>
+            <div class="dossier-header-strip-sub">Statutory Pupil Record • U-DISE+ / AP State Board Verified</div>
+            <h6 class="dossier-header-strip-title">
+              <i class="fa-solid fa-id-card-clip text-primary"></i>Comprehensive Personal &amp; Demographic Profile
+            </h6>
+            <p class="dossier-header-strip-desc">Authoritative civil identity, verified birth particulars, and demographic master record</p>
+          </div>
+          <div class="dossier-header-strip-badges">
+            <span class="badge" style="background: #eff6ff; color: #1e40af; border: 1px solid #bfdbfe; font-size: 0.76rem; font-weight: 600; padding: 5px 10px; border-radius: 6px;">
+              <i class="fa-solid fa-certificate me-1"></i>Birth Certificate Verified
+            </span>
+            <span class="badge" style="background: #ecfdf5; color: #065f46; border: 1px solid #a7f3d0; font-size: 0.76rem; font-weight: 600; padding: 5px 10px; border-radius: 6px;">
+              <i class="fa-solid fa-fingerprint me-1"></i>Aadhaar Matched
+            </span>
+          </div>
+        </div>
+
+        <div class="dossier-cards-grid">
+          <!-- Card 1: Civil Identity & Official Identifiers -->
+          <div class="dossier-section-card">
+            <div class="dossier-section-title">
+              <i class="fa-solid fa-id-card text-primary"></i>
+              <span>Civil Identity &amp; Government Identifiers</span>
+            </div>
+            <div class="dossier-meta-grid">
+              <div class="dossier-meta-item full-width">
+                <span class="dossier-meta-label">Full Legal Name</span>
+                <span class="dossier-meta-value" style="font-size: 0.95rem;">
+                  <strong style="color: #0f172a;">${s.name}</strong>
+                  <span class="badge" style="background: #eff6ff; color: #1e40af; border: 1px solid #bfdbfe; font-size: 0.7rem; font-weight: 600; padding: 2px 7px; border-radius: 4px;">
+                    <i class="fa-solid fa-check me-1 text-primary"></i>Official Birth Cert
+                  </span>
+                </span>
+              </div>
+              <div class="dossier-meta-item">
+                <span class="dossier-meta-label">Permanent Student ID</span>
+                <span class="dossier-meta-value">
+                  <code style="background: #f1f5f9; padding: 3px 8px; border-radius: 5px; font-weight: 700; color: #1e40af; font-size: 0.82rem;">${s.studentId}</code>
+                </span>
+              </div>
+              <div class="dossier-meta-item">
+                <span class="dossier-meta-label">Official Admission Number</span>
+                <span class="dossier-meta-value font-monospace" style="font-weight: 700; color: #0f172a;">${s.admNo}</span>
+              </div>
+              <div class="dossier-meta-item">
+                <span class="dossier-meta-label">U-DISE+ / AP Child Info ID</span>
+                <span class="dossier-meta-value font-monospace text-muted" style="font-size: 0.8rem;">AP-${(s.studentId || 'STU-SV-0001').replace('STU-', '')}-2023</span>
+              </div>
+              <div class="dossier-meta-item">
+                <span class="dossier-meta-label">Class &amp; Roll Number</span>
+                <span class="dossier-meta-value">
+                  <span class="badge" style="background: #eff6ff; color: #1e40af; border: 1px solid #bfdbfe; font-weight: 700; padding: 3px 8px; border-radius: 4px;">Class ${s.class}-${s.section || 'A'}</span>
+                  <span class="text-muted" style="font-size: 0.78rem;">Roll #${s.rollNo || '801'}</span>
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 2: Demographic & Birth Particulars -->
+          <div class="dossier-section-card">
+            <div class="dossier-section-title">
+              <i class="fa-solid fa-cake-candles text-primary"></i>
+              <span>Demographic &amp; Birth Particulars</span>
+            </div>
+            <div class="dossier-meta-grid">
+              <div class="dossier-meta-item">
+                <span class="dossier-meta-label">Date of Birth &amp; Age</span>
+                <span class="dossier-meta-value">
+                  <strong>${s.dob || '24 Sep 2012'}</strong>
+                  <span class="text-muted" style="font-size: 0.78rem;">(13 Years)</span>
+                </span>
+              </div>
+              <div class="dossier-meta-item">
+                <span class="dossier-meta-label">Gender &amp; Nationality</span>
+                <span class="dossier-meta-value">
+                  <span class="badge" style="background: #eff6ff; color: #1e40af; font-weight: 700; padding: 3px 8px; border-radius: 4px;">${(s.gender || 'Male').toUpperCase()}</span>
+                  <span class="badge" style="background: #f8fafc; color: #475569; border: 1px solid #e2e8f0; font-weight: 600; padding: 3px 7px; border-radius: 4px;">${s.nationality || 'Indian'}</span>
+                </span>
+              </div>
+              <div class="dossier-meta-item">
+                <span class="dossier-meta-label">Mother Tongue</span>
+                <span class="dossier-meta-value">${s.motherTongue || 'Telugu'}</span>
+              </div>
+              <div class="dossier-meta-item">
+                <span class="dossier-meta-label">Medium of Instruction</span>
+                <span class="dossier-meta-value">English Medium</span>
+              </div>
+              <div class="dossier-meta-item">
+                <span class="dossier-meta-label">Admission Category</span>
+                <span class="dossier-meta-value"><span class="badge" style="background: #ecfdf5; color: #065f46; border: 1px solid #a7f3d0; font-weight: 600; padding: 3px 8px; border-radius: 4px;">${s.admissionCategory || 'General Merit'}</span></span>
+              </div>
+              <div class="dossier-meta-item">
+                <span class="dossier-meta-label">State Domicile</span>
+                <span class="dossier-meta-value">Andhra Pradesh</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 3: Emergency Health & Medical Profile -->
+          <div class="dossier-section-card">
+            <div class="dossier-section-title">
+              <i class="fa-solid fa-heart-pulse text-danger"></i>
+              <span>Emergency Health &amp; Medical Baseline</span>
+            </div>
+            <div class="dossier-meta-grid">
+              <div class="dossier-meta-item">
+                <span class="dossier-meta-label">Blood Group</span>
+                <span class="dossier-meta-value">
+                  <span class="badge bg-danger text-white" style="font-size: 0.82rem; font-weight: 700; padding: 4px 10px; border-radius: 6px;">
+                    <i class="fa-solid fa-droplet me-1"></i>${s.bloodGroup || 'O+'}
+                  </span>
+                  <span class="text-muted ms-1" style="font-size: 0.74rem;">(Emergency Record)</span>
+                </span>
+              </div>
+              <div class="dossier-meta-item">
+                <span class="dossier-meta-label">Physical Fitness</span>
+                <span class="dossier-meta-value">
+                  <span class="badge" style="background: #ecfdf5; color: #065f46; border: 1px solid #a7f3d0; font-size: 0.76rem; font-weight: 700; padding: 4px 8px; border-radius: 6px;">
+                    <i class="fa-solid fa-circle-check text-success me-1"></i>Medically Fit
+                  </span>
+                </span>
+              </div>
+              <div class="dossier-meta-item">
+                <span class="dossier-meta-label">Sensory Screening</span>
+                <span class="dossier-meta-value" style="font-size: 0.82rem; color: #334155;">6/6 Vision • Normal Hearing</span>
+              </div>
+              <div class="dossier-meta-item">
+                <span class="dossier-meta-label">Known Allergies</span>
+                <span class="dossier-meta-value"><span class="badge" style="background: #f1f5f9; color: #475569; padding: 3px 8px; border-radius: 4px;">Nil Declared Allergies</span></span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 4: Residential Coordinates & Inclusive Support -->
+          <div class="dossier-section-card">
+            <div class="dossier-section-title">
+              <i class="fa-solid fa-map-location-dot text-primary"></i>
+              <span>Residential Coordinates &amp; Accessibility</span>
+            </div>
+            <div class="dossier-meta-grid">
+              <div class="dossier-meta-item full-width">
+                <span class="dossier-meta-label">Permanent Residential Address</span>
+                <span class="dossier-meta-value" style="color: #0f172a;">
+                  <i class="fa-solid fa-location-dot text-danger me-1"></i>${s.address || 'Lawsons Bay Colony, Visakhapatnam'}
+                </span>
+              </div>
+              <div class="dossier-meta-item">
+                <span class="dossier-meta-label">Municipal Ward</span>
+                <span class="dossier-meta-value text-muted" style="font-size: 0.8rem;">Ward 18, GVMC Zone</span>
+              </div>
+              <div class="dossier-meta-item">
+                <span class="dossier-meta-label">Distance to Campus</span>
+                <span class="dossier-meta-value" style="font-size: 0.82rem;">3.2 km (Zone 2)</span>
+              </div>
+              <div class="dossier-meta-item full-width">
+                <span class="dossier-meta-label">Support &amp; Accessibility (Restricted)</span>
+                <div class="p-2 border rounded mt-1" style="background: #f8fafc; font-size: 0.78rem; line-height: 1.45; color: #475569;">
+                  <i class="fa-solid fa-universal-access text-primary me-1"></i>
+                  <strong>Support Profile:</strong> ${s.supportInfo || 'Standard educational and physical development support profile. No restricted clinical intervention required.'}
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
       <!-- TAB 3: PARENTS AND GUARDIANS -->
       <div class="dossier-tab-pane" id="pane-dossier-parents">
-        <h6 class="font-bold text-dark mb-3"><i class="fa-solid fa-users text-primary mr-1"></i> Parents &amp; Authorized Legal Guardians</h6>
+        <div class="dossier-header-strip">
+          <div>
+            <div class="dossier-header-strip-sub">Statutory Guardianship • Authorized Legal Designees</div>
+            <h6 class="dossier-header-strip-title">
+              <i class="fa-solid fa-users text-primary"></i>Parents &amp; Authorized Legal Guardians
+            </h6>
+            <p class="dossier-header-strip-desc">Verified primary guardians, emergency points of contact, and school interaction authority</p>
+          </div>
+          <div class="dossier-header-strip-badges">
+            <span class="badge" style="background: #ecfdf5; color: #065f46; border: 1px solid #a7f3d0; font-size: 0.76rem; font-weight: 600; padding: 5px 10px; border-radius: 6px;">
+              <i class="fa-solid fa-circle-check me-1"></i>Aadhaar KYC Verified
+            </span>
+            <span class="badge" style="background: #eff6ff; color: #1e40af; border: 1px solid #bfdbfe; font-size: 0.76rem; font-weight: 600; padding: 5px 10px; border-radius: 6px;">
+              <i class="fa-solid fa-user-check me-1"></i>PTM Designee Active
+            </span>
+          </div>
+        </div>
+
         <div class="dossier-cards-grid">
           <div class="dossier-section-card">
             <div class="dossier-section-title">
@@ -5475,7 +5659,7 @@ const FEE_CATEGORY_AUDIT_DATA = [
               </div>
               <div class="dossier-meta-item full-width">
                 <span class="dossier-meta-label">Residential Address</span>
-                <span class="dossier-meta-value"><i class="fa-solid fa-location-dot text-muted"></i> ${s.address}</span>
+                <span class="dossier-meta-value"><i class="fa-solid fa-location-dot text-danger"></i> ${s.address || 'Lawsons Bay Colony, Visakhapatnam'}</span>
               </div>
             </div>
           </div>
@@ -5513,19 +5697,82 @@ const FEE_CATEGORY_AUDIT_DATA = [
 
       <!-- TAB 4: ADMISSION HISTORY -->
       <div class="dossier-tab-pane" id="pane-dossier-admission">
-        <h6 class="font-bold text-dark mb-3"><i class="fa-solid fa-file-signature text-primary mr-1"></i> Authoritative Admission History &amp; Quota</h6>
-        <div class="table-responsive">
-          <table class="table table-bordered text-xs">
-            <tbody>
-              <tr><th style="width:30%; background:#f8fafc;">Original Application ID</th><td><code>APP-2023-0142</code></td></tr>
-              <tr><th style="background:#f8fafc;">Official Admission Number</th><td><strong>${s.admNo}</strong> (Permanent Serial)</td></tr>
-              <tr><th style="background:#f8fafc;">Admission Date</th><td>${s.admissionDate || '12-Jun-2023'}</td></tr>
-              <tr><th style="background:#f8fafc;">Class at Admission</th><td>Class ${s.class === 'X' ? 'VII' : (s.class === 'IX' ? 'VI' : 'PP')}</td></tr>
-              <tr><th style="background:#f8fafc;">Admission Category</th><td><span class="badge bg-primary text-white">${s.admissionCategory || 'General Merit'}</span></td></tr>
-              <tr><th style="background:#f8fafc;">Fee Category</th><td>${s.feeCategory || 'Standard Board Fee'}</td></tr>
-              <tr><th style="background:#f8fafc;">Admitting Authority</th><td>Executive Principal Smt. Gorle Varalakshmi</td></tr>
-            </tbody>
-          </table>
+        <div class="dossier-header-strip">
+          <div>
+            <div class="dossier-header-strip-sub">Statutory Enrolment • Board Admission Register</div>
+            <h6 class="dossier-header-strip-title">
+              <i class="fa-solid fa-file-signature text-primary"></i>Authoritative Admission History &amp; Quota Ledger
+            </h6>
+            <p class="dossier-header-strip-desc">Initial admission records, entry class credentials, and statutory verification status</p>
+          </div>
+          <div class="dossier-header-strip-badges">
+            <span class="badge" style="background: #eff6ff; color: #1e40af; border: 1px solid #bfdbfe; font-size: 0.76rem; font-weight: 600; padding: 5px 10px; border-radius: 6px;">
+              <i class="fa-solid fa-shield-halved me-1"></i>Permanent Serial Record
+            </span>
+            <span class="badge" style="background: #ecfdf5; color: #065f46; border: 1px solid #a7f3d0; font-size: 0.76rem; font-weight: 600; padding: 5px 10px; border-radius: 6px;">
+              <i class="fa-solid fa-check-double me-1"></i>U-DISE+ Synchronized
+            </span>
+          </div>
+        </div>
+
+        <div class="dossier-cards-grid">
+          <div class="dossier-section-card">
+            <div class="dossier-section-title">
+              <i class="fa-solid fa-stamp text-primary"></i>
+              <span>Admission Particulars &amp; Quota</span>
+            </div>
+            <div class="dossier-meta-grid">
+              <div class="dossier-meta-item">
+                <span class="dossier-meta-label">Original Application ID</span>
+                <span class="dossier-meta-value"><code style="background:#f1f5f9; padding:2px 6px; border-radius:4px; font-size:0.8rem; color:#1e40af;">APP-2023-0142</code></span>
+              </div>
+              <div class="dossier-meta-item">
+                <span class="dossier-meta-label">Official Admission No</span>
+                <span class="dossier-meta-value font-monospace" style="font-weight:700; color:#0f172a;">${s.admNo}</span>
+              </div>
+              <div class="dossier-meta-item">
+                <span class="dossier-meta-label">Formal Admission Date</span>
+                <span class="dossier-meta-value">${s.admissionDate || '12-Jun-2023'}</span>
+              </div>
+              <div class="dossier-meta-item">
+                <span class="dossier-meta-label">Class at Initial Entry</span>
+                <span class="dossier-meta-value"><span class="badge" style="background:#eff6ff; color:#1e40af; border:1px solid #bfdbfe; font-weight:700; padding:3px 8px; border-radius:4px;">Class ${s.class === 'X' ? 'VII' : (s.class === 'IX' ? 'VI' : 'PP')}</span></span>
+              </div>
+              <div class="dossier-meta-item">
+                <span class="dossier-meta-label">Admission Category</span>
+                <span class="dossier-meta-value"><span class="badge" style="background:#ecfdf5; color:#065f46; border:1px solid #a7f3d0; font-weight:600; padding:3px 8px; border-radius:4px;">${s.admissionCategory || 'General Merit'}</span></span>
+              </div>
+              <div class="dossier-meta-item">
+                <span class="dossier-meta-label">Fee Structure</span>
+                <span class="dossier-meta-value">${s.feeCategory || 'Standard Board Fee'}</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="dossier-section-card">
+            <div class="dossier-section-title">
+              <i class="fa-solid fa-building-columns text-primary"></i>
+              <span>Statutory Approvals &amp; Prior Credentials</span>
+            </div>
+            <div class="dossier-meta-grid">
+              <div class="dossier-meta-item full-width">
+                <span class="dossier-meta-label">Sanctioning / Admitting Authority</span>
+                <span class="dossier-meta-value"><strong>Executive Principal Smt. Gorle Varalakshmi</strong></span>
+              </div>
+              <div class="dossier-meta-item">
+                <span class="dossier-meta-label">Prior Institution</span>
+                <span class="dossier-meta-value">${s.previousEducation?.school || "St. Ann's High School"}</span>
+              </div>
+              <div class="dossier-meta-item">
+                <span class="dossier-meta-label">Prior Transfer Certificate</span>
+                <span class="dossier-meta-value"><code style="background:#f1f5f9; padding:2px 6px; border-radius:4px; font-size:0.78rem;">${s.previousEducation?.tcNo || 'TC-2023-089'}</code></span>
+              </div>
+              <div class="dossier-meta-item full-width">
+                <span class="dossier-meta-label">Board Clearance Status</span>
+                <span class="dossier-meta-value"><span class="badge" style="background:#ecfdf5; color:#065f46; border:1px solid #a7f3d0; font-size:0.78rem; font-weight:700; padding:4px 8px; border-radius:6px;"><i class="fa-solid fa-circle-check text-success me-1"></i>AP State Child Info Registered &bull; Verified</span></span>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -5670,31 +5917,109 @@ const FEE_CATEGORY_AUDIT_DATA = [
 
       <!-- TAB 7: ATTENDANCE -->
       <div class="dossier-tab-pane" id="pane-dossier-attendance">
-        <h6 class="font-bold text-dark mb-3"><i class="fa-solid fa-calendar-check text-primary mr-1"></i> Monthly &amp; Period Attendance Breakdown</h6>
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin-bottom: 1.25rem;">
-          <div class="p-3 bg-light border rounded-3 text-center">
-            <span class="dossier-meta-label d-block mb-1">Working Days</span>
-            <strong style="font-size: 1.25rem; color: #1e293b; display: block;">${s.attendanceStats?.workingDays || 182}</strong>
+        <div class="dossier-header-strip">
+          <div>
+            <div class="dossier-header-strip-sub">Statutory Attendance • AP State Board Compliance</div>
+            <h6 class="dossier-header-strip-title">
+              <i class="fa-solid fa-calendar-check text-primary"></i>Monthly &amp; Period Attendance Breakdown
+            </h6>
+            <p class="dossier-header-strip-desc">Official biometric and register attendance records with Board minimum 75% threshold indicator</p>
           </div>
-          <div class="p-3 bg-light border rounded-3 text-center">
-            <span class="dossier-meta-label d-block mb-1">Present Days</span>
-            <strong style="font-size: 1.25rem; color: #10b981; display: block;">${s.attendanceStats?.presentDays || 172}</strong>
+          <div class="dossier-header-strip-badges">
+            <span class="badge" style="background: #ecfdf5; color: #065f46; border: 1px solid #a7f3d0; font-size: 0.76rem; font-weight: 600; padding: 5px 10px; border-radius: 6px;">
+              <i class="fa-solid fa-circle-check me-1"></i>Eligible for Board Exams (≥ 75%)
+            </span>
           </div>
-          <div class="p-3 bg-light border rounded-3 text-center">
-            <span class="dossier-meta-label d-block mb-1">Absent Days</span>
-            <strong style="font-size: 1.25rem; color: #ef4444; display: block;">${s.attendanceStats?.absentDays || 7}</strong>
+        </div>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 14px; margin-bottom: 1.25rem;">
+          <div class="p-3 bg-white border rounded-3 text-center" style="box-shadow: 0 1px 3px rgba(15,23,42,0.03);">
+            <span class="dossier-meta-label d-block mb-1">Total Working Days</span>
+            <strong style="font-size: 1.35rem; color: #1e293b; display: block;">${s.attendanceStats?.workingDays || 182}</strong>
+            <span class="text-xs text-muted">Academic Term 2025-26</span>
           </div>
-          <div class="p-3 bg-light border rounded-3 text-center">
-            <span class="dossier-meta-label d-block mb-1">Attendance Rate</span>
-            <strong style="font-size: 1.25rem; color: #2563eb; display: block;">${s.attendanceStats?.pct || s.attendance}</strong>
+          <div class="p-3 bg-white border rounded-3 text-center" style="box-shadow: 0 1px 3px rgba(15,23,42,0.03);">
+            <span class="dossier-meta-label d-block mb-1">Days Present</span>
+            <strong style="font-size: 1.35rem; color: #10b981; display: block;">${s.attendanceStats?.presentDays || 172}</strong>
+            <span class="text-xs text-success font-weight-bold"><i class="fa-solid fa-arrow-trend-up me-1"></i>Regular Attendance</span>
+          </div>
+          <div class="p-3 bg-white border rounded-3 text-center" style="box-shadow: 0 1px 3px rgba(15,23,42,0.03);">
+            <span class="dossier-meta-label d-block mb-1">Approved Leaves / Absent</span>
+            <strong style="font-size: 1.35rem; color: #ef4444; display: block;">${s.attendanceStats?.absentDays || 7}</strong>
+            <span class="text-xs text-muted">Authorized Parent Slips</span>
+          </div>
+          <div class="p-3 bg-white border rounded-3 text-center" style="box-shadow: 0 1px 3px rgba(15,23,42,0.03);">
+            <span class="dossier-meta-label d-block mb-1">Cumulative Percentage</span>
+            <strong style="font-size: 1.35rem; color: #2563eb; display: block;">${s.attendanceStats?.pct || s.attendance}</strong>
+            <span class="badge" style="background:#ecfdf5; color:#065f46; font-size:0.72rem; padding:2px 6px;">Exceeds Mandatory 75%</span>
           </div>
         </div>
       </div>
 
       <!-- TAB 8: ACADEMIC PERFORMANCE -->
       <div class="dossier-tab-pane" id="pane-dossier-performance">
-        <h6 class="font-bold text-dark mb-3"><i class="fa-solid fa-chart-line text-primary mr-1"></i> GPA Progression &amp; Continuous Evaluation</h6>
-        <p class="text-xs text-muted">Cumulative Grade Point Average: <strong>${s.gpa || '8.8'} / 10.0</strong> (Consistently in Top Quartile of Class ${s.class}-${s.section}).</p>
+        <div class="dossier-header-strip">
+          <div>
+            <div class="dossier-header-strip-sub">Scholastic Performance • Continuous Comprehensive Evaluation</div>
+            <h6 class="dossier-header-strip-title">
+              <i class="fa-solid fa-chart-line text-primary"></i>GPA Progression &amp; Continuous Evaluation
+            </h6>
+            <p class="dossier-header-strip-desc">Consolidated grade point average, quartile distribution, and scholastic competencies</p>
+          </div>
+          <div class="dossier-header-strip-badges">
+            <span class="badge" style="background: #eff6ff; color: #1e40af; border: 1px solid #bfdbfe; font-size: 0.76rem; font-weight: 600; padding: 5px 10px; border-radius: 6px;">
+              <i class="fa-solid fa-award me-1"></i>Top Decile in Class ${s.class}
+            </span>
+          </div>
+        </div>
+
+        <div class="dossier-cards-grid">
+          <div class="dossier-section-card">
+            <div class="dossier-section-title">
+              <i class="fa-solid fa-graduation-cap text-primary"></i>
+              <span>Scholastic GPA &amp; Academic Standing</span>
+            </div>
+            <div class="dossier-meta-grid">
+              <div class="dossier-meta-item">
+                <span class="dossier-meta-label">Cumulative GPA</span>
+                <span class="dossier-meta-value text-primary" style="font-size:1.15rem; font-weight:700;">${s.gpa || '8.8'} <span class="text-xs text-muted">/ 10.0</span></span>
+              </div>
+              <div class="dossier-meta-item">
+                <span class="dossier-meta-label">Class Percentile</span>
+                <span class="dossier-meta-value"><span class="badge" style="background:#ecfdf5; color:#065f46; font-weight:700; padding:4px 8px; border-radius:4px;">Top 10% Decile</span></span>
+              </div>
+              <div class="dossier-meta-item full-width">
+                <span class="dossier-meta-label">Scholastic Assessment Summary</span>
+                <span class="dossier-meta-value text-muted" style="font-size:0.84rem; line-height:1.45;">Demonstrates superior proficiency in Mathematics and Science, with commendable participation in co-curricular literary forums.</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="dossier-section-card">
+            <div class="dossier-section-title">
+              <i class="fa-solid fa-compass-drafting text-primary"></i>
+              <span>Formative &amp; Summative Milestones</span>
+            </div>
+            <div class="dossier-meta-grid">
+              <div class="dossier-meta-item">
+                <span class="dossier-meta-label">Formative Assessment 1</span>
+                <span class="dossier-meta-value"><strong>48 / 50 (96%)</strong></span>
+              </div>
+              <div class="dossier-meta-item">
+                <span class="dossier-meta-label">Formative Assessment 2</span>
+                <span class="dossier-meta-value"><strong>47 / 50 (94%)</strong></span>
+              </div>
+              <div class="dossier-meta-item">
+                <span class="dossier-meta-label">Term 1 Summative Exam</span>
+                <span class="dossier-meta-value text-success font-monospace" style="font-weight:700;">497 / 550 (90.4%)</span>
+              </div>
+              <div class="dossier-meta-item">
+                <span class="dossier-meta-label">Promotion Eligibility</span>
+                <span class="dossier-meta-value"><span class="badge" style="background:#eff6ff; color:#1e40af; border:1px solid #bfdbfe; font-weight:700; padding:3px 8px; border-radius:4px;">Clear Path to Next Class</span></span>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
 
       <!-- TAB 9: EXAMINATION RESULTS -->
@@ -5742,43 +6067,253 @@ const FEE_CATEGORY_AUDIT_DATA = [
 
       <!-- TAB 10: FEES AND PAYMENTS -->
       <div class="dossier-tab-pane" id="pane-dossier-fees">
-        <h6 class="font-bold text-dark mb-3"><i class="fa-solid fa-receipt text-primary mr-1"></i> Fee Ledger, Receipts &amp; Dues Status</h6>
-        <div class="p-3 bg-light rounded-3 border text-xs">
-          <div>Annual Tuition Fee: <strong>₹36,000</strong></div>
-          <div class="mt-1">Fee Status: <strong class="text-success">${s.feeStatus || 'Paid in Full'}</strong></div>
-          <div class="mt-1">Last Receipt: <code>REC-2025-0482</code> (Sanctioned via Accounts Counter)</div>
+        <div class="dossier-header-strip">
+          <div>
+            <div class="dossier-header-strip-sub">Financial Clearance • Audited Accounts Ledger</div>
+            <h6 class="dossier-header-strip-title">
+              <i class="fa-solid fa-receipt text-primary"></i>Fee Ledger, Receipts &amp; Dues Reconciliation
+            </h6>
+            <p class="dossier-header-strip-desc">Verified fee structure, accounts counter receipts, and term clearance certification</p>
+          </div>
+          <div class="dossier-header-strip-badges">
+            <span class="badge" style="background: ${isPaid ? '#ecfdf5' : '#fffbeb'}; color: ${isPaid ? '#065f46' : '#92400e'}; border: 1px solid ${isPaid ? '#a7f3d0' : '#fde68a'}; font-size: 0.76rem; font-weight: 600; padding: 5px 10px; border-radius: 6px;">
+              <i class="fa-solid fa-${isPaid ? 'circle-check' : 'hourglass-half'} me-1"></i>${isPaid ? 'All Term Dues Settled' : 'Payment Review'}
+            </span>
+          </div>
+        </div>
+
+        <div class="dossier-cards-grid">
+          <div class="dossier-section-card">
+            <div class="dossier-section-title">
+              <i class="fa-solid fa-wallet text-primary"></i>
+              <span>Financial Summary &amp; Balance</span>
+            </div>
+            <div class="dossier-meta-grid">
+              <div class="dossier-meta-item">
+                <span class="dossier-meta-label">Annual Tuition Fee</span>
+                <span class="dossier-meta-value font-monospace" style="font-size:1.05rem; font-weight:700;">₹36,000</span>
+              </div>
+              <div class="dossier-meta-item">
+                <span class="dossier-meta-label">Clearance Status</span>
+                <span class="dossier-meta-value"><strong class="${isPaid ? 'text-success' : 'text-danger'}">${s.feeStatus || 'Paid in Full'}</strong></span>
+              </div>
+              <div class="dossier-meta-item">
+                <span class="dossier-meta-label">Outstanding Balance</span>
+                <span class="dossier-meta-value font-monospace text-success" style="font-weight:700;">₹0.00</span>
+              </div>
+              <div class="dossier-meta-item">
+                <span class="dossier-meta-label">Next Due Date</span>
+                <span class="dossier-meta-value text-muted">Term 2 (10-Nov-2025)</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="dossier-section-card">
+            <div class="dossier-section-title">
+              <i class="fa-solid fa-file-invoice text-primary"></i>
+              <span>Latest Sanctioned Receipt</span>
+            </div>
+            <div class="dossier-meta-grid">
+              <div class="dossier-meta-item">
+                <span class="dossier-meta-label">Receipt Number</span>
+                <span class="dossier-meta-value"><code style="background:#f1f5f9; padding:2px 6px; border-radius:4px; font-size:0.82rem; color:#1e40af;">REC-2025-0482</code></span>
+              </div>
+              <div class="dossier-meta-item">
+                <span class="dossier-meta-label">Payment Channel</span>
+                <span class="dossier-meta-value">Accounts Counter (Cash/UPI)</span>
+              </div>
+              <div class="dossier-meta-item full-width">
+                <span class="dossier-meta-label">Ledger Reconciled By</span>
+                <span class="dossier-meta-value text-muted" style="font-size:0.84rem;">Accounts Officer Sri M. Srinivas Rao &bull; Verified on 14-Aug-2025</span>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
       <!-- TAB 11: TRANSPORT -->
       <div class="dossier-tab-pane" id="pane-dossier-transport">
-        <h6 class="font-bold text-dark mb-3"><i class="fa-solid fa-bus text-primary mr-1"></i> School Fleet Route &amp; Pickup Allocation</h6>
-        <div class="p-3 bg-light rounded-3 border text-xs">
-          <div>Allocated Service: <strong>${s.transportAllocation || 'Route 3 - Jagannadhapuram'}</strong></div>
-          <div class="mt-1">Pickup Stop: <strong>RTC Complex Junction</strong> (07:45 AM Pickup / 04:30 PM Drop)</div>
-          <div class="mt-1">Driver Contact: Sri M. Appa Rao (Phone: 9848099112)</div>
+        <div class="dossier-header-strip">
+          <div>
+            <div class="dossier-header-strip-sub">Student Logistics • Fleet &amp; Route Management</div>
+            <h6 class="dossier-header-strip-title">
+              <i class="fa-solid fa-bus text-primary"></i>School Fleet Route &amp; Pickup Allocation
+            </h6>
+            <p class="dossier-header-strip-desc">Designated bus route, verified pickup/drop timings, and authorized crew credentials</p>
+          </div>
+          <div class="dossier-header-strip-badges">
+            <span class="badge" style="background: #eff6ff; color: #1e40af; border: 1px solid #bfdbfe; font-size: 0.76rem; font-weight: 600; padding: 5px 10px; border-radius: 6px;">
+              <i class="fa-solid fa-route me-1"></i>Active Seat Allocation
+            </span>
+          </div>
+        </div>
+
+        <div class="dossier-cards-grid">
+          <div class="dossier-section-card">
+            <div class="dossier-section-title">
+              <i class="fa-solid fa-bus-simple text-primary"></i>
+              <span>Route &amp; Stoppage Details</span>
+            </div>
+            <div class="dossier-meta-grid">
+              <div class="dossier-meta-item">
+                <span class="dossier-meta-label">Allocated Service</span>
+                <span class="dossier-meta-value"><strong>${s.transportAllocation || 'Route 3 - Jagannadhapuram'}</strong></span>
+              </div>
+              <div class="dossier-meta-item">
+                <span class="dossier-meta-label">Designated Bus Stop</span>
+                <span class="dossier-meta-value" style="color:#0f172a;"><i class="fa-solid fa-location-dot text-danger me-1"></i>RTC Complex Junction</span>
+              </div>
+              <div class="dossier-meta-item">
+                <span class="dossier-meta-label">Morning Pickup Time</span>
+                <span class="dossier-meta-value font-monospace text-primary"><strong>07:45 AM</strong></span>
+              </div>
+              <div class="dossier-meta-item">
+                <span class="dossier-meta-label">Evening Drop Time</span>
+                <span class="dossier-meta-value font-monospace text-primary"><strong>04:30 PM</strong></span>
+              </div>
+            </div>
+          </div>
+
+          <div class="dossier-section-card">
+            <div class="dossier-section-title">
+              <i class="fa-solid fa-shield-heart text-primary"></i>
+              <span>Vehicle &amp; Crew Information</span>
+            </div>
+            <div class="dossier-meta-grid">
+              <div class="dossier-meta-item">
+                <span class="dossier-meta-label">Vehicle Registration</span>
+                <span class="dossier-meta-value"><span class="badge" style="background:#f1f5f9; color:#1e293b; font-family:monospace; font-size:0.82rem;">AP 39 TZ 1042</span></span>
+              </div>
+              <div class="dossier-meta-item">
+                <span class="dossier-meta-label">Assigned Driver</span>
+                <span class="dossier-meta-value">Sri M. Appa Rao</span>
+              </div>
+              <div class="dossier-meta-item">
+                <span class="dossier-meta-label">Driver Contact</span>
+                <span class="dossier-meta-value"><a href="tel:9848099112" class="phone-link"><i class="fa-solid fa-phone text-primary"></i> 9848099112</a></span>
+              </div>
+              <div class="dossier-meta-item">
+                <span class="dossier-meta-label">Transport Attendant</span>
+                <span class="dossier-meta-value">Smt. P. Kumari</span>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
       <!-- TAB 12: DISCIPLINE AND WELFARE (RESTRICTED) -->
       <div class="dossier-tab-pane" id="pane-dossier-discipline">
-        <div class="d-flex align-items-center justify-content-between mb-3">
-          <h6 class="font-bold text-dark mb-0"><i class="fa-solid fa-user-shield text-danger mr-1"></i> Pastoral Care, Discipline &amp; Welfare (Restricted)</h6>
-          <span class="badge bg-danger text-white"><i class="fa-solid fa-lock mr-1"></i>Confidential / Authorized Staff Only</span>
+        <div class="dossier-header-strip">
+          <div>
+            <div class="dossier-header-strip-sub">Confidential Pastoral Care &amp; Student Welfare</div>
+            <h6 class="dossier-header-strip-title">
+              <i class="fa-solid fa-user-shield text-danger"></i>Pastoral Care, Discipline &amp; Welfare Record
+            </h6>
+            <p class="dossier-header-strip-desc">Confidential student welfare notes, scholastic honors, and disciplinary standing</p>
+          </div>
+          <div class="dossier-header-strip-badges">
+            <span class="badge bg-danger text-white" style="font-size: 0.76rem; font-weight: 600; padding: 5px 10px; border-radius: 6px;">
+              <i class="fa-solid fa-lock me-1"></i>Confidential / Authorized Staff Only
+            </span>
+          </div>
         </div>
-        <div class="p-3 bg-light rounded-3 border text-xs">
-          <div><i class="fa-solid fa-star text-amber mr-1"></i> Commendation: Star Student for Mathematics Olympiad Achievement.</div>
-          <div class="mt-2"><i class="fa-solid fa-circle-check text-success mr-1"></i> Disciplinary Standing: Clean Record – Zero Infractions.</div>
-          <div class="mt-2"><i class="fa-solid fa-user-nurse text-primary mr-1"></i> Pastoral Care: Routine welfare assessment completed by Smt. D. Leela (Counselor).</div>
+
+        <div class="dossier-cards-grid">
+          <div class="dossier-section-card">
+            <div class="dossier-section-title">
+              <i class="fa-solid fa-award text-amber"></i>
+              <span>Commendations &amp; Honors</span>
+            </div>
+            <div class="dossier-meta-grid">
+              <div class="dossier-meta-item full-width">
+                <span class="dossier-meta-label">Scholastic Commendation</span>
+                <span class="dossier-meta-value"><i class="fa-solid fa-star text-amber me-1"></i>Star Student Award for District Mathematics Olympiad Achievement.</span>
+              </div>
+              <div class="dossier-meta-item full-width">
+                <span class="dossier-meta-label">Disciplinary Standing</span>
+                <span class="dossier-meta-value"><span class="badge" style="background:#ecfdf5; color:#065f46; border:1px solid #a7f3d0; font-size:0.78rem; font-weight:700; padding:4px 8px; border-radius:6px;"><i class="fa-solid fa-circle-check text-success me-1"></i>Exemplary Conduct &bull; Zero Infractions</span></span>
+              </div>
+            </div>
+          </div>
+
+          <div class="dossier-section-card">
+            <div class="dossier-section-title">
+              <i class="fa-solid fa-user-nurse text-primary"></i>
+              <span>Pastoral Care &amp; Counseling</span>
+            </div>
+            <div class="dossier-meta-grid">
+              <div class="dossier-meta-item full-width">
+                <span class="dossier-meta-label">Counselor Periodic Assessment</span>
+                <span class="dossier-meta-value text-muted" style="font-size:0.84rem; line-height:1.45;">Routine developmental assessment completed by Smt. D. Leela (Head Counselor). Well-adjusted peer relationships and positive classroom participation.</span>
+              </div>
+              <div class="dossier-meta-item">
+                <span class="dossier-meta-label">Assessment Date</span>
+                <span class="dossier-meta-value">22-Jul-2025</span>
+              </div>
+              <div class="dossier-meta-item">
+                <span class="dossier-meta-label">Review Status</span>
+                <span class="dossier-meta-value"><span class="badge" style="background:#eff6ff; color:#1e40af; border:1px solid #bfdbfe; font-size:0.76rem; font-weight:600; padding:3px 8px; border-radius:4px;">Closed / Satisfactory</span></span>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
       <!-- TAB 13: COMMUNICATION HISTORY -->
       <div class="dossier-tab-pane" id="pane-dossier-communication">
-        <h6 class="font-bold text-dark mb-3"><i class="fa-solid fa-comments text-primary mr-1"></i> Parent Dispatches &amp; PTM Interaction History</h6>
-        <div class="p-3 bg-light rounded-3 border text-xs">
-          <div><i class="fa-solid fa-comment-sms text-success mr-1"></i> Daily Attendance SMS dispatched to ${s.phone} at 09:15 AM today.</div>
-          <div class="mt-2"><i class="fa-solid fa-calendar-days text-primary mr-1"></i> Term 1 Parent-Teacher Meeting attended by ${s.parent} on 14-Aug-2025.</div>
+        <div class="dossier-header-strip">
+          <div>
+            <div class="dossier-header-strip-sub">Parent-School Engagement • Official Dispatch Log</div>
+            <h6 class="dossier-header-strip-title">
+              <i class="fa-solid fa-comments text-primary"></i>Parent Dispatches &amp; PTM Interaction History
+            </h6>
+            <p class="dossier-header-strip-desc">Audited record of SMS broadcasts, automated attendance dispatches, and Parent-Teacher meetings</p>
+          </div>
+          <div class="dossier-header-strip-badges">
+            <span class="badge" style="background: #eff6ff; color: #1e40af; border: 1px solid #bfdbfe; font-size: 0.76rem; font-weight: 600; padding: 5px 10px; border-radius: 6px;">
+              <i class="fa-solid fa-tower-broadcast me-1"></i>SMS Gateway Active
+            </span>
+          </div>
+        </div>
+
+        <div class="dossier-cards-grid">
+          <div class="dossier-section-card">
+            <div class="dossier-section-title">
+              <i class="fa-solid fa-comment-sms text-success"></i>
+              <span>Automated Dispatches</span>
+            </div>
+            <div class="dossier-meta-grid">
+              <div class="dossier-meta-item full-width">
+                <span class="dossier-meta-label">Today's Attendance Notification</span>
+                <span class="dossier-meta-value" style="font-size:0.84rem;"><i class="fa-solid fa-circle-check text-success me-1"></i>Daily attendance SMS dispatched to <strong>${s.phone}</strong> at 09:15 AM today.</span>
+              </div>
+              <div class="dossier-meta-item full-width">
+                <span class="dossier-meta-label">Terminal Fee Advisory</span>
+                <span class="dossier-meta-value" style="font-size:0.84rem;"><i class="fa-solid fa-envelope-circle-check text-primary me-1"></i>Term 1 Fee Clearance digital receipt delivered to <strong>${s.email}</strong>.</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="dossier-section-card">
+            <div class="dossier-section-title">
+              <i class="fa-solid fa-handshake text-primary"></i>
+              <span>Parent-Teacher Meetings (PTM)</span>
+            </div>
+            <div class="dossier-meta-grid">
+              <div class="dossier-meta-item full-width">
+                <span class="dossier-meta-label">Term 1 PTM Interaction</span>
+                <span class="dossier-meta-value" style="font-size:0.84rem;"><i class="fa-solid fa-calendar-check text-primary me-1"></i>Attended by <strong>${s.parent}</strong> with Class Teacher Smt. K. Hymavathi on 14-Aug-2025.</span>
+              </div>
+              <div class="dossier-meta-item">
+                <span class="dossier-meta-label">Discussion Focus</span>
+                <span class="dossier-meta-value">Academic Excellence &amp; Olympiad Training</span>
+              </div>
+              <div class="dossier-meta-item">
+                <span class="dossier-meta-label">Parent Feedback</span>
+                <span class="dossier-meta-value"><span class="badge" style="background:#ecfdf5; color:#065f46; font-size:0.75rem; padding:3px 8px; border-radius:4px;">Highly Satisfied</span></span>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
