@@ -46,6 +46,22 @@ router.post(
   attendanceController.markAttendance
 );
 
+// Teacher/Management: Reopen submitted attendance register for corrections
+router.post(
+  '/reopen',
+  authenticateUser,
+  authorizeRoles('SUPER_ADMIN', 'PRINCIPAL', 'VICE_PRINCIPAL', 'OFFICE'),
+  attendanceController.reopenRegister
+);
+
+// Teacher/Management: Submit individual student attendance correction with audit trail
+router.post(
+  '/corrections',
+  authenticateUser,
+  authorizeRoles('TEACHER', 'SUPER_ADMIN', 'PRINCIPAL', 'VICE_PRINCIPAL', 'OFFICE'),
+  attendanceController.submitCorrection
+);
+
 // Teacher/Management: Update permitted attendance record
 router.patch(
   '/records/:id',

@@ -1235,6 +1235,9 @@ const PortalAuth = {
   },
 
   async init(portalType) {
+    if (typeof portalType === 'object' && portalType !== null) {
+      portalType = portalType.portal || portalType.portalType || 'management';
+    }
     const cfg = this.configs[portalType];
     if (!cfg) return;
 

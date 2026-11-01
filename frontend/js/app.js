@@ -2163,3 +2163,16 @@ function switchLeadershipDesk(target) {
 }
 window.switchLeadershipDesk = switchLeadershipDesk;
 
+
+
+// Universal Section and Tab Switcher for Public Website
+window.switchTab = function(sectionId, tabId) {
+  const section = document.getElementById(sectionId);
+  if (section) {
+    section.scrollIntoView({ behavior: 'smooth' });
+    const btn = section.querySelector(`.tab-btn[data-tab="${tabId}"]`);
+    if (btn) {
+      btn.click();
+    }
+  }
+};

@@ -113,8 +113,9 @@ const getTeacherAssignedClasses = async (user) => {
 /**
  * 2. Get students of a class-section for attendance marking
  */
-const getClassStudentsForAttendance = async (className, section, dateInput, user) => {
+const getClassStudentsForAttendance = async (className, section, dateInput, user, sessionInput = 'FULL_DAY') => {
   const targetDate = normalizeDate(dateInput);
+  const session = sessionInput ? sessionInput.toUpperCase() : 'FULL_DAY';
 
   // If role is TEACHER, verify authorization
   if (user.role === 'TEACHER') {
@@ -137,11 +138,12 @@ const getClassStudentsForAttendance = async (className, section, dateInput, user
     status: 'ACTIVE',
   }).sort({ rollNo: 1, fullName: 1 });
 
-  // Fetch existing attendance records for these students on targetDate
+  // Fetch existing attendance records for these students on targetDate and session
   const studentIds = students.map((s) => s._id);
   const existingRecords = await AttendanceRecord.find({
     student: { $in: studentIds },
     date: targetDate,
+    session,
   });
 
   const recordMap = new Map();
@@ -158,6 +160,7 @@ const getClassStudentsForAttendance = async (className, section, dateInput, user
       fullName: s.fullName,
       gender: s.gender,
       currentStatus: record ? record.status : 'PRESENT',
+      arrivalTime: record ? record.arrivalTime : '',
       remarks: record ? record.remarks : '',
       isPermitted: record ? record.isPermitted : false,
       recordId: record ? record._id : null,
@@ -169,12 +172,16 @@ const getClassStudentsForAttendance = async (className, section, dateInput, user
     class: className,
     section: section,
     date: targetDate,
+    session,
   });
 
   return {
     class: className,
     section: section,
     date: targetDate,
+    session,
+    status: register ? register.status : 'PENDING',
+    reopenReason: register ? register.reopenReason : '',
     totalStudents: students.length,
     isMarked: Boolean(register),
     summary: register
@@ -185,6 +192,7 @@ const getClassStudentsForAttendance = async (className, section, dateInput, user
           halfDayCount: register.halfDayCount,
           excusedCount: register.excusedCount,
           attendanceRate: register.attendanceRate,
+          status: register.status,
         }
       : null,
     students: studentRoster,
@@ -192,10 +200,12 @@ const getClassStudentsForAttendance = async (className, section, dateInput, user
 };
 
 /**
- * 3. Mark & Submit Class Attendance (With backend validation & duplicate prevention)
+ * 3. Mark & Submit Class Attendance (With backend validation, session policy & duplicate prevention)
  */
-const markClassAttendance = async (className, section, dateInput, records, remarks, user) => {
+const markClassAttendance = async (className, section, dateInput, records, remarks, user, sessionInput = 'FULL_DAY', statusInput = 'SUBMITTED') => {
   const normalizedDate = normalizeDate(dateInput);
+  const session = sessionInput ? sessionInput.toUpperCase() : 'FULL_DAY';
+  const registerStatus = statusInput === 'DRAFT' ? 'DRAFT' : 'SUBMITTED';
 
   // 1. Authorization: If TEACHER, verify assignment
   if (user.role === 'TEACHER') {
@@ -243,14 +253,16 @@ const markClassAttendance = async (className, section, dateInput, records, remar
 
     return {
       updateOne: {
-        filter: { student: rec.studentId, date: normalizedDate },
+        filter: { student: rec.studentId, date: normalizedDate, session },
         update: {
           $set: {
             student: rec.studentId,
             class: className,
             section: section,
             date: normalizedDate,
+            session,
             status,
+            arrivalTime: rec.arrivalTime || '',
             remarks: rec.remarks || '',
             isPermitted: Boolean(rec.isPermitted),
             markedBy: user._id,
@@ -271,11 +283,12 @@ const markClassAttendance = async (className, section, dateInput, records, remar
 
   // 5. Upsert Classroom Session Register Header
   const register = await AttendanceRegister.findOneAndUpdate(
-    { class: className, section, date: normalizedDate },
+    { class: className, section, date: normalizedDate, session },
     {
       class: className,
       section,
       date: normalizedDate,
+      session,
       takenBy: user._id,
       totalStudents,
       presentCount,
@@ -284,7 +297,7 @@ const markClassAttendance = async (className, section, dateInput, records, remar
       halfDayCount,
       excusedCount,
       attendanceRate,
-      status: 'SUBMITTED',
+      status: registerStatus,
       remarks: remarks || '',
     },
     { upsert: true, new: true, setDefaultsOnInsert: true }
@@ -300,6 +313,8 @@ const markClassAttendance = async (className, section, dateInput, records, remar
     class: className,
     section,
     date: normalizedDate,
+    session,
+    status: registerStatus,
     totalStudents,
     presentCount,
     absentCount,
@@ -307,7 +322,9 @@ const markClassAttendance = async (className, section, dateInput, records, remar
     halfDayCount,
     excusedCount,
     attendanceRate,
-    message: `Attendance for Class ${className}-${section} recorded successfully (${presentCount}/${totalStudents} present)`,
+    message: registerStatus === 'DRAFT'
+      ? `Attendance draft for Class ${className}-${section} (${session}) saved successfully`
+      : `Attendance for Class ${className}-${section} (${session}) submitted successfully (${presentCount}/${totalStudents} present)`,
   };
 };
 
@@ -689,12 +706,119 @@ const getManagementReports = async (query = {}) => {
   };
 };
 
+/**
+ * 12. Reopen Attendance Register
+ * Allows authorized personnel (Principal/Admin) to unlock a submitted attendance register for corrections
+ */
+const reopenAttendanceRegister = async (className, section, dateInput, sessionInput, reason, user) => {
+  const normalizedDate = normalizeDate(dateInput);
+  const session = sessionInput ? sessionInput.toUpperCase() : 'FULL_DAY';
+
+  const register = await AttendanceRegister.findOne({
+    class: className,
+    section,
+    date: normalizedDate,
+    session,
+  });
+
+  if (!register) {
+    throw ApiError.notFound(`Attendance register for Class ${className}-${section} (${session}) on selected date not found`);
+  }
+
+  register.status = 'REOPENED';
+  register.reopenedBy = user._id;
+  register.reopenedAt = new Date();
+  register.reopenReason = reason || 'Administrative correction request approved';
+  await register.save();
+
+  return {
+    registerId: register._id,
+    class: className,
+    section,
+    session,
+    status: register.status,
+    reopenReason: register.reopenReason,
+    reopenedAt: register.reopenedAt,
+    message: `Attendance register for Class ${className}-${section} reopened successfully for authorized corrections.`,
+  };
+};
+
+/**
+ * 13. Submit Attendance Correction with Audit Trail
+ */
+const submitAttendanceCorrection = async (recordId, newStatus, reason, user) => {
+  const record = await AttendanceRecord.findById(recordId);
+  if (!record) {
+    throw ApiError.notFound('Attendance record not found');
+  }
+
+  const previousStatus = record.status;
+  const targetStatus = newStatus ? newStatus.toUpperCase() : previousStatus;
+
+  record.status = targetStatus;
+  record.updatedBy = user._id;
+  if (!record.correctionHistory) record.correctionHistory = [];
+  record.correctionHistory.push({
+    previousStatus,
+    newStatus: targetStatus,
+    reason: reason || 'Authorized status correction',
+    correctedBy: user._id,
+    correctedAt: new Date(),
+    approvedBy: user._id,
+  });
+
+  await record.save();
+  await recalculateStudentAttendance(record.student);
+
+  // Recalculate register
+  const allRecords = await AttendanceRecord.find({
+    class: record.class,
+    section: record.section,
+    date: record.date,
+    session: record.session || 'FULL_DAY',
+  });
+
+  let presentCount = 0;
+  let absentCount = 0;
+  let lateCount = 0;
+  let halfDayCount = 0;
+  let excusedCount = 0;
+
+  allRecords.forEach((r) => {
+    const s = r.status.toUpperCase();
+    if (s === 'PRESENT') presentCount++;
+    else if (s === 'ABSENT') absentCount++;
+    else if (s === 'LATE') lateCount++;
+    else if (s === 'HALF_DAY') halfDayCount++;
+    else if (s === 'EXCUSED') excusedCount++;
+  });
+
+  const total = allRecords.length;
+  const weighted = presentCount + lateCount + excusedCount + halfDayCount * 0.5;
+  const rate = total > 0 ? Math.round((weighted / total) * 1000) / 10 : 100;
+
+  await AttendanceRegister.findOneAndUpdate(
+    { class: record.class, section: record.section, date: record.date, session: record.session || 'FULL_DAY' },
+    { presentCount, absentCount, lateCount, halfDayCount, excusedCount, attendanceRate: rate }
+  );
+
+  return {
+    recordId: record._id,
+    previousStatus,
+    newStatus: targetStatus,
+    reason,
+    message: `Attendance status for record ${recordId} corrected from ${previousStatus} to ${targetStatus}`,
+  };
+};
+
 module.exports = {
   normalizeDate,
   getTeacherAssignedClasses,
   getClassStudentsForAttendance,
   markClassAttendance,
   updatePermittedAttendance,
+  reopenAttendanceRegister,
+  submitAttendanceCorrection,
   getAttendanceHistory,
   getStudentAttendanceSummary,
   getStudentDailyAttendance,

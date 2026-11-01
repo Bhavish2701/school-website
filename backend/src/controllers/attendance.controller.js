@@ -21,9 +21,9 @@ const getTeacherClasses = asyncHandler(async (req, res) => {
  */
 const getClassStudents = asyncHandler(async (req, res) => {
   const { class: className, section } = req.params;
-  const { date } = req.query;
+  const { date, session } = req.query;
 
-  const result = await attendanceService.getClassStudentsForAttendance(className, section, date, req.user);
+  const result = await attendanceService.getClassStudentsForAttendance(className, section, date, req.user, session);
   return sendSuccess(res, result, `Student roster for Class ${className}-${section} retrieved successfully`, 200);
 });
 
@@ -31,7 +31,7 @@ const getClassStudents = asyncHandler(async (req, res) => {
  * 3. TEACHER/MANAGEMENT: Mark and Submit Class Attendance
  */
 const markAttendance = asyncHandler(async (req, res) => {
-  const { class: className, section, date, records, remarks } = req.body;
+  const { class: className, section, date, records, remarks, session, status } = req.body;
 
   const result = await attendanceService.markClassAttendance(
     className,
@@ -39,14 +39,46 @@ const markAttendance = asyncHandler(async (req, res) => {
     date,
     records,
     remarks,
-    req.user
+    req.user,
+    session,
+    status
   );
 
   return sendSuccess(res, result, result.message, 201);
 });
 
 /**
- * 4. TEACHER/MANAGEMENT: Update Permitted Attendance Record
+ * 4. TEACHER/MANAGEMENT: Reopen Attendance Register
+ */
+const reopenRegister = asyncHandler(async (req, res) => {
+  const { class: className, section, date, session, reason } = req.body;
+  const result = await attendanceService.reopenAttendanceRegister(
+    className,
+    section,
+    date,
+    session,
+    reason,
+    req.user
+  );
+  return sendSuccess(res, result, result.message, 200);
+});
+
+/**
+ * 4b. TEACHER/MANAGEMENT: Submit Attendance Correction
+ */
+const submitCorrection = asyncHandler(async (req, res) => {
+  const { recordId, newStatus, reason } = req.body;
+  const result = await attendanceService.submitAttendanceCorrection(
+    recordId,
+    newStatus,
+    reason,
+    req.user
+  );
+  return sendSuccess(res, result, result.message, 200);
+});
+
+/**
+ * 4c. TEACHER/MANAGEMENT: Update Permitted Attendance Record
  */
 const updateRecord = asyncHandler(async (req, res) => {
   const { id } = req.params;
@@ -194,6 +226,8 @@ module.exports = {
   getTeacherClasses,
   getClassStudents,
   markAttendance,
+  reopenRegister,
+  submitCorrection,
   updateRecord,
   getHistory,
   getStudentSummary,
