@@ -23618,16 +23618,29 @@ button.close:hover,
   border-bottom: none !important;
   padding-bottom: 2px !important;
   margin-bottom: 0 !important;
-  scrollbar-width: none !important;
-  -ms-overflow-style: none !important;
+  scrollbar-width: thin !important;
+  scrollbar-color: #cbd5e1 transparent !important;
   scroll-behavior: smooth;
   width: 100%;
 }
 
 .dossier-tab-strip::-webkit-scrollbar {
-  display: none !important;
-  width: 0 !important;
-  height: 0 !important;
+  height: 4px !important;
+  display: block !important;
+}
+
+.dossier-tab-strip::-webkit-scrollbar-track {
+  background: #f1f5f9 !important;
+  border-radius: 4px !important;
+}
+
+.dossier-tab-strip::-webkit-scrollbar-thumb {
+  background: #cbd5e1 !important;
+  border-radius: 4px !important;
+}
+
+.dossier-tab-strip::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8 !important;
 }
 
 .dossier-tab-item {
@@ -25400,4 +25413,31 @@ button.close:hover,
   height: 10px;
   border-radius: 50%;
   background: #2563eb;
+}
+
+/* ==========================================================================
+   OFFICIAL STUDENT DOSSIER PRINT MEDIA OVERRIDE
+   Guarantees 100% visible, sharp, multi-page print docket
+   ========================================================================== */
+@media print {
+  body.printing-dossier * {
+    visibility: hidden !important;
+  }
+
+  body.printing-dossier #printableStudentDossier,
+  body.printing-dossier #printableStudentDossier * {
+    visibility: visible !important;
+  }
+
+  body.printing-dossier #printableStudentDossier {
+    display: block !important;
+    position: absolute !important;
+    left: 0 !important;
+    top: 0 !important;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: #ffffff !important;
+    z-index: 9999999 !important;
+  }
 }
