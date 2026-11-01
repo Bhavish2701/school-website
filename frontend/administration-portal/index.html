@@ -3500,38 +3500,40 @@
                   </button>
                 </div>
 
-                <div class="filter-group">
-                  <label for="profileClassFilter"><i class="fa-solid fa-graduation-cap"></i> Class:</label>
-                  <select id="profileClassFilter" class="filter-select" onchange="portalApp.filterStudentProfiles()">
-                    <option value="">All Classes (PP to X)</option>
-                    <option value="X">Class X</option>
-                    <option value="IX">Class IX</option>
-                    <option value="VIII">Class VIII</option>
-                    <option value="VII">Class VII</option>
-                    <option value="VI">Class VI</option>
-                    <option value="V">Class V</option>
-                    <option value="IV">Class IV</option>
-                    <option value="III">Class III</option>
-                    <option value="II">Class II</option>
-                    <option value="I">Class I</option>
-                    <option value="PP">Pre-Primary</option>
-                  </select>
-                </div>
+                <div class="toolbar-filter-controls">
+                  <div class="filter-group filter-pill-item">
+                    <label for="profileClassFilter"><i class="fa-solid fa-graduation-cap text-primary"></i> Class:</label>
+                    <select id="profileClassFilter" class="filter-select" onchange="portalApp.filterStudentProfiles()">
+                      <option value="">All Classes (PP to X)</option>
+                      <option value="X">Class X</option>
+                      <option value="IX">Class IX</option>
+                      <option value="VIII">Class VIII</option>
+                      <option value="VII">Class VII</option>
+                      <option value="VI">Class VI</option>
+                      <option value="V">Class V</option>
+                      <option value="IV">Class IV</option>
+                      <option value="III">Class III</option>
+                      <option value="II">Class II</option>
+                      <option value="I">Class I</option>
+                      <option value="PP">Pre-Primary</option>
+                    </select>
+                  </div>
 
-                <div class="filter-group">
-                  <label for="profileStatusFilter"><i class="fa-solid fa-circle-check"></i> Status:</label>
-                  <select id="profileStatusFilter" class="filter-select" onchange="portalApp.filterStudentProfiles()">
-                    <option value="">All Statuses</option>
-                    <option value="Active">Active Enrolled</option>
-                    <option value="Paid">Fee Paid</option>
-                    <option value="Partial">Fee Partial</option>
-                    <option value="Pending">Fee Pending</option>
-                  </select>
-                </div>
+                  <div class="filter-group filter-pill-item">
+                    <label for="profileStatusFilter"><i class="fa-solid fa-circle-check text-primary"></i> Status:</label>
+                    <select id="profileStatusFilter" class="filter-select" onchange="portalApp.filterStudentProfiles()">
+                      <option value="">All Statuses</option>
+                      <option value="Active">Active Enrolled</option>
+                      <option value="Paid">Fee Paid</option>
+                      <option value="Partial">Fee Partial</option>
+                      <option value="Pending">Fee Pending</option>
+                    </select>
+                  </div>
 
-                <button type="button" class="btn-filter-reset" onclick="portalApp.resetStudentFilters(); return false;" title="Reset all filters">
-                  <i class="fa-solid fa-rotate-left"></i> Reset
-                </button>
+                  <button type="button" class="btn-filter-reset" onclick="portalApp.resetStudentFilters(); return false;" title="Reset all filters">
+                    <i class="fa-solid fa-rotate-left"></i> Reset
+                  </button>
+                </div>
               </div>
 
               <!-- Tier 2: Governance Indicators, View Mode Toggles, and Administrative Remarks -->
@@ -3541,7 +3543,10 @@
                     <i class="fa-solid fa-users-viewfinder"></i> Showing: <strong id="profilesShowingCount">500</strong> of <strong id="profilesTotalCount">500</strong> Enrolled Students
                   </span>
                   <span class="toolbar-tag-pill">
-                    <i class="fa-solid fa-calendar-check text-primary"></i> Academic Year 2026–27
+                    <i class="fa-solid fa-calendar-check text-primary"></i> Academic Year 2025–2026
+                  </span>
+                  <span class="toolbar-tag-pill stat-badge-verified">
+                    <i class="fa-solid fa-shield-check text-success"></i> AP Board Verified
                   </span>
                 </div>
 
@@ -3561,7 +3566,7 @@
                   <button type="button" class="btn-deletion-archive"
                     onclick="portalApp.openDeletedStudentsArchiveModal()"
                     title="View Permanent Deletion Log & Executive Remarks Archive">
-                    <i class="fa-solid fa-clock-rotate-left"></i> Deletion Remarks Log
+                    <i class="fa-solid fa-clock-rotate-left text-danger"></i> Deletion Remarks Log
                   </button>
                 </div>
               </div>
