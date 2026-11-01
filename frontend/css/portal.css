@@ -18933,6 +18933,41 @@ input:disabled+.perm-slider {
 }
 
 /* Formal Transfer & Clearance Checklist */
+#studentTransferWithdrawalModal .portal-modal {
+  max-width: 780px !important;
+  width: 95% !important;
+  max-height: 90vh !important;
+  border-radius: 14px !important;
+  overflow: hidden !important;
+  display: flex !important;
+  flex-direction: column !important;
+  box-shadow: 0 20px 25px -5px rgba(15, 23, 42, 0.15), 0 8px 10px -6px rgba(15, 23, 42, 0.1) !important;
+}
+
+#studentTransferWithdrawalModal .modal-body {
+  overflow-y: auto !important;
+  max-height: calc(90vh - 140px) !important;
+  scrollbar-width: thin !important;
+  scrollbar-color: #cbd5e1 #f8fafc !important;
+}
+
+#studentTransferWithdrawalModal .modal-body::-webkit-scrollbar {
+  width: 6px !important;
+}
+
+#studentTransferWithdrawalModal .modal-body::-webkit-scrollbar-track {
+  background: #f8fafc !important;
+}
+
+#studentTransferWithdrawalModal .modal-body::-webkit-scrollbar-thumb {
+  background: #cbd5e1 !important;
+  border-radius: 6px !important;
+}
+
+#studentTransferWithdrawalModal .modal-body::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8 !important;
+}
+
 .clearance-check-card {
   background: #f8fafc;
   border: 1.5px solid #e2e8f0;
@@ -18942,6 +18977,11 @@ input:disabled+.perm-slider {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  transition: all 0.2s ease;
+}
+
+.clearance-check-card:hover {
+  border-color: #cbd5e1;
 }
 
 .clearance-check-card.checked {

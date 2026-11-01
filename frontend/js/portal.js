@@ -6424,6 +6424,7 @@ const FEE_CATEGORY_AUDIT_DATA = [
     if (!student) return;
 
     studentTransferTargetAdmNo = student.admNo;
+    if (document.getElementById('tcAvatar')) document.getElementById('tcAvatar').textContent = student.name.charAt(0).toUpperCase();
     if (document.getElementById('tcStudentName')) document.getElementById('tcStudentName').textContent = student.name;
     if (document.getElementById('tcStudentMeta')) document.getElementById('tcStudentMeta').textContent = `Adm No: ${student.admNo} | Class: Class ${student.class} - ${student.section || 'A'} | Roll: #${student.rollNo}`;
     if (document.getElementById('tcLeavingDate')) document.getElementById('tcLeavingDate').value = new Date().toISOString().split('T')[0];

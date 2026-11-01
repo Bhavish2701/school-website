@@ -17915,98 +17915,151 @@
        Clearance Checklist, Transfer Certificate Generation, Zero Deletion
        ==================================================================== -->
   <div class="modal-backdrop" id="studentTransferWithdrawalModal" role="dialog" aria-modal="true" style="display:none;">
-    <div class="portal-modal" style="max-width: 640px; width: 95%;">
-      <div class="modal-header d-flex justify-content-between align-items-center">
-        <div>
-          <h3 class="mb-0 text-danger" style="font-size: 1.15rem;">
-            <i class="fa-solid fa-arrow-right-from-bracket mr-1"></i> Formal Student Transfer &amp; Withdrawal Clearance
-          </h3>
-          <p class="text-muted text-xs mb-0 mt-1">Multi-department statutory clearances required prior to issuing official Transfer Certificate (TC).</p>
+    <div class="portal-modal" style="max-width: 780px; width: 95%; max-height: 90vh; border-radius: 14px; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 20px 25px -5px rgba(15, 23, 42, 0.15), 0 8px 10px -6px rgba(15, 23, 42, 0.1);">
+      <div class="modal-header d-flex justify-content-between align-items-center" style="padding: 1.25rem 1.75rem; background: #ffffff; border-bottom: 1px solid #e2e8f0; flex-shrink: 0;">
+        <div class="d-flex align-items-center gap-3">
+          <div style="width: 44px; height: 44px; border-radius: 10px; background: #fee2e2; color: #b91c1c; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; flex-shrink: 0; box-shadow: 0 2px 5px rgba(185, 28, 28, 0.12);">
+            <i class="fa-solid fa-arrow-right-from-bracket"></i>
+          </div>
+          <div>
+            <div style="font-size: 0.68rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #64748b; margin-bottom: 2px;">
+              Statutory Student Exit • Transfer Certificate Docket
+            </div>
+            <h3 class="mb-0" style="font-size: 1.15rem; font-weight: 700; color: #0f172a; margin: 0;">
+              Formal Student Transfer &amp; Withdrawal Clearance
+            </h3>
+            <p style="margin: 2px 0 0 0; font-size: 0.78rem; color: #64748b;">
+              Multi-department statutory clearances required prior to issuing official Transfer Certificate (TC)
+            </p>
+          </div>
         </div>
-        <button type="button" class="modal-close-x" onclick="portalApp.closeModal('studentTransferWithdrawalModal')" title="Close" aria-label="Close">
+        <button type="button" class="modal-close-x" onclick="portalApp.closeModal('studentTransferWithdrawalModal')" title="Close" aria-label="Close" style="width: 32px; height: 32px; border-radius: 50%; background: #f1f5f9; border: 1px solid #e2e8f0; color: #64748b; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s ease;">
           <i class="fa-solid fa-xmark"></i>
         </button>
       </div>
-      <form id="studentTransferForm" onsubmit="portalApp.submitStudentTransfer(event)">
-        <div class="modal-body p-4">
-          <!-- Student Info Strip -->
-          <div class="p-3 bg-light rounded-3 border mb-3">
-            <div class="d-flex justify-content-between align-items-center">
-              <div>
-                <strong id="tcStudentName" class="d-block" style="font-size:1rem; color:#0f172a;">Student Name</strong>
-                <span class="text-xs text-muted" id="tcStudentMeta">Adm No: SV-0001 | Class: Class VIII - A</span>
+
+      <form id="studentTransferForm" onsubmit="portalApp.submitStudentTransfer(event)" style="display: flex; flex-direction: column; overflow: hidden; height: 100%; margin: 0;">
+        <div class="modal-body p-4" style="overflow-y: auto; max-height: calc(90vh - 140px); scrollbar-width: thin; scrollbar-color: #cbd5e1 #f8fafc;">
+          <!-- Executive Student Info Ribbon -->
+          <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 14px 18px; margin-bottom: 1.25rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
+            <div class="d-flex align-items-center gap-3">
+              <div id="tcAvatar" style="width: 44px; height: 44px; border-radius: 50%; background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%); color: #ffffff; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 1.15rem; flex-shrink: 0; box-shadow: 0 2px 6px rgba(37,99,235,0.25);">
+                S
               </div>
-              <span class="badge" style="background:#fee2e2; color:#b91c1c; font-weight:700;">Initiating Withdrawal</span>
+              <div>
+                <div class="d-flex align-items-center gap-2 flex-wrap">
+                  <strong id="tcStudentName" style="font-size: 1.05rem; font-weight: 700; color: #0f172a;">Student Name</strong>
+                  <span class="badge" style="background: #eff6ff; color: #1e40af; border: 1px solid #bfdbfe; font-size: 0.72rem; font-weight: 700; padding: 2px 8px; border-radius: 4px;">
+                    <i class="fa-solid fa-graduation-cap me-1"></i>Enrolled Student
+                  </span>
+                </div>
+                <div class="d-flex align-items-center gap-2 mt-1 flex-wrap" style="font-size: 0.78rem; color: #64748b;">
+                  <span id="tcStudentMeta">Adm No: SV-0001 | Class: Class X - A | Roll: #1001</span>
+                </div>
+              </div>
             </div>
+            <span class="badge" style="background: #fef2f2; color: #991b1b; border: 1px solid #fecaca; font-weight: 700; font-size: 0.78rem; padding: 6px 12px; border-radius: 6px; display: inline-flex; align-items: center; gap: 6px;">
+              <span style="width: 7px; height: 7px; border-radius: 50%; background: #dc2626; display: inline-block;"></span> Initiating Formal Withdrawal
+            </span>
           </div>
 
           <div class="row g-3 mb-3">
             <div class="col-md-6">
-              <label class="form-label text-xs font-bold text-muted">Date of Leaving *</label>
-              <input type="date" class="form-control" id="tcLeavingDate" required>
+              <label class="form-label" style="font-size: 0.74rem; font-weight: 700; color: #475569; text-transform: uppercase; letter-spacing: 0.03em; margin-bottom: 6px; display: block;">
+                Official Date of Leaving *
+              </label>
+              <input type="date" class="form-control" id="tcLeavingDate" required style="border: 1px solid #cbd5e1; border-radius: 8px; padding: 9px 12px; font-size: 0.85rem; color: #0f172a;">
             </div>
             <div class="col-md-6">
-              <label class="form-label text-xs font-bold text-muted">Reason for Withdrawal *</label>
-              <select class="form-select" id="tcReason" required>
+              <label class="form-label" style="font-size: 0.74rem; font-weight: 700; color: #475569; text-transform: uppercase; letter-spacing: 0.03em; margin-bottom: 6px; display: block;">
+                Statutory Reason for Withdrawal *
+              </label>
+              <select class="form-select" id="tcReason" required style="border: 1px solid #cbd5e1; border-radius: 8px; padding: 9px 12px; font-size: 0.85rem; color: #0f172a;">
                 <option value="Parent Job Transfer / Family Relocation">Parent Job Transfer / Family Relocation</option>
                 <option value="Completed Class X Course">Completed Class X Course</option>
                 <option value="Admission to Junior College">Admission to Junior College</option>
                 <option value="Joining Sports Academy">Joining Sports Academy</option>
                 <option value="Financial / Personal Constraints">Financial / Personal Constraints</option>
-                <option value="Other">Other Institutional Reason</option>
+                <option value="Other Institutional Reason">Other Institutional Reason</option>
               </select>
             </div>
           </div>
 
-          <!-- Mandatory Clearances Checklist -->
-          <label class="form-label text-xs font-bold text-muted mb-2 d-block">
-            <i class="fa-solid fa-list-check text-primary mr-1"></i> Statutory Department Clearance Checklist (Mandatory):
-          </label>
-
-          <div class="clearance-check-card checked mb-2">
-            <div class="d-flex align-items-center gap-2">
-              <input class="form-check-input" type="checkbox" id="tcClearLibrary" checked required>
-              <label class="form-check-label text-xs font-bold text-dark" for="tcClearLibrary">
-                <i class="fa-solid fa-book-bookmark text-primary mr-1"></i> Library Clearance: All borrowed books returned &amp; zero fines.
-              </label>
+          <!-- Mandatory Clearances Checklist Section -->
+          <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 10px; padding: 14px 16px; margin-bottom: 1.25rem; box-shadow: 0 1px 3px rgba(15, 23, 42, 0.03);">
+            <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+              <div>
+                <div style="font-size: 0.68rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: #64748b;">
+                  Multi-Department Statutory Clearance Checklist
+                </div>
+                <h6 style="font-size: 0.88rem; font-weight: 700; color: #0f172a; margin: 2px 0 0 0;">
+                  <i class="fa-solid fa-list-check text-primary me-1"></i>Mandatory Clearances Prior to TC Issue
+                </h6>
+              </div>
+              <span class="badge" style="background: #ecfdf5; color: #065f46; border: 1px solid #a7f3d0; font-size: 0.74rem; font-weight: 700; padding: 4px 10px; border-radius: 6px;">
+                <i class="fa-solid fa-shield-check me-1"></i>All 4 Departments Cleared
+              </span>
             </div>
-            <span class="clearance-status-tag" style="background:#dcfce7; color:#15803d;">CLEARED</span>
+
+            <!-- Library Clearance -->
+            <div class="clearance-check-card checked" style="background: #f0fdf4; border: 1.5px solid #86efac; border-radius: 8px; padding: 11px 14px; margin-bottom: 8px; display: flex; align-items: center; justify-content: space-between;">
+              <div class="d-flex align-items-center gap-3">
+                <input class="form-check-input" type="checkbox" id="tcClearLibrary" checked required style="cursor: pointer; width: 17px; height: 17px; border-color: #22c55e;">
+                <label class="form-check-label" for="tcClearLibrary" style="font-size: 0.82rem; font-weight: 600; color: #0f172a; margin: 0; cursor: pointer;">
+                  <i class="fa-solid fa-book-bookmark text-primary me-1"></i> <strong>Library Resource Centre:</strong> All borrowed books returned &amp; zero pending library dues.
+                </label>
+              </div>
+              <span class="clearance-status-tag" style="background: #dcfce7; color: #15803d; font-size: 0.72rem; font-weight: 700; padding: 3px 8px; border-radius: 4px; border: 1px solid #bbf7d0;">
+                <i class="fa-solid fa-check me-1"></i>CLEARED
+              </span>
+            </div>
+
+            <!-- Accounts & Fee Clearance -->
+            <div class="clearance-check-card checked" style="background: #f0fdf4; border: 1.5px solid #86efac; border-radius: 8px; padding: 11px 14px; margin-bottom: 8px; display: flex; align-items: center; justify-content: space-between;">
+              <div class="d-flex align-items-center gap-3">
+                <input class="form-check-input" type="checkbox" id="tcClearAccounts" checked required style="cursor: pointer; width: 17px; height: 17px; border-color: #22c55e;">
+                <label class="form-check-label" for="tcClearAccounts" style="font-size: 0.82rem; font-weight: 600; color: #0f172a; margin: 0; cursor: pointer;">
+                  <i class="fa-solid fa-receipt text-success me-1"></i> <strong>Accounts &amp; Fee Counter:</strong> All tuition, examination &amp; transport dues fully settled.
+                </label>
+              </div>
+              <span class="clearance-status-tag" style="background: #dcfce7; color: #15803d; font-size: 0.72rem; font-weight: 700; padding: 3px 8px; border-radius: 4px; border: 1px solid #bbf7d0;">
+                <i class="fa-solid fa-check me-1"></i>CLEARED
+              </span>
+            </div>
+
+            <!-- Science Labs & Sports Clearance -->
+            <div class="clearance-check-card checked" style="background: #f0fdf4; border: 1.5px solid #86efac; border-radius: 8px; padding: 11px 14px; margin-bottom: 8px; display: flex; align-items: center; justify-content: space-between;">
+              <div class="d-flex align-items-center gap-3">
+                <input class="form-check-input" type="checkbox" id="tcClearLabs" checked required style="cursor: pointer; width: 17px; height: 17px; border-color: #22c55e;">
+                <label class="form-check-label" for="tcClearLabs" style="font-size: 0.82rem; font-weight: 600; color: #0f172a; margin: 0; cursor: pointer;">
+                  <i class="fa-solid fa-flask text-purple me-1"></i> <strong>Science Labs &amp; Sports Equipment:</strong> Laboratory apparatus, chemicals &amp; athletics kit surrendered.
+                </label>
+              </div>
+              <span class="clearance-status-tag" style="background: #dcfce7; color: #15803d; font-size: 0.72rem; font-weight: 700; padding: 3px 8px; border-radius: 4px; border: 1px solid #bbf7d0;">
+                <i class="fa-solid fa-check me-1"></i>CLEARED
+              </span>
+            </div>
+
+            <!-- Academic Progress Clearance -->
+            <div class="clearance-check-card checked" style="background: #f0fdf4; border: 1.5px solid #86efac; border-radius: 8px; padding: 11px 14px; margin-bottom: 0; display: flex; align-items: center; justify-content: space-between;">
+              <div class="d-flex align-items-center gap-3">
+                <input class="form-check-input" type="checkbox" id="tcClearAcademic" checked required style="cursor: pointer; width: 17px; height: 17px; border-color: #22c55e;">
+                <label class="form-check-label" for="tcClearAcademic" style="font-size: 0.82rem; font-weight: 600; color: #0f172a; margin: 0; cursor: pointer;">
+                  <i class="fa-solid fa-graduation-cap text-amber me-1"></i> <strong>Academic Tabulation Council:</strong> Continuous evaluation marks finalized &amp; attendance register verified.
+                </label>
+              </div>
+              <span class="clearance-status-tag" style="background: #dcfce7; color: #15803d; font-size: 0.72rem; font-weight: 700; padding: 3px 8px; border-radius: 4px; border: 1px solid #bbf7d0;">
+                <i class="fa-solid fa-check me-1"></i>CLEARED
+              </span>
+            </div>
           </div>
 
-          <div class="clearance-check-card checked mb-2">
-            <div class="d-flex align-items-center gap-2">
-              <input class="form-check-input" type="checkbox" id="tcClearAccounts" checked required>
-              <label class="form-check-label text-xs font-bold text-dark" for="tcClearAccounts">
-                <i class="fa-solid fa-receipt text-success mr-1"></i> Accounts &amp; Fee Clearance: All tuition &amp; transport dues settled.
-              </label>
-            </div>
-            <span class="clearance-status-tag" style="background:#dcfce7; color:#15803d;">CLEARED</span>
-          </div>
-
-          <div class="clearance-check-card checked mb-2">
-            <div class="d-flex align-items-center gap-2">
-              <input class="form-check-input" type="checkbox" id="tcClearLabs" checked required>
-              <label class="form-check-label text-xs font-bold text-dark" for="tcClearLabs">
-                <i class="fa-solid fa-flask text-purple mr-1"></i> Science Labs &amp; Sports Clearance: Apparatus and kit returned in good order.
-              </label>
-            </div>
-            <span class="clearance-status-tag" style="background:#dcfce7; color:#15803d;">CLEARED</span>
-          </div>
-
-          <div class="clearance-check-card checked mb-3">
-            <div class="d-flex align-items-center gap-2">
-              <input class="form-check-input" type="checkbox" id="tcClearAcademic" checked required>
-              <label class="form-check-label text-xs font-bold text-dark" for="tcClearAcademic">
-                <i class="fa-solid fa-graduation-cap text-amber mr-1"></i> Academic Progress Clearance: Final term marks logged &amp; verified.
-              </label>
-            </div>
-            <span class="clearance-status-tag" style="background:#dcfce7; color:#15803d;">CLEARED</span>
-          </div>
-
-          <div class="row g-3">
+          <div class="row g-3 mb-3">
             <div class="col-md-6">
-              <label class="form-label text-xs font-bold text-muted">Conduct &amp; Character Evaluation *</label>
-              <select class="form-select" id="tcConduct" required>
+              <label class="form-label" style="font-size: 0.74rem; font-weight: 700; color: #475569; text-transform: uppercase; letter-spacing: 0.03em; margin-bottom: 6px; display: block;">
+                Conduct &amp; Character Evaluation *
+              </label>
+              <select class="form-select" id="tcConduct" required style="border: 1px solid #cbd5e1; border-radius: 8px; padding: 9px 12px; font-size: 0.85rem; color: #0f172a;">
                 <option value="Exemplary" selected>Exemplary</option>
                 <option value="Very Good">Very Good</option>
                 <option value="Good">Good</option>
@@ -18014,21 +18067,32 @@
               </select>
             </div>
             <div class="col-md-6">
-              <label class="form-label text-xs font-bold text-muted">Transfer Certificate No. (Auto-Generated)</label>
-              <input type="text" class="form-control" id="tcGeneratedNumber" readonly style="font-family:monospace; font-weight:700; color:#1e40af;">
+              <label class="form-label" style="font-size: 0.74rem; font-weight: 700; color: #475569; text-transform: uppercase; letter-spacing: 0.03em; margin-bottom: 6px; display: block;">
+                Official TC Serial Number (Auto-Generated)
+              </label>
+              <div style="position: relative;">
+                <input type="text" class="form-control" id="tcGeneratedNumber" readonly style="font-family: monospace; font-weight: 700; color: #1e40af; background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 8px; padding: 9px 12px 9px 34px; font-size: 0.88rem;">
+                <i class="fa-solid fa-stamp" style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: #64748b; font-size: 0.85rem;"></i>
+              </div>
             </div>
           </div>
 
-          <div class="p-3 bg-light rounded-3 border mt-3 text-xs text-muted">
-            <i class="fa-solid fa-shield-halved text-primary mr-1"></i>
-            <strong>Zero History Deletion Guardrail:</strong> Issuing this Transfer Certificate transitions the student status to <em>Withdrawn</em>. All historical fee receipts, exam grades, attendance logs, and dossier documents remain permanently preserved in the statutory archive.
+          <div class="p-3 border rounded-3" style="background: #f8fafc; border-color: #e2e8f0;">
+            <div class="d-flex align-items-center gap-2 mb-1" style="font-weight: 700; color: #1e40af; font-size: 0.82rem;">
+              <i class="fa-solid fa-shield-halved"></i> Statutory Zero History Deletion Guardrail
+            </div>
+            <p style="font-size: 0.78rem; color: #475569; margin: 0; line-height: 1.45;">
+              Issuing this Transfer Certificate formally transitions student status to <strong>Withdrawn / TC Issued</strong>. In strict accordance with AP State Education Board mandates, all historical examination scores, fee ledgers, attendance archives, and demographic files remain permanently preserved in the Statutory Archive.
+            </p>
           </div>
         </div>
 
-        <div class="modal-footer d-flex justify-content-between align-items-center bg-light p-3 border-top">
-          <button type="button" class="btn btn-secondary btn-sm" onclick="portalApp.closeModal('studentTransferWithdrawalModal')">Cancel</button>
-          <button type="submit" class="btn btn-danger btn-sm">
-            <i class="fa-solid fa-file-signature mr-1"></i> Issue Official TC &amp; Record Withdrawal
+        <div class="modal-footer d-flex justify-content-between align-items-center" style="background: #f8fafc; border-top: 1px solid #e2e8f0; padding: 1rem 1.75rem; flex-shrink: 0;">
+          <button type="button" class="btn btn-secondary btn-sm" onclick="portalApp.closeModal('studentTransferWithdrawalModal')" style="padding: 7px 16px; font-weight: 600; border-radius: 6px;">
+            Cancel
+          </button>
+          <button type="submit" class="btn btn-danger btn-sm" style="display: inline-flex; align-items: center; gap: 7px; padding: 8px 18px; font-weight: 600; border-radius: 6px; box-shadow: 0 2px 4px rgba(220, 38, 38, 0.25);">
+            <i class="fa-solid fa-stamp"></i> Issue Official TC &amp; Record Withdrawal
           </button>
         </div>
       </form>
