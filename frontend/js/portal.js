@@ -15274,6 +15274,15 @@ const FEE_CATEGORY_AUDIT_DATA = [
     if (modalId === 'studentDocsModal' && typeof openStudentDocsModal === 'function') {
       return openStudentDocsModal();
     }
+    if (modalId === 'uploadDocumentModal') {
+      const modal = document.getElementById('uploadDocumentModal') || document.getElementById('studentDocsModal');
+      if (modal) {
+        modal.style.display = 'flex';
+        modal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+      }
+      return;
+    }
     if (modalId === 'studentDocViewerModal' && typeof openDocumentPreviewModal === 'function') {
       return openDocumentPreviewModal();
     }
@@ -15298,6 +15307,22 @@ const FEE_CATEGORY_AUDIT_DATA = [
   function closeModal(modalId) {
     if (modalId === 'addStudentModal') closeModal('addStudentWizardModal');
     if (modalId === 'viewStudentModal') closeModal('studentDossierModal');
+    if (modalId === 'uploadDocumentModal' || modalId === 'studentDocsModal') {
+      const m1 = document.getElementById('uploadDocumentModal');
+      if (m1) { m1.classList.remove('active', 'open', 'show'); m1.style.display = 'none'; }
+      const m2 = document.getElementById('studentDocsModal');
+      if (m2) { m2.classList.remove('active', 'open', 'show'); m2.style.display = 'none'; }
+      document.body.style.overflow = '';
+      return;
+    }
+    if (modalId === 'studentDocViewerModal' || modalId === 'previewDocumentModal') {
+      const m1 = document.getElementById('previewDocumentModal');
+      if (m1) { m1.classList.remove('active', 'open', 'show'); m1.style.display = 'none'; }
+      const m2 = document.getElementById('studentDocViewerModal');
+      if (m2) { m2.classList.remove('active', 'open', 'show'); m2.style.display = 'none'; }
+      document.body.style.overflow = '';
+      return;
+    }
     const modal = document.getElementById(modalId);
     if (modal) {
       modal.classList.remove('active');

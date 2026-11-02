@@ -23621,47 +23621,305 @@ Class X-A,Monday,2,09:35 AM - 10:20 AM,Physical Science,Sri Navva Anand,Room 201
   <!-- =========================================================================
        MODAL 1: STUDENT DOCUMENT DOSSIER VIEWER (Full 9 Document Definitions)
        ========================================================================= -->
-  <div class="modal-backdrop" id="studentDocViewerModal" style="display:none;">
+  <!-- =========================================================================
+       MODAL: STUDENT DOCUMENT PREVIEW & CREDENTIAL VERIFICATION
+       ========================================================================= -->
+  <div class="modal-backdrop" id="previewDocumentModal" style="display:none;">
     <div class="portal-modal" style="max-width: 860px; width: 95%;">
       <div class="modal-header">
         <div style="display: flex; align-items: center; gap: 0.75rem;">
           <div
-            style="width: 42px; height: 42px; border-radius: 8px; background: #eff6ff; color: #1d4ed8; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; border: 1px solid #bfdbfe;">
-            <i class="fa-solid fa-folder-open"></i>
+            style="width: 42px; height: 42px; border-radius: 8px; background: #eff6ff; color: #1d4ed8; display: flex; align-items: center; justify-content: center; font-size: 1.25rem; border: 1px solid #bfdbfe;">
+            <i class="fa-solid fa-file-shield"></i>
           </div>
           <div>
-            <h3 style="margin: 0; font-size: 1.15rem; font-weight: 800; color: #0f172a;" id="docViewerTitle">Student
-              Document Dossier</h3>
-            <p style="margin: 2px 0 0; font-size: 0.8rem; color: #64748b;" id="docViewerSubtitle">Official Institutional
-              Admission &amp; Identity Credentials</p>
+            <h3 style="margin: 0; font-size: 1.15rem; font-weight: 800; color: #0f172a;" id="prevModalDocTitle">Student Document Credentials</h3>
+            <p style="margin: 2px 0 0; font-size: 0.8rem; color: #64748b;" id="prevModalDocSub">Official Institutional Archive Verification Docket</p>
           </div>
         </div>
-        <button type="button" class="modal-close-x" onclick="portalApp.closeModal('studentDocViewerModal')"
-          title="Close" aria-label="Close">
+        <button type="button" class="modal-close-x" onclick="portalApp.closeModal('previewDocumentModal')"
+          title="Close Preview" aria-label="Close">
           <i class="fa-solid fa-xmark"></i>
         </button>
       </div>
-      <div class="modal-body" id="docViewerModalBody"
-        style="max-height: calc(85vh - 140px); overflow-y: auto; padding: 1.25rem;">
-        <!-- Dynamically rendered via portalApp.openStudentDocViewerModal -->
+
+      <div class="modal-body" style="max-height: calc(85vh - 140px); overflow-y: auto; padding: 1.25rem;">
+        <div class="doc-preview-wrapper" style="position: relative; background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 8px; padding: 1.5rem; min-height: 440px; display: flex; flex-direction: column; justify-content: space-between;">
+          <div class="doc-watermark-overlay verified" id="docPreviewWatermark">VERIFIED</div>
+
+          <!-- Official Institutional Letterhead Header -->
+          <div class="doc-preview-cert-header" style="border-bottom: 2px solid #0f172a; padding-bottom: 0.75rem; text-align: center;">
+            <div style="display: flex; align-items: center; justify-content: center; gap: 12px; margin-bottom: 6px;">
+              <div style="width: 38px; height: 38px; border-radius: 6px; background: #1e3a8a; color: #ffffff; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 0.95rem;">
+                SV
+              </div>
+              <div style="text-align: left;">
+                <h4 style="margin: 0; font-size: 1.05rem; font-weight: 800; color: #0f172a; letter-spacing: -0.01em;">SRI VIDYA ENGLISH MEDIUM HIGH SCHOOL</h4>
+                <div style="font-size: 0.72rem; color: #64748b;">Recognized by Govt. of Andhra Pradesh • Affiliation No: AP-BOARD/VSP-2017/042 • U-DISE+ 28131800109</div>
+              </div>
+            </div>
+            <div style="margin-top: 6px;">
+              <span class="badge" id="prevCertDocType" style="background: #1e40af; color: #ffffff; font-size: 0.76rem; font-weight: 700; padding: 4px 12px; letter-spacing: 0.04em;">
+                STATUTORY INSTITUTIONAL CERTIFICATE
+              </span>
+            </div>
+          </div>
+
+          <!-- Document Demographics and Metadata Body -->
+          <div class="doc-preview-cert-body" style="margin: 1.25rem 0; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 6px; padding: 1.25rem;">
+            <table style="width: 100%; border-collapse: collapse; font-size: 0.85rem;">
+              <tbody>
+                <tr style="border-bottom: 1px solid #f1f5f9;">
+                  <td style="padding: 8px 10px; width: 25%; font-weight: 700; color: #475569; text-transform: uppercase; font-size: 0.72rem;">Student Legal Name</td>
+                  <td style="padding: 8px 10px; width: 35%; font-weight: 700; color: #0f172a;" id="prevCertStudentName">—</td>
+                  <td style="padding: 8px 10px; width: 20%; font-weight: 700; color: #475569; text-transform: uppercase; font-size: 0.72rem;">Admission Number</td>
+                  <td style="padding: 8px 10px; width: 20%; font-family: monospace; font-weight: 700; color: #1e40af;" id="prevCertAdmNo">—</td>
+                </tr>
+                <tr style="border-bottom: 1px solid #f1f5f9;">
+                  <td style="padding: 8px 10px; font-weight: 700; color: #475569; text-transform: uppercase; font-size: 0.72rem;">Current Standard &amp; Sec</td>
+                  <td style="padding: 8px 10px; color: #1e293b;" id="prevCertClassSec">—</td>
+                  <td style="padding: 8px 10px; font-weight: 700; color: #475569; text-transform: uppercase; font-size: 0.72rem;">Submission Date</td>
+                  <td style="padding: 8px 10px; color: #1e293b;" id="prevCertUploadDate">—</td>
+                </tr>
+                <tr style="border-bottom: 1px solid #f1f5f9;">
+                  <td style="padding: 8px 10px; font-weight: 700; color: #475569; text-transform: uppercase; font-size: 0.72rem;">Document Title &amp; Ref</td>
+                  <td style="padding: 8px 10px; color: #0f172a; font-weight: 600;" id="prevCertTitleNumber" colspan="3">—</td>
+                </tr>
+                <tr style="border-bottom: 1px solid #f1f5f9;">
+                  <td style="padding: 8px 10px; font-weight: 700; color: #475569; text-transform: uppercase; font-size: 0.72rem;">Submission Channel &amp; Desk</td>
+                  <td style="padding: 8px 10px; color: #1e293b;" id="prevCertSource" colspan="3">—</td>
+                </tr>
+                <tr>
+                  <td style="padding: 8px 10px; font-weight: 700; color: #475569; text-transform: uppercase; font-size: 0.72rem; vertical-align: top;">Statutory Audit Notes</td>
+                  <td style="padding: 8px 10px; color: #334155; font-size: 0.8rem; line-height: 1.45;" id="prevCertNotes" colspan="3">—</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Official Stamp and Attestation Footer -->
+          <div class="doc-preview-cert-footer" style="border-top: 1px dashed #cbd5e1; padding-top: 0.75rem; display: flex; justify-content: space-between; align-items: flex-end; font-size: 0.8rem;">
+            <div>
+              <div style="font-size: 0.7rem; color: #64748b; text-transform: uppercase; font-weight: 700;">Statutory Archive ID</div>
+              <div style="font-family: monospace; font-weight: 700; color: #0284c7; font-size: 0.85rem;" id="prevCertStampId">AP-STATUTORY-ARCHIVE-000</div>
+              <div style="font-size: 0.72rem; color: #94a3b8; margin-top: 2px;">Preserved in permanent institutional register (Vol IV)</div>
+            </div>
+            <div style="text-align: right;">
+              <div style="font-size: 0.7rem; color: #64748b; text-transform: uppercase; font-weight: 700;">Verifying Authority</div>
+              <div style="font-weight: 700; color: #0f172a; font-size: 0.88rem;" id="prevCertAuthority">Pending Verification</div>
+              <div style="font-size: 0.72rem; color: #059669; font-weight: 600; margin-top: 2px;">
+                <i class="fa-solid fa-circle-check"></i> Digital Institutional Signature Verified
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
-      <div class="modal-footer"
-        style="display: flex; justify-content: space-between; align-items: center; background: #f8fafc; border-top: 1px solid #e2e8f0; padding: 0.85rem 1.25rem;">
-        <span style="font-size: 0.78rem; color: #64748b;" id="docViewerAuditStamp"><i
-            class="fa-solid fa-shield-check text-emerald"></i> Governed under AP Educational Archives Act</span>
-        <div style="display: flex; gap: 0.5rem;">
-          <button type="button" class="btn btn-secondary btn-sm"
-            onclick="portalApp.closeModal('studentDocViewerModal')">Close</button>
-          <button type="button" class="btn btn-primary btn-sm" id="docViewerManageBtn"><i
-              class="fa-solid fa-file-pen"></i> Manage Uploads</button>
+
+      <div class="modal-footer" style="display: flex; justify-content: space-between; align-items: center; background: #f8fafc; border-top: 1px solid #e2e8f0; padding: 0.85rem 1.25rem;">
+        <div style="display: flex; gap: 0.5rem; align-items: center;">
+          <button type="button" class="btn btn-secondary btn-sm" onclick="portalApp.downloadStudentDocumentFromPreview()" title="Download original document file">
+            <i class="fa-solid fa-download text-primary me-1"></i> Download File
+          </button>
+          <button type="button" class="btn btn-secondary btn-sm" onclick="portalApp.openDocumentHistoryModalFromPreview()" title="View Version and Audit History">
+            <i class="fa-solid fa-clock-rotate-left text-info me-1"></i> Version History
+          </button>
+        </div>
+        <div style="display: flex; gap: 0.5rem; align-items: center;">
+          <div id="previewActionButtonsContainer" style="display: inline-flex; gap: 0.5rem;">
+            <!-- Injected dynamically by portalApp.openDocumentPreviewModal -->
+          </div>
+          <button type="button" class="btn btn-secondary btn-sm" onclick="portalApp.closeModal('previewDocumentModal')">
+            Close
+          </button>
         </div>
       </div>
     </div>
   </div>
 
   <!-- =========================================================================
-       MODAL 2: UPLOAD & VERIFY STUDENT DOCUMENT MODAL
+       MODAL: REJECT STUDENT DOCUMENT (DEFICIENCY RECORDING)
        ========================================================================= -->
+  <div class="modal-backdrop" id="rejectDocumentModal" style="display:none;">
+    <div class="portal-modal" style="max-width: 600px; width: 95%;">
+      <div class="modal-header">
+        <div style="display: flex; align-items: center; gap: 0.75rem;">
+          <div
+            style="width: 42px; height: 42px; border-radius: 8px; background: #fef2f2; color: #dc2626; display: flex; align-items: center; justify-content: center; font-size: 1.25rem; border: 1px solid #fecaca;">
+            <i class="fa-solid fa-ban"></i>
+          </div>
+          <div>
+            <h3 style="margin: 0; font-size: 1.15rem; font-weight: 800; color: #0f172a;">Reject Document with Reason</h3>
+            <p style="margin: 2px 0 0; font-size: 0.8rem; color: #64748b;">Record deficiency reason and request guardian resubmission.</p>
+          </div>
+        </div>
+        <button type="button" class="modal-close-x" onclick="portalApp.closeModal('rejectDocumentModal')" title="Close">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <form onsubmit="portalApp.submitRejectDocument(event)">
+        <input type="hidden" id="rejectDocTargetId">
+        <div class="modal-body" style="padding: 1.25rem; display: flex; flex-direction: column; gap: 1rem;">
+          <div id="rejectDocSummary" style="padding: 10px 14px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; font-weight: 700; font-size: 0.85rem; color: #0f172a;"></div>
+
+          <div class="form-group">
+            <label style="font-weight: 700; font-size: 0.82rem; color: #1e293b; margin-bottom: 4px; display: block;">Primary Deficiency Reason *</label>
+            <select id="rejectReasonCategorySelect" class="form-control" required style="width:100%; padding:0.55rem 0.75rem; border:1px solid #cbd5e1; border-radius:6px; font-size:0.85rem;">
+              <option value="Statutory Deficiency">Statutory Deficiency / Incomplete Information</option>
+              <option value="Illegible Document">Illegible / Low Resolution / Blurry Scan</option>
+              <option value="Missing Signatures or Seal">Missing Official Seal or Signatures</option>
+              <option value="Mismatched Student Particulars">Mismatched Name / DOB / Parent Particulars</option>
+              <option value="Expired Credential">Expired Credential / Past Validity Period</option>
+              <option value="Invalid File Format">Corrupted or Unreadable Document File</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label style="font-weight: 700; font-size: 0.82rem; color: #1e293b; margin-bottom: 4px; display: block;">Detailed Officer Remarks &amp; Rectification Directive *</label>
+            <textarea id="rejectDetailedRemarks" class="form-control" rows="3" required placeholder="Specify exact rectifications required from parent or student..." style="width:100%; padding:0.55rem 0.75rem; border:1px solid #cbd5e1; border-radius:6px; font-size:0.85rem;"></textarea>
+          </div>
+        </div>
+        <div class="modal-footer" style="display:flex; justify-content:flex-end; gap:0.5rem; background:#f8fafc; border-top:1px solid #e2e8f0; padding:0.85rem 1.25rem;">
+          <button type="button" class="btn btn-secondary btn-sm" onclick="portalApp.closeModal('rejectDocumentModal')">Cancel</button>
+          <button type="submit" class="btn btn-danger btn-sm"><i class="fa-solid fa-ban me-1"></i> Confirm Rejection &amp; Notify</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       MODAL: REPLACE STUDENT DOCUMENT / REVISION UPLOAD
+       ========================================================================= -->
+  <div class="modal-backdrop" id="replaceDocumentModal" style="display:none;">
+    <div class="portal-modal" style="max-width: 620px; width: 95%;">
+      <div class="modal-header">
+        <div style="display: flex; align-items: center; gap: 0.75rem;">
+          <div
+            style="width: 42px; height: 42px; border-radius: 8px; background: #eff6ff; color: #1d4ed8; display: flex; align-items: center; justify-content: center; font-size: 1.25rem; border: 1px solid #bfdbfe;">
+            <i class="fa-solid fa-cloud-arrow-up"></i>
+          </div>
+          <div>
+            <h3 style="margin: 0; font-size: 1.15rem; font-weight: 800; color: #0f172a;">Replace Document / Upload Revision</h3>
+            <p style="margin: 2px 0 0; font-size: 0.8rem; color: #64748b;">Upload corrected replacement file while archiving prior version.</p>
+          </div>
+        </div>
+        <button type="button" class="modal-close-x" onclick="portalApp.closeModal('replaceDocumentModal')" title="Close">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <form onsubmit="portalApp.submitReplaceDocument(event)">
+        <input type="hidden" id="replaceDocTargetId">
+        <div class="modal-body" style="padding: 1.25rem; display: flex; flex-direction: column; gap: 1rem;">
+          <div id="replaceDocCurrentInfo" style="padding: 10px 14px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; font-weight: 600; font-size: 0.85rem; color: #0f172a;"></div>
+
+          <div class="form-group">
+            <label style="font-weight: 700; font-size: 0.82rem; color: #1e293b; margin-bottom: 4px; display: block;">Submission Channel *</label>
+            <select id="replaceDocSourceSelect" class="form-control" required style="width:100%; padding:0.55rem 0.75rem; border:1px solid #cbd5e1; border-radius:6px; font-size:0.85rem;">
+              <option value="Uploaded Online" selected>Digital Upload (PDF / Scanned Copy)</option>
+              <option value="Received Physically">Physical Hard Copy (Reception Desk)</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label style="font-weight: 700; font-size: 0.82rem; color: #1e293b; margin-bottom: 4px; display: block;">Select Replacement File (PDF / JPG / PNG) *</label>
+            <input type="file" id="replaceFileInput" class="form-control" onchange="portalApp.handleReplaceFileSelected(event)" style="width:100%; padding:0.5rem 0.75rem; border:1px solid #cbd5e1; border-radius:6px;">
+            <div id="replaceSelectedFilePreview" style="display:none; align-items:center; gap:8px; padding:6px 12px; background:#eff6ff; border:1px solid #bfdbfe; border-radius:6px; margin-top:8px;">
+              <i class="fa-solid fa-file-check text-primary"></i> <span id="replaceSelectedFileName" style="font-size:0.82rem; font-weight:700; color:#1e40af;"></span>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label style="font-weight: 700; font-size: 0.82rem; color: #1e293b; margin-bottom: 4px; display: block;">Revision Notes</label>
+            <textarea id="replaceDocNotes" class="form-control" rows="2" placeholder="e.g., Replacement birth certificate copy with updated municipal seal..." style="width:100%; padding:0.55rem 0.75rem; border:1px solid #cbd5e1; border-radius:6px; font-size:0.85rem;"></textarea>
+          </div>
+        </div>
+        <div class="modal-footer" style="display:flex; justify-content:flex-end; gap:0.5rem; background:#f8fafc; border-top:1px solid #e2e8f0; padding:0.85rem 1.25rem;">
+          <button type="button" class="btn btn-secondary btn-sm" onclick="portalApp.closeModal('replaceDocumentModal')">Cancel</button>
+          <button type="submit" class="btn btn-primary btn-sm"><i class="fa-solid fa-cloud-arrow-up me-1"></i> Upload Replacement</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       MODAL: MARK DOCUMENT NOT APPLICABLE (STATUTORY EXEMPTION)
+       ========================================================================= -->
+  <div class="modal-backdrop" id="markDocNaModal" style="display:none;">
+    <div class="portal-modal" style="max-width: 580px; width: 95%;">
+      <div class="modal-header">
+        <div style="display: flex; align-items: center; gap: 0.75rem;">
+          <div
+            style="width: 42px; height: 42px; border-radius: 8px; background: #f1f5f9; color: #475569; display: flex; align-items: center; justify-content: center; font-size: 1.25rem; border: 1px solid #cbd5e1;">
+            <i class="fa-solid fa-shield-slash"></i>
+          </div>
+          <div>
+            <h3 style="margin: 0; font-size: 1.15rem; font-weight: 800; color: #0f172a;">Mark as Not Applicable</h3>
+            <p style="margin: 2px 0 0; font-size: 0.8rem; color: #64748b;">Record official statutory exemption or waiver.</p>
+          </div>
+        </div>
+        <button type="button" class="modal-close-x" onclick="portalApp.closeModal('markDocNaModal')" title="Close">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <form onsubmit="portalApp.submitMarkDocNa(event)">
+        <input type="hidden" id="markNaDocTargetId">
+        <div class="modal-body" style="padding: 1.25rem; display: flex; flex-direction: column; gap: 1rem;">
+          <div id="markNaDocSummary" style="padding: 10px 14px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; font-weight: 700; font-size: 0.85rem; color: #0f172a;"></div>
+
+          <div class="form-group">
+            <label style="font-weight: 700; font-size: 0.82rem; color: #1e293b; margin-bottom: 4px; display: block;">Exemption Grounds *</label>
+            <select id="markNaReasonSelect" class="form-control" required style="width:100%; padding:0.55rem 0.75rem; border:1px solid #cbd5e1; border-radius:6px; font-size:0.85rem;">
+              <option value="Statutory Exemption">Statutory State Board Exemption</option>
+              <option value="Direct Primary Admission">Pre-Primary Direct Admission (TC Not Applicable)</option>
+              <option value="Foreign National Status">Exempt Category</option>
+              <option value="Principal Discretion Exemption">Principal Executive Waiver Granted</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label style="font-weight: 700; font-size: 0.82rem; color: #1e293b; margin-bottom: 4px; display: block;">Exemption Executive Order / Remarks</label>
+            <textarea id="markNaRemarks" class="form-control" rows="2" placeholder="Official exemption reference or statutory order..." style="width:100%; padding:0.55rem 0.75rem; border:1px solid #cbd5e1; border-radius:6px; font-size:0.85rem;"></textarea>
+          </div>
+        </div>
+        <div class="modal-footer" style="display:flex; justify-content:flex-end; gap:0.5rem; background:#f8fafc; border-top:1px solid #e2e8f0; padding:0.85rem 1.25rem;">
+          <button type="button" class="btn btn-secondary btn-sm" onclick="portalApp.closeModal('markDocNaModal')">Cancel</button>
+          <button type="submit" class="btn btn-warning btn-sm" style="color:#fff;"><i class="fa-solid fa-shield-slash me-1"></i> Exempt &amp; Mark N/A</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       MODAL: DOCUMENT VERSION & AUDIT TIMELINE HISTORY
+       ========================================================================= -->
+  <div class="modal-backdrop" id="documentHistoryModal" style="display:none;">
+    <div class="portal-modal" style="max-width: 720px; width: 95%;">
+      <div class="modal-header">
+        <div style="display: flex; align-items: center; gap: 0.75rem;">
+          <div
+            style="width: 42px; height: 42px; border-radius: 8px; background: #eff6ff; color: #1d4ed8; display: flex; align-items: center; justify-content: center; font-size: 1.25rem; border: 1px solid #bfdbfe;">
+            <i class="fa-solid fa-clock-rotate-left"></i>
+          </div>
+          <div>
+            <h3 style="margin: 0; font-size: 1.15rem; font-weight: 800; color: #0f172a;">Document Version &amp; Audit Trail</h3>
+            <p style="margin: 2px 0 0; font-size: 0.8rem; color: #64748b;">Audited lifecycle of uploads, verifications, and revisions.</p>
+          </div>
+        </div>
+        <button type="button" class="modal-close-x" onclick="portalApp.closeModal('documentHistoryModal')" title="Close">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <div class="modal-body" style="padding: 1.25rem; max-height: calc(85vh - 140px); overflow-y: auto;">
+        <div id="historyDocSummary" style="padding: 10px 14px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; font-weight: 700; font-size: 0.85rem; color: #0f172a; margin-bottom: 1rem;"></div>
+        <div class="doc-version-timeline" id="docVersionTimelineContainer" style="padding: 0.5rem 0 1rem 1.5rem;">
+          <!-- Injected dynamically by portalApp.openDocumentHistoryModal -->
+        </div>
+      </div>
+      <div class="modal-footer" style="display:flex; justify-content:flex-end; background:#f8fafc; border-top:1px solid #e2e8f0; padding:0.85rem 1.25rem;">
+        <button type="button" class="btn btn-secondary btn-sm" onclick="portalApp.closeModal('documentHistoryModal')">Close</button>
+      </div>
+    </div>
+  </div>
+
   <div class="modal-backdrop" id="studentDocsModal" style="display:none;">
     <div class="portal-modal" style="max-width: 680px; width: 95%;">
       <div class="modal-header">
