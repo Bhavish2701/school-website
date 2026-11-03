@@ -69,6 +69,97 @@ const css = fs.readFileSync('frontend/css/portal.css', 'utf8');
 assert(css.includes('overflow-x: auto'), 'portal.css must have overflow-x: auto on .student-docs-wrap');
 console.log('[PASS] CSS overflow-x: auto properly configured');
 
+// 7. Verify Tab Badges in index.html match authoritative repository records
+assert(html.includes('id="studentDocsCountBadge">1,500<'), 'Student Documents badge in index.html must be 1,500');
+assert(html.includes('id="parentRecordsCountBadge">412<'), 'Parent Records badge in index.html must be 412');
+assert(html.includes('id="admissionsCountBadge">18<'), 'Admissions badge in index.html must be 18');
+assert(html.includes('id="transfersCountBadge">8<'), 'Transfers badge in index.html must be 8');
+console.log('[PASS] Tab badges in index.html properly configured with authoritative record counts (1,500 files, 412 parents, 18 admissions, 8 transfers)');
+
+// 8. Dynamic DOM Execution Test: Verify updateStudentTabBadges & updateStudentDocKPIs
+const path = require('path');
+const mockElements = new Map();
+function getMock(id, tag = 'div') {
+  if (!mockElements.has(id)) {
+    mockElements.set(id, {
+      id: id,
+      tagName: tag.toUpperCase(),
+      textContent: '',
+      innerHTML: '',
+      value: '',
+      style: {},
+      classList: {
+        add: () => {},
+        remove: () => {},
+        contains: () => false,
+        toggle: () => {}
+      },
+      querySelectorAll: () => [],
+      querySelector: () => null,
+      appendChild: () => {},
+      addEventListener: () => {}
+    });
+  }
+  return mockElements.get(id);
+}
+
+global.window = {
+  addEventListener: () => {},
+  removeEventListener: () => {},
+  location: { hash: '#students' },
+  localStorage: { getItem: () => null, setItem: () => {}, removeItem: () => {} },
+  scrollTo: () => {}
+};
+
+global.document = {
+  getElementById: (id) => getMock(id),
+  querySelector: (sel) => {
+    if (sel.startsWith('#')) return getMock(sel.slice(1));
+    return getMock('sel_' + Math.random());
+  },
+  querySelectorAll: () => [],
+  createElement: (tag) => getMock('el_' + Math.random(), tag),
+  body: getMock('body'),
+  addEventListener: () => {},
+  removeEventListener: () => {}
+};
+
+global.localStorage = global.window.localStorage;
+global.bootstrap = { Modal: function() { return { show: () => {}, hide: () => {} }; } };
+global.showToast = () => {};
+
+// Load student-roster.js
+const rosterPath = path.join(__dirname, '..', 'frontend', 'js', 'student-roster.js');
+if (fs.existsSync(rosterPath)) {
+  eval(fs.readFileSync(rosterPath, 'utf8'));
+}
+
+// Load portal.js
+eval(js);
+const portal = global.portalApp || window.portalApp;
+assert(portal, 'portalApp must be available');
+
+// Call updateStudentTabBadges
+portal.updateStudentTabBadges();
+const docsBadgeEl = getMock('studentDocsCountBadge');
+const parentBadgeEl = getMock('parentRecordsCountBadge');
+console.log(`[CHECK] updateStudentTabBadges -> studentDocsCountBadge: "${docsBadgeEl.textContent}"`);
+console.log(`[CHECK] updateStudentTabBadges -> parentRecordsCountBadge: "${parentBadgeEl.textContent}"`);
+
+assert.strictEqual(docsBadgeEl.textContent, '1,500', 'docsBadge textContent must be 1,500');
+assert.strictEqual(parentBadgeEl.textContent, '412', 'parentBadge textContent must be 412');
+
+// Call updateStudentDocKPIs
+portal.updateStudentDocKPIs();
+console.log(`[CHECK] updateStudentDocKPIs -> studentDocsCountBadge: "${docsBadgeEl.textContent}"`);
+assert.strictEqual(docsBadgeEl.textContent, '1,500', 'docsBadge must retain 1,500 after updateStudentDocKPIs');
+
+const kpiDossiers = getMock('kpiDocTotalDossiers');
+console.log(`[CHECK] updateStudentDocKPIs -> kpiDocTotalDossiers: "${kpiDossiers.textContent}"`);
+assert.strictEqual(kpiDossiers.textContent, '500', 'kpiDocTotalDossiers must be 500');
+
+console.log('[PASS] Dynamic runtime badge synchronization functions execute with 100% accuracy!');
+
 console.log('\n========================================');
 console.log('TEST SUMMARY: ALL STUDENT DOCUMENTS TESTS PASSED 100%!');
 console.log('========================================');
