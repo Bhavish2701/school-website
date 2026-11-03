@@ -11557,8 +11557,10 @@ const FEE_CATEGORY_AUDIT_DATA = [
             <a href="javascript:void(0)" onclick="portalApp.openApplicationDetailModal('${item.appId}')" style="font-family:monospace; font-weight:800; font-size:0.88rem; color:#1d4ed8; text-decoration:none;">
               ${item.appId}
             </a>
-            <div style="font-size:0.72rem; color:#64748b; margin-top:2px;">
-              ${isOnline ? '<i class="fa-solid fa-globe text-primary"></i> Online' : '<i class="fa-solid fa-building-columns text-amber"></i> Walk-In'}
+            <div style="margin-top:3px;">
+              <span class="badge" style="background:${isOnline ? '#eff6ff' : '#fff7ed'}; color:${isOnline ? '#1d4ed8' : '#c2410c'}; border:1px solid ${isOnline ? '#bfdbfe' : '#fed7aa'}; font-size:0.68rem; font-weight:700; padding:2px 7px; border-radius:4px; display:inline-flex; align-items:center; gap:4px;">
+                ${isOnline ? '<i class="fa-solid fa-globe"></i> Online' : '<i class="fa-solid fa-building-columns"></i> Walk-In'}
+              </span>
             </div>
           </td>
 
@@ -11588,7 +11590,7 @@ const FEE_CATEGORY_AUDIT_DATA = [
 
           <!-- 4. Parent / Guardian -->
           <td>
-            <div style="font-size:0.84rem; font-weight:700; color:#1e293b;">${item.parent || item.parentName || 'Parent'}</div>
+            <div style="font-size:0.84rem; font-weight:700; color:#1e293b; text-transform:capitalize;">${item.parent || item.parentName || 'Parent'}</div>
             <div style="font-size:0.78rem; margin-top:2px;">
               <a href="tel:${item.phone}" class="phone-link"><i class="fa-solid fa-phone text-emerald mr-1"></i>${item.phone}</a>
             </div>

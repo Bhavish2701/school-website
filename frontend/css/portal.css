@@ -13042,19 +13042,76 @@ input:disabled+.perm-slider {
   margin-top: 0.2rem;
 }
 
-/* Admissions Executive Toolbar */
-.admissions-toolbar {
+/* Admissions Executive Toolbar & Enterprise 2-Tier Architecture */
+.admissions-toolbar,
+.admissions-toolbar-container {
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column;
   gap: 0.75rem;
-  align-items: center;
-  justify-content: space-between;
   background: var(--color-bg-surface, #ffffff);
   border: 1px solid var(--color-border, #e2e8f0);
   border-radius: 12px;
-  padding: 0.85rem 1.15rem;
+  padding: 0.95rem 1.15rem;
   margin-bottom: 1.15rem;
   box-shadow: 0 1px 4px rgba(15, 23, 42, 0.03);
+}
+
+.admissions-filter-grid {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.65rem;
+  width: 100%;
+}
+
+.admissions-filter-grid .adm-search-wrap {
+  flex: 1.6;
+  min-width: 240px;
+  position: relative;
+}
+
+.admissions-filter-grid .adm-select-wrap {
+  flex: 1;
+  min-width: 150px;
+}
+
+.admissions-filter-grid .adm-select-wrap .adm-filter-select {
+  width: 100%;
+}
+
+.admissions-filter-grid .btn-filter-reset {
+  height: 38px;
+  padding: 0 0.95rem;
+  font-size: 0.82rem;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  border-radius: 8px;
+  white-space: nowrap;
+}
+
+.admissions-governance-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+  padding-top: 0.65rem;
+  border-top: 1px solid #f1f5f9;
+}
+
+.admissions-governance-row .adm-stats-left {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.admissions-governance-row .adm-actions-right {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
 .adm-toolbar-left {
@@ -13176,6 +13233,7 @@ input:disabled+.perm-slider {
 
 .admissions-table {
   width: 100%;
+  min-width: 1220px;
   border-collapse: separate;
   border-spacing: 0;
   font-size: 0.84rem;
@@ -19277,7 +19335,26 @@ input:disabled+.perm-slider {
   border-bottom: 2px solid #e2e8f0;
   margin-bottom: 1.25rem;
   overflow-x: auto;
-  padding-bottom: 2px;
+  padding-bottom: 4px;
+  scrollbar-width: thin;
+  scrollbar-color: #cbd5e1 transparent;
+}
+
+.admissions-tab-strip::-webkit-scrollbar {
+  height: 4px;
+}
+
+.admissions-tab-strip::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.admissions-tab-strip::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+
+.admissions-tab-strip::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
 }
 
 .admissions-tab-btn {

@@ -3802,7 +3802,7 @@
               </div>
               <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
                 <button type="button" class="btn btn-primary" onclick="portalApp.openNewAdmissionModal()" id="btnNewAdmissionPrimary" title="Create new admission application (Online / Offline)">
-                  <i class="fa-solid fa-plus mr-1"></i> + New Admission
+                  <i class="fa-solid fa-user-plus me-1"></i> New Admission
                 </button>
                 <button type="button" class="btn btn-secondary" onclick="portalApp.openAddEnquiryModal()" id="btnAddEnquirySecondary" title="Log prospective student enquiry">
                   <i class="fa-solid fa-phone-volume mr-1"></i> Add Enquiry
@@ -3894,9 +3894,10 @@
             </div>
 
             <!-- Admissions Executive Toolbar & Granular Filters -->
-            <div class="admissions-toolbar">
-              <div class="adm-toolbar-left" style="display: flex; gap: 0.5rem; flex-wrap: wrap; align-items: center;">
-                <div class="adm-search-wrap" style="min-width: 250px;">
+            <div class="admissions-toolbar-container">
+              <!-- Tier 1: Search & Granular Filters -->
+              <div class="admissions-filter-grid">
+                <div class="adm-search-wrap">
                   <i class="fa-solid fa-magnifying-glass search-icon"></i>
                   <input type="text" id="admSearchInput" class="adm-search-input"
                     placeholder="Search by App ID, student, parent, phone, school..."
@@ -3908,66 +3909,87 @@
                   </button>
                 </div>
 
-                <select id="admClassFilter" class="adm-filter-select" onchange="portalApp.filterAdmissions()" title="Filter by Class Applied">
-                  <option value="">All Classes (Nursery to X)</option>
-                  <option value="Nursery">Nursery</option>
-                  <option value="LKG">Class LKG</option>
-                  <option value="UKG">Class UKG</option>
-                  <option value="I">Class I</option>
-                  <option value="II">Class II</option>
-                  <option value="III">Class III</option>
-                  <option value="IV">Class IV</option>
-                  <option value="V">Class V</option>
-                  <option value="VI">Class VI</option>
-                  <option value="VII">Class VII</option>
-                  <option value="VIII">Class VIII</option>
-                  <option value="IX">Class IX</option>
-                  <option value="X">Class X</option>
-                </select>
+                <div class="adm-select-wrap">
+                  <select id="admClassFilter" class="adm-filter-select" onchange="portalApp.filterAdmissions()" title="Filter by Class Applied">
+                    <option value="">All Classes (Nursery to X)</option>
+                    <option value="Nursery">Nursery</option>
+                    <option value="LKG">Class LKG</option>
+                    <option value="UKG">Class UKG</option>
+                    <option value="I">Class I</option>
+                    <option value="II">Class II</option>
+                    <option value="III">Class III</option>
+                    <option value="IV">Class IV</option>
+                    <option value="V">Class V</option>
+                    <option value="VI">Class VI</option>
+                    <option value="VII">Class VII</option>
+                    <option value="VIII">Class VIII</option>
+                    <option value="IX">Class IX</option>
+                    <option value="X">Class X</option>
+                  </select>
+                </div>
 
-                <select id="admStatusFilter" class="adm-filter-select" onchange="portalApp.filterAdmissions()" title="Filter by Status">
-                  <option value="">All Lifecycle Statuses</option>
-                  <option value="New Enquiry">New Enquiry</option>
-                  <option value="Submitted">Submitted / Received</option>
-                  <option value="Documents Pending">Documents Pending</option>
-                  <option value="Under Review">Under Review</option>
-                  <option value="Eligibility Review">Eligibility Review</option>
-                  <option value="Offer Issued">Offer Issued</option>
-                  <option value="Offer Accepted">Offer Accepted</option>
-                  <option value="Enrolment Pending">Enrolment Pending</option>
-                  <option value="Confirmed Admission">Confirmed Admission</option>
-                  <option value="Rejected">Rejected</option>
-                  <option value="Withdrawn">Withdrawn</option>
-                </select>
+                <div class="adm-select-wrap">
+                  <select id="admStatusFilter" class="adm-filter-select" onchange="portalApp.filterAdmissions()" title="Filter by Status">
+                    <option value="">All Lifecycle Statuses</option>
+                    <option value="New Enquiry">New Enquiry</option>
+                    <option value="Submitted">Submitted / Received</option>
+                    <option value="Documents Pending">Documents Pending</option>
+                    <option value="Under Review">Under Review</option>
+                    <option value="Eligibility Review">Eligibility Review</option>
+                    <option value="Offer Issued">Offer Issued</option>
+                    <option value="Offer Accepted">Offer Accepted</option>
+                    <option value="Enrolment Pending">Enrolment Pending</option>
+                    <option value="Confirmed Admission">Confirmed Admission</option>
+                    <option value="Rejected">Rejected</option>
+                    <option value="Withdrawn">Withdrawn</option>
+                  </select>
+                </div>
 
-                <select id="admDocFilter" class="adm-filter-select" onchange="portalApp.filterAdmissions()" title="Filter by Document Screening">
-                  <option value="">All Document States</option>
-                  <option value="Complete">Complete (All Verified)</option>
-                  <option value="Pending Verification">Pending Verification</option>
-                  <option value="Deficient">Deficient / Action Required</option>
-                  <option value="Exempt">Exempt / Not Applicable</option>
-                </select>
+                <div class="adm-select-wrap">
+                  <select id="admDocFilter" class="adm-filter-select" onchange="portalApp.filterAdmissions()" title="Filter by Document Screening">
+                    <option value="">All Document States</option>
+                    <option value="Complete">Complete (All Verified)</option>
+                    <option value="Pending Verification">Pending Verification</option>
+                    <option value="Deficient">Deficient / Action Required</option>
+                    <option value="Exempt">Exempt / Not Applicable</option>
+                  </select>
+                </div>
 
-                <select id="admSourceFilter" class="adm-filter-select" onchange="portalApp.filterAdmissions()" title="Filter by Submission Channel">
-                  <option value="">All Channels (Online &amp; Walk-In)</option>
-                  <option value="Online Application">Online Portal Form</option>
-                  <option value="Offline Walk-In">Offline Walk-In (Reception Desk)</option>
-                </select>
+                <div class="adm-select-wrap">
+                  <select id="admSourceFilter" class="adm-filter-select" onchange="portalApp.filterAdmissions()" title="Filter by Submission Channel">
+                    <option value="">All Channels (Online &amp; Walk-In)</option>
+                    <option value="Online Application">Online Portal Form</option>
+                    <option value="Offline Walk-In">Offline Walk-In (Reception Desk)</option>
+                  </select>
+                </div>
+
+                <button type="button" class="btn btn-outline-secondary btn-filter-reset"
+                  onclick="portalApp.resetAdmissionsFilters()" title="Reset all filters">
+                  <i class="fa-solid fa-rotate-left me-1"></i> Reset
+                </button>
               </div>
 
-              <div class="adm-toolbar-right" style="display: flex; gap: 0.5rem; align-items: center;">
-                <span class="adm-count-pill" id="admFilterCountDisplay">
-                  <i class="fa-solid fa-list-check text-primary"></i> Showing <strong id="admFilteredCount">0</strong>
-                  of <strong id="admTotalCount">0</strong>
-                </span>
-                <button type="button" class="btn btn-outline-secondary btn-sm"
-                  onclick="portalApp.resetAdmissionsFilters()" title="Reset all filters">
-                  <i class="fa-solid fa-rotate-left"></i> Reset
-                </button>
-                <button type="button" class="btn btn-outline-primary btn-sm" onclick="portalApp.printAdmissionsTable()"
-                  title="Print admissions docket">
-                  <i class="fa-solid fa-print"></i> Print
-                </button>
+              <!-- Tier 2: Governance Indicators and Register Print Operations -->
+              <div class="admissions-governance-row">
+                <div class="adm-stats-left">
+                  <span class="adm-count-pill" id="admFilterCountDisplay">
+                    <i class="fa-solid fa-list-check text-primary"></i> Showing <strong id="admFilteredCount">0</strong>
+                    of <strong id="admTotalCount">0</strong> Applications
+                  </span>
+                  <span class="toolbar-tag-pill">
+                    <i class="fa-solid fa-calendar-check text-primary"></i> Academic Year 2026–2027
+                  </span>
+                  <span class="toolbar-tag-pill stat-badge-verified">
+                    <i class="fa-solid fa-shield-check text-success"></i> AP Statutory Enrolment
+                  </span>
+                </div>
+
+                <div class="adm-actions-right">
+                  <button type="button" class="btn btn-outline-primary btn-sm" onclick="portalApp.printAdmissionsTable()"
+                    title="Print admissions docket">
+                    <i class="fa-solid fa-print me-1"></i> Print Register
+                  </button>
+                </div>
               </div>
             </div>
 
@@ -3985,7 +4007,7 @@
                       <th class="th-doc-status text-center" style="min-width: 140px;"><i class="fa-solid fa-file-circle-check"></i> Documents Status</th>
                       <th class="th-decision text-center" style="min-width: 150px;"><i class="fa-solid fa-circle-check"></i> Application Status</th>
                       <th class="th-officer" style="min-width: 150px;"><i class="fa-solid fa-user-tie"></i> Assigned Staff</th>
-                      <th class="th-actions text-end" style="min-width: 160px;"><i class="fa-solid fa-sliders"></i> Next Action</th>
+                      <th class="th-actions text-end" style="min-width: 170px;"><i class="fa-solid fa-sliders me-1"></i> Actions</th>
                     </tr>
                   </thead>
                   <tbody id="admissionsTableBody">
