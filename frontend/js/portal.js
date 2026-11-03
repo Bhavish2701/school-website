@@ -8452,32 +8452,32 @@ const FEE_CATEGORY_AUDIT_DATA = [
     if (btnContainer) {
       if (doc.status === 'Pending Verification') {
         btnContainer.innerHTML = `
-          <button type="button" class="btn btn-danger btn-sm" onclick="portalApp.openRejectDocumentModal('${doc.id}')">
-            <i class="fa-solid fa-ban mr-1"></i> Reject with Reason
+          <button type="button" class="btn btn-danger btn-sm" onclick="portalApp.openRejectDocumentModal('${doc.id}')" title="Reject document and record deficiency reason">
+            <i class="fa-solid fa-ban me-1"></i> Reject
           </button>
-          <button type="button" class="btn btn-warning btn-sm" style="color:#fff;" onclick="portalApp.openRequestReplacementModal('${doc.id}')">
-            <i class="fa-solid fa-arrows-rotate mr-1"></i> Request Replacement
+          <button type="button" class="btn btn-warning btn-sm" onclick="portalApp.openRequestReplacementModal('${doc.id}')" title="Request corrected revision from student/guardian">
+            <i class="fa-solid fa-arrows-rotate me-1"></i> Request Revision
           </button>
-          <button type="button" class="btn btn-success btn-sm" onclick="portalApp.verifyStudentDocument('${doc.id}')">
-            <i class="fa-solid fa-shield-check mr-1"></i> Authorize &amp; Verify
+          <button type="button" class="btn btn-success btn-sm" onclick="portalApp.verifyStudentDocument('${doc.id}')" title="Statutory institutional authorization and verification">
+            <i class="fa-solid fa-shield-check me-1"></i> Authorize &amp; Verify
           </button>
         `;
       } else if (doc.status === 'Rejected or Invalid' || doc.status === 'Replacement Requested') {
         btnContainer.innerHTML = `
-          <button type="button" class="btn btn-primary btn-sm" onclick="portalApp.openReplaceDocumentModal('${doc.id}')">
-            <i class="fa-solid fa-cloud-arrow-up mr-1"></i> Replace File / Upload Revision
+          <button type="button" class="btn btn-primary btn-sm" onclick="portalApp.openReplaceDocumentModal('${doc.id}')" title="Upload replacement file">
+            <i class="fa-solid fa-cloud-arrow-up me-1"></i> Upload Revision
           </button>
-          <button type="button" class="btn btn-success btn-sm" onclick="portalApp.verifyStudentDocument('${doc.id}')">
-            <i class="fa-solid fa-shield-check mr-1"></i> Override &amp; Verify
+          <button type="button" class="btn btn-success btn-sm" onclick="portalApp.verifyStudentDocument('${doc.id}')" title="Authorize and verify document">
+            <i class="fa-solid fa-shield-check me-1"></i> Override &amp; Verify
           </button>
         `;
       } else {
         btnContainer.innerHTML = `
-          <button type="button" class="btn btn-secondary btn-sm" onclick="portalApp.openReplaceDocumentModal('${doc.id}')">
-            <i class="fa-solid fa-arrows-rotate mr-1"></i> Replace File
+          <button type="button" class="btn btn-secondary btn-sm" onclick="portalApp.openReplaceDocumentModal('${doc.id}')" title="Replace document file">
+            <i class="fa-solid fa-arrows-rotate me-1"></i> Replace File
           </button>
-          <button type="button" class="btn btn-outline-danger btn-sm" onclick="portalApp.openRejectDocumentModal('${doc.id}')">
-            <i class="fa-solid fa-ban mr-1"></i> Revoke &amp; Reject
+          <button type="button" class="btn btn-outline-danger btn-sm" onclick="portalApp.openRejectDocumentModal('${doc.id}')" title="Revoke and reject document">
+            <i class="fa-solid fa-ban me-1"></i> Revoke &amp; Reject
           </button>
         `;
       }

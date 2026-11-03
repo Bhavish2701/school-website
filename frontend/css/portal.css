@@ -12222,6 +12222,36 @@ input:disabled+.perm-slider {
   border-color: #047857;
 }
 
+.btn-warning {
+  background: #d97706;
+  color: #ffffff !important;
+  border: 1px solid #d97706;
+  font-weight: 600;
+}
+
+.btn-warning:hover {
+  background: #b45309;
+  color: #ffffff !important;
+  border-color: #b45309;
+}
+
+.portal-modal .modal-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.portal-modal .modal-footer .btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  font-weight: 600;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
 .btn-sm {
   padding: 0.42rem 0.85rem;
   font-size: 0.8rem;

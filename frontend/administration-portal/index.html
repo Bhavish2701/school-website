@@ -23625,7 +23625,7 @@ Class X-A,Monday,2,09:35 AM - 10:20 AM,Physical Science,Sri Navva Anand,Room 201
        MODAL: STUDENT DOCUMENT PREVIEW & CREDENTIAL VERIFICATION
        ========================================================================= -->
   <div class="modal-backdrop" id="previewDocumentModal" style="display:none;">
-    <div class="portal-modal" style="max-width: 860px; width: 95%;">
+    <div class="portal-modal" style="max-width: 960px; width: 96%;">
       <div class="modal-header">
         <div style="display: flex; align-items: center; gap: 0.75rem;">
           <div
@@ -23715,8 +23715,8 @@ Class X-A,Monday,2,09:35 AM - 10:20 AM,Physical Science,Sri Navva Anand,Room 201
         </div>
       </div>
 
-      <div class="modal-footer" style="display: flex; justify-content: space-between; align-items: center; background: #f8fafc; border-top: 1px solid #e2e8f0; padding: 0.85rem 1.25rem;">
-        <div style="display: flex; gap: 0.5rem; align-items: center;">
+      <div class="modal-footer" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.75rem; background: #f8fafc; border-top: 1px solid #e2e8f0; padding: 0.85rem 1.25rem;">
+        <div style="display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;">
           <button type="button" class="btn btn-secondary btn-sm" onclick="portalApp.downloadStudentDocumentFromPreview()" title="Download original document file">
             <i class="fa-solid fa-download text-primary me-1"></i> Download File
           </button>
@@ -23724,11 +23724,11 @@ Class X-A,Monday,2,09:35 AM - 10:20 AM,Physical Science,Sri Navva Anand,Room 201
             <i class="fa-solid fa-clock-rotate-left text-info me-1"></i> Version History
           </button>
         </div>
-        <div style="display: flex; gap: 0.5rem; align-items: center;">
-          <div id="previewActionButtonsContainer" style="display: inline-flex; gap: 0.5rem;">
+        <div style="display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;">
+          <div id="previewActionButtonsContainer" style="display: inline-flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;">
             <!-- Injected dynamically by portalApp.openDocumentPreviewModal -->
           </div>
-          <button type="button" class="btn btn-secondary btn-sm" onclick="portalApp.closeModal('previewDocumentModal')">
+          <button type="button" class="btn btn-secondary btn-sm" onclick="portalApp.closeModal('previewDocumentModal')" style="min-width: 72px;">
             Close
           </button>
         </div>
