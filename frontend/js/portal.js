@@ -11704,12 +11704,29 @@ const FEE_CATEGORY_AUDIT_DATA = [
      ========================================================================= */
 
   function openNewAdmissionModal(name, cls, parent, phone) {
+    const form = document.getElementById('newAdmissionForm');
+    if (form) form.reset();
+
+    if (document.getElementById('admIntakeChannel')) document.getElementById('admIntakeChannel').value = 'Offline Walk-In';
     if (document.getElementById('admFullName')) document.getElementById('admFullName').value = name || '';
+    if (document.getElementById('admDob')) document.getElementById('admDob').value = '2014-06-15';
+    if (document.getElementById('admGender')) document.getElementById('admGender').value = 'Male';
+    if (document.getElementById('admBloodGroup')) document.getElementById('admBloodGroup').value = 'O+';
+    if (document.getElementById('admMotherTongue')) document.getElementById('admMotherTongue').value = 'Telugu';
     if (document.getElementById('admClassApplied')) document.getElementById('admClassApplied').value = cls || 'IX';
+    if (document.getElementById('admCategory')) document.getElementById('admCategory').value = 'General Merit';
+    if (document.getElementById('admTransport')) document.getElementById('admTransport').value = 'Self Commute';
+    if (document.getElementById('admPrevSchool')) document.getElementById('admPrevSchool').value = 'Sri Vidya Primary Wing';
     if (document.getElementById('admGuardianName')) document.getElementById('admGuardianName').value = parent || '';
+    if (document.getElementById('admGuardianRel')) document.getElementById('admGuardianRel').value = 'Father';
     if (document.getElementById('admGuardianPhone')) document.getElementById('admGuardianPhone').value = phone || '';
+    if (document.getElementById('admAddress')) document.getElementById('admAddress').value = 'Visakhapatnam';
 
     openModal('newAdmissionModal');
+    setTimeout(() => {
+      const nameInput = document.getElementById('admFullName');
+      if (nameInput) nameInput.focus();
+    }, 100);
   }
 
   function submitNewAdmission(event) {
@@ -11793,17 +11810,30 @@ const FEE_CATEGORY_AUDIT_DATA = [
     } catch (e) {}
 
     closeModal('newAdmissionModal');
+    if (typeof updateStudentTabBadges === 'function') updateStudentTabBadges();
+    if (typeof updateAdmissionsKPIs === 'function') updateAdmissionsKPIs();
     filterAdmissions();
     showToast(`Admission Application ${newAppId} for ${fullName} created successfully!`, 'success');
   }
 
   function openAddEnquiryModal() {
+    if (document.getElementById('enqStudentName')) document.getElementById('enqStudentName').value = '';
+    if (document.getElementById('enqParentName')) document.getElementById('enqParentName').value = '';
+    if (document.getElementById('enqPhone')) document.getElementById('enqPhone').value = '';
+    if (document.getElementById('enqRemarks')) document.getElementById('enqRemarks').value = '';
+    if (document.getElementById('enqClass')) document.getElementById('enqClass').value = 'IX';
+    if (document.getElementById('enqSource')) document.getElementById('enqSource').value = 'Walk-In (Front Desk)';
+
     if (document.getElementById('enqFollowupDate')) {
       const d = new Date();
       d.setDate(d.getDate() + 3);
       document.getElementById('enqFollowupDate').value = d.toISOString().split('T')[0];
     }
     openModal('addEnquiryModal');
+    setTimeout(() => {
+      const el = document.getElementById('enqStudentName');
+      if (el) el.focus();
+    }, 100);
   }
 
   function submitAddEnquiry(event) {
@@ -11854,7 +11884,15 @@ const FEE_CATEGORY_AUDIT_DATA = [
     };
 
     state.admissions.unshift(newEnquiry);
+    try {
+      const stored = JSON.parse(localStorage.getItem('sv_applications') || '[]');
+      stored.unshift(newEnquiry);
+      localStorage.setItem('sv_applications', JSON.stringify(stored));
+      window.dispatchEvent(new Event('storage'));
+    } catch (e) {}
     closeModal('addEnquiryModal');
+    if (typeof updateStudentTabBadges === 'function') updateStudentTabBadges();
+    if (typeof updateAdmissionsKPIs === 'function') updateAdmissionsKPIs();
     filterAdmissions();
     showToast(`Prospective Enquiry ${newEnqId} for ${name} logged successfully!`, 'success');
   }
@@ -12497,12 +12535,14 @@ const FEE_CATEGORY_AUDIT_DATA = [
   function exportAdmissionsCSV() {
     initAdmissions();
     const all = state.admissions || [];
-    let csv = 'ApplicationID,ApplicantName,DOB,Gender,ClassApplied,ParentGuardian,Phone,Email,SubmissionDate,Channel,DocumentStatus,ApplicationStatus,AssignedOfficer,Score,FeeStatus\n';
+    const dateStr = new Date().toISOString().split('T')[0];
+    let csv = 'ApplicationID,ApplicantName,DOB,Gender,ClassApplied,ParentGuardian,Relationship,Phone,Email,Address,SubmissionDate,Channel,DocumentStatus,ApplicationStatus,AssignedOfficer,Score,FeeStatus,FeeAmount\n';
     all.forEach(a => {
-      csv += `"${a.appId}","${a.name}","${a.dob}","${a.gender}","${a.class}","${a.parent}","${a.phone}","${a.email || ''}","${a.submissionDate}","${a.intakeChannel}","${a.docStatus}","${a.status}","${a.assignedOfficer}","${a.score}","${a.feeStatus}"\n`;
+      const clean = (val) => String(val || '').replace(/"/g, '""');
+      csv += `"${clean(a.appId)}","${clean(a.name || a.studentName)}","${clean(a.dob)}","${clean(a.gender)}","${clean(a.class || a.grade)}","${clean(a.parent)}","${clean(a.guardianRel || 'Father')}","${clean(a.phone)}","${clean(a.email)}","${clean(a.address)}","${clean(a.submissionDate)}","${clean(a.intakeChannel)}","${clean(a.docStatus)}","${clean(a.status)}","${clean(a.assignedOfficer)}","${clean(a.score)}","${clean(a.feeStatus)}","${clean(a.feeAmount || '₹12,500')}"\n`;
     });
-    downloadCsvFile(csv, 'sri_vidya_admissions_master_register.csv');
-    showToast('Admissions Master Register exported to CSV successfully.', 'success');
+    downloadCsvFile(csv, `sri_vidya_admissions_master_register_${dateStr}.csv`);
+    showToast(`Admissions Master Register (${all.length} applications) exported to CSV successfully.`, 'success');
   }
 
   function printAdmissionsTable() {
@@ -12510,8 +12550,248 @@ const FEE_CATEGORY_AUDIT_DATA = [
     window.print();
   }
 
+  let activeAdmissionsImportData = [];
+
   function openImportAdmissionsModal() {
-    showToast('Import Applications docket active: Upload CSV to bulk ingest prospective admissions.', 'info');
+    activeAdmissionsImportData = [];
+    const fileInput = document.getElementById('admImportFileInput');
+    if (fileInput) fileInput.value = '';
+    const pasteArea = document.getElementById('admImportPasteText');
+    if (pasteArea) pasteArea.value = '';
+
+    renderAdmissionsImportPreview([]);
+    openModal('importAdmissionsModal');
+  }
+
+  function downloadAdmissionsImportSample() {
+    const sampleCsv = 'Full Name,Class Applied,Gender,Date of Birth,Parent Name,Relationship,Mobile Phone,Email,Address,Intake Channel,Previous School,Notes\n' +
+      'K. Sneha,VIII,Female,2013-08-22,K. Venkat Rao,Father,9848123456,venkat.k@gmail.com,MVP Colony Visakhapatnam,Walk-In,St. Anthony High School,Prospective admission for Class 8\n' +
+      'M. Tharun Kumar,IX,Male,2012-04-15,M. Srinivas,Father,9848234567,srinivas.m@gmail.com,Gajuwaka Visakhapatnam,Online Application,Zilla Parishad High School,Interested in science club\n' +
+      'P. Ananya,X,Female,2011-11-03,P. Lakshmi Narayana,Father,9848345678,narayana.p@yahoo.com,Seethammadhara Visakhapatnam,Walk-In,Kendriya Vidyalaya,Transfer from central syllabus\n';
+    downloadCsvFile(sampleCsv, 'sri_vidya_admissions_import_template.csv');
+    showToast('Admissions import template downloaded successfully.', 'success');
+  }
+
+  function handleAdmissionsImportFileSelected(event) {
+    const file = event?.target?.files?.[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      const text = e.target.result;
+      parseAdmissionsCsvData(text, file.name);
+    };
+    reader.onerror = function() {
+      showToast('Error reading the selected CSV file.', 'danger');
+    };
+    reader.readAsText(file);
+  }
+
+  function parseAdmissionsPastedText() {
+    const text = document.getElementById('admImportPasteText')?.value || '';
+    if (!text.trim()) {
+      showToast('Please paste CSV or tabular data before parsing.', 'warning');
+      return;
+    }
+    parseAdmissionsCsvData(text, 'Pasted Data');
+  }
+
+  function parseAdmissionsCsvData(rawText, sourceName = 'Import Docket') {
+    if (!rawText || !rawText.trim()) {
+      showToast('No data found to parse.', 'warning');
+      return;
+    }
+
+    const lines = rawText.split(/\r?\n/).map(l => l.trim()).filter(l => l.length > 0);
+    if (lines.length === 0) {
+      showToast('Import file is empty.', 'warning');
+      return;
+    }
+
+    function parseCsvLine(line) {
+      const result = [];
+      let cur = '';
+      let inQuotes = false;
+      const delimiter = line.includes('\t') && !line.includes(',') ? '\t' : ',';
+      for (let i = 0; i < line.length; i++) {
+        const c = line[i];
+        if (c === '"') {
+          if (inQuotes && line[i + 1] === '"') {
+            cur += '"';
+            i++;
+          } else {
+            inQuotes = !inQuotes;
+          }
+        } else if (c === delimiter && !inQuotes) {
+          result.push(cur.trim());
+          cur = '';
+        } else {
+          cur += c;
+        }
+      }
+      result.push(cur.trim());
+      return result;
+    }
+
+    const firstRow = parseCsvLine(lines[0]);
+    const isHeader = firstRow.some(col => /name|class|grade|dob|parent|gender|phone/i.test(col));
+    const dataRows = isHeader ? lines.slice(1) : lines;
+
+    const parsed = [];
+    dataRows.forEach((line, idx) => {
+      const cols = parseCsvLine(line);
+      if (cols.length === 0 || cols.every(c => !c)) return;
+
+      const name = (cols[0] || '').trim();
+      const cls = (cols[1] || 'IX').trim().toUpperCase().replace(/^CLASS\s+/i, '');
+      const gender = (cols[2] || 'Male').trim();
+      const dob = (cols[3] || '2013-06-15').trim();
+      const parent = (cols[4] || 'Parent / Guardian').trim();
+      const rel = (cols[5] || 'Father').trim();
+      const phone = (cols[6] || '9848011223').trim();
+      const email = (cols[7] || '').trim();
+      const addr = (cols[8] || 'Visakhapatnam').trim();
+      const channel = (cols[9] || 'Walk-In').trim();
+      const prevSchool = (cols[10] || 'Previous School').trim();
+      const notes = (cols[11] || 'Imported via bulk admissions intake docket.').trim();
+
+      const isValid = name.length >= 2;
+      parsed.push({
+        name,
+        class: cls,
+        gender,
+        dob,
+        parent,
+        guardianRel: rel,
+        phone,
+        email,
+        address: addr,
+        intakeChannel: channel,
+        prevSchool,
+        internalNotes: notes,
+        isValid,
+        error: isValid ? '' : 'Name is required'
+      });
+    });
+
+    activeAdmissionsImportData = parsed;
+    renderAdmissionsImportPreview(parsed, sourceName);
+  }
+
+  function renderAdmissionsImportPreview(records, sourceName = '') {
+    const tbody = document.getElementById('admImportPreviewTbody');
+    const badge = document.getElementById('admImportSummaryBadge');
+    const msg = document.getElementById('admImportStatusMessage');
+    const confirmBtn = document.getElementById('btnConfirmAdmissionsImport');
+    const validCountEl = document.getElementById('admImportValidCount');
+
+    if (!tbody) return;
+
+    if (!records || records.length === 0) {
+      tbody.innerHTML = `
+        <tr>
+          <td colspan="7" style="text-align: center; padding: 1.5rem; color: #94a3b8; font-size: 0.82rem;">
+            <i class="fa-solid fa-file-arrow-up mr-1"></i> Upload a CSV or paste records above to inspect prospective applications before loading.
+          </td>
+        </tr>
+      `;
+      if (badge) badge.textContent = 'No applications parsed yet';
+      if (msg) msg.textContent = 'Awaiting input docket...';
+      if (confirmBtn) confirmBtn.disabled = true;
+      if (validCountEl) validCountEl.textContent = '0';
+      return;
+    }
+
+    const validRows = records.filter(r => r.isValid);
+    if (badge) badge.innerHTML = `<span style="color:#059669; font-weight:700;">${validRows.length} valid</span> / ${records.length} total found`;
+    if (msg) msg.textContent = sourceName ? `Parsed ${records.length} records from ${sourceName}` : `Parsed ${records.length} applications`;
+    if (validCountEl) validCountEl.textContent = validRows.length;
+    if (confirmBtn) confirmBtn.disabled = validRows.length === 0;
+
+    tbody.innerHTML = records.map((r, idx) => `
+      <tr style="border-bottom: 1px solid #f1f5f9; ${!r.isValid ? 'background: #fff1f2;' : ''}">
+        <td style="padding: 0.5rem 0.75rem; color: #64748b; font-size: 0.75rem;">${idx + 1}</td>
+        <td style="padding: 0.5rem 0.75rem; font-weight: 700; color: #0f172a;">${r.name || '<span style="color:#dc2626; font-style:italic;">Missing</span>'}</td>
+        <td style="padding: 0.5rem 0.75rem;"><span class="portal-badge badge-primary" style="font-size:0.7rem;">Class ${r.class}</span></td>
+        <td style="padding: 0.5rem 0.75rem; color: #475569;">${r.gender}</td>
+        <td style="padding: 0.5rem 0.75rem; color: #334155;">${r.parent}</td>
+        <td style="padding: 0.5rem 0.75rem; font-family: monospace; font-size: 0.75rem;">${r.phone}</td>
+        <td style="padding: 0.5rem 0.75rem; text-align: center;">
+          ${r.isValid
+            ? '<span class="portal-badge badge-success" style="font-size:0.68rem; background:#dcfce7; color:#15803d; border:1px solid #86efac;"><i class="fa-solid fa-check mr-1"></i> Valid</span>'
+            : '<span class="portal-badge badge-danger" style="font-size:0.68rem; background:#fee2e2; color:#b91c1c; border:1px solid #fca5a5;"><i class="fa-solid fa-triangle-exclamation mr-1"></i> ' + r.error + '</span>'}
+        </td>
+      </tr>
+    `).join('');
+  }
+
+  function confirmAdmissionsImport() {
+    initAdmissions();
+    const validRecords = (activeAdmissionsImportData || []).filter(r => r.isValid);
+    if (validRecords.length === 0) {
+      showToast('No valid application records to import.', 'warning');
+      return;
+    }
+
+    const timestamp = new Date().toISOString().split('T')[0];
+    const newApps = [];
+
+    validRecords.forEach((r, idx) => {
+      const appId = 'APP-2026-' + String(Math.floor(1000 + Math.random() * 9000));
+      const app = {
+        appId: appId,
+        name: r.name,
+        dob: r.dob || '2013-06-15',
+        gender: r.gender || 'Male',
+        bloodGroup: 'O+',
+        motherTongue: 'Telugu',
+        class: r.class || 'IX',
+        grade: r.class || 'IX',
+        parent: r.parent || 'Parent / Guardian',
+        guardianRel: r.guardianRel || 'Father',
+        phone: r.phone || '9848011223',
+        email: r.email || '',
+        address: r.address || 'Visakhapatnam',
+        occupation: 'Private Service',
+        prevSchool: r.prevSchool || 'Fresh Intake',
+        lastClass: 'Previous Class',
+        tcNumber: 'Pending',
+        intakeChannel: r.intakeChannel || 'Bulk CSV Import',
+        docStatus: 'Pending Verification',
+        status: 'Applications Received',
+        score: 'Awaiting Assessment',
+        assignedOfficer: 'M. Ramesh (Admissions Desk)',
+        submissionDate: timestamp,
+        submissionTime: '11:00 AM',
+        feeStatus: 'Unpaid',
+        feeAmount: '₹12,500',
+        concession: 'General Merit',
+        transport: 'Self Commute',
+        internalNotes: r.internalNotes || 'Imported via Bulk CSV Admissions Ingest Docket.',
+        decisionHistory: [
+          { timestamp: `${timestamp} 11:00 AM`, actor: 'M. Ramesh (Admissions Desk)', action: 'Bulk Ingest Registered', remarks: 'Batch imported into active admissions ledger.' }
+        ],
+        communicationHistory: [
+          { timestamp: `${timestamp} 11:05 AM`, channel: 'SMS', recipient: r.phone || '9848011223', message: `Application ${appId} for ${r.name} has been logged in Sri Vidya Admissions register.` }
+        ]
+      };
+      newApps.push(app);
+      state.admissions.unshift(app);
+    });
+
+    try {
+      const stored = JSON.parse(localStorage.getItem('sv_applications') || '[]');
+      stored.unshift(...newApps);
+      localStorage.setItem('sv_applications', JSON.stringify(stored));
+      window.dispatchEvent(new Event('storage'));
+    } catch (e) {}
+
+    closeModal('importAdmissionsModal');
+    if (typeof updateStudentTabBadges === 'function') updateStudentTabBadges();
+    if (typeof updateAdmissionsKPIs === 'function') updateAdmissionsKPIs();
+    filterAdmissions();
+
+    showToast(`Successfully imported and registered ${newApps.length} prospective admissions applications!`, 'success');
   }
 
   // Legacy admissions backwards-compatibility wrappers
@@ -17372,15 +17652,28 @@ const FEE_CATEGORY_AUDIT_DATA = [
   // =========================================================================
 
   function downloadCsvFile(content, filename) {
-    const blob = new Blob([content], { type: 'text/csv;charset=utf-8;' });
+    let finalContent = content;
+    let finalFilename = filename;
+    if (typeof content === 'string' && (content.endsWith('.csv') || content.endsWith('.txt')) && typeof filename === 'string' && (filename.includes('\n') || filename.includes(','))) {
+      finalContent = filename;
+      finalFilename = content;
+    }
+    if (!finalFilename) finalFilename = 'export.csv';
+    if (!finalFilename.toLowerCase().endsWith('.csv')) finalFilename += '.csv';
+
+    const bom = '\uFEFF';
+    const blob = new Blob([bom + finalContent], { type: 'text/csv;charset=utf-8;' });
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.setAttribute('href', url);
-    link.setAttribute('download', filename);
+    link.setAttribute('download', finalFilename);
+    link.style.display = 'none';
     document.body.appendChild(link);
     link.click();
-    document.body.removeChild(link);
-    URL.revokeObjectURL(url);
+    setTimeout(() => {
+      if (link.parentNode) link.parentNode.removeChild(link);
+      URL.revokeObjectURL(url);
+    }, 1500);
   }
 
   function openImportModal() {
@@ -60239,7 +60532,15 @@ const FEE_CATEGORY_AUDIT_DATA = [
         document.querySelectorAll('.record-more-menu.open').forEach(m => m.classList.remove('open'));
       }
 
-      // 2. Universal dropdown menu toggle & outside-click dismissal
+      // 2. Modal backdrop click dismissal: clicking directly on backdrop
+      if (e.target && (e.target.classList.contains('modal-backdrop') || e.target.classList.contains('portal-modal-backdrop'))) {
+        const modalId = e.target.id;
+        if (modalId && typeof closeModal === 'function') {
+          closeModal(modalId);
+        }
+      }
+
+      // 3. Universal dropdown menu toggle & outside-click dismissal
       const toggle = e.target.closest('[data-bs-toggle="dropdown"], [data-toggle="dropdown"]');
       const openDropdowns = document.querySelectorAll('.dropdown-menu.show');
 
@@ -60256,6 +60557,19 @@ const FEE_CATEGORY_AUDIT_DATA = [
         }
       } else if (!e.target.closest('.dropdown-menu')) {
         openDropdowns.forEach(m => m.classList.remove('show'));
+      }
+    });
+  }
+
+  
+  // portalApp_escape_listener: Universal Escape key to close active modal
+  if (typeof document !== 'undefined') {
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        const openBackdrop = document.querySelector('.modal-backdrop.active, .modal-backdrop[style*="display: flex"], .modal-backdrop[style*="display: block"], .portal-modal-backdrop.active');
+        if (openBackdrop && openBackdrop.id && typeof closeModal === 'function') {
+          closeModal(openBackdrop.id);
+        }
       }
     });
   }
@@ -63187,6 +63501,7 @@ const FEE_CATEGORY_AUDIT_DATA = [
 
 
   return {
+    state,
     resetFeeCollectionSearch,
     openRecordPaymentModal,
     handleStudentSelectForRecordPayment,
@@ -64079,6 +64394,12 @@ exportInventoryAssetsCSV,
     exportAdmissionsCSV,
     printAdmissionsTable,
     openImportAdmissionsModal,
+      downloadAdmissionsImportSample,
+      handleAdmissionsImportFileSelected,
+      parseAdmissionsPastedText,
+      confirmAdmissionsImport,
+      parseAdmissionsCsvData,
+      renderAdmissionsImportPreview,
     renderNotifications,
     markAllNotificationsAsRead,
     addNewNotification,
