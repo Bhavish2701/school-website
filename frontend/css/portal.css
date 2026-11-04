@@ -25239,7 +25239,7 @@ button.close:hover,
    ========================================================================== */
 
 .archived-modal-dialog {
-  max-width: 1180px !important;
+  max-width: 1240px !important;
   width: 96% !important;
   border-radius: 14px !important;
   overflow: hidden !important;
@@ -25255,12 +25255,13 @@ button.close:hover,
 .archived-modal-header {
   background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%);
   color: #ffffff;
-  padding: 1.25rem 1.6rem;
+  padding: 1.15rem 1.6rem;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   display: flex;
   justify-content: space-between;
   align-items: center;
   flex-shrink: 0;
+  gap: 1rem;
 }
 
 .archived-header-brand {
@@ -25308,21 +25309,22 @@ button.close:hover,
   display: inline-flex;
   align-items: center;
   gap: 7px;
+  white-space: nowrap;
 }
 
 .archived-modal-body {
-  padding: 1.4rem 1.6rem;
+  padding: 1.25rem 1.6rem;
   overflow-y: auto;
   flex: 1;
   background: #f8fafc;
 }
 
-/* Stats Row */
+/* Institutional KPI Stats Row */
 .archived-kpi-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 12px;
-  margin-bottom: 1.25rem;
+  margin-bottom: 1.15rem;
 }
 
 .archived-kpi-card {
@@ -25333,7 +25335,19 @@ button.close:hover,
   display: flex;
   align-items: center;
   gap: 12px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  min-height: 72px;
+  transition: all 0.2s ease;
+}
+
+.archived-kpi-card:nth-child(1) { border-left: 3.5px solid #2563eb; }
+.archived-kpi-card:nth-child(2) { border-left: 3.5px solid #f59e0b; }
+.archived-kpi-card:nth-child(3) { border-left: 3.5px solid #8b5cf6; }
+.archived-kpi-card:nth-child(4) { border-left: 3.5px solid #10b981; }
+
+.archived-kpi-card:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.08);
 }
 
 .archived-kpi-icon {
@@ -25360,6 +25374,7 @@ button.close:hover,
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.04em;
+  margin-top: 1px;
 }
 
 /* Toolbar */
@@ -25371,7 +25386,7 @@ button.close:hover,
   gap: 12px;
   margin-bottom: 1rem;
   background: #ffffff;
-  padding: 12px 16px;
+  padding: 10px 14px;
   border-radius: 10px;
   border: 1px solid #e2e8f0;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
@@ -25379,72 +25394,132 @@ button.close:hover,
 
 .archived-search-wrap {
   position: relative;
-  flex: 1;
+  flex: 1.5;
   min-width: 280px;
-  max-width: 460px;
 }
 
-.archived-search-wrap i {
+.archived-search-wrap i.fa-magnifying-glass {
   position: absolute;
   left: 12px;
   top: 50%;
   transform: translateY(-50%);
   color: #64748b;
   font-size: 0.85rem;
+  pointer-events: none;
 }
 
 .archived-search-wrap input {
   width: 100%;
-  padding: 8px 12px 8px 34px;
-  border: 1.5px solid #cbd5e1;
-  border-radius: 6px;
+  height: 38px;
+  padding: 0 32px 0 34px;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
   font-size: 0.85rem;
   outline: none;
-  background: #ffffff;
+  background: #f8fafc;
   color: #1e293b;
   transition: all 0.2s;
   box-sizing: border-box;
 }
 
 .archived-search-wrap input:focus {
-  border-color: #3b82f6;
-  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+  background: #ffffff;
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+}
+
+.archived-clear-btn {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: #94a3b8;
+  cursor: pointer;
+  padding: 4px;
+  font-size: 0.75rem;
+  display: none;
+}
+
+.archived-search-wrap input:not(:placeholder-shown) + .archived-clear-btn {
+  display: block;
 }
 
 .archived-toolbar-actions {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
   flex-wrap: wrap;
 }
 
 .archived-select {
-  padding: 8px 12px;
-  border: 1.5px solid #cbd5e1;
-  border-radius: 6px;
-  font-size: 0.85rem;
-  background: #ffffff;
+  height: 38px;
+  padding: 0 1.5rem 0 0.85rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  background: #f8fafc;
   color: #334155;
   outline: none;
-  font-weight: 500;
   cursor: pointer;
+  transition: all 0.2s;
 }
 
 .archived-select:focus {
-  border-color: #3b82f6;
+  background: #ffffff;
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
 }
 
-/* Dedicated Table */
+.archived-toolbar-actions .btn {
+  height: 38px;
+  padding: 0 12px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border-radius: 8px;
+  white-space: nowrap;
+  transition: all 0.15s ease;
+}
+
+/* Dedicated Table & Horizontal Scrollbar */
 .archived-table-container {
   background: #ffffff;
   border: 1px solid #e2e8f0;
   border-radius: 10px;
-  overflow: hidden;
+  overflow-x: auto;
+  overflow-y: hidden;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  scrollbar-width: thin;
+  scrollbar-color: #cbd5e1 #f8fafc;
+  -webkit-overflow-scrolling: touch;
+}
+
+.archived-table-container::-webkit-scrollbar {
+  height: 6px;
+}
+
+.archived-table-container::-webkit-scrollbar-track {
+  background: #f8fafc;
+  border-radius: 4px;
+}
+
+.archived-table-container::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+
+.archived-table-container::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
 }
 
 .archive-records-table {
   width: 100%;
+  min-width: 1060px;
   border-collapse: separate;
   border-spacing: 0;
   font-size: 0.84rem;
@@ -25452,11 +25527,14 @@ button.close:hover,
 }
 
 .archive-records-table thead {
-  background: #f1f5f9;
+  background: #f8fafc;
+  position: sticky;
+  top: 0;
+  z-index: 2;
 }
 
 .archive-records-table thead th {
-  padding: 12px 14px;
+  padding: 11px 14px;
   font-size: 0.72rem;
   font-weight: 700;
   text-transform: uppercase;
@@ -25504,13 +25582,13 @@ button.close:hover,
   font-weight: 600;
   background: #fef3c7;
   color: #92400e;
-  padding: 2px 7px;
-  border-radius: 4px;
+  padding: 3px 8px;
+  border-radius: 5px;
   border: 1px solid #fde68a;
   font-size: 0.78rem;
   display: inline-flex;
   align-items: center;
-  gap: 4px;
+  gap: 5px;
 }
 
 .archive-clearance-pill {
@@ -25557,7 +25635,6 @@ button.close:hover,
     grid-template-columns: 1fr;
   }
 }
-
 
 /* ==========================================================================
    EXAMINATIONS SUITE: SEATING PLAN, TABULATION & RESULTS WORKFLOW

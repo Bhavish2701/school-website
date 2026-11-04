@@ -7633,12 +7633,12 @@ const FEE_CATEGORY_AUDIT_DATA = [
               <i class="fa-solid fa-circle-check"></i> Verified Cleared
             </span>
           </td>
-          <td class="text-end">
-            <div style="display: flex; gap: 6px; justify-content: flex-end;">
-              <button type="button" class="btn btn-sm btn-outline-primary" onclick="portalApp.viewStudentProfile('${s.admNo}')" title="View Dossier" style="padding: 4px 10px; font-size: 0.78rem; font-weight: 600; display: inline-flex; align-items: center; gap: 4px;">
+          <td class="text-end" style="padding-right: 16px; white-space: nowrap;">
+            <div style="display: flex; gap: 6px; justify-content: flex-end; align-items: center;">
+              <button type="button" class="btn btn-sm btn-outline-primary" onclick="portalApp.viewStudentProfile('${s.admNo}')" title="View Student Dossier" style="padding: 4px 10px; font-size: 0.78rem; font-weight: 600; display: inline-flex; align-items: center; gap: 5px; border-radius: 6px; white-space: nowrap;">
                 <i class="fa-solid fa-id-badge"></i> Dossier
               </button>
-              <button type="button" class="btn btn-sm btn-outline-secondary" onclick="portalApp.printStudentArchivedTC('${s.admNo}')" title="Print TC Slip" style="padding: 4px 8px; font-size: 0.78rem;">
+              <button type="button" class="btn btn-sm btn-outline-secondary" onclick="portalApp.printStudentArchivedTC('${s.admNo}')" title="Print TC Slip" style="padding: 4px 8px; font-size: 0.78rem; border-radius: 6px; white-space: nowrap;">
                 <i class="fa-solid fa-print"></i>
               </button>
             </div>
