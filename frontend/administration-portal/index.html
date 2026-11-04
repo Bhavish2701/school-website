@@ -29382,67 +29382,129 @@ Class X-A,Monday,2,09:35 AM - 10:20 AM,Physical Science,Sri Navva Anand,Room 201
        MODAL: SCHEDULE INTERACTION / ASSESSMENT
        ========================================================================= -->
   <div class="modal-backdrop" id="scheduleAssessmentModal" style="display:none;">
-    <div class="portal-modal" style="max-width: 580px; width: 95%;">
-      <div class="modal-header">
-        <div style="display: flex; align-items: center; gap: 0.75rem;">
-          <div style="width: 42px; height: 42px; border-radius: 8px; background: #eff6ff; color: #1d4ed8; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; border: 1px solid #bfdbfe;">
+    <div class="portal-modal" style="max-width: 640px; width: 95%; border-radius: 14px; overflow: hidden; box-shadow: 0 25px 50px -12px rgba(15, 23, 42, 0.25);">
+      <!-- Executive Header -->
+      <div class="modal-header" style="border-bottom: 1px solid #e2e8f0; padding: 1.15rem 1.45rem; background: #ffffff;">
+        <div style="display: flex; align-items: center; gap: 0.85rem;">
+          <div style="width: 44px; height: 44px; border-radius: 10px; background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%); color: #1d4ed8; display: flex; align-items: center; justify-content: center; font-size: 1.25rem; border: 1.5px solid #bfdbfe; box-shadow: 0 2px 4px rgba(29, 78, 216, 0.08); flex-shrink: 0;">
             <i class="fa-solid fa-calendar-check"></i>
           </div>
           <div>
-            <h3 style="margin: 0; font-size: 1.15rem; font-weight: 800; color: #0f172a;">Schedule Assessment / Interaction</h3>
-            <p style="margin: 2px 0 0; font-size: 0.8rem; color: #64748b;" id="schedModalSubtitle">Applicant: Aarav Sharma</p>
+            <div style="font-size: 0.68rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #1d4ed8;">
+              Admissions Lifecycle &amp; Scheduling
+            </div>
+            <h3 style="margin: 2px 0 0 0; font-size: 1.2rem; font-weight: 800; color: #0f172a; letter-spacing: -0.01em;">Schedule Assessment / Interaction</h3>
+            <p style="margin: 2px 0 0; font-size: 0.8rem; color: #64748b;" id="schedModalSubtitle">Applicant: S. Harini (SV202600006) • Class LKG</p>
           </div>
         </div>
-        <button type="button" class="modal-close-x" onclick="portalApp.closeModal('scheduleAssessmentModal')" title="Close">
+        <button type="button" class="modal-close-x" onclick="portalApp.closeModal('scheduleAssessmentModal')" title="Close (Esc)" style="width: 32px; height: 32px; border-radius: 50%; border: 1px solid #e2e8f0; background: #f8fafc; color: #64748b; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.15s ease;">
           <i class="fa-solid fa-xmark"></i>
         </button>
       </div>
+
       <form onsubmit="portalApp.submitScheduleAssessment(event)">
         <input type="hidden" id="schedTargetAppId">
-        <div class="modal-body" style="padding: 1.25rem; display: flex; flex-direction: column; gap: 1rem;">
+        <div class="modal-body" style="padding: 1.35rem 1.45rem; display: flex; flex-direction: column; gap: 1.15rem; background: #ffffff;">
           
-          <div class="form-group">
-            <label style="font-weight: 700; font-size: 0.82rem; color: #1e293b; margin-bottom: 3px; display: block;">Assessment / Interaction Type *</label>
-            <select id="schedType" class="form-control" required style="width:100%; padding:0.45rem 0.65rem; border:1px solid #cbd5e1; border-radius:6px; font-size:0.85rem;">
-              <option value="Written Aptitude Evaluation" selected>Written Aptitude &amp; Core Concept Evaluation</option>
-              <option value="Oral Interaction & General Readiness">Oral Interaction &amp; General Readiness (Early Primary)</option>
-              <option value="Principal Interview">Principal &amp; Senior Committee Interaction</option>
-            </select>
-          </div>
-
-          <div class="form-row" style="display: flex; gap: 1rem;">
-            <div class="form-group" style="flex: 1;">
-              <label style="font-weight: 700; font-size: 0.82rem; color: #1e293b; margin-bottom: 3px; display: block;">Scheduled Date *</label>
-              <input type="date" id="schedDate" class="form-control" required style="width:100%; padding:0.45rem 0.65rem; border:1px solid #cbd5e1; border-radius:6px; font-size:0.85rem;">
-            </div>
-            <div class="form-group" style="flex: 1;">
-              <label style="font-weight: 700; font-size: 0.82rem; color: #1e293b; margin-bottom: 3px; display: block;">Scheduled Time *</label>
-              <input type="time" id="schedTime" value="10:00" class="form-control" required style="width:100%; padding:0.45rem 0.65rem; border:1px solid #cbd5e1; border-radius:6px; font-size:0.85rem;">
+          <!-- Context Advisory Banner -->
+          <div style="background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 8px; padding: 10px 14px; display: flex; align-items: flex-start; gap: 10px; font-size: 0.78rem; color: #1e40af; line-height: 1.45;">
+            <i class="fa-solid fa-calendar-days text-primary" style="font-size: 1rem; margin-top: 2px; flex-shrink: 0;"></i>
+            <div>
+              <strong style="color: #1e3a8a;">Official Examination Docket:</strong> Scheduling this slot assigns the faculty assessment panel and triggers an automated SMS and email appointment docket to the parent/guardian.
             </div>
           </div>
 
-          <div class="form-row" style="display: flex; gap: 1rem;">
-            <div class="form-group" style="flex: 1.2;">
-              <label style="font-weight: 700; font-size: 0.82rem; color: #1e293b; margin-bottom: 3px; display: block;">Venue / Room *</label>
-              <input type="text" id="schedVenue" class="form-control" value="Academic Assessment Cell (Room 102)" required style="width:100%; padding:0.45rem 0.65rem; border:1px solid #cbd5e1; border-radius:6px; font-size:0.85rem;">
-            </div>
-            <div class="form-group" style="flex: 1.2;">
-              <label style="font-weight: 700; font-size: 0.82rem; color: #1e293b; margin-bottom: 3px; display: block;">Assigned Evaluator *</label>
-              <input type="text" id="schedAssessor" class="form-control" value="Sri Ch. Ramesh (Academic Dean)" required style="width:100%; padding:0.45rem 0.65rem; border:1px solid #cbd5e1; border-radius:6px; font-size:0.85rem;">
+          <!-- Assessment Type -->
+          <div class="form-group" style="margin-bottom: 0;">
+            <label style="font-weight: 700; font-size: 0.82rem; color: #1e293b; margin-bottom: 6px; display: flex; align-items: center; justify-content: space-between;">
+              <span>Assessment / Interaction Type <span class="text-danger">*</span></span>
+              <span style="font-size: 0.72rem; color: #64748b; font-weight: 500;">Format &amp; Rubric Track</span>
+            </label>
+            <div style="position: relative;">
+              <select id="schedType" class="form-control" required
+                style="width: 100%; height: 40px; padding: 0 2rem 0 0.85rem; border: 1.5px solid #cbd5e1; border-radius: 8px; font-size: 0.85rem; font-weight: 600; color: #0f172a; outline: none; background: #ffffff; cursor: pointer; transition: all 0.2s;">
+                <option value="Written Aptitude Evaluation" selected>Written Aptitude &amp; Core Concept Evaluation</option>
+                <option value="Oral Interaction &amp; General Readiness">Oral Interaction &amp; General Readiness (Early Primary)</option>
+                <option value="Principal Interview">Principal &amp; Senior Committee Interaction</option>
+              </select>
             </div>
           </div>
 
-          <div class="form-group">
-            <label style="font-weight: 700; font-size: 0.82rem; color: #1e293b; margin-bottom: 3px; display: block;">Instructions to Parent</label>
-            <textarea id="schedInstructions" class="form-control" rows="2" style="width:100%; padding:0.45rem 0.65rem; border:1px solid #cbd5e1; border-radius:6px; font-size:0.85rem;">Please bring the applicant with writing materials and previous academic report card 15 minutes before the scheduled time.</textarea>
+          <!-- Symmetrical 2-Column: Scheduled Date & Scheduled Time -->
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; align-items: start;">
+            <div class="form-group" style="margin-bottom: 0;">
+              <label style="font-weight: 700; font-size: 0.82rem; color: #1e293b; margin-bottom: 6px; display: flex; align-items: center; justify-content: space-between; white-space: nowrap;">
+                <span>Scheduled Date <span class="text-danger">*</span></span>
+                <span style="font-size: 0.72rem; color: #64748b; font-weight: 500;">Working Day</span>
+              </label>
+              <div style="position: relative;">
+                <input type="date" id="schedDate" class="form-control" required
+                  style="width: 100%; height: 40px; padding: 0 0.85rem; border: 1.5px solid #cbd5e1; border-radius: 8px; font-size: 0.85rem; font-weight: 600; color: #0f172a; outline: none; background: #ffffff; transition: all 0.2s;">
+              </div>
+            </div>
+
+            <div class="form-group" style="margin-bottom: 0;">
+              <label style="font-weight: 700; font-size: 0.82rem; color: #1e293b; margin-bottom: 6px; display: flex; align-items: center; justify-content: space-between; white-space: nowrap;">
+                <span>Scheduled Time <span class="text-danger">*</span></span>
+                <span style="font-size: 0.72rem; color: #64748b; font-weight: 500;">Reporting IST</span>
+              </label>
+              <div style="position: relative;">
+                <input type="time" id="schedTime" value="10:00" class="form-control" required
+                  style="width: 100%; height: 40px; padding: 0 0.85rem; border: 1.5px solid #cbd5e1; border-radius: 8px; font-size: 0.85rem; font-weight: 600; color: #0f172a; outline: none; background: #ffffff; transition: all 0.2s;">
+              </div>
+            </div>
+          </div>
+
+          <!-- Symmetrical 2-Column: Venue & Assigned Evaluator (Expanded width prevents text truncation) -->
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; align-items: start;">
+            <div class="form-group" style="margin-bottom: 0;">
+              <label style="font-weight: 700; font-size: 0.82rem; color: #1e293b; margin-bottom: 6px; display: flex; align-items: center; justify-content: space-between; white-space: nowrap;">
+                <span>Venue / Room <span class="text-danger">*</span></span>
+                <span style="font-size: 0.72rem; color: #64748b; font-weight: 500;">Campus Cell</span>
+              </label>
+              <div style="position: relative;">
+                <input type="text" id="schedVenue" class="form-control" value="Academic Assessment Cell (Room 102)" required
+                  placeholder="e.g. Academic Assessment Cell (Room 102)"
+                  style="width: 100%; height: 40px; padding: 0 0.85rem; border: 1.5px solid #cbd5e1; border-radius: 8px; font-size: 0.83rem; font-weight: 600; color: #0f172a; outline: none; background: #ffffff; transition: all 0.2s;">
+              </div>
+            </div>
+
+            <div class="form-group" style="margin-bottom: 0;">
+              <label style="font-weight: 700; font-size: 0.82rem; color: #1e293b; margin-bottom: 6px; display: flex; align-items: center; justify-content: space-between; white-space: nowrap;">
+                <span>Assigned Evaluator <span class="text-danger">*</span></span>
+                <span style="font-size: 0.72rem; color: #64748b; font-weight: 500;">Faculty / Dean</span>
+              </label>
+              <div style="position: relative;">
+                <input type="text" id="schedAssessor" class="form-control" value="Sri Ch. Ramesh (Academic Dean)" required
+                  placeholder="e.g. Sri Ch. Ramesh (Academic Dean)"
+                  style="width: 100%; height: 40px; padding: 0 0.85rem; border: 1.5px solid #cbd5e1; border-radius: 8px; font-size: 0.83rem; font-weight: 600; color: #0f172a; outline: none; background: #ffffff; transition: all 0.2s;">
+              </div>
+            </div>
+          </div>
+
+          <!-- Instructions to Parent -->
+          <div class="form-group" style="margin-bottom: 0;">
+            <label style="font-weight: 700; font-size: 0.82rem; color: #1e293b; margin-bottom: 6px; display: flex; align-items: center; justify-content: space-between;">
+              <span>Instructions to Parent</span>
+              <span style="font-size: 0.72rem; color: #64748b; font-weight: 500;">Printed on Admit Slip</span>
+            </label>
+            <textarea id="schedInstructions" class="form-control" rows="2"
+              placeholder="Enter instructions for student and parents on assessment day..."
+              style="width: 100%; padding: 0.65rem 0.85rem; border: 1.5px solid #cbd5e1; border-radius: 8px; font-size: 0.84rem; color: #0f172a; outline: none; background: #ffffff; transition: all 0.2s; line-height: 1.5; resize: vertical; min-height: 70px;">Please bring the applicant with writing materials and previous academic report card 15 minutes before the scheduled time.</textarea>
           </div>
 
         </div>
-        <div class="modal-footer" style="display:flex; justify-content:space-between; align-items:center; background:#f8fafc; border-top:1px solid #e2e8f0; padding:0.85rem 1.25rem;">
-          <span style="font-size: 0.75rem; color: #64748b;"><i class="fa-solid fa-bell text-warning mr-1"></i> Dispatches SMS schedule reminder to parent</span>
-          <div style="display:flex; gap:0.5rem;">
-            <button type="button" class="btn btn-secondary btn-sm" onclick="portalApp.closeModal('scheduleAssessmentModal')">Cancel</button>
-            <button type="submit" class="btn btn-primary btn-sm"><i class="fa-solid fa-calendar-check mr-1"></i> Confirm Schedule</button>
+
+        <!-- Balanced Governance Footer -->
+        <div class="modal-footer" style="display: flex; justify-content: space-between; align-items: center; background: #f8fafc; border-top: 1px solid #e2e8f0; padding: 0.95rem 1.45rem;">
+          <span style="font-size: 0.76rem; color: #64748b; font-weight: 600; display: inline-flex; align-items: center; gap: 6px;">
+            <i class="fa-solid fa-bell text-warning"></i> Dispatches SMS schedule reminder to parent
+          </span>
+          <div style="display: flex; gap: 0.5rem; align-items: center;">
+            <button type="button" class="btn btn-outline-secondary btn-sm" onclick="portalApp.closeModal('scheduleAssessmentModal')" style="height: 36px; padding: 0 16px; font-weight: 600; border-radius: 7px;">Cancel</button>
+            <button type="submit" class="btn btn-primary btn-sm" style="height: 36px; padding: 0 18px; font-weight: 700; border-radius: 7px; display: inline-flex; align-items: center; gap: 6px;">
+              <i class="fa-solid fa-calendar-check"></i> Confirm Schedule
+            </button>
           </div>
         </div>
       </form>
@@ -29547,58 +29609,111 @@ Class X-A,Monday,2,09:35 AM - 10:20 AM,Physical Science,Sri Navva Anand,Room 201
        MODAL: ISSUE ADMISSION OFFER LETTER
        ========================================================================= -->
   <div class="modal-backdrop" id="issueOfferModal" style="display:none;">
-    <div class="portal-modal" style="max-width: 600px; width: 95%;">
-      <div class="modal-header">
-        <div style="display: flex; align-items: center; gap: 0.75rem;">
-          <div style="width: 42px; height: 42px; border-radius: 8px; background: #f5f3ff; color: #7c3aed; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; border: 1px solid #ddd6fe;">
+    <div class="portal-modal" style="max-width: 640px; width: 95%; border-radius: 14px; overflow: hidden; box-shadow: 0 25px 50px -12px rgba(15, 23, 42, 0.25);">
+      <!-- Executive Header -->
+      <div class="modal-header" style="border-bottom: 1px solid #e2e8f0; padding: 1.15rem 1.45rem; background: #ffffff;">
+        <div style="display: flex; align-items: center; gap: 0.85rem;">
+          <div style="width: 44px; height: 44px; border-radius: 10px; background: linear-gradient(135deg, #f5f3ff 0%, #ede9fe 100%); color: #7c3aed; display: flex; align-items: center; justify-content: center; font-size: 1.25rem; border: 1.5px solid #ddd6fe; box-shadow: 0 2px 4px rgba(124, 58, 237, 0.08); flex-shrink: 0;">
             <i class="fa-solid fa-envelope-open-text"></i>
           </div>
           <div>
-            <h3 style="margin: 0; font-size: 1.15rem; font-weight: 800; color: #0f172a;">Issue Formal Admission Offer</h3>
-            <p style="margin: 2px 0 0; font-size: 0.8rem; color: #64748b;" id="offerModalSub">Applicant: Aarav Sharma</p>
+            <div style="font-size: 0.68rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #7c3aed;">
+              Admissions Lifecycle &amp; Offer Docket
+            </div>
+            <h3 style="margin: 2px 0 0 0; font-size: 1.2rem; font-weight: 800; color: #0f172a; letter-spacing: -0.01em;">Issue Formal Admission Offer</h3>
+            <p style="margin: 2px 0 0; font-size: 0.8rem; color: #64748b;" id="offerModalSub">Applicant: S. Harini (SV202600006) • Class LKG</p>
           </div>
         </div>
-        <button type="button" class="modal-close-x" onclick="portalApp.closeModal('issueOfferModal')" title="Close">
+        <button type="button" class="modal-close-x" onclick="portalApp.closeModal('issueOfferModal')" title="Close (Esc)" style="width: 32px; height: 32px; border-radius: 50%; border: 1px solid #e2e8f0; background: #f8fafc; color: #64748b; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.15s ease;">
           <i class="fa-solid fa-xmark"></i>
         </button>
       </div>
+
       <form onsubmit="portalApp.submitIssueOffer(event)">
         <input type="hidden" id="offerTargetAppId">
-        <div class="modal-body" style="padding: 1.25rem; display: flex; flex-direction: column; gap: 1rem;">
+        <div class="modal-body" style="padding: 1.35rem 1.45rem; display: flex; flex-direction: column; gap: 1.15rem; background: #ffffff;">
           
-          <div class="form-row" style="display: flex; gap: 1rem;">
-            <div class="form-group" style="flex: 1;">
-              <label style="font-weight: 700; font-size: 0.82rem; color: #1e293b; margin-bottom: 3px; display: block;">Approved Class Offered *</label>
-              <input type="text" id="offerClass" class="form-control" readonly style="width:100%; padding:0.45rem 0.65rem; border:1px solid #cbd5e1; border-radius:6px; font-size:0.85rem; font-weight:700; background:#f8fafc;">
-            </div>
-            <div class="form-group" style="flex: 1;">
-              <label style="font-weight: 700; font-size: 0.82rem; color: #1e293b; margin-bottom: 3px; display: block;">Offer Expiry Date *</label>
-              <input type="date" id="offerExpiryDate" class="form-control" required style="width:100%; padding:0.45rem 0.65rem; border:1px solid #cbd5e1; border-radius:6px; font-size:0.85rem;">
+          <!-- Context Advisory Banner -->
+          <div style="background: #faf5ff; border: 1px solid #e9d5ff; border-radius: 8px; padding: 10px 14px; display: flex; align-items: flex-start; gap: 10px; font-size: 0.78rem; color: #6b21a8; line-height: 1.45;">
+            <i class="fa-solid fa-file-signature text-purple" style="font-size: 1rem; margin-top: 2px; flex-shrink: 0;"></i>
+            <div>
+              <strong style="color: #581c87;">Statutory Offer Letter Generation:</strong> Confirming this issuance generates a digitally sealed admission offer letter and dispatches official credentials to the parent via SMS and registered email.
             </div>
           </div>
 
-          <div class="form-row" style="display: flex; gap: 1rem;">
-            <div class="form-group" style="flex: 1;">
-              <label style="font-weight: 700; font-size: 0.82rem; color: #1e293b; margin-bottom: 3px; display: block;">Admission Fee Due (INR) *</label>
-              <input type="text" id="offerFeeAmount" class="form-control" value="₹12,500" required style="width:100%; padding:0.45rem 0.65rem; border:1px solid #cbd5e1; border-radius:6px; font-size:0.85rem; font-weight:700;">
+          <!-- Symmetrical 2-Column: Approved Class & Expiry Date -->
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; align-items: start;">
+            <div class="form-group" style="margin-bottom: 0;">
+              <label style="font-weight: 700; font-size: 0.82rem; color: #1e293b; margin-bottom: 6px; display: flex; align-items: center; justify-content: space-between; white-space: nowrap;">
+                <span>Approved Class Offered <span class="text-danger">*</span></span>
+                <span style="font-size: 0.72rem; color: #64748b; font-weight: 500;">Sanctioned Intake</span>
+              </label>
+              <div style="position: relative;">
+                <input type="text" id="offerClass" class="form-control" readonly
+                  style="width: 100%; height: 40px; padding: 0 0.85rem; border: 1.5px solid #cbd5e1; border-radius: 8px; font-size: 0.85rem; font-weight: 700; color: #0f172a; outline: none; background: #f8fafc;">
+              </div>
             </div>
-            <div class="form-group" style="flex: 1;">
-              <label style="font-weight: 700; font-size: 0.82rem; color: #1e293b; margin-bottom: 3px; display: block;">Special Concessions</label>
-              <input type="text" id="offerConcession" class="form-control" value="None (Standard Board Fee)" style="width:100%; padding:0.45rem 0.65rem; border:1px solid #cbd5e1; border-radius:6px; font-size:0.85rem;">
+
+            <div class="form-group" style="margin-bottom: 0;">
+              <label style="font-weight: 700; font-size: 0.82rem; color: #1e293b; margin-bottom: 6px; display: flex; align-items: center; justify-content: space-between; white-space: nowrap;">
+                <span>Offer Expiry Date <span class="text-danger">*</span></span>
+                <span style="font-size: 0.72rem; color: #64748b; font-weight: 500;">Seat Validity</span>
+              </label>
+              <div style="position: relative;">
+                <input type="date" id="offerExpiryDate" class="form-control" required
+                  style="width: 100%; height: 40px; padding: 0 0.85rem; border: 1.5px solid #cbd5e1; border-radius: 8px; font-size: 0.85rem; font-weight: 600; color: #0f172a; outline: none; background: #ffffff; transition: all 0.2s;">
+              </div>
             </div>
           </div>
 
-          <div class="form-group">
-            <label style="font-weight: 700; font-size: 0.82rem; color: #1e293b; margin-bottom: 3px; display: block;">Terms &amp; Offer Conditions</label>
-            <textarea id="offerTerms" class="form-control" rows="2" style="width:100%; padding:0.45rem 0.65rem; border:1px solid #cbd5e1; border-radius:6px; font-size:0.85rem;">Admission is subject to payment of admission fee and submission of original Transfer Certificate before commencement of classes.</textarea>
+          <!-- Symmetrical 2-Column: Admission Fee & Concession -->
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; align-items: start;">
+            <div class="form-group" style="margin-bottom: 0;">
+              <label style="font-weight: 700; font-size: 0.82rem; color: #1e293b; margin-bottom: 6px; display: flex; align-items: center; justify-content: space-between; white-space: nowrap;">
+                <span>Admission Fee Due <span class="text-danger">*</span></span>
+                <span style="font-size: 0.72rem; color: #64748b; font-weight: 500;">Term I Base</span>
+              </label>
+              <div style="position: relative;">
+                <input type="text" id="offerFeeAmount" class="form-control" value="₹12,500" required
+                  style="width: 100%; height: 40px; padding: 0 0.85rem; border: 1.5px solid #cbd5e1; border-radius: 8px; font-size: 0.85rem; font-weight: 700; color: #0f172a; outline: none; background: #ffffff; transition: all 0.2s;">
+              </div>
+            </div>
+
+            <div class="form-group" style="margin-bottom: 0;">
+              <label style="font-weight: 700; font-size: 0.82rem; color: #1e293b; margin-bottom: 6px; display: flex; align-items: center; justify-content: space-between; white-space: nowrap;">
+                <span>Special Concession</span>
+                <span style="font-size: 0.72rem; color: #64748b; font-weight: 500;">Scholarship / Quota</span>
+              </label>
+              <div style="position: relative;">
+                <input type="text" id="offerConcession" class="form-control" value="None (Standard Board Fee)"
+                  style="width: 100%; height: 40px; padding: 0 0.85rem; border: 1.5px solid #cbd5e1; border-radius: 8px; font-size: 0.83rem; font-weight: 600; color: #0f172a; outline: none; background: #ffffff; transition: all 0.2s;">
+              </div>
+            </div>
+          </div>
+
+          <!-- Terms & Offer Conditions -->
+          <div class="form-group" style="margin-bottom: 0;">
+            <label style="font-weight: 700; font-size: 0.82rem; color: #1e293b; margin-bottom: 6px; display: flex; align-items: center; justify-content: space-between;">
+              <span>Terms &amp; Offer Conditions</span>
+              <span style="font-size: 0.72rem; color: #64748b; font-weight: 500;">Statutory Clause</span>
+            </label>
+            <textarea id="offerTerms" class="form-control" rows="2"
+              placeholder="Enter conditions of admission offer..."
+              style="width: 100%; padding: 0.65rem 0.85rem; border: 1.5px solid #cbd5e1; border-radius: 8px; font-size: 0.84rem; color: #0f172a; outline: none; background: #ffffff; transition: all 0.2s; line-height: 1.5; resize: vertical; min-height: 70px;">Admission is subject to payment of admission fee and submission of original Transfer Certificate before commencement of classes.</textarea>
           </div>
 
         </div>
-        <div class="modal-footer" style="display:flex; justify-content:space-between; align-items:center; background:#f8fafc; border-top:1px solid #e2e8f0; padding:0.85rem 1.25rem;">
-          <span style="font-size: 0.75rem; color: #64748b;"><i class="fa-solid fa-envelope text-primary mr-1"></i> Dispatches offer letter to parent email &amp; SMS</span>
-          <div style="display:flex; gap:0.5rem;">
-            <button type="button" class="btn btn-secondary btn-sm" onclick="portalApp.closeModal('issueOfferModal')">Cancel</button>
-            <button type="submit" class="btn btn-primary btn-sm"><i class="fa-solid fa-paper-plane mr-1"></i> Dispatch Offer Letter</button>
+
+        <!-- Balanced Governance Footer -->
+        <div class="modal-footer" style="display: flex; justify-content: space-between; align-items: center; background: #f8fafc; border-top: 1px solid #e2e8f0; padding: 0.95rem 1.45rem;">
+          <span style="font-size: 0.76rem; color: #64748b; font-weight: 600; display: inline-flex; align-items: center; gap: 6px;">
+            <i class="fa-solid fa-envelope text-primary"></i> Dispatches offer letter to parent email &amp; SMS
+          </span>
+          <div style="display: flex; gap: 0.5rem; align-items: center;">
+            <button type="button" class="btn btn-outline-secondary btn-sm" onclick="portalApp.closeModal('issueOfferModal')" style="height: 36px; padding: 0 16px; font-weight: 600; border-radius: 7px;">Cancel</button>
+            <button type="submit" class="btn btn-primary btn-sm" style="height: 36px; padding: 0 18px; font-weight: 700; border-radius: 7px; display: inline-flex; align-items: center; gap: 6px;">
+              <i class="fa-solid fa-paper-plane"></i> Dispatch Offer Letter
+            </button>
           </div>
         </div>
       </form>
