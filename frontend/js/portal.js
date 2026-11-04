@@ -12614,7 +12614,7 @@ const FEE_CATEGORY_AUDIT_DATA = [
     if (!app) return;
 
     if (document.getElementById('offerTargetAppId')) document.getElementById('offerTargetAppId').value = app.appId;
-    if (document.getElementById('offerModalSub')) document.getElementById('offerModalSub').textContent = `Applicant: ${app.name} (${app.appId})`;
+    if (document.getElementById('offerModalSub')) document.getElementById('offerModalSub').textContent = `Applicant: ${app.name} (${app.appId}) • Class ${app.class || app.grade || 'N/A'}`;
     if (document.getElementById('offerClass')) document.getElementById('offerClass').value = `Class ${app.class || app.grade} (Section A)`;
 
     if (document.getElementById('offerExpiryDate')) {
@@ -12716,7 +12716,7 @@ const FEE_CATEGORY_AUDIT_DATA = [
     if (!app) return;
 
     if (document.getElementById('enrolTargetAppId')) document.getElementById('enrolTargetAppId').value = app.appId;
-    if (document.getElementById('enrolModalSub')) document.getElementById('enrolModalSub').textContent = `Applicant: ${app.name} (${app.appId})`;
+    if (document.getElementById('enrolModalSub')) document.getElementById('enrolModalSub').textContent = `Applicant: ${app.name} (${app.appId}) • Class ${app.class || app.grade || 'N/A'}`;
 
     // Calculate next admission number
     const nextNum = (state.students ? state.students.length : 500) + 1;
@@ -12889,7 +12889,7 @@ const FEE_CATEGORY_AUDIT_DATA = [
     if (!app) return;
 
     if (document.getElementById('cancelTargetAppId')) document.getElementById('cancelTargetAppId').value = app.appId;
-    if (document.getElementById('cancelModalSub')) document.getElementById('cancelModalSub').textContent = `Applicant: ${app.name} (${app.appId})`;
+    if (document.getElementById('cancelModalSub')) document.getElementById('cancelModalSub').textContent = `Applicant: ${app.name} (${app.appId}) • Class ${app.class || app.grade || 'N/A'}`;
 
     closeModal('applicationDetailModal');
     openModal('cancelApplicationModal');
