@@ -12778,11 +12778,11 @@ const FEE_CATEGORY_AUDIT_DATA = [
       `;
     } else {
       container.innerHTML = `
-        <div style="background:#ecfdf5; border:1px solid #a7f3d0; border-radius:8px; padding:0.85rem; display:flex; align-items:center; gap:8px;">
-          <i class="fa-solid fa-shield-check text-emerald" style="font-size:1.2rem;"></i>
+        <div style="background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px; padding: 10px 14px; display: flex; align-items: flex-start; gap: 10px; font-size: 0.78rem; color: #166534; line-height: 1.45;">
+          <i class="fa-solid fa-circle-check text-success" style="font-size: 1.15rem; margin-top: 1px; flex-shrink: 0;"></i>
           <div>
-            <div style="font-size:0.85rem; font-weight:700; color:#065f46;">Duplicate Scanner: Verified Clean</div>
-            <div style="font-size:0.75rem; color:#047857;">Zero matching student records found matching this applicant's legal name, DOB, or guardian phone.</div>
+            <div style="font-weight: 800; color: #14532d; font-size: 0.82rem; margin-bottom: 2px;">Duplicate Prevention Scanner: Verified Clean</div>
+            <div>Zero matching student records found matching this applicant's legal name, DOB, or guardian phone. Eligible for official enrolment order.</div>
           </div>
         </div>
       `;
