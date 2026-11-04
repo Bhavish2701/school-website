@@ -13057,38 +13057,25 @@ input:disabled+.perm-slider {
 }
 
 .admissions-filter-grid {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: minmax(220px, 1.6fr) repeat(4, minmax(160px, 1fr));
   align-items: center;
   gap: 0.65rem;
   width: 100%;
 }
 
 .admissions-filter-grid .adm-search-wrap {
-  flex: 1.6;
-  min-width: 240px;
+  width: 100%;
+  max-width: none;
   position: relative;
 }
 
 .admissions-filter-grid .adm-select-wrap {
-  flex: 1;
-  min-width: 150px;
+  width: 100%;
 }
 
 .admissions-filter-grid .adm-select-wrap .adm-filter-select {
   width: 100%;
-}
-
-.admissions-filter-grid .btn-filter-reset {
-  height: 38px;
-  padding: 0 0.95rem;
-  font-size: 0.82rem;
-  font-weight: 600;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.35rem;
-  border-radius: 8px;
-  white-space: nowrap;
 }
 
 .admissions-governance-row {
@@ -13112,6 +13099,47 @@ input:disabled+.perm-slider {
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.admissions-governance-row .adm-actions-right .btn {
+  height: 32px;
+  padding: 0 0.85rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  border-radius: 7px;
+  white-space: nowrap;
+  transition: all 0.15s ease;
+}
+
+.admissions-governance-row .adm-actions-right .btn-filter-reset {
+  color: #475569;
+  border-color: #cbd5e1;
+  background: #ffffff;
+}
+
+.admissions-governance-row .adm-actions-right .btn-filter-reset:hover {
+  background: #f1f5f9;
+  color: #0f172a;
+  border-color: #94a3b8;
+}
+
+@media (max-width: 1100px) {
+  .admissions-filter-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .admissions-filter-grid .adm-search-wrap {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 640px) {
+  .admissions-filter-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 .adm-toolbar-left {
@@ -13126,8 +13154,7 @@ input:disabled+.perm-slider {
 .adm-search-wrap {
   position: relative;
   flex: 1;
-  min-width: 240px;
-  max-width: 400px;
+  min-width: 220px;
 }
 
 .adm-search-wrap .search-icon {
@@ -13179,7 +13206,7 @@ input:disabled+.perm-slider {
 
 .adm-filter-select {
   height: 38px;
-  padding: 0 1.85rem 0 0.85rem;
+  padding: 0 1.6rem 0 0.8rem;
   font-size: 0.82rem;
   font-weight: 600;
   color: var(--color-text-dark, #334155);
@@ -13188,10 +13215,13 @@ input:disabled+.perm-slider {
   border-radius: 8px;
   outline: none;
   cursor: pointer;
-  transition: border-color 0.2s ease;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .adm-filter-select:focus {
+  background: #ffffff;
   border-color: var(--color-primary, #1d4ed8);
   box-shadow: 0 0 0 3px rgba(29, 78, 216, 0.12);
 }

@@ -3900,7 +3900,7 @@
                 <div class="adm-search-wrap">
                   <i class="fa-solid fa-magnifying-glass search-icon"></i>
                   <input type="text" id="admSearchInput" class="adm-search-input"
-                    placeholder="Search by App ID, student, parent, phone, school..."
+                    placeholder="Search student, App ID, parent, mobile..."
                     oninput="portalApp.filterAdmissions()">
                   <button type="button" class="adm-clear-btn" id="admClearSearchBtn"
                     onclick="document.getElementById('admSearchInput').value=''; portalApp.filterAdmissions();"
@@ -3911,7 +3911,7 @@
 
                 <div class="adm-select-wrap">
                   <select id="admClassFilter" class="adm-filter-select" onchange="portalApp.filterAdmissions()" title="Filter by Class Applied">
-                    <option value="">All Classes (Nursery to X)</option>
+                    <option value="">All Classes (Nursery–X)</option>
                     <option value="Nursery">Nursery</option>
                     <option value="LKG">Class LKG</option>
                     <option value="UKG">Class UKG</option>
@@ -3957,16 +3957,11 @@
 
                 <div class="adm-select-wrap">
                   <select id="admSourceFilter" class="adm-filter-select" onchange="portalApp.filterAdmissions()" title="Filter by Submission Channel">
-                    <option value="">All Channels (Online &amp; Walk-In)</option>
+                    <option value="">All Intake Channels</option>
                     <option value="Online Application">Online Portal Form</option>
                     <option value="Offline Walk-In">Offline Walk-In (Reception Desk)</option>
                   </select>
                 </div>
-
-                <button type="button" class="btn btn-outline-secondary btn-filter-reset"
-                  onclick="portalApp.resetAdmissionsFilters()" title="Reset all filters">
-                  <i class="fa-solid fa-rotate-left me-1"></i> Reset
-                </button>
               </div>
 
               <!-- Tier 2: Governance Indicators and Register Print Operations -->
@@ -3985,6 +3980,10 @@
                 </div>
 
                 <div class="adm-actions-right">
+                  <button type="button" class="btn btn-outline-secondary btn-sm btn-filter-reset"
+                    onclick="portalApp.resetAdmissionsFilters()" title="Reset all filters">
+                    <i class="fa-solid fa-rotate-left me-1"></i> Reset Filters
+                  </button>
                   <button type="button" class="btn btn-outline-primary btn-sm" onclick="portalApp.printAdmissionsTable()"
                     title="Print admissions docket">
                     <i class="fa-solid fa-print me-1"></i> Print Register
