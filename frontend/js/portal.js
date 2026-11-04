@@ -11816,6 +11816,18 @@ const FEE_CATEGORY_AUDIT_DATA = [
     showToast(`Admission Application ${newAppId} for ${fullName} created successfully!`, 'success');
   }
 
+  function addEnquiryTag(tag) {
+    const area = document.getElementById('enqRemarks');
+    if (!area) return;
+    const current = area.value.trim();
+    if (!current) {
+      area.value = tag;
+    } else if (!current.includes(tag)) {
+      area.value = current + ' • ' + tag;
+    }
+    area.focus();
+  }
+
   function openAddEnquiryModal() {
     if (document.getElementById('enqStudentName')) document.getElementById('enqStudentName').value = '';
     if (document.getElementById('enqParentName')) document.getElementById('enqParentName').value = '';
@@ -64752,6 +64764,7 @@ exportInventoryAssetsCSV,
     renderAdmissionsQueue,
     openNewAdmissionModal,
     submitNewAdmission,
+    addEnquiryTag,
     openAddEnquiryModal,
     submitAddEnquiry,
     openApplicationDetailModal,

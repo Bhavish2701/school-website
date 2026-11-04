@@ -29034,15 +29034,18 @@ Class X-A,Monday,2,09:35 AM - 10:20 AM,Physical Science,Sri Navva Anand,Room 201
        MODAL: QUICK PROSPECTIVE ENQUIRY
        ========================================================================= -->
   <div class="modal-backdrop" id="addEnquiryModal" style="display:none;">
-    <div class="portal-modal" style="max-width: 580px; width: 95%;">
-      <div class="modal-header">
-        <div style="display: flex; align-items: center; gap: 0.75rem;">
-          <div style="width: 42px; height: 42px; border-radius: 8px; background: #eff6ff; color: #1d4ed8; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; border: 1px solid #bfdbfe;">
+    <div class="portal-modal" style="max-width: 650px; width: 95%; border-radius: 12px; overflow: hidden; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);">
+      <div class="modal-header" style="border-bottom: 1px solid #e2e8f0; padding: 1rem 1.35rem; background: #ffffff;">
+        <div style="display: flex; align-items: center; gap: 0.85rem;">
+          <div style="width: 46px; height: 46px; border-radius: 10px; background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%); color: #1d4ed8; display: flex; align-items: center; justify-content: center; font-size: 1.25rem; border: 1px solid #bfdbfe; box-shadow: 0 2px 4px rgba(37,99,235,0.06); flex-shrink: 0;">
             <i class="fa-solid fa-phone-volume"></i>
           </div>
           <div>
-            <h3 style="margin: 0; font-size: 1.15rem; font-weight: 800; color: #0f172a;">Log Prospective Enquiry</h3>
-            <p style="margin: 2px 0 0; font-size: 0.8rem; color: #64748b;">Capture prospective student interest from reception desk or phone enquiry</p>
+            <div style="display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
+              <h3 style="margin: 0; font-size: 1.18rem; font-weight: 800; color: #0f172a; letter-spacing: -0.01em;">Log Prospective Enquiry</h3>
+              <span class="badge" style="background: #f1f5f9; color: #475569; border: 1px solid #cbd5e1; font-size: 0.7rem; font-weight: 700;">Front Office Intake</span>
+            </div>
+            <p style="margin: 2px 0 0; font-size: 0.8rem; color: #64748b;">Capture prospective student interest and schedule follow-up counseling</p>
           </div>
         </div>
         <button type="button" class="modal-close-x" onclick="portalApp.closeModal('addEnquiryModal')" title="Close">
@@ -29050,75 +29053,104 @@ Class X-A,Monday,2,09:35 AM - 10:20 AM,Physical Science,Sri Navva Anand,Room 201
         </button>
       </div>
       <form onsubmit="portalApp.submitAddEnquiry(event)">
-        <div class="modal-body" style="padding: 1.25rem; display: flex; flex-direction: column; gap: 1rem;">
-          
-          <div class="form-row" style="display: flex; gap: 1rem;">
-            <div class="form-group" style="flex: 1.5;">
-              <label style="font-weight: 700; font-size: 0.82rem; color: #1e293b; margin-bottom: 3px; display: block;">Student Name *</label>
-              <input type="text" id="enqStudentName" class="form-control" required placeholder="Prospective child's name" style="width:100%; padding:0.45rem 0.65rem; border:1px solid #cbd5e1; border-radius:6px; font-size:0.85rem;">
+        <div class="modal-body" style="padding: 1.25rem; display: flex; flex-direction: column; gap: 0.85rem; max-height: calc(85vh - 140px); overflow-y: auto;">
+          <!-- Section 1: Prospective Student & Guardian Info -->
+          <div>
+            <div class="enq-section-banner">
+              <i class="fa-solid fa-user-graduate"></i> 1. Prospective Student &amp; Guardian Info
             </div>
-            <div class="form-group" style="flex: 1;">
-              <label style="font-weight: 700; font-size: 0.82rem; color: #1e293b; margin-bottom: 3px; display: block;">Class of Interest *</label>
-              <select id="enqClass" class="form-control" required style="width:100%; padding:0.45rem 0.65rem; border:1px solid #cbd5e1; border-radius:6px; font-size:0.85rem;">
-                <option value="Nursery">Nursery</option>
-                <option value="LKG">LKG</option>
-                <option value="UKG">UKG</option>
-                <option value="I">Class I</option>
-                <option value="II">Class II</option>
-                <option value="III">Class III</option>
-                <option value="IV">Class IV</option>
-                <option value="V">Class V</option>
-                <option value="VI">Class VI</option>
-                <option value="VII">Class VII</option>
-                <option value="VIII">Class VIII</option>
-                <option value="IX" selected>Class IX</option>
-                <option value="X">Class X</option>
-              </select>
-            </div>
-          </div>
-
-          <div class="form-row" style="display: flex; gap: 1rem;">
-            <div class="form-group" style="flex: 1.5;">
-              <label style="font-weight: 700; font-size: 0.82rem; color: #1e293b; margin-bottom: 3px; display: block;">Parent / Contact Person *</label>
-              <input type="text" id="enqParentName" class="form-control" required placeholder="Parent or guardian name" style="width:100%; padding:0.45rem 0.65rem; border:1px solid #cbd5e1; border-radius:6px; font-size:0.85rem;">
-            </div>
-            <div class="form-group" style="flex: 1.2;">
-              <label style="font-weight: 700; font-size: 0.82rem; color: #1e293b; margin-bottom: 3px; display: block;">Phone Number *</label>
-              <input type="tel" id="enqPhone" class="form-control" required placeholder="10-digit mobile" pattern="[0-9]{10}" style="width:100%; padding:0.45rem 0.65rem; border:1px solid #cbd5e1; border-radius:6px; font-size:0.85rem;">
-            </div>
-          </div>
-
-          <div class="form-row" style="display: flex; gap: 1rem;">
-            <div class="form-group" style="flex: 1;">
-              <label style="font-weight: 700; font-size: 0.82rem; color: #1e293b; margin-bottom: 3px; display: block;">Enquiry Source *</label>
-              <select id="enqSource" class="form-control" style="width:100%; padding:0.45rem 0.65rem; border:1px solid #cbd5e1; border-radius:6px; font-size:0.85rem;">
-                <option value="Walk-In (Front Desk)" selected>Walk-In (Front Desk)</option>
-                <option value="Phone Enquiry">Phone Call Enquiry</option>
-                <option value="Website Contact Form">Website Contact Form</option>
-                <option value="Parent Referral">Parent Referral</option>
-              </select>
-            </div>
-            <div class="form-group" style="flex: 1;">
-              <label style="font-weight: 700; font-size: 0.82rem; color: #1e293b; margin-bottom: 3px; display: block;">Follow-up Date</label>
-              <input type="date" id="enqFollowupDate" class="form-control" style="width:100%; padding:0.45rem 0.65rem; border:1px solid #cbd5e1; border-radius:6px; font-size:0.85rem;">
+            <div class="enq-form-grid">
+              <div class="enq-field-group">
+                <label class="enq-field-label">Student Name <span class="text-danger">*</span></label>
+                <input type="text" id="enqStudentName" class="enq-input-control" required placeholder="Prospective child's name">
+              </div>
+              <div class="enq-field-group">
+                <label class="enq-field-label">Class of Interest <span class="text-danger">*</span></label>
+                <select id="enqClass" class="enq-input-control" required>
+                  <option value="Nursery">Class Nursery</option>
+                  <option value="LKG">Class LKG</option>
+                  <option value="UKG">Class UKG</option>
+                  <option value="I">Class I</option>
+                  <option value="II">Class II</option>
+                  <option value="III">Class III</option>
+                  <option value="IV">Class IV</option>
+                  <option value="V">Class V</option>
+                  <option value="VI">Class VI</option>
+                  <option value="VII">Class VII</option>
+                  <option value="VIII">Class VIII</option>
+                  <option value="IX" selected>Class IX</option>
+                  <option value="X">Class X</option>
+                </select>
+              </div>
+              <div class="enq-field-group">
+                <label class="enq-field-label">Parent / Contact Person <span class="text-danger">*</span></label>
+                <input type="text" id="enqParentName" class="enq-input-control" required placeholder="Parent or guardian name">
+              </div>
+              <div class="enq-field-group">
+                <label class="enq-field-label">Phone Number <span class="text-danger">*</span></label>
+                <div style="display: flex;">
+                  <span style="display: inline-flex; align-items: center; padding: 0 0.65rem; background: #f8fafc; border: 1px solid #cbd5e1; border-right: none; border-radius: 6px 0 0 6px; font-size: 0.8rem; font-weight: 700; color: #475569;">+91</span>
+                  <input type="tel" id="enqPhone" class="enq-input-control" required placeholder="10-digit mobile" pattern="[0-9]{10}" style="border-radius: 0 6px 6px 0; font-family: 'JetBrains Mono', monospace;">
+                </div>
+              </div>
             </div>
           </div>
 
-          <div class="form-group">
-            <label style="font-weight: 700; font-size: 0.82rem; color: #1e293b; margin-bottom: 3px; display: block;">Enquiry Remarks / Queries</label>
-            <textarea id="enqRemarks" class="form-control" rows="2" placeholder="e.g. Parent inquired about bus facilities, English medium syllabus, and fee structure." style="width:100%; padding:0.45rem 0.65rem; border:1px solid #cbd5e1; border-radius:6px; font-size:0.85rem;"></textarea>
+          <!-- Section 2: Channel & Follow-up Scheduling -->
+          <div>
+            <div class="enq-section-banner">
+              <i class="fa-solid fa-headset"></i> 2. Intake Channel &amp; Follow-up Scheduling
+            </div>
+            <div class="enq-form-grid">
+              <div class="enq-field-group">
+                <label class="enq-field-label">Enquiry Source <span class="text-danger">*</span></label>
+                <select id="enqSource" class="enq-input-control">
+                  <option value="Walk-In (Front Desk)" selected>Walk-In (Front Desk)</option>
+                  <option value="Phone Enquiry">Phone Call Enquiry</option>
+                  <option value="Website Contact Form">Website Contact Form</option>
+                  <option value="Parent Referral">Parent Referral</option>
+                </select>
+              </div>
+              <div class="enq-field-group">
+                <label class="enq-field-label">Follow-up Date</label>
+                <input type="date" id="enqFollowupDate" class="enq-input-control">
+              </div>
+            </div>
           </div>
 
+          <!-- Section 3: Enquiry Remarks & Quick Topic Chips -->
+          <div class="enq-field-group">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <label class="enq-field-label">Enquiry Remarks / Queries</label>
+              <span style="font-size: 0.72rem; color: #64748b;">Click tags to auto-append topic</span>
+            </div>
+            <textarea id="enqRemarks" class="form-control" rows="2" placeholder="e.g. Parent inquired about bus facilities, English medium syllabus, and fee structure." style="width:100%; padding:0.5rem 0.75rem; border:1px solid #cbd5e1; border-radius:6px; font-size:0.82rem; resize:none;"></textarea>
+            <div class="enq-quick-tags">
+              <button type="button" class="enq-chip-btn" onclick="portalApp.addEnquiryTag('Transport / Bus Route')"><i class="fa-solid fa-bus text-primary"></i> Transport Route</button>
+              <button type="button" class="enq-chip-btn" onclick="portalApp.addEnquiryTag('Fee Structure / Terms')"><i class="fa-solid fa-receipt text-emerald"></i> Fee Structure</button>
+              <button type="button" class="enq-chip-btn" onclick="portalApp.addEnquiryTag('Curriculum / Syllabus')"><i class="fa-solid fa-book-open text-indigo"></i> Syllabus Details</button>
+              <button type="button" class="enq-chip-btn" onclick="portalApp.addEnquiryTag('Hostel Facilities')"><i class="fa-solid fa-bed text-warning"></i> Hostel Facilities</button>
+              <button type="button" class="enq-chip-btn" onclick="portalApp.addEnquiryTag('Sports & Kit')"><i class="fa-solid fa-volleyball text-danger"></i> Sports &amp; Activities</button>
+            </div>
+          </div>
         </div>
-        <div class="modal-footer" style="display:flex; justify-content:flex-end; gap:0.5rem; background:#f8fafc; border-top:1px solid #e2e8f0; padding:0.85rem 1.25rem;">
-          <button type="button" class="btn btn-secondary btn-sm" onclick="portalApp.closeModal('addEnquiryModal')">Cancel</button>
-          <button type="submit" class="btn btn-primary btn-sm"><i class="fa-solid fa-check mr-1"></i> Log Enquiry</button>
+
+        <div class="modal-footer" style="display:flex; justify-content:space-between; align-items:center; background:#f8fafc; border-top:1px solid #e2e8f0; padding:0.85rem 1.25rem;">
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <span class="badge" style="background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe; font-size: 0.76rem; font-weight: 600; padding: 5px 10px; display: inline-flex; align-items: center; gap: 6px;">
+              <i class="fa-solid fa-headset text-primary"></i> Admissions Helpdesk &bull; Front Office Intake
+            </span>
+          </div>
+          <div style="display: flex; gap: 0.65rem; align-items: center;">
+            <button type="button" class="btn btn-secondary btn-sm" onclick="portalApp.closeModal('addEnquiryModal')" style="font-weight: 600; padding: 0.45rem 1rem;">Cancel</button>
+            <button type="submit" class="btn btn-primary btn-sm" style="display: inline-flex; align-items: center; gap: 6px; font-weight: 700; padding: 0.45rem 1.15rem; box-shadow: 0 1px 2px rgba(37,99,235,0.2);"><i class="fa-solid fa-check"></i> Log Enquiry</button>
+          </div>
         </div>
       </form>
     </div>
   </div>
 
-<!-- =========================================================================
+  <!-- =========================================================================
        MODAL: BULK IMPORT ADMISSIONS APPLICATIONS
        ========================================================================= -->
   <div class="modal-backdrop" id="importAdmissionsModal" style="display:none;">
