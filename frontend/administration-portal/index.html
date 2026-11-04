@@ -24280,19 +24280,19 @@ Class X-A,Monday,2,09:35 AM - 10:20 AM,Physical Science,Sri Navva Anand,Room 201
        MODAL 3: 11-SECTION TC DETAIL DOSSIER & WORKFLOW PAGE
        ========================================================================= -->
   <div class="modal-backdrop" id="tcDetailModal" style="display:none;">
-    <div class="portal-modal" style="max-width: 960px; width: 95%;">
-      <div class="modal-header" style="border-bottom: 1px solid #e2e8f0; padding-bottom: 0.85rem;">
+    <div class="portal-modal" style="max-width: 980px; width: 95%; border-radius: 12px; overflow: hidden; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);">
+      <div class="modal-header" style="border-bottom: 1px solid #e2e8f0; padding: 1rem 1.35rem; background: #ffffff;">
         <div style="display: flex; align-items: center; gap: 0.85rem;">
-          <div style="width: 46px; height: 46px; border-radius: 10px; background: #eff6ff; color: #1d4ed8; display: flex; align-items: center; justify-content: center; font-size: 1.35rem; border: 1px solid #bfdbfe;">
+          <div style="width: 46px; height: 46px; border-radius: 10px; background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%); color: #1d4ed8; display: flex; align-items: center; justify-content: center; font-size: 1.35rem; border: 1px solid #bfdbfe; box-shadow: 0 2px 4px rgba(37,99,235,0.06); flex-shrink: 0;">
             <i class="fa-solid fa-graduation-cap"></i>
           </div>
           <div>
-            <div style="display: flex; align-items: center; gap: 0.6rem;">
-              <h3 style="margin: 0; font-size: 1.25rem; font-weight: 800; color: #0f172a;" id="tcDetailModalTitle">P. Kiran Kumar</h3>
+            <div style="display: flex; align-items: center; gap: 0.6rem; flex-wrap: wrap;">
+              <h3 style="margin: 0; font-size: 1.25rem; font-weight: 800; color: #0f172a; letter-spacing: -0.01em;" id="tcDetailModalTitle">P. Kiran Kumar</h3>
               <span class="portal-badge badge-primary" id="tcDetailStatusBadge">Issued</span>
               <span class="tc-id-pill" id="tcDetailRequestIdPill">TC-REQ-2026-0041</span>
             </div>
-            <p style="margin: 3px 0 0; font-size: 0.82rem; color: #64748b;" id="tcDetailModalSubtitle">
+            <p style="margin: 3px 0 0; font-size: 0.8rem; color: #64748b;" id="tcDetailModalSubtitle">
               Adm No: SV-0082 &bull; Class X-A &bull; Transfer Certificate Docket
             </p>
           </div>
@@ -24318,136 +24318,240 @@ Class X-A,Monday,2,09:35 AM - 10:20 AM,Physical Science,Sri Navva Anand,Room 201
         </button>
       </div>
 
-      <div class="modal-body" style="padding: 0; max-height: calc(85vh - 170px); overflow-y: auto;">
-        
+      <div class="modal-body" style="padding: 1.25rem; max-height: calc(85vh - 170px); overflow-y: auto; display: flex; flex-direction: column; gap: 1rem;">
         <!-- PANE 1: STUDENT & REQUEST PROFILE -->
-        <div class="tc-detail-pane active" id="tcPane-profile">
-          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem;">
-            
-            <!-- Section 1: Student Profile -->
-            <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 1rem;">
-              <h4 style="margin: 0 0 0.75rem 0; font-size: 0.85rem; font-weight: 800; color: #1e3a8a; text-transform: uppercase;">
-                <i class="fa-solid fa-id-card mr-1"></i> 1. Student Profile
-              </h4>
-              <div style="display: flex; flex-direction: column; gap: 0.45rem; font-size: 0.82rem;">
-                <div><span style="color:#64748b;">Full Legal Name:</span> <strong id="tcDossierName">-</strong></div>
-                <div><span style="color:#64748b;">Official Admission No:</span> <strong id="tcDossierAdmNo" class="text-primary">-</strong></div>
-                <div><span style="color:#64748b;">Permanent Student ID:</span> <strong id="tcDossierStudentId">-</strong></div>
-                <div><span style="color:#64748b;">PEN Number:</span> <strong id="tcDossierPenNo">-</strong></div>
-                <div><span style="color:#64748b;">Aadhaar Number:</span> <strong id="tcDossierAadhaar">-</strong></div>
-                <div><span style="color:#64748b;">Class &amp; Section:</span> <strong id="tcDossierClass">-</strong></div>
-                <div><span style="color:#64748b;">Date of Birth:</span> <strong id="tcDossierDob">-</strong></div>
-                <div><span style="color:#64748b;">Father's Name:</span> <strong id="tcDossierFather">-</strong></div>
-                <div><span style="color:#64748b;">Mother's Name:</span> <strong id="tcDossierMother">-</strong></div>
+        <div class="tc-detail-pane active" id="tcPane-profile" style="padding: 0;">
+          <!-- Dual Profile & Request Cards with Perfect Equal Height -->
+          <div class="tc-profile-grid">
+            <!-- Section 1: Student Profile Card -->
+            <div class="tc-dossier-card">
+              <div class="tc-dossier-header">
+                <h4 class="tc-dossier-title">
+                  <i class="fa-solid fa-id-card text-primary"></i> 1. Student Profile
+                </h4>
+                <span class="badge" style="background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe; font-size: 0.7rem; font-weight: 700;">
+                  Institutional Roster
+                </span>
+              </div>
+              <div class="tc-dossier-body">
+                <div class="tc-kv-row">
+                  <span class="tc-kv-label">Full Legal Name</span>
+                  <span class="tc-kv-val" id="tcDossierName">-</span>
+                </div>
+                <div class="tc-kv-row">
+                  <span class="tc-kv-label">Official Admission No</span>
+                  <span class="tc-id-pill" id="tcDossierAdmNo" style="font-size: 0.76rem; padding: 1px 7px;">-</span>
+                </div>
+                <div class="tc-kv-row">
+                  <span class="tc-kv-label">Permanent Student ID</span>
+                  <span class="tc-kv-val font-mono" id="tcDossierStudentId" style="font-size: 0.78rem; color: #475569;">-</span>
+                </div>
+                <div class="tc-kv-row">
+                  <span class="tc-kv-label">PEN Number</span>
+                  <span class="tc-kv-val font-mono" id="tcDossierPenNo" style="font-size: 0.78rem;">-</span>
+                </div>
+                <div class="tc-kv-row">
+                  <span class="tc-kv-label">Aadhaar Number</span>
+                  <span class="tc-kv-val font-mono" id="tcDossierAadhaar" style="font-size: 0.78rem; color: #64748b;">-</span>
+                </div>
+                <div class="tc-kv-row">
+                  <span class="tc-kv-label">Class &amp; Section</span>
+                  <span class="portal-badge badge-primary" id="tcDossierClass" style="font-size: 0.72rem; padding: 2px 7px;">-</span>
+                </div>
+                <div class="tc-kv-row">
+                  <span class="tc-kv-label">Date of Birth</span>
+                  <span class="tc-kv-val" id="tcDossierDob">-</span>
+                </div>
+                <div class="tc-kv-row">
+                  <span class="tc-kv-label">Father's Name</span>
+                  <span class="tc-kv-val" id="tcDossierFather">-</span>
+                </div>
+                <div class="tc-kv-row">
+                  <span class="tc-kv-label">Mother's Name</span>
+                  <span class="tc-kv-val" id="tcDossierMother">-</span>
+                </div>
               </div>
             </div>
 
-            <!-- Section 2: Parent/Guardian Request -->
-            <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 1rem;">
-              <h4 style="margin: 0 0 0.75rem 0; font-size: 0.85rem; font-weight: 800; color: #1e3a8a; text-transform: uppercase;">
-                <i class="fa-solid fa-user-group mr-1"></i> 2. Parent / Guardian Request
-              </h4>
-              <div style="display: flex; flex-direction: column; gap: 0.45rem; font-size: 0.82rem;">
-                <div><span style="color:#64748b;">Requester Name:</span> <strong id="tcDossierRequester">-</strong></div>
-                <div><span style="color:#64748b;">Relationship:</span> <strong id="tcDossierRelation">-</strong></div>
-                <div><span style="color:#64748b;">Contact Mobile:</span> <strong id="tcDossierPhone">-</strong></div>
-                <div><span style="color:#64748b;">Request Submission Date:</span> <strong id="tcDossierReqDate">-</strong></div>
-                <div><span style="color:#64748b;">Application Channel:</span> <span class="portal-badge badge-blue">Parent Portal / Office Intake</span></div>
-                <div><span style="color:#64748b;">Govt Order / Reference:</span> <strong id="tcDossierOrderRef">-</strong></div>
+            <!-- Section 2: Parent/Guardian Request Card -->
+            <div class="tc-dossier-card">
+              <div class="tc-dossier-header">
+                <h4 class="tc-dossier-title">
+                  <i class="fa-solid fa-user-group text-primary"></i> 2. Parent / Guardian Request
+                </h4>
+                <span class="badge" style="background: #f0fdf4; color: #15803d; border: 1px solid #bbf7d0; font-size: 0.7rem; font-weight: 700;">
+                  Verified Application
+                </span>
+              </div>
+              <div class="tc-dossier-body">
+                <div class="tc-kv-row">
+                  <span class="tc-kv-label">Requester Name</span>
+                  <span class="tc-kv-val" id="tcDossierRequester">-</span>
+                </div>
+                <div class="tc-kv-row">
+                  <span class="tc-kv-label">Relationship</span>
+                  <span class="tc-kv-val" id="tcDossierRelation">-</span>
+                </div>
+                <div class="tc-kv-row">
+                  <span class="tc-kv-label">Contact Mobile</span>
+                  <span class="tc-kv-val font-mono" id="tcDossierPhone">-</span>
+                </div>
+                <div class="tc-kv-row">
+                  <span class="tc-kv-label">Request Submission Date</span>
+                  <span class="tc-kv-val" id="tcDossierReqDate">-</span>
+                </div>
+                <div class="tc-kv-row">
+                  <span class="tc-kv-label">Application Channel</span>
+                  <span class="portal-badge badge-blue" style="font-size: 0.7rem;">Parent Portal / Office Intake</span>
+                </div>
+                <div class="tc-kv-row">
+                  <span class="tc-kv-label">Govt Order / Reference</span>
+                  <span class="tc-kv-val font-mono" id="tcDossierOrderRef" style="font-size: 0.76rem; color: #475569;">-</span>
+                </div>
+                <div class="tc-kv-row">
+                  <span class="tc-kv-label">Statutory TC Category</span>
+                  <span class="portal-badge badge-primary" style="font-size: 0.7rem; padding: 2px 7px;">Standard Institutional Transfer</span>
+                </div>
+                <div class="tc-kv-row">
+                  <span class="tc-kv-label">Statutory Processing Fee</span>
+                  <span class="badge" style="background:#ecfdf5; color:#047857; border:1px solid #a7f3d0; font-size:0.72rem; font-weight:700;">₹0 (Statutory Exemption)</span>
+                </div>
+                <div class="tc-kv-row">
+                  <span class="tc-kv-label">Parent Declaration</span>
+                  <span style="font-size:0.76rem; color:#15803d; font-weight:700;"><i class="fa-solid fa-circle-check me-1"></i> Verified on Record</span>
+                </div>
               </div>
             </div>
+          </div>
 
-            <!-- Section 3 & 4: Reason for Leaving & Last Date of Attendance -->
-            <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 1rem; grid-column: 1 / -1;">
-              <h4 style="margin: 0 0 0.75rem 0; font-size: 0.85rem; font-weight: 800; color: #1e3a8a; text-transform: uppercase;">
-                <i class="fa-solid fa-calendar-check mr-1"></i> 3 &amp; 4. Reason for Leaving &amp; Attendance Standing
+          <!-- Section 3 & 4: Reason for Leaving & Attendance Standing (Balanced 4-Metric Grid) -->
+          <div class="tc-dossier-card" style="margin-top: 1.15rem;">
+            <div class="tc-dossier-header">
+              <h4 class="tc-dossier-title">
+                <i class="fa-solid fa-calendar-check text-primary"></i> 3 &amp; 4. Reason for Leaving &amp; Attendance Standing
               </h4>
-              <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 0.75rem; font-size: 0.82rem;">
-                <div><span style="color:#64748b;">Reason for Leaving:</span> <br><strong id="tcDossierReason" style="font-size:0.86rem; color:#0f172a;">-</strong></div>
-                <div><span style="color:#64748b;">Destination Institution:</span> <br><strong id="tcDossierDest">-</strong></div>
-                <div><span style="color:#64748b;">Last Date of Attendance:</span> <br><strong id="tcDossierLastDate" class="text-primary">-</strong></div>
-                <div><span style="color:#64748b;">Working Days Attended:</span> <br><strong id="tcDossierAttendance">-</strong></div>
+              <span class="badge" style="background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe; font-size: 0.7rem; font-weight: 700;">
+                <i class="fa-solid fa-scale-balanced me-1"></i> Statutory Rule 99 Compliance
+              </span>
+            </div>
+            <div style="padding: 1rem;">
+              <div class="tc-metrics-grid">
+                <!-- Metric 1: Reason for Leaving -->
+                <div class="tc-metric-tile">
+                  <div class="tc-metric-header">
+                    <span class="tc-metric-icon" style="background: #eff6ff; color: #2563eb; border: 1px solid #dbeafe;">
+                      <i class="fa-solid fa-right-from-bracket"></i>
+                    </span>
+                    <span class="tc-metric-label">Reason for Leaving</span>
+                  </div>
+                  <div class="tc-metric-val" id="tcDossierReason">-</div>
+                </div>
+                <!-- Metric 2: Destination Institution -->
+                <div class="tc-metric-tile">
+                  <div class="tc-metric-header">
+                    <span class="tc-metric-icon" style="background: #f5f3ff; color: #7c3aed; border: 1px solid #ddd6fe;">
+                      <i class="fa-solid fa-school"></i>
+                    </span>
+                    <span class="tc-metric-label">Destination Institution</span>
+                  </div>
+                  <div class="tc-metric-val" id="tcDossierDest">-</div>
+                </div>
+                <!-- Metric 3: Last Date of Attendance -->
+                <div class="tc-metric-tile">
+                  <div class="tc-metric-header">
+                    <span class="tc-metric-icon" style="background: #ecfdf5; color: #059669; border: 1px solid #a7f3d0;">
+                      <i class="fa-solid fa-calendar-day"></i>
+                    </span>
+                    <span class="tc-metric-label">Last Date of Attendance</span>
+                  </div>
+                  <div class="tc-metric-val text-primary" id="tcDossierLastDate">-</div>
+                </div>
+                <!-- Metric 4: Working Days Attended -->
+                <div class="tc-metric-tile">
+                  <div class="tc-metric-header">
+                    <span class="tc-metric-icon" style="background: #fffbeb; color: #d97706; border: 1px solid #fde68a;">
+                      <i class="fa-solid fa-clipboard-user"></i>
+                    </span>
+                    <span class="tc-metric-label">Working Days Attended</span>
+                  </div>
+                  <div class="tc-metric-val" id="tcDossierAttendance">-</div>
+                </div>
               </div>
             </div>
-
           </div>
         </div>
 
         <!-- PANE 2: CLEARANCE CHECKS & REQUIRED APPROVALS -->
-        <div class="tc-detail-pane" id="tcPane-clearance">
-          
+        <div class="tc-detail-pane" id="tcPane-clearance" style="padding: 0;">
           <div class="tc-statutory-notice">
             <i class="fa-solid fa-circle-info mr-1"></i>
             <strong>Multi-Department Clearance Workflow:</strong>
             All department heads (Academics, Library, Science/Sports, and Accounts) review the pupil's standing. Where fee arrears exist, <em>Statutory Parent Undertaking</em> can be executed under AP Educational Rules to avoid unconstitutionally blocking educational progression.
           </div>
-
           <div class="tc-clearance-grid">
-            
             <!-- Section 5: Academic History & Class Teacher Clearance -->
             <div class="tc-clearance-card" id="cardClearanceAcad">
-              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.5rem;">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.65rem; border-bottom: 1px solid #f1f5f9; padding-bottom: 0.5rem;">
                 <h5 style="margin:0; font-size:0.84rem; font-weight:800; color:#1e293b;">
                   <i class="fa-solid fa-graduation-cap text-primary mr-1"></i> 5. Academic History &amp; Class Teacher
                 </h5>
                 <span class="clearance-pill cleared" id="pillClearanceAcad">Cleared</span>
               </div>
-              <div style="font-size:0.8rem; color:#475569; display:flex; flex-direction:column; gap:0.35rem;">
-                <div>Last Examination: <strong id="tcDossierExam">-</strong></div>
-                <div>Result &amp; Conduct: <strong id="tcDossierConduct">-</strong></div>
-                <div>Promotion Status: <strong id="tcDossierPromotion">-</strong></div>
-                <div>Class Teacher Sign-off: <strong id="tcDossierTeacherSign">-</strong></div>
+              <div style="display:flex; flex-direction:column;">
+                <div class="tc-kv-row"><span class="tc-kv-label">Last Examination</span><span class="tc-kv-val" id="tcDossierExam">-</span></div>
+                <div class="tc-kv-row"><span class="tc-kv-label">Result &amp; Conduct</span><span class="tc-kv-val text-success" id="tcDossierConduct">-</span></div>
+                <div class="tc-kv-row"><span class="tc-kv-label">Promotion Status</span><span class="tc-kv-val" id="tcDossierPromotion">-</span></div>
+                <div class="tc-kv-row"><span class="tc-kv-label">Class Teacher Sign-off</span><span class="tc-kv-val" id="tcDossierTeacherSign">-</span></div>
               </div>
             </div>
 
             <!-- Section 6: Outstanding Library Books & Assets -->
             <div class="tc-clearance-card" id="cardClearanceLib">
-              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.5rem;">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.65rem; border-bottom: 1px solid #f1f5f9; padding-bottom: 0.5rem;">
                 <h5 style="margin:0; font-size:0.84rem; font-weight:800; color:#1e293b;">
                   <i class="fa-solid fa-book-open-reader text-warning mr-1"></i> 6. Library &amp; Physical Assets
                 </h5>
                 <span class="clearance-pill cleared" id="pillClearanceLib">Cleared</span>
               </div>
-              <div style="font-size:0.8rem; color:#475569; display:flex; flex-direction:column; gap:0.35rem;">
-                <div>Library Books: <strong id="tcDossierLibBooks">-</strong></div>
-                <div>Science Lab Clearance: <strong id="tcDossierLab">-</strong></div>
-                <div>Sports Equipment &amp; Kit: <strong id="tcDossierSports">-</strong></div>
-                <div>Librarian Sign-off: <strong id="tcDossierLibrarianSign">-</strong></div>
+              <div style="display:flex; flex-direction:column;">
+                <div class="tc-kv-row"><span class="tc-kv-label">Library Books</span><span class="tc-kv-val" id="tcDossierLibBooks">-</span></div>
+                <div class="tc-kv-row"><span class="tc-kv-label">Science Lab Clearance</span><span class="tc-kv-val" id="tcDossierLab">-</span></div>
+                <div class="tc-kv-row"><span class="tc-kv-label">Sports Equipment &amp; Kit</span><span class="tc-kv-val" id="tcDossierSports">-</span></div>
+                <div class="tc-kv-row"><span class="tc-kv-label">Librarian Sign-off</span><span class="tc-kv-val" id="tcDossierLibrarianSign">-</span></div>
               </div>
             </div>
 
             <!-- Section 7: Fee Clearance Status -->
             <div class="tc-clearance-card" id="cardClearanceFee">
-              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.5rem;">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.65rem; border-bottom: 1px solid #f1f5f9; padding-bottom: 0.5rem;">
                 <h5 style="margin:0; font-size:0.84rem; font-weight:800; color:#1e293b;">
                   <i class="fa-solid fa-receipt text-emerald mr-1"></i> 7. Fee &amp; Financial Clearance
                 </h5>
                 <span class="clearance-pill cleared" id="pillClearanceFee">Fee Cleared</span>
               </div>
-              <div style="font-size:0.8rem; color:#475569; display:flex; flex-direction:column; gap:0.35rem;">
-                <div>Tuition &amp; Term Dues: <strong id="tcDossierDues">-</strong></div>
-                <div>No-Dues Receipt Ref: <strong id="tcDossierNdcRef">-</strong></div>
-                <div>Statutory Override Status: <strong id="tcDossierStatutoryStatus">-</strong></div>
-                <div>Bursar / Accounts Sign-off: <strong id="tcDossierBursarSign">-</strong></div>
+              <div style="display:flex; flex-direction:column;">
+                <div class="tc-kv-row"><span class="tc-kv-label">Tuition &amp; Term Dues</span><span class="tc-kv-val" id="tcDossierDues">-</span></div>
+                <div class="tc-kv-row"><span class="tc-kv-label">No-Dues Receipt Ref</span><span class="tc-kv-val font-mono" id="tcDossierNdcRef">-</span></div>
+                <div class="tc-kv-row"><span class="tc-kv-label">Statutory Override Status</span><span class="tc-kv-val" id="tcDossierStatutoryStatus">-</span></div>
+                <div class="tc-kv-row"><span class="tc-kv-label">Bursar / Accounts Sign-off</span><span class="tc-kv-val" id="tcDossierBursarSign">-</span></div>
               </div>
             </div>
 
             <!-- Section 8: Required Executive Approvals -->
             <div class="tc-clearance-card" id="cardClearancePrincipal">
-              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.5rem;">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.65rem; border-bottom: 1px solid #f1f5f9; padding-bottom: 0.5rem;">
                 <h5 style="margin:0; font-size:0.84rem; font-weight:800; color:#1e293b;">
                   <i class="fa-solid fa-stamp text-purple mr-1"></i> 8. Designated Authority Approval
                 </h5>
                 <span class="clearance-pill cleared" id="pillClearancePrincipal">Principal Authorized</span>
               </div>
-              <div style="font-size:0.8rem; color:#475569; display:flex; flex-direction:column; gap:0.35rem;">
-                <div>Designated Approver: <strong>Smt. Gorle Varalakshmi (Principal)</strong></div>
-                <div>Approval Status: <strong id="tcDossierPrincipalStatus">Approved</strong></div>
-                <div>Statutory Compliance: <strong class="text-success">Verified under AP Education Code</strong></div>
-                <div>Approval Date: <strong id="tcDossierPrincipalDate">-</strong></div>
+              <div style="display:flex; flex-direction:column;">
+                <div class="tc-kv-row"><span class="tc-kv-label">Designated Approver</span><span class="tc-kv-val">Smt. Gorle Varalakshmi (Principal)</span></div>
+                <div class="tc-kv-row"><span class="tc-kv-label">Approval Status</span><span class="tc-kv-val text-success" id="tcDossierPrincipalStatus">Approved</span></div>
+                <div class="tc-kv-row"><span class="tc-kv-label">Statutory Compliance</span><span class="tc-kv-val text-success">Verified under AP Education Code</span></div>
+                <div class="tc-kv-row"><span class="tc-kv-label">Approval Date</span><span class="tc-kv-val" id="tcDossierPrincipalDate">-</span></div>
               </div>
             </div>
-
           </div>
 
           <!-- Quick Department Action Buttons -->
@@ -24459,65 +24563,74 @@ Class X-A,Monday,2,09:35 AM - 10:20 AM,Physical Science,Sri Navva Anand,Room 201
         </div>
 
         <!-- PANE 3: TC PREVIEW (APPENDIX 16 OFFICIAL SHEET) -->
-        <div class="tc-detail-pane" id="tcPane-preview">
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem; background: #f8fafc; padding: 0.6rem 0.85rem; border-radius: 6px; border: 1px solid #e2e8f0;">
-            <div style="font-size: 0.82rem; font-weight: 700; color: #1e3a8a;">
-              <i class="fa-solid fa-print mr-1"></i> 9. Transfer Certificate Preview (Appendix 16 Standard Format)
+        <div class="tc-detail-pane" id="tcPane-preview" style="padding: 0;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem; background: #f8fafc; padding: 0.65rem 0.95rem; border-radius: 8px; border: 1px solid #e2e8f0;">
+            <div style="font-size: 0.82rem; font-weight: 700; color: #1e3a8a; display: flex; align-items: center; gap: 6px;">
+              <i class="fa-solid fa-stamp text-primary"></i> 9. Transfer Certificate Preview (Appendix 16 Standard Format)
             </div>
             <div style="display: flex; gap: 0.5rem;">
-              <button type="button" class="btn btn-secondary btn-sm" onclick="portalApp.printCurrentDossierTC()">
-                <i class="fa-solid fa-print mr-1"></i> Print Official TC
+              <button type="button" class="btn btn-primary btn-sm" onclick="portalApp.printCurrentDossierTC()" style="display: inline-flex; align-items: center; gap: 6px; font-weight: 700;">
+                <i class="fa-solid fa-print"></i> Print Official TC
               </button>
             </div>
           </div>
-          <div id="tcDossierDocContainer" style="overflow-x: auto; background: #e2e8f0; padding: 1rem; border-radius: 8px;">
+          <div id="tcDossierDocContainer" style="overflow-x: auto; background: #f1f5f9; padding: 1.25rem; border-radius: 8px; border: 1px solid #e2e8f0;">
             <!-- Rendered via portalApp.renderDossierTCDocument -->
           </div>
         </div>
 
         <!-- PANE 4: ISSUANCE, SIGNATURES & AUDIT TRAIL -->
-        <div class="tc-detail-pane" id="tcPane-issuance">
+        <div class="tc-detail-pane" id="tcPane-issuance" style="padding: 0;">
           <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem;">
-            
             <!-- Section 10 & 11: Issue Date & Authorized Signatures -->
-            <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 1rem;">
-              <h4 style="margin: 0 0 0.75rem 0; font-size: 0.85rem; font-weight: 800; color: #1e3a8a; text-transform: uppercase;">
-                <i class="fa-solid fa-signature mr-1"></i> 10 &amp; 11. Issue Date &amp; Signatures
-              </h4>
-              <div style="display: flex; flex-direction: column; gap: 0.45rem; font-size: 0.82rem;">
-                <div><span style="color:#64748b;">Official TC Number:</span> <strong id="tcDossierFinalNo" class="text-primary">-</strong></div>
-                <div><span style="color:#64748b;">Official Date of Issue:</span> <strong id="tcDossierFinalDate">-</strong></div>
-                <div><span style="color:#64748b;">Authorized Signatory:</span> <strong id="tcDossierSignatory">-</strong></div>
-                <div><span style="color:#64748b;">Digital Verification Hash:</span> <code id="tcDossierHash" style="font-size:0.75rem; background:#e2e8f0; padding:2px 4px; border-radius:3px;">-</code></div>
-                <div><span style="color:#64748b;">Enrolment Transition:</span> <span class="portal-badge badge-warning" id="tcDossierStatusTransition">Active &rarr; Transferred</span></div>
+            <div class="tc-dossier-card">
+              <div class="tc-dossier-header">
+                <h4 class="tc-dossier-title">
+                  <i class="fa-solid fa-signature text-primary"></i> 10 &amp; 11. Issue Date &amp; Signatures
+                </h4>
+                <span class="badge" style="background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe; font-size: 0.7rem; font-weight: 700;">
+                  Statutory Execution
+                </span>
+              </div>
+              <div class="tc-dossier-body">
+                <div class="tc-kv-row"><span class="tc-kv-label">Official TC Number</span><span class="tc-kv-val text-primary font-mono" id="tcDossierFinalNo">-</span></div>
+                <div class="tc-kv-row"><span class="tc-kv-label">Official Date of Issue</span><span class="tc-kv-val" id="tcDossierFinalDate">-</span></div>
+                <div class="tc-kv-row"><span class="tc-kv-label">Authorized Signatory</span><span class="tc-kv-val" id="tcDossierSignatory">-</span></div>
+                <div class="tc-kv-row"><span class="tc-kv-label">Digital Verification Hash</span><span class="tc-kv-val"><code id="tcDossierHash" style="font-size:0.75rem; background:#f1f5f9; padding:2px 5px; border-radius:4px; border:1px solid #cbd5e1;">-</code></span></div>
+                <div class="tc-kv-row"><span class="tc-kv-label">Enrolment Transition</span><span class="tc-kv-val"><span class="portal-badge badge-warning" id="tcDossierStatusTransition">Active &rarr; Transferred</span></span></div>
               </div>
             </div>
 
             <!-- Historical Data Preservation Notice -->
-            <div style="background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px; padding: 1rem;">
-              <h4 style="margin: 0 0 0.75rem 0; font-size: 0.85rem; font-weight: 800; color: #166534; text-transform: uppercase;">
-                <i class="fa-solid fa-database mr-1"></i> Historical Records Retention
-              </h4>
-              <p style="font-size: 0.8rem; color: #15803d; line-height: 1.4; margin: 0 0 0.5rem 0;">
-                In compliance with statutory rules, issuance of this Transfer Certificate updates the student register status to <strong>Transferred</strong>. Historical academic grades, term report cards, attendance logs, and fee ledger receipts remain fully accessible to authorized faculty.
-              </p>
-              <div style="font-size: 0.78rem; color: #166534;">
-                <i class="fa-solid fa-circle-check mr-1"></i> Permanent student record preserved under ID: <strong id="tcDossierPermId">-</strong>
+            <div class="tc-dossier-card" style="border-color: #bbf7d0;">
+              <div class="tc-dossier-header" style="background: #f0fdf4; border-bottom-color: #bbf7d0;">
+                <h4 class="tc-dossier-title" style="color: #166534;">
+                  <i class="fa-solid fa-database text-emerald"></i> Historical Records Retention
+                </h4>
+                <span class="badge" style="background: #dcfce7; color: #15803d; border: 1px solid #86efac; font-size: 0.7rem; font-weight: 700;">
+                  Permanent Archive
+                </span>
+              </div>
+              <div class="tc-dossier-body" style="background: #f0fdf4;">
+                <p style="font-size: 0.8rem; color: #15803d; line-height: 1.45; margin: 0 0 0.75rem 0;">
+                  In compliance with statutory rules, issuance of this Transfer Certificate updates the student register status to <strong>Transferred</strong>. Historical academic grades, term report cards, attendance logs, and fee ledger receipts remain fully accessible to authorized faculty.
+                </p>
+                <div style="font-size: 0.78rem; color: #166534; font-weight: 600; padding: 0.5rem 0.75rem; background: #ffffff; border-radius: 6px; border: 1px solid #bbf7d0;">
+                  <i class="fa-solid fa-circle-check text-success me-1"></i> Permanent student record preserved under ID: <strong id="tcDossierPermId" class="font-mono">-</strong>
+                </div>
               </div>
             </div>
-
           </div>
         </div>
-
       </div>
 
       <div class="modal-footer" style="display:flex; justify-content:space-between; align-items:center; background:#f8fafc; border-top:1px solid #e2e8f0; padding:0.85rem 1.25rem;">
-        <div>
-          <button type="button" class="btn btn-secondary btn-sm" onclick="portalApp.printCurrentDossierTC()">
-            <i class="fa-solid fa-print mr-1"></i> Print TC Sheet
-          </button>
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <span class="badge" style="background: #f1f5f9; color: #475569; border: 1px solid #cbd5e1; font-size: 0.76rem; font-weight: 600; padding: 5px 10px; display: inline-flex; align-items: center; gap: 6px;">
+            <i class="fa-solid fa-stamp text-primary"></i> AP Educational Rules Form Appendix 16
+          </span>
         </div>
-        <div style="display:flex; gap:0.5rem;" id="tcDetailFooterActionBtns">
+        <div style="display:flex; gap:0.65rem; align-items: center;" id="tcDetailFooterActionBtns">
           <!-- Populated dynamically via portalApp.renderTcDetailActions -->
         </div>
       </div>
