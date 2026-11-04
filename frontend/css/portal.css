@@ -25817,3 +25817,114 @@ button.close:hover,
 #docSearchInput {
   min-width: 260px;
 }
+
+
+/* ==========================================================================
+   ADMISSIONS BULK IMPORT MODAL DESIGN & ALIGNMENT
+   ========================================================================== */
+.adm-import-spec-card {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 0.9rem 1.15rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+.adm-import-spec-tags {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  margin-top: 5px;
+}
+.adm-import-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  align-items: stretch;
+}
+.adm-import-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+.adm-import-card:focus-within {
+  border-color: #93c5fd;
+  box-shadow: 0 2px 6px rgba(37, 99, 235, 0.08);
+}
+.adm-import-dropzone {
+  flex: 1;
+  min-height: 145px;
+  border: 2px dashed #cbd5e1;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  text-align: center;
+  background: #f8fafc;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.adm-import-dropzone:hover {
+  border-color: #2563eb;
+  background: #eff6ff;
+}
+.adm-import-dropzone.drag-over {
+  border-color: #1d4ed8;
+  background: #dbeafe;
+}
+.adm-import-textarea {
+  flex: 1;
+  width: 100%;
+  min-height: 145px;
+  font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+  font-size: 0.77rem;
+  line-height: 1.45;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  padding: 0.65rem;
+  resize: none;
+  background: #fcfcfc;
+  transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+}
+.adm-import-textarea:focus {
+  border-color: #2563eb;
+  background: #ffffff;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+}
+.adm-import-table th {
+  padding: 0.55rem 0.75rem;
+  font-size: 0.74rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #475569;
+  background: #f1f5f9;
+  border-bottom: 1px solid #cbd5e1;
+  white-space: nowrap;
+}
+.adm-import-table td {
+  padding: 0.5rem 0.75rem;
+  font-size: 0.79rem;
+  vertical-align: middle;
+}
+@media (max-width: 768px) {
+  .adm-import-grid {
+    grid-template-columns: 1fr;
+  }
+  .adm-import-spec-card {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

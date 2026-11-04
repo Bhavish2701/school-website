@@ -12898,6 +12898,16 @@ const FEE_CATEGORY_AUDIT_DATA = [
     openModal('importAdmissionsModal');
   }
 
+  function loadAdmissionsImportSampleText() {
+    const pasteArea = document.getElementById('admImportPasteText');
+    if (!pasteArea) return;
+    pasteArea.value = 'Full Name,Class Applied,Gender,Date of Birth,Parent Name,Relationship,Mobile Phone,Email,Address,Intake Channel,Previous School,Notes\n' +
+      'K. Sneha,VIII,Female,2013-08-22,K. Venkat Rao,Father,9848123456,venkat.k@gmail.com,MVP Colony Visakhapatnam,Walk-In,St. Anthony High School,Prospective admission for Class 8\n' +
+      'M. Tharun Kumar,IX,Male,2012-04-15,M. Srinivas,Father,9848234567,srinivas.m@gmail.com,Gajuwaka Visakhapatnam,Online Application,Zilla Parishad High School,Interested in science club\n' +
+      'P. Ananya,X,Female,2011-11-03,P. Lakshmi Narayana,Father,9848345678,narayana.p@yahoo.com,Seethammadhara Visakhapatnam,Walk-In,Kendriya Vidyalaya,Transfer from central syllabus';
+    showToast('Loaded 3 sample student application records into editor.', 'info');
+  }
+
   function downloadAdmissionsImportSample() {
     const sampleCsv = 'Full Name,Class Applied,Gender,Date of Birth,Parent Name,Relationship,Mobile Phone,Email,Address,Intake Channel,Previous School,Notes\n' +
       'K. Sneha,VIII,Female,2013-08-22,K. Venkat Rao,Father,9848123456,venkat.k@gmail.com,MVP Colony Visakhapatnam,Walk-In,St. Anthony High School,Prospective admission for Class 8\n' +
@@ -13025,36 +13035,70 @@ const FEE_CATEGORY_AUDIT_DATA = [
     if (!records || records.length === 0) {
       tbody.innerHTML = `
         <tr>
-          <td colspan="7" style="text-align: center; padding: 1.5rem; color: #94a3b8; font-size: 0.82rem;">
-            <i class="fa-solid fa-file-arrow-up mr-1"></i> Upload a CSV or paste records above to inspect prospective applications before loading.
+          <td colspan="7" style="text-align: center; padding: 2rem 1rem; color: #64748b;">
+            <div style="width: 44px; height: 44px; border-radius: 50%; background: #eff6ff; color: #3b82f6; display: inline-flex; align-items: center; justify-content: center; font-size: 1.25rem; margin-bottom: 0.5rem; border: 1px solid #bfdbfe;">
+              <i class="fa-solid fa-file-csv"></i>
+            </div>
+            <div style="font-size: 0.86rem; font-weight: 700; color: #334155; margin-bottom: 3px;">No Prospective Applications Loaded</div>
+            <div style="font-size: 0.77rem; color: #64748b; max-width: 460px; margin: 0 auto;">Select an admissions CSV file or paste tabular student rows above to verify and preview validation status before intake.</div>
           </td>
         </tr>
       `;
-      if (badge) badge.textContent = 'No applications parsed yet';
-      if (msg) msg.textContent = 'Awaiting input docket...';
+      if (badge) {
+        badge.className = 'badge';
+        badge.style.background = '#f1f5f9';
+        badge.style.color = '#64748b';
+        badge.style.border = '1px solid #cbd5e1';
+        badge.textContent = 'No applications parsed yet';
+      }
+      if (msg) {
+        msg.innerHTML = '<i class="fa-solid fa-clock-rotate-left" style="color: #94a3b8;"></i> Awaiting intake docket...';
+      }
       if (confirmBtn) confirmBtn.disabled = true;
       if (validCountEl) validCountEl.textContent = '0';
       return;
     }
 
     const validRows = records.filter(r => r.isValid);
-    if (badge) badge.innerHTML = `<span style="color:#059669; font-weight:700;">${validRows.length} valid</span> / ${records.length} total found`;
-    if (msg) msg.textContent = sourceName ? `Parsed ${records.length} records from ${sourceName}` : `Parsed ${records.length} applications`;
+    if (badge) {
+      badge.className = 'badge';
+      if (validRows.length === records.length) {
+        badge.style.background = '#ecfdf5';
+        badge.style.color = '#047857';
+        badge.style.border = '1px solid #a7f3d0';
+      } else {
+        badge.style.background = '#fffbeb';
+        badge.style.color = '#b45309';
+        badge.style.border = '1px solid #fde68a';
+      }
+      badge.innerHTML = `<i class="fa-solid fa-circle-check me-1"></i> ${validRows.length} Valid / ${records.length} Total`;
+    }
+    if (msg) {
+      msg.innerHTML = `<i class="fa-solid fa-database text-primary"></i> ${sourceName ? `Ready: ${validRows.length} of ${records.length} from ${sourceName}` : `${validRows.length} valid applications ready to ingest`}`;
+    }
     if (validCountEl) validCountEl.textContent = validRows.length;
     if (confirmBtn) confirmBtn.disabled = validRows.length === 0;
 
     tbody.innerHTML = records.map((r, idx) => `
       <tr style="border-bottom: 1px solid #f1f5f9; ${!r.isValid ? 'background: #fff1f2;' : ''}">
-        <td style="padding: 0.5rem 0.75rem; color: #64748b; font-size: 0.75rem;">${idx + 1}</td>
-        <td style="padding: 0.5rem 0.75rem; font-weight: 700; color: #0f172a;">${r.name || '<span style="color:#dc2626; font-style:italic;">Missing</span>'}</td>
-        <td style="padding: 0.5rem 0.75rem;"><span class="portal-badge badge-primary" style="font-size:0.7rem;">Class ${r.class}</span></td>
-        <td style="padding: 0.5rem 0.75rem; color: #475569;">${r.gender}</td>
-        <td style="padding: 0.5rem 0.75rem; color: #334155;">${r.parent}</td>
-        <td style="padding: 0.5rem 0.75rem; font-family: monospace; font-size: 0.75rem;">${r.phone}</td>
+        <td style="padding: 0.5rem 0.75rem; text-align: center; color: #64748b; font-size: 0.75rem; font-weight: 600;">${idx + 1}</td>
+        <td style="padding: 0.5rem 0.75rem; font-weight: 700; color: #0f172a;">
+          ${r.name || '<span style="color:#dc2626; font-style:italic;">[Missing Name - Invalid]</span>'}
+          ${r.email ? `<div style="font-size:0.72rem; color:#64748b; font-weight:normal;">${r.email}</div>` : ''}
+        </td>
+        <td style="padding: 0.5rem 0.75rem; text-align: center;">
+          <span class="portal-badge badge-primary" style="font-size:0.7rem; padding: 2px 7px;">Class ${r.class}</span>
+        </td>
+        <td style="padding: 0.5rem 0.75rem; text-align: center; color: #475569; font-size: 0.76rem;">${r.gender}</td>
+        <td style="padding: 0.5rem 0.75rem;">
+          <div style="font-weight: 600; color: #334155; font-size: 0.78rem;">${r.parent}</div>
+          <div style="font-size: 0.7rem; color: #64748b;">${r.guardianRel || 'Guardian'}</div>
+        </td>
+        <td style="padding: 0.5rem 0.75rem; font-family: 'SFMono-Regular', Consolas, monospace; font-size: 0.76rem; color: #1e293b;">${r.phone}</td>
         <td style="padding: 0.5rem 0.75rem; text-align: center;">
           ${r.isValid
-            ? '<span class="portal-badge badge-success" style="font-size:0.68rem; background:#dcfce7; color:#15803d; border:1px solid #86efac;"><i class="fa-solid fa-check mr-1"></i> Valid</span>'
-            : '<span class="portal-badge badge-danger" style="font-size:0.68rem; background:#fee2e2; color:#b91c1c; border:1px solid #fca5a5;"><i class="fa-solid fa-triangle-exclamation mr-1"></i> ' + r.error + '</span>'}
+            ? '<span class="portal-badge badge-success" style="font-size:0.7rem; background:#dcfce7; color:#15803d; border:1px solid #86efac; padding:2px 8px; border-radius:12px;"><i class="fa-solid fa-circle-check me-1"></i> Valid</span>'
+            : '<span class="portal-badge badge-danger" style="font-size:0.7rem; background:#fee2e2; color:#b91c1c; border:1px solid #fca5a5; padding:2px 8px; border-radius:12px;"><i class="fa-solid fa-circle-xmark me-1"></i> ' + (r.error || 'Deficient') + '</span>'}
         </td>
       </tr>
     `).join('');
@@ -64729,6 +64773,7 @@ exportInventoryAssetsCSV,
     exportAdmissionsCSV,
     printAdmissionsTable,
     openImportAdmissionsModal,
+      loadAdmissionsImportSampleText,
       downloadAdmissionsImportSample,
       handleAdmissionsImportFileSelected,
       parseAdmissionsPastedText,
