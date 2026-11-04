@@ -26265,3 +26265,7 @@ button.close:hover,
     grid-template-columns: 1fr;
   }
 }
+
+#studentDossierModal {
+  z-index: 10070 !important;
+}

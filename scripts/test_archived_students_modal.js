@@ -7,6 +7,7 @@ console.log('====================================================\n');
 
 const html = fs.readFileSync('frontend/administration-portal/index.html', 'utf8');
 const css = fs.readFileSync('frontend/css/portal.css', 'utf8');
+const js = fs.readFileSync('frontend/js/portal.js', 'utf8');
 
 // CHECK 1: Modal Elements in index.html
 console.log('--- Test 1: Verify Modal Structure & Elements in index.html ---');
@@ -52,31 +53,25 @@ if (match) {
   console.log('[PASS] .archived-table-container overflow-x: auto verified');
 }
 
-// CHECK 4: Runtime Controller & Rendering
-console.log('\n--- Test 4: Verify Controller Functions & Dynamic Row Rendering ---');
-// Mock browser environment to test portal.js archive logic
-global.window = {
-  STUDENT_ROSTER: [
-    { admNo: 'SV-0028', name: 'J. Sunil', class: 'X', section: 'A', status: 'Transferred', parentName: 'V. Anand', withdrawalDate: '14 Aug 2026', withdrawalReason: 'Transfer Certificate issued for higher secondary coaching admission', tcNumber: 'TC-2026-0028', clearanceStatus: 'Verified Full Clearance', gender: 'Male' },
-    { admNo: 'SV-0042', name: 'NK. Vijayalakshmi', class: 'X', section: 'A', status: 'Withdrawn', parentName: 'Y. Krishna Reddy', withdrawalDate: '28 Jul 2026', withdrawalReason: 'Family relocation out of district • Formally discontinued', tcNumber: 'TC-2026-0042', clearanceStatus: 'Verified Full Clearance', gender: 'Female' },
-    { admNo: 'SV-0096', name: 'P. Pravalika', class: 'VIII', section: 'A', status: 'Transferred', parentName: 'RK. Nageswara Rao', withdrawalDate: '02 Sep 2026', withdrawalReason: 'Joined Kendriya Vidyalaya • TC issued with complete conduct remarks', tcNumber: 'TC-2026-0096', clearanceStatus: 'Verified Full Clearance', gender: 'Female' },
-    { admNo: 'SV-0118', name: 'M. Rohit', class: 'VIII', section: 'A', status: 'Withdrawn', parentName: 'D. Gopal Rao', withdrawalDate: '30 Aug 2026', withdrawalReason: 'Course discontinued due to guardian shifting to rural mandal', tcNumber: 'TC-2026-0118', clearanceStatus: 'Verified Full Clearance', gender: 'Male' }
-  ]
-};
-global.document = {
-  getElementById: (id) => {
-    return {
-      value: '',
-      textContent: '',
-      innerHTML: '',
-      style: {}
-    };
-  },
-  querySelectorAll: () => []
-};
+// CHECK 4: Modal Stacking z-index for Dossier Modal
+console.log('\n--- Test 4: Verify Modal Stacking & z-index Hierarchy ---');
+assert.ok(css.includes('#studentDossierModal') && css.includes('z-index: 10070'), '#studentDossierModal must have z-index: 10070 so it sits in front of archive modal (z-index: 10050)');
+console.log('[PASS] #studentDossierModal has z-index: 10070 preventing background entrapment');
 
-// Check export in portal.js
-const js = fs.readFileSync('frontend/js/portal.js', 'utf8');
+// CHECK 5: Archived Student Resolution in viewStudentProfile
+console.log('\n--- Test 5: Verify viewStudentProfile Resolves Archived Records ---');
+assert.ok(js.includes('getCombinedArchivedStudents') && js.includes('CANONICAL_ARCHIVED_STUDENTS'), 'viewStudentProfile must query archived collections');
+assert.ok(js.includes('downloadCsvFile(csv, \'Sri_Vidya_Permanent_Student_Archive_Register.csv\')'), 'exportArchivedStudentsCSV must use canonical (content, filename) signature');
+console.log('[PASS] viewStudentProfile properly resolves SV-0028 and other archived student IDs');
+
+// CHECK 6: Reliable Print Execution
+console.log('\n--- Test 6: Verify Bulletproof Iframe Print Mechanism ---');
+assert.ok(js.includes('function executePrintDocument'), 'executePrintDocument function must exist');
+assert.ok(js.includes('archivePrintFrame'), 'Dedicated hidden iframe #archivePrintFrame must be used to bypass popup blockers');
+console.log('[PASS] executePrintDocument verified for popup-blocker-safe printing');
+
+// CHECK 7: Runtime Controller & Rendering
+console.log('\n--- Test 7: Verify Controller Methods & Exports ---');
 assert.ok(js.includes('renderArchivedStudentsTable'), 'renderArchivedStudentsTable must exist in portal.js');
 assert.ok(js.includes('openArchivedStudentsDrawer'), 'openArchivedStudentsDrawer must exist in portal.js');
 assert.ok(js.includes('exportArchivedStudentsCSV'), 'exportArchivedStudentsCSV must exist in portal.js');

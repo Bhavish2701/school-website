@@ -5282,8 +5282,23 @@ const FEE_CATEGORY_AUDIT_DATA = [
   }
 
   function viewStudentProfile(admNo) {
-    state.students.forEach((s, idx) => ensureStudentRecord(s, idx));
-    const student = (admNo ? state.students.find(s => s.admNo === admNo || s.studentId === admNo) : null) || state.students[0];
+    if (state.students && state.students.length) {
+      state.students.forEach((s, idx) => ensureStudentRecord(s, idx));
+    }
+    let student = null;
+    if (admNo) {
+      student = (state.students || []).find(s => s.admNo === admNo || s.studentId === admNo);
+      if (!student && typeof getCombinedArchivedStudents === 'function') {
+        const archived = getCombinedArchivedStudents();
+        student = archived.find(s => s.admNo === admNo || s.studentId === admNo);
+      }
+      if (!student && typeof CANONICAL_ARCHIVED_STUDENTS !== 'undefined') {
+        student = CANONICAL_ARCHIVED_STUDENTS.find(s => s.admNo === admNo || s.studentId === admNo);
+      }
+    }
+    if (!student) {
+      student = (state.students && state.students.length > 0) ? state.students[0] : null;
+    }
     if (!student) return;
 
     ensureStudentRecord(student);
@@ -7659,8 +7674,49 @@ const FEE_CATEGORY_AUDIT_DATA = [
     students.forEach(s => {
       csv += `"${s.admNo}","${s.name}","${s.gender || 'Student'}","${s.class}","${s.section || 'A'}","${s.parentName || s.parent || ''}","${s.withdrawalDate || ''}","${(s.withdrawalReason || '').replace(/"/g, '""')}","${s.tcNumber || ''}","${s.clearanceStatus || 'Full Clearance Verified'}","${s.conduct || 'Exemplary'}"\n`;
     });
-    downloadCsvFile('Sri_Vidya_Permanent_Student_Archive_Register.csv', csv);
+    downloadCsvFile(csv, 'Sri_Vidya_Permanent_Student_Archive_Register.csv');
     showToast('Exported statutory archive register to CSV', 'success');
+  }
+
+  function executePrintDocument(htmlContent, toastMessage) {
+    if (toastMessage && typeof showToast === 'function') {
+      showToast(toastMessage, 'info');
+    }
+
+    try {
+      let iframe = document.getElementById('archivePrintFrame');
+      if (!iframe) {
+        iframe = document.createElement('iframe');
+        iframe.id = 'archivePrintFrame';
+        iframe.style.position = 'fixed';
+        iframe.style.right = '0';
+        iframe.style.bottom = '0';
+        iframe.style.width = '0';
+        iframe.style.height = '0';
+        iframe.style.border = '0';
+        iframe.setAttribute('aria-hidden', 'true');
+        document.body.appendChild(iframe);
+      }
+      const doc = iframe.contentWindow.document;
+      doc.open();
+      doc.write(htmlContent);
+      doc.close();
+      iframe.contentWindow.focus();
+      setTimeout(() => {
+        iframe.contentWindow.print();
+      }, 350);
+      return;
+    } catch (err) {
+      console.warn('Iframe print error, falling back to window.open', err);
+    }
+
+    const win = window.open('', '_blank');
+    if (win) {
+      win.document.write(htmlContent + '<script>window.onload = function() { window.print(); };<\\/script>');
+      win.document.close();
+    } else if (typeof window !== 'undefined' && typeof window.print === 'function') {
+      window.print();
+    }
   }
 
   function printArchivedStudentsRegister() {
@@ -7679,18 +7735,13 @@ const FEE_CATEGORY_AUDIT_DATA = [
       </tr>
     `).join('');
 
-    const win = window.open('', '_blank');
-    if (!win) {
-      showToast('Popup blocker prevented print window. Please allow popups.', 'warning');
-      return;
-    }
-    win.document.write(`
+    const printHTML = `
       <!DOCTYPE html>
       <html>
       <head>
         <title>Permanent Student Archive Register - Sri Vidya E.M High School</title>
         <style>
-          body { font-family: "Segoe UI", Tahoma, Arial, sans-serif; margin: 25px; color: #0f172a; }
+          body { font-family: "Segoe UI", Tahoma, Arial, sans-serif; margin: 25px; color: #0f172a; background: #fff; }
           .header { text-align: center; border-bottom: 2.5px solid #1e3a8a; padding-bottom: 12px; margin-bottom: 20px; }
           .title { font-size: 20px; font-weight: 800; color: #1e3a8a; letter-spacing: 0.5px; margin: 0; }
           .sub { font-size: 12px; color: #475569; margin: 4px 0 0; }
@@ -7701,6 +7752,9 @@ const FEE_CATEGORY_AUDIT_DATA = [
           .signatures { display: flex; justify-content: space-between; margin-top: 50px; padding: 0 30px; }
           .sig-box { text-align: center; font-size: 12px; }
           .sig-line { width: 180px; border-top: 1.5px solid #0f172a; margin-bottom: 6px; }
+          @media print {
+            body { margin: 15px; }
+          }
         </style>
       </head>
       <body>
@@ -7741,33 +7795,26 @@ const FEE_CATEGORY_AUDIT_DATA = [
             <strong>Approved &amp; Certified:</strong><br>Smt. Gorle Varalakshmi<br>Principal
           </div>
         </div>
-        <script>
-          window.onload = function() { window.print(); };
-        </script>
       </body>
       </html>
-    `);
-    win.document.close();
+    `;
+
+    executePrintDocument(printHTML, 'Opening Permanent Student Archive Register for Printing...');
   }
 
   function printStudentArchivedTC(admNo) {
     const all = getCombinedArchivedStudents();
-    const s = all.find(x => x.admNo === admNo) || all[0];
+    const s = (admNo ? all.find(x => x.admNo === admNo) : null) || all[0];
     if (!s) return;
 
-    const win = window.open('', '_blank');
-    if (!win) {
-      showToast('Popup blocker prevented print window.', 'warning');
-      return;
-    }
     const tcNo = s.tcNumber || ('TC-2026-' + (s.admNo ? s.admNo.replace(/\D/g, '') : '001'));
-    win.document.write(`
+    const printHTML = `
       <!DOCTYPE html>
       <html>
       <head>
         <title>Transfer Certificate Clearance Slip - ${s.name} (${s.admNo})</title>
         <style>
-          body { font-family: "Georgia", serif; margin: 30px; color: #1e293b; }
+          body { font-family: "Georgia", serif; margin: 30px; color: #1e293b; background: #fff; }
           .certificate { border: 4px double #1e3a8a; padding: 30px 35px; border-radius: 4px; max-width: 750px; margin: 0 auto; }
           .crest { text-align: center; border-bottom: 2px solid #1e3a8a; padding-bottom: 15px; margin-bottom: 25px; }
           .school-name { font-size: 24px; font-weight: bold; color: #1e3a8a; letter-spacing: 1px; margin: 0; }
@@ -7780,6 +7827,10 @@ const FEE_CATEGORY_AUDIT_DATA = [
           .signatures { display: flex; justify-content: space-between; margin-top: 55px; font-size: 13px; }
           .sig-block { text-align: center; }
           .sig-line { width: 160px; border-top: 1px solid #0f172a; margin-bottom: 6px; }
+          @media print {
+            body { margin: 15px; }
+            .certificate { border: 4px double #000; }
+          }
         </style>
       </head>
       <body>
@@ -7817,13 +7868,11 @@ const FEE_CATEGORY_AUDIT_DATA = [
             </div>
           </div>
         </div>
-        <script>
-          window.onload = function() { window.print(); };
-        </script>
       </body>
       </html>
-    `);
-    win.document.close();
+    `;
+
+    executePrintDocument(printHTML, `Opening Official TC Slip for ${s.name} (${s.admNo})...`);
   }
 
   function openEditStudentPermittedModal(admNo) {
@@ -16013,6 +16062,20 @@ const FEE_CATEGORY_AUDIT_DATA = [
   function closeModal(modalId) {
     if (modalId === 'addStudentModal') closeModal('addStudentWizardModal');
     if (modalId === 'viewStudentModal') closeModal('studentDossierModal');
+    if (modalId === 'studentDossierModal' || modalId === 'viewStudentModal') {
+      const modal = document.getElementById('studentDossierModal');
+      if (modal) {
+        modal.classList.remove('active', 'open', 'show');
+        modal.style.display = 'none';
+      }
+      const archiveModal = document.getElementById('archivedStudentsModal');
+      if (archiveModal && (archiveModal.style.display === 'flex' || archiveModal.classList.contains('active'))) {
+        document.body.style.overflow = 'hidden';
+      } else {
+        document.body.style.overflow = '';
+      }
+      return;
+    }
     if (modalId === 'uploadDocumentModal' || modalId === 'studentDocsModal') {
       const m1 = document.getElementById('uploadDocumentModal');
       if (m1) { m1.classList.remove('active', 'open', 'show'); m1.style.display = 'none'; }
@@ -64975,6 +65038,7 @@ exportInventoryAssetsCSV,
     openArchivedStudentsDrawer,
     renderArchivedStudentsTable,
     filterArchivedStudents,
+    executePrintDocument,
     exportArchivedStudentsCSV,
     printArchivedStudentsRegister,
     printStudentArchivedTC,
