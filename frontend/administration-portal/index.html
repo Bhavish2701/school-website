@@ -29453,49 +29453,91 @@ Class X-A,Monday,2,09:35 AM - 10:20 AM,Physical Science,Sri Navva Anand,Room 201
        MODAL: RECORD ASSESSMENT OUTCOME
        ========================================================================= -->
   <div class="modal-backdrop" id="recordAssessmentModal" style="display:none;">
-    <div class="portal-modal" style="max-width: 580px; width: 95%;">
-      <div class="modal-header">
-        <div style="display: flex; align-items: center; gap: 0.75rem;">
-          <div style="width: 42px; height: 42px; border-radius: 8px; background: #ecfdf5; color: #059669; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; border: 1px solid #a7f3d0;">
+    <div class="portal-modal" style="max-width: 630px; width: 95%; border-radius: 14px; overflow: hidden; box-shadow: 0 25px 50px -12px rgba(15, 23, 42, 0.25);">
+      <!-- Executive Header -->
+      <div class="modal-header" style="border-bottom: 1px solid #e2e8f0; padding: 1.15rem 1.45rem; background: #ffffff;">
+        <div style="display: flex; align-items: center; gap: 0.85rem;">
+          <div style="width: 44px; height: 44px; border-radius: 10px; background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%); color: #059669; display: flex; align-items: center; justify-content: center; font-size: 1.25rem; border: 1.5px solid #a7f3d0; box-shadow: 0 2px 4px rgba(5, 150, 105, 0.08); flex-shrink: 0;">
             <i class="fa-solid fa-chart-line"></i>
           </div>
           <div>
-            <h3 style="margin: 0; font-size: 1.15rem; font-weight: 800; color: #0f172a;">Record Assessment Outcome</h3>
-            <p style="margin: 2px 0 0; font-size: 0.8rem; color: #64748b;" id="recordAssSub">Applicant: Aarav Sharma</p>
+            <div style="font-size: 0.68rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #059669;">
+              Admissions Academic Evaluation
+            </div>
+            <h3 style="margin: 2px 0 0 0; font-size: 1.2rem; font-weight: 800; color: #0f172a; letter-spacing: -0.01em;">Record Assessment Outcome</h3>
+            <p style="margin: 2px 0 0; font-size: 0.8rem; color: #64748b;" id="recordAssSub">Applicant: S. Harini (SV202600006) • Class LKG</p>
           </div>
         </div>
-        <button type="button" class="modal-close-x" onclick="portalApp.closeModal('recordAssessmentModal')" title="Close">
+        <button type="button" class="modal-close-x" onclick="portalApp.closeModal('recordAssessmentModal')" title="Close (Esc)" style="width: 32px; height: 32px; border-radius: 50%; border: 1px solid #e2e8f0; background: #f8fafc; color: #64748b; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.15s ease;">
           <i class="fa-solid fa-xmark"></i>
         </button>
       </div>
+
       <form onsubmit="portalApp.submitRecordAssessment(event)">
         <input type="hidden" id="recordAssTargetAppId">
-        <div class="modal-body" style="padding: 1.25rem; display: flex; flex-direction: column; gap: 1rem;">
+        <div class="modal-body" style="padding: 1.35rem 1.45rem; display: flex; flex-direction: column; gap: 1.15rem; background: #ffffff;">
           
-          <div class="form-row" style="display: flex; gap: 1rem;">
-            <div class="form-group" style="flex: 1;">
-              <label style="font-weight: 700; font-size: 0.82rem; color: #1e293b; margin-bottom: 3px; display: block;">Assessment Score / Percentage *</label>
-              <input type="text" id="recordAssScore" class="form-control" required placeholder="e.g. 88% (First Class)" style="width:100%; padding:0.45rem 0.65rem; border:1px solid #cbd5e1; border-radius:6px; font-size:0.85rem; font-weight:700;">
-            </div>
-            <div class="form-group" style="flex: 1.5;">
-              <label style="font-weight: 700; font-size: 0.82rem; color: #1e293b; margin-bottom: 3px; display: block;">Recommendation Outcome *</label>
-              <select id="recordAssOutcome" class="form-control" required style="width:100%; padding:0.45rem 0.65rem; border:1px solid #cbd5e1; border-radius:6px; font-size:0.85rem; font-weight:700;">
-                <option value="Recommended" selected>Recommended for Full Admission</option>
-                <option value="Conditional">Conditional (Remedial Bridge Course Required)</option>
-                <option value="Not Recommended">Not Recommended (Academic Deficiency)</option>
-              </select>
+          <!-- Context Advisory Banner -->
+          <div style="background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px; padding: 10px 14px; display: flex; align-items: flex-start; gap: 10px; font-size: 0.78rem; color: #166534; line-height: 1.45;">
+            <i class="fa-solid fa-graduation-cap text-success" style="font-size: 1rem; margin-top: 2px; flex-shrink: 0;"></i>
+            <div>
+              <strong style="color: #14532d;">Statutory Evaluation Standing:</strong> Outcome recorded here updates the candidate's lifecycle docket and establishes baseline eligibility for admission offer issuance.
             </div>
           </div>
 
-          <div class="form-group">
-            <label style="font-weight: 700; font-size: 0.82rem; color: #1e293b; margin-bottom: 3px; display: block;">Evaluator Academic Observations *</label>
-            <textarea id="recordAssRemarks" class="form-control" rows="3" required placeholder="Note student's proficiency in Mathematics, English comprehension, and general behavioral readiness..." style="width:100%; padding:0.45rem 0.65rem; border:1px solid #cbd5e1; border-radius:6px; font-size:0.85rem;"></textarea>
+          <!-- Symmetrical 2-Column Row with Single-Line Labels -->
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; align-items: start;">
+            <div class="form-group" style="margin-bottom: 0;">
+              <label style="font-weight: 700; font-size: 0.82rem; color: #1e293b; margin-bottom: 6px; display: flex; align-items: center; justify-content: space-between; white-space: nowrap;">
+                <span>Score / Percentage <span class="text-danger">*</span></span>
+                <span style="font-size: 0.72rem; color: #64748b; font-weight: 500;">Scale: 0–100%</span>
+              </label>
+              <div style="position: relative;">
+                <input type="text" id="recordAssScore" class="form-control" required placeholder="e.g. 88% (First Class)"
+                  style="width: 100%; height: 40px; padding: 0 0.85rem; border: 1.5px solid #cbd5e1; border-radius: 8px; font-size: 0.85rem; font-weight: 700; color: #0f172a; outline: none; background: #ffffff; transition: all 0.2s;">
+              </div>
+            </div>
+
+            <div class="form-group" style="margin-bottom: 0;">
+              <label style="font-weight: 700; font-size: 0.82rem; color: #1e293b; margin-bottom: 6px; display: flex; align-items: center; justify-content: space-between; white-space: nowrap;">
+                <span>Recommendation <span class="text-danger">*</span></span>
+                <span style="font-size: 0.72rem; color: #64748b; font-weight: 500;">Board Verdict</span>
+              </label>
+              <div style="position: relative;">
+                <select id="recordAssOutcome" class="form-control" required
+                  style="width: 100%; height: 40px; padding: 0 2rem 0 0.85rem; border: 1.5px solid #cbd5e1; border-radius: 8px; font-size: 0.83rem; font-weight: 700; color: #0f172a; outline: none; background: #ffffff; cursor: pointer; transition: all 0.2s;">
+                  <option value="Recommended" selected>Recommended for Full Admission</option>
+                  <option value="Conditional">Conditional (Remedial Bridge Course)</option>
+                  <option value="Not Recommended">Not Recommended (Academic Deficiency)</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <!-- Academic Remarks -->
+          <div class="form-group" style="margin-bottom: 0;">
+            <label style="font-weight: 700; font-size: 0.82rem; color: #1e293b; margin-bottom: 6px; display: flex; align-items: center; justify-content: space-between;">
+              <span>Evaluator Academic Observations <span class="text-danger">*</span></span>
+              <span style="font-size: 0.72rem; color: #64748b; font-weight: 500;">Diagnostic Notes</span>
+            </label>
+            <textarea id="recordAssRemarks" class="form-control" rows="3" required
+              placeholder="Note student's proficiency in Mathematics, English comprehension, and general behavioral readiness..."
+              style="width: 100%; padding: 0.65rem 0.85rem; border: 1.5px solid #cbd5e1; border-radius: 8px; font-size: 0.85rem; color: #0f172a; outline: none; background: #ffffff; transition: all 0.2s; line-height: 1.5; resize: vertical; min-height: 85px;"></textarea>
           </div>
 
         </div>
-        <div class="modal-footer" style="display:flex; justify-content:flex-end; gap:0.5rem; background:#f8fafc; border-top:1px solid #e2e8f0; padding:0.85rem 1.25rem;">
-          <button type="button" class="btn btn-secondary btn-sm" onclick="portalApp.closeModal('recordAssessmentModal')">Cancel</button>
-          <button type="submit" class="btn btn-primary btn-sm"><i class="fa-solid fa-check mr-1"></i> Save Assessment Outcome</button>
+
+        <!-- Balanced Governance Footer -->
+        <div class="modal-footer" style="display: flex; justify-content: space-between; align-items: center; background: #f8fafc; border-top: 1px solid #e2e8f0; padding: 0.95rem 1.45rem;">
+          <span style="font-size: 0.76rem; color: #64748b; font-weight: 600; display: inline-flex; align-items: center; gap: 6px;">
+            <i class="fa-solid fa-shield-check text-success"></i> AP SCERT Assessment Standards
+          </span>
+          <div style="display: flex; gap: 0.5rem; align-items: center;">
+            <button type="button" class="btn btn-outline-secondary btn-sm" onclick="portalApp.closeModal('recordAssessmentModal')" style="height: 36px; padding: 0 16px; font-weight: 600; border-radius: 7px;">Cancel</button>
+            <button type="submit" class="btn btn-primary btn-sm" style="height: 36px; padding: 0 18px; font-weight: 700; border-radius: 7px; display: inline-flex; align-items: center; gap: 6px;">
+              <i class="fa-solid fa-circle-check"></i> Save Assessment Outcome
+            </button>
+          </div>
         </div>
       </form>
     </div>
