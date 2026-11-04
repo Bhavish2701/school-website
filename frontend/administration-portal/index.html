@@ -29118,30 +29118,34 @@ Class X-A,Monday,2,09:35 AM - 10:20 AM,Physical Science,Sri Navva Anand,Room 201
   </div>
 
   <!-- =========================================================================
-       MODAL: APPLICATION DETAIL DOSSIER (11 SECTIONS)
+       MODAL: APPLICATION DETAIL DOSSIER (10 SECTIONS)
        ========================================================================= -->
   <div class="modal-backdrop" id="applicationDetailModal" style="display:none;">
-    <div class="portal-modal" style="max-width: 950px; width: 95%;">
-      <div class="modal-header" style="border-bottom: none; padding-bottom: 0.75rem;">
-        <div style="display: flex; align-items: center; gap: 0.75rem;">
-          <div style="width: 44px; height: 44px; border-radius: 8px; background: #eff6ff; color: #1d4ed8; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; border: 1px solid #bfdbfe;">
-            <i class="fa-solid fa-id-card"></i>
+    <div class="portal-modal" style="max-width: 960px; width: 95%; border-radius: 12px; overflow: hidden; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);">
+      <div class="modal-header" style="border-bottom: 1px solid #e2e8f0; padding: 1rem 1.35rem; background: #ffffff;">
+        <div style="display: flex; align-items: center; gap: 0.85rem;">
+          <div
+            style="width: 46px; height: 46px; border-radius: 10px; background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%); color: #1d4ed8; display: flex; align-items: center; justify-content: center; font-size: 1.35rem; border: 1px solid #bfdbfe; box-shadow: 0 2px 4px rgba(37,99,235,0.06); flex-shrink: 0;">
+            <i class="fa-solid fa-id-card-clip"></i>
           </div>
           <div>
-            <div style="display: flex; align-items: center; gap: 0.5rem;">
-              <h3 style="margin: 0; font-size: 1.2rem; font-weight: 800; color: #0f172a;" id="admDetailTitle">Aarav Sharma</h3>
-              <span class="portal-badge badge-primary" id="admDetailAppId">APP-2026-0104</span>
+            <div style="display: flex; align-items: center; gap: 0.6rem; flex-wrap: wrap;">
+              <h3 style="margin: 0; font-size: 1.25rem; font-weight: 800; color: #0f172a; letter-spacing: -0.01em;" id="admDetailTitle">Applicant Full Name</h3>
+              <span class="portal-badge" id="admDetailAppId" style="background:#f1f5f9; color:#1e293b; border:1px solid #cbd5e1; font-weight:700; font-size:0.75rem; padding:3px 9px; border-radius:6px; font-family:monospace;">APP-2026-0104</span>
               <span id="admDetailStatusBadge"></span>
             </div>
-            <p style="margin: 2px 0 0; font-size: 0.8rem; color: #64748b;" id="admDetailSub">Class IX Applied • Submitted 12-Jun-2025 via Online Form</p>
+            <div style="display: flex; align-items: center; gap: 0.75rem; margin-top: 4px; font-size: 0.78rem; color: #64748b; flex-wrap: wrap;" id="admDetailSub">
+              <!-- Dynamically populated via portalApp.openApplicationDetailModal -->
+            </div>
           </div>
         </div>
-        <button type="button" class="modal-close-x" onclick="portalApp.closeModal('applicationDetailModal')" title="Close">
+        <button type="button" class="modal-close-x" onclick="portalApp.closeModal('applicationDetailModal')"
+          title="Close (Esc)" style="width: 32px; height: 32px; border-radius: 50%; border: 1px solid #e2e8f0; background: #f8fafc; color: #64748b; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.15s ease;">
           <i class="fa-solid fa-xmark"></i>
         </button>
       </div>
 
-      <!-- Dossier Multi-Tab Navigation (11 Sections) -->
+      <!-- Dossier Multi-Tab Navigation (10 Sections with Sleek Scrollbar) -->
       <div class="adm-detail-nav">
         <button type="button" class="adm-detail-tab-btn active" data-tab="profile" onclick="portalApp.switchAdmDetailTab('profile')">
           <i class="fa-solid fa-user"></i> Profile
@@ -29175,16 +29179,16 @@ Class X-A,Monday,2,09:35 AM - 10:20 AM,Physical Science,Sri Navva Anand,Room 201
         </button>
       </div>
 
-      <div class="modal-body" style="padding: 0; max-height: calc(85vh - 170px); overflow-y: auto;">
+      <div class="modal-body" style="padding: 0; max-height: calc(85vh - 165px); overflow-y: auto;">
         <div id="admDetailPanesContainer">
           <!-- Dynamically populated via portalApp.renderAdmissionDetailPanes -->
         </div>
       </div>
 
-      <div class="modal-footer" style="display:flex; justify-content:space-between; align-items:center; background:#f8fafc; border-top:1px solid #e2e8f0; padding:0.85rem 1.25rem;">
+      <div class="modal-footer" style="display:flex; justify-content:space-between; align-items:center; background:#f8fafc; border-top:1px solid #e2e8f0; padding:0.85rem 1.35rem;">
         <div>
-          <button type="button" class="btn btn-secondary btn-sm" onclick="portalApp.printAdmissionVerification()">
-            <i class="fa-solid fa-print mr-1"></i> Print Application
+          <button type="button" class="btn btn-secondary btn-sm" onclick="portalApp.printAdmissionVerification(portalApp.activeDetailAppId)" style="display:inline-flex; align-items:center; gap:6px; font-weight:600;">
+            <i class="fa-solid fa-print"></i> Print Official Dossier
           </button>
         </div>
         <div style="display:flex; gap:0.5rem;" id="admDetailActionButtons">

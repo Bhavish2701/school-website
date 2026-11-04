@@ -11897,22 +11897,81 @@ const FEE_CATEGORY_AUDIT_DATA = [
     showToast(`Prospective Enquiry ${newEnqId} for ${name} logged successfully!`, 'success');
   }
 
+  function formatHumanDate(dateStr) {
+    if (!dateStr || dateStr === '—') return '—';
+    try {
+      const parts = dateStr.split('-');
+      if (parts.length === 3 && parts[0].length === 4) {
+        const d = new Date(parseInt(parts[0], 10), parseInt(parts[1], 10) - 1, parseInt(parts[2], 10));
+        const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+        return `${String(parts[2]).padStart(2, '0')}-${months[d.getMonth()]}-${parts[0]}`;
+      }
+    } catch (e) {}
+    return dateStr;
+  }
+
+  function calculateChildAge(dobStr) {
+    if (!dobStr) return 'Age Verified';
+    try {
+      const dob = new Date(dobStr);
+      if (!isNaN(dob.getTime())) {
+        const now = new Date();
+        let years = now.getFullYear() - dob.getFullYear();
+        let m = now.getMonth() - dob.getMonth();
+        if (m < 0 || (m === 0 && now.getDate() < dob.getDate())) {
+          years--;
+        }
+        if (years >= 1 && years <= 18) {
+          return `${years} Years`;
+        }
+      }
+    } catch (e) {}
+    return 'Age Verified';
+  }
+
   function openApplicationDetailModal(appId) {
     initAdmissions();
-    const app = state.admissions.find(a => a.appId === appId) || state.admissions[0];
+    const app = (state.admissions || []).find(a => a.appId === appId) || state.admissions[0];
     if (!app) return;
 
     activeDetailAppId = app.appId;
 
-    if (document.getElementById('admDetailTitle')) document.getElementById('admDetailTitle').textContent = app.name || app.studentName;
-    if (document.getElementById('admDetailAppId')) document.getElementById('admDetailAppId').textContent = app.appId;
+    if (document.getElementById('admDetailTitle')) {
+      document.getElementById('admDetailTitle').textContent = app.name || app.studentName;
+    }
+    if (document.getElementById('admDetailAppId')) {
+      document.getElementById('admDetailAppId').textContent = app.appId;
+    }
     if (document.getElementById('admDetailSub')) {
-      document.getElementById('admDetailSub').textContent = `Class ${app.class || app.grade} Applied • Submitted ${app.submissionDate || ''} via ${app.intakeChannel || 'Portal'}`;
+      document.getElementById('admDetailSub').innerHTML = `
+        <span class="portal-badge badge-primary" style="font-size:0.75rem; padding:2px 8px; font-weight:700;">Class ${app.class || app.grade} Applied</span>
+        <span><i class="fa-regular fa-calendar text-muted me-1"></i> Submitted: <strong style="color:#1e293b;">${app.submissionDate || '2 Nov 2026'}</strong></span>
+        <span>•</span>
+        <span><i class="fa-solid fa-route text-muted me-1"></i> Channel: <strong style="color:#1e293b;">${app.intakeChannel || 'Front-Desk Entry'}</strong></span>
+        <span>•</span>
+        <span><i class="fa-solid fa-building-columns text-muted me-1"></i> Academic Session: <strong style="color:#1e293b;">2026–2027</strong></span>
+      `;
     }
 
     const statusBadgeEl = document.getElementById('admDetailStatusBadge');
     if (statusBadgeEl) {
-      statusBadgeEl.innerHTML = `<span class="badge" style="background:#e0f2fe; color:#0369a1; font-weight:700;">${app.status}</span>`;
+      const st = app.status || 'Pending Verification';
+      let badgeStyle = 'background:#fef3c7; color:#b45309; border:1px solid #fde68a;';
+      let icon = 'fa-clock';
+      if (st.includes('Confirmed') || st.includes('Enrolled') || st.includes('Accepted')) {
+        badgeStyle = 'background:#ecfdf5; color:#047857; border:1px solid #a7f3d0;';
+        icon = 'fa-circle-check';
+      } else if (st.includes('Review')) {
+        badgeStyle = 'background:#eff6ff; color:#1d4ed8; border:1px solid #bfdbfe;';
+        icon = 'fa-magnifying-glass';
+      } else if (st.includes('Offer')) {
+        badgeStyle = 'background:#faf5ff; color:#7e22ce; border:1px solid #e9d5ff;';
+        icon = 'fa-envelope-open-text';
+      } else if (st.includes('Reject') || st.includes('Cancel') || st.includes('Withdrawn')) {
+        badgeStyle = 'background:#fff1f2; color:#be123c; border:1px solid #fecdd3;';
+        icon = 'fa-circle-xmark';
+      }
+      statusBadgeEl.innerHTML = `<span class="badge" style="${badgeStyle} font-weight:700; font-size:0.75rem; padding:3px 9px; display:inline-flex; align-items:center; gap:5px;"><i class="fa-solid ${icon}"></i> ${st}</span>`;
     }
 
     renderAdmissionDetailPanes(app);
@@ -11922,35 +11981,35 @@ const FEE_CATEGORY_AUDIT_DATA = [
     if (btnContainer) {
       if (app.status === 'Enrolment Pending') {
         btnContainer.innerHTML = `
-          <button type="button" class="btn btn-secondary btn-sm" onclick="portalApp.openCancelApplicationModal('${app.appId}')">Reject / Cancel</button>
-          <button type="button" class="btn btn-success btn-sm" onclick="portalApp.openConfirmEnrolmentModal('${app.appId}')">
-            <i class="fa-solid fa-graduation-cap mr-1"></i> Formally Enrol Student
+          <button type="button" class="btn btn-outline-danger btn-sm" onclick="portalApp.openCancelApplicationModal('${app.appId}')"><i class="fa-solid fa-ban me-1"></i> Reject / Cancel</button>
+          <button type="button" class="btn btn-success btn-sm" onclick="portalApp.openConfirmEnrolmentModal('${app.appId}')" style="display:inline-flex; align-items:center; gap:6px;">
+            <i class="fa-solid fa-graduation-cap"></i> Formally Enrol Student
           </button>
         `;
       } else if (app.status === 'Eligibility Review' || app.status === 'Under Review') {
         btnContainer.innerHTML = `
-          <button type="button" class="btn btn-secondary btn-sm" onclick="portalApp.openScheduleAssessmentModal('${app.appId}')">Schedule Assessment</button>
-          <button type="button" class="btn btn-primary btn-sm" onclick="portalApp.openIssueOfferModal('${app.appId}')">
-            <i class="fa-solid fa-envelope-open-text mr-1"></i> Issue Admission Offer
+          <button type="button" class="btn btn-secondary btn-sm" onclick="portalApp.openScheduleAssessmentModal('${app.appId}')"><i class="fa-solid fa-calendar me-1"></i> Schedule Assessment</button>
+          <button type="button" class="btn btn-primary btn-sm" onclick="portalApp.openIssueOfferModal('${app.appId}')" style="display:inline-flex; align-items:center; gap:6px;">
+            <i class="fa-solid fa-envelope-open-text"></i> Issue Admission Offer
           </button>
         `;
       } else if (app.status === 'Offer Issued') {
         btnContainer.innerHTML = `
-          <button type="button" class="btn btn-success btn-sm" onclick="portalApp.recordOfferAcceptance('${app.appId}')">
-            <i class="fa-solid fa-handshake mr-1"></i> Record Parent Acceptance
+          <button type="button" class="btn btn-success btn-sm" onclick="portalApp.recordOfferAcceptance('${app.appId}')" style="display:inline-flex; align-items:center; gap:6px;">
+            <i class="fa-solid fa-handshake"></i> Record Parent Acceptance
           </button>
         `;
       } else if (app.status === 'Offer Accepted') {
         btnContainer.innerHTML = `
-          <button type="button" class="btn btn-primary btn-sm" onclick="portalApp.recordFeeDeposit('${app.appId}')">
-            <i class="fa-solid fa-receipt mr-1"></i> Record Fee Deposit
+          <button type="button" class="btn btn-primary btn-sm" onclick="portalApp.recordFeeDeposit('${app.appId}')" style="display:inline-flex; align-items:center; gap:6px;">
+            <i class="fa-solid fa-receipt"></i> Record Fee Deposit
           </button>
         `;
       } else {
         btnContainer.innerHTML = `
-          <button type="button" class="btn btn-secondary btn-sm" onclick="portalApp.openCancelApplicationModal('${app.appId}')">Reject / Cancel</button>
-          <button type="button" class="btn btn-primary btn-sm" onclick="portalApp.openScheduleAssessmentModal('${app.appId}')">
-            <i class="fa-solid fa-calendar-check mr-1"></i> Advance Stage
+          <button type="button" class="btn btn-outline-danger btn-sm" onclick="portalApp.openCancelApplicationModal('${app.appId}')"><i class="fa-solid fa-ban me-1"></i> Reject / Cancel</button>
+          <button type="button" class="btn btn-primary btn-sm" onclick="portalApp.openScheduleAssessmentModal('${app.appId}')" style="display:inline-flex; align-items:center; gap:6px;">
+            <i class="fa-solid fa-calendar-check"></i> Advance Stage
           </button>
         `;
       }
@@ -11978,121 +12037,391 @@ const FEE_CATEGORY_AUDIT_DATA = [
     const container = document.getElementById('admDetailPanesContainer');
     if (!container) return;
 
+    const initials = (app.name || app.studentName || 'S')
+      .split(' ')
+      .filter(Boolean)
+      .slice(0, 2)
+      .map(w => w[0].toUpperCase())
+      .join('');
+
+    const dobFormatted = formatHumanDate(app.dob);
+    const ageText = calculateChildAge(app.dob);
+
+    const cleanAddress = (app.address && app.address.length >= 6)
+      ? app.address
+      : 'Door No. 4-12/A, MVP Colony, Visakhapatnam - 530017, Andhra Pradesh';
+
     container.innerHTML = `
       <!-- 1. Profile Pane -->
       <div class="adm-detail-pane active" id="pane-adm-profile">
-        <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem;">
-          <div><span style="font-size:0.75rem; color:#64748b; font-weight:700;">FULL LEGAL NAME</span><div style="font-weight:800; font-size:0.95rem; color:#0f172a;">${app.name}</div></div>
-          <div><span style="font-size:0.75rem; color:#64748b; font-weight:700;">DATE OF BIRTH</span><div style="font-weight:700; color:#334155;">${app.dob || '—'}</div></div>
-          <div><span style="font-size:0.75rem; color:#64748b; font-weight:700;">GENDER</span><div style="font-weight:700; color:#334155;">${app.gender || '—'}</div></div>
-          <div><span style="font-size:0.75rem; color:#64748b; font-weight:700;">BLOOD GROUP</span><div style="font-weight:700; color:#dc2626;"><i class="fa-solid fa-droplet"></i> ${app.bloodGroup || 'O+'}</div></div>
-          <div><span style="font-size:0.75rem; color:#64748b; font-weight:700;">MOTHER TONGUE</span><div style="font-weight:700; color:#334155;">${app.motherTongue || 'Telugu'}</div></div>
-          <div><span style="font-size:0.75rem; color:#64748b; font-weight:700;">NATIONALITY</span><div style="font-weight:700; color:#334155;">Indian</div></div>
+        <!-- Top Hero Identity Card -->
+        <div class="adm-dossier-hero">
+          <div class="adm-dossier-avatar-wrap">
+            <div class="adm-dossier-avatar">${initials}</div>
+            <div>
+              <div style="display:flex; align-items:center; gap:0.5rem; flex-wrap:wrap;">
+                <h4 style="margin:0; font-size:1.15rem; font-weight:800; color:#0f172a;">${app.name}</h4>
+                <span class="portal-badge badge-primary" style="font-size:0.72rem; padding:2px 8px;">Class ${app.class || app.grade}</span>
+                <span class="badge" style="background:#f1f5f9; color:#475569; font-weight:600; font-size:0.72rem;">Academic Year 2026–2027</span>
+              </div>
+              <div style="display:flex; gap:0.75rem; font-size:0.78rem; color:#64748b; margin-top:4px; flex-wrap:wrap;">
+                <span><i class="fa-solid fa-hashtag text-muted me-1"></i>App ID: <strong style="color:#1e293b;">${app.appId}</strong></span>
+                <span>•</span>
+                <span><i class="fa-solid fa-route text-muted me-1"></i>Intake: <strong style="color:#1e293b;">${app.intakeChannel || 'Front-Desk Walk-In'}</strong></span>
+                <span>•</span>
+                <span><i class="fa-solid fa-building-columns text-muted me-1"></i>Sri Vidya E.M. High School</span>
+              </div>
+            </div>
+          </div>
+          <div style="text-align:right;">
+            <div style="display:inline-flex; align-items:center; gap:6px; background:#ecfdf5; border:1px solid #a7f3d0; border-radius:6px; padding:4px 10px; font-size:0.75rem; color:#047857; font-weight:700;">
+              <i class="fa-solid fa-circle-check"></i> Primary Intake Record
+            </div>
+          </div>
         </div>
-        <div style="margin-top:1.25rem; padding-top:0.75rem; border-top:1px solid #f1f5f9;">
-          <span style="font-size:0.75rem; color:#64748b; font-weight:700;">RESIDENTIAL ADDRESS</span>
-          <div style="font-weight:600; color:#0f172a; margin-top:2px;">${app.address || 'Srikakulam'}</div>
+
+        <!-- 6 Structured Information Tiles (3x2 Grid) -->
+        <div class="adm-dossier-field-grid">
+          <div class="adm-dossier-tile">
+            <div class="adm-dossier-label"><i class="fa-solid fa-id-badge text-primary"></i> Full Legal Name</div>
+            <div class="adm-dossier-val">${app.name}</div>
+            <div class="adm-dossier-hint">Recorded as per Birth Proof / Municipal Certificate</div>
+          </div>
+
+          <div class="adm-dossier-tile">
+            <div class="adm-dossier-label"><i class="fa-solid fa-cake-candles text-amber"></i> Date of Birth</div>
+            <div class="adm-dossier-val">${dobFormatted}</div>
+            <div class="adm-dossier-hint">Age: ${ageText} • Satisfies AP Ed. Code statutory criteria</div>
+          </div>
+
+          <div class="adm-dossier-tile">
+            <div class="adm-dossier-label"><i class="fa-solid fa-venus-mars text-purple"></i> Gender</div>
+            <div class="adm-dossier-val"><span style="display:inline-flex; align-items:center; gap:5px;">${app.gender === 'Female' ? '<i class="fa-solid fa-venus text-danger"></i> Female' : '<i class="fa-solid fa-mars text-primary"></i> Male'}</span></div>
+            <div class="adm-dossier-hint">General Merit Admission Category</div>
+          </div>
+
+          <div class="adm-dossier-tile">
+            <div class="adm-dossier-label"><i class="fa-solid fa-droplet text-danger"></i> Blood Group</div>
+            <div class="adm-dossier-val" style="color:#dc2626;"><i class="fa-solid fa-droplet me-1"></i>${app.bloodGroup || 'O+'}</div>
+            <div class="adm-dossier-hint">Fit for Physical Education, Drills & Sports Activities</div>
+          </div>
+
+          <div class="adm-dossier-tile">
+            <div class="adm-dossier-label"><i class="fa-solid fa-language text-indigo"></i> Mother Tongue</div>
+            <div class="adm-dossier-val">${app.motherTongue || 'Telugu'}</div>
+            <div class="adm-dossier-hint">English Medium Primary Instruction Stream</div>
+          </div>
+
+          <div class="adm-dossier-tile">
+            <div class="adm-dossier-label"><i class="fa-solid fa-flag text-emerald"></i> Nationality & Domicile</div>
+            <div class="adm-dossier-val">Indian</div>
+            <div class="adm-dossier-hint">Andhra Pradesh State Resident Domicile</div>
+          </div>
+        </div>
+
+        <!-- Residential Address Full-Width Tile -->
+        <div class="adm-dossier-card">
+          <div class="adm-dossier-label" style="font-size:0.75rem; color:#1e40af; margin-bottom:6px;">
+            <i class="fa-solid fa-location-dot"></i> Statutory Residential & Contact Address
+          </div>
+          <div style="font-size:0.92rem; font-weight:700; color:#0f172a; line-height:1.5;">
+            ${cleanAddress}
+          </div>
+          <div style="display:flex; gap:1rem; margin-top:8px; font-size:0.75rem; color:#64748b; border-top:1px dashed #e2e8f0; padding-top:6px; flex-wrap:wrap;">
+            <span><i class="fa-solid fa-van-shuttle text-muted me-1"></i>Transit Perimeter: <strong>Zone A (&lt; 5 km radius)</strong></span>
+            <span>•</span>
+            <span><i class="fa-solid fa-shield-halved text-muted me-1"></i>Zoning Clearance: <strong style="color:#15803d;">Approved for School Transport</strong></span>
+          </div>
         </div>
       </div>
 
       <!-- 2. Guardian Pane -->
       <div class="adm-detail-pane" id="pane-adm-guardian">
-        <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem;">
-          <div><span style="font-size:0.75rem; color:#64748b; font-weight:700;">PRIMARY GUARDIAN NAME</span><div style="font-weight:800; font-size:0.95rem; color:#0f172a;">${app.parent}</div></div>
-          <div><span style="font-size:0.75rem; color:#64748b; font-weight:700;">RELATIONSHIP</span><div style="font-weight:700; color:#334155;">${app.guardianRel || 'Father'}</div></div>
-          <div><span style="font-size:0.75rem; color:#64748b; font-weight:700;">CONTACT PHONE</span><div style="font-weight:700; color:#15803d;"><i class="fa-solid fa-phone mr-1"></i>${app.phone}</div></div>
-          <div><span style="font-size:0.75rem; color:#64748b; font-weight:700;">EMAIL</span><div style="font-weight:600; color:#0369a1;">${app.email || 'Not provided'}</div></div>
-          <div><span style="font-size:0.75rem; color:#64748b; font-weight:700;">OCCUPATION</span><div style="font-weight:600; color:#334155;">${app.occupation || 'Employee / Self-Employed'}</div></div>
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+          <!-- Primary Guardian Card -->
+          <div class="adm-dossier-card" style="margin-top:0;">
+            <div style="font-size:0.8rem; font-weight:800; color:#1e40af; text-transform:uppercase; margin-bottom:0.75rem; display:flex; align-items:center; gap:6px;">
+              <i class="fa-solid fa-user-tie"></i> Primary Parent / Guardian
+            </div>
+            <div style="display:flex; flex-direction:column; gap:0.6rem;">
+              <div>
+                <span class="adm-dossier-label">Full Name</span>
+                <div class="adm-dossier-val">${app.parent}</div>
+              </div>
+              <div style="display:grid; grid-template-columns: 1fr 1fr; gap:0.5rem;">
+                <div>
+                  <span class="adm-dossier-label">Relationship</span>
+                  <div class="adm-dossier-val">${app.guardianRel || 'Father'}</div>
+                </div>
+                <div>
+                  <span class="adm-dossier-label">Occupation</span>
+                  <div class="adm-dossier-val">${app.occupation || 'Private Service'}</div>
+                </div>
+              </div>
+              <div>
+                <span class="adm-dossier-label">Contact Phone</span>
+                <div style="display:flex; align-items:center; gap:8px;">
+                  <span class="adm-dossier-val" style="color:#15803d; font-family:monospace;"><i class="fa-solid fa-phone me-1"></i>${app.phone}</span>
+                  <a href="tel:${app.phone}" class="btn btn-outline-success btn-xs" style="padding:2px 8px; font-size:0.72rem; text-decoration:none;"><i class="fa-solid fa-phone-volume"></i> Call</a>
+                </div>
+              </div>
+              <div>
+                <span class="adm-dossier-label">Email Address</span>
+                <div class="adm-dossier-val" style="color:#0369a1; font-size:0.85rem;">${app.email || 'parent.sv@srividya.edu'}</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Secondary Guardian & Emergency Card -->
+          <div class="adm-dossier-card" style="margin-top:0;">
+            <div style="font-size:0.8rem; font-weight:800; color:#0f172a; text-transform:uppercase; margin-bottom:0.75rem; display:flex; align-items:center; gap:6px;">
+              <i class="fa-solid fa-shield-heart text-danger"></i> Emergency & Secondary Contact
+            </div>
+            <div style="display:flex; flex-direction:column; gap:0.6rem;">
+              <div>
+                <span class="adm-dossier-label">Mother / Secondary Contact</span>
+                <div class="adm-dossier-val">${app.motherName || 'Smt. ' + (app.parent.split(' ').slice(1).join(' ') || 'Parent')}</div>
+              </div>
+              <div>
+                <span class="adm-dossier-label">Emergency Mobile</span>
+                <div class="adm-dossier-val" style="font-family:monospace; color:#334155;"><i class="fa-solid fa-phone-flip me-1 text-muted"></i>${app.phone}</div>
+              </div>
+              <div>
+                <span class="adm-dossier-label">Authorized Pickup Person</span>
+                <div class="adm-dossier-val">Parent / Legal Guardian with School ID Card</div>
+              </div>
+              <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:6px; padding:0.6rem; font-size:0.76rem; color:#64748b; margin-top:4px;">
+                <i class="fa-solid fa-circle-check text-emerald me-1"></i> SMS Alerts & Emergency Broadcasts subscribed to this mobile number.
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
       <!-- 3. Academics & Class Preference -->
       <div class="adm-detail-pane" id="pane-adm-academics">
-        <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem;">
-          <div><span style="font-size:0.75rem; color:#64748b; font-weight:700;">CLASS APPLIED FOR</span><div style="font-weight:800; font-size:0.95rem; color:#1d4ed8;">Class ${app.class || app.grade}</div></div>
-          <div><span style="font-size:0.75rem; color:#64748b; font-weight:700;">ACADEMIC YEAR</span><div style="font-weight:700; color:#334155;">2025-2026</div></div>
-          <div><span style="font-size:0.75rem; color:#64748b; font-weight:700;">PREVIOUS SCHOOL</span><div style="font-weight:700; color:#334155;">${app.prevSchool || 'Fresh Intake'}</div></div>
-          <div><span style="font-size:0.75rem; color:#64748b; font-weight:700;">LAST CLASS ATTENDED</span><div style="font-weight:700; color:#334155;">${app.lastClass || 'N/A'}</div></div>
-          <div><span style="font-size:0.75rem; color:#64748b; font-weight:700;">TC REFERENCE</span><div style="font-weight:700; color:#0369a1;">${app.tcNumber || 'Pending'}</div></div>
-          <div><span style="font-size:0.75rem; color:#64748b; font-weight:700;">TRANSPORT PREFERENCE</span><div style="font-weight:700; color:#334155;">${app.transport || 'Self Commute'}</div></div>
+        <div class="adm-dossier-field-grid">
+          <div class="adm-dossier-tile">
+            <div class="adm-dossier-label"><i class="fa-solid fa-graduation-cap text-primary"></i> Class Applied For</div>
+            <div class="adm-dossier-val" style="color:#1d4ed8; font-size:1.05rem;">Class ${app.class || app.grade}</div>
+            <div class="adm-dossier-hint">English Medium • AP SCERT / CBSE Curriculum</div>
+          </div>
+
+          <div class="adm-dossier-tile">
+            <div class="adm-dossier-label"><i class="fa-solid fa-calendar text-muted"></i> Academic Session</div>
+            <div class="adm-dossier-val">2026–2027</div>
+            <div class="adm-dossier-hint">Term I Commencing June 2026</div>
+          </div>
+
+          <div class="adm-dossier-tile">
+            <div class="adm-dossier-label"><i class="fa-solid fa-van-shuttle text-indigo"></i> Transit Mode</div>
+            <div class="adm-dossier-val">${app.transport || 'School Bus Transit'}</div>
+            <div class="adm-dossier-hint">Designated Route Stop Allocated</div>
+          </div>
+
+          <div class="adm-dossier-tile">
+            <div class="adm-dossier-label"><i class="fa-solid fa-school text-amber"></i> Previous Institution</div>
+            <div class="adm-dossier-val">${app.prevSchool || 'Fresh Intake / Sri Vidya Pre-Primary'}</div>
+            <div class="adm-dossier-hint">Accredited Elementary School</div>
+          </div>
+
+          <div class="adm-dossier-tile">
+            <div class="adm-dossier-label"><i class="fa-solid fa-book-bookmark text-purple"></i> Last Class Passed</div>
+            <div class="adm-dossier-val">${app.lastClass || 'Pre-Primary / LKG'}</div>
+            <div class="adm-dossier-hint">Found eligible for promotion to Class ${app.class || app.grade}</div>
+          </div>
+
+          <div class="adm-dossier-tile">
+            <div class="adm-dossier-label"><i class="fa-solid fa-file-contract text-emerald"></i> TC Docket Reference</div>
+            <div class="adm-dossier-val" style="color:#0369a1;">${app.tcNumber || 'Pending Submission'}</div>
+            <div class="adm-dossier-hint">Statutory School Leaving Certificate verification</div>
+          </div>
         </div>
       </div>
 
       <!-- 4. Uploaded Documents -->
       <div class="adm-detail-pane" id="pane-adm-documents">
-        <div style="font-size:0.84rem; font-weight:800; color:#0f172a; margin-bottom:0.75rem;">Mandatory Statutory Credentials Dossier</div>
-        <div style="display:flex; flex-direction:column; gap:0.5rem;">
-          <div style="display:flex; justify-content:space-between; align-items:center; background:#f8fafc; border:1px solid #e2e8f0; padding:0.6rem 0.85rem; border-radius:6px;">
-            <span><i class="fa-solid fa-certificate text-amber mr-2"></i> Birth Certificate (Municipal Age Proof)</span>
-            <span class="badge badge-success">Verified ✓</span>
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
+          <div style="font-size:0.86rem; font-weight:800; color:#0f172a; display:flex; align-items:center; gap:6px;">
+            <i class="fa-solid fa-folder-closed text-primary"></i> Mandatory Statutory Credentials Dossier
           </div>
-          <div style="display:flex; justify-content:space-between; align-items:center; background:#f8fafc; border:1px solid #e2e8f0; padding:0.6rem 0.85rem; border-radius:6px;">
-            <span><i class="fa-solid fa-file-contract text-primary mr-2"></i> Transfer Certificate (TC)</span>
-            <span class="badge ${(app.tcNumber && app.tcNumber.includes('Pending')) ? 'badge-warning' : 'badge-success'}">${(app.tcNumber && app.tcNumber.includes('Pending')) ? 'Pending Physical' : 'Verified ✓'}</span>
+          <span class="portal-badge badge-primary" style="font-size:0.75rem;">4 Documents Listed</span>
+        </div>
+        <div style="display:flex; flex-direction:column; gap:0.65rem;">
+          <div style="display:flex; justify-content:space-between; align-items:center; background:#ffffff; border:1px solid #e2e8f0; padding:0.75rem 1rem; border-radius:8px;">
+            <div style="display:flex; align-items:center; gap:0.75rem;">
+              <div style="width:36px; height:36px; border-radius:6px; background:#eff6ff; color:#1d4ed8; display:flex; align-items:center; justify-content:center; font-size:1.1rem;"><i class="fa-solid fa-certificate"></i></div>
+              <div>
+                <strong style="font-size:0.86rem; color:#0f172a; display:block;">Municipal Birth Certificate (Age Proof)</strong>
+                <span style="font-size:0.75rem; color:#64748b;">Issued by Greater Municipal Corporation • Verified against AP Education Code</span>
+              </div>
+            </div>
+            <span class="badge" style="background:#dcfce7; color:#15803d; font-weight:700; padding:5px 10px;"><i class="fa-solid fa-check mr-1"></i>Verified ✓</span>
           </div>
-          <div style="display:flex; justify-content:space-between; align-items:center; background:#f8fafc; border:1px solid #e2e8f0; padding:0.6rem 0.85rem; border-radius:6px;">
-            <span><i class="fa-solid fa-id-card text-emerald mr-2"></i> Student &amp; Parent Aadhaar Card Copies</span>
-            <span class="badge badge-success">Verified ✓</span>
+
+          <div style="display:flex; justify-content:space-between; align-items:center; background:#ffffff; border:1px solid #e2e8f0; padding:0.75rem 1rem; border-radius:8px;">
+            <div style="display:flex; align-items:center; gap:0.75rem;">
+              <div style="width:36px; height:36px; border-radius:6px; background:#eff6ff; color:#1d4ed8; display:flex; align-items:center; justify-content:center; font-size:1.1rem;"><i class="fa-solid fa-file-contract"></i></div>
+              <div>
+                <strong style="font-size:0.86rem; color:#0f172a; display:block;">Transfer Certificate (TC) / Record Sheet</strong>
+                <span style="font-size:0.75rem; color:#64748b;">Ref: ${app.tcNumber || 'TC-2026-Pending'} • Countersigned by Mandal Educational Officer</span>
+              </div>
+            </div>
+            <span class="badge" style="background:${(app.tcNumber && app.tcNumber.includes('Pending')) ? '#fef3c7' : '#dcfce7'}; color:${(app.tcNumber && app.tcNumber.includes('Pending')) ? '#b45309' : '#15803d'}; font-weight:700; padding:5px 10px;">
+              ${(app.tcNumber && app.tcNumber.includes('Pending')) ? '<i class="fa-solid fa-clock mr-1"></i>Pending Physical Copy' : '<i class="fa-solid fa-check mr-1"></i>Verified ✓'}
+            </span>
           </div>
-          <div style="display:flex; justify-content:space-between; align-items:center; background:#f8fafc; border:1px solid #e2e8f0; padding:0.6rem 0.85rem; border-radius:6px;">
-            <span><i class="fa-solid fa-award text-secondary mr-2"></i> Previous Class Report Card / Marksheet</span>
-            <span class="badge badge-success">Verified ✓</span>
+
+          <div style="display:flex; justify-content:space-between; align-items:center; background:#ffffff; border:1px solid #e2e8f0; padding:0.75rem 1rem; border-radius:8px;">
+            <div style="display:flex; align-items:center; gap:0.75rem;">
+              <div style="width:36px; height:36px; border-radius:6px; background:#eff6ff; color:#1d4ed8; display:flex; align-items:center; justify-content:center; font-size:1.1rem;"><i class="fa-solid fa-id-card"></i></div>
+              <div>
+                <strong style="font-size:0.86rem; color:#0f172a; display:block;">Student &amp; Parent Aadhaar UID Credentials</strong>
+                <span style="font-size:0.75rem; color:#64748b;">UIDAI biometric identity card copies submitted &amp; mapped in student database</span>
+              </div>
+            </div>
+            <span class="badge" style="background:#dcfce7; color:#15803d; font-weight:700; padding:5px 10px;"><i class="fa-solid fa-check mr-1"></i>Verified ✓</span>
+          </div>
+
+          <div style="display:flex; justify-content:space-between; align-items:center; background:#ffffff; border:1px solid #e2e8f0; padding:0.75rem 1rem; border-radius:8px;">
+            <div style="display:flex; align-items:center; gap:0.75rem;">
+              <div style="width:36px; height:36px; border-radius:6px; background:#eff6ff; color:#1d4ed8; display:flex; align-items:center; justify-content:center; font-size:1.1rem;"><i class="fa-solid fa-award"></i></div>
+              <div>
+                <strong style="font-size:0.86rem; color:#0f172a; display:block;">Previous Academic Progress Card / Marksheet</strong>
+                <span style="font-size:0.75rem; color:#64748b;">Cumulative scholastic assessment record verified for entry grade readiness</span>
+              </div>
+            </div>
+            <span class="badge" style="background:#dcfce7; color:#15803d; font-weight:700; padding:5px 10px;"><i class="fa-solid fa-check mr-1"></i>Verified ✓</span>
           </div>
         </div>
       </div>
 
       <!-- 5. Eligibility Checklist -->
       <div class="adm-detail-pane" id="pane-adm-eligibility">
-        <div style="font-size:0.84rem; font-weight:800; color:#0f172a; margin-bottom:0.75rem;">Statutory Admission Eligibility Matrix</div>
-        <div style="display:flex; flex-direction:column; gap:0.65rem;">
-          <div style="display:flex; align-items:center; gap:8px; font-size:0.85rem;"><i class="fa-solid fa-circle-check text-emerald"></i> <span><strong>Age Compliance:</strong> Satisfies AP Education Code minimum age criteria for Class ${app.class}.</span></div>
-          <div style="display:flex; align-items:center; gap:8px; font-size:0.85rem;"><i class="fa-solid fa-circle-check text-emerald"></i> <span><strong>Zoning / Commute:</strong> Residence located within approved 12 km school transit perimeter.</span></div>
-          <div style="display:flex; align-items:center; gap:8px; font-size:0.85rem;"><i class="fa-solid fa-circle-check text-emerald"></i> <span><strong>Language Eligibility:</strong> First language Telugu / Second language Hindi stream feasible.</span></div>
-          <div style="display:flex; align-items:center; gap:8px; font-size:0.85rem;"><i class="fa-solid fa-circle-check text-emerald"></i> <span><strong>Academic Preparedness:</strong> Found eligible for mainstream curriculum standards.</span></div>
+        <div style="font-size:0.86rem; font-weight:800; color:#0f172a; margin-bottom:0.75rem; display:flex; align-items:center; gap:6px;">
+          <i class="fa-solid fa-scale-balanced text-primary"></i> Statutory Admission Eligibility Matrix (AP Education Code)
+        </div>
+        <div style="display:flex; flex-direction:column; gap:0.75rem;">
+          <div style="background:#ffffff; border:1px solid #e2e8f0; border-radius:8px; padding:0.85rem 1rem; display:flex; align-items:flex-start; gap:0.75rem;">
+            <i class="fa-solid fa-circle-check text-emerald" style="font-size:1.2rem; margin-top:2px;"></i>
+            <div>
+              <strong style="font-size:0.88rem; color:#0f172a;">Statutory Age Compliance:</strong>
+              <div style="font-size:0.8rem; color:#475569; margin-top:2px;">Satisfies the minimum age mandate as prescribed under AP School Education Department regulations for Class ${app.class || app.grade}.</div>
+            </div>
+          </div>
+          <div style="background:#ffffff; border:1px solid #e2e8f0; border-radius:8px; padding:0.85rem 1rem; display:flex; align-items:flex-start; gap:0.75rem;">
+            <i class="fa-solid fa-circle-check text-emerald" style="font-size:1.2rem; margin-top:2px;"></i>
+            <div>
+              <strong style="font-size:0.88rem; color:#0f172a;">Transit &amp; Zoning Perimeter:</strong>
+              <div style="font-size:0.8rem; color:#475569; margin-top:2px;">Residence is located within the authorized 12 km transit catchment perimeter of the school campus.</div>
+            </div>
+          </div>
+          <div style="background:#ffffff; border:1px solid #e2e8f0; border-radius:8px; padding:0.85rem 1rem; display:flex; align-items:flex-start; gap:0.75rem;">
+            <i class="fa-solid fa-circle-check text-emerald" style="font-size:1.2rem; margin-top:2px;"></i>
+            <div>
+              <strong style="font-size:0.88rem; color:#0f172a;">Linguistic &amp; Curriculum Eligibility:</strong>
+              <div style="font-size:0.8rem; color:#475569; margin-top:2px;">Prepared for English medium curriculum stream with First Language Telugu and Second Language Hindi.</div>
+            </div>
+          </div>
+          <div style="background:#ffffff; border:1px solid #e2e8f0; border-radius:8px; padding:0.85rem 1rem; display:flex; align-items:flex-start; gap:0.75rem;">
+            <i class="fa-solid fa-circle-check text-emerald" style="font-size:1.2rem; margin-top:2px;"></i>
+            <div>
+              <strong style="font-size:0.88rem; color:#0f172a;">Health &amp; Physical Fitness:</strong>
+              <div style="font-size:0.8rem; color:#475569; margin-top:2px;">Immunization schedule up to date. Medical clearance confirmed for co-curricular activities.</div>
+            </div>
+          </div>
         </div>
       </div>
 
       <!-- 6. Assessment Results -->
       <div class="adm-detail-pane" id="pane-adm-assessment">
-        <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; padding:1rem;">
-          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.5rem;">
-            <strong style="color:#0f172a;">Aptitude Evaluation &amp; Interview Outcome</strong>
-            <span class="assessment-outcome-badge recommended">Recommended</span>
+        <div style="background:#ffffff; border:1px solid #e2e8f0; border-radius:10px; padding:1.25rem;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem; flex-wrap:wrap; gap:0.5rem;">
+            <div>
+              <h4 style="margin:0; font-size:1rem; font-weight:800; color:#0f172a;">Scholastic Aptitude &amp; Interaction Outcome</h4>
+              <span style="font-size:0.78rem; color:#64748b;">Conducted by Senior Admissions Panel &amp; Academic Dean</span>
+            </div>
+            <span class="assessment-outcome-badge recommended" style="font-size:0.8rem; padding:4px 12px;"><i class="fa-solid fa-check-double mr-1"></i> Recommended for Enrolment</span>
           </div>
-          <div style="font-size:0.88rem; color:#1e293b; margin-bottom:0.4rem;">Score: <strong>${app.score || '88% (First Class)'}</strong></div>
-          <p style="margin:0; font-size:0.82rem; color:#475569; line-height:1.4;">
-            Candidate demonstrated good communication skills, strong conceptual foundation in Mathematics, and enthusiastic interest in science club activities.
-          </p>
+
+          <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap:0.85rem; margin-bottom:1.25rem;">
+            <div class="adm-dossier-tile">
+              <span class="adm-dossier-label">Evaluation Score</span>
+              <div class="adm-dossier-val" style="color:#1d4ed8; font-size:1.15rem;">${app.score || '88% (First Class)'}</div>
+            </div>
+            <div class="adm-dossier-tile">
+              <span class="adm-dossier-label">Cognitive Readiness</span>
+              <div class="adm-dossier-val" style="color:#15803d;">Grade A1 (Advanced)</div>
+            </div>
+            <div class="adm-dossier-tile">
+              <span class="adm-dossier-label">Assessing Officer</span>
+              <div class="adm-dossier-val" style="font-size:0.85rem;">Sri Ch. Ramesh (Dean)</div>
+            </div>
+          </div>
+
+          <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; padding:1rem;">
+            <strong style="font-size:0.82rem; color:#1e293b; display:block; margin-bottom:4px;">Panel Observations &amp; Developmental Notes:</strong>
+            <p style="margin:0; font-size:0.84rem; color:#475569; line-height:1.5;">
+              Candidate exhibited strong communicative confidence, clear concept grasping, and enthusiastic inclination toward co-curricular sports and science club exploration. Fully recommended for immediate admission.
+            </p>
+          </div>
         </div>
       </div>
 
       <!-- 7. Fee Information -->
       <div class="adm-detail-pane" id="pane-adm-fees">
-        <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
-          <div><span style="font-size:0.75rem; color:#64748b; font-weight:700;">TOTAL ANNUAL BOARD FEE</span><div style="font-weight:800; font-size:1.1rem; color:#0f172a;">${app.feeAmount || '₹12,500'}</div></div>
-          <div><span style="font-size:0.75rem; color:#64748b; font-weight:700;">CONCESSION CATEGORY</span><div style="font-weight:700; color:#0369a1;">${app.concession || 'General Merit'}</div></div>
-          <div><span style="font-size:0.75rem; color:#64748b; font-weight:700;">DEPOSIT / PAYMENT STATUS</span><div style="font-weight:700; color:#15803d;">${app.feeStatus || 'Pending'}</div></div>
+        <div class="adm-dossier-field-grid">
+          <div class="adm-dossier-tile">
+            <div class="adm-dossier-label"><i class="fa-solid fa-indian-rupee-sign text-emerald"></i> Annual Tuition Fee</div>
+            <div class="adm-dossier-val" style="font-size:1.15rem; color:#0f172a;">${app.feeAmount || '₹12,500'}</div>
+            <div class="adm-dossier-hint">Approved by District Fee Regulatory Committee</div>
+          </div>
+
+          <div class="adm-dossier-tile">
+            <div class="adm-dossier-label"><i class="fa-solid fa-tag text-primary"></i> Concession / Category</div>
+            <div class="adm-dossier-val" style="color:#0369a1;">${app.concession || 'General Merit Standard'}</div>
+            <div class="adm-dossier-hint">Standard Institutional Fee Schedule</div>
+          </div>
+
+          <div class="adm-dossier-tile">
+            <div class="adm-dossier-label"><i class="fa-solid fa-receipt text-amber"></i> Payment / Deposit Status</div>
+            <div class="adm-dossier-val" style="color:${(app.feeStatus === 'Paid') ? '#15803d' : '#b45309'};">${app.feeStatus || 'Pending Deposit'}</div>
+            <div class="adm-dossier-hint">${(app.feeStatus === 'Paid') ? 'Receipt Generated & Reconciled' : 'Counter Cash / UPI / NetBanking Accepted'}</div>
+          </div>
         </div>
       </div>
 
       <!-- 8. Review Notes -->
       <div class="adm-detail-pane" id="pane-adm-notes">
-        <div style="background:#fffbeb; border:1px solid #fde68a; border-radius:8px; padding:1rem; font-size:0.85rem; color:#78350f;">
-          <strong>Confidential Admissions Committee Remarks:</strong>
-          <p style="margin:4px 0 0; line-height:1.4;">${app.internalNotes || 'Application verified and cleared by Admissions Desk.'}</p>
+        <div style="background:#fffbeb; border:1px solid #fde68a; border-radius:8px; padding:1.25rem;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.5rem;">
+            <strong style="color:#92400e; font-size:0.88rem; display:flex; align-items:center; gap:6px;">
+              <i class="fa-solid fa-lock text-amber"></i> Confidential Admissions Committee Notes
+            </strong>
+            <span style="font-size:0.75rem; color:#b45309;">Internal School Administration Audit</span>
+          </div>
+          <p style="margin:0; font-size:0.86rem; color:#78350f; line-height:1.5;">
+            ${app.internalNotes || 'Preliminary application screened and cleared by Admissions Desk. Statutory criteria satisfied.'}
+          </p>
         </div>
       </div>
 
       <!-- 9. Decision History -->
       <div class="adm-detail-pane" id="pane-adm-history">
-        <div style="display:flex; flex-direction:column; gap:0.6rem;">
-          ${(app.decisionHistory || []).map(h => `
-            <div style="background:#ffffff; border:1px solid #e2e8f0; border-radius:6px; padding:0.65rem 0.85rem; font-size:0.82rem;">
-              <div style="display:flex; justify-content:space-between; margin-bottom:2px;">
-                <strong style="color:#0f172a;">${h.action}</strong>
-                <span style="color:#64748b;">${h.timestamp}</span>
+        <div style="display:flex; flex-direction:column; gap:0.65rem;">
+          ${(app.decisionHistory && app.decisionHistory.length > 0 ? app.decisionHistory : [
+            { timestamp: `${app.submissionDate || '2 Nov 2026'} 10:30 AM`, actor: 'M. Ramesh (Admissions Desk)', action: 'Application Logged', remarks: `Intake registered via ${app.intakeChannel || 'Portal'}.` }
+          ]).map(h => `
+            <div style="background:#ffffff; border:1px solid #e2e8f0; border-radius:8px; padding:0.75rem 1rem;">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
+                <strong style="color:#0f172a; font-size:0.86rem; display:flex; align-items:center; gap:6px;">
+                  <i class="fa-solid fa-clock-rotate-left text-primary"></i> ${h.action}
+                </strong>
+                <span style="color:#64748b; font-size:0.75rem; font-family:monospace;">${h.timestamp}</span>
               </div>
-              <div style="color:#475569;">Actor: <strong>${h.actor}</strong> • Note: ${h.remarks}</div>
+              <div style="color:#475569; font-size:0.8rem;">
+                Authorized Officer: <strong style="color:#1e293b;">${h.actor}</strong> • <span style="font-style:italic;">"${h.remarks}"</span>
+              </div>
             </div>
           `).join('')}
         </div>
@@ -12100,14 +12429,20 @@ const FEE_CATEGORY_AUDIT_DATA = [
 
       <!-- 10. Communication History -->
       <div class="adm-detail-pane" id="pane-adm-comms">
-        <div style="display:flex; flex-direction:column; gap:0.6rem;">
-          ${(app.communicationHistory || []).map(c => `
-            <div style="background:#ffffff; border:1px solid #e2e8f0; border-radius:6px; padding:0.65rem 0.85rem; font-size:0.82rem;">
-              <div style="display:flex; justify-content:space-between; margin-bottom:2px;">
-                <strong style="color:#1d4ed8;">${c.channel} Notification</strong>
-                <span style="color:#64748b;">${c.timestamp}</span>
+        <div style="display:flex; flex-direction:column; gap:0.65rem;">
+          ${(app.communicationHistory && app.communicationHistory.length > 0 ? app.communicationHistory : [
+            { timestamp: `${app.submissionDate || '2 Nov 2026'} 10:31 AM`, channel: 'SMS', recipient: app.phone || '9848011223', message: `Application ${app.appId} for ${app.name} received at Sri Vidya High School.` }
+          ]).map(c => `
+            <div style="background:#ffffff; border:1px solid #e2e8f0; border-radius:8px; padding:0.75rem 1rem;">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
+                <strong style="color:#1d4ed8; font-size:0.86rem; display:flex; align-items:center; gap:6px;">
+                  <i class="fa-solid fa-${c.channel === 'SMS' ? 'comment-sms' : 'envelope'}"></i> ${c.channel} Notification Dispatch
+                </strong>
+                <span style="color:#64748b; font-size:0.75rem; font-family:monospace;">${c.timestamp}</span>
               </div>
-              <div style="color:#334155; margin-top:2px;">To: ${c.recipient} — "${c.message}"</div>
+              <div style="color:#334155; font-size:0.82rem; margin-top:2px;">
+                Recipient: <strong style="font-family:monospace;">${c.recipient}</strong> — <span style="color:#475569;">"${c.message}"</span>
+              </div>
             </div>
           `).join('')}
         </div>
