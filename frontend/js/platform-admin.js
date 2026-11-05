@@ -485,6 +485,8 @@ const platformApp = (function () {
       renderSupportTicketsTable();
     } else if (viewId === 'onboarding' && typeof loadOnboardingOverview === 'function') {
       loadOnboardingOverview();
+    } else if (viewId === 'roles' && typeof loadRoleTemplatesDirectory === 'function') {
+      loadRoleTemplatesDirectory();
     }
 
     // Update Header Breadcrumb
@@ -3879,7 +3881,1166 @@ const platformApp = (function () {
   }
 
 
-  function init() {
+  
+  /* ==========================================================================
+     MODULE 7: ROLE TEMPLATES & PERMISSIONS CONTROLLER (SECTIONS 7.1 - 7.4)
+     ========================================================================== */
+
+  // State
+  let rolesDirectoryData = [];
+  let activeEditorRole = null;
+  let activeViewerRoleId = null;
+  let pendingRoleDraft = null;
+
+  const DEFAULT_ROLES_FALLBACK = [
+    {
+      roleId: 'ROLE-PLT-001',
+      name: 'Platform Owner',
+      slug: 'platform-owner',
+      scope: 'Platform',
+      description: 'Full statutory governance across all Trust platforms, infrastructure, root cryptography, and institutional policies.',
+      isBuiltIn: true,
+      isPrivileged: true,
+      status: 'Active',
+      assignedUsersCount: 1,
+      permissions: {
+        institutions: { view: true, create_edit: true, approve: true, export: true, manage_access: true },
+        user_accounts: { view: true, create_edit: true, approve: true, export: true, manage_access: true },
+        school_config: { view: true, create_edit: true, approve: true, export: true, manage_access: true },
+        system_health: { view: true, create_edit: true, approve: false, export: true, manage_access: false },
+        audit_logs: { view: true, create_edit: false, approve: false, export: true, manage_access: false },
+        integrations: { view: true, create_edit: true, approve: true, export: true, manage_access: true }
+      },
+      recordScope: 'all_records',
+      sensitiveFields: ['aadhaar_pii', 'financial_ledgers', 'staff_compensation', 'mark_moderation'],
+      effectiveDate: '2026-01-01',
+      expiryDate: null,
+      delegatedAuthority: 'can_delegate',
+      exportRestrictions: 'unrestricted',
+      updatedAt: '2026-01-01T00:00:00.000Z'
+    },
+    {
+      roleId: 'ROLE-PLT-002',
+      name: 'Platform Administrator',
+      slug: 'platform-administrator',
+      scope: 'Platform',
+      description: 'Multi-tenant institutional provisioning, system health monitoring, operator account administration, and backup management.',
+      isBuiltIn: true,
+      isPrivileged: true,
+      status: 'Active',
+      assignedUsersCount: 3,
+      permissions: {
+        institutions: { view: true, create_edit: true, approve: true, export: true, manage_access: true },
+        user_accounts: { view: true, create_edit: true, approve: true, export: true, manage_access: true },
+        school_config: { view: true, create_edit: true, approve: true, export: true, manage_access: true },
+        system_health: { view: true, create_edit: true, approve: false, export: true, manage_access: false },
+        audit_logs: { view: true, create_edit: false, approve: false, export: true, manage_access: false },
+        integrations: { view: true, create_edit: true, approve: false, export: true, manage_access: false }
+      },
+      recordScope: 'all_records',
+      sensitiveFields: ['aadhaar_pii', 'financial_ledgers'],
+      effectiveDate: '2026-01-01',
+      expiryDate: null,
+      delegatedAuthority: 'can_delegate',
+      exportRestrictions: 'approval_required',
+      updatedAt: '2026-01-01T00:00:00.000Z'
+    },
+    {
+      roleId: 'ROLE-PLT-003',
+      name: 'Platform Operations',
+      slug: 'platform-operations',
+      scope: 'Platform',
+      description: 'Infrastructure metrics telemetry, service cluster health, database failover diagnostics, and background job queues.',
+      isBuiltIn: true,
+      isPrivileged: false,
+      status: 'Active',
+      assignedUsersCount: 2,
+      permissions: {
+        institutions: { view: true, create_edit: false, approve: false, export: true, manage_access: false },
+        user_accounts: { view: true, create_edit: false, approve: false, export: false, manage_access: false },
+        school_config: { view: true, create_edit: false, approve: false, export: false, manage_access: false },
+        system_health: { view: true, create_edit: true, approve: false, export: true, manage_access: false },
+        audit_logs: { view: true, create_edit: false, approve: false, export: true, manage_access: false },
+        integrations: { view: true, create_edit: true, approve: false, export: false, manage_access: false }
+      },
+      recordScope: 'all_records',
+      sensitiveFields: [],
+      effectiveDate: '2026-01-01',
+      expiryDate: null,
+      delegatedAuthority: 'no_delegation',
+      exportRestrictions: 'masked_pii',
+      updatedAt: '2026-01-01T00:00:00.000Z'
+    },
+    {
+      roleId: 'ROLE-PLT-004',
+      name: 'Platform Support',
+      slug: 'platform-support',
+      scope: 'Platform',
+      description: 'First-line ticket triage, tenant diagnostic reporting, and non-sensitive user identity onboarding support.',
+      isBuiltIn: true,
+      isPrivileged: false,
+      status: 'Active',
+      assignedUsersCount: 4,
+      permissions: {
+        institutions: { view: true, create_edit: false, approve: false, export: false, manage_access: false },
+        user_accounts: { view: true, create_edit: false, approve: false, export: false, manage_access: false },
+        school_config: { view: true, create_edit: false, approve: false, export: false, manage_access: false },
+        system_health: { view: true, create_edit: false, approve: false, export: false, manage_access: false },
+        audit_logs: { view: true, create_edit: false, approve: false, export: false, manage_access: false },
+        integrations: { view: false, create_edit: false, approve: false, export: false, manage_access: false }
+      },
+      recordScope: 'all_records',
+      sensitiveFields: [],
+      effectiveDate: '2026-01-01',
+      expiryDate: null,
+      delegatedAuthority: 'no_delegation',
+      exportRestrictions: 'prohibited',
+      updatedAt: '2026-01-01T00:00:00.000Z'
+    },
+    {
+      roleId: 'ROLE-PLT-005',
+      name: 'Institution Administrator',
+      slug: 'institution-administrator',
+      scope: 'Platform',
+      description: 'Manages institution onboarding workflows, campus profile updates, and primary administrative dispatch for branch schools.',
+      isBuiltIn: true,
+      isPrivileged: false,
+      status: 'Active',
+      assignedUsersCount: 5,
+      permissions: {
+        institutions: { view: true, create_edit: true, approve: false, export: true, manage_access: false },
+        user_accounts: { view: true, create_edit: true, approve: false, export: true, manage_access: false },
+        school_config: { view: true, create_edit: true, approve: true, export: true, manage_access: false },
+        system_health: { view: true, create_edit: false, approve: false, export: false, manage_access: false },
+        audit_logs: { view: true, create_edit: false, approve: false, export: true, manage_access: false },
+        integrations: { view: true, create_edit: false, approve: false, export: false, manage_access: false }
+      },
+      recordScope: 'own_campus',
+      sensitiveFields: ['aadhaar_pii', 'financial_ledgers'],
+      effectiveDate: '2026-01-01',
+      expiryDate: null,
+      delegatedAuthority: 'can_delegate',
+      exportRestrictions: 'masked_pii',
+      updatedAt: '2026-01-01T00:00:00.000Z'
+    },
+    {
+      roleId: 'ROLE-INST-006',
+      name: 'Principal',
+      slug: 'principal',
+      scope: 'Institution',
+      description: 'Executive institutional head with final statutory sign-off on admissions, faculty rosters, fee concessions, and board exam results.',
+      isBuiltIn: true,
+      isPrivileged: true,
+      status: 'Active',
+      assignedUsersCount: 4,
+      permissions: {
+        institutions: { view: true, create_edit: false, approve: false, export: true, manage_access: false },
+        user_accounts: { view: true, create_edit: true, approve: true, export: true, manage_access: true },
+        school_config: { view: true, create_edit: true, approve: true, export: true, manage_access: true },
+        system_health: { view: true, create_edit: false, approve: false, export: false, manage_access: false },
+        audit_logs: { view: true, create_edit: false, approve: false, export: true, manage_access: false },
+        integrations: { view: true, create_edit: false, approve: false, export: false, manage_access: false }
+      },
+      recordScope: 'own_campus',
+      sensitiveFields: ['aadhaar_pii', 'financial_ledgers', 'staff_compensation', 'mark_moderation'],
+      effectiveDate: '2026-01-01',
+      expiryDate: null,
+      delegatedAuthority: 'can_delegate',
+      exportRestrictions: 'unrestricted',
+      updatedAt: '2026-01-01T00:00:00.000Z'
+    },
+    {
+      roleId: 'ROLE-INST-007',
+      name: 'Vice Principal',
+      slug: 'vice-principal',
+      scope: 'Institution',
+      description: 'Academic dean governing master timetables, examination schedules, teacher classroom allocations, and marks moderation.',
+      isBuiltIn: true,
+      isPrivileged: false,
+      status: 'Active',
+      assignedUsersCount: 6,
+      permissions: {
+        institutions: { view: true, create_edit: false, approve: false, export: false, manage_access: false },
+        user_accounts: { view: true, create_edit: false, approve: false, export: false, manage_access: false },
+        school_config: { view: true, create_edit: true, approve: false, export: true, manage_access: false },
+        system_health: { view: false, create_edit: false, approve: false, export: false, manage_access: false },
+        audit_logs: { view: true, create_edit: false, approve: false, export: false, manage_access: false },
+        integrations: { view: false, create_edit: false, approve: false, export: false, manage_access: false }
+      },
+      recordScope: 'own_campus',
+      sensitiveFields: ['mark_moderation'],
+      effectiveDate: '2026-01-01',
+      expiryDate: null,
+      delegatedAuthority: 'no_delegation',
+      exportRestrictions: 'masked_pii',
+      updatedAt: '2026-01-01T00:00:00.000Z'
+    },
+    {
+      roleId: 'ROLE-INST-008',
+      name: 'Office Staff',
+      slug: 'office-staff',
+      scope: 'Institution',
+      description: 'Admissions inquiry processing, student record document verification, transfer certificate clearance, and parent communication.',
+      isBuiltIn: true,
+      isPrivileged: false,
+      status: 'Active',
+      assignedUsersCount: 18,
+      permissions: {
+        institutions: { view: true, create_edit: false, approve: false, export: false, manage_access: false },
+        user_accounts: { view: true, create_edit: true, approve: false, export: true, manage_access: false },
+        school_config: { view: true, create_edit: false, approve: false, export: false, manage_access: false },
+        system_health: { view: false, create_edit: false, approve: false, export: false, manage_access: false },
+        audit_logs: { view: false, create_edit: false, approve: false, export: false, manage_access: false },
+        integrations: { view: false, create_edit: false, approve: false, export: false, manage_access: false }
+      },
+      recordScope: 'own_campus',
+      sensitiveFields: ['aadhaar_pii'],
+      effectiveDate: '2026-01-01',
+      expiryDate: null,
+      delegatedAuthority: 'no_delegation',
+      exportRestrictions: 'masked_pii',
+      updatedAt: '2026-01-01T00:00:00.000Z'
+    },
+    {
+      roleId: 'ROLE-INST-009',
+      name: 'Accounts Staff',
+      slug: 'accounts-staff',
+      scope: 'Institution',
+      description: 'Fee collection register maintenance, offline receipt verification, daily cash reconciliation, and outstanding dues reporting.',
+      isBuiltIn: true,
+      isPrivileged: false,
+      status: 'Active',
+      assignedUsersCount: 8,
+      permissions: {
+        institutions: { view: true, create_edit: false, approve: false, export: false, manage_access: false },
+        user_accounts: { view: true, create_edit: false, approve: false, export: false, manage_access: false },
+        school_config: { view: true, create_edit: false, approve: false, export: false, manage_access: false },
+        system_health: { view: false, create_edit: false, approve: false, export: false, manage_access: false },
+        audit_logs: { view: true, create_edit: false, approve: false, export: true, manage_access: false },
+        integrations: { view: false, create_edit: false, approve: false, export: false, manage_access: false }
+      },
+      recordScope: 'own_campus',
+      sensitiveFields: ['financial_ledgers'],
+      effectiveDate: '2026-01-01',
+      expiryDate: null,
+      delegatedAuthority: 'no_delegation',
+      exportRestrictions: 'approval_required',
+      updatedAt: '2026-01-01T00:00:00.000Z'
+    },
+    {
+      roleId: 'ROLE-INST-010',
+      name: 'Teacher',
+      slug: 'teacher',
+      scope: 'Institution',
+      description: 'Classroom attendance register submission, student progress tracking, periodic assessment marks entry, and student notes.',
+      isBuiltIn: true,
+      isPrivileged: false,
+      status: 'Active',
+      assignedUsersCount: 85,
+      permissions: {
+        institutions: { view: false, create_edit: false, approve: false, export: false, manage_access: false },
+        user_accounts: { view: false, create_edit: false, approve: false, export: false, manage_access: false },
+        school_config: { view: true, create_edit: false, approve: false, export: false, manage_access: false },
+        system_health: { view: false, create_edit: false, approve: false, export: false, manage_access: false },
+        audit_logs: { view: false, create_edit: false, approve: false, export: false, manage_access: false },
+        integrations: { view: false, create_edit: false, approve: false, export: false, manage_access: false }
+      },
+      recordScope: 'assigned_classes',
+      sensitiveFields: [],
+      effectiveDate: '2026-01-01',
+      expiryDate: null,
+      delegatedAuthority: 'no_delegation',
+      exportRestrictions: 'prohibited',
+      updatedAt: '2026-01-01T00:00:00.000Z'
+    }
+  ];
+
+  /**
+   * 7.2 Load Roles Directory from Backend
+   */
+  async function loadRoleTemplatesDirectory() {
+    try {
+      const res = await fetch('/api/v1/platform/roles');
+      if (res.ok) {
+        const json = await res.json();
+        if (json.success && json.data) {
+          rolesDirectoryData = json.data;
+          if (json.summary) {
+            updateRoleSummaryCards(json.summary);
+          }
+        } else {
+          rolesDirectoryData = DEFAULT_ROLES_FALLBACK;
+        }
+      } else {
+        rolesDirectoryData = DEFAULT_ROLES_FALLBACK;
+      }
+    } catch (e) {
+      console.warn('Roles API offline; using fallback roles seed:', e.message);
+      rolesDirectoryData = DEFAULT_ROLES_FALLBACK;
+    }
+
+    if (!rolesDirectoryData || rolesDirectoryData.length === 0) {
+      rolesDirectoryData = DEFAULT_ROLES_FALLBACK;
+    }
+
+    updateRoleSummaryCardsFromLocal();
+    renderRolesTable(rolesDirectoryData);
+  }
+
+  function updateRoleSummaryCards(s) {
+    const setT = (id, val) => {
+      const el = document.getElementById(id);
+      if (el) el.textContent = val;
+    };
+    setT('kpiRoleTotal', s.totalRoles || 0);
+    setT('kpiRolePlatform', s.platformRoles || 0);
+    setT('kpiRoleInstitution', s.institutionRoles || 0);
+    setT('kpiRoleCustom', s.customRoles || 0);
+    setT('kpiRoleAssignedUsers', s.totalAssignedUsers || 0);
+  }
+
+  function updateRoleSummaryCardsFromLocal() {
+    const total = rolesDirectoryData.length;
+    const platform = rolesDirectoryData.filter(r => r.scope === 'Platform').length;
+    const institution = rolesDirectoryData.filter(r => r.scope === 'Institution').length;
+    const custom = rolesDirectoryData.filter(r => !r.isBuiltIn).length;
+    const assigned = rolesDirectoryData.reduce((acc, r) => acc + (r.assignedUsersCount || 0), 0);
+    updateRoleSummaryCards({
+      totalRoles: total,
+      platformRoles: platform,
+      institutionRoles: institution,
+      customRoles: custom,
+      totalAssignedUsers: assigned
+    });
+  }
+
+  /**
+   * 7.2 Render Roles Table
+   */
+  function renderRolesTable(roles) {
+    const tbody = document.getElementById('rolesTableBody');
+    if (!tbody) return;
+
+    if (!roles || roles.length === 0) {
+      tbody.innerHTML = `
+        <tr>
+          <td colspan="7" class="text-center py-4 text-muted">
+            <i class="fa-solid fa-id-card-clip fa-2x mb-2 d-block text-secondary"></i>
+            No role templates found matching the current search criteria.
+          </td>
+        </tr>
+      `;
+      return;
+    }
+
+    const rows = roles.map(r => {
+      const isPlatform = r.scope === 'Platform';
+      const scopeBadge = isPlatform
+        ? '<span class="role-scope-badge role-scope-platform"><i class="fa-solid fa-network-wired"></i> Platform</span>'
+        : '<span class="role-scope-badge role-scope-institution"><i class="fa-solid fa-school"></i> Institution</span>';
+
+      const typeBadge = r.isBuiltIn
+        ? '<span class="role-type-badge role-type-builtin"><i class="fa-solid fa-shield-halved text-primary"></i> Built-in</span>'
+        : '<span class="role-type-badge role-type-custom"><i class="fa-solid fa-puzzle-piece text-info"></i> Custom</span>';
+
+      const safeguardBadge = r.isPrivileged
+        ? '<span class="role-safeguard-badge ms-1" title="Critical Privileges Safeguarded"><i class="fa-solid fa-lock"></i> Protected</span>'
+        : '';
+
+      const statusPill = r.status === 'Active'
+        ? '<span class="badge bg-success-subtle text-success border border-success-subtle">Active</span>'
+        : r.status === 'Pending Review'
+        ? '<span class="badge bg-warning-subtle text-warning border border-warning-subtle">Pending Review</span>'
+        : '<span class="badge bg-secondary-subtle text-secondary border">Inactive</span>';
+
+      const updatedStr = r.updatedAt ? new Date(r.updatedAt).toLocaleDateString('en-IN', { month: 'short', day: 'numeric', year: 'numeric' }) : 'Jan 01, 2026';
+
+      const deactivateAction = r.isBuiltIn
+        ? `<button type="button" class="btn btn-sm btn-outline-secondary opacity-50" disabled title="Built-in statutory roles cannot be deactivated">
+             <i class="fa-solid fa-ban text-muted"></i>
+           </button>`
+        : `<button type="button" class="btn btn-sm ${r.status === 'Active' ? 'btn-outline-danger' : 'btn-outline-success'}" onclick="platformApp.toggleRoleStatus('${r.roleId}')" title="${r.status === 'Active' ? 'Deactivate Role' : 'Reactivate Role'}">
+             <i class="fa-solid ${r.status === 'Active' ? 'fa-ban' : 'fa-check'}"></i>
+           </button>`;
+
+      return `
+        <tr>
+          <td>
+            <div style="display: flex; align-items: center; gap: 0.65rem;">
+              <div class="pa-user-avatar" style="width: 36px; height: 36px; font-size: 0.85rem; background: ${isPlatform ? '#EEF2FF' : '#ECFDF5'}; color: ${isPlatform ? '#4F46E5' : '#059669'}; border-color: ${isPlatform ? '#C7D2FE' : '#A7F3D0'};">
+                <i class="fa-solid ${isPlatform ? 'fa-shield-halved' : 'fa-user-tie'}"></i>
+              </div>
+              <div>
+                <div style="font-weight: 700; color: var(--color-text-main); font-size: 0.92rem;">
+                  ${r.name} ${safeguardBadge}
+                </div>
+                <div style="font-size: 0.75rem; color: #64748B; font-family: monospace;">
+                  ${r.roleId} &bull; ${statusPill}
+                </div>
+              </div>
+            </div>
+          </td>
+          <td>${scopeBadge}</td>
+          <td style="max-width: 280px; font-size: 0.82rem; color: #475569; line-height: 1.35;">
+            ${r.description}
+          </td>
+          <td>
+            <button type="button" class="btn btn-sm btn-light border px-2 py-1" onclick="platformApp.openAssignUsersModal('${r.roleId}')" title="Adjust User Assignments">
+              <i class="fa-solid fa-users text-primary me-1"></i> <strong>${r.assignedUsersCount || 0}</strong> Users
+            </button>
+          </td>
+          <td>${typeBadge}</td>
+          <td style="font-size: 0.8rem; color: #64748B;">
+            ${updatedStr}
+          </td>
+          <td>
+            <div style="display: flex; gap: 0.35rem; align-items: center;">
+              <button type="button" class="btn btn-sm btn-outline-primary" onclick="platformApp.viewRolePermissions('${r.roleId}')" title="View Permission Matrix">
+                <i class="fa-solid fa-eye me-1"></i> View
+              </button>
+              <button type="button" class="btn btn-sm btn-outline-secondary" onclick="platformApp.openDuplicateRoleModal('${r.roleId}')" title="Duplicate into New Custom Role">
+                <i class="fa-solid fa-copy"></i>
+              </button>
+              <button type="button" class="btn btn-sm btn-outline-secondary" onclick="platformApp.openEditRoleModal('${r.roleId}')" title="Edit Permissions">
+                <i class="fa-solid fa-pen"></i>
+              </button>
+              ${deactivateAction}
+            </div>
+          </td>
+        </tr>
+      `;
+    }).join('');
+
+    tbody.innerHTML = rows;
+
+    const filteredEl = document.getElementById('roleFilteredCount');
+    const totalEl = document.getElementById('roleTotalCount');
+    if (filteredEl) filteredEl.textContent = roles.length;
+    if (totalEl) totalEl.textContent = rolesDirectoryData.length;
+  }
+
+  /**
+   * 7.2 Filter Roles Directory
+   */
+  function filterRolesDirectory() {
+    const q = (document.getElementById('roleSearchInput')?.value || '').toLowerCase().trim();
+    const scope = document.getElementById('roleScopeFilter')?.value || 'all';
+    const type = document.getElementById('roleTypeFilter')?.value || 'all';
+    const status = document.getElementById('roleStatusFilter')?.value || 'all';
+
+    const filtered = rolesDirectoryData.filter(r => {
+      if (q && !r.name.toLowerCase().includes(q) &&
+          !r.description.toLowerCase().includes(q) &&
+          !r.roleId.toLowerCase().includes(q) &&
+          !r.slug.toLowerCase().includes(q)) {
+        return false;
+      }
+      if (scope !== 'all' && r.scope.toLowerCase() !== scope.toLowerCase()) {
+        return false;
+      }
+      if (type !== 'all') {
+        if (type === 'builtin' && !r.isBuiltIn) return false;
+        if (type === 'custom' && r.isBuiltIn) return false;
+      }
+      if (status !== 'all' && r.status !== status) {
+        return false;
+      }
+      return true;
+    });
+
+    renderRolesTable(filtered);
+  }
+
+  function resetRoleFilters() {
+    const setVal = (id, val) => {
+      const el = document.getElementById(id);
+      if (el) el.value = val;
+    };
+    setVal('roleSearchInput', '');
+    setVal('roleScopeFilter', 'all');
+    setVal('roleTypeFilter', 'all');
+    setVal('roleStatusFilter', 'all');
+    filterRolesDirectory();
+  }
+
+  /**
+   * 7.2 Export Roles Matrix CSV
+   */
+  function exportRolesMatrixCSV() {
+    if (!rolesDirectoryData || rolesDirectoryData.length === 0) {
+      showToast('No role data available to export.', 'warning');
+      return;
+    }
+
+    const headers = [
+      'Role ID', 'Role Name', 'Scope', 'Type', 'Status', 'Assigned Users',
+      'Institutions Permissions', 'User Accounts Permissions', 'School Config Permissions',
+      'System Health Permissions', 'Audit Logs Permissions', 'Integrations Permissions',
+      'Record Scope', 'Export Restrictions', 'Sensitive Fields'
+    ];
+
+    const getPermStr = (perms = {}) => {
+      const active = [];
+      if (perms.view) active.push('View');
+      if (perms.create_edit) active.push('Create/Edit');
+      if (perms.approve) active.push('Approve');
+      if (perms.export) active.push('Export');
+      if (perms.manage_access) active.push('Manage Access');
+      return active.length > 0 ? active.join('|') : 'None';
+    };
+
+    const rows = rolesDirectoryData.map(r => [
+      r.roleId,
+      r.name,
+      r.scope,
+      r.isBuiltIn ? 'Built-in' : 'Custom',
+      r.status,
+      r.assignedUsersCount || 0,
+      getPermStr(r.permissions?.institutions),
+      getPermStr(r.permissions?.user_accounts),
+      getPermStr(r.permissions?.school_config),
+      getPermStr(r.permissions?.system_health),
+      getPermStr(r.permissions?.audit_logs),
+      getPermStr(r.permissions?.integrations),
+      r.recordScope || 'own_campus',
+      r.exportRestrictions || 'masked_pii',
+      (r.sensitiveFields || []).join(';')
+    ]);
+
+    const csvContent = [
+      headers.map(h => `"${h}"`).join(','),
+      ...rows.map(row => row.map(v => `"${String(v).replace(/"/g, '""')}"`).join(','))
+    ].join('\n');
+
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `SriVidya_Role_Permissions_Matrix_${new Date().toISOString().slice(0, 10)}.csv`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    showToast('Role permissions matrix exported successfully.', 'success');
+  }
+
+  /**
+   * 7.3 Modal: Open Create Role
+   */
+  function openCreateRoleModal() {
+    activeEditorRole = null;
+    const title = document.getElementById('modalRoleEditorTitle');
+    if (title) title.innerHTML = '<i class="fa-solid fa-plus text-primary me-1"></i> Create Custom Role Template';
+
+    const safeguardAlert = document.getElementById('roleEditorSafeguardAlert');
+    if (safeguardAlert) safeguardAlert.style.display = 'none';
+
+    const setVal = (id, val) => {
+      const el = document.getElementById(id);
+      if (el) el.value = val;
+    };
+    setVal('roleEditId', '');
+    setVal('roleEditName', '');
+    setVal('roleEditScope', 'Institution');
+    setVal('roleEditDescription', '');
+    setVal('roleEditTypeBadge', 'Custom Template');
+    setVal('roleEditRecordScope', 'own_campus');
+    setVal('roleEditExportRestrictions', 'masked_pii');
+    setVal('roleEditEffectiveDate', new Date().toISOString().slice(0, 10));
+    setVal('roleEditExpiryDate', '');
+    setVal('roleEditDelegatedAuth', 'no_delegation');
+
+    const nameInput = document.getElementById('roleEditName');
+    if (nameInput) nameInput.readOnly = false;
+    const scopeSelect = document.getElementById('roleEditScope');
+    if (scopeSelect) scopeSelect.disabled = false;
+
+    // Default permissions: read only
+    quickPresetPerms('readonly');
+
+    // Sensitive fields uncheck
+    ['aadhaar_pii', 'financial_ledgers', 'staff_compensation', 'mark_moderation'].forEach(f => {
+      const cb = document.getElementById(`sens_${f}`);
+      if (cb) cb.checked = false;
+    });
+
+    openModal('modalRoleEditor');
+  }
+
+  /**
+   * 7.3 Modal: Open Edit Role
+   */
+  function openEditRoleModal(roleId) {
+    const role = rolesDirectoryData.find(r => r.roleId === roleId || r.slug === roleId);
+    if (!role) {
+      showToast('Role not found', 'error');
+      return;
+    }
+
+    activeEditorRole = role;
+    const title = document.getElementById('modalRoleEditorTitle');
+    if (title) title.innerHTML = `<i class="fa-solid fa-pen-to-square text-primary me-1"></i> Edit Role: ${role.name}`;
+
+    const safeguardAlert = document.getElementById('roleEditorSafeguardAlert');
+    if (safeguardAlert) {
+      safeguardAlert.style.display = role.isBuiltIn ? 'block' : 'none';
+    }
+
+    const setVal = (id, val) => {
+      const el = document.getElementById(id);
+      if (el) el.value = val;
+    };
+    setVal('roleEditId', role.roleId);
+    setVal('roleEditName', role.name);
+    setVal('roleEditScope', role.scope);
+    setVal('roleEditDescription', role.description);
+    setVal('roleEditTypeBadge', role.isBuiltIn ? 'Built-in (Protected Template)' : 'Custom Template');
+    setVal('roleEditRecordScope', role.recordScope || 'own_campus');
+    setVal('roleEditExportRestrictions', role.exportRestrictions || 'masked_pii');
+    setVal('roleEditEffectiveDate', role.effectiveDate ? new Date(role.effectiveDate).toISOString().slice(0, 10) : new Date().toISOString().slice(0, 10));
+    setVal('roleEditExpiryDate', role.expiryDate ? new Date(role.expiryDate).toISOString().slice(0, 10) : '');
+    setVal('roleEditDelegatedAuth', role.delegatedAuthority || 'no_delegation');
+
+    const nameInput = document.getElementById('roleEditName');
+    if (nameInput) nameInput.readOnly = role.isBuiltIn;
+    const scopeSelect = document.getElementById('roleEditScope');
+    if (scopeSelect) scopeSelect.disabled = role.isBuiltIn;
+
+    // Matrix Checkboxes
+    const modules = ['institutions', 'user_accounts', 'school_config', 'system_health', 'audit_logs', 'integrations'];
+    const actions = ['view', 'create_edit', 'approve', 'export', 'manage_access'];
+
+    modules.forEach(m => {
+      actions.forEach(a => {
+        const cb = document.getElementById(`perm_${m}_${a}`);
+        if (cb) {
+          cb.checked = !!(role.permissions && role.permissions[m] && role.permissions[m][a]);
+        }
+      });
+    });
+
+    // Sensitive Fields
+    ['aadhaar_pii', 'financial_ledgers', 'staff_compensation', 'mark_moderation'].forEach(f => {
+      const cb = document.getElementById(`sens_${f}`);
+      if (cb) {
+        cb.checked = (role.sensitiveFields || []).includes(f);
+      }
+    });
+
+    openModal('modalRoleEditor');
+  }
+
+  /**
+   * 7.2 Action: Duplicate Role
+   */
+  async function openDuplicateRoleModal(roleId) {
+    const role = rolesDirectoryData.find(r => r.roleId === roleId || r.slug === roleId);
+    if (!role) return;
+
+    const newName = prompt(`Enter name for duplicated role template:`, `Copy of ${role.name}`);
+    if (!newName || !newName.trim()) return;
+
+    try {
+      const res = await fetch(`/api/v1/platform/roles/${role.roleId}/duplicate`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: newName.trim(), operator: 'Platform Super Administrator' })
+      });
+
+      if (res.ok) {
+        const json = await res.json();
+        if (json.success && json.data) {
+          rolesDirectoryData.unshift(json.data);
+          updateRoleSummaryCardsFromLocal();
+          renderRolesTable(rolesDirectoryData);
+          showToast(`Role duplicated successfully as '${json.data.name}'.`, 'success');
+          return;
+        }
+      }
+    } catch (e) {
+      console.warn('Backend duplicate failed; duplicating in local state:', e.message);
+    }
+
+    // Local fallback
+    const nextSeq = Math.floor(100 + Math.random() * 900);
+    const cloned = JSON.parse(JSON.stringify(role));
+    cloned.roleId = `ROLE-INST-CUS${nextSeq}`;
+    cloned.name = newName.trim();
+    cloned.slug = newName.trim().toLowerCase().replace(/[^a-z0-9]+/g, '-') + `-${nextSeq}`;
+    cloned.isBuiltIn = false;
+    cloned.isPrivileged = false;
+    cloned.status = 'Active';
+    cloned.assignedUsersCount = 0;
+    cloned.updatedAt = new Date().toISOString();
+
+    rolesDirectoryData.unshift(cloned);
+    updateRoleSummaryCardsFromLocal();
+    renderRolesTable(rolesDirectoryData);
+    showToast(`Role duplicated successfully as '${cloned.name}'.`, 'success');
+  }
+
+  /**
+   * 7.2 Action: View Permissions Dossier
+   */
+  function viewRolePermissions(roleId) {
+    const role = rolesDirectoryData.find(r => r.roleId === roleId || r.slug === roleId);
+    if (!role) return;
+
+    activeViewerRoleId = role.roleId;
+
+    const setT = (id, val) => {
+      const el = document.getElementById(id);
+      if (el) el.textContent = val;
+    };
+    setT('viewRoleTitle', role.name);
+    setT('viewRoleDesc', role.description);
+    setT('viewRoleRecordScope', role.recordScope ? role.recordScope.replace('_', ' ').toUpperCase() : 'OWN CAMPUS');
+    setT('viewRoleExportRestrictions', role.exportRestrictions ? role.exportRestrictions.replace('_', ' ').toUpperCase() : 'MASKED PII');
+
+    const scopeBadge = document.getElementById('viewRoleScopeBadge');
+    if (scopeBadge) {
+      scopeBadge.textContent = role.scope;
+      scopeBadge.className = role.scope === 'Platform' ? 'role-scope-badge role-scope-platform' : 'role-scope-badge role-scope-institution';
+    }
+
+    const safeguardBadge = document.getElementById('viewRoleSafeguardBadge');
+    if (safeguardBadge) {
+      safeguardBadge.textContent = role.isBuiltIn ? 'Built-in Protected' : 'Custom Template';
+      safeguardBadge.className = role.isBuiltIn ? 'role-safeguard-badge' : 'role-type-badge role-type-custom';
+    }
+
+    // Populate Matrix Table in Viewer
+    const modules = [
+      { id: 'institutions', label: 'Institutions', desc: 'Campus profiles & directory' },
+      { id: 'user_accounts', label: 'User Accounts', desc: 'Identity lifecycle & sessions' },
+      { id: 'school_config', label: 'School Configuration', desc: 'Curriculum, terms & grading' },
+      { id: 'system_health', label: 'System Health', desc: 'Cluster diagnostics & jobs' },
+      { id: 'audit_logs', label: 'Audit Logs', desc: 'Immutable forensic event trail' },
+      { id: 'integrations', label: 'Integrations', desc: 'APIs, SMTP & webhooks' }
+    ];
+
+    const actions = ['view', 'create_edit', 'approve', 'export', 'manage_access'];
+
+    const tbody = document.getElementById('viewMatrixTableBody');
+    if (tbody) {
+      tbody.innerHTML = modules.map(m => {
+        const cells = actions.map(a => {
+          if ((m.id === 'system_health' && (a === 'approve' || a === 'manage_access')) ||
+              (m.id === 'audit_logs' && (a === 'create_edit' || a === 'approve' || a === 'manage_access'))) {
+            return '<td><span class="role-matrix-na">N/A</span></td>';
+          }
+          const has = !!(role.permissions && role.permissions[m.id] && role.permissions[m.id][a]);
+          return has
+            ? '<td><span class="badge bg-success-subtle text-success p-1"><i class="fa-solid fa-check"></i> Allowed</span></td>'
+            : '<td><span class="badge bg-danger-subtle text-danger p-1"><i class="fa-solid fa-xmark"></i> Denied</span></td>';
+        }).join('');
+
+        return `
+          <tr>
+            <td><strong>${m.label}</strong><div class="small text-muted">${m.desc}</div></td>
+            ${cells}
+          </tr>
+        `;
+      }).join('');
+    }
+
+    // Sensitive Fields Pills
+    const sensContainer = document.getElementById('viewRoleSensitiveFields');
+    if (sensContainer) {
+      if (!role.sensitiveFields || role.sensitiveFields.length === 0) {
+        sensContainer.innerHTML = '<span class="text-muted small">None authorized</span>';
+      } else {
+        sensContainer.innerHTML = role.sensitiveFields.map(f => `
+          <span class="badge bg-warning-subtle text-warning border border-warning-subtle py-1 px-2">
+            <i class="fa-solid fa-shield-halved me-1"></i> ${f.replace('_', ' ').toUpperCase()}
+          </span>
+        `).join('');
+      }
+    }
+
+    // Change History Ledger
+    const histContainer = document.getElementById('viewRoleHistoryContainer');
+    if (histContainer) {
+      const history = role.changeHistory || [];
+      if (history.length === 0) {
+        histContainer.innerHTML = '<div class="text-muted small p-2 bg-light rounded">No modifications recorded. Baseline template.</div>';
+      } else {
+        histContainer.innerHTML = history.map(h => `
+          <div class="p-2 mb-2 bg-light rounded border" style="font-size: 0.8rem;">
+            <div class="d-flex justify-content-between">
+              <strong>${h.action}</strong>
+              <span class="text-muted">${new Date(h.timestamp).toLocaleString('en-IN')}</span>
+            </div>
+            <div class="text-muted mt-1">${h.details}</div>
+            <div class="text-secondary small mt-1">Responsible: <strong>${h.performedBy}</strong></div>
+          </div>
+        `).join('');
+      }
+    }
+
+    openModal('modalRoleViewer');
+  }
+
+  function editRoleFromViewer() {
+    closeModal('modalRoleViewer');
+    if (activeViewerRoleId) {
+      openEditRoleModal(activeViewerRoleId);
+    }
+  }
+
+  /**
+   * Quick Preset Toggles for Permission Matrix
+   */
+  function quickPresetPerms(preset) {
+    const modules = ['institutions', 'user_accounts', 'school_config', 'system_health', 'audit_logs', 'integrations'];
+    const actions = ['view', 'create_edit', 'approve', 'export', 'manage_access'];
+
+    modules.forEach(m => {
+      actions.forEach(a => {
+        const cb = document.getElementById(`perm_${m}_${a}`);
+        if (!cb) return;
+
+        if (preset === 'clear') {
+          cb.checked = false;
+        } else if (preset === 'readonly') {
+          cb.checked = (a === 'view');
+        } else if (preset === 'full') {
+          cb.checked = true;
+        }
+      });
+    });
+  }
+
+  /**
+   * 7.4 Form Submission: Compute Diff & Present Review Workflow
+   */
+  function handleRoleFormSubmit(event) {
+    event.preventDefault();
+
+    const roleId = document.getElementById('roleEditId')?.value || '';
+    const name = document.getElementById('roleEditName')?.value || '';
+    const scope = document.getElementById('roleEditScope')?.value || 'Institution';
+    const description = document.getElementById('roleEditDescription')?.value || '';
+    const recordScope = document.getElementById('roleEditRecordScope')?.value || 'own_campus';
+    const exportRestrictions = document.getElementById('roleEditExportRestrictions')?.value || 'masked_pii';
+    const effectiveDate = document.getElementById('roleEditEffectiveDate')?.value || new Date().toISOString().slice(0, 10);
+    const expiryDate = document.getElementById('roleEditExpiryDate')?.value || null;
+    const delegatedAuthority = document.getElementById('roleEditDelegatedAuth')?.value || 'no_delegation';
+
+    // Gather Matrix Permissions
+    const modules = ['institutions', 'user_accounts', 'school_config', 'system_health', 'audit_logs', 'integrations'];
+    const actions = ['view', 'create_edit', 'approve', 'export', 'manage_access'];
+
+    const newPerms = {};
+    modules.forEach(m => {
+      newPerms[m] = {};
+      actions.forEach(a => {
+        const cb = document.getElementById(`perm_${m}_${a}`);
+        newPerms[m][a] = !!(cb && cb.checked);
+      });
+    });
+
+    // Gather Sensitive Fields
+    const sensFields = [];
+    ['aadhaar_pii', 'financial_ledgers', 'staff_compensation', 'mark_moderation'].forEach(f => {
+      const cb = document.getElementById(`sens_${f}`);
+      if (cb && cb.checked) sensFields.push(f);
+    });
+
+    const draftData = {
+      roleId,
+      name,
+      scope,
+      description,
+      permissions: newPerms,
+      recordScope,
+      sensitiveFields: sensFields,
+      effectiveDate,
+      expiryDate,
+      delegatedAuthority,
+      exportRestrictions
+    };
+
+    // If new role creation, skip diff workflow and create directly
+    if (!roleId) {
+      createNewRoleSubmit(draftData);
+      return;
+    }
+
+    // Existing role: compute diff against activeEditorRole
+    const oldPerms = activeEditorRole?.permissions || {};
+    const added = [];
+    const removed = [];
+
+    modules.forEach(m => {
+      actions.forEach(a => {
+        const wasGranted = !!(oldPerms[m] && oldPerms[m][a]);
+        const isGranted = !!(newPerms[m] && newPerms[m][a]);
+        if (!wasGranted && isGranted) {
+          added.push({ module: m, action: a, label: `${m.toUpperCase()} &rarr; ${a.toUpperCase()}` });
+        } else if (wasGranted && !isGranted) {
+          removed.push({ module: m, action: a, label: `${m.toUpperCase()} &rarr; ${a.toUpperCase()}` });
+        }
+      });
+    });
+
+    pendingRoleDraft = {
+      roleId,
+      draftData,
+      diff: { added, removed },
+      isCritical: !!(activeEditorRole?.isPrivileged || (activeEditorRole?.isBuiltIn && activeEditorRole?.scope === 'Platform'))
+    };
+
+    // Populate Diff Modal
+    const addedCont = document.getElementById('roleDiffAddedContainer');
+    const removedCont = document.getElementById('roleDiffRemovedContainer');
+    const addedCount = document.getElementById('diffAddedCount');
+    const removedCount = document.getElementById('diffRemovedCount');
+
+    if (addedCount) addedCount.textContent = added.length;
+    if (removedCount) removedCount.textContent = removed.length;
+
+    if (addedCont) {
+      addedCont.innerHTML = added.length === 0
+        ? '<span class="text-muted small">No new permissions granted</span>'
+        : added.map(x => `<span class="diff-chip-added"><i class="fa-solid fa-plus"></i> ${x.label}</span>`).join('');
+    }
+
+    if (removedCont) {
+      removedCont.innerHTML = removed.length === 0
+        ? '<span class="text-muted small">No existing permissions revoked</span>'
+        : removed.map(x => `<span class="diff-chip-removed"><i class="fa-solid fa-minus"></i> ${x.label}</span>`).join('');
+    }
+
+    // Check safeguard requirement
+    const reviewerNotice = document.getElementById('roleDiffReviewerNotice');
+    if (reviewerNotice) {
+      reviewerNotice.style.display = pendingRoleDraft.isCritical ? 'block' : 'none';
+    }
+
+    closeModal('modalRoleEditor');
+    openModal('modalRoleDiff');
+  }
+
+  /**
+   * Create New Custom Role Handler
+   */
+  async function createNewRoleSubmit(draftData) {
+    try {
+      const res = await fetch('/api/v1/platform/roles', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ...draftData, operator: 'Platform Super Administrator' })
+      });
+
+      if (res.ok) {
+        const json = await res.json();
+        if (json.success && json.data) {
+          rolesDirectoryData.unshift(json.data);
+          updateRoleSummaryCardsFromLocal();
+          renderRolesTable(rolesDirectoryData);
+          closeModal('modalRoleEditor');
+          showToast(`Custom role '${json.data.name}' provisioned successfully.`, 'success');
+          return;
+        }
+      }
+    } catch (e) {
+      console.warn('Backend role creation failed; creating locally:', e.message);
+    }
+
+    // Fallback local
+    const nextSeq = Math.floor(100 + Math.random() * 900);
+    const newRole = {
+      roleId: `ROLE-INST-CUS${nextSeq}`,
+      name: draftData.name,
+      slug: draftData.name.toLowerCase().replace(/[^a-z0-9]+/g, '-') + `-${nextSeq}`,
+      scope: draftData.scope,
+      description: draftData.description,
+      isBuiltIn: false,
+      isPrivileged: false,
+      status: 'Active',
+      assignedUsersCount: 0,
+      permissions: draftData.permissions,
+      recordScope: draftData.recordScope,
+      sensitiveFields: draftData.sensitiveFields,
+      effectiveDate: draftData.effectiveDate,
+      expiryDate: draftData.expiryDate,
+      delegatedAuthority: draftData.delegatedAuthority,
+      exportRestrictions: draftData.exportRestrictions,
+      updatedAt: new Date().toISOString()
+    };
+
+    rolesDirectoryData.unshift(newRole);
+    updateRoleSummaryCardsFromLocal();
+    renderRolesTable(rolesDirectoryData);
+    closeModal('modalRoleEditor');
+    showToast(`Custom role '${newRole.name}' created successfully.`, 'success');
+  }
+
+  /**
+   * 7.4 Confirm Role Save or Submit for Review
+   */
+  async function confirmRoleSaveOrSubmit() {
+    if (!pendingRoleDraft) return;
+
+    const rationale = document.getElementById('roleChangeRationale')?.value || 'Administrative privilege adjustment';
+    const reviewer = document.getElementById('roleReviewerSelect')?.value || 'Platform Owner';
+
+    const { roleId, draftData, isCritical } = pendingRoleDraft;
+
+    try {
+      const res = await fetch(`/api/v1/platform/roles/${roleId}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          ...draftData,
+          rationale,
+          reviewer,
+          operator: 'Platform Super Administrator'
+        })
+      });
+
+      if (res.ok) {
+        const json = await res.json();
+        if (json.success && json.data) {
+          const idx = rolesDirectoryData.findIndex(r => r.roleId === roleId);
+          if (idx !== -1) rolesDirectoryData[idx] = json.data;
+          renderRolesTable(rolesDirectoryData);
+          closeModal('modalRoleDiff');
+          showToast(json.message || 'Permissions updated successfully.', 'success');
+          return;
+        }
+      }
+    } catch (e) {
+      console.warn('Backend update failed; applying locally:', e.message);
+    }
+
+    // Local apply
+    const idx = rolesDirectoryData.findIndex(r => r.roleId === roleId);
+    if (idx !== -1) {
+      const role = rolesDirectoryData[idx];
+      role.description = draftData.description;
+      role.permissions = draftData.permissions;
+      role.recordScope = draftData.recordScope;
+      role.sensitiveFields = draftData.sensitiveFields;
+      role.exportRestrictions = draftData.exportRestrictions;
+      role.status = isCritical ? 'Pending Review' : 'Active';
+      role.updatedAt = new Date().toISOString();
+      if (!role.changeHistory) role.changeHistory = [];
+      role.changeHistory.unshift({
+        action: isCritical ? 'Changes Submitted for Review' : 'Permissions Updated',
+        performedBy: 'Platform Super Administrator',
+        timestamp: new Date().toISOString(),
+        details: `Adjusted permissions. Added: ${pendingRoleDraft.diff.added.length}, Removed: ${pendingRoleDraft.diff.removed.length}. Rationale: ${rationale}.`
+      });
+      renderRolesTable(rolesDirectoryData);
+    }
+
+    closeModal('modalRoleDiff');
+    showToast(isCritical ? 'Changes submitted for authorized reviewer sign-off.' : 'Role permissions updated and activated.', 'success');
+  }
+
+  /**
+   * 7.2 Action: Toggle Role Status
+   * Safeguard: Built-in roles with critical privileges cannot be deactivated!
+   */
+  async function toggleRoleStatus(roleId) {
+    const role = rolesDirectoryData.find(r => r.roleId === roleId);
+    if (!role) return;
+
+    if (role.isBuiltIn) {
+      alert('Built-in statutory role templates cannot be deactivated. Create a custom role to define restricted permissions.');
+      return;
+    }
+
+    const newStatus = role.status === 'Active' ? 'Inactive' : 'Active';
+    const confirmMsg = `Are you sure you want to ${newStatus === 'Active' ? 'reactivate' : 'deactivate'} role '${role.name}'?`;
+    if (!confirm(confirmMsg)) return;
+
+    try {
+      const res = await fetch(`/api/v1/platform/roles/${roleId}/toggle-status`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ operator: 'Platform Super Administrator' })
+      });
+
+      if (res.ok) {
+        const json = await res.json();
+        if (json.success && json.data) {
+          role.status = json.data.status;
+          renderRolesTable(rolesDirectoryData);
+          showToast(`Role status updated to ${role.status}.`, 'success');
+          return;
+        }
+      }
+    } catch (e) {
+      console.warn('Backend toggle failed; updating locally:', e.message);
+    }
+
+    role.status = newStatus;
+    renderRolesTable(rolesDirectoryData);
+    showToast(`Role status updated to ${newStatus}.`, 'success');
+  }
+
+  /**
+   * 7.2 Action: Quick User Assignment Modal
+   */
+  function openAssignUsersModal(roleId) {
+    const role = rolesDirectoryData.find(r => r.roleId === roleId);
+    if (!role) return;
+
+    const setVal = (id, val) => {
+      const el = document.getElementById(id);
+      if (el) el.value = val;
+    };
+    const setT = (id, val) => {
+      const el = document.getElementById(id);
+      if (el) el.textContent = val;
+    };
+
+    setVal('assignRoleId', role.roleId);
+    setT('assignRoleName', `Template: ${role.name} (${role.roleId})`);
+    setT('assignRoleCount', role.assignedUsersCount || 0);
+
+    openModal('modalAssignUsers');
+  }
+
+  async function submitAssignUsers(delta) {
+    const roleId = document.getElementById('assignRoleId')?.value;
+    const role = rolesDirectoryData.find(r => r.roleId === roleId);
+    if (!role) return;
+
+    const newCount = Math.max(0, (role.assignedUsersCount || 0) + delta);
+
+    try {
+      const res = await fetch(`/api/v1/platform/roles/${roleId}/assign-users`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ delta, operator: 'Platform Super Administrator' })
+      });
+      if (res.ok) {
+        const json = await res.json();
+        if (json.success && json.data) {
+          role.assignedUsersCount = json.data.assignedUsersCount;
+          document.getElementById('assignRoleCount').textContent = role.assignedUsersCount;
+          updateRoleSummaryCardsFromLocal();
+          renderRolesTable(rolesDirectoryData);
+          showToast(`Assigned user count updated for ${role.name}.`, 'success');
+          return;
+        }
+      }
+    } catch (e) {
+      console.warn('Backend user assignment failed; updating locally:', e.message);
+    }
+
+    role.assignedUsersCount = newCount;
+    document.getElementById('assignRoleCount').textContent = role.assignedUsersCount;
+    updateRoleSummaryCardsFromLocal();
+    renderRolesTable(rolesDirectoryData);
+    showToast(`Assigned user count updated for ${role.name}.`, 'success');
+  }
+
+function init() {
     setupTheme();
     updatePlatformClock();
     setInterval(updatePlatformClock, 1000);
@@ -3932,6 +5093,23 @@ const platformApp = (function () {
 
   // Public Interface
   return {
+    // Module 7: Role Templates & Permissions (RBAC)
+    loadRoleTemplatesDirectory,
+    filterRolesDirectory,
+    resetRoleFilters,
+    exportRolesMatrixCSV,
+    openCreateRoleModal,
+    openEditRoleModal,
+    openDuplicateRoleModal,
+    viewRolePermissions,
+    editRoleFromViewer,
+    quickPresetPerms,
+    handleRoleFormSubmit,
+    confirmRoleSaveOrSubmit,
+    toggleRoleStatus,
+    openAssignUsersModal,
+    submitAssignUsers,
+
     // Core Navigation & Theme
     navigateTo,
     toggleTheme,

@@ -1860,79 +1860,163 @@
       </section>
 
       <!-- =======================================================================
-           MODULE 5: ROLE TEMPLATES (#view-roles)
+           MODULE 7: ROLE TEMPLATES & PERMISSIONS (#view-roles)
            ======================================================================= -->
       <section class="portal-view" id="view-roles">
-        <div class="pa-card">
-          <div class="pa-card-header">
-            <div>
-              <h3 class="pa-card-title"><i class="fa-solid fa-id-card-clip text-primary"></i> Role-Based Access Control
-                (RBAC) Templates</h3>
-              <p class="pa-card-desc">Granular authorization boundaries ensuring strict separation between software
-                operations and school records</p>
+        <!-- Module Header -->
+        <div class="pa-view-header mb-3" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+          <div>
+            <h2 style="margin: 0; font-size: 1.4rem; font-weight: 800; color: var(--color-text-main); display: flex; align-items: center; gap: 0.5rem;">
+              <i class="fa-solid fa-id-card-clip text-primary"></i> Role Templates &amp; Permissions
+            </h2>
+            <p style="margin: 3px 0 0; font-size: 0.85rem; color: #64748B;">
+              Define role capabilities independently from user assignments. Built-in templates provide baseline guardrails; custom roles allow granular authority scoping.
+            </p>
+          </div>
+          <div style="display: flex; gap: 0.65rem; align-items: center; flex-wrap: wrap;">
+            <button type="button" class="btn-pa btn-pa-secondary" onclick="platformApp.exportRolesMatrixCSV()" title="Export current role capabilities matrix to CSV">
+              <i class="fa-solid fa-file-csv text-emerald me-1"></i> Export Role Matrix
+            </button>
+            <button type="button" class="btn-pa btn-pa-primary" onclick="platformApp.openCreateRoleModal()" title="Create new custom role template">
+              <i class="fa-solid fa-plus me-1"></i> + Create Role
+            </button>
+          </div>
+        </div>
+
+        <!-- 5 Summary KPI Cards (Section 7.2 Specification) -->
+        <div class="pa-kpi-grid mb-4" style="grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));">
+          <div class="pa-kpi-card" style="border-left: 4px solid #4F46E5;">
+            <div class="pa-kpi-header">
+              <span class="pa-kpi-title">Total Role Templates</span>
+              <div class="pa-kpi-icon" style="background: rgba(79,70,229,0.12); color: #4F46E5;"><i class="fa-solid fa-id-badge"></i></div>
+            </div>
+            <div class="pa-kpi-value text-primary" id="kpiRoleTotal">10</div>
+            <div class="pa-kpi-sub">Across Platform &amp; Institutions</div>
+          </div>
+
+          <div class="pa-kpi-card" style="border-left: 4px solid #06B6D4;">
+            <div class="pa-kpi-header">
+              <span class="pa-kpi-title">Platform Scope Roles</span>
+              <div class="pa-kpi-icon" style="background: rgba(6,182,212,0.12); color: #06B6D4;"><i class="fa-solid fa-network-wired"></i></div>
+            </div>
+            <div class="pa-kpi-value text-cyan" id="kpiRolePlatform">5</div>
+            <div class="pa-kpi-sub">Platform Owner, Admin, Ops, Support</div>
+          </div>
+
+          <div class="pa-kpi-card" style="border-left: 4px solid #10B981;">
+            <div class="pa-kpi-header">
+              <span class="pa-kpi-title">Institution Scope Roles</span>
+              <div class="pa-kpi-icon" style="background: rgba(16,185,129,0.12); color: #10B981;"><i class="fa-solid fa-school"></i></div>
+            </div>
+            <div class="pa-kpi-value text-emerald" id="kpiRoleInstitution">5</div>
+            <div class="pa-kpi-sub">Principal, VP, Office, Accounts, Teacher</div>
+          </div>
+
+          <div class="pa-kpi-card" style="border-left: 4px solid #F59E0B;">
+            <div class="pa-kpi-header">
+              <span class="pa-kpi-title">Custom Role Templates</span>
+              <div class="pa-kpi-icon" style="background: rgba(245,158,11,0.12); color: #F59E0B;"><i class="fa-solid fa-puzzle-piece"></i></div>
+            </div>
+            <div class="pa-kpi-value text-amber" id="kpiRoleCustom">0</div>
+            <div class="pa-kpi-sub">Tenant customized delegations</div>
+          </div>
+
+          <div class="pa-kpi-card" style="border-left: 4px solid #8B5CF6;">
+            <div class="pa-kpi-header">
+              <span class="pa-kpi-title">Assigned Identities</span>
+              <div class="pa-kpi-icon" style="background: rgba(139,92,246,0.12); color: #8B5CF6;"><i class="fa-solid fa-users-gear"></i></div>
+            </div>
+            <div class="pa-kpi-value text-indigo" id="kpiRoleAssignedUsers">128</div>
+            <div class="pa-kpi-sub">Total active account links</div>
+          </div>
+        </div>
+
+        <!-- Multi-Field Search & Filter Toolbar -->
+        <div class="transfers-toolbar-container mb-3">
+          <!-- Tier 1: Search & Filter Selects -->
+          <div style="display: grid; grid-template-columns: minmax(260px, 2fr) repeat(3, minmax(160px, 1fr)); gap: 0.75rem; align-items: center; width: 100%;">
+            <div class="tc-search-wrap" style="width: 100%; position: relative;">
+              <i class="fa-solid fa-magnifying-glass search-icon"></i>
+              <input type="text" id="roleSearchInput" class="tc-search-input"
+                placeholder="Search by Role Name, Slug, or Description..."
+                oninput="platformApp.filterRolesDirectory()">
+              <button type="button" class="tc-clear-btn"
+                onclick="document.getElementById('roleSearchInput').value=''; platformApp.filterRolesDirectory();"
+                title="Clear Search">
+                <i class="fa-solid fa-xmark"></i>
+              </button>
+            </div>
+
+            <div class="tc-select-wrap">
+              <select id="roleScopeFilter" class="tc-filter-select" onchange="platformApp.filterRolesDirectory()" title="Filter by Authority Scope">
+                <option value="all">All Authority Scopes</option>
+                <option value="Platform">Platform Scope</option>
+                <option value="Institution">Institution Scope</option>
+              </select>
+            </div>
+
+            <div class="tc-select-wrap">
+              <select id="roleTypeFilter" class="tc-filter-select" onchange="platformApp.filterRolesDirectory()" title="Filter by Template Type">
+                <option value="all">All Template Types</option>
+                <option value="builtin">Built-in (System Guarded)</option>
+                <option value="custom">Custom Templates</option>
+              </select>
+            </div>
+
+            <div class="tc-select-wrap">
+              <select id="roleStatusFilter" class="tc-filter-select" onchange="platformApp.filterRolesDirectory()" title="Filter by Status">
+                <option value="all">All Template States</option>
+                <option value="Active">Active</option>
+                <option value="Pending Review">Pending Review</option>
+                <option value="Draft">Draft</option>
+                <option value="Inactive">Inactive</option>
+              </select>
             </div>
           </div>
 
+          <!-- Tier 2: Governance Indicators & Action Controls -->
+          <div class="transfers-governance-row">
+            <div class="tc-stats-left">
+              <span class="tc-count-pill" id="roleFilterCountDisplay">
+                <i class="fa-solid fa-list-check text-primary mr-1"></i> Showing <strong id="roleFilteredCount">10</strong> of
+                <strong id="roleTotalCount">10</strong> Roles
+              </span>
+              <span class="toolbar-tag-pill">
+                <i class="fa-solid fa-shield-halved text-primary mr-1"></i> RBAC Architecture Matrix
+              </span>
+              <span class="toolbar-tag-pill stat-badge-verified">
+                <i class="fa-solid fa-lock text-success mr-1"></i> Critical Privileges Safeguarded
+              </span>
+            </div>
+
+            <div class="tc-actions-right">
+              <button type="button" class="btn btn-outline-secondary btn-sm" id="btnResetRoleFilters" onclick="platformApp.resetRoleFilters()" title="Reset all filters">
+                <i class="fa-solid fa-rotate-left me-1"></i> Reset Filters
+              </button>
+              <button type="button" class="btn btn-outline-secondary btn-sm" onclick="platformApp.exportRolesMatrixCSV()" title="Export current role capabilities to CSV">
+                <i class="fa-solid fa-file-excel text-success me-1"></i> Export Matrix
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Authoritative 7-Column Role Directory Table (Section 7.2 Specification) -->
+        <div class="pa-card">
           <div class="pa-table-responsive">
-            <table class="pa-table">
+            <table class="pa-table" id="rolesTable">
               <thead>
                 <tr>
-                  <th>Role Template</th>
-                  <th>Software Configuration</th>
-                  <th>Student Private Files</th>
-                  <th>Financial Audits</th>
-                  <th>Staff Directory</th>
-                  <th>Security Posture</th>
+                  <th>Role Name</th>
+                  <th>Scope</th>
+                  <th>Description</th>
+                  <th>Assigned Users</th>
+                  <th>Type</th>
+                  <th>Last Updated</th>
+                  <th>Actions</th>
                 </tr>
               </thead>
-              <tbody>
-                <tr>
-                  <td>
-                    <strong>Super Administrator</strong>
-                    <div style="font-size:0.75rem; color:#64748B;">Platform Operator</div>
-                  </td>
-                  <td><span class="text-emerald font-bold"><i class="fa-solid fa-check"></i> Full Control</span></td>
-                  <td><span class="text-danger font-bold"><i class="fa-solid fa-ban"></i> Restricted (Privacy
-                      Guard)</span></td>
-                  <td><span class="text-muted">Subscription Only</span></td>
-                  <td><span class="text-emerald font-bold"><i class="fa-solid fa-check"></i> Account Level</span></td>
-                  <td><span class="badge-operator">Platform Root</span></td>
-                </tr>
-                <tr>
-                  <td>
-                    <strong>Institutional Principal</strong>
-                    <div style="font-size:0.75rem; color:#64748B;">Executive Authority</div>
-                  </td>
-                  <td><span class="text-emerald font-bold"><i class="fa-solid fa-check"></i> School Level</span></td>
-                  <td><span class="text-emerald font-bold"><i class="fa-solid fa-check"></i> Full Access</span></td>
-                  <td><span class="text-emerald font-bold"><i class="fa-solid fa-check"></i> Full Sign-off</span></td>
-                  <td><span class="text-emerald font-bold"><i class="fa-solid fa-check"></i> Governance</span></td>
-                  <td><span class="badge-active">School Root</span></td>
-                </tr>
-                <tr>
-                  <td>
-                    <strong>Vice Principal / HOD</strong>
-                    <div style="font-size:0.75rem; color:#64748B;">Academic Dean</div>
-                  </td>
-                  <td><span class="text-muted">Curriculum Only</span></td>
-                  <td><span class="text-emerald font-bold"><i class="fa-solid fa-check"></i> Academic Dossiers</span>
-                  </td>
-                  <td><span class="text-muted">Read-Only</span></td>
-                  <td><span class="text-emerald font-bold"><i class="fa-solid fa-check"></i> Faculty Rosters</span></td>
-                  <td><span class="badge-active">Academic Root</span></td>
-                </tr>
-                <tr>
-                  <td>
-                    <strong>Teaching Faculty</strong>
-                    <div style="font-size:0.75rem; color:#64748B;">Class Teacher</div>
-                  </td>
-                  <td><span class="text-danger"><i class="fa-solid fa-ban"></i> None</span></td>
-                  <td><span class="text-emerald font-bold"><i class="fa-solid fa-check"></i> Assigned Classes
-                      Only</span></td>
-                  <td><span class="text-danger"><i class="fa-solid fa-ban"></i> None</span></td>
-                  <td><span class="text-muted">Colleague Directory</span></td>
-                  <td><span class="badge-operator">Faculty Scope</span></td>
-                </tr>
+              <tbody id="rolesTableBody">
+                <!-- Dynamically populated by platformApp.loadRoleTemplatesDirectory() -->
               </tbody>
             </table>
           </div>
@@ -4709,6 +4793,453 @@
         </div>
         <div>
           <button type="button" class="btn-pa btn-pa-secondary" onclick="platformApp.closeModal('modalUserDossier')">Close Dossier</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       MODULE 7 MODALS: ROLE TEMPLATES & PERMISSION EDITOR
+       ========================================================================= -->
+
+  <!-- Modal 1: 7.3 Permission Editor & Role Configuration (#modalRoleEditor) -->
+  <div class="pa-modal-backdrop" id="modalRoleEditor">
+    <div class="pa-modal pa-modal-lg" style="max-width: 900px; width: 95%;">
+      <div class="pa-modal-header" style="border-bottom: 1px solid #E2E8F0; padding: 1.25rem 1.5rem;">
+        <div>
+          <h3 class="pa-modal-title" id="modalRoleEditorTitle" style="margin: 0; font-size: 1.2rem; font-weight: 800; display: flex; align-items: center; gap: 0.5rem;">
+            <i class="fa-solid fa-sliders text-primary"></i> Configure Role Template &amp; Permissions
+          </h3>
+          <p class="pa-modal-desc" style="margin: 2px 0 0; font-size: 0.8rem; color: #64748B;">
+            Define granular module action matrix, record scoping, and sensitive field authorizations
+          </p>
+        </div>
+        <button class="btn-pa btn-pa-secondary" style="padding: 0.3rem 0.6rem;" onclick="platformApp.closeModal('modalRoleEditor')">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <form id="formRoleEditor" onsubmit="platformApp.handleRoleFormSubmit(event)">
+        <input type="hidden" id="roleEditId">
+        <div class="pa-modal-body" style="padding: 1.5rem; background: #FFFFFF; max-height: 75vh; overflow-y: auto;">
+          <!-- Safeguard Alert Banner -->
+          <div class="p-3 mb-3 rounded" id="roleEditorSafeguardAlert" style="background: #FFFBEB; border: 1px solid #FCD34D; font-size: 0.82rem; color: #92400E; display: none;">
+            <i class="fa-solid fa-shield-halved me-1"></i>
+            <strong>Critical Privileges Safeguard:</strong> This is a built-in privileged role template. Any modifications require an authorized reviewer approval before becoming effective. Built-in roles cannot be deactivated.
+          </div>
+
+          <!-- Basic Role Meta -->
+          <div class="row g-3 mb-3">
+            <div class="col-md-5">
+              <label class="form-label small fw-bold">Role Name *</label>
+              <input type="text" id="roleEditName" class="pa-search-input" style="width: 100%; height: 38px;" placeholder="e.g. Senior Examination Moderator" required>
+            </div>
+            <div class="col-md-3">
+              <label class="form-label small fw-bold">Authority Scope *</label>
+              <select id="roleEditScope" class="pa-select" style="width: 100%; height: 38px;" required>
+                <option value="Institution" selected>Institution Scope</option>
+                <option value="Platform">Platform Scope</option>
+              </select>
+            </div>
+            <div class="col-md-4">
+              <label class="form-label small fw-bold">Template Type</label>
+              <input type="text" id="roleEditTypeBadge" class="pa-search-input bg-light" style="width: 100%; height: 38px;" value="Custom Template" readonly>
+            </div>
+            <div class="col-md-12">
+              <label class="form-label small fw-bold">Role Description *</label>
+              <textarea id="roleEditDescription" class="pa-search-input" style="width: 100%;" rows="2" placeholder="Clear explanation of responsibilities and authority bounds..." required></textarea>
+            </div>
+          </div>
+
+          <!-- Section 7.3: Module Action Permission Matrix -->
+          <div class="mb-4">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+              <div>
+                <h5 class="fw-bold mb-0" style="font-size: 0.95rem;">
+                  <i class="fa-solid fa-table-cells text-primary me-1"></i> Module &amp; Action Permission Matrix
+                </h5>
+                <span class="small text-muted">Configure granular CRUD, approval, export, and access management rights</span>
+              </div>
+              <div class="d-flex gap-2">
+                <button type="button" class="btn btn-outline-secondary btn-sm" onclick="platformApp.quickPresetPerms('readonly')">Read-Only Preset</button>
+                <button type="button" class="btn btn-outline-secondary btn-sm" onclick="platformApp.quickPresetPerms('full')">Full Admin Preset</button>
+                <button type="button" class="btn btn-outline-secondary btn-sm" onclick="platformApp.quickPresetPerms('clear')">Clear All</button>
+              </div>
+            </div>
+
+            <div class="table-responsive">
+              <table class="role-matrix-table" id="matrixTable">
+                <thead>
+                  <tr>
+                    <th style="width: 25%;">Module</th>
+                    <th style="width: 15%;">View</th>
+                    <th style="width: 15%;">Create / Edit</th>
+                    <th style="width: 15%;">Approve</th>
+                    <th style="width: 15%;">Export</th>
+                    <th style="width: 15%;">Manage Access</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <!-- 1. Institutions -->
+                  <tr>
+                    <td><strong>Institutions</strong><div class="small text-muted">Campus profiles &amp; directories</div></td>
+                    <td><input type="checkbox" class="role-matrix-checkbox" id="perm_institutions_view"></td>
+                    <td><input type="checkbox" class="role-matrix-checkbox" id="perm_institutions_create_edit"></td>
+                    <td><input type="checkbox" class="role-matrix-checkbox" id="perm_institutions_approve"></td>
+                    <td><input type="checkbox" class="role-matrix-checkbox" id="perm_institutions_export"></td>
+                    <td><input type="checkbox" class="role-matrix-checkbox" id="perm_institutions_manage_access"></td>
+                  </tr>
+                  <!-- 2. User Accounts -->
+                  <tr>
+                    <td><strong>User Accounts</strong><div class="small text-muted">Identity lifecycle &amp; sessions</div></td>
+                    <td><input type="checkbox" class="role-matrix-checkbox" id="perm_user_accounts_view"></td>
+                    <td><input type="checkbox" class="role-matrix-checkbox" id="perm_user_accounts_create_edit"></td>
+                    <td><input type="checkbox" class="role-matrix-checkbox" id="perm_user_accounts_approve"></td>
+                    <td><input type="checkbox" class="role-matrix-checkbox" id="perm_user_accounts_export"></td>
+                    <td><input type="checkbox" class="role-matrix-checkbox" id="perm_user_accounts_manage_access"></td>
+                  </tr>
+                  <!-- 3. School Configuration -->
+                  <tr>
+                    <td><strong>School Configuration</strong><div class="small text-muted">Academic years, terms, grading</div></td>
+                    <td><input type="checkbox" class="role-matrix-checkbox" id="perm_school_config_view"></td>
+                    <td><input type="checkbox" class="role-matrix-checkbox" id="perm_school_config_create_edit"></td>
+                    <td><input type="checkbox" class="role-matrix-checkbox" id="perm_school_config_approve"></td>
+                    <td><input type="checkbox" class="role-matrix-checkbox" id="perm_school_config_export"></td>
+                    <td><input type="checkbox" class="role-matrix-checkbox" id="perm_school_config_manage_access"></td>
+                  </tr>
+                  <!-- 4. System Health -->
+                  <tr>
+                    <td><strong>System Health</strong><div class="small text-muted">Cluster diagnostics &amp; jobs</div></td>
+                    <td><input type="checkbox" class="role-matrix-checkbox" id="perm_system_health_view"></td>
+                    <td><input type="checkbox" class="role-matrix-checkbox" id="perm_system_health_create_edit"></td>
+                    <td><span class="role-matrix-na">N/A</span></td>
+                    <td><input type="checkbox" class="role-matrix-checkbox" id="perm_system_health_export"></td>
+                    <td><span class="role-matrix-na">N/A</span></td>
+                  </tr>
+                  <!-- 5. Audit Logs -->
+                  <tr>
+                    <td><strong>Audit Logs</strong><div class="small text-muted">Immutable forensic event trail</div></td>
+                    <td><input type="checkbox" class="role-matrix-checkbox" id="perm_audit_logs_view"></td>
+                    <td><span class="role-matrix-na">N/A</span></td>
+                    <td><span class="role-matrix-na">N/A</span></td>
+                    <td><input type="checkbox" class="role-matrix-checkbox" id="perm_audit_logs_export"></td>
+                    <td><span class="role-matrix-na">N/A</span></td>
+                  </tr>
+                  <!-- 6. Integrations -->
+                  <tr>
+                    <td><strong>Integrations</strong><div class="small text-muted">APIs, SMTP &amp; webhooks</div></td>
+                    <td><input type="checkbox" class="role-matrix-checkbox" id="perm_integrations_view"></td>
+                    <td><input type="checkbox" class="role-matrix-checkbox" id="perm_integrations_create_edit"></td>
+                    <td><input type="checkbox" class="role-matrix-checkbox" id="perm_integrations_approve"></td>
+                    <td><input type="checkbox" class="role-matrix-checkbox" id="perm_integrations_export"></td>
+                    <td><input type="checkbox" class="role-matrix-checkbox" id="perm_integrations_manage_access"></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Section 7.3: Scope, Sensitive Fields, Dates, Delegations & Export Controls -->
+          <div class="p-3 bg-light rounded border mb-3">
+            <h5 class="fw-bold mb-3" style="font-size: 0.95rem;">
+              <i class="fa-solid fa-shield-halved text-primary me-1"></i> Governance Boundaries &amp; Data Protections
+            </h5>
+
+            <div class="row g-3">
+              <!-- Allowed Record Scope -->
+              <div class="col-md-6">
+                <label class="form-label small fw-bold">Allowed Record Scope *</label>
+                <select id="roleEditRecordScope" class="pa-select" style="width: 100%; height: 38px;" required>
+                  <option value="all_records">All Records (Platform / Entire Scope)</option>
+                  <option value="own_campus" selected>Own Campus / Branch Only</option>
+                  <option value="assigned_department">Assigned Department Cadre Only</option>
+                  <option value="assigned_classes">Assigned Classes Only (Teachers)</option>
+                  <option value="own_records">Own Self-Generated Records Only</option>
+                </select>
+              </div>
+
+              <!-- Export Restrictions -->
+              <div class="col-md-6">
+                <label class="form-label small fw-bold">Restrictions on Exporting Data *</label>
+                <select id="roleEditExportRestrictions" class="pa-select" style="width: 100%; height: 38px;" required>
+                  <option value="unrestricted">Unrestricted Export</option>
+                  <option value="masked_pii" selected>Masked PII Only (Recommended)</option>
+                  <option value="approval_required">Requires Prior Reviewer Sign-Off</option>
+                  <option value="prohibited">Prohibited (Data Export Blocked)</option>
+                </select>
+              </div>
+
+              <!-- Effective Date & Expiry Date -->
+              <div class="col-md-6">
+                <label class="form-label small fw-bold">Effective Date *</label>
+                <input type="date" id="roleEditEffectiveDate" class="pa-search-input" style="width: 100%; height: 38px;" required>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label small fw-bold">Expiry Date (Optional Delegation)</label>
+                <input type="date" id="roleEditExpiryDate" class="pa-search-input" style="width: 100%; height: 38px;" placeholder="dd/mm/yyyy">
+              </div>
+
+              <!-- Delegated Authority -->
+              <div class="col-md-12">
+                <label class="form-label small fw-bold">Delegated Authority</label>
+                <select id="roleEditDelegatedAuth" class="pa-select" style="width: 100%; height: 38px;">
+                  <option value="no_delegation" selected>No Delegation Permitted (Authority cannot be passed to subordinates)</option>
+                  <option value="can_delegate">Can Delegate Subordinate Authority (Allows granting lower-tier roles)</option>
+                </select>
+              </div>
+
+              <!-- Sensitive Fields Clearance -->
+              <div class="col-md-12">
+                <label class="form-label small fw-bold d-block mb-2">Access to Sensitive Fields</label>
+                <div class="d-flex flex-wrap gap-3 p-2 bg-white rounded border">
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="sens_aadhaar_pii" value="aadhaar_pii">
+                    <label class="form-check-label small" for="sens_aadhaar_pii">
+                      <strong>Aadhaar / PII</strong> (National ID, date of birth, personal contact)
+                    </label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="sens_financial_ledgers" value="financial_ledgers">
+                    <label class="form-check-label small" for="sens_financial_ledgers">
+                      <strong>Financial Ledgers</strong> (Bank accounts, fee collections, offline cash receipts)
+                    </label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="sens_staff_compensation" value="staff_compensation">
+                    <label class="form-check-label small" for="sens_staff_compensation">
+                      <strong>Staff Compensation</strong> (Salaries, pay slips, payroll ledger)
+                    </label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="sens_mark_moderation" value="mark_moderation">
+                    <label class="form-check-label small" for="sens_mark_moderation">
+                      <strong>Mark Moderation</strong> (Final grade gazette adjustments, board score overrides)
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="pa-modal-footer" style="border-top: 1px solid #E2E8F0; padding: 1rem 1.5rem; display: flex; justify-content: flex-end; gap: 0.5rem; background: #F8FAFC;">
+          <button type="button" class="btn-pa btn-pa-secondary" onclick="platformApp.closeModal('modalRoleEditor')">Cancel</button>
+          <button type="submit" class="btn-pa btn-pa-primary" id="btnSubmitRoleForm">
+            <i class="fa-solid fa-code-compare me-1"></i> Review Changes &amp; Proceed
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal 2: 7.4 Permission Change Workflow Diff Modal (#modalRoleDiff) -->
+  <div class="pa-modal-backdrop" id="modalRoleDiff">
+    <div class="pa-modal pa-modal-lg" style="max-width: 720px; width: 95%;">
+      <div class="pa-modal-header" style="border-bottom: 1px solid #E2E8F0; padding: 1.25rem 1.5rem;">
+        <div>
+          <h3 class="pa-modal-title" style="margin: 0; font-size: 1.2rem; font-weight: 800; display: flex; align-items: center; gap: 0.5rem;">
+            <i class="fa-solid fa-code-compare text-primary"></i> Review Permission Changes (Step 4 &amp; 5)
+          </h3>
+          <p class="pa-modal-desc" style="margin: 2px 0 0; font-size: 0.8rem; color: #64748B;">
+            Verify added and removed capabilities prior to recording the decision and audit entry
+          </p>
+        </div>
+        <button class="btn-pa btn-pa-secondary" style="padding: 0.3rem 0.6rem;" onclick="platformApp.closeModal('modalRoleDiff')">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <div class="pa-modal-body" style="padding: 1.5rem; background: #FFFFFF;">
+        <!-- Diff Highlights -->
+        <div class="mb-3">
+          <label class="form-label small fw-bold text-success mb-1">
+            <i class="fa-solid fa-circle-plus me-1"></i> Permissions Added (<span id="diffAddedCount">0</span>)
+          </label>
+          <div class="p-2 rounded border bg-light" id="roleDiffAddedContainer" style="min-height: 48px;">
+            <span class="text-muted small">None added</span>
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label small fw-bold text-danger mb-1">
+            <i class="fa-solid fa-circle-minus me-1"></i> Permissions Removed (<span id="diffRemovedCount">0</span>)
+          </label>
+          <div class="p-2 rounded border bg-light" id="roleDiffRemovedContainer" style="min-height: 48px;">
+            <span class="text-muted small">None removed</span>
+          </div>
+        </div>
+
+        <!-- Privileged Role Reviewer Notice -->
+        <div id="roleDiffReviewerNotice" class="p-3 mb-3 rounded" style="background: #EFF6FF; border: 1px solid #BFDBFE;">
+          <h6 class="fw-bold text-primary mb-1">
+            <i class="fa-solid fa-shield-halved me-1"></i> Privileged Role Change Safeguard
+          </h6>
+          <p class="small text-muted mb-2">
+            Changes to privileged roles require an authorized reviewer approval before becoming effective. The decision will be recorded in the immutable audit log.
+          </p>
+          <div class="row g-2">
+            <div class="col-md-6">
+              <label class="form-label small fw-bold">Designated Reviewer *</label>
+              <select id="roleReviewerSelect" class="pa-select" style="width: 100%; height: 38px;">
+                <option value="Platform Owner (Root Authority)">Platform Owner (Sri P. Venkatasubba Rao)</option>
+                <option value="Trust Security Auditor">Trust Security Auditor</option>
+                <option value="Institutional Executive Principal">Institutional Executive Principal</option>
+              </select>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label small fw-bold">Required Next Action</label>
+              <input type="text" class="pa-search-input bg-light" style="width: 100%; height: 38px;" value="Pending Authorized Sign-off" readonly>
+            </div>
+          </div>
+        </div>
+
+        <!-- Rationale -->
+        <div class="mb-2">
+          <label class="form-label small fw-bold">Audit Rationale &amp; Operational Justification *</label>
+          <textarea id="roleChangeRationale" class="pa-search-input" style="width: 100%;" rows="2" placeholder="e.g. Authorized under Academic Senate Resolution 2026/04 for terminal exam coordination..." required></textarea>
+        </div>
+      </div>
+
+      <div class="pa-modal-footer" style="border-top: 1px solid #E2E8F0; padding: 1rem 1.5rem; display: flex; justify-content: space-between; background: #F8FAFC;">
+        <button type="button" class="btn btn-outline-secondary btn-sm" onclick="platformApp.closeModal('modalRoleDiff'); platformApp.openModal('modalRoleEditor');">
+          <i class="fa-solid fa-arrow-left me-1"></i> Revise Draft
+        </button>
+        <button type="button" class="btn-pa btn-pa-primary" id="btnConfirmRoleChanges" onclick="platformApp.confirmRoleSaveOrSubmit()">
+          <i class="fa-solid fa-check me-1"></i> Apply &amp; Record Audit Decision
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 3: 7.2 Read-Only Permission Viewer (#modalRoleViewer) -->
+  <div class="pa-modal-backdrop" id="modalRoleViewer">
+    <div class="pa-modal pa-modal-lg" style="max-width: 860px; width: 95%;">
+      <div class="pa-modal-header" style="border-bottom: 1px solid #E2E8F0; padding: 1.25rem 1.5rem;">
+        <div style="display: flex; align-items: center; gap: 0.75rem;">
+          <div class="pa-kpi-icon" style="background: rgba(79,70,229,0.12); color: #4F46E5; width: 44px; height: 44px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 1.25rem;">
+            <i class="fa-solid fa-id-card-clip"></i>
+          </div>
+          <div>
+            <div style="display: flex; align-items: center; gap: 0.5rem;">
+              <h3 class="pa-modal-title" style="margin: 0; font-size: 1.25rem; font-weight: 800;" id="viewRoleTitle">Platform Owner</h3>
+              <span class="role-scope-badge role-scope-platform" id="viewRoleScopeBadge">Platform</span>
+              <span class="role-safeguard-badge" id="viewRoleSafeguardBadge">Built-in Protected</span>
+            </div>
+            <p class="pa-modal-desc" style="margin: 2px 0 0; font-size: 0.8rem; color: #64748B;" id="viewRoleDesc">
+              Full statutory governance across all Trust platforms
+            </p>
+          </div>
+        </div>
+        <button class="btn-pa btn-pa-secondary" style="padding: 0.3rem 0.6rem;" onclick="platformApp.closeModal('modalRoleViewer')">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <div class="pa-modal-body" style="padding: 1.5rem; background: #FFFFFF; max-height: 70vh; overflow-y: auto;">
+        <!-- Matrix View -->
+        <h5 class="fw-bold mb-2" style="font-size: 0.95rem;">Assigned Capability Matrix</h5>
+        <div class="table-responsive mb-3">
+          <table class="role-matrix-table" id="viewMatrixTable">
+            <thead>
+              <tr>
+                <th>Module</th>
+                <th>View</th>
+                <th>Create / Edit</th>
+                <th>Approve</th>
+                <th>Export</th>
+                <th>Manage Access</th>
+              </tr>
+            </thead>
+            <tbody id="viewMatrixTableBody">
+              <!-- Dynamically populated -->
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Scope & Sensitive Fields Summary -->
+        <div class="row g-2 mb-3">
+          <div class="col-md-6">
+            <div class="p-2 bg-light rounded border">
+              <span class="small text-muted fw-bold d-block">Record Scope</span>
+              <span class="fw-bold text-dark" id="viewRoleRecordScope">All Records</span>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="p-2 bg-light rounded border">
+              <span class="small text-muted fw-bold d-block">Export Restrictions</span>
+              <span class="fw-bold text-dark" id="viewRoleExportRestrictions">Masked PII Only</span>
+            </div>
+          </div>
+          <div class="col-md-12">
+            <div class="p-2 bg-light rounded border">
+              <span class="small text-muted fw-bold d-block">Sensitive Fields Cleared</span>
+              <div id="viewRoleSensitiveFields" class="d-flex flex-wrap gap-1 mt-1">
+                <!-- Dynamically populated -->
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Immutable Audit Trail -->
+        <h5 class="fw-bold mb-2" style="font-size: 0.95rem;">Permission Revision History</h5>
+        <div id="viewRoleHistoryContainer">
+          <!-- Dynamically populated -->
+        </div>
+      </div>
+
+      <div class="pa-modal-footer" style="border-top: 1px solid #E2E8F0; padding: 1rem 1.5rem; display: flex; justify-content: space-between; background: #F8FAFC;">
+        <button type="button" class="btn btn-outline-secondary btn-sm" onclick="platformApp.closeModal('modalRoleViewer')">Close</button>
+        <button type="button" class="btn-pa btn-pa-primary" id="btnViewToEdit" onclick="platformApp.editRoleFromViewer()">
+          <i class="fa-solid fa-pen-to-square me-1"></i> Edit Permissions
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 4: 7.2 Quick User Assignment (#modalAssignUsers) -->
+  <div class="pa-modal-backdrop" id="modalAssignUsers">
+    <div class="pa-modal" style="max-width: 480px; width: 95%;">
+      <div class="pa-modal-header" style="border-bottom: 1px solid #E2E8F0; padding: 1.25rem 1.5rem;">
+        <div>
+          <h3 class="pa-modal-title" style="margin: 0; font-size: 1.15rem; font-weight: 800;">
+            <i class="fa-solid fa-user-plus text-primary me-1"></i> Assign Users to Role
+          </h3>
+          <p class="pa-modal-desc" style="margin: 2px 0 0; font-size: 0.8rem; color: #64748B;" id="assignRoleName">
+            Vice Principal
+          </p>
+        </div>
+        <button class="btn-pa btn-pa-secondary" style="padding: 0.3rem 0.6rem;" onclick="platformApp.closeModal('modalAssignUsers')">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <div class="pa-modal-body" style="padding: 1.5rem; background: #FFFFFF;">
+        <input type="hidden" id="assignRoleId">
+        <p class="small text-muted mb-3">
+          Manage identity linkages for this role template. Users inherit all permissions and scoping boundaries configured on the template.
+        </p>
+
+        <div class="p-3 bg-light rounded border mb-3 text-center">
+          <div class="small text-muted mb-1">Current Assigned Users</div>
+          <div class="h2 fw-bold text-primary mb-0" id="assignRoleCount">6</div>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label small fw-bold">Adjustment</label>
+          <div class="d-flex gap-2">
+            <button type="button" class="btn btn-outline-primary flex-fill" onclick="platformApp.submitAssignUsers(1)">
+              <i class="fa-solid fa-plus me-1"></i> +1 User
+            </button>
+            <button type="button" class="btn btn-outline-danger flex-fill" onclick="platformApp.submitAssignUsers(-1)">
+              <i class="fa-solid fa-minus me-1"></i> -1 User
+            </button>
+          </div>
+        </div>
+
+        <div>
+          <button type="button" class="btn btn-outline-secondary w-100 btn-sm" onclick="platformApp.closeModal('modalAssignUsers'); platformApp.navigateTo('users');">
+            <i class="fa-solid fa-users me-1"></i> Open User Directory to Assign Specific Identities
+          </button>
         </div>
       </div>
     </div>

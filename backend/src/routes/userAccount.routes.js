@@ -22,3 +22,4 @@ router.delete('/:userId/sessions/:sessionId', controller.revokeSession);
 router.delete('/:userId/sessions', controller.revokeAllSessions);
 
 module.exports = router;
+
