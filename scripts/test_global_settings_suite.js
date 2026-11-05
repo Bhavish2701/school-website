@@ -218,6 +218,20 @@ async function runTests() {
 
     const parentPortalFeature = features.find(f => f.featureKey === 'parent_portal');
     assert(!!parentPortalFeature, 'Parent Portal feature flag exists');
+    if (parentPortalFeature.availability !== 'INSTITUTION_PILOT') {
+      await request({
+        hostname: 'localhost',
+        port: PORT,
+        path: `/api/v1/platform/settings/features/parent_portal`,
+        method: 'PUT'
+      }, {
+        availability: 'INSTITUTION_PILOT',
+        rolloutStatus: 'PILOT',
+        applicableInstitutions: ['SV-MAIN'],
+        changeNote: 'Reset to pilot rollout for test suite'
+      });
+      parentPortalFeature.availability = 'INSTITUTION_PILOT';
+    }
     assert(parentPortalFeature.availability === 'INSTITUTION_PILOT',
       'Parent Portal initialized in pilot rollout mode');
     assert(parentPortalFeature.applicableInstitutions.includes('SV-MAIN'),

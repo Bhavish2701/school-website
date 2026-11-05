@@ -11,7 +11,8 @@ const { formatError } = require('../utils/apiResponse');
  */
 const apiLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  max: process.env.NODE_ENV === 'test' ? 10000 : 200,
+  max: process.env.NODE_ENV === 'production' ? 500 : 100000,
+  skip: (req) => req.ip === '127.0.0.1' || req.ip === '::1' || req.ip === '::ffff:127.0.0.1' || req.hostname === 'localhost',
   standardHeaders: true, // Return rate limit info in `RateLimit-*` headers
   legacyHeaders: false,
   handler: (req, res) => {
@@ -30,7 +31,8 @@ const apiLimiter = rateLimit({
  */
 const authLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  max: process.env.NODE_ENV === 'production' ? 10 : (process.env.NODE_ENV === 'test' ? 10000 : 500),
+  max: process.env.NODE_ENV === 'production' ? 10 : 50000,
+  skip: (req) => req.ip === '127.0.0.1' || req.ip === '::1' || req.ip === '::ffff:127.0.0.1' || req.hostname === 'localhost',
   standardHeaders: true,
   legacyHeaders: false,
   handler: (req, res) => {

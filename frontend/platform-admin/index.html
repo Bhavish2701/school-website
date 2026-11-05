@@ -5017,77 +5017,229 @@
       </section>
 
       <!-- =======================================================================
-           MODULE 16: PLATFORM POLICIES & DATA RETENTION (#view-policies)
+           MODULE 17: PLATFORM POLICIES & DATA RETENTION (#view-policies)
            ======================================================================= -->
       <section class="portal-view" id="view-policies">
         <div class="pa-card">
           <div class="pa-card-header">
             <div>
-              <h3 class="pa-card-title"><i class="fa-solid fa-scale-balanced text-primary"></i> Platform Policies &amp;
-                Statutory Record Retention</h3>
-              <p class="pa-card-desc">State Board statutory archive regulations, right-to-rectification mandates, and
-                institutional governance</p>
+              <h3 class="pa-card-title"><i class="fa-solid fa-scale-balanced text-primary"></i> Platform Policies &amp; Data Retention</h3>
+              <p class="pa-card-desc">Statutory governance policies, non-universal record retention frameworks, and controlled data requests</p>
             </div>
-            <button class="btn-pa btn-pa-primary" onclick="platformApp.savePlatformPolicies()">
-              <i class="fa-solid fa-floppy-disk"></i> Enforce Policy Rules
+            <div class="d-flex gap-2">
+              <button class="btn-pa btn-pa-secondary" onclick="platformApp.loadPlatformPoliciesData()">
+                <i class="fa-solid fa-arrows-rotate"></i> Refresh Data
+              </button>
+            </div>
+          </div>
+
+          <!-- Module 17 3-Tab Subnavigation -->
+          <div class="pol-subnav">
+            <button class="pol-subnav-btn active" id="btnPolTabRegister" onclick="platformApp.switchPoliciesSubTab('register')">
+              <i class="fa-solid fa-book-bookmark"></i> 17.1 Policy Register
+            </button>
+            <button class="pol-subnav-btn" id="btnPolTabRetention" onclick="platformApp.switchPoliciesSubTab('retention')">
+              <i class="fa-solid fa-clock-rotate-left"></i> 17.2 Data Retention Configuration
+            </button>
+            <button class="pol-subnav-btn" id="btnPolTabDataRequests" onclick="platformApp.switchPoliciesSubTab('requests')">
+              <i class="fa-solid fa-file-shield"></i> 17.3 Data Requests &amp; Governance
             </button>
           </div>
 
-          <div class="pa-table-responsive">
-            <table class="pa-table">
-              <thead>
-                <tr>
-                  <th>Statutory Register / Record Type</th>
-                  <th>Governing Law / Regulation</th>
-                  <th>Mandatory Retention Period</th>
-                  <th>Deletion / Modification Protection</th>
-                  <th>Status</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td><strong>Master General Register (Admission Register)</strong></td>
-                  <td>AP Education Code Chapter III Rule 88</td>
-                  <td><span class="badge" style="background:#ede9fe; color:#6d28d9; font-weight:800;">PERMANENT
-                      (Statutory Mandate)</span></td>
-                  <td>Locked • Immutable Audit Vault</td>
-                  <td><span class="badge" style="background:#dcfce7; color:#15803d;">Strictly Enforced</span></td>
-                </tr>
-                <tr>
-                  <td><strong>Transfer Certificate (TC) Appendix 16 Docket</strong></td>
-                  <td>AP Educational Rules Chapter III Rule 99</td>
-                  <td><span class="badge" style="background:#ede9fe; color:#6d28d9; font-weight:800;">PERMANENT
-                      (Statutory Mandate)</span></td>
-                  <td>Sequential Numbering Guaranteed</td>
-                  <td><span class="badge" style="background:#dcfce7; color:#15803d;">Strictly Enforced</span></td>
-                </tr>
-                <tr>
-                  <td><strong>Secondary School Certificate (SSC) Tabulation</strong></td>
-                  <td>Directorate of Government Examinations AP</td>
-                  <td><span class="badge" style="background:#ede9fe; color:#6d28d9; font-weight:800;">PERMANENT
-                      (Statutory Mandate)</span></td>
-                  <td>Published Marksheets Immutable</td>
-                  <td><span class="badge" style="background:#dcfce7; color:#15803d;">Strictly Enforced</span></td>
-                </tr>
-                <tr>
-                  <td><strong>Fee Day Books, Vouchers &amp; Audit Ledgers</strong></td>
-                  <td>State Educational Accounting &amp; Audit Standard</td>
-                  <td><span class="badge" style="background:#e0f2fe; color:#0369a1; font-weight:800;">7 YEARS (Financial
-                      Law)</span></td>
-                  <td>Tamper-Evident Receipts Active</td>
-                  <td><span class="badge" style="background:#dcfce7; color:#15803d;">Strictly Enforced</span></td>
-                </tr>
-                <tr>
-                  <td><strong>Biometric Daily Turnout &amp; Staff Attendance</strong></td>
-                  <td>Institutional Employment Service Rules</td>
-                  <td><span class="badge" style="background:#f1f5f9; color:#475569; font-weight:800;">3 YEARS (Rolling
-                      Cadence)</span></td>
-                  <td>Principal Correction Slip Required</td>
-                  <td><span class="badge" style="background:#dcfce7; color:#15803d;">Active</span></td>
-                </tr>
-              </tbody>
-            </table>
+          <!-- 17.1 Policy Register Subtab -->
+          <div id="polSectionRegister">
+            <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+              <div class="d-flex align-items-center gap-2 flex-wrap">
+                <div class="input-group input-group-sm" style="width: 260px;">
+                  <span class="input-group-text"><i class="fa-solid fa-magnifying-glass"></i></span>
+                  <input type="text" class="form-control" id="inputPolicySearch" placeholder="Search policies or owners..." oninput="platformApp.filterPoliciesTable()">
+                </div>
+                <select class="form-select form-select-sm" id="selectPolicyCategoryFilter" style="width: 200px;" onchange="platformApp.filterPoliciesTable()">
+                  <option value="">All Categories (8)</option>
+                  <option value="ACCOUNT_SECURITY">Account Security</option>
+                  <option value="DATA_ACCESS">Data Access</option>
+                  <option value="DATA_RETENTION">Data Retention</option>
+                  <option value="DOCUMENT_STORAGE">Document Storage</option>
+                  <option value="BACKUP_RETENTION">Backup Retention</option>
+                  <option value="AUDIT_LOGGING">Audit Logging</option>
+                  <option value="DATA_EXPORTS">Data Exports</option>
+                  <option value="INCIDENT_RESPONSE">Incident Response</option>
+                </select>
+                <select class="form-select form-select-sm" id="selectPolicyStatusFilter" style="width: 160px;" onchange="platformApp.filterPoliciesTable()">
+                  <option value="">All Statuses</option>
+                  <option value="APPROVED">Approved</option>
+                  <option value="UNDER_REVIEW">Under Review</option>
+                  <option value="DRAFT">Draft</option>
+                  <option value="SUPERSEDED">Superseded</option>
+                </select>
+                <button class="btn btn-sm btn-outline-secondary" onclick="platformApp.resetPolicyFilters()">
+                  <i class="fa-solid fa-filter-circle-xmark me-1"></i> Reset
+                </button>
+              </div>
+              <button class="btn btn-sm btn-primary" onclick="platformApp.openCreatePolicyModal()">
+                <i class="fa-solid fa-plus me-1"></i> Create Policy
+              </button>
+            </div>
+
+            <div class="pa-table-responsive">
+              <table class="pa-table" id="tableGovernancePolicies">
+                <thead>
+                  <tr>
+                    <th>Policy Name &amp; ID</th>
+                    <th>Category</th>
+                    <th>Version</th>
+                    <th>Effective Date</th>
+                    <th>Owner</th>
+                    <th>Approval Status</th>
+                    <th>Review Date</th>
+                    <th style="text-align: right; width: 100px;">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="tbodyGovernancePolicies">
+                  <tr>
+                    <td colspan="8" class="text-center py-4 text-muted">
+                      <i class="fa-solid fa-spinner fa-spin me-2"></i> Loading Policy Register...
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
           </div>
+
+          <!-- 17.2 Data Retention Configuration Subtab -->
+          <div id="polSectionRetention" style="display: none;">
+            <div class="pol-statutory-alert">
+              <i class="fa-solid fa-shield-halved text-success" style="font-size: 1.5rem; margin-top: 2px;"></i>
+              <div>
+                <strong class="text-success d-block mb-1"><i class="fa-solid fa-scale-balanced me-1"></i> Statutory Retention Architecture (Section 17.2 Guaranteed)</strong>
+                <p class="small text-muted mb-0" style="line-height: 1.45;">
+                  Retention rules follow applicable statutory law, contractual mandates, and Trust requirements. 
+                  <strong>Universal deletion periods are strictly blocked.</strong> Master Admission General Registers (Rule 88), TC Appendix 16 Dockets, and SSC Tabulations are classified as <em>Statutory Permanent</em> and can never be assigned temporary expiration periods. Financial records maintain a 7-year statutory lock under the Companies and Income Tax Acts.
+                </p>
+              </div>
+            </div>
+
+            <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+              <div class="d-flex align-items-center gap-2 flex-wrap">
+                <div class="input-group input-group-sm" style="width: 260px;">
+                  <span class="input-group-text"><i class="fa-solid fa-magnifying-glass"></i></span>
+                  <input type="text" class="form-control" id="inputRetentionSearch" placeholder="Search record category or legal basis..." oninput="platformApp.filterRetentionTable()">
+                </div>
+                <select class="form-select form-select-sm" id="selectRetentionStatusFilter" style="width: 170px;" onchange="platformApp.filterRetentionTable()">
+                  <option value="">All Review Statuses</option>
+                  <option value="PUBLISHED">Published</option>
+                  <option value="APPROVED">Approved</option>
+                  <option value="UNDER_REVIEW">Under Review</option>
+                  <option value="DRAFT">Draft</option>
+                </select>
+                <select class="form-select form-select-sm" id="selectRetentionInstitutionFilter" style="width: 190px;" onchange="platformApp.filterRetentionTable()">
+                  <option value="">All Scopes</option>
+                  <option value="ALL">Platform-Wide (ALL)</option>
+                  <option value="INST-SVET-HYD">Hyderabad Campus</option>
+                  <option value="INST-SVET-SEC">Secunderabad Campus</option>
+                </select>
+                <button class="btn btn-sm btn-outline-secondary" onclick="platformApp.resetRetentionFilters()">
+                  <i class="fa-solid fa-filter-circle-xmark me-1"></i> Reset
+                </button>
+              </div>
+              <button class="btn btn-sm btn-primary" onclick="platformApp.openCreateRetentionDraftModal()">
+                <i class="fa-solid fa-file-circle-plus me-1"></i> Create Policy Draft
+              </button>
+            </div>
+
+            <div class="pa-table-responsive">
+              <table class="pa-table" id="tableRetentionRules">
+                <thead>
+                  <tr>
+                    <th>Record Category &amp; ID</th>
+                    <th>Applicable Institution</th>
+                    <th>Retention Rule</th>
+                    <th>Legal or Operational Basis</th>
+                    <th>Effective Date</th>
+                    <th>Approved By</th>
+                    <th>Review Status</th>
+                    <th style="text-align: right; width: 220px;">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="tbodyRetentionRules">
+                  <tr>
+                    <td colspan="8" class="text-center py-4 text-muted">
+                      <i class="fa-solid fa-spinner fa-spin me-2"></i> Loading Data Retention Framework...
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- 17.3 Data Requests & Controlled Governance Subtab -->
+          <div id="polSectionDataRequests" style="display: none;">
+            <div class="pol-governance-alert">
+              <i class="fa-solid fa-user-lock text-primary" style="font-size: 1.5rem; margin-top: 2px;"></i>
+              <div>
+                <strong class="text-primary d-block mb-1"><i class="fa-solid fa-triangle-exclamation me-1"></i> Multi-Party Authorization Mandate (Section 17.3 Guaranteed)</strong>
+                <p class="small text-muted mb-0" style="line-height: 1.45;">
+                  <strong>Platform operators cannot independently decide to delete a school's records.</strong> All deletion, anonymization, and extraction requests require explicit business justifications and verified dual signoffs from both the <em>School Principal</em> and the <em>Trust Legal Directorate</em> prior to execution.
+                </p>
+              </div>
+            </div>
+
+            <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+              <div class="d-flex align-items-center gap-2 flex-wrap">
+                <div class="input-group input-group-sm" style="width: 260px;">
+                  <span class="input-group-text"><i class="fa-solid fa-magnifying-glass"></i></span>
+                  <input type="text" class="form-control" id="inputDataReqSearch" placeholder="Search request ID, requester, or subject..." oninput="platformApp.filterDataRequestsTable()">
+                </div>
+                <select class="form-select form-select-sm" id="selectDataReqTypeFilter" style="width: 200px;" onchange="platformApp.filterDataRequestsTable()">
+                  <option value="">All Request Types (5)</option>
+                  <option value="RECORD_ACCESS">Access to Records</option>
+                  <option value="DATA_CORRECTION">Correction Requests</option>
+                  <option value="DATA_EXPORT">Data Exports</option>
+                  <option value="RETENTION_EXCEPTION">Retention Exceptions</option>
+                  <option value="DELETION_ANONYMIZATION">Deletion / Anonymization</option>
+                </select>
+                <select class="form-select form-select-sm" id="selectDataReqStatusFilter" style="width: 170px;" onchange="platformApp.filterDataRequestsTable()">
+                  <option value="">All Statuses</option>
+                  <option value="SUBMITTED">Submitted</option>
+                  <option value="PENDING_APPROVAL">Pending Approval</option>
+                  <option value="APPROVED">Approved</option>
+                  <option value="FULFILLED">Fulfilled</option>
+                  <option value="REJECTED">Rejected</option>
+                </select>
+                <button class="btn btn-sm btn-outline-secondary" onclick="platformApp.resetDataRequestFilters()">
+                  <i class="fa-solid fa-filter-circle-xmark me-1"></i> Reset
+                </button>
+              </div>
+              <button class="btn btn-sm btn-primary" onclick="platformApp.openSubmitDataRequestModal()">
+                <i class="fa-solid fa-paper-plane me-1"></i> Log Authorized Request
+              </button>
+            </div>
+
+            <div class="pa-table-responsive">
+              <table class="pa-table" id="tableDataRequests">
+                <thead>
+                  <tr>
+                    <th>Request ID</th>
+                    <th>Type</th>
+                    <th>Institution Scope</th>
+                    <th>Requester</th>
+                    <th>Target Subject</th>
+                    <th>Governance Signoffs</th>
+                    <th>Status</th>
+                    <th style="text-align: right; width: 140px;">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="tbodyDataRequests">
+                  <tr>
+                    <td colspan="8" class="text-center py-4 text-muted">
+                      <i class="fa-solid fa-spinner fa-spin me-2"></i> Loading Authorized Data Requests...
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
         </div>
       </section>
 
@@ -9644,6 +9796,263 @@
       </div>
       <div class="pa-modal-footer" style="padding: 1rem 1.5rem; border-top: 1px solid #E2E8F0; display: flex; justify-content: flex-end; background: #F8FAFC;">
         <button type="button" class="btn btn-sm btn-secondary" onclick="platformApp.closeModal('modalPreviewMaintenance')">Close Preview</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       MODULE 17 MODALS: PLATFORM POLICIES & DATA RETENTION
+       ========================================================================= -->
+
+  <!-- Modal 17.1: Create Governance Policy -->
+  <div class="pa-modal-backdrop" id="modalCreatePolicy" style="display: none;">
+    <div class="pa-modal-card" style="max-width: 680px; width: 90%;">
+      <div class="pa-modal-header" style="padding: 1.25rem 1.5rem; border-bottom: 1px solid #E2E8F0; display: flex; justify-content: space-between; align-items: center;">
+        <h4 class="h6 mb-0 fw-bold"><i class="fa-solid fa-file-contract text-primary me-2"></i>Create Governance Policy (17.1)</h4>
+        <button type="button" class="btn-close" onclick="platformApp.closeModal('modalCreatePolicy')"></button>
+      </div>
+      <div class="pa-modal-body" style="padding: 1.5rem; max-height: 75vh; overflow-y: auto;">
+        <div class="row g-3 mb-3">
+          <div class="col-md-6">
+            <label class="form-label small fw-bold">Policy ID *</label>
+            <input type="text" class="form-control form-control-sm font-mono" id="txtNewPolicyId" placeholder="POL-SEC-09">
+          </div>
+          <div class="col-md-6">
+            <label class="form-label small fw-bold">Policy Category *</label>
+            <select class="form-select form-select-sm" id="selNewPolicyCategory">
+              <option value="ACCOUNT_SECURITY">Account Security</option>
+              <option value="DATA_ACCESS">Data Access</option>
+              <option value="DATA_RETENTION">Data Retention</option>
+              <option value="DOCUMENT_STORAGE">Document Storage</option>
+              <option value="BACKUP_RETENTION">Backup Retention</option>
+              <option value="AUDIT_LOGGING">Audit Logging</option>
+              <option value="DATA_EXPORTS">Data Exports</option>
+              <option value="INCIDENT_RESPONSE">Incident Response</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label small fw-bold">Policy Name *</label>
+          <input type="text" class="form-control form-control-sm" id="txtNewPolicyName" placeholder="e.g., Cryptographic Key Management & HSM Operations Policy">
+        </div>
+
+        <div class="row g-3 mb-3">
+          <div class="col-md-4">
+            <label class="form-label small fw-bold">Version *</label>
+            <input type="text" class="form-control form-control-sm" id="txtNewPolicyVersion" value="v1.0">
+          </div>
+          <div class="col-md-4">
+            <label class="form-label small fw-bold">Approval Status</label>
+            <select class="form-select form-select-sm" id="selNewPolicyApprovalStatus">
+              <option value="APPROVED">Approved</option>
+              <option value="UNDER_REVIEW">Under Review</option>
+              <option value="DRAFT">Draft</option>
+            </select>
+          </div>
+          <div class="col-md-4">
+            <label class="form-label small fw-bold">Owner Directorate</label>
+            <input type="text" class="form-control form-control-sm" id="txtNewPolicyOwner" value="Trust Legal & Compliance Directorate">
+          </div>
+        </div>
+
+        <div class="row g-3 mb-3">
+          <div class="col-md-6">
+            <label class="form-label small fw-bold">Effective Date</label>
+            <input type="date" class="form-control form-control-sm" id="txtNewPolicyEffectiveDate">
+          </div>
+          <div class="col-md-6">
+            <label class="form-label small fw-bold">Annual Review Date</label>
+            <input type="date" class="form-control form-control-sm" id="txtNewPolicyReviewDate">
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label small fw-bold">Applicable Scope Description *</label>
+          <textarea class="form-control form-control-sm" id="txtNewPolicyScope" rows="2" placeholder="Describe the institutions, systems, and roles governed by this policy..."></textarea>
+        </div>
+
+        <div class="mb-2">
+          <label class="form-label small fw-bold">Content Summary</label>
+          <textarea class="form-control form-control-sm" id="txtNewPolicySummary" rows="3" placeholder="Summary of governance mandates and operational protocols..."></textarea>
+        </div>
+      </div>
+      <div class="pa-modal-footer" style="padding: 1rem 1.5rem; border-top: 1px solid #E2E8F0; display: flex; justify-content: flex-end; gap: 0.5rem; background: #F8FAFC;">
+        <button type="button" class="btn btn-sm btn-secondary" onclick="platformApp.closeModal('modalCreatePolicy')">Cancel</button>
+        <button type="button" class="btn btn-sm btn-primary" onclick="platformApp.submitCreatePolicy()">
+          <i class="fa-solid fa-check me-1"></i> Save Policy
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 17.2: Create Retention Policy Draft -->
+  <div class="pa-modal-backdrop" id="modalRetentionDraft" style="display: none;">
+    <div class="pa-modal-card" style="max-width: 680px; width: 90%;">
+      <div class="pa-modal-header" style="padding: 1.25rem 1.5rem; border-bottom: 1px solid #E2E8F0; display: flex; justify-content: space-between; align-items: center;">
+        <h4 class="h6 mb-0 fw-bold"><i class="fa-solid fa-clock-rotate-left text-primary me-2"></i>Create Data Retention Policy Draft (17.2)</h4>
+        <button type="button" class="btn-close" onclick="platformApp.closeModal('modalRetentionDraft')"></button>
+      </div>
+      <div class="pa-modal-body" style="padding: 1.5rem; max-height: 75vh; overflow-y: auto;">
+        <div class="alert alert-warning py-2 px-3 small mb-3 d-flex align-items-center gap-2">
+          <i class="fa-solid fa-triangle-exclamation text-warning"></i>
+          <span><strong>Statutory Retention Non-Universal Rule:</strong> Universal deletion is blocked. Student admission registers and TC dockets must remain <strong>Permanent (-1 years)</strong> under AP Education Code.</span>
+        </div>
+
+        <div class="row g-3 mb-3">
+          <div class="col-md-6">
+            <label class="form-label small fw-bold">Rule ID *</label>
+            <input type="text" class="form-control form-control-sm font-mono" id="txtNewRetRuleId" placeholder="RET-NEW-008">
+          </div>
+          <div class="col-md-6">
+            <label class="form-label small fw-bold">Applicable Scope</label>
+            <select class="form-select form-select-sm" id="selNewRetInstitution">
+              <option value="ALL">Platform-Wide (All Institutions)</option>
+              <option value="INST-SVET-HYD">Hyderabad Campus Only</option>
+              <option value="INST-SVET-SEC">Secunderabad Campus Only</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label small fw-bold">Record Category *</label>
+          <input type="text" class="form-control form-control-sm" id="txtNewRetCategory" placeholder="e.g., Staff Disciplinary & Vigilance Inquiry Records">
+        </div>
+
+        <div class="row g-3 mb-3">
+          <div class="col-md-6">
+            <label class="form-label small fw-bold">Retention Cadence / Duration *</label>
+            <select class="form-select form-select-sm" id="selNewRetDuration">
+              <option value="-1">Permanent Custody (-1, Indefinite Statutory Archival)</option>
+              <option value="7">7 Financial / Academic Years</option>
+              <option value="5">5 Calendar Years</option>
+              <option value="3">3 Rolling Academic Years</option>
+              <option value="1">1 Year Operational</option>
+            </select>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label small fw-bold">Rule Title / Description *</label>
+            <input type="text" class="form-control form-control-sm" id="txtNewRetRuleDescription" placeholder="e.g., 7 Years Post Conclusion of Inquiry">
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label small fw-bold">Legal or Operational Basis *</label>
+          <textarea class="form-control form-control-sm" id="txtNewRetLegalBasis" rows="2" placeholder="e.g., Central Vigilance Guidelines & AP Private School Service Rules 2002"></textarea>
+        </div>
+
+        <div class="mb-2">
+          <label class="form-label small fw-bold">Draft Change Summary</label>
+          <input type="text" class="form-control form-control-sm" id="txtNewRetSummary" placeholder="Initial proposal for new statutory record category...">
+        </div>
+      </div>
+      <div class="pa-modal-footer" style="padding: 1rem 1.5rem; border-top: 1px solid #E2E8F0; display: flex; justify-content: flex-end; gap: 0.5rem; background: #F8FAFC;">
+        <button type="button" class="btn btn-sm btn-secondary" onclick="platformApp.closeModal('modalRetentionDraft')">Cancel</button>
+        <button type="button" class="btn btn-sm btn-primary" onclick="platformApp.submitCreateRetentionDraft()">
+          <i class="fa-solid fa-file-pen me-1"></i> Save Draft Rule
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 17.2B: Retention Previous Versions -->
+  <div class="pa-modal-backdrop" id="modalRetentionVersions" style="display: none;">
+    <div class="pa-modal-card" style="max-width: 680px; width: 90%;">
+      <div class="pa-modal-header" style="padding: 1.25rem 1.5rem; border-bottom: 1px solid #E2E8F0; display: flex; justify-content: space-between; align-items: center;">
+        <h4 class="h6 mb-0 fw-bold"><i class="fa-solid fa-code-branch text-primary me-2"></i>Retention Rule Previous Versions</h4>
+        <button type="button" class="btn-close" onclick="platformApp.closeModal('modalRetentionVersions')"></button>
+      </div>
+      <div class="pa-modal-body" style="padding: 1.5rem; max-height: 70vh; overflow-y: auto;">
+        <div class="mb-3">
+          <h5 class="h6 fw-bold mb-1" id="lblRetVersionRuleCategory">Record Category</h5>
+          <div class="text-muted small font-mono" id="lblRetVersionRuleId">Rule ID: RET-STU-001</div>
+        </div>
+        <div id="divRetentionVersionsList" class="d-flex flex-column gap-3">
+          <!-- Populated dynamically -->
+        </div>
+      </div>
+      <div class="pa-modal-footer" style="padding: 1rem 1.5rem; border-top: 1px solid #E2E8F0; display: flex; justify-content: flex-end; background: #F8FAFC;">
+        <button type="button" class="btn btn-sm btn-secondary" onclick="platformApp.closeModal('modalRetentionVersions')">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 17.3A: Submit Authorized Data Request -->
+  <div class="pa-modal-backdrop" id="modalSubmitDataRequest" style="display: none;">
+    <div class="pa-modal-card" style="max-width: 680px; width: 90%;">
+      <div class="pa-modal-header" style="padding: 1.25rem 1.5rem; border-bottom: 1px solid #E2E8F0; display: flex; justify-content: space-between; align-items: center;">
+        <h4 class="h6 mb-0 fw-bold"><i class="fa-solid fa-file-shield text-primary me-2"></i>Log Authorized Data Request (17.3)</h4>
+        <button type="button" class="btn-close" onclick="platformApp.closeModal('modalSubmitDataRequest')"></button>
+      </div>
+      <div class="pa-modal-body" style="padding: 1.5rem; max-height: 75vh; overflow-y: auto;">
+        <div class="alert alert-info py-2 px-3 small mb-3 d-flex align-items-center gap-2">
+          <i class="fa-solid fa-circle-info text-primary"></i>
+          <span><strong>Multi-Party Governance:</strong> Deletion and Anonymization requests are subjected to dual verification (School Principal + Trust Legal Directorate).</span>
+        </div>
+
+        <div class="row g-3 mb-3">
+          <div class="col-md-6">
+            <label class="form-label small fw-bold">Request Type *</label>
+            <select class="form-select form-select-sm" id="selNewDataReqType">
+              <option value="RECORD_ACCESS">Access to Records</option>
+              <option value="DATA_CORRECTION">Correction Request</option>
+              <option value="DATA_EXPORT">Data Export</option>
+              <option value="RETENTION_EXCEPTION">Retention Exception (Legal Hold)</option>
+              <option value="DELETION_ANONYMIZATION">Deletion / Anonymization Request</option>
+            </select>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label small fw-bold">Institution Scope *</label>
+            <input type="text" class="form-control form-control-sm" id="txtNewDataReqInstitution" value="Sri Vidya High School, Hyderabad (Main Campus)">
+          </div>
+        </div>
+
+        <div class="row g-3 mb-3">
+          <div class="col-md-4">
+            <label class="form-label small fw-bold">Requester Name *</label>
+            <input type="text" class="form-control form-control-sm" id="txtNewDataReqName" placeholder="Dr. / Sri / Smt...">
+          </div>
+          <div class="col-md-4">
+            <label class="form-label small fw-bold">Requester Role *</label>
+            <input type="text" class="form-control form-control-sm" id="txtNewDataReqRole" placeholder="e.g., Parent / School Principal / Counsel">
+          </div>
+          <div class="col-md-4">
+            <label class="form-label small fw-bold">Requester Email *</label>
+            <input type="email" class="form-control form-control-sm" id="txtNewDataReqEmail" placeholder="requester@srividya.edu.in">
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label small fw-bold">Target Record Reference / Subject *</label>
+          <input type="text" class="form-control form-control-sm" id="txtNewDataReqSubject" placeholder="e.g., Academic Transcripts for Batch 2023-24">
+        </div>
+
+        <div class="mb-2">
+          <label class="form-label small fw-bold">Statutory or Business Justification *</label>
+          <textarea class="form-control form-control-sm" id="txtNewDataReqJustification" rows="3" placeholder="Provide detailed legal basis, court order reference, or institutional justification..."></textarea>
+        </div>
+      </div>
+      <div class="pa-modal-footer" style="padding: 1rem 1.5rem; border-top: 1px solid #E2E8F0; display: flex; justify-content: flex-end; gap: 0.5rem; background: #F8FAFC;">
+        <button type="button" class="btn btn-sm btn-secondary" onclick="platformApp.closeModal('modalSubmitDataRequest')">Cancel</button>
+        <button type="button" class="btn btn-sm btn-primary" onclick="platformApp.submitDataRequest()">
+          <i class="fa-solid fa-paper-plane me-1"></i> Submit Request
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 17.3B: Data Request Detail & Multi-Party Governance Signoff -->
+  <div class="pa-modal-backdrop" id="modalDataRequestDetail" style="display: none;">
+    <div class="pa-modal-card" style="max-width: 720px; width: 90%;">
+      <div class="pa-modal-header" style="padding: 1.25rem 1.5rem; border-bottom: 1px solid #E2E8F0; display: flex; justify-content: space-between; align-items: center;">
+        <h4 class="h6 mb-0 fw-bold"><i class="fa-solid fa-file-circle-check text-primary me-2"></i>Data Request Authorization &amp; Governance</h4>
+        <button type="button" class="btn-close" onclick="platformApp.closeModal('modalDataRequestDetail')"></button>
+      </div>
+      <div class="pa-modal-body" style="padding: 1.5rem; max-height: 75vh; overflow-y: auto;" id="divDataRequestDetailContent">
+        <!-- Loaded dynamically -->
+      </div>
+      <div class="pa-modal-footer" style="padding: 1rem 1.5rem; border-top: 1px solid #E2E8F0; display: flex; justify-content: flex-end; background: #F8FAFC;">
+        <button type="button" class="btn btn-sm btn-secondary" onclick="platformApp.closeModal('modalDataRequestDetail')">Close</button>
       </div>
     </div>
   </div>

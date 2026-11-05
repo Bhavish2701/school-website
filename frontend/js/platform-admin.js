@@ -511,6 +511,8 @@ const platformApp = (function () {
       loadDomainsEmailData();
     } else if (viewId === 'settings' && typeof loadGlobalSettingsData === 'function') {
       loadGlobalSettingsData();
+    } else if (viewId === 'policies' && typeof loadPlatformPoliciesData === 'function') {
+      loadPlatformPoliciesData();
     }
 
     // Update Header Breadcrumb
@@ -11923,6 +11925,850 @@ const platformApp = (function () {
     }
   }
 
+  // ==========================================================================
+  // MODULE 17: PLATFORM POLICIES & DATA RETENTION
+  // ==========================================================================
+
+  let currentPolicies = [];
+  let currentRetentionRules = [];
+  let currentDataRequests = [];
+  let activeDetailDataRequest = null;
+  let activePoliciesSubTab = 'register';
+
+  async function loadPlatformPoliciesData() {
+    try {
+      const [resPol, resRet, resReq] = await Promise.all([
+        fetch('/api/v1/platform/policies'),
+        fetch('/api/v1/platform/policies/retention'),
+        fetch('/api/v1/platform/policies/requests')
+      ]);
+
+      const [jPol, jRet, jReq] = await Promise.all([
+        resPol.json(),
+        resRet.json(),
+        resReq.json()
+      ]);
+
+      if (jPol.success && Array.isArray(jPol.data)) {
+        currentPolicies = jPol.data;
+        renderPoliciesTable(currentPolicies);
+      }
+      if (jRet.success && Array.isArray(jRet.data)) {
+        currentRetentionRules = jRet.data;
+        renderRetentionRulesTable(currentRetentionRules);
+      }
+      if (jReq.success && Array.isArray(jReq.data)) {
+        currentDataRequests = jReq.data;
+        renderDataRequestsTable(currentDataRequests);
+      }
+    } catch (err) {
+      console.error('Error loading platform policies data:', err);
+      showToast('Error loading platform policies data: ' + err.message, 'danger');
+    }
+  }
+
+  function switchPoliciesSubTab(tabName) {
+    activePoliciesSubTab = tabName;
+    const btnReg = document.getElementById('btnPolTabRegister');
+    const btnRet = document.getElementById('btnPolTabRetention');
+    const btnReq = document.getElementById('btnPolTabDataRequests');
+    const secReg = document.getElementById('polSectionRegister');
+    const secRet = document.getElementById('polSectionRetention');
+    const secReq = document.getElementById('polSectionDataRequests');
+
+    if (btnReg) btnReg.classList.toggle('active', tabName === 'register');
+    if (btnRet) btnRet.classList.toggle('active', tabName === 'retention');
+    if (btnReq) btnReq.classList.toggle('active', tabName === 'requests');
+
+    if (secReg) secReg.style.display = (tabName === 'register') ? 'block' : 'none';
+    if (secRet) secRet.style.display = (tabName === 'retention') ? 'block' : 'none';
+    if (secReq) secReq.style.display = (tabName === 'requests') ? 'block' : 'none';
+  }
+
+  // 17.1 Policy Register Rendering & Controls
+  function renderPoliciesTable(policies) {
+    const tbody = document.getElementById('tbodyGovernancePolicies');
+    if (!tbody) return;
+
+    if (!policies || policies.length === 0) {
+      tbody.innerHTML = `<tr><td colspan="8" class="text-center py-4 text-muted">No governance policies found matching filters.</td></tr>`;
+      return;
+    }
+
+    const categoryIcons = {
+      ACCOUNT_SECURITY: 'fa-shield-halved',
+      DATA_ACCESS: 'fa-user-lock',
+      DATA_RETENTION: 'fa-clock-rotate-left',
+      DOCUMENT_STORAGE: 'fa-box-archive',
+      BACKUP_RETENTION: 'fa-server',
+      AUDIT_LOGGING: 'fa-fingerprint',
+      DATA_EXPORTS: 'fa-file-export',
+      INCIDENT_RESPONSE: 'fa-tower-broadcast'
+    };
+
+    tbody.innerHTML = policies.map(p => {
+      const icon = categoryIcons[p.category] || 'fa-file-shield';
+      const statusBadge = p.approvalStatus === 'APPROVED' ?
+        `<span class="badge-pol-status-approved"><i class="fa-solid fa-check me-1"></i>Approved</span>` :
+        (p.approvalStatus === 'UNDER_REVIEW' ?
+          `<span class="badge-pol-status-review"><i class="fa-solid fa-hourglass-half me-1"></i>Under Review</span>` :
+          `<span class="badge-pol-status-draft">${p.approvalStatus || 'Draft'}</span>`);
+
+      const effDate = p.effectiveDate ? new Date(p.effectiveDate).toLocaleDateString('en-GB') : 'N/A';
+      const revDate = p.reviewDate ? new Date(p.reviewDate).toLocaleDateString('en-GB') : 'N/A';
+      const catLabel = p.category ? p.category.replace(/_/g, ' ') : 'GENERAL';
+
+      return `
+        <tr>
+          <td>
+            <div class="fw-bold text-dark">${p.name}</div>
+            <div class="text-muted small font-mono">${p.policyId}</div>
+          </td>
+          <td>
+            <span class="badge-pol-category">
+              <i class="fa-solid ${icon} me-1 text-primary"></i> ${catLabel}
+            </span>
+          </td>
+          <td><span class="badge bg-light text-dark font-mono">${p.version || 'v1.0'}</span></td>
+          <td class="small">${effDate}</td>
+          <td class="small">${p.owner || 'Trust Compliance'}</td>
+          <td>${statusBadge}</td>
+          <td class="small text-muted">${revDate}</td>
+          <td style="text-align: right;">
+            <button class="btn btn-sm btn-outline-primary py-0 px-2" title="${escapeHtml(p.scopeDescription || '')}" onclick="platformApp.showPolicyQuickInfo('${p.policyId}')">
+              <i class="fa-solid fa-circle-info me-1"></i> Details
+            </button>
+          </td>
+        </tr>
+      `;
+    }).join('');
+  }
+
+  function showPolicyQuickInfo(policyId) {
+    const p = currentPolicies.find(item => item.policyId === policyId);
+    if (!p) return;
+    alert(`POLICY DETAILS:\n\n[${p.policyId}] ${p.name}\nCategory: ${p.category}\nVersion: ${p.version}\nStatus: ${p.approvalStatus}\nOwner: ${p.owner}\n\nScope:\n${p.scopeDescription}\n\nSummary:\n${p.contentSummary || 'No additional summary provided.'}`);
+  }
+
+  function filterPoliciesTable() {
+    const sTerm = (document.getElementById('inputPolicySearch')?.value || '').toLowerCase().trim();
+    const cat = document.getElementById('selectPolicyCategoryFilter')?.value || '';
+    const status = document.getElementById('selectPolicyStatusFilter')?.value || '';
+
+    let filtered = [...currentPolicies];
+    if (sTerm) {
+      filtered = filtered.filter(p =>
+        (p.name && p.name.toLowerCase().includes(sTerm)) ||
+        (p.policyId && p.policyId.toLowerCase().includes(sTerm)) ||
+        (p.owner && p.owner.toLowerCase().includes(sTerm))
+      );
+    }
+    if (cat) {
+      filtered = filtered.filter(p => p.category === cat);
+    }
+    if (status) {
+      filtered = filtered.filter(p => p.approvalStatus === status);
+    }
+    renderPoliciesTable(filtered);
+  }
+
+  function resetPolicyFilters() {
+    const inputS = document.getElementById('inputPolicySearch');
+    const selCat = document.getElementById('selectPolicyCategoryFilter');
+    const selStat = document.getElementById('selectPolicyStatusFilter');
+    if (inputS) inputS.value = '';
+    if (selCat) selCat.value = '';
+    if (selStat) selStat.value = '';
+    renderPoliciesTable(currentPolicies);
+  }
+
+  function openCreatePolicyModal() {
+    const txtId = document.getElementById('txtNewPolicyId');
+    const txtName = document.getElementById('txtNewPolicyName');
+    const txtScope = document.getElementById('txtNewPolicyScope');
+    const txtSummary = document.getElementById('txtNewPolicySummary');
+    const txtEff = document.getElementById('txtNewPolicyEffectiveDate');
+    const txtRev = document.getElementById('txtNewPolicyReviewDate');
+
+    if (txtId) txtId.value = `POL-GOV-${Math.floor(10 + Math.random() * 90)}`;
+    if (txtName) txtName.value = '';
+    if (txtScope) txtScope.value = '';
+    if (txtSummary) txtSummary.value = '';
+    if (txtEff) txtEff.value = new Date().toISOString().split('T')[0];
+    if (txtRev) {
+      const nextYear = new Date();
+      nextYear.setFullYear(nextYear.getFullYear() + 1);
+      txtRev.value = nextYear.toISOString().split('T')[0];
+    }
+    openModal('modalCreatePolicy');
+  }
+
+  async function submitCreatePolicy() {
+    const policyId = (document.getElementById('txtNewPolicyId')?.value || '').trim();
+    const name = (document.getElementById('txtNewPolicyName')?.value || '').trim();
+    const category = document.getElementById('selNewPolicyCategory')?.value || 'ACCOUNT_SECURITY';
+    const version = (document.getElementById('txtNewPolicyVersion')?.value || 'v1.0').trim();
+    const approvalStatus = document.getElementById('selNewPolicyApprovalStatus')?.value || 'APPROVED';
+    const owner = (document.getElementById('txtNewPolicyOwner')?.value || 'Trust Legal & Compliance Directorate').trim();
+    const effectiveDate = document.getElementById('txtNewPolicyEffectiveDate')?.value || new Date();
+    const reviewDate = document.getElementById('txtNewPolicyReviewDate')?.value || new Date();
+    const scopeDescription = (document.getElementById('txtNewPolicyScope')?.value || '').trim();
+    const contentSummary = (document.getElementById('txtNewPolicySummary')?.value || '').trim();
+
+    if (!name || !scopeDescription) {
+      showToast('Policy name and scope description are required.', 'warning');
+      return;
+    }
+
+    try {
+      const res = await fetch('/api/v1/platform/policies/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          policyId,
+          name,
+          category,
+          version,
+          approvalStatus,
+          owner,
+          effectiveDate,
+          reviewDate,
+          scopeDescription,
+          contentSummary
+        })
+      });
+
+      const j = await res.json();
+      if (res.ok && j.success) {
+        showToast(`Policy '${name}' registered successfully!`, 'success');
+        closeModal('modalCreatePolicy');
+        await loadPlatformPoliciesData();
+      } else {
+        showToast('Failed to create policy: ' + (j.message || 'Error'), 'danger');
+      }
+    } catch (err) {
+      console.error('Error creating policy:', err);
+      showToast('Error creating policy: ' + err.message, 'danger');
+    }
+  }
+
+  // 17.2 Data Retention Rendering & Controls
+  function renderRetentionRulesTable(rules) {
+    const tbody = document.getElementById('tbodyRetentionRules');
+    if (!tbody) return;
+
+    if (!rules || rules.length === 0) {
+      tbody.innerHTML = `<tr><td colspan="8" class="text-center py-4 text-muted">No retention rules found.</td></tr>`;
+      return;
+    }
+
+    tbody.innerHTML = rules.map(r => {
+      const isPermanent = r.retentionYears === -1 || r.isStatutoryPermanent;
+      const ruleBadge = isPermanent ?
+        `<span class="badge-ret-permanent"><i class="fa-solid fa-lock me-1"></i>Permanent Custody (Statutory Mandate)</span>` :
+        `<span class="badge-ret-years"><i class="fa-solid fa-calendar-days me-1"></i>${r.retentionRule || (r.retentionYears + ' Years')}</span>`;
+
+      const scopeBadge = r.applicableInstitution === 'ALL' ?
+        `<span class="badge bg-light text-dark font-mono">Platform-Wide (ALL)</span>` :
+        `<span class="badge bg-secondary text-white font-mono">${r.applicableInstitution}</span>`;
+
+      const statusBadge = r.reviewStatus === 'PUBLISHED' ?
+        `<span class="badge bg-success font-mono"><i class="fa-solid fa-globe me-1"></i>Published</span>` :
+        (r.reviewStatus === 'APPROVED' ?
+          `<span class="badge bg-primary font-mono"><i class="fa-solid fa-check-double me-1"></i>Approved</span>` :
+          (r.reviewStatus === 'UNDER_REVIEW' ?
+            `<span class="badge bg-warning text-dark font-mono"><i class="fa-solid fa-hourglass-half me-1"></i>Under Review</span>` :
+            `<span class="badge bg-secondary font-mono">${r.reviewStatus}</span>`));
+
+      const effDate = r.effectiveDate ? new Date(r.effectiveDate).toLocaleDateString('en-GB') : 'N/A';
+
+      let actionButtons = '';
+      if (r.reviewStatus === 'DRAFT') {
+        actionButtons += `<button class="btn btn-sm btn-outline-warning py-0 px-2 me-1" onclick="platformApp.submitRetentionForReview('${r.ruleId}')" title="Submit for Statutory Review"><i class="fa-solid fa-paper-plane me-1"></i>Review</button>`;
+      } else if (r.reviewStatus === 'UNDER_REVIEW') {
+        actionButtons += `<button class="btn btn-sm btn-outline-success py-0 px-2 me-1" onclick="platformApp.approveRetentionRule('${r.ruleId}')" title="Approve Retention Rule"><i class="fa-solid fa-check me-1"></i>Approve</button>`;
+      } else if (r.reviewStatus === 'APPROVED') {
+        actionButtons += `<button class="btn btn-sm btn-outline-primary py-0 px-2 me-1" onclick="platformApp.publishRetentionRule('${r.ruleId}')" title="Publish Platform-Wide"><i class="fa-solid fa-upload me-1"></i>Publish</button>`;
+      }
+      actionButtons += `<button class="btn btn-sm btn-outline-secondary py-0 px-2" onclick="platformApp.openRetentionVersionsModal('${r.ruleId}')" title="View Version History"><i class="fa-solid fa-code-branch me-1"></i>v${r.currentVersion || 1}</button>`;
+
+      return `
+        <tr>
+          <td>
+            <div class="fw-bold text-dark">${r.recordCategory}</div>
+            <div class="text-muted small font-mono">${r.ruleId}</div>
+          </td>
+          <td>${scopeBadge}</td>
+          <td>${ruleBadge}</td>
+          <td class="small text-muted" style="max-width: 260px;">${r.legalBasis}</td>
+          <td class="small">${effDate}</td>
+          <td class="small">${r.approvedBy || 'Pending'}</td>
+          <td>${statusBadge}</td>
+          <td style="text-align: right;">${actionButtons}</td>
+        </tr>
+      `;
+    }).join('');
+  }
+
+  function filterRetentionTable() {
+    const sTerm = (document.getElementById('inputRetentionSearch')?.value || '').toLowerCase().trim();
+    const stat = document.getElementById('selectRetentionStatusFilter')?.value || '';
+    const inst = document.getElementById('selectRetentionInstitutionFilter')?.value || '';
+
+    let filtered = [...currentRetentionRules];
+    if (sTerm) {
+      filtered = filtered.filter(r =>
+        (r.recordCategory && r.recordCategory.toLowerCase().includes(sTerm)) ||
+        (r.ruleId && r.ruleId.toLowerCase().includes(sTerm)) ||
+        (r.legalBasis && r.legalBasis.toLowerCase().includes(sTerm))
+      );
+    }
+    if (stat) {
+      filtered = filtered.filter(r => r.reviewStatus === stat);
+    }
+    if (inst) {
+      filtered = filtered.filter(r => r.applicableInstitution === inst || (inst === 'ALL' && r.applicableInstitution === 'ALL'));
+    }
+    renderRetentionRulesTable(filtered);
+  }
+
+  function resetRetentionFilters() {
+    const inputS = document.getElementById('inputRetentionSearch');
+    const selStat = document.getElementById('selectRetentionStatusFilter');
+    const selInst = document.getElementById('selectRetentionInstitutionFilter');
+    if (inputS) inputS.value = '';
+    if (selStat) selStat.value = '';
+    if (selInst) selInst.value = '';
+    renderRetentionRulesTable(currentRetentionRules);
+  }
+
+  function openCreateRetentionDraftModal() {
+    const txtId = document.getElementById('txtNewRetRuleId');
+    const txtCat = document.getElementById('txtNewRetCategory');
+    const txtDesc = document.getElementById('txtNewRetRuleDescription');
+    const txtBasis = document.getElementById('txtNewRetLegalBasis');
+    const txtSumm = document.getElementById('txtNewRetSummary');
+
+    if (txtId) txtId.value = `RET-RULE-${Math.floor(100 + Math.random() * 900)}`;
+    if (txtCat) txtCat.value = '';
+    if (txtDesc) txtDesc.value = '';
+    if (txtBasis) txtBasis.value = '';
+    if (txtSumm) txtSumm.value = '';
+    openModal('modalRetentionDraft');
+  }
+
+  async function submitCreateRetentionDraft() {
+    const ruleId = (document.getElementById('txtNewRetRuleId')?.value || '').trim();
+    const applicableInstitution = document.getElementById('selNewRetInstitution')?.value || 'ALL';
+    const recordCategory = (document.getElementById('txtNewRetCategory')?.value || '').trim();
+    const retentionYears = Number(document.getElementById('selNewRetDuration')?.value || -1);
+    const retentionRule = (document.getElementById('txtNewRetRuleDescription')?.value || '').trim();
+    const legalBasis = (document.getElementById('txtNewRetLegalBasis')?.value || '').trim();
+    const changeSummary = (document.getElementById('txtNewRetSummary')?.value || 'Initial draft creation.').trim();
+
+    if (!recordCategory || !retentionRule || !legalBasis) {
+      showToast('Record category, rule description, and legal basis are required.', 'warning');
+      return;
+    }
+
+    if (recordCategory.toUpperCase() === 'ALL' || recordCategory.toUpperCase() === 'UNIVERSAL') {
+      showToast('Universal retention periods are strictly prohibited under Section 17.2 statutory invariants.', 'danger');
+      return;
+    }
+
+    try {
+      const res = await fetch('/api/v1/platform/policies/retention/draft', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          ruleId,
+          applicableInstitution,
+          recordCategory,
+          retentionYears,
+          retentionRule,
+          legalBasis,
+          changeSummary
+        })
+      });
+
+      const j = await res.json();
+      if (res.ok && j.success) {
+        showToast(`Retention draft '${ruleId}' created successfully!`, 'success');
+        closeModal('modalRetentionDraft');
+        await loadPlatformPoliciesData();
+      } else {
+        showToast('Draft creation blocked: ' + (j.message || 'Error'), 'danger');
+      }
+    } catch (err) {
+      console.error('Error creating retention draft:', err);
+      showToast('Error creating retention draft: ' + err.message, 'danger');
+    }
+  }
+
+  async function submitRetentionForReview(ruleId) {
+    try {
+      const res = await fetch(`/api/v1/platform/policies/retention/${ruleId}/submit-review`, {
+        method: 'POST'
+      });
+      const j = await res.json();
+      if (res.ok && j.success) {
+        showToast(j.message || `Rule '${ruleId}' submitted for statutory review.`, 'success');
+        await loadPlatformPoliciesData();
+      } else {
+        showToast('Action failed: ' + (j.message || 'Error'), 'danger');
+      }
+    } catch (err) {
+      console.error('Error submitting review:', err);
+      showToast('Error submitting review: ' + err.message, 'danger');
+    }
+  }
+
+  async function approveRetentionRule(ruleId) {
+    try {
+      const res = await fetch(`/api/v1/platform/policies/retention/${ruleId}/approve`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ approvedBy: 'State Board of Education & Trust Legal Directorate' })
+      });
+      const j = await res.json();
+      if (res.ok && j.success) {
+        showToast(j.message || `Rule '${ruleId}' approved.`, 'success');
+        await loadPlatformPoliciesData();
+      } else {
+        showToast('Approval failed: ' + (j.message || 'Error'), 'danger');
+      }
+    } catch (err) {
+      console.error('Error approving rule:', err);
+      showToast('Error approving rule: ' + err.message, 'danger');
+    }
+  }
+
+  async function publishRetentionRule(ruleId) {
+    try {
+      const res = await fetch(`/api/v1/platform/policies/retention/${ruleId}/publish`, {
+        method: 'POST'
+      });
+      const j = await res.json();
+      if (res.ok && j.success) {
+        showToast(j.message || `Rule '${ruleId}' published platform-wide!`, 'success');
+        await loadPlatformPoliciesData();
+      } else {
+        showToast('Publication failed: ' + (j.message || 'Error'), 'danger');
+      }
+    } catch (err) {
+      console.error('Error publishing rule:', err);
+      showToast('Error publishing rule: ' + err.message, 'danger');
+    }
+  }
+
+  async function openRetentionVersionsModal(ruleId) {
+    try {
+      const res = await fetch(`/api/v1/platform/policies/retention/${ruleId}/versions`);
+      const j = await res.json();
+      if (res.ok && j.success) {
+        const lblCat = document.getElementById('lblRetVersionRuleCategory');
+        const lblId = document.getElementById('lblRetVersionRuleId');
+        const listDiv = document.getElementById('divRetentionVersionsList');
+
+        if (lblCat) lblCat.textContent = j.recordCategory;
+        if (lblId) lblId.textContent = `Rule ID: ${j.ruleId} (Active Version: v${j.currentVersion})`;
+
+        if (listDiv) {
+          const versions = j.versions || [];
+          if (versions.length === 0) {
+            listDiv.innerHTML = '<div class="text-muted small">No prior versions recorded.</div>';
+          } else {
+            listDiv.innerHTML = versions.map(v => `
+              <div class="p-3 border rounded bg-light">
+                <div class="d-flex justify-content-between align-items-center mb-1">
+                  <span class="badge bg-primary font-mono">Version ${v.version}</span>
+                  <span class="small text-muted">${v.effectiveDate ? new Date(v.effectiveDate).toLocaleDateString('en-GB') : ''}</span>
+                </div>
+                <div class="fw-bold text-dark small">${v.retentionRule} (${v.retentionYears === -1 ? 'Permanent' : v.retentionYears + ' Years'})</div>
+                <div class="small text-muted mt-1"><strong>Changed By:</strong> ${v.changedBy || 'N/A'} | <strong>Approved By:</strong> ${v.approvedBy || 'Pending'}</div>
+                <div class="small text-secondary mt-1"><em>${v.changeSummary || ''}</em></div>
+              </div>
+            `).join('');
+          }
+        }
+        openModal('modalRetentionVersions');
+      } else {
+        showToast('Failed to fetch versions: ' + (j.message || 'Error'), 'danger');
+      }
+    } catch (err) {
+      console.error('Error loading retention versions:', err);
+      showToast('Error loading versions: ' + err.message, 'danger');
+    }
+  }
+
+  // 17.3 Data Requests Rendering & Controls
+  function renderDataRequestsTable(requests) {
+    const tbody = document.getElementById('tbodyDataRequests');
+    if (!tbody) return;
+
+    if (!requests || requests.length === 0) {
+      tbody.innerHTML = `<tr><td colspan="8" class="text-center py-4 text-muted">No data requests found.</td></tr>`;
+      return;
+    }
+
+    const typeBadges = {
+      RECORD_ACCESS: `<span class="badge-req-access"><i class="fa-solid fa-eye me-1"></i>Record Access</span>`,
+      DATA_CORRECTION: `<span class="badge-req-correction"><i class="fa-solid fa-pen-to-square me-1"></i>Data Correction</span>`,
+      DATA_EXPORT: `<span class="badge-req-export"><i class="fa-solid fa-file-export me-1"></i>Data Export</span>`,
+      RETENTION_EXCEPTION: `<span class="badge-req-exception"><i class="fa-solid fa-pause me-1"></i>Retention Exception</span>`,
+      DELETION_ANONYMIZATION: `<span class="badge-req-deletion"><i class="fa-solid fa-trash-can me-1"></i>Deletion / Purge</span>`
+    };
+
+    const statusBadges = {
+      SUBMITTED: `<span class="badge bg-secondary font-mono">Submitted</span>`,
+      PENDING_APPROVAL: `<span class="badge bg-warning text-dark font-mono"><i class="fa-solid fa-clock me-1"></i>Pending Signoff</span>`,
+      APPROVED: `<span class="badge bg-info text-dark font-mono"><i class="fa-solid fa-check me-1"></i>Approved</span>`,
+      FULFILLED: `<span class="badge-req-status-fulfilled"><i class="fa-solid fa-check-double me-1"></i>Fulfilled</span>`,
+      REJECTED: `<span class="badge-req-status-rejected"><i class="fa-solid fa-ban me-1"></i>Rejected</span>`
+    };
+
+    tbody.innerHTML = requests.map(req => {
+      const typeBadge = typeBadges[req.requestType] || `<span class="badge bg-light text-dark">${req.requestType}</span>`;
+      const statusBadge = statusBadges[req.status] || `<span class="badge bg-light text-dark">${req.status}</span>`;
+      const signoffCount = (req.authorizedSignoffs || []).length;
+      const signoffLabel = signoffCount > 0 ?
+        `<span class="badge bg-success-subtle text-success small font-mono">${signoffCount} Authorized Signoff(s)</span>` :
+        `<span class="badge bg-light text-muted small font-mono">0 Signoffs</span>`;
+      const createdDate = req.createdAt ? new Date(req.createdAt).toLocaleDateString('en-GB') : 'N/A';
+
+      return `
+        <tr>
+          <td><span class="fw-bold font-mono text-dark">${req.requestId}</span></td>
+          <td>${typeBadge}</td>
+          <td class="small" style="max-width: 170px;">${req.institutionScope}</td>
+          <td>
+            <div class="fw-bold small">${req.requesterName}</div>
+            <div class="text-muted small">${req.requesterRole}</div>
+          </td>
+          <td class="small" style="max-width: 220px;">${req.targetSubject}</td>
+          <td>
+            <div>${statusBadge}</div>
+            <div class="mt-1">${signoffLabel}</div>
+          </td>
+          <td class="small text-muted">${createdDate}</td>
+          <td style="text-align: right;">
+            <button class="btn btn-sm btn-outline-primary py-0 px-2" onclick="platformApp.openDataRequestDetailModal('${req.requestId}')">
+              <i class="fa-solid fa-file-signature me-1"></i> Review
+            </button>
+          </td>
+        </tr>
+      `;
+    }).join('');
+  }
+
+  function filterDataRequestsTable() {
+    const sTerm = (document.getElementById('inputDataReqSearch')?.value || '').toLowerCase().trim();
+    const type = document.getElementById('selectDataReqTypeFilter')?.value || '';
+    const status = document.getElementById('selectDataReqStatusFilter')?.value || '';
+
+    let filtered = [...currentDataRequests];
+    if (sTerm) {
+      filtered = filtered.filter(r =>
+        (r.requestId && r.requestId.toLowerCase().includes(sTerm)) ||
+        (r.requesterName && r.requesterName.toLowerCase().includes(sTerm)) ||
+        (r.targetSubject && r.targetSubject.toLowerCase().includes(sTerm))
+      );
+    }
+    if (type) {
+      filtered = filtered.filter(r => r.requestType === type);
+    }
+    if (status) {
+      filtered = filtered.filter(r => r.status === status);
+    }
+    renderDataRequestsTable(filtered);
+  }
+
+  function resetDataRequestFilters() {
+    const inputS = document.getElementById('inputDataReqSearch');
+    const selType = document.getElementById('selectDataReqTypeFilter');
+    const selStat = document.getElementById('selectDataReqStatusFilter');
+    if (inputS) inputS.value = '';
+    if (selType) selType.value = '';
+    if (selStat) selStat.value = '';
+    renderDataRequestsTable(currentDataRequests);
+  }
+
+  function openSubmitDataRequestModal() {
+    const txtName = document.getElementById('txtNewDataReqName');
+    const txtRole = document.getElementById('txtNewDataReqRole');
+    const txtEmail = document.getElementById('txtNewDataReqEmail');
+    const txtSub = document.getElementById('txtNewDataReqSubject');
+    const txtJust = document.getElementById('txtNewDataReqJustification');
+
+    if (txtName) txtName.value = '';
+    if (txtRole) txtRole.value = '';
+    if (txtEmail) txtEmail.value = '';
+    if (txtSub) txtSub.value = '';
+    if (txtJust) txtJust.value = '';
+    openModal('modalSubmitDataRequest');
+  }
+
+  async function submitDataRequest() {
+    const requestType = document.getElementById('selNewDataReqType')?.value || 'RECORD_ACCESS';
+    const institutionScope = (document.getElementById('txtNewDataReqInstitution')?.value || '').trim();
+    const requesterName = (document.getElementById('txtNewDataReqName')?.value || '').trim();
+    const requesterRole = (document.getElementById('txtNewDataReqRole')?.value || 'Authorized Requester').trim();
+    const requesterEmail = (document.getElementById('txtNewDataReqEmail')?.value || '').trim();
+    const targetSubject = (document.getElementById('txtNewDataReqSubject')?.value || '').trim();
+    const businessJustification = (document.getElementById('txtNewDataReqJustification')?.value || '').trim();
+
+    if (!institutionScope || !requesterName || !targetSubject || !businessJustification) {
+      showToast('Institution scope, requester name, target records, and justification are required.', 'warning');
+      return;
+    }
+
+    try {
+      const res = await fetch('/api/v1/platform/policies/requests', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          requestType,
+          institutionScope,
+          requesterName,
+          requesterRole,
+          requesterEmail,
+          targetSubject,
+          businessJustification
+        })
+      });
+
+      const j = await res.json();
+      if (res.ok && j.success) {
+        showToast(`Data request logged under ID '${j.data?.requestId || 'NEW'}'!`, 'success');
+        closeModal('modalSubmitDataRequest');
+        await loadPlatformPoliciesData();
+      } else {
+        showToast('Request submission failed: ' + (j.message || 'Error'), 'danger');
+      }
+    } catch (err) {
+      console.error('Error submitting data request:', err);
+      showToast('Error submitting data request: ' + err.message, 'danger');
+    }
+  }
+
+  function openDataRequestDetailModal(requestId) {
+    const req = currentDataRequests.find(r => r.requestId === requestId);
+    if (!req) return;
+    activeDetailDataRequest = req;
+
+    const contentDiv = document.getElementById('divDataRequestDetailContent');
+    if (!contentDiv) return;
+
+    const isDeletion = req.requestType === 'DELETION_ANONYMIZATION';
+    const signoffs = req.authorizedSignoffs || [];
+    const isTerminal = ['FULFILLED', 'REJECTED'].includes(req.status);
+
+    const signoffsHtml = signoffs.length === 0 ?
+      `<p class="text-muted small mb-0">No authorized signoffs registered yet.</p>` :
+      signoffs.map(s => `
+        <div class="p-2 border rounded bg-light mb-2 small">
+          <div class="d-flex justify-content-between align-items-center">
+            <strong><i class="fa-solid fa-signature text-primary me-1"></i>${s.signoffBy} (${s.role})</strong>
+            <span class="text-muted font-mono" style="font-size: 0.72rem;">${s.timestamp ? new Date(s.timestamp).toLocaleString('en-GB') : ''}</span>
+          </div>
+          <div class="text-secondary mt-1">${s.notes || ''}</div>
+        </div>
+      `).join('');
+
+    let actionSectionHtml = '';
+    if (!isTerminal) {
+      actionSectionHtml = `
+        <div class="mt-4 pt-3 border-top">
+          <h6 class="fw-bold small mb-2"><i class="fa-solid fa-pen-nib text-primary me-1"></i>Record Multi-Party Governance Signoff</h6>
+          <div class="row g-2 mb-2">
+            <div class="col-md-6">
+              <input type="text" class="form-control form-control-sm" id="txtDataReqSignoffBy" placeholder="Authorized Signatory Name *">
+            </div>
+            <div class="col-md-6">
+              <select class="form-select form-select-sm" id="selDataReqSignoffRole">
+                <option value="School Principal">School Principal</option>
+                <option value="Trust Legal Counsel">Trust Legal Counsel</option>
+                <option value="Statutory Auditor">Statutory Auditor</option>
+                <option value="Chief Compliance Officer">Chief Compliance Officer</option>
+              </select>
+            </div>
+          </div>
+          <div class="mb-2">
+            <input type="text" class="form-control form-control-sm" id="txtDataReqSignoffNotes" placeholder="Signoff authorization notes / Verification remarks...">
+          </div>
+          <div class="d-flex gap-2 mb-3">
+            <button class="btn btn-sm btn-primary" onclick="platformApp.approveCurrentDataRequest()">
+              <i class="fa-solid fa-file-signature me-1"></i> Add Signoff
+            </button>
+          </div>
+
+          <div class="row g-2 pt-2 border-top">
+            <div class="col-md-6">
+              <div class="border rounded p-2 bg-light">
+                <div class="small fw-bold text-success mb-1"><i class="fa-solid fa-check-double me-1"></i>Fulfill Request</div>
+                <input type="text" class="form-control form-control-sm mb-2" id="txtDataReqFulfillDetails" placeholder="Fulfillment reference / Archive details">
+                <button class="btn btn-sm btn-success w-100" onclick="platformApp.fulfillCurrentDataRequest()">
+                  Fulfill Request
+                </button>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="border rounded p-2 bg-light">
+                <div class="small fw-bold text-danger mb-1"><i class="fa-solid fa-ban me-1"></i>Reject Request</div>
+                <input type="text" class="form-control form-control-sm mb-2" id="txtDataReqRejectReason" placeholder="Rejection reason *">
+                <button class="btn btn-sm btn-danger w-100" onclick="platformApp.rejectCurrentDataRequest()">
+                  Reject Request
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+    } else {
+      actionSectionHtml = `
+        <div class="mt-3 p-3 border rounded ${req.status === 'FULFILLED' ? 'bg-success-subtle' : 'bg-danger-subtle'}">
+          <div class="small fw-bold mb-1">${req.status === 'FULFILLED' ? 'Request Fulfilled' : 'Request Rejected'}</div>
+          <div class="small text-muted">${req.fulfillmentDetails || req.rejectionReason || 'No details provided.'}</div>
+          ${req.fulfilledAt ? `<div class="small text-muted mt-1 font-mono">Timestamp: ${new Date(req.fulfilledAt).toLocaleString('en-GB')}</div>` : ''}
+        </div>
+      `;
+    }
+
+    contentDiv.innerHTML = `
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <div>
+          <span class="badge bg-light text-dark font-mono fs-6">${req.requestId}</span>
+          <span class="badge bg-secondary font-mono ms-2">${req.requestType}</span>
+        </div>
+        <span class="badge ${req.status === 'FULFILLED' ? 'bg-success' : (req.status === 'REJECTED' ? 'bg-danger' : 'bg-primary')} font-mono">${req.status}</span>
+      </div>
+
+      ${isDeletion ? `
+        <div class="alert alert-warning py-2 px-3 small mb-3">
+          <i class="fa-solid fa-triangle-exclamation text-warning me-1"></i>
+          <strong>Controlled Deletion Guard:</strong> Platform operators cannot independently delete records. Deletion requires dual signoff from both the <em>School Principal</em> and the <em>Trust Legal Directorate</em>.
+        </div>
+      ` : ''}
+
+      <div class="row g-2 mb-3 small">
+        <div class="col-md-6">
+          <div class="text-muted">Requester:</div>
+          <div class="fw-bold">${req.requesterName} (${req.requesterRole})</div>
+          <div class="text-muted font-mono">${req.requesterEmail}</div>
+        </div>
+        <div class="col-md-6">
+          <div class="text-muted">Institution Scope:</div>
+          <div class="fw-bold">${req.institutionScope}</div>
+        </div>
+      </div>
+
+      <div class="mb-3 small">
+        <div class="text-muted">Target Subject / Records:</div>
+        <div class="p-2 border rounded bg-light fw-bold">${req.targetSubject}</div>
+      </div>
+
+      <div class="mb-3 small">
+        <div class="text-muted">Business / Statutory Justification:</div>
+        <div class="p-2 border rounded bg-light">${req.businessJustification}</div>
+      </div>
+
+      <div class="mb-2">
+        <div class="small fw-bold text-muted mb-2">Registered Authorized Signoffs:</div>
+        ${signoffsHtml}
+      </div>
+
+      ${actionSectionHtml}
+    `;
+
+    openModal('modalDataRequestDetail');
+  }
+
+  async function approveCurrentDataRequest() {
+    if (!activeDetailDataRequest) return;
+    const signoffBy = (document.getElementById('txtDataReqSignoffBy')?.value || '').trim();
+    const role = document.getElementById('selDataReqSignoffRole')?.value || 'School Principal';
+    const notes = (document.getElementById('txtDataReqSignoffNotes')?.value || '').trim();
+
+    if (!signoffBy) {
+      showToast('Signatory name is required to record authorization.', 'warning');
+      return;
+    }
+
+    try {
+      const res = await fetch(`/api/v1/platform/policies/requests/${activeDetailDataRequest.requestId}/approve`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ signoffBy, role, notes })
+      });
+
+      const j = await res.json();
+      if (res.ok && j.success) {
+        showToast(j.message || 'Signoff recorded successfully!', 'success');
+        await loadPlatformPoliciesData();
+        openDataRequestDetailModal(activeDetailDataRequest.requestId);
+      } else {
+        showToast('Signoff failed: ' + (j.message || 'Error'), 'danger');
+      }
+    } catch (err) {
+      console.error('Error recording signoff:', err);
+      showToast('Error recording signoff: ' + err.message, 'danger');
+    }
+  }
+
+  async function rejectCurrentDataRequest() {
+    if (!activeDetailDataRequest) return;
+    const reason = (document.getElementById('txtDataReqRejectReason')?.value || '').trim();
+    if (!reason) {
+      showToast('Rejection reason is required for governance tracking.', 'warning');
+      return;
+    }
+
+    try {
+      const res = await fetch(`/api/v1/platform/policies/requests/${activeDetailDataRequest.requestId}/reject`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ reason })
+      });
+
+      const j = await res.json();
+      if (res.ok && j.success) {
+        showToast(`Request '${activeDetailDataRequest.requestId}' rejected.`, 'info');
+        closeModal('modalDataRequestDetail');
+        await loadPlatformPoliciesData();
+      } else {
+        showToast('Rejection failed: ' + (j.message || 'Error'), 'danger');
+      }
+    } catch (err) {
+      console.error('Error rejecting request:', err);
+      showToast('Error rejecting request: ' + err.message, 'danger');
+    }
+  }
+
+  async function fulfillCurrentDataRequest() {
+    if (!activeDetailDataRequest) return;
+    const fulfillmentDetails = (document.getElementById('txtDataReqFulfillDetails')?.value || '').trim();
+
+    try {
+      const res = await fetch(`/api/v1/platform/policies/requests/${activeDetailDataRequest.requestId}/fulfill`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ fulfillmentDetails })
+      });
+
+      const j = await res.json();
+      if (res.ok && j.success) {
+        showToast(j.message || `Request '${activeDetailDataRequest.requestId}' fulfilled successfully!`, 'success');
+        closeModal('modalDataRequestDetail');
+        await loadPlatformPoliciesData();
+      } else {
+        showToast('Fulfillment Blocked: ' + (j.message || 'Error'), 'danger');
+      }
+    } catch (err) {
+      console.error('Error fulfilling request:', err);
+      showToast('Error fulfilling request: ' + err.message, 'danger');
+    }
+  }
+
 
   function init() {
     setupTheme();
@@ -11977,6 +12823,34 @@ const platformApp = (function () {
 
   // Public Interface
   return {
+    // Module 17: Platform Policies & Data Retention
+    loadPlatformPoliciesData,
+    switchPoliciesSubTab,
+    renderPoliciesTable,
+    filterPoliciesTable,
+    resetPolicyFilters,
+    openCreatePolicyModal,
+    submitCreatePolicy,
+    showPolicyQuickInfo,
+    renderRetentionRulesTable,
+    filterRetentionTable,
+    resetRetentionFilters,
+    openCreateRetentionDraftModal,
+    submitCreateRetentionDraft,
+    submitRetentionForReview,
+    approveRetentionRule,
+    publishRetentionRule,
+    openRetentionVersionsModal,
+    renderDataRequestsTable,
+    filterDataRequestsTable,
+    resetDataRequestFilters,
+    openSubmitDataRequestModal,
+    submitDataRequest,
+    openDataRequestDetailModal,
+    approveCurrentDataRequest,
+    rejectCurrentDataRequest,
+    fulfillCurrentDataRequest,
+
     // Module 16: Global Platform Settings
     loadGlobalSettingsData,
     switchSettingsSubTab,
