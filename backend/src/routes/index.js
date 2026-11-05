@@ -87,6 +87,7 @@ const backupRoutes = require('./backup.routes');
 const integrationRoutes = require('./integration.routes');
 const supportTicketRoutes = require('./supportTicket.routes');
 const domainEmailRoutes = require('./domainEmail.routes');
+const globalSettingsRoutes = require('./globalSettings.routes');
 const platformRouter = express.Router();
 platformRouter.get('/dashboard', dashboardController.getPlatformDashboard);
 platformRouter.use('/institutions', institutionRoutes);
@@ -106,6 +107,7 @@ platformRouter.use('/backups', backupRoutes);
 platformRouter.use('/integrations', integrationRoutes);
 platformRouter.use('/support', supportTicketRoutes);
 platformRouter.use('/domains', domainEmailRoutes);
+platformRouter.use('/settings', globalSettingsRoutes);
 router.use('/platform', platformRouter);
 router.use('/institutions', institutionRoutes);
 router.use('/schools/config', schoolConfigRoutes);
@@ -126,6 +128,8 @@ router.use('/platform/support', supportTicketRoutes);
 router.use('/support', supportTicketRoutes);
 router.use('/platform/domains', domainEmailRoutes);
 router.use('/domains', domainEmailRoutes);
+router.use('/platform/settings', globalSettingsRoutes);
+router.use('/settings', globalSettingsRoutes);
 
 // Mount timetable module endpoints at /api/v1/timetable
 const timetableRoutes = require('./timetable.routes');

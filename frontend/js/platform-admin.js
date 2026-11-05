@@ -509,6 +509,8 @@ const platformApp = (function () {
       loadIntegrationsData();
     } else if (viewId === 'domains-email' && typeof loadDomainsEmailData === 'function') {
       loadDomainsEmailData();
+    } else if (viewId === 'settings' && typeof loadGlobalSettingsData === 'function') {
+      loadGlobalSettingsData();
     }
 
     // Update Header Breadcrumb
@@ -11230,6 +11232,698 @@ const platformApp = (function () {
   }
 
 
+    // ===========================================================================
+  // MODULE 16: GLOBAL PLATFORM SETTINGS
+  // ===========================================================================
+  let globalSettingsState = {
+    settings: null,
+    features: [],
+    activeTab: 'general'
+  };
+
+  async function loadGlobalSettingsData() {
+    try {
+      const [resSettings, resFeatures] = await Promise.all([
+        fetch('/api/v1/platform/settings'),
+        fetch('/api/v1/platform/settings/features')
+      ]);
+
+      const jSettings = await resSettings.json();
+      const jFeatures = await resFeatures.json();
+
+      if (jSettings && jSettings.success) {
+        globalSettingsState.settings = jSettings.data;
+        populateGlobalSettingsForm(jSettings.data);
+      }
+      if (jFeatures && jFeatures.success) {
+        globalSettingsState.features = jFeatures.data || [];
+        renderFeatureControlsTable(globalSettingsState.features);
+      }
+    } catch (err) {
+      console.error('Error loading Global Settings:', err);
+      showToast('Error loading Global Settings: ' + err.message, 'danger');
+    }
+  }
+
+  function switchSettingsSubTab(tabName) {
+    globalSettingsState.activeTab = tabName;
+    const tabs = [
+      { id: 'btnSettingsTabGeneral', content: 'settingsTabGeneralContent', name: 'general' },
+      { id: 'btnSettingsTabAuth', content: 'settingsTabAuthContent', name: 'auth' },
+      { id: 'btnSettingsTabFeatures', content: 'settingsTabFeaturesContent', name: 'features' },
+      { id: 'btnSettingsTabMaintenance', content: 'settingsTabMaintenanceContent', name: 'maintenance' }
+    ];
+
+    tabs.forEach(t => {
+      const btn = document.getElementById(t.id);
+      const content = document.getElementById(t.content);
+      if (t.name === tabName) {
+        if (btn) btn.classList.add('active');
+        if (content) content.style.display = 'block';
+      } else {
+        if (btn) btn.classList.remove('active');
+        if (content) content.style.display = 'none';
+      }
+    });
+  }
+
+  function populateGlobalSettingsForm(settings) {
+    if (!settings) return;
+
+    // 16.1 General Settings
+    const gen = settings.general || {};
+    const elName = document.getElementById('txtSettingsPlatformName');
+    const elLogo = document.getElementById('txtSettingsPlatformLogo');
+    const elLocale = document.getElementById('selSettingsLocale');
+    const elTimeZone = document.getElementById('selSettingsTimeZone');
+    const elDateFormat = document.getElementById('selSettingsDateFormat');
+    const elTimeFormat = document.getElementById('selSettingsTimeFormat');
+    const elSupportEmail = document.getElementById('txtSettingsSupportEmail');
+    const elSupportPhone = document.getElementById('txtSettingsSupportPhone');
+    const elEmergencyDesk = document.getElementById('txtSettingsEmergencyDesk');
+    const elNotifyEmail = document.getElementById('chkSettingsNotifyEmail');
+    const elNotifySms = document.getElementById('chkSettingsNotifySms');
+    const elNotifyWhatsApp = document.getElementById('chkSettingsNotifyWhatsApp');
+    const elDigestFreq = document.getElementById('selSettingsDigestFreq');
+
+    if (elName && gen.platformName) elName.value = gen.platformName;
+    if (elLogo && gen.platformLogo) {
+      elLogo.value = gen.platformLogo;
+      previewSettingsLogo();
+    }
+    if (elLocale && gen.defaultLocale) elLocale.value = gen.defaultLocale;
+    if (elTimeZone && gen.defaultTimeZone) elTimeZone.value = gen.defaultTimeZone;
+    if (elDateFormat && gen.dateFormat) elDateFormat.value = gen.dateFormat;
+    if (elTimeFormat && gen.timeFormat) elTimeFormat.value = gen.timeFormat;
+
+    const langs = gen.supportedLanguages || ['en-IN', 'te-IN', 'hi-IN'];
+    const chkEn = document.getElementById('chkLangEn');
+    const chkTe = document.getElementById('chkLangTe');
+    const chkHi = document.getElementById('chkLangHi');
+    if (chkEn) chkEn.checked = langs.includes('en-IN');
+    if (chkTe) chkTe.checked = langs.includes('te-IN');
+    if (chkHi) chkHi.checked = langs.includes('hi-IN');
+
+    const support = gen.publicSupportContact || {};
+    if (elSupportEmail && support.email) elSupportEmail.value = support.email;
+    if (elSupportPhone && support.phone) elSupportPhone.value = support.phone;
+    if (elEmergencyDesk && support.emergencyDesk) elEmergencyDesk.value = support.emergencyDesk;
+
+    const notify = gen.defaultNotificationPreferences || {};
+    if (elNotifyEmail && notify.emailEnabled !== undefined) elNotifyEmail.checked = notify.emailEnabled;
+    if (elNotifySms && notify.smsEnabled !== undefined) elNotifySms.checked = notify.smsEnabled;
+    if (elNotifyWhatsApp && notify.whatsappEnabled !== undefined) elNotifyWhatsApp.checked = notify.whatsappEnabled;
+    if (elDigestFreq && notify.digestFrequency) elDigestFreq.value = notify.digestFrequency;
+
+    // 16.2 Authentication Settings
+    const auth = settings.authentication || {};
+    const pwd = auth.passwordRequirements || {};
+    const sess = auth.sessionDuration || {};
+    const mfa = auth.mfaPolicy || {};
+    const limit = auth.loginAttemptLimits || {};
+    const methods = auth.supportedAuthMethods || {};
+
+    const elMinLen = document.getElementById('numSettingsPasswordMinLength');
+    const elUpper = document.getElementById('chkSettingsPasswordUpper');
+    const elLower = document.getElementById('chkSettingsPasswordLower');
+    const elNums = document.getElementById('chkSettingsPasswordNumbers');
+    const elSpecial = document.getElementById('chkSettingsPasswordSpecial');
+    const elExpiry = document.getElementById('numSettingsPasswordExpiry');
+    const elReuse = document.getElementById('numSettingsPasswordReuse');
+    const elInactivity = document.getElementById('selSettingsInactivityTimeout');
+    const elMaxLifetime = document.getElementById('selSettingsMaxSessionLifetime');
+    const elMfa = document.getElementById('selSettingsMfaEnforcement');
+    const elMaxAttempts = document.getElementById('numSettingsMaxFailedAttempts');
+    const elLockout = document.getElementById('numSettingsLockoutDuration');
+    const elAutoUnlock = document.getElementById('chkSettingsAutoUnlock');
+    const elAuthGoogle = document.getElementById('chkSettingsAuthGoogle');
+    const elAuthMicrosoft = document.getElementById('chkSettingsAuthMicrosoft');
+
+    if (elMinLen && pwd.minLength != null) elMinLen.value = pwd.minLength;
+    if (elUpper && pwd.requireUppercase !== undefined) elUpper.checked = pwd.requireUppercase;
+    if (elLower && pwd.requireLowercase !== undefined) elLower.checked = pwd.requireLowercase;
+    if (elNums && pwd.requireNumbers !== undefined) elNums.checked = pwd.requireNumbers;
+    if (elSpecial && pwd.requireSpecialChars !== undefined) elSpecial.checked = pwd.requireSpecialChars;
+    if (elExpiry && pwd.passwordExpiryDays != null) elExpiry.value = pwd.passwordExpiryDays;
+    if (elReuse && pwd.preventReuseCount != null) elReuse.value = pwd.preventReuseCount;
+
+    if (elInactivity && sess.inactivityTimeoutMinutes != null) elInactivity.value = sess.inactivityTimeoutMinutes;
+    if (elMaxLifetime && sess.maxSessionLifetimeHours != null) elMaxLifetime.value = sess.maxSessionLifetimeHours;
+
+    if (elMfa && mfa.enforcement) elMfa.value = mfa.enforcement;
+    if (elMaxAttempts && limit.maxFailedAttempts != null) elMaxAttempts.value = limit.maxFailedAttempts;
+    if (elLockout && limit.lockoutDurationMinutes != null) elLockout.value = limit.lockoutDurationMinutes;
+    if (elAutoUnlock && limit.autoUnlockAfterTimeout !== undefined) elAutoUnlock.checked = limit.autoUnlockAfterTimeout;
+
+    if (elAuthGoogle && methods.googleWorkspaceSSO !== undefined) elAuthGoogle.checked = methods.googleWorkspaceSSO;
+    if (elAuthMicrosoft && methods.microsoftEntraID !== undefined) elAuthMicrosoft.checked = methods.microsoftEntraID;
+
+    // 16.4 Maintenance Settings
+    renderMaintenanceSettings(settings.maintenance);
+  }
+
+  function previewSettingsLogo() {
+    const input = document.getElementById('txtSettingsPlatformLogo');
+    const img = document.getElementById('imgSettingsLogoPreview');
+    if (input && img) {
+      img.src = input.value.trim() || 'https://placehold.co/100x32?text=Logo';
+    }
+  }
+
+  async function saveGeneralSettings() {
+    const platformName = document.getElementById('txtSettingsPlatformName')?.value?.trim();
+    const platformLogo = document.getElementById('txtSettingsPlatformLogo')?.value?.trim();
+    const defaultLocale = document.getElementById('selSettingsLocale')?.value;
+    const defaultTimeZone = document.getElementById('selSettingsTimeZone')?.value;
+    const dateFormat = document.getElementById('selSettingsDateFormat')?.value;
+    const timeFormat = document.getElementById('selSettingsTimeFormat')?.value;
+
+    const supportedLanguages = [];
+    if (document.getElementById('chkLangEn')?.checked) supportedLanguages.push('en-IN');
+    if (document.getElementById('chkLangTe')?.checked) supportedLanguages.push('te-IN');
+    if (document.getElementById('chkLangHi')?.checked) supportedLanguages.push('hi-IN');
+
+    const publicSupportContact = {
+      email: document.getElementById('txtSettingsSupportEmail')?.value?.trim(),
+      phone: document.getElementById('txtSettingsSupportPhone')?.value?.trim(),
+      emergencyDesk: document.getElementById('txtSettingsEmergencyDesk')?.value?.trim()
+    };
+
+    const defaultNotificationPreferences = {
+      emailEnabled: Boolean(document.getElementById('chkSettingsNotifyEmail')?.checked),
+      smsEnabled: Boolean(document.getElementById('chkSettingsNotifySms')?.checked),
+      whatsappEnabled: Boolean(document.getElementById('chkSettingsNotifyWhatsApp')?.checked),
+      digestFrequency: document.getElementById('selSettingsDigestFreq')?.value || 'REALTIME'
+    };
+
+    if (!platformName) {
+      showToast('Platform Name is required.', 'warning');
+      return;
+    }
+
+    try {
+      const res = await fetch('/api/v1/platform/settings/general', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          platformName,
+          platformLogo,
+          defaultLocale,
+          defaultTimeZone,
+          supportedLanguages,
+          dateFormat,
+          timeFormat,
+          publicSupportContact,
+          defaultNotificationPreferences
+        })
+      });
+      const j = await res.json();
+      if (res.ok && j.success) {
+        showToast('General platform settings updated successfully!', 'success');
+        await loadGlobalSettingsData();
+      } else {
+        showToast('Update failed: ' + (j.message || 'Server error'), 'danger');
+      }
+    } catch (err) {
+      console.error('Error saving general settings:', err);
+      showToast('Error saving general settings: ' + err.message, 'danger');
+    }
+  }
+
+  async function saveAuthenticationSettings() {
+    const minLength = parseInt(document.getElementById('numSettingsPasswordMinLength')?.value, 10);
+    const requireUppercase = Boolean(document.getElementById('chkSettingsPasswordUpper')?.checked);
+    const requireLowercase = Boolean(document.getElementById('chkSettingsPasswordLower')?.checked);
+    const requireNumbers = Boolean(document.getElementById('chkSettingsPasswordNumbers')?.checked);
+    const requireSpecialChars = Boolean(document.getElementById('chkSettingsPasswordSpecial')?.checked);
+    const passwordExpiryDays = parseInt(document.getElementById('numSettingsPasswordExpiry')?.value, 10);
+    const preventReuseCount = parseInt(document.getElementById('numSettingsPasswordReuse')?.value, 10);
+
+    const inactivityTimeoutMinutes = parseInt(document.getElementById('selSettingsInactivityTimeout')?.value, 10);
+    const maxSessionLifetimeHours = parseInt(document.getElementById('selSettingsMaxSessionLifetime')?.value, 10);
+
+    const enforcement = document.getElementById('selSettingsMfaEnforcement')?.value;
+    const maxFailedAttempts = parseInt(document.getElementById('numSettingsMaxFailedAttempts')?.value, 10);
+    const lockoutDurationMinutes = parseInt(document.getElementById('numSettingsLockoutDuration')?.value, 10);
+    const autoUnlockAfterTimeout = Boolean(document.getElementById('chkSettingsAutoUnlock')?.checked);
+
+    const googleWorkspaceSSO = Boolean(document.getElementById('chkSettingsAuthGoogle')?.checked);
+    const microsoftEntraID = Boolean(document.getElementById('chkSettingsAuthMicrosoft')?.checked);
+
+    // Client-side invariant check (Section 16.2)
+    if (isNaN(minLength) || minLength < 8) {
+      showToast('Validation Error: Password minimum length cannot be less than 8 characters.', 'danger');
+      return;
+    }
+    if (isNaN(inactivityTimeoutMinutes) || inactivityTimeoutMinutes < 5) {
+      showToast('Validation Error: Session inactivity timeout cannot be less than 5 minutes.', 'danger');
+      return;
+    }
+    if (isNaN(maxFailedAttempts) || maxFailedAttempts < 1) {
+      showToast('Validation Error: Max failed login attempts must be at least 1.', 'danger');
+      return;
+    }
+
+    try {
+      const res = await fetch('/api/v1/platform/settings/authentication', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          passwordRequirements: {
+            minLength,
+            requireUppercase,
+            requireLowercase,
+            requireNumbers,
+            requireSpecialChars,
+            passwordExpiryDays,
+            preventReuseCount
+          },
+          sessionDuration: {
+            inactivityTimeoutMinutes,
+            maxSessionLifetimeHours
+          },
+          mfaPolicy: {
+            enforcement
+          },
+          loginAttemptLimits: {
+            maxFailedAttempts,
+            lockoutDurationMinutes,
+            autoUnlockAfterTimeout
+          },
+          supportedAuthMethods: {
+            localPassword: true, // Permanent invariant
+            googleWorkspaceSSO,
+            microsoftEntraID
+          },
+          breakGlassEmergencyAccessEnabled: true // Permanent invariant
+        })
+      });
+      const j = await res.json();
+      if (res.ok && j.success) {
+        showToast('Authentication policies validated and enforced platform-wide.', 'success');
+        await loadGlobalSettingsData();
+      } else {
+        showToast('Validation Failed: ' + (j.message || 'Server error'), 'danger');
+      }
+    } catch (err) {
+      console.error('Error updating authentication settings:', err);
+      showToast('Error saving authentication policies: ' + err.message, 'danger');
+    }
+  }
+
+  // 16.3 Feature Controls
+  function renderFeatureControlsTable(list) {
+    const tbody = document.getElementById('tbodyFeatureControls');
+    const badgeCount = document.getElementById('badgeFeaturesCount');
+    if (badgeCount) badgeCount.textContent = list.length;
+    if (!tbody) return;
+
+    if (!list || list.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="7" class="text-center py-4 text-muted"><i class="fa-solid fa-toggle-off me-2"></i>No feature controls registered</td></tr>';
+      return;
+    }
+
+    tbody.innerHTML = list.map(f => {
+      let availBadge = '<span class="badge badge-feat-draft">DISABLED</span>';
+      if (f.availability === 'GLOBAL_ENABLED') availBadge = '<span class="badge badge-feat-ga"><i class="fa-solid fa-circle-check me-1"></i>GLOBAL_ENABLED</span>';
+      else if (f.availability === 'INSTITUTION_PILOT') availBadge = '<span class="badge badge-feat-pilot"><i class="fa-solid fa-flask me-1"></i>INSTITUTION_PILOT</span>';
+      else if (f.availability === 'BETA_TEST') availBadge = '<span class="badge badge-feat-beta"><i class="fa-solid fa-vial me-1"></i>BETA_TEST</span>';
+
+      let rolloutBadge = '<span class="badge bg-light text-dark border font-mono">DRAFT</span>';
+      if (f.rolloutStatus === 'GA') rolloutBadge = '<span class="badge bg-success font-mono">GA</span>';
+      else if (f.rolloutStatus === 'PILOT') rolloutBadge = '<span class="badge bg-primary font-mono">PILOT</span>';
+      else if (f.rolloutStatus === 'BETA') rolloutBadge = '<span class="badge bg-warning text-dark font-mono">BETA</span>';
+
+      const instTags = (f.applicableInstitutions && f.applicableInstitutions.length > 0)
+        ? f.applicableInstitutions.map(inst => `<span class="badge bg-light text-dark border font-mono me-1">${domEscape(inst)}</span>`).join('')
+        : '<span class="text-muted small">None</span>';
+
+      const isEnabled = f.availability !== 'DISABLED';
+
+      return `
+        <tr>
+          <td>
+            <strong class="text-dark">${domEscape(f.featureName)}</strong><br>
+            <code class="font-mono text-muted" style="font-size:0.75rem;">${domEscape(f.featureKey)}</code>
+          </td>
+          <td style="max-width: 260px; font-size: 0.82rem; line-height: 1.4;">
+            ${domEscape(f.description)}
+          </td>
+          <td>${availBadge}</td>
+          <td>${instTags}</td>
+          <td>${rolloutBadge}</td>
+          <td><small class="text-muted">${domFormatDate(f.effectiveDate)}</small></td>
+          <td style="text-align: right; white-space: nowrap;">
+            <button class="btn btn-xs ${isEnabled ? 'btn-outline-danger' : 'btn-outline-success'} me-1" onclick="platformApp.toggleFeatureFlag('${f.featureKey}')" title="${isEnabled ? 'Disable Feature' : 'Enable Feature'}">
+              <i class="fa-solid ${isEnabled ? 'fa-toggle-on' : 'fa-toggle-off'}"></i>
+            </button>
+            <button class="btn btn-xs btn-outline-primary" onclick="platformApp.openEditFeatureFlagModal('${f.featureKey}')" title="Configure Feature Rollout">
+              <i class="fa-solid fa-sliders"></i>
+            </button>
+          </td>
+        </tr>
+      `;
+    }).join('');
+  }
+
+  function openAddFeatureFlagModal() {
+    const k = document.getElementById('txtAddFeatureKey');
+    const n = document.getElementById('txtAddFeatureName');
+    const d = document.getElementById('txtAddFeatureDesc');
+    const a = document.getElementById('selAddFeatureAvailability');
+    const r = document.getElementById('selAddFeatureRollout');
+    const i = document.getElementById('txtAddFeatureInstitutions');
+
+    if (k) k.value = '';
+    if (n) n.value = '';
+    if (d) d.value = '';
+    if (a) a.value = 'DISABLED';
+    if (r) r.value = 'DRAFT';
+    if (i) i.value = 'ALL';
+
+    openModal('modalAddFeatureFlag');
+  }
+
+  async function submitAddFeatureFlag() {
+    const featureKey = document.getElementById('txtAddFeatureKey')?.value?.trim();
+    const featureName = document.getElementById('txtAddFeatureName')?.value?.trim();
+    const description = document.getElementById('txtAddFeatureDesc')?.value?.trim();
+    const availability = document.getElementById('selAddFeatureAvailability')?.value;
+    const rolloutStatus = document.getElementById('selAddFeatureRollout')?.value;
+    const instStr = document.getElementById('txtAddFeatureInstitutions')?.value?.trim() || 'ALL';
+    const applicableInstitutions = instStr.split(',').map(s => s.trim()).filter(Boolean);
+
+    if (!featureKey || !featureName || !description) {
+      showToast('Key, Name, and Description are required', 'warning');
+      return;
+    }
+
+    try {
+      const res = await fetch('/api/v1/platform/settings/features', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          featureKey,
+          featureName,
+          description,
+          availability,
+          rolloutStatus,
+          applicableInstitutions
+        })
+      });
+      const j = await res.json();
+      if (res.ok && j.success) {
+        showToast(`Feature flag [${featureKey}] registered successfully`, 'success');
+        closeModal('modalAddFeatureFlag');
+        await loadGlobalSettingsData();
+      } else {
+        showToast('Registration failed: ' + (j.message || 'Server error'), 'danger');
+      }
+    } catch (err) {
+      console.error('Error adding feature flag:', err);
+      showToast('Error registering feature: ' + err.message, 'danger');
+    }
+  }
+
+  function openEditFeatureFlagModal(featureKey) {
+    const f = globalSettingsState.features.find(x => x.featureKey === featureKey);
+    if (!f) return;
+
+    const lbl = document.getElementById('lblEditFeatureName');
+    const txtK = document.getElementById('txtEditFeatureKey');
+    const txtKD = document.getElementById('txtEditFeatureKeyDisplay');
+    const selA = document.getElementById('selEditFeatureAvailability');
+    const selR = document.getElementById('selEditFeatureRollout');
+    const txtI = document.getElementById('txtEditFeatureInstitutions');
+    const txtN = document.getElementById('txtEditFeatureChangeNote');
+
+    if (lbl) lbl.textContent = f.featureName;
+    if (txtK) txtK.value = f.featureKey;
+    if (txtKD) txtKD.value = f.featureKey;
+    if (selA) selA.value = f.availability;
+    if (selR) selR.value = f.rolloutStatus;
+    if (txtI) txtI.value = (f.applicableInstitutions || []).join(', ');
+    if (txtN) txtN.value = '';
+
+    openModal('modalEditFeatureFlag');
+  }
+
+  async function submitEditFeatureFlag() {
+    const featureKey = document.getElementById('txtEditFeatureKey')?.value;
+    const availability = document.getElementById('selEditFeatureAvailability')?.value;
+    const rolloutStatus = document.getElementById('selEditFeatureRollout')?.value;
+    const instStr = document.getElementById('txtEditFeatureInstitutions')?.value?.trim() || 'ALL';
+    const applicableInstitutions = instStr.split(',').map(s => s.trim()).filter(Boolean);
+    const changeNote = document.getElementById('txtEditFeatureChangeNote')?.value?.trim();
+
+    if (!featureKey) return;
+
+    try {
+      const res = await fetch(`/api/v1/platform/settings/features/${encodeURIComponent(featureKey)}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          availability,
+          rolloutStatus,
+          applicableInstitutions,
+          changeNote: changeNote || `Updated rollout to ${availability}`
+        })
+      });
+      const j = await res.json();
+      if (res.ok && j.success) {
+        showToast('Feature rollout configuration updated successfully', 'success');
+        closeModal('modalEditFeatureFlag');
+        await loadGlobalSettingsData();
+      } else {
+        showToast('Update failed: ' + (j.message || 'Server error'), 'danger');
+      }
+    } catch (err) {
+      console.error('Error updating feature flag:', err);
+      showToast('Error updating feature flag: ' + err.message, 'danger');
+    }
+  }
+
+  async function toggleFeatureFlag(featureKey) {
+    if (!featureKey) return;
+    try {
+      const res = await fetch(`/api/v1/platform/settings/features/${encodeURIComponent(featureKey)}/toggle`, {
+        method: 'POST'
+      });
+      const j = await res.json();
+      if (res.ok && j.success) {
+        showToast(j.message || 'Feature state toggled', 'success');
+        await loadGlobalSettingsData();
+      } else {
+        showToast('Toggle failed: ' + (j.message || 'Server error'), 'danger');
+      }
+    } catch (err) {
+      console.error('Error toggling feature flag:', err);
+      showToast('Error toggling feature flag: ' + err.message, 'danger');
+    }
+  }
+
+  // 16.4 Maintenance Settings
+  function renderMaintenanceSettings(maint) {
+    if (!maint) return;
+
+    const isActive = Boolean(maint.isActive);
+    const badgeStatus = document.getElementById('badgeMaintenanceStatus');
+    const heroBox = document.getElementById('boxMaintenanceHero');
+    const lblBadge = document.getElementById('lblMaintenanceModeBadge');
+    const lblHeadline = document.getElementById('lblMaintenanceStatusHeadline');
+    const lblSub = document.getElementById('lblMaintenanceStatusSub');
+    const btnToggle = document.getElementById('btnToggleMaintenanceMaster');
+    const bannerActive = document.getElementById('bannerPlatformMaintenanceActive');
+
+    if (badgeStatus) {
+      badgeStatus.textContent = isActive ? 'ACTIVE' : 'INACTIVE';
+      badgeStatus.className = 'badge ' + (isActive ? 'bg-danger' : 'bg-secondary') + ' ms-1';
+    }
+
+    if (bannerActive) {
+      bannerActive.style.setProperty('display', isActive ? 'flex' : 'none', 'important');
+    }
+
+    if (heroBox) {
+      heroBox.className = 'maintenance-card-hero ' + (isActive ? 'active' : 'inactive');
+    }
+
+    if (lblBadge) {
+      lblBadge.textContent = isActive ? 'MAINTENANCE MODE ACTIVE' : 'MAINTENANCE INACTIVE';
+      lblBadge.className = 'badge ' + (isActive ? 'bg-danger' : 'bg-secondary') + ' mb-2';
+    }
+
+    if (lblHeadline) {
+      lblHeadline.textContent = isActive
+        ? 'Scheduled Platform Maintenance in Progress (Admin Bypass Active)'
+        : 'System Operating Normally in Full Production';
+    }
+
+    if (lblSub) {
+      lblSub.textContent = isActive
+        ? 'Public websites, faculty, and student portals display maintenance announcements. Platform operations remain fully accessible.'
+        : 'All student, faculty, administration, and public web endpoints are operational.';
+    }
+
+    if (btnToggle) {
+      if (isActive) {
+        btnToggle.className = 'btn btn-sm btn-success';
+        btnToggle.innerHTML = '<i class="fa-solid fa-play me-1"></i> End Maintenance Mode';
+      } else {
+        btnToggle.className = 'btn btn-sm btn-outline-danger';
+        btnToggle.innerHTML = '<i class="fa-solid fa-power-off me-1"></i> Activate Maintenance Mode';
+      }
+    }
+
+    // Window & Operator
+    const lblWindow = document.getElementById('lblMaintenanceWindowText');
+    if (lblWindow) {
+      if (maint.plannedWindow && maint.plannedWindow.startTime) {
+        lblWindow.textContent = `${domFormatDate(maint.plannedWindow.startTime)} - ${domFormatDate(maint.plannedWindow.endTime)}`;
+      } else {
+        lblWindow.textContent = 'No upcoming maintenance window scheduled';
+      }
+    }
+
+    const lblOp = document.getElementById('lblMaintenanceOperatorText');
+    if (lblOp) {
+      lblOp.textContent = maint.authorizedOperator || 'Platform Administrator';
+    }
+
+    const boxMsg = document.getElementById('boxMaintenanceBroadcastMessage');
+    if (boxMsg) {
+      boxMsg.textContent = maint.userFacingMessage || 'Sri Vidya Educational Trust ERP is undergoing scheduled maintenance.';
+    }
+
+    // History Table
+    const tbodyHistory = document.getElementById('tbodyMaintenanceHistory');
+    if (tbodyHistory) {
+      const hist = maint.history || [];
+      if (hist.length === 0) {
+        tbodyHistory.innerHTML = '<tr><td colspan="4" class="text-center py-3 text-muted">No maintenance events recorded yet.</td></tr>';
+      } else {
+        tbodyHistory.innerHTML = hist.map(h => `
+          <tr>
+            <td><small class="text-muted">${domFormatDate(h.timestamp)}</small></td>
+            <td><span class="badge bg-light text-dark border font-mono">${domEscape(h.action)}</span></td>
+            <td><strong class="small text-dark">${domEscape(h.operator)}</strong></td>
+            <td><small class="text-muted">${domEscape(h.details || '')}</small></td>
+          </tr>
+        `).join('');
+      }
+    }
+  }
+
+  async function toggleMaintenanceMode(forceState) {
+    const currentActive = globalSettingsState.settings?.maintenance?.isActive || false;
+    const nextActive = forceState !== undefined ? Boolean(forceState) : !currentActive;
+
+    const actionText = nextActive ? 'ACTIVATE platform maintenance mode' : 'END maintenance mode';
+    if (!confirm(`Are you sure you want to ${actionText}? Administrative bypass controls will ensure operators retain continuous access.`)) {
+      return;
+    }
+
+    try {
+      const res = await fetch('/api/v1/platform/settings/maintenance/toggle', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ isActive: nextActive })
+      });
+      const j = await res.json();
+      if (res.ok && j.success) {
+        showToast(j.message || 'Maintenance mode state updated successfully', 'success');
+        await loadGlobalSettingsData();
+      } else {
+        showToast('Action failed: ' + (j.message || 'Server error'), 'danger');
+      }
+    } catch (err) {
+      console.error('Error toggling maintenance mode:', err);
+      showToast('Error updating maintenance mode: ' + err.message, 'danger');
+    }
+  }
+
+  function openScheduleMaintenanceModal() {
+    const dtStart = document.getElementById('dtScheduleMaintenanceStart');
+    const dtEnd = document.getElementById('dtScheduleMaintenanceEnd');
+    if (dtStart && !dtStart.value) {
+      const tomorrow = new Date(Date.now() + 3600000 * 24);
+      tomorrow.setMinutes(0, 0, 0);
+      dtStart.value = tomorrow.toISOString().slice(0, 16);
+    }
+    if (dtEnd && !dtEnd.value) {
+      const finish = new Date(Date.now() + 3600000 * 27);
+      finish.setMinutes(0, 0, 0);
+      dtEnd.value = finish.toISOString().slice(0, 16);
+    }
+    openModal('modalScheduleMaintenance');
+  }
+
+  async function submitScheduleMaintenance() {
+    const startTime = document.getElementById('dtScheduleMaintenanceStart')?.value;
+    const endTime = document.getElementById('dtScheduleMaintenanceEnd')?.value;
+    const userFacingMessage = document.getElementById('txtScheduleMaintenanceMessage')?.value?.trim();
+
+    const affectedServices = [];
+    if (document.getElementById('chkAffPublic')?.checked) affectedServices.push('PUBLIC_WEBSITE');
+    if (document.getElementById('chkAffFaculty')?.checked) affectedServices.push('FACULTY_PORTAL');
+    if (document.getElementById('chkAffStudent')?.checked) affectedServices.push('STUDENT_PORTAL');
+    if (document.getElementById('chkAffPayments')?.checked) affectedServices.push('PAYMENTS_API');
+
+    if (!startTime || !endTime) {
+      showToast('Start and end time are required', 'warning');
+      return;
+    }
+
+    try {
+      const res = await fetch('/api/v1/platform/settings/maintenance/schedule', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          startTime,
+          endTime,
+          affectedServices,
+          userFacingMessage
+        })
+      });
+      const j = await res.json();
+      if (res.ok && j.success) {
+        showToast('Maintenance window scheduled successfully', 'success');
+        closeModal('modalScheduleMaintenance');
+        await loadGlobalSettingsData();
+      } else {
+        showToast('Scheduling failed: ' + (j.message || 'Server error'), 'danger');
+      }
+    } catch (err) {
+      console.error('Error scheduling maintenance:', err);
+      showToast('Error scheduling maintenance: ' + err.message, 'danger');
+    }
+  }
+
+  async function openPreviewMaintenanceModal() {
+    try {
+      const res = await fetch('/api/v1/platform/settings/maintenance/preview');
+      const j = await res.json();
+      if (res.ok && j.success) {
+        const d = j.data;
+        const lblHead = document.getElementById('lblPreviewMaintHeadline');
+        const lblMsg = document.getElementById('lblPreviewMaintMessage');
+        const lblServ = document.getElementById('lblPreviewMaintServices');
+
+        if (lblHead) lblHead.textContent = d.bannerHeadline;
+        if (lblMsg) lblMsg.textContent = d.userFacingMessage;
+        if (lblServ) lblServ.textContent = (d.affectedServices || []).join(', ');
+
+        openModal('modalPreviewMaintenance');
+      } else {
+        showToast('Failed to generate preview: ' + (j.message || 'Error'), 'danger');
+      }
+    } catch (err) {
+      console.error('Error previewing maintenance:', err);
+      showToast('Error generating maintenance preview: ' + err.message, 'danger');
+    }
+  }
+
+
   function init() {
     setupTheme();
     updatePlatformClock();
@@ -11283,6 +11977,24 @@ const platformApp = (function () {
 
   // Public Interface
   return {
+    // Module 16: Global Platform Settings
+    loadGlobalSettingsData,
+    switchSettingsSubTab,
+    previewSettingsLogo,
+    saveGeneralSettings,
+    saveAuthenticationSettings,
+    renderFeatureControlsTable,
+    openAddFeatureFlagModal,
+    submitAddFeatureFlag,
+    openEditFeatureFlagModal,
+    submitEditFeatureFlag,
+    toggleFeatureFlag,
+    renderMaintenanceSettings,
+    toggleMaintenanceMode,
+    openScheduleMaintenanceModal,
+    submitScheduleMaintenance,
+    openPreviewMaintenanceModal,
+
     // Module 15: Domains, Email & Notifications
     loadDomainsEmailData,
     switchDomainsSubTab,
