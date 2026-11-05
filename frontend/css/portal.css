@@ -26373,22 +26373,33 @@ button.close:hover,
   transition: all 0.18s ease;
 }
 
-@media (max-width: 1280px) and (min-width: 769px) {
+@media (max-width: 1040px) and (min-width: 769px) {
   .transfers-filter-grid {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(4, 1fr);
   }
   .transfers-filter-grid .tc-search-wrap {
     grid-column: 1 / -1;
   }
 }
 
-@media (min-width: 1281px) {
+@media (max-width: 768px) and (min-width: 521px) {
   .transfers-filter-grid {
-    grid-template-columns: minmax(260px, 2fr) repeat(4, minmax(135px, 1fr));
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .transfers-filter-grid .tc-search-wrap {
+    grid-column: 1 / -1;
+  }
+  .transfers-governance-row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .transfers-governance-row .tc-actions-right {
+    width: 100%;
+    justify-content: flex-end;
   }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 520px) {
   .transfers-filter-grid {
     grid-template-columns: 1fr;
   }

@@ -39,5 +39,7 @@ const audit_logsModule = require('./audit-logs');
 router.use('/audit-logs', audit_logsModule.routes);
 const workflowsModule = require('./workflows');
 router.use('/workflows', workflowsModule.routes);
+const systemRulesModule = require('./system-rules');
+router.use('/system-rules', systemRulesModule.routes);
 
 module.exports = router;

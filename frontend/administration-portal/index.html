@@ -29848,35 +29848,34 @@ Class X-A,Monday,2,09:35 AM - 10:20 AM,Physical Science,Sri Navva Anand,Room 201
               </div>
             </div>
 
-            <!-- Row 2: Approved Class, Assigned Section, Assigned Class Teacher (Balanced 3 Columns) -->
-            <div style="display: grid; grid-template-columns: 1fr 1fr 1.3fr; gap: 0.85rem; margin-bottom: 1rem;">
+            <!-- Row 2: Approved Class & Section (Col 1) and Assigned Class Teacher (Col 2) - Symmetrical 2 Columns -->
+            <div class="school-grid-2col" style="margin-bottom: 1rem;">
               <div class="school-form-group">
                 <label class="school-form-label">
-                  <span>Approved Class <span class="req">*</span></span>
+                  <span>Approved Class &amp; Section <span class="req">*</span></span>
+                  <span class="hint">Sanctioned Roster</span>
                 </label>
-                <div class="school-input-wrap">
-                  <i class="fa-solid fa-graduation-cap school-input-icon"></i>
-                  <input type="text" id="enrolAllocatedClass" class="school-control readonly-field" readonly>
-                </div>
-              </div>
-
-              <div class="school-form-group">
-                <label class="school-form-label">
-                  <span>Assigned Section <span class="req">*</span></span>
-                </label>
-                <div class="school-input-wrap">
-                  <i class="fa-solid fa-users-rectangle school-input-icon"></i>
-                  <input type="text" id="enrolAllocatedSection" class="school-control readonly-field" value="Section A" readonly>
+                <div style="display: grid; grid-template-columns: 1.35fr 1fr; gap: 0.5rem;">
+                  <div class="school-input-wrap">
+                    <i class="fa-solid fa-graduation-cap school-input-icon"></i>
+                    <input type="text" id="enrolAllocatedClass" class="school-control readonly-field" readonly>
+                  </div>
+                  <div class="school-input-wrap">
+                    <i class="fa-solid fa-users-rectangle school-input-icon"></i>
+                    <input type="text" id="enrolAllocatedSection" class="school-control readonly-field" value="Section A" readonly>
+                  </div>
                 </div>
               </div>
 
               <div class="school-form-group">
                 <label class="school-form-label">
                   <span>Assigned Class Teacher <span class="req">*</span></span>
+                  <span class="hint">Faculty Mentor</span>
                 </label>
                 <div class="school-input-wrap">
-                  <i class="fa-solid fa-chalkboard-user school-input-icon"></i>
-                  <input type="text" id="enrolClassTeacher" class="school-control readonly-field" readonly>
+                  <i class="fa-solid fa-chalkboard-user school-input-icon text-purple"></i>
+                  <input type="text" id="enrolClassTeacher" class="school-control readonly-field" readonly
+                    style="background: #faf5ff; border-color: #e9d5ff; color: #6b21a8; font-weight: 700;">
                 </div>
               </div>
             </div>

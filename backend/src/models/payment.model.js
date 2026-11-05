@@ -4,8 +4,9 @@
  */
 const mongoose = require('mongoose');
 
-const PAYMENT_METHODS = ['UPI', 'CARD', 'NETBANKING', 'CASH', 'DEMAND_DRAFT'];
+const PAYMENT_METHODS = ['UPI', 'CARD', 'NETBANKING', 'CASH', 'DEMAND_DRAFT', 'CHEQUE', 'POS'];
 const PAYMENT_STATUSES = ['CREATED', 'SUCCESS', 'FAILED', 'REFUNDED'];
+const PAYMENT_CHANNELS = ['ONLINE_GATEWAY', 'OFFLINE_COUNTER', 'BANK_TRANSFER'];
 
 const paymentSchema = new mongoose.Schema(
   {
@@ -57,6 +58,21 @@ const paymentSchema = new mongoose.Schema(
       },
       default: 'UPI',
     },
+    // Specification 22.2: Online and offline financial records convergence
+    paymentChannel: {
+      type: String,
+      enum: {
+        values: PAYMENT_CHANNELS,
+        message: '{VALUE} is not a valid payment channel',
+      },
+      default: 'ONLINE_GATEWAY',
+      index: true,
+    },
+    collectedBy: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+      index: true,
+    },
     status: {
       type: String,
       enum: {
@@ -99,4 +115,5 @@ module.exports = {
   Payment,
   PAYMENT_METHODS,
   PAYMENT_STATUSES,
+  PAYMENT_CHANNELS,
 };

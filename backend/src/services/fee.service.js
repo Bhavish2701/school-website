@@ -356,6 +356,8 @@ const verifyPayment = async (orderId, paymentId, signature, user) => {
   payment.signature = signature;
   payment.receiptNumber = receiptNumber;
   payment.verifiedAt = new Date();
+  payment.paymentChannel = isStaffVerification ? 'OFFLINE_COUNTER' : 'ONLINE_GATEWAY';
+  if (isStaffVerification) payment.collectedBy = user._id;
   await payment.save();
 
   // Atomically update Fee ledger
@@ -390,6 +392,43 @@ const verifyPayment = async (orderId, paymentId, signature, user) => {
     paymentMode: payment.paymentMethod,
     description: `Fee payment for ${fee.term} (${fee.academicYear})`,
   });
+
+  // Specification 22.4: Traceability of sensitive financial transactions
+  try {
+    const auditLogService = require('./auditLog.service');
+    await auditLogService.logSensitiveChange({
+      user: user.fullName || user.email || 'Cashier Desk',
+      userId: user._id,
+      role: user.role || 'ACCOUNTS',
+      action: isStaffVerification ? 'OFFLINE_FEE_PAYMENT_RECORDED' : 'ONLINE_FEE_PAYMENT_VERIFIED',
+      module: 'FEES',
+      recordReference: `${receiptNumber} (${payment.student.admissionNo || payment.student.fullName || payment.student._id})`,
+      reason: isStaffVerification
+        ? `Offline ${payment.paymentMethod} receipt recorded over school accounts counter`
+        : 'Gateway payment verification success',
+      changedFields: [
+        { field: 'paidAmount', oldValue: fee.paidAmount - payment.amount, newValue: fee.paidAmount },
+        { field: 'dueAmount', oldValue: fee.dueAmount + payment.amount, newValue: fee.dueAmount },
+        { field: 'status', oldValue: fee.paidAmount - payment.amount === 0 ? 'Pending' : 'Partial', newValue: fee.status },
+      ],
+      result: 'SUCCESS',
+    });
+  } catch (e) {
+    // Non-fatal audit log error
+  }
+
+  // Specification 22.3: Notifications must follow actual state changes
+  try {
+    const { dispatchFeePaymentVerified } = require('./notificationDispatcher.service');
+    await dispatchFeePaymentVerified({
+      payment,
+      receiptNumber,
+      student: payment.student,
+      channel: isStaffVerification ? 'Printed Slip & SMS' : 'SMS & Email',
+    });
+  } catch (e) {
+    // Non-fatal notification error
+  }
 
   return {
     verified: true,

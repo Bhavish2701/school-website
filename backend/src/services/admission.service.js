@@ -72,7 +72,33 @@ const submitApplication = async (applicationData) => {
     status: 'SUBMITTED',
     reviewerRemarks: 'After filling this form, please visit the school and contact the Principal or Vice Principal for the confirmation of your admission.',
     documents: documents || [],
+    admissionSource: applicationData.admissionSource || 'ONLINE',
   });
+
+  // Specification 22.3: Notifications must follow actual state changes
+  try {
+    const { dispatchApplicationSubmitted } = require('./notificationDispatcher.service');
+    await dispatchApplicationSubmitted({ application });
+  } catch (e) {
+    // Non-fatal notification error
+  }
+
+  // Specification 22.4: Traceability of new applications
+  try {
+    const auditLogService = require('./auditLog.service');
+    await auditLogService.logSensitiveChange({
+      user: application.parentName || 'Online Applicant',
+      role: 'PARENT',
+      action: 'ADMISSION_APPLICATION_SUBMITTED',
+      module: 'ADMISSIONS',
+      recordReference: `${application.applicationNumber} (${application.studentName})`,
+      reason: `New ${application.admissionSource} admission application registered for Class ${application.applyingClass}`,
+      changedFields: [{ field: 'status', oldValue: null, newValue: 'SUBMITTED' }],
+      result: 'SUCCESS',
+    });
+  } catch (e) {
+    // Non-fatal audit log error
+  }
 
   return application;
 };
@@ -248,6 +274,45 @@ const updateApplicationStatus = async (applicationId, updateData, user) => {
   application.reviewedAt = new Date();
 
   await application.save();
+
+  // Specification 22.3: Notifications must follow actual state changes
+  try {
+    const { dispatchAdmissionApproved, dispatchDocumentRejected } = require('./notificationDispatcher.service');
+    if (status === 'APPROVED') {
+      await dispatchAdmissionApproved({
+        application,
+        classOffered: application.applyingClass,
+        approvedBy: user.fullName || 'Principal',
+      });
+    } else if (status === 'REJECTED') {
+      await dispatchDocumentRejected({
+        application,
+        documentName: 'Admission Eligibility / Application Dossier',
+        rejectionReason: rejectionReason || reviewerRemarks || 'Academic criteria or age eligibility threshold not satisfied',
+        reviewer: user.fullName || 'Admissions Review Board',
+      });
+    }
+  } catch (e) {
+    // Non-fatal notification error
+  }
+
+  // Specification 22.4: Traceability of sensitive admission status changes
+  try {
+    const auditLogService = require('./auditLog.service');
+    await auditLogService.logSensitiveChange({
+      user: user.fullName || user.email || 'Admissions Officer',
+      userId: user._id,
+      role: user.role || 'PRINCIPAL',
+      action: `ADMISSION_STATUS_${status}`,
+      module: 'ADMISSIONS',
+      recordReference: `${application.applicationNumber} (${application.studentName})`,
+      reason: reviewerRemarks || rejectionReason || `Application status changed to ${status}`,
+      changedFields: [{ field: 'status', oldValue: 'PREVIOUS', newValue: status }],
+      result: 'SUCCESS',
+    });
+  } catch (e) {
+    // Non-fatal audit log error
+  }
 
   return application;
 };
@@ -466,6 +531,29 @@ const convertToStudent = async (applicationId, enrollmentData = {}, user) => {
     });
   } catch (e) {
     // Non-fatal notification error
+  }
+
+  // Specification 22.4: Traceability of student enrolment
+  try {
+    const auditLogService = require('./auditLog.service');
+    await auditLogService.logSensitiveChange({
+      user: user?.fullName || 'Registrar Office',
+      userId: user?._id,
+      role: user?.role || 'REGISTRAR',
+      action: 'STUDENT_ENROLMENT_COMPLETED',
+      module: 'STUDENTS',
+      recordReference: `${student.admissionNo} (${student.fullName})`,
+      reason: `Formally converted approved application ${application.applicationNumber} to enrolled student in Class ${student.class}-${student.section}`,
+      changedFields: [
+        { field: 'admissionNo', oldValue: null, newValue: student.admissionNo },
+        { field: 'class', oldValue: null, newValue: student.class },
+        { field: 'section', oldValue: null, newValue: student.section },
+        { field: 'status', oldValue: null, newValue: 'ACTIVE' },
+      ],
+      result: 'SUCCESS',
+    });
+  } catch (e) {
+    // Non-fatal audit log error
   }
 
   return {
