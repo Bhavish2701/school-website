@@ -30,3 +30,4 @@ router.get('/reviews', controller.listAccessReviews);
 router.post('/reviews/:reviewId/outcome', controller.recordAccessReviewOutcome);
 
 module.exports = router;
+

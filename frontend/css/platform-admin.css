@@ -2385,3 +2385,268 @@ input:checked + .pa-slider:before {
   color: #94A3B8;
 }
 
+/* ==========================================================================
+   MODULE 10: SUBSCRIPTIONS & PLANS STYLES
+   ========================================================================== */
+
+.sub-subnav {
+  display: flex;
+  gap: 0.5rem;
+  border-bottom: 2px solid #E2E8F0;
+  margin-bottom: 1.5rem;
+}
+
+[data-theme="dark"] .sub-subnav {
+  border-color: #334155;
+}
+
+.sub-tab-btn {
+  background: transparent;
+  border: none;
+  border-bottom: 3px solid transparent;
+  padding: 0.75rem 1.25rem;
+  font-weight: 600;
+  font-size: 0.88rem;
+  color: #64748B;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.2s ease;
+  margin-bottom: -2px;
+}
+
+.sub-tab-btn:hover {
+  color: #0F172A;
+}
+
+[data-theme="dark"] .sub-tab-btn:hover {
+  color: #F8FAFC;
+}
+
+.sub-tab-btn.active {
+  color: var(--pa-primary, #4F46E5);
+  border-bottom-color: var(--pa-primary, #4F46E5);
+}
+
+[data-theme="dark"] .sub-tab-btn.active {
+  color: #818CF8;
+  border-bottom-color: #818CF8;
+}
+
+/* Plan Cards */
+.plan-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.plan-card {
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  border-radius: 12px;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  transition: all 0.25s ease;
+  position: relative;
+}
+
+[data-theme="dark"] .plan-card {
+  background: #1E293B;
+  border-color: #334155;
+}
+
+.plan-card:hover {
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.08);
+  transform: translateY(-2px);
+}
+
+.plan-card.featured {
+  border: 2px solid var(--pa-primary, #4F46E5);
+  box-shadow: 0 12px 28px -5px rgba(79, 70, 229, 0.15);
+}
+
+.plan-badge-featured {
+  position: absolute;
+  top: -12px;
+  right: 20px;
+  background: var(--pa-primary, #4F46E5);
+  color: #FFFFFF;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  padding: 0.25rem 0.65rem;
+  border-radius: 9999px;
+  letter-spacing: 0.05em;
+}
+
+.plan-price-row {
+  display: flex;
+  align-items: baseline;
+  gap: 0.35rem;
+  margin: 0.75rem 0;
+}
+
+.plan-price-amount {
+  font-size: 2rem;
+  font-weight: 900;
+  color: #0F172A;
+}
+
+[data-theme="dark"] .plan-price-amount {
+  color: #F8FAFC;
+}
+
+.plan-price-interval {
+  font-size: 0.85rem;
+  color: #64748B;
+  font-weight: 600;
+}
+
+.plan-features-list {
+  list-style: none;
+  padding: 0;
+  margin: 1rem 0;
+  flex-grow: 1;
+}
+
+.plan-features-list li {
+  font-size: 0.82rem;
+  color: #334155;
+  margin-bottom: 0.5rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+}
+
+[data-theme="dark"] .plan-features-list li {
+  color: #CBD5E1;
+}
+
+.plan-features-list li i {
+  color: #10B981;
+  font-size: 0.85rem;
+  margin-top: 0.15rem;
+  flex-shrink: 0;
+}
+
+.plan-limits-box {
+  background: #F8FAFC;
+  border: 1px solid #E2E8F0;
+  border-radius: 8px;
+  padding: 0.75rem;
+  margin-bottom: 1rem;
+  font-size: 0.78rem;
+}
+
+[data-theme="dark"] .plan-limits-box {
+  background: #0F172A;
+  border-color: #334155;
+}
+
+/* Subscription Status Badges */
+.badge-sub-active {
+  background: #D1FAE5;
+  color: #065F46;
+  border: 1px solid #6EE7B7;
+}
+
+.badge-sub-renewed {
+  background: #E0E7FF;
+  color: #3730A3;
+  border: 1px solid #A5B4FC;
+}
+
+.badge-sub-grace {
+  background: #FEF3C7;
+  color: #B45309;
+  border: 1px solid #FCD34D;
+}
+
+.badge-sub-suspended {
+  background: #FEE2E2;
+  color: #991B1B;
+  border: 1px solid #FCA5A5;
+}
+
+.badge-sub-cancelled {
+  background: #F1F5F9;
+  color: #475569;
+  border: 1px solid #CBD5E1;
+}
+
+/* Payment Status Badges */
+.badge-pay-paid {
+  background: #ECFDF5;
+  color: #047857;
+  border: 1px solid #A7F3D0;
+}
+
+.badge-pay-waived {
+  background: #FAF5FF;
+  color: #6B21A8;
+  border: 1px solid #E9D5FF;
+}
+
+.badge-pay-pending {
+  background: #FFFBEB;
+  color: #B45309;
+  border: 1px solid #FDE68A;
+}
+
+.badge-pay-overdue {
+  background: #FFF1F2;
+  color: #BE123C;
+  border: 1px solid #FDA4AF;
+}
+
+/* Usage Progress Components */
+.usage-progress-container {
+  height: 8px;
+  border-radius: 4px;
+  background: #E2E8F0;
+  overflow: hidden;
+  margin-bottom: 0.5rem;
+}
+
+[data-theme="dark"] .usage-progress-container {
+  background: #334155;
+}
+
+.usage-progress-fill {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 0.4s ease;
+}
+
+.usage-progress-fill.safe {
+  background: #10B981;
+}
+
+.usage-progress-fill.warning {
+  background: #F59E0B;
+}
+
+.usage-progress-fill.danger {
+  background: #EF4444;
+}
+
+.statutory-guarantee-box {
+  background: #F0FDF4;
+  border: 1.5px solid #BBF7D0;
+  border-radius: 10px;
+  padding: 1rem 1.25rem;
+  margin-top: 1.5rem;
+  color: #166534;
+  font-size: 0.85rem;
+}
+
+[data-theme="dark"] .statutory-guarantee-box {
+  background: rgba(16, 185, 129, 0.1);
+  border-color: rgba(52, 211, 153, 0.3);
+  color: #6EE7B7;
+}
+
+

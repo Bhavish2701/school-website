@@ -2024,62 +2024,310 @@
       </section>
 
       <!-- =======================================================================
-           MODULE 6: SUBSCRIPTION & PLANS (#view-subscription)
+           MODULE 10: SUBSCRIPTIONS & PLANS (#view-subscription)
            ======================================================================= -->
       <section class="portal-view" id="view-subscription">
-        <div class="pa-card">
-          <div class="pa-card-header">
-            <div>
-              <h3 class="pa-card-title"><i class="fa-solid fa-certificate text-primary"></i> Subscription Tier &amp;
-                Commercial Plans</h3>
-              <p class="pa-card-desc">Institutional seat allocations, cloud storage volume, and commercial entitlements
-              </p>
+        <!-- Module Header -->
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <div>
+            <h2 class="h4 mb-1 fw-bold text-dark">
+              <i class="fa-solid fa-certificate text-primary me-2"></i>Subscriptions &amp; Commercial Plans
+            </h2>
+            <p class="text-muted small mb-0">
+              Multi-tenant commercial license tiers, school subscription lifecycle, seat/storage quotas, and statutory non-disruption guarantees.
+            </p>
+          </div>
+          <div class="d-flex gap-2">
+            <button class="btn-pa btn-pa-secondary" onclick="platformApp.exportSubscriptionsCSV()">
+              <i class="fa-solid fa-file-csv text-success me-1"></i> Export Subscriptions
+            </button>
+            <button class="btn-pa btn-pa-secondary" onclick="platformApp.openAssignPlanModal()">
+              <i class="fa-solid fa-plus text-primary me-1"></i> Assign Subscription
+            </button>
+            <button class="btn-pa btn-pa-primary" onclick="platformApp.openCreatePlanModal()">
+              <i class="fa-solid fa-plus-circle me-1"></i> Create Plan
+            </button>
+          </div>
+        </div>
+
+        <!-- Sub-navigation Tabs -->
+        <div class="sub-subnav">
+          <button type="button" class="sub-tab-btn active" id="btnSubTabPlans" onclick="platformApp.switchSubscriptionSubTab('plans')">
+            <i class="fa-solid fa-layer-group"></i> 10.1 Commercial Plans Directory
+          </button>
+          <button type="button" class="sub-tab-btn" id="btnSubTabSubscriptions" onclick="platformApp.switchSubscriptionSubTab('subscriptions')">
+            <i class="fa-solid fa-school"></i> 10.2 Institution Subscriptions
+            <span class="badge bg-primary ms-1" id="badgeSubscriptionsCount">0</span>
+          </button>
+          <button type="button" class="sub-tab-btn" id="btnSubTabUsage" onclick="platformApp.switchSubscriptionSubTab('usage')">
+            <i class="fa-solid fa-gauge-high"></i> 10.3 Usage &amp; Entitlements
+          </button>
+        </div>
+
+        <!-- TAB 1: 10.1 Commercial Plans Directory -->
+        <div id="subTabPlansContent">
+          <!-- Overview Cards -->
+          <div class="pa-kpi-grid mb-4" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
+            <div class="pa-kpi-card">
+              <div class="pa-kpi-header">
+                <span class="pa-kpi-title">Active Plans</span>
+                <div class="pa-kpi-icon" style="background: rgba(79,70,229,0.12); color: #4F46E5;"><i class="fa-solid fa-certificate"></i></div>
+              </div>
+              <div class="pa-kpi-value text-primary" id="kpiSubActivePlans">3</div>
+              <div class="pa-kpi-sub">Published Tiers</div>
             </div>
-            <span class="badge-active" style="padding: 0.35rem 0.85rem; font-size: 0.85rem;">
-              <i class="fa-solid fa-crown"></i> Institutional Enterprise License
-            </span>
+            <div class="pa-kpi-card">
+              <div class="pa-kpi-header">
+                <span class="pa-kpi-title">Active Subscriptions</span>
+                <div class="pa-kpi-icon" style="background: rgba(16,185,129,0.12); color: #10B981;"><i class="fa-solid fa-school-flag"></i></div>
+              </div>
+              <div class="pa-kpi-value text-emerald" id="kpiSubTotalSubscriptions">3</div>
+              <div class="pa-kpi-sub">Institutions Enrolled</div>
+            </div>
+            <div class="pa-kpi-card">
+              <div class="pa-kpi-header">
+                <span class="pa-kpi-title">Total Students Enrolled</span>
+                <div class="pa-kpi-icon" style="background: rgba(6,182,212,0.12); color: #06B6D4;"><i class="fa-solid fa-users"></i></div>
+              </div>
+              <div class="pa-kpi-value text-cyan" id="kpiSubTotalStudents">1,565</div>
+              <div class="pa-kpi-sub">Across All Campuses</div>
+            </div>
+            <div class="pa-kpi-card">
+              <div class="pa-kpi-header">
+                <span class="pa-kpi-title">Cloud Vault Volume</span>
+                <div class="pa-kpi-icon" style="background: rgba(245,158,11,0.12); color: #F59E0B;"><i class="fa-solid fa-database"></i></div>
+              </div>
+              <div class="pa-kpi-value text-amber" id="kpiSubTotalStorage">72.5 GB</div>
+              <div class="pa-kpi-sub">Encrypted Storage Used</div>
+            </div>
           </div>
 
-          <div
-            style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-bottom: 1.5rem;">
-
-            <div
-              style="border: 1.5px solid #4F46E5; border-radius: 12px; padding: 1.5rem; background: rgba(79, 70, 229, 0.03);">
-              <div style="font-size: 0.8rem; font-weight: 700; color: #4F46E5; text-transform: uppercase;">Allocated
-                Student Quota</div>
-              <div style="font-size: 2rem; font-weight: 900; margin: 0.35rem 0;">855 / 1,500</div>
-              <div
-                style="height: 8px; border-radius: 4px; background: #E2E8F0; overflow: hidden; margin-bottom: 0.5rem;">
-                <div style="width: 57%; height: 100%; background: #4F46E5;"></div>
+          <!-- Plans Filter & Toolbar -->
+          <div class="pa-card mb-4">
+            <div class="pa-card-header">
+              <div>
+                <h3 class="pa-card-title"><i class="fa-solid fa-layer-group text-primary me-2"></i>Available Commercial Plans</h3>
+                <p class="pa-card-desc">Standard multi-tenant subscription tiers, institutional quotas, and pricing models</p>
               </div>
-              <span style="font-size: 0.78rem; color: #64748B;">645 student seats remaining for current academic
-                cycle</span>
-            </div>
-
-            <div
-              style="border: 1px solid var(--color-border); border-radius: 12px; padding: 1.5rem; background: var(--color-bg-subtle);">
-              <div style="font-size: 0.8rem; font-weight: 700; color: #06B6D4; text-transform: uppercase;">Cloud
-                Document Vault</div>
-              <div style="font-size: 2rem; font-weight: 900; margin: 0.35rem 0;">42.8 / 500 GB</div>
-              <div
-                style="height: 8px; border-radius: 4px; background: #E2E8F0; overflow: hidden; margin-bottom: 0.5rem;">
-                <div style="width: 8.5%; height: 100%; background: #06B6D4;"></div>
+              <div class="d-flex gap-2">
+                <div class="input-group input-group-sm" style="width: 250px;">
+                  <span class="input-group-text"><i class="fa-solid fa-magnifying-glass"></i></span>
+                  <input type="text" class="form-control" id="txtPlanFilterSearch" placeholder="Search plan, code, feature..." onkeyup="platformApp.filterPlansDirectory()">
+                </div>
+                <select class="form-select form-select-sm" id="selPlanFilterStatus" style="width: 140px;" onchange="platformApp.filterPlansDirectory()">
+                  <option value="">All Statuses</option>
+                  <option value="Published">Published</option>
+                  <option value="Draft">Draft</option>
+                  <option value="Archived">Archived</option>
+                </select>
+                <select class="form-select form-select-sm" id="selPlanFilterInterval" style="width: 140px;" onchange="platformApp.filterPlansDirectory()">
+                  <option value="">All Intervals</option>
+                  <option value="Annual">Annual</option>
+                  <option value="Termly">Termly</option>
+                  <option value="Perpetual">Perpetual</option>
+                  <option value="Monthly">Monthly</option>
+                </select>
               </div>
-              <span style="font-size: 0.78rem; color: #64748B;">AES-256 encrypted storage for certificates and academic
-                records</span>
             </div>
 
-            <div
-              style="border: 1px solid var(--color-border); border-radius: 12px; padding: 1.5rem; background: var(--color-bg-subtle);">
-              <div style="font-size: 0.8rem; font-weight: 700; color: #10B981; text-transform: uppercase;">Trust License
-                SLA</div>
-              <div style="font-size: 1.35rem; font-weight: 800; margin: 0.35rem 0;">Perpetual Support</div>
-              <p style="margin: 0; font-size: 0.8rem; color: #64748B;">
-                Valid through <strong>March 31, 2028</strong> with guaranteed 99.9% uptime SLA &amp; automated cloud
-                backups.
-              </p>
+            <div class="p-4">
+              <div class="plan-grid" id="planGridContainer">
+                <div class="text-center py-4 text-muted w-100">
+                  <i class="fa-solid fa-spinner fa-spin me-2"></i> Loading Commercial Plans...
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB 2: 10.2 Institution Subscriptions -->
+        <div id="subTabSubscriptionsContent" style="display: none;">
+          <div class="pa-card">
+            <div class="pa-card-header">
+              <div>
+                <h3 class="pa-card-title"><i class="fa-solid fa-school text-primary me-2"></i>10.2 Institution Subscriptions Register</h3>
+                <p class="pa-card-desc">Active institutional contracts, billing renewals, quota tracking, and contractual adjustments</p>
+              </div>
+              <span class="badge bg-secondary" id="lblSubFilteredCount">Showing 0 Subscriptions</span>
             </div>
 
+            <!-- Filter Toolbar -->
+            <div class="p-3 bg-light border-bottom">
+              <div class="row g-2 align-items-center">
+                <div class="col-md-3">
+                  <div class="input-group input-group-sm">
+                    <span class="input-group-text"><i class="fa-solid fa-magnifying-glass"></i></span>
+                    <input type="text" class="form-control" id="txtSubFilterSearch" placeholder="Search school, plan ID..." onkeyup="platformApp.filterSubscriptionsTable()">
+                  </div>
+                </div>
+                <div class="col-md-3">
+                  <select class="form-select form-select-sm" id="selSubFilterInstitution" onchange="platformApp.filterSubscriptionsTable()">
+                    <option value="">All Institutions</option>
+                    <option value="INST-001">Main Campus (INST-001)</option>
+                    <option value="INST-002">City Branch (INST-002)</option>
+                    <option value="INST-003">Rural Branch (INST-003)</option>
+                  </select>
+                </div>
+                <div class="col-md-2">
+                  <select class="form-select form-select-sm" id="selSubFilterStatus" onchange="platformApp.filterSubscriptionsTable()">
+                    <option value="">All Sub Statuses</option>
+                    <option value="Active">Active</option>
+                    <option value="Renewed">Renewed</option>
+                    <option value="In Grace Period">In Grace Period</option>
+                    <option value="Suspended">Suspended</option>
+                    <option value="Cancelled">Cancelled</option>
+                  </select>
+                </div>
+                <div class="col-md-2">
+                  <select class="form-select form-select-sm" id="selSubFilterPayment" onchange="platformApp.filterSubscriptionsTable()">
+                    <option value="">All Payment States</option>
+                    <option value="Paid">Paid</option>
+                    <option value="Pending">Pending</option>
+                    <option value="Waived (Internal Trust)">Waived</option>
+                    <option value="Overdue">Overdue</option>
+                  </select>
+                </div>
+                <div class="col-md-2 d-flex gap-2">
+                  <button class="btn btn-sm btn-outline-secondary w-100" onclick="platformApp.resetSubscriptionFilters()">
+                    <i class="fa-solid fa-rotate-left me-1"></i> Reset
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Table with 8 Columns (Section 10.2) -->
+            <div class="pa-table-responsive">
+              <table class="pa-table">
+                <thead>
+                  <tr>
+                    <th>Institution</th>
+                    <th>Subscribed Plan</th>
+                    <th>Start Date</th>
+                    <th>Renewal Date</th>
+                    <th>Subscription Status</th>
+                    <th>Usage (Students &amp; Vault)</th>
+                    <th>Payment Status</th>
+                    <th style="text-align: right; width: 180px;">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="tblSubscriptionsBody">
+                  <tr>
+                    <td colspan="8" class="text-center py-4 text-muted">
+                      <i class="fa-solid fa-spinner fa-spin me-2"></i> Loading Institution Subscriptions...
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB 3: 10.3 Usage & Entitlements -->
+        <div id="subTabUsageContent" style="display: none;">
+          <div class="pa-card mb-4">
+            <div class="pa-card-header">
+              <div>
+                <h3 class="pa-card-title"><i class="fa-solid fa-gauge-high text-primary me-2"></i>10.3 Usage, Quotas &amp; Entitlements Inspector</h3>
+                <p class="pa-card-desc">Detailed seat allocation, vault consumption, module entitlements, and AP Education Code non-disruption guarantees</p>
+              </div>
+              <div class="d-flex align-items-center gap-2">
+                <label class="small fw-bold text-muted mb-0">Select Campus:</label>
+                <select class="form-select form-select-sm" id="selUsageInstitution" style="width: 250px;" onchange="platformApp.renderUsageAndEntitlements(this.value)">
+                  <option value="INST-001">Main Campus (INST-001)</option>
+                  <option value="INST-002">City Branch (INST-002)</option>
+                  <option value="INST-003">Rural Branch (INST-003)</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="p-4">
+              <!-- Warning Banner Container (Dynamic) -->
+              <div id="usageWarningContainer"></div>
+
+              <!-- 4 Usage Metrics -->
+              <div class="row g-4 mb-4">
+                <!-- 1. Active Student Enrollment -->
+                <div class="col-md-6 col-lg-3">
+                  <div class="p-3 border rounded bg-light">
+                    <div class="d-flex justify-content-between align-items-center mb-1">
+                      <span class="small fw-bold text-uppercase text-muted">Active Students</span>
+                      <span class="badge bg-primary" id="usageStudentPctBadge">57%</span>
+                    </div>
+                    <div class="h3 fw-bold mb-2 text-dark" id="usageStudentValue">855 / 1,500</div>
+                    <div class="usage-progress-container">
+                      <div class="usage-progress-fill safe" id="usageStudentBar" style="width: 57%;"></div>
+                    </div>
+                    <div class="small text-muted" id="usageStudentSub">645 student seats remaining</div>
+                  </div>
+                </div>
+
+                <!-- 2. Storage Usage -->
+                <div class="col-md-6 col-lg-3">
+                  <div class="p-3 border rounded bg-light">
+                    <div class="d-flex justify-content-between align-items-center mb-1">
+                      <span class="small fw-bold text-uppercase text-muted">Cloud Document Vault</span>
+                      <span class="badge bg-info text-dark" id="usageStoragePctBadge">21%</span>
+                    </div>
+                    <div class="h3 fw-bold mb-2 text-dark" id="usageStorageValue">42.8 / 200 GB</div>
+                    <div class="usage-progress-container">
+                      <div class="usage-progress-fill safe" id="usageStorageBar" style="width: 21%;"></div>
+                    </div>
+                    <div class="small text-muted" id="usageStorageSub">157.2 GB capacity available</div>
+                  </div>
+                </div>
+
+                <!-- 3. Active Staff Seats -->
+                <div class="col-md-6 col-lg-3">
+                  <div class="p-3 border rounded bg-light">
+                    <div class="d-flex justify-content-between align-items-center mb-1">
+                      <span class="small fw-bold text-uppercase text-muted">Authorized Faculty</span>
+                      <span class="badge bg-success" id="usageStaffPctBadge">48%</span>
+                    </div>
+                    <div class="h3 fw-bold mb-2 text-dark" id="usageStaffValue">72 / 150</div>
+                    <div class="usage-progress-container">
+                      <div class="usage-progress-fill safe" id="usageStaffBar" style="width: 48%;"></div>
+                    </div>
+                    <div class="small text-muted" id="usageStaffSub">78 staff logins available</div>
+                  </div>
+                </div>
+
+                <!-- 4. Daily API Throughput -->
+                <div class="col-md-6 col-lg-3">
+                  <div class="p-3 border rounded bg-light">
+                    <div class="d-flex justify-content-between align-items-center mb-1">
+                      <span class="small fw-bold text-uppercase text-muted">API Daily Requests</span>
+                      <span class="badge bg-secondary" id="usageApiPctBadge">17%</span>
+                    </div>
+                    <div class="h3 fw-bold mb-2 text-dark" id="usageApiValue">12,450 / 75k</div>
+                    <div class="usage-progress-container">
+                      <div class="usage-progress-fill safe" id="usageApiBar" style="width: 17%;"></div>
+                    </div>
+                    <div class="small text-muted" id="usageApiSub">62,550 calls remaining today</div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Enabled Modules Pills Grid -->
+              <div class="pa-card p-3 border mb-3">
+                <h6 class="fw-bold text-dark mb-2"><i class="fa-solid fa-cubes text-primary me-2"></i>Enabled System Modules &amp; Entitlements</h6>
+                <div class="d-flex flex-wrap gap-2" id="usageEnabledModulesList">
+                  <!-- Dynamically populated -->
+                </div>
+              </div>
+
+              <!-- Section 10.3 Statutory Non-Disruption Guarantee Box -->
+              <div class="statutory-guarantee-box">
+                <div class="d-flex align-items-start gap-3">
+                  <i class="fa-solid fa-scale-balanced fa-2x mt-1 text-success"></i>
+                  <div>
+                    <h6 class="fw-bold mb-1 text-success">Section 10.3 Statutory Record Protection &amp; Non-Disruption Guarantee</h6>
+                    <p class="mb-0 small">
+                      <strong>Contractual Invariant:</strong> Do not disable access to school records simply because a subscription is overdue. Under Andhra Pradesh Educational Rules and statutory governance protocols, educational record read access, student gazettes, and Transfer Certificate (TC) exports remain accessible unconditionally, even during billing disputes or contract renewals.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -6098,6 +6346,234 @@
       <div class="pa-modal-footer" style="padding: 1rem 1.5rem; border-top: 1px solid #E2E8F0; display: flex; justify-content: flex-end; gap: 0.5rem; background: #F8FAFC;">
         <button type="button" class="btn btn-sm btn-secondary" onclick="platformApp.closeModal('modalAccessReviewAction')">Cancel</button>
         <button type="button" class="btn btn-sm btn-primary" onclick="platformApp.submitAccessReviewAction()">Submit Review Outcome</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 10.1: Create / Edit Commercial Plan -->
+  <div class="pa-modal-backdrop" id="modalCreateEditPlan" style="display: none;">
+    <div class="pa-modal-card" style="max-width: 680px; width: 95%;">
+      <div class="pa-modal-header" style="background: linear-gradient(135deg, #0F172A 0%, #1E1B4B 100%); color: #FFFFFF; padding: 1.25rem 1.5rem; display: flex; justify-content: space-between; align-items: center;">
+        <h4 class="h6 mb-0 fw-bold text-white"><i class="fa-solid fa-layer-group text-primary me-2"></i><span id="lblPlanModalTitle">Create Commercial Plan</span></h4>
+        <button type="button" class="btn-close btn-close-white" onclick="platformApp.closeModal('modalCreateEditPlan')"></button>
+      </div>
+      <div class="pa-modal-body" style="padding: 1.5rem; max-height: calc(85vh - 160px); overflow-y: auto;">
+        <input type="hidden" id="txtPlanFormPlanId">
+        <div class="row g-3 mb-3">
+          <div class="col-md-6">
+            <label class="form-label small fw-bold">Plan Name *</label>
+            <input type="text" class="form-control form-control-sm" id="txtPlanFormName" placeholder="e.g. Comprehensive Campus Pro" required>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label small fw-bold">Plan Code *</label>
+            <input type="text" class="form-control form-control-sm text-uppercase font-mono" id="txtPlanFormCode" placeholder="e.g. SVT-PRO" required>
+          </div>
+        </div>
+        <div class="mb-3">
+          <label class="form-label small fw-bold">Plan Description</label>
+          <textarea class="form-control form-control-sm" id="txtPlanFormDescription" rows="2" placeholder="Brief summary of target schools and operational scope..."></textarea>
+        </div>
+        <div class="row g-3 mb-3">
+          <div class="col-md-4">
+            <label class="form-label small fw-bold">Price (INR)</label>
+            <input type="number" class="form-control form-control-sm" id="numPlanFormPrice" value="0" min="0">
+          </div>
+          <div class="col-md-4">
+            <label class="form-label small fw-bold">Billing Interval</label>
+            <select class="form-select form-select-sm" id="selPlanFormInterval">
+              <option value="Annual">Annual</option>
+              <option value="Termly">Termly</option>
+              <option value="Monthly">Monthly</option>
+              <option value="Perpetual">Perpetual (Trust Grant)</option>
+            </select>
+          </div>
+          <div class="col-md-4">
+            <label class="form-label small fw-bold">Status</label>
+            <select class="form-select form-select-sm" id="selPlanFormStatus">
+              <option value="Published">Published</option>
+              <option value="Draft">Draft</option>
+              <option value="Archived">Archived</option>
+            </select>
+          </div>
+        </div>
+
+        <h6 class="fw-bold text-dark border-bottom pb-1 mb-2"><i class="fa-solid fa-sliders text-primary me-1"></i> Quotas &amp; Limits</h6>
+        <div class="row g-3 mb-3">
+          <div class="col-md-3">
+            <label class="form-label small fw-bold">Max Students</label>
+            <input type="number" class="form-control form-control-sm" id="numPlanLimitStudents" value="1000" min="50">
+          </div>
+          <div class="col-md-3">
+            <label class="form-label small fw-bold">Max Staff</label>
+            <input type="number" class="form-control form-control-sm" id="numPlanLimitStaff" value="100" min="5">
+          </div>
+          <div class="col-md-3">
+            <label class="form-label small fw-bold">Cloud Vault (GB)</label>
+            <input type="number" class="form-control form-control-sm" id="numPlanLimitStorage" value="100" min="10">
+          </div>
+          <div class="col-md-3">
+            <label class="form-label small fw-bold">Daily API Calls</label>
+            <input type="number" class="form-control form-control-sm" id="numPlanLimitApi" value="25000" min="1000">
+          </div>
+        </div>
+
+        <h6 class="fw-bold text-dark border-bottom pb-1 mb-2"><i class="fa-solid fa-list-check text-primary me-1"></i> Included Commercial Features</h6>
+        <div class="mb-3">
+          <textarea class="form-control form-control-sm" id="txtPlanFormFeatures" rows="3" placeholder="Enter comma-separated features, e.g. Student Information System (SIS), Online Fee Gateway, Timetable Solver, Custom Domain"></textarea>
+          <div class="form-text small">Enter each distinct feature separated by commas.</div>
+        </div>
+      </div>
+      <div class="pa-modal-footer" style="padding: 1rem 1.5rem; border-top: 1px solid #E2E8F0; display: flex; justify-content: flex-end; gap: 0.5rem; background: #F8FAFC;">
+        <button type="button" class="btn btn-sm btn-secondary" onclick="platformApp.closeModal('modalCreateEditPlan')">Cancel</button>
+        <button type="button" class="btn btn-sm btn-primary" onclick="platformApp.submitPlanForm()">Save Plan</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 10.2: Assign / Change Institution Plan -->
+  <div class="pa-modal-backdrop" id="modalAssignChangePlan" style="display: none;">
+    <div class="pa-modal-card" style="max-width: 550px; width: 90%;">
+      <div class="pa-modal-header" style="padding: 1.25rem 1.5rem; border-bottom: 1px solid #E2E8F0; display: flex; justify-content: space-between; align-items: center;">
+        <h4 class="h6 mb-0 fw-bold"><i class="fa-solid fa-school text-primary me-2"></i><span id="lblAssignPlanModalTitle">Assign Commercial Subscription</span></h4>
+        <button type="button" class="btn-close" onclick="platformApp.closeModal('modalAssignChangePlan')"></button>
+      </div>
+      <div class="pa-modal-body" style="padding: 1.5rem;">
+        <input type="hidden" id="txtAssignSubId">
+        <div class="mb-3">
+          <label class="form-label small fw-bold">Select Institution *</label>
+          <select class="form-select form-select-sm" id="selAssignInstitution">
+            <option value="INST-001">Sri Vidya E.M High School (Main Campus - INST-001)</option>
+            <option value="INST-002">Sri Vidya High School (City Branch - INST-002)</option>
+            <option value="INST-003">Sri Vidya Rural Academy (Rural Branch - INST-003)</option>
+          </select>
+        </div>
+        <div class="mb-3">
+          <label class="form-label small fw-bold">Select Target Commercial Plan *</label>
+          <select class="form-select form-select-sm" id="selAssignPlan">
+            <!-- Dynamically populated from plans -->
+          </select>
+        </div>
+        <div class="row g-2 mb-3">
+          <div class="col-md-6">
+            <label class="form-label small fw-bold">Start Date</label>
+            <input type="date" class="form-control form-control-sm" id="dateAssignStart">
+          </div>
+          <div class="col-md-6">
+            <label class="form-label small fw-bold">Renewal Date</label>
+            <input type="date" class="form-control form-control-sm" id="dateAssignRenewal">
+          </div>
+        </div>
+        <div class="mb-3">
+          <label class="form-label small fw-bold">Payment Status</label>
+          <select class="form-select form-select-sm" id="selAssignPayment">
+            <option value="Paid">Paid</option>
+            <option value="Pending">Pending</option>
+            <option value="Waived (Internal Trust)">Waived (Internal Trust)</option>
+            <option value="Overdue">Overdue</option>
+          </select>
+        </div>
+      </div>
+      <div class="pa-modal-footer" style="padding: 1rem 1.5rem; border-top: 1px solid #E2E8F0; display: flex; justify-content: flex-end; gap: 0.5rem; background: #F8FAFC;">
+        <button type="button" class="btn btn-sm btn-secondary" onclick="platformApp.closeModal('modalAssignChangePlan')">Cancel</button>
+        <button type="button" class="btn btn-sm btn-primary" onclick="platformApp.submitAssignPlan()">Confirm Subscription</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 10.2: Renew Subscription -->
+  <div class="pa-modal-backdrop" id="modalRenewSubscription" style="display: none;">
+    <div class="pa-modal-card" style="max-width: 480px; width: 90%;">
+      <div class="pa-modal-header" style="padding: 1.25rem 1.5rem; border-bottom: 1px solid #E2E8F0; display: flex; justify-content: space-between; align-items: center;">
+        <h4 class="h6 mb-0 fw-bold"><i class="fa-solid fa-arrows-rotate text-success me-2"></i>Renew Institution Contract</h4>
+        <button type="button" class="btn-close" onclick="platformApp.closeModal('modalRenewSubscription')"></button>
+      </div>
+      <div class="pa-modal-body" style="padding: 1.5rem;">
+        <input type="hidden" id="txtRenewSubId">
+        <div class="p-2 border rounded bg-light mb-3">
+          <strong class="text-dark d-block" id="lblRenewInstitutionName">Institution Name</strong>
+          <small class="text-muted" id="lblRenewPlanName">Plan Name</small>
+        </div>
+        <div class="mb-3">
+          <label class="form-label small fw-bold">Extended Contract Renewal Date *</label>
+          <input type="date" class="form-control form-control-sm" id="dateRenewTargetDate" required>
+        </div>
+        <div class="mb-3">
+          <label class="form-label small fw-bold">Updated Payment Status</label>
+          <select class="form-select form-select-sm" id="selRenewPaymentStatus">
+            <option value="Paid">Paid</option>
+            <option value="Pending">Pending</option>
+            <option value="Waived (Internal Trust)">Waived (Internal Trust)</option>
+          </select>
+        </div>
+      </div>
+      <div class="pa-modal-footer" style="padding: 1rem 1.5rem; border-top: 1px solid #E2E8F0; display: flex; justify-content: flex-end; gap: 0.5rem; background: #F8FAFC;">
+        <button type="button" class="btn btn-sm btn-secondary" onclick="platformApp.closeModal('modalRenewSubscription')">Cancel</button>
+        <button type="button" class="btn btn-sm btn-success" onclick="platformApp.submitRenewSubscription()">Execute Contract Renewal</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 10.2: Record Authorized Billing Adjustment -->
+  <div class="pa-modal-backdrop" id="modalBillingAdjustment" style="display: none;">
+    <div class="pa-modal-card" style="max-width: 500px; width: 90%;">
+      <div class="pa-modal-header" style="padding: 1.25rem 1.5rem; border-bottom: 1px solid #E2E8F0; display: flex; justify-content: space-between; align-items: center;">
+        <h4 class="h6 mb-0 fw-bold"><i class="fa-solid fa-file-invoice-dollar text-primary me-2"></i>Record Authorized Billing Adjustment</h4>
+        <button type="button" class="btn-close" onclick="platformApp.closeModal('modalBillingAdjustment')"></button>
+      </div>
+      <div class="pa-modal-body" style="padding: 1.5rem;">
+        <input type="hidden" id="txtAdjustmentSubId">
+        <div class="mb-3">
+          <label class="form-label small fw-bold">Adjustment Type</label>
+          <select class="form-select form-select-sm" id="selAdjustmentType">
+            <option value="CONCESSION">Concession (Trust Scholar Subsidy)</option>
+            <option value="WAIVER">Waiver (100% Grant Waiver)</option>
+            <option value="CREDIT">Credit Note</option>
+            <option value="DEBIT">Debit Adjustment</option>
+          </select>
+        </div>
+        <div class="mb-3">
+          <label class="form-label small fw-bold">Adjustment Amount (INR)</label>
+          <input type="number" class="form-control form-control-sm" id="numAdjustmentAmount" value="5000" min="0">
+        </div>
+        <div class="mb-3">
+          <label class="form-label small fw-bold">Statutory Reason &amp; Trustee Authorization *</label>
+          <textarea class="form-control form-control-sm" id="txtAdjustmentReason" rows="3" placeholder="Provide governance justification and trustee sign-off details..." required></textarea>
+        </div>
+      </div>
+      <div class="pa-modal-footer" style="padding: 1rem 1.5rem; border-top: 1px solid #E2E8F0; display: flex; justify-content: flex-end; gap: 0.5rem; background: #F8FAFC;">
+        <button type="button" class="btn btn-sm btn-secondary" onclick="platformApp.closeModal('modalBillingAdjustment')">Cancel</button>
+        <button type="button" class="btn btn-sm btn-primary" onclick="platformApp.submitBillingAdjustment()">Record Adjustment</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 10.2: Suspend or Cancel According to Contract -->
+  <div class="pa-modal-backdrop" id="modalSuspendCancelSubscription" style="display: none;">
+    <div class="pa-modal-card" style="max-width: 520px; width: 90%;">
+      <div class="pa-modal-header" style="background: #FFF1F2; border-bottom: 1px solid #FDA4AF; padding: 1.25rem 1.5rem; display: flex; justify-content: space-between; align-items: center;">
+        <h4 class="h6 mb-0 fw-bold text-danger"><i class="fa-solid fa-triangle-exclamation me-2"></i>Contractual Suspension or Cancellation</h4>
+        <button type="button" class="btn-close" onclick="platformApp.closeModal('modalSuspendCancelSubscription')"></button>
+      </div>
+      <div class="pa-modal-body" style="padding: 1.5rem;">
+        <input type="hidden" id="txtSuspendCancelSubId">
+        <div class="alert alert-info small mb-3">
+          <i class="fa-solid fa-shield-check me-1"></i> <strong>Section 10.3 Non-Disruption Guarantee:</strong> Executing a contractual suspension or cancellation will NOT lock out historical records or prevent academic Transfer Certificate (TC) exports.
+        </div>
+        <div class="mb-3">
+          <label class="form-label small fw-bold">Contract Action</label>
+          <select class="form-select form-select-sm" id="selSuspendCancelAction">
+            <option value="Suspend">Contractual Suspension (Temporary)</option>
+            <option value="Cancel">Contract Cancellation (Permanent Termination)</option>
+          </select>
+        </div>
+        <div class="mb-3">
+          <label class="form-label small fw-bold">Mandatory Statutory Justification / Reason *</label>
+          <textarea class="form-control form-control-sm" id="txtSuspendCancelReason" rows="3" placeholder="State contractual clause or statutory breach justification..." required></textarea>
+        </div>
+      </div>
+      <div class="pa-modal-footer" style="padding: 1rem 1.5rem; border-top: 1px solid #E2E8F0; display: flex; justify-content: flex-end; gap: 0.5rem; background: #F8FAFC;">
+        <button type="button" class="btn btn-sm btn-secondary" onclick="platformApp.closeModal('modalSuspendCancelSubscription')">Cancel</button>
+        <button type="button" class="btn btn-sm btn-danger" onclick="platformApp.submitSuspendCancelSubscription()">Confirm Contract Action</button>
       </div>
     </div>
   </div>

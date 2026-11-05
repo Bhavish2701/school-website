@@ -493,6 +493,8 @@ const platformApp = (function () {
       loadRoleTemplatesDirectory();
     } else if ((viewId === 'security-monitoring' || viewId === 'security') && typeof loadSecurityMonitoringData === 'function') {
       loadSecurityMonitoringData();
+    } else if (viewId === 'subscription' && typeof loadSubscriptionsData === 'function') {
+      loadSubscriptionsData();
     }
 
     // Update Header Breadcrumb
@@ -6433,6 +6435,700 @@ const platformApp = (function () {
     showToast('Security dossier exported successfully.', 'success');
   }
 
+
+  /* ==========================================================================
+     MODULE 10: SUBSCRIPTIONS & COMMERCIAL PLANS CONTROLLER
+     10.1 Plans Directory, 10.2 Institution Subscriptions, 10.3 Usage/Entitlements
+     ========================================================================== */
+
+  let plansData = [];
+  let subscriptionsData = [];
+  let currentActiveUsageInstId = 'INST-001';
+
+  async function loadSubscriptionsData() {
+    try {
+      const [summaryRes, plansRes, subsRes] = await Promise.all([
+        fetch('/api/v1/platform/subscriptions/summary'),
+        fetch('/api/v1/platform/plans'),
+        fetch('/api/v1/platform/subscriptions')
+      ]);
+
+      if (summaryRes.ok) {
+        const sumJson = await summaryRes.json();
+        updateSubscriptionSummaryKPIs(sumJson.data);
+      }
+
+      if (plansRes.ok) {
+        const plansJson = await plansRes.json();
+        plansData = plansJson.data || [];
+        populatePlanDropdowns(plansData);
+      }
+
+      if (subsRes.ok) {
+        const subsJson = await subsRes.json();
+        subscriptionsData = subsJson.data || [];
+      }
+
+      renderPlansDirectory(plansData);
+      renderSubscriptionsTable(subscriptionsData);
+      renderUsageAndEntitlements(currentActiveUsageInstId);
+
+      const countBadge = document.getElementById('badgeSubscriptionsCount');
+      if (countBadge) countBadge.textContent = subscriptionsData.length;
+
+    } catch (err) {
+      console.error('Failed to load subscription data:', err);
+      showToast('Error loading commercial subscriptions: ' + err.message, 'danger');
+    }
+  }
+
+  function updateSubscriptionSummaryKPIs(summary) {
+    if (!summary) return;
+    const setVal = (id, val) => {
+      const el = document.getElementById(id);
+      if (el) el.textContent = val;
+    };
+    setVal('kpiSubActivePlans', summary.activePublishedPlans ?? 3);
+    setVal('kpiSubTotalSubscriptions', summary.totalSubscriptions ?? 3);
+    setVal('kpiSubTotalStudents', (summary.totalActiveStudentsEnrolled ?? 1565).toLocaleString('en-IN'));
+    setVal('kpiSubTotalStorage', (summary.totalCloudStorageGB ?? 72.5) + ' GB');
+  }
+
+  function populatePlanDropdowns(plans) {
+    const sel = document.getElementById('selAssignPlan');
+    if (!sel) return;
+    sel.innerHTML = plans.map(p => {
+      const priceStr = p.price === 0 ? 'Trust Free Grant' : ('Rs ' + p.price.toLocaleString('en-IN') + ' / ' + p.billingInterval);
+      return '<option value="' + p.planId + '">' + p.name + ' (' + p.code + ') - ' + priceStr + '</option>';
+    }).join('');
+  }
+
+  function switchSubscriptionSubTab(tabName) {
+    const tabs = ['plans', 'subscriptions', 'usage'];
+    tabs.forEach(t => {
+      const btn = document.getElementById('btnSubTab' + t.charAt(0).toUpperCase() + t.slice(1));
+      const pane = document.getElementById('subTab' + t.charAt(0).toUpperCase() + t.slice(1) + 'Content');
+      if (btn) {
+        if (t === tabName) btn.classList.add('active');
+        else btn.classList.remove('active');
+      }
+      if (pane) {
+        pane.style.display = (t === tabName) ? 'block' : 'none';
+      }
+    });
+  }
+
+  function renderPlansDirectory(plans) {
+    const container = document.getElementById('planGridContainer');
+    if (!container) return;
+
+    if (!plans || plans.length === 0) {
+      container.innerHTML = '<div class="text-center py-4 text-muted w-100">No commercial plans found matching criteria.</div>';
+      return;
+    }
+
+    container.innerHTML = plans.map(p => {
+      const isFeatured = p.code === 'SVT-PRO';
+      const featuredCardClass = isFeatured ? 'plan-card featured' : 'plan-card';
+      const featuredBadge = isFeatured ? '<span class="plan-badge-featured"><i class="fa-solid fa-star me-1"></i> Most Popular</span>' : '';
+
+      let statusBadge = '<span class="badge bg-success">Published</span>';
+      if (p.status === 'Draft') statusBadge = '<span class="badge bg-warning text-dark">Draft</span>';
+      else if (p.status === 'Archived') statusBadge = '<span class="badge bg-secondary">Archived</span>';
+
+      const priceDisplay = p.price === 0 ? '<span class="plan-price-amount">Free</span><span class="plan-price-interval">/ Trust Grant</span>' :
+        ('<span class="plan-price-amount">₹' + p.price.toLocaleString('en-IN') + '</span><span class="plan-price-interval">/ ' + p.billingInterval + '</span>');
+
+      const featuresHtml = (p.includedFeatures || []).map(f => '<li><i class="fa-solid fa-circle-check"></i> ' + f + '</li>').join('');
+
+      return '<div class="' + featuredCardClass + '">' +
+        featuredBadge +
+        '<div class="d-flex justify-content-between align-items-start mb-2">' +
+          '<div>' +
+            '<h5 class="fw-bold mb-1 text-dark">' + p.name + '</h5>' +
+            '<span class="badge bg-light text-dark border font-mono">' + p.code + '</span>' +
+          '</div>' +
+          statusBadge +
+        '</div>' +
+        '<p class="small text-muted mb-2">' + (p.description || '') + '</p>' +
+        '<div class="plan-price-row">' + priceDisplay + '</div>' +
+        '<div class="plan-limits-box">' +
+          '<div class="d-flex justify-content-between mb-1"><span>Max Students:</span><strong>' + (p.limits?.maxStudents || 1000).toLocaleString('en-IN') + '</strong></div>' +
+          '<div class="d-flex justify-content-between mb-1"><span>Max Faculty/Staff:</span><strong>' + (p.limits?.maxStaff || 100) + '</strong></div>' +
+          '<div class="d-flex justify-content-between mb-1"><span>Document Vault:</span><strong>' + (p.limits?.storageGB || 100) + ' GB</strong></div>' +
+          '<div class="d-flex justify-content-between"><span>API Throughput:</span><strong>' + ((p.limits?.apiRequestsPerDay || 25000) / 1000) + 'k / day</strong></div>' +
+        '</div>' +
+        '<ul class="plan-features-list">' + featuresHtml + '</ul>' +
+        '<div class="d-flex gap-2 mt-auto pt-3 border-top">' +
+          '<button class="btn btn-sm btn-outline-primary flex-grow-1" onclick="platformApp.openEditPlanModal(\'' + p.planId + '\')"><i class="fa-solid fa-pen-to-square me-1"></i> Edit Plan</button>' +
+          (p.status === 'Draft' ? '<button class="btn btn-sm btn-success" onclick="platformApp.publishPlan(\'' + p.planId + '\')"><i class="fa-solid fa-upload"></i> Publish</button>' : '') +
+          (p.status === 'Published' ? '<button class="btn btn-sm btn-outline-secondary" onclick="platformApp.archivePlan(\'' + p.planId + '\')"><i class="fa-solid fa-box-archive"></i> Archive</button>' : '') +
+        '</div>' +
+      '</div>';
+    }).join('');
+  }
+
+  function filterPlansDirectory() {
+    const q = (document.getElementById('txtPlanFilterSearch')?.value || '').toLowerCase().trim();
+    const status = document.getElementById('selPlanFilterStatus')?.value || '';
+    const interval = document.getElementById('selPlanFilterInterval')?.value || '';
+
+    const filtered = plansData.filter(p => {
+      if (q) {
+        const text = (p.planId + ' ' + p.name + ' ' + p.code + ' ' + (p.description || '') + ' ' + (p.includedFeatures || []).join(' ')).toLowerCase();
+        if (!text.includes(q)) return false;
+      }
+      if (status && p.status !== status) return false;
+      if (interval && p.billingInterval !== interval) return false;
+      return true;
+    });
+
+    renderPlansDirectory(filtered);
+  }
+
+  function openCreatePlanModal() {
+    const setVal = (id, val) => { const el = document.getElementById(id); if (el) el.value = val; };
+    setVal('txtPlanFormPlanId', '');
+    setVal('txtPlanFormName', '');
+    setVal('txtPlanFormCode', '');
+    setVal('txtPlanFormDescription', '');
+    setVal('numPlanFormPrice', 0);
+    setVal('selPlanFormInterval', 'Annual');
+    setVal('selPlanFormStatus', 'Published');
+    setVal('numPlanLimitStudents', 1000);
+    setVal('numPlanLimitStaff', 100);
+    setVal('numPlanLimitStorage', 100);
+    setVal('numPlanLimitApi', 25000);
+    setVal('txtPlanFormFeatures', 'Student Information System (SIS), Attendance Registers, Fee Accounting, Examination Marks Gazette, Transfer Certificate Engine');
+
+    const titleEl = document.getElementById('lblPlanModalTitle');
+    if (titleEl) titleEl.textContent = 'Create Commercial Plan';
+    openModal('modalCreateEditPlan');
+  }
+
+  function openEditPlanModal(planId) {
+    const plan = plansData.find(p => p.planId === planId);
+    if (!plan) return;
+
+    const setVal = (id, val) => { const el = document.getElementById(id); if (el) el.value = val; };
+    setVal('txtPlanFormPlanId', plan.planId);
+    setVal('txtPlanFormName', plan.name);
+    setVal('txtPlanFormCode', plan.code);
+    setVal('txtPlanFormDescription', plan.description || '');
+    setVal('numPlanFormPrice', plan.price || 0);
+    setVal('selPlanFormInterval', plan.billingInterval || 'Annual');
+    setVal('selPlanFormStatus', plan.status || 'Published');
+    setVal('numPlanLimitStudents', plan.limits?.maxStudents || 1000);
+    setVal('numPlanLimitStaff', plan.limits?.maxStaff || 100);
+    setVal('numPlanLimitStorage', plan.limits?.storageGB || 100);
+    setVal('numPlanLimitApi', plan.limits?.apiRequestsPerDay || 25000);
+    setVal('txtPlanFormFeatures', (plan.includedFeatures || []).join(', '));
+
+    const titleEl = document.getElementById('lblPlanModalTitle');
+    if (titleEl) titleEl.textContent = 'Edit Commercial Plan (' + plan.code + ')';
+    openModal('modalCreateEditPlan');
+  }
+
+  async function submitPlanForm() {
+    const planId = document.getElementById('txtPlanFormPlanId')?.value;
+    const name = document.getElementById('txtPlanFormName')?.value?.trim();
+    const code = document.getElementById('txtPlanFormCode')?.value?.trim();
+    const description = document.getElementById('txtPlanFormDescription')?.value?.trim();
+    const price = Number(document.getElementById('numPlanFormPrice')?.value || 0);
+    const billingInterval = document.getElementById('selPlanFormInterval')?.value || 'Annual';
+    const status = document.getElementById('selPlanFormStatus')?.value || 'Published';
+    const maxStudents = Number(document.getElementById('numPlanLimitStudents')?.value || 1000);
+    const maxStaff = Number(document.getElementById('numPlanLimitStaff')?.value || 100);
+    const storageGB = Number(document.getElementById('numPlanLimitStorage')?.value || 100);
+    const apiRequestsPerDay = Number(document.getElementById('numPlanLimitApi')?.value || 25000);
+    const featuresStr = document.getElementById('txtPlanFormFeatures')?.value || '';
+    const includedFeatures = featuresStr.split(',').map(s => s.trim()).filter(Boolean);
+
+    if (!name || !code) {
+      showToast('Plan name and code are required.', 'warning');
+      return;
+    }
+
+    const payload = {
+      name,
+      code,
+      description,
+      price,
+      billingInterval,
+      status,
+      limits: { maxStudents, maxStaff, storageGB, apiRequestsPerDay },
+      includedFeatures
+    };
+
+    try {
+      const url = planId ? ('/api/v1/platform/plans/' + planId) : '/api/v1/platform/plans';
+      const method = planId ? 'PUT' : 'POST';
+
+      const res = await fetch(url, {
+        method,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      const json = await res.json();
+      if (json.success) {
+        showToast('Commercial plan ' + (planId ? 'updated' : 'created') + ' successfully!', 'success');
+        closeModal('modalCreateEditPlan');
+        await loadSubscriptionsData();
+      } else {
+        showToast(json.message || 'Failed to save plan', 'warning');
+      }
+    } catch (e) {
+      showToast('Error saving plan: ' + e.message, 'danger');
+    }
+  }
+
+  async function publishPlan(planId) {
+    try {
+      const res = await fetch('/api/v1/platform/plans/' + planId + '/publish', { method: 'POST' });
+      const json = await res.json();
+      if (json.success) {
+        showToast('Plan published to commercial catalog.', 'success');
+        await loadSubscriptionsData();
+      } else {
+        showToast(json.message || 'Publish failed', 'warning');
+      }
+    } catch (e) {
+      showToast('Error publishing plan: ' + e.message, 'danger');
+    }
+  }
+
+  async function archivePlan(planId) {
+    try {
+      const res = await fetch('/api/v1/platform/plans/' + planId + '/archive', { method: 'POST' });
+      const json = await res.json();
+      if (json.success) {
+        showToast('Plan archived from commercial catalog.', 'info');
+        await loadSubscriptionsData();
+      } else {
+        showToast(json.message || 'Archive failed', 'warning');
+      }
+    } catch (e) {
+      showToast('Error archiving plan: ' + e.message, 'danger');
+    }
+  }
+
+  function renderSubscriptionsTable(subs) {
+    const tbody = document.getElementById('tblSubscriptionsBody');
+    const countLbl = document.getElementById('lblSubFilteredCount');
+    if (countLbl) countLbl.textContent = 'Showing ' + subs.length + ' Subscriptions';
+    if (!tbody) return;
+
+    if (!subs || subs.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="8" class="text-center py-4 text-muted">No institution subscriptions found.</td></tr>';
+      return;
+    }
+
+    tbody.innerHTML = subs.map(s => {
+      let subStatusBadge = '<span class="badge badge-sub-active">Active</span>';
+      if (s.subscriptionStatus === 'Renewed') subStatusBadge = '<span class="badge badge-sub-renewed">Renewed</span>';
+      else if (s.subscriptionStatus === 'In Grace Period') subStatusBadge = '<span class="badge badge-sub-grace">In Grace Period</span>';
+      else if (s.subscriptionStatus === 'Suspended') subStatusBadge = '<span class="badge badge-sub-suspended">Suspended</span>';
+      else if (s.subscriptionStatus === 'Cancelled') subStatusBadge = '<span class="badge badge-sub-cancelled">Cancelled</span>';
+
+      let payStatusBadge = '<span class="badge badge-pay-paid">Paid</span>';
+      if (s.paymentStatus === 'Waived (Internal Trust)') payStatusBadge = '<span class="badge badge-pay-waived">Waived (Trust)</span>';
+      else if (s.paymentStatus === 'Pending') payStatusBadge = '<span class="badge badge-pay-pending">Pending</span>';
+      else if (s.paymentStatus === 'Overdue') payStatusBadge = '<span class="badge badge-pay-overdue">Overdue</span>';
+
+      const startDateStr = new Date(s.startDate).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' });
+      const renewalDateStr = new Date(s.renewalDate).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' });
+      const studentsUsage = s.usage?.activeStudents || 0;
+      const storageUsage = (s.usage?.storageUsedGB || 0) + ' GB';
+
+      return '<tr>' +
+        '<td><strong>' + s.institutionName + '</strong><br><small class="text-muted font-mono">' + s.institutionId + '</small></td>' +
+        '<td><span class="fw-bold text-primary">' + s.planName + '</span><br><span class="badge bg-light text-dark border font-mono">' + s.planCode + '</span></td>' +
+        '<td><small>' + startDateStr + '</small></td>' +
+        '<td><small class="fw-bold">' + renewalDateStr + '</small></td>' +
+        '<td>' + subStatusBadge + '</td>' +
+        '<td><small>' + studentsUsage + ' Students<br><span class="text-muted">' + storageUsage + ' Vault</span></small></td>' +
+        '<td>' + payStatusBadge + '</td>' +
+        '<td style="text-align: right;">' +
+          '<div class="btn-group btn-group-sm">' +
+            '<button class="btn btn-outline-primary" style="padding: 0.2rem 0.45rem; font-size: 0.72rem;" onclick="platformApp.openChangePlanModal(\'' + s.subscriptionId + '\')">' +
+              '<i class="fa-solid fa-arrows-up-to-line"></i> Plan' +
+            '</button>' +
+            '<button class="btn btn-outline-success" style="padding: 0.2rem 0.45rem; font-size: 0.72rem;" onclick="platformApp.openRenewModal(\'' + s.subscriptionId + '\')">' +
+              '<i class="fa-solid fa-arrows-rotate"></i> Renew' +
+            '</button>' +
+            '<button class="btn btn-outline-secondary" style="padding: 0.2rem 0.45rem; font-size: 0.72rem;" onclick="platformApp.openBillingAdjustmentModal(\'' + s.subscriptionId + '\')">' +
+              '<i class="fa-solid fa-receipt"></i> Adj' +
+            '</button>' +
+            '<button class="btn btn-outline-danger" style="padding: 0.2rem 0.45rem; font-size: 0.72rem;" onclick="platformApp.openSuspendCancelModal(\'' + s.subscriptionId + '\')">' +
+              '<i class="fa-solid fa-ban"></i>' +
+            '</button>' +
+          '</div>' +
+        '</td>' +
+      '</tr>';
+    }).join('');
+  }
+
+  function filterSubscriptionsTable() {
+    const q = (document.getElementById('txtSubFilterSearch')?.value || '').toLowerCase().trim();
+    const inst = document.getElementById('selSubFilterInstitution')?.value || '';
+    const status = document.getElementById('selSubFilterStatus')?.value || '';
+    const payment = document.getElementById('selSubFilterPayment')?.value || '';
+
+    const filtered = subscriptionsData.filter(s => {
+      if (q) {
+        const text = (s.subscriptionId + ' ' + s.institutionName + ' ' + s.institutionId + ' ' + s.planName + ' ' + s.planCode).toLowerCase();
+        if (!text.includes(q)) return false;
+      }
+      if (inst && s.institutionId !== inst) return false;
+      if (status && s.subscriptionStatus !== status) return false;
+      if (payment && s.paymentStatus !== payment) return false;
+      return true;
+    });
+
+    renderSubscriptionsTable(filtered);
+  }
+
+  function resetSubscriptionFilters() {
+    const s = document.getElementById('txtSubFilterSearch'); if (s) s.value = '';
+    const inst = document.getElementById('selSubFilterInstitution'); if (inst) inst.value = '';
+    const st = document.getElementById('selSubFilterStatus'); if (st) st.value = '';
+    const p = document.getElementById('selSubFilterPayment'); if (p) p.value = '';
+    renderSubscriptionsTable(subscriptionsData);
+  }
+
+  function openAssignPlanModal(instId) {
+    const titleEl = document.getElementById('lblAssignPlanModalTitle');
+    if (titleEl) titleEl.textContent = 'Assign Commercial Subscription';
+    const subIdInput = document.getElementById('txtAssignSubId');
+    if (subIdInput) subIdInput.value = '';
+
+    const instSel = document.getElementById('selAssignInstitution');
+    if (instSel) {
+      instSel.disabled = false;
+      if (instId) instSel.value = instId;
+    }
+
+    const todayStr = new Date().toISOString().slice(0, 10);
+    const nextYear = new Date(); nextYear.setFullYear(nextYear.getFullYear() + 1);
+    const renewalStr = nextYear.toISOString().slice(0, 10);
+
+    const sDate = document.getElementById('dateAssignStart'); if (sDate) sDate.value = todayStr;
+    const rDate = document.getElementById('dateAssignRenewal'); if (rDate) rDate.value = renewalStr;
+
+    openModal('modalAssignChangePlan');
+  }
+
+  function openChangePlanModal(subId) {
+    const sub = subscriptionsData.find(s => s.subscriptionId === subId);
+    if (!sub) return;
+
+    const titleEl = document.getElementById('lblAssignPlanModalTitle');
+    if (titleEl) titleEl.textContent = 'Change / Upgrade Plan (' + sub.institutionName + ')';
+    const subIdInput = document.getElementById('txtAssignSubId');
+    if (subIdInput) subIdInput.value = sub.subscriptionId;
+
+    const instSel = document.getElementById('selAssignInstitution');
+    if (instSel) {
+      instSel.value = sub.institutionId;
+      instSel.disabled = true;
+    }
+
+    const planSel = document.getElementById('selAssignPlan');
+    if (planSel) planSel.value = sub.planId;
+
+    const sDate = document.getElementById('dateAssignStart'); if (sDate) sDate.value = new Date(sub.startDate).toISOString().slice(0, 10);
+    const rDate = document.getElementById('dateAssignRenewal'); if (rDate) rDate.value = new Date(sub.renewalDate).toISOString().slice(0, 10);
+
+    openModal('modalAssignChangePlan');
+  }
+
+  async function submitAssignPlan() {
+    const subId = document.getElementById('txtAssignSubId')?.value;
+    const institutionId = document.getElementById('selAssignInstitution')?.value;
+    const planId = document.getElementById('selAssignPlan')?.value;
+    const startDate = document.getElementById('dateAssignStart')?.value;
+    const renewalDate = document.getElementById('dateAssignRenewal')?.value;
+    const paymentStatus = document.getElementById('selAssignPayment')?.value || 'Paid';
+
+    if (!institutionId || !planId) {
+      showToast('Institution and Plan selection are required.', 'warning');
+      return;
+    }
+
+    try {
+      let res;
+      if (subId) {
+        // Change plan
+        res = await fetch('/api/v1/platform/subscriptions/' + subId + '/change-plan', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ planId, operator: 'Platform Administrator' })
+        });
+      } else {
+        // Assign new plan
+        res = await fetch('/api/v1/platform/subscriptions/assign', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ institutionId, planId, startDate, renewalDate, paymentStatus, operator: 'Platform Administrator' })
+        });
+      }
+
+      const json = await res.json();
+      if (json.success) {
+        showToast('Subscription ' + (subId ? 'plan changed' : 'assigned') + ' successfully!', 'success');
+        closeModal('modalAssignChangePlan');
+        await loadSubscriptionsData();
+      } else {
+        showToast(json.message || 'Action failed', 'warning');
+      }
+    } catch (e) {
+      showToast('Error: ' + e.message, 'danger');
+    }
+  }
+
+  function openRenewModal(subId) {
+    const sub = subscriptionsData.find(s => s.subscriptionId === subId);
+    if (!sub) return;
+
+    const txtId = document.getElementById('txtRenewSubId'); if (txtId) txtId.value = sub.subscriptionId;
+    const nameEl = document.getElementById('lblRenewInstitutionName'); if (nameEl) nameEl.textContent = sub.institutionName;
+    const planEl = document.getElementById('lblRenewPlanName'); if (planEl) planEl.textContent = 'Current Plan: ' + sub.planName + ' (' + sub.planCode + ')';
+
+    const currentRenewal = new Date(sub.renewalDate);
+    currentRenewal.setFullYear(currentRenewal.getFullYear() + 1);
+    const dateInput = document.getElementById('dateRenewTargetDate');
+    if (dateInput) dateInput.value = currentRenewal.toISOString().slice(0, 10);
+
+    openModal('modalRenewSubscription');
+  }
+
+  async function submitRenewSubscription() {
+    const subId = document.getElementById('txtRenewSubId')?.value;
+    const renewalDate = document.getElementById('dateRenewTargetDate')?.value;
+    const paymentStatus = document.getElementById('selRenewPaymentStatus')?.value || 'Paid';
+
+    if (!subId || !renewalDate) return;
+
+    try {
+      const res = await fetch('/api/v1/platform/subscriptions/' + subId + '/renew', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ renewalDate, paymentStatus, operator: 'Platform Administrator' })
+      });
+      const json = await res.json();
+      if (json.success) {
+        showToast('Subscription contract renewed through ' + renewalDate + '!', 'success');
+        closeModal('modalRenewSubscription');
+        await loadSubscriptionsData();
+      } else {
+        showToast(json.message || 'Renewal failed', 'warning');
+      }
+    } catch (e) {
+      showToast('Error renewing subscription: ' + e.message, 'danger');
+    }
+  }
+
+  function openBillingAdjustmentModal(subId) {
+    const sub = subscriptionsData.find(s => s.subscriptionId === subId);
+    if (!sub) return;
+
+    const idInput = document.getElementById('txtAdjustmentSubId'); if (idInput) idInput.value = sub.subscriptionId;
+    const reasonInput = document.getElementById('txtAdjustmentReason'); if (reasonInput) reasonInput.value = '';
+    openModal('modalBillingAdjustment');
+  }
+
+  async function submitBillingAdjustment() {
+    const subId = document.getElementById('txtAdjustmentSubId')?.value;
+    const type = document.getElementById('selAdjustmentType')?.value || 'CONCESSION';
+    const amount = Number(document.getElementById('numAdjustmentAmount')?.value || 0);
+    const reason = document.getElementById('txtAdjustmentReason')?.value?.trim();
+
+    if (!subId || !reason) {
+      showToast('Mandatory authorization reason is required.', 'warning');
+      return;
+    }
+
+    try {
+      const res = await fetch('/api/v1/platform/subscriptions/' + subId + '/adjustments', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ type, amount, reason, operator: 'Platform Administrator' })
+      });
+      const json = await res.json();
+      if (json.success) {
+        showToast('Billing adjustment (' + type + ') recorded successfully.', 'success');
+        closeModal('modalBillingAdjustment');
+        await loadSubscriptionsData();
+      } else {
+        showToast(json.message || 'Failed to record adjustment', 'warning');
+      }
+    } catch (e) {
+      showToast('Error: ' + e.message, 'danger');
+    }
+  }
+
+  function openSuspendCancelModal(subId) {
+    const sub = subscriptionsData.find(s => s.subscriptionId === subId);
+    if (!sub) return;
+
+    const idInput = document.getElementById('txtSuspendCancelSubId'); if (idInput) idInput.value = sub.subscriptionId;
+    const reasonInput = document.getElementById('txtSuspendCancelReason'); if (reasonInput) reasonInput.value = '';
+    openModal('modalSuspendCancelSubscription');
+  }
+
+  async function submitSuspendCancelSubscription() {
+    const subId = document.getElementById('txtSuspendCancelSubId')?.value;
+    const action = document.getElementById('selSuspendCancelAction')?.value || 'Suspend';
+    const reason = document.getElementById('txtSuspendCancelReason')?.value?.trim();
+
+    if (!subId || !reason) {
+      showToast('Statutory reason is required for contractual actions.', 'warning');
+      return;
+    }
+
+    try {
+      const res = await fetch('/api/v1/platform/subscriptions/' + subId + '/status', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action, reason, operator: 'Platform Administrator' })
+      });
+      const json = await res.json();
+      if (json.success) {
+        showToast('Subscription ' + action + ' applied. Non-disruption guarantee active: Record read access preserved.', 'info');
+        closeModal('modalSuspendCancelSubscription');
+        await loadSubscriptionsData();
+      } else {
+        showToast(json.message || 'Action failed', 'warning');
+      }
+    } catch (e) {
+      showToast('Error: ' + e.message, 'danger');
+    }
+  }
+
+  async function renderUsageAndEntitlements(instId = 'INST-001') {
+    currentActiveUsageInstId = instId;
+    const instSel = document.getElementById('selUsageInstitution');
+    if (instSel && instSel.value !== instId) instSel.value = instId;
+
+    try {
+      const res = await fetch('/api/v1/platform/subscriptions/usage/' + instId);
+      if (!res.ok) return;
+
+      const json = await res.json();
+      const u = json.usage;
+      if (!u) return;
+
+      // Student usage
+      const sVal = document.getElementById('usageStudentValue');
+      if (sVal) sVal.textContent = u.activeStudents.used + ' / ' + u.activeStudents.limit.toLocaleString('en-IN');
+      const sBar = document.getElementById('usageStudentBar');
+      if (sBar) {
+        sBar.style.width = u.activeStudents.percentage + '%';
+        sBar.className = 'usage-progress-fill ' + (u.activeStudents.percentage >= 85 ? 'danger' : (u.activeStudents.percentage >= 70 ? 'warning' : 'safe'));
+      }
+      const sBadge = document.getElementById('usageStudentPctBadge');
+      if (sBadge) sBadge.textContent = u.activeStudents.percentage + '%';
+      const sSub = document.getElementById('usageStudentSub');
+      if (sSub) sSub.textContent = (u.activeStudents.limit - u.activeStudents.used) + ' student seats remaining';
+
+      // Storage usage
+      const stVal = document.getElementById('usageStorageValue');
+      if (stVal) stVal.textContent = u.storageGB.used + ' / ' + u.storageGB.limit + ' GB';
+      const stBar = document.getElementById('usageStorageBar');
+      if (stBar) {
+        stBar.style.width = u.storageGB.percentage + '%';
+        stBar.className = 'usage-progress-fill ' + (u.storageGB.percentage >= 85 ? 'danger' : 'safe');
+      }
+      const stBadge = document.getElementById('usageStoragePctBadge');
+      if (stBadge) stBadge.textContent = u.storageGB.percentage + '%';
+      const stSub = document.getElementById('usageStorageSub');
+      if (stSub) stSub.textContent = (u.storageGB.limit - u.storageGB.used).toFixed(1) + ' GB capacity available';
+
+      // Staff usage
+      const sfVal = document.getElementById('usageStaffValue');
+      if (sfVal) sfVal.textContent = u.activeStaff.used + ' / ' + u.activeStaff.limit;
+      const sfBar = document.getElementById('usageStaffBar');
+      if (sfBar) sfBar.style.width = Math.round((u.activeStaff.used / u.activeStaff.limit) * 100) + '%';
+      const sfSub = document.getElementById('usageStaffSub');
+      if (sfSub) sfSub.textContent = (u.activeStaff.limit - u.activeStaff.used) + ' staff logins available';
+
+      // API usage
+      const aVal = document.getElementById('usageApiValue');
+      if (aVal) aVal.textContent = u.apiRequestsToday.used.toLocaleString('en-IN') + ' / ' + (u.apiRequestsToday.limit / 1000) + 'k';
+      const aBar = document.getElementById('usageApiBar');
+      if (aBar) aBar.style.width = u.apiRequestsToday.percentage + '%';
+      const aSub = document.getElementById('usageApiSub');
+      if (aSub) aSub.textContent = (u.apiRequestsToday.limit - u.apiRequestsToday.used).toLocaleString('en-IN') + ' calls remaining today';
+
+      // Warnings
+      const warnContainer = document.getElementById('usageWarningContainer');
+      if (warnContainer) {
+        const warnings = json.warnings || [];
+        if (warnings.length === 0) {
+          warnContainer.innerHTML = '';
+        } else {
+          warnContainer.innerHTML = warnings.map(w => 
+            '<div class="alert alert-warning d-flex align-items-center mb-3 py-2" style="font-size: 0.85rem;">' +
+              '<i class="fa-solid fa-triangle-exclamation me-2"></i><strong>Quota Warning:</strong> ' + w.message +
+            '</div>'
+          ).join('');
+        }
+      }
+
+      // Modules list
+      const modsList = document.getElementById('usageEnabledModulesList');
+      if (modsList) {
+        const modules = json.enabledModules || [];
+        modsList.innerHTML = modules.map(m => 
+          '<span class="badge bg-primary px-3 py-2" style="font-size: 0.82rem;"><i class="fa-solid fa-check me-1"></i> ' + m.toUpperCase() + '</span>'
+        ).join('');
+      }
+
+    } catch (e) {
+      console.warn('Failed to load usage:', e);
+    }
+  }
+
+  function exportSubscriptionsCSV() {
+    if (!subscriptionsData || subscriptionsData.length === 0) {
+      showToast('No subscription records to export.', 'warning');
+      return;
+    }
+
+    const headers = ['Subscription ID', 'Institution ID', 'Institution Name', 'Plan Code', 'Plan Name', 'Start Date', 'Renewal Date', 'Subscription Status', 'Payment Status', 'Active Students', 'Storage Used (GB)', 'Contractual Notes'];
+    const rows = subscriptionsData.map(s => [
+      s.subscriptionId,
+      s.institutionId,
+      s.institutionName,
+      s.planCode,
+      s.planName,
+      new Date(s.startDate).toISOString().slice(0, 10),
+      new Date(s.renewalDate).toISOString().slice(0, 10),
+      s.subscriptionStatus,
+      s.paymentStatus,
+      s.usage?.activeStudents || 0,
+      s.usage?.storageUsedGB || 0,
+      s.contractualNotes || ''
+    ]);
+
+    const csvContent = [
+      '# SRI VIDYA EDUCATIONAL TRUST - MULTI-TENANT INSTITUTION SUBSCRIPTION DOSSIER',
+      '# Export Timestamp: ' + new Date().toISOString() + ' | Statutory Non-Disruption Guarantee Active',
+      headers.map(h => '"' + h + '"').join(','),
+      ...rows.map(r => r.map(v => '"' + String(v).replace(/"/g, '""') + '"').join(','))
+    ].join('\n');
+
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'SriVidya_Subscriptions_Dossier_' + new Date().toISOString().slice(0, 10) + '.csv';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    showToast('Subscription register exported successfully.', 'success');
+  }
+
 function init() {
     setupTheme();
     updatePlatformClock();
@@ -6486,6 +7182,29 @@ function init() {
 
   // Public Interface
   return {
+    // Module 10: Subscriptions & Plans
+    loadSubscriptionsData,
+    switchSubscriptionSubTab,
+    filterPlansDirectory,
+    openCreatePlanModal,
+    openEditPlanModal,
+    submitPlanForm,
+    publishPlan,
+    archivePlan,
+    filterSubscriptionsTable,
+    resetSubscriptionFilters,
+    openAssignPlanModal,
+    submitAssignPlan,
+    openChangePlanModal,
+    openRenewModal,
+    submitRenewSubscription,
+    openBillingAdjustmentModal,
+    submitBillingAdjustment,
+    openSuspendCancelModal,
+    submitSuspendCancelSubscription,
+    renderUsageAndEntitlements,
+    exportSubscriptionsCSV,
+
     // Module 9: Security & Access Monitoring
     loadSecurityMonitoringData,
     switchSecuritySubTab,
