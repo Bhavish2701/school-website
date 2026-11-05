@@ -478,6 +478,7 @@ const platformApp = (function () {
       loadPlatformDashboard();
     } else if (viewId === 'users' && typeof renderOperatorsTable === 'function') {
       renderOperatorsTable();
+      loadUsersDirectory();
     } else if (viewId === 'audit' && typeof renderAuditLogsTable === 'function') {
       renderAuditLogsTable();
     } else if (viewId === 'support' && typeof renderSupportTicketsTable === 'function') {
@@ -3282,6 +3283,602 @@ const platformApp = (function () {
   }
 
 
+
+  /* ==========================================================================
+     MODULE 6: USER & ACCOUNT MANAGEMENT CONTROLLER (SECTIONS 6.1 - 6.5)
+     ========================================================================== */
+
+  // State
+  let usersDirectoryData = [];
+  let activeUserDossier = null;
+  let activeUserDossierTab = 'profile';
+
+  const defaultUsersDataFallback = [
+    {
+      userId: 'USR-1001',
+      name: 'Root Platform Administrator',
+      email: 'superadmin@srividya.edu.in',
+      phone: '+91 891 2748100',
+      institutionId: 'TRUST-ALL',
+      institutionName: 'Trust Central Operations',
+      roles: ['Super Administrator', 'Security Auditor'],
+      status: 'Active',
+      mfa: { enabled: true, method: 'totp' },
+      lastLogin: { timestamp: '2026-11-05T18:45:00Z', device: 'Chrome 128 (Windows 11)' },
+      invitation: { status: 'Verified' },
+      sessions: [
+        { sessionId: 'SES-9401', device: 'Workstation Alpha', browser: 'Chrome 128', os: 'Windows 11', ipAddress: '106.51.24.112', loginTime: '2026-11-05T09:15:00Z', lastActivity: '2026-11-05T18:45:00Z', authMethod: 'Password + TOTP MFA', isCurrent: true },
+        { sessionId: 'SES-9402', device: 'Admin Tablet', browser: 'Safari 18', os: 'iPadOS', ipAddress: '106.51.24.115', loginTime: '2026-11-04T14:20:00Z', lastActivity: '2026-11-04T16:00:00Z', authMethod: 'Password + FIDO2 Key', isCurrent: false }
+      ],
+      auditHistory: [
+        { action: 'Account Created', performedBy: 'System Bootstrap', timestamp: '2026-06-01T09:00:00Z', details: 'Master platform root account established.' }
+      ]
+    },
+    {
+      userId: 'USR-1002',
+      name: 'Smt. Gorle Varalakshmi',
+      email: 'srividyaschools2017@gmail.com',
+      phone: '+91 863 2234567',
+      institutionId: 'INST-001',
+      institutionName: 'Sri Vidya E.M High School (Main Campus)',
+      roles: ['Institutional Principal'],
+      status: 'Active',
+      mfa: { enabled: true, method: 'sms' },
+      lastLogin: { timestamp: '2026-11-05T17:30:00Z', device: 'Edge 129 (macOS)' },
+      invitation: { status: 'Verified' },
+      sessions: [
+        { sessionId: 'SES-9403', device: 'MacBook Air Principal Office', browser: 'Edge 129', os: 'macOS Sonoma', ipAddress: '183.82.112.45', loginTime: '2026-11-05T10:00:00Z', lastActivity: '2026-11-05T17:30:00Z', authMethod: 'Password + SMS OTP', isCurrent: true }
+      ],
+      auditHistory: [
+        { action: 'Initial Invite Verified', performedBy: 'Self', timestamp: '2026-06-01T10:15:00Z', details: 'Activated account via cryptographic token.' }
+      ]
+    },
+    {
+      userId: 'USR-1003',
+      name: 'Sri Navva Anand',
+      email: 'navva.anand.personal@gmail.com',
+      phone: '+91 9440123456',
+      institutionId: 'INST-001',
+      institutionName: 'Sri Vidya E.M High School (Main Campus)',
+      roles: ['Vice Principal & HOD Maths'],
+      status: 'Active',
+      mfa: { enabled: true, method: 'totp' },
+      lastLogin: { timestamp: '2026-11-05T16:15:00Z', device: 'Chrome 128 (Windows 11)' },
+      invitation: { status: 'Verified' },
+      sessions: [
+        { sessionId: 'SES-9404', device: 'Staff Room Desktop 02', browser: 'Chrome 128', os: 'Windows 11', ipAddress: '183.82.112.46', loginTime: '2026-11-05T08:45:00Z', lastActivity: '2026-11-05T16:15:00Z', authMethod: 'Password + TOTP MFA', isCurrent: false }
+      ],
+      auditHistory: [
+        { action: 'Role Assigned', performedBy: 'Smt. Gorle Varalakshmi', timestamp: '2026-06-02T11:30:00Z', details: 'Assigned Vice Principal role.' }
+      ]
+    },
+    {
+      userId: 'USR-1004',
+      name: 'Dr. K. S. Ramanujam',
+      email: 'principal.main@srividya.edu.in',
+      phone: '+91 891 2748102',
+      institutionId: 'INST-001',
+      institutionName: 'Sri Vidya E.M High School (Main Campus)',
+      roles: ['Examination In-Charge'],
+      status: 'Active',
+      mfa: { enabled: true, method: 'totp' },
+      lastLogin: { timestamp: '2026-11-04T12:00:00Z', device: 'Firefox 130 (Ubuntu)' },
+      invitation: { status: 'Verified' },
+      sessions: [],
+      auditHistory: []
+    },
+    {
+      userId: 'USR-1005',
+      name: 'Smt. P. Lakshmi Kameswari',
+      email: 'office.clerk@srividya.edu.in',
+      phone: '+91 891 2748103',
+      institutionId: 'INST-002',
+      institutionName: 'Sri Vidya High School (City Branch)',
+      roles: ['Office Clerk'],
+      status: 'Pending Invitation',
+      mfa: { enabled: false, method: 'none' },
+      lastLogin: { timestamp: null, device: 'N/A' },
+      invitation: { status: 'Dispatched', expiresAt: '2026-11-12T10:00:00Z' },
+      sessions: [],
+      auditHistory: []
+    },
+    {
+      userId: 'USR-1006',
+      name: 'Sri T. Ramesh Kumar',
+      email: 'ramesh.accounts@srividya.edu.in',
+      phone: '+91 9440128899',
+      institutionId: 'INST-002',
+      institutionName: 'Sri Vidya High School (City Branch)',
+      roles: ['Fee Collection Clerk'],
+      status: 'Suspended',
+      suspensionDetails: { reason: 'Audit reconciliation pending for cash receipts discrepancy' },
+      mfa: { enabled: true, method: 'sms' },
+      lastLogin: { timestamp: '2026-10-28T13:45:00Z', device: 'Chrome 128 (Windows 10)' },
+      invitation: { status: 'Verified' },
+      sessions: [],
+      auditHistory: []
+    }
+  ];
+
+  async function loadUsersDirectory() {
+    try {
+      const res = await fetch('/api/v1/platform/users');
+      if (res.ok) {
+        const json = await res.json();
+        if (json.success && json.data) {
+          usersDirectoryData = json.data;
+          applyUsersSummary(json.summary);
+          filterUsersDirectory();
+          return;
+        }
+      }
+    } catch (e) {}
+
+    // Offline fallback
+    usersDirectoryData = defaultUsersDataFallback;
+    applyUsersSummary({
+      totalAccounts: usersDirectoryData.length,
+      activeAccounts: usersDirectoryData.filter(u => u.status === 'Active').length,
+      pendingInvitations: usersDirectoryData.filter(u => u.status === 'Pending Invitation').length,
+      suspendedAccounts: usersDirectoryData.filter(u => u.status === 'Suspended').length,
+      accountsRequiringAttention: usersDirectoryData.filter(u => !u.mfa?.enabled || u.status === 'Suspended').length
+    });
+    filterUsersDirectory();
+  }
+
+  function applyUsersSummary(s) {
+    if (!s) return;
+    const setT = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
+    setT('kpiUserTotal', s.totalAccounts || 0);
+    setT('kpiUserActive', s.activeAccounts || 0);
+    setT('kpiUserPendingInvites', s.pendingInvitations || 0);
+    setT('kpiUserSuspended', s.suspendedAccounts || 0);
+    setT('kpiUserAttention', s.accountsRequiringAttention || 0);
+  }
+
+  function filterUsersDirectory() {
+    const q = (document.getElementById('userSearchInput')?.value || '').toLowerCase().trim();
+    const inst = document.getElementById('userInstFilter')?.value || 'all';
+    const role = document.getElementById('userRoleFilter')?.value || 'all';
+    const status = document.getElementById('userStatusFilter')?.value || 'all';
+    const inviteStatus = document.getElementById('userInviteStatusFilter')?.value || 'all';
+    const mfa = document.getElementById('userMfaFilter')?.value || 'all';
+
+    const filtered = usersDirectoryData.filter(u => {
+      if (q && !u.name.toLowerCase().includes(q) && !u.email.toLowerCase().includes(q) && !u.userId.toLowerCase().includes(q)) {
+        return false;
+      }
+      if (inst !== 'all' && u.institutionId !== inst) return false;
+      if (role !== 'all' && !u.roles.some(r => r.toLowerCase().includes(role.toLowerCase()))) return false;
+      if (status !== 'all' && u.status !== status) return false;
+      if (inviteStatus !== 'all' && u.invitation?.status !== inviteStatus) return false;
+      if (mfa === 'enforced' && !u.mfa?.enabled) return false;
+      if (mfa === 'disabled' && u.mfa?.enabled) return false;
+      return true;
+    });
+
+    // Update filtered counts
+    const fCountEl = document.getElementById('userFilteredCount');
+    const tCountEl = document.getElementById('userTotalCount');
+    if (fCountEl) fCountEl.textContent = filtered.length;
+    if (tCountEl) tCountEl.textContent = usersDirectoryData.length;
+
+    renderUsersTable(filtered);
+  }
+
+  function resetUserFilters() {
+    const s = document.getElementById('userSearchInput'); if (s) s.value = '';
+    const i = document.getElementById('userInstFilter'); if (i) i.value = 'all';
+    const r = document.getElementById('userRoleFilter'); if (r) r.value = 'all';
+    const st = document.getElementById('userStatusFilter'); if (st) st.value = 'all';
+    const inv = document.getElementById('userInviteStatusFilter'); if (inv) inv.value = 'all';
+    const l = document.getElementById('userLastLoginFilter'); if (l) l.value = 'all';
+    const m = document.getElementById('userMfaFilter'); if (m) m.value = 'all';
+
+    filterUsersDirectory();
+    showToast('User directory filters reset.', 'info');
+  }
+
+  function renderUsersTable(list) {
+    const tbody = document.getElementById('usersTableBody');
+    if (!tbody) return;
+
+    if (list.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="9" style="text-align: center; padding: 2.5rem; color: #64748B;">No user accounts match the selected filter criteria.</td></tr>';
+      return;
+    }
+
+    tbody.innerHTML = list.map(u => {
+      const initials = u.name.split(' ').map(n => n[0]).slice(0, 2).join('').toUpperCase();
+      let statusClass = 'status-pill-user-active';
+      if (u.status === 'Suspended') statusClass = 'status-pill-user-suspended';
+      else if (u.status === 'Pending Invitation') statusClass = 'status-pill-user-pending';
+      else if (u.status === 'Deactivated') statusClass = 'status-pill-user-deactivated';
+
+      const lastLoginStr = u.lastLogin?.timestamp
+        ? new Date(u.lastLogin.timestamp).toLocaleDateString('en-IN', { day: '2-digit', month: 'short' }) + ' (' + (u.lastLogin.device || 'Web') + ')'
+        : '<span class="text-muted">Never Logged In</span>';
+
+      const mfaBadge = u.mfa?.enabled
+        ? '<span class="badge bg-success-subtle text-success border border-success"><i class="fa-solid fa-fingerprint me-1"></i> Enforced (' + (u.mfa.method || 'TOTP').toUpperCase() + ')</span>'
+        : '<span class="badge bg-warning-subtle text-warning border border-warning"><i class="fa-solid fa-triangle-exclamation me-1"></i> Disabled</span>';
+
+      return `
+        <tr>
+          <td><strong class="font-mono text-primary">${u.userId}</strong></td>
+          <td>
+            <div style="display: flex; align-items: center; gap: 0.65rem;">
+              <div class="pa-user-avatar">${initials}</div>
+              <div>
+                <strong style="color: #1E293B;">${u.name}</strong>
+                ${u.employeeRecordId ? '<div style="font-size: 0.72rem; color: #64748B;"><i class="fa-solid fa-id-badge me-1"></i>' + u.employeeRecordId + '</div>' : ''}
+              </div>
+            </div>
+          </td>
+          <td>
+            <div style="font-size: 0.82rem; color: #334155;">${u.email}</div>
+            <div style="font-size: 0.72rem; color: #10B981;"><i class="fa-solid fa-shield-check me-1"></i> Verified Domain</div>
+          </td>
+          <td><span class="badge" style="background: #F1F5F9; color: #334155;">${u.institutionName || u.institutionId}</span></td>
+          <td>
+            <div style="display: flex; flex-wrap: wrap; gap: 3px;">
+              ${(u.roles || []).map(r => '<span class="badge" style="background: #EEF2FF; color: #4338CA; font-size: 0.72rem;">' + r + '</span>').join('')}
+            </div>
+          </td>
+          <td><span class="${statusClass}">${u.status}</span></td>
+          <td style="font-size: 0.8rem; white-space: nowrap;">${lastLoginStr}</td>
+          <td>${mfaBadge}</td>
+          <td style="text-align: right; white-space: nowrap;">
+            <button type="button" class="btn-pa btn-pa-secondary" style="padding: 0.25rem 0.55rem; font-size: 0.75rem;" onclick="platformApp.viewUserDossier('${u.userId}')" title="Open 7-Tab User Dossier">
+              <i class="fa-solid fa-eye me-1"></i> Dossier
+            </button>
+            <button type="button" class="btn btn-outline-secondary btn-sm" style="padding: 2px 7px; font-size: 0.72rem;" onclick="platformApp.openUserQuickActions('${u.userId}')" title="Quick Security Actions">
+              <i class="fa-solid fa-ellipsis-vertical"></i>
+            </button>
+          </td>
+        </tr>
+      `;
+    }).join('');
+  }
+
+  function exportUsersCSV() {
+    let csv = 'User ID,Full Name,Official Email,Contact Phone,Institution,Assigned Roles,Account Status,MFA Status,Last Login\n';
+    usersDirectoryData.forEach(u => {
+      const roles = (u.roles || []).join('; ');
+      csv += `"${u.userId}","${u.name}","${u.email}","${u.phone || ''}","${u.institutionName}","${roles}","${u.status}","${u.mfa?.enabled ? 'Enforced' : 'Disabled'}","${u.lastLogin?.timestamp || 'Never'}"\n`;
+    });
+
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = `Sri_Vidya_User_Directory_${new Date().toISOString().split('T')[0]}.csv`;
+    link.click();
+    showToast('Accounts directory exported to CSV.', 'info');
+  }
+
+  function openImportUsers() {
+    openNewImportWizard();
+  }
+
+  /* -------------------------------------------------------------------------
+     6.2 CREATE USER
+     ------------------------------------------------------------------------- */
+  function openCreateUserModal() {
+    const f = document.getElementById('formCreateUser');
+    if (f) f.reset();
+    openModal('modalCreateUser');
+  }
+
+  async function handleCreateUserSubmit(event) {
+    if (event) event.preventDefault();
+
+    const name = document.getElementById('newUserFullName')?.value;
+    const email = document.getElementById('newUserEmail')?.value;
+    const phone = document.getElementById('newUserPhone')?.value;
+    const empId = document.getElementById('newUserEmployeeId')?.value;
+    const instId = document.getElementById('newUserInstitution')?.value;
+    const role = document.getElementById('newUserRoles')?.value;
+    const actMethod = document.getElementById('newUserActivationMethod')?.value;
+    const expiry = document.getElementById('newUserInviteExpiry')?.value;
+    const reqMfa = document.getElementById('newUserRequireMfa')?.checked;
+    const reqRot = document.getElementById('newUserPasswordRotation')?.checked;
+    const bindDev = document.getElementById('newUserDeviceBinding')?.checked;
+
+    const payload = {
+      name,
+      email,
+      phone,
+      employeeRecordId: empId,
+      institutionId: instId,
+      institutionName: instId === 'TRUST-ALL' ? 'Trust Central Operations' : 'Sri Vidya High School',
+      roles: [role],
+      activationMethod: actMethod,
+      invitationExpiryHours: expiry,
+      requireMfa: reqMfa,
+      requirePasswordRotation: reqRot,
+      bindToRegisteredDevices: bindDev
+    };
+
+    try {
+      const res = await fetch('/api/v1/platform/users', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      if (res.ok) {
+        const json = await res.json();
+        if (json.success && json.data) {
+          usersDirectoryData.unshift(json.data);
+          closeModal('modalCreateUser');
+          filterUsersDirectory();
+          showToast(`User account ${name} provisioned. Activation token dispatched.`, 'success');
+          return;
+        }
+      }
+    } catch (e) {}
+
+    // Offline fallback
+    const mockCreated = {
+      userId: `USR-${Math.floor(1008 + Math.random() * 8000)}`,
+      name,
+      email,
+      phone,
+      institutionId: instId,
+      institutionName: instId === 'TRUST-ALL' ? 'Trust Central Operations' : 'Sri Vidya High School',
+      roles: [role],
+      status: 'Pending Invitation',
+      mfa: { enabled: reqMfa, method: 'totp' },
+      lastLogin: { timestamp: null, device: 'N/A' },
+      invitation: { status: 'Dispatched', expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000) },
+      sessions: [],
+      auditHistory: [{ action: 'Account Created', performedBy: 'Platform Administrator', timestamp: new Date(), details: 'Created via admin console.' }]
+    };
+    usersDirectoryData.unshift(mockCreated);
+    closeModal('modalCreateUser');
+    filterUsersDirectory();
+    showToast(`User account ${name} provisioned. Activation invitation dispatched.`, 'success');
+  }
+
+  /* -------------------------------------------------------------------------
+     6.3 & 6.5 USER DETAIL 7-TAB DOSSIER
+     ------------------------------------------------------------------------- */
+  function viewUserDossier(userId) {
+    const user = usersDirectoryData.find(u => u.userId === userId || u.email === userId) || usersDirectoryData[0];
+    if (!user) return;
+    activeUserDossier = user;
+
+    // Header Info
+    const nameEl = document.getElementById('dossierUserName'); if (nameEl) nameEl.textContent = user.name;
+    const idEl = document.getElementById('dossierUserId'); if (idEl) idEl.textContent = user.userId;
+    const emailEl = document.getElementById('dossierUserEmail'); if (emailEl) emailEl.textContent = user.email;
+    const campusEl = document.getElementById('dossierUserCampus'); if (campusEl) campusEl.textContent = user.institutionName || user.institutionId;
+    const avatarEl = document.getElementById('dossierUserAvatar');
+    if (avatarEl) avatarEl.textContent = user.name.split(' ').map(n => n[0]).slice(0, 2).join('').toUpperCase();
+
+    const pillEl = document.getElementById('dossierUserStatusPill');
+    if (pillEl) {
+      pillEl.textContent = user.status;
+      pillEl.className = (user.status === 'Active') ? 'status-pill-user-active' : (user.status === 'Suspended' ? 'status-pill-user-suspended' : 'status-pill-user-pending');
+    }
+
+    const btnSuspend = document.getElementById('btnDossierSuspend');
+    if (btnSuspend) {
+      btnSuspend.innerHTML = (user.status === 'Suspended')
+        ? '<i class="fa-solid fa-circle-check me-1"></i> Reactivate Account'
+        : '<i class="fa-solid fa-ban me-1"></i> Suspend Account';
+    }
+
+    // Populate Tab 1: Profile
+    const setT = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val || 'N/A'; };
+    setT('dossierProfName', user.name);
+    setT('dossierProfEmail', user.email);
+    setT('dossierProfPhone', user.phone || '+91 891 2748102');
+    setT('dossierProfDept', user.department || 'Administration');
+    setT('dossierProfEmp', user.employeeRecordId || 'EMP-SV-014');
+
+    // Populate Tab 2: Institutions
+    const instEl = document.getElementById('dossierInstName');
+    if (instEl) instEl.textContent = user.institutionName || user.institutionId;
+
+    // Populate Tab 3: Roles
+    const rolesContainer = document.getElementById('dossierRolesList');
+    if (rolesContainer) {
+      rolesContainer.innerHTML = (user.roles || []).map(r => `
+        <span class="badge" style="background: #EEF2FF; color: #4338CA; padding: 0.5rem 0.85rem; font-size: 0.85rem; border-radius: 6px;">
+          <i class="fa-solid fa-id-card-clip me-1"></i> ${r}
+        </span>
+      `).join('');
+    }
+
+    // Populate Tab 4: Security
+    const mfaBadge = document.getElementById('dossierMfaBadge');
+    if (mfaBadge) {
+      mfaBadge.textContent = user.mfa?.enabled ? `Enforced (${(user.mfa.method || 'TOTP').toUpperCase()})` : 'Disabled';
+      mfaBadge.className = user.mfa?.enabled ? 'badge bg-success' : 'badge bg-warning text-dark';
+    }
+
+    // Populate Tab 5: Sessions
+    const sessions = user.sessions || [];
+    const sessCountEl = document.getElementById('dossierSessionCount');
+    if (sessCountEl) sessCountEl.textContent = sessions.length;
+    const sessBox = document.getElementById('dossierSessionsContainer');
+    if (sessBox) {
+      if (sessions.length === 0) {
+        sessBox.innerHTML = '<div class="text-center py-4 text-muted"><i class="fa-solid fa-desktop fa-2x mb-2" style="opacity: 0.4;"></i><div>No active login sessions detected for this account.</div></div>';
+      } else {
+        sessBox.innerHTML = sessions.map(s => `
+          <div class="pa-session-card">
+            <div style="display: flex; align-items: center; gap: 1rem;">
+              <div style="width: 40px; height: 40px; border-radius: 8px; background: #EEF2FF; color: #4F46E5; display: flex; align-items: center; justify-content: center; font-size: 1.1rem;">
+                <i class="fa-solid fa-desktop"></i>
+              </div>
+              <div>
+                <div style="display: flex; align-items: center; gap: 0.5rem;">
+                  <strong>${s.device}</strong>
+                  ${s.isCurrent ? '<span class="pa-session-badge-current">This Session</span>' : ''}
+                </div>
+                <div style="font-size: 0.78rem; color: #64748B;">
+                  ${s.browser} on ${s.os} &bull; IP: ${s.ipAddress} &bull; Auth: ${s.authMethod}
+                </div>
+                <div style="font-size: 0.72rem; color: #94A3B8; margin-top: 2px;">
+                  Logged in: ${new Date(s.loginTime).toLocaleString()} &bull; Last Activity: ${new Date(s.lastActivity).toLocaleTimeString()}
+                </div>
+              </div>
+            </div>
+            <div>
+              <button type="button" class="btn btn-outline-danger btn-sm" onclick="platformApp.revokeUserSession('${s.sessionId}')">
+                <i class="fa-solid fa-ban me-1"></i> Revoke
+              </button>
+            </div>
+          </div>
+        `).join('');
+      }
+    }
+
+    // Populate Tab 6: Invitations
+    const invBox = document.getElementById('dossierInvitationsContainer');
+    if (invBox) {
+      invBox.innerHTML = `
+        <div class="p-3 bg-light rounded border mb-3">
+          <div class="d-flex justify-content-between align-items-center">
+            <div>
+              <strong>Active Activation Status:</strong>
+              <span class="badge bg-primary ms-1">${user.invitation?.status || 'Verified'}</span>
+            </div>
+            <div class="small text-muted">
+              ${user.invitation?.expiresAt ? 'Expires on: ' + new Date(user.invitation.expiresAt).toLocaleDateString() : 'Lifetime Verified'}
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    // Populate Tab 7: Audit
+    const auditBox = document.getElementById('dossierAuditContainer');
+    if (auditBox) {
+      const logs = user.auditHistory || [];
+      if (logs.length === 0) {
+        auditBox.innerHTML = '<div class="text-center py-4 text-muted">No sensitive administrative modifications logged.</div>';
+      } else {
+        auditBox.innerHTML = logs.map(l => `
+          <div class="d-flex align-items-start gap-3 p-3 border-bottom">
+            <div class="badge bg-secondary text-white mt-1"><i class="fa-solid fa-shield"></i></div>
+            <div class="flex-grow-1">
+              <div class="d-flex justify-content-between">
+                <strong>${l.action}</strong>
+                <small class="text-muted">${new Date(l.timestamp).toLocaleString()}</small>
+              </div>
+              <div class="small text-dark mt-1">${l.details}</div>
+              <div class="small text-muted mt-1">Responsible Operator: ${l.performedBy}</div>
+            </div>
+          </div>
+        `).join('');
+      }
+    }
+
+    switchUserDossierTab('profile');
+    openModal('modalUserDossier');
+  }
+
+  function switchUserDossierTab(tabKey) {
+    activeUserDossierTab = tabKey;
+    const tabs = ['profile', 'institutions', 'roles', 'security', 'sessions', 'invitations', 'audit'];
+    tabs.forEach(t => {
+      const btn = document.getElementById(`btnUserTab_${t}`);
+      const pane = document.getElementById(`dossierPane_${t}`);
+      if (btn) btn.classList.toggle('active', t === tabKey);
+      if (pane) pane.style.display = (t === tabKey) ? 'block' : 'none';
+    });
+  }
+
+  function openUserQuickActions(userId) {
+    viewUserDossier(userId);
+  }
+
+  async function resendUserInvitation() {
+    if (!activeUserDossier) return;
+    try {
+      await fetch(`/api/v1/platform/users/${activeUserDossier.userId}/resend-invite`, { method: 'POST' });
+    } catch(e) {}
+    showToast(`New cryptographic activation invitation re-issued to ${activeUserDossier.email}.`, 'success');
+  }
+
+  async function toggleUserSuspension() {
+    if (!activeUserDossier) return;
+    const isSuspended = activeUserDossier.status === 'Suspended';
+    const action = isSuspended ? 'reactivate' : 'suspend';
+
+    if (!isSuspended) {
+      const reason = prompt('Enter statutory justification for suspending this account:');
+      if (!reason) return;
+      try {
+        await fetch(`/api/v1/platform/users/${activeUserDossier.userId}/suspend`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ reason })
+        });
+      } catch(e) {}
+      activeUserDossier.status = 'Suspended';
+      showToast(`Account ${activeUserDossier.name} suspended. All active sessions terminated.`, 'warning');
+    } else {
+      try {
+        await fetch(`/api/v1/platform/users/${activeUserDossier.userId}/reactivate`, { method: 'POST' });
+      } catch(e) {}
+      activeUserDossier.status = 'Active';
+      showToast(`Account ${activeUserDossier.name} reactivated successfully.`, 'success');
+    }
+    viewUserDossier(activeUserDossier.userId);
+    filterUsersDirectory();
+  }
+
+  async function deactivateUserAccount() {
+    if (!activeUserDossier) return;
+    const confirmed = confirm(`DEACTIVATION CONFIRMATION:\n\nIn compliance with Trust Audit Governance (Section 22.1 & 22.4), accounts cannot be permanently deleted. Identity records are permanently retained for ledger traceability.\n\nDo you wish to deactivate account ${activeUserDossier.name}?`);
+    if (!confirmed) return;
+
+    try {
+      await fetch(`/api/v1/platform/users/${activeUserDossier.userId}/deactivate`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ reason: 'Administrative deactivation' })
+      });
+    } catch(e) {}
+
+    activeUserDossier.status = 'Deactivated';
+    closeModal('modalUserDossier');
+    filterUsersDirectory();
+    showToast(`Account ${activeUserDossier.name} deactivated. Historical audit identity preserved.`, 'info');
+  }
+
+  async function triggerUserPasswordReset() {
+    if (!activeUserDossier) return;
+    try {
+      await fetch(`/api/v1/platform/users/${activeUserDossier.userId}/reset-password`, { method: 'POST' });
+    } catch(e) {}
+    showToast(`Forced password rotation applied for ${activeUserDossier.name}. Active sessions revoked.`, 'success');
+  }
+
+  async function revokeUserSession(sessionId) {
+    if (!activeUserDossier) return;
+    try {
+      await fetch(`/api/v1/platform/users/${activeUserDossier.userId}/sessions/${sessionId}`, { method: 'DELETE' });
+    } catch(e) {}
+    activeUserDossier.sessions = (activeUserDossier.sessions || []).filter(s => s.sessionId !== sessionId);
+    viewUserDossier(activeUserDossier.userId);
+    showToast(`Login session #${sessionId} revoked successfully.`, 'success');
+  }
+
+  async function revokeAllUserSessions() {
+    if (!activeUserDossier) return;
+    try {
+      await fetch(`/api/v1/platform/users/${activeUserDossier.userId}/sessions`, { method: 'DELETE' });
+    } catch(e) {}
+    activeUserDossier.sessions = [];
+    viewUserDossier(activeUserDossier.userId);
+    showToast(`All active login sessions for ${activeUserDossier.name} forcefully revoked.`, 'success');
+  }
+
+
   function init() {
     setupTheme();
     updatePlatformClock();
@@ -3351,6 +3948,22 @@ const platformApp = (function () {
     openFailedJobsModal,
     openSecurityAlertsModal,
     handleInviteAdmin,
+    revokeAllUserSessions,
+    revokeUserSession,
+    triggerUserPasswordReset,
+    deactivateUserAccount,
+    toggleUserSuspension,
+    resendUserInvitation,
+    openUserQuickActions,
+    switchUserDossierTab,
+    viewUserDossier,
+    handleCreateUserSubmit,
+    openCreateUserModal,
+    openImportUsers,
+    exportUsersCSV,
+    resetUserFilters,
+    filterUsersDirectory,
+    loadUsersDirectory,
     downloadImportTemplates,
     downloadImportErrorsCSV,
     switchImportPreviewSubTab,

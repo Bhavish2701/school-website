@@ -1575,3 +1575,148 @@ input:checked + .pa-slider:before {
   font-size: 0.72rem;
   font-weight: 600;
 }
+
+/* ==========================================================================
+   MODULE 6: USER & ACCOUNT MANAGEMENT SUITE (SECTIONS 6.1 - 6.5)
+   ========================================================================== */
+
+/* User Directory Avatar */
+.pa-user-avatar {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #4F46E5, #818CF8);
+  color: #FFFFFF;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.8rem;
+  flex-shrink: 0;
+}
+
+.status-pill-user-active {
+  background: #DCFCE7;
+  color: #15803D;
+  border: 1px solid #86EFAC;
+  padding: 3px 8px;
+  border-radius: 12px;
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+
+.status-pill-user-suspended {
+  background: #FEE2E2;
+  color: #B91C1C;
+  border: 1px solid #FCA5A5;
+  padding: 3px 8px;
+  border-radius: 12px;
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+
+.status-pill-user-pending {
+  background: #FEF3C7;
+  color: #B45309;
+  border: 1px solid #FCD34D;
+  padding: 3px 8px;
+  border-radius: 12px;
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+
+.status-pill-user-deactivated {
+  background: #F1F5F9;
+  color: #64748B;
+  border: 1px solid #CBD5E1;
+  padding: 3px 8px;
+  border-radius: 12px;
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+
+/* 7-Tab Dossier Subnav */
+.pa-user-dossier-subnav {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: #F8FAFC;
+  border-bottom: 1px solid #E2E8F0;
+  padding: 0.5rem 1.25rem 0;
+  overflow-x: auto;
+}
+
+.pa-user-dossier-tab-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.5rem 0.85rem;
+  font-size: 0.82rem;
+  font-weight: 600;
+  border: none;
+  border-bottom: 2px solid transparent;
+  background: transparent;
+  color: #64748B;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.pa-user-dossier-tab-btn:hover {
+  color: #1E293B;
+  background: rgba(0,0,0,0.02);
+}
+
+.pa-user-dossier-tab-btn.active {
+  color: var(--pa-primary, #4F46E5);
+  border-bottom-color: var(--pa-primary, #4F46E5);
+  font-weight: 700;
+  background: transparent;
+}
+
+[data-theme="dark"] .pa-user-dossier-subnav {
+  background: #0F172A;
+  border-color: #334155;
+}
+
+[data-theme="dark"] .pa-user-dossier-tab-btn {
+  color: #94A3B8;
+}
+
+[data-theme="dark"] .pa-user-dossier-tab-btn:hover {
+  color: #F8FAFC;
+}
+
+[data-theme="dark"] .pa-user-dossier-tab-btn.active {
+  color: #818CF8;
+  border-bottom-color: #818CF8;
+}
+
+/* Session Cards */
+.pa-session-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.25rem;
+  background: var(--pa-card-bg, #FFFFFF);
+  border: 1px solid var(--pa-border, #E2E8F0);
+  border-radius: 10px;
+  margin-bottom: 0.75rem;
+  transition: all 0.2s ease;
+}
+
+.pa-session-card:hover {
+  border-color: #CBD5E1;
+  box-shadow: 0 2px 6px rgba(15, 23, 42, 0.04);
+}
+
+.pa-session-badge-current {
+  background: #DCFCE7;
+  color: #15803D;
+  border: 1px solid #86EFAC;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 0.68rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}

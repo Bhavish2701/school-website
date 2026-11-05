@@ -1656,35 +1656,203 @@
       <!-- =======================================================================
            MODULE 4: USER & ACCOUNT MANAGEMENT (#view-users)
            ======================================================================= -->
+            <!-- =======================================================================
+           MODULE 6: USER & ACCOUNT MANAGEMENT (#view-users)
+           ======================================================================= -->
       <section class="portal-view" id="view-users">
-        <div class="pa-card">
-          <div class="pa-card-header">
-            <div>
-              <h3 class="pa-card-title"><i class="fa-solid fa-user-shield text-primary"></i> User &amp; Account
-                Management</h3>
-              <p class="pa-card-desc">Super Admins, Institutional Executives, and Platform Operators with MFA
-                Enforcement</p>
-            </div>
-            <button class="btn-pa btn-pa-primary"
-              onclick="platformApp.showToast('Invitation dispatched to operator email', 'info')">
-              <i class="fa-solid fa-user-plus"></i> Provision New Operator
+        <!-- Module Header -->
+        <div class="pa-view-header mb-3" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+          <div>
+            <h2 style="margin: 0; font-size: 1.4rem; font-weight: 800; color: var(--color-text-main); display: flex; align-items: center; gap: 0.5rem;">
+              <i class="fa-solid fa-user-shield text-primary"></i> User &amp; Account Management
+            </h2>
+            <p style="margin: 3px 0 0; font-size: 0.85rem; color: #64748B;">
+              Cross-platform identity lifecycle governance, institutional authorization scoping, and session security without bypassing school permissions.
+            </p>
+          </div>
+          <div style="display: flex; gap: 0.65rem; align-items: center; flex-wrap: wrap;">
+            <button type="button" class="btn-pa btn-pa-secondary" onclick="platformApp.exportUsersCSV()" title="Export current accounts directory to CSV">
+              <i class="fa-solid fa-file-csv text-emerald me-1"></i> Export Directory
+            </button>
+            <button type="button" class="btn-pa btn-pa-secondary" onclick="platformApp.openImportUsers()" title="Bulk import authorized users">
+              <i class="fa-solid fa-file-import me-1"></i> Import Users
+            </button>
+            <button type="button" class="btn-pa btn-pa-primary" onclick="platformApp.openCreateUserModal()" title="Provision new user identity">
+              <i class="fa-solid fa-user-plus me-1"></i> + Create User
             </button>
           </div>
+        </div>
 
+        <!-- 5 Summary Cards (Section 6.1 Specification) -->
+        <div class="pa-kpi-grid mb-4" style="grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));">
+          <div class="pa-kpi-card" style="border-left: 4px solid #4F46E5;">
+            <div class="pa-kpi-header">
+              <span class="pa-kpi-title">Total Accounts</span>
+              <div class="pa-kpi-icon" style="background: rgba(79,70,229,0.12); color: #4F46E5;"><i class="fa-solid fa-users"></i></div>
+            </div>
+            <div class="pa-kpi-value text-primary" id="kpiUserTotal">6</div>
+            <div class="pa-kpi-sub">Across all Trust entities</div>
+          </div>
+
+          <div class="pa-kpi-card" style="border-left: 4px solid #10B981;">
+            <div class="pa-kpi-header">
+              <span class="pa-kpi-title">Active Accounts</span>
+              <div class="pa-kpi-icon" style="background: rgba(16,185,129,0.12); color: #10B981;"><i class="fa-solid fa-user-check"></i></div>
+            </div>
+            <div class="pa-kpi-value text-emerald" id="kpiUserActive">4</div>
+            <div class="pa-kpi-sub">Verified &amp; active logins</div>
+          </div>
+
+          <div class="pa-kpi-card" style="border-left: 4px solid #F59E0B;">
+            <div class="pa-kpi-header">
+              <span class="pa-kpi-title">Pending Invitations</span>
+              <div class="pa-kpi-icon" style="background: rgba(245,158,11,0.12); color: #F59E0B;"><i class="fa-solid fa-envelope-open-text"></i></div>
+            </div>
+            <div class="pa-kpi-value text-amber" id="kpiUserPendingInvites">1</div>
+            <div class="pa-kpi-sub">Dispatched activation tokens</div>
+          </div>
+
+          <div class="pa-kpi-card" style="border-left: 4px solid #EF4444;">
+            <div class="pa-kpi-header">
+              <span class="pa-kpi-title">Suspended Accounts</span>
+              <div class="pa-kpi-icon" style="background: rgba(239,68,68,0.12); color: #EF4444;"><i class="fa-solid fa-user-lock"></i></div>
+            </div>
+            <div class="pa-kpi-value text-danger" id="kpiUserSuspended">1</div>
+            <div class="pa-kpi-sub">Locked by audit decree</div>
+          </div>
+
+          <div class="pa-kpi-card" style="border-left: 4px solid #8B5CF6;">
+            <div class="pa-kpi-header">
+              <span class="pa-kpi-title">Requiring Attention</span>
+              <div class="pa-kpi-icon" style="background: rgba(139,92,246,0.12); color: #8B5CF6;"><i class="fa-solid fa-shield-halved"></i></div>
+            </div>
+            <div class="pa-kpi-value text-indigo" id="kpiUserAttention">2</div>
+            <div class="pa-kpi-sub">MFA setup / expired tokens</div>
+          </div>
+        </div>
+
+        <!-- Multi-Field Search & Filter Toolbar (2-Tier Enterprise Architecture) -->
+        <div class="transfers-toolbar-container mb-3">
+          <!-- Tier 1: Search & Granular Filters -->
+          <div style="display: grid; grid-template-columns: minmax(220px, 1.8fr) repeat(6, minmax(130px, 1fr)); gap: 0.65rem; align-items: center; width: 100%;">
+            <div class="tc-search-wrap" style="width: 100%; position: relative;">
+              <i class="fa-solid fa-magnifying-glass search-icon"></i>
+              <input type="text" id="userSearchInput" class="tc-search-input"
+                placeholder="Search by Name, Email, or User ID..."
+                oninput="platformApp.filterUsersDirectory()">
+              <button type="button" class="tc-clear-btn"
+                onclick="document.getElementById('userSearchInput').value=''; platformApp.filterUsersDirectory();"
+                title="Clear Search">
+                <i class="fa-solid fa-xmark"></i>
+              </button>
+            </div>
+
+            <div class="tc-select-wrap">
+              <select id="userInstFilter" class="tc-filter-select" onchange="platformApp.filterUsersDirectory()" title="Filter by Institution">
+                <option value="all">All Institutions</option>
+                <option value="TRUST-ALL">Trust Central</option>
+                <option value="INST-001">Main Campus</option>
+                <option value="INST-002">City Branch</option>
+                <option value="INST-003">Valley Campus</option>
+                <option value="INST-004">Junior College</option>
+              </select>
+            </div>
+
+            <div class="tc-select-wrap">
+              <select id="userRoleFilter" class="tc-filter-select" onchange="platformApp.filterUsersDirectory()" title="Filter by Role">
+                <option value="all">All Assigned Roles</option>
+                <option value="Super Administrator">Super Administrator</option>
+                <option value="Institutional Principal">Principal</option>
+                <option value="Vice Principal">Vice Principal</option>
+                <option value="Examination In-Charge">Exam Controller</option>
+                <option value="Office Clerk">Office Clerk</option>
+                <option value="Fee Collection Clerk">Accounts / Fees</option>
+              </select>
+            </div>
+
+            <div class="tc-select-wrap">
+              <select id="userStatusFilter" class="tc-filter-select" onchange="platformApp.filterUsersDirectory()" title="Filter by Account Status">
+                <option value="all">All Account States</option>
+                <option value="Active">Active</option>
+                <option value="Pending Invitation">Pending Invitation</option>
+                <option value="Suspended">Suspended</option>
+                <option value="Deactivated">Deactivated</option>
+              </select>
+            </div>
+
+            <div class="tc-select-wrap">
+              <select id="userInviteStatusFilter" class="tc-filter-select" onchange="platformApp.filterUsersDirectory()" title="Filter by Invitation Status">
+                <option value="all">All Invite States</option>
+                <option value="Verified">Verified &amp; Activated</option>
+                <option value="Dispatched">Dispatched Pending</option>
+                <option value="Expired">Expired</option>
+              </select>
+            </div>
+
+            <div class="tc-select-wrap">
+              <select id="userLastLoginFilter" class="tc-filter-select" onchange="platformApp.filterUsersDirectory()" title="Filter by Last Login">
+                <option value="all">All Login Periods</option>
+                <option value="today">Today</option>
+                <option value="7days">Last 7 Days</option>
+                <option value="30days">Last 30 Days</option>
+                <option value="inactive">Inactive &gt; 30 Days</option>
+              </select>
+            </div>
+
+            <div class="tc-select-wrap">
+              <select id="userMfaFilter" class="tc-filter-select" onchange="platformApp.filterUsersDirectory()" title="Filter by MFA Status">
+                <option value="all">All MFA States</option>
+                <option value="enforced">MFA Enforced</option>
+                <option value="disabled">MFA Pending / Off</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Tier 2: Governance Indicators & Actions -->
+          <div class="transfers-governance-row">
+            <div class="tc-stats-left">
+              <span class="tc-count-pill" id="userFilterCountDisplay">
+                <i class="fa-solid fa-list-check text-primary mr-1"></i> Showing <strong id="userFilteredCount">6</strong> of
+                <strong id="userTotalCount">6</strong> Accounts
+              </span>
+              <span class="toolbar-tag-pill">
+                <i class="fa-solid fa-shield-halved text-primary mr-1"></i> Trust Multi-Tenant Identity Directory
+              </span>
+              <span class="toolbar-tag-pill stat-badge-verified">
+                <i class="fa-solid fa-fingerprint text-success mr-1"></i> FIDO2 / TOTP Supported
+              </span>
+            </div>
+
+            <div class="tc-actions-right">
+              <button type="button" class="btn btn-outline-secondary btn-sm" onclick="platformApp.resetUserFilters()" title="Reset all filters">
+                <i class="fa-solid fa-rotate-left me-1"></i> Reset Filters
+              </button>
+              <button type="button" class="btn btn-outline-secondary btn-sm" onclick="platformApp.exportUsersCSV()" title="Export current accounts list to CSV">
+                <i class="fa-solid fa-file-excel text-success me-1"></i> Export Directory
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Authoritative 9-Column Accounts Table (Section 6.1 Specification) -->
+        <div class="pa-card">
           <div class="pa-table-responsive">
-            <table class="pa-table">
+            <table class="pa-table" id="usersTable">
               <thead>
                 <tr>
-                  <th>Account Holder</th>
-                  <th>Assigned Role</th>
-                  <th>Campus Scope</th>
+                  <th>User ID</th>
+                  <th>Name</th>
+                  <th>Email</th>
+                  <th>Institution Scope</th>
+                  <th>Assigned Roles</th>
+                  <th>Account Status</th>
+                  <th>Last Login</th>
                   <th>MFA Status</th>
-                  <th>Last Authentication</th>
-                  <th>Actions</th>
+                  <th style="text-align: right;">Actions</th>
                 </tr>
               </thead>
-              <tbody id="operatorsTableBody">
-                <!-- Dynamically populated by platform-admin.js -->
+              <tbody id="usersTableBody">
+                <!-- Dynamically populated by platformApp.loadUsersDirectory -->
               </tbody>
             </table>
           </div>
@@ -4217,6 +4385,330 @@
           <button type="button" class="btn-pa btn-pa-primary" id="btnImpFinish" onclick="platformApp.closeModal('modalNewDataImport')" style="display: none;">
             <i class="fa-solid fa-circle-check me-1"></i> Done &amp; Close
           </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- =========================================================================
+       MODAL: 6.2 CREATE USER / ACCOUNT PROVISIONING WIZARD
+       ========================================================================= -->
+  <div class="pa-modal-backdrop" id="modalCreateUser">
+    <div class="pa-modal pa-modal-lg" style="max-width: 760px; width: 95%;">
+      <div class="pa-modal-header" style="border-bottom: 1px solid #E2E8F0; padding: 1.25rem 1.5rem;">
+        <div>
+          <h3 class="pa-modal-title" style="margin: 0; font-size: 1.2rem; font-weight: 800; display: flex; align-items: center; gap: 0.5rem;">
+            <i class="fa-solid fa-user-plus text-primary"></i> Provision Platform User Identity
+          </h3>
+          <p class="pa-modal-desc" style="margin: 2px 0 0; font-size: 0.8rem; color: #64748B;">
+            Assign institutional boundaries, role templates, and cryptographic activation credentials
+          </p>
+        </div>
+        <button class="btn-pa btn-pa-secondary" style="padding: 0.3rem 0.6rem;" onclick="platformApp.closeModal('modalCreateUser')">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <form id="formCreateUser" onsubmit="platformApp.handleCreateUserSubmit(event)">
+        <div class="pa-modal-body" style="padding: 1.5rem; background: #FFFFFF;">
+
+          <!-- School Employee Authorization Invariant Notice -->
+          <div class="p-3 mb-3 rounded" style="background: #EFF6FF; border: 1px solid #BFDBFE; font-size: 0.82rem; color: #1E40AF; display: flex; gap: 0.75rem; align-items: flex-start;">
+            <i class="fa-solid fa-shield-halved mt-1" style="font-size: 1.1rem;"></i>
+            <div>
+              <strong>Institutional Authorization Notice:</strong> For school employees, the school should generally create or authorize the employee record first, then associate the appropriate login account.
+            </div>
+          </div>
+
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label class="form-label small fw-bold">Full Legal Name *</label>
+              <input type="text" id="newUserFullName" class="pa-search-input" style="width: 100%; height: 38px;" placeholder="e.g. Smt. K. V. Sarada Devi" required>
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label small fw-bold">Official Email Address *</label>
+              <input type="email" id="newUserEmail" class="pa-search-input" style="width: 100%; height: 38px;" placeholder="name@srividya.edu.in" required>
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label small fw-bold">Contact Telephone (Mobile)</label>
+              <input type="tel" id="newUserPhone" class="pa-search-input" style="width: 100%; height: 38px;" placeholder="+91 94401 23456">
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label small fw-bold">Employee Record Linkage</label>
+              <input type="text" id="newUserEmployeeId" class="pa-search-input" style="width: 100%; height: 38px;" placeholder="EMP-SV-045 (Optional)">
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label small fw-bold">Institution Assignment *</label>
+              <select id="newUserInstitution" class="pa-select" style="width: 100%; height: 38px;" required>
+                <option value="INST-001" selected>Sri Vidya E.M High School (Main Campus)</option>
+                <option value="INST-002">Sri Vidya High School (City Branch)</option>
+                <option value="INST-003">Sri Vidya International (Valley Campus)</option>
+                <option value="INST-004">Sri Vidya Junior College (+1 &amp; +2)</option>
+                <option value="TRUST-ALL">Sri Vidya Educational Trust (Multi-Tenant Central)</option>
+              </select>
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label small fw-bold">Primary Role Assignment *</label>
+              <select id="newUserRoles" class="pa-select" style="width: 100%; height: 38px;" required>
+                <option value="Institutional Principal">Institutional Principal</option>
+                <option value="Vice Principal &amp; HOD Maths">Vice Principal</option>
+                <option value="Examination In-Charge">Examination Controller</option>
+                <option value="Office Clerk">Office &amp; Admissions Clerk</option>
+                <option value="Fee Collection Clerk">Accounts / Fee In-Charge</option>
+                <option value="Super Administrator">Super Administrator (Central Trust)</option>
+              </select>
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label small fw-bold">Account Activation Method</label>
+              <select id="newUserActivationMethod" class="pa-select" style="width: 100%; height: 38px;">
+                <option value="email_token" selected>Cryptographic Activation Token (Recommended)</option>
+                <option value="direct_password">Temporary Master Password (Force Reset on Login)</option>
+              </select>
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label small fw-bold">Invitation Token Expiry</label>
+              <select id="newUserInviteExpiry" class="pa-select" style="width: 100%; height: 38px;">
+                <option value="24">24 Hours (Urgent Onboarding)</option>
+                <option value="48">48 Hours</option>
+                <option value="168" selected>7 Days (Statutory Default)</option>
+                <option value="336">14 Days</option>
+              </select>
+            </div>
+
+            <!-- Required Security Settings -->
+            <div class="col-md-12 mt-2">
+              <label class="form-label small fw-bold text-dark d-block mb-2">Required Security Controls</label>
+              <div class="p-3 bg-light rounded border">
+                <div class="form-check mb-2">
+                  <input class="form-check-input" type="checkbox" id="newUserRequireMfa" checked>
+                  <label class="form-check-label small" for="newUserRequireMfa">
+                    <strong>Require Multi-Factor Authentication (MFA)</strong> upon initial account verification
+                  </label>
+                </div>
+                <div class="form-check mb-2">
+                  <input class="form-check-input" type="checkbox" id="newUserPasswordRotation" checked>
+                  <label class="form-check-label small" for="newUserPasswordRotation">
+                    Enforce 90-day password rotation policy and NIST 800-63B complexity standards
+                  </label>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" id="newUserDeviceBinding">
+                  <label class="form-check-label small" for="newUserDeviceBinding">
+                    Bind login access exclusively to verified institutional office devices
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="pa-modal-footer" style="border-top: 1px solid #E2E8F0; padding: 1rem 1.5rem; display: flex; justify-content: flex-end; gap: 0.5rem;">
+          <button type="button" class="btn-pa btn-pa-secondary" onclick="platformApp.closeModal('modalCreateUser')">Cancel</button>
+          <button type="submit" class="btn-pa btn-pa-primary">
+            <i class="fa-solid fa-paper-plane me-1"></i> Provision &amp; Send Invitation
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       MODAL: 6.3 USER DETAIL 7-TAB DOSSIER & SESSION GOVERNANCE
+       ========================================================================= -->
+  <div class="pa-modal-backdrop" id="modalUserDossier">
+    <div class="pa-modal pa-modal-lg" style="max-width: 960px; width: 95%;">
+      <!-- Dossier Header -->
+      <div class="pa-modal-header" style="border-bottom: 1px solid #E2E8F0; padding: 1.25rem 1.5rem; background: #FFFFFF;">
+        <div style="display: flex; align-items: center; gap: 1rem;">
+          <div class="pa-user-avatar" id="dossierUserAvatar" style="width: 48px; height: 48px; font-size: 1.2rem;">
+            GV
+          </div>
+          <div>
+            <div style="display: flex; align-items: center; gap: 0.5rem;">
+              <h3 class="pa-modal-title" style="margin: 0; font-size: 1.25rem; font-weight: 800;" id="dossierUserName">
+                Smt. Gorle Varalakshmi
+              </h3>
+              <span class="status-pill-user-active" id="dossierUserStatusPill">Active</span>
+            </div>
+            <div style="font-size: 0.8rem; color: #64748B; margin-top: 2px;">
+              <span class="font-mono text-primary fw-bold" id="dossierUserId">USR-1002</span> &bull;
+              <span id="dossierUserEmail">srividyaschools2017@gmail.com</span> &bull;
+              <span class="badge" style="background:#f1f5f9; color:#334155;" id="dossierUserCampus">Main Campus</span>
+            </div>
+          </div>
+        </div>
+        <button class="btn-pa btn-pa-secondary" style="padding: 0.3rem 0.6rem;" onclick="platformApp.closeModal('modalUserDossier')">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <!-- 7-Tab Sub-Navigation Strip (Section 6.3 Specification) -->
+      <div class="pa-user-dossier-subnav" id="userDossierSubnav">
+        <button type="button" class="pa-user-dossier-tab-btn active" id="btnUserTab_profile" onclick="platformApp.switchUserDossierTab('profile')">
+          <i class="fa-solid fa-user me-1"></i> 1. Profile
+        </button>
+        <button type="button" class="pa-user-dossier-tab-btn" id="btnUserTab_institutions" onclick="platformApp.switchUserDossierTab('institutions')">
+          <i class="fa-solid fa-school me-1"></i> 2. Institution Scope
+        </button>
+        <button type="button" class="pa-user-dossier-tab-btn" id="btnUserTab_roles" onclick="platformApp.switchUserDossierTab('roles')">
+          <i class="fa-solid fa-id-card-clip me-1"></i> 3. Roles &amp; Permissions
+        </button>
+        <button type="button" class="pa-user-dossier-tab-btn" id="btnUserTab_security" onclick="platformApp.switchUserDossierTab('security')">
+          <i class="fa-solid fa-shield-halved me-1"></i> 4. Account Security
+        </button>
+        <button type="button" class="pa-user-dossier-tab-btn" id="btnUserTab_sessions" onclick="platformApp.switchUserDossierTab('sessions')">
+          <i class="fa-solid fa-laptop me-1"></i> 5. Active Sessions (<span id="dossierSessionCount">1</span>)
+        </button>
+        <button type="button" class="pa-user-dossier-tab-btn" id="btnUserTab_invitations" onclick="platformApp.switchUserDossierTab('invitations')">
+          <i class="fa-solid fa-paper-plane me-1"></i> 6. Invitation History
+        </button>
+        <button type="button" class="pa-user-dossier-tab-btn" id="btnUserTab_audit" onclick="platformApp.switchUserDossierTab('audit')">
+          <i class="fa-solid fa-clock-rotate-left me-1"></i> 7. Audit History
+        </button>
+      </div>
+
+      <!-- Tab Content Panes -->
+      <div class="pa-modal-body" style="padding: 1.5rem; min-height: 380px; background: #FFFFFF;">
+        <!-- Tab 1: Profile -->
+        <div class="user-dossier-pane" id="dossierPane_profile">
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label class="small text-muted fw-bold">Full Legal Name</label>
+              <div class="p-2 bg-light rounded border fw-bold text-dark" id="dossierProfName">Smt. Gorle Varalakshmi</div>
+            </div>
+            <div class="col-md-6">
+              <label class="small text-muted fw-bold">Official Email</label>
+              <div class="p-2 bg-light rounded border text-dark" id="dossierProfEmail">srividyaschools2017@gmail.com</div>
+            </div>
+            <div class="col-md-6">
+              <label class="small text-muted fw-bold">Telephone (Mobile)</label>
+              <div class="p-2 bg-light rounded border text-dark" id="dossierProfPhone">+91 863 2234567</div>
+            </div>
+            <div class="col-md-6">
+              <label class="small text-muted fw-bold">Department / Cell</label>
+              <div class="p-2 bg-light rounded border text-dark" id="dossierProfDept">Executive Leadership</div>
+            </div>
+            <div class="col-md-6">
+              <label class="small text-muted fw-bold">Employee Record Linkage</label>
+              <div class="p-2 bg-light rounded border text-dark"><span class="badge bg-primary me-1" id="dossierProfEmp">EMP-SV-001</span> Linked to Staff Cadre Master</div>
+            </div>
+            <div class="col-md-6">
+              <label class="small text-muted fw-bold">Account Registration Date</label>
+              <div class="p-2 bg-light rounded border text-dark">June 01, 2026 (Statutory Accredited)</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tab 2: Institution Scope -->
+        <div class="user-dossier-pane" id="dossierPane_institutions" style="display: none;">
+          <h5 class="fw-bold mb-2">Tenant Scope &amp; Branch Authorizations</h5>
+          <p class="small text-muted mb-3">This identity is bound to the following institutional tenant scopes. Cross-campus access is governed strictly by Trust senate policy.</p>
+          <div class="p-3 bg-light rounded border mb-3">
+            <div class="d-flex justify-content-between align-items-center">
+              <div>
+                <strong id="dossierInstName">Sri Vidya E.M High School (Main Campus)</strong>
+                <div class="small text-muted">Primary Institutional Cadre &bull; Campus Code: SV-MAIN</div>
+              </div>
+              <span class="badge bg-success">Primary Scope</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tab 3: Roles and Permissions -->
+        <div class="user-dossier-pane" id="dossierPane_roles" style="display: none;">
+          <h5 class="fw-bold mb-2">Assigned Role Templates</h5>
+          <p class="small text-muted mb-3">Granular authorization boundaries ensuring strict separation between software operations and school records.</p>
+          <div id="dossierRolesList" class="d-flex flex-wrap gap-2 mb-3">
+            <!-- Dynamically populated -->
+          </div>
+        </div>
+
+        <!-- Tab 4: Account Security -->
+        <div class="user-dossier-pane" id="dossierPane_security" style="display: none;">
+          <h5 class="fw-bold mb-2">Authentication &amp; Cryptographic Security Posture</h5>
+          <div class="p-3 bg-light rounded border mb-3">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+              <div>
+                <strong>Multi-Factor Authentication (MFA)</strong>
+                <div class="small text-muted">FIDO2 WebAuthn / Time-based One-Time Passwords (TOTP)</div>
+              </div>
+              <span class="badge bg-success" id="dossierMfaBadge">Enforced</span>
+            </div>
+            <div class="d-flex justify-content-between align-items-center">
+              <div>
+                <strong>Password Policy Compliance</strong>
+                <div class="small text-muted">Last changed 42 days ago &bull; Next rotation in 48 days</div>
+              </div>
+              <span class="badge bg-success">Compliant</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tab 5: Sessions (Section 6.5 Specification) -->
+        <div class="user-dossier-pane" id="dossierPane_sessions" style="display: none;">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <div>
+              <h5 class="fw-bold mb-0">Active Login Sessions</h5>
+              <p class="small text-muted mb-0">Device telemetry, IP locations, and session termination controls. Session tokens and passwords remain masked.</p>
+            </div>
+            <button type="button" class="btn btn-outline-danger btn-sm" onclick="platformApp.revokeAllUserSessions()">
+              <i class="fa-solid fa-ban me-1"></i> Revoke All Sessions
+            </button>
+          </div>
+          <div id="dossierSessionsContainer">
+            <!-- Dynamically populated with session cards -->
+          </div>
+        </div>
+
+        <!-- Tab 6: Invitation History -->
+        <div class="user-dossier-pane" id="dossierPane_invitations" style="display: none;">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <div>
+              <h5 class="fw-bold mb-0">Cryptographic Invitation Lifecycle</h5>
+              <p class="small text-muted mb-0">Traceable record of activation tokens, dispatch channels, and verification timestamps.</p>
+            </div>
+            <button type="button" class="btn btn-outline-primary btn-sm" onclick="platformApp.resendUserInvitation()">
+              <i class="fa-solid fa-paper-plane me-1"></i> Resend New Invitation
+            </button>
+          </div>
+          <div id="dossierInvitationsContainer">
+            <!-- Dynamically populated -->
+          </div>
+        </div>
+
+        <!-- Tab 7: Audit History -->
+        <div class="user-dossier-pane" id="dossierPane_audit" style="display: none;">
+          <h5 class="fw-bold mb-2">Immutable Sensitive Changes Ledger</h5>
+          <p class="small text-muted mb-3">Traceable log of role updates, session terminations, suspensions, and password resets.</p>
+          <div id="dossierAuditContainer">
+            <!-- Dynamically populated -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Dossier Actions Footer (Section 6.3 Specification) -->
+      <div class="pa-modal-footer" style="border-top: 1px solid #E2E8F0; padding: 1rem 1.5rem; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem; background: #F8FAFC;">
+        <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+          <button type="button" class="btn btn-outline-secondary btn-sm" onclick="platformApp.triggerUserPasswordReset()">
+            <i class="fa-solid fa-key me-1"></i> Force Password Reset
+          </button>
+          <button type="button" class="btn btn-outline-warning btn-sm" id="btnDossierSuspend" onclick="platformApp.toggleUserSuspension()">
+            <i class="fa-solid fa-ban me-1"></i> Suspend Account
+          </button>
+          <button type="button" class="btn btn-outline-danger btn-sm" onclick="platformApp.deactivateUserAccount()" title="Permanent deactivation (historical identity retained for statutory audits)">
+            <i class="fa-solid fa-user-xmark me-1"></i> Deactivate
+          </button>
+        </div>
+        <div>
+          <button type="button" class="btn-pa btn-pa-secondary" onclick="platformApp.closeModal('modalUserDossier')">Close Dossier</button>
         </div>
       </div>
     </div>

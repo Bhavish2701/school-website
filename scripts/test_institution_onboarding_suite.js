@@ -178,3 +178,4 @@ const OnboardingService = require('../backend/src/services/onboarding.service');
     process.exit(1);
   }
 })();
+
