@@ -26308,10 +26308,12 @@ button.close:hover,
 
 .transfers-filter-grid .tc-select-wrap {
   width: 100%;
+  min-width: 0;
 }
 
 .transfers-filter-grid .tc-select-wrap .tc-filter-select {
   width: 100%;
+  min-width: 0;
   height: 38px;
   padding: 0 1.85rem 0 0.75rem;
   font-size: 0.83rem;
@@ -26373,7 +26375,7 @@ button.close:hover,
   transition: all 0.18s ease;
 }
 
-@media (max-width: 1040px) and (min-width: 769px) {
+@media (max-width: 1280px) and (min-width: 769px) {
   .transfers-filter-grid {
     grid-template-columns: repeat(4, 1fr);
   }

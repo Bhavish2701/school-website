@@ -101,23 +101,23 @@ if (fs.existsSync(FRONTEND_DIR)) {
     res.sendFile(path.join(FRONTEND_DIR, 'public-website', 'index.html'));
   });
 
-  app.get(['/platform-admin', '/admin'], (req, res) => {
+  app.get(['/platform-admin', '/platform-admin/', '/admin', '/admin/'], (req, res) => {
     res.sendFile(path.join(FRONTEND_DIR, 'platform-admin', 'index.html'));
   });
 
-  app.get(['/management', '/administration-portal', '/portal.html', '/management.html'], (req, res) => {
+  app.get(['/management', '/management/', '/administration-portal', '/administration-portal/', '/portal.html', '/management.html'], (req, res) => {
     res.sendFile(path.join(FRONTEND_DIR, 'administration-portal', 'index.html'));
   });
 
-  app.get(['/teacher', '/faculty-portal', '/teacher-portal.html', '/teacher.html'], (req, res) => {
+  app.get(['/teacher', '/teacher/', '/faculty-portal', '/faculty-portal/', '/teacher-portal.html', '/teacher.html'], (req, res) => {
     res.sendFile(path.join(FRONTEND_DIR, 'faculty-portal', 'index.html'));
   });
 
-  app.get(['/student', '/student-portal', '/future-portals/student-portal'], (req, res) => {
+  app.get(['/student', '/student/', '/student-portal', '/student-portal/', '/future-portals/student-portal'], (req, res) => {
     res.sendFile(path.join(FRONTEND_DIR, 'future-portals', 'student-portal', 'index.html'));
   });
 
-  app.get(['/parent', '/parent-portal', '/future-portals/parent-portal'], (req, res) => {
+  app.get(['/parent', '/parent/', '/parent-portal', '/parent-portal/', '/future-portals/parent-portal'], (req, res) => {
     res.sendFile(path.join(FRONTEND_DIR, 'future-portals', 'parent-portal', 'index.html'));
   });
 

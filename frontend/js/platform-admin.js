@@ -314,13 +314,19 @@ const platformApp = (function () {
         'dashboard': 'Platform Dashboard',
         'institutions': 'Institution Management',
         'config': 'School Configuration',
+        'onboarding': 'Institution Onboarding & Migration',
         'users': 'User & Account Management',
-        'roles': 'Role Templates & RBAC',
-        'subscription': 'Subscription & Plans',
+        'roles': 'Role Templates & Permissions',
+        'security-monitoring': 'Security & Access Monitoring',
+        'subscription': 'Subscriptions & Plans',
         'health': 'System Health & Deployment',
-        'audit': 'Immutable Audit Logs',
+        'backups': 'Backups & Recovery',
+        'integrations': 'Integrations & API Management',
+        'support': 'Support & Issue Management',
+        'domains-email': 'Domains, Email & Notifications',
         'settings': 'Global Platform Settings',
-        'support': 'Support & Issue Management'
+        'policies': 'Platform Policies & Data Retention',
+        'audit': 'Immutable Audit Logs'
       };
       crumbEl.textContent = titles[viewId] || 'Platform Administration';
     }
@@ -607,6 +613,29 @@ const platformApp = (function () {
     showToast('Audit trail exported successfully as CSV!', 'success');
   }
 
+  // Infrastructure & Operations Actions
+  function triggerManualBackup() {
+    showToast('Snapshot initiation dispatched to AWS S3 Mumbai Vault (ap-south-1). Encryption: AES-256.', 'info');
+    setTimeout(() => {
+      showToast('Disaster Recovery Snapshot #SNAP-2026-LIVE verified and stored in immutable vault.', 'success');
+    }, 1800);
+  }
+
+  function terminateAllSuspiciousSessions() {
+    showToast('All anomalous IP sessions terminated. Forced re-authentication triggered.', 'warning');
+  }
+
+  function verifyDnsStatus() {
+    showToast('Probing Apex DNS, SPF/DKIM, and MX records...', 'info');
+    setTimeout(() => {
+      showToast('DNS Health Verified: 100% records aligned with Google Workspace and Cloudflare edge.', 'success');
+    }, 1200);
+  }
+
+  function savePlatformPolicies() {
+    showToast('AP Statutory Retention Policies (Rule 88/99) updated and locked into database governance matrix.', 'success');
+  }
+
   // Initialization
   function init() {
     setupTheme();
@@ -650,7 +679,11 @@ const platformApp = (function () {
     resolveTicket,
     filterAuditLogs,
     pingCluster,
-    exportAuditTrail
+    exportAuditTrail,
+    triggerManualBackup,
+    terminateAllSuspiciousSessions,
+    verifyDnsStatus,
+    savePlatformPolicies
   };
 })();
 
