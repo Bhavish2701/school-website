@@ -13,8 +13,10 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
   <!-- Portal Custom CSS -->
-  <link rel="stylesheet" href="/css/portal.css">
-  <link rel="stylesheet" href="/css/portal-login.css">
+  <link rel="stylesheet" href="/css/portal.css?v=20261105-02">
+  <link rel="stylesheet" href="../css/portal.css?v=20261105-02">
+  <link rel="stylesheet" href="/css/portal-login.css?v=20261105-02">
+  <link rel="stylesheet" href="../css/portal-login.css?v=20261105-02">
 </head>
 
 <body>
@@ -4299,89 +4301,107 @@
               </div>
             </div>
 
-            <!-- Executive Toolbar & 5 Standard Filters -->
-            <div class="transfers-toolbar" style="margin-bottom: 1rem;">
-              <div class="tc-toolbar-left" style="display:flex; align-items:center; gap:0.5rem; flex-wrap:wrap; flex:1;">
-                
-                <!-- Search input -->
-                <div class="tc-search-wrap" style="position:relative; min-width:230px;">
-                  <i class="fa-solid fa-magnifying-glass search-icon" style="position:absolute; left:10px; top:50%; transform:translateY(-50%); color:#94a3b8; font-size:0.85rem;"></i>
+            <!-- Executive Toolbar & 5 Standard Filters (2-Tier Enterprise Architecture) -->
+            <div class="transfers-toolbar-container">
+              <!-- Tier 1: Search & Granular Assessment Filters (6-Column Responsive Grid) -->
+              <div class="perf-filter-grid">
+                <div class="tc-search-wrap">
+                  <i class="fa-solid fa-magnifying-glass search-icon"></i>
                   <input type="text" id="perfStudentSearchInput" class="tc-search-input"
                     placeholder="Search student, admission no, roll..."
-                    oninput="portalApp.filterPerformanceRegister()"
-                    style="padding-left:32px; padding-right:28px; width:100%; height:36px; border:1px solid #cbd5e1; border-radius:6px; font-size:0.83rem;">
+                    oninput="portalApp.filterPerformanceRegister()">
                   <button type="button" class="tc-clear-btn" id="perfClearSearchBtn"
                     onclick="document.getElementById('perfStudentSearchInput').value=''; portalApp.filterPerformanceRegister();"
-                    title="Clear Search" style="position:absolute; right:8px; top:50%; transform:translateY(-50%); background:none; border:none; color:#94a3b8; cursor:pointer;">
+                    title="Clear Search">
                     <i class="fa-solid fa-xmark"></i>
                   </button>
                 </div>
 
-                <!-- 1. Academic Year Filter -->
-                <select id="perfAcademicYearFilter" class="tc-filter-select" onchange="portalApp.filterPerformanceRegister()" title="Filter by Academic Year" style="height:36px; padding:0 0.65rem; border:1px solid #cbd5e1; border-radius:6px; font-size:0.83rem;">
-                  <option value="2025-2026" selected>AY 2025–2026</option>
-                  <option value="2024-2025">AY 2024–2025</option>
-                  <option value="2026-2027">AY 2026–2027</option>
-                </select>
+                <div class="tc-select-wrap">
+                  <select id="perfAcademicYearFilter" class="tc-filter-select" onchange="portalApp.filterPerformanceRegister()" title="Filter by Academic Year">
+                    <option value="2025-2026" selected>AY 2025–2026</option>
+                    <option value="2024-2025">AY 2024–2025</option>
+                    <option value="2026-2027">AY 2026–2027</option>
+                  </select>
+                </div>
 
-                <!-- 2. Class Filter -->
-                <select id="perfClassFilter" class="tc-filter-select" onchange="portalApp.filterPerformanceRegister()" title="Filter by Class" style="height:36px; padding:0 0.65rem; border:1px solid #cbd5e1; border-radius:6px; font-size:0.83rem;">
-                  <option value="">All Classes</option>
-                  <option value="X">Class X</option>
-                  <option value="IX">Class IX</option>
-                  <option value="VIII">Class VIII</option>
-                  <option value="VII">Class VII</option>
-                  <option value="VI">Class VI</option>
-                  <option value="V">Class V</option>
-                  <option value="IV">Class IV</option>
-                  <option value="III">Class III</option>
-                  <option value="II">Class II</option>
-                  <option value="I">Class I</option>
-                </select>
+                <div class="tc-select-wrap">
+                  <select id="perfClassFilter" class="tc-filter-select" onchange="portalApp.filterPerformanceRegister()" title="Filter by Class">
+                    <option value="">All Classes</option>
+                    <option value="X">Class X</option>
+                    <option value="IX">Class IX</option>
+                    <option value="VIII">Class VIII</option>
+                    <option value="VII">Class VII</option>
+                    <option value="VI">Class VI</option>
+                    <option value="V">Class V</option>
+                    <option value="IV">Class IV</option>
+                    <option value="III">Class III</option>
+                    <option value="II">Class II</option>
+                    <option value="I">Class I</option>
+                  </select>
+                </div>
 
-                <!-- 3. Section Filter -->
-                <select id="perfSectionFilter" class="tc-filter-select" onchange="portalApp.filterPerformanceRegister()" title="Filter by Section" style="height:36px; padding:0 0.65rem; border:1px solid #cbd5e1; border-radius:6px; font-size:0.83rem;">
-                  <option value="">All Sections</option>
-                  <option value="A">Section A</option>
-                  <option value="B">Section B</option>
-                  <option value="C">Section C</option>
-                </select>
+                <div class="tc-select-wrap">
+                  <select id="perfSectionFilter" class="tc-filter-select" onchange="portalApp.filterPerformanceRegister()" title="Filter by Section">
+                    <option value="">All Sections</option>
+                    <option value="A">Section A</option>
+                    <option value="B">Section B</option>
+                    <option value="C">Section C</option>
+                  </select>
+                </div>
 
-                <!-- 4. Exam Filter -->
-                <select id="perfExamFilter" class="tc-filter-select" onchange="portalApp.filterPerformanceRegister()" title="Filter by Examination" style="height:36px; padding:0 0.65rem; border:1px solid #cbd5e1; border-radius:6px; font-size:0.83rem;">
-                  <option value="Quarterly (SA-1)" selected>Quarterly (SA-1)</option>
-                  <option value="Formative Assessment 2 (FA-2)">FA-2 Assessment</option>
-                  <option value="Formative Assessment 1 (FA-1)">FA-1 Assessment</option>
-                  <option value="Half-Yearly Examination">Half-Yearly Exam</option>
-                  <option value="Pre-Board / Annual Examination">Pre-Board / Annual</option>
-                </select>
+                <div class="tc-select-wrap">
+                  <select id="perfExamFilter" class="tc-filter-select" onchange="portalApp.filterPerformanceRegister()" title="Filter by Examination">
+                    <option value="Quarterly (SA-1)" selected>Quarterly (SA-1)</option>
+                    <option value="Formative Assessment 2 (FA-2)">FA-2 Assessment</option>
+                    <option value="Formative Assessment 1 (FA-1)">FA-1 Assessment</option>
+                    <option value="Half-Yearly Examination">Half-Yearly Exam</option>
+                    <option value="Pre-Board / Annual Examination">Pre-Board / Annual</option>
+                  </select>
+                </div>
 
-                <!-- 5. Subject Filter -->
-                <select id="perfSubjectFilter" class="tc-filter-select" onchange="portalApp.filterPerformanceRegister()" title="Filter by Subject" style="height:36px; padding:0 0.65rem; border:1px solid #cbd5e1; border-radius:6px; font-size:0.83rem;">
-                  <option value="">All Subjects</option>
-                  <option value="Mathematics">Mathematics</option>
-                  <option value="General Science">General Science</option>
-                  <option value="English">English</option>
-                  <option value="Social Studies">Social Studies</option>
-                  <option value="First Language (Telugu)">First Lang (Telugu)</option>
-                  <option value="Second Language (Hindi)">Second Lang (Hindi)</option>
-                </select>
+                <div class="tc-select-wrap">
+                  <select id="perfSubjectFilter" class="tc-filter-select" onchange="portalApp.filterPerformanceRegister()" title="Filter by Subject">
+                    <option value="">All Subjects</option>
+                    <option value="Mathematics">Mathematics</option>
+                    <option value="General Science">General Science</option>
+                    <option value="English">English</option>
+                    <option value="Social Studies">Social Studies</option>
+                    <option value="First Language (Telugu)">First Lang (Telugu)</option>
+                    <option value="Second Language (Hindi)">Second Lang (Hindi)</option>
+                  </select>
+                </div>
               </div>
 
-              <div class="tc-toolbar-right" style="display:flex; align-items:center; gap:0.5rem; flex-wrap:wrap;">
-                <span class="tc-count-pill" id="perfFilterCountDisplay" style="font-size:0.8rem; background:#f1f5f9; padding:0.4rem 0.75rem; border-radius:6px; border:1px solid #e2e8f0;">
-                  <i class="fa-solid fa-chart-simple text-primary mr-1"></i> Showing <strong id="perfShowingCount">0</strong> of
-                  <strong id="perfTotalCount">0</strong>
-                </span>
-                <button type="button" class="btn btn-outline-secondary btn-sm" onclick="portalApp.resetPerformanceFilters()" title="Reset all filters">
-                  <i class="fa-solid fa-rotate-left"></i> Reset
-                </button>
-                <button type="button" class="btn btn-outline-primary btn-sm" onclick="portalApp.exportPerformanceCSV()" title="Export performance dataset to CSV">
-                  <i class="fa-solid fa-file-csv mr-1"></i> Export CSV
-                </button>
-                <button type="button" class="btn btn-outline-primary btn-sm" onclick="portalApp.printPerformanceTable()" title="Print performance table">
-                  <i class="fa-solid fa-print mr-1"></i> Print
-                </button>
+              <!-- Tier 2: Governance Indicators and Register Operations -->
+              <div class="transfers-governance-row">
+                <div class="tc-stats-left">
+                  <span class="tc-count-pill" id="perfFilterCountDisplay">
+                    <i class="fa-solid fa-chart-simple text-primary mr-1"></i> Showing <strong id="perfShowingCount">0</strong> of
+                    <strong id="perfTotalCount">0</strong> Assessment Records
+                  </span>
+                  <span class="toolbar-tag-pill">
+                    <i class="fa-solid fa-calendar-check text-primary mr-1"></i> Academic Year 2025–2026
+                  </span>
+                  <span class="toolbar-tag-pill stat-badge-verified">
+                    <i class="fa-solid fa-stamp text-success mr-1"></i> AP CCE Continuous Assessment Register
+                  </span>
+                </div>
+
+                <div class="tc-actions-right">
+                  <button type="button" class="btn btn-outline-secondary btn-sm btn-filter-reset"
+                    onclick="portalApp.resetPerformanceFilters()" title="Reset all filters">
+                    <i class="fa-solid fa-rotate-left me-1"></i> Reset Filters
+                  </button>
+                  <button type="button" class="btn btn-outline-secondary btn-sm" onclick="portalApp.exportPerformanceCSV()"
+                    title="Export performance dataset to CSV">
+                    <i class="fa-solid fa-file-excel text-success me-1"></i> Export Dataset
+                  </button>
+                  <button type="button" class="btn btn-outline-primary btn-sm" onclick="portalApp.printPerformanceTable()"
+                    title="Print performance table">
+                    <i class="fa-solid fa-print me-1"></i> Print Register
+                  </button>
+                </div>
               </div>
             </div>
 
@@ -4483,64 +4503,80 @@
               </div>
             </div>
 
-            <!-- Executive Filter Toolbar -->
-            <div class="transfers-toolbar" style="margin-bottom: 1rem;">
-              <div class="tc-toolbar-left" style="display:flex; align-items:center; gap:0.5rem; flex-wrap:wrap; flex:1;">
-                
-                <!-- Search input -->
-                <div class="tc-search-wrap" style="position:relative; min-width:240px; flex: 1;">
-                  <i class="fa-solid fa-magnifying-glass search-icon" style="position:absolute; left:10px; top:50%; transform:translateY(-50%); color:#94a3b8; font-size:0.85rem;"></i>
+            <!-- Executive Filter Toolbar (2-Tier Enterprise Architecture) -->
+            <div class="transfers-toolbar-container">
+              <!-- Tier 1: Search & Guardian Filters (4-Column Responsive Grid) -->
+              <div class="parents-filter-grid">
+                <div class="tc-search-wrap">
+                  <i class="fa-solid fa-magnifying-glass search-icon"></i>
                   <input type="text" id="parentFilterInput" class="tc-search-input"
                     placeholder="Search by guardian name, phone, email, student, admission no, occupation..."
-                    oninput="portalApp.filterParentRecords()"
-                    style="padding-left:32px; padding-right:28px; width:100%; height:36px; border:1px solid #cbd5e1; border-radius:6px; font-size:0.83rem;">
+                    oninput="portalApp.filterParentRecords()">
                   <button type="button" class="tc-clear-btn" id="parentClearSearchBtn"
                     onclick="document.getElementById('parentFilterInput').value=''; portalApp.filterParentRecords();"
-                    title="Clear Search" style="position:absolute; right:8px; top:50%; transform:translateY(-50%); background:none; border:none; color:#94a3b8; cursor:pointer;">
+                    title="Clear Search">
                     <i class="fa-solid fa-xmark"></i>
                   </button>
                 </div>
 
-                <!-- 1. Relationship Filter -->
-                <select id="parentRelationFilter" class="tc-filter-select" onchange="portalApp.filterParentRecords()" title="Filter by Relationship" style="height:36px; padding:0 0.65rem; border:1px solid #cbd5e1; border-radius:6px; font-size:0.83rem;">
-                  <option value="">All Relationships</option>
-                  <option value="Father">Father</option>
-                  <option value="Mother">Mother</option>
-                  <option value="Legal Guardian">Legal Guardian</option>
-                </select>
+                <div class="tc-select-wrap">
+                  <select id="parentRelationFilter" class="tc-filter-select" onchange="portalApp.filterParentRecords()" title="Filter by Relationship">
+                    <option value="">All Relationships</option>
+                    <option value="Father">Father</option>
+                    <option value="Mother">Mother</option>
+                    <option value="Legal Guardian">Legal Guardian</option>
+                  </select>
+                </div>
 
-                <!-- 2. Verification Status Filter -->
-                <select id="parentVerifyFilter" class="tc-filter-select" onchange="portalApp.filterParentRecords()" title="Filter by Verification Status" style="height:36px; padding:0 0.65rem; border:1px solid #cbd5e1; border-radius:6px; font-size:0.83rem;">
-                  <option value="">All Verification Statuses</option>
-                  <option value="Verified">Verified ✓</option>
-                  <option value="Review Due">Review Due ⚠</option>
-                  <option value="Unverified">Unverified ✗</option>
-                </select>
+                <div class="tc-select-wrap">
+                  <select id="parentVerifyFilter" class="tc-filter-select" onchange="portalApp.filterParentRecords()" title="Filter by Verification Status">
+                    <option value="">All Verification Statuses</option>
+                    <option value="Verified">Verified ✓</option>
+                    <option value="Review Due">Review Due ⚠</option>
+                    <option value="Unverified">Unverified ✗</option>
+                  </select>
+                </div>
 
-                <!-- 3. Portal Account Status Filter -->
-                <select id="parentPortalFilter" class="tc-filter-select" onchange="portalApp.filterParentRecords()" title="Filter by Portal Account Status" style="height:36px; padding:0 0.65rem; border:1px solid #cbd5e1; border-radius:6px; font-size:0.83rem;">
-                  <option value="">All Portal Statuses</option>
-                  <option value="Active">Portal Active</option>
-                  <option value="Invitation Sent">Invitation Sent</option>
-                  <option value="Pending Verification">Pending Identity Check</option>
-                  <option value="Not Enrolled">Not Enrolled</option>
-                </select>
+                <div class="tc-select-wrap">
+                  <select id="parentPortalFilter" class="tc-filter-select" onchange="portalApp.filterParentRecords()" title="Filter by Portal Account Status">
+                    <option value="">All Portal Statuses</option>
+                    <option value="Active">Portal Active</option>
+                    <option value="Invitation Sent">Invitation Sent</option>
+                    <option value="Pending Verification">Pending Identity Check</option>
+                    <option value="Not Enrolled">Not Enrolled</option>
+                  </select>
+                </div>
               </div>
 
-              <div class="tc-toolbar-right" style="display:flex; align-items:center; gap:0.5rem; flex-wrap:wrap;">
-                <span class="tc-count-pill" id="parentFilterCountDisplay" style="font-size:0.8rem; background:#f1f5f9; padding:0.4rem 0.75rem; border-radius:6px; border:1px solid #e2e8f0;">
-                  <i class="fa-solid fa-address-book text-primary mr-1"></i> Showing <strong id="parentShowingCount">0</strong> of
-                  <strong id="parentTotalCount">0</strong>
-                </span>
-                <button type="button" class="btn btn-outline-secondary btn-sm" onclick="portalApp.resetParentFilters()" title="Reset all filters">
-                  <i class="fa-solid fa-rotate-left"></i> Reset
-                </button>
-                <button type="button" class="btn btn-outline-primary btn-sm" onclick="portalApp.exportParentCSV()" title="Export guardian register to CSV">
-                  <i class="fa-solid fa-file-csv mr-1"></i> Export CSV
-                </button>
-                <button type="button" class="btn btn-outline-primary btn-sm" onclick="portalApp.printParentDirectory()" title="Print guardian directory">
-                  <i class="fa-solid fa-print mr-1"></i> Print
-                </button>
+              <!-- Tier 2: Governance Indicators and Register Operations -->
+              <div class="transfers-governance-row">
+                <div class="tc-stats-left">
+                  <span class="tc-count-pill" id="parentFilterCountDisplay">
+                    <i class="fa-solid fa-address-book text-primary mr-1"></i> Showing <strong id="parentShowingCount">0</strong> of
+                    <strong id="parentTotalCount">0</strong> Guardians
+                  </span>
+                  <span class="toolbar-tag-pill">
+                    <i class="fa-solid fa-calendar-check text-primary mr-1"></i> AY 2026–2027
+                  </span>
+                  <span class="toolbar-tag-pill stat-badge-verified">
+                    <i class="fa-solid fa-stamp text-success mr-1"></i> AP Statutory Primary Contact Registry
+                  </span>
+                </div>
+
+                <div class="tc-actions-right">
+                  <button type="button" class="btn btn-outline-secondary btn-sm btn-filter-reset"
+                    onclick="portalApp.resetParentFilters()" title="Reset all filters">
+                    <i class="fa-solid fa-rotate-left me-1"></i> Reset Filters
+                  </button>
+                  <button type="button" class="btn btn-outline-secondary btn-sm" onclick="portalApp.exportParentCSV()"
+                    title="Export guardian register to CSV">
+                    <i class="fa-solid fa-file-excel text-success me-1"></i> Export CSV
+                  </button>
+                  <button type="button" class="btn btn-outline-primary btn-sm" onclick="portalApp.printParentDirectory()"
+                    title="Print guardian directory">
+                    <i class="fa-solid fa-print me-1"></i> Print Directory
+                  </button>
+                </div>
               </div>
             </div>
 
@@ -4725,65 +4761,78 @@
               </div>
             </div>
 
-            <!-- Executive Filter Toolbar -->
-            <div class="transfers-toolbar" style="margin-bottom: 1rem;">
-              <div class="tc-toolbar-left" style="display:flex; align-items:center; gap:0.5rem; flex-wrap:wrap; flex:1;">
-                
-                <!-- Search input -->
-                <div class="tc-search-wrap" style="position:relative; min-width:240px; flex: 1;">
-                  <i class="fa-solid fa-magnifying-glass search-icon" style="position:absolute; left:10px; top:50%; transform:translateY(-50%); color:#94a3b8; font-size:0.85rem;"></i>
+            <!-- Executive Filter Toolbar (2-Tier Enterprise Architecture) -->
+            <div class="transfers-toolbar-container">
+              <!-- Tier 1: Search & Faculty Filters (3-Column Responsive Grid) -->
+              <div class="faculty-filter-grid">
+                <div class="tc-search-wrap">
+                  <i class="fa-solid fa-magnifying-glass search-icon"></i>
                   <input type="text" id="facultyFilterInput" class="tc-search-input"
                     placeholder="Search by Employee ID, Name, Department, Subjects, Assigned Classes, Qualifications..."
-                    oninput="portalApp.filterFaculty()"
-                    style="padding-left:32px; padding-right:28px; width:100%; height:36px; border:1px solid #cbd5e1; border-radius:6px; font-size:0.83rem;">
+                    oninput="portalApp.filterFaculty()">
                   <button type="button" class="tc-clear-btn" id="facClearSearchBtn"
                     onclick="document.getElementById('facultyFilterInput').value=''; portalApp.filterFaculty();"
-                    title="Clear Search" style="position:absolute; right:8px; top:50%; transform:translateY(-50%); background:none; border:none; color:#94a3b8; cursor:pointer;">
+                    title="Clear Search">
                     <i class="fa-solid fa-xmark"></i>
                   </button>
                 </div>
 
-                <!-- 1. Department Filter -->
-                <select id="facultyDeptFilter" class="tc-filter-select" onchange="portalApp.filterFaculty()" title="Filter by Department" style="height:36px; padding:0 0.65rem; border:1px solid #cbd5e1; border-radius:6px; font-size:0.83rem;">
-                  <option value="">All Departments</option>
-                  <option value="Mathematics">Mathematics</option>
-                  <option value="Science">Physical &amp; Natural Science</option>
-                  <option value="English">English</option>
-                  <option value="Social">Social Studies</option>
-                  <option value="Telugu">Telugu</option>
-                  <option value="Hindi">Hindi</option>
-                  <option value="Computer">Computer Applications</option>
-                  <option value="Primary">Primary &amp; Pre-Primary</option>
-                </select>
+                <div class="tc-select-wrap">
+                  <select id="facultyDeptFilter" class="tc-filter-select" onchange="portalApp.filterFaculty()" title="Filter by Department">
+                    <option value="">All Departments</option>
+                    <option value="Mathematics">Mathematics</option>
+                    <option value="Science">Physical &amp; Natural Science</option>
+                    <option value="English">English</option>
+                    <option value="Social">Social Studies</option>
+                    <option value="Telugu">Telugu</option>
+                    <option value="Hindi">Hindi</option>
+                    <option value="Computer">Computer Applications</option>
+                    <option value="Primary">Primary &amp; Pre-Primary</option>
+                  </select>
+                </div>
 
-                <!-- 2. Status Filter -->
-                <select id="facultyStatusFilter" class="tc-filter-select" onchange="portalApp.filterFaculty()" title="Filter by Employment Status" style="height:36px; padding:0 0.65rem; border:1px solid #cbd5e1; border-radius:6px; font-size:0.83rem;">
-                  <option value="">All Employment Statuses</option>
-                  <option value="Active">Active (Confirmed)</option>
-                  <option value="New Joiner">New Joiner / Probation</option>
-                  <option value="Leave">On Leave</option>
-                  <option value="Pending Verification">Pending Verification</option>
-                  <option value="Notice">Notice / Exit Clearance</option>
-                </select>
+                <div class="tc-select-wrap">
+                  <select id="facultyStatusFilter" class="tc-filter-select" onchange="portalApp.filterFaculty()" title="Filter by Employment Status">
+                    <option value="">All Employment Statuses</option>
+                    <option value="Active">Active (Confirmed)</option>
+                    <option value="New Joiner">New Joiner / Probation</option>
+                    <option value="Leave">On Leave</option>
+                    <option value="Pending Verification">Pending Verification</option>
+                    <option value="Notice">Notice / Exit Clearance</option>
+                  </select>
+                </div>
               </div>
 
-              <div class="tc-toolbar-right" style="display:flex; align-items:center; gap:0.5rem; flex-wrap:wrap;">
-                <span class="tc-count-pill" id="facFilterCountDisplay" style="font-size:0.8rem; background:#f1f5f9; padding:0.4rem 0.75rem; border-radius:6px; border:1px solid #e2e8f0;">
-                  <i class="fa-solid fa-chalkboard-user text-primary mr-1"></i> Showing <strong id="facShowingCount">30</strong> of
-                  <strong id="facTotalCount">30</strong> Teachers
-                </span>
-                <button type="button" class="btn btn-outline-secondary btn-sm" onclick="portalApp.resetFacultyFilters()" title="Reset all filters">
-                  <i class="fa-solid fa-rotate-left"></i> Reset
-                </button>
-                <div class="staff-table-view-toggle" style="margin-left:0.25rem;">
-                  <button type="button" class="staff-view-btn active" id="btnFacultyViewTable"
-                    onclick="portalApp.toggleFacultyView('table')" title="Table View">
-                    <i class="fa-solid fa-table-list"></i>
+              <!-- Tier 2: Governance Indicators and Register Operations -->
+              <div class="transfers-governance-row">
+                <div class="tc-stats-left">
+                  <span class="tc-count-pill" id="facFilterCountDisplay">
+                    <i class="fa-solid fa-chalkboard-user text-primary mr-1"></i> Showing <strong id="facShowingCount">30</strong> of
+                    <strong id="facTotalCount">30</strong> Teachers
+                  </span>
+                  <span class="toolbar-tag-pill">
+                    <i class="fa-solid fa-calendar-check text-primary mr-1"></i> AY 2026–2027
+                  </span>
+                  <span class="toolbar-tag-pill stat-badge-verified">
+                    <i class="fa-solid fa-stamp text-success mr-1"></i> AP Board Approved Teaching Faculty
+                  </span>
+                </div>
+
+                <div class="tc-actions-right">
+                  <button type="button" class="btn btn-outline-secondary btn-sm btn-filter-reset"
+                    onclick="portalApp.resetFacultyFilters()" title="Reset all filters">
+                    <i class="fa-solid fa-rotate-left me-1"></i> Reset Filters
                   </button>
-                  <button type="button" class="staff-view-btn" id="btnFacultyViewCards"
-                    onclick="portalApp.toggleFacultyView('cards')" title="Card View">
-                    <i class="fa-solid fa-grip"></i>
-                  </button>
+                  <div class="staff-table-view-toggle" style="margin-left:0.25rem;">
+                    <button type="button" class="staff-view-btn active" id="btnFacultyViewTable"
+                      onclick="portalApp.toggleFacultyView('table')" title="Table View">
+                      <i class="fa-solid fa-table-list"></i>
+                    </button>
+                    <button type="button" class="staff-view-btn" id="btnFacultyViewCards"
+                      onclick="portalApp.toggleFacultyView('cards')" title="Card View">
+                      <i class="fa-solid fa-grip"></i>
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
@@ -4897,65 +4946,78 @@
               </div>
             </div>
 
-            <!-- Executive Filter Toolbar -->
-            <div class="transfers-toolbar" style="margin-bottom: 1rem;">
-              <div class="tc-toolbar-left" style="display:flex; align-items:center; gap:0.5rem; flex-wrap:wrap; flex:1;">
-                
-                <!-- Search input -->
-                <div class="tc-search-wrap" style="position:relative; min-width:240px; flex: 1;">
-                  <i class="fa-solid fa-magnifying-glass search-icon" style="position:absolute; left:10px; top:50%; transform:translateY(-50%); color:#94a3b8; font-size:0.85rem;"></i>
+            <!-- Executive Filter Toolbar (2-Tier Enterprise Architecture) -->
+            <div class="transfers-toolbar-container">
+              <!-- Tier 1: Search & Staff Filters (3-Column Responsive Grid) -->
+              <div class="staff-filter-grid">
+                <div class="tc-search-wrap">
+                  <i class="fa-solid fa-magnifying-glass search-icon"></i>
                   <input type="text" id="staffFilterInput" class="tc-search-input"
                     placeholder="Search by Employee ID, Name, Department, Designation, Reporting Manager, Responsibilities..."
-                    oninput="portalApp.filterNonTeachingStaff()"
-                    style="padding-left:32px; padding-right:28px; width:100%; height:36px; border:1px solid #cbd5e1; border-radius:6px; font-size:0.83rem;">
+                    oninput="portalApp.filterNonTeachingStaff()">
                   <button type="button" class="tc-clear-btn" id="staffClearSearchBtn"
                     onclick="document.getElementById('staffFilterInput').value=''; portalApp.filterNonTeachingStaff();"
-                    title="Clear Search" style="position:absolute; right:8px; top:50%; transform:translateY(-50%); background:none; border:none; color:#94a3b8; cursor:pointer;">
+                    title="Clear Search">
                     <i class="fa-solid fa-xmark"></i>
                   </button>
                 </div>
 
-                <!-- 1. Department Filter -->
-                <select id="staffDeptFilter" class="tc-filter-select" onchange="portalApp.filterNonTeachingStaff()" title="Filter by Operational Wing" style="height:36px; padding:0 0.65rem; border:1px solid #cbd5e1; border-radius:6px; font-size:0.83rem;">
-                  <option value="">All Departments</option>
-                  <option value="Administrative Office">Administrative Office</option>
-                  <option value="Finance & Accounts">Finance &amp; Accounts</option>
-                  <option value="Transport Operations">Transport Operations</option>
-                  <option value="Library & Learning Resource">Library &amp; Learning Resource</option>
-                  <option value="Science Laboratories">Science Laboratories</option>
-                  <option value="Information Technology">Information Technology (IT)</option>
-                  <option value="Facilities & Security">Facilities &amp; Security</option>
-                  <option value="Student Services">Student Services &amp; Welfare</option>
-                </select>
+                <div class="tc-select-wrap">
+                  <select id="staffDeptFilter" class="tc-filter-select" onchange="portalApp.filterNonTeachingStaff()" title="Filter by Operational Wing">
+                    <option value="">All Departments</option>
+                    <option value="Administrative Office">Administrative Office</option>
+                    <option value="Finance & Accounts">Finance &amp; Accounts</option>
+                    <option value="Transport Operations">Transport Operations</option>
+                    <option value="Library & Learning Resource">Library &amp; Learning Resource</option>
+                    <option value="Science Laboratories">Science Laboratories</option>
+                    <option value="Information Technology">Information Technology (IT)</option>
+                    <option value="Facilities & Security">Facilities &amp; Security</option>
+                    <option value="Student Services">Student Services &amp; Welfare</option>
+                  </select>
+                </div>
 
-                <!-- 2. Employment Status Filter -->
-                <select id="staffStatusFilter" class="tc-filter-select" onchange="portalApp.filterNonTeachingStaff()" title="Filter by Employment Status" style="height:36px; padding:0 0.65rem; border:1px solid #cbd5e1; border-radius:6px; font-size:0.83rem;">
-                  <option value="">All Employment Statuses</option>
-                  <option value="Active">Active (On Duty)</option>
-                  <option value="Probation">Probationary</option>
-                  <option value="Leave">On Leave</option>
-                  <option value="Notice">Notice Period</option>
-                  <option value="Archived">Archived</option>
-                </select>
+                <div class="tc-select-wrap">
+                  <select id="staffStatusFilter" class="tc-filter-select" onchange="portalApp.filterNonTeachingStaff()" title="Filter by Employment Status">
+                    <option value="">All Employment Statuses</option>
+                    <option value="Active">Active (On Duty)</option>
+                    <option value="Probation">Probationary</option>
+                    <option value="Leave">On Leave</option>
+                    <option value="Notice">Notice Period</option>
+                    <option value="Archived">Archived</option>
+                  </select>
+                </div>
               </div>
 
-              <div class="tc-toolbar-right" style="display:flex; align-items:center; gap:0.5rem; flex-wrap:wrap;">
-                <span class="tc-count-pill" id="staffCountPill" style="font-size:0.8rem; background:#f1f5f9; padding:0.4rem 0.75rem; border-radius:6px; border:1px solid #e2e8f0;">
-                  <i class="fa-solid fa-id-badge text-primary mr-1"></i> Showing <strong id="staffFilteredCount">12</strong> of
-                  <strong id="staffTotalCount">12</strong> Staff
-                </span>
-                <button type="button" class="btn btn-outline-secondary btn-sm" onclick="portalApp.resetStaffFilters()" title="Reset all filters">
-                  <i class="fa-solid fa-rotate-left"></i> Reset
-                </button>
-                <div class="staff-table-view-toggle" style="margin-left:0.25rem;">
-                  <button type="button" class="staff-view-btn active" id="btnStaffViewTable"
-                    onclick="portalApp.toggleStaffView('table')" title="Table View">
-                    <i class="fa-solid fa-table-list"></i>
+              <!-- Tier 2: Governance Indicators and Register Operations -->
+              <div class="transfers-governance-row">
+                <div class="tc-stats-left">
+                  <span class="tc-count-pill" id="staffCountPill">
+                    <i class="fa-solid fa-id-badge text-primary mr-1"></i> Showing <strong id="staffFilteredCount">12</strong> of
+                    <strong id="staffTotalCount">12</strong> Staff
+                  </span>
+                  <span class="toolbar-tag-pill">
+                    <i class="fa-solid fa-calendar-check text-primary mr-1"></i> AY 2026–2027
+                  </span>
+                  <span class="toolbar-tag-pill stat-badge-verified">
+                    <i class="fa-solid fa-stamp text-success mr-1"></i> Institutional Operations &amp; Support Wing
+                  </span>
+                </div>
+
+                <div class="tc-actions-right">
+                  <button type="button" class="btn btn-outline-secondary btn-sm btn-filter-reset"
+                    onclick="portalApp.resetStaffFilters()" title="Reset all filters">
+                    <i class="fa-solid fa-rotate-left me-1"></i> Reset Filters
                   </button>
-                  <button type="button" class="staff-view-btn" id="btnStaffViewCards"
-                    onclick="portalApp.toggleStaffView('cards')" title="Card View">
-                    <i class="fa-solid fa-grip"></i>
-                  </button>
+                  <div class="staff-table-view-toggle" style="margin-left:0.25rem;">
+                    <button type="button" class="staff-view-btn active" id="btnStaffViewTable"
+                      onclick="portalApp.toggleStaffView('table')" title="Table View">
+                      <i class="fa-solid fa-table-list"></i>
+                    </button>
+                    <button type="button" class="staff-view-btn" id="btnStaffViewCards"
+                      onclick="portalApp.toggleStaffView('cards')" title="Card View">
+                      <i class="fa-solid fa-grip"></i>
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>

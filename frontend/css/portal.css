@@ -13863,36 +13863,66 @@ input:disabled+.perm-slider {
    TRANSFERS (TC) MANAGEMENT ENTERPRISE REDESIGN (SUBMENU OF STUDENTS)
    ========================================================================== */
 
-/* Upgraded Transfers Toolbar */
+/* Upgraded Transfers & Module Filter Toolbars */
 .transfers-toolbar {
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-  background: var(--color-bg-surface, #ffffff);
-  border: 1px solid var(--color-border, #e2e8f0);
-  border-radius: 12px;
-  padding: 0.95rem 1.25rem;
-  margin-bottom: 1.15rem;
-  box-shadow: 0 1px 4px rgba(15, 23, 42, 0.03);
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 0.75rem !important;
+  background: var(--color-bg-surface, #ffffff) !important;
+  border: 1px solid var(--color-border, #e2e8f0) !important;
+  border-radius: 12px !important;
+  padding: 0.95rem 1.25rem !important;
+  margin-bottom: 1.15rem !important;
+  box-shadow: 0 1px 4px rgba(15, 23, 42, 0.03) !important;
+  width: 100% !important;
 }
 
 .tc-toolbar-left {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.65rem;
-  align-items: center;
-  width: 100%;
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 0.65rem !important;
+  align-items: center !important;
+  width: 100% !important;
+  flex: none !important;
 }
 
 .transfers-toolbar .tc-toolbar-right {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 0.65rem;
-  width: 100%;
-  padding-top: 0.65rem;
-  border-top: 1px solid var(--color-border-subtle, #f1f5f9);
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  flex-wrap: wrap !important;
+  gap: 0.65rem !important;
+  width: 100% !important;
+  padding-top: 0.75rem !important;
+  margin-top: 0.25rem !important;
+  border-top: 1px solid var(--color-border-subtle, #f1f5f9) !important;
+}
+
+.tc-toolbar-left .tc-search-wrap {
+  flex: 1 1 260px;
+  min-width: 240px;
+  position: relative;
+}
+
+.tc-toolbar-left .tc-filter-select,
+.tc-toolbar-left select.form-control,
+.tc-toolbar-left select.form-control-sm {
+  flex: 1 1 140px;
+  min-width: 120px;
+  height: 38px !important;
+  padding: 0 1.85rem 0 0.75rem !important;
+  font-size: 0.83rem !important;
+  font-weight: 600 !important;
+  color: #1e293b !important;
+  background-color: #f8fafc !important;
+  border: 1px solid #cbd5e1 !important;
+  border-radius: 8px !important;
+  cursor: pointer !important;
+  outline: none !important;
+  transition: all 0.2s ease !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
 }
 
 .tc-search-wrap {
@@ -26311,7 +26341,12 @@ button.close:hover,
   min-width: 0;
 }
 
-.transfers-filter-grid .tc-select-wrap .tc-filter-select {
+.transfers-filter-grid .tc-select-wrap .tc-filter-select,
+.perf-filter-grid .tc-select-wrap .tc-filter-select,
+.parents-filter-grid .tc-select-wrap .tc-filter-select,
+.faculty-filter-grid .tc-select-wrap .tc-filter-select,
+.staff-filter-grid .tc-select-wrap .tc-filter-select,
+.academics-filter-grid .tc-select-wrap .tc-filter-select {
   width: 100%;
   min-width: 0;
   height: 38px;
@@ -26325,6 +26360,9 @@ button.close:hover,
   cursor: pointer;
   outline: none;
   transition: all 0.2s ease;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
   appearance: none;
   -webkit-appearance: none;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2364748b'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
@@ -26375,13 +26413,94 @@ button.close:hover,
   transition: all 0.18s ease;
 }
 
-@media (max-width: 1280px) and (min-width: 769px) {
-  .transfers-filter-grid {
+@media (max-width: 1400px) and (min-width: 861px) {
+  .transfers-filter-grid,
+  .parents-filter-grid,
+  .faculty-filter-grid,
+  .staff-filter-grid,
+  .academics-filter-grid {
     grid-template-columns: repeat(4, 1fr);
   }
-  .transfers-filter-grid .tc-search-wrap {
+  .transfers-filter-grid .tc-search-wrap,
+  .parents-filter-grid .tc-search-wrap,
+  .faculty-filter-grid .tc-search-wrap,
+  .staff-filter-grid .tc-search-wrap,
+  .academics-filter-grid .tc-search-wrap {
     grid-column: 1 / -1;
   }
+  .perf-filter-grid {
+    grid-template-columns: repeat(5, 1fr);
+  }
+  .perf-filter-grid .tc-search-wrap {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 860px) and (min-width: 521px) {
+  .transfers-filter-grid,
+  .perf-filter-grid,
+  .parents-filter-grid,
+  .faculty-filter-grid,
+  .staff-filter-grid,
+  .academics-filter-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .transfers-filter-grid .tc-search-wrap,
+  .perf-filter-grid .tc-search-wrap,
+  .parents-filter-grid .tc-search-wrap,
+  .faculty-filter-grid .tc-search-wrap,
+  .staff-filter-grid .tc-search-wrap,
+  .academics-filter-grid .tc-search-wrap {
+    grid-column: 1 / -1;
+  }
+}
+
+/* Institutional Grid Definitions */
+.perf-filter-grid {
+  display: grid;
+  grid-template-columns: minmax(220px, 1.8fr) repeat(5, minmax(115px, 1fr));
+  align-items: center;
+  gap: 0.65rem;
+  width: 100%;
+}
+.perf-filter-grid .tc-search-wrap,
+.parents-filter-grid .tc-search-wrap,
+.faculty-filter-grid .tc-search-wrap,
+.staff-filter-grid .tc-search-wrap,
+.academics-filter-grid .tc-search-wrap {
+  width: 100%;
+  max-width: none;
+  position: relative;
+}
+.perf-filter-grid .tc-select-wrap,
+.parents-filter-grid .tc-select-wrap,
+.faculty-filter-grid .tc-select-wrap,
+.staff-filter-grid .tc-select-wrap,
+.academics-filter-grid .tc-select-wrap {
+  width: 100%;
+  min-width: 0;
+}
+.parents-filter-grid {
+  display: grid;
+  grid-template-columns: minmax(240px, 1.8fr) repeat(3, minmax(130px, 1fr));
+  align-items: center;
+  gap: 0.65rem;
+  width: 100%;
+}
+.faculty-filter-grid,
+.staff-filter-grid {
+  display: grid;
+  grid-template-columns: minmax(260px, 2fr) repeat(2, minmax(150px, 1fr));
+  align-items: center;
+  gap: 0.65rem;
+  width: 100%;
+}
+.academics-filter-grid {
+  display: grid;
+  grid-template-columns: minmax(240px, 1.8fr) repeat(3, minmax(130px, 1fr));
+  align-items: center;
+  gap: 0.65rem;
+  width: 100%;
 }
 
 @media (max-width: 768px) and (min-width: 521px) {

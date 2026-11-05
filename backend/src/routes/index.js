@@ -68,6 +68,12 @@ router.use('/admissions', admissionRoutes);
 const dashboardRoutes = require('./dashboard.routes');
 router.use('/dashboard', dashboardRoutes);
 
+// Mount platform administration endpoints at /api/v1/platform
+const dashboardController = require('../controllers/dashboard.controller');
+const platformRouter = express.Router();
+platformRouter.get('/dashboard', dashboardController.getPlatformDashboard);
+router.use('/platform', platformRouter);
+
 // Mount timetable module endpoints at /api/v1/timetable
 const timetableRoutes = require('./timetable.routes');
 router.use('/timetable', timetableRoutes);

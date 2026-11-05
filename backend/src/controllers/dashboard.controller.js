@@ -74,9 +74,25 @@ const getParentDashboard = asyncHandler(async (req, res) => {
   );
 });
 
+/**
+ * @route   GET /api/v1/dashboard/platform
+ * @desc    Get central multi-tenant platform dashboard telemetry (5 core answers, institution summary, health, security, operational tasks, recent activity)
+ * @access  Public / Operator Scoped (SUPER_ADMIN, PLATFORM_OPERATOR, PRINCIPAL)
+ */
+const getPlatformDashboard = asyncHandler(async (req, res) => {
+  const dashboard = await dashboardService.getPlatformDashboard(req.user);
+  return sendSuccess(
+    res,
+    dashboard,
+    'Multi-tenant platform administration dashboard retrieved successfully',
+    200
+  );
+});
+
 module.exports = {
   getManagementDashboard,
   getTeacherDashboard,
   getStudentDashboard,
   getParentDashboard,
+  getPlatformDashboard,
 };

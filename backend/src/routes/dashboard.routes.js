@@ -49,4 +49,10 @@ router.get(
   dashboardController.getParentDashboard
 );
 
+// 5. Multi-Tenant Platform Administration Dashboard (Specification 2.1 & 2.2)
+router.get(
+  '/platform',
+  dashboardController.getPlatformDashboard
+);
+
 module.exports = router;

@@ -1,22 +1,26 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="light">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Platform Administration | Sri Vidya Educational Trust ERP</title>
-  <meta name="description" content="Central multi-tenant platform administration and institutional infrastructure configuration for Sri Vidya Educational Trust.">
-  
+  <meta name="description"
+    content="Central multi-tenant platform administration and institutional infrastructure configuration for Sri Vidya Educational Trust.">
+
   <!-- FontAwesome & Google Fonts -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-  
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
+    rel="stylesheet">
+
   <!-- Core Styles -->
   <link rel="stylesheet" href="/css/style.css">
   <link rel="stylesheet" href="/css/portal.css">
   <link rel="stylesheet" href="/css/platform-admin.css">
 </head>
+
 <body class="platform-admin-body">
 
   <!-- =========================================================================
@@ -137,7 +141,8 @@
         <div class="operator-name">Root Platform Admin</div>
         <div class="operator-role"><i class="fa-solid fa-shield-halved"></i> Super Admin Operator</div>
       </div>
-      <button class="btn-pa btn-pa-secondary" style="padding: 0.35rem 0.5rem;" title="Sign out" onclick="PortalAuth.logout('management')">
+      <button class="btn-pa btn-pa-secondary" style="padding: 0.35rem 0.5rem;" title="Sign out"
+        onclick="PortalAuth.logout('management')">
         <i class="fa-solid fa-arrow-right-from-bracket"></i>
       </button>
     </div>
@@ -147,7 +152,7 @@
        MAIN CONTENT CONTAINER
        ========================================================================= -->
   <div class="portal-main">
-    
+
     <!-- Top Sticky Header Bar -->
     <header class="portal-header">
       <div class="header-left">
@@ -157,19 +162,22 @@
         <div style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.875rem;">
           <span style="color: #64748B;">Platform Administration</span>
           <i class="fa-solid fa-chevron-right" style="font-size: 0.7rem; color: #94A3B8;"></i>
-          <span style="font-weight: 700; color: var(--color-text-main);" id="currentViewBreadcrumb">Platform Dashboard</span>
+          <span style="font-weight: 700; color: var(--color-text-main);" id="currentViewBreadcrumb">Platform
+            Dashboard</span>
         </div>
       </div>
 
       <div class="header-right">
         <!-- Live Cluster Status Indicator -->
         <span class="badge-active" style="padding: 0.35rem 0.75rem;">
-          <span style="width: 8px; height: 8px; border-radius: 50%; background: #10B981; box-shadow: 0 0 6px #10B981;"></span>
+          <span
+            style="width: 8px; height: 8px; border-radius: 50%; background: #10B981; box-shadow: 0 0 6px #10B981;"></span>
           Cluster: Healthy (99.98%)
         </span>
 
         <!-- Theme Toggle -->
-        <button class="btn-pa btn-pa-secondary" id="platformThemeToggle" onclick="platformApp.toggleTheme()" title="Toggle Dark/Light Mode" style="padding: 0.45rem 0.8rem;">
+        <button class="btn-pa btn-pa-secondary" id="platformThemeToggle" onclick="platformApp.toggleTheme()"
+          title="Toggle Dark/Light Mode" style="padding: 0.45rem 0.8rem;">
           <i class="fa-solid fa-moon" id="platformThemeIcon"></i>
         </button>
 
@@ -192,7 +200,8 @@
           </span>
           <h1 class="banner-title">Sri Vidya Educational Trust • Platform Administration</h1>
           <p class="banner-subtitle">
-            Global management of multi-school software instances, tenant licensing, hardware gateways, system security policies, and institutional configurations.
+            Global management of multi-school software instances, tenant licensing, hardware gateways, system security
+            policies, and institutional configurations.
           </p>
         </div>
 
@@ -225,168 +234,566 @@
         <div class="privacy-guard-text">
           <h4>Architectural Privacy Isolation Boundary Enforced</h4>
           <p>
-            The Super Admin manages cloud infrastructure, tenant onboarding, and system configurations. 
-            <strong>By strict architectural design, platform operators do not receive unrestricted access to confidential student medical dossiers, personal counseling files, or private academic logs.</strong> 
-            School records remain sovereign and access-controlled exclusively to authorized institutional leadership and faculty.
+            The Super Admin manages cloud infrastructure, tenant onboarding, and system configurations.
+            <strong>By strict architectural design, platform operators do not receive unrestricted access to
+              confidential student medical dossiers, personal counseling files, or private academic logs.</strong>
+            School records remain sovereign and access-controlled exclusively to authorized institutional leadership and
+            faculty.
           </p>
         </div>
       </div>
 
       <!-- =======================================================================
            MODULE 1: PLATFORM DASHBOARD (#view-dashboard)
+           Scope: Multi-tenant Operational Command Centre answering the 5 Questions:
+           1. How many institutions are registered?
+           2. Is the platform operating correctly?
+           3. Are there security issues or failed operations?
+           4. Which institutions need attention?
+           5. What tasks must the Platform Administrator complete?
            ======================================================================= -->
       <section class="portal-view active" id="view-dashboard">
-        
-        <!-- Platform Metric Quad -->
+
+        <!-- Platform Core Overview Quad (Example Design Specification) -->
         <div class="platform-metric-quad">
-          <div class="pa-metric-card" onclick="platformApp.navigateTo('institutions')" style="cursor: pointer;">
+          <div class="pa-metric-card" onclick="platformApp.navigateTo('institutions')" style="cursor: pointer;"
+            title="Question 1: Total Registered Institutions">
             <div class="pa-metric-top">
-              <span class="pa-metric-label">Managed Institutions</span>
+              <span class="pa-metric-label">Institutions</span>
               <div class="pa-metric-icon-box" style="background: rgba(79, 70, 229, 0.12); color: #4F46E5;">
                 <i class="fa-solid fa-school-flag"></i>
               </div>
             </div>
-            <div class="pa-metric-value">3 Campuses</div>
+            <div class="pa-metric-value" id="paHeroInstitutions">3</div>
             <div class="pa-metric-sub text-emerald">
-              <i class="fa-solid fa-circle-check"></i> 100% Operational &amp; Licensed
+              <i class="fa-solid fa-circle-check"></i> Registered in the platform
             </div>
           </div>
 
-          <div class="pa-metric-card" onclick="platformApp.navigateTo('users')" style="cursor: pointer;">
+          <div class="pa-metric-card" onclick="platformApp.navigateTo('users')" style="cursor: pointer;"
+            title="Total Platform Accounts">
             <div class="pa-metric-top">
-              <span class="pa-metric-label">Total Provisioned Users</span>
+              <span class="pa-metric-label">Platform Accounts</span>
               <div class="pa-metric-icon-box" style="background: rgba(6, 182, 212, 0.12); color: #06B6D4;">
                 <i class="fa-solid fa-users-gear"></i>
               </div>
             </div>
-            <div class="pa-metric-value">1,315</div>
+            <div class="pa-metric-value" id="paHeroAccounts">128</div>
             <div class="pa-metric-sub">
-              <span>855 Students • 58 Faculty • 5 Admins</span>
+              <span>Across registered institutions</span>
             </div>
           </div>
 
-          <div class="pa-metric-card" onclick="platformApp.navigateTo('subscription')" style="cursor: pointer;">
+          <div class="pa-metric-card" onclick="platformApp.navigateTo('health')" style="cursor: pointer;"
+            title="Question 2: Is the platform operating correctly?">
             <div class="pa-metric-top">
-              <span class="pa-metric-label">Student Seat Quota</span>
-              <div class="pa-metric-icon-box" style="background: rgba(245, 158, 11, 0.12); color: #F59E0B;">
-                <i class="fa-solid fa-chart-pie"></i>
-              </div>
-            </div>
-            <div class="pa-metric-value">57% Used</div>
-            <div class="pa-metric-sub">
-              <span>855 / 1,500 Enrolled Seats Allocated</span>
-            </div>
-          </div>
-
-          <div class="pa-metric-card" onclick="platformApp.navigateTo('health')" style="cursor: pointer;">
-            <div class="pa-metric-top">
-              <span class="pa-metric-label">System Performance</span>
+              <span class="pa-metric-label">Application Status</span>
               <div class="pa-metric-icon-box" style="background: rgba(16, 185, 129, 0.12); color: #10B981;">
-                <i class="fa-solid fa-gauge-simple-high"></i>
+                <i class="fa-solid fa-heart-pulse"></i>
               </div>
             </div>
-            <div class="pa-metric-value text-emerald">24 ms</div>
+            <div class="pa-metric-value text-emerald" id="paHeroStatus">Healthy</div>
             <div class="pa-metric-sub text-emerald">
-              <i class="fa-solid fa-cloud-arrow-up"></i> P95 Gateway Latency (Zero Drops)
+              <i class="fa-solid fa-cloud-arrow-up"></i> Live status (24ms P95 Latency)
+            </div>
+          </div>
+
+          <div class="pa-metric-card" onclick="platformApp.navigateTo('support')" style="cursor: pointer;"
+            title="Question 4: Which institutions need attention?">
+            <div class="pa-metric-top">
+              <span class="pa-metric-label">Open Issues</span>
+              <div class="pa-metric-icon-box" style="background: rgba(245, 158, 11, 0.12); color: #F59E0B;">
+                <i class="fa-solid fa-circle-exclamation"></i>
+              </div>
+            </div>
+            <div class="pa-metric-value text-amber" id="paHeroOpenIssues">2</div>
+            <div class="pa-metric-sub text-amber">
+              <i class="fa-solid fa-triangle-exclamation"></i> Requiring attention
             </div>
           </div>
         </div>
 
-        <!-- Quick Platform Actions Bar -->
-        <div class="pa-card">
+        <!-- 5 Core Questions Executive Telemetry Strip -->
+        <div
+          style="background: var(--color-bg-subtle); border: 1px solid var(--color-border); border-radius: 12px; padding: 1rem 1.35rem; margin-bottom: 1.5rem; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 1rem;">
+          <div style="display: flex; align-items: center; gap: 0.75rem;">
+            <div
+              style="width: 10px; height: 10px; border-radius: 50%; background: #10b981; box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2);">
+            </div>
+            <span style="font-size: 0.88rem; font-weight: 700; color: var(--color-text-main);">
+              Operational Command Status: All 3 Campuses Online
+            </span>
+          </div>
+          <div style="display: flex; gap: 1.25rem; flex-wrap: wrap; font-size: 0.8rem; color: #64748b;">
+            <span><i class="fa-solid fa-shield-halved text-emerald mr-1"></i> Security: <strong
+                style="color:var(--color-text-main);">0 Active Threats</strong></span>
+            <span><i class="fa-solid fa-list-check text-primary mr-1"></i> Operator Tasks: <strong
+                style="color:var(--color-text-main);">4 To Complete</strong></span>
+            <span><i class="fa-solid fa-database text-blue mr-1"></i> Latest Backup: <strong
+                style="color:var(--color-text-main);">Today 03:00 AM (Verified)</strong></span>
+          </div>
+        </div>
+
+        <!-- SECTION 2.2: DASHBOARD ACTIONS (Operational Command Centre) -->
+        <div class="pa-card" style="margin-bottom: 1.5rem;">
+          <div class="pa-card-header"
+            style="border-bottom: 1px solid var(--color-border); padding-bottom: 1rem; margin-bottom: 1rem;">
+            <div>
+              <h3 class="pa-card-title"><i class="fa-solid fa-bolt text-amber"></i> Operational Command Actions</h3>
+              <p class="pa-card-desc">Execute governance, security, and infrastructure workflows across the ecosystem
+              </p>
+            </div>
+          </div>
+          <div style="display: flex; gap: 0.65rem; flex-wrap: wrap;" id="dashboardActionsBar">
+            <button class="btn-pa btn-pa-primary" onclick="platformApp.openModal('modalAddInstitution')">
+              <i class="fa-solid fa-plus"></i> Add Institution
+            </button>
+            <button class="btn-pa btn-pa-secondary" onclick="platformApp.openInviteAdminModal()">
+              <i class="fa-solid fa-user-shield"></i> Invite Platform Administrator
+            </button>
+            <button class="btn-pa btn-pa-secondary" onclick="platformApp.openSecurityAlertsModal()">
+              <i class="fa-solid fa-shield-halved text-primary"></i> Review Security Alerts
+            </button>
+            <button class="btn-pa btn-pa-secondary" onclick="platformApp.navigateTo('health')">
+              <i class="fa-solid fa-gauge-high"></i> Open System Health
+            </button>
+            <button class="btn-pa btn-pa-secondary" onclick="platformApp.openFailedJobsModal()">
+              <i class="fa-solid fa-triangle-exclamation text-amber"></i> View Failed Jobs
+            </button>
+            <button class="btn-pa btn-pa-secondary" onclick="platformApp.navigateTo('support')">
+              <i class="fa-solid fa-headset text-primary"></i> Open Support Tickets
+            </button>
+            <button class="btn-pa btn-pa-secondary" onclick="platformApp.navigateTo('backups')">
+              <i class="fa-solid fa-database text-emerald"></i> Review Backup Status
+            </button>
+          </div>
+        </div>
+
+        <!-- SECTION 2.1 A: INSTITUTION SUMMARY -->
+        <div class="pa-card" style="margin-bottom: 1.5rem;">
           <div class="pa-card-header">
             <div>
-              <h3 class="pa-card-title"><i class="fa-solid fa-bolt text-amber"></i> Operator Quick Actions</h3>
-              <p class="pa-card-desc">Execute high-priority operational workflows across the platform ecosystem</p>
+              <h3 class="pa-card-title"><i class="fa-solid fa-school-flag text-primary"></i> Institution Summary</h3>
+              <p class="pa-card-desc">Multi-campus tenancy breakdown. Click any category card to filter the registry.
+              </p>
             </div>
-            <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
-              <button class="btn-pa btn-pa-primary" onclick="platformApp.openModal('modalAddInstitution')">
-                <i class="fa-solid fa-plus"></i> Onboard New Institution
-              </button>
-              <button class="btn-pa btn-pa-secondary" onclick="platformApp.openModal('modalCreateTicket')">
-                <i class="fa-solid fa-ticket"></i> Log Support Ticket
-              </button>
-              <button class="btn-pa btn-pa-secondary" onclick="platformApp.pingCluster()" id="btnPingCluster">
-                <i class="fa-solid fa-satellite-dish"></i> Run Diagnostics Ping
-              </button>
-              <button class="btn-pa btn-pa-secondary" onclick="platformApp.exportAuditTrail()">
-                <i class="fa-solid fa-download"></i> Export Audit Log
-              </button>
+            <button class="btn-pa btn-pa-secondary" onclick="platformApp.navigateTo('institutions')">
+              <i class="fa-solid fa-table-list"></i> View All in Registry
+            </button>
+          </div>
+
+          <!-- 5 Category Cards (Each card opens Institution Management with the relevant filter applied) -->
+          <div
+            style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem; margin-bottom: 1.5rem;">
+            <div class="pa-metric-card" onclick="platformApp.filterInstitutions('all')"
+              style="cursor: pointer; padding: 1rem 1.15rem; background: var(--color-bg-subtle);"
+              title="Filter: All Institutions">
+              <div style="font-size: 0.75rem; font-weight: 700; color: #64748B; text-transform: uppercase;">Total
+                Registered</div>
+              <div style="font-size: 1.6rem; font-weight: 800; color: var(--color-text-main); margin: 0.35rem 0;"
+                id="sumTotalRegistered">3</div>
+              <div style="font-size: 0.75rem; color: #4F46E5;"><i class="fa-solid fa-arrow-right"></i> Open Registry
+                (All)</div>
+            </div>
+
+            <div class="pa-metric-card" onclick="platformApp.filterInstitutions('active')"
+              style="cursor: pointer; padding: 1rem 1.15rem; background: rgba(16, 185, 129, 0.05); border-color: rgba(16, 185, 129, 0.2);"
+              title="Filter: Active Institutions">
+              <div style="font-size: 0.75rem; font-weight: 700; color: #047857; text-transform: uppercase;">Active
+                Institutions</div>
+              <div style="font-size: 1.6rem; font-weight: 800; color: #047857; margin: 0.35rem 0;" id="sumActive">3
+              </div>
+              <div style="font-size: 0.75rem; color: #059669;"><i class="fa-solid fa-circle-check"></i> 100% Operational
+              </div>
+            </div>
+
+            <div class="pa-metric-card" onclick="platformApp.filterInstitutions('onboarding')"
+              style="cursor: pointer; padding: 1rem 1.15rem; background: rgba(6, 182, 212, 0.05); border-color: rgba(6, 182, 212, 0.2);"
+              title="Filter: Onboarding Institutions">
+              <div style="font-size: 0.75rem; font-weight: 700; color: #0e7490; text-transform: uppercase;">Onboarding
+              </div>
+              <div style="font-size: 1.6rem; font-weight: 800; color: #0891b2; margin: 0.35rem 0;" id="sumOnboarding">0
+              </div>
+              <div style="font-size: 0.75rem; color: #06b6d4;"><i class="fa-solid fa-cloud-arrow-up"></i> Setup
+                Pipelines</div>
+            </div>
+
+            <div class="pa-metric-card" onclick="platformApp.filterInstitutions('suspended')"
+              style="cursor: pointer; padding: 1rem 1.15rem; background: rgba(239, 68, 68, 0.05); border-color: rgba(239, 68, 68, 0.2);"
+              title="Filter: Suspended Institutions">
+              <div style="font-size: 0.75rem; font-weight: 700; color: #b91c1c; text-transform: uppercase;">Suspended
+              </div>
+              <div style="font-size: 1.6rem; font-weight: 800; color: #dc2626; margin: 0.35rem 0;" id="sumSuspended">0
+              </div>
+              <div style="font-size: 0.75rem; color: #ef4444;"><i class="fa-solid fa-ban"></i> Zero Sanctions</div>
+            </div>
+
+            <div class="pa-metric-card" onclick="platformApp.filterInstitutions('config_pending')"
+              style="cursor: pointer; padding: 1rem 1.15rem; background: rgba(245, 158, 11, 0.05); border-color: rgba(245, 158, 11, 0.2);"
+              title="Filter: Config Issues">
+              <div style="font-size: 0.75rem; font-weight: 700; color: #b45309; text-transform: uppercase;">Config
+                Issues</div>
+              <div style="font-size: 1.6rem; font-weight: 800; color: #d97706; margin: 0.35rem 0;" id="sumConfigIssues">
+                0</div>
+              <div style="font-size: 0.75rem; color: #f59e0b;"><i class="fa-solid fa-sliders"></i> All Compliant</div>
             </div>
           </div>
 
           <!-- Multi-Campus Tenant Overview Cards -->
-          <h4 style="margin: 1.25rem 0 0.85rem; font-size: 1rem; color: var(--color-text-main);">
-            <i class="fa-solid fa-sitemap text-primary"></i> Active Institutional Tenants
+          <h4 style="margin: 0 0 0.85rem; font-size: 0.95rem; color: var(--color-text-main); font-weight: 700;">
+            <i class="fa-solid fa-sitemap text-primary mr-1"></i> Active Institutional Tenants
           </h4>
           <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(310px, 1fr)); gap: 1.25rem;">
-            
-            <div style="border: 1px solid var(--color-border); border-radius: 12px; padding: 1.35rem; background: var(--color-bg-subtle);">
-              <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem;">
+
+            <div
+              style="border: 1px solid var(--color-border); border-radius: 12px; padding: 1.35rem; background: var(--color-bg-subtle);">
+              <div
+                style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem;">
                 <span class="badge-operator" style="background:#4F46E5; color:#fff;">Lead Campus</span>
                 <span class="badge-active">Active</span>
               </div>
               <h4 style="margin: 0.25rem 0; font-size: 1.05rem;">Sri Vidya E.M High School</h4>
-              <p style="margin: 0 0 0.75rem; font-size: 0.8rem; color: #64748B;">UDISE: 28172901923 • Primary &amp; Secondary (Class 1–10)</p>
-              <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 1rem; padding: 0.5rem 0; border-top: 1px dashed var(--color-border); border-bottom: 1px dashed var(--color-border);">
+              <p style="margin: 0 0 0.75rem; font-size: 0.8rem; color: #64748B;">UDISE: 28172901923 • Primary &amp;
+                Secondary (Class 1–10)</p>
+              <div
+                style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 1rem; padding: 0.5rem 0; border-top: 1px dashed var(--color-border); border-bottom: 1px dashed var(--color-border);">
                 <span>Students: <strong>855</strong></span>
                 <span>Staff: <strong>34</strong></span>
                 <span>Term: <strong>2025–26</strong></span>
               </div>
               <div style="display: flex; gap: 0.5rem;">
-                <a href="/management" class="btn-pa btn-pa-primary" style="flex:1; justify-content:center; font-size:0.8rem;">
+                <a href="/management" class="btn-pa btn-pa-primary"
+                  style="flex:1; justify-content:center; font-size:0.8rem;">
                   <i class="fa-solid fa-arrow-right"></i> Open Portal
                 </a>
-                <button class="btn-pa btn-pa-secondary" onclick="platformApp.navigateTo('config')" style="font-size:0.8rem;">
+                <button class="btn-pa btn-pa-secondary" onclick="platformApp.navigateTo('config')"
+                  style="font-size:0.8rem;" title="Configure School">
                   <i class="fa-solid fa-sliders"></i>
                 </button>
               </div>
             </div>
 
-            <div style="border: 1px solid var(--color-border); border-radius: 12px; padding: 1.35rem; background: var(--color-bg-subtle);">
-              <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem;">
+            <div
+              style="border: 1px solid var(--color-border); border-radius: 12px; padding: 1.35rem; background: var(--color-bg-subtle);">
+              <div
+                style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem;">
                 <span class="badge-operator">Intermediate Wing</span>
                 <span class="badge-active">Active</span>
               </div>
               <h4 style="margin: 0.25rem 0; font-size: 1.05rem;">Sri Vidya Junior College</h4>
-              <p style="margin: 0 0 0.75rem; font-size: 0.8rem; color: #64748B;">UDISE: 28172901924 • BIEAP AP (+1 &amp; +2 MPC/BiPC)</p>
-              <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 1rem; padding: 0.5rem 0; border-top: 1px dashed var(--color-border); border-bottom: 1px dashed var(--color-border);">
+              <p style="margin: 0 0 0.75rem; font-size: 0.8rem; color: #64748B;">UDISE: 28172901924 • BIEAP AP (+1 &amp;
+                +2 MPC/BiPC)</p>
+              <div
+                style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 1rem; padding: 0.5rem 0; border-top: 1px dashed var(--color-border); border-bottom: 1px dashed var(--color-border);">
                 <span>Students: <strong>320</strong></span>
                 <span>Staff: <strong>18</strong></span>
                 <span>Term: <strong>2025–26</strong></span>
               </div>
               <div style="display: flex; gap: 0.5rem;">
-                <a href="/management" class="btn-pa btn-pa-secondary" style="flex:1; justify-content:center; font-size:0.8rem;">
+                <a href="/management" class="btn-pa btn-pa-secondary"
+                  style="flex:1; justify-content:center; font-size:0.8rem;">
                   <i class="fa-solid fa-arrow-right"></i> Open Portal
                 </a>
-                <button class="btn-pa btn-pa-secondary" onclick="platformApp.navigateTo('config')" style="font-size:0.8rem;">
+                <button class="btn-pa btn-pa-secondary" onclick="platformApp.navigateTo('config')"
+                  style="font-size:0.8rem;" title="Configure College">
                   <i class="fa-solid fa-sliders"></i>
                 </button>
               </div>
             </div>
 
-            <div style="border: 1px solid var(--color-border); border-radius: 12px; padding: 1.35rem; background: var(--color-bg-subtle);">
-              <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem;">
+            <div
+              style="border: 1px solid var(--color-border); border-radius: 12px; padding: 1.35rem; background: var(--color-bg-subtle);">
+              <div
+                style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem;">
                 <span class="badge-operator">Pre-Primary</span>
                 <span class="badge-active">Active</span>
               </div>
               <h4 style="margin: 0.25rem 0; font-size: 1.05rem;">Sri Vidya Kids Academy</h4>
-              <p style="margin: 0 0 0.75rem; font-size: 0.8rem; color: #64748B;">UDISE: 28172901925 • Nursery, LKG, UKG Play School</p>
-              <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 1rem; padding: 0.5rem 0; border-top: 1px dashed var(--color-border); border-bottom: 1px dashed var(--color-border);">
+              <p style="margin: 0 0 0.75rem; font-size: 0.8rem; color: #64748B;">UDISE: 28172901925 • Nursery, LKG, UKG
+                Play School</p>
+              <div
+                style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 1rem; padding: 0.5rem 0; border-top: 1px dashed var(--color-border); border-bottom: 1px dashed var(--color-border);">
                 <span>Students: <strong>140</strong></span>
                 <span>Staff: <strong>8</strong></span>
                 <span>Term: <strong>2025–26</strong></span>
               </div>
               <div style="display: flex; gap: 0.5rem;">
-                <a href="/management" class="btn-pa btn-pa-secondary" style="flex:1; justify-content:center; font-size:0.8rem;">
+                <a href="/management" class="btn-pa btn-pa-secondary"
+                  style="flex:1; justify-content:center; font-size:0.8rem;">
                   <i class="fa-solid fa-arrow-right"></i> Open Portal
                 </a>
-                <button class="btn-pa btn-pa-secondary" onclick="platformApp.navigateTo('config')" style="font-size:0.8rem;">
+                <button class="btn-pa btn-pa-secondary" onclick="platformApp.navigateTo('config')"
+                  style="font-size:0.8rem;" title="Configure Academy">
                   <i class="fa-solid fa-sliders"></i>
                 </button>
               </div>
             </div>
 
+          </div>
+        </div>
+
+        <!-- SECTION 2.1 B: PLATFORM HEALTH -->
+        <div class="pa-card" style="margin-bottom: 1.5rem;">
+          <div class="pa-card-header">
+            <div>
+              <h3 class="pa-card-title"><i class="fa-solid fa-heart-pulse text-emerald"></i> Platform Health Matrix</h3>
+              <p class="pa-card-desc">Real-time health check telemetry. Services are marked healthy strictly upon
+                passing active diagnostic probes.</p>
+            </div>
+            <button class="btn-pa btn-pa-secondary" onclick="platformApp.navigateTo('health')">
+              <i class="fa-solid fa-stethoscope"></i> Open Health Console
+            </button>
+          </div>
+
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem;"
+            id="platformHealthGrid">
+
+            <div
+              style="border: 1px solid var(--color-border); border-radius: 10px; padding: 1.15rem; background: var(--color-bg-subtle);">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                <span style="font-weight: 700; font-size: 0.85rem; color: var(--color-text-main);"><i
+                    class="fa-solid fa-globe text-primary mr-1"></i> Frontend Availability</span>
+                <span class="badge-active" id="badgeHealthFrontend"><i class="fa-solid fa-check"></i> Healthy</span>
+              </div>
+              <div style="font-size: 0.82rem; font-weight: 700; color: #10b981;" id="metricsHealthFrontend">99.99%
+                Uptime (P90: 12ms)</div>
+              <div style="font-size: 0.75rem; color: #64748b; margin-top: 0.25rem;">Cloudflare CDN • Static Assets
+                Cached</div>
+            </div>
+
+            <div
+              style="border: 1px solid var(--color-border); border-radius: 10px; padding: 1.15rem; background: var(--color-bg-subtle);">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                <span style="font-weight: 700; font-size: 0.85rem; color: var(--color-text-main);"><i
+                    class="fa-solid fa-server text-indigo mr-1"></i> Backend API Health</span>
+                <span class="badge-active" id="badgeHealthBackend"><i class="fa-solid fa-check"></i> Healthy</span>
+              </div>
+              <div style="font-size: 0.82rem; font-weight: 700; color: #10b981;" id="metricsHealthBackend">24ms P95
+                Latency (Zero Drops)</div>
+              <div style="font-size: 0.75rem; color: #64748b; margin-top: 0.25rem;">Node.js v24 REST Cluster • Active
+                Daemon</div>
+            </div>
+
+            <div
+              style="border: 1px solid var(--color-border); border-radius: 10px; padding: 1.15rem; background: var(--color-bg-subtle);">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                <span style="font-weight: 700; font-size: 0.85rem; color: var(--color-text-main);"><i
+                    class="fa-solid fa-database text-blue mr-1"></i> Database Connectivity</span>
+                <span class="badge-active" id="badgeHealthDatabase"><i class="fa-solid fa-check"></i> Connected</span>
+              </div>
+              <div style="font-size: 0.82rem; font-weight: 700; color: #10b981;" id="metricsHealthDatabase">MongoDB 8.0
+                (6ms Ping)</div>
+              <div style="font-size: 0.75rem; color: #64748b; margin-top: 0.25rem;">srividya_school_db • WiredTiger
+                Engine</div>
+            </div>
+
+            <div
+              style="border: 1px solid var(--color-border); border-radius: 10px; padding: 1.15rem; background: var(--color-bg-subtle);">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                <span style="font-weight: 700; font-size: 0.85rem; color: var(--color-text-main);"><i
+                    class="fa-solid fa-hard-drive text-amber mr-1"></i> File Storage Availability</span>
+                <span class="badge-active" id="badgeHealthStorage"><i class="fa-solid fa-check"></i> Operational</span>
+              </div>
+              <div style="font-size: 0.82rem; font-weight: 700; color: #10b981;" id="metricsHealthStorage">Local Storage
+                &amp; S3 Vault</div>
+              <div style="font-size: 0.75rem; color: #64748b; margin-top: 0.25rem;">Write Probe Verified • 42% Quota
+                Used</div>
+            </div>
+
+            <div
+              style="border: 1px solid var(--color-border); border-radius: 10px; padding: 1.15rem; background: var(--color-bg-subtle);">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                <span style="font-weight: 700; font-size: 0.85rem; color: var(--color-text-main);"><i
+                    class="fa-solid fa-envelope-circle-check text-purple mr-1"></i> Email Delivery Service</span>
+                <span class="badge-active" id="badgeHealthEmail"><i class="fa-solid fa-check"></i> Connected</span>
+              </div>
+              <div style="font-size: 0.82rem; font-weight: 700; color: #10b981;" id="metricsHealthEmail">Google
+                Workspace SMTP Relay</div>
+              <div style="font-size: 0.75rem; color: #64748b; margin-top: 0.25rem;">Queue: 0 Pending • SPF/DKIM Verified
+              </div>
+            </div>
+
+            <div
+              style="border: 1px solid var(--color-border); border-radius: 10px; padding: 1.15rem; background: var(--color-bg-subtle);">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                <span style="font-weight: 700; font-size: 0.85rem; color: var(--color-text-main);"><i
+                    class="fa-solid fa-gears text-cyan mr-1"></i> Background Job Failures</span>
+                <span class="badge-active" id="badgeHealthJobs"><i class="fa-solid fa-check"></i> 0 Failures</span>
+              </div>
+              <div style="font-size: 0.82rem; font-weight: 700; color: #10b981;" id="metricsHealthJobs">Scheduler Active
+                (12 Success)</div>
+              <div style="font-size: 0.75rem; color: #64748b; margin-top: 0.25rem;">Attendance digest &amp; fee
+                reconciliation</div>
+            </div>
+
+            <div
+              style="border: 1px solid var(--color-border); border-radius: 10px; padding: 1.15rem; background: var(--color-bg-subtle);">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                <span style="font-weight: 700; font-size: 0.85rem; color: var(--color-text-main);"><i
+                    class="fa-solid fa-box-archive text-emerald mr-1"></i> Latest Successful Backup</span>
+                <span class="badge-active" id="badgeHealthBackup"><i class="fa-solid fa-check"></i> Verified</span>
+              </div>
+              <div style="font-size: 0.82rem; font-weight: 700; color: #10b981;" id="metricsHealthBackup">Today, 03:00
+                AM UTC</div>
+              <div style="font-size: 0.75rem; color: #64748b; margin-top: 0.25rem;">AWS S3 Mumbai • AES-256 Encrypted
+              </div>
+            </div>
+
+            <div
+              style="border: 1px solid var(--color-border); border-radius: 10px; padding: 1.15rem; background: var(--color-bg-subtle);">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                <span style="font-weight: 700; font-size: 0.85rem; color: var(--color-text-main);"><i
+                    class="fa-solid fa-code-branch text-pink mr-1"></i> Recent Deployment Status</span>
+                <span class="badge-active" id="badgeHealthDeployment"><i class="fa-solid fa-check"></i> Current</span>
+              </div>
+              <div style="font-size: 0.82rem; font-weight: 700; color: #10b981;" id="metricsHealthDeployment">
+                v2.4.0-prod (Commit a3e9c55)</div>
+              <div style="font-size: 0.75rem; color: #64748b; margin-top: 0.25rem;">Zero-downtime rolling restart
+                verified</div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- SECTION 2.1 C: SECURITY OVERVIEW -->
+        <div class="pa-card" style="margin-bottom: 1.5rem;">
+          <div class="pa-card-header">
+            <div>
+              <h3 class="pa-card-title"><i class="fa-solid fa-shield-halved text-primary"></i> Security Overview &amp;
+                Access Radar</h3>
+              <p class="pa-card-desc">Authentication telemetry, privilege tracking, and statutory threat intelligence
+              </p>
+            </div>
+            <button class="btn-pa btn-pa-secondary" onclick="platformApp.navigateTo('security-monitoring')">
+              <i class="fa-solid fa-fingerprint"></i> Full Security Monitor
+            </button>
+          </div>
+
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem;">
+
+            <div
+              style="border: 1px solid var(--color-border); border-radius: 10px; padding: 1rem; background: var(--color-bg-subtle);">
+              <div style="font-size: 0.75rem; font-weight: 700; color: #64748B; text-transform: uppercase;">Failed Login
+                Activity</div>
+              <div style="font-size: 1.55rem; font-weight: 800; color: var(--color-text-main); margin: 0.35rem 0;"
+                id="secFailedLogins">4</div>
+              <div style="font-size: 0.75rem; color: #10B981;"><i class="fa-solid fa-shield"></i> Rate Limiter Throttled
+              </div>
+            </div>
+
+            <div
+              style="border: 1px solid var(--color-border); border-radius: 10px; padding: 1rem; background: var(--color-bg-subtle);">
+              <div style="font-size: 0.75rem; font-weight: 700; color: #64748B; text-transform: uppercase;">Suspicious
+                Auth Events</div>
+              <div style="font-size: 1.55rem; font-weight: 800; color: #10B981; margin: 0.35rem 0;"
+                id="secSuspiciousAuth">0</div>
+              <div style="font-size: 0.75rem; color: #10B981;"><i class="fa-solid fa-circle-check"></i> Zero Anomalies
+              </div>
+            </div>
+
+            <div
+              style="border: 1px solid var(--color-border); border-radius: 10px; padding: 1rem; background: var(--color-bg-subtle);">
+              <div style="font-size: 0.75rem; font-weight: 700; color: #64748B; text-transform: uppercase;">Admin
+                Permission Changes</div>
+              <div style="font-size: 1.55rem; font-weight: 800; color: #4F46E5; margin: 0.35rem 0;"
+                id="secAdminPermChanges">2</div>
+              <div style="font-size: 0.75rem; color: #64748B;"><i class="fa-solid fa-signature"></i> Audited in Log
+              </div>
+            </div>
+
+            <div
+              style="border: 1px solid var(--color-border); border-radius: 10px; padding: 1rem; background: var(--color-bg-subtle);">
+              <div style="font-size: 0.75rem; font-weight: 700; color: #64748B; text-transform: uppercase;">Awaiting
+                Activation</div>
+              <div style="font-size: 1.55rem; font-weight: 800; color: #0891B2; margin: 0.35rem 0;"
+                id="secPendingActivation">5</div>
+              <div style="font-size: 0.75rem; color: #0891B2;"><i class="fa-solid fa-user-clock"></i> Invited Accounts
+              </div>
+            </div>
+
+            <div
+              style="border: 1px solid var(--color-border); border-radius: 10px; padding: 1rem; background: var(--color-bg-subtle);">
+              <div style="font-size: 0.75rem; font-weight: 700; color: #64748B; text-transform: uppercase;">Expiring
+                Privileged Access</div>
+              <div style="font-size: 1.55rem; font-weight: 800; color: #D97706; margin: 0.35rem 0;"
+                id="secExpiringAccess">1</div>
+              <div style="font-size: 0.75rem; color: #D97706;"><i class="fa-solid fa-clock"></i> Expires in 18h</div>
+            </div>
+
+            <div
+              style="border: 1px solid var(--color-border); border-radius: 10px; padding: 1rem; background: var(--color-bg-subtle);">
+              <div style="font-size: 0.75rem; font-weight: 700; color: #64748B; text-transform: uppercase;">Unresolved
+                Security Alerts</div>
+              <div style="font-size: 1.55rem; font-weight: 800; color: #10B981; margin: 0.35rem 0;"
+                id="secUnresolvedAlerts">0</div>
+              <div style="font-size: 0.75rem; color: #10B981;"><i class="fa-solid fa-circle-check"></i> Clean Posture
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- SECTION 2.1 D: OPERATIONAL TASKS -->
+        <div class="pa-card" style="margin-bottom: 1.5rem;">
+          <div class="pa-card-header">
+            <div>
+              <h3 class="pa-card-title"><i class="fa-solid fa-list-check text-primary"></i> Operational Tasks &amp;
+                Action Items</h3>
+              <p class="pa-card-desc">Answers Question 5: What tasks must the Platform Administrator complete?</p>
+            </div>
+            <span class="badge-operator" style="background:#4F46E5; color:#fff;" id="operationalTasksBadge">4 Tasks
+              Pending</span>
+          </div>
+
+          <div class="pa-table-responsive">
+            <table class="pa-table">
+              <thead>
+                <tr>
+                  <th>Task Description</th>
+                  <th>Institution / Scope</th>
+                  <th>Assigned Operator</th>
+                  <th>Status</th>
+                  <th>Priority</th>
+                  <th style="text-align: right;">Action</th>
+                </tr>
+              </thead>
+              <tbody id="operationalTasksTableBody">
+                <!-- Populated dynamically by platform-admin.js -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- SECTION 2.1 E: RECENT PLATFORM ACTIVITY -->
+        <div class="pa-card">
+          <div class="pa-card-header">
+            <div>
+              <h3 class="pa-card-title"><i class="fa-solid fa-clock-rotate-left text-primary"></i> Recent Platform
+                Activity</h3>
+              <p class="pa-card-desc">Live institutional audit trail. Sensitive credentials, hashes, and PII are
+                strictly masked.</p>
+            </div>
+            <button class="btn-pa btn-pa-secondary" onclick="platformApp.navigateTo('audit')">
+              <i class="fa-solid fa-scroll"></i> View Full Audit Log
+            </button>
+          </div>
+
+          <div class="pa-table-responsive">
+            <table class="pa-table">
+              <thead>
+                <tr>
+                  <th>Activity</th>
+                  <th>Institution / Scope</th>
+                  <th>Responsible User</th>
+                  <th>Timestamp</th>
+                  <th>Outcome</th>
+                  <th style="text-align: right;">Action</th>
+                </tr>
+              </thead>
+              <tbody id="recentPlatformActivityTableBody">
+                <!-- Populated dynamically by platform-admin.js -->
+              </tbody>
+            </table>
           </div>
         </div>
 
@@ -400,7 +807,8 @@
           <div class="pa-card-header">
             <div>
               <h3 class="pa-card-title"><i class="fa-solid fa-school-flag text-primary"></i> Institution Registry</h3>
-              <p class="pa-card-desc">Configure, provision, and maintain all school campuses under the educational trust</p>
+              <p class="pa-card-desc">Configure, provision, and maintain all school campuses under the educational trust
+              </p>
             </div>
             <button class="btn-pa btn-pa-primary" onclick="platformApp.openModal('modalAddInstitution')">
               <i class="fa-solid fa-plus"></i> Add New Institution
@@ -434,24 +842,28 @@
         <div class="pa-card">
           <div class="pa-card-header">
             <div>
-              <h3 class="pa-card-title"><i class="fa-solid fa-sliders text-primary"></i> School Configuration &amp; Feature Flags</h3>
-              <p class="pa-card-desc">Set institutional policies, academic terms, grading scales, and hardware integration modules</p>
+              <h3 class="pa-card-title"><i class="fa-solid fa-sliders text-primary"></i> School Configuration &amp;
+                Feature Flags</h3>
+              <p class="pa-card-desc">Set institutional policies, academic terms, grading scales, and hardware
+                integration modules</p>
             </div>
-            <button class="btn-pa btn-pa-primary" onclick="platformApp.showToast('Configuration saved and distributed to cluster!', 'success')">
+            <button class="btn-pa btn-pa-primary"
+              onclick="platformApp.showToast('Configuration saved and distributed to cluster!', 'success')">
               <i class="fa-solid fa-floppy-disk"></i> Save Global Changes
             </button>
           </div>
 
           <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); gap: 1.5rem;">
-            
+
             <!-- Academic Standards -->
             <div>
               <h4 style="margin: 0 0 0.85rem; font-size: 0.95rem; font-weight: 700; color: var(--color-text-main);">
                 <i class="fa-solid fa-graduation-cap text-primary"></i> Academic &amp; Grading Standards
               </h4>
-              
+
               <div class="mb-3">
-                <label style="font-size: 0.8rem; font-weight: 600; display: block; margin-bottom: 0.35rem;">Primary Board Curriculum</label>
+                <label style="font-size: 0.8rem; font-weight: 600; display: block; margin-bottom: 0.35rem;">Primary
+                  Board Curriculum</label>
                 <select class="pa-select" style="width: 100%;">
                   <option selected>Andhra Pradesh State Board (AP SSC - English Medium)</option>
                   <option>Central Board of Secondary Education (CBSE)</option>
@@ -460,14 +872,17 @@
               </div>
 
               <div class="mb-3">
-                <label style="font-size: 0.8rem; font-weight: 600; display: block; margin-bottom: 0.35rem;">Current Academic Year</label>
+                <label style="font-size: 0.8rem; font-weight: 600; display: block; margin-bottom: 0.35rem;">Current
+                  Academic Year</label>
                 <input type="text" class="pa-search-input" value="2025–26 (Term 1 &amp; Term 2)" style="width: 100%;">
               </div>
 
               <div class="mb-3">
-                <label style="font-size: 0.8rem; font-weight: 600; display: block; margin-bottom: 0.35rem;">Admission Number Auto-Generation Prefix</label>
+                <label style="font-size: 0.8rem; font-weight: 600; display: block; margin-bottom: 0.35rem;">Admission
+                  Number Auto-Generation Prefix</label>
                 <input type="text" class="pa-search-input" value="SV-" style="width: 100%;">
-                <small style="color: #64748B; font-size: 0.75rem;">Generates format: SV-0001 to SV-9999 with automatic uniqueness check</small>
+                <small style="color: #64748B; font-size: 0.75rem;">Generates format: SV-0001 to SV-9999 with automatic
+                  uniqueness check</small>
               </div>
             </div>
 
@@ -480,7 +895,8 @@
               <div class="pa-switch-label">
                 <div>
                   <div style="font-weight: 600; font-size: 0.875rem;">Biometric Fingerprint Devices</div>
-                  <div style="font-size: 0.75rem; color: #64748B;">Real-time teacher and staff biometric attendance gateway</div>
+                  <div style="font-size: 0.75rem; color: #64748B;">Real-time teacher and staff biometric attendance
+                    gateway</div>
                 </div>
                 <label class="pa-switch">
                   <input type="checkbox" checked onchange="platformApp.toggleFeature('Biometric Devices')">
@@ -491,7 +907,8 @@
               <div class="pa-switch-label">
                 <div>
                   <div style="font-weight: 600; font-size: 0.875rem;">School Van Fleet GPS Tracking</div>
-                  <div style="font-size: 0.75rem; color: #64748B;">Live transit map for student transportation &amp; parents</div>
+                  <div style="font-size: 0.75rem; color: #64748B;">Live transit map for student transportation &amp;
+                    parents</div>
                 </div>
                 <label class="pa-switch">
                   <input type="checkbox" checked onchange="platformApp.toggleFeature('GPS Fleet Tracking')">
@@ -502,7 +919,8 @@
               <div class="pa-switch-label">
                 <div>
                   <div style="font-weight: 600; font-size: 0.875rem;">Online Fee Gateway (Razorpay/UPI)</div>
-                  <div style="font-size: 0.75rem; color: #64748B;">Accept instant card, NetBanking, and UPI payments</div>
+                  <div style="font-size: 0.75rem; color: #64748B;">Accept instant card, NetBanking, and UPI payments
+                  </div>
                 </div>
                 <label class="pa-switch">
                   <input type="checkbox" checked onchange="platformApp.toggleFeature('Online Fee Payment Gateway')">
@@ -513,7 +931,8 @@
               <div class="pa-switch-label">
                 <div>
                   <div style="font-weight: 600; font-size: 0.875rem;">WhatsApp &amp; SMS Parent Dispatch</div>
-                  <div style="font-size: 0.75rem; color: #64748B;">Automated circulars, attendance alerts, and fee reminders</div>
+                  <div style="font-size: 0.75rem; color: #64748B;">Automated circulars, attendance alerts, and fee
+                    reminders</div>
                 </div>
                 <label class="pa-switch">
                   <input type="checkbox" checked onchange="platformApp.toggleFeature('Parent Dispatch Gateway')">
@@ -534,10 +953,13 @@
         <div class="pa-card">
           <div class="pa-card-header">
             <div>
-              <h3 class="pa-card-title"><i class="fa-solid fa-user-shield text-primary"></i> User &amp; Account Management</h3>
-              <p class="pa-card-desc">Super Admins, Institutional Executives, and Platform Operators with MFA Enforcement</p>
+              <h3 class="pa-card-title"><i class="fa-solid fa-user-shield text-primary"></i> User &amp; Account
+                Management</h3>
+              <p class="pa-card-desc">Super Admins, Institutional Executives, and Platform Operators with MFA
+                Enforcement</p>
             </div>
-            <button class="btn-pa btn-pa-primary" onclick="platformApp.showToast('Invitation dispatched to operator email', 'info')">
+            <button class="btn-pa btn-pa-primary"
+              onclick="platformApp.showToast('Invitation dispatched to operator email', 'info')">
               <i class="fa-solid fa-user-plus"></i> Provision New Operator
             </button>
           </div>
@@ -569,8 +991,10 @@
         <div class="pa-card">
           <div class="pa-card-header">
             <div>
-              <h3 class="pa-card-title"><i class="fa-solid fa-id-card-clip text-primary"></i> Role-Based Access Control (RBAC) Templates</h3>
-              <p class="pa-card-desc">Granular authorization boundaries ensuring strict separation between software operations and school records</p>
+              <h3 class="pa-card-title"><i class="fa-solid fa-id-card-clip text-primary"></i> Role-Based Access Control
+                (RBAC) Templates</h3>
+              <p class="pa-card-desc">Granular authorization boundaries ensuring strict separation between software
+                operations and school records</p>
             </div>
           </div>
 
@@ -593,7 +1017,8 @@
                     <div style="font-size:0.75rem; color:#64748B;">Platform Operator</div>
                   </td>
                   <td><span class="text-emerald font-bold"><i class="fa-solid fa-check"></i> Full Control</span></td>
-                  <td><span class="text-danger font-bold"><i class="fa-solid fa-ban"></i> Restricted (Privacy Guard)</span></td>
+                  <td><span class="text-danger font-bold"><i class="fa-solid fa-ban"></i> Restricted (Privacy
+                      Guard)</span></td>
                   <td><span class="text-muted">Subscription Only</span></td>
                   <td><span class="text-emerald font-bold"><i class="fa-solid fa-check"></i> Account Level</span></td>
                   <td><span class="badge-operator">Platform Root</span></td>
@@ -615,7 +1040,8 @@
                     <div style="font-size:0.75rem; color:#64748B;">Academic Dean</div>
                   </td>
                   <td><span class="text-muted">Curriculum Only</span></td>
-                  <td><span class="text-emerald font-bold"><i class="fa-solid fa-check"></i> Academic Dossiers</span></td>
+                  <td><span class="text-emerald font-bold"><i class="fa-solid fa-check"></i> Academic Dossiers</span>
+                  </td>
                   <td><span class="text-muted">Read-Only</span></td>
                   <td><span class="text-emerald font-bold"><i class="fa-solid fa-check"></i> Faculty Rosters</span></td>
                   <td><span class="badge-active">Academic Root</span></td>
@@ -626,7 +1052,8 @@
                     <div style="font-size:0.75rem; color:#64748B;">Class Teacher</div>
                   </td>
                   <td><span class="text-danger"><i class="fa-solid fa-ban"></i> None</span></td>
-                  <td><span class="text-emerald font-bold"><i class="fa-solid fa-check"></i> Assigned Classes Only</span></td>
+                  <td><span class="text-emerald font-bold"><i class="fa-solid fa-check"></i> Assigned Classes
+                      Only</span></td>
                   <td><span class="text-danger"><i class="fa-solid fa-ban"></i> None</span></td>
                   <td><span class="text-muted">Colleague Directory</span></td>
                   <td><span class="badge-operator">Faculty Scope</span></td>
@@ -644,39 +1071,53 @@
         <div class="pa-card">
           <div class="pa-card-header">
             <div>
-              <h3 class="pa-card-title"><i class="fa-solid fa-certificate text-primary"></i> Subscription Tier &amp; Commercial Plans</h3>
-              <p class="pa-card-desc">Institutional seat allocations, cloud storage volume, and commercial entitlements</p>
+              <h3 class="pa-card-title"><i class="fa-solid fa-certificate text-primary"></i> Subscription Tier &amp;
+                Commercial Plans</h3>
+              <p class="pa-card-desc">Institutional seat allocations, cloud storage volume, and commercial entitlements
+              </p>
             </div>
             <span class="badge-active" style="padding: 0.35rem 0.85rem; font-size: 0.85rem;">
               <i class="fa-solid fa-crown"></i> Institutional Enterprise License
             </span>
           </div>
 
-          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-bottom: 1.5rem;">
-            
-            <div style="border: 1.5px solid #4F46E5; border-radius: 12px; padding: 1.5rem; background: rgba(79, 70, 229, 0.03);">
-              <div style="font-size: 0.8rem; font-weight: 700; color: #4F46E5; text-transform: uppercase;">Allocated Student Quota</div>
+          <div
+            style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-bottom: 1.5rem;">
+
+            <div
+              style="border: 1.5px solid #4F46E5; border-radius: 12px; padding: 1.5rem; background: rgba(79, 70, 229, 0.03);">
+              <div style="font-size: 0.8rem; font-weight: 700; color: #4F46E5; text-transform: uppercase;">Allocated
+                Student Quota</div>
               <div style="font-size: 2rem; font-weight: 900; margin: 0.35rem 0;">855 / 1,500</div>
-              <div style="height: 8px; border-radius: 4px; background: #E2E8F0; overflow: hidden; margin-bottom: 0.5rem;">
+              <div
+                style="height: 8px; border-radius: 4px; background: #E2E8F0; overflow: hidden; margin-bottom: 0.5rem;">
                 <div style="width: 57%; height: 100%; background: #4F46E5;"></div>
               </div>
-              <span style="font-size: 0.78rem; color: #64748B;">645 student seats remaining for current academic cycle</span>
+              <span style="font-size: 0.78rem; color: #64748B;">645 student seats remaining for current academic
+                cycle</span>
             </div>
 
-            <div style="border: 1px solid var(--color-border); border-radius: 12px; padding: 1.5rem; background: var(--color-bg-subtle);">
-              <div style="font-size: 0.8rem; font-weight: 700; color: #06B6D4; text-transform: uppercase;">Cloud Document Vault</div>
+            <div
+              style="border: 1px solid var(--color-border); border-radius: 12px; padding: 1.5rem; background: var(--color-bg-subtle);">
+              <div style="font-size: 0.8rem; font-weight: 700; color: #06B6D4; text-transform: uppercase;">Cloud
+                Document Vault</div>
               <div style="font-size: 2rem; font-weight: 900; margin: 0.35rem 0;">42.8 / 500 GB</div>
-              <div style="height: 8px; border-radius: 4px; background: #E2E8F0; overflow: hidden; margin-bottom: 0.5rem;">
+              <div
+                style="height: 8px; border-radius: 4px; background: #E2E8F0; overflow: hidden; margin-bottom: 0.5rem;">
                 <div style="width: 8.5%; height: 100%; background: #06B6D4;"></div>
               </div>
-              <span style="font-size: 0.78rem; color: #64748B;">AES-256 encrypted storage for certificates and academic records</span>
+              <span style="font-size: 0.78rem; color: #64748B;">AES-256 encrypted storage for certificates and academic
+                records</span>
             </div>
 
-            <div style="border: 1px solid var(--color-border); border-radius: 12px; padding: 1.5rem; background: var(--color-bg-subtle);">
-              <div style="font-size: 0.8rem; font-weight: 700; color: #10B981; text-transform: uppercase;">Trust License SLA</div>
+            <div
+              style="border: 1px solid var(--color-border); border-radius: 12px; padding: 1.5rem; background: var(--color-bg-subtle);">
+              <div style="font-size: 0.8rem; font-weight: 700; color: #10B981; text-transform: uppercase;">Trust License
+                SLA</div>
               <div style="font-size: 1.35rem; font-weight: 800; margin: 0.35rem 0;">Perpetual Support</div>
               <p style="margin: 0; font-size: 0.8rem; color: #64748B;">
-                Valid through <strong>March 31, 2028</strong> with guaranteed 99.9% uptime SLA &amp; automated cloud backups.
+                Valid through <strong>March 31, 2028</strong> with guaranteed 99.9% uptime SLA &amp; automated cloud
+                backups.
               </p>
             </div>
 
@@ -691,8 +1132,10 @@
         <div class="pa-card">
           <div class="pa-card-header">
             <div>
-              <h3 class="pa-card-title"><i class="fa-solid fa-server text-primary"></i> System Health &amp; Deployment Topology</h3>
-              <p class="pa-card-desc">Live performance metrics, database pool health, and background worker monitoring</p>
+              <h3 class="pa-card-title"><i class="fa-solid fa-server text-primary"></i> System Health &amp; Deployment
+                Topology</h3>
+              <p class="pa-card-desc">Live performance metrics, database pool health, and background worker monitoring
+              </p>
             </div>
             <button class="btn-pa btn-pa-secondary" onclick="platformApp.pingCluster()">
               <i class="fa-solid fa-rotate"></i> Refresh Telemetry
@@ -700,8 +1143,9 @@
           </div>
 
           <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.25rem;">
-            
-            <div style="border: 1px solid var(--color-border); border-radius: 10px; padding: 1.25rem; background: var(--color-bg-subtle);">
+
+            <div
+              style="border: 1px solid var(--color-border); border-radius: 10px; padding: 1.25rem; background: var(--color-bg-subtle);">
               <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
                 <span style="font-size: 0.85rem; font-weight: 600;">API Gateway</span>
                 <span class="badge-active">Online</span>
@@ -710,7 +1154,8 @@
               <div style="font-size: 0.78rem; color: #64748B;">HTTP 200 OK • 0 Faults in 24h</div>
             </div>
 
-            <div style="border: 1px solid var(--color-border); border-radius: 10px; padding: 1.25rem; background: var(--color-bg-subtle);">
+            <div
+              style="border: 1px solid var(--color-border); border-radius: 10px; padding: 1.25rem; background: var(--color-bg-subtle);">
               <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
                 <span style="font-size: 0.85rem; font-weight: 600;">PostgreSQL Primary</span>
                 <span class="badge-active">Connected</span>
@@ -719,7 +1164,8 @@
               <div style="font-size: 0.78rem; color: #64748B;">Active Connections • 0ms lag</div>
             </div>
 
-            <div style="border: 1px solid var(--color-border); border-radius: 10px; padding: 1.25rem; background: var(--color-bg-subtle);">
+            <div
+              style="border: 1px solid var(--color-border); border-radius: 10px; padding: 1.25rem; background: var(--color-bg-subtle);">
               <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
                 <span style="font-size: 0.85rem; font-weight: 600;">Memory &amp; CPU</span>
                 <span class="badge-active">Optimal</span>
@@ -728,7 +1174,8 @@
               <div style="font-size: 0.78rem; color: #64748B;">4.2 GB / 16 GB RAM utilized</div>
             </div>
 
-            <div style="border: 1px solid var(--color-border); border-radius: 10px; padding: 1.25rem; background: var(--color-bg-subtle);">
+            <div
+              style="border: 1px solid var(--color-border); border-radius: 10px; padding: 1.25rem; background: var(--color-bg-subtle);">
               <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
                 <span style="font-size: 0.85rem; font-weight: 600;">Automated Backups</span>
                 <span class="badge-active">Verified</span>
@@ -748,8 +1195,10 @@
         <div class="pa-card">
           <div class="pa-card-header">
             <div>
-              <h3 class="pa-card-title"><i class="fa-solid fa-clock-rotate-left text-primary"></i> Immutable Platform Audit Logs</h3>
-              <p class="pa-card-desc">Cryptographically timestamped trail of platform administrative interventions and access events</p>
+              <h3 class="pa-card-title"><i class="fa-solid fa-clock-rotate-left text-primary"></i> Immutable Platform
+                Audit Logs</h3>
+              <p class="pa-card-desc">Cryptographically timestamped trail of platform administrative interventions and
+                access events</p>
             </div>
             <button class="btn-pa btn-pa-secondary" onclick="platformApp.exportAuditTrail()">
               <i class="fa-solid fa-file-csv"></i> Export CSV Trail
@@ -758,7 +1207,8 @@
 
           <!-- Filter Search -->
           <div class="pa-filter-bar">
-            <input type="text" id="auditSearchInput" class="pa-search-input" placeholder="Search by actor, action, target, or IP address..." onkeyup="platformApp.filterAuditLogs()">
+            <input type="text" id="auditSearchInput" class="pa-search-input"
+              placeholder="Search by actor, action, target, or IP address..." onkeyup="platformApp.filterAuditLogs()">
             <select class="pa-select">
               <option selected>All Event Categories</option>
               <option>Configuration Updates</option>
@@ -796,32 +1246,37 @@
           <div class="pa-card-header">
             <div>
               <h3 class="pa-card-title"><i class="fa-solid fa-gears text-primary"></i> Global Platform Settings</h3>
-              <p class="pa-card-desc">White-label branding, SMTP gateways, password complexity, and data retention windows</p>
+              <p class="pa-card-desc">White-label branding, SMTP gateways, password complexity, and data retention
+                windows</p>
             </div>
-            <button class="btn-pa btn-pa-primary" onclick="platformApp.showToast('Global settings updated and applied!', 'success')">
+            <button class="btn-pa btn-pa-primary"
+              onclick="platformApp.showToast('Global settings updated and applied!', 'success')">
               <i class="fa-solid fa-check"></i> Apply Settings
             </button>
           </div>
 
           <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.5rem;">
-            
+
             <div>
               <h4 style="margin: 0 0 0.85rem; font-size: 0.95rem; font-weight: 700; color: var(--color-text-main);">
                 <i class="fa-solid fa-palette text-primary"></i> Trust Branding &amp; White-Labeling
               </h4>
 
               <div class="mb-3">
-                <label style="font-size: 0.8rem; font-weight: 600; display: block; margin-bottom: 0.35rem;">Educational Trust Name</label>
+                <label style="font-size: 0.8rem; font-weight: 600; display: block; margin-bottom: 0.35rem;">Educational
+                  Trust Name</label>
                 <input type="text" class="pa-search-input" value="Sri Vidya Educational Trust" style="width: 100%;">
               </div>
 
               <div class="mb-3">
-                <label style="font-size: 0.8rem; font-weight: 600; display: block; margin-bottom: 0.35rem;">Official Support Email</label>
+                <label style="font-size: 0.8rem; font-weight: 600; display: block; margin-bottom: 0.35rem;">Official
+                  Support Email</label>
                 <input type="email" class="pa-search-input" value="srividyaschools2017@gmail.com" style="width: 100%;">
               </div>
 
               <div class="mb-3">
-                <label style="font-size: 0.8rem; font-weight: 600; display: block; margin-bottom: 0.35rem;">Primary Helpline Number</label>
+                <label style="font-size: 0.8rem; font-weight: 600; display: block; margin-bottom: 0.35rem;">Primary
+                  Helpline Number</label>
                 <input type="text" class="pa-search-input" value="+91 94402 33445" style="width: 100%;">
               </div>
             </div>
@@ -832,7 +1287,8 @@
               </h4>
 
               <div class="mb-3">
-                <label style="font-size: 0.8rem; font-weight: 600; display: block; margin-bottom: 0.35rem;">Inactivity Session Timeout</label>
+                <label style="font-size: 0.8rem; font-weight: 600; display: block; margin-bottom: 0.35rem;">Inactivity
+                  Session Timeout</label>
                 <select class="pa-select" style="width: 100%;">
                   <option>15 Minutes</option>
                   <option selected>30 Minutes (Recommended)</option>
@@ -841,7 +1297,8 @@
               </div>
 
               <div class="mb-3">
-                <label style="font-size: 0.8rem; font-weight: 600; display: block; margin-bottom: 0.35rem;">Max Failed Logins Before Lockout</label>
+                <label style="font-size: 0.8rem; font-weight: 600; display: block; margin-bottom: 0.35rem;">Max Failed
+                  Logins Before Lockout</label>
                 <select class="pa-select" style="width: 100%;">
                   <option selected>5 Attempts (15-min lockout)</option>
                   <option>3 Attempts (Strict)</option>
@@ -850,7 +1307,8 @@
               </div>
 
               <div class="mb-3">
-                <label style="font-size: 0.8rem; font-weight: 600; display: block; margin-bottom: 0.35rem;">Audit Trail Data Retention Window</label>
+                <label style="font-size: 0.8rem; font-weight: 600; display: block; margin-bottom: 0.35rem;">Audit Trail
+                  Data Retention Window</label>
                 <select class="pa-select" style="width: 100%;">
                   <option selected>365 Days (1 Full Year)</option>
                   <option>730 Days (2 Years)</option>
@@ -870,8 +1328,10 @@
         <div class="pa-card">
           <div class="pa-card-header">
             <div>
-              <h3 class="pa-card-title"><i class="fa-solid fa-headset text-primary"></i> Support &amp; Institutional Issue Queue</h3>
-              <p class="pa-card-desc">Direct technical assistance tickets submitted by school principals, vice principals, and office staff</p>
+              <h3 class="pa-card-title"><i class="fa-solid fa-headset text-primary"></i> Support &amp; Institutional
+                Issue Queue</h3>
+              <p class="pa-card-desc">Direct technical assistance tickets submitted by school principals, vice
+                principals, and office staff</p>
             </div>
             <button class="btn-pa btn-pa-primary" onclick="platformApp.openModal('modalCreateTicket')">
               <i class="fa-solid fa-plus"></i> Open New Support Ticket
@@ -907,7 +1367,8 @@
           <div class="pa-kpi-card">
             <div class="pa-kpi-header">
               <span class="pa-kpi-title">Active Migration Pipelines</span>
-              <div class="pa-kpi-icon" style="background: rgba(79,70,229,0.12); color: #4F46E5;"><i class="fa-solid fa-cloud-arrow-up"></i></div>
+              <div class="pa-kpi-icon" style="background: rgba(79,70,229,0.12); color: #4F46E5;"><i
+                  class="fa-solid fa-cloud-arrow-up"></i></div>
             </div>
             <div class="pa-kpi-value text-primary">1 Campus</div>
             <div class="pa-kpi-sub">Sri Vidya Junior College Expansion</div>
@@ -915,7 +1376,8 @@
           <div class="pa-kpi-card">
             <div class="pa-kpi-header">
               <span class="pa-kpi-title">Legacy Records Ingested</span>
-              <div class="pa-kpi-icon" style="background: rgba(16,185,129,0.12); color: #10B981;"><i class="fa-solid fa-database"></i></div>
+              <div class="pa-kpi-icon" style="background: rgba(16,185,129,0.12); color: #10B981;"><i
+                  class="fa-solid fa-database"></i></div>
             </div>
             <div class="pa-kpi-value text-emerald">1,315</div>
             <div class="pa-kpi-sub">Students, Faculty &amp; Fee Registers</div>
@@ -923,7 +1385,8 @@
           <div class="pa-kpi-card">
             <div class="pa-kpi-header">
               <span class="pa-kpi-title">Schema Compliance</span>
-              <div class="pa-kpi-icon" style="background: rgba(6,182,212,0.12); color: #06B6D4;"><i class="fa-solid fa-circle-check"></i></div>
+              <div class="pa-kpi-icon" style="background: rgba(6,182,212,0.12); color: #06B6D4;"><i
+                  class="fa-solid fa-circle-check"></i></div>
             </div>
             <div class="pa-kpi-value text-cyan">100%</div>
             <div class="pa-kpi-sub">AP State Board &amp; UDISE+ Format</div>
@@ -931,7 +1394,8 @@
           <div class="pa-kpi-card">
             <div class="pa-kpi-header">
               <span class="pa-kpi-title">Turnaround SLA</span>
-              <div class="pa-kpi-icon" style="background: rgba(245,158,11,0.12); color: #F59E0B;"><i class="fa-solid fa-stopwatch"></i></div>
+              <div class="pa-kpi-icon" style="background: rgba(245,158,11,0.12); color: #F59E0B;"><i
+                  class="fa-solid fa-stopwatch"></i></div>
             </div>
             <div class="pa-kpi-value text-amber">&lt; 24 Hrs</div>
             <div class="pa-kpi-sub">Standard Automated Ingestion</div>
@@ -941,8 +1405,10 @@
         <div class="pa-card">
           <div class="pa-card-header">
             <div>
-              <h3 class="pa-card-title"><i class="fa-solid fa-cloud-arrow-up text-primary"></i> Institutional Onboarding &amp; Migration Queue</h3>
-              <p class="pa-card-desc">Automated ingestion of student registers, faculty cadres, and financial records from legacy software and state portals</p>
+              <h3 class="pa-card-title"><i class="fa-solid fa-cloud-arrow-up text-primary"></i> Institutional Onboarding
+                &amp; Migration Queue</h3>
+              <p class="pa-card-desc">Automated ingestion of student registers, faculty cadres, and financial records
+                from legacy software and state portals</p>
             </div>
             <button class="btn-pa btn-pa-primary" onclick="platformApp.openModal('modalAddInstitution')">
               <i class="fa-solid fa-plus"></i> Onboard New Institutional Campus
@@ -968,10 +1434,13 @@
                   <td><strong>Sri Vidya Junior College (+1 &amp; +2)</strong></td>
                   <td><span class="badge" style="background:#f1f5f9; color:#334155;">BIEAP Excel Export</span></td>
                   <td><strong>320 Students &bull; 18 Staff</strong></td>
-                  <td><span class="badge" style="background:#e0f2fe; color:#0369a1;"><i class="fa-solid fa-spinner fa-spin mr-1"></i> Data Verification</span></td>
-                  <td><span class="badge" style="background:#dcfce7; color:#15803d;"><i class="fa-solid fa-circle-check mr-1"></i> 0 Errors</span></td>
+                  <td><span class="badge" style="background:#e0f2fe; color:#0369a1;"><i
+                        class="fa-solid fa-spinner fa-spin mr-1"></i> Data Verification</span></td>
+                  <td><span class="badge" style="background:#dcfce7; color:#15803d;"><i
+                        class="fa-solid fa-circle-check mr-1"></i> 0 Errors</span></td>
                   <td>
-                    <button class="btn-pa btn-pa-secondary" style="padding: 0.35rem 0.65rem;" onclick="platformApp.showToast('Verifying BIEAP dataset checksums...', 'info')">
+                    <button class="btn-pa btn-pa-secondary" style="padding: 0.35rem 0.65rem;"
+                      onclick="platformApp.showToast('Verifying BIEAP dataset checksums...', 'info')">
                       <i class="fa-solid fa-eye"></i> Inspect
                     </button>
                   </td>
@@ -979,12 +1448,16 @@
                 <tr>
                   <td><span class="font-mono text-primary font-bold">MIG-2025-003</span></td>
                   <td><strong>Sri Vidya E.M High School (Main Campus)</strong></td>
-                  <td><span class="badge" style="background:#f1f5f9; color:#334155;">UDISE+ Statutory Register</span></td>
+                  <td><span class="badge" style="background:#f1f5f9; color:#334155;">UDISE+ Statutory Register</span>
+                  </td>
                   <td><strong>855 Students &bull; 34 Staff</strong></td>
-                  <td><span class="badge" style="background:#dcfce7; color:#15803d;"><i class="fa-solid fa-circle-check mr-1"></i> Live Production</span></td>
-                  <td><span class="badge" style="background:#dcfce7; color:#15803d;"><i class="fa-solid fa-shield-check mr-1"></i> Certified</span></td>
+                  <td><span class="badge" style="background:#dcfce7; color:#15803d;"><i
+                        class="fa-solid fa-circle-check mr-1"></i> Live Production</span></td>
+                  <td><span class="badge" style="background:#dcfce7; color:#15803d;"><i
+                        class="fa-solid fa-shield-check mr-1"></i> Certified</span></td>
                   <td>
-                    <button class="btn-pa btn-pa-secondary" style="padding: 0.35rem 0.65rem;" onclick="platformApp.showToast('Migration docket archived permanently.', 'info')">
+                    <button class="btn-pa btn-pa-secondary" style="padding: 0.35rem 0.65rem;"
+                      onclick="platformApp.showToast('Migration docket archived permanently.', 'info')">
                       <i class="fa-solid fa-file-lines"></i> Dossier
                     </button>
                   </td>
@@ -1003,7 +1476,8 @@
           <div class="pa-kpi-card">
             <div class="pa-kpi-header">
               <span class="pa-kpi-title">Active Trust Sessions</span>
-              <div class="pa-kpi-icon" style="background: rgba(16,185,129,0.12); color: #10B981;"><i class="fa-solid fa-user-check"></i></div>
+              <div class="pa-kpi-icon" style="background: rgba(16,185,129,0.12); color: #10B981;"><i
+                  class="fa-solid fa-user-check"></i></div>
             </div>
             <div class="pa-kpi-value text-emerald">48 Active</div>
             <div class="pa-kpi-sub">Across All Campuses &amp; Portals</div>
@@ -1011,7 +1485,8 @@
           <div class="pa-kpi-card">
             <div class="pa-kpi-header">
               <span class="pa-kpi-title">MFA Compliance Rate</span>
-              <div class="pa-kpi-icon" style="background: rgba(79,70,229,0.12); color: #4F46E5;"><i class="fa-solid fa-fingerprint"></i></div>
+              <div class="pa-kpi-icon" style="background: rgba(79,70,229,0.12); color: #4F46E5;"><i
+                  class="fa-solid fa-fingerprint"></i></div>
             </div>
             <div class="pa-kpi-value text-primary">98.4%</div>
             <div class="pa-kpi-sub">Mandatory for Executive Roles</div>
@@ -1019,7 +1494,8 @@
           <div class="pa-kpi-card">
             <div class="pa-kpi-header">
               <span class="pa-kpi-title">Blocked Brute-Force Attacks</span>
-              <div class="pa-kpi-icon" style="background: rgba(239,68,68,0.12); color: #EF4444;"><i class="fa-solid fa-shield-virus"></i></div>
+              <div class="pa-kpi-icon" style="background: rgba(239,68,68,0.12); color: #EF4444;"><i
+                  class="fa-solid fa-shield-virus"></i></div>
             </div>
             <div class="pa-kpi-value text-rose">2 Rate-Limited</div>
             <div class="pa-kpi-sub">IP Subnet Isolation Active</div>
@@ -1027,7 +1503,8 @@
           <div class="pa-kpi-card">
             <div class="pa-kpi-header">
               <span class="pa-kpi-title">Transport Encryption</span>
-              <div class="pa-kpi-icon" style="background: rgba(6,182,212,0.12); color: #06B6D4;"><i class="fa-solid fa-lock"></i></div>
+              <div class="pa-kpi-icon" style="background: rgba(6,182,212,0.12); color: #06B6D4;"><i
+                  class="fa-solid fa-lock"></i></div>
             </div>
             <div class="pa-kpi-value text-cyan">TLS 1.3 Strict</div>
             <div class="pa-kpi-sub">AES-256 GCM Cipher Suites</div>
@@ -1037,8 +1514,10 @@
         <div class="pa-card">
           <div class="pa-card-header">
             <div>
-              <h3 class="pa-card-title"><i class="fa-solid fa-shield-halved text-primary"></i> Live Authenticated Sessions &amp; Threat Defense</h3>
-              <p class="pa-card-desc">Real-time session token management, device fingerprinting, and emergency credential revocation</p>
+              <h3 class="pa-card-title"><i class="fa-solid fa-shield-halved text-primary"></i> Live Authenticated
+                Sessions &amp; Threat Defense</h3>
+              <p class="pa-card-desc">Real-time session token management, device fingerprinting, and emergency
+                credential revocation</p>
             </div>
             <button class="btn-pa btn-pa-secondary" onclick="platformApp.terminateAllSuspiciousSessions()">
               <i class="fa-solid fa-user-slash text-danger"></i> Invalidate Suspicious Sessions
@@ -1078,7 +1557,8 @@
                   <td>Edge 131 / Windows 11</td>
                   <td>Today 08:45 AM</td>
                   <td><span class="badge" style="background:#dcfce7; color:#15803d;">Clean (0/100)</span></td>
-                  <td><button class="btn-pa btn-pa-secondary" style="padding:0.25rem 0.5rem; font-size:0.75rem;" onclick="platformApp.invalidateSession('Gorle Varalakshmi')">Revoke</button></td>
+                  <td><button class="btn-pa btn-pa-secondary" style="padding:0.25rem 0.5rem; font-size:0.75rem;"
+                      onclick="platformApp.invalidateSession('Gorle Varalakshmi')">Revoke</button></td>
                 </tr>
                 <tr>
                   <td><strong>Unknown Crawler Probe</strong></td>
@@ -1088,7 +1568,8 @@
                   <td>Python-requests/2.31</td>
                   <td>Today 11:14 AM</td>
                   <td><span class="badge" style="background:#fee2e2; color:#b91c1c;">High (95/100)</span></td>
-                  <td><span class="badge" style="background:#fee2e2; color:#b91c1c;"><i class="fa-solid fa-ban"></i> IP Blocked</span></td>
+                  <td><span class="badge" style="background:#fee2e2; color:#b91c1c;"><i class="fa-solid fa-ban"></i> IP
+                      Blocked</span></td>
                 </tr>
               </tbody>
             </table>
@@ -1104,7 +1585,8 @@
           <div class="pa-kpi-card">
             <div class="pa-kpi-header">
               <span class="pa-kpi-title">Automated Snapshot Cadence</span>
-              <div class="pa-kpi-icon" style="background: rgba(79,70,229,0.12); color: #4F46E5;"><i class="fa-solid fa-clock-rotate-left"></i></div>
+              <div class="pa-kpi-icon" style="background: rgba(79,70,229,0.12); color: #4F46E5;"><i
+                  class="fa-solid fa-clock-rotate-left"></i></div>
             </div>
             <div class="pa-kpi-value text-primary">Every 6 Hours</div>
             <div class="pa-kpi-sub">Next scheduled: 06:00 PM IST</div>
@@ -1112,7 +1594,8 @@
           <div class="pa-kpi-card">
             <div class="pa-kpi-header">
               <span class="pa-kpi-title">Last Verified Snapshot</span>
-              <div class="pa-kpi-icon" style="background: rgba(16,185,129,0.12); color: #10B981;"><i class="fa-solid fa-database"></i></div>
+              <div class="pa-kpi-icon" style="background: rgba(16,185,129,0.12); color: #10B981;"><i
+                  class="fa-solid fa-database"></i></div>
             </div>
             <div class="pa-kpi-value text-emerald">Today 02:00 AM</div>
             <div class="pa-kpi-sub">Checksum SHA-256 Validated</div>
@@ -1120,7 +1603,8 @@
           <div class="pa-kpi-card">
             <div class="pa-kpi-header">
               <span class="pa-kpi-title">Recovery Time Objective (RTO)</span>
-              <div class="pa-kpi-icon" style="background: rgba(6,182,212,0.12); color: #06B6D4;"><i class="fa-solid fa-bolt"></i></div>
+              <div class="pa-kpi-icon" style="background: rgba(6,182,212,0.12); color: #06B6D4;"><i
+                  class="fa-solid fa-bolt"></i></div>
             </div>
             <div class="pa-kpi-value text-cyan">&lt; 8 Minutes</div>
             <div class="pa-kpi-sub">Hot-Standby Automated Failover</div>
@@ -1128,7 +1612,8 @@
           <div class="pa-kpi-card">
             <div class="pa-kpi-header">
               <span class="pa-kpi-title">Cold Storage Retention</span>
-              <div class="pa-kpi-icon" style="background: rgba(245,158,11,0.12); color: #F59E0B;"><i class="fa-solid fa-vault"></i></div>
+              <div class="pa-kpi-icon" style="background: rgba(245,158,11,0.12); color: #F59E0B;"><i
+                  class="fa-solid fa-vault"></i></div>
             </div>
             <div class="pa-kpi-value text-amber">Permanent</div>
             <div class="pa-kpi-sub">AP Statutory Education Register</div>
@@ -1138,8 +1623,10 @@
         <div class="pa-card">
           <div class="pa-card-header">
             <div>
-              <h3 class="pa-card-title"><i class="fa-solid fa-database text-primary"></i> Database Snapshot Archive &amp; Disaster Recovery Vault</h3>
-              <p class="pa-card-desc">Immutable encrypted backups of MongoDB collections, student documents, examination ledgers, and audit trails</p>
+              <h3 class="pa-card-title"><i class="fa-solid fa-database text-primary"></i> Database Snapshot Archive
+                &amp; Disaster Recovery Vault</h3>
+              <p class="pa-card-desc">Immutable encrypted backups of MongoDB collections, student documents, examination
+                ledgers, and audit trails</p>
             </div>
             <button class="btn-pa btn-pa-primary" onclick="platformApp.triggerManualBackup()">
               <i class="fa-solid fa-cloud-arrow-up"></i> Trigger Live Snapshot Now
@@ -1166,9 +1653,11 @@
                   <td><span class="badge" style="background:#e0f2fe; color:#0369a1;">Automated Scheduled</span></td>
                   <td>142.8 MB</td>
                   <td>05-11-2026 02:00 AM</td>
-                  <td><span class="badge" style="background:#dcfce7; color:#15803d;"><i class="fa-solid fa-circle-check mr-1"></i> Verified Clean</span></td>
+                  <td><span class="badge" style="background:#dcfce7; color:#15803d;"><i
+                        class="fa-solid fa-circle-check mr-1"></i> Verified Clean</span></td>
                   <td>
-                    <button class="btn-pa btn-pa-secondary" style="padding:0.3rem 0.6rem;" onclick="platformApp.showToast('Snapshot verification passed. Checksum: e4d9...3b21', 'success')">
+                    <button class="btn-pa btn-pa-secondary" style="padding:0.3rem 0.6rem;"
+                      onclick="platformApp.showToast('Snapshot verification passed. Checksum: e4d9...3b21', 'success')">
                       <i class="fa-solid fa-shield-check"></i> Verify
                     </button>
                   </td>
@@ -1179,9 +1668,11 @@
                   <td><span class="badge" style="background:#e0f2fe; color:#0369a1;">Automated Scheduled</span></td>
                   <td>141.6 MB</td>
                   <td>04-11-2026 06:00 PM</td>
-                  <td><span class="badge" style="background:#dcfce7; color:#15803d;"><i class="fa-solid fa-circle-check mr-1"></i> Verified Clean</span></td>
+                  <td><span class="badge" style="background:#dcfce7; color:#15803d;"><i
+                        class="fa-solid fa-circle-check mr-1"></i> Verified Clean</span></td>
                   <td>
-                    <button class="btn-pa btn-pa-secondary" style="padding:0.3rem 0.6rem;" onclick="platformApp.showToast('Snapshot verified clean.', 'success')">
+                    <button class="btn-pa btn-pa-secondary" style="padding:0.3rem 0.6rem;"
+                      onclick="platformApp.showToast('Snapshot verified clean.', 'success')">
                       <i class="fa-solid fa-shield-check"></i> Verify
                     </button>
                   </td>
@@ -1192,9 +1683,11 @@
                   <td><span class="badge" style="background:#fef3c7; color:#b45309;">Manual Pre-Exam</span></td>
                   <td>89.4 MB</td>
                   <td>04-11-2026 12:00 PM</td>
-                  <td><span class="badge" style="background:#dcfce7; color:#15803d;"><i class="fa-solid fa-circle-check mr-1"></i> Verified Clean</span></td>
+                  <td><span class="badge" style="background:#dcfce7; color:#15803d;"><i
+                        class="fa-solid fa-circle-check mr-1"></i> Verified Clean</span></td>
                   <td>
-                    <button class="btn-pa btn-pa-secondary" style="padding:0.3rem 0.6rem;" onclick="platformApp.showToast('Snapshot verified clean.', 'success')">
+                    <button class="btn-pa btn-pa-secondary" style="padding:0.3rem 0.6rem;"
+                      onclick="platformApp.showToast('Snapshot verified clean.', 'success')">
                       <i class="fa-solid fa-shield-check"></i> Verify
                     </button>
                   </td>
@@ -1212,10 +1705,13 @@
         <div class="pa-card mb-4">
           <div class="pa-card-header">
             <div>
-              <h3 class="pa-card-title"><i class="fa-solid fa-network-wired text-primary"></i> Enterprise Integrations &amp; Telecommunication Relays</h3>
-              <p class="pa-card-desc">Status of external payment gateways, government DLT SMS channels, biometric clocks, and education board sync</p>
+              <h3 class="pa-card-title"><i class="fa-solid fa-network-wired text-primary"></i> Enterprise Integrations
+                &amp; Telecommunication Relays</h3>
+              <p class="pa-card-desc">Status of external payment gateways, government DLT SMS channels, biometric
+                clocks, and education board sync</p>
             </div>
-            <button class="btn-pa btn-pa-primary" onclick="platformApp.showToast('Generating new Cryptographic API Key pair...', 'info')">
+            <button class="btn-pa btn-pa-primary"
+              onclick="platformApp.showToast('Generating new Cryptographic API Key pair...', 'info')">
               <i class="fa-solid fa-key"></i> Generate API Key
             </button>
           </div>
@@ -1223,29 +1719,38 @@
           <div class="pa-grid-3col">
             <div class="pa-card" style="border: 1.5px solid #bbf7d0; background: #f0fdf4;">
               <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 0.75rem;">
-                <div style="font-weight: 800; font-size: 1rem; color: #166534;"><i class="fa-solid fa-receipt mr-1"></i> Payment Gateways</div>
+                <div style="font-weight: 800; font-size: 1rem; color: #166534;"><i class="fa-solid fa-receipt mr-1"></i>
+                  Payment Gateways</div>
                 <span class="badge" style="background:#dcfce7; color:#15803d;">Connected</span>
               </div>
-              <p style="font-size: 0.8rem; color: #166534; line-height: 1.45;">Razorpay Enterprise &amp; Bharat UPI Gateway active for fee collection and online counter receipts.</p>
-              <div style="font-size: 0.75rem; color: #15803d; font-weight: 700; margin-top: 0.5rem;">SLA: 99.98% Success Rate</div>
+              <p style="font-size: 0.8rem; color: #166534; line-height: 1.45;">Razorpay Enterprise &amp; Bharat UPI
+                Gateway active for fee collection and online counter receipts.</p>
+              <div style="font-size: 0.75rem; color: #15803d; font-weight: 700; margin-top: 0.5rem;">SLA: 99.98% Success
+                Rate</div>
             </div>
 
             <div class="pa-card" style="border: 1.5px solid #bbf7d0; background: #f0fdf4;">
               <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 0.75rem;">
-                <div style="font-weight: 800; font-size: 1rem; color: #166534;"><i class="fa-solid fa-comment-sms mr-1"></i> Government DLT SMS</div>
+                <div style="font-weight: 800; font-size: 1rem; color: #166534;"><i
+                    class="fa-solid fa-comment-sms mr-1"></i> Government DLT SMS</div>
                 <span class="badge" style="background:#dcfce7; color:#15803d;">Connected</span>
               </div>
-              <p style="font-size: 0.8rem; color: #166534; line-height: 1.45;">TRAI DLT compliant Principal entity (PE) approved header <code>SRIVID</code> active for parent alerts.</p>
-              <div style="font-size: 0.75rem; color: #15803d; font-weight: 700; margin-top: 0.5rem;">Relay: NIC National Gateway</div>
+              <p style="font-size: 0.8rem; color: #166534; line-height: 1.45;">TRAI DLT compliant Principal entity (PE)
+                approved header <code>SRIVID</code> active for parent alerts.</p>
+              <div style="font-size: 0.75rem; color: #15803d; font-weight: 700; margin-top: 0.5rem;">Relay: NIC National
+                Gateway</div>
             </div>
 
             <div class="pa-card" style="border: 1.5px solid #bbf7d0; background: #f0fdf4;">
               <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 0.75rem;">
-                <div style="font-weight: 800; font-size: 1rem; color: #166534;"><i class="fa-solid fa-fingerprint mr-1"></i> Biometric Devices</div>
+                <div style="font-weight: 800; font-size: 1rem; color: #166534;"><i
+                    class="fa-solid fa-fingerprint mr-1"></i> Biometric Devices</div>
                 <span class="badge" style="background:#dcfce7; color:#15803d;">6 Clocks Online</span>
               </div>
-              <p style="font-size: 0.8rem; color: #166534; line-height: 1.45;">ZKTeco &amp; Mantra optical biometric readers synced with faculty &amp; non-teaching attendance registers.</p>
-              <div style="font-size: 0.75rem; color: #15803d; font-weight: 700; margin-top: 0.5rem;">Sync Latency: &lt; 2 seconds</div>
+              <p style="font-size: 0.8rem; color: #166534; line-height: 1.45;">ZKTeco &amp; Mantra optical biometric
+                readers synced with faculty &amp; non-teaching attendance registers.</p>
+              <div style="font-size: 0.75rem; color: #15803d; font-weight: 700; margin-top: 0.5rem;">Sync Latency: &lt;
+                2 seconds</div>
             </div>
           </div>
         </div>
@@ -1258,8 +1763,10 @@
         <div class="pa-card mb-4">
           <div class="pa-card-header">
             <div>
-              <h3 class="pa-card-title"><i class="fa-solid fa-envelope-open-text text-primary"></i> Domain Verification &amp; Official Mail Infrastructure</h3>
-              <p class="pa-card-desc">Google Workspace DNS records, TLS certificates, and statutory parental notification relays</p>
+              <h3 class="pa-card-title"><i class="fa-solid fa-envelope-open-text text-primary"></i> Domain Verification
+                &amp; Official Mail Infrastructure</h3>
+              <p class="pa-card-desc">Google Workspace DNS records, TLS certificates, and statutory parental
+                notification relays</p>
             </div>
             <button class="btn-pa btn-pa-primary" onclick="platformApp.verifyDnsStatus()">
               <i class="fa-solid fa-rotate"></i> Re-verify DNS Records
@@ -1283,29 +1790,36 @@
                 <tr>
                   <td><strong>srividya.edu.in</strong></td>
                   <td>Sri Vidya High School (Apex)</td>
-                  <td><span class="badge" style="background:#dcfce7; color:#15803d;"><i class="fa-solid fa-circle-check mr-1"></i> Active</span></td>
+                  <td><span class="badge" style="background:#dcfce7; color:#15803d;"><i
+                        class="fa-solid fa-circle-check mr-1"></i> Active</span></td>
                   <td><span class="badge" style="background:#dcfce7; color:#15803d;">Valid (Exp: Oct 2027)</span></td>
                   <td><span class="badge" style="background:#dcfce7; color:#15803d;">Google Workspace</span></td>
                   <td><span class="badge" style="background:#dcfce7; color:#15803d;">100% Enforced</span></td>
-                  <td><button class="btn-pa btn-pa-secondary" style="padding:0.25rem 0.5rem;" onclick="platformApp.showToast('srividya.edu.in DNS is fully healthy.', 'success')">Details</button></td>
+                  <td><button class="btn-pa btn-pa-secondary" style="padding:0.25rem 0.5rem;"
+                      onclick="platformApp.showToast('srividya.edu.in DNS is fully healthy.', 'success')">Details</button>
+                  </td>
                 </tr>
                 <tr>
                   <td><strong>intermediate.srividya.edu.in</strong></td>
                   <td>Sri Vidya Junior College</td>
-                  <td><span class="badge" style="background:#dcfce7; color:#15803d;"><i class="fa-solid fa-circle-check mr-1"></i> Active</span></td>
+                  <td><span class="badge" style="background:#dcfce7; color:#15803d;"><i
+                        class="fa-solid fa-circle-check mr-1"></i> Active</span></td>
                   <td><span class="badge" style="background:#dcfce7; color:#15803d;">Valid (Exp: Oct 2027)</span></td>
                   <td><span class="badge" style="background:#dcfce7; color:#15803d;">Google Workspace</span></td>
                   <td><span class="badge" style="background:#dcfce7; color:#15803d;">100% Enforced</span></td>
-                  <td><button class="btn-pa btn-pa-secondary" style="padding:0.25rem 0.5rem;" onclick="platformApp.showToast('Junior College DNS is healthy.', 'success')">Details</button></td>
+                  <td><button class="btn-pa btn-pa-secondary" style="padding:0.25rem 0.5rem;"
+                      onclick="platformApp.showToast('Junior College DNS is healthy.', 'success')">Details</button></td>
                 </tr>
                 <tr>
                   <td><strong>kids.srividya.edu.in</strong></td>
                   <td>Sri Vidya Kids Academy</td>
-                  <td><span class="badge" style="background:#dcfce7; color:#15803d;"><i class="fa-solid fa-circle-check mr-1"></i> Active</span></td>
+                  <td><span class="badge" style="background:#dcfce7; color:#15803d;"><i
+                        class="fa-solid fa-circle-check mr-1"></i> Active</span></td>
                   <td><span class="badge" style="background:#dcfce7; color:#15803d;">Valid (Exp: Oct 2027)</span></td>
                   <td><span class="badge" style="background:#dcfce7; color:#15803d;">Google Workspace</span></td>
                   <td><span class="badge" style="background:#dcfce7; color:#15803d;">100% Enforced</span></td>
-                  <td><button class="btn-pa btn-pa-secondary" style="padding:0.25rem 0.5rem;" onclick="platformApp.showToast('Kids Academy DNS is healthy.', 'success')">Details</button></td>
+                  <td><button class="btn-pa btn-pa-secondary" style="padding:0.25rem 0.5rem;"
+                      onclick="platformApp.showToast('Kids Academy DNS is healthy.', 'success')">Details</button></td>
                 </tr>
               </tbody>
             </table>
@@ -1320,8 +1834,10 @@
         <div class="pa-card">
           <div class="pa-card-header">
             <div>
-              <h3 class="pa-card-title"><i class="fa-solid fa-scale-balanced text-primary"></i> Platform Policies &amp; Statutory Record Retention</h3>
-              <p class="pa-card-desc">State Board statutory archive regulations, right-to-rectification mandates, and institutional governance</p>
+              <h3 class="pa-card-title"><i class="fa-solid fa-scale-balanced text-primary"></i> Platform Policies &amp;
+                Statutory Record Retention</h3>
+              <p class="pa-card-desc">State Board statutory archive regulations, right-to-rectification mandates, and
+                institutional governance</p>
             </div>
             <button class="btn-pa btn-pa-primary" onclick="platformApp.savePlatformPolicies()">
               <i class="fa-solid fa-floppy-disk"></i> Enforce Policy Rules
@@ -1343,35 +1859,40 @@
                 <tr>
                   <td><strong>Master General Register (Admission Register)</strong></td>
                   <td>AP Education Code Chapter III Rule 88</td>
-                  <td><span class="badge" style="background:#ede9fe; color:#6d28d9; font-weight:800;">PERMANENT (Statutory Mandate)</span></td>
+                  <td><span class="badge" style="background:#ede9fe; color:#6d28d9; font-weight:800;">PERMANENT
+                      (Statutory Mandate)</span></td>
                   <td>Locked • Immutable Audit Vault</td>
                   <td><span class="badge" style="background:#dcfce7; color:#15803d;">Strictly Enforced</span></td>
                 </tr>
                 <tr>
                   <td><strong>Transfer Certificate (TC) Appendix 16 Docket</strong></td>
                   <td>AP Educational Rules Chapter III Rule 99</td>
-                  <td><span class="badge" style="background:#ede9fe; color:#6d28d9; font-weight:800;">PERMANENT (Statutory Mandate)</span></td>
+                  <td><span class="badge" style="background:#ede9fe; color:#6d28d9; font-weight:800;">PERMANENT
+                      (Statutory Mandate)</span></td>
                   <td>Sequential Numbering Guaranteed</td>
                   <td><span class="badge" style="background:#dcfce7; color:#15803d;">Strictly Enforced</span></td>
                 </tr>
                 <tr>
                   <td><strong>Secondary School Certificate (SSC) Tabulation</strong></td>
                   <td>Directorate of Government Examinations AP</td>
-                  <td><span class="badge" style="background:#ede9fe; color:#6d28d9; font-weight:800;">PERMANENT (Statutory Mandate)</span></td>
+                  <td><span class="badge" style="background:#ede9fe; color:#6d28d9; font-weight:800;">PERMANENT
+                      (Statutory Mandate)</span></td>
                   <td>Published Marksheets Immutable</td>
                   <td><span class="badge" style="background:#dcfce7; color:#15803d;">Strictly Enforced</span></td>
                 </tr>
                 <tr>
                   <td><strong>Fee Day Books, Vouchers &amp; Audit Ledgers</strong></td>
                   <td>State Educational Accounting &amp; Audit Standard</td>
-                  <td><span class="badge" style="background:#e0f2fe; color:#0369a1; font-weight:800;">7 YEARS (Financial Law)</span></td>
+                  <td><span class="badge" style="background:#e0f2fe; color:#0369a1; font-weight:800;">7 YEARS (Financial
+                      Law)</span></td>
                   <td>Tamper-Evident Receipts Active</td>
                   <td><span class="badge" style="background:#dcfce7; color:#15803d;">Strictly Enforced</span></td>
                 </tr>
                 <tr>
                   <td><strong>Biometric Daily Turnout &amp; Staff Attendance</strong></td>
                   <td>Institutional Employment Service Rules</td>
-                  <td><span class="badge" style="background:#f1f5f9; color:#475569; font-weight:800;">3 YEARS (Rolling Cadence)</span></td>
+                  <td><span class="badge" style="background:#f1f5f9; color:#475569; font-weight:800;">3 YEARS (Rolling
+                      Cadence)</span></td>
                   <td>Principal Correction Slip Required</td>
                   <td><span class="badge" style="background:#dcfce7; color:#15803d;">Active</span></td>
                 </tr>
@@ -1393,31 +1914,41 @@
         <h3 style="margin: 0; font-size: 1.15rem; font-weight: 700;">
           <i class="fa-solid fa-school-flag text-primary"></i> Onboard New Institutional Campus
         </h3>
-        <button class="btn-pa btn-pa-secondary" style="padding: 0.3rem 0.6rem;" onclick="platformApp.closeModal('modalAddInstitution')">
+        <button class="btn-pa btn-pa-secondary" style="padding: 0.3rem 0.6rem;"
+          onclick="platformApp.closeModal('modalAddInstitution')">
           <i class="fa-solid fa-xmark"></i>
         </button>
       </div>
       <form onsubmit="platformApp.handleAddInstitution(event)">
         <div class="pa-modal-body">
           <div class="mb-3">
-            <label style="font-size: 0.8rem; font-weight: 600; display: block; margin-bottom: 0.35rem;">Institution Full Name *</label>
-            <input type="text" id="newInstName" class="pa-search-input" style="width: 100%;" required placeholder="e.g. Sri Vidya Degree &amp; PG College">
+            <label style="font-size: 0.8rem; font-weight: 600; display: block; margin-bottom: 0.35rem;">Institution Full
+              Name *</label>
+            <input type="text" id="newInstName" class="pa-search-input" style="width: 100%;" required
+              placeholder="e.g. Sri Vidya Degree &amp; PG College">
           </div>
           <div class="mb-3">
-            <label style="font-size: 0.8rem; font-weight: 600; display: block; margin-bottom: 0.35rem;">Campus Code *</label>
-            <input type="text" id="newInstCode" class="pa-search-input" style="width: 100%;" required placeholder="e.g. SV-DEGREE">
+            <label style="font-size: 0.8rem; font-weight: 600; display: block; margin-bottom: 0.35rem;">Campus Code
+              *</label>
+            <input type="text" id="newInstCode" class="pa-search-input" style="width: 100%;" required
+              placeholder="e.g. SV-DEGREE">
           </div>
           <div class="mb-3">
-            <label style="font-size: 0.8rem; font-weight: 600; display: block; margin-bottom: 0.35rem;">Board / University Affiliation *</label>
-            <input type="text" id="newInstBoard" class="pa-search-input" style="width: 100%;" required placeholder="e.g. Acharya Nagarjuna University">
+            <label style="font-size: 0.8rem; font-weight: 600; display: block; margin-bottom: 0.35rem;">Board /
+              University Affiliation *</label>
+            <input type="text" id="newInstBoard" class="pa-search-input" style="width: 100%;" required
+              placeholder="e.g. Acharya Nagarjuna University">
           </div>
           <div class="mb-3">
-            <label style="font-size: 0.8rem; font-weight: 600; display: block; margin-bottom: 0.35rem;">Primary Web Domain *</label>
-            <input type="text" id="newInstDomain" class="pa-search-input" style="width: 100%;" required placeholder="e.g. degree.srividya.edu.in">
+            <label style="font-size: 0.8rem; font-weight: 600; display: block; margin-bottom: 0.35rem;">Primary Web
+              Domain *</label>
+            <input type="text" id="newInstDomain" class="pa-search-input" style="width: 100%;" required
+              placeholder="e.g. degree.srividya.edu.in">
           </div>
         </div>
         <div class="pa-modal-footer">
-          <button type="button" class="btn-pa btn-pa-secondary" onclick="platformApp.closeModal('modalAddInstitution')">Cancel</button>
+          <button type="button" class="btn-pa btn-pa-secondary"
+            onclick="platformApp.closeModal('modalAddInstitution')">Cancel</button>
           <button type="submit" class="btn-pa btn-pa-primary">Provision Tenant</button>
         </div>
       </form>
@@ -1433,18 +1964,22 @@
         <h3 style="margin: 0; font-size: 1.15rem; font-weight: 700;">
           <i class="fa-solid fa-headset text-primary"></i> Create Support Ticket
         </h3>
-        <button class="btn-pa btn-pa-secondary" style="padding: 0.3rem 0.6rem;" onclick="platformApp.closeModal('modalCreateTicket')">
+        <button class="btn-pa btn-pa-secondary" style="padding: 0.3rem 0.6rem;"
+          onclick="platformApp.closeModal('modalCreateTicket')">
           <i class="fa-solid fa-xmark"></i>
         </button>
       </div>
       <form onsubmit="platformApp.handleCreateTicket(event)">
         <div class="pa-modal-body">
           <div class="mb-3">
-            <label style="font-size: 0.8rem; font-weight: 600; display: block; margin-bottom: 0.35rem;">Subject / Brief Summary *</label>
-            <input type="text" id="newTicketSubject" class="pa-search-input" style="width: 100%;" required placeholder="Describe the technical requirement...">
+            <label style="font-size: 0.8rem; font-weight: 600; display: block; margin-bottom: 0.35rem;">Subject / Brief
+              Summary *</label>
+            <input type="text" id="newTicketSubject" class="pa-search-input" style="width: 100%;" required
+              placeholder="Describe the technical requirement...">
           </div>
           <div class="mb-3">
-            <label style="font-size: 0.8rem; font-weight: 600; display: block; margin-bottom: 0.35rem;">Ticket Category *</label>
+            <label style="font-size: 0.8rem; font-weight: 600; display: block; margin-bottom: 0.35rem;">Ticket Category
+              *</label>
             <select id="newTicketCategory" class="pa-select" style="width: 100%;">
               <option>Subscription &amp; Quota</option>
               <option>Hardware Integration</option>
@@ -1454,7 +1989,8 @@
             </select>
           </div>
           <div class="mb-3">
-            <label style="font-size: 0.8rem; font-weight: 600; display: block; margin-bottom: 0.35rem;">Priority Level *</label>
+            <label style="font-size: 0.8rem; font-weight: 600; display: block; margin-bottom: 0.35rem;">Priority Level
+              *</label>
             <select id="newTicketPriority" class="pa-select" style="width: 100%;">
               <option>Normal</option>
               <option>Medium</option>
@@ -1463,10 +1999,200 @@
           </div>
         </div>
         <div class="pa-modal-footer">
-          <button type="button" class="btn-pa btn-pa-secondary" onclick="platformApp.closeModal('modalCreateTicket')">Cancel</button>
+          <button type="button" class="btn-pa btn-pa-secondary"
+            onclick="platformApp.closeModal('modalCreateTicket')">Cancel</button>
           <button type="submit" class="btn-pa btn-pa-primary">Submit Ticket</button>
         </div>
       </form>
+    </div>
+  </div>
+
+  <!-- Modal: Invite Platform Administrator -->
+  <div class="pa-modal-backdrop" id="modalInviteAdmin">
+    <div class="pa-modal">
+      <div class="pa-modal-header">
+        <div>
+          <h3 class="pa-modal-title"><i class="fa-solid fa-user-shield text-primary"></i> Invite Platform Administrator
+          </h3>
+          <p class="pa-modal-desc">Issue cryptographically signed invitation with hardware MFA requirement</p>
+        </div>
+        <button class="btn-pa btn-pa-secondary" style="padding: 0.3rem 0.6rem;"
+          onclick="platformApp.closeModal('modalInviteAdmin')">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <form onsubmit="platformApp.handleInviteAdmin(event)">
+        <div class="pa-modal-body">
+          <div style="margin-bottom: 1rem;">
+            <label style="font-size: 0.8rem; font-weight: 600; display: block; margin-bottom: 0.35rem;">Full Name
+              *</label>
+            <input type="text" id="inviteAdminName" class="pa-input" placeholder="e.g. Sri R. K. Varma" required
+              style="width: 100%;">
+          </div>
+          <div style="margin-bottom: 1rem;">
+            <label style="font-size: 0.8rem; font-weight: 600; display: block; margin-bottom: 0.35rem;">Official Trust
+              Email *</label>
+            <input type="email" id="inviteAdminEmail" class="pa-input" placeholder="operator@srividya.trust" required
+              style="width: 100%;">
+          </div>
+          <div style="margin-bottom: 1rem;">
+            <label style="font-size: 0.8rem; font-weight: 600; display: block; margin-bottom: 0.35rem;">Administrative
+              Role *</label>
+            <select id="inviteAdminRole" class="pa-select" style="width: 100%;">
+              <option value="Super Administrator">Super Administrator (Global Root)</option>
+              <option value="Platform Operator">Platform Operator (Infrastructure &amp; Backups)</option>
+              <option value="Security Auditor">Security Auditor (Read-Only Access &amp; Compliance)</option>
+            </select>
+          </div>
+          <div>
+            <label style="font-size: 0.8rem; font-weight: 600; display: block; margin-bottom: 0.35rem;">MFA Enforcement
+              Policy</label>
+            <div
+              style="font-size: 0.8rem; color: #10B981; font-weight: 600; background: rgba(16, 185, 129, 0.08); padding: 0.65rem; border-radius: 6px;">
+              <i class="fa-solid fa-key"></i> Hardware FIDO2 / WebAuthn &amp; TOTP Token Enforced by Trust Policy
+            </div>
+          </div>
+        </div>
+        <div class="pa-modal-footer">
+          <button type="button" class="btn-pa btn-pa-secondary"
+            onclick="platformApp.closeModal('modalInviteAdmin')">Cancel</button>
+          <button type="submit" class="btn-pa btn-pa-primary">Dispatch Cryptographic Invitation</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal: View Failed Background Jobs -->
+  <div class="pa-modal-backdrop" id="modalFailedJobs">
+    <div class="pa-modal" style="max-width: 650px;">
+      <div class="pa-modal-header">
+        <div>
+          <h3 class="pa-modal-title"><i class="fa-solid fa-gears text-amber"></i> Background Job Engine Status</h3>
+          <p class="pa-modal-desc">Inspect asynchronous schedulers, cron tasks, and failure logs</p>
+        </div>
+        <button class="btn-pa btn-pa-secondary" style="padding: 0.3rem 0.6rem;"
+          onclick="platformApp.closeModal('modalFailedJobs')">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <div class="pa-modal-body">
+        <div
+          style="background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.2); border-radius: 8px; padding: 0.85rem 1rem; margin-bottom: 1rem; display: flex; align-items: center; justify-content: space-between;">
+          <div style="font-size: 0.85rem; font-weight: 700; color: #047857;">
+            <i class="fa-solid fa-circle-check"></i> 0 Critical Background Job Failures in last 24 hours
+          </div>
+          <span class="badge-active">Queue Healthy</span>
+        </div>
+        <div style="font-size: 0.85rem; font-weight: 700; margin-bottom: 0.5rem; color: var(--color-text-main);">Active
+          Scheduled Pipelines:</div>
+        <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+          <div
+            style="display: flex; justify-content: space-between; padding: 0.6rem 0.8rem; background: var(--color-bg-subtle); border-radius: 6px; font-size: 0.8rem;">
+            <span><i class="fa-solid fa-clock text-primary mr-1"></i> Midnight Attendance Digest Sync</span>
+            <span class="text-emerald font-weight-bold">Completed (00:05 IST)</span>
+          </div>
+          <div
+            style="display: flex; justify-content: space-between; padding: 0.6rem 0.8rem; background: var(--color-bg-subtle); border-radius: 6px; font-size: 0.8rem;">
+            <span><i class="fa-solid fa-database text-blue mr-1"></i> S3 Glacier Disaster Recovery Snapshot</span>
+            <span class="text-emerald font-weight-bold">Completed (03:00 IST)</span>
+          </div>
+          <div
+            style="display: flex; justify-content: space-between; padding: 0.6rem 0.8rem; background: var(--color-bg-subtle); border-radius: 6px; font-size: 0.8rem;">
+            <span><i class="fa-solid fa-receipt text-indigo mr-1"></i> Fee Ledger Reconciliation &amp; UTR Audit</span>
+            <span class="text-emerald font-weight-bold">Completed (06:00 IST)</span>
+          </div>
+          <div
+            style="display: flex; justify-content: space-between; padding: 0.6rem 0.8rem; background: var(--color-bg-subtle); border-radius: 6px; font-size: 0.8rem;">
+            <span><i class="fa-solid fa-envelope text-purple mr-1"></i> Parental Notice Batch Dispatcher</span>
+            <span class="text-emerald font-weight-bold">Active (0 Pending)</span>
+          </div>
+        </div>
+      </div>
+      <div class="pa-modal-footer">
+        <button type="button" class="btn-pa btn-pa-secondary"
+          onclick="platformApp.closeModal('modalFailedJobs')">Close</button>
+        <button type="button" class="btn-pa btn-pa-primary"
+          onclick="platformApp.showToast('Job queues flushed and verified 100% active!', 'success')">
+          <i class="fa-solid fa-rotate"></i> Run On-Demand Sync
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Review Security Alerts -->
+  <div class="pa-modal-backdrop" id="modalSecurityAlerts">
+    <div class="pa-modal" style="max-width: 650px;">
+      <div class="pa-modal-header">
+        <div>
+          <h3 class="pa-modal-title"><i class="fa-solid fa-shield-halved text-primary"></i> Security Alerts &amp; Threat
+            Defense</h3>
+          <p class="pa-modal-desc">Multi-tenant perimeter defense, rate limiters, and privilege audit radar</p>
+        </div>
+        <button class="btn-pa btn-pa-secondary" style="padding: 0.3rem 0.6rem;"
+          onclick="platformApp.closeModal('modalSecurityAlerts')">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <div class="pa-modal-body">
+        <div
+          style="background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.2); border-radius: 8px; padding: 0.85rem 1rem; margin-bottom: 1rem; display: flex; align-items: center; justify-content: space-between;">
+          <div style="font-size: 0.85rem; font-weight: 700; color: #047857;">
+            <i class="fa-solid fa-shield-check"></i> Security Posture: Optimal (0 Critical Threats)
+          </div>
+          <span class="badge-active">WAF Armed</span>
+        </div>
+        <div style="font-size: 0.82rem; color: #64748B; margin-bottom: 0.75rem;">
+          Recent Automated Security Mitigations:
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+          <div
+            style="display: flex; justify-content: space-between; padding: 0.6rem 0.8rem; background: var(--color-bg-subtle); border-radius: 6px; font-size: 0.8rem;">
+            <span><i class="fa-solid fa-ban text-amber mr-1"></i> Failed Password Throttle (IP 49.37.112.9)</span>
+            <span class="text-amber">4 Attempts (Auto-Locked 15m)</span>
+          </div>
+          <div
+            style="display: flex; justify-content: space-between; padding: 0.6rem 0.8rem; background: var(--color-bg-subtle); border-radius: 6px; font-size: 0.8rem;">
+            <span><i class="fa-solid fa-key text-emerald mr-1"></i> FIDO2 MFA Token Verification</span>
+            <span class="text-emerald">Enforced on all 5 Operator Logins</span>
+          </div>
+          <div
+            style="display: flex; justify-content: space-between; padding: 0.6rem 0.8rem; background: var(--color-bg-subtle); border-radius: 6px; font-size: 0.8rem;">
+            <span><i class="fa-solid fa-lock text-primary mr-1"></i> TLS 1.3 Transport Encryption</span>
+            <span class="text-emerald">100% Cipher Strength</span>
+          </div>
+        </div>
+      </div>
+      <div class="pa-modal-footer">
+        <button type="button" class="btn-pa btn-pa-secondary"
+          onclick="platformApp.closeModal('modalSecurityAlerts')">Close</button>
+        <button type="button" class="btn-pa btn-pa-primary"
+          onclick="platformApp.navigateTo('security-monitoring'); platformApp.closeModal('modalSecurityAlerts');">
+          <i class="fa-solid fa-arrow-up-right-from-square"></i> Open Security Monitoring Console
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Activity Detail Inspection -->
+  <div class="pa-modal-backdrop" id="modalActivityDetail">
+    <div class="pa-modal" style="max-width: 580px;">
+      <div class="pa-modal-header">
+        <div>
+          <h3 class="pa-modal-title"><i class="fa-solid fa-circle-info text-primary"></i> Activity Event Inspection</h3>
+          <p class="pa-modal-desc">Authoritative audit log payload with sensitive credential masking</p>
+        </div>
+        <button class="btn-pa btn-pa-secondary" style="padding: 0.3rem 0.6rem;"
+          onclick="platformApp.closeModal('modalActivityDetail')">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <div class="pa-modal-body" id="activityDetailModalBody">
+        <!-- Populated dynamically by platformApp.viewActivityDetails -->
+      </div>
+      <div class="pa-modal-footer">
+        <button type="button" class="btn-pa btn-pa-secondary"
+          onclick="platformApp.closeModal('modalActivityDetail')">Close</button>
+      </div>
     </div>
   </div>
 
@@ -1474,4 +2200,5 @@
   <script src="/js/portal-auth.js"></script>
   <script src="/js/platform-admin.js"></script>
 </body>
+
 </html>
