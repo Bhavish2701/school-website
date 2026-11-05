@@ -26270,3 +26270,117 @@ button.close:hover,
 #studentDossierModal {
   z-index: 10070 !important;
 }
+
+
+/* ==========================================================================
+   ENTERPRISE TWO-TIER TRANSFERS & TC FILTER TOOLBAR
+   ========================================================================== */
+.transfers-toolbar-container {
+  background: var(--color-bg-surface, #ffffff);
+  border: 1px solid var(--color-border, #e2e8f0);
+  border-radius: 12px;
+  padding: 0.85rem 1.15rem;
+  margin-bottom: 1.15rem;
+  box-shadow: 0 1px 4px rgba(15, 23, 42, 0.03);
+}
+
+.transfers-filter-grid {
+  display: grid;
+  grid-template-columns: minmax(220px, 1.8fr) repeat(4, minmax(130px, 1fr));
+  align-items: center;
+  gap: 0.65rem;
+  width: 100%;
+}
+
+.transfers-filter-grid .tc-search-wrap {
+  width: 100%;
+  max-width: none;
+  position: relative;
+}
+
+.transfers-filter-grid .tc-select-wrap {
+  width: 100%;
+}
+
+.transfers-filter-grid .tc-select-wrap .tc-filter-select {
+  width: 100%;
+  height: 38px;
+  padding: 0 1.85rem 0 0.75rem;
+  font-size: 0.83rem;
+  font-weight: 600;
+  color: #1e293b;
+  background-color: #f8fafc;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  cursor: pointer;
+  outline: none;
+  transition: all 0.2s ease;
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2364748b'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.65rem center;
+  background-size: 14px;
+}
+
+.transfers-filter-grid .tc-select-wrap .tc-filter-select:focus {
+  background-color: #ffffff;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.12);
+}
+
+.transfers-governance-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+  padding-top: 0.65rem;
+  margin-top: 0.65rem;
+  border-top: 1px solid #f1f5f9;
+}
+
+.transfers-governance-row .tc-stats-left {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.transfers-governance-row .tc-actions-right {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.transfers-governance-row .tc-actions-right .btn {
+  height: 34px;
+  padding: 0 0.95rem;
+  font-size: 0.82rem;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  border-radius: 7px;
+  transition: all 0.18s ease;
+}
+
+@media (max-width: 1200px) {
+  .transfers-filter-grid {
+    grid-template-columns: minmax(200px, 1.5fr) repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .transfers-filter-grid {
+    grid-template-columns: 1fr;
+  }
+  .transfers-governance-row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .transfers-governance-row .tc-actions-right {
+    width: 100%;
+    justify-content: flex-end;
+  }
+}

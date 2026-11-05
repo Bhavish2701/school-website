@@ -450,7 +450,7 @@
             <div>
               <div class="tw-badge"><i class="fa-solid fa-award"></i> Senior Faculty • Mathematics</div>
               <h1 class="tw-title">Good Morning, Ms. Anjali</h1>
-              <div class="tw-subtitle">Class Teacher – Grade 8A</div>
+              <div class="tw-subtitle">Class Teacher – Grade 8A &bull; Mathematics Department</div>
               <div class="tw-meta-pills">
                 <span class="tw-pill live-clock-pill" id="teacherClockPill" title="Indian Standard Time (IST, UTC+5:30)">
                   <i class="fa-regular fa-clock"></i>
@@ -468,46 +468,112 @@
             </div>
           </div>
 
-          <!-- Newly Admitted Students Directive Alert (Direct Class Teacher Roster) -->
+          <!-- Permitted Records Scope Policy Banner -->
+          <div class="alert alert-info d-flex align-items-center justify-content-between flex-wrap gap-2 mb-4" style="background:#f0f9ff; border:1px solid #bae6fd; border-radius:10px; padding:0.75rem 1.25rem;">
+            <div class="d-flex align-items-center gap-2">
+              <i class="fa-solid fa-shield-halved text-primary" style="font-size:1.15rem;"></i>
+              <span style="font-size:0.83rem; color:#0369a1;">
+                <strong>Institutional Faculty Access Scope:</strong> Every card should open the teacher's own permitted records. Authorized Classes: <strong>Grade 8A (Class Teacher), 9B, 7C, 10A Remedial</strong>.
+              </span>
+            </div>
+            <span class="badge" style="background:#e0f2fe; color:#0284c7; font-weight:700; font-size:0.75rem; padding:4px 10px;">Role: Senior Faculty</span>
+          </div>
+
+          <!-- Quick Actions Bar (6 Required Actions) -->
+          <div class="card p-3 mb-4 border rounded-3 bg-white shadow-sm">
+            <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
+              <span style="font-weight:700; font-size:0.85rem; color:#0f172a;">
+                <i class="fa-solid fa-bolt text-warning mr-1"></i> Quick Actions
+              </span>
+              <div class="d-flex align-items-center gap-2 flex-wrap">
+                <button type="button" class="btn btn-sm btn-outline-primary" onclick="teacherApp.navigateTo('attendance')">
+                  <i class="fa-solid fa-clipboard-user mr-1"></i> Mark Attendance
+                </button>
+                <button type="button" class="btn btn-sm btn-outline-primary" onclick="teacherApp.openModal('createHomeworkModal')">
+                  <i class="fa-solid fa-file-circle-plus mr-1"></i> Create Assignment
+                </button>
+                <button type="button" class="btn btn-sm btn-outline-secondary" onclick="teacherApp.openModal('uploadMaterialModal')">
+                  <i class="fa-solid fa-cloud-arrow-up mr-1"></i> Upload Study Material
+                </button>
+                <button type="button" class="btn btn-sm btn-outline-primary" onclick="teacherApp.navigateTo('examinations')">
+                  <i class="fa-solid fa-pen-to-square mr-1"></i> Enter Marks
+                </button>
+                <button type="button" class="btn btn-sm btn-outline-secondary" onclick="teacherApp.navigateTo('timetable')">
+                  <i class="fa-solid fa-calendar-days mr-1"></i> View Timetable
+                </button>
+                <button type="button" class="btn btn-sm btn-outline-info" onclick="teacherApp.openModal('postAnnouncementModal')">
+                  <i class="fa-solid fa-bullhorn mr-1"></i> Send Authorized Class Announcement
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Newly Admitted Students Directive Alert -->
           <div id="teacherNewAdmissionsAlert" class="mb-4" style="display: none;"></div>
 
-          <!-- 4 Metric Cards:
-               [ My Classes: 4 ] [ Students: 152 ] [ Attendance: 96% ] [ Pending: 8 Tasks ] -->
-          <div class="metrics-quad">
+          <!-- 9 Metric & Status Quad Cards (Display: Today's classes, Assigned students, Attendance pending, Assignments to grade, Marks pending submission, Upcoming exams, School announcements, Parent meeting requests, Tasks and deadlines) -->
+          <div class="metrics-quad mb-4" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 1rem;">
             
-            <div class="metric-card" onclick="teacherApp.navigateTo('my-classes')">
-              <span class="metric-label">My Classes</span>
-              <div class="metric-value text-primary">4</div>
-              <span class="metric-sub">8A (Lead), 9B, 7C, 10A Remedial</span>
+            <div class="metric-card" onclick="teacherApp.navigateTo('my-classes')" style="cursor:pointer;">
+              <span class="metric-label">Today's classes</span>
+              <div class="metric-value text-primary">3 Periods</div>
+              <span class="metric-sub">8A Math (09:00), 9B Math (10:00), 7C Math (12:00)</span>
             </div>
 
-            <div class="metric-card" onclick="teacherApp.navigateTo('students')">
-              <span class="metric-label">Students</span>
-              <div class="metric-value">152</div>
-              <span class="metric-sub">Across all 4 allocated sections</span>
+            <div class="metric-card" onclick="teacherApp.navigateTo('students')" style="cursor:pointer;">
+              <span class="metric-label">Assigned students</span>
+              <div class="metric-value text-emerald">152 Active</div>
+              <span class="metric-sub">Across 4 allocated grade sections</span>
             </div>
 
-            <div class="metric-card" onclick="teacherApp.navigateTo('attendance')">
-              <span class="metric-label">Attendance</span>
-              <div class="metric-value text-emerald">96%</div>
-              <span class="metric-sub">Grade 8A Daily Attendance Rate</span>
+            <div class="metric-card" onclick="teacherApp.navigateTo('attendance')" style="cursor:pointer;">
+              <span class="metric-label">Attendance pending</span>
+              <div class="metric-value text-amber">Class 8A</div>
+              <span class="metric-sub">Morning Roll Call Pending Submission</span>
             </div>
 
-            <div class="metric-card" onclick="teacherApp.scrollToTasks()">
-              <span class="metric-label">Pending</span>
-              <div class="metric-value text-amber" id="pendingTasksCount">8 Tasks</div>
-              <span class="metric-sub">2 Due today • 6 This week</span>
+            <div class="metric-card" onclick="teacherApp.navigateTo('assignments')" style="cursor:pointer;">
+              <span class="metric-label">Assignments to grade</span>
+              <div class="metric-value" style="color:#7c3aed;">14 Pending</div>
+              <span class="metric-sub">Algebra Problem Set 2.3 Submissions</span>
+            </div>
+
+            <div class="metric-card" onclick="teacherApp.navigateTo('examinations')" style="cursor:pointer;">
+              <span class="metric-label">Marks pending submission</span>
+              <div class="metric-value text-danger">FA-2 Math</div>
+              <span class="metric-sub">36/42 Entered • Due Friday 05:00 PM</span>
+            </div>
+
+            <div class="metric-card" onclick="teacherApp.navigateTo('examinations')" style="cursor:pointer;">
+              <span class="metric-label">Upcoming exams</span>
+              <div class="metric-value text-primary">SA-1 Quarterly</div>
+              <span class="metric-sub">Syllabus revision window begins next week</span>
+            </div>
+
+            <div class="metric-card" onclick="teacherApp.navigateTo('communication')" style="cursor:pointer;">
+              <span class="metric-label">School announcements</span>
+              <div class="metric-value text-emerald">3 New</div>
+              <span class="metric-sub">Quarterly Schedule &amp; Staff Coordination</span>
+            </div>
+
+            <div class="metric-card" onclick="teacherApp.navigateTo('communication')" style="cursor:pointer;">
+              <span class="metric-label">Parent meeting requests</span>
+              <div class="metric-value text-amber">2 Requests</div>
+              <span class="metric-sub">P. Kiran &bull; K. Tarun (Academic Progress)</span>
+            </div>
+
+            <div class="metric-card" onclick="teacherApp.scrollToTasks()" style="cursor:pointer;">
+              <span class="metric-label">Tasks and deadlines</span>
+              <div class="metric-value text-amber" id="pendingTasksCount">4 Deadlines</div>
+              <span class="metric-sub">2 Due today • 2 This week</span>
             </div>
 
           </div>
 
-          <!-- Today's Classes Section:
-               09:00 Mathematics – 8A
-               10:00 Mathematics – 9B
-               12:00 Mathematics – 7C -->
-          <div class="today-classes-card">
+          <!-- Today's Classes Section -->
+          <div class="today-classes-card mb-4">
             <div class="card-header-bar">
-              <h2><i class="fa-solid fa-clock text-primary"></i> Today's Classes Schedule</h2>
+              <h2><i class="fa-solid fa-clock text-primary"></i> Today's classes</h2>
               <span class="portal-badge badge-primary">3 Scheduled Classes Today</span>
             </div>
 
@@ -523,10 +589,10 @@
                 </div>
                 <div class="schedule-actions">
                   <button type="button" class="btn btn-primary btn-sm" onclick="teacherApp.openModal('markAttendanceModal')">
-                    <i class="fa-solid fa-check"></i> Mark Attendance
+                    <i class="fa-solid fa-clipboard-user mr-1"></i> Mark Attendance
                   </button>
-                  <button type="button" class="btn btn-secondary btn-sm" onclick="teacherApp.navigateTo('academics', 'homework')">
-                    <i class="fa-solid fa-file-pen"></i> Assign Homework
+                  <button type="button" class="btn btn-secondary btn-sm" onclick="teacherApp.openModal('createHomeworkModal')">
+                    <i class="fa-solid fa-file-pen mr-1"></i> Create Assignment
                   </button>
                 </div>
               </div>
@@ -537,12 +603,12 @@
                   <div class="schedule-time-badge">10:00</div>
                   <div class="schedule-details">
                     <h4>Mathematics – Class 9B</h4>
-                    <p>Room 208 • Topic: Polynomials & Factor Theorem</p>
+                    <p>Room 208 • Topic: Polynomials &amp; Factor Theorem</p>
                   </div>
                 </div>
                 <div class="schedule-actions">
-                  <button type="button" class="btn btn-secondary btn-sm" onclick="teacherApp.navigateTo('academics', 'materials')">
-                    <i class="fa-solid fa-book-open"></i> View Materials
+                  <button type="button" class="btn btn-secondary btn-sm" onclick="teacherApp.openModal('uploadMaterialModal')">
+                    <i class="fa-solid fa-book-open mr-1"></i> Upload Study Material
                   </button>
                 </div>
               </div>
@@ -557,33 +623,53 @@
                   </div>
                 </div>
                 <div class="schedule-actions">
-                  <button type="button" class="btn btn-secondary btn-sm" onclick="teacherApp.navigateTo('academics', 'plans')">
-                    <i class="fa-solid fa-list-check"></i> Lesson Plan
+                  <button type="button" class="btn btn-secondary btn-sm" onclick="teacherApp.navigateTo('timetable')">
+                    <i class="fa-solid fa-calendar-days mr-1"></i> View Timetable
                   </button>
                 </div>
               </div>
             </div>
           </div>
 
-          <!-- 2-Column Split: [Pending Work | Announcements] -->
+          <!-- 2-Column Split: [Tasks & Deadlines | School Announcements & Meeting Requests] -->
           <div class="teacher-two-col" id="dashboardTwoCol">
             
-            <!-- Column 1: Pending Work -->
+            <!-- Column 1: Tasks and Deadlines -->
             <div class="task-list-card">
               <div class="card-header-bar">
-                <h3><i class="fa-solid fa-list-check text-amber"></i> Pending Work</h3>
-                <span class="portal-badge badge-warning" id="taskBadgeCount">8 Tasks</span>
+                <h3><i class="fa-solid fa-list-check text-amber"></i> Tasks and deadlines</h3>
+                <span class="portal-badge badge-warning" id="taskBadgeCount">4 Tasks</span>
               </div>
               <div class="tasks-container" id="tasksContainer">
-                <!-- Dynamically populated via JS -->
+                <div class="task-item d-flex align-items-center justify-content-between p-2 mb-2 border rounded" style="background:#f8fafc;">
+                  <div>
+                    <strong style="font-size:0.85rem; color:#0f172a;">Submit Class 8A FA-2 Mathematics Marks</strong>
+                    <div style="font-size:0.75rem; color:#64748b;">Statutory deadline: 28 Oct, 05:00 PM &bull; Examination Cell</div>
+                  </div>
+                  <button type="button" class="btn btn-sm btn-outline-primary" onclick="teacherApp.navigateTo('examinations')">Enter Marks</button>
+                </div>
+                <div class="task-item d-flex align-items-center justify-content-between p-2 mb-2 border rounded" style="background:#f8fafc;">
+                  <div>
+                    <strong style="font-size:0.85rem; color:#0f172a;">Grade Linear Equations Homework Problem Set</strong>
+                    <div style="font-size:0.75rem; color:#64748b;">14 submissions awaiting evaluation &bull; Class 8A</div>
+                  </div>
+                  <button type="button" class="btn btn-sm btn-outline-primary" onclick="teacherApp.navigateTo('assignments')">Grade Submissions</button>
+                </div>
+                <div class="task-item d-flex align-items-center justify-content-between p-2 mb-2 border rounded" style="background:#f8fafc;">
+                  <div>
+                    <strong style="font-size:0.85rem; color:#0f172a;">Upload Term 1 Syllabus Progress Report</strong>
+                    <div style="font-size:0.75rem; color:#64748b;">Academic Coordination &bull; Head of Department review</div>
+                  </div>
+                  <button type="button" class="btn btn-sm btn-outline-secondary" onclick="teacherApp.navigateTo('academics')">Update Syllabus</button>
+                </div>
               </div>
             </div>
 
-            <!-- Column 2: Announcements -->
+            <!-- Column 2: School Announcements & Parent Meeting Requests -->
             <div class="announcements-card">
               <div class="card-header-bar">
-                <h3><i class="fa-solid fa-bullhorn text-primary"></i> Announcements</h3>
-                <span class="portal-badge badge-primary">School Bulletins</span>
+                <h3><i class="fa-solid fa-bullhorn text-primary"></i> School announcements</h3>
+                <span class="portal-badge badge-primary">Official Bulletins</span>
               </div>
               <div class="announcements-container">
                 
@@ -594,15 +680,19 @@
                 </div>
 
                 <div class="announcement-item">
-                  <div class="announcement-title">Swachh Vidya Drive & Gandhi Jayanti</div>
-                  <div class="announcement-body">Class Teachers of Grades 6–10 are requested to select 5 student leaders for cleanliness drive coordination on Oct 2.</div>
-                  <div class="announcement-meta"><i class="fa-regular fa-clock"></i> 2 days ago from Principal</div>
+                  <div class="announcement-title">Parent meeting requests (2 Pending)</div>
+                  <div class="announcement-body">Guardian of P. Kiran Kumar (Grade 8A) and K. Tarun (Grade 10A) requested formal 15-minute consultations regarding Olympiad training and academic progress.</div>
+                  <div class="announcement-meta">
+                    <button type="button" class="btn btn-sm btn-outline-primary mt-1" onclick="teacherApp.navigateTo('communication')">
+                      <i class="fa-solid fa-handshake mr-1"></i> Review Parent Meeting Requests
+                    </button>
+                  </div>
                 </div>
 
                 <div class="announcement-item">
                   <div class="announcement-title">Staff Coordination Meeting</div>
                   <div class="announcement-body">All High School mathematics and science faculty meeting with Sri Navva Anand (VP) in Conference Hall at 04:00 PM.</div>
-                  <div class="announcement-meta"><i class="fa-regular fa-clock"></i> Sept 16 from Academic Cell</div>
+                  <div class="announcement-meta"><i class="fa-regular fa-clock"></i> Academic Dean notice</div>
                 </div>
 
               </div>
@@ -616,43 +706,168 @@
              MODULE 2: MY CLASSES (8A, 9B, 7C)
              ================================================================= -->
         <section class="portal-view" id="view-my-classes">
+
           <div class="card-header-bar mb-3">
             <div>
-              <h2><i class="fa-solid fa-shapes text-primary"></i> My Classes &amp; Students</h2>
-              <p class="text-muted text-sm mt-1">Assigned classes, class lists, student profiles, and relevant parent contacts.</p>
+              <h2><i class="fa-solid fa-shapes text-primary"></i> 19.2 My Classes</h2>
+              <p class="text-muted text-sm mt-1">Authorized instructional roster, class allocation, and academic performance tracking.</p>
             </div>
-            <button class="btn btn-primary" onclick="teacherApp.openModal('createHomeworkModal')">
-              <i class="fa-solid fa-plus"></i> Post Homework
-            </button>
+            <div class="d-flex align-items-center gap-2">
+              <button class="btn btn-primary" onclick="teacherApp.openModal('createHomeworkModal')">
+                <i class="fa-solid fa-plus mr-1"></i> Create Assignment
+              </button>
+            </div>
           </div>
 
-          <!-- Subtab Strip: Assigned Classes, Class Lists, Student Profiles, Parent Contacts -->
-          <div class="tab-strip" id="myClassesTabStrip">
+          <!-- Subtab Strip: Classes Table, Class Lists, Student Profiles, Parent Contacts -->
+          <div class="tab-strip mb-4" id="myClassesTabStrip">
             <button type="button" class="tab-btn active" data-sub="classes" onclick="teacherApp.switchSubTab('my-classes', 'classes'); return false;">
-              <i class="fa-solid fa-shapes mr-1"></i> Assigned Classes
+              <i class="fa-solid fa-table-list mr-1"></i> Allocated Classes Table
             </button>
             <button type="button" class="tab-btn" data-sub="roster" onclick="teacherApp.switchSubTab('my-classes', 'roster'); return false;">
-              <i class="fa-solid fa-users mr-1"></i> Class Lists
+              <i class="fa-solid fa-users mr-1"></i> View roster
             </button>
             <button type="button" class="tab-btn" data-sub="profiles" onclick="teacherApp.switchSubTab('my-classes', 'profiles'); return false;">
               <i class="fa-solid fa-id-card mr-1"></i> Student Profiles
             </button>
           </div>
 
-          <!-- Panel 1: Assigned Classes -->
+          <!-- Panel 1: Master Classes Table (Specification 19.2) -->
           <div id="subtab-classes-panel" class="my-classes-subview">
-            <div class="row g-3" id="assignedClassesCardsGrid">
-              <!-- Rendered via JS -->
+            <div class="card p-0 border rounded-3 bg-white shadow-sm overflow-hidden mb-4">
+              <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0" id="tableMyClasses" style="font-size: 0.86rem;">
+                  <thead class="table-light">
+                    <tr>
+                      <th style="min-width: 110px;"><i class="fa-solid fa-graduation-cap me-1 text-muted"></i> Class</th>
+                      <th style="min-width: 90px;"><i class="fa-solid fa-layer-group me-1 text-muted"></i> Section</th>
+                      <th style="min-width: 140px;"><i class="fa-solid fa-book-open me-1 text-muted"></i> Subject</th>
+                      <th style="min-width: 130px;"><i class="fa-solid fa-users me-1 text-muted"></i> Student count</th>
+                      <th style="min-width: 160px;"><i class="fa-solid fa-user-tie me-1 text-muted"></i> Class teacher status</th>
+                      <th style="min-width: 180px;"><i class="fa-solid fa-clock me-1 text-muted"></i> Next lesson</th>
+                      <th style="min-width: 320px;" class="text-end pe-3"><i class="fa-solid fa-sliders me-1 text-muted"></i> Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><strong style="color: #0f172a;">Class VIII</strong></td>
+                      <td><span class="badge" style="background:#eff6ff; color:#1d4ed8; font-weight:700;">Section A</span></td>
+                      <td><span style="font-weight:600; color:#1e293b;">Mathematics</span></td>
+                      <td><span class="badge" style="background:#f1f5f9; color:#334155; font-weight:700;">42 Students</span></td>
+                      <td>
+                        <span class="badge" style="background:#ecfdf5; color:#059669; border:1px solid #a7f3d0; font-weight:700;">
+                          <i class="fa-solid fa-crown me-1"></i> Class Teacher (Lead)
+                        </span>
+                      </td>
+                      <td>
+                        <div style="font-size:0.83rem; font-weight:600; color:#0f172a;"><i class="fa-regular fa-clock me-1 text-primary"></i> Today, 09:00 AM</div>
+                        <small class="text-muted">Room 204 &bull; Linear Equations Ex. 2.3</small>
+                      </td>
+                      <td class="text-end pe-3">
+                        <div class="d-flex align-items-center justify-content-end gap-1 flex-wrap">
+                          <button type="button" class="btn btn-sm btn-outline-primary" onclick="teacherApp.openClassDetail('8A')" title="Open class">
+                            <i class="fa-solid fa-folder-open me-1"></i> Open class
+                          </button>
+                          <button type="button" class="btn btn-sm btn-outline-secondary" onclick="teacherApp.viewClassRoster('8A')" title="View roster">
+                            <i class="fa-solid fa-users me-1"></i> View roster
+                          </button>
+                          <button type="button" class="btn btn-sm btn-outline-success" onclick="teacherApp.openClassAttendance('8A')" title="Open attendance">
+                            <i class="fa-solid fa-clipboard-user me-1"></i> Open attendance
+                          </button>
+                          <button type="button" class="btn btn-sm btn-outline-info" onclick="teacherApp.viewClassAssignments('8A')" title="View assignments">
+                            <i class="fa-solid fa-file-pen me-1"></i> View assignments
+                          </button>
+                          <button type="button" class="btn btn-sm btn-outline-secondary" onclick="teacherApp.viewClassPerformance('8A')" title="View permitted performance data">
+                            <i class="fa-solid fa-chart-line me-1"></i> View permitted performance data
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td><strong style="color: #0f172a;">Class IX</strong></td>
+                      <td><span class="badge" style="background:#eff6ff; color:#1d4ed8; font-weight:700;">Section B</span></td>
+                      <td><span style="font-weight:600; color:#1e293b;">Mathematics</span></td>
+                      <td><span class="badge" style="background:#f1f5f9; color:#334155; font-weight:700;">38 Students</span></td>
+                      <td>
+                        <span class="badge" style="background:#f8fafc; color:#475569; border:1px solid #cbd5e1; font-weight:600;">
+                          Subject Teacher
+                        </span>
+                      </td>
+                      <td>
+                        <div style="font-size:0.83rem; font-weight:600; color:#0f172a;"><i class="fa-regular fa-clock me-1 text-primary"></i> Today, 10:00 AM</div>
+                        <small class="text-muted">Room 208 &bull; Polynomials &amp; Factor Theorem</small>
+                      </td>
+                      <td class="text-end pe-3">
+                        <div class="d-flex align-items-center justify-content-end gap-1 flex-wrap">
+                          <button type="button" class="btn btn-sm btn-outline-primary" onclick="teacherApp.openClassDetail('9B')"><i class="fa-solid fa-folder-open me-1"></i> Open class</button>
+                          <button type="button" class="btn btn-sm btn-outline-secondary" onclick="teacherApp.viewClassRoster('9B')"><i class="fa-solid fa-users me-1"></i> View roster</button>
+                          <button type="button" class="btn btn-sm btn-outline-success" onclick="teacherApp.openClassAttendance('9B')"><i class="fa-solid fa-clipboard-user me-1"></i> Open attendance</button>
+                          <button type="button" class="btn btn-sm btn-outline-info" onclick="teacherApp.viewClassAssignments('9B')"><i class="fa-solid fa-file-pen me-1"></i> View assignments</button>
+                          <button type="button" class="btn btn-sm btn-outline-secondary" onclick="teacherApp.viewClassPerformance('9B')"><i class="fa-solid fa-chart-line me-1"></i> View permitted performance data</button>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td><strong style="color: #0f172a;">Class VII</strong></td>
+                      <td><span class="badge" style="background:#eff6ff; color:#1d4ed8; font-weight:700;">Section C</span></td>
+                      <td><span style="font-weight:600; color:#1e293b;">Mathematics</span></td>
+                      <td><span class="badge" style="background:#f1f5f9; color:#334155; font-weight:700;">40 Students</span></td>
+                      <td>
+                        <span class="badge" style="background:#f8fafc; color:#475569; border:1px solid #cbd5e1; font-weight:600;">
+                          Subject Teacher
+                        </span>
+                      </td>
+                      <td>
+                        <div style="font-size:0.83rem; font-weight:600; color:#0f172a;"><i class="fa-regular fa-clock me-1 text-primary"></i> Today, 12:00 PM</div>
+                        <small class="text-muted">Room 112 &bull; Fractions &amp; Decimals Drills</small>
+                      </td>
+                      <td class="text-end pe-3">
+                        <div class="d-flex align-items-center justify-content-end gap-1 flex-wrap">
+                          <button type="button" class="btn btn-sm btn-outline-primary" onclick="teacherApp.openClassDetail('7C')"><i class="fa-solid fa-folder-open me-1"></i> Open class</button>
+                          <button type="button" class="btn btn-sm btn-outline-secondary" onclick="teacherApp.viewClassRoster('7C')"><i class="fa-solid fa-users me-1"></i> View roster</button>
+                          <button type="button" class="btn btn-sm btn-outline-success" onclick="teacherApp.openClassAttendance('7C')"><i class="fa-solid fa-clipboard-user me-1"></i> Open attendance</button>
+                          <button type="button" class="btn btn-sm btn-outline-info" onclick="teacherApp.viewClassAssignments('7C')"><i class="fa-solid fa-file-pen me-1"></i> View assignments</button>
+                          <button type="button" class="btn btn-sm btn-outline-secondary" onclick="teacherApp.viewClassPerformance('7C')"><i class="fa-solid fa-chart-line me-1"></i> View permitted performance data</button>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td><strong style="color: #0f172a;">Class X</strong></td>
+                      <td><span class="badge" style="background:#eff6ff; color:#1d4ed8; font-weight:700;">Section A</span></td>
+                      <td><span style="font-weight:600; color:#1e293b;">Mathematics (Remedial &amp; Olympiad)</span></td>
+                      <td><span class="badge" style="background:#f1f5f9; color:#334155; font-weight:700;">32 Students</span></td>
+                      <td>
+                        <span class="badge" style="background:#fef3c7; color:#b45309; border:1px solid #fde68a; font-weight:600;">
+                          Special Mentor
+                        </span>
+                      </td>
+                      <td>
+                        <div style="font-size:0.83rem; font-weight:600; color:#0f172a;"><i class="fa-regular fa-clock me-1 text-primary"></i> Tomorrow, 02:30 PM</div>
+                        <small class="text-muted">Room 302 &bull; Quadratic Equations Olympiad Drills</small>
+                      </td>
+                      <td class="text-end pe-3">
+                        <div class="d-flex align-items-center justify-content-end gap-1 flex-wrap">
+                          <button type="button" class="btn btn-sm btn-outline-primary" onclick="teacherApp.openClassDetail('10A')"><i class="fa-solid fa-folder-open me-1"></i> Open class</button>
+                          <button type="button" class="btn btn-sm btn-outline-secondary" onclick="teacherApp.viewClassRoster('10A')"><i class="fa-solid fa-users me-1"></i> View roster</button>
+                          <button type="button" class="btn btn-sm btn-outline-success" onclick="teacherApp.openClassAttendance('10A')"><i class="fa-solid fa-clipboard-user me-1"></i> Open attendance</button>
+                          <button type="button" class="btn btn-sm btn-outline-info" onclick="teacherApp.viewClassAssignments('10A')"><i class="fa-solid fa-file-pen me-1"></i> View assignments</button>
+                          <button type="button" class="btn btn-sm btn-outline-secondary" onclick="teacherApp.viewClassPerformance('10A')"><i class="fa-solid fa-chart-line me-1"></i> View permitted performance data</button>
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
             </div>
           </div>
 
           <!-- Panel 2: Class Lists (Roster) -->
           <div id="subtab-roster-panel" class="my-classes-subview" style="display: none;">
-            <div class="card p-3">
-              <div class="d-flex justify-content-between align-items-center mb-3">
+            <div class="card p-3 border rounded-3 bg-white shadow-sm mb-4">
+              <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-3">
                 <div class="d-flex align-items-center gap-2">
-                  <span class="fw-bold">Select Class:</span>
-                  <select class="form-control form-control-sm" id="classRosterSelect" style="width: 180px;" onchange="teacherApp.renderClassListRoster(this.value)">
+                  <span class="fw-bold" style="font-size:0.88rem;">Select Class:</span>
+                  <select class="form-control form-control-sm" id="classRosterSelect" style="width: 200px;" onchange="teacherApp.renderClassListRoster(this.value)">
                     <option value="8A">Class 8A (Class Teacher)</option>
                     <option value="9B">Class 9B (Maths)</option>
                     <option value="7C">Class 7C (Maths)</option>
@@ -661,16 +876,16 @@
                 </div>
                 <input type="text" class="form-control form-control-sm" placeholder="Search Student by Name / Roll..." style="width: 240px;" onkeyup="teacherApp.filterRosterTable(this.value)">
               </div>
-              <div class="table-container">
-                <table class="data-table" id="classListTable" style="width: 100%;">
-                  <thead>
+              <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0" id="classListTable" style="font-size: 0.84rem;">
+                  <thead class="table-light">
                     <tr>
                       <th>Roll No</th>
                       <th>Student Name</th>
                       <th>Class</th>
                       <th>Attendance Rate</th>
                       <th>Academic Status</th>
-                      <th>Actions</th>
+                      <th class="text-end pe-3">Actions</th>
                     </tr>
                   </thead>
                   <tbody id="classListTableBody">
@@ -681,10 +896,10 @@
             </div>
           </div>
 
-          <!-- Panel 3: Student Profiles -->
+          <!-- Panel 3: Student Profiles Subtab -->
           <div id="subtab-profiles-panel" class="my-classes-subview" style="display: none;">
-            <div class="card p-3">
-              <div class="d-flex justify-content-between align-items-center mb-3">
+            <div class="card p-3 border rounded-3 bg-white shadow-sm mb-4">
+              <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-3">
                 <h3 class="m-0" style="font-size:1.05rem;"><i class="fa-solid fa-id-card text-primary mr-1"></i> Student Academic Dossier</h3>
                 <input type="text" class="form-control form-control-sm" placeholder="Search Roll or Name..." style="width: 220px;" onkeyup="teacherApp.searchStudentProfile(this.value)">
               </div>
@@ -694,473 +909,690 @@
             </div>
           </div>
 
-          <!-- Panel 4: Parent Contacts -->
-          <div id="subtab-parents-panel" class="my-classes-subview" style="display: none;">
-            <div class="card p-3">
-              <div class="d-flex justify-content-between align-items-center mb-3">
-                <h3 class="m-0" style="font-size:1.05rem;"><i class="fa-solid fa-phone text-emerald mr-1"></i> Relevant Parent &amp; Guardian Contacts</h3>
-                <span class="badge badge-info">Assigned Students Only</span>
-              </div>
-              <div class="table-container">
-                <table class="data-table" id="parentContactsTable" style="width: 100%;">
-                  <thead>
-                    <tr>
-                      <th>Student Name</th>
-                      <th>Class &amp; Roll</th>
-                      <th>Parent / Guardian</th>
-                      <th>Contact Number</th>
-                      <th>Emergency Contact</th>
-                      <th>Actions</th>
-                    </tr>
-                  </thead>
-                  <tbody id="parentContactsTableBody">
-                    <!-- Populated via JS -->
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </div>
-
-        </section>
+</section>
 
         <!-- =================================================================
              ===================================== -->
         <section class="portal-view" id="view-students">
 
           <!-- Institutional Scope & Privacy Notice -->
-          <div class="alert alert-info d-flex align-items-center gap-3 mb-3" style="background: rgba(14, 165, 233, 0.08); border: 1px solid rgba(14, 165, 233, 0.25); border-radius: 8px; padding: 0.85rem 1.25rem;">
-            <i class="fa-solid fa-shield-halved text-info" style="font-size: 1.4rem;"></i>
-            <div style="font-size: 0.85rem; line-height: 1.4;">
-              <strong>Assigned Student Records Scope</strong>: Showing academic and attendance records exclusively for your assigned classes (Class 8A, Class 9B, Class 7C, and Class 10A Remedial). School-wide financial ledgers, staff compensation, and role-management settings are restricted by school governance.
+          <div class="alert alert-info d-flex align-items-center justify-content-between flex-wrap gap-2 mb-3" style="background: rgba(14, 165, 233, 0.08); border: 1px solid rgba(14, 165, 233, 0.25); border-radius: 8px; padding: 0.85rem 1.25rem;">
+            <div class="d-flex align-items-center gap-3">
+              <i class="fa-solid fa-shield-halved text-info" style="font-size: 1.4rem;"></i>
+              <div style="font-size: 0.85rem; line-height: 1.4;">
+                <strong>Assigned Student Records Scope</strong>: Displaying academic records exclusively for your assigned classes (Class 8A, Class 9B, Class 7C, and Class 10A Remedial). Display only assigned students and authorized fields in accordance with statutory privacy policy.
+              </div>
             </div>
+            <span class="badge" style="background:#e0f2fe; color:#0284c7; font-weight:700;">Role: Permitted Access</span>
           </div>
 
           <div class="card-header-bar mb-3">
             <div>
-              <h2><i class="fa-solid fa-user-graduate text-primary"></i> Student Roster & Performance</h2>
-              <p class="text-muted text-sm mt-1">Individual student profiles, attendance track records, and examination metrics.</p>
+              <h2><i class="fa-solid fa-user-graduate text-primary"></i> 19.3 Student Profiles</h2>
+              <p class="text-muted text-sm mt-1">Authorized student dossiers, academic evaluations, performance tracking, and guardian contacts.</p>
             </div>
             <div style="display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;">
-              <span class="portal-badge badge-primary" id="studentRosterCountBadge">42 Students</span>
-              <div class="filter-group">
-                <select id="studentClassFilterSelect" class="form-control" onchange="teacherApp.selectStudentClass(this.value)">
-                  <option value="8A" selected>Class 8A (Class Teacher - 42 Students)</option>
-                  <option value="9B">Class 9B (Subject Teacher - 40 Students)</option>
-                  <option value="7C">Class 7C (Subject Teacher - 38 Students)</option>
-                  <option value="10A">Class 10A Remedial (32 Students)</option>
-                  <option value="ALL">All Assigned Classes (152 Students)</option>
-                </select>
+              <select id="teacherStudentClassFilter" class="form-control form-control-sm" style="width: 170px;" onchange="teacherApp.filterStudentList(this.value)">
+                <option value="8A" selected>Class 8A (Lead)</option>
+                <option value="9B">Class 9B</option>
+                <option value="7C">Class 7C</option>
+                <option value="10A">Class 10A</option>
+              </select>
+              <input type="text" id="teacherStudentSearchInput" class="form-control form-control-sm" placeholder="Search student by name, roll..." style="width: 210px;" onkeyup="teacherApp.filterStudentList(document.getElementById('teacherStudentClassFilter').value, this.value)">
+            </div>
+          </div>
+
+          <!-- Student Profile Detail Tabs: Overview, Attendance, Academic Progress, Assignments, Published Results, Authorized Remarks -->
+          <div class="card p-0 border rounded-3 bg-white shadow-sm overflow-hidden mb-4">
+            <div class="p-3 border-bottom bg-light">
+              <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+                <div class="d-flex align-items-center gap-2">
+                  <span class="badge" style="background:#eff6ff; color:#1d4ed8; font-weight:700; padding:6px 12px;">
+                    <i class="fa-solid fa-user-check me-1"></i> Active Student Profile
+                  </span>
+                  <strong style="color:#0f172a; font-size:0.95rem;">P. Kiran Kumar (Roll: 8A-14 &bull; Adm: SV-0082)</strong>
+                </div>
+                <div class="d-flex align-items-center gap-2 flex-wrap">
+                  <button type="button" class="btn btn-sm btn-outline-primary" onclick="teacherApp.viewStudentProfile('SV-0082')">
+                    <i class="fa-solid fa-eye me-1"></i> View profile
+                  </button>
+                  <button type="button" class="btn btn-sm btn-outline-success" onclick="teacherApp.submitAcademicFeedbackModal('SV-0082')">
+                    <i class="fa-solid fa-comment-dots me-1"></i> Submit academic feedback
+                  </button>
+                  <button type="button" class="btn btn-sm btn-outline-warning" onclick="teacherApp.requestStudentCorrectionModal('SV-0082')">
+                    <i class="fa-solid fa-triangle-exclamation me-1"></i> Request correction
+                  </button>
+                  <button type="button" class="btn btn-sm btn-outline-info" onclick="teacherApp.contactAuthorizedGuardian('SV-0082')">
+                    <i class="fa-solid fa-phone me-1"></i> Contact authorized guardian
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- 6 Required Profile Tabs -->
+            <div class="tab-strip p-2 bg-white border-bottom" id="studentDetailTabStrip">
+              <button type="button" class="tab-btn active" data-tab="overview" onclick="teacherApp.switchStudentProfileTab('overview')">
+                <i class="fa-solid fa-id-badge mr-1"></i> Overview
+              </button>
+              <button type="button" class="tab-btn" data-tab="attendance" onclick="teacherApp.switchStudentProfileTab('attendance')">
+                <i class="fa-solid fa-clipboard-user mr-1"></i> Attendance
+              </button>
+              <button type="button" class="tab-btn" data-tab="progress" onclick="teacherApp.switchStudentProfileTab('progress')">
+                <i class="fa-solid fa-chart-line mr-1"></i> Academic Progress
+              </button>
+              <button type="button" class="tab-btn" data-tab="assignments" onclick="teacherApp.switchStudentProfileTab('assignments')">
+                <i class="fa-solid fa-file-pen mr-1"></i> Assignments
+              </button>
+              <button type="button" class="tab-btn" data-tab="results" onclick="teacherApp.switchStudentProfileTab('results')">
+                <i class="fa-solid fa-award mr-1"></i> Published Results
+              </button>
+              <button type="button" class="tab-btn" data-tab="remarks" onclick="teacherApp.switchStudentProfileTab('remarks')">
+                <i class="fa-solid fa-feather mr-1"></i> Authorized Remarks
+              </button>
+            </div>
+
+            <div class="p-3" id="studentTabContentArea">
+              <div class="row g-3">
+                <div class="col-md-6">
+                  <div class="p-3 rounded border" style="background:#f8fafc;">
+                    <h6 class="font-bold text-dark mb-2"><i class="fa-solid fa-user me-1 text-primary"></i> Bio &amp; Academic Overview</h6>
+                    <div style="font-size:0.83rem; line-height:1.6; color:#334155;">
+                      <div><strong>Full Legal Name:</strong> P. Kiran Kumar</div>
+                      <div><strong>Admission No:</strong> SV-0082 &bull; <strong>PEN:</strong> 281115010080082</div>
+                      <div><strong>Enrolled Class:</strong> Class 8A (Class Teacher: Ms. Anjali)</div>
+                      <div><strong>Guardian:</strong> P. Venkateswarlu (Father &bull; Verified Contact)</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="p-3 rounded border" style="background:#f8fafc;">
+                    <h6 class="font-bold text-dark mb-2"><i class="fa-solid fa-chart-pie me-1 text-emerald"></i> Attendance &amp; Standing</h6>
+                    <div style="font-size:0.83rem; line-height:1.6; color:#334155;">
+                      <div><strong>Attendance Percentage:</strong> <span class="badge" style="background:#ecfdf5; color:#059669; font-weight:700;">94.8% (Present: 182 / 192 Days)</span></div>
+                      <div><strong>Academic Standing:</strong> Grade A1 (Distinction in Mathematics)</div>
+                      <div><strong>Recent Assignments:</strong> 12 / 12 Submitted on time</div>
+                      <div><strong>Official Remarks:</strong> Recommended for State Science Olympiad</div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
 
-          <!-- Class Quick Selector Bar for All Teacher's Classes -->
-          <div class="class-quick-bar mb-3" style="display: flex; gap: 8px; flex-wrap: wrap;">
-            <button type="button" class="btn-class-pill active" id="btnClassPill-8A" onclick="teacherApp.selectStudentClass('8A')">
-              <i class="fa-solid fa-star text-amber"></i> Class 8A (Class Teacher - 42)
-            </button>
-            <button type="button" class="btn-class-pill" id="btnClassPill-9B" onclick="teacherApp.selectStudentClass('9B')">
-              <i class="fa-solid fa-book text-primary"></i> Class 9B (Maths - 40)
-            </button>
-            <button type="button" class="btn-class-pill" id="btnClassPill-7C" onclick="teacherApp.selectStudentClass('7C')">
-              <i class="fa-solid fa-book-open text-emerald"></i> Class 7C (Maths - 38)
-            </button>
-            <button type="button" class="btn-class-pill" id="btnClassPill-10A" onclick="teacherApp.selectStudentClass('10A')">
-              <i class="fa-solid fa-graduation-cap text-purple"></i> Class 10A (Remedial - 32)
-            </button>
-            <button type="button" class="btn-class-pill" id="btnClassPill-ALL" onclick="teacherApp.selectStudentClass('ALL')">
-              <i class="fa-solid fa-users"></i> All Assigned Classes (152)
-            </button>
-          </div>
-
-          <!-- Dynamic Class Information Card -->
-          <div id="studentClassInfoBanner" class="mb-3">
-            <!-- Rendered dynamically -->
-          </div>
-
-          <div class="tab-strip">
-            <button type="button" class="tab-btn active" onclick="teacherApp.switchSubTab('students', 'list')">Student List</button>
-            <button type="button" class="tab-btn" onclick="teacherApp.switchSubTab('students', 'profile')">Student Dossiers</button>
-            <button type="button" class="tab-btn" onclick="teacherApp.switchSubTab('students', 'att-history')">Attendance History</button>
-            <button type="button" class="tab-btn" onclick="teacherApp.switchSubTab('students', 'perf')">Academic Marks</button>
-          </div>
-
-          <div class="table-container">
-            <table class="data-table" id="teacherStudentsTable">
-              <thead>
-                <tr>
-                  <th class="text-center" style="width: 90px;">Roll No</th>
-                  <th>Student Name</th>
-                  <th class="text-center" style="width: 95px;">Class</th>
-                  <th style="width: 140px;">Parent Contact</th>
-                  <th class="text-center" style="width: 125px;">Attendance %</th>
-                  <th class="text-center" style="width: 135px;">Maths Score</th>
-                  <th class="text-center" style="width: 90px;">Grade</th>
-                  <th class="text-center" style="width: 145px;">Actions</th>
-                </tr>
-              </thead>
-              <tbody id="teacherStudentsTableBody">
-                <!-- Populated via JS -->
-              </tbody>
-            </table>
-          </div>
-        </section>
+</section>
 
         <!-- =================================================================
              MODULE 4: ATTENDANCE
              (Mark Attendance, Attendance History, Report)
              ================================================================= -->
         <section class="portal-view" id="view-attendance">
+
           <div class="card-header-bar mb-3">
-            <h2><i class="fa-solid fa-clipboard-check text-primary"></i> Classroom Attendance Register</h2>
             <div>
-              <button type="button" class="btn btn-secondary" onclick="teacherApp.markAllPresent()">
-                <i class="fa-solid fa-check-double"></i> Mark All Present
+              <h2><i class="fa-solid fa-clipboard-check text-primary"></i> 19.4 Mark Attendance</h2>
+              <p class="text-muted text-sm mt-1">Daily morning roll call, individual student status management, and statutory attendance register submission.</p>
+            </div>
+            <div class="d-flex align-items-center gap-2 flex-wrap">
+              <button type="button" class="btn btn-secondary btn-sm" onclick="teacherApp.markAllPresentConfirm()">
+                <i class="fa-solid fa-check-double mr-1"></i> Mark all present, with explicit confirmation
               </button>
-              <button type="button" class="btn btn-primary" onclick="teacherApp.saveDailyAttendance()">
-                <i class="fa-solid fa-floppy-disk"></i> Submit Daily Register
+              <button type="button" class="btn btn-outline-warning btn-sm" onclick="teacherApp.saveAttendanceDraft()">
+                <i class="fa-solid fa-floppy-disk mr-1"></i> Save draft
+              </button>
+              <button type="button" class="btn btn-primary btn-sm" onclick="teacherApp.submitDailyAttendanceRegister()">
+                <i class="fa-solid fa-paper-plane mr-1"></i> Submit
+              </button>
+              <button type="button" class="btn btn-outline-danger btn-sm" onclick="teacherApp.requestAttendanceCorrectionModal()">
+                <i class="fa-solid fa-pen-ruler mr-1"></i> Request correction
               </button>
             </div>
           </div>
 
-          <div class="tab-strip">
-            <button type="button" class="tab-btn active" onclick="teacherApp.switchSubTab('attendance', 'mark')">Mark Attendance (Today: Class 8A)</button>
-            <button type="button" class="tab-btn" onclick="teacherApp.switchSubTab('attendance', 'history')">Monthly Attendance History</button>
-            <button type="button" class="tab-btn" onclick="teacherApp.switchSubTab('attendance', 'report')">Absentee Summary</button>
-            <button type="button" class="tab-btn" onclick="teacherApp.switchSubTab('attendance', 'corrections')">Submit Corrections</button>
-          </div>
-
-          <div class="card p-4">
-            <div class="card-header-bar">
-              <div>
-                <h3><i class="fa-solid fa-clipboard-check text-primary"></i> Class 8A Daily Register — Sept 19, 2026</h3>
-                <p class="text-muted text-sm mt-1">Total Enrolled: <strong id="attEnrolledCount">42</strong> Students • Class Teacher: Ms. Anjali</p>
-              </div>
-              <div id="attendanceLiveCounter">
-                <span class="portal-badge badge-success" id="presentCountBadge"><i class="fa-solid fa-check"></i> Present: 39</span>
-                <span class="portal-badge badge-danger" id="absentCountBadge"><i class="fa-solid fa-xmark"></i> Absent: 2</span>
-                <span class="portal-badge badge-warning" id="lateCountBadge"><i class="fa-solid fa-clock"></i> Late: 1</span>
-              </div>
-            </div>
-
-            <!-- Live Attendance Visual Summary (Donut Pie Chart & Distribution Bar) -->
-            <div class="attendance-visual-strip mt-3 mb-3" style="display: flex; gap: 1.25rem; align-items: center; background: var(--color-bg-subtle); padding: 0.9rem 1.25rem; border-radius: var(--radius-md); border: 1px solid var(--color-border); flex-wrap: wrap;">
-              <div style="display: flex; align-items: center; gap: 1rem;">
-                <div class="pie-chart-graphic" id="attLiveDonut" style="width: 58px; height: 58px; background: conic-gradient(#10B981 0% 92.9%, #EF4444 92.9% 97.6%, #F59E0B 97.6% 100%);">
-                  <div class="pie-chart-hole" style="width: 38px; height: 38px;">
-                    <span id="attLiveRateText" style="font-size: 0.72rem; font-weight: 800; color: var(--color-text-dark);">96%</span>
-                  </div>
+          <!-- Attendance Parameter Strip: Class and section, Date, Submission status, Attendance summary -->
+          <div class="card p-3 mb-3 border rounded-3 bg-white shadow-sm">
+            <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+              <div class="d-flex align-items-center gap-3 flex-wrap">
+                <div>
+                  <label class="form-label text-xs font-bold text-muted mb-1">Class and section</label>
+                  <select id="attendanceClassSelect" class="form-control form-control-sm" style="width: 190px;" onchange="teacherApp.switchAttendanceClass(this.value)">
+                    <option value="8A" selected>Class 8A (Class Teacher)</option>
+                    <option value="9B">Class 9B</option>
+                    <option value="7C">Class 7C</option>
+                    <option value="10A">Class 10A</option>
+                  </select>
                 </div>
                 <div>
-                  <div style="font-weight: 700; font-size: 0.92rem; color: var(--color-text-dark);"><i class="fa-solid fa-chart-pie text-primary"></i> Daily Attendance Breakdown</div>
-                  <div class="text-muted text-xs mt-1" id="attLiveSummaryText">39 Present (92.9%) • 2 Absent (4.8%) • 1 Late (2.4%)</div>
+                  <label class="form-label text-xs font-bold text-muted mb-1">Date</label>
+                  <input type="date" id="attendanceDateInput" class="form-control form-control-sm" value="2026-10-24" style="width: 150px;">
+                </div>
+                <div>
+                  <label class="form-label text-xs font-bold text-muted mb-1">Submission status</label>
+                  <div>
+                    <span class="badge" id="attendanceSubmissionStatusBadge" style="background:#fef3c7; color:#b45309; border:1px solid #fde68a; font-weight:700; padding:6px 12px;">
+                      <i class="fa-solid fa-clock-rotate-left me-1"></i> Draft / Pending Submission
+                    </span>
+                  </div>
                 </div>
               </div>
-              <div style="flex: 1; min-width: 220px;">
-                <div style="display: flex; justify-content: space-between; font-size: 0.75rem; font-weight: 700; margin-bottom: 0.25rem;">
-                  <span style="color: #10B981;"><i class="fa-solid fa-circle" style="font-size: 0.55rem;"></i> Present: <span id="attLivePresentPct">92.9%</span></span>
-                  <span style="color: #F59E0B;"><i class="fa-solid fa-circle" style="font-size: 0.55rem;"></i> Late: <span id="attLiveLatePct">2.4%</span></span>
-                  <span style="color: #EF4444;"><i class="fa-solid fa-circle" style="font-size: 0.55rem;"></i> Absent: <span id="attLiveAbsentPct">4.8%</span></span>
-                </div>
-                <div style="display: flex; height: 10px; border-radius: 5px; overflow: hidden; background: var(--color-bg-subtle, #e2e8f0);">
-                  <div id="attLivePresentBar" style="width: 92.9%; background: #10B981; transition: width 0.4s ease;"></div>
-                  <div id="attLiveLateBar" style="width: 2.4%; background: #F59E0B; transition: width 0.4s ease;"></div>
-                  <div id="attLiveAbsentBar" style="width: 4.8%; background: #EF4444; transition: width 0.4s ease;"></div>
-                </div>
+
+              <!-- Attendance summary -->
+              <div class="d-flex align-items-center gap-2 p-2 border rounded" style="background:#f8fafc;" id="attendanceSummaryBlock">
+                <span style="font-size:0.8rem; font-weight:700; color:#334155;"><i class="fa-solid fa-chart-simple text-primary me-1"></i> Attendance summary:</span>
+                <span class="badge" style="background:#f1f5f9; color:#0f172a; font-weight:700;">Total: 42</span>
+                <span class="badge" style="background:#ecfdf5; color:#059669; font-weight:700;">Present: 39</span>
+                <span class="badge" style="background:#fef2f2; color:#dc2626; font-weight:700;">Absent: 2</span>
+                <span class="badge" style="background:#fffbeb; color:#d97706; font-weight:700;">Late: 1</span>
               </div>
             </div>
+          </div>
 
-            <div class="table-container mt-3">
-              <table class="data-table">
-                <thead>
+          <!-- Student list Table: Present, absent or late -->
+          <div class="card p-0 border rounded-3 bg-white shadow-sm overflow-hidden mb-4">
+            <div class="table-responsive">
+              <table class="table table-hover align-middle mb-0" id="tableAttendanceRoster" style="font-size: 0.85rem;">
+                <thead class="table-light">
                   <tr>
-                    <th class="text-center" style="width: 90px;">Roll No</th>
-                    <th>Student Name</th>
-                    <th class="text-center" style="width: 170px;">Status Selector (Click to Toggle)</th>
-                    <th>Remarks</th>
+                    <th style="width: 80px;">Roll No</th>
+                    <th style="min-width: 140px;">Admission No</th>
+                    <th style="min-width: 220px;">Student list</th>
+                    <th style="min-width: 260px;" class="text-center">Present, absent or late</th>
+                    <th style="min-width: 200px;">Change individual status &amp; Remarks</th>
                   </tr>
                 </thead>
-                <tbody id="attendanceMarkingTableBody">
-                  <!-- Rendered dynamically -->
+                <tbody id="attendanceRosterTableBody">
+                  <tr>
+                    <td><strong>01</strong></td>
+                    <td><code>SV-0081</code></td>
+                    <td><strong>Ch. Harish Reddy</strong></td>
+                    <td class="text-center">
+                      <div class="btn-group btn-group-sm" role="group">
+                        <input type="radio" class="btn-check" name="att_status_01" id="att_p_01" checked onchange="teacherApp.changeIndividualStatus('01', 'Present')">
+                        <label class="btn btn-outline-success" for="att_p_01">Present</label>
+                        <input type="radio" class="btn-check" name="att_status_01" id="att_a_01" onchange="teacherApp.changeIndividualStatus('01', 'Absent')">
+                        <label class="btn btn-outline-danger" for="att_a_01">Absent</label>
+                        <input type="radio" class="btn-check" name="att_status_01" id="att_l_01" onchange="teacherApp.changeIndividualStatus('01', 'Late')">
+                        <label class="btn btn-outline-warning" for="att_l_01">Late</label>
+                      </div>
+                    </td>
+                    <td><input type="text" class="form-control form-control-sm" placeholder="Optional remark (e.g. medical slip)"></td>
+                  </tr>
+                  <tr>
+                    <td><strong>02</strong></td>
+                    <td><code>SV-0082</code></td>
+                    <td><strong>P. Kiran Kumar</strong></td>
+                    <td class="text-center">
+                      <div class="btn-group btn-group-sm" role="group">
+                        <input type="radio" class="btn-check" name="att_status_02" id="att_p_02" checked onchange="teacherApp.changeIndividualStatus('02', 'Present')">
+                        <label class="btn btn-outline-success" for="att_p_02">Present</label>
+                        <input type="radio" class="btn-check" name="att_status_02" id="att_a_02" onchange="teacherApp.changeIndividualStatus('02', 'Absent')">
+                        <label class="btn btn-outline-danger" for="att_a_02">Absent</label>
+                        <input type="radio" class="btn-check" name="att_status_02" id="att_l_02" onchange="teacherApp.changeIndividualStatus('02', 'Late')">
+                        <label class="btn btn-outline-warning" for="att_l_02">Late</label>
+                      </div>
+                    </td>
+                    <td><input type="text" class="form-control form-control-sm" placeholder="Optional remark"></td>
+                  </tr>
+                  <tr>
+                    <td><strong>03</strong></td>
+                    <td><code>SV-0083</code></td>
+                    <td><strong>M. Sravani</strong></td>
+                    <td class="text-center">
+                      <div class="btn-group btn-group-sm" role="group">
+                        <input type="radio" class="btn-check" name="att_status_03" id="att_p_03" onchange="teacherApp.changeIndividualStatus('03', 'Present')">
+                        <label class="btn btn-outline-success" for="att_p_03">Present</label>
+                        <input type="radio" class="btn-check" name="att_status_03" id="att_a_03" checked onchange="teacherApp.changeIndividualStatus('03', 'Absent')">
+                        <label class="btn btn-outline-danger" for="att_a_03">Absent</label>
+                        <input type="radio" class="btn-check" name="att_status_03" id="att_l_03" onchange="teacherApp.changeIndividualStatus('03', 'Late')">
+                        <label class="btn btn-outline-warning" for="att_l_03">Late</label>
+                      </div>
+                    </td>
+                    <td><input type="text" class="form-control form-control-sm" value="Leave letter submitted (viral fever)"></td>
+                  </tr>
                 </tbody>
               </table>
             </div>
           </div>
-        
-          <!-- Subview: Submit Attendance Corrections -->
-          <div id="subview-attendance-corrections" class="attendance-subview" style="display: none; margin-top: 1rem;">
-            <div class="card p-4">
-              <div class="card-header-bar mb-3">
-                <div>
-                  <h3><i class="fa-solid fa-file-signature text-amber mr-1"></i> Submit Attendance Correction Slip</h3>
-                  <p class="text-muted text-sm mt-1">Submit attendance correction slips to the Principal / Office for late bus arrivals, medical excuses, or gate pass validations.</p>
-                </div>
-              </div>
-              <form id="attendanceCorrectionForm" onsubmit="event.preventDefault(); teacherApp.submitAttendanceCorrection();">
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
-                  <div>
-                    <label class="form-label" style="font-weight: 600; font-size: 0.85rem;">Class &amp; Section</label>
-                    <select class="form-control" id="corrClassSelect" required>
-                      <option value="8A">Class 8A</option>
-                      <option value="9B">Class 9B</option>
-                      <option value="7C">Class 7C</option>
-                      <option value="10A">Class 10A</option>
-                    </select>
-                  </div>
-                  <div>
-                    <label class="form-label" style="font-weight: 600; font-size: 0.85rem;">Date of Attendance</label>
-                    <input type="date" class="form-control" id="corrDateInput" value="2026-10-24" required>
-                  </div>
-                </div>
 
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
-                  <div>
-                    <label class="form-label" style="font-weight: 600; font-size: 0.85rem;">Student Name &amp; Roll</label>
-                    <input type="text" class="form-control" id="corrStudentInput" placeholder="e.g. Roll #841 CH. Karthik" required>
-                  </div>
-                  <div>
-                    <label class="form-label" style="font-weight: 600; font-size: 0.85rem;">Requested Correction</label>
-                    <select class="form-control" id="corrTypeSelect" required>
-                      <option value="Absent to Present">Change 'Absent' to 'Present' (Medical Note Attached)</option>
-                      <option value="Late to Present">Change 'Late' to 'Present' (School Bus Delay Route #3)</option>
-                      <option value="Absent to On-Duty">Change 'Absent' to 'On-Duty' (Science Fair Participation)</option>
-                    </select>
-                  </div>
-                </div>
-
-                <div style="margin-bottom: 1.25rem;">
-                  <label class="form-label" style="font-weight: 600; font-size: 0.85rem;">Justification / Evidence</label>
-                  <textarea class="form-control" id="corrReasonInput" rows="2" placeholder="Specify reason and attach confirmation..." required></textarea>
-                </div>
-
-                <button type="submit" class="btn btn-primary">
-                  <i class="fa-solid fa-paper-plane mr-1"></i> Forward Correction Slip to Office
-                </button>
-              </form>
-            </div>
-          </div>
-
-        </section>
+</section>
 
         <!-- =================================================================
              MODULE 5: ACADEMICS
              (Assignments, Homework, Study Materials, Lesson Plans, Syllabus)
              ================================================================= -->
         <section class="portal-view" id="view-academics">
+
           <div class="card-header-bar mb-3">
-            <h2><i class="fa-solid fa-book text-primary"></i> Academic Materials & Homework</h2>
-            <button class="btn btn-primary" onclick="teacherApp.openModal('createHomeworkModal')">
-              <i class="fa-solid fa-plus"></i> New Homework / Assignment
-            </button>
+            <div>
+              <h2><i class="fa-solid fa-book text-primary"></i> 19.5 Lesson Plans &amp; Syllabus</h2>
+              <p class="text-muted text-sm mt-1">Curriculum progression, instructional objectives, chapter coverage, and syllabus review tracking.</p>
+            </div>
+            <div class="d-flex align-items-center gap-2 flex-wrap">
+              <button class="btn btn-primary btn-sm" onclick="teacherApp.openCreateLessonPlanModal()">
+                <i class="fa-solid fa-plus mr-1"></i> Create lesson plan
+              </button>
+              <button class="btn btn-outline-secondary btn-sm" onclick="teacherApp.saveLessonPlanDraft()">
+                <i class="fa-solid fa-floppy-disk mr-1"></i> Save draft
+              </button>
+              <button class="btn btn-outline-success btn-sm" onclick="teacherApp.submitLessonPlanForReview()">
+                <i class="fa-solid fa-paper-plane mr-1"></i> Submit for review
+              </button>
+              <button class="btn btn-outline-info btn-sm" onclick="teacherApp.updateSyllabusProgressModal()">
+                <i class="fa-solid fa-chart-line mr-1"></i> Update syllabus progress
+              </button>
+            </div>
           </div>
 
-          <div class="tab-strip" id="academicsTabStrip">
-            <button type="button" class="tab-btn active" data-sub="plans" onclick="teacherApp.switchSubTab('academics', 'plans'); return false;">
-              <i class="fa-solid fa-calendar-check mr-1"></i> Lesson Plans
-            </button>
-            <button type="button" class="tab-btn" data-sub="syllabus" onclick="teacherApp.switchSubTab('academics', 'syllabus'); return false;">
-              <i class="fa-solid fa-chart-line mr-1"></i> Syllabus Progress
-            </button>
-            <button type="button" class="tab-btn" data-sub="materials" onclick="teacherApp.switchSubTab('academics', 'materials'); return false;">
-              <i class="fa-solid fa-folder-open mr-1"></i> Study Materials
-            </button>
+          <!-- Lesson Plans Table: Subject, Class, Chapter, Topic, Objectives, Planned date, Completion status, Review comments -->
+          <div class="card p-0 border rounded-3 bg-white shadow-sm overflow-hidden mb-4">
+            <div class="table-responsive">
+              <table class="table table-hover align-middle mb-0" id="tableLessonPlans" style="font-size: 0.85rem;">
+                <thead class="table-light">
+                  <tr>
+                    <th style="min-width: 120px;">Subject</th>
+                    <th style="min-width: 90px;">Class</th>
+                    <th style="min-width: 140px;">Chapter</th>
+                    <th style="min-width: 180px;">Topic</th>
+                    <th style="min-width: 220px;">Objectives</th>
+                    <th style="min-width: 130px;">Planned date</th>
+                    <th style="min-width: 130px;">Completion status</th>
+                    <th style="min-width: 180px;">Review comments</th>
+                    <th style="min-width: 160px;" class="text-end pe-3">Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><strong>Mathematics</strong></td>
+                    <td><span class="badge" style="background:#eff6ff; color:#1d4ed8;">Class 8A</span></td>
+                    <td>Chapter 2: Linear Equations</td>
+                    <td>Solving Linear Equations with Variables on Both Sides</td>
+                    <td>Master transposition and verify roots with algebraic substitution.</td>
+                    <td><i class="fa-regular fa-calendar me-1 text-primary"></i> 26 Oct 2026</td>
+                    <td>
+                      <span class="badge" style="background:#fef3c7; color:#b45309; border:1px solid #fde68a;">
+                        In Progress (80%)
+                      </span>
+                    </td>
+                    <td><small class="text-muted">HOD: "Include 2 application word problems"</small></td>
+                    <td class="text-end pe-3">
+                      <button type="button" class="btn btn-sm btn-outline-success" onclick="teacherApp.markTopicComplete('LP-01')" title="Mark topic complete">
+                        <i class="fa-solid fa-check me-1"></i> Mark topic complete
+                      </button>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><strong>Mathematics</strong></td>
+                    <td><span class="badge" style="background:#eff6ff; color:#1d4ed8;">Class 9B</span></td>
+                    <td>Chapter 3: Coordinate Geometry</td>
+                    <td>Cartesian Plane &amp; Quadrant Plotting</td>
+                    <td>Identify coordinates (x,y) and plot points across 4 quadrants.</td>
+                    <td><i class="fa-regular fa-calendar me-1 text-primary"></i> 28 Oct 2026</td>
+                    <td>
+                      <span class="badge" style="background:#ecfdf5; color:#059669; border:1px solid #a7f3d0;">
+                        Completed
+                      </span>
+                    </td>
+                    <td><small class="text-muted">VP: "Excellent graph worksheet attached"</small></td>
+                    <td class="text-end pe-3">
+                      <button type="button" class="btn btn-sm btn-outline-secondary" onclick="teacherApp.markTopicComplete('LP-02')" disabled>
+                        <i class="fa-solid fa-check-double me-1"></i> Completed
+                      </button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
           </div>
 
-          <div id="homeworkFeedContainer">
-            <!-- Dynamically populated -->
-          </div>
-        </section>
+</section>
 
         <!-- =================================================================
              MODULE 6: EXAMINATIONS
              (Create Exam, Enter Marks, Grade Students, Results)
              ================================================================= -->
         <section class="portal-view" id="view-examinations">
+
+          <!-- Statutory Policy Banner -->
+          <div class="alert alert-warning d-flex align-items-center justify-content-between flex-wrap gap-2 mb-3" style="background:#fffbeb; border:1px solid #fde68a; border-radius:8px; padding:0.85rem 1.25rem;">
+            <div class="d-flex align-items-center gap-3">
+              <i class="fa-solid fa-triangle-exclamation text-warning" style="font-size:1.4rem;"></i>
+              <div style="font-size:0.85rem; line-height:1.4; color:#92400e;">
+                <strong>Statutory Results Publication Policy:</strong> Teachers should not publish final results unless explicitly authorized by school policy. All evaluated answer sheets, marks registries, and promotion tallies must be reviewed and countersigned by the Vice Principal and Academic Committee prior to formal report card publication.
+              </div>
+            </div>
+            <span class="badge" style="background:#fef3c7; color:#b45309; font-weight:700;">AP Code Sec. 24 Compliance</span>
+          </div>
+
           <div class="card-header-bar mb-3">
-            <h2><i class="fa-solid fa-file-pen text-primary"></i> Examination & Marks Entry</h2>
             <div>
-              <button type="button" class="btn btn-primary" onclick="teacherApp.saveMarks()">
-                <i class="fa-solid fa-floppy-disk"></i> Save & Lock Marks
+              <h2><i class="fa-solid fa-file-pen text-primary"></i> 19.7 Examinations &amp; Marks</h2>
+              <p class="text-muted text-sm mt-1">Formative and summative assessment schedules, marks ledger validation, and academic board submission.</p>
+            </div>
+            <div class="d-flex align-items-center gap-2 flex-wrap">
+              <button class="btn btn-primary btn-sm" onclick="teacherApp.openMarksEntry('EX-FA2-8A')">
+                <i class="fa-solid fa-pen-to-square mr-1"></i> Enter marks
+              </button>
+              <button class="btn btn-outline-secondary btn-sm" onclick="teacherApp.saveMarksDraft()">
+                <i class="fa-solid fa-floppy-disk mr-1"></i> Save draft
+              </button>
+              <button class="btn btn-outline-info btn-sm" onclick="teacherApp.validateMarksSpreadsheet()">
+                <i class="fa-solid fa-vial-circle-check mr-1"></i> Validate
+              </button>
+              <button class="btn btn-outline-success btn-sm" onclick="teacherApp.submitMarksForReview()">
+                <i class="fa-solid fa-paper-plane mr-1"></i> Submit for review
               </button>
             </div>
           </div>
 
-          <div class="tab-strip" id="examinationsTabStrip">
-            <button type="button" class="tab-btn active" data-sub="schedule" onclick="teacherApp.switchSubTab('examinations', 'schedule'); return false;">
-              <i class="fa-solid fa-calendar-days mr-1"></i> Examination Schedule
-            </button>
-            <button type="button" class="tab-btn" data-sub="enter-marks" onclick="teacherApp.switchSubTab('examinations', 'enter-marks'); return false;">
-              <i class="fa-solid fa-pen-to-square mr-1"></i> Enter Marks
-            </button>
-            <button type="button" class="tab-btn" data-sub="review" onclick="teacherApp.switchSubTab('examinations', 'review'); return false;">
-              <i class="fa-solid fa-clipboard-check mr-1"></i> Marks Review
-            </button>
-          </div>
-
-          <div class="card p-4">
-            <div class="card-header-bar">
-              <div>
-                <h3>Mathematics Unit Test 2 — Class 8A (Max Marks: 50)</h3>
-                <p class="text-muted text-sm mt-1">Enter marks below. Percentage and CBSE/State Grade calculate automatically.</p>
-              </div>
-              <span class="portal-badge badge-primary">Term 1 Assessment</span>
-            </div>
-
-            <div class="table-container mt-3">
-              <table class="data-table">
-                <thead>
+          <!-- Examinations Table: Exam, Class, Subject, Maximum marks, Marks entry progress, Submission deadline, Review status -->
+          <div class="card p-0 border rounded-3 bg-white shadow-sm overflow-hidden mb-4">
+            <div class="table-responsive">
+              <table class="table table-hover align-middle mb-0" id="tableExamsMarks" style="font-size: 0.85rem;">
+                <thead class="table-light">
                   <tr>
-                    <th class="text-center" style="width: 90px;">Roll #</th>
-                    <th>Student Name</th>
-                    <th class="text-center" style="width: 160px;">Marks Scored (out of 50)</th>
-                    <th class="text-center" style="width: 120px;">Percentage</th>
-                    <th class="text-center" style="width: 100px;">Grade</th>
-                    <th>Teacher Remarks</th>
+                    <th style="min-width: 180px;">Exam</th>
+                    <th style="min-width: 90px;">Class</th>
+                    <th style="min-width: 120px;">Subject</th>
+                    <th style="min-width: 120px;">Maximum marks</th>
+                    <th style="min-width: 170px;">Marks entry progress</th>
+                    <th style="min-width: 160px;">Submission deadline</th>
+                    <th style="min-width: 140px;">Review status</th>
+                    <th style="min-width: 240px;" class="text-end pe-3">Actions</th>
                   </tr>
                 </thead>
-                <tbody id="marksEntryTableBody">
-                  <!-- Populated via JS with editable inputs -->
+                <tbody>
+                  <tr>
+                    <td><strong>Formative Assessment 2 (FA-2)</strong></td>
+                    <td><span class="badge" style="background:#eff6ff; color:#1d4ed8;">Class 8A</span></td>
+                    <td>Mathematics</td>
+                    <td><strong>25 Marks</strong></td>
+                    <td>
+                      <div class="d-flex align-items-center gap-2">
+                        <div class="progress flex-grow-1" style="height: 6px;">
+                          <div class="progress-bar bg-primary" style="width: 85%;"></div>
+                        </div>
+                        <span style="font-size:0.78rem; font-weight:700;">36/42 (85%)</span>
+                      </div>
+                    </td>
+                    <td><i class="fa-regular fa-clock text-danger me-1"></i> 28 Oct 2026, 05:00 PM</td>
+                    <td><span class="badge" style="background:#fef3c7; color:#b45309;">Draft Saved</span></td>
+                    <td class="text-end pe-3">
+                      <button type="button" class="btn btn-sm btn-outline-warning" onclick="teacherApp.correctReturnedEntries('EX-FA2-8A')" title="Correct returned entries">
+                        <i class="fa-solid fa-pen-ruler me-1"></i> Correct returned entries
+                      </button>
+                      <button type="button" class="btn btn-sm btn-outline-secondary" onclick="teacherApp.viewApprovalOutcome('EX-FA2-8A')" title="View approval outcome">
+                        <i class="fa-solid fa-clipboard-check me-1"></i> View approval outcome
+                      </button>
+                    </td>
+                  </tr>
                 </tbody>
               </table>
             </div>
           </div>
-        </section>
+
+</section>
 
         <!-- =================================================================
              MODULE 7: TIMETABLE
              (My Timetable, Class Timetable)
              ================================================================= -->
         <section class="portal-view" id="view-timetable">
+
           <div class="card-header-bar mb-3">
-            <h2><i class="fa-solid fa-calendar-days text-primary"></i> Teaching Timetable</h2>
-            <button class="btn btn-secondary" onclick="window.print()">
-              <i class="fa-solid fa-print"></i> Print My Schedule
+            <div>
+              <h2><i class="fa-solid fa-calendar-days text-primary"></i> 19.8 My Timetable</h2>
+              <p class="text-muted text-sm mt-1">Weekly schedule, period distribution, room assignments, substitution alerts, and timetable change requests.</p>
+            </div>
+            <div class="d-flex align-items-center gap-2 flex-wrap">
+              <button class="btn btn-primary btn-sm" onclick="teacherApp.viewFullMasterTimetable()">
+                <i class="fa-solid fa-table mr-1"></i> View full timetable
+              </button>
+              <button class="btn btn-outline-warning btn-sm" onclick="teacherApp.requestTimetableCorrectionModal()">
+                <i class="fa-solid fa-pen-to-square mr-1"></i> Request correction
+              </button>
+            </div>
+          </div>
+
+          <!-- Timetable Alert: Schedule updates & Substitution -->
+          <div class="alert alert-info d-flex align-items-center justify-content-between flex-wrap gap-2 mb-3" style="background:#f0fdf4; border:1px solid #bbf7d0; border-radius:8px; padding:0.75rem 1.25rem;">
+            <div class="d-flex align-items-center gap-2">
+              <i class="fa-solid fa-bell text-success" style="font-size:1.15rem;"></i>
+              <span style="font-size:0.83rem; color:#14532d;">
+                <strong>Schedule updates:</strong> Zero Period substitution assigned today for Period 4 (Grade 10A Science lab cover).
+              </span>
+            </div>
+            <button type="button" class="btn btn-sm btn-success" onclick="teacherApp.acknowledgeSubstitution('SUB-042')">
+              <i class="fa-solid fa-check me-1"></i> Acknowledge substitution
             </button>
           </div>
 
-          <div class="tab-strip" id="timetableTabStrip">
-            <button type="button" class="tab-btn active" data-sub="my" onclick="teacherApp.switchSubTab('timetable', 'my'); return false;">
-              <i class="fa-solid fa-calendar-days mr-1"></i> My Timetable
-            </button>
-            <button type="button" class="tab-btn" data-sub="substitutions" onclick="teacherApp.switchSubTab('timetable', 'substitutions'); return false;">
-              <i class="fa-solid fa-user-clock mr-1"></i> Substitution Schedule
-            </button>
-          </div>
-
-          <div class="card p-4">
-            <h3>Weekly Teaching Periods for Ms. Anjali</h3>
-            <div class="table-container mt-3">
-              <table class="data-table">
-                <thead>
+          <!-- Weekly Schedule Table: Weekly schedule, Period, Class, Subject, Room, Substitution -->
+          <div class="card p-0 border rounded-3 bg-white shadow-sm overflow-hidden mb-4">
+            <div class="p-3 border-bottom bg-light d-flex justify-content-between align-items-center">
+              <h5 class="mb-0 font-bold" style="font-size:0.95rem; color:#0f172a;"><i class="fa-solid fa-calendar-week text-primary me-2"></i> Weekly schedule &bull; Ms. Anjali (Mathematics)</h5>
+              <span class="badge" style="background:#eff6ff; color:#1d4ed8; font-weight:700;">24 Periods / Week</span>
+            </div>
+            <div class="table-responsive">
+              <table class="table table-bordered table-hover align-middle mb-0" id="tableWeeklyTimetable" style="font-size: 0.84rem;">
+                <thead class="table-light">
                   <tr>
-                    <th>Time / Period</th>
-                    <th>Monday</th>
-                    <th>Tuesday</th>
-                    <th>Wednesday</th>
-                    <th>Thursday</th>
-                    <th>Friday</th>
-                    <th>Saturday</th>
+                    <th>Period</th>
+                    <th>Time</th>
+                    <th>Class</th>
+                    <th>Subject</th>
+                    <th>Room</th>
+                    <th>Substitution</th>
+                    <th class="text-end pe-3">Actions</th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr>
-                    <td><strong>09:00 - 09:45 (P1)</strong></td>
-                    <td><span class="portal-badge badge-primary">Class 8A (Maths)</span></td>
-                    <td>Free / Prep</td>
-                    <td><span class="portal-badge badge-primary">Class 8A (Maths)</span></td>
-                    <td>Free / Prep</td>
-                    <td><span class="portal-badge badge-primary">Class 8A (Maths)</span></td>
-                    <td>Assembly / Math Club</td>
+                    <td><strong>Period 1</strong></td>
+                    <td>09:00 AM – 09:45 AM</td>
+                    <td><span class="badge" style="background:#eff6ff; color:#1d4ed8;">Class 8A</span></td>
+                    <td>Mathematics (Class Teacher)</td>
+                    <td>Room 204</td>
+                    <td><span class="text-muted">None (Regular)</span></td>
+                    <td class="text-end pe-3">
+                      <button type="button" class="btn btn-sm btn-outline-primary" onclick="teacherApp.viewTimetableClassDetails('8A')">
+                        <i class="fa-solid fa-eye me-1"></i> View class details
+                      </button>
+                    </td>
                   </tr>
                   <tr>
-                    <td><strong>09:45 - 10:30 (P2)</strong></td>
-                    <td>Free / Prep</td>
-                    <td><span class="portal-badge badge-warning">Class 9B (Maths)</span></td>
-                    <td>Free / Prep</td>
-                    <td><span class="portal-badge badge-warning">Class 9B (Maths)</span></td>
-                    <td>Free / Prep</td>
-                    <td><span class="portal-badge badge-warning">Class 9B (Maths)</span></td>
+                    <td><strong>Period 2</strong></td>
+                    <td>09:45 AM – 10:30 AM</td>
+                    <td><span class="badge" style="background:#eff6ff; color:#1d4ed8;">Class 9B</span></td>
+                    <td>Mathematics</td>
+                    <td>Room 208</td>
+                    <td><span class="text-muted">None (Regular)</span></td>
+                    <td class="text-end pe-3">
+                      <button type="button" class="btn btn-sm btn-outline-primary" onclick="teacherApp.viewTimetableClassDetails('9B')">
+                        <i class="fa-solid fa-eye me-1"></i> View class details
+                      </button>
+                    </td>
                   </tr>
                   <tr>
-                    <td><strong>10:45 - 11:30 (P3)</strong></td>
-                    <td>Remedial Clinic</td>
-                    <td>Free / Prep</td>
-                    <td>Remedial Clinic</td>
-                    <td>Free / Prep</td>
-                    <td>Library Duty</td>
-                    <td>Free / Prep</td>
-                  </tr>
-                  <tr>
-                    <td><strong>11:30 - 12:15 (P4)</strong></td>
-                    <td>Free / Prep</td>
-                    <td><span class="portal-badge badge-success">Class 7C (Maths)</span></td>
-                    <td>Free / Prep</td>
-                    <td><span class="portal-badge badge-success">Class 7C (Maths)</span></td>
-                    <td><span class="portal-badge badge-success">Class 7C (Maths)</span></td>
-                    <td>Weekly Review</td>
+                    <td><strong>Period 4</strong></td>
+                    <td>11:30 AM – 12:15 PM</td>
+                    <td><span class="badge" style="background:#fef3c7; color:#b45309;">Class 10A</span></td>
+                    <td>General Science (Substitution)</td>
+                    <td>Room 302</td>
+                    <td><span class="badge" style="background:#fef3c7; color:#b45309;"><i class="fa-solid fa-user-clock me-1"></i> Active Substitution</span></td>
+                    <td class="text-end pe-3">
+                      <button type="button" class="btn btn-sm btn-outline-success" onclick="teacherApp.acknowledgeSubstitution('SUB-042')">
+                        <i class="fa-solid fa-check me-1"></i> Acknowledge substitution
+                      </button>
+                    </td>
                   </tr>
                 </tbody>
               </table>
             </div>
           </div>
-        </section>
+
+</section>
 
         <!-- =================================================================
              MODULE 8: COMMUNICATION
              (Class Announcements, Parent Messages, Notifications)
              ================================================================= -->
         <section class="portal-view" id="view-communication">
+
           <div class="card-header-bar mb-3">
-            <h2><i class="fa-solid fa-comments text-primary"></i> Parent & Classroom Communication</h2>
-            <button class="btn btn-primary" onclick="teacherApp.openModal('postAnnouncementModal')">
-              <i class="fa-solid fa-bullhorn"></i> Post Class Notice
-            </button>
+            <div>
+              <h2><i class="fa-solid fa-comments text-primary"></i> 19.9 Communication</h2>
+              <p class="text-muted text-sm mt-1">Official school notices, assigned class bulletins, parent messages within permitted scope, and meeting requests.</p>
+            </div>
+            <div class="d-flex align-items-center gap-2 flex-wrap">
+              <button class="btn btn-primary btn-sm" onclick="teacherApp.openModal('postAnnouncementModal')">
+                <i class="fa-solid fa-bullhorn mr-1"></i> Create class announcement
+              </button>
+              <button class="btn btn-outline-success btn-sm" onclick="teacherApp.submitAnnouncementForApproval()">
+                <i class="fa-solid fa-paper-plane mr-1"></i> Submit for approval
+              </button>
+              <button class="btn btn-outline-danger btn-sm" onclick="teacherApp.escalateConcernModal()">
+                <i class="fa-solid fa-triangle-exclamation mr-1"></i> Escalate a sensitive concern
+              </button>
+            </div>
           </div>
 
-          <div class="tab-strip" id="commTabStrip">
-            <button type="button" class="tab-btn active" data-sub="class-announcements" onclick="teacherApp.switchSubTab('communication', 'class-announcements'); return false;">
-              <i class="fa-solid fa-bullhorn mr-1"></i> Class Announcements
-            </button>
-            <button type="button" class="tab-btn" data-sub="parent-messages" onclick="teacherApp.switchSubTab('communication', 'parent-messages'); return false;">
-              <i class="fa-solid fa-comments mr-1"></i> Parent Messages (<span class="badge badge-warning">2 New</span>)
-            </button>
-            <button type="button" class="tab-btn" data-sub="school-notices" onclick="teacherApp.switchSubTab('communication', 'school-notices'); return false;">
-              <i class="fa-solid fa-scroll mr-1"></i> School Notices
-            </button>
+          <!-- Communication Panels: School notices, Assigned class announcements, Parent messages, Meeting requests, Message history -->
+          <div class="row g-3 mb-4">
+            <div class="col-md-6">
+              <div class="card p-3 border rounded-3 bg-white shadow-sm h-100">
+                <h5 class="font-bold text-dark mb-2"><i class="fa-solid fa-bullhorn text-primary me-2"></i> Assigned class announcements</h5>
+                <p class="text-xs text-muted mb-3">Bulletins issued directly to your assigned class parents and students.</p>
+                <div class="p-2 border rounded mb-2" style="background:#f8fafc;">
+                  <strong style="font-size:0.85rem; color:#0f172a;">Class 8A: Mathematics Unit Test 2 Syllabus</strong>
+                  <p class="mb-1 text-xs text-secondary">Chapters 1 &amp; 2 revision questions posted. Parent signature required on progress card by Monday.</p>
+                  <small class="text-muted"><i class="fa-regular fa-clock me-1"></i> Dispatched via portal &amp; SMS</small>
+                </div>
+                <div class="p-2 border rounded" style="background:#f8fafc;">
+                  <h6 class="font-bold text-dark mb-1" style="font-size:0.85rem;"><i class="fa-solid fa-school me-1 text-emerald"></i> School notices</h6>
+                  <p class="mb-0 text-xs text-muted">All notices released by the Principal Executive Office &bull; Mandatory staff coordination bulletin.</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <div class="card p-3 border rounded-3 bg-white shadow-sm h-100">
+                <h5 class="font-bold text-dark mb-2"><i class="fa-solid fa-comments text-emerald me-2"></i> Parent messages &amp; Meeting requests</h5>
+                <p class="text-xs text-muted mb-3">Parent messages within permitted scope &bull; Scheduled consultation docket.</p>
+                
+                <div class="p-2 border rounded mb-2" style="background:#f0fdf4;">
+                  <div class="d-flex justify-content-between align-items-center mb-1">
+                    <strong style="font-size:0.85rem; color:#14532d;">P. Venkateswarlu (Kiran's Father)</strong>
+                    <span class="badge" style="background:#dcfce7; color:#166534;">Meeting requests</span>
+                  </div>
+                  <p class="mb-2 text-xs text-secondary">"Requesting a 15-minute consultation regarding Kiran's State Olympiad training schedule."</p>
+                  <div class="d-flex gap-2">
+                    <button type="button" class="btn btn-sm btn-outline-primary" onclick="teacherApp.replyToParentMessageModal('MSG-01')">
+                      <i class="fa-solid fa-reply me-1"></i> Reply to authorized message
+                    </button>
+                    <button type="button" class="btn btn-sm btn-outline-success" onclick="teacherApp.scheduleParentMeetingModal('MSG-01')">
+                      <i class="fa-solid fa-handshake me-1"></i> Schedule meeting
+                    </button>
+                  </div>
+                </div>
+
+                <div class="mt-2 text-end">
+                  <button type="button" class="btn btn-sm btn-link text-muted" onclick="teacherApp.viewMessageHistory()">
+                    <i class="fa-solid fa-clock-rotate-left me-1"></i> Message history
+                  </button>
+                </div>
+              </div>
+            </div>
           </div>
 
-          <div id="parentMessagesContainer">
-            <!-- Rendered dynamically -->
-          </div>
-        </section>
+</section>
 
         <!-- =================================================================
              MODULE 9: LEAVE
              (Apply Leave, Leave Status)
              ================================================================= -->
         <section class="portal-view" id="view-leave">
+
           <div class="card-header-bar mb-3">
             <div>
-              <h2><i class="fa-solid fa-calendar-minus text-primary"></i> Teacher Leave Management</h2>
-              <p class="text-muted text-sm mt-1">Submit formal leave applications, track departmental balance, and view administrative approvals.</p>
+              <h2><i class="fa-solid fa-calendar-minus text-primary"></i> 19.10 Leave Management</h2>
+              <p class="text-muted text-sm mt-1">Leave balance, application drafting, medical/evidence documentation, and administrative approval history.</p>
             </div>
-            <button class="btn btn-primary" onclick="teacherApp.switchSubTab('leave', 'apply')">
-              <i class="fa-solid fa-plus"></i> Apply for Leave
-            </button>
+            <div class="d-flex align-items-center gap-2 flex-wrap">
+              <button class="btn btn-primary btn-sm" onclick="teacherApp.openApplyLeaveModal()">
+                <i class="fa-solid fa-plus mr-1"></i> Apply for leave
+              </button>
+              <button class="btn btn-outline-secondary btn-sm" onclick="teacherApp.uploadLeaveEvidenceModal()">
+                <i class="fa-solid fa-paperclip mr-1"></i> Upload required evidence
+              </button>
+            </div>
           </div>
 
-          <div class="tab-strip mb-3" id="leaveTabStrip">
-            <button type="button" class="tab-btn active" data-sub="apply" onclick="teacherApp.switchSubTab('leave', 'apply'); return false;">
-              <i class="fa-solid fa-calendar-plus mr-1"></i> Apply Leave
-            </button>
-            <button type="button" class="tab-btn" data-sub="history" onclick="teacherApp.switchSubTab('leave', 'history'); return false;">
-              <i class="fa-solid fa-clock-rotate-left mr-1"></i> Leave History
-            </button>
+          <!-- Leave Balance Quad: Leave balance, Previous requests, Pending requests, Upcoming approved leave -->
+          <div class="metrics-quad mb-4" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 1rem;">
+            <div class="metric-card">
+              <span class="metric-label">Leave balance</span>
+              <div class="metric-value text-primary">18 Days</div>
+              <span class="metric-sub">Casual: 8 &bull; Medical: 7 &bull; Special: 3</span>
+            </div>
+            <div class="metric-card">
+              <span class="metric-label">Previous requests</span>
+              <div class="metric-value text-secondary">4 Applications</div>
+              <span class="metric-sub">AY 2026–2027 Approved Leave Ledger</span>
+            </div>
+            <div class="metric-card">
+              <span class="metric-label">Pending requests</span>
+              <div class="metric-value text-amber">1 Request</div>
+              <span class="metric-sub">Casual Leave (Nov 04) awaiting VP approval</span>
+            </div>
+            <div class="metric-card">
+              <span class="metric-label">Upcoming approved leave</span>
+              <div class="metric-value text-emerald">1 Approved</div>
+              <span class="metric-sub">AP Mathematics Olympiad Escort Duty (Nov 14)</span>
+            </div>
           </div>
 
-          <div id="leaveContentArea">
-            <!-- Populated via renderLeaveSubTab -->
-          </div></section>
+          <!-- Leave Ledger Table -->
+          <div class="card p-0 border rounded-3 bg-white shadow-sm overflow-hidden mb-4">
+            <div class="table-responsive">
+              <table class="table table-hover align-middle mb-0" id="tableTeacherLeaveHistory" style="font-size: 0.85rem;">
+                <thead class="table-light">
+                  <tr>
+                    <th>Request ID</th>
+                    <th>Leave Type</th>
+                    <th>From Date</th>
+                    <th>To Date</th>
+                    <th>Days</th>
+                    <th>Reason</th>
+                    <th>Status</th>
+                    <th class="text-end pe-3">Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><code>LV-2026-042</code></td>
+                    <td><span class="badge" style="background:#eff6ff; color:#1d4ed8;">Casual Leave</span></td>
+                    <td>04 Nov 2026</td>
+                    <td>04 Nov 2026</td>
+                    <td>1 Day</td>
+                    <td>Family ceremony</td>
+                    <td><span class="badge" style="background:#fef3c7; color:#b45309;">Pending requests</span></td>
+                    <td class="text-end pe-3">
+                      <button type="button" class="btn btn-sm btn-outline-primary" onclick="teacherApp.editLeaveDraft('LV-2026-042')" title="Edit draft">
+                        <i class="fa-solid fa-pen me-1"></i> Edit draft
+                      </button>
+                      <button type="button" class="btn btn-sm btn-outline-danger" onclick="teacherApp.cancelLeaveRequest('LV-2026-042')" title="Cancel according to policy">
+                        <i class="fa-solid fa-ban me-1"></i> Cancel
+                      </button>
+                      <button type="button" class="btn btn-sm btn-outline-secondary" onclick="teacherApp.viewLeaveApprovalHistory('LV-2026-042')" title="View approval history">
+                        <i class="fa-solid fa-clock-rotate-left me-1"></i> View approval history
+                      </button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+</section>
 
         <!-- =================================================================
              MODULE 10: REPORTS
@@ -1305,120 +1737,76 @@
              MODULE 6: ASSIGNMENTS & STUDY MATERIALS
              ================================================================= -->
         <section class="portal-view" id="view-assignments">
+
           <div class="card-header-bar mb-3">
             <div>
-              <h2><i class="fa-solid fa-folder-open text-primary"></i> Assignments &amp; Study Materials</h2>
-              <p class="text-muted text-sm mt-1">Manage homework assignments, digital study guides, and evaluation trackers for assigned classes.</p>
+              <h2><i class="fa-solid fa-folder-open text-primary"></i> 19.6 Assignments &amp; Study Materials</h2>
+              <p class="text-muted text-sm mt-1">Manage class homework, digital instructional resources, submission evaluations, and grading feedback.</p>
             </div>
-            <button class="btn btn-primary" onclick="teacherApp.openModal('createHomeworkModal')">
-              <i class="fa-solid fa-plus"></i> New Assignment
-            </button>
-          </div>
-
-          <div class="tab-strip mb-3" id="assignmentsTabStrip">
-            <button type="button" class="tab-btn active" data-sub="create" onclick="teacherApp.switchSubTab('assignments', 'create'); return false;">
-              <i class="fa-solid fa-file-pen mr-1"></i> Assignments
-            </button>
-            <button type="button" class="tab-btn" data-sub="submissions" onclick="teacherApp.switchSubTab('assignments', 'submissions'); return false;">
-              <i class="fa-solid fa-inbox mr-1"></i> Student Submissions
-            </button>
-          </div>
-
-          <div id="assignmentsContentArea">
-            <div class="row g-3">
-              <div class="col-md-4">
-                <div class="card p-3 h-100" style="border-left: 4px solid var(--color-primary);">
-                  <div class="d-flex justify-content-between align-items-center">
-                    <span class="portal-badge badge-primary">Class 8A • Homework</span>
-                    <span class="text-danger text-sm font-weight-bold">Due Today (05:00 PM)</span>
-                  </div>
-                  <h4 class="mt-2 mb-1" style="font-size: 1rem;">Ex 2.3 Linear Equations Questions 1–10</h4>
-                  <p class="text-muted text-xs">Solve step-by-step in the mathematics classwork notebook. Bring for morning desk correction.</p>
-                  <div class="mt-3 pt-2 border-top d-flex justify-content-between align-items-center text-xs">
-                    <span>Submissions: <strong>38 / 42 (90%)</strong></span>
-                    <button class="btn btn-secondary btn-sm" onclick="teacherApp.showToast('Opened Class 8A submission ledger', 'info')">Check Submissions</button>
-                  </div>
-                </div>
-              </div>
-
-              <div class="col-md-4">
-                <div class="card p-3 h-100" style="border-left: 4px solid #06B6D4;">
-                  <div class="d-flex justify-content-between align-items-center">
-                    <span class="portal-badge badge-primary" style="background: rgba(6,182,212,0.15); color: #0891B2;">Class 9B • Project</span>
-                    <span class="text-muted text-sm font-weight-bold">Due Tomorrow</span>
-                  </div>
-                  <h4 class="mt-2 mb-1" style="font-size: 1rem;">Polynomials Factorization Practice Sheet</h4>
-                  <p class="text-muted text-xs">Complete 15 factorization problems on splitting middle terms and applying factor theorem.</p>
-                  <div class="mt-3 pt-2 border-top d-flex justify-content-between align-items-center text-xs">
-                    <span>Submissions: <strong>26 / 40 (65%)</strong></span>
-                    <button class="btn btn-secondary btn-sm" onclick="teacherApp.showToast('Opened Class 9B submission ledger', 'info')">Check Submissions</button>
-                  </div>
-                </div>
-              </div>
-
-              <div class="col-md-4">
-                <div class="card p-3 h-100" style="border-left: 4px solid #10B981;">
-                  <div class="d-flex justify-content-between align-items-center">
-                    <span class="portal-badge badge-success">Class 7C • Drill</span>
-                    <span class="text-muted text-sm font-weight-bold">Sept 22, 2026</span>
-                  </div>
-                  <h4 class="mt-2 mb-1" style="font-size: 1rem;">Fractions Reciprocal &amp; Division Drill</h4>
-                  <p class="text-muted text-xs">Workbook exercise 3B: Practice mental fraction conversion and area model representations.</p>
-                  <div class="mt-3 pt-2 border-top d-flex justify-content-between align-items-center text-xs">
-                    <span>Submissions: <strong>35 / 38 (92%)</strong></span>
-                    <button class="btn btn-secondary btn-sm" onclick="teacherApp.showToast('Opened Class 7C submission ledger', 'info')">Check Submissions</button>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Downloadable Study Guides Section -->
-            <div class="card p-4 mt-4">
-              <div class="card-header-bar">
-                <h3><i class="fa-solid fa-file-pdf text-danger"></i> Class Study Material Repository</h3>
-                <button class="btn btn-secondary btn-sm" onclick="teacherApp.showToast('Uploaded new syllabus notes PDF', 'success')">
-                  <i class="fa-solid fa-cloud-arrow-up"></i> Upload PDF to Class
-                </button>
-              </div>
-              <div class="table-container mt-3">
-                <table class="data-table">
-                  <thead>
-                    <tr>
-                      <th>Document Name</th>
-                      <th>Target Class</th>
-                      <th>Upload Date</th>
-                      <th>File Size</th>
-                      <th class="text-center">Action</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td><strong>Chapter 2: Linear Equations Formula Sheet &amp; Notes</strong></td>
-                      <td><span class="portal-badge badge-primary">Class 8A</span></td>
-                      <td>Sept 15, 2026</td>
-                      <td>2.4 MB (PDF)</td>
-                      <td class="text-center"><button class="btn btn-secondary btn-sm" onclick="teacherApp.showToast('Downloaded Linear Equations Notes', 'success')"><i class="fa-solid fa-download"></i> Download</button></td>
-                    </tr>
-                    <tr>
-                      <td><strong>Polynomials &amp; Factor Theorem Solved Examples</strong></td>
-                      <td><span class="portal-badge badge-primary">Class 9B</span></td>
-                      <td>Sept 12, 2026</td>
-                      <td>3.1 MB (PDF)</td>
-                      <td class="text-center"><button class="btn btn-secondary btn-sm" onclick="teacherApp.showToast('Downloaded Polynomials Guide', 'success')"><i class="fa-solid fa-download"></i> Download</button></td>
-                    </tr>
-                    <tr>
-                      <td><strong>Grade 7 Fractions Multiplication Drill Workbook</strong></td>
-                      <td><span class="portal-badge badge-primary">Class 7C</span></td>
-                      <td>Sept 08, 2026</td>
-                      <td>1.8 MB (PDF)</td>
-                      <td class="text-center"><button class="btn btn-secondary btn-sm" onclick="teacherApp.showToast('Downloaded Grade 7 Workbook', 'success')"><i class="fa-solid fa-download"></i> Download</button></td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
+            <div class="d-flex align-items-center gap-2 flex-wrap">
+              <button class="btn btn-primary btn-sm" onclick="teacherApp.openModal('createHomeworkModal')">
+                <i class="fa-solid fa-plus mr-1"></i> Create assignment
+              </button>
+              <button class="btn btn-outline-secondary btn-sm" onclick="teacherApp.attachStudyMaterialModal()">
+                <i class="fa-solid fa-paperclip mr-1"></i> Attach material
+              </button>
             </div>
           </div>
-        </section>
+
+          <!-- Assignments Table: Assignment title, Class, Subject, Assigned date, Due date, Submission count, Grading status -->
+          <div class="card p-0 border rounded-3 bg-white shadow-sm overflow-hidden mb-4">
+            <div class="table-responsive">
+              <table class="table table-hover align-middle mb-0" id="tableAssignmentsList" style="font-size: 0.85rem;">
+                <thead class="table-light">
+                  <tr>
+                    <th style="min-width: 220px;">Assignment title</th>
+                    <th style="min-width: 90px;">Class</th>
+                    <th style="min-width: 120px;">Subject</th>
+                    <th style="min-width: 120px;">Assigned date</th>
+                    <th style="min-width: 120px;">Due date</th>
+                    <th style="min-width: 140px;">Submission count</th>
+                    <th style="min-width: 140px;">Grading status</th>
+                    <th style="min-width: 320px;" class="text-end pe-3">Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>
+                      <strong style="color:#0f172a;">Linear Equations Problem Set 2.3</strong><br>
+                      <small class="text-muted"><i class="fa-solid fa-paperclip me-1"></i> Ex2_3_Worksheet.pdf attached</small>
+                    </td>
+                    <td><span class="badge" style="background:#eff6ff; color:#1d4ed8;">Class 8A</span></td>
+                    <td>Mathematics</td>
+                    <td><i class="fa-regular fa-calendar me-1 text-muted"></i> 22 Oct 2026</td>
+                    <td><i class="fa-regular fa-calendar-check me-1 text-danger"></i> 27 Oct 2026</td>
+                    <td><span class="badge" style="background:#f1f5f9; color:#334155; font-weight:700;">38 / 42 Submitted</span></td>
+                    <td><span class="badge" style="background:#fef3c7; color:#b45309;">14 to Grade (24 Graded)</span></td>
+                    <td class="text-end pe-3">
+                      <div class="d-flex align-items-center justify-content-end gap-1 flex-wrap">
+                        <button type="button" class="btn btn-sm btn-outline-primary" onclick="teacherApp.publishAssignment('HW-01')" title="Publish assignment">
+                          <i class="fa-solid fa-bullhorn me-1"></i> Publish assignment
+                        </button>
+                        <button type="button" class="btn btn-sm btn-outline-warning" onclick="teacherApp.extendAssignmentDeadline('HW-01')" title="Extend deadline, if authorized">
+                          <i class="fa-solid fa-clock-rotate-left me-1"></i> Extend deadline
+                        </button>
+                        <button type="button" class="btn btn-sm btn-outline-secondary" onclick="teacherApp.reviewAssignmentSubmissions('HW-01')" title="Review submissions">
+                          <i class="fa-solid fa-inbox me-1"></i> Review submissions
+                        </button>
+                        <button type="button" class="btn btn-sm btn-outline-success" onclick="teacherApp.gradeSubmission('HW-01')" title="Grade">
+                          <i class="fa-solid fa-check me-1"></i> Grade
+                        </button>
+                        <button type="button" class="btn btn-sm btn-outline-info" onclick="teacherApp.provideSubmissionFeedback('HW-01')" title="Provide feedback">
+                          <i class="fa-solid fa-comment-dots me-1"></i> Provide feedback
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+</section>
 
         <!-- =================================================================
              MODULE 10: APPOINTMENTS & PARENT MEETINGS (PTM)
@@ -1537,453 +1925,72 @@
         </section>
 
         <section class="portal-view" id="view-profile">
+
           <div class="prof-clean-container">
             
             <!-- Hero Card -->
-            <div class="prof-hero-card">
-              <div class="prof-hero-avatar-wrap">
-                <i class="fa-solid fa-chalkboard-user"></i>
-              </div>
-              <div class="prof-hero-details">
-                <h2 class="prof-hero-name" id="profTeacherHeroName">Ms. Anjali</h2>
-                <p class="prof-hero-role" id="profTeacherHeroRole">
-                  <i class="fa-solid fa-graduation-cap"></i> Senior Faculty • Department of Mathematics (Grade 8A Class Teacher)
-                </p>
-                <div class="prof-hero-tags">
-                  <span class="prof-hero-tag" id="profHeroSchoolId"><i class="fa-solid fa-id-badge"></i> School ID: SV200005</span>
-                  <span class="prof-hero-tag"><i class="fa-solid fa-circle-check"></i> Status: Active Faculty</span>
-                  <span class="prof-hero-tag"><i class="fa-solid fa-building-columns"></i> Sri Vidya E.M High School</span>
+            <div class="prof-hero-card mb-4 p-4 border rounded-3 bg-white shadow-sm d-flex align-items-center justify-content-between flex-wrap gap-3">
+              <div class="d-flex align-items-center gap-3">
+                <div style="width: 56px; height: 56px; border-radius: 50%; background:#eff6ff; color:#1d4ed8; display:flex; align-items:center; justify-content:center; font-size:1.5rem;">
+                  <i class="fa-solid fa-chalkboard-user"></i>
+                </div>
+                <div>
+                  <h3 class="mb-0 font-bold" style="color:#0f172a;">Ms. Anjali</h3>
+                  <div style="font-size:0.85rem; color:#475569;">Senior Mathematics Teacher &bull; Grade 8A Class Teacher</div>
+                  <div class="d-flex gap-2 mt-1">
+                    <span class="badge" style="background:#eff6ff; color:#1d4ed8;">EMP-T-042</span>
+                    <span class="badge" style="background:#ecfdf5; color:#059669;">Active Faculty</span>
+                  </div>
                 </div>
               </div>
-            </div>
-
-            <!-- Profile Tabs Navigation -->
-            <div class="prof-tab-nav">
-              <button type="button" class="prof-tab-btn active" onclick="teacherApp.switchProfileTab('personal')" id="tabBtn-personal">
-                <i class="fa-solid fa-user"></i> Personal &amp; Contact
-              </button>
-              <button type="button" class="prof-tab-btn" onclick="teacherApp.switchProfileTab('professional')" id="tabBtn-professional">
-                <i class="fa-solid fa-briefcase"></i> Professional Details
-              </button>
-              <button type="button" class="prof-tab-btn" onclick="teacherApp.switchProfileTab('identity-bank')" id="tabBtn-identity-bank">
-                <i class="fa-solid fa-building-columns"></i> Aadhaar &amp; Bank Details
-              </button>
-              <button type="button" class="prof-tab-btn" onclick="teacherApp.switchProfileTab('security')" id="tabBtn-security">
-                <i class="fa-solid fa-key"></i> Security &amp; Password
-              </button>
-            </div>
-
-            <!-- ===============================================================
-                 TAB 1: PERSONAL & CONTACT INFORMATION
-                 =============================================================== -->
-            <div class="prof-tab-content" id="profTab-personal">
-              <div class="prof-section-card">
-                <div class="prof-section-header">
-                  <div>
-                    <h3 class="prof-section-title"><i class="fa-solid fa-user"></i> Personal &amp; Contact Information</h3>
-                    <p class="prof-section-subtitle">Your personal contact details and residential address on school records</p>
-                  </div>
-                  <span class="prof-badge-verified"><i class="fa-solid fa-shield-check"></i> Official Record</span>
-                </div>
-
-                <form onsubmit="teacherApp.saveProfile(event)">
-                  <div class="prof-grid-2">
-                    <div class="prof-form-group">
-                      <label class="prof-form-label">Full Name *</label>
-                      <input type="text" class="prof-form-control" id="profTeacherName" required value="Ms. Anjali" placeholder="Enter your full name">
-                    </div>
-                    <div class="prof-form-group">
-                      <label class="prof-form-label">Official School Teacher ID (Assigned)</label>
-                      <input type="text" class="prof-form-control" id="profSchoolId" readonly value="SV200005" title="Assigned by School Leadership">
-                    </div>
-                  </div>
-
-                  <div class="prof-grid-3">
-                    <div class="prof-form-group">
-                      <label class="prof-form-label">Gender</label>
-                      <select class="prof-form-control" id="profTeacherGender">
-                        <option value="Female" selected>Female</option>
-                        <option value="Male">Male</option>
-                        <option value="Other">Other</option>
-                      </select>
-                    </div>
-                    <div class="prof-form-group">
-                      <label class="prof-form-label">Date of Birth</label>
-                      <input type="date" class="prof-form-control" id="profTeacherDob" value="1990-05-15">
-                    </div>
-                    <div class="prof-form-group">
-                      <label class="prof-form-label">Blood Group</label>
-                      <select class="prof-form-control" id="profTeacherBlood">
-                        <option value="A+" selected>A Positive (A+)</option>
-                        <option value="B+">B Positive (B+)</option>
-                        <option value="O+">O Positive (O+)</option>
-                        <option value="AB+">AB Positive (AB+)</option>
-                        <option value="A-">A Negative (A-)</option>
-                        <option value="B-">B Negative (B-)</option>
-                        <option value="O-">O Negative (O-)</option>
-                        <option value="AB-">AB Negative (AB-)</option>
-                      </select>
-                    </div>
-                  </div>
-
-                  <div class="prof-grid-2">
-                    <div class="prof-form-group">
-                      <label class="prof-form-label">Primary Mobile / WhatsApp *</label>
-                      <input type="tel" class="prof-form-control" id="profTeacherPhone" required value="+91 98481 23456" placeholder="+91 98481 00000">
-                    </div>
-                    <div class="prof-form-group">
-                      <label class="prof-form-label">Personal Email Address *</label>
-                      <input type="email" class="prof-form-control" id="profTeacherPersonalEmail" required value="anjali.faculty@gmail.com" placeholder="name@gmail.com">
-                    </div>
-                  </div>
-
-                  <div class="prof-grid-2">
-                    <div class="prof-form-group">
-                      <label class="prof-form-label">Official Institutional Email</label>
-                      <input type="email" class="prof-form-control" id="profTeacherOfficialEmail" value="anjali@srividya.edu" placeholder="name@srividya.edu">
-                    </div>
-                    <div class="prof-form-group">
-                      <label class="prof-form-label">Emergency Contact Phone</label>
-                      <input type="tel" class="prof-form-control" id="profTeacherEmergency" value="+91 98480 99887" placeholder="+91 98480 00000">
-                    </div>
-                  </div>
-
-                  <div class="prof-form-group" style="margin-bottom: 1.25rem;">
-                    <label class="prof-form-label">Residential Postal Address</label>
-                    <textarea class="prof-form-control" id="profTeacherAddress" rows="2" placeholder="Your residential address...">Flat 402, Sri Sai Balaji Enclave, Main Road, Guntur, AP - 522002</textarea>
-                  </div>
-
-                  <div class="prof-actions-bar">
-                    <button type="submit" class="btn-prof-save">
-                      <i class="fa-solid fa-floppy-disk"></i> Save Personal Details
-                    </button>
-                  </div>
-                </form>
+              <div class="d-flex align-items-center gap-2 flex-wrap">
+                <button type="button" class="btn btn-sm btn-outline-primary" onclick="teacherApp.requestProfileCorrectionModal()">
+                  <i class="fa-solid fa-pen-to-square me-1"></i> Request profile correction
+                </button>
+                <button type="button" class="btn btn-sm btn-outline-secondary" onclick="teacherApp.updateContactDetailsModal()">
+                  <i class="fa-solid fa-address-book me-1"></i> Update permitted contact details
+                </button>
+                <button type="button" class="btn btn-sm btn-outline-info" onclick="teacherApp.uploadProfileDocumentModal()">
+                  <i class="fa-solid fa-cloud-arrow-up me-1"></i> Upload required document
+                </button>
+                <button type="button" class="btn btn-sm btn-outline-warning" onclick="teacherApp.openChangePasswordModal()">
+                  <i class="fa-solid fa-key me-1"></i> Change password
+                </button>
+                <button type="button" class="btn btn-sm btn-outline-secondary" onclick="teacherApp.manageSecuritySettingsModal()">
+                  <i class="fa-solid fa-user-shield me-1"></i> Manage supported security settings
+                </button>
               </div>
             </div>
 
-            <!-- ===============================================================
-                 TAB 2: PROFESSIONAL & EMPLOYMENT DETAILS
-                 =============================================================== -->
-            <div class="prof-tab-content" id="profTab-professional" style="display:none;">
-              <div class="prof-section-card">
-                <div class="prof-section-header">
-                  <div>
-                    <h3 class="prof-section-title"><i class="fa-solid fa-briefcase"></i> Professional &amp; Teaching Credentials</h3>
-                    <p class="prof-section-subtitle">Academic qualifications, teaching experience, and allocated departments</p>
+            <!-- Profile Sections Quad: Personal information, Employment details, Qualifications, Authorized documents, Contact details, Account security -->
+            <div class="row g-3">
+              <div class="col-md-6">
+                <div class="card p-3 border rounded-3 bg-white shadow-sm h-100">
+                  <h5 class="font-bold text-dark mb-2"><i class="fa-solid fa-id-card text-primary me-2"></i> Personal information &amp; Employment details</h5>
+                  <div style="font-size:0.84rem; line-height:1.7; color:#334155;">
+                    <div><strong>Employee ID:</strong> EMP-T-042</div>
+                    <div><strong>Employment details:</strong> Full-Time Regular Faculty &bull; Mathematics Department</div>
+                    <div><strong>Date of Joining:</strong> 12 June 2019 (7 Years Service)</div>
+                    <div><strong>Qualifications:</strong> M.Sc Mathematics, B.Ed (Andhra University &bull; First Class)</div>
                   </div>
-                  <span class="prof-badge-verified"><i class="fa-solid fa-award"></i> Verified Faculty</span>
                 </div>
+              </div>
 
-                <form onsubmit="teacherApp.saveProfile(event)">
-                  <div class="prof-grid-2">
-                    <div class="prof-form-group">
-                      <label class="prof-form-label">Academic Department</label>
-                      <input type="text" class="prof-form-control" id="profDept" value="Secondary Mathematics" placeholder="e.g. Secondary Mathematics">
-                    </div>
-                    <div class="prof-form-group">
-                      <label class="prof-form-label">Designation / Role Title</label>
-                      <select class="prof-form-control" id="profDesignation">
-                        <option value="Principal">Principal</option>
-                        <option value="Vice Principal">Vice Principal</option>
-                        <option value="Head of Department">Head of Department</option>
-                        <option value="Senior Faculty &amp; Grade 8A Class Teacher" selected>Senior Faculty &amp; Grade 8A Class Teacher</option>
-                        <option value="Senior Faculty">Senior Faculty</option>
-                        <option value="Subject Teacher">Subject Teacher</option>
-                        <option value="Class Teacher">Class Teacher</option>
-                        <option value="Special Education Teacher">Special Education Teacher</option>
-                        <option value="Physical Education Teacher">Physical Education Teacher</option>
-                        <option value="Counsellor">Counsellor</option>
-                        <option value="Librarian">Librarian</option>
-                        <option value="Lab Assistant">Lab Assistant</option>
-                        <option value="Office Administrator">Office Administrator</option>
-                        <option value="Accounts Assistant">Accounts Assistant</option>
-                        <option value="Receptionist">Receptionist</option>
-                        <option value="Transport Coordinator">Transport Coordinator</option>
-                        <option value="Support Staff">Support Staff</option>
-                      </select>
-                    </div>
+              <div class="col-md-6">
+                <div class="card p-3 border rounded-3 bg-white shadow-sm h-100">
+                  <h5 class="font-bold text-dark mb-2"><i class="fa-solid fa-phone text-emerald me-2"></i> Contact details &amp; Authorized documents</h5>
+                  <div style="font-size:0.84rem; line-height:1.7; color:#334155;">
+                    <div><strong>Contact details:</strong> anjali.math@srividyaschool.edu.in &bull; +91 98480 22334</div>
+                    <div><strong>Authorized documents:</strong> Appointment Letter, B.Ed Degree Certificate, Aadhaar Verification (Verified &bull; On File)</div>
+                    <div><strong>Account security:</strong> Two-Factor Authentication (SMS Active) &bull; Password Last Changed: 14 days ago</div>
                   </div>
-
-                  <div class="prof-grid-3">
-                    <div class="prof-form-group">
-                      <label class="prof-form-label">Highest Qualification</label>
-                      <input type="text" class="prof-form-control" id="profQualification" value="M.Sc (Mathematics), B.Ed" placeholder="e.g. M.Sc, B.Ed">
-                    </div>
-                    <div class="prof-form-group">
-                      <label class="prof-form-label">Total Teaching Experience</label>
-                      <input type="text" class="prof-form-control" id="profExperience" value="9 Years" placeholder="e.g. 9 Years">
-                    </div>
-                    <div class="prof-form-group">
-                      <label class="prof-form-label">Date of Joining Sri Vidya</label>
-                      <input type="text" class="prof-form-control" id="profJoinDate" value="12-June-2019" placeholder="e.g. 12-June-2019">
-                    </div>
-                  </div>
-
-                  <div class="prof-form-group" style="margin-bottom: 1.25rem;">
-                    <label class="prof-form-label">Assigned Classes &amp; Subjects</label>
-                    <input type="text" class="prof-form-control" id="profAllocatedClasses" value="Mathematics (Class 8A, Class 9B, Class 10A Remedial)" placeholder="e.g. Mathematics - 8A, 9B">
-                  </div>
-
-                  <div class="prof-form-group" style="margin-bottom: 1.25rem;">
-                    <label class="prof-form-label">Teaching Philosophy / Faculty Bio</label>
-                    <textarea class="prof-form-control" id="profTeacherBio" rows="3" placeholder="Share your teaching philosophy or brief biography...">Senior Mathematics Educator with over 9 years of teaching experience. Passionate about interactive problem solving, conceptual clarity, and fostering analytical confidence among students.</textarea>
-                  </div>
-
-                  <div class="prof-actions-bar">
-                    <button type="submit" class="btn-prof-save">
-                      <i class="fa-solid fa-floppy-disk"></i> Save Professional Details
-                    </button>
-                  </div>
-                </form>
+                </div>
               </div>
             </div>
 
-            <!-- ===============================================================
-                 TAB 3: AADHAAR CARD, IDENTITY & BANK SALARY DETAILS (UNIFIED)
-                 =============================================================== -->
-            <div class="prof-tab-content" id="profTab-identity-bank" style="display:none;">
-              <div class="prof-section-card">
-                <div class="prof-section-header">
-                  <div>
-                    <h3 class="prof-section-title"><i class="fa-solid fa-building-columns"></i> Aadhaar Identity &amp; Bank Salary Details</h3>
-                    <p class="prof-section-subtitle">Official government-recognized identity verification and verified bank records for monthly salary payroll</p>
-                  </div>
-                  <span class="prof-badge-verified"><i class="fa-solid fa-circle-check"></i> Statutory &amp; Payroll Verified</span>
-                </div>
-
-                <div class="prof-security-note">
-                  <i class="fa-solid fa-shield-halved"></i>
-                  <div>
-                    <strong>Confidential Identity &amp; Payroll Records:</strong>
-                    Your Aadhaar UID, PAN Card, and Bank Account records are securely archived in the school administrative database for AP State Board accreditation, teacher U-DISE verification, and monthly direct salary remittance.
-                  </div>
-                </div>
-
-                <form onsubmit="teacherApp.saveProfile(event)">
-                  <!-- Section 1: Aadhaar & Govt Identity -->
-                  <h4 style="font-size: 0.95rem; font-weight: 800; color: var(--color-text-dark); margin: 1.25rem 0 0.85rem 0; padding-bottom: 6px; border-bottom: 2px solid var(--color-border); display:flex; align-items:center; gap:8px;">
-                    <i class="fa-solid fa-address-card text-primary"></i> 1. Government Identity &amp; Aadhaar Verification
-                  </h4>
-
-                  <div class="prof-grid-2">
-                    <div class="prof-form-group">
-                      <label class="prof-form-label">
-                        <span>Aadhaar Card Number *</span>
-                        <span style="font-size:0.75rem; color:#64748B;">12-digit UID</span>
-                      </label>
-                      <input type="text" class="prof-form-control" id="profAadhaarNumber" maxlength="14" value="5482 1920 3847" placeholder="XXXX XXXX XXXX">
-                    </div>
-                    <div class="prof-form-group">
-                      <label class="prof-form-label">
-                        <span>PAN Card Number *</span>
-                        <span style="font-size:0.75rem; color:#64748B;">10-character Alphanumeric</span>
-                      </label>
-                      <input type="text" class="prof-form-control" id="profPanNumber" maxlength="10" value="ABCDE1234F" placeholder="e.g. ABCDE1234F" style="text-transform: uppercase;">
-                    </div>
-                  </div>
-
-                  <div class="prof-grid-2">
-                    <div class="prof-form-group">
-                      <label class="prof-form-label">U-DISE+ Teacher National Code</label>
-                      <input type="text" class="prof-form-control" id="profUdiseCode" value="AP-FAC-2017-8821" placeholder="e.g. AP-FAC-2017-8821">
-                    </div>
-                    <div class="prof-form-group">
-                      <label class="prof-form-label">Aadhaar Linked Mobile Number</label>
-                      <input type="tel" class="prof-form-control" id="profAadhaarMobile" value="+91 98481 23456" placeholder="+91 98481 00000">
-                    </div>
-                  </div>
-
-                  <!-- Section 2: Bank Account & Payroll -->
-                  <h4 style="font-size: 0.95rem; font-weight: 800; color: var(--color-text-dark); margin: 1.5rem 0 0.85rem 0; padding-bottom: 6px; border-bottom: 2px solid var(--color-border); display:flex; align-items:center; gap:8px;">
-                    <i class="fa-solid fa-building-columns text-primary"></i> 2. Bank Account &amp; Salary Disbursement Details
-                  </h4>
-
-                  <div class="prof-grid-2">
-                    <div class="prof-form-group">
-                      <label class="prof-form-label">Bank Name *</label>
-                      <input type="text" class="prof-form-control" id="profBankName" required value="State Bank of India (SBI)" placeholder="e.g. State Bank of India, HDFC Bank">
-                    </div>
-                    <div class="prof-form-group">
-                      <label class="prof-form-label">Account Holder Name (As per Bank) *</label>
-                      <input type="text" class="prof-form-control" id="profAccountHolder" required value="Ms. Anjali" placeholder="Full name as in passbook">
-                    </div>
-                  </div>
-
-                  <div class="prof-grid-2">
-                    <div class="prof-form-group">
-                      <label class="prof-form-label">Bank Account Number *</label>
-                      <input type="text" class="prof-form-control" id="profAccountNumber" required value="309812456789" placeholder="Enter bank account number">
-                    </div>
-                    <div class="prof-form-group">
-                      <label class="prof-form-label">IFSC Code *</label>
-                      <input type="text" class="prof-form-control" id="profIfscCode" required value="SBIN0002145" placeholder="e.g. SBIN0002145" style="text-transform: uppercase;">
-                    </div>
-                  </div>
-
-                  <div class="prof-grid-2">
-                    <div class="prof-form-group">
-                      <label class="prof-form-label">Branch Name &amp; City</label>
-                      <input type="text" class="prof-form-control" id="profBranchName" value="Arundelpet Branch, Guntur" placeholder="e.g. Main Branch, Guntur">
-                    </div>
-                    <div class="prof-form-group">
-                      <label class="prof-form-label">Account Type</label>
-                      <select class="prof-form-control" id="profAccountType">
-                        <option value="Savings (Salary)" selected>Savings Account (Salary Linked)</option>
-                        <option value="Current Account">Current Account</option>
-                      </select>
-                    </div>
-                  </div>
-
-                  <div class="prof-actions-bar">
-                    <button type="submit" class="btn-prof-save">
-                      <i class="fa-solid fa-floppy-disk"></i> Save Aadhaar &amp; Bank Details
-                    </button>
-                  </div>
-                </form>
-              </div>
-            </div>
-
-            <!-- ===============================================================
-                 TAB 5: ACCOUNT SECURITY & CHANGE PASSWORD
-                 =============================================================== -->
-            <div class="prof-tab-content" id="profTab-security" style="display:none;">
-              <div class="prof-section-card">
-                <div class="prof-section-header">
-                  <div>
-                    <h3 class="prof-section-title"><i class="fa-solid fa-lock" style="color: #059669;"></i> Change Account Password</h3>
-                    <p class="prof-section-subtitle">Set a secure private password for your teacher account and manage account protection</p>
-                  </div>
-                  <span class="prof-badge-verified"><i class="fa-solid fa-shield-check"></i> Account Protected</span>
-                </div>
-
-                <!-- Security overview banner -->
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 1.5rem;">
-                  <div style="background: var(--color-bg-subtle); border: 1px solid var(--color-border); border-radius: 10px; padding: 1rem; display: flex; align-items: center; gap: 12px;">
-                    <div style="width: 42px; height: 42px; border-radius: 8px; background: rgba(5, 150, 105, 0.12); color: #059669; display: flex; align-items: center; justify-content: center; font-size: 1.2rem;">
-                      <i class="fa-solid fa-id-badge"></i>
-                    </div>
-                    <div>
-                      <div style="font-size: 0.75rem; color: #64748b; font-weight: 600; text-transform: uppercase;">Faculty School ID</div>
-                      <div style="font-size: 0.95rem; font-weight: 700; color: var(--color-text-dark);" id="secSchoolIdBadge">SV200005</div>
-                    </div>
-                  </div>
-
-                  <div style="background: var(--color-bg-subtle); border: 1px solid var(--color-border); border-radius: 10px; padding: 1rem; display: flex; align-items: center; gap: 12px;">
-                    <div style="width: 42px; height: 42px; border-radius: 8px; background: rgba(16,185,129,0.12); color: #10b981; display: flex; align-items: center; justify-content: center; font-size: 1.2rem;">
-                      <i class="fa-solid fa-circle-check"></i>
-                    </div>
-                    <div>
-                      <div style="font-size: 0.75rem; color: #64748b; font-weight: 600; text-transform: uppercase;">Security Status</div>
-                      <div style="font-size: 0.95rem; font-weight: 700; color: #10b981;">Active &amp; Protected</div>
-                    </div>
-                  </div>
-
-                  <div style="background: var(--color-bg-subtle); border: 1px solid var(--color-border); border-radius: 10px; padding: 1rem; display: flex; align-items: center; gap: 12px;">
-                    <div style="width: 42px; height: 42px; border-radius: 8px; background: rgba(245,158,11,0.12); color: #f59e0b; display: flex; align-items: center; justify-content: center; font-size: 1.2rem;">
-                      <i class="fa-solid fa-clock-rotate-left"></i>
-                    </div>
-                    <div>
-                      <div style="font-size: 0.75rem; color: #64748b; font-weight: 600; text-transform: uppercase;">Password Status</div>
-                      <div style="font-size: 0.92rem; font-weight: 700; color: var(--color-text-dark);" id="secLastPassUpdated">Verified by Admin</div>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="prof-security-note" style="margin-bottom: 1.5rem;">
-                  <i class="fa-solid fa-shield-halved"></i>
-                  <div>
-                    <strong>Secure Faculty Credentials:</strong>
-                    When you update your password here, your new private password becomes effective immediately across all future logins using your assigned School ID. Neither students nor other teachers will have access to your private credentials.
-                  </div>
-                </div>
-
-                <!-- Dedicated Change Password Form -->
-                <form id="teacherChangePasswordPageForm" onsubmit="teacherApp.handleSecurityPasswordChange(event)" style="max-width: 680px;">
-                  <div class="prof-form-group" style="margin-bottom: 1.25rem;">
-                    <label class="prof-form-label" for="secCurrentPass">
-                      <span>Current Password *</span>
-                      <span style="font-size:0.75rem; color:#64748b; font-weight:400;">Existing password or school default</span>
-                    </label>
-                    <div style="position: relative;">
-                      <input type="password" class="prof-form-control" id="secCurrentPass" required placeholder="Enter current password (e.g. SriVidya@2026)" style="padding-right: 44px;">
-                      <button type="button" onclick="teacherApp.toggleFieldPass('secCurrentPass', this)" style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); background: none; border: none; color: #64748B; cursor: pointer; font-size: 0.95rem;" title="Show/Hide Password">
-                        <i class="fa-solid fa-eye"></i>
-                      </button>
-                    </div>
-                  </div>
-
-                  <div class="prof-grid-2">
-                    <div class="prof-form-group">
-                      <label class="prof-form-label" for="secNewPass">
-                        <span>New Secure Password *</span>
-                        <span style="font-size:0.75rem; color:#64748b; font-weight:400;">Min. 6 characters</span>
-                      </label>
-                      <div style="position: relative;">
-                        <input type="password" class="prof-form-control" id="secNewPass" required minlength="6" placeholder="Enter new password" style="padding-right: 44px;" oninput="teacherApp.checkPassStrength(this.value)">
-                        <button type="button" onclick="teacherApp.toggleFieldPass('secNewPass', this)" style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); background: none; border: none; color: #64748B; cursor: pointer; font-size: 0.95rem;" title="Show/Hide Password">
-                          <i class="fa-solid fa-eye"></i>
-                        </button>
-                      </div>
-                      <!-- Strength meter bar -->
-                      <div style="margin-top: 8px;">
-                        <div style="height: 5px; width: 100%; background: #e2e8f0; border-radius: 4px; overflow: hidden;">
-                          <div id="secPassStrengthMeter" style="height: 100%; width: 0%; transition: width 0.3s ease, background-color 0.3s ease;"></div>
-                        </div>
-                        <div id="secPassStrengthText" style="font-size: 0.75rem; font-weight: 600; margin-top: 4px; min-height: 16px;"></div>
-                      </div>
-                    </div>
-
-                    <div class="prof-form-group">
-                      <label class="prof-form-label" for="secConfirmPass">
-                        <span>Confirm New Password *</span>
-                        <span style="font-size:0.75rem; color:#64748b; font-weight:400;">Re-enter exactly</span>
-                      </label>
-                      <div style="position: relative;">
-                        <input type="password" class="prof-form-control" id="secConfirmPass" required minlength="6" placeholder="Re-enter new password" style="padding-right: 44px;" oninput="teacherApp.checkPassMatch()">
-                        <button type="button" onclick="teacherApp.toggleFieldPass('secConfirmPass', this)" style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); background: none; border: none; color: #64748B; cursor: pointer; font-size: 0.95rem;" title="Show/Hide Password">
-                          <i class="fa-solid fa-eye"></i>
-                        </button>
-                      </div>
-                      <div id="secPassMatchText" style="margin-top: 6px; min-height: 20px;"></div>
-                    </div>
-                  </div>
-
-                  <!-- Security tips card -->
-                  <div style="background: var(--color-bg-subtle); border-radius: 8px; padding: 1rem 1.25rem; margin: 1.25rem 0; border-left: 3px solid #059669;">
-                    <div style="font-size: 0.82rem; font-weight: 700; color: var(--color-text-main); margin-bottom: 6px; display: flex; align-items: center; gap: 6px;">
-                      <i class="fa-solid fa-circle-info" style="color:#059669;"></i> Password Security Recommendations:
-                    </div>
-                    <ul style="margin: 0; padding-left: 1.25rem; font-size: 0.8rem; color: #475569; line-height: 1.6;">
-                      <li>Choose at least 6 characters in length (8+ characters recommended)</li>
-                      <li>Include a mix of uppercase letters, lowercase letters, and digits</li>
-                      <li>Do not use simple passwords or share login credentials with students</li>
-                    </ul>
-                  </div>
-
-                  <div class="prof-actions-bar" style="display: flex; gap: 10px; align-items: center;">
-                    <button type="submit" class="btn-prof-save" style="background:#059669; color: #fff; padding: 0.65rem 1.5rem; font-weight: 700; display: inline-flex; align-items: center; gap: 8px;">
-                      <i class="fa-solid fa-shield-check"></i> Update Password Now
-                    </button>
-                    <button type="button" onclick="document.getElementById('teacherChangePasswordPageForm').reset(); teacherApp.checkPassStrength(''); teacherApp.checkPassMatch();" class="btn-prof-reset" style="padding: 0.65rem 1.25rem; font-weight: 600;">
-                      <i class="fa-solid fa-rotate-left"></i> Reset Fields
-                    </button>
-                  </div>
-                </form>
-
-                <!-- Recovery assistance footer note -->
-                <div style="margin-top: 2rem; padding-top: 1.25rem; border-top: 1px dashed #cbd5e1; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;">
-                  <div style="font-size: 0.83rem; color: #64748b;">
-                    <i class="fa-solid fa-headset"></i> Need password reset assistance?
-                  </div>
-                  <span style="font-size: 0.82rem; font-weight: 600; color: #0284c7;">
-                    Contact Principal or IT Cell to reset your credentials to school default
-                  </span>
-                </div>
-              </div>
-            </div>
           </div>
-        </section>
+
+</section>
 
 
 

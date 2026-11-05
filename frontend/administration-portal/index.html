@@ -4099,75 +4099,98 @@
               </div>
             </div>
 
-            <!-- Executive Toolbar & Multi-field Filters -->
-            <div class="transfers-toolbar" style="margin-bottom: 1rem;">
-              <div class="tc-toolbar-left" style="display:flex; align-items:center; gap:0.6rem; flex-wrap:wrap; flex:1;">
-                <div class="tc-search-wrap" style="position:relative; min-width:260px;">
-                  <i class="fa-solid fa-magnifying-glass search-icon" style="position:absolute; left:10px; top:50%; transform:translateY(-50%); color:#94a3b8; font-size:0.85rem;"></i>
+            <!-- Executive Toolbar & Multi-field Filters (2-Tier Enterprise Architecture) -->
+            <div class="transfers-toolbar-container">
+              <!-- Tier 1: Search & Granular TC Filters (5-Column Responsive Grid) -->
+              <div class="transfers-filter-grid">
+                <div class="tc-search-wrap">
+                  <i class="fa-solid fa-magnifying-glass search-icon"></i>
                   <input type="text" id="tcSearchInput" class="tc-search-input"
                     placeholder="Search by Request ID, Student, Adm No, TC No, Reason..."
-                    oninput="portalApp.filterTransfers()"
-                    style="padding-left:32px; padding-right:28px; width:100%; height:36px; border:1px solid #cbd5e1; border-radius:6px; font-size:0.83rem;">
+                    oninput="portalApp.filterTransfers()">
                   <button type="button" class="tc-clear-btn" id="tcClearSearchBtn"
                     onclick="document.getElementById('tcSearchInput').value=''; portalApp.filterTransfers();"
-                    title="Clear Search" style="position:absolute; right:8px; top:50%; transform:translateY(-50%); background:none; border:none; color:#94a3b8; cursor:pointer;">
+                    title="Clear Search">
                     <i class="fa-solid fa-xmark"></i>
                   </button>
                 </div>
 
-                <select id="tcClassFilter" class="tc-filter-select" onchange="portalApp.filterTransfers()" title="Filter by Class" style="height:36px; padding:0 0.65rem; border:1px solid #cbd5e1; border-radius:6px; font-size:0.83rem;">
-                  <option value="">All Classes</option>
-                  <option value="I">Class I</option>
-                  <option value="II">Class II</option>
-                  <option value="III">Class III</option>
-                  <option value="IV">Class IV</option>
-                  <option value="V">Class V</option>
-                  <option value="VI">Class VI</option>
-                  <option value="VII">Class VII</option>
-                  <option value="VIII">Class VIII</option>
-                  <option value="IX">Class IX</option>
-                  <option value="X">Class X</option>
-                </select>
+                <div class="tc-select-wrap">
+                  <select id="tcClassFilter" class="tc-filter-select" onchange="portalApp.filterTransfers()" title="Filter by Class">
+                    <option value="">All Classes</option>
+                    <option value="I">Class I</option>
+                    <option value="II">Class II</option>
+                    <option value="III">Class III</option>
+                    <option value="IV">Class IV</option>
+                    <option value="V">Class V</option>
+                    <option value="VI">Class VI</option>
+                    <option value="VII">Class VII</option>
+                    <option value="VIII">Class VIII</option>
+                    <option value="IX">Class IX</option>
+                    <option value="X">Class X</option>
+                  </select>
+                </div>
 
-                <select id="tcAcademicClearanceFilter" class="tc-filter-select" onchange="portalApp.filterTransfers()" title="Filter by Academic Clearance" style="height:36px; padding:0 0.65rem; border:1px solid #cbd5e1; border-radius:6px; font-size:0.83rem;">
-                  <option value="">All Academic Clearance</option>
-                  <option value="Cleared">Academic Cleared</option>
-                  <option value="Pending">Academic Pending</option>
-                </select>
+                <div class="tc-select-wrap">
+                  <select id="tcAcademicClearanceFilter" class="tc-filter-select" onchange="portalApp.filterTransfers()" title="Filter by Academic Clearance">
+                    <option value="">All Academic Clearance</option>
+                    <option value="Cleared">Academic Cleared</option>
+                    <option value="Pending">Academic Pending</option>
+                  </select>
+                </div>
 
-                <select id="tcFinancialClearanceFilter" class="tc-filter-select" onchange="portalApp.filterTransfers()" title="Filter by Financial Clearance" style="height:36px; padding:0 0.65rem; border:1px solid #cbd5e1; border-radius:6px; font-size:0.83rem;">
-                  <option value="">All Financial States</option>
-                  <option value="Cleared (No Dues)">Cleared (No Dues)</option>
-                  <option value="Dues Pending">Dues Pending</option>
-                  <option value="Statutory Undertaking">Statutory Undertaking</option>
-                </select>
+                <div class="tc-select-wrap">
+                  <select id="tcFinancialClearanceFilter" class="tc-filter-select" onchange="portalApp.filterTransfers()" title="Filter by Financial Clearance">
+                    <option value="">All Financial States</option>
+                    <option value="Cleared (No Dues)">Cleared (No Dues)</option>
+                    <option value="Dues Pending">Dues Pending</option>
+                    <option value="Statutory Undertaking">Statutory Undertaking</option>
+                  </select>
+                </div>
 
-                <select id="tcApprovalStatusFilter" class="tc-filter-select" onchange="portalApp.filterTransfers()" title="Filter by Approval Status" style="height:36px; padding:0 0.65rem; border:1px solid #cbd5e1; border-radius:6px; font-size:0.83rem;">
-                  <option value="">All Approval Statuses</option>
-                  <option value="Draft">Draft</option>
-                  <option value="Submitted">Submitted</option>
-                  <option value="Under Review">Under Review</option>
-                  <option value="Approved">Approved</option>
-                  <option value="Issued">Issued</option>
-                  <option value="On Hold">On Hold</option>
-                  <option value="Rejected">Rejected</option>
-                </select>
+                <div class="tc-select-wrap">
+                  <select id="tcApprovalStatusFilter" class="tc-filter-select" onchange="portalApp.filterTransfers()" title="Filter by Approval Status">
+                    <option value="">All Approval Statuses</option>
+                    <option value="Draft">Draft</option>
+                    <option value="Submitted">Submitted</option>
+                    <option value="Under Review">Under Review</option>
+                    <option value="Approved">Approved</option>
+                    <option value="Issued">Issued</option>
+                    <option value="On Hold">On Hold</option>
+                    <option value="Rejected">Rejected</option>
+                  </select>
+                </div>
               </div>
 
-              <div class="tc-toolbar-right" style="display:flex; align-items:center; gap:0.5rem; flex-wrap:wrap;">
-                <span class="tc-count-pill" id="tcFilterCountDisplay" style="font-size:0.8rem; background:#f1f5f9; padding:0.4rem 0.75rem; border-radius:6px; border:1px solid #e2e8f0;">
-                  <i class="fa-solid fa-list-check text-primary mr-1"></i> Showing <strong id="tcFilteredCount">8</strong> of
-                  <strong id="tcTotalCount">8</strong>
-                </span>
-                <button type="button" class="btn btn-outline-secondary btn-sm" onclick="portalApp.resetTransfersFilters()" title="Reset all filters">
-                  <i class="fa-solid fa-rotate-left"></i> Reset
-                </button>
-                <button type="button" class="btn btn-outline-primary btn-sm" onclick="portalApp.exportTransfersCSV()" title="Export current TC records to CSV">
-                  <i class="fa-solid fa-file-csv mr-1"></i> Export Register
-                </button>
-                <button type="button" class="btn btn-outline-primary btn-sm" onclick="portalApp.printTransfersTable()" title="Print transfers table">
-                  <i class="fa-solid fa-print mr-1"></i> Print
-                </button>
+              <!-- Tier 2: Governance Indicators and Register Operations -->
+              <div class="transfers-governance-row">
+                <div class="tc-stats-left">
+                  <span class="tc-count-pill" id="tcFilterCountDisplay">
+                    <i class="fa-solid fa-list-check text-primary mr-1"></i> Showing <strong id="tcFilteredCount">8</strong> of
+                    <strong id="tcTotalCount">8</strong> TC Requests
+                  </span>
+                  <span class="toolbar-tag-pill">
+                    <i class="fa-solid fa-calendar-check text-primary mr-1"></i> Academic Year 2026–2027
+                  </span>
+                  <span class="toolbar-tag-pill stat-badge-verified">
+                    <i class="fa-solid fa-stamp text-success mr-1"></i> AP Statutory TC Clearance Register
+                  </span>
+                </div>
+
+                <div class="tc-actions-right">
+                  <button type="button" class="btn btn-outline-secondary btn-sm btn-filter-reset"
+                    onclick="portalApp.resetTransfersFilters()" title="Reset all filters">
+                    <i class="fa-solid fa-rotate-left me-1"></i> Reset Filters
+                  </button>
+                  <button type="button" class="btn btn-outline-secondary btn-sm" onclick="portalApp.exportTransfersCSV()"
+                    title="Export current TC records to CSV">
+                    <i class="fa-solid fa-file-excel text-success me-1"></i> Export Register
+                  </button>
+                  <button type="button" class="btn btn-outline-primary btn-sm" onclick="portalApp.printTransfersTable()"
+                    title="Print transfers table">
+                    <i class="fa-solid fa-print me-1"></i> Print Register
+                  </button>
+                </div>
               </div>
             </div>
 

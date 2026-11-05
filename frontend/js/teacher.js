@@ -4784,7 +4784,420 @@ var teacherApp = (function () {
     showToast(`Timetable & Leave view: ${subKey.toUpperCase()}`, 'info');
   }
 
+  
+  /* =========================================================================
+     MODULE 19: FACULTY & TEACHING STAFF PORTAL ACTION HANDLERS (19.1 - 19.11)
+     ========================================================================= */
+
+  // 19.2 My Classes Actions
+  function openClassDetail(classId) {
+    showToast('Opening instructional workspace for Class ' + classId + '...', 'info');
+    switchSubTab('my-classes', 'roster');
+    const sel = document.getElementById('classRosterSelect');
+    if (sel) {
+      sel.value = classId;
+      renderClassListRoster(classId);
+    }
+  }
+
+  function viewClassRoster(classId) {
+    switchSubTab('my-classes', 'roster');
+    const sel = document.getElementById('classRosterSelect');
+    if (sel) {
+      sel.value = classId;
+      renderClassListRoster(classId);
+    }
+    showToast('Viewing student roster for Class ' + classId, 'info');
+  }
+
+  function openClassAttendance(classId) {
+    navigateTo('attendance');
+    const sel = document.getElementById('attendanceClassSelect');
+    if (sel) sel.value = classId;
+    showToast('Opened daily attendance register for Class ' + classId, 'info');
+  }
+
+  function viewClassAssignments(classId) {
+    navigateTo('assignments');
+    showToast('Viewing assignments and homework submissions for Class ' + classId, 'info');
+  }
+
+  function viewClassPerformance(classId) {
+    navigateTo('examinations');
+    showToast('Viewing permitted academic performance data for Class ' + classId, 'info');
+  }
+
+  // 19.3 Student Profiles Actions
+  function viewStudentProfile(studentId) {
+    showToast('Loading authorized dossier for student ' + studentId + '...', 'info');
+    viewStudentDossier(studentId);
+  }
+
+  function submitAcademicFeedbackModal(studentId) {
+    showToast('Opening academic evaluation and feedback docket for ' + studentId + '...', 'info');
+  }
+
+  function requestStudentCorrectionModal(studentId) {
+    showToast('Initiated student record correction request for ' + studentId + ' to Administration.', 'warning');
+  }
+
+  function contactAuthorizedGuardian(studentId) {
+    showToast('Contacting authorized guardian through official school portal communication channel...', 'info');
+    navigateTo('communication');
+  }
+
+  function switchStudentProfileTab(tabName) {
+    const tabStrip = document.getElementById('studentDetailTabStrip');
+    if (tabStrip) {
+      tabStrip.querySelectorAll('.tab-btn').forEach(btn => {
+        if (btn.getAttribute('data-tab') === tabName) btn.classList.add('active');
+        else btn.classList.remove('active');
+      });
+    }
+    const container = document.getElementById('studentTabContentArea');
+    if (!container) return;
+
+    if (tabName === 'overview') {
+      container.innerHTML = `
+        <div class="row g-3">
+          <div class="col-md-6">
+            <div class="p-3 rounded border" style="background:#f8fafc;">
+              <h6 class="font-bold text-dark mb-2"><i class="fa-solid fa-user me-1 text-primary"></i> Bio & Academic Overview</h6>
+              <div style="font-size:0.83rem; line-height:1.6; color:#334155;">
+                <div><strong>Full Legal Name:</strong> P. Kiran Kumar</div>
+                <div><strong>Admission No:</strong> SV-0082 &bull; <strong>PEN:</strong> 281115010080082</div>
+                <div><strong>Enrolled Class:</strong> Class 8A (Class Teacher: Ms. Anjali)</div>
+                <div><strong>Guardian:</strong> P. Venkateswarlu (Father &bull; Verified Contact)</div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="p-3 rounded border" style="background:#f8fafc;">
+              <h6 class="font-bold text-dark mb-2"><i class="fa-solid fa-chart-pie me-1 text-emerald"></i> Attendance & Standing</h6>
+              <div style="font-size:0.83rem; line-height:1.6; color:#334155;">
+                <div><strong>Attendance Percentage:</strong> <span class="badge" style="background:#ecfdf5; color:#059669; font-weight:700;">94.8% (Present: 182 / 192 Days)</span></div>
+                <div><strong>Academic Standing:</strong> Grade A1 (Distinction in Mathematics)</div>
+                <div><strong>Recent Assignments:</strong> 12 / 12 Submitted on time</div>
+                <div><strong>Official Remarks:</strong> Recommended for State Science Olympiad</div>
+              </div>
+            </div>
+          </div>
+        </div>`;
+    } else if (tabName === 'attendance') {
+      container.innerHTML = `
+        <div class="p-3 rounded border" style="background:#f8fafc;">
+          <h6 class="font-bold text-dark mb-2"><i class="fa-solid fa-clipboard-user me-1 text-primary"></i> Detailed Attendance Register (P. Kiran Kumar)</h6>
+          <p class="text-xs text-muted mb-2">Monthly attendance rolls, leave slips, and biometric timestamps.</p>
+          <div class="d-flex gap-2 flex-wrap mb-3">
+            <span class="badge" style="background:#ecfdf5; color:#059669; padding:6px 12px;">June: 96%</span>
+            <span class="badge" style="background:#ecfdf5; color:#059669; padding:6px 12px;">July: 95%</span>
+            <span class="badge" style="background:#ecfdf5; color:#059669; padding:6px 12px;">August: 94%</span>
+            <span class="badge" style="background:#ecfdf5; color:#059669; padding:6px 12px;">September: 96%</span>
+            <span class="badge" style="background:#ecfdf5; color:#059669; padding:6px 12px;">October: 93%</span>
+          </div>
+          <small class="text-muted"><i class="fa-solid fa-circle-check text-success me-1"></i> Meets AP statutory 75% minimum attendance requirement.</small>
+        </div>`;
+    } else if (tabName === 'progress') {
+      container.innerHTML = `
+        <div class="p-3 rounded border" style="background:#f8fafc;">
+          <h6 class="font-bold text-dark mb-2"><i class="fa-solid fa-chart-line me-1 text-primary"></i> Academic Progress Trajectory</h6>
+          <p class="text-xs text-muted mb-2">Longitudinal assessment tracking across formative tests, term exams, and classroom participation.</p>
+          <div style="font-size:0.83rem; color:#334155; line-height:1.6;">
+            <div><strong>Mathematics:</strong> 96% (Grade A1 &bull; Consistent Top Ranker)</div>
+            <div><strong>General Science:</strong> 92% (Grade A1)</div>
+            <div><strong>Social Studies:</strong> 88% (Grade A2)</div>
+            <div><strong>English Language:</strong> 90% (Grade A1)</div>
+          </div>
+        </div>`;
+    } else if (tabName === 'assignments') {
+      container.innerHTML = `
+        <div class="p-3 rounded border" style="background:#f8fafc;">
+          <h6 class="font-bold text-dark mb-2"><i class="fa-solid fa-file-pen me-1 text-primary"></i> Homework & Assignments Compliance</h6>
+          <div class="table-responsive">
+            <table class="table table-sm mb-0" style="font-size:0.82rem;">
+              <thead><tr><th>Assignment</th><th>Due Date</th><th>Submission Status</th><th>Score</th></tr></thead>
+              <tbody>
+                <tr><td>Linear Equations Problem Set 2.3</td><td>27 Oct 2026</td><td><span class="badge bg-success">Submitted</span></td><td>25/25 (A+)</td></tr>
+                <tr><td>Rational Numbers Concept Map</td><td>14 Oct 2026</td><td><span class="badge bg-success">Submitted</span></td><td>24/25 (A)</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>`;
+    } else if (tabName === 'results') {
+      container.innerHTML = `
+        <div class="p-3 rounded border" style="background:#f8fafc;">
+          <h6 class="font-bold text-dark mb-2"><i class="fa-solid fa-award me-1 text-primary"></i> Published Results (Official Board Approved)</h6>
+          <div style="font-size:0.83rem; color:#334155; line-height:1.6;">
+            <div><strong>FA-1 Examination:</strong> 94.5% &bull; Aggregate: 472/500 (Rank 1 in Section 8A)</div>
+            <div><strong>Diagnostic Baseline:</strong> First Class Distinction with Special Honors in Mathematics</div>
+          </div>
+        </div>`;
+    } else if (tabName === 'remarks') {
+      container.innerHTML = `
+        <div class="p-3 rounded border" style="background:#f8fafc;">
+          <h6 class="font-bold text-dark mb-2"><i class="fa-solid fa-feather me-1 text-primary"></i> Authorized Remarks & Conduct Log</h6>
+          <p class="text-xs text-muted mb-2">Statutory conduct, discipline records, and teacher remarks.</p>
+          <div class="p-2 border rounded bg-white" style="font-size:0.83rem; color:#1e293b;">
+            "Kiran demonstrates exceptional aptitude in analytical problem solving. Exhibits disciplined classroom behavior and active peer collaboration." &bull; <em>Ms. Anjali (Class Teacher)</em>
+          </div>
+        </div>`;
+    }
+  }
+
+  // 19.4 Mark Attendance Actions
+  function markAllPresentConfirm() {
+    if (window.confirm('Mark all 42 students present in Class 8A?')) {
+      const inputs = document.querySelectorAll('input[type="radio"][id^="att_p_"]');
+      inputs.forEach(inp => inp.checked = true);
+      const summary = document.getElementById('attendanceSummaryBlock');
+      if (summary) {
+        summary.innerHTML = `
+          <span style="font-size:0.8rem; font-weight:700; color:#334155;"><i class="fa-solid fa-chart-simple text-primary me-1"></i> Attendance summary:</span>
+          <span class="badge" style="background:#f1f5f9; color:#0f172a; font-weight:700;">Total: 42</span>
+          <span class="badge" style="background:#ecfdf5; color:#059669; font-weight:700;">Present: 42</span>
+          <span class="badge" style="background:#fef2f2; color:#dc2626; font-weight:700;">Absent: 0</span>
+          <span class="badge" style="background:#fffbeb; color:#d97706; font-weight:700;">Late: 0</span>`;
+      }
+      showToast('All 42 students marked Present. Remember to save draft or submit daily register.', 'success');
+    }
+  }
+
+  function changeIndividualStatus(roll, status) {
+    showToast('Updated Roll ' + roll + ' status to: ' + status, 'info');
+  }
+
+  function saveAttendanceDraft() {
+    showToast('Attendance draft saved locally for Class 8A.', 'info');
+  }
+
+  function submitDailyAttendanceRegister() {
+    const badge = document.getElementById('attendanceSubmissionStatusBadge');
+    if (badge) {
+      badge.className = 'badge';
+      badge.style.background = '#ecfdf5';
+      badge.style.color = '#059669';
+      badge.style.border = '1px solid #a7f3d0';
+      badge.innerHTML = '<i class="fa-solid fa-circle-check me-1"></i> Submitted to Office (Finalized)';
+    }
+    showToast('Daily attendance register formally submitted to Office & Principal.', 'success');
+  }
+
+  function requestAttendanceCorrectionModal() {
+    showToast('Attendance correction order request dispatched to Administration.', 'warning');
+  }
+
+  function switchAttendanceClass(classId) {
+    showToast('Loaded attendance sheet for Class ' + classId, 'info');
+  }
+
+  // 19.5 Lesson Plans & Syllabus Actions
+  function openCreateLessonPlanModal() {
+    showToast('Opening Lesson Plan creation form...', 'info');
+  }
+
+  function saveLessonPlanDraft() {
+    showToast('Lesson plan draft saved successfully.', 'info');
+  }
+
+  function submitLessonPlanForReview() {
+    showToast('Lesson plan submitted for Head of Department review.', 'success');
+  }
+
+  function markTopicComplete(planId) {
+    showToast('Topic marked as Completed! Syllabus tracker updated.', 'success');
+  }
+
+  function updateSyllabusProgressModal() {
+    showToast('Opening Term 1 syllabus progress updater...', 'info');
+  }
+
+  // 19.6 Assignments & Study Materials Actions
+  function attachStudyMaterialModal() {
+    showToast('Opening study material attachment docket (PDF / PPT / Worksheet)...', 'info');
+  }
+
+  function publishAssignment(id) {
+    showToast('Assignment ' + id + ' published to Student Portal and Parent App.', 'success');
+  }
+
+  function extendAssignmentDeadline(id) {
+    showToast('Submission deadline extended by 48 hours for assignment ' + id + '.', 'warning');
+  }
+
+  function reviewAssignmentSubmissions(id) {
+    showToast('Displaying 38 student homework submissions for evaluation.', 'info');
+  }
+
+  function gradeSubmission(id) {
+    showToast('Submission evaluated: Grade A+ (100%). Score recorded in gradebook.', 'success');
+  }
+
+  function provideSubmissionFeedback(id) {
+    showToast('Detailed pedagogical feedback sent to student.', 'info');
+  }
+
+  // 19.7 Examinations & Marks Actions
+  function openMarksEntry(id) {
+    showToast('Opening marks entry spreadsheet for ' + id + '...', 'info');
+  }
+
+  function saveMarksDraft() {
+    showToast('Marks spreadsheet draft saved successfully.', 'info');
+  }
+
+  function validateMarksSpreadsheet() {
+    showToast('Validation Complete: 42/42 marks within 0–25 score range. 0 missing entries.', 'success');
+  }
+
+  function submitMarksForReview() {
+    showToast('Marks ledger submitted for Vice Principal and Examination Board review.', 'success');
+  }
+
+  function correctReturnedEntries(id) {
+    showToast('Opening returned marks entry correction docket for ' + id + '...', 'info');
+  }
+
+  function viewApprovalOutcome(id) {
+    showToast('Approval Outcome: Approved by Vice Principal Sri Navva Anand.', 'success');
+  }
+
+  // 19.8 My Timetable Actions
+  function viewFullMasterTimetable() {
+    showToast('Displaying full institutional master timetable.', 'info');
+  }
+
+  function viewTimetableClassDetails(id) {
+    showToast('Class ' + id + ' Details: Room 204 • Mathematics • 42 Enrolled.', 'info');
+  }
+
+  function requestTimetableCorrectionModal() {
+    showToast('Submitting timetable adjustment request to Academic Dean...', 'info');
+  }
+
+  function acknowledgeSubstitution(id) {
+    showToast('Substitution ' + id + ' acknowledged. Period 4 cover docket confirmed.', 'success');
+  }
+
+  // 19.9 Communication Actions
+  function submitAnnouncementForApproval() {
+    showToast('Class announcement submitted for Principal executive review.', 'success');
+  }
+
+  function replyToParentMessageModal(id) {
+    showToast('Opening authorized parent messaging channel for ' + id + '...', 'info');
+  }
+
+  function scheduleParentMeetingModal(id) {
+    showToast('Parent meeting consultation scheduled for Wednesday 03:30 PM.', 'success');
+  }
+
+  function escalateConcernModal() {
+    showToast('Sensitive student concern escalated to Vice Principal & Guidance Counselor.', 'warning');
+  }
+
+  function viewMessageHistory() {
+    showToast('Displaying complete parent and administrative message history.', 'info');
+  }
+
+  // 19.10 Leave Management Actions
+  function openApplyLeaveModal() {
+    showToast('Opening formal Leave Application form...', 'info');
+    switchSubTab('leave', 'apply');
+  }
+
+  function uploadLeaveEvidenceModal() {
+    showToast('Opening evidence upload docket (Medical Certificate / Official Slip)...', 'info');
+  }
+
+  function editLeaveDraft(id) {
+    showToast('Editing leave draft ' + id + '...', 'info');
+  }
+
+  function cancelLeaveRequest(id) {
+    showToast('Leave request ' + id + ' cancelled in accordance with school leave policy.', 'warning');
+  }
+
+  function viewLeaveApprovalHistory(id) {
+    showToast('Displaying complete approval history for leave application ' + id + '.', 'info');
+  }
+
+  // 19.11 My Profile Actions
+  function requestProfileCorrectionModal() {
+    showToast('Profile correction request dispatched to HR & Administration.', 'info');
+  }
+
+  function updateContactDetailsModal() {
+    showToast('Contact details update form opened.', 'info');
+  }
+
+  function uploadProfileDocumentModal() {
+    showToast('Opening authorized credential upload docket...', 'info');
+  }
+
+  function openChangePasswordModal() {
+    showToast('Opening account security change password form...', 'info');
+  }
+
+  function manageSecuritySettingsModal() {
+    showToast('Displaying active devices and 2FA authentication settings.', 'info');
+  }
+
+
   return {
+    // Module 19: Faculty & Teaching Staff Actions
+    openClassDetail,
+    viewClassRoster,
+    openClassAttendance,
+    viewClassAssignments,
+    viewClassPerformance,
+    viewStudentProfile,
+    submitAcademicFeedbackModal,
+    requestStudentCorrectionModal,
+    contactAuthorizedGuardian,
+    switchStudentProfileTab,
+    markAllPresentConfirm,
+    changeIndividualStatus,
+    saveAttendanceDraft,
+    submitDailyAttendanceRegister,
+    requestAttendanceCorrectionModal,
+    switchAttendanceClass,
+    openCreateLessonPlanModal,
+    saveLessonPlanDraft,
+    submitLessonPlanForReview,
+    markTopicComplete,
+    updateSyllabusProgressModal,
+    attachStudyMaterialModal,
+    publishAssignment,
+    extendAssignmentDeadline,
+    reviewAssignmentSubmissions,
+    gradeSubmission,
+    provideSubmissionFeedback,
+    openMarksEntry,
+    saveMarksDraft,
+    validateMarksSpreadsheet,
+    submitMarksForReview,
+    correctReturnedEntries,
+    viewApprovalOutcome,
+    viewFullMasterTimetable,
+    viewTimetableClassDetails,
+    requestTimetableCorrectionModal,
+    acknowledgeSubstitution,
+    submitAnnouncementForApproval,
+    replyToParentMessageModal,
+    scheduleParentMeetingModal,
+    escalateConcernModal,
+    viewMessageHistory,
+    openApplyLeaveModal,
+    uploadLeaveEvidenceModal,
+    editLeaveDraft,
+    cancelLeaveRequest,
+    viewLeaveApprovalHistory,
+    requestProfileCorrectionModal,
+    updateContactDetailsModal,
+    uploadProfileDocumentModal,
+    openChangePasswordModal,
+    manageSecuritySettingsModal,
+
     renderMyClassesSubTab,
     renderClassListRoster,
     renderParentContactsTable,
