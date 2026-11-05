@@ -56,12 +56,12 @@ school-erp/
 
 | Portal | URL / Clean Route | Target Architecture Path | Description |
 | :--- | :--- | :--- | :--- |
-| **Public Website** | [http://localhost:8080/](http://localhost:8080/) | `frontend/public-website/` | Public admissions, campus tour, academics, notice board, and gallery |
-| **Platform Admin** | [http://localhost:8080/platform-admin](http://localhost:8080/platform-admin) | `frontend/platform-admin/` | System-wide platform governance, server health, multi-campus management, security |
-| **Administration Portal** | [http://localhost:8080/management](http://localhost:8080/management) | `frontend/administration-portal/` | Executive dashboard for Principal & Management: full Attendance with 5 submenus, Academics, Timetable, Exams, Fees |
-| **Faculty Portal** | [http://localhost:8080/teacher](http://localhost:8080/teacher) | `frontend/faculty-portal/` | Teacher workspace: roster roll call, marks entry, class schedule, leave approvals |
-| **Student Portal** | [http://localhost:8080/student](http://localhost:8080/student) | `frontend/future-portals/student-portal/` | Student self-service: attendance summary, homework, report cards, fee status |
-| **Parent Portal** | [http://localhost:8080/parent](http://localhost:8080/parent) | `frontend/future-portals/parent-portal/` | Guardian dashboard: real-time ward tracking, exam results, fee payments, PTM requests |
+| **Public Website** | [http://localhost:8080/](http://localhost:5000/) | `frontend/public-website/` | Public admissions, campus tour, academics, notice board, and gallery |
+| **Platform Admin** | [http://localhost:8080/platform-admin](http://localhost:5000/platform-admin) | `frontend/platform-admin/` | System-wide platform governance, server health, multi-campus management, security |
+| **Administration Portal** | [http://localhost:8080/management](http://localhost:5000/management) | `frontend/administration-portal/` | Executive dashboard for Principal & Management: full Attendance with 5 submenus, Academics, Timetable, Exams, Fees |
+| **Faculty Portal** | [http://localhost:8080/teacher](http://localhost:5000/teacher) | `frontend/faculty-portal/` | Teacher workspace: roster roll call, marks entry, class schedule, leave approvals |
+| **Student Portal** | [http://localhost:8080/student](http://localhost:5000/student) | `frontend/future-portals/student-portal/` | Student self-service: attendance summary, homework, report cards, fee status |
+| **Parent Portal** | [http://localhost:8080/parent](http://localhost:5000/parent) | `frontend/future-portals/parent-portal/` | Guardian dashboard: real-time ward tracking, exam results, fee payments, PTM requests |
 
 ---
 
