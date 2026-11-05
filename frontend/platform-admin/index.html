@@ -1020,112 +1020,637 @@
       <!-- =======================================================================
            MODULE 3: SCHOOL CONFIGURATION (#view-config)
            ======================================================================= -->
+      <!-- =======================================================================
+           MODULE 4: SCHOOL CONFIGURATION (#view-config)
+           Institution-wide Settings, Academic Policies, Operational Defaults & Templates
+           Compliant with Sri Vidya Educational Trust Multi-Tenant Standards
+           ======================================================================= -->
       <section class="portal-view" id="view-config">
-        <div class="pa-card">
-          <div class="pa-card-header">
-            <div>
-              <h3 class="pa-card-title"><i class="fa-solid fa-sliders text-primary"></i> School Configuration &amp;
-                Feature Flags</h3>
-              <p class="pa-card-desc">Set institutional policies, academic terms, grading scales, and hardware
-                integration modules</p>
+
+        <!-- Page Header -->
+        <div class="pa-page-header" style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1.25rem; flex-wrap: wrap; gap: 1rem;">
+          <div>
+            <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.25rem;">
+              <span class="pa-view-badge" style="background: rgba(79, 70, 229, 0.1); color: var(--pa-primary, #4F46E5); font-weight: 700; font-size: 0.72rem; padding: 2px 8px; border-radius: 4px; text-transform: uppercase;">
+                Core Operations
+              </span>
+              <span style="font-size: 0.75rem; color: #64748B;">• Institution-Wide Environmental Standards</span>
             </div>
-            <button class="btn-pa btn-pa-primary"
-              onclick="platformApp.showToast('Configuration saved and distributed to cluster!', 'success')">
-              <i class="fa-solid fa-floppy-disk"></i> Save Global Changes
-            </button>
+            <h1 style="margin: 0; font-size: 1.65rem; font-weight: 800; color: var(--color-text-main); display: flex; align-items: center; gap: 0.6rem;">
+              <i class="fa-solid fa-sliders text-primary"></i> School Configuration
+            </h1>
+            <p style="margin: 4px 0 0; color: #64748B; font-size: 0.88rem;">
+              Configure institutional identity, academic calendars, grading rules, operational session defaults, and versioned document templates.
+            </p>
           </div>
 
-          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); gap: 1.5rem;">
+          <!-- Scope Switcher & Live Status -->
+          <div class="pa-scope-bar" style="margin: 0; padding: 0.5rem 1rem;">
+            <div style="display: flex; align-items: center; gap: 0.6rem;">
+              <label for="cfgInstitutionScope" style="font-size: 0.8rem; font-weight: 700; color: #475569; margin: 0;">Configuring Campus:</label>
+              <select id="cfgInstitutionScope" class="pa-select" style="font-weight: 700; min-width: 250px; height: 34px; font-size: 0.82rem;" onchange="platformApp.switchConfigInstitution(this.value)">
+                <option value="INST-001" selected>Sri Vidya E.M High School (Main Campus)</option>
+                <option value="INST-002">Sri Vidya Junior College (SV-INTER)</option>
+                <option value="INST-003">Sri Vidya Kids Academy (SV-KIDS)</option>
+              </select>
+            </div>
+            <div style="display: flex; align-items: center; gap: 0.5rem;">
+              <span class="pa-status-pill status-pill-published" id="cfgGlobalStatusBadge">
+                <i class="fa-solid fa-circle-check"></i> Published (Live v3)
+              </span>
+            </div>
+          </div>
+        </div>
 
-            <!-- Academic Standards -->
-            <div>
-              <h4 style="margin: 0 0 0.85rem; font-size: 0.95rem; font-weight: 700; color: var(--color-text-main);">
-                <i class="fa-solid fa-graduation-cap text-primary"></i> Academic &amp; Grading Standards
-              </h4>
+        <!-- Sub-Navigation (Sections 4.1, 4.2, 4.3, 4.4) -->
+        <div class="pa-config-subnav" id="cfgSubnav">
+          <button type="button" class="pa-config-tab-btn active" id="btnCfgTabProfile" onclick="platformApp.switchConfigTab('profile')">
+            <i class="fa-solid fa-building-columns"></i> 4.1 School Profile
+          </button>
+          <button type="button" class="pa-config-tab-btn" id="btnCfgTabAcademic" onclick="platformApp.switchConfigTab('academic')">
+            <i class="fa-solid fa-graduation-cap"></i> 4.2 Academic Configuration
+          </button>
+          <button type="button" class="pa-config-tab-btn" id="btnCfgTabOperational" onclick="platformApp.switchConfigTab('operational')">
+            <i class="fa-solid fa-clock"></i> 4.3 Operational Defaults
+          </button>
+          <button type="button" class="pa-config-tab-btn" id="btnCfgTabTemplates" onclick="platformApp.switchConfigTab('templates')">
+            <i class="fa-solid fa-file-invoice"></i> 4.4 Document &amp; Report Templates
+          </button>
+        </div>
+
+        <!-- =====================================================================
+             SUB-TAB 1: 4.1 SCHOOL PROFILE
+             ===================================================================== -->
+        <div class="pa-config-pane" id="cfgPaneProfile">
+          <!-- Profile Action Toolbar -->
+          <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.75rem; margin-bottom: 1.25rem; background: #FFFFFF; border: 1px solid #E2E8F0; border-radius: 10px; padding: 0.75rem 1.25rem;">
+            <div style="display: flex; align-items: center; gap: 0.5rem;">
+              <span style="font-size: 0.85rem; font-weight: 700; color: var(--color-text-main);">
+                <i class="fa-solid fa-school text-primary mr-1"></i> Profile Lifecycle:
+              </span>
+              <span class="pa-status-pill status-pill-published" id="profileStatusBadge">
+                <i class="fa-solid fa-check"></i> Published
+              </span>
+              <span style="font-size: 0.78rem; color: #64748B;">• Version <strong id="profileVersionNum">3</strong></span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
+              <button type="button" class="btn-pa btn-pa-secondary" onclick="platformApp.previewSchoolProfileLetterhead()" id="btnProfilePreview" title="Preview Official Institutional Letterhead">
+                <i class="fa-solid fa-eye me-1"></i> Preview
+              </button>
+              <button type="button" class="btn-pa btn-pa-secondary" onclick="platformApp.saveSchoolProfileDraft()" id="btnProfileSaveDraft" title="Save changes as Draft without publishing">
+                <i class="fa-solid fa-floppy-disk me-1"></i> Save Draft
+              </button>
+              <button type="button" class="btn-pa btn-pa-secondary" onclick="platformApp.submitSchoolProfileForApproval()" id="btnProfileSubmitApproval" title="Submit profile changes to Trust Committee">
+                <i class="fa-solid fa-paper-plane me-1"></i> Submit for Approval
+              </button>
+              <button type="button" class="btn-pa btn-pa-primary" onclick="platformApp.publishSchoolProfile()" id="btnProfilePublish" title="Promote draft directly to Live Published Version">
+                <i class="fa-solid fa-circle-check me-1"></i> Publish Changes
+              </button>
+              <button type="button" class="btn-pa btn-pa-secondary" onclick="platformApp.viewProfileChangeHistory()" id="btnProfileHistory" title="View Audit Trail of Profile Revisions">
+                <i class="fa-solid fa-clock-rotate-left me-1"></i> Change History
+              </button>
+            </div>
+          </div>
+
+          <!-- Profile Fields Grid -->
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 1.25rem;">
+
+            <!-- Column 1: Identity & Official Affiliation -->
+            <div class="pa-field-card">
+              <div class="pa-field-card-title">
+                <i class="fa-solid fa-id-badge text-primary"></i> Institutional Identity &amp; Statutory Affiliation
+              </div>
 
               <div class="mb-3">
-                <label style="font-size: 0.8rem; font-weight: 600; display: block; margin-bottom: 0.35rem;">Primary
-                  Board Curriculum</label>
-                <select class="pa-select" style="width: 100%;">
-                  <option selected>Andhra Pradesh State Board (AP SSC - English Medium)</option>
-                  <option>Central Board of Secondary Education (CBSE)</option>
-                  <option>Dual-Stream (AP Board + CBSE Integrated Track)</option>
+                <label style="font-size: 0.8rem; font-weight: 700; display: block; margin-bottom: 0.35rem;">Official School Name *</label>
+                <input type="text" id="cfgSchoolName" class="pa-search-input" value="Sri Vidya English Medium High School (Main Campus)" style="width: 100%;">
+              </div>
+
+              <div class="mb-3">
+                <label style="font-size: 0.8rem; font-weight: 700; display: block; margin-bottom: 0.35rem;">Display / Short Name</label>
+                <input type="text" id="cfgDisplayName" class="pa-search-input" value="Sri Vidya Main Campus" style="width: 100%;">
+              </div>
+
+              <div class="mb-3">
+                <label style="font-size: 0.8rem; font-weight: 700; display: block; margin-bottom: 0.35rem;">Affiliation Board &amp; Curriculum</label>
+                <select id="cfgBoardAffiliation" class="pa-select" style="width: 100%;">
+                  <option selected>Andhra Pradesh State SSC Board (English Medium)</option>
+                  <option>Board of Intermediate Education AP (BIEAP)</option>
+                  <option>Early Years Foundation Stage (EYFS)</option>
+                  <option>CBSE Affiliated Stream</option>
                 </select>
               </div>
 
-              <div class="mb-3">
-                <label style="font-size: 0.8rem; font-weight: 600; display: block; margin-bottom: 0.35rem;">Current
-                  Academic Year</label>
-                <input type="text" class="pa-search-input" value="2025–26 (Term 1 &amp; Term 2)" style="width: 100%;">
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;" class="mb-3">
+                <div>
+                  <label style="font-size: 0.8rem; font-weight: 700; display: block; margin-bottom: 0.35rem;">Affiliation Code</label>
+                  <input type="text" id="cfgAffiliationCode" class="pa-search-input" value="AP-SSC-GUN-1923" style="width: 100%;">
+                </div>
+                <div>
+                  <label style="font-size: 0.8rem; font-weight: 700; display: block; margin-bottom: 0.35rem;">Recognition Order No</label>
+                  <input type="text" id="cfgRecognitionNo" class="pa-search-input" value="RC.No. 4521/B2/2017" style="width: 100%;">
+                </div>
               </div>
 
-              <div class="mb-3">
-                <label style="font-size: 0.8rem; font-weight: 600; display: block; margin-bottom: 0.35rem;">Admission
-                  Number Auto-Generation Prefix</label>
-                <input type="text" class="pa-search-input" value="SV-" style="width: 100%;">
-                <small style="color: #64748B; font-size: 0.75rem;">Generates format: SV-0001 to SV-9999 with automatic
-                  uniqueness check</small>
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;">
+                <div>
+                  <label style="font-size: 0.8rem; font-weight: 700; display: block; margin-bottom: 0.35rem;">UDISE+ Code</label>
+                  <input type="text" id="cfgUdise" class="pa-search-input" value="28172901923" style="width: 100%;">
+                </div>
+                <div>
+                  <label style="font-size: 0.8rem; font-weight: 700; display: block; margin-bottom: 0.35rem;">Category</label>
+                  <input type="text" id="cfgSchoolCategory" class="pa-search-input" value="Class 1 to 10 (Co-Ed)" style="width: 100%;">
+                </div>
               </div>
             </div>
 
-            <!-- Hardware & Cloud Integration Flags -->
-            <div>
-              <h4 style="margin: 0 0 0.85rem; font-size: 0.95rem; font-weight: 700; color: var(--color-text-main);">
-                <i class="fa-solid fa-microchip text-primary"></i> Platform Integration Toggles
-              </h4>
-
-              <div class="pa-switch-label">
-                <div>
-                  <div style="font-weight: 600; font-size: 0.875rem;">Biometric Fingerprint Devices</div>
-                  <div style="font-size: 0.75rem; color: #64748B;">Real-time teacher and staff biometric attendance
-                    gateway</div>
-                </div>
-                <label class="pa-switch">
-                  <input type="checkbox" checked onchange="platformApp.toggleFeature('Biometric Devices')">
-                  <span class="pa-slider"></span>
-                </label>
+            <!-- Column 2: Address, Contact & Domain -->
+            <div class="pa-field-card">
+              <div class="pa-field-card-title">
+                <i class="fa-solid fa-map-location-dot text-primary"></i> Address, Contact &amp; Digital Presence
               </div>
 
-              <div class="pa-switch-label">
-                <div>
-                  <div style="font-weight: 600; font-size: 0.875rem;">School Van Fleet GPS Tracking</div>
-                  <div style="font-size: 0.75rem; color: #64748B;">Live transit map for student transportation &amp;
-                    parents</div>
-                </div>
-                <label class="pa-switch">
-                  <input type="checkbox" checked onchange="platformApp.toggleFeature('GPS Fleet Tracking')">
-                  <span class="pa-slider"></span>
-                </label>
+              <div class="mb-3">
+                <label style="font-size: 0.8rem; font-weight: 700; display: block; margin-bottom: 0.35rem;">Campus Street Address</label>
+                <input type="text" id="cfgAddressStreet" class="pa-search-input" value="1-23 Main Road, Tilak Nagar" style="width: 100%;">
               </div>
 
-              <div class="pa-switch-label">
+              <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.6rem;" class="mb-3">
                 <div>
-                  <div style="font-weight: 600; font-size: 0.875rem;">Online Fee Gateway (Razorpay/UPI)</div>
-                  <div style="font-size: 0.75rem; color: #64748B;">Accept instant card, NetBanking, and UPI payments
+                  <label style="font-size: 0.78rem; font-weight: 700; display: block; margin-bottom: 0.35rem;">City</label>
+                  <input type="text" id="cfgAddressCity" class="pa-search-input" value="Guntur" style="width: 100%;">
+                </div>
+                <div>
+                  <label style="font-size: 0.78rem; font-weight: 700; display: block; margin-bottom: 0.35rem;">State</label>
+                  <input type="text" id="cfgAddressState" class="pa-search-input" value="Andhra Pradesh" style="width: 100%;">
+                </div>
+                <div>
+                  <label style="font-size: 0.78rem; font-weight: 700; display: block; margin-bottom: 0.35rem;">Postal Code</label>
+                  <input type="text" id="cfgAddressPin" class="pa-search-input" value="522002" style="width: 100%;">
+                </div>
+              </div>
+
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;" class="mb-3">
+                <div>
+                  <label style="font-size: 0.8rem; font-weight: 700; display: block; margin-bottom: 0.35rem;">Official Phone</label>
+                  <input type="text" id="cfgContactPhone" class="pa-search-input" value="+91 863 2234567" style="width: 100%;">
+                </div>
+                <div>
+                  <label style="font-size: 0.8rem; font-weight: 700; display: block; margin-bottom: 0.35rem;">Alternate Phone</label>
+                  <input type="text" id="cfgContactAltPhone" class="pa-search-input" value="+91 9440123456" style="width: 100%;">
+                </div>
+              </div>
+
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;" class="mb-3">
+                <div>
+                  <label style="font-size: 0.8rem; font-weight: 700; display: block; margin-bottom: 0.35rem;">Official Email</label>
+                  <input type="email" id="cfgContactEmail" class="pa-search-input" value="srividyaschools2017@gmail.com" style="width: 100%;">
+                </div>
+                <div>
+                  <label style="font-size: 0.8rem; font-weight: 700; display: block; margin-bottom: 0.35rem;">Official Domain</label>
+                  <input type="text" id="cfgOfficialEmailDomain" class="pa-search-input" value="srividya.edu.in" style="width: 100%;">
+                </div>
+              </div>
+
+              <div>
+                <label style="font-size: 0.8rem; font-weight: 700; display: block; margin-bottom: 0.35rem;">Public Website URL</label>
+                <input type="url" id="cfgWebsiteUrl" class="pa-search-input" value="https://srividya.edu.in" style="width: 100%;">
+              </div>
+            </div>
+
+            <!-- Column 3: Authorized Signatories & School Branding -->
+            <div class="pa-field-card">
+              <div class="pa-field-card-title">
+                <i class="fa-solid fa-stamp text-primary"></i> Authorized Signatories &amp; Branding
+              </div>
+
+              <!-- Signatories List -->
+              <div class="mb-3">
+                <label style="font-size: 0.8rem; font-weight: 700; display: block; margin-bottom: 0.35rem;">Authorized Document Signatories</label>
+                <div style="background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 8px; padding: 0.6rem;" id="cfgSignatoriesContainer">
+                  <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.35rem 0; border-bottom: 1px solid #F1F5F9;">
+                    <div>
+                      <strong style="font-size: 0.82rem; color: #0F172A;">Smt. Gorle Varalakshmi</strong>
+                      <div style="font-size: 0.72rem; color: #64748B;">Institutional Principal (Primary Signatory)</div>
+                    </div>
+                    <span class="domain-dns-badge dns-badge-verified"><i class="fa-solid fa-check"></i> Active</span>
+                  </div>
+                  <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.35rem 0; border-bottom: 1px solid #F1F5F9;">
+                    <div>
+                      <strong style="font-size: 0.82rem; color: #0F172A;">Sri Navva Anand</strong>
+                      <div style="font-size: 0.72rem; color: #64748B;">Vice Principal &amp; HOD Maths</div>
+                    </div>
+                    <span class="domain-dns-badge dns-badge-verified"><i class="fa-solid fa-check"></i> Active</span>
+                  </div>
+                  <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.35rem 0;">
+                    <div>
+                      <strong style="font-size: 0.82rem; color: #0F172A;">Sri K. Rama Rao</strong>
+                      <div style="font-size: 0.72rem; color: #64748B;">Trust Correspondent &amp; Secretary</div>
+                    </div>
+                    <span class="domain-dns-badge dns-badge-verified"><i class="fa-solid fa-check"></i> Active</span>
                   </div>
                 </div>
-                <label class="pa-switch">
-                  <input type="checkbox" checked onchange="platformApp.toggleFeature('Online Fee Payment Gateway')">
-                  <span class="pa-slider"></span>
-                </label>
               </div>
 
-              <div class="pa-switch-label">
+              <!-- Branding Colors -->
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;" class="mb-3">
                 <div>
-                  <div style="font-weight: 600; font-size: 0.875rem;">WhatsApp &amp; SMS Parent Dispatch</div>
-                  <div style="font-size: 0.75rem; color: #64748B;">Automated circulars, attendance alerts, and fee
-                    reminders</div>
+                  <label style="font-size: 0.8rem; font-weight: 700; display: block; margin-bottom: 0.35rem;">Primary Brand Color</label>
+                  <div style="display: flex; align-items: center; gap: 0.4rem;">
+                    <input type="color" id="cfgBrandPrimary" value="#1E3A8A" style="width: 38px; height: 34px; border: none; cursor: pointer; border-radius: 4px;">
+                    <input type="text" id="cfgBrandPrimaryText" class="pa-search-input" value="#1E3A8A" style="font-family: monospace; font-size: 0.8rem; width: 100%;">
+                  </div>
                 </div>
-                <label class="pa-switch">
-                  <input type="checkbox" checked onchange="platformApp.toggleFeature('Parent Dispatch Gateway')">
-                  <span class="pa-slider"></span>
-                </label>
+                <div>
+                  <label style="font-size: 0.8rem; font-weight: 700; display: block; margin-bottom: 0.35rem;">Accent Color</label>
+                  <div style="display: flex; align-items: center; gap: 0.4rem;">
+                    <input type="color" id="cfgBrandAccent" value="#F59E0B" style="width: 38px; height: 34px; border: none; cursor: pointer; border-radius: 4px;">
+                    <input type="text" id="cfgBrandAccentText" class="pa-search-input" value="#F59E0B" style="font-family: monospace; font-size: 0.8rem; width: 100%;">
+                  </div>
+                </div>
               </div>
 
+              <!-- Official Header Lines -->
+              <div>
+                <label style="font-size: 0.8rem; font-weight: 700; display: block; margin-bottom: 0.35rem;">Document Header Title</label>
+                <input type="text" id="cfgHeaderTitle" class="pa-search-input" value="SRI VIDYA ENGLISH MEDIUM HIGH SCHOOL" style="width: 100%; font-weight: 700; margin-bottom: 0.4rem;">
+                <input type="text" id="cfgHeaderSubtitle" class="pa-search-input" value="Recognized by Govt. of Andhra Pradesh • Affiliated to AP State SSC Board" style="width: 100%; font-size: 0.78rem;">
+              </div>
             </div>
 
           </div>
         </div>
+
+        <!-- =====================================================================
+             SUB-TAB 2: 4.2 ACADEMIC CONFIGURATION
+             ===================================================================== -->
+        <div class="pa-config-pane" id="cfgPaneAcademic" style="display: none;">
+
+          <!-- Historical Immutability Lock Banner -->
+          <div class="pa-policy-lock-banner">
+            <i class="fa-solid fa-shield-halved" style="color: #D97706; font-size: 1.4rem; margin-top: 2px;"></i>
+            <div>
+              <strong style="color: #92400E; font-size: 0.92rem;">Historical Policy Integrity Guarantee:</strong>
+              <div style="font-size: 0.82rem; color: #78350F; margin-top: 2px; line-height: 1.4;">
+                Changes to grading scales, roll numbering conventions, or examination weightage apply <strong>strictly to the currently active or selected academic year</strong>.
+                Historical academic records, published marks gazettes, and archive dossiers (AY 2024–25, 2025–26) will <strong>never be silently rewritten or altered</strong>.
+              </div>
+            </div>
+          </div>
+
+          <!-- Academic Action Toolbar -->
+          <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.75rem; margin-bottom: 1.25rem; background: #FFFFFF; border: 1px solid #E2E8F0; border-radius: 10px; padding: 0.75rem 1.25rem;">
+            <div style="display: flex; align-items: center; gap: 0.6rem;">
+              <span style="font-size: 0.85rem; font-weight: 700; color: var(--color-text-main);">
+                <i class="fa-solid fa-calendar-check text-primary mr-1"></i> Active Policy Cycle:
+              </span>
+              <span class="pa-status-pill status-pill-published" id="acadStatusBadge">
+                <i class="fa-solid fa-circle-check"></i> Published (AY 2026–2027)
+              </span>
+              <span style="font-size: 0.78rem; color: #64748B;">• Policy Version <strong id="acadVersionNum">2.0</strong></span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
+              <button type="button" class="btn-pa btn-pa-secondary" onclick="platformApp.validateAcademicConfig()" id="btnAcadValidate" title="Run logical consistency check on terms, grading, and pass criteria">
+                <i class="fa-solid fa-list-check me-1"></i> Validate
+              </button>
+              <button type="button" class="btn-pa btn-pa-secondary" onclick="platformApp.saveAcademicDraft()" id="btnAcadDraft" title="Save draft configuration">
+                <i class="fa-solid fa-floppy-disk me-1"></i> Edit Draft
+              </button>
+              <button type="button" class="btn-pa btn-pa-primary" onclick="platformApp.publishAcademicConfig()" id="btnAcadPublish" title="Publish configuration for the selected academic year">
+                <i class="fa-solid fa-stamp me-1"></i> Publish for Selected AY
+              </button>
+              <button type="button" class="btn-pa btn-pa-secondary" onclick="platformApp.viewAcademicVersions()" id="btnAcadVersions" title="View historical academic policy snapshots">
+                <i class="fa-solid fa-code-compare me-1"></i> View Previous Versions
+              </button>
+            </div>
+          </div>
+
+          <!-- Academic Settings 2-Column Grid -->
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); gap: 1.25rem;">
+
+            <!-- Left: Calendar, Naming & Policies -->
+            <div>
+              <div class="pa-field-card">
+                <div class="pa-field-card-title">
+                  <i class="fa-solid fa-calendar-days text-primary"></i> Academic Year Structure &amp; Term Boundaries
+                </div>
+
+                <div class="mb-3">
+                  <label style="font-size: 0.8rem; font-weight: 700; display: block; margin-bottom: 0.35rem;">Academic Year Cycle</label>
+                  <select id="cfgAyStructure" class="pa-select" style="width: 100%;">
+                    <option selected>June – April (10 Months Academic Year - State Board Standard)</option>
+                    <option>April – March (12 Months - CBSE Stream)</option>
+                  </select>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;" class="mb-3">
+                  <div>
+                    <label style="font-size: 0.8rem; font-weight: 700; display: block; margin-bottom: 0.35rem;">Target Academic Year</label>
+                    <input type="text" id="cfgAyCurrent" class="pa-search-input" value="2026–2027" style="width: 100%; font-weight: 700;">
+                  </div>
+                  <div>
+                    <label style="font-size: 0.8rem; font-weight: 700; display: block; margin-bottom: 0.35rem;">Terms / Semesters</label>
+                    <input type="text" class="pa-search-input" value="2 Terms (Term 1 &amp; Term 2)" readonly style="width: 100%; background: #F1F5F9;">
+                  </div>
+                </div>
+
+                <div style="background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 8px; padding: 0.75rem;">
+                  <div style="font-size: 0.78rem; font-weight: 700; color: #1E293B; margin-bottom: 0.35rem;">Configured Terms:</div>
+                  <div style="font-size: 0.76rem; color: #475569; display: flex; justify-content: space-between; padding: 2px 0;">
+                    <span>Term 1 (Formative &amp; Mid-Term):</span>
+                    <strong>12 Jun 2026 – 31 Oct 2026 (50% Weight)</strong>
+                  </div>
+                  <div style="font-size: 0.76rem; color: #475569; display: flex; justify-content: space-between; padding: 2px 0;">
+                    <span>Term 2 (Summative &amp; Annual):</span>
+                    <strong>02 Nov 2026 – 24 Apr 2027 (50% Weight)</strong>
+                  </div>
+                </div>
+              </div>
+
+              <div class="pa-field-card">
+                <div class="pa-field-card-title">
+                  <i class="fa-solid fa-list-ol text-primary"></i> Naming Conventions &amp; Student Identifiers
+                </div>
+
+                <div class="mb-3">
+                  <label style="font-size: 0.8rem; font-weight: 700; display: block; margin-bottom: 0.35rem;">Class Naming Convention</label>
+                  <select id="cfgClassNaming" class="pa-select" style="width: 100%;">
+                    <option selected>Roman Numerals (Class I to Class X)</option>
+                    <option>Standard Numeric (Grade 1 to Grade 10)</option>
+                  </select>
+                </div>
+
+                <div class="mb-3">
+                  <label style="font-size: 0.8rem; font-weight: 700; display: block; margin-bottom: 0.35rem;">Section Naming Rule</label>
+                  <select id="cfgSectionNaming" class="pa-select" style="width: 100%;">
+                    <option selected>Standard Alphabetical Sections (A, B, C, D)</option>
+                    <option>Wing Naming (Rose, Lotus, Jasmine)</option>
+                  </select>
+                </div>
+
+                <div class="mb-3">
+                  <label style="font-size: 0.8rem; font-weight: 700; display: block; margin-bottom: 0.35rem;">Subject Code Format</label>
+                  <input type="text" id="cfgSubjectCodeFormat" class="pa-search-input" value="SUB-LEVEL-SEQ (e.g. MAT-X-01, TEL-X-02)" style="width: 100%;">
+                </div>
+
+                <div class="mb-3">
+                  <label style="font-size: 0.8rem; font-weight: 700; display: block; margin-bottom: 0.35rem;">Roll Number Policy</label>
+                  <select id="cfgRollNumberPolicy" class="pa-select" style="width: 100%;">
+                    <option selected>Class-Section Alphabetical Student Sort (01 to 60)</option>
+                    <option>Admission Order Sequential</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label style="font-size: 0.8rem; font-weight: 700; display: block; margin-bottom: 0.35rem;">Admission Number Auto-Generation Policy</label>
+                  <div style="display: flex; gap: 0.5rem; align-items: center;">
+                    <input type="text" id="cfgAdmPrefix" class="pa-search-input" value="SV-" style="width: 80px; font-weight: 700;">
+                    <input type="text" id="cfgAdmFormat" class="pa-search-input" value="SV-YYYY-NNNN" readonly style="flex: 1; background: #F1F5F9; font-family: monospace;">
+                  </div>
+                  <small style="color: #059669; font-size: 0.74rem; display: block; margin-top: 3px;">
+                    <i class="fa-solid fa-check-circle"></i> Automatic cryptographic uniqueness constraint active.
+                  </small>
+                </div>
+              </div>
+            </div>
+
+            <!-- Right: Examination, Grading Scales & Attendance Rules -->
+            <div>
+              <div class="pa-field-card">
+                <div class="pa-field-card-title">
+                  <i class="fa-solid fa-square-poll-vertical text-primary"></i> Examination Categories &amp; Grading Scales
+                </div>
+
+                <!-- Exam Categories -->
+                <div class="mb-3">
+                  <label style="font-size: 0.8rem; font-weight: 700; display: block; margin-bottom: 0.35rem;">Statutory Examination Cycles</label>
+                  <div style="background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 8px; padding: 0.6rem;">
+                    <div style="display: flex; justify-content: space-between; font-size: 0.76rem; padding: 3px 0; border-bottom: 1px solid #F1F5F9;">
+                      <span>FA1 &amp; FA2 (Formative Assessments):</span>
+                      <strong>50 Marks each (10% Weightage each)</strong>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; font-size: 0.76rem; padding: 3px 0; border-bottom: 1px solid #F1F5F9;">
+                      <span>SA1 (Half-Yearly Summative Assessment):</span>
+                      <strong>100 Marks (30% Weightage)</strong>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; font-size: 0.76rem; padding: 3px 0; border-bottom: 1px solid #F1F5F9;">
+                      <span>FA3 &amp; FA4 (Term 2 Formatives):</span>
+                      <strong>50 Marks each (10% Weightage each)</strong>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; font-size: 0.76rem; padding: 3px 0;">
+                      <span>SA2 (Pre-Final / Annual Summative Assessment):</span>
+                      <strong>100 Marks (30% Weightage)</strong>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Grading Scale Table -->
+                <div class="mb-3">
+                  <label style="font-size: 0.8rem; font-weight: 700; display: block; margin-bottom: 0.35rem;">Andhra Pradesh SSC 10-Point GPA Scale</label>
+                  <div style="max-height: 170px; overflow-y: auto; border: 1px solid #E2E8F0; border-radius: 8px;">
+                    <table class="pa-table" style="font-size: 0.76rem; margin: 0;">
+                      <thead>
+                        <tr>
+                          <th>Grade</th>
+                          <th>Mark Range</th>
+                          <th>GPA</th>
+                          <th>Remarks</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr><td><strong style="color: #059669;">A1</strong></td><td>91 – 100</td><td>10.0</td><td>Outstanding</td></tr>
+                        <tr><td><strong style="color: #059669;">A2</strong></td><td>81 – 90</td><td>9.0</td><td>Excellent</td></tr>
+                        <tr><td><strong style="color: #2563EB;">B1</strong></td><td>71 – 80</td><td>8.0</td><td>Very Good</td></tr>
+                        <tr><td><strong style="color: #2563EB;">B2</strong></td><td>61 – 70</td><td>7.0</td><td>Good</td></tr>
+                        <tr><td><strong style="color: #D97706;">C1</strong></td><td>51 – 60</td><td>6.0</td><td>Above Average</td></tr>
+                        <tr><td><strong style="color: #D97706;">C2</strong></td><td>41 – 50</td><td>5.0</td><td>Average</td></tr>
+                        <tr><td><strong style="color: #EA580C;">D</strong></td><td>35 – 40</td><td>4.0</td><td>Pass Standard</td></tr>
+                        <tr><td><strong style="color: #DC2626;">E</strong></td><td>0 – 34</td><td>0.0</td><td>Remedial Support Required</td></tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+
+                <!-- Passing Criteria -->
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;" class="mb-3">
+                  <div>
+                    <label style="font-size: 0.78rem; font-weight: 700; display: block; margin-bottom: 0.35rem;">Min Subject Passing %</label>
+                    <input type="number" id="cfgMinSubjectPct" class="pa-search-input" value="35" style="width: 100%; font-weight: 700;">
+                  </div>
+                  <div>
+                    <label style="font-size: 0.78rem; font-weight: 700; display: block; margin-bottom: 0.35rem;">Min Aggregate Passing %</label>
+                    <input type="number" id="cfgMinAggPct" class="pa-search-input" value="35" style="width: 100%; font-weight: 700;">
+                  </div>
+                </div>
+
+                <!-- Attendance Rules -->
+                <div>
+                  <label style="font-size: 0.8rem; font-weight: 700; display: block; margin-bottom: 0.35rem;">Attendance Calculation &amp; Exam Eligibility</label>
+                  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;">
+                    <div>
+                      <span style="font-size: 0.74rem; color: #64748B;">Min Attendance for Exam:</span>
+                      <input type="text" class="pa-search-input" value="75% Statutory" readonly style="width: 100%; font-weight: 700; background: #F1F5F9;">
+                    </div>
+                    <div>
+                      <span style="font-size: 0.74rem; color: #64748B;">Medical Condonation:</span>
+                      <input type="text" class="pa-search-input" value="Up to 10% on Approval" readonly style="width: 100%; background: #F1F5F9;">
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- =====================================================================
+             SUB-TAB 3: 4.3 OPERATIONAL DEFAULTS
+             ===================================================================== -->
+        <div class="pa-config-pane" id="cfgPaneOperational" style="display: none;">
+          <!-- Action Bar -->
+          <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.75rem; margin-bottom: 1.25rem; background: #FFFFFF; border: 1px solid #E2E8F0; border-radius: 10px; padding: 0.75rem 1.25rem;">
+            <div>
+              <strong style="font-size: 0.9rem; color: var(--color-text-main);">
+                <i class="fa-solid fa-business-time text-primary mr-1"></i> Campus Operational Routines &amp; System Defaults
+              </strong>
+              <div style="font-size: 0.75rem; color: #64748B;">Applied across timetables, attendance session registers, fee structures, and holiday calendars</div>
+            </div>
+            <button type="button" class="btn-pa btn-pa-primary" onclick="platformApp.saveOperationalDefaults()">
+              <i class="fa-solid fa-floppy-disk me-1"></i> Save Operational Defaults
+            </button>
+          </div>
+
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 1.25rem;">
+
+            <!-- Working Days & Session Times -->
+            <div class="pa-field-card">
+              <div class="pa-field-card-title">
+                <i class="fa-solid fa-business-time text-primary"></i> Working Days &amp; Attendance Sessions
+              </div>
+
+              <div class="mb-3">
+                <label style="font-size: 0.8rem; font-weight: 700; display: block; margin-bottom: 0.35rem;">Standard Working Week</label>
+                <div style="font-size: 0.8rem; color: #334155; line-height: 1.6; background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 8px; padding: 0.65rem;">
+                  <div><i class="fa-solid fa-check text-emerald mr-1"></i> <strong>Mon – Fri:</strong> 08:45 AM to 04:15 PM (Full Day)</div>
+                  <div><i class="fa-solid fa-check text-emerald mr-1"></i> <strong>Saturday:</strong> 08:45 AM to 01:00 PM (Half Day Activities)</div>
+                  <div><i class="fa-solid fa-xmark text-danger mr-1"></i> <strong>Sunday:</strong> Weekly Off</div>
+                </div>
+              </div>
+
+              <div>
+                <label style="font-size: 0.8rem; font-weight: 700; display: block; margin-bottom: 0.35rem;">Default Attendance Sessions</label>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem;">
+                  <div style="background: #F1F5F9; border-radius: 6px; padding: 0.5rem;">
+                    <strong style="font-size: 0.78rem;">Session 1 (Morning)</strong>
+                    <div style="font-size: 0.72rem; color: #64748B;">08:45 AM – 12:45 PM</div>
+                  </div>
+                  <div style="background: #F1F5F9; border-radius: 6px; padding: 0.5rem;">
+                    <strong style="font-size: 0.78rem;">Session 2 (Afternoon)</strong>
+                    <div style="font-size: 0.72rem; color: #64748B;">01:30 PM – 04:15 PM</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Periods & Fee Conventions -->
+            <div class="pa-field-card">
+              <div class="pa-field-card-title">
+                <i class="fa-solid fa-bell text-primary"></i> Timetable Periods &amp; Fee Conventions
+              </div>
+
+              <div class="mb-3">
+                <label style="font-size: 0.8rem; font-weight: 700; display: block; margin-bottom: 0.35rem;">Default Timetable Schedule</label>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem;">
+                  <div>
+                    <span style="font-size: 0.72rem; color: #64748B;">Periods Per Day:</span>
+                    <input type="text" class="pa-search-input" value="8 Periods" readonly style="width: 100%; font-weight: 700; background: #F1F5F9;">
+                  </div>
+                  <div>
+                    <span style="font-size: 0.72rem; color: #64748B;">Period Duration:</span>
+                    <input type="text" class="pa-search-input" value="45 Minutes" readonly style="width: 100%; font-weight: 700; background: #F1F5F9;">
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <label style="font-size: 0.8rem; font-weight: 700; display: block; margin-bottom: 0.35rem;">Fee Instalment Convention</label>
+                <select class="pa-select" style="width: 100%; margin-bottom: 0.4rem;">
+                  <option selected>Quarterly (4 Instalments: Jun, Sep, Dec, Feb)</option>
+                  <option>3 Term Instalments (Term 1, Term 2, Term 3)</option>
+                  <option>Monthly Option (10 Instalments)</option>
+                </select>
+                <small style="color: #64748B; font-size: 0.72rem;">Default applies to all newly generated student fee ledgers.</small>
+              </div>
+            </div>
+
+            <!-- Workflows & Notification Templates -->
+            <div class="pa-field-card">
+              <div class="pa-field-card-title">
+                <i class="fa-solid fa-route text-primary"></i> Approval Workflows &amp; Notifications
+              </div>
+
+              <div class="mb-3">
+                <label style="font-size: 0.8rem; font-weight: 700; display: block; margin-bottom: 0.35rem;">Standard Approval Workflows</label>
+                <div style="font-size: 0.76rem; background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 8px; padding: 0.6rem;">
+                  <div style="font-weight: 700; color: #1E293B;">Transfer Certificate Clearance:</div>
+                  <div style="color: #64748B; margin-top: 2px;">Class Teacher -> Admin/Fees -> Principal Sign-off</div>
+                </div>
+              </div>
+
+              <div>
+                <label style="font-size: 0.8rem; font-weight: 700; display: block; margin-bottom: 0.35rem;">Automated Dispatch Templates</label>
+                <div style="font-size: 0.76rem; background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 8px; padding: 0.6rem;">
+                  <div style="display: flex; justify-content: space-between;">
+                    <strong>Absentee SMS Alert:</strong>
+                    <span class="domain-dns-badge dns-badge-verified">Active</span>
+                  </div>
+                  <div style="display: flex; justify-content: space-between; margin-top: 4px;">
+                    <strong>Fee Due Notice:</strong>
+                    <span class="domain-dns-badge dns-badge-verified">Active</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- =====================================================================
+             SUB-TAB 4: 4.4 DOCUMENT & REPORT TEMPLATES
+             ===================================================================== -->
+        <div class="pa-config-pane" id="cfgPaneTemplates" style="display: none;">
+
+          <!-- Templates Header Bar -->
+          <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.75rem; margin-bottom: 1.25rem; background: #FFFFFF; border: 1px solid #E2E8F0; border-radius: 10px; padding: 0.75rem 1.25rem;">
+            <div>
+              <strong style="font-size: 0.92rem; color: var(--color-text-main);">
+                <i class="fa-solid fa-file-invoice text-primary mr-1"></i> Document &amp; Report Templates Repository
+              </strong>
+              <div style="font-size: 0.75rem; color: #64748B;">All official school certificates, report cards, and circulars are versioned to guarantee statutory traceability</div>
+            </div>
+            <div style="display: flex; align-items: center; gap: 0.5rem;">
+              <select id="cfgTemplateFilter" class="pa-select" style="height: 34px; font-size: 0.82rem;" onchange="platformApp.filterDocumentTemplates(this.value)">
+                <option value="All">All 8 Document Types</option>
+                <option value="Admission Form">Admission Forms</option>
+                <option value="Student ID Card">Student ID Cards</option>
+                <option value="Transfer Certificate">Transfer Certificates</option>
+                <option value="Bonafide Certificate">Bonafide Certificates</option>
+                <option value="Report Card">Report Cards</option>
+                <option value="Fee Receipt">Fee Receipts</option>
+                <option value="Official Circular">Official Circulars</option>
+                <option value="Staff Letter">Staff Letters</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Document Templates Grid -->
+          <div class="pa-template-grid" id="cfgTemplatesContainer">
+            <!-- Dynamically populated by platformApp.renderDocumentTemplates -->
+          </div>
+
+        </div>
+
       </section>
 
       <!-- =======================================================================
@@ -3162,6 +3687,145 @@
   <!-- Scripts -->
   <script src="/js/portal-auth.js"></script>
   <script src="/js/platform-admin.js"></script>
+<!-- =========================================================================
+       MODAL: SCHOOL PROFILE LETTERHEAD & BRANDING PREVIEW (SECTION 4.1)
+       ========================================================================= -->
+  <div class="pa-modal-backdrop" id="modalConfigProfilePreview">
+    <div class="pa-modal pa-modal-lg">
+      <div class="pa-modal-header">
+        <div>
+          <h3 class="pa-modal-title" style="margin: 0; font-size: 1.15rem; font-weight: 800; display: flex; align-items: center; gap: 0.5rem;">
+            <i class="fa-solid fa-eye text-primary"></i> Official Letterhead &amp; Document Header Preview
+          </h3>
+          <p class="pa-modal-desc" style="margin: 2px 0 0; font-size: 0.8rem; color: #64748B;">
+            Live preview of school crest, official address, and authorized signatories as rendered on official stationery
+          </p>
+        </div>
+        <button class="btn-pa btn-pa-secondary" style="padding: 0.3rem 0.6rem;" onclick="platformApp.closeModal('modalConfigProfilePreview')">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <div class="pa-modal-body" style="padding: 1.75rem; background: #F8FAFC;">
+        <div class="pa-letterhead-preview" id="previewLetterheadDoc">
+          <div class="pa-letterhead-header">
+            <div style="display: flex; align-items: center; justify-content: center; gap: 1rem; margin-bottom: 0.5rem;">
+              <div style="width: 50px; height: 50px; border-radius: 50%; background: #1E3A8A; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; font-weight: 900;">
+                SV
+              </div>
+              <div>
+                <h2 style="margin: 0; font-size: 1.35rem; font-weight: 900; color: #1E3A8A; letter-spacing: 0.5px;" id="prevHeaderTitle">
+                  SRI VIDYA ENGLISH MEDIUM HIGH SCHOOL
+                </h2>
+                <div style="font-size: 0.78rem; font-weight: 700; color: #475569; margin-top: 2px;" id="prevHeaderSubtitle">
+                  Recognized by Govt. of Andhra Pradesh • Affiliated to AP State SSC Board • UDISE: 28172901923
+                </div>
+              </div>
+            </div>
+            <div style="font-size: 0.76rem; color: #64748B;" id="prevHeaderAddress">
+              1-23 Main Road, Tilak Nagar, Guntur, Andhra Pradesh - 522002 • Ph: +91 863 2234567 • Email: srividyaschools2017@gmail.com
+            </div>
+          </div>
+
+          <div style="min-height: 120px; font-size: 0.85rem; color: #334155; line-height: 1.6; border: 1px dashed #CBD5E1; border-radius: 6px; padding: 1rem; background: #FAFBFD;">
+            <p style="margin: 0 0 0.5rem;"><strong>SAMPLE OFFICIAL CORRESPONDENCE / DISPATCH</strong></p>
+            <p style="margin: 0 0 0.5rem;">This official institutional header is automatically applied to Transfer Certificates, Bonafide Letters, Report Cards, and Official Circulars generated under Sri Vidya Educational Trust.</p>
+            <p style="margin: 0;">Authorized by Governing Body &amp; Academic Senate.</p>
+          </div>
+
+          <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-top: 2rem; padding-top: 1rem; border-top: 1px solid #E2E8F0;">
+            <div style="text-align: center;">
+              <div style="font-size: 0.75rem; font-weight: 700; color: #1E293B;">Sri Navva Anand</div>
+              <div style="font-size: 0.68rem; color: #64748B;">Vice Principal</div>
+            </div>
+            <div style="text-align: center;">
+              <div style="font-size: 0.75rem; font-weight: 700; color: #1E293B;">Smt. Gorle Varalakshmi</div>
+              <div style="font-size: 0.68rem; color: #64748B;">Institutional Principal</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="pa-modal-footer">
+        <button type="button" class="btn-pa btn-pa-secondary" onclick="platformApp.closeModal('modalConfigProfilePreview')">Close Preview</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       MODAL: CONFIGURATION CHANGE HISTORY DRAWER (SECTIONS 4.1, 4.2)
+       ========================================================================= -->
+  <div class="pa-modal-backdrop" id="modalConfigHistory">
+    <div class="pa-modal pa-modal-lg">
+      <div class="pa-modal-header">
+        <div>
+          <h3 class="pa-modal-title" style="margin: 0; font-size: 1.15rem; font-weight: 800; display: flex; align-items: center; gap: 0.5rem;">
+            <i class="fa-solid fa-clock-rotate-left text-primary"></i> Configuration Revision &amp; Audit History
+          </h3>
+          <p class="pa-modal-desc" style="margin: 2px 0 0; font-size: 0.8rem; color: #64748B;">
+            Traceable version log with author, timestamp, change summaries, and approval sign-offs
+          </p>
+        </div>
+        <button class="btn-pa btn-pa-secondary" style="padding: 0.3rem 0.6rem;" onclick="platformApp.closeModal('modalConfigHistory')">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <div class="pa-modal-body" style="padding: 1.5rem;">
+        <div class="pa-table-responsive">
+          <table class="pa-table" style="font-size: 0.82rem;">
+            <thead>
+              <tr>
+                <th>Version</th>
+                <th>Modified By</th>
+                <th>Date</th>
+                <th>Summary of Revisions</th>
+                <th>Approval Status</th>
+              </tr>
+            </thead>
+            <tbody id="cfgHistoryTableBody">
+              <!-- Dynamically populated -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="pa-modal-footer">
+        <button type="button" class="btn-pa btn-pa-secondary" onclick="platformApp.closeModal('modalConfigHistory')">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       MODAL: DOCUMENT TEMPLATE PREVIEW (SECTION 4.4)
+       ========================================================================= -->
+  <div class="pa-modal-backdrop" id="modalTemplatePreview">
+    <div class="pa-modal pa-modal-lg">
+      <div class="pa-modal-header">
+        <div>
+          <h3 class="pa-modal-title" style="margin: 0; font-size: 1.15rem; font-weight: 800; display: flex; align-items: center; gap: 0.5rem;" id="prevTplModalTitle">
+            <i class="fa-solid fa-file-invoice text-primary"></i> Template Preview
+          </h3>
+          <p class="pa-modal-desc" style="margin: 2px 0 0; font-size: 0.8rem; color: #64748B;" id="prevTplModalSubtitle">
+            Statutory Document Architecture
+          </p>
+        </div>
+        <button class="btn-pa btn-pa-secondary" style="padding: 0.3rem 0.6rem;" onclick="platformApp.closeModal('modalTemplatePreview')">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <div class="pa-modal-body" style="padding: 1.5rem; background: #F8FAFC;">
+        <div style="background: #fff; border: 1px solid #CBD5E1; border-radius: 8px; padding: 1.5rem; box-shadow: 0 2px 8px rgba(0,0,0,0.05);" id="prevTplDocContent">
+          <!-- Content dynamically rendered -->
+        </div>
+      </div>
+
+      <div class="pa-modal-footer">
+        <button type="button" class="btn-pa btn-pa-secondary" onclick="platformApp.closeModal('modalTemplatePreview')">Close</button>
+      </div>
+    </div>
+  </div>
 </body>
 
 </html>

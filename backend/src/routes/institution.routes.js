@@ -16,3 +16,4 @@ router.post('/:id/verify-domain', institutionController.verifyDomain);
 router.post('/:id/invite-admin', institutionController.inviteAdministrator);
 
 module.exports = router;
+

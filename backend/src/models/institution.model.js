@@ -155,3 +155,4 @@ const Institution = mongoose.model('Institution', institutionSchema);
 module.exports = {
   Institution
 };
+

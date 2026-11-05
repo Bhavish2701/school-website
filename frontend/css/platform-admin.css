@@ -1193,3 +1193,186 @@ input:checked + .pa-slider:before {
   background: #111827;
   border-color: #1F2937;
 }
+
+/* ==========================================================================
+   MODULE 4: SCHOOL CONFIGURATION (SECTIONS 4.1, 4.2, 4.3, 4.4)
+   ========================================================================== */
+
+/* Sub-Navigation Tabs */
+.pa-config-subnav {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: #F8FAFC;
+  border: 1px solid #E2E8F0;
+  border-radius: 12px;
+  padding: 0.4rem;
+  margin-bottom: 1.5rem;
+  overflow-x: auto;
+}
+[data-theme="dark"] .pa-config-subnav {
+  background: #111827;
+  border-color: #1F2937;
+}
+
+.pa-config-tab-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1.15rem;
+  font-size: 0.84rem;
+  font-weight: 600;
+  color: #64748B;
+  background: transparent;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+.pa-config-tab-btn:hover {
+  color: var(--pa-primary, #4F46E5);
+  background: rgba(79, 70, 229, 0.05);
+}
+.pa-config-tab-btn.active {
+  color: #FFFFFF;
+  background: var(--pa-primary, #4F46E5);
+  box-shadow: 0 2px 6px rgba(79, 70, 229, 0.25);
+}
+
+/* Institutional Scope Switcher Bar */
+.pa-scope-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  border-radius: 12px;
+  padding: 0.85rem 1.25rem;
+  margin-bottom: 1.25rem;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+}
+[data-theme="dark"] .pa-scope-bar {
+  background: #111827;
+  border-color: #1F2937;
+}
+
+/* Status Pill Tags */
+.pa-status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+.status-pill-published {
+  background: #ECFDF5;
+  color: #065F46;
+  border: 1px solid #A7F3D0;
+}
+.status-pill-draft {
+  background: #FEF3C7;
+  color: #92400E;
+  border: 1px solid #FDE68A;
+}
+.status-pill-pending {
+  background: #EFF6FF;
+  color: #1E40AF;
+  border: 1px solid #BFDBFE;
+}
+
+/* Historical Policy Immutability Lock Banner */
+.pa-policy-lock-banner {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  background: #FFFBEB;
+  border: 1.5px solid #FDE68A;
+  border-radius: 10px;
+  padding: 1rem 1.25rem;
+  margin-bottom: 1.5rem;
+}
+[data-theme="dark"] .pa-policy-lock-banner {
+  background: rgba(245, 158, 11, 0.08);
+  border-color: rgba(245, 158, 11, 0.25);
+}
+
+/* Field Group Card */
+.pa-field-card {
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  border-radius: 10px;
+  padding: 1.25rem;
+  margin-bottom: 1.25rem;
+}
+[data-theme="dark"] .pa-field-card {
+  background: #111827;
+  border-color: #1F2937;
+}
+
+.pa-field-card-title {
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: var(--color-text-main);
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid #F1F5F9;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+[data-theme="dark"] .pa-field-card-title {
+  border-bottom-color: #1F2937;
+}
+
+/* Template Cards Grid */
+.pa-template-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.15rem;
+  margin-top: 1rem;
+}
+
+.pa-template-card {
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  border-radius: 10px;
+  padding: 1.15rem;
+  transition: all 0.2s ease;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.pa-template-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.06);
+  border-color: var(--pa-primary, #4F46E5);
+}
+[data-theme="dark"] .pa-template-card {
+  background: #111827;
+  border-color: #1F2937;
+}
+
+/* Official Document Letterhead Preview */
+.pa-letterhead-preview {
+  background: #FFFFFF;
+  color: #0F172A;
+  border: 1px solid #CBD5E1;
+  border-radius: 6px;
+  padding: 2rem;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+  font-family: 'Times New Roman', serif;
+}
+.pa-letterhead-header {
+  text-align: center;
+  border-bottom: 2px solid #1E3A8A;
+  padding-bottom: 0.85rem;
+  margin-bottom: 1.5rem;
+}

@@ -854,3 +854,4 @@ class InstitutionService {
 }
 
 module.exports = new InstitutionService();
+
