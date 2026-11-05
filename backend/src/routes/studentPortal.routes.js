@@ -65,3 +65,4 @@ router.get('/help-support', studentPortalController.getHelpSupport);
 router.post('/help-support', studentPortalController.submitHelpSupportQuery);
 
 module.exports = router;
+

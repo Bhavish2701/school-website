@@ -12517,7 +12517,19 @@ const FEE_CATEGORY_AUDIT_DATA = [
     if (!app) return;
 
     if (document.getElementById('schedTargetAppId')) document.getElementById('schedTargetAppId').value = app.appId;
-    if (document.getElementById('schedModalSubtitle')) document.getElementById('schedModalSubtitle').textContent = `Applicant: ${app.name} (${app.appId}) • Class ${app.class}`;
+    if (document.getElementById('schedModalSubtitle')) document.getElementById('schedModalSubtitle').textContent = `Applicant: ${app.name} (${app.appId}) • Class ${app.class || app.grade || 'LKG'}`;
+
+    // Populate Rich Applicant Dossier Card
+    if (document.getElementById('schedApplicantName')) document.getElementById('schedApplicantName').textContent = app.name || 'Applicant';
+    if (document.getElementById('schedChipAppId')) document.getElementById('schedChipAppId').innerHTML = `<i class="fa-solid fa-hashtag"></i> ${app.appId}`;
+    if (document.getElementById('schedChipClass')) document.getElementById('schedChipClass').innerHTML = `<i class="fa-solid fa-graduation-cap"></i> Class ${app.class || app.grade || 'LKG'}`;
+    if (document.getElementById('schedAvatarInitials')) {
+      const initials = (app.name || 'A').split(' ').map(w => w[0]).join('').substring(0, 2).toUpperCase();
+      document.getElementById('schedAvatarInitials').textContent = initials;
+    }
+    if (document.getElementById('schedApplicantGuardian')) {
+      document.getElementById('schedApplicantGuardian').innerHTML = `<i class="fa-solid fa-user-shield me-1"></i> Guardian: ${app.parentName || 'Sri S. Koteswara Rao (Father)'} • <i class="fa-solid fa-phone ms-2 me-1"></i> ${app.phone || '+91 98765 43210'}`;
+    }
 
     if (document.getElementById('schedDate')) {
       const d = new Date();
@@ -12615,7 +12627,19 @@ const FEE_CATEGORY_AUDIT_DATA = [
 
     if (document.getElementById('offerTargetAppId')) document.getElementById('offerTargetAppId').value = app.appId;
     if (document.getElementById('offerModalSub')) document.getElementById('offerModalSub').textContent = `Applicant: ${app.name} (${app.appId}) • Class ${app.class || app.grade || 'N/A'}`;
-    if (document.getElementById('offerClass')) document.getElementById('offerClass').value = `Class ${app.class || app.grade} (Section A)`;
+    if (document.getElementById('offerClass')) document.getElementById('offerClass').value = `Class ${app.class || app.grade || 'LKG'} (Section A)`;
+
+    // Populate Rich Applicant Dossier Card
+    if (document.getElementById('offerApplicantName')) document.getElementById('offerApplicantName').textContent = app.name || 'Applicant';
+    if (document.getElementById('offerChipAppId')) document.getElementById('offerChipAppId').innerHTML = `<i class="fa-solid fa-hashtag"></i> ${app.appId}`;
+    if (document.getElementById('offerChipClass')) document.getElementById('offerChipClass').innerHTML = `<i class="fa-solid fa-graduation-cap"></i> Class ${app.class || app.grade || 'LKG'}`;
+    if (document.getElementById('offerAvatarInitials')) {
+      const initials = (app.name || 'A').split(' ').map(w => w[0]).join('').substring(0, 2).toUpperCase();
+      document.getElementById('offerAvatarInitials').textContent = initials;
+    }
+    if (document.getElementById('offerApplicantStatus')) {
+      document.getElementById('offerApplicantStatus').innerHTML = `<i class="fa-solid fa-circle-check text-success me-1"></i> Assessment: <strong>${app.score || '88% (Pass with Distinction)'}</strong> • Verified by Academic Dean`;
+    }
 
     if (document.getElementById('offerExpiryDate')) {
       const d = new Date();
@@ -12778,11 +12802,18 @@ const FEE_CATEGORY_AUDIT_DATA = [
       `;
     } else {
       container.innerHTML = `
-        <div style="background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px; padding: 10px 14px; display: flex; align-items: flex-start; gap: 10px; font-size: 0.78rem; color: #166534; line-height: 1.45;">
-          <i class="fa-solid fa-circle-check text-success" style="font-size: 1.15rem; margin-top: 1px; flex-shrink: 0;"></i>
-          <div>
-            <div style="font-weight: 800; color: #14532d; font-size: 0.82rem; margin-bottom: 2px;">Duplicate Prevention Scanner: Verified Clean</div>
-            <div>Zero matching student records found matching this applicant's legal name, DOB, or guardian phone. Eligible for official enrolment order.</div>
+        <div style="background: #f0fdf4; border: 1.5px solid #bbf7d0; border-radius: 10px; padding: 0.95rem 1.15rem; display: flex; align-items: flex-start; gap: 0.85rem; box-shadow: 0 1px 3px rgba(22, 101, 52, 0.05);">
+          <div style="width: 34px; height: 34px; border-radius: 50%; background: #dcfce7; color: #166534; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; flex-shrink: 0;">
+            <i class="fa-solid fa-shield-check"></i>
+          </div>
+          <div style="flex: 1;">
+            <div style="font-weight: 800; color: #14532d; font-size: 0.88rem; display: flex; align-items: center; justify-content: space-between;">
+              <span>Duplicate Scanner: Verified Clean</span>
+              <span class="school-chip school-chip-green" style="font-size: 0.7rem; font-weight: 800;"><i class="fa-solid fa-stamp"></i> Statutory Clean</span>
+            </div>
+            <div style="font-size: 0.78rem; color: #166534; margin-top: 3px; line-height: 1.45;">
+              Zero matching student records found matching this applicant's legal name, DOB, or guardian phone. Eligible for official enrolment order.
+            </div>
           </div>
         </div>
       `;
@@ -58810,43 +58841,479 @@ const FEE_CATEGORY_AUDIT_DATA = [
     renderEscalationsTable(filtered);
   }
 
+    /* =========================================================================
+     THE MOST IMPORTANT SCHOOL WORKFLOWS (WORKFLOWS A THROUGH J)
+     Specification:
+     At each step, record the responsible user, status, timestamps and required next action.
+     ========================================================================= */
+
+  const INSTITUTIONAL_WORKFLOWS_DATA = [
+    {
+      id: 'WF-A',
+      code: 'Workflow A',
+      title: 'New student admission',
+      category: 'Admissions & Enrolment',
+      domain: 'Academic',
+      icon: 'fa-user-plus',
+      color: '#2563eb',
+      sla: '48 Hours',
+      currentActiveStep: 8,
+      totalSteps: 12,
+      overallStatus: 'IN_PROGRESS',
+      description: 'Enquiry → Application → Document Verification → Eligibility Review → Admission Decision → Offer Acceptance → Required Payment/Clearance → Enrolment → Admission Number → Class Allocation → Guardian Linking → Account Invitation, when available.',
+      steps: [
+        { stepNo: 1, name: 'Enquiry', responsibleUser: 'Sri K. Venkat (Front Office)', responsibleRole: 'Front Office Executive', status: 'COMPLETED', timestamp: '2026-10-20 09:30 AM IST', nextAction: 'Proceed to official application submission' },
+        { stepNo: 2, name: 'Application', responsibleUser: 'Smt. P. Madhavi (Admissions Cell)', responsibleRole: 'Admissions Coordinator', status: 'COMPLETED', timestamp: '2026-10-21 11:15 AM IST', nextAction: 'Submit original certificates for verification' },
+        { stepNo: 3, name: 'Document Verification', responsibleUser: 'Sri Ch. Ramesh (Verification Desk)', responsibleRole: 'Admissions Desk Officer', status: 'COMPLETED', timestamp: '2026-10-22 02:45 PM IST', nextAction: 'Review statutory academic eligibility & age criteria' },
+        { stepNo: 4, name: 'Eligibility Review', responsibleUser: 'Sri Ch. Ramesh (Academic Dean)', responsibleRole: 'Academic Dean', status: 'COMPLETED', timestamp: '2026-10-23 10:00 AM IST', nextAction: 'Principal executive decision on provisional seat' },
+        { stepNo: 5, name: 'Admission Decision', responsibleUser: 'Smt. Gorle Varalakshmi (Principal)', responsibleRole: 'Principal / Head of Institution', status: 'COMPLETED', timestamp: '2026-10-24 04:30 PM IST', nextAction: 'Dispatch formal admission offer docket to parent' },
+        { stepNo: 6, name: 'Offer Acceptance', responsibleUser: 'Sri S. Koteswara Rao (Parent/Guardian)', responsibleRole: 'Parent / Legal Guardian', status: 'COMPLETED', timestamp: '2026-10-25 01:20 PM IST', nextAction: 'Remit Term I admission fees and clear statutory accounts' },
+        { stepNo: 7, name: 'Required Payment/Clearance', responsibleUser: 'Sri M. Prasad (Accounts Officer)', responsibleRole: 'Chief Cashier & Accounts Officer', status: 'COMPLETED', timestamp: '2026-10-26 11:50 AM IST', nextAction: 'Enter student into authoritative General Register' },
+        { stepNo: 8, name: 'Enrolment', responsibleUser: 'Sri T. Satyanarayana (Registrar)', responsibleRole: 'Administrative Registrar', status: 'IN_PROGRESS', timestamp: '2026-10-27 10:00 AM IST', nextAction: 'Allocate unique statutory Admission Number' },
+        { stepNo: 9, name: 'Admission Number', responsibleUser: 'Sri T. Satyanarayana (Registrar)', responsibleRole: 'Administrative Registrar', status: 'PENDING', timestamp: 'Pending', nextAction: 'Assign class section and authoritative class teacher' },
+        { stepNo: 10, name: 'Class Allocation', responsibleUser: 'Smt. Gorle Varalakshmi (Principal)', responsibleRole: 'Principal', status: 'PENDING', timestamp: 'Pending', nextAction: 'Link verified primary guardian profile and contact ledger' },
+        { stepNo: 11, name: 'Guardian Linking', responsibleUser: 'Sri K. Venkat (Front Desk)', responsibleRole: 'Admissions Officer', status: 'PENDING', timestamp: 'Pending', nextAction: 'Generate secure invitation docket for upcoming parent portal' },
+        { stepNo: 12, name: 'Account Invitation', responsibleUser: 'Sri V. Krishna Mohan (IT Lead)', responsibleRole: 'Campus Systems Administrator', status: 'PENDING', timestamp: 'Pending', nextAction: 'Activate student & guardian digital credentials' }
+      ]
+    },
+    {
+      id: 'WF-B',
+      code: 'Workflow B',
+      title: 'Student attendance',
+      category: 'Daily Academic Governance',
+      domain: 'Attendance',
+      icon: 'fa-clipboard-user',
+      color: '#059669',
+      sla: '10:00 AM Daily',
+      currentActiveStep: 4,
+      totalSteps: 8,
+      overallStatus: 'IN_PROGRESS',
+      description: 'Class Register → Attendance Entry → Validation → Teacher Submission → Attendance Summary → Authorized Parent Notification, if configured → Management Reporting → Correction Request, if needed.',
+      steps: [
+        { stepNo: 1, name: 'Class Register', responsibleUser: 'Sri B. Naresh (Class 5A Teacher)', responsibleRole: 'Designated Class Teacher', status: 'COMPLETED', timestamp: '2026-11-05 08:45 AM IST', nextAction: 'Take visual and roll-call morning attendance' },
+        { stepNo: 2, name: 'Attendance Entry', responsibleUser: 'Sri B. Naresh (Class 5A Teacher)', responsibleRole: 'Designated Class Teacher', status: 'COMPLETED', timestamp: '2026-11-05 09:05 AM IST', nextAction: 'Perform biometric and headcount tally validation' },
+        { stepNo: 3, name: 'Validation', responsibleUser: 'Sri B. Naresh (Class 5A Teacher)', responsibleRole: 'Designated Class Teacher', status: 'COMPLETED', timestamp: '2026-11-05 09:12 AM IST', nextAction: 'Final electronic register lock and submission' },
+        { stepNo: 4, name: 'Teacher Submission', responsibleUser: 'Sri B. Naresh (Class 5A Teacher)', responsibleRole: 'Designated Class Teacher', status: 'IN_PROGRESS', timestamp: '2026-11-05 09:15 AM IST', nextAction: 'Generate whole-school morning attendance executive summary' },
+        { stepNo: 5, name: 'Attendance Summary', responsibleUser: 'Sri Ch. Ramesh (Vice Principal)', responsibleRole: 'Vice Principal / Academic Dean', status: 'PENDING', timestamp: 'Pending', nextAction: 'Trigger automated absent SMS to verified parent phones' },
+        { stepNo: 6, name: 'Authorized Parent Notification', responsibleUser: 'Automated Gateway (Gov. SMS)', responsibleRole: 'System Dispatch Gateway', status: 'PENDING', timestamp: 'Pending', nextAction: 'Compile daily statutory compliance report for Principal' },
+        { stepNo: 7, name: 'Management Reporting', responsibleUser: 'Smt. Gorle Varalakshmi (Principal)', responsibleRole: 'Principal', status: 'PENDING', timestamp: 'Pending', nextAction: 'Audit and approve any subsequent correction dockets' },
+        { stepNo: 8, name: 'Correction Request', responsibleUser: 'Sri Ch. Ramesh (Vice Principal)', responsibleRole: 'Authorized Approver', status: 'PENDING', timestamp: 'Pending', nextAction: 'Apply authorized amendment to statutory daily ledger' }
+      ]
+    },
+    {
+      id: 'WF-C',
+      code: 'Workflow C',
+      title: 'Examinations and results',
+      category: 'Examinations & Grading',
+      domain: 'Examinations',
+      icon: 'fa-award',
+      color: '#7c3aed',
+      sla: '7 Days Post Exam',
+      currentActiveStep: 6,
+      totalSteps: 10,
+      overallStatus: 'IN_PROGRESS',
+      description: 'Exam Creation → Schedule Approval → Examination Conducted → Marks Entry → Validation → Review/Moderation → Result Approval → Report Card Generation → Publication → Student/Parent Access, when enabled.',
+      steps: [
+        { stepNo: 1, name: 'Exam Creation', responsibleUser: 'Sri Ch. Ramesh (Exam Cell Head)', responsibleRole: 'Controller of Examinations', status: 'COMPLETED', timestamp: '2026-10-05 10:00 AM IST', nextAction: 'Submit master timetable and invigilation matrix for approval' },
+        { stepNo: 2, name: 'Schedule Approval', responsibleUser: 'Smt. Gorle Varalakshmi (Principal)', responsibleRole: 'Principal', status: 'COMPLETED', timestamp: '2026-10-07 03:30 PM IST', nextAction: 'Execute statutory exam invigilation and answer paper collection' },
+        { stepNo: 3, name: 'Examination Conducted', responsibleUser: 'All Invigilating Faculty', responsibleRole: 'Exam Invigilators & Flying Squad', status: 'COMPLETED', timestamp: '2026-10-18 01:00 PM IST', nextAction: 'Subject teachers evaluate scripts and enter rubrics' },
+        { stepNo: 4, name: 'Marks Entry', responsibleUser: 'Subject Faculty Panel (Maths, Sci, Eng)', responsibleRole: 'Subject Teachers', status: 'COMPLETED', timestamp: '2026-10-24 05:00 PM IST', nextAction: 'Check maximum marks and grade boundaries integrity' },
+        { stepNo: 5, name: 'Validation', responsibleUser: 'Sri Ch. Ramesh (Exam Cell Head)', responsibleRole: 'Controller of Examinations', status: 'COMPLETED', timestamp: '2026-10-26 11:30 AM IST', nextAction: 'Convene academic moderation committee for standardization' },
+        { stepNo: 6, name: 'Review/Moderation', responsibleUser: 'Academic Board Moderation Panel', responsibleRole: 'Academic Review Committee', status: 'IN_PROGRESS', timestamp: '2026-10-28 02:00 PM IST', nextAction: 'Principal statutory seal and final result approval' },
+        { stepNo: 7, name: 'Result Approval', responsibleUser: 'Smt. Gorle Varalakshmi (Principal)', responsibleRole: 'Principal / Head of Institution', status: 'PENDING', timestamp: 'Pending', nextAction: 'Batch generate bilingual statutory progress report cards' },
+        { stepNo: 8, name: 'Report Card Generation', responsibleUser: 'Sri V. Krishna Mohan (IT / Exam Cell)', responsibleRole: 'Exam Automation Cell', status: 'PENDING', timestamp: 'Pending', nextAction: 'Officially publish master ledger to academic records' },
+        { stepNo: 9, name: 'Publication', responsibleUser: 'Smt. Gorle Varalakshmi (Principal)', responsibleRole: 'Principal', status: 'PENDING', timestamp: 'Pending', nextAction: 'Enable digital report card view on parent/student accounts' },
+        { stepNo: 10, name: 'Student/Parent Access', responsibleUser: 'Admissions & Portal Dispatch', responsibleRole: 'Portal Systems Officer', status: 'PENDING', timestamp: 'Pending', nextAction: 'Archive examination dossier in permanent institutional vault' }
+      ]
+    },
+    {
+      id: 'WF-D',
+      code: 'Workflow D',
+      title: 'Fees',
+      category: 'Financial Governance',
+      domain: 'Finance',
+      icon: 'fa-file-invoice-dollar',
+      color: '#d97706',
+      sla: '24 Hours',
+      currentActiveStep: 5,
+      totalSteps: 9,
+      overallStatus: 'IN_PROGRESS',
+      description: 'Fee Structure → Student Invoice → Payment or Offline Receipt → Transaction Verification → Ledger Entry → Receipt → Outstanding Balance Update → Reconciliation → Authorized Financial Reporting.',
+      steps: [
+        { stepNo: 1, name: 'Fee Structure', responsibleUser: 'Governing Board & Principal', responsibleRole: 'Executive School Board', status: 'COMPLETED', timestamp: '2026-06-01 10:00 AM IST', nextAction: 'Generate term invoice batch for enrolled students' },
+        { stepNo: 2, name: 'Student Invoice', responsibleUser: 'Sri M. Prasad (Accounts Officer)', responsibleRole: 'Accounts Officer', status: 'COMPLETED', timestamp: '2026-10-01 09:00 AM IST', nextAction: 'Collect UPI, Netbanking, POS or Cash at Cashier Desk' },
+        { stepNo: 3, name: 'Payment or Offline Receipt', responsibleUser: 'Sri G. Somayajulu (Cashier)', responsibleRole: 'Campus Cashier', status: 'COMPLETED', timestamp: '2026-11-04 11:20 AM IST', nextAction: 'Verify bank scroll credits and UTR reference' },
+        { stepNo: 4, name: 'Transaction Verification', responsibleUser: 'Sri M. Prasad (Accounts Officer)', responsibleRole: 'Accounts Officer', status: 'COMPLETED', timestamp: '2026-11-04 02:40 PM IST', nextAction: 'Post double-entry credit into general school ledger' },
+        { stepNo: 5, name: 'Ledger Entry', responsibleUser: 'Sri M. Prasad (Accounts Officer)', responsibleRole: 'Accounts Officer', status: 'IN_PROGRESS', timestamp: '2026-11-05 10:15 AM IST', nextAction: 'Issue digitally signed 80G compliant statutory receipt' },
+        { stepNo: 6, name: 'Receipt', responsibleUser: 'Sri G. Somayajulu (Cashier)', responsibleRole: 'Campus Cashier', status: 'PENDING', timestamp: 'Pending', nextAction: 'Adjust student account balance and recalculate term dues' },
+        { stepNo: 7, name: 'Outstanding Balance Update', responsibleUser: 'Automated Finance Engine', responsibleRole: 'Finance Automation', status: 'PENDING', timestamp: 'Pending', nextAction: 'Execute daily bank balance reconciliation' },
+        { stepNo: 8, name: 'Reconciliation', responsibleUser: 'Sri M. Prasad (Accounts Officer)', responsibleRole: 'Accounts Officer', status: 'PENDING', timestamp: 'Pending', nextAction: 'Generate statutory daily cash-book report for Management' },
+        { stepNo: 9, name: 'Authorized Financial Reporting', responsibleUser: 'Smt. Gorle Varalakshmi (Principal)', responsibleRole: 'Principal / Management Board', status: 'PENDING', timestamp: 'Pending', nextAction: 'Archive monthly financial audit register' }
+      ]
+    },
+    {
+      id: 'WF-E',
+      code: 'Workflow E',
+      title: 'Teacher onboarding',
+      category: 'Human Resources & Faculty',
+      domain: 'Staff HR',
+      icon: 'fa-chalkboard-teacher',
+      color: '#0891b2',
+      sla: '3 Working Days',
+      currentActiveStep: 6,
+      totalSteps: 8,
+      overallStatus: 'IN_PROGRESS',
+      description: 'Staff Record → Document Verification → Employment Approval → Class/Subject Allocation → User Account Creation → Permission Assignment → Timetable Allocation → Active Faculty Account.',
+      steps: [
+        { stepNo: 1, name: 'Staff Record', responsibleUser: 'Sri K. Venkat (HR Coordinator)', responsibleRole: 'HR Executive', status: 'COMPLETED', timestamp: '2026-10-15 11:00 AM IST', nextAction: 'Verify B.Ed, degree certificates and AP TET scorecards' },
+        { stepNo: 2, name: 'Document Verification', responsibleUser: 'Sri Ch. Ramesh (Vice Principal)', responsibleRole: 'Academic Dean', status: 'COMPLETED', timestamp: '2026-10-16 03:00 PM IST', nextAction: 'Management endorsement of employment agreement' },
+        { stepNo: 3, name: 'Employment Approval', responsibleUser: 'Smt. Gorle Varalakshmi (Principal)', responsibleRole: 'Principal', status: 'COMPLETED', timestamp: '2026-10-17 04:30 PM IST', nextAction: 'Map pedagogical subjects and designated class teacher duties' },
+        { stepNo: 4, name: 'Class/Subject Allocation', responsibleUser: 'Sri Ch. Ramesh (Vice Principal)', responsibleRole: 'Academic Dean', status: 'COMPLETED', timestamp: '2026-10-18 10:15 AM IST', nextAction: 'Provision official institutional email and ERP account' },
+        { stepNo: 5, name: 'User Account Creation', responsibleUser: 'Sri V. Krishna Mohan (IT Lead)', responsibleRole: 'IT Administrator', status: 'COMPLETED', timestamp: '2026-10-19 11:30 AM IST', nextAction: 'Assign role-based access permissions for Faculty Portal' },
+        { stepNo: 6, name: 'Permission Assignment', responsibleUser: 'Sri V. Krishna Mohan (IT Lead)', responsibleRole: 'IT Administrator', status: 'IN_PROGRESS', timestamp: '2026-10-20 09:45 AM IST', nextAction: 'Assign weekly lesson periods and room timetable' },
+        { stepNo: 7, name: 'Timetable Allocation', responsibleUser: 'Sri Ch. Ramesh (Timetable In-charge)', responsibleRole: 'Academic Dean', status: 'PENDING', timestamp: 'Pending', nextAction: 'Formally activate faculty credentials and issue Welcome Kit' },
+        { stepNo: 8, name: 'Active Faculty Account', responsibleUser: 'Smt. Gorle Varalakshmi (Principal)', responsibleRole: 'Principal', status: 'PENDING', timestamp: 'Pending', nextAction: 'Handover class register and biometric punch ID' }
+      ]
+    },
+    {
+      id: 'WF-F',
+      code: 'Workflow F',
+      title: 'Staff leave',
+      category: 'Faculty Administration',
+      domain: 'Staff HR',
+      icon: 'fa-user-clock',
+      color: '#e11d48',
+      sla: '4 Hours',
+      currentActiveStep: 3,
+      totalSteps: 7,
+      overallStatus: 'IN_PROGRESS',
+      description: 'Leave Request → Policy Validation → Designated Approver → Decision → Staff Availability Update → Substitution Planning, if needed → Attendance Reconciliation.',
+      steps: [
+        { stepNo: 1, name: 'Leave Request', responsibleUser: 'Smt. K. Hymavathi (Maths Faculty)', responsibleRole: 'Teaching Faculty', status: 'COMPLETED', timestamp: '2026-11-04 04:15 PM IST', nextAction: 'Verify leave balance (Casual, Medical, Earned)' },
+        { stepNo: 2, name: 'Policy Validation', responsibleUser: 'Automated HR Engine', responsibleRole: 'HR System', status: 'COMPLETED', timestamp: '2026-11-04 04:16 PM IST', nextAction: 'Route to Vice Principal / Principal for approval' },
+        { stepNo: 3, name: 'Designated Approver', responsibleUser: 'Sri Ch. Ramesh (Vice Principal)', responsibleRole: 'Vice Principal', status: 'IN_PROGRESS', timestamp: '2026-11-05 08:30 AM IST', nextAction: 'Record approval decision with statutory rationale' },
+        { stepNo: 4, name: 'Decision', responsibleUser: 'Sri Ch. Ramesh (Vice Principal)', responsibleRole: 'Vice Principal', status: 'PENDING', timestamp: 'Pending', nextAction: 'Update faculty campus availability dashboard' },
+        { stepNo: 5, name: 'Staff Availability Update', responsibleUser: 'Academic Roster Engine', responsibleRole: 'HR System', status: 'PENDING', timestamp: 'Pending', nextAction: 'Assign qualified substitute teacher for affected periods' },
+        { stepNo: 6, name: 'Substitution Planning', responsibleUser: 'Sri Ch. Ramesh (Timetable In-charge)', responsibleRole: 'Academic Dean', status: 'PENDING', timestamp: 'Pending', nextAction: 'Reconcile payroll register and biometric attendance record' },
+        { stepNo: 7, name: 'Attendance Reconciliation', responsibleUser: 'Sri M. Prasad (Accounts Officer)', responsibleRole: 'Accounts Officer', status: 'PENDING', timestamp: 'Pending', nextAction: 'Close leave docket and archive in personal file' }
+      ]
+    },
+    {
+      id: 'WF-G',
+      code: 'Workflow G',
+      title: 'Principal appointment',
+      category: 'Executive Leadership & Visitors',
+      domain: 'Administration',
+      icon: 'fa-handshake',
+      color: '#4f46e5',
+      sla: '24 Hours',
+      currentActiveStep: 5,
+      totalSteps: 9,
+      overallStatus: 'IN_PROGRESS',
+      description: 'Appointment Request → Availability Check → Review → Approval/Rescheduling → Confirmation → Visitor Check-in → Meeting → Follow-up → Completion.',
+      steps: [
+        { stepNo: 1, name: 'Appointment Request', responsibleUser: 'Sri D. Ramana (Parent / Community Leader)', responsibleRole: 'Parent / External Stakeholder', status: 'COMPLETED', timestamp: '2026-11-03 10:20 AM IST', nextAction: 'Check Principal executive calendar availability' },
+        { stepNo: 2, name: 'Availability Check', responsibleUser: 'Smt. S. Aruna (Executive Secretary)', responsibleRole: 'Principal Executive Assistant', status: 'COMPLETED', timestamp: '2026-11-03 11:00 AM IST', nextAction: 'Review meeting agenda and background dossier' },
+        { stepNo: 3, name: 'Review', responsibleUser: 'Smt. S. Aruna (Executive Secretary)', responsibleRole: 'Principal Executive Assistant', status: 'COMPLETED', timestamp: '2026-11-03 02:15 PM IST', nextAction: 'Principal review and formal slot approval' },
+        { stepNo: 4, name: 'Approval/Rescheduling', responsibleUser: 'Smt. Gorle Varalakshmi (Principal)', responsibleRole: 'Principal', status: 'COMPLETED', timestamp: '2026-11-04 09:30 AM IST', nextAction: 'Dispatch official appointment confirmation docket via SMS' },
+        { stepNo: 5, name: 'Confirmation', responsibleUser: 'Campus Dispatch Gateway', responsibleRole: 'Automated Dispatcher', status: 'IN_PROGRESS', timestamp: '2026-11-04 09:35 AM IST', nextAction: 'Security gate visitor pass issuance on arrival' },
+        { stepNo: 6, name: 'Visitor Check-in', responsibleUser: 'Sri P. Apparao (Gate Security Officer)', responsibleRole: 'Campus Security', status: 'PENDING', timestamp: 'Pending', nextAction: 'Conduct executive meeting in Principal Office' },
+        { stepNo: 7, name: 'Meeting', responsibleUser: 'Smt. Gorle Varalakshmi (Principal)', responsibleRole: 'Principal', status: 'PENDING', timestamp: 'Pending', nextAction: 'Record official meeting minutes and action items' },
+        { stepNo: 8, name: 'Follow-up', responsibleUser: 'Smt. S. Aruna (Executive Secretary)', responsibleRole: 'Executive Assistant', status: 'PENDING', timestamp: 'Pending', nextAction: 'Formally close appointment docket in Executive Ledger' },
+        { stepNo: 9, name: 'Completion', responsibleUser: 'Smt. Gorle Varalakshmi (Principal)', responsibleRole: 'Principal', status: 'PENDING', timestamp: 'Pending', nextAction: 'Archive visitor docket in institutional records' }
+      ]
+    },
+    {
+      id: 'WF-H',
+      code: 'Workflow H',
+      title: 'Student transfer',
+      category: 'Statutory Records & TC',
+      domain: 'Students',
+      icon: 'fa-arrow-right-arrow-left',
+      color: '#0284c7',
+      sla: '48 Hours',
+      currentActiveStep: 5,
+      totalSteps: 9,
+      overallStatus: 'IN_PROGRESS',
+      description: 'Transfer Request → Identity Verification → Academic Clearance → Required Departmental Checks → Authorized Decision → TC Generation → Issue Record → Enrolment Status Update → Historical Record Retention.',
+      steps: [
+        { stepNo: 1, name: 'Transfer Request', responsibleUser: 'Sri N. Surya Rao (Parent)', responsibleRole: 'Parent / Legal Guardian', status: 'COMPLETED', timestamp: '2026-10-28 11:30 AM IST', nextAction: 'Verify parent identity and legal custody documentation' },
+        { stepNo: 2, name: 'Identity Verification', responsibleUser: 'Sri K. Venkat (Admissions Desk)', responsibleRole: 'Admissions Officer', status: 'COMPLETED', timestamp: '2026-10-29 10:15 AM IST', nextAction: 'Verify academic completion and attendance percentage' },
+        { stepNo: 3, name: 'Academic Clearance', responsibleUser: 'Sri Ch. Ramesh (Academic Dean)', responsibleRole: 'Academic Dean', status: 'COMPLETED', timestamp: '2026-10-30 02:40 PM IST', nextAction: 'Verify Library, Laboratory, Sports and Fee Dues' },
+        { stepNo: 4, name: 'Required Departmental Checks', responsibleUser: 'Sri M. Prasad (Accounts Officer)', responsibleRole: 'Chief Cashier & Accounts', status: 'COMPLETED', timestamp: '2026-10-31 04:00 PM IST', nextAction: 'Principal executive authorization for TC issuance' },
+        { stepNo: 5, name: 'Authorized Decision', responsibleUser: 'Smt. Gorle Varalakshmi (Principal)', responsibleRole: 'Principal', status: 'IN_PROGRESS', timestamp: '2026-11-01 11:00 AM IST', nextAction: 'Generate AP Education Code serialized Transfer Certificate' },
+        { stepNo: 6, name: 'TC Generation', responsibleUser: 'Sri T. Satyanarayana (Registrar)', responsibleRole: 'Administrative Registrar', status: 'PENDING', timestamp: 'Pending', nextAction: 'Record physical handover with parent signature and thumbprint' },
+        { stepNo: 7, name: 'Issue Record', responsibleUser: 'Sri T. Satyanarayana (Registrar)', responsibleRole: 'Administrative Registrar', status: 'PENDING', timestamp: 'Pending', nextAction: 'Update authoritative register: Transferred / TC Issued' },
+        { stepNo: 8, name: 'Enrolment Status Update', responsibleUser: 'Automated Student Ledger', responsibleRole: 'General Register Engine', status: 'PENDING', timestamp: 'Pending', nextAction: 'Archive permanent academic dossier in historical vault' },
+        { stepNo: 9, name: 'Historical Record Retention', responsibleUser: 'Sri T. Satyanarayana (Registrar)', responsibleRole: 'Administrative Registrar', status: 'PENDING', timestamp: 'Pending', nextAction: 'Comply with AP State permanent statutory archiving rules' }
+      ]
+    },
+    {
+      id: 'WF-I',
+      code: 'Workflow I',
+      title: 'Purchase request',
+      category: 'Procurement & Assets',
+      domain: 'Administration',
+      icon: 'fa-cart-shopping',
+      color: '#ea580c',
+      sla: '3 Working Days',
+      currentActiveStep: 5,
+      totalSteps: 9,
+      overallStatus: 'IN_PROGRESS',
+      description: 'Department Request → Budget/Need Review → Approval → Vendor/Quotation Process → Purchase Order → Goods Received → Invoice Matching → Authorized Payment → Asset/Stock Register Update.',
+      steps: [
+        { stepNo: 1, name: 'Department Request', responsibleUser: 'Smt. V. Anuradha (Science Lab Head)', responsibleRole: 'Department Head', status: 'COMPLETED', timestamp: '2026-10-22 09:40 AM IST', nextAction: 'Review departmental budget and statutory need' },
+        { stepNo: 2, name: 'Budget/Need Review', responsibleUser: 'Sri M. Prasad (Accounts Officer)', responsibleRole: 'Accounts Officer', status: 'COMPLETED', timestamp: '2026-10-23 03:15 PM IST', nextAction: 'Principal expenditure approval' },
+        { stepNo: 3, name: 'Approval', responsibleUser: 'Smt. Gorle Varalakshmi (Principal)', responsibleRole: 'Principal', status: 'COMPLETED', timestamp: '2026-10-24 11:30 AM IST', nextAction: 'Collect 3 competitive vendor quotations' },
+        { stepNo: 4, name: 'Vendor/Quotation Process', responsibleUser: 'Sri R. Apparao (Stores Officer)', responsibleRole: 'Procurement In-charge', status: 'COMPLETED', timestamp: '2026-10-28 02:00 PM IST', nextAction: 'Generate serialized school Purchase Order (PO)' },
+        { stepNo: 5, name: 'Purchase Order', responsibleUser: 'Sri M. Prasad (Accounts Officer)', responsibleRole: 'Accounts Officer', status: 'IN_PROGRESS', timestamp: '2026-10-30 04:45 PM IST', nextAction: 'Verify physical consignment and quality specifications' },
+        { stepNo: 6, name: 'Goods Received', responsibleUser: 'Sri R. Apparao (Stores Officer)', responsibleRole: 'Procurement In-charge', status: 'PENDING', timestamp: 'Pending', nextAction: 'Perform 3-way matching: PO vs Delivery Challan vs Tax Invoice' },
+        { stepNo: 7, name: 'Invoice Matching', responsibleUser: 'Sri M. Prasad (Accounts Officer)', responsibleRole: 'Accounts Officer', status: 'PENDING', timestamp: 'Pending', nextAction: 'Disburse verified vendor payment via RTGS/NEFT' },
+        { stepNo: 8, name: 'Authorized Payment', responsibleUser: 'Smt. Gorle Varalakshmi (Principal)', responsibleRole: 'Principal / Management', status: 'PENDING', timestamp: 'Pending', nextAction: 'Enter asset barcodes into authoritative Fixed Asset Register' },
+        { stepNo: 9, name: 'Asset/Stock Register Update', responsibleUser: 'Sri R. Apparao (Stores Officer)', responsibleRole: 'Procurement In-charge', status: 'PENDING', timestamp: 'Pending', nextAction: 'Handover chemicals and lab apparatus to Science Lab Head' }
+      ]
+    },
+    {
+      id: 'WF-J',
+      code: 'Workflow J',
+      title: 'School announcement',
+      category: 'Public & Internal Communications',
+      domain: 'Communication',
+      icon: 'fa-bullhorn',
+      color: '#84cc16',
+      sla: '2 Hours',
+      currentActiveStep: 4,
+      totalSteps: 7,
+      overallStatus: 'IN_PROGRESS',
+      description: 'Draft → Audience Selection → Approval, if required → Preview → Publication/Scheduling → Delivery Tracking → Expiry/Archive.',
+      steps: [
+        { stepNo: 1, name: 'Draft', responsibleUser: 'Sri Ch. Ramesh (Vice Principal)', responsibleRole: 'Vice Principal / PRO', status: 'COMPLETED', timestamp: '2026-11-05 08:00 AM IST', nextAction: 'Select intended recipient groups (Parents, Teachers, Students)' },
+        { stepNo: 2, name: 'Audience Selection', responsibleUser: 'Sri Ch. Ramesh (Vice Principal)', responsibleRole: 'Vice Principal / PRO', status: 'COMPLETED', timestamp: '2026-11-05 08:15 AM IST', nextAction: 'Principal executive authorization for broadcast' },
+        { stepNo: 3, name: 'Approval, if required', responsibleUser: 'Smt. Gorle Varalakshmi (Principal)', responsibleRole: 'Principal', status: 'COMPLETED', timestamp: '2026-11-05 08:35 AM IST', nextAction: 'Generate high-fidelity notice preview docket' },
+        { stepNo: 4, name: 'Preview', responsibleUser: 'Sri Ch. Ramesh (Vice Principal)', responsibleRole: 'Vice Principal', status: 'IN_PROGRESS', timestamp: '2026-11-05 08:45 AM IST', nextAction: 'Publish instantly to website, notice board, and SMS gateway' },
+        { stepNo: 5, name: 'Publication/Scheduling', responsibleUser: 'Sri V. Krishna Mohan (IT Lead)', responsibleRole: 'IT Administrator', status: 'PENDING', timestamp: 'Pending', nextAction: 'Track real-time SMS delivery receipts and portal read receipts' },
+        { stepNo: 6, name: 'Delivery Tracking', responsibleUser: 'Communication Gateway Engine', responsibleRole: 'System Dispatch Gateway', status: 'PENDING', timestamp: 'Pending', nextAction: 'Set automated validity expiry and archive in notice records' },
+        { stepNo: 7, name: 'Expiry/Archive', responsibleUser: 'Administrative Archive Engine', responsibleRole: 'Records Vault', status: 'PENDING', timestamp: 'Pending', nextAction: 'Permanently archive circular in annual school gazette' }
+      ]
+    }
+  ];
+
+  let activeModalWorkflowId = 'WF-A';
+
   function renderWorkflowSettingsTable(data) {
-    const list = data || TASKS_WORKFLOW_SETTINGS_DATA;
+    const list = data || INSTITUTIONAL_WORKFLOWS_DATA;
     const tbody = document.getElementById('tbodyWorkflowSettings');
     if (!tbody) return;
     if (list.length === 0) {
-      tbody.innerHTML = '<tr><td colspan="7" class="text-center p-4 text-muted">No workflow pipelines configured.</td></tr>';
+      tbody.innerHTML = '<tr><td colspan="7" class="text-center p-4 text-muted">No institutional workflows found matching criteria.</td></tr>';
       return;
     }
-    tbody.innerHTML = list.map(item => `
-      <tr>
-        <td>
-          <div style="font-weight: 700; color: #0f172a;"><i class="fa-solid fa-sliders text-primary mr-1"></i> ${item.category}</div>
-          <small class="text-muted">Pipeline ID: ${item.id} &bull; Domain: ${item.domain}</small>
-        </td>
-        <td>${item.submitter}</td>
-        <td>${item.reviewer}</td>
-        <td><strong style="color: #1e3a8a;">${item.approver}</strong></td>
-        <td><span class="badge" style="background:#eff6ff; color:#1d4ed8; font-weight:800;">${item.sla}</span></td>
-        <td style="max-width: 260px; font-size: 0.82rem; color: #475569;">${item.fallback}</td>
-        <td class="text-end">
-          <button class="btn btn-secondary btn-sm" onclick="portalApp.openEditWorkflowModal('${item.id}')" title="Configure Routing Matrix">
-            <i class="fa-solid fa-gear mr-1"></i> Configure
-          </button>
-        </td>
-      </tr>
-    `).join('');
+
+    tbody.innerHTML = list.map(item => {
+      const activeStepObj = item.steps[item.currentActiveStep - 1] || item.steps[0];
+      const progressPercent = Math.round((item.currentActiveStep / item.totalSteps) * 100);
+
+      // Micro stepper nodes
+      const stepperDots = item.steps.map((st, i) => {
+        let dotClass = 'pending';
+        let iconHtml = '<i class="fa-solid fa-circle"></i>';
+        if (st.status === 'COMPLETED') {
+          dotClass = 'completed';
+          iconHtml = '<i class="fa-solid fa-check"></i>';
+        } else if (st.status === 'IN_PROGRESS') {
+          dotClass = 'active';
+          iconHtml = '<i class="fa-solid fa-spinner fa-spin"></i>';
+        }
+        return `<span class="wf-step-node ${dotClass}" title="Step ${st.stepNo}: ${st.name} (${st.status})">${iconHtml}</span>`;
+      }).join('<span class="wf-arrow">›</span>');
+
+      return `
+        <tr>
+          <td>
+            <div style="font-weight: 800; color: #0f172a; font-size: 0.92rem; display: flex; align-items: center; gap: 8px;">
+              <span style="display:inline-flex; align-items:center; justify-content:center; width:28px; height:28px; border-radius:6px; background:${item.color}15; color:${item.color}; font-size:0.85rem;">
+                <i class="fa-solid ${item.icon}"></i>
+              </span>
+              <div>
+                ${item.code}: ${item.title}
+                <div style="font-size: 0.72rem; color: #64748b; font-weight: 500;">${item.category}</div>
+              </div>
+            </div>
+          </td>
+          <td>
+            <div class="workflow-step-chain">
+              ${stepperDots}
+            </div>
+            <div style="margin-top: 4px; font-size: 0.73rem; color: #64748b; font-weight: 600;">
+              Step ${item.currentActiveStep} of ${item.totalSteps} (${progressPercent}%) &bull; <strong style="color: #0f172a;">${activeStepObj.name}</strong>
+            </div>
+          </td>
+          <td>
+            <div style="font-weight: 700; color: #1e293b; font-size: 0.83rem;">${activeStepObj.responsibleUser}</div>
+            <div style="font-size: 0.72rem; color: #64748b;">${activeStepObj.responsibleRole}</div>
+          </td>
+          <td>
+            <span class="badge" style="background:#f1f5f9; color:#334155; font-size:0.75rem; font-weight:600; border:1px solid #cbd5e1;">
+              <i class="fa-regular fa-clock mr-1"></i> ${activeStepObj.timestamp}
+            </span>
+          </td>
+          <td style="max-width: 240px;">
+            <div style="font-size: 0.8rem; font-weight: 600; color: #0f172a; line-height: 1.35;">
+              <i class="fa-solid fa-arrow-right text-primary mr-1"></i> ${activeStepObj.nextAction}
+            </div>
+          </td>
+          <td>
+            <span class="badge" style="background:${item.overallStatus === 'COMPLETED' ? '#dcfce7; color:#166534;' : '#eff6ff; color:#1d4ed8;'} font-weight:800; font-size:0.75rem; border:1px solid ${item.overallStatus === 'COMPLETED' ? '#86efac' : '#bfdbfe'};">
+              ${item.overallStatus}
+            </span>
+          </td>
+          <td class="text-end">
+            <div style="display: inline-flex; gap: 4px;">
+              <button class="btn btn-secondary btn-sm" onclick="portalApp.openWorkflowPipelineModal('${item.id}')" title="Inspect Full Audit Trail & Advance Steps">
+                <i class="fa-solid fa-timeline mr-1"></i> Inspect
+              </button>
+              <button class="btn btn-primary btn-sm" onclick="portalApp.advanceWorkflowStep('${item.id}')" title="Advance to Next Statutory Step" ${item.overallStatus === 'COMPLETED' ? 'disabled' : ''}>
+                <i class="fa-solid fa-forward-step mr-1"></i> Advance
+              </button>
+            </div>
+          </td>
+        </tr>
+      `;
+    }).join('');
   }
 
   function filterWorkflowSettingsTable() {
     const q = (document.getElementById('searchWorkflowSettingsInput')?.value || '').toLowerCase().trim();
     const dept = document.getElementById('filterWorkflowDeptSelect')?.value || '';
-    const filtered = TASKS_WORKFLOW_SETTINGS_DATA.filter(item => {
-      const matchQ = !q || item.category.toLowerCase().includes(q) || item.approver.toLowerCase().includes(q);
+    const filtered = INSTITUTIONAL_WORKFLOWS_DATA.filter(item => {
+      const matchQ = !q || item.title.toLowerCase().includes(q) || item.code.toLowerCase().includes(q) || item.category.toLowerCase().includes(q) || item.domain.toLowerCase().includes(q);
       const matchDept = !dept || item.domain.includes(dept);
       return matchQ && matchDept;
     });
     renderWorkflowSettingsTable(filtered);
+  }
+
+  function openWorkflowPipelineModal(wfId) {
+    activeModalWorkflowId = wfId || 'WF-A';
+    const wf = INSTITUTIONAL_WORKFLOWS_DATA.find(w => w.id === activeModalWorkflowId) || INSTITUTIONAL_WORKFLOWS_DATA[0];
+    if (!wf) return;
+
+    const select = document.getElementById('modalWfSelector');
+    if (select) {
+      select.value = wf.id;
+    }
+
+    const titleEl = document.getElementById('modalWfTitle');
+    if (titleEl) {
+      titleEl.innerHTML = `<i class="fa-solid ${wf.icon}" style="color: ${wf.color};"></i> ${wf.code}: ${wf.title}`;
+    }
+
+    const descEl = document.getElementById('modalWfSequenceDesc');
+    if (descEl) {
+      descEl.textContent = wf.description;
+    }
+
+    const currentObj = wf.steps[wf.currentActiveStep - 1] || wf.steps[0];
+    const curActionEl = document.getElementById('modalWfCurrentActionBox');
+    if (curActionEl) {
+      curActionEl.innerHTML = `
+        <div style="font-size:0.75rem; text-transform:uppercase; letter-spacing:0.05em; font-weight:800; color:#b45309; margin-bottom:4px;">
+          <i class="fa-solid fa-triangle-exclamation mr-1"></i> Immediate Required Statutory Action (Step ${wf.currentActiveStep} of ${wf.totalSteps})
+        </div>
+        <div style="font-size:0.95rem; font-weight:800; color:#92400e; margin-bottom:6px;">
+          ${currentObj.nextAction}
+        </div>
+        <div style="font-size:0.8rem; color:#78350f;">
+          <strong>Responsible Official:</strong> ${currentObj.responsibleUser} (${currentObj.responsibleRole}) &bull; <strong>Recorded Status:</strong> <span class="badge" style="background:#fef3c7; color:#92400e; border:1px solid #fde68a;">${currentObj.status}</span>
+        </div>
+      `;
+    }
+
+    const container = document.getElementById('modalWfStepsContainer');
+    if (container) {
+      container.innerHTML = wf.steps.map(st => {
+        let cardClass = 'wf-step-card pending-step';
+        let badgeHtml = '<span class="badge" style="background:#f1f5f9; color:#475569;">PENDING</span>';
+        if (st.status === 'COMPLETED') {
+          cardClass = 'wf-step-card completed-step';
+          badgeHtml = '<span class="badge" style="background:#dcfce7; color:#166534; font-weight:700;"><i class="fa-solid fa-check mr-1"></i> COMPLETED</span>';
+        } else if (st.status === 'IN_PROGRESS') {
+          cardClass = 'wf-step-card active-step';
+          badgeHtml = '<span class="badge" style="background:#eff6ff; color:#1d4ed8; font-weight:800;"><i class="fa-solid fa-spinner fa-spin mr-1"></i> IN PROGRESS</span>';
+        }
+
+        return `
+          <div class="${cardClass}">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+              <div style="font-weight:800; font-size:0.92rem; color:#0f172a;">
+                Step ${st.stepNo}: ${st.name}
+              </div>
+              <div>${badgeHtml}</div>
+            </div>
+            <div class="wf-meta-grid">
+              <div><i class="fa-solid fa-user-tie text-primary mr-1"></i> <strong>User:</strong> ${st.responsibleUser}</div>
+              <div><i class="fa-solid fa-shield text-secondary mr-1"></i> <strong>Role:</strong> ${st.responsibleRole}</div>
+              <div><i class="fa-regular fa-clock text-muted mr-1"></i> <strong>Timestamp:</strong> ${st.timestamp}</div>
+            </div>
+            <div style="margin-top:6px; font-size:0.82rem; color:#1e293b; background:#f8fafc; padding:6px 10px; border-radius:6px; border:1px solid #e2e8f0;">
+              <strong style="color:#0f172a;">Mandatory Next Action:</strong> ${st.nextAction}
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    const advBtn = document.getElementById('modalAdvanceBtn');
+    if (advBtn) {
+      if (wf.overallStatus === 'COMPLETED') {
+        advBtn.disabled = true;
+        advBtn.innerHTML = '<i class="fa-solid fa-check-double mr-1"></i> Workflow Completed';
+      } else {
+        advBtn.disabled = false;
+        advBtn.innerHTML = `<i class="fa-solid fa-forward-step mr-1"></i> Advance to Step ${Math.min(wf.currentActiveStep + 1, wf.totalSteps)}`;
+      }
+    }
+
+    openModal('institutionalWorkflowModal');
+  }
+
+  function advanceWorkflowStep(wfId) {
+    const wf = INSTITUTIONAL_WORKFLOWS_DATA.find(w => w.id === wfId);
+    if (!wf) return;
+
+    if (wf.currentActiveStep < wf.totalSteps) {
+      const curIdx = wf.currentActiveStep - 1;
+      wf.steps[curIdx].status = 'COMPLETED';
+      wf.steps[curIdx].timestamp = new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' }) + ' IST';
+
+      wf.currentActiveStep += 1;
+      const nextIdx = wf.currentActiveStep - 1;
+      wf.steps[nextIdx].status = 'IN_PROGRESS';
+      wf.steps[nextIdx].timestamp = new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' }) + ' IST';
+      showToast(`${wf.code} successfully advanced to Step ${wf.currentActiveStep}: "${wf.steps[nextIdx].name}"`, 'success');
+    } else {
+      wf.overallStatus = 'COMPLETED';
+      showToast(`${wf.code} has completed all ${wf.totalSteps} lifecycle steps!`, 'success');
+    }
+
+    renderWorkflowSettingsTable();
+    if (activeModalWorkflowId === wfId) {
+      openWorkflowPipelineModal(wfId);
+    }
+  }
+
+  function advanceCurrentModalWorkflowStep() {
+    advanceWorkflowStep(activeModalWorkflowId);
+  }
+
+  function exportWorkflowSettingsCSV() {
+    let csv = '"Workflow ID","Code","Title","Category","Domain","Total Steps","Active Step","SLA","Overall Status","End-to-End Pipeline Sequence","Active Step Name","Responsible User","Responsible Role","Recorded Timestamp","Required Next Action"\n';
+    INSTITUTIONAL_WORKFLOWS_DATA.forEach(w => {
+      const activeObj = w.steps[w.currentActiveStep - 1] || w.steps[0];
+      csv += `"${w.id}","${w.code}","${w.title}","${w.category}","${w.domain}","${w.totalSteps}","${w.currentActiveStep}","${w.sla}","${w.overallStatus}","${w.description.replace(/"/g, '""')}","${activeObj.name}","${activeObj.responsibleUser}","${activeObj.responsibleRole}","${activeObj.timestamp}","${activeObj.nextAction.replace(/"/g, '""')}"\n`;
+    });
+    downloadCSV(csv, 'SriVidya_Institutional_Workflows_Matrix_A_to_J.csv');
+    showToast('Exported complete 10-workflow lifecycle registry to CSV', 'success');
   }
 
   // --- MODAL DECISION HANDLERS ---
@@ -64852,6 +65319,15 @@ const FEE_CATEGORY_AUDIT_DATA = [
 
 
   return {
+    // Institutional Core Workflows (Workflows A through J)
+    INSTITUTIONAL_WORKFLOWS_DATA,
+    renderWorkflowSettingsTable,
+    filterWorkflowSettingsTable,
+    openWorkflowPipelineModal,
+    advanceWorkflowStep,
+    advanceCurrentModalWorkflowStep,
+    exportWorkflowSettingsCSV,
+
     state,
     resetFeeCollectionSearch,
     openRecordPaymentModal,

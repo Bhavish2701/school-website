@@ -622,3 +622,4 @@ class StudentPortalService {
 }
 
 module.exports = new StudentPortalService();
+

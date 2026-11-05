@@ -684,7 +684,7 @@
               onclick="portalApp.switchSubTab('tasks', 'escalations');"><span>Escalations</span><span
                 class="nav-sub-badge danger">3 Alert</span></a>
             <a href="#tasks-workflows" class="nav-sub-link" data-sub="workflows"
-              onclick="portalApp.switchSubTab('tasks', 'workflows');">Workflow Settings</a>
+              onclick="portalApp.switchSubTab('tasks', 'workflows');">Core Workflows (A–J)</a>
           </div>
         </div>
 
@@ -14364,7 +14364,7 @@
               <i class="fa-solid fa-triangle-exclamation text-danger mr-1"></i> Escalations (<span id="tabBadgeTasksEscalations">3 Alert</span>)
             </button>
             <button class="tab-btn" data-sub="workflows" onclick="portalApp.switchSubTab('tasks', 'workflows')">
-              <i class="fa-solid fa-sliders text-purple mr-1"></i> Workflow Settings (7 Matrix)
+              <i class="fa-solid fa-sliders text-purple mr-1"></i> Core Workflows (10 Pipelines)
             </button>
           </div>
 
@@ -14797,23 +14797,26 @@
                SUBVIEW 5: WORKFLOW SETTINGS
                Who can submit, review and approve each type of request
                ==================================================================== -->
+                    <!-- ====================================================================
+               SUBVIEW 5: THE MOST IMPORTANT SCHOOL WORKFLOWS (WORKFLOWS A - J)
+               ==================================================================== -->
           <div class="tasks-subview" id="subview-tasks-workflows" style="display: none;">
             <!-- Quad Stat Cards -->
             <div class="metrics-quad mb-4">
               <div class="metric-card">
-                <div class="metric-icon-wrap icon-purple"><i class="fa-solid fa-sliders"></i></div>
+                <div class="metric-icon-wrap icon-purple"><i class="fa-solid fa-diagram-project"></i></div>
                 <div class="metric-details">
-                  <span class="metric-label">Statutory Workflow Pipelines</span>
-                  <div class="metric-value text-purple">7 Pipelines</div>
-                  <div class="metric-trend trend-steady"><span>100% Institutional Decision Matrix</span></div>
+                  <span class="metric-label">Institutional Core Workflows</span>
+                  <div class="metric-value text-purple" id="kpiWorkflowCount">10 Pipelines</div>
+                  <div class="metric-trend trend-steady"><span>Workflows A through J Matrix</span></div>
                 </div>
               </div>
               <div class="metric-card">
-                <div class="metric-icon-wrap icon-blue"><i class="fa-solid fa-layer-group"></i></div>
+                <div class="metric-icon-wrap icon-blue"><i class="fa-solid fa-list-check"></i></div>
                 <div class="metric-details">
-                  <span class="metric-label">Multi-Tier Hierarchy</span>
-                  <div class="metric-value text-primary">2 - 3 Tiers</div>
-                  <div class="metric-trend trend-up"><span>Dept Head &rarr; VP &rarr; Principal</span></div>
+                  <span class="metric-label">End-to-End Lifecycle Steps</span>
+                  <div class="metric-value text-primary" id="kpiWorkflowSteps">86 Audited Steps</div>
+                  <div class="metric-trend trend-up"><span>100% Sequence Traceability</span></div>
                 </div>
               </div>
               <div class="metric-card">
@@ -14821,15 +14824,15 @@
                 <div class="metric-details">
                   <span class="metric-label">Standard Turnaround SLA</span>
                   <div class="metric-value text-emerald">24 - 48 Hrs</div>
-                  <div class="metric-trend trend-up"><span>Automated Escalation Rule</span></div>
+                  <div class="metric-trend trend-up"><span>Active Escalation Watchdog</span></div>
                 </div>
               </div>
               <div class="metric-card">
                 <div class="metric-icon-wrap icon-amber"><i class="fa-solid fa-fingerprint"></i></div>
                 <div class="metric-details">
-                  <span class="metric-label">Cryptographic Audit Trail</span>
+                  <span class="metric-label">Audit &amp; Next Action Log</span>
                   <div class="metric-value text-amber">Immutable</div>
-                  <div class="metric-trend trend-steady"><span>Zero Silent Overwrites</span></div>
+                  <div class="metric-trend trend-steady"><span>User • Status • Timestamp • Next Action</span></div>
                 </div>
               </div>
             </div>
@@ -14837,50 +14840,51 @@
             <!-- Filter & Action Strip -->
             <div class="report-meta-header">
               <div class="d-flex align-items-center gap-2 flex-wrap">
-                <div class="search-input-wrap" style="width: 280px;">
+                <div class="search-input-wrap" style="width: 320px;">
                   <i class="fa-solid fa-magnifying-glass"></i>
                   <input type="text" class="form-control" id="searchWorkflowSettingsInput"
-                    placeholder="Search workflow, approver, authority..."
+                    placeholder="Search workflow (A–J), step, user..."
                     onkeyup="portalApp.filterWorkflowSettingsTable()">
                 </div>
-                <select class="form-control" style="width: 200px;" id="filterWorkflowDeptSelect"
+                <select class="form-control" style="width: 270px;" id="filterWorkflowDeptSelect"
                   onchange="portalApp.filterWorkflowSettingsTable()">
-                  <option value="">All Workflow Domains</option>
-                  <option value="Academic">Academic &amp; Student Welfare</option>
-                  <option value="Financial">Financial, Fees &amp; Indents</option>
-                  <option value="Operational">Campus Operations &amp; Logistics</option>
+                  <option value="">All Institutional Domains (A–J)</option>
+                  <option value="Academic">Academic &amp; Student (A, B, C, H)</option>
+                  <option value="Financial">Financial &amp; Ledgers (D, I)</option>
+                  <option value="Administrative">Faculty, Staff &amp; Admin (E, F, G, J)</option>
                 </select>
               </div>
               <div class="report-export-buttons">
                 <button class="btn btn-secondary btn-sm" onclick="portalApp.exportWorkflowSettingsCSV()">
                   <i class="fa-solid fa-file-csv"></i> Export Matrix CSV
                 </button>
-                <button class="btn btn-primary btn-sm" onclick="portalApp.openNewWorkflowPipelineModal()">
-                  <i class="fa-solid fa-plus"></i> New Routing Pipeline
+                <button class="btn btn-primary btn-sm" onclick="portalApp.openWorkflowPipelineModal('WF-A')">
+                  <i class="fa-solid fa-diagram-project"></i> Inspect Pipeline Stepper
                 </button>
               </div>
             </div>
 
-            <!-- Table -->
+            <!-- Table with Columns: Workflow, Lifecycle Sequence, Active Step & Responsible User, Status & SLA, Last Timestamp, Required Next Action, Actions -->
             <div class="table-responsive bg-white rounded-3 border">
               <table class="table table-hover align-middle mb-0" id="tableWorkflowSettings">
                 <thead class="table-light">
                   <tr>
-                    <th>Workflow Category &amp; Request Type</th>
-                    <th>Who Can Submit (Originator)</th>
-                    <th>First Reviewer / Verifier</th>
-                    <th>Final Approver / Executive Head</th>
-                    <th>Turnaround SLA</th>
-                    <th>Delegation &amp; Fallback Rule</th>
-                    <th class="text-end">Actions</th>
+                    <th style="min-width: 220px;">Workflow &amp; Title</th>
+                    <th style="min-width: 400px;">End-to-End Lifecycle Sequence</th>
+                    <th style="min-width: 210px;">Active Step &amp; Responsible User</th>
+                    <th style="min-width: 140px;">Status &amp; SLA</th>
+                    <th style="min-width: 175px;">Recorded Timestamp</th>
+                    <th style="min-width: 260px;">Required Next Action</th>
+                    <th class="text-end" style="min-width: 150px;">Actions</th>
                   </tr>
                 </thead>
                 <tbody id="tbodyWorkflowSettings">
-                  <!-- Rendered dynamically -->
+                  <!-- Rendered dynamically via portalApp.renderWorkflowSettingsTable -->
                 </tbody>
               </table>
             </div>
           </div>
+
         </section>
 
         <!-- 18. Settings & Access Control View -->
@@ -29394,129 +29398,148 @@ Class X-A,Monday,2,09:35 AM - 10:20 AM,Physical Science,Sri Navva Anand,Room 201
   <!-- =========================================================================
        MODAL: SCHEDULE INTERACTION / ASSESSMENT
        ========================================================================= -->
+    <!-- =========================================================================
+       MODAL: SCHEDULE INTERACTION / ASSESSMENT
+       ========================================================================= -->
   <div class="modal-backdrop" id="scheduleAssessmentModal" style="display:none;">
-    <div class="portal-modal" style="max-width: 640px; width: 95%; border-radius: 14px; overflow: hidden; box-shadow: 0 25px 50px -12px rgba(15, 23, 42, 0.25);">
-      <!-- Executive Header -->
-      <div class="modal-header" style="border-bottom: 1px solid #e2e8f0; padding: 1.15rem 1.45rem; background: #ffffff;">
-        <div style="display: flex; align-items: center; gap: 0.85rem;">
-          <div style="width: 44px; height: 44px; border-radius: 10px; background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%); color: #1d4ed8; display: flex; align-items: center; justify-content: center; font-size: 1.25rem; border: 1.5px solid #bfdbfe; box-shadow: 0 2px 4px rgba(29, 78, 216, 0.08); flex-shrink: 0;">
+    <div class="portal-modal school-gov-modal" style="max-width: 720px; width: 95%;">
+      <!-- Executive School Header -->
+      <div class="school-gov-header theme-blue">
+        <div style="display: flex; align-items: center; gap: 0.95rem;">
+          <div class="school-gov-icon-badge blue">
             <i class="fa-solid fa-calendar-check"></i>
           </div>
           <div>
-            <div style="font-size: 0.68rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #1d4ed8;">
-              Admissions Lifecycle &amp; Scheduling
+            <div class="school-gov-dept-tag" style="color: #1e40af;">
+              Sri Vidya High School • Admissions Directorate
             </div>
-            <h3 style="margin: 2px 0 0 0; font-size: 1.2rem; font-weight: 800; color: #0f172a; letter-spacing: -0.01em;">Schedule Assessment / Interaction</h3>
+            <h3 class="school-gov-title">Schedule Assessment / Interaction</h3>
             <p style="margin: 2px 0 0; font-size: 0.8rem; color: #64748b;" id="schedModalSubtitle">Applicant: S. Harini (SV202600006) • Class LKG</p>
           </div>
         </div>
-        <button type="button" class="modal-close-x" onclick="portalApp.closeModal('scheduleAssessmentModal')" title="Close (Esc)" style="width: 32px; height: 32px; border-radius: 50%; border: 1px solid #e2e8f0; background: #f8fafc; color: #64748b; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.15s ease;">
+        <button type="button" class="modal-close-x" onclick="portalApp.closeModal('scheduleAssessmentModal')" title="Close (Esc)">
           <i class="fa-solid fa-xmark"></i>
         </button>
       </div>
 
       <form onsubmit="portalApp.submitScheduleAssessment(event)">
         <input type="hidden" id="schedTargetAppId">
-        <div class="modal-body" style="padding: 1.35rem 1.45rem; display: flex; flex-direction: column; gap: 1.15rem; background: #ffffff;">
+        <div class="modal-body" style="padding: 1.35rem 1.6rem; display: flex; flex-direction: column; gap: 1.15rem; background: #ffffff;">
           
-          <!-- Context Advisory Banner -->
-          <div style="background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 8px; padding: 10px 14px; display: flex; align-items: flex-start; gap: 10px; font-size: 0.78rem; color: #1e40af; line-height: 1.45;">
-            <i class="fa-solid fa-calendar-days text-primary" style="font-size: 1rem; margin-top: 2px; flex-shrink: 0;"></i>
-            <div>
-              <strong style="color: #1e3a8a;">Official Examination Docket:</strong> Scheduling this slot assigns the faculty assessment panel and triggers an automated SMS and email appointment docket to the parent/guardian.
+          <!-- Applicant Dossier Micro-Summary Card -->
+          <div class="school-applicant-dossier" id="schedApplicantDossier">
+            <div class="school-applicant-left">
+              <div class="school-applicant-avatar" id="schedAvatarInitials">SH</div>
+              <div>
+                <div class="school-applicant-info-name">
+                  <span id="schedApplicantName">S. Harini</span>
+                  <span class="school-chip school-chip-blue" id="schedChipAppId"><i class="fa-solid fa-hashtag"></i> SV202600006</span>
+                  <span class="school-chip school-chip-green" id="schedChipClass"><i class="fa-solid fa-graduation-cap"></i> Class LKG</span>
+                </div>
+                <div class="school-applicant-info-sub" id="schedApplicantGuardian">
+                  <i class="fa-solid fa-user-shield me-1"></i> Guardian: Sri S. Koteswara Rao (Father) • <i class="fa-solid fa-phone ms-2 me-1"></i> +91 98765 43210
+                </div>
+              </div>
+            </div>
+            <div class="school-applicant-badges">
+              <span class="school-chip school-chip-blue" style="font-weight: 800;">AY 2026–2027</span>
             </div>
           </div>
 
-          <!-- Assessment Type -->
-          <div class="form-group" style="margin-bottom: 0;">
-            <label style="font-weight: 700; font-size: 0.82rem; color: #1e293b; margin-bottom: 6px; display: flex; align-items: center; justify-content: space-between;">
-              <span>Assessment / Interaction Type <span class="text-danger">*</span></span>
-              <span style="font-size: 0.72rem; color: #64748b; font-weight: 500;">Format &amp; Rubric Track</span>
+          <!-- Assessment Format / Rubric -->
+          <div class="school-form-group">
+            <label class="school-form-label">
+              <span>Assessment / Interaction Type <span class="req">*</span></span>
+              <span class="hint">Format &amp; Rubric Track</span>
             </label>
-            <div style="position: relative;">
-              <select id="schedType" class="form-control" required
-                style="width: 100%; height: 40px; padding: 0 2rem 0 0.85rem; border: 1.5px solid #cbd5e1; border-radius: 8px; font-size: 0.85rem; font-weight: 600; color: #0f172a; outline: none; background: #ffffff; cursor: pointer; transition: all 0.2s;">
+            <div class="school-input-wrap">
+              <i class="fa-solid fa-clipboard-check school-input-icon"></i>
+              <select id="schedType" class="school-control school-select" required>
                 <option value="Written Aptitude Evaluation" selected>Written Aptitude &amp; Core Concept Evaluation</option>
                 <option value="Oral Interaction &amp; General Readiness">Oral Interaction &amp; General Readiness (Early Primary)</option>
                 <option value="Principal Interview">Principal &amp; Senior Committee Interaction</option>
+                <option value="Special Aptitude &amp; Talent Track">Special Aptitude &amp; Talent Evaluation (Co-curricular)</option>
               </select>
             </div>
           </div>
 
           <!-- Symmetrical 2-Column: Scheduled Date & Scheduled Time -->
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; align-items: start;">
-            <div class="form-group" style="margin-bottom: 0;">
-              <label style="font-weight: 700; font-size: 0.82rem; color: #1e293b; margin-bottom: 6px; display: flex; align-items: center; justify-content: space-between; white-space: nowrap;">
-                <span>Scheduled Date <span class="text-danger">*</span></span>
-                <span style="font-size: 0.72rem; color: #64748b; font-weight: 500;">Working Day</span>
+          <div class="school-grid-2col">
+            <div class="school-form-group">
+              <label class="school-form-label">
+                <span>Scheduled Date <span class="req">*</span></span>
+                <span class="hint">Campus Working Day</span>
               </label>
-              <div style="position: relative;">
-                <input type="date" id="schedDate" class="form-control" required
-                  style="width: 100%; height: 40px; padding: 0 0.85rem; border: 1.5px solid #cbd5e1; border-radius: 8px; font-size: 0.85rem; font-weight: 600; color: #0f172a; outline: none; background: #ffffff; transition: all 0.2s;">
+              <div class="school-input-wrap">
+                <i class="fa-solid fa-calendar-day school-input-icon"></i>
+                <input type="date" id="schedDate" class="school-control" required>
               </div>
             </div>
 
-            <div class="form-group" style="margin-bottom: 0;">
-              <label style="font-weight: 700; font-size: 0.82rem; color: #1e293b; margin-bottom: 6px; display: flex; align-items: center; justify-content: space-between; white-space: nowrap;">
-                <span>Scheduled Time <span class="text-danger">*</span></span>
-                <span style="font-size: 0.72rem; color: #64748b; font-weight: 500;">Reporting IST</span>
+            <div class="school-form-group">
+              <label class="school-form-label">
+                <span>Scheduled Time <span class="req">*</span></span>
+                <span class="hint">Reporting IST</span>
               </label>
-              <div style="position: relative;">
-                <input type="time" id="schedTime" value="10:00" class="form-control" required
-                  style="width: 100%; height: 40px; padding: 0 0.85rem; border: 1.5px solid #cbd5e1; border-radius: 8px; font-size: 0.85rem; font-weight: 600; color: #0f172a; outline: none; background: #ffffff; transition: all 0.2s;">
+              <div class="school-input-wrap">
+                <i class="fa-solid fa-clock school-input-icon"></i>
+                <input type="time" id="schedTime" value="10:00" class="school-control" required>
               </div>
             </div>
           </div>
 
-          <!-- Symmetrical 2-Column: Venue & Assigned Evaluator (Expanded width prevents text truncation) -->
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; align-items: start;">
-            <div class="form-group" style="margin-bottom: 0;">
-              <label style="font-weight: 700; font-size: 0.82rem; color: #1e293b; margin-bottom: 6px; display: flex; align-items: center; justify-content: space-between; white-space: nowrap;">
-                <span>Venue / Room <span class="text-danger">*</span></span>
-                <span style="font-size: 0.72rem; color: #64748b; font-weight: 500;">Campus Cell</span>
+          <!-- Symmetrical 2-Column: Venue & Assigned Evaluator -->
+          <div class="school-grid-2col">
+            <div class="school-form-group">
+              <label class="school-form-label">
+                <span>Venue / Room <span class="req">*</span></span>
+                <span class="hint">Campus Facility</span>
               </label>
-              <div style="position: relative;">
-                <input type="text" id="schedVenue" class="form-control" value="Academic Assessment Cell (Room 102)" required
-                  placeholder="e.g. Academic Assessment Cell (Room 102)"
-                  style="width: 100%; height: 40px; padding: 0 0.85rem; border: 1.5px solid #cbd5e1; border-radius: 8px; font-size: 0.83rem; font-weight: 600; color: #0f172a; outline: none; background: #ffffff; transition: all 0.2s;">
+              <div class="school-input-wrap">
+                <i class="fa-solid fa-location-dot school-input-icon"></i>
+                <input type="text" id="schedVenue" class="school-control" value="Academic Assessment Cell (Room 102)" required
+                  placeholder="e.g. Academic Assessment Cell (Room 102)">
               </div>
             </div>
 
-            <div class="form-group" style="margin-bottom: 0;">
-              <label style="font-weight: 700; font-size: 0.82rem; color: #1e293b; margin-bottom: 6px; display: flex; align-items: center; justify-content: space-between; white-space: nowrap;">
-                <span>Assigned Evaluator <span class="text-danger">*</span></span>
-                <span style="font-size: 0.72rem; color: #64748b; font-weight: 500;">Faculty / Dean</span>
+            <div class="school-form-group">
+              <label class="school-form-label">
+                <span>Assigned Evaluator <span class="req">*</span></span>
+                <span class="hint">Faculty Panel</span>
               </label>
-              <div style="position: relative;">
-                <input type="text" id="schedAssessor" class="form-control" value="Sri Ch. Ramesh (Academic Dean)" required
-                  placeholder="e.g. Sri Ch. Ramesh (Academic Dean)"
-                  style="width: 100%; height: 40px; padding: 0 0.85rem; border: 1.5px solid #cbd5e1; border-radius: 8px; font-size: 0.83rem; font-weight: 600; color: #0f172a; outline: none; background: #ffffff; transition: all 0.2s;">
+              <div class="school-input-wrap">
+                <i class="fa-solid fa-user-tie school-input-icon"></i>
+                <input type="text" id="schedAssessor" class="school-control" value="Sri Ch. Ramesh (Academic Dean)" required
+                  placeholder="e.g. Sri Ch. Ramesh (Academic Dean)">
               </div>
             </div>
           </div>
 
           <!-- Instructions to Parent -->
-          <div class="form-group" style="margin-bottom: 0;">
-            <label style="font-weight: 700; font-size: 0.82rem; color: #1e293b; margin-bottom: 6px; display: flex; align-items: center; justify-content: space-between;">
-              <span>Instructions to Parent</span>
-              <span style="font-size: 0.72rem; color: #64748b; font-weight: 500;">Printed on Admit Slip</span>
+          <div class="school-form-group">
+            <label class="school-form-label">
+              <span>Instructions to Parent &amp; Candidate</span>
+              <span class="hint">Dispatched on Admit Docket</span>
             </label>
-            <textarea id="schedInstructions" class="form-control" rows="2"
-              placeholder="Enter instructions for student and parents on assessment day..."
-              style="width: 100%; padding: 0.65rem 0.85rem; border: 1.5px solid #cbd5e1; border-radius: 8px; font-size: 0.84rem; color: #0f172a; outline: none; background: #ffffff; transition: all 0.2s; line-height: 1.5; resize: vertical; min-height: 70px;">Please bring the applicant with writing materials and previous academic report card 15 minutes before the scheduled time.</textarea>
+            <div class="school-input-wrap">
+              <i class="fa-solid fa-file-pen school-textarea-icon"></i>
+              <textarea id="schedInstructions" class="school-textarea" rows="2"
+                placeholder="Enter instructions for student and parents on assessment day...">Please bring the applicant with writing materials and previous academic report card 15 minutes before the scheduled time.</textarea>
+            </div>
           </div>
 
         </div>
 
-        <!-- Balanced Governance Footer -->
-        <div class="modal-footer" style="display: flex; justify-content: space-between; align-items: center; background: #f8fafc; border-top: 1px solid #e2e8f0; padding: 0.95rem 1.45rem;">
-          <span style="font-size: 0.76rem; color: #64748b; font-weight: 600; display: inline-flex; align-items: center; gap: 6px;">
-            <i class="fa-solid fa-bell text-warning"></i> Dispatches SMS schedule reminder to parent
-          </span>
-          <div style="display: flex; gap: 0.5rem; align-items: center;">
-            <button type="button" class="btn btn-outline-secondary btn-sm" onclick="portalApp.closeModal('scheduleAssessmentModal')" style="height: 36px; padding: 0 16px; font-weight: 600; border-radius: 7px;">Cancel</button>
-            <button type="submit" class="btn btn-primary btn-sm" style="height: 36px; padding: 0 18px; font-weight: 700; border-radius: 7px; display: inline-flex; align-items: center; gap: 6px;">
-              <i class="fa-solid fa-calendar-check"></i> Confirm Schedule
+        <!-- Professional Governance Footer -->
+        <div class="school-gov-footer">
+          <div class="school-gov-footer-notice">
+            <i class="fa-solid fa-bell text-primary"></i>
+            <span>Dispatches SMS schedule reminder to parent</span>
+          </div>
+          <div class="school-gov-footer-actions">
+            <button type="button" class="btn btn-outline-secondary btn-sm" onclick="portalApp.closeModal('scheduleAssessmentModal')">Cancel</button>
+            <button type="submit" class="btn btn-primary btn-sm">
+              <i class="fa-solid fa-calendar-check me-1"></i> Confirm Schedule
             </button>
           </div>
         </div>
@@ -29528,59 +29551,51 @@ Class X-A,Monday,2,09:35 AM - 10:20 AM,Physical Science,Sri Navva Anand,Room 201
        MODAL: RECORD ASSESSMENT OUTCOME
        ========================================================================= -->
   <div class="modal-backdrop" id="recordAssessmentModal" style="display:none;">
-    <div class="portal-modal" style="max-width: 630px; width: 95%; border-radius: 14px; overflow: hidden; box-shadow: 0 25px 50px -12px rgba(15, 23, 42, 0.25);">
-      <!-- Executive Header -->
-      <div class="modal-header" style="border-bottom: 1px solid #e2e8f0; padding: 1.15rem 1.45rem; background: #ffffff;">
-        <div style="display: flex; align-items: center; gap: 0.85rem;">
-          <div style="width: 44px; height: 44px; border-radius: 10px; background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%); color: #059669; display: flex; align-items: center; justify-content: center; font-size: 1.25rem; border: 1.5px solid #a7f3d0; box-shadow: 0 2px 4px rgba(5, 150, 105, 0.08); flex-shrink: 0;">
+    <div class="portal-modal school-gov-modal" style="max-width: 720px; width: 95%;">
+      <!-- Executive School Header -->
+      <div class="school-gov-header theme-emerald">
+        <div style="display: flex; align-items: center; gap: 0.95rem;">
+          <div class="school-gov-icon-badge emerald">
             <i class="fa-solid fa-chart-line"></i>
           </div>
           <div>
-            <div style="font-size: 0.68rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #059669;">
-              Admissions Academic Evaluation
+            <div class="school-gov-dept-tag" style="color: #059669;">
+              Sri Vidya High School • Academic Evaluation
             </div>
-            <h3 style="margin: 2px 0 0 0; font-size: 1.2rem; font-weight: 800; color: #0f172a; letter-spacing: -0.01em;">Record Assessment Outcome</h3>
+            <h3 class="school-gov-title">Record Assessment Outcome</h3>
             <p style="margin: 2px 0 0; font-size: 0.8rem; color: #64748b;" id="recordAssSub">Applicant: S. Harini (SV202600006) • Class LKG</p>
           </div>
         </div>
-        <button type="button" class="modal-close-x" onclick="portalApp.closeModal('recordAssessmentModal')" title="Close (Esc)" style="width: 32px; height: 32px; border-radius: 50%; border: 1px solid #e2e8f0; background: #f8fafc; color: #64748b; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.15s ease;">
+        <button type="button" class="modal-close-x" onclick="portalApp.closeModal('recordAssessmentModal')" title="Close (Esc)">
           <i class="fa-solid fa-xmark"></i>
         </button>
       </div>
 
       <form onsubmit="portalApp.submitRecordAssessment(event)">
         <input type="hidden" id="recordAssTargetAppId">
-        <div class="modal-body" style="padding: 1.35rem 1.45rem; display: flex; flex-direction: column; gap: 1.15rem; background: #ffffff;">
+        <div class="modal-body" style="padding: 1.35rem 1.6rem; display: flex; flex-direction: column; gap: 1.15rem; background: #ffffff;">
           
-          <!-- Context Advisory Banner -->
-          <div style="background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px; padding: 10px 14px; display: flex; align-items: flex-start; gap: 10px; font-size: 0.78rem; color: #166534; line-height: 1.45;">
-            <i class="fa-solid fa-graduation-cap text-success" style="font-size: 1rem; margin-top: 2px; flex-shrink: 0;"></i>
-            <div>
-              <strong style="color: #14532d;">Statutory Evaluation Standing:</strong> Outcome recorded here updates the candidate's lifecycle docket and establishes baseline eligibility for admission offer issuance.
-            </div>
-          </div>
-
-          <!-- Symmetrical 2-Column Row with Single-Line Labels -->
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; align-items: start;">
-            <div class="form-group" style="margin-bottom: 0;">
-              <label style="font-weight: 700; font-size: 0.82rem; color: #1e293b; margin-bottom: 6px; display: flex; align-items: center; justify-content: space-between; white-space: nowrap;">
-                <span>Score / Percentage <span class="text-danger">*</span></span>
-                <span style="font-size: 0.72rem; color: #64748b; font-weight: 500;">Scale: 0–100%</span>
+          <!-- Symmetrical 2-Column: Score & Recommendation -->
+          <div class="school-grid-2col">
+            <div class="school-form-group">
+              <label class="school-form-label">
+                <span>Score / Percentage <span class="req">*</span></span>
+                <span class="hint">Scale: 0–100%</span>
               </label>
-              <div style="position: relative;">
-                <input type="text" id="recordAssScore" class="form-control" required placeholder="e.g. 88% (First Class)"
-                  style="width: 100%; height: 40px; padding: 0 0.85rem; border: 1.5px solid #cbd5e1; border-radius: 8px; font-size: 0.85rem; font-weight: 700; color: #0f172a; outline: none; background: #ffffff; transition: all 0.2s;">
+              <div class="school-input-wrap">
+                <i class="fa-solid fa-award school-input-icon"></i>
+                <input type="text" id="recordAssScore" class="school-control" required placeholder="e.g. 88% (First Class)">
               </div>
             </div>
 
-            <div class="form-group" style="margin-bottom: 0;">
-              <label style="font-weight: 700; font-size: 0.82rem; color: #1e293b; margin-bottom: 6px; display: flex; align-items: center; justify-content: space-between; white-space: nowrap;">
-                <span>Recommendation <span class="text-danger">*</span></span>
-                <span style="font-size: 0.72rem; color: #64748b; font-weight: 500;">Board Verdict</span>
+            <div class="school-form-group">
+              <label class="school-form-label">
+                <span>Recommendation <span class="req">*</span></span>
+                <span class="hint">Board Verdict</span>
               </label>
-              <div style="position: relative;">
-                <select id="recordAssOutcome" class="form-control" required
-                  style="width: 100%; height: 40px; padding: 0 2rem 0 0.85rem; border: 1.5px solid #cbd5e1; border-radius: 8px; font-size: 0.83rem; font-weight: 700; color: #0f172a; outline: none; background: #ffffff; cursor: pointer; transition: all 0.2s;">
+              <div class="school-input-wrap">
+                <i class="fa-solid fa-check-to-slot school-input-icon"></i>
+                <select id="recordAssOutcome" class="school-control school-select" required>
                   <option value="Recommended" selected>Recommended for Full Admission</option>
                   <option value="Conditional">Conditional (Remedial Bridge Course)</option>
                   <option value="Not Recommended">Not Recommended (Academic Deficiency)</option>
@@ -29590,27 +29605,30 @@ Class X-A,Monday,2,09:35 AM - 10:20 AM,Physical Science,Sri Navva Anand,Room 201
           </div>
 
           <!-- Academic Remarks -->
-          <div class="form-group" style="margin-bottom: 0;">
-            <label style="font-weight: 700; font-size: 0.82rem; color: #1e293b; margin-bottom: 6px; display: flex; align-items: center; justify-content: space-between;">
-              <span>Evaluator Academic Observations <span class="text-danger">*</span></span>
-              <span style="font-size: 0.72rem; color: #64748b; font-weight: 500;">Diagnostic Notes</span>
+          <div class="school-form-group">
+            <label class="school-form-label">
+              <span>Evaluator Academic Observations <span class="req">*</span></span>
+              <span class="hint">Diagnostic Notes</span>
             </label>
-            <textarea id="recordAssRemarks" class="form-control" rows="3" required
-              placeholder="Note student's proficiency in Mathematics, English comprehension, and general behavioral readiness..."
-              style="width: 100%; padding: 0.65rem 0.85rem; border: 1.5px solid #cbd5e1; border-radius: 8px; font-size: 0.85rem; color: #0f172a; outline: none; background: #ffffff; transition: all 0.2s; line-height: 1.5; resize: vertical; min-height: 85px;"></textarea>
+            <div class="school-input-wrap">
+              <i class="fa-solid fa-notes-medical school-textarea-icon"></i>
+              <textarea id="recordAssRemarks" class="school-textarea" rows="3" required
+                placeholder="Note student's proficiency in Mathematics, English comprehension, and general behavioral readiness..."></textarea>
+            </div>
           </div>
 
         </div>
 
-        <!-- Balanced Governance Footer -->
-        <div class="modal-footer" style="display: flex; justify-content: space-between; align-items: center; background: #f8fafc; border-top: 1px solid #e2e8f0; padding: 0.95rem 1.45rem;">
-          <span style="font-size: 0.76rem; color: #64748b; font-weight: 600; display: inline-flex; align-items: center; gap: 6px;">
-            <i class="fa-solid fa-shield-check text-success"></i> AP SCERT Assessment Standards
-          </span>
-          <div style="display: flex; gap: 0.5rem; align-items: center;">
-            <button type="button" class="btn btn-outline-secondary btn-sm" onclick="portalApp.closeModal('recordAssessmentModal')" style="height: 36px; padding: 0 16px; font-weight: 600; border-radius: 7px;">Cancel</button>
-            <button type="submit" class="btn btn-primary btn-sm" style="height: 36px; padding: 0 18px; font-weight: 700; border-radius: 7px; display: inline-flex; align-items: center; gap: 6px;">
-              <i class="fa-solid fa-circle-check"></i> Save Assessment Outcome
+        <!-- Professional Governance Footer -->
+        <div class="school-gov-footer">
+          <div class="school-gov-footer-notice">
+            <i class="fa-solid fa-shield-check text-success"></i>
+            <span>AP SCERT Assessment Standards • Authoritative Evaluation Record</span>
+          </div>
+          <div class="school-gov-footer-actions">
+            <button type="button" class="btn btn-outline-secondary btn-sm" onclick="portalApp.closeModal('recordAssessmentModal')">Cancel</button>
+            <button type="submit" class="btn btn-primary btn-sm">
+              <i class="fa-solid fa-circle-check me-1"></i> Save Assessment Outcome
             </button>
           </div>
         </div>
@@ -29622,110 +29640,125 @@ Class X-A,Monday,2,09:35 AM - 10:20 AM,Physical Science,Sri Navva Anand,Room 201
        MODAL: ISSUE ADMISSION OFFER LETTER
        ========================================================================= -->
   <div class="modal-backdrop" id="issueOfferModal" style="display:none;">
-    <div class="portal-modal" style="max-width: 640px; width: 95%; border-radius: 14px; overflow: hidden; box-shadow: 0 25px 50px -12px rgba(15, 23, 42, 0.25);">
-      <!-- Executive Header -->
-      <div class="modal-header" style="border-bottom: 1px solid #e2e8f0; padding: 1.15rem 1.45rem; background: #ffffff;">
-        <div style="display: flex; align-items: center; gap: 0.85rem;">
-          <div style="width: 44px; height: 44px; border-radius: 10px; background: linear-gradient(135deg, #f5f3ff 0%, #ede9fe 100%); color: #7c3aed; display: flex; align-items: center; justify-content: center; font-size: 1.25rem; border: 1.5px solid #ddd6fe; box-shadow: 0 2px 4px rgba(124, 58, 237, 0.08); flex-shrink: 0;">
+    <div class="portal-modal school-gov-modal" style="max-width: 720px; width: 95%;">
+      <!-- Executive School Header -->
+      <div class="school-gov-header theme-purple">
+        <div style="display: flex; align-items: center; gap: 0.95rem;">
+          <div class="school-gov-icon-badge purple">
             <i class="fa-solid fa-envelope-open-text"></i>
           </div>
           <div>
-            <div style="font-size: 0.68rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #7c3aed;">
-              Admissions Lifecycle &amp; Offer Docket
+            <div class="school-gov-dept-tag" style="color: #7c3aed;">
+              Sri Vidya High School • Admissions Directorate
             </div>
-            <h3 style="margin: 2px 0 0 0; font-size: 1.2rem; font-weight: 800; color: #0f172a; letter-spacing: -0.01em;">Issue Formal Admission Offer</h3>
+            <h3 class="school-gov-title">Issue Formal Admission Offer</h3>
             <p style="margin: 2px 0 0; font-size: 0.8rem; color: #64748b;" id="offerModalSub">Applicant: S. Harini (SV202600006) • Class LKG</p>
           </div>
         </div>
-        <button type="button" class="modal-close-x" onclick="portalApp.closeModal('issueOfferModal')" title="Close (Esc)" style="width: 32px; height: 32px; border-radius: 50%; border: 1px solid #e2e8f0; background: #f8fafc; color: #64748b; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.15s ease;">
+        <button type="button" class="modal-close-x" onclick="portalApp.closeModal('issueOfferModal')" title="Close (Esc)">
           <i class="fa-solid fa-xmark"></i>
         </button>
       </div>
 
       <form onsubmit="portalApp.submitIssueOffer(event)">
         <input type="hidden" id="offerTargetAppId">
-        <div class="modal-body" style="padding: 1.35rem 1.45rem; display: flex; flex-direction: column; gap: 1.15rem; background: #ffffff;">
+        <div class="modal-body" style="padding: 1.35rem 1.6rem; display: flex; flex-direction: column; gap: 1.15rem; background: #ffffff;">
           
-          <!-- Context Advisory Banner -->
-          <div style="background: #faf5ff; border: 1px solid #e9d5ff; border-radius: 8px; padding: 10px 14px; display: flex; align-items: flex-start; gap: 10px; font-size: 0.78rem; color: #6b21a8; line-height: 1.45;">
-            <i class="fa-solid fa-file-signature text-purple" style="font-size: 1rem; margin-top: 2px; flex-shrink: 0;"></i>
-            <div>
-              <strong style="color: #581c87;">Statutory Offer Letter Generation:</strong> Confirming this issuance generates a digitally sealed admission offer letter and dispatches official credentials to the parent via SMS and registered email.
+          <!-- Applicant Dossier Micro-Summary Card with Merit Standing -->
+          <div class="school-applicant-dossier" id="offerApplicantDossier">
+            <div class="school-applicant-left">
+              <div class="school-applicant-avatar" style="background: #7c3aed;" id="offerAvatarInitials">SH</div>
+              <div>
+                <div class="school-applicant-info-name">
+                  <span id="offerApplicantName">S. Harini</span>
+                  <span class="school-chip school-chip-purple" id="offerChipAppId"><i class="fa-solid fa-hashtag"></i> SV202600006</span>
+                  <span class="school-chip school-chip-green" id="offerChipClass"><i class="fa-solid fa-graduation-cap"></i> Class LKG</span>
+                </div>
+                <div class="school-applicant-info-sub" id="offerApplicantStatus">
+                  <i class="fa-solid fa-circle-check text-success me-1"></i> Assessment: <strong>88% (Distinction)</strong> • Verified by Academic Dean
+                </div>
+              </div>
+            </div>
+            <div class="school-applicant-badges">
+              <span class="school-chip school-chip-purple" style="font-weight: 800;">AY 2026–2027</span>
             </div>
           </div>
 
           <!-- Symmetrical 2-Column: Approved Class & Expiry Date -->
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; align-items: start;">
-            <div class="form-group" style="margin-bottom: 0;">
-              <label style="font-weight: 700; font-size: 0.82rem; color: #1e293b; margin-bottom: 6px; display: flex; align-items: center; justify-content: space-between; white-space: nowrap;">
-                <span>Approved Class Offered <span class="text-danger">*</span></span>
-                <span style="font-size: 0.72rem; color: #64748b; font-weight: 500;">Sanctioned Intake</span>
+          <div class="school-grid-2col">
+            <div class="school-form-group">
+              <label class="school-form-label">
+                <span>Approved Class Offered <span class="req">*</span></span>
+                <span class="hint">Sanctioned Intake</span>
               </label>
-              <div style="position: relative;">
-                <input type="text" id="offerClass" class="form-control" readonly
-                  style="width: 100%; height: 40px; padding: 0 0.85rem; border: 1.5px solid #cbd5e1; border-radius: 8px; font-size: 0.85rem; font-weight: 700; color: #0f172a; outline: none; background: #f8fafc;">
+              <div class="school-input-wrap">
+                <i class="fa-solid fa-chalkboard-user school-input-icon"></i>
+                <input type="text" id="offerClass" class="school-control readonly-field" readonly>
               </div>
             </div>
 
-            <div class="form-group" style="margin-bottom: 0;">
-              <label style="font-weight: 700; font-size: 0.82rem; color: #1e293b; margin-bottom: 6px; display: flex; align-items: center; justify-content: space-between; white-space: nowrap;">
-                <span>Offer Expiry Date <span class="text-danger">*</span></span>
-                <span style="font-size: 0.72rem; color: #64748b; font-weight: 500;">Seat Validity</span>
+            <div class="school-form-group">
+              <label class="school-form-label">
+                <span>Offer Expiry Date <span class="req">*</span></span>
+                <span class="hint">Seat Validity</span>
               </label>
-              <div style="position: relative;">
-                <input type="date" id="offerExpiryDate" class="form-control" required
-                  style="width: 100%; height: 40px; padding: 0 0.85rem; border: 1.5px solid #cbd5e1; border-radius: 8px; font-size: 0.85rem; font-weight: 600; color: #0f172a; outline: none; background: #ffffff; transition: all 0.2s;">
+              <div class="school-input-wrap">
+                <i class="fa-solid fa-calendar-xmark school-input-icon"></i>
+                <input type="date" id="offerExpiryDate" class="school-control" required>
               </div>
             </div>
           </div>
 
           <!-- Symmetrical 2-Column: Admission Fee & Concession -->
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; align-items: start;">
-            <div class="form-group" style="margin-bottom: 0;">
-              <label style="font-weight: 700; font-size: 0.82rem; color: #1e293b; margin-bottom: 6px; display: flex; align-items: center; justify-content: space-between; white-space: nowrap;">
-                <span>Admission Fee Due <span class="text-danger">*</span></span>
-                <span style="font-size: 0.72rem; color: #64748b; font-weight: 500;">Term I Base</span>
+          <div class="school-grid-2col">
+            <div class="school-form-group">
+              <label class="school-form-label">
+                <span>Admission Fee Due (INR) <span class="req">*</span></span>
+                <span class="hint">Term I Base</span>
               </label>
-              <div style="position: relative;">
-                <input type="text" id="offerFeeAmount" class="form-control" value="₹12,500" required
-                  style="width: 100%; height: 40px; padding: 0 0.85rem; border: 1.5px solid #cbd5e1; border-radius: 8px; font-size: 0.85rem; font-weight: 700; color: #0f172a; outline: none; background: #ffffff; transition: all 0.2s;">
+              <div class="school-input-wrap">
+                <i class="fa-solid fa-indian-rupee-sign school-input-icon"></i>
+                <input type="text" id="offerFeeAmount" class="school-control" value="₹12,500" required>
               </div>
             </div>
 
-            <div class="form-group" style="margin-bottom: 0;">
-              <label style="font-weight: 700; font-size: 0.82rem; color: #1e293b; margin-bottom: 6px; display: flex; align-items: center; justify-content: space-between; white-space: nowrap;">
+            <div class="school-form-group">
+              <label class="school-form-label">
                 <span>Special Concession</span>
-                <span style="font-size: 0.72rem; color: #64748b; font-weight: 500;">Scholarship / Quota</span>
+                <span class="hint">Scholarship / Quota</span>
               </label>
-              <div style="position: relative;">
-                <input type="text" id="offerConcession" class="form-control" value="None (Standard Board Fee)"
-                  style="width: 100%; height: 40px; padding: 0 0.85rem; border: 1.5px solid #cbd5e1; border-radius: 8px; font-size: 0.83rem; font-weight: 600; color: #0f172a; outline: none; background: #ffffff; transition: all 0.2s;">
+              <div class="school-input-wrap">
+                <i class="fa-solid fa-tags school-input-icon"></i>
+                <input type="text" id="offerConcession" class="school-control" value="None (Standard Board Fee)">
               </div>
             </div>
           </div>
 
           <!-- Terms & Offer Conditions -->
-          <div class="form-group" style="margin-bottom: 0;">
-            <label style="font-weight: 700; font-size: 0.82rem; color: #1e293b; margin-bottom: 6px; display: flex; align-items: center; justify-content: space-between;">
+          <div class="school-form-group">
+            <label class="school-form-label">
               <span>Terms &amp; Offer Conditions</span>
-              <span style="font-size: 0.72rem; color: #64748b; font-weight: 500;">Statutory Clause</span>
+              <span class="hint">Statutory Clause</span>
             </label>
-            <textarea id="offerTerms" class="form-control" rows="2"
-              placeholder="Enter conditions of admission offer..."
-              style="width: 100%; padding: 0.65rem 0.85rem; border: 1.5px solid #cbd5e1; border-radius: 8px; font-size: 0.84rem; color: #0f172a; outline: none; background: #ffffff; transition: all 0.2s; line-height: 1.5; resize: vertical; min-height: 70px;">Admission is subject to payment of admission fee and submission of original Transfer Certificate before commencement of classes.</textarea>
+            <div class="school-input-wrap">
+              <i class="fa-solid fa-file-contract school-textarea-icon"></i>
+              <textarea id="offerTerms" class="school-textarea" rows="2"
+                placeholder="Enter conditions of admission offer...">Admission is subject to payment of admission fee and submission of original Transfer Certificate before commencement of classes.</textarea>
+            </div>
           </div>
 
         </div>
 
-        <!-- Balanced Governance Footer -->
-        <div class="modal-footer" style="display: flex; justify-content: space-between; align-items: center; background: #f8fafc; border-top: 1px solid #e2e8f0; padding: 0.95rem 1.45rem;">
-          <span style="font-size: 0.76rem; color: #64748b; font-weight: 600; display: inline-flex; align-items: center; gap: 6px;">
-            <i class="fa-solid fa-envelope text-primary"></i> Dispatches offer letter to parent email &amp; SMS
-          </span>
-          <div style="display: flex; gap: 0.5rem; align-items: center;">
-            <button type="button" class="btn btn-outline-secondary btn-sm" onclick="portalApp.closeModal('issueOfferModal')" style="height: 36px; padding: 0 16px; font-weight: 600; border-radius: 7px;">Cancel</button>
-            <button type="submit" class="btn btn-primary btn-sm" style="height: 36px; padding: 0 18px; font-weight: 700; border-radius: 7px; display: inline-flex; align-items: center; gap: 6px;">
-              <i class="fa-solid fa-paper-plane"></i> Dispatch Offer Letter
+        <!-- Professional Governance Footer -->
+        <div class="school-gov-footer">
+          <div class="school-gov-footer-notice">
+            <i class="fa-solid fa-envelope text-primary"></i>
+            <span>Dispatches offer letter to parent email &amp; SMS</span>
+          </div>
+          <div class="school-gov-footer-actions">
+            <button type="button" class="btn btn-outline-secondary btn-sm" onclick="portalApp.closeModal('issueOfferModal')">Cancel</button>
+            <button type="submit" class="btn btn-primary btn-sm" style="background:#4f46e5; border-color:#4f46e5;">
+              <i class="fa-solid fa-paper-plane me-1"></i> Dispatch Offer Letter
             </button>
           </div>
         </div>
@@ -29737,135 +29770,155 @@ Class X-A,Monday,2,09:35 AM - 10:20 AM,Physical Science,Sri Navva Anand,Room 201
        MODAL: CONFIRM ENROLMENT & DUPLICATE PREVENTION SCANNER
        ========================================================================= -->
   <div class="modal-backdrop" id="confirmEnrolmentModal" style="display:none;">
-    <div class="portal-modal" style="max-width: 700px; width: 95%; border-radius: 14px; overflow: hidden; box-shadow: 0 25px 50px -12px rgba(15, 23, 42, 0.25);">
-      <!-- Executive Header -->
-      <div class="modal-header" style="border-bottom: 1px solid #e2e8f0; padding: 1.15rem 1.45rem; background: #ffffff;">
-        <div style="display: flex; align-items: center; gap: 0.85rem;">
-          <div style="width: 44px; height: 44px; border-radius: 10px; background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%); color: #059669; display: flex; align-items: center; justify-content: center; font-size: 1.25rem; border: 1.5px solid #a7f3d0; box-shadow: 0 2px 4px rgba(5, 150, 105, 0.08); flex-shrink: 0;">
+    <div class="portal-modal school-gov-modal" style="max-width: 740px; width: 95%;">
+      <!-- Executive School Header -->
+      <div class="school-gov-header theme-emerald">
+        <div style="display: flex; align-items: center; gap: 0.95rem;">
+          <div class="school-gov-icon-badge emerald">
             <i class="fa-solid fa-graduation-cap"></i>
           </div>
           <div>
-            <div style="font-size: 0.68rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #059669;">
-              Statutory Admissions &amp; General Register
+            <div class="school-gov-dept-tag" style="color: #059669;">
+              Sri Vidya High School • Statutory General Register
             </div>
-            <h3 style="margin: 2px 0 0 0; font-size: 1.2rem; font-weight: 800; color: #0f172a; letter-spacing: -0.01em;">Confirm Enrolment &amp; Allocate Student ID</h3>
+            <h3 class="school-gov-title">Confirm Enrolment &amp; Allocate Student ID</h3>
             <p style="margin: 2px 0 0; font-size: 0.8rem; color: #64748b;" id="enrolModalSub">Applicant: S. Harini (SV202600006) • Class LKG</p>
           </div>
         </div>
-        <button type="button" class="modal-close-x" onclick="portalApp.closeModal('confirmEnrolmentModal')" title="Close (Esc)" style="width: 32px; height: 32px; border-radius: 50%; border: 1px solid #e2e8f0; background: #f8fafc; color: #64748b; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.15s ease;">
+        <button type="button" class="modal-close-x" onclick="portalApp.closeModal('confirmEnrolmentModal')" title="Close (Esc)">
           <i class="fa-solid fa-xmark"></i>
         </button>
       </div>
 
       <form onsubmit="portalApp.submitConfirmEnrolment(event)">
         <input type="hidden" id="enrolTargetAppId">
-        <div class="modal-body" style="padding: 1.35rem 1.45rem; display: flex; flex-direction: column; gap: 1.15rem; max-height: calc(85vh - 140px); overflow-y: auto; background: #ffffff;">
+        <div class="modal-body" style="padding: 1.35rem 1.6rem; display: flex; flex-direction: column; gap: 1.15rem; max-height: calc(85vh - 140px); overflow-y: auto; background: #ffffff;">
           
-          <!-- Duplicate Prevention Scanner Result -->
+          <!-- Duplicate Prevention Scanner Result (State Board Authority Banner) -->
           <div id="duplicateScannerContainer">
-            <!-- Dynamically populated via portalApp.scanAdmissionsDuplicate -->
+            <div style="background: #f0fdf4; border: 1.5px solid #bbf7d0; border-radius: 10px; padding: 0.85rem 1.15rem; display: flex; align-items: flex-start; gap: 0.85rem;">
+              <div style="width: 32px; height: 32px; border-radius: 50%; background: #dcfce7; color: #166534; display: flex; align-items: center; justify-content: center; font-size: 1rem; flex-shrink: 0;">
+                <i class="fa-solid fa-shield-check"></i>
+              </div>
+              <div style="flex: 1;">
+                <div style="font-weight: 800; font-size: 0.88rem; color: #14532d;">
+                  Duplicate Scanner: Verified Clean
+                </div>
+                <div style="font-size: 0.78rem; color: #166534; margin-top: 2px; line-height: 1.45;">
+                  Zero matching student records found matching this applicant's legal name, DOB, or guardian phone.
+                </div>
+              </div>
+              <span class="school-chip school-chip-green" style="font-weight: 800;"><i class="fa-solid fa-stamp"></i> Statutory Clean</span>
+            </div>
           </div>
 
-          <!-- Official Allocation Details Card -->
-          <div style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 10px; padding: 1.15rem;">
-            <div style="font-size: 0.78rem; font-weight: 800; color: #1e40af; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.85rem; display: flex; align-items: center; gap: 6px;">
-              <i class="fa-solid fa-id-card text-primary"></i> Official Statutory Enrolment Credentials
+          <!-- Official Enrolment Credentials Card -->
+          <div style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 12px; padding: 1.25rem;">
+            <div style="font-size: 0.78rem; font-weight: 800; color: #1e40af; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 1rem; display: flex; align-items: center; justify-content: space-between;">
+              <span style="display: flex; align-items: center; gap: 6px;">
+                <i class="fa-solid fa-id-card text-primary"></i> Official Enrolment Credentials
+              </span>
+              <span style="font-size: 0.72rem; color: #64748b; font-weight: 600; text-transform: none;">AP Education Code Vol. VI</span>
             </div>
 
-            <!-- Row 1: Admission No & Student ID -->
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
-              <div class="form-group" style="margin-bottom: 0;">
-                <label style="font-weight: 700; font-size: 0.8rem; color: #1e293b; margin-bottom: 5px; display: flex; align-items: center; justify-content: space-between; white-space: nowrap;">
-                  <span>Official Admission No <span class="text-danger">*</span></span>
-                  <span style="font-size: 0.7rem; color: #64748b; font-weight: 500;">General Register</span>
+            <!-- Row 1: Admission No & Student ID (2 Symmetrical Columns) -->
+            <div class="school-grid-2col" style="margin-bottom: 1rem;">
+              <div class="school-form-group">
+                <label class="school-form-label">
+                  <span>Official Admission No <span class="req">*</span></span>
+                  <span class="hint">General Register</span>
                 </label>
-                <div style="position: relative;">
-                  <input type="text" id="enrolAllocatedAdmNo" class="form-control" readonly
-                    style="width: 100%; height: 40px; padding: 0 0.85rem; border: 1.5px solid #bfdbfe; border-radius: 8px; font-size: 0.88rem; font-weight: 800; color: #1d4ed8; background: #eff6ff;">
+                <div class="school-input-wrap">
+                  <i class="fa-solid fa-hashtag school-input-icon text-primary"></i>
+                  <input type="text" id="enrolAllocatedAdmNo" class="school-control" readonly
+                    style="background: #eff6ff; border-color: #bfdbfe; color: #1d4ed8; font-weight: 800;">
                 </div>
               </div>
 
-              <div class="form-group" style="margin-bottom: 0;">
-                <label style="font-weight: 700; font-size: 0.8rem; color: #1e293b; margin-bottom: 5px; display: flex; align-items: center; justify-content: space-between; white-space: nowrap;">
-                  <span>Permanent Student ID <span class="text-danger">*</span></span>
-                  <span style="font-size: 0.7rem; color: #64748b; font-weight: 500;">Unique Identity</span>
+              <div class="school-form-group">
+                <label class="school-form-label">
+                  <span>Permanent Student ID <span class="req">*</span></span>
+                  <span class="hint">Unique Student Identity</span>
                 </label>
-                <div style="position: relative;">
-                  <input type="text" id="enrolAllocatedStudentId" class="form-control" readonly
-                    style="width: 100%; height: 40px; padding: 0 0.85rem; border: 1.5px solid #cbd5e1; border-radius: 8px; font-size: 0.88rem; font-weight: 800; color: #0f172a; background: #f1f5f9;">
-                </div>
-              </div>
-            </div>
-
-            <!-- Row 2: Approved Class & Assigned Section (2 Columns, perfectly aligned) -->
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
-              <div class="form-group" style="margin-bottom: 0;">
-                <label style="font-weight: 700; font-size: 0.8rem; color: #1e293b; margin-bottom: 5px; display: block; white-space: nowrap;">
-                  Approved Class <span class="text-danger">*</span>
-                </label>
-                <div style="position: relative;">
-                  <input type="text" id="enrolAllocatedClass" class="form-control" readonly
-                    style="width: 100%; height: 40px; padding: 0 0.85rem; border: 1.5px solid #cbd5e1; border-radius: 8px; font-size: 0.85rem; font-weight: 700; color: #0f172a; background: #ffffff;">
-                </div>
-              </div>
-
-              <div class="form-group" style="margin-bottom: 0;">
-                <label style="font-weight: 700; font-size: 0.8rem; color: #1e293b; margin-bottom: 5px; display: block; white-space: nowrap;">
-                  Assigned Section <span class="text-danger">*</span>
-                </label>
-                <div style="position: relative;">
-                  <input type="text" id="enrolAllocatedSection" class="form-control" value="Section A" readonly
-                    style="width: 100%; height: 40px; padding: 0 0.85rem; border: 1.5px solid #cbd5e1; border-radius: 8px; font-size: 0.85rem; font-weight: 700; color: #0f172a; background: #ffffff;">
+                <div class="school-input-wrap">
+                  <i class="fa-solid fa-fingerprint school-input-icon"></i>
+                  <input type="text" id="enrolAllocatedStudentId" class="school-control" readonly
+                    style="background: #f1f5f9; border-color: #cbd5e1; color: #0f172a; font-weight: 800;">
                 </div>
               </div>
             </div>
 
-            <!-- Row 3: Class Teacher & Statutory Category (2 Columns, perfectly aligned) -->
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
-              <div class="form-group" style="margin-bottom: 0;">
-                <label style="font-weight: 700; font-size: 0.8rem; color: #1e293b; margin-bottom: 5px; display: block; white-space: nowrap;">
-                  Class Teacher <span class="text-danger">*</span>
+            <!-- Row 2: Approved Class, Assigned Section, Assigned Class Teacher (Balanced 3 Columns) -->
+            <div style="display: grid; grid-template-columns: 1fr 1fr 1.3fr; gap: 0.85rem; margin-bottom: 1rem;">
+              <div class="school-form-group">
+                <label class="school-form-label">
+                  <span>Approved Class <span class="req">*</span></span>
                 </label>
-                <div style="position: relative;">
-                  <input type="text" id="enrolClassTeacher" class="form-control" readonly
-                    style="width: 100%; height: 40px; padding: 0 0.85rem; border: 1.5px solid #cbd5e1; border-radius: 8px; font-size: 0.83rem; font-weight: 600; color: #0f172a; background: #ffffff;">
+                <div class="school-input-wrap">
+                  <i class="fa-solid fa-graduation-cap school-input-icon"></i>
+                  <input type="text" id="enrolAllocatedClass" class="school-control readonly-field" readonly>
                 </div>
               </div>
 
-              <div class="form-group" style="margin-bottom: 0;">
-                <label style="font-weight: 700; font-size: 0.8rem; color: #1e293b; margin-bottom: 5px; display: block; white-space: nowrap;">
-                  Academic Session &amp; Status <span class="text-danger">*</span>
+              <div class="school-form-group">
+                <label class="school-form-label">
+                  <span>Assigned Section <span class="req">*</span></span>
                 </label>
-                <div style="position: relative;">
-                  <input type="text" class="form-control" value="AY 2026–2027 • Regular Statutory Enrolment" readonly
-                    style="width: 100%; height: 40px; padding: 0 0.85rem; border: 1.5px solid #cbd5e1; border-radius: 8px; font-size: 0.82rem; font-weight: 600; color: #475569; background: #f8fafc;">
+                <div class="school-input-wrap">
+                  <i class="fa-solid fa-users-rectangle school-input-icon"></i>
+                  <input type="text" id="enrolAllocatedSection" class="school-control readonly-field" value="Section A" readonly>
                 </div>
+              </div>
+
+              <div class="school-form-group">
+                <label class="school-form-label">
+                  <span>Assigned Class Teacher <span class="req">*</span></span>
+                </label>
+                <div class="school-input-wrap">
+                  <i class="fa-solid fa-chalkboard-user school-input-icon"></i>
+                  <input type="text" id="enrolClassTeacher" class="school-control readonly-field" readonly>
+                </div>
+              </div>
+            </div>
+
+            <!-- Row 3: Academic Session (Full Width) -->
+            <div class="school-form-group">
+              <label class="school-form-label">
+                <span>Academic Session &amp; Status <span class="req">*</span></span>
+                <span class="hint">Authoritative Register Enrolment</span>
+              </label>
+              <div class="school-input-wrap">
+                <i class="fa-solid fa-calendar-check school-input-icon text-success"></i>
+                <input type="text" class="school-control readonly-field" value="AY 2026–2027 • Regular Statutory Enrolment" readonly>
               </div>
             </div>
           </div>
 
           <!-- Statutory Enrolment Order Remarks -->
-          <div class="form-group" style="margin-bottom: 0;">
-            <label style="font-weight: 700; font-size: 0.82rem; color: #1e293b; margin-bottom: 6px; display: flex; align-items: center; justify-content: space-between;">
+          <div class="school-form-group">
+            <label class="school-form-label">
               <span>Statutory Enrolment Order Remarks</span>
-              <span style="font-size: 0.72rem; color: #64748b; font-weight: 500;">General Register Entry</span>
+              <span class="hint">General Register Record</span>
             </label>
-            <textarea id="enrolRemarks" class="form-control" rows="2"
-              placeholder="Enter enrolment remarks for statutory general register..."
-              style="width: 100%; padding: 0.65rem 0.85rem; border: 1.5px solid #cbd5e1; border-radius: 8px; font-size: 0.84rem; color: #0f172a; outline: none; background: #ffffff; transition: all 0.2s; line-height: 1.5; resize: vertical; min-height: 70px;">Enrolment completed in compliance with AP Education Code statutory register regulations.</textarea>
+            <div class="school-input-wrap">
+              <i class="fa-solid fa-pen-nib school-textarea-icon"></i>
+              <textarea id="enrolRemarks" class="school-textarea" rows="2"
+                placeholder="Enter enrolment remarks for statutory general register...">Enrolment completed in compliance with AP Education Code statutory register regulations.</textarea>
+            </div>
           </div>
 
         </div>
 
-        <!-- Balanced Governance Footer -->
-        <div class="modal-footer" style="display: flex; justify-content: space-between; align-items: center; background: #f8fafc; border-top: 1px solid #e2e8f0; padding: 0.95rem 1.45rem;">
-          <span style="font-size: 0.76rem; color: #64748b; font-weight: 600; display: inline-flex; align-items: center; gap: 6px;">
-            <i class="fa-solid fa-graduation-cap text-success"></i> Adds student directly to authoritative register &amp; attendance roster
-          </span>
-          <div style="display: flex; gap: 0.5rem; align-items: center;">
-            <button type="button" class="btn btn-outline-secondary btn-sm" onclick="portalApp.closeModal('confirmEnrolmentModal')" style="height: 36px; padding: 0 16px; font-weight: 600; border-radius: 7px;">Cancel</button>
-            <button type="submit" class="btn btn-success btn-sm" style="height: 36px; padding: 0 18px; font-weight: 700; border-radius: 7px; display: inline-flex; align-items: center; gap: 6px;">
-              <i class="fa-solid fa-circle-check"></i> Formally Enrol Student
+        <!-- Professional Governance Footer -->
+        <div class="school-gov-footer">
+          <div class="school-gov-footer-notice">
+            <i class="fa-solid fa-graduation-cap text-success"></i>
+            <span>Adds student directly to authoritative register &amp; class teacher</span>
+          </div>
+          <div class="school-gov-footer-actions">
+            <button type="button" class="btn btn-outline-secondary btn-sm" onclick="portalApp.closeModal('confirmEnrolmentModal')">Cancel</button>
+            <button type="submit" class="btn btn-success btn-sm">
+              <i class="fa-solid fa-circle-check me-1"></i> Formally Enrol Student
             </button>
           </div>
         </div>
@@ -30703,6 +30756,64 @@ Class X-A,Monday,2,09:35 AM - 10:20 AM,Physical Science,Sri Navva Anand,Room 201
       </form>
     </div>
   </div>
+
+    <!-- =========================================================================
+       MODAL: INSTITUTIONAL CORE WORKFLOW STEPPER (WORKFLOWS A - J)
+       At each step, records: Responsible User, Status, Timestamps, Required Next Action
+       ========================================================================= -->
+  <div class="modal-backdrop" id="institutionalWorkflowModal" style="display:none; z-index: 10055;">
+    <div class="portal-modal" style="max-width: 920px; width: 95%; border-radius: 14px; overflow: hidden; box-shadow: 0 25px 50px -12px rgba(15, 23, 42, 0.25);">
+      <div class="modal-header" style="border-bottom: 1px solid #e2e8f0; padding: 1.15rem 1.45rem; background: #ffffff;">
+        <div style="display: flex; align-items: center; gap: 0.85rem;">
+          <div style="width: 44px; height: 44px; border-radius: 10px; background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%); color: #1d4ed8; display: flex; align-items: center; justify-content: center; font-size: 1.25rem; border: 1.5px solid #bfdbfe; flex-shrink: 0;" id="workflowModalIcon">
+            <i class="fa-solid fa-diagram-project"></i>
+          </div>
+          <div>
+            <div style="font-size: 0.68rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #1d4ed8;" id="workflowModalCategory">
+              Institutional Governance Pipeline
+            </div>
+            <h3 style="margin: 2px 0 0 0; font-size: 1.2rem; font-weight: 800; color: #0f172a;" id="workflowModalTitle">Workflow A: New student admission</h3>
+            <p style="margin: 2px 0 0; font-size: 0.8rem; color: #64748b;" id="workflowModalSubtitle">12 Lifecycle Audit Steps &bull; Responsible User, Status, Timestamps, and Required Next Action</p>
+          </div>
+        </div>
+        <button type="button" class="modal-close-x" onclick="portalApp.closeModal('institutionalWorkflowModal')" title="Close (Esc)" style="width: 32px; height: 32px; border-radius: 50%; border: 1px solid #e2e8f0; background: #f8fafc; color: #64748b; display: flex; align-items: center; justify-content: center; cursor: pointer;">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <!-- Quick Pipeline Selector Dropdown inside Modal -->
+      <div style="background: #f8fafc; border-bottom: 1px solid #e2e8f0; padding: 0.65rem 1.45rem; display: flex; justify-content: space-between; align-items: center; gap: 1rem; flex-wrap: wrap;">
+        <div style="display: flex; align-items: center; gap: 0.5rem;">
+          <span style="font-size: 0.78rem; font-weight: 700; color: #475569;">Switch Pipeline:</span>
+          <select id="workflowModalSelector" class="form-control" style="width: 380px; height: 34px; padding: 2px 8px; font-size: 0.82rem; font-weight: 600;" onchange="portalApp.openWorkflowPipelineModal(this.value)">
+            <!-- Options dynamically populated: Workflow A through Workflow J -->
+          </select>
+        </div>
+        <div id="workflowModalBadges" style="display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;">
+          <!-- SLA & Step badges -->
+        </div>
+      </div>
+
+      <!-- Modal Body: Interactive Step Tracker -->
+      <div class="modal-body" id="workflowModalBody" style="padding: 1.35rem 1.45rem; background: #ffffff; max-height: calc(85vh - 200px); overflow-y: auto;">
+        <!-- Populated dynamically via portalApp.renderWorkflowModalSteps -->
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="modal-footer" style="display: flex; justify-content: space-between; align-items: center; background: #f8fafc; border-top: 1px solid #e2e8f0; padding: 0.95rem 1.45rem; flex-wrap: wrap; gap: 0.5rem;">
+        <button type="button" class="btn btn-outline-secondary btn-sm" onclick="portalApp.closeModal('institutionalWorkflowModal')">Close</button>
+        <div style="display: flex; gap: 0.5rem;">
+          <button type="button" class="btn btn-outline-primary btn-sm" onclick="window.print()">
+            <i class="fa-solid fa-print mr-1"></i> Print Docket
+          </button>
+          <button type="button" class="btn btn-success btn-sm" id="btnAdvanceWorkflowStep" onclick="portalApp.advanceCurrentModalWorkflowStep()" style="font-weight: 700;">
+            <i class="fa-solid fa-forward-step mr-1"></i> Advance Active Step
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
 
   <!-- =========================================================================
        MODULE 18: SETTINGS & ACCESS CONTROL ACTION MODALS

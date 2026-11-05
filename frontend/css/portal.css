@@ -13866,14 +13866,12 @@ input:disabled+.perm-slider {
 /* Upgraded Transfers Toolbar */
 .transfers-toolbar {
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column;
   gap: 0.75rem;
-  align-items: center;
-  justify-content: space-between;
   background: var(--color-bg-surface, #ffffff);
   border: 1px solid var(--color-border, #e2e8f0);
   border-radius: 12px;
-  padding: 0.85rem 1.15rem;
+  padding: 0.95rem 1.25rem;
   margin-bottom: 1.15rem;
   box-shadow: 0 1px 4px rgba(15, 23, 42, 0.03);
 }
@@ -13883,8 +13881,18 @@ input:disabled+.perm-slider {
   flex-wrap: wrap;
   gap: 0.65rem;
   align-items: center;
-  flex: 1;
-  min-width: 320px;
+  width: 100%;
+}
+
+.transfers-toolbar .tc-toolbar-right {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+  width: 100%;
+  padding-top: 0.65rem;
+  border-top: 1px solid var(--color-border-subtle, #f1f5f9);
 }
 
 .tc-search-wrap {
@@ -26365,9 +26373,18 @@ button.close:hover,
   transition: all 0.18s ease;
 }
 
-@media (max-width: 1200px) {
+@media (max-width: 1280px) and (min-width: 769px) {
   .transfers-filter-grid {
-    grid-template-columns: minmax(200px, 1.5fr) repeat(2, 1fr);
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .transfers-filter-grid .tc-search-wrap {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (min-width: 1281px) {
+  .transfers-filter-grid {
+    grid-template-columns: minmax(260px, 2fr) repeat(4, minmax(135px, 1fr));
   }
 }
 
@@ -26383,4 +26400,440 @@ button.close:hover,
     width: 100%;
     justify-content: flex-end;
   }
+}
+
+/* ==========================================================================
+   INSTITUTIONAL CORE WORKFLOW STEPPER & CHAIN STYLES (WORKFLOWS A - J)
+   ========================================================================== */
+.workflow-step-chain {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 4px;
+  font-size: 0.72rem;
+  line-height: 1.3;
+}
+
+.wf-step-node {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 7px;
+  border-radius: 12px;
+  font-weight: 600;
+  background: #f1f5f9;
+  color: #475569;
+  border: 1px solid #e2e8f0;
+  white-space: nowrap;
+}
+
+.wf-step-node.completed {
+  background: #ecfdf5;
+  color: #065f46;
+  border-color: #a7f3d0;
+}
+
+.wf-step-node.active {
+  background: #eff6ff;
+  color: #1e40af;
+  border-color: #93c5fd;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+}
+
+.wf-step-node.pending {
+  background: #f8fafc;
+  color: #94a3b8;
+  border-color: #e2e8f0;
+}
+
+.wf-arrow {
+  color: #94a3b8;
+  font-size: 0.7rem;
+}
+
+.wf-step-card {
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 0.95rem 1.15rem;
+  margin-bottom: 0.75rem;
+  background: #ffffff;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.wf-step-card:hover {
+  border-color: #cbd5e1;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.04);
+}
+
+.wf-step-card.active-step {
+  border: 1.5px solid #3b82f6;
+  background: #f8fafc;
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.08);
+}
+
+.wf-step-card.completed-step {
+  border-left: 4px solid #10b981;
+}
+
+.wf-step-card.pending-step {
+  opacity: 0.8;
+}
+
+.wf-action-box {
+  background: #fffbeb;
+  border: 1px solid #fde68a;
+  border-radius: 7px;
+  padding: 0.5rem 0.85rem;
+  margin-top: 0.5rem;
+  font-size: 0.82rem;
+  color: #92400e;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.wf-meta-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 0.4rem;
+  margin-top: 0.5rem;
+  font-size: 0.8rem;
+  color: #475569;
+}
+
+
+/* ==========================================================================
+   INSTITUTIONAL SCHOOL MANAGEMENT MODAL DESIGN SYSTEM
+   Professional Government/Affiliated School ERP Aesthetic
+   ========================================================================== */
+
+.school-gov-modal {
+  max-width: 720px;
+  width: 95%;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 25px 60px -15px rgba(15, 23, 42, 0.35);
+  border: 1px solid #cbd5e1;
+  background: #ffffff;
+}
+
+.school-gov-header {
+  border-bottom: 1px solid #e2e8f0;
+  padding: 1.15rem 1.6rem;
+  background: #ffffff;
+  border-top: 4px solid #1e3a8a;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.school-gov-header.theme-blue {
+  border-top-color: #1e40af;
+}
+
+.school-gov-header.theme-purple {
+  border-top-color: #7c3aed;
+}
+
+.school-gov-header.theme-emerald {
+  border-top-color: #059669;
+}
+
+.school-gov-icon-badge {
+  width: 46px;
+  height: 46px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.35rem;
+  flex-shrink: 0;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+}
+
+.school-gov-icon-badge.blue {
+  background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+  color: #1d4ed8;
+  border: 1.5px solid #bfdbfe;
+}
+
+.school-gov-icon-badge.purple {
+  background: linear-gradient(135deg, #f5f3ff 0%, #ede9fe 100%);
+  color: #7c3aed;
+  border: 1.5px solid #ddd6fe;
+}
+
+.school-gov-icon-badge.emerald {
+  background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
+  color: #059669;
+  border: 1.5px solid #a7f3d0;
+}
+
+.school-gov-dept-tag {
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.school-gov-title {
+  margin: 2px 0 0 0;
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: #0f172a;
+  letter-spacing: -0.01em;
+}
+
+/* Applicant Header Dossier Card */
+.school-applicant-dossier {
+  background: #f8fafc;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 0.85rem 1.15rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.school-applicant-left {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+.school-applicant-avatar {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: #1e40af;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 0.92rem;
+  box-shadow: 0 2px 4px rgba(30, 64, 175, 0.25);
+  flex-shrink: 0;
+}
+
+.school-applicant-info-name {
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: #0f172a;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.school-applicant-info-sub {
+  font-size: 0.76rem;
+  color: #64748b;
+  margin-top: 2px;
+}
+
+.school-applicant-badges {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.school-chip {
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 3px 9px;
+  border-radius: 6px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.school-chip-blue {
+  background: #eff6ff;
+  color: #1e40af;
+  border: 1px solid #bfdbfe;
+}
+
+.school-chip-green {
+  background: #f0fdf4;
+  color: #166534;
+  border: 1px solid #bbf7d0;
+}
+
+.school-chip-purple {
+  background: #faf5ff;
+  color: #6b21a8;
+  border: 1px solid #e9d5ff;
+}
+
+/* Institutional Form Fields & Controls */
+.school-form-group {
+  margin-bottom: 0;
+}
+
+.school-form-label {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-weight: 700;
+  font-size: 0.8rem;
+  color: #1e293b;
+  margin-bottom: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.school-form-label .req {
+  color: #dc2626;
+  font-weight: 800;
+  margin-left: 2px;
+}
+
+.school-form-label .hint {
+  font-size: 0.72rem;
+  color: #64748b;
+  font-weight: 500;
+  text-transform: none;
+  letter-spacing: normal;
+}
+
+.school-input-wrap {
+  position: relative;
+  width: 100%;
+}
+
+.school-input-icon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #64748b;
+  font-size: 0.88rem;
+  pointer-events: none;
+}
+
+.school-textarea-icon {
+  position: absolute;
+  left: 12px;
+  top: 14px;
+  color: #64748b;
+  font-size: 0.88rem;
+  pointer-events: none;
+}
+
+.school-control {
+  width: 100%;
+  height: 42px;
+  padding: 0 0.85rem 0 2.45rem;
+  border: 1.5px solid #cbd5e1;
+  border-radius: 8px;
+  font-size: 0.86rem;
+  font-weight: 600;
+  color: #0f172a;
+  background-color: #ffffff;
+  outline: none;
+  transition: all 0.2s ease;
+  box-sizing: border-box;
+}
+
+.school-control:focus {
+  border-color: #2563eb;
+  background-color: #ffffff;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.14);
+}
+
+.school-control.readonly-field {
+  background-color: #f8fafc;
+  border-color: #e2e8f0;
+  color: #334155;
+  font-weight: 700;
+  cursor: default;
+}
+
+.school-select {
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2364748b'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+  background-size: 14px;
+  padding-right: 2.2rem;
+  cursor: pointer;
+}
+
+.school-textarea {
+  width: 100%;
+  min-height: 75px;
+  padding: 0.65rem 0.85rem 0.65rem 2.45rem;
+  border: 1.5px solid #cbd5e1;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  line-height: 1.5;
+  color: #0f172a;
+  background-color: #ffffff;
+  outline: none;
+  resize: vertical;
+  transition: all 0.2s ease;
+  box-sizing: border-box;
+}
+
+.school-textarea:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.14);
+}
+
+/* Symmetrical Form Grid */
+.school-grid-2col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  align-items: start;
+}
+
+@media (max-width: 600px) {
+  .school-grid-2col {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Governance Footer */
+.school-gov-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #f8fafc;
+  border-top: 1px solid #e2e8f0;
+  padding: 1rem 1.6rem;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.school-gov-footer-notice {
+  font-size: 0.76rem;
+  color: #64748b;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.school-gov-footer-actions {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.school-gov-footer-actions .btn {
+  height: 38px;
+  padding: 0 18px;
+  font-size: 0.84rem;
+  font-weight: 700;
+  border-radius: 8px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
 }

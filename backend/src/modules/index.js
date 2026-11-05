@@ -37,5 +37,7 @@ const filesModule = require('./files');
 router.use('/files', filesModule.routes);
 const audit_logsModule = require('./audit-logs');
 router.use('/audit-logs', audit_logsModule.routes);
+const workflowsModule = require('./workflows');
+router.use('/workflows', workflowsModule.routes);
 
 module.exports = router;
