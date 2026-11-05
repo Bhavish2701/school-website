@@ -2976,36 +2976,188 @@
       </section>
 
       <!-- =======================================================================
-           MODULE 10: SUPPORT & ISSUE MANAGEMENT (#view-support)
+           MODULE 14: SUPPORT & ISSUE MANAGEMENT (#view-support)
            ======================================================================= -->
       <section class="portal-view" id="view-support">
+        <!-- Module Header -->
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <div>
+            <h2 class="h4 mb-1 fw-bold text-dark">
+              <i class="fa-solid fa-headset text-primary me-2"></i>Support &amp; Issue Management
+            </h2>
+            <p class="text-muted small mb-0">
+              Technical incident handling, administrative portal issues, and institutional requests across Sri Vidya Trust schools.
+            </p>
+          </div>
+          <div class="d-flex gap-2">
+            <button class="btn-pa btn-pa-primary" onclick="platformApp.openCreateTicketModal()">
+              <i class="fa-solid fa-plus me-1"></i> + Create Ticket
+            </button>
+            <button class="btn-pa btn-pa-secondary" onclick="platformApp.loadSupportData()">
+              <i class="fa-solid fa-arrows-rotate me-1"></i> Refresh Queue
+            </button>
+          </div>
+        </div>
+
+        <!-- 14.1 Support Overview (5 KPI Cards) -->
+        <div class="support-kpi-grid">
+          <!-- Card 1: Open Issues -->
+          <div class="support-kpi-card">
+            <div class="support-kpi-icon bg-primary-subtle text-primary">
+              <i class="fa-solid fa-folder-open"></i>
+            </div>
+            <div>
+              <div class="support-kpi-label">Open Issues</div>
+              <div class="support-kpi-val text-primary" id="kpiSupportOpenCount">0</div>
+              <small class="text-muted" style="font-size: 0.7rem;">Active support queue</small>
+            </div>
+          </div>
+
+          <!-- Card 2: High-Priority Issues -->
+          <div class="support-kpi-card">
+            <div class="support-kpi-icon bg-danger-subtle text-danger">
+              <i class="fa-solid fa-triangle-exclamation"></i>
+            </div>
+            <div>
+              <div class="support-kpi-label">High-Priority Issues</div>
+              <div class="support-kpi-val text-danger" id="kpiSupportHighPriorityCount">0</div>
+              <small class="text-muted" style="font-size: 0.7rem;">Critical &amp; High severity</small>
+            </div>
+          </div>
+
+          <!-- Card 3: Issues Awaiting Trust / School -->
+          <div class="support-kpi-card">
+            <div class="support-kpi-icon bg-warning-subtle text-warning">
+              <i class="fa-solid fa-hourglass-half"></i>
+            </div>
+            <div>
+              <div class="support-kpi-label">Awaiting Trust / School</div>
+              <div class="support-kpi-val text-warning" id="kpiSupportAwaitingCount">0</div>
+              <small class="text-muted" style="font-size: 0.7rem;">Requester or Engineering</small>
+            </div>
+          </div>
+
+          <!-- Card 4: Overdue Issues -->
+          <div class="support-kpi-card">
+            <div class="support-kpi-icon bg-danger-subtle text-danger">
+              <i class="fa-solid fa-clock-rotate-left"></i>
+            </div>
+            <div>
+              <div class="support-kpi-label">Overdue Issues</div>
+              <div class="support-kpi-val text-danger" id="kpiSupportOverdueCount">0</div>
+              <small class="text-muted" style="font-size: 0.7rem;">SLA target breached</small>
+            </div>
+          </div>
+
+          <!-- Card 5: Recently Resolved Issues -->
+          <div class="support-kpi-card">
+            <div class="support-kpi-icon bg-success-subtle text-success">
+              <i class="fa-solid fa-circle-check"></i>
+            </div>
+            <div>
+              <div class="support-kpi-label">Recently Resolved</div>
+              <div class="support-kpi-val text-success" id="kpiSupportResolvedCount">0</div>
+              <small class="text-muted" style="font-size: 0.7rem;">Past 7 days resolved</small>
+            </div>
+          </div>
+        </div>
+
+        <!-- 14.2 Support Ticket Directory Card -->
         <div class="pa-card">
           <div class="pa-card-header">
             <div>
-              <h3 class="pa-card-title"><i class="fa-solid fa-headset text-primary"></i> Support &amp; Institutional
-                Issue Queue</h3>
-              <p class="pa-card-desc">Direct technical assistance tickets submitted by school principals, vice
-                principals, and office staff</p>
+              <h3 class="pa-card-title"><i class="fa-solid fa-ticket text-primary me-2"></i>14.2 Support Ticket Directory</h3>
+              <p class="pa-card-desc">Unified tracking across login, portal, data import, integrations, and institutional assistance</p>
             </div>
-            <button class="btn-pa btn-pa-primary" onclick="platformApp.openModal('modalCreateTicket')">
-              <i class="fa-solid fa-plus"></i> Open New Support Ticket
-            </button>
+            <span class="badge bg-secondary" id="lblSupportFilteredCount">Showing 0 Tickets</span>
           </div>
 
+          <!-- Filter Toolbar -->
+          <div class="p-3 bg-light border-bottom">
+            <div class="row g-2 align-items-center">
+              <div class="col-md-3">
+                <div class="input-group input-group-sm">
+                  <span class="input-group-text"><i class="fa-solid fa-magnifying-glass"></i></span>
+                  <input type="text" class="form-control" id="txtSupportSearch" placeholder="Search ticket ID, subject, requester..." onkeyup="platformApp.filterSupportTickets()">
+                </div>
+              </div>
+              <div class="col-md-2">
+                <select class="form-select form-select-sm" id="selSupportFilterCategory" onchange="platformApp.filterSupportTickets()">
+                  <option value="">All Categories</option>
+                  <option value="Login and access">Login and access</option>
+                  <option value="Institution configuration">Institution configuration</option>
+                  <option value="Portal issue">Portal issue</option>
+                  <option value="Data import">Data import</option>
+                  <option value="Email or notification">Email or notification</option>
+                  <option value="Integration">Integration</option>
+                  <option value="Performance">Performance</option>
+                  <option value="Security incident">Security incident</option>
+                  <option value="Feature request">Feature request</option>
+                </select>
+              </div>
+              <div class="col-md-2">
+                <select class="form-select form-select-sm" id="selSupportFilterPriority" onchange="platformApp.filterSupportTickets()">
+                  <option value="">All Priorities</option>
+                  <option value="Critical">Critical</option>
+                  <option value="High">High</option>
+                  <option value="Medium">Medium</option>
+                  <option value="Low">Low</option>
+                </select>
+              </div>
+              <div class="col-md-2">
+                <select class="form-select form-select-sm" id="selSupportFilterStatus" onchange="platformApp.filterSupportTickets()">
+                  <option value="">All Statuses</option>
+                  <option value="New">New</option>
+                  <option value="Triaged">Triaged</option>
+                  <option value="Assigned">Assigned</option>
+                  <option value="In Progress">In Progress</option>
+                  <option value="Waiting for Requester">Waiting for Requester</option>
+                  <option value="Waiting for Engineering">Waiting for Engineering</option>
+                  <option value="Resolved">Resolved</option>
+                  <option value="Closed">Closed</option>
+                </select>
+              </div>
+              <div class="col-md-2">
+                <select class="form-select form-select-sm" id="selSupportFilterInstitution" onchange="platformApp.filterSupportTickets()">
+                  <option value="">All Campuses</option>
+                  <option value="SV-MAIN">Sri Vidya High School (SV-MAIN)</option>
+                  <option value="SV-PRIMARY">Sri Vidya Primary (SV-PRIMARY)</option>
+                  <option value="SV-VILLAGE">Sri Vidya Rural (SV-VILLAGE)</option>
+                  <option value="TRUST_CENTRAL">Trust Central Operations</option>
+                </select>
+              </div>
+              <div class="col-md-1">
+                <button class="btn btn-sm btn-outline-secondary w-100" onclick="platformApp.resetSupportFilters()" title="Reset Filters">
+                  <i class="fa-solid fa-rotate-left"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- 10-Column Table (Section 14.2) -->
           <div class="pa-table-responsive">
             <table class="pa-table">
               <thead>
                 <tr>
                   <th>Ticket ID</th>
-                  <th>Subject &amp; Campus Context</th>
+                  <th>Subject</th>
+                  <th>Institution</th>
+                  <th>Requester</th>
                   <th>Category</th>
                   <th>Priority</th>
+                  <th>Assigned Agent</th>
+                  <th>Created Date</th>
+                  <th>Last Updated</th>
                   <th>Status</th>
-                  <th>Action</th>
+                  <th style="text-align: right; width: 120px;">Actions</th>
                 </tr>
               </thead>
-              <tbody id="supportTicketsTableBody">
-                <!-- Dynamically populated by platform-admin.js -->
+              <tbody id="tbodySupportTickets">
+                <tr>
+                  <td colspan="11" class="text-center py-4 text-muted">
+                    <i class="fa-solid fa-spinner fa-spin me-2"></i> Loading Support Tickets...
+                  </td>
+                </tr>
               </tbody>
             </table>
           </div>
@@ -5210,52 +5362,121 @@
   </div>
 
   <!-- =========================================================================
-       MODAL 2: LOG SUPPORT TICKET
+       MODAL: 14.3 CREATE SUPPORT TICKET
        ========================================================================= -->
-  <div class="pa-modal-backdrop" id="modalCreateTicket">
-    <div class="pa-modal">
-      <div class="pa-modal-header">
+  <div class="pa-modal-backdrop" id="modalCreateTicket" style="display: none;">
+    <div class="pa-modal-card" style="max-width: 680px; width: 90%;">
+      <div class="pa-modal-header" style="padding: 1.25rem 1.5rem; border-bottom: 1px solid #E2E8F0; display: flex; justify-content: space-between; align-items: center;">
         <h3 style="margin: 0; font-size: 1.15rem; font-weight: 700;">
-          <i class="fa-solid fa-headset text-primary"></i> Create Support Ticket
+          <i class="fa-solid fa-headset text-primary me-2"></i>Create Support Ticket
         </h3>
-        <button class="btn-pa btn-pa-secondary" style="padding: 0.3rem 0.6rem;"
-          onclick="platformApp.closeModal('modalCreateTicket')">
-          <i class="fa-solid fa-xmark"></i>
-        </button>
+        <button type="button" class="btn-close" onclick="platformApp.closeModal('modalCreateTicket')"></button>
       </div>
       <form onsubmit="platformApp.handleCreateTicket(event)">
-        <div class="pa-modal-body">
-          <div class="mb-3">
-            <label style="font-size: 0.8rem; font-weight: 600; display: block; margin-bottom: 0.35rem;">Subject / Brief
-              Summary *</label>
-            <input type="text" id="newTicketSubject" class="pa-search-input" style="width: 100%;" required
-              placeholder="Describe the technical requirement...">
+        <div class="pa-modal-body" style="padding: 1.5rem; max-height: 75vh; overflow-y: auto;">
+          <!-- Section 14.5 Security Incident Warning Banner -->
+          <div id="boxTicketSecurityNotice" class="alert alert-danger py-2 small mb-3" style="display: none;">
+            <i class="fa-solid fa-shield-halved me-1"></i>
+            <strong>Section 14.5 Invariant:</strong> Security incidents follow a dedicated triage and incident containment workflow rather than ordinary support queues.
           </div>
+
           <div class="mb-3">
-            <label style="font-size: 0.8rem; font-weight: 600; display: block; margin-bottom: 0.35rem;">Ticket Category
-              *</label>
-            <select id="newTicketCategory" class="pa-select" style="width: 100%;">
-              <option>Subscription &amp; Quota</option>
-              <option>Hardware Integration</option>
-              <option>School Configuration</option>
-              <option>Third-Party Gateways</option>
-              <option>Security &amp; Permissions</option>
-            </select>
+            <label class="form-label small fw-bold">Subject / Issue Summary *</label>
+            <input type="text" id="txtTicketFormSubject" class="form-control form-control-sm" required placeholder="e.g. Faculty Portal Authentication Failure for Science Staff">
+            <!-- Hidden backward-compatible field -->
+            <input type="hidden" id="newTicketSubject">
           </div>
+
+          <div class="row g-2 mb-3">
+            <div class="col-md-6">
+              <label class="form-label small fw-bold">Institution / Campus Scope *</label>
+              <select id="selTicketFormInstitution" class="form-select form-select-sm" required>
+                <option value="SV-MAIN">Sri Vidya High School (SV-MAIN)</option>
+                <option value="SV-PRIMARY">Sri Vidya Primary (SV-PRIMARY)</option>
+                <option value="SV-VILLAGE">Sri Vidya Rural Branch (SV-VILLAGE)</option>
+                <option value="TRUST_CENTRAL">Trust Central Operations</option>
+              </select>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label small fw-bold">Ticket Category *</label>
+              <select id="selTicketFormCategory" class="form-select form-select-sm" required onchange="platformApp.onTicketCategoryChange(this.value)">
+                <option value="Login and access">Login and access</option>
+                <option value="Institution configuration">Institution configuration</option>
+                <option value="Portal issue">Portal issue</option>
+                <option value="Data import">Data import</option>
+                <option value="Email or notification">Email or notification</option>
+                <option value="Integration">Integration</option>
+                <option value="Performance">Performance</option>
+                <option value="Security incident">Security incident</option>
+                <option value="Feature request">Feature request</option>
+              </select>
+              <input type="hidden" id="newTicketCategory">
+            </div>
+          </div>
+
+          <div class="row g-2 mb-3">
+            <div class="col-md-4">
+              <label class="form-label small fw-bold">Requester Name *</label>
+              <input type="text" id="txtTicketFormRequesterName" class="form-control form-control-sm" required placeholder="e.g. Dr. K. V. Rao">
+            </div>
+            <div class="col-md-4">
+              <label class="form-label small fw-bold">Requester Email *</label>
+              <input type="email" id="txtTicketFormRequesterEmail" class="form-control form-control-sm" required placeholder="principal.main@srividya.edu.in">
+            </div>
+            <div class="col-md-4">
+              <label class="form-label small fw-bold">Requester Role</label>
+              <select id="selTicketFormRequesterRole" class="form-select form-select-sm">
+                <option value="Principal">Principal</option>
+                <option value="Vice Principal">Vice Principal</option>
+                <option value="Teacher">Teacher / Faculty</option>
+                <option value="Office Staff">Office Staff</option>
+                <option value="Accounts Staff">Accounts Staff</option>
+                <option value="Platform Operator">Platform Operator</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="row g-2 mb-3">
+            <div class="col-md-6">
+              <label class="form-label small fw-bold">Priority Level *</label>
+              <select id="selTicketFormPriority" class="form-select form-select-sm" required>
+                <option value="Critical">Critical (SLA 4h)</option>
+                <option value="High">High (SLA 12h)</option>
+                <option value="Medium" selected>Medium (SLA 48h)</option>
+                <option value="Low">Low (SLA 96h)</option>
+              </select>
+              <input type="hidden" id="newTicketPriority">
+            </div>
+            <div class="col-md-6">
+              <label class="form-label small fw-bold">Impact Scope *</label>
+              <select id="selTicketFormImpact" class="form-select form-select-sm" required>
+                <option value="Single User">Single User Affected</option>
+                <option value="Class or Section">Entire Class or Section</option>
+                <option value="Entire School">Entire School / Campus</option>
+                <option value="Multi-Campus / Trust-wide">Trust-wide / Multi-Campus</option>
+              </select>
+            </div>
+          </div>
+
           <div class="mb-3">
-            <label style="font-size: 0.8rem; font-weight: 600; display: block; margin-bottom: 0.35rem;">Priority Level
-              *</label>
-            <select id="newTicketPriority" class="pa-select" style="width: 100%;">
-              <option>Normal</option>
-              <option>Medium</option>
-              <option>High</option>
-            </select>
+            <label class="form-label small fw-bold">Detailed Issue Description *</label>
+            <textarea id="txtTicketFormDescription" class="form-control form-control-sm" rows="3" required placeholder="Provide full context, observed error codes, steps to reproduce..."></textarea>
+          </div>
+
+          <div class="row g-2 mb-2">
+            <div class="col-md-6">
+              <label class="form-label small fw-bold">Supporting Screenshots / Logs Reference</label>
+              <input type="text" id="txtTicketFormAttachment" class="form-control form-control-sm font-mono" placeholder="e.g. sso_error_trace.png">
+            </div>
+            <div class="col-md-6">
+              <label class="form-label small fw-bold">Related Record or Request ID</label>
+              <input type="text" id="txtTicketFormRelatedId" class="form-control form-control-sm font-mono" placeholder="e.g. IMPORT-JOB-102, STU-2026-081">
+            </div>
           </div>
         </div>
-        <div class="pa-modal-footer">
-          <button type="button" class="btn-pa btn-pa-secondary"
-            onclick="platformApp.closeModal('modalCreateTicket')">Cancel</button>
-          <button type="submit" class="btn-pa btn-pa-primary">Submit Ticket</button>
+        <div class="pa-modal-footer" style="padding: 1rem 1.5rem; border-top: 1px solid #E2E8F0; display: flex; justify-content: flex-end; gap: 0.5rem; background: #F8FAFC;">
+          <button type="button" class="btn btn-sm btn-secondary" onclick="platformApp.closeModal('modalCreateTicket')">Cancel</button>
+          <button type="submit" class="btn btn-sm btn-primary"><i class="fa-solid fa-paper-plane me-1"></i> Submit Ticket</button>
         </div>
       </form>
     </div>
@@ -8085,6 +8306,324 @@
       </div>
       <div class="pa-modal-footer" style="padding: 1rem 1.5rem; border-top: 1px solid #E2E8F0; display: flex; justify-content: flex-end; background: #F8FAFC;">
         <button type="button" class="btn btn-sm btn-secondary" onclick="platformApp.closeModal('modalIntegrationEventDetail')">Close Inspector</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- =======================================================================
+       MODULE 14: SUPPORT & ISSUE MANAGEMENT MODALS (14.4 & 14.5)
+       ======================================================================= -->
+
+  <!-- Modal 14.4: Master Support Ticket Detail Inspector -->
+  <div class="pa-modal-backdrop" id="modalSupportTicketDetail" style="display: none;">
+    <div class="pa-modal-card" style="max-width: 860px; width: 95%;">
+      <div class="pa-modal-header" style="padding: 1.25rem 1.5rem; border-bottom: 1px solid #E2E8F0; display: flex; justify-content: space-between; align-items: center;">
+        <div class="d-flex align-items-center gap-2">
+          <span class="font-mono fw-bold text-primary fs-5" id="lblTicketDetailId">TICK-2026-001</span>
+          <span class="badge badge-st-new" id="lblTicketDetailStatus">New</span>
+          <span class="badge badge-pri-high" id="lblTicketDetailPriority">High Priority</span>
+        </div>
+        <button type="button" class="btn-close" onclick="platformApp.closeModal('modalSupportTicketDetail')"></button>
+      </div>
+
+      <div class="pa-modal-body" style="padding: 1.5rem; max-height: 78vh; overflow-y: auto;">
+        <!-- Ticket Subject & Context -->
+        <div class="mb-3">
+          <h4 class="h5 fw-bold text-dark mb-1" id="lblTicketDetailSubject">Ticket Subject</h4>
+          <div class="d-flex flex-wrap align-items-center gap-3 text-muted small">
+            <span><i class="fa-solid fa-school text-primary me-1"></i><strong class="text-dark" id="lblTicketDetailInstitution">SV-MAIN</strong></span>
+            <span><i class="fa-solid fa-user me-1"></i><span id="lblTicketDetailRequester">Requester</span></span>
+            <span><i class="fa-solid fa-user-gear me-1"></i>Assigned: <strong class="text-dark" id="lblTicketDetailAgent">Unassigned</strong></span>
+            <span><i class="fa-solid fa-clock me-1"></i>SLA Target: <span class="font-mono" id="lblTicketDetailSLA">--</span></span>
+          </div>
+        </div>
+
+        <!-- Section 14.5: Dedicated Security Incident Workflow Banner -->
+        <div id="boxTicketDetailSecurityBanner" class="ticket-security-banner" style="display: none;">
+          <div>
+            <div class="fw-bold"><i class="fa-solid fa-shield-halved me-1"></i> Dedicated Security Incident Response Active</div>
+            <small>Section 14.5 Invariant: A security incident follows the dedicated security response process rather than being treated as an ordinary support ticket.</small>
+          </div>
+          <button type="button" class="btn btn-sm btn-danger text-nowrap ms-2" onclick="platformApp.openTicketSecurityEvent()">
+            <i class="fa-solid fa-arrow-up-right-from-square me-1"></i> View in Security Module
+          </button>
+        </div>
+
+        <!-- Action Bar (Section 14.4) -->
+        <div class="d-flex flex-wrap gap-2 p-2 bg-light border rounded mb-3">
+          <button type="button" class="btn btn-sm btn-outline-primary" id="btnTicketActionAssign" onclick="platformApp.openAssignModal()">
+            <i class="fa-solid fa-user-plus me-1"></i> Assign
+          </button>
+          <button type="button" class="btn btn-sm btn-outline-secondary" id="btnTicketActionPriority" onclick="platformApp.openChangePriorityModal()">
+            <i class="fa-solid fa-arrow-up-wide-short me-1"></i> Change Priority
+          </button>
+          <button type="button" class="btn btn-sm btn-outline-info" onclick="platformApp.switchTicketTab('conversation')">
+            <i class="fa-solid fa-reply me-1"></i> Reply to School
+          </button>
+          <button type="button" class="btn btn-sm btn-outline-warning" onclick="platformApp.switchTicketTab('internal-notes')">
+            <i class="fa-solid fa-lock me-1"></i> Add Internal Note
+          </button>
+          <button type="button" class="btn btn-sm btn-outline-secondary" id="btnTicketActionRequestInfo" onclick="platformApp.openRequestInfoModal()">
+            <i class="fa-solid fa-circle-question me-1"></i> Request Info
+          </button>
+          <button type="button" class="btn btn-sm btn-outline-danger" id="btnTicketActionEscalate" onclick="platformApp.openEscalateModal()">
+            <i class="fa-solid fa-bullhorn me-1"></i> Escalate
+          </button>
+          <button type="button" class="btn btn-sm btn-success text-white" id="btnTicketActionResolve" onclick="platformApp.openResolveModal()">
+            <i class="fa-solid fa-circle-check me-1"></i> Resolve
+          </button>
+          <button type="button" class="btn btn-sm btn-outline-secondary" id="btnTicketActionReopen" style="display: none;" onclick="platformApp.reopenCurrentTicket()">
+            <i class="fa-solid fa-rotate-left me-1"></i> Reopen
+          </button>
+        </div>
+
+        <!-- 6 Tabs (Section 14.4) -->
+        <div class="ticket-subnav">
+          <button type="button" class="ticket-tab-btn active" id="btnTicketTabOverview" onclick="platformApp.switchTicketTab('overview')">
+            <i class="fa-solid fa-circle-info"></i> 1. Overview
+          </button>
+          <button type="button" class="ticket-tab-btn" id="btnTicketTabConversation" onclick="platformApp.switchTicketTab('conversation')">
+            <i class="fa-solid fa-comments"></i> 2. Conversation
+            <span class="badge bg-primary ms-1" id="badgeTicketConversationCount">0</span>
+          </button>
+          <button type="button" class="ticket-tab-btn" id="btnTicketTabAttachments" onclick="platformApp.switchTicketTab('attachments')">
+            <i class="fa-solid fa-paperclip"></i> 3. Attachments
+            <span class="badge bg-secondary ms-1" id="badgeTicketAttachmentsCount">0</span>
+          </button>
+          <button type="button" class="ticket-tab-btn" id="btnTicketTabInternalNotes" onclick="platformApp.switchTicketTab('internal-notes')">
+            <i class="fa-solid fa-user-secret text-warning"></i> 4. Internal Notes
+            <span class="badge bg-warning text-dark ms-1" id="badgeTicketNotesCount">0</span>
+          </button>
+          <button type="button" class="ticket-tab-btn" id="btnTicketTabRelated" onclick="platformApp.switchTicketTab('related')">
+            <i class="fa-solid fa-link"></i> 5. Related Incidents
+          </button>
+          <button type="button" class="ticket-tab-btn" id="btnTicketTabActivity" onclick="platformApp.switchTicketTab('activity')">
+            <i class="fa-solid fa-timeline"></i> 6. Activity History
+          </button>
+        </div>
+
+        <!-- TAB 1: Overview -->
+        <div id="tabTicketOverviewContent">
+          <div class="p-3 border rounded bg-light mb-3">
+            <span class="small text-muted fw-bold text-uppercase d-block mb-1">Issue Description</span>
+            <p class="mb-0 text-dark" id="lblTicketDetailDescription" style="white-space: pre-wrap; font-size: 0.9rem;">--</p>
+          </div>
+
+          <div class="row g-2 mb-3">
+            <div class="col-md-3">
+              <span class="small text-muted fw-bold text-uppercase d-block">Category</span>
+              <strong class="text-dark font-mono small" id="lblTicketDetailCategory">--</strong>
+            </div>
+            <div class="col-md-3">
+              <span class="small text-muted fw-bold text-uppercase d-block">Impact Scope</span>
+              <strong class="text-dark font-mono small" id="lblTicketDetailImpact">--</strong>
+            </div>
+            <div class="col-md-3">
+              <span class="small text-muted fw-bold text-uppercase d-block">Created Date</span>
+              <small class="text-dark font-mono" id="lblTicketDetailCreated">--</small>
+            </div>
+            <div class="col-md-3">
+              <span class="small text-muted fw-bold text-uppercase d-block">Last Updated</span>
+              <small class="text-dark font-mono" id="lblTicketDetailUpdated">--</small>
+            </div>
+          </div>
+
+          <div class="p-2 border rounded bg-white mb-2 small" id="boxTicketDetailResolution" style="display: none;">
+            <span class="small text-success fw-bold text-uppercase d-block mb-1"><i class="fa-solid fa-circle-check me-1"></i> Resolution Summary</span>
+            <div class="p-2 bg-success-subtle text-success border border-success-subtle rounded font-mono" id="lblTicketDetailResolutionText"></div>
+            <div class="text-muted mt-1" style="font-size: 0.72rem;">Resolved by <span id="lblTicketDetailResolvedBy">--</span> on <span id="lblTicketDetailResolvedAt">--</span></div>
+          </div>
+        </div>
+
+        <!-- TAB 2: Conversation (School-visible) -->
+        <div id="tabTicketConversationContent" style="display: none;">
+          <div class="ticket-message-stream mb-3" id="streamTicketConversation">
+            <!-- Populated by platform-admin.js -->
+          </div>
+          <div class="p-3 border rounded bg-light">
+            <label class="form-label small fw-bold"><i class="fa-solid fa-reply me-1 text-primary"></i> Reply to Requester / School</label>
+            <textarea class="form-control form-control-sm mb-2" id="txtTicketReplyInput" rows="2" placeholder="Type a message visible to school administrators..."></textarea>
+            <div class="d-flex justify-content-end">
+              <button type="button" class="btn btn-sm btn-primary" onclick="platformApp.submitTicketReply()">
+                <i class="fa-solid fa-paper-plane me-1"></i> Send Reply
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB 3: Attachments -->
+        <div id="tabTicketAttachmentsContent" style="display: none;">
+          <div id="listTicketAttachments">
+            <!-- Populated by platform-admin.js -->
+          </div>
+        </div>
+
+        <!-- TAB 4: Internal Notes (Strict Invariant: Internal only) -->
+        <div id="tabTicketInternalNotesContent" style="display: none;">
+          <div class="ticket-internal-banner">
+            <i class="fa-solid fa-lock text-warning me-1"></i>
+            <strong>Strict Confidentiality Guard (Section 14.4):</strong> Internal notes are strictly isolated to platform administrators and support operations. They are never transmitted or visible to the school.
+          </div>
+          <div class="mb-3" id="streamTicketInternalNotes">
+            <!-- Populated by platform-admin.js -->
+          </div>
+          <div class="p-3 border rounded bg-light">
+            <label class="form-label small fw-bold text-dark"><i class="fa-solid fa-lock me-1 text-warning"></i> Add Internal Note</label>
+            <textarea class="form-control form-control-sm mb-2" id="txtTicketInternalNoteInput" rows="2" placeholder="Enter private diagnostic analysis, engineer commentary, root cause notes..."></textarea>
+            <div class="d-flex justify-content-between align-items-center">
+              <select class="form-select form-select-sm" id="selTicketNoteConfidentiality" style="width: 220px;">
+                <option value="Support Staff Only">Support Staff Only</option>
+                <option value="Engineering / Security Only">Engineering / Security Only</option>
+                <option value="Confidential Trust Internal">Confidential Trust Internal</option>
+              </select>
+              <button type="button" class="btn btn-sm btn-warning text-dark fw-bold" onclick="platformApp.submitTicketInternalNote()">
+                <i class="fa-solid fa-plus me-1"></i> Save Internal Note
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB 5: Related Incidents -->
+        <div id="tabTicketRelatedContent" style="display: none;">
+          <div id="listTicketRelatedIncidents">
+            <!-- Populated by platform-admin.js -->
+          </div>
+        </div>
+
+        <!-- TAB 6: Activity History -->
+        <div id="tabTicketActivityContent" style="display: none;">
+          <div id="listTicketActivityHistory">
+            <!-- Populated by platform-admin.js -->
+          </div>
+        </div>
+
+      </div>
+
+      <div class="pa-modal-footer" style="padding: 1rem 1.5rem; border-top: 1px solid #E2E8F0; display: flex; justify-content: flex-end; background: #F8FAFC;">
+        <button type="button" class="btn btn-sm btn-secondary" onclick="platformApp.closeModal('modalSupportTicketDetail')">Close Inspector</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 14.4A: Assign Support Ticket -->
+  <div class="pa-modal-backdrop" id="modalAssignTicket" style="display: none;">
+    <div class="pa-modal-card" style="max-width: 480px; width: 90%;">
+      <div class="pa-modal-header" style="padding: 1.25rem 1.5rem; border-bottom: 1px solid #E2E8F0; display: flex; justify-content: space-between; align-items: center;">
+        <h4 class="h6 mb-0 fw-bold"><i class="fa-solid fa-user-plus text-primary me-2"></i>Assign Support Ticket</h4>
+        <button type="button" class="btn-close" onclick="platformApp.closeModal('modalAssignTicket')"></button>
+      </div>
+      <div class="pa-modal-body" style="padding: 1.5rem;">
+        <div class="mb-3">
+          <label class="form-label small fw-bold">Select Support Agent / Engineer</label>
+          <select class="form-select form-select-sm" id="selAssignAgent">
+            <option value="K. Sudhir|sudhir.k@srividya.edu.in|Tier 2 Support">K. Sudhir (Tier 2 Support - Data &amp; Identity)</option>
+            <option value="P. Swetha|swetha.p@srividya.edu.in|Tier 3 Engineering">P. Swetha (Tier 3 Engineering - Infrastructure &amp; Gateways)</option>
+            <option value="N. Latha|latha.n@srividya.edu.in|Tier 1 Support">N. Latha (Tier 1 Support - School Operations)</option>
+            <option value="T. Harish|harish.t@srividya.edu.in|Tier 2 Support">T. Harish (Tier 2 Support - Hardware &amp; Performance)</option>
+            <option value="Security Response Team|soc@srividya.edu.in|Security Response Team">Security Response Team (SOC Tier 3)</option>
+          </select>
+        </div>
+      </div>
+      <div class="pa-modal-footer" style="padding: 1rem 1.5rem; border-top: 1px solid #E2E8F0; display: flex; justify-content: flex-end; gap: 0.5rem; background: #F8FAFC;">
+        <button type="button" class="btn btn-sm btn-secondary" onclick="platformApp.closeModal('modalAssignTicket')">Cancel</button>
+        <button type="button" class="btn btn-sm btn-primary" onclick="platformApp.submitAssignTicket()">Confirm Assignment</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 14.4B: Change Priority -->
+  <div class="pa-modal-backdrop" id="modalChangePriority" style="display: none;">
+    <div class="pa-modal-card" style="max-width: 480px; width: 90%;">
+      <div class="pa-modal-header" style="padding: 1.25rem 1.5rem; border-bottom: 1px solid #E2E8F0; display: flex; justify-content: space-between; align-items: center;">
+        <h4 class="h6 mb-0 fw-bold"><i class="fa-solid fa-arrow-up-wide-short text-warning me-2"></i>Change Priority</h4>
+        <button type="button" class="btn-close" onclick="platformApp.closeModal('modalChangePriority')"></button>
+      </div>
+      <div class="pa-modal-body" style="padding: 1.5rem;">
+        <div class="mb-3">
+          <label class="form-label small fw-bold">New Priority Level</label>
+          <select class="form-select form-select-sm" id="selChangePriorityLevel">
+            <option value="Critical">Critical (SLA 4 Hours)</option>
+            <option value="High">High (SLA 12 Hours)</option>
+            <option value="Medium">Medium (SLA 48 Hours)</option>
+            <option value="Low">Low (SLA 96 Hours)</option>
+          </select>
+        </div>
+        <div class="mb-3">
+          <label class="form-label small fw-bold">Business Justification / Reason</label>
+          <input type="text" class="form-control form-control-sm" id="txtChangePriorityReason" placeholder="e.g. Assessment deadline approaching, affects 500+ students">
+        </div>
+      </div>
+      <div class="pa-modal-footer" style="padding: 1rem 1.5rem; border-top: 1px solid #E2E8F0; display: flex; justify-content: flex-end; gap: 0.5rem; background: #F8FAFC;">
+        <button type="button" class="btn btn-sm btn-secondary" onclick="platformApp.closeModal('modalChangePriority')">Cancel</button>
+        <button type="button" class="btn btn-sm btn-primary" onclick="platformApp.submitChangePriority()">Update Priority</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 14.4C: Escalate Ticket -->
+  <div class="pa-modal-backdrop" id="modalEscalateTicket" style="display: none;">
+    <div class="pa-modal-card" style="max-width: 500px; width: 90%;">
+      <div class="pa-modal-header" style="padding: 1.25rem 1.5rem; border-bottom: 1px solid #E2E8F0; display: flex; justify-content: space-between; align-items: center;">
+        <h4 class="h6 mb-0 fw-bold text-danger"><i class="fa-solid fa-bullhorn me-2"></i>Escalate Support Ticket</h4>
+        <button type="button" class="btn-close" onclick="platformApp.closeModal('modalEscalateTicket')"></button>
+      </div>
+      <div class="pa-modal-body" style="padding: 1.5rem;">
+        <div class="mb-3">
+          <label class="form-label small fw-bold">Escalation Target</label>
+          <select class="form-select form-select-sm" id="selEscalateTier">
+            <option value="Tier 3 Engineering">Tier 3 Cloud Infrastructure Engineering</option>
+            <option value="Security Team">Security Team (Section 14.5 Response Workflow)</option>
+            <option value="Trust Executive Board">Trust Operations Leadership</option>
+          </select>
+        </div>
+        <div class="mb-3">
+          <label class="form-label small fw-bold">Technical Escalation Rationale</label>
+          <textarea class="form-control form-control-sm" id="txtEscalateReason" rows="3" placeholder="Explain why higher-tier engineering or security intervention is required..."></textarea>
+        </div>
+      </div>
+      <div class="pa-modal-footer" style="padding: 1rem 1.5rem; border-top: 1px solid #E2E8F0; display: flex; justify-content: flex-end; gap: 0.5rem; background: #F8FAFC;">
+        <button type="button" class="btn btn-sm btn-secondary" onclick="platformApp.closeModal('modalEscalateTicket')">Cancel</button>
+        <button type="button" class="btn btn-sm btn-danger" onclick="platformApp.submitEscalateTicket()">Confirm Escalation</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 14.4D: Resolve Ticket -->
+  <div class="pa-modal-backdrop" id="modalResolveTicket" style="display: none;">
+    <div class="pa-modal-card" style="max-width: 520px; width: 90%;">
+      <div class="pa-modal-header" style="padding: 1.25rem 1.5rem; border-bottom: 1px solid #E2E8F0; display: flex; justify-content: space-between; align-items: center;">
+        <h4 class="h6 mb-0 fw-bold text-success"><i class="fa-solid fa-circle-check me-2"></i>Resolve Support Ticket</h4>
+        <button type="button" class="btn-close" onclick="platformApp.closeModal('modalResolveTicket')"></button>
+      </div>
+      <div class="pa-modal-body" style="padding: 1.5rem;">
+        <div class="mb-3">
+          <label class="form-label small fw-bold">Resolution Summary &amp; Corrective Actions *</label>
+          <textarea class="form-control form-control-sm" id="txtResolutionSummary" rows="3" required placeholder="Describe what fix was deployed, configuration changed, or instruction given to the school..."></textarea>
+        </div>
+      </div>
+      <div class="pa-modal-footer" style="padding: 1rem 1.5rem; border-top: 1px solid #E2E8F0; display: flex; justify-content: flex-end; gap: 0.5rem; background: #F8FAFC;">
+        <button type="button" class="btn btn-sm btn-secondary" onclick="platformApp.closeModal('modalResolveTicket')">Cancel</button>
+        <button type="button" class="btn btn-sm btn-success text-white" onclick="platformApp.submitResolveTicket()">Mark as Resolved</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 14.4E: Request Info -->
+  <div class="pa-modal-backdrop" id="modalRequestInfo" style="display: none;">
+    <div class="pa-modal-card" style="max-width: 500px; width: 90%;">
+      <div class="pa-modal-header" style="padding: 1.25rem 1.5rem; border-bottom: 1px solid #E2E8F0; display: flex; justify-content: space-between; align-items: center;">
+        <h4 class="h6 mb-0 fw-bold"><i class="fa-solid fa-circle-question text-info me-2"></i>Request Additional Information</h4>
+        <button type="button" class="btn-close" onclick="platformApp.closeModal('modalRequestInfo')"></button>
+      </div>
+      <div class="pa-modal-body" style="padding: 1.5rem;">
+        <div class="mb-3">
+          <label class="form-label small fw-bold">Question / Required Diagnostics for School</label>
+          <textarea class="form-control form-control-sm" id="txtRequestInfoMessage" rows="3" placeholder="Specify exact screenshots, log timestamps, or student roll numbers required..."></textarea>
+        </div>
+      </div>
+      <div class="pa-modal-footer" style="padding: 1rem 1.5rem; border-top: 1px solid #E2E8F0; display: flex; justify-content: flex-end; gap: 0.5rem; background: #F8FAFC;">
+        <button type="button" class="btn btn-sm btn-secondary" onclick="platformApp.closeModal('modalRequestInfo')">Cancel</button>
+        <button type="button" class="btn btn-sm btn-info text-white" onclick="platformApp.submitRequestInfo()">Send Request</button>
       </div>
     </div>
   </div>

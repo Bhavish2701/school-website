@@ -487,8 +487,12 @@ const platformApp = (function () {
       } else if (typeof renderAuditLogsTable === 'function') {
         renderAuditLogsTable();
       }
-    } else if (viewId === 'support' && typeof renderSupportTicketsTable === 'function') {
-      renderSupportTicketsTable();
+    } else if (viewId === 'support') {
+      if (typeof loadSupportData === 'function') {
+        loadSupportData();
+      } else if (typeof renderSupportTicketsTable === 'function') {
+        renderSupportTicketsTable();
+      }
     } else if (viewId === 'onboarding' && typeof loadOnboardingOverview === 'function') {
       loadOnboardingOverview();
     } else if (viewId === 'roles' && typeof loadRoleTemplatesDirectory === 'function') {
@@ -9623,6 +9627,813 @@ const platformApp = (function () {
   }
 
 
+
+  /* ==========================================================================
+     MODULE 14: SUPPORT & ISSUE MANAGEMENT CONTROLLER
+     14.1 Support Overview (5 KPI Cards)
+     14.2 Support Ticket Directory (10 Columns & Filters)
+     14.3 Create Support Ticket Form & Validation
+     14.4 Ticket Detail Inspector (6 Tabs & Actions)
+     14.5 Lifecycle Workflow & Dedicated Security Response Invariant
+     ========================================================================== */
+
+  let supportTicketsData = [];
+  let supportOverviewData = null;
+  let currentViewingTicketId = null;
+  let activeTicketTab = 'overview';
+
+  function formatSupportDate(d) {
+    if (!d) return '--';
+    const date = new Date(d);
+    if (isNaN(date.getTime())) return '--';
+    return date.toLocaleString('en-IN', {
+      day: '2-digit',
+      month: 'short',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: true
+    });
+  }
+
+  function getSupportPriorityBadge(pri) {
+    switch (pri) {
+      case 'Critical':
+        return '<span class="badge badge-pri-critical"><i class="fa-solid fa-triangle-exclamation me-1"></i>Critical</span>';
+      case 'High':
+        return '<span class="badge badge-pri-high"><i class="fa-solid fa-angles-up me-1"></i>High</span>';
+      case 'Medium':
+        return '<span class="badge badge-pri-medium"><i class="fa-solid fa-angle-up me-1"></i>Medium</span>';
+      case 'Low':
+        return '<span class="badge badge-pri-low"><i class="fa-solid fa-angle-down me-1"></i>Low</span>';
+      default:
+        return `<span class="badge bg-secondary font-mono">${escapeBkpHtml(pri || 'Normal')}</span>`;
+    }
+  }
+
+  function getSupportStatusBadge(status) {
+    switch (status) {
+      case 'New':
+        return '<span class="badge badge-st-new"><i class="fa-solid fa-circle-dot me-1"></i>New</span>';
+      case 'Triaged':
+        return '<span class="badge badge-st-triaged"><i class="fa-solid fa-list-check me-1"></i>Triaged</span>';
+      case 'Assigned':
+        return '<span class="badge badge-st-assigned"><i class="fa-solid fa-user-check me-1"></i>Assigned</span>';
+      case 'In Progress':
+        return '<span class="badge badge-st-inprogress"><i class="fa-solid fa-spinner fa-spin me-1"></i>In Progress</span>';
+      case 'Waiting for Requester':
+        return '<span class="badge badge-st-waiting"><i class="fa-solid fa-hourglass-start me-1"></i>Waiting on School</span>';
+      case 'Waiting for Engineering':
+        return '<span class="badge badge-st-waiting"><i class="fa-solid fa-wrench me-1"></i>Waiting on Eng</span>';
+      case 'Resolved':
+        return '<span class="badge badge-st-resolved"><i class="fa-solid fa-circle-check me-1"></i>Resolved</span>';
+      case 'Closed':
+        return '<span class="badge badge-st-closed"><i class="fa-solid fa-lock me-1"></i>Closed</span>';
+      default:
+        return `<span class="badge bg-secondary font-mono">${escapeBkpHtml(status || 'Open')}</span>`;
+    }
+  }
+
+  async function loadSupportData() {
+    try {
+      const [overviewRes, ticketsRes] = await Promise.all([
+        fetch('/api/v1/platform/support/overview'),
+        fetch('/api/v1/platform/support/tickets')
+      ]);
+
+      if (overviewRes.ok) {
+        const oJson = await overviewRes.json();
+        if (oJson.success && oJson.data) {
+          supportOverviewData = oJson.data;
+          renderSupportOverview(oJson.data);
+        }
+      }
+
+      if (ticketsRes.ok) {
+        const tJson = await ticketsRes.json();
+        if (tJson.success) {
+          supportTicketsData = tJson.data || [];
+          renderSupportTicketsTable(supportTicketsData);
+        }
+      }
+
+      showToast('Support & issue queue synchronized', 'success');
+    } catch (err) {
+      console.error('Error loading support data:', err);
+      showToast('Error loading support data: ' + err.message, 'warning');
+    }
+  }
+
+  /* --------------------------------------------------------------------------
+     14.1 Support Overview (5 KPI Cards)
+     -------------------------------------------------------------------------- */
+  function renderSupportOverview(overview) {
+    if (!overview) return;
+    const setVal = (id, val) => {
+      const el = document.getElementById(id);
+      if (el) el.textContent = val;
+    };
+
+    setVal('kpiSupportOpenCount', overview.openIssuesCount ?? 0);
+    setVal('kpiSupportHighPriorityCount', overview.highPriorityCount ?? 0);
+    setVal('kpiSupportAwaitingCount', overview.awaitingCount ?? 0);
+    setVal('kpiSupportOverdueCount', overview.overdueCount ?? 0);
+    setVal('kpiSupportResolvedCount', overview.recentlyResolvedCount ?? 0);
+  }
+
+  /* --------------------------------------------------------------------------
+     14.2 Support Ticket Directory (10 Columns)
+     -------------------------------------------------------------------------- */
+  function renderSupportTicketsTable(list) {
+    const tbody = document.getElementById('tbodySupportTickets');
+    const legacyTbody = document.getElementById('supportTicketsTableBody');
+    const filterCount = document.getElementById('lblSupportFilteredCount');
+
+    if (filterCount) filterCount.textContent = 'Showing ' + (list || []).length + ' Tickets';
+
+    const renderRows = (arr) => {
+      if (!arr || arr.length === 0) {
+        return '<tr><td colspan="11" class="text-center text-muted py-4"><i class="fa-solid fa-headset me-2"></i>No support tickets match the selected criteria.</td></tr>';
+      }
+
+      return arr.map(t => {
+        const ticketId = t.ticketId || t.id || 'TICK-2026-000';
+        const createdStr = t.createdAt ? formatSupportDate(t.createdAt) : (t.date || '--');
+        const updatedStr = t.updatedAt ? formatSupportDate(t.updatedAt) : createdStr;
+        const requesterName = t.requester?.name || t.reportedBy || 'School Staff';
+        const requesterRole = t.requester?.role || '';
+        const agentName = t.assignedAgent?.name || 'Unassigned';
+
+        return `
+          <tr>
+            <td>
+              <span class="font-mono fw-bold text-primary">#${escapeBkpHtml(ticketId)}</span>
+              ${t.isSecurityIncident ? '<span class="badge bg-danger ms-1" style="font-size:0.65rem;" title="Security Response Active"><i class="fa-solid fa-shield-halved"></i></span>' : ''}
+            </td>
+            <td>
+              <div class="fw-semibold text-dark" style="max-width: 260px; white-space: normal;">${escapeBkpHtml(t.subject || '--')}</div>
+              <small class="text-muted font-mono" style="font-size: 0.72rem;">Impact: ${escapeBkpHtml(t.impact || 'Single User')}</small>
+            </td>
+            <td>
+              <span class="badge bg-secondary-subtle text-dark font-mono">${escapeBkpHtml(t.institution || 'ALL_CAMPUSES')}</span>
+            </td>
+            <td>
+              <div class="fw-bold text-dark">${escapeBkpHtml(requesterName)}</div>
+              <small class="text-muted">${escapeBkpHtml(requesterRole)}</small>
+            </td>
+            <td>
+              <span class="badge bg-light text-dark border font-mono" style="font-size: 0.72rem;">${escapeBkpHtml(t.category || 'General')}</span>
+            </td>
+            <td>
+              ${getSupportPriorityBadge(t.priority)}
+            </td>
+            <td class="small">
+              <span class="${agentName === 'Unassigned' ? 'text-muted fst-italic' : 'text-dark fw-semibold'}">${escapeBkpHtml(agentName)}</span>
+            </td>
+            <td class="font-mono small">
+              ${createdStr}
+            </td>
+            <td class="font-mono small">
+              ${updatedStr}
+            </td>
+            <td>
+              ${getSupportStatusBadge(t.status)}
+            </td>
+            <td style="text-align: right;">
+              <div class="d-flex justify-content-end gap-1">
+                <button class="btn btn-sm btn-outline-primary py-0 px-2" title="Inspect Ticket Details" onclick="platformApp.openSupportTicketDetailsModal('${ticketId}')">
+                  <i class="fa-solid fa-eye"></i> Details
+                </button>
+              </div>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    };
+
+    const renderedHtml = renderRows(list);
+    if (tbody) tbody.innerHTML = renderedHtml;
+    if (legacyTbody) legacyTbody.innerHTML = renderedHtml;
+  }
+
+  function filterSupportTickets() {
+    const search = (document.getElementById('txtSupportSearch')?.value || '').toLowerCase().trim();
+    const category = document.getElementById('selSupportFilterCategory')?.value || '';
+    const priority = document.getElementById('selSupportFilterPriority')?.value || '';
+    const status = document.getElementById('selSupportFilterStatus')?.value || '';
+    const institution = document.getElementById('selSupportFilterInstitution')?.value || '';
+
+    const filtered = (supportTicketsData || []).filter(t => {
+      const ticketId = (t.ticketId || t.id || '').toLowerCase();
+      const subject = (t.subject || '').toLowerCase();
+      const requester = (t.requester?.name || t.reportedBy || '').toLowerCase();
+      const inst = (t.institution || '').toLowerCase();
+
+      const matchSearch = !search ||
+        ticketId.includes(search) ||
+        subject.includes(search) ||
+        requester.includes(search) ||
+        inst.includes(search);
+
+      const matchCat = !category || t.category === category;
+      const matchPri = !priority || t.priority === priority;
+      const matchSt = !status || t.status === status;
+      const matchInst = !institution || t.institution === institution;
+
+      return matchSearch && matchCat && matchPri && matchSt && matchInst;
+    });
+
+    renderSupportTicketsTable(filtered);
+  }
+
+  function resetSupportFilters() {
+    const s = document.getElementById('txtSupportSearch');
+    const c = document.getElementById('selSupportFilterCategory');
+    const p = document.getElementById('selSupportFilterPriority');
+    const st = document.getElementById('selSupportFilterStatus');
+    const inst = document.getElementById('selSupportFilterInstitution');
+
+    if (s) s.value = '';
+    if (c) c.value = '';
+    if (p) p.value = '';
+    if (st) st.value = '';
+    if (inst) inst.value = '';
+
+    renderSupportTicketsTable(supportTicketsData);
+  }
+
+  /* --------------------------------------------------------------------------
+     14.3 Create Support Ticket Form & Handling
+     -------------------------------------------------------------------------- */
+  function openCreateTicketModal() {
+    const setVal = (id, v) => { const el = document.getElementById(id); if (el) el.value = v; };
+    setVal('txtTicketFormSubject', '');
+    setVal('newTicketSubject', '');
+    setVal('selTicketFormInstitution', 'SV-MAIN');
+    setVal('txtTicketFormRequesterName', '');
+    setVal('txtTicketFormRequesterEmail', '');
+    setVal('selTicketFormRequesterRole', 'Principal');
+    setVal('selTicketFormCategory', 'Login and access');
+    setVal('newTicketCategory', 'Login and access');
+    setVal('selTicketFormPriority', 'Medium');
+    setVal('newTicketPriority', 'Medium');
+    setVal('selTicketFormImpact', 'Single User');
+    setVal('txtTicketFormDescription', '');
+    setVal('txtTicketFormAttachment', '');
+    setVal('txtTicketFormRelatedId', '');
+
+    const noticeBox = document.getElementById('boxTicketSecurityNotice');
+    if (noticeBox) noticeBox.style.display = 'none';
+
+    openModal('modalCreateTicket');
+  }
+
+  function onTicketCategoryChange(val) {
+    const noticeBox = document.getElementById('boxTicketSecurityNotice');
+    if (noticeBox) {
+      if (val === 'Security incident') {
+        noticeBox.style.display = 'block';
+      } else {
+        noticeBox.style.display = 'none';
+      }
+    }
+  }
+
+  async function handleCreateTicket(event) {
+    if (event && typeof event.preventDefault === 'function') {
+      event.preventDefault();
+    }
+
+    const subject = (document.getElementById('txtTicketFormSubject')?.value || document.getElementById('newTicketSubject')?.value || '').trim();
+    const institution = document.getElementById('selTicketFormInstitution')?.value || 'SV-MAIN';
+    const requesterName = (document.getElementById('txtTicketFormRequesterName')?.value || 'School Staff').trim();
+    const requesterEmail = (document.getElementById('txtTicketFormRequesterEmail')?.value || 'staff@srividya.edu.in').trim();
+    const requesterRole = document.getElementById('selTicketFormRequesterRole')?.value || 'School Staff';
+    const category = document.getElementById('selTicketFormCategory')?.value || document.getElementById('newTicketCategory')?.value || 'Login and access';
+    const priority = document.getElementById('selTicketFormPriority')?.value || document.getElementById('newTicketPriority')?.value || 'Medium';
+    const impact = document.getElementById('selTicketFormImpact')?.value || 'Single User';
+    const description = (document.getElementById('txtTicketFormDescription')?.value || subject || 'No description').trim();
+    const attachmentName = (document.getElementById('txtTicketFormAttachment')?.value || '').trim();
+    const relatedRecordId = (document.getElementById('txtTicketFormRelatedId')?.value || '').trim();
+
+    if (!subject) {
+      showToast('Subject summary is required to open a support ticket', 'warning');
+      return;
+    }
+
+    const payload = {
+      subject,
+      institution,
+      requesterName,
+      requesterEmail,
+      requesterRole,
+      category,
+      priority,
+      impact,
+      description,
+      attachmentName: attachmentName || null,
+      relatedRecordId: relatedRecordId || null
+    };
+
+    try {
+      const res = await fetch('/api/v1/platform/support/tickets', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      const j = await res.json();
+      if (res.ok && j.success) {
+        showToast(`Support ticket #${j.data?.ticketId || 'LOGGED'} registered successfully`, 'success');
+        closeModal('modalCreateTicket');
+        await loadSupportData();
+      } else {
+        showToast('Failed to create ticket: ' + (j.message || 'Server error'), 'danger');
+      }
+    } catch (err) {
+      console.error('Error submitting support ticket:', err);
+      showToast('Error submitting ticket: ' + err.message, 'danger');
+    }
+  }
+
+  /* --------------------------------------------------------------------------
+     14.4 Ticket Detail Inspector (6 Tabs & Actions)
+     -------------------------------------------------------------------------- */
+  async function openSupportTicketDetailsModal(ticketId) {
+    currentViewingTicketId = ticketId;
+    let ticket = (supportTicketsData || []).find(t => (t.ticketId === ticketId || t.id === ticketId));
+
+    if (!ticket) {
+      try {
+        const res = await fetch(`/api/v1/platform/support/tickets/${encodeURIComponent(ticketId)}`);
+        const j = await res.json();
+        if (res.ok && j.success && j.data) {
+          ticket = j.data;
+        }
+      } catch (e) {}
+    }
+
+    if (!ticket) {
+      showToast('Support ticket record not found', 'warning');
+      return;
+    }
+
+    const setEl = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
+    setEl('lblTicketDetailId', '#' + (ticket.ticketId || ticket.id));
+    setEl('lblTicketDetailSubject', ticket.subject || 'Ticket Summary');
+    setEl('lblTicketDetailInstitution', ticket.institution || 'SV-MAIN');
+    setEl('lblTicketDetailRequester', (ticket.requester?.name || ticket.reportedBy || 'Requester') + ' (' + (ticket.requester?.role || 'Staff') + ')');
+    setEl('lblTicketDetailAgent', ticket.assignedAgent?.name || 'Unassigned');
+    setEl('lblTicketDetailSLA', ticket.slaDeadline ? formatSupportDate(ticket.slaDeadline) : 'None');
+
+    // Priority & Status Badges
+    const pEl = document.getElementById('lblTicketDetailPriority');
+    if (pEl) {
+      pEl.className = 'badge ' + (ticket.priority === 'Critical' ? 'badge-pri-critical' : ticket.priority === 'High' ? 'badge-pri-high' : ticket.priority === 'Medium' ? 'badge-pri-medium' : 'badge-pri-low');
+      pEl.textContent = ticket.priority + ' Priority';
+    }
+
+    const sEl = document.getElementById('lblTicketDetailStatus');
+    if (sEl) {
+      sEl.className = 'badge ' + (ticket.status === 'Resolved' ? 'badge-st-resolved' : ticket.status === 'In Progress' ? 'badge-st-inprogress' : 'badge-st-new');
+      sEl.textContent = ticket.status;
+    }
+
+    // Section 14.5 Security Incident Workflow Banner
+    const secBox = document.getElementById('boxTicketDetailSecurityBanner');
+    if (secBox) {
+      secBox.style.display = ticket.isSecurityIncident ? 'flex' : 'none';
+    }
+
+    // Toggle Resolve vs Reopen buttons
+    const btnResolve = document.getElementById('btnTicketActionResolve');
+    const btnReopen = document.getElementById('btnTicketActionReopen');
+    if (['Resolved', 'Closed'].includes(ticket.status)) {
+      if (btnResolve) btnResolve.style.display = 'none';
+      if (btnReopen) btnReopen.style.display = 'inline-block';
+    } else {
+      if (btnResolve) btnResolve.style.display = 'inline-block';
+      if (btnReopen) btnReopen.style.display = 'none';
+    }
+
+    // Populate Tab 1: Overview
+    setEl('lblTicketDetailDescription', ticket.description || 'No detailed description provided.');
+    setEl('lblTicketDetailCategory', ticket.category || 'General');
+    setEl('lblTicketDetailImpact', ticket.impact || 'Single User');
+    setEl('lblTicketDetailCreated', ticket.createdAt ? formatSupportDate(ticket.createdAt) : (ticket.date || '--'));
+    setEl('lblTicketDetailUpdated', ticket.updatedAt ? formatSupportDate(ticket.updatedAt) : '--');
+
+    const resBox = document.getElementById('boxTicketDetailResolution');
+    if (ticket.status === 'Resolved' || ticket.resolutionSummary) {
+      if (resBox) resBox.style.display = 'block';
+      setEl('lblTicketDetailResolutionText', ticket.resolutionSummary || 'Resolved successfully.');
+      setEl('lblTicketDetailResolvedBy', ticket.resolvedBy || 'Support Team');
+      setEl('lblTicketDetailResolvedAt', ticket.resolvedAt ? formatSupportDate(ticket.resolvedAt) : '--');
+    } else {
+      if (resBox) resBox.style.display = 'none';
+    }
+
+    // Populate Tab 2: Conversation
+    const conversation = ticket.conversation || [];
+    const convBadge = document.getElementById('badgeTicketConversationCount');
+    if (convBadge) convBadge.textContent = conversation.length;
+
+    const streamEl = document.getElementById('streamTicketConversation');
+    if (streamEl) {
+      if (conversation.length === 0) {
+        streamEl.innerHTML = '<div class="text-center text-muted py-3 small"><i class="fa-solid fa-comments me-1"></i>No public messages exchanged yet.</div>';
+      } else {
+        streamEl.innerHTML = conversation.map(m => {
+          const isReq = m.senderType === 'Requester';
+          const isSys = m.senderType === 'System';
+          const boxClass = isReq ? 'ticket-msg-requester' : isSys ? 'ticket-msg-system' : 'ticket-msg-agent';
+
+          return `
+            <div class="ticket-msg-box ${boxClass}">
+              <div class="d-flex justify-content-between align-items-center mb-1">
+                <strong class="text-dark">${escapeBkpHtml(m.senderName)} <small class="text-muted">(${escapeBkpHtml(m.senderRole || m.senderType)})</small></strong>
+                <small class="text-muted font-mono" style="font-size: 0.72rem;">${formatSupportDate(m.sentAt)}</small>
+              </div>
+              <div class="text-dark" style="white-space: pre-wrap;">${escapeBkpHtml(m.message)}</div>
+            </div>
+          `;
+        }).join('');
+      }
+    }
+
+    // Populate Tab 3: Attachments
+    const attachments = ticket.supportingFiles || [];
+    const attBadge = document.getElementById('badgeTicketAttachmentsCount');
+    if (attBadge) attBadge.textContent = attachments.length;
+
+    const attListEl = document.getElementById('listTicketAttachments');
+    if (attListEl) {
+      if (attachments.length === 0) {
+        attListEl.innerHTML = '<div class="text-center text-muted py-3 small"><i class="fa-solid fa-paperclip me-1"></i>No supporting files attached.</div>';
+      } else {
+        attListEl.innerHTML = attachments.map(a => `
+          <div class="d-flex justify-content-between align-items-center p-2 border rounded bg-light mb-2">
+            <div class="d-flex align-items-center gap-2">
+              <i class="fa-solid fa-file-lines text-primary fs-5"></i>
+              <div>
+                <strong class="text-dark font-mono small d-block">${escapeBkpHtml(a.filename)}</strong>
+                <small class="text-muted">${escapeBkpHtml(a.fileSize || 'Unknown size')} • Uploaded by ${escapeBkpHtml(a.uploadedBy || 'Staff')}</small>
+              </div>
+            </div>
+            <a href="${escapeBkpHtml(a.fileUrl || '#')}" target="_blank" class="btn btn-sm btn-outline-secondary py-0 px-2" download>
+              <i class="fa-solid fa-download me-1"></i> Download
+            </a>
+          </div>
+        `).join('');
+      }
+    }
+
+    // Populate Tab 4: Internal Notes (Strict Invariant: Internal only)
+    const notes = ticket.internalNotes || [];
+    const notesBadge = document.getElementById('badgeTicketNotesCount');
+    if (notesBadge) notesBadge.textContent = notes.length;
+
+    const notesStreamEl = document.getElementById('streamTicketInternalNotes');
+    if (notesStreamEl) {
+      if (notes.length === 0) {
+        notesStreamEl.innerHTML = '<div class="text-center text-muted py-3 small"><i class="fa-solid fa-user-secret me-1"></i>No internal notes logged for this incident.</div>';
+      } else {
+        notesStreamEl.innerHTML = notes.map(n => `
+          <div class="ticket-internal-note-box">
+            <div class="d-flex justify-content-between align-items-center mb-1">
+              <div>
+                <strong class="text-dark"><i class="fa-solid fa-user-shield text-warning me-1"></i>${escapeBkpHtml(n.authorName)}</strong>
+                <span class="badge bg-warning text-dark border ms-1 font-mono" style="font-size:0.68rem;">${escapeBkpHtml(n.confidentialityLevel || 'Support Staff Only')}</span>
+              </div>
+              <small class="text-muted font-mono" style="font-size:0.72rem;">${formatSupportDate(n.createdAt)}</small>
+            </div>
+            <div class="text-dark" style="white-space: pre-wrap; font-size: 0.88rem;">${escapeBkpHtml(n.note)}</div>
+          </div>
+        `).join('');
+      }
+    }
+
+    // Populate Tab 5: Related Incidents
+    const related = ticket.relatedIncidents || [];
+    const relatedEl = document.getElementById('listTicketRelatedIncidents');
+    if (relatedEl) {
+      if (related.length === 0) {
+        relatedEl.innerHTML = '<div class="text-center text-muted py-3 small"><i class="fa-solid fa-link me-1"></i>No correlated incidents or system alarms linked.</div>';
+      } else {
+        relatedEl.innerHTML = related.map(r => `
+          <div class="d-flex justify-content-between align-items-center p-2 border rounded bg-light mb-2">
+            <div>
+              <span class="badge bg-secondary font-mono me-1">${escapeBkpHtml(r.relationship || 'Related To')}</span>
+              <strong class="text-dark font-mono">${escapeBkpHtml(r.incidentId)}</strong> - ${escapeBkpHtml(r.title)}
+            </div>
+            <span class="badge bg-light text-dark border font-mono">${escapeBkpHtml(r.status || 'Active')}</span>
+          </div>
+        `).join('');
+      }
+    }
+
+    // Populate Tab 6: Activity History
+    const activity = ticket.activityHistory || [];
+    const activityEl = document.getElementById('listTicketActivityHistory');
+    if (activityEl) {
+      if (activity.length === 0) {
+        activityEl.innerHTML = '<div class="text-center text-muted py-3 small">No activity history recorded.</div>';
+      } else {
+        activityEl.innerHTML = activity.map(act => `
+          <div class="d-flex justify-content-between align-items-center p-2 border-bottom small">
+            <div>
+              <strong class="text-dark">${escapeBkpHtml(act.action)}</strong>: ${escapeBkpHtml(act.details || '--')}
+              <small class="text-muted d-block">Actor: ${escapeBkpHtml(act.actor)}</small>
+            </div>
+            <small class="text-muted font-mono">${formatSupportDate(act.timestamp)}</small>
+          </div>
+        `).join('');
+      }
+    }
+
+    switchTicketTab('overview');
+    openModal('modalSupportTicketDetail');
+  }
+
+  function switchTicketTab(tabName) {
+    activeTicketTab = tabName;
+    const tabs = ['overview', 'conversation', 'attachments', 'internal-notes', 'related', 'activity'];
+    tabs.forEach(t => {
+      const btn = document.getElementById('btnTicketTab' + t.split('-').map(p => p.charAt(0).toUpperCase() + p.slice(1)).join(''));
+      const content = document.getElementById('tabTicket' + t.split('-').map(p => p.charAt(0).toUpperCase() + p.slice(1)).join('') + 'Content');
+      if (t === tabName) {
+        if (btn) btn.classList.add('active');
+        if (content) content.style.display = 'block';
+      } else {
+        if (btn) btn.classList.remove('active');
+        if (content) content.style.display = 'none';
+      }
+    });
+  }
+
+  /* --------------------------------------------------------------------------
+     14.4 Action Modals & Handlers
+     -------------------------------------------------------------------------- */
+  function openAssignModal() {
+    openModal('modalAssignTicket');
+  }
+
+  async function submitAssignTicket() {
+    if (!currentViewingTicketId) return;
+    const raw = document.getElementById('selAssignAgent')?.value || '';
+    const parts = raw.split('|');
+    const agentName = parts[0] || 'Assigned Support Agent';
+    const agentEmail = parts[1] || 'support@srividya.edu.in';
+    const tier = parts[2] || 'Tier 1 Support';
+
+    try {
+      const res = await fetch(`/api/v1/platform/support/tickets/${encodeURIComponent(currentViewingTicketId)}/assign`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ agentName, agentEmail, tier })
+      });
+      const j = await res.json();
+      if (res.ok && j.success) {
+        showToast(`Ticket assigned to ${agentName}`, 'success');
+        closeModal('modalAssignTicket');
+        await loadSupportData();
+        await openSupportTicketDetailsModal(currentViewingTicketId);
+      } else {
+        showToast('Assignment failed: ' + (j.message || 'Server error'), 'danger');
+      }
+    } catch (err) {
+      console.error('Error assigning ticket:', err);
+      showToast('Assignment error: ' + err.message, 'danger');
+    }
+  }
+
+  function openChangePriorityModal() {
+    openModal('modalChangePriority');
+  }
+
+  async function submitChangePriority() {
+    if (!currentViewingTicketId) return;
+    const priority = document.getElementById('selChangePriorityLevel')?.value || 'Medium';
+    const reason = (document.getElementById('txtChangePriorityReason')?.value || '').trim();
+
+    try {
+      const res = await fetch(`/api/v1/platform/support/tickets/${encodeURIComponent(currentViewingTicketId)}/priority`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ priority, reason })
+      });
+      const j = await res.json();
+      if (res.ok && j.success) {
+        showToast(`Priority updated to ${priority}`, 'success');
+        closeModal('modalChangePriority');
+        await loadSupportData();
+        await openSupportTicketDetailsModal(currentViewingTicketId);
+      } else {
+        showToast('Priority update failed: ' + (j.message || 'Server error'), 'danger');
+      }
+    } catch (err) {
+      console.error('Error updating priority:', err);
+      showToast('Priority error: ' + err.message, 'danger');
+    }
+  }
+
+  async function submitTicketReply() {
+    if (!currentViewingTicketId) return;
+    const message = (document.getElementById('txtTicketReplyInput')?.value || '').trim();
+    if (!message) {
+      showToast('Reply message cannot be empty', 'warning');
+      return;
+    }
+
+    try {
+      const res = await fetch(`/api/v1/platform/support/tickets/${encodeURIComponent(currentViewingTicketId)}/reply`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          message,
+          senderName: 'Platform Support Operations',
+          senderRole: 'Support Specialist',
+          senderType: 'Support Agent'
+        })
+      });
+      const j = await res.json();
+      if (res.ok && j.success) {
+        showToast('Public response sent to school requester', 'success');
+        const inp = document.getElementById('txtTicketReplyInput');
+        if (inp) inp.value = '';
+        await loadSupportData();
+        await openSupportTicketDetailsModal(currentViewingTicketId);
+        switchTicketTab('conversation');
+      } else {
+        showToast('Failed to send reply: ' + (j.message || 'Server error'), 'danger');
+      }
+    } catch (err) {
+      console.error('Error replying to ticket:', err);
+      showToast('Reply error: ' + err.message, 'danger');
+    }
+  }
+
+  async function submitTicketInternalNote() {
+    if (!currentViewingTicketId) return;
+    const note = (document.getElementById('txtTicketInternalNoteInput')?.value || '').trim();
+    const confidentialityLevel = document.getElementById('selTicketNoteConfidentiality')?.value || 'Support Staff Only';
+
+    if (!note) {
+      showToast('Internal note cannot be empty', 'warning');
+      return;
+    }
+
+    try {
+      const res = await fetch(`/api/v1/platform/support/tickets/${encodeURIComponent(currentViewingTicketId)}/internal-note`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ note, confidentialityLevel })
+      });
+      const j = await res.json();
+      if (res.ok && j.success) {
+        showToast('Internal note saved (strictly hidden from school)', 'success');
+        const inp = document.getElementById('txtTicketInternalNoteInput');
+        if (inp) inp.value = '';
+        await loadSupportData();
+        await openSupportTicketDetailsModal(currentViewingTicketId);
+        switchTicketTab('internal-notes');
+      } else {
+        showToast('Failed to add internal note: ' + (j.message || 'Server error'), 'danger');
+      }
+    } catch (err) {
+      console.error('Error adding internal note:', err);
+      showToast('Internal note error: ' + err.message, 'danger');
+    }
+  }
+
+  function openRequestInfoModal() {
+    openModal('modalRequestInfo');
+  }
+
+  async function submitRequestInfo() {
+    if (!currentViewingTicketId) return;
+    const message = (document.getElementById('txtRequestInfoMessage')?.value || '').trim();
+    if (!message) {
+      showToast('Please specify the questions or diagnostics required from the school', 'warning');
+      return;
+    }
+
+    try {
+      const res = await fetch(`/api/v1/platform/support/tickets/${encodeURIComponent(currentViewingTicketId)}/request-info`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message })
+      });
+      const j = await res.json();
+      if (res.ok && j.success) {
+        showToast('Information request sent. Status changed to Waiting for Requester', 'info');
+        closeModal('modalRequestInfo');
+        await loadSupportData();
+        await openSupportTicketDetailsModal(currentViewingTicketId);
+      } else {
+        showToast('Request info failed: ' + (j.message || 'Server error'), 'danger');
+      }
+    } catch (err) {
+      console.error('Error requesting info:', err);
+      showToast('Request info error: ' + err.message, 'danger');
+    }
+  }
+
+  function openEscalateModal() {
+    openModal('modalEscalateTicket');
+  }
+
+  async function submitEscalateTicket() {
+    if (!currentViewingTicketId) return;
+    const escalationTier = document.getElementById('selEscalateTier')?.value || 'Tier 3 Engineering';
+    const reason = (document.getElementById('txtEscalateReason')?.value || '').trim();
+
+    try {
+      const res = await fetch(`/api/v1/platform/support/tickets/${encodeURIComponent(currentViewingTicketId)}/escalate`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ escalationTier, reason })
+      });
+      const j = await res.json();
+      if (res.ok && j.success) {
+        showToast(`Ticket escalated to ${escalationTier}`, 'info');
+        closeModal('modalEscalateTicket');
+        await loadSupportData();
+        await openSupportTicketDetailsModal(currentViewingTicketId);
+      } else {
+        showToast('Escalation failed: ' + (j.message || 'Server error'), 'danger');
+      }
+    } catch (err) {
+      console.error('Error escalating ticket:', err);
+      showToast('Escalation error: ' + err.message, 'danger');
+    }
+  }
+
+  function openResolveModal() {
+    openModal('modalResolveTicket');
+  }
+
+  async function submitResolveTicket() {
+    if (!currentViewingTicketId) return;
+    const resolutionSummary = (document.getElementById('txtResolutionSummary')?.value || '').trim();
+    if (!resolutionSummary) {
+      showToast('Resolution summary and corrective actions are required', 'warning');
+      return;
+    }
+
+    try {
+      const res = await fetch(`/api/v1/platform/support/tickets/${encodeURIComponent(currentViewingTicketId)}/resolve`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ resolutionSummary })
+      });
+      const j = await res.json();
+      if (res.ok && j.success) {
+        showToast('Ticket marked as Resolved successfully', 'success');
+        closeModal('modalResolveTicket');
+        await loadSupportData();
+        await openSupportTicketDetailsModal(currentViewingTicketId);
+      } else {
+        showToast('Resolution failed: ' + (j.message || 'Server error'), 'danger');
+      }
+    } catch (err) {
+      console.error('Error resolving ticket:', err);
+      showToast('Resolution error: ' + err.message, 'danger');
+    }
+  }
+
+  async function reopenCurrentTicket() {
+    if (!currentViewingTicketId) return;
+    const reason = prompt('Please specify the reason for reopening this ticket:');
+    if (reason === null) return;
+
+    try {
+      const res = await fetch(`/api/v1/platform/support/tickets/${encodeURIComponent(currentViewingTicketId)}/reopen`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ reason: reason || 'Reopened by operator' })
+      });
+      const j = await res.json();
+      if (res.ok && j.success) {
+        showToast('Ticket reopened and returned to In Progress queue', 'info');
+        await loadSupportData();
+        await openSupportTicketDetailsModal(currentViewingTicketId);
+      } else {
+        showToast('Reopen failed: ' + (j.message || 'Server error'), 'danger');
+      }
+    } catch (err) {
+      console.error('Error reopening ticket:', err);
+      showToast('Reopen error: ' + err.message, 'danger');
+    }
+  }
+
+  function openTicketSecurityEvent() {
+    closeModal('modalSupportTicketDetail');
+    if (typeof navigateTo === 'function') {
+      navigateTo('security-monitoring');
+    }
+  }
+
+
 function init() {
     setupTheme();
     updatePlatformClock();
@@ -9676,6 +10487,32 @@ function init() {
 
   // Public Interface
   return {
+    // Module 14: Support & Issue Management
+    loadSupportData,
+    renderSupportOverview,
+    renderSupportTicketsTable,
+    filterSupportTickets,
+    resetSupportFilters,
+    openCreateTicketModal,
+    onTicketCategoryChange,
+    handleCreateTicket,
+    openSupportTicketDetailsModal,
+    switchTicketTab,
+    openAssignModal,
+    submitAssignTicket,
+    openChangePriorityModal,
+    submitChangePriority,
+    submitTicketReply,
+    submitTicketInternalNote,
+    openRequestInfoModal,
+    submitRequestInfo,
+    openEscalateModal,
+    submitEscalateTicket,
+    openResolveModal,
+    submitResolveTicket,
+    reopenCurrentTicket,
+    openTicketSecurityEvent,
+
     // Module 13: Integrations & API Management
     loadIntegrationsData,
     switchIntegrationsSubTab,
