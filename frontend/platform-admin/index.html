@@ -2151,46 +2151,223 @@
            MODULE 8: AUDIT LOGS (#view-audit)
            ======================================================================= -->
       <section class="portal-view" id="view-audit">
-        <div class="pa-card">
-          <div class="pa-card-header">
-            <div>
-              <h3 class="pa-card-title"><i class="fa-solid fa-clock-rotate-left text-primary"></i> Immutable Platform
-                Audit Logs</h3>
-              <p class="pa-card-desc">Cryptographically timestamped trail of platform administrative interventions and
-                access events</p>
-            </div>
-            <button class="btn-pa btn-pa-secondary" onclick="platformApp.exportAuditTrail()">
-              <i class="fa-solid fa-file-csv"></i> Export CSV Trail
+        <!-- Module Header -->
+        <div class="pa-view-header mb-3" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+          <div>
+            <h2 style="margin: 0; font-size: 1.4rem; font-weight: 800; color: var(--color-text-main); display: flex; align-items: center; gap: 0.5rem;">
+              <i class="fa-solid fa-clock-rotate-left text-primary"></i> Platform Audit Log Explorer
+            </h2>
+            <p style="margin: 3px 0 0; font-size: 0.85rem; color: #64748B;">
+              Authoritative, read-only evidence and investigation interface. Forensic events are permanently sealed with SHA-256 tamper-proof signatures.
+            </p>
+          </div>
+          <div style="display: flex; gap: 0.65rem; align-items: center; flex-wrap: wrap;">
+            <button type="button" class="btn-pa btn-pa-secondary" onclick="platformApp.exportAuthorizedAuditReport()" title="Export cryptographically signed evidence report">
+              <i class="fa-solid fa-file-csv text-emerald me-1"></i> Export Authorized Report
             </button>
+            <span class="toolbar-tag-pill stat-badge-verified">
+              <i class="fa-solid fa-vault text-success me-1"></i> WORM Vault Sealed
+            </span>
+          </div>
+        </div>
+
+        <!-- 5 Summary KPI Cards (Section 8.1 Specification) -->
+        <div class="pa-kpi-grid mb-4" style="grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));">
+          <div class="pa-kpi-card" style="border-left: 4px solid #4F46E5;">
+            <div class="pa-kpi-header">
+              <span class="pa-kpi-title">Total Recorded Events</span>
+              <div class="pa-kpi-icon" style="background: rgba(79,70,229,0.12); color: #4F46E5;"><i class="fa-solid fa-list-check"></i></div>
+            </div>
+            <div class="pa-kpi-value text-primary" id="kpiAuditTotal">10</div>
+            <div class="pa-kpi-sub">Immutable ledger entries</div>
           </div>
 
-          <!-- Filter Search -->
-          <div class="pa-filter-bar">
-            <input type="text" id="auditSearchInput" class="pa-search-input"
-              placeholder="Search by actor, action, target, or IP address..." onkeyup="platformApp.filterAuditLogs()">
-            <select class="pa-select">
-              <option selected>All Event Categories</option>
-              <option>Configuration Updates</option>
-              <option>Security &amp; Permissions</option>
-              <option>Tenant Provisioning</option>
-              <option>Authentication</option>
-            </select>
+          <div class="pa-kpi-card" style="border-left: 4px solid #DC2626;">
+            <div class="pa-kpi-header">
+              <span class="pa-kpi-title">Critical &amp; High Severity</span>
+              <div class="pa-kpi-icon" style="background: rgba(220,38,38,0.12); color: #DC2626;"><i class="fa-solid fa-triangle-exclamation"></i></div>
+            </div>
+            <div class="pa-kpi-value text-danger" id="kpiAuditCritical">4</div>
+            <div class="pa-kpi-sub">Suspensions, alerts &amp; overrides</div>
           </div>
 
+          <div class="pa-kpi-card" style="border-left: 4px solid #F59E0B;">
+            <div class="pa-kpi-header">
+              <span class="pa-kpi-title">Denied / Failed Actions</span>
+              <div class="pa-kpi-icon" style="background: rgba(245,158,11,0.12); color: #F59E0B;"><i class="fa-solid fa-ban"></i></div>
+            </div>
+            <div class="pa-kpi-value text-amber" id="kpiAuditDenied">1</div>
+            <div class="pa-kpi-sub">Unauthorized access blocks</div>
+          </div>
+
+          <div class="pa-kpi-card" style="border-left: 4px solid #06B6D4;">
+            <div class="pa-kpi-header">
+              <span class="pa-kpi-title">Active Operators Logged</span>
+              <div class="pa-kpi-icon" style="background: rgba(6,182,212,0.12); color: #06B6D4;"><i class="fa-solid fa-user-shield"></i></div>
+            </div>
+            <div class="pa-kpi-value text-cyan" id="kpiAuditActors">4</div>
+            <div class="pa-kpi-sub">Distinct administrative actors</div>
+          </div>
+
+          <div class="pa-kpi-card" style="border-left: 4px solid #10B981;">
+            <div class="pa-kpi-header">
+              <span class="pa-kpi-title">Integrity Vault Status</span>
+              <div class="pa-kpi-icon" style="background: rgba(16,185,129,0.12); color: #10B981;"><i class="fa-solid fa-shield-halved"></i></div>
+            </div>
+            <div class="pa-kpi-value text-emerald" style="font-size: 1.1rem; line-height: 1.6;" id="kpiAuditVault">Sealed (100%)</div>
+            <div class="pa-kpi-sub">SHA-256 Tamper Protected</div>
+          </div>
+        </div>
+
+        <!-- 2-Tier Multi-Field Search & Filter Toolbar (Section 8.1 Specification) -->
+        <div class="transfers-toolbar-container mb-3">
+          <!-- Tier 1: Search & Date Range -->
+          <div style="display: grid; grid-template-columns: minmax(240px, 1.8fr) repeat(4, minmax(140px, 1fr)); gap: 0.65rem; align-items: center; width: 100%; margin-bottom: 0.65rem;">
+            <div class="tc-search-wrap" style="width: 100%; position: relative;">
+              <i class="fa-solid fa-magnifying-glass search-icon"></i>
+              <input type="text" id="auditSearchInput" class="tc-search-input"
+                placeholder="Search Event ID, Actor, Action, Target, or Reason..."
+                oninput="platformApp.filterPlatformAuditLogs()">
+              <button type="button" class="tc-clear-btn"
+                onclick="document.getElementById('auditSearchInput').value=''; platformApp.filterPlatformAuditLogs();"
+                title="Clear Search">
+                <i class="fa-solid fa-xmark"></i>
+              </button>
+            </div>
+
+            <div class="d-flex align-items-center gap-1">
+              <input type="date" id="auditStartDate" class="pa-search-input" style="width: 100%; height: 38px; font-size: 0.8rem;" onchange="platformApp.filterPlatformAuditLogs()" title="Start Date Filter">
+            </div>
+
+            <div class="d-flex align-items-center gap-1">
+              <input type="date" id="auditEndDate" class="pa-search-input" style="width: 100%; height: 38px; font-size: 0.8rem;" onchange="platformApp.filterPlatformAuditLogs()" title="End Date Filter">
+            </div>
+
+            <div class="tc-select-wrap">
+              <select id="auditUserFilter" class="tc-filter-select" onchange="platformApp.filterPlatformAuditLogs()" title="Filter by User / Actor">
+                <option value="all">All Actors</option>
+                <option value="Root Platform Administrator">Super Administrator</option>
+                <option value="Gorle Varalakshmi">Principal Varalakshmi</option>
+                <option value="Lakshmi Kameswari">Clerk Kameswari</option>
+                <option value="SYSTEM">Automated System Daemons</option>
+              </select>
+            </div>
+
+            <div class="tc-select-wrap">
+              <select id="auditInstFilter" class="tc-filter-select" onchange="platformApp.filterPlatformAuditLogs()" title="Filter by Institution">
+                <option value="all">All Institutions</option>
+                <option value="TRUST-ALL">Trust Central</option>
+                <option value="INST-001">Main Campus</option>
+                <option value="INST-002">City Branch</option>
+                <option value="INST-003">Valley Campus</option>
+                <option value="INST-004">Junior College</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Tier 2: Category, Action, Result, Severity & Record Reference -->
+          <div style="display: grid; grid-template-columns: minmax(160px, 1.2fr) repeat(4, minmax(130px, 1fr)) minmax(140px, 1fr); gap: 0.65rem; align-items: center; width: 100%;">
+            <!-- 8.3 10 Statutory Categories -->
+            <div class="tc-select-wrap">
+              <select id="auditCategoryFilter" class="tc-filter-select" onchange="platformApp.filterPlatformAuditLogs()" title="Filter by Module / Category">
+                <option value="all">All 10 Categories</option>
+                <option value="AUTH_ACCOUNTS">1. Authentication &amp; Accounts</option>
+                <option value="INSTITUTIONS">2. Institutions Lifecycle</option>
+                <option value="RBAC_PERMISSIONS">3. Roles &amp; Permissions</option>
+                <option value="SCHOOL_CONFIG">4. School Configuration</option>
+                <option value="INTEGRATIONS">5. Integrations &amp; APIs</option>
+                <option value="DATA_IMPORT_EXPORT">6. Data Import &amp; Export</option>
+                <option value="BACKUP_RECOVERY">7. Backup &amp; Recovery</option>
+                <option value="ADMIN_SUPPORT">8. Administrative Support</option>
+                <option value="SECURITY_ALERTS">9. Security Alerts</option>
+                <option value="DEPLOYMENT_OPS">10. Deployment &amp; Ops</option>
+              </select>
+            </div>
+
+            <div class="tc-select-wrap">
+              <select id="auditActionFilter" class="tc-filter-select" onchange="platformApp.filterPlatformAuditLogs()" title="Filter by Action Type">
+                <option value="all">All Action Types</option>
+                <option value="SUSPEND">Suspension Events</option>
+                <option value="APPROVED">Review Approvals</option>
+                <option value="MODIFIED">Config Updates</option>
+                <option value="IMPORT">Import Operations</option>
+                <option value="SNAPSHOT">Backup Verifications</option>
+                <option value="ALERT">Security Alerts</option>
+                <option value="DEPLOY">Releases Deployed</option>
+              </select>
+            </div>
+
+            <div class="tc-select-wrap">
+              <select id="auditResultFilter" class="tc-filter-select" onchange="platformApp.filterPlatformAuditLogs()" title="Filter by Result">
+                <option value="all">All Results</option>
+                <option value="SUCCESS">Success</option>
+                <option value="DENIED">Denied</option>
+                <option value="FAILED">Failed</option>
+                <option value="WARNING">Warning</option>
+              </select>
+            </div>
+
+            <div class="tc-select-wrap">
+              <select id="auditSeverityFilter" class="tc-filter-select" onchange="platformApp.filterPlatformAuditLogs()" title="Filter by Severity">
+                <option value="all">All Severities</option>
+                <option value="CRITICAL">Critical</option>
+                <option value="HIGH">High</option>
+                <option value="MEDIUM">Medium</option>
+                <option value="LOW">Low</option>
+                <option value="INFO">Info</option>
+              </select>
+            </div>
+
+            <div>
+              <input type="text" id="auditRecordRefInput" class="pa-search-input" style="width: 100%; height: 38px; font-size: 0.8rem;"
+                placeholder="Target Record Ref (ID)..." oninput="platformApp.filterPlatformAuditLogs()">
+            </div>
+
+            <div class="d-flex justify-content-end gap-1">
+              <button type="button" class="btn btn-outline-secondary btn-sm" id="btnResetAuditFilters" onclick="platformApp.resetAuditFilters()" title="Reset all filters">
+                <i class="fa-solid fa-rotate-left me-1"></i> Reset
+              </button>
+            </div>
+          </div>
+
+          <!-- Bottom Provenance Counter Strip -->
+          <div class="transfers-governance-row mt-2">
+            <div class="tc-stats-left">
+              <span class="tc-count-pill" id="auditFilterCountDisplay">
+                <i class="fa-solid fa-list-check text-primary mr-1"></i> Showing <strong id="auditFilteredCount">10</strong> of
+                <strong id="auditTotalCount">10</strong> Audit Events
+              </span>
+              <span class="toolbar-tag-pill">
+                <i class="fa-solid fa-scale-balanced text-primary mr-1"></i> AP Education Code Statutory Evidence
+              </span>
+            </div>
+            <div class="tc-actions-right">
+              <button type="button" class="btn btn-outline-secondary btn-sm" onclick="platformApp.exportAuthorizedAuditReport()" title="Export current filtered view to CSV">
+                <i class="fa-solid fa-file-excel text-success me-1"></i> Export Audit Dossier
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Authoritative 9-Column Forensic Audit Table (Section 8.1 Specification) -->
+        <div class="pa-card">
           <div class="pa-table-responsive">
-            <table class="pa-table">
+            <table class="pa-table" id="auditTable">
               <thead>
                 <tr>
-                  <th>Timestamp (IST)</th>
-                  <th>Operator Actor</th>
-                  <th>Action Executed</th>
-                  <th>Audit Details</th>
-                  <th>IP Address</th>
-                  <th>Status</th>
+                  <th>Event ID</th>
+                  <th>Timestamp</th>
+                  <th>Actor</th>
+                  <th>Institution</th>
+                  <th>Action</th>
+                  <th>Target Record</th>
+                  <th>Result</th>
+                  <th>Severity</th>
+                  <th>View Details</th>
                 </tr>
               </thead>
               <tbody id="auditLogsTableBody">
-                <!-- Dynamically populated by platform-admin.js -->
+                <!-- Dynamically populated by platformApp.loadPlatformAuditDirectory() -->
               </tbody>
             </table>
           </div>
@@ -5240,6 +5417,152 @@
           <button type="button" class="btn btn-outline-secondary w-100 btn-sm" onclick="platformApp.closeModal('modalAssignUsers'); platformApp.navigateTo('users');">
             <i class="fa-solid fa-users me-1"></i> Open User Directory to Assign Specific Identities
           </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       MODULE 8 MODAL: 8.2 EVENT DETAIL PAGE / INSPECTION MODAL (#modalAuditEventDetail)
+       ========================================================================= -->
+  <div class="pa-modal-backdrop" id="modalAuditEventDetail">
+    <div class="pa-modal pa-modal-lg" style="max-width: 900px; width: 95%;">
+      <!-- Header -->
+      <div class="pa-modal-header" style="border-bottom: 1px solid #E2E8F0; padding: 1.25rem 1.5rem; background: #FFFFFF;">
+        <div style="display: flex; align-items: center; gap: 0.85rem;">
+          <div class="pa-kpi-icon" style="background: rgba(79,70,229,0.12); color: #4F46E5; width: 44px; height: 44px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem;">
+            <i class="fa-solid fa-file-shield"></i>
+          </div>
+          <div>
+            <div style="display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
+              <h3 class="pa-modal-title" style="margin: 0; font-size: 1.2rem; font-weight: 800; font-family: monospace;" id="auditDetailEventId">
+                EVT-2026-10491
+              </h3>
+              <span id="auditDetailSeverityBadge" class="badge-sev-high">HIGH</span>
+              <span id="auditDetailResultBadge" class="badge-res-success">SUCCESS</span>
+            </div>
+            <div style="font-size: 0.8rem; color: #64748B; margin-top: 2px;">
+              <span id="auditDetailCategory">AUTH_ACCOUNTS</span> &bull;
+              Correlation ID: <span class="font-mono text-primary fw-bold" id="auditDetailCorrelationId">corr_auth_8821a</span> &bull;
+              <span id="auditDetailTimestamp">05 Nov 2026, 18:45:00 IST</span>
+            </div>
+          </div>
+        </div>
+        <button class="btn-pa btn-pa-secondary" style="padding: 0.3rem 0.6rem;" onclick="platformApp.closeModal('modalAuditEventDetail')">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <div class="pa-modal-body" style="padding: 1.5rem; background: #FFFFFF; max-height: 75vh; overflow-y: auto;">
+        <!-- Two Column Overview: Actor vs Target -->
+        <div class="row g-3 mb-3">
+          <!-- Actor Card -->
+          <div class="col-md-6">
+            <div class="p-3 bg-light rounded border h-100">
+              <div class="d-flex justify-content-between align-items-center mb-2">
+                <span class="small text-muted fw-bold text-uppercase">
+                  <i class="fa-solid fa-user-shield text-primary me-1"></i> Responsible Actor
+                </span>
+                <span class="badge bg-primary-subtle text-primary border border-primary-subtle" id="auditDetailActorScope">Platform Scope</span>
+              </div>
+              <div class="fw-bold text-dark fs-6" id="auditDetailActorName">Root Platform Administrator</div>
+              <div class="small text-muted mb-2" id="auditDetailActorEmail">superadmin@srividya.edu.in</div>
+              <div class="small text-secondary pt-2 border-top">
+                <div>Role: <strong id="auditDetailActorRole">Super Administrator</strong></div>
+                <div>Client IP: <span class="font-mono fw-bold" id="auditDetailActorIp">106.51.24.112</span></div>
+                <div class="text-truncate" title="User Agent">Agent: <span id="auditDetailActorAgent">Chrome 128 (Windows 11)</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Target Entity Card -->
+          <div class="col-md-6">
+            <div class="p-3 bg-light rounded border h-100">
+              <div class="d-flex justify-content-between align-items-center mb-2">
+                <span class="small text-muted fw-bold text-uppercase">
+                  <i class="fa-solid fa-bullseye text-primary me-1"></i> Target Entity
+                </span>
+                <span class="badge bg-secondary-subtle text-dark" id="auditDetailTargetType">UserAccount</span>
+              </div>
+              <div class="fw-bold text-dark fs-6" id="auditDetailTargetName">Sri T. Ramesh Kumar</div>
+              <div class="small font-mono text-primary mb-2" id="auditDetailTargetId">USR-1006</div>
+              <div class="small text-secondary pt-2 border-top">
+                <div>Campus: <strong id="auditDetailInstitution">City Branch (INST-002)</strong></div>
+                <div>Action Performed: <strong class="text-dark" id="auditDetailAction">USER_ACCOUNT_SUSPENDED</strong></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Statutory Reason / Justification -->
+        <div class="p-3 mb-3 rounded" style="background: #F8FAFC; border: 1px solid #E2E8F0;">
+          <label class="small text-muted fw-bold text-uppercase d-block mb-1">
+            <i class="fa-solid fa-pen-fancy text-primary me-1"></i> Mandatory Statutory Reason / Audit Justification
+          </label>
+          <div class="text-dark fw-bold" style="font-size: 0.9rem;" id="auditDetailReason">
+            Audit reconciliation pending for cash receipts discrepancy in Quarter 2
+          </div>
+        </div>
+
+        <!-- 8.2 Changed Fields Diff Viewer with Sensitive Masking Guard -->
+        <div class="mb-3">
+          <div class="d-flex justify-content-between align-items-center mb-1">
+            <label class="small text-muted fw-bold text-uppercase">
+              <i class="fa-solid fa-code-compare text-primary me-1"></i> Relevant Changed Fields &amp; State Diff
+            </label>
+            <span class="small text-muted">
+              <i class="fa-solid fa-lock text-success me-1"></i> Sensitive values (passwords, tokens, Aadhaar) masked
+            </span>
+          </div>
+
+          <table class="audit-diff-table" id="auditDetailDiffTable">
+            <thead>
+              <tr>
+                <th style="width: 25%;">Field Name</th>
+                <th style="width: 37.5%;">Previous State / Old Value</th>
+                <th style="width: 37.5%;">Committed State / New Value</th>
+              </tr>
+            </thead>
+            <tbody id="auditDetailDiffTableBody">
+              <!-- Dynamically populated -->
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Cryptographic Tamper Seal -->
+        <div class="tamper-seal-box mb-3">
+          <div class="d-flex justify-content-between align-items-center">
+            <div>
+              <i class="fa-solid fa-circle-check text-success me-1"></i>
+              <strong>Cryptographic Tamper Seal Verified:</strong> This audit event is cryptographically immutable and verified against the master genesis block.
+            </div>
+            <span class="badge bg-success">SHA-256 Valid</span>
+          </div>
+          <span class="tamper-seal-hash" id="auditDetailTamperSeal">
+            a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1b2c3d4e5f6a7b8
+          </span>
+        </div>
+
+        <!-- Related Events Timeline -->
+        <div>
+          <label class="small text-muted fw-bold text-uppercase d-block mb-2">
+            <i class="fa-solid fa-timeline text-primary me-1"></i> Correlated Forensic Chain &amp; Related Events
+          </label>
+          <div id="auditDetailRelatedEvents" class="d-flex flex-column gap-2">
+            <!-- Dynamically populated -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Footer Actions -->
+      <div class="pa-modal-footer" style="border-top: 1px solid #E2E8F0; padding: 1rem 1.5rem; display: flex; justify-content: space-between; background: #F8FAFC;">
+        <div>
+          <button type="button" class="btn btn-outline-warning btn-sm" id="btnOpenRelatedSecurityEvent" onclick="platformApp.openRelatedSecurityEvent()">
+            <i class="fa-solid fa-shield-virus me-1"></i> Open Related Security Event
+          </button>
+        </div>
+        <div>
+          <button type="button" class="btn-pa btn-pa-secondary" onclick="platformApp.closeModal('modalAuditEventDetail')">Close Inspector</button>
         </div>
       </div>
     </div>

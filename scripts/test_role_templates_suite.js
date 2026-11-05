@@ -305,3 +305,4 @@ const RoleTemplateService = require('../backend/src/services/roleTemplate.servic
     process.exit(1);
   }
 })();
+

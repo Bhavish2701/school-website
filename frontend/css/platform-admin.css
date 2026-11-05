@@ -1871,3 +1871,184 @@ input:checked + .pa-slider:before {
   font-weight: 600;
   margin: 0.2rem;
 }
+
+
+/* ==========================================================================
+   MODULE 8: AUDIT LOG EXPLORER & FORENSIC EVIDENCE STYLES
+   ========================================================================== */
+
+.badge-sev-critical {
+  background: #7F1D1D;
+  color: #FEE2E2;
+  font-weight: 800;
+  font-size: 0.7rem;
+  padding: 0.2rem 0.55rem;
+  border-radius: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.badge-sev-high {
+  background: #FFEDD5;
+  color: #C2410C;
+  border: 1px solid #FDBA74;
+  font-weight: 700;
+  font-size: 0.7rem;
+  padding: 0.2rem 0.55rem;
+  border-radius: 4px;
+  text-transform: uppercase;
+}
+
+.badge-sev-medium {
+  background: #FEF3C7;
+  color: #B45309;
+  border: 1px solid #FCD34D;
+  font-weight: 700;
+  font-size: 0.7rem;
+  padding: 0.2rem 0.55rem;
+  border-radius: 4px;
+  text-transform: uppercase;
+}
+
+.badge-sev-low {
+  background: #E0F2FE;
+  color: #0369A1;
+  border: 1px solid #BAE6FD;
+  font-weight: 700;
+  font-size: 0.7rem;
+  padding: 0.2rem 0.55rem;
+  border-radius: 4px;
+  text-transform: uppercase;
+}
+
+.badge-sev-info {
+  background: #F1F5F9;
+  color: #475569;
+  border: 1px solid #CBD5E1;
+  font-weight: 700;
+  font-size: 0.7rem;
+  padding: 0.2rem 0.55rem;
+  border-radius: 4px;
+  text-transform: uppercase;
+}
+
+.badge-res-success {
+  background: #DCFCE7;
+  color: #15803D;
+  border: 1px solid #86EFAC;
+  font-weight: 700;
+  font-size: 0.7rem;
+  padding: 0.2rem 0.55rem;
+  border-radius: 4px;
+  text-transform: uppercase;
+}
+
+.badge-res-denied {
+  background: #FCE7F3;
+  color: #9D174D;
+  border: 1px solid #FBCFE8;
+  font-weight: 800;
+  font-size: 0.7rem;
+  padding: 0.2rem 0.55rem;
+  border-radius: 4px;
+  text-transform: uppercase;
+}
+
+.badge-res-failed {
+  background: #FEE2E2;
+  color: #B91C1C;
+  border: 1px solid #FCA5A5;
+  font-weight: 800;
+  font-size: 0.7rem;
+  padding: 0.2rem 0.55rem;
+  border-radius: 4px;
+  text-transform: uppercase;
+}
+
+.badge-res-warning {
+  background: #FEF3C7;
+  color: #92400E;
+  border: 1px solid #FCD34D;
+  font-weight: 700;
+  font-size: 0.7rem;
+  padding: 0.2rem 0.55rem;
+  border-radius: 4px;
+  text-transform: uppercase;
+}
+
+.audit-diff-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  border: 1px solid #E2E8F0;
+  border-radius: 8px;
+  overflow: hidden;
+  font-size: 0.82rem;
+}
+
+.audit-diff-table th {
+  background: #F8FAFC;
+  padding: 0.6rem 0.85rem;
+  font-weight: 700;
+  color: #64748B;
+  border-bottom: 1px solid #E2E8F0;
+  text-transform: uppercase;
+  font-size: 0.72rem;
+}
+
+.audit-diff-table td {
+  padding: 0.65rem 0.85rem;
+  border-bottom: 1px solid #F1F5F9;
+  vertical-align: top;
+}
+
+.audit-diff-table tr:last-child td {
+  border-bottom: none;
+}
+
+.audit-diff-old {
+  background: #FFF1F2;
+  color: #9F1239;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-family: monospace;
+  font-size: 0.78rem;
+  display: inline-block;
+  word-break: break-all;
+}
+
+.audit-diff-new {
+  background: #ECFDF5;
+  color: #065F46;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-family: monospace;
+  font-size: 0.78rem;
+  display: inline-block;
+  word-break: break-all;
+}
+
+.tamper-seal-box {
+  background: #F0FDF4;
+  border: 1px solid #BBF7D0;
+  border-radius: 8px;
+  padding: 0.85rem 1rem;
+  font-size: 0.8rem;
+  color: #166534;
+}
+
+.tamper-seal-hash {
+  font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+  font-size: 0.75rem;
+  background: #FFFFFF;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  border: 1px solid #DCFCE7;
+  word-break: break-all;
+  display: block;
+  margin-top: 0.35rem;
+  color: #14532D;
+}

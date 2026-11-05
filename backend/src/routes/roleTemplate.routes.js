@@ -22,3 +22,4 @@ router.post('/:roleId/toggle-status', controller.toggleRoleStatus);
 router.post('/:roleId/assign-users', controller.assignUsers);
 
 module.exports = router;
+

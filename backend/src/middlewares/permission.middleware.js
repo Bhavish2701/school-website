@@ -64,3 +64,4 @@ const requirePermission = (moduleName, action, options = {}) => {
 module.exports = {
   requirePermission
 };
+
