@@ -491,6 +491,8 @@ const platformApp = (function () {
       loadOnboardingOverview();
     } else if (viewId === 'roles' && typeof loadRoleTemplatesDirectory === 'function') {
       loadRoleTemplatesDirectory();
+    } else if ((viewId === 'security-monitoring' || viewId === 'security') && typeof loadSecurityMonitoringData === 'function') {
+      loadSecurityMonitoringData();
     }
 
     // Update Header Breadcrumb
@@ -5846,6 +5848,591 @@ const platformApp = (function () {
     showToast('Navigated to Security & Access Monitoring.', 'info');
   }
 
+
+  /* ==========================================================================
+     MODULE 9: SECURITY & ACCESS MONITORING CONTROLLER
+     9.1 Overview, 9.2 Events Register, 9.3 Access Reviews, 9.4 Workflow
+     ========================================================================== */
+
+  let securityEventsData = [];
+  let accessReviewsData = [];
+  let currentSelectedSecurityEventId = null;
+
+  async function loadSecurityMonitoringData() {
+    try {
+      const [eventsRes, reviewsRes] = await Promise.all([
+        fetch('/api/v1/platform/security/events'),
+        fetch('/api/v1/platform/security/reviews')
+      ]);
+
+      if (eventsRes.ok) {
+        const eventsJson = await eventsRes.json();
+        securityEventsData = eventsJson.data || [];
+        if (eventsJson.overview) {
+          updateSecurityOverviewKPIs(eventsJson.overview);
+        }
+      }
+
+      if (reviewsRes.ok) {
+        const reviewsJson = await reviewsRes.json();
+        accessReviewsData = reviewsJson.data || [];
+      }
+
+      renderSecurityEventsTable(securityEventsData);
+      renderAccessReviewsTable(accessReviewsData);
+
+      const countBadge = document.getElementById('badgeSecEventsCount');
+      if (countBadge) countBadge.textContent = securityEventsData.length;
+      const revBadge = document.getElementById('badgeSecReviewsCount');
+      if (revBadge) revBadge.textContent = accessReviewsData.length;
+
+    } catch (err) {
+      console.error('Failed to load security monitoring data:', err);
+      showToast('Error connecting to threat telemetry engine: ' + err.message, 'danger');
+    }
+  }
+
+  function updateSecurityOverviewKPIs(overview) {
+    if (!overview) return;
+    const setVal = (id, val) => {
+      const el = document.getElementById(id);
+      if (el) el.textContent = val;
+    };
+    setVal('kpiSecFailedLogins', overview.failedAuthAttempts ?? 0);
+    setVal('kpiSecSuspiciousPatterns', overview.suspiciousLoginPatterns ?? 0);
+    setVal('kpiSecPrivRoleChanges', overview.privilegedRoleChanges ?? 2);
+    setVal('kpiSecUnusualAccess', overview.unusualAccessActivity ?? 0);
+    setVal('kpiSecUnresolvedAlerts', overview.unresolvedSecurityAlerts ?? 0);
+    setVal('kpiSecAccountsReview', overview.accountsRequiringReview ?? 0);
+    setVal('kpiSecRecentIncidents', overview.recentSecurityIncidents ?? 0);
+  }
+
+  function switchSecuritySubTab(tabName) {
+    const tabs = ['overview', 'events', 'reviews'];
+    tabs.forEach(t => {
+      const btn = document.getElementById('btnSecTab' + t.charAt(0).toUpperCase() + t.slice(1));
+      const pane = document.getElementById('secSubTab' + t.charAt(0).toUpperCase() + t.slice(1) + 'Content');
+      if (btn) {
+        if (t === tabName) btn.classList.add('active');
+        else btn.classList.remove('active');
+      }
+      if (pane) {
+        pane.style.display = (t === tabName) ? 'block' : 'none';
+      }
+    });
+  }
+
+  function renderSecurityEventsTable(events) {
+    const tbody = document.getElementById('tblSecurityEventsBody');
+    const countLbl = document.getElementById('lblSecFilteredCount');
+    if (countLbl) countLbl.textContent = 'Showing ' + events.length + ' Events';
+    if (!tbody) return;
+
+    if (!events || events.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="9" class="text-center py-4 text-muted">No security events found matching criteria.</td></tr>';
+      return;
+    }
+
+    tbody.innerHTML = events.map(e => {
+      const riskClass = (e.riskClassification || 'MEDIUM').toLowerCase();
+      const riskBadge = '<span class="badge badge-risk badge-risk-' + riskClass + '">' + (e.riskClassification || 'MEDIUM') + '</span>';
+      
+      let statusBg = 'bg-secondary';
+      if (e.status === 'Alert Detected') statusBg = 'bg-danger';
+      else if (e.status === 'Triage') statusBg = 'bg-warning text-dark';
+      else if (e.status === 'Under Investigation' || e.status === 'Investigate') statusBg = 'bg-info text-dark';
+      else if (e.status === 'Contain or Remediate') statusBg = 'bg-primary';
+      else if (e.status === 'Close') statusBg = 'bg-success';
+      else if (e.status === 'Escalated') statusBg = 'bg-danger';
+
+      const statusBadge = '<span class="badge ' + statusBg + '">' + e.status + '</span>';
+      const timeStr = new Date(e.timestamp).toLocaleString('en-IN', { dateStyle: 'short', timeStyle: 'short' });
+      const investigatorStr = e.assignedInvestigator?.name || 'Unassigned';
+
+      return '<tr>' +
+        '<td><span class="font-mono fw-bold text-primary">' + e.eventId + '</span></td>' +
+        '<td><strong>' + e.eventType + '</strong></td>' +
+        '<td><div>' + e.userName + '</div><small class="text-muted font-mono">' + e.userId + '</small></td>' +
+        '<td><div>' + e.institutionName + '</div><small class="text-muted font-mono">' + e.institutionId + '</small></td>' +
+        '<td><small>' + timeStr + '</small></td>' +
+        '<td>' + riskBadge + '</td>' +
+        '<td>' + statusBadge + '</td>' +
+        '<td><small>' + investigatorStr + '</small></td>' +
+        '<td style="text-align: right;">' +
+          '<button class="btn btn-sm btn-outline-primary me-1" style="padding: 0.2rem 0.5rem; font-size: 0.75rem;" onclick="platformApp.openSecurityEventDetails(\'' + e.eventId + '\')">' +
+            '<i class="fa-solid fa-eye me-1"></i> Open' +
+          '</button>' +
+        '</td>' +
+      '</tr>';
+    }).join('');
+  }
+
+  function filterSecurityEvents() {
+    const q = (document.getElementById('txtSecFilterSearch')?.value || '').toLowerCase().trim();
+    const risk = document.getElementById('selSecFilterRisk')?.value || '';
+    const status = document.getElementById('selSecFilterStatus')?.value || '';
+    const inst = document.getElementById('selSecFilterInstitution')?.value || '';
+
+    const filtered = securityEventsData.filter(e => {
+      if (q) {
+        const text = (e.eventId + ' ' + e.eventType + ' ' + e.userName + ' ' + e.userId + ' ' + e.institutionName + ' ' + (e.telemetry?.ipAddress || '') + ' ' + (e.assignedInvestigator?.name || '')).toLowerCase();
+        if (!text.includes(q)) return false;
+      }
+      if (risk && e.riskClassification !== risk) return false;
+      if (status && e.status !== status) return false;
+      if (inst && e.institutionId !== inst) return false;
+      return true;
+    });
+
+    renderSecurityEventsTable(filtered);
+  }
+
+  function resetSecurityEventFilters() {
+    const s = document.getElementById('txtSecFilterSearch'); if (s) s.value = '';
+    const r = document.getElementById('selSecFilterRisk'); if (r) r.value = '';
+    const st = document.getElementById('selSecFilterStatus'); if (st) st.value = '';
+    const inst = document.getElementById('selSecFilterInstitution'); if (inst) inst.value = '';
+    renderSecurityEventsTable(securityEventsData);
+  }
+
+  async function openSecurityEventDetails(eventId) {
+    currentSelectedSecurityEventId = eventId;
+    let event = securityEventsData.find(e => e.eventId === eventId);
+
+    try {
+      const res = await fetch('/api/v1/platform/security/events/' + eventId);
+      if (res.ok) {
+        const json = await res.json();
+        if (json.data) event = json.data;
+      }
+    } catch (e) {
+      console.warn('Fallback to local event record:', e);
+    }
+
+    if (!event) {
+      showToast('Security event not found', 'warning');
+      return;
+    }
+
+    const setTxt = (id, val) => {
+      const el = document.getElementById(id);
+      if (el) el.textContent = val;
+    };
+
+    setTxt('secDetailEventId', event.eventId);
+    setTxt('secDetailEventType', event.eventType);
+    setTxt('secDetailUserName', event.userName || 'Unauthenticated Remote Client');
+    setTxt('secDetailUserId', event.userId || 'ANONYMOUS');
+    setTxt('secDetailInstitutionName', event.institutionName || 'Sri Vidya Trust');
+    setTxt('secDetailInstitutionId', event.institutionId || 'TRUST-ALL');
+    setTxt('secDetailInvestigatorName', event.assignedInvestigator?.name || 'Unassigned');
+    setTxt('secDetailInvestigatorSLA', 'SLA Target: ' + (event.assignedInvestigator?.slaTargetHours || 4) + 'h');
+
+    // Risk badge
+    const riskBadge = document.getElementById('secDetailRiskBadge');
+    if (riskBadge) {
+      const rClass = (event.riskClassification || 'MEDIUM').toLowerCase();
+      riskBadge.className = 'badge badge-risk badge-risk-' + rClass;
+      riskBadge.textContent = event.riskClassification + ' RISK';
+    }
+
+    // Status badge
+    const statusBadge = document.getElementById('secDetailStatusBadge');
+    if (statusBadge) {
+      statusBadge.textContent = event.status;
+    }
+
+    // Telemetry
+    setTxt('secDetailIpAddress', event.telemetry?.ipAddress || '127.0.0.1');
+    setTxt('secDetailLocation', event.telemetry?.location || 'Visakhapatnam, AP, India');
+    setTxt('secDetailUserAgent', event.telemetry?.userAgent || 'Standard Browser Client');
+    setTxt('secDetailFailedAttempts', (event.telemetry?.failedAttemptsCount || 0) + ' Attempts');
+
+    const sessionState = document.getElementById('secDetailSessionState');
+    if (sessionState) {
+      if (event.telemetry?.sessionTerminated) {
+        sessionState.className = 'badge bg-danger font-mono';
+        sessionState.textContent = 'Session: Terminated';
+      } else {
+        sessionState.className = 'badge bg-success font-mono';
+        sessionState.textContent = 'Session: Active';
+      }
+    }
+
+    // Findings
+    setTxt('secDetailRootCause', event.findings?.rootCause || 'No findings recorded yet. Investigator assigned.');
+    setTxt('secDetailEvidence', event.findings?.evidence || 'No evidence uploaded.');
+    setTxt('secDetailRemediationNotes', event.findings?.remediationNotes || 'Remediation pending.');
+
+    // Escalation banner
+    const escBanner = document.getElementById('secDetailEscalationBanner');
+    if (escBanner) {
+      if (event.escalationDetails?.isEscalated) {
+        escBanner.style.display = 'block';
+        setTxt('secDetailEscalationLevel', event.escalationDetails.escalationLevel || 'L2_LEADERSHIP');
+        setTxt('secDetailEscalationReason', 'Reason: ' + (event.escalationDetails.reason || 'Escalated to Executive Trust Senate.'));
+        setTxt('secDetailEscalationMeta', 'Escalated by: ' + (event.escalationDetails.escalatedBy || 'SecOps Lead'));
+      } else {
+        escBanner.style.display = 'none';
+      }
+    }
+
+    // Timeline list
+    const timelineEl = document.getElementById('secDetailTimelineList');
+    if (timelineEl) {
+      const list = event.timeline || [];
+      if (list.length === 0) {
+        timelineEl.innerHTML = '<div class="text-muted small">No timeline events recorded.</div>';
+      } else {
+        timelineEl.innerHTML = list.map(item => {
+          const tStr = new Date(item.timestamp).toLocaleString('en-IN', { dateStyle: 'short', timeStyle: 'short' });
+          return '<div class="sec-timeline-node">' +
+            '<div class="sec-timeline-bullet"></div>' +
+            '<div class="sec-timeline-time">' + tStr + ' &bull; by <strong>' + item.performedBy + '</strong></div>' +
+            '<div class="sec-timeline-stage">' + item.stage + '</div>' +
+            (item.notes ? '<div class="sec-timeline-notes">' + item.notes + '</div>' : '') +
+          '</div>';
+        }).join('');
+      }
+    }
+
+    openModal('modalSecurityEventDetail');
+  }
+
+  async function markEventUnderInvestigation(eventId) {
+    const id = eventId || currentSelectedSecurityEventId;
+    if (!id) return;
+
+    try {
+      const res = await fetch('/api/v1/platform/security/events/' + id + '/investigate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ operator: 'Platform Administrator' })
+      });
+      const json = await res.json();
+      if (json.success) {
+        showToast('Event marked Under Investigation.', 'info');
+        await loadSecurityMonitoringData();
+        openSecurityEventDetails(id);
+      } else {
+        showToast(json.message || 'Failed to update status', 'warning');
+      }
+    } catch (e) {
+      showToast('Error updating status: ' + e.message, 'danger');
+    }
+  }
+
+  function openAssignInvestigatorModal(eventId) {
+    const id = eventId || currentSelectedSecurityEventId;
+    if (!id) return;
+    const txt = document.getElementById('txtAssignEventId');
+    if (txt) txt.value = id;
+    openModal('modalAssignInvestigator');
+  }
+
+  async function submitAssignInvestigator() {
+    const id = document.getElementById('txtAssignEventId')?.value || currentSelectedSecurityEventId;
+    const name = document.getElementById('selInvestigatorName')?.value;
+    const sla = parseInt(document.getElementById('selInvestigatorSLA')?.value || '4', 10);
+
+    if (!id || !name) return;
+
+    try {
+      const res = await fetch('/api/v1/platform/security/events/' + id + '/assign', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ investigatorName: name, slaHours: sla, operator: 'Platform Administrator' })
+      });
+      const json = await res.json();
+      if (json.success) {
+        showToast('Assigned investigator ' + name + ' with ' + sla + 'h SLA.', 'success');
+        closeModal('modalAssignInvestigator');
+        await loadSecurityMonitoringData();
+        openSecurityEventDetails(id);
+      } else {
+        showToast(json.message || 'Failed to assign investigator', 'warning');
+      }
+    } catch (e) {
+      showToast('Error assigning investigator: ' + e.message, 'danger');
+    }
+  }
+
+  function openRecordFindingsModal(eventId) {
+    const id = eventId || currentSelectedSecurityEventId;
+    if (!id) return;
+    const txt = document.getElementById('txtFindingsEventId');
+    if (txt) txt.value = id;
+
+    const event = securityEventsData.find(e => e.eventId === id);
+    if (event?.findings) {
+      const r = document.getElementById('txtFindingsRootCause'); if (r) r.value = event.findings.rootCause || '';
+      const ev = document.getElementById('txtFindingsEvidence'); if (ev) ev.value = event.findings.evidence || '';
+      const rem = document.getElementById('txtFindingsRemediation'); if (rem) rem.value = event.findings.remediationNotes || '';
+    }
+    openModal('modalRecordFindings');
+  }
+
+  async function submitRecordFindings() {
+    const id = document.getElementById('txtFindingsEventId')?.value || currentSelectedSecurityEventId;
+    const rootCause = document.getElementById('txtFindingsRootCause')?.value || 'Root cause validated';
+    const evidence = document.getElementById('txtFindingsEvidence')?.value || 'Telemetry trace confirmed';
+    const remediationNotes = document.getElementById('txtFindingsRemediation')?.value || 'Remediation completed';
+
+    if (!id) return;
+
+    try {
+      const res = await fetch('/api/v1/platform/security/events/' + id + '/findings', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ rootCause, evidence, remediationNotes, operator: 'Platform Administrator' })
+      });
+      const json = await res.json();
+      if (json.success) {
+        showToast('Findings recorded successfully.', 'success');
+        closeModal('modalRecordFindings');
+        await loadSecurityMonitoringData();
+        openSecurityEventDetails(id);
+      } else {
+        showToast(json.message || 'Failed to record findings', 'warning');
+      }
+    } catch (e) {
+      showToast('Error recording findings: ' + e.message, 'danger');
+    }
+  }
+
+  async function executeContainment(eventId) {
+    const id = eventId || currentSelectedSecurityEventId;
+    if (!id) return;
+
+    try {
+      const res = await fetch('/api/v1/platform/security/events/' + id + '/contain', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          terminateSession: true,
+          actionSummary: 'Active session invalidated and source IP rate-limited',
+          operator: 'Platform Administrator'
+        })
+      });
+      const json = await res.json();
+      if (json.success) {
+        showToast('Containment executed: Session terminated & forensic audit trail logged.', 'success');
+        await loadSecurityMonitoringData();
+        openSecurityEventDetails(id);
+      } else {
+        showToast(json.message || 'Containment failed', 'warning');
+      }
+    } catch (e) {
+      showToast('Error executing containment: ' + e.message, 'danger');
+    }
+  }
+
+  async function closeSecurityEvent(eventId) {
+    const id = eventId || currentSelectedSecurityEventId;
+    if (!id) return;
+
+    try {
+      const res = await fetch('/api/v1/platform/security/events/' + id + '/close', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          resolutionNotes: 'Remediation verified and signed off by Platform Administrator',
+          operator: 'Platform Administrator'
+        })
+      });
+      const json = await res.json();
+      if (json.success) {
+        showToast('Security incident closed successfully.', 'success');
+        await loadSecurityMonitoringData();
+        openSecurityEventDetails(id);
+      } else {
+        showToast(json.message || 'Failed to close incident', 'warning');
+      }
+    } catch (e) {
+      showToast('Error closing incident: ' + e.message, 'danger');
+    }
+  }
+
+  function openEscalateModal(eventId) {
+    const id = eventId || currentSelectedSecurityEventId;
+    if (!id) return;
+    const txt = document.getElementById('txtEscalateEventId');
+    if (txt) txt.value = id;
+    openModal('modalEscalateIncident');
+  }
+
+  async function submitEscalateIncident() {
+    const id = document.getElementById('txtEscalateEventId')?.value || currentSelectedSecurityEventId;
+    const level = document.getElementById('selEscalationLevel')?.value || 'L2_LEADERSHIP';
+    const reason = document.getElementById('txtEscalationReason')?.value || 'Escalated under multi-tenant risk protocol';
+
+    if (!id) return;
+
+    try {
+      const res = await fetch('/api/v1/platform/security/events/' + id + '/escalate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ escalationLevel: level, reason, operator: 'Platform Administrator' })
+      });
+      const json = await res.json();
+      if (json.success) {
+        showToast('Incident escalated to ' + level + '. Immutable audit entry recorded.', 'danger');
+        closeModal('modalEscalateIncident');
+        await loadSecurityMonitoringData();
+        openSecurityEventDetails(id);
+      } else {
+        showToast(json.message || 'Failed to escalate incident', 'warning');
+      }
+    } catch (e) {
+      showToast('Error escalating incident: ' + e.message, 'danger');
+    }
+  }
+
+  function renderAccessReviewsTable(reviews) {
+    const tbody = document.getElementById('tblAccessReviewsBody');
+    const countLbl = document.getElementById('lblSecReviewsCount');
+    if (countLbl) countLbl.textContent = 'Showing ' + reviews.length + ' Reviews';
+    if (!tbody) return;
+
+    if (!reviews || reviews.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="8" class="text-center py-4 text-muted">No privileged access review records found.</td></tr>';
+      return;
+    }
+
+    tbody.innerHTML = reviews.map(r => {
+      let statusClass = 'badge-rev-pending';
+      if (r.reviewStatus === 'Confirmed') statusClass = 'badge-rev-confirmed';
+      else if (r.reviewStatus === 'Clarification Requested') statusClass = 'badge-rev-clarify';
+      else if (r.reviewStatus === 'Permissions Reduced') statusClass = 'badge-rev-reduced';
+      else if (r.reviewStatus === 'Role Revoked') statusClass = 'badge-rev-revoked';
+
+      const statusBadge = '<span class="badge ' + statusClass + '">' + r.reviewStatus + '</span>';
+      const rolePills = (r.privilegedRoles || []).map(role => '<span class="badge bg-light text-dark border me-1">' + role + '</span>').join('');
+      const dueDate = new Date(r.reviewDueDate).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' });
+      const lastAccessStr = r.lastAccess?.timestamp ? new Date(r.lastAccess.timestamp).toLocaleDateString('en-IN', { day: '2-digit', month: 'short' }) : 'Recent';
+
+      return '<tr>' +
+        '<td><strong>' + r.userName + '</strong><br><small class="text-muted">' + r.userEmail + '</small></td>' +
+        '<td><small>' + r.institutionScope + '</small></td>' +
+        '<td>' + rolePills + '</td>' +
+        '<td><small>' + lastAccessStr + '<br><span class="font-mono text-muted">' + (r.lastAccess?.ipAddress || '') + '</span></small></td>' +
+        '<td><small class="text-muted">' + (r.businessJustification || '').slice(0, 50) + '...</small></td>' +
+        '<td><small class="fw-bold">' + dueDate + '</small></td>' +
+        '<td><small>' + (r.reviewerName || 'SecOps') + '</small></td>' +
+        '<td style="text-align: right;">' +
+          statusBadge + '<br>' +
+          '<button class="btn btn-sm btn-outline-primary mt-1" style="padding: 0.15rem 0.45rem; font-size: 0.72rem;" onclick="platformApp.openAccessReviewModal(\'' + r.reviewId + '\')">' +
+            '<i class="fa-solid fa-pen-to-square me-1"></i> Review' +
+          '</button>' +
+        '</td>' +
+      '</tr>';
+    }).join('');
+  }
+
+  function filterAccessReviews() {
+    const q = (document.getElementById('txtRevFilterSearch')?.value || '').toLowerCase().trim();
+    const status = document.getElementById('selRevFilterStatus')?.value || '';
+    const inst = document.getElementById('selRevFilterInstitution')?.value || '';
+
+    const filtered = accessReviewsData.filter(r => {
+      if (q) {
+        const text = (r.reviewId + ' ' + r.userName + ' ' + r.userEmail + ' ' + r.privilegedRoles.join(' ') + ' ' + r.businessJustification).toLowerCase();
+        if (!text.includes(q)) return false;
+      }
+      if (status && r.reviewStatus !== status) return false;
+      if (inst && r.institutionId !== inst) return false;
+      return true;
+    });
+
+    renderAccessReviewsTable(filtered);
+  }
+
+  function resetAccessReviewFilters() {
+    const s = document.getElementById('txtRevFilterSearch'); if (s) s.value = '';
+    const st = document.getElementById('selRevFilterStatus'); if (st) st.value = '';
+    const inst = document.getElementById('selRevFilterInstitution'); if (inst) inst.value = '';
+    renderAccessReviewsTable(accessReviewsData);
+  }
+
+  function openAccessReviewModal(reviewId) {
+    const review = accessReviewsData.find(r => r.reviewId === reviewId);
+    if (!review) return;
+
+    const idInput = document.getElementById('txtReviewActionReviewId'); if (idInput) idInput.value = reviewId;
+    const nameEl = document.getElementById('lblReviewActionUserName'); if (nameEl) nameEl.textContent = review.userName;
+    const roleEl = document.getElementById('lblReviewActionRole'); if (roleEl) roleEl.textContent = review.privilegedRoles.join(', ');
+    const scopeEl = document.getElementById('lblReviewActionScope'); if (scopeEl) scopeEl.textContent = review.institutionScope;
+
+    const notes = document.getElementById('txtReviewDecisionNotes'); if (notes) notes.value = '';
+    openModal('modalAccessReviewAction');
+  }
+
+  async function submitAccessReviewAction() {
+    const reviewId = document.getElementById('txtReviewActionReviewId')?.value;
+    const decision = document.getElementById('selReviewDecision')?.value || 'confirm';
+    const notes = document.getElementById('txtReviewDecisionNotes')?.value || 'Recertification action processed';
+
+    if (!reviewId) return;
+
+    try {
+      const res = await fetch('/api/v1/platform/security/reviews/' + reviewId + '/outcome', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ decision, notes, operator: 'Trust Security Auditor' })
+      });
+      const json = await res.json();
+      if (json.success) {
+        showToast('Review outcome recorded: ' + json.reviewStatus, 'success');
+        closeModal('modalAccessReviewAction');
+        await loadSecurityMonitoringData();
+      } else {
+        showToast(json.message || 'Failed to submit review', 'warning');
+      }
+    } catch (e) {
+      showToast('Error submitting review: ' + e.message, 'danger');
+    }
+  }
+
+  function exportSecurityDossierCSV() {
+    if (!securityEventsData || securityEventsData.length === 0) {
+      showToast('No security event records to export.', 'warning');
+      return;
+    }
+
+    const headers = ['Event ID', 'Timestamp', 'Event Type', 'User Name', 'User ID', 'Institution', 'Risk', 'Status', 'Investigator', 'Source IP', 'Failed Attempts', 'Root Cause'];
+    const rows = securityEventsData.map(e => [
+      e.eventId,
+      new Date(e.timestamp).toISOString(),
+      e.eventType,
+      e.userName,
+      e.userId,
+      e.institutionName,
+      e.riskClassification,
+      e.status,
+      e.assignedInvestigator?.name || 'Unassigned',
+      e.telemetry?.ipAddress || '',
+      e.telemetry?.failedAttemptsCount || 0,
+      e.findings?.rootCause || ''
+    ]);
+
+    const csvContent = [
+      '# SRI VIDYA EDUCATIONAL TRUST - STATUTORY SECURITY DOSSIER',
+      '# Export Timestamp: ' + new Date().toISOString() + ' | Classification: CONFIDENTIAL AUDIT',
+      headers.map(h => '"' + h + '"').join(','),
+      ...rows.map(r => r.map(v => '"' + String(v).replace(/"/g, '""') + '"').join(','))
+    ].join('\n');
+
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'SriVidya_Security_Dossier_' + new Date().toISOString().slice(0, 10) + '.csv';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    showToast('Security dossier exported successfully.', 'success');
+  }
+
 function init() {
     setupTheme();
     updatePlatformClock();
@@ -5899,6 +6486,27 @@ function init() {
 
   // Public Interface
   return {
+    // Module 9: Security & Access Monitoring
+    loadSecurityMonitoringData,
+    switchSecuritySubTab,
+    filterSecurityEvents,
+    resetSecurityEventFilters,
+    openSecurityEventDetails,
+    markEventUnderInvestigation,
+    openAssignInvestigatorModal,
+    submitAssignInvestigator,
+    openRecordFindingsModal,
+    submitRecordFindings,
+    executeContainment,
+    closeSecurityEvent,
+    openEscalateModal,
+    submitEscalateIncident,
+    filterAccessReviews,
+    resetAccessReviewFilters,
+    openAccessReviewModal,
+    submitAccessReviewAction,
+    exportSecurityDossierCSV,
+
     // Module 8: Audit Logs Explorer (Forensic Evidence & Investigation)
     loadPlatformAuditDirectory,
     filterPlatformAuditLogs,

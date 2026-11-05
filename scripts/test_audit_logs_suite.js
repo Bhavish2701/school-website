@@ -234,3 +234,4 @@ const PlatformAuditService = require('../backend/src/services/platformAudit.serv
     process.exit(1);
   }
 })();
+

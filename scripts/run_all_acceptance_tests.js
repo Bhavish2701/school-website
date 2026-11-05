@@ -1,6 +1,7 @@
 const cp = require('child_process');
 
 const testSuites = [
+  'scripts/test_security_monitoring_suite.js',
   'scripts/test_audit_logs_suite.js',
   'scripts/test_role_templates_suite.js',
   'scripts/test_user_account_suite.js',

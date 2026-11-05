@@ -32,3 +32,4 @@ router.delete('/:eventId', rejectTampering);
 router.delete('/', rejectTampering);
 
 module.exports = router;
+

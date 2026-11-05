@@ -676,3 +676,4 @@ class PlatformAuditService {
 }
 
 module.exports = PlatformAuditService;
+
