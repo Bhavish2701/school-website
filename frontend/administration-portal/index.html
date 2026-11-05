@@ -14865,166 +14865,259 @@
           <!-- Module Header Strip -->
           <div class="module-header-strip mb-4">
             <div class="mhs-title">
-              <h2><i class="fa-solid fa-user-gear text-primary"></i> Institutional Settings &amp; Access Control Center
-              </h2>
-              <p>System Configuration • Statutory Regulatory Metadata • RBAC Permissions • Security Policies • Audit
-                Logs &amp; Backups</p>
+              <h2><i class="fa-solid fa-user-gear text-primary"></i> Institutional Settings &amp; Access Control Center</h2>
+              <p>School Profile • Academic Year • Role Management • Access Permissions Matrix • Security Policies • Immutable Audit Logs • Data &amp; Backup</p>
             </div>
             <div class="mhs-actions" style="display:flex; align-items:center; gap:0.75rem; flex-wrap:wrap;">
-              <span class="badge"
-                style="background:#f0fdf4; color:#166534; padding: 7px 14px; font-size: 0.82rem; font-weight:700; border:1px solid #bbf7d0; border-radius: 6px;">
-                <i class="fa-solid fa-lock text-success mr-1"></i> Security Protocol: <strong>TLS 1.3 &bull; AES-256
-                  Encrypted</strong>
+              <span class="badge" style="background:#f0fdf4; color:#166534; padding: 7px 14px; font-size: 0.82rem; font-weight:700; border:1px solid #bbf7d0; border-radius: 6px;">
+                <i class="fa-solid fa-lock text-success mr-1"></i> Security Protocol: <strong>TLS 1.3 &bull; AES-256 Encrypted</strong>
               </span>
-              <button class="btn btn-secondary btn-sm" onclick="portalApp.triggerInstantBackup()">
-                <i class="fa-solid fa-cloud-arrow-up"></i> Instant Backup
+              <button class="btn btn-secondary btn-sm" onclick="portalApp.triggerAuthorizedBackup()">
+                <i class="fa-solid fa-cloud-arrow-up mr-1"></i> Start Authorized Backup
               </button>
-              <button class="btn btn-primary btn-sm" onclick="portalApp.saveInstitutionalSettings()">
-                <i class="fa-solid fa-floppy-disk"></i> Save Changes
+              <button class="btn btn-primary btn-sm" onclick="portalApp.publishSchoolProfileChanges()">
+                <i class="fa-solid fa-cloud-check mr-1"></i> Publish Changes
               </button>
             </div>
           </div>
 
-          <!-- Protocol Notice Strip -->
+          <!-- Statutory Protocol Notice Strip -->
           <div class="p-3 mb-4 rounded-3 border" style="background: #f8fafc; border-color: #cbd5e1 !important;">
             <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
               <div class="d-flex align-items-center gap-3">
-                <div
-                  style="width: 40px; height: 40px; border-radius: 8px; background: #0f172a; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 1.25rem;">
+                <div style="width: 42px; height: 42px; border-radius: 8px; background: #0f172a; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 1.25rem;">
                   <i class="fa-solid fa-shield-halved"></i>
                 </div>
                 <div>
-                  <h6 class="mb-0 font-bold" style="color: #0f172a; font-size: 0.95rem;">Statutory Governance &amp;
-                    Executive Access Control Standard</h6>
-                  <p class="mb-0 text-muted" style="font-size: 0.8rem;">Modifications to school profile, academic term
-                    dates, role hierarchies, and security parameters require Executive Principal authorization. All
-                    changes are cryptographically timestamped in the immutable Audit Log.</p>
+                  <h6 class="mb-0 font-bold" style="color: #0f172a; font-size: 0.95rem;">Andhra Pradesh Statutory Governance &amp; Executive Access Standard</h6>
+                  <p class="mb-0 text-muted" style="font-size: 0.8rem;">Modifications to school profile, academic term boundaries, role hierarchies, and security parameters require Executive Principal authorization. All changes are cryptographically timestamped in the immutable Audit Log.</p>
                 </div>
               </div>
               <div class="d-flex align-items-center gap-2">
-                <span class="badge" style="background:#e2e8f0; color:#334155; padding:6px 12px; font-weight:700;"><i
-                    class="fa-solid fa-fingerprint"></i> Audit Active</span>
-                <span class="badge" style="background:#dcfce7; color:#166534; padding:6px 12px; font-weight:700;"><i
-                    class="fa-solid fa-circle-check"></i> U-DISE+ 28111501008</span>
+                <span class="badge" style="background:#e2e8f0; color:#334155; padding:6px 12px; font-weight:700;"><i class="fa-solid fa-fingerprint mr-1"></i> Audit Active</span>
+                <span class="badge" style="background:#dcfce7; color:#166534; padding:6px 12px; font-weight:700;"><i class="fa-solid fa-circle-check mr-1"></i> U-DISE+ 28111501008</span>
               </div>
             </div>
           </div>
 
-          <!-- Module Tab Strip (9 Submenus) -->
+          <!-- Module Tab Strip (7 Core Subviews) -->
           <div class="tab-strip mb-4" id="settingsTabStrip" style="overflow-x: auto; white-space: nowrap;">
             <button class="tab-btn active" data-sub="profile" onclick="portalApp.switchSubTab('settings', 'profile')">
-              <i class="fa-solid fa-school"></i> School Profile
+              <i class="fa-solid fa-school mr-1"></i> 18.1 School Profile
             </button>
             <button class="tab-btn" data-sub="year" onclick="portalApp.switchSubTab('settings', 'year')">
-              <i class="fa-solid fa-calendar-days"></i> Academic Year
+              <i class="fa-solid fa-calendar-days mr-1"></i> 18.2 Academic Year
             </button>
             <button class="tab-btn" data-sub="roles" onclick="portalApp.switchSubTab('settings', 'roles')">
-              <i class="fa-solid fa-sitemap"></i> Role Management
+              <i class="fa-solid fa-sitemap mr-1"></i> 18.3 Role Management
             </button>
             <button class="tab-btn" data-sub="permissions" onclick="portalApp.switchSubTab('settings', 'permissions')">
-              <i class="fa-solid fa-shield-halved"></i> Access Permissions
-            </button>
-            <button class="tab-btn" data-sub="workflows" onclick="portalApp.switchSubTab('settings', 'workflows')">
-              <i class="fa-solid fa-sliders"></i> Approval Workflows
-            </button>
-            <button class="tab-btn" data-sub="notifications"
-              onclick="portalApp.switchSubTab('settings', 'notifications')">
-              <i class="fa-solid fa-bell"></i> Notifications
+              <i class="fa-solid fa-shield-halved mr-1"></i> 18.4 Access Permissions
             </button>
             <button class="tab-btn" data-sub="security" onclick="portalApp.switchSubTab('settings', 'security')">
-              <i class="fa-solid fa-key"></i> Security Settings
+              <i class="fa-solid fa-key mr-1"></i> 18.5 Security Settings
             </button>
             <button class="tab-btn" data-sub="audit" onclick="portalApp.switchSubTab('settings', 'audit')">
-              <i class="fa-solid fa-clipboard-list"></i> Audit Logs
+              <i class="fa-solid fa-clipboard-list mr-1"></i> 18.6 Audit Logs
             </button>
             <button class="tab-btn" data-sub="backup" onclick="portalApp.switchSubTab('settings', 'backup')">
-              <i class="fa-solid fa-database"></i> Data &amp; Backup
+              <i class="fa-solid fa-database mr-1"></i> 18.7 Data &amp; Backup
             </button>
           </div>
 
           <!-- ====================================================================
-               SUBVIEW 1: SCHOOL PROFILE
-               School name, logo, address, contact details and affiliation details
+               SUBVIEW 18.1: SCHOOL PROFILE
+               Fields: Official school name, Logo, Address, Contact info, Affiliation info,
+               Website domain, Official email domain, Authorized signatories, School branding
+               Actions: Edit draft, Preview, Submit for approval, Publish changes, View history
                ==================================================================== -->
           <div class="setting-subview active" id="subview-settings-profile">
-            <div class="row g-4">
-              <div class="col-lg-4">
-                <div class="card p-4 border rounded-3 bg-white text-center shadow-sm">
-                  <div class="mb-3">
-                    <img src="assets/images/school-logo.jpg" alt="Sri Vidya Emblem"
-                      style="width: 120px; height: 120px; object-fit: contain; border-radius: 12px; border: 2px solid #e2e8f0; padding: 6px; background: #fff;"
-                      id="profileLogoPreview">
-                  </div>
-                  <h5 class="font-bold mb-1" style="color: #0f172a;">SRI VIDYA E.M HIGH SCHOOL</h5>
-                  <p class="text-muted text-xs mb-3">"Vidyathe Vijayam — Knowledge Brings Victory"</p>
-                  <div class="d-flex justify-content-center gap-2 mb-3">
-                    <span class="badge" style="background:#eff6ff; color:#1d4ed8; font-weight:700;">Est. 2017</span>
-                    <span class="badge" style="background:#f0fdf4; color:#166534; font-weight:700;">AP Govt
-                      Recognized</span>
-                  </div>
-                  <button class="btn btn-secondary btn-sm w-100"
-                    onclick="portalApp.showToast('Select replacement image file (PNG/JPEG under 2MB).', 'info')">
-                    <i class="fa-solid fa-image mr-1"></i> Update Emblem / Logo
+            <!-- Action Toolbar Strip -->
+            <div class="card p-3 mb-4 border rounded-3 bg-white shadow-sm">
+              <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+                <div class="d-flex align-items-center gap-2">
+                  <span class="badge" style="background:#eff6ff; color:#1d4ed8; font-weight:700; font-size:0.8rem; padding:6px 12px;">
+                    <i class="fa-solid fa-circle-check mr-1"></i> Active Published Profile
+                  </span>
+                  <span class="text-muted text-xs">Version 2026.3 &bull; Last published by Smt. Gorle Varalakshmi</span>
+                </div>
+                <div class="d-flex align-items-center gap-2 flex-wrap">
+                  <button type="button" class="btn btn-outline-primary btn-sm" onclick="portalApp.editSchoolProfileDraft()">
+                    <i class="fa-solid fa-pen-to-square mr-1"></i> Edit draft
+                  </button>
+                  <button type="button" class="btn btn-outline-info btn-sm" onclick="portalApp.previewSchoolProfile()">
+                    <i class="fa-regular fa-eye mr-1"></i> Preview
+                  </button>
+                  <button type="button" class="btn btn-outline-warning btn-sm" onclick="portalApp.submitSchoolProfileForApproval()">
+                    <i class="fa-solid fa-paper-plane mr-1"></i> Submit for approval
+                  </button>
+                  <button type="button" class="btn btn-success btn-sm" onclick="portalApp.publishSchoolProfileChanges()">
+                    <i class="fa-solid fa-cloud-check mr-1"></i> Publish changes
+                  </button>
+                  <button type="button" class="btn btn-outline-secondary btn-sm" onclick="portalApp.viewSchoolProfileHistory()">
+                    <i class="fa-solid fa-clock-rotate-left mr-1"></i> View history
                   </button>
                 </div>
               </div>
+            </div>
+
+            <div class="row g-4">
+              <!-- Left Column: Logo Emblem & School Branding -->
+              <div class="col-lg-4">
+                <div class="card p-4 border rounded-3 bg-white text-center shadow-sm mb-4">
+                  <div class="mb-3">
+                    <img src="assets/images/school-logo.jpg" alt="Official School Logo Emblem"
+                      style="width: 130px; height: 130px; object-fit: contain; border-radius: 14px; border: 2px solid #e2e8f0; padding: 6px; background: #fff;"
+                      id="profileLogoPreview">
+                  </div>
+                  <h5 class="font-bold mb-1" style="color: #0f172a;">SRI VIDYA ENGLISH MEDIUM HIGH SCHOOL</h5>
+                  <p class="text-muted text-xs mb-3">"Vidyathe Vijayam — Knowledge Brings Victory"</p>
+                  <div class="d-flex justify-content-center gap-2 mb-3">
+                    <span class="badge" style="background:#eff6ff; color:#1d4ed8; font-weight:700;">Est. 2017</span>
+                    <span class="badge" style="background:#f0fdf4; color:#166534; font-weight:700;">AP Govt Recognized</span>
+                  </div>
+                  <button type="button" class="btn btn-outline-secondary btn-sm w-100" onclick="portalApp.showToast('Select replacement high-resolution emblem (PNG/JPEG under 2MB).', 'info')">
+                    <i class="fa-solid fa-image mr-1"></i> Update Logo Emblem
+                  </button>
+                </div>
+
+                <!-- School Branding Configuration -->
+                <div class="card p-4 border rounded-3 bg-white shadow-sm">
+                  <h6 class="font-bold mb-3" style="color:#0f172a;"><i class="fa-solid fa-palette text-primary mr-2"></i> School Branding &amp; Visual Identity</h6>
+                  <div class="mb-3">
+                    <label class="form-label text-xs font-bold text-muted">Primary Brand Color</label>
+                    <div class="d-flex align-items-center gap-2">
+                      <input type="color" id="profilePrimaryBrandColor" value="#1e3a8a" style="width:40px; height:38px; border:1px solid #cbd5e1; border-radius:6px; cursor:pointer;">
+                      <input type="text" class="form-control form-control-sm font-monospace" value="#1e3a8a" readonly style="font-weight:700;">
+                    </div>
+                  </div>
+                  <div class="mb-3">
+                    <label class="form-label text-xs font-bold text-muted">Secondary Accent Color</label>
+                    <div class="d-flex align-items-center gap-2">
+                      <input type="color" id="profileSecondaryBrandColor" value="#d97706" style="width:40px; height:38px; border:1px solid #cbd5e1; border-radius:6px; cursor:pointer;">
+                      <input type="text" class="form-control form-control-sm font-monospace" value="#d97706" readonly style="font-weight:700;">
+                    </div>
+                  </div>
+                  <div class="mb-3">
+                    <label class="form-label text-xs font-bold text-muted">Official Institutional Motto</label>
+                    <input type="text" class="form-control" id="profileSchoolMotto" value="Vidyathe Vijayam — Knowledge Brings Victory">
+                  </div>
+                  <div class="form-check form-switch mt-2">
+                    <input class="form-check-input" type="checkbox" id="profileBrandingWatermarkToggle" checked>
+                    <label class="form-check-label text-xs font-bold text-muted" for="profileBrandingWatermarkToggle">Watermark Emblem on Transcripts &amp; TCs</label>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Right Column: Institutional Identity, Domains, Identifiers & Signatories -->
               <div class="col-lg-8">
+                <!-- Section 1: Basic Identifiers & Contact -->
                 <div class="card p-4 border rounded-3 bg-white shadow-sm mb-4">
-                  <h5 class="font-bold mb-3" style="color:#1e3a8a;"><i
-                      class="fa-solid fa-landmark text-primary mr-2"></i> Institutional Identity &amp; Contact Details
-                  </h5>
+                  <h5 class="font-bold mb-3" style="color:#1e3a8a;"><i class="fa-solid fa-landmark text-primary mr-2"></i> Official Identity &amp; Contact Information</h5>
                   <div class="row g-3">
                     <div class="col-md-6">
-                      <label class="form-label text-xs font-bold text-muted">School Name (English)</label>
-                      <input type="text" class="form-control" id="profileSchoolName" value="Sri Vidya E.M High School">
+                      <label class="form-label text-xs font-bold text-muted">Official School Name <span class="text-danger">*</span></label>
+                      <input type="text" class="form-control" id="profileSchoolName" value="Sri Vidya English Medium High School">
                     </div>
                     <div class="col-md-6">
-                      <label class="form-label text-xs font-bold text-muted">Executive Principal</label>
+                      <label class="form-label text-xs font-bold text-muted">Executive Principal <span class="text-danger">*</span></label>
                       <input type="text" class="form-control" id="profilePrincipalName" value="Smt. Gorle Varalakshmi">
                     </div>
                     <div class="col-12">
-                      <label class="form-label text-xs font-bold text-muted">Campus Address</label>
-                      <input type="text" class="form-control" id="profileAddress"
-                        value="Door No. 4-128, Main Campus Road, Near Old Bus Stand, Visakhapatnam - 530041, Andhra Pradesh">
+                      <label class="form-label text-xs font-bold text-muted">Official Campus Address <span class="text-danger">*</span></label>
+                      <input type="text" class="form-control" id="profileAddress" value="Door No. 4-128, Main Campus Road, Near Old Bus Stand, Visakhapatnam - 530041, Andhra Pradesh">
                     </div>
                     <div class="col-md-6">
-                      <label class="form-label text-xs font-bold text-muted">Primary Administrative Phone</label>
+                      <label class="form-label text-xs font-bold text-muted">Primary Contact Phone <span class="text-danger">*</span></label>
                       <input type="text" class="form-control" id="profilePhone" value="+91 93985 78584 / 0891-2548911">
                     </div>
                     <div class="col-md-6">
-                      <label class="form-label text-xs font-bold text-muted">Official Portal Email</label>
-                      <input type="email" class="form-control" id="profileEmail" value="admin@srividyaschool.edu.in">
-                    </div>
-                    <div class="col-12">
-                      <label class="form-label text-xs font-bold text-muted">Official Website URL</label>
-                      <input type="url" class="form-control" id="profileWebsite" value="https://srividyaschool.edu.in">
+                      <label class="form-label text-xs font-bold text-muted">Primary Administrative Email <span class="text-danger">*</span></label>
+                      <input type="email" class="form-control" id="profileEmail" value="admin@srividya.edu.in">
                     </div>
                   </div>
                 </div>
 
-                <div class="card p-4 border rounded-3 bg-white shadow-sm">
-                  <h5 class="font-bold mb-3" style="color:#1e3a8a;"><i
-                      class="fa-solid fa-certificate text-primary mr-2"></i> Statutory Affiliation &amp; Recognition
-                    Details</h5>
+                <!-- Section 2: Domains & Regulatory Identifiers -->
+                <div class="card p-4 border rounded-3 bg-white shadow-sm mb-4">
+                  <h5 class="font-bold mb-3" style="color:#0f172a;"><i class="fa-solid fa-globe text-primary mr-2"></i> Domains, Regulatory Identifiers &amp; Affiliation</h5>
                   <div class="row g-3">
                     <div class="col-md-6">
-                      <label class="form-label text-xs font-bold text-muted">Affiliation Board</label>
-                      <input type="text" class="form-control" id="profileBoard"
-                        value="AP State Board of Secondary Education (CBSE Affiliated Dual Stream)">
+                      <label class="form-label text-xs font-bold text-muted">Website Domain <span class="text-danger">*</span></label>
+                      <div class="input-group">
+                        <span class="input-group-text bg-light text-muted"><i class="fa-solid fa-link"></i></span>
+                        <input type="url" class="form-control" id="profileWebsiteDomain" value="https://srividyaschool.edu.in">
+                      </div>
                     </div>
                     <div class="col-md-6">
-                      <label class="form-label text-xs font-bold text-muted">U-DISE+ Unified Institutional Code</label>
-                      <input type="text" class="form-control" id="profileUdise" value="28111501008">
+                      <label class="form-label text-xs font-bold text-muted">Official Email Domain <span class="text-danger">*</span></label>
+                      <div class="input-group">
+                        <span class="input-group-text bg-light text-muted"><i class="fa-solid fa-at"></i></span>
+                        <input type="text" class="form-control" id="profileOfficialEmailDomain" value="@srividya.edu.in">
+                      </div>
                     </div>
                     <div class="col-md-6">
-                      <label class="form-label text-xs font-bold text-muted">State Recognition Order No.</label>
-                      <input type="text" class="form-control" id="profileRecOrder" value="AP-DEO-VSP-REC/2017/4891">
+                      <label class="form-label text-xs font-bold text-muted">National U-DISE+ Code <span class="text-danger">*</span></label>
+                      <input type="text" class="form-control font-monospace font-bold" id="profileUdiseCode" value="28111501008" readonly>
                     </div>
                     <div class="col-md-6">
-                      <label class="form-label text-xs font-bold text-muted">Trust / Society Registration</label>
-                      <input type="text" class="form-control" id="profileTrust"
-                        value="Sri Vidya Educational Trust (Reg. No. 124/2016)">
+                      <label class="form-label text-xs font-bold text-muted">Affiliation Board &amp; Code <span class="text-danger">*</span></label>
+                      <input type="text" class="form-control" id="profileAffiliationBoard" value="AP SCERT &amp; State Board of Secondary Education, AP (CBSE Aligned)">
                     </div>
+                    <div class="col-md-6">
+                      <label class="form-label text-xs font-bold text-muted">Statutory School Registration No</label>
+                      <input type="text" class="form-control font-monospace" id="profileRegNo" value="AP-VSP-REC-2017/0491" readonly>
+                    </div>
+                    <div class="col-md-6">
+                      <label class="form-label text-xs font-bold text-muted">Government Recognition Order</label>
+                      <input type="text" class="form-control" id="profileGovtOrder" value="G.O.Ms.No. 412/SE-DEO/2017" readonly>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Section 3: Authorized Signatories -->
+                <div class="card p-4 border rounded-3 bg-white shadow-sm" id="profileAuthorizedSignatories">
+                  <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h5 class="font-bold mb-0" style="color:#0f172a;"><i class="fa-solid fa-file-signature text-primary mr-2"></i> Authorized Institutional Signatories</h5>
+                    <button type="button" class="btn btn-outline-primary btn-sm" onclick="portalApp.openAddSignatoryModal()">
+                      <i class="fa-solid fa-plus mr-1"></i> Add Signatory
+                    </button>
+                  </div>
+                  <div class="table-responsive">
+                    <table class="table table-sm table-bordered align-middle mb-0" style="font-size:0.84rem;">
+                      <thead class="table-light">
+                        <tr>
+                          <th>Signatory Name</th>
+                          <th>Institutional Designation</th>
+                          <th>Signing Authority Scope</th>
+                          <th>Digital Seal</th>
+                          <th>Status</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td><strong>Smt. Gorle Varalakshmi</strong></td>
+                          <td>Principal &amp; Head of Institution</td>
+                          <td>Transfer Certificates (TC), Board Transcripts, Staff Relinquishment</td>
+                          <td><span class="badge bg-success"><i class="fa-solid fa-signature"></i> Sealed</span></td>
+                          <td><span class="badge bg-primary">Primary</span></td>
+                        </tr>
+                        <tr>
+                          <td><strong>Sri Navva Anand</strong></td>
+                          <td>Vice Principal (Academic Dean)</td>
+                          <td>Attendance Registers, Internal Moderation, Routine Clearances</td>
+                          <td><span class="badge bg-success"><i class="fa-solid fa-signature"></i> Sealed</span></td>
+                          <td><span class="badge bg-secondary">Secondary</span></td>
+                        </tr>
+                        <tr>
+                          <td><strong>Sri K. Venkat</strong></td>
+                          <td>School Correspondent &amp; Secretary</td>
+                          <td>Financial Sanctions, Legal Affidavits, Infrastructure Leases</td>
+                          <td><span class="badge bg-success"><i class="fa-solid fa-signature"></i> Sealed</span></td>
+                          <td><span class="badge bg-secondary">Executive</span></td>
+                        </tr>
+                      </tbody>
+                    </table>
                   </div>
                 </div>
               </div>
@@ -15032,226 +15125,238 @@
           </div>
 
           <!-- ====================================================================
-               SUBVIEW 2: ACADEMIC YEAR
-               Start/end dates, terms, holidays and current-year status
+               SUBVIEW 18.2: ACADEMIC YEAR
+               Fields: Academic year name, Start date, End date, Terms, Holidays, Working days, Current-year status
+               Actions: Create academic year, Configure terms, Review date conflicts, Activate year, Close year, Archive previous year
+               Mandatory Rule: Closing an academic year should not delete previous enrolments, attendance, marks or fee history.
                ==================================================================== -->
           <div class="setting-subview" id="subview-settings-year" style="display: none;">
+            <!-- Statutory Non-Deletion Guarantee Banner -->
+            <div class="alert alert-info border-primary mb-4" style="background: #eff6ff; border: 1.5px solid #93c5fd; border-radius: 8px;">
+              <div class="d-flex align-items-start gap-3">
+                <i class="fa-solid fa-shield-halved text-primary" style="font-size: 1.4rem; margin-top: 2px;"></i>
+                <div>
+                  <h6 class="font-bold mb-1" style="color: #1e3a8a;">Statutory Academic Preservation Policy (AP Education Code Section 19)</h6>
+                  <p class="mb-0 text-sm" style="color: #1e40af;">
+                    <strong>Closing an academic year should not delete previous enrolments, attendance, marks or fee history.</strong> 
+                    When an academic session is closed, all statutory registers, student dossiers, examination marks, and fee payment ledgers are immutably archived into permanent cold-storage for regulatory retention and Transfer Certificate continuity.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <!-- KPI Quad: Session Status, Dates, Terms, Working Days -->
             <div class="metrics-quad mb-4">
               <div class="metric-card">
                 <div class="metric-icon-wrap icon-emerald"><i class="fa-solid fa-calendar-check"></i></div>
                 <div class="metric-details">
-                  <span class="metric-label">Current Academic Session</span>
-                  <div class="metric-value text-emerald">AY 2026-27</div>
-                  <div class="metric-trend trend-up"><span>ACTIVE OPERATING YEAR</span></div>
+                  <span class="metric-label">Current-Year Status</span>
+                  <div class="metric-value text-emerald">ACTIVE YEAR</div>
+                  <div class="metric-trend trend-up"><span>Academic Year 2026–2027</span></div>
                 </div>
               </div>
               <div class="metric-card">
                 <div class="metric-icon-wrap icon-blue"><i class="fa-solid fa-business-time"></i></div>
                 <div class="metric-details">
-                  <span class="metric-label">Statutory Working Days</span>
-                  <div class="metric-value text-primary">224 Days</div>
-                  <div class="metric-trend trend-up"><span>Exceeds AP Board Mandate</span></div>
+                  <span class="metric-label">Mandated Working Days</span>
+                  <div class="metric-value text-primary" id="workingDaysDisplay">224 Days</div>
+                  <div class="metric-trend trend-steady"><span>AP SCERT Mandate: &ge; 220 Days</span></div>
                 </div>
               </div>
               <div class="metric-card">
                 <div class="metric-icon-wrap icon-purple"><i class="fa-solid fa-layer-group"></i></div>
                 <div class="metric-details">
-                  <span class="metric-label">Academic Terms</span>
-                  <div class="metric-value text-purple">3 Terms</div>
-                  <div class="metric-trend trend-steady"><span>Term 2 In Progress</span></div>
+                  <span class="metric-label">Configured Terms</span>
+                  <div class="metric-value" style="color: #7c3aed;">3 Terms</div>
+                  <div class="metric-trend trend-steady"><span>FA-1, FA-2, SA-1, SA-2 Tracks</span></div>
                 </div>
               </div>
               <div class="metric-card">
                 <div class="metric-icon-wrap icon-amber"><i class="fa-solid fa-umbrella-beach"></i></div>
                 <div class="metric-details">
-                  <span class="metric-label">Approved Holidays</span>
-                  <div class="metric-value text-amber">48 Days</div>
-                  <div class="metric-trend trend-steady"><span>Gazetted &amp; Vacations</span></div>
+                  <span class="metric-label">Statutory Holidays</span>
+                  <div class="metric-value text-amber">42 Days</div>
+                  <div class="metric-trend trend-steady"><span>Vacations &amp; Gazetted Leaves</span></div>
                 </div>
               </div>
             </div>
 
-            <div class="card p-4 border rounded-3 bg-white shadow-sm mb-4">
-              <h5 class="font-bold mb-3" style="color:#0f172a;"><i
-                  class="fa-solid fa-clock-rotate-left text-primary mr-2"></i> Academic Session Terms &amp; Examination
-                Cycles</h5>
-              <div class="table-responsive">
-                <table class="table table-hover align-middle mb-0">
-                  <thead class="table-light">
-                    <tr>
-                      <th>Term Name</th>
-                      <th>Start Date</th>
-                      <th>End Date</th>
-                      <th>Working Days</th>
-                      <th>Major Examination Schedule</th>
-                      <th>Status</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td><strong>Term 1 (Monsoon Term)</strong></td>
-                      <td>12 Jun 2026</td>
-                      <td>20 Sep 2026</td>
-                      <td>78 Days</td>
-                      <td>Summative Assessment 1 (SA-1) &bull; FA-1</td>
-                      <td><span class="badge"
-                          style="background:#e2e8f0; color:#334155; font-weight:700;">Completed</span></td>
-                    </tr>
-                    <tr>
-                      <td><strong>Term 2 (Autumn / Winter Term)</strong></td>
-                      <td>05 Oct 2026</td>
-                      <td>10 Jan 2027</td>
-                      <td>76 Days</td>
-                      <td>Half-Yearly Examination &bull; Formative FA-2</td>
-                      <td><span class="badge" style="background:#dcfce7; color:#166534; font-weight:700;">Current
-                          Active</span></td>
-                    </tr>
-                    <tr>
-                      <td><strong>Term 3 (Spring / Board Term)</strong></td>
-                      <td>16 Jan 2027</td>
-                      <td>24 Apr 2027</td>
-                      <td>70 Days</td>
-                      <td>AP SSC Board Exams 2027 &bull; Final Summative SA-2</td>
-                      <td><span class="badge"
-                          style="background:#eff6ff; color:#1d4ed8; font-weight:700;">Scheduled</span></td>
-                    </tr>
-                  </tbody>
-                </table>
+            <!-- Academic Year Actions Toolbar -->
+            <div class="card p-3 mb-4 border rounded-3 bg-white shadow-sm">
+              <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+                <div class="d-flex align-items-center gap-2">
+                  <span class="badge" style="background:#dcfce7; color:#166534; font-weight:700; font-size:0.8rem; padding:6px 12px;">
+                    <i class="fa-solid fa-circle mr-1" style="font-size:0.5rem;"></i> Operating Session: AY 2026-27
+                  </span>
+                  <span class="text-muted text-xs">Start Date: <strong>12 Jun 2026</strong> &bull; End Date: <strong>23 Apr 2027</strong></span>
+                </div>
+                <div class="d-flex align-items-center gap-2 flex-wrap">
+                  <button type="button" class="btn btn-outline-primary btn-sm" onclick="portalApp.openCreateAcademicYearModal()">
+                    <i class="fa-solid fa-calendar-plus mr-1"></i> Create academic year
+                  </button>
+                  <button type="button" class="btn btn-outline-secondary btn-sm" onclick="portalApp.openConfigureTermsModal()">
+                    <i class="fa-solid fa-sliders mr-1"></i> Configure terms
+                  </button>
+                  <button type="button" class="btn btn-outline-info btn-sm" onclick="portalApp.reviewAcademicDateConflicts()">
+                    <i class="fa-solid fa-triangle-exclamation mr-1"></i> Review date conflicts
+                  </button>
+                  <button type="button" class="btn btn-outline-success btn-sm" onclick="portalApp.activateAcademicYear('AY-2026-27')">
+                    <i class="fa-solid fa-circle-check mr-1"></i> Activate year
+                  </button>
+                  <button type="button" class="btn btn-outline-danger btn-sm" onclick="portalApp.openCloseAcademicYearModal('AY-2026-27')">
+                    <i class="fa-solid fa-lock mr-1"></i> Close year
+                  </button>
+                  <button type="button" class="btn btn-outline-dark btn-sm" onclick="portalApp.archivePreviousAcademicYear('AY-2025-26')">
+                    <i class="fa-solid fa-box-archive mr-1"></i> Archive previous year
+                  </button>
+                </div>
               </div>
             </div>
 
-            <div class="card p-4 border rounded-3 bg-white shadow-sm">
-              <div class="d-flex justify-content-between align-items-center mb-3">
-                <h5 class="font-bold mb-0" style="color:#0f172a;"><i
-                    class="fa-solid fa-holly-berry text-primary mr-2"></i> Statutory Holidays &amp; Vacations Register
-                </h5>
-                <button class="btn btn-secondary btn-sm"
-                  onclick="portalApp.showToast('Academic holiday draft form opened.', 'info')">
-                  <i class="fa-solid fa-plus mr-1"></i> Add Holiday Entry
-                </button>
+            <div class="row g-4">
+              <!-- Terms Configuration Table -->
+              <div class="col-lg-6">
+                <div class="card p-4 border rounded-3 bg-white shadow-sm h-100">
+                  <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h5 class="font-bold mb-0" style="color:#0f172a;"><i class="fa-solid fa-calendar-week text-primary mr-2"></i> Academic Terms &amp; Examination Cycles</h5>
+                    <span class="badge bg-light text-dark border">3 Terms</span>
+                  </div>
+                  <div class="table-responsive">
+                    <table class="table table-sm table-bordered align-middle mb-0" style="font-size:0.84rem;" id="termsTable">
+                      <thead class="table-light">
+                        <tr>
+                          <th>Term</th>
+                          <th>Start Date</th>
+                          <th>End Date</th>
+                          <th>Working Days</th>
+                          <th>Status</th>
+                        </tr>
+                      </thead>
+                      <tbody id="tbodyAcademicTerms">
+                        <tr>
+                          <td><strong>Term 1 (Formative I &amp; II)</strong></td>
+                          <td>12 Jun 2026</td>
+                          <td>26 Sep 2026</td>
+                          <td><span class="badge bg-light text-dark">78 Days</span></td>
+                          <td><span class="badge bg-success">Completed</span></td>
+                        </tr>
+                        <tr>
+                          <td><strong>Term 2 (Half-Yearly SA-1)</strong></td>
+                          <td>12 Oct 2026</td>
+                          <td>09 Jan 2027</td>
+                          <td><span class="badge bg-light text-dark">72 Days</span></td>
+                          <td><span class="badge bg-primary">In Progress</span></td>
+                        </tr>
+                        <tr>
+                          <td><strong>Term 3 (Annual Finals SA-2)</strong></td>
+                          <td>18 Jan 2027</td>
+                          <td>23 Apr 2027</td>
+                          <td><span class="badge bg-light text-dark">74 Days</span></td>
+                          <td><span class="badge bg-secondary">Upcoming</span></td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
               </div>
-              <div class="table-responsive">
-                <table class="table table-hover align-middle mb-0">
-                  <thead class="table-light">
-                    <tr>
-                      <th>Occasion / Holiday Name</th>
-                      <th>Date / Range</th>
-                      <th>Duration</th>
-                      <th>Category</th>
-                      <th>Board Mandatory</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td><strong>Dussehra Vacations</strong></td>
-                      <td>28 Sep 2026 - 04 Oct 2026</td>
-                      <td>7 Days</td>
-                      <td>Festive Vacation</td>
-                      <td><span class="badge bg-success">Mandatory</span></td>
-                    </tr>
-                    <tr>
-                      <td><strong>Diwali &amp; Naraka Chaturdashi</strong></td>
-                      <td>31 Oct 2026</td>
-                      <td>1 Day</td>
-                      <td>Gazetted Holiday</td>
-                      <td><span class="badge bg-success">Mandatory</span></td>
-                    </tr>
-                    <tr>
-                      <td><strong>Children's Day &amp; Science Fair</strong></td>
-                      <td>14 Nov 2026</td>
-                      <td>1 Day</td>
-                      <td>Institutional Observance</td>
-                      <td><span class="badge bg-info">Observance</span></td>
-                    </tr>
-                    <tr>
-                      <td><strong>Christmas Holiday</strong></td>
-                      <td>25 Dec 2026</td>
-                      <td>1 Day</td>
-                      <td>Gazetted Holiday</td>
-                      <td><span class="badge bg-success">Mandatory</span></td>
-                    </tr>
-                    <tr>
-                      <td><strong>Sankranti / Pongal Vacations</strong></td>
-                      <td>11 Jan 2027 - 17 Jan 2027</td>
-                      <td>7 Days</td>
-                      <td>State Festive Vacation</td>
-                      <td><span class="badge bg-success">Mandatory</span></td>
-                    </tr>
-                    <tr>
-                      <td><strong>Republic Day</strong></td>
-                      <td>26 Jan 2027</td>
-                      <td>1 Day</td>
-                      <td>National Holiday</td>
-                      <td><span class="badge bg-success">Mandatory</span></td>
-                    </tr>
-                  </tbody>
-                </table>
+
+              <!-- Holidays & Vacation Schedule Table -->
+              <div class="col-lg-6">
+                <div class="card p-4 border rounded-3 bg-white shadow-sm h-100">
+                  <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h5 class="font-bold mb-0" style="color:#0f172a;"><i class="fa-solid fa-umbrella-beach text-amber mr-2"></i> Statutory Holidays &amp; Vacations</h5>
+                    <span class="badge bg-light text-dark border">42 Days Total</span>
+                  </div>
+                  <div class="table-responsive">
+                    <table class="table table-sm table-bordered align-middle mb-0" style="font-size:0.84rem;" id="holidaysTable">
+                      <thead class="table-light">
+                        <tr>
+                          <th>Holiday / Vacation Event</th>
+                          <th>Start Date</th>
+                          <th>End Date</th>
+                          <th>Duration</th>
+                          <th>Classification</th>
+                        </tr>
+                      </thead>
+                      <tbody id="tbodyAcademicHolidays">
+                        <tr>
+                          <td><strong>Dussehra Festival Vacation</strong></td>
+                          <td>27 Sep 2026</td>
+                          <td>11 Oct 2026</td>
+                          <td>15 Days</td>
+                          <td><span class="badge bg-warning text-dark">State Vacation</span></td>
+                        </tr>
+                        <tr>
+                          <td><strong>Sankranti Harvest Vacation</strong></td>
+                          <td>10 Jan 2027</td>
+                          <td>17 Jan 2027</td>
+                          <td>8 Days</td>
+                          <td><span class="badge bg-warning text-dark">State Vacation</span></td>
+                        </tr>
+                        <tr>
+                          <td><strong>Gandhi Jayanti</strong></td>
+                          <td>02 Oct 2026</td>
+                          <td>02 Oct 2026</td>
+                          <td>1 Day</td>
+                          <td><span class="badge bg-danger">National Gazetted</span></td>
+                        </tr>
+                        <tr>
+                          <td><strong>Republic Day</strong></td>
+                          <td>26 Jan 2027</td>
+                          <td>26 Jan 2027</td>
+                          <td>1 Day</td>
+                          <td><span class="badge bg-danger">National Gazetted</span></td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
 
           <!-- ====================================================================
-               SUBVIEW 3: ROLE MANAGEMENT
-               Roles, assigned users and role templates
+               SUBVIEW 18.3: ROLE MANAGEMENT
+               Display: Role name, Description, Assigned users, Default permissions, Status
+               Actions: Create role, Duplicate role, Assign users, Edit role permissions, Deactivate role, View permission history
                ==================================================================== -->
           <div class="setting-subview" id="subview-settings-roles" style="display: none;">
-            <div class="metrics-quad mb-4">
-              <div class="metric-card">
-                <div class="metric-icon-wrap icon-blue"><i class="fa-solid fa-user-shield"></i></div>
-                <div class="metric-details">
-                  <span class="metric-label">Core Institutional Roles</span>
-                  <div class="metric-value text-primary">4 Roles</div>
-                  <div class="metric-trend trend-steady"><span>Principal, VP, Faculty, Clerk</span></div>
+            <!-- Role Actions & Header Toolbar -->
+            <div class="card p-3 mb-4 border rounded-3 bg-white shadow-sm">
+              <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+                <div class="d-flex align-items-center gap-2">
+                  <span class="badge" style="background:#eff6ff; color:#1d4ed8; font-weight:700; font-size:0.8rem; padding:6px 12px;">
+                    <i class="fa-solid fa-users-gear mr-1"></i> Role-Based Access Control (RBAC)
+                  </span>
+                  <span class="text-muted text-xs">5 Core Institutional Roles &bull; 34 Authenticated Users</span>
                 </div>
-              </div>
-              <div class="metric-card">
-                <div class="metric-icon-wrap icon-emerald"><i class="fa-solid fa-users"></i></div>
-                <div class="metric-details">
-                  <span class="metric-label">Active Assigned Users</span>
-                  <div class="metric-value text-emerald">54 Staff</div>
-                  <div class="metric-trend trend-up"><span>100% RBAC Enforced</span></div>
-                </div>
-              </div>
-              <div class="metric-card">
-                <div class="metric-icon-wrap icon-purple"><i class="fa-solid fa-file-shield"></i></div>
-                <div class="metric-details">
-                  <span class="metric-label">Role Security Templates</span>
-                  <div class="metric-value text-purple">3 Standard</div>
-                  <div class="metric-trend trend-steady"><span>Executive, Academic, Operations</span></div>
-                </div>
-              </div>
-              <div class="metric-card">
-                <div class="metric-icon-wrap icon-amber"><i class="fa-solid fa-triangle-exclamation"></i></div>
-                <div class="metric-details">
-                  <span class="metric-label">Orphaned / Unbound Accounts</span>
-                  <div class="metric-value text-amber">0 Users</div>
-                  <div class="metric-trend trend-up"><span>Zero Security Leaks</span></div>
+                <div class="d-flex align-items-center gap-2">
+                  <button type="button" class="btn btn-primary btn-sm" onclick="portalApp.openCreateRoleModal()">
+                    <i class="fa-solid fa-plus mr-1"></i> Create role
+                  </button>
+                  <button type="button" class="btn btn-outline-secondary btn-sm" onclick="portalApp.viewRolePermissionHistory('all')">
+                    <i class="fa-solid fa-clock-rotate-left mr-1"></i> View permission history
+                  </button>
                 </div>
               </div>
             </div>
 
-            <div class="card p-4 border rounded-3 bg-white shadow-sm">
-              <div class="d-flex justify-content-between align-items-center mb-3">
-                <h5 class="font-bold mb-0" style="color:#0f172a;"><i class="fa-solid fa-sitemap text-primary mr-2"></i>
-                  Configured Roles, Users &amp; Authorization Templates</h5>
-                <button class="btn btn-secondary btn-sm" onclick="portalApp.openRoleAssignmentModal()">
-                  <i class="fa-solid fa-plus mr-1"></i> Add / Assign Role
-                </button>
-              </div>
+            <!-- Role Management Master Table -->
+            <div class="card p-0 border rounded-3 bg-white shadow-sm overflow-hidden">
               <div class="table-responsive">
-                <table class="table table-hover align-middle mb-0" id="tableRoleManagement">
+                <table class="table table-hover align-middle mb-0" id="tableSettingsRoles" style="font-size:0.84rem;">
                   <thead class="table-light">
                     <tr>
-                      <th>Role Identifier</th>
-                      <th>Security Clearance Template</th>
-                      <th>Assigned User(s)</th>
-                      <th>Permitted Governance Scope</th>
-                      <th>Delegation Clearance</th>
-                      <th class="text-end">Actions</th>
+                      <th style="min-width: 170px;"><i class="fa-solid fa-user-shield me-1 text-muted"></i> Role Name</th>
+                      <th style="min-width: 260px;"><i class="fa-solid fa-align-left me-1 text-muted"></i> Description</th>
+                      <th style="min-width: 160px;"><i class="fa-solid fa-users me-1 text-muted"></i> Assigned Users</th>
+                      <th style="min-width: 200px;"><i class="fa-solid fa-key me-1 text-muted"></i> Default Permissions</th>
+                      <th style="min-width: 100px;"><i class="fa-solid fa-circle-check me-1 text-muted"></i> Status</th>
+                      <th style="min-width: 240px;" class="text-end pe-3"><i class="fa-solid fa-sliders me-1 text-muted"></i> Actions</th>
                     </tr>
                   </thead>
-                  <tbody id="tbodyRoleManagement">
-                    <!-- Populated dynamically -->
+                  <tbody id="tbodySettingsRoles">
+                    <!-- Populated dynamically via portalApp.renderSettingsRolesTable -->
                   </tbody>
                 </table>
               </div>
@@ -15259,457 +15364,326 @@
           </div>
 
           <!-- ====================================================================
-               SUBVIEW 4: ACCESS PERMISSIONS
-               Universal Permissions (9 Core Actions), Record Scopes & Segregation
+               SUBVIEW 18.4: ACCESS PERMISSIONS
+               Permission Matrix: Module | View | Create/Edit | Approve | Archive | Export
+               Modules: Students, Attendance, Results, Fees, Staff HR
+               Additional Settings: Record scope, Assigned class/dept, Sensitive fields,
+               Delegated approval authority, Effective date, Expiry date
                ==================================================================== -->
           <div class="setting-subview" id="subview-settings-permissions" style="display: none;">
-
-            <!-- Universal Permissions KPI Metrics Quad -->
-            <div class="metrics-quad mb-4">
-              <div class="metric-card">
-                <div class="metric-icon-wrap icon-blue"><i class="fa-solid fa-cubes"></i></div>
-                <div class="metric-details">
-                  <span class="metric-label">Configured Modules</span>
-                  <div class="metric-value text-primary">18 Modules</div>
-                  <div class="metric-trend trend-steady"><span>100% Standalone Access Rules</span></div>
+            <!-- Matrix Header & Advisory -->
+            <div class="card p-3 mb-4 border rounded-3 bg-white shadow-sm">
+              <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+                <div class="d-flex align-items-center gap-2">
+                  <span class="badge" style="background:#eff6ff; color:#1d4ed8; font-weight:700; font-size:0.8rem; padding:6px 12px;">
+                    <i class="fa-solid fa-table-cells mr-1"></i> Universal Permission Matrix
+                  </span>
+                  <span class="text-muted text-xs">Role Target: <strong id="permSelectedRoleDisplay">Teaching Faculty (Senior English)</strong></span>
                 </div>
-              </div>
-              <div class="metric-card">
-                <div class="metric-icon-wrap icon-emerald"><i class="fa-solid fa-shield-halved"></i></div>
-                <div class="metric-details">
-                  <span class="metric-label">Universal Actions</span>
-                  <div class="metric-value text-emerald">9 Permissions</div>
-                  <div class="metric-trend trend-up"><span>View, Create, Edit, Submit, Approve, Archive, Export,
-                      Sensitive, Manage</span></div>
-                </div>
-              </div>
-              <div class="metric-card">
-                <div class="metric-icon-wrap icon-purple"><i class="fa-solid fa-arrows-to-eye"></i></div>
-                <div class="metric-details">
-                  <span class="metric-label">Record Scope Engine</span>
-                  <div class="metric-value text-purple">5 Granular Scopes</div>
-                  <div class="metric-trend trend-steady"><span>All, Assigned Classes, Dept, Students, Own</span></div>
-                </div>
-              </div>
-              <div class="metric-card">
-                <div class="metric-icon-wrap icon-amber"><i class="fa-solid fa-handshake-angle"></i></div>
-                <div class="metric-details">
-                  <span class="metric-label">Segregation of Duties</span>
-                  <div class="metric-value text-amber">Active Enforced</div>
-                  <div class="metric-trend trend-up"><span>Anti-Self-Approval Active</span></div>
+                <div class="d-flex align-items-center gap-2">
+                  <button type="button" class="btn btn-outline-secondary btn-sm" onclick="portalApp.resetPermissionsMatrixToDefault()">
+                    <i class="fa-solid fa-rotate-left mr-1"></i> Reset to Defaults
+                  </button>
+                  <button type="button" class="btn btn-success btn-sm" onclick="portalApp.savePermissionsMatrixAndScopes()">
+                    <i class="fa-solid fa-floppy-disk mr-1"></i> Save Permissions Matrix &amp; Scope Rules
+                  </button>
                 </div>
               </div>
             </div>
 
-            <!-- Permissions Governance Card -->
-            <div class="card p-4 border rounded-3 bg-white shadow-sm mb-4">
-              <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-3">
-                <div>
-                  <h5 class="font-bold mb-1" style="color:#0f172a;"><i
-                      class="fa-solid fa-shield-halved text-primary mr-2"></i> Universal Permissions &amp; Record Scope
-                    Governance Matrix</h5>
-                  <p class="text-muted text-xs mb-0">Every module independently enforces 9 core permissions, granular
-                    record scopes, and statutory segregation of duties (anti-self-approval).</p>
-                </div>
-                <div class="d-flex gap-2">
-                  <button class="btn btn-secondary btn-sm" onclick="portalApp.resetUniversalPermissionsToDefault()">
-                    <i class="fa-solid fa-rotate-left mr-1"></i> Reset Standard Defaults
-                  </button>
-                  <button class="btn btn-outline-primary btn-sm" onclick="portalApp.exportPermissionsSecurityAudit()">
-                    <i class="fa-solid fa-file-shield mr-1"></i> Export Audit PDF
-                  </button>
-                  <button class="btn btn-primary btn-sm" onclick="portalApp.saveUniversalPermissionsMatrix()">
-                    <i class="fa-solid fa-floppy-disk mr-1"></i> Save &amp; Enforce Matrix
-                  </button>
-                </div>
-              </div>
-
-              <!-- Role Context & Filter Bar -->
-              <div class="p-3 bg-light rounded-3 mb-3 border">
-                <div class="row g-2 align-items-center">
-                  <div class="col-lg-6">
-                    <label class="form-label text-xs font-bold text-muted mb-1 d-block">
-                      <i class="fa-solid fa-users-gear text-primary mr-1"></i> Inspect Permissions by Role Context:
-                    </label>
-                    <div class="btn-group btn-group-sm w-100 flex-wrap" role="group" id="permRoleFilterGroup">
-                      <button type="button" class="btn btn-primary" data-role="all"
-                        onclick="portalApp.filterPermissionsMatrix('all')">All Roles Overview</button>
-                      <button type="button" class="btn btn-outline-secondary" data-role="teacher"
-                        onclick="portalApp.filterPermissionsMatrix('teacher')"
-                        title="Teaching Faculty (Assigned Classes Scope)">Teaching Faculty</button>
-                      <button type="button" class="btn btn-outline-secondary" data-role="bursar"
-                        onclick="portalApp.filterPermissionsMatrix('bursar')"
-                        title="Head Bursar / Accounts Clerk (Segregated Duties)">Accounts Clerk / Bursar</button>
-                      <button type="button" class="btn btn-outline-secondary" data-role="counselor"
-                        onclick="portalApp.filterPermissionsMatrix('counselor')"
-                        title="Student Counselor (Confidential Dossiers)">Student Counselor</button>
-                      <button type="button" class="btn btn-outline-secondary" data-role="vice-principal"
-                        onclick="portalApp.filterPermissionsMatrix('vice-principal')">Vice Principal</button>
-                      <button type="button" class="btn btn-outline-secondary" data-role="principal"
-                        onclick="portalApp.filterPermissionsMatrix('principal')">Principal (Super Admin)</button>
-                    </div>
-                  </div>
-                  <div class="col-lg-4 col-md-8">
-                    <label class="form-label text-xs font-bold text-muted mb-1 d-block">
-                      <i class="fa-solid fa-magnifying-glass text-primary mr-1"></i> Search Modules:
-                    </label>
-                    <input type="text" class="form-control form-control-sm" id="permModuleSearchInput"
-                      placeholder="Filter by module name (e.g. Attendance, Fees, Students)..."
-                      oninput="portalApp.filterPermissionsMatrix()">
-                  </div>
-                  <div class="col-lg-2 col-md-4">
-                    <label class="form-label text-xs font-bold text-muted mb-1 d-block">
-                      <i class="fa-solid fa-layer-group text-primary mr-1"></i> Domain:
-                    </label>
-                    <select class="form-select form-select-sm" id="permCategoryFilterSelect"
-                      onchange="portalApp.filterPermissionsMatrix()">
-                      <option value="all">All Domains (18)</option>
-                      <option value="Academic">Academic</option>
-                      <option value="Finance">Finance &amp; Accounts</option>
-                      <option value="Operations">Operations &amp; Logistics</option>
-                      <option value="Welfare">Student Welfare</option>
-                      <option value="Governance">Institutional Governance</option>
-                    </select>
-                  </div>
-                </div>
-              </div>
-
-              <!-- The Universal Permissions Matrix Table -->
+            <!-- 5-Module Permission Matrix Table -->
+            <div class="card p-0 border rounded-3 bg-white shadow-sm overflow-hidden mb-4">
               <div class="table-responsive">
-                <table class="table table-hover align-middle mb-0" id="tableAccessPermissions">
+                <table class="table table-bordered table-hover align-middle mb-0" id="tablePermissionsMatrix" style="font-size:0.85rem;">
                   <thead class="table-light">
                     <tr>
-                      <th style="min-width: 190px;">Module &amp; Domain</th>
-                      <th style="min-width: 140px;">Role Context</th>
-                      <th style="min-width: 320px;">9 Universal Permissions</th>
-                      <th style="min-width: 160px;">Record Scope</th>
-                      <th style="min-width: 180px;">Segregation &amp; Guardrails</th>
-                      <th class="text-end" style="min-width: 110px;">Actions</th>
+                      <th style="min-width: 180px;"><i class="fa-solid fa-cubes me-1 text-primary"></i> Module</th>
+                      <th class="text-center" style="width: 120px;"><i class="fa-solid fa-eye me-1 text-muted"></i> View</th>
+                      <th class="text-center" style="width: 140px;"><i class="fa-solid fa-pen-to-square me-1 text-muted"></i> Create/Edit</th>
+                      <th class="text-center" style="width: 120px;"><i class="fa-solid fa-stamp me-1 text-muted"></i> Approve</th>
+                      <th class="text-center" style="width: 120px;"><i class="fa-solid fa-box-archive me-1 text-muted"></i> Archive</th>
+                      <th class="text-center" style="width: 120px;"><i class="fa-solid fa-file-export me-1 text-muted"></i> Export</th>
                     </tr>
                   </thead>
-                  <tbody id="tbodyAccessPermissions">
-                    <!-- Populated dynamically by portalApp.renderSettingsPermissionsTable() -->
+                  <tbody id="tbodyPermissionsMatrix">
+                    <!-- 1. Students Module -->
+                    <tr>
+                      <td>
+                        <strong><i class="fa-solid fa-user-graduate text-primary mr-2"></i> Students</strong>
+                        <div class="text-xs text-muted">Admissions, Student Dossiers, Transfers, TC Registry</div>
+                      </td>
+                      <td class="text-center"><input type="checkbox" class="form-check-input" id="perm_students_view" checked></td>
+                      <td class="text-center"><input type="checkbox" class="form-check-input" id="perm_students_create" checked></td>
+                      <td class="text-center"><input type="checkbox" class="form-check-input" id="perm_students_approve"></td>
+                      <td class="text-center"><input type="checkbox" class="form-check-input" id="perm_students_archive"></td>
+                      <td class="text-center"><input type="checkbox" class="form-check-input" id="perm_students_export" checked></td>
+                    </tr>
+                    <!-- 2. Attendance Module -->
+                    <tr>
+                      <td>
+                        <strong><i class="fa-solid fa-clipboard-user text-emerald mr-2"></i> Attendance</strong>
+                        <div class="text-xs text-muted">Daily Rolls, Period Roster, Biometrics, Leave Requests</div>
+                      </td>
+                      <td class="text-center"><input type="checkbox" class="form-check-input" id="perm_attendance_view" checked></td>
+                      <td class="text-center"><input type="checkbox" class="form-check-input" id="perm_attendance_create" checked></td>
+                      <td class="text-center"><input type="checkbox" class="form-check-input" id="perm_attendance_approve"></td>
+                      <td class="text-center"><input type="checkbox" class="form-check-input" id="perm_attendance_archive"></td>
+                      <td class="text-center"><input type="checkbox" class="form-check-input" id="perm_attendance_export" checked></td>
+                    </tr>
+                    <!-- 3. Results Module -->
+                    <tr>
+                      <td>
+                        <strong><i class="fa-solid fa-square-poll-vertical text-purple mr-2"></i> Results</strong>
+                        <div class="text-xs text-muted">Marks Entry, Moderation, Gradebooks, Report Cards</div>
+                      </td>
+                      <td class="text-center"><input type="checkbox" class="form-check-input" id="perm_results_view" checked></td>
+                      <td class="text-center"><input type="checkbox" class="form-check-input" id="perm_results_create" checked></td>
+                      <td class="text-center"><input type="checkbox" class="form-check-input" id="perm_results_approve"></td>
+                      <td class="text-center"><input type="checkbox" class="form-check-input" id="perm_results_archive"></td>
+                      <td class="text-center"><input type="checkbox" class="form-check-input" id="perm_results_export" checked></td>
+                    </tr>
+                    <!-- 4. Fees Module -->
+                    <tr>
+                      <td>
+                        <strong><i class="fa-solid fa-receipt text-warning mr-2"></i> Fees</strong>
+                        <div class="text-xs text-muted">Tuition Invoices, Concessions, Receipts, Ledger Reversals</div>
+                      </td>
+                      <td class="text-center"><input type="checkbox" class="form-check-input" id="perm_fees_view" checked></td>
+                      <td class="text-center"><input type="checkbox" class="form-check-input" id="perm_fees_create"></td>
+                      <td class="text-center"><input type="checkbox" class="form-check-input" id="perm_fees_approve"></td>
+                      <td class="text-center"><input type="checkbox" class="form-check-input" id="perm_fees_archive"></td>
+                      <td class="text-center"><input type="checkbox" class="form-check-input" id="perm_fees_export"></td>
+                    </tr>
+                    <!-- 5. Staff HR Module -->
+                    <tr>
+                      <td>
+                        <strong><i class="fa-solid fa-id-card-clip text-danger mr-2"></i> Staff HR</strong>
+                        <div class="text-xs text-muted">Faculty Roster, Substitutions, Leave Balances, Appraisals</div>
+                      </td>
+                      <td class="text-center"><input type="checkbox" class="form-check-input" id="perm_staffhr_view" checked></td>
+                      <td class="text-center"><input type="checkbox" class="form-check-input" id="perm_staffhr_create"></td>
+                      <td class="text-center"><input type="checkbox" class="form-check-input" id="perm_staffhr_approve"></td>
+                      <td class="text-center"><input type="checkbox" class="form-check-input" id="perm_staffhr_archive"></td>
+                      <td class="text-center"><input type="checkbox" class="form-check-input" id="perm_staffhr_export"></td>
+                    </tr>
                   </tbody>
                 </table>
               </div>
             </div>
 
-            <!-- Universal Permissions & Record Scope Interactive Live Testing Sandbox -->
-            <div class="card p-4 border rounded-3 bg-white shadow-sm mb-4" id="permSimulatorCard">
-              <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-3">
-                <div>
-                  <h5 class="font-bold mb-1" style="color:#1e3a8a;">
-                    <i class="fa-solid fa-laptop-code text-primary mr-2"></i> Universal Permissions &amp; Record Scope
-                    Live Testing Sandbox
-                  </h5>
-                  <p class="text-muted text-xs mb-0">
-                    Verify live access evaluations: Test teacher class-scoped attendance, accounts employee
-                    anti-self-approval on refunds, and sensitive data masking.
-                  </p>
-                </div>
-                <span class="badge" style="background:#eff6ff; color:#1d4ed8; font-weight:700; padding:6px 10px;">
-                  <i class="fa-solid fa-vial mr-1"></i> Interactive Simulator
-                </span>
-              </div>
-
-              <div class="row g-3 mb-4">
-                <div class="col-md-5">
-                  <label class="form-label text-xs font-bold text-muted">Select Active Persona / Employee
-                    Profile:</label>
-                  <select class="form-select" id="simUserSelect" onchange="portalApp.runAccessSimulation()">
-                    <option value="teacher_anjali">Teaching Faculty: Ms. Anjali (Assigned: Classes 8A, 9B, 7C, 10A)
-                    </option>
-                    <option value="bursar_ramu">Accounts Clerk: Sri S. Ramu (Cash Counter &amp; Refund Initiator)
-                    </option>
-                    <option value="counselor_leela">Student Counselor: Smt. D. Leela (Pastoral &amp; Mental Health)
-                    </option>
-                    <option value="clerk_swathi">Front Desk Clerk: Smt. G. Swathi (Admissions &amp; Visitor Desk)
-                    </option>
-                    <option value="vp_anand">Vice Principal: Sri Navva Anand (Academic &amp; Operations)</option>
-                    <option value="principal_varalakshmi">Executive Principal: Smt. Gorle Varalakshmi (Super Admin)
-                    </option>
-                  </select>
-                </div>
-                <div class="col-md-4">
-                  <label class="form-label text-xs font-bold text-muted">Select Target Module:</label>
-                  <select class="form-select" id="simModuleSelect" onchange="portalApp.runAccessSimulation()">
-                    <option value="attendance">Attendance Tracking</option>
-                    <option value="fees">Fees &amp; Finance</option>
-                    <option value="students">Students Management</option>
-                    <option value="teachers">Teachers &amp; Staff</option>
-                    <option value="academics">Academics &amp; Curriculum</option>
-                    <option value="examinations">Examinations &amp; Grading</option>
-                    <option value="discipline">Discipline &amp; Student Welfare</option>
-                    <option value="leaves">Leave Management</option>
-                    <option value="inventory">Inventory &amp; Assets</option>
-                    <option value="reports">Reports &amp; Analytics</option>
-                    <option value="tasks">Tasks &amp; Approvals</option>
-                    <option value="settings">Settings &amp; Access Control</option>
-                  </select>
-                </div>
-                <div class="col-md-3 d-flex align-items-end">
-                  <button class="btn btn-primary w-100" onclick="portalApp.runAccessSimulation()">
-                    <i class="fa-solid fa-play mr-1"></i> Re-Evaluate Access
-                  </button>
-                </div>
-              </div>
-
-              <!-- Live Simulation Results Container -->
-              <div id="simResultsContainer" class="p-3 bg-light rounded-3 border">
-                <!-- Populated dynamically by portalApp.runAccessSimulation() -->
-              </div>
-            </div>
-
-          </div>
-
-          <!-- ====================================================================
-               SUBVIEW 5: APPROVAL WORKFLOWS
-               Approval stages, authorized approvers and escalation rules
-               ==================================================================== -->
-          <div class="setting-subview" id="subview-settings-workflows" style="display: none;">
+            <!-- Additional Granular Scope Settings Form -->
             <div class="card p-4 border rounded-3 bg-white shadow-sm">
-              <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-3">
-                <div>
-                  <h5 class="font-bold mb-1" style="color:#0f172a;"><i
-                      class="fa-solid fa-sliders text-primary mr-2"></i> Institutional Approval Stages &amp; Escalation
-                    Protocols</h5>
-                  <p class="text-muted text-xs mb-0">Defines routing tiers, turnaround SLAs, and automated escalation
-                    fallbacks for multi-departmental requests.</p>
+              <h5 class="font-bold mb-3" style="color:#0f172a;"><i class="fa-solid fa-sliders text-primary mr-2"></i> Additional Granular Scope &amp; Delegation Parameters</h5>
+              <div class="row g-3">
+                <div class="col-md-6">
+                  <label class="form-label text-xs font-bold text-muted">Record Scope <span class="text-danger">*</span></label>
+                  <select class="form-select" id="permRecordScope">
+                    <option value="Own Records Only">Own Records Only</option>
+                    <option value="Assigned Class / Department" selected>Assigned Class / Department (Restricted Boundary)</option>
+                    <option value="Department Wide">Department Wide</option>
+                    <option value="Institution Wide (Statutory Full Access)">Institution Wide (Statutory Full Access)</option>
+                  </select>
                 </div>
-                <button class="btn btn-secondary btn-sm"
-                  onclick="portalApp.showToast('Workflow configuration wizard launched.', 'info')">
-                  <i class="fa-solid fa-plus mr-1"></i> Add Workflow Stage
-                </button>
-              </div>
-              <div class="table-responsive">
-                <table class="table table-hover align-middle mb-0" id="tableSettingsWorkflows">
-                  <thead class="table-light">
-                    <tr>
-                      <th>Approval Stage &amp; Domain</th>
-                      <th>Stage 1: Verification</th>
-                      <th>Stage 2: Final Executive</th>
-                      <th>Turnaround SLA</th>
-                      <th>Escalation Rule &amp; Fallback</th>
-                      <th class="text-end">Actions</th>
-                    </tr>
-                  </thead>
-                  <tbody id="tbodySettingsWorkflows">
-                    <!-- Populated dynamically -->
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </div>
-
-          <!-- ====================================================================
-               SUBVIEW 6: NOTIFICATIONS
-               Email/SMS settings, templates and delivery preferences
-               ==================================================================== -->
-          <div class="setting-subview" id="subview-settings-notifications" style="display: none;">
-            <div class="row g-4">
-              <div class="col-lg-6">
-                <div class="card p-4 border rounded-3 bg-white shadow-sm mb-4">
-                  <h5 class="font-bold mb-3" style="color:#1e3a8a;"><i
-                      class="fa-solid fa-comment-sms text-primary mr-2"></i> TRAI DLT Telephony SMS Gateway Settings
-                  </h5>
-                  <div class="row g-3">
-                    <div class="col-md-6">
-                      <label class="form-label text-xs font-bold text-muted">Carrier Gateway Provider</label>
-                      <input type="text" class="form-control" value="Netcore / BSNL Enterprise DLT">
-                    </div>
-                    <div class="col-md-6">
-                      <label class="form-label text-xs font-bold text-muted">DLT Approved Header ID</label>
-                      <input type="text" class="form-control" value="SRIVID">
-                    </div>
-                    <div class="col-12">
-                      <label class="form-label text-xs font-bold text-muted">Entity Principal ID (PE ID)</label>
-                      <input type="text" class="form-control" value="1101524890000042">
-                    </div>
-                    <div class="col-12">
-                      <label class="form-label text-xs font-bold text-muted">API Access Key</label>
-                      <input type="password" class="form-control" value="netcore_live_sec_90412895471">
-                    </div>
-                    <div class="col-12">
-                      <button class="btn btn-secondary btn-sm"
-                        onclick="portalApp.showToast('Test SMS dispatched to Principal mobile +91 93985 78584: Delivery ACK received in 1.4s', 'success')">
-                        <i class="fa-solid fa-paper-plane mr-1"></i> Send Test SMS Ping
-                      </button>
+                <div class="col-md-6">
+                  <label class="form-label text-xs font-bold text-muted">Assigned Class or Department <span class="text-danger">*</span></label>
+                  <input type="text" class="form-control" id="permAssignedScope" value="Class X (Sections A &amp; B) &bull; English Faculty">
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label text-xs font-bold text-muted">Access to Sensitive Fields</label>
+                  <div class="p-2 border rounded bg-light">
+                    <div class="form-check form-switch mb-1">
+                      <input class="form-check-input" type="checkbox" id="permSensitiveAccess">
+                      <label class="form-check-label text-xs font-bold text-muted" for="permSensitiveAccess">Access Student Aadhaar, Income &amp; Medical Records</label>
                     </div>
                   </div>
                 </div>
-
-                <div class="card p-4 border rounded-3 bg-white shadow-sm">
-                  <h5 class="font-bold mb-3" style="color:#1e3a8a;"><i
-                      class="fa-solid fa-envelope text-primary mr-2"></i> Google Workspace SMTP Relay Relay</h5>
-                  <div class="row g-3">
-                    <div class="col-md-8">
-                      <label class="form-label text-xs font-bold text-muted">SMTP Server Host</label>
-                      <input type="text" class="form-control" value="smtp.gmail.com">
-                    </div>
-                    <div class="col-md-4">
-                      <label class="form-label text-xs font-bold text-muted">Port</label>
-                      <input type="text" class="form-control" value="587 (TLS)">
-                    </div>
-                    <div class="col-12">
-                      <label class="form-label text-xs font-bold text-muted">Sender From Address</label>
-                      <input type="email" class="form-control" value="notifications@srividyaschool.edu.in">
-                    </div>
-                  </div>
+                <div class="col-md-6">
+                  <label class="form-label text-xs font-bold text-muted">Delegated Approval Authority</label>
+                  <input type="text" class="form-control" id="permDelegatedAuthority" value="Routine Classroom Absence Sanctions (Up to 2 Days)">
                 </div>
-              </div>
-
-              <div class="col-lg-6">
-                <div class="card p-4 border rounded-3 bg-white shadow-sm mb-4">
-                  <h5 class="font-bold mb-3" style="color:#1e3a8a;"><i
-                      class="fa-solid fa-sliders text-primary mr-2"></i> Automated Notification Delivery Triggers</h5>
-                  <div class="d-flex flex-column gap-3">
-                    <label class="d-flex align-items-center justify-content-between p-2 border rounded-2"
-                      style="cursor:pointer;">
-                      <div>
-                        <strong>Daily Absentee SMS Dispatch (09:15 AM)</strong>
-                        <div class="text-muted text-xs">Sends automated alert to parent if child is unexcused by 09:15
-                          AM.</div>
-                      </div>
-                      <input type="checkbox" checked style="width: 20px; height: 20px; accent-color: #2563eb;">
-                    </label>
-                    <label class="d-flex align-items-center justify-content-between p-2 border rounded-2"
-                      style="cursor:pointer;">
-                      <div>
-                        <strong>Fee Installment Due &amp; Receipt ACK</strong>
-                        <div class="text-muted text-xs">Dispatches receipt number with payment confirmation link.</div>
-                      </div>
-                      <input type="checkbox" checked style="width: 20px; height: 20px; accent-color: #2563eb;">
-                    </label>
-                    <label class="d-flex align-items-center justify-content-between p-2 border rounded-2"
-                      style="cursor:pointer;">
-                      <div>
-                        <strong>Emergency Weather &amp; Holiday Alerts</strong>
-                        <div class="text-muted text-xs">High-priority instant broadcast to 855 student families.</div>
-                      </div>
-                      <input type="checkbox" checked style="width: 20px; height: 20px; accent-color: #2563eb;">
-                    </label>
-                    <label class="d-flex align-items-center justify-content-between p-2 border rounded-2"
-                      style="cursor:pointer;">
-                      <div>
-                        <strong>Executive Task &amp; Approval Escalation Alerts</strong>
-                        <div class="text-muted text-xs">SMS &amp; Email ping to Principal for overdue SLA items.</div>
-                      </div>
-                      <input type="checkbox" checked style="width: 20px; height: 20px; accent-color: #2563eb;">
-                    </label>
-                  </div>
+                <div class="col-md-6">
+                  <label class="form-label text-xs font-bold text-muted">Effective Date <span class="text-danger">*</span></label>
+                  <input type="date" class="form-control" id="permEffectiveDate" value="2026-06-01">
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label text-xs font-bold text-muted">Expiry Date, Where Applicable</label>
+                  <input type="date" class="form-control" id="permExpiryDate" value="2027-04-30">
                 </div>
               </div>
             </div>
           </div>
 
           <!-- ====================================================================
-               SUBVIEW 7: SECURITY SETTINGS
-               Password rules, session controls, multi-factor authentication and login policies
+               SUBVIEW 18.5: SECURITY SETTINGS
+               Include: Password policy, Multi-factor authentication, Session duration,
+               Login attempt limits, Account recovery, Active session management,
+               Security notifications, Device and sign-in history
                ==================================================================== -->
           <div class="setting-subview" id="subview-settings-security" style="display: none;">
             <div class="row g-4">
+              <!-- Column 1: Password Policy & MFA -->
               <div class="col-lg-6">
+                <!-- 1. Password Policy -->
                 <div class="card p-4 border rounded-3 bg-white shadow-sm mb-4">
-                  <h5 class="font-bold mb-3" style="color:#0f172a;"><i
-                      class="fa-solid fa-shield-cat text-primary mr-2"></i> Password Complexity &amp; Hygiene Standards
-                  </h5>
+                  <h5 class="font-bold mb-3" style="color:#0f172a;"><i class="fa-solid fa-shield-cat text-primary mr-2"></i> Password Policy &amp; Complexity Standards</h5>
                   <div class="row g-3">
                     <div class="col-md-6">
                       <label class="form-label text-xs font-bold text-muted">Minimum Password Length</label>
-                      <input type="number" class="form-control" value="10" min="8" max="32">
+                      <input type="number" class="form-control font-bold" id="secMinPasswordLength" value="10" min="8" max="32">
                     </div>
                     <div class="col-md-6">
-                      <label class="form-label text-xs font-bold text-muted">Mandatory Password Expiry</label>
-                      <select class="form-control">
-                        <option>Every 90 Days</option>
-                        <option>Every 180 Days</option>
-                        <option>Never Expire</option>
-                      </select>
+                      <label class="form-label text-xs font-bold text-muted">Password Expiration (Days)</label>
+                      <input type="number" class="form-control font-bold" id="secPasswordExpiry" value="90">
                     </div>
                     <div class="col-12">
                       <div class="form-check mb-2">
-                        <input class="form-check-input" type="checkbox" checked id="secUpper">
-                        <label class="form-check-label text-xs font-semibold" for="secUpper">Require at least one
-                          uppercase letter (A-Z) and one number (0-9)</label>
+                        <input class="form-check-input" type="checkbox" id="secReqAlphaNum" checked>
+                        <label class="form-check-label text-xs font-bold text-muted" for="secReqAlphaNum">Require Uppercase, Lowercase, Numbers &amp; Special Symbols</label>
                       </div>
                       <div class="form-check">
-                        <input class="form-check-input" type="checkbox" checked id="secSpecial">
-                        <label class="form-check-label text-xs font-semibold" for="secSpecial">Require at least one
-                          special symbol (!@#$%^&amp;*)</label>
+                        <input class="form-check-input" type="checkbox" id="secPreventReuse" checked>
+                        <label class="form-check-label text-xs font-bold text-muted" for="secPreventReuse">Prevent Reuse of Last 5 Previous Passwords</label>
                       </div>
                     </div>
                   </div>
                 </div>
 
+                <!-- 2. Multi-Factor Authentication (MFA) -->
+                <div class="card p-4 border rounded-3 bg-white shadow-sm mb-4">
+                  <h5 class="font-bold mb-3" style="color:#0f172a;"><i class="fa-solid fa-mobile-screen text-primary mr-2"></i> Multi-Factor Authentication (MFA)</h5>
+                  <div class="form-check form-switch mb-3">
+                    <input class="form-check-input" type="checkbox" id="secMfaToggle" checked>
+                    <label class="form-check-label font-bold text-sm" for="secMfaToggle">Enforce Mandatory MFA for All Administrative &amp; Finance Accounts</label>
+                  </div>
+                  <div class="text-xs text-muted mb-2">Supported Authenticators: Time-Based OTP (Google Authenticator / Microsoft Authenticator) &amp; Registered Mobile SMS OTP</div>
+                  <span class="badge bg-success"><i class="fa-solid fa-lock mr-1"></i> FIPS 140-2 Compliant MFA Active</span>
+                </div>
+
+                <!-- 3. Session Duration & Login Attempt Limits -->
                 <div class="card p-4 border rounded-3 bg-white shadow-sm">
-                  <h5 class="font-bold mb-3" style="color:#0f172a;"><i
-                      class="fa-solid fa-hourglass-end text-primary mr-2"></i> Session Lifetime &amp; Timeout Controls
-                  </h5>
+                  <h5 class="font-bold mb-3" style="color:#0f172a;"><i class="fa-solid fa-clock text-primary mr-2"></i> Session Duration &amp; Login Attempt Limits</h5>
                   <div class="row g-3">
                     <div class="col-md-6">
-                      <label class="form-label text-xs font-bold text-muted">Idle Inactivity Auto-Logout</label>
-                      <select class="form-control">
-                        <option>30 Minutes (Recommended)</option>
-                        <option>15 Minutes (Strict)</option>
-                        <option>60 Minutes</option>
-                      </select>
+                      <label class="form-label text-xs font-bold text-muted">Inactivity Auto-Logout (Minutes)</label>
+                      <input type="number" class="form-control font-bold" id="secSessionDuration" value="15">
                     </div>
                     <div class="col-md-6">
-                      <label class="form-label text-xs font-bold text-muted">Max Concurrent Logins</label>
-                      <select class="form-control">
-                        <option>1 Device (Enforce Single Session)</option>
-                        <option>2 Devices</option>
-                      </select>
+                      <label class="form-label text-xs font-bold text-muted">Max Login Attempt Limits</label>
+                      <input type="number" class="form-control font-bold" id="secMaxLoginAttempts" value="5">
+                    </div>
+                    <div class="col-12">
+                      <small class="text-muted"><i class="fa-solid fa-circle-info mr-1"></i> Exceeding 5 failed attempts locks user account for 30 minutes and dispatches alert to Principal.</small>
                     </div>
                   </div>
                 </div>
               </div>
 
+              <!-- Column 2: Account Recovery, Active Sessions, Notifications & History -->
               <div class="col-lg-6">
+                <!-- 4. Account Recovery & Security Notifications -->
                 <div class="card p-4 border rounded-3 bg-white shadow-sm mb-4">
-                  <h5 class="font-bold mb-3" style="color:#0f172a;"><i
-                      class="fa-solid fa-mobile-screen-button text-primary mr-2"></i> Multi-Factor Authentication (MFA /
-                    2FA)</h5>
-                  <div class="p-3 mb-3 rounded-2 border" style="background:#f0fdf4; border-color:#bbf7d0 !important;">
-                    <strong style="color:#166534;"><i class="fa-solid fa-circle-check mr-1"></i> Executive MFA
-                      Enforced</strong>
-                    <p class="text-xs text-muted mb-0">Principal, Vice Principal, and Head Accounts desks are mandated
-                      to supply secondary OTP validation during login.</p>
+                  <h5 class="font-bold mb-3" style="color:#0f172a;"><i class="fa-solid fa-bell text-primary mr-2"></i> Account Recovery &amp; Security Notifications</h5>
+                  <div class="mb-3">
+                    <label class="form-label text-xs font-bold text-muted">Account Recovery Verification Method</label>
+                    <select class="form-select" id="secAccountRecoveryMethod">
+                      <option value="Admin Verification + SMS OTP" selected>Admin Verification + Verified Mobile SMS OTP (Dual Auth)</option>
+                      <option value="Self-Service Registered Email Recovery">Self-Service Registered Email Recovery Link</option>
+                    </select>
                   </div>
-                  <div class="form-check mb-2">
-                    <input class="form-check-input" type="checkbox" checked id="mfaExec">
-                    <label class="form-check-label text-xs font-semibold" for="mfaExec">Enforce MFA for Executive &amp;
-                      Management Roles</label>
+                  <div class="form-check form-switch mb-2">
+                    <input class="form-check-input" type="checkbox" id="secNotifyNewLogin" checked>
+                    <label class="form-check-label text-xs font-bold text-muted" for="secNotifyNewLogin">Security Notifications on Sign-in from Unrecognized Device / IP</label>
                   </div>
-                  <div class="form-check">
-                    <input class="form-check-input" type="checkbox" id="mfaFaculty">
-                    <label class="form-check-label text-xs font-semibold" for="mfaFaculty">Enforce MFA for all Teaching
-                      Faculty accounts</label>
+                  <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" id="secNotifyPrivilegeChange" checked>
+                    <label class="form-check-label text-xs font-bold text-muted" for="secNotifyPrivilegeChange">Instant Dispatch on Permission or Role Hierarchy Changes</label>
                   </div>
                 </div>
 
+                <!-- 5. Active Session Management -->
+                <div class="card p-4 border rounded-3 bg-white shadow-sm mb-4">
+                  <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h5 class="font-bold mb-0" style="color:#0f172a;"><i class="fa-solid fa-display text-primary mr-2"></i> Active Session Management</h5>
+                    <button type="button" class="btn btn-outline-danger btn-sm" onclick="portalApp.terminateAllOtherSessions()">
+                      <i class="fa-solid fa-power-off mr-1"></i> Terminate All Other Sessions
+                    </button>
+                  </div>
+                  <div class="table-responsive">
+                    <table class="table table-sm table-bordered align-middle mb-0" id="tableActiveSessions" style="font-size:0.8rem;">
+                      <thead class="table-light">
+                        <tr>
+                          <th>User</th>
+                          <th>IP Address</th>
+                          <th>Device / OS</th>
+                          <th>Status</th>
+                          <th class="text-end">Action</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td><strong>Smt. Gorle Varalakshmi</strong></td>
+                          <td>103.117.238.12 (Vizag)</td>
+                          <td>Windows 11 &bull; Chrome 128</td>
+                          <td><span class="badge bg-success">Current Session</span></td>
+                          <td class="text-end"><button class="btn btn-outline-secondary btn-xs" disabled>Active</button></td>
+                        </tr>
+                        <tr>
+                          <td><strong>Sri Navva Anand</strong></td>
+                          <td>103.117.238.15 (Vizag)</td>
+                          <td>macOS Sonoma &bull; Safari</td>
+                          <td><span class="badge bg-primary">Online</span></td>
+                          <td class="text-end"><button class="btn btn-outline-danger btn-xs" onclick="portalApp.revokeSession('SES-002')">Revoke</button></td>
+                        </tr>
+                        <tr>
+                          <td><strong>Sri S. Ramu</strong></td>
+                          <td>192.168.1.45 (Accounts Cell)</td>
+                          <td>Windows 10 &bull; Edge</td>
+                          <td><span class="badge bg-primary">Online</span></td>
+                          <td class="text-end"><button class="btn btn-outline-danger btn-xs" onclick="portalApp.revokeSession('SES-003')">Revoke</button></td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+
+                <!-- 6. Device and Sign-in History -->
                 <div class="card p-4 border rounded-3 bg-white shadow-sm">
-                  <h5 class="font-bold mb-3" style="color:#0f172a;"><i class="fa-solid fa-ban text-danger mr-2"></i>
-                    Lockout &amp; Threat Defense Policies</h5>
-                  <div class="row g-3">
-                    <div class="col-md-6">
-                      <label class="form-label text-xs font-bold text-muted">Max Failed Attempts</label>
-                      <input type="number" class="form-control" value="5" min="3" max="10">
-                    </div>
-                    <div class="col-md-6">
-                      <label class="form-label text-xs font-bold text-muted">Lockout Duration</label>
-                      <select class="form-control">
-                        <option>30 Minutes</option>
-                        <option>60 Minutes</option>
-                        <option>Permanent (Admin Unlock Required)</option>
-                      </select>
-                    </div>
-                    <div class="col-12 mt-3">
-                      <button class="btn btn-danger btn-sm"
-                        onclick="portalApp.showToast('All active user sessions invalidated. Re-authentication enforced.', 'warning')">
-                        <i class="fa-solid fa-power-off mr-1"></i> Terminate All Active Staff Sessions
-                      </button>
-                    </div>
+                  <h5 class="font-bold mb-3" style="color:#0f172a;"><i class="fa-solid fa-clock-rotate-left text-primary mr-2"></i> Device and Sign-in History</h5>
+                  <div class="table-responsive">
+                    <table class="table table-sm table-bordered align-middle mb-0" id="tableSignInHistory" style="font-size:0.8rem;">
+                      <thead class="table-light">
+                        <tr>
+                          <th>Timestamp</th>
+                          <th>User</th>
+                          <th>IP &amp; Location</th>
+                          <th>Device / Client</th>
+                          <th>Result</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>Today, 08:30 AM</td>
+                          <td>Smt. Gorle Varalakshmi</td>
+                          <td>103.117.238.12 (Vizag)</td>
+                          <td>Windows 11 &bull; Chrome</td>
+                          <td><span class="badge bg-success">Success (MFA)</span></td>
+                        </tr>
+                        <tr>
+                          <td>Today, 08:15 AM</td>
+                          <td>Sri Navva Anand</td>
+                          <td>103.117.238.15 (Vizag)</td>
+                          <td>macOS &bull; Safari</td>
+                          <td><span class="badge bg-success">Success (MFA)</span></td>
+                        </tr>
+                        <tr>
+                          <td>Yesterday, 11:42 PM</td>
+                          <td>Unknown User (admin)</td>
+                          <td>45.134.22.8 (Offshore)</td>
+                          <td>Linux &bull; Python/Requests</td>
+                          <td><span class="badge bg-danger">Blocked (Firewall)</span></td>
+                        </tr>
+                      </tbody>
+                    </table>
                   </div>
                 </div>
               </div>
@@ -15717,169 +15691,180 @@
           </div>
 
           <!-- ====================================================================
-               SUBVIEW 8: AUDIT LOGS
-               User, action, record, timestamp, result and change history
+               SUBVIEW 18.6: AUDIT LOGS
+               Display: User, Action, Module, Record reference, Timestamp, Result, Reason, Relevant changed fields
+               Mandatory Rule: Protected from ordinary modification or deletion. Sensitive values
+               such as passwords, session tokens and unnecessary personal data must never be logged.
                ==================================================================== -->
           <div class="setting-subview" id="subview-settings-audit" style="display: none;">
-            <div class="metrics-quad mb-4">
-              <div class="metric-card">
-                <div class="metric-icon-wrap icon-blue"><i class="fa-solid fa-list-check"></i></div>
-                <div class="metric-details">
-                  <span class="metric-label">Total Immutable Audit Logs</span>
-                  <div class="metric-value text-primary">1,248</div>
-                  <div class="metric-trend trend-steady"><span>AY 2026-27 Cryptographic Ledger</span></div>
-                </div>
-              </div>
-              <div class="metric-card">
-                <div class="metric-icon-wrap icon-emerald"><i class="fa-solid fa-circle-check"></i></div>
-                <div class="metric-details">
-                  <span class="metric-label">Tamper-Proof Verification</span>
-                  <div class="metric-value text-emerald">100% Intact</div>
-                  <div class="metric-trend trend-up"><span>Zero Integrity Violations</span></div>
-                </div>
-              </div>
-              <div class="metric-card">
-                <div class="metric-icon-wrap icon-purple"><i class="fa-solid fa-user-check"></i></div>
-                <div class="metric-details">
-                  <span class="metric-label">Today's Logged Actions</span>
-                  <div class="metric-value text-purple">42 Actions</div>
-                  <div class="metric-trend trend-up"><span>Principal, VP &amp; Billing Desk</span></div>
-                </div>
-              </div>
-              <div class="metric-card">
-                <div class="metric-icon-wrap icon-amber"><i class="fa-solid fa-database"></i></div>
-                <div class="metric-details">
-                  <span class="metric-label">Statutory Retention</span>
-                  <div class="metric-value text-amber">7 Years</div>
-                  <div class="metric-trend trend-steady"><span>AP Education Act Standard</span></div>
+            <!-- Immutable Protection Statutory Banner -->
+            <div class="alert alert-dark mb-4" style="background:#0f172a; color:#f8fafc; border-radius:8px; border:1px solid #334155;">
+              <div class="d-flex align-items-start gap-3">
+                <i class="fa-solid fa-fingerprint text-warning" style="font-size: 1.4rem; margin-top: 2px;"></i>
+                <div>
+                  <h6 class="font-bold mb-1" style="color:#fbbf24;">Immutable Statutory Audit Ledger Standard (AP School Regulatory Norms)</h6>
+                  <p class="mb-0 text-sm" style="color:#cbd5e1;">
+                    <strong>Audit logs are protected from ordinary modification or deletion under statutory AP School Governance guidelines.</strong> 
+                    Under institutional governance rules, audit records are write-once and cryptographically sequenced. 
+                    <strong>Sensitive values such as passwords, session tokens, cryptographic keys, and unnecessary personal data must never be logged.</strong>
+                  </p>
                 </div>
               </div>
             </div>
 
-            <!-- Filter & Action Strip -->
-            <div class="report-meta-header">
-              <div class="d-flex align-items-center gap-2 flex-wrap">
-                <div class="search-input-wrap" style="width: 280px;">
-                  <i class="fa-solid fa-magnifying-glass"></i>
-                  <input type="text" class="form-control" id="searchAuditLogsInput"
-                    placeholder="Search user, action, record, IP..." onkeyup="portalApp.filterAuditLogsTable()">
+            <!-- Audit Logs Filter Toolbar -->
+            <div class="card p-3 mb-4 border rounded-3 bg-white shadow-sm">
+              <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+                <div class="d-flex align-items-center gap-2 flex-wrap">
+                  <input type="text" id="auditSearchInput" class="form-control form-control-sm" placeholder="Search by user, action, record reference..." style="width: 280px;" oninput="portalApp.filterAuditLogsTable()">
+                  <select class="form-select form-select-sm" id="auditModuleFilter" style="width: 160px;" onchange="portalApp.filterAuditLogsTable()">
+                    <option value="">All Modules</option>
+                    <option value="Admissions">Admissions</option>
+                    <option value="Attendance">Attendance</option>
+                    <option value="Examinations">Examinations</option>
+                    <option value="Fees">Fees &amp; Finance</option>
+                    <option value="Staff HR">Staff HR</option>
+                    <option value="Settings">Settings &amp; Access</option>
+                  </select>
+                  <select class="form-select form-select-sm" id="auditResultFilter" style="width: 140px;" onchange="portalApp.filterAuditLogsTable()">
+                    <option value="">All Results</option>
+                    <option value="Success">Success</option>
+                    <option value="Failed">Failed</option>
+                    <option value="Blocked">Blocked</option>
+                  </select>
                 </div>
-                <select class="form-control" style="width: 190px;" id="filterAuditUserSelect"
-                  onchange="portalApp.filterAuditLogsTable()">
-                  <option value="">All Users</option>
-                  <option value="Gorle Varalakshmi">Smt. Gorle Varalakshmi (Principal)</option>
-                  <option value="Navva Anand">Sri Navva Anand (VP)</option>
-                  <option value="S. Ramu">Sri S. Ramu (Accounts)</option>
-                  <option value="K. Anuradha">Smt. K. Anuradha (Faculty)</option>
-                </select>
-                <select class="form-control" style="width: 170px;" id="filterAuditResultSelect"
-                  onchange="portalApp.filterAuditLogsTable()">
-                  <option value="">All Results</option>
-                  <option value="SUCCESS">SUCCESS Only</option>
-                  <option value="DENIED">DENIED (Security Flags)</option>
-                  <option value="REVERSED">REVERSED Entries</option>
-                </select>
-              </div>
-              <div class="report-export-buttons">
-                <button class="btn btn-secondary btn-sm" onclick="portalApp.exportAuditLogsCSV()">
-                  <i class="fa-solid fa-file-csv"></i> Export Audit CSV
-                </button>
-                <button class="btn btn-primary btn-sm" onclick="window.print()">
-                  <i class="fa-solid fa-print"></i> Print Statutory Log
-                </button>
+                <div>
+                  <button type="button" class="btn btn-outline-secondary btn-sm" onclick="portalApp.exportAuditLogsCSV()">
+                    <i class="fa-solid fa-file-csv mr-1"></i> Export Audit Register (CSV)
+                  </button>
+                </div>
               </div>
             </div>
 
-            <!-- Table -->
-            <div class="table-responsive bg-white rounded-3 border">
-              <table class="table table-hover align-middle mb-0" id="tableAuditLogs">
-                <thead class="table-light">
-                  <tr>
-                    <th>User &amp; Role</th>
-                    <th>Action Performed</th>
-                    <th>Target Record / Module</th>
-                    <th>Timestamp</th>
-                    <th>Result</th>
-                    <th>IP / Device</th>
-                    <th>Change History / Diff</th>
-                    <th class="text-end">Actions</th>
-                  </tr>
-                </thead>
-                <tbody id="tbodyAuditLogs">
-                  <!-- Populated dynamically -->
-                </tbody>
-              </table>
+            <!-- Audit Logs Table -->
+            <div class="card p-0 border rounded-3 bg-white shadow-sm overflow-hidden">
+              <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0" id="tableSettingsAuditLogs" style="font-size:0.83rem;">
+                  <thead class="table-light">
+                    <tr>
+                      <th style="min-width: 150px;"><i class="fa-solid fa-user me-1 text-muted"></i> User</th>
+                      <th style="min-width: 140px;"><i class="fa-solid fa-bolt me-1 text-muted"></i> Action</th>
+                      <th style="min-width: 130px;"><i class="fa-solid fa-cubes me-1 text-muted"></i> Module</th>
+                      <th style="min-width: 150px;"><i class="fa-solid fa-hashtag me-1 text-muted"></i> Record Reference</th>
+                      <th style="min-width: 150px;"><i class="fa-solid fa-clock me-1 text-muted"></i> Timestamp</th>
+                      <th style="min-width: 100px;"><i class="fa-solid fa-check-double me-1 text-muted"></i> Result</th>
+                      <th style="min-width: 200px;"><i class="fa-solid fa-comment-dots me-1 text-muted"></i> Reason</th>
+                      <th style="min-width: 220px;"><i class="fa-solid fa-code-compare me-1 text-muted"></i> Relevant Changed Fields</th>
+                    </tr>
+                  </thead>
+                  <tbody id="tbodySettingsAuditLogs">
+                    <!-- Populated dynamically via portalApp.renderSettingsAuditLogsTable -->
+                  </tbody>
+                </table>
+              </div>
             </div>
           </div>
 
           <!-- ====================================================================
-               SUBVIEW 9: DATA & BACKUP
-               Backup status, retention policy and authorized recovery controls
+               SUBVIEW 18.7: DATA & BACKUP
+               Display: Last successful backup, Backup schedule, Backup status, Retention period, Storage status, Recovery test history
+               Actions: Start authorized backup, View backup history, Run recovery test, Review failures
+               Mandatory Rule: Do not provide unrestricted database exports or destructive recovery actions to ordinary school employees.
                ==================================================================== -->
           <div class="setting-subview" id="subview-settings-backup" style="display: none;">
+            <!-- Role Restriction Policy Banner -->
+            <div class="alert alert-warning border-warning mb-4" style="background:#fffbeb; border: 1.5px solid #fde68a; border-radius:8px;">
+              <div class="d-flex align-items-start gap-3">
+                <i class="fa-solid fa-triangle-exclamation text-warning" style="font-size: 1.4rem; margin-top: 2px;"></i>
+                <div>
+                  <h6 class="font-bold mb-1" style="color: #92400e;">Institutional Data Protection &amp; Role Restrictions</h6>
+                  <p class="mb-0 text-sm" style="color: #78350f;">
+                    <strong>Do not provide unrestricted database exports or destructive recovery actions to ordinary school employees.</strong> 
+                    Database restoration, cold-storage extraction, and production rollbacks are strictly restricted to the Executive Principal and designated Data Protection Officer upon verified dual-factor identity confirmation.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Backup Metrics Quad -->
             <div class="metrics-quad mb-4">
               <div class="metric-card">
                 <div class="metric-icon-wrap icon-emerald"><i class="fa-solid fa-cloud-arrow-up"></i></div>
                 <div class="metric-details">
-                  <span class="metric-label">Backup Engine Status</span>
-                  <div class="metric-value text-emerald">HEALTHY</div>
-                  <div class="metric-trend trend-up"><span>Last Snapshot: Today 04:00 AM</span></div>
+                  <span class="metric-label">Last Successful Backup</span>
+                  <div class="metric-value text-emerald" id="lastBackupDisplay">Today, 04:00 AM</div>
+                  <div class="metric-trend trend-up"><span>Snapshot: SHA-256 Verified</span></div>
                 </div>
               </div>
               <div class="metric-card">
-                <div class="metric-icon-wrap icon-blue"><i class="fa-solid fa-hard-drive"></i></div>
+                <div class="metric-icon-wrap icon-blue"><i class="fa-solid fa-calendar-check"></i></div>
                 <div class="metric-details">
-                  <span class="metric-label">Encrypted Archive Size</span>
-                  <div class="metric-value text-primary">1.48 GB</div>
-                  <div class="metric-trend trend-steady"><span>Database + Document Stores</span></div>
+                  <span class="metric-label">Backup Schedule</span>
+                  <div class="metric-value text-primary">Daily 02:00 AM</div>
+                  <div class="metric-trend trend-steady"><span>Automated Incremental + Weekly Full</span></div>
                 </div>
               </div>
               <div class="metric-card">
-                <div class="metric-icon-wrap icon-purple"><i class="fa-solid fa-clock-rotate-left"></i></div>
+                <div class="metric-icon-wrap icon-purple"><i class="fa-solid fa-shield-halved"></i></div>
                 <div class="metric-details">
-                  <span class="metric-label">Statutory Retention Policy</span>
-                  <div class="metric-value text-purple">7 Years</div>
-                  <div class="metric-trend trend-up"><span>Immutable Multi-Zone Storage</span></div>
+                  <span class="metric-label">Backup Status &amp; Retention</span>
+                  <div class="metric-value" style="color: #7c3aed;">HEALTHY (7 Yrs)</div>
+                  <div class="metric-trend trend-steady"><span>AP Code 7-Year Statutory Retention</span></div>
                 </div>
               </div>
               <div class="metric-card">
-                <div class="metric-icon-wrap icon-amber"><i class="fa-solid fa-arrows-rotate"></i></div>
+                <div class="metric-icon-wrap icon-amber"><i class="fa-solid fa-hard-drive"></i></div>
                 <div class="metric-details">
-                  <span class="metric-label">Recovery Point Objective (RPO)</span>
-                  <div class="metric-value text-amber">&lt; 12 Hours</div>
-                  <div class="metric-trend trend-up"><span>RTO: Under 30 Mins</span></div>
+                  <span class="metric-label">Storage Status &amp; Recovery</span>
+                  <div class="metric-value text-amber">14.8 GB / 100 GB</div>
+                  <div class="metric-trend trend-steady"><span>Last Recovery Drill: PASS (3m 42s RTO)</span></div>
                 </div>
               </div>
             </div>
 
-            <div class="card p-4 border rounded-3 bg-white shadow-sm mb-4">
-              <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-3">
-                <div>
-                  <h5 class="font-bold mb-1" style="color:#0f172a;"><i
-                      class="fa-solid fa-database text-primary mr-2"></i> Verified System Backups &amp; Point-in-Time
-                    Recovery Snapshots</h5>
-                  <p class="text-muted text-xs mb-0">Automated nightly backups stored with SHA-256 integrity checksums.
-                    Restorations require Principal cryptographic clearance.</p>
+            <!-- Backup Actions Toolbar -->
+            <div class="card p-3 mb-4 border rounded-3 bg-white shadow-sm">
+              <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+                <div class="d-flex align-items-center gap-2">
+                  <span class="badge" style="background:#f0fdf4; color:#166534; font-weight:700; font-size:0.8rem; padding:6px 12px;">
+                    <i class="fa-solid fa-circle-check mr-1"></i> Storage Status: 14.8% Used (Encrypted Cloud Mirror)
+                  </span>
+                  <span class="text-muted text-xs">Retention Period: <strong>7 Years Statutory Archive</strong></span>
                 </div>
-                <button class="btn btn-primary btn-sm" onclick="portalApp.triggerInstantBackup()">
-                  <i class="fa-solid fa-cloud-arrow-up mr-1"></i> Trigger Instant Snapshot
-                </button>
+                <div class="d-flex align-items-center gap-2 flex-wrap">
+                  <button type="button" class="btn btn-primary btn-sm" onclick="portalApp.triggerAuthorizedBackup()">
+                    <i class="fa-solid fa-cloud-arrow-up mr-1"></i> Start authorized backup
+                  </button>
+                  <button type="button" class="btn btn-outline-secondary btn-sm" onclick="portalApp.viewBackupHistory()">
+                    <i class="fa-solid fa-clock-rotate-left mr-1"></i> View backup history
+                  </button>
+                  <button type="button" class="btn btn-outline-info btn-sm" onclick="portalApp.runBackupRecoveryTest()">
+                    <i class="fa-solid fa-vial-circle-check mr-1"></i> Run recovery test
+                  </button>
+                  <button type="button" class="btn btn-outline-danger btn-sm" onclick="portalApp.reviewBackupFailures()">
+                    <i class="fa-solid fa-triangle-exclamation mr-1"></i> Review failures
+                  </button>
+                </div>
               </div>
+            </div>
+
+            <!-- Authorized Backup Snapshots Table -->
+            <div class="card p-0 border rounded-3 bg-white shadow-sm overflow-hidden">
               <div class="table-responsive">
-                <table class="table table-hover align-middle mb-0" id="tableDataBackups">
+                <table class="table table-hover align-middle mb-0" id="tableDataBackups" style="font-size:0.84rem;">
                   <thead class="table-light">
                     <tr>
-                      <th>Snapshot ID</th>
-                      <th>Creation Timestamp</th>
-                      <th>Archive Scope</th>
-                      <th>File Size</th>
-                      <th>SHA-256 Checksum</th>
-                      <th>Integrity Status</th>
-                      <th class="text-end">Recovery Controls</th>
+                      <th style="min-width: 160px;"><i class="fa-solid fa-hashtag me-1 text-muted"></i> Snapshot ID</th>
+                      <th style="min-width: 150px;"><i class="fa-solid fa-calendar me-1 text-muted"></i> Created Timestamp</th>
+                      <th style="min-width: 110px;"><i class="fa-solid fa-database me-1 text-muted"></i> Archive Size</th>
+                      <th style="min-width: 140px;"><i class="fa-solid fa-layer-group me-1 text-muted"></i> Backup Type</th>
+                      <th style="min-width: 140px;"><i class="fa-solid fa-lock me-1 text-muted"></i> Encryption &amp; Hash</th>
+                      <th style="min-width: 120px;"><i class="fa-solid fa-circle-check me-1 text-muted"></i> Integrity Status</th>
+                      <th style="min-width: 160px;" class="text-end pe-3"><i class="fa-solid fa-sliders me-1 text-muted"></i> Recovery Controls</th>
                     </tr>
                   </thead>
                   <tbody id="tbodyDataBackups">
-                    <!-- Populated dynamically -->
+                    <!-- Populated dynamically via portalApp.renderSettingsBackupsTable -->
                   </tbody>
                 </table>
               </div>
@@ -15887,9 +15872,7 @@
           </div>
         </section>
 
-
-
-        <section class="portal-view" id="view-transport">
+<section class="portal-view" id="view-transport">
           <!-- Module Header Strip -->
           <div class="module-header-strip mb-4">
             <div class="mhs-title">
@@ -30697,6 +30680,155 @@ Class X-A,Monday,2,09:35 AM - 10:20 AM,Physical Science,Sri Navva Anand,Room 201
       </form>
     </div>
   </div>
+
+  <!-- =========================================================================
+       MODULE 18: SETTINGS & ACCESS CONTROL ACTION MODALS
+       ========================================================================= -->
+
+  <!-- 1. PREVIEW SCHOOL PROFILE MODAL -->
+  <div class="modal-backdrop" id="schoolProfilePreviewModal" role="dialog" aria-modal="true" style="display:none;">
+    <div class="portal-modal" style="max-width: 680px; width: 95%; border-radius: 14px; overflow: hidden; background: #fff;">
+      <div class="modal-header" style="background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%); color: #fff; padding: 1.15rem 1.45rem;">
+        <div style="display: flex; align-items: center; gap: 0.85rem;">
+          <div style="width: 44px; height: 44px; border-radius: 10px; background: rgba(255,255,255,0.15); display: flex; align-items: center; justify-content: center; font-size: 1.25rem;">
+            <i class="fa-solid fa-school"></i>
+          </div>
+          <div>
+            <div style="font-size: 0.68rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: #93c5fd;">Institutional Prospectus &amp; Portal Header Preview</div>
+            <h3 style="margin: 2px 0 0; font-size: 1.18rem; font-weight: 800; color: #fff;" id="profilePreviewSchoolTitle">Sri Vidya English Medium High School</h3>
+          </div>
+        </div>
+        <button type="button" class="modal-close-x" onclick="portalApp.closeModal('schoolProfilePreviewModal')" style="color:#fff;"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="modal-body" style="padding: 1.35rem 1.45rem;">
+        <div class="text-center mb-3">
+          <img src="assets/images/school-logo.jpg" alt="Emblem Preview" style="width: 90px; height: 90px; object-fit: contain;">
+          <h4 class="font-bold mt-2 mb-0" id="prevModalSchoolName">Sri Vidya English Medium High School</h4>
+          <p class="text-muted text-xs" id="prevModalMotto">"Vidyathe Vijayam — Knowledge Brings Victory"</p>
+        </div>
+        <div class="border rounded p-3 bg-light mb-3" style="font-size:0.85rem;">
+          <div class="row g-2">
+            <div class="col-6"><strong>U-DISE+ Code:</strong> 28111501008</div>
+            <div class="col-6"><strong>Affiliation:</strong> AP SCERT &amp; State Board</div>
+            <div class="col-6"><strong>Website:</strong> https://srividyaschool.edu.in</div>
+            <div class="col-6"><strong>Email Domain:</strong> @srividya.edu.in</div>
+            <div class="col-12"><strong>Campus Address:</strong> Door No. 4-128, Main Campus Road, Visakhapatnam - 530041, AP</div>
+          </div>
+        </div>
+        <div class="alert alert-success py-2 px-3 mb-0 text-xs">
+          <i class="fa-solid fa-check-circle mr-1"></i> Official AP Board and SCERT statutory headers verified.
+        </div>
+      </div>
+      <div class="modal-footer" style="background:#f8fafc; border-top:1px solid #e2e8f0; padding:0.85rem 1.35rem; display:flex; justify-content:flex-end;">
+        <button type="button" class="btn btn-secondary btn-sm" onclick="portalApp.closeModal('schoolProfilePreviewModal')">Close Preview</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. CREATE ACADEMIC YEAR MODAL -->
+  <div class="modal-backdrop" id="createAcademicYearModal" role="dialog" aria-modal="true" style="display:none;">
+    <div class="portal-modal" style="max-width: 600px; width: 95%; border-radius: 14px; overflow: hidden; background: #fff;">
+      <div class="modal-header" style="background: #ffffff; border-bottom: 1px solid #e2e8f0; padding: 1.15rem 1.45rem;">
+        <h4 class="font-bold mb-0" style="color: #0f172a;"><i class="fa-solid fa-calendar-plus text-primary mr-2"></i> Create New Academic Year Session</h4>
+        <button type="button" class="modal-close-x" onclick="portalApp.closeModal('createAcademicYearModal')"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <form onsubmit="portalApp.submitCreateAcademicYear(event)">
+        <div class="modal-body" style="padding: 1.35rem 1.45rem; display: flex; flex-direction: column; gap: 1rem;">
+          <div class="form-group">
+            <label class="form-label text-xs font-bold text-muted">Academic Year Name <span class="text-danger">*</span></label>
+            <input type="text" class="form-control" id="newYearNameInput" required placeholder="e.g. Academic Year 2027–2028">
+          </div>
+          <div class="row g-3">
+            <div class="col-6">
+              <label class="form-label text-xs font-bold text-muted">Session Start Date <span class="text-danger">*</span></label>
+              <input type="date" class="form-control" id="newYearStartDateInput" required value="2027-06-12">
+            </div>
+            <div class="col-6">
+              <label class="form-label text-xs font-bold text-muted">Session End Date <span class="text-danger">*</span></label>
+              <input type="date" class="form-control" id="newYearEndDateInput" required value="2028-04-23">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label text-xs font-bold text-muted">Mandated Working Days Goal</label>
+            <input type="number" class="form-control" id="newYearWorkingDaysInput" value="224" min="200" max="250">
+          </div>
+        </div>
+        <div class="modal-footer" style="background:#f8fafc; border-top:1px solid #e2e8f0; padding:0.85rem 1.35rem; display:flex; justify-content:flex-end; gap:0.5rem;">
+          <button type="button" class="btn btn-secondary btn-sm" onclick="portalApp.closeModal('createAcademicYearModal')">Cancel</button>
+          <button type="submit" class="btn btn-primary btn-sm"><i class="fa-solid fa-check mr-1"></i> Create Academic Year</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- 3. CLOSE ACADEMIC YEAR MODAL (WITH STATUTORY PRESERVATION GUARANTEE) -->
+  <div class="modal-backdrop" id="closeAcademicYearModal" role="dialog" aria-modal="true" style="display:none;">
+    <div class="portal-modal" style="max-width: 620px; width: 95%; border-radius: 14px; overflow: hidden; background: #fff;">
+      <div class="modal-header" style="background: #fee2e2; border-bottom: 1.5px solid #fecaca; padding: 1.15rem 1.45rem;">
+        <h4 class="font-bold mb-0 text-danger"><i class="fa-solid fa-triangle-exclamation mr-2"></i> Close Academic Year &bull; Statutory Finalization</h4>
+        <button type="button" class="modal-close-x" onclick="portalApp.closeModal('closeAcademicYearModal')"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <form onsubmit="portalApp.submitCloseAcademicYear(event)">
+        <div class="modal-body" style="padding: 1.35rem 1.45rem; display: flex; flex-direction: column; gap: 1rem;">
+          <div class="alert alert-info py-2 px-3 mb-0" style="font-size:0.83rem;">
+            <strong>Statutory Rule (AP Education Code Sec. 19):</strong> 
+            Closing an academic year transitions students to the next grade and locks finalized sessions into read-only audit mode. 
+            <strong>Closing an academic year should not delete previous enrolments, attendance, marks or fee history.</strong>
+          </div>
+          <div class="form-check p-3 border rounded bg-light">
+            <input class="form-check-input ms-0 me-2" type="checkbox" id="chkStatutoryPreservationConfirm" required>
+            <label class="form-check-label text-xs font-bold text-dark" for="chkStatutoryPreservationConfirm">
+              I certify that all 500 student enrolments, 224-day attendance rolls, Summative SA-1/SA-2 examination marks, and fee payment ledgers are completely indexed and will be preserved permanently in compliance with AP statutory archival regulations.
+            </label>
+          </div>
+          <div class="form-group">
+            <label class="form-label text-xs font-bold text-muted">Executive Principal Authorization Password <span class="text-danger">*</span></label>
+            <input type="password" class="form-control" id="closeYearAuthPass" placeholder="Enter executive password..." required value="Principal@2026">
+          </div>
+        </div>
+        <div class="modal-footer" style="background:#f8fafc; border-top:1px solid #e2e8f0; padding:0.85rem 1.35rem; display:flex; justify-content:flex-end; gap:0.5rem;">
+          <button type="button" class="btn btn-secondary btn-sm" onclick="portalApp.closeModal('closeAcademicYearModal')">Cancel</button>
+          <button type="submit" class="btn btn-danger btn-sm"><i class="fa-solid fa-lock mr-1"></i> Confirm Non-Destructive Year Closure</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- 4. CREATE / DUPLICATE ROLE MODAL -->
+  <div class="modal-backdrop" id="createRoleModal" role="dialog" aria-modal="true" style="display:none;">
+    <div class="portal-modal" style="max-width: 600px; width: 95%; border-radius: 14px; overflow: hidden; background: #fff;">
+      <div class="modal-header" style="background: #ffffff; border-bottom: 1px solid #e2e8f0; padding: 1.15rem 1.45rem;">
+        <h4 class="font-bold mb-0" style="color: #0f172a;" id="createRoleModalTitle"><i class="fa-solid fa-user-shield text-primary mr-2"></i> Create Institutional Role</h4>
+        <button type="button" class="modal-close-x" onclick="portalApp.closeModal('createRoleModal')"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <form onsubmit="portalApp.submitCreateRole(event)">
+        <div class="modal-body" style="padding: 1.35rem 1.45rem; display: flex; flex-direction: column; gap: 1rem;">
+          <div class="form-group">
+            <label class="form-label text-xs font-bold text-muted">Role Name <span class="text-danger">*</span></label>
+            <input type="text" class="form-control" id="newRoleNameInput" required placeholder="e.g. Examination Officer / Dean">
+          </div>
+          <div class="form-group">
+            <label class="form-label text-xs font-bold text-muted">Role Description <span class="text-danger">*</span></label>
+            <textarea class="form-control" id="newRoleDescInput" rows="2" required placeholder="Describe responsibilities and statutory authority..."></textarea>
+          </div>
+          <div class="form-group">
+            <label class="form-label text-xs font-bold text-muted">Default Permissions Template</label>
+            <select class="form-select" id="newRolePermTemplateSelect">
+              <option value="Academic Faculty">Academic Faculty (Attendance &amp; Marks Entry)</option>
+              <option value="Administrative Staff">Administrative Staff (Admissions &amp; Clearances)</option>
+              <option value="Financial Officer">Financial Officer (Billing &amp; Collections)</option>
+              <option value="Executive Full Access">Executive Full Access (Principal / Director)</option>
+            </select>
+          </div>
+        </div>
+        <div class="modal-footer" style="background:#f8fafc; border-top:1px solid #e2e8f0; padding:0.85rem 1.35rem; display:flex; justify-content:flex-end; gap:0.5rem;">
+          <button type="button" class="btn btn-secondary btn-sm" onclick="portalApp.closeModal('createRoleModal')">Cancel</button>
+          <button type="submit" class="btn btn-primary btn-sm"><i class="fa-solid fa-check mr-1"></i> Save Role</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
 
   <!-- =========================================================================
        MODAL 1: AUDIT LOG CHANGE DIFF MODAL

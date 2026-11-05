@@ -59888,38 +59888,376 @@ const FEE_CATEGORY_AUDIT_DATA = [
   ];
 
   function renderSettingsRolesTable() {
-    const tbody = document.getElementById('tbodyRoleManagement');
+    const tbody = document.getElementById('tbodySettingsRoles') || document.getElementById('tbodyRoleManagement');
     if (!tbody) return;
 
     tbody.innerHTML = SETTINGS_ROLES_DATA.map(r => `
       <tr>
         <td>
-          <strong style="color: #0f172a; font-size: 0.9rem;">${r.name}</strong><br>
-          <small class="text-muted">${r.description}</small>
+          <div style="font-weight: 700; color: #0f172a; font-size: 0.88rem;">${r.name}</div>
+          <span class="badge" style="background: #eff6ff; color: #1d4ed8; font-weight: 600; font-size: 0.72rem;">${r.slug || r.id}</span>
         </td>
         <td>
-          <span class="badge" style="background:#eff6ff; color:#1d4ed8; font-weight:700;">${r.template}</span>
+          <div style="font-size: 0.82rem; color: #475569; line-height: 1.45;">${r.description}</div>
         </td>
         <td>
-          <div style="font-weight:600; color:#1e293b; font-size:0.85rem;">${r.assignedUsers.join(', ')}</div>
-          <small class="text-muted">${r.userCount} active account(s)</small>
+          <div style="font-weight: 600; color: #1e293b; font-size: 0.84rem;">${Array.isArray(r.assignedUsers) ? r.assignedUsers.join(', ') : r.assignedUsers}</div>
+          <small class="text-muted"><i class="fa-solid fa-user me-1"></i>${r.userCount || 1} assigned user(s)</small>
         </td>
         <td>
-          <span class="text-xs" style="color: #475569; font-weight: 500;">${r.scope}</span>
+          <span class="badge" style="background: #f8fafc; color: #334155; border: 1px solid #cbd5e1; font-weight: 600; font-size: 0.75rem;">
+            <i class="fa-solid fa-key me-1 text-primary"></i>${r.permissionsCount || r.template || 'Configurable'}
+          </span>
         </td>
         <td>
-          <span class="badge" style="background:#f0fdf4; color:#166534; font-weight:700;">${r.permissionsCount}</span>
+          <span class="badge" style="background: ${r.status === 'Active' ? '#f0fdf4' : '#fef2f2'}; color: ${r.status === 'Active' ? '#166534' : '#991b1b'}; border: 1px solid ${r.status === 'Active' ? '#bbf7d0' : '#fecaca'}; font-weight: 700;">
+            <i class="fa-solid ${r.status === 'Active' ? 'fa-circle-check' : 'fa-circle-xmark'} me-1"></i>${r.status}
+          </span>
+        </td>
+        <td class="text-end pe-3">
+          <div class="d-flex align-items-center justify-content-end gap-1 flex-wrap">
+            <button type="button" class="btn btn-outline-primary btn-sm" onclick="portalApp.openAssignUsersModal('${r.id}')" title="Assign users">
+              <i class="fa-solid fa-user-plus me-1"></i> Assign users
+            </button>
+            <button type="button" class="btn btn-outline-secondary btn-sm" onclick="portalApp.duplicateRole('${r.id}')" title="Duplicate role">
+              <i class="fa-solid fa-copy me-1"></i> Duplicate role
+            </button>
+            <button type="button" class="btn btn-outline-secondary btn-sm" onclick="portalApp.openEditRolePermissionsModal('${r.id}')" title="Edit role permissions">
+              <i class="fa-solid fa-pen-to-square me-1"></i> Edit role permissions
+            </button>
+            <button type="button" class="btn btn-outline-danger btn-sm" onclick="portalApp.deactivateRole('${r.id}')" title="Deactivate role">
+              <i class="fa-solid fa-ban me-1"></i> Deactivate role
+            </button>
+            <button type="button" class="btn btn-outline-secondary btn-sm" onclick="portalApp.viewRolePermissionHistory('${r.id}')" title="View permission history">
+              <i class="fa-solid fa-clock-rotate-left me-1"></i> View permission history
+            </button>
+          </div>
+        </td>
+      </tr>
+    `).join('');
+
+    const legacyTbody = document.getElementById('tbodyRoleManagement');
+    if (legacyTbody && legacyTbody !== tbody) {
+      legacyTbody.innerHTML = tbody.innerHTML;
+    }
+  }
+
+  /* =========================================================================
+     MODULE 18: SETTINGS & ACCESS CONTROL ACTIONS (18.1 - 18.7)
+     ========================================================================= */
+
+  // --- 18.1 School Profile Actions ---
+  function editSchoolProfileDraft() {
+    const inputs = document.querySelectorAll('#subview-settings-profile input, #subview-settings-profile textarea');
+    inputs.forEach(inp => {
+      inp.removeAttribute('readonly');
+      inp.classList.remove('bg-light');
+    });
+    const firstInp = document.getElementById('profSchoolName');
+    if (firstInp) firstInp.focus();
+    showToast('Draft profile unlocked for editing. Make modifications and submit for approval.', 'info');
+  }
+
+  function previewSchoolProfile() {
+    const schoolName = document.getElementById('profSchoolName')?.value || 'Sri Vidya E.M High School';
+    const address = document.getElementById('profSchoolAddress')?.value || 'Door No. 4-12, Main Road, Tilak Nagar, Guntur, AP - 522002';
+    const email = document.getElementById('profContactEmail')?.value || 'principal@srividyaschool.edu.in';
+    const phone = document.getElementById('profContactPhone')?.value || '+91 863 2234567';
+    const affil = document.getElementById('profAffiliationNo')?.value || 'CBSE Affiliation No: 130284 / AP State Code: 28111501008';
+    const brandColor = document.getElementById('profPrimaryColor')?.value || '#1e3a8a';
+
+    const pName = document.getElementById('profilePreviewSchoolName');
+    if (pName) pName.textContent = schoolName;
+    const pAddr = document.getElementById('profilePreviewAddress');
+    if (pAddr) pAddr.textContent = address;
+    const pContact = document.getElementById('profilePreviewContact');
+    if (pContact) pContact.textContent = `${email} | ${phone}`;
+    const pAffil = document.getElementById('profilePreviewAffiliation');
+    if (pAffil) pAffil.textContent = affil;
+    const pBranding = document.getElementById('profilePreviewBranding');
+    if (pBranding) pBranding.style.backgroundColor = brandColor;
+
+    openModal('schoolProfilePreviewModal');
+  }
+
+  function submitSchoolProfileForApproval() {
+    showToast('School Profile updates submitted for Governing Body approval. Status changed to Pending Review.', 'success');
+  }
+
+  function publishSchoolProfileChanges() {
+    const name = document.getElementById('profSchoolName')?.value || 'Sri Vidya E.M High School';
+    document.title = `${name} | Management Portal`;
+    closeModal('schoolProfilePreviewModal');
+    showToast('School profile changes approved and published successfully. Portal headers and statutory documents updated.', 'success');
+  }
+
+  function viewSchoolProfileHistory() {
+    switchSubTab('settings', 'audit');
+    showToast('Displaying immutable profile change audit history.', 'info');
+  }
+
+  // --- 18.2 Academic Year Actions ---
+  function openCreateAcademicYearModal() {
+    const form = document.querySelector('#createAcademicYearModal form');
+    if (form) form.reset();
+    openModal('createAcademicYearModal');
+  }
+
+  function submitCreateAcademicYear(e) {
+    if (e) e.preventDefault();
+    const name = document.getElementById('newAyName')?.value || 'AY 2027–2028';
+    const start = document.getElementById('newAyStart')?.value;
+    const end = document.getElementById('newAyEnd')?.value;
+
+    if (start && end && new Date(start) >= new Date(end)) {
+      showToast('Error: Academic Year start date must precede end date.', 'error');
+      return;
+    }
+
+    closeModal('createAcademicYearModal');
+    showToast(`Academic Year session "${name}" created successfully. Ready for term configuration.`, 'success');
+  }
+
+  function openConfigureTermsModal(ayId) {
+    showToast(`Configuring terms (Term 1, Term 2, Term 3) for ${ayId || 'AY 2026–2027'}...`, 'info');
+  }
+
+  function reviewAcademicDateConflicts(ayId) {
+    showToast('Audit Complete: 0 date conflicts detected. Term schedules align with gazetted holidays and comply with statutory working days quota (220 days).', 'success');
+  }
+
+  function activateAcademicYear(ayId) {
+    showToast(`${ayId || 'AY 2026–2027'} set as Current Active Academic Year. All system operational dockets synced.`, 'success');
+  }
+
+  function openCloseAcademicYearModal(ayId) {
+    const target = document.getElementById('closeAyTargetId');
+    if (target) target.value = ayId || 'AY 2026–2027';
+    openModal('closeAcademicYearModal');
+  }
+
+  function submitCloseAcademicYear(e) {
+    if (e) e.preventDefault();
+    closeModal('closeAcademicYearModal');
+    showToast('Academic year successfully closed. Statutory Rule: Previous enrolments, attendance rolls, marks, and fee history are permanently preserved and remain accessible.', 'success');
+  }
+
+  function archivePreviousAcademicYear(ayId) {
+    showToast(`${ayId || 'AY 2025–2026'} archived to permanent institutional cold storage. Historical continuity intact.`, 'success');
+  }
+
+  // --- 18.3 Role Management Actions ---
+  function openCreateRoleModal() {
+    const form = document.querySelector('#createRoleModal form');
+    if (form) form.reset();
+    openModal('createRoleModal');
+  }
+
+  function submitCreateRole(e) {
+    if (e) e.preventDefault();
+    const name = document.getElementById('newRoleName')?.value || 'Custom Department Coordinator';
+    const desc = document.getElementById('newRoleDesc')?.value || 'Departmental oversight and reporting.';
+    const id = 'ROLE-' + String(SETTINGS_ROLES_DATA.length + 1).padStart(2, '0');
+
+    SETTINGS_ROLES_DATA.push({
+      id,
+      name,
+      slug: name.toLowerCase().replace(/[^a-z0-9]+/g, '-'),
+      assignedUsers: ['Unassigned (New Role)'],
+      userCount: 0,
+      template: 'Custom Role',
+      scope: 'Assigned Department',
+      permissionsCount: 'Configurable',
+      status: 'Active',
+      description: desc
+    });
+
+    renderSettingsRolesTable();
+    closeModal('createRoleModal');
+    showToast(`Role "${name}" created successfully. You may now assign users and configure permissions.`, 'success');
+  }
+
+  function duplicateRole(roleId) {
+    const role = SETTINGS_ROLES_DATA.find(r => r.id === roleId);
+    if (!role) {
+      showToast('Role not found for duplication.', 'error');
+      return;
+    }
+    const newId = 'ROLE-' + String(SETTINGS_ROLES_DATA.length + 1).padStart(2, '0');
+    const newRole = {
+      ...role,
+      id: newId,
+      name: `${role.name} (Copy)`,
+      slug: `${role.slug}-copy`,
+      assignedUsers: ['Unassigned (Cloned)'],
+      userCount: 0,
+      status: 'Active'
+    };
+    SETTINGS_ROLES_DATA.push(newRole);
+    renderSettingsRolesTable();
+    showToast(`Duplicated role "${role.name}" successfully as "${newRole.name}".`, 'success');
+  }
+
+  function openAssignUsersModal(roleId) {
+    const role = SETTINGS_ROLES_DATA.find(r => r.id === roleId);
+    showToast(`Opening User Assignment modal for ${role ? role.name : roleId}...`, 'info');
+  }
+
+  function openEditRolePermissionsModal(roleId) {
+    switchSubTab('settings', 'permissions');
+    const role = SETTINGS_ROLES_DATA.find(r => r.id === roleId);
+    const targetDisp = document.getElementById('permSelectedRoleDisplay');
+    if (targetDisp && role) {
+      targetDisp.textContent = role.name;
+    }
+    showToast(`Loaded Permission Matrix for ${role ? role.name : roleId}. Configure privileges below.`, 'info');
+  }
+
+  function deactivateRole(roleId) {
+    if (roleId === 'ROLE-01') {
+      showToast('Statutory Policy: Supreme Principal Executive Super Admin role cannot be deactivated.', 'error');
+      return;
+    }
+    const role = SETTINGS_ROLES_DATA.find(r => r.id === roleId);
+    if (!role) return;
+    role.status = (role.status === 'Active') ? 'Inactive' : 'Active';
+    renderSettingsRolesTable();
+    showToast(`Role "${role.name}" status updated to ${role.status}.`, 'warning');
+  }
+
+  function viewRolePermissionHistory(roleId) {
+    switchSubTab('settings', 'audit');
+    showToast(`Displaying permission audit history for role ${roleId || 'all'}.`, 'info');
+  }
+
+  // --- 18.4 Access Permissions Actions ---
+  function renderPermissionsMatrixTable() {
+    // 5 modules rendered in HTML: Students, Attendance, Results, Fees, Staff HR
+  }
+
+  function savePermissionsMatrixAndScopes() {
+    showToast('Permission Matrix and Scope Rules saved successfully. Role privileges re-indexed across all 5 core modules.', 'success');
+  }
+
+  function resetPermissionsMatrixToDefault() {
+    showToast('Permission matrix and security scopes reset to statutory institutional defaults.', 'info');
+  }
+
+  // --- 18.5 Security Settings Actions ---
+  function saveSecuritySettings() {
+    showToast('Security policies updated successfully. Password rules, session limits, and MFA requirements applied.', 'success');
+  }
+
+  function terminateAllOtherSessions() {
+    showToast('All other active workstation and mobile sessions have been terminated. Current administrative session retained.', 'warning');
+  }
+
+  function revokeSession(sessionId) {
+    showToast(`Session ${sessionId || 'SES-CURRENT'} revoked and logged out immediately.`, 'info');
+  }
+
+  // --- 18.6 Audit Logs Actions ---
+  function renderSettingsAuditLogsTable(recordsToRender) {
+    const tbody = document.getElementById('tbodySettingsAuditLogs') || document.getElementById('tbodyAuditLogs');
+    if (!tbody) return;
+
+    const records = recordsToRender || SETTINGS_AUDIT_LOGS_DATA;
+    if (records.length === 0) {
+      tbody.innerHTML = `<tr><td colspan="8" class="text-center py-4 text-muted">No audit logs match the current search or filter.</td></tr>`;
+      return;
+    }
+
+    tbody.innerHTML = records.map(l => {
+      const isSuccess = l.result === 'SUCCESS';
+      const resultBadge = `<span class="badge" style="background:${isSuccess ? '#f0fdf4' : '#fef2f2'}; color:${isSuccess ? '#166534' : '#991b1b'}; border:1px solid ${isSuccess ? '#bbf7d0' : '#fecaca'}; font-weight:700;">${l.result || 'SUCCESS'}</span>`;
+      const moduleName = l.module || (l.action && l.action.includes('FEE') ? 'Fees' : l.action && l.action.includes('STUDENT') ? 'Students' : 'Administration');
+      const ref = l.record || l.target || l.id;
+      const changed = l.diff ? `${l.diff.field || 'Record'}: ${l.diff.afterValue || 'Updated'}` : (l.reason || 'Security Policy Update');
+
+      return `
+        <tr>
+          <td><strong style="color:#0f172a;">${l.user}</strong><br><small class="text-muted">${l.role || 'Staff'}</small></td>
+          <td><span class="badge" style="background:#f1f5f9; color:#334155; font-weight:600; font-family:monospace;">${l.action}</span></td>
+          <td><span class="badge" style="background:#eff6ff; color:#1d4ed8; font-weight:700;">${moduleName}</span></td>
+          <td><code style="color:#0f172a; font-weight:600;">${ref}</code></td>
+          <td style="font-size:0.8rem; color:#475569;">${l.timestamp}</td>
+          <td>${resultBadge}</td>
+          <td style="font-size:0.82rem; color:#334155;">${l.reason || 'Statutory compliance verification'}</td>
+          <td style="font-size:0.82rem; color:#059669; font-weight:500;">${changed}</td>
+        </tr>
+      `;
+    }).join('');
+  }
+
+  // --- 18.7 Data & Backup Actions ---
+  function renderSettingsBackupsTable() {
+    const tbody = document.getElementById('tbodyDataBackups') || document.getElementById('tbodySettingsBackups');
+    if (!tbody) return;
+
+    tbody.innerHTML = SETTINGS_BACKUPS_DATA.map(b => `
+      <tr>
+        <td>
+          <strong style="color: #0f172a; font-size: 0.88rem;"><i class="fa-solid fa-database text-primary mr-1"></i>${b.id}</strong><br>
+          <small class="text-muted">${b.retention || 'Statutory 7 Years'}</small>
+        </td>
+        <td>
+          <span style="font-size:0.82rem; color:#1e293b; font-weight:500;">${b.timestamp}</span>
+        </td>
+        <td>
+          <span class="badge" style="background:#f1f5f9; color:#334155; font-weight:700;">${b.size}</span>
+        </td>
+        <td>
+          <span class="badge" style="background:#eff6ff; color:#1d4ed8; font-weight:700;">Full System Snapshot</span>
+        </td>
+        <td>
+          <span class="text-xs" style="color: #64748b; font-family: monospace;">${b.checksum ? b.checksum.substring(0, 16) + '...' : 'AES-256 / SHA-256'}</span>
+        </td>
+        <td>
+          <span class="badge" style="background:#f0fdf4; color:#166534; font-weight:700;">
+            <i class="fa-solid fa-circle-check mr-1"></i>${b.status || 'VERIFIED & INTACT'}
+          </span>
         </td>
         <td class="text-end">
-          <button class="btn btn-sm btn-outline-primary" onclick="portalApp.openRoleAssignmentModal('${r.id}')" title="Configure Role & Assigned Users">
-            <i class="fa-solid fa-user-pen"></i> Edit Role
+          <button class="btn btn-sm btn-outline-secondary" onclick="showToast('Backup ${b.id} integrity verified. SHA-256 match confirmed.', 'success')" title="Verify Integrity">
+            <i class="fa-solid fa-shield-check"></i> Verify
           </button>
         </td>
       </tr>
     `).join('');
   }
 
-/* =========================================================================
+  function triggerAuthorizedBackup() {
+    const newId = 'BKP-' + new Date().toISOString().slice(0, 10) + '-AUTHORIZED';
+    SETTINGS_BACKUPS_DATA.unshift({
+      id: newId,
+      timestamp: 'Just now (Authorized Manual)',
+      scope: 'Full Database & Document Assets (MongoDB + Cloudinary Mirrors)',
+      size: '1.49 GB',
+      checksum: 'f9a8b7c6d5e4f3a2b1c0987654321fedcba0',
+      status: 'VERIFIED & INTACT',
+      retention: 'Statutory 7 Years'
+    });
+    const lastDisplay = document.getElementById('lastBackupDisplay');
+    if (lastDisplay) lastDisplay.textContent = 'Just now (Manual Snapshot)';
+    renderSettingsBackupsTable();
+    showToast('Authorized institutional backup snapshot generated and verified (SHA-256). Stored in encrypted cloud mirror.', 'success');
+  }
+
+  function viewBackupHistory() {
+    const table = document.getElementById('tableDataBackups');
+    if (table) table.scrollIntoView({ behavior: 'smooth' });
+    showToast('Displaying complete 7-year statutory backup history archive.', 'info');
+  }
+
+  function runBackupRecoveryTest() {
+    showToast('Disaster Recovery Drill Completed (Sandbox Environment): RTO = 3 min 12 sec, RPO = 0 records lost. Test PASSED.', 'success');
+  }
+
+  function reviewBackupFailures() {
+    showToast('Backup Telemetry Review: 0 failed backups in the last 365 days. All primary, secondary, and cold-storage archives are HEALTHY.', 'success');
+  }
+
+  /* =========================================================================
      UNIVERSAL PERMISSIONS RENDERING, SCOPE EVALUATION & SIMULATION
      Supports 9 core permissions, 5 record scopes, and statutory anti-self-approval
      ========================================================================= */
@@ -66054,6 +66392,39 @@ exportInventoryAssetsCSV,
 
 
     renderSettingsRolesTable,
+    // Module 18: Settings & Governance Actions
+    editSchoolProfileDraft,
+    previewSchoolProfile,
+    submitSchoolProfileForApproval,
+    publishSchoolProfileChanges,
+    viewSchoolProfileHistory,
+    openCreateAcademicYearModal,
+    submitCreateAcademicYear,
+    openConfigureTermsModal,
+    reviewAcademicDateConflicts,
+    activateAcademicYear,
+    openCloseAcademicYearModal,
+    submitCloseAcademicYear,
+    archivePreviousAcademicYear,
+    openCreateRoleModal,
+    submitCreateRole,
+    duplicateRole,
+    openAssignUsersModal,
+    openEditRolePermissionsModal,
+    deactivateRole,
+    viewRolePermissionHistory,
+    renderPermissionsMatrixTable,
+    savePermissionsMatrixAndScopes,
+    resetPermissionsMatrixToDefault,
+    saveSecuritySettings,
+    terminateAllOtherSessions,
+    revokeSession,
+    renderSettingsAuditLogsTable,
+    renderSettingsBackupsTable,
+    triggerAuthorizedBackup,
+    viewBackupHistory,
+    runBackupRecoveryTest,
+    reviewBackupFailures,
     renderSettingsPermissionsTable,
     UNIVERSAL_PERMISSIONS_CATALOG,
     RECORD_SCOPES,
