@@ -137,3 +137,4 @@ module.exports = {
   createRecoveryRequest,
   approveRecoveryRequest
 };
+

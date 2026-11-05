@@ -501,6 +501,8 @@ const platformApp = (function () {
       loadSystemHealthData();
     } else if (viewId === 'backups' && typeof loadBackupsData === 'function') {
       loadBackupsData();
+    } else if (viewId === 'integrations' && typeof loadIntegrationsData === 'function') {
+      loadIntegrationsData();
     }
 
     // Update Header Breadcrumb
@@ -8682,6 +8684,945 @@ const platformApp = (function () {
     openModal('modalRecoveryWorkflowDetail');
   }
 
+
+  /* ==========================================================================
+     MODULE 13: INTEGRATIONS & API MANAGEMENT CONTROLLER
+     13.1 Integrations Directory
+     13.2 Integration Configuration & Masked KMS Credentials
+     13.3 External API Clients Management & Scopes
+     13.4 Integration Event Logs & Strict Payment Reconciliation Invariant
+     ========================================================================== */
+
+  let integrationsData = [];
+  let apiClientsData = [];
+  let integrationEventLogsData = [];
+  let activeIntegrationsSubTab = 'directory';
+
+  function formatIntDateTime(d) {
+    if (!d) return '--';
+    const date = new Date(d);
+    if (isNaN(date.getTime())) return '--';
+    return date.toLocaleString('en-IN', {
+      day: '2-digit',
+      month: 'short',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: true
+    });
+  }
+
+  function formatIntType(type) {
+    switch (type) {
+      case 'EMAIL_DELIVERY': return 'Email Delivery';
+      case 'SMS_PROVIDER': return 'DLT SMS Relay';
+      case 'PAYMENT_GATEWAY': return 'Payment Gateway';
+      case 'FILE_STORAGE': return 'Cloud Storage';
+      case 'IDENTITY_PROVIDER': return 'Identity / SSO';
+      case 'BACKUP_SERVICE': return 'Backup Cold Vault';
+      case 'EXTERNAL_SCHOOL_SYSTEM': return 'External Edu Relay';
+      default: return type || 'General Relay';
+    }
+  }
+
+  function getIntStatusBadge(status) {
+    switch (status) {
+      case 'CONNECTED':
+        return '<span class="badge badge-int-connected"><i class="fa-solid fa-circle-check me-1"></i>CONNECTED</span>';
+      case 'DEGRADED':
+        return '<span class="badge badge-int-degraded"><i class="fa-solid fa-triangle-exclamation me-1"></i>DEGRADED</span>';
+      case 'DISCONNECTED':
+        return '<span class="badge badge-int-disconnected"><i class="fa-solid fa-circle-xmark me-1"></i>DISCONNECTED</span>';
+      case 'DISABLED':
+        return '<span class="badge badge-int-disabled"><i class="fa-solid fa-ban me-1"></i>DISABLED</span>';
+      default:
+        return `<span class="badge bg-secondary font-mono">${escapeBkpHtml(status || 'UNKNOWN')}</span>`;
+    }
+  }
+
+  function switchIntegrationsSubTab(tabName) {
+    activeIntegrationsSubTab = tabName;
+    const tabs = ['directory', 'api', 'logs'];
+    tabs.forEach(t => {
+      const btn = document.getElementById('btnIntTab' + t.charAt(0).toUpperCase() + t.slice(1));
+      const content = document.getElementById('intTab' + t.charAt(0).toUpperCase() + t.slice(1) + 'Content');
+      if (t === tabName) {
+        if (btn) btn.classList.add('active');
+        if (content) content.style.display = 'block';
+      } else {
+        if (btn) btn.classList.remove('active');
+        if (content) content.style.display = 'none';
+      }
+    });
+
+    if (tabName === 'directory' && (!integrationsData || integrationsData.length === 0)) {
+      loadIntegrationsData();
+    } else if (tabName === 'api' && (!apiClientsData || apiClientsData.length === 0)) {
+      loadIntegrationsData();
+    } else if (tabName === 'logs' && (!integrationEventLogsData || integrationEventLogsData.length === 0)) {
+      loadIntegrationsData();
+    }
+  }
+
+  async function loadIntegrationsData() {
+    try {
+      const [intRes, cliRes, logRes] = await Promise.all([
+        fetch('/api/v1/platform/integrations'),
+        fetch('/api/v1/platform/integrations/api-clients'),
+        fetch('/api/v1/platform/integrations/logs')
+      ]);
+
+      if (intRes.ok) {
+        const j = await intRes.json();
+        if (j.success) {
+          integrationsData = j.data || [];
+          renderIntegrationsTable(integrationsData);
+          const b = document.getElementById('badgeIntegrationsCount');
+          if (b) b.textContent = integrationsData.length;
+        }
+      }
+
+      if (cliRes.ok) {
+        const j = await cliRes.json();
+        if (j.success) {
+          apiClientsData = j.data || [];
+          renderApiClientsTable(apiClientsData);
+          const b = document.getElementById('badgeApiClientsCount');
+          if (b) b.textContent = apiClientsData.length;
+        }
+      }
+
+      if (logRes.ok) {
+        const j = await logRes.json();
+        if (j.success) {
+          integrationEventLogsData = j.data || [];
+          renderEventLogsTable(integrationEventLogsData);
+          const b = document.getElementById('badgeEventLogsCount');
+          if (b) b.textContent = integrationEventLogsData.length;
+        }
+      }
+
+      showToast('Integrations & external API relays synchronized', 'success');
+    } catch (err) {
+      console.error('Error loading integrations data:', err);
+      showToast('Error loading integrations data: ' + err.message, 'warning');
+    }
+  }
+
+  /* --------------------------------------------------------------------------
+     13.1 Integrations Directory
+     -------------------------------------------------------------------------- */
+  function renderIntegrationsTable(list) {
+    const tbody = document.getElementById('tbodyIntegrations');
+    const badgeCount = document.getElementById('badgeIntegrationsCount');
+    const filterCount = document.getElementById('lblIntFilteredCount');
+
+    if (badgeCount) badgeCount.textContent = (list || []).length;
+    if (filterCount) filterCount.textContent = 'Showing ' + (list || []).length + ' Integrations';
+    if (!tbody) return;
+
+    if (!list || list.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="8" class="text-center text-muted py-4"><i class="fa-solid fa-puzzle-piece me-2"></i>No integrations found matching filter criteria.</td></tr>';
+      return;
+    }
+
+    tbody.innerHTML = list.map(item => {
+      const syncStr = item.lastSuccessfulSync ? formatIntDateTime(item.lastSuccessfulSync) : '<span class="text-muted">Never</span>';
+      const errorStr = item.lastError
+        ? `<span class="text-danger small font-mono" title="${escapeBkpHtml(item.lastError)}"><i class="fa-solid fa-circle-exclamation me-1"></i>${escapeBkpHtml(item.lastError.length > 28 ? item.lastError.substring(0, 28) + '...' : item.lastError)}</span>`
+        : '<span class="text-success small"><i class="fa-solid fa-circle-check me-1"></i>Healthy</span>';
+
+      return `
+        <tr>
+          <td>
+            <div class="fw-bold text-dark">${escapeBkpHtml(item.name)}</div>
+            <div class="d-flex align-items-center gap-1 mt-1">
+              <small class="text-muted font-mono" style="font-size: 0.72rem;">${escapeBkpHtml(item.integrationId)}</small>
+              <span class="badge bg-light text-secondary border font-mono" style="font-size: 0.65rem;">${escapeBkpHtml(item.environment || 'PRODUCTION')}</span>
+            </div>
+          </td>
+          <td>
+            <span class="text-dark fw-semibold">${escapeBkpHtml(item.provider)}</span>
+          </td>
+          <td>
+            <span class="badge bg-secondary-subtle text-dark font-mono">${escapeBkpHtml(item.institutionScope || 'ALL_CAMPUSES')}</span>
+          </td>
+          <td>
+            <span class="badge bg-primary-subtle text-primary border font-mono" style="font-size: 0.72rem;">${formatIntType(item.type)}</span>
+          </td>
+          <td>
+            ${getIntStatusBadge(item.connectionStatus)}
+          </td>
+          <td class="font-mono small">
+            ${syncStr}
+          </td>
+          <td>
+            ${errorStr}
+          </td>
+          <td style="text-align: right;">
+            <div class="d-flex justify-content-end gap-1">
+              <button class="btn btn-sm btn-outline-primary py-0 px-2" title="View Integration Details" onclick="platformApp.openIntegrationDetailsModal('${item.integrationId}')">
+                <i class="fa-solid fa-eye"></i>
+              </button>
+              <button class="btn btn-sm btn-outline-secondary py-0 px-2" title="Test Live Connection Handshake" onclick="platformApp.testIntegrationConnection('${item.integrationId}')">
+                <i class="fa-solid fa-satellite-dish"></i>
+              </button>
+              <button class="btn btn-sm btn-outline-dark py-0 px-2" title="Configure Relay Settings" onclick="platformApp.openEditIntegrationModal('${item.integrationId}')">
+                <i class="fa-solid fa-gear"></i>
+              </button>
+              <button class="btn btn-sm ${item.isEnabled ? 'btn-outline-warning' : 'btn-outline-success'} py-0 px-2" title="${item.isEnabled ? 'Disable Relay' : 'Enable Relay'}" onclick="platformApp.toggleIntegrationStatus('${item.integrationId}')">
+                <i class="fa-solid ${item.isEnabled ? 'fa-pause' : 'fa-play'}"></i>
+              </button>
+              <button class="btn btn-sm btn-outline-info py-0 px-2" title="View Event Logs" onclick="platformApp.viewIntegrationLogs('${item.integrationId}')">
+                <i class="fa-solid fa-receipt"></i>
+              </button>
+              <button class="btn btn-sm btn-outline-danger py-0 px-2" title="Rotate Cryptographic Key" onclick="platformApp.rotateIntegrationCredentials('${item.integrationId}')">
+                <i class="fa-solid fa-key"></i>
+              </button>
+              <button class="btn btn-sm btn-outline-danger py-0 px-2" title="Disconnect Integration" onclick="platformApp.disconnectIntegration('${item.integrationId}')">
+                <i class="fa-solid fa-plug-circle-xmark"></i>
+              </button>
+            </div>
+          </td>
+        </tr>
+      `;
+    }).join('');
+  }
+
+  function filterIntegrationsTable() {
+    const search = (document.getElementById('txtIntFilterSearch')?.value || '').toLowerCase().trim();
+    const type = document.getElementById('selIntFilterType')?.value || '';
+    const status = document.getElementById('selIntFilterStatus')?.value || '';
+    const scope = document.getElementById('selIntFilterScope')?.value || '';
+
+    const filtered = (integrationsData || []).filter(item => {
+      const matchSearch = !search ||
+        (item.name && item.name.toLowerCase().includes(search)) ||
+        (item.provider && item.provider.toLowerCase().includes(search)) ||
+        (item.endpoint && item.endpoint.toLowerCase().includes(search)) ||
+        (item.integrationId && item.integrationId.toLowerCase().includes(search));
+
+      const matchType = !type || item.type === type;
+      const matchStatus = !status || item.connectionStatus === status;
+      const matchScope = !scope || item.institutionScope === scope;
+
+      return matchSearch && matchType && matchStatus && matchScope;
+    });
+
+    renderIntegrationsTable(filtered);
+  }
+
+  function resetIntegrationFilters() {
+    const s = document.getElementById('txtIntFilterSearch');
+    const t = document.getElementById('selIntFilterType');
+    const st = document.getElementById('selIntFilterStatus');
+    const sc = document.getElementById('selIntFilterScope');
+
+    if (s) s.value = '';
+    if (t) t.value = '';
+    if (st) st.value = '';
+    if (sc) sc.value = '';
+
+    renderIntegrationsTable(integrationsData);
+  }
+
+  /* --------------------------------------------------------------------------
+     13.2 Integration Configuration & Actions
+     -------------------------------------------------------------------------- */
+  function openCreateIntegrationModal() {
+    const setVal = (id, v) => { const el = document.getElementById(id); if (el) el.value = v; };
+    setVal('txtIntFormId', '');
+    setVal('txtIntFormName', '');
+    setVal('txtIntFormProvider', '');
+    setVal('selIntFormType', 'EMAIL_DELIVERY');
+    setVal('selIntFormEnv', 'PRODUCTION');
+    setVal('selIntFormScope', 'ALL_CAMPUSES');
+    setVal('txtIntFormEndpoint', '');
+    setVal('txtIntFormCredRef', 'vault://kms/ap-south-1/provider-key');
+    setVal('txtIntFormRawKey', '');
+    setVal('txtIntFormScopes', '');
+    setVal('txtIntFormWebhookUrl', '');
+    setVal('txtIntFormWebhookEvents', '');
+    setVal('numIntFormRetries', 3);
+    setVal('selIntFormBackoff', 'EXPONENTIAL');
+    setVal('numIntFormTimeout', 15);
+
+    const titleEl = document.getElementById('lblIntModalTitle');
+    if (titleEl) titleEl.textContent = 'Register External Service Relay';
+
+    openModal('modalCreateEditIntegration');
+  }
+
+  function openEditIntegrationModal(integrationId) {
+    const item = (integrationsData || []).find(i => i.integrationId === integrationId);
+    if (!item) {
+      showToast('Integration record not found', 'warning');
+      return;
+    }
+
+    const setVal = (id, v) => { const el = document.getElementById(id); if (el) el.value = v; };
+    setVal('txtIntFormId', item.integrationId);
+    setVal('txtIntFormName', item.name);
+    setVal('txtIntFormProvider', item.provider);
+    setVal('selIntFormType', item.type);
+    setVal('selIntFormEnv', item.environment || 'PRODUCTION');
+    setVal('selIntFormScope', item.institutionScope || 'ALL_CAMPUSES');
+    setVal('txtIntFormEndpoint', item.endpoint || '');
+    setVal('txtIntFormCredRef', item.credentialRef || '');
+    setVal('txtIntFormRawKey', '');
+    setVal('txtIntFormScopes', (item.scopes || []).join(', '));
+    setVal('txtIntFormWebhookUrl', item.webhookConfig?.url || '');
+    setVal('txtIntFormWebhookEvents', (item.webhookConfig?.subscribedEvents || []).join(', '));
+    setVal('numIntFormRetries', item.retryPolicy?.maxRetries ?? 3);
+    setVal('selIntFormBackoff', item.retryPolicy?.backoffStrategy || 'EXPONENTIAL');
+    setVal('numIntFormTimeout', item.retryPolicy?.timeoutSeconds ?? 15);
+
+    const titleEl = document.getElementById('lblIntModalTitle');
+    if (titleEl) titleEl.textContent = 'Configure ' + item.name;
+
+    openModal('modalCreateEditIntegration');
+  }
+
+  async function submitIntegrationForm() {
+    const id = document.getElementById('txtIntFormId')?.value || '';
+    const name = document.getElementById('txtIntFormName')?.value.trim();
+    const provider = document.getElementById('txtIntFormProvider')?.value.trim();
+    const type = document.getElementById('selIntFormType')?.value;
+    const environment = document.getElementById('selIntFormEnv')?.value;
+    const institutionScope = document.getElementById('selIntFormScope')?.value;
+    const endpoint = document.getElementById('txtIntFormEndpoint')?.value.trim();
+    const credentialRef = document.getElementById('txtIntFormCredRef')?.value.trim();
+    const rawKey = document.getElementById('txtIntFormRawKey')?.value.trim();
+    const scopesStr = document.getElementById('txtIntFormScopes')?.value.trim();
+    const webhookUrl = document.getElementById('txtIntFormWebhookUrl')?.value.trim();
+    const webhookEventsStr = document.getElementById('txtIntFormWebhookEvents')?.value.trim();
+    const maxRetries = parseInt(document.getElementById('numIntFormRetries')?.value, 10) || 3;
+    const backoffStrategy = document.getElementById('selIntFormBackoff')?.value || 'EXPONENTIAL';
+    const timeoutSeconds = parseInt(document.getElementById('numIntFormTimeout')?.value, 10) || 15;
+
+    if (!name || !provider || !endpoint) {
+      showToast('Integration name, provider, and endpoint URL are required', 'warning');
+      return;
+    }
+
+    const payload = {
+      name,
+      provider,
+      type,
+      environment,
+      institutionScope,
+      endpoint,
+      credentialRef: credentialRef || ('vault://kms/ap-south-1/' + provider.toLowerCase().replace(/[^a-z0-9]/g, '-')),
+      scopes: scopesStr ? scopesStr.split(',').map(s => s.trim()).filter(Boolean) : [],
+      webhookConfig: {
+        url: webhookUrl || null,
+        subscribedEvents: webhookEventsStr ? webhookEventsStr.split(',').map(s => s.trim()).filter(Boolean) : []
+      },
+      retryPolicy: {
+        maxRetries,
+        backoffStrategy,
+        timeoutSeconds
+      }
+    };
+
+    if (rawKey) {
+      payload.rawCredential = rawKey;
+    }
+
+    try {
+      let res;
+      if (id) {
+        res = await fetch('/api/v1/platform/integrations/' + encodeURIComponent(id), {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+      } else {
+        res = await fetch('/api/v1/platform/integrations', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+      }
+
+      const j = await res.json();
+      if (res.ok && j.success) {
+        showToast(id ? 'Integration configuration updated' : 'Integration registered successfully', 'success');
+        closeModal('modalCreateEditIntegration');
+        await loadIntegrationsData();
+      } else {
+        showToast('Save failed: ' + (j.message || 'Server error'), 'danger');
+      }
+    } catch (err) {
+      console.error('Error submitting integration form:', err);
+      showToast('Error saving integration: ' + err.message, 'danger');
+    }
+  }
+
+  async function testIntegrationConnection(integrationId) {
+    try {
+      showToast('Testing live handshake connection...', 'info');
+      const res = await fetch(`/api/v1/platform/integrations/${encodeURIComponent(integrationId)}/test`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' }
+      });
+      const j = await res.json();
+      if (res.ok && j.success) {
+        showToast(`Handshake verified! Latency: ${j.data?.latencyMs || 45}ms. Status: ${j.data?.status || 'CONNECTED'}`, 'success');
+        await loadIntegrationsData();
+      } else {
+        showToast('Connection test failed: ' + (j.message || 'Endpoint unreachable'), 'danger');
+      }
+    } catch (err) {
+      console.error('Error testing connection:', err);
+      showToast('Connection test error: ' + err.message, 'danger');
+    }
+  }
+
+  async function toggleIntegrationStatus(integrationId) {
+    try {
+      const res = await fetch(`/api/v1/platform/integrations/${encodeURIComponent(integrationId)}/toggle`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' }
+      });
+      const j = await res.json();
+      if (res.ok && j.success) {
+        const item = j.data;
+        showToast(`Relay ${item.name} is now ${item.isEnabled ? 'ENABLED' : 'DISABLED'}`, 'info');
+        await loadIntegrationsData();
+      } else {
+        showToast('Toggle failed: ' + (j.message || 'Server error'), 'danger');
+      }
+    } catch (err) {
+      console.error('Error toggling status:', err);
+      showToast('Toggle error: ' + err.message, 'danger');
+    }
+  }
+
+  async function rotateIntegrationCredentials(integrationId) {
+    if (!confirm('Rotate cryptographic credentials for this integration? Existing keys will be invalidated and replaced in KMS.')) {
+      return;
+    }
+
+    try {
+      const res = await fetch(`/api/v1/platform/integrations/${encodeURIComponent(integrationId)}/rotate`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' }
+      });
+      const j = await res.json();
+      if (res.ok && j.success) {
+        showToast(`Credentials rotated in KMS: ${j.data?.credentialMasked || '••••••••'}`, 'success');
+        await loadIntegrationsData();
+      } else {
+        showToast('Rotation failed: ' + (j.message || 'Server error'), 'danger');
+      }
+    } catch (err) {
+      console.error('Error rotating credentials:', err);
+      showToast('Credential rotation error: ' + err.message, 'danger');
+    }
+  }
+
+  async function disconnectIntegration(integrationId) {
+    if (!confirm('Safely disconnect integration relay? Active API operations will cease immediately. Historical telemetry and audit logs will be preserved.')) {
+      return;
+    }
+
+    try {
+      const res = await fetch(`/api/v1/platform/integrations/${encodeURIComponent(integrationId)}/disconnect`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' }
+      });
+      const j = await res.json();
+      if (res.ok && j.success) {
+        showToast('Integration disconnected safely', 'info');
+        await loadIntegrationsData();
+      } else {
+        showToast('Disconnect failed: ' + (j.message || 'Server error'), 'danger');
+      }
+    } catch (err) {
+      console.error('Error disconnecting integration:', err);
+      showToast('Disconnect error: ' + err.message, 'danger');
+    }
+  }
+
+  function openIntegrationDetailsModal(integrationId) {
+    const item = (integrationsData || []).find(i => i.integrationId === integrationId);
+    if (!item) {
+      showToast('Integration record not found', 'warning');
+      return;
+    }
+
+    const setEl = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
+    setEl('lblIntDetailName', item.name);
+
+    const stEl = document.getElementById('lblIntDetailStatus');
+    if (stEl) {
+      stEl.className = 'badge ' + (item.connectionStatus === 'CONNECTED' ? 'badge-int-connected' : 'badge-int-' + item.connectionStatus.toLowerCase());
+      stEl.textContent = item.connectionStatus;
+    }
+
+    setEl('lblIntDetailProvider', item.provider);
+    setEl('lblIntDetailType', item.type + ' (' + (item.environment || 'PRODUCTION') + ')');
+    setEl('lblIntDetailScope', item.institutionScope || 'ALL_CAMPUSES');
+    setEl('lblIntDetailLastSync', item.lastSuccessfulSync ? formatIntDateTime(item.lastSuccessfulSync) : 'Never');
+    setEl('lblIntDetailEndpoint', item.endpoint);
+    setEl('lblIntDetailCredRef', item.credentialRef);
+    setEl('lblIntDetailMasked', item.credentialMasked || '••••••••a8f3');
+
+    const scopesEl = document.getElementById('lblIntDetailScopes');
+    if (scopesEl) {
+      const scopes = item.scopes || [];
+      if (scopes.length > 0) {
+        scopesEl.innerHTML = scopes.map(s => `<span class="badge bg-secondary me-1 font-mono" style="font-size:0.7rem;">${escapeBkpHtml(s)}</span>`).join(' ');
+      } else {
+        scopesEl.innerHTML = '<span class="text-muted small">No special scopes configured</span>';
+      }
+    }
+
+    const errBox = document.getElementById('intDetailErrorBox');
+    const errText = document.getElementById('lblIntDetailError');
+    if (item.lastError) {
+      if (errBox) errBox.style.display = 'block';
+      if (errText) errText.textContent = item.lastError;
+    } else {
+      if (errBox) errBox.style.display = 'none';
+    }
+
+    const btnTest = document.getElementById('btnIntDetailTest');
+    if (btnTest) btnTest.onclick = () => testIntegrationConnection(item.integrationId);
+
+    const btnRotate = document.getElementById('btnIntDetailRotate');
+    if (btnRotate) btnRotate.onclick = () => rotateIntegrationCredentials(item.integrationId);
+
+    const btnEdit = document.getElementById('btnIntDetailEdit');
+    if (btnEdit) btnEdit.onclick = () => {
+      closeModal('modalIntegrationDetail');
+      openEditIntegrationModal(item.integrationId);
+    };
+
+    openModal('modalIntegrationDetail');
+  }
+
+  /* --------------------------------------------------------------------------
+     13.3 API Management (External Clients)
+     -------------------------------------------------------------------------- */
+  function renderApiClientsTable(list) {
+    const tbody = document.getElementById('tbodyApiClients');
+    const badgeCount = document.getElementById('badgeApiClientsCount');
+
+    if (badgeCount) badgeCount.textContent = (list || []).length;
+    if (!tbody) return;
+
+    if (!list || list.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="8" class="text-center text-muted py-4"><i class="fa-solid fa-code me-2"></i>No registered API clients found.</td></tr>';
+      return;
+    }
+
+    tbody.innerHTML = list.map(cli => {
+      let stBadge = '<span class="badge badge-cli-active"><i class="fa-solid fa-circle-check me-1"></i>ACTIVE</span>';
+      if (cli.credentialStatus === 'ROTATED') {
+        stBadge = '<span class="badge badge-cli-rotated"><i class="fa-solid fa-rotate me-1"></i>ROTATED</span>';
+      } else if (cli.credentialStatus === 'REVOKED') {
+        stBadge = '<span class="badge badge-cli-revoked"><i class="fa-solid fa-circle-xmark me-1"></i>REVOKED</span>';
+      }
+
+      const scopesPills = (cli.grantedScopes || []).map(s => `<span class="badge bg-light text-dark border font-mono" style="font-size:0.68rem;">${escapeBkpHtml(s)}</span>`).join(' ');
+
+      return `
+        <tr>
+          <td>
+            <span class="font-mono fw-bold text-dark">${escapeBkpHtml(cli.clientId)}</span>
+          </td>
+          <td>
+            <div class="fw-semibold text-dark">${escapeBkpHtml(cli.clientName)}</div>
+          </td>
+          <td>
+            <div>${escapeBkpHtml(cli.ownership?.organization || '--')}</div>
+            <small class="text-muted">${escapeBkpHtml(cli.ownership?.contactPerson || '')} (${escapeBkpHtml(cli.ownership?.contactEmail || '')})</small>
+          </td>
+          <td>
+            ${scopesPills || '<span class="text-muted small">None</span>'}
+          </td>
+          <td>
+            <span class="font-mono small">${cli.rateLimit?.requestsPerMinute || 60} req/min</span>
+            <br><small class="text-muted font-mono">${cli.rateLimit?.dailyLimit || 10000}/day</small>
+          </td>
+          <td>
+            ${stBadge}
+            <br><small class="font-mono text-muted" style="font-size:0.7rem;">${escapeBkpHtml(cli.credentialMasked || '••••••••')}</small>
+          </td>
+          <td>
+            <span class="fw-bold text-dark">${cli.usageStats?.totalRequests24h || 0} reqs</span> <small class="text-muted">(${cli.usageStats?.avgLatencyMs || 20}ms)</small>
+            <br><small class="text-danger font-mono">${cli.usageStats?.errorCount24h || 0} errors</small>
+          </td>
+          <td style="text-align: right;">
+            <div class="d-flex justify-content-end gap-1">
+              <button class="btn btn-sm btn-outline-warning py-0 px-2" title="Rotate API Secret" onclick="platformApp.rotateApiClientCredentials('${cli.clientId}')">
+                <i class="fa-solid fa-key"></i> Rotate
+              </button>
+              <button class="btn btn-sm btn-outline-danger py-0 px-2" title="Revoke API Access" onclick="platformApp.revokeApiClient('${cli.clientId}')">
+                <i class="fa-solid fa-ban"></i> Revoke
+              </button>
+            </div>
+          </td>
+        </tr>
+      `;
+    }).join('');
+  }
+
+  function filterApiClientsTable() {
+    renderApiClientsTable(apiClientsData);
+  }
+
+  function openRegisterApiClientModal() {
+    const setVal = (id, v) => { const el = document.getElementById(id); if (el) el.value = v; };
+    setVal('txtClientFormName', '');
+    setVal('txtClientFormOrg', '');
+    setVal('txtClientFormPerson', '');
+    setVal('txtClientFormEmail', '');
+    setVal('txtClientFormScopes', 'students.attendance.read, enrollment.stats.read');
+    setVal('numClientFormRpm', 60);
+    setVal('numClientFormDaily', 25000);
+
+    openModal('modalRegisterApiClient');
+  }
+
+  async function submitRegisterApiClient() {
+    const clientName = document.getElementById('txtClientFormName')?.value.trim();
+    const organization = document.getElementById('txtClientFormOrg')?.value.trim();
+    const contactPerson = document.getElementById('txtClientFormPerson')?.value.trim();
+    const contactEmail = document.getElementById('txtClientFormEmail')?.value.trim();
+    const scopesStr = document.getElementById('txtClientFormScopes')?.value.trim();
+    const requestsPerMinute = parseInt(document.getElementById('numClientFormRpm')?.value, 10) || 60;
+    const dailyLimit = parseInt(document.getElementById('numClientFormDaily')?.value, 10) || 25000;
+
+    if (!clientName || !organization || !contactEmail) {
+      showToast('Client name, organization, and contact email are required', 'warning');
+      return;
+    }
+
+    const payload = {
+      clientName,
+      organization,
+      contactPerson,
+      contactEmail,
+      grantedScopes: scopesStr ? scopesStr.split(',').map(s => s.trim()).filter(Boolean) : [],
+      rateLimit: {
+        requestsPerMinute,
+        dailyLimit
+      }
+    };
+
+    try {
+      const res = await fetch('/api/v1/platform/integrations/api-clients', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      const j = await res.json();
+      if (res.ok && j.success) {
+        showToast('API Client registered with issued credential', 'success');
+        closeModal('modalRegisterApiClient');
+        await loadIntegrationsData();
+      } else {
+        showToast('Registration failed: ' + (j.message || 'Server error'), 'danger');
+      }
+    } catch (err) {
+      console.error('Error registering API client:', err);
+      showToast('Client registration error: ' + err.message, 'danger');
+    }
+  }
+
+  async function rotateApiClientCredentials(clientId) {
+    if (!confirm(`Rotate cryptographic secret for client ${clientId}? Client application must be updated.`)) {
+      return;
+    }
+
+    try {
+      const res = await fetch(`/api/v1/platform/integrations/api-clients/${encodeURIComponent(clientId)}/rotate`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' }
+      });
+      const j = await res.json();
+      if (res.ok && j.success) {
+        showToast(`Client secret rotated: ${j.data?.credentialMasked || '••••••••'}`, 'success');
+        await loadIntegrationsData();
+      } else {
+        showToast('Client key rotation failed: ' + (j.message || 'Server error'), 'danger');
+      }
+    } catch (err) {
+      console.error('Error rotating client secret:', err);
+      showToast('Rotation error: ' + err.message, 'danger');
+    }
+  }
+
+  async function revokeApiClient(clientId) {
+    if (!confirm(`Revoke API credentials for client ${clientId}? All subsequent API requests will be immediately denied.`)) {
+      return;
+    }
+
+    try {
+      const res = await fetch(`/api/v1/platform/integrations/api-clients/${encodeURIComponent(clientId)}/revoke`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ reason: 'Administrative revocation by Platform Administrator' })
+      });
+      const j = await res.json();
+      if (res.ok && j.success) {
+        showToast('API Client revoked immediately', 'info');
+        await loadIntegrationsData();
+      } else {
+        showToast('Revocation failed: ' + (j.message || 'Server error'), 'danger');
+      }
+    } catch (err) {
+      console.error('Error revoking client:', err);
+      showToast('Revocation error: ' + err.message, 'danger');
+    }
+  }
+
+  /* --------------------------------------------------------------------------
+     13.4 Integration Event Logs & Payment Reconciliation
+     -------------------------------------------------------------------------- */
+  function renderEventLogsTable(list) {
+    const tbody = document.getElementById('tbodyIntegrationEventLogs');
+    const badgeCount = document.getElementById('badgeEventLogsCount');
+    const filterCount = document.getElementById('lblEventLogsFilteredCount');
+
+    if (badgeCount) badgeCount.textContent = (list || []).length;
+    if (filterCount) filterCount.textContent = 'Showing ' + (list || []).length + ' Events';
+    if (!tbody) return;
+
+    if (!list || list.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="9" class="text-center text-muted py-4"><i class="fa-solid fa-receipt me-2"></i>No event logs match the selected filters.</td></tr>';
+      return;
+    }
+
+    tbody.innerHTML = list.map(evt => {
+      // Payment Invariant Section 13.4: Strictly distinguish unverified webhooks from independently reconciled payments
+      let statusBadge = '';
+      if (evt.isPayment) {
+        if (evt.paymentVerificationStatus === 'INDEPENDENTLY_RECONCILED') {
+          statusBadge = '<span class="badge badge-pay-reconciled"><i class="fa-solid fa-check-double me-1"></i>RECONCILED</span>';
+        } else {
+          statusBadge = '<span class="badge badge-pay-received"><i class="fa-solid fa-clock me-1"></i>WEBHOOK (UNVERIFIED)</span>';
+        }
+      } else {
+        if (evt.result === 'SUCCESS') {
+          statusBadge = '<span class="badge bg-success-subtle text-success border font-mono"><i class="fa-solid fa-circle-check me-1"></i>SUCCESS</span>';
+        } else if (evt.result === 'FAILED') {
+          statusBadge = '<span class="badge bg-danger-subtle text-danger border font-mono"><i class="fa-solid fa-circle-xmark me-1"></i>FAILED</span>';
+        } else {
+          statusBadge = `<span class="badge bg-secondary font-mono">${escapeBkpHtml(evt.result)}</span>`;
+        }
+      }
+
+      const reconcileBtn = (evt.isPayment && evt.paymentVerificationStatus === 'UNVERIFIED_NOTIFICATION')
+        ? `<button class="btn btn-sm btn-outline-success py-0 px-2 ms-1" title="Verify against bank and reconcile to fee ledger" onclick="platformApp.reconcilePaymentEvent('${evt.eventId}')"><i class="fa-solid fa-check-double"></i> Reconcile</button>`
+        : '';
+
+      return `
+        <tr>
+          <td>
+            <span class="font-mono fw-bold text-dark">${escapeBkpHtml(evt.eventId)}</span>
+          </td>
+          <td>
+            <div class="fw-semibold text-dark">${escapeBkpHtml(evt.integrationName)}</div>
+            <small class="text-muted">${escapeBkpHtml(evt.provider)}</small>
+          </td>
+          <td>
+            <span class="badge bg-secondary-subtle text-dark font-mono">${escapeBkpHtml(evt.institutionScope || 'ALL_CAMPUSES')}</span>
+          </td>
+          <td class="font-mono small">
+            ${formatIntDateTime(evt.eventTime)}
+          </td>
+          <td>
+            <span class="font-mono small text-muted">${escapeBkpHtml(evt.correlationId)}</span>
+          </td>
+          <td>
+            ${statusBadge}
+          </td>
+          <td class="font-mono small text-center">
+            ${evt.retryCount} / ${evt.maxRetries}
+          </td>
+          <td class="small">
+            ${evt.errorSummary ? `<span class="text-danger font-mono" title="${escapeBkpHtml(evt.errorSummary)}">${escapeBkpHtml(evt.errorSummary.length > 25 ? evt.errorSummary.substring(0, 25) + '...' : evt.errorSummary)}</span>` : '<span class="text-muted">--</span>'}
+          </td>
+          <td style="text-align: right;">
+            <div class="d-flex justify-content-end align-items-center">
+              <button class="btn btn-sm btn-outline-primary py-0 px-2" title="Inspect Event Details" onclick="platformApp.openEventLogDetailsModal('${evt.eventId}')">
+                <i class="fa-solid fa-eye"></i> Details
+              </button>
+              ${reconcileBtn}
+            </div>
+          </td>
+        </tr>
+      `;
+    }).join('');
+  }
+
+  function filterEventLogsTable() {
+    const search = (document.getElementById('txtEventFilterSearch')?.value || '').toLowerCase().trim();
+    const payFilter = document.getElementById('selEventFilterPayment')?.value || '';
+    const resFilter = document.getElementById('selEventFilterResult')?.value || '';
+
+    const filtered = (integrationEventLogsData || []).filter(item => {
+      const matchSearch = !search ||
+        (item.eventId && item.eventId.toLowerCase().includes(search)) ||
+        (item.correlationId && item.correlationId.toLowerCase().includes(search)) ||
+        (item.integrationName && item.integrationName.toLowerCase().includes(search)) ||
+        (item.integrationId && item.integrationId.toLowerCase().includes(search));
+
+      let matchPay = true;
+      if (payFilter === 'PAYMENT_ONLY') {
+        matchPay = item.isPayment === true;
+      } else if (payFilter === 'UNVERIFIED_NOTIFICATION') {
+        matchPay = item.isPayment === true && item.paymentVerificationStatus === 'UNVERIFIED_NOTIFICATION';
+      } else if (payFilter === 'INDEPENDENTLY_RECONCILED') {
+        matchPay = item.isPayment === true && item.paymentVerificationStatus === 'INDEPENDENTLY_RECONCILED';
+      }
+
+      let matchRes = true;
+      if (resFilter) {
+        matchRes = item.result === resFilter;
+      }
+
+      return matchSearch && matchPay && matchRes;
+    });
+
+    renderEventLogsTable(filtered);
+  }
+
+  function resetEventLogFilters() {
+    const s = document.getElementById('txtEventFilterSearch');
+    const p = document.getElementById('selEventFilterPayment');
+    const r = document.getElementById('selEventFilterResult');
+
+    if (s) s.value = '';
+    if (p) p.value = '';
+    if (r) r.value = '';
+
+    renderEventLogsTable(integrationEventLogsData);
+  }
+
+  function openEventLogDetailsModal(eventId) {
+    const evt = (integrationEventLogsData || []).find(e => e.eventId === eventId);
+    if (!evt) {
+      showToast('Event log not found', 'warning');
+      return;
+    }
+
+    const setEl = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
+    const idHidden = document.getElementById('txtEventDetailId');
+    if (idHidden) idHidden.value = evt.eventId;
+
+    setEl('lblEventDetailId', evt.eventId);
+    setEl('lblEventDetailResult', evt.result);
+
+    const resEl = document.getElementById('lblEventDetailResult');
+    if (resEl) {
+      resEl.className = 'badge ' + (evt.result === 'SUCCESS' ? 'bg-success' : evt.result === 'FAILED' ? 'bg-danger' : 'bg-primary');
+    }
+
+    setEl('lblEventDetailIntegration', evt.integrationName + ' (' + evt.provider + ')');
+    setEl('lblEventDetailScope', evt.institutionScope || 'ALL_CAMPUSES');
+    setEl('lblEventDetailTime', formatIntDateTime(evt.eventTime));
+    setEl('lblEventDetailCorrelation', evt.correlationId);
+
+    const metaEl = document.getElementById('lblEventDetailMetadata');
+    if (metaEl) {
+      metaEl.textContent = JSON.stringify(evt.metadata || {}, null, 2);
+    }
+
+    // Payment Section 13.4 Box
+    const payBox = document.getElementById('boxEventPaymentReconciliation');
+    const payStatusEl = document.getElementById('lblEventDetailPayStatus');
+    const payNoteEl = document.getElementById('lblEventDetailPayNote');
+    const reconcileBtn = document.getElementById('btnEventReconcileAction');
+
+    if (evt.isPayment) {
+      if (payBox) payBox.style.display = 'block';
+      if (evt.paymentVerificationStatus === 'INDEPENDENTLY_RECONCILED') {
+        if (payStatusEl) {
+          payStatusEl.className = 'badge badge-pay-reconciled';
+          payStatusEl.innerHTML = '<i class="fa-solid fa-check-double me-1"></i>INDEPENDENTLY RECONCILED';
+        }
+        if (payNoteEl) {
+          payNoteEl.textContent = 'Transaction independently verified against bank settlement batch. Credited to student fee ledger.';
+        }
+        if (reconcileBtn) {
+          reconcileBtn.style.display = 'none';
+        }
+      } else {
+        if (payStatusEl) {
+          payStatusEl.className = 'badge badge-pay-received';
+          payStatusEl.innerHTML = '<i class="fa-solid fa-clock me-1"></i>UNVERIFIED WEBHOOK NOTIFICATION';
+        }
+        if (payNoteEl) {
+          payNoteEl.textContent = 'Initial callback received from gateway; fee ledger balance requires independent bank verification.';
+        }
+        if (reconcileBtn) {
+          reconcileBtn.style.display = 'inline-block';
+          reconcileBtn.disabled = false;
+        }
+      }
+    } else {
+      if (payBox) payBox.style.display = 'none';
+    }
+
+    const errBox = document.getElementById('eventDetailErrorBox');
+    const errText = document.getElementById('lblEventDetailError');
+    if (evt.errorSummary) {
+      if (errBox) errBox.style.display = 'block';
+      if (errText) errText.textContent = evt.errorSummary;
+    } else {
+      if (errBox) errBox.style.display = 'none';
+    }
+
+    openModal('modalIntegrationEventDetail');
+  }
+
+  async function reconcilePaymentEvent(eventId) {
+    const targetId = eventId || document.getElementById('txtEventDetailId')?.value;
+    if (!targetId) {
+      showToast('Event ID required for reconciliation', 'warning');
+      return;
+    }
+
+    try {
+      showToast('Reconciling payment against banking settlement batch...', 'info');
+      const res = await fetch(`/api/v1/platform/integrations/logs/${encodeURIComponent(targetId)}/reconcile`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' }
+      });
+      const j = await res.json();
+      if (res.ok && j.success) {
+        showToast('Payment independently verified & credited to student fee ledger', 'success');
+        await loadIntegrationsData();
+
+        // If modal open, refresh modal
+        const idHidden = document.getElementById('txtEventDetailId');
+        if (idHidden && idHidden.value === targetId) {
+          openEventLogDetailsModal(targetId);
+        }
+      } else {
+        showToast('Reconciliation failed: ' + (j.message || 'Server error'), 'danger');
+      }
+    } catch (err) {
+      console.error('Error reconciling payment:', err);
+      showToast('Reconciliation error: ' + err.message, 'danger');
+    }
+  }
+
+  function viewIntegrationLogs(integrationId) {
+    switchIntegrationsSubTab('logs');
+    const search = document.getElementById('txtEventFilterSearch');
+    if (search) {
+      search.value = integrationId;
+      filterEventLogsTable();
+    }
+  }
+
+
 function init() {
     setupTheme();
     updatePlatformClock();
@@ -8735,6 +9676,33 @@ function init() {
 
   // Public Interface
   return {
+    // Module 13: Integrations & API Management
+    loadIntegrationsData,
+    switchIntegrationsSubTab,
+    renderIntegrationsTable,
+    filterIntegrationsTable,
+    resetIntegrationFilters,
+    openCreateIntegrationModal,
+    openEditIntegrationModal,
+    submitIntegrationForm,
+    testIntegrationConnection,
+    toggleIntegrationStatus,
+    rotateIntegrationCredentials,
+    disconnectIntegration,
+    openIntegrationDetailsModal,
+    renderApiClientsTable,
+    filterApiClientsTable,
+    openRegisterApiClientModal,
+    submitRegisterApiClient,
+    rotateApiClientCredentials,
+    revokeApiClient,
+    renderEventLogsTable,
+    filterEventLogsTable,
+    resetEventLogFilters,
+    openEventLogDetailsModal,
+    reconcilePaymentEvent,
+    viewIntegrationLogs,
+
     // Module 12: Backups & Recovery
     loadBackupsData,
     switchBackupsSubTab,

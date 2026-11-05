@@ -207,3 +207,4 @@ module.exports = {
   RecoveryRequest,
   RecoveryRequestSchema
 };
+
