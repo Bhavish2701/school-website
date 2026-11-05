@@ -12,3 +12,4 @@ router.post('/:jobId/retry', controller.retryJob);
 router.post('/:jobId/cancel', controller.cancelJob);
 
 module.exports = router;
+

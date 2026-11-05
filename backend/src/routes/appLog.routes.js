@@ -12,3 +12,4 @@ router.get('/', controller.listLogs);
 router.post('/', controller.ingestLog);
 
 module.exports = router;
+

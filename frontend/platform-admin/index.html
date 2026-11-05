@@ -3625,122 +3625,346 @@
       </section>
 
       <!-- =======================================================================
-           MODULE 13: BACKUPS & RECOVERY (#view-backups)
+           MODULE 12: BACKUPS & RECOVERY (#view-backups)
            ======================================================================= -->
       <section class="portal-view" id="view-backups">
-        <div class="pa-kpi-grid mb-4">
-          <div class="pa-kpi-card">
-            <div class="pa-kpi-header">
-              <span class="pa-kpi-title">Automated Snapshot Cadence</span>
-              <div class="pa-kpi-icon" style="background: rgba(79,70,229,0.12); color: #4F46E5;"><i
-                  class="fa-solid fa-clock-rotate-left"></i></div>
-            </div>
-            <div class="pa-kpi-value text-primary">Every 6 Hours</div>
-            <div class="pa-kpi-sub">Next scheduled: 06:00 PM IST</div>
+        <!-- Module Header -->
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <div>
+            <h2 class="h4 mb-1 fw-bold text-dark">
+              <i class="fa-solid fa-database text-primary me-2"></i>Backups &amp; Disaster Recovery Vault
+            </h2>
+            <p class="text-muted small mb-0">
+              Automated snapshot cadence, cloud storage capacity, statutory retention compliance, and dual-authorized 8-step disaster recovery workflow.
+            </p>
           </div>
-          <div class="pa-kpi-card">
-            <div class="pa-kpi-header">
-              <span class="pa-kpi-title">Last Verified Snapshot</span>
-              <div class="pa-kpi-icon" style="background: rgba(16,185,129,0.12); color: #10B981;"><i
-                  class="fa-solid fa-database"></i></div>
-            </div>
-            <div class="pa-kpi-value text-emerald">Today 02:00 AM</div>
-            <div class="pa-kpi-sub">Checksum SHA-256 Validated</div>
-          </div>
-          <div class="pa-kpi-card">
-            <div class="pa-kpi-header">
-              <span class="pa-kpi-title">Recovery Time Objective (RTO)</span>
-              <div class="pa-kpi-icon" style="background: rgba(6,182,212,0.12); color: #06B6D4;"><i
-                  class="fa-solid fa-bolt"></i></div>
-            </div>
-            <div class="pa-kpi-value text-cyan">&lt; 8 Minutes</div>
-            <div class="pa-kpi-sub">Hot-Standby Automated Failover</div>
-          </div>
-          <div class="pa-kpi-card">
-            <div class="pa-kpi-header">
-              <span class="pa-kpi-title">Cold Storage Retention</span>
-              <div class="pa-kpi-icon" style="background: rgba(245,158,11,0.12); color: #F59E0B;"><i
-                  class="fa-solid fa-vault"></i></div>
-            </div>
-            <div class="pa-kpi-value text-amber">Permanent</div>
-            <div class="pa-kpi-sub">AP Statutory Education Register</div>
+          <div class="d-flex gap-2">
+            <button class="btn-pa btn-pa-secondary" onclick="platformApp.openRequestRecoveryModal()">
+              <i class="fa-solid fa-shield-halved text-warning me-1"></i> Request Recovery Drill
+            </button>
+            <button class="btn-pa btn-pa-primary" onclick="platformApp.openStartBackupModal()">
+              <i class="fa-solid fa-cloud-arrow-up me-1"></i> Trigger Live Snapshot
+            </button>
+            <button class="btn-pa btn-pa-secondary" onclick="platformApp.loadBackupsData()">
+              <i class="fa-solid fa-arrows-rotate me-1"></i> Refresh Vault
+            </button>
           </div>
         </div>
 
-        <div class="pa-card">
-          <div class="pa-card-header">
-            <div>
-              <h3 class="pa-card-title"><i class="fa-solid fa-database text-primary"></i> Database Snapshot Archive
-                &amp; Disaster Recovery Vault</h3>
-              <p class="pa-card-desc">Immutable encrypted backups of MongoDB collections, student documents, examination
-                ledgers, and audit trails</p>
+        <!-- Sub-navigation Tabs -->
+        <div class="bkp-subnav">
+          <button type="button" class="bkp-tab-btn active" id="btnBkpTabOverview" onclick="platformApp.switchBackupsSubTab('overview')">
+            <i class="fa-solid fa-chart-pie"></i> 12.1 Backup Overview
+          </button>
+          <button type="button" class="bkp-tab-btn" id="btnBkpTabHistory" onclick="platformApp.switchBackupsSubTab('history')">
+            <i class="fa-solid fa-clock-rotate-left"></i> 12.2 Backup History
+            <span class="badge bg-primary ms-1" id="badgeBackupsCount">0</span>
+          </button>
+          <button type="button" class="bkp-tab-btn" id="btnBkpTabRecovery" onclick="platformApp.switchBackupsSubTab('recovery')">
+            <i class="fa-solid fa-shield-virus"></i> 12.3 Recovery Workflow
+            <span class="badge bg-secondary ms-1" id="badgeRecoveryRequestsCount">0</span>
+          </button>
+        </div>
+
+        <!-- TAB 1: 12.1 Backup Overview -->
+        <div id="bkpTabOverviewContent">
+          <!-- Summary Cards (Section 12.1 Display Requirements) -->
+          <div class="pa-kpi-grid mb-4" style="grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));">
+            <!-- 1. Last successful database backup -->
+            <div class="pa-kpi-card">
+              <div class="pa-kpi-header">
+                <span class="pa-kpi-title">Last Database Backup</span>
+                <div class="pa-kpi-icon" style="background: rgba(16,185,129,0.12); color: #10B981;"><i class="fa-solid fa-database"></i></div>
+              </div>
+              <div class="pa-kpi-value text-emerald" id="kpiBkpLastDb">Loading...</div>
+              <div class="pa-kpi-sub" id="kpiBkpLastDbMeta">SHA-256 Verified Clean</div>
             </div>
-            <button class="btn-pa btn-pa-primary" onclick="platformApp.triggerManualBackup()">
-              <i class="fa-solid fa-cloud-arrow-up"></i> Trigger Live Snapshot Now
-            </button>
+
+            <!-- 2. Last successful file backup -->
+            <div class="pa-kpi-card">
+              <div class="pa-kpi-header">
+                <span class="pa-kpi-title">Last File Vault Backup</span>
+                <div class="pa-kpi-icon" style="background: rgba(79,70,229,0.12); color: #4F46E5;"><i class="fa-solid fa-folder-closed"></i></div>
+              </div>
+              <div class="pa-kpi-value text-primary" id="kpiBkpLastFiles">Loading...</div>
+              <div class="pa-kpi-sub" id="kpiBkpLastFilesMeta">AES-256 Encrypted</div>
+            </div>
+
+            <!-- 3. Backup schedule -->
+            <div class="pa-kpi-card">
+              <div class="pa-kpi-header">
+                <span class="pa-kpi-title">Backup Schedule</span>
+                <div class="pa-kpi-icon" style="background: rgba(6,182,212,0.12); color: #06B6D4;"><i class="fa-solid fa-clock"></i></div>
+              </div>
+              <div class="pa-kpi-value text-cyan" id="kpiBkpSchedule" style="font-size: 1.15rem;">Every 6 Hours</div>
+              <div class="pa-kpi-sub" id="kpiBkpNextRun">Next: Today 20:00 IST</div>
+            </div>
+
+            <!-- 4. Backup storage status -->
+            <div class="pa-kpi-card">
+              <div class="pa-kpi-header">
+                <span class="pa-kpi-title">Storage Status</span>
+                <div class="pa-kpi-icon" style="background: rgba(245,158,11,0.12); color: #F59E0B;"><i class="fa-solid fa-server"></i></div>
+              </div>
+              <div class="pa-kpi-value text-amber" id="kpiBkpStorage">248.6 GB / 2 TB</div>
+              <div class="pa-kpi-sub" id="kpiBkpStorageUsage">12.1% Utilized (Optimal)</div>
+            </div>
+
+            <!-- 5. Retention policy -->
+            <div class="pa-kpi-card">
+              <div class="pa-kpi-header">
+                <span class="pa-kpi-title">Retention Policy</span>
+                <div class="pa-kpi-icon" style="background: rgba(139,92,246,0.12); color: #8B5CF6;"><i class="fa-solid fa-landmark"></i></div>
+              </div>
+              <div class="pa-kpi-value text-purple" id="kpiBkpRetention" style="font-size: 1.15rem;">7 Yrs / Permanent</div>
+              <div class="pa-kpi-sub">AP Statutory Education Act</div>
+            </div>
+
+            <!-- 6. Failed backups -->
+            <div class="pa-kpi-card">
+              <div class="pa-kpi-header">
+                <span class="pa-kpi-title">Failed Backups</span>
+                <div class="pa-kpi-icon" style="background: rgba(239,68,68,0.12); color: #EF4444;"><i class="fa-solid fa-triangle-exclamation"></i></div>
+              </div>
+              <div class="pa-kpi-value text-danger" id="kpiBkpFailedCount">0 Events</div>
+              <div class="pa-kpi-sub" id="kpiBkpFailedMeta">Zero Unresolved Failures</div>
+            </div>
+
+            <!-- 7. Latest recovery test -->
+            <div class="pa-kpi-card">
+              <div class="pa-kpi-header">
+                <span class="pa-kpi-title">Latest Recovery Test</span>
+                <div class="pa-kpi-icon" style="background: rgba(16,185,129,0.12); color: #10B981;"><i class="fa-solid fa-vial-circle-check"></i></div>
+              </div>
+              <div class="pa-kpi-value text-emerald" id="kpiBkpLatestDrill" style="font-size: 1.1rem;">100% Fidelity</div>
+              <div class="pa-kpi-sub" id="kpiBkpLatestDrillMeta">RTO: 6m 40s (&lt; 8m SLA)</div>
+            </div>
           </div>
 
-          <div class="pa-table-responsive">
-            <table class="pa-table">
-              <thead>
-                <tr>
-                  <th>Snapshot ID</th>
-                  <th>Campus Scope</th>
-                  <th>Type</th>
-                  <th>Size</th>
-                  <th>Created At</th>
-                  <th>Integrity Check</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td><span class="font-mono text-primary font-bold">SNAP-20261105-0200</span></td>
-                  <td><strong>All Trust Campuses (Full)</strong></td>
-                  <td><span class="badge" style="background:#e0f2fe; color:#0369a1;">Automated Scheduled</span></td>
-                  <td>142.8 MB</td>
-                  <td>05-11-2026 02:00 AM</td>
-                  <td><span class="badge" style="background:#dcfce7; color:#15803d;"><i
-                        class="fa-solid fa-circle-check mr-1"></i> Verified Clean</span></td>
-                  <td>
-                    <button class="btn-pa btn-pa-secondary" style="padding:0.3rem 0.6rem;"
-                      onclick="platformApp.showToast('Snapshot verification passed. Checksum: e4d9...3b21', 'success')">
-                      <i class="fa-solid fa-shield-check"></i> Verify
-                    </button>
-                  </td>
-                </tr>
-                <tr>
-                  <td><span class="font-mono text-primary font-bold">SNAP-20261104-1800</span></td>
-                  <td><strong>All Trust Campuses (Full)</strong></td>
-                  <td><span class="badge" style="background:#e0f2fe; color:#0369a1;">Automated Scheduled</span></td>
-                  <td>141.6 MB</td>
-                  <td>04-11-2026 06:00 PM</td>
-                  <td><span class="badge" style="background:#dcfce7; color:#15803d;"><i
-                        class="fa-solid fa-circle-check mr-1"></i> Verified Clean</span></td>
-                  <td>
-                    <button class="btn-pa btn-pa-secondary" style="padding:0.3rem 0.6rem;"
-                      onclick="platformApp.showToast('Snapshot verified clean.', 'success')">
-                      <i class="fa-solid fa-shield-check"></i> Verify
-                    </button>
-                  </td>
-                </tr>
-                <tr>
-                  <td><span class="font-mono text-primary font-bold">SNAP-20261104-1200</span></td>
-                  <td><strong>Sri Vidya High School (SV-MAIN)</strong></td>
-                  <td><span class="badge" style="background:#fef3c7; color:#b45309;">Manual Pre-Exam</span></td>
-                  <td>89.4 MB</td>
-                  <td>04-11-2026 12:00 PM</td>
-                  <td><span class="badge" style="background:#dcfce7; color:#15803d;"><i
-                        class="fa-solid fa-circle-check mr-1"></i> Verified Clean</span></td>
-                  <td>
-                    <button class="btn-pa btn-pa-secondary" style="padding:0.3rem 0.6rem;"
-                      onclick="platformApp.showToast('Snapshot verified clean.', 'success')">
-                      <i class="fa-solid fa-shield-check"></i> Verify
-                    </button>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
+          <!-- Overview Detailed Breakdowns -->
+          <div class="row g-3">
+            <div class="col-md-6">
+              <div class="pa-card h-100">
+                <div class="pa-card-header pb-2">
+                  <h4 class="h6 mb-0 fw-bold"><i class="fa-solid fa-cloud-arrow-up text-primary me-2"></i>Cloud Vault Storage Architecture</h4>
+                </div>
+                <div class="p-3">
+                  <div class="mb-3">
+                    <div class="d-flex justify-content-between small mb-1">
+                      <span class="text-muted fw-bold">Primary Snapshot Storage Pool</span>
+                      <strong class="text-dark" id="lblStorageProgressText">248.6 GB of 2,048 GB (12.1%)</strong>
+                    </div>
+                    <div class="progress" style="height: 10px;">
+                      <div class="progress-bar bg-primary" id="barStorageProgress" role="progressbar" style="width: 12.1%;"></div>
+                    </div>
+                  </div>
+
+                  <div class="p-2 rounded bg-light border small">
+                    <div class="d-flex justify-content-between mb-1">
+                      <span class="text-muted">Primary Regional Vault:</span>
+                      <span class="font-mono text-dark fw-bold">AWS S3 ap-south-1 (Mumbai)</span>
+                    </div>
+                    <div class="d-flex justify-content-between mb-1">
+                      <span class="text-muted">Cold Archive Tier:</span>
+                      <span class="font-mono text-dark fw-bold">AWS Glacier Deep Archive (3-Region Replicated)</span>
+                    </div>
+                    <div class="d-flex justify-content-between mb-1">
+                      <span class="text-muted">Hardware Encryption:</span>
+                      <span class="badge bg-success-subtle text-success border border-success-subtle">AES-256 KMS Hardware-Sealed</span>
+                    </div>
+                    <div class="d-flex justify-content-between">
+                      <span class="text-muted">Immutability Lock:</span>
+                      <span class="text-primary fw-bold"><i class="fa-solid fa-lock me-1"></i>WORM Enabled (Compliance Mode)</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <div class="pa-card h-100">
+                <div class="pa-card-header pb-2">
+                  <h4 class="h6 mb-0 fw-bold"><i class="fa-solid fa-scale-balanced text-primary me-2"></i>Statutory Compliance &amp; Disaster Recovery SLAs</h4>
+                </div>
+                <div class="p-3">
+                  <div class="p-2 rounded bg-light border small mb-3">
+                    <div class="d-flex justify-content-between mb-1">
+                      <span class="text-muted">Statutory Act:</span>
+                      <span class="fw-bold text-dark">Andhra Pradesh Statutory Education Act (G.O.Ms.No. 1)</span>
+                    </div>
+                    <div class="d-flex justify-content-between mb-1">
+                      <span class="text-muted">Operational Retention:</span>
+                      <span class="fw-bold text-dark">7 Years (Financial, Fee, Daily Attendance)</span>
+                    </div>
+                    <div class="d-flex justify-content-between mb-1">
+                      <span class="text-muted">Permanent Gazette Records:</span>
+                      <span class="fw-bold text-success">Matriculation &amp; Transfer Certificates (Indefinite)</span>
+                    </div>
+                    <div class="d-flex justify-content-between">
+                      <span class="text-muted">Automated Deletion Purge:</span>
+                      <span class="badge bg-warning-subtle text-warning-emphasis border">Disabled by Statutory Policy</span>
+                    </div>
+                  </div>
+
+                  <div class="d-flex justify-content-between align-items-center p-2 rounded bg-indigo-subtle border border-indigo-subtle">
+                    <div>
+                      <span class="small fw-bold text-indigo d-block">Disaster Recovery Service Level Objective</span>
+                      <small class="text-muted">RTO Target: &lt; 8 min | RPO Target: &lt; 6 hrs</small>
+                    </div>
+                    <span class="badge bg-success font-mono"><i class="fa-solid fa-check me-1"></i>SLA Compliant</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB 2: 12.2 Backup History -->
+        <div id="bkpTabHistoryContent" style="display: none;">
+          <div class="pa-card">
+            <div class="pa-card-header">
+              <div>
+                <h3 class="pa-card-title"><i class="fa-solid fa-clock-rotate-left text-primary me-2"></i>12.2 Backup History Ledger</h3>
+                <p class="pa-card-desc">Immutable register of automated and authorized manual backups across database collections and file storage vaults</p>
+              </div>
+              <span class="badge bg-secondary" id="lblBkpFilteredCount">Showing 0 Backups</span>
+            </div>
+
+            <!-- Filter Toolbar -->
+            <div class="p-3 bg-light border-bottom">
+              <div class="row g-2 align-items-center">
+                <div class="col-md-3">
+                  <div class="input-group input-group-sm">
+                    <span class="input-group-text"><i class="fa-solid fa-magnifying-glass"></i></span>
+                    <input type="text" class="form-control" id="txtBkpFilterSearch" placeholder="Search backup ID, scope, campus..." onkeyup="platformApp.filterBackupsTable()">
+                  </div>
+                </div>
+                <div class="col-md-2">
+                  <select class="form-select form-select-sm" id="selBkpFilterScope" onchange="platformApp.filterBackupsTable()">
+                    <option value="">All Scopes</option>
+                    <option value="DATABASE">Database</option>
+                    <option value="FILES_VAULT">Files Vault</option>
+                    <option value="FULL_TRUST">Full Trust</option>
+                    <option value="CAMPUS_SPECIFIC">Campus Specific</option>
+                  </select>
+                </div>
+                <div class="col-md-2">
+                  <select class="form-select form-select-sm" id="selBkpFilterStatus" onchange="platformApp.filterBackupsTable()">
+                    <option value="">All Statuses</option>
+                    <option value="SUCCESS">Success</option>
+                    <option value="IN_PROGRESS">In Progress</option>
+                    <option value="FAILED">Failed</option>
+                  </select>
+                </div>
+                <div class="col-md-3">
+                  <select class="form-select form-select-sm" id="selBkpFilterVerification" onchange="platformApp.filterBackupsTable()">
+                    <option value="">All Verification States</option>
+                    <option value="VERIFIED_CLEAN">Verified Clean</option>
+                    <option value="PENDING_VERIFICATION">Pending Verification</option>
+                    <option value="CHECKSUM_FAILED">Checksum Failed</option>
+                  </select>
+                </div>
+                <div class="col-md-2">
+                  <button class="btn btn-sm btn-outline-secondary w-100" onclick="platformApp.resetBackupFilters()">
+                    <i class="fa-solid fa-rotate-left me-1"></i> Reset
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Table with 8 Columns (Section 12.2) -->
+            <div class="pa-table-responsive">
+              <table class="pa-table">
+                <thead>
+                  <tr>
+                    <th>Backup ID</th>
+                    <th>Scope</th>
+                    <th>Start Time</th>
+                    <th>Completion Time</th>
+                    <th>Status</th>
+                    <th>Size</th>
+                    <th>Storage Reference</th>
+                    <th>Verification Status</th>
+                    <th style="text-align: right; width: 180px;">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="tbodyBackups">
+                  <tr>
+                    <td colspan="9" class="text-center py-4 text-muted">
+                      <i class="fa-solid fa-spinner fa-spin me-2"></i> Loading Backup Register...
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB 3: 12.3 Recovery Workflow -->
+        <div id="bkpTabRecoveryContent" style="display: none;">
+          <div class="pa-card">
+            <div class="pa-card-header">
+              <div>
+                <h3 class="pa-card-title"><i class="fa-solid fa-shield-halved text-primary me-2"></i>12.3 Controlled Disaster Recovery Workflow</h3>
+                <p class="pa-card-desc">Restricted recovery operations executing through an 8-step controlled workflow with dual-authorization verification</p>
+              </div>
+              <button class="btn-pa btn-pa-primary" onclick="platformApp.openRequestRecoveryModal()">
+                <i class="fa-solid fa-plus me-1"></i> Request Recovery Drill
+              </button>
+            </div>
+
+            <!-- Invariant Notice Banner (Section 12.3) -->
+            <div class="alert alert-warning d-flex align-items-center mx-3 mt-3 mb-0 py-2" style="font-size: 0.8rem; background: #FFFBEB; border-left: 4px solid #F59E0B; color: #92400E;">
+              <i class="fa-solid fa-triangle-exclamation text-warning me-2" style="font-size: 1.1rem;"></i>
+              <span><strong>Disaster Recovery Policy (Section 12.3):</strong> Never offer an unrestricted one-click production restore to every Platform Administrator. All restore operations require target environment isolation, impact assessment, independent dual-authorization approval, data integrity checks, and audit logging.</span>
+            </div>
+
+            <!-- 8-Step Procedure Visual Explainer -->
+            <div class="p-3 bg-light border-bottom m-3 rounded">
+              <span class="small fw-bold text-dark text-uppercase d-block mb-2">Mandated 8-Step Recovery Workflow:</span>
+              <div class="d-flex flex-wrap gap-2 small">
+                <span class="badge bg-white text-dark border p-2">1. Operator Submits Request</span>
+                <span class="text-muted d-flex align-items-center"><i class="fa-solid fa-arrow-right"></i></span>
+                <span class="badge bg-white text-dark border p-2">2. Identify Backup &amp; Target Env</span>
+                <span class="text-muted d-flex align-items-center"><i class="fa-solid fa-arrow-right"></i></span>
+                <span class="badge bg-white text-dark border p-2">3. Review Potential Impact</span>
+                <span class="text-muted d-flex align-items-center"><i class="fa-solid fa-arrow-right"></i></span>
+                <span class="badge bg-white text-primary border border-primary p-2">4. Dual-Authorization Approval</span>
+                <span class="text-muted d-flex align-items-center"><i class="fa-solid fa-arrow-right"></i></span>
+                <span class="badge bg-white text-dark border p-2">5. Controlled Recovery Executed</span>
+                <span class="text-muted d-flex align-items-center"><i class="fa-solid fa-arrow-right"></i></span>
+                <span class="badge bg-white text-dark border p-2">6. Integrity Checks Performed</span>
+                <span class="text-muted d-flex align-items-center"><i class="fa-solid fa-arrow-right"></i></span>
+                <span class="badge bg-white text-dark border p-2">7. System Validated</span>
+                <span class="text-muted d-flex align-items-center"><i class="fa-solid fa-arrow-right"></i></span>
+                <span class="badge bg-white text-success border border-success p-2">8. Audit Log Sealed</span>
+              </div>
+            </div>
+
+            <!-- Table of Recovery Requests -->
+            <div class="pa-table-responsive">
+              <table class="pa-table">
+                <thead>
+                  <tr>
+                    <th>Recovery ID</th>
+                    <th>Target Environment</th>
+                    <th>Source Snapshot</th>
+                    <th>Requested By</th>
+                    <th>Potential Impact</th>
+                    <th>Workflow Step</th>
+                    <th>Status</th>
+                    <th style="text-align: right; width: 180px;">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="tbodyRecoveryRequests">
+                  <tr>
+                    <td colspan="8" class="text-center py-4 text-muted">
+                      <i class="fa-solid fa-spinner fa-spin me-2"></i> Loading Recovery Drills &amp; Requests...
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
       </section>
@@ -7078,6 +7302,283 @@
             <i class="fa-solid fa-rotate-right me-1"></i> Safe Retry Job
           </button>
         </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- =======================================================================
+       MODULE 12: BACKUPS & RECOVERY MODALS
+       ======================================================================= -->
+
+  <!-- Modal 12.1: Start Authorized Backup -->
+  <div class="pa-modal-backdrop" id="modalStartBackup" style="display: none;">
+    <div class="pa-modal-card" style="max-width: 540px; width: 90%;">
+      <div class="pa-modal-header" style="padding: 1.25rem 1.5rem; border-bottom: 1px solid #E2E8F0; display: flex; justify-content: space-between; align-items: center;">
+        <h4 class="h6 mb-0 fw-bold"><i class="fa-solid fa-cloud-arrow-up text-primary me-2"></i>Trigger Authorized Snapshot</h4>
+        <button type="button" class="btn-close" onclick="platformApp.closeModal('modalStartBackup')"></button>
+      </div>
+      <div class="pa-modal-body" style="padding: 1.5rem;">
+        <div class="mb-3">
+          <label class="form-label small fw-bold">Backup Scope</label>
+          <select class="form-select form-select-sm" id="selNewBkpScope">
+            <option value="DATABASE">DATABASE (All MongoDB Collections &amp; Indexes)</option>
+            <option value="FILES_VAULT">FILES_VAULT (Student Dossiers, Identity &amp; Certificates)</option>
+            <option value="FULL_TRUST">FULL_TRUST (Full Enterprise System &amp; Audit Ledger)</option>
+            <option value="CAMPUS_SPECIFIC">CAMPUS_SPECIFIC (Designated Institution Only)</option>
+          </select>
+        </div>
+        <div class="mb-3">
+          <label class="form-label small fw-bold">Campus / Institution Scope</label>
+          <select class="form-select form-select-sm" id="selNewBkpCampus">
+            <option value="ALL_CAMPUSES">All Trust Campuses (Full Umbrella)</option>
+            <option value="SV-MAIN">Sri Vidya High School (SV-MAIN)</option>
+            <option value="SV-PRIMARY">Sri Vidya Primary School (SV-PRIMARY)</option>
+            <option value="SV-VILLAGE">Sri Vidya Rural Branch (SV-VILLAGE)</option>
+          </select>
+        </div>
+        <div class="mb-3">
+          <label class="form-label small fw-bold">Snapshot Label / Name</label>
+          <input type="text" class="form-control form-control-sm" id="txtNewBkpName" placeholder="e.g. Pre-Board Examination Snapshot">
+        </div>
+        <div class="mb-3">
+          <label class="form-label small fw-bold">Operational Justification / Reason</label>
+          <textarea class="form-control form-control-sm" id="txtNewBkpReason" rows="2" placeholder="e.g. Routine administrative safety checkpoint prior to annual academic rollups."></textarea>
+        </div>
+        <div class="alert alert-info py-2 small mb-0">
+          <i class="fa-solid fa-shield-halved text-primary me-1"></i> Snapshots are hardware-encrypted with AES-256 KMS envelope keys and stored with immutable WORM locks.
+        </div>
+      </div>
+      <div class="pa-modal-footer" style="padding: 1rem 1.5rem; border-top: 1px solid #E2E8F0; display: flex; justify-content: flex-end; gap: 0.5rem; background: #F8FAFC;">
+        <button type="button" class="btn btn-sm btn-secondary" onclick="platformApp.closeModal('modalStartBackup')">Cancel</button>
+        <button type="button" class="btn btn-sm btn-primary" onclick="platformApp.submitStartBackup()">Initiate Backup Now</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 12.2: Backup Record Details -->
+  <div class="pa-modal-backdrop" id="modalBackupDetail" style="display: none;">
+    <div class="pa-modal-card" style="max-width: 640px; width: 90%;">
+      <div class="pa-modal-header" style="padding: 1.25rem 1.5rem; border-bottom: 1px solid #E2E8F0; display: flex; justify-content: space-between; align-items: center;">
+        <div class="d-flex align-items-center gap-2">
+          <h4 class="h6 mb-0 fw-bold"><i class="fa-solid fa-database text-primary me-2"></i><span id="lblBkpDetailId">BKP-2026-001</span></h4>
+          <span class="badge badge-bkp-success" id="lblBkpDetailStatus">SUCCESS</span>
+        </div>
+        <button type="button" class="btn-close" onclick="platformApp.closeModal('modalBackupDetail')"></button>
+      </div>
+      <div class="pa-modal-body" style="padding: 1.5rem;">
+        <div class="row g-2 mb-3">
+          <div class="col-md-6">
+            <span class="small text-muted fw-bold text-uppercase d-block">Scope &amp; Campus</span>
+            <strong class="text-dark" id="lblBkpDetailScope">DATABASE (ALL_CAMPUSES)</strong>
+          </div>
+          <div class="col-md-6">
+            <span class="small text-muted fw-bold text-uppercase d-block">Size</span>
+            <span class="font-mono fw-bold text-primary" id="lblBkpDetailSize">142.8 MB</span>
+          </div>
+          <div class="col-md-6">
+            <span class="small text-muted fw-bold text-uppercase d-block">Started</span>
+            <small class="text-dark font-mono" id="lblBkpDetailStartTime">05-Nov-2026 01:55 AM IST</small>
+          </div>
+          <div class="col-md-6">
+            <span class="small text-muted fw-bold text-uppercase d-block">Completed</span>
+            <small class="text-dark font-mono" id="lblBkpDetailEndTime">05-Nov-2026 02:00 AM IST</small>
+          </div>
+        </div>
+
+        <div class="p-2 border rounded bg-light mb-3 small">
+          <div class="mb-1">
+            <span class="text-muted fw-bold">Cloud Storage Reference:</span>
+            <div class="font-mono text-dark text-break fw-bold" id="lblBkpDetailStorageRef">s3://srividya-vault-mumbai/db/20261105-0200.enc</div>
+          </div>
+          <div class="mb-1">
+            <span class="text-muted fw-bold">Physical Vault Location:</span>
+            <div class="text-dark" id="lblBkpDetailStorageLoc">AWS S3 ap-south-1 (Mumbai Vault) / Immutable Glacier Archive</div>
+          </div>
+          <div class="mb-1">
+            <span class="text-muted fw-bold">Cryptographic Checksum (SHA-256):</span>
+            <div class="font-mono text-muted text-break small" id="lblBkpDetailChecksum">e4d9c7482a93108c90123efb672a912837bc901823901bcae8901234abcd5678</div>
+          </div>
+          <div class="d-flex justify-content-between pt-1 border-top">
+            <span class="text-muted">Verification Status:</span>
+            <span class="badge badge-bkp-verified" id="lblBkpDetailVerification"><i class="fa-solid fa-circle-check me-1"></i>VERIFIED CLEAN</span>
+          </div>
+        </div>
+
+        <div class="p-2 border rounded bg-light mb-3 small d-flex justify-content-between align-items-center">
+          <div>
+            <span class="text-muted fw-bold d-block">Statutory Retention Compliance:</span>
+            <span class="text-dark" id="lblBkpDetailRetention">AP Statutory Education Act: 7 Years Retained</span>
+          </div>
+          <span class="badge bg-white border text-secondary font-mono">Retained to 2033</span>
+        </div>
+
+        <div class="mb-3" id="bkpDetailErrorBox" style="display: none;">
+          <span class="small text-danger fw-bold text-uppercase d-block mb-1">Error Summary</span>
+          <div class="p-2 border rounded bg-danger-subtle text-danger small font-mono" id="lblBkpDetailError"></div>
+        </div>
+      </div>
+      <div class="pa-modal-footer" style="padding: 1rem 1.5rem; border-top: 1px solid #E2E8F0; display: flex; justify-content: space-between; background: #F8FAFC;">
+        <button type="button" class="btn btn-sm btn-outline-primary" id="btnBkpDetailVerify">
+          <i class="fa-solid fa-shield-check me-1"></i> Verify Checksum
+        </button>
+        <div class="d-flex gap-2">
+          <button type="button" class="btn btn-sm btn-secondary" onclick="platformApp.closeModal('modalBackupDetail')">Close</button>
+          <button type="button" class="btn btn-sm btn-outline-success" id="btnBkpDetailDownload">
+            <i class="fa-solid fa-download me-1"></i> Download
+          </button>
+          <button type="button" class="btn btn-sm btn-warning" id="btnBkpDetailRequestRestore">
+            <i class="fa-solid fa-shield-halved me-1"></i> Request Restore
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 12.3: Request Controlled Recovery (Steps 1, 2, 3) -->
+  <div class="pa-modal-backdrop" id="modalRequestRecovery" style="display: none;">
+    <div class="pa-modal-card" style="max-width: 580px; width: 90%;">
+      <div class="pa-modal-header" style="padding: 1.25rem 1.5rem; border-bottom: 1px solid #E2E8F0; display: flex; justify-content: space-between; align-items: center;">
+        <h4 class="h6 mb-0 fw-bold"><i class="fa-solid fa-shield-virus text-warning me-2"></i>Initiate Controlled Recovery Request</h4>
+        <button type="button" class="btn-close" onclick="platformApp.closeModal('modalRequestRecovery')"></button>
+      </div>
+      <div class="pa-modal-body" style="padding: 1.5rem;">
+        <div class="mb-3">
+          <label class="form-label small fw-bold">Target Backup Snapshot (Source)</label>
+          <select class="form-select form-select-sm" id="selReqRecBackupId">
+            <!-- Dynamically populated -->
+          </select>
+        </div>
+        <div class="mb-3">
+          <label class="form-label small fw-bold">Target Controlled Environment</label>
+          <select class="form-select form-select-sm" id="selReqRecTargetEnv" onchange="platformApp.updateRecoveryImpactPreview()">
+            <option value="ISOLATED_SANDBOX" selected>ISOLATED_SANDBOX (Isolated Non-Production Pod - Recommended for Drills)</option>
+            <option value="STAGING_DRILL">STAGING_DRILL (Staging Environment Overwrite &amp; Verification)</option>
+            <option value="DISASTER_RECOVERY_CLUSTER">DISASTER_RECOVERY_CLUSTER (Secondary DR Standby Cluster)</option>
+            <option value="PRODUCTION_CONTROLLED">PRODUCTION_CONTROLLED (Production Restore - Requires Board Escalation)</option>
+          </select>
+        </div>
+        <div class="mb-3">
+          <label class="form-label small fw-bold">Operational Justification / Drill Objective</label>
+          <textarea class="form-control form-control-sm" id="txtReqRecReason" rows="2" placeholder="e.g. Mandatory quarterly statutory disaster recovery audit and data fidelity verification."></textarea>
+        </div>
+
+        <!-- Step 3: Potential Impact Review Box -->
+        <div class="p-3 border rounded bg-light mb-3 small" id="boxReqRecImpact">
+          <span class="small fw-bold text-dark text-uppercase d-block mb-2"><i class="fa-solid fa-scale-balanced text-primary me-1"></i> Step 3: Potential Impact Assessment</span>
+          <div class="d-flex justify-content-between mb-1">
+            <span class="text-muted">Estimated System Downtime:</span>
+            <strong class="text-dark" id="lblReqRecDowntime">0 Minutes (Zero Downtime)</strong>
+          </div>
+          <div class="d-flex justify-content-between mb-1">
+            <span class="text-muted">Target Data Overwrite Risk:</span>
+            <span class="badge bg-success-subtle text-success border border-success-subtle" id="lblReqRecOverwrite">NO (Isolated Sandbox)</span>
+          </div>
+          <div class="d-flex justify-content-between">
+            <span class="text-muted">Student &amp; Staff Records Reconciled:</span>
+            <span class="font-mono text-dark fw-bold" id="lblReqRecRecords">1,565 Active Profiles</span>
+          </div>
+        </div>
+
+        <div class="alert alert-warning py-2 small mb-0">
+          <i class="fa-solid fa-lock text-warning me-1"></i> <strong>Dual-Authorization Safeguard:</strong> Submitting this request will not directly execute a restore. An independent Platform Owner or Administrator must review and approve Step 4.
+        </div>
+      </div>
+      <div class="pa-modal-footer" style="padding: 1rem 1.5rem; border-top: 1px solid #E2E8F0; display: flex; justify-content: flex-end; gap: 0.5rem; background: #F8FAFC;">
+        <button type="button" class="btn btn-sm btn-secondary" onclick="platformApp.closeModal('modalRequestRecovery')">Cancel</button>
+        <button type="button" class="btn btn-sm btn-warning" onclick="platformApp.submitRecoveryRequest()">Submit for Dual-Approval</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 12.4: Dual-Authorization Approval (Step 4) -->
+  <div class="pa-modal-backdrop" id="modalApproveRecovery" style="display: none;">
+    <div class="pa-modal-card" style="max-width: 540px; width: 90%;">
+      <div class="pa-modal-header" style="padding: 1.25rem 1.5rem; border-bottom: 1px solid #E2E8F0; display: flex; justify-content: space-between; align-items: center;">
+        <h4 class="h6 mb-0 fw-bold"><i class="fa-solid fa-user-shield text-primary me-2"></i>Dual-Authorization Recovery Sign-Off</h4>
+        <button type="button" class="btn-close" onclick="platformApp.closeModal('modalApproveRecovery')"></button>
+      </div>
+      <div class="pa-modal-body" style="padding: 1.5rem;">
+        <input type="hidden" id="txtApproveRecoveryId">
+        <div class="p-2 border rounded bg-light mb-3 small">
+          <div class="d-flex justify-content-between mb-1">
+            <span class="text-muted fw-bold">Recovery Operation ID:</span>
+            <span class="font-mono text-primary fw-bold" id="lblApproveRecId">REC-2026-002</span>
+          </div>
+          <div class="d-flex justify-content-between mb-1">
+            <span class="text-muted fw-bold">Target Environment:</span>
+            <span class="badge bg-warning-subtle text-warning-emphasis font-mono" id="lblApproveRecTarget">STAGING_DRILL</span>
+          </div>
+          <div class="d-flex justify-content-between mb-1">
+            <span class="text-muted fw-bold">Submitted By:</span>
+            <span class="text-dark" id="lblApproveRecRequester">Platform Operator (ops@srividya.edu.in)</span>
+          </div>
+          <div class="d-flex justify-content-between">
+            <span class="text-muted fw-bold">Disaster Recovery Objective:</span>
+            <span class="text-dark text-end" id="lblApproveRecReason" style="max-width: 280px;">Monthly Staging sync</span>
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label small fw-bold">Approver Authorization Remarks</label>
+          <textarea class="form-control form-control-sm" id="txtApproveRecRemarks" rows="2" placeholder="e.g. Verified target environment isolation and impact assessment. Approved for execution."></textarea>
+        </div>
+
+        <div class="alert alert-danger py-2 small mb-0">
+          <i class="fa-solid fa-triangle-exclamation text-danger me-1"></i> Dual-authorization strictly prohibits self-approval. This approval will execute Steps 5-8 in a controlled sandboxed environment.
+        </div>
+      </div>
+      <div class="pa-modal-footer" style="padding: 1rem 1.5rem; border-top: 1px solid #E2E8F0; display: flex; justify-content: space-between; background: #F8FAFC;">
+        <button type="button" class="btn btn-sm btn-outline-danger" onclick="platformApp.submitApproveRecovery('REJECT')">
+          <i class="fa-solid fa-ban me-1"></i> Reject Operation
+        </button>
+        <div class="d-flex gap-2">
+          <button type="button" class="btn btn-sm btn-secondary" onclick="platformApp.closeModal('modalApproveRecovery')">Cancel</button>
+          <button type="button" class="btn btn-sm btn-success" onclick="platformApp.submitApproveRecovery('APPROVE')">
+            <i class="fa-solid fa-check-double me-1"></i> Authorize &amp; Execute
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 12.5: Controlled 8-Step Recovery Workflow Tracker -->
+  <div class="pa-modal-backdrop" id="modalRecoveryWorkflowDetail" style="display: none;">
+    <div class="pa-modal-card" style="max-width: 680px; width: 90%;">
+      <div class="pa-modal-header" style="padding: 1.25rem 1.5rem; border-bottom: 1px solid #E2E8F0; display: flex; justify-content: space-between; align-items: center;">
+        <div class="d-flex align-items-center gap-2">
+          <h4 class="h6 mb-0 fw-bold"><i class="fa-solid fa-timeline text-primary me-2"></i><span id="lblWorkflowModalTitle">Recovery Workflow Tracker</span></h4>
+          <span class="badge badge-rec-completed" id="lblWorkflowStatusPill">COMPLETED</span>
+        </div>
+        <button type="button" class="btn-close" onclick="platformApp.closeModal('modalRecoveryWorkflowDetail')"></button>
+      </div>
+      <div class="pa-modal-body" style="padding: 1.5rem; max-height: 70vh; overflow-y: auto;">
+        <!-- 8-Step Stepper -->
+        <div class="recovery-workflow-stepper mb-3" id="workflowStepperContainer">
+          <!-- Dynamically populated with Steps 1 through 8 -->
+        </div>
+
+        <!-- Integrity & Validation Results Box -->
+        <div class="p-3 border rounded bg-light mb-2 small" id="boxWorkflowIntegrity">
+          <div class="d-flex justify-content-between mb-1">
+            <span class="text-muted fw-bold">Data Integrity Check:</span>
+            <span class="text-success fw-bold" id="lblWorkflowIntegrityMatch"><i class="fa-solid fa-circle-check me-1"></i>100% SHA-256 Checksum Match</span>
+          </div>
+          <div class="d-flex justify-content-between mb-1">
+            <span class="text-muted fw-bold">Records Reconciled:</span>
+            <strong class="text-dark" id="lblWorkflowRecordsReconciled">1,565 Documents / 0 Discrepancies</strong>
+          </div>
+          <div class="d-flex justify-content-between mb-1">
+            <span class="text-muted fw-bold">System Validation:</span>
+            <span class="text-dark" id="lblWorkflowValidation">All API smoke tests and ledgers verified</span>
+          </div>
+          <div class="d-flex justify-content-between pt-1 border-top">
+            <span class="text-muted fw-bold">Audit Evidence Reference:</span>
+            <span class="font-mono text-primary fw-bold" id="lblWorkflowAuditRef">AUD-REC-89211</span>
+          </div>
+        </div>
+      </div>
+      <div class="pa-modal-footer" style="padding: 1rem 1.5rem; border-top: 1px solid #E2E8F0; display: flex; justify-content: flex-end; background: #F8FAFC;">
+        <button type="button" class="btn btn-sm btn-secondary" onclick="platformApp.closeModal('modalRecoveryWorkflowDetail')">Close Tracker</button>
       </div>
     </div>
   </div>

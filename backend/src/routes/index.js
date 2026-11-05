@@ -83,6 +83,7 @@ const systemHealthRoutes = require('./systemHealth.routes');
 const deploymentRoutes = require('./deployment.routes');
 const appLogRoutes = require('./appLog.routes');
 const backgroundJobRoutes = require('./backgroundJob.routes');
+const backupRoutes = require('./backup.routes');
 const platformRouter = express.Router();
 platformRouter.get('/dashboard', dashboardController.getPlatformDashboard);
 platformRouter.use('/institutions', institutionRoutes);
@@ -98,6 +99,7 @@ platformRouter.use('/health', systemHealthRoutes);
 platformRouter.use('/deployments', deploymentRoutes);
 platformRouter.use('/logs', appLogRoutes);
 platformRouter.use('/jobs', backgroundJobRoutes);
+platformRouter.use('/backups', backupRoutes);
 router.use('/platform', platformRouter);
 router.use('/institutions', institutionRoutes);
 router.use('/schools/config', schoolConfigRoutes);
@@ -112,6 +114,7 @@ router.use('/platform/health', systemHealthRoutes);
 router.use('/platform/deployments', deploymentRoutes);
 router.use('/platform/logs', appLogRoutes);
 router.use('/platform/jobs', backgroundJobRoutes);
+router.use('/platform/backups', backupRoutes);
 
 // Mount timetable module endpoints at /api/v1/timetable
 const timetableRoutes = require('./timetable.routes');

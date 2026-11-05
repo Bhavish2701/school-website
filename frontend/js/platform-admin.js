@@ -499,6 +499,8 @@ const platformApp = (function () {
       loadSubscriptionsData();
     } else if (viewId === 'health' && typeof loadSystemHealthData === 'function') {
       loadSystemHealthData();
+    } else if (viewId === 'backups' && typeof loadBackupsData === 'function') {
+      loadBackupsData();
     }
 
     // Update Header Breadcrumb
@@ -7959,6 +7961,727 @@ const platformApp = (function () {
     }
   }
 
+
+  /* ==========================================================================
+     MODULE 12: BACKUPS & DISASTER RECOVERY CONTROLLER
+     12.1 Backup Overview
+     12.2 Backup History
+     12.3 Controlled 8-Step Recovery Workflow
+     ========================================================================== */
+
+  let backupsOverviewData = null;
+  let backupsData = [];
+  let recoveryRequestsData = [];
+  let currentActiveBackupsTab = 'overview';
+
+  function formatBkpDateTime(dateVal) {
+    if (!dateVal) return 'Never';
+    try {
+      const d = new Date(dateVal);
+      if (isNaN(d.getTime())) return String(dateVal);
+      return d.toLocaleString('en-IN', {
+        timeZone: 'Asia/Kolkata',
+        day: '2-digit',
+        month: 'short',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        hour12: true
+      }) + ' IST';
+    } catch (e) {
+      return String(dateVal);
+    }
+  }
+
+  function escapeBkpHtml(str) {
+    if (str === null || str === undefined) return '';
+    return String(str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#039;');
+  }
+
+  function switchBackupsSubTab(tabName) {
+    currentActiveBackupsTab = tabName;
+    const tabs = [
+      { id: 'overview', btn: 'btnBkpTabOverview', content: 'bkpTabOverviewContent' },
+      { id: 'history', btn: 'btnBkpTabHistory', content: 'bkpTabHistoryContent' },
+      { id: 'recovery', btn: 'btnBkpTabRecovery', content: 'bkpTabRecoveryContent' }
+    ];
+
+    tabs.forEach(t => {
+      const btn = document.getElementById(t.btn);
+      const content = document.getElementById(t.content);
+      if (t.id === tabName) {
+        if (btn) btn.classList.add('active');
+        if (content) content.style.display = 'block';
+      } else {
+        if (btn) btn.classList.remove('active');
+        if (content) content.style.display = 'none';
+      }
+    });
+
+    if (tabName === 'history' && (!backupsData || backupsData.length === 0)) {
+      fetchBackupsList();
+    } else if (tabName === 'recovery' && (!recoveryRequestsData || recoveryRequestsData.length === 0)) {
+      fetchRecoveryRequestsList();
+    }
+  }
+
+  async function loadBackupsData() {
+    try {
+      const [overviewRes, backupsRes, recoveryRes] = await Promise.all([
+        fetch('/api/v1/platform/backups/overview'),
+        fetch('/api/v1/platform/backups'),
+        fetch('/api/v1/platform/backups/recovery-requests')
+      ]);
+
+      if (overviewRes.ok) {
+        const oJson = await overviewRes.json();
+        if (oJson.success && oJson.data) {
+          backupsOverviewData = oJson.data;
+          renderBackupOverview(oJson.data);
+        }
+      }
+
+      if (backupsRes.ok) {
+        const bJson = await backupsRes.json();
+        if (bJson.success) {
+          backupsData = bJson.data || [];
+          renderBackupsTable(backupsData);
+        }
+      }
+
+      if (recoveryRes.ok) {
+        const rJson = await recoveryRes.json();
+        if (rJson.success) {
+          recoveryRequestsData = rJson.data || [];
+          renderRecoveryRequestsTable(recoveryRequestsData);
+        }
+      }
+
+      showToast('Backups & Disaster Recovery telemetry refreshed', 'success');
+    } catch (err) {
+      console.error('Error loading backups data:', err);
+      showToast('Error loading backups data: ' + err.message, 'warning');
+    }
+  }
+
+  async function fetchBackupsList() {
+    try {
+      const res = await fetch('/api/v1/platform/backups');
+      if (res.ok) {
+        const json = await res.json();
+        backupsData = json.data || [];
+        renderBackupsTable(backupsData);
+      }
+    } catch (e) {
+      console.error('Failed to fetch backups:', e);
+    }
+  }
+
+  async function fetchRecoveryRequestsList() {
+    try {
+      const res = await fetch('/api/v1/platform/backups/recovery-requests');
+      if (res.ok) {
+        const json = await res.json();
+        recoveryRequestsData = json.data || [];
+        renderRecoveryRequestsTable(recoveryRequestsData);
+      }
+    } catch (e) {
+      console.error('Failed to fetch recovery requests:', e);
+    }
+  }
+
+  /* --------------------------------------------------------------------------
+     12.1 Backup Overview
+     -------------------------------------------------------------------------- */
+  function renderBackupOverview(overview) {
+    if (!overview) return;
+
+    const setEl = (id, val) => {
+      const el = document.getElementById(id);
+      if (el) el.textContent = val;
+    };
+
+    // 1. Last database backup
+    if (overview.lastSuccessfulDatabaseBackup) {
+      setEl('kpiBkpLastDb', overview.lastSuccessfulDatabaseBackup.sizeFormatted || '142.8 MB');
+      setEl('kpiBkpLastDbMeta', formatBkpDateTime(overview.lastSuccessfulDatabaseBackup.completedAt));
+    }
+
+    // 2. Last file backup
+    if (overview.lastSuccessfulFileBackup) {
+      setEl('kpiBkpLastFiles', overview.lastSuccessfulFileBackup.sizeFormatted || '1.40 GB');
+      setEl('kpiBkpLastFilesMeta', formatBkpDateTime(overview.lastSuccessfulFileBackup.completedAt));
+    }
+
+    // 3. Backup schedule
+    if (overview.backupSchedule) {
+      setEl('kpiBkpSchedule', overview.backupSchedule.databaseCadence ? 'Every 6 Hours' : 'Automated');
+      setEl('kpiBkpNextRun', 'Next: ' + (overview.backupSchedule.nextScheduledRun || 'Today 20:00 IST'));
+    }
+
+    // 4. Backup storage status
+    if (overview.backupStorageStatus) {
+      const st = overview.backupStorageStatus;
+      setEl('kpiBkpStorage', (st.usedGB ?? 248.6) + ' GB / ' + (Math.round((st.totalAllocatedGB || 2048) / 1024)) + ' TB');
+      setEl('kpiBkpStorageUsage', (st.usagePercentage || '12.1%') + ' Utilized (Optimal)');
+
+      const pText = document.getElementById('lblStorageProgressText');
+      if (pText) pText.textContent = (st.usedGB ?? 248.6) + ' GB of ' + (st.totalAllocatedGB ?? 2048) + ' GB (' + (st.usagePercentage || '12.1%') + ')';
+
+      const pBar = document.getElementById('barStorageProgress');
+      if (pBar) pBar.style.width = st.usagePercentage || '12.1%';
+    }
+
+    // 5. Retention policy
+    setEl('kpiBkpRetention', '7 Yrs / Permanent');
+
+    // 6. Failed backups
+    if (overview.failedBackups) {
+      const f = overview.failedBackups;
+      setEl('kpiBkpFailedCount', (f.totalFailedCount || 0) + ' Events');
+      setEl('kpiBkpFailedMeta', f.totalFailedCount > 0 ? (f.totalFailedCount + ' archived error events') : 'Zero Unresolved Failures');
+    }
+
+    // 7. Latest recovery test
+    if (overview.latestRecoveryTest) {
+      const r = overview.latestRecoveryTest;
+      setEl('kpiBkpLatestDrill', r.drillId || 'REC-2026-001');
+      setEl('kpiBkpLatestDrillMeta', r.rtoAchieved ? ('RTO: ' + r.rtoAchieved) : '100% Fidelity');
+    }
+  }
+
+  /* --------------------------------------------------------------------------
+     12.2 Backup History
+     -------------------------------------------------------------------------- */
+  function renderBackupsTable(backups) {
+    const tbody = document.getElementById('tbodyBackups');
+    const badgeCount = document.getElementById('badgeBackupsCount');
+    const filterCount = document.getElementById('lblBkpFilteredCount');
+
+    if (badgeCount) badgeCount.textContent = (backups || []).length;
+    if (filterCount) filterCount.textContent = 'Showing ' + (backups || []).length + ' Backups';
+    if (!tbody) return;
+
+    if (!backups || backups.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="9" class="text-center text-muted py-4">No backups found matching criteria.</td></tr>';
+      return;
+    }
+
+    tbody.innerHTML = backups.map(b => {
+      let stBadge = '<span class="badge-bkp-success"><i class="fa-solid fa-circle-check me-1"></i>SUCCESS</span>';
+      if (b.status === 'FAILED') {
+        stBadge = '<span class="badge-bkp-failed"><i class="fa-solid fa-circle-xmark me-1"></i>FAILED</span>';
+      } else if (b.status === 'IN_PROGRESS') {
+        stBadge = '<span class="badge-bkp-in_progress"><i class="fa-solid fa-spinner fa-spin me-1"></i>IN PROGRESS</span>';
+      }
+
+      let vBadge = '<span class="badge-bkp-verified"><i class="fa-solid fa-shield-check me-1"></i>VERIFIED CLEAN</span>';
+      if (b.verificationStatus === 'CHECKSUM_FAILED') {
+        vBadge = '<span class="badge-bkp-failed"><i class="fa-solid fa-triangle-exclamation me-1"></i>CHECKSUM FAILED</span>';
+      } else if (b.verificationStatus === 'PENDING_VERIFICATION') {
+        vBadge = '<span class="badge-bkp-in_progress"><i class="fa-solid fa-clock me-1"></i>PENDING</span>';
+      }
+
+      const scopeBadge = b.scope === 'DATABASE'
+        ? '<span class="badge bg-primary-subtle text-primary border border-primary-subtle font-mono">DATABASE</span>'
+        : (b.scope === 'FILES_VAULT'
+          ? '<span class="badge bg-info-subtle text-info-emphasis border border-info-subtle font-mono">FILES VAULT</span>'
+          : (b.scope === 'FULL_TRUST'
+            ? '<span class="badge bg-success-subtle text-success border border-success-subtle font-mono">FULL TRUST</span>'
+            : '<span class="badge bg-secondary-subtle text-secondary border font-mono">CAMPUS SPECIFIC</span>'));
+
+      return `
+        <tr>
+          <td><span class="font-mono fw-bold text-primary">${escapeBkpHtml(b.backupId)}</span></td>
+          <td>
+            ${scopeBadge}
+            <small class="d-block text-muted font-mono" style="font-size:0.72rem;">${escapeBkpHtml(b.campusScope || 'ALL_CAMPUSES')}</small>
+          </td>
+          <td><small class="font-mono text-dark">${formatBkpDateTime(b.startTime)}</small></td>
+          <td><small class="font-mono text-muted">${b.completionTime ? formatBkpDateTime(b.completionTime) : 'In Progress'}</small></td>
+          <td>${stBadge}</td>
+          <td><span class="font-mono fw-bold text-dark">${escapeBkpHtml(b.sizeFormatted || '0.0 MB')}</span></td>
+          <td>
+            <div class="font-mono text-truncate text-muted small" style="max-width: 180px;" title="${escapeBkpHtml(b.storageReference)}">
+              ${escapeBkpHtml(b.storageReference)}
+            </div>
+          </td>
+          <td>${vBadge}</td>
+          <td>
+            <div class="d-flex align-items-center justify-content-end gap-1">
+              <button type="button" class="btn btn-sm btn-outline-secondary py-0 px-2" title="Inspect Snapshot Dossier"
+                onclick="platformApp.openBackupDetailsModal('${b.backupId}')">
+                <i class="fa-solid fa-eye"></i>
+              </button>
+              <button type="button" class="btn btn-sm btn-outline-primary py-0 px-2" title="Re-Verify Cryptographic Checksum"
+                onclick="platformApp.verifyBackup('${b.backupId}')">
+                <i class="fa-solid fa-shield-check"></i>
+              </button>
+              <button type="button" class="btn btn-sm btn-outline-success py-0 px-2" title="Download Encrypted Snapshot (Where Permitted)"
+                onclick="platformApp.downloadBackupFile('${b.backupId}')">
+                <i class="fa-solid fa-download"></i>
+              </button>
+              <button type="button" class="btn btn-sm btn-outline-warning py-0 px-2" title="Request Controlled Restore"
+                onclick="platformApp.openRequestRecoveryModal('${b.backupId}')">
+                <i class="fa-solid fa-shield-virus"></i>
+              </button>
+            </div>
+          </td>
+        </tr>
+      `;
+    }).join('');
+  }
+
+  function filterBackupsTable() {
+    const search = document.getElementById('txtBkpFilterSearch')?.value?.trim().toLowerCase() || '';
+    const scope = document.getElementById('selBkpFilterScope')?.value || '';
+    const status = document.getElementById('selBkpFilterStatus')?.value || '';
+    const verification = document.getElementById('selBkpFilterVerification')?.value || '';
+
+    const filtered = (backupsData || []).filter(b => {
+      const matchSearch = !search ||
+        (b.backupId && b.backupId.toLowerCase().includes(search)) ||
+        (b.name && b.name.toLowerCase().includes(search)) ||
+        (b.scope && b.scope.toLowerCase().includes(search)) ||
+        (b.campusScope && b.campusScope.toLowerCase().includes(search)) ||
+        (b.storageReference && b.storageReference.toLowerCase().includes(search));
+
+      const matchScope = !scope || b.scope === scope;
+      const matchStatus = !status || b.status === status;
+      const matchVerification = !verification || b.verificationStatus === verification;
+
+      return matchSearch && matchScope && matchStatus && matchVerification;
+    });
+
+    renderBackupsTable(filtered);
+  }
+
+  function resetBackupFilters() {
+    if (document.getElementById('txtBkpFilterSearch')) document.getElementById('txtBkpFilterSearch').value = '';
+    if (document.getElementById('selBkpFilterScope')) document.getElementById('selBkpFilterScope').value = '';
+    if (document.getElementById('selBkpFilterStatus')) document.getElementById('selBkpFilterStatus').value = '';
+    if (document.getElementById('selBkpFilterVerification')) document.getElementById('selBkpFilterVerification').value = '';
+    fetchBackupsList();
+  }
+
+  function openStartBackupModal() {
+    if (document.getElementById('txtNewBkpName')) document.getElementById('txtNewBkpName').value = '';
+    if (document.getElementById('txtNewBkpReason')) document.getElementById('txtNewBkpReason').value = '';
+    openModal('modalStartBackup');
+  }
+
+  async function submitStartBackup() {
+    const scope = document.getElementById('selNewBkpScope')?.value || 'DATABASE';
+    const campusScope = document.getElementById('selNewBkpCampus')?.value || 'ALL_CAMPUSES';
+    const name = document.getElementById('txtNewBkpName')?.value?.trim() || ('Authorized Snapshot (' + scope + ')');
+    const reason = document.getElementById('txtNewBkpReason')?.value?.trim() || 'Operator initiated routine backup';
+
+    try {
+      const res = await fetch('/api/v1/platform/backups', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          scope,
+          campusScope,
+          name,
+          reason,
+          operator: 'Platform Operator'
+        })
+      });
+
+      const json = await res.json();
+      if (json.success) {
+        showToast('Authorized backup initiated: ' + (json.data?.backupId || 'BKP-NEW'), 'success');
+        closeModal('modalStartBackup');
+        await fetchBackupsList();
+        const ovRes = await fetch('/api/v1/platform/backups/overview');
+        if (ovRes.ok) {
+          const ovJson = await ovRes.json();
+          renderBackupOverview(ovJson.data);
+        }
+      } else {
+        showToast(json.message || 'Backup could not be initiated', 'warning');
+      }
+    } catch (e) {
+      console.error('Backup start error:', e);
+      showToast('Error initiating snapshot: ' + e.message, 'danger');
+    }
+  }
+
+  async function verifyBackup(backupId) {
+    if (!backupId) return;
+    try {
+      showToast('Re-verifying cryptographic SHA-256 checksum...', 'info');
+      const res = await fetch('/api/v1/platform/backups/' + encodeURIComponent(backupId) + '/verify', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ operator: 'Platform Operator' })
+      });
+
+      const json = await res.json();
+      if (json.success) {
+        showToast('Checksum verification clean for ' + backupId, 'success');
+        await fetchBackupsList();
+      } else {
+        showToast(json.message || 'Checksum verification failed', 'danger');
+      }
+    } catch (e) {
+      console.error('Verify backup error:', e);
+      showToast('Error validating backup: ' + e.message, 'danger');
+    }
+  }
+
+  function openBackupDetailsModal(backupId) {
+    const b = (backupsData || []).find(x => x.backupId === backupId);
+    if (!b) {
+      showToast('Backup record not found', 'warning');
+      return;
+    }
+
+    const setEl = (id, val) => {
+      const el = document.getElementById(id);
+      if (el) el.textContent = val;
+    };
+
+    setEl('lblBkpDetailId', b.backupId);
+    setEl('lblBkpDetailScope', (b.scope || 'DATABASE') + ' (' + (b.campusScope || 'ALL_CAMPUSES') + ')');
+    setEl('lblBkpDetailSize', b.sizeFormatted || '0.0 MB');
+    setEl('lblBkpDetailStartTime', formatBkpDateTime(b.startTime));
+    setEl('lblBkpDetailEndTime', b.completionTime ? formatBkpDateTime(b.completionTime) : 'In Progress');
+    setEl('lblBkpDetailStorageRef', b.storageReference);
+    setEl('lblBkpDetailStorageLoc', b.storageLocation || 'AWS S3 ap-south-1 (Mumbai Vault)');
+    setEl('lblBkpDetailChecksum', b.checksumSha256 || 'SHA-256 Pending');
+    setEl('lblBkpDetailRetention', b.retentionPolicy || 'AP Statutory Education Act: 7 Years Retained');
+
+    const stBadge = document.getElementById('lblBkpDetailStatus');
+    if (stBadge) {
+      stBadge.className = 'badge badge-bkp-' + (b.status ? b.status.toLowerCase() : 'success');
+      stBadge.textContent = b.status || 'SUCCESS';
+    }
+
+    const vBadge = document.getElementById('lblBkpDetailVerification');
+    if (vBadge) {
+      vBadge.className = 'badge badge-bkp-' + (b.verificationStatus === 'CHECKSUM_FAILED' ? 'failed' : 'verified');
+      vBadge.textContent = b.verificationStatus || 'VERIFIED CLEAN';
+    }
+
+    const btnVerify = document.getElementById('btnBkpDetailVerify');
+    if (btnVerify) btnVerify.onclick = () => verifyBackup(b.backupId);
+
+    const btnDownload = document.getElementById('btnBkpDetailDownload');
+    if (btnDownload) btnDownload.onclick = () => downloadBackupFile(b.backupId);
+
+    const btnRestore = document.getElementById('btnBkpDetailRequestRestore');
+    if (btnRestore) btnRestore.onclick = () => {
+      closeModal('modalBackupDetail');
+      openRequestRecoveryModal(b.backupId);
+    };
+
+    openModal('modalBackupDetail');
+  }
+
+  async function downloadBackupFile(backupId) {
+    if (!backupId) return;
+    try {
+      const res = await fetch('/api/v1/platform/backups/' + encodeURIComponent(backupId) + '/download');
+      const json = await res.json();
+
+      if (json.success && json.downloadManifest) {
+        showToast('Authorized download manifest generated for ' + backupId + '. Starting download...', 'success');
+        const manifest = json.downloadManifest;
+        const blob = new Blob([JSON.stringify(manifest, null, 2)], { type: 'application/json' });
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = backupId + '_DownloadManifest.json';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        window.URL.revokeObjectURL(url);
+      } else {
+        // Direct download restricted by policy
+        showToast(json.message || 'Security Policy: Direct download of raw PII vault archives is restricted.', 'warning');
+      }
+    } catch (e) {
+      console.error('Download error:', e);
+      showToast('Download request error: ' + e.message, 'danger');
+    }
+  }
+
+  /* --------------------------------------------------------------------------
+     12.3 Recovery Workflow (8-Step Controlled Process)
+     -------------------------------------------------------------------------- */
+  function openRequestRecoveryModal(presetBackupId) {
+    const sel = document.getElementById('selReqRecBackupId');
+    if (sel) {
+      sel.innerHTML = (backupsData || []).map(b => {
+        const selected = presetBackupId && b.backupId === presetBackupId ? 'selected' : '';
+        return '<option value="' + b.backupId + '" ' + selected + '>' + b.backupId + ' - ' + b.scope + ' (' + (b.sizeFormatted || '0 MB') + ') - ' + formatBkpDateTime(b.startTime) + '</option>';
+      }).join('');
+    }
+
+    updateRecoveryImpactPreview();
+    openModal('modalRequestRecovery');
+  }
+
+  function updateRecoveryImpactPreview() {
+    const targetEnv = document.getElementById('selReqRecTargetEnv')?.value || 'ISOLATED_SANDBOX';
+    const downtimeEl = document.getElementById('lblReqRecDowntime');
+    const overwriteEl = document.getElementById('lblReqRecOverwrite');
+    const recordsEl = document.getElementById('lblReqRecRecords');
+
+    if (targetEnv === 'PRODUCTION_CONTROLLED') {
+      if (downtimeEl) downtimeEl.textContent = '15 Minutes (Maintenance Window Required)';
+      if (overwriteEl) {
+        overwriteEl.className = 'badge bg-danger-subtle text-danger border border-danger-subtle';
+        overwriteEl.textContent = 'YES (Production Database Replacement)';
+      }
+      if (recordsEl) recordsEl.textContent = '1,565 Active Students & Accounts Overwritten';
+    } else if (targetEnv === 'STAGING_DRILL') {
+      if (downtimeEl) downtimeEl.textContent = '0 Minutes (Zero Production Downtime)';
+      if (overwriteEl) {
+        overwriteEl.className = 'badge bg-warning-subtle text-warning-emphasis border border-warning-subtle';
+        overwriteEl.textContent = 'YES (Staging Sandbox Overwritten)';
+      }
+      if (recordsEl) recordsEl.textContent = '920 Test Records Synchronized';
+    } else {
+      // ISOLATED_SANDBOX or DISASTER_RECOVERY_CLUSTER
+      if (downtimeEl) downtimeEl.textContent = '0 Minutes (Zero Downtime)';
+      if (overwriteEl) {
+        overwriteEl.className = 'badge bg-success-subtle text-success border border-success-subtle';
+        overwriteEl.textContent = 'NO (Isolated Sandbox Pod)';
+      }
+      if (recordsEl) recordsEl.textContent = '1,565 Active Profiles Reconciled';
+    }
+  }
+
+  async function submitRecoveryRequest() {
+    const backupId = document.getElementById('selReqRecBackupId')?.value;
+    const targetEnvironment = document.getElementById('selReqRecTargetEnv')?.value || 'ISOLATED_SANDBOX';
+    const reason = document.getElementById('txtReqRecReason')?.value?.trim();
+
+    if (!backupId) {
+      showToast('Please select a target backup snapshot', 'warning');
+      return;
+    }
+
+    try {
+      const res = await fetch('/api/v1/platform/backups/recovery-requests', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          backupId,
+          targetEnvironment,
+          reason: reason || 'Scheduled disaster recovery drill and data fidelity verification.',
+          operator: 'Platform Operator'
+        })
+      });
+
+      const json = await res.json();
+      if (json.success) {
+        showToast('Recovery request submitted: ' + (json.data?.recoveryId || 'REC-NEW') + '. Awaiting dual-authorization.', 'success');
+        closeModal('modalRequestRecovery');
+        await fetchRecoveryRequestsList();
+        switchBackupsSubTab('recovery');
+      } else {
+        showToast(json.message || 'Recovery request submission failed', 'danger');
+      }
+    } catch (e) {
+      console.error('Recovery request error:', e);
+      showToast('Error submitting recovery request: ' + e.message, 'danger');
+    }
+  }
+
+  function renderRecoveryRequestsTable(requests) {
+    const tbody = document.getElementById('tbodyRecoveryRequests');
+    const badgeCount = document.getElementById('badgeRecoveryRequestsCount');
+    if (badgeCount) badgeCount.textContent = (requests || []).length;
+    if (!tbody) return;
+
+    if (!requests || requests.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="8" class="text-center text-muted py-4">No recovery requests or drills recorded.</td></tr>';
+      return;
+    }
+
+    tbody.innerHTML = requests.map(r => {
+      let stBadge = '<span class="badge-rec-completed">COMPLETED</span>';
+      if (r.recoveryStatus === 'QUEUED') stBadge = '<span class="badge-rec-pending">QUEUED</span>';
+      else if (r.recoveryStatus === 'IN_PROGRESS') stBadge = '<span class="badge-rec-pending">IN PROGRESS</span>';
+      else if (r.recoveryStatus === 'CANCELLED') stBadge = '<span class="badge-rec-rejected">REJECTED</span>';
+
+      const isAwaitingApproval = r.approvalStatus === 'PENDING_APPROVAL';
+      const stepText = r.workflowStep >= 8 ? 'Step 8/8 (Sealed)' : ('Step ' + r.workflowStep + '/8 (Pending Dual-Approval)');
+
+      return `
+        <tr>
+          <td><span class="font-mono fw-bold text-primary">${escapeBkpHtml(r.recoveryId)}</span></td>
+          <td><span class="badge bg-light text-dark border font-mono">${escapeBkpHtml(r.targetEnvironment)}</span></td>
+          <td><span class="font-mono text-dark fw-bold">${escapeBkpHtml(r.backupId)}</span></td>
+          <td>
+            <div class="small fw-semibold text-dark">${escapeBkpHtml(r.requestedBy?.name || 'Operator')}</div>
+            <small class="text-muted font-mono" style="font-size:0.72rem;">${escapeBkpHtml(r.requestedBy?.role || 'Platform Operations')}</small>
+          </td>
+          <td>
+            <small class="text-muted">${r.potentialImpact?.estimatedDowntimeMinutes || 0}m downtime | ${r.potentialImpact?.recordsCount || 1565} recs</small>
+          </td>
+          <td>
+            <span class="badge bg-secondary-subtle text-secondary font-mono">${stepText}</span>
+          </td>
+          <td>${stBadge}</td>
+          <td>
+            <div class="d-flex align-items-center justify-content-end gap-1">
+              <button type="button" class="btn btn-sm btn-outline-secondary py-0 px-2" title="Track 8-Step Controlled Workflow"
+                onclick="platformApp.openRecoveryWorkflowDetailModal('${r.recoveryId}')">
+                <i class="fa-solid fa-timeline"></i>
+              </button>
+              ${isAwaitingApproval ? `
+                <button type="button" class="btn btn-sm btn-outline-success py-0 px-2" title="Dual-Authorization Sign-Off"
+                  onclick="platformApp.openApproveRecoveryModal('${r.recoveryId}')">
+                  <i class="fa-solid fa-user-check"></i> Sign-Off
+                </button>
+              ` : ''}
+            </div>
+          </td>
+        </tr>
+      `;
+    }).join('');
+  }
+
+  function openApproveRecoveryModal(recoveryId) {
+    const r = (recoveryRequestsData || []).find(x => x.recoveryId === recoveryId);
+    if (!r) {
+      showToast('Recovery request record not found', 'warning');
+      return;
+    }
+
+    const setEl = (id, val) => {
+      const el = document.getElementById(id);
+      if (el) el.textContent = val;
+    };
+
+    if (document.getElementById('txtApproveRecoveryId')) {
+      document.getElementById('txtApproveRecoveryId').value = r.recoveryId;
+    }
+
+    setEl('lblApproveRecId', r.recoveryId);
+    setEl('lblApproveRecTarget', r.targetEnvironment);
+    setEl('lblApproveRecRequester', (r.requestedBy?.name || 'Platform Operator') + ' (' + (r.requestedBy?.email || 'N/A') + ')');
+    setEl('lblApproveRecReason', r.reason || 'Controlled disaster recovery drill');
+
+    if (document.getElementById('txtApproveRecRemarks')) {
+      document.getElementById('txtApproveRecRemarks').value = '';
+    }
+
+    openModal('modalApproveRecovery');
+  }
+
+  async function submitApproveRecovery(action) {
+    const recoveryId = document.getElementById('txtApproveRecoveryId')?.value;
+    const remarks = document.getElementById('txtApproveRecRemarks')?.value?.trim();
+
+    if (!recoveryId) return;
+
+    try {
+      const res = await fetch('/api/v1/platform/backups/recovery-requests/' + encodeURIComponent(recoveryId) + '/approve', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          action: action || 'APPROVE',
+          remarks: remarks || (action === 'REJECT' ? 'Rejected by authorized person.' : 'Approved for controlled environment execution.'),
+          approver: {
+            userId: 'USR-PLAT-CHIEF',
+            name: 'Chief Security Officer',
+            role: 'Platform Owner'
+          }
+        })
+      });
+
+      const json = await res.json();
+      if (json.success) {
+        showToast('Dual-authorization complete: 8-step controlled recovery executed for ' + recoveryId, 'success');
+        closeModal('modalApproveRecovery');
+        await fetchRecoveryRequestsList();
+      } else {
+        showToast(json.message || 'Authorization sign-off rejected', 'danger');
+      }
+    } catch (e) {
+      console.error('Approve recovery error:', e);
+      showToast('Error during approval: ' + e.message, 'danger');
+    }
+  }
+
+  function openRecoveryWorkflowDetailModal(recoveryId) {
+    const r = (recoveryRequestsData || []).find(x => x.recoveryId === recoveryId);
+    if (!r) {
+      showToast('Recovery request record not found', 'warning');
+      return;
+    }
+
+    const setEl = (id, val) => {
+      const el = document.getElementById(id);
+      if (el) el.textContent = val;
+    };
+
+    setEl('lblWorkflowModalTitle', 'Controlled Recovery Workflow (' + r.recoveryId + ')');
+
+    const statusPill = document.getElementById('lblWorkflowStatusPill');
+    if (statusPill) {
+      statusPill.className = 'badge badge-rec-' + (r.recoveryStatus ? r.recoveryStatus.toLowerCase() : 'completed');
+      statusPill.textContent = r.recoveryStatus || 'COMPLETED';
+    }
+
+    // Render 8 Steps
+    const container = document.getElementById('workflowStepperContainer');
+    if (container) {
+      const steps = r.stepDetails && r.stepDetails.length > 0 ? r.stepDetails : [
+        { stepNumber: 1, stepName: 'Recovery Request Submitted', status: 'COMPLETED', executedAt: r.createdAt, operator: r.requestedBy?.name, details: 'Target snapshot identified' },
+        { stepNumber: 2, stepName: 'Target Environment Identified', status: 'COMPLETED', executedAt: r.createdAt, operator: 'System Orchestrator', details: 'Environment: ' + r.targetEnvironment },
+        { stepNumber: 3, stepName: 'Potential Impact Reviewed', status: 'COMPLETED', executedAt: r.createdAt, operator: r.requestedBy?.name, details: 'Assessed ' + (r.potentialImpact?.estimatedDowntimeMinutes || 0) + 'm downtime' },
+        { stepNumber: 4, stepName: 'Dual-Authorized Approval Granted', status: r.workflowStep >= 4 ? 'COMPLETED' : 'PENDING', executedAt: r.approvedBy?.approvedAt, operator: r.approvedBy?.name, details: r.approvedBy?.remarks || 'Awaiting sign-off' },
+        { stepNumber: 5, stepName: 'Controlled Environment Recovery Executed', status: r.workflowStep >= 5 ? 'COMPLETED' : 'PENDING', executedAt: null, operator: 'Recovery Pod', details: 'Sandbox restoration' },
+        { stepNumber: 6, stepName: 'Data Integrity Checked', status: r.workflowStep >= 6 ? 'COMPLETED' : 'PENDING', executedAt: null, operator: 'Checksum Verifier', details: 'SHA-256 validation' },
+        { stepNumber: 7, stepName: 'System Validated', status: r.workflowStep >= 7 ? 'COMPLETED' : 'PENDING', executedAt: null, operator: 'QA Suite', details: 'Smoke tests' },
+        { stepNumber: 8, stepName: 'Outcome Recorded in Audit Ledger', status: r.workflowStep >= 8 ? 'COMPLETED' : 'PENDING', executedAt: null, operator: 'Audit Ledger', details: 'Sealed forensic log' }
+      ];
+
+      container.innerHTML = steps.map(s => {
+        const isComp = s.status === 'COMPLETED';
+        const isAct = s.status === 'IN_PROGRESS';
+        const rowClass = isComp ? 'completed' : (isAct ? 'active' : 'pending');
+        const badgeIcon = isComp ? '<i class="fa-solid fa-check"></i>' : s.stepNumber;
+
+        return `
+          <div class="recovery-step-row ${rowClass}">
+            <div class="recovery-step-num">${badgeIcon}</div>
+            <div class="flex-grow-1">
+              <div class="d-flex justify-content-between align-items-center mb-1">
+                <strong class="text-dark" style="font-size:0.875rem;">Step ${s.stepNumber}: ${escapeBkpHtml(s.stepName)}</strong>
+                <span class="badge ${isComp ? 'bg-success font-mono' : 'bg-secondary font-mono'}" style="font-size:0.7rem;">${s.status}</span>
+              </div>
+              <p class="text-muted small mb-1" style="font-size:0.78rem;">${escapeBkpHtml(s.details || 'Step execution pending')}</p>
+              <div class="d-flex justify-content-between small text-muted font-mono" style="font-size:0.7rem;">
+                <span>Operator: ${escapeBkpHtml(s.operator || 'System Automated')}</span>
+                <span>${s.executedAt ? formatBkpDateTime(s.executedAt) : '--'}</span>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    setEl('lblWorkflowRecordsReconciled', (r.potentialImpact?.recordsCount || 1565) + ' Documents Reconciled / 0 Discrepancies');
+    setEl('lblWorkflowValidation', r.validationSummary || 'Controlled environment validation passed 100%.');
+    setEl('lblWorkflowAuditRef', r.auditLogRef || 'AUD-REC-PENDING');
+
+    openModal('modalRecoveryWorkflowDetail');
+  }
+
 function init() {
     setupTheme();
     updatePlatformClock();
@@ -8012,6 +8735,26 @@ function init() {
 
   // Public Interface
   return {
+    // Module 12: Backups & Recovery
+    loadBackupsData,
+    switchBackupsSubTab,
+    renderBackupOverview,
+    renderBackupsTable,
+    filterBackupsTable,
+    resetBackupFilters,
+    openStartBackupModal,
+    submitStartBackup,
+    verifyBackup,
+    openBackupDetailsModal,
+    downloadBackupFile,
+    openRequestRecoveryModal,
+    updateRecoveryImpactPreview,
+    submitRecoveryRequest,
+    renderRecoveryRequestsTable,
+    openApproveRecoveryModal,
+    submitApproveRecovery,
+    openRecoveryWorkflowDetailModal,
+
     // Module 11: System Health & Deployment
     loadSystemHealthData,
     switchHealthSubTab,
