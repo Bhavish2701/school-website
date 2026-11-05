@@ -2068,109 +2068,244 @@
       <!-- =======================================================================
            MODULE 11: INSTITUTION ONBOARDING & MIGRATION (#view-onboarding)
            ======================================================================= -->
+            <!-- =======================================================================
+           MODULE 5: INSTITUTION ONBOARDING & MIGRATION (#view-onboarding)
+           ======================================================================= -->
       <section class="portal-view" id="view-onboarding">
-        <!-- Overview KPIs -->
-        <div class="pa-kpi-grid mb-4">
-          <div class="pa-kpi-card">
-            <div class="pa-kpi-header">
-              <span class="pa-kpi-title">Active Migration Pipelines</span>
-              <div class="pa-kpi-icon" style="background: rgba(79,70,229,0.12); color: #4F46E5;"><i
-                  class="fa-solid fa-cloud-arrow-up"></i></div>
-            </div>
-            <div class="pa-kpi-value text-primary">1 Campus</div>
-            <div class="pa-kpi-sub">Sri Vidya Junior College Expansion</div>
+        <!-- Module Header -->
+        <div class="pa-view-header mb-3" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+          <div>
+            <h2 style="margin: 0; font-size: 1.4rem; font-weight: 800; color: var(--color-text-main); display: flex; align-items: center; gap: 0.5rem;">
+              <i class="fa-solid fa-cloud-arrow-up text-primary"></i> Institution Onboarding &amp; Migration
+            </h2>
+            <p style="margin: 3px 0 0; font-size: 0.85rem; color: #64748B;">
+              Onboard existing and newly acquired schools into the Trust cloud with automated legacy ingestion, 12-point readiness checklists, and statutory data migration pipelines.
+            </p>
           </div>
-          <div class="pa-kpi-card">
-            <div class="pa-kpi-header">
-              <span class="pa-kpi-title">Legacy Records Ingested</span>
-              <div class="pa-kpi-icon" style="background: rgba(16,185,129,0.12); color: #10B981;"><i
-                  class="fa-solid fa-database"></i></div>
-            </div>
-            <div class="pa-kpi-value text-emerald">1,315</div>
-            <div class="pa-kpi-sub">Students, Faculty &amp; Fee Registers</div>
-          </div>
-          <div class="pa-kpi-card">
-            <div class="pa-kpi-header">
-              <span class="pa-kpi-title">Schema Compliance</span>
-              <div class="pa-kpi-icon" style="background: rgba(6,182,212,0.12); color: #06B6D4;"><i
-                  class="fa-solid fa-circle-check"></i></div>
-            </div>
-            <div class="pa-kpi-value text-cyan">100%</div>
-            <div class="pa-kpi-sub">AP State Board &amp; UDISE+ Format</div>
-          </div>
-          <div class="pa-kpi-card">
-            <div class="pa-kpi-header">
-              <span class="pa-kpi-title">Turnaround SLA</span>
-              <div class="pa-kpi-icon" style="background: rgba(245,158,11,0.12); color: #F59E0B;"><i
-                  class="fa-solid fa-stopwatch"></i></div>
-            </div>
-            <div class="pa-kpi-value text-amber">&lt; 24 Hrs</div>
-            <div class="pa-kpi-sub">Standard Automated Ingestion</div>
+          <div style="display: flex; gap: 0.65rem; align-items: center;">
+            <button type="button" class="btn-pa btn-pa-secondary" onclick="platformApp.downloadImportTemplates()" title="Download approved CSV &amp; Excel migration templates">
+              <i class="fa-solid fa-file-excel text-emerald me-1"></i> Migration Templates
+            </button>
+            <button type="button" class="btn-pa btn-pa-primary" onclick="platformApp.openNewImportWizard()" title="Launch 10-step institutional data import wizard">
+              <i class="fa-solid fa-plus me-1"></i> + New Import
+            </button>
           </div>
         </div>
 
-        <div class="pa-card">
-          <div class="pa-card-header">
-            <div>
-              <h3 class="pa-card-title"><i class="fa-solid fa-cloud-arrow-up text-primary"></i> Institutional Onboarding
-                &amp; Migration Queue</h3>
-              <p class="pa-card-desc">Automated ingestion of student registers, faculty cadres, and financial records
-                from legacy software and state portals</p>
+        <!-- 3-Tab Sub-Navigation Strip -->
+        <div class="pa-onboarding-subnav" id="obSubnav">
+          <button type="button" class="pa-onboarding-tab-btn active" id="btnObTabOverview" onclick="platformApp.switchOnboardingTab('overview')">
+            <i class="fa-solid fa-chart-pie me-1"></i> 5.1 Onboarding Overview
+          </button>
+          <button type="button" class="pa-onboarding-tab-btn" id="btnObTabChecklist" onclick="platformApp.switchOnboardingTab('checklist')">
+            <i class="fa-solid fa-list-check me-1"></i> 5.2 Onboarding Checklist (12 Points)
+          </button>
+          <button type="button" class="pa-onboarding-tab-btn" id="btnObTabImports" onclick="platformApp.switchOnboardingTab('imports')">
+            <i class="fa-solid fa-file-import me-1"></i> 5.3 Data Import Centre
+          </button>
+        </div>
+
+        <!-- =====================================================================
+             SUB-TAB 1: 5.1 ONBOARDING OVERVIEW
+             ===================================================================== -->
+        <div class="pa-onboarding-pane" id="obPaneOverview">
+          <!-- 6 Stat KPIs (Section 5.1 Specification) -->
+          <div class="pa-kpi-grid mb-4" style="grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));">
+            <div class="pa-kpi-card" style="border-left: 4px solid #6366F1;">
+              <div class="pa-kpi-header">
+                <span class="pa-kpi-title">Awaiting Setup</span>
+                <div class="pa-kpi-icon" style="background: rgba(99,102,241,0.12); color: #6366F1;"><i class="fa-solid fa-hourglass-start"></i></div>
+              </div>
+              <div class="pa-kpi-value text-primary" id="kpiObAwaitingSetup">1</div>
+              <div class="pa-kpi-sub">Schools with setup &lt; 50%</div>
             </div>
-            <button class="btn-pa btn-pa-primary" onclick="platformApp.openModal('modalAddInstitution')">
-              <i class="fa-solid fa-plus"></i> Onboard New Institutional Campus
-            </button>
+
+            <div class="pa-kpi-card" style="border-left: 4px solid #F59E0B;">
+              <div class="pa-kpi-header">
+                <span class="pa-kpi-title">Incomplete Config</span>
+                <div class="pa-kpi-icon" style="background: rgba(245,158,11,0.12); color: #F59E0B;"><i class="fa-solid fa-triangle-exclamation"></i></div>
+              </div>
+              <div class="pa-kpi-value text-amber" id="kpiObIncompleteConfig">3</div>
+              <div class="pa-kpi-sub">Campuses in staging / audit</div>
+            </div>
+
+            <div class="pa-kpi-card" style="border-left: 4px solid #8B5CF6;">
+              <div class="pa-kpi-header">
+                <span class="pa-kpi-title">Pending Admin Invites</span>
+                <div class="pa-kpi-icon" style="background: rgba(139,92,246,0.12); color: #8B5CF6;"><i class="fa-solid fa-user-clock"></i></div>
+              </div>
+              <div class="pa-kpi-value text-indigo" id="kpiObPendingAdminInvites">1</div>
+              <div class="pa-kpi-sub">Activation tokens dispatched</div>
+            </div>
+
+            <div class="pa-kpi-card" style="border-left: 4px solid #06B6D4;">
+              <div class="pa-kpi-header">
+                <span class="pa-kpi-title">Domain Verification</span>
+                <div class="pa-kpi-icon" style="background: rgba(6,182,212,0.12); color: #06B6D4;"><i class="fa-solid fa-globe"></i></div>
+              </div>
+              <div class="pa-kpi-value text-cyan" id="kpiObDomainPending">1</div>
+              <div class="pa-kpi-sub">DNS CNAME / MX pending</div>
+            </div>
+
+            <div class="pa-kpi-card" style="border-left: 4px solid #10B981;">
+              <div class="pa-kpi-header">
+                <span class="pa-kpi-title">Imports In Progress</span>
+                <div class="pa-kpi-icon" style="background: rgba(16,185,129,0.12); color: #10B981;"><i class="fa-solid fa-spinner fa-spin"></i></div>
+              </div>
+              <div class="pa-kpi-value text-emerald" id="kpiObImportsInProgress">1</div>
+              <div class="pa-kpi-sub">Active ingestion pipeline</div>
+            </div>
+
+            <div class="pa-kpi-card" style="border-left: 4px solid #EF4444;">
+              <div class="pa-kpi-header">
+                <span class="pa-kpi-title">Migration Errors</span>
+                <div class="pa-kpi-icon" style="background: rgba(239,68,68,0.12); color: #EF4444;"><i class="fa-solid fa-bug"></i></div>
+              </div>
+              <div class="pa-kpi-value text-danger" id="kpiObMigrationErrors">2</div>
+              <div class="pa-kpi-sub">Action required in Error List</div>
+            </div>
           </div>
 
-          <div class="pa-table-responsive">
-            <table class="pa-table">
-              <thead>
-                <tr>
-                  <th>Pipeline ID</th>
-                  <th>Campus / Entity</th>
-                  <th>Source Format</th>
-                  <th>Records Mapped</th>
-                  <th>Current Stage</th>
-                  <th>Validation Status</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td><span class="font-mono text-primary font-bold">MIG-2026-001</span></td>
-                  <td><strong>Sri Vidya Junior College (+1 &amp; +2)</strong></td>
-                  <td><span class="badge" style="background:#f1f5f9; color:#334155;">BIEAP Excel Export</span></td>
-                  <td><strong>320 Students &bull; 18 Staff</strong></td>
-                  <td><span class="badge" style="background:#e0f2fe; color:#0369a1;"><i
-                        class="fa-solid fa-spinner fa-spin mr-1"></i> Data Verification</span></td>
-                  <td><span class="badge" style="background:#dcfce7; color:#15803d;"><i
-                        class="fa-solid fa-circle-check mr-1"></i> 0 Errors</span></td>
-                  <td>
-                    <button class="btn-pa btn-pa-secondary" style="padding: 0.35rem 0.65rem;"
-                      onclick="platformApp.showToast('Verifying BIEAP dataset checksums...', 'info')">
-                      <i class="fa-solid fa-eye"></i> Inspect
-                    </button>
-                  </td>
-                </tr>
-                <tr>
-                  <td><span class="font-mono text-primary font-bold">MIG-2025-003</span></td>
-                  <td><strong>Sri Vidya E.M High School (Main Campus)</strong></td>
-                  <td><span class="badge" style="background:#f1f5f9; color:#334155;">UDISE+ Statutory Register</span>
-                  </td>
-                  <td><strong>855 Students &bull; 34 Staff</strong></td>
-                  <td><span class="badge" style="background:#dcfce7; color:#15803d;"><i
-                        class="fa-solid fa-circle-check mr-1"></i> Live Production</span></td>
-                  <td><span class="badge" style="background:#dcfce7; color:#15803d;"><i
-                        class="fa-solid fa-shield-check mr-1"></i> Certified</span></td>
-                  <td>
-                    <button class="btn-pa btn-pa-secondary" style="padding: 0.35rem 0.65rem;"
-                      onclick="platformApp.showToast('Migration docket archived permanently.', 'info')">
-                      <i class="fa-solid fa-file-lines"></i> Dossier
-                    </button>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
+          <!-- Active Migration Pipelines Queue -->
+          <div class="pa-card">
+            <div class="pa-card-header">
+              <div>
+                <h3 class="pa-card-title"><i class="fa-solid fa-network-wired text-primary"></i> Active Migration Pipelines Queue</h3>
+                <p class="pa-card-desc">Batch ingestion pipelines mapping legacy school registers into unified MERN schemas</p>
+              </div>
+              <div style="display: flex; gap: 0.5rem;">
+                <button type="button" class="btn-pa btn-pa-secondary" onclick="platformApp.refreshOnboardingOverview()">
+                  <i class="fa-solid fa-rotate me-1"></i> Refresh Status
+                </button>
+              </div>
+            </div>
+
+            <div class="pa-table-responsive">
+              <table class="pa-table">
+                <thead>
+                  <tr>
+                    <th>Pipeline ID</th>
+                    <th>Campus / Entity</th>
+                    <th>Data Type</th>
+                    <th>Source Format</th>
+                    <th>Records Ingested</th>
+                    <th>Ingestion Status</th>
+                    <th>Validation Errors</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="obPipelinesTableBody">
+                  <!-- Dynamically populated by platformApp.loadOnboardingOverview -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- =====================================================================
+             SUB-TAB 2: 5.2 ONBOARDING CHECKLIST (12 STATUTORY POINTS)
+             ===================================================================== -->
+        <div class="pa-onboarding-pane" id="obPaneChecklist" style="display: none;">
+          <!-- Campus Scope & Readiness Header -->
+          <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; margin-bottom: 1.25rem; background: var(--pa-card-bg, #FFFFFF); border: 1px solid var(--pa-border, #E2E8F0); border-radius: 10px; padding: 1rem 1.25rem;">
+            <div style="display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;">
+              <div>
+                <label for="obChecklistScope" style="font-size: 0.76rem; font-weight: 700; color: #64748B; display: block; text-transform: uppercase;">
+                  Target Campus
+                </label>
+                <select id="obChecklistScope" class="pa-select" style="min-width: 280px; font-weight: 700;" onchange="platformApp.switchChecklistInstitution(this.value)">
+                  <option value="INST-001" selected>Sri Vidya E.M High School (Main Campus)</option>
+                  <option value="INST-002">Sri Vidya High School (City Branch)</option>
+                  <option value="INST-003">Sri Vidya International (Valley Campus)</option>
+                  <option value="INST-004">Sri Vidya Junior College (+1 &amp; +2 Expansion)</option>
+                </select>
+              </div>
+
+              <div>
+                <span style="font-size: 0.76rem; font-weight: 700; color: #64748B; display: block; text-transform: uppercase;">Certification Status</span>
+                <span class="pa-scope-badge published" id="obReadinessBadge">Live Production Certified</span>
+              </div>
+            </div>
+
+            <!-- Readiness Progress Meter -->
+            <div style="min-width: 260px; flex: 1; max-width: 380px;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.35rem;">
+                <span style="font-size: 0.8rem; font-weight: 700; color: #334155;">Institutional Readiness Meter</span>
+                <span style="font-size: 0.85rem; font-weight: 800; color: var(--pa-primary, #4F46E5);" id="obReadinessPct">92%</span>
+              </div>
+              <div style="width: 100%; height: 8px; background: #E2E8F0; border-radius: 4px; overflow: hidden;">
+                <div id="obReadinessBar" style="width: 92%; height: 100%; background: linear-gradient(90deg, #4F46E5, #10B981); transition: width 0.3s ease;"></div>
+              </div>
+            </div>
+
+            <div>
+              <button type="button" class="btn-pa btn-pa-secondary" onclick="platformApp.runInstitutionAuditCheck()">
+                <i class="fa-solid fa-stethoscope me-1 text-primary"></i> Run Readiness Audit
+              </button>
+            </div>
+          </div>
+
+          <!-- 12-Item Checklist Container -->
+          <div class="pa-checklist-container" id="obChecklistItemsContainer">
+            <!-- Dynamically populated with all 12 items -->
+          </div>
+        </div>
+
+        <!-- =====================================================================
+             SUB-TAB 3: 5.3 DATA IMPORT CENTRE
+             ===================================================================== -->
+        <div class="pa-onboarding-pane" id="obPaneImports" style="display: none;">
+          <!-- Controls Header Bar -->
+          <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.75rem; margin-bottom: 1.25rem; background: var(--pa-card-bg, #FFFFFF); border: 1px solid var(--pa-border, #E2E8F0); border-radius: 10px; padding: 0.75rem 1.25rem;">
+            <div style="display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;">
+              <div>
+                <strong style="font-size: 0.92rem; color: var(--color-text-main);">
+                  <i class="fa-solid fa-database text-primary mr-1"></i> Statutory Data Import Repository
+                </strong>
+                <div style="font-size: 0.75rem; color: #64748B;">Supported approved types: Students, Staff, Classes, Subjects, Guardians, Attendance &amp; Fees</div>
+              </div>
+            </div>
+
+            <div style="display: flex; align-items: center; gap: 0.65rem;">
+              <select id="obImportTypeFilter" class="pa-select" style="height: 36px; font-size: 0.82rem;" onchange="platformApp.filterImportJobs(this.value)">
+                <option value="all">All Approved Data Types</option>
+                <option value="students">Students</option>
+                <option value="staff">Staff / Faculty</option>
+                <option value="classes_sections">Classes &amp; Sections</option>
+                <option value="subject_assignments">Subject Assignments</option>
+                <option value="guardian_records">Guardian Records</option>
+                <option value="historical_attendance">Historical Attendance</option>
+                <option value="fee_balances">Fee Opening Balances</option>
+              </select>
+              <button type="button" class="btn-pa btn-pa-primary" onclick="platformApp.openNewImportWizard()">
+                <i class="fa-solid fa-plus me-1"></i> + New Import
+              </button>
+            </div>
+          </div>
+
+          <!-- Historical & In-Flight Imports Table -->
+          <div class="pa-card">
+            <div class="pa-table-responsive">
+              <table class="pa-table">
+                <thead>
+                  <tr>
+                    <th>Job ID</th>
+                    <th>Target Institution</th>
+                    <th>Data Type</th>
+                    <th>Source File</th>
+                    <th>Total Records</th>
+                    <th>Accepted</th>
+                    <th>Rejected</th>
+                    <th>Update Policy</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="obImportsTableBody">
+                  <!-- Populated dynamically by platformApp.loadImportJobs -->
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
       </section>
@@ -3826,6 +3961,267 @@
       </div>
     </div>
   </div>
+
+  <!-- =========================================================================
+       MODAL: 10-STEP DATA IMPORT WIZARD (SECTION 5.3 SPECIFICATION)
+       ========================================================================= -->
+  <div class="pa-modal-backdrop" id="modalNewDataImport">
+    <div class="pa-modal pa-modal-lg" style="max-width: 900px; width: 95%;">
+      <div class="pa-modal-header" style="border-bottom: 1px solid #E2E8F0; padding: 1.25rem 1.5rem;">
+        <div>
+          <div class="small fw-bold text-primary text-uppercase" style="letter-spacing: 1px;" id="impStepIndicator">
+            Step 1 of 10: Select Institution
+          </div>
+          <h3 class="pa-modal-title" style="margin: 2px 0 0; font-size: 1.25rem; font-weight: 800; display: flex; align-items: center; gap: 0.5rem;" id="impWizardTitle">
+            <i class="fa-solid fa-file-import text-primary"></i> Institutional Data Import Engine
+          </h3>
+        </div>
+        <button class="btn-pa btn-pa-secondary" style="padding: 0.3rem 0.6rem;" onclick="platformApp.closeModal('modalNewDataImport')">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <div class="pa-modal-body" style="padding: 1.75rem; min-height: 400px; background: #FFFFFF;">
+        <!-- Step 1: Select Institution -->
+        <div class="imp-wizard-pane" id="impPaneStep1">
+          <h4 style="margin: 0 0 0.5rem; font-size: 1.05rem; font-weight: 700;">Select Target Institution Campus</h4>
+          <p style="font-size: 0.82rem; color: #64748B; margin-bottom: 1.25rem;">Choose the registered school or college under Sri Vidya Educational Trust where this dataset will be imported.</p>
+          <div class="row g-3">
+            <div class="col-md-12">
+              <label class="form-label small fw-bold">Target Campus</label>
+              <select id="impSelectInstitution" class="pa-select" style="width: 100%; height: 42px; font-size: 0.9rem;">
+                <option value="INST-001" selected>Sri Vidya E.M High School (Main Campus) - Visakhapatnam</option>
+                <option value="INST-002">Sri Vidya High School (City Branch) - Guntur</option>
+                <option value="INST-003">Sri Vidya International (Valley Campus) - Vijayawada</option>
+                <option value="INST-004">Sri Vidya Junior College (+1 &amp; +2 Expansion) - Tirupati</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 2: Select Data Type -->
+        <div class="imp-wizard-pane" id="impPaneStep2" style="display: none;">
+          <h4 style="margin: 0 0 0.5rem; font-size: 1.05rem; font-weight: 700;">Select Approved Data Type</h4>
+          <p style="font-size: 0.82rem; color: #64748B; margin-bottom: 1.25rem;">Choose the exact entity type to import. Strict field validation applies based on statutory standards.</p>
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 0.75rem;" id="impDataTypeGrid">
+            <label class="pa-radio-card" style="border: 2px solid #4F46E5; background: rgba(79,70,229,0.03); border-radius: 8px; padding: 0.85rem; cursor: pointer; display: flex; align-items: center; gap: 0.75rem;">
+              <input type="radio" name="impDataType" value="students" checked style="accent-color: #4F46E5;">
+              <div>
+                <strong style="font-size: 0.88rem; display: block; color: #1E293B;"><i class="fa-solid fa-user-graduate text-primary me-1"></i> Students</strong>
+                <span style="font-size: 0.74rem; color: #64748B;">Enrollment, Adm No, Class, DoB</span>
+              </div>
+            </label>
+            <label class="pa-radio-card" style="border: 1px solid #CBD5E1; border-radius: 8px; padding: 0.85rem; cursor: pointer; display: flex; align-items: center; gap: 0.75rem;">
+              <input type="radio" name="impDataType" value="staff" style="accent-color: #4F46E5;">
+              <div>
+                <strong style="font-size: 0.88rem; display: block; color: #1E293B;"><i class="fa-solid fa-chalkboard-user text-info me-1"></i> Staff / Faculty</strong>
+                <span style="font-size: 0.74rem; color: #64748B;">Teaching cadre, Employee ID, Cadre</span>
+              </div>
+            </label>
+            <label class="pa-radio-card" style="border: 1px solid #CBD5E1; border-radius: 8px; padding: 0.85rem; cursor: pointer; display: flex; align-items: center; gap: 0.75rem;">
+              <input type="radio" name="impDataType" value="classes_sections" style="accent-color: #4F46E5;">
+              <div>
+                <strong style="font-size: 0.88rem; display: block; color: #1E293B;"><i class="fa-solid fa-shapes text-warning me-1"></i> Classes &amp; Sections</strong>
+                <span style="font-size: 0.74rem; color: #64748B;">Class I-X, Wings, Sections A-D</span>
+              </div>
+            </label>
+            <label class="pa-radio-card" style="border: 1px solid #CBD5E1; border-radius: 8px; padding: 0.85rem; cursor: pointer; display: flex; align-items: center; gap: 0.75rem;">
+              <input type="radio" name="impDataType" value="subject_assignments" style="accent-color: #4F46E5;">
+              <div>
+                <strong style="font-size: 0.88rem; display: block; color: #1E293B;"><i class="fa-solid fa-book-open text-purple me-1"></i> Subject Assignments</strong>
+                <span style="font-size: 0.74rem; color: #64748B;">Faculty to subject allocation</span>
+              </div>
+            </label>
+            <label class="pa-radio-card" style="border: 1px solid #CBD5E1; border-radius: 8px; padding: 0.85rem; cursor: pointer; display: flex; align-items: center; gap: 0.75rem;">
+              <input type="radio" name="impDataType" value="guardian_records" style="accent-color: #4F46E5;">
+              <div>
+                <strong style="font-size: 0.88rem; display: block; color: #1E293B;"><i class="fa-solid fa-people-roof text-emerald me-1"></i> Guardian Records</strong>
+                <span style="font-size: 0.74rem; color: #64748B;">Parents, Phone, Emergency contacts</span>
+              </div>
+            </label>
+            <label class="pa-radio-card" style="border: 1px solid #CBD5E1; border-radius: 8px; padding: 0.85rem; cursor: pointer; display: flex; align-items: center; gap: 0.75rem;">
+              <input type="radio" name="impDataType" value="fee_balances" style="accent-color: #4F46E5;">
+              <div>
+                <strong style="font-size: 0.88rem; display: block; color: #1E293B;"><i class="fa-solid fa-receipt text-danger me-1"></i> Fee Opening Balances</strong>
+                <span style="font-size: 0.74rem; color: #64748B;">Arrears ledger &amp; opening dues</span>
+              </div>
+            </label>
+          </div>
+        </div>
+
+        <!-- Step 3: Upload the File -->
+        <div class="imp-wizard-pane" id="impPaneStep3" style="display: none;">
+          <h4 style="margin: 0 0 0.5rem; font-size: 1.05rem; font-weight: 700;">Upload Source Spreadsheet / Register</h4>
+          <p style="font-size: 0.82rem; color: #64748B; margin-bottom: 1.25rem;">Upload files exported from Excel, CSV, UDISE+ portals, or legacy school software.</p>
+          <div class="pa-import-dropzone" onclick="document.getElementById('impFileInput').click()">
+            <i class="fa-solid fa-cloud-arrow-up fa-3x text-primary mb-3"></i>
+            <h5 style="margin: 0 0 0.25rem; font-weight: 700;">Click to browse or drag &amp; drop file here</h5>
+            <div style="font-size: 0.8rem; color: #64748B;">Supported Formats: CSV (*.csv), Microsoft Excel (*.xlsx, *.xls) &bull; Max 25 MB</div>
+            <input type="file" id="impFileInput" style="display: none;" accept=".csv,.xlsx,.xls" onchange="platformApp.handleImportFileSelected(event)">
+            <div id="impSelectedFileBadge" class="mt-3 badge bg-primary text-white" style="display: none; font-size: 0.85rem; padding: 0.4rem 0.8rem;">
+              <i class="fa-solid fa-file-csv me-1"></i> <span id="impSelectedFileName">Students_Batch_2026.csv</span> (156 KB)
+            </div>
+          </div>
+          <div class="mt-3 text-center">
+            <a href="javascript:void(0)" onclick="platformApp.downloadImportTemplates()" class="small text-primary fw-bold">
+              <i class="fa-solid fa-download me-1"></i> Need a pre-formatted template? Download sample CSV
+            </a>
+          </div>
+        </div>
+
+        <!-- Step 4: Map Source Columns -->
+        <div class="imp-wizard-pane" id="impPaneStep4" style="display: none;">
+          <h4 style="margin: 0 0 0.5rem; font-size: 1.05rem; font-weight: 700;">Map Source Columns to Required Schema Fields</h4>
+          <p style="font-size: 0.82rem; color: #64748B; margin-bottom: 1rem;">Confirm matching between your file's header names and Sri Vidya schema targets.</p>
+          <div class="pa-table-responsive" style="max-height: 280px; overflow-y: auto;">
+            <table class="pa-mapper-table">
+              <thead>
+                <tr>
+                  <th>Source Column in File</th>
+                  <th>Sample Data Preview</th>
+                  <th>Target Schema Field</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody id="impMapperTableBody">
+                <!-- Dynamically rendered -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Step 5: Validate Mandatory Fields & Formats -->
+        <div class="imp-wizard-pane" id="impPaneStep5" style="display: none;">
+          <h4 style="margin: 0 0 0.5rem; font-size: 1.05rem; font-weight: 700;">Mandatory Field &amp; Format Validation</h4>
+          <p style="font-size: 0.82rem; color: #64748B; margin-bottom: 1rem;">Verifying regex formats, dates, telephone conventions, and statutory identifiers.</p>
+          <div class="p-3 bg-light rounded border mb-3" id="impValidationSummaryBox">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+              <strong style="color: #10B981;"><i class="fa-solid fa-circle-check me-1"></i> Schema Syntax Check Passed</strong>
+              <span class="badge bg-success">42 Valid Rows</span>
+            </div>
+            <div style="font-size: 0.8rem; color: #475569;">
+              Mandatory fields (Name, Adm No, Class, Guardian Phone) are populated across 93.3% of records.
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 6: Detect Duplicates & Conflicting Identifiers -->
+        <div class="imp-wizard-pane" id="impPaneStep6" style="display: none;">
+          <h4 style="margin: 0 0 0.5rem; font-size: 1.05rem; font-weight: 700;">Duplicate Detection &amp; Update Policy</h4>
+          <p style="font-size: 0.82rem; color: #64748B; margin-bottom: 1rem;">Cross-referencing Admission Numbers, PEN numbers, and Aadhaar identifiers against active records.</p>
+          <div class="p-3 bg-light rounded border mb-3">
+            <label class="form-label small fw-bold text-dark">Explicit Record Update Policy</label>
+            <select id="impUpdatePolicy" class="pa-select" style="width: 100%;">
+              <option value="reject_duplicates" selected>Reject Duplicates (Safe Default - Never overwrite existing records)</option>
+              <option value="skip_existing">Skip Existing (Import only newly identified records)</option>
+              <option value="update_existing">Update Existing Records (Merge with full traceable audit trail)</option>
+            </select>
+            <small class="text-muted d-block mt-1">In compliance with Section 22.1 &amp; 22.4, updates maintain historical ledger preservation.</small>
+          </div>
+        </div>
+
+        <!-- Step 7: Preview Accepted Rows & Rejected Rows -->
+        <div class="imp-wizard-pane" id="impPaneStep7" style="display: none;">
+          <h4 style="margin: 0 0 0.5rem; font-size: 1.05rem; font-weight: 700;">Preview Accepted Rows &amp; Flagged / Rejected Rows</h4>
+          <div class="d-flex gap-2 mb-3">
+            <button type="button" class="btn btn-sm btn-outline-success active" id="btnImpTabAccepted" onclick="platformApp.switchImportPreviewSubTab('accepted')">
+              <i class="fa-solid fa-circle-check me-1"></i> Accepted Rows (<span id="impAcceptedCount">42</span>)
+            </button>
+            <button type="button" class="btn btn-sm btn-outline-danger" id="btnImpTabRejected" onclick="platformApp.switchImportPreviewSubTab('rejected')">
+              <i class="fa-solid fa-circle-xmark me-1"></i> Rejected Rows (<span id="impRejectedCount">3</span>)
+            </button>
+          </div>
+          <div class="pa-table-responsive" style="max-height: 250px; overflow-y: auto;" id="impPreviewTableContainer">
+            <!-- Dynamically populated -->
+          </div>
+        </div>
+
+        <!-- Step 8: Confirm Import & Sensitivity Test Run -->
+        <div class="imp-wizard-pane" id="impPaneStep8" style="display: none;">
+          <h4 style="margin: 0 0 0.5rem; font-size: 1.05rem; font-weight: 700;">Sensitivity Confirmation &amp; Dry-Run Simulation</h4>
+          <div class="alert alert-warning small mb-3">
+            <i class="fa-solid fa-triangle-exclamation me-1"></i>
+            <strong>Traceability Notice:</strong> Importing will commit these records into active campus registers. An audit snapshot will be permanently sealed.
+          </div>
+          <div class="form-check mb-3">
+            <input class="form-check-input" type="checkbox" id="impCheckDryRun">
+            <label class="form-check-label small" for="impCheckDryRun">
+              <strong>Execute as Simulation / Dry Run first</strong> (Simulates database ingestion without committing live student records)
+            </label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="impCheckExplicitConfirm">
+            <label class="form-check-label small" for="impCheckExplicitConfirm">
+              I certify that this dataset has been verified against school admission registers and comply with Trust governance standards.
+            </label>
+          </div>
+        </div>
+
+        <!-- Step 9: Processing Live Monitor -->
+        <div class="imp-wizard-pane" id="impPaneStep9" style="display: none; text-align: center; padding: 3rem 1rem;">
+          <div style="font-size: 2.5rem; color: #4F46E5; margin-bottom: 1rem;"><i class="fa-solid fa-spinner fa-spin"></i></div>
+          <h4 style="font-weight: 800; margin-bottom: 0.25rem;">Processing Institutional Ingestion...</h4>
+          <p style="font-size: 0.85rem; color: #64748B; margin-bottom: 1.5rem;" id="impProgressStatusText">Ingesting row 28 of 45 records...</p>
+          <div style="width: 80%; margin: 0 auto; height: 10px; background: #E2E8F0; border-radius: 5px; overflow: hidden;">
+            <div id="impLiveProgressBar" style="width: 65%; height: 100%; background: #4F46E5; transition: width 0.3s ease;"></div>
+          </div>
+        </div>
+
+        <!-- Step 10: Completion Report & Downloadable Error List -->
+        <div class="imp-wizard-pane" id="impPaneStep10" style="display: none;">
+          <div class="text-center py-3">
+            <div style="width: 60px; height: 60px; border-radius: 50%; background: #DCFCE7; color: #16A34A; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; margin: 0 auto 1rem;">
+              <i class="fa-solid fa-check-double"></i>
+            </div>
+            <h4 style="font-weight: 800; margin-bottom: 0.25rem;">Import Completed Successfully</h4>
+            <p style="font-size: 0.85rem; color: #64748B;">Institutional records committed with full audit traceability.</p>
+          </div>
+
+          <div class="row g-3 my-2 text-center">
+            <div class="col-4">
+              <div class="p-3 bg-light rounded border">
+                <div style="font-size: 1.4rem; font-weight: 800; color: #10B981;" id="impFinalAccepted">42</div>
+                <div class="small text-muted">Records Ingested</div>
+              </div>
+            </div>
+            <div class="col-4">
+              <div class="p-3 bg-light rounded border">
+                <div style="font-size: 1.4rem; font-weight: 800; color: #EF4444;" id="impFinalRejected">3</div>
+                <div class="small text-muted">Rows Rejected</div>
+              </div>
+            </div>
+            <div class="col-4">
+              <div class="p-3 bg-light rounded border">
+                <div style="font-size: 1.4rem; font-weight: 800; color: #4F46E5;" id="impFinalTime">320ms</div>
+                <div class="small text-muted">Execution SLA</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-4 text-center">
+            <button type="button" class="btn btn-outline-danger btn-sm" onclick="platformApp.downloadImportErrorsCSV()" id="btnDownloadErrorList">
+              <i class="fa-solid fa-download me-1"></i> Download Rejected Rows Error List (CSV)
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="pa-modal-footer" style="border-top: 1px solid #E2E8F0; padding: 1rem 1.5rem; display: flex; justify-content: space-between;">
+        <button type="button" class="btn-pa btn-pa-secondary" id="btnImpPrev" onclick="platformApp.prevImportStep()" style="display: none;">
+          <i class="fa-solid fa-arrow-left me-1"></i> Previous Step
+        </button>
+        <div style="margin-left: auto; display: flex; gap: 0.5rem;">
+          <button type="button" class="btn-pa btn-pa-primary" id="btnImpNext" onclick="platformApp.nextImportStep()">
+            Next Step <i class="fa-solid fa-arrow-right ms-1"></i>
+          </button>
+          <button type="button" class="btn-pa btn-pa-primary" id="btnImpFinish" onclick="platformApp.closeModal('modalNewDataImport')" style="display: none;">
+            <i class="fa-solid fa-circle-check me-1"></i> Done &amp; Close
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
 </body>
 
 </html>

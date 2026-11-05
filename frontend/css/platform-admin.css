@@ -1376,3 +1376,202 @@ input:checked + .pa-slider:before {
   padding-bottom: 0.85rem;
   margin-bottom: 1.5rem;
 }
+
+/* ==========================================================================
+   MODULE 5: INSTITUTION ONBOARDING & MIGRATION SUITE (SECTIONS 5.1 - 5.3)
+   ========================================================================== */
+
+.pa-onboarding-subnav {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: var(--pa-card-bg, #FFFFFF);
+  border: 1px solid var(--pa-border, #E2E8F0);
+  border-radius: 10px;
+  padding: 0.45rem;
+  margin-bottom: 1.25rem;
+  overflow-x: auto;
+}
+
+.pa-onboarding-tab-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.45rem 1rem;
+  font-size: 0.84rem;
+  font-weight: 600;
+  border-radius: 7px;
+  border: none;
+  background: transparent;
+  color: #64748B;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.pa-onboarding-tab-btn:hover {
+  background: #F1F5F9;
+  color: #1E293B;
+}
+
+.pa-onboarding-tab-btn.active {
+  background: var(--pa-primary, #4F46E5);
+  color: #FFFFFF;
+}
+
+[data-theme="dark"] .pa-onboarding-subnav {
+  background: #1E293B;
+  border-color: #334155;
+}
+
+[data-theme="dark"] .pa-onboarding-tab-btn {
+  color: #94A3B8;
+}
+
+[data-theme="dark"] .pa-onboarding-tab-btn:hover {
+  background: #334155;
+  color: #F8FAFC;
+}
+
+[data-theme="dark"] .pa-onboarding-tab-btn.active {
+  background: var(--pa-primary, #4F46E5);
+  color: #FFFFFF;
+}
+
+/* 5.2 Checklist Grid & Items */
+.pa-checklist-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.pa-checklist-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.25rem;
+  background: var(--pa-card-bg, #FFFFFF);
+  border: 1px solid var(--pa-border, #E2E8F0);
+  border-radius: 10px;
+  transition: all 0.2s ease;
+}
+
+.pa-checklist-card:hover {
+  border-color: #CBD5E1;
+  box-shadow: 0 2px 6px rgba(15, 23, 42, 0.04);
+}
+
+.pa-checklist-card.completed {
+  border-left: 4px solid #10B981;
+}
+
+.pa-checklist-card.in_progress {
+  border-left: 4px solid #F59E0B;
+}
+
+.pa-checklist-card.pending {
+  border-left: 4px solid #94A3B8;
+}
+
+.pa-checklist-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+
+.pa-checklist-icon.completed {
+  background: rgba(16, 185, 129, 0.12);
+  color: #10B981;
+}
+
+.pa-checklist-icon.in_progress {
+  background: rgba(245, 158, 11, 0.12);
+  color: #F59E0B;
+}
+
+.pa-checklist-icon.pending {
+  background: #F1F5F9;
+  color: #94A3B8;
+}
+
+[data-theme="dark"] .pa-checklist-card {
+  background: #1E293B;
+  border-color: #334155;
+}
+
+/* 5.3 Import Wizard Dropzone & Mappings */
+.pa-import-dropzone {
+  border: 2px dashed #CBD5E1;
+  border-radius: 10px;
+  padding: 2.5rem 1.5rem;
+  text-align: center;
+  background: #F8FAFC;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.pa-import-dropzone:hover {
+  border-color: var(--pa-primary, #4F46E5);
+  background: rgba(79, 70, 229, 0.03);
+}
+
+[data-theme="dark"] .pa-import-dropzone {
+  background: #0F172A;
+  border-color: #334155;
+}
+
+.pa-mapper-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.82rem;
+}
+
+.pa-mapper-table th {
+  padding: 0.6rem 0.75rem;
+  background: #F1F5F9;
+  color: #475569;
+  font-weight: 700;
+  text-align: left;
+  border-bottom: 1px solid #E2E8F0;
+}
+
+.pa-mapper-table td {
+  padding: 0.6rem 0.75rem;
+  border-bottom: 1px solid #F1F5F9;
+  vertical-align: middle;
+}
+
+[data-theme="dark"] .pa-mapper-table th {
+  background: #0F172A;
+  color: #94A3B8;
+  border-color: #334155;
+}
+
+[data-theme="dark"] .pa-mapper-table td {
+  border-color: #1E293B;
+}
+
+.pa-preview-badge-valid {
+  background: #DCFCE7;
+  color: #15803D;
+  border: 1px solid #86EFAC;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 0.72rem;
+  font-weight: 600;
+}
+
+.pa-preview-badge-rejected {
+  background: #FEE2E2;
+  color: #B91C1C;
+  border: 1px solid #FCA5A5;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 0.72rem;
+  font-weight: 600;
+}

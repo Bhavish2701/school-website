@@ -72,13 +72,16 @@ router.use('/dashboard', dashboardRoutes);
 const dashboardController = require('../controllers/dashboard.controller');
 const institutionRoutes = require('./institution.routes');
 const schoolConfigRoutes = require('./schoolConfig.routes');
+const onboardingRoutes = require('./onboarding.routes');
 const platformRouter = express.Router();
 platformRouter.get('/dashboard', dashboardController.getPlatformDashboard);
 platformRouter.use('/institutions', institutionRoutes);
 platformRouter.use('/config', schoolConfigRoutes);
+platformRouter.use('/onboarding', onboardingRoutes);
 router.use('/platform', platformRouter);
 router.use('/institutions', institutionRoutes);
 router.use('/schools/config', schoolConfigRoutes);
+router.use('/onboarding', onboardingRoutes);
 
 // Mount timetable module endpoints at /api/v1/timetable
 const timetableRoutes = require('./timetable.routes');

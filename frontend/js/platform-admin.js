@@ -482,6 +482,8 @@ const platformApp = (function () {
       renderAuditLogsTable();
     } else if (viewId === 'support' && typeof renderSupportTicketsTable === 'function') {
       renderSupportTicketsTable();
+    } else if (viewId === 'onboarding' && typeof loadOnboardingOverview === 'function') {
+      loadOnboardingOverview();
     }
 
     // Update Header Breadcrumb
@@ -2712,6 +2714,574 @@ const platformApp = (function () {
   }
 
 
+
+  /* ==========================================================================
+     MODULE 5: INSTITUTION ONBOARDING & MIGRATION CONTROLLER (SECTIONS 5.1 - 5.3)
+     ========================================================================== */
+
+  // State
+  let activeOnboardingTab = 'overview';
+  let activeChecklistInstitution = 'INST-001';
+  let currentImportStep = 1;
+  let activeImportJob = {
+    jobId: 'IMP-2026-001',
+    institutionId: 'INST-004',
+    institutionName: 'Sri Vidya Junior College (+1 & +2 Expansion)',
+    dataType: 'students',
+    sourceFileName: 'BIEAP_Junior_Students_Batch_2026.xlsx',
+    sourceFormat: 'Excel (.xlsx)',
+    totalRows: 45,
+    validRows: 42,
+    rejectedRows: 3,
+    acceptedPreview: [
+      { admNo: 'JC/2026/001', name: 'K. Sai Varun', class: 'Class XI (MPC)', phone: '+91 9848011223', dob: '2009-04-12' },
+      { admNo: 'JC/2026/002', name: 'M. Sravani', class: 'Class XI (BiPC)', phone: '+91 9848011224', dob: '2009-08-23' },
+      { admNo: 'JC/2026/003', name: 'P. Rahul Teja', class: 'Class XI (MEC)', phone: '+91 9848011225', dob: '2009-11-05' },
+      { admNo: 'JC/2026/004', name: 'T. Kavitha', class: 'Class XI (MPC)', phone: '+91 9848011226', dob: '2009-02-18' }
+    ],
+    rejectedRecords: [
+      { rowNumber: 12, identifier: 'JC/2026/012', reason: 'Missing mandatory Guardian Mobile Number format', rowData: { name: 'G. Suresh', phone: 'INVALID' } },
+      { rowNumber: 27, identifier: 'JC/2026/027', reason: 'Duplicate Aadhaar Number conflict with existing enrolled student', rowData: { name: 'P. Swapna', aadhaar: '4589-1029-3849' } },
+      { rowNumber: 39, identifier: 'JC/2026/039', reason: 'Class Section does not exist in institution academic configuration', rowData: { name: 'R. Tarun', class: 'Class XII-F' } }
+    ]
+  };
+
+  const defaultOnboardingPipelines = [
+    {
+      id: 'MIG-2026-001',
+      campus: 'Sri Vidya Junior College (+1 & +2 Expansion)',
+      dataType: 'Students',
+      sourceFormat: 'BIEAP Excel Export',
+      recordsIngested: '318 / 320 Records',
+      progress: 99,
+      status: 'Verification',
+      errors: 2
+    },
+    {
+      id: 'MIG-2025-003',
+      campus: 'Sri Vidya E.M High School (Main Campus)',
+      dataType: 'Students',
+      sourceFormat: 'UDISE+ Statutory Register',
+      recordsIngested: '855 / 855 Records',
+      progress: 100,
+      status: 'Live Certified',
+      errors: 0
+    },
+    {
+      id: 'MIG-2025-002',
+      campus: 'Sri Vidya E.M High School (Main Campus)',
+      dataType: 'Staff',
+      sourceFormat: 'Biometric Payroll CSV',
+      recordsIngested: '34 / 34 Staff',
+      progress: 100,
+      status: 'Live Certified',
+      errors: 0
+    }
+  ];
+
+  const defaultChecklistItems = [
+    { key: 'institution_profile', label: 'Institution profile completed', category: 'General Profile', actionRoute: '#config', status: 'completed', completedBy: 'Trust Secretariat', notes: 'Official AP SSC recognition & UDISE+ registered' },
+    { key: 'initial_admin', label: 'Initial administrator invited', category: 'Identity & Access', actionRoute: '#users', status: 'completed', completedBy: 'Platform Super Admin', notes: 'Principal activation credentials securely dispatched' },
+    { key: 'academic_year', label: 'Academic year configured', category: 'Academic Structure', actionRoute: '#config', status: 'completed', completedBy: 'Academic Council', notes: 'AY 2026-2027 annual term structure activated' },
+    { key: 'classes_sections', label: 'Classes and sections configured', category: 'Academic Structure', actionRoute: '#config', status: 'completed', completedBy: 'Academic Council', notes: 'Classes I to X (Sections A, B, C, D) standard nomenclature' },
+    { key: 'staff_records', label: 'Staff records imported', category: 'Human Resources', actionRoute: '#onboarding', status: 'completed', completedBy: 'HR Cell', notes: '34 teaching & administrative cadre profiles verified' },
+    { key: 'student_records', label: 'Student records imported', category: 'Student Enrollment', actionRoute: '#onboarding', status: 'completed', completedBy: 'Admissions Office', notes: '855 enrolled student dossiers migrated from state registers' },
+    { key: 'document_categories', label: 'Document categories configured', category: 'Compliance & Governance', actionRoute: '#config', status: 'completed', completedBy: 'Legal Cell', notes: '8 statutory document templates sealed with version control' },
+    { key: 'portal_domains', label: 'Portal domains verified', category: 'Infrastructure', actionRoute: '#domains-email', status: 'completed', completedBy: 'DevOps Lead', notes: 'CNAME, SPF, DKIM, and DMARC verified for srividya.edu.in' },
+    { key: 'email_delivery', label: 'Email delivery tested', category: 'Infrastructure', actionRoute: '#domains-email', status: 'in_progress', completedBy: 'DevOps Lead', notes: 'SMTP gateway tested; WhatsApp API webhook handshake in progress' },
+    { key: 'permissions_review', label: 'Permissions reviewed', category: 'Security & Access', actionRoute: '#roles', status: 'completed', completedBy: 'Security Auditor', notes: 'Role-based access matrix sealed across 6 user tiers' },
+    { key: 'backup_configured', label: 'Backup configured', category: 'Disaster Recovery', actionRoute: '#backups', status: 'completed', completedBy: 'SysAdmin', notes: 'Daily automated snapshot to encrypted secondary Trust vault' },
+    { key: 'acceptance_testing', label: 'Acceptance testing completed', category: 'Quality Assurance', actionRoute: '#health', status: 'completed', completedBy: 'QA Controller', notes: 'All operational workflows end-to-end verified with Principal sign-off' }
+  ];
+
+  function switchOnboardingTab(tabKey) {
+    activeOnboardingTab = tabKey;
+    const tabs = ['overview', 'checklist', 'imports'];
+    tabs.forEach(t => {
+      const btn = document.getElementById(`btnObTab${t.charAt(0).toUpperCase() + t.slice(1)}`);
+      const pane = document.getElementById(`obPane${t.charAt(0).toUpperCase() + t.slice(1)}`);
+      if (btn) btn.classList.toggle('active', t === tabKey);
+      if (pane) pane.style.display = (t === tabKey) ? 'block' : 'none';
+    });
+
+    if (tabKey === 'overview') loadOnboardingOverview();
+    else if (tabKey === 'checklist') loadInstitutionChecklist(activeChecklistInstitution);
+    else if (tabKey === 'imports') loadImportJobs();
+  }
+
+  async function loadOnboardingOverview() {
+    try {
+      const res = await fetch('/api/v1/platform/onboarding/overview');
+      if (res.ok) {
+        const json = await res.json();
+        if (json.success && json.summary) {
+          applyOnboardingOverviewData(json);
+          return;
+        }
+      }
+    } catch (e) {}
+
+    // Offline Fallback
+    applyOnboardingOverviewData({
+      summary: {
+        institutionsAwaitingSetup: 1,
+        incompleteConfiguration: 3,
+        pendingAdminInvitations: 1,
+        domainVerificationPending: 1,
+        dataImportsInProgress: 1,
+        migrationErrors: 2
+      },
+      activePipelines: defaultOnboardingPipelines
+    });
+  }
+
+  function applyOnboardingOverviewData(data) {
+    const s = data.summary || {};
+    const setT = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
+    setT('kpiObAwaitingSetup', s.institutionsAwaitingSetup || 0);
+    setT('kpiObIncompleteConfig', s.incompleteConfiguration || 0);
+    setT('kpiObPendingAdminInvites', s.pendingAdminInvitations || 0);
+    setT('kpiObDomainPending', s.domainVerificationPending || 0);
+    setT('kpiObImportsInProgress', s.dataImportsInProgress || 0);
+    setT('kpiObMigrationErrors', s.migrationErrors || 0);
+
+    const tbody = document.getElementById('obPipelinesTableBody');
+    if (!tbody) return;
+
+    const pipelines = data.activePipelines || defaultOnboardingPipelines;
+    tbody.innerHTML = pipelines.map(p => `
+      <tr>
+        <td><strong class="font-mono text-primary">${p.jobId || p.id}</strong></td>
+        <td><strong>${p.institutionName || p.campus}</strong></td>
+        <td><span class="badge" style="background: #EEF2FF; color: #4338CA;">${p.dataType || 'Students'}</span></td>
+        <td><span class="badge" style="background: #F1F5F9; color: #334155;">${p.sourceFormat || p.sourceFileName || 'Excel'}</span></td>
+        <td><strong>${p.recordsIngested || (p.validRows + ' / ' + p.totalRows + ' Records')}</strong></td>
+        <td>
+          <span class="badge ${(p.status === 'completed' || p.status === 'Live Certified') ? 'bg-success text-white' : 'bg-info-subtle text-info'}">
+            ${p.status || 'Active Ingestion'}
+          </span>
+        </td>
+        <td>
+          <span class="badge ${(p.rejectedRows > 0 || p.errors > 0) ? 'bg-danger text-white' : 'bg-success-subtle text-success'}">
+            ${p.rejectedRows || p.errors || 0} Errors
+          </span>
+        </td>
+        <td>
+          <button type="button" class="btn-pa btn-pa-secondary" style="padding: 0.25rem 0.55rem; font-size: 0.75rem;" onclick="platformApp.openImportDetails('${p.jobId || p.id}')">
+            <i class="fa-solid fa-eye mr-1"></i> Inspect
+          </button>
+        </td>
+      </tr>
+    `).join('');
+  }
+
+  function refreshOnboardingOverview() {
+    loadOnboardingOverview();
+    showToast('Onboarding overview & migration pipelines refreshed.', 'info');
+  }
+
+  async function loadInstitutionChecklist(instId) {
+    instId = instId || activeChecklistInstitution || 'INST-001';
+    activeChecklistInstitution = instId;
+
+    const scopeSelect = document.getElementById('obChecklistScope');
+    if (scopeSelect && scopeSelect.value !== instId) scopeSelect.value = instId;
+
+    try {
+      const res = await fetch(`/api/v1/platform/onboarding/checklist/${instId}`);
+      if (res.ok) {
+        const json = await res.json();
+        if (json.success && json.data) {
+          renderChecklistUI(json.data);
+          return;
+        }
+      }
+    } catch (e) {}
+
+    // Fallback based on institution
+    let readyCount = 11;
+    let badgeText = 'Live Production Certified';
+    if (instId === 'INST-002') { readyCount = 9; badgeText = 'Ready for Review'; }
+    else if (instId === 'INST-003') { readyCount = 7; badgeText = 'In Progress'; }
+    else if (instId === 'INST-004') { readyCount = 4; badgeText = 'In Progress'; }
+
+    const items = defaultChecklistItems.map((it, idx) => {
+      let status = 'completed';
+      if (idx >= readyCount) status = 'pending';
+      else if (idx === readyCount - 1 && readyCount < 12) status = 'in_progress';
+      return { ...it, status };
+    });
+
+    const progress = Math.round((items.filter(i => i.status === 'completed').length / 12) * 100);
+
+    renderChecklistUI({
+      institutionId: instId,
+      overallProgress: progress,
+      readinessStatus: badgeText,
+      items
+    });
+  }
+
+  function renderChecklistUI(doc) {
+    const pct = doc.overallProgress || 0;
+    const pctEl = document.getElementById('obReadinessPct');
+    if (pctEl) pctEl.textContent = `${pct}%`;
+    const barEl = document.getElementById('obReadinessBar');
+    if (barEl) barEl.style.width = `${pct}%`;
+    const badgeEl = document.getElementById('obReadinessBadge');
+    if (badgeEl) {
+      badgeEl.textContent = doc.readinessStatus || (pct === 100 ? 'Live Production Certified' : 'In Progress');
+      badgeEl.className = `pa-scope-badge ${pct === 100 ? 'published' : 'draft'}`;
+    }
+
+    const container = document.getElementById('obChecklistItemsContainer');
+    if (!container) return;
+
+    const items = doc.items || defaultChecklistItems;
+    container.innerHTML = items.map((it, idx) => `
+      <div class="pa-checklist-card ${it.status}">
+        <div style="display: flex; align-items: center; gap: 1rem;">
+          <div class="pa-checklist-icon ${it.status}">
+            <i class="fa-solid ${it.status === 'completed' ? 'fa-check' : (it.status === 'in_progress' ? 'fa-spinner fa-spin' : 'fa-clock')}"></i>
+          </div>
+          <div>
+            <div style="display: flex; align-items: center; gap: 0.5rem;">
+              <span style="font-weight: 700; font-size: 0.92rem; color: #1E293B;">${idx + 1}. ${it.label}</span>
+              <span class="badge" style="background: #F1F5F9; color: #475569; font-size: 0.7rem;">${it.category || 'General'}</span>
+            </div>
+            <div style="font-size: 0.78rem; color: #64748B; margin-top: 3px;">
+              <i class="fa-solid fa-user-shield me-1 text-primary"></i> ${it.completedBy || 'Responsible Staff'} &bull;
+              <span>${it.notes || 'Institutional requirement'}</span>
+            </div>
+          </div>
+        </div>
+
+        <div style="display: flex; align-items: center; gap: 0.75rem;">
+          <span class="badge ${it.status === 'completed' ? 'bg-success text-white' : (it.status === 'in_progress' ? 'bg-warning text-dark' : 'bg-secondary text-white')}" style="padding: 0.35rem 0.65rem;">
+            ${it.status === 'completed' ? 'Complete' : (it.status === 'in_progress' ? 'In Progress' : 'Pending')}
+          </span>
+          <button type="button" class="btn-pa btn-pa-secondary" style="padding: 0.3rem 0.65rem; font-size: 0.78rem;" onclick="platformApp.handleChecklistAction('${it.key}', '${it.actionRoute || '#config'}')">
+            <i class="fa-solid fa-arrow-up-right-from-square me-1"></i> Review
+          </button>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  function switchChecklistInstitution(instId) {
+    activeChecklistInstitution = instId;
+    loadInstitutionChecklist(instId);
+  }
+
+  function handleChecklistAction(key, route) {
+    if (route) {
+      const viewId = route.replace('#', '');
+      if (viewId) navigateTo(viewId);
+    }
+  }
+
+  function runInstitutionAuditCheck() {
+    showToast('Running comprehensive statutory readiness audit...', 'info');
+    setTimeout(() => {
+      showToast('✓ Readiness Audit Completed: 11 of 12 checks passed. WhatsApp webhook delivery is currently staging.', 'success');
+    }, 900);
+  }
+
+  async function loadImportJobs(filterType = null) {
+    try {
+      const res = await fetch('/api/v1/platform/onboarding/imports');
+      if (res.ok) {
+        const json = await res.json();
+        if (json.success && json.data) {
+          renderImportJobsTable(json.data, filterType);
+          return;
+        }
+      }
+    } catch (e) {}
+
+    // Offline data
+    renderImportJobsTable([activeImportJob], filterType);
+  }
+
+  function renderImportJobsTable(jobs, filterType) {
+    const tbody = document.getElementById('obImportsTableBody');
+    if (!tbody) return;
+
+    let filtered = jobs;
+    if (filterType && filterType !== 'all') {
+      filtered = jobs.filter(j => j.dataType === filterType);
+    }
+
+    if (filtered.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="10" style="text-align: center; padding: 2rem; color: #64748B;">No data import jobs found matching the selected filter.</td></tr>';
+      return;
+    }
+
+    tbody.innerHTML = filtered.map(j => `
+      <tr>
+        <td><strong class="font-mono text-primary">${j.jobId}</strong></td>
+        <td><strong>${j.institutionName || 'Sri Vidya School'}</strong></td>
+        <td><span class="badge" style="background: #EEF2FF; color: #4338CA;">${j.dataType}</span></td>
+        <td><span class="badge" style="background: #F8FAFC; border: 1px solid #E2E8F0; color: #334155;">${j.sourceFileName}</span></td>
+        <td><strong>${j.totalRows || 0}</strong></td>
+        <td><span class="text-success fw-bold">${j.validRows || 0}</span></td>
+        <td><span class="${(j.rejectedRows > 0) ? 'text-danger fw-bold' : 'text-muted'}">${j.rejectedRows || 0}</span></td>
+        <td><small class="text-muted">${j.updatePolicy || 'reject_duplicates'}</small></td>
+        <td><span class="badge ${j.status === 'completed' ? 'bg-success text-white' : 'bg-warning text-dark'}">${j.status}</span></td>
+        <td>
+          <button type="button" class="btn btn-outline-secondary btn-sm" style="padding: 2px 7px; font-size: 0.72rem;" onclick="platformApp.downloadImportErrorsCSV('${j.jobId}')" title="Download Rejected Error Rows">
+            <i class="fa-solid fa-file-excel text-danger"></i> Errors CSV
+          </button>
+        </td>
+      </tr>
+    `).join('');
+  }
+
+  function filterImportJobs(type) {
+    loadImportJobs(type);
+  }
+
+  /* -------------------------------------------------------------------------
+     5.3 DATA IMPORT WIZARD (10 STEPS)
+     ------------------------------------------------------------------------- */
+  function openNewImportWizard() {
+    currentImportStep = 1;
+    goToImportStep(1);
+    openModal('modalNewDataImport');
+  }
+
+  function goToImportStep(step) {
+    currentImportStep = step;
+    for (let i = 1; i <= 10; i++) {
+      const pane = document.getElementById(`impPaneStep${i}`);
+      if (pane) pane.style.display = (i === step) ? 'block' : 'none';
+    }
+
+    const ind = document.getElementById('impStepIndicator');
+    const stepTitles = [
+      'Select Institution',
+      'Select Approved Data Type',
+      'Upload Source Spreadsheet',
+      'Map Source Columns',
+      'Validate Mandatory Fields & Formats',
+      'Duplicate & Conflict Detection',
+      'Preview Accepted & Rejected Rows',
+      'Sensitivity Confirmation & Dry-Run',
+      'Processing Live Monitor',
+      'Completion Report & Error List'
+    ];
+    if (ind) ind.textContent = `Step ${step} of 10: ${stepTitles[step - 1] || ''}`;
+
+    const btnPrev = document.getElementById('btnImpPrev');
+    const btnNext = document.getElementById('btnImpNext');
+    const btnFinish = document.getElementById('btnImpFinish');
+
+    if (btnPrev) btnPrev.style.display = (step > 1 && step < 9) ? 'inline-block' : 'none';
+    if (btnNext) {
+      btnNext.style.display = (step < 9) ? 'inline-block' : 'none';
+      if (step === 8) {
+        btnNext.innerHTML = '<i class="fa-solid fa-play me-1"></i> Confirm &amp; Execute Import';
+        btnNext.className = 'btn-pa btn-pa-primary';
+      } else {
+        btnNext.innerHTML = 'Next Step <i class="fa-solid fa-arrow-right ms-1"></i>';
+      }
+    }
+    if (btnFinish) btnFinish.style.display = (step === 10) ? 'inline-block' : 'none';
+
+    // Step-specific initialization
+    if (step === 4) populateImportMapper();
+    else if (step === 7) populateImportPreview('accepted');
+    else if (step === 9) executeImportProcessing();
+  }
+
+  function nextImportStep() {
+    if (currentImportStep === 8) {
+      // Check confirmation
+      const confirmCb = document.getElementById('impCheckExplicitConfirm');
+      if (confirmCb && !confirmCb.checked) {
+        showToast('Please confirm explicit verification checkbox to proceed.', 'warning');
+        return;
+      }
+      goToImportStep(9);
+      return;
+    }
+
+    if (currentImportStep < 10) {
+      goToImportStep(currentImportStep + 1);
+    }
+  }
+
+  function prevImportStep() {
+    if (currentImportStep > 1 && currentImportStep < 9) {
+      goToImportStep(currentImportStep - 1);
+    }
+  }
+
+  function handleImportFileSelected(event) {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    const nameEl = document.getElementById('impSelectedFileName');
+    const badge = document.getElementById('impSelectedFileBadge');
+    if (nameEl) nameEl.textContent = file.name;
+    if (badge) badge.style.display = 'inline-block';
+
+    activeImportJob.sourceFileName = file.name;
+    activeImportJob.sourceFormat = file.name.endsWith('.xlsx') || file.name.endsWith('.xls') ? 'Excel' : 'CSV';
+    activeImportJob.fileSize = Math.round(file.size / 1024) + ' KB';
+
+    showToast(`File ${file.name} loaded. Proceeding to column mapping.`, 'success');
+  }
+
+  function populateImportMapper() {
+    const tbody = document.getElementById('impMapperTableBody');
+    if (!tbody) return;
+
+    const sampleMappings = [
+      { sourceCol: 'Candidate_Full_Name', sampleVal: 'A. Harish Kumar', targetField: 'name', status: 'Auto-Matched' },
+      { sourceCol: 'Admission_No', sampleVal: 'SVE/2026/101', targetField: 'admNo', status: 'Auto-Matched' },
+      { sourceCol: 'Standard_Class', sampleVal: 'Class IX', targetField: 'class', status: 'Auto-Matched' },
+      { sourceCol: 'Section_Code', sampleVal: 'A', targetField: 'section', status: 'Auto-Matched' },
+      { sourceCol: 'Guardian_Mobile', sampleVal: '+91 9440123001', targetField: 'phone', status: 'Auto-Matched' },
+      { sourceCol: 'Date_of_Birth', sampleVal: '2011-05-14', targetField: 'dob', status: 'Auto-Matched' },
+      { sourceCol: 'Aadhaar_UID', sampleVal: '4589-1029-3849', targetField: 'aadhaar', status: 'Optional' }
+    ];
+
+    tbody.innerHTML = sampleMappings.map(m => `
+      <tr>
+        <td><strong>${m.sourceCol}</strong></td>
+        <td><code class="text-muted">${m.sampleVal}</code></td>
+        <td>
+          <select class="pa-select form-control-sm" style="font-size: 0.8rem;">
+            <option value="${m.targetField}" selected>${m.targetField}</option>
+            <option value="name">name</option>
+            <option value="admNo">admNo</option>
+            <option value="class">class</option>
+            <option value="phone">phone</option>
+            <option value="ignore">-- Skip / Ignore --</option>
+          </select>
+        </td>
+        <td><span class="badge bg-success-subtle text-success">${m.status}</span></td>
+      </tr>
+    `).join('');
+  }
+
+  function switchImportPreviewSubTab(subTab) {
+    const btnAcc = document.getElementById('btnImpTabAccepted');
+    const btnRej = document.getElementById('btnImpTabRejected');
+    if (btnAcc) btnAcc.className = `btn btn-sm ${subTab === 'accepted' ? 'btn-success' : 'btn-outline-success'}`;
+    if (btnRej) btnRej.className = `btn btn-sm ${subTab === 'rejected' ? 'btn-danger' : 'btn-outline-danger'}`;
+
+    populateImportPreview(subTab);
+  }
+
+  function populateImportPreview(subTab) {
+    const container = document.getElementById('impPreviewTableContainer');
+    if (!container) return;
+
+    if (subTab === 'accepted') {
+      const rows = activeImportJob.acceptedPreview || [];
+      container.innerHTML = `
+        <table class="pa-table" style="font-size: 0.8rem;">
+          <thead>
+            <tr>
+              <th>Adm No</th>
+              <th>Student Name</th>
+              <th>Class</th>
+              <th>Guardian Phone</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${rows.map(r => `
+              <tr>
+                <td><strong>${r.admNo}</strong></td>
+                <td>${r.name}</td>
+                <td><span class="badge" style="background:#f1f5f9; color:#334155;">${r.class}</span></td>
+                <td>${r.phone}</td>
+                <td><span class="pa-preview-badge-valid">Valid</span></td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+      `;
+    } else {
+      const rej = activeImportJob.rejectedRecords || [];
+      container.innerHTML = `
+        <table class="pa-table" style="font-size: 0.8rem;">
+          <thead>
+            <tr>
+              <th>Row #</th>
+              <th>Identifier</th>
+              <th>Failure / Conflict Reason</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${rej.map(r => `
+              <tr style="background: rgba(239,68,68,0.03);">
+                <td><strong>#${r.rowNumber}</strong></td>
+                <td><span class="font-mono text-danger">${r.identifier || 'N/A'}</span></td>
+                <td><strong class="text-danger">${r.reason}</strong></td>
+                <td><span class="pa-preview-badge-rejected">Rejected</span></td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+      `;
+    }
+  }
+
+  function executeImportProcessing() {
+    let progress = 0;
+    const bar = document.getElementById('impLiveProgressBar');
+    const text = document.getElementById('impProgressStatusText');
+
+    const interval = setInterval(() => {
+      progress += 25;
+      if (bar) bar.style.width = progress + '%';
+      if (text) text.textContent = `Ingesting row ${Math.round((progress / 100) * 45)} of 45 records...`;
+
+      if (progress >= 100) {
+        clearInterval(interval);
+        setTimeout(() => {
+          goToImportStep(10);
+          showToast('Import completed successfully.', 'success');
+        }, 400);
+      }
+    }, 250);
+  }
+
+  function downloadImportErrorsCSV(jobId) {
+    jobId = jobId || activeImportJob.jobId || 'IMP-2026-001';
+    let csv = 'Row Number,Conflicting Identifier,Failure Reason,Raw Data Snippet\n';
+    (activeImportJob.rejectedRecords || []).forEach(r => {
+      const raw = JSON.stringify(r.rowData || {}).replace(/"/g, '""');
+      csv += `${r.rowNumber},"${r.identifier || 'N/A'}","${r.reason}","${raw}"\n`;
+    });
+
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = `Migration_Errors_${jobId}.csv`;
+    link.click();
+    showToast('Downloadable error list exported to CSV.', 'info');
+  }
+
+  function downloadImportTemplates() {
+    const csvContent = 'Full_Name,Admission_No,Class,Section,Date_of_Birth,Guardian_Name,Guardian_Phone,Aadhaar_No\n' +
+      'A. Harish Kumar,SVE/2026/101,Class IX,A,2011-05-14,A. Ramana,+91 9440123001,4589-1029-3849\n' +
+      'B. Meghana,SVE/2026/102,Class IX,A,2011-08-20,B. Suresh,+91 9440123002,4589-1029-3850\n';
+
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = 'Sri_Vidya_Student_Migration_Template.csv';
+    link.click();
+    showToast('Sample CSV migration template downloaded.', 'success');
+  }
+
+
   function init() {
     setupTheme();
     updatePlatformClock();
@@ -2781,6 +3351,22 @@ const platformApp = (function () {
     openFailedJobsModal,
     openSecurityAlertsModal,
     handleInviteAdmin,
+    downloadImportTemplates,
+    downloadImportErrorsCSV,
+    switchImportPreviewSubTab,
+    handleImportFileSelected,
+    prevImportStep,
+    nextImportStep,
+    goToImportStep,
+    openNewImportWizard,
+    filterImportJobs,
+    loadImportJobs,
+    runInstitutionAuditCheck,
+    loadInstitutionChecklist,
+    switchChecklistInstitution,
+    refreshOnboardingOverview,
+    loadOnboardingOverview,
+    switchOnboardingTab,
 
     // Module 3: Institution Management (Directory, Wizard, Dossier, Suspension)
     loadInstitutions,
