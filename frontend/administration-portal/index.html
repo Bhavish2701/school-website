@@ -6210,33 +6210,33 @@
                 </div>
               </div>
 
-              <!-- Filter Toolbar -->
-              <div class="transfers-toolbar mb-3">
-                <div class="tc-toolbar-left" style="flex:1; display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
-                  <div class="tc-search-wrap" style="min-width:240px; flex:1;">
-                    <i class="fa-solid fa-search"></i>
-                    <input type="text" id="classSearchInput" class="form-control" placeholder="Search class, section, teacher, room..." oninput="portalApp.filterAcademicClasses()" style="height:36px; font-size:0.875rem;">
+              <!-- Filter Toolbar (2-Tier Enterprise Architecture) -->
+              <div class="transfers-toolbar-container">
+                <div class="academics-filter-grid">
+                  <div class="tc-search-wrap">
+                    <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                    <input type="text" id="classSearchInput" class="tc-search-input" placeholder="Search class, section, teacher, room..." oninput="portalApp.filterAcademicClasses()">
+                    <button type="button" class="tc-clear-btn" onclick="document.getElementById('classSearchInput').value=''; portalApp.filterAcademicClasses();" title="Clear Search">
+                      <i class="fa-solid fa-xmark"></i>
+                    </button>
                   </div>
-                  <div style="display:flex; align-items:center; gap:6px;">
-                    <label class="text-sm font-weight-bold text-muted mb-0" for="classYearFilter">Year:</label>
-                    <select id="classYearFilter" class="form-control form-control-sm" onchange="portalApp.filterAcademicClasses()" style="width:140px; height:36px;">
+                  <div class="tc-select-wrap">
+                    <select id="classYearFilter" class="tc-filter-select" onchange="portalApp.filterAcademicClasses()" title="Filter by Academic Year">
                       <option value="">All Academic Years</option>
                       <option value="2026–27" selected>AY 2026–27 (Current)</option>
                       <option value="2025–26">AY 2025–26 (Previous)</option>
                     </select>
                   </div>
-                  <div style="display:flex; align-items:center; gap:6px;">
-                    <label class="text-sm font-weight-bold text-muted mb-0" for="classWingFilter">Wing:</label>
-                    <select id="classWingFilter" class="form-control form-control-sm" onchange="portalApp.filterAcademicClasses()" style="width:145px; height:36px;">
+                  <div class="tc-select-wrap">
+                    <select id="classWingFilter" class="tc-filter-select" onchange="portalApp.filterAcademicClasses()" title="Filter by Wing">
                       <option value="">All Wings</option>
                       <option value="High School">High School (VI–X)</option>
                       <option value="Primary">Primary (I–V)</option>
                       <option value="Pre-Primary">Pre-Primary (Nursery–UKG)</option>
                     </select>
                   </div>
-                  <div style="display:flex; align-items:center; gap:6px;">
-                    <label class="text-sm font-weight-bold text-muted mb-0" for="classStatusFilter">Status:</label>
-                    <select id="classStatusFilter" class="form-control form-control-sm" onchange="portalApp.filterAcademicClasses()" style="width:140px; height:36px;">
+                  <div class="tc-select-wrap">
+                    <select id="classStatusFilter" class="tc-filter-select" onchange="portalApp.filterAcademicClasses()" title="Filter by Status">
                       <option value="">All Statuses</option>
                       <option value="Active">Active</option>
                       <option value="Enrolment Open">Enrolment Open</option>
@@ -6244,12 +6244,28 @@
                       <option value="Archived / Completed">Archived / Completed</option>
                     </select>
                   </div>
-                  <button type="button" class="btn btn-secondary btn-sm" onclick="portalApp.resetAcademicClassesFilters()" title="Reset Filters" style="height:36px;">
-                    <i class="fa-solid fa-rotate mr-1"></i>Reset
-                  </button>
                 </div>
-                <div class="tc-toolbar-right" style="display:flex; align-items:center; gap:10px;">
-                  <span class="portal-badge badge-neutral" id="classesCountPill" style="font-weight:700;">Showing 16 Records</span>
+
+                <div class="transfers-governance-row">
+                  <div class="tc-stats-left">
+                    <span class="tc-count-pill" id="classesCountPill">
+                      <i class="fa-solid fa-chalkboard-user text-primary mr-1"></i> Showing <strong>16</strong> Classes
+                    </span>
+                    <span class="toolbar-tag-pill">
+                      <i class="fa-solid fa-calendar-check text-primary mr-1"></i> Academic Year 2026–2027
+                    </span>
+                    <span class="toolbar-tag-pill stat-badge-verified">
+                      <i class="fa-solid fa-stamp text-success mr-1"></i> Statutory Section Register
+                    </span>
+                  </div>
+                  <div class="tc-actions-right">
+                    <button type="button" class="btn btn-outline-secondary btn-sm btn-filter-reset" onclick="portalApp.resetAcademicClassesFilters()" title="Reset Filters">
+                      <i class="fa-solid fa-rotate-left me-1"></i> Reset Filters
+                    </button>
+                    <button type="button" class="btn btn-outline-secondary btn-sm" onclick="portalApp.exportClassesCSV()" title="Export Classes CSV">
+                      <i class="fa-solid fa-file-excel text-success me-1"></i> Export Register
+                    </button>
+                  </div>
                 </div>
               </div>
 
@@ -6353,16 +6369,18 @@
                 </div>
               </div>
 
-              <!-- Filter Toolbar -->
-              <div class="transfers-toolbar mb-3">
-                <div class="tc-toolbar-left" style="flex:1; display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
-                  <div class="tc-search-wrap" style="min-width:240px; flex:1;">
-                    <i class="fa-solid fa-search"></i>
-                    <input type="text" id="subjectSearchInput" class="form-control" placeholder="Search code, subject name, teacher, textbook..." oninput="portalApp.filterAcademicSubjects()" style="height:36px; font-size:0.875rem;">
+              <!-- Filter Toolbar (2-Tier Enterprise Architecture) -->
+              <div class="transfers-toolbar-container">
+                <div class="academics-filter-grid">
+                  <div class="tc-search-wrap">
+                    <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                    <input type="text" id="subjectSearchInput" class="tc-search-input" placeholder="Search code, subject name, teacher, textbook..." oninput="portalApp.filterAcademicSubjects()">
+                    <button type="button" class="tc-clear-btn" onclick="document.getElementById('subjectSearchInput').value=''; portalApp.filterAcademicSubjects();" title="Clear Search">
+                      <i class="fa-solid fa-xmark"></i>
+                    </button>
                   </div>
-                  <div style="display:flex; align-items:center; gap:6px;">
-                    <label class="text-sm font-weight-bold text-muted mb-0" for="subjectClassFilter">Class:</label>
-                    <select id="subjectClassFilter" class="form-control form-control-sm" onchange="portalApp.filterAcademicSubjects()" style="width:130px; height:36px;">
+                  <div class="tc-select-wrap">
+                    <select id="subjectClassFilter" class="tc-filter-select" onchange="portalApp.filterAcademicSubjects()" title="Filter by Class">
                       <option value="">All Classes</option>
                       <option value="Class X">Class X</option>
                       <option value="Class IX">Class IX</option>
@@ -6376,17 +6394,15 @@
                       <option value="Class I">Class I</option>
                     </select>
                   </div>
-                  <div style="display:flex; align-items:center; gap:6px;">
-                    <label class="text-sm font-weight-bold text-muted mb-0" for="subjectYearFilter">Year:</label>
-                    <select id="subjectYearFilter" class="form-control form-control-sm" onchange="portalApp.filterAcademicSubjects()" style="width:140px; height:36px;">
+                  <div class="tc-select-wrap">
+                    <select id="subjectYearFilter" class="tc-filter-select" onchange="portalApp.filterAcademicSubjects()" title="Filter by Academic Year">
                       <option value="">All Academic Years</option>
                       <option value="2026–27" selected>AY 2026–27</option>
                       <option value="2025–26">AY 2025–26</option>
                     </select>
                   </div>
-                  <div style="display:flex; align-items:center; gap:6px;">
-                    <label class="text-sm font-weight-bold text-muted mb-0" for="subjectStatusFilter">Status:</label>
-                    <select id="subjectStatusFilter" class="form-control form-control-sm" onchange="portalApp.filterAcademicSubjects()" style="width:145px; height:36px;">
+                  <div class="tc-select-wrap">
+                    <select id="subjectStatusFilter" class="tc-filter-select" onchange="portalApp.filterAcademicSubjects()" title="Filter by Status">
                       <option value="">All Statuses</option>
                       <option value="On Track">On Track</option>
                       <option value="Ahead of Schedule">Ahead of Schedule</option>
@@ -6394,12 +6410,28 @@
                       <option value="Archived / Inactive">Archived / Inactive</option>
                     </select>
                   </div>
-                  <button type="button" class="btn btn-secondary btn-sm" onclick="portalApp.resetAcademicSubjectsFilters()" title="Reset Filters" style="height:36px;">
-                    <i class="fa-solid fa-rotate mr-1"></i>Reset
-                  </button>
                 </div>
-                <div class="tc-toolbar-right" style="display:flex; align-items:center; gap:10px;">
-                  <span class="portal-badge badge-neutral" id="subjectsCountPill" style="font-weight:700;">Showing 18 Subjects</span>
+
+                <div class="transfers-governance-row">
+                  <div class="tc-stats-left">
+                    <span class="tc-count-pill" id="subjectsCountPill">
+                      <i class="fa-solid fa-book-open text-primary mr-1"></i> Showing <strong>18</strong> Subjects
+                    </span>
+                    <span class="toolbar-tag-pill">
+                      <i class="fa-solid fa-calendar-check text-primary mr-1"></i> Academic Year 2026–2027
+                    </span>
+                    <span class="toolbar-tag-pill stat-badge-verified">
+                      <i class="fa-solid fa-stamp text-success mr-1"></i> Statutory Curriculum &amp; Syllabus Register
+                    </span>
+                  </div>
+                  <div class="tc-actions-right">
+                    <button type="button" class="btn btn-outline-secondary btn-sm btn-filter-reset" onclick="portalApp.resetAcademicSubjectsFilters()" title="Reset Filters">
+                      <i class="fa-solid fa-rotate-left me-1"></i> Reset Filters
+                    </button>
+                    <button type="button" class="btn btn-outline-secondary btn-sm" onclick="portalApp.exportSyllabusRegisterCSV()" title="Export Syllabus Register">
+                      <i class="fa-solid fa-file-excel text-success me-1"></i> Export Register
+                    </button>
+                  </div>
                 </div>
               </div>
 
@@ -7446,17 +7478,18 @@
                 <span class="portal-badge badge-warning">Active Assessment Cycle</span>
               </div>
 
-              <!-- Filter Toolbar -->
-              <div class="transfers-toolbar mb-3">
-                <div class="tc-toolbar-left"
-                  style="flex:1; display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
-                  <div class="tc-search-wrap" style="min-width:240px; flex:1;">
+              <!-- Filter Toolbar (2-Tier Enterprise Architecture) -->
+              <div class="transfers-toolbar-container">
+                <div class="faculty-filter-grid">
+                  <div class="tc-search-wrap">
                     <i class="fa-solid fa-magnifying-glass search-icon"></i>
-                    <input type="text" id="examsSearchInput" class="tc-search-input"
-                      placeholder="Search exam name, class, subject, room..." oninput="portalApp.filterAcademicExams()">
+                    <input type="text" id="examsSearchInput" class="tc-search-input" placeholder="Search exam name, class, subject, room..." oninput="portalApp.filterAcademicExams()">
+                    <button type="button" class="tc-clear-btn" onclick="document.getElementById('examsSearchInput').value=''; portalApp.filterAcademicExams();" title="Clear Search">
+                      <i class="fa-solid fa-xmark"></i>
+                    </button>
                   </div>
-                  <div class="filter-group" style="margin-bottom:0;">
-                    <select id="examsClassFilter" class="tc-filter-select" onchange="portalApp.filterAcademicExams()">
+                  <div class="tc-select-wrap">
+                    <select id="examsClassFilter" class="tc-filter-select" onchange="portalApp.filterAcademicExams()" title="Filter by Class">
                       <option value="">All Classes</option>
                       <option value="Class X-A">Class X-A</option>
                       <option value="Class IX-A">Class IX-A</option>
@@ -7465,8 +7498,21 @@
                     </select>
                   </div>
                 </div>
-                <div class="tc-toolbar-right">
-                  <span class="tc-count-pill" id="examsCountPill">Showing Exam Schedules</span>
+
+                <div class="transfers-governance-row">
+                  <div class="tc-stats-left">
+                    <span class="tc-count-pill" id="examsCountPill">
+                      <i class="fa-solid fa-file-signature text-primary mr-1"></i> Showing Exam Schedules
+                    </span>
+                    <span class="toolbar-tag-pill">
+                      <i class="fa-solid fa-calendar-check text-primary mr-1"></i> AY 2026–2027 Active Cycle
+                    </span>
+                  </div>
+                  <div class="tc-actions-right">
+                    <button type="button" class="btn btn-outline-secondary btn-sm btn-filter-reset" onclick="document.getElementById('examsSearchInput').value=''; document.getElementById('examsClassFilter').value=''; portalApp.filterAcademicExams();">
+                      <i class="fa-solid fa-rotate-left me-1"></i> Reset Filters
+                    </button>
+                  </div>
                 </div>
               </div>
 
@@ -7526,19 +7572,32 @@
                 <span class="portal-badge badge-success">Term 1 Council Certified</span>
               </div>
 
-              <!-- Filter Toolbar -->
-              <div class="transfers-toolbar mb-3">
-                <div class="tc-toolbar-left"
-                  style="flex:1; display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
-                  <div class="tc-search-wrap" style="min-width:240px; flex:1;">
+              <!-- Filter Toolbar (2-Tier Enterprise Architecture) -->
+              <div class="transfers-toolbar-container">
+                <div class="faculty-filter-grid">
+                  <div class="tc-search-wrap">
                     <i class="fa-solid fa-magnifying-glass search-icon"></i>
-                    <input type="text" id="resultsSearchInput" class="tc-search-input"
-                      placeholder="Search class, grade scales, publication status..."
-                      oninput="portalApp.filterAcademicResults()">
+                    <input type="text" id="resultsSearchInput" class="tc-search-input" placeholder="Search class, grade scales, publication status..." oninput="portalApp.filterAcademicResults()">
+                    <button type="button" class="tc-clear-btn" onclick="document.getElementById('resultsSearchInput').value=''; portalApp.filterAcademicResults();" title="Clear Search">
+                      <i class="fa-solid fa-xmark"></i>
+                    </button>
                   </div>
                 </div>
-                <div class="tc-toolbar-right">
-                  <span class="tc-count-pill" id="resultsCountPill">Showing Results</span>
+
+                <div class="transfers-governance-row">
+                  <div class="tc-stats-left">
+                    <span class="tc-count-pill" id="resultsCountPill">
+                      <i class="fa-solid fa-square-poll-vertical text-primary mr-1"></i> Showing Results
+                    </span>
+                    <span class="toolbar-tag-pill stat-badge-verified">
+                      <i class="fa-solid fa-stamp text-success mr-1"></i> Term 1 Council Certified
+                    </span>
+                  </div>
+                  <div class="tc-actions-right">
+                    <button type="button" class="btn btn-outline-secondary btn-sm btn-filter-reset" onclick="document.getElementById('resultsSearchInput').value=''; portalApp.filterAcademicResults();">
+                      <i class="fa-solid fa-rotate-left me-1"></i> Reset Filters
+                    </button>
+                  </div>
                 </div>
               </div>
 
@@ -7618,19 +7677,32 @@
                 </button>
               </div>
 
-              <!-- Filter Toolbar -->
-              <div class="transfers-toolbar mb-3">
-                <div class="tc-toolbar-left"
-                  style="flex:1; display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
-                  <div class="tc-search-wrap" style="min-width:240px; flex:1;">
+              <!-- Filter Toolbar (2-Tier Enterprise Architecture) -->
+              <div class="transfers-toolbar-container">
+                <div class="faculty-filter-grid">
+                  <div class="tc-search-wrap">
                     <i class="fa-solid fa-magnifying-glass search-icon"></i>
-                    <input type="text" id="reportsSearchInput" class="tc-search-input"
-                      placeholder="Search class performance, subjects, trends..."
-                      oninput="portalApp.filterAcademicReports()">
+                    <input type="text" id="reportsSearchInput" class="tc-search-input" placeholder="Search class performance, subjects, trends..." oninput="portalApp.filterAcademicReports()">
+                    <button type="button" class="tc-clear-btn" onclick="document.getElementById('reportsSearchInput').value=''; portalApp.filterAcademicReports();" title="Clear Search">
+                      <i class="fa-solid fa-xmark"></i>
+                    </button>
                   </div>
                 </div>
-                <div class="tc-toolbar-right">
-                  <span class="tc-count-pill" id="reportsCountPill">Showing 6 Class Reports</span>
+
+                <div class="transfers-governance-row">
+                  <div class="tc-stats-left">
+                    <span class="tc-count-pill" id="reportsCountPill">
+                      <i class="fa-solid fa-chart-line text-primary mr-1"></i> Showing 6 Class Reports
+                    </span>
+                    <span class="toolbar-tag-pill">
+                      <i class="fa-solid fa-calendar-check text-primary mr-1"></i> AY 2026–2027 Performance Dossier
+                    </span>
+                  </div>
+                  <div class="tc-actions-right">
+                    <button type="button" class="btn btn-outline-secondary btn-sm btn-filter-reset" onclick="document.getElementById('reportsSearchInput').value=''; portalApp.filterAcademicReports();">
+                      <i class="fa-solid fa-rotate-left me-1"></i> Reset Filters
+                    </button>
+                  </div>
                 </div>
               </div>
 

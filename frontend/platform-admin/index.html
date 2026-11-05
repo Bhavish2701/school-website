@@ -802,37 +802,219 @@
       <!-- =======================================================================
            MODULE 2: INSTITUTION MANAGEMENT (#view-institutions)
            ======================================================================= -->
+      <!-- =======================================================================
+           MODULE 3: INSTITUTION MANAGEMENT DIRECTORY & LIFECYCLE (#view-institutions)
+           Compliant with Sri Vidya Educational Trust Multi-Tenant Platform Standards
+           ======================================================================= -->
       <section class="portal-view" id="view-institutions">
-        <div class="pa-card">
-          <div class="pa-card-header">
-            <div>
-              <h3 class="pa-card-title"><i class="fa-solid fa-school-flag text-primary"></i> Institution Registry</h3>
-              <p class="pa-card-desc">Configure, provision, and maintain all school campuses under the educational trust
-              </p>
+
+        <!-- Page Header (Section 3.1) -->
+        <div class="pa-page-header" style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;">
+          <div>
+            <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.25rem;">
+              <span class="pa-view-badge" style="background: rgba(79, 70, 229, 0.1); color: var(--pa-primary, #4F46E5); font-weight: 700; font-size: 0.72rem; padding: 2px 8px; border-radius: 4px; text-transform: uppercase;">
+                Core Operations
+              </span>
+              <span style="font-size: 0.75rem; color: #64748B;">• Central Multi-School Provisioning</span>
             </div>
-            <button class="btn-pa btn-pa-primary" onclick="platformApp.openModal('modalAddInstitution')">
-              <i class="fa-solid fa-plus"></i> Add New Institution
-            </button>
+            <h1 style="margin: 0; font-size: 1.65rem; font-weight: 800; color: var(--color-text-main); display: flex; align-items: center; gap: 0.6rem;">
+              <i class="fa-solid fa-school-flag text-primary"></i> Institution Management
+            </h1>
+            <p style="margin: 4px 0 0; color: #64748B; font-size: 0.88rem;">
+              Multi-school administrative governance, domain mapping, tenant provisioning, and authoritative lifecycle control across the Trust.
+            </p>
           </div>
 
+          <div style="display: flex; align-items: center; gap: 0.6rem; flex-wrap: wrap;">
+            <!-- Primary Action -->
+            <button type="button" class="btn-pa btn-pa-primary" onclick="platformApp.openAddInstitutionWizard()" id="btnPrimaryAddInstitution" style="font-weight: 700;">
+              <i class="fa-solid fa-plus me-1"></i> Add Institution
+            </button>
+            <!-- Secondary Actions -->
+            <button type="button" class="btn-pa btn-pa-secondary" onclick="platformApp.openImportModal()" id="btnImportInstitutions">
+              <i class="fa-solid fa-file-import me-1"></i> Import Institutions
+            </button>
+            <button type="button" class="btn-pa btn-pa-secondary" onclick="platformApp.exportInstitutionsCSV()" id="btnExportInstitutionsDirectory">
+              <i class="fa-solid fa-file-excel text-emerald me-1"></i> Export Directory
+            </button>
+          </div>
+        </div>
+
+        <!-- Summary Cards (Section 3.1) -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 1.5rem;">
+          <div class="pa-card" id="cardTotalInstitutions" onclick="platformApp.filterInstitutions('all')" style="cursor: pointer; border-left: 4px solid var(--pa-primary, #4F46E5); padding: 1.15rem; transition: transform 0.2s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <div>
+                <div style="font-size: 0.75rem; font-weight: 700; color: #64748B; text-transform: uppercase;">Total Institutions</div>
+                <div style="font-size: 1.85rem; font-weight: 800; color: var(--color-text-main); margin-top: 0.2rem;" id="instSummaryTotal">3</div>
+              </div>
+              <div style="width: 42px; height: 42px; border-radius: 10px; background: rgba(79, 70, 229, 0.1); display: flex; align-items: center; justify-content: center; color: var(--pa-primary, #4F46E5); font-size: 1.25rem;">
+                <i class="fa-solid fa-building-columns"></i>
+              </div>
+            </div>
+            <div style="font-size: 0.75rem; color: #64748B; margin-top: 0.5rem;"><i class="fa-solid fa-network-wired text-primary mr-1"></i> Across registered campuses</div>
+          </div>
+
+          <div class="pa-card" id="cardActiveInstitutions" onclick="platformApp.filterInstitutions('Active')" style="cursor: pointer; border-left: 4px solid #10B981; padding: 1.15rem; transition: transform 0.2s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <div>
+                <div style="font-size: 0.75rem; font-weight: 700; color: #64748B; text-transform: uppercase;">Active</div>
+                <div style="font-size: 1.85rem; font-weight: 800; color: #10B981; margin-top: 0.2rem;" id="instSummaryActive">3</div>
+              </div>
+              <div style="width: 42px; height: 42px; border-radius: 10px; background: #DCFCE7; display: flex; align-items: center; justify-content: center; color: #15803D; font-size: 1.25rem;">
+                <i class="fa-solid fa-circle-check"></i>
+              </div>
+            </div>
+            <div style="font-size: 0.75rem; color: #64748B; margin-top: 0.5rem;"><i class="fa-solid fa-shield-check text-emerald mr-1"></i> Full portal access active</div>
+          </div>
+
+          <div class="pa-card" id="cardSetupInProgress" onclick="platformApp.filterInstitutions('progress')" style="cursor: pointer; border-left: 4px solid #F59E0B; padding: 1.15rem; transition: transform 0.2s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <div>
+                <div style="font-size: 0.75rem; font-weight: 700; color: #64748B; text-transform: uppercase;">Setup in Progress</div>
+                <div style="font-size: 1.85rem; font-weight: 800; color: #F59E0B; margin-top: 0.2rem;" id="instSummaryProgress">0</div>
+              </div>
+              <div style="width: 42px; height: 42px; border-radius: 10px; background: #FEF3C7; display: flex; align-items: center; justify-content: center; color: #B45309; font-size: 1.25rem;">
+                <i class="fa-solid fa-spinner"></i>
+              </div>
+            </div>
+            <div style="font-size: 0.75rem; color: #64748B; margin-top: 0.5rem;"><i class="fa-solid fa-clock text-amber mr-1"></i> Draft or review pending</div>
+          </div>
+
+          <div class="pa-card" id="cardSuspendedInstitutions" onclick="platformApp.filterInstitutions('Suspended')" style="cursor: pointer; border-left: 4px solid #EF4444; padding: 1.15rem; transition: transform 0.2s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <div>
+                <div style="font-size: 0.75rem; font-weight: 700; color: #64748B; text-transform: uppercase;">Suspended</div>
+                <div style="font-size: 1.85rem; font-weight: 800; color: #EF4444; margin-top: 0.2rem;" id="instSummarySuspended">0</div>
+              </div>
+              <div style="width: 42px; height: 42px; border-radius: 10px; background: #FEE2E2; display: flex; align-items: center; justify-content: center; color: #B91C1C; font-size: 1.25rem;">
+                <i class="fa-solid fa-ban"></i>
+              </div>
+            </div>
+            <div style="font-size: 0.75rem; color: #64748B; margin-top: 0.5rem;"><i class="fa-solid fa-lock text-rose mr-1"></i> Policy access restricted</div>
+          </div>
+
+          <div class="pa-card" id="cardConfigIssues" onclick="platformApp.filterInstitutions('config_pending')" style="cursor: pointer; border-left: 4px solid #8B5CF6; padding: 1.15rem; transition: transform 0.2s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <div>
+                <div style="font-size: 0.75rem; font-weight: 700; color: #64748B; text-transform: uppercase;">Configuration Issues</div>
+                <div style="font-size: 1.85rem; font-weight: 800; color: #8B5CF6; margin-top: 0.2rem;" id="instSummaryConfigIssues">0</div>
+              </div>
+              <div style="width: 42px; height: 42px; border-radius: 10px; background: #EDE9FE; display: flex; align-items: center; justify-content: center; color: #6D28D9; font-size: 1.25rem;">
+                <i class="fa-solid fa-triangle-exclamation"></i>
+              </div>
+            </div>
+            <div style="font-size: 0.75rem; color: #64748B; margin-top: 0.5rem;"><i class="fa-solid fa-wrench text-purple mr-1"></i> DNS or profile review</div>
+          </div>
+        </div>
+
+        <!-- Search & Multi-Field Filters Bar (Section 3.1) -->
+        <div class="pa-card" style="margin-bottom: 1.5rem; padding: 1.15rem;">
+          <div style="display: grid; grid-template-columns: minmax(240px, 2fr) repeat(auto-fit, minmax(135px, 1fr)) auto; gap: 0.65rem; align-items: center;">
+            <!-- Free-text search -->
+            <div style="position: relative;">
+              <i class="fa-solid fa-magnifying-glass" style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: #94A3B8; font-size: 0.85rem;"></i>
+              <input type="text" id="instSearchInput" class="pa-search-input" placeholder="Search by name, code, email, domain, UDISE..." style="width: 100%; padding-left: 34px; height: 38px; border-radius: 8px;" oninput="platformApp.filterInstitutionsDirectory()">
+            </div>
+
+            <!-- Code Filter -->
+            <div>
+              <input type="text" id="instCodeFilter" class="pa-search-input" placeholder="Filter by Code..." style="width: 100%; height: 38px; border-radius: 8px;" oninput="platformApp.filterInstitutionsDirectory()">
+            </div>
+
+            <!-- Type Filter -->
+            <div>
+              <select id="instTypeFilter" class="pa-select" style="width: 100%; height: 38px; border-radius: 8px;" onchange="platformApp.filterInstitutionsDirectory()">
+                <option value="All">All Types</option>
+                <option value="Primary & Secondary School">Primary &amp; Secondary School</option>
+                <option value="Junior College">Junior College</option>
+                <option value="Early Childhood Centre">Early Childhood Centre</option>
+                <option value="Branch Campus">Branch Campus</option>
+                <option value="K-12 School">K-12 School</option>
+              </select>
+            </div>
+
+            <!-- Status Filter -->
+            <div>
+              <select id="instStatusFilter" class="pa-select" style="width: 100%; height: 38px; border-radius: 8px;" onchange="platformApp.filterInstitutionsDirectory()">
+                <option value="All">All Statuses</option>
+                <option value="Active">Active</option>
+                <option value="Draft">Draft</option>
+                <option value="Setup in Progress">Setup in Progress</option>
+                <option value="Configuration Review">Configuration Review</option>
+                <option value="Ready for Activation">Ready for Activation</option>
+                <option value="Suspended">Suspended</option>
+                <option value="Archived">Archived</option>
+              </select>
+            </div>
+
+            <!-- Academic Year Filter -->
+            <div>
+              <select id="instAyFilter" class="pa-select" style="width: 100%; height: 38px; border-radius: 8px;" onchange="platformApp.filterInstitutionsDirectory()">
+                <option value="All">All Academic Years</option>
+                <option value="2026–2027">AY 2026–2027 (Current)</option>
+                <option value="2025–2026">AY 2025–2026 (Previous)</option>
+              </select>
+            </div>
+
+            <!-- Domain Status Filter -->
+            <div>
+              <select id="instDomainFilter" class="pa-select" style="width: 100%; height: 38px; border-radius: 8px;" onchange="platformApp.filterInstitutionsDirectory()">
+                <option value="All">All Domains</option>
+                <option value="verified">DNS Verified</option>
+                <option value="unverified">DNS Pending</option>
+              </select>
+            </div>
+
+            <!-- Reset Button -->
+            <div>
+              <button type="button" class="btn-pa btn-pa-secondary" style="height: 38px; padding: 0 0.9rem;" onclick="platformApp.resetInstitutionFilters()" title="Reset all search &amp; filters">
+                <i class="fa-solid fa-rotate-left"></i> Reset
+              </button>
+            </div>
+          </div>
+
+          <!-- Secondary Toolbar: Count Pill & Active Tags -->
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 0.85rem; padding-top: 0.75rem; border-top: 1px solid var(--color-border, #E2E8F0); font-size: 0.8rem; color: #64748B; flex-wrap: wrap; gap: 0.5rem;">
+            <div style="display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
+              <span class="badge" style="background: rgba(79, 70, 229, 0.1); color: var(--pa-primary, #4F46E5); font-weight: 700; padding: 0.35rem 0.75rem; border-radius: 20px;" id="instShowingCountPill">
+                <i class="fa-solid fa-list-check mr-1"></i> Showing <strong id="instFilteredCount">3</strong> of <strong id="instTotalCount">3</strong> Institutions
+              </span>
+              <span class="badge" style="background: #F1F5F9; color: #475569; padding: 0.35rem 0.75rem; border-radius: 6px;">
+                <i class="fa-solid fa-shield-halved text-primary mr-1"></i> Sri Vidya Educational Trust Cluster
+              </span>
+            </div>
+            <div style="font-size: 0.75rem; color: #94A3B8;">
+              <i class="fa-solid fa-circle-info mr-1"></i> Suspension policy enforces read-only administrative retention without data deletion.
+            </div>
+          </div>
+        </div>
+
+        <!-- Authoritative 10-Column Institution Directory Table (Section 3.1) -->
+        <div class="pa-card">
           <div class="pa-table-responsive">
-            <table class="pa-table">
+            <table class="pa-table" id="institutionsDirectoryTable">
               <thead>
                 <tr>
-                  <th>Institution Details</th>
-                  <th>Affiliation &amp; Category</th>
-                  <th>Enrollment Footprint</th>
-                  <th>Domain Mapping</th>
-                  <th>Status</th>
-                  <th>Actions</th>
+                  <th style="min-width: 110px;">Institution ID</th>
+                  <th style="min-width: 220px;">Institution Name</th>
+                  <th style="min-width: 110px;">Institution Code</th>
+                  <th style="min-width: 140px;">Type</th>
+                  <th style="min-width: 160px;">Primary Domain</th>
+                  <th style="min-width: 180px;">Admin Contact</th>
+                  <th style="min-width: 120px;">Setup Status</th>
+                  <th style="min-width: 130px;">Institution Status</th>
+                  <th style="min-width: 110px;">Created Date</th>
+                  <th style="min-width: 140px; text-align: center;">Actions</th>
                 </tr>
               </thead>
               <tbody id="institutionsTableBody">
-                <!-- Dynamically populated by platform-admin.js -->
+                <!-- Dynamically populated by platformApp.renderInstitutionsTable -->
               </tbody>
             </table>
           </div>
         </div>
+
       </section>
 
       <!-- =======================================================================
@@ -1908,50 +2090,831 @@
   <!-- =========================================================================
        MODAL 1: ADD NEW INSTITUTION
        ========================================================================= -->
+  <!-- =========================================================================
+       MODAL 1: ADD INSTITUTION MULTI-STEP SETUP WIZARD (SECTION 3.2)
+       ========================================================================= -->
   <div class="pa-modal-backdrop" id="modalAddInstitution">
-    <div class="pa-modal">
+    <div class="pa-modal pa-modal-xl">
       <div class="pa-modal-header">
-        <h3 style="margin: 0; font-size: 1.15rem; font-weight: 700;">
-          <i class="fa-solid fa-school-flag text-primary"></i> Onboard New Institutional Campus
-        </h3>
-        <button class="btn-pa btn-pa-secondary" style="padding: 0.3rem 0.6rem;"
-          onclick="platformApp.closeModal('modalAddInstitution')">
+        <div>
+          <h3 class="pa-modal-title" style="margin: 0; font-size: 1.15rem; font-weight: 800; display: flex; align-items: center; gap: 0.5rem;">
+            <i class="fa-solid fa-school-flag text-primary"></i> Add Institution Setup Wizard
+          </h3>
+          <p class="pa-modal-desc" style="margin: 2px 0 0; font-size: 0.8rem; color: #64748B;">
+            Multi-school provisioning pipeline under Sri Vidya Educational Trust governance
+          </p>
+        </div>
+        <button class="btn-pa btn-pa-secondary" style="padding: 0.3rem 0.6rem;" onclick="platformApp.closeModal('modalAddInstitution')">
           <i class="fa-solid fa-xmark"></i>
         </button>
       </div>
-      <form onsubmit="platformApp.handleAddInstitution(event)">
-        <div class="pa-modal-body">
-          <div class="mb-3">
-            <label style="font-size: 0.8rem; font-weight: 600; display: block; margin-bottom: 0.35rem;">Institution Full
-              Name *</label>
-            <input type="text" id="newInstName" class="pa-search-input" style="width: 100%;" required
-              placeholder="e.g. Sri Vidya Degree &amp; PG College">
-          </div>
-          <div class="mb-3">
-            <label style="font-size: 0.8rem; font-weight: 600; display: block; margin-bottom: 0.35rem;">Campus Code
-              *</label>
-            <input type="text" id="newInstCode" class="pa-search-input" style="width: 100%;" required
-              placeholder="e.g. SV-DEGREE">
-          </div>
-          <div class="mb-3">
-            <label style="font-size: 0.8rem; font-weight: 600; display: block; margin-bottom: 0.35rem;">Board /
-              University Affiliation *</label>
-            <input type="text" id="newInstBoard" class="pa-search-input" style="width: 100%;" required
-              placeholder="e.g. Acharya Nagarjuna University">
-          </div>
-          <div class="mb-3">
-            <label style="font-size: 0.8rem; font-weight: 600; display: block; margin-bottom: 0.35rem;">Primary Web
-              Domain *</label>
-            <input type="text" id="newInstDomain" class="pa-search-input" style="width: 100%;" required
-              placeholder="e.g. degree.srividya.edu.in">
-          </div>
+
+      <!-- 6-Step Stepper Navigation -->
+      <div class="pa-wizard-stepper" id="wizardStepperNav">
+        <div class="pa-wizard-step active" id="wizardStepNav1" onclick="platformApp.goToWizardStep(1)">
+          <span class="pa-wizard-num">1</span>
+          <span>1. Identity</span>
         </div>
-        <div class="pa-modal-footer">
-          <button type="button" class="btn-pa btn-pa-secondary"
-            onclick="platformApp.closeModal('modalAddInstitution')">Cancel</button>
-          <button type="submit" class="btn-pa btn-pa-primary">Provision Tenant</button>
+        <div class="pa-wizard-divider"></div>
+        <div class="pa-wizard-step" id="wizardStepNav2" onclick="platformApp.goToWizardStep(2)">
+          <span class="pa-wizard-num">2</span>
+          <span>2. Configuration</span>
+        </div>
+        <div class="pa-wizard-divider"></div>
+        <div class="pa-wizard-step" id="wizardStepNav3" onclick="platformApp.goToWizardStep(3)">
+          <span class="pa-wizard-num">3</span>
+          <span>3. Branding</span>
+        </div>
+        <div class="pa-wizard-divider"></div>
+        <div class="pa-wizard-step" id="wizardStepNav4" onclick="platformApp.goToWizardStep(4)">
+          <span class="pa-wizard-num">4</span>
+          <span>4. Domain &amp; Mail</span>
+        </div>
+        <div class="pa-wizard-divider"></div>
+        <div class="pa-wizard-step" id="wizardStepNav5" onclick="platformApp.goToWizardStep(5)">
+          <span class="pa-wizard-num">5</span>
+          <span>5. Initial Admin</span>
+        </div>
+        <div class="pa-wizard-divider"></div>
+        <div class="pa-wizard-step" id="wizardStepNav6" onclick="platformApp.goToWizardStep(6)">
+          <span class="pa-wizard-num">6</span>
+          <span>6. Review &amp; Activate</span>
+        </div>
+      </div>
+
+      <form id="formAddInstitutionWizard" onsubmit="event.preventDefault();">
+        <div class="pa-modal-body" style="padding: 1.5rem; max-height: 65vh; overflow-y: auto;">
+
+          <!-- STEP 1: INSTITUTION IDENTITY -->
+          <div class="wizard-pane active" id="wizardPane1">
+            <h4 style="margin: 0 0 1rem; font-size: 0.95rem; font-weight: 700; color: var(--color-text-main); display: flex; align-items: center; gap: 0.5rem;">
+              <i class="fa-solid fa-id-card text-primary"></i> Step 1: Institutional Identity &amp; Legal Entity
+            </h4>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem;">
+              <div class="mb-3">
+                <label style="font-size: 0.8rem; font-weight: 600; display: block; margin-bottom: 0.35rem;">Official Institution Name *</label>
+                <input type="text" id="wizName" class="pa-search-input" required placeholder="e.g. Sri Vidya Global Academy (North Campus)" style="width: 100%;">
+              </div>
+              <div class="mb-3">
+                <label style="font-size: 0.8rem; font-weight: 600; display: block; margin-bottom: 0.35rem;">Display Name / Short Name</label>
+                <input type="text" id="wizDisplayName" class="pa-search-input" placeholder="e.g. Sri Vidya Global" style="width: 100%;">
+              </div>
+              <div class="mb-3">
+                <label style="font-size: 0.8rem; font-weight: 600; display: block; margin-bottom: 0.35rem;">Institution Code (Permanent Key) *</label>
+                <input type="text" id="wizCode" class="pa-search-input" required placeholder="e.g. SV-GLOBAL" style="width: 100%; text-transform: uppercase;">
+                <small style="color: #64748B; font-size: 0.72rem;">Unique school code across the Trust</small>
+              </div>
+              <div class="mb-3">
+                <label style="font-size: 0.8rem; font-weight: 600; display: block; margin-bottom: 0.35rem;">Institution Type *</label>
+                <select id="wizType" class="pa-select" style="width: 100%;">
+                  <option value="Primary & Secondary School">Primary &amp; Secondary School (Class 1 to 10)</option>
+                  <option value="Junior College">Junior College (Intermediate +1 &amp; +2)</option>
+                  <option value="Early Childhood Centre">Early Childhood Centre (Nursery to UKG)</option>
+                  <option value="Branch Campus">Branch Campus / Extension</option>
+                  <option value="K-12 School">Integrated K-12 Comprehensive School</option>
+                </select>
+              </div>
+              <div class="mb-3">
+                <label style="font-size: 0.8rem; font-weight: 600; display: block; margin-bottom: 0.35rem;">Trust / Parent Organization</label>
+                <input type="text" id="wizTrust" class="pa-search-input" value="Sri Vidya Educational Trust" readonly style="width: 100%; background: #F1F5F9; color: #475569;">
+              </div>
+              <div class="mb-3">
+                <label style="font-size: 0.8rem; font-weight: 600; display: block; margin-bottom: 0.35rem;">UDISE+ Statutory Identifier</label>
+                <input type="text" id="wizUdise" class="pa-search-input" placeholder="e.g. 28172901928" style="width: 100%;">
+              </div>
+              <div class="mb-3" style="grid-column: 1 / -1;">
+                <label style="font-size: 0.8rem; font-weight: 600; display: block; margin-bottom: 0.35rem;">Physical Campus Address *</label>
+                <input type="text" id="wizAddress" class="pa-search-input" required placeholder="Street, Door No, Landmark, City, State, Pincode" style="width: 100%;">
+              </div>
+              <div class="mb-3">
+                <label style="font-size: 0.8rem; font-weight: 600; display: block; margin-bottom: 0.35rem;">Official Contact Email *</label>
+                <input type="email" id="wizEmail" class="pa-search-input" required placeholder="principal.branch@srividya.edu.in" style="width: 100%;">
+              </div>
+              <div class="mb-3">
+                <label style="font-size: 0.8rem; font-weight: 600; display: block; margin-bottom: 0.35rem;">Contact Telephone / Mobile *</label>
+                <input type="text" id="wizPhone" class="pa-search-input" required placeholder="+91 891 255 4899" style="width: 100%;">
+              </div>
+            </div>
+          </div>
+
+          <!-- STEP 2: INSTITUTION CONFIGURATION -->
+          <div class="wizard-pane" id="wizardPane2" style="display: none;">
+            <h4 style="margin: 0 0 1rem; font-size: 0.95rem; font-weight: 700; color: var(--color-text-main); display: flex; align-items: center; gap: 0.5rem;">
+              <i class="fa-solid fa-sliders text-primary"></i> Step 2: Operational &amp; Academic Configuration
+            </h4>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem;">
+              <div class="mb-3">
+                <label style="font-size: 0.8rem; font-weight: 600; display: block; margin-bottom: 0.35rem;">Time Zone</label>
+                <select id="wizTimezone" class="pa-select" style="width: 100%;">
+                  <option value="Asia/Kolkata (IST +05:30)" selected>Asia/Kolkata (IST +05:30) - Standard Indian Time</option>
+                  <option value="UTC">UTC (Universal Coordinated Time)</option>
+                </select>
+              </div>
+              <div class="mb-3">
+                <label style="font-size: 0.8rem; font-weight: 600; display: block; margin-bottom: 0.35rem;">Locale &amp; Languages</label>
+                <select id="wizLocale" class="pa-select" style="width: 100%;">
+                  <option value="en-IN" selected>en-IN (English - India) + Telugu Regional Support</option>
+                  <option value="te-IN">te-IN (Telugu Primary)</option>
+                </select>
+              </div>
+              <div class="mb-3">
+                <label style="font-size: 0.8rem; font-weight: 600; display: block; margin-bottom: 0.35rem;">Accounting Currency</label>
+                <input type="text" id="wizCurrency" class="pa-search-input" value="INR (₹) - Indian Rupee" readonly style="width: 100%; background: #F1F5F9; color: #475569;">
+              </div>
+              <div class="mb-3">
+                <label style="font-size: 0.8rem; font-weight: 600; display: block; margin-bottom: 0.35rem;">Academic Year Format</label>
+                <select id="wizAyFormat" class="pa-select" style="width: 100%;">
+                  <option value="June to April (AP State Board Standard)" selected>June to April (AP State Board Standard)</option>
+                  <option value="April to March (CBSE / Central Standard)">April to March (CBSE / Central Standard)</option>
+                  <option value="June to March (BIEAP Intermediate Standard)">June to March (BIEAP Intermediate Standard)</option>
+                </select>
+              </div>
+              <div class="mb-3">
+                <label style="font-size: 0.8rem; font-weight: 600; display: block; margin-bottom: 0.35rem;">Grading Configuration</label>
+                <select id="wizGrading" class="pa-select" style="width: 100%;">
+                  <option value="AP Board CCE (A1 to E Scale with GPA 10.0)" selected>AP Board CCE (A1 to E Scale with GPA 10.0)</option>
+                  <option value="CBSE 9-Point Scale (A1 to E2)">CBSE 9-Point Scale (A1 to E2)</option>
+                  <option value="Percentage Based (Distinction, First, Second)">Percentage Based (Distinction, First, Second)</option>
+                </select>
+              </div>
+              <div class="mb-3">
+                <label style="font-size: 0.8rem; font-weight: 600; display: block; margin-bottom: 0.35rem;">Attendance Configuration</label>
+                <select id="wizAttendance" class="pa-select" style="width: 100%;">
+                  <option value="Daily Morning & Afternoon Register" selected>Daily Morning &amp; Afternoon Register</option>
+                  <option value="Period / Subject-Wise Biometric Integrated">Period / Subject-Wise Biometric Integrated</option>
+                  <option value="Single Daily Homeroom Register">Single Daily Homeroom Register</option>
+                </select>
+              </div>
+              <div class="mb-3" style="grid-column: 1 / -1;">
+                <label style="font-size: 0.8rem; font-weight: 600; display: block; margin-bottom: 0.35rem;">School Calendar Working Days</label>
+                <select id="wizCalendar" class="pa-select" style="width: 100%;">
+                  <option value="6 Working Days (Mon-Sat, 2nd Saturday Holiday)" selected>6 Working Days (Mon–Sat, 2nd Saturday Statutory Holiday)</option>
+                  <option value="5 Working Days (Mon-Fri)">5 Working Days (Mon–Fri)</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <!-- STEP 3: BRANDING -->
+          <div class="wizard-pane" id="wizardPane3" style="display: none;">
+            <h4 style="margin: 0 0 1rem; font-size: 0.95rem; font-weight: 700; color: var(--color-text-main); display: flex; align-items: center; gap: 0.5rem;">
+              <i class="fa-solid fa-palette text-primary"></i> Step 3: Campus Branding &amp; Visual Identity
+            </h4>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.25rem;">
+              <!-- Controls -->
+              <div>
+                <div class="mb-3">
+                  <label style="font-size: 0.8rem; font-weight: 600; display: block; margin-bottom: 0.35rem;">School Logo Path / URL</label>
+                  <input type="text" id="wizLogo" class="pa-search-input" value="/assets/images/logo.png" style="width: 100%;" oninput="platformApp.updateWizardBrandingPreview()">
+                </div>
+                <div class="mb-3">
+                  <label style="font-size: 0.8rem; font-weight: 600; display: block; margin-bottom: 0.35rem;">Primary Brand Color</label>
+                  <div style="display: flex; gap: 0.5rem; align-items: center;">
+                    <input type="color" id="wizPrimaryColorPicker" value="#1e3a8a" style="width: 44px; height: 38px; border: 1px solid #CBD5E1; border-radius: 6px; cursor: pointer;" oninput="document.getElementById('wizPrimaryColorText').value=this.value; platformApp.updateWizardBrandingPreview();">
+                    <input type="text" id="wizPrimaryColorText" class="pa-search-input" value="#1e3a8a" style="flex: 1;" oninput="document.getElementById('wizPrimaryColorPicker').value=this.value; platformApp.updateWizardBrandingPreview();">
+                  </div>
+                </div>
+                <div class="mb-3">
+                  <label style="font-size: 0.8rem; font-weight: 600; display: block; margin-bottom: 0.35rem;">Secondary Accent Color</label>
+                  <div style="display: flex; gap: 0.5rem; align-items: center;">
+                    <input type="color" id="wizSecondaryColorPicker" value="#059669" style="width: 44px; height: 38px; border: 1px solid #CBD5E1; border-radius: 6px; cursor: pointer;" oninput="document.getElementById('wizSecondaryColorText').value=this.value; platformApp.updateWizardBrandingPreview();">
+                    <input type="text" id="wizSecondaryColorText" class="pa-search-input" value="#059669" style="flex: 1;" oninput="document.getElementById('wizSecondaryColorPicker').value=this.value; platformApp.updateWizardBrandingPreview();">
+                  </div>
+                </div>
+                <div class="mb-3">
+                  <label style="font-size: 0.8rem; font-weight: 600; display: block; margin-bottom: 0.35rem;">Official Document Header Text</label>
+                  <input type="text" id="wizDocHeader" class="pa-search-input" value="SRI VIDYA EDUCATIONAL TRUST • GOVT RECOGNIZED" style="width: 100%;" oninput="platformApp.updateWizardBrandingPreview()">
+                </div>
+              </div>
+
+              <!-- Live Previews -->
+              <div>
+                <label style="font-size: 0.8rem; font-weight: 700; color: #475569; display: block; margin-bottom: 0.5rem;">
+                  <i class="fa-solid fa-eye text-primary mr-1"></i> Live Institutional Branding Previews
+                </label>
+
+                <!-- Document Header Preview -->
+                <div class="branding-preview-box mb-3" style="text-align: center; border-top: 4px solid #1e3a8a;" id="previewDocHeaderBox">
+                  <div style="font-size: 0.75rem; font-weight: 800; letter-spacing: 0.05em; color: #1e3a8a;" id="previewDocHeaderText">
+                    SRI VIDYA EDUCATIONAL TRUST • GOVT RECOGNIZED
+                  </div>
+                  <div style="font-size: 1.05rem; font-weight: 800; color: #0F172A; margin: 4px 0;" id="previewSchoolName">
+                    Sri Vidya School
+                  </div>
+                  <div style="font-size: 0.72rem; color: #64748B;">Affiliated to AP State Board • Visakhapatnam</div>
+                </div>
+
+                <!-- Report Card Crest Preview -->
+                <div class="branding-preview-box" style="display: flex; align-items: center; gap: 1rem;">
+                  <div style="width: 46px; height: 46px; border-radius: 8px; background: #1e3a8a; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 1.3rem;" id="previewLogoBox">
+                    <i class="fa-solid fa-graduation-cap"></i>
+                  </div>
+                  <div>
+                    <div style="font-size: 0.85rem; font-weight: 700;" id="previewCardTitle">Progress Report Card</div>
+                    <div style="font-size: 0.72rem; color: #64748B;">Statutory Hologram &amp; Authorized Seal Applied</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- STEP 4: DOMAIN AND EMAIL -->
+          <div class="wizard-pane" id="wizardPane4" style="display: none;">
+            <h4 style="margin: 0 0 1rem; font-size: 0.95rem; font-weight: 700; color: var(--color-text-main); display: flex; align-items: center; gap: 0.5rem;">
+              <i class="fa-solid fa-globe text-primary"></i> Step 4: Domain Mapping &amp; DNS Verification
+            </h4>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem; margin-bottom: 1.25rem;">
+              <div class="mb-3">
+                <label style="font-size: 0.8rem; font-weight: 600; display: block; margin-bottom: 0.35rem;">Primary Apex Domain *</label>
+                <input type="text" id="wizPrimaryDomain" class="pa-search-input" required placeholder="e.g. global.srividya.edu.in" style="width: 100%;">
+              </div>
+              <div class="mb-3">
+                <label style="font-size: 0.8rem; font-weight: 600; display: block; margin-bottom: 0.35rem;">Public Website Domain</label>
+                <input type="text" id="wizWebsiteDomain" class="pa-search-input" placeholder="e.g. www.global.srividya.edu.in" style="width: 100%;">
+              </div>
+              <div class="mb-3">
+                <label style="font-size: 0.8rem; font-weight: 600; display: block; margin-bottom: 0.35rem;">Administration Portal Domain</label>
+                <input type="text" id="wizAdminDomain" class="pa-search-input" placeholder="e.g. admin.global.srividya.edu.in" style="width: 100%;">
+              </div>
+              <div class="mb-3">
+                <label style="font-size: 0.8rem; font-weight: 600; display: block; margin-bottom: 0.35rem;">Faculty Portal Domain</label>
+                <input type="text" id="wizFacultyDomain" class="pa-search-input" placeholder="e.g. faculty.global.srividya.edu.in" style="width: 100%;">
+              </div>
+            </div>
+
+            <!-- DNS Verification Console -->
+            <div style="background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 10px; padding: 1.25rem;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+                <div style="font-weight: 700; font-size: 0.85rem; color: #1E293B;">
+                  <i class="fa-solid fa-satellite-dish text-primary mr-1"></i> DNS Propagation &amp; SSL Diagnostic Probe
+                </div>
+                <button type="button" class="btn-pa btn-pa-secondary" style="padding: 0.3rem 0.75rem; font-size: 0.78rem;" onclick="platformApp.runWizardDnsCheck()">
+                  <i class="fa-solid fa-rotate mr-1"></i> Run DNS Test
+                </button>
+              </div>
+
+              <div id="wizardDnsResults" style="font-size: 0.8rem; color: #475569;">
+                <div style="display: flex; gap: 0.5rem; align-items: center; margin-bottom: 0.35rem;">
+                  <span class="badge" style="background: #DCFCE7; color: #15803D;"><i class="fa-solid fa-check mr-1"></i> A Record</span>
+                  <span>172.67.182.41 (Global Cloudflare Anycast)</span>
+                </div>
+                <div style="display: flex; gap: 0.5rem; align-items: center; margin-bottom: 0.35rem;">
+                  <span class="badge" style="background: #DCFCE7; color: #15803D;"><i class="fa-solid fa-check mr-1"></i> SPF / DKIM</span>
+                  <span>Google Workspace Relay Authorized</span>
+                </div>
+                <div style="display: flex; gap: 0.5rem; align-items: center;">
+                  <span class="badge" style="background: #DCFCE7; color: #15803D;"><i class="fa-solid fa-shield mr-1"></i> SSL/TLS</span>
+                  <span>Auto-provisioned Let's Encrypt Certificate</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- STEP 5: INITIAL ADMINISTRATOR -->
+          <div class="wizard-pane" id="wizardPane5" style="display: none;">
+            <h4 style="margin: 0 0 1rem; font-size: 0.95rem; font-weight: 700; color: var(--color-text-main); display: flex; align-items: center; gap: 0.5rem;">
+              <i class="fa-solid fa-user-shield text-primary"></i> Step 5: Initial Campus Administrator Provisioning
+            </h4>
+
+            <div style="background: #EFF6FF; border: 1px solid #BFDBFE; border-radius: 10px; padding: 1rem; margin-bottom: 1.25rem; font-size: 0.82rem; color: #1E40AF; line-height: 1.5;">
+              <i class="fa-solid fa-shield-halved mr-1" style="font-size: 1rem;"></i>
+              <strong>Zero-Shared-Password Policy:</strong> An activation invite link with a 256-bit cryptographic token will be dispatched directly to the official administrator. The administrator must set their own secure credentials and configure Multi-Factor Authentication upon initial access.
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem;">
+              <div class="mb-3">
+                <label style="font-size: 0.8rem; font-weight: 600; display: block; margin-bottom: 0.35rem;">Administrator Full Name *</label>
+                <input type="text" id="wizAdminName" class="pa-search-input" required placeholder="e.g. Sri K. Ramakrishna" style="width: 100%;">
+              </div>
+              <div class="mb-3">
+                <label style="font-size: 0.8rem; font-weight: 600; display: block; margin-bottom: 0.35rem;">Official Email Address *</label>
+                <input type="email" id="wizAdminEmail" class="pa-search-input" required placeholder="admin.campus@srividya.edu.in" style="width: 100%;">
+              </div>
+              <div class="mb-3">
+                <label style="font-size: 0.8rem; font-weight: 600; display: block; margin-bottom: 0.35rem;">Official Mobile Number</label>
+                <input type="text" id="wizAdminPhone" class="pa-search-input" placeholder="+91 98480 12345" style="width: 100%;">
+              </div>
+              <div class="mb-3">
+                <label style="font-size: 0.8rem; font-weight: 600; display: block; margin-bottom: 0.35rem;">Institutional Role *</label>
+                <select id="wizAdminRole" class="pa-select" style="width: 100%;">
+                  <option value="Institutional Principal" selected>Institutional Principal (Apex Academic Head)</option>
+                  <option value="Vice Principal">Vice Principal &amp; Academic Dean</option>
+                  <option value="Administrative Officer">Administrative Officer (Finance &amp; Office)</option>
+                  <option value="Campus Director">Campus Director</option>
+                </select>
+              </div>
+              <div class="mb-3">
+                <label style="font-size: 0.8rem; font-weight: 600; display: block; margin-bottom: 0.35rem;">Invitation Validity Window</label>
+                <input type="text" class="pa-search-input" value="7 Days (Standard Platform Security Window)" readonly style="width: 100%; background: #F1F5F9; color: #475569;">
+              </div>
+              <div class="mb-3">
+                <label style="font-size: 0.8rem; font-weight: 600; display: block; margin-bottom: 0.35rem;">MFA Requirement</label>
+                <input type="text" class="pa-search-input" value="Mandatory Mobile OTP / Authenticator TOTP" readonly style="width: 100%; background: #F1F5F9; color: #475569;">
+              </div>
+            </div>
+          </div>
+
+          <!-- STEP 6: REVIEW AND ACTIVATE -->
+          <div class="wizard-pane" id="wizardPane6" style="display: none;">
+            <h4 style="margin: 0 0 1rem; font-size: 0.95rem; font-weight: 700; color: var(--color-text-main); display: flex; align-items: center; gap: 0.5rem;">
+              <i class="fa-solid fa-clipboard-check text-primary"></i> Step 6: Review Institutional Parameters &amp; Provision
+            </h4>
+
+            <div style="background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 12px; padding: 1.25rem; margin-bottom: 1.25rem;">
+              <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem; font-size: 0.82rem;">
+                <div>
+                  <div style="color: #64748B; font-size: 0.75rem; text-transform: uppercase; font-weight: 700;">Campus Identity</div>
+                  <div style="font-weight: 700; font-size: 0.95rem; color: #0F172A; margin: 2px 0;" id="revName">Sri Vidya School</div>
+                  <div style="color: #475569;">Code: <strong id="revCode">SV-000</strong> • <span id="revType">Primary &amp; Secondary</span></div>
+                  <div style="color: #64748B; font-size: 0.75rem; margin-top: 2px;" id="revAddress">Visakhapatnam, AP</div>
+                </div>
+
+                <div>
+                  <div style="color: #64748B; font-size: 0.75rem; text-transform: uppercase; font-weight: 700;">Domain &amp; Network</div>
+                  <div style="font-weight: 700; color: #0F172A; margin: 2px 0;" id="revDomain">domain.srividya.edu.in</div>
+                  <div style="color: #10B981;"><i class="fa-solid fa-shield-check mr-1"></i> DNS Verified • SSL Ready</div>
+                  <div style="color: #64748B; font-size: 0.75rem;" id="revContactEmail">info@srividya.edu.in</div>
+                </div>
+
+                <div>
+                  <div style="color: #64748B; font-size: 0.75rem; text-transform: uppercase; font-weight: 700;">Initial Administrator</div>
+                  <div style="font-weight: 700; color: #0F172A; margin: 2px 0;" id="revAdmin">Sri Administrator</div>
+                  <div style="color: #475569;" id="revAdminRole">Institutional Principal</div>
+                  <div style="color: #64748B; font-size: 0.75rem;" id="revAdminEmail">admin@srividya.edu.in</div>
+                </div>
+              </div>
+            </div>
+
+            <div style="display: flex; gap: 0.75rem; align-items: flex-start; padding: 0.85rem; background: #ECFDF5; border: 1px solid #A7F3D0; border-radius: 8px; font-size: 0.8rem; color: #065F46;">
+              <i class="fa-solid fa-circle-check" style="font-size: 1.1rem; margin-top: 2px;"></i>
+              <div>
+                <strong>Validation Complete:</strong> All institutional identity, grading configuration, domain mappings, and administrative privileges comply with Sri Vidya Educational Trust multi-tenant governance rules.
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Wizard Footer Controls -->
+        <div class="pa-modal-footer" style="justify-content: space-between;">
+          <button type="button" class="btn-pa btn-pa-secondary" id="btnWizardBack" onclick="platformApp.prevWizardStep()" style="display: none;">
+            <i class="fa-solid fa-arrow-left me-1"></i> Back
+          </button>
+          <div style="display: flex; gap: 0.6rem; margin-left: auto;">
+            <button type="button" class="btn-pa btn-pa-secondary" onclick="platformApp.closeModal('modalAddInstitution')">
+              Cancel
+            </button>
+            <button type="button" class="btn-pa btn-pa-secondary" id="btnWizardDraft" onclick="platformApp.submitWizard('save_draft')" style="font-weight: 600;">
+              <i class="fa-solid fa-floppy-disk me-1"></i> Save Draft
+            </button>
+            <button type="button" class="btn-pa btn-pa-primary" id="btnWizardNext" onclick="platformApp.nextWizardStep()" style="font-weight: 700;">
+              Next <i class="fa-solid fa-arrow-right ms-1"></i>
+            </button>
+            <button type="button" class="btn-pa btn-pa-primary" id="btnWizardSubmit" onclick="platformApp.submitWizard('activate')" style="display: none; background: #10B981; font-weight: 700;">
+              <i class="fa-solid fa-rocket me-1"></i> Activate Institution Now
+            </button>
+          </div>
         </div>
       </form>
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       MODAL 2: INSTITUTION DETAIL (10 AUTHORITATIVE TABS - SECTION 3.3)
+       ========================================================================= -->
+  <div class="pa-modal-backdrop" id="modalInstitutionDetail">
+    <div class="pa-modal pa-modal-xl">
+      <div class="pa-modal-header" style="flex-wrap: wrap; gap: 0.75rem;">
+        <div>
+          <div style="display: flex; align-items: center; gap: 0.6rem;">
+            <h3 class="pa-modal-title" style="margin: 0; font-size: 1.25rem; font-weight: 800;" id="detailModalTitle">
+              Sri Vidya E.M High School (Main Campus)
+            </h3>
+            <span class="inst-badge-active" id="detailModalStatusBadge"><i class="fa-solid fa-circle-check"></i> Active</span>
+          </div>
+          <div style="font-size: 0.78rem; color: #64748B; margin-top: 3px;">
+            Permanent ID: <strong id="detailModalId">INST-001</strong> • Code: <strong id="detailModalCode">SV-MAIN</strong> • Affiliation: <span id="detailModalBoard">AP SSC</span>
+          </div>
+        </div>
+
+        <!-- Detail Actions Toolbar -->
+        <div style="display: flex; gap: 0.4rem; flex-wrap: wrap;">
+          <button type="button" class="btn-pa btn-pa-secondary" style="padding: 0.35rem 0.75rem; font-size: 0.8rem;" onclick="platformApp.openEditFromDetail()">
+            <i class="fa-solid fa-pen-to-square me-1"></i> Edit
+          </button>
+          <button type="button" class="btn-pa btn-pa-secondary" style="padding: 0.35rem 0.75rem; font-size: 0.8rem;" onclick="platformApp.openConfigureFromDetail()">
+            <i class="fa-solid fa-sliders me-1"></i> Configure
+          </button>
+          <button type="button" class="btn-pa btn-pa-secondary" style="padding: 0.35rem 0.75rem; font-size: 0.8rem;" onclick="platformApp.openInviteAdminForDetail()">
+            <i class="fa-solid fa-user-plus me-1"></i> Invite Admin
+          </button>
+          <button type="button" class="btn-pa btn-pa-secondary" style="padding: 0.35rem 0.75rem; font-size: 0.8rem; color: #EF4444;" id="btnDetailSuspend" onclick="platformApp.openSuspendFromDetail()">
+            <i class="fa-solid fa-ban me-1"></i> Suspend Access
+          </button>
+          <button type="button" class="btn-pa btn-pa-secondary" style="padding: 0.35rem 0.75rem; font-size: 0.8rem; color: #10B981; display: none;" id="btnDetailReactivate" onclick="platformApp.reactivateInstitutionFromDetail()">
+            <i class="fa-solid fa-circle-check me-1"></i> Reactivate
+          </button>
+          <button type="button" class="btn-pa btn-pa-secondary" style="padding: 0.35rem 0.6rem;" onclick="platformApp.closeModal('modalInstitutionDetail')">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- 10 Detail Tabs Header -->
+      <div class="pa-detail-nav" id="institutionDetailTabsNav">
+        <button class="pa-detail-tab-btn active" onclick="platformApp.switchInstitutionDetailTab('overview')"><i class="fa-solid fa-chart-pie"></i> 1. Overview</button>
+        <button class="pa-detail-tab-btn" onclick="platformApp.switchInstitutionDetailTab('profile')"><i class="fa-solid fa-building-columns"></i> 2. Profile</button>
+        <button class="pa-detail-tab-btn" onclick="platformApp.switchInstitutionDetailTab('config')"><i class="fa-solid fa-sliders"></i> 3. Configuration</button>
+        <button class="pa-detail-tab-btn" onclick="platformApp.switchInstitutionDetailTab('domains')"><i class="fa-solid fa-globe"></i> 4. Domains</button>
+        <button class="pa-detail-tab-btn" onclick="platformApp.switchInstitutionDetailTab('portals')"><i class="fa-solid fa-network-wired"></i> 5. Portal Status</button>
+        <button class="pa-detail-tab-btn" onclick="platformApp.switchInstitutionDetailTab('admins')"><i class="fa-solid fa-user-shield"></i> 6. Administrators</button>
+        <button class="pa-detail-tab-btn" onclick="platformApp.switchInstitutionDetailTab('integrations')"><i class="fa-solid fa-puzzle-piece"></i> 7. Integrations</button>
+        <button class="pa-detail-tab-btn" onclick="platformApp.switchInstitutionDetailTab('subscription')"><i class="fa-solid fa-id-card-clip"></i> 8. Subscription</button>
+        <button class="pa-detail-tab-btn" onclick="platformApp.switchInstitutionDetailTab('support')"><i class="fa-solid fa-headset"></i> 9. Support History</button>
+        <button class="pa-detail-tab-btn" onclick="platformApp.switchInstitutionDetailTab('audit')"><i class="fa-solid fa-clock-rotate-left"></i> 10. Audit History</button>
+      </div>
+
+      <!-- Detail Tabs Content -->
+      <div class="pa-modal-body" style="padding: 1.5rem; max-height: 65vh; overflow-y: auto;" id="institutionDetailBody">
+
+        <!-- TAB 1: OVERVIEW -->
+        <div class="detail-tab-pane active" id="detailTabPane-overview">
+          <!-- Status Pipeline Banner -->
+          <div class="pa-status-pipeline" id="detailModalPipeline">
+            <span class="pa-pipeline-node done"><i class="fa-solid fa-check-circle"></i> Draft</span>
+            <i class="fa-solid fa-chevron-right pa-pipeline-arrow"></i>
+            <span class="pa-pipeline-node done"><i class="fa-solid fa-check-circle"></i> Setup in Progress</span>
+            <i class="fa-solid fa-chevron-right pa-pipeline-arrow"></i>
+            <span class="pa-pipeline-node done"><i class="fa-solid fa-check-circle"></i> Configuration Review</span>
+            <i class="fa-solid fa-chevron-right pa-pipeline-arrow"></i>
+            <span class="pa-pipeline-node done"><i class="fa-solid fa-check-circle"></i> Ready for Activation</span>
+            <i class="fa-solid fa-chevron-right pa-pipeline-arrow"></i>
+            <span class="pa-pipeline-node current" id="detailPipelineStatusNode"><i class="fa-solid fa-circle-dot"></i> Active</span>
+          </div>
+
+          <!-- Suspension Alert Box (if suspended) -->
+          <div id="detailSuspensionAlert" style="display: none; background: #FEE2E2; border: 1.5px solid #F87171; border-radius: 10px; padding: 1rem; margin-bottom: 1.25rem;">
+            <div style="font-weight: 800; color: #991B1B; font-size: 0.9rem; display: flex; align-items: center; gap: 0.5rem;">
+              <i class="fa-solid fa-triangle-exclamation"></i> INSTITUTION ACCESS SUSPENDED
+            </div>
+            <p style="margin: 4px 0 0; font-size: 0.8rem; color: #7F1D1D;" id="detailSuspensionReason">
+              Reason: Administrative audit review in progress.
+            </p>
+            <div style="font-size: 0.72rem; color: #991B1B; margin-top: 4px;">
+              <strong>Policy:</strong> Public and teacher logins disabled. Records are fully retained for authorized compliance investigation.
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin-bottom: 1.5rem;">
+            <div class="pa-card" style="padding: 1rem; border-left: 4px solid var(--pa-primary, #4F46E5);">
+              <div style="font-size: 0.75rem; font-weight: 700; color: #64748B;">ENROLLED STUDENTS</div>
+              <div style="font-size: 1.6rem; font-weight: 800; color: var(--color-text-main); margin-top: 0.2rem;" id="detailOverviewStudents">855</div>
+              <div style="font-size: 0.72rem; color: #10B981;"><i class="fa-solid fa-arrow-up mr-1"></i> Active Roster Verified</div>
+            </div>
+            <div class="pa-card" style="padding: 1rem; border-left: 4px solid #10B981;">
+              <div style="font-size: 0.75rem; font-weight: 700; color: #64748B;">FACULTY &amp; STAFF</div>
+              <div style="font-size: 1.6rem; font-weight: 800; color: var(--color-text-main); margin-top: 0.2rem;" id="detailOverviewStaff">34</div>
+              <div style="font-size: 0.72rem; color: #64748B;">Biometric Active</div>
+            </div>
+            <div class="pa-card" style="padding: 1rem; border-left: 4px solid #F59E0B;">
+              <div style="font-size: 0.75rem; font-weight: 700; color: #64748B;">ACTIVE CLASSROOMS</div>
+              <div style="font-size: 1.6rem; font-weight: 800; color: var(--color-text-main); margin-top: 0.2rem;" id="detailOverviewClassrooms">18</div>
+              <div style="font-size: 0.72rem; color: #64748B;">Pre-Primary to Class X</div>
+            </div>
+            <div class="pa-card" style="padding: 1rem; border-left: 4px solid #8B5CF6;">
+              <div style="font-size: 0.75rem; font-weight: 700; color: #64748B;">TODAY'S ATTENDANCE</div>
+              <div style="font-size: 1.6rem; font-weight: 800; color: #10B981; margin-top: 0.2rem;">96.8%</div>
+              <div style="font-size: 0.72rem; color: #64748B;">828 Present / 27 Absent</div>
+            </div>
+          </div>
+
+          <!-- Quick Information Columns -->
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1rem;">
+            <div class="pa-card" style="padding: 1rem;">
+              <div style="font-weight: 700; font-size: 0.85rem; margin-bottom: 0.75rem; color: #1E293B;"><i class="fa-solid fa-address-book text-primary mr-1"></i> Authorized Campus Contacts</div>
+              <div style="font-size: 0.8rem; line-height: 1.6;">
+                <div><strong>Apex Head:</strong> <span id="detailOverviewHead">Smt. Gorle Varalakshmi (Principal)</span></div>
+                <div><strong>Email:</strong> <span id="detailOverviewEmail">srividyaschools2017@gmail.com</span></div>
+                <div><strong>Phone:</strong> <span id="detailOverviewPhone">+91 891 255 4899</span></div>
+                <div><strong>Campus:</strong> <span id="detailOverviewAddress">Visakhapatnam, Andhra Pradesh</span></div>
+              </div>
+            </div>
+
+            <div class="pa-card" style="padding: 1rem;">
+              <div style="font-weight: 700; font-size: 0.85rem; margin-bottom: 0.75rem; color: #1E293B;"><i class="fa-solid fa-network-wired text-primary mr-1"></i> Domain &amp; Network Ingress</div>
+              <div style="font-size: 0.8rem; line-height: 1.6;">
+                <div><strong>Primary Domain:</strong> <a href="#" target="_blank" id="detailOverviewDomainLink">srividya.edu.in</a> <span class="badge" style="background:#DCFCE7; color:#15803D; font-size:0.7rem;">Verified</span></div>
+                <div><strong>Admin Portal:</strong> <span id="detailOverviewAdminDomain">admin.srividya.edu.in</span></div>
+                <div><strong>Faculty Portal:</strong> <span id="detailOverviewFacultyDomain">faculty.srividya.edu.in</span></div>
+                <div><strong>SSL Security:</strong> <span class="badge" style="background:#DCFCE7; color:#15803D; font-size:0.7rem;">TLS 1.3 Active</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB 2: PROFILE -->
+        <div class="detail-tab-pane" id="detailTabPane-profile" style="display: none;">
+          <h4 style="margin: 0 0 1rem; font-size: 0.95rem; font-weight: 700; color: #1E293B;"><i class="fa-solid fa-building-columns text-primary mr-1"></i> Complete Institutional Profile</h4>
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem; font-size: 0.83rem;">
+            <div><strong>Official Name:</strong> <div id="detailProfileName" style="color: #475569;">Sri Vidya E.M High School</div></div>
+            <div><strong>Display Name:</strong> <div id="detailProfileDisplayName" style="color: #475569;">Sri Vidya High School</div></div>
+            <div><strong>Campus Code:</strong> <div id="detailProfileCode" style="color: #475569;">SV-MAIN</div></div>
+            <div><strong>Board / Affiliation:</strong> <div id="detailProfileBoard" style="color: #475569;">AP State SSC Board</div></div>
+            <div><strong>UDISE+ Code:</strong> <div id="detailProfileUdise" style="color: #475569;">28172901923</div></div>
+            <div><strong>Parent Trust:</strong> <div id="detailProfileTrust" style="color: #475569;">Sri Vidya Educational Trust</div></div>
+            <div><strong>Official Email:</strong> <div id="detailProfileEmail" style="color: #475569;">srividyaschools2017@gmail.com</div></div>
+            <div><strong>Phone Number:</strong> <div id="detailProfilePhone" style="color: #475569;">+91 891 255 4899</div></div>
+            <div style="grid-column: 1 / -1;"><strong>Address:</strong> <div id="detailProfileFullAddress" style="color: #475569;">Visakhapatnam, Andhra Pradesh</div></div>
+          </div>
+        </div>
+
+        <!-- TAB 3: CONFIGURATION -->
+        <div class="detail-tab-pane" id="detailTabPane-config" style="display: none;">
+          <h4 style="margin: 0 0 1rem; font-size: 0.95rem; font-weight: 700; color: #1E293B;"><i class="fa-solid fa-sliders text-primary mr-1"></i> Operational &amp; Academic Settings</h4>
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem; font-size: 0.83rem;">
+            <div><strong>Timezone:</strong> <div id="detailConfigTimezone" style="color: #475569;">Asia/Kolkata (IST +05:30)</div></div>
+            <div><strong>Locale:</strong> <div id="detailConfigLocale" style="color: #475569;">en-IN (English - India)</div></div>
+            <div><strong>Currency:</strong> <div id="detailConfigCurrency" style="color: #475569;">INR (₹)</div></div>
+            <div><strong>Academic Year Format:</strong> <div id="detailConfigAyFormat" style="color: #475569;">June to April (AP State Board)</div></div>
+            <div><strong>Current Academic Year:</strong> <div id="detailConfigCurrentAy" style="color: #475569;">2026–2027</div></div>
+            <div><strong>Grading Policy:</strong> <div id="detailConfigGrading" style="color: #475569;">AP Board CCE (A1-E Scale)</div></div>
+            <div><strong>Attendance Mode:</strong> <div id="detailConfigAttendance" style="color: #475569;">Daily Morning &amp; Afternoon Register</div></div>
+            <div><strong>Calendar Settings:</strong> <div id="detailConfigCalendar" style="color: #475569;">6 Working Days (Mon-Sat)</div></div>
+          </div>
+        </div>
+
+        <!-- TAB 4: DOMAINS -->
+        <div class="detail-tab-pane" id="detailTabPane-domains" style="display: none;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+            <h4 style="margin: 0; font-size: 0.95rem; font-weight: 700; color: #1E293B;"><i class="fa-solid fa-globe text-primary mr-1"></i> Verified Domains &amp; DNS Records</h4>
+            <button type="button" class="btn-pa btn-pa-secondary" style="font-size: 0.78rem;" onclick="platformApp.verifyCurrentInstitutionDns()"><i class="fa-solid fa-rotate mr-1"></i> Re-test DNS Probe</button>
+          </div>
+          <table class="pa-table" style="font-size: 0.82rem;">
+            <thead>
+              <tr><th>Domain Route</th><th>Type</th><th>Target / Value</th><th>Status</th><th>SSL</th></tr>
+            </thead>
+            <tbody id="detailDomainsTableBody">
+              <tr><td><strong>srividya.edu.in</strong> (Apex)</td><td>A Record</td><td>172.67.182.41</td><td><span class="badge" style="background:#DCFCE7; color:#15803D;">Active</span></td><td><span class="badge" style="background:#DCFCE7; color:#15803D;">TLS 1.3</span></td></tr>
+              <tr><td><strong>admin.srividya.edu.in</strong></td><td>CNAME</td><td>ingress.srividya.edu.in</td><td><span class="badge" style="background:#DCFCE7; color:#15803D;">Active</span></td><td><span class="badge" style="background:#DCFCE7; color:#15803D;">TLS 1.3</span></td></tr>
+              <tr><td><strong>faculty.srividya.edu.in</strong></td><td>CNAME</td><td>ingress.srividya.edu.in</td><td><span class="badge" style="background:#DCFCE7; color:#15803D;">Active</span></td><td><span class="badge" style="background:#DCFCE7; color:#15803D;">TLS 1.3</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- TAB 5: PORTAL STATUS -->
+        <div class="detail-tab-pane" id="detailTabPane-portals" style="display: none;">
+          <h4 style="margin: 0 0 1rem; font-size: 0.95rem; font-weight: 700; color: #1E293B;"><i class="fa-solid fa-network-wired text-primary mr-1"></i> Sub-Portal Health &amp; Gateway Status</h4>
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem;">
+            <div class="pa-card" style="padding: 1rem; border: 1px solid #BBF7D0; background: #F0FDF4;">
+              <div style="display: flex; justify-content: space-between; font-weight: 700; color: #166534;">
+                <span>Public Website</span><span class="badge" style="background:#DCFCE7; color:#15803D;">200 OK</span>
+              </div>
+              <div style="font-size: 0.78rem; color: #15803D; margin-top: 4px;">Route: <code>/</code> (2ms response)</div>
+            </div>
+            <div class="pa-card" style="padding: 1rem; border: 1px solid #BBF7D0; background: #F0FDF4;">
+              <div style="display: flex; justify-content: space-between; font-weight: 700; color: #166534;">
+                <span>Management Portal</span><span class="badge" style="background:#DCFCE7; color:#15803D;">200 OK</span>
+              </div>
+              <div style="font-size: 0.78rem; color: #15803D; margin-top: 4px;">Route: <code>/management</code> (Principal &amp; Office)</div>
+            </div>
+            <div class="pa-card" style="padding: 1rem; border: 1px solid #BBF7D0; background: #F0FDF4;">
+              <div style="display: flex; justify-content: space-between; font-weight: 700; color: #166534;">
+                <span>Faculty Portal</span><span class="badge" style="background:#DCFCE7; color:#15803D;">200 OK</span>
+              </div>
+              <div style="font-size: 0.78rem; color: #15803D; margin-top: 4px;">Route: <code>/teacher</code> (Marks &amp; Attendance)</div>
+            </div>
+            <div class="pa-card" style="padding: 1rem; border: 1px solid #BFDBFE; background: #EFF6FF;">
+              <div style="display: flex; justify-content: space-between; font-weight: 700; color: #1E40AF;">
+                <span>Future Student &amp; Parent Gateways</span><span class="badge" style="background:#DBEAFE; color:#1E40AF;">Provisioned</span>
+              </div>
+              <div style="font-size: 0.78rem; color: #1E40AF; margin-top: 4px;">Backend endpoints active &amp; ready</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB 6: ADMINISTRATORS -->
+        <div class="detail-tab-pane" id="detailTabPane-admins" style="display: none;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+            <h4 style="margin: 0; font-size: 0.95rem; font-weight: 700; color: #1E293B;"><i class="fa-solid fa-user-shield text-primary mr-1"></i> Authorized Institutional Leaders</h4>
+            <button type="button" class="btn-pa btn-pa-primary" style="font-size: 0.78rem;" onclick="platformApp.openInviteAdminForDetail()"><i class="fa-solid fa-plus mr-1"></i> Invite Administrator</button>
+          </div>
+          <table class="pa-table" style="font-size: 0.82rem;">
+            <thead>
+              <tr><th>Administrator Name</th><th>Official Email</th><th>Role</th><th>Status</th><th>Last Login</th><th>Actions</th></tr>
+            </thead>
+            <tbody id="detailAdminsTableBody">
+              <!-- Dynamically populated -->
+            </tbody>
+          </table>
+        </div>
+
+        <!-- TAB 7: INTEGRATIONS -->
+        <div class="detail-tab-pane" id="detailTabPane-integrations" style="display: none;">
+          <h4 style="margin: 0 0 1rem; font-size: 0.95rem; font-weight: 700; color: #1E293B;"><i class="fa-solid fa-puzzle-piece text-primary mr-1"></i> Institutional Integrations</h4>
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem; font-size: 0.82rem;">
+            <div class="pa-card" style="padding: 1rem;">
+              <div style="font-weight: 700; color: #1E293B;"><i class="fa-solid fa-comment-sms text-primary mr-1"></i> SMS Gateway</div>
+              <div style="color: #475569; margin: 4px 0;" id="detailIntegSms">National CDAC Gateway (Govt DLT Approved)</div>
+              <span class="badge" style="background:#DCFCE7; color:#15803D;">Active &amp; Balanced</span>
+            </div>
+            <div class="pa-card" style="padding: 1rem;">
+              <div style="font-weight: 700; color: #1E293B;"><i class="fa-solid fa-credit-card text-emerald mr-1"></i> Payment Gateway</div>
+              <div style="color: #475569; margin: 4px 0;" id="detailIntegPayment">Razorpay &amp; UPI Instant Settlement</div>
+              <span class="badge" style="background:#DCFCE7; color:#15803D;">Settlements Active</span>
+            </div>
+            <div class="pa-card" style="padding: 1rem;">
+              <div style="font-weight: 700; color: #1E293B;"><i class="fa-solid fa-fingerprint text-purple mr-1"></i> Biometrics</div>
+              <div style="color: #475569; margin: 4px 0;">ZKTeco Optical Scanners (6 Units Online)</div>
+              <span class="badge" style="background:#DCFCE7; color:#15803D;">Synchronized</span>
+            </div>
+            <div class="pa-card" style="padding: 1rem;">
+              <div style="font-weight: 700; color: #1E293B;"><i class="fa-solid fa-vault text-amber mr-1"></i> Document Storage Vault</div>
+              <div style="color: #475569; margin: 4px 0;">AWS S3 Mumbai (AES-256 Encrypted)</div>
+              <span class="badge" style="background:#DCFCE7; color:#15803D;">Compliant</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB 8: SUBSCRIPTION -->
+        <div class="detail-tab-pane" id="detailTabPane-subscription" style="display: none;">
+          <h4 style="margin: 0 0 1rem; font-size: 0.95rem; font-weight: 700; color: #1E293B;"><i class="fa-solid fa-id-card-clip text-primary mr-1"></i> Trust Multi-Campus License</h4>
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem; font-size: 0.83rem;">
+            <div class="pa-card" style="padding: 1rem;">
+              <div style="color: #64748B; font-size: 0.75rem; text-transform: uppercase; font-weight: 700;">Plan Tier</div>
+              <div style="font-size: 1.25rem; font-weight: 800; color: var(--pa-primary, #4F46E5); margin: 4px 0;" id="detailSubTier">Trust Enterprise Multi-Campus</div>
+              <div style="color: #64748B;">Unlimited Faculty &amp; Student Seats</div>
+            </div>
+            <div class="pa-card" style="padding: 1rem;">
+              <div style="color: #64748B; font-size: 0.75rem; text-transform: uppercase; font-weight: 700;">Student Capacity Allocation</div>
+              <div style="font-size: 1.25rem; font-weight: 800; color: #10B981; margin: 4px 0;"><span id="detailSubSeatsUsed">855</span> / <span id="detailSubSeatsTotal">1200</span> Used</div>
+              <div style="width: 100%; height: 6px; background: #E2E8F0; border-radius: 3px; overflow: hidden; margin-top: 6px;">
+                <div style="width: 71%; height: 100%; background: #10B981;" id="detailSubBar"></div>
+              </div>
+            </div>
+            <div class="pa-card" style="padding: 1rem;">
+              <div style="color: #64748B; font-size: 0.75rem; text-transform: uppercase; font-weight: 700;">License Renewal Date</div>
+              <div style="font-size: 1.25rem; font-weight: 800; color: #0F172A; margin: 4px 0;" id="detailSubRenewal">30 Jun 2028</div>
+              <div style="color: #10B981;"><i class="fa-solid fa-check mr-1"></i> Trust Master Contract Active</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB 9: SUPPORT HISTORY -->
+        <div class="detail-tab-pane" id="detailTabPane-support" style="display: none;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+            <h4 style="margin: 0; font-size: 0.95rem; font-weight: 700; color: #1E293B;"><i class="fa-solid fa-headset text-primary mr-1"></i> Technical Tickets Log</h4>
+            <button type="button" class="btn-pa btn-pa-secondary" style="font-size: 0.78rem;" onclick="platformApp.openCreateTicketModal()"><i class="fa-solid fa-plus mr-1"></i> Open Ticket</button>
+          </div>
+          <table class="pa-table" style="font-size: 0.82rem;">
+            <thead>
+              <tr><th>Ticket ID</th><th>Issue Summary</th><th>Priority</th><th>Logged Date</th><th>Status</th></tr>
+            </thead>
+            <tbody id="detailSupportTableBody">
+              <tr><td><code>TCK-8821</code></td><td>Biometric scanner optical recalibration</td><td><span class="badge" style="background:#FEF3C7; color:#B45309;">Normal</span></td><td>Yesterday</td><td><span class="badge" style="background:#DCFCE7; color:#15803D;">Resolved</span></td></tr>
+              <tr><td><code>TCK-8794</code></td><td>Class X hall tickets batch PDF watermark update</td><td><span class="badge" style="background:#DCFCE7; color:#15803D;">Low</span></td><td>3 days ago</td><td><span class="badge" style="background:#DCFCE7; color:#15803D;">Resolved</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- TAB 10: AUDIT HISTORY -->
+        <div class="detail-tab-pane" id="detailTabPane-audit" style="display: none;">
+          <h4 style="margin: 0 0 1rem; font-size: 0.95rem; font-weight: 700; color: #1E293B;"><i class="fa-solid fa-clock-rotate-left text-primary mr-1"></i> Immutable Institutional Audit Trail</h4>
+          <table class="pa-table" style="font-size: 0.82rem;">
+            <thead>
+              <tr><th>Timestamp</th><th>Operator</th><th>Action</th><th>Outcome</th><th>Details</th></tr>
+            </thead>
+            <tbody id="detailAuditTableBody">
+              <tr><td>Today, 08:15 PM</td><td>sysadmin.root@srividya.trust</td><td><code>CONFIG_VERIFIED</code></td><td><span class="badge" style="background:#DCFCE7; color:#15803D;">Success</span></td><td>Academic year and fee schedule verified for 2026-27</td></tr>
+              <tr><td>01 Nov 2026, 09:30 AM</td><td>srividyaschools2017@gmail.com</td><td><code>TERM_ACTIVATED</code></td><td><span class="badge" style="background:#DCFCE7; color:#15803D;">Success</span></td><td>Quarterly assessment cycle SA-1 marks register approved</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+      </div>
+
+      <div class="pa-modal-footer">
+        <button type="button" class="btn-pa btn-pa-secondary" onclick="platformApp.closeModal('modalInstitutionDetail')">Close Dossier</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       MODAL 3: SUSPEND INSTITUTION CONFIRMATION (SECTIONS 3.3 & 3.4)
+       ========================================================================= -->
+  <div class="pa-modal-backdrop" id="modalSuspendInstitution">
+    <div class="pa-modal pa-modal-lg">
+      <div class="pa-modal-header" style="background: #FEF2F2; border-bottom: 1px solid #FECACA;">
+        <div>
+          <h3 class="pa-modal-title" style="margin: 0; color: #991B1B; font-weight: 800; display: flex; align-items: center; gap: 0.5rem;">
+            <i class="fa-solid fa-ban"></i> Suspend Campus Access
+          </h3>
+          <p class="pa-modal-desc" style="margin: 2px 0 0; color: #B91C1C; font-size: 0.8rem;">
+            Enforces Trust Access Suspension Policy without record deletion
+          </p>
+        </div>
+        <button class="btn-pa btn-pa-secondary" style="padding: 0.3rem 0.6rem;" onclick="platformApp.closeModal('modalSuspendInstitution')">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <form onsubmit="platformApp.confirmSuspendInstitution(event)">
+        <div class="pa-modal-body" style="padding: 1.5rem;">
+          <div style="background: #FFF1F2; border: 1.5px solid #FDA4AF; border-radius: 10px; padding: 1.15rem; margin-bottom: 1.25rem;">
+            <div style="font-weight: 800; font-size: 0.92rem; color: #9F1239; margin-bottom: 0.35rem;">
+              <i class="fa-solid fa-triangle-exclamation mr-1"></i> Authoritative Access Policy Enforcement
+            </div>
+            <ul style="margin: 0; padding-left: 1.2rem; font-size: 0.82rem; color: #881337; line-height: 1.5;">
+              <li>Public website, parent portal, and faculty login for this campus will be immediately disabled.</li>
+              <li><strong>Zero Data Deletion:</strong> All student rosters, attendance marks, fee collections, and academic records are preserved in the encrypted database.</li>
+              <li>Trust Root Administrators retain read-only audit access under approved supervisory procedure.</li>
+            </ul>
+          </div>
+
+          <input type="hidden" id="suspendTargetInstId">
+
+          <div class="mb-3">
+            <label style="font-size: 0.82rem; font-weight: 700; color: #1E293B; display: block; margin-bottom: 0.35rem;">Campus to Suspend</label>
+            <input type="text" id="suspendTargetInstName" class="pa-search-input" readonly style="width: 100%; background: #F1F5F9; font-weight: 700; color: #334155;">
+          </div>
+
+          <div class="mb-3">
+            <label style="font-size: 0.82rem; font-weight: 700; color: #1E293B; display: block; margin-bottom: 0.35rem;">
+              Authoritative Reason for Suspension * (Required for Audit Trail)
+            </label>
+            <textarea id="suspendReason" class="pa-search-input" rows="3" required placeholder="Specify formal reason (e.g. Statutory affiliation audit pending, annual regulatory inspection, financial restructuring...)" style="width: 100%; height: auto; padding: 0.65rem;"></textarea>
+            <small style="color: #64748B; font-size: 0.72rem;">Minimum 5 characters. This reason will be logged permanently in the platform audit log.</small>
+          </div>
+
+          <div style="margin-top: 1rem;">
+            <label style="display: flex; gap: 0.6rem; align-items: flex-start; cursor: pointer; font-size: 0.82rem; color: #1E293B; font-weight: 600;">
+              <input type="checkbox" id="suspendConfirmationCheckbox" required style="margin-top: 3px; width: 16px; height: 16px;">
+              <span>I confirm that I possess authorized administrative clearance from Sri Vidya Educational Trust to suspend this campus access.</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="pa-modal-footer" style="background: #F9FAFB;">
+          <button type="button" class="btn-pa btn-pa-secondary" onclick="platformApp.closeModal('modalSuspendInstitution')">Cancel</button>
+          <button type="submit" class="btn-pa btn-pa-primary" style="background: #DC2626; font-weight: 700;">
+            <i class="fa-solid fa-lock mr-1"></i> Confirm Suspension
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       MODAL 4: IMPORT INSTITUTIONS DOCKET (SECTION 3.1)
+       ========================================================================= -->
+  <div class="pa-modal-backdrop" id="modalImportInstitutions">
+    <div class="pa-modal pa-modal-lg">
+      <div class="pa-modal-header">
+        <div>
+          <h3 class="pa-modal-title" style="margin: 0; font-size: 1.15rem; font-weight: 800; display: flex; align-items: center; gap: 0.5rem;">
+            <i class="fa-solid fa-file-import text-primary"></i> Import Institutions Docket
+          </h3>
+          <p class="pa-modal-desc" style="margin: 2px 0 0; color: #64748B; font-size: 0.8rem;">
+            Batch ingest school branches using standardized CSV / JSON docket
+          </p>
+        </div>
+        <button class="btn-pa btn-pa-secondary" style="padding: 0.3rem 0.6rem;" onclick="platformApp.closeModal('modalImportInstitutions')">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <div class="pa-modal-body" style="padding: 1.5rem;">
+        <div style="display: flex; justify-content: space-between; align-items: center; background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 10px; padding: 1rem; margin-bottom: 1.25rem;">
+          <div>
+            <div style="font-weight: 700; font-size: 0.85rem; color: #1E293B;">Sample Import Docket</div>
+            <div style="font-size: 0.75rem; color: #64748B;">Download pre-formatted CSV template with standard column headers</div>
+          </div>
+          <button type="button" class="btn-pa btn-pa-secondary" style="font-size: 0.8rem;" onclick="platformApp.downloadSampleInstitutionsCSV()">
+            <i class="fa-solid fa-download mr-1"></i> Download Template
+          </button>
+        </div>
+
+        <div style="border: 2px dashed #CBD5E1; border-radius: 12px; padding: 2rem; text-align: center; background: #F8FAFC; cursor: pointer; margin-bottom: 1rem;" onclick="document.getElementById('importInstFileInput').click()">
+          <i class="fa-solid fa-cloud-arrow-up" style="font-size: 2.2rem; color: var(--pa-primary, #4F46E5); margin-bottom: 0.5rem;"></i>
+          <div style="font-weight: 700; font-size: 0.95rem; color: #1E293B;">Click to select or drag CSV docket here</div>
+          <div style="font-size: 0.75rem; color: #64748B; margin-top: 4px;">Supported format: CSV (UTF-8) with columns: Name, Code, Type, Domain, Email, Phone</div>
+          <input type="file" id="importInstFileInput" accept=".csv" style="display: none;" onchange="platformApp.handleImportFileSelect(event)">
+        </div>
+
+        <div id="importFileStatus" style="display: none; padding: 0.75rem; background: #ECFDF5; border: 1px solid #A7F3D0; border-radius: 8px; font-size: 0.8rem; color: #065F46;">
+          <i class="fa-solid fa-file-csv mr-1"></i> <span id="importFileName">sample.csv</span> ready for ingestion.
+        </div>
+      </div>
+
+      <div class="pa-modal-footer">
+        <button type="button" class="btn-pa btn-pa-secondary" onclick="platformApp.closeModal('modalImportInstitutions')">Cancel</button>
+        <button type="button" class="btn-pa btn-pa-primary" onclick="platformApp.processImportInstitutions()">
+          <i class="fa-solid fa-cloud-arrow-up mr-1"></i> Ingest Institutions
+        </button>
+      </div>
     </div>
   </div>
 
