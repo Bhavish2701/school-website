@@ -507,6 +507,8 @@ const platformApp = (function () {
       loadBackupsData();
     } else if (viewId === 'integrations' && typeof loadIntegrationsData === 'function') {
       loadIntegrationsData();
+    } else if (viewId === 'domains-email' && typeof loadDomainsEmailData === 'function') {
+      loadDomainsEmailData();
     }
 
     // Update Header Breadcrumb
@@ -10434,7 +10436,801 @@ const platformApp = (function () {
   }
 
 
-function init() {
+  // ===========================================================================
+  // MODULE 15: DOMAINS, EMAIL & NOTIFICATIONS
+  // ===========================================================================
+  let domainsEmailState = {
+    domains: [],
+    emailServices: [],
+    templates: [],
+    activeTab: 'directory',
+    currentDomainId: null
+  };
+
+  function domEscape(str) {
+    if (!str) return '';
+    return String(str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
+  }
+
+  function domFormatDate(d) {
+    if (!d) return '--';
+    const date = new Date(d);
+    if (isNaN(date.getTime())) return '--';
+    return date.toLocaleString('en-IN', {
+      day: '2-digit',
+      month: 'short',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: false
+    });
+  }
+
+  async function loadDomainsEmailData() {
+    try {
+      const [resDomains, resServices, resTemplates] = await Promise.all([
+        fetch('/api/v1/platform/domains'),
+        fetch('/api/v1/platform/domains/email/services'),
+        fetch('/api/v1/platform/domains/templates')
+      ]);
+
+      const jDomains = await resDomains.json();
+      const jServices = await resServices.json();
+      const jTemplates = await resTemplates.json();
+
+      domainsEmailState.domains = (jDomains && jDomains.success) ? (jDomains.data || []) : [];
+      domainsEmailState.emailServices = (jServices && jServices.success) ? (jServices.data || []) : [];
+      domainsEmailState.templates = (jTemplates && jTemplates.success) ? (jTemplates.data || []) : [];
+
+      // Update Sub-Tab Counts
+      const bDomains = document.getElementById('badgeDomainsCount');
+      if (bDomains) bDomains.textContent = domainsEmailState.domains.length;
+
+      const bEmail = document.getElementById('badgeEmailServicesCount');
+      if (bEmail) bEmail.textContent = domainsEmailState.emailServices.length;
+
+      const bTemplates = document.getElementById('badgeTemplatesCount');
+      if (bTemplates) bTemplates.textContent = domainsEmailState.templates.length;
+
+      renderDomainsTable(domainsEmailState.domains);
+      renderEmailServicesTable(domainsEmailState.emailServices);
+      renderNotificationTemplatesTable(domainsEmailState.templates);
+    } catch (err) {
+      console.error('Error loading Domains & Email data:', err);
+      showToast('Error loading Domains and Email data: ' + err.message, 'danger');
+    }
+  }
+
+  function switchDomainsSubTab(tabName) {
+    domainsEmailState.activeTab = tabName;
+    const tabs = [
+      { id: 'btnDomTabDirectory', content: 'domTabDirectoryContent', name: 'directory' },
+      { id: 'btnDomTabEmail', content: 'domTabEmailContent', name: 'email' },
+      { id: 'btnDomTabTemplates', content: 'domTabTemplatesContent', name: 'templates' }
+    ];
+
+    tabs.forEach(t => {
+      const btn = document.getElementById(t.id);
+      const content = document.getElementById(t.content);
+      if (t.name === tabName) {
+        if (btn) {
+          btn.classList.add('active');
+          const badge = btn.querySelector('.badge');
+          if (badge) {
+            badge.classList.remove('bg-secondary');
+            badge.classList.add('bg-primary');
+          }
+        }
+        if (content) content.style.display = 'block';
+      } else {
+        if (btn) {
+          btn.classList.remove('active');
+          const badge = btn.querySelector('.badge');
+          if (badge) {
+            badge.classList.remove('bg-primary');
+            badge.classList.add('bg-secondary');
+          }
+        }
+        if (content) content.style.display = 'none';
+      }
+    });
+  }
+
+  function renderDomainsTable(list) {
+    const tbody = document.getElementById('tbodyDomains');
+    const lblCount = document.getElementById('lblDomFilteredCount');
+    if (lblCount) lblCount.textContent = `Showing ${list.length} Domains`;
+    if (!tbody) return;
+
+    if (!list || list.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="8" class="text-center py-4 text-muted"><i class="fa-solid fa-folder-open me-2"></i>No domains found matching criteria</td></tr>';
+      return;
+    }
+
+    tbody.innerHTML = list.map(d => {
+      // Verification badge
+      let vBadge = '<span class="badge badge-dom-pending"><i class="fa-solid fa-clock me-1"></i>PENDING</span>';
+      if (d.verificationStatus === 'VERIFIED') {
+        vBadge = '<span class="badge badge-dom-verified"><i class="fa-solid fa-circle-check me-1"></i>VERIFIED</span>';
+      } else if (d.verificationStatus === 'FAILED') {
+        vBadge = '<span class="badge badge-dom-failed"><i class="fa-solid fa-triangle-exclamation me-1"></i>FAILED</span>';
+      }
+
+      // DNS status badge
+      let dnsBadge = '<span class="badge badge-dns-propagating"><i class="fa-solid fa-spinner fa-spin me-1"></i>PROPAGATING</span>';
+      if (d.dnsStatus === 'HEALTHY' || d.dnsStatus === 'ACTIVE') {
+        dnsBadge = '<span class="badge badge-dns-healthy"><i class="fa-solid fa-check me-1"></i>HEALTHY</span>';
+      } else if (d.dnsStatus === 'MISCONFIGURED' || d.dnsStatus === 'ERROR' || d.dnsStatus === 'ACTION_REQUIRED') {
+        dnsBadge = '<span class="badge badge-dns-misconfigured"><i class="fa-solid fa-circle-xmark me-1"></i>MISCONFIGURED</span>';
+      }
+
+      // SSL status badge
+      let sslBadge = '<span class="badge badge-ssl-none"><i class="fa-solid fa-xmark me-1"></i>NONE</span>';
+      if (d.sslStatus === 'VALID') {
+        sslBadge = '<span class="badge badge-ssl-valid"><i class="fa-solid fa-shield-halved me-1"></i>VALID</span>';
+      } else if (d.sslStatus === 'EXPIRING_SOON') {
+        sslBadge = '<span class="badge badge-ssl-expiring"><i class="fa-solid fa-clock me-1"></i>EXPIRING</span>';
+      }
+
+      const isDisabled = d.isEnabled === false || d.isActive === false;
+
+      return `
+        <tr>
+          <td>
+            <strong class="font-mono text-dark">${domEscape(d.domain)}</strong>
+            ${d.isPrimary ? '<span class="badge bg-primary ms-1" style="font-size: 0.65rem;">Primary</span>' : ''}
+            ${isDisabled ? '<span class="badge bg-secondary ms-1" style="font-size: 0.65rem;">Disabled</span>' : ''}
+          </td>
+          <td>
+            <div class="fw-bold">${domEscape(d.institutionName || d.institutionScope || d.institution)}</div>
+            <small class="text-muted font-mono" style="font-size:0.75rem;">${domEscape(d.institutionScope || d.institution)}</small>
+          </td>
+          <td>
+            <span class="badge bg-light text-dark border font-mono">${domEscape(d.purpose)}</span>
+          </td>
+          <td>${vBadge}</td>
+          <td>${dnsBadge}</td>
+          <td>${sslBadge}</td>
+          <td>
+            <small class="text-muted">${domFormatDate(d.lastChecked || d.lastCheckedAt)}</small>
+          </td>
+          <td style="text-align: right; white-space: nowrap;">
+            <button class="btn btn-xs btn-outline-primary me-1" onclick="platformApp.openDomainDnsModal('${d.domainId}')" title="View DNS Instructions / Configuration">
+              <i class="fa-solid fa-list-check"></i> DNS
+            </button>
+            <button class="btn btn-xs btn-outline-success me-1" onclick="platformApp.verifyCurrentDomainOwnership('${d.domainId}')" title="Verify Ownership">
+              <i class="fa-solid fa-circle-check"></i>
+            </button>
+            <button class="btn btn-xs btn-outline-secondary me-1" onclick="platformApp.checkCurrentDomainDns('${d.domainId}')" title="Check DNS Status">
+              <i class="fa-solid fa-arrows-rotate"></i>
+            </button>
+            <button class="btn btn-xs btn-outline-warning me-1" onclick="platformApp.retryDomainVerification('${d.domainId}')" title="Retry Verification">
+              <i class="fa-solid fa-arrow-rotate-right"></i>
+            </button>
+            <button class="btn btn-xs btn-outline-danger" onclick="platformApp.disableOrRemoveCurrentDomain('${d.domainId}')" title="Disable or Remove Domain">
+              <i class="fa-solid fa-ban"></i>
+            </button>
+          </td>
+        </tr>
+      `;
+    }).join('');
+  }
+
+  function filterDomainsTable() {
+    const q = (document.getElementById('txtDomFilterSearch')?.value || '').toLowerCase().trim();
+    const purpose = document.getElementById('selDomFilterPurpose')?.value || '';
+    const verification = document.getElementById('selDomFilterVerification')?.value || '';
+    const scope = document.getElementById('selDomFilterScope')?.value || '';
+
+    const filtered = domainsEmailState.domains.filter(d => {
+      const dScope = d.institutionScope || d.institution || '';
+      const dName = d.institutionName || dScope;
+      const matchQ = !q || (d.domain && d.domain.toLowerCase().includes(q)) ||
+        dName.toLowerCase().includes(q) || dScope.toLowerCase().includes(q);
+      const matchPurpose = !purpose || d.purpose === purpose;
+      const matchVerification = !verification || d.verificationStatus === verification;
+      const matchScope = !scope || dScope === scope;
+      return matchQ && matchPurpose && matchVerification && matchScope;
+    });
+
+    renderDomainsTable(filtered);
+  }
+
+  function resetDomainFilters() {
+    const elQ = document.getElementById('txtDomFilterSearch');
+    const elP = document.getElementById('selDomFilterPurpose');
+    const elV = document.getElementById('selDomFilterVerification');
+    const elS = document.getElementById('selDomFilterScope');
+    if (elQ) elQ.value = '';
+    if (elP) elP.value = '';
+    if (elV) elV.value = '';
+    if (elS) elS.value = '';
+    renderDomainsTable(domainsEmailState.domains);
+  }
+
+  function openAddDomainModal() {
+    const input = document.getElementById('txtAddDomainInput');
+    if (input) input.value = '';
+    openModal('modalAddDomain');
+  }
+
+  async function submitAddDomain() {
+    const domainInput = document.getElementById('txtAddDomainInput')?.value?.trim();
+    const instScope = document.getElementById('selAddDomainInstitution')?.value;
+    const purpose = document.getElementById('selAddDomainPurpose')?.value;
+
+    if (!domainInput) {
+      showToast('Please enter a valid domain name', 'warning');
+      return;
+    }
+
+    try {
+      const res = await fetch('/api/v1/platform/domains', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          domain: domainInput,
+          institutionScope: instScope,
+          purpose: purpose
+        })
+      });
+      const j = await res.json();
+      if (res.ok && j.success) {
+        showToast('Domain registered successfully. Status: PENDING_VERIFICATION', 'success');
+        closeModal('modalAddDomain');
+        await loadDomainsEmailData();
+        if (j.data && j.data.domainId) {
+          openDomainDnsModal(j.data.domainId);
+        }
+      } else {
+        showToast('Failed to add domain: ' + (j.message || 'Server error'), 'danger');
+      }
+    } catch (err) {
+      console.error('Error adding domain:', err);
+      showToast('Error registering domain: ' + err.message, 'danger');
+    }
+  }
+
+  async function openDomainDnsModal(domainId) {
+    if (!domainId) return;
+    domainsEmailState.currentDomainId = domainId;
+
+    try {
+      const res = await fetch(`/api/v1/platform/domains/${encodeURIComponent(domainId)}/dns`);
+      const j = await res.json();
+      if (!res.ok || !j.success) {
+        showToast('Failed to fetch DNS details: ' + (j.message || 'Error'), 'danger');
+        return;
+      }
+
+      const domainData = j.data.domain;
+      const records = j.data.records || [];
+
+      const lblDomain = document.getElementById('lblDnsDetailDomain');
+      const lblStatus = document.getElementById('lblDnsDetailStatus');
+      const lblPurpose = document.getElementById('lblDnsDetailPurpose');
+      const lblSsl = document.getElementById('lblDnsDetailSsl');
+      const lblSslMeta = document.getElementById('lblDnsDetailSslMeta');
+      const lblToken = document.getElementById('lblDnsDetailToken');
+      const txtDomainId = document.getElementById('txtDnsDetailDomainId');
+
+      if (lblDomain) lblDomain.textContent = domainData.domain;
+      if (txtDomainId) txtDomainId.value = domainData.domainId;
+      if (lblPurpose) lblPurpose.textContent = domainData.purpose;
+
+      if (lblStatus) {
+        lblStatus.textContent = domainData.verificationStatus;
+        lblStatus.className = 'badge ' + (domainData.verificationStatus === 'VERIFIED' ? 'badge-dom-verified' :
+          domainData.verificationStatus === 'FAILED' ? 'badge-dom-failed' : 'badge-dom-pending');
+      }
+
+      if (lblSsl) {
+        lblSsl.textContent = domainData.sslStatus;
+        lblSsl.className = 'badge ' + (domainData.sslStatus === 'VALID' ? 'badge-ssl-valid' :
+          domainData.sslStatus === 'EXPIRING_SOON' ? 'badge-ssl-expiring' : 'badge-ssl-none');
+      }
+      if (lblSslMeta) {
+        lblSslMeta.textContent = domainData.sslExpiresAt ? `Expires: ${domFormatDate(domainData.sslExpiresAt)}` : "Managed via Cloudflare / Let's Encrypt";
+      }
+      if (lblToken) {
+        lblToken.textContent = domainData.verificationToken || 'N/A';
+      }
+
+      // Render Records Table
+      const tbody = document.getElementById('tbodyDomainDnsRecords');
+      if (tbody) {
+        if (records.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="6" class="text-center py-3 text-muted">No DNS records required.</td></tr>';
+        } else {
+          tbody.innerHTML = records.map(r => {
+            let statusBadge = '<span class="badge badge-dns-propagating">PENDING</span>';
+            if (r.status === 'VERIFIED') statusBadge = '<span class="badge badge-dns-healthy"><i class="fa-solid fa-check me-1"></i>VERIFIED</span>';
+            else if (r.status === 'MISCONFIGURED') statusBadge = '<span class="badge badge-dns-misconfigured"><i class="fa-solid fa-xmark me-1"></i>MISCONFIGURED</span>';
+            else if (r.status === 'MISSING') statusBadge = '<span class="badge badge-dom-failed">MISSING</span>';
+
+            const recordType = r.type || r.recordType || 'TXT';
+            const explanation = r.explanation || r.plainLanguageExplanation || '';
+
+            return `
+              <tr>
+                <td><span class="badge bg-secondary font-mono">${domEscape(recordType)}</span></td>
+                <td><code class="font-mono text-dark">${domEscape(r.host)}</code></td>
+                <td><code class="font-mono text-dark" style="word-break:break-all;">${domEscape(r.value || r.expectedValue || '')}</code></td>
+                <td>${r.priority != null ? r.priority : '-'}</td>
+                <td>${statusBadge}</td>
+                <td><small class="text-muted">${domEscape(explanation)}</small></td>
+              </tr>
+            `;
+          }).join('');
+        }
+      }
+
+      openModal('modalDomainDnsDetail');
+    } catch (err) {
+      console.error('Error loading DNS modal:', err);
+      showToast('Error opening DNS modal: ' + err.message, 'danger');
+    }
+  }
+
+  async function verifyCurrentDomainOwnership(domainId) {
+    const id = domainId || domainsEmailState.currentDomainId || document.getElementById('txtDnsDetailDomainId')?.value;
+    if (!id) return;
+
+    try {
+      const res = await fetch(`/api/v1/platform/domains/${encodeURIComponent(id)}/verify`, {
+        method: 'POST'
+      });
+      const j = await res.json();
+      if (res.ok && j.success) {
+        showToast(j.message || 'Domain verified successfully!', 'success');
+        await loadDomainsEmailData();
+        await openDomainDnsModal(id);
+      } else {
+        showToast(j.message || 'Domain ownership verification failed', 'warning');
+        await loadDomainsEmailData();
+        await openDomainDnsModal(id);
+      }
+    } catch (err) {
+      console.error('Error verifying domain:', err);
+      showToast('Error during domain verification: ' + err.message, 'danger');
+    }
+  }
+
+  async function checkCurrentDomainDns(domainId) {
+    const id = domainId || domainsEmailState.currentDomainId || document.getElementById('txtDnsDetailDomainId')?.value;
+    if (!id) return;
+
+    try {
+      const res = await fetch(`/api/v1/platform/domains/${encodeURIComponent(id)}/check-dns`, {
+        method: 'POST'
+      });
+      const j = await res.json();
+      if (res.ok && j.success) {
+        showToast(j.message || 'DNS check completed', 'info');
+        await loadDomainsEmailData();
+        await openDomainDnsModal(id);
+      } else {
+        showToast('DNS check failed: ' + (j.message || 'Unknown error'), 'danger');
+      }
+    } catch (err) {
+      console.error('Error checking DNS:', err);
+      showToast('Error checking DNS: ' + err.message, 'danger');
+    }
+  }
+
+  async function retryDomainVerification(domainId) {
+    const id = domainId || domainsEmailState.currentDomainId || document.getElementById('txtDnsDetailDomainId')?.value;
+    if (!id) return;
+
+    try {
+      const res = await fetch(`/api/v1/platform/domains/${encodeURIComponent(id)}/retry`, {
+        method: 'POST'
+      });
+      const j = await res.json();
+      if (res.ok && j.success) {
+        showToast(j.message || 'Verification retry submitted', 'info');
+        await loadDomainsEmailData();
+      } else {
+        showToast('Verification retry error: ' + (j.message || 'Failed'), 'danger');
+      }
+    } catch (err) {
+      console.error('Error retrying verification:', err);
+      showToast('Retry error: ' + err.message, 'danger');
+    }
+  }
+
+  async function disableOrRemoveCurrentDomain(domainId) {
+    const id = domainId || domainsEmailState.currentDomainId || document.getElementById('txtDnsDetailDomainId')?.value;
+    if (!id) return;
+
+    if (!confirm('Are you sure you want to disable or remove this institutional domain? Public portal routing or mail may be affected.')) {
+      return;
+    }
+
+    try {
+      const res = await fetch(`/api/v1/platform/domains/${encodeURIComponent(id)}/toggle`, {
+        method: 'POST'
+      });
+      const j = await res.json();
+      if (res.ok && j.success) {
+        showToast(j.message || 'Domain status updated', 'success');
+        closeModal('modalDomainDnsDetail');
+        await loadDomainsEmailData();
+      } else {
+        showToast('Action failed: ' + (j.message || 'Server error'), 'danger');
+      }
+    } catch (err) {
+      console.error('Error toggling domain:', err);
+      showToast('Error toggling domain: ' + err.message, 'danger');
+    }
+  }
+
+  // 15.3 Email Service Management
+  function renderEmailServicesTable(list) {
+    const tbody = document.getElementById('tbodyEmailServices');
+    if (!tbody) return;
+
+    if (!list || list.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="8" class="text-center py-4 text-muted"><i class="fa-solid fa-folder-open me-2"></i>No email services configured</td></tr>';
+      return;
+    }
+
+    tbody.innerHTML = list.map(s => {
+      let vBadge = '<span class="badge badge-dom-pending">PENDING</span>';
+      if (s.verificationStatus === 'VERIFIED') vBadge = '<span class="badge badge-dom-verified">VERIFIED</span>';
+      else if (s.verificationStatus === 'FAILED') vBadge = '<span class="badge badge-dom-failed">FAILED</span>';
+
+      let hBadge = '<span class="badge badge-es-operational"><i class="fa-solid fa-circle-check me-1"></i>OPERATIONAL</span>';
+      if (s.deliveryHealth === 'DEGRADED') hBadge = '<span class="badge badge-es-degraded"><i class="fa-solid fa-triangle-exclamation me-1"></i>DEGRADED</span>';
+      else if (s.deliveryHealth === 'CRITICAL' || s.deliveryHealth === 'DOWN') hBadge = '<span class="badge badge-es-critical"><i class="fa-solid fa-circle-xmark me-1"></i>CRITICAL</span>';
+
+      const isEnabled = s.isEnabled !== false && s.isActive !== false;
+
+      return `
+        <tr>
+          <td>
+            <strong class="text-dark">${domEscape(s.providerName || s.provider)}</strong><br>
+            <small class="text-muted font-mono" style="font-size:0.75rem;">${domEscape(s.serviceId)}</small>
+            ${!isEnabled ? '<span class="badge bg-danger ms-1" style="font-size: 0.65rem;">Disabled</span>' : ''}
+          </td>
+          <td>
+            <div class="fw-bold font-mono text-dark">${domEscape(s.senderDomain)}</div>
+            <small class="text-muted font-mono" style="font-size:0.75rem;">${domEscape(s.senderAddress || s.fromEmail || '')}</small>
+          </td>
+          <td>${vBadge}</td>
+          <td>${hBadge}</td>
+          <td><span class="fw-bold">${s.bounceRate != null ? s.bounceRate : 0}%</span></td>
+          <td><span class="badge bg-light text-dark border font-mono">${s.failedMessagesCount || 0}</span></td>
+          <td>
+            <small class="text-muted">${domEscape(s.lastTestResult || 'No test conducted')}</small>
+          </td>
+          <td style="text-align: right; white-space: nowrap;">
+            <button class="btn btn-xs btn-outline-primary me-1" onclick="platformApp.openSendTestEmailModal('${s.serviceId}')" title="Send Test Email">
+              <i class="fa-solid fa-paper-plane"></i> Test
+            </button>
+            <button class="btn btn-xs btn-outline-success me-1" onclick="platformApp.verifySenderDomain('${s.serviceId}')" title="Verify Sender Domain">
+              <i class="fa-solid fa-shield-check"></i> Verify
+            </button>
+            <button class="btn btn-xs btn-outline-secondary me-1" onclick="platformApp.openEmailDeliveryLogsModal('${s.serviceId}')" title="View Delivery Logs">
+              <i class="fa-solid fa-receipt"></i> Logs
+            </button>
+            <button class="btn btn-xs ${isEnabled ? 'btn-outline-danger' : 'btn-outline-success'}" onclick="platformApp.toggleEmailService('${s.serviceId}')" title="${isEnabled ? 'Disable Service' : 'Enable Service'}">
+              <i class="fa-solid ${isEnabled ? 'fa-power-off' : 'fa-check'}"></i>
+            </button>
+          </td>
+        </tr>
+      `;
+    }).join('');
+  }
+
+  function openSendTestEmailModal(serviceId) {
+    const s = domainsEmailState.emailServices.find(x => x.serviceId === serviceId);
+    if (!s) return;
+    const txtId = document.getElementById('txtTestEmailServiceId');
+    const lblProv = document.getElementById('lblTestEmailProvider');
+    if (txtId) txtId.value = s.serviceId;
+    if (lblProv) lblProv.textContent = `${s.providerName || s.provider} (${s.senderAddress || s.fromEmail || ''})`;
+    openModal('modalSendTestEmail');
+  }
+
+  async function submitSendTestEmail() {
+    const serviceId = document.getElementById('txtTestEmailServiceId')?.value;
+    const recipient = document.getElementById('txtTestEmailRecipient')?.value?.trim();
+
+    if (!serviceId) return;
+    if (!recipient) {
+      showToast('Please enter recipient email address', 'warning');
+      return;
+    }
+
+    try {
+      const res = await fetch(`/api/v1/platform/domains/email/services/${encodeURIComponent(serviceId)}/test`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ recipientEmail: recipient })
+      });
+      const j = await res.json();
+      if (res.ok && j.success) {
+        showToast(j.message || 'Diagnostic test email dispatched successfully', 'success');
+        closeModal('modalSendTestEmail');
+        await loadDomainsEmailData();
+      } else {
+        showToast('Test email failed: ' + (j.message || 'Server error'), 'danger');
+      }
+    } catch (err) {
+      console.error('Error sending test email:', err);
+      showToast('Error sending test email: ' + err.message, 'danger');
+    }
+  }
+
+  async function verifySenderDomain(serviceId) {
+    if (!serviceId) return;
+    try {
+      const res = await fetch(`/api/v1/platform/domains/email/services/${encodeURIComponent(serviceId)}/verify-sender`, {
+        method: 'POST'
+      });
+      const j = await res.json();
+      if (res.ok && j.success) {
+        showToast(j.message || 'Sender domain verified', 'success');
+        await loadDomainsEmailData();
+      } else {
+        showToast('Verification result: ' + (j.message || 'Check failed'), 'warning');
+        await loadDomainsEmailData();
+      }
+    } catch (err) {
+      console.error('Error verifying sender:', err);
+      showToast('Error verifying sender domain: ' + err.message, 'danger');
+    }
+  }
+
+  async function toggleEmailService(serviceId) {
+    if (!serviceId) return;
+    try {
+      const res = await fetch(`/api/v1/platform/domains/email/services/${encodeURIComponent(serviceId)}/toggle`, {
+        method: 'POST'
+      });
+      const j = await res.json();
+      if (res.ok && j.success) {
+        showToast(j.message || 'Email service status toggled', 'success');
+        await loadDomainsEmailData();
+      } else {
+        showToast('Toggle failed: ' + (j.message || 'Server error'), 'danger');
+      }
+    } catch (err) {
+      console.error('Error toggling email service:', err);
+      showToast('Toggle error: ' + err.message, 'danger');
+    }
+  }
+
+  async function openEmailDeliveryLogsModal(serviceId) {
+    if (!serviceId) return;
+    const s = domainsEmailState.emailServices.find(x => x.serviceId === serviceId);
+    const lblProv = document.getElementById('lblDeliveryLogsProvider');
+    if (lblProv) lblProv.textContent = s ? (s.providerName || s.provider) : serviceId;
+
+    try {
+      const res = await fetch(`/api/v1/platform/domains/email/services/${encodeURIComponent(serviceId)}/logs`);
+      const j = await res.json();
+      const logs = (j && j.success) ? (j.data || []) : [];
+
+      const tbody = document.getElementById('tbodyEmailDeliveryLogs');
+      if (tbody) {
+        if (logs.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="5" class="text-center py-3 text-muted">No delivery logs recorded yet.</td></tr>';
+        } else {
+          tbody.innerHTML = logs.map(l => `
+            <tr>
+              <td><code class="font-mono small text-dark">${domEscape(l.logId || '-')}</code></td>
+              <td><span class="font-mono small">${domEscape(l.recipient || l.recipientEmail || '-')}</span></td>
+              <td>${domEscape(l.subject || '-')}</td>
+              <td><span class="badge ${l.status === 'DELIVERED' ? 'bg-success' : l.status === 'SENT' ? 'bg-primary' : 'bg-danger'}">${domEscape(l.status)}</span></td>
+              <td><small class="text-muted">${domFormatDate(l.sentAt || l.timestamp)}</small></td>
+            </tr>
+          `).join('');
+        }
+      }
+      openModal('modalEmailDeliveryLogs');
+    } catch (err) {
+      console.error('Error loading email delivery logs:', err);
+      showToast('Error loading delivery logs: ' + err.message, 'danger');
+    }
+  }
+
+  // 15.4 Notification Templates
+  function renderNotificationTemplatesTable(list) {
+    const tbody = document.getElementById('tbodyNotificationTemplates');
+    if (!tbody) return;
+
+    if (!list || list.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="8" class="text-center py-4 text-muted"><i class="fa-solid fa-folder-open me-2"></i>No notification templates configured</td></tr>';
+      return;
+    }
+
+    tbody.innerHTML = list.map(t => {
+      const vNum = t.version || (t.versionHistory && t.versionHistory.length) || 1;
+      return `
+        <tr>
+          <td>
+            <strong class="text-dark">${domEscape(t.name)}</strong><br>
+            <small class="text-muted font-mono" style="font-size:0.75rem;">${domEscape(t.templateId)}</small>
+          </td>
+          <td><span class="badge bg-light text-dark border font-mono">${domEscape(t.eventTrigger)}</span></td>
+          <td><span class="badge bg-secondary font-mono">${domEscape(t.channel)}</span></td>
+          <td style="max-width: 240px; text-overflow: ellipsis; overflow: hidden; white-space: nowrap;">${domEscape(t.subject)}</td>
+          <td>
+            <span class="badge ${t.publicationStatus === 'PUBLISHED' ? 'bg-success' : 'bg-warning text-dark'}">${domEscape(t.publicationStatus)}</span>
+          </td>
+          <td><span class="badge bg-light text-dark border font-mono">v${vNum}</span></td>
+          <td><small class="text-muted">${t.lastTestSentAt ? domFormatDate(t.lastTestSentAt) : 'Never'}</small></td>
+          <td style="text-align: right; white-space: nowrap;">
+            <button class="btn btn-xs btn-outline-primary me-1" onclick="platformApp.openEditTemplateModal('${t.templateId}')" title="Edit Template">
+              <i class="fa-solid fa-file-pen"></i>
+            </button>
+            <button class="btn btn-xs btn-outline-secondary me-1" onclick="platformApp.openPreviewTemplateModal('${t.templateId}')" title="Preview Rendered Template">
+              <i class="fa-solid fa-eye"></i>
+            </button>
+            <button class="btn btn-xs btn-outline-success" onclick="platformApp.testSendNotificationTemplate('${t.templateId}')" title="Test Send Sample Notification">
+              <i class="fa-solid fa-paper-plane"></i>
+            </button>
+          </td>
+        </tr>
+      `;
+    }).join('');
+  }
+
+  function openEditTemplateModal(templateId) {
+    const t = domainsEmailState.templates.find(x => x.templateId === templateId);
+    if (!t) return;
+
+    const lblName = document.getElementById('lblEditTemplateName');
+    const txtId = document.getElementById('txtEditTemplateId');
+    const txtSubj = document.getElementById('txtEditTemplateSubject');
+    const selChan = document.getElementById('selEditTemplateChannel');
+    const txtBody = document.getElementById('txtEditTemplateBody');
+    const txtSumm = document.getElementById('txtEditTemplateSummary');
+    const boxVars = document.getElementById('boxEditTemplateVariables');
+
+    if (lblName) lblName.textContent = t.name;
+    if (txtId) txtId.value = t.templateId;
+    if (txtSubj) txtSubj.value = t.subject;
+    if (selChan) selChan.value = t.channel;
+    if (txtBody) txtBody.value = t.messageBody || t.body || '';
+    if (txtSumm) txtSumm.value = '';
+
+    const varList = (t.allowedVariables && t.allowedVariables.map(v => typeof v === 'string' ? v : v.name)) || t.availableVariables || [];
+
+    if (boxVars) {
+      if (varList.length === 0) {
+        boxVars.innerHTML = '<span class="text-muted small">No variable tokens available</span>';
+      } else {
+        boxVars.innerHTML = varList.map(v => `
+          <button type="button" class="btn btn-xs btn-outline-secondary font-mono me-1 mb-1" onclick="platformApp.insertTemplateVariable('${v}')" title="Click to insert {{${v}}}">
+            {{${v}}}
+          </button>
+        `).join('');
+      }
+    }
+
+    openModal('modalEditNotificationTemplate');
+  }
+
+  function insertTemplateVariable(varName) {
+    const txtBody = document.getElementById('txtEditTemplateBody');
+    if (!txtBody) return;
+    const token = `{{${varName}}}`;
+    const start = txtBody.selectionStart || 0;
+    const end = txtBody.selectionEnd || 0;
+    const text = txtBody.value;
+    txtBody.value = text.substring(0, start) + token + text.substring(end);
+    txtBody.focus();
+    txtBody.selectionStart = txtBody.selectionEnd = start + token.length;
+  }
+
+  async function submitUpdateTemplate() {
+    const templateId = document.getElementById('txtEditTemplateId')?.value;
+    const subject = document.getElementById('txtEditTemplateSubject')?.value?.trim();
+    const channel = document.getElementById('selEditTemplateChannel')?.value;
+    const body = document.getElementById('txtEditTemplateBody')?.value;
+    const changeSummary = document.getElementById('txtEditTemplateSummary')?.value?.trim();
+
+    if (!templateId) return;
+    if (!subject || !body) {
+      showToast('Subject and Message Body are required', 'warning');
+      return;
+    }
+
+    // Client-side Privacy Guard Invariant check
+    const prohibitedTokens = ['password', 'password_hash', 'token', 'session_token', 'aadhaar_full', 'bank_account_full', 'secret', 'api_key'];
+    const lowerBody = body.toLowerCase();
+    for (const p of prohibitedTokens) {
+      if (lowerBody.includes(`{{${p}}}`)) {
+        showToast(`Privacy Guard Violation: Prohibited variable {{${p}}} cannot be exposed in notification templates.`, 'danger');
+        return;
+      }
+    }
+
+    try {
+      const res = await fetch(`/api/v1/platform/domains/templates/${encodeURIComponent(templateId)}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          subject,
+          channel,
+          messageBody: body,
+          body: body,
+          changeSummary
+        })
+      });
+      const j = await res.json();
+      if (res.ok && j.success) {
+        showToast('Template revision saved and published successfully', 'success');
+        closeModal('modalEditNotificationTemplate');
+        await loadDomainsEmailData();
+      } else {
+        showToast('Failed to update template: ' + (j.message || 'Server error'), 'danger');
+      }
+    } catch (err) {
+      console.error('Error updating template:', err);
+      showToast('Error updating template: ' + err.message, 'danger');
+    }
+  }
+
+  async function openPreviewTemplateModal(templateId) {
+    if (!templateId) return;
+    try {
+      const res = await fetch(`/api/v1/platform/domains/templates/${encodeURIComponent(templateId)}/preview`, {
+        method: 'POST'
+      });
+      const j = await res.json();
+      if (!res.ok || !j.success) {
+        showToast('Failed to preview template: ' + (j.message || 'Error'), 'danger');
+        return;
+      }
+
+      const p = j.data;
+      const lblName = document.getElementById('lblPreviewTemplateName');
+      const lblSubj = document.getElementById('lblPreviewTemplateSubject');
+      const lblChan = document.getElementById('lblPreviewTemplateChannel');
+      const boxBody = document.getElementById('boxPreviewTemplateBody');
+
+      if (lblName) lblName.textContent = p.name;
+      if (lblSubj) lblSubj.textContent = p.interpolatedSubject || p.subject;
+      if (lblChan) lblChan.textContent = p.channel;
+      if (boxBody) boxBody.textContent = p.interpolatedBody || p.messageBody || '';
+
+      openModal('modalPreviewNotificationTemplate');
+    } catch (err) {
+      console.error('Error loading template preview:', err);
+      showToast('Error loading template preview: ' + err.message, 'danger');
+    }
+  }
+
+  async function testSendNotificationTemplate(templateId) {
+    if (!templateId) return;
+    try {
+      const res = await fetch(`/api/v1/platform/domains/templates/${encodeURIComponent(templateId)}/test-send`, {
+        method: 'POST'
+      });
+      const j = await res.json();
+      if (res.ok && j.success) {
+        showToast(j.message || 'Sample test notification dispatched successfully', 'success');
+        await loadDomainsEmailData();
+      } else {
+        showToast('Test send failed: ' + (j.message || 'Error'), 'danger');
+      }
+    } catch (err) {
+      console.error('Error test sending template:', err);
+      showToast('Error test sending: ' + err.message, 'danger');
+    }
+  }
+
+
+  function init() {
     setupTheme();
     updatePlatformClock();
     setInterval(updatePlatformClock, 1000);
@@ -10487,6 +11283,32 @@ function init() {
 
   // Public Interface
   return {
+    // Module 15: Domains, Email & Notifications
+    loadDomainsEmailData,
+    switchDomainsSubTab,
+    renderDomainsTable,
+    filterDomainsTable,
+    resetDomainFilters,
+    openAddDomainModal,
+    submitAddDomain,
+    openDomainDnsModal,
+    verifyCurrentDomainOwnership,
+    checkCurrentDomainDns,
+    retryDomainVerification,
+    disableOrRemoveCurrentDomain,
+    renderEmailServicesTable,
+    openSendTestEmailModal,
+    submitSendTestEmail,
+    verifySenderDomain,
+    toggleEmailService,
+    openEmailDeliveryLogsModal,
+    renderNotificationTemplatesTable,
+    openEditTemplateModal,
+    insertTemplateVariable,
+    submitUpdateTemplate,
+    openPreviewTemplateModal,
+    testSendNotificationTemplate,
+
     // Module 14: Support & Issue Management
     loadSupportData,
     renderSupportOverview,

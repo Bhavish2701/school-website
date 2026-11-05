@@ -3555,3 +3555,193 @@ input:checked+.pa-slider:before {
   align-items: center;
   justify-content: space-between;
 }
+
+/* ==========================================================================
+   MODULE 15: DOMAINS, EMAIL & NOTIFICATIONS (SECTIONS 15.1 - 15.4)
+   ========================================================================== */
+
+/* Sub-navigation Tabs */
+.dom-subnav {
+  display: flex;
+  gap: 0.5rem;
+  background: var(--pa-card-bg, #FFFFFF);
+  border: 1px solid var(--pa-border, #E2E8F0);
+  border-radius: 10px;
+  padding: 0.4rem;
+  margin-bottom: 1.25rem;
+}
+
+.dom-tab-btn {
+  background: transparent;
+  border: none;
+  padding: 0.55rem 1rem;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--pa-text-muted, #64748B);
+  border-radius: 8px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  transition: all 0.2s ease;
+}
+
+.dom-tab-btn:hover {
+  background: rgba(79, 70, 229, 0.05);
+  color: var(--pa-primary, #4F46E5);
+}
+
+.dom-tab-btn.active {
+  background: var(--pa-primary, #4F46E5);
+  color: #FFFFFF;
+}
+
+/* 15.1 Verification & DNS Badges */
+.badge-dom-verified {
+  background: #D1FAE5;
+  color: #065F46;
+  border: 1px solid #6EE7B7;
+  padding: 0.2rem 0.6rem;
+  border-radius: 9999px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+}
+
+.badge-dom-pending {
+  background: #FEF3C7;
+  color: #92400E;
+  border: 1px solid #FCD34D;
+  padding: 0.2rem 0.6rem;
+  border-radius: 9999px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+}
+
+.badge-dom-failed {
+  background: #FEE2E2;
+  color: #991B1B;
+  border: 1px solid #FCA5A5;
+  padding: 0.2rem 0.6rem;
+  border-radius: 9999px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+}
+
+/* 15.1 SSL / TLS Badges */
+.badge-ssl-valid {
+  background: #EFF6FF;
+  color: #1D4ED8;
+  border: 1px solid #93C5FD;
+  padding: 0.2rem 0.55rem;
+  border-radius: 9999px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+}
+
+.badge-ssl-provisioning {
+  background: #FFFBEB;
+  color: #B45309;
+  border: 1px solid #FDE68A;
+  padding: 0.2rem 0.55rem;
+  border-radius: 9999px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+}
+
+.badge-ssl-failed {
+  background: #FEF2F2;
+  color: #DC2626;
+  border: 1px solid #FECACA;
+  padding: 0.2rem 0.55rem;
+  border-radius: 9999px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+}
+
+/* 15.3 Email Health Badges */
+.badge-es-optimal {
+  background: #ECFDF5;
+  color: #047857;
+  border: 1px solid #6EE7B7;
+  padding: 0.2rem 0.6rem;
+  border-radius: 9999px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+}
+
+.badge-es-good {
+  background: #EFF6FF;
+  color: #1E40AF;
+  border: 1px solid #93C5FD;
+  padding: 0.2rem 0.6rem;
+  border-radius: 9999px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+}
+
+.badge-es-degraded {
+  background: #FFFBEB;
+  color: #B45309;
+  border: 1px solid #FCD34D;
+  padding: 0.2rem 0.6rem;
+  border-radius: 9999px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+}
+
+.badge-es-critical {
+  background: #FEF2F2;
+  color: #B91C1C;
+  border: 1px solid #F87171;
+  padding: 0.2rem 0.6rem;
+  border-radius: 9999px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+}
+
+/* 15.4 Notification Template Preview Cards */
+.template-var-pill {
+  background: #F1F5F9;
+  color: #334155;
+  border: 1px solid #CBD5E1;
+  padding: 0.15rem 0.45rem;
+  border-radius: 4px;
+  font-size: 0.72rem;
+  font-family: monospace;
+  cursor: pointer;
+  display: inline-block;
+  margin: 0.15rem;
+}
+
+.template-var-pill:hover {
+  background: #E2E8F0;
+  color: #0F172A;
+}
+
+.preview-email-frame {
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  border-radius: 8px;
+  padding: 1.25rem;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}

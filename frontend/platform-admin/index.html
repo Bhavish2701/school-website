@@ -4385,69 +4385,205 @@
            MODULE 15: DOMAINS, EMAIL & NOTIFICATIONS (#view-domains-email)
            ======================================================================= -->
       <section class="portal-view" id="view-domains-email">
-        <div class="pa-card mb-4">
-          <div class="pa-card-header">
-            <div>
-              <h3 class="pa-card-title"><i class="fa-solid fa-envelope-open-text text-primary"></i> Domain Verification
-                &amp; Official Mail Infrastructure</h3>
-              <p class="pa-card-desc">Google Workspace DNS records, TLS certificates, and statutory parental
-                notification relays</p>
-            </div>
-            <button class="btn-pa btn-pa-primary" onclick="platformApp.verifyDnsStatus()">
-              <i class="fa-solid fa-rotate"></i> Re-verify DNS Records
+        <!-- Module Header -->
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <div>
+            <h2 class="h4 mb-1 fw-bold text-dark">
+              <i class="fa-solid fa-envelope-open-text text-primary me-2"></i>Domains, Email &amp; Notifications
+            </h2>
+            <p class="text-muted small mb-0">
+              Manage school websites, administration &amp; faculty portal domains, Google Workspace/SMTP delivery relays, and statutory notification templates.
+            </p>
+          </div>
+          <div class="d-flex gap-2">
+            <button class="btn-pa btn-pa-primary" onclick="platformApp.openAddDomainModal()">
+              <i class="fa-solid fa-plus me-1"></i> Add Domain
+            </button>
+            <button class="btn-pa btn-pa-secondary" onclick="platformApp.loadDomainsEmailData()">
+              <i class="fa-solid fa-arrows-rotate me-1"></i> Refresh Status
             </button>
           </div>
+        </div>
 
-          <div class="pa-table-responsive">
-            <table class="pa-table">
-              <thead>
-                <tr>
-                  <th>Domain</th>
-                  <th>Campus Scope</th>
-                  <th>DNS Status</th>
-                  <th>SSL / TLS</th>
-                  <th>Google MX</th>
-                  <th>SPF / DKIM / DMARC</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td><strong>srividya.edu.in</strong></td>
-                  <td>Sri Vidya High School (Apex)</td>
-                  <td><span class="badge" style="background:#dcfce7; color:#15803d;"><i
-                        class="fa-solid fa-circle-check mr-1"></i> Active</span></td>
-                  <td><span class="badge" style="background:#dcfce7; color:#15803d;">Valid (Exp: Oct 2027)</span></td>
-                  <td><span class="badge" style="background:#dcfce7; color:#15803d;">Google Workspace</span></td>
-                  <td><span class="badge" style="background:#dcfce7; color:#15803d;">100% Enforced</span></td>
-                  <td><button class="btn-pa btn-pa-secondary" style="padding:0.25rem 0.5rem;"
-                      onclick="platformApp.showToast('srividya.edu.in DNS is fully healthy.', 'success')">Details</button>
-                  </td>
-                </tr>
-                <tr>
-                  <td><strong>intermediate.srividya.edu.in</strong></td>
-                  <td>Sri Vidya Junior College</td>
-                  <td><span class="badge" style="background:#dcfce7; color:#15803d;"><i
-                        class="fa-solid fa-circle-check mr-1"></i> Active</span></td>
-                  <td><span class="badge" style="background:#dcfce7; color:#15803d;">Valid (Exp: Oct 2027)</span></td>
-                  <td><span class="badge" style="background:#dcfce7; color:#15803d;">Google Workspace</span></td>
-                  <td><span class="badge" style="background:#dcfce7; color:#15803d;">100% Enforced</span></td>
-                  <td><button class="btn-pa btn-pa-secondary" style="padding:0.25rem 0.5rem;"
-                      onclick="platformApp.showToast('Junior College DNS is healthy.', 'success')">Details</button></td>
-                </tr>
-                <tr>
-                  <td><strong>kids.srividya.edu.in</strong></td>
-                  <td>Sri Vidya Kids Academy</td>
-                  <td><span class="badge" style="background:#dcfce7; color:#15803d;"><i
-                        class="fa-solid fa-circle-check mr-1"></i> Active</span></td>
-                  <td><span class="badge" style="background:#dcfce7; color:#15803d;">Valid (Exp: Oct 2027)</span></td>
-                  <td><span class="badge" style="background:#dcfce7; color:#15803d;">Google Workspace</span></td>
-                  <td><span class="badge" style="background:#dcfce7; color:#15803d;">100% Enforced</span></td>
-                  <td><button class="btn-pa btn-pa-secondary" style="padding:0.25rem 0.5rem;"
-                      onclick="platformApp.showToast('Kids Academy DNS is healthy.', 'success')">Details</button></td>
-                </tr>
-              </tbody>
-            </table>
+        <!-- Sub-navigation Tabs -->
+        <div class="dom-subnav">
+          <button type="button" class="dom-tab-btn active" id="btnDomTabDirectory" onclick="platformApp.switchDomainsSubTab('directory')">
+            <i class="fa-solid fa-globe"></i> 15.1 &amp; 15.2 Domain Directory &amp; DNS
+            <span class="badge bg-primary ms-1" id="badgeDomainsCount">0</span>
+          </button>
+          <button type="button" class="dom-tab-btn" id="btnDomTabEmail" onclick="platformApp.switchDomainsSubTab('email')">
+            <i class="fa-solid fa-paper-plane"></i> 15.3 Email Service Management
+            <span class="badge bg-secondary ms-1" id="badgeEmailServicesCount">0</span>
+          </button>
+          <button type="button" class="dom-tab-btn" id="btnDomTabTemplates" onclick="platformApp.switchDomainsSubTab('templates')">
+            <i class="fa-solid fa-file-lines"></i> 15.4 Notification Templates
+            <span class="badge bg-secondary ms-1" id="badgeTemplatesCount">0</span>
+          </button>
+        </div>
+
+        <!-- TAB 1: 15.1 & 15.2 Domain Directory & DNS Verification -->
+        <div id="domTabDirectoryContent">
+          <div class="pa-card">
+            <div class="pa-card-header">
+              <div>
+                <h3 class="pa-card-title"><i class="fa-solid fa-globe text-primary me-2"></i>15.1 Institutional Domain Directory</h3>
+                <p class="pa-card-desc">Public websites, portal gateways, API routes, and official mail domains</p>
+              </div>
+              <span class="badge bg-secondary" id="lblDomFilteredCount">Showing 0 Domains</span>
+            </div>
+
+            <!-- Invariant Notice (Section 15.2) -->
+            <div class="alert alert-secondary d-flex align-items-center mx-3 mt-3 mb-0 py-2" style="font-size: 0.8rem; background: #F8FAFC; border-left: 4px solid #4F46E5;">
+              <i class="fa-solid fa-shield-check text-primary me-2"></i>
+              <span><strong>Verification Integrity Rule (Section 15.2):</strong> A domain is never reported as verified before the authoritative DNS verification check succeeds.</span>
+            </div>
+
+            <!-- Filter Toolbar -->
+            <div class="p-3 bg-light border-bottom">
+              <div class="row g-2 align-items-center">
+                <div class="col-md-3">
+                  <div class="input-group input-group-sm">
+                    <span class="input-group-text"><i class="fa-solid fa-magnifying-glass"></i></span>
+                    <input type="text" class="form-control" id="txtDomFilterSearch" placeholder="Search domain, campus..." onkeyup="platformApp.filterDomainsTable()">
+                  </div>
+                </div>
+                <div class="col-md-3">
+                  <select class="form-select form-select-sm" id="selDomFilterPurpose" onchange="platformApp.filterDomainsTable()">
+                    <option value="">All Domain Purposes</option>
+                    <option value="Public website">Public website</option>
+                    <option value="Administration Portal">Administration Portal</option>
+                    <option value="Faculty Portal">Faculty Portal</option>
+                    <option value="API">API</option>
+                    <option value="Official email domain">Official email domain</option>
+                  </select>
+                </div>
+                <div class="col-md-2">
+                  <select class="form-select form-select-sm" id="selDomFilterVerification" onchange="platformApp.filterDomainsTable()">
+                    <option value="">All Verification Statuses</option>
+                    <option value="VERIFIED">Verified</option>
+                    <option value="PENDING_VERIFICATION">Pending Verification</option>
+                    <option value="FAILED">Failed</option>
+                  </select>
+                </div>
+                <div class="col-md-3">
+                  <select class="form-select form-select-sm" id="selDomFilterScope" onchange="platformApp.filterDomainsTable()">
+                    <option value="">All Campuses</option>
+                    <option value="SV-MAIN">Sri Vidya High School (SV-MAIN)</option>
+                    <option value="SV-PRIMARY">Sri Vidya Primary (SV-PRIMARY)</option>
+                    <option value="SV-VILLAGE">Sri Vidya Rural Branch (SV-VILLAGE)</option>
+                    <option value="TRUST_CENTRAL">Trust Central Operations</option>
+                  </select>
+                </div>
+                <div class="col-md-1">
+                  <button class="btn btn-sm btn-outline-secondary w-100" onclick="platformApp.resetDomainFilters()" title="Reset Filters">
+                    <i class="fa-solid fa-rotate-left"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- 8-Column Table (Section 15.1) -->
+            <div class="pa-table-responsive">
+              <table class="pa-table">
+                <thead>
+                  <tr>
+                    <th>Domain</th>
+                    <th>Institution</th>
+                    <th>Domain Purpose</th>
+                    <th>Verification Status</th>
+                    <th>DNS Status</th>
+                    <th>SSL/TLS Status</th>
+                    <th>Last Checked</th>
+                    <th style="text-align: right; width: 190px;">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="tbodyDomains">
+                  <tr>
+                    <td colspan="8" class="text-center py-4 text-muted">
+                      <i class="fa-solid fa-spinner fa-spin me-2"></i> Loading Domains...
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB 2: 15.3 Email Service Management -->
+        <div id="domTabEmailContent" style="display: none;">
+          <div class="pa-card">
+            <div class="pa-card-header">
+              <div>
+                <h3 class="pa-card-title"><i class="fa-solid fa-paper-plane text-primary me-2"></i>15.3 Email Service Management</h3>
+                <p class="pa-card-desc">Authoritative mail relays, sender domains, delivery health telemetry, and bounce rate tracking</p>
+              </div>
+            </div>
+
+            <div class="pa-table-responsive">
+              <table class="pa-table">
+                <thead>
+                  <tr>
+                    <th>Provider</th>
+                    <th>Sender Domain &amp; From Address</th>
+                    <th>Verification Status</th>
+                    <th>Delivery Health</th>
+                    <th>Bounce Rate</th>
+                    <th>Failed Messages (24h)</th>
+                    <th>Last Test Result</th>
+                    <th style="text-align: right; width: 220px;">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="tbodyEmailServices">
+                  <tr>
+                    <td colspan="8" class="text-center py-4 text-muted">
+                      <i class="fa-solid fa-spinner fa-spin me-2"></i> Loading Email Services...
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB 3: 15.4 Notification Templates -->
+        <div id="domTabTemplatesContent" style="display: none;">
+          <div class="pa-card">
+            <div class="pa-card-header">
+              <div>
+                <h3 class="pa-card-title"><i class="fa-solid fa-file-lines text-primary me-2"></i>15.4 Notification Templates</h3>
+                <p class="pa-card-desc">System notification templates for statutory school workflows, invitations, receipts, and security alerts</p>
+              </div>
+            </div>
+
+            <!-- Invariant Notice (Section 15.4) -->
+            <div class="alert alert-secondary d-flex align-items-center mx-3 mt-3 mb-0 py-2" style="font-size: 0.8rem; background: #FFFDF0; border-left: 4px solid #F59E0B; color: #92400E;">
+              <i class="fa-solid fa-lock text-warning me-2"></i>
+              <span><strong>Privacy Guard (Section 15.4):</strong> Arbitrary template variables are strictly validated. Confidential variables (passwords, tokens, raw Aadhaar, bank credentials) are prohibited to prevent data leakage.</span>
+            </div>
+
+            <div class="pa-table-responsive">
+              <table class="pa-table">
+                <thead>
+                  <tr>
+                    <th>Template Name</th>
+                    <th>Event Trigger</th>
+                    <th>Channel</th>
+                    <th>Subject</th>
+                    <th>Publication Status</th>
+                    <th>Version</th>
+                    <th>Last Test Sent</th>
+                    <th style="text-align: right; width: 170px;">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="tbodyNotificationTemplates">
+                  <tr>
+                    <td colspan="8" class="text-center py-4 text-muted">
+                      <i class="fa-solid fa-spinner fa-spin me-2"></i> Loading Templates...
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
       </section>
@@ -8624,6 +8760,257 @@
       <div class="pa-modal-footer" style="padding: 1rem 1.5rem; border-top: 1px solid #E2E8F0; display: flex; justify-content: flex-end; gap: 0.5rem; background: #F8FAFC;">
         <button type="button" class="btn btn-sm btn-secondary" onclick="platformApp.closeModal('modalRequestInfo')">Cancel</button>
         <button type="button" class="btn btn-sm btn-info text-white" onclick="platformApp.submitRequestInfo()">Send Request</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- =======================================================================
+       MODULE 15: DOMAINS, EMAIL & NOTIFICATIONS MODALS (15.1 - 15.4)
+       ======================================================================= -->
+
+  <!-- Modal 15.1: Add Domain -->
+  <div class="pa-modal-backdrop" id="modalAddDomain" style="display: none;">
+    <div class="pa-modal-card" style="max-width: 540px; width: 90%;">
+      <div class="pa-modal-header" style="padding: 1.25rem 1.5rem; border-bottom: 1px solid #E2E8F0; display: flex; justify-content: space-between; align-items: center;">
+        <h4 class="h6 mb-0 fw-bold"><i class="fa-solid fa-globe text-primary me-2"></i>Add Institutional Domain</h4>
+        <button type="button" class="btn-close" onclick="platformApp.closeModal('modalAddDomain')"></button>
+      </div>
+      <div class="pa-modal-body" style="padding: 1.5rem;">
+        <div class="mb-3">
+          <label class="form-label small fw-bold">Fully Qualified Domain Name *</label>
+          <input type="text" class="form-control form-control-sm font-mono" id="txtAddDomainInput" placeholder="e.g. portal.srividya.edu.in">
+          <small class="text-muted" style="font-size:0.75rem;">Apex domain or subdomain for portals, websites, or mail routing</small>
+        </div>
+        <div class="mb-3">
+          <label class="form-label small fw-bold">Applicable Institution / Campus Scope *</label>
+          <select class="form-select form-select-sm" id="selAddDomainInstitution">
+            <option value="SV-MAIN">Sri Vidya High School (SV-MAIN)</option>
+            <option value="SV-PRIMARY">Sri Vidya Primary (SV-PRIMARY)</option>
+            <option value="SV-VILLAGE">Sri Vidya Rural Branch (SV-VILLAGE)</option>
+            <option value="TRUST_CENTRAL">Trust Central Operations</option>
+          </select>
+        </div>
+        <div class="mb-3">
+          <label class="form-label small fw-bold">Domain Purpose *</label>
+          <select class="form-select form-select-sm" id="selAddDomainPurpose">
+            <option value="Public website">Public website</option>
+            <option value="Administration Portal">Administration Portal</option>
+            <option value="Faculty Portal">Faculty Portal</option>
+            <option value="API">API</option>
+            <option value="Official email domain">Official email domain</option>
+          </select>
+        </div>
+        <div class="alert alert-secondary py-2 small mb-0">
+          <i class="fa-solid fa-shield-halved text-primary me-1"></i>
+          <strong>Section 15.2 Rule:</strong> Registration generates authoritative TXT, CNAME, and MX tokens. Domain remains unverified until nameservers are verified.
+        </div>
+      </div>
+      <div class="pa-modal-footer" style="padding: 1rem 1.5rem; border-top: 1px solid #E2E8F0; display: flex; justify-content: flex-end; gap: 0.5rem; background: #F8FAFC;">
+        <button type="button" class="btn btn-sm btn-secondary" onclick="platformApp.closeModal('modalAddDomain')">Cancel</button>
+        <button type="button" class="btn btn-sm btn-primary" onclick="platformApp.submitAddDomain()"><i class="fa-solid fa-plus me-1"></i> Register Domain</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 15.2: Domain Configuration & DNS Records Detail -->
+  <div class="pa-modal-backdrop" id="modalDomainDnsDetail" style="display: none;">
+    <div class="pa-modal-card" style="max-width: 860px; width: 95%;">
+      <div class="pa-modal-header" style="padding: 1.25rem 1.5rem; border-bottom: 1px solid #E2E8F0; display: flex; justify-content: space-between; align-items: center;">
+        <div class="d-flex align-items-center gap-2">
+          <h4 class="h6 mb-0 fw-bold"><i class="fa-solid fa-globe text-primary me-2"></i><span id="lblDnsDetailDomain">srividya.edu.in</span></h4>
+          <span class="badge badge-dom-verified" id="lblDnsDetailStatus">VERIFIED</span>
+          <span class="badge bg-light text-dark border font-mono" id="lblDnsDetailPurpose">Public website</span>
+        </div>
+        <button type="button" class="btn-close" onclick="platformApp.closeModal('modalDomainDnsDetail')"></button>
+      </div>
+      <div class="pa-modal-body" style="padding: 1.5rem; max-height: 75vh; overflow-y: auto;">
+        <input type="hidden" id="txtDnsDetailDomainId">
+
+        <!-- Invariant Notice -->
+        <div class="alert alert-secondary d-flex align-items-center py-2 mb-3 small" style="background:#F8FAFC; border-left: 4px solid #4F46E5;">
+          <i class="fa-solid fa-circle-info text-primary me-2"></i>
+          <span><strong>Section 15.2 DNS Integrity:</strong> Publish the records below at your domain registrar/DNS provider. Missing or misconfigured records are explained in simple language.</span>
+        </div>
+
+        <!-- DNS Records Table -->
+        <div class="pa-table-responsive mb-3">
+          <table class="pa-table">
+            <thead>
+              <tr>
+                <th>Type</th>
+                <th>Host / Name</th>
+                <th>Required Value / Target</th>
+                <th>Priority</th>
+                <th>Status</th>
+                <th>Plain Language Explanation</th>
+              </tr>
+            </thead>
+            <tbody id="tbodyDomainDnsRecords">
+              <!-- Populated by platform-admin.js -->
+            </tbody>
+          </table>
+        </div>
+
+        <div class="row g-2 mb-2 p-3 bg-light rounded border">
+          <div class="col-md-6">
+            <span class="small text-muted fw-bold text-uppercase d-block">SSL / TLS Certificate</span>
+            <span class="badge badge-ssl-valid" id="lblDnsDetailSsl">VALID</span>
+            <small class="text-muted d-block mt-1" id="lblDnsDetailSslMeta">Expires in 300 days (Cloudflare Edge ECC)</small>
+          </div>
+          <div class="col-md-6">
+            <span class="small text-muted fw-bold text-uppercase d-block">Authoritative Verification Token</span>
+            <code class="small text-dark" id="lblDnsDetailToken">srividya-site-verification=...</code>
+          </div>
+        </div>
+      </div>
+      <div class="pa-modal-footer" style="padding: 1rem 1.5rem; border-top: 1px solid #E2E8F0; display: flex; justify-content: space-between; background: #F8FAFC;">
+        <button type="button" class="btn btn-sm btn-outline-danger" onclick="platformApp.disableOrRemoveCurrentDomain()">
+          <i class="fa-solid fa-trash me-1"></i> Disable / Remove
+        </button>
+        <div class="d-flex gap-2">
+          <button type="button" class="btn btn-sm btn-secondary" onclick="platformApp.closeModal('modalDomainDnsDetail')">Close</button>
+          <button type="button" class="btn btn-sm btn-outline-secondary" onclick="platformApp.checkCurrentDomainDns()">
+            <i class="fa-solid fa-arrows-rotate me-1"></i> Check DNS
+          </button>
+          <button type="button" class="btn btn-sm btn-primary" onclick="platformApp.verifyCurrentDomainOwnership()">
+            <i class="fa-solid fa-circle-check me-1"></i> Verify Ownership
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 15.3A: Send Test Email -->
+  <div class="pa-modal-backdrop" id="modalSendTestEmail" style="display: none;">
+    <div class="pa-modal-card" style="max-width: 480px; width: 90%;">
+      <div class="pa-modal-header" style="padding: 1.25rem 1.5rem; border-bottom: 1px solid #E2E8F0; display: flex; justify-content: space-between; align-items: center;">
+        <h4 class="h6 mb-0 fw-bold"><i class="fa-solid fa-paper-plane text-primary me-2"></i>Send Test Email</h4>
+        <button type="button" class="btn-close" onclick="platformApp.closeModal('modalSendTestEmail')"></button>
+      </div>
+      <div class="pa-modal-body" style="padding: 1.5rem;">
+        <input type="hidden" id="txtTestEmailServiceId">
+        <div class="mb-3">
+          <span class="small text-muted fw-bold text-uppercase d-block">Delivery Relay</span>
+          <strong class="text-dark" id="lblTestEmailProvider">Google Workspace Enterprise Relay</strong>
+        </div>
+        <div class="mb-3">
+          <label class="form-label small fw-bold">Target Recipient Email Address</label>
+          <input type="email" class="form-control form-control-sm" id="txtTestEmailRecipient" value="admin@srividya.edu.in" placeholder="admin@srividya.edu.in">
+        </div>
+        <p class="text-muted small mb-0">Dispatches an authenticated diagnostic SMTP message to test SPF, DKIM, and deliverability latency.</p>
+      </div>
+      <div class="pa-modal-footer" style="padding: 1rem 1.5rem; border-top: 1px solid #E2E8F0; display: flex; justify-content: flex-end; gap: 0.5rem; background: #F8FAFC;">
+        <button type="button" class="btn btn-sm btn-secondary" onclick="platformApp.closeModal('modalSendTestEmail')">Cancel</button>
+        <button type="button" class="btn btn-sm btn-primary" onclick="platformApp.submitSendTestEmail()"><i class="fa-solid fa-paper-plane me-1"></i> Send Test</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 15.3B: Email Delivery Logs -->
+  <div class="pa-modal-backdrop" id="modalEmailDeliveryLogs" style="display: none;">
+    <div class="pa-modal-card" style="max-width: 720px; width: 90%;">
+      <div class="pa-modal-header" style="padding: 1.25rem 1.5rem; border-bottom: 1px solid #E2E8F0; display: flex; justify-content: space-between; align-items: center;">
+        <h4 class="h6 mb-0 fw-bold"><i class="fa-solid fa-receipt text-primary me-2"></i>Delivery Logs: <span id="lblDeliveryLogsProvider">Provider</span></h4>
+        <button type="button" class="btn-close" onclick="platformApp.closeModal('modalEmailDeliveryLogs')"></button>
+      </div>
+      <div class="pa-modal-body" style="padding: 1.5rem; max-height: 70vh; overflow-y: auto;">
+        <div class="pa-table-responsive">
+          <table class="pa-table">
+            <thead>
+              <tr>
+                <th>Log ID</th>
+                <th>Recipient</th>
+                <th>Subject</th>
+                <th>Status</th>
+                <th>Sent Time</th>
+              </tr>
+            </thead>
+            <tbody id="tbodyEmailDeliveryLogs">
+              <!-- Populated by platform-admin.js -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="pa-modal-footer" style="padding: 1rem 1.5rem; border-top: 1px solid #E2E8F0; display: flex; justify-content: flex-end; background: #F8FAFC;">
+        <button type="button" class="btn btn-sm btn-secondary" onclick="platformApp.closeModal('modalEmailDeliveryLogs')">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 15.4A: Edit Notification Template -->
+  <div class="pa-modal-backdrop" id="modalEditNotificationTemplate" style="display: none;">
+    <div class="pa-modal-card" style="max-width: 760px; width: 90%;">
+      <div class="pa-modal-header" style="padding: 1.25rem 1.5rem; border-bottom: 1px solid #E2E8F0; display: flex; justify-content: space-between; align-items: center;">
+        <h4 class="h6 mb-0 fw-bold"><i class="fa-solid fa-file-pen text-primary me-2"></i>Edit Template: <span id="lblEditTemplateName">Template</span></h4>
+        <button type="button" class="btn-close" onclick="platformApp.closeModal('modalEditNotificationTemplate')"></button>
+      </div>
+      <div class="pa-modal-body" style="padding: 1.5rem; max-height: 75vh; overflow-y: auto;">
+        <input type="hidden" id="txtEditTemplateId">
+
+        <!-- Privacy Guard Alert Banner (Section 15.4) -->
+        <div class="alert alert-secondary py-2 small mb-3" style="background:#FFFDF0; border-left: 4px solid #F59E0B; color: #92400E;">
+          <i class="fa-solid fa-lock text-warning me-1"></i>
+          <strong>Privacy Guard Invariant:</strong> Confidential variables (e.g. passwords, token hashes, raw credentials, full bank accounts) are prohibited and will be rejected automatically on save.
+        </div>
+
+        <div class="row g-2 mb-3">
+          <div class="col-md-8">
+            <label class="form-label small fw-bold">Notification Subject *</label>
+            <input type="text" class="form-control form-control-sm" id="txtEditTemplateSubject">
+          </div>
+          <div class="col-md-4">
+            <label class="form-label small fw-bold">Delivery Channel</label>
+            <select class="form-select form-select-sm" id="selEditTemplateChannel">
+              <option value="EMAIL">EMAIL</option>
+              <option value="SMS">SMS</option>
+              <option value="WHATSAPP">WHATSAPP</option>
+              <option value="PORTAL_NOTIFICATION">PORTAL NOTIFICATION</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label small fw-bold">Available Dynamic Variables (Click to copy)</label>
+          <div id="boxEditTemplateVariables" class="p-2 border rounded bg-light">
+            <!-- Populated by platform-admin.js -->
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label small fw-bold">Template Message Body *</label>
+          <textarea class="form-control form-control-sm font-mono" id="txtEditTemplateBody" rows="7"></textarea>
+        </div>
+
+        <div class="mb-2">
+          <label class="form-label small fw-bold">Revision Change Summary</label>
+          <input type="text" class="form-control form-control-sm" id="txtEditTemplateSummary" placeholder="e.g. Updated letterhead styling and expiry wording">
+        </div>
+      </div>
+      <div class="pa-modal-footer" style="padding: 1rem 1.5rem; border-top: 1px solid #E2E8F0; display: flex; justify-content: flex-end; gap: 0.5rem; background: #F8FAFC;">
+        <button type="button" class="btn btn-sm btn-secondary" onclick="platformApp.closeModal('modalEditNotificationTemplate')">Cancel</button>
+        <button type="button" class="btn btn-sm btn-primary" onclick="platformApp.submitUpdateTemplate()"><i class="fa-solid fa-floppy-disk me-1"></i> Save Revision</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 15.4B: Preview Notification Template -->
+  <div class="pa-modal-backdrop" id="modalPreviewNotificationTemplate" style="display: none;">
+    <div class="pa-modal-card" style="max-width: 680px; width: 90%;">
+      <div class="pa-modal-header" style="padding: 1.25rem 1.5rem; border-bottom: 1px solid #E2E8F0; display: flex; justify-content: space-between; align-items: center;">
+        <h4 class="h6 mb-0 fw-bold"><i class="fa-solid fa-eye text-primary me-2"></i>Live Preview: <span id="lblPreviewTemplateName">Template</span></h4>
+        <button type="button" class="btn-close" onclick="platformApp.closeModal('modalPreviewNotificationTemplate')"></button>
+      </div>
+      <div class="pa-modal-body" style="padding: 1.5rem;">
+        <div class="p-2 border rounded bg-light mb-3 small">
+          <div><strong class="text-muted">Subject:</strong> <span class="text-dark fw-bold" id="lblPreviewTemplateSubject">--</span></div>
+          <div><strong class="text-muted">Channel:</strong> <span class="badge bg-secondary font-mono" id="lblPreviewTemplateChannel">EMAIL</span></div>
+        </div>
+        <div class="preview-email-frame" id="boxPreviewTemplateBody" style="white-space: pre-wrap; font-size: 0.88rem; max-height: 380px; overflow-y: auto;">
+          <!-- Rendered sample preview -->
+        </div>
+      </div>
+      <div class="pa-modal-footer" style="padding: 1rem 1.5rem; border-top: 1px solid #E2E8F0; display: flex; justify-content: flex-end; background: #F8FAFC;">
+        <button type="button" class="btn btn-sm btn-secondary" onclick="platformApp.closeModal('modalPreviewNotificationTemplate')">Close Preview</button>
       </div>
     </div>
   </div>
