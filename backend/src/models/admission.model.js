@@ -161,6 +161,60 @@ const admissionSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Student',
     },
+    // Unified Workflow Source (Specification 20.3: One workflow shared by online and offline admissions)
+    admissionSource: {
+      type: String,
+      enum: ['ONLINE', 'OFFLINE_WALKIN', 'REFERRAL', 'TRANSFER_IN'],
+      default: 'ONLINE',
+      index: true,
+    },
+    // Document Verification Workflow by Office Staff (Specification 20.3)
+    documentVerification: {
+      verifiedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+      verifiedAt: { type: Date },
+      remarks: { type: String, default: '' },
+      allVerified: { type: Boolean, default: false },
+    },
+    // Eligibility Review by Designated Authority (Specification 20.3)
+    eligibilityReview: {
+      reviewedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+      decision: {
+        type: String,
+        enum: ['PENDING', 'ELIGIBLE', 'INELIGIBLE', 'CONDITIONAL'],
+        default: 'PENDING',
+      },
+      reviewedAt: { type: Date },
+      notes: { type: String, default: '' },
+    },
+    // Official Decision Record & Communication Channel (Specification 20.3)
+    decisionRecord: {
+      status: { type: String, default: 'SUBMITTED' },
+      decisionBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+      decisionDate: { type: Date },
+      remarks: { type: String, default: '' },
+      communicationSent: {
+        channel: { type: String, default: 'SMS & Email' },
+        sentAt: { type: Date },
+        status: { type: String, default: 'DELIVERED' },
+      },
+    },
+    // Future Portal Activation Credentials (Specification 20.3)
+    portalActivation: {
+      studentAccount: {
+        isEligible: { type: Boolean, default: true },
+        isActivated: { type: Boolean, default: false },
+        username: { type: String, trim: true },
+        activationCode: { type: String, trim: true },
+        activatedAt: { type: Date },
+      },
+      guardianAccount: {
+        isEligible: { type: Boolean, default: true },
+        isActivated: { type: Boolean, default: false },
+        username: { type: String, trim: true },
+        activationCode: { type: String, trim: true },
+        activatedAt: { type: Date },
+      },
+    },
   },
   {
     timestamps: true,

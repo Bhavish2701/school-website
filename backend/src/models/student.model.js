@@ -141,6 +141,57 @@ const studentSchema = new mongoose.Schema(
       relation: { type: String, trim: true, default: 'Parent' },
       phone: { type: String, trim: true, default: '' },
     },
+    // Verified Guardian Details (Specification 20.2 & 20.3)
+    guardianDetails: {
+      name: { type: String, trim: true, default: '' },
+      relation: { type: String, trim: true, default: 'Parent' },
+      phone: { type: String, trim: true, default: '' },
+      email: { type: String, trim: true, lowercase: true, default: '' },
+      isVerified: { type: Boolean, default: true },
+      verifiedAt: { type: Date, default: Date.now },
+      verifiedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+    },
+    // Future Student Portal Access Capabilities (Specification 20.1 & 20.3)
+    studentPortalAccess: {
+      isEligible: { type: Boolean, default: true },
+      isActivated: { type: Boolean, default: false },
+      username: { type: String, trim: true, lowercase: true },
+      activationToken: { type: String, select: false },
+      activatedAt: { type: Date },
+    },
+    // Future Parent Portal Access Capabilities (Specification 20.2 & 20.3)
+    parentPortalAccess: {
+      isEligible: { type: Boolean, default: true },
+      isActivated: { type: Boolean, default: false },
+      primaryPhone: { type: String, trim: true },
+      activationToken: { type: String, select: false },
+      activatedAt: { type: Date },
+    },
+    // Transport Details (Specification 20.1)
+    transportDetails: {
+      isApplicable: { type: Boolean, default: true },
+      assignedRoute: { type: String, default: 'Route 4 (Maddilapalem - School)' },
+      busNumber: { type: String, default: 'AP 31 TZ 4042' },
+      pickupStop: { type: String, default: 'Maddilapalem Junction' },
+      pickupTime: { type: String, default: '07:45 AM' },
+      dropTime: { type: String, default: '04:30 PM' },
+      driverName: { type: String, default: 'B. Appa Rao' },
+      driverPhone: { type: String, default: '9848123456' },
+    },
+    // Library Details (Specification 20.1)
+    libraryDetails: {
+      isImplemented: { type: Boolean, default: true },
+      libraryCardNo: { type: String, default: '' },
+      booksIssued: [
+        {
+          bookTitle: { type: String, required: true },
+          accessionNo: { type: String, required: true },
+          issueDate: { type: Date, default: Date.now },
+          dueDate: { type: Date },
+          returned: { type: Boolean, default: false },
+        },
+      ],
+    },
   },
   {
     timestamps: true,

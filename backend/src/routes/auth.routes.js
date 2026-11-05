@@ -21,6 +21,10 @@ router.post('/refresh', authController.refresh);
 router.post('/forgot-password', authLimiter, validateForgotPassword, authController.forgotPassword);
 router.post('/reset-password', authLimiter, validateResetPassword, authController.resetPassword);
 
+// Future Portal Activation Endpoints (Specification 20.3)
+router.post('/parent/activate', authLimiter, authController.activateParentAccount);
+router.post('/student/activate', authLimiter, authController.activateStudentAccount);
+
 // Protected Authentication Endpoints
 router.get('/me', authenticate, authController.getMe);
 router.post('/change-password', authenticate, validateChangePassword, authController.changePassword);

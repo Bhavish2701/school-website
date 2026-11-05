@@ -8,6 +8,7 @@ const config = require('../config/env');
 const ApiError = require('../utils/apiError');
 const asyncHandler = require('../utils/asyncHandler');
 const { User } = require('../models/user.model');
+const { Student } = require('../models/student.model');
 
 /**
  * @route   POST /api/v1/auth/login
@@ -257,6 +258,155 @@ const resetPassword = asyncHandler(async (req, res) => {
   });
 });
 
+/**
+ * @route   POST /api/v1/auth/parent/activate
+ * @desc    Activate Verified Guardian Portal Account (Specification 20.3)
+ * @access  Public
+ */
+const activateParentAccount = asyncHandler(async (req, res) => {
+  const { admissionNo, parentPhone, activationCode, password, fullName } = req.body;
+
+  if (!admissionNo || !parentPhone || !password) {
+    throw ApiError.badRequest('Activation requires admissionNo, parentPhone, and password');
+  }
+
+  const cleanAdmNo = admissionNo.trim().toUpperCase();
+  const cleanPhone = parentPhone.trim();
+
+  // Find student by admissionNo
+  const student = await Student.findOne({ admissionNo: cleanAdmNo });
+  if (!student) {
+    throw ApiError.notFound(`No official student record found for Admission No '${cleanAdmNo}'`);
+  }
+
+  // Verify guardian phone matches registered student records
+  const registeredPhone = student.parentPhone || (student.guardianDetails && student.guardianDetails.phone);
+  if (registeredPhone && registeredPhone.slice(-10) !== cleanPhone.slice(-10)) {
+    throw ApiError.forbidden('Guardian phone number does not match registered student records');
+  }
+
+  // Find or create User with role PARENT
+  const username = `parent_${cleanPhone.slice(-10)}`;
+  let parentUser = await User.findOne({
+    $or: [{ phone: cleanPhone }, { username }],
+  });
+
+  if (!parentUser) {
+    parentUser = await User.create({
+      username,
+      email: student.email || `${cleanPhone}@parents.srividya.edu.in`,
+      password,
+      fullName: fullName || student.parentName || 'Verified Guardian',
+      role: 'PARENT',
+      phone: cleanPhone,
+      children: [student._id],
+      isActive: true,
+    });
+  } else {
+    parentUser.password = password;
+    if (!parentUser.children) parentUser.children = [];
+    if (!parentUser.children.includes(student._id)) {
+      parentUser.children.push(student._id);
+    }
+    await parentUser.save();
+  }
+
+  // Link student to parent User and mark activation
+  student.parentUser = parentUser._id;
+  if (!student.parentPortalAccess) student.parentPortalAccess = {};
+  student.parentPortalAccess.isActivated = true;
+  student.parentPortalAccess.activatedAt = new Date();
+  await student.save();
+
+  const accessToken = parentUser.generateAccessToken();
+  const refreshToken = parentUser.generateRefreshToken();
+
+  res.status(200).json({
+    success: true,
+    message: `Parent Portal account activated successfully for guardian of ${student.fullName}.`,
+    data: {
+      user: parentUser.toJSON(),
+      tokens: { accessToken, refreshToken, tokenType: 'Bearer', expiresIn: config.jwt.expire },
+      linkedChild: {
+        id: student._id,
+        admissionNo: student.admissionNo,
+        fullName: student.fullName,
+        classSection: `${student.class}-${student.section}`,
+      },
+    },
+  });
+});
+
+/**
+ * @route   POST /api/v1/auth/student/activate
+ * @desc    Activate Student Self-Service Portal Account (Specification 20.3)
+ * @access  Public
+ */
+const activateStudentAccount = asyncHandler(async (req, res) => {
+  const { admissionNo, dob, activationCode, password } = req.body;
+
+  if (!admissionNo || !password) {
+    throw ApiError.badRequest('Activation requires admissionNo and password');
+  }
+
+  const cleanAdmNo = admissionNo.trim().toUpperCase();
+
+  const student = await Student.findOne({ admissionNo: cleanAdmNo });
+  if (!student) {
+    throw ApiError.notFound(`No official student record found for Admission No '${cleanAdmNo}'`);
+  }
+
+  // Find or create User with role STUDENT
+  const username = cleanAdmNo.toLowerCase().replace(/[^a-z0-9]/g, '');
+  let studentUser = await User.findOne({ username });
+
+  if (!studentUser) {
+    studentUser = await User.create({
+      username,
+      email: student.email || `${username}@students.srividya.edu.in`,
+      password,
+      fullName: student.fullName,
+      role: 'STUDENT',
+      phone: student.phone || '',
+      studentProfile: {
+        class: student.class,
+        section: student.section,
+        rollNumber: student.rollNo,
+        admissionNo: student.admissionNo,
+        parentUser: student.parentUser,
+      },
+      isActive: true,
+    });
+  } else {
+    studentUser.password = password;
+    await studentUser.save();
+  }
+
+  // Link student to User and mark activation
+  student.user = studentUser._id;
+  if (!student.studentPortalAccess) student.studentPortalAccess = {};
+  student.studentPortalAccess.isActivated = true;
+  student.studentPortalAccess.activatedAt = new Date();
+  await student.save();
+
+  const accessToken = studentUser.generateAccessToken();
+  const refreshToken = studentUser.generateRefreshToken();
+
+  res.status(200).json({
+    success: true,
+    message: `Student Portal account activated successfully for ${student.fullName}.`,
+    data: {
+      user: studentUser.toJSON(),
+      tokens: { accessToken, refreshToken, tokenType: 'Bearer', expiresIn: config.jwt.expire },
+      studentProfile: {
+        admissionNo: student.admissionNo,
+        fullName: student.fullName,
+        classSection: `${student.class}-${student.section}`,
+      },
+    },
+  });
+});
+
 module.exports = {
   login,
   logout,
@@ -265,4 +415,6 @@ module.exports = {
   changePassword,
   forgotPassword,
   resetPassword,
+  activateParentAccount,
+  activateStudentAccount,
 };

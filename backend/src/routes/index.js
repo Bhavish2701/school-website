@@ -21,17 +21,24 @@ router.use('/records', recordRoutes);
 const managementRoutes = require('./management.routes');
 router.use('/management', managementRoutes);
 
-// Mount student module endpoints at /api/v1/students
+// Mount student administrative module endpoints at /api/v1/students
 const studentRoutes = require('./student.routes');
 router.use('/students', studentRoutes);
+
+// Mount future Student Portal self-service endpoints (Specification 20.1)
+const studentPortalRoutes = require('./studentPortal.routes');
+router.use('/student-portal', studentPortalRoutes);
+router.use('/student', studentPortalRoutes);
 
 // Mount teacher module endpoints at /api/v1/teachers
 const teacherRoutes = require('./teacher.routes');
 router.use('/teachers', teacherRoutes);
 
-// Mount parent module endpoints at /api/v1/parents
+// Mount parent module & future Parent Portal endpoints (Specification 20.2)
 const parentRoutes = require('./parent.routes');
 router.use('/parents', parentRoutes);
+router.use('/parent', parentRoutes);
+router.use('/parent-portal', parentRoutes);
 
 // Mount academic module endpoints at /api/v1/academic
 const academicRoutes = require('./academic.routes');
