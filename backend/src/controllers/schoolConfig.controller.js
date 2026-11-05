@@ -76,3 +76,4 @@ class SchoolConfigController {
 }
 
 module.exports = new SchoolConfigController();
+

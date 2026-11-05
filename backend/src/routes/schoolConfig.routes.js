@@ -25,3 +25,4 @@ router.get('/templates/list', (req, res) => schoolConfigController.listTemplates
 router.post('/templates/:templateId', (req, res) => schoolConfigController.updateTemplate(req, res));
 
 module.exports = router;
+

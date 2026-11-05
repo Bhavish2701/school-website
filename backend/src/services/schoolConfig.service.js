@@ -610,3 +610,4 @@ class SchoolConfigService {
 }
 
 module.exports = new SchoolConfigService();
+

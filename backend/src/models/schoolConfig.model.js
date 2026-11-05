@@ -208,3 +208,4 @@ const SchoolConfig = mongoose.models.SchoolConfig || mongoose.model('SchoolConfi
 module.exports = {
   SchoolConfig
 };
+

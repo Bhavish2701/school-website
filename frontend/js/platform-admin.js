@@ -378,37 +378,7 @@ const platformApp = (function () {
     };
     const dateString = new Intl.DateTimeFormat('en-US', dateOptions).format(now);
     const timeString = new Intl.DateTimeFormat('en-US', timeOptions).format(now);
-    return { dateString, timeString,
-    loadInstitutions,
-    updateInstitutionSummaryCards,
-    filterInstitutionsDirectory,
-    resetInstitutionFilters,
-    openAddInstitutionWizard,
-    goToWizardStep,
-    nextWizardStep,
-    prevWizardStep,
-    updateWizardBrandingPreview,
-    runWizardDnsCheck,
-    submitWizard,
-    viewInstitution,
-    switchInstitutionDetailTab,
-    openEditFromDetail,
-    openConfigureFromDetail,
-    openInviteAdminForDetail,
-    openSuspendFromDetail,
-    confirmSuspendInstitution,
-    reactivateInstitutionFromDetail,
-    archiveInstitutionFromDetail,
-    verifyDomainFromDetail,
-    resendAdminInvite,
-    exportInstitutionsCSV,
-    openImportModal,
-    downloadSampleInstitutionsCSV,
-    handleImportFileSelect,
-    processImportInstitutions,
-    toggleRowDropdown,
-    closeAllRowDropdowns
-  };
+    return { dateString, timeString };
   }
 
   function updatePlatformClock() {
@@ -469,7 +439,17 @@ const platformApp = (function () {
 
   // Navigation Controller
   function navigateTo(viewId) {
+    if (!viewId) return;
     state.activeView = viewId;
+
+    // Update URL Hash cleanly without page jumping
+    if (window.location.hash !== '#' + viewId) {
+      try {
+        history.pushState(null, '', '#' + viewId);
+      } catch (e) {
+        window.location.hash = '#' + viewId;
+      }
+    }
 
     // Update Sidebar Active Links
     document.querySelectorAll('.sidebar-nav .nav-link').forEach(link => {
@@ -482,12 +462,27 @@ const platformApp = (function () {
 
     // Update Visible Views
     document.querySelectorAll('.portal-view').forEach(view => {
-      if (view.id === `view-${viewId}`) {
+      if (view.id === 'view-' + viewId) {
         view.classList.add('active');
       } else {
         view.classList.remove('active');
       }
     });
+
+    // View-specific data initializations
+    if (viewId === 'institutions' && typeof loadInstitutions === 'function') {
+      loadInstitutions();
+    } else if (viewId === 'config' && typeof loadSchoolConfig === 'function') {
+      loadSchoolConfig(activeConfigInstitution || 'INST-001');
+    } else if (viewId === 'dashboard' && typeof loadPlatformDashboard === 'function') {
+      loadPlatformDashboard();
+    } else if (viewId === 'users' && typeof renderOperatorsTable === 'function') {
+      renderOperatorsTable();
+    } else if (viewId === 'audit' && typeof renderAuditLogsTable === 'function') {
+      renderAuditLogsTable();
+    } else if (viewId === 'support' && typeof renderSupportTicketsTable === 'function') {
+      renderSupportTicketsTable();
+    }
 
     // Update Header Breadcrumb
     const crumbEl = document.getElementById('currentViewBreadcrumb');
@@ -2729,9 +2724,32 @@ const platformApp = (function () {
     loadPlatformDashboard();
     loadSchoolConfig();
 
+    // Global Delegated Sidebar Click Listener
+    const sidebarNav = document.querySelector('.sidebar-nav');
+    if (sidebarNav) {
+      sidebarNav.addEventListener('click', (e) => {
+        const link = e.target.closest('.nav-link[data-view]');
+        if (link) {
+          e.preventDefault();
+          const targetView = link.getAttribute('data-view');
+          if (targetView) {
+            navigateTo(targetView);
+          }
+        }
+      });
+    }
+
+    // Hash change listener for browser forward/back buttons
+    window.addEventListener('hashchange', () => {
+      const currentHash = window.location.hash.replace('#', '');
+      if (currentHash && document.getElementById('view-' + currentHash)) {
+        navigateTo(currentHash);
+      }
+    });
+
     // Check hash for direct view navigation (e.g. #institutions)
     const hash = window.location.hash.replace('#', '');
-    if (hash && document.getElementById(`view-${hash}`)) {
+    if (hash && document.getElementById('view-' + hash)) {
       navigateTo(hash);
     } else {
       navigateTo('dashboard');
@@ -2747,33 +2765,57 @@ const platformApp = (function () {
 
   // Public Interface
   return {
+    // Core Navigation & Theme
     navigateTo,
     toggleTheme,
     toggleMobileSidebar,
     closeMobileSidebar,
     openModal,
     closeModal,
-    handleAddInstitution,
-    handleCreateTicket,
-    toggleFeature,
-    invalidateSession,
-    resetMFA,
-    resolveTicket,
-    filterAuditLogs,
-    pingCluster,
-    exportAuditTrail,
-    triggerManualBackup,
-    terminateAllSuspiciousSessions,
-    verifyDnsStatus,
-    savePlatformPolicies,
+
+    // Module 2: Platform Dashboard
     loadPlatformDashboard,
-    filterInstitutions,
     openTaskAction,
     viewActivityDetails,
     openInviteAdminModal,
     openFailedJobsModal,
     openSecurityAlertsModal,
     handleInviteAdmin,
+
+    // Module 3: Institution Management (Directory, Wizard, Dossier, Suspension)
+    loadInstitutions,
+    updateInstitutionSummaryCards,
+    filterInstitutionsDirectory,
+    filterInstitutions: filterInstitutionsDirectory,
+    resetInstitutionFilters,
+    openAddInstitutionWizard,
+    goToWizardStep,
+    nextWizardStep,
+    prevWizardStep,
+    updateWizardBrandingPreview,
+    runWizardDnsCheck,
+    submitWizard,
+    handleAddInstitution,
+    viewInstitution,
+    switchInstitutionDetailTab,
+    openEditFromDetail,
+    openConfigureFromDetail,
+    openInviteAdminForDetail,
+    openSuspendFromDetail,
+    confirmSuspendInstitution,
+    reactivateInstitutionFromDetail,
+    archiveInstitutionFromDetail,
+    verifyDomainFromDetail,
+    resendAdminInvite,
+    exportInstitutionsCSV,
+    openImportModal,
+    downloadSampleInstitutionsCSV,
+    handleImportFileSelect,
+    processImportInstitutions,
+    toggleRowDropdown,
+    closeAllRowDropdowns,
+
+    // Module 4: School Configuration (Profile, Academic, Operational, Templates)
     switchConfigTab,
     switchConfigInstitution,
     loadSchoolConfig,
@@ -2789,7 +2831,21 @@ const platformApp = (function () {
     saveOperationalDefaults,
     filterDocumentTemplates,
     previewDocumentTemplate,
-    openEditTemplate
+    openEditTemplate,
+
+    // Other System & Operator Actions
+    handleCreateTicket,
+    toggleFeature,
+    invalidateSession,
+    resetMFA,
+    resolveTicket,
+    filterAuditLogs,
+    pingCluster,
+    exportAuditTrail,
+    triggerManualBackup,
+    terminateAllSuspiciousSessions,
+    verifyDnsStatus,
+    savePlatformPolicies
   };
 })();
 
