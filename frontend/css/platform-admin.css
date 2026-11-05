@@ -863,7 +863,7 @@ input:checked + .pa-slider:before {
 }
 
 .pa-modal-backdrop.active {
-  display: flex;
+  display: flex !important;
 }
 
 .pa-modal {
@@ -2648,5 +2648,227 @@ input:checked + .pa-slider:before {
   border-color: rgba(52, 211, 153, 0.3);
   color: #6EE7B7;
 }
+
+/* ==========================================================================
+   MODULE 11: SYSTEM HEALTH & DEPLOYMENT STYLES
+   ========================================================================== */
+
+.hlth-subnav {
+  display: flex;
+  gap: 0.5rem;
+  border-bottom: 2px solid #E2E8F0;
+  margin-bottom: 1.5rem;
+}
+
+[data-theme="dark"] .hlth-subnav {
+  border-color: #334155;
+}
+
+.hlth-tab-btn {
+  background: transparent;
+  border: none;
+  border-bottom: 3px solid transparent;
+  padding: 0.75rem 1.25rem;
+  font-weight: 600;
+  font-size: 0.88rem;
+  color: #64748B;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.2s ease;
+  margin-bottom: -2px;
+}
+
+.hlth-tab-btn:hover {
+  color: #0F172A;
+}
+
+[data-theme="dark"] .hlth-tab-btn:hover {
+  color: #F8FAFC;
+}
+
+.hlth-tab-btn.active {
+  color: var(--pa-primary, #4F46E5);
+  border-bottom-color: var(--pa-primary, #4F46E5);
+}
+
+[data-theme="dark"] .hlth-tab-btn.active {
+  color: #818CF8;
+  border-bottom-color: #818CF8;
+}
+
+/* Service Health Cards Grid */
+.service-health-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.25rem;
+  margin-bottom: 1.5rem;
+}
+
+.service-health-card {
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  border-radius: 12px;
+  padding: 1.25rem;
+  transition: all 0.2s ease;
+  display: flex;
+  flex-direction: column;
+}
+
+[data-theme="dark"] .service-health-card {
+  background: #1E293B;
+  border-color: #334155;
+}
+
+.service-health-card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  border-color: #CBD5E1;
+}
+
+.service-health-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+}
+
+.service-status-pill {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  padding: 0.2rem 0.6rem;
+  border-radius: 9999px;
+  letter-spacing: 0.04em;
+}
+
+.service-status-pill.healthy {
+  background: #DCFCE7;
+  color: #15803D;
+  border: 1px solid #86EFAC;
+}
+
+.service-status-pill.degraded {
+  background: #FEF3C7;
+  color: #B45309;
+  border: 1px solid #FCD34D;
+}
+
+.service-status-pill.down {
+  background: #FEE2E2;
+  color: #991B1B;
+  border: 1px solid #FCA5A5;
+}
+
+.service-health-desc {
+  font-size: 0.8rem;
+  color: #64748B;
+  margin-bottom: 0.75rem;
+  flex-grow: 1;
+}
+
+[data-theme="dark"] .service-health-desc {
+  color: #94A3B8;
+}
+
+.service-health-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.72rem;
+  color: #94A3B8;
+  border-top: 1px solid #F1F5F9;
+  padding-top: 0.5rem;
+}
+
+[data-theme="dark"] .service-health-footer {
+  border-color: #334155;
+}
+
+.service-latency-tag {
+  font-family: monospace;
+  font-weight: 700;
+  color: #0F172A;
+}
+
+[data-theme="dark"] .service-latency-tag {
+  color: #F8FAFC;
+}
+
+/* Deployment Status Badges */
+.badge-dep-success {
+  background: #DCFCE7;
+  color: #15803D;
+  border: 1px solid #86EFAC;
+}
+
+.badge-dep-inprogress {
+  background: #E0E7FF;
+  color: #3730A3;
+  border: 1px solid #A5B4FC;
+}
+
+.badge-dep-failed {
+  background: #FEE2E2;
+  color: #991B1B;
+  border: 1px solid #FCA5A5;
+}
+
+.badge-dep-rollback {
+  background: #FEF3C7;
+  color: #B45309;
+  border: 1px solid #FCD34D;
+}
+
+/* Log Level Badges */
+.badge-log-info {
+  background: #E0F2FE;
+  color: #0369A1;
+  border: 1px solid #BAE6FD;
+}
+
+.badge-log-warn {
+  background: #FEF3C7;
+  color: #B45309;
+  border: 1px solid #FCD34D;
+}
+
+.badge-log-error {
+  background: #FEE2E2;
+  color: #B91C1C;
+  border: 1px solid #FCA5A5;
+}
+
+.badge-log-fatal {
+  background: #831843;
+  color: #FCE7F3;
+  border: 1px solid #BE185D;
+}
+
+/* Background Job Status Badges */
+.badge-job-completed {
+  background: #DCFCE7;
+  color: #15803D;
+  border: 1px solid #86EFAC;
+}
+
+.badge-job-running {
+  background: #E0E7FF;
+  color: #3730A3;
+  border: 1px solid #A5B4FC;
+}
+
+.badge-job-queued {
+  background: #F1F5F9;
+  color: #475569;
+  border: 1px solid #CBD5E1;
+}
+
+.badge-job-failed {
+  background: #FEE2E2;
+  color: #991B1B;
+  border: 1px solid #FCA5A5;
+}
+
 
 

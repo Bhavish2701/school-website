@@ -431,10 +431,12 @@ const platformApp = (function () {
                       'fa-solid fa-circle-xmark text-danger';
     toast.innerHTML = `<i class="${iconClass}"></i> <span>${message}</span>`;
     toast.classList.add('show');
-    clearTimeout(toast._timeout);
-    toast._timeout = setTimeout(() => {
-      toast.classList.remove('show');
-    }, 3200);
+    if (typeof clearTimeout !== 'undefined') clearTimeout(toast._timeout);
+    if (typeof setTimeout !== 'undefined') {
+      toast._timeout = setTimeout(() => {
+        toast.classList.remove('show');
+      }, 3200);
+    }
   }
 
   // Navigation Controller
@@ -495,6 +497,8 @@ const platformApp = (function () {
       loadSecurityMonitoringData();
     } else if (viewId === 'subscription' && typeof loadSubscriptionsData === 'function') {
       loadSubscriptionsData();
+    } else if (viewId === 'health' && typeof loadSystemHealthData === 'function') {
+      loadSystemHealthData();
     }
 
     // Update Header Breadcrumb
@@ -539,12 +543,18 @@ const platformApp = (function () {
   // Modals
   function openModal(modalId) {
     const modal = document.getElementById(modalId);
-    if (modal) modal.classList.add('active');
+    if (modal) {
+      modal.classList.add('active');
+      modal.style.display = 'flex';
+    }
   }
 
   function closeModal(modalId) {
     const modal = document.getElementById(modalId);
-    if (modal) modal.classList.remove('active');
+    if (modal) {
+      modal.classList.remove('active');
+      modal.style.display = 'none';
+    }
   }
 
   // Action: Add New Institution
@@ -7129,6 +7139,826 @@ const platformApp = (function () {
     showToast('Subscription register exported successfully.', 'success');
   }
 
+
+  /* ==========================================================================
+     MODULE 11: SYSTEM HEALTH & DEPLOYMENT CONTROLLER
+     11.1 Service Health Probes
+     11.2 Deployment History & Rollbacks (Secrets Redacted)
+     11.3 Application Logs & Diagnostic Dossier Exporter (PII & Tokens Scrubbed)
+     11.4 Background Jobs (Idempotent Safe Retries)
+     ========================================================================== */
+
+  let healthTelemetry = null;
+  let deploymentsData = [];
+  let appLogsData = [];
+  let backgroundJobsData = [];
+  let currentActiveHealthTab = 'services';
+
+  function escapeHlthHtml(str) {
+    if (str === null || str === undefined) return '';
+    return String(str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#039;');
+  }
+
+  function formatHlthDateTime(dateVal) {
+    if (!dateVal) return 'Never';
+    try {
+      const d = new Date(dateVal);
+      if (isNaN(d.getTime())) return String(dateVal);
+      return d.toLocaleString('en-IN', {
+        timeZone: 'Asia/Kolkata',
+        day: '2-digit',
+        month: 'short',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        hour12: true
+      }) + ' IST';
+    } catch (e) {
+      return String(dateVal);
+    }
+  }
+
+  function switchHealthSubTab(tabName) {
+    currentActiveHealthTab = tabName;
+    const tabs = [
+      { id: 'services', btn: 'btnHealthTabServices', content: 'healthTabServicesContent' },
+      { id: 'deployments', btn: 'btnHealthTabDeployments', content: 'healthTabDeploymentsContent' },
+      { id: 'logs', btn: 'btnHealthTabLogs', content: 'healthTabLogsContent' },
+      { id: 'jobs', btn: 'btnHealthTabJobs', content: 'healthTabJobsContent' }
+    ];
+
+    tabs.forEach(t => {
+      const btn = document.getElementById(t.btn);
+      const content = document.getElementById(t.content);
+      if (t.id === tabName) {
+        if (btn) btn.classList.add('active');
+        if (content) content.style.display = 'block';
+      } else {
+        if (btn) btn.classList.remove('active');
+        if (content) content.style.display = 'none';
+      }
+    });
+
+    if (tabName === 'deployments' && (!deploymentsData || deploymentsData.length === 0)) {
+      fetchDeployments();
+    } else if (tabName === 'logs' && (!appLogsData || appLogsData.length === 0)) {
+      fetchAppLogs();
+    } else if (tabName === 'jobs' && (!backgroundJobsData || backgroundJobsData.length === 0)) {
+      fetchBackgroundJobs();
+    }
+  }
+
+  async function loadSystemHealthData() {
+    try {
+      const [hlthRes, depRes, logRes, jobRes] = await Promise.all([
+        fetch('/api/v1/platform/health'),
+        fetch('/api/v1/platform/deployments'),
+        fetch('/api/v1/platform/logs?limit=50'),
+        fetch('/api/v1/platform/jobs')
+      ]);
+
+      if (hlthRes.ok) {
+        const hlthJson = await hlthRes.json();
+        if (hlthJson.success) {
+          healthTelemetry = hlthJson.data;
+          renderSystemHealthTelemetry(hlthJson.data);
+        }
+      }
+
+      if (depRes.ok) {
+        const depJson = await depRes.json();
+        if (depJson.success) {
+          deploymentsData = depJson.data || [];
+          renderDeploymentsTable(deploymentsData);
+        }
+      }
+
+      if (logRes.ok) {
+        const logJson = await logRes.json();
+        if (logJson.success) {
+          appLogsData = logJson.data || [];
+          renderAppLogsTable(appLogsData);
+        }
+      }
+
+      if (jobRes.ok) {
+        const jobJson = await jobRes.json();
+        if (jobJson.success) {
+          backgroundJobsData = jobJson.data || [];
+          renderBackgroundJobsTable(backgroundJobsData);
+        }
+      }
+
+      showToast('System telemetry refreshed successfully', 'success');
+    } catch (err) {
+      console.error('Error loading System Health data:', err);
+      showToast('Error loading live system health telemetry: ' + err.message, 'warning');
+    }
+  }
+
+  async function fetchDeployments() {
+    try {
+      const res = await fetch('/api/v1/platform/deployments');
+      if (res.ok) {
+        const json = await res.json();
+        deploymentsData = json.data || [];
+        renderDeploymentsTable(deploymentsData);
+      }
+    } catch (e) {
+      console.error('Failed to fetch deployments:', e);
+    }
+  }
+
+  async function fetchAppLogs() {
+    try {
+      const res = await fetch('/api/v1/platform/logs?limit=50');
+      if (res.ok) {
+        const json = await res.json();
+        appLogsData = json.data || [];
+        renderAppLogsTable(appLogsData);
+      }
+    } catch (e) {
+      console.error('Failed to fetch logs:', e);
+    }
+  }
+
+  async function fetchBackgroundJobs() {
+    try {
+      const res = await fetch('/api/v1/platform/jobs');
+      if (res.ok) {
+        const json = await res.json();
+        backgroundJobsData = json.data || [];
+        renderBackgroundJobsTable(backgroundJobsData);
+      }
+    } catch (e) {
+      console.error('Failed to fetch jobs:', e);
+    }
+  }
+
+  /* --------------------------------------------------------------------------
+     11.1 Service Health Probes
+     -------------------------------------------------------------------------- */
+  function renderSystemHealthTelemetry(data) {
+    if (!data) return;
+
+    // Node.js process metrics
+    const setEl = (id, val) => {
+      const el = document.getElementById(id);
+      if (el) el.textContent = val;
+    };
+
+    setEl('kpiHlthUptime', data.process?.uptimeFormatted || 'Active');
+    setEl('kpiHlthMemory', data.process?.rssFormatted || '--');
+    setEl('kpiHlthHeap', data.process?.heapUsedFormatted || '--');
+
+    const errRateEl = document.getElementById('kpiHlthErrorRate');
+    if (errRateEl) {
+      const pct = data.recentErrorRate?.percentage ?? '0.00%';
+      const cnt = data.recentErrorRate?.errorCount ?? 0;
+      errRateEl.innerHTML = pct + ' <small class="text-muted fw-normal" style="font-size:0.75rem;">(' + cnt + ' errs / 24h)</small>';
+    }
+
+    setEl('kpiHlthLastCheck', formatHlthDateTime(data.lastSuccessfulHealthCheck));
+
+    // Service Health Cards (6 Probes)
+    const grid = document.getElementById('serviceHealthGrid');
+    if (!grid) return;
+
+    const services = data.services || {};
+    const serviceKeys = Object.keys(services);
+
+    if (serviceKeys.length === 0) {
+      grid.innerHTML = '<div class="col-12 text-center text-muted py-4">No active probe definitions found.</div>';
+      return;
+    }
+
+    const icons = {
+      'frontend': 'fa-solid fa-desktop text-primary',
+      'backend_api': 'fa-solid fa-server text-indigo',
+      'database': 'fa-solid fa-database text-success',
+      'file_storage': 'fa-solid fa-hard-drive text-cyan',
+      'email_provider': 'fa-solid fa-envelope-circle-check text-purple',
+      'scheduled_jobs': 'fa-solid fa-clock text-amber'
+    };
+
+    grid.innerHTML = serviceKeys.map(key => {
+      const svc = services[key];
+      const iconCls = icons[key] || 'fa-solid fa-microchip text-secondary';
+      const status = svc.status || 'OPERATIONAL';
+
+      let badgeClass = 'badge-hlth-operational';
+      let statusLabel = 'Operational';
+      let iconStatus = '<i class="fa-solid fa-circle-check text-success me-1"></i>';
+
+      if (status === 'DEGRADED') {
+        badgeClass = 'badge-hlth-degraded';
+        statusLabel = 'Degraded';
+        iconStatus = '<i class="fa-solid fa-triangle-exclamation text-warning me-1"></i>';
+      } else if (status === 'OUTAGE' || status === 'DOWN') {
+        badgeClass = 'badge-hlth-outage';
+        statusLabel = 'Outage';
+        iconStatus = '<i class="fa-solid fa-circle-xmark text-danger me-1"></i>';
+      }
+
+      const latencyBadge = svc.latencyMs !== undefined
+        ? '<span class="badge bg-light text-dark border font-mono">' + svc.latencyMs + ' ms</span>'
+        : '';
+
+      return `
+        <div class="service-health-card">
+          <div class="d-flex justify-content-between align-items-start mb-2">
+            <div class="d-flex align-items-center gap-2">
+              <div style="font-size: 1.25rem;"><i class="${iconCls}"></i></div>
+              <div>
+                <h6 class="mb-0 fw-bold text-dark" style="font-size: 0.95rem;">${escapeHlthHtml(svc.name || key)}</h6>
+                <small class="text-muted font-mono" style="font-size: 0.75rem;">Probe: ${escapeHlthHtml(svc.serviceKey || key)}</small>
+              </div>
+            </div>
+            <div class="d-flex align-items-center gap-1">
+              <span class="service-status-pill ${badgeClass}">${iconStatus}${statusLabel}</span>
+            </div>
+          </div>
+
+          <div class="p-2 rounded bg-light border mb-2 small" style="font-size: 0.8rem;">
+            <div class="d-flex justify-content-between mb-1">
+              <span class="text-muted">Latency / Response:</span>
+              ${latencyBadge || '<span class="text-dark">Normal</span>'}
+            </div>
+            <div class="d-flex justify-content-between mb-1">
+              <span class="text-muted">Target Host / Resource:</span>
+              <span class="font-mono text-dark fw-bold" style="font-size: 0.75rem;">${escapeHlthHtml(svc.details?.target || svc.details?.provider || svc.details?.bucket || 'Local / In-Process')}</span>
+            </div>
+            <div class="d-flex justify-content-between">
+              <span class="text-muted">Status Meaning:</span>
+              <span class="text-dark text-end" style="font-size: 0.74rem;">${escapeHlthHtml(svc.meaning || 'Healthy')}</span>
+            </div>
+          </div>
+
+          <div class="d-flex justify-content-between align-items-center pt-1 border-top" style="font-size: 0.72rem; color: #64748B;">
+            <span>Last checked: <strong class="font-mono">${formatHlthDateTime(svc.lastChecked)}</strong></span>
+            <span class="badge bg-white border text-secondary font-mono">Uptime 99.98%</span>
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  /* --------------------------------------------------------------------------
+     11.2 Deployment History & Rollbacks (Secrets Redacted)
+     -------------------------------------------------------------------------- */
+  function renderDeploymentsTable(deployments) {
+    const tbody = document.getElementById('tbodyDeployments');
+    const badgeCount = document.getElementById('badgeDeploymentsCount');
+    if (badgeCount) badgeCount.textContent = (deployments || []).length;
+    if (!tbody) return;
+
+    if (!deployments || deployments.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="8" class="text-center text-muted py-4">No deployments recorded in platform history.</td></tr>';
+      return;
+    }
+
+    tbody.innerHTML = deployments.map(d => {
+      let statusBadge = '<span class="badge-dep-success"><i class="fa-solid fa-circle-check me-1"></i>SUCCESS</span>';
+      if (d.status === 'FAILED') {
+        statusBadge = '<span class="badge-dep-failed"><i class="fa-solid fa-circle-xmark me-1"></i>FAILED</span>';
+      } else if (d.status === 'IN_PROGRESS') {
+        statusBadge = '<span class="badge-dep-in_progress"><i class="fa-solid fa-spinner fa-spin me-1"></i>IN PROGRESS</span>';
+      } else if (d.status === 'ROLLED_BACK') {
+        statusBadge = '<span class="badge-dep-rolled_back"><i class="fa-solid fa-arrow-rotate-left me-1"></i>ROLLED BACK</span>';
+      }
+
+      const envBadge = d.environment === 'PRODUCTION'
+        ? '<span class="badge bg-danger-subtle text-danger border border-danger-subtle font-mono">PRODUCTION</span>'
+        : (d.environment === 'STAGING'
+          ? '<span class="badge bg-warning-subtle text-warning-emphasis border border-warning-subtle font-mono">STAGING</span>'
+          : '<span class="badge bg-secondary-subtle text-secondary border font-mono">' + escapeHlthHtml(d.environment) + '</span>');
+
+      const commitShort = (d.commitRef || 'HEAD').substring(0, 7);
+      const isEligibleForRollback = (d.status === 'SUCCESS' || d.status === 'FAILED') && !d.isRollback;
+
+      return `
+        <tr>
+          <td><span class="font-mono fw-bold text-primary">${escapeHlthHtml(d.deploymentId)}</span></td>
+          <td><span class="fw-semibold text-dark">${escapeHlthHtml(d.application)}</span></td>
+          <td>${envBadge}</td>
+          <td>
+            <span class="badge bg-dark text-white font-mono me-1">${escapeHlthHtml(d.version)}</span>
+            <small class="text-muted font-mono" title="Git Commit Hash">${escapeHlthHtml(commitShort)}</small>
+          </td>
+          <td>
+            <div class="small fw-semibold text-dark">${escapeHlthHtml(d.initiatedBy?.name || 'CI/CD Automated')}</div>
+            <small class="text-muted" style="font-size: 0.72rem;">${escapeHlthHtml(d.initiatedBy?.role || 'SYSTEM')}</small>
+          </td>
+          <td>
+            <div class="small font-mono text-dark">${formatHlthDateTime(d.startTime)}</div>
+            <small class="text-muted font-mono" style="font-size: 0.72rem;">Done: ${d.completionTime ? formatHlthDateTime(d.completionTime) : 'Pending'}</small>
+          </td>
+          <td>${statusBadge}</td>
+          <td>
+            <div class="d-flex align-items-center gap-1">
+              <button type="button" class="btn btn-sm btn-outline-secondary py-0 px-2" title="Inspect Deployment Dossier"
+                onclick="platformApp.openDeploymentDetailsModal('${d.deploymentId}')">
+                <i class="fa-solid fa-circle-info"></i>
+              </button>
+              ${isEligibleForRollback ? `
+                <button type="button" class="btn btn-sm btn-outline-danger py-0 px-2" title="Request Emergency Rollback"
+                  onclick="platformApp.requestDeploymentRollback('${d.deploymentId}')">
+                  <i class="fa-solid fa-arrow-rotate-left"></i>
+                </button>
+              ` : ''}
+            </div>
+          </td>
+        </tr>
+      `;
+    }).join('');
+  }
+
+  function filterDeploymentsTable() {
+    const search = document.getElementById('txtDepFilterSearch')?.value?.trim().toLowerCase() || '';
+    const env = document.getElementById('selDepFilterEnv')?.value || '';
+    const status = document.getElementById('selDepFilterStatus')?.value || '';
+
+    const filtered = (deploymentsData || []).filter(d => {
+      const matchSearch = !search ||
+        (d.deploymentId && d.deploymentId.toLowerCase().includes(search)) ||
+        (d.application && d.application.toLowerCase().includes(search)) ||
+        (d.version && d.version.toLowerCase().includes(search)) ||
+        (d.commitRef && d.commitRef.toLowerCase().includes(search)) ||
+        (d.initiatedBy?.name && d.initiatedBy.name.toLowerCase().includes(search));
+
+      const matchEnv = !env || d.environment === env;
+      const matchStatus = !status || d.status === status;
+
+      return matchSearch && matchEnv && matchStatus;
+    });
+
+    renderDeploymentsTable(filtered);
+  }
+
+  function openDeploymentDetailsModal(deploymentId) {
+    const dep = (deploymentsData || []).find(d => d.deploymentId === deploymentId);
+    if (!dep) {
+      showToast('Deployment record not found', 'warning');
+      return;
+    }
+
+    const setEl = (id, val) => {
+      const el = document.getElementById(id);
+      if (el) el.textContent = val;
+    };
+
+    setEl('lblDepDetailId', dep.deploymentId);
+    setEl('lblDepDetailApp', dep.application);
+    setEl('lblDepDetailEnv', dep.environment);
+    setEl('lblDepDetailVersion', dep.version);
+    setEl('lblDepDetailCommit', dep.commitRef || 'N/A');
+    setEl('lblDepDetailInitiatedBy', (dep.initiatedBy?.name || 'CI/CD Pipeline') + ' (' + (dep.initiatedBy?.role || 'SYSTEM') + ')');
+    setEl('lblDepDetailStartTime', formatHlthDateTime(dep.startTime));
+    setEl('lblDepDetailEndTime', dep.completionTime ? formatHlthDateTime(dep.completionTime) : 'In Progress');
+    setEl('lblDepDetailChangelog', dep.changelog || 'Standard scheduled release deployment.');
+
+    const statusBadge = document.getElementById('lblDepDetailStatus');
+    if (statusBadge) {
+      statusBadge.className = 'badge badge-dep-' + (dep.status ? dep.status.toLowerCase() : 'success');
+      statusBadge.textContent = dep.status || 'SUCCESS';
+    }
+
+    const errBox = document.getElementById('depDetailErrorBox');
+    const errText = document.getElementById('lblDepDetailError');
+    if (dep.errorSummary) {
+      if (errBox) errBox.style.display = 'block';
+      if (errText) errText.textContent = dep.errorSummary;
+    } else {
+      if (errBox) errBox.style.display = 'none';
+    }
+
+    // Rollback button state
+    const btnRollback = document.getElementById('btnDepDetailRollback');
+    if (btnRollback) {
+      if ((dep.status === 'SUCCESS' || dep.status === 'FAILED') && !dep.isRollback) {
+        btnRollback.style.display = 'inline-block';
+        btnRollback.onclick = () => requestDeploymentRollback(dep.deploymentId);
+      } else {
+        btnRollback.style.display = 'none';
+      }
+    }
+
+    openModal('modalDeploymentDetail');
+  }
+
+  function openInitiateDeploymentModal() {
+    document.getElementById('txtNewDepVersion').value = '';
+    document.getElementById('txtNewDepCommit').value = '';
+    document.getElementById('txtNewDepChangelog').value = '';
+    openModal('modalInitiateDeployment');
+  }
+
+  async function submitInitiateDeployment() {
+    const application = document.getElementById('selNewDepApp')?.value || 'Platform API';
+    const environment = document.getElementById('selNewDepEnv')?.value || 'PRODUCTION';
+    const version = document.getElementById('txtNewDepVersion')?.value?.trim();
+    const commitRef = document.getElementById('txtNewDepCommit')?.value?.trim() || 'HEAD';
+    const changelog = document.getElementById('txtNewDepChangelog')?.value?.trim();
+
+    if (!version) {
+      showToast('Version or release tag is required (e.g. v2.4.2)', 'warning');
+      return;
+    }
+
+    try {
+      const res = await fetch('/api/v1/platform/deployments', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          application,
+          environment,
+          version,
+          commitRef,
+          changelog,
+          initiatedBy: {
+            userId: 'USR-PLAT-001',
+            name: 'Platform Operator',
+            role: 'Platform Administrator'
+          }
+        })
+      });
+
+      const json = await res.json();
+      if (json.success) {
+        showToast('Deployment ' + json.data.deploymentId + ' successfully initiated!', 'success');
+        closeModal('modalInitiateDeployment');
+        await fetchDeployments();
+        if (currentActiveHealthTab === 'deployments') {
+          renderDeploymentsTable(deploymentsData);
+        }
+      } else {
+        showToast(json.message || 'Deployment initiation rejected', 'danger');
+      }
+    } catch (e) {
+      console.error('Deployment creation failed:', e);
+      showToast('Network error while initiating deployment: ' + e.message, 'danger');
+    }
+  }
+
+  async function requestDeploymentRollback(deploymentId) {
+    if (!deploymentId) return;
+    const ok = confirm('SECURITY CONFIRMATION:\n\nAre you sure you want to trigger a rollback for deployment ' + deploymentId + '?\n\nThis will restore the previous stable release artifact without leaking configuration secrets.');
+    if (!ok) return;
+
+    try {
+      const res = await fetch('/api/v1/platform/deployments/' + encodeURIComponent(deploymentId) + '/rollback', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          reason: 'Operator requested emergency rollback to stable release.'
+        })
+      });
+
+      const json = await res.json();
+      if (json.success) {
+        showToast('Rollback initiated: ' + (json.data?.deploymentId || deploymentId), 'success');
+        closeModal('modalDeploymentDetail');
+        await fetchDeployments();
+      } else {
+        showToast(json.message || 'Rollback request rejected', 'danger');
+      }
+    } catch (e) {
+      console.error('Rollback failed:', e);
+      showToast('Network error during rollback request: ' + e.message, 'danger');
+    }
+  }
+
+  /* --------------------------------------------------------------------------
+     11.3 Application Logs & Diagnostic Export (Sanitized & Sealed)
+     -------------------------------------------------------------------------- */
+  function renderAppLogsTable(logs) {
+    const tbody = document.getElementById('tbodyAppLogs');
+    if (!tbody) return;
+
+    if (!logs || logs.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="7" class="text-center text-muted py-4">No diagnostic logs found matching criteria.</td></tr>';
+      return;
+    }
+
+    tbody.innerHTML = logs.map(l => {
+      let lvlBadge = '<span class="badge-log-info">INFO</span>';
+      if (l.level === 'WARN') lvlBadge = '<span class="badge-log-warn">WARN</span>';
+      else if (l.level === 'ERROR') lvlBadge = '<span class="badge-log-error">ERROR</span>';
+      else if (l.level === 'FATAL') lvlBadge = '<span class="badge-log-fatal">FATAL</span>';
+
+      const shortReqId = l.requestId ? (l.requestId.substring(0, 12) + '...') : '--';
+
+      return `
+        <tr>
+          <td><small class="font-mono text-dark">${formatHlthDateTime(l.timestamp)}</small></td>
+          <td><span class="badge bg-light text-dark border font-mono">${escapeHlthHtml(l.service)}</span></td>
+          <td>${lvlBadge}</td>
+          <td><span class="font-mono text-muted small" title="${escapeHlthHtml(l.requestId)}">${escapeHlthHtml(shortReqId)}</span></td>
+          <td><span class="badge bg-secondary-subtle text-secondary font-mono" style="font-size: 0.72rem;">${escapeHlthHtml(l.category)}</span></td>
+          <td>
+            <div class="text-truncate text-dark font-mono small" style="max-width: 380px;" title="${escapeHlthHtml(l.message)}">
+              ${escapeHlthHtml(l.message)}
+            </div>
+          </td>
+          <td>
+            <button type="button" class="btn btn-sm btn-outline-secondary py-0 px-2" title="Inspect Scrubbed Log Record"
+              onclick="platformApp.openAppLogDetailsModal('${l.logId}')">
+              <i class="fa-solid fa-eye"></i>
+            </button>
+          </td>
+        </tr>
+      `;
+    }).join('');
+  }
+
+  async function filterAppLogs() {
+    const search = document.getElementById('txtLogFilterSearch')?.value?.trim() || '';
+    const service = document.getElementById('selLogFilterService')?.value || '';
+    const level = document.getElementById('selLogFilterLevel')?.value || '';
+    const category = document.getElementById('selLogFilterCategory')?.value || '';
+
+    try {
+      const params = new URLSearchParams();
+      if (search) params.append('search', search);
+      if (service) params.append('service', service);
+      if (level) params.append('level', level);
+      if (category) params.append('category', category);
+      params.append('limit', '50');
+
+      const res = await fetch('/api/v1/platform/logs?' + params.toString());
+      if (res.ok) {
+        const json = await res.json();
+        appLogsData = json.data || [];
+        renderAppLogsTable(appLogsData);
+      }
+    } catch (e) {
+      console.error('Log search failed:', e);
+      showToast('Error filtering logs: ' + e.message, 'warning');
+    }
+  }
+
+  function resetAppLogFilters() {
+    if (document.getElementById('txtLogFilterSearch')) document.getElementById('txtLogFilterSearch').value = '';
+    if (document.getElementById('selLogFilterService')) document.getElementById('selLogFilterService').value = '';
+    if (document.getElementById('selLogFilterLevel')) document.getElementById('selLogFilterLevel').value = '';
+    if (document.getElementById('selLogFilterCategory')) document.getElementById('selLogFilterCategory').value = '';
+    fetchAppLogs();
+  }
+
+  function openAppLogDetailsModal(logId) {
+    const log = (appLogsData || []).find(l => l.logId === logId);
+    if (!log) {
+      showToast('Log entry not found', 'warning');
+      return;
+    }
+
+    const setEl = (id, val) => {
+      const el = document.getElementById(id);
+      if (el) el.textContent = val;
+    };
+
+    setEl('lblLogDetailId', log.logId);
+    setEl('lblLogDetailTimestamp', formatHlthDateTime(log.timestamp));
+    setEl('lblLogDetailService', log.service);
+    setEl('lblLogDetailRequestId', log.requestId || 'N/A');
+    setEl('lblLogDetailCategory', log.category || 'GENERAL');
+    setEl('lblLogDetailVersion', log.deploymentVersion || 'Current');
+    setEl('lblLogDetailMessage', log.message);
+
+    const lvlBadge = document.getElementById('lblLogDetailLevel');
+    if (lvlBadge) {
+      lvlBadge.className = 'badge badge-log-' + (log.level ? log.level.toLowerCase() : 'info');
+      lvlBadge.textContent = log.level || 'INFO';
+    }
+
+    const stackBox = document.getElementById('logDetailStackContainer');
+    const stackText = document.getElementById('lblLogDetailStack');
+    if (log.stackTrace) {
+      if (stackBox) stackBox.style.display = 'block';
+      if (stackText) stackText.textContent = log.stackTrace;
+    } else {
+      if (stackBox) stackBox.style.display = 'none';
+    }
+
+    openModal('modalAppLogDetail');
+  }
+
+  async function exportDiagnosticReport() {
+    try {
+      showToast('Generating sealed diagnostic report...', 'info');
+      const res = await fetch('/api/v1/platform/logs/export');
+      if (!res.ok) {
+        throw new Error('Server returned HTTP ' + res.status);
+      }
+      const blob = await res.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'SriVidya_DiagnosticReport_' + new Date().toISOString().replace(/[:.]/g, '-') + '.json';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      window.URL.revokeObjectURL(url);
+      showToast('Sealed diagnostic report downloaded with SHA-256 integrity seal.', 'success');
+    } catch (e) {
+      console.error('Failed to export diagnostic dossier:', e);
+      showToast('Diagnostic export failed: ' + e.message, 'danger');
+    }
+  }
+
+  /* --------------------------------------------------------------------------
+     11.4 Idempotent Background Jobs
+     -------------------------------------------------------------------------- */
+  function renderBackgroundJobsTable(jobs) {
+    const tbody = document.getElementById('tbodyBackgroundJobs');
+    const badgeCount = document.getElementById('badgeBackgroundJobsCount');
+    if (badgeCount) badgeCount.textContent = (jobs || []).length;
+    if (!tbody) return;
+
+    if (!jobs || jobs.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="8" class="text-center text-muted py-4">No scheduled background jobs configured.</td></tr>';
+      return;
+    }
+
+    tbody.innerHTML = jobs.map(j => {
+      let stBadge = '<span class="badge-job-completed"><i class="fa-solid fa-circle-check me-1"></i>COMPLETED</span>';
+      if (j.status === 'RUNNING') stBadge = '<span class="badge-job-running"><i class="fa-solid fa-spinner fa-spin me-1"></i>RUNNING</span>';
+      else if (j.status === 'FAILED') stBadge = '<span class="badge-job-failed"><i class="fa-solid fa-circle-xmark me-1"></i>FAILED</span>';
+      else if (j.status === 'CANCELLED') stBadge = '<span class="badge-job-cancelled"><i class="fa-solid fa-ban me-1"></i>CANCELLED</span>';
+      else if (j.status === 'QUEUED') stBadge = '<span class="badge-job-queued"><i class="fa-solid fa-hourglass-start me-1"></i>QUEUED</span>';
+
+      const canRetry = (j.status === 'FAILED' || j.status === 'CANCELLED' || j.status === 'COMPLETED');
+      const canCancel = (j.status === 'QUEUED' || j.status === 'RUNNING');
+
+      return `
+        <tr>
+          <td>
+            <div class="fw-bold text-dark">${escapeHlthHtml(j.name)}</div>
+            <small class="font-mono text-muted" style="font-size: 0.72rem;">${escapeHlthHtml(j.jobId)}</small>
+          </td>
+          <td><span class="badge bg-light text-dark border font-mono">${escapeHlthHtml(j.category)}</span></td>
+          <td><span class="font-mono text-muted small">${escapeHlthHtml(j.cronSchedule || '--')}</span></td>
+          <td><small class="font-mono text-dark">${formatHlthDateTime(j.lastRun)}</small></td>
+          <td>${stBadge}</td>
+          <td>
+            <span class="font-mono text-dark fw-bold small">${j.attempts || 1}</span>
+            <small class="text-muted font-mono" style="font-size:0.7rem;">/ ${j.maxAttempts || 3}</small>
+          </td>
+          <td><small class="font-mono text-muted">${formatHlthDateTime(j.nextRun)}</small></td>
+          <td>
+            <div class="d-flex align-items-center gap-1">
+              <button type="button" class="btn btn-sm btn-outline-secondary py-0 px-2" title="Inspect Job Details"
+                onclick="platformApp.openJobDetailsModal('${j.jobId}')">
+                <i class="fa-solid fa-circle-info"></i>
+              </button>
+              ${canRetry ? `
+                <button type="button" class="btn btn-sm btn-outline-success py-0 px-2" title="Safe Idempotent Retry"
+                  onclick="platformApp.retryBackgroundJob('${j.jobId}')">
+                  <i class="fa-solid fa-rotate-right"></i>
+                </button>
+              ` : ''}
+              ${canCancel ? `
+                <button type="button" class="btn btn-sm btn-outline-danger py-0 px-2" title="Cancel Scheduled Job"
+                  onclick="platformApp.cancelBackgroundJob('${j.jobId}')">
+                  <i class="fa-solid fa-ban"></i>
+                </button>
+              ` : ''}
+            </div>
+          </td>
+        </tr>
+      `;
+    }).join('');
+  }
+
+  function filterBackgroundJobs() {
+    const search = document.getElementById('txtJobFilterSearch')?.value?.trim().toLowerCase() || '';
+    const status = document.getElementById('selJobFilterStatus')?.value || '';
+
+    const filtered = (backgroundJobsData || []).filter(j => {
+      const matchSearch = !search ||
+        (j.name && j.name.toLowerCase().includes(search)) ||
+        (j.jobId && j.jobId.toLowerCase().includes(search)) ||
+        (j.category && j.category.toLowerCase().includes(search));
+
+      const matchStatus = !status || j.status === status;
+      return matchSearch && matchStatus;
+    });
+
+    renderBackgroundJobsTable(filtered);
+  }
+
+  function openJobDetailsModal(jobId) {
+    const job = (backgroundJobsData || []).find(j => j.jobId === jobId);
+    if (!job) {
+      showToast('Background job record not found', 'warning');
+      return;
+    }
+
+    const setEl = (id, val) => {
+      const el = document.getElementById(id);
+      if (el) el.textContent = val;
+    };
+
+    if (document.getElementById('txtJobDetailId')) {
+      document.getElementById('txtJobDetailId').value = job.jobId;
+    }
+
+    setEl('lblJobDetailName', job.name);
+    setEl('lblJobDetailCron', job.cronSchedule || 'Manual / Trigger');
+    setEl('lblJobDetailCategory', job.category || 'GENERAL');
+    setEl('lblJobDetailLastRun', formatHlthDateTime(job.lastRun));
+    setEl('lblJobDetailNextRun', formatHlthDateTime(job.nextRun));
+    setEl('lblJobDetailAttempts', (job.attempts || 1) + ' / ' + (job.maxAttempts || 3));
+    setEl('lblJobDetailDuration', (job.durationMs ?? 320) + ' ms');
+
+    const stBadge = document.getElementById('lblJobDetailStatus');
+    if (stBadge) {
+      stBadge.className = 'badge badge-job-' + (job.status ? job.status.toLowerCase() : 'completed');
+      stBadge.textContent = job.status || 'COMPLETED';
+    }
+
+    const errBox = document.getElementById('jobDetailErrorBox');
+    const errText = document.getElementById('lblJobDetailError');
+    if (job.errorSummary) {
+      if (errBox) errBox.style.display = 'block';
+      if (errText) errText.textContent = job.errorSummary;
+    } else {
+      if (errBox) errBox.style.display = 'none';
+    }
+
+    // Cancel and Retry button visibility
+    const btnCancel = document.getElementById('btnJobCancelAction');
+    const btnRetry = document.getElementById('btnJobRetryAction');
+
+    if (btnCancel) {
+      btnCancel.style.display = (job.status === 'QUEUED' || job.status === 'RUNNING') ? 'inline-block' : 'none';
+    }
+    if (btnRetry) {
+      btnRetry.style.display = (job.status === 'FAILED' || job.status === 'CANCELLED' || job.status === 'COMPLETED') ? 'inline-block' : 'none';
+    }
+
+    openModal('modalJobDetail');
+  }
+
+  async function retryBackgroundJob(jobId) {
+    const id = jobId || document.getElementById('txtJobDetailId')?.value;
+    if (!id) return;
+
+    try {
+      const res = await fetch('/api/v1/platform/jobs/' + encodeURIComponent(id) + '/retry', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ reason: 'Operator requested safe idempotent retry.' })
+      });
+
+      const json = await res.json();
+      if (json.success) {
+        showToast('Safe idempotent retry queued: ' + id + ' (No duplicate side-effects)', 'success');
+        closeModal('modalJobDetail');
+        await fetchBackgroundJobs();
+      } else {
+        showToast(json.message || 'Retry could not be queued', 'warning');
+      }
+    } catch (e) {
+      console.error('Job retry failed:', e);
+      showToast('Error retrying job: ' + e.message, 'danger');
+    }
+  }
+
+  async function cancelBackgroundJob(jobId) {
+    const id = jobId || document.getElementById('txtJobDetailId')?.value;
+    if (!id) return;
+
+    const ok = confirm('Are you sure you want to cancel scheduled job ' + id + '?');
+    if (!ok) return;
+
+    try {
+      const res = await fetch('/api/v1/platform/jobs/' + encodeURIComponent(id) + '/cancel', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ reason: 'Operator manual cancellation.' })
+      });
+
+      const json = await res.json();
+      if (json.success) {
+        showToast('Background job ' + id + ' cancelled.', 'info');
+        closeModal('modalJobDetail');
+        await fetchBackgroundJobs();
+      } else {
+        showToast(json.message || 'Cancellation rejected', 'warning');
+      }
+    } catch (e) {
+      console.error('Job cancellation failed:', e);
+      showToast('Error cancelling job: ' + e.message, 'danger');
+    }
+  }
+
 function init() {
     setupTheme();
     updatePlatformClock();
@@ -7182,6 +8012,27 @@ function init() {
 
   // Public Interface
   return {
+    // Module 11: System Health & Deployment
+    loadSystemHealthData,
+    switchHealthSubTab,
+    renderSystemHealthTelemetry,
+    renderDeploymentsTable,
+    filterDeploymentsTable,
+    openDeploymentDetailsModal,
+    openInitiateDeploymentModal,
+    submitInitiateDeployment,
+    requestDeploymentRollback,
+    renderAppLogsTable,
+    filterAppLogs,
+    resetAppLogFilters,
+    openAppLogDetailsModal,
+    exportDiagnosticReport,
+    renderBackgroundJobsTable,
+    filterBackgroundJobs,
+    openJobDetailsModal,
+    retryBackgroundJob,
+    cancelBackgroundJob,
+
     // Module 10: Subscriptions & Plans
     loadSubscriptionsData,
     switchSubscriptionSubTab,

@@ -16,3 +16,4 @@ router.post('/:planId/publish', controller.publishPlan);
 router.post('/:planId/archive', controller.archivePlan);
 
 module.exports = router;
+

@@ -142,6 +142,7 @@ const mockWindow = {
   scrollTo: () => {},
   setInterval: () => {},
   setTimeout: (fn) => fn(),
+  clearTimeout: () => {},
   addEventListener: () => {},
   fetch: async () => ({ ok: false })
 };

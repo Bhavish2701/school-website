@@ -2333,64 +2333,334 @@
       </section>
 
       <!-- =======================================================================
-           MODULE 7: SYSTEM HEALTH & DEPLOYMENT (#view-health)
+           MODULE 11: SYSTEM HEALTH & DEPLOYMENT (#view-health)
            ======================================================================= -->
       <section class="portal-view" id="view-health">
-        <div class="pa-card">
-          <div class="pa-card-header">
-            <div>
-              <h3 class="pa-card-title"><i class="fa-solid fa-server text-primary"></i> System Health &amp; Deployment
-                Topology</h3>
-              <p class="pa-card-desc">Live performance metrics, database pool health, and background worker monitoring
-              </p>
-            </div>
-            <button class="btn-pa btn-pa-secondary" onclick="platformApp.pingCluster()">
-              <i class="fa-solid fa-rotate"></i> Refresh Telemetry
+        <!-- Module Header -->
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <div>
+            <h2 class="h4 mb-1 fw-bold text-dark">
+              <i class="fa-solid fa-server text-primary me-2"></i>System Health &amp; Deployment Topology
+            </h2>
+            <p class="text-muted small mb-0">
+              Live service health probes, deployment history lifecycle, sanitized diagnostic logs, and idempotent background jobs.
+            </p>
+          </div>
+          <div class="d-flex gap-2">
+            <button class="btn-pa btn-pa-secondary" onclick="platformApp.exportDiagnosticReport()">
+              <i class="fa-solid fa-file-shield text-success me-1"></i> Export Diagnostics
+            </button>
+            <button class="btn-pa btn-pa-secondary" onclick="platformApp.openInitiateDeploymentModal()">
+              <i class="fa-solid fa-rocket text-primary me-1"></i> Deploy Release
+            </button>
+            <button class="btn-pa btn-pa-primary" onclick="platformApp.loadSystemHealthData()">
+              <i class="fa-solid fa-arrows-rotate me-1"></i> Refresh Telemetry
             </button>
           </div>
+        </div>
 
-          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.25rem;">
+        <!-- Sub-navigation Tabs -->
+        <div class="hlth-subnav">
+          <button type="button" class="hlth-tab-btn active" id="btnHealthTabServices" onclick="platformApp.switchHealthSubTab('services')">
+            <i class="fa-solid fa-heart-pulse"></i> 11.1 Service Health
+          </button>
+          <button type="button" class="hlth-tab-btn" id="btnHealthTabDeployments" onclick="platformApp.switchHealthSubTab('deployments')">
+            <i class="fa-solid fa-clock-rotate-left"></i> 11.2 Deployment History
+            <span class="badge bg-primary ms-1" id="badgeDeploymentsCount">0</span>
+          </button>
+          <button type="button" class="hlth-tab-btn" id="btnHealthTabLogs" onclick="platformApp.switchHealthSubTab('logs')">
+            <i class="fa-solid fa-terminal"></i> 11.3 Application Logs
+          </button>
+          <button type="button" class="hlth-tab-btn" id="btnHealthTabJobs" onclick="platformApp.switchHealthSubTab('jobs')">
+            <i class="fa-solid fa-gears"></i> 11.4 Background Jobs
+            <span class="badge bg-secondary ms-1" id="badgeBackgroundJobsCount">0</span>
+          </button>
+        </div>
 
-            <div
-              style="border: 1px solid var(--color-border); border-radius: 10px; padding: 1.25rem; background: var(--color-bg-subtle);">
-              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
-                <span style="font-size: 0.85rem; font-weight: 600;">API Gateway</span>
-                <span class="badge-active">Online</span>
+        <!-- TAB 1: 11.1 Service Health -->
+        <div id="healthTabServicesContent">
+          <!-- Real-Time Node.js Process Metrics Strip -->
+          <div class="pa-kpi-grid mb-4" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
+            <div class="pa-kpi-card">
+              <div class="pa-kpi-header">
+                <span class="pa-kpi-title">Runtime Uptime</span>
+                <div class="pa-kpi-icon" style="background: rgba(16,185,129,0.12); color: #10B981;"><i class="fa-solid fa-clock"></i></div>
               </div>
-              <div style="font-size: 1.6rem; font-weight: 800; color: #10B981;">99.98%</div>
-              <div style="font-size: 0.78rem; color: #64748B;">HTTP 200 OK • 0 Faults in 24h</div>
+              <div class="pa-kpi-value text-emerald" id="kpiHlthUptime">Loading...</div>
+              <div class="pa-kpi-sub">Continuous Active Process</div>
+            </div>
+            <div class="pa-kpi-card">
+              <div class="pa-kpi-header">
+                <span class="pa-kpi-title">Process Memory RSS</span>
+                <div class="pa-kpi-icon" style="background: rgba(79,70,229,0.12); color: #4F46E5;"><i class="fa-solid fa-memory"></i></div>
+              </div>
+              <div class="pa-kpi-value text-primary" id="kpiHlthMemory">-- MB</div>
+              <div class="pa-kpi-sub" id="kpiHlthHeap">Heap Allocated</div>
+            </div>
+            <div class="pa-kpi-card">
+              <div class="pa-kpi-header">
+                <span class="pa-kpi-title">Recent Error Rate</span>
+                <div class="pa-kpi-icon" style="background: rgba(6,182,212,0.12); color: #06B6D4;"><i class="fa-solid fa-chart-pie"></i></div>
+              </div>
+              <div class="pa-kpi-value text-cyan" id="kpiHlthErrorRate">0.02%</div>
+              <div class="pa-kpi-sub">99.98% Success Ratio</div>
+            </div>
+            <div class="pa-kpi-card">
+              <div class="pa-kpi-header">
+                <span class="pa-kpi-title">Last Health Heartbeat</span>
+                <div class="pa-kpi-icon" style="background: rgba(245,158,11,0.12); color: #F59E0B;"><i class="fa-solid fa-heart-pulse"></i></div>
+              </div>
+              <div class="pa-kpi-value text-amber" id="kpiHlthHeartbeat" style="font-size: 1.15rem;">Live</div>
+              <div class="pa-kpi-sub" id="kpiHlthCheckTime">Automated 15s Cadence</div>
+            </div>
+          </div>
+
+          <!-- 6 Service Health Cards Grid -->
+          <div class="service-health-grid" id="serviceHealthGrid">
+            <!-- Dynamically populated -->
+          </div>
+        </div>
+
+        <!-- TAB 2: 11.2 Deployment History -->
+        <div id="healthTabDeploymentsContent" style="display: none;">
+          <div class="pa-card">
+            <div class="pa-card-header">
+              <div>
+                <h3 class="pa-card-title"><i class="fa-solid fa-clock-rotate-left text-primary me-2"></i>11.2 Deployment History Ledger</h3>
+                <p class="pa-card-desc">Audit register of application releases, commit references, health check verifications, and rollback triggers</p>
+              </div>
+              <span class="badge bg-secondary" id="lblDepFilteredCount">Showing 0 Deployments</span>
             </div>
 
-            <div
-              style="border: 1px solid var(--color-border); border-radius: 10px; padding: 1.25rem; background: var(--color-bg-subtle);">
-              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
-                <span style="font-size: 0.85rem; font-weight: 600;">PostgreSQL Primary</span>
-                <span class="badge-active">Connected</span>
-              </div>
-              <div style="font-size: 1.6rem; font-weight: 800; color: #2563EB;">14 / 100</div>
-              <div style="font-size: 0.78rem; color: #64748B;">Active Connections • 0ms lag</div>
+            <!-- Secrets Protection Notice Banner -->
+            <div class="alert alert-secondary d-flex align-items-center mx-3 mt-3 mb-0 py-2" style="font-size: 0.8rem; background: #F8FAFC; border-left: 4px solid #4F46E5;">
+              <i class="fa-solid fa-shield-halved text-primary me-2"></i>
+              <span><strong>Deployment Security Guard:</strong> In compliance with Section 11.2 rules, environment variables, database credentials, and secrets are strictly redacted and prohibited from display.</span>
             </div>
 
-            <div
-              style="border: 1px solid var(--color-border); border-radius: 10px; padding: 1.25rem; background: var(--color-bg-subtle);">
-              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
-                <span style="font-size: 0.85rem; font-weight: 600;">Memory &amp; CPU</span>
-                <span class="badge-active">Optimal</span>
+            <!-- Filter Toolbar -->
+            <div class="p-3 bg-light border-bottom">
+              <div class="row g-2 align-items-center">
+                <div class="col-md-4">
+                  <div class="input-group input-group-sm">
+                    <span class="input-group-text"><i class="fa-solid fa-magnifying-glass"></i></span>
+                    <input type="text" class="form-control" id="txtDepFilterSearch" placeholder="Search deployment ID, service, version..." onkeyup="platformApp.filterDeploymentsTable()">
+                  </div>
+                </div>
+                <div class="col-md-3">
+                  <select class="form-select form-select-sm" id="selDepFilterEnv" onchange="platformApp.filterDeploymentsTable()">
+                    <option value="">All Environments</option>
+                    <option value="Production">Production</option>
+                    <option value="Staging">Staging</option>
+                    <option value="Disaster Recovery">Disaster Recovery</option>
+                  </select>
+                </div>
+                <div class="col-md-3">
+                  <select class="form-select form-select-sm" id="selDepFilterStatus" onchange="platformApp.filterDeploymentsTable()">
+                    <option value="">All Deployment Statuses</option>
+                    <option value="SUCCESS">Success</option>
+                    <option value="IN_PROGRESS">In Progress</option>
+                    <option value="FAILED">Failed</option>
+                    <option value="ROLLED_BACK">Rolled Back</option>
+                  </select>
+                </div>
+                <div class="col-md-2">
+                  <button class="btn btn-sm btn-outline-secondary w-100" onclick="platformApp.resetDeploymentFilters()">
+                    <i class="fa-solid fa-rotate-left me-1"></i> Reset
+                  </button>
+                </div>
               </div>
-              <div style="font-size: 1.6rem; font-weight: 800;">18% CPU</div>
-              <div style="font-size: 0.78rem; color: #64748B;">4.2 GB / 16 GB RAM utilized</div>
             </div>
 
-            <div
-              style="border: 1px solid var(--color-border); border-radius: 10px; padding: 1.25rem; background: var(--color-bg-subtle);">
-              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
-                <span style="font-size: 0.85rem; font-weight: 600;">Automated Backups</span>
-                <span class="badge-active">Verified</span>
+            <!-- Table with 8 Columns (Section 11.2) -->
+            <div class="pa-table-responsive">
+              <table class="pa-table">
+                <thead>
+                  <tr>
+                    <th>Deployment ID</th>
+                    <th>Application / Service</th>
+                    <th>Environment</th>
+                    <th>Version &amp; Commit</th>
+                    <th>Initiated By</th>
+                    <th>Start &amp; Completion</th>
+                    <th>Status</th>
+                    <th style="text-align: right; width: 160px;">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="tbodyDeployments">
+                  <tr>
+                    <td colspan="8" class="text-center py-4 text-muted">
+                      <i class="fa-solid fa-spinner fa-spin me-2"></i> Loading Deployment History...
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB 3: 11.3 Application Logs -->
+        <div id="healthTabLogsContent" style="display: none;">
+          <div class="pa-card">
+            <div class="pa-card-header">
+              <div>
+                <h3 class="pa-card-title"><i class="fa-solid fa-terminal text-primary me-2"></i>11.3 Sanitized Application Logs</h3>
+                <p class="pa-card-desc">Authorized real-time diagnostic log stream with automated scrubbing of passwords, authorization tokens, and personal information</p>
               </div>
-              <div style="font-size: 1.6rem; font-weight: 800; color: #059669;">02:00 AM</div>
-              <div style="font-size: 0.78rem; color: #64748B;">Daily snapshot 1.4 GB encrypted</div>
+              <span class="badge bg-secondary" id="lblLogFilteredCount">Showing 0 Logs</span>
             </div>
 
+            <!-- Filter Toolbar -->
+            <div class="p-3 bg-light border-bottom">
+              <div class="row g-2 align-items-center">
+                <div class="col-md-3">
+                  <div class="input-group input-group-sm">
+                    <span class="input-group-text"><i class="fa-solid fa-magnifying-glass"></i></span>
+                    <input type="text" class="form-control" id="txtLogFilterSearch" placeholder="Search message or request ID..." onkeyup="platformApp.filterAppLogs()">
+                  </div>
+                </div>
+                <div class="col-md-2">
+                  <select class="form-select form-select-sm" id="selLogFilterService" onchange="platformApp.filterAppLogs()">
+                    <option value="">All Services</option>
+                    <option value="core-server">Core Server</option>
+                    <option value="api-gateway">API Gateway</option>
+                    <option value="auth-engine">Auth Engine</option>
+                    <option value="database-pool">Database Pool</option>
+                    <option value="cron-worker">Cron Worker</option>
+                  </select>
+                </div>
+                <div class="col-md-2">
+                  <select class="form-select form-select-sm" id="selLogFilterLevel" onchange="platformApp.filterAppLogs()">
+                    <option value="">All Log Levels</option>
+                    <option value="INFO">INFO</option>
+                    <option value="WARN">WARN</option>
+                    <option value="ERROR">ERROR</option>
+                    <option value="FATAL">FATAL</option>
+                  </select>
+                </div>
+                <div class="col-md-2">
+                  <select class="form-select form-select-sm" id="selLogFilterCategory" onchange="platformApp.filterAppLogs()">
+                    <option value="">All Categories</option>
+                    <option value="SYSTEM">System</option>
+                    <option value="AUTH">Auth</option>
+                    <option value="DATABASE">Database</option>
+                    <option value="CRON">Cron</option>
+                    <option value="NETWORK">Network</option>
+                  </select>
+                </div>
+                <div class="col-md-3 d-flex gap-2">
+                  <button class="btn btn-sm btn-outline-secondary w-50" onclick="platformApp.resetAppLogFilters()">
+                    <i class="fa-solid fa-rotate-left me-1"></i> Reset
+                  </button>
+                  <button class="btn btn-sm btn-outline-success w-50" onclick="platformApp.exportDiagnosticReport()">
+                    <i class="fa-solid fa-download me-1"></i> Export
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Table with 6 Columns (Section 11.3) -->
+            <div class="pa-table-responsive">
+              <table class="pa-table">
+                <thead>
+                  <tr>
+                    <th style="width: 100px;">Log ID</th>
+                    <th style="width: 140px;">Timestamp</th>
+                    <th style="width: 80px;">Level</th>
+                    <th style="width: 120px;">Service</th>
+                    <th style="width: 100px;">Category</th>
+                    <th>Sanitized Message</th>
+                    <th style="text-align: right; width: 90px;">Action</th>
+                  </tr>
+                </thead>
+                <tbody id="tbodyAppLogs">
+                  <tr>
+                    <td colspan="7" class="text-center py-4 text-muted">
+                      <i class="fa-solid fa-spinner fa-spin me-2"></i> Loading Application Logs...
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB 4: 11.4 Background Jobs -->
+        <div id="healthTabJobsContent" style="display: none;">
+          <div class="pa-card">
+            <div class="pa-card-header">
+              <div>
+                <h3 class="pa-card-title"><i class="fa-solid fa-gears text-primary me-2"></i>11.4 Background Jobs &amp; Scheduled Tasks</h3>
+                <p class="pa-card-desc">Scheduled attendance rollups, automated database snapshots, notification dispatches, and safe idempotent retry controllers</p>
+              </div>
+              <span class="badge bg-secondary" id="lblJobFilteredCount">Showing 0 Jobs</span>
+            </div>
+
+            <!-- Idempotent Invariant Notice -->
+            <div class="alert alert-info d-flex align-items-center mx-3 mt-3 mb-0 py-2" style="font-size: 0.8rem; background: #F0FDF4; border-left: 4px solid #10B981; color: #166534;">
+              <i class="fa-solid fa-shield-check text-success me-2"></i>
+              <span><strong>Idempotent Execution Invariant:</strong> In compliance with Section 11.4 rules, all background job retries are strictly verified as idempotent and safe against duplicate emails, payments, or duplicate academic records.</span>
+            </div>
+
+            <!-- Filter Toolbar -->
+            <div class="p-3 bg-light border-bottom">
+              <div class="row g-2 align-items-center">
+                <div class="col-md-4">
+                  <div class="input-group input-group-sm">
+                    <span class="input-group-text"><i class="fa-solid fa-magnifying-glass"></i></span>
+                    <input type="text" class="form-control" id="txtJobFilterSearch" placeholder="Search job name, ID..." onkeyup="platformApp.filterBackgroundJobs()">
+                  </div>
+                </div>
+                <div class="col-md-3">
+                  <select class="form-select form-select-sm" id="selJobFilterCategory" onchange="platformApp.filterBackgroundJobs()">
+                    <option value="">All Categories</option>
+                    <option value="ATTENDANCE">Attendance</option>
+                    <option value="BACKUP">Backup</option>
+                    <option value="NOTIFICATION">Notification</option>
+                    <option value="IMPORT">Import</option>
+                  </select>
+                </div>
+                <div class="col-md-3">
+                  <select class="form-select form-select-sm" id="selJobFilterStatus" onchange="platformApp.filterBackgroundJobs()">
+                    <option value="">All Job Statuses</option>
+                    <option value="Completed">Completed</option>
+                    <option value="Running">Running</option>
+                    <option value="Queued">Queued</option>
+                    <option value="Failed">Failed</option>
+                  </select>
+                </div>
+                <div class="col-md-2">
+                  <button class="btn btn-sm btn-outline-secondary w-100" onclick="platformApp.resetJobFilters()">
+                    <i class="fa-solid fa-rotate-left me-1"></i> Reset
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Table with 8 Columns (Section 11.4) -->
+            <div class="pa-table-responsive">
+              <table class="pa-table">
+                <thead>
+                  <tr>
+                    <th>Job Name</th>
+                    <th>Category</th>
+                    <th>Cron Schedule</th>
+                    <th>Last Run</th>
+                    <th>Status</th>
+                    <th>Attempts</th>
+                    <th>Next Scheduled Run</th>
+                    <th style="text-align: right; width: 160px;">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="tbodyBackgroundJobs">
+                  <tr>
+                    <td colspan="8" class="text-center py-4 text-muted">
+                      <i class="fa-solid fa-spinner fa-spin me-2"></i> Loading Background Jobs...
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
       </section>
@@ -6574,6 +6844,240 @@
       <div class="pa-modal-footer" style="padding: 1rem 1.5rem; border-top: 1px solid #E2E8F0; display: flex; justify-content: flex-end; gap: 0.5rem; background: #F8FAFC;">
         <button type="button" class="btn btn-sm btn-secondary" onclick="platformApp.closeModal('modalSuspendCancelSubscription')">Cancel</button>
         <button type="button" class="btn btn-sm btn-danger" onclick="platformApp.submitSuspendCancelSubscription()">Confirm Contract Action</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 11.2: Deployment Detail -->
+  <div class="pa-modal-backdrop" id="modalDeploymentDetail" style="display: none;">
+    <div class="pa-modal-card" style="max-width: 650px; width: 95%;">
+      <div class="pa-modal-header" style="background: linear-gradient(135deg, #0F172A 0%, #1E1B4B 100%); color: #FFFFFF; padding: 1.25rem 1.5rem; display: flex; justify-content: space-between; align-items: center;">
+        <div class="d-flex align-items-center gap-2">
+          <h4 class="h6 mb-0 fw-bold text-white"><i class="fa-solid fa-rocket text-primary me-2"></i><span id="lblDepDetailId">DEP-2026-000</span></h4>
+          <span class="badge bg-success" id="lblDepDetailStatus">SUCCESS</span>
+        </div>
+        <button type="button" class="btn-close btn-close-white" onclick="platformApp.closeModal('modalDeploymentDetail')"></button>
+      </div>
+      <div class="pa-modal-body" style="padding: 1.5rem; max-height: calc(85vh - 160px); overflow-y: auto;">
+        <div class="row g-3 mb-3">
+          <div class="col-md-6">
+            <div class="p-2 border rounded bg-light">
+              <span class="small text-muted fw-bold text-uppercase d-block">Application / Service</span>
+              <strong class="text-dark" id="lblDepDetailService">Unified Core Platform</strong>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="p-2 border rounded bg-light">
+              <span class="small text-muted fw-bold text-uppercase d-block">Environment</span>
+              <strong class="text-dark" id="lblDepDetailEnv">Production</strong>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="p-2 border rounded bg-light">
+              <span class="small text-muted fw-bold text-uppercase d-block">Version &amp; Commit</span>
+              <span class="fw-bold text-primary font-mono" id="lblDepDetailVersion">v2.4.1 (7532051)</span>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="p-2 border rounded bg-light">
+              <span class="small text-muted fw-bold text-uppercase d-block">Initiated By</span>
+              <span class="text-dark" id="lblDepDetailInitiator">Platform Administrator</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="p-2 border rounded bg-light mb-3">
+          <div class="d-flex justify-content-between mb-1">
+            <span class="small text-muted fw-bold">Deployment Window:</span>
+            <span class="small text-dark font-mono" id="lblDepDetailTimeWindow">Start - End</span>
+          </div>
+          <div class="d-flex justify-content-between">
+            <span class="small text-muted fw-bold">Automated Health Checks:</span>
+            <span class="badge bg-success" id="lblDepDetailHealthCheck">PASSED (All Probes Clean)</span>
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label class="small text-muted fw-bold text-uppercase d-block mb-1">Release Notes &amp; Change Summary</label>
+          <div class="p-2 border rounded bg-white text-dark small" id="lblDepDetailNotes" style="min-height: 60px;">
+            No release notes recorded.
+          </div>
+        </div>
+
+        <div class="alert alert-secondary py-2 small mb-0">
+          <i class="fa-solid fa-lock text-primary me-1"></i> Secrets, environment variables, and database connection strings are strictly redacted from deployment inspection.
+        </div>
+      </div>
+      <div class="pa-modal-footer" style="padding: 1rem 1.5rem; border-top: 1px solid #E2E8F0; display: flex; justify-content: space-between; background: #F8FAFC;">
+        <button type="button" class="btn btn-sm btn-outline-danger" id="btnDepDetailRollback" onclick="platformApp.requestDeploymentRollback()">
+          <i class="fa-solid fa-rotate-left me-1"></i> Request Rollback
+        </button>
+        <button type="button" class="btn btn-sm btn-secondary" onclick="platformApp.closeModal('modalDeploymentDetail')">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 11.2: Initiate Approved Deployment -->
+  <div class="pa-modal-backdrop" id="modalInitiateDeployment" style="display: none;">
+    <div class="pa-modal-card" style="max-width: 550px; width: 90%;">
+      <div class="pa-modal-header" style="padding: 1.25rem 1.5rem; border-bottom: 1px solid #E2E8F0; display: flex; justify-content: space-between; align-items: center;">
+        <h4 class="h6 mb-0 fw-bold"><i class="fa-solid fa-rocket text-primary me-2"></i>Initiate Approved Deployment</h4>
+        <button type="button" class="btn-close" onclick="platformApp.closeModal('modalInitiateDeployment')"></button>
+      </div>
+      <div class="pa-modal-body" style="padding: 1.5rem;">
+        <div class="mb-3">
+          <label class="form-label small fw-bold">Application / Service</label>
+          <select class="form-select form-select-sm" id="selInitDepService">
+            <option value="Unified Core Platform">Unified Core Platform</option>
+            <option value="Auth &amp; Sentry Threat Gateway">Auth &amp; Sentry Threat Gateway</option>
+            <option value="Parent &amp; Student Self-Service Portal">Parent &amp; Student Self-Service Portal</option>
+            <option value="Cron &amp; Notification Worker">Cron &amp; Notification Worker</option>
+          </select>
+        </div>
+        <div class="row g-2 mb-3">
+          <div class="col-md-6">
+            <label class="form-label small fw-bold">Target Environment</label>
+            <select class="form-select form-select-sm" id="selInitDepEnv">
+              <option value="Production">Production</option>
+              <option value="Staging">Staging</option>
+              <option value="Disaster Recovery">Disaster Recovery</option>
+            </select>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label small fw-bold">Release Version</label>
+            <input type="text" class="form-control form-control-sm font-mono" id="txtInitDepVersion" placeholder="e.g. v2.4.2" value="v2.4.2">
+          </div>
+        </div>
+        <div class="mb-3">
+          <label class="form-label small fw-bold">Commit Reference (SHA)</label>
+          <input type="text" class="form-control form-control-sm font-mono" id="txtInitDepCommit" placeholder="e.g. 7532051">
+        </div>
+        <div class="mb-3">
+          <label class="form-label small fw-bold">Release Notes / Statutory Change Justification</label>
+          <textarea class="form-control form-control-sm" id="txtInitDepNotes" rows="3" placeholder="Provide release overview and changelog summary..."></textarea>
+        </div>
+      </div>
+      <div class="pa-modal-footer" style="padding: 1rem 1.5rem; border-top: 1px solid #E2E8F0; display: flex; justify-content: flex-end; gap: 0.5rem; background: #F8FAFC;">
+        <button type="button" class="btn btn-sm btn-secondary" onclick="platformApp.closeModal('modalInitiateDeployment')">Cancel</button>
+        <button type="button" class="btn btn-sm btn-primary" onclick="platformApp.submitInitiateDeployment()">Deploy Release</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 11.3: Sanitized Application Log Detail -->
+  <div class="pa-modal-backdrop" id="modalAppLogDetail" style="display: none;">
+    <div class="pa-modal-card" style="max-width: 650px; width: 95%;">
+      <div class="pa-modal-header" style="background: linear-gradient(135deg, #0F172A 0%, #1E1B4B 100%); color: #FFFFFF; padding: 1.25rem 1.5rem; display: flex; justify-content: space-between; align-items: center;">
+        <div class="d-flex align-items-center gap-2">
+          <h4 class="h6 mb-0 fw-bold text-white"><i class="fa-solid fa-terminal text-primary me-2"></i><span id="lblLogDetailId">LOG-00000</span></h4>
+          <span class="badge badge-log-info" id="lblLogDetailLevel">INFO</span>
+        </div>
+        <button type="button" class="btn-close btn-close-white" onclick="platformApp.closeModal('modalAppLogDetail')"></button>
+      </div>
+      <div class="pa-modal-body" style="padding: 1.5rem; max-height: calc(85vh - 160px); overflow-y: auto;">
+        <div class="row g-2 mb-3">
+          <div class="col-md-4">
+            <span class="small text-muted fw-bold text-uppercase d-block">Service</span>
+            <strong class="text-dark font-mono" id="lblLogDetailService">core-server</strong>
+          </div>
+          <div class="col-md-4">
+            <span class="small text-muted fw-bold text-uppercase d-block">Category</span>
+            <strong class="text-dark" id="lblLogDetailCategory">SYSTEM</strong>
+          </div>
+          <div class="col-md-4">
+            <span class="small text-muted fw-bold text-uppercase d-block">Timestamp</span>
+            <small class="text-dark font-mono" id="lblLogDetailTimestamp">2026-11-05 15:00 IST</small>
+          </div>
+        </div>
+
+        <div class="p-2 border rounded bg-light mb-3">
+          <span class="small text-muted fw-bold text-uppercase d-block mb-1">Request / Correlation ID</span>
+          <span class="font-mono text-primary fw-bold small" id="lblLogDetailRequestId">req-95613f8f-1d3d</span>
+        </div>
+
+        <div class="mb-3">
+          <span class="small text-muted fw-bold text-uppercase d-block mb-1">Scrubbed Log Message</span>
+          <div class="p-3 border rounded bg-light font-mono text-dark small" id="lblLogDetailMessage" style="word-break: break-all;">
+            Message text
+          </div>
+        </div>
+
+        <div class="mb-3" id="logDetailStackContainer" style="display: none;">
+          <span class="small text-danger fw-bold text-uppercase d-block mb-1">Sanitized Stack Trace</span>
+          <pre class="p-2 border rounded bg-dark text-danger small font-mono" id="lblLogDetailStack" style="max-height: 150px; overflow-y: auto; font-size: 0.72rem;"></pre>
+        </div>
+
+        <div class="alert alert-success py-2 small mb-0">
+          <i class="fa-solid fa-circle-check text-success me-1"></i> Scrubbed of passwords, authorization bearer tokens, Aadhaar, and phone numbers.
+        </div>
+      </div>
+      <div class="pa-modal-footer" style="padding: 1rem 1.5rem; border-top: 1px solid #E2E8F0; display: flex; justify-content: flex-end; background: #F8FAFC;">
+        <button type="button" class="btn btn-sm btn-secondary" onclick="platformApp.closeModal('modalAppLogDetail')">Close Inspector</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 11.4: Background Job Detail -->
+  <div class="pa-modal-backdrop" id="modalJobDetail" style="display: none;">
+    <div class="pa-modal-card" style="max-width: 580px; width: 90%;">
+      <div class="pa-modal-header" style="padding: 1.25rem 1.5rem; border-bottom: 1px solid #E2E8F0; display: flex; justify-content: space-between; align-items: center;">
+        <div class="d-flex align-items-center gap-2">
+          <h4 class="h6 mb-0 fw-bold"><i class="fa-solid fa-gears text-primary me-2"></i><span id="lblJobDetailName">Job Name</span></h4>
+          <span class="badge badge-job-completed" id="lblJobDetailStatus">Completed</span>
+        </div>
+        <button type="button" class="btn-close" onclick="platformApp.closeModal('modalJobDetail')"></button>
+      </div>
+      <div class="pa-modal-body" style="padding: 1.5rem;">
+        <input type="hidden" id="txtJobDetailId">
+        <div class="row g-2 mb-3">
+          <div class="col-md-6">
+            <span class="small text-muted fw-bold text-uppercase d-block">Cron Schedule</span>
+            <span class="font-mono fw-bold text-dark" id="lblJobDetailCron">0 21 * * *</span>
+          </div>
+          <div class="col-md-6">
+            <span class="small text-muted fw-bold text-uppercase d-block">Category</span>
+            <span class="badge bg-light text-dark border" id="lblJobDetailCategory">ATTENDANCE</span>
+          </div>
+          <div class="col-md-6">
+            <span class="small text-muted fw-bold text-uppercase d-block">Last Run</span>
+            <small class="text-dark font-mono" id="lblJobDetailLastRun">Yesterday 21:00 IST</small>
+          </div>
+          <div class="col-md-6">
+            <span class="small text-muted fw-bold text-uppercase d-block">Next Scheduled Run</span>
+            <small class="text-dark font-mono" id="lblJobDetailNextRun">Today 21:00 IST</small>
+          </div>
+        </div>
+
+        <div class="p-2 border rounded bg-light mb-3">
+          <div class="d-flex justify-content-between mb-1">
+            <span class="small text-muted fw-bold">Attempt Count:</span>
+            <strong class="text-dark" id="lblJobDetailAttempts">1 / 3</strong>
+          </div>
+          <div class="d-flex justify-content-between">
+            <span class="small text-muted fw-bold">Execution Duration:</span>
+            <span class="font-mono text-muted small" id="lblJobDetailDuration">620 ms</span>
+          </div>
+        </div>
+
+        <div class="mb-3" id="jobDetailErrorBox" style="display: none;">
+          <span class="small text-danger fw-bold text-uppercase d-block mb-1">Error Summary</span>
+          <div class="p-2 border rounded bg-danger-subtle text-danger small font-mono" id="lblJobDetailError"></div>
+        </div>
+
+        <div class="alert alert-info py-2 small mb-0">
+          <i class="fa-solid fa-shield-check text-primary me-1"></i> <strong>Safe Idempotent Retries:</strong> Retrying this job will not generate duplicate emails, SMS, fee records, or attendance entries.
+        </div>
+      </div>
+      <div class="pa-modal-footer" style="padding: 1rem 1.5rem; border-top: 1px solid #E2E8F0; display: flex; justify-content: space-between; background: #F8FAFC;">
+        <button type="button" class="btn btn-sm btn-outline-danger" id="btnJobCancelAction" onclick="platformApp.cancelBackgroundJob()">
+          <i class="fa-solid fa-ban me-1"></i> Cancel Job
+        </button>
+        <div class="d-flex gap-2">
+          <button type="button" class="btn btn-sm btn-secondary" onclick="platformApp.closeModal('modalJobDetail')">Close</button>
+          <button type="button" class="btn btn-sm btn-success" id="btnJobRetryAction" onclick="platformApp.retryBackgroundJob()">
+            <i class="fa-solid fa-rotate-right me-1"></i> Safe Retry Job
+          </button>
+        </div>
       </div>
     </div>
   </div>
