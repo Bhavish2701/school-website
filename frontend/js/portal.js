@@ -57642,308 +57642,440 @@ const FEE_CATEGORY_AUDIT_DATA = [
   // ==========================================================================
 
   let activeDecisionRequestId = null;
+  let activeTaskActionId = null;
 
+  // 17.1 Pending Approvals Data (All 8 Required Institutional Categories)
   const TASKS_PENDING_DATA = [
     {
-      id: 'REQ-LEV-2026-081',
-      category: 'Staff Leave',
-      requester: 'Smt. K. Anuradha',
-      dept: 'Teaching Faculty (Senior English)',
-      summary: '3 Days Medical Leave & Class Substitution Verified',
-      impact: '3 Days / 18 Periods Covered by Smt. T. Sunitha',
-      submittedOn: '28 Oct 2026, 04:15 PM',
+      id: 'REQ-ADM-2026-052',
+      module: 'Admission approvals',
+      category: 'Admission approvals',
+      requester: 'Admissions Desk (Bhavish Y. / S. Harini)',
+      dept: 'Front Office Admissions',
+      summary: 'Class IX Lateral Enrolment & Assessment Sanction for Bhavish Y.',
+      requestDate: '01 Nov 2026',
+      submittedOn: '01 Nov 2026, 10:15 AM',
+      priority: 'High',
       urgency: 'High Priority',
       badgeClass: 'warning',
-      status: 'Under Review',
+      approvalStage: 'Principal Final Clearance',
+      dueDate: '04 Nov 2026',
+      impact: 'Class IX-A Seat Allocation & Enrolment Order',
+      docs: 'Birth Certificate, Transfer Certificate, Previous Marks Card',
+      amount: '₹14,500 Term Fee',
+      status: 'Pending Approval'
+    },
+    {
+      id: 'REQ-LEV-2026-081',
+      module: 'Leave requests',
+      category: 'Staff Leave Request',
+      requester: 'Smt. K. Anuradha (Senior English)',
+      dept: 'Teaching Faculty (Senior English)',
+      summary: '3 Days Medical Leave & Class Substitution Verified',
+      requestDate: '28 Oct 2026',
+      submittedOn: '28 Oct 2026, 04:15 PM',
+      priority: 'High',
+      urgency: 'High Priority',
+      badgeClass: 'warning',
+      approvalStage: 'Vice Principal Review',
+      dueDate: '31 Oct 2026',
+      impact: '3 Days / 18 Periods Covered by Smt. T. Sunitha',
       docs: 'Medical Prescription & Hospital Discharge Summary Verified',
-      amount: '-'
+      amount: '-',
+      status: 'Under Review'
+    },
+    {
+      id: 'REQ-MRK-2026-019',
+      module: 'Marks or results approvals',
+      category: 'Marks or Results Approval',
+      requester: 'Examinations Cell (Sri Ch. Ramesh)',
+      dept: 'Examinations Cell',
+      summary: 'Class X Half-Yearly Moderated Result Sign-off & Report Card Publishing',
+      requestDate: '29 Oct 2026',
+      submittedOn: '29 Oct 2026, 02:30 PM',
+      priority: 'Critical',
+      urgency: 'Critical Priority',
+      badgeClass: 'danger',
+      approvalStage: 'Academic Dean Verification',
+      dueDate: '02 Nov 2026',
+      impact: '82 Student Official Transcripts Publication',
+      docs: 'Moderation Rubric, Answer Script Re-checking Sheets',
+      amount: '-',
+      status: 'Awaiting Audit'
     },
     {
       id: 'REQ-FEE-2026-042',
+      module: 'Fee concessions',
       category: 'Fee Concession',
-      requester: 'S. Ramu (Accounts Desk)',
+      requester: 'Accounts Desk (S. Ramu / P. Bhavana)',
       dept: 'Accounts & Billing Office',
       summary: '40% Merit Scholarship Concession for P. Bhavana (Class VIII-A)',
-      impact: '₹12,000 Institutional Fee Waiver',
+      requestDate: '27 Oct 2026',
       submittedOn: '27 Oct 2026, 11:30 AM',
+      priority: 'High',
       urgency: 'High Priority',
       badgeClass: 'warning',
-      status: 'Submitted',
+      approvalStage: 'Principal Executive Sanction',
+      dueDate: '01 Nov 2026',
+      impact: '₹12,000 Institutional Fee Waiver',
       docs: 'Parent Income Declaration & Previous Year Mark Sheet (9.8 GPA)',
-      amount: '₹12,000'
-    },
-    {
-      id: 'REQ-PUR-2026-019',
-      category: 'Purchase Indent',
-      requester: 'Sri P. Rajesh Kumar',
-      dept: 'Mathematics & Examinations Cell',
-      summary: '500x Pre-Printed OMR Graph Sheets & Geometry Master Demo Sets',
-      impact: '₹14,200 Lab & Exam Outlay',
-      submittedOn: '28 Oct 2026, 02:45 PM',
-      urgency: 'Critical',
-      badgeClass: 'danger',
-      status: 'Under Review',
-      docs: '3 Comparative Vendor Quotations (Sri Krishna Book Depot Lowest L1)',
-      amount: '₹14,200'
+      amount: '₹12,000 Concession',
+      status: 'Submitted'
     },
     {
       id: 'REQ-REF-2026-008',
+      module: 'Refunds',
       category: 'Financial Refund',
-      requester: 'S. Ramu (Cashier Desk)',
+      requester: 'Cashier Desk (S. Ramu / M. Sravanthi)',
       dept: 'Accounts & Finance',
       summary: 'Duplicate Gateway UPI Double Payment Reversal for M. Sravanthi (IX)',
-      impact: '₹16,000 Debit Ledger Reversal',
+      requestDate: '29 Oct 2026',
       submittedOn: '29 Oct 2026, 10:15 AM',
-      urgency: 'Critical',
+      priority: 'Critical',
+      urgency: 'Critical Priority',
       badgeClass: 'danger',
-      status: 'Returned for Correction',
+      approvalStage: 'Finance Head Audit',
+      dueDate: '03 Nov 2026',
+      impact: '₹16,000 Debit Ledger Reversal',
       docs: 'SBI Banking Gateway UTR 904128 & Parent Bank Passbook Statement',
-      amount: '₹16,000'
+      amount: '₹16,000 Refund',
+      status: 'Returned for Correction'
     },
     {
-      id: 'REQ-TRN-2026-015',
-      category: 'Student Transfer',
-      requester: 'Academic Clearance Desk',
-      dept: 'Administrative Office',
-      summary: 'Official Transfer Certificate (TC) Issue for Master K. Tarun (Class X)',
-      impact: 'Clearance Memo & CBSE Relocation',
-      submittedOn: '26 Oct 2026, 03:00 PM',
-      urgency: 'Normal',
-      badgeClass: 'info',
-      status: 'Draft',
-      urgency: 'Normal',
-      badgeClass: 'info',
-      docs: 'Father Central Govt Transfer Order (Hyderabad) & All Dues Cleared',
-      amount: '-'
+      id: 'REQ-PUR-2026-019',
+      module: 'Purchase requests',
+      category: 'Purchase Indent',
+      requester: 'Sri P. Rajesh Kumar (Maths Dept)',
+      dept: 'Mathematics & Examinations Cell',
+      summary: '500x Pre-Printed OMR Graph Sheets & Geometry Master Demo Sets',
+      requestDate: '28 Oct 2026',
+      submittedOn: '28 Oct 2026, 02:45 PM',
+      priority: 'Critical',
+      urgency: 'Critical Priority',
+      badgeClass: 'danger',
+      approvalStage: 'Purchasing Committee Quorum',
+      dueDate: '02 Nov 2026',
+      impact: '₹14,200 Lab & Exam Outlay',
+      docs: '3 Comparative Vendor Quotations (Sri Krishna Book Depot Lowest L1)',
+      amount: '₹14,200 Outlay',
+      status: 'Under Review'
     },
     {
-      id: 'REQ-EVT-2026-033',
-      category: 'Event Permission',
-      requester: 'Cultural Committee',
-      dept: 'Science & Student Activities',
-      summary: 'Annual STEM & Science Exhibition 2026 Stage Setup & Medals',
-      impact: '₹22,500 Budget Allocation',
-      submittedOn: '27 Oct 2026, 01:20 PM',
-      urgency: 'Normal',
+      id: 'REQ-COR-2026-014',
+      module: 'Student record corrections',
+      category: 'Student Record Correction',
+      requester: 'Parent Desk (Master K. Tarun / Father)',
+      dept: 'Student Records Section',
+      summary: 'Legal Surname & DOB Correction for Master K. Tarun (Class X)',
+      requestDate: '30 Oct 2026',
+      submittedOn: '30 Oct 2026, 09:30 AM',
+      priority: 'Normal',
+      urgency: 'Routine Audit',
       badgeClass: 'info',
-      docs: 'Auditorium Floor Plan, Fire Safety Protocol & Detailed Vendor Invoices',
-      amount: '₹22,500'
+      approvalStage: 'Registrar & Board Liason Review',
+      dueDate: '05 Nov 2026',
+      impact: 'CBSE Gazetted Gazetted Officer Notarized Correction',
+      docs: 'Notarized Affidavit, Municipal Birth Certificate, Aadhaar Copy',
+      amount: '-',
+      status: 'In Verification'
+    },
+    {
+      id: 'REQ-COM-2026-027',
+      module: 'Published communication approvals',
+      category: 'Published Communication Approval',
+      requester: 'Cultural Committee & Vice Principal Desk',
+      dept: 'Institutional Communications',
+      summary: 'Bilingual Sports Day & Vacation Notice Parent Circular via WhatsApp & SMS',
+      requestDate: '31 Oct 2026',
+      submittedOn: '31 Oct 2026, 03:00 PM',
+      priority: 'High',
+      urgency: 'High Priority',
+      badgeClass: 'warning',
+      approvalStage: 'Director & Principal Final Authorization',
+      dueDate: '04 Nov 2026',
+      impact: 'Broadcast to 855 Parents & Web Portal Notification',
+      docs: 'Telugu & English Dual Proofed Notice Draft & Schedule',
+      amount: '-',
+      status: 'Editorial Cleared'
     }
   ];
 
+  // 17.2 My Assigned Tasks Data
   const TASKS_ASSIGNED_DATA = [
     {
       taskId: 'TSK-2026-101',
-      title: 'Class X Half-Yearly Marks Tabulation Moderation',
-      owner: 'Principal Smt. Gorle Varalakshmi',
-      assignee: 'Sri Navva Anand (Vice Principal)',
-      dept: 'Examinations Cell',
-      deadline: '31 Oct 2026',
+      task: 'Class X Half-Yearly Marks Tabulation Moderation',
+      taskTitle: 'Class X Half-Yearly Marks Tabulation Moderation',
+      assignedBy: 'Principal Smt. Gorle Varalakshmi',
+      assignedTo: 'Sri Navva Anand (Vice Principal)',
+      dueDate: '31 Oct 2026',
       priority: 'Critical',
       priorityClass: 'danger',
       status: 'In Progress (85%)',
       statusClass: 'warning',
+      relatedRecord: 'EXAM-2026-HY-CL10',
+      progress: 85,
+      comments: [
+        { author: 'Sri Navva Anand', date: '30 Oct 2026', text: 'Section A & B tabulation complete. Moderation meeting held.' }
+      ],
+      evidence: 'Marks_Tabulation_Sheet_Signed.pdf',
       notes: 'Final verification of internal moderation and marks entry before parent report card release.'
     },
     {
       taskId: 'TSK-2026-102',
-      title: 'Campus Biometric Fingerprint Sensor Calibration',
-      owner: 'Principal Smt. Gorle Varalakshmi',
-      assignee: 'Sri K. Nagaraju (IT Tech)',
-      dept: 'IT & Infrastructure',
-      deadline: '02 Nov 2026',
+      task: 'Campus Biometric Fingerprint Sensor Calibration',
+      taskTitle: 'Campus Biometric Fingerprint Sensor Calibration',
+      assignedBy: 'Principal Smt. Gorle Varalakshmi',
+      assignedTo: 'Sri K. Nagaraju (IT Tech)',
+      dueDate: '02 Nov 2026',
       priority: 'High',
       priorityClass: 'warning',
-      status: 'In Progress',
+      status: 'In Progress (40%)',
       statusClass: 'warning',
+      relatedRecord: 'IT-ASSET-BIO-04',
+      progress: 40,
+      comments: [
+        { author: 'Sri K. Nagaraju', date: '01 Nov 2026', text: 'Firmware updated on Main Gate unit. Staff room terminal pending.' }
+      ],
+      evidence: 'Sensor_Calibration_Log.pdf',
       notes: 'Clean optical sensors and synchronize terminal firmware with server timestamp.'
     },
     {
       taskId: 'TSK-2026-103',
-      title: 'Quarterly Campus Fire Extinguisher & Safety Certificate Renewal',
-      owner: 'Executive Committee',
-      assignee: 'Sri G. Venkatesh (Operations In-Charge)',
-      dept: 'Campus Operations & Safety',
-      deadline: '05 Nov 2026',
+      task: 'Quarterly Campus Fire Extinguisher & Safety Certificate Renewal',
+      taskTitle: 'Quarterly Campus Fire Extinguisher & Safety Certificate Renewal',
+      assignedBy: 'Executive Committee',
+      assignedTo: 'Sri G. Venkatesh (Operations In-Charge)',
+      dueDate: '05 Nov 2026',
       priority: 'Critical',
       priorityClass: 'danger',
       status: 'Pending Review',
       statusClass: 'info',
+      relatedRecord: 'STAT-SAFETY-2026-Q3',
+      progress: 90,
+      comments: [
+        { author: 'Sri G. Venkatesh', date: '29 Oct 2026', text: 'Fire inspector completed physical inspection on 28th Oct.' }
+      ],
+      evidence: 'Fire_Inspection_Certificate_Inspection.pdf',
       notes: 'Statutory Fire Dept inspection completed; physical certificate awaiting final executive counter-sign.'
     },
     {
       taskId: 'TSK-2026-104',
-      title: 'PTA General Meeting Circular Draft Sign-off',
-      owner: 'Vice Principal Academic Desk',
-      assignee: 'Smt. K. Anuradha (English Faculty)',
-      dept: 'Academic & Communications',
-      deadline: '30 Oct 2026',
+      task: 'PTA General Meeting Circular Draft Sign-off',
+      taskTitle: 'PTA General Meeting Circular Draft Sign-off',
+      assignedBy: 'Vice Principal Academic Desk',
+      assignedTo: 'Smt. K. Anuradha (English Faculty)',
+      dueDate: '30 Oct 2026',
       priority: 'High',
       priorityClass: 'warning',
-      status: 'Pending Review',
-      statusClass: 'info',
+      status: 'Completed',
+      statusClass: 'success',
+      relatedRecord: 'COMM-CIRC-2026-08',
+      progress: 100,
+      comments: [
+        { author: 'Smt. K. Anuradha', date: '30 Oct 2026', text: 'Both English and Telugu translations finalized and vetted.' }
+      ],
+      evidence: 'PTA_Circular_Approved_Copy.pdf',
       notes: 'Bilingual circular regarding Dussehra project reviews and Childrens Day plans.'
     },
     {
       taskId: 'TSK-2026-105',
-      title: 'Transport Bus 03 Lubricant Service & RTA Permit Clearance',
-      owner: 'Transport Desk',
-      assignee: 'Sri Ch. Ramesh (Transport Officer)',
-      dept: 'Logistics Fleet',
-      deadline: '31 Oct 2026',
+      task: 'Transport Bus 03 Lubricant Service & RTA Permit Clearance',
+      taskTitle: 'Transport Bus 03 Lubricant Service & RTA Permit Clearance',
+      assignedBy: 'Transport Desk',
+      assignedTo: 'Sri Ch. Ramesh (Transport Officer)',
+      dueDate: '31 Oct 2026',
       priority: 'Medium',
       priorityClass: 'secondary',
-      status: 'In Progress',
+      status: 'In Progress (60%)',
       statusClass: 'warning',
+      relatedRecord: 'FLEET-BUS-03',
+      progress: 60,
+      comments: [
+        { author: 'Sri Ch. Ramesh', date: '30 Oct 2026', text: 'Engine oil flushed and filters changed at Ashok Leyland Guntur.' }
+      ],
+      evidence: 'Service_Receipt_AshokLeyland.pdf',
       notes: 'Scheduled 10,000 km oil change and wheel alignment at authorized Ashok Leyland service center.'
     },
     {
       taskId: 'TSK-2026-106',
-      title: 'U-DISE+ 2026-27 Government Child Information Data Sync',
-      owner: 'Principal Smt. Gorle Varalakshmi',
-      assignee: 'Sri S. Ramu (Admin Clerk)',
-      dept: 'Administrative Office',
-      deadline: '04 Nov 2026',
+      task: 'U-DISE+ 2026-27 Government Child Information Data Sync',
+      taskTitle: 'U-DISE+ 2026-27 Government Child Information Data Sync',
+      assignedBy: 'Principal Smt. Gorle Varalakshmi',
+      assignedTo: 'Sri S. Ramu (Admin Clerk)',
+      dueDate: '04 Nov 2026',
       priority: 'Medium',
       priorityClass: 'secondary',
-      status: 'In Progress',
+      status: 'In Progress (70%)',
       statusClass: 'warning',
+      relatedRecord: 'GOVT-UDISE-2026',
+      progress: 70,
+      comments: [
+        { author: 'Sri S. Ramu', date: '01 Nov 2026', text: '792 out of 855 student records successfully Aadhaar-authenticated.' }
+      ],
+      evidence: 'UDISE_Sync_Report_Draft.csv',
       notes: 'Final verification of 855 student Aadhaar linking and RTE category classifications on AP portal.'
     }
   ];
 
+  // 17.3 Approval History Data (Traceable Decisions & Complete Stage Audit)
   const TASKS_HISTORY_DATA = [
     {
       id: 'DEC-2026-072',
+      request: 'REQ-LEV-2026-079 (Staff Casual Leave)',
       ref: 'REQ-LEV-2026-079',
       type: 'Staff Casual Leave',
-      applicant: 'Sri Ch. Ramesh (Lecturer)',
+      decision: 'Approved',
       action: 'Approved',
       actionClass: 'success',
+      decisionMaker: 'Vice Principal Sri Navva Anand',
       authority: 'Vice Principal Sri Navva Anand',
       timestamp: '27 Oct 2026, 05:10 PM',
+      reason: '1 Day CL on 28 Oct sanctioned; substitution class duty verified with Sri G. Venkatesh.',
+      previousStage: 'Faculty Department Review',
+      nextStage: 'Completed & Payroll Roster Updated',
       notes: '1 Day CL on 28 Oct; substitution arranged with Sri G. Venkatesh.',
       audit: 'AP-AUD-9012'
     },
     {
       id: 'DEC-2026-071',
+      request: 'REQ-REF-2026-007 (Fee Reversal Debit)',
       ref: 'REQ-REF-2026-007',
       type: 'Fee Reversal Debit',
-      applicant: 'P. Hema Latha (Class X-A)',
+      decision: 'Approved',
       action: 'Approved',
       actionClass: 'success',
+      decisionMaker: 'Principal Smt. Gorle Varalakshmi',
       authority: 'Principal Smt. Gorle Varalakshmi',
       timestamp: '26 Oct 2026, 04:30 PM',
+      reason: '₹14,500 Term fee duplicate clearance approved against verified bank statement UTR 904125.',
+      previousStage: 'Accounts Head Audit',
+      nextStage: 'Direct Bank NEFT Processing',
       notes: '₹14,500 Term fee duplicate clearance approved against UTR 904125.',
       audit: 'AP-AUD-9011'
     },
     {
       id: 'DEC-2026-070',
+      request: 'REQ-PUR-2026-018 (Purchase Indent Lab)',
       ref: 'REQ-PUR-2026-018',
       type: 'Purchase Indent',
-      applicant: 'Biology Science Dept',
+      decision: 'Approved',
       action: 'Approved',
       actionClass: 'success',
+      decisionMaker: 'Principal Smt. Gorle Varalakshmi',
       authority: 'Principal Smt. Gorle Varalakshmi',
       timestamp: '25 Oct 2026, 02:15 PM',
+      reason: '₹8,500 Glassware & Dissection specimens requisition sanctioned under annual science budget.',
+      previousStage: 'Purchasing Quorum',
+      nextStage: 'Purchase Order Generation',
       notes: '₹8,500 Glassware & Dissection specimens requisition sanctioned.',
       audit: 'AP-AUD-9010'
     },
     {
       id: 'DEC-2026-069',
+      request: 'REQ-CON-2026-041 (Fee Concession Request)',
       ref: 'REQ-CON-2026-041',
       type: 'Fee Concession Request',
-      applicant: 'Parent of CH. Karthik (VIII)',
+      decision: 'Returned for Correction',
       action: 'Returned',
       actionClass: 'warning',
+      decisionMaker: 'Principal Smt. Gorle Varalakshmi',
       authority: 'Principal Smt. Gorle Varalakshmi',
       timestamp: '24 Oct 2026, 11:45 AM',
+      reason: 'Returned for submission of verified Mandal Tehsildar Income Certificate. Self-affidavit insufficient.',
+      previousStage: 'Accounts Initial Screening',
+      nextStage: 'Requester Resubmission Needed',
       notes: 'Returned for submission of verified Mandal Tehsildar Income Certificate.',
       audit: 'AP-AUD-9009'
     },
     {
       id: 'DEC-2026-068',
+      request: 'REQ-EVT-2026-031 (Off-Campus Excursion)',
       ref: 'REQ-EVT-2026-031',
       type: 'Off-Campus Excursion',
-      applicant: 'History & Heritage Club',
+      decision: 'Rejected with Reason',
       action: 'Rejected',
       actionClass: 'danger',
+      decisionMaker: 'Principal Smt. Gorle Varalakshmi',
       authority: 'Principal Smt. Gorle Varalakshmi',
       timestamp: '22 Oct 2026, 04:00 PM',
+      reason: 'Rejected due to proximity with upcoming Half-Yearly Board examination dates and syllabus completion milestones.',
+      previousStage: 'Cultural Committee Proposal',
+      nextStage: 'Request Closed / Cancelled',
       notes: 'Rejected due to proximity with upcoming Half-Yearly Board examination dates.',
       audit: 'AP-AUD-9008'
     },
     {
       id: 'DEC-2026-067',
+      request: 'REQ-TRN-2026-014 (Bus Route Modification)',
       ref: 'REQ-TRN-2026-014',
       type: 'Bus Route Modification',
-      applicant: 'Parent of K. Tanvi (Class I)',
+      decision: 'Approved',
       action: 'Approved',
       actionClass: 'success',
+      decisionMaker: 'Vice Principal Sri Navva Anand',
       authority: 'Vice Principal Sri Navva Anand',
       timestamp: '21 Oct 2026, 01:20 PM',
+      reason: 'Stop altered from Guntur Ring Road to Brodipet 4th Lane; bus route capacity verified.',
+      previousStage: 'Transport Fleet Review',
+      nextStage: 'Bus Route Pass Updated',
       notes: 'Stop altered from Guntur Ring Road to Brodipet 4th Lane; bus fee adjusted.',
       audit: 'AP-AUD-9007'
-    },
-    {
-      id: 'DEC-2026-066',
-      ref: 'REQ-PUR-2026-017',
-      type: 'Furniture Repair Requisition',
-      applicant: 'Store Custodian Sri P. Appa Rao',
-      action: 'Approved',
-      actionClass: 'success',
-      authority: 'Principal Smt. Gorle Varalakshmi',
-      timestamp: '20 Oct 2026, 10:10 AM',
-      notes: '₹6,400 Dual-desk classroom carpentry and welding repairs approved.',
-      audit: 'AP-AUD-9006'
-    },
-    {
-      id: 'DEC-2026-065',
-      ref: 'REQ-LEV-2026-077',
-      type: 'Staff Casual Leave',
-      applicant: 'Sri M. Appa Rao (Driver)',
-      action: 'Cancelled',
-      actionClass: 'secondary',
-      authority: 'Transport Officer Sri Ch. Ramesh',
-      timestamp: '19 Oct 2026, 08:30 AM',
-      notes: 'Cancelled upon applicant mutual shift exchange with Driver Sri K. Prasad.',
-      audit: 'AP-AUD-9005'
     }
   ];
 
+  // 17.4 Escalations Data (Follows Defined Policies, No Approval Bypass)
   const TASKS_ESCALATIONS_DATA = [
     {
       id: 'ESC-2026-009',
+      overdueRequest: 'REQ-PUR-2026-016 (Auditorium Smart Projector Warranty Servicing)',
       issue: 'Auditorium Smart Projector Warranty Servicing Unresolved (SMPS + Lamp)',
+      responsiblePerson: 'Sri P. Appa Rao (Store In-Charge)',
       source: 'Inventory & Assets',
       requester: 'Sri P. Appa Rao (Store In-Charge)',
+      timeOverdue: '3 Days Overdue',
       overdue: '3 Days Overdue',
+      priority: 'Critical',
+      escalationLevel: 'Level 3 Critical',
       slaLevel: 'Level 3 Critical',
       slaClass: 'danger',
+      nextAction: 'Expedite Vendor AMC & Summon Technical Engineer',
       impact: 'High Operational Impact (Assembly Presentations & Smart Demos Disabled)',
       authority: 'Principal Executive Desk',
       actionType: 'Expedite Vendor'
     },
     {
       id: 'ESC-2026-008',
+      overdueRequest: 'REQ-FEE-2026-039 (Term Fee Arrears Verification & Summons)',
       issue: 'Long-Pending Fee Default Verification & Parent Summons Non-Response',
+      responsiblePerson: 'Sri S. Ramu (Accounts Desk)',
       source: 'Fees & Finance',
       requester: 'Sri S. Ramu (Accounts Desk)',
+      timeOverdue: '4 Days Overdue',
       overdue: '4 Days Overdue',
+      priority: 'High',
+      escalationLevel: 'Level 2 Moderate',
       slaLevel: 'Level 2 Moderate',
       slaClass: 'warning',
+      nextAction: 'Direct Telephone Conference with Parent & Discretion Review',
       impact: 'Financial Impact (₹14,500 Outstanding 45+ Days without explanation)',
       authority: 'Vice Principal Desk',
       actionType: 'Issue Summons'
     },
     {
       id: 'ESC-2026-007',
+      overdueRequest: 'REQ-SAF-2026-012 (Chemical Waste Disposal Compliance Certification)',
       issue: 'Biology & Chemistry Lab Chemical Waste Disposal Clearance',
+      responsiblePerson: 'Sri G. Venkatesh (Operations In-Charge)',
       source: 'Academics & Labs',
       requester: 'Science Department Head',
+      timeOverdue: '2 Days Overdue',
       overdue: '2 Days Overdue',
+      priority: 'Critical',
+      escalationLevel: 'Level 3 Critical',
       slaLevel: 'Level 3 Critical',
       slaClass: 'danger',
+      nextAction: 'Statutory Andhra Pradesh PCB Authorized Vendor Handover',
       impact: 'Campus Statutory Safety Hazard (APPCB Norms Compliance)',
       authority: 'Principal & Campus Safety Head',
       actionType: 'Immediate Clearance'
@@ -58023,69 +58155,65 @@ const FEE_CATEGORY_AUDIT_DATA = [
     }
   ];
 
-  // --- RENDERERS ---
+  // =========================================================================
+  // 17.1 PENDING APPROVALS RENDERER & ACTIONS
+  // =========================================================================
+
   function renderPendingApprovalsTable(data) {
     const list = data || TASKS_PENDING_DATA;
     const tbody = document.getElementById('tbodyPendingApprovals');
     if (!tbody) return;
     if (list.length === 0) {
-      tbody.innerHTML = '<tr><td colspan="7" class="text-center p-4 text-muted">No pending approvals awaiting decision.</td></tr>';
+      tbody.innerHTML = '<tr><td colspan="8" class="text-center p-4 text-muted">No pending approvals awaiting decision. All statutory items cleared.</td></tr>';
       return;
     }
     tbody.innerHTML = list.map(item => `
       <tr>
         <td>
           <div style="font-weight: 700; color: #0f172a;"><i class="fa-solid fa-stamp text-primary mr-1"></i> ${item.id}</div>
-          <span class="badge" style="background:#eff6ff; color:#1d4ed8; font-weight:700;">${item.category}</span>
+          <small class="text-muted">${item.impact || ''}</small>
+        </td>
+        <td>
+          <span class="badge" style="background:#eff6ff; color:#1d4ed8; font-weight:700; font-size:0.75rem;">${item.module || item.category}</span>
         </td>
         <td>
           <div style="font-weight: 600; color: #1e293b;">${item.requester}</div>
-          <small class="text-muted">${item.dept}</small>
-        </td>
-        <td style="max-width: 280px;">
-          <div style="font-weight: 600; color: #334155; font-size: 0.85rem;">${item.summary}</div>
-          <small class="text-muted"><i class="fa-solid fa-paperclip mr-1"></i> ${item.docs}</small>
+          <small class="text-muted">${item.dept || ''}</small>
         </td>
         <td>
-          <div style="font-weight: 800; color: ${item.amount !== '-' ? '#166534' : '#475569'}; font-size: 0.9rem;">${item.amount !== '-' ? item.amount : 'Academic / Admin'}</div>
-          <small class="text-muted">${item.impact}</small>
+          <div style="font-size: 0.85rem; color: #475569;"><i class="fa-regular fa-calendar mr-1"></i> ${item.requestDate || item.submittedOn}</div>
         </td>
         <td>
-          <div style="font-size: 0.82rem; color: #475569;">${item.submittedOn}</div>
+          <span class="badge" style="background: ${item.priority === 'Critical' ? '#fee2e2; color: #991b1b' : (item.priority === 'High' ? '#fef3c7; color: #92400e' : '#e0e7ff; color: #3730a3')}; font-weight: 700; font-size:0.75rem;">
+            ${item.priority}
+          </span>
         </td>
         <td>
-          <div style="display:flex; flex-direction:column; gap:4px;">
-            <div>${portalApp.getStandardStatusBadgeHtml(item.status || 'Under Review')}</div>
-            <span class="badge" style="background: ${item.badgeClass === 'danger' ? '#fee2e2; color: #991b1b' : (item.badgeClass === 'warning' ? '#fef3c7; color: #92400e' : '#e0e7ff; color: #3730a3')}; font-weight: 700; font-size:0.75rem;">
-              ${item.urgency}
-            </span>
-          </div>
+          <div style="font-weight: 600; color: #0369a1; font-size:0.85rem;"><i class="fa-solid fa-hourglass-half mr-1"></i> ${item.approvalStage}</div>
+        </td>
+        <td>
+          <div style="font-weight: 700; color: #0f172a; font-size:0.85rem;"><i class="fa-regular fa-clock mr-1 text-danger"></i> ${item.dueDate}</div>
         </td>
         <td class="text-end">
-          <div class="record-actions-wrap" style="justify-content:flex-end;">
-            <button type="button" class="record-action-btn btn-action-view" onclick="portalApp.openApprovalDecisionModal('${item.id}')" title="Review Dossier">
-              <i class="fa-regular fa-eye"></i> View
+          <div class="record-actions-wrap" style="justify-content:flex-end; gap:4px;">
+            <button type="button" class="btn btn-sm btn-outline-primary" onclick="portalApp.openApprovalDecisionModal('${item.id}')" title="Open Request Details">
+              <i class="fa-regular fa-folder-open mr-1"></i> Open request
             </button>
-            <button type="button" class="record-action-btn btn-action-approve" onclick="portalApp.executeStandardAction('approve', { module: 'tasks', id: '${item.id}' })" title="Authorize Request">
-              <i class="fa-solid fa-check"></i> Approve
+            <button type="button" class="btn btn-sm btn-success" onclick="portalApp.approvePendingRequest('${item.id}')" title="Approve Request">
+              <i class="fa-solid fa-check mr-1"></i> Approve
             </button>
-            <button type="button" class="record-action-btn btn-action-reject" onclick="portalApp.executeStandardAction('reject', { module: 'tasks', id: '${item.id}', scope: '${item.category}' })" title="Decline with Reason">
-              <i class="fa-solid fa-xmark"></i> Reject
+            <button type="button" class="btn btn-sm btn-outline-danger" onclick="portalApp.openRejectRequestModal('${item.id}')" title="Reject with Reason">
+              <i class="fa-solid fa-xmark mr-1"></i> Reject with reason
             </button>
-            <button type="button" class="record-action-btn btn-action-return" onclick="portalApp.executeStandardAction('return_correction', { module: 'tasks', id: '${item.id}', scope: '${item.category}' })" title="Return for Correction">
-              <i class="fa-solid fa-rotate-left"></i> Return
+            <button type="button" class="btn btn-sm btn-outline-warning" onclick="portalApp.openReturnRequestModal('${item.id}')" title="Return for Correction">
+              <i class="fa-solid fa-rotate-left mr-1"></i> Return for correction
             </button>
-            <button type="button" class="record-action-btn btn-action-more" onclick="portalApp.toggleRecordMoreMenu(this, event)" title="More Actions">
-              <i class="fa-solid fa-ellipsis-vertical"></i>
+            <button type="button" class="btn btn-sm btn-outline-secondary" onclick="portalApp.openReassignRequestModal('${item.id}')" title="Reassign if Permitted">
+              <i class="fa-solid fa-user-pen mr-1"></i> Reassign if permitted
             </button>
-            <div class="record-more-menu">
-              <button type="button" class="record-more-item" onclick="portalApp.executeStandardAction('history', { module: 'tasks', id: '${item.id}', title: 'Workflow Request ${item.id}' })">
-                <i class="fa-solid fa-clock-rotate-left"></i> Approval History
-              </button>
-              <button type="button" class="record-more-item" onclick="portalApp.executeStandardAction('print', { module: 'tasks', id: '${item.id}' })">
-                <i class="fa-solid fa-print"></i> Print Docket
-              </button>
-            </div>
+            <button type="button" class="btn btn-sm btn-light" onclick="portalApp.openRequestHistoryModal('${item.id}')" title="View Full History">
+              <i class="fa-solid fa-clock-rotate-left mr-1"></i> View history
+            </button>
           </div>
         </td>
       </tr>
@@ -58104,52 +58232,302 @@ const FEE_CATEGORY_AUDIT_DATA = [
     const cat = document.getElementById('filterPendingCategorySelect')?.value || '';
     const urg = document.getElementById('filterPendingUrgencySelect')?.value || '';
     const filtered = TASKS_PENDING_DATA.filter(item => {
-      const matchQ = !q || item.id.toLowerCase().includes(q) || item.requester.toLowerCase().includes(q) || item.summary.toLowerCase().includes(q);
-      const matchCat = !cat || item.category === cat;
-      const matchUrg = !urg || item.urgency.includes(urg);
+      const matchQ = !q || item.id.toLowerCase().includes(q) || item.requester.toLowerCase().includes(q) || item.summary.toLowerCase().includes(q) || item.module.toLowerCase().includes(q);
+      const matchCat = !cat || item.category === cat || item.module === cat;
+      const matchUrg = !urg || item.priority === urg || item.urgency.includes(urg);
       return matchQ && matchCat && matchUrg;
     });
     renderPendingApprovalsTable(filtered);
   }
+
+  function approvePendingRequest(reqId) {
+    const idx = TASKS_PENDING_DATA.findIndex(x => x.id === reqId);
+    if (idx === -1) return;
+    const item = TASKS_PENDING_DATA[idx];
+    
+    // Add to history
+    TASKS_HISTORY_DATA.unshift({
+      id: 'DEC-2026-0' + (TASKS_HISTORY_DATA.length + 73),
+      request: item.id + ' (' + item.module + ')',
+      ref: item.id,
+      type: item.module,
+      decision: 'Approved',
+      action: 'Approved',
+      actionClass: 'success',
+      decisionMaker: 'Principal Smt. Gorle Varalakshmi',
+      authority: 'Principal Smt. Gorle Varalakshmi',
+      timestamp: 'Just now',
+      reason: 'Statutory compliance verified under AP School Code regulations. Sanctioned.',
+      previousStage: item.approvalStage,
+      nextStage: 'Completed & Archive Synchronized',
+      notes: 'Full statutory clearance granted by Executive Head.',
+      audit: 'AP-AUD-' + Math.floor(1000 + Math.random() * 9000)
+    });
+
+    TASKS_PENDING_DATA.splice(idx, 1);
+    renderPendingApprovalsTable();
+    renderApprovalHistoryTable();
+    showToast(`Request ${reqId} successfully approved and audited.`, 'success');
+  }
+
+  function openRejectRequestModal(reqId) {
+    activeDecisionRequestId = reqId;
+    const item = TASKS_PENDING_DATA.find(x => x.id === reqId);
+    if (!item) return;
+    const modal = document.getElementById('rejectRequestReasonModal');
+    if (!modal) {
+      const reason = prompt('Please provide mandatory institutional reason for rejection:');
+      if (reason) {
+        recordRejectDecision(reqId, reason);
+      }
+      return;
+    }
+    document.getElementById('rejectModalReqIdDisplay').textContent = item.id + ' (' + item.module + ')';
+    document.getElementById('rejectReasonInput').value = '';
+    openModal('rejectRequestReasonModal');
+  }
+
+  function recordRejectDecision(reqId, reason) {
+    const idx = TASKS_PENDING_DATA.findIndex(x => x.id === reqId);
+    if (idx === -1) return;
+    const item = TASKS_PENDING_DATA[idx];
+
+    TASKS_HISTORY_DATA.unshift({
+      id: 'DEC-2026-0' + (TASKS_HISTORY_DATA.length + 73),
+      request: item.id + ' (' + item.module + ')',
+      ref: item.id,
+      type: item.module,
+      decision: 'Rejected with reason',
+      action: 'Rejected',
+      actionClass: 'danger',
+      decisionMaker: 'Principal Smt. Gorle Varalakshmi',
+      authority: 'Principal Smt. Gorle Varalakshmi',
+      timestamp: 'Just now',
+      reason: reason || 'Does not meet institutional eligibility requirements.',
+      previousStage: item.approvalStage,
+      nextStage: 'Closed / Rejected',
+      notes: reason,
+      audit: 'AP-AUD-' + Math.floor(1000 + Math.random() * 9000)
+    });
+
+    TASKS_PENDING_DATA.splice(idx, 1);
+    renderPendingApprovalsTable();
+    renderApprovalHistoryTable();
+    closeModal('rejectRequestReasonModal');
+    showToast(`Request ${reqId} rejected with recorded reason.`, 'info');
+  }
+
+  function submitRejectRequest(e) {
+    if (e && e.preventDefault) e.preventDefault();
+    const reason = document.getElementById('rejectReasonInput')?.value || 'Statutory criteria not met.';
+    if (activeDecisionRequestId) {
+      recordRejectDecision(activeDecisionRequestId, reason);
+    }
+  }
+
+  function openReturnRequestModal(reqId) {
+    activeDecisionRequestId = reqId;
+    const item = TASKS_PENDING_DATA.find(x => x.id === reqId);
+    if (!item) return;
+    const modal = document.getElementById('returnRequestCorrectionModal');
+    if (!modal) {
+      const notes = prompt('Enter required corrections for requester:');
+      if (notes) {
+        recordReturnCorrection(reqId, notes);
+      }
+      return;
+    }
+    document.getElementById('returnModalReqIdDisplay').textContent = item.id + ' (' + item.module + ')';
+    document.getElementById('returnCorrectionNotesInput').value = '';
+    openModal('returnRequestCorrectionModal');
+  }
+
+  function recordReturnCorrection(reqId, notes) {
+    const idx = TASKS_PENDING_DATA.findIndex(x => x.id === reqId);
+    if (idx === -1) return;
+    const item = TASKS_PENDING_DATA[idx];
+
+    item.status = 'Returned for Correction';
+    item.approvalStage = 'Requester Correction Phase';
+
+    TASKS_HISTORY_DATA.unshift({
+      id: 'DEC-2026-0' + (TASKS_HISTORY_DATA.length + 73),
+      request: item.id + ' (' + item.module + ')',
+      ref: item.id,
+      type: item.module,
+      decision: 'Return for correction',
+      action: 'Returned',
+      actionClass: 'warning',
+      decisionMaker: 'Principal Smt. Gorle Varalakshmi',
+      authority: 'Principal Smt. Gorle Varalakshmi',
+      timestamp: 'Just now',
+      reason: notes || 'Supporting documentation requires re-verification.',
+      previousStage: 'Principal Executive Sanction',
+      nextStage: 'Requester Resubmission',
+      notes: notes,
+      audit: 'AP-AUD-' + Math.floor(1000 + Math.random() * 9000)
+    });
+
+    renderPendingApprovalsTable();
+    renderApprovalHistoryTable();
+    closeModal('returnRequestCorrectionModal');
+    showToast(`Request ${reqId} returned for correction to ${item.requester}.`, 'warning');
+  }
+
+  function submitReturnRequest(e) {
+    if (e && e.preventDefault) e.preventDefault();
+    const notes = document.getElementById('returnCorrectionNotesInput')?.value || 'Clarifications requested.';
+    if (activeDecisionRequestId) {
+      recordReturnCorrection(activeDecisionRequestId, notes);
+    }
+  }
+
+  function openReassignRequestModal(reqId) {
+    activeDecisionRequestId = reqId;
+    const item = TASKS_PENDING_DATA.find(x => x.id === reqId);
+    if (!item) return;
+    const modal = document.getElementById('reassignRequestModal');
+    if (!modal) {
+      const assignee = prompt('Enter new officer to reassign approval authority:');
+      if (assignee) {
+        recordReassignDecision(reqId, assignee, 'Administrative workload rebalance');
+      }
+      return;
+    }
+    document.getElementById('reassignModalReqIdDisplay').textContent = item.id + ' (' + item.module + ')';
+    openModal('reassignRequestModal');
+  }
+
+  function recordReassignDecision(reqId, newOfficer, reason) {
+    const item = TASKS_PENDING_DATA.find(x => x.id === reqId);
+    if (!item) return;
+
+    item.approvalStage = `Reassigned to ${newOfficer}`;
+
+    TASKS_HISTORY_DATA.unshift({
+      id: 'DEC-2026-0' + (TASKS_HISTORY_DATA.length + 73),
+      request: item.id + ' (' + item.module + ')',
+      ref: item.id,
+      type: item.module,
+      decision: 'Reassign if permitted',
+      action: 'Reassigned',
+      actionClass: 'info',
+      decisionMaker: 'Principal Smt. Gorle Varalakshmi',
+      authority: 'Principal Smt. Gorle Varalakshmi',
+      timestamp: 'Just now',
+      reason: `Authority delegated to ${newOfficer}. Reason: ${reason || 'Delegated authority'}`,
+      previousStage: 'Executive Desk',
+      nextStage: `Review by ${newOfficer}`,
+      notes: reason,
+      audit: 'AP-AUD-' + Math.floor(1000 + Math.random() * 9000)
+    });
+
+    renderPendingApprovalsTable();
+    renderApprovalHistoryTable();
+    closeModal('reassignRequestModal');
+    showToast(`Request ${reqId} reassigned to ${newOfficer}.`, 'info');
+  }
+
+  function submitReassignRequest(e) {
+    if (e && e.preventDefault) e.preventDefault();
+    const newOfficer = document.getElementById('reassignOfficerSelect')?.value || 'Vice Principal Sri Navva Anand';
+    const reason = document.getElementById('reassignReasonInput')?.value || 'Workload balancing';
+    if (activeDecisionRequestId) {
+      recordReassignDecision(activeDecisionRequestId, newOfficer, reason);
+    }
+  }
+
+  function openRequestHistoryModal(reqId) {
+    const item = TASKS_PENDING_DATA.find(x => x.id === reqId);
+    const relatedDecisions = TASKS_HISTORY_DATA.filter(h => h.ref === reqId || h.request.includes(reqId));
+    const container = document.getElementById('requestHistoryTimelineContainer');
+    const header = document.getElementById('requestHistoryModalTitle');
+    if (header) header.textContent = `Audit Timeline & History: ${reqId}`;
+
+    if (container) {
+      if (relatedDecisions.length === 0) {
+        container.innerHTML = `
+          <div class="alert alert-info">
+            <strong>Original Submission:</strong> Initial request lodged on ${item ? item.requestDate : 'Recently'}. No prior rejection or reversal events on file.
+          </div>
+        `;
+      } else {
+        container.innerHTML = relatedDecisions.map(d => `
+          <div style="border-left: 3px solid #2563eb; padding-left: 1rem; margin-bottom: 1rem;">
+            <div style="display:flex; justify-content:space-between;">
+              <strong>${d.decision || d.action} by ${d.decisionMaker || d.authority}</strong>
+              <small class="text-muted">${d.timestamp}</small>
+            </div>
+            <p style="margin: 4px 0; font-size: 0.85rem; color: #334155;">${d.reason || d.notes}</p>
+            <small class="text-muted">Stage Transition: ${d.previousStage} &rarr; ${d.nextStage} &bull; Audit: ${d.audit}</small>
+          </div>
+        `).join('');
+      }
+    }
+    openModal('requestHistoryTimelineModal');
+  }
+
+  // =========================================================================
+  // 17.2 MY ASSIGNED TASKS RENDERER & ACTIONS
+  // =========================================================================
 
   function renderAssignedTasksTable(data) {
     const list = data || TASKS_ASSIGNED_DATA;
     const tbody = document.getElementById('tbodyAssignedTasks');
     if (!tbody) return;
     if (list.length === 0) {
-      tbody.innerHTML = '<tr><td colspan="7" class="text-center p-4 text-muted">No assigned tasks found.</td></tr>';
+      tbody.innerHTML = '<tr><td colspan="8" class="text-center p-4 text-muted">No assigned tasks found.</td></tr>';
       return;
     }
     tbody.innerHTML = list.map(item => `
       <tr>
         <td>
-          <div style="font-weight: 700; color: #0f172a;"><i class="fa-solid fa-list-check text-primary mr-1"></i> ${item.title}</div>
+          <div style="font-weight: 700; color: #0f172a;"><i class="fa-solid fa-list-check text-primary mr-1"></i> ${item.task || item.taskTitle}</div>
           <small class="text-muted">Task ID: ${item.taskId}</small>
         </td>
         <td>
-          <div style="font-size: 0.85rem; font-weight: 600;">${item.owner}</div>
+          <div style="font-size: 0.85rem; font-weight: 600; color:#334155;">${item.assignedBy}</div>
         </td>
         <td>
-          <div style="font-weight: 600; color: #1e40af;">${item.assignee}</div>
-          <small class="text-muted">${item.dept}</small>
+          <div style="font-weight: 600; color: #1e40af; font-size:0.85rem;">${item.assignedTo}</div>
         </td>
         <td>
-          <span style="font-weight: 700; color: #0f172a;"><i class="fa-regular fa-calendar mr-1"></i> ${item.deadline}</span>
+          <span style="font-weight: 700; color: #0f172a; font-size:0.85rem;"><i class="fa-regular fa-calendar mr-1"></i> ${item.dueDate}</span>
         </td>
         <td>
-          <span class="badge" style="background: ${item.priorityClass === 'danger' ? '#fee2e2; color: #991b1b' : (item.priorityClass === 'warning' ? '#fef3c7; color: #92400e' : '#f1f5f9; color: #475569')}; font-weight: 700;">
+          <span class="badge" style="background: ${item.priority === 'Critical' ? '#fee2e2; color: #991b1b' : (item.priority === 'High' ? '#fef3c7; color: #92400e' : '#f1f5f9; color: #475569')}; font-weight: 700;">
             ${item.priority}
           </span>
         </td>
         <td>
-          <span class="badge" style="background: ${item.statusClass === 'info' ? '#e0e7ff; color: #3730a3' : '#fef3c7; color: #92400e'}; font-weight: 700;">
+          <span class="badge" style="background: ${item.status.includes('Completed') ? '#dcfce7; color: #166534' : (item.status.includes('In Progress') ? '#fef3c7; color: #92400e' : '#e0e7ff; color: #3730a3')}; font-weight: 700;">
             ${item.status}
           </span>
         </td>
+        <td>
+          <code style="font-size:0.78rem; background:#f1f5f9; padding:2px 6px; border-radius:4px; color:#0f172a;">${item.relatedRecord}</code>
+        </td>
         <td class="text-end">
-          <button class="btn btn-secondary btn-sm" onclick="portalApp.openTaskDetailsModal('${item.taskId}')" title="Task Details & Notes">
-            <i class="fa-solid fa-clipboard mr-1"></i> Details
-          </button>
+          <div class="record-actions-wrap" style="justify-content:flex-end; gap:4px;">
+            <button type="button" class="btn btn-sm btn-outline-primary" onclick="portalApp.startAssignedTask('${item.taskId}')" title="Start Task">
+              <i class="fa-solid fa-play mr-1"></i> Start
+            </button>
+            <button type="button" class="btn btn-sm btn-outline-info" onclick="portalApp.openUpdateTaskProgressModal('${item.taskId}')" title="Update Progress">
+              <i class="fa-solid fa-chart-line mr-1"></i> Update progress
+            </button>
+            <button type="button" class="btn btn-sm btn-outline-secondary" onclick="portalApp.openAddTaskCommentModal('${item.taskId}')" title="Add Comment">
+              <i class="fa-regular fa-comment mr-1"></i> Add comment
+            </button>
+            <button type="button" class="btn btn-sm btn-outline-dark" onclick="portalApp.openAttachTaskEvidenceModal('${item.taskId}')" title="Attach Evidence">
+              <i class="fa-solid fa-paperclip mr-1"></i> Attach evidence
+            </button>
+            <button type="button" class="btn btn-sm btn-success" onclick="portalApp.markTaskComplete('${item.taskId}')" title="Mark Complete">
+              <i class="fa-solid fa-check-double mr-1"></i> Mark complete
+            </button>
+            <button type="button" class="btn btn-sm btn-outline-warning" onclick="portalApp.openRequestTaskExtensionModal('${item.taskId}')" title="Request Extension">
+              <i class="fa-regular fa-clock mr-1"></i> Request extension
+            </button>
+          </div>
         </td>
       </tr>
     `).join('');
@@ -58163,7 +58541,7 @@ const FEE_CATEGORY_AUDIT_DATA = [
     const prio = document.getElementById('filterAssignedPrioritySelect')?.value || '';
     const stat = document.getElementById('filterAssignedStatusSelect')?.value || '';
     const filtered = TASKS_ASSIGNED_DATA.filter(item => {
-      const matchQ = !q || item.title.toLowerCase().includes(q) || item.assignee.toLowerCase().includes(q) || item.taskId.toLowerCase().includes(q);
+      const matchQ = !q || (item.task && item.task.toLowerCase().includes(q)) || (item.taskTitle && item.taskTitle.toLowerCase().includes(q)) || item.assignedTo.toLowerCase().includes(q) || item.taskId.toLowerCase().includes(q) || (item.relatedRecord && item.relatedRecord.toLowerCase().includes(q));
       const matchPrio = !prio || item.priority === prio;
       const matchStat = !stat || item.status.includes(stat);
       return matchQ && matchPrio && matchStat;
@@ -58171,32 +58549,188 @@ const FEE_CATEGORY_AUDIT_DATA = [
     renderAssignedTasksTable(filtered);
   }
 
+  function startAssignedTask(taskId) {
+    const task = TASKS_ASSIGNED_DATA.find(x => x.taskId === taskId);
+    if (!task) return;
+    task.status = 'In Progress (15%)';
+    task.progress = 15;
+    renderAssignedTasksTable();
+    showToast(`Task ${taskId} marked as Started (In Progress).`, 'info');
+  }
+
+  function openUpdateTaskProgressModal(taskId) {
+    activeTaskActionId = taskId;
+    const task = TASKS_ASSIGNED_DATA.find(x => x.taskId === taskId);
+    if (!task) return;
+    const modal = document.getElementById('updateTaskProgressModal');
+    if (!modal) {
+      const p = prompt('Enter new progress percentage (0-100):', task.progress || '50');
+      if (p !== null) {
+        task.progress = parseInt(p, 10) || 50;
+        task.status = `In Progress (${task.progress}%)`;
+        renderAssignedTasksTable();
+        showToast(`Task ${taskId} progress updated to ${task.progress}%.`, 'success');
+      }
+      return;
+    }
+    document.getElementById('updateTaskModalTitle').textContent = task.taskId + ': ' + task.taskTitle;
+    document.getElementById('taskProgressRangeInput').value = task.progress || 50;
+    document.getElementById('taskProgressValueDisplay').textContent = (task.progress || 50) + '%';
+    openModal('updateTaskProgressModal');
+  }
+
+  function submitUpdateTaskProgress(e) {
+    if (e && e.preventDefault) e.preventDefault();
+    const p = parseInt(document.getElementById('taskProgressRangeInput')?.value || '50', 10);
+    const task = TASKS_ASSIGNED_DATA.find(x => x.taskId === activeTaskActionId);
+    if (task) {
+      task.progress = p;
+      task.status = p === 100 ? 'Completed' : `In Progress (${p}%)`;
+      renderAssignedTasksTable();
+      closeModal('updateTaskProgressModal');
+      showToast(`Progress for ${task.taskId} set to ${p}%.`, 'success');
+    }
+  }
+
+  function openAddTaskCommentModal(taskId) {
+    activeTaskActionId = taskId;
+    const task = TASKS_ASSIGNED_DATA.find(x => x.taskId === taskId);
+    if (!task) return;
+    const modal = document.getElementById('addTaskCommentModal');
+    if (!modal) {
+      const comment = prompt('Enter comment for task ' + taskId + ':');
+      if (comment) {
+        task.comments = task.comments || [];
+        task.comments.push({ author: 'Staff In-Charge', date: 'Just now', text: comment });
+        showToast('Comment saved to task audit trail.', 'success');
+      }
+      return;
+    }
+    document.getElementById('taskCommentModalTitle').textContent = task.taskId + ': ' + task.taskTitle;
+    document.getElementById('taskCommentInput').value = '';
+    openModal('addTaskCommentModal');
+  }
+
+  function submitAddTaskComment(e) {
+    if (e && e.preventDefault) e.preventDefault();
+    const text = document.getElementById('taskCommentInput')?.value || '';
+    const task = TASKS_ASSIGNED_DATA.find(x => x.taskId === activeTaskActionId);
+    if (task && text) {
+      task.comments = task.comments || [];
+      task.comments.push({ author: 'Staff In-Charge', date: 'Just now', text: text });
+      closeModal('addTaskCommentModal');
+      showToast('Task comment appended to institutional audit log.', 'success');
+    }
+  }
+
+  function openAttachTaskEvidenceModal(taskId) {
+    activeTaskActionId = taskId;
+    const task = TASKS_ASSIGNED_DATA.find(x => x.taskId === taskId);
+    if (!task) return;
+    const modal = document.getElementById('attachTaskEvidenceModal');
+    if (!modal) {
+      const ev = prompt('Enter evidence file name or reference code:');
+      if (ev) {
+        task.evidence = ev;
+        showToast('Evidence ' + ev + ' attached to task.', 'success');
+      }
+      return;
+    }
+    document.getElementById('taskEvidenceModalTitle').textContent = task.taskId + ': ' + task.taskTitle;
+    document.getElementById('taskEvidenceTitleInput').value = '';
+    openModal('attachTaskEvidenceModal');
+  }
+
+  function submitAttachTaskEvidence(e) {
+    if (e && e.preventDefault) e.preventDefault();
+    const title = document.getElementById('taskEvidenceTitleInput')?.value || 'Execution_Voucher.pdf';
+    const task = TASKS_ASSIGNED_DATA.find(x => x.taskId === activeTaskActionId);
+    if (task) {
+      task.evidence = title;
+      closeModal('attachTaskEvidenceModal');
+      showToast(`Evidence document "${title}" attached to ${task.taskId}.`, 'success');
+    }
+  }
+
+  function markTaskComplete(taskId) {
+    const task = TASKS_ASSIGNED_DATA.find(x => x.taskId === taskId);
+    if (!task) return;
+    task.status = 'Completed';
+    task.progress = 100;
+    renderAssignedTasksTable();
+    showToast(`Task ${taskId} marked as Fully Completed and verified.`, 'success');
+  }
+
+  function openRequestTaskExtensionModal(taskId) {
+    activeTaskActionId = taskId;
+    const task = TASKS_ASSIGNED_DATA.find(x => x.taskId === taskId);
+    if (!task) return;
+    const modal = document.getElementById('requestTaskExtensionModal');
+    if (!modal) {
+      const ext = prompt('Enter requested extension due date (YYYY-MM-DD):');
+      if (ext) {
+        task.dueDate = ext;
+        renderAssignedTasksTable();
+        showToast('Task due date extended to ' + ext, 'info');
+      }
+      return;
+    }
+    document.getElementById('taskExtensionModalTitle').textContent = task.taskId + ': ' + task.taskTitle;
+    document.getElementById('taskExtensionNewDueDate').value = '2026-11-10';
+    document.getElementById('taskExtensionReasonInput').value = '';
+    openModal('requestTaskExtensionModal');
+  }
+
+  function submitRequestTaskExtension(e) {
+    if (e && e.preventDefault) e.preventDefault();
+    const newDate = document.getElementById('taskExtensionNewDueDate')?.value || '2026-11-10';
+    const reason = document.getElementById('taskExtensionReasonInput')?.value || 'Operational contingency';
+    const task = TASKS_ASSIGNED_DATA.find(x => x.taskId === activeTaskActionId);
+    if (task) {
+      task.dueDate = newDate;
+      renderAssignedTasksTable();
+      closeModal('requestTaskExtensionModal');
+      showToast(`Extension for ${task.taskId} requested till ${newDate} (Reason: ${reason}).`, 'info');
+    }
+  }
+
+  // =========================================================================
+  // 17.3 APPROVAL HISTORY RENDERER (DECISION TRACEABILITY)
+  // =========================================================================
+
   function renderApprovalHistoryTable(data) {
     const list = data || TASKS_HISTORY_DATA;
     const tbody = document.getElementById('tbodyApprovalHistory');
     if (!tbody) return;
     if (list.length === 0) {
-      tbody.innerHTML = '<tr><td colspan="8" class="text-center p-4 text-muted">No approval decisions found matching criteria.</td></tr>';
+      tbody.innerHTML = '<tr><td colspan="7" class="text-center p-4 text-muted">No approval history records found.</td></tr>';
       return;
     }
     tbody.innerHTML = list.map(item => `
       <tr>
         <td>
-          <div style="font-weight: 700; color: #0f172a;"><i class="fa-solid fa-file-signature text-primary mr-1"></i> ${item.id}</div>
-          <small class="text-muted">${item.ref}</small>
+          <div style="font-weight: 700; color: #0f172a;"><i class="fa-solid fa-file-signature text-primary mr-1"></i> ${item.request || item.ref}</div>
+          <small class="text-muted">Audit: ${item.audit}</small>
         </td>
         <td>
-          <div style="font-weight: 600; color: #1e293b;">${item.type}</div>
+          <span class="badge" style="background: ${item.decision && item.decision.includes('Approved') ? '#dcfce7; color: #166534' : (item.decision && item.decision.includes('Returned') ? '#fef3c7; color: #92400e' : '#fee2e2; color: #991b1b')}; font-weight:700;">
+            ${item.decision || item.action}
+          </span>
         </td>
-        <td>${item.applicant}</td>
         <td>
-          ${portalApp.getStandardStatusBadgeHtml(item.action)}
+          <div style="font-weight: 600; color: #1e293b; font-size:0.85rem;">${item.decisionMaker || item.authority}</div>
         </td>
-        <td>${item.authority}</td>
-        <td><small class="text-muted">${item.timestamp}</small></td>
-        <td style="max-width: 250px; font-size: 0.82rem; color: #475569;">${item.notes}</td>
-        <td class="text-end">
-          <code style="font-size: 0.75rem; background: #f8fafc; padding: 2px 6px; border-radius: 4px;">${item.audit}</code>
+        <td>
+          <small class="text-muted"><i class="fa-regular fa-clock mr-1"></i> ${item.timestamp}</small>
+        </td>
+        <td style="max-width: 250px; font-size: 0.85rem; color: #334155;">
+          ${item.reason || item.notes}
+        </td>
+        <td>
+          <span class="badge" style="background:#f1f5f9; color:#475569; font-weight:600; font-size:0.75rem;">${item.previousStage || 'Initial'}</span>
+        </td>
+        <td>
+          <span class="badge" style="background:#eff6ff; color:#1d4ed8; font-weight:600; font-size:0.75rem;">${item.nextStage || 'Finalized'}</span>
         </td>
       </tr>
     `).join('');
@@ -58209,40 +58743,53 @@ const FEE_CATEGORY_AUDIT_DATA = [
     const q = (document.getElementById('searchApprovalHistoryInput')?.value || '').toLowerCase().trim();
     const dec = document.getElementById('filterApprovalHistoryDecisionSelect')?.value || '';
     const filtered = TASKS_HISTORY_DATA.filter(item => {
-      const matchQ = !q || item.id.toLowerCase().includes(q) || item.applicant.toLowerCase().includes(q) || item.notes.toLowerCase().includes(q);
-      const matchDec = !dec || item.action === dec;
+      const matchQ = !q || item.id.toLowerCase().includes(q) || (item.request && item.request.toLowerCase().includes(q)) || (item.decisionMaker && item.decisionMaker.toLowerCase().includes(q)) || (item.reason && item.reason.toLowerCase().includes(q));
+      const matchDec = !dec || (item.decision && item.decision.includes(dec)) || (item.action && item.action.includes(dec));
       return matchQ && matchDec;
     });
     renderApprovalHistoryTable(filtered);
   }
+
+  // =========================================================================
+  // 17.4 ESCALATIONS RENDERER (POLICY COMPLIANCE, NO BYPASS)
+  // =========================================================================
 
   function renderEscalationsTable(data) {
     const list = data || TASKS_ESCALATIONS_DATA;
     const tbody = document.getElementById('tbodyEscalations');
     if (!tbody) return;
     if (list.length === 0) {
-      tbody.innerHTML = '<tr><td colspan="8" class="text-center p-4 text-muted">Zero active escalation alerts. All SLAs operating within target.</td></tr>';
+      tbody.innerHTML = '<tr><td colspan="7" class="text-center p-4 text-muted">Zero active escalation alerts. All SLAs operating within target.</td></tr>';
       return;
     }
     tbody.innerHTML = list.map(item => `
       <tr>
         <td>
-          <div style="font-weight: 700; color: #dc2626;"><i class="fa-solid fa-triangle-exclamation mr-1"></i> ${item.id}</div>
-          <div style="font-weight: 600; font-size: 0.85rem; color: #0f172a;">${item.issue}</div>
+          <div style="font-weight: 700; color: #dc2626;"><i class="fa-solid fa-triangle-exclamation mr-1"></i> ${item.overdueRequest || item.issue}</div>
+          <small class="text-muted">${item.impact || ''}</small>
         </td>
-        <td><span class="badge" style="background:#eff6ff; color:#1d4ed8; font-weight:700;">${item.source}</span></td>
-        <td>${item.requester}</td>
-        <td><span style="font-weight: 800; color: #dc2626;">${item.overdue}</span></td>
         <td>
-          <span class="badge" style="background: ${item.slaClass === 'danger' ? '#fee2e2; color: #991b1b' : '#fef3c7; color: #92400e'}; font-weight: 800;">
-            ${item.slaLevel}
+          <div style="font-weight: 600; color: #1e293b; font-size:0.85rem;">${item.responsiblePerson || item.requester}</div>
+        </td>
+        <td>
+          <span style="font-weight: 800; color: #dc2626; font-size:0.85rem;"><i class="fa-regular fa-clock mr-1"></i> ${item.timeOverdue || item.overdue}</span>
+        </td>
+        <td>
+          <span class="badge" style="background: ${item.priority === 'Critical' ? '#fee2e2; color: #991b1b' : '#fef3c7; color: #92400e'}; font-weight: 800;">
+            ${item.priority}
           </span>
         </td>
-        <td style="max-width: 250px; font-size: 0.82rem; color: #475569;">${item.impact}</td>
-        <td>${item.authority}</td>
+        <td>
+          <span class="badge" style="background: #fef2f2; color: #991b1b; border: 1px solid #fecaca; font-weight: 700;">
+            ${item.escalationLevel || item.slaLevel}
+          </span>
+        </td>
+        <td>
+          <div style="font-weight: 600; color: #0284c7; font-size:0.85rem;">${item.nextAction || item.actionType}</div>
+        </td>
         <td class="text-end">
-          <button class="btn btn-danger btn-sm" onclick="portalApp.resolveEscalationAction('${item.id}')" title="Executive Intervention">
-            <i class="fa-solid fa-bolt mr-1"></i> ${item.actionType}
+          <button class="btn btn-danger btn-sm" onclick="portalApp.resolveEscalationAction('${item.id}')" title="Executive Policy Action">
+            <i class="fa-solid fa-bolt mr-1"></i> Resolve
           </button>
         </td>
       </tr>
@@ -58256,8 +58803,8 @@ const FEE_CATEGORY_AUDIT_DATA = [
     const q = (document.getElementById('searchEscalationsInput')?.value || '').toLowerCase().trim();
     const sev = document.getElementById('filterEscalationSeveritySelect')?.value || '';
     const filtered = TASKS_ESCALATIONS_DATA.filter(item => {
-      const matchQ = !q || item.id.toLowerCase().includes(q) || item.issue.toLowerCase().includes(q) || item.requester.toLowerCase().includes(q);
-      const matchSev = !sev || item.slaLevel.includes(sev);
+      const matchQ = !q || item.id.toLowerCase().includes(q) || (item.overdueRequest && item.overdueRequest.toLowerCase().includes(q)) || (item.responsiblePerson && item.responsiblePerson.toLowerCase().includes(q));
+      const matchSev = !sev || (item.escalationLevel && item.escalationLevel.includes(sev)) || (item.priority && item.priority.includes(sev));
       return matchQ && matchSev;
     });
     renderEscalationsTable(filtered);
@@ -58310,17 +58857,17 @@ const FEE_CATEGORY_AUDIT_DATA = [
     const title = document.getElementById('approvalDecisionModalTitle');
     if (!body) return;
 
-    if (title) title.textContent = `Decision Clearance: ${item.id} (${item.category})`;
+    if (title) title.textContent = `Decision Clearance: ${item.id} (${item.module || item.category})`;
 
     body.innerHTML = `
       <div style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 8px; padding: 1rem; margin-bottom: 1.25rem;">
         <div class="row g-2" style="font-size: 0.85rem;">
           <div class="col-6"><strong>Request Reference:</strong> ${item.id}</div>
-          <div class="col-6"><strong>Category:</strong> <span class="badge" style="background:#eff6ff; color:#1d4ed8; font-weight:700;">${item.category}</span></div>
+          <div class="col-6"><strong>Module:</strong> <span class="badge" style="background:#eff6ff; color:#1d4ed8; font-weight:700;">${item.module || item.category}</span></div>
           <div class="col-6"><strong>Requester:</strong> ${item.requester} (${item.dept})</div>
-          <div class="col-6"><strong>Submitted Timestamp:</strong> ${item.submittedOn}</div>
-          <div class="col-6"><strong>Financial / Academic Impact:</strong> <span style="font-weight:700; color:#166534;">${item.amount !== '-' ? item.amount : item.impact}</span></div>
-          <div class="col-6"><strong>Urgency Priority:</strong> <span class="badge" style="background:#fee2e2; color:#991b1b; font-weight:700;">${item.urgency}</span></div>
+          <div class="col-6"><strong>Request Date:</strong> ${item.requestDate || item.submittedOn}</div>
+          <div class="col-6"><strong>Current Stage:</strong> <span style="font-weight:700; color:#0369a1;">${item.approvalStage}</span></div>
+          <div class="col-6"><strong>Due Date:</strong> <span style="font-weight:700; color:#dc2626;">${item.dueDate}</span></div>
         </div>
       </div>
       <div class="mb-3">
@@ -58352,21 +58899,24 @@ const FEE_CATEGORY_AUDIT_DATA = [
       const item = TASKS_PENDING_DATA[idx];
       const notes = document.getElementById('approvalDecisionNotesInput')?.value || `Decision recorded as ${action} by Principal.`;
       
-      // Add to History
       TASKS_HISTORY_DATA.unshift({
         id: 'DEC-2026-0' + (TASKS_HISTORY_DATA.length + 73),
+        request: item.id + ' (' + (item.module || item.category) + ')',
         ref: item.id,
-        type: item.category,
-        applicant: item.requester,
+        type: item.module || item.category,
+        decision: action,
         action: action,
         actionClass: action === 'Approved' ? 'success' : (action === 'Returned' ? 'warning' : 'danger'),
+        decisionMaker: 'Principal Smt. Gorle Varalakshmi',
         authority: 'Principal Smt. Gorle Varalakshmi',
         timestamp: 'Just now',
+        reason: notes,
+        previousStage: item.approvalStage,
+        nextStage: action === 'Approved' ? 'Completed' : (action === 'Returned' ? 'Requester Resubmission' : 'Closed'),
         notes: notes,
         audit: 'AP-AUD-' + Math.floor(1000 + Math.random() * 9000)
       });
 
-      // Remove from pending
       TASKS_PENDING_DATA.splice(idx, 1);
       renderPendingApprovalsTable();
       renderApprovalHistoryTable();
@@ -58390,7 +58940,7 @@ const FEE_CATEGORY_AUDIT_DATA = [
       showToast('No pending requests awaiting bulk clearance.', 'info');
       return;
     }
-    const routineItems = TASKS_PENDING_DATA.filter(x => x.urgency === 'Normal');
+    const routineItems = TASKS_PENDING_DATA.filter(x => x.priority === 'Normal' || x.urgency === 'Normal');
     if (routineItems.length === 0) {
       showToast('All remaining items are High or Critical Priority and require individual review.', 'warning');
       return;
@@ -58398,13 +58948,18 @@ const FEE_CATEGORY_AUDIT_DATA = [
     routineItems.forEach(item => {
       TASKS_HISTORY_DATA.unshift({
         id: 'DEC-2026-0' + (TASKS_HISTORY_DATA.length + 73),
+        request: item.id + ' (' + item.module + ')',
         ref: item.id,
-        type: item.category,
-        applicant: item.requester,
+        type: item.module,
+        decision: 'Approved',
         action: 'Approved',
         actionClass: 'success',
+        decisionMaker: 'Principal Smt. Gorle Varalakshmi',
         authority: 'Principal Smt. Gorle Varalakshmi',
         timestamp: 'Just now (Bulk Sanction)',
+        reason: 'Bulk administrative approval cleared under routine threshold rules.',
+        previousStage: item.approvalStage,
+        nextStage: 'Completed',
         notes: 'Bulk administrative approval cleared under routine threshold rules.',
         audit: 'AP-AUD-' + Math.floor(1000 + Math.random() * 9000)
       });
@@ -58431,15 +58986,20 @@ const FEE_CATEGORY_AUDIT_DATA = [
 
     TASKS_ASSIGNED_DATA.unshift({
       taskId: 'TSK-2026-' + (TASKS_ASSIGNED_DATA.length + 107),
-      title: title,
-      owner: 'Principal Smt. Gorle Varalakshmi',
-      assignee: assignee,
+      task: title,
+      taskTitle: title,
+      assignedBy: 'Principal Smt. Gorle Varalakshmi',
+      assignedTo: assignee,
       dept: dept,
+      dueDate: deadline,
       deadline: deadline,
       priority: priority,
       priorityClass: priority === 'Critical' ? 'danger' : (priority === 'High' ? 'warning' : 'secondary'),
       status: 'Assigned',
       statusClass: 'info',
+      relatedRecord: 'GEN-TASK-' + Math.floor(100 + Math.random() * 900),
+      progress: 0,
+      comments: [],
       notes: desc
     });
 
@@ -58458,7 +59018,7 @@ const FEE_CATEGORY_AUDIT_DATA = [
     const idx = TASKS_ESCALATIONS_DATA.findIndex(x => x.id === escId);
     if (idx !== -1) {
       const esc = TASKS_ESCALATIONS_DATA[idx];
-      showToast(`Executive escalation action executed for ${esc.id}: ${esc.actionType}`, 'success');
+      showToast(`Executive escalation action executed for ${esc.id}: ${esc.nextAction || esc.actionType}`, 'success');
       TASKS_ESCALATIONS_DATA.splice(idx, 1);
       renderEscalationsTable();
     }
@@ -58475,33 +59035,33 @@ const FEE_CATEGORY_AUDIT_DATA = [
 
   // --- CSV EXPORTS ---
   function exportPendingApprovalsCSV() {
-    let csv = 'Request ID,Category,Requester,Department,Summary,Amount,Submitted On,Urgency\n';
+    let csv = 'Request ID,Module,Requester,Department,Summary,Request Date,Priority,Current Approval Stage,Due Date\n';
     TASKS_PENDING_DATA.forEach(r => {
-      csv += `"${r.id}","${r.category}","${r.requester}","${r.dept}","${r.summary}","${r.amount}","${r.submittedOn}","${r.urgency}"\n`;
+      csv += `"${r.id}","${r.module}","${r.requester}","${r.dept}","${r.summary}","${r.requestDate}","${r.priority}","${r.approvalStage}","${r.dueDate}"\n`;
     });
     downloadCSV(csv, 'SriVidya_Pending_Approvals_Queue.csv');
   }
 
   function exportAssignedTasksCSV() {
-    let csv = 'Task ID,Title,Owner,Assignee,Department,Deadline,Priority,Status,Notes\n';
+    let csv = 'Task ID,Task,Assigned By,Assigned To,Due Date,Priority,Status,Related Record\n';
     TASKS_ASSIGNED_DATA.forEach(t => {
-      csv += `"${t.taskId}","${t.title}","${t.owner}","${t.assignee}","${t.dept}","${t.deadline}","${t.priority}","${t.status}","${t.notes}"\n`;
+      csv += `"${t.taskId}","${t.taskTitle}","${t.assignedBy}","${t.assignedTo}","${t.dueDate}","${t.priority}","${t.status}","${t.relatedRecord}"\n`;
     });
     downloadCSV(csv, 'SriVidya_Assigned_Tasks_Milestones.csv');
   }
 
   function exportApprovalHistoryCSV() {
-    let csv = 'Decision ID,Reference,Request Type,Applicant,Action,Authority,Timestamp,Notes,Audit Ref\n';
+    let csv = 'Decision ID,Request,Decision,Decision Maker,Timestamp,Reason,Previous Stage,Next Stage,Audit Ref\n';
     TASKS_HISTORY_DATA.forEach(h => {
-      csv += `"${h.id}","${h.ref}","${h.type}","${h.applicant}","${h.action}","${h.authority}","${h.timestamp}","${h.notes}","${h.audit}"\n`;
+      csv += `"${h.id}","${h.request}","${h.decision}","${h.decisionMaker}","${h.timestamp}","${h.reason}","${h.previousStage}","${h.nextStage}","${h.audit}"\n`;
     });
     downloadCSV(csv, 'SriVidya_Approval_History_Audit.csv');
   }
 
   function exportEscalationsCSV() {
-    let csv = 'Escalation ID,Issue,Source,Requester,Overdue By,SLA Level,Impact,Authority\n';
+    let csv = 'Escalation ID,Overdue Request,Responsible Person,Time Overdue,Priority,Escalation Level,Next Action\n';
     TASKS_ESCALATIONS_DATA.forEach(e => {
-      csv += `"${e.id}","${e.issue}","${e.source}","${e.requester}","${e.overdue}","${e.slaLevel}","${e.impact}","${e.authority}"\n`;
+      csv += `"${e.id}","${e.overdueRequest}","${e.responsiblePerson}","${e.timeOverdue}","${e.priority}","${e.escalationLevel}","${e.nextAction}"\n`;
     });
     downloadCSV(csv, 'SriVidya_Escalations_Bottlenecks.csv');
   }
@@ -58513,7 +59073,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
     });
     downloadCSV(csv, 'SriVidya_Workflow_Routing_Matrix.csv');
   }
-
 
   /* =========================================================================
      MODULE 18: SETTINGS & ACCESS CONTROL IMPLEMENTATION
@@ -65460,6 +66019,24 @@ exportInventoryAssetsCSV,
     filterWorkflowSettingsTable,
     openApprovalDecisionModal,
     executeQuickDecision,
+    approvePendingRequest,
+    openRejectRequestModal,
+    submitRejectRequest,
+    openReturnRequestModal,
+    submitReturnRequest,
+    openReassignRequestModal,
+    submitReassignRequest,
+    openRequestHistoryModal,
+    startAssignedTask,
+    openUpdateTaskProgressModal,
+    submitUpdateTaskProgress,
+    openAddTaskCommentModal,
+    submitAddTaskComment,
+    openAttachTaskEvidenceModal,
+    submitAttachTaskEvidence,
+    markTaskComplete,
+    openRequestTaskExtensionModal,
+    submitRequestTaskExtension,
     submitApprovalDecision,
     quickDecisionAction,
     openBulkDecisionModal,

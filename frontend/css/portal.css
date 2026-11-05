@@ -13058,7 +13058,7 @@ input:disabled+.perm-slider {
 
 .admissions-filter-grid {
   display: grid;
-  grid-template-columns: minmax(220px, 1.6fr) repeat(4, minmax(160px, 1fr));
+  grid-template-columns: minmax(240px, 1.8fr) repeat(4, minmax(130px, 1fr));
   align-items: center;
   gap: 0.65rem;
   width: 100%;
@@ -25369,12 +25369,13 @@ button.close:hover,
 }
 
 .archived-kpi-lbl {
-  font-size: 0.74rem;
+  font-size: 0.72rem;
   color: #64748b;
-  font-weight: 600;
+  font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.02em;
   margin-top: 1px;
+  white-space: nowrap;
 }
 
 /* Toolbar */
@@ -25519,7 +25520,7 @@ button.close:hover,
 
 .archive-records-table {
   width: 100%;
-  min-width: 1060px;
+  min-width: 960px;
   border-collapse: separate;
   border-spacing: 0;
   font-size: 0.84rem;
@@ -25534,11 +25535,11 @@ button.close:hover,
 }
 
 .archive-records-table thead th {
-  padding: 11px 14px;
+  padding: 10px 10px;
   font-size: 0.72rem;
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.04em;
   color: #475569;
   border-bottom: 2px solid #cbd5e1;
   white-space: nowrap;
@@ -25550,11 +25551,11 @@ button.close:hover,
 }
 
 .archive-records-table tbody td {
-  padding: 12px 14px;
+  padding: 10px 10px;
   border-bottom: 1px solid #f1f5f9;
   vertical-align: middle;
   color: #334155;
-  font-size: 0.84rem;
+  font-size: 0.82rem;
 }
 
 .archive-records-table tbody tr:last-child td {

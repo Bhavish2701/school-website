@@ -3911,7 +3911,7 @@
 
                 <div class="adm-select-wrap">
                   <select id="admClassFilter" class="adm-filter-select" onchange="portalApp.filterAdmissions()" title="Filter by Class Applied">
-                    <option value="">All Classes (Nursery–X)</option>
+                    <option value="">All Classes</option>
                     <option value="Nursery">Nursery</option>
                     <option value="LKG">Class LKG</option>
                     <option value="UKG">Class UKG</option>
@@ -3930,7 +3930,7 @@
 
                 <div class="adm-select-wrap">
                   <select id="admStatusFilter" class="adm-filter-select" onchange="portalApp.filterAdmissions()" title="Filter by Status">
-                    <option value="">All Lifecycle Statuses</option>
+                    <option value="">All Statuses</option>
                     <option value="New Enquiry">New Enquiry</option>
                     <option value="Submitted">Submitted / Received</option>
                     <option value="Documents Pending">Documents Pending</option>
@@ -3947,7 +3947,7 @@
 
                 <div class="adm-select-wrap">
                   <select id="admDocFilter" class="adm-filter-select" onchange="portalApp.filterAdmissions()" title="Filter by Document Screening">
-                    <option value="">All Document States</option>
+                    <option value="">All Documents</option>
                     <option value="Complete">Complete (All Verified)</option>
                     <option value="Pending Verification">Pending Verification</option>
                     <option value="Deficient">Deficient / Action Required</option>
@@ -3957,7 +3957,7 @@
 
                 <div class="adm-select-wrap">
                   <select id="admSourceFilter" class="adm-filter-select" onchange="portalApp.filterAdmissions()" title="Filter by Submission Channel">
-                    <option value="">All Intake Channels</option>
+                    <option value="">All Channels</option>
                     <option value="Online Application">Online Portal Form</option>
                     <option value="Offline Walk-In">Offline Walk-In (Reception Desk)</option>
                   </select>
@@ -14287,18 +14287,16 @@
           <!-- Module Header Strip -->
           <div class="module-header-strip mb-4">
             <div class="mhs-title">
-              <h2><i class="fa-solid fa-list-check text-primary"></i> Unified Tasks, Decision Clearances &amp; Workflow
-                Governance</h2>
-              <p>Centralized Decision Hub • Multi-Departmental Approvals • SLA Tracking • Statutory Delegations</p>
+              <h2><i class="fa-solid fa-list-check text-primary"></i> Tasks, Approvals &amp; Institutional Governance</h2>
+              <p>Centralized Decision Hub &bull; Multi-Stage Approvals &bull; Assigned Tasks &bull; Traceable History &bull; Policy Escalations</p>
             </div>
             <div class="mhs-actions" style="display:flex; align-items:center; gap:0.75rem; flex-wrap:wrap;">
               <span class="badge"
                 style="background:#fee2e2; color:#dc2626; padding: 7px 14px; font-size: 0.82rem; font-weight:700; border:1px solid #fca5a5; border-radius: 6px;">
-                <i class="fa-solid fa-bell mr-1"></i> <span id="tasksPendingHeaderBadge">6 Decisions Awaiting Executive
-                  Clearance</span>
+                <i class="fa-solid fa-bell mr-1"></i> <span id="tasksPendingHeaderBadge">8 Decisions Awaiting Executive Clearance</span>
               </span>
               <button class="btn btn-secondary btn-sm" onclick="portalApp.openNewTaskModal()">
-                <i class="fa-solid fa-plus"></i> Assign Executive Task
+                <i class="fa-solid fa-plus"></i> Assign Task
               </button>
               <button class="btn btn-primary btn-sm" onclick="portalApp.openBulkDecisionModal()">
                 <i class="fa-solid fa-check-double"></i> Quick Approve Routine (2)
@@ -14315,12 +14313,8 @@
                   <i class="fa-solid fa-sitemap"></i>
                 </div>
                 <div>
-                  <h6 class="mb-0 font-bold" style="color: #1e3a8a; font-size: 0.95rem;">Single Consolidated
-                    Institutional Approval &amp; Decision Routing Engine</h6>
-                  <p class="mb-0 text-muted" style="font-size: 0.8rem;">Provides a single unified pane for decisions
-                    previously distributed across Leaves, Fees, Indents, Student TCs, and Events. Every sign-off records
-                    an immutable cryptographic audit trail under Executive Authority of Principal <strong>Smt. Gorle
-                      Varalakshmi</strong>.</p>
+                  <h6 class="mb-0 font-bold" style="color: #1e3a8a; font-size: 0.95rem;">Single Consolidated Institutional Approval &amp; Decision Routing Engine</h6>
+                  <p class="mb-0 text-muted" style="font-size: 0.8rem;">Provides a single unified pane for decisions across Admissions, Staff Leave, Marks, Concessions, Refunds, Purchases, Record Corrections, and Communications. Decisions are traceable to reduce disputes under Executive Authority of Principal <strong>Smt. Gorle Varalakshmi</strong>.</p>
                 </div>
               </div>
               <div class="d-flex align-items-center gap-2">
@@ -14335,20 +14329,16 @@
           <!-- Module Tab Strip (5 Submenus) -->
           <div class="tab-strip mb-4" id="tasksTabStrip">
             <button class="tab-btn active" data-sub="pending" onclick="portalApp.switchSubTab('tasks', 'pending')">
-              <i class="fa-solid fa-clock text-amber mr-1"></i> Pending Approvals (<span
-                id="tabBadgeTasksPending">6</span>)
+              <i class="fa-solid fa-clock text-amber mr-1"></i> Pending Approvals (<span id="tabBadgeTasksPending">8</span>)
             </button>
             <button class="tab-btn" data-sub="assigned" onclick="portalApp.switchSubTab('tasks', 'assigned')">
-              <i class="fa-solid fa-user-check text-primary mr-1"></i> My Assigned Tasks (<span
-                id="tabBadgeTasksAssigned">6</span>)
+              <i class="fa-solid fa-user-check text-primary mr-1"></i> My Assigned Tasks (<span id="tabBadgeTasksAssigned">6</span>)
             </button>
             <button class="tab-btn" data-sub="history" onclick="portalApp.switchSubTab('tasks', 'history')">
-              <i class="fa-solid fa-clipboard-check text-emerald mr-1"></i> Approval History (<span
-                id="tabBadgeTasksHistory">8</span>)
+              <i class="fa-solid fa-clipboard-check text-emerald mr-1"></i> Approval History (<span id="tabBadgeTasksHistory">8</span>)
             </button>
             <button class="tab-btn" data-sub="escalations" onclick="portalApp.switchSubTab('tasks', 'escalations')">
-              <i class="fa-solid fa-triangle-exclamation text-danger mr-1"></i> Escalations (<span
-                id="tabBadgeTasksEscalations">3 Alert</span>)
+              <i class="fa-solid fa-triangle-exclamation text-danger mr-1"></i> Escalations (<span id="tabBadgeTasksEscalations">3 Alert</span>)
             </button>
             <button class="tab-btn" data-sub="workflows" onclick="portalApp.switchSubTab('tasks', 'workflows')">
               <i class="fa-solid fa-sliders text-purple mr-1"></i> Workflow Settings (7 Matrix)
@@ -14356,8 +14346,9 @@
           </div>
 
           <!-- ====================================================================
-               SUBVIEW 1: PENDING APPROVALS
-               All requests awaiting the current user's decision
+               SUBVIEW 1: PENDING APPROVALS (17.1)
+               Display: Request ID, Module, Requester, Request date, Priority, Current approval stage, Due date, Actions
+               Include: Admission approvals, Leave requests, Marks or results approvals, Fee concessions, Refunds, Purchase requests, Student record corrections, Published communication approvals
                ==================================================================== -->
           <div class="tasks-subview active" id="subview-tasks-pending">
             <!-- Quad Stat Cards -->
@@ -14366,23 +14357,23 @@
                 <div class="metric-icon-wrap icon-amber"><i class="fa-solid fa-hourglass-half"></i></div>
                 <div class="metric-details">
                   <span class="metric-label">Awaiting Executive Decision</span>
-                  <div class="metric-value text-amber">6 Requests</div>
-                  <div class="metric-trend trend-down"><span>3 High Priority • 2 Financial</span></div>
+                  <div class="metric-value text-amber">8 Requests</div>
+                  <div class="metric-trend trend-down"><span>4 High Priority &bull; 8 Core Modules Covered</span></div>
                 </div>
               </div>
               <div class="metric-card">
                 <div class="metric-icon-wrap icon-blue"><i class="fa-solid fa-receipt"></i></div>
                 <div class="metric-details">
                   <span class="metric-label">Financial Value Under Review</span>
-                  <div class="metric-value text-primary">₹48,500</div>
-                  <div class="metric-trend trend-steady"><span>2 Indents &amp; 1 Refund Debit</span></div>
+                  <div class="metric-value text-primary">&#8377;60,700</div>
+                  <div class="metric-trend trend-steady"><span>Concessions, Refunds &amp; Indents</span></div>
                 </div>
               </div>
               <div class="metric-card">
                 <div class="metric-icon-wrap icon-purple"><i class="fa-solid fa-stopwatch"></i></div>
                 <div class="metric-details">
                   <span class="metric-label">Average Request Age</span>
-                  <div class="metric-value text-purple">1.8 Days</div>
+                  <div class="metric-value text-purple">1.4 Days</div>
                   <div class="metric-trend trend-up"><span>Within 48h Executive Target</span></div>
                 </div>
               </div>
@@ -14391,7 +14382,7 @@
                 <div class="metric-details">
                   <span class="metric-label">Statutory Compliance Check</span>
                   <div class="metric-value text-emerald">100% Passed</div>
-                  <div class="metric-trend trend-up"><span>Verified Against School By-laws</span></div>
+                  <div class="metric-trend trend-up"><span>Verified Against School Policies</span></div>
                 </div>
               </div>
             </div>
@@ -14402,23 +14393,25 @@
                 <div class="search-input-wrap" style="width: 280px;">
                   <i class="fa-solid fa-magnifying-glass"></i>
                   <input type="text" class="form-control" id="searchPendingApprovalsInput"
-                    placeholder="Search requester, subject, ID..." onkeyup="portalApp.filterPendingApprovalsTable()">
+                    placeholder="Search Request ID, requester, module..." onkeyup="portalApp.filterPendingApprovalsTable()">
                 </div>
-                <select class="form-control" style="width: 190px;" id="filterPendingCategorySelect"
+                <select class="form-control" style="width: 220px;" id="filterPendingCategorySelect"
                   onchange="portalApp.filterPendingApprovalsTable()">
-                  <option value="">All Request Categories</option>
-                  <option value="Staff Leave">Staff Leave Applications</option>
-                  <option value="Fee Concession">Fee Concessions &amp; Waivers</option>
-                  <option value="Purchase Indent">Purchase Indents &amp; Lab Stores</option>
-                  <option value="Financial Refund">Financial Refunds &amp; Reversals</option>
-                  <option value="Student Transfer">Student Transfer Certificates (TC)</option>
-                  <option value="Event Permission">Event Permissions &amp; Budgets</option>
+                  <option value="">All Request Modules</option>
+                  <option value="Admissions">Admission Approvals</option>
+                  <option value="Staff Leave">Leave Requests</option>
+                  <option value="Marks / Results">Marks or Results Approvals</option>
+                  <option value="Fees &amp; Finance">Fee Concessions</option>
+                  <option value="Refunds">Refunds</option>
+                  <option value="Purchase Requests">Purchase Requests</option>
+                  <option value="Student Records">Student Record Corrections</option>
+                  <option value="Communications">Published Communication Approvals</option>
                 </select>
                 <select class="form-control" style="width: 170px;" id="filterPendingUrgencySelect"
                   onchange="portalApp.filterPendingApprovalsTable()">
-                  <option value="">All Urgency Levels</option>
-                  <option value="Critical">Critical (Immediate)</option>
-                  <option value="High Priority">High Priority</option>
+                  <option value="">All Priorities</option>
+                  <option value="Critical">Critical Priority</option>
+                  <option value="High">High Priority</option>
                   <option value="Normal">Normal Standard</option>
                 </select>
               </div>
@@ -14432,17 +14425,18 @@
               </div>
             </div>
 
-            <!-- Table -->
+            <!-- Table with explicit Section 17.1 Columns -->
             <div class="table-responsive bg-white rounded-3 border">
               <table class="table table-hover align-middle mb-0" id="tablePendingApprovals">
                 <thead class="table-light">
                   <tr>
-                    <th>Request ID &amp; Category</th>
-                    <th>Requester &amp; Department</th>
-                    <th>Request Summary / Subject</th>
-                    <th>Impact / Financial Outlay</th>
-                    <th>Submitted On</th>
-                    <th>Urgency Level</th>
+                    <th>Request ID</th>
+                    <th>Module</th>
+                    <th>Requester</th>
+                    <th>Request Date</th>
+                    <th>Priority</th>
+                    <th>Current Approval Stage</th>
+                    <th>Due Date</th>
                     <th class="text-end">Actions</th>
                   </tr>
                 </thead>
@@ -14454,8 +14448,9 @@
           </div>
 
           <!-- ====================================================================
-               SUBVIEW 2: MY ASSIGNED TASKS
-               Task, owner, deadline, priority and status
+               SUBVIEW 2: MY ASSIGNED TASKS (17.2)
+               Display: Task, Assigned by, Assigned to, Due date, Priority, Status, Related record, Actions
+               Actions: Start, Update progress, Add comment, Attach evidence, Mark complete, Request extension
                ==================================================================== -->
           <div class="tasks-subview" id="subview-tasks-assigned" style="display: none;">
             <!-- Quad Stat Cards -->
@@ -14465,7 +14460,7 @@
                 <div class="metric-details">
                   <span class="metric-label">Active Assigned Tasks</span>
                   <div class="metric-value text-primary">6 Tasks</div>
-                  <div class="metric-trend trend-steady"><span>4 In Progress • 2 Review Ready</span></div>
+                  <div class="metric-trend trend-steady"><span>4 In Progress &bull; 2 Review Ready</span></div>
                 </div>
               </div>
               <div class="metric-card">
@@ -14479,9 +14474,9 @@
               <div class="metric-card">
                 <div class="metric-icon-wrap icon-purple"><i class="fa-solid fa-calendar-day"></i></div>
                 <div class="metric-details">
-                  <span class="metric-label">Nearest Deadline Due</span>
+                  <span class="metric-label">Nearest Due Date</span>
                   <div class="metric-value text-purple">30 Oct 2026</div>
-                  <div class="metric-trend trend-up"><span>Tomorrow • PTA Circular</span></div>
+                  <div class="metric-trend trend-up"><span>Tomorrow &bull; PTA Circular</span></div>
                 </div>
               </div>
               <div class="metric-card">
@@ -14512,6 +14507,7 @@
                 <select class="form-control" style="width: 170px;" id="filterAssignedStatusSelect"
                   onchange="portalApp.filterAssignedTasksTable()">
                   <option value="">All Statuses</option>
+                  <option value="Not Started">Not Started</option>
                   <option value="In Progress">In Progress</option>
                   <option value="Pending Review">Pending Review</option>
                   <option value="Completed">Completed</option>
@@ -14527,17 +14523,18 @@
               </div>
             </div>
 
-            <!-- Table -->
+            <!-- Table with explicit Section 17.2 Columns -->
             <div class="table-responsive bg-white rounded-3 border">
               <table class="table table-hover align-middle mb-0" id="tableAssignedTasks">
                 <thead class="table-light">
                   <tr>
-                    <th>Task ID &amp; Title</th>
-                    <th>Task Owner / Originator</th>
-                    <th>Assigned Department / Staff</th>
-                    <th>Deadline</th>
+                    <th>Task</th>
+                    <th>Assigned By</th>
+                    <th>Assigned To</th>
+                    <th>Due Date</th>
                     <th>Priority</th>
                     <th>Status</th>
+                    <th>Related Record</th>
                     <th class="text-end">Actions</th>
                   </tr>
                 </thead>
@@ -14549,10 +14546,24 @@
           </div>
 
           <!-- ====================================================================
-               SUBVIEW 3: APPROVAL HISTORY
-               Approved, rejected, returned and cancelled requests
+               SUBVIEW 3: APPROVAL HISTORY (17.3)
+               Display: Request, Decision, Decision maker, Timestamp, Reason, Previous stage, Next stage
+               "This makes decisions traceable and reduces disputes over who approved a request."
                ==================================================================== -->
           <div class="tasks-subview" id="subview-tasks-history" style="display: none;">
+            <!-- Traceability Banner -->
+            <div class="p-3 mb-4 rounded-3 border" style="background: #f0fdf4; border-color: #bbf7d0 !important;">
+              <div class="d-flex align-items-center gap-3">
+                <div style="width: 40px; height: 40px; border-radius: 8px; background: #16a34a; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 1.25rem; flex-shrink: 0;">
+                  <i class="fa-solid fa-fingerprint"></i>
+                </div>
+                <div>
+                  <h6 class="mb-0 font-bold" style="color: #14532d; font-size: 0.95rem;">Traceable Decision Audit Ledger</h6>
+                  <p class="mb-0 text-muted" style="font-size: 0.8rem; color: #166534 !important;">Every decision records the authorizer, exact timestamp, justification reason, and previous &rarr; next stage transition. This makes decisions traceable and reduces disputes over who approved a request.</p>
+                </div>
+              </div>
+            </div>
+
             <!-- Quad Stat Cards -->
             <div class="metrics-quad mb-4">
               <div class="metric-card">
@@ -14560,7 +14571,7 @@
                 <div class="metric-details">
                   <span class="metric-label">Total Decision History</span>
                   <div class="metric-value text-primary">84 Decided</div>
-                  <div class="metric-trend trend-steady"><span>Term 1 &amp; 2 YTD Audit</span></div>
+                  <div class="metric-trend trend-steady"><span>Academic Year 2026-27 Audit</span></div>
                 </div>
               </div>
               <div class="metric-card">
@@ -14595,7 +14606,7 @@
                 <div class="search-input-wrap" style="width: 280px;">
                   <i class="fa-solid fa-magnifying-glass"></i>
                   <input type="text" class="form-control" id="searchApprovalHistoryInput"
-                    placeholder="Search reference, applicant, decision..."
+                    placeholder="Search request, decision, decision maker..."
                     onkeyup="portalApp.filterApprovalHistoryTable()">
                 </div>
                 <select class="form-control" style="width: 180px;" id="filterApprovalHistoryDecisionSelect"
@@ -14603,8 +14614,8 @@
                   <option value="">All Decisions</option>
                   <option value="Approved">Approved Only</option>
                   <option value="Rejected">Rejected Only</option>
-                  <option value="Returned">Returned for Modification</option>
-                  <option value="Cancelled">Cancelled Requests</option>
+                  <option value="Returned for Correction">Returned for Correction</option>
+                  <option value="Reassigned">Reassigned</option>
                 </select>
                 <select class="form-control" style="width: 170px;" id="filterApprovalHistoryMonthSelect"
                   onchange="portalApp.filterApprovalHistoryTable()">
@@ -14624,19 +14635,19 @@
               </div>
             </div>
 
-            <!-- Table -->
+            <!-- Table with explicit Section 17.3 Columns -->
             <div class="table-responsive bg-white rounded-3 border">
               <table class="table table-hover align-middle mb-0" id="tableApprovalHistory">
                 <thead class="table-light">
                   <tr>
-                    <th>Decision ID &amp; Ref</th>
-                    <th>Request Type &amp; Subject</th>
-                    <th>Applicant / In-Charge</th>
-                    <th>Action Taken</th>
-                    <th>Decision Authority</th>
+                    <th>Request</th>
+                    <th>Decision</th>
+                    <th>Decision Maker</th>
                     <th>Timestamp</th>
-                    <th>Justification / Notes</th>
-                    <th class="text-end">Audit</th>
+                    <th>Reason</th>
+                    <th>Previous Stage</th>
+                    <th>Next Stage</th>
+                    <th class="text-end">Traceability / Audit</th>
                   </tr>
                 </thead>
                 <tbody id="tbodyApprovalHistory">
@@ -14647,24 +14658,22 @@
           </div>
 
           <!-- ====================================================================
-               SUBVIEW 4: ESCALATIONS
-               Overdue approvals and unresolved high-priority items
+               SUBVIEW 4: ESCALATIONS (17.4)
+               Display: Overdue request, Responsible person, Time overdue, Priority, Escalation level, Next action
+               "Escalations should follow defined school policies, not automatically bypass approval requirements."
                ==================================================================== -->
           <div class="tasks-subview" id="subview-tasks-escalations" style="display: none;">
-            <!-- Warning Banner -->
+            <!-- Warning Banner & Policy Statement -->
             <div class="p-3 mb-4 rounded-3 border" style="background: #fef2f2; border-color: #fecaca !important;">
               <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
                 <div class="d-flex align-items-center gap-3">
                   <div
-                    style="width: 40px; height: 40px; border-radius: 8px; background: #dc2626; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 1.25rem;">
+                    style="width: 40px; height: 40px; border-radius: 8px; background: #dc2626; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 1.25rem; flex-shrink: 0;">
                     <i class="fa-solid fa-triangle-exclamation"></i>
                   </div>
                   <div>
-                    <h6 class="mb-0 font-bold" style="color: #991b1b; font-size: 0.95rem;">Automated SLA Breach &amp;
-                      Bottleneck Escalation Monitor</h6>
-                    <p class="mb-0 text-muted" style="font-size: 0.8rem;">Requests exceeding designated 24h/48h response
-                      windows or tagged with Critical Safety Hazard tags auto-route directly to the Executive Principal
-                      Desk for expedited resolution.</p>
+                    <h6 class="mb-0 font-bold" style="color: #991b1b; font-size: 0.95rem;">School Escalation Policy &amp; SLA Bottleneck Control</h6>
+                    <p class="mb-0 text-muted" style="font-size: 0.8rem; color: #991b1b !important;">Escalations follow defined school policies for overdue requests and safety hazards. Escalations should follow defined school policies, not automatically bypass approval requirements.</p>
                   </div>
                 </div>
                 <div>
@@ -14684,7 +14693,7 @@
                 <div class="metric-details">
                   <span class="metric-label">Active Escalation Alerts</span>
                   <div class="metric-value text-danger">3 Critical</div>
-                  <div class="metric-trend trend-down"><span>Requires Immediate Intervention</span></div>
+                  <div class="metric-trend trend-down"><span>Policy Intervention Required</span></div>
                 </div>
               </div>
               <div class="metric-card">
@@ -14692,7 +14701,7 @@
                 <div class="metric-details">
                   <span class="metric-label">Maximum SLA Breach</span>
                   <div class="metric-value text-purple">+4 Days</div>
-                  <div class="metric-trend trend-down"><span>Fee Default Parent Summons</span></div>
+                  <div class="metric-trend trend-down"><span>Fee Default Verification</span></div>
                 </div>
               </div>
               <div class="metric-card">
@@ -14700,7 +14709,7 @@
                 <div class="metric-details">
                   <span class="metric-label">Operational Impact</span>
                   <div class="metric-value text-primary">Lab &amp; AV</div>
-                  <div class="metric-trend trend-steady"><span>Projector &amp; Chemical Disposal</span></div>
+                  <div class="metric-trend trend-steady"><span>Projector &amp; Chemical Waste</span></div>
                 </div>
               </div>
               <div class="metric-card">
@@ -14708,7 +14717,7 @@
                 <div class="metric-details">
                   <span class="metric-label">Executive Dispatch Status</span>
                   <div class="metric-value text-emerald">Dispatched</div>
-                  <div class="metric-trend trend-up"><span>Direct Alert to Principal WhatsApp</span></div>
+                  <div class="metric-trend trend-up"><span>Direct Alert to Principal Desk</span></div>
                 </div>
               </div>
             </div>
@@ -14719,11 +14728,11 @@
                 <div class="search-input-wrap" style="width: 280px;">
                   <i class="fa-solid fa-magnifying-glass"></i>
                   <input type="text" class="form-control" id="searchEscalationsInput"
-                    placeholder="Search escalation issue, requester..." onkeyup="portalApp.filterEscalationsTable()">
+                    placeholder="Search overdue request, responsible person..." onkeyup="portalApp.filterEscalationsTable()">
                 </div>
                 <select class="form-control" style="width: 190px;" id="filterEscalationSeveritySelect"
                   onchange="portalApp.filterEscalationsTable()">
-                  <option value="">All Severity Levels</option>
+                  <option value="">All Escalation Levels</option>
                   <option value="Level 3">Level 3 (Critical SLA Breach)</option>
                   <option value="Level 2">Level 2 (Moderate Overdue)</option>
                   <option value="Level 1">Level 1 (Standard Warning)</option>
@@ -14740,18 +14749,17 @@
               </div>
             </div>
 
-            <!-- Table -->
+            <!-- Table with explicit Section 17.4 Columns -->
             <div class="table-responsive bg-white rounded-3 border">
               <table class="table table-hover align-middle mb-0" id="tableEscalations">
                 <thead class="table-light">
                   <tr>
-                    <th>Escalation ID &amp; Issue</th>
-                    <th>Source Module</th>
-                    <th>Original Requester</th>
-                    <th>Overdue By</th>
-                    <th>SLA Breach Level</th>
-                    <th>Impact / Severity</th>
-                    <th>Escalated Authority</th>
+                    <th>Overdue Request</th>
+                    <th>Responsible Person</th>
+                    <th>Time Overdue</th>
+                    <th>Priority</th>
+                    <th>Escalation Level</th>
+                    <th>Next Action</th>
                     <th class="text-end">Actions</th>
                   </tr>
                 </thead>
@@ -14824,8 +14832,8 @@
                 <button class="btn btn-secondary btn-sm" onclick="portalApp.exportWorkflowSettingsCSV()">
                   <i class="fa-solid fa-file-csv"></i> Export Matrix CSV
                 </button>
-                <button class="btn btn-primary btn-sm" onclick="portalApp.openNewWorkflowModal()">
-                  <i class="fa-solid fa-plus"></i> Configure New Workflow
+                <button class="btn btn-primary btn-sm" onclick="portalApp.openNewWorkflowPipelineModal()">
+                  <i class="fa-solid fa-plus"></i> New Routing Pipeline
                 </button>
               </div>
             </div>
@@ -14851,7 +14859,6 @@
             </div>
           </div>
         </section>
-
 
         <!-- 18. Settings & Access Control View -->
         <section class="portal-view" id="view-settings">
@@ -18414,14 +18421,14 @@
           <table class="archive-records-table" id="tableArchivedStudents">
             <thead>
               <tr>
-                <th style="min-width: 105px;"><i class="fa-solid fa-hashtag me-1 text-muted"></i> Admission No.</th>
-                <th style="min-width: 195px;"><i class="fa-solid fa-user-graduate me-1 text-muted"></i> Student Name &amp; Guardian</th>
-                <th style="min-width: 105px;"><i class="fa-solid fa-school me-1 text-muted"></i> Final Class</th>
-                <th style="min-width: 115px;"><i class="fa-solid fa-calendar-day me-1 text-muted"></i> Departure Date</th>
-                <th style="min-width: 200px;"><i class="fa-solid fa-comment-dots me-1 text-muted"></i> Reason for Leaving</th>
-                <th style="min-width: 140px;"><i class="fa-solid fa-stamp me-1 text-muted"></i> TC / Clearance Ref</th>
-                <th style="min-width: 140px;"><i class="fa-solid fa-circle-check me-1 text-muted"></i> Clearance Status</th>
-                <th style="min-width: 130px;" class="text-end pe-3"><i class="fa-solid fa-sliders me-1 text-muted"></i> Actions</th>
+                <th style="width: 95px; min-width: 85px;"><i class="fa-solid fa-hashtag me-1 text-muted"></i> Admission No.</th>
+                <th style="width: 175px; min-width: 155px;"><i class="fa-solid fa-user-graduate me-1 text-muted"></i> Student Name &amp; Guardian</th>
+                <th style="width: 90px; min-width: 80px;"><i class="fa-solid fa-school me-1 text-muted"></i> Final Class</th>
+                <th style="width: 110px; min-width: 95px;"><i class="fa-solid fa-calendar-day me-1 text-muted"></i> Departure Date</th>
+                <th style="min-width: 160px;"><i class="fa-solid fa-comment-dots me-1 text-muted"></i> Reason for Leaving</th>
+                <th style="width: 125px; min-width: 115px;"><i class="fa-solid fa-stamp me-1 text-muted"></i> TC / Clearance Ref</th>
+                <th style="width: 130px; min-width: 120px;"><i class="fa-solid fa-circle-check me-1 text-muted"></i> Clearance Status</th>
+                <th style="width: 120px; min-width: 110px;" class="text-end pe-2"><i class="fa-solid fa-sliders me-1 text-muted"></i> Actions</th>
               </tr>
             </thead>
             <tbody id="tbodyArchivedStudents">
@@ -29784,8 +29791,8 @@ Class X-A,Monday,2,09:35 AM - 10:20 AM,Physical Science,Sri Navva Anand,Room 201
               </div>
             </div>
 
-            <!-- Row 2: Approved Class, Section, Class Teacher -->
-            <div style="display: grid; grid-template-columns: 1fr 1fr 1.2fr; gap: 1rem;">
+            <!-- Row 2: Approved Class & Assigned Section (2 Columns, perfectly aligned) -->
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
               <div class="form-group" style="margin-bottom: 0;">
                 <label style="font-weight: 700; font-size: 0.8rem; color: #1e293b; margin-bottom: 5px; display: block; white-space: nowrap;">
                   Approved Class <span class="text-danger">*</span>
@@ -29805,7 +29812,10 @@ Class X-A,Monday,2,09:35 AM - 10:20 AM,Physical Science,Sri Navva Anand,Room 201
                     style="width: 100%; height: 40px; padding: 0 0.85rem; border: 1.5px solid #cbd5e1; border-radius: 8px; font-size: 0.85rem; font-weight: 700; color: #0f172a; background: #ffffff;">
                 </div>
               </div>
+            </div>
 
+            <!-- Row 3: Class Teacher & Statutory Category (2 Columns, perfectly aligned) -->
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
               <div class="form-group" style="margin-bottom: 0;">
                 <label style="font-weight: 700; font-size: 0.8rem; color: #1e293b; margin-bottom: 5px; display: block; white-space: nowrap;">
                   Class Teacher <span class="text-danger">*</span>
@@ -29813,6 +29823,16 @@ Class X-A,Monday,2,09:35 AM - 10:20 AM,Physical Science,Sri Navva Anand,Room 201
                 <div style="position: relative;">
                   <input type="text" id="enrolClassTeacher" class="form-control" readonly
                     style="width: 100%; height: 40px; padding: 0 0.85rem; border: 1.5px solid #cbd5e1; border-radius: 8px; font-size: 0.83rem; font-weight: 600; color: #0f172a; background: #ffffff;">
+                </div>
+              </div>
+
+              <div class="form-group" style="margin-bottom: 0;">
+                <label style="font-weight: 700; font-size: 0.8rem; color: #1e293b; margin-bottom: 5px; display: block; white-space: nowrap;">
+                  Academic Session &amp; Status <span class="text-danger">*</span>
+                </label>
+                <div style="position: relative;">
+                  <input type="text" class="form-control" value="AY 2026–2027 • Regular Statutory Enrolment" readonly
+                    style="width: 100%; height: 40px; padding: 0 0.85rem; border: 1.5px solid #cbd5e1; border-radius: 8px; font-size: 0.82rem; font-weight: 600; color: #475569; background: #f8fafc;">
                 </div>
               </div>
             </div>
@@ -30357,34 +30377,47 @@ Class X-A,Monday,2,09:35 AM - 10:20 AM,Physical Science,Sri Navva Anand,Room 201
 
 
   <!-- =========================================================================
-       MODAL 1: EXECUTIVE DECISION CLEARANCE MODAL (APPROVE / RETURN / REJECT)
+       MODULE 17: TASKS & APPROVALS ACTION MODALS
        ========================================================================= -->
+
+  <!-- MODAL 1: EXECUTIVE DECISION CLEARANCE / OPEN REQUEST MODAL -->
   <div class="modal-backdrop" id="approvalDecisionModal" style="display:none;">
-    <div class="portal-modal" style="max-width: 750px; width: 95%;">
-      <div class="modal-header">
-        <h3><i class="fa-solid fa-stamp text-primary"></i> <span id="approvalDecisionModalTitle">Executive Decision
-            Clearance Desk</span></h3>
-        <button class="modal-close-x" onclick="portalApp.closeModal('approvalDecisionModal')" title="Close"
-          aria-label="Close">
+    <div class="portal-modal" style="max-width: 780px; width: 95%; border-radius: 14px; overflow: hidden; box-shadow: 0 25px 50px -12px rgba(15, 23, 42, 0.25);">
+      <div class="modal-header" style="border-bottom: 1px solid #e2e8f0; padding: 1.15rem 1.45rem; background: #ffffff;">
+        <div style="display: flex; align-items: center; gap: 0.85rem;">
+          <div style="width: 44px; height: 44px; border-radius: 10px; background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%); color: #1d4ed8; display: flex; align-items: center; justify-content: center; font-size: 1.25rem; border: 1.5px solid #bfdbfe; box-shadow: 0 2px 4px rgba(29, 78, 216, 0.08); flex-shrink: 0;">
+            <i class="fa-solid fa-stamp"></i>
+          </div>
+          <div>
+            <div style="font-size: 0.68rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #1d4ed8;">
+              Executive Approval &amp; Governance Desk
+            </div>
+            <h3 style="margin: 2px 0 0 0; font-size: 1.2rem; font-weight: 800; color: #0f172a; letter-spacing: -0.01em;" id="approvalDecisionModalTitle">Open Request Clearance</h3>
+            <p style="margin: 2px 0 0; font-size: 0.8rem; color: #64748b;" id="approvalDecisionModalSub">Authorized Review for Principal Smt. Gorle Varalakshmi</p>
+          </div>
+        </div>
+        <button type="button" class="modal-close-x" onclick="portalApp.closeModal('approvalDecisionModal')" title="Close (Esc)" style="width: 32px; height: 32px; border-radius: 50%; border: 1px solid #e2e8f0; background: #f8fafc; color: #64748b; display: flex; align-items: center; justify-content: center; cursor: pointer;">
           <i class="fa-solid fa-xmark"></i>
         </button>
       </div>
       <form id="approvalDecisionForm" onsubmit="portalApp.submitApprovalDecision(event)">
-        <div class="modal-body" id="approvalDecisionModalBody">
+        <div class="modal-body" id="approvalDecisionModalBody" style="padding: 1.35rem 1.45rem; background: #ffffff;">
           <!-- Populated dynamically via portalApp.openApprovalDecisionModal -->
         </div>
-        <div class="modal-footer" style="display:flex; justify-content:space-between; flex-wrap:wrap; gap:0.5rem;">
-          <button type="button" class="btn btn-secondary"
-            onclick="portalApp.closeModal('approvalDecisionModal')">Cancel</button>
-          <div style="display:flex; gap:0.5rem;">
-            <button type="button" class="btn btn-danger" onclick="portalApp.executeQuickDecision('Rejected')">
-              <i class="fa-solid fa-ban mr-1"></i> Reject
+        <div class="modal-footer" style="display:flex; justify-content:space-between; align-items:center; background:#f8fafc; border-top:1px solid #e2e8f0; padding: 0.95rem 1.45rem; flex-wrap:wrap; gap:0.5rem;">
+          <button type="button" class="btn btn-outline-secondary btn-sm" onclick="portalApp.closeModal('approvalDecisionModal')" style="height: 36px; padding: 0 16px; font-weight: 600; border-radius: 7px;">Cancel</button>
+          <div style="display:flex; gap:0.5rem; flex-wrap:wrap;">
+            <button type="button" class="btn btn-outline-danger btn-sm" onclick="portalApp.openRejectRequestModalFromDecision()" style="height: 36px; padding: 0 14px; font-weight: 700; border-radius: 7px;">
+              <i class="fa-solid fa-ban mr-1"></i> Reject with Reason
             </button>
-            <button type="button" class="btn btn-warning" onclick="portalApp.executeQuickDecision('Returned')">
-              <i class="fa-solid fa-rotate-left mr-1"></i> Return for Clarification
+            <button type="button" class="btn btn-outline-warning btn-sm" onclick="portalApp.openReturnRequestModalFromDecision()" style="height: 36px; padding: 0 14px; font-weight: 700; border-radius: 7px;">
+              <i class="fa-solid fa-rotate-left mr-1"></i> Return for Correction
             </button>
-            <button type="button" class="btn btn-success" onclick="portalApp.executeQuickDecision('Approved')">
-              <i class="fa-solid fa-check mr-1"></i> Approve &amp; Clear
+            <button type="button" class="btn btn-outline-primary btn-sm" onclick="portalApp.openReassignRequestModalFromDecision()" style="height: 36px; padding: 0 14px; font-weight: 700; border-radius: 7px;">
+              <i class="fa-solid fa-user-gear mr-1"></i> Reassign
+            </button>
+            <button type="button" class="btn btn-success btn-sm" onclick="portalApp.executeQuickDecision('Approved')" style="height: 36px; padding: 0 18px; font-weight: 700; border-radius: 7px;">
+              <i class="fa-solid fa-check mr-1"></i> Approve
             </button>
           </div>
         </div>
@@ -30392,92 +30425,278 @@ Class X-A,Monday,2,09:35 AM - 10:20 AM,Physical Science,Sri Navva Anand,Room 201
     </div>
   </div>
 
-  <!-- =========================================================================
-       MODAL 2: ASSIGN TASK / WORKFLOW ROUTING RULE MODAL
-       ========================================================================= -->
-  <div class="modal-backdrop" id="newTaskOrWorkflowModal" style="display:none;">
-    <div class="portal-modal" style="max-width: 650px; width: 95%;">
-      <div class="modal-header">
-        <h3><i class="fa-solid fa-thumbtack text-primary"></i> <span id="newTaskModalTitle">Assign Executive
-            Institutional Task</span></h3>
-        <button class="modal-close-x" onclick="portalApp.closeModal('newTaskOrWorkflowModal')" title="Close"
-          aria-label="Close">
+  <!-- MODAL 2: REJECT WITH REASON MODAL -->
+  <div class="modal-backdrop" id="rejectRequestReasonModal" style="display:none; z-index: 10060;">
+    <div class="portal-modal" style="max-width: 580px; width: 95%; border-radius: 14px; overflow: hidden; box-shadow: 0 25px 50px -12px rgba(15, 23, 42, 0.25);">
+      <div class="modal-header" style="border-bottom: 1px solid #e2e8f0; padding: 1.15rem 1.45rem; background: #ffffff;">
+        <div style="display: flex; align-items: center; gap: 0.85rem;">
+          <div style="width: 44px; height: 44px; border-radius: 10px; background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%); color: #dc2626; display: flex; align-items: center; justify-content: center; font-size: 1.25rem; border: 1.5px solid #fecaca; flex-shrink: 0;">
+            <i class="fa-solid fa-ban"></i>
+          </div>
+          <div>
+            <div style="font-size: 0.68rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #dc2626;">
+              Institutional Rejection Notice
+            </div>
+            <h3 style="margin: 2px 0 0 0; font-size: 1.2rem; font-weight: 800; color: #0f172a;">Reject Request with Reason</h3>
+            <p style="margin: 2px 0 0; font-size: 0.8rem; color: #64748b;" id="rejectRequestModalSub">Request: REQ-...</p>
+          </div>
+        </div>
+        <button type="button" class="modal-close-x" onclick="portalApp.closeModal('rejectRequestReasonModal')" title="Close (Esc)" style="width: 32px; height: 32px; border-radius: 50%; border: 1px solid #e2e8f0; background: #f8fafc; color: #64748b; display: flex; align-items: center; justify-content: center;">
           <i class="fa-solid fa-xmark"></i>
         </button>
       </div>
-      <form id="newTaskAssignmentForm" onsubmit="portalApp.handleNewTaskAssignmentSubmit(event)">
-        <div class="modal-body">
-          <div
-            style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 8px; padding: 0.85rem 1rem; margin-bottom: 1.15rem; font-size: 0.82rem; color: #475569; line-height: 1.45;">
-            <div style="font-weight: 700; color: #1e293b; margin-bottom: 2px;">
-              <i class="fa-solid fa-shield-halved text-primary mr-1"></i> Executive Direct Delegation Authority
-            </div>
-            Assign actionable milestones to faculty or administrative in-charges. Tasks notify the assignee's portal
-            immediately and track SLA completion.
+      <form onsubmit="portalApp.submitRejectRequest(event)">
+        <input type="hidden" id="rejectTargetRequestId">
+        <div class="modal-body" style="padding: 1.35rem 1.45rem; display: flex; flex-direction: column; gap: 1.15rem; background: #ffffff;">
+          <div style="background: #fef2f2; border: 1px solid #fecaca; border-radius: 8px; padding: 10px 14px; font-size: 0.78rem; color: #991b1b; line-height: 1.45;">
+            <strong>Mandatory Traceability Reason:</strong> Rejection reason is recorded in the permanent audit trail to eliminate disputes and provide clear feedback to the requester.
           </div>
-          <div class="row g-2">
-            <div class="col-12 mb-2">
-              <label class="form-label text-sm font-bold">Task Title / Milestone Name <span
-                  class="text-danger">*</span></label>
-              <input type="text" class="form-control" id="newTaskTitleInput"
-                placeholder="e.g. Conduct SSC Pre-Board Hall Seating Verification" required>
-            </div>
-            <div class="col-md-6 mb-2">
-              <label class="form-label text-sm font-bold">Target Department <span class="text-danger">*</span></label>
-              <select class="form-control" id="newTaskDeptSelect" required>
-                <option value="Academic & Examinations">Academic &amp; Examinations</option>
-                <option value="Discipline & Welfare">Discipline &amp; Student Welfare</option>
-                <option value="Accounts & Finance">Accounts &amp; Fee Collection</option>
-                <option value="Transport Logistics">Transport &amp; Campus Logistics</option>
-                <option value="IT & Science Labs">IT &amp; Science Laboratories</option>
-                <option value="Administration Desk">Administrative &amp; General Office</option>
-              </select>
-            </div>
-            <div class="col-md-6 mb-2">
-              <label class="form-label text-sm font-bold">Assigned Staff In-Charge <span
-                  class="text-danger">*</span></label>
-              <select class="form-control" id="newTaskAssigneeSelect" required>
-                <option value="Sri Navva Anand (Vice Principal)">Sri Navva Anand (Vice Principal)</option>
-                <option value="Sri Ch. Ramesh (Senior Lecturer)">Sri Ch. Ramesh (Senior Lecturer)</option>
-                <option value="Smt. K. Anuradha (English Faculty)">Smt. K. Anuradha (English Faculty)</option>
-                <option value="Sri S. Ramu (Accounts Desk)">Sri S. Ramu (Accounts Desk)</option>
-                <option value="Sri P. Appa Rao (Store In-Charge)">Sri P. Appa Rao (Store In-Charge)</option>
-                <option value="Sri G. Venkatesh (Operations Tech)">Sri G. Venkatesh (Operations Tech)</option>
-              </select>
-            </div>
-            <div class="col-md-6 mb-2">
-              <label class="form-label text-sm font-bold">Priority Level <span class="text-danger">*</span></label>
-              <select class="form-control" id="newTaskPrioritySelect" required>
-                <option value="Critical">Critical (Immediate Milestone)</option>
-                <option value="High" selected>High Priority</option>
-                <option value="Medium">Medium Priority</option>
-                <option value="Low">Low / Standard</option>
-              </select>
-            </div>
-            <div class="col-md-6 mb-2">
-              <label class="form-label text-sm font-bold">Deadline Date <span class="text-danger">*</span></label>
-              <input type="date" class="form-control" id="newTaskDeadlineInput" value="2026-11-05" required>
-            </div>
-            <div class="col-12 mb-2">
-              <label class="form-label text-sm font-bold">Detailed Instructions &amp; Deliverables <span
-                  class="text-danger">*</span></label>
-              <textarea class="form-control" id="newTaskDescInput" rows="2"
-                placeholder="Specify deliverables, verification protocol, and reporting expectations..."
-                required></textarea>
-            </div>
+          <div class="form-group" style="margin-bottom: 0;">
+            <label style="font-weight: 700; font-size: 0.82rem; color: #1e293b; margin-bottom: 6px; display: block;">Primary Reason Category <span class="text-danger">*</span></label>
+            <select id="rejectReasonCategorySelect" class="form-control" required style="width: 100%; height: 40px; border-radius: 8px; font-size: 0.85rem; font-weight: 600;">
+              <option value="Non-compliance with School Policy">Non-compliance with School Policy / AP Regulations</option>
+              <option value="Budget / Financial Allocation Exceeded">Budget / Financial Allocation Exceeded</option>
+              <option value="Incomplete Supporting Documents">Incomplete Supporting Documents / Vouchers</option>
+              <option value="Incompatible Timeline / Schedule Conflict">Incompatible Timeline / Academic Schedule Conflict</option>
+              <option value="Duplicate or Superceded Request">Duplicate or Superceded Request</option>
+            </select>
+          </div>
+          <div class="form-group" style="margin-bottom: 0;">
+            <label style="font-weight: 700; font-size: 0.82rem; color: #1e293b; margin-bottom: 6px; display: block;">Detailed Explanation (Logged to History) <span class="text-danger">*</span></label>
+            <textarea id="rejectReasonTextarea" class="form-control" rows="3" required placeholder="Specify exact grounds for rejection..." style="width: 100%; border-radius: 8px; font-size: 0.85rem; min-height: 80px;"></textarea>
           </div>
         </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary"
-            onclick="portalApp.closeModal('newTaskOrWorkflowModal')">Cancel</button>
-          <button type="submit" class="btn btn-primary" style="font-weight:700;">
-            <i class="fa-solid fa-paper-plane mr-1"></i> Dispath &amp; Assign Task
-          </button>
+        <div class="modal-footer" style="display: flex; justify-content: flex-end; gap: 0.5rem; background: #f8fafc; border-top: 1px solid #e2e8f0; padding: 0.95rem 1.45rem;">
+          <button type="button" class="btn btn-outline-secondary btn-sm" onclick="portalApp.closeModal('rejectRequestReasonModal')">Cancel</button>
+          <button type="submit" class="btn btn-danger btn-sm" style="font-weight: 700;"><i class="fa-solid fa-ban mr-1"></i> Confirm Rejection</button>
         </div>
       </form>
     </div>
   </div>
 
+  <!-- MODAL 3: RETURN FOR CORRECTION MODAL -->
+  <div class="modal-backdrop" id="returnRequestCorrectionModal" style="display:none; z-index: 10060;">
+    <div class="portal-modal" style="max-width: 580px; width: 95%; border-radius: 14px; overflow: hidden; box-shadow: 0 25px 50px -12px rgba(15, 23, 42, 0.25);">
+      <div class="modal-header" style="border-bottom: 1px solid #e2e8f0; padding: 1.15rem 1.45rem; background: #ffffff;">
+        <div style="display: flex; align-items: center; gap: 0.85rem;">
+          <div style="width: 44px; height: 44px; border-radius: 10px; background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%); color: #b45309; display: flex; align-items: center; justify-content: center; font-size: 1.25rem; border: 1.5px solid #fde68a; flex-shrink: 0;">
+            <i class="fa-solid fa-rotate-left"></i>
+          </div>
+          <div>
+            <div style="font-size: 0.68rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #b45309;">
+              Correction &amp; Resubmission Loop
+            </div>
+            <h3 style="margin: 2px 0 0 0; font-size: 1.2rem; font-weight: 800; color: #0f172a;">Return for Correction</h3>
+            <p style="margin: 2px 0 0; font-size: 0.8rem; color: #64748b;" id="returnRequestModalSub">Request: REQ-...</p>
+          </div>
+        </div>
+        <button type="button" class="modal-close-x" onclick="portalApp.closeModal('returnRequestCorrectionModal')" title="Close (Esc)" style="width: 32px; height: 32px; border-radius: 50%; border: 1px solid #e2e8f0; background: #f8fafc; color: #64748b; display: flex; align-items: center; justify-content: center;">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <form onsubmit="portalApp.submitReturnRequest(event)">
+        <input type="hidden" id="returnTargetRequestId">
+        <div class="modal-body" style="padding: 1.35rem 1.45rem; display: flex; flex-direction: column; gap: 1.15rem; background: #ffffff;">
+          <div style="background: #fffbeb; border: 1px solid #fde68a; border-radius: 8px; padding: 10px 14px; font-size: 0.78rem; color: #92400e; line-height: 1.45;">
+            <strong>Correction Workflow:</strong> Returning this request allows the originator to rectify specific details, append missing vouchers, or adjust figures without re-initiating from scratch.
+          </div>
+          <div class="form-group" style="margin-bottom: 0;">
+            <label style="font-weight: 700; font-size: 0.82rem; color: #1e293b; margin-bottom: 6px; display: block;">Required Corrections &amp; Clarification Directives <span class="text-danger">*</span></label>
+            <textarea id="returnCorrectionTextarea" class="form-control" rows="3" required placeholder="Itemize exact amendments required from requester before reconsideration..." style="width: 100%; border-radius: 8px; font-size: 0.85rem; min-height: 85px;">Please provide verified counter-signed vouchers and submit Mandal Revenue Officer certificate.</textarea>
+          </div>
+        </div>
+        <div class="modal-footer" style="display: flex; justify-content: flex-end; gap: 0.5rem; background: #f8fafc; border-top: 1px solid #e2e8f0; padding: 0.95rem 1.45rem;">
+          <button type="button" class="btn btn-outline-secondary btn-sm" onclick="portalApp.closeModal('returnRequestCorrectionModal')">Cancel</button>
+          <button type="submit" class="btn btn-warning btn-sm" style="font-weight: 700;"><i class="fa-solid fa-rotate-left mr-1"></i> Return for Correction</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL 4: REASSIGN REQUEST (IF PERMITTED) -->
+  <div class="modal-backdrop" id="reassignRequestModal" style="display:none; z-index: 10060;">
+    <div class="portal-modal" style="max-width: 580px; width: 95%; border-radius: 14px; overflow: hidden; box-shadow: 0 25px 50px -12px rgba(15, 23, 42, 0.25);">
+      <div class="modal-header" style="border-bottom: 1px solid #e2e8f0; padding: 1.15rem 1.45rem; background: #ffffff;">
+        <div style="display: flex; align-items: center; gap: 0.85rem;">
+          <div style="width: 44px; height: 44px; border-radius: 10px; background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%); color: #1d4ed8; display: flex; align-items: center; justify-content: center; font-size: 1.25rem; border: 1.5px solid #bfdbfe; flex-shrink: 0;">
+            <i class="fa-solid fa-user-gear"></i>
+          </div>
+          <div>
+            <div style="font-size: 0.68rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #1d4ed8;">
+              Delegation of Approval Authority
+            </div>
+            <h3 style="margin: 2px 0 0 0; font-size: 1.2rem; font-weight: 800; color: #0f172a;">Reassign Request</h3>
+            <p style="margin: 2px 0 0; font-size: 0.8rem; color: #64748b;" id="reassignRequestModalSub">Request: REQ-...</p>
+          </div>
+        </div>
+        <button type="button" class="modal-close-x" onclick="portalApp.closeModal('reassignRequestModal')" title="Close (Esc)" style="width: 32px; height: 32px; border-radius: 50%; border: 1px solid #e2e8f0; background: #f8fafc; color: #64748b; display: flex; align-items: center; justify-content: center;">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <form onsubmit="portalApp.submitReassignRequest(event)">
+        <input type="hidden" id="reassignTargetRequestId">
+        <div class="modal-body" style="padding: 1.35rem 1.45rem; display: flex; flex-direction: column; gap: 1.15rem; background: #ffffff;">
+          <div class="form-group" style="margin-bottom: 0;">
+            <label style="font-weight: 700; font-size: 0.82rem; color: #1e293b; margin-bottom: 6px; display: block;">Reassign To Officer <span class="text-danger">*</span></label>
+            <select id="reassignOfficerSelect" class="form-control" required style="width: 100%; height: 40px; border-radius: 8px; font-size: 0.85rem; font-weight: 600;">
+              <option value="Sri Navva Anand (Vice Principal)">Sri Navva Anand (Vice Principal)</option>
+              <option value="Sri Ch. Ramesh (Senior Lecturer)">Sri Ch. Ramesh (Senior Lecturer)</option>
+              <option value="Sri S. Ramu (Accounts Desk)">Sri S. Ramu (Accounts Desk)</option>
+              <option value="Smt. K. Anuradha (English Faculty)">Smt. K. Anuradha (English Faculty)</option>
+            </select>
+          </div>
+          <div class="form-group" style="margin-bottom: 0;">
+            <label style="font-weight: 700; font-size: 0.82rem; color: #1e293b; margin-bottom: 6px; display: block;">Reason for Delegation / Reassignment <span class="text-danger">*</span></label>
+            <textarea id="reassignReasonTextarea" class="form-control" rows="2" required placeholder="Explain why decision is being delegated to another officer..." style="width: 100%; border-radius: 8px; font-size: 0.85rem; min-height: 70px;">Delegated for subject-matter domain review and field verification.</textarea>
+          </div>
+        </div>
+        <div class="modal-footer" style="display: flex; justify-content: flex-end; gap: 0.5rem; background: #f8fafc; border-top: 1px solid #e2e8f0; padding: 0.95rem 1.45rem;">
+          <button type="button" class="btn btn-outline-secondary btn-sm" onclick="portalApp.closeModal('reassignRequestModal')">Cancel</button>
+          <button type="submit" class="btn btn-primary btn-sm" style="font-weight: 700;"><i class="fa-solid fa-user-gear mr-1"></i> Reassign Request</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL 5: REQUEST AUDIT & HISTORY TIMELINE -->
+  <div class="modal-backdrop" id="requestHistoryTimelineModal" style="display:none; z-index: 10060;">
+    <div class="portal-modal" style="max-width: 650px; width: 95%; border-radius: 14px; overflow: hidden; box-shadow: 0 25px 50px -12px rgba(15, 23, 42, 0.25);">
+      <div class="modal-header" style="border-bottom: 1px solid #e2e8f0; padding: 1.15rem 1.45rem; background: #ffffff;">
+        <div style="display: flex; align-items: center; gap: 0.85rem;">
+          <div style="width: 44px; height: 44px; border-radius: 10px; background: linear-gradient(135deg, #f5f3ff 0%, #ede9fe 100%); color: #7c3aed; display: flex; align-items: center; justify-content: center; font-size: 1.25rem; border: 1.5px solid #ddd6fe; flex-shrink: 0;">
+            <i class="fa-solid fa-timeline"></i>
+          </div>
+          <div>
+            <div style="font-size: 0.68rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #7c3aed;">
+              Traceable Decision History
+            </div>
+            <h3 style="margin: 2px 0 0 0; font-size: 1.2rem; font-weight: 800; color: #0f172a;" id="requestHistoryModalTitle">Request Approval Timeline</h3>
+            <p style="margin: 2px 0 0; font-size: 0.8rem; color: #64748b;" id="requestHistoryModalSub">Immutable Staged Transition Audit Trail</p>
+          </div>
+        </div>
+        <button type="button" class="modal-close-x" onclick="portalApp.closeModal('requestHistoryTimelineModal')" title="Close (Esc)" style="width: 32px; height: 32px; border-radius: 50%; border: 1px solid #e2e8f0; background: #f8fafc; color: #64748b; display: flex; align-items: center; justify-content: center;">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <div class="modal-body" id="requestHistoryModalBody" style="padding: 1.35rem 1.45rem; background: #ffffff; max-height: calc(85vh - 140px); overflow-y: auto;">
+        <!-- Populated dynamically -->
+      </div>
+      <div class="modal-footer" style="display: flex; justify-content: flex-end; background: #f8fafc; border-top: 1px solid #e2e8f0; padding: 0.95rem 1.45rem;">
+        <button type="button" class="btn btn-secondary btn-sm" onclick="portalApp.closeModal('requestHistoryTimelineModal')">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL 6: UPDATE TASK PROGRESS (17.2) -->
+  <div class="modal-backdrop" id="updateTaskProgressModal" style="display:none; z-index: 10060;">
+    <div class="portal-modal" style="max-width: 540px; width: 95%; border-radius: 14px; overflow: hidden; box-shadow: 0 25px 50px -12px rgba(15, 23, 42, 0.25);">
+      <div class="modal-header" style="border-bottom: 1px solid #e2e8f0; padding: 1.15rem 1.45rem; background: #ffffff;">
+        <h3 style="margin: 0; font-size: 1.15rem; font-weight: 800; color: #0f172a;"><i class="fa-solid fa-bars-progress text-primary mr-1"></i> Update Task Progress</h3>
+        <button type="button" class="modal-close-x" onclick="portalApp.closeModal('updateTaskProgressModal')" title="Close (Esc)">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <form onsubmit="portalApp.submitUpdateTaskProgress(event)">
+        <input type="hidden" id="updateTaskTargetId">
+        <div class="modal-body" style="padding: 1.35rem 1.45rem; display: flex; flex-direction: column; gap: 1rem; background: #ffffff;">
+          <div class="form-group" style="margin-bottom: 0;">
+            <label style="font-weight: 700; font-size: 0.82rem; color: #1e293b; margin-bottom: 6px; display: block;">Milestone Completion Percentage <span class="text-danger">*</span></label>
+            <select id="updateTaskPercentageSelect" class="form-control" style="width:100%; height:40px; border-radius:8px; font-weight:700;">
+              <option value="25%">25% - Commenced / Initial Preparation</option>
+              <option value="50%">50% - Mid-way Execution &amp; Field Work</option>
+              <option value="75%">75% - Advanced / Final Scrutiny Pending</option>
+              <option value="100%">100% - Ready for Executive Sign-off</option>
+            </select>
+          </div>
+          <div class="form-group" style="margin-bottom: 0;">
+            <label style="font-weight: 700; font-size: 0.82rem; color: #1e293b; margin-bottom: 6px; display: block;">Progress Remarks &amp; Updates <span class="text-danger">*</span></label>
+            <textarea id="updateTaskRemarksTextarea" class="form-control" rows="3" required placeholder="Note milestones achieved, current blockers or status..." style="width:100%; border-radius:8px; font-size:0.85rem;"></textarea>
+          </div>
+        </div>
+        <div class="modal-footer" style="display: flex; justify-content: flex-end; gap: 0.5rem; background: #f8fafc; border-top: 1px solid #e2e8f0; padding: 0.95rem 1.45rem;">
+          <button type="button" class="btn btn-outline-secondary btn-sm" onclick="portalApp.closeModal('updateTaskProgressModal')">Cancel</button>
+          <button type="submit" class="btn btn-primary btn-sm" style="font-weight:700;"><i class="fa-solid fa-check mr-1"></i> Save Progress</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL 7: ADD COMMENT TO TASK (17.2) -->
+  <div class="modal-backdrop" id="addTaskCommentModal" style="display:none; z-index: 10060;">
+    <div class="portal-modal" style="max-width: 540px; width: 95%; border-radius: 14px; overflow: hidden;">
+      <div class="modal-header" style="border-bottom: 1px solid #e2e8f0; padding: 1.15rem 1.45rem; background: #ffffff;">
+        <h3 style="margin: 0; font-size: 1.15rem; font-weight: 800; color: #0f172a;"><i class="fa-solid fa-comment-dots text-primary mr-1"></i> Add Task Comment</h3>
+        <button type="button" class="modal-close-x" onclick="portalApp.closeModal('addTaskCommentModal')"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <form onsubmit="portalApp.submitAddTaskComment(event)">
+        <input type="hidden" id="commentTaskTargetId">
+        <div class="modal-body" style="padding: 1.35rem 1.45rem; background: #ffffff;">
+          <div class="form-group" style="margin-bottom: 0;">
+            <label style="font-weight: 700; font-size: 0.82rem; color: #1e293b; margin-bottom: 6px; display: block;">Collaboration Note / Internal Comment <span class="text-danger">*</span></label>
+            <textarea id="taskCommentTextarea" class="form-control" rows="3" required placeholder="Type operational comments or guidance for the team..." style="width: 100%; border-radius: 8px; font-size: 0.85rem;"></textarea>
+          </div>
+        </div>
+        <div class="modal-footer" style="display: flex; justify-content: flex-end; gap: 0.5rem; background: #f8fafc; border-top: 1px solid #e2e8f0; padding: 0.95rem 1.45rem;">
+          <button type="button" class="btn btn-outline-secondary btn-sm" onclick="portalApp.closeModal('addTaskCommentModal')">Cancel</button>
+          <button type="submit" class="btn btn-primary btn-sm" style="font-weight:700;"><i class="fa-solid fa-paper-plane mr-1"></i> Post Comment</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL 8: ATTACH EVIDENCE (17.2) -->
+  <div class="modal-backdrop" id="attachTaskEvidenceModal" style="display:none; z-index: 10060;">
+    <div class="portal-modal" style="max-width: 540px; width: 95%; border-radius: 14px; overflow: hidden;">
+      <div class="modal-header" style="border-bottom: 1px solid #e2e8f0; padding: 1.15rem 1.45rem; background: #ffffff;">
+        <h3 style="margin: 0; font-size: 1.15rem; font-weight: 800; color: #0f172a;"><i class="fa-solid fa-paperclip text-primary mr-1"></i> Attach Task Evidence</h3>
+        <button type="button" class="modal-close-x" onclick="portalApp.closeModal('attachTaskEvidenceModal')"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <form onsubmit="portalApp.submitAttachTaskEvidence(event)">
+        <input type="hidden" id="evidenceTaskTargetId">
+        <div class="modal-body" style="padding: 1.35rem 1.45rem; display: flex; flex-direction: column; gap: 1rem; background: #ffffff;">
+          <div class="form-group" style="margin-bottom: 0;">
+            <label style="font-weight: 700; font-size: 0.82rem; color: #1e293b; margin-bottom: 6px; display: block;">Evidence Title / Document Name <span class="text-danger">*</span></label>
+            <input type="text" id="evidenceDocTitleInput" class="form-control" required placeholder="e.g. Fire Dept Inspection Certificate PDF" style="width: 100%; height: 40px; border-radius: 8px;">
+          </div>
+          <div class="form-group" style="margin-bottom: 0;">
+            <label style="font-weight: 700; font-size: 0.82rem; color: #1e293b; margin-bottom: 6px; display: block;">Reference Voucher / File Link <span class="text-danger">*</span></label>
+            <input type="text" id="evidenceDocRefInput" class="form-control" required placeholder="e.g. DOC-SAFETY-2026-Q3.pdf or UTR Voucher #88192" style="width: 100%; height: 40px; border-radius: 8px;">
+          </div>
+        </div>
+        <div class="modal-footer" style="display: flex; justify-content: flex-end; gap: 0.5rem; background: #f8fafc; border-top: 1px solid #e2e8f0; padding: 0.95rem 1.45rem;">
+          <button type="button" class="btn btn-outline-secondary btn-sm" onclick="portalApp.closeModal('attachTaskEvidenceModal')">Cancel</button>
+          <button type="submit" class="btn btn-primary btn-sm" style="font-weight:700;"><i class="fa-solid fa-file-circle-check mr-1"></i> Attach Evidence</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL 9: REQUEST EXTENSION (17.2) -->
+  <div class="modal-backdrop" id="requestTaskExtensionModal" style="display:none; z-index: 10060;">
+    <div class="portal-modal" style="max-width: 540px; width: 95%; border-radius: 14px; overflow: hidden;">
+      <div class="modal-header" style="border-bottom: 1px solid #e2e8f0; padding: 1.15rem 1.45rem; background: #ffffff;">
+        <h3 style="margin: 0; font-size: 1.15rem; font-weight: 800; color: #0f172a;"><i class="fa-solid fa-clock-rotate-left text-warning mr-1"></i> Request Due Date Extension</h3>
+        <button type="button" class="modal-close-x" onclick="portalApp.closeModal('requestTaskExtensionModal')"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <form onsubmit="portalApp.submitRequestTaskExtension(event)">
+        <input type="hidden" id="extensionTaskTargetId">
+        <div class="modal-body" style="padding: 1.35rem 1.45rem; display: flex; flex-direction: column; gap: 1rem; background: #ffffff;">
+          <div class="form-group" style="margin-bottom: 0;">
+            <label style="font-weight: 700; font-size: 0.82rem; color: #1e293b; margin-bottom: 6px; display: block;">Proposed New Due Date <span class="text-danger">*</span></label>
+            <input type="date" id="extensionNewDateInput" class="form-control" required style="width: 100%; height: 40px; border-radius: 8px;">
+          </div>
+          <div class="form-group" style="margin-bottom: 0;">
+            <label style="font-weight: 700; font-size: 0.82rem; color: #1e293b; margin-bottom: 6px; display: block;">Justification / Grounds for Extension <span class="text-danger">*</span></label>
+            <textarea id="extensionReasonTextarea" class="form-control" rows="3" required placeholder="Specify why the deadline requires postponement..." style="width: 100%; border-radius: 8px; font-size: 0.85rem;"></textarea>
+          </div>
+        </div>
+        <div class="modal-footer" style="display: flex; justify-content: flex-end; gap: 0.5rem; background: #f8fafc; border-top: 1px solid #e2e8f0; padding: 0.95rem 1.45rem;">
+          <button type="button" class="btn btn-outline-secondary btn-sm" onclick="portalApp.closeModal('requestTaskExtensionModal')">Cancel</button>
+          <button type="submit" class="btn btn-warning btn-sm" style="font-weight:700;"><i class="fa-solid fa-calendar-plus mr-1"></i> Submit Extension Request</button>
+        </div>
+      </form>
+    </div>
+  </div>
 
   <!-- =========================================================================
        MODAL 1: AUDIT LOG CHANGE DIFF MODAL
