@@ -1948,7 +1948,7 @@ button, input, select, textarea {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: clamp(1rem, 1.8vw, 1.75rem);
-  margin-top: -3rem;
+  margin-top: 0;
   position: relative;
   z-index: 20;
 }
@@ -2033,6 +2033,8 @@ button, input, select, textarea {
   display: inline-flex;
   align-items: center;
   gap: 0.35rem;
+  margin-top: auto;
+  padding-top: 0.5rem;
 }
 
 .feature-link:hover {

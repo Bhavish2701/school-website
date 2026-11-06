@@ -239,7 +239,7 @@
       </div>
     </header>
 
-    <main class="portal-content" style="padding: 1.75rem 2rem;">
+    <main class="portal-content">
 
       <!-- =======================================================================
            EXECUTIVE WELCOME BANNER WITH PROMINENT LIVE IST CLOCK (BIG & FIRST)
@@ -365,37 +365,29 @@
         </div>
 
         <!-- 5 Core Questions Executive Telemetry Strip -->
-        <div
-          style="background: var(--color-bg-subtle); border: 1px solid var(--color-border); border-radius: 12px; padding: 1rem 1.35rem; margin-bottom: 1.5rem; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 1rem;">
-          <div style="display: flex; align-items: center; gap: 0.75rem;">
-            <div
-              style="width: 10px; height: 10px; border-radius: 50%; background: #10b981; box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2);">
-            </div>
-            <span style="font-size: 0.88rem; font-weight: 700; color: var(--color-text-main);">
+        <div class="executive-telemetry-strip">
+          <div class="telemetry-strip-left">
+            <div class="telemetry-live-dot"></div>
+            <span class="telemetry-strip-title">
               Operational Command Status: All 3 Campuses Online
             </span>
           </div>
-          <div style="display: flex; gap: 1.25rem; flex-wrap: wrap; font-size: 0.8rem; color: #64748b;">
-            <span><i class="fa-solid fa-shield-halved text-emerald mr-1"></i> Security: <strong
-                style="color:var(--color-text-main);">0 Active Threats</strong></span>
-            <span><i class="fa-solid fa-list-check text-primary mr-1"></i> Operator Tasks: <strong
-                style="color:var(--color-text-main);">4 To Complete</strong></span>
-            <span><i class="fa-solid fa-database text-blue mr-1"></i> Latest Backup: <strong
-                style="color:var(--color-text-main);">Today 03:00 AM (Verified)</strong></span>
+          <div class="telemetry-strip-chips">
+            <span class="telemetry-chip"><i class="fa-solid fa-shield-halved text-emerald"></i> Security: <strong>0 Active Threats</strong></span>
+            <span class="telemetry-chip"><i class="fa-solid fa-list-check text-primary"></i> Operator Tasks: <strong>4 To Complete</strong></span>
+            <span class="telemetry-chip"><i class="fa-solid fa-database text-blue"></i> Latest Backup: <strong>Today 03:00 AM (Verified)</strong></span>
           </div>
         </div>
 
         <!-- SECTION 2.2: DASHBOARD ACTIONS (Operational Command Centre) -->
-        <div class="pa-card" style="margin-bottom: 1.5rem;">
-          <div class="pa-card-header"
-            style="border-bottom: 1px solid var(--color-border); padding-bottom: 1rem; margin-bottom: 1rem;">
+        <div class="pa-card command-actions-card">
+          <div class="pa-card-header command-actions-header">
             <div>
               <h3 class="pa-card-title"><i class="fa-solid fa-bolt text-amber"></i> Operational Command Actions</h3>
-              <p class="pa-card-desc">Execute governance, security, and infrastructure workflows across the ecosystem
-              </p>
+              <p class="pa-card-desc">Execute governance, security, and infrastructure workflows across the ecosystem</p>
             </div>
           </div>
-          <div style="display: flex; gap: 0.65rem; flex-wrap: wrap;" id="dashboardActionsBar">
+          <div class="command-actions-toolbar" id="dashboardActionsBar">
             <button class="btn-pa btn-pa-primary" onclick="platformApp.openModal('modalAddInstitution')">
               <i class="fa-solid fa-plus"></i> Add Institution
             </button>
