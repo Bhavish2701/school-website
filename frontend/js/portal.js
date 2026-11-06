@@ -11654,10 +11654,10 @@ const FEE_CATEGORY_AUDIT_DATA = [
               </div>
               <div>
                 <strong style="color:#0f172a; font-size:0.88rem;">${item.name || item.studentName}</strong>
-                <div style="font-size:0.72rem; color:var(--color-text-muted); display:flex; gap:4px; margin-top:1px;">
+                <div style="font-size:0.72rem; color:var(--color-text-muted); display:flex; align-items:center; gap:5px; margin-top:2px; white-space:nowrap;">
                   <span>${item.gender || 'Student'}</span>
                   <span>•</span>
-                  <span>DOB: ${item.dob || '—'}</span>
+                  <span style="white-space:nowrap;">DOB: ${item.dob || '—'}</span>
                 </div>
               </div>
             </div>
@@ -11746,6 +11746,20 @@ const FEE_CATEGORY_AUDIT_DATA = [
         </tr>
       `;
     }).join('');
+
+    const paginationEl = document.getElementById('admissionsPagination');
+    if (paginationEl) {
+      paginationEl.innerHTML = `
+        <div class="adm-page-info">
+          Showing <strong>1</strong> to <strong>${data.length}</strong> of <strong>${data.length}</strong> Applications
+        </div>
+        <div class="adm-page-controls">
+          <button type="button" class="adm-page-btn" disabled><i class="fa-solid fa-chevron-left me-1"></i> Prev</button>
+          <button type="button" class="adm-page-btn active" style="background:#1d4ed8; color:#fff; border-color:#1d4ed8;">1</button>
+          <button type="button" class="adm-page-btn" disabled>Next <i class="fa-solid fa-chevron-right ms-1"></i></button>
+        </div>
+      `;
+    }
   }
 
   /* =========================================================================
