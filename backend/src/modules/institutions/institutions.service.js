@@ -110,3 +110,4 @@ class InstitutionsService {
 }
 
 module.exports = InstitutionsService;
+

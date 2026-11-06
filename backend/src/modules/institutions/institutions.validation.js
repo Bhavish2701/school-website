@@ -44,3 +44,4 @@ class InstitutionsValidation {
 }
 
 module.exports = InstitutionsValidation;
+

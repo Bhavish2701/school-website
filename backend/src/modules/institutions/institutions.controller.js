@@ -56,3 +56,4 @@ class InstitutionsController {
 }
 
 module.exports = InstitutionsController;
+

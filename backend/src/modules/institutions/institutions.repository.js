@@ -69,3 +69,4 @@ class InstitutionsRepository {
 }
 
 module.exports = InstitutionsRepository;
+

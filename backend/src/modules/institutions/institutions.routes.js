@@ -15,3 +15,4 @@ router.get('/:id', policy.readPolicy, controller.getById);
 router.post('/:id/suspend', policy.suspendPolicy, validation.validateSuspension, controller.suspend);
 
 module.exports = router;
+

@@ -59,3 +59,4 @@ class InstitutionsPolicy {
 }
 
 module.exports = InstitutionsPolicy;
+
