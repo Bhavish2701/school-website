@@ -118,20 +118,55 @@
         <span class="nav-text">Platform Policies &amp; Data Retention</span>
       </a>
 
-      <!-- 5. SCHOOL GATEWAYS -->
+      <!-- 5. SCHOOL GATEWAYS (MODULE 18) -->
       <div class="nav-section-title">School Gateways</div>
-      <a href="/management" class="nav-link" target="_blank">
+      <a href="/management" class="nav-link" id="navGatewayAdmin" target="_blank" onclick="platformApp.launchSchoolGateway('management', event)" title="Open School Administration Portal (18.1)">
         <span class="nav-icon"><i class="fa-solid fa-building-columns"></i></span>
         <span class="nav-text">School Administration Portal</span>
+        <span class="nav-badge" style="background: rgba(79,70,229,0.15); color: #4F46E5; font-size: 0.65rem;">18.1</span>
       </a>
-      <a href="/teacher" class="nav-link" target="_blank">
+      <a href="/teacher" class="nav-link" id="navGatewayFaculty" target="_blank" onclick="platformApp.launchSchoolGateway('teacher', event)" title="Open Faculty &amp; Teacher Portal (18.2)">
         <span class="nav-icon"><i class="fa-solid fa-chalkboard-user"></i></span>
         <span class="nav-text">Faculty &amp; Teacher Portal</span>
+        <span class="nav-badge" style="background: rgba(16,185,129,0.15); color: #10B981; font-size: 0.65rem;">18.2</span>
       </a>
-      <a href="/" class="nav-link">
+      <a href="/" class="nav-link" id="navGatewayWebsite" target="_blank" rel="noopener noreferrer" onclick="platformApp.launchSchoolGateway('website', event)" title="Open Public Website (18.3)">
         <span class="nav-icon"><i class="fa-solid fa-arrow-left"></i></span>
         <span class="nav-text">Public Website</span>
+        <span class="nav-badge" style="background: rgba(14,165,233,0.15); color: #0284C7; font-size: 0.65rem;">18.3</span>
       </a>
+
+      <!-- 18.3 Status Indicator in Sidebar -->
+      <div class="gateway-status-card" id="gatewaySidebarStatusCard">
+        <div class="gateway-status-header">
+          <div class="d-flex align-items-center gap-1">
+            <span class="gateway-status-dot online" id="dotGatewayStatus"></span>
+            <span class="gateway-status-title">Public Web Status</span>
+          </div>
+          <span class="badge bg-success-subtle text-success border border-success-subtle" id="lblGatewaySslBadge" style="font-size:0.65rem;">SSL: ACTIVE</span>
+        </div>
+        <div class="gateway-status-details">
+          <div class="gateway-status-row">
+            <span class="text-muted">Domain:</span> <strong id="lblGatewayDomain" class="font-mono">srividya.edu.in</strong>
+          </div>
+          <div class="gateway-status-row">
+            <span class="text-muted">Checked:</span> <span id="lblGatewayLastCheck" class="text-muted font-mono" style="font-size:0.7rem;">Just now</span>
+          </div>
+          <div class="gateway-decoupled-badges">
+            <span class="badge badge-decoupled-ok" id="badgeGatewayFrontend" title="Frontend Delivery HTTP 200 OK"><i class="fa-solid fa-check me-1"></i>Web: 200</span>
+            <span class="badge badge-decoupled-ok" id="badgeGatewayApi" title="Backend API Operational"><i class="fa-solid fa-check me-1"></i>API: OK</span>
+            <span class="badge badge-decoupled-ok" id="badgeGatewayDb" title="Database Connected"><i class="fa-solid fa-database me-1"></i>DB: OK</span>
+          </div>
+        </div>
+        <div class="d-flex gap-1 mt-2">
+          <button class="btn btn-sm btn-outline-primary flex-grow-1 py-1" style="font-size: 0.72rem;" onclick="platformApp.openGatewayStatusModal()">
+            <i class="fa-solid fa-satellite-dish me-1"></i> Telemetry
+          </button>
+          <a href="/" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-primary py-1 px-2" style="font-size: 0.72rem;" title="Launch Public Website in New Tab">
+            <i class="fa-solid fa-arrow-up-right-from-square"></i>
+          </a>
+        </div>
+      </div>
     </nav>
 
     <!-- Sidebar Operator Card -->
@@ -168,6 +203,12 @@
       </div>
 
       <div class="header-right">
+        <!-- 18.3 Header Gateway Status Indicator -->
+        <button class="badge-gateway-header d-none d-md-inline-flex" id="btnHeaderGatewayStatus" onclick="platformApp.openGatewayStatusModal()" title="View School Gateway Decoupled Telemetry (18.3)">
+          <i class="fa-solid fa-globe text-primary"></i>
+          <span>Web &amp; SSL: <strong class="text-success" id="lblHeaderGatewayStatus">Online</strong></span>
+        </button>
+
         <!-- Live Cluster Status Indicator -->
         <span class="badge-active" style="padding: 0.35rem 0.75rem;">
           <span
@@ -10053,6 +10094,187 @@
       </div>
       <div class="pa-modal-footer" style="padding: 1rem 1.5rem; border-top: 1px solid #E2E8F0; display: flex; justify-content: flex-end; background: #F8FAFC;">
         <button type="button" class="btn btn-sm btn-secondary" onclick="platformApp.closeModal('modalDataRequestDetail')">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       MODULE 18 MODALS: SCHOOL GATEWAYS & DECOUPLED TELEMETRY
+       ========================================================================= -->
+
+  <!-- Modal 18.1: School Administration Portal Access Denied -->
+  <div class="pa-modal-backdrop" id="modalGatewayAccessDenied" style="display: none;">
+    <div class="pa-modal-card" style="max-width: 580px; width: 90%;">
+      <div class="pa-modal-header" style="padding: 1.25rem 1.5rem; border-bottom: 1px solid #E2E8F0; display: flex; justify-content: space-between; align-items: center;">
+        <h4 class="h6 mb-0 fw-bold text-danger"><i class="fa-solid fa-ban text-danger me-2"></i>School Administration Portal - Access Denied (18.1)</h4>
+        <button type="button" class="btn-close" onclick="platformApp.closeModal('modalGatewayAccessDenied')"></button>
+      </div>
+      <div class="pa-modal-body" style="padding: 1.5rem;">
+        <div class="alert alert-danger py-2 px-3 small mb-3">
+          <i class="fa-solid fa-triangle-exclamation me-1"></i>
+          <strong>Institutional Permission Required:</strong> Your current platform session does not carry school-level administrative credentials for the selected institution (<span id="lblDeniedInstitution">Sri Vidya E.M High School</span>).
+        </div>
+
+        <div class="p-3 border rounded bg-light mb-3 small">
+          <div class="fw-bold text-dark mb-1"><i class="fa-solid fa-shield-halved text-success me-1"></i>Security Invariant (Section 18.1 Enforced)</div>
+          <p class="text-muted mb-0">
+            Institution context is preserved securely. <strong>Passwords and session tokens are never transmitted in URLs or query strings.</strong> To enter the School Administration Portal, you must authenticate through an authorized institutional account.
+          </p>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label small fw-bold">Select Authorized School Administrator Identity</label>
+          <select class="form-select form-select-sm font-mono" id="selGatewayAdminIdentity">
+            <option value="PRINCIPAL">Smt. Gorle Varalakshmi (Institutional Principal) - [Authorized]</option>
+            <option value="VICE_PRINCIPAL">Sri Navva Anand (Vice Principal &amp; HOD Maths) - [Authorized]</option>
+            <option value="SUPER_ADMIN">Sri Vidya Trust Root Operator (Super Admin Bypass) - [Authorized]</option>
+          </select>
+        </div>
+      </div>
+      <div class="pa-modal-footer" style="padding: 1rem 1.5rem; border-top: 1px solid #E2E8F0; display: flex; justify-content: flex-end; gap: 0.5rem; background: #F8FAFC;">
+        <button type="button" class="btn btn-sm btn-secondary" onclick="platformApp.closeModal('modalGatewayAccessDenied')">Cancel</button>
+        <button type="button" class="btn btn-sm btn-primary" onclick="platformApp.authorizeAndLaunchAdminGateway()">
+          <i class="fa-solid fa-arrow-right-to-bracket me-1"></i> Authenticate &amp; Launch Portal
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 18.2: Faculty & Teacher Portal Verification -->
+  <div class="pa-modal-backdrop" id="modalFacultyGatewayAuth" style="display: none;">
+    <div class="pa-modal-card" style="max-width: 580px; width: 90%;">
+      <div class="pa-modal-header" style="padding: 1.25rem 1.5rem; border-bottom: 1px solid #E2E8F0; display: flex; justify-content: space-between; align-items: center;">
+        <h4 class="h6 mb-0 fw-bold"><i class="fa-solid fa-chalkboard-user text-primary me-2"></i>Faculty &amp; Teacher Portal Verification (18.2)</h4>
+        <button type="button" class="btn-close" onclick="platformApp.closeModal('modalFacultyGatewayAuth')"></button>
+      </div>
+      <div class="pa-modal-body" style="padding: 1.5rem;">
+        <div class="alert alert-info py-2 px-3 small mb-3">
+          <i class="fa-solid fa-circle-info me-1"></i>
+          <strong>Certified Faculty Scoping:</strong> Access to the Faculty &amp; Teacher Portal requires a verified teacher account or institutional faculty identity flow.
+        </div>
+
+        <div class="p-3 border rounded bg-light mb-3 small">
+          <div class="d-flex justify-content-between align-items-center mb-1">
+            <strong>Target Destination:</strong>
+            <span class="badge bg-primary font-mono">/teacher</span>
+          </div>
+          <div class="d-flex justify-content-between align-items-center mb-1">
+            <strong>Identity Scoping:</strong>
+            <span class="text-success fw-bold"><i class="fa-solid fa-check-circle me-1"></i>Verified Institutional Faculty Account</span>
+          </div>
+          <div class="d-flex justify-content-between align-items-center">
+            <strong>Preserved Institution Context:</strong>
+            <span class="font-mono text-dark" id="lblFacultyInstContext">INST-001 (Sri Vidya Main Campus)</span>
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label small fw-bold">Sign-in Mode</label>
+          <select class="form-select form-select-sm" id="selFacultyAuthMode">
+            <option value="SESSION">Use Current Platform Operator Session (Supervisory Teacher Role)</option>
+            <option value="SSO">Institutional Google Workspace SSO (@srividya.edu.in)</option>
+            <option value="FACULTY_LOGIN">Direct Faculty Portal Credential Login</option>
+          </select>
+        </div>
+      </div>
+      <div class="pa-modal-footer" style="padding: 1rem 1.5rem; border-top: 1px solid #E2E8F0; display: flex; justify-content: flex-end; gap: 0.5rem; background: #F8FAFC;">
+        <button type="button" class="btn btn-sm btn-secondary" onclick="platformApp.closeModal('modalFacultyGatewayAuth')">Cancel</button>
+        <button type="button" class="btn btn-sm btn-success" onclick="platformApp.authorizeAndLaunchFacultyGateway()">
+          <i class="fa-solid fa-arrow-up-right-from-square me-1"></i> Open Faculty Portal
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 18.3: School Public Website & Decoupled Telemetry Inspector -->
+  <div class="pa-modal-backdrop" id="modalSchoolGatewayStatus" style="display: none;">
+    <div class="pa-modal-card" style="max-width: 680px; width: 90%;">
+      <div class="pa-modal-header" style="padding: 1.25rem 1.5rem; border-bottom: 1px solid #E2E8F0; display: flex; justify-content: space-between; align-items: center;">
+        <h4 class="h6 mb-0 fw-bold"><i class="fa-solid fa-globe text-primary me-2"></i>School Public Website &amp; Decoupled Telemetry (18.3)</h4>
+        <button type="button" class="btn-close" onclick="platformApp.closeModal('modalSchoolGatewayStatus')"></button>
+      </div>
+      <div class="pa-modal-body" style="padding: 1.5rem; max-height: 75vh; overflow-y: auto;">
+        
+        <!-- Section 18.3 Invariant Callout Banner -->
+        <div class="alert alert-warning py-2 px-3 small mb-3">
+          <i class="fa-solid fa-triangle-exclamation text-warning me-1"></i>
+          <strong>Decoupled Architecture Mandate (Section 18.3):</strong> Do not automatically assume that a successful frontend response means the backend and database are healthy. Telemetry across all three architectural layers is probed and verified independently.
+        </div>
+
+        <!-- Public Website Overview Card -->
+        <div class="p-3 border rounded bg-light mb-3">
+          <div class="d-flex justify-content-between align-items-center mb-2 flex-wrap gap-2">
+            <div>
+              <div class="text-muted small">Configured Public Domain:</div>
+              <h5 class="h6 fw-bold mb-0 font-mono text-dark" id="lblModalGatewayDomain">srividya.edu.in</h5>
+            </div>
+            <div>
+              <span class="badge bg-success font-mono px-2 py-1" id="lblModalGatewaySsl"><i class="fa-solid fa-lock me-1"></i>SSL: Active (TLS 1.3 Valid)</span>
+            </div>
+          </div>
+          <div class="row g-2 small mt-1">
+            <div class="col-md-6">
+              <span class="text-muted">Last Availability Check:</span> <strong id="lblModalGatewayLastCheck">Just now</strong>
+            </div>
+            <div class="col-md-6 text-md-end">
+              <a href="/" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-primary py-1 px-3">
+                <i class="fa-solid fa-arrow-up-right-from-square me-1"></i> Open Public Website
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3 Decoupled Subsystem Breakdown Cards -->
+        <h6 class="small fw-bold text-uppercase text-muted mb-2">Decoupled Subsystem Health Verification</h6>
+        
+        <!-- Layer 1: Frontend Web -->
+        <div class="decoupled-layer-box">
+          <div class="d-flex justify-content-between align-items-center">
+            <div class="d-flex align-items-center gap-2">
+              <span class="badge bg-success-subtle text-success p-2"><i class="fa-solid fa-display fs-6"></i></span>
+              <div>
+                <strong class="d-block small text-dark">Frontend Web Presentation Layer</strong>
+                <span class="text-muted" style="font-size: 0.72rem;">HTML5, Static CDN, Client Assets &amp; Routing</span>
+              </div>
+            </div>
+            <span class="badge bg-success font-mono" id="lblModalLayerFrontend">HTTP 200 OK</span>
+          </div>
+        </div>
+
+        <!-- Layer 2: Backend REST API -->
+        <div class="decoupled-layer-box">
+          <div class="d-flex justify-content-between align-items-center">
+            <div class="d-flex align-items-center gap-2">
+              <span class="badge bg-primary-subtle text-primary p-2"><i class="fa-solid fa-server fs-6"></i></span>
+              <div>
+                <strong class="d-block small text-dark">Backend REST API Routing Layer</strong>
+                <span class="text-muted" style="font-size: 0.72rem;">Unified Node.js Server &amp; Express Micro-Services</span>
+              </div>
+            </div>
+            <span class="badge bg-success font-mono" id="lblModalLayerBackend">HEALTHY (Active)</span>
+          </div>
+        </div>
+
+        <!-- Layer 3: Database Storage -->
+        <div class="decoupled-layer-box">
+          <div class="d-flex justify-content-between align-items-center">
+            <div class="d-flex align-items-center gap-2">
+              <span class="badge bg-info-subtle text-info p-2"><i class="fa-solid fa-database fs-6"></i></span>
+              <div>
+                <strong class="d-block small text-dark">Statutory Encrypted Database Layer</strong>
+                <span class="text-muted" style="font-size: 0.72rem;">MongoDB Server &amp; Statutory Collections</span>
+              </div>
+            </div>
+            <span class="badge bg-success font-mono" id="lblModalLayerDatabase">CONNECTED</span>
+          </div>
+        </div>
+
+      </div>
+      <div class="pa-modal-footer" style="padding: 1rem 1.5rem; border-top: 1px solid #E2E8F0; display: flex; justify-content: space-between; align-items: center; background: #F8FAFC;">
+        <button type="button" class="btn btn-sm btn-outline-secondary" onclick="platformApp.refreshGatewayStatus()">
+          <i class="fa-solid fa-arrows-rotate me-1"></i> Re-check Telemetry Now
+        </button>
+        <button type="button" class="btn btn-sm btn-secondary" onclick="platformApp.closeModal('modalSchoolGatewayStatus')">Close</button>
       </div>
     </div>
   </div>

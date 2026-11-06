@@ -4071,4 +4071,147 @@ input:checked+.pa-slider:before {
   font-weight: 700;
 }
 
+/* ==========================================================================
+   MODULE 18: SCHOOL GATEWAYS & DECOUPLED TELEMETRY STYLES
+   ========================================================================== */
+
+.gateway-status-card {
+  margin: 0.75rem 0.75rem 0.5rem;
+  background: #F8FAFC;
+  border: 1px solid #E2E8F0;
+  border-radius: 10px;
+  padding: 0.75rem 0.85rem;
+  font-size: 0.78rem;
+  transition: all 0.2s ease;
+}
+
+.gateway-status-card:hover {
+  border-color: #CBD5E1;
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.05);
+}
+
+[data-theme="dark"] .gateway-status-card {
+  background: #1E293B;
+  border-color: #334155;
+}
+
+.gateway-status-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.4rem;
+}
+
+.gateway-status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.gateway-status-dot.online {
+  background: #10B981;
+  box-shadow: 0 0 6px rgba(16, 185, 129, 0.6);
+}
+
+.gateway-status-dot.degraded {
+  background: #F59E0B;
+  box-shadow: 0 0 6px rgba(245, 158, 11, 0.6);
+}
+
+.gateway-status-title {
+  font-weight: 700;
+  color: #1E293B;
+  font-size: 0.74rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+[data-theme="dark"] .gateway-status-title {
+  color: #F1F5F9;
+}
+
+.gateway-status-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.2rem;
+  font-size: 0.74rem;
+}
+
+.gateway-decoupled-badges {
+  display: flex;
+  gap: 0.25rem;
+  flex-wrap: wrap;
+  margin-top: 0.35rem;
+}
+
+.badge-decoupled-ok {
+  background: #DCFCE7;
+  color: #15803D;
+  border: 1px solid #86EFAC;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 0.68rem;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+}
+
+.badge-decoupled-degraded {
+  background: #FEF3C7;
+  color: #B45309;
+  border: 1px solid #FCD34D;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 0.68rem;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+}
+
+.badge-gateway-header {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.35rem 0.65rem;
+  border-radius: 6px;
+  font-size: 0.78rem;
+  background: #F1F5F9;
+  border: 1px solid #CBD5E1;
+  color: #334155;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.badge-gateway-header:hover {
+  background: #E2E8F0;
+  border-color: #94A3B8;
+}
+
+[data-theme="dark"] .badge-gateway-header {
+  background: #1E293B;
+  border-color: #334155;
+  color: #CBD5E1;
+}
+
+[data-theme="dark"] .badge-gateway-header:hover {
+  background: #334155;
+  color: #F8FAFC;
+}
+
+.decoupled-layer-box {
+  padding: 1rem;
+  border-radius: 8px;
+  border: 1px solid #E2E8F0;
+  background: #F8FAFC;
+  margin-bottom: 0.75rem;
+}
+
+[data-theme="dark"] .decoupled-layer-box {
+  background: #1E293B;
+  border-color: #334155;
+}
+
+
 

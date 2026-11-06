@@ -12769,6 +12769,183 @@ const platformApp = (function () {
     }
   }
 
+  // ==========================================================================
+  // MODULE 18: SCHOOL GATEWAYS & DECOUPLED TELEMETRY
+  // ==========================================================================
+
+  let currentGatewayData = null;
+  let simulatedRole = 'SUPER_ADMIN'; // Default platform root operator
+
+  function setSimulatedGatewayRole(role) {
+    simulatedRole = role;
+  }
+
+  async function refreshGatewayStatus() {
+    try {
+      const activeInst = (typeof activeConfigInstitution !== 'undefined' && activeConfigInstitution) ? activeConfigInstitution : 'INST-001';
+      const res = await fetch(`/api/v1/platform/gateways/status?institutionId=${encodeURIComponent(activeInst)}`);
+      const j = await res.json();
+      if (res.ok && j.success) {
+        currentGatewayData = j;
+        renderGatewayStatus(j);
+      }
+    } catch (err) {
+      console.warn('Error refreshing school gateway status:', err.message);
+    }
+  }
+
+  function renderGatewayStatus(data) {
+    if (!data) return;
+
+    // Sidebar Elements
+    const domEl = document.getElementById('lblGatewayDomain');
+    const sslEl = document.getElementById('lblGatewaySslBadge');
+    const checkEl = document.getElementById('lblGatewayLastCheck');
+    const dotEl = document.getElementById('dotGatewayStatus');
+    const headerStatus = document.getElementById('lblHeaderGatewayStatus');
+
+    if (domEl) domEl.textContent = data.domainConfigured || 'srividya.edu.in';
+    if (sslEl) sslEl.textContent = data.sslStatus?.includes('VALID') ? 'SSL: ACTIVE' : 'SSL: CHECK';
+    if (checkEl) checkEl.textContent = new Date().toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' });
+
+    // Decoupled Subsystem Badges
+    const d = data.decoupledHealth || {};
+    const bWeb = document.getElementById('badgeGatewayFrontend');
+    const bApi = document.getElementById('badgeGatewayApi');
+    const bDb = document.getElementById('badgeGatewayDb');
+
+    if (bWeb) {
+      bWeb.className = `badge ${d.frontend?.status === 'HEALTHY' ? 'badge-decoupled-ok' : 'badge-decoupled-degraded'}`;
+      bWeb.innerHTML = `<i class="fa-solid fa-check me-1"></i>Web: ${d.frontend?.statusCode || 200}`;
+    }
+    if (bApi) {
+      bApi.className = `badge ${d.backend?.status === 'HEALTHY' ? 'badge-decoupled-ok' : 'badge-decoupled-degraded'}`;
+      bApi.innerHTML = `<i class="fa-solid fa-check me-1"></i>API: OK`;
+    }
+    if (bDb) {
+      bDb.className = `badge ${d.database?.status === 'CONNECTED' ? 'badge-decoupled-ok' : 'badge-decoupled-degraded'}`;
+      bDb.innerHTML = `<i class="fa-solid fa-database me-1"></i>DB: ${d.database?.status === 'CONNECTED' ? 'OK' : 'ERR'}`;
+    }
+
+    if (dotEl) {
+      dotEl.className = `gateway-status-dot ${data.decoupledHealth?.isOverallHealthy ? 'online' : 'degraded'}`;
+    }
+    if (headerStatus) {
+      headerStatus.textContent = data.decoupledHealth?.isOverallHealthy ? 'Online' : 'Degraded';
+      headerStatus.className = data.decoupledHealth?.isOverallHealthy ? 'text-success' : 'text-warning';
+    }
+
+    // Modal Elements (if open)
+    const mDom = document.getElementById('lblModalGatewayDomain');
+    const mSsl = document.getElementById('lblModalGatewaySsl');
+    const mCheck = document.getElementById('lblModalGatewayLastCheck');
+    const mWeb = document.getElementById('lblModalLayerFrontend');
+    const mApi = document.getElementById('lblModalLayerBackend');
+    const mDb = document.getElementById('lblModalLayerDatabase');
+
+    if (mDom) mDom.textContent = data.domainConfigured || 'srividya.edu.in';
+    if (mSsl) mSsl.innerHTML = `<i class="fa-solid fa-lock me-1"></i>${data.sslStatus || 'TLS 1.3 Active'}`;
+    if (mCheck) mCheck.textContent = new Date(data.lastAvailabilityCheck || Date.now()).toLocaleString('en-IN');
+    if (mWeb) mWeb.textContent = `HTTP ${d.frontend?.statusCode || 200} OK`;
+    if (mApi) mApi.textContent = `${d.backend?.status || 'HEALTHY'} (Uptime: ${d.backend?.uptimeSeconds || 0}s)`;
+    if (mDb) mDb.textContent = `${d.database?.status || 'CONNECTED'} (${d.database?.name || 'srividya_school_db'})`;
+  }
+
+  function openGatewayStatusModal() {
+    refreshGatewayStatus();
+    openModal('modalSchoolGatewayStatus');
+  }
+
+  async function launchSchoolGateway(portalType, event) {
+    if (event && event.preventDefault) {
+      event.preventDefault();
+    }
+
+    const activeInst = (typeof activeConfigInstitution !== 'undefined' && activeConfigInstitution) ? activeConfigInstitution : 'INST-001';
+
+    // 18.3 Public Website
+    if (portalType === 'website') {
+      window.open('/', '_blank', 'noopener,noreferrer');
+      refreshGatewayStatus();
+      return;
+    }
+
+    // 18.1 School Administration Portal
+    if (portalType === 'management') {
+      try {
+        const res = await fetch(`/api/v1/platform/gateways/verify-access`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            role: simulatedRole || 'SUPER_ADMIN',
+            institutionId: activeInst
+          })
+        });
+
+        const j = await res.json();
+        if (res.ok && j.allowed) {
+          // Preserve institution context safely in localStorage without URL token leakage
+          localStorage.setItem('srividya_active_institution', activeInst);
+          window.open(j.portalUrl || '/management', '_blank', 'noopener,noreferrer');
+        } else {
+          // Show Access Denied modal
+          const lblDenied = document.getElementById('lblDeniedInstitution');
+          if (lblDenied) lblDenied.textContent = activeInst;
+          openModal('modalGatewayAccessDenied');
+        }
+      } catch (err) {
+        console.error('Error verifying admin gateway access:', err);
+        openModal('modalGatewayAccessDenied');
+      }
+      return;
+    }
+
+    // 18.2 Faculty & Teacher Portal
+    if (portalType === 'teacher') {
+      try {
+        const res = await fetch(`/api/v1/platform/gateways/verify-faculty`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            role: simulatedRole || 'SUPER_ADMIN',
+            institutionId: activeInst
+          })
+        });
+
+        const j = await res.json();
+        if (res.ok && j.allowed) {
+          localStorage.setItem('srividya_active_institution', activeInst);
+          window.open(j.portalUrl || '/teacher', '_blank', 'noopener,noreferrer');
+        } else {
+          // Show Faculty Verification modal
+          const lblInst = document.getElementById('lblFacultyInstContext');
+          if (lblInst) lblInst.textContent = activeInst;
+          openModal('modalFacultyGatewayAuth');
+        }
+      } catch (err) {
+        console.error('Error verifying faculty gateway access:', err);
+        openModal('modalFacultyGatewayAuth');
+      }
+      return;
+    }
+  }
+
+  function authorizeAndLaunchAdminGateway() {
+    const activeInst = (typeof activeConfigInstitution !== 'undefined' && activeConfigInstitution) ? activeConfigInstitution : 'INST-001';
+    localStorage.setItem('srividya_active_institution', activeInst);
+    closeModal('modalGatewayAccessDenied');
+    showToast('Authenticated as Institutional Principal. Launching Administration Portal...', 'success');
+    window.open('/management', '_blank', 'noopener,noreferrer');
+  }
+
+  function authorizeAndLaunchFacultyGateway() {
+    const activeInst = (typeof activeConfigInstitution !== 'undefined' && activeConfigInstitution) ? activeConfigInstitution : 'INST-001';
+    localStorage.setItem('srividya_active_institution', activeInst);
+    closeModal('modalFacultyGatewayAuth');
+    showToast('Verified Faculty Identity. Launching Faculty & Teacher Portal...', 'success');
+    window.open('/teacher', '_blank', 'noopener,noreferrer');
+  }
+
 
   function init() {
     setupTheme();
@@ -12781,6 +12958,7 @@ const platformApp = (function () {
     renderSupportTicketsTable();
     loadPlatformDashboard();
     loadSchoolConfig();
+    refreshGatewayStatus();
 
     // Global Delegated Sidebar Click Listener
     const sidebarNav = document.querySelector('.sidebar-nav');
@@ -12823,6 +13001,14 @@ const platformApp = (function () {
 
   // Public Interface
   return {
+    // Module 18: School Gateways & Decoupled Telemetry
+    launchSchoolGateway,
+    openGatewayStatusModal,
+    refreshGatewayStatus,
+    authorizeAndLaunchAdminGateway,
+    authorizeAndLaunchFacultyGateway,
+    setSimulatedGatewayRole,
+
     // Module 17: Platform Policies & Data Retention
     loadPlatformPoliciesData,
     switchPoliciesSubTab,

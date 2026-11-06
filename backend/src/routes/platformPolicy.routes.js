@@ -32,3 +32,4 @@ router.post('/requests/:id/reject', controller.rejectDataRequest);
 router.post('/requests/:id/fulfill', controller.fulfillDataRequest);
 
 module.exports = router;
+
