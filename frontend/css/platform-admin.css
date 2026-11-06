@@ -4314,6 +4314,112 @@ input:checked+.pa-slider:before {
   color: #93C5FD;
 }
 
+/* =========================================================================
+   COMPLETE PLATFORM ADMINISTRATION WORKFLOWS (A–F) STYLES
+   ========================================================================= */
+.workflow-stepper-box {
+  background: #090D16;
+  border: 1px solid #1E293B;
+  border-radius: 12px;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 680px;
+  margin: 0 auto 1.5rem auto;
+}
+
+.workflow-step-item {
+  width: 100%;
+  padding: 0.9rem 1.25rem;
+  border: 1px solid #334155;
+  border-radius: 8px;
+  background: #0F172A;
+  color: #F8FAFC;
+  font-size: 0.92rem;
+  font-weight: 600;
+  text-align: center;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.workflow-step-item:hover {
+  border-color: #38BDF8;
+  background: #1E293B;
+  color: #38BDF8;
+  transform: translateY(-1px);
+}
+
+.workflow-step-item.active {
+  border-color: #10B981;
+  background: rgba(16, 185, 129, 0.12);
+  color: #34D399;
+}
+
+.workflow-step-arrow {
+  color: #64748B;
+  font-size: 1.15rem;
+  line-height: 1;
+  padding: 0.5rem 0;
+  user-select: none;
+}
+
+.workflow-card {
+  border: 1px solid #E2E8F0;
+  border-radius: 10px;
+  background: #FFFFFF;
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: all 0.2s ease;
+  height: 100%;
+}
+
+.workflow-card:hover {
+  border-color: #4F46E5;
+  box-shadow: 0 6px 16px rgba(79, 70, 229, 0.08);
+}
+
+[data-theme="dark"] .workflow-card {
+  background: #1E293B;
+  border-color: #334155;
+}
+
+.workflow-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 0.75rem;
+}
+
+.workflow-badge-pill {
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 12px;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.workflow-log-console {
+  background: #0F172A;
+  color: #38BDF8;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 0.75rem;
+  padding: 0.75rem;
+  border-radius: 6px;
+  border: 1px solid #334155;
+  max-height: 200px;
+  overflow-y: auto;
+  line-height: 1.5;
+}
+
+
 
 
 

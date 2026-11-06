@@ -91,6 +91,7 @@ const globalSettingsRoutes = require('./globalSettings.routes');
 const platformPolicyRoutes = require('./platformPolicy.routes');
 const schoolGatewayRoutes = require('./schoolGateway.routes');
 const globalActionPatternRoutes = require('./globalActionPattern.routes');
+const platformWorkflowRoutes = require('./platformWorkflow.routes');
 const platformRouter = express.Router();
 platformRouter.get('/dashboard', dashboardController.getPlatformDashboard);
 platformRouter.use('/institutions', institutionRoutes);
@@ -114,6 +115,7 @@ platformRouter.use('/settings', globalSettingsRoutes);
 platformRouter.use('/policies', platformPolicyRoutes);
 platformRouter.use('/gateways', schoolGatewayRoutes);
 platformRouter.use('/actions', globalActionPatternRoutes);
+platformRouter.use('/workflows', platformWorkflowRoutes);
 router.use('/platform', platformRouter);
 router.use('/institutions', institutionRoutes);
 router.use('/schools/config', schoolConfigRoutes);
@@ -142,6 +144,8 @@ router.use('/platform/gateways', schoolGatewayRoutes);
 router.use('/gateways', schoolGatewayRoutes);
 router.use('/platform/actions', globalActionPatternRoutes);
 router.use('/actions', globalActionPatternRoutes);
+router.use('/platform/workflows', platformWorkflowRoutes);
+router.use('/workflows', platformWorkflowRoutes);
 
 // Mount timetable module endpoints at /api/v1/timetable
 const timetableRoutes = require('./timetable.routes');

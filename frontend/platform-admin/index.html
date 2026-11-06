@@ -122,6 +122,11 @@
         <span class="nav-text">Global Action Patterns</span>
         <span class="nav-badge" style="background: rgba(239,68,68,0.15); color: #EF4444; font-size: 0.65rem;">Safeguards</span>
       </a>
+      <a href="#workflows" class="nav-link" data-view="workflows" onclick="platformApp.navigateTo('workflows')">
+        <span class="nav-icon"><i class="fa-solid fa-diagram-project"></i></span>
+        <span class="nav-text">Core Workflows (A–F)</span>
+        <span class="nav-badge" style="background: rgba(16,185,129,0.15); color: #10B981; font-size: 0.65rem;">Ready</span>
+      </a>
 
       <!-- 5. SCHOOL GATEWAYS (MODULE 18) -->
       <div class="nav-section-title">School Gateways</div>
@@ -5427,6 +5432,527 @@
               <div id="streamActionDiagnosticLogs" class="p-2 border rounded font-mono small" style="background:#0F172A; color:#E2E8F0; min-height: 120px; max-height: 240px; overflow-y: auto; font-size: 0.75rem;">
                 <div class="text-muted">// Invariant telemetry active. All actions adhere to post-backend confirmation and input-preservation standards.</div>
               </div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- =======================================================================
+           COMPLETE PLATFORM ADMINISTRATION WORKFLOWS (A–F) VIEW
+           ======================================================================= -->
+      <section class="portal-view" id="view-workflows">
+        <div class="pa-card">
+          <div class="pa-card-header">
+            <div>
+              <h3 class="pa-card-title"><i class="fa-solid fa-diagram-project text-primary"></i> Complete Platform Administration Workflows</h3>
+              <p class="pa-card-desc">End-to-end operational workflows (A through F) required for full production readiness and audit governance</p>
+            </div>
+            <div class="d-flex gap-2">
+              <button class="btn-pa btn-pa-secondary" onclick="platformApp.loadWorkflowsData()">
+                <i class="fa-solid fa-arrows-rotate"></i> Refresh Workflows
+              </button>
+            </div>
+          </div>
+
+          <!-- Workflows Subnav Tabs -->
+          <div class="pol-subnav mb-3">
+            <button class="pol-subnav-btn active" id="btnWfTabOverview" onclick="platformApp.switchWorkflowTab('overview')">
+              <i class="fa-solid fa-table-cells-large"></i> Workflows Hub (A–F)
+            </button>
+            <button class="pol-subnav-btn" id="btnWfTabA" onclick="platformApp.switchWorkflowTab('wfA')">
+              <i class="fa-solid fa-school"></i> Workflow A: Register School
+            </button>
+            <button class="pol-subnav-btn" id="btnWfTabB" onclick="platformApp.switchWorkflowTab('wfB')">
+              <i class="fa-solid fa-user-plus"></i> Workflow B: Invite Admin
+            </button>
+            <button class="pol-subnav-btn" id="btnWfTabC" onclick="platformApp.switchWorkflowTab('wfC')">
+              <i class="fa-solid fa-cloud-arrow-up"></i> Workflow C: Deploy Version
+            </button>
+            <button class="pol-subnav-btn" id="btnWfTabD" onclick="platformApp.switchWorkflowTab('wfD')">
+              <i class="fa-solid fa-triangle-exclamation"></i> Workflow D: Resolve Incident
+            </button>
+            <button class="pol-subnav-btn" id="btnWfTabE" onclick="platformApp.switchWorkflowTab('wfE')">
+              <i class="fa-solid fa-user-lock"></i> Workflow E: Suspend Account
+            </button>
+            <button class="pol-subnav-btn" id="btnWfTabF" onclick="platformApp.switchWorkflowTab('wfF')">
+              <i class="fa-solid fa-file-import"></i> Workflow F: Import Records
+            </button>
+          </div>
+
+          <!-- Tab 1: Workflows Overview Hub -->
+          <div id="wfSectionOverview">
+            <div class="row g-3">
+              <!-- Workflow A Card -->
+              <div class="col-md-6 col-lg-4">
+                <div class="workflow-card">
+                  <div>
+                    <div class="workflow-card-header">
+                      <span class="workflow-badge-pill bg-primary-subtle text-primary border border-primary-subtle">
+                        <i class="fa-solid fa-school"></i> Workflow A
+                      </span>
+                      <span class="badge bg-success-subtle text-success">6 Steps</span>
+                    </div>
+                    <h5 class="h6 fw-bold text-dark mb-1">Register a New School</h5>
+                    <p class="text-muted small mb-3">6-step provisioning lifecycle: institution record, identity/academic defaults, domain verification, admin invitation, permission validation, and activation with zero fabricated records.</p>
+                  </div>
+                  <button class="btn btn-sm btn-outline-primary w-100" onclick="platformApp.switchWorkflowTab('wfA')">
+                    <i class="fa-solid fa-arrow-right me-1"></i> Open Workflow A
+                  </button>
+                </div>
+              </div>
+
+              <!-- Workflow B Card -->
+              <div class="col-md-6 col-lg-4">
+                <div class="workflow-card">
+                  <div>
+                    <div class="workflow-card-header">
+                      <span class="workflow-badge-pill bg-info-subtle text-info border border-info-subtle">
+                        <i class="fa-solid fa-user-plus"></i> Workflow B
+                      </span>
+                      <span class="badge bg-success-subtle text-success">10 Steps</span>
+                    </div>
+                    <h5 class="h6 fw-bold text-dark mb-1">Invite School Administrator</h5>
+                    <p class="text-muted small mb-3">10-step institutional administrator provisioning: official email invite, cryptographic invitation token, identity verification, role validity checks, scoped sign-in, and audit logging.</p>
+                  </div>
+                  <button class="btn btn-sm btn-outline-info w-100" onclick="platformApp.switchWorkflowTab('wfB')">
+                    <i class="fa-solid fa-arrow-right me-1"></i> Open Workflow B
+                  </button>
+                </div>
+              </div>
+
+              <!-- Workflow C Card -->
+              <div class="col-md-6 col-lg-4">
+                <div class="workflow-card">
+                  <div>
+                    <div class="workflow-card-header">
+                      <span class="workflow-badge-pill bg-warning-subtle text-warning border border-warning-subtle">
+                        <i class="fa-solid fa-cloud-arrow-up"></i> Workflow C
+                      </span>
+                      <span class="badge bg-success-subtle text-success">7 Steps</span>
+                    </div>
+                    <h5 class="h6 fw-bold text-dark mb-1">Deploy Application Version</h5>
+                    <p class="text-muted small mb-3">7-step deployment management: version review, authorized initiation, automated pre-flight checks, real-time log streaming, health verification, and operator-approved rollback.</p>
+                  </div>
+                  <button class="btn btn-sm btn-outline-warning w-100" onclick="platformApp.switchWorkflowTab('wfC')">
+                    <i class="fa-solid fa-arrow-right me-1"></i> Open Workflow C
+                  </button>
+                </div>
+              </div>
+
+              <!-- Workflow D Card -->
+              <div class="col-md-6 col-lg-4">
+                <div class="workflow-card">
+                  <div>
+                    <div class="workflow-card-header">
+                      <span class="workflow-badge-pill bg-danger-subtle text-danger border border-danger-subtle">
+                        <i class="fa-solid fa-triangle-exclamation"></i> Workflow D
+                      </span>
+                      <span class="badge bg-success-subtle text-success">8 Steps</span>
+                    </div>
+                    <h5 class="h6 fw-bold text-dark mb-1">Resolve System Incident</h5>
+                    <p class="text-muted small mb-3">8-step incident response: health check/support alert, docket creation, severity &amp; owner assignment, log investigation, mitigation, telemetry recovery verification, RCA, and audit linking.</p>
+                  </div>
+                  <button class="btn btn-sm btn-outline-danger w-100" onclick="platformApp.switchWorkflowTab('wfD')">
+                    <i class="fa-solid fa-arrow-right me-1"></i> Open Workflow D
+                  </button>
+                </div>
+              </div>
+
+              <!-- Workflow E Card -->
+              <div class="col-md-6 col-lg-4">
+                <div class="workflow-card">
+                  <div>
+                    <div class="workflow-card-header">
+                      <span class="workflow-badge-pill bg-danger-subtle text-danger border border-danger-subtle">
+                        <i class="fa-solid fa-user-lock"></i> Workflow E
+                      </span>
+                      <span class="badge bg-success-subtle text-success">8 Steps</span>
+                    </div>
+                    <h5 class="h6 fw-bold text-dark mb-1">Suspend Compromised Account</h5>
+                    <p class="text-muted small mb-3">8-step account containment: suspicious account identification, evidence review, immediate session kill-switch, policy notification, investigation, and authorized reinstatement with mandatory MFA.</p>
+                  </div>
+                  <button class="btn btn-sm btn-outline-danger w-100" onclick="platformApp.switchWorkflowTab('wfE')">
+                    <i class="fa-solid fa-arrow-right me-1"></i> Open Workflow E
+                  </button>
+                </div>
+              </div>
+
+              <!-- Workflow F Card -->
+              <div class="col-md-6 col-lg-4">
+                <div class="workflow-card">
+                  <div>
+                    <div class="workflow-card-header">
+                      <span class="workflow-badge-pill bg-success-subtle text-success border border-success-subtle">
+                        <i class="fa-solid fa-file-import"></i> Workflow F
+                      </span>
+                      <span class="badge bg-success-subtle text-success">10 Steps</span>
+                    </div>
+                    <h5 class="h6 fw-bold text-dark mb-1">Import School Records</h5>
+                    <p class="text-muted small mb-3">10-step institutional data migration: file upload, column mapping, required fields validation, duplicate preview, Dry-Run test import, production approval, error CSV export, and portal verification.</p>
+                  </div>
+                  <button class="btn btn-sm btn-outline-success w-100" onclick="platformApp.switchWorkflowTab('wfF')">
+                    <i class="fa-solid fa-arrow-right me-1"></i> Open Workflow F
+                  </button>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- Tab 2: Workflow A (Register a New School) -->
+          <div id="wfSectionA" style="display: none;">
+            <div class="p-3 border rounded bg-light mb-3">
+              <h5 class="h6 fw-bold text-dark mb-2"><i class="fa-solid fa-school text-primary me-2"></i>Workflow A: Register a New School (6-Step Lifecycle)</h5>
+              
+              <!-- Invariant Alert -->
+              <div class="alert alert-info py-2 px-3 small mb-3">
+                <i class="fa-solid fa-shield-check text-primary me-1"></i>
+                <strong>Statutory Zero-Fabricated Data Invariant:</strong> At activation, the school is ready to sign in and begin its own setup. Student, staff and financial records are NOT fabricated automatically; they must be imported or created through the school's operational workflows.
+              </div>
+
+              <!-- Visual 6-Step Vertical Flowchart (Exact specification from diagram) -->
+              <div class="workflow-stepper-box mb-3">
+                <div class="workflow-step-item" id="wfA_step1">1. Create institution record</div>
+                <div class="workflow-step-arrow">↓</div>
+                <div class="workflow-step-item" id="wfA_step2">2. Configure school identity and academic defaults</div>
+                <div class="workflow-step-arrow">↓</div>
+                <div class="workflow-step-item" id="wfA_step3">3. Verify domains and email</div>
+                <div class="workflow-step-arrow">↓</div>
+                <div class="workflow-step-item" id="wfA_step4">4. Invite institution administrator</div>
+                <div class="workflow-step-arrow">↓</div>
+                <div class="workflow-step-item" id="wfA_step5">5. Validate permissions and configuration</div>
+                <div class="workflow-step-arrow">↓</div>
+                <div class="workflow-step-item" id="wfA_step6">6. Activate institution</div>
+              </div>
+
+              <!-- Interactive Execution Form -->
+              <div class="pa-field-card">
+                <div class="pa-field-card-title">Provision New Institution Campus</div>
+                <div class="row g-2 mb-2">
+                  <div class="col-md-4">
+                    <label class="form-label small fw-bold">Institution Code *</label>
+                    <input type="text" class="form-control form-control-sm font-mono" id="txtWfA_Code" placeholder="e.g. SV-TIRUPATI" value="SV-TIRUPATI">
+                  </div>
+                  <div class="col-md-8">
+                    <label class="form-label small fw-bold">Institution Full Name *</label>
+                    <input type="text" class="form-control form-control-sm" id="txtWfA_Name" placeholder="e.g. Sri Vidya Model High School (Tirupati Campus)" value="Sri Vidya Model High School (Tirupati Campus)">
+                  </div>
+                </div>
+                <div class="row g-2 mb-2">
+                  <div class="col-md-4">
+                    <label class="form-label small fw-bold">Primary Domain *</label>
+                    <input type="text" class="form-control form-control-sm font-mono" id="txtWfA_Domain" value="tirupati.srividya.edu.in">
+                  </div>
+                  <div class="col-md-4">
+                    <label class="form-label small fw-bold">Initial Administrator Email *</label>
+                    <input type="email" class="form-control form-control-sm" id="txtWfA_AdminEmail" value="principal.tirupati@srividya.edu.in">
+                  </div>
+                  <div class="col-md-4">
+                    <label class="form-label small fw-bold">Affiliation Board</label>
+                    <input type="text" class="form-control form-control-sm" id="txtWfA_Board" value="Andhra Pradesh State Board (AP SSC)">
+                  </div>
+                </div>
+                <div class="mt-3 text-end">
+                  <button class="btn btn-sm btn-primary px-3" onclick="platformApp.executeWorkflowA()">
+                    <i class="fa-solid fa-play me-1"></i> Execute Complete 6-Step Workflow A
+                  </button>
+                </div>
+              </div>
+
+              <!-- Live Execution Outcome Box -->
+              <div id="boxWfA_Outcome" class="mt-3" style="display: none;">
+                <div class="alert alert-success py-2 px-3 small mb-2" id="lblWfA_SuccessMessage">
+                  Institution successfully provisioned and activated.
+                </div>
+                <div class="p-3 border rounded bg-white font-mono small">
+                  <div><strong>Activation Status:</strong> <span class="badge bg-success">ACTIVE</span></div>
+                  <div><strong>Zero-Data Guarantee:</strong> <span class="text-success">0 students, 0 staff, 0 fee records fabricated. Clean state confirmed.</span></div>
+                  <div><strong>Initial Admin Activation Link:</strong> <code id="lblWfA_InviteLink">http://localhost:5000/management?activate=...</code></div>
+                  <div><strong>PlatformAudit Seal:</strong> <span class="text-primary" id="lblWfA_AuditId">AUD-XXX</span></div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- Tab 3: Workflow B (Invite Administrator) -->
+          <div id="wfSectionB" style="display: none;">
+            <div class="p-3 border rounded bg-light mb-3">
+              <h5 class="h6 fw-bold text-dark mb-2"><i class="fa-solid fa-user-plus text-primary me-2"></i>Workflow B: Invite a New School Administrator (10 Steps)</h5>
+              <p class="text-muted small mb-3">Manages institutional administrator onboarding: invitation issuance, cryptographic token verification, role checks, and scoped activation.</p>
+
+              <div class="row g-3">
+                <div class="col-md-6">
+                  <div class="pa-field-card h-100">
+                    <div class="pa-field-card-title">Step 1–6: Issue Secure Invitation</div>
+                    <div class="mb-2">
+                      <label class="form-label small fw-bold">Target Institution *</label>
+                      <select class="form-select form-select-sm font-mono" id="selWfB_Inst">
+                        <option value="INST-001">INST-001: Main Campus</option>
+                        <option value="INST-002">INST-002: City Branch</option>
+                        <option value="INST-004">INST-004: Junior College</option>
+                      </select>
+                    </div>
+                    <div class="mb-2">
+                      <label class="form-label small fw-bold">Official Email Address *</label>
+                      <input type="email" class="form-control form-control-sm" id="txtWfB_Email" value="viceprincipal.city@srividya.edu.in">
+                    </div>
+                    <div class="mb-2">
+                      <label class="form-label small fw-bold">Institution-Level Role *</label>
+                      <select class="form-select form-select-sm" id="selWfB_Role">
+                        <option value="Institutional Principal">Institutional Principal</option>
+                        <option value="Campus Administrator" selected>Campus Administrator</option>
+                        <option value="Vice Principal & Academic Dean">Vice Principal &amp; Academic Dean</option>
+                      </select>
+                    </div>
+                    <button class="btn btn-sm btn-primary w-100 mt-2" onclick="platformApp.executeWorkflowB()">
+                      <i class="fa-solid fa-paper-plane me-1"></i> Send Cryptographic Invitation
+                    </button>
+                  </div>
+                </div>
+
+                <div class="col-md-6">
+                  <div class="pa-field-card h-100">
+                    <div class="pa-field-card-title">Step 7–10: Verify &amp; Activate Account</div>
+                    <div class="mb-2">
+                      <label class="form-label small fw-bold">Invitation Token *</label>
+                      <input type="text" class="form-control form-control-sm font-mono" id="txtWfB_Token" placeholder="AUTH-INV-XXXX">
+                    </div>
+                    <p class="text-muted small mb-3">Simulates the recipient verifying their identity and the platform confirming token validity, role template active state, and scoping access exclusively to the target institution.</p>
+                    <button class="btn btn-sm btn-success w-100" onclick="platformApp.activateAdminAccount()">
+                      <i class="fa-solid fa-shield-check me-1"></i> Verify &amp; Complete Activation
+                    </button>
+                    <div id="boxWfB_Outcome" class="mt-2" style="display: none;">
+                      <div class="alert alert-success py-1 px-2 small mb-0" id="lblWfB_Outcome">Account activated. Scoped access granted.</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Tab 4: Workflow C (Deploy Application Version) -->
+          <div id="wfSectionC" style="display: none;">
+            <div class="p-3 border rounded bg-light mb-3">
+              <h5 class="h6 fw-bold text-dark mb-2"><i class="fa-solid fa-cloud-arrow-up text-primary me-2"></i>Workflow C: Deploy a New Application Version (7 Steps)</h5>
+              <p class="text-muted small mb-2">Automated checks, deployment initiation, live log monitoring, decoupled health check verification, and operator-approved rollback.</p>
+
+              <div class="pa-field-card mb-3">
+                <div class="row g-2 align-items-center">
+                  <div class="col-md-3">
+                    <label class="form-label small fw-bold">Target Version *</label>
+                    <input type="text" class="form-control form-control-sm font-mono" id="txtWfC_Version" value="v2.5.0">
+                  </div>
+                  <div class="col-md-3">
+                    <label class="form-label small fw-bold">Commit SHA *</label>
+                    <input type="text" class="form-control form-control-sm font-mono" id="txtWfC_Commit" value="6198ab0">
+                  </div>
+                  <div class="col-md-3">
+                    <label class="form-label small fw-bold">Environment</label>
+                    <input type="text" class="form-control form-control-sm font-mono" value="PRODUCTION" readonly>
+                  </div>
+                  <div class="col-md-3 text-end pt-3">
+                    <button class="btn btn-sm btn-primary me-1" onclick="platformApp.executeWorkflowC(false)">
+                      <i class="fa-solid fa-rocket me-1"></i> Initiate Deployment
+                    </button>
+                    <button class="btn btn-sm btn-outline-danger" onclick="platformApp.executeWorkflowC(true)" title="Simulates a check failure to test rollback workflow">
+                      <i class="fa-solid fa-bug me-1"></i> Test Failure
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Live Deployment Log Console -->
+              <div class="pa-field-card">
+                <div class="pa-field-card-title d-flex justify-content-between align-items-center">
+                  <span><i class="fa-solid fa-terminal text-primary"></i> Automated Checks &amp; Deployment Stream</span>
+                  <button class="btn btn-sm btn-outline-danger py-0 px-2" id="btnWfC_Rollback" style="display: none;" onclick="platformApp.rollbackWorkflowC()">
+                    <i class="fa-solid fa-rotate-left me-1"></i> Request Rollback
+                  </button>
+                </div>
+                <div class="workflow-log-console" id="logWfC_Console">
+                  // Deployment stream ready. Press 'Initiate Deployment' to run automated checks.
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Tab 5: Workflow D (Resolve System Incident) -->
+          <div id="wfSectionD" style="display: none;">
+            <div class="p-3 border rounded bg-light mb-3">
+              <h5 class="h6 fw-bold text-dark mb-2"><i class="fa-solid fa-triangle-exclamation text-primary me-2"></i>Workflow D: Resolve a System Incident (8 Steps)</h5>
+              <p class="text-muted small mb-3">Problem intake from telemetry, incident ticketing, owner assignment, log triage, mitigation, telemetry recovery probe, RCA, and audit closure.</p>
+
+              <div class="row g-3">
+                <div class="col-md-6">
+                  <div class="pa-field-card h-100">
+                    <div class="pa-field-card-title">Step 1–3: Intake &amp; Triage Incident</div>
+                    <div class="mb-2">
+                      <label class="form-label small fw-bold">Problem Title *</label>
+                      <input type="text" class="form-control form-control-sm" id="txtWfD_Title" value="Transient socket saturation on Gateway Ingress pool">
+                    </div>
+                    <div class="row g-2 mb-2">
+                      <div class="col-6">
+                        <label class="form-label small fw-bold">Source *</label>
+                        <select class="form-select form-select-sm" id="selWfD_Source">
+                          <option value="HEALTH_CHECK">System Health Check</option>
+                          <option value="SUPPORT_TICKET">Support Ticket</option>
+                          <option value="SECURITY_MONITOR">Security Monitoring</option>
+                        </select>
+                      </div>
+                      <div class="col-6">
+                        <label class="form-label small fw-bold">Severity *</label>
+                        <select class="form-select form-select-sm font-mono" id="selWfD_Severity">
+                          <option value="P1_CRITICAL">P1 - Critical</option>
+                          <option value="P2_HIGH" selected>P2 - High</option>
+                          <option value="P3_MEDIUM">P3 - Medium</option>
+                        </select>
+                      </div>
+                    </div>
+                    <button class="btn btn-sm btn-danger w-100 mt-2" onclick="platformApp.createIncidentWorkflow()">
+                      <i class="fa-solid fa-bell me-1"></i> Create Incident Docket
+                    </button>
+                  </div>
+                </div>
+
+                <div class="col-md-6">
+                  <div class="pa-field-card h-100">
+                    <div class="pa-field-card-title">Step 4–8: Mitigate, Verify &amp; Resolve</div>
+                    <div class="mb-2">
+                      <label class="form-label small fw-bold">Incident Docket ID *</label>
+                      <input type="text" class="form-control form-control-sm font-mono" id="txtWfD_IncidentId" placeholder="INC-2026-XXXX">
+                    </div>
+                    <div class="mb-2">
+                      <label class="form-label small fw-bold">Mitigation Actions Taken</label>
+                      <input type="text" class="form-control form-control-sm" id="txtWfD_Mitigation" value="Recycled keep-alive connection pool; re-allocated socket buffers">
+                    </div>
+                    <div class="mb-2">
+                      <label class="form-label small fw-bold">Root Cause Analysis (RCA)</label>
+                      <input type="text" class="form-control form-control-sm" id="txtWfD_RootCause" value="Socket buffer exhaustion under concurrent bulk report generation">
+                    </div>
+                    <button class="btn btn-sm btn-success w-100 mt-2" onclick="platformApp.resolveIncidentWorkflow()">
+                      <i class="fa-solid fa-circle-check me-1"></i> Verify Telemetry &amp; Close Incident
+                    </button>
+                    <div id="boxWfD_Outcome" class="mt-2" style="display: none;">
+                      <div class="alert alert-success py-1 px-2 small mb-0" id="lblWfD_Outcome">Incident resolved. Health checks confirmed 100% recovery.</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Tab 6: Workflow E (Suspend Compromised Account) -->
+          <div id="wfSectionE" style="display: none;">
+            <div class="p-3 border rounded bg-light mb-3">
+              <h5 class="h6 fw-bold text-dark mb-2"><i class="fa-solid fa-user-lock text-primary me-2"></i>Workflow E: Suspend a Compromised Account (8 Steps)</h5>
+              <p class="text-muted small mb-3">Evidence review, immediate session kill-switch, policy notifications, security findings, and authorized reinstatement with mandatory MFA.</p>
+
+              <div class="row g-3">
+                <div class="col-md-6">
+                  <div class="pa-field-card h-100">
+                    <div class="pa-field-card-title">Step 1–5: Review Evidence &amp; Enforce Kill-Switch</div>
+                    <div class="mb-2">
+                      <label class="form-label small fw-bold">Compromised User ID *</label>
+                      <input type="text" class="form-control form-control-sm font-mono" id="txtWfE_UserId" value="USR-1005">
+                    </div>
+                    <div class="mb-2">
+                      <label class="form-label small fw-bold">Compromise Reason / Evidence</label>
+                      <textarea class="form-control form-control-sm" id="txtWfE_Reason" rows="2">Repeated brute force failures followed by anomalous session creation from unmapped subnet.</textarea>
+                    </div>
+                    <button class="btn btn-sm btn-danger w-100 mt-2" onclick="platformApp.suspendAccountWorkflow()">
+                      <i class="fa-solid fa-ban me-1"></i> Suspend &amp; Terminate All Sessions
+                    </button>
+                    <div id="boxWfE_SuspendOutcome" class="mt-2" style="display: none;">
+                      <div class="alert alert-danger py-1 px-2 small mb-0" id="lblWfE_SuspendOutcome">Account suspended. All JWT/session cookies revoked immediately.</div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-md-6">
+                  <div class="pa-field-card h-100">
+                    <div class="pa-field-card-title">Step 6–8: Investigate &amp; Reinstate Access</div>
+                    <div class="mb-2">
+                      <label class="form-label small fw-bold">Signatory Authorization Reference *</label>
+                      <input type="text" class="form-control form-control-sm font-mono" id="txtWfE_Signatory" value="Trust Chief Information Security Officer">
+                    </div>
+                    <div class="form-check mb-2">
+                      <input class="form-check-input" type="checkbox" id="chkWfE_ResetPass" checked>
+                      <label class="form-check-label small" for="chkWfE_ResetPass">Enforce mandatory password reset on next login</label>
+                    </div>
+                    <div class="form-check mb-3">
+                      <input class="form-check-input" type="checkbox" id="chkWfE_Mfa" checked>
+                      <label class="form-check-label small" for="chkWfE_Mfa">Enforce mandatory Hardware/App TOTP MFA</label>
+                    </div>
+                    <button class="btn btn-sm btn-primary w-100" onclick="platformApp.reinstateAccountWorkflow()">
+                      <i class="fa-solid fa-lock-open me-1"></i> Authorize &amp; Reinstate Account
+                    </button>
+                    <div id="boxWfE_ReinstateOutcome" class="mt-2" style="display: none;">
+                      <div class="alert alert-success py-1 px-2 small mb-0" id="lblWfE_ReinstateOutcome">Account reinstated under audit seal.</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Tab 7: Workflow F (Import an Existing School's Records) -->
+          <div id="wfSectionF" style="display: none;">
+            <div class="p-3 border rounded bg-light mb-3">
+              <h5 class="h6 fw-bold text-dark mb-2"><i class="fa-solid fa-file-import text-primary me-2"></i>Workflow F: Import an Existing School's Records (10 Steps)</h5>
+              <p class="text-muted small mb-2">10-step institutional migration: column mapping, validation, duplicate preview, Dry-Run test import, approved production ingest, and school portal verification.</p>
+
+              <div class="pa-field-card mb-3">
+                <div class="row g-2 align-items-center">
+                  <div class="col-md-4">
+                    <label class="form-label small fw-bold">Target Campus *</label>
+                    <select class="form-select form-select-sm font-mono" id="selWfF_Inst">
+                      <option value="INST-001">INST-001: Main Campus</option>
+                      <option value="INST-002">INST-002: City Branch</option>
+                      <option value="INST-004" selected>INST-004: Junior College</option>
+                    </select>
+                  </div>
+                  <div class="col-md-4">
+                    <label class="form-label small fw-bold">Record Category</label>
+                    <select class="form-select form-select-sm" id="selWfF_Category">
+                      <option value="students" selected>Student Enrollment &amp; Demographics</option>
+                      <option value="staff">Teaching &amp; Non-Teaching Staff</option>
+                      <option value="classes">Classes &amp; Sections Structure</option>
+                    </select>
+                  </div>
+                  <div class="col-md-4 text-end pt-3">
+                    <button class="btn btn-sm btn-outline-primary me-1" onclick="platformApp.testImportWorkflow()">
+                      <i class="fa-solid fa-vial me-1"></i> Step 6–7: Test Import (Dry-Run)
+                    </button>
+                    <button class="btn btn-sm btn-success" onclick="platformApp.approveImportWorkflow()">
+                      <i class="fa-solid fa-circle-check me-1"></i> Step 8: Approve Production Import
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Dry Run & Ingest Outcome -->
+              <div id="boxWfF_Outcome" style="display: none;">
+                <div class="p-3 border rounded bg-white font-mono small mb-2">
+                  <div class="d-flex justify-content-between align-items-center mb-2">
+                    <strong class="text-dark">Execution Mode: <span id="lblWfF_Mode" class="text-primary">DRY_RUN</span></strong>
+                    <span class="badge bg-secondary" id="lblWfF_JobId">IMP-2026-XXXX</span>
+                  </div>
+                  <div class="row g-2 mb-2">
+                    <div class="col-4"><span class="text-success fw-bold">Valid Records:</span> <span id="lblWfF_Valid">3</span></div>
+                    <div class="col-4"><span class="text-danger fw-bold">Rejected / Duplicates:</span> <span id="lblWfF_Rejected">1</span></div>
+                    <div class="col-4"><span class="text-muted fw-bold">Ingested to DB:</span> <span id="lblWfF_Ingested">0</span></div>
+                  </div>
+                  <div class="pt-2 border-top d-flex justify-content-between align-items-center">
+                    <a href="/management?tab=students" target="_blank" class="btn btn-sm btn-outline-secondary py-1" id="linkWfF_PortalVerify">
+                      <i class="fa-solid fa-arrow-up-right-from-square me-1"></i> Step 10: Verify in School Admin Portal
+                    </a>
+                    <span class="text-muted" style="font-size:0.72rem;">Error list CSV preserved for compliance audit.</span>
+                  </div>
+                </div>
+              </div>
+
             </div>
           </div>
 
