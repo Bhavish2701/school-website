@@ -4213,5 +4213,107 @@ input:checked+.pa-slider:before {
   border-color: #334155;
 }
 
+/* =========================================================================
+   GLOBAL ACTION PATTERNS & HIGH-IMPACT CONFIRMATION STYLES
+   ========================================================================= */
+.high-impact-dialog {
+  border-top: 4px solid #EF4444 !important;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.15), 0 10px 10px -5px rgba(0, 0, 0, 0.08) !important;
+}
+
+.diff-preview-box {
+  background: #F8FAFC;
+  border: 1px solid #E2E8F0;
+  border-radius: 6px;
+  padding: 0.75rem;
+  margin-top: 0.5rem;
+}
+
+[data-theme="dark"] .diff-preview-box {
+  background: #0F172A;
+  border-color: #334155;
+}
+
+.diff-chip-add {
+  display: inline-flex;
+  align-items: center;
+  background: #DCFCE7;
+  color: #15803D;
+  border: 1px solid #86EFAC;
+  padding: 2px 7px;
+  border-radius: 4px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  margin: 2px;
+}
+
+.diff-chip-del {
+  display: inline-flex;
+  align-items: center;
+  background: #FEE2E2;
+  color: #B91C1C;
+  border: 1px solid #FCA5A5;
+  padding: 2px 7px;
+  border-radius: 4px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  margin: 2px;
+}
+
+.action-pattern-card {
+  border: 1px solid #E2E8F0;
+  border-radius: 8px;
+  padding: 1rem;
+  background: #FFFFFF;
+  transition: all 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.action-pattern-card:hover {
+  border-color: #4F46E5;
+  box-shadow: 0 4px 12px rgba(79, 70, 229, 0.08);
+}
+
+[data-theme="dark"] .action-pattern-card {
+  background: #1E293B;
+  border-color: #334155;
+}
+
+.action-pattern-card.severity-danger {
+  border-left: 4px solid #EF4444;
+}
+
+.action-pattern-card.severity-warning {
+  border-left: 4px solid #F59E0B;
+}
+
+.action-pattern-card.severity-primary {
+  border-left: 4px solid #4F46E5;
+}
+
+.action-pattern-card.severity-info {
+  border-left: 4px solid #0EA5E9;
+}
+
+.feedback-invariant-banner {
+  background: #EFF6FF;
+  border: 1px solid #BFDBFE;
+  border-left: 4px solid #3B82F6;
+  border-radius: 6px;
+  padding: 0.75rem 1rem;
+  margin-bottom: 1rem;
+  font-size: 0.82rem;
+  color: #1E40AF;
+}
+
+[data-theme="dark"] .feedback-invariant-banner {
+  background: #172554;
+  border-color: #1E40AF;
+  color: #93C5FD;
+}
+
+
 
 

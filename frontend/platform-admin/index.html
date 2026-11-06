@@ -117,6 +117,11 @@
         <span class="nav-icon"><i class="fa-solid fa-scale-balanced"></i></span>
         <span class="nav-text">Platform Policies &amp; Data Retention</span>
       </a>
+      <a href="#actions" class="nav-link" data-view="actions" onclick="platformApp.navigateTo('actions')">
+        <span class="nav-icon"><i class="fa-solid fa-shield-cat"></i></span>
+        <span class="nav-text">Global Action Patterns</span>
+        <span class="nav-badge" style="background: rgba(239,68,68,0.15); color: #EF4444; font-size: 0.65rem;">Safeguards</span>
+      </a>
 
       <!-- 5. SCHOOL GATEWAYS (MODULE 18) -->
       <div class="nav-section-title">School Gateways</div>
@@ -5284,6 +5289,150 @@
         </div>
       </section>
 
+      <!-- =======================================================================
+           RECOMMENDED GLOBAL ACTION PATTERNS & HIGH-IMPACT SAFEGUARDS VIEW
+           ======================================================================= -->
+      <section class="portal-view" id="view-actions">
+        <div class="pa-card">
+          <div class="pa-card-header">
+            <div>
+              <h3 class="pa-card-title"><i class="fa-solid fa-shield-cat text-primary"></i> Recommended Global Action Patterns</h3>
+              <p class="pa-card-desc">Consistent confirmation dialogs, field validation, duplicate checking, difference previews, and post-backend feedback invariants</p>
+            </div>
+            <div class="d-flex gap-2">
+              <button class="btn-pa btn-pa-secondary" onclick="platformApp.loadActionPatternsData()">
+                <i class="fa-solid fa-arrows-rotate"></i> Refresh Patterns
+              </button>
+            </div>
+          </div>
+
+          <!-- Dual Feedback Invariants Callout Box -->
+          <div class="feedback-invariant-banner">
+            <div class="d-flex align-items-center gap-2 mb-1">
+              <i class="fa-solid fa-scale-balanced fs-5 text-primary"></i>
+              <strong class="fs-6">Global Feedback &amp; Integrity Invariants:</strong>
+            </div>
+            <ul class="mb-0 ps-3 small" style="line-height: 1.6;">
+              <li><strong>Success Messages Invariant:</strong> Use success messages <em>only after the backend confirms that an operation succeeded</em> (no optimistic/premature success alerts).</li>
+              <li><strong>Input Preservation Invariant:</strong> If a request fails, <em>preserve the user's input where safe and display a clear error</em> (no wiping modal form data on validation error).</li>
+            </ul>
+          </div>
+
+          <!-- Subnav for Action Patterns -->
+          <div class="pol-subnav mb-3">
+            <button class="pol-subnav-btn active" id="btnActionTabRegistry" onclick="platformApp.switchActionSubTab('registry')">
+              <i class="fa-solid fa-list-check"></i> 10 Regulated Action Patterns
+            </button>
+            <button class="pol-subnav-btn" id="btnActionTabDiagnostic" onclick="platformApp.switchActionSubTab('diagnostic')">
+              <i class="fa-solid fa-vial-circle-check"></i> Interactive Verification Sandbox
+            </button>
+          </div>
+
+          <!-- Section A: 10 Action Rules Cards & Directory -->
+          <div id="actionSectionRegistry">
+            <div class="row g-3" id="containerActionPatternCards">
+              <!-- Rendered dynamically by platformApp.loadActionPatternsData() -->
+              <div class="col-12 text-center py-4 text-muted">
+                <i class="fa-solid fa-spinner fa-spin me-2"></i> Loading 10 Regulated Action Patterns...
+              </div>
+            </div>
+          </div>
+
+          <!-- Section B: Interactive Verification Sandbox -->
+          <div id="actionSectionDiagnostic" style="display: none;">
+            <div class="p-3 border rounded bg-light mb-3">
+              <h5 class="h6 fw-bold mb-1 text-dark"><i class="fa-solid fa-microscope text-primary me-2"></i>Action Pattern Invariant Test Harness</h5>
+              <p class="text-muted small mb-3">Test duplicate detection, difference previews, access impact preservation, and input-retaining error handling in real time.</p>
+              
+              <div class="row g-3">
+                <!-- Sandbox Test 1: Duplicate Institution Code & Domain Check -->
+                <div class="col-md-6">
+                  <div class="p-3 border rounded bg-white h-100 shadow-sm">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                      <span class="badge bg-primary font-mono">CREATE_INSTITUTION</span>
+                      <span class="badge bg-light text-dark border">Duplicate &amp; Workflow Test</span>
+                    </div>
+                    <strong class="d-block small text-dark mb-1">Test 1: Duplicate Code / Domain Collision</strong>
+                    <p class="text-muted small mb-2">Attempts to create institution with existing code <code>SV-MAIN</code>. Confirms duplicate validation rejection, zero optimistic toast, and full input preservation.</p>
+                    <div class="d-flex gap-2">
+                      <button class="btn btn-sm btn-outline-danger" onclick="platformApp.testActionTrigger('CREATE_INSTITUTION_DUPLICATE')">
+                        <i class="fa-solid fa-triangle-exclamation me-1"></i> Trigger Duplicate Error
+                      </button>
+                      <button class="btn btn-sm btn-outline-primary" onclick="platformApp.testActionTrigger('CREATE_INSTITUTION_VALID')">
+                        <i class="fa-solid fa-check me-1"></i> Trigger Valid Creation
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Sandbox Test 2: URL Token Leakage Rejection -->
+                <div class="col-md-6">
+                  <div class="p-3 border rounded bg-white h-100 shadow-sm">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                      <span class="badge bg-info font-mono">OPEN_SCHOOL_PORTAL</span>
+                      <span class="badge bg-light text-dark border">Security Invariant Test</span>
+                    </div>
+                    <strong class="d-block small text-dark mb-1">Test 2: Sensitive URL Parameter Injection</strong>
+                    <p class="text-muted small mb-2">Attempts to open school portal with <code>?token=xyz_secret</code> in URL. Confirms security rejection, prevents token leakage, and preserves input.</p>
+                    <div class="d-flex gap-2">
+                      <button class="btn btn-sm btn-outline-danger" onclick="platformApp.testActionTrigger('OPEN_PORTAL_LEAK')">
+                        <i class="fa-solid fa-shield-xmark me-1"></i> Test Token Leakage Block
+                      </button>
+                      <button class="btn btn-sm btn-outline-success" onclick="platformApp.testActionTrigger('OPEN_PORTAL_SAFE')">
+                        <i class="fa-solid fa-lock me-1"></i> Test Secure Session Launch
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Sandbox Test 3: High-Impact Suspension Justification & Authority -->
+                <div class="col-md-6">
+                  <div class="p-3 border rounded bg-white h-100 shadow-sm">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                      <span class="badge bg-danger font-mono">SUSPEND_INSTITUTION</span>
+                      <span class="badge bg-light text-dark border">Authority &amp; Impact Test</span>
+                    </div>
+                    <strong class="d-block small text-dark mb-1">Test 3: Mandatory Reason &amp; Authority Confirmation</strong>
+                    <p class="text-muted small mb-2">Verifies that suspension requires at least 8 characters justification, explicit authority confirmation checkbox, and preserves zero-deletion records.</p>
+                    <button class="btn btn-sm btn-outline-warning" onclick="platformApp.testActionTrigger('SUSPEND_INSTITUTION')">
+                      <i class="fa-solid fa-ban me-1"></i> Test Suspension Pattern
+                    </button>
+                  </div>
+                </div>
+
+                <!-- Sandbox Test 4: Role Permission Differences Preview -->
+                <div class="col-md-6">
+                  <div class="p-3 border rounded bg-white h-100 shadow-sm">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                      <span class="badge bg-warning text-dark font-mono">CHANGE_PRIVILEGED_ROLE</span>
+                      <span class="badge bg-light text-dark border">Difference Preview Test</span>
+                    </div>
+                    <strong class="d-block small text-dark mb-1">Test 4: Permission Difference Calculation</strong>
+                    <p class="text-muted small mb-2">Demonstrates dynamic permission diff computation showing added (+) and removed (-) granular entitlements prior to authorized approval.</p>
+                    <button class="btn btn-sm btn-outline-primary" onclick="platformApp.testActionTrigger('CHANGE_ROLE_DIFF')">
+                      <i class="fa-solid fa-code-compare me-1"></i> Test Permission Diff
+                    </button>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+            <!-- Invariant Execution Telemetry / Audit Log -->
+            <div class="pa-field-card mt-3">
+              <div class="pa-field-card-title d-flex justify-content-between align-items-center">
+                <span><i class="fa-solid fa-terminal text-primary"></i> Live Pattern Execution &amp; Feedback Verification Stream</span>
+                <button class="btn btn-sm btn-outline-secondary py-0 px-2" style="font-size: 0.72rem;" onclick="platformApp.clearActionDiagnosticLogs()">Clear Stream</button>
+              </div>
+              <div id="streamActionDiagnosticLogs" class="p-2 border rounded font-mono small" style="background:#0F172A; color:#E2E8F0; min-height: 120px; max-height: 240px; overflow-y: auto; font-size: 0.75rem;">
+                <div class="text-muted">// Invariant telemetry active. All actions adhere to post-backend confirmation and input-preservation standards.</div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
     </main>
   </div>
 
@@ -10275,6 +10424,76 @@
           <i class="fa-solid fa-arrows-rotate me-1"></i> Re-check Telemetry Now
         </button>
         <button type="button" class="btn btn-sm btn-secondary" onclick="platformApp.closeModal('modalSchoolGatewayStatus')">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       GLOBAL ACTION PATTERN: UNIFIED HIGH-IMPACT CONFIRMATION MODAL
+       ========================================================================= -->
+  <div class="pa-modal-backdrop" id="modalHighImpactConfirm" style="display: none; z-index: 1060;">
+    <div class="pa-modal-card high-impact-dialog" style="max-width: 650px; width: 92%;">
+      <div class="pa-modal-header" id="modalHighImpactHeader" style="padding: 1.25rem 1.5rem; border-bottom: 1px solid #E2E8F0; display: flex; justify-content: space-between; align-items: center;">
+        <div class="d-flex align-items-center gap-2">
+          <span class="badge bg-danger p-2" id="badgeHighImpactSeverity"><i class="fa-solid fa-triangle-exclamation" id="iconHighImpactSeverity"></i></span>
+          <div>
+            <h4 class="h6 mb-0 fw-bold" id="lblHighImpactTitle">Confirm High-Impact Operation</h4>
+            <span class="text-muted small" id="lblHighImpactRequiredBehavior">Statutory Action Pattern</span>
+          </div>
+        </div>
+        <button type="button" class="btn-close" onclick="platformApp.closeModal('modalHighImpactConfirm')"></button>
+      </div>
+
+      <div class="pa-modal-body" style="padding: 1.5rem; max-height: 75vh; overflow-y: auto;">
+        
+        <!-- Target Record & Scope Indicator -->
+        <div class="p-3 border rounded bg-light mb-3">
+          <div class="d-flex justify-content-between align-items-center">
+            <span class="text-muted small fw-bold text-uppercase">Target Record / Scope</span>
+            <span class="badge bg-secondary font-mono" id="lblHighImpactActionKey">ACTION_KEY</span>
+          </div>
+          <div class="fw-bold fs-6 text-dark mt-1 font-mono" id="lblHighImpactTarget">Target Record Details</div>
+        </div>
+
+        <!-- Invariant / Impact Explanation Box -->
+        <div class="alert alert-warning py-2 px-3 small mb-3" id="divHighImpactImpactNotice">
+          <i class="fa-solid fa-circle-exclamation me-1"></i>
+          <span id="lblHighImpactImpactSummary">Impact summary</span>
+        </div>
+
+        <!-- Dynamic Action Fields Container (Diff Preview, Scope checklist, Duplicate notice) -->
+        <div id="divHighImpactCustomFields" class="mb-3"></div>
+
+        <!-- Mandatory Justification / Reason -->
+        <div class="mb-3" id="groupHighImpactReason">
+          <label class="form-label small fw-bold">
+            <span class="text-danger">*</span> Statutory Justification / Reason:
+          </label>
+          <textarea class="form-control form-control-sm" id="txtHighImpactReason" rows="2" placeholder="State operational or regulatory justification..."></textarea>
+          <div class="form-text text-muted" style="font-size: 0.72rem;">All justifications are permanently sealed in PlatformAudit logs.</div>
+        </div>
+
+        <!-- Mandatory Authority Confirmation Checkbox -->
+        <div class="form-check p-3 bg-light border rounded mb-3" id="groupHighImpactAuthority">
+          <input class="form-check-input" type="checkbox" id="chkHighImpactAuthority" style="cursor: pointer;">
+          <label class="form-check-label small fw-bold text-dark" for="chkHighImpactAuthority" style="cursor: pointer;" id="lblHighImpactAuthorityText">
+            I confirm that I possess statutory authorization to execute this high-impact operation.
+          </label>
+        </div>
+
+        <!-- Dynamic Failure Alert (Preserves input without closing modal) -->
+        <div class="alert alert-danger py-2 px-3 small mb-0" id="alertHighImpactError" style="display: none;">
+          <i class="fa-solid fa-triangle-exclamation me-1"></i>
+          <span id="lblHighImpactErrorMessage">Error message</span>
+        </div>
+
+      </div>
+
+      <div class="pa-modal-footer" style="padding: 1rem 1.5rem; border-top: 1px solid #E2E8F0; display: flex; justify-content: space-between; align-items: center; background: #F8FAFC;">
+        <button type="button" class="btn btn-sm btn-secondary" onclick="platformApp.closeModal('modalHighImpactConfirm')">Cancel</button>
+        <button type="button" class="btn btn-sm btn-danger" id="btnHighImpactConfirmSubmit" onclick="platformApp.submitHighImpactConfirmation()">
+          <i class="fa-solid fa-check me-1"></i> <span id="lblHighImpactConfirmBtn">Confirm &amp; Execute</span>
+        </button>
       </div>
     </div>
   </div>

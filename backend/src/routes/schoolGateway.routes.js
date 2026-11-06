@@ -23,3 +23,4 @@ router.get('/verify-faculty', controller.verifyFacultyAccess);
 router.post('/verify-faculty', controller.verifyFacultyAccess);
 
 module.exports = router;
+

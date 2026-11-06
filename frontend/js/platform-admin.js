@@ -513,6 +513,8 @@ const platformApp = (function () {
       loadGlobalSettingsData();
     } else if (viewId === 'policies' && typeof loadPlatformPoliciesData === 'function') {
       loadPlatformPoliciesData();
+    } else if (viewId === 'actions' && typeof loadActionPatternsData === 'function') {
+      loadActionPatternsData();
     }
 
     // Update Header Breadcrumb
@@ -534,6 +536,7 @@ const platformApp = (function () {
         'domains-email': 'Domains, Email & Notifications',
         'settings': 'Global Platform Settings',
         'policies': 'Platform Policies & Data Retention',
+        'actions': 'Global Action Patterns & High-Impact Safeguards',
         'audit': 'Immutable Audit Logs'
       };
       crumbEl.textContent = titles[viewId] || 'Platform Administration';
@@ -12946,6 +12949,618 @@ const platformApp = (function () {
     window.open('/teacher', '_blank', 'noopener,noreferrer');
   }
 
+  // =========================================================================
+  // GLOBAL ACTION PATTERNS & HIGH-IMPACT SAFEGUARDS FRAMEWORK
+  // =========================================================================
+
+  let highImpactState = {
+    currentAction: null,
+    currentPayload: {},
+    onConfirmCallback: null,
+    preValidation: null,
+    patternsRegistry: []
+  };
+
+  async function loadActionPatternsData() {
+    try {
+      const res = await fetch('/api/v1/platform/actions/patterns');
+      const data = await res.json();
+      if (data.success && Array.isArray(data.patterns)) {
+        highImpactState.patternsRegistry = data.patterns;
+        renderActionPatternsCards(data.patterns);
+      }
+    } catch (err) {
+      console.warn('Failed to fetch action patterns registry:', err);
+    }
+  }
+
+  function renderActionPatternsCards(patterns) {
+    const container = document.getElementById('containerActionPatternCards');
+    if (!container) return;
+
+    if (!patterns || patterns.length === 0) {
+      container.innerHTML = '<div class="col-12 text-center text-muted py-4">No action patterns registered.</div>';
+      return;
+    }
+
+    container.innerHTML = patterns.map((p, idx) => {
+      const severity = p.severity || 'primary';
+      const badgeClass = severity === 'danger' ? 'bg-danger' :
+                         severity === 'warning' ? 'bg-warning text-dark' :
+                         severity === 'info' ? 'bg-info text-dark' : 'bg-primary';
+
+      const iconClass = severity === 'danger' ? 'fa-ban' :
+                        severity === 'warning' ? 'fa-triangle-exclamation' :
+                        severity === 'info' ? 'fa-database' : 'fa-shield-halved';
+
+      return `
+        <div class="col-md-6 col-lg-6 mb-3">
+          <div class="action-pattern-card severity-${severity} h-100 shadow-sm">
+            <div>
+              <div class="d-flex justify-content-between align-items-center mb-2">
+                <span class="badge ${badgeClass} font-mono px-2 py-1">
+                  <i class="fa-solid ${iconClass} me-1"></i> ${p.action}
+                </span>
+                <span class="text-muted small">Pattern #${idx + 1}</span>
+              </div>
+              <h5 class="h6 fw-bold text-dark mb-1">${p.name}</h5>
+              <div class="small text-muted mb-2" style="font-size:0.78rem;">
+                <strong>Required Behavior:</strong> ${p.requiredBehavior}
+              </div>
+              <div class="p-2 border rounded bg-light small mb-3 text-secondary" style="font-size:0.75rem;">
+                <i class="fa-solid fa-circle-info text-primary me-1"></i> ${p.impactSummary}
+              </div>
+            </div>
+            <div class="d-flex justify-content-between align-items-center pt-2 border-top">
+              <span class="text-muted" style="font-size:0.72rem;">Strict Post-Backend Toast Invariant</span>
+              <button type="button" class="btn btn-sm btn-outline-${severity === 'warning' ? 'secondary' : severity}" 
+                      onclick="platformApp.testActionTrigger('${p.action}')">
+                <i class="fa-solid fa-play me-1"></i> Test Action
+              </button>
+            </div>
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  function switchActionSubTab(tab) {
+    const regSection = document.getElementById('actionSectionRegistry');
+    const diagSection = document.getElementById('actionSectionDiagnostic');
+    const btnReg = document.getElementById('btnActionTabRegistry');
+    const btnDiag = document.getElementById('btnActionTabDiagnostic');
+
+    if (tab === 'diagnostic') {
+      if (regSection) regSection.style.display = 'none';
+      if (diagSection) diagSection.style.display = 'block';
+      if (btnReg) btnReg.classList.remove('active');
+      if (btnDiag) btnDiag.classList.add('active');
+    } else {
+      if (regSection) regSection.style.display = 'block';
+      if (diagSection) diagSection.style.display = 'none';
+      if (btnReg) btnReg.classList.add('active');
+      if (btnDiag) btnDiag.classList.remove('active');
+    }
+  }
+
+  async function openHighImpactModal(actionType, payload = {}, onConfirmCallback = null) {
+    highImpactState.currentAction = actionType;
+    highImpactState.currentPayload = Object.assign({}, payload);
+    highImpactState.onConfirmCallback = onConfirmCallback;
+
+    // Clear previous error message and hide error alert
+    const errAlert = document.getElementById('alertHighImpactError');
+    if (errAlert) errAlert.style.display = 'none';
+
+    // Reset authority checkbox
+    const chkAuth = document.getElementById('chkHighImpactAuthority');
+    if (chkAuth) chkAuth.checked = false;
+
+    // Reset or keep reason if provided
+    const txtReason = document.getElementById('txtHighImpactReason');
+    if (txtReason && payload.reason) {
+      txtReason.value = payload.reason;
+    } else if (txtReason && !txtReason.value) {
+      txtReason.value = '';
+    }
+
+    // Call pre-validation API
+    let validation = null;
+    try {
+      const res = await fetch('/api/v1/platform/actions/validate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ actionType, payload })
+      });
+      validation = await res.json();
+    } catch (err) {
+      console.warn('[ActionPattern] Pre-validation fetch error:', err);
+    }
+
+    highImpactState.preValidation = validation;
+
+    // Populate Modal UI
+    const lblTitle = document.getElementById('lblHighImpactTitle');
+    const lblBehavior = document.getElementById('lblHighImpactRequiredBehavior');
+    const lblActionKey = document.getElementById('lblHighImpactActionKey');
+    const lblTarget = document.getElementById('lblHighImpactTarget');
+    const lblImpactSummary = document.getElementById('lblHighImpactImpactSummary');
+    const badgeSeverity = document.getElementById('badgeHighImpactSeverity');
+    const iconSeverity = document.getElementById('iconHighImpactSeverity');
+    const customFields = document.getElementById('divHighImpactCustomFields');
+    const groupReason = document.getElementById('groupHighImpactReason');
+    const groupAuth = document.getElementById('groupHighImpactAuthority');
+    const lblAuthText = document.getElementById('lblHighImpactAuthorityText');
+    const btnConfirm = document.getElementById('lblHighImpactConfirmBtn');
+
+    if (lblActionKey) lblActionKey.textContent = actionType;
+    if (lblTarget) {
+      lblTarget.textContent = payload.institutionName || payload.name || payload.userName || payload.roleName || payload.targetScope || actionType;
+    }
+
+    // Style severity
+    const sev = validation?.spec?.severity || (actionType.includes('SUSPEND') || actionType.includes('RESTORE') ? 'danger' : 'warning');
+    if (badgeSeverity) {
+      badgeSeverity.className = `badge p-2 bg-${sev === 'danger' ? 'danger' : sev === 'warning' ? 'warning text-dark' : 'primary'}`;
+    }
+    if (iconSeverity) {
+      iconSeverity.className = `fa-solid ${sev === 'danger' ? 'fa-ban' : 'fa-triangle-exclamation'}`;
+    }
+
+    if (lblTitle) {
+      lblTitle.textContent = validation?.spec?.name || `Confirm ${actionType.replace(/_/g, ' ')}`;
+    }
+    if (lblBehavior) {
+      lblBehavior.textContent = validation?.spec?.requiredBehavior || 'Statutory Action Pattern';
+    }
+    if (lblImpactSummary) {
+      lblImpactSummary.textContent = validation?.impactExplanation || validation?.spec?.impactSummary || 'Review potential operational and regulatory impact before executing.';
+    }
+
+    // Render Dynamic Custom Action Fields
+    if (customFields) {
+      customFields.innerHTML = renderDynamicCustomActionFields(actionType, payload, validation);
+    }
+
+    // Configure Reason & Authority requirements
+    if (groupReason) {
+      groupReason.style.display = (actionType === 'SUSPEND_INSTITUTION' || actionType === 'RESTORE_BACKUP' || actionType === 'CHANGE_PRIVILEGED_ROLE') ? 'block' : 'block';
+    }
+    if (groupAuth) {
+      groupAuth.style.display = 'block';
+      if (lblAuthText) {
+        if (actionType === 'SUSPEND_INSTITUTION') {
+          lblAuthText.textContent = 'I confirm that I possess Trust Executive authority to suspend this institution under zero-deletion preservation mandates.';
+        } else if (actionType === 'RESTORE_BACKUP') {
+          lblAuthText.textContent = 'I confirm that I possess Platform Super Administrator credentials and an approved Recovery Ticket ID.';
+        } else if (actionType === 'DISABLE_USER') {
+          lblAuthText.textContent = 'I confirm that access should be revoked while preserving all historical grading & audit trail records.';
+        } else {
+          lblAuthText.textContent = 'I confirm that I possess statutory authorization to execute this high-impact operation.';
+        }
+      }
+    }
+
+    if (btnConfirm) {
+      btnConfirm.textContent = actionType === 'SUSPEND_INSTITUTION' ? 'Confirm Suspension' :
+                               actionType === 'RESTORE_BACKUP' ? 'Execute Recovery' :
+                               actionType === 'DISABLE_USER' ? 'Disable Account' : 'Confirm & Execute';
+    }
+
+    openModal('modalHighImpactConfirm');
+  }
+
+  function renderDynamicCustomActionFields(actionType, payload, validation) {
+    switch (actionType) {
+      case 'CREATE_INSTITUTION': {
+        const dup = validation?.duplicateChecks || { codeExists: false, domainExists: false, udiseExists: false };
+        return `
+          <div class="p-3 border rounded bg-light mb-3">
+            <span class="small text-muted fw-bold text-uppercase d-block mb-2">Duplicate Pre-Verification</span>
+            <div class="row g-2 small">
+              <div class="col-4">
+                <span class="badge ${dup.codeExists ? 'bg-danger' : 'bg-success'} font-mono w-100 py-1">
+                  ${dup.codeExists ? 'CODE IN USE' : 'CODE UNIQUE'}
+                </span>
+              </div>
+              <div class="col-4">
+                <span class="badge ${dup.domainExists ? 'bg-danger' : 'bg-success'} font-mono w-100 py-1">
+                  ${dup.domainExists ? 'DOMAIN IN USE' : 'DOMAIN UNIQUE'}
+                </span>
+              </div>
+              <div class="col-4">
+                <span class="badge ${dup.udiseExists ? 'bg-danger' : 'bg-success'} font-mono w-100 py-1">
+                  ${dup.udiseExists ? 'UDISE IN USE' : 'UDISE UNIQUE'}
+                </span>
+              </div>
+            </div>
+          </div>
+          <div class="mb-3">
+            <label class="form-label small fw-bold">Provisioning Workflow</label>
+            <div class="d-flex gap-3">
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="radInstWorkflow" id="radInstDraft" value="DRAFT" checked>
+                <label class="form-check-label small" for="radInstDraft">Save as Draft Setup Pipeline</label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="radInstWorkflow" id="radInstActivate" value="ACTIVATE">
+                <label class="form-check-label small" for="radInstActivate">Immediate Operational Activation</label>
+              </div>
+            </div>
+          </div>
+        `;
+      }
+
+      case 'SUSPEND_INSTITUTION': {
+        return `
+          <div class="alert alert-secondary py-2 px-3 small mb-2" style="background:#FEF2F2; border: 1px solid #FCA5A5; color:#991B1B;">
+            <i class="fa-solid fa-shield-halved me-1"></i>
+            <strong>Zero-Record Deletion Mandate:</strong> Student grades, historical attendance, fees, and audit trails remain permanently immutable in the database.
+          </div>
+          <div class="p-2 border rounded bg-light small mb-2">
+            <span class="fw-bold d-block text-dark">Services Immediately Disabled:</span>
+            <span class="badge bg-secondary me-1">Public Website</span>
+            <span class="badge bg-secondary me-1">Faculty & Teacher Portal</span>
+            <span class="badge bg-secondary me-1">Student / Parent Portal</span>
+            <span class="badge bg-secondary me-1">API Integrations</span>
+          </div>
+        `;
+      }
+
+      case 'DISABLE_USER': {
+        return `
+          <div class="alert alert-info py-2 px-3 small mb-2">
+            <i class="fa-solid fa-clock-rotate-left me-1"></i>
+            <strong>Historical Integrity Preserved:</strong> All attendance, grade entries, report cards, and financial submissions previously authored by this user remain fully intact.
+          </div>
+          <div class="p-2 border rounded bg-light small mb-2 font-mono">
+            <strong>Session Impact:</strong> Revokes all active JWT and refresh cookies across web and mobile.
+          </div>
+        `;
+      }
+
+      case 'CHANGE_PRIVILEGED_ROLE': {
+        const diffs = validation?.differences || {
+          added: ['data_requests.approve', 'governance_policies.publish'],
+          removed: ['billing.adjust']
+        };
+        return `
+          <div class="diff-preview-box mb-3">
+            <span class="small text-muted fw-bold text-uppercase d-block mb-1">Permission Difference Preview</span>
+            <div class="mb-1">
+              <span class="text-success small fw-bold me-1">Entitlements Added (+):</span>
+              ${diffs.added.length ? diffs.added.map(p => `<span class="diff-chip-add">+ ${p}</span>`).join('') : '<span class="text-muted small">None</span>'}
+            </div>
+            <div>
+              <span class="text-danger small fw-bold me-1">Entitlements Revoked (-):</span>
+              ${diffs.removed.length ? diffs.removed.map(p => `<span class="diff-chip-del">- ${p}</span>`).join('') : '<span class="text-muted small">None</span>'}
+            </div>
+          </div>
+          <div class="mb-2">
+            <label class="form-label small fw-bold">Signatory Authorization Reference</label>
+            <input type="text" class="form-control form-control-sm font-mono" id="txtRoleSignatory" value="Trust Chief Information Officer" placeholder="Authorized Signatory Identity">
+          </div>
+        `;
+      }
+
+      case 'RESTORE_BACKUP': {
+        return `
+          <div class="alert alert-danger py-2 px-3 small mb-2">
+            <i class="fa-solid fa-triangle-exclamation me-1"></i>
+            <strong>CRITICAL RECOVERY PROCEDURE:</strong> Elevated Platform Super Administrator authorization is strictly required. Unrestricted one-click restores are statutorily prohibited.
+          </div>
+          <div class="mb-2">
+            <label class="form-label small fw-bold"><span class="text-danger">*</span> Approved Recovery Ticket / Change Request ID:</label>
+            <input type="text" class="form-control form-control-sm font-mono" id="txtRecoveryTicketId" placeholder="e.g. REC-2026-9041" value="${payload.recoveryTicketId || 'REC-2026-9041'}">
+          </div>
+          <div class="mb-2">
+            <label class="form-label small fw-bold"><span class="text-danger">*</span> Type <code class="text-danger">RESTORE</code> to Confirm:</label>
+            <input type="text" class="form-control form-control-sm font-mono" id="txtRecoveryPhrase" placeholder="RESTORE">
+          </div>
+        `;
+      }
+
+      case 'START_BACKUP': {
+        const sc = validation?.scopeDetails || ['Statutory Database Namespaces', 'Encrypted Media Assets', 'System Configurations', 'Immutable Audit Trails'];
+        return `
+          <div class="p-3 border rounded bg-light mb-2">
+            <span class="small text-muted fw-bold text-uppercase d-block mb-1">Encrypted Point-in-Time Scope</span>
+            <ul class="mb-0 ps-3 small text-dark">
+              ${sc.map(s => `<li>${s}</li>`).join('')}
+            </ul>
+          </div>
+          <div class="small text-muted font-mono">
+            Vault Destination: AWS S3 + Statutory Cold Storage (AES-256-GCM)
+          </div>
+        `;
+      }
+
+      case 'ROTATE_INTEGRATION_CREDENTIAL': {
+        return `
+          <div class="p-3 border rounded bg-light mb-2">
+            <span class="small text-muted fw-bold text-uppercase d-block mb-1">Replacement Credential Validation</span>
+            <div class="font-mono small text-dark">Replacement Key: <code>${payload.replacementKey ? payload.replacementKey.substring(0, 10) + '...' : 'SEC-ROTATED-AES256'}</code></div>
+            <div class="text-success small fw-bold mt-1"><i class="fa-solid fa-circle-check me-1"></i> Endpoint handshake successful (200 OK)</div>
+          </div>
+        `;
+      }
+
+      case 'CHANGE_GLOBAL_SECURITY_POLICY': {
+        return `
+          <div class="p-2 border rounded bg-light small mb-2">
+            <div><strong>Password Policy:</strong> Minimum 8 Characters enforced platform-wide</div>
+            <div><strong>Safe Recovery Policy:</strong> Local password recovery guaranteed for emergency root access</div>
+          </div>
+        `;
+      }
+
+      case 'EXPORT_DATA': {
+        return `
+          <div class="p-2 border rounded bg-light small mb-2">
+            <div><strong>PII Redaction:</strong> Student Aadhaar & password hashes automatically sanitized</div>
+            <div><strong>Compliance Record:</strong> Export sealed under PlatformAudit category DATA_IMPORT_EXPORT</div>
+          </div>
+        `;
+      }
+
+      case 'OPEN_SCHOOL_PORTAL': {
+        return `
+          <div class="p-2 border rounded bg-light small mb-2">
+            <div><strong>Target Portal URL:</strong> <code>/${payload.portal || 'management'}</code></div>
+            <div><strong>Security Invariant:</strong> Cookie/Platform Session Only. Zero session tokens or credentials in URL.</div>
+          </div>
+        `;
+      }
+
+      default:
+        return '';
+    }
+  }
+
+  async function submitHighImpactConfirmation() {
+    const actionType = highImpactState.currentAction;
+    if (!actionType) return;
+
+    const payload = Object.assign({}, highImpactState.currentPayload);
+    const errAlert = document.getElementById('alertHighImpactError');
+    const lblErrMsg = document.getElementById('lblHighImpactErrorMessage');
+
+    function displayErrorAndPreserve(msg) {
+      if (lblErrMsg) lblErrMsg.textContent = msg;
+      if (errAlert) errAlert.style.display = 'block';
+      showToast(msg, 'danger');
+      appendActionDiagnosticLog(`[FAILED CLIENT-CHECK] ${actionType}: ${msg}`);
+      // NOTE: Modal is NOT closed. User input is preserved!
+    }
+
+    // 1. Mandatory Authority Confirmation
+    const chkAuth = document.getElementById('chkHighImpactAuthority');
+    if (!chkAuth || !chkAuth.checked) {
+      displayErrorAndPreserve('You must confirm statutory authority by checking the confirmation box.');
+      return;
+    }
+    payload.authorityConfirmed = true;
+
+    // 2. Reason / Justification
+    const txtReason = document.getElementById('txtHighImpactReason');
+    const reasonVal = txtReason ? txtReason.value.trim() : '';
+    if (actionType === 'SUSPEND_INSTITUTION' && reasonVal.length < 8) {
+      displayErrorAndPreserve('A specific operational reason of at least 8 characters is required for suspension.');
+      return;
+    }
+    payload.reason = reasonVal || 'Administrative Execution';
+
+    // 3. Action-specific fields
+    if (actionType === 'CREATE_INSTITUTION') {
+      const radActivate = document.getElementById('radInstActivate');
+      payload.workflowType = (radActivate && radActivate.checked) ? 'ACTIVATE' : 'DRAFT';
+    } else if (actionType === 'RESTORE_BACKUP') {
+      const ticketId = document.getElementById('txtRecoveryTicketId')?.value.trim();
+      const phrase = document.getElementById('txtRecoveryPhrase')?.value.trim();
+      if (!ticketId) {
+        displayErrorAndPreserve('Approved Recovery Ticket ID / Change Request ID is required.');
+        return;
+      }
+      if (phrase !== 'RESTORE') {
+        displayErrorAndPreserve("You must type 'RESTORE' in capital letters to confirm recovery.");
+        return;
+      }
+      payload.recoveryTicketId = ticketId;
+      payload.confirmationPhrase = phrase;
+      payload.elevatedRole = 'SUPER_ADMIN';
+    } else if (actionType === 'CHANGE_PRIVILEGED_ROLE') {
+      const signatory = document.getElementById('txtRoleSignatory')?.value.trim();
+      if (!signatory) {
+        displayErrorAndPreserve('Signatory authorization reference is required.');
+        return;
+      }
+      payload.approvalSignatory = signatory;
+    }
+
+    // 4. Send Execution Request to Backend
+    try {
+      const res = await fetch('/api/v1/platform/actions/confirm', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          actionType,
+          payload,
+          actor: 'Platform Administrator'
+        })
+      });
+
+      const data = await res.json();
+
+      // INVARIANT 1: IF REQUEST FAILS, PRESERVE INPUT AND DISPLAY CLEAR ERROR
+      if (!res.ok || !data.success) {
+        displayErrorAndPreserve(data.message || 'Operation failed on the server.');
+        return;
+      }
+
+      // INVARIANT 2: USE SUCCESS MESSAGES ONLY AFTER THE BACKEND CONFIRMS SUCCESS
+      closeModal('modalHighImpactConfirm');
+      showToast(data.message || `Action '${actionType}' confirmed and executed.`, 'success');
+      appendActionDiagnosticLog(`[SUCCESS 200 OK] ${actionType}: Confirmed by backend. Audit ID: ${data.auditId || 'SEALED'}`);
+
+      // Run any action callback
+      if (typeof highImpactState.onConfirmCallback === 'function') {
+        highImpactState.onConfirmCallback(data);
+      }
+
+      // Synchronize affected subsystem views
+      if (actionType === 'SUSPEND_INSTITUTION') {
+        const instId = payload.institutionId;
+        const inst = state.institutions?.find(i => i.institutionId === instId || i.id === instId);
+        if (inst) {
+          inst.status = 'Suspended';
+        }
+        if (typeof renderInstitutionsTable === 'function') renderInstitutionsTable();
+        if (typeof updateInstitutionSummaryCards === 'function') updateInstitutionSummaryCards();
+      } else if (actionType === 'START_BACKUP' || actionType === 'RESTORE_BACKUP') {
+        if (typeof loadBackupsData === 'function') loadBackupsData();
+      } else if (actionType === 'DISABLE_USER') {
+        if (typeof loadUsersDirectory === 'function') loadUsersDirectory();
+      }
+
+    } catch (networkErr) {
+      displayErrorAndPreserve(`Network/Server connection failure: ${networkErr.message}`);
+    }
+  }
+
+  // Diagnostic Test Harness Triggers
+  function testActionTrigger(testKey) {
+    switch (testKey) {
+      case 'CREATE_INSTITUTION_DUPLICATE': {
+        // Trigger duplicate code error to verify input preservation & no premature toast
+        openHighImpactModal('CREATE_INSTITUTION', {
+          code: 'SV-MAIN',
+          name: 'Sri Vidya Main Campus (Duplicate)',
+          domain: 'srividya.edu.in',
+          udiseCode: '33240100101'
+        });
+        break;
+      }
+      case 'CREATE_INSTITUTION_VALID': {
+        openHighImpactModal('CREATE_INSTITUTION', {
+          code: `SV-NEW-${Math.floor(100 + Math.random() * 900)}`,
+          name: 'Sri Vidya New Campus Facility',
+          domain: `branch-${Date.now()}.srividya.edu.in`,
+          udiseCode: `3324010${Math.floor(1000 + Math.random() * 9000)}`
+        });
+        break;
+      }
+      case 'OPEN_PORTAL_LEAK': {
+        // Trigger sensitive URL parameter injection error
+        openHighImpactModal('OPEN_SCHOOL_PORTAL', {
+          portal: 'management',
+          queryParams: { token: 'jwt_secret_token_123', admin: 'true' }
+        });
+        break;
+      }
+      case 'OPEN_PORTAL_SAFE': {
+        openHighImpactModal('OPEN_SCHOOL_PORTAL', {
+          portal: 'management',
+          queryParams: { campus: 'SV-MAIN' }
+        }, () => {
+          window.open('/management', '_blank', 'noopener,noreferrer');
+        });
+        break;
+      }
+      case 'SUSPEND_INSTITUTION': {
+        openHighImpactModal('SUSPEND_INSTITUTION', {
+          institutionId: 'INST-002',
+          name: 'Sri Vidya Primary School - Annur',
+          reason: 'Statutory compliance verification and audit review'
+        });
+        break;
+      }
+      case 'CHANGE_ROLE_DIFF': {
+        openHighImpactModal('CHANGE_PRIVILEGED_ROLE', {
+          roleId: 'ROLE-CAMPUS-ADMIN',
+          roleName: 'Institutional Campus Administrator',
+          newPermissions: ['data_requests.approve', 'governance_policies.publish', 'students.view', 'attendance.mark']
+        });
+        break;
+      }
+      case 'DISABLE_USER': {
+        openHighImpactModal('DISABLE_USER', {
+          userId: 'USR-OP-02',
+          userName: 'kavitha.ramesh@srividya.edu.in',
+          reason: 'Employee transition to external research leave'
+        });
+        break;
+      }
+      case 'ROTATE_INTEGRATION_CREDENTIAL': {
+        openHighImpactModal('ROTATE_INTEGRATION_CREDENTIAL', {
+          integrationId: 'INT-001',
+          name: 'Razorpay Statutory Gateway',
+          replacementKey: 'rzp_live_sec_' + Math.random().toString(36).substring(2, 12)
+        });
+        break;
+      }
+      case 'START_BACKUP': {
+        openHighImpactModal('START_BACKUP', {
+          targetScope: 'Full Encrypted Platform Database & Assets'
+        });
+        break;
+      }
+      case 'RESTORE_BACKUP': {
+        openHighImpactModal('RESTORE_BACKUP', {
+          backupId: 'BKP-2026-001',
+          recoveryTicketId: 'REC-2026-9041'
+        });
+        break;
+      }
+      case 'CHANGE_GLOBAL_SECURITY_POLICY': {
+        openHighImpactModal('CHANGE_GLOBAL_SECURITY_POLICY', {
+          policy: { passwordMinLength: 10, mfaPolicy: 'MANDATORY_ALL' }
+        });
+        break;
+      }
+      case 'EXPORT_DATA': {
+        openHighImpactModal('EXPORT_DATA', {
+          scope: 'INSTITUTION_DIRECTORY',
+          exportType: 'CSV'
+        });
+        break;
+      }
+      case 'CREATE_INSTITUTION': {
+        openHighImpactModal('CREATE_INSTITUTION', {
+          code: `SV-${Math.floor(100 + Math.random() * 900)}`,
+          name: 'New Educational Campus Facility',
+          domain: `campus-${Date.now()}.srividya.edu.in`
+        });
+        break;
+      }
+      default: {
+        openHighImpactModal(testKey, {
+          targetScope: testKey
+        });
+        break;
+      }
+    }
+  }
+
+  function appendActionDiagnosticLog(entry) {
+    const stream = document.getElementById('streamActionDiagnosticLogs');
+    if (!stream) return;
+    const time = new Date().toLocaleTimeString('en-IN', { hour12: false });
+    const logLine = document.createElement('div');
+    logLine.style.padding = '2px 0';
+    logLine.style.borderBottom = '1px solid rgba(255,255,255,0.06)';
+    logLine.innerHTML = `<span style="color:#64748B;">[${time}]</span> ${entry}`;
+    stream.appendChild(logLine);
+    stream.scrollTop = stream.scrollHeight;
+  }
+
+  function clearActionDiagnosticLogs() {
+    const stream = document.getElementById('streamActionDiagnosticLogs');
+    if (stream) {
+      stream.innerHTML = '<div class="text-muted">// Telemetry cleared. Active listeners ready.</div>';
+    }
+  }
+
+
 
   function init() {
     setupTheme();
@@ -13001,6 +13616,15 @@ const platformApp = (function () {
 
   // Public Interface
   return {
+    // Global Action Patterns & High-Impact Safeguards
+    loadActionPatternsData,
+    renderActionPatternsCards,
+    switchActionSubTab,
+    openHighImpactModal,
+    submitHighImpactConfirmation,
+    testActionTrigger,
+    clearActionDiagnosticLogs,
+
     // Module 18: School Gateways & Decoupled Telemetry
     launchSchoolGateway,
     openGatewayStatusModal,
