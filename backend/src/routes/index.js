@@ -116,6 +116,12 @@ platformRouter.use('/policies', platformPolicyRoutes);
 platformRouter.use('/gateways', schoolGatewayRoutes);
 platformRouter.use('/actions', globalActionPatternRoutes);
 platformRouter.use('/workflows', platformWorkflowRoutes);
+
+// Mount Modular Backend Architecture (Specification 10: Backend Architecture for Platform Administration)
+const masterModulesRouter = require('../modules');
+platformRouter.use('/modules', masterModulesRouter);
+router.use('/modules', masterModulesRouter);
+
 router.use('/platform', platformRouter);
 router.use('/institutions', institutionRoutes);
 router.use('/schools/config', schoolConfigRoutes);

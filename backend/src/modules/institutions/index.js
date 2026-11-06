@@ -1,11 +1,20 @@
 /**
- * INSTITUTIONS Module
- * Institution Profile, Branches, and School Affiliations
+ * Institutions Module Aggregator
+ * Exposes all 6 architectural layers
  */
-const routes = require('./routes');
+
+const routes = require('./institutions.routes');
+const controller = require('./institutions.controller');
+const service = require('./institutions.service');
+const repository = require('./institutions.repository');
+const validation = require('./institutions.validation');
+const policy = require('./institutions.policy');
 
 module.exports = {
-  name: 'institutions',
-  description: 'Institution Profile, Branches, and School Affiliations',
-  routes
+  routes,
+  controller,
+  service,
+  repository,
+  validation,
+  policy
 };

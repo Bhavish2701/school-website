@@ -1,11 +1,20 @@
 /**
- * USERS Module
- * User Management & Directory Module
+ * Platform Users & Accounts - Module Aggregator
+ * Exports all 6 architectural layers
  */
-const routes = require('./routes');
+
+const routes = require('./users.routes');
+const controller = require('./users.controller');
+const service = require('./users.service');
+const repository = require('./users.repository');
+const validation = require('./users.validation');
+const policy = require('./users.policy');
 
 module.exports = {
-  name: 'users',
-  description: 'User Management & Directory Module',
-  routes
+  routes,
+  controller,
+  service,
+  repository,
+  validation,
+  policy
 };
