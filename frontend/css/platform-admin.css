@@ -773,7 +773,10 @@
 /* Data Tables */
 .pa-table-responsive {
   overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
   border-radius: 8px;
+  scrollbar-width: thin;
+  width: 100%;
 }
 
 .pa-table {
@@ -793,6 +796,7 @@
   padding: 0.85rem 1rem;
   text-align: left;
   border-bottom: 1.5px solid #E2E8F0;
+  white-space: nowrap;
 }
 
 [data-theme="dark"] .pa-table th {
@@ -802,10 +806,11 @@
 }
 
 .pa-table td {
-  padding: 0.95rem 1rem;
+  padding: 0.85rem 1rem;
   border-bottom: 1px solid #E2E8F0;
   color: inherit;
   vertical-align: middle;
+  white-space: nowrap;
 }
 
 [data-theme="dark"] .pa-table td {

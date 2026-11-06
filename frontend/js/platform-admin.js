@@ -717,7 +717,19 @@ const platformApp = (function () {
       const adminEmail = (inst.adminContact && inst.adminContact.email) || (inst.administrators && inst.administrators[0] && inst.administrators[0].email) || (inst.contact && inst.contact.email) || 'N/A';
       const setupStatus = inst.setupStatus || 'Complete';
       const status = inst.status || 'Active';
-      const createdDate = inst.createdDate || '2026-01-01';
+      let formattedDate = '01 Jan 2026';
+      if (inst.createdDate) {
+        try {
+          const d = new Date(inst.createdDate);
+          if (!isNaN(d.getTime())) {
+            formattedDate = d.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+          } else {
+            formattedDate = String(inst.createdDate).split('T')[0];
+          }
+        } catch (e) {
+          formattedDate = String(inst.createdDate).split('T')[0];
+        }
+      }
 
       let setupBadgeClass = 'setup-badge-complete';
       let setupIcon = 'fa-circle-check';
@@ -759,7 +771,7 @@ const platformApp = (function () {
         '<td><div style="font-size: 0.82rem; font-weight: 600; color: var(--color-text-main);">' + adminName + '</div><div style="font-size: 0.74rem; color: #64748B;">' + adminEmail + '</div></td>' +
         '<td><span class="inst-setup-badge ' + setupBadgeClass + '"><i class="fa-solid ' + setupIcon + '"></i> ' + setupStatus + '</span></td>' +
         '<td><span class="inst-status-badge ' + statusBadgeClass + '"><i class="fa-solid ' + statusIcon + '"></i> ' + status + '</span></td>' +
-        '<td><span style="font-size: 0.8rem; color: #475569;">' + createdDate + '</span></td>' +
+        '<td><span style="font-size: 0.8rem; color: #475569; white-space: nowrap;">' + formattedDate + '</span></td>' +
         '<td style="text-align: center;"><div style="display: inline-flex; align-items: center; gap: 0.35rem;">' +
         '<button type="button" class="btn-pa btn-pa-secondary" style="padding: 0.28rem 0.55rem; font-size: 0.75rem;" onclick="platformApp.viewInstitution(\'' + instId + '\')" title="View Full 10-Tab Dossier"><i class="fa-solid fa-eye mr-1"></i> View</button>' +
         '<button type="button" class="btn-pa btn-pa-secondary" style="padding: 0.28rem 0.55rem; font-size: 0.75rem;" onclick="platformApp.openConfigureFromDetail(\'' + instId + '\')" title="Configure Institution"><i class="fa-solid fa-sliders"></i></button>' +
