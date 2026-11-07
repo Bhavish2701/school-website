@@ -328,12 +328,18 @@ body {
 }
 
 .nav-badge {
+  display: none !important;
   font-size: 0.68rem;
   font-weight: 700;
   padding: 0.15rem 0.45rem;
   border-radius: var(--radius-full);
   background: var(--color-primary-tint);
   color: var(--color-primary);
+}
+
+.sidebar-menu .nav-badge,
+.sidebar-menu .nav-sub-badge {
+  display: none !important;
 }
 
 .nav-badge.pulse {
