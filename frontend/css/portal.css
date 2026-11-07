@@ -3926,6 +3926,81 @@ body {
   border-bottom-color: var(--color-primary);
 }
 
+/* ==========================================================================
+   Subview Header Bar & Action Layout (Institutional Standard)
+   ========================================================================== */
+.subview-header-bar {
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  margin-bottom: 1.25rem !important;
+  flex-wrap: wrap !important;
+  gap: 1rem !important;
+}
+
+.subview-header-info,
+.subview-title-group {
+  flex: 1 1 320px;
+}
+
+.subview-header-info h2,
+.subview-header-info h3,
+.subview-title-group h2,
+.subview-title-group h3 {
+  font-size: 1.25rem !important;
+  font-weight: 800 !important;
+  color: var(--color-text-main, #0f172a) !important;
+  margin: 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 0.6rem !important;
+  letter-spacing: -0.01em;
+}
+
+.subview-header-info p,
+.subview-title-group p {
+  font-size: 0.82rem !important;
+  color: var(--color-text-muted, #64748b) !important;
+  margin: 0.25rem 0 0 0 !important;
+  line-height: 1.45 !important;
+}
+
+.subview-header-actions,
+.guardian-header-actions,
+.adm-header-actions,
+.tc-header-actions,
+.perf-header-actions {
+  display: flex !important;
+  align-items: center !important;
+  gap: 0.6rem !important;
+  flex-wrap: wrap !important;
+}
+
+.subview-header-actions .btn,
+.guardian-header-actions .btn,
+.adm-header-actions .btn,
+.tc-header-actions .btn,
+.perf-header-actions .btn {
+  font-weight: 600 !important;
+  font-size: 0.82rem !important;
+  padding: 0.45rem 0.95rem !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 0.45rem !important;
+  border-radius: 8px !important;
+  line-height: 1.4 !important;
+  height: 36px !important;
+  white-space: nowrap !important;
+}
+
+.subview-header-actions .btn i,
+.guardian-header-actions .btn i,
+.adm-header-actions .btn i,
+.tc-header-actions .btn i,
+.perf-header-actions .btn i {
+  font-size: 0.85rem;
+}
+
 .radio-row {
   display: flex;
   gap: 0.75rem;

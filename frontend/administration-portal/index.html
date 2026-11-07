@@ -18,8 +18,8 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
   <!-- Portal Custom CSS -->
-  <link rel="stylesheet" href="/css/portal.css?v=20261107-12">
-  <link rel="stylesheet" href="../css/portal.css?v=20261107-12">
+  <link rel="stylesheet" href="/css/portal.css?v=20261107-13">
+  <link rel="stylesheet" href="../css/portal.css?v=20261107-13">
   <link rel="stylesheet" href="/css/portal-login.css?v=20261107-11">
   <link rel="stylesheet" href="../css/portal-login.css?v=20261107-11">
 </head>
@@ -4404,17 +4404,21 @@
                     <div class="student-subview" id="subview-students-parents" style="display:none;">
 
             <!-- Standard Subview Header Bar -->
-            <div class="subview-header-bar">
+            <div class="subview-header-bar" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; flex-wrap: wrap; gap: 1rem;">
               <div class="subview-header-info">
-                <h3><i class="fa-solid fa-users text-primary"></i> Parent and Guardian Records</h3>
-                <p>Authoritative parent and legal guardian register, verified emergency contacts, student relationships, and parent portal provisioning.</p>
+                <h2 style="font-size: 1.25rem; font-weight: 800; color: #0f172a; margin: 0; display: flex; align-items: center; gap: 0.6rem;">
+                  <i class="fa-solid fa-users text-primary" style="font-size: 1.15rem;"></i> Parent and Guardian Records
+                </h2>
+                <p style="font-size: 0.82rem; color: #64748b; margin: 0.25rem 0 0 0;">
+                  Authoritative parent and legal guardian register, verified emergency contacts, student relationships, and parent portal provisioning.
+                </p>
               </div>
-              <div class="subview-header-actions">
-                <button type="button" class="btn btn-secondary" onclick="portalApp.openVerifyContactModal()" id="btnVerifyContactPrimary">
+              <div class="subview-header-actions" style="display: flex; gap: 0.5rem; flex-wrap: wrap; align-items: center;">
+                <button type="button" class="btn btn-secondary" onclick="portalApp.openVerifyContactModal()" id="btnVerifyContactPrimary" style="font-weight: 600; height: 36px;">
                   <i class="fa-solid fa-user-check text-primary"></i> Verify Contact
                 </button>
-                <button type="button" class="btn btn-primary" onclick="portalApp.openAddGuardianModal()" id="btnAddGuardianPrimary">
-                  <i class="fa-solid fa-user-plus"></i> + Add Guardian
+                <button type="button" class="btn btn-primary" onclick="portalApp.openAddGuardianModal()" id="btnAddGuardianPrimary" style="font-weight: 700; height: 36px;">
+                  <i class="fa-solid fa-user-plus"></i> Add Guardian
                 </button>
               </div>
             </div>
