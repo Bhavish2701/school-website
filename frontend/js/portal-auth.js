@@ -288,8 +288,8 @@ const PortalAuth = {
       const prefix = portalType === 'management' ? 'mgmt' : 'teacher';
       const loginForm = document.getElementById(portalType === 'management' ? 'mgmtLoginForm' : 'teacherLoginForm');
       const otpForm = document.getElementById(`${prefix}OtpForm`);
-      if (otpForm) otpForm.style.display = 'none';
-      if (loginForm) loginForm.style.display = 'block';
+      if (otpForm) { otpForm.style.display = 'none'; otpForm.classList.add('hidden'); }
+      if (loginForm) { loginForm.style.display = ''; loginForm.classList.remove('hidden'); }
 
       // Clear password field requiring credential re-entry
       const passInput = document.getElementById(`${portalType}LoginPass`);
@@ -626,8 +626,8 @@ const PortalAuth = {
       intervalId: null
     };
 
-    if (loginForm) loginForm.style.display = 'none';
-    otpForm.style.display = 'block';
+    if (loginForm) { loginForm.style.display = 'none'; loginForm.classList.add('hidden'); }
+    if (otpForm) { otpForm.style.display = ''; otpForm.classList.remove('hidden'); }
 
     const phoneDisplay = document.getElementById(`${prefix}OtpPhoneDisplay`);
     if (phoneDisplay) phoneDisplay.textContent = maskedPhone;
@@ -792,8 +792,8 @@ const PortalAuth = {
     const loginForm = document.getElementById(portalType === 'management' ? 'mgmtLoginForm' : 'teacherLoginForm');
     const otpForm = document.getElementById(`${prefix}OtpForm`);
 
-    if (otpForm) otpForm.style.display = 'none';
-    if (loginForm) loginForm.style.display = 'block';
+    if (otpForm) { otpForm.style.display = 'none'; otpForm.classList.add('hidden'); }
+      if (loginForm) { loginForm.style.display = ''; loginForm.classList.remove('hidden'); }
 
     this.showToast('Returned to sign-in credentials form', 'fa-arrow-left');
   },
@@ -930,8 +930,8 @@ const PortalAuth = {
 
     const loginForm = document.getElementById(portalType === 'management' ? 'mgmtLoginForm' : 'teacherLoginForm');
     const otpForm = document.getElementById(portalType === 'management' ? 'mgmtOtpForm' : 'teacherOtpForm');
-    if (otpForm) otpForm.style.display = 'none';
-    if (loginForm) loginForm.style.display = 'block';
+    if (otpForm) { otpForm.style.display = 'none'; otpForm.classList.add('hidden'); }
+      if (loginForm) { loginForm.style.display = ''; loginForm.classList.remove('hidden'); }
 
     if (portalType === 'management' && window.portalApp && typeof window.portalApp.loadLiveData === 'function') {
       window.portalApp.loadLiveData();
@@ -1156,8 +1156,8 @@ const PortalAuth = {
       const prefix = portalType === 'management' ? 'mgmt' : 'teacher';
       const loginForm = document.getElementById(portalType === 'management' ? 'mgmtLoginForm' : 'teacherLoginForm');
       const otpForm = document.getElementById(`${prefix}OtpForm`);
-      if (otpForm) otpForm.style.display = 'none';
-      if (loginForm) loginForm.style.display = 'block';
+      if (otpForm) { otpForm.style.display = 'none'; otpForm.classList.add('hidden'); }
+      if (loginForm) { loginForm.style.display = ''; loginForm.classList.remove('hidden'); }
 
       const userInput = document.getElementById(`${portalType}LoginUser`) || document.getElementById(`${portalType}LoginId`);
       const passInput = document.getElementById(`${portalType}LoginPass`);
