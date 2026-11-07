@@ -3930,10 +3930,15 @@ body {
    Subview Header Bar & Action Layout (Institutional Standard)
    ========================================================================== */
 .subview-header-bar {
+  background: var(--color-bg-surface, #ffffff);
+  border: 1px solid var(--color-border, #e2e8f0);
+  border-radius: 12px;
+  padding: 1rem 1.35rem;
+  margin-bottom: 1.25rem !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
   display: flex !important;
   justify-content: space-between !important;
   align-items: center !important;
-  margin-bottom: 1.25rem !important;
   flex-wrap: wrap !important;
   gap: 1rem !important;
 }
@@ -20984,6 +20989,24 @@ input:disabled+.perm-slider {
 }
 
 /* Dark Mode Support */
+[data-theme="dark"] .subview-header-bar {
+  background: #1e293b;
+  border-color: #334155;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+}
+
+[data-theme="dark"] .subview-header-info h2,
+[data-theme="dark"] .subview-header-info h3,
+[data-theme="dark"] .subview-title-group h2,
+[data-theme="dark"] .subview-title-group h3 {
+  color: #f8fafc !important;
+}
+
+[data-theme="dark"] .subview-header-info p,
+[data-theme="dark"] .subview-title-group p {
+  color: #94a3b8 !important;
+}
+
 [data-theme="dark"] .guardian-statutory-notice {
   background: rgba(30, 41, 59, 0.6);
   border-color: #334155;
