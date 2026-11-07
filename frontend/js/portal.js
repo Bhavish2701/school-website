@@ -19913,7 +19913,7 @@ const FEE_CATEGORY_AUDIT_DATA = [
         // 1. Employee ID
         '<td>' +
           '<div style="display:flex; align-items:center; gap:6px;">' +
-            '<span class="badge badge-light font-mono font-weight-bold" style="background:#f1f5f9; color:#0f172a; border:1px solid #cbd5e1; font-size:0.8rem; padding:4px 8px; letter-spacing:0.5px;">' + empId + '</span>' +
+            '<span class="teacher-id-badge">' + empId + '</span>' +
           '</div>' +
         '</td>' +
         // 2. Staff Name
@@ -42244,7 +42244,7 @@ const FEE_CATEGORY_AUDIT_DATA = [
 
       rowsHtml += '<tr data-record-id="' + record.id + '">' +
         // 1. Employee ID
-        '<td><span class="badge badge-light font-mono font-weight-bold" style="background:#f1f5f9; color:#0f172a; border:1px solid #cbd5e1; font-size:0.8rem; padding:4px 8px;">' + empId + '</span></td>' +
+        '<td><span class="teacher-id-badge">' + empId + '</span></td>' +
         // 2. Employee Name
         '<td>' +
           '<div style="display:flex; align-items:center; gap:8px;">' +

@@ -13249,6 +13249,15 @@ input:disabled+.perm-slider {
   color: #ef4444;
 }
 
+.adm-stat-card.card-emerald::after {
+  background: #10b981;
+}
+
+.adm-stat-icon.icon-emerald {
+  background: rgba(16, 185, 129, 0.12);
+  color: #059669;
+}
+
 .adm-stat-card.card-sky::after {
   background: #0284c7;
 }
@@ -26932,6 +26941,7 @@ button.close:hover,
 .parents-filter-grid .tc-select-wrap .tc-filter-select,
 .faculty-filter-grid .tc-select-wrap .tc-filter-select,
 .staff-filter-grid .tc-select-wrap .tc-filter-select,
+.attendance-filter-grid .tc-select-wrap .tc-filter-select,
 .academics-filter-grid .tc-select-wrap .tc-filter-select {
   width: 100%;
   min-width: 0;
@@ -27004,6 +27014,7 @@ button.close:hover,
   .parents-filter-grid,
   .faculty-filter-grid,
   .staff-filter-grid,
+  .attendance-filter-grid,
   .academics-filter-grid {
     grid-template-columns: repeat(4, 1fr);
   }
@@ -27011,6 +27022,7 @@ button.close:hover,
   .parents-filter-grid .tc-search-wrap,
   .faculty-filter-grid .tc-search-wrap,
   .staff-filter-grid .tc-search-wrap,
+  .attendance-filter-grid .tc-search-wrap,
   .academics-filter-grid .tc-search-wrap {
     grid-column: 1 / -1;
   }
@@ -27028,6 +27040,7 @@ button.close:hover,
   .parents-filter-grid,
   .faculty-filter-grid,
   .staff-filter-grid,
+  .attendance-filter-grid,
   .academics-filter-grid {
     grid-template-columns: repeat(2, 1fr);
   }
@@ -27036,6 +27049,7 @@ button.close:hover,
   .parents-filter-grid .tc-search-wrap,
   .faculty-filter-grid .tc-search-wrap,
   .staff-filter-grid .tc-search-wrap,
+  .attendance-filter-grid .tc-search-wrap,
   .academics-filter-grid .tc-search-wrap {
     grid-column: 1 / -1;
   }
@@ -27053,6 +27067,7 @@ button.close:hover,
 .parents-filter-grid .tc-search-wrap,
 .faculty-filter-grid .tc-search-wrap,
 .staff-filter-grid .tc-search-wrap,
+.attendance-filter-grid .tc-search-wrap,
 .academics-filter-grid .tc-search-wrap {
   width: 100%;
   max-width: none;
@@ -27062,6 +27077,7 @@ button.close:hover,
 .parents-filter-grid .tc-select-wrap,
 .faculty-filter-grid .tc-select-wrap,
 .staff-filter-grid .tc-select-wrap,
+.attendance-filter-grid .tc-select-wrap,
 .academics-filter-grid .tc-select-wrap {
   width: 100%;
   min-width: 0;
@@ -27081,6 +27097,13 @@ button.close:hover,
   gap: 0.65rem;
   width: 100%;
 }
+.attendance-filter-grid {
+  display: grid;
+  grid-template-columns: minmax(220px, 1.8fr) minmax(130px, 1fr) repeat(3, minmax(130px, 1fr));
+  align-items: center;
+  gap: 0.65rem;
+  width: 100%;
+}
 .academics-filter-grid {
   display: grid;
   grid-template-columns: minmax(240px, 1.8fr) repeat(3, minmax(130px, 1fr));
@@ -27090,10 +27113,12 @@ button.close:hover,
 }
 
 @media (max-width: 768px) and (min-width: 521px) {
-  .transfers-filter-grid {
+  .transfers-filter-grid,
+  .attendance-filter-grid {
     grid-template-columns: repeat(2, 1fr);
   }
-  .transfers-filter-grid .tc-search-wrap {
+  .transfers-filter-grid .tc-search-wrap,
+  .attendance-filter-grid .tc-search-wrap {
     grid-column: 1 / -1;
   }
   .transfers-governance-row {
@@ -27107,7 +27132,8 @@ button.close:hover,
 }
 
 @media (max-width: 520px) {
-  .transfers-filter-grid {
+  .transfers-filter-grid,
+  .attendance-filter-grid {
     grid-template-columns: 1fr;
   }
   .transfers-governance-row {
