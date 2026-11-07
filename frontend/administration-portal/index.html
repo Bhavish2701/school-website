@@ -18,10 +18,10 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
   <!-- Portal Custom CSS -->
-  <link rel="stylesheet" href="/css/portal.css?v=20261107-08">
-  <link rel="stylesheet" href="../css/portal.css?v=20261107-08">
-  <link rel="stylesheet" href="/css/portal-login.css?v=20261107-08">
-  <link rel="stylesheet" href="../css/portal-login.css?v=20261107-08">
+  <link rel="stylesheet" href="/css/portal.css?v=20261107-09">
+  <link rel="stylesheet" href="../css/portal.css?v=20261107-09">
+  <link rel="stylesheet" href="/css/portal-login.css?v=20261107-09">
+  <link rel="stylesheet" href="../css/portal-login.css?v=20261107-09">
 </head>
 
 <body>
@@ -3768,24 +3768,17 @@
                ================================================================= -->
           <div class="student-subview" id="subview-students-admissions" style="display:none;">
             
-            <!-- Breadcrumb Navigation -->
-            <div class="breadcrumb-bar" style="margin-bottom: 1rem; font-size: 0.85rem; color: var(--color-text-muted);">
-              <span style="cursor: pointer;" onclick="portalApp.switchSubTab('students', 'profiles');">Students</span>
-              <i class="fa-solid fa-chevron-right" style="font-size: 0.7rem; margin: 0 0.5rem; color: #94a3b8;"></i>
-              <strong style="color: var(--color-text-dark);">Admissions</strong>
-            </div>
-
-            <!-- Page Header -->
-            <div class="portal-page-header" style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1.25rem; flex-wrap: wrap; gap: 1rem;">
-              <div>
-                <h1 style="margin: 0; font-size: 1.6rem; font-weight: 800; color: #0f172a; display: flex; align-items: center; gap: 0.6rem;">
-                  <i class="fa-solid fa-user-plus text-primary"></i> Admissions
-                </h1>
-                <p style="margin: 4px 0 0; color: #64748b; font-size: 0.9rem;">
+            <!-- Subview Header & Operations Bar -->
+            <div class="subview-header-bar" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; flex-wrap: wrap; gap: 1rem;">
+              <div class="subview-title-group">
+                <h2 style="font-size: 1.25rem; font-weight: 800; color: #0f172a; margin: 0; display: flex; align-items: center; gap: 0.6rem;">
+                  <i class="fa-solid fa-user-plus text-primary" style="font-size: 1.15rem;"></i> Admissions
+                </h2>
+                <p style="font-size: 0.82rem; color: #64748b; margin: 0.25rem 0 0 0;">
                   Manage admission enquiries through to confirmed enrolment across statutory lifecycle stages.
                 </p>
               </div>
-              <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+              <div class="adm-header-actions" style="display: flex; gap: 0.5rem; flex-wrap: wrap; align-items: center;">
                 <button type="button" class="btn btn-primary" onclick="portalApp.openNewAdmissionModal()" id="btnNewAdmissionPrimary" title="Create new admission application (Online / Offline)">
                   <i class="fa-solid fa-user-plus me-1"></i> New Admission
                 </button>
@@ -3802,7 +3795,7 @@
             </div>
 
             <!-- Summary Cards (6 KPIs) -->
-            <div class="admissions-overview-bar" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 1rem; margin-bottom: 1.25rem;">
+            <div class="admissions-overview-bar">
               <div class="adm-stat-card card-blue">
                 <div class="adm-stat-icon icon-blue"><i class="fa-solid fa-comments"></i></div>
                 <div class="adm-stat-info">
@@ -3831,10 +3824,10 @@
                   <div class="adm-label">Under Review</div>
                 </div>
               </div>
-              <div class="adm-stat-card card-amber" style="border-left: 3px solid #8b5cf6;">
-                <div class="adm-stat-icon" style="background:#f5f3ff; color:#7c3aed; border:1px solid #ddd6fe;"><i class="fa-solid fa-envelope-open-text"></i></div>
+              <div class="adm-stat-card card-purple">
+                <div class="adm-stat-icon icon-purple"><i class="fa-solid fa-envelope-open-text"></i></div>
                 <div class="adm-stat-info">
-                  <div class="adm-count" style="color:#6d28d9;" id="kpiAdmOffers">0</div>
+                  <div class="adm-count text-purple" id="kpiAdmOffers">0</div>
                   <div class="adm-label">Offers Issued</div>
                 </div>
               </div>

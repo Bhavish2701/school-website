@@ -11636,10 +11636,10 @@ const FEE_CATEGORY_AUDIT_DATA = [
         <tr id="adm-row-${item.appId}">
           <!-- 1. Application ID -->
           <td>
-            <a href="javascript:void(0)" onclick="portalApp.openApplicationDetailModal('${item.appId}')" style="font-family:monospace; font-weight:800; font-size:0.88rem; color:#1d4ed8; text-decoration:none;">
+            <a href="javascript:void(0)" onclick="portalApp.openApplicationDetailModal('${item.appId}')" class="adm-id-pill" title="View details for ${item.appId}">
               ${item.appId}
             </a>
-            <div style="margin-top:3px;">
+            <div style="margin-top:4px;">
               <span class="badge" style="background:${isOnline ? '#eff6ff' : '#fff7ed'}; color:${isOnline ? '#1d4ed8' : '#c2410c'}; border:1px solid ${isOnline ? '#bfdbfe' : '#fed7aa'}; font-size:0.68rem; font-weight:700; padding:2px 7px; border-radius:4px; display:inline-flex; align-items:center; gap:4px;">
                 ${isOnline ? '<i class="fa-solid fa-globe"></i> Online' : '<i class="fa-solid fa-building-columns"></i> Walk-In'}
               </span>
