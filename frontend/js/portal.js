@@ -14976,7 +14976,7 @@ const FEE_CATEGORY_AUDIT_DATA = [
           return `
             <tr>
               <td>
-                <span class="teacher-id-badge" style="font-family:monospace; font-weight:700; color:#1d4ed8; background:#eff6ff; padding:0.25rem 0.5rem; border-radius:4px; border:1px solid #bfdbfe;">
+                <span class="teacher-id-badge">
                   ${displayId}
                 </span>
               </td>

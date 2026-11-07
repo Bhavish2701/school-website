@@ -18,8 +18,8 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
   <!-- Portal Custom CSS -->
-  <link rel="stylesheet" href="/css/portal.css?v=20261107-14">
-  <link rel="stylesheet" href="../css/portal.css?v=20261107-14">
+  <link rel="stylesheet" href="/css/portal.css?v=20261107-15">
+  <link rel="stylesheet" href="../css/portal.css?v=20261107-15">
   <link rel="stylesheet" href="/css/portal-login.css?v=20261107-11">
   <link rel="stylesheet" href="../css/portal-login.css?v=20261107-11">
 </head>
@@ -4646,37 +4646,32 @@
           <!-- ========================================== -->
                     <div class="teacher-subview active" id="subview-teachers-faculty">
             
-            <!-- Standard Page Header -->
-            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1.25rem; flex-wrap: wrap; gap: 1rem;">
-              <div>
-                <div style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.8rem; color: #64748b; margin-bottom: 0.35rem;">
-                  <span>Teachers &amp; Staff</span>
-                  <i class="fa-solid fa-chevron-right" style="font-size: 0.65rem;"></i>
-                  <span style="color: #0f172a; font-weight: 600;">Faculty (Teaching)</span>
-                </div>
-                <h2 style="font-size: 1.4rem; font-weight: 800; color: #0f172a; margin: 0 0 0.25rem 0;">
-                  Faculty (Teaching)
+            <!-- Subview Header Card -->
+            <div class="subview-header-bar">
+              <div class="subview-header-info">
+                <h2>
+                  <i class="fa-solid fa-chalkboard-user text-primary"></i> Faculty Directory (Teaching)
                 </h2>
-                <p style="font-size: 0.84rem; color: #64748b; margin: 0;">
+                <p>
                   Institutional faculty directory, teaching workload, class &amp; subject assignments, statutory credentials, and access control governance.
                 </p>
               </div>
-              <div class="faculty-header-actions">
-                <button type="button" class="btn btn-outline-secondary btn-sm" onclick="portalApp.openStaffImportModal()" style="font-weight: 600;">
-                  <i class="fa-solid fa-file-import mr-1"></i> Import Staff
+              <div class="subview-header-actions">
+                <button type="button" class="btn btn-secondary" onclick="portalApp.openStaffImportModal()" id="btnImportFacultyHeader" title="Import Teaching Staff">
+                  <i class="fa-solid fa-file-import text-primary"></i> Import Staff
                 </button>
-                <button type="button" class="btn btn-outline-primary btn-sm" onclick="portalApp.exportFacultyRegisterCSV()" style="font-weight: 600;">
-                  <i class="fa-solid fa-file-csv mr-1"></i> Export Register
+                <button type="button" class="btn btn-secondary" onclick="portalApp.exportFacultyRegisterCSV()" id="btnExportFacultyHeader" title="Export Faculty Register">
+                  <i class="fa-solid fa-file-csv text-primary"></i> Export Register
                 </button>
-                <button type="button" class="btn btn-primary btn-sm" onclick="portalApp.openAddTeacherModal()" style="font-weight: 700;">
-                  <i class="fa-solid fa-user-plus mr-1"></i> + Add Teacher
+                <button type="button" class="btn btn-primary" onclick="portalApp.openAddTeacherModal()" id="btnAddTeacherHeader" title="Add New Faculty Member">
+                  <i class="fa-solid fa-user-plus"></i> Add Teacher
                 </button>
               </div>
             </div>
 
             <!-- Statutory Record Scope Policy Notice -->
             <div class="faculty-statutory-notice">
-              <i class="fa-solid fa-shield-halved mr-1" style="font-size: 1rem; color: #059669; margin-top: 2px;"></i>
+              <i class="fa-solid fa-shield-halved text-primary mr-1" style="font-size: 1rem; margin-top: 2px;"></i>
               <div>
                 <strong>Role-Based Record Scope Mandate:</strong>
                 A newly appointed teacher is never granted unrestricted school-wide access to all students or all marks entries. System authorization strictly mirrors assigned classes, allocated subjects, and specific academic duties (Class Teacher / Subject In-charge) to safeguard institutional evaluation integrity.
@@ -4684,7 +4679,7 @@
             </div>
 
             <!-- 5 Summary KPI Cards -->
-            <div class="admissions-overview-bar" style="margin-bottom: 1.25rem;">
+            <div class="teachers-overview-bar">
               <div class="adm-stat-card card-blue">
                 <div class="adm-stat-icon icon-blue"><i class="fa-solid fa-chalkboard-user"></i></div>
                 <div class="adm-stat-info">
@@ -4696,7 +4691,7 @@
                 <div class="adm-stat-icon icon-green"><i class="fa-solid fa-user-check"></i></div>
                 <div class="adm-stat-info">
                   <div class="adm-count" id="facKpiActive">27</div>
-                  <div class="adm-label">Active Teachers (90%)</div>
+                  <div class="adm-label">Active Teaching Faculty</div>
                 </div>
               </div>
               <div class="adm-stat-card card-purple">
@@ -4713,10 +4708,10 @@
                   <div class="adm-label">On Leave</div>
                 </div>
               </div>
-              <div class="adm-stat-card card-red" style="border-left: 4px solid #ef4444;">
-                <div class="adm-stat-icon" style="background:#fef2f2; color:#ef4444;"><i class="fa-solid fa-file-circle-question"></i></div>
+              <div class="adm-stat-card card-rose">
+                <div class="adm-stat-icon icon-rose"><i class="fa-solid fa-file-circle-question"></i></div>
                 <div class="adm-stat-info">
-                  <div class="adm-count" id="facKpiPendingVerify" style="color:#ef4444;">1</div>
+                  <div class="adm-count" id="facKpiPendingVerify">1</div>
                   <div class="adm-label">Pending Verification</div>
                 </div>
               </div>
@@ -4729,7 +4724,7 @@
                 <div class="tc-search-wrap">
                   <i class="fa-solid fa-magnifying-glass search-icon"></i>
                   <input type="text" id="facultyFilterInput" class="tc-search-input"
-                    placeholder="Search by Employee ID, Name, Department, Subjects, Assigned Classes, Qualifications..."
+                    placeholder="Search employee ID, name, department, subject, class..."
                     oninput="portalApp.filterFaculty()">
                   <button type="button" class="tc-clear-btn" id="facClearSearchBtn"
                     onclick="document.getElementById('facultyFilterInput').value=''; portalApp.filterFaculty();"
@@ -4780,7 +4775,7 @@
                 </div>
 
                 <div class="tc-actions-right">
-                  <button type="button" class="btn btn-outline-secondary btn-sm btn-filter-reset"
+                  <button type="button" class="btn btn-sm btn-secondary btn-filter-reset"
                     onclick="portalApp.resetFacultyFilters()" title="Reset all filters">
                     <i class="fa-solid fa-rotate-left me-1"></i> Reset Filters
                   </button>
