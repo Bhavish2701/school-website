@@ -18,10 +18,10 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
   <!-- Portal Custom CSS -->
-  <link rel="stylesheet" href="/css/portal.css?v=20261107-06">
-  <link rel="stylesheet" href="../css/portal.css?v=20261107-06">
-  <link rel="stylesheet" href="/css/portal-login.css?v=20261107-03">
-  <link rel="stylesheet" href="../css/portal-login.css?v=20261107-03">
+  <link rel="stylesheet" href="/css/portal.css?v=20261107-07">
+  <link rel="stylesheet" href="../css/portal.css?v=20261107-07">
+  <link rel="stylesheet" href="/css/portal-login.css?v=20261107-07">
+  <link rel="stylesheet" href="../css/portal-login.css?v=20261107-07">
 </head>
 
 <body>
@@ -4420,27 +4420,22 @@
                ================================================================= -->
                     <div class="student-subview" id="subview-students-parents" style="display:none;">
             
-            <!-- Standard Page Header -->
-            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1.25rem; flex-wrap: wrap; gap: 1rem;">
+<!-- Standard Page Header -->
+            <div class="subview-header-bar" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; flex-wrap: wrap; gap: 0.75rem;">
               <div>
-                <div style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.8rem; color: #64748b; margin-bottom: 0.35rem;">
-                  <span>Students</span>
-                  <i class="fa-solid fa-chevron-right" style="font-size: 0.65rem;"></i>
-                  <span style="color: #0f172a; font-weight: 600;">Parent and Guardian Records</span>
-                </div>
-                <h2 style="font-size: 1.4rem; font-weight: 800; color: #0f172a; margin: 0 0 0.25rem 0;">
-                  Parent and Guardian Records
-                </h2>
-                <p style="font-size: 0.84rem; color: #64748b; margin: 0;">
-                  Authoritative parent and legal guardian register, verified emergency contacts, student relationships, communication preferences, and future parent portal provisioning.
+                <h3 style="font-size: 1.15rem; font-weight: 700; color: #0f172a; margin: 0 0 0.2rem 0; display: flex; align-items: center; gap: 0.5rem;">
+                  <i class="fa-solid fa-users text-primary" style="font-size: 1.05rem;"></i> Parent and Guardian Records
+                </h3>
+                <p style="font-size: 0.8125rem; color: #64748b; margin: 0;">
+                  Authoritative parent and legal guardian register, verified emergency contacts, student relationships, and parent portal provisioning.
                 </p>
               </div>
-              <div class="guardian-header-actions">
-                <button type="button" class="btn btn-outline-secondary btn-sm" onclick="portalApp.openVerifyContactModal()" style="font-weight: 600;">
-                  <i class="fa-solid fa-user-check mr-1"></i> Verify Contact
+              <div class="guardian-header-actions" style="display: flex; align-items: center; gap: 0.5rem;">
+                <button type="button" class="btn btn-outline-secondary btn-sm" onclick="portalApp.openVerifyContactModal()" style="font-weight: 600; padding: 0.4rem 0.85rem; font-size: 0.8125rem;">
+                  <i class="fa-solid fa-user-check me-1"></i> Verify Contact
                 </button>
-                <button type="button" class="btn btn-primary btn-sm" onclick="portalApp.openAddGuardianModal()" style="font-weight: 700;">
-                  <i class="fa-solid fa-user-plus mr-1"></i> + Add Guardian
+                <button type="button" class="btn btn-primary btn-sm" onclick="portalApp.openAddGuardianModal()" style="font-weight: 600; padding: 0.4rem 0.85rem; font-size: 0.8125rem;">
+                  <i class="fa-solid fa-user-plus me-1"></i> + Add Guardian
                 </button>
               </div>
             </div>
@@ -4466,8 +4461,8 @@
               <div class="adm-stat-card card-green">
                 <div class="adm-stat-icon icon-green"><i class="fa-solid fa-user-shield"></i></div>
                 <div class="adm-stat-info">
-                  <div class="adm-count" id="parentSummaryVerified">468</div>
-                  <div class="adm-label">Verified Contacts (97.1%)</div>
+                  <div class="adm-count" id="parentSummaryVerified">400</div>
+                  <div class="adm-label">Verified Contacts</div>
                 </div>
               </div>
               <div class="adm-stat-card card-amber">
@@ -4569,14 +4564,14 @@
                 <table class="parent-table" id="parentRecordsTable">
                   <thead>
                     <tr>
-                      <th class="th-guardian" style="min-width: 190px;"><i class="fa-solid fa-user-tie"></i> Guardian Name</th>
+                      <th class="th-guardian" style="min-width: 210px;"><i class="fa-solid fa-user-tie"></i> Guardian Name</th>
                       <th class="th-relation" style="min-width: 130px;"><i class="fa-solid fa-people-roof"></i> Relationship</th>
-                      <th class="th-linked" style="min-width: 200px;"><i class="fa-solid fa-user-graduate"></i> Linked Students</th>
+                      <th class="th-linked" style="min-width: 190px;"><i class="fa-solid fa-user-graduate"></i> Linked Students</th>
                       <th class="th-contact" style="min-width: 150px;"><i class="fa-solid fa-phone-volume"></i> Primary Contact</th>
                       <th class="th-email" style="min-width: 180px;"><i class="fa-solid fa-envelope"></i> Email</th>
-                      <th class="th-verify" style="min-width: 130px;"><i class="fa-solid fa-circle-check"></i> Verification Status</th>
-                      <th class="th-portal" style="min-width: 150px;"><i class="fa-solid fa-mobile-screen-button"></i> Portal Account Status</th>
-                      <th class="th-actions" style="text-align: center; min-width: 120px;"><i class="fa-solid fa-sliders"></i> Action</th>
+                      <th class="th-verify" style="min-width: 140px;"><i class="fa-solid fa-circle-check"></i> Verification Status</th>
+                      <th class="th-portal" style="min-width: 160px;"><i class="fa-solid fa-mobile-screen-button"></i> Portal Account Status</th>
+                      <th class="th-actions" style="text-align: center; min-width: 160px;"><i class="fa-solid fa-sliders"></i> Action</th>
                     </tr>
                   </thead>
                   <tbody id="parentRecordsTableBody">

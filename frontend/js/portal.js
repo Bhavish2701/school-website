@@ -9221,7 +9221,7 @@ const FEE_CATEGORY_AUDIT_DATA = [
     const elTotalCount = document.getElementById('parentTotalCount');
 
     if (elTotal) elTotal.textContent = total;
-    if (elVer) elVer.textContent = `${verified} (${Math.round((verified/total)*100)}%)`;
+    if (elVer) elVer.textContent = verified;
     if (elRev) elRev.textContent = review;
     if (elPortal) elPortal.textContent = portalReady;
     if (elTotalCount) elTotalCount.textContent = total;
@@ -9363,13 +9363,13 @@ const FEE_CATEGORY_AUDIT_DATA = [
               <button type="button" class="parent-btn-dossier" onclick="portalApp.openGuardianDetailModal('${p.guardianId}')" title="Open Complete Guardian Dossier">
                 <i class="fa-solid fa-id-card text-primary"></i> Dossier
               </button>
-              <button type="button" class="parent-btn-edit" onclick="portalApp.openVerifyContactModal('${p.guardianId}')" title="Verify Contact Number / Identity">
+              <button type="button" class="parent-icon-btn" onclick="portalApp.openVerifyContactModal('${p.guardianId}')" title="Verify Contact Number / Identity">
                 <i class="fa-solid fa-user-check text-success"></i>
               </button>
-              <button type="button" class="parent-btn-edit" onclick="portalApp.callGuardian('${p.phone}')" title="Place Direct Phone Call">
+              <button type="button" class="parent-icon-btn" onclick="portalApp.callGuardian('${p.phone}')" title="Place Direct Phone Call">
                 <i class="fa-solid fa-phone text-emerald"></i>
               </button>
-              <button type="button" class="parent-btn-edit" onclick="portalApp.messageGuardian('${p.phone}', '${p.guardianName}')" title="Send SMS Broadcast">
+              <button type="button" class="parent-icon-btn" onclick="portalApp.messageGuardian('${p.phone}', '${p.guardianName}')" title="Send SMS Broadcast">
                 <i class="fa-solid fa-comment-sms text-primary"></i>
               </button>
             </div>
