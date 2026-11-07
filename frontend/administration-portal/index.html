@@ -18,10 +18,10 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
   <!-- Portal Custom CSS -->
-  <link rel="stylesheet" href="/css/portal.css?v=20261107-10">
-  <link rel="stylesheet" href="../css/portal.css?v=20261107-10">
-  <link rel="stylesheet" href="/css/portal-login.css?v=20261107-10">
-  <link rel="stylesheet" href="../css/portal-login.css?v=20261107-10">
+  <link rel="stylesheet" href="/css/portal.css?v=20261107-11">
+  <link rel="stylesheet" href="../css/portal.css?v=20261107-11">
+  <link rel="stylesheet" href="/css/portal-login.css?v=20261107-11">
+  <link rel="stylesheet" href="../css/portal-login.css?v=20261107-11">
 </head>
 
 <body>
@@ -4206,68 +4206,63 @@
                ================================================================= -->
           <div class="student-subview" id="subview-students-performance" style="display:none;">
             
-            <!-- Standard Page Header -->
-            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1.25rem; flex-wrap: wrap; gap: 1rem;">
-              <div>
-                <div style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.8rem; color: #64748b; margin-bottom: 0.35rem;">
-                  <span>Students</span>
-                  <i class="fa-solid fa-chevron-right" style="font-size: 0.65rem;"></i>
-                  <span style="color: #0f172a; font-weight: 600;">Student Performance</span>
-                </div>
-                <h2 style="font-size: 1.4rem; font-weight: 800; color: #0f172a; margin: 0 0 0.25rem 0;">
-                  Student Performance
+            <!-- Subview Header & Operations Bar -->
+            <div class="subview-header-bar" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; flex-wrap: wrap; gap: 1rem;">
+              <div class="subview-title-group">
+                <h2 style="font-size: 1.25rem; font-weight: 800; color: #0f172a; margin: 0; display: flex; align-items: center; gap: 0.6rem;">
+                  <i class="fa-solid fa-chart-line text-primary" style="font-size: 1.15rem;"></i> Student Performance
                 </h2>
-                <p style="font-size: 0.84rem; color: #64748b; margin: 0;">
+                <p style="font-size: 0.82rem; color: #64748b; margin: 0.25rem 0 0 0;">
                   Scholastic analytics, assessment tracking, learning objectives, and student intervention records.
                 </p>
               </div>
-              <div class="perf-header-actions">
-                <button type="button" class="btn btn-outline-secondary btn-sm" onclick="portalApp.openCompareAssessmentsModal()" style="font-weight: 600;">
+              <div class="perf-header-actions" style="display: flex; gap: 0.5rem; flex-wrap: wrap; align-items: center;">
+                <button type="button" class="btn btn-secondary" onclick="portalApp.openCompareAssessmentsModal()" style="font-weight: 600;">
                   <i class="fa-solid fa-code-compare mr-1"></i> Compare Assessments
                 </button>
-                <button type="button" class="btn btn-outline-primary btn-sm" onclick="portalApp.openGenerateReportModal()" style="font-weight: 600;">
+                <button type="button" class="btn btn-outline-primary" onclick="portalApp.openGenerateReportModal()" style="font-weight: 600;">
                   <i class="fa-solid fa-file-invoice mr-1"></i> Generate Report
                 </button>
-                <button type="button" class="btn btn-primary btn-sm" onclick="portalApp.openPerformanceStudentPicker()" style="font-weight: 700;">
+                <button type="button" class="btn btn-primary" onclick="portalApp.openPerformanceStudentPicker()" style="font-weight: 700;">
                   <i class="fa-solid fa-eye mr-1"></i> View Student
                 </button>
               </div>
             </div>
 
             <!-- Statutory Result Publication Policy Notice -->
-            <div class="tc-statutory-notice" style="background:#eff6ff; border-left-color:#3b82f6; color:#1e3a8a;">
+            <div class="tc-statutory-notice">
               <i class="fa-solid fa-certificate mr-1" style="font-size: 0.95rem;"></i>
               <strong>Statutory Publication Protocol:</strong> Only formally published results carry authoritative official status. Draft, tabulating, or unapproved marks are visibly watermarked and distinguished from finalized institutional grades to prevent unauthorized early dissemination.
             </div>
 
             <!-- 4 Summary KPI Cards -->
-            <div class="admissions-overview-bar" style="margin-bottom: 1.25rem;">
+            <div class="perf-overview-bar">
               <div class="adm-stat-card card-blue">
                 <div class="adm-stat-icon icon-blue"><i class="fa-solid fa-chart-line"></i></div>
                 <div class="adm-stat-info">
-                  <div class="adm-count" id="perfKpiClassAvg">81.4%</div>
-                  <div class="adm-label">Class Average (8.6 GPA)</div>
+                  <div class="adm-count" id="perfKpiClassAvg">84.0%</div>
+                  <div class="adm-label">Cohort Average</div>
                 </div>
               </div>
               <div class="adm-stat-card card-green">
                 <div class="adm-stat-icon icon-green"><i class="fa-solid fa-graduation-cap"></i></div>
                 <div class="adm-stat-info">
-                  <div class="adm-count" id="perfKpiPassRate">98.2%</div>
-                  <div class="adm-label">Pass Rate (School Target: 100%)</div>
+                  <div class="adm-count text-emerald" id="perfKpiPassRate">100.0%</div>
+                  <div class="adm-label">Pass Rate (Target: 100%)</div>
                 </div>
               </div>
               <div class="adm-stat-card card-amber">
                 <div class="adm-stat-icon icon-amber"><i class="fa-solid fa-user-shield"></i></div>
                 <div class="adm-stat-info">
-                  <div class="adm-count" id="perfKpiSupport">18</div>
-                  <div class="adm-label">Students Requiring Support</div>
+                  <div class="adm-count text-amber" id="perfKpiSupport">0</div>
+                  <div class="adm-label">Students Needing Support</div>
                 </div>
               </div>
-              <div class="adm-stat-card card-purple" style="border-left: 4px solid #ef4444;">
-                <div class="adm-stat-icon" style="background:#fef2f2; color:#ef4444;"><i class="fa-solid fa-clipboard-question"></i></div>
+              <div class="adm-stat-card card-rose">
+                <div class="adm-stat-icon icon-rose"><i class="fa-solid fa-clipboard-question"></i></div>
                 <div class="adm-stat-info">
-                  <div class="adm-count" id="perfKpiMissing" style="color:#ef4444;">4</div>
-                  <div class="adm-label">Missing Marks Entries</div>
+                  <div class="adm-count text-danger" id="perfKpiMissing">5</div>
+                  <div class="adm-label">Pending Marks Entries</div>
                 </div>
               </div>
             </div>

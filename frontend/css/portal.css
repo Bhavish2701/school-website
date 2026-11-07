@@ -13101,6 +13101,28 @@ input:disabled+.perm-slider {
   }
 }
 
+.perf-overview-bar {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.1rem;
+  margin-bottom: 1.25rem;
+}
+
+@media (min-width: 1200px) {
+  .perf-overview-bar {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.adm-stat-card.card-rose::after {
+  background: #ef4444;
+}
+
+.adm-stat-icon.icon-rose {
+  background: rgba(239, 68, 68, 0.12);
+  color: #ef4444;
+}
+
 .adm-stat-card.card-sky::after {
   background: #0284c7;
 }
@@ -14811,10 +14833,43 @@ input:disabled+.perm-slider {
 
 .perf-table {
   width: 100%;
+  min-width: 1280px;
   border-collapse: separate;
   border-spacing: 0;
   font-size: 0.84rem;
   text-align: left;
+}
+
+.perf-table th:first-child,
+.perf-table td:first-child {
+  position: sticky;
+  left: 0;
+  z-index: 3;
+  background: var(--color-bg-surface, #ffffff);
+  box-shadow: 2px 0 6px rgba(15, 23, 42, 0.05);
+}
+
+.perf-table thead th:first-child {
+  z-index: 5;
+  background: var(--color-bg-subtle, #f8fafc);
+}
+
+.perf-table tbody tr:hover td:first-child {
+  background: var(--color-primary-subtle, #eff6ff) !important;
+}
+
+[data-theme="dark"] .perf-table th:first-child,
+[data-theme="dark"] .perf-table td:first-child {
+  background: #1e293b;
+  box-shadow: 2px 0 6px rgba(0, 0, 0, 0.35);
+}
+
+[data-theme="dark"] .perf-table thead th:first-child {
+  background: #0f172a;
+}
+
+[data-theme="dark"] .perf-table tbody tr:hover td:first-child {
+  background: rgba(30, 41, 59, 0.8) !important;
 }
 
 .perf-table thead {
@@ -14902,14 +14957,15 @@ input:disabled+.perm-slider {
 }
 
 .perf-admno-badge {
-  font-family: monospace;
+  font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
   font-weight: 700;
-  font-size: 0.73rem;
+  font-size: 0.74rem;
   color: #1d4ed8;
   background: #eff6ff;
   border: 1px solid #bfdbfe;
-  padding: 1px 6px;
+  padding: 1px 7px;
   border-radius: 4px;
+  letter-spacing: 0.02em;
 }
 
 /* Subject-wise Marks Grid */
