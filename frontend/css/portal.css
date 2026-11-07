@@ -4064,6 +4064,64 @@ input[type="radio"]:checked+.radio-chip {
   gap: 0.85rem !important;
 }
 
+/* Universal Base Data Table Styles */
+.table-responsive {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  border-radius: var(--radius-md, 10px);
+  border: 1px solid var(--color-border, #e2e8f0);
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: inherit;
+  font-size: 0.85rem;
+  text-align: left;
+  border-spacing: 0;
+}
+
+.data-table th {
+  background: var(--color-bg-subtle, #f8fafc);
+  color: var(--color-text-muted, #475569);
+  font-weight: 700;
+  font-size: 0.74rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 0.85rem 1rem;
+  border-bottom: 2px solid var(--color-border, #e2e8f0);
+  white-space: nowrap;
+  vertical-align: middle;
+}
+
+.data-table td {
+  padding: 0.85rem 1rem;
+  border-bottom: 1px solid var(--color-border, #e2e8f0);
+  color: var(--color-text-main, #1e293b);
+  vertical-align: middle;
+  transition: background 0.15s ease;
+}
+
+.data-table tbody tr:hover td {
+  background: rgba(29, 78, 216, 0.03);
+}
+
+[data-theme="dark"] .data-table th {
+  background: #1e293b;
+  color: #94a3b8;
+  border-bottom-color: #334155;
+}
+
+[data-theme="dark"] .data-table td {
+  border-bottom-color: #334155;
+  color: #f1f5f9;
+}
+
+[data-theme="dark"] .data-table tbody tr:hover td {
+  background: rgba(255, 255, 255, 0.04);
+}
+
 #view-attendance .table-responsive {
   width: 100% !important;
   overflow-x: auto !important;
@@ -11493,6 +11551,7 @@ input:disabled+.perm-slider {
 }
 
 .dash-table {
+  min-width: 800px;
   width: 100%;
   border-collapse: collapse;
   font-size: 0.84rem;

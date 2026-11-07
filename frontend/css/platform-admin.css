@@ -781,6 +781,7 @@
 
 .pa-table {
   width: 100%;
+  min-width: 1100px;
   border-collapse: separate;
   border-spacing: 0;
   font-size: 0.875rem;
@@ -1515,8 +1516,8 @@ input:checked+.pa-slider:before {
 .pa-detail-nav {
   display: flex;
   overflow-x: auto;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
+  scrollbar-width: none !important;
+  -ms-overflow-style: none !important;
   -webkit-overflow-scrolling: touch;
   border-bottom: 1px solid var(--color-border, #E2E8F0);
   background: var(--color-bg-subtle, #F8FAFC);
@@ -1525,9 +1526,9 @@ input:checked+.pa-slider:before {
 }
 
 .pa-detail-nav::-webkit-scrollbar {
-  display: none;
-  width: 0;
-  height: 0;
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
 }
 
 [data-theme="dark"] .pa-detail-nav {
