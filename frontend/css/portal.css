@@ -338,7 +338,10 @@ body {
 }
 
 .sidebar-menu .nav-badge,
-.sidebar-menu .nav-sub-badge {
+.sidebar-menu .nav-sub-badge,
+.tab-count-badge,
+.tab-btn .tab-count-badge,
+.tab-strip .tab-count-badge {
   display: none !important;
 }
 

@@ -18,8 +18,8 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
   <!-- Portal Custom CSS -->
-  <link rel="stylesheet" href="/css/portal.css?v=20261107-04">
-  <link rel="stylesheet" href="../css/portal.css?v=20261107-04">
+  <link rel="stylesheet" href="/css/portal.css?v=20261107-05">
+  <link rel="stylesheet" href="../css/portal.css?v=20261107-05">
   <link rel="stylesheet" href="/css/portal-login.css?v=20261107-03">
   <link rel="stylesheet" href="../css/portal-login.css?v=20261107-03">
 </head>
@@ -3438,20 +3438,20 @@
           <div class="tab-strip" id="studentsTabStrip">
             <button type="button" class="tab-btn active" data-sub="profiles"
               onclick="portalApp.switchSubTab('students', 'profiles')">
-              <i class="fa-solid fa-address-card"></i> Student Profiles (<span
-                id="studentProfilesCountBadge">500</span>)
+              <i class="fa-solid fa-address-card"></i> Student Profiles<span class="tab-count-badge" style="display: none;"> (<span
+                id="studentProfilesCountBadge">500</span>)</span>
             </button>
             <button type="button" class="tab-btn" data-sub="documents"
               onclick="portalApp.switchSubTab('students', 'documents')">
-              <i class="fa-solid fa-folder-tree"></i> Student Documents (<span id="studentDocsCountBadge">1,500</span>)
+              <i class="fa-solid fa-folder-tree"></i> Student Documents<span class="tab-count-badge" style="display: none;"> (<span id="studentDocsCountBadge">1,500</span>)</span>
             </button>
             <button type="button" class="tab-btn" data-sub="admissions"
               onclick="portalApp.switchSubTab('students', 'admissions')">
-              <i class="fa-solid fa-user-plus"></i> Admissions (<span id="admissionsCountBadge">18</span>)
+              <i class="fa-solid fa-user-plus"></i> Admissions<span class="tab-count-badge" style="display: none;"> (<span id="admissionsCountBadge">18</span>)</span>
             </button>
             <button type="button" class="tab-btn" data-sub="transfers"
               onclick="portalApp.switchSubTab('students', 'transfers')">
-              <i class="fa-solid fa-file-contract"></i> Transfers (TC) (<span id="transfersCountBadge">8</span>)
+              <i class="fa-solid fa-file-contract"></i> Transfers (TC)<span class="tab-count-badge" style="display: none;"> (<span id="transfersCountBadge">8</span>)</span>
             </button>
             <button type="button" class="tab-btn" data-sub="performance"
               onclick="portalApp.switchSubTab('students', 'performance')">
@@ -3459,7 +3459,7 @@
             </button>
             <button type="button" class="tab-btn" data-sub="parents"
               onclick="portalApp.switchSubTab('students', 'parents')">
-              <i class="fa-solid fa-users"></i> Parent / Guardian Records (<span id="parentRecordsCountBadge">412</span>)
+              <i class="fa-solid fa-users"></i> Parent / Guardian Records<span class="tab-count-badge" style="display: none;"> (<span id="parentRecordsCountBadge">412</span>)</span>
             </button>
           </div>
 
@@ -4635,11 +4635,11 @@
           <div class="tab-strip" id="teachersTabStrip">
             <button type="button" class="tab-btn active" data-sub="faculty"
               onclick="portalApp.switchSubTab('teachers', 'faculty')">
-              <i class="fa-solid fa-chalkboard-user"></i> Faculty (Teaching) (<span id="facultyCountBadge">30</span>)
+              <i class="fa-solid fa-chalkboard-user"></i> Faculty (Teaching)<span class="tab-count-badge" style="display: none;"> (<span id="facultyCountBadge">30</span>)</span>
             </button>
             <button type="button" class="tab-btn" data-sub="staff"
               onclick="portalApp.switchSubTab('teachers', 'staff')">
-              <i class="fa-solid fa-id-badge"></i> Staff (Non-Teaching) (<span id="staffCountBadge">8</span>)
+              <i class="fa-solid fa-id-badge"></i> Staff (Non-Teaching)<span class="tab-count-badge" style="display: none;"> (<span id="staffCountBadge">8</span>)</span>
             </button>
             <button type="button" class="tab-btn" data-sub="attendance"
               onclick="portalApp.switchSubTab('teachers', 'attendance')">
@@ -4647,7 +4647,7 @@
             </button>
             <button type="button" class="tab-btn" data-sub="leave"
               onclick="portalApp.switchSubTab('teachers', 'leave')">
-              <i class="fa-solid fa-calendar-minus"></i> Leave Requests (<span id="teacherLeaveCountBadge">3</span>)
+              <i class="fa-solid fa-calendar-minus"></i> Leave Requests<span class="tab-count-badge" style="display: none;"> (<span id="teacherLeaveCountBadge">3</span>)</span>
             </button>
             <button type="button" class="tab-btn" data-sub="performance"
               onclick="portalApp.switchSubTab('teachers', 'performance')">
@@ -8466,11 +8466,11 @@
             <button class="tab-btn active" data-sub="class-schedules"
               onclick="portalApp.switchSubTab('timetable', 'class-schedules')">Class Schedules</button>
             <button class="tab-btn" data-sub="substitution-planner"
-              onclick="portalApp.switchSubTab('timetable', 'substitution-planner')">Substitution Planner (3)</button>
+              onclick="portalApp.switchSubTab('timetable', 'substitution-planner')">Substitution Planner<span class="tab-count-badge" style="display: none;"> (3)</span></button>
             <button class="tab-btn" data-sub="lab-hall-allocations"
               onclick="portalApp.switchSubTab('timetable', 'lab-hall-allocations')">Lab &amp; Hall Allocations</button>
             <button class="tab-btn" data-sub="timetable-conflicts"
-              onclick="portalApp.switchSubTab('timetable', 'timetable-conflicts')">Timetable Conflicts (4)</button>
+              onclick="portalApp.switchSubTab('timetable', 'timetable-conflicts')">Timetable Conflicts<span class="tab-count-badge" style="display: none;"> (4)</span></button>
           </div>
 
           <!-- ==========================================
@@ -10081,19 +10081,19 @@
           <!-- Section 8 Sub-Tab Strip -->
           <div class="tab-strip" id="disciplineTabStrip">
             <button type="button" class="tab-btn active" data-sub="all" onclick="portalApp.switchSubTab('discipline', 'all')">
-              <i class="fa-solid fa-clipboard-list"></i> 8.1 Incident Records (<span id="tabBadgeDisciplineAll">4</span>)
+              <i class="fa-solid fa-clipboard-list"></i> 8.1 Incident Records<span class="tab-count-badge" style="display: none;"> (<span id="tabBadgeDisciplineAll">4</span>)</span>
             </button>
             <button type="button" class="tab-btn" data-sub="late" onclick="portalApp.switchSubTab('discipline', 'late')">
-              <i class="fa-solid fa-door-open"></i> 8.2 Late-Coming Register (<span id="tabBadgeDisciplineLate">4</span>)
+              <i class="fa-solid fa-door-open"></i> 8.2 Late-Coming Register<span class="tab-count-badge" style="display: none;"> (<span id="tabBadgeDisciplineLate">4</span>)</span>
             </button>
             <button type="button" class="tab-btn" data-sub="merit" onclick="portalApp.switchSubTab('discipline', 'merit')">
-              <i class="fa-solid fa-award"></i> 8.3 Merit &amp; Achievement (<span id="tabBadgeDisciplineMerit">4</span>)
+              <i class="fa-solid fa-award"></i> 8.3 Merit &amp; Achievement<span class="tab-count-badge" style="display: none;"> (<span id="tabBadgeDisciplineMerit">4</span>)</span>
             </button>
             <button type="button" class="tab-btn" data-sub="meetings" onclick="portalApp.switchSubTab('discipline', 'meetings')">
-              <i class="fa-solid fa-people-arrows"></i> 8.4 Parent Meetings (<span id="tabBadgeDisciplineMeetings">3</span>)
+              <i class="fa-solid fa-people-arrows"></i> 8.4 Parent Meetings<span class="tab-count-badge" style="display: none;"> (<span id="tabBadgeDisciplineMeetings">3</span>)</span>
             </button>
             <button type="button" class="tab-btn" data-sub="counselling" onclick="portalApp.switchSubTab('discipline', 'counselling')">
-              <i class="fa-solid fa-shield-halved text-amber"></i> 8.5 Counselling Referrals <span class="portal-badge badge-warning" style="font-size:0.65rem; margin-left:4px;"><i class="fa-solid fa-lock"></i> Restricted</span> (<span id="tabBadgeDisciplineCounselling">3</span>)
+              <i class="fa-solid fa-shield-halved text-amber"></i> 8.5 Counselling Referrals <span class="portal-badge badge-warning" style="font-size:0.65rem; margin-left:4px;"><i class="fa-solid fa-lock"></i> Restricted</span><span class="tab-count-badge" style="display: none;"> (<span id="tabBadgeDisciplineCounselling">3</span>)</span>
             </button>
           </div>
 
@@ -10403,16 +10403,16 @@
           <!-- Section 9 Sub-Tab Strip -->
           <div class="tab-strip" id="leavesTabStrip">
             <button type="button" class="tab-btn active" data-sub="faculty" onclick="portalApp.switchSubTab('leaves', 'faculty')">
-              <i class="fa-solid fa-user-check mr-1"></i> 9.1 Faculty Leave Review (<span id="facultyLeaveTabBadge">4</span>)
+              <i class="fa-solid fa-user-check mr-1"></i> 9.1 Faculty Leave Review<span class="tab-count-badge" style="display: none;"> (<span id="facultyLeaveTabBadge">4</span>)</span>
             </button>
             <button type="button" class="tab-btn" data-sub="students" onclick="portalApp.switchSubTab('leaves', 'students')">
-              <i class="fa-solid fa-id-card-clip mr-1"></i> 9.2 Student Leave Requests (<span id="studentLeaveTabBadge">14</span>)
+              <i class="fa-solid fa-id-card-clip mr-1"></i> 9.2 Student Leave Requests<span class="tab-count-badge" style="display: none;"> (<span id="studentLeaveTabBadge">14</span>)</span>
             </button>
             <button type="button" class="tab-btn" data-sub="history" onclick="portalApp.switchSubTab('leaves', 'history')">
-              <i class="fa-solid fa-clock-rotate-left mr-1"></i> 9.3 Leave History Register (<span id="historyLeaveTabBadge">24</span>)
+              <i class="fa-solid fa-clock-rotate-left mr-1"></i> 9.3 Leave History Register<span class="tab-count-badge" style="display: none;"> (<span id="historyLeaveTabBadge">24</span>)</span>
             </button>
             <button type="button" class="tab-btn" data-sub="calendar" onclick="portalApp.switchSubTab('leaves', 'calendar')">
-              <i class="fa-solid fa-calendar-days mr-1"></i> Leave Calendar (<span id="calendarOverlapBadge" class="text-amber">1 Overlap</span>)
+              <i class="fa-solid fa-calendar-days mr-1"></i> Leave Calendar<span class="tab-count-badge" style="display: none;"> (<span id="calendarOverlapBadge" class="text-amber">1 Overlap</span>)</span>
             </button>
             <button type="button" class="tab-btn" data-sub="policy" onclick="portalApp.switchSubTab('leaves', 'policy')">
               <i class="fa-solid fa-book-bookmark mr-1"></i> Leave Policy
@@ -10967,7 +10967,7 @@
               <i class="fa-solid fa-cash-register mr-1"></i> 10.1 Fee Collection
             </button>
             <button class="tab-btn" data-sub="pending" onclick="portalApp.switchSubTab('fees', 'pending')">
-              <i class="fa-solid fa-user-clock mr-1"></i> 10.2 Pending Dues (<span id="feePendingTabBadge">₹4.2L</span>)
+              <i class="fa-solid fa-user-clock mr-1"></i> 10.2 Pending Dues<span class="tab-count-badge" style="display: none;"> (<span id="feePendingTabBadge">₹4.2L</span>)</span>
             </button>
             <button class="tab-btn" data-sub="structure" onclick="portalApp.switchSubTab('fees', 'structure')">
               <i class="fa-solid fa-table-list mr-1"></i> 10.3 Fee Structure
@@ -11543,16 +11543,16 @@
               <i class="fa-solid fa-calendar-day mr-1"></i> 11.2 Principal's Calendar
             </button>
             <button class="tab-btn" data-sub="requests" onclick="portalApp.switchSubTab('appointments', 'requests')">
-              <i class="fa-solid fa-envelope-open-text mr-1"></i> 11.3 Appointment Requests (<span id="apptPendingBadge">3</span>)
+              <i class="fa-solid fa-envelope-open-text mr-1"></i> 11.3 Appointment Requests<span class="tab-count-badge" style="display: none;"> (<span id="apptPendingBadge">3</span>)</span>
             </button>
             <button class="tab-btn" data-sub="visitors" onclick="portalApp.switchSubTab('appointments', 'visitors')">
-              <i class="fa-solid fa-address-book mr-1"></i> 11.4 Visitor Register (<span id="visitorCountBadge">4 In Campus</span>)
+              <i class="fa-solid fa-address-book mr-1"></i> 11.4 Visitor Register<span class="tab-count-badge" style="display: none;"> (<span id="visitorCountBadge">4 In Campus</span>)</span>
             </button>
             <button class="tab-btn" data-sub="history" onclick="portalApp.switchSubTab('appointments', 'history')">
               <i class="fa-solid fa-clock-rotate-left mr-1"></i> 11.5 Meeting History &amp; Retention
             </button>
             <button class="tab-btn" data-sub="followup" onclick="portalApp.switchSubTab('appointments', 'followup')">
-              <i class="fa-solid fa-list-check mr-1"></i> Follow-up Tasks (<span id="apptFollowupBadge">4 Pending</span>)
+              <i class="fa-solid fa-list-check mr-1"></i> Follow-up Tasks<span class="tab-count-badge" style="display: none;"> (<span id="apptFollowupBadge">4 Pending</span>)</span>
             </button>
           </div>
 
@@ -12174,10 +12174,10 @@
           <div class="tab-strip" id="commTabStrip">
             <button class="tab-btn active" data-sub="announcements"
               onclick="portalApp.switchSubTab('communication', 'announcements')">
-              <i class="fa-solid fa-bullhorn mr-1"></i> Announcements (<span id="commAnnCountBadge">8</span>)
+              <i class="fa-solid fa-bullhorn mr-1"></i> Announcements<span class="tab-count-badge" style="display: none;"> (<span id="commAnnCountBadge">8</span>)</span>
             </button>
             <button class="tab-btn" data-sub="circulars" onclick="portalApp.switchSubTab('communication', 'circulars')">
-              <i class="fa-solid fa-scroll mr-1"></i> Official Circulars (<span id="commCirCountBadge">24</span>)
+              <i class="fa-solid fa-scroll mr-1"></i> Official Circulars<span class="tab-count-badge" style="display: none;"> (<span id="commCirCountBadge">24</span>)</span>
             </button>
             <button class="tab-btn" data-sub="sms" onclick="portalApp.switchSubTab('communication', 'sms')">
               <i class="fa-solid fa-comment-sms mr-1"></i> SMS Broadcast
@@ -12189,7 +12189,7 @@
               <i class="fa-solid fa-mobile-screen mr-1"></i> Mobile Push
             </button>
             <button class="tab-btn" data-sub="enquiries" onclick="portalApp.switchSubTab('communication', 'enquiries')">
-              <i class="fa-solid fa-comments mr-1"></i> Parent Enquiries (<span id="commEnqCountBadge">6</span>)
+              <i class="fa-solid fa-comments mr-1"></i> Parent Enquiries<span class="tab-count-badge" style="display: none;"> (<span id="commEnqCountBadge">6</span>)</span>
             </button>
             <button class="tab-btn" data-sub="templates" onclick="portalApp.switchSubTab('communication', 'templates')">
               <i class="fa-solid fa-file-code mr-1"></i> Message Templates
@@ -12941,23 +12941,23 @@
           <!-- Navigation Tab Strip matching the 6 required submenus -->
           <div class="tab-strip" id="eventsTabStrip">
             <button class="tab-btn active" data-sub="calendar" onclick="portalApp.switchSubTab('events', 'calendar')">
-              <i class="fa-solid fa-calendar-days"></i> Annual Calendar (<span id="tabBadgeEventsCalendar">16</span>)
+              <i class="fa-solid fa-calendar-days"></i> Annual Calendar<span class="tab-count-badge" style="display: none;"> (<span id="tabBadgeEventsCalendar">16</span>)</span>
             </button>
             <button class="tab-btn" data-sub="school" onclick="portalApp.switchSubTab('events', 'school')">
-              <i class="fa-solid fa-school-flag"></i> School Events (<span id="tabBadgeEventsSchool">7</span>)
+              <i class="fa-solid fa-school-flag"></i> School Events<span class="tab-count-badge" style="display: none;"> (<span id="tabBadgeEventsSchool">7</span>)</span>
             </button>
             <button class="tab-btn" data-sub="competitions" onclick="portalApp.switchSubTab('events', 'competitions')">
-              <i class="fa-solid fa-trophy"></i> Competitions (<span id="tabBadgeEventsCompetitions">6</span>)
+              <i class="fa-solid fa-trophy"></i> Competitions<span class="tab-count-badge" style="display: none;"> (<span id="tabBadgeEventsCompetitions">6</span>)</span>
             </button>
             <button class="tab-btn" data-sub="clubs-sports" onclick="portalApp.switchSubTab('events', 'clubs-sports')">
-              <i class="fa-solid fa-person-running"></i> Clubs &amp; Sports (<span id="tabBadgeEventsClubs">6</span>)
+              <i class="fa-solid fa-person-running"></i> Clubs &amp; Sports<span class="tab-count-badge" style="display: none;"> (<span id="tabBadgeEventsClubs">6</span>)</span>
             </button>
             <button class="tab-btn" data-sub="permissions" onclick="portalApp.switchSubTab('events', 'permissions')">
-              <i class="fa-solid fa-shield-halved"></i> Event Permissions (<span
-                id="tabBadgeEventsPermissions">5</span>)
+              <i class="fa-solid fa-shield-halved"></i> Event Permissions<span class="tab-count-badge" style="display: none;"> (<span
+                id="tabBadgeEventsPermissions">5</span>)</span>
             </button>
             <button class="tab-btn" data-sub="reports" onclick="portalApp.switchSubTab('events', 'reports')">
-              <i class="fa-solid fa-clipboard-check"></i> Event Reports (<span id="tabBadgeEventsReports">4</span>)
+              <i class="fa-solid fa-clipboard-check"></i> Event Reports<span class="tab-count-badge" style="display: none;"> (<span id="tabBadgeEventsReports">4</span>)</span>
             </button>
           </div>
 
@@ -14469,16 +14469,16 @@
           <!-- Module Tab Strip (5 Submenus) -->
           <div class="tab-strip mb-4" id="tasksTabStrip">
             <button class="tab-btn active" data-sub="pending" onclick="portalApp.switchSubTab('tasks', 'pending')">
-              <i class="fa-solid fa-clock text-amber mr-1"></i> Pending Approvals (<span id="tabBadgeTasksPending">8</span>)
+              <i class="fa-solid fa-clock text-amber mr-1"></i> Pending Approvals<span class="tab-count-badge" style="display: none;"> (<span id="tabBadgeTasksPending">8</span>)</span>
             </button>
             <button class="tab-btn" data-sub="assigned" onclick="portalApp.switchSubTab('tasks', 'assigned')">
-              <i class="fa-solid fa-user-check text-primary mr-1"></i> My Assigned Tasks (<span id="tabBadgeTasksAssigned">6</span>)
+              <i class="fa-solid fa-user-check text-primary mr-1"></i> My Assigned Tasks<span class="tab-count-badge" style="display: none;"> (<span id="tabBadgeTasksAssigned">6</span>)</span>
             </button>
             <button class="tab-btn" data-sub="history" onclick="portalApp.switchSubTab('tasks', 'history')">
-              <i class="fa-solid fa-clipboard-check text-emerald mr-1"></i> Approval History (<span id="tabBadgeTasksHistory">8</span>)
+              <i class="fa-solid fa-clipboard-check text-emerald mr-1"></i> Approval History<span class="tab-count-badge" style="display: none;"> (<span id="tabBadgeTasksHistory">8</span>)</span>
             </button>
             <button class="tab-btn" data-sub="escalations" onclick="portalApp.switchSubTab('tasks', 'escalations')">
-              <i class="fa-solid fa-triangle-exclamation text-danger mr-1"></i> Escalations (<span id="tabBadgeTasksEscalations">3 Alert</span>)
+              <i class="fa-solid fa-triangle-exclamation text-danger mr-1"></i> Escalations<span class="tab-count-badge" style="display: none;"> (<span id="tabBadgeTasksEscalations">3 Alert</span>)</span>
             </button>
             <button class="tab-btn" data-sub="workflows" onclick="portalApp.switchSubTab('tasks', 'workflows')">
               <i class="fa-solid fa-sliders text-purple mr-1"></i> Core Workflows (10 Pipelines)
@@ -16064,25 +16064,25 @@
           <!-- Tab-Strip with 6 Submenus per User Specification -->
           <div class="tab-strip" id="transportTabStrip">
             <button class="tab-btn active" data-sub="routes" onclick="portalApp.switchSubTab('transport', 'routes')">
-              <i class="fa-solid fa-route"></i> Routes &amp; Stops (<span id="tabBadgeTransportRoutes">6</span>)
+              <i class="fa-solid fa-route"></i> Routes &amp; Stops<span class="tab-count-badge" style="display: none;"> (<span id="tabBadgeTransportRoutes">6</span>)</span>
             </button>
             <button class="tab-btn" data-sub="vehicles" onclick="portalApp.switchSubTab('transport', 'vehicles')">
-              <i class="fa-solid fa-bus"></i> Vehicles (<span id="tabBadgeTransportVehicles">6</span>)
+              <i class="fa-solid fa-bus"></i> Vehicles<span class="tab-count-badge" style="display: none;"> (<span id="tabBadgeTransportVehicles">6</span>)</span>
             </button>
             <button class="tab-btn" data-sub="drivers" onclick="portalApp.switchSubTab('transport', 'drivers')">
-              <i class="fa-solid fa-id-card"></i> Drivers &amp; Attendants (<span
-                id="tabBadgeTransportDrivers">12</span>)
+              <i class="fa-solid fa-id-card"></i> Drivers &amp; Attendants<span class="tab-count-badge" style="display: none;"> (<span
+                id="tabBadgeTransportDrivers">12</span>)</span>
             </button>
             <button class="tab-btn" data-sub="allocations" onclick="portalApp.switchSubTab('transport', 'allocations')">
-              <i class="fa-solid fa-users-line"></i> Transport Allocation (<span
-                id="tabBadgeTransportAllocations">180</span>)
+              <i class="fa-solid fa-users-line"></i> Transport Allocation<span class="tab-count-badge" style="display: none;"> (<span
+                id="tabBadgeTransportAllocations">180</span>)</span>
             </button>
             <button class="tab-btn" data-sub="maintenance" onclick="portalApp.switchSubTab('transport', 'maintenance')">
-              <i class="fa-solid fa-screwdriver-wrench"></i> Maintenance (<span
-                id="tabBadgeTransportMaintenance">8</span>)
+              <i class="fa-solid fa-screwdriver-wrench"></i> Maintenance<span class="tab-count-badge" style="display: none;"> (<span
+                id="tabBadgeTransportMaintenance">8</span>)</span>
             </button>
             <button class="tab-btn" data-sub="safety" onclick="portalApp.switchSubTab('transport', 'safety')">
-              <i class="fa-solid fa-shield-halved"></i> Safety Inspections (<span id="tabBadgeTransportSafety">6</span>)
+              <i class="fa-solid fa-shield-halved"></i> Safety Inspections<span class="tab-count-badge" style="display: none;"> (<span id="tabBadgeTransportSafety">6</span>)</span>
             </button>
           </div>
 
@@ -16698,26 +16698,26 @@
           <!-- Tab-Strip with 6 Submenus per User Specification -->
           <div class="tab-strip" id="inventoryTabStrip">
             <button class="tab-btn active" data-sub="assets" onclick="portalApp.switchSubTab('inventory', 'assets')">
-              <i class="fa-solid fa-barcode"></i> Asset Register (<span id="tabBadgeInventoryAssets">8</span>)
+              <i class="fa-solid fa-barcode"></i> Asset Register<span class="tab-count-badge" style="display: none;"> (<span id="tabBadgeInventoryAssets">8</span>)</span>
             </button>
             <button class="tab-btn" data-sub="stock" onclick="portalApp.switchSubTab('inventory', 'stock')">
-              <i class="fa-solid fa-boxes-stacked"></i> Stock Management (<span id="tabBadgeInventoryStock">8</span>)
+              <i class="fa-solid fa-boxes-stacked"></i> Stock Management<span class="tab-count-badge" style="display: none;"> (<span id="tabBadgeInventoryStock">8</span>)</span>
             </button>
             <button class="tab-btn" data-sub="purchases" onclick="portalApp.switchSubTab('inventory', 'purchases')">
-              <i class="fa-solid fa-cart-shopping"></i> Purchase Requests (<span
-                id="tabBadgeInventoryPurchases">6</span>)
+              <i class="fa-solid fa-cart-shopping"></i> Purchase Requests<span class="tab-count-badge" style="display: none;"> (<span
+                id="tabBadgeInventoryPurchases">6</span>)</span>
             </button>
             <button class="tab-btn" data-sub="vendors" onclick="portalApp.switchSubTab('inventory', 'vendors')">
-              <i class="fa-solid fa-handshake"></i> Vendors (<span id="tabBadgeInventoryVendors">6</span>)
+              <i class="fa-solid fa-handshake"></i> Vendors<span class="tab-count-badge" style="display: none;"> (<span id="tabBadgeInventoryVendors">6</span>)</span>
             </button>
             <button class="tab-btn" data-sub="issue-return"
               onclick="portalApp.switchSubTab('inventory', 'issue-return')">
-              <i class="fa-solid fa-arrow-right-arrow-left"></i> Issue &amp; Return (<span
-                id="tabBadgeInventoryIssueReturn">8</span>)
+              <i class="fa-solid fa-arrow-right-arrow-left"></i> Issue &amp; Return<span class="tab-count-badge" style="display: none;"> (<span
+                id="tabBadgeInventoryIssueReturn">8</span>)</span>
             </button>
             <button class="tab-btn" data-sub="maintenance" onclick="portalApp.switchSubTab('inventory', 'maintenance')">
-              <i class="fa-solid fa-screwdriver-wrench"></i> Maintenance (<span
-                id="tabBadgeInventoryMaintenance">6</span>)
+              <i class="fa-solid fa-screwdriver-wrench"></i> Maintenance<span class="tab-count-badge" style="display: none;"> (<span
+                id="tabBadgeInventoryMaintenance">6</span>)</span>
             </button>
           </div>
 
@@ -17305,11 +17305,11 @@
           <div class="tab-strip" id="documentsTabStrip">
             <button type="button" class="tab-btn active" data-sub="certificates"
               onclick="portalApp.switchSubTab('documents', 'certificates')">
-              <i class="fa-solid fa-certificate"></i> Certificates (<span id="docsCertCountBadge">24</span>)
+              <i class="fa-solid fa-certificate"></i> Certificates<span class="tab-count-badge" style="display: none;"> (<span id="docsCertCountBadge">24</span>)</span>
             </button>
             <button type="button" class="tab-btn" data-sub="record-requests"
               onclick="portalApp.switchSubTab('documents', 'record-requests')">
-              <i class="fa-solid fa-folder-open"></i> Record Requests (<span id="docsReqCountBadge">8</span>)
+              <i class="fa-solid fa-folder-open"></i> Record Requests<span class="tab-count-badge" style="display: none;"> (<span id="docsReqCountBadge">8</span>)</span>
             </button>
           </div>
 
