@@ -18,8 +18,8 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
   <!-- Portal Custom CSS -->
-  <link rel="stylesheet" href="/css/portal.css?v=20261107-11">
-  <link rel="stylesheet" href="../css/portal.css?v=20261107-11">
+  <link rel="stylesheet" href="/css/portal.css?v=20261107-12">
+  <link rel="stylesheet" href="../css/portal.css?v=20261107-12">
   <link rel="stylesheet" href="/css/portal-login.css?v=20261107-11">
   <link rel="stylesheet" href="../css/portal-login.css?v=20261107-11">
 </head>
@@ -4402,30 +4402,26 @@
                Display: Guardian details, verified contact information, relationship and linked children
                ================================================================= -->
                     <div class="student-subview" id="subview-students-parents" style="display:none;">
-            
-<!-- Standard Page Header -->
-            <div class="subview-header-bar" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; flex-wrap: wrap; gap: 0.75rem;">
-              <div>
-                <h3 style="font-size: 1.15rem; font-weight: 700; color: #0f172a; margin: 0 0 0.2rem 0; display: flex; align-items: center; gap: 0.5rem;">
-                  <i class="fa-solid fa-users text-primary" style="font-size: 1.05rem;"></i> Parent and Guardian Records
-                </h3>
-                <p style="font-size: 0.8125rem; color: #64748b; margin: 0;">
-                  Authoritative parent and legal guardian register, verified emergency contacts, student relationships, and parent portal provisioning.
-                </p>
+
+            <!-- Standard Subview Header Bar -->
+            <div class="subview-header-bar">
+              <div class="subview-header-info">
+                <h3><i class="fa-solid fa-users text-primary"></i> Parent and Guardian Records</h3>
+                <p>Authoritative parent and legal guardian register, verified emergency contacts, student relationships, and parent portal provisioning.</p>
               </div>
-              <div class="guardian-header-actions" style="display: flex; align-items: center; gap: 0.5rem;">
-                <button type="button" class="btn btn-outline-secondary btn-sm" onclick="portalApp.openVerifyContactModal()" style="font-weight: 600; padding: 0.4rem 0.85rem; font-size: 0.8125rem;">
-                  <i class="fa-solid fa-user-check me-1"></i> Verify Contact
+              <div class="subview-header-actions">
+                <button type="button" class="btn btn-secondary" onclick="portalApp.openVerifyContactModal()" id="btnVerifyContactPrimary">
+                  <i class="fa-solid fa-user-check text-primary"></i> Verify Contact
                 </button>
-                <button type="button" class="btn btn-primary btn-sm" onclick="portalApp.openAddGuardianModal()" style="font-weight: 600; padding: 0.4rem 0.85rem; font-size: 0.8125rem;">
-                  <i class="fa-solid fa-user-plus me-1"></i> + Add Guardian
+                <button type="button" class="btn btn-primary" onclick="portalApp.openAddGuardianModal()" id="btnAddGuardianPrimary">
+                  <i class="fa-solid fa-user-plus"></i> + Add Guardian
                 </button>
               </div>
             </div>
 
             <!-- Statutory Architecture Notice: Future Parent Portal Preparation -->
             <div class="guardian-statutory-notice">
-              <i class="fa-solid fa-shield-halved mr-1" style="font-size: 1rem; color: #059669; margin-top: 2px;"></i>
+              <i class="fa-solid fa-shield-halved text-primary mr-1" style="font-size: 1rem; margin-top: 2px;"></i>
               <div>
                 <strong>Statutory Parent Portal Architecture &amp; Data Integrity:</strong>
                 Guardian relationships are recorded and verified independently of user login credentials. When Parent Portal accounts are provisioned, identity verification binds user credentials strictly to authorized children with recorded parental consent and communication preferences. Parents may submit corrections to their contact information via audit dockets without directly overwriting verified institutional school records.
@@ -4433,7 +4429,7 @@
             </div>
 
             <!-- 4 Summary KPI Cards -->
-            <div class="admissions-overview-bar" style="margin-bottom: 1.25rem;">
+            <div class="parents-overview-bar">
               <div class="adm-stat-card card-blue">
                 <div class="adm-stat-icon icon-blue"><i class="fa-solid fa-users"></i></div>
                 <div class="adm-stat-info">
@@ -4471,7 +4467,7 @@
                 <div class="tc-search-wrap">
                   <i class="fa-solid fa-magnifying-glass search-icon"></i>
                   <input type="text" id="parentFilterInput" class="tc-search-input"
-                    placeholder="Search by guardian name, phone, email, student, admission no, occupation..."
+                    placeholder="Search guardian name, phone, email, student, admission no..."
                     oninput="portalApp.filterParentRecords()">
                   <button type="button" class="tc-clear-btn" id="parentClearSearchBtn"
                     onclick="document.getElementById('parentFilterInput').value=''; portalApp.filterParentRecords();"
@@ -4525,17 +4521,17 @@
                 </div>
 
                 <div class="tc-actions-right">
-                  <button type="button" class="btn btn-outline-secondary btn-sm btn-filter-reset"
+                  <button type="button" class="btn btn-sm btn-secondary btn-filter-reset"
                     onclick="portalApp.resetParentFilters()" title="Reset all filters">
-                    <i class="fa-solid fa-rotate-left me-1"></i> Reset Filters
+                    <i class="fa-solid fa-rotate-left"></i> Reset Filters
                   </button>
-                  <button type="button" class="btn btn-outline-secondary btn-sm" onclick="portalApp.exportParentCSV()"
+                  <button type="button" class="btn btn-sm btn-secondary" onclick="portalApp.exportParentCSV()"
                     title="Export guardian register to CSV">
-                    <i class="fa-solid fa-file-excel text-success me-1"></i> Export CSV
+                    <i class="fa-solid fa-file-csv text-primary"></i> Export CSV
                   </button>
-                  <button type="button" class="btn btn-outline-primary btn-sm" onclick="portalApp.printParentDirectory()"
+                  <button type="button" class="btn btn-sm btn-secondary" onclick="portalApp.printParentDirectory()"
                     title="Print guardian directory">
-                    <i class="fa-solid fa-print me-1"></i> Print Directory
+                    <i class="fa-solid fa-print"></i> Print Directory
                   </button>
                 </div>
               </div>

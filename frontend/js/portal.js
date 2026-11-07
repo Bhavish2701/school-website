@@ -9355,7 +9355,7 @@ const FEE_CATEGORY_AUDIT_DATA = [
           <td>
             <div style="display:flex; flex-direction:column; gap:0.25rem;">
               ${portalBadgeHtml}
-              <span style="font-size:0.7rem; color:#64748b;">${p.portalAccount ? p.portalAccount.accountUid : ''}</span>
+              <span class="parent-uid-pill">${p.portalAccount ? p.portalAccount.accountUid : ''}</span>
             </div>
           </td>
           <td style="text-align: center;">
