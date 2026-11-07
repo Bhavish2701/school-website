@@ -9,17 +9,17 @@
   left: 0;
   right: 0;
   bottom: 0;
-  width: 100%;
-  height: 100%;
-  background: radial-gradient(circle at 15% 15%, rgba(37, 99, 235, 0.35) 0%, transparent 45%),
-              radial-gradient(circle at 85% 85%, rgba(30, 58, 138, 0.45) 0%, transparent 45%),
-              radial-gradient(circle at 50% 50%, rgba(15, 23, 42, 0.6) 0%, transparent 100%),
-              linear-gradient(135deg, #070d1e 0%, #0b1426 40%, #0f172a 100%);
+  width: 100vw;
+  height: 100vh;
+  min-height: 100vh;
+  background: #0B1426;
   display: flex;
-  align-items: center;
-  justify-content: center;
+  align-items: stretch;
+  justify-content: stretch;
   z-index: 99999;
-  padding: 1.5rem;
+  padding: 0 !important;
+  margin: 0 !important;
+  overflow-x: hidden;
   overflow-y: auto;
   box-sizing: border-box;
   font-family: 'Outfit', 'Plus Jakarta Sans', 'Inter', -apple-system, sans-serif;
@@ -32,15 +32,9 @@
   pointer-events: none;
 }
 
-/* Ambient Floating Glows for Depth */
+/* Ambient Floating Glows for Depth - Hidden in full-screen edge-to-edge mode */
 .login-bg-glow {
-  position: absolute;
-  border-radius: 50%;
-  filter: blur(90px);
-  pointer-events: none;
-  z-index: 0;
-  opacity: 0.55;
-  animation: pulseGlow 8s ease-in-out infinite alternate;
+  display: none !important;
 }
 
 .glow-1 {
@@ -66,45 +60,51 @@
 
 /* Container */
 .login-card-container {
-  width: 100%;
-  max-width: 1060px;
-  margin: auto;
+  width: 100vw;
+  max-width: 100vw;
+  height: 100vh;
+  min-height: 100vh;
+  margin: 0 !important;
+  padding: 0 !important;
   position: relative;
   z-index: 2;
-  animation: loginSlideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  display: flex;
+  flex: 1;
+  animation: loginFadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
-@keyframes loginSlideUp {
+@keyframes loginFadeIn {
   from {
     opacity: 0;
-    transform: translateY(22px) scale(0.98);
   }
   to {
     opacity: 1;
-    transform: translateY(0) scale(1);
   }
 }
 
-/* 2-Column Split Card */
+/* 2-Column Split Full-Page Layout */
 .portal-login-card {
   background: #FFFFFF;
-  border-radius: 20px;
-  box-shadow: 0 25px 70px -15px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.12);
+  border-radius: 0 !important;
+  box-shadow: none !important;
   display: grid;
-  grid-template-columns: 1.08fr 1fr;
-  min-height: 590px;
+  grid-template-columns: minmax(420px, 1fr) minmax(460px, 1.08fr);
+  width: 100vw;
+  height: 100vh;
+  min-height: 100vh;
   position: relative;
   overflow: hidden;
   box-sizing: border-box;
 }
 
-/* Top Accent Stripe */
+/* Top Accent Stripe - Spans full screen width */
 .portal-login-card::before {
   content: '';
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
+  width: 100vw;
   height: 4px;
   background: linear-gradient(90deg, #1D4ED8 0%, #38BDF8 50%, #1E40AF 100%);
   z-index: 10;
@@ -137,9 +137,12 @@
   color: #FFFFFF;
   display: flex;
   flex-direction: column;
-  padding: 2.25rem 2.25rem 1.65rem;
+  justify-content: center;
+  align-items: center;
+  padding: 3.5rem 3.5rem 2.5rem;
   box-sizing: border-box;
-  overflow: hidden;
+  overflow-y: auto;
+  height: 100vh;
 }
 
 .showcase-mgmt {
@@ -184,7 +187,12 @@
   z-index: 2;
   display: flex;
   flex-direction: column;
+  width: 100%;
+  max-width: 520px;
+  margin: auto;
   height: 100%;
+  max-height: 820px;
+  justify-content: space-between;
 }
 
 /* School Crest & Identity */
@@ -417,11 +425,33 @@
    ========================================================================== */
 .login-form-panel {
   background: #FFFFFF;
-  padding: 2.25rem 2.25rem 1.65rem;
+  padding: 3rem 3.5rem 2.5rem;
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
+  justify-content: center;
+  align-items: center;
   box-sizing: border-box;
+  overflow-y: auto;
+  height: 100vh;
+}
+
+.login-form-header,
+.login-form-panel .login-form,
+.login-portal-switch,
+.login-card-footer {
+  width: 100%;
+  max-width: 440px;
+  margin-left: auto;
+  margin-right: auto;
+  box-sizing: border-box;
+}
+
+.login-form-panel > *:first-child {
+  margin-top: auto;
+}
+
+.login-form-panel > *:last-child {
+  margin-bottom: auto;
 }
 
 .login-form-header {
@@ -817,7 +847,7 @@
 
 /* Bottom Footer */
 .login-card-footer {
-  margin-top: auto;
+  margin-top: 1.15rem;
   padding-top: 0.9rem;
   border-top: 1px solid #E2E8F0;
   display: flex;
@@ -881,16 +911,27 @@
    Responsive Adaptations
    ========================================================================== */
 @media (max-width: 960px) {
+  .portal-login-overlay {
+    overflow-y: auto;
+  }
+
+  .login-card-container {
+    height: auto;
+    min-height: 100vh;
+  }
+
   .portal-login-card {
     grid-template-columns: 1fr;
-    min-height: auto;
-    max-width: 520px;
-    margin: auto;
+    height: auto;
+    min-height: 100vh;
+    max-width: 100%;
+    margin: 0;
   }
 
   .login-showcase-panel {
-    padding: 2rem 1.75rem;
-    min-height: 240px;
+    height: auto;
+    min-height: 220px;
+    padding: 2.25rem 1.5rem 1.75rem;
   }
 
   .showcase-features,
@@ -900,21 +941,23 @@
   }
 
   .login-form-panel {
-    padding: 2rem 1.75rem 1.75rem;
+    height: auto;
+    min-height: calc(100vh - 220px);
+    padding: 2.5rem 1.75rem 2rem;
   }
 }
 
 @media (max-width: 480px) {
   .portal-login-overlay {
-    padding: 0.75rem;
+    padding: 0 !important;
   }
 
   .portal-login-card {
-    border-radius: 18px;
+    border-radius: 0 !important;
   }
 
   .login-form-panel {
-    padding: 1.5rem 1.25rem;
+    padding: 1.75rem 1.25rem;
   }
 
   .showcase-title {
