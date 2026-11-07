@@ -18,10 +18,10 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
   <!-- Portal Custom CSS -->
-  <link rel="stylesheet" href="/css/portal.css?v=20261107-09">
-  <link rel="stylesheet" href="../css/portal.css?v=20261107-09">
-  <link rel="stylesheet" href="/css/portal-login.css?v=20261107-09">
-  <link rel="stylesheet" href="../css/portal-login.css?v=20261107-09">
+  <link rel="stylesheet" href="/css/portal.css?v=20261107-10">
+  <link rel="stylesheet" href="../css/portal.css?v=20261107-10">
+  <link rel="stylesheet" href="/css/portal-login.css?v=20261107-10">
+  <link rel="stylesheet" href="../css/portal-login.css?v=20261107-10">
 </head>
 
 <body>
@@ -4007,26 +4007,21 @@
                ================================================================= -->
           <div class="student-subview" id="subview-students-transfers" style="display:none;">
             
-            <!-- Standard Page Header -->
-            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1.25rem; flex-wrap: wrap; gap: 1rem;">
-              <div>
-                <div style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.8rem; color: #64748b; margin-bottom: 0.35rem;">
-                  <span>Students</span>
-                  <i class="fa-solid fa-chevron-right" style="font-size: 0.65rem;"></i>
-                  <span style="color: #0f172a; font-weight: 600;">Transfers and Transfer Certificates</span>
-                </div>
-                <h2 style="font-size: 1.4rem; font-weight: 800; color: #0f172a; margin: 0 0 0.25rem 0;">
-                  Transfers and Transfer Certificates
+            <!-- Subview Header & Operations Bar -->
+            <div class="subview-header-bar" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; flex-wrap: wrap; gap: 1rem;">
+              <div class="subview-title-group">
+                <h2 style="font-size: 1.25rem; font-weight: 800; color: #0f172a; margin: 0; display: flex; align-items: center; gap: 0.6rem;">
+                  <i class="fa-solid fa-file-export text-primary" style="font-size: 1.15rem;"></i> Transfers and Transfer Certificates
                 </h2>
-                <p style="font-size: 0.84rem; color: #64748b; margin: 0;">
+                <p style="font-size: 0.82rem; color: #64748b; margin: 0.25rem 0 0 0;">
                   Manage student transfer requests, multi-department statutory clearances, and official Transfer Certificate (TC) issuance.
                 </p>
               </div>
-              <div class="tc-header-actions">
-                <button type="button" class="btn btn-outline-secondary btn-sm" onclick="portalApp.openRecordExternalTransferModal()" style="font-weight: 600;">
+              <div class="tc-header-actions" style="display: flex; gap: 0.5rem; flex-wrap: wrap; align-items: center;">
+                <button type="button" class="btn btn-secondary" onclick="portalApp.openRecordExternalTransferModal()" style="font-weight: 600;">
                   <i class="fa-solid fa-right-left mr-1"></i> Record External Transfer
                 </button>
-                <button type="button" class="btn btn-primary btn-sm" onclick="portalApp.openNewTcRequestModal()" style="font-weight: 700;">
+                <button type="button" class="btn btn-primary" onclick="portalApp.openNewTcRequestModal()" style="font-weight: 700;">
                   <i class="fa-solid fa-plus mr-1"></i> New TC Request
                 </button>
               </div>
@@ -4039,7 +4034,7 @@
             </div>
 
             <!-- Summary KPI Cards -->
-            <div class="admissions-overview-bar" style="margin-bottom: 1.25rem;">
+            <div class="transfers-overview-bar">
               <div class="adm-stat-card card-blue">
                 <div class="adm-stat-icon icon-blue"><i class="fa-solid fa-file-export"></i></div>
                 <div class="adm-stat-info">
@@ -4068,8 +4063,8 @@
                   <div class="adm-label">Issued &amp; Transferred</div>
                 </div>
               </div>
-              <div class="adm-stat-card card-blue" style="border-left: 4px solid #0284c7;">
-                <div class="adm-stat-icon" style="background:#e0f2fe; color:#0284c7;"><i class="fa-solid fa-arrow-right-arrow-left"></i></div>
+              <div class="adm-stat-card card-sky">
+                <div class="adm-stat-icon icon-sky"><i class="fa-solid fa-arrow-right-arrow-left"></i></div>
                 <div class="adm-stat-info">
                   <div class="adm-count" id="tcKpiExternal">3</div>
                   <div class="adm-label">External Transfers</div>
@@ -4084,7 +4079,7 @@
                 <div class="tc-search-wrap">
                   <i class="fa-solid fa-magnifying-glass search-icon"></i>
                   <input type="text" id="tcSearchInput" class="tc-search-input"
-                    placeholder="Search by Request ID, Student, Adm No, TC No, Reason..."
+                    placeholder="Search Request ID, Student, Adm No, TC No, Reason..."
                     oninput="portalApp.filterTransfers()">
                   <button type="button" class="tc-clear-btn" id="tcClearSearchBtn"
                     onclick="document.getElementById('tcSearchInput').value=''; portalApp.filterTransfers();"
