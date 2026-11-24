@@ -48,10 +48,47 @@ const getPendingFees = asyncHandler(async (req, res) => {
   return sendSuccess(res, result, 'Pending fees report retrieved successfully', 200);
 });
 
+/**
+ * 6. Get Fee Dashboard Overview (Management)
+ */
+const getFeeDashboardOverview = asyncHandler(async (req, res) => {
+  const result = await feeService.getFeeDashboardOverview();
+  return sendSuccess(res, result, 'Fee dashboard overview retrieved successfully', 200);
+});
+
+/**
+ * 7. Send Single Student Fee Reminder via AP-EDUSMS
+ */
+const sendFeeReminder = asyncHandler(async (req, res) => {
+  const result = await feeService.sendFeeReminder(req.body, req.user);
+  return sendSuccess(
+    res,
+    result,
+    `Fee payment reminder successfully dispatched to parent ${result.parentName} (${result.parentPhone}) via AP-EDUSMS.`,
+    200
+  );
+});
+
+/**
+ * 8. Broadcast Fee Reminders to All Defaulters via AP-EDUSMS
+ */
+const broadcastFeeReminders = asyncHandler(async (req, res) => {
+  const result = await feeService.broadcastFeeReminders(req.user);
+  return sendSuccess(
+    res,
+    result,
+    `Fee payment reminder broadcast dispatched to parents of ${result.recipientCount} defaulters via AP-EDUSMS.`,
+    200
+  );
+});
+
 module.exports = {
   createStructure,
   getStructures,
   assignFee,
   getStudentFees,
   getPendingFees,
+  getFeeDashboardOverview,
+  sendFeeReminder,
+  broadcastFeeReminders,
 };

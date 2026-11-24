@@ -19,8 +19,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
   <!-- Custom Stylesheet -->
-  <link rel="stylesheet" href="css/style.css?v=2.9">
-
+  <link rel="stylesheet" href="css/style.css?v=modern">
   <!-- Ensure Default English Language on Initial Load / Refresh -->
   <script>
     (function() {
@@ -32,6 +31,10 @@
       } catch(e) {}
     })();
   </script>
+  <!-- Modern Input Field System -->
+  <link rel="stylesheet" href="css/modern-inputs.css?v=20261122-v1">
+  <!-- Modern Popover & Overlay Component System -->
+  <link rel="stylesheet" href="/css/modern-popovers.css?v=20261122-v1">
 </head>
 <body>
 
@@ -168,50 +171,11 @@
 
       <!-- Action Button & Mobile Toggle -->
       <div class="nav-cta-group">
-        <!-- Single Unified Institutional Portals Dropdown CTA -->
-        <div class="portal-dropdown-wrapper" id="portalDropdownWrap">
-          <button type="button" class="btn-portal-trigger" id="portalDropdownBtn" aria-expanded="false" title="Institutional Portals Gateway">
-            <i class="fa-solid fa-shield-halved"></i>
-            <span>Institutional Portals</span>
-            <i class="fa-solid fa-chevron-down caret-icon"></i>
-          </button>
-          <div class="portal-dropdown-menu" id="portalDropdownMenu">
-            <div class="portal-drop-header">
-              <span class="portal-drop-title"><i class="fa-solid fa-building-columns"></i> Institutional Portals</span>
-              <span class="portal-drop-sub">Secure ERP Gateway</span>
-            </div>
-            <a href="/platform-admin" class="portal-drop-item" title="Platform Administration Console">
-              <div class="portal-drop-icon icon-mgmt"><i class="fa-solid fa-server"></i></div>
-              <div class="portal-drop-info">
-                <div class="portal-drop-top">
-                  <span class="portal-drop-name">Platform Administration</span>
-                  <span class="portal-drop-badge">Super Admin</span>
-                </div>
-                <div class="portal-drop-desc">Tenants, System Config &amp; Security</div>
-              </div>
-            </a>
-            <a href="/management" class="portal-drop-item item-mgmt" title="Administration Portal: Principal &amp; Management">
-              <div class="portal-drop-icon icon-mgmt"><i class="fa-solid fa-building-columns"></i></div>
-              <div class="portal-drop-info">
-                <div class="portal-drop-top">
-                  <span class="portal-drop-name">Administration Portal</span>
-                  <span class="portal-drop-badge">Executive</span>
-                </div>
-                <div class="portal-drop-desc">Principal &amp; Administrative Management</div>
-              </div>
-            </a>
-            <a href="/teacher" class="portal-drop-item item-teacher" title="Faculty Portal: Teaching Staff &amp; Mentors">
-              <div class="portal-drop-icon icon-teacher"><i class="fa-solid fa-chalkboard-user"></i></div>
-              <div class="portal-drop-info">
-                <div class="portal-drop-top">
-                  <span class="portal-drop-name">Faculty Portal</span>
-                  <span class="portal-drop-badge">Faculty</span>
-                </div>
-                <div class="portal-drop-desc">Attendance, Marks, Invigilation &amp; Syllabus</div>
-              </div>
-            </a>
-          </div>
-        </div>
+        <!-- Unified Single Sign-On Portal CTA -->
+        <a href="/login" class="btn-portal-trigger" title="Sri Vidya Unified Portal Gateway (Management, Faculty & Platform Admin)" style="text-decoration: none;">
+          <i class="fa-solid fa-shield-halved"></i>
+          <span>Portal Sign In</span>
+        </a>
 
         <!-- Mobile Drawer Toggle -->
         <button type="button" class="mobile-toggle" id="mobileMenuToggle" aria-label="Toggle navigation menu">
@@ -1688,7 +1652,21 @@
       <div class="section-header">
         <span class="section-badge gold">Secure ERP Gateways</span>
         <h2 class="section-title">Institutional Portals</h2>
-        <p class="section-subtitle">Dedicated role-based portals for institution administrators, executive management, and academic faculty.</p>
+        <p class="section-subtitle">Unified single sign-on access for Platform Administration, Executive Management, and Academic Faculty. Sign in with your username or School ID, and the platform automatically opens your authorized console.</p>
+      </div>
+
+      <!-- Unified Single Sign-On Callout Banner -->
+      <div class="portal-unified-banner" style="background: linear-gradient(135deg, #0F172A 0%, #1E3A8A 50%, #1D4ED8 100%); color: #FFFFFF; border-radius: 16px; padding: 1.5rem 2rem; margin-bottom: 2.25rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1.25rem; box-shadow: 0 10px 25px -5px rgba(29, 78, 216, 0.3);">
+        <div style="max-width: 650px;">
+          <div style="display: inline-flex; align-items: center; gap: 0.5rem; background: rgba(255, 255, 255, 0.15); padding: 0.25rem 0.75rem; border-radius: 20px; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 0.5rem;">
+            <i class="fa-solid fa-shield-halved"></i> One Unified Access Platform
+          </div>
+          <h3 style="color: #FFFFFF; margin: 0 0 0.35rem; font-size: 1.35rem; font-weight: 800;">Single Common Sign-In for All School Roles</h3>
+          <p style="margin: 0; color: #E2E8F0; font-size: 0.9rem; line-height: 1.5;">Access Management, Faculty, or Platform consoles from one unified login interface. Enter your credentials, and the system automatically identifies your assigned role and permissions.</p>
+        </div>
+        <a href="/login" class="btn btn-primary" style="background: #FFFFFF; color: #1E3A8A; font-weight: 800; padding: 0.75rem 1.6rem; border-radius: 50px; text-decoration: none; display: inline-flex; align-items: center; gap: 0.6rem; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); transition: all 0.2s ease;">
+          <i class="fa-solid fa-right-to-bracket"></i> Launch Unified Sign In
+        </a>
       </div>
 
       <div class="portals-showcase-grid">
@@ -1706,8 +1684,8 @@
             <li><i class="fa-solid fa-check"></i> Infrastructure Health &amp; Logs</li>
             <li><i class="fa-solid fa-check"></i> Tenant Institutions &amp; Audit Logs</li>
           </ul>
-          <a href="/platform-admin" class="btn btn-portal-platform">
-            <i class="fa-solid fa-server"></i> Access Platform Admin
+          <a href="/login?redirect=/platform-admin" class="btn btn-portal-platform">
+            <i class="fa-solid fa-server"></i> Sign In to Platform Admin
           </a>
         </div>
 
@@ -1725,8 +1703,8 @@
             <li><i class="fa-solid fa-check"></i> Examinations, Moderation &amp; Grading</li>
             <li><i class="fa-solid fa-check"></i> Staff Leave Approvals &amp; Welfare</li>
           </ul>
-          <a href="/management" class="btn btn-portal-admin">
-            <i class="fa-solid fa-building-columns"></i> Access Administration Portal
+          <a href="/login?redirect=/management" class="btn btn-portal-admin">
+            <i class="fa-solid fa-building-columns"></i> Sign In to Administration Portal
           </a>
         </div>
 
@@ -1744,8 +1722,8 @@
             <li><i class="fa-solid fa-check"></i> Timetable &amp; Lab Allotments</li>
             <li><i class="fa-solid fa-check"></i> Merit &amp; Incident Logging</li>
           </ul>
-          <a href="/teacher" class="btn btn-portal-faculty">
-            <i class="fa-solid fa-chalkboard-user"></i> Access Faculty Portal
+          <a href="/login?redirect=/teacher" class="btn btn-portal-faculty">
+            <i class="fa-solid fa-chalkboard-user"></i> Sign In to Faculty Portal
           </a>
         </div>
       </div>
@@ -1792,9 +1770,10 @@
         <div class="footer-col">
           <h4 class="footer-heading">Institutional Portals</h4>
           <ul class="footer-links">
-            <li><a href="/platform-admin" style="color: #60A5FA; font-weight: 700;"><i class="fa-solid fa-server"></i> Platform Administration</a></li>
-            <li><a href="/management" style="color: #F87171; font-weight: 700;"><i class="fa-solid fa-building-columns"></i> Administration Portal</a></li>
-            <li><a href="/teacher" style="color: #34D399; font-weight: 700;"><i class="fa-solid fa-chalkboard-user"></i> Faculty Portal</a></li>
+            <li><a href="/login" style="color: #60A5FA; font-weight: 700;"><i class="fa-solid fa-shield-halved"></i> Unified Portal Sign In</a></li>
+            <li><a href="/login?redirect=/platform-admin" style="color: #93C5FD;"><i class="fa-solid fa-server"></i> Platform Administration</a></li>
+            <li><a href="/login?redirect=/management" style="color: #FCA5A5;"><i class="fa-solid fa-building-columns"></i> Administration Portal</a></li>
+            <li><a href="/login?redirect=/teacher" style="color: #6EE7B7;"><i class="fa-solid fa-chalkboard-user"></i> Faculty Portal</a></li>
             <li><a href="#appointments"><i class="fa-solid fa-calendar-check"></i> Book an Appointment</a></li>
             <li><a href="#admissions-status"><i class="fa-solid fa-magnifying-glass"></i> Track Admission Status</a></li>
           </ul>
@@ -1815,6 +1794,14 @@
         </div>
         <div>
           Principal: <strong>Gorle Varalakshmi</strong> (<a href="tel:8106636230" style="color: inherit; text-decoration: underline;">8106636230</a>) &bull; Vice Principal: <strong>Navva Anand</strong> (<a href="tel:9966422096" style="color: inherit; text-decoration: underline;">9966422096</a>)
+        </div>
+        <div style="width: 100%; margin-top: 10px; font-size: 0.8rem; display: flex; gap: 14px; flex-wrap: wrap; justify-content: center; padding-top: 10px; border-top: 1px solid rgba(255,255,255,0.12);">
+          <a href="/privacy" style="color: #93C5FD; text-decoration: none;">Privacy Policy (DPDP Act)</a>
+          <a href="/terms" style="color: #93C5FD; text-decoration: none;">Terms of Service</a>
+          <a href="/cookie-policy" style="color: #93C5FD; text-decoration: none;">Cookie Policy</a>
+          <a href="/fee-policy" style="color: #93C5FD; text-decoration: none;">Fee &amp; Refund Policy</a>
+          <a href="/licenses" style="color: #93C5FD; text-decoration: none;">Open Source Licences</a>
+          <a href="#" onclick="if(window.CookieConsent) CookieConsent.openModal(); return false;" style="color: #FCD34D; text-decoration: none;"><i class="fa-solid fa-sliders"></i> Cookie Preferences</a>
         </div>
       </div>
     </div>
@@ -1906,6 +1893,8 @@
 
   <!-- Reusable API Client -->
   <script src="js/api-client.js"></script>
+  <!-- Cookie Consent & Privacy Manager -->
+  <script src="js/cookie-consent.js?v=20261122-v3"></script>
   <!-- Main JavaScript File -->
   <script src="js/app.js?v=2.7"></script>
 
@@ -1921,5 +1910,14 @@
     }
   </script>
   <script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
+  <!-- ==========================================================================
+       FLOATING BOTTOM NAVIGATION BAR (Mobile Compulsory & Desktop Dock on Scroll)
+       ========================================================================== -->
+  
+  <!-- Modern Input Field System Controller -->
+  <script src="js/modern-inputs.js?v=20261122-v1"></script>
+  <!-- Modern Popover & Overlay Component System Controller -->
+  <script src="/js/modern-popovers.js?v=20261122-v1"></script>
 </body>
 </html>

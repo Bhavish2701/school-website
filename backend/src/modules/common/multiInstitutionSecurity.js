@@ -21,46 +21,31 @@ const mongoose = require('mongoose');
 class MultiInstitutionSecurity {
 
   /**
-   * Resolves the authenticated actor from request session, token, or platform context
+   * Resolves the authenticated actor strictly from verified JWT session context.
+   * Never fails open or elevates privileges from spoofable request headers.
    */
   static resolveActor(req) {
-    if (!req) {
+    if (!req || !req.user) {
       return {
-        userId: 'ACT-ANONYMOUS',
-        name: 'Anonymous',
-        role: 'Guest',
+        userId: 'UNAUTHENTICATED',
+        name: 'Unauthenticated Request',
+        role: 'GUEST',
         institutionId: 'NONE',
         scope: 'INSTITUTION_ONLY',
         permissions: []
       };
     }
 
-    if (req.user) {
-      return {
-        userId: req.user.userId || req.user.id || 'USR-OP-CURRENT',
-        name: req.user.name || req.user.username || 'Platform Operator',
-        role: req.user.role || (Array.isArray(req.user.roles) ? req.user.roles[0] : 'Super Administrator'),
-        institutionId: req.user.institutionId || 'TRUST-ALL',
-        scope: req.user.scope || (req.user.role === 'Super Administrator' ? 'PLATFORM_WIDE' : 'INSTITUTION_ONLY'),
-        permissions: req.user.permissions || []
-      };
-    }
-
-    // Default supervisory root operator context for platform-admin endpoints
-    const headers = req.headers || {};
-    const roleHeader = headers['x-operator-role'] || headers['x-actor-role'];
-    const instHeader = headers['x-institution-id'] || headers['x-actor-institution-id'];
-    const scopeHeader = headers['x-operator-scope'] || headers['x-institution-scope'];
-    const nameHeader = headers['x-operator-name'] || headers['x-actor-name'];
-    const idHeader = headers['x-operator-id'] || headers['x-actor-id'];
-
+    const rawRole = req.user.role || (Array.isArray(req.user.roles) ? req.user.roles[0] : 'GUEST');
+    const isSuper = rawRole === 'SUPER_ADMIN' || rawRole === 'Super Administrator';
     return {
-      userId: idHeader || 'ACT-ROOT-OPERATOR',
-      name: nameHeader || 'Super Administrator Operator',
-      role: roleHeader || 'Super Administrator',
-      institutionId: instHeader || 'TRUST-ALL',
-      scope: scopeHeader || (roleHeader === 'Super Administrator' ? 'PLATFORM_WIDE' : (roleHeader ? 'INSTITUTION_ONLY' : 'PLATFORM_WIDE')),
-      permissions: ['*'] // full wild-card for super-admin unless constrained
+      userId: String(req.user.userId || req.user._id || req.user.id || 'UNKNOWN'),
+      name: req.user.fullName || req.user.name || req.user.username || 'Authenticated User',
+      email: req.user.email || `${req.user.username || 'operator'}@srividya.edu.in`,
+      role: rawRole,
+      institutionId: req.user.institutionId || (isSuper ? 'TRUST-ALL' : 'INST-001'),
+      scope: req.user.scope || (isSuper ? 'PLATFORM_WIDE' : 'INSTITUTION_ONLY'),
+      permissions: isSuper ? ['*'] : (req.user.permissions || [])
     };
   }
 
@@ -224,42 +209,64 @@ class MultiInstitutionSecurity {
   static async logSecurityViolation(actor, violationType, details) {
     try {
       if (mongoose.connection && mongoose.connection.readyState === 1) {
+        const now = Date.now();
         await PlatformAudit.create({
-          eventId: `SEC-VIOLATION-${Date.now()}`,
+          eventId: `SEC-VIOLATION-${now}`,
+          correlationId: `CORR-SEC-${now}`,
           timestamp: new Date(),
-          category: 'SECURITY_MONITORING',
-          action: violationType,
+          category: 'SECURITY_ALERTS',
+          action: violationType || 'SECURITY_POLICY_VIOLATION',
           actor: {
-            actorId: actor.userId,
-            identity: actor.name,
-            role: actor.role,
-            scope: actor.scope
+            userId: String(actor?.userId || 'SYSTEM'),
+            name: actor?.name || 'System Security Policy',
+            email: actor?.email || 'security@srividya.edu.in',
+            role: actor?.role || 'UNKNOWN',
+            scope: actor?.scope === 'PLATFORM_WIDE' ? 'Platform' : 'Institution',
           },
-          institution: actor.institutionId,
-          result: 'BLOCKED',
+          institutionId: actor?.institutionId || 'TRUST-ALL',
+          targetEntity: {
+            entityType: 'SecurityPolicy',
+            entityId: String(details?.targetInstitutionId || actor?.institutionId || 'TRUST-ALL'),
+            displayName: violationType || 'Policy Check',
+          },
+          result: 'DENIED',
           severity: 'HIGH',
+          reason: details?.reason || 'Cross-institution or unauthorized access attempt blocked',
           details
         });
       }
     } catch (e) {}
   }
 
-  static async logAuditRecord(actor, category, action, details) {
-    const eventId = `AUD-${Date.now()}-${Math.random().toString(36).substring(2, 6).toUpperCase()}`;
+  static async logAuditRecord(actor, category, action, details = {}) {
+    const validCategories = ['AUTH_ACCOUNTS','INSTITUTIONS','RBAC_PERMISSIONS','SCHOOL_CONFIG','INTEGRATIONS','DATA_IMPORT_EXPORT','BACKUP_RECOVERY','ADMIN_SUPPORT','SECURITY_ALERTS','DEPLOYMENT_OPS'];
+    const mappedCategory = validCategories.includes(category) ? category : 'SECURITY_ALERTS';
+    const validResults = ['SUCCESS', 'FAILED', 'DENIED', 'WARNING'];
+    const mappedResult = validResults.includes(details.result) ? details.result : 'SUCCESS';
+    const now = Date.now();
+    const eventId = `AUD-${now}-${Math.random().toString(36).substring(2, 6).toUpperCase()}`;
     const auditDoc = {
       eventId,
+      correlationId: details.correlationId || `CORR-${now}`,
       timestamp: new Date(),
-      category,
-      action,
+      category: mappedCategory,
+      action: action || 'PLATFORM_ACTION',
       actor: {
-        actorId: actor.userId || actor.id,
-        identity: actor.name,
-        role: actor.role,
-        scope: actor.scope
+        userId: String(actor?.userId || actor?.id || 'SYSTEM'),
+        name: actor?.name || 'Platform Operator',
+        email: actor?.email || 'admin@srividya.edu.in',
+        role: actor?.role || 'SUPER_ADMIN',
+        scope: actor?.scope === 'INSTITUTION_ONLY' ? 'Institution' : 'Platform',
       },
-      institution: details.targetInstitutionId || actor.institutionId,
-      result: details.result || 'SUCCESS',
-      severity: details.severity || 'INFO',
+      institutionId: details.targetInstitutionId || actor?.institutionId || 'TRUST-ALL',
+      targetEntity: {
+        entityType: details.entityType || 'PlatformEntity',
+        entityId: String(details.targetId || details.targetInstitutionId || actor?.institutionId || 'TRUST-ALL'),
+        displayName: details.displayName || action || 'Platform Audit Event',
+      },
+      result: mappedResult,
+      severity: ['INFO', 'LOW', 'MEDIUM', 'HIGH', 'CRITICAL'].includes(details.severity) ? details.severity : 'INFO',
+      reason: details.reason || `Recorded ${action || 'action'} via security policy controller`,
       details
     };
 

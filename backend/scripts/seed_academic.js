@@ -21,19 +21,31 @@ const seedAcademic = async () => {
   const teacherSunitha = await Teacher.findOne({ fullName: /Sunitha/i });
   const teacherRamesh = await Teacher.findOne({ fullName: /Ramesh/i });
 
-  // 1. Seed Academic Year
-  const currentYear = await AcademicYear.create({
-    name: '2025-2026',
-    startDate: new Date('2025-06-12'),
-    endDate: new Date('2026-04-20'),
-    isCurrent: true,
-    status: 'ACTIVE',
-    terms: [
-      { name: 'Term 1', startDate: new Date('2025-06-12'), endDate: new Date('2025-10-31') },
-      { name: 'Term 2', startDate: new Date('2025-11-01'), endDate: new Date('2026-04-20') },
-    ],
-  });
-  console.log(`[Academic Seed] Seeded Academic Year: ${currentYear.name} (Current & Active)`);
+  // 1. Seed Academic Years (Historical, Current Active 2026-2027, and Upcoming)
+  const yearsData = [
+    { name: '2021-2022', startDate: new Date('2021-06-12'), endDate: new Date('2022-04-20'), isCurrent: false, status: 'COMPLETED' },
+    { name: '2022-2023', startDate: new Date('2022-06-12'), endDate: new Date('2023-04-20'), isCurrent: false, status: 'COMPLETED' },
+    { name: '2023-2024', startDate: new Date('2023-06-12'), endDate: new Date('2024-04-20'), isCurrent: false, status: 'COMPLETED' },
+    { name: '2024-2025', startDate: new Date('2024-06-12'), endDate: new Date('2025-04-20'), isCurrent: false, status: 'COMPLETED' },
+    { name: '2025-2026', startDate: new Date('2025-06-12'), endDate: new Date('2026-04-20'), isCurrent: false, status: 'COMPLETED' },
+    {
+      name: '2026-2027',
+      startDate: new Date('2026-06-12'),
+      endDate: new Date('2027-04-20'),
+      isCurrent: true,
+      status: 'ACTIVE',
+      terms: [
+        { name: 'Term 1', startDate: new Date('2026-06-12'), endDate: new Date('2026-10-31') },
+        { name: 'Term 2', startDate: new Date('2026-11-01'), endDate: new Date('2027-04-20') },
+      ],
+    },
+    { name: '2027-2028', startDate: new Date('2027-06-12'), endDate: new Date('2028-04-20'), isCurrent: false, status: 'UPCOMING' },
+    { name: '2028-2029', startDate: new Date('2028-06-12'), endDate: new Date('2029-04-20'), isCurrent: false, status: 'UPCOMING' },
+    { name: '2029-2030', startDate: new Date('2029-06-12'), endDate: new Date('2030-04-20'), isCurrent: false, status: 'UPCOMING' },
+  ];
+  await AcademicYear.insertMany(yearsData);
+  const currentYear = await AcademicYear.findOne({ name: '2026-2027' });
+  console.log(`[Academic Seed] Seeded Academic Years: 2021-2022 to 2029-2030 (Active Present Year: ${currentYear.name})`);
 
   // 2. Seed Subjects
   const subjects = await Subject.insertMany([

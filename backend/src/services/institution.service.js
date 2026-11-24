@@ -1,5 +1,7 @@
 const mongoose = require('mongoose');
 const { Institution } = require('../models/institution.model');
+const { PlatformAudit } = require('../models/platformAudit.model');
+const liveSyncBus = require('../utils/liveSyncBus');
 const crypto = require('crypto');
 
 let AuditLogModel = null;
@@ -306,17 +308,41 @@ const defaultInstitutions = [
   }
 ];
 
-// Helper to record audit events
+// Helper to record audit events & broadcast live sync
 async function logAuditEvent(action, details, user, ip) {
-  if (!AuditLogModel || mongoose.connection.readyState !== 1) return;
+  liveSyncBus.emitSync('PLATFORM', action, { category: 'INSTITUTIONS', details });
+  if (mongoose.connection.readyState !== 1) return;
   try {
-    await AuditLogModel.create({
+    if (AuditLogModel) {
+      await AuditLogModel.create({
+        action,
+        module: 'INSTITUTIONS',
+        user: user || 'Platform Root Administrator',
+        details,
+        ip: ip || '127.0.0.1',
+        timestamp: new Date()
+      });
+    }
+    await PlatformAudit.create({
+      eventId: `AUD-INST-${Date.now()}-${Math.floor(Math.random() * 1000)}`,
+      correlationId: `CORR-INST-${Date.now()}`,
+      timestamp: new Date(),
+      actor: {
+        userId: 'USR-PLAT-001',
+        name: user || 'Platform Root Administrator',
+        email: 'superadmin@srividya.edu.in',
+        role: 'SUPER_ADMIN',
+        ipAddress: ip || '127.0.0.1'
+      },
       action,
-      module: 'INSTITUTIONS',
-      user: user || 'Platform Root Administrator',
-      details,
-      ip: ip || '127.0.0.1',
-      timestamp: new Date()
+      category: 'INSTITUTIONS',
+      severity: 'INFO',
+      targetEntity: {
+        entityType: 'Institution',
+        entityId: 'INSTITUTION',
+        displayName: details ? String(details).slice(0, 80) : 'Institution'
+      },
+      reason: details
     });
   } catch (err) {
     // Non-blocking

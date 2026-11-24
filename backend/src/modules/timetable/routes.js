@@ -1,34 +1,61 @@
 const express = require('express');
 const router = express.Router();
 const timetableRoutes = require('../../routes/timetable.routes');
-const { formatSuccess } = require('../../utils/apiResponse');
+const asyncHandler = require('../../utils/asyncHandler');
+const { sendSuccess } = require('../../utils/apiResponse');
+const { Teacher } = require('../../models/teacher.model');
+const { Timetable } = require('../../models/timetable.model');
+const { Substitution } = require('../../models/substitution.model');
+const { authenticateUser, authorizeRoles } = require('../../middleware/rbac.middleware');
 
-// Submenu Modular Routes:
-router.get('/teacher-allocations', (req, res) => {
-  res.json(formatSuccess([
-    { teacherId: 't-1', name: 'M. Sreenivasa Rao', subject: 'Mathematics', weeklyHours: 24, classes: ['10-A', '10-B', '9-A'] },
-    { teacherId: 't-2', name: 'B. Anuradha', subject: 'Physical Science', weeklyHours: 22, classes: ['10-A', '9-B', '8-A'] }
-  ], 'Teacher allocations retrieved'));
-});
+router.get(
+  '/teacher-allocations',
+  authenticateUser,
+  authorizeRoles('SUPER_ADMIN', 'PRINCIPAL', 'VICE_PRINCIPAL', 'OFFICE', 'TEACHER'),
+  asyncHandler(async (req, res) => {
+    const filter = { status: 'ACTIVE' };
+    if (req.user.role === 'TEACHER') filter.user = req.user._id;
+    const teachers = await Teacher.find(filter)
+      .select('employeeId fullName specialization assignedClasses timetable')
+      .lean();
+    const allocations = teachers.map((t) => ({
+      teacherId: t._id,
+      employeeId: t.employeeId,
+      name: t.fullName,
+      subject: t.specialization || '',
+      weeklyHours: (t.timetable || []).reduce((sum, d) => sum + ((d.periods || []).length), 0),
+      classes: (t.assignedClasses || []).map((c) => `${c.class}-${c.section}`),
+    }));
+    return sendSuccess(res, allocations, 'Teacher allocations retrieved');
+  })
+);
 
-router.get('/substitutions', (req, res) => {
-  res.json(formatSuccess([
-    { id: 'sub-1', absentTeacher: 'K. Ramesh (Telugu)', substituteTeacher: 'P. Venkat Rao', period: 3, class: '9-B', date: '2026-10-24', status: 'CONFIRMED' }
-  ], 'Substitutions retrieved'));
-});
+router.get(
+  '/substitutions',
+  authenticateUser,
+  authorizeRoles('SUPER_ADMIN', 'PRINCIPAL', 'VICE_PRINCIPAL', 'OFFICE', 'TEACHER'),
+  asyncHandler(async (req, res) => {
+    const subs = await Substitution.find({}).sort({ date: -1, periodNumber: 1 }).limit(100).lean();
+    return sendSuccess(res, subs, 'Substitutions retrieved');
+  })
+);
 
-router.get('/room-bookings', (req, res) => {
-  res.json(formatSuccess([
-    { room: 'Audio-Visual Seminar Hall', bookedBy: 'English Dept.', date: '2026-10-24', period: 'Period 4-5', purpose: 'Phonetics & Debate Workshop' }
-  ], 'Room bookings retrieved'));
-});
-
-router.get('/lab-allocations', (req, res) => {
-  res.json(formatSuccess([
-    { lab: 'Tinkering Science Lab', class: 'Grade 10-A', faculty: 'B. Anuradha', time: '10:30 AM - 12:00 PM', topic: 'Ohm’s Law & Electric Circuits' },
-    { lab: 'Computer Information Lab', class: 'Grade 8-B', faculty: 'S. Divya', time: '01:30 PM - 02:45 PM', topic: 'Python Loops & Algorithms' }
-  ], 'Lab allocations retrieved'));
-});
+router.get(
+  '/room-bookings',
+  authenticateUser,
+  asyncHandler(async (req, res) => {
+    const timetables = await Timetable.find({ isActive: true }).select('class section day periods').lean();
+    const rooms = [];
+    timetables.forEach((tt) => {
+      (tt.periods || []).forEach((p) => {
+        if (p.room) {
+          rooms.push({ room: p.room, class: `${tt.class}-${tt.section}`, day: tt.day, period: p.periodNumber, subject: p.subject });
+        }
+      });
+    });
+    return sendSuccess(res, rooms, 'Room allocations retrieved from active timetables');
+  })
+);
 
 // Base timetable routes
 router.use('/', timetableRoutes);

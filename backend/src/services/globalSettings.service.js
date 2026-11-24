@@ -5,7 +5,9 @@
 
 const mongoose = require('mongoose');
 const { GlobalSettings, FeatureControl } = require('../models/globalSettings.model');
-const { PlatformAuditLog } = require('../models/platformAudit.model');
+const { PlatformAudit } = require('../models/platformAudit.model');
+const liveSyncBus = require('../utils/liveSyncBus');
+const { invalidateMaintenanceCache } = require('../middleware/maintenance.middleware');
 
 // In-Memory Fallbacks & Defaults
 let inMemorySettings = null;
@@ -177,25 +179,33 @@ class GlobalSettingsService {
   }
 
   static async _logAudit(action, recordRef, actor, details) {
+    invalidateMaintenanceCache();
+    liveSyncBus.emitSync('PLATFORM', action, { category: 'GLOBAL_SETTINGS', recordRef });
     if (!this.isMongoReady()) return;
     try {
-      await PlatformAuditLog.create({
-        eventId: `AUD-SET-${Date.now()}-${Math.floor(Math.random() * 1000)}`,
+      const now = Date.now();
+      await PlatformAudit.create({
+        eventId: `AUD-SET-${now}-${Math.floor(Math.random() * 1000)}`,
+        correlationId: `CORR-SET-${now}`,
         timestamp: new Date(),
+        category: action.includes('AUTH') ? 'AUTH_ACCOUNTS' : 'SCHOOL_CONFIG',
+        action,
         actor: {
-          id: 'USR-PLAT-001',
+          userId: 'USR-PLAT-001',
           name: actor || 'Platform Administrator',
           email: 'admin@srividya.edu.in',
-          role: 'Platform Administrator',
-          scope: 'Platform'
+          role: 'SUPER_ADMIN',
+          scope: 'Platform',
         },
-        institutionId: 'PLATFORM_GLOBAL',
-        module: 'Global Settings',
-        action,
-        targetRecord: recordRef || 'PLATFORM_GLOBAL_SETTINGS',
+        institutionId: 'TRUST-ALL',
+        targetEntity: {
+          entityType: 'GlobalSettings',
+          entityId: String(recordRef || 'PLATFORM_GLOBAL_SETTINGS'),
+          displayName: String(recordRef || 'Global Platform Settings'),
+        },
         result: 'SUCCESS',
-        severity: action.includes('MAINTENANCE') || action.includes('AUTH') ? 'WARNING' : 'INFO',
-        details: { description: details }
+        severity: action.includes('MAINTENANCE') || action.includes('AUTH') ? 'HIGH' : 'INFO',
+        reason: details || `Global settings updated (${action})`,
       });
     } catch (e) {
       // Non-blocking audit failure

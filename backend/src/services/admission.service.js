@@ -25,10 +25,10 @@ const generateApplicationNumber = async (year = new Date().getFullYear().toStrin
   const prefix = `SV${year}`;
   const regex = new RegExp(`^${prefix}\\d{5}$`);
   const last = await Admission.findOne({ applicationNumber: regex }).sort({ applicationNumber: -1 });
-  let nextSeq = (year === '2026') ? 7 : 1;
+  let nextSeq = 1;
   if (last && last.applicationNumber) {
     const numPart = parseInt(last.applicationNumber.slice(prefix.length), 10);
-    if (!isNaN(numPart) && numPart >= nextSeq) nextSeq = numPart + 1;
+    if (!Number.isNaN(numPart) && numPart >= nextSeq) nextSeq = numPart + 1;
   }
   const padded = String(nextSeq).padStart(5, '0');
   return `${prefix}${padded}`;
@@ -466,25 +466,36 @@ const convertToStudent = async (applicationId, enrollmentData = {}, user) => {
     }
   }
 
-  // 3. Create initial Fee record for the student
-  const totalAnnualFee = 25000;
-  await Fee.create({
-    student: student._id,
+  // 3. Provision Fee ledger from configured FeeStructure for this class/year (if defined)
+  const FeeStructure = require('../models/feeStructure.model');
+  const structure = await FeeStructure.findOne({
+    class: student.class,
     academicYear: student.academicYear,
-    term: 'Annual & Term 1',
-    totalAmount: totalAnnualFee,
-    concessionAmount: 0,
-    paidAmount: 0,
-    dueAmount: totalAnnualFee,
-    dueDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000), // 30 days due
-    status: 'Pending',
-    breakdown: [
-      { item: 'Tuition Fee (Term 1 & Term 2)', amount: 18000 },
-      { item: 'Admission & Enrolment Processing Fee', amount: 4000 },
-      { item: 'Digital Classroom & Lab Infrastructure', amount: 3000 },
-    ],
-    remarks: 'Auto-provisioned upon formal admission confirmation',
-  });
+  }).lean() || await FeeStructure.findOne({ class: student.class }).sort({ createdAt: -1 }).lean();
+
+  if (structure) {
+    const totalAnnualFee = structure.totalAmount || 0;
+    await Fee.create({
+      student: student._id,
+      feeStructure: structure._id,
+      academicYear: student.academicYear,
+      term: structure.name || 'Annual & Term 1',
+      totalAmount: totalAnnualFee,
+      concessionAmount: 0,
+      paidAmount: 0,
+      dueAmount: totalAnnualFee,
+      dueDate: structure.dueDate || new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
+      status: totalAnnualFee > 0 ? 'Pending' : 'Paid',
+      breakdown: Array.isArray(structure.breakdown) ? structure.breakdown : [],
+      remarks: 'Auto-provisioned from official Fee Structure upon admission confirmation',
+    });
+  }
+
+  try {
+    const liveSyncBus = require('../utils/liveSyncBus');
+    liveSyncBus.emitSync('ADMISSIONS', 'ENROLLED', { entityId: application._id, academicYear: student.academicYear });
+    liveSyncBus.emitSync('STUDENTS', 'CREATED', { entityId: student._id, academicYear: student.academicYear });
+  } catch (e) {}
 
   // 4. Update Admission record with link, decision history, and portal credentials
   application.enrolledStudent = student._id;

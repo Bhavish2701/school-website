@@ -156,10 +156,16 @@ const getClassMarksDossier = asyncHandler(async (req, res) => {
   return sendSuccess(res, { marks }, `Results dossier for Class ${className}-${section} retrieved successfully`, 200);
 });
 
+const updateExam = asyncHandler(async (req, res) => {
+  const result = await examService.updateExam(req.params.id, req.body, req.user);
+  return sendSuccess(res, result, 'Examination details updated successfully', 200);
+});
+
 module.exports = {
   createExam,
   getExams,
   getExamById,
+  updateExam,
   createSchedule,
   getExamSchedule,
   enterMarks,

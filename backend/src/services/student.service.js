@@ -56,7 +56,7 @@ class StudentService {
       .search(['fullName', 'admissionNo', 'rollNo', 'parentName', 'phone', 'address'])
       .filter()
       .sort('class:asc,rollNo:asc')
-      .paginate(10, 100);
+      .paginate(10, 2000);
 
     return await queryFeatures.execute();
   }
@@ -240,21 +240,36 @@ class StudentService {
    * Dashboard statistics for student management portal
    */
   async getStudentDashboardStats(currentUser = null) {
-    const totalStudents = await Student.countDocuments();
-    const activeStudents = await Student.countDocuments({ status: 'ACTIVE' });
-    const inactiveStudents = await Student.countDocuments({ status: { $ne: 'ACTIVE' } });
+    const activeFilter = { status: 'ACTIVE' };
+    const totalStudents = await Student.countDocuments({ status: { $ne: 'DELETED' } });
+    const activeStudents = await Student.countDocuments(activeFilter);
+    const inactiveStudents = await Student.countDocuments({ status: { $in: ['INACTIVE', 'SUSPENDED', 'TRANSFERRED', 'WITHDRAWN', 'ARCHIVED'] } });
 
-    // Gender breakdown
-    const maleCount = await Student.countDocuments({ gender: 'male' });
-    const femaleCount = await Student.countDocuments({ gender: 'female' });
+    // Gender breakdown across ACTIVE students
+    const maleCount = await Student.countDocuments({ ...activeFilter, gender: 'male' });
+    const femaleCount = await Student.countDocuments({ ...activeFilter, gender: 'female' });
 
-    // Fee status distribution
-    const paidCount = await Student.countDocuments({ feeStatus: 'Paid' });
-    const partialCount = await Student.countDocuments({ feeStatus: 'Partial' });
-    const pendingCount = await Student.countDocuments({ feeStatus: 'Pending' });
+    // Fee status distribution across ACTIVE students
+    const paidCount = await Student.countDocuments({ ...activeFilter, feeStatus: 'Paid' });
+    const partialCount = await Student.countDocuments({ ...activeFilter, feeStatus: 'Partial' });
+    const pendingCount = await Student.countDocuments({ ...activeFilter, feeStatus: 'Pending' });
 
-    // Class distribution
+    // Real attendance average computed from active AttendanceRecord rows (null if no records)
+    const { AttendanceRecord } = require('../models/attendance.model');
+    const activeStudentIds = await Student.find(activeFilter).distinct('_id');
+    const [totalAttRecords, presentAttRecords] = activeStudentIds.length > 0
+      ? await Promise.all([
+          AttendanceRecord.countDocuments({ student: { $in: activeStudentIds } }),
+          AttendanceRecord.countDocuments({ student: { $in: activeStudentIds }, status: { $in: ['PRESENT', 'LATE', 'EXCUSED'] } }),
+        ])
+      : [0, 0];
+    const attendanceAverage = totalAttRecords > 0
+      ? Math.round((presentAttRecords / totalAttRecords) * 1000) / 10
+      : null;
+
+    // Class distribution across ACTIVE students
     const classAggregation = await Student.aggregate([
+      { $match: activeFilter },
       { $group: { _id: '$class', count: { $sum: 1 } } },
       { $sort: { _id: 1 } },
     ]);
@@ -263,8 +278,8 @@ class StudentService {
       count: c.count,
     }));
 
-    // Recent 5 Admissions
-    const recentAdmissions = await Student.find()
+    // Recent 5 Enrolled Active Students
+    const recentAdmissions = await Student.find(activeFilter)
       .sort({ createdAt: -1 })
       .limit(5)
       .select('admissionNo fullName class section status createdAt feeStatus');
@@ -274,7 +289,7 @@ class StudentService {
         totalStudents,
         activeStudents,
         inactiveStudents,
-        attendanceAverage: 92.4,
+        attendanceAverage,
       },
       genderStats: {
         male: maleCount,

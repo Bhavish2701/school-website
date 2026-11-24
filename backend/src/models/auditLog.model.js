@@ -10,6 +10,7 @@
 const mongoose = require('mongoose');
 
 const AUDIT_MODULES = [
+  'AUTH',
   'STUDENTS',
   'ADMISSIONS',
   'ATTENDANCE',
@@ -20,6 +21,7 @@ const AUDIT_MODULES = [
   'SETTINGS',
   'COMMUNICATION',
   'TRANSFERS',
+  'SYSTEM',
 ];
 
 const AUDIT_RESULTS = ['SUCCESS', 'DENIED', 'REVERSED'];

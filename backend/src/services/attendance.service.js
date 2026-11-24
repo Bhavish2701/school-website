@@ -1,3 +1,4 @@
+const SmsLog = require('../models/smsLog.model');
 /**
  * Attendance Service
  *
@@ -811,6 +812,139 @@ const submitAttendanceCorrection = async (recordId, newStatus, reason, user) => 
   };
 };
 
+
+/**
+ * Get live reported absentees for a given school date
+ */
+const getTodayAbsenteesList = async (dateInput) => {
+  const istOffsetMs = 5.5 * 60 * 60 * 1000;
+  const targetDate = dateInput ? new Date(dateInput) : new Date();
+  const targetIst = new Date(targetDate.getTime() + istOffsetMs);
+  const minDate = new Date(Date.UTC(targetIst.getUTCFullYear(), targetIst.getUTCMonth(), targetIst.getUTCDate(), 0, 0, 0, 0) - istOffsetMs);
+  const maxDate = new Date(Date.UTC(targetIst.getUTCFullYear(), targetIst.getUTCMonth(), targetIst.getUTCDate(), 23, 59, 59, 999) - istOffsetMs);
+
+  const [records, smsLogs] = await Promise.all([
+    AttendanceRecord.find({
+      date: { $gte: minDate, $lte: maxDate },
+      status: { $in: ['ABSENT', 'EXCUSED'] },
+    })
+      .populate('student', 'fullName admissionNo rollNo class section parentName parentPhone status')
+      .lean(),
+    SmsLog.find({
+      createdAt: { $gte: minDate, $lte: maxDate },
+    }).lean(),
+  ]);
+
+  const smsLogMap = new Map();
+  smsLogs.forEach(log => {
+    if (log.admissionNo) smsLogMap.set(log.admissionNo.toUpperCase(), log);
+    if (log.recipientPhone) smsLogMap.set(log.recipientPhone.replace(/[^0-9]/g, ''), log);
+  });
+
+  const absentees = [];
+  let unexcusedCount = 0;
+  let medicalCount = 0;
+  let excusedCount = 0;
+
+  records.forEach(rec => {
+    const student = rec.student;
+    if (!student || ['DELETED', 'ARCHIVED', 'TRANSFERRED', 'WITHDRAWN', 'INACTIVE'].includes(student.status)) return;
+
+    const status = (rec.status || '').toUpperCase();
+    const remarks = (rec.remarks || '').trim();
+    const remarksLower = remarks.toLowerCase();
+
+    let category = 'unexcused';
+    let displayReason = remarks || 'Uninformed Absence';
+
+    if (
+      status === 'EXCUSED' ||
+      rec.isPermitted ||
+      remarksLower.includes('on-duty') ||
+      remarksLower.includes('tourney') ||
+      remarksLower.includes('tournament') ||
+      remarksLower.includes('competition') ||
+      remarksLower.includes('sanctioned') ||
+      remarksLower.includes('leave') ||
+      remarksLower.includes('approved')
+    ) {
+      category = 'excused';
+      displayReason = remarks || 'Authorized Leave / On-Duty';
+      excusedCount++;
+    } else if (
+      remarksLower.includes('fever') ||
+      remarksLower.includes('medical') ||
+      remarksLower.includes('doctor') ||
+      remarksLower.includes('hospital') ||
+      remarksLower.includes('dental') ||
+      remarksLower.includes('sick') ||
+      remarksLower.includes('ill') ||
+      remarksLower.includes('pain') ||
+      remarksLower.includes('unwell')
+    ) {
+      category = 'medical';
+      displayReason = remarks || 'Medical / Health Reason';
+      medicalCount++;
+    } else {
+      category = 'unexcused';
+      displayReason = remarks || 'Uninformed Absence';
+      unexcusedCount++;
+    }
+
+    const admKey = (student.admissionNo || '').toUpperCase();
+    const phoneKey = (student.parentPhone || student.phone || '').replace(/[^0-9]/g, '');
+    const matchedLog = smsLogMap.get(admKey) || (phoneKey ? smsLogMap.get(phoneKey) : null);
+
+    let smsDelivery = {
+      delivered: false,
+      statusText: 'Not Dispatched',
+      deliveryTime: null,
+      gateway: 'AP-EDUSMS',
+    };
+
+    if (matchedLog && matchedLog.status === 'DELIVERED') {
+      const logDate = new Date(matchedLog.deliveredAt || matchedLog.createdAt);
+      const timeStr = !isNaN(logDate.getTime())
+        ? logDate.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', hour12: true })
+        : 'Today';
+      smsDelivery = {
+        delivered: true,
+        statusText: `Delivered ${timeStr}`,
+        deliveryTime: timeStr,
+        gateway: matchedLog.gateway || 'AP-EDUSMS',
+      };
+    }
+
+    absentees.push({
+      recordId: rec._id,
+      studentId: student._id,
+      admissionNo: student.admissionNo || 'SV-0000',
+      studentName: student.fullName || 'Student',
+      rollNo: student.rollNo || '-',
+      class: student.class || rec.class || 'X',
+      section: student.section || rec.section || 'A',
+      parentName: student.parentName || 'Authorized Parent',
+      parentPhone: student.parentPhone || student.phone || '',
+      reportedReason: displayReason,
+      status: status,
+      category: category,
+      smsStatus: smsDelivery,
+    });
+  });
+
+  return {
+    date: targetDate.toISOString().split('T')[0],
+    totalAbsentees: absentees.length,
+    counts: {
+      all: absentees.length,
+      unexcused: unexcusedCount,
+      medical: medicalCount,
+      excused: excusedCount,
+    },
+    absentees,
+  };
+};
+
 module.exports = {
   normalizeDate,
   getTeacherAssignedClasses,
@@ -825,4 +959,5 @@ module.exports = {
   getStudentMonthlyAttendance,
   getManagementSchoolOverview,
   getManagementReports,
+  getTodayAbsenteesList,
 };

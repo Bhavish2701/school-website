@@ -1,37 +1,44 @@
 const express = require('express');
 const router = express.Router();
-const { formatSuccess } = require('../../utils/apiResponse');
+const asyncHandler = require('../../utils/asyncHandler');
+const { sendSuccess } = require('../../utils/apiResponse');
+const { Institution } = require('../../models/institution.model');
+const { SchoolConfig } = require('../../models/schoolConfig.model');
+const { Student } = require('../../models/student.model');
+const { authenticateUser, authorizeRoles } = require('../../middleware/rbac.middleware');
 
-router.get('/profile', (req, res) => {
-  res.json(formatSuccess({
-    id: 'inst-001',
-    name: 'Sri Vidya English Medium High School',
-    code: 'SVEMHS',
-    affiliation: 'State Board of Secondary Education, AP (Recognized by Govt. of Andhra Pradesh)',
-    recognitionCode: 'AP-EDS-2024-SVEMHS',
-    established: 1998,
-    address: 'Main Campus, Trunk Road, Rayachoty, Annamayya Dist., Andhra Pradesh - 516269',
-    contact: {
-      phone: '+91 94402 34567',
-      email: 'contact@srividyaschool.edu.in',
-      admissionsEmail: 'admissions@srividyaschool.edu.in'
-    },
-    accreditation: 'A+ Grade Institutional Excellence Rating',
-    curriculum: ['State Board (AP)', 'Pre-Primary Playgroup', 'Primary Grades 1-5', 'Secondary Grades 6-10'],
-    capacity: 1200,
-    currentStrength: 850
-  }, 'Institution profile retrieved successfully'));
-});
+router.use(authenticateUser);
 
-router.put('/profile', (req, res) => {
-  res.json(formatSuccess(req.body, 'Institution profile updated successfully'));
-});
+router.get(
+  '/profile',
+  asyncHandler(async (req, res) => {
+    const [config, institution, activeStrength] = await Promise.all([
+      SchoolConfig.findOne({}).lean(),
+      Institution.findOne({ status: { $ne: 'Archived' } }).lean(),
+      Student.countDocuments({ status: 'ACTIVE' }),
+    ]);
+    return sendSuccess(
+      res,
+      {
+        schoolConfig: config?.schoolProfile || null,
+        academicConfiguration: config?.academicConfiguration || null,
+        institution: institution || null,
+        currentStrength: activeStrength,
+      },
+      'Institution profile retrieved from database'
+    );
+  })
+);
 
-router.get('/branches', (req, res) => {
-  res.json(formatSuccess([
-    { id: 'branch-1', name: 'Main High School Campus', address: 'Trunk Road, Rayachoty', grades: '6th - 10th' },
-    { id: 'branch-2', name: 'Primary & Kindergarten Campus', address: 'Bypass Road, Rayachoty', grades: 'Nursery - 5th' }
-  ], 'Branches retrieved successfully'));
-});
+router.get(
+  '/branches',
+  authorizeRoles('SUPER_ADMIN', 'PRINCIPAL', 'VICE_PRINCIPAL', 'OFFICE'),
+  asyncHandler(async (req, res) => {
+    const institutions = await Institution.find({ status: { $ne: 'Archived' } })
+      .select('institutionId name code board category address contact status')
+      .lean();
+    return sendSuccess(res, institutions, 'Branches retrieved from database');
+  })
+);
 
 module.exports = router;

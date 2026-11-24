@@ -1,31 +1,51 @@
 const express = require('express');
 const router = express.Router();
 const feeRoutes = require('../../routes/fee.routes');
-const { formatSuccess } = require('../../utils/apiResponse');
+const asyncHandler = require('../../utils/asyncHandler');
+const { sendSuccess } = require('../../utils/apiResponse');
+const Fee = require('../../models/fee.model');
+const feeService = require('../../services/fee.service');
+const { authenticateUser, authorizeRoles } = require('../../middleware/rbac.middleware');
 
-// Submenu Modular Routes:
-router.get('/pending-dues', (req, res) => {
-  res.json(formatSuccess([
-    { studentName: 'V. Akhil', rollNo: '10-A-04', grade: 'Grade 10-A', term: 'Term-2', dueAmount: 14500, dueDate: '2026-11-15' },
-    { studentName: 'S. Meghana', rollNo: '9-B-18', grade: 'Grade 9-B', term: 'Term-2', dueAmount: 12000, dueDate: '2026-11-15' }
-  ], 'Pending dues retrieved'));
-});
+router.get(
+  '/pending-dues',
+  authenticateUser,
+  authorizeRoles('SUPER_ADMIN', 'PRINCIPAL', 'VICE_PRINCIPAL', 'OFFICE'),
+  asyncHandler(async (req, res) => {
+    const dues = await Fee.find({ balance: { $gt: 0 } })
+      .populate('student', 'fullName admissionNo class section rollNumber parentPhone')
+      .sort({ balance: -1 })
+      .limit(200)
+      .lean();
+    return sendSuccess(res, dues, 'Pending dues retrieved');
+  })
+);
 
-router.get('/concessions', (req, res) => {
-  res.json(formatSuccess([
-    { id: 'con-1', studentName: 'K. Sai Krishna', category: 'Merit Scholarship (Top 1% State)', percentage: '50%', approvedBy: 'Director' }
-  ], 'Fee concessions retrieved'));
-});
+router.get(
+  '/concessions',
+  authenticateUser,
+  authorizeRoles('SUPER_ADMIN', 'PRINCIPAL', 'VICE_PRINCIPAL', 'OFFICE'),
+  asyncHandler(async (req, res) => {
+    const concessions = await Fee.find({ discountAmount: { $gt: 0 } })
+      .populate('student', 'fullName admissionNo class section')
+      .sort({ updatedAt: -1 })
+      .limit(200)
+      .lean();
+    return sendSuccess(res, concessions, 'Fee concessions retrieved');
+  })
+);
 
-router.get('/financial-reports', (req, res) => {
-  res.json(formatSuccess({
-    fiscalYear: '2026-2027',
-    totalReceivable: 12500000,
-    collectedToDate: 10450000,
-    outstandingDues: 2050000,
-    collectionPercentage: '83.6%'
-  }, 'Financial summary report retrieved'));
-});
+router.get(
+  '/financial-reports',
+  authenticateUser,
+  authorizeRoles('SUPER_ADMIN', 'PRINCIPAL', 'VICE_PRINCIPAL', 'OFFICE'),
+  asyncHandler(async (req, res) => {
+    const overview = await feeService.getFeeDashboardOverview({
+      academicYear: req.query.academicYear,
+    });
+    return sendSuccess(res, overview, 'Financial summary report retrieved');
+  })
+);
 
 // Base fee routes
 router.use('/', feeRoutes);

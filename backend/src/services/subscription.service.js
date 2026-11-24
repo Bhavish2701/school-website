@@ -676,7 +676,7 @@ class SubscriptionService {
     try {
       await PlatformAuditService.logEvent({
         action,
-        category: 'CONFIGURATION_CHANGES',
+        category: 'SCHOOL_CONFIG',
         actor: { userId: 'PLATFORM-ADMIN', name: operator, role: 'Platform Administrator' },
         institutionId: 'TRUST-ALL',
         institutionName: 'Sri Vidya Educational Trust',
@@ -694,7 +694,7 @@ class SubscriptionService {
     try {
       await PlatformAuditService.logEvent({
         action,
-        category: 'SUBSCRIPTIONS_PLANS',
+        category: 'INSTITUTIONS',
         actor: { userId: 'PLATFORM-ADMIN', name: operator, role: 'Platform Administrator' },
         institutionId,
         institutionName: `Institution ${institutionId}`,

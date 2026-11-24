@@ -1,0 +1,1239 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Unified Portal Sign In | Sri Vidya E.M High School</title>
+  <meta name="description" content="Official Unified Single Sign-On (SSO) Portal for Sri Vidya E.M High School - Management, Faculty, Office Staff, and Platform Administration.">
+  <link rel="icon" type="image/x-icon" href="/assets/images/favicon.ico">
+
+  <!-- Google Fonts: Plus Jakarta Sans, Outfit & Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Outfit:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- FontAwesome 6 Pro Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+  <style>
+    /* ==========================================================================
+       Sri Vidya E.M High School - Unified Single-Page Enterprise Login
+       Zero Nested Scrollbars &bull; Clean Proportions &bull; Flawless Vertical Fit
+       ========================================================================== */
+
+    :root {
+      --sv-primary: #1D4ED8;
+      --sv-primary-hover: #2563EB;
+      --sv-primary-dark: #1E40AF;
+      --sv-navy-dark: #0A0F1D;
+      --sv-navy-surface: #0F172A;
+      --sv-text-main: #0F172A;
+      --sv-text-muted: #64748B;
+      --sv-text-light: #94A3B8;
+      --sv-border: #E2E8F0;
+      --sv-border-focus: #2563EB;
+      --sv-bg-input: #F8FAFC;
+      --sv-card-bg: #FFFFFF;
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      width: 100%;
+      min-height: 100vh;
+      background-color: var(--sv-navy-dark);
+      font-family: 'Plus Jakarta Sans', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      color: var(--sv-text-main);
+      overflow-x: hidden;
+      line-height: 1.5;
+    }
+
+    /* Full-Screen Immersive Canvas */
+    .unified-login-overlay {
+      position: relative;
+      width: 100%;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem 1rem;
+      background: #081026;
+      background-image: 
+        radial-gradient(at 10% 20%, rgba(29, 78, 216, 0.28) 0px, transparent 50%),
+        radial-gradient(at 90% 80%, rgba(2, 132, 199, 0.2) 0px, transparent 50%),
+        radial-gradient(at 50% 50%, rgba(15, 23, 42, 0.85) 0px, transparent 100%),
+        url('/assets/images/campus.jpg');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+    }
+
+    /* Ambient Dark Frosting Layer */
+    .unified-login-overlay::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(145deg, rgba(8, 16, 38, 0.94) 0%, rgba(11, 20, 48, 0.92) 50%, rgba(15, 23, 42, 0.96) 100%);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      z-index: 1;
+    }
+
+    /* Main Central Wrapper - Widened for clear desktop layout and no vertical scrolling */
+    .login-central-container {
+      position: relative;
+      z-index: 2;
+      width: 100%;
+      max-width: 660px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin: auto;
+    }
+
+    /* Unified Master Card */
+    .login-main-card {
+      width: 100%;
+      background: var(--sv-card-bg);
+      border-radius: 16px;
+      padding: 1.15rem 2.25rem 1rem;
+      box-shadow: 
+        0 20px 40px -15px rgba(0, 0, 0, 0.45),
+        0 0 0 1px rgba(255, 255, 255, 0.15),
+        0 1px 3px rgba(0, 0, 0, 0.08);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Top Accent Stripe */
+    .login-main-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, #1D4ED8 0%, #0284C7 35%, #059669 70%, #7C3AED 100%);
+    }
+
+    /* --------------------------------------------------------------------------
+       Top Integrated School Branding - Centered Prominently in the Middle
+       -------------------------------------------------------------------------- */
+    .school-brand-header {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      gap: 0.45rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 1px solid var(--sv-border);
+      margin-bottom: 0.75rem;
+      width: 100%;
+    }
+
+    .brand-crest-wrap {
+      width: 50px;
+      height: 50px;
+      border-radius: 12px;
+      background: #FFFFFF;
+      padding: 3px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08), 0 0 0 1px #E2E8F0;
+      flex-shrink: 0;
+      margin: 0 auto;
+    }
+
+    .brand-crest-img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      border-radius: 8px;
+    }
+
+    .brand-text-group {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      min-width: 0;
+      width: 100%;
+    }
+
+    .brand-affiliation-pill {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.35rem;
+      font-size: 0.68rem;
+      font-weight: 700;
+      color: var(--sv-primary);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      margin-bottom: 2px;
+    }
+
+    .brand-school-name {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: var(--sv-text-main);
+      line-height: 1.2;
+      letter-spacing: 0.01em;
+      white-space: normal;
+      text-align: center;
+    }
+
+    .brand-school-motto {
+      font-size: 0.74rem;
+      color: var(--sv-text-muted);
+      font-style: italic;
+      line-height: 1.35;
+      margin-top: 1px;
+      text-align: center;
+    }
+
+    /* --------------------------------------------------------------------------
+       Portal Identification & Auto-Routing Info
+       -------------------------------------------------------------------------- */
+    .portal-identity-bar {
+      margin-bottom: 0.85rem;
+      text-align: center;
+    }
+
+    .sso-badge-wrap {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      padding: 0.2rem 0.65rem;
+      background: #EFF6FF;
+      color: var(--sv-primary);
+      border: 1px solid #BFDBFE;
+      border-radius: 20px;
+      font-size: 0.68rem;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      margin-bottom: 0.35rem;
+    }
+
+    .portal-card-title {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: var(--sv-text-main);
+      margin-bottom: 0.25rem;
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+    }
+
+    .sso-desc {
+      font-size: 0.8rem;
+      color: var(--sv-text-muted);
+      line-height: 1.35;
+      margin: 0;
+    }
+
+    .sso-desc strong {
+      color: #334155;
+      font-weight: 600;
+    }
+
+    /* When in OTP verification mode, hide redundant pre-login identity and demo pillars to save vertical space */
+    .unified-login-overlay.in-otp-mode .portal-identity-bar,
+    .unified-login-overlay.in-otp-mode .institutional-pillars-bar,
+    .unified-login-overlay:has(#unifiedOtpForm:not([style*="display: none"]):not([style*="display:none"])) .portal-identity-bar,
+    .unified-login-overlay:has(#unifiedOtpForm:not([style*="display: none"]):not([style*="display:none"])) .institutional-pillars-bar {
+      display: none !important;
+    }
+
+    /* --------------------------------------------------------------------------
+       Primary Clean Login Form
+       -------------------------------------------------------------------------- */
+    .unified-form {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      width: 100%;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+    }
+
+    .label-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .form-label {
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: #334155;
+      letter-spacing: 0.01em;
+    }
+
+    .forgot-link {
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--sv-primary);
+      text-decoration: none;
+      transition: color 0.15s ease;
+    }
+
+    .forgot-link:hover {
+      color: var(--sv-primary-dark);
+      text-decoration: underline;
+    }
+
+    .input-container {
+      position: relative !important;
+      display: flex !important;
+      align-items: center !important;
+      width: 100% !important;
+    }
+
+    .input-icon {
+      position: absolute !important;
+      left: 1.15rem !important;
+      top: 50% !important;
+      transform: translateY(-50%) !important;
+      color: var(--sv-text-light) !important;
+      font-size: 1.1rem !important;
+      width: 1.25rem !important;
+      height: 1.25rem !important;
+      display: inline-flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      pointer-events: none !important;
+      transition: color 0.2s ease !important;
+      z-index: 10 !important;
+    }
+
+    .input-container .form-control,
+    .input-container input,
+    #unifiedLoginUser,
+    #unifiedLoginPass {
+      width: 100% !important;
+      height: 48px !important;
+      padding: 0 1.25rem 0 3.25rem !important;
+      border-radius: 9px !important;
+      border: 1.5px solid var(--sv-border) !important;
+      background: var(--sv-bg-input) !important;
+      font-size: 0.92rem !important;
+      font-weight: 500 !important;
+      color: var(--sv-text-main) !important;
+      font-family: inherit !important;
+      outline: none !important;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    }
+
+    .input-container .form-control[type="password"],
+    #unifiedLoginPass {
+      padding-right: 3rem !important;
+    }
+
+    .form-control::placeholder {
+      color: #94A3B8;
+      font-weight: 400;
+      font-size: 0.86rem;
+    }
+
+    .form-control:hover {
+      border-color: #CBD5E1;
+      background: #FFFFFF;
+    }
+
+    .form-control:focus {
+      background: #FFFFFF;
+      border-color: var(--sv-border-focus);
+      box-shadow: 0 0 0 3.5px rgba(37, 99, 235, 0.12);
+    }
+
+    .input-container:focus-within .input-icon {
+      color: var(--sv-primary) !important;
+    }
+
+    .pwd-toggle-btn {
+      position: absolute;
+      right: 0.65rem;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      color: #94A3B8;
+      cursor: pointer;
+      padding: 0.4rem;
+      font-size: 0.9rem;
+      border-radius: 6px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: color 0.15s ease, background 0.15s ease;
+      z-index: 2;
+    }
+
+    .pwd-toggle-btn:hover {
+      color: #1E293B;
+      background: #F1F5F9;
+    }
+
+    #unifiedLoginPass {
+      padding-right: 2.75rem;
+    }
+
+    .form-options-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: -0.25rem;
+      font-size: 0.82rem;
+    }
+
+    .remember-checkbox-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      color: #475569;
+      cursor: pointer;
+      font-weight: 600;
+      user-select: none;
+    }
+
+    .remember-checkbox-label input {
+      cursor: pointer;
+      width: 15px;
+      height: 15px;
+      accent-color: var(--sv-primary);
+      border-radius: 4px;
+    }
+
+    /* Prominent Sign In Button */
+    .submit-btn {
+      width: 100%;
+      height: 46px;
+      padding: 0 1.5rem;
+      border-radius: 9px;
+      border: none;
+      background: linear-gradient(135deg, #1D4ED8 0%, #1E40AF 100%);
+      color: #FFFFFF;
+      font-family: inherit;
+      font-size: 0.94rem;
+      font-weight: 700;
+      letter-spacing: 0.015em;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.55rem;
+      box-shadow: 0 4px 12px rgba(29, 78, 216, 0.28);
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      margin-top: 0.25rem;
+    }
+
+    .submit-btn:hover {
+      background: linear-gradient(135deg, #2563EB 0%, #1D4ED8 100%);
+      transform: translateY(-1.5px);
+      box-shadow: 0 8px 18px rgba(29, 78, 216, 0.35);
+    }
+
+    .submit-btn:active {
+      transform: translateY(0);
+      box-shadow: 0 2px 6px rgba(29, 78, 216, 0.2);
+    }
+
+    .submit-btn:disabled {
+      opacity: 0.75;
+      cursor: not-allowed;
+      transform: none !important;
+      box-shadow: none !important;
+    }
+
+    /* --------------------------------------------------------------------------
+       Integrated Institutional Pillars (Clean, Flat, Cohesive)
+       -------------------------------------------------------------------------- */
+    .institutional-pillars-bar {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.75rem;
+      padding: 0.45rem 0.5rem;
+      margin-top: 0.85rem;
+      background: #F8FAFC;
+      border: 1px solid #E2E8F0;
+      border-radius: 8px;
+      font-size: 0.72rem;
+      color: #475569;
+      font-weight: 600;
+      flex-wrap: nowrap;
+    }
+
+    .pillar-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      white-space: nowrap;
+      cursor: pointer;
+      padding: 0.15rem 0.35rem;
+      border-radius: 4px;
+      transition: background-color 0.15s ease, color 0.15s ease;
+    }
+
+    .pillar-item:hover {
+      background-color: #E2E8F0;
+      color: var(--sv-primary);
+    }
+
+    .pillar-item i {
+      color: var(--sv-primary);
+      font-size: 0.78rem;
+    }
+
+    .pillar-divider {
+      color: #CBD5E1;
+      font-weight: bold;
+    }
+
+    /* --------------------------------------------------------------------------
+       Trust Footer Inside Card
+       -------------------------------------------------------------------------- */
+    .card-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 0.85rem;
+      padding-top: 0.75rem;
+      border-top: 1px solid var(--sv-border);
+      font-size: 0.78rem;
+      color: var(--sv-text-muted);
+    }
+
+    .return-site-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      color: #334155;
+      font-weight: 700;
+      text-decoration: none;
+      transition: color 0.15s ease;
+    }
+
+    .return-site-link:hover {
+      color: var(--sv-primary);
+    }
+
+    .security-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      color: #059669;
+      font-weight: 700;
+      font-size: 0.74rem;
+    }
+
+    /* --------------------------------------------------------------------------
+       Outside Subfooter Note
+       -------------------------------------------------------------------------- */
+    .login-subfooter {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      margin-top: 0.75rem;
+      font-size: 0.72rem;
+      color: #94A3B8;
+      text-align: center;
+      flex-wrap: wrap;
+    }
+
+    .login-subfooter strong {
+      color: #E2E8F0;
+      font-weight: 600;
+    }
+
+    .subfooter-sep {
+      opacity: 0.6;
+    }
+
+    /* --------------------------------------------------------------------------
+       2FA Phone OTP Modal View (If Activated) - Compact Wide Layout
+       -------------------------------------------------------------------------- */
+    .otp-verification-header {
+      text-align: center;
+      margin-bottom: 0.65rem;
+    }
+
+    .otp-icon-wrap {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: #EFF6FF;
+      color: var(--sv-primary);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      border: 1px solid #BFDBFE;
+    }
+
+    .otp-input-container {
+      display: flex;
+      justify-content: center;
+      gap: 0.65rem;
+      margin-bottom: 0.85rem;
+    }
+
+    .otp-digit {
+      width: 48px;
+      height: 48px;
+      font-size: 1.35rem;
+      font-weight: 800;
+      text-align: center;
+      border: 1.5px solid var(--sv-border);
+      border-radius: 9px;
+      background: var(--sv-bg-input);
+      outline: none;
+      transition: all 0.18s ease;
+    }
+
+    .otp-digit:focus {
+      border-color: var(--sv-primary);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+      background: #FFFFFF;
+    }
+
+    .whatsapp-code-callout {
+      margin: 0.45rem 0 0.65rem 0 !important;
+      padding: 0.55rem 1rem !important;
+      background: linear-gradient(135deg, rgba(37, 211, 102, 0.1) 0%, rgba(18, 140, 126, 0.14) 100%) !important;
+      border: 1.5px dashed #25D366 !important;
+      border-radius: 12px !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: space-between !important;
+      gap: 0.75rem !important;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .whatsapp-code-callout:hover {
+      background: linear-gradient(135deg, rgba(37, 211, 102, 0.16) 0%, rgba(18, 140, 126, 0.2) 100%) !important;
+      border-color: #128C7E !important;
+    }
+
+    .btn-change-phone {
+      background: none;
+      border: none;
+      color: var(--sv-primary);
+      font-weight: 700;
+      font-size: 0.76rem;
+      cursor: pointer;
+      text-decoration: underline;
+      padding: 0;
+    }
+
+    .otp-meta-actions {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 0.65rem;
+      font-size: 0.8rem;
+    }
+
+    .btn-otp-resend {
+      background: none;
+      border: none;
+      color: #64748B;
+      font-weight: 600;
+      font-size: 0.8rem;
+      cursor: pointer;
+      padding: 0;
+      transition: color 0.15s ease;
+    }
+
+    .btn-otp-resend:not(:disabled) {
+      color: var(--sv-primary);
+      text-decoration: underline;
+      font-weight: 700;
+    }
+
+    .btn-otp-cancel {
+      background: none;
+      border: none;
+      color: #475569;
+      font-weight: 600;
+      font-size: 0.8rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0;
+      transition: color 0.15s ease;
+    }
+
+    .btn-otp-cancel:hover {
+      color: #0F172A;
+    }
+
+    /* --------------------------------------------------------------------------
+       Circular OTP Verification Animation Widget
+       -------------------------------------------------------------------------- */
+    .otp-digit.error {
+      border-color: #EF4444 !important;
+      background: #FEF2F2 !important;
+      color: #B91C1C !important;
+      animation: otpShake 0.4s ease-in-out;
+    }
+
+    .otp-digit.success {
+      border-color: #10B981 !important;
+      background: #ECFDF5 !important;
+      color: #047857 !important;
+    }
+
+    .otp-verification-status-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 1.15rem 1rem;
+      margin: 0.65rem 0 0.85rem;
+      border-radius: 14px;
+      background: rgba(248, 250, 252, 0.95);
+      border: 1px solid #E2E8F0;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.04);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      text-align: center;
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .otp-status-circle {
+      position: relative;
+      width: 72px;
+      height: 72px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 0.65rem;
+    }
+
+    .otp-spinner-svg {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      transform: rotate(-90deg);
+    }
+
+    .otp-spinner-bg {
+      stroke: #E2E8F0;
+    }
+
+    .otp-spinner-bar {
+      stroke: var(--sv-primary);
+      stroke-linecap: round;
+      stroke-dasharray: 169.6; /* 2 * PI * 27 */
+      stroke-dashoffset: 45;
+      transform-origin: center;
+      transition: stroke 0.3s ease, stroke-dashoffset 0.3s ease;
+    }
+
+    .otp-status-icon-inner {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      background: #FFFFFF;
+      box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
+      transition: all 0.25s ease;
+    }
+
+    /* Icon display toggling */
+    .otp-status-icon-inner .otp-state-icon-verifying,
+    .otp-status-icon-inner .otp-state-icon-success,
+    .otp-status-icon-inner .otp-state-icon-failed,
+    .otp-status-icon-inner .otp-state-icon-expired {
+      display: none;
+    }
+
+    /* State: Verifying (Rotating Circular Loader) */
+    .otp-verification-status-wrap.state-verifying {
+      border-color: #BFDBFE;
+      background: rgba(239, 246, 255, 0.95);
+    }
+    .otp-verification-status-wrap.state-verifying .otp-spinner-bar {
+      stroke: #2563EB;
+      stroke-dashoffset: 55;
+      animation: otpCircleSpin 1.1s linear infinite;
+    }
+    .otp-verification-status-wrap.state-verifying .otp-state-icon-verifying {
+      display: inline-block;
+      color: #2563EB;
+      font-size: 1.4rem;
+    }
+
+    /* State: Success (Green Circular Checkmark) */
+    .otp-verification-status-wrap.state-success {
+      border-color: #A7F3D0;
+      background: rgba(236, 253, 245, 0.95);
+    }
+    .otp-verification-status-wrap.state-success .otp-spinner-bar {
+      stroke: #10B981;
+      stroke-dashoffset: 0;
+      animation: none;
+    }
+    .otp-verification-status-wrap.state-success .otp-status-icon-inner {
+      background: #10B981;
+      color: #FFFFFF;
+      animation: otpPopIn 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+    }
+    .otp-verification-status-wrap.state-success .otp-state-icon-success {
+      display: inline-block;
+      color: #FFFFFF;
+      font-size: 1.45rem;
+    }
+    .otp-verification-status-wrap.state-success .otp-status-title {
+      color: #065F46;
+    }
+
+    /* State: Failed (Red Circular Indicator) */
+    .otp-verification-status-wrap.state-failed {
+      border-color: #FECACA;
+      background: rgba(254, 242, 242, 0.95);
+      animation: otpShake 0.4s ease-in-out;
+    }
+    .otp-verification-status-wrap.state-failed .otp-spinner-bar {
+      stroke: #EF4444;
+      stroke-dashoffset: 0;
+      animation: none;
+    }
+    .otp-verification-status-wrap.state-failed .otp-status-icon-inner {
+      background: #EF4444;
+      color: #FFFFFF;
+      animation: otpPopIn 0.25s ease-out;
+    }
+    .otp-verification-status-wrap.state-failed .otp-state-icon-failed {
+      display: inline-block;
+      color: #FFFFFF;
+      font-size: 1.35rem;
+    }
+    .otp-verification-status-wrap.state-failed .otp-status-title {
+      color: #991B1B;
+    }
+
+    /* State: Expired (Amber Circular Indicator) */
+    .otp-verification-status-wrap.state-expired {
+      border-color: #FDE68A;
+      background: rgba(255, 251, 235, 0.95);
+    }
+    .otp-verification-status-wrap.state-expired .otp-spinner-bar {
+      stroke: #F59E0B;
+      stroke-dashoffset: 0;
+      animation: none;
+    }
+    .otp-verification-status-wrap.state-expired .otp-status-icon-inner {
+      background: #F59E0B;
+      color: #FFFFFF;
+      animation: otpPopIn 0.25s ease-out;
+    }
+    .otp-verification-status-wrap.state-expired .otp-state-icon-expired {
+      display: inline-block;
+      color: #FFFFFF;
+      font-size: 1.3rem;
+    }
+    .otp-verification-status-wrap.state-expired .otp-status-title {
+      color: #92400E;
+    }
+
+    .otp-status-text-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.15rem;
+    }
+
+    .otp-status-title {
+      font-size: 0.98rem;
+      font-weight: 800;
+      color: var(--sv-text-main);
+    }
+
+    .otp-status-sub {
+      font-size: 0.78rem;
+      color: var(--sv-text-muted);
+    }
+
+    @keyframes otpCircleSpin {
+      0% {
+        transform: rotate(0deg);
+      }
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+
+    @keyframes otpPopIn {
+      0% {
+        transform: scale(0.65);
+        opacity: 0;
+      }
+      70% {
+        transform: scale(1.15);
+      }
+      100% {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+
+    @keyframes otpShake {
+      0%, 100% { transform: translateX(0); }
+      20% { transform: translateX(-8px); }
+      40% { transform: translateX(8px); }
+      60% { transform: translateX(-5px); }
+      80% { transform: translateX(5px); }
+    }
+
+    /* --------------------------------------------------------------------------
+       Floating Feedback Toasts
+       -------------------------------------------------------------------------- */
+    .login-toast {
+      position: fixed;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #0F172A;
+      color: #FFFFFF;
+      padding: 0.75rem 1.4rem;
+      border-radius: 9999px;
+      font-size: 0.88rem;
+      font-weight: 600;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35);
+      display: flex;
+      align-items: center;
+      gap: 0.55rem;
+      z-index: 100000;
+      animation: toastFadeIn 0.25s ease forwards;
+    }
+
+    @keyframes toastFadeIn {
+      from {
+        opacity: 0;
+        transform: translate(-50%, 15px);
+      }
+      to {
+        opacity: 1;
+        transform: translate(-50%, 0);
+      }
+    }
+
+    /* --------------------------------------------------------------------------
+       Responsive Polish
+       -------------------------------------------------------------------------- */
+    @media (max-width: 520px) {
+      .unified-login-overlay {
+        padding: 1rem 0.75rem;
+        justify-content: flex-start;
+      }
+
+      .login-main-card {
+        padding: 1.5rem 1.25rem 1.25rem;
+        border-radius: 12px;
+      }
+
+      .brand-school-name {
+        font-size: 1.08rem;
+      }
+
+      .card-footer {
+        flex-direction: column;
+        gap: 0.65rem;
+        text-align: center;
+      }
+
+      .institutional-pillars-bar {
+        font-size: 0.68rem;
+        gap: 0.45rem;
+      }
+    }
+
+    @media (max-height: 700px) {
+      .unified-login-overlay {
+        padding: 0.75rem;
+      }
+
+      .login-main-card {
+        padding: 1.25rem 1.75rem 1.15rem;
+      }
+
+      .school-brand-header {
+        margin-bottom: 0.55rem;
+        padding-bottom: 0.55rem;
+        gap: 0.35rem;
+      }
+
+      .brand-crest-wrap {
+        width: 42px;
+        height: 42px;
+      }
+
+      .portal-identity-bar {
+        margin-bottom: 0.95rem;
+      }
+
+      .institutional-pillars-bar {
+        margin-top: 0.85rem;
+      }
+    }
+  </style>
+  <!-- Modern Input Field System -->
+  <link rel="stylesheet" href="/css/modern-inputs.css?v=20261122-v13">
+  <!-- Modern Popover & Overlay Component System -->
+  <link rel="stylesheet" href="/css/modern-popovers.css?v=20261122-v13">
+</head>
+
+<body>
+  <!-- ==========================================================================
+       SRI VIDYA UNIFIED PORTAL - SINGLE UNIFIED FULL-SCREEN LOGIN
+       ========================================================================== -->
+  <div class="unified-login-overlay" id="unifiedLoginOverlay">
+    <main class="login-central-container">
+      
+      <!-- Unified Master Card -->
+      <div class="login-main-card">
+
+        <!-- Top School Branding Section -->
+        <header class="school-brand-header">
+          <div class="brand-crest-wrap">
+            <img src="/assets/images/school-logo.jpg" alt="Sri Vidya E.M. High School Crest" class="brand-crest-img">
+          </div>
+          <div class="brand-text-group">
+            <div class="brand-affiliation-pill">
+              <i class="fa-solid fa-graduation-cap"></i> AP Govt. Recognized &bull; Affiliated
+            </div>
+            <h1 class="brand-school-name">SRI VIDYA E.M. HIGH SCHOOL</h1>
+            <p class="brand-school-motto">"Vidyathe Vijayam — Knowledge Brings Victory"</p>
+          </div>
+        </header>
+
+        <!-- Gateway Identity & Automatic Role Redirection Notice -->
+        <div class="portal-identity-bar">
+          <div class="sso-badge-wrap">
+            <i class="fa-solid fa-shield-halved"></i> Unified Single Sign-On (SSO) Gateway
+          </div>
+          <h2 class="portal-card-title">Sign In to Your Workspace</h2>
+          <p class="sso-desc">
+            Single secure gateway for <strong>Management, Faculty, Staff,</strong> and <strong>Platform Admin</strong>.
+          </p>
+        </div>
+
+        <!-- Primary Sign-In Form -->
+        <form class="unified-form" id="unifiedLoginForm" action="javascript:void(0);" onsubmit="PortalAuth.handleUnifiedLogin(event)">
+          <!-- Username / Email Field -->
+          <div class="form-group">
+            <label class="form-label" for="unifiedLoginUser">Username, School ID or Official Email</label>
+            <div class="input-container">
+              <i class="fa-solid fa-user-circle input-icon"></i>
+              <input type="text" class="form-control" id="unifiedLoginUser" required
+                placeholder="Enter your username, School ID, or email" autocomplete="username" autofocus>
+            </div>
+          </div>
+
+          <!-- Password Field -->
+          <div class="form-group">
+            <div class="label-row">
+              <label class="form-label" for="unifiedLoginPass">Security Password</label>
+              <a href="/forgot-password" class="forgot-link">
+                Forgot Password?
+              </a>
+            </div>
+            <div class="input-container">
+              <i class="fa-solid fa-lock input-icon"></i>
+              <input type="password" class="form-control" id="unifiedLoginPass" required
+                placeholder="Enter your password" autocomplete="current-password">
+              <button type="button" class="pwd-toggle-btn"
+                onclick="PortalAuth.togglePassword('unifiedLoginPass', this)"
+                aria-label="Toggle password visibility">
+                <i class="fa-solid fa-eye"></i>
+              </button>
+            </div>
+          </div>
+
+          <!-- Options Row: Remember Me -->
+          <div class="form-options-row">
+            <label class="remember-checkbox-label">
+              <input type="checkbox" id="unifiedRememberMe" checked>
+              <span>Remember this device</span>
+            </label>
+          </div>
+
+          <!-- Prominent Sign In Button -->
+          <button type="submit" class="submit-btn" id="unifiedSubmitBtn">
+            <span>Sign In to Portal</span>
+            <i class="fa-solid fa-arrow-right"></i>
+          </button>
+        </form>
+
+        <!-- 2FA Security OTP Verification Form -->
+        <form class="unified-form" id="unifiedOtpForm" style="display: none;"
+          onsubmit="PortalAuth.verifyUnifiedOtp(event)">
+          <div class="otp-verification-header">
+            <div style="display: flex; align-items: center; justify-content: center; gap: 0.55rem; margin-bottom: 0.2rem;">
+              <div class="otp-icon-wrap">
+                <i class="fa-solid fa-shield-halved"></i>
+              </div>
+              <h3 style="margin: 0; font-size: 1.2rem; font-weight: 800; color: #0F172A; letter-spacing: -0.01em;">
+                Two-Factor Authentication
+              </h3>
+            </div>
+            <p style="margin: 0; font-size: 0.82rem; color: #64748B; line-height: 1.35;">
+              Enter 6-digit verification code sent to: <strong id="unifiedOtpDestinationDisplay" style="color: #1D4ED8; font-size: 0.88rem; letter-spacing: 0.5px; font-weight: 700;">+91 93985 *****84</strong>
+            </p>
+          </div>
+
+          <!-- Prominent WhatsApp Security Code Display (Horizontal Wide Layout) -->
+          <div class="whatsapp-code-callout" id="unifiedWhatsappCodeCallout"
+            onclick="PortalAuth.autoFillOtp('unified')"
+            title="Click anywhere to auto-fill code">
+            <div style="display: flex; align-items: center; gap: 0.65rem; min-width: 0;">
+              <i class="fa-brands fa-whatsapp" style="font-size: 1.5rem; color: #25D366; flex-shrink: 0;"></i>
+              <div style="display: flex; flex-direction: column; text-align: left; gap: 2px;">
+                <div style="display: flex; align-items: center; gap: 6px;">
+                  <span style="font-size: 0.78rem; font-weight: 800; color: #075E54; text-transform: uppercase; letter-spacing: 0.4px;">WhatsApp Security Code</span>
+                  <span style="background: #25D366; color: #fff; font-size: 0.62rem; padding: 1px 6px; border-radius: 12px; font-weight: 800;">ACTIVE TEST CODE</span>
+                </div>
+                <span style="font-size: 0.72rem; color: #064E3B; font-weight: 500;">Click anywhere or button to instantly fill code</span>
+              </div>
+            </div>
+            <div style="display: flex; align-items: center; gap: 0.65rem; flex-shrink: 0;">
+              <span id="unifiedWhatsappCodeDisplay" style="font-size: 1.5rem; font-weight: 900; letter-spacing: 5px; color: #075E54; font-family: 'Courier New', monospace; background: #FFFFFF; padding: 0.25rem 0.75rem; border-radius: 8px; border: 1.5px solid rgba(37, 211, 102, 0.4); box-shadow: inset 0 1px 2px rgba(0,0,0,0.05);">123456</span>
+              <button type="button" class="btn-copy-otp" onclick="event.stopPropagation(); PortalAuth.autoFillOtp('unified')"
+                style="background: #25D366; color: #FFFFFF; border: none; border-radius: 8px; padding: 0.45rem 0.85rem; font-size: 0.78rem; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 0.35rem; box-shadow: 0 2px 6px rgba(37, 211, 102, 0.3);" title="Click to fill code into the 6 boxes">
+                <i class="fa-solid fa-bolt"></i> Auto-Fill
+              </button>
+            </div>
+          </div>
+
+          <!-- Circular Verification Animation Widget (verifying, success, failed, expired states) -->
+          <div class="otp-verification-status-wrap" id="unifiedOtpStatusWrap" style="display: none;">
+            <div class="otp-status-circle" id="unifiedOtpStatusCircle">
+              <svg class="otp-spinner-svg" viewBox="0 0 64 64">
+                <circle class="otp-spinner-bg" cx="32" cy="32" r="27" fill="none" stroke-width="4.5" />
+                <circle class="otp-spinner-bar" cx="32" cy="32" r="27" fill="none" stroke-width="4.5" />
+              </svg>
+              <div class="otp-status-icon-inner" id="unifiedOtpStatusIconInner">
+                <i class="fa-solid fa-spinner fa-spin otp-state-icon-verifying"></i>
+                <i class="fa-solid fa-check otp-state-icon-success"></i>
+                <i class="fa-solid fa-xmark otp-state-icon-failed"></i>
+                <i class="fa-solid fa-clock-rotate-left otp-state-icon-expired"></i>
+              </div>
+            </div>
+            <div class="otp-status-text-group">
+              <div class="otp-status-title" id="unifiedOtpStatusTitle">Verifying...</div>
+              <div class="otp-status-sub" id="unifiedOtpStatusSub">Validating security credentials</div>
+            </div>
+          </div>
+
+          <div class="otp-input-container" id="unifiedOtpInputContainer">
+            <input type="text" maxlength="1" class="otp-digit" id="unifiedOtp-1" inputmode="numeric" autocomplete="one-time-code" required>
+            <input type="text" maxlength="1" class="otp-digit" id="unifiedOtp-2" inputmode="numeric" required>
+            <input type="text" maxlength="1" class="otp-digit" id="unifiedOtp-3" inputmode="numeric" required>
+            <input type="text" maxlength="1" class="otp-digit" id="unifiedOtp-4" inputmode="numeric" required>
+            <input type="text" maxlength="1" class="otp-digit" id="unifiedOtp-5" inputmode="numeric" required>
+            <input type="text" maxlength="1" class="otp-digit" id="unifiedOtp-6" inputmode="numeric" required>
+          </div>
+
+          <button type="submit" class="submit-btn" id="unifiedOtpSubmitBtn">
+            <span>Verify &amp; Launch Dashboard</span>
+            <i class="fa-solid fa-shield-check"></i>
+          </button>
+
+          <div class="otp-meta-actions">
+            <button type="button" class="btn-otp-resend" id="unifiedResendOtpBtn" onclick="PortalAuth.resendOtp('unified')" disabled>
+              Resend code in <span id="unifiedOtpTimer">45</span>s
+            </button>
+            <button type="button" class="btn-otp-cancel" id="unifiedCancelOtpBtn" onclick="PortalAuth.cancelUnifiedOtp()">
+              <i class="fa-solid fa-arrow-left"></i> Change Account
+            </button>
+          </div>
+        </form>
+
+        <!-- Integrated Institutional Workspaces -->
+        <div class="institutional-pillars-bar" title="Click any role to quick-fill credentials">
+          <div class="pillar-item" onclick="PortalAuth.quickFillDemo('principal')" title="Click to fill Principal credentials">
+            <i class="fa-solid fa-building-columns"></i>
+            <span>Executive Management</span>
+          </div>
+          <div class="pillar-divider">&bull;</div>
+          <div class="pillar-item" onclick="PortalAuth.quickFillDemo('teacher')" title="Click to fill Faculty credentials">
+            <i class="fa-solid fa-chalkboard-user"></i>
+            <span>Faculty Workspace</span>
+          </div>
+          <div class="pillar-divider">&bull;</div>
+          <div class="pillar-item" onclick="PortalAuth.quickFillDemo('officestaff')" title="Click to fill Office Staff credentials">
+            <i class="fa-solid fa-shield-halved"></i>
+            <span>Administration</span>
+          </div>
+        </div>
+
+        <!-- Trust & Security Footer inside the card -->
+        <footer class="card-footer">
+          <a href="/" class="return-site-link">
+            <i class="fa-solid fa-arrow-left"></i> Return to School Website
+          </a>
+          <span class="security-badge">
+            <i class="fa-solid fa-lock"></i> 256-Bit SSL Encrypted
+          </span>
+        </footer>
+
+      </div>
+
+      <!-- External Institutional Subfooter -->
+      <div class="login-subfooter">
+        <span>Official Sri Vidya ERP &bull; Authorized Personnel Only</span>
+        <span class="subfooter-sep">&bull;</span>
+        <span>Campus IT Support: <strong>+91 93985 78584</strong></span>
+        <div style="margin-top: 6px; font-size: 0.74rem;">
+          <a href="/privacy" style="color: #94A3B8; text-decoration: none; margin-right: 12px;">Data Privacy (DPDP)</a>
+          <a href="/terms" style="color: #94A3B8; text-decoration: none; margin-right: 12px;">Terms of Service</a>
+          <a href="/cookie-policy" style="color: #94A3B8; text-decoration: none; margin-right: 12px;">Cookie Policy</a>
+          <a href="#" onclick="if(window.CookieConsent) CookieConsent.openModal(); return false;" style="color: #38BDF8; text-decoration: none;">Cookie Preferences</a>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- API Client & Unified Authentication Script -->
+  <script src="/js/api-client.js?v=20261122-v13"></script>
+  <script src="/js/portal-auth.js?v=20261122-v13"></script>
+  <script src="/js/cookie-consent.js?v=20261122-v13"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      PortalAuth.initUnifiedLoginPage();
+    });
+  </script>
+  <!-- Modern Input Field System Controller -->
+  <script src="/js/modern-inputs.js?v=20261122-v13"></script>
+  <!-- Modern Popover & Overlay Component System Controller -->
+  <script src="/js/modern-popovers.js?v=20261122-v13"></script>
+</body>
+
+</html>

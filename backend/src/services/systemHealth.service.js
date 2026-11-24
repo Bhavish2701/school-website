@@ -404,9 +404,23 @@ class SystemHealthService {
       }
     };
 
+    // Live error rate from AppLog in last 24h
+    const oneDayAgo = new Date(Date.now() - 24 * 60 * 60 * 1000);
+    let errLogs24h = 0;
+    let totalLogs24h = 0;
+    if (isDbConnected) {
+      [errLogs24h, totalLogs24h] = await Promise.all([
+        AppLog.countDocuments({ level: { $in: ['ERROR', 'FATAL', 'CRITICAL'] }, timestamp: { $gte: oneDayAgo } }).catch(() => 0),
+        AppLog.countDocuments({ timestamp: { $gte: oneDayAgo } }).catch(() => 0),
+      ]);
+    }
+    const errRatePct = totalLogs24h > 0 ? `${((errLogs24h / totalLogs24h) * 100).toFixed(2)}%` : '0.00%';
+
     const metrics = {
-      recentErrorRate: '0.02%',
-      errorRateMeaning: '99.98% successful request completion in last 24 operational hours',
+      recentErrorRate: errRatePct,
+      errorRateMeaning: totalLogs24h > 0
+        ? `${errLogs24h} error event(s) across ${totalLogs24h} logged events in last 24h`
+        : 'No error events logged in last 24 operational hours',
       lastSuccessfulHealthCheck: now.toISOString(),
       processUptime: uptimeSec,
       memoryRSS_MB: Math.round(memUsage.rss / 1024 / 1024),
@@ -429,7 +443,8 @@ class SystemHealthService {
       },
       recentErrorRate: {
         percentage: metrics.recentErrorRate,
-        errorCount: 1,
+        errorCount: errLogs24h,
+        totalLogged24h: totalLogs24h,
         meaning: metrics.errorRateMeaning
       },
       lastSuccessfulHealthCheck: metrics.lastSuccessfulHealthCheck
@@ -890,14 +905,14 @@ class SystemHealthService {
     try {
       await PlatformAuditService.logEvent({
         action,
-        category: 'DEPLOYMENT_EVENTS',
+        category: 'DEPLOYMENT_OPS',
         actor: { userId: 'PLATFORM-ADMIN', name: operator, role: 'Platform Administrator' },
         institutionId: 'TRUST-ALL',
         institutionName: 'Sri Vidya Educational Trust',
-        target: {
+        targetEntity: {
           entityType: 'SystemHealth',
-          entityId,
-          entityName
+          entityId: String(entityId || 'SYS'),
+          displayName: String(entityName || action),
         },
         result: 'SUCCESS',
         severity: 'INFO',

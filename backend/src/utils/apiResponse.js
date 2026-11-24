@@ -3,7 +3,7 @@
  *
  * Ensures consistent contract across all endpoints:
  * Success: { success: true, message: "...", data: {}, errors: null }
- * Error:   { success: false, message: "...", data: null, errors: {} }
+ * Error:   { success: false, message: "...", data: null, errors: {}, recoveryAction?: "...", errorCode?: "..." }
  */
 
 /**
@@ -19,9 +19,9 @@ const formatSuccess = (data = {}, message = 'Operation completed successfully') 
 };
 
 /**
- * Format error payload
+ * Format error payload with optional recovery action and error code
  */
-const formatError = (message = 'An error occurred', errors = {}) => {
+const formatError = (message = 'An error occurred', errors = {}, recoveryAction = null, errorCode = null) => {
   // Ensure errors is an object
   let formattedErrors = errors;
   if (Array.isArray(errors)) {
@@ -34,12 +34,21 @@ const formatError = (message = 'An error occurred', errors = {}) => {
     formattedErrors = { detail: String(errors) };
   }
 
-  return {
+  const payload = {
     success: false,
     message,
     data: null,
     errors: formattedErrors,
   };
+
+  if (recoveryAction) {
+    payload.recoveryAction = recoveryAction;
+  }
+  if (errorCode) {
+    payload.errorCode = errorCode;
+  }
+
+  return payload;
 };
 
 /**
@@ -52,8 +61,8 @@ const sendSuccess = (res, data = {}, message = 'Operation successful', statusCod
 /**
  * Express helper to send formatted error response
  */
-const sendError = (res, message = 'Request failed', errors = {}, statusCode = 400) => {
-  return res.status(statusCode).json(formatError(message, errors));
+const sendError = (res, message = 'Request failed', errors = {}, statusCode = 400, recoveryAction = null, errorCode = null) => {
+  return res.status(statusCode).json(formatError(message, errors, recoveryAction, errorCode));
 };
 
 module.exports = {
@@ -65,6 +74,6 @@ module.exports = {
   apiResponse: (data = {}, message = 'Operation successful') => formatSuccess(data, message),
   ApiResponse: {
     success: (res, message = 'Operation successful', data = {}, statusCode = 200) => sendSuccess(res, data, message, statusCode),
-    error: (res, message = 'Request failed', errors = {}, statusCode = 400) => sendError(res, message, errors, statusCode),
+    error: (res, message = 'Request failed', errors = {}, statusCode = 400, recoveryAction = null) => sendError(res, message, errors, statusCode, recoveryAction),
   },
 };

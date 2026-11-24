@@ -6,7 +6,46 @@
 var teacherApp = (function () {
   'use strict';
 
-  // Application State
+  (function installTeacherFetchInterceptor() {
+    if (typeof window === 'undefined' || typeof window.fetch !== 'function' || window.__svTeacherFetchPatched) return;
+    window.__svTeacherFetchPatched = true;
+    const rawFetch = window.fetch.bind(window);
+    window.fetch = async function (input, init) {
+      const url = typeof input === 'string' ? input : (input && input.url) || '';
+      if (!url.includes('/api/v1/') || url.includes('/api/v1/dashboard/stream')) return rawFetch(input, init);
+      const opts = Object.assign({}, init || {});
+      const headers = new Headers(opts.headers || (typeof input !== 'string' && input.headers) || {});
+      const token = (window.ApiClient && typeof window.ApiClient.getAccessToken === 'function')
+        ? window.ApiClient.getAccessToken()
+        : (sessionStorage.getItem('sv_access_token') || localStorage.getItem('sv_access_token'));
+      if (token && !headers.has('Authorization')) headers.set('Authorization', 'Bearer ' + token);
+      opts.headers = headers;
+      let res = await rawFetch(input, opts);
+      if (res.status === 401 && window.ApiClient && typeof window.ApiClient.refreshSession === 'function' && !url.includes('/auth/refresh') && !url.includes('/auth/login')) {
+        const refreshed = await window.ApiClient.refreshSession();
+        if (refreshed) {
+          const t2 = window.ApiClient.getAccessToken();
+          if (t2) headers.set('Authorization', 'Bearer ' + t2);
+          opts.headers = headers;
+          res = await rawFetch(input, opts);
+        }
+      }
+      const method = (opts.method || 'GET').toUpperCase();
+      if (res.ok && ['POST', 'PUT', 'PATCH', 'DELETE'].includes(method)) {
+        if (window.ApiClient && window.ApiClient.sync && typeof window.ApiClient.sync.invalidate === 'function') {
+          window.ApiClient.sync.invalidate();
+        }
+        setTimeout(() => { if (typeof loadLiveData === 'function') loadLiveData(true); }, 150);
+      }
+      return res;
+    };
+  })();
+
+  function getTodayISTDateISO() {
+    try { return new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Kolkata' }).format(new Date()); }
+    catch (e) { return new Date().toISOString().split('T')[0]; }
+  }
+
   const state = {
     activeModule: 'dashboard',
     activeSubTab: {
@@ -21,204 +60,21 @@ var teacherApp = (function () {
       'profile': 'personal'
     },
     teacher: {
-      name: 'Ms. Anjali',
-      role: 'Class Teacher – Grade 8A',
-      subject: 'Mathematics',
-      totalClasses: 4,
-      totalStudents: 152,
-      todayAttendancePct: '96%'
+      name: 'Faculty Member',
+      role: 'Faculty Workspace',
+      subject: '--',
+      totalClasses: 0,
+      totalStudents: 0,
+      todayAttendancePct: 'Pending'
     },
-    classes: [
-      { id: '8a', code: '8A', name: 'Class 8A', isClassTeacher: true, roleTitle: 'Class Teacher & Subject Faculty', subject: 'Mathematics', strength: 42, room: 'Room 204 (2nd Floor, Main Block)', timing: 'Period 1 (08:45 AM - 09:30 AM)', avgScore: '86.4%', topper: 'V. Divya Bharathi (49/50)' },
-      { id: '9b', code: '9B', name: 'Class 9B', isClassTeacher: false, roleTitle: 'Subject Teacher', subject: 'Mathematics', strength: 40, room: 'Room 208 (2nd Floor, High School Wing)', timing: 'Period 3 (10:45 AM - 11:30 AM)', avgScore: '82.1%', topper: 'P. Lavanya (48/50)' },
-      { id: '7c', code: '7C', name: 'Class 7C', isClassTeacher: false, roleTitle: 'Subject Teacher', subject: 'Mathematics', strength: 38, room: 'Room 112 (1st Floor, Middle Wing)', timing: 'Period 5 (01:15 PM - 02:00 PM)', avgScore: '89.0%', topper: 'S. Bhavana (48/50)' },
-      { id: '10a', code: '10A', name: 'Class 10A', isClassTeacher: false, roleTitle: 'Remedial Faculty', subject: 'Mathematics (Remedial & Board Exam Prep)', strength: 32, room: 'Mathematics Lab 2 (Ground Floor)', timing: 'Period 7 (03:00 PM - 03:45 PM)', avgScore: '78.5%', topper: 'K. Sai Tharun (45/50)' }
-    ],
-    pendingTasks: [
-      { id: 1, title: 'Evaluate Class 8A Math Unit Test 2 Answer Sheets', meta: 'Due Today (05:00 PM) • 42 Papers', badge: 'due-today', badgeText: 'Due Today', done: false },
-      { id: 2, title: 'Confirm & submit morning attendance register for Grade 8A', meta: 'Due Today (10:00 AM) • Daily Office Submission', badge: 'due-today', badgeText: 'Due Today', done: false },
-      { id: 3, title: 'Reply to Mr. Rambabu regarding Karthik’s geometry notebook', meta: 'Parent Message • Inward #842', badge: 'due-soon', badgeText: 'Pending Reply', done: false },
-      { id: 4, title: 'Upload Chapter 3 polynomials study notes PDF', meta: 'Class 9B • Academic Repository', badge: 'due-soon', badgeText: 'Due Tomorrow', done: false },
-      { id: 5, title: 'Prepare remedial practice worksheets for 3 students', meta: 'Class 8A (Naveen, Teja, Keerthi)', badge: 'due-soon', badgeText: 'This Week', done: false },
-      { id: 6, title: 'Submit quarterly examination question paper to Vice Principal', meta: 'Vice Principal Submission • Deadline Sept 21', badge: 'due-soon', badgeText: 'Sept 21', done: false },
-      { id: 7, title: 'Verify math club project submissions for Science & Math fair', meta: 'Co-Curricular Review • 6 Teams', badge: 'due-soon', badgeText: 'This Week', done: false },
-      { id: 8, title: 'Sign student diaries for assembly dress code notice', meta: 'Class 8A Class Teacher Period', badge: 'due-soon', badgeText: 'Pending', done: false }
-    ],
-    // Complete Roster: Class 8A (Roll 801 to 842 = exactly 42 students), Class 9B, Class 7C
-    students: [
-      // Class 8A (Exactly 42 Students)
-      { roll: 801, name: 'A. Naveen Kumar', class: '8A', phone: '9848123001', att: 'P', marks: 38, remarks: 'Good improvement in linear equations' },
-      { roll: 802, name: 'B. Sravan Reddy', class: '8A', phone: '9848123002', att: 'P', marks: 44, remarks: 'Excellent algebra understanding' },
-      { roll: 803, name: 'CH. Swathi', class: '8A', phone: '9848123003', att: 'P', marks: 47, remarks: 'Subject topper potential' },
-      { roll: 804, name: 'V. Divya Bharathi', class: '8A', phone: '9848678901', att: 'P', marks: 49, remarks: 'Class Rank 1 - Highest marks in test' },
-      { roll: 805, name: 'D. Manoj Kumar', class: '8A', phone: '9848123005', att: 'P', marks: 36, remarks: 'Needs extra drill on word problems' },
-      { roll: 806, name: 'G. Harika', class: '8A', phone: '9848123006', att: 'P', marks: 42, remarks: 'Active classroom participation' },
-      { roll: 807, name: 'K. Sai Krishna', class: '8A', phone: '9848123007', att: 'A', marks: 34, remarks: 'Absent today (Medical note submitted)' },
-      { roll: 808, name: 'M. Tejaswi', class: '8A', phone: '9848123008', att: 'P', marks: 45, remarks: 'Very thorough solutions in geometry' },
-      { roll: 809, name: 'P. Charan', class: '8A', phone: '9848123009', att: 'P', marks: 40, remarks: 'Steady homework submissions' },
-      { roll: 810, name: 'R. Ananya', class: '8A', phone: '9848123010', att: 'P', marks: 48, remarks: 'Outstanding analytical skills' },
-      { roll: 811, name: 'S. Akhil', class: '8A', phone: '9848123011', att: 'P', marks: 39, remarks: 'Punctual and disciplined' },
-      { roll: 812, name: 'T. Bhavani', class: '8A', phone: '9848123012', att: 'P', marks: 46, remarks: 'Neat notebook presentation' },
-      { roll: 813, name: 'V. Chandra Sekhar', class: '8A', phone: '9848123013', att: 'P', marks: 41, remarks: 'Good geometry skills' },
-      { roll: 814, name: 'Y. Deepthi', class: '8A', phone: '9848123014', att: 'P', marks: 43, remarks: 'Very attentive in math sessions' },
-      { roll: 815, name: 'A. Ganesh', class: '8A', phone: '9848123015', att: 'P', marks: 37, remarks: 'Practicing fraction operations' },
-      { roll: 816, name: 'B. Hemalatha', class: '8A', phone: '9848123016', att: 'P', marks: 44, remarks: 'High arithmetic precision' },
-      { roll: 817, name: 'C. Indu', class: '8A', phone: '9848123017', att: 'P', marks: 42, remarks: 'Consistent academic performance' },
-      { roll: 818, name: 'D. Jagadeesh', class: '8A', phone: '9848123018', att: 'P', marks: 35, remarks: 'Attending remedial clinic' },
-      { roll: 819, name: 'E. Kavya', class: '8A', phone: '9848123019', att: 'P', marks: 46, remarks: 'Fast mental math calculations' },
-      { roll: 820, name: 'G. Lokesh', class: '8A', phone: '9848123020', att: 'P', marks: 38, remarks: 'Good classroom response' },
-      { roll: 821, name: 'K. Madhavi', class: '8A', phone: '9848123021', att: 'P', marks: 47, remarks: 'Excellent score in polynomials' },
-      { roll: 822, name: 'M. Nagesh', class: '8A', phone: '9848123022', att: 'P', marks: 40, remarks: 'Regular and attentive' },
-      { roll: 823, name: 'N. Ooha', class: '8A', phone: '9848123023', att: 'P', marks: 45, remarks: 'Strong mathematical logic' },
-      { roll: 824, name: 'P. Pawan Kalyan', class: '8A', phone: '9848123024', att: 'P', marks: 41, remarks: 'Well maintained math record' },
-      { roll: 825, name: 'R. Rajesh', class: '8A', phone: '9848123025', att: 'P', marks: 36, remarks: 'Showing steady progress' },
-      { roll: 826, name: 'S. Sai Ram', class: '8A', phone: '9848123026', att: 'P', marks: 44, remarks: 'Very good grasp of formulas' },
-      { roll: 827, name: 'T. Tarun Kumar', class: '8A', phone: '9848123027', att: 'P', marks: 39, remarks: 'Active in group problem solving' },
-      { roll: 828, name: 'U. Usha Rani', class: '8A', phone: '9848123028', att: 'P', marks: 43, remarks: 'Consistently completes exercises' },
-      { roll: 829, name: 'V. Venkat', class: '8A', phone: '9848123029', att: 'P', marks: 42, remarks: 'Good focus in class' },
-      { roll: 830, name: 'Y. Yamini', class: '8A', phone: '9848123030', att: 'P', marks: 48, remarks: 'Top 3 ranker in Grade 8A' },
-      { roll: 831, name: 'B. Ajay', class: '8A', phone: '9848123031', att: 'P', marks: 37, remarks: 'Improving in quadratic equations' },
-      { roll: 832, name: 'C. Bindu', class: '8A', phone: '9848123032', att: 'P', marks: 45, remarks: 'Clear step-by-step reasoning' },
-      { roll: 833, name: 'D. Chaitanya', class: '8A', phone: '9848123033', att: 'P', marks: 41, remarks: 'Good teamwork in math lab' },
-      { roll: 834, name: 'G. Dinesh', class: '8A', phone: '9848123034', att: 'P', marks: 38, remarks: 'Good attendance and punctuality' },
-      { roll: 835, name: 'K. Eshwar', class: '8A', phone: '9848123035', att: 'P', marks: 46, remarks: 'High accuracy in calculations' },
-      { roll: 836, name: 'M. Fathima', class: '8A', phone: '9848123036', att: 'P', marks: 47, remarks: 'Distinction level test score' },
-      { roll: 837, name: 'P. Gowtham', class: '8A', phone: '9848123037', att: 'P', marks: 40, remarks: 'Regular notebook submission' },
-      { roll: 838, name: 'R. Hemanth', class: '8A', phone: '9848123038', att: 'P', marks: 39, remarks: 'Solid effort in homework' },
-      { roll: 839, name: 'S. Ishwarya', class: '8A', phone: '9848123039', att: 'P', marks: 44, remarks: 'Good analytical thinking' },
-      { roll: 840, name: 'T. Jyothi', class: '8A', phone: '9848123040', att: 'P', marks: 43, remarks: 'Clear handwriting and diagrams' },
-      { roll: 841, name: 'CH. Karthik', class: '8A', phone: '9848789012', att: 'L', marks: 39, remarks: 'Arrived late today (Gate pass #44)' },
-      { roll: 842, name: 'Y. Tharun', class: '8A', phone: '9848123012', att: 'A', marks: 32, remarks: 'Absent today (Uninformed - SMS sent)' },
-
-      // Class 9B (Exactly 40 Students)
-      {"roll":901,"name":"G. Sai Teja","class":"9B","phone":"9848450901","att":"P","marks":34,"remarks":"Strong fundamentals in polynomials and algebra"},
-      {"roll":902,"name":"M. Sravanthi","class":"9B","phone":"9848450902","att":"P","marks":41,"remarks":"Polite, attentive and regular in homework"},
-      {"roll":903,"name":"K. Rakesh","class":"9B","phone":"9848450903","att":"P","marks":48,"remarks":"High accuracy in coordinate geometry calculations"},
-      {"roll":904,"name":"P. Lavanya","class":"9B","phone":"9848450904","att":"P","marks":39,"remarks":"Active participation in math group discussions"},
-      {"roll":905,"name":"S. Varun","class":"9B","phone":"9848450905","att":"P","marks":46,"remarks":"Very good problem-solving speed and step clarity"},
-      {"roll":906,"name":"B. Haritha","class":"9B","phone":"9848450906","att":"P","marks":37,"remarks":"Shows dedication and punctuality in daily work"},
-      {"roll":907,"name":"N. Sandeep","class":"9B","phone":"9848450907","att":"A","marks":44,"remarks":"Strong fundamentals in polynomials and algebra"},
-      {"roll":908,"name":"T. Manasa","class":"9B","phone":"9848450908","att":"P","marks":35,"remarks":"Polite, attentive and regular in homework"},
-      {"roll":909,"name":"V. Naresh","class":"9B","phone":"9848450909","att":"P","marks":42,"remarks":"High accuracy in coordinate geometry calculations"},
-      {"roll":910,"name":"J. Priyanka","class":"9B","phone":"9848450910","att":"P","marks":49,"remarks":"Active participation in math group discussions"},
-      {"roll":911,"name":"R. Ajay Kumar","class":"9B","phone":"9848450911","att":"P","marks":40,"remarks":"Very good problem-solving speed and step clarity"},
-      {"roll":912,"name":"D. Keerthi","class":"9B","phone":"9848450912","att":"P","marks":47,"remarks":"Shows dedication and punctuality in daily work"},
-      {"roll":913,"name":"A. Sai Kiran","class":"9B","phone":"9848450913","att":"P","marks":38,"remarks":"Strong fundamentals in polynomials and algebra"},
-      {"roll":914,"name":"C. Meghana","class":"9B","phone":"9848450914","att":"P","marks":45,"remarks":"Polite, attentive and regular in homework"},
-      {"roll":915,"name":"E. Rohith","class":"9B","phone":"9848450915","att":"L","marks":36,"remarks":"High accuracy in coordinate geometry calculations"},
-      {"roll":916,"name":"G. Pavani","class":"9B","phone":"9848450916","att":"P","marks":43,"remarks":"Active participation in math group discussions"},
-      {"roll":917,"name":"H. Yashwanth","class":"9B","phone":"9848450917","att":"P","marks":34,"remarks":"Very good problem-solving speed and step clarity"},
-      {"roll":918,"name":"K. Divya","class":"9B","phone":"9848450918","att":"P","marks":41,"remarks":"Shows dedication and punctuality in daily work"},
-      {"roll":919,"name":"L. Pradeep","class":"9B","phone":"9848450919","att":"P","marks":48,"remarks":"Strong fundamentals in polynomials and algebra"},
-      {"roll":920,"name":"M. Sneha","class":"9B","phone":"9848450920","att":"P","marks":39,"remarks":"Polite, attentive and regular in homework"},
-      {"roll":921,"name":"N. Vinay","class":"9B","phone":"9848450921","att":"P","marks":46,"remarks":"High accuracy in coordinate geometry calculations"},
-      {"roll":922,"name":"P. Anusha","class":"9B","phone":"9848450922","att":"P","marks":37,"remarks":"Active participation in math group discussions"},
-      {"roll":923,"name":"R. Karthikeya","class":"9B","phone":"9848450923","att":"P","marks":44,"remarks":"Very good problem-solving speed and step clarity"},
-      {"roll":924,"name":"S. Sushma","class":"9B","phone":"9848450924","att":"A","marks":35,"remarks":"Shows dedication and punctuality in daily work"},
-      {"roll":925,"name":"T. Abhinav","class":"9B","phone":"9848450925","att":"P","marks":42,"remarks":"Strong fundamentals in polynomials and algebra"},
-      {"roll":926,"name":"V. Pranitha","class":"9B","phone":"9848450926","att":"P","marks":49,"remarks":"Polite, attentive and regular in homework"},
-      {"roll":927,"name":"Y. Bharath","class":"9B","phone":"9848450927","att":"P","marks":40,"remarks":"High accuracy in coordinate geometry calculations"},
-      {"roll":928,"name":"A. Deepa","class":"9B","phone":"9848450928","att":"P","marks":47,"remarks":"Active participation in math group discussions"},
-      {"roll":929,"name":"B. Harish","class":"9B","phone":"9848450929","att":"P","marks":38,"remarks":"Very good problem-solving speed and step clarity"},
-      {"roll":930,"name":"C. Jyothika","class":"9B","phone":"9848450930","att":"P","marks":45,"remarks":"Shows dedication and punctuality in daily work"},
-      {"roll":931,"name":"D. Kalyan","class":"9B","phone":"9848450931","att":"P","marks":36,"remarks":"Strong fundamentals in polynomials and algebra"},
-      {"roll":932,"name":"G. Likitha","class":"9B","phone":"9848450932","att":"P","marks":43,"remarks":"Polite, attentive and regular in homework"},
-      {"roll":933,"name":"K. Manoj","class":"9B","phone":"9848450933","att":"P","marks":34,"remarks":"High accuracy in coordinate geometry calculations"},
-      {"roll":934,"name":"M. Nandini","class":"9B","phone":"9848450934","att":"P","marks":41,"remarks":"Active participation in math group discussions"},
-      {"roll":935,"name":"P. Rahul","class":"9B","phone":"9848450935","att":"P","marks":48,"remarks":"Very good problem-solving speed and step clarity"},
-      {"roll":936,"name":"R. Sahithi","class":"9B","phone":"9848450936","att":"P","marks":39,"remarks":"Shows dedication and punctuality in daily work"},
-      {"roll":937,"name":"S. Tarun","class":"9B","phone":"9848450937","att":"P","marks":46,"remarks":"Strong fundamentals in polynomials and algebra"},
-      {"roll":938,"name":"T. Varshini","class":"9B","phone":"9848450938","att":"P","marks":37,"remarks":"Polite, attentive and regular in homework"},
-      {"roll":939,"name":"V. Vamsi","class":"9B","phone":"9848450939","att":"P","marks":44,"remarks":"High accuracy in coordinate geometry calculations"},
-      {"roll":940,"name":"Y. Alekhya","class":"9B","phone":"9848450940","att":"P","marks":35,"remarks":"Active participation in math group discussions"},
-
-      // Class 7C (Exactly 38 Students)
-      {"roll":701,"name":"S. Bhavana","class":"7C","phone":"9848890701","att":"P","marks":36,"remarks":"High accuracy in fractions and decimal arithmetic"},
-      {"roll":702,"name":"M. Rohit","class":"7C","phone":"9848890702","att":"P","marks":41,"remarks":"Excellent homework notebook and neat handwriting"},
-      {"roll":703,"name":"A. Pranathi","class":"7C","phone":"9848890703","att":"P","marks":46,"remarks":"Quick mental math and active classroom response"},
-      {"roll":704,"name":"B. Sumanth","class":"7C","phone":"9848890704","att":"P","marks":37,"remarks":"Showing steady improvement in geometry theorems"},
-      {"roll":705,"name":"C. Tanuja","class":"7C","phone":"9848890705","att":"A","marks":42,"remarks":"Very well behaved and disciplined student"},
-      {"roll":706,"name":"D. Charan Teja","class":"7C","phone":"9848890706","att":"P","marks":47,"remarks":"Good focus and prompt submission of assignments"},
-      {"roll":707,"name":"E. Gayathri","class":"7C","phone":"9848890707","att":"P","marks":38,"remarks":"High accuracy in fractions and decimal arithmetic"},
-      {"roll":708,"name":"G. Hemanth","class":"7C","phone":"9848890708","att":"P","marks":43,"remarks":"Excellent homework notebook and neat handwriting"},
-      {"roll":709,"name":"K. Ishwarya","class":"7C","phone":"9848890709","att":"P","marks":48,"remarks":"Quick mental math and active classroom response"},
-      {"roll":710,"name":"L. Jagadeesh","class":"7C","phone":"9848890710","att":"P","marks":39,"remarks":"Showing steady improvement in geometry theorems"},
-      {"roll":711,"name":"M. Keerthana","class":"7C","phone":"9848890711","att":"P","marks":44,"remarks":"Very well behaved and disciplined student"},
-      {"roll":712,"name":"N. Lohith","class":"7C","phone":"9848890712","att":"L","marks":49,"remarks":"Good focus and prompt submission of assignments"},
-      {"roll":713,"name":"P. Moulya","class":"7C","phone":"9848890713","att":"P","marks":40,"remarks":"High accuracy in fractions and decimal arithmetic"},
-      {"roll":714,"name":"R. Niharika","class":"7C","phone":"9848890714","att":"P","marks":45,"remarks":"Excellent homework notebook and neat handwriting"},
-      {"roll":715,"name":"S. Omprakash","class":"7C","phone":"9848890715","att":"P","marks":36,"remarks":"Quick mental math and active classroom response"},
-      {"roll":716,"name":"T. Pallavi","class":"7C","phone":"9848890716","att":"P","marks":41,"remarks":"Showing steady improvement in geometry theorems"},
-      {"roll":717,"name":"V. Rajesh","class":"7C","phone":"9848890717","att":"P","marks":46,"remarks":"Very well behaved and disciplined student"},
-      {"roll":718,"name":"Y. Sahiti","class":"7C","phone":"9848890718","att":"P","marks":37,"remarks":"Good focus and prompt submission of assignments"},
-      {"roll":719,"name":"A. Tejas","class":"7C","phone":"9848890719","att":"P","marks":42,"remarks":"High accuracy in fractions and decimal arithmetic"},
-      {"roll":720,"name":"B. Usha","class":"7C","phone":"9848890720","att":"P","marks":47,"remarks":"Excellent homework notebook and neat handwriting"},
-      {"roll":721,"name":"C. Vikas","class":"7C","phone":"9848890721","att":"A","marks":38,"remarks":"Quick mental math and active classroom response"},
-      {"roll":722,"name":"D. Yamini","class":"7C","phone":"9848890722","att":"P","marks":43,"remarks":"Showing steady improvement in geometry theorems"},
-      {"roll":723,"name":"G. Akhila","class":"7C","phone":"9848890723","att":"P","marks":48,"remarks":"Very well behaved and disciplined student"},
-      {"roll":724,"name":"H. Balaji","class":"7C","phone":"9848890724","att":"P","marks":39,"remarks":"Good focus and prompt submission of assignments"},
-      {"roll":725,"name":"K. Chaitra","class":"7C","phone":"9848890725","att":"P","marks":44,"remarks":"High accuracy in fractions and decimal arithmetic"},
-      {"roll":726,"name":"M. Deepak","class":"7C","phone":"9848890726","att":"P","marks":49,"remarks":"Excellent homework notebook and neat handwriting"},
-      {"roll":727,"name":"N. Eswari","class":"7C","phone":"9848890727","att":"P","marks":40,"remarks":"Quick mental math and active classroom response"},
-      {"roll":728,"name":"P. Farooq","class":"7C","phone":"9848890728","att":"P","marks":45,"remarks":"Showing steady improvement in geometry theorems"},
-      {"roll":729,"name":"R. Geetha","class":"7C","phone":"9848890729","att":"P","marks":36,"remarks":"Very well behaved and disciplined student"},
-      {"roll":730,"name":"S. Harsha","class":"7C","phone":"9848890730","att":"P","marks":41,"remarks":"Good focus and prompt submission of assignments"},
-      {"roll":731,"name":"T. Indrani","class":"7C","phone":"9848890731","att":"P","marks":46,"remarks":"High accuracy in fractions and decimal arithmetic"},
-      {"roll":732,"name":"V. Jayanth","class":"7C","phone":"9848890732","att":"P","marks":37,"remarks":"Excellent homework notebook and neat handwriting"},
-      {"roll":733,"name":"Y. Kushal","class":"7C","phone":"9848890733","att":"P","marks":42,"remarks":"Quick mental math and active classroom response"},
-      {"roll":734,"name":"A. Lavanya","class":"7C","phone":"9848890734","att":"P","marks":47,"remarks":"Showing steady improvement in geometry theorems"},
-      {"roll":735,"name":"B. Mahesh","class":"7C","phone":"9848890735","att":"P","marks":38,"remarks":"Very well behaved and disciplined student"},
-      {"roll":736,"name":"C. Navya","class":"7C","phone":"9848890736","att":"P","marks":43,"remarks":"Good focus and prompt submission of assignments"},
-      {"roll":737,"name":"D. Pavan","class":"7C","phone":"9848890737","att":"P","marks":48,"remarks":"High accuracy in fractions and decimal arithmetic"},
-      {"roll":738,"name":"G. Rupa","class":"7C","phone":"9848890738","att":"P","marks":39,"remarks":"Excellent homework notebook and neat handwriting"},
-
-      // Class 10A Remedial (Exactly 32 Students)
-      {"roll":1001,"name":"K. Sai Tharun","class":"10A","phone":"9848911001","att":"P","marks":32,"remarks":"Remedial focus: Practicing quadratic equations & trigonometry"},
-      {"roll":1002,"name":"B. Vennela","class":"10A","phone":"9848911002","att":"P","marks":41,"remarks":"Board exam preparation: Improving step-by-step problem writing"},
-      {"roll":1003,"name":"M. Dinesh Kumar","class":"10A","phone":"9848911003","att":"A","marks":33,"remarks":"Great commitment shown in afternoon remedial sessions"},
-      {"roll":1004,"name":"V. Aditya","class":"10A","phone":"9848911004","att":"P","marks":42,"remarks":"Clarifies doubts regularly, formula retention is improving"},
-      {"roll":1005,"name":"P. Hema Latha","class":"10A","phone":"9848911005","att":"P","marks":34,"remarks":"Steady progress in weekly remedial math drills"},
-      {"roll":1006,"name":"T. Siri Varshini","class":"10A","phone":"9848911006","att":"P","marks":43,"remarks":"Very responsive to one-on-one coaching and practice papers"},
-      {"roll":1007,"name":"G. Sai Teja","class":"10A","phone":"9848911007","att":"P","marks":35,"remarks":"Remedial focus: Practicing quadratic equations & trigonometry"},
-      {"roll":1008,"name":"K. Tanvi Sree","class":"10A","phone":"9848911008","att":"P","marks":44,"remarks":"Board exam preparation: Improving step-by-step problem writing"},
-      {"roll":1009,"name":"S. Bhavana","class":"10A","phone":"9848911009","att":"P","marks":36,"remarks":"Great commitment shown in afternoon remedial sessions"},
-      {"roll":1010,"name":"M. Sravanthi","class":"10A","phone":"9848911010","att":"L","marks":45,"remarks":"Clarifies doubts regularly, formula retention is improving"},
-      {"roll":1011,"name":"A. Naveen","class":"10A","phone":"9848911011","att":"P","marks":37,"remarks":"Steady progress in weekly remedial math drills"},
-      {"roll":1012,"name":"CH. Rithwik","class":"10A","phone":"9848911012","att":"P","marks":46,"remarks":"Very responsive to one-on-one coaching and practice papers"},
-      {"roll":1013,"name":"D. Sai Charan","class":"10A","phone":"9848911013","att":"P","marks":38,"remarks":"Remedial focus: Practicing quadratic equations & trigonometry"},
-      {"roll":1014,"name":"G. Swetha","class":"10A","phone":"9848911014","att":"P","marks":47,"remarks":"Board exam preparation: Improving step-by-step problem writing"},
-      {"roll":1015,"name":"K. Bharat","class":"10A","phone":"9848911015","att":"P","marks":39,"remarks":"Great commitment shown in afternoon remedial sessions"},
-      {"roll":1016,"name":"M. Harish","class":"10A","phone":"9848911016","att":"P","marks":48,"remarks":"Clarifies doubts regularly, formula retention is improving"},
-      {"roll":1017,"name":"N. Pooja","class":"10A","phone":"9848911017","att":"P","marks":40,"remarks":"Steady progress in weekly remedial math drills"},
-      {"roll":1018,"name":"P. Srikanth","class":"10A","phone":"9848911018","att":"P","marks":32,"remarks":"Very responsive to one-on-one coaching and practice papers"},
-      {"roll":1019,"name":"R. Madhuri","class":"10A","phone":"9848911019","att":"A","marks":41,"remarks":"Remedial focus: Practicing quadratic equations & trigonometry"},
-      {"roll":1020,"name":"S. Vishnu","class":"10A","phone":"9848911020","att":"P","marks":33,"remarks":"Board exam preparation: Improving step-by-step problem writing"},
-      {"roll":1021,"name":"T. Anusha","class":"10A","phone":"9848911021","att":"P","marks":42,"remarks":"Great commitment shown in afternoon remedial sessions"},
-      {"roll":1022,"name":"V. Karthik","class":"10A","phone":"9848911022","att":"P","marks":34,"remarks":"Clarifies doubts regularly, formula retention is improving"},
-      {"roll":1023,"name":"Y. Deepa","class":"10A","phone":"9848911023","att":"P","marks":43,"remarks":"Steady progress in weekly remedial math drills"},
-      {"roll":1024,"name":"A. Sunil","class":"10A","phone":"9848911024","att":"P","marks":35,"remarks":"Very responsive to one-on-one coaching and practice papers"},
-      {"roll":1025,"name":"B. Rohini","class":"10A","phone":"9848911025","att":"P","marks":44,"remarks":"Remedial focus: Practicing quadratic equations & trigonometry"},
-      {"roll":1026,"name":"C. Prasad","class":"10A","phone":"9848911026","att":"P","marks":36,"remarks":"Board exam preparation: Improving step-by-step problem writing"},
-      {"roll":1027,"name":"D. Sireesha","class":"10A","phone":"9848911027","att":"P","marks":45,"remarks":"Great commitment shown in afternoon remedial sessions"},
-      {"roll":1028,"name":"G. Naveena","class":"10A","phone":"9848911028","att":"P","marks":37,"remarks":"Clarifies doubts regularly, formula retention is improving"},
-      {"roll":1029,"name":"K. Ramu","class":"10A","phone":"9848911029","att":"P","marks":46,"remarks":"Steady progress in weekly remedial math drills"},
-      {"roll":1030,"name":"M. Bindu","class":"10A","phone":"9848911030","att":"P","marks":38,"remarks":"Very responsive to one-on-one coaching and practice papers"},
-      {"roll":1031,"name":"P. Santosh","class":"10A","phone":"9848911031","att":"P","marks":47,"remarks":"Remedial focus: Practicing quadratic equations & trigonometry"},
-      {"roll":1032,"name":"R. Kalyani","class":"10A","phone":"9848911032","att":"P","marks":39,"remarks":"Board exam preparation: Improving step-by-step problem writing"}
-    ],
-    homework: [
-      { id: 1, class: 'Class 8A', title: 'Chapter 2: Linear Equations Exercise 2.3', due: 'Sept 22, 2026', desc: 'Solve questions 1 through 8 in homework notebook. Step-by-step verification required.' },
-      { id: 2, class: 'Class 9B', title: 'Polynomials Remainder Theorem Practice', due: 'Sept 23, 2026', desc: 'Complete worksheet questions 1 to 12. Bring graph sheets for plotting quadratic curves.' },
-      { id: 3, class: 'Class 7C', title: 'Fractions Multiplication Drill', due: 'Sept 21, 2026', desc: 'Workbook page 34: Solve exercise 3.2 problems and verify with parent signature.' }
-    ],
-    parentMessages: [
-      { id: 1, parent: 'Mrs. V. Sarada', student: 'V. Divya Bharathi (Roll 804)', date: 'Today, 08:30 AM', message: 'Dear Ms. Anjali, Divya will bring her math geometry set and completed assignment notebook today. Thank you for your guidance.' },
-      { id: 2, parent: 'Mr. CH. Rambabu', student: 'CH. Karthik (Roll 841)', date: 'Yesterday, 06:15 PM', message: 'Respected Teacher, Karthik had fever yesterday and arrived slightly late today. He has completed Exercise 2.2.' }
-    ],
-    leaveHistory: [
-      { id: 'LV-2026-081', type: 'Casual Leave (CL)', dates: 'Aug 14, 2026 (1 Day)', substitute: 'Sri P. Satyanarayana', reason: 'Personal family event', status: 'Approved by Principal' },
-      { id: 'LV-2026-042', type: 'On Duty (OD)', dates: 'July 28, 2026 (1 Day)', substitute: 'Smt. S. Lakshmi', reason: 'District Math Teachers Training Workshop', status: 'Approved by Principal' }
-    ]
+    classes: [],
+    pendingTasks: [],
+    students: [],
+    homework: [],
+    parentMessages: [],
+    leaveHistory: [],
+    upcomingExams: [],
+    latestDashboard: null
   };
 
   let activeDossierRoll = null;
@@ -327,112 +183,214 @@ var teacherApp = (function () {
   }
 
   function init() {
-    // Filter out students withdrawn by Class Teacher
-    const withdrawnRolls = JSON.parse(localStorage.getItem('sv_teacher_withdrawn_rolls') || '[]');
-    const withdrawnAdms = JSON.parse(localStorage.getItem('sv_teacher_withdrawn_adms') || '[]');
-    if (withdrawnRolls.length > 0 || withdrawnAdms.length > 0) {
-      state.students = state.students.filter(s => !withdrawnRolls.includes(s.roll) && !withdrawnAdms.includes(s.admNo));
-      state.classes.forEach(cls => {
-        const activeCount = state.students.filter(s => s.class === cls.code || s.class === cls.id.toUpperCase()).length;
-        if (activeCount > 0) {
-          cls.strength = activeCount;
-        }
-      });
-      state.teacher.totalStudents = state.students.length;
+    if (window.PortalAuth && typeof window.PortalAuth.canAccessPortalSync === 'function' && !window.PortalAuth.canAccessPortalSync('teacher')) {
+      return;
     }
     setupTheme();
+    const todayIso = getTodayISTDateISO();
+    ['attendanceDateInput', 'hwDueDate', 'lvFromDate', 'lvToDate'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el && !el.value) el.value = todayIso;
+    });
     updateISTClock();
-    setInterval(updateISTClock, 1000);
+    if (!window.__sv_teacher_clock) window.__sv_teacher_clock = setInterval(updateISTClock, 1000);
     loadSavedProfile();
     bindEvents();
     renderAll();
     setupHashRouting();
+    initSidebarCollapsedState();
     applyTeacherDynamicPermissions();
     syncAdmittedStudentsFromStorage();
 
-    window.addEventListener('storage', function(e) {
-      if (!e.key || e.key === 'sv_teacher_new_admissions' || e.key === 'sv_enrolled_students' || e.key === 'sv_applications') {
-        syncAdmittedStudentsFromStorage(true);
-      }
-    });
-
-    // Listen for real-time permission modifications made by Principal, Vice Principal, or HOD
-    window.addEventListener('storage', function(e) {
-      if (e.key && (e.key.startsWith('sv_teacher_permissions') || e.key === 'sv_executive_restrictions')) {
-        applyTeacherDynamicPermissions();
-        if (state.activeModule && !checkModuleAccess(state.activeModule)) {
-          navigateTo('dashboard');
-        }
-      }
-    });
-
-    if (window.ApiClient && window.ApiClient.isAuthenticated()) {
-      loadLiveData();
+    if (window.ApiClient && window.ApiClient.sync && !window.__svTeacherSseBound) {
+      window.__svTeacherSseBound = true;
+      window.ApiClient.sync.connectStream();
+      let tmr = null;
+      window.ApiClient.sync.on('*', () => {
+        clearTimeout(tmr);
+        tmr = setTimeout(() => loadLiveData(true), 300);
+      });
     }
+
+    loadLiveData(true);
+    if (window.__sv_teacher_sync_interval) clearInterval(window.__sv_teacher_sync_interval);
+    window.__sv_teacher_sync_interval = setInterval(() => {
+      if (document.visibilityState === 'visible') loadLiveData(false);
+    }, 60000);
   }
 
-  async function loadLiveData() {
-    if (!window.ApiClient || !window.ApiClient.isAuthenticated()) return;
+  async function loadLiveData(force = false) {
+    const icon = document.getElementById('tdSyncIcon');
+    const lastEl = document.getElementById('tdLastUpdatedText');
+    const errBanner = document.getElementById('teacherErrorBanner');
+    if (icon) icon.classList.add('fa-spin');
 
     try {
-      // 1. Fetch Teacher Operational Dashboard
-      const dash = await window.ApiClient.dashboard.getTeacherDashboard();
-      if (dash) {
-        if (dash.teacherProfile) {
-          state.teacher.name = dash.teacherProfile.fullName;
-          state.teacher.subject = dash.teacherProfile.specialization || 'Mathematics';
-          state.teacher.role = `Class Teacher • Employee ID ${dash.teacherProfile.employeeId}`;
-          updateTeacherHeaderDOM(dash.teacherProfile);
-        }
+      const safe = async (fn) => { try { return await fn(); } catch (e) { return null; } };
+      const fetcher = async () => {
+        const dashRes = await window.ApiClient.dashboard.getTeacherDashboard();
+        const [studRes, leavesRes, circularsRes] = await Promise.all([
+          safe(() => window.ApiClient.students.getStudents({ limit: 200 })),
+          safe(() => window.ApiClient.teachers.getMyLeaves()),
+          safe(() => window.ApiClient.request('/modules/communication/circulars'))
+        ]);
+        return { dashRes, studRes, leavesRes, circularsRes };
+      };
 
-        if (dash.classes) {
-          state.teacher.totalClasses = dash.classes.assignedClassesCount;
-          state.teacher.totalStudents = dash.classes.totalStudentsCount;
-          if (dash.classes.list && dash.classes.list.length > 0) {
-            state.classes = dash.classes.list.map(c => ({
-              id: `${c.class}${c.section || 'A'}`.toLowerCase(),
-              name: `Class ${c.class}${c.section || 'A'}`,
-              isClassTeacher: c.isClassTeacher || false,
-              strength: 42,
-              room: 'Room 204',
-              avgScore: '86.4%'
-            }));
-          }
-        }
+      const bundle = (window.ApiClient && window.ApiClient.sync && typeof window.ApiClient.sync.fetchLatest === 'function')
+        ? await window.ApiClient.sync.fetchLatest('teacher-dashboard', fetcher, force ? 0 : 3000)
+        : await fetcher();
 
-        if (dash.attendance) {
-          state.teacher.todayAttendancePct = `${dash.attendance.markedCount > 0 ? '96%' : 'Pending'}`;
-        }
+      if (!bundle) return;
+      const dash = bundle.dashRes && bundle.dashRes.data ? bundle.dashRes.data : bundle.dashRes;
+      if (!dash || !dash.teacherProfile) throw new Error('Unable to load teacher profile from server');
 
-        if (dash.assignments && dash.assignments.list) {
-          state.homework = dash.assignments.list.map(h => ({
-            id: h.id,
-            class: `Class ${h.class}${h.section || 'A'}`,
-            title: h.title,
-            due: new Date(h.dueDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
-            desc: h.description || 'Complete all exercises in notebook.'
-          }));
-          renderHomeworkFeed();
+      if (errBanner) errBanner.style.display = 'none';
+      state.latestDashboard = dash;
+
+      const prof = dash.teacherProfile;
+      state.teacher.name = prof.fullName || 'Faculty Member';
+      state.teacher.subject = prof.specialization || prof.subject || 'Faculty';
+      state.teacher.role = 'Employee ID ' + (prof.employeeId || '--');
+      updateTeacherHeaderDOM(prof);
+
+      const elActive = document.getElementById('tdHeaderActiveTeacher');
+      if (elActive) elActive.textContent = state.teacher.name + ' (' + state.teacher.subject + ')';
+      const elDesig = document.getElementById('teacherUserDesignation');
+      if (elDesig) elDesig.textContent = (prof.designation || 'Faculty') + ' • ' + (prof.employeeId || '');
+      const elSub = document.getElementById('tdBannerSub');
+      if (elSub) elSub.textContent = state.teacher.subject + ' Department • ' + state.teacher.role;
+      const elBadge = document.getElementById('tdBannerDeptBadge');
+      if (elBadge) elBadge.innerHTML = '<i class="fa-solid fa-award"></i> ' + state.teacher.subject + ' Faculty';
+
+      if (dash.classes) {
+        state.teacher.totalClasses = Number(dash.classes.assignedClassesCount) || 0;
+        state.teacher.totalStudents = Number(dash.classes.totalStudentsCount) || 0;
+        state.classes = (dash.classes.list || []).map(c => ({
+          id: ((c.class || '') + (c.section || 'A')).toLowerCase(),
+          code: (c.class || '') + (c.section || 'A'),
+          classOnly: c.class || '',
+          section: c.section || 'A',
+          name: 'Class ' + (c.class || '') + (c.section || 'A'),
+          isClassTeacher: Boolean(c.isClassTeacher),
+          subject: c.subject || state.teacher.subject,
+          strength: Number(c.studentsCount) || 0,
+          room: c.room || 'Campus Room',
+          avgScore: '--'
+        }));
+      }
+
+      if (Array.isArray(dash.assignments && dash.assignments.list)) {
+        state.homework = dash.assignments.list.map(h => ({
+          id: h.id || h._id,
+          class: 'Class ' + h.class + (h.section || 'A'),
+          title: h.title,
+          due: h.dueDate ? new Date(h.dueDate).toLocaleDateString('en-IN', { month: 'short', day: 'numeric', year: 'numeric' }) : '--',
+          desc: h.description || ''
+        }));
+        renderHomeworkFeed();
+      }
+
+      const rawStudents = (bundle.studRes && bundle.studRes.data && (bundle.studRes.data.students || bundle.studRes.data)) || [];
+      if (Array.isArray(rawStudents)) {
+        state.students = rawStudents.map((s, idx) => ({
+          _id: s._id,
+          admNo: s.admissionNo,
+          roll: parseInt(s.rollNo, 10) || (100 + idx),
+          name: s.fullName,
+          class: String(s.class || '') + String(s.section || 'A'),
+          classOnly: String(s.class || ''),
+          section: String(s.section || 'A'),
+          phone: s.parentPhone || s.phone || '--',
+          att: s.todayAttendance || 'P',
+          marks: s.marks !== undefined ? s.marks : '',
+          remarks: s.remarks || ''
+        }));
+        if (typeof renderAttendanceMarkingTable === 'function') renderAttendanceMarkingTable();
+        if (typeof renderMarksEntryTable === 'function') renderMarksEntryTable();
+      }
+
+      const rawLeaves = (bundle.leavesRes && bundle.leavesRes.data && (bundle.leavesRes.data.leaves || bundle.leavesRes.data)) || [];
+      if (Array.isArray(rawLeaves)) {
+        state.leaveHistory = rawLeaves.map(lv => ({
+          id: lv._id || lv.leaveId || '--',
+          type: lv.leaveType || 'Leave',
+          dates: (lv.startDate ? new Date(lv.startDate).toLocaleDateString('en-IN') : '') + ' (' + (lv.daysCount || 1) + 'd)',
+          substitute: lv.substituteName || '--',
+          reason: lv.reason || '',
+          status: lv.status || 'PENDING'
+        }));
+        if (typeof renderLeaveHistory === 'function') renderLeaveHistory();
+      }
+
+      const circulars = (bundle.circularsRes && bundle.circularsRes.data && (bundle.circularsRes.data.circulars || bundle.circularsRes.data)) || [];
+
+      // Populate Dashboard 9 metric cards & Today's classes & Tasks from live API
+      const setTxt = (id, v) => { const e = document.getElementById(id); if (e) e.textContent = v; };
+      setTxt('tdMetricClassesVal', state.classes.length + ' Classes');
+      setTxt('tdMetricClassesSub', state.classes.map(c => c.code).join(', ') || 'No classes assigned');
+      setTxt('tdMetricStudentsVal', (state.teacher.totalStudents || state.students.length) + ' Active');
+      setTxt('tdMetricStudentsSub', 'Across allocated grade sections');
+      const attMarked = Number(dash.attendance && dash.attendance.markedCount) || 0;
+      setTxt('tdMetricAttVal', attMarked > 0 ? (attMarked + ' Marked') : 'Pending');
+      setTxt('tdMetricAttSub', 'Daily roll call register');
+      setTxt('tdMetricHwVal', state.homework.length + ' Active');
+      setTxt('tdMetricHwSub', 'Published class assignments');
+      const upcomingEx = Array.isArray(dash.upcomingExams) ? dash.upcomingExams : [];
+      setTxt('tdMetricMarksVal', upcomingEx.length + ' Exam Cycles');
+      setTxt('tdMetricMarksSub', 'Active grading windows');
+      setTxt('tdMetricExamsVal', upcomingEx[0] ? upcomingEx[0].name : 'None');
+      setTxt('tdMetricExamsSub', upcomingEx[0] ? (upcomingEx[0].classes || '') : 'No upcoming exams');
+      setTxt('tdMetricAnnVal', state.leaveHistory.length + ' Leaves');
+      setTxt('tdMetricAnnSub', state.leaveHistory.filter(l => l.status === 'PENDING').length + ' Pending Approval');
+      setTxt('tdMetricMeetVal', circulars.length + ' Notices');
+      setTxt('tdMetricMeetSub', 'Published circulars');
+
+      // Render Today's Timetable / Assigned Classes
+      const periods = (dash.timetable && Array.isArray(dash.timetable.periods)) ? dash.timetable.periods : [];
+      setTxt('tdTodayClassesCountBadge', periods.length + ' Scheduled Today');
+      const tcListEl = document.getElementById('tdTodayClassesList');
+      if (tcListEl) {
+        if (periods.length === 0) {
+          tcListEl.innerHTML = state.classes.length === 0
+            ? '<div style="text-align:center;padding:1.25rem;color:#64748b;">No classes scheduled for today.</div>'
+            : state.classes.map(c =>
+              '<div class="schedule-item"><div class="schedule-time-block"><div class="schedule-time-badge">' + c.code + '</div>' +
+              '<div class="schedule-details"><h4>' + c.subject + ' – ' + c.name + '</h4><p>' + c.room + ' • ' + c.strength + ' Students</p></div></div>' +
+              '<div class="schedule-actions"><button type="button" class="btn btn-primary btn-sm" onclick="teacherApp.navigateTo(\'attendance\')">Mark Attendance</button></div></div>'
+            ).join('');
+        } else {
+          tcListEl.innerHTML = periods.map(p =>
+            '<div class="schedule-item"><div class="schedule-time-block"><div class="schedule-time-badge">' + (p.startTime || ('P' + p.periodNumber)) + '</div>' +
+            '<div class="schedule-details"><h4>' + (p.subject || state.teacher.subject) + ' – Class ' + (p.className || '') + '</h4><p>Room: ' + (p.room || '--') + '</p></div></div>' +
+            '<div class="schedule-actions"><button type="button" class="btn btn-primary btn-sm" onclick="teacherApp.navigateTo(\'attendance\')">Mark Attendance</button></div></div>'
+          ).join('');
         }
       }
 
-      // 2. Fetch Assigned Class Students
-      const studentRes = await window.ApiClient.students.getStudents({ limit: 50 });
-      if (studentRes && studentRes.data && studentRes.data.students && studentRes.data.students.length > 0) {
-        state.students = studentRes.data.students.map((s, idx) => ({
-          roll: parseInt(s.rollNo) || (801 + idx),
-          name: s.fullName,
-          class: `${s.class}${s.section || 'A'}`,
-          phone: s.phone || '9848123000',
-          att: 'P',
-          marks: 44,
-          remarks: 'Good classroom participation and consistent homework.'
-        }));
-        renderAttendanceMarkingTable();
-        renderMarksEntryTable();
+      // Tasks list from live upcoming exams & homework
+      state.pendingTasks = [
+        ...upcomingEx.map((ex, i) => ({ id: i + 1, title: 'Exam Schedule: ' + ex.name, meta: ex.datesFormatted || 'Upcoming', badge: 'due-today', badgeText: ex.status || 'UPCOMING', done: false })),
+        ...state.homework.slice(0, 4).map((h, i) => ({ id: 100 + i, title: 'Assignment: ' + h.title, meta: h.class + ' • Due ' + h.due, badge: 'due-soon', badgeText: 'Homework', done: false }))
+      ];
+      setTxt('pendingTasksCount', state.pendingTasks.length + ' Items');
+      setTxt('taskBadgeCount', state.pendingTasks.length + ' Tasks');
+      if (typeof renderTasks === 'function') try { renderTasks(); } catch (e) {}
+
+      if (lastEl && window.ApiClient && window.ApiClient.sync) {
+        lastEl.textContent = 'Synced: ' + window.ApiClient.sync.formatLastUpdated(dash.lastUpdated || new Date());
       }
     } catch (err) {
-      console.warn('[teacherApp.loadLiveData error]:', err.message);
+      if (err && (err.isStale || err.name === 'AbortError' || err.message === 'STALE_RESPONSE_IGNORED')) {
+        return;
+      }
+      console.error('[teacherApp.loadLiveData]', err);
+      if (errBanner) errBanner.style.display = 'flex';
+      const msgEl = document.getElementById('teacherErrorBannerMsg');
+      if (msgEl) msgEl.textContent = 'Unable to load faculty data: ' + (err.message || 'Server error');
+      if (lastEl) lastEl.textContent = 'Sync Unavailable';
+    } finally {
+      if (icon) icon.classList.remove('fa-spin');
     }
   }
 
@@ -471,7 +429,121 @@ var teacherApp = (function () {
     const themeBtn = document.getElementById('themeToggleBtn');
     if (themeBtn) themeBtn.addEventListener('click', toggleTheme);
 
-    // Mobile sidebar controller with backdrop & outside-click support
+    
+  // =========================================================================
+  // TWO-LEVEL SIDEBAR NAVIGATION & COLLAPSE CONTROLLER
+  // =========================================================================
+  let _lastTeacherToggleStamp = 0;
+  let _lastTeacherToggleMod = null;
+
+  function toggleSubmenu(moduleKey, event) {
+    if (event) {
+      try {
+        event.preventDefault();
+        event.stopPropagation();
+      } catch (e) {}
+      if (event.__svToggleHandled) return;
+      event.__svToggleHandled = true;
+    }
+    const now = Date.now();
+    if (_lastTeacherToggleMod === moduleKey && (now - _lastTeacherToggleStamp) < 250) {
+      return;
+    }
+    _lastTeacherToggleStamp = now;
+    _lastTeacherToggleMod = moduleKey;
+
+    const navItems = document.querySelectorAll('.nav-item');
+    const targetItem = document.querySelector(`.nav-item[data-module="${moduleKey}"]`);
+    if (!targetItem) return;
+
+    const hasSub = !!targetItem.querySelector('.nav-sub');
+    if (!hasSub) {
+      navigateTo(moduleKey);
+      return;
+    }
+
+    const wasOpen = targetItem.classList.contains('open');
+    navItems.forEach(item => {
+      if (item !== targetItem) {
+        item.classList.remove('open');
+      }
+    });
+    targetItem.classList.toggle('open', !wasOpen);
+
+    const sb = document.getElementById('portalSidebar');
+    if (sb && sb.classList.contains('collapsed')) {
+      toggleSidebarCollapse();
+    }
+  }
+
+  function toggleSidebarCollapse() {
+    const sb = document.getElementById('portalSidebar');
+    const isCollapsed = document.body.classList.toggle('sidebar-collapsed');
+    if (sb) {
+      sb.classList.toggle('collapsed', isCollapsed);
+    }
+    try {
+      localStorage.setItem('sv_sidebar_collapsed', isCollapsed ? 'true' : 'false');
+    } catch (e) {}
+
+    const btn = document.getElementById('sidebarCollapseBtn');
+    if (btn) {
+      btn.innerHTML = isCollapsed
+        ? '<i class="fa-solid fa-angles-right"></i>'
+        : '<i class="fa-solid fa-angles-left"></i>';
+      btn.setAttribute('title', isCollapsed ? 'Expand Sidebar (Ctrl+B)' : 'Collapse Sidebar (Ctrl+B)');
+    }
+  }
+
+  function initSidebarCollapsedState() {
+    try {
+      const stored = localStorage.getItem('sv_sidebar_collapsed');
+      if (stored === 'true') {
+        document.body.classList.add('sidebar-collapsed');
+        const sb = document.getElementById('portalSidebar');
+        if (sb) sb.classList.add('collapsed');
+        const btn = document.getElementById('sidebarCollapseBtn');
+        if (btn) {
+          btn.innerHTML = '<i class="fa-solid fa-angles-right"></i>';
+          btn.setAttribute('title', 'Expand Sidebar (Ctrl+B)');
+        }
+      }
+    } catch (e) {}
+
+    // Populate data-tooltip on each .nav-item from .nav-text for minimized icon mode
+    document.querySelectorAll('.nav-item').forEach(item => {
+      const textEl = item.querySelector('.nav-text');
+      if (textEl && !item.getAttribute('data-tooltip')) {
+        item.setAttribute('data-tooltip', textEl.textContent.trim());
+      }
+    });
+
+    // Dynamic flyout vertical positioning for collapsed sidebar
+    document.addEventListener('mouseenter', function (e) {
+      if (!document.body.classList.contains('sidebar-collapsed')) return;
+      const navItem = e.target && e.target.closest && e.target.closest('.nav-item');
+      if (!navItem) return;
+      const sub = navItem.querySelector('.nav-sub');
+      if (!sub) return;
+      const rect = navItem.getBoundingClientRect();
+      const flyoutHeight = sub.offsetHeight || 280;
+      let top = rect.top;
+      if (top + flyoutHeight > window.innerHeight - 16) {
+        top = Math.max(12, window.innerHeight - flyoutHeight - 16);
+      }
+      sub.style.top = top + 'px';
+    }, true);
+
+    // Keyboard shortcut Ctrl+B or Cmd+B
+    document.addEventListener('keydown', function(e) {
+      if ((e.ctrlKey || e.metaKey) && (e.key === 'b' || e.key === 'B')) {
+        e.preventDefault();
+        toggleSidebarCollapse();
+      }
+    });
+  }
+
+  // Mobile sidebar controller with backdrop & outside-click support
     const sidebar = document.getElementById('portalSidebar');
     const mobileBtn = document.getElementById('mobileSidebarToggle');
 
@@ -649,8 +721,8 @@ var teacherApp = (function () {
           sub = parts.slice(1).join('-') || null;
         }
       } else {
-        mod = sessionStorage.getItem('sv_teacher_last_module') || localStorage.getItem('sv_teacher_last_module') || 'dashboard';
-        sub = sessionStorage.getItem('sv_teacher_last_sub') || localStorage.getItem('sv_teacher_last_sub') || null;
+        mod = 'dashboard';
+        sub = null;
       }
 
       if (document.getElementById('view-' + mod)) {
@@ -1044,9 +1116,12 @@ var teacherApp = (function () {
   }
 
   function checkModuleAccess(moduleKey) {
-    if (['dashboard', 'profile', 'appointments', 'tasks', 'assignments', 'timetable', 'students', 'my-classes', 'attendance', 'academics', 'examinations', 'communication', 'leave', 'reports'].includes(moduleKey)) return true;
+    if (moduleKey === 'dashboard' || moduleKey === 'profile') return true;
     const perms = getFacultyPermissions();
-    return perms[moduleKey] !== false;
+    if (Object.prototype.hasOwnProperty.call(perms, moduleKey)) {
+      return perms[moduleKey] !== false;
+    }
+    return true;
   }
 
   function renderAccessLockedScreen(moduleKey) {
@@ -1195,6 +1270,9 @@ var teacherApp = (function () {
     }
 
     state.activeModule = moduleKey;
+    if (window.FloatingBottomNav && typeof window.FloatingBottomNav.syncActiveState === 'function') {
+      window.FloatingBottomNav.syncActiveState();
+    }
 
     try {
       sessionStorage.setItem('sv_teacher_last_module', moduleKey);
@@ -3089,39 +3167,40 @@ var teacherApp = (function () {
   }
 
   async function saveDailyAttendance() {
-    const class8A = state.students.filter(s => s.class === '8A' || s.class === '8-A');
-    const present = class8A.filter(s => s.att === 'P').length;
-    const absent = class8A.filter(s => s.att === 'A').length;
-    const late = class8A.filter(s => s.att === 'L').length;
-
-    if (window.ApiClient) {
-      try {
-        const records = class8A.map(s => ({
-          rollNo: String(s.roll),
-          name: s.name,
-          status: s.att === 'P' ? 'PRESENT' : (s.att === 'A' ? 'ABSENT' : 'LATE')
-        }));
-        await window.ApiClient.attendance.markAttendance({
-          class: '8',
-          section: 'A',
-          academicYear: '2025-2026',
-          date: new Date().toISOString(),
-          records
-        });
-      } catch (err) {
-        console.warn('[saveDailyAttendance API error]:', err.message);
-      }
+    const selCls = (document.getElementById('attendanceClassSelect')?.value || (state.classes[0] && state.classes[0].code) || '8A').toUpperCase();
+    const classStudents = state.students.filter(s => (s.class || '').toUpperCase() === selCls);
+    if (classStudents.length === 0) {
+      showToast('No enrolled students loaded for Class ' + selCls + '.', 'warning');
+      return;
     }
+    const present = classStudents.filter(s => s.att === 'P').length;
+    const absent = classStudents.filter(s => s.att === 'A').length;
+    const late = classStudents.filter(s => s.att === 'L').length;
+    const dateVal = document.getElementById('attendanceDateInput')?.value || getTodayISTDateISO();
+    const classNum = selCls.replace(/[^0-9A-Za-z]/g, '').slice(0, -1) || selCls;
+    const sectionChar = selCls.slice(-1) || 'A';
 
-    localStorage.setItem('sv_teacher_attendance_8a', JSON.stringify({
-      date: new Date().toISOString().split('T')[0],
-      total: class8A.length,
-      present,
-      absent,
-      late
-    }));
-
-    showToast(`Class 8A Register Confirmed: ${present} Present, ${absent} Absent, ${late} Late (Total: ${class8A.length}) logged to attendance server!`, 'success');
+    try {
+      const records = classStudents.map(s => ({
+        student: s._id || undefined,
+        admissionNo: s.admNo || undefined,
+        rollNo: String(s.roll),
+        name: s.name,
+        status: s.att === 'P' ? 'PRESENT' : (s.att === 'A' ? 'ABSENT' : 'LATE')
+      }));
+      const res = await window.ApiClient.attendance.markAttendance({
+        class: classNum,
+        section: sectionChar,
+        date: dateVal,
+        records
+      });
+      if (!res || res.success === false) throw new Error((res && res.message) || 'Attendance save failed');
+      await loadLiveData(true);
+      showToast('Class ' + selCls + ' Register Confirmed: ' + present + ' Present, ' + absent + ' Absent, ' + late + ' Late saved to MongoDB.', 'success');
+    } catch (err) {
+      console.error('[saveDailyAttendance]', err);
+      showToast('Attendance Save Failed: ' + (err.message || 'Server error'), 'error');
+    }
   }
 
   function confirmQuickAttendance() {
@@ -3434,40 +3513,30 @@ var teacherApp = (function () {
 
   async function handleApplyLeave(e) {
     e.preventDefault();
-    const type = document.getElementById('lvType')?.value;
-    const days = document.getElementById('lvDays')?.value;
-    const from = document.getElementById('lvFromDate')?.value;
-    const sub = document.getElementById('lvSubstitute')?.value;
-    const reason = document.getElementById('lvReason')?.value;
+    const type = document.getElementById('lvType')?.value || 'CASUAL';
+    const days = document.getElementById('lvDays')?.value || 1;
+    const from = document.getElementById('lvFromDate')?.value || getTodayISTDateISO();
+    const to = document.getElementById('lvToDate')?.value || from;
+    const reason = (document.getElementById('lvReason')?.value || '').trim();
+    if (!reason) { showToast('Please enter leave reason.', 'warning'); return; }
 
-    if (window.ApiClient) {
-      try {
-        await window.ApiClient.teachers.applyLeave({
-          leaveType: (type || 'CASUAL').toUpperCase(),
-          startDate: from || new Date().toISOString(),
-          endDate: from || new Date().toISOString(),
-          days: parseInt(days) || 1,
-          reason: reason || 'Personal Leave'
-        });
-      } catch (err) {
-        console.warn('[applyLeave API error]:', err.message);
-      }
+    try {
+      const res = await window.ApiClient.teachers.applyLeave({
+        leaveType: type.toUpperCase().includes('MEDICAL') ? 'MEDICAL' : (type.toUpperCase().includes('DUTY') ? 'ON_DUTY' : 'CASUAL'),
+        startDate: from,
+        endDate: to,
+        daysCount: parseInt(days, 10) || 1,
+        reason
+      });
+      if (!res || res.success === false) throw new Error((res && res.message) || 'Leave submission failed');
+      closeModal('applyLeaveModal');
+      e.target.reset();
+      await loadLiveData(true);
+      showToast('Leave application persisted to MongoDB & routed for Principal review.', 'success');
+    } catch (err) {
+      console.error('[applyLeave API error]', err);
+      showToast('Leave Submission Error: ' + (err.message || 'Server error'), 'error');
     }
-
-    const newLv = {
-      id: `LV-2026-0${Math.floor(82 + Math.random() * 20)}`,
-      type: type,
-      dates: `${from} (${days} Days)`,
-      substitute: sub,
-      reason: reason,
-      status: 'Pending VP Recommendation'
-    };
-
-    state.leaveHistory.unshift(newLv);
-    renderLeaveHistory();
-    closeModal('applyLeaveModal');
-    e.target.reset();
-    showToast(`Leave application ${newLv.id} submitted to Vice Principal Sri Navva Anand for recommendation`, 'success');
   }
 
   function switchTeacherDossierExam(roll, examKey) {
@@ -4262,6 +4331,56 @@ var teacherApp = (function () {
     }
   }
 
+
+  
+  function toggleConsentPreference(type, isChecked) {
+    try {
+      const stored = JSON.parse(localStorage.getItem('sv_teacher_consents') || '{}');
+      stored[type] = Boolean(isChecked);
+      localStorage.setItem('sv_teacher_consents', JSON.stringify(stored));
+      
+      const typeLabels = {
+        'COMMUNICATION_SMS': 'SMS Notifications',
+        'MARKETING_WHATSAPP': 'WhatsApp Announcements',
+        'TELEMETRY_ANALYTICS': 'In-House Telemetry'
+      };
+      const label = typeLabels[type] || type;
+      showToast(`${label} ${isChecked ? 'enabled' : 'disabled'} successfully. Preference saved.`, 'success');
+      
+      const idMap = {
+        'COMMUNICATION_SMS': 'facultyConsentSms',
+        'MARKETING_WHATSAPP': 'facultyConsentWhatsApp',
+        'TELEMETRY_ANALYTICS': 'facultyConsentTelemetry'
+      };
+      const el = document.getElementById(idMap[type]);
+      if (el) {
+        el.checked = isChecked;
+        el.setAttribute('aria-checked', isChecked ? 'true' : 'false');
+      }
+    } catch (err) {
+      console.warn('Error saving teacher consent:', err);
+    }
+  }
+
+  function restoreConsentPreferences() {
+    try {
+      const stored = JSON.parse(localStorage.getItem('sv_teacher_consents') || '{}');
+      const idMap = {
+        'COMMUNICATION_SMS': 'facultyConsentSms',
+        'MARKETING_WHATSAPP': 'facultyConsentWhatsApp',
+        'TELEMETRY_ANALYTICS': 'facultyConsentTelemetry'
+      };
+      Object.keys(idMap).forEach(key => {
+        if (typeof stored[key] === 'boolean') {
+          const el = document.getElementById(idMap[key]);
+          if (el) {
+            el.checked = stored[key];
+            el.setAttribute('aria-checked', stored[key] ? 'true' : 'false');
+          }
+        }
+      });
+    } catch (e) {}
+  }
 
   function loadSavedProfile() {
     try {
@@ -5214,7 +5333,10 @@ var teacherApp = (function () {
     init,
     loadLiveData,
     navigateTo,
+    toggleSubmenu,
+    toggleSidebarCollapse,
     checkModuleAccess,
+    refreshDashboardData: () => loadLiveData(true),
     requestModuleAccess,
     unlockAllTeacherModulesForFaculty,
     getFacultyPermissions,
@@ -5251,7 +5373,9 @@ var teacherApp = (function () {
     contactParentFromDossier,
     promptWithdrawStudent,
     notifyNonClassTeacherAttempt,
-    confirmWithdrawStudent
+    confirmWithdrawStudent,
+    toggleConsentPreference,
+    restoreConsentPreferences
   };
 
 })();

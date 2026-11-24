@@ -2,7 +2,46 @@
  * Seed Initial Users and Sample Student Records for all Roles
  */
 const { User } = require('../models/user.model');
+const { Teacher } = require('../models/teacher.model');
 const StudentRecord = require('../models/studentRecord.model');
+
+const ensureSeededTeacherProfile = async () => {
+  const teacherUser = await User.findOne({ username: 'teacher1' });
+  if (!teacherUser) return;
+  const existingTeacher = await Teacher.findOne({
+    $or: [{ user: teacherUser._id }, { email: teacherUser.email }],
+  });
+  if (!existingTeacher) {
+    await Teacher.create({
+      employeeId: 'EMP-2025-001',
+      fullName: teacherUser.fullName || 'P. Sunitha (Senior Teacher)',
+      gender: 'female',
+      qualification: 'M.Sc, B.Ed',
+      experienceYears: 8,
+      specialization: 'Mathematics',
+      email: teacherUser.email,
+      phone: teacherUser.phone || '9876543214',
+      status: 'ACTIVE',
+      user: teacherUser._id,
+      assignedClasses:
+        Array.isArray(teacherUser.assignedClasses) && teacherUser.assignedClasses.length > 0
+          ? teacherUser.assignedClasses.map((ac, idx) => ({
+              class: ac.class,
+              section: ac.section || 'A',
+              subject: ac.subject || 'Mathematics',
+              isClassTeacher: idx === 0,
+            }))
+          : [
+              { class: '10', section: 'A', subject: 'Mathematics', isClassTeacher: true },
+              { class: '9', section: 'B', subject: 'Mathematics', isClassTeacher: false },
+            ],
+      assignedSubjects: ['Mathematics'],
+    });
+  } else if (!existingTeacher.user) {
+    existingTeacher.user = teacherUser._id;
+    await existingTeacher.save({ validateBeforeSave: false });
+  }
+};
 
 const seedData = async () => {
   try {
@@ -13,6 +52,7 @@ const seedData = async () => {
       if (recordCount === 0) {
         await seedRecords();
       }
+      await ensureSeededTeacherProfile();
       return;
     }
 
@@ -33,7 +73,7 @@ const seedData = async () => {
       username: 'principal',
       email: 'principal@srividya.edu.in',
       password: 'Principal@123',
-      fullName: 'Dr. K. S. Rao (Principal)',
+      fullName: 'Smt. Gorle Varalakshmi',
       role: 'PRINCIPAL',
       phone: '9876543211',
     });
@@ -43,7 +83,7 @@ const seedData = async () => {
       username: 'viceprincipal',
       email: 'viceprincipal@srividya.edu.in',
       password: 'VicePrincipal@123',
-      fullName: 'Mrs. L. Vani (Vice Principal)',
+      fullName: 'Sri Navva Anand',
       role: 'VICE_PRINCIPAL',
       phone: '9876543212',
     });
@@ -135,7 +175,8 @@ const seedData = async () => {
 
     console.log('[Seed] Users seeded successfully with role relationships.');
 
-    // 8. Seed sample Student Records for object-level authorization testing
+    // 8. Ensure teacher1 has a linked Teacher profile & seed Student Records
+    await ensureSeededTeacherProfile();
     await seedRecords(student1, student2);
   } catch (error) {
     console.error(`[Seed Error] Could not seed data: ${error.message}`);

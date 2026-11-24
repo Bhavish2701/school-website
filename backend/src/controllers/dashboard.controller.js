@@ -17,7 +17,7 @@ const asyncHandler = require('../utils/asyncHandler');
  * @access  Protected (SUPER_ADMIN, PRINCIPAL, VICE_PRINCIPAL, OFFICE)
  */
 const getManagementDashboard = asyncHandler(async (req, res) => {
-  const dashboard = await dashboardService.getManagementDashboard(req.user);
+  const dashboard = await dashboardService.getManagementDashboard(req.user, req.query);
   return sendSuccess(
     res,
     dashboard,
@@ -80,7 +80,7 @@ const getParentDashboard = asyncHandler(async (req, res) => {
  * @access  Public / Operator Scoped (SUPER_ADMIN, PLATFORM_OPERATOR, PRINCIPAL)
  */
 const getPlatformDashboard = asyncHandler(async (req, res) => {
-  const dashboard = await dashboardService.getPlatformDashboard(req.user);
+  const dashboard = await dashboardService.getPlatformDashboard(req.user, req.query);
   return sendSuccess(
     res,
     dashboard,
@@ -89,8 +89,26 @@ const getPlatformDashboard = asyncHandler(async (req, res) => {
   );
 });
 
+const getManagementTimetable = asyncHandler(async (req, res) => {
+  const dashboard = await dashboardService.getManagementDashboard(req.user, req.query);
+  return sendSuccess(res, dashboard.timetable, 'Management timetable retrieved successfully', 200);
+});
+
+const getManagementUpcomingExams = asyncHandler(async (req, res) => {
+  const dashboard = await dashboardService.getManagementDashboard(req.user, req.query);
+  return sendSuccess(res, dashboard.upcomingExams, 'Management upcoming examinations retrieved successfully', 200);
+});
+
+const getManagementFees = asyncHandler(async (req, res) => {
+  const dashboard = await dashboardService.getManagementDashboard(req.user, req.query);
+  return sendSuccess(res, dashboard.finances, 'Management fee overview retrieved successfully', 200);
+});
+
 module.exports = {
   getManagementDashboard,
+  getManagementTimetable,
+  getManagementUpcomingExams,
+  getManagementFees,
   getTeacherDashboard,
   getStudentDashboard,
   getParentDashboard,

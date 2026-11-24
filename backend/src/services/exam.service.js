@@ -525,10 +525,42 @@ const getClassMarksDossier = async (examId, className, section) => {
   return marks;
 };
 
+/**
+ * 13. Update Exam Details (Management)
+ */
+const updateExam = async (examId, updateData, user) => {
+  const exam = await Exam.findById(examId);
+  if (!exam) throw ApiError.notFound('Exam not found');
+
+  const allowedFields = [
+    'name', 'examType', 'academicYear', 'startDate', 'endDate',
+    'classes', 'description', 'timings', 'subjectsCovered',
+    'hallTicketStatus', 'actionLabel', 'status', 'isPublished'
+  ];
+
+  allowedFields.forEach((field) => {
+    if (updateData[field] !== undefined) {
+      if (field === 'startDate' || field === 'endDate') {
+        exam[field] = new Date(updateData[field]);
+      } else {
+        exam[field] = updateData[field];
+      }
+    }
+  });
+
+  if (exam.startDate > exam.endDate) {
+    throw ApiError.badRequest('Exam start date cannot be after end date');
+  }
+
+  await exam.save();
+  return exam;
+};
+
 module.exports = {
   createExam,
   getExams,
   getExamById,
+  updateExam,
   createSchedule,
   getExamSchedule,
   enterSubjectMarks,

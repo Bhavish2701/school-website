@@ -1,22 +1,83 @@
 const express = require('express');
 const router = express.Router();
-const { formatSuccess } = require('../../utils/apiResponse');
+const asyncHandler = require('../../utils/asyncHandler');
+const { sendSuccess } = require('../../utils/apiResponse');
+const { Notification } = require('../../models/notification.model');
+const { Message } = require('../../models/message.model');
+const { Student } = require('../../models/student.model');
+const { Teacher } = require('../../models/teacher.model');
+const { authenticateUser, authorizeRoles } = require('../../middleware/rbac.middleware');
 
-router.get('/circulars', (req, res) => {
-  res.json(formatSuccess([
-    { id: 'circ-1', title: 'Diwali Festival Holidays & Campus Reopening Notice', date: '2026-10-22', targetAudience: 'All Parents & Staff', status: 'PUBLISHED' },
-    { id: 'circ-2', title: 'Schedule for Term-1 Summative Assessments (SA-1)', date: '2026-10-18', targetAudience: 'Grades 6 to 10', status: 'PUBLISHED' }
-  ], 'Circulars retrieved'));
-});
+router.use(authenticateUser);
 
-router.post('/broadcast', (req, res) => {
-  res.status(201).json(formatSuccess({
-    broadcastId: 'bc-' + Date.now(),
-    channel: req.body.channel || 'SMS & App Notification',
-    recipientCount: 850,
-    status: 'DELIVERED',
-    timestamp: new Date().toISOString()
-  }, 'Broadcast message transmitted'));
-});
+router.get(
+  '/circulars',
+  asyncHandler(async (req, res) => {
+    const circulars = await Notification.find({
+      type: { $in: ['NOTICE', 'ANNOUNCEMENT', 'GENERAL', 'EVENT'] },
+    })
+      .sort({ createdAt: -1 })
+      .limit(50)
+      .lean();
+    return sendSuccess(res, circulars, 'Circulars retrieved from database');
+  })
+);
+
+router.post(
+  '/broadcast',
+  authorizeRoles('SUPER_ADMIN', 'PRINCIPAL', 'VICE_PRINCIPAL', 'OFFICE'),
+  asyncHandler(async (req, res) => {
+    const title = req.body.title || req.body.subject || 'Institutional Circular';
+    const message = req.body.message || req.body.body || '';
+    const recipientRole = (req.body.recipientRole || 'ALL').toUpperCase();
+    const [activeStudents, activeTeachers] = await Promise.all([
+      Student.countDocuments({ status: 'ACTIVE' }),
+      Teacher.countDocuments({ status: 'ACTIVE' }),
+    ]);
+    const doc = await Notification.create({
+      title,
+      message,
+      type: req.body.type || 'NOTICE',
+      recipientRole,
+      createdBy: req.user._id,
+    });
+    const estimatedRecipients =
+      recipientRole === 'TEACHER'
+        ? activeTeachers
+        : recipientRole === 'STUDENT' || recipientRole === 'PARENT'
+          ? activeStudents
+          : activeStudents + activeTeachers;
+
+    return sendSuccess(
+      res,
+      {
+        notification: doc,
+        channel: req.body.channel || 'Portal Noticeboard',
+        recipientCount: estimatedRecipients,
+        status: 'PUBLISHED',
+        timestamp: doc.createdAt,
+      },
+      'Broadcast notice published',
+      201
+    );
+  })
+);
+
+router.get(
+  '/messages',
+  asyncHandler(async (req, res) => {
+    const messages = await Message.find({
+      $or: [
+        { sender: req.user._id },
+        { recipient: req.user._id },
+        { recipientRole: { $in: ['ALL', req.user.role] } },
+      ],
+    })
+      .sort({ createdAt: -1 })
+      .limit(50)
+      .lean();
+    return sendSuccess(res, messages, 'Messages retrieved');
+  })
+);
 
 module.exports = router;

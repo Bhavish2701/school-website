@@ -42,8 +42,8 @@
           ST
         </div>
         <div>
-          <h3 style="margin:0; font-size:1.35rem;">K. Sai Tharun</h3>
-          <p style="margin:0.25rem 0 0; color:#dbeafe; font-size:0.9rem;">Adm No: <strong>SV-0210</strong> • Class: <strong>VIII-A</strong> • Roll No: <strong>#12</strong> • Class Teacher: <strong>Ms. Anjali</strong></p>
+          <h3 style="margin:0; font-size:1.35rem;" id="spStudentName">Student Profile</h3>
+          <p style="margin:0.25rem 0 0; color:#dbeafe; font-size:0.9rem;" id="spStudentMeta">Sign in via ERP Login to load verified student dossier.</p>
         </div>
       </div>
       <div style="display:flex; align-items:center; gap:0.75rem;">
@@ -55,23 +55,23 @@
     <div class="portal-metric-grid" style="display:grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.25rem; margin-bottom: 2rem;">
       <div class="metric-card">
         <span class="metric-label">Attendance Record</span>
-        <span class="metric-value text-emerald">96.8%</span>
-        <span class="metric-sub text-emerald">182 / 188 Sessions Present</span>
+        <span class="metric-value text-emerald" id="spAttPct">--</span>
+        <span class="metric-sub text-emerald" id="spAttSub">Live Attendance</span>
       </div>
       <div class="metric-card">
-        <span class="metric-label">Cumulative GPA</span>
-        <span class="metric-value text-blue">9.4 / 10</span>
-        <span class="metric-sub text-blue">Grade A1 • Term 1 Honor Roll</span>
+        <span class="metric-label">Exam Assessments</span>
+        <span class="metric-value text-blue" id="spExamAvg">--</span>
+        <span class="metric-sub text-blue" id="spExamSub">Verified Exam Marks</span>
       </div>
       <div class="metric-card">
-        <span class="metric-label">Pending Homework</span>
-        <span class="metric-value text-amber">2 Tasks</span>
-        <span class="metric-sub text-muted">Science Lab &amp; Math Ex 4.2</span>
+        <span class="metric-label">Active Assignments</span>
+        <span class="metric-value text-amber" id="spHwCount">--</span>
+        <span class="metric-sub text-muted">Assigned Homework</span>
       </div>
       <div class="metric-card">
         <span class="metric-label">Fee Clearance</span>
-        <span class="metric-value text-emerald">Paid</span>
-        <span class="metric-sub text-muted">Term 1 Dues Cleared</span>
+        <span class="metric-value text-emerald" id="spFeeStatus">--</span>
+        <span class="metric-sub text-muted" id="spFeeSub">Financial Ledger</span>
       </div>
     </div>
 
@@ -191,8 +191,35 @@
       }
     }
 
+    async function hydrateLiveStudentPortal() {
+      if (!window.ApiClient || !window.ApiClient.isAuthenticated()) {
+        document.getElementById('spStudentMeta').innerHTML = 'Not signed in. <a href="/login" style="color:#fff;text-decoration:underline;">Login as Student</a> to view your live academic records.';
+        return;
+      }
+      try {
+        const res = await window.ApiClient.dashboard.getStudentDashboard();
+        const d = res && res.data;
+        if (!d) return;
+        const st = d.student || {};
+        document.getElementById('spStudentName').textContent = st.fullName || 'Student';
+        document.getElementById('spStudentMeta').textContent = 'Adm No: ' + (st.admissionNo || '--') + ' • Class: ' + (st.class || '-') + '-' + (st.section || 'A') + ' • Roll: ' + (st.rollNo || '--');
+        document.getElementById('spAttPct').textContent = (d.attendance && d.attendance.attendancePercentage !== undefined) ? (d.attendance.attendancePercentage + '%') : '--';
+        document.getElementById('spAttSub').textContent = (d.attendance ? (d.attendance.presentDays + ' / ' + d.attendance.totalDays + ' Days Present') : '');
+        document.getElementById('spExamAvg').textContent = (d.academic && d.academic.averagePercentage !== undefined) ? (d.academic.averagePercentage + '%') : '--';
+        document.getElementById('spHwCount').textContent = ((d.assignments && d.assignments.totalPending) || 0) + ' Tasks';
+        document.getElementById('spFeeStatus').textContent = (d.fees && d.fees.pendingAmount > 0) ? ('₹' + d.fees.pendingAmount + ' Due') : 'Cleared';
+        document.getElementById('spFeeSub').textContent = 'Paid: ₹' + ((d.fees && d.fees.paidAmount) || 0);
+      } catch (e) {}
+    }
     updateStudentDashboard();
     setInterval(updateStudentDashboard, 1000);
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', hydrateLiveStudentPortal);
+    } else {
+      hydrateLiveStudentPortal();
+    }
   </script>
+  <script src="/js/api-client.js"></script>
+  <script>hydrateLiveStudentPortal();</script>
 </body>
 </html>

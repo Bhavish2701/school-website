@@ -18,8 +18,8 @@ const getStatus = async (req, res) => {
 const verifyAdministrationAccess = async (req, res) => {
   try {
     const user = {
-      role: req.body.role || req.query.role || req.user?.role || 'admin',
-      institutionId: req.body.institutionId || req.query.institutionId || 'INST-001'
+      role: req.user?.role || 'GUEST',
+      institutionId: req.user?.institutionId || req.query.institutionId || 'INST-001'
     };
     // Pass query params to check for token/password leakage
     const result = SchoolGatewayService.verifyAdministrationAccess(user, req.query);
@@ -32,8 +32,8 @@ const verifyAdministrationAccess = async (req, res) => {
 const verifyFacultyAccess = async (req, res) => {
   try {
     const user = {
-      role: req.body.role || req.query.role || req.user?.role || 'teacher',
-      institutionId: req.body.institutionId || req.query.institutionId || 'INST-001'
+      role: req.user?.role || 'GUEST',
+      institutionId: req.user?.institutionId || req.query.institutionId || 'INST-001'
     };
     // Pass query params to check for token/password leakage
     const result = SchoolGatewayService.verifyFacultyAccess(user, req.query);

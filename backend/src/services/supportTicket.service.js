@@ -5,7 +5,7 @@
 
 const mongoose = require('mongoose');
 const { SupportTicket } = require('../models/supportTicket.model');
-const { PlatformAuditLog } = require('../models/platformAudit.model');
+const { PlatformAudit } = require('../models/platformAudit.model');
 
 const DEFAULT_SUPPORT_TICKETS_SEED = [
   {
@@ -1383,27 +1383,29 @@ class SupportTicketService {
   static async _logSupportAudit(action, recordRef, targetName, actor, details) {
     if (this.isMongoReady()) {
       try {
-        await PlatformAuditLog.create({
-          eventId: `AUD-SUP-${Date.now().toString().slice(-6)}`,
+        const now = Date.now();
+        await PlatformAudit.create({
+          eventId: `AUD-SUP-${now.toString().slice(-6)}-${Math.floor(10 + Math.random() * 89)}`,
+          correlationId: `req-sup-${now}`,
           timestamp: new Date(),
+          category: 'ADMIN_SUPPORT',
+          action,
           actor: {
             userId: 'USR-OP-ADMIN',
-            username: actor,
-            role: 'Platform Operations',
-            scope: 'TRUST_CENTRAL'
+            name: actor || 'Platform Administrator',
+            email: 'admin@srividya.edu.in',
+            role: 'SUPER_ADMIN',
+            scope: 'Platform',
           },
-          institution: 'ALL_CAMPUSES',
-          module: 'Support & Issue Management',
-          action,
-          targetRecord: {
-            entityType: 'SUPPORT_TICKET',
-            recordId: recordRef,
-            recordReference: targetName
+          institutionId: 'TRUST-ALL',
+          targetEntity: {
+            entityType: 'SupportTicket',
+            entityId: String(recordRef || 'TICKET'),
+            displayName: String(targetName || action),
           },
           result: 'SUCCESS',
           severity: 'INFO',
-          correlationId: `req-sup-${Date.now()}`,
-          reason: details
+          reason: details || `Support ticket action: ${action}`,
         });
       } catch (e) {
         // Fallback

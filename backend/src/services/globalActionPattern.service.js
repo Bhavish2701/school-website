@@ -468,28 +468,35 @@ async function confirmHighImpactAction(actionType, payload = {}, actor = 'Platfo
   }
 
   // 2. Generate Audit Record in PlatformAudit
-  const auditId = `AUD-${Date.now()}-${Math.random().toString(36).substring(2, 6).toUpperCase()}`;
+  const now = Date.now();
+  const auditId = `AUD-${now}-${Math.random().toString(36).substring(2, 6).toUpperCase()}`;
+  const rawSeverity = String(HIGH_IMPACT_ACTIONS[actionType]?.severity || 'INFO').toUpperCase();
+  const mappedSeverity = ['INFO', 'LOW', 'MEDIUM', 'HIGH', 'CRITICAL'].includes(rawSeverity) ? rawSeverity : 'INFO';
   try {
     if (mongoose.connection && mongoose.connection.readyState === 1) {
       await PlatformAudit.create({
         eventId: auditId,
         timestamp: new Date(),
-        correlationId: `CORR-${Date.now()}`,
+        correlationId: `CORR-${now}`,
         category: 'ADMIN_SUPPORT',
         action: actionType,
         actor: {
-          actorId: 'ACT-OPERATOR',
-          identity: actor,
-          role: 'Platform Super Administrator',
-          scope: 'PLATFORM_WIDE'
+          userId: 'ACT-OPERATOR',
+          name: actor || 'Platform Super Administrator',
+          email: 'admin@srividya.edu.in',
+          role: 'SUPER_ADMIN',
+          scope: 'Platform'
         },
-        institution: 'Sri Vidya Educational Trust',
-        targetRecord: {
-          entityType: 'GLOBAL_ACTION_PATTERN',
-          recordReference: payload.institutionId || payload.userId || payload.roleId || actionType
+        institutionId: payload.institutionId || 'TRUST-ALL',
+        institutionName: 'Sri Vidya Educational Trust',
+        targetEntity: {
+          entityType: 'GlobalActionPattern',
+          entityId: String(payload.institutionId || payload.userId || payload.roleId || actionType),
+          displayName: String(HIGH_IMPACT_ACTIONS[actionType]?.name || actionType),
         },
         result: 'SUCCESS',
-        severity: HIGH_IMPACT_ACTIONS[actionType]?.severity?.toUpperCase() || 'INFO',
+        severity: mappedSeverity,
+        reason: payload.reason || `Confirmed high-impact action: ${HIGH_IMPACT_ACTIONS[actionType]?.name || actionType}`,
         details: {
           action: actionType,
           requiredBehavior: HIGH_IMPACT_ACTIONS[actionType]?.requiredBehavior,

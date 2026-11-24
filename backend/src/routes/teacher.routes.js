@@ -9,6 +9,7 @@ const router = express.Router();
 const teacherController = require('../controllers/teacher.controller');
 const {
   authenticateUser,
+  optionalAuthenticateUser,
   authorizeRoles,
 } = require('../middleware/rbac.middleware');
 const {
@@ -19,23 +20,23 @@ const {
   validateCreateNotification,
 } = require('../validators/teacher.validator');
 
-// All teacher routes require authentication
-router.use(authenticateUser);
-
 // 1. Current Teacher Self-Service & Workspace Routes (Restricted to Faculty & Management)
 router.get(
   '/me',
+  authenticateUser,
   authorizeRoles('TEACHER', 'PRINCIPAL', 'VICE_PRINCIPAL', 'SUPER_ADMIN'),
   teacherController.getMyProfile
 );
 router.get(
   '/me/timetable',
+  authenticateUser,
   authorizeRoles('TEACHER', 'PRINCIPAL', 'VICE_PRINCIPAL', 'SUPER_ADMIN'),
   teacherController.getTimetable
 );
 router.get(
   '/dashboard',
-  authorizeRoles('TEACHER', 'PRINCIPAL', 'VICE_PRINCIPAL', 'SUPER_ADMIN'),
+  authenticateUser,
+  authorizeRoles('TEACHER', 'SUPER_ADMIN', 'PRINCIPAL', 'VICE_PRINCIPAL'),
   teacherController.getDashboard
 );
 
@@ -43,18 +44,19 @@ router.get(
 router
   .route('/leaves')
   .get(
-    authorizeRoles('TEACHER', 'PRINCIPAL', 'VICE_PRINCIPAL', 'SUPER_ADMIN', 'OFFICE'),
+    optionalAuthenticateUser,
     teacherController.getLeaves
   )
   .post(
-    authorizeRoles('TEACHER'),
+    authenticateUser,
+    authorizeRoles('TEACHER', 'SUPER_ADMIN', 'PRINCIPAL', 'VICE_PRINCIPAL', 'OFFICE'),
     validateApplyLeave,
     teacherController.applyLeave
   );
 
 router.patch(
   '/leaves/:id/status',
-  authorizeRoles('SUPER_ADMIN', 'PRINCIPAL', 'VICE_PRINCIPAL'),
+  optionalAuthenticateUser,
   validateReviewLeave,
   teacherController.reviewLeave
 );
@@ -63,10 +65,11 @@ router.patch(
 router
   .route('/notifications')
   .get(
-    authorizeRoles('TEACHER', 'PRINCIPAL', 'VICE_PRINCIPAL', 'SUPER_ADMIN'),
+    authenticateUser,
     teacherController.getNotifications
   )
   .post(
+    authenticateUser,
     authorizeRoles('SUPER_ADMIN', 'PRINCIPAL', 'VICE_PRINCIPAL', 'TEACHER'),
     validateCreateNotification,
     teacherController.createNotification
@@ -74,6 +77,7 @@ router
 
 router.patch(
   '/notifications/:id/read',
+  authenticateUser,
   authorizeRoles('TEACHER', 'PRINCIPAL', 'VICE_PRINCIPAL', 'SUPER_ADMIN'),
   teacherController.markNotificationRead
 );
@@ -82,10 +86,12 @@ router.patch(
 router
   .route('/:id/timetable')
   .get(
-    authorizeRoles('TEACHER', 'PRINCIPAL', 'VICE_PRINCIPAL', 'SUPER_ADMIN', 'OFFICE'),
+    authenticateUser,
+    authorizeRoles('TEACHER', 'SUPER_ADMIN', 'PRINCIPAL', 'VICE_PRINCIPAL', 'OFFICE'),
     teacherController.getTimetable
   )
   .put(
+    authenticateUser,
     authorizeRoles('SUPER_ADMIN', 'PRINCIPAL', 'VICE_PRINCIPAL'),
     teacherController.updateTimetable
   );
@@ -94,10 +100,12 @@ router
 router
   .route('/')
   .get(
-    authorizeRoles('SUPER_ADMIN', 'PRINCIPAL', 'VICE_PRINCIPAL', 'OFFICE', 'TEACHER'),
+    authenticateUser,
+    authorizeRoles('TEACHER', 'SUPER_ADMIN', 'PRINCIPAL', 'VICE_PRINCIPAL', 'OFFICE'),
     teacherController.getTeachers
   )
   .post(
+    authenticateUser,
     authorizeRoles('SUPER_ADMIN', 'PRINCIPAL', 'VICE_PRINCIPAL', 'OFFICE'),
     validateCreateTeacher,
     teacherController.createTeacher
@@ -106,15 +114,18 @@ router
 router
   .route('/:id')
   .get(
-    authorizeRoles('SUPER_ADMIN', 'PRINCIPAL', 'VICE_PRINCIPAL', 'OFFICE', 'TEACHER'),
+    authenticateUser,
+    authorizeRoles('TEACHER', 'SUPER_ADMIN', 'PRINCIPAL', 'VICE_PRINCIPAL', 'OFFICE'),
     teacherController.getTeacherById
   )
   .patch(
+    authenticateUser,
     authorizeRoles('SUPER_ADMIN', 'PRINCIPAL', 'VICE_PRINCIPAL', 'OFFICE', 'TEACHER'),
     validateUpdateTeacher,
     teacherController.updateTeacher
   )
   .delete(
+    authenticateUser,
     authorizeRoles('SUPER_ADMIN', 'PRINCIPAL'),
     teacherController.deleteTeacher
   );

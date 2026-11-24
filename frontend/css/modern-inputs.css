@@ -1,0 +1,789 @@
+/* ==========================================================================
+   Sri Vidya ERP & School Portals - Modern Input Field System
+   - Floating Labels
+   - Password Fields with Strength Meter & Eye Toggle
+   - Search Fields with Left Icon & Instant Clear Button
+   - Real-Time Validation with Success/Error Visual Feedback
+   - Code/OTP Fields with Auto-advance, Paste & Backspace Support
+   - Stepper Fields with Increment/Decrement Controls
+   - Tag-based Inputs with Add/Remove functionality
+   - Date Masks with Auto-formatting & Validation
+   - Skeuomorphic Raised & Inset Tactile Finishes
+   - Full Dark Mode Support
+   ========================================================================== */
+
+:root {
+  --input-bg-light: #FFFFFF;
+  --input-bg-well: linear-gradient(180deg, #F8FAFC 0%, #FFFFFF 100%);
+  --input-border-light: #CBD5E1;
+  --input-border-hover: #94A3B8;
+  --input-border-focus: #2563EB;
+  --input-text-light: #0F172A;
+  --input-placeholder: #94A3B8;
+  --input-shadow-inset: inset 0 2px 4px rgba(15, 23, 42, 0.06), 0 1px 0 #FFFFFF;
+  --input-focus-ring: 0 0 0 3px rgba(37, 99, 235, 0.18), inset 0 1px 2px rgba(15, 23, 42, 0.04);
+  --input-radius: 10px;
+
+  /* Validation Colors */
+  --input-success-border: #10B981;
+  --input-success-bg: #F0FDF4;
+  --input-success-ring: 0 0 0 3px rgba(16, 185, 129, 0.18);
+  --input-error-border: #EF4444;
+  --input-error-bg: #FEF2F2;
+  --input-error-ring: 0 0 0 3px rgba(239, 68, 68, 0.18);
+}
+
+/* ==========================================================================
+   1. Universal Modern Base Form Control
+   ========================================================================== */
+.sv-form-control,
+.form-control {
+  border-radius: var(--input-radius) !important;
+  border: 1px solid var(--input-border-light);
+  background: var(--input-bg-well);
+  box-shadow: var(--input-shadow-inset);
+  color: var(--input-text-light);
+  font-family: inherit;
+  font-size: 0.92rem;
+  font-weight: 500;
+  padding: 0.65rem 0.95rem;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  outline: none;
+}
+
+.sv-form-control:hover,
+.form-control:hover {
+  border-color: var(--input-border-hover);
+}
+
+.sv-form-control:focus,
+.form-control:focus {
+  border-color: var(--input-border-focus) !important;
+  box-shadow: var(--input-focus-ring) !important;
+  background: #FFFFFF !important;
+}
+
+/* ==========================================================================
+   Universal Left / Right Icon Alignment (Prevents Text Colliding With Icons)
+   ========================================================================== */
+.input-container,
+.input-wrapper,
+.school-input-wrap,
+.search-input-wrap,
+.has-icon-left {
+  position: relative !important;
+  display: flex !important;
+  flex-wrap: wrap !important;
+  align-items: center !important;
+  width: 100% !important;
+}
+
+.input-container > .input-icon,
+.input-container > i,
+.input-wrapper > i,
+.school-input-wrap > .school-input-icon,
+.search-input-wrap > i,
+.has-icon-left > .input-icon {
+  position: absolute !important;
+  left: 1.15rem !important;
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+  font-size: 1.05rem !important;
+  color: #64748B !important;
+  pointer-events: none !important;
+  z-index: 10 !important;
+}
+
+.input-container input,
+.input-container .form-control,
+.input-wrapper input,
+.input-wrapper .form-control,
+.school-input-wrap input,
+.school-input-wrap .school-control,
+.search-input-wrap input,
+.search-input-wrap .form-control,
+.has-icon-left input,
+.has-icon-left .form-control,
+#unifiedLoginUser,
+#unifiedLoginPass {
+  padding-left: 3.25rem !important;
+}
+
+.input-container input[type="password"],
+.input-container .form-control[type="password"],
+.input-wrapper input[type="password"],
+.input-wrapper .form-control[type="password"],
+.has-icon-right input,
+#unifiedLoginPass {
+  padding-right: 3rem !important;
+}
+
+/* ==========================================================================
+   2. Floating Labels System
+   ========================================================================== */
+.sv-floating-group,
+.form-floating {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1.15rem;
+}
+
+.sv-floating-group > input,
+.sv-floating-group > select,
+.sv-floating-group > textarea,
+.form-floating > .form-control,
+.form-floating > .form-select {
+  height: 54px;
+  padding: 1.25rem 0.95rem 0.35rem 0.95rem !important;
+  font-size: 0.95rem;
+  border-radius: var(--input-radius) !important;
+  width: 100%;
+}
+
+.sv-floating-group > textarea,
+.form-floating > textarea.form-control {
+  height: 110px;
+  padding-top: 1.5rem !important;
+}
+
+.sv-floating-group > label,
+.form-floating > label {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  padding: 1rem 0.95rem;
+  pointer-events: none;
+  border: 1px solid transparent;
+  transform-origin: 0 0;
+  transition: opacity 0.18s ease-in-out, transform 0.18s ease-in-out, color 0.18s ease-in-out;
+  color: #64748B;
+  font-size: 0.9rem;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  margin-bottom: 0;
+}
+
+.sv-floating-group > input:focus ~ label,
+.sv-floating-group > input:not(:placeholder-shown) ~ label,
+.sv-floating-group > select:focus ~ label,
+.sv-floating-group > select:not([value=""]) ~ label,
+.sv-floating-group > textarea:focus ~ label,
+.sv-floating-group > textarea:not(:placeholder-shown) ~ label,
+.form-floating > .form-control:focus ~ label,
+.form-floating > .form-control:not(:placeholder-shown) ~ label,
+.form-floating > .form-select ~ label {
+  transform: scale(0.78) translateY(-0.85rem) translateX(0.15rem);
+  color: #1D4ED8;
+  font-weight: 700;
+  opacity: 1;
+}
+
+/* ==========================================================================
+   3. Password Fields with Strength Meter & Eye Toggle
+   ========================================================================== */
+.sv-password-wrap {
+  position: relative;
+  width: 100%;
+}
+
+.sv-password-wrap input {
+  padding-right: 2.75rem !important;
+  width: 100%;
+}
+
+.sv-password-toggle {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: #64748B;
+  padding: 6px 8px;
+  cursor: pointer;
+  font-size: 1rem;
+  border-radius: 6px;
+  transition: color 0.18s ease, background-color 0.18s ease;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sv-password-toggle:hover {
+  color: #1D4ED8;
+  background-color: rgba(226, 232, 240, 0.5);
+}
+
+/* Password Strength Indicator */
+.password-strength-container {
+  margin-top: 0.5rem;
+  width: 100%;
+}
+
+.password-strength-bars {
+  display: flex;
+  gap: 4px;
+  height: 5px;
+  border-radius: 4px;
+  overflow: hidden;
+  background: #E2E8F0;
+  margin-bottom: 4px;
+}
+
+.password-strength-segment {
+  flex: 1;
+  height: 100%;
+  background: transparent;
+  transition: background-color 0.25s ease;
+  border-radius: 2px;
+}
+
+.password-strength-label {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #64748B;
+}
+
+.strength-level-weak .password-strength-segment:nth-child(1) { background: #EF4444; }
+.strength-level-weak .password-strength-label span:last-child { color: #EF4444; }
+
+.strength-level-fair .password-strength-segment:nth-child(1),
+.strength-level-fair .password-strength-segment:nth-child(2) { background: #F59E0B; }
+.strength-level-fair .password-strength-label span:last-child { color: #F59E0B; }
+
+.strength-level-good .password-strength-segment:nth-child(1),
+.strength-level-good .password-strength-segment:nth-child(2),
+.strength-level-good .password-strength-segment:nth-child(3) { background: #3B82F6; }
+.strength-level-good .password-strength-label span:last-child { color: #3B82F6; }
+
+.strength-level-strong .password-strength-segment { background: #10B981; }
+.strength-level-strong .password-strength-label span:last-child { color: #10B981; }
+
+/* Password Criteria Checklist */
+.password-criteria-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: 4px 8px;
+  margin-top: 0.45rem;
+  font-size: 0.72rem;
+  color: #64748B;
+}
+
+.password-criteria-item {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  transition: color 0.2s ease;
+}
+
+.password-criteria-item i {
+  font-size: 0.7rem;
+  color: #94A3B8;
+  transition: all 0.2s ease;
+}
+
+.password-criteria-item.met {
+  color: #059669;
+  font-weight: 600;
+}
+
+.password-criteria-item.met i {
+  color: #10B981;
+  transform: scale(1.15);
+}
+
+/* ==========================================================================
+   4. Search Fields with Search Icon & Instant Clear Button
+   ========================================================================== */
+.sv-search-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.sv-search-icon {
+  position: absolute;
+  left: 12px;
+  color: #64748B;
+  font-size: 0.95rem;
+  pointer-events: none;
+  z-index: 2;
+  transition: color 0.18s ease;
+}
+
+.sv-search-input,
+.sv-search-wrap input {
+  padding-left: 2.35rem !important;
+  padding-right: 2.35rem !important;
+  width: 100%;
+}
+
+.sv-search-wrap:focus-within .sv-search-icon {
+  color: #1D4ED8;
+}
+
+.sv-search-clear {
+  position: absolute;
+  right: 8px;
+  background: #E2E8F0;
+  border: none;
+  color: #475569;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.72rem;
+  cursor: pointer;
+  opacity: 0;
+  pointer-events: none;
+  transform: scale(0.85);
+  transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: 3;
+}
+
+.sv-search-clear.visible {
+  opacity: 1;
+  pointer-events: auto;
+  transform: scale(1);
+}
+
+.sv-search-clear:hover {
+  background: #CBD5E1;
+  color: #0F172A;
+  transform: scale(1.08);
+}
+
+/* ==========================================================================
+   5. Real-Time Field Validation System (Success & Error Visual States)
+   ========================================================================== */
+.is-valid,
+.sv-form-control.is-valid,
+input.is-valid,
+select.is-valid,
+textarea.is-valid {
+  border-color: var(--input-success-border) !important;
+  background-color: var(--input-success-bg) !important;
+  box-shadow: var(--input-success-ring) !important;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%2310B981'%3E%3Cpath d='M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+  background-size: 1.15rem 1.15rem;
+  padding-right: 2.25rem !important;
+}
+
+.is-invalid,
+.sv-form-control.is-invalid,
+input.is-invalid,
+select.is-invalid,
+textarea.is-invalid {
+  border-color: var(--input-error-border) !important;
+  background-color: var(--input-error-bg) !important;
+  box-shadow: var(--input-error-ring) !important;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23EF4444'%3E%3Cpath d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+  background-size: 1.15rem 1.15rem;
+  padding-right: 2.25rem !important;
+  animation: svFieldShake 0.35s ease-in-out;
+}
+
+@keyframes svFieldShake {
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-4px); }
+  40%, 80% { transform: translateX(4px); }
+}
+
+.valid-feedback {
+  display: none;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #059669;
+  margin-top: 0.35rem;
+  margin-bottom: 0.2rem;
+  align-items: center;
+  gap: 0.4rem;
+  width: 100% !important;
+  flex-basis: 100% !important;
+  max-width: 100% !important;
+  clear: both !important;
+  box-sizing: border-box !important;
+  line-height: 1.35 !important;
+}
+
+.invalid-feedback {
+  display: none;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #DC2626;
+  margin-top: 0.35rem;
+  margin-bottom: 0.2rem;
+  align-items: center;
+  gap: 0.4rem;
+  width: 100% !important;
+  flex-basis: 100% !important;
+  max-width: 100% !important;
+  clear: both !important;
+  box-sizing: border-box !important;
+  line-height: 1.35 !important;
+  white-space: normal !important;
+  word-break: break-word !important;
+}
+
+.valid-feedback i,
+.invalid-feedback i {
+  font-size: 0.85rem;
+  flex-shrink: 0;
+}
+
+.valid-feedback span,
+.invalid-feedback span {
+  flex: 1;
+}
+
+.is-valid ~ .valid-feedback,
+.valid-feedback.show {
+  display: flex !important;
+}
+
+.is-invalid ~ .invalid-feedback,
+.is-invalid + .invalid-feedback,
+.input-container + .invalid-feedback,
+.input-wrapper + .invalid-feedback,
+.sv-password-wrap + .invalid-feedback,
+.school-input-wrap + .invalid-feedback,
+.search-input-wrap + .invalid-feedback,
+.invalid-feedback.show {
+  display: flex !important;
+}
+
+/* Focused Invalid State: Maintain crisp Red glow rather than falling back to Blue */
+.is-invalid:focus,
+.sv-form-control.is-invalid:focus,
+.form-control.is-invalid:focus,
+input.is-invalid:focus,
+select.is-invalid:focus,
+textarea.is-invalid:focus {
+  border-color: #EF4444 !important;
+  background-color: var(--input-error-bg) !important;
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.22), inset 0 1px 2px rgba(0, 0, 0, 0.05) !important;
+  outline: none !important;
+}
+
+/* Dark mode error contrast */
+[data-theme="dark"] .invalid-feedback,
+body.dark-theme .invalid-feedback {
+  color: #F87171 !important;
+}
+
+[data-theme="dark"] .is-invalid:focus,
+[data-theme="dark"] .form-control.is-invalid:focus,
+body.dark-theme .is-invalid:focus,
+body.dark-theme .form-control.is-invalid:focus {
+  border-color: #F87171 !important;
+  box-shadow: 0 0 0 3px rgba(248, 113, 113, 0.28), inset 0 1px 2px rgba(0, 0, 0, 0.3) !important;
+}
+
+/* ==========================================================================
+   6. Code / OTP Individual Digit Inputs
+   ========================================================================== */
+.sv-otp-group,
+.otp-input-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem;
+  margin: 0.85rem 0;
+  width: 100%;
+}
+
+.sv-otp-digit,
+.otp-digit {
+  width: 48px;
+  height: 54px;
+  border-radius: 12px !important;
+  border: 1.5px solid #CBD5E1;
+  background: linear-gradient(180deg, #FFFFFF 0%, #F8FAFC 100%);
+  box-shadow: inset 0 2px 4px rgba(15, 23, 42, 0.05), 0 1px 2px rgba(0, 0, 0, 0.04);
+  font-family: 'Outfit', 'Inter', monospace !important;
+  font-size: 1.6rem !important;
+  font-weight: 800 !important;
+  text-align: center;
+  color: #0F172A;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  padding: 0 !important;
+  caret-color: #1D4ED8;
+}
+
+.sv-otp-digit:hover,
+.otp-digit:hover {
+  border-color: #94A3B8;
+}
+
+.sv-otp-digit:focus,
+.otp-digit:focus {
+  border-color: #2563EB !important;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.22), inset 0 1px 2px rgba(15, 23, 42, 0.05) !important;
+  transform: translateY(-2px);
+  background: #FFFFFF !important;
+  outline: none !important;
+}
+
+.sv-otp-digit.filled,
+.otp-digit.filled {
+  border-color: #3B82F6;
+  background: #EFF6FF;
+  color: #1D4ED8;
+}
+
+/* ==========================================================================
+   7. Stepper Fields (Increment / Decrement Controls)
+   ========================================================================== */
+.sv-stepper-field {
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid #CBD5E1;
+  border-radius: var(--input-radius);
+  background: #FFFFFF;
+  box-shadow: inset 0 1px 2px rgba(15, 23, 42, 0.04), 0 1px 2px rgba(0, 0, 0, 0.02);
+  overflow: hidden;
+  vertical-align: middle;
+}
+
+.sv-stepper-btn {
+  width: 38px;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(180deg, #F8FAFC 0%, #E2E8F0 100%);
+  border: none;
+  color: #334155;
+  font-size: 0.85rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.sv-stepper-btn:hover:not(:disabled) {
+  background: linear-gradient(180deg, #EFF6FF 0%, #DBEAFE 100%);
+  color: #1D4ED8;
+}
+
+.sv-stepper-btn:active:not(:disabled) {
+  background: #BFDBFE;
+  transform: scale(0.95);
+}
+
+.sv-stepper-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.sv-stepper-input {
+  width: 60px;
+  height: 38px;
+  border: none !important;
+  background: transparent !important;
+  text-align: center;
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: #0F172A;
+  box-shadow: none !important;
+  padding: 0 !important;
+  -moz-appearance: textfield;
+}
+
+.sv-stepper-input::-webkit-outer-spin-button,
+.sv-stepper-input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* ==========================================================================
+   8. Tag-Based Multiple Entry Inputs
+   ========================================================================== */
+.sv-tags-container {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 8px;
+  border: 1px solid #CBD5E1;
+  border-radius: var(--input-radius);
+  background: var(--input-bg-well);
+  box-shadow: var(--input-shadow-inset);
+  min-height: 44px;
+  cursor: text;
+  transition: all 0.2s ease;
+}
+
+.sv-tags-container:focus-within {
+  border-color: #2563EB;
+  box-shadow: var(--input-focus-ring);
+  background: #FFFFFF;
+}
+
+.sv-tag-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: linear-gradient(180deg, #EFF6FF 0%, #DBEAFE 100%);
+  border: 1px solid #93C5FD;
+  color: #1D4ED8;
+  font-size: 0.78rem;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 16px;
+  box-shadow: 0 1px 2px rgba(29, 78, 216, 0.08);
+  animation: svTagPop 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes svTagPop {
+  0% { transform: scale(0.7); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.sv-tag-remove {
+  background: none;
+  border: none;
+  color: #1D4ED8;
+  cursor: pointer;
+  font-size: 0.8rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  padding: 0;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.sv-tag-remove:hover {
+  background-color: #1D4ED8;
+  color: #FFFFFF;
+}
+
+.sv-tags-input-field {
+  border: none !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  outline: none !important;
+  font-size: 0.88rem;
+  color: #0F172A;
+  flex: 1;
+  min-width: 90px;
+  padding: 4px 6px !important;
+}
+
+/* ==========================================================================
+   9. Date Masks & Formatting
+   ========================================================================== */
+.sv-date-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.sv-date-wrap input {
+  padding-right: 2.5rem !important;
+  font-variant-numeric: tabular-nums;
+  width: 100%;
+}
+
+.sv-date-icon {
+  position: absolute;
+  right: 12px;
+  color: #64748B;
+  font-size: 1rem;
+  pointer-events: none;
+}
+
+/* ==========================================================================
+   10. Dark Mode Support
+   ========================================================================== */
+[data-theme="dark"] .sv-form-control,
+[data-theme="dark"] .form-control,
+body.dark-theme .sv-form-control,
+body.dark-theme .form-control {
+  background: #111C2E !important;
+  border-color: #243550 !important;
+  color: #F8FAFC !important;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.4), 0 1px 0 rgba(255, 255, 255, 0.05) !important;
+}
+
+[data-theme="dark"] .sv-form-control:focus,
+[data-theme="dark"] .form-control:focus,
+body.dark-theme .sv-form-control:focus,
+body.dark-theme .form-control:focus {
+  border-color: #3B82F6 !important;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25), inset 0 1px 2px rgba(0, 0, 0, 0.3) !important;
+  background: #0F172A !important;
+}
+
+[data-theme="dark"] .sv-floating-group > label,
+[data-theme="dark"] .form-floating > label,
+body.dark-theme .sv-floating-group > label,
+body.dark-theme .form-floating > label {
+  color: #94A3B8 !important;
+}
+
+[data-theme="dark"] .sv-floating-group > input:focus ~ label,
+[data-theme="dark"] .sv-floating-group > input:not(:placeholder-shown) ~ label,
+[data-theme="dark"] .form-floating > .form-control:focus ~ label,
+[data-theme="dark"] .form-floating > .form-control:not(:placeholder-shown) ~ label,
+body.dark-theme .form-floating > .form-control:focus ~ label {
+  color: #60A5FA !important;
+}
+
+[data-theme="dark"] .sv-otp-digit,
+[data-theme="dark"] .otp-digit,
+body.dark-theme .sv-otp-digit,
+body.dark-theme .otp-digit {
+  background: linear-gradient(180deg, #151F32 0%, #0F172A 100%) !important;
+  border-color: #243550 !important;
+  color: #FFFFFF !important;
+}
+
+[data-theme="dark"] .sv-stepper-field,
+body.dark-theme .sv-stepper-field {
+  background: #0F172A;
+  border-color: #243550;
+}
+
+[data-theme="dark"] .sv-stepper-btn,
+body.dark-theme .sv-stepper-btn {
+  background: #1E293B;
+  color: #E2E8F0;
+}
+
+[data-theme="dark"] .sv-stepper-input,
+body.dark-theme .sv-stepper-input {
+  color: #FFFFFF;
+}
+
+[data-theme="dark"] .sv-tags-container,
+body.dark-theme .sv-tags-container {
+  background: #111C2E;
+  border-color: #243550;
+}
+
+[data-theme="dark"] .sv-tag-pill,
+body.dark-theme .sv-tag-pill {
+  background: linear-gradient(180deg, #1E3A8A 0%, #1E40AF 100%);
+  border-color: #3B82F6;
+  color: #FFFFFF;
+}

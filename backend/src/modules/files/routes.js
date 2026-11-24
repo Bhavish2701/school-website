@@ -1,21 +1,41 @@
 const express = require('express');
+const fs = require('fs');
+const path = require('path');
 const router = express.Router();
-const { formatSuccess } = require('../../utils/apiResponse');
+const asyncHandler = require('../../utils/asyncHandler');
+const { sendSuccess } = require('../../utils/apiResponse');
+const { SchoolConfig } = require('../../models/schoolConfig.model');
+const { authenticateUser } = require('../../middleware/rbac.middleware');
 
-router.get('/documents', (req, res) => {
-  res.json(formatSuccess([
-    { id: 'doc-1', name: 'Transfer_Certificate_Template.pdf', category: 'Certificates', size: '1.2 MB' },
-    { id: 'doc-2', name: 'Academic_Calendar_2026_27.pdf', category: 'Handbooks', size: '2.4 MB' },
-    { id: 'doc-3', name: 'Fee_Receipt_Format.pdf', category: 'Finance', size: '450 KB' }
-  ], 'Files retrieved'));
-});
+router.use(authenticateUser);
 
-router.post('/upload', (req, res) => {
-  res.status(201).json(formatSuccess({
-    fileId: 'file-' + Date.now(),
-    url: '/assets/uploads/' + (req.body.filename || 'uploaded_doc.pdf'),
-    uploadedAt: new Date().toISOString()
-  }, 'File uploaded successfully'));
-});
+router.get(
+  '/documents',
+  asyncHandler(async (req, res) => {
+    const config = await SchoolConfig.findOne({}).select('documentTemplates').lean();
+    const downloadsDir = path.resolve(__dirname, '../../../../frontend/downloads');
+    let diskFiles = [];
+    if (fs.existsSync(downloadsDir)) {
+      diskFiles = fs.readdirSync(downloadsDir).map((name) => {
+        const stat = fs.statSync(path.join(downloadsDir, name));
+        return {
+          name,
+          category: 'Downloads',
+          sizeBytes: stat.size,
+          url: `/downloads/${name}`,
+          updatedAt: stat.mtime,
+        };
+      });
+    }
+    return sendSuccess(
+      res,
+      {
+        templates: config?.documentTemplates || [],
+        downloads: diskFiles,
+      },
+      'Documents retrieved'
+    );
+  })
+);
 
 module.exports = router;

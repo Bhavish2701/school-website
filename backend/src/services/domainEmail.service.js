@@ -6,7 +6,7 @@
 const mongoose = require('mongoose');
 const crypto = require('crypto');
 const { Domain, EmailService, NotificationTemplate } = require('../models/domainEmail.model');
-const { PlatformAuditLog } = require('../models/platformAudit.model');
+const { PlatformAudit } = require('../models/platformAudit.model');
 
 // Strict Invariant (Section 15.4): Confidential forbidden variables that must NEVER be exposed via templates
 const CONFIDENTIAL_FORBIDDEN_VARIABLES = [
@@ -1295,27 +1295,29 @@ class DomainEmailService {
   static async _logDomainAudit(action, recordRef, targetName, actor, details) {
     if (this.isMongoReady()) {
       try {
-        await PlatformAuditLog.create({
-          eventId: `AUD-DOM-${Date.now().toString().slice(-6)}`,
+        const now = Date.now();
+        await PlatformAudit.create({
+          eventId: `AUD-DOM-${now.toString().slice(-6)}-${Math.floor(10 + Math.random() * 89)}`,
+          correlationId: `req-dom-${now}`,
           timestamp: new Date(),
+          category: 'SCHOOL_CONFIG',
+          action,
           actor: {
             userId: 'USR-OP-ADMIN',
-            username: actor,
-            role: 'Platform Operations',
-            scope: 'TRUST_CENTRAL'
+            name: actor || 'Platform Administrator',
+            email: 'admin@srividya.edu.in',
+            role: 'SUPER_ADMIN',
+            scope: 'Platform',
           },
-          institution: 'ALL_CAMPUSES',
-          module: 'Domains, Email & Notifications',
-          action,
-          targetRecord: {
-            entityType: 'DOMAIN_OR_EMAIL',
-            recordId: recordRef,
-            recordReference: targetName
+          institutionId: 'TRUST-ALL',
+          targetEntity: {
+            entityType: 'DomainOrEmail',
+            entityId: String(recordRef || 'DOMAIN'),
+            displayName: String(targetName || action),
           },
           result: 'SUCCESS',
           severity: 'INFO',
-          correlationId: `req-dom-${Date.now()}`,
-          reason: details
+          reason: details || `Domain/Email action: ${action}`,
         });
       } catch (e) {}
     }

@@ -5,6 +5,8 @@
  */
 const mongoose = require('mongoose');
 const { SchoolConfig } = require('../models/schoolConfig.model');
+const { PlatformAudit } = require('../models/platformAudit.model');
+const liveSyncBus = require('../utils/liveSyncBus');
 
 let AuditLogModel = null;
 try {
@@ -294,14 +296,38 @@ const defaultConfigs = {
 };
 
 async function logAuditEvent(action, details, user = 'Platform Administrator', ip = '127.0.0.1') {
-  if (AuditLogModel && mongoose.connection.readyState === 1) {
+  liveSyncBus.emitSync('PLATFORM', action, { category: 'SCHOOL_CONFIG', details });
+  if (mongoose.connection.readyState === 1) {
     try {
-      await AuditLogModel.create({
+      if (AuditLogModel) {
+        await AuditLogModel.create({
+          action,
+          details,
+          user,
+          ipAddress: ip,
+          timestamp: new Date()
+        });
+      }
+      await PlatformAudit.create({
+        eventId: `AUD-CFG-${Date.now()}-${Math.floor(Math.random() * 1000)}`,
+        correlationId: `CORR-CFG-${Date.now()}`,
+        timestamp: new Date(),
+        actor: {
+          userId: 'USR-PLAT-001',
+          name: user,
+          email: 'superadmin@srividya.edu.in',
+          role: 'SUPER_ADMIN',
+          ipAddress: ip
+        },
         action,
-        details,
-        user,
-        ipAddress: ip,
-        timestamp: new Date()
+        category: 'SCHOOL_CONFIG',
+        severity: 'INFO',
+        targetEntity: {
+          entityType: 'SchoolConfig',
+          entityId: 'SCHOOL-CONFIG',
+          displayName: details ? String(details).slice(0, 80) : 'School Configuration'
+        },
+        reason: details
       });
     } catch (e) {
       // Non-fatal

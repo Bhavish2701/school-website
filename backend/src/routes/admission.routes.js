@@ -7,7 +7,7 @@
 const express = require('express');
 const router = express.Router();
 
-const { authenticateUser, authorizeRoles } = require('../middleware/rbac.middleware');
+const { authenticateUser, optionalAuthenticateUser, authorizeRoles } = require('../middleware/rbac.middleware');
 const {
   validateSubmitApplication,
   validateCheckStatus,

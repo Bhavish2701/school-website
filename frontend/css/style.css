@@ -7817,5 +7817,44 @@ font {
   }
 }
 
+/* ==========================================================================
+   PUBLIC WEBSITE - MODERN INSTITUTIONAL DESIGN SYSTEM OVERHAUL
+   ========================================================================== */
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif !important;
+  -webkit-font-smoothing: antialiased !important;
+  -moz-osx-font-smoothing: grayscale !important;
+  text-rendering: optimizeLegibility !important;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading, 'Outfit', 'Plus Jakarta Sans', sans-serif) !important;
+  letter-spacing: -0.02em !important;
+}
+
+/* Polished Button Component */
+.btn {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 0.5rem !important;
+  font-weight: 600 !important;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+.btn-primary {
+  background: var(--color-primary, #1D4ED8) !important;
+  border-color: var(--color-primary, #1D4ED8) !important;
+  color: #FFFFFF !important;
+  box-shadow: 0 1px 2px rgba(29, 78, 216, 0.2) !important;
+}
+
+.btn-primary:hover {
+  background: var(--color-primary-hover, #1E40AF) !important;
+  border-color: var(--color-primary-hover, #1E40AF) !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 4px 12px rgba(29, 78, 216, 0.25) !important;
+}
+
 
 

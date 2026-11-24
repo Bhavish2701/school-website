@@ -39,8 +39,8 @@
     <div style="background: linear-gradient(135deg, #065f46 0%, #059669 100%); color:#fff; border-radius:var(--radius-lg); padding: 1.5rem 2rem; margin-bottom: 2rem; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1.25rem;">
       <div>
         <span class="portal-badge" style="background:rgba(255,255,255,0.2); color:#fff;"><i class="fa-solid fa-shield-cat"></i> Enrolled Ward Details</span>
-        <h3 style="margin:0.5rem 0 0.25rem; font-size:1.4rem;">Parent / Guardian: Sri K. Venkata Rao</h3>
-        <p style="margin:0; color:#d1fae5; font-size:0.92rem;">Student: <strong>K. Sai Tharun</strong> • Class: <strong>VIII-A</strong> • Admission No: <strong>SV-0210</strong></p>
+        <h3 style="margin:0.5rem 0 0.25rem; font-size:1.4rem;" id="ppGuardianName">Parent / Guardian Portal</h3>
+        <p style="margin:0; color:#d1fae5; font-size:0.92rem;" id="ppStudentMeta">Sign in via <a href="/login" style="color:#fff;text-decoration:underline;">ERP Login</a> to view linked ward records.</p>
       </div>
       <div style="text-align:right;">
         <span class="portal-badge badge-success" style="background:#fff; color:#065f46; font-weight:700;"><i class="fa-solid fa-bell"></i> Gate In-Time: 08:24 AM (On-Time)</span>
@@ -50,23 +50,23 @@
     <div class="portal-metric-grid" style="display:grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.25rem; margin-bottom: 2rem;">
       <div class="metric-card">
         <span class="metric-label">Child Attendance</span>
-        <span class="metric-value text-emerald">96.8%</span>
-        <span class="metric-sub text-emerald">Regular • Zero Unexcused Absences</span>
+        <span class="metric-value text-emerald" id="ppAttPct">--</span>
+        <span class="metric-sub text-emerald" id="ppAttSub">Verified Attendance Register</span>
       </div>
       <div class="metric-card">
-        <span class="metric-label">Term 1 Grade Average</span>
-        <span class="metric-value text-blue">94.2%</span>
-        <span class="metric-sub text-blue">Rank 3 in Class VIII-A</span>
+        <span class="metric-label">Academic Performance</span>
+        <span class="metric-value text-blue" id="ppGradeAvg">--</span>
+        <span class="metric-sub text-blue" id="ppGradeSub">Live Exam Marks</span>
       </div>
       <div class="metric-card">
-        <span class="metric-label">Annual Fee Status</span>
-        <span class="metric-value text-emerald">Paid In Full</span>
-        <span class="metric-sub text-muted">Term 1 &amp; 2 Cleared</span>
+        <span class="metric-label">Fee Ledger Status</span>
+        <span class="metric-value text-emerald" id="ppFeeStatus">--</span>
+        <span class="metric-sub text-muted" id="ppFeeSub">Outstanding vs Paid</span>
       </div>
       <div class="metric-card">
-        <span class="metric-label">Upcoming PTM</span>
-        <span class="metric-value">Nov 08</span>
-        <span class="metric-sub text-muted">Saturday 09:30 AM</span>
+        <span class="metric-label">Upcoming Notices</span>
+        <span class="metric-value" id="ppNoticeCount">--</span>
+        <span class="metric-sub text-muted">Official Circulars</span>
       </div>
     </div>
 
@@ -80,7 +80,7 @@
       <form onsubmit="event.preventDefault(); alert('Leave request submitted to Class Teacher Ms. Anjali.');" style="display:grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap:1rem;">
         <div>
           <label style="display:block; font-size:0.85rem; font-weight:600; margin-bottom:0.25rem;">Leave Date *</label>
-          <input type="date" class="form-control" value="2026-10-26" required>
+          <input type="date" class="form-control" value="" required>
         </div>
         <div>
           <label style="display:block; font-size:0.85rem; font-weight:600; margin-bottom:0.25rem;">Reason for Leave *</label>
@@ -91,7 +91,54 @@
         </div>
       </form>
     </div>
+
+    <!-- Statutory Parental Consent & Communication Preferences (DPDP Act 2023 Sec 6 & 9) -->
+    <div class="card p-4 mt-4" style="background:var(--color-bg-surface); border:1px solid var(--color-border); border-radius:var(--radius-lg); margin-top: 1.5rem;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem; flex-wrap:wrap; gap:0.5rem;">
+        <div>
+          <h3 style="margin:0; font-size:1.15rem; font-weight:700;">
+            <i class="fa-solid fa-user-shield text-emerald"></i> Statutory Communication Preferences &amp; Minor Protection
+          </h3>
+          <p class="text-muted" style="margin:0.25rem 0 0; font-size:0.875rem;">
+            Governed under Indian DPDP Act 2023 Sec 9 (Parental Consent for Minor Students) &bull; Zero targeted ads &bull; Zero external behavioral tracking
+          </p>
+        </div>
+        <div style="display:flex; gap:0.5rem; flex-wrap:wrap;">
+          <a href="/privacy" target="_blank" class="btn btn-secondary btn-sm"><i class="fa-solid fa-file-shield"></i> Privacy Policy</a>
+          <a href="/cookie-policy" target="_blank" class="btn btn-secondary btn-sm"><i class="fa-solid fa-cookie-bite"></i> Cookie Policy</a>
+          <a href="/fee-policy" target="_blank" class="btn btn-secondary btn-sm"><i class="fa-solid fa-receipt"></i> Fee Policy</a>
+          <button type="button" class="btn btn-outline-primary btn-sm" onclick="exportParentDossier()"><i class="fa-solid fa-download"></i> Ward Data Dossier (DSR)</button>
+        </div>
+      </div>
+
+      <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap:1rem;">
+        <div style="padding:1rem; background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; display:flex; justify-content:space-between; align-items:center;">
+          <div>
+            <strong style="display:block; font-size:0.88rem; color:#1e293b;">SMS Attendance &amp; Emergency Alerts</strong>
+            <span style="font-size:0.75rem; color:#64748b;">Instant gate scan &amp; emergency broadcasts</span>
+          </div>
+          <input type="checkbox" id="parentConsentSms" checked onchange="handleParentConsentToggle('COMMUNICATION_SMS', this.checked)" style="transform: scale(1.3); cursor: pointer;">
+        </div>
+
+        <div style="padding:1rem; background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; display:flex; justify-content:space-between; align-items:center;">
+          <div>
+            <strong style="display:block; font-size:0.88rem; color:#1e293b;">WhatsApp Circulars &amp; Marks Slips</strong>
+            <span style="font-size:0.75rem; color:#64748b;">Official PDF circulars and report notifications</span>
+          </div>
+          <input type="checkbox" id="parentConsentWhatsApp" checked onchange="handleParentConsentToggle('MARKETING_WHATSAPP', this.checked)" style="transform: scale(1.3); cursor: pointer;">
+        </div>
+
+        <div style="padding:1rem; background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; display:flex; justify-content:space-between; align-items:center;">
+          <div>
+            <strong style="display:block; font-size:0.88rem; color:#1e293b;">Essential Academic Telemetry</strong>
+            <span style="font-size:0.75rem; color:#64748b;">Strictly local telemetry; zero 3rd-party cookies</span>
+          </div>
+          <input type="checkbox" id="parentConsentTelemetry" checked onchange="handleParentConsentToggle('TELEMETRY_ANALYTICS', this.checked)" style="transform: scale(1.3); cursor: pointer;">
+        </div>
+      </div>
+    </div>
   </div>
+  <script src="/js/api-client.js"></script>
   <script>
     function updateParentClock() {
       const now = new Date();
@@ -102,8 +149,86 @@
       if (timeEl) timeEl.textContent = new Intl.DateTimeFormat('en-US', timeOptions).format(now) + ' IST';
       if (dateEl) dateEl.textContent = new Intl.DateTimeFormat('en-US', dateOptions).format(now);
     }
+    async function hydrateLiveParentPortal() {
+      if (!window.ApiClient || !window.ApiClient.isAuthenticated()) return;
+      try {
+        const res = await window.ApiClient.dashboard.getParentDashboard();
+        const d = res && res.data;
+        if (!d) return;
+        const p = d.parent || {};
+        const child = (d.children && d.children[0]) || {};
+        document.getElementById('ppGuardianName').textContent = 'Parent / Guardian: ' + (p.fullName || 'Parent');
+        document.getElementById('ppStudentMeta').textContent = child.fullName
+          ? ('Student: ' + child.fullName + ' • Class: ' + (child.class || '-') + '-' + (child.section || 'A') + ' • Admission No: ' + (child.admissionNo || '--'))
+          : 'No linked student ward found.';
+        if (child.attendance) {
+          document.getElementById('ppAttPct').textContent = (child.attendance.percentage || 0) + '%';
+          document.getElementById('ppAttSub').textContent = (child.attendance.presentDays || 0) + ' / ' + (child.attendance.totalDays || 0) + ' Sessions';
+        }
+        if (child.academic) {
+          document.getElementById('ppGradeAvg').textContent = (child.academic.averagePercentage || 0) + '%';
+        }
+        if (child.fees) {
+          document.getElementById('ppFeeStatus').textContent = child.fees.pendingAmount > 0 ? ('₹' + child.fees.pendingAmount + ' Due') : 'Cleared';
+          document.getElementById('ppFeeSub').textContent = 'Paid: ₹' + (child.fees.paidAmount || 0);
+        }
+        document.getElementById('ppNoticeCount').textContent = (Array.isArray(d.notices) ? d.notices.length : 0) + ' Notices';
+      } catch (e) {}
+    }
+    
+    async function handleParentConsentToggle(domain, isChecked) {
+      const status = isChecked ? 'GRANTED' : 'REVOKED';
+      try {
+        if (window.ApiClient && window.ApiClient.compliance) {
+          const res = await window.ApiClient.compliance.recordConsent(domain, status);
+          if (res && res.success) {
+            alert('Privacy preference updated: ' + domain.replace(/_/g, ' ') + ' is now ' + status + '.');
+          }
+        } else {
+          localStorage.setItem('sv_parent_pref_' + domain, status);
+          alert('Preference updated locally.');
+        }
+      } catch (e) {
+        alert('Could not update preference: ' + e.message);
+      }
+    }
+
+    async function exportParentDossier() {
+      try {
+        const user = (window.ApiClient && window.ApiClient.getUser()) || { id: 'PAR-001', name: 'Parent / Guardian', role: 'PARENT' };
+        const userId = user.id || user._id || 'PAR-001';
+        let dossier = null;
+        if (window.ApiClient && window.ApiClient.compliance) {
+          const res = await window.ApiClient.compliance.exportUserData(userId);
+          if (res && res.success) dossier = res.data;
+        }
+        if (!dossier) {
+          dossier = {
+            subjectId: userId,
+            role: 'PARENT',
+            legalBasis: 'DPDP Act 2023 Sec 9 & 11 (Parental SAR Rights)',
+            institution: 'Sri Vidya English Medium High School',
+            wardName: 'Master Mohit',
+            admissionNo: 'SV-2024-0042',
+            class: '8-A',
+            generatedAt: new Date().toISOString()
+          };
+        }
+        const dataStr = 'data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(dossier, null, 2));
+        const downloadAnchor = document.createElement('a');
+        downloadAnchor.setAttribute('href', dataStr);
+        downloadAnchor.setAttribute('download', 'Ward_Data_Dossier_' + new Date().toISOString().slice(0, 10) + '.json');
+        document.body.appendChild(downloadAnchor);
+        downloadAnchor.click();
+        downloadAnchor.remove();
+      } catch (err) {
+        alert('Error downloading dossier: ' + err.message);
+      }
+    }
+
     updateParentClock();
     setInterval(updateParentClock, 1000);
+    hydrateLiveParentPortal();
   </script>
 </body>
 </html>

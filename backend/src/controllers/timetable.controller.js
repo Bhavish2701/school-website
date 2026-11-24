@@ -43,8 +43,42 @@ const assignPeriod = asyncHandler(async (req, res) => {
   );
 });
 
+const getTodayTimetable = asyncHandler(async (req, res) => {
+  const now = new Date();
+  const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+  const day = req.query.day || days[now.getDay()];
+  const className = req.query.className || 'Class X-A';
+  const academicYear = req.query.academicYear || '2025-2026';
+
+  const timetable = await timetableService.getTodayTimetable(day, className, academicYear);
+
+  return res.status(200).json(
+    formatSuccess(timetable, `Retrieved today's timetable for ${day}`)
+  );
+});
+
+const createSubstitution = asyncHandler(async (req, res) => {
+  const substitution = await timetableService.createSubstitution(req.body);
+
+  return res.status(201).json(
+    formatSuccess(substitution, 'Teacher substitution created/updated successfully.')
+  );
+});
+
+const getSubstitutions = asyncHandler(async (req, res) => {
+  const date = req.query.date;
+  const list = await timetableService.getSubstitutions(date);
+
+  return res.status(200).json(
+    formatSuccess(list, 'Retrieved active substitutions')
+  );
+});
+
 module.exports = {
   getClassTimetable,
   validateConflict,
   assignPeriod,
+  getTodayTimetable,
+  createSubstitution,
+  getSubstitutions,
 };

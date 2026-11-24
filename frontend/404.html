@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>404 - Page Not Found | Sri Vidya E.M High School</title>
+  <link rel="icon" type="image/x-icon" href="/assets/images/favicon.ico">
+  <!-- Fonts & Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Outfit:wght@600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="/css/skeuomorphic-portal.css">
+
+  <style>
+    :root {
+      --sv-primary: #1D4ED8;
+      --sv-navy: #0B192C;
+      --sv-navy-dark: #06101E;
+      --sv-surface: #F8FAFC;
+      --sv-border: #CBD5E1;
+      --sv-text: #0F172A;
+      --sv-text-muted: #64748B;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: radial-gradient(circle at 50% 20%, #15294A 0%, #08111F 100%);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      color: var(--sv-text);
+      padding: 24px;
+      overflow-x: hidden;
+    }
+
+    .skeuo-404-card {
+      width: 100%;
+      max-width: 580px;
+      background: linear-gradient(180deg, #FFFFFF 0%, #F1F5F9 100%);
+      border-radius: 20px;
+      padding: 40px 36px;
+      text-align: center;
+      position: relative;
+      box-shadow: 
+        0 20px 45px -10px rgba(0, 0, 0, 0.5),
+        0 0 0 1px rgba(255, 255, 255, 0.8) inset,
+        0 1px 3px rgba(0, 0, 0, 0.2);
+      border: 1px solid rgba(203, 213, 225, 0.6);
+    }
+
+    .school-brand {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      margin-bottom: 24px;
+      padding-bottom: 18px;
+      border-bottom: 1.5px solid #E2E8F0;
+    }
+
+    .brand-crest {
+      width: 54px;
+      height: 54px;
+      background: #FFFFFF;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 
+        0 4px 10px rgba(0,0,0,0.08),
+        0 1px 0 rgba(255,255,255,0.9) inset;
+      border: 1px solid #CBD5E1;
+    }
+
+    .brand-text h1 {
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: #0F172A;
+      letter-spacing: -0.01em;
+      line-height: 1.2;
+    }
+
+    .brand-text p {
+      font-size: 0.76rem;
+      color: #0284C7;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .error-code-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 110px;
+      height: 110px;
+      border-radius: 50%;
+      background: linear-gradient(145deg, #EFF6FF 0%, #DBEAFE 100%);
+      box-shadow: 
+        0 8px 20px rgba(29, 78, 216, 0.18),
+        inset 0 2px 4px rgba(255, 255, 255, 0.9),
+        inset 0 -2px 4px rgba(29, 78, 216, 0.15);
+      border: 2px solid #BFDBFE;
+      margin-bottom: 20px;
+    }
+
+    .error-code-badge i {
+      font-size: 3rem;
+      color: var(--sv-primary);
+    }
+
+    .error-title {
+      font-size: 1.6rem;
+      font-weight: 800;
+      color: #0F172A;
+      margin-bottom: 10px;
+    }
+
+    .error-desc {
+      font-size: 0.92rem;
+      color: var(--sv-text-muted);
+      line-height: 1.55;
+      margin-bottom: 28px;
+    }
+
+    .error-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+
+    .btn-skeuo-primary {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      width: 100%;
+      padding: 13px 24px;
+      background: linear-gradient(180deg, #2563EB 0%, #1D4ED8 100%);
+      color: #FFFFFF;
+      font-size: 0.95rem;
+      font-weight: 700;
+      border-radius: 10px;
+      text-decoration: none;
+      cursor: pointer;
+      border: none;
+      box-shadow: 
+        0 4px 10px rgba(29, 78, 216, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.35);
+      transition: all 0.15s ease;
+    }
+
+    .btn-skeuo-primary:hover {
+      background: linear-gradient(180deg, #3B82F6 0%, #2563EB 100%);
+      transform: translateY(-1px);
+      box-shadow: 0 6px 14px rgba(29, 78, 216, 0.4);
+    }
+
+    .btn-skeuo-primary:active {
+      transform: translateY(1px);
+      box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.25);
+    }
+
+    .btn-skeuo-secondary {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      width: 100%;
+      padding: 12px 24px;
+      background: linear-gradient(180deg, #FFFFFF 0%, #E2E8F0 100%);
+      color: #1E293B;
+      font-size: 0.9rem;
+      font-weight: 700;
+      border-radius: 10px;
+      text-decoration: none;
+      border: 1px solid #CBD5E1;
+      box-shadow: 
+        0 3px 6px rgba(0,0,0,0.06),
+        inset 0 1px 0 rgba(255,255,255,0.9);
+      transition: all 0.15s ease;
+    }
+
+    .btn-skeuo-secondary:hover {
+      background: linear-gradient(180deg, #F8FAFC 0%, #CBD5E1 100%);
+      color: #0F172A;
+    }
+
+    .footer-support {
+      font-size: 0.78rem;
+      color: var(--sv-text-muted);
+      border-top: 1px solid #E2E8F0;
+      padding-top: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .footer-support a {
+      color: var(--sv-primary);
+      text-decoration: none;
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+  <div class="skeuo-404-card">
+    <div class="school-brand">
+      <div class="brand-crest">
+        <img src="/assets/images/favicon.ico" alt="Sri Vidya Crest" style="width: 34px; height: 34px; object-fit: contain;" onerror="this.outerHTML='<i class=\'fa-solid fa-graduation-cap\' style=\'color:#1D4ED8; font-size:1.6rem;\'></i>'">
+      </div>
+      <div class="brand-text">
+        <h1>SRI VIDYA E.M HIGH SCHOOL</h1>
+        <p>Vidyathe Vijayam &bull; Knowledge Brings Victory</p>
+      </div>
+    </div>
+
+    <div class="error-code-badge">
+      <i class="fa-solid fa-compass-drafting"></i>
+    </div>
+
+    <h2 class="error-title">404 - Academic Resource Not Found</h2>
+    <p class="error-desc">
+      The classroom portal, student docket, or administrative route you requested could not be located in Sri Vidya ERP. The page may have moved, been archived, or you may need to sign in again.
+    </p>
+
+    <div class="error-actions">
+      <button class="btn-skeuo-primary" onclick="launchAuthorizedDashboard()">
+        <i class="fa-solid fa-gauge-high"></i>
+        <span>Launch My Dashboard</span>
+      </button>
+      <a href="/login" class="btn-skeuo-secondary">
+        <i class="fa-solid fa-right-to-bracket"></i>
+        <span>Sign In to School ERP</span>
+      </a>
+      <a href="/" class="btn-skeuo-secondary">
+        <i class="fa-solid fa-school"></i>
+        <span>Public School Website</span>
+      </a>
+    </div>
+
+    <div class="footer-support">
+      <span>Official Sri Vidya ERP &bull; 256-Bit SSL Encrypted</span>
+      <span>IT Desk: <a href="tel:+919398578584">+91 9398578584</a></span>
+    </div>
+  </div>
+
+  <script>
+    function launchAuthorizedDashboard() {
+      try {
+        const stored = localStorage.getItem('user') || localStorage.getItem('sv_auth_user');
+        if (stored) {
+          const user = JSON.parse(stored);
+          const role = (user.role || '').toUpperCase();
+          if (role === 'SUPER_ADMIN') {
+            window.location.href = '/platform-admin#dashboard';
+            return;
+          }
+          if (['PRINCIPAL', 'VICE_PRINCIPAL', 'OFFICE'].includes(role)) {
+            window.location.href = '/management#dashboard';
+            return;
+          }
+          if (role === 'TEACHER') {
+            window.location.href = '/teacher#dashboard';
+            return;
+          }
+          if (role === 'STUDENT') {
+            window.location.href = '/student#dashboard';
+            return;
+          }
+          if (role === 'PARENT') {
+            window.location.href = '/parent#dashboard';
+            return;
+          }
+        }
+      } catch (e) {}
+      window.location.href = '/login';
+    }
+  </script>
+</body>
+</html>

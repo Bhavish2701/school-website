@@ -6,19 +6,17 @@
  *   "success": false,
  *   "message": "...",
  *   "data": null,
- *   "errors": {}
+ *   "errors": {},
+ *   "recoveryAction": "...",
+ *   "errorCode": "..."
  * }
  */
 const ApiError = require('../utils/apiError');
 const { formatError } = require('../utils/apiResponse');
+const ErrorLog = require('../models/errorLog.model');
 
 const errorHandler = (err, req, res, next) => {
   let error = err;
-
-  // Log unexpected errors
-  if (!(err instanceof ApiError)) {
-    console.error(`[Unhandled Error] ${err.name}: ${err.message}`, err.stack);
-  }
 
   // 1. Handle SyntaxError for malformed JSON body
   if (err instanceof SyntaxError && err.status === 400 && 'body' in err) {
@@ -69,11 +67,53 @@ const errorHandler = (err, req, res, next) => {
   const statusCode = error.statusCode || 500;
   const message = error.message || 'An unexpected server error occurred';
   const errors = error.errors || {};
+  const errorCode = error.code || (statusCode >= 500 ? 'INTERNAL_SERVER_ERROR' : 'REQUEST_ERROR');
 
-  // Construct strict standard response:
-  // { success: false, message: "...", data: null, errors: {} }
-  const payload = formatError(message, errors);
+  // Determine recovery action based on context
+  let recoveryAction = null;
+  if (statusCode === 401) {
+    recoveryAction = 'Your session has expired or authentication failed. Please sign in again with your credentials.';
+  } else if (statusCode === 403) {
+    recoveryAction = 'You do not have authorization to perform this executive action. Contact the Principal or IT Administrator.';
+  } else if (statusCode === 404) {
+    recoveryAction = 'The requested school record or endpoint does not exist. Please check the identifier or navigate back to the dashboard.';
+  } else if (statusCode === 409 || errorCode === 'DUPLICATE_KEY') {
+    recoveryAction = 'A duplicate record already exists in Sri Vidya ERP. Please use a unique admission number, roll number, or identifier.';
+  } else if (statusCode === 429) {
+    recoveryAction = 'Rate limit reached. Please wait a short moment before trying again.';
+  } else if (statusCode === 400 || statusCode === 422) {
+    recoveryAction = 'Please verify the highlighted form values, ensure all required fields are provided, and resubmit.';
+  } else if (statusCode >= 500) {
+    recoveryAction = 'Our school ERP engineering team has been notified. Please refresh the page or retry in a few moments.';
+  }
 
+  // Persist 5xx and fatal errors into central ErrorLog collection for monitoring
+  if (statusCode >= 500 || !(err instanceof ApiError)) {
+    console.error(`[ERP Central Error Tracker] ${err.name || 'Error'}: ${err.message}`, err.stack);
+    ErrorLog.create({
+      source: 'backend',
+      level: statusCode >= 500 ? 'error' : 'warn',
+      message: err.message || message,
+      errorType: errorCode,
+      stack: err.stack,
+      endpoint: req.originalUrl || req.path,
+      method: req.method,
+      statusCode,
+      user: req.user
+        ? {
+            id: String(req.user._id || req.user.id || ''),
+            username: req.user.username || '',
+            role: req.user.role || '',
+          }
+        : null,
+      ip: req.ip || (req.connection && req.connection.remoteAddress) || '',
+      userAgent: req.get ? req.get('User-Agent') : '',
+    }).catch((logErr) => {
+      console.warn('[ErrorLog Persistence Warning]', logErr.message);
+    });
+  }
+
+  const payload = formatError(message, errors, recoveryAction, errorCode);
   res.status(statusCode).json(payload);
 };
 

@@ -826,7 +826,7 @@
     <button class="ctrl-btn secondary" id="refreshBtn" onclick="regenerateCert()">
       <i class="fa-solid fa-rotate" id="refreshIcon"></i> Refresh QR Code
     </button>
-    <a href="portal.html" class="ctrl-btn secondary" id="backBtn" onclick="goBackToPortal(event)" style="text-decoration:none;">
+    <a href="/management" class="ctrl-btn secondary" id="backBtn" onclick="goBackToPortal(event)" style="text-decoration:none;">
       <i class="fa-solid fa-arrow-left"></i> Back to Portal
     </a>
   </div>
@@ -1139,8 +1139,8 @@
         window.history.back();
         return;
       }
-      // Otherwise navigate directly to portal.html
-      window.location.href = 'portal.html';
+      // Otherwise navigate directly to /management
+      window.location.href = '/management';
     }
 
     function renderCert(idx) {

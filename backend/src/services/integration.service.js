@@ -944,14 +944,14 @@ class IntegrationService {
     try {
       await PlatformAuditService.logEvent({
         action,
-        category: 'INTEGRATION_MANAGEMENT',
+        category: 'INTEGRATIONS',
         actor: { userId: 'PLATFORM-ADMIN', name: operator, role: 'Platform Administrator' },
         institutionId: 'TRUST-ALL',
         institutionName: 'Sri Vidya Educational Trust',
-        target: {
+        targetEntity: {
           entityType: 'Integration',
-          entityId,
-          entityName
+          entityId: String(entityId || 'INT'),
+          displayName: String(entityName || action),
         },
         result: 'SUCCESS',
         severity: 'INFO',

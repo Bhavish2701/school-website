@@ -16,9 +16,31 @@
     rel="stylesheet">
 
   <!-- Core Styles -->
-  <link rel="stylesheet" href="/css/style.css?v=20261107-03">
-  <link rel="stylesheet" href="/css/portal.css?v=20261107-03">
-  <link rel="stylesheet" href="/css/platform-admin.css?v=20261107-03">
+  <link rel="stylesheet" href="/css/style.css?v=20261122-v13">
+  <link rel="stylesheet" href="/css/portal.css?v=20261122-v13">
+  <link rel="stylesheet" href="/css/platform-admin.css?v=20261122-v13">
+  <!-- Skeuomorphic 2-Level Portal Design Tokens & Styles -->
+  <link rel="stylesheet" href="/css/skeuomorphic-portal.css?v=20261122-v13">
+  <link rel="stylesheet" href="/css/floating-bottom-nav.css?v=20261122-v13">
+  <!-- Early Route Guard: Unified Authentication Verification -->
+  <script>
+    (function() {
+      try {
+        var token = localStorage.getItem('sv_token_access') || sessionStorage.getItem('sv_token_access');
+        if (!token) {
+          var cur = window.location.pathname + window.location.search;
+          window.location.replace('/login?redirect=' + encodeURIComponent(cur));
+        }
+      } catch (e) {}
+    })();
+  </script>
+  <!-- Modern Input Field System -->
+  <link rel="stylesheet" href="/css/modern-inputs.css?v=20261122-v13">
+  <!-- Modern Popover & Overlay Component System -->
+  <link rel="stylesheet" href="/css/modern-popovers.css?v=20261122-v13">
+  <!-- Liquid-Fill Toggle Switch Design System -->
+  <link rel="stylesheet" href="/css/liquid-toggles.css?v=20261122-v18">
+  <link rel="stylesheet" href="../css/liquid-toggles.css?v=20261122-v18">
 </head>
 
 <body class="platform-admin-body">
@@ -28,7 +50,7 @@
        ========================================================================= -->
   <aside class="portal-sidebar" id="sidebar">
     <div class="sidebar-header">
-      <a href="#dashboard" class="sidebar-brand" onclick="platformApp.navigateTo('dashboard')">
+      <a href="#dashboard" class="sidebar-brand" onclick="platformApp.navigateTo('dashboard'); return false;">
         <div class="brand-icon">
           <i class="fa-solid fa-layer-group"></i>
         </div>
@@ -37,114 +59,96 @@
           <span class="brand-sub">Platform Administration</span>
         </div>
       </a>
+      <button type="button" class="sidebar-collapse-btn" id="sidebarCollapseBtn" onclick="platformApp.toggleSidebarCollapse()" aria-label="Toggle sidebar collapse" title="Collapse Sidebar (Ctrl+B)">
+        <i class="fa-solid fa-angles-left"></i>
+      </button>
     </div>
 
-    <nav class="sidebar-nav">
-      <!-- 1. CORE OPERATIONS -->
-      <div class="nav-section-title">Core Operations</div>
-      <a href="#dashboard" class="nav-link active" data-view="dashboard" onclick="platformApp.navigateTo('dashboard')">
-        <span class="nav-icon"><i class="fa-solid fa-gauge-high"></i></span>
-        <span class="nav-text">Platform Dashboard</span>
-      </a>
-      <a href="#institutions" class="nav-link" data-view="institutions" onclick="platformApp.navigateTo('institutions')">
-        <span class="nav-icon"><i class="fa-solid fa-school-flag"></i></span>
-        <span class="nav-text">Institution Management</span>
-        <span class="nav-badge">3</span>
-      </a>
-      <a href="#config" class="nav-link" data-view="config" onclick="platformApp.navigateTo('config')">
-        <span class="nav-icon"><i class="fa-solid fa-sliders"></i></span>
-        <span class="nav-text">School Configuration</span>
-      </a>
-      <a href="#onboarding" class="nav-link" data-view="onboarding" onclick="platformApp.navigateTo('onboarding')">
-        <span class="nav-icon"><i class="fa-solid fa-cloud-arrow-up"></i></span>
-        <span class="nav-text">Institution Onboarding &amp; Migration</span>
-      </a>
+        <nav class="sidebar-nav" id="platformSidebarNav">
+      <!-- 1. DASHBOARD (Direct Level 1 module) -->
+      <div class="nav-item active" data-module="dashboard">
+        <a href="#dashboard" class="nav-link" data-view="dashboard" onclick="platformApp.navigateTo('dashboard'); return false;">
+          <span class="nav-icon"><i class="fa-solid fa-gauge-high"></i></span>
+          <span class="nav-text">Platform Dashboard</span>
+          <span class="nav-badge">Live</span>
+        </a>
+      </div>
 
-      <!-- 2. ACCESS & SECURITY -->
-      <div class="nav-section-title">Access &amp; Security</div>
-      <a href="#users" class="nav-link" data-view="users" onclick="platformApp.navigateTo('users')">
-        <span class="nav-icon"><i class="fa-solid fa-user-shield"></i></span>
-        <span class="nav-text">User &amp; Account Management</span>
-      </a>
-      <a href="#roles" class="nav-link" data-view="roles" onclick="platformApp.navigateTo('roles')">
-        <span class="nav-icon"><i class="fa-solid fa-id-card-clip"></i></span>
-        <span class="nav-text">Role Templates &amp; Permissions</span>
-      </a>
-      <a href="#audit" class="nav-link" data-view="audit" onclick="platformApp.navigateTo('audit')">
-        <span class="nav-icon"><i class="fa-solid fa-clock-rotate-left"></i></span>
-        <span class="nav-text">Audit Logs</span>
-      </a>
-      <a href="#security-monitoring" class="nav-link" data-view="security-monitoring" onclick="platformApp.navigateTo('security-monitoring')">
-        <span class="nav-icon"><i class="fa-solid fa-shield-halved"></i></span>
-        <span class="nav-text">Security &amp; Access Monitoring</span>
-      </a>
+      <!-- 2. INSTITUTIONS & TENANCY (Level 1 with Level 2 submenus) -->
+      <div class="nav-item" data-module="institutions-tenancy">
+        <a href="#institutions" class="nav-link" onclick="platformApp.toggleSubmenu('institutions-tenancy', event); return false;">
+          <span class="nav-icon"><i class="fa-solid fa-school-flag"></i></span>
+          <span class="nav-text">Institutions &amp; Tenancy</span>
+          <span class="nav-badge">3</span>
+          <span class="nav-arrow"><i class="fa-solid fa-chevron-right"></i></span>
+        </a>
+        <div class="nav-sub">
+          <a href="#institutions" class="nav-sub-link active" data-view="institutions" onclick="platformApp.navigateTo('institutions'); return false;">Institution Management</a>
+          <a href="#config" class="nav-sub-link" data-view="config" onclick="platformApp.navigateTo('config'); return false;">School Configuration</a>
+          <a href="#onboarding" class="nav-sub-link" data-view="onboarding" onclick="platformApp.navigateTo('onboarding'); return false;">Onboarding &amp; Migration</a>
+        </div>
+      </div>
 
-      <!-- 3. PLATFORM INFRASTRUCTURE -->
-      <div class="nav-section-title">Platform Infrastructure</div>
-      <a href="#subscription" class="nav-link" data-view="subscription" onclick="platformApp.navigateTo('subscription')">
-        <span class="nav-icon"><i class="fa-solid fa-certificate"></i></span>
-        <span class="nav-text">Subscriptions &amp; Plans</span>
-      </a>
-      <a href="#health" class="nav-link" data-view="health" onclick="platformApp.navigateTo('health')">
-        <span class="nav-icon"><i class="fa-solid fa-server"></i></span>
-        <span class="nav-text">System Health &amp; Deployment</span>
-      </a>
-      <a href="#backups" class="nav-link" data-view="backups" onclick="platformApp.navigateTo('backups')">
-        <span class="nav-icon"><i class="fa-solid fa-database"></i></span>
-        <span class="nav-text">Backups &amp; Recovery</span>
-      </a>
-      <a href="#integrations" class="nav-link" data-view="integrations" onclick="platformApp.navigateTo('integrations')">
-        <span class="nav-icon"><i class="fa-solid fa-network-wired"></i></span>
-        <span class="nav-text">Integrations &amp; API Management</span>
-      </a>
-      <a href="#support" class="nav-link" data-view="support" onclick="platformApp.navigateTo('support')">
-        <span class="nav-icon"><i class="fa-solid fa-headset"></i></span>
-        <span class="nav-text">Support &amp; Issue Management</span>
-        <span class="nav-badge" style="background: rgba(245,158,11,0.25); color: #F59E0B;">2 Open</span>
-      </a>
+      <!-- 3. ACCESS & SECURITY (Level 1 with Level 2 submenus) -->
+      <div class="nav-item" data-module="access-security">
+        <a href="#users" class="nav-link" onclick="platformApp.toggleSubmenu('access-security', event); return false;">
+          <span class="nav-icon"><i class="fa-solid fa-user-shield"></i></span>
+          <span class="nav-text">Access &amp; Security</span>
+          <span class="nav-arrow"><i class="fa-solid fa-chevron-right"></i></span>
+        </a>
+        <div class="nav-sub">
+          <a href="#users" class="nav-sub-link active" data-view="users" onclick="platformApp.navigateTo('users'); return false;">User &amp; Account Management</a>
+          <a href="#roles" class="nav-sub-link" data-view="roles" onclick="platformApp.navigateTo('roles'); return false;">Role Templates &amp; Permissions</a>
+          <a href="#audit" class="nav-sub-link" data-view="audit" onclick="platformApp.navigateTo('audit'); return false;">Audit Logs</a>
+          <a href="#security-monitoring" class="nav-sub-link" data-view="security-monitoring" onclick="platformApp.navigateTo('security-monitoring'); return false;">Security &amp; Access Monitoring</a>
+        </div>
+      </div>
 
-      <!-- 4. PLATFORM SETTINGS -->
-      <div class="nav-section-title">Platform Settings</div>
-      <a href="#domains-email" class="nav-link" data-view="domains-email" onclick="platformApp.navigateTo('domains-email')">
-        <span class="nav-icon"><i class="fa-solid fa-envelope-open-text"></i></span>
-        <span class="nav-text">Domains, Email &amp; Notifications</span>
-      </a>
-      <a href="#settings" class="nav-link" data-view="settings" onclick="platformApp.navigateTo('settings')">
-        <span class="nav-icon"><i class="fa-solid fa-gears"></i></span>
-        <span class="nav-text">Global Settings</span>
-      </a>
-      <a href="#policies" class="nav-link" data-view="policies" onclick="platformApp.navigateTo('policies')">
-        <span class="nav-icon"><i class="fa-solid fa-scale-balanced"></i></span>
-        <span class="nav-text">Platform Policies &amp; Data Retention</span>
-      </a>
-      <a href="#actions" class="nav-link" data-view="actions" onclick="platformApp.navigateTo('actions')">
-        <span class="nav-icon"><i class="fa-solid fa-shield-cat"></i></span>
-        <span class="nav-text">Global Action Patterns</span>
-        <span class="nav-badge" style="background: rgba(239,68,68,0.15); color: #EF4444; font-size: 0.65rem;">Safeguards</span>
-      </a>
-      <a href="#workflows" class="nav-link" data-view="workflows" onclick="platformApp.navigateTo('workflows')">
-        <span class="nav-icon"><i class="fa-solid fa-diagram-project"></i></span>
-        <span class="nav-text">Core Workflows (A–F)</span>
-        <span class="nav-badge" style="background: rgba(16,185,129,0.15); color: #10B981; font-size: 0.65rem;">Ready</span>
-      </a>
+      <!-- 4. INFRASTRUCTURE & HEALTH (Level 1 with Level 2 submenus) -->
+      <div class="nav-item" data-module="platform-infrastructure">
+        <a href="#subscription" class="nav-link" onclick="platformApp.toggleSubmenu('platform-infrastructure', event); return false;">
+          <span class="nav-icon"><i class="fa-solid fa-server"></i></span>
+          <span class="nav-text">Infrastructure &amp; Health</span>
+          <span class="nav-arrow"><i class="fa-solid fa-chevron-right"></i></span>
+        </a>
+        <div class="nav-sub">
+          <a href="#subscription" class="nav-sub-link active" data-view="subscription" onclick="platformApp.navigateTo('subscription'); return false;">Subscriptions &amp; Plans</a>
+          <a href="#health" class="nav-sub-link" data-view="health" onclick="platformApp.navigateTo('health'); return false;">System Health &amp; Deployment</a>
+          <a href="#backups" class="nav-sub-link" data-view="backups" onclick="platformApp.navigateTo('backups'); return false;">Backups &amp; Recovery</a>
+          <a href="#integrations" class="nav-sub-link" data-view="integrations" onclick="platformApp.navigateTo('integrations'); return false;">Integrations &amp; API Management</a>
+          <a href="#support" class="nav-sub-link" data-view="support" onclick="platformApp.navigateTo('support'); return false;">Support &amp; Issue Management</a>
+        </div>
+      </div>
 
-      <!-- 5. SCHOOL GATEWAYS (MODULE 18) -->
-      <div class="nav-section-title">School Gateways</div>
-      <a href="/management" class="nav-link" id="navGatewayAdmin" target="_blank" onclick="platformApp.launchSchoolGateway('management', event)" title="Open School Administration Portal (18.1)">
-        <span class="nav-icon"><i class="fa-solid fa-building-columns"></i></span>
-        <span class="nav-text">School Administration Portal</span>
-        <span class="nav-badge" style="background: rgba(79,70,229,0.15); color: #4F46E5; font-size: 0.65rem;">18.1</span>
-      </a>
-      <a href="/teacher" class="nav-link" id="navGatewayFaculty" target="_blank" onclick="platformApp.launchSchoolGateway('teacher', event)" title="Open Faculty &amp; Teacher Portal (18.2)">
-        <span class="nav-icon"><i class="fa-solid fa-chalkboard-user"></i></span>
-        <span class="nav-text">Faculty &amp; Teacher Portal</span>
-        <span class="nav-badge" style="background: rgba(16,185,129,0.15); color: #10B981; font-size: 0.65rem;">18.2</span>
-      </a>
-      <a href="/" class="nav-link" id="navGatewayWebsite" target="_blank" rel="noopener noreferrer" onclick="platformApp.launchSchoolGateway('website', event)" title="Open Public Website (18.3)">
-        <span class="nav-icon"><i class="fa-solid fa-arrow-left"></i></span>
-        <span class="nav-text">Public Website</span>
-        <span class="nav-badge" style="background: rgba(14,165,233,0.15); color: #0284C7; font-size: 0.65rem;">18.3</span>
-      </a>
+      <!-- 5. PLATFORM GOVERNANCE (Level 1 with Level 2 submenus) -->
+      <div class="nav-item" data-module="platform-governance">
+        <a href="#domains-email" class="nav-link" onclick="platformApp.toggleSubmenu('platform-governance', event); return false;">
+          <span class="nav-icon"><i class="fa-solid fa-gears"></i></span>
+          <span class="nav-text">Governance &amp; Policies</span>
+          <span class="nav-arrow"><i class="fa-solid fa-chevron-right"></i></span>
+        </a>
+        <div class="nav-sub">
+          <a href="#domains-email" class="nav-sub-link active" data-view="domains-email" onclick="platformApp.navigateTo('domains-email'); return false;">Domains, Email &amp; Notifications</a>
+          <a href="#settings" class="nav-sub-link" data-view="settings" onclick="platformApp.navigateTo('settings'); return false;">Global Settings</a>
+          <a href="#policies" class="nav-sub-link" data-view="policies" onclick="platformApp.navigateTo('policies'); return false;">Platform Policies &amp; Retention</a>
+          <a href="#actions" class="nav-sub-link" data-view="actions" onclick="platformApp.navigateTo('actions'); return false;">Global Action Safeguards</a>
+          <a href="#workflows" class="nav-sub-link" data-view="workflows" onclick="platformApp.navigateTo('workflows'); return false;">Core Workflows (A–F)</a>
+        </div>
+      </div>
+
+      <!-- 6. SCHOOL GATEWAYS (Level 1 with Level 2 submenus) -->
+      <div class="nav-item" data-module="school-gateways">
+        <a href="#school-gateways" class="nav-link" onclick="platformApp.toggleSubmenu('school-gateways', event); return false;">
+          <span class="nav-icon"><i class="fa-solid fa-building-columns"></i></span>
+          <span class="nav-text">School Gateways</span>
+          <span class="nav-arrow"><i class="fa-solid fa-chevron-right"></i></span>
+        </a>
+        <div class="nav-sub">
+          <a href="/management" class="nav-sub-link" id="navGatewayAdmin" target="_blank" onclick="platformApp.launchSchoolGateway('management', event)" title="Open School Administration Portal (18.1)">School Administration Portal</a>
+          <a href="/teacher" class="nav-sub-link" id="navGatewayFaculty" target="_blank" onclick="platformApp.launchSchoolGateway('teacher', event)" title="Open Faculty &amp; Teacher Portal (18.2)">Faculty &amp; Teacher Portal</a>
+          <a href="/" class="nav-sub-link" id="navGatewayWebsite" target="_blank" rel="noopener noreferrer" onclick="platformApp.launchSchoolGateway('website', event)" title="Open Public Website (18.3)">Public Website</a>
+        </div>
+      </div>
 
       <!-- 18.3 Status Indicator in Sidebar -->
       <div class="gateway-status-card" id="gatewaySidebarStatusCard">
@@ -187,7 +191,7 @@
         <div class="operator-role"><i class="fa-solid fa-shield-halved"></i> Super Admin Operator</div>
       </div>
       <button class="btn-pa btn-pa-secondary" style="padding: 0.35rem 0.5rem;" title="Sign out"
-        onclick="PortalAuth.logout('management')">
+        onclick="PortalAuth.logout('platform-admin')">
         <i class="fa-solid fa-arrow-right-from-bracket"></i>
       </button>
     </div>
@@ -213,6 +217,28 @@
       </div>
 
       <div class="header-right">
+        <!-- Interactive Quick Popovers & Overlays -->
+        <button type="button" class="header-action-btn" id="paDatePickerBtn"
+          data-datepicker="true" data-tooltip="Operations Calendar" aria-label="Operations Calendar" style="display:inline-flex; align-items:center; justify-content:center; width:36px; height:36px; border-radius:8px; border:1px solid #CBD5E1; background:#fff; color:#334155; cursor:pointer;">
+          <i class="fa-solid fa-calendar-days"></i>
+        </button>
+        <button type="button" class="header-action-btn sv-share-btn" id="paShareBtn"
+          data-share-sheet="true" data-share-title="Sri Vidya Platform Administration"
+          data-share-url="http://localhost:5000/platform-admin"
+          data-tooltip="Share / Export Platform" aria-label="Share" style="display:inline-flex; align-items:center; justify-content:center; width:36px; height:36px; border-radius:8px; border:1px solid #CBD5E1; background:#fff; color:#334155; cursor:pointer;">
+          <i class="fa-solid fa-share-nodes"></i>
+        </button>
+        <button type="button" class="header-action-btn" id="paInfoCardBtn"
+          data-info-card="true" data-info-title="Sri Vidya Multi-Tenant Platform"
+          data-info-content="Multi-tenant cluster monitoring, enterprise security boundaries, decoupled telemetry, and institutional isolation controls."
+          data-info-badge="Cluster Active"
+          data-tooltip="Platform Telemetry" aria-label="Info" style="display:inline-flex; align-items:center; justify-content:center; width:36px; height:36px; border-radius:8px; border:1px solid #CBD5E1; background:#fff; color:#334155; cursor:pointer;">
+          <i class="fa-solid fa-circle-info"></i>
+        </button>
+        <button type="button" class="header-action-btn sv-reactions-trigger" id="paReactionsBtn"
+          data-reactions="true" data-tooltip="React / Kudos" aria-label="Quick Reactions" style="display:inline-flex; align-items:center; justify-content:center; width:36px; height:36px; border-radius:8px; border:1px solid #CBD5E1; background:#fff; color:#334155; cursor:pointer;">
+          <i class="fa-regular fa-face-smile"></i>
+        </button>
         <!-- 18.3 Header Gateway Status Indicator -->
         <button class="badge-gateway-header d-none d-md-inline-flex" id="btnHeaderGatewayStatus" onclick="platformApp.openGatewayStatusModal()" title="View School Gateway Decoupled Telemetry (18.3)">
           <i class="fa-solid fa-globe text-primary"></i>
@@ -266,7 +292,7 @@
           <!-- Secondary Metadata Down of the Time -->
           <div class="banner-subpill">
             <i class="fa-regular fa-calendar"></i>
-            <span id="platformLiveDateText">Saturday, Oct 24, 2026</span>
+            <span id="platformLiveDateText">Loading IST date...</span>
           </div>
           <div class="banner-subpill">
             <i class="fa-solid fa-server"></i>
@@ -315,7 +341,7 @@
                 <i class="fa-solid fa-school-flag"></i>
               </div>
             </div>
-            <div class="pa-metric-value" id="paHeroInstitutions">3</div>
+            <div class="pa-metric-value" id="paHeroInstitutions">--</div>
             <div class="pa-metric-sub text-emerald">
               <i class="fa-solid fa-circle-check"></i> Registered in the platform
             </div>
@@ -329,7 +355,7 @@
                 <i class="fa-solid fa-users-gear"></i>
               </div>
             </div>
-            <div class="pa-metric-value" id="paHeroAccounts">128</div>
+            <div class="pa-metric-value" id="paHeroAccounts">--</div>
             <div class="pa-metric-sub">
               <span>Across registered institutions</span>
             </div>
@@ -343,9 +369,9 @@
                 <i class="fa-solid fa-heart-pulse"></i>
               </div>
             </div>
-            <div class="pa-metric-value text-emerald" id="paHeroStatus">Healthy</div>
+            <div class="pa-metric-value text-emerald" id="paHeroStatus">--</div>
             <div class="pa-metric-sub text-emerald">
-              <i class="fa-solid fa-cloud-arrow-up"></i> Live status (24ms P95 Latency)
+              <span id="paHeroStatusSub"><i class="fa-solid fa-cloud-arrow-up"></i> Checking live telemetry...</span>
             </div>
           </div>
 
@@ -357,7 +383,7 @@
                 <i class="fa-solid fa-circle-exclamation"></i>
               </div>
             </div>
-            <div class="pa-metric-value text-amber" id="paHeroOpenIssues">2</div>
+            <div class="pa-metric-value text-amber" id="paHeroOpenIssues">--</div>
             <div class="pa-metric-sub text-amber">
               <i class="fa-solid fa-triangle-exclamation"></i> Requiring attention
             </div>
@@ -368,14 +394,14 @@
         <div class="executive-telemetry-strip">
           <div class="telemetry-strip-left">
             <div class="telemetry-live-dot"></div>
-            <span class="telemetry-strip-title">
-              Operational Command Status: All 3 Campuses Online
-            </span>
+            <span class="telemetry-strip-title" id="paTelemetryCampuses">Operational Command Status: Syncing Live Cluster Telemetry...</span>
           </div>
           <div class="telemetry-strip-chips">
-            <span class="telemetry-chip"><i class="fa-solid fa-shield-halved text-emerald"></i> Security: <strong>0 Active Threats</strong></span>
-            <span class="telemetry-chip"><i class="fa-solid fa-list-check text-primary"></i> Operator Tasks: <strong>4 To Complete</strong></span>
-            <span class="telemetry-chip"><i class="fa-solid fa-database text-blue"></i> Latest Backup: <strong>Today 03:00 AM (Verified)</strong></span>
+            <span class="telemetry-chip" id="paTelemetrySecurity"><i class="fa-solid fa-shield-halved text-emerald"></i> Security: <strong>--</strong></span>
+            <span class="telemetry-chip" id="paTelemetryTasks"><i class="fa-solid fa-list-check text-primary"></i> Operator Tasks: <strong>--</strong></span>
+            <span class="telemetry-chip" id="paTelemetryBackup"><i class="fa-solid fa-database text-blue"></i> Latest Backup: <strong>--</strong></span>
+            <span class="telemetry-chip"><i class="fa-regular fa-clock text-muted"></i> Updated: <strong id="paLastUpdatedText">--</strong></span>
+            <button type="button" class="btn-pa btn-pa-secondary" id="paManualRefreshBtn" onclick="platformApp.refreshDashboard()" style="padding: 0.25rem 0.65rem; font-size: 0.75rem;" title="Refresh Live Platform Data"><i class="fa-solid fa-rotate"></i> Refresh</button>
           </div>
         </div>
 
@@ -486,91 +512,8 @@
           <h4 style="margin: 0 0 0.85rem; font-size: 0.95rem; color: var(--color-text-main); font-weight: 700;">
             <i class="fa-solid fa-sitemap text-primary mr-1"></i> Active Institutional Tenants
           </h4>
-          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(310px, 1fr)); gap: 1.25rem;">
-
-            <div
-              style="border: 1px solid var(--color-border); border-radius: 12px; padding: 1.35rem; background: var(--color-bg-subtle);">
-              <div
-                style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem;">
-                <span class="badge-operator" style="background:#4F46E5; color:#fff;">Lead Campus</span>
-                <span class="badge-active">Active</span>
-              </div>
-              <h4 style="margin: 0.25rem 0; font-size: 1.05rem;">Sri Vidya E.M High School</h4>
-              <p style="margin: 0 0 0.75rem; font-size: 0.8rem; color: #64748B;">UDISE: 28172901923 • Primary &amp;
-                Secondary (Class 1–10)</p>
-              <div
-                style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 1rem; padding: 0.5rem 0; border-top: 1px dashed var(--color-border); border-bottom: 1px dashed var(--color-border);">
-                <span>Students: <strong>855</strong></span>
-                <span>Staff: <strong>34</strong></span>
-                <span>Term: <strong>2025–26</strong></span>
-              </div>
-              <div style="display: flex; gap: 0.5rem;">
-                <a href="/management" class="btn-pa btn-pa-primary"
-                  style="flex:1; justify-content:center; font-size:0.8rem;">
-                  <i class="fa-solid fa-arrow-right"></i> Open Portal
-                </a>
-                <button class="btn-pa btn-pa-secondary" onclick="platformApp.navigateTo('config')"
-                  style="font-size:0.8rem;" title="Configure School">
-                  <i class="fa-solid fa-sliders"></i>
-                </button>
-              </div>
-            </div>
-
-            <div
-              style="border: 1px solid var(--color-border); border-radius: 12px; padding: 1.35rem; background: var(--color-bg-subtle);">
-              <div
-                style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem;">
-                <span class="badge-operator">Intermediate Wing</span>
-                <span class="badge-active">Active</span>
-              </div>
-              <h4 style="margin: 0.25rem 0; font-size: 1.05rem;">Sri Vidya Junior College</h4>
-              <p style="margin: 0 0 0.75rem; font-size: 0.8rem; color: #64748B;">UDISE: 28172901924 • BIEAP AP (+1 &amp;
-                +2 MPC/BiPC)</p>
-              <div
-                style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 1rem; padding: 0.5rem 0; border-top: 1px dashed var(--color-border); border-bottom: 1px dashed var(--color-border);">
-                <span>Students: <strong>320</strong></span>
-                <span>Staff: <strong>18</strong></span>
-                <span>Term: <strong>2025–26</strong></span>
-              </div>
-              <div style="display: flex; gap: 0.5rem;">
-                <a href="/management" class="btn-pa btn-pa-secondary"
-                  style="flex:1; justify-content:center; font-size:0.8rem;">
-                  <i class="fa-solid fa-arrow-right"></i> Open Portal
-                </a>
-                <button class="btn-pa btn-pa-secondary" onclick="platformApp.navigateTo('config')"
-                  style="font-size:0.8rem;" title="Configure College">
-                  <i class="fa-solid fa-sliders"></i>
-                </button>
-              </div>
-            </div>
-
-            <div
-              style="border: 1px solid var(--color-border); border-radius: 12px; padding: 1.35rem; background: var(--color-bg-subtle);">
-              <div
-                style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem;">
-                <span class="badge-operator">Pre-Primary</span>
-                <span class="badge-active">Active</span>
-              </div>
-              <h4 style="margin: 0.25rem 0; font-size: 1.05rem;">Sri Vidya Kids Academy</h4>
-              <p style="margin: 0 0 0.75rem; font-size: 0.8rem; color: #64748B;">UDISE: 28172901925 • Nursery, LKG, UKG
-                Play School</p>
-              <div
-                style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 1rem; padding: 0.5rem 0; border-top: 1px dashed var(--color-border); border-bottom: 1px dashed var(--color-border);">
-                <span>Students: <strong>140</strong></span>
-                <span>Staff: <strong>8</strong></span>
-                <span>Term: <strong>2025–26</strong></span>
-              </div>
-              <div style="display: flex; gap: 0.5rem;">
-                <a href="/management" class="btn-pa btn-pa-secondary"
-                  style="flex:1; justify-content:center; font-size:0.8rem;">
-                  <i class="fa-solid fa-arrow-right"></i> Open Portal
-                </a>
-                <button class="btn-pa btn-pa-secondary" onclick="platformApp.navigateTo('config')"
-                  style="font-size:0.8rem;" title="Configure Academy">
-                  <i class="fa-solid fa-sliders"></i>
-                </button>
-              </div>
-            </div>
+            <div id="activeTenantsGrid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(310px, 1fr)); gap: 1.25rem;">
+            <div class="text-center py-4 text-muted" style="grid-column: 1 / -1;"><i class="fa-solid fa-spinner fa-spin me-2"></i> Loading registered institutional tenants from database...</div>
 
           </div>
         </div>
@@ -5624,25 +5567,25 @@
                 <div class="row g-2 mb-2">
                   <div class="col-md-4">
                     <label class="form-label small fw-bold">Institution Code *</label>
-                    <input type="text" class="form-control form-control-sm font-mono" id="txtWfA_Code" placeholder="e.g. SV-TIRUPATI" value="SV-TIRUPATI">
+                    <input type="text" class="form-control form-control-sm font-mono" id="txtWfA_Code" placeholder="Enter unique institution code" value="">
                   </div>
                   <div class="col-md-8">
                     <label class="form-label small fw-bold">Institution Full Name *</label>
-                    <input type="text" class="form-control form-control-sm" id="txtWfA_Name" placeholder="e.g. Sri Vidya Model High School (Tirupati Campus)" value="Sri Vidya Model High School (Tirupati Campus)">
+                    <input type="text" class="form-control form-control-sm" id="txtWfA_Name" placeholder="Enter institution full name" value="">
                   </div>
                 </div>
                 <div class="row g-2 mb-2">
                   <div class="col-md-4">
                     <label class="form-label small fw-bold">Primary Domain *</label>
-                    <input type="text" class="form-control form-control-sm font-mono" id="txtWfA_Domain" value="tirupati.srividya.edu.in">
+            <input type="text" class="form-control form-control-sm font-mono" id="txtWfA_Domain" placeholder="e.g. campus.srividya.edu.in" value="">
                   </div>
                   <div class="col-md-4">
                     <label class="form-label small fw-bold">Initial Administrator Email *</label>
-                    <input type="email" class="form-control form-control-sm" id="txtWfA_AdminEmail" value="principal.tirupati@srividya.edu.in">
+                    <input type="email" class="form-control form-control-sm" id="txtWfA_AdminEmail" placeholder="principal@campus.edu.in" value="">
                   </div>
                   <div class="col-md-4">
                     <label class="form-label small fw-bold">Affiliation Board</label>
-                    <input type="text" class="form-control form-control-sm" id="txtWfA_Board" value="Andhra Pradesh State Board (AP SSC)">
+                    <input type="text" class="form-control form-control-sm" id="txtWfA_Board" placeholder="e.g. State Board / CBSE" value="">
                   </div>
                 </div>
                 <div class="mt-3 text-end">
@@ -7096,8 +7039,18 @@
   </div>
 
   <!-- Scripts -->
-  <script src="/js/portal-auth.js"></script>
-  <script src="/js/platform-admin.js"></script>
+  <script src="/js/api-client.js?v=20261122-v13"></script>
+  <script src="/js/portal-auth.js?v=20261122-v13"></script>
+  <script src="/js/platform-admin.js?v=20261122-v13"></script>
+  <!-- Production Readiness Suite -->
+  <script src="/js/portal-production-suite.js?v=20261122-v13"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      if (window.PortalAuth && typeof window.PortalAuth.init === 'function') {
+        PortalAuth.init('platform-admin');
+      }
+    });
+  </script>
 <!-- =========================================================================
        MODAL: SCHOOL PROFILE LETTERHEAD & BRANDING PREVIEW (SECTION 4.1)
        ========================================================================= -->
@@ -11016,6 +10969,43 @@
     </div>
   </div>
 
+
+  <!-- ==========================================================================
+       FLOATING BOTTOM NAVIGATION BAR (Compulsory on Mobile)
+       ========================================================================== -->
+  <nav class="floating-bottom-nav" id="floatingBottomNav" aria-label="Platform Admin Mobile Bottom Navigation">
+    <div class="bottom-nav-inner">
+      <a href="#dashboard" class="bottom-nav-item active" data-nav="dashboard" onclick="platformApp.navigateTo('dashboard'); return false;" title="Platform Dashboard">
+        <div class="bottom-nav-icon-wrap"><i class="fa-solid fa-gauge-high"></i></div>
+        <span class="bottom-nav-label">Dashboard</span>
+      </a>
+      <a href="#institutions" class="bottom-nav-item" data-nav="institutions" onclick="platformApp.navigateTo('institutions'); return false;" title="Institutions">
+        <div class="bottom-nav-icon-wrap"><i class="fa-solid fa-school-flag"></i></div>
+        <span class="bottom-nav-label">Schools</span>
+      </a>
+      <a href="#users" class="bottom-nav-item" data-nav="users" onclick="platformApp.navigateTo('users'); return false;" title="User &amp; Account Management">
+        <div class="bottom-nav-icon-wrap"><i class="fa-solid fa-user-shield"></i></div>
+        <span class="bottom-nav-label">Users</span>
+      </a>
+      <a href="#health" class="bottom-nav-item" data-nav="health" onclick="platformApp.navigateTo('health'); return false;" title="System Health &amp; Deployment">
+        <div class="bottom-nav-icon-wrap"><i class="fa-solid fa-server"></i></div>
+        <span class="bottom-nav-label">Health</span>
+      </a>
+      <button type="button" class="bottom-nav-item" onclick="FloatingBottomNav.openPortalSidebar('platform-admin'); return false;" aria-label="Open full platform admin menu" title="All Platform Modules">
+        <div class="bottom-nav-icon-wrap"><i class="fa-solid fa-bars"></i></div>
+        <span class="bottom-nav-label">More</span>
+      </button>
+    </div>
+  </nav>
+  <script src="/js/floating-bottom-nav.js?v=20261122-v13"></script>
+
+  <!-- Modern Input Field System Controller -->
+  <script src="/js/modern-inputs.js?v=20261122-v13"></script>
+  <!-- Modern Popover & Overlay Component System Controller -->
+  <script src="/js/modern-popovers.js?v=20261122-v13"></script>
+  <!-- Liquid-Fill Toggle Switch Micro-Interaction Controller -->
+  <script src="/js/liquid-toggles.js?v=20261122-v18"></script>
+  <script src="../js/liquid-toggles.js?v=20261122-v18"></script>
 </body>
 
 </html>

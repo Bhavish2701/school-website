@@ -64,6 +64,56 @@ const userSchema = new mongoose.Schema(
       trim: true,
       default: '',
     },
+    alternateEmail: {
+      type: String,
+      trim: true,
+      default: '',
+    },
+    address: {
+      type: String,
+      trim: true,
+      default: '',
+    },
+    city: {
+      type: String,
+      trim: true,
+      default: '',
+    },
+    pincode: {
+      type: String,
+      trim: true,
+      default: '',
+    },
+    bloodGroup: {
+      type: String,
+      trim: true,
+      default: '',
+    },
+    emergencyContact: {
+      type: String,
+      trim: true,
+      default: '',
+    },
+    emergencyPhone: {
+      type: String,
+      trim: true,
+      default: '',
+    },
+    qualification: {
+      type: String,
+      trim: true,
+      default: '',
+    },
+    bio: {
+      type: String,
+      trim: true,
+      default: '',
+    },
+    avatarUrl: {
+      type: String,
+      trim: true,
+      default: '',
+    },
     // Student specific profile data
     studentProfile: {
       class: { type: String, trim: true },
@@ -90,6 +140,27 @@ const userSchema = new mongoose.Schema(
     isActive: {
       type: Boolean,
       default: true,
+    },
+    accountStatus: {
+      type: String,
+      enum: ['Active', 'Suspended', 'Deactivated'],
+      default: 'Active',
+    },
+    isEmailVerified: {
+      type: Boolean,
+      default: false,
+    },
+    emailVerificationOtp: {
+      type: String,
+      select: false,
+    },
+    emailVerificationExpires: {
+      type: Date,
+      select: false,
+    },
+    hasCompletedOnboarding: {
+      type: Boolean,
+      default: false,
     },
     refreshToken: {
       type: String,
@@ -176,6 +247,17 @@ userSchema.methods.createPasswordResetToken = function () {
   return resetToken;
 };
 
+// Create Email Verification OTP (6 digits)
+userSchema.methods.createEmailVerificationOtp = function () {
+  const otp = Math.floor(100000 + Math.random() * 900000).toString();
+  this.emailVerificationOtp = crypto
+    .createHash('sha256')
+    .update(otp)
+    .digest('hex');
+  this.emailVerificationExpires = Date.now() + 15 * 60 * 1000; // 15 mins
+  return otp;
+};
+
 // Clean object representation to ensure no secrets are exposed
 userSchema.methods.toJSON = function () {
   const obj = this.toObject();
@@ -183,6 +265,8 @@ userSchema.methods.toJSON = function () {
   delete obj.refreshToken;
   delete obj.passwordResetToken;
   delete obj.passwordResetExpires;
+  delete obj.emailVerificationOtp;
+  delete obj.emailVerificationExpires;
   delete obj.__v;
   return obj;
 };

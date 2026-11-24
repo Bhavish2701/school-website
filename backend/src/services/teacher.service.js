@@ -339,7 +339,7 @@ class TeacherService {
     const filter = {};
 
     // Teachers can view only their own leaves
-    if (currentUser.role === 'TEACHER') {
+    if (currentUser && currentUser.role === 'TEACHER') {
       const teacher = await this.getTeacherDocByUser(currentUser._id);
       if (teacher) {
         filter.teacher = teacher._id;
@@ -353,8 +353,9 @@ class TeacherService {
     }
 
     const leaves = await Leave.find(filter)
-      .populate('teacher', 'fullName employeeId specialization phone')
+      .populate('teacher', 'fullName employeeId specialization department status phone')
       .populate('reviewedBy', 'fullName role')
+      .populate('user', 'fullName email')
       .sort({ createdAt: -1 });
 
     return leaves;
@@ -373,32 +374,53 @@ class TeacherService {
       throw ApiError.notFound(`Leave request '${leaveId}' not found`);
     }
 
+    const { User } = require('../models/user.model');
+    const reviewer = currentUser || (await User.findOne({ role: 'PRINCIPAL' })) || { _id: null, fullName: 'Principal Smt. Gorle Varalakshmi' };
+
     leave.status = status;
-    leave.reviewedBy = currentUser._id;
+    leave.reviewedBy = reviewer._id;
     leave.reviewRemarks = reviewRemarks;
     await leave.save();
 
-    // Deduct leave balance if approved
-    if (status === 'APPROVED' && leave.teacher) {
+    // Deduct leave balance and update teacher status
+    if (leave.teacher) {
       const teacher = await Teacher.findById(leave.teacher._id);
-      if (teacher && teacher.leaveBalance) {
-        const typeKey = leave.leaveType.toLowerCase();
-        if (teacher.leaveBalance[typeKey] !== undefined) {
-          teacher.leaveBalance[typeKey] = Math.max(0, teacher.leaveBalance[typeKey] - leave.daysCount);
-          await teacher.save();
+      if (teacher) {
+        if (status === 'APPROVED') {
+          teacher.status = 'ON_LEAVE';
+          if (teacher.leaveBalance) {
+            const typeKey = leave.leaveType.toLowerCase();
+            if (teacher.leaveBalance[typeKey] !== undefined) {
+              teacher.leaveBalance[typeKey] = Math.max(0, teacher.leaveBalance[typeKey] - leave.daysCount);
+            }
+          }
+        } else if (status === 'REJECTED') {
+          const otherActiveLeaves = await Leave.countDocuments({
+            _id: { $ne: leave._id },
+            teacher: teacher._id,
+            status: 'APPROVED',
+            startDate: { $lte: new Date() },
+            endDate: { $gte: new Date() }
+          });
+          if (otherActiveLeaves === 0) {
+            teacher.status = 'ACTIVE';
+          }
         }
+        await teacher.save();
       }
     }
 
-    // Send notification to teacher
-    await Notification.create({
-      title: `Leave Application ${status}`,
-      message: `Your leave request for ${leave.daysCount} day(s) has been ${status.toLowerCase()} by ${currentUser.fullName}. Remarks: ${reviewRemarks || 'None'}`,
-      type: 'LEAVE_STATUS',
-      recipientUser: leave.user,
-      recipientRole: 'TEACHER',
-      senderUser: currentUser._id,
-    });
+    // Send notification to teacher user
+    if (leave.user) {
+      await Notification.create({
+        title: `Leave Application ${status}`,
+        message: `Your leave request for ${leave.daysCount} day(s) has been ${status.toLowerCase()} by ${reviewer.fullName || 'Principal Smt. Gorle Varalakshmi'}. Remarks: ${reviewRemarks || 'None'}`,
+        type: 'LEAVE_STATUS',
+        recipientUser: leave.user,
+        recipientRole: 'TEACHER',
+        senderUser: reviewer._id || leave.user,
+      });
+    }
 
     return leave;
   }

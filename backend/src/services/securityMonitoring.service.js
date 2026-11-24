@@ -361,7 +361,10 @@ class SecurityMonitoringService {
 
     const failedAuthAttempts = events.reduce((sum, e) => sum + (e.telemetry?.failedAttemptsCount || 0), 0);
     const suspiciousLoginPatterns = events.filter(e => e.eventType.includes('LOGIN') || e.eventType.includes('PROBE')).length;
-    const privilegedRoleChanges = 2; // From Module 7 role approvals
+    const { PlatformAudit } = require('../models/platformAudit.model');
+    const privilegedRoleChanges = this.isMongoReady()
+      ? await PlatformAudit.countDocuments({ category: 'RBAC_PERMISSIONS' }).catch(() => 0)
+      : 0;
     const unusualAccessActivity = events.filter(e => e.eventType.includes('CROSS_CAMPUS') || e.eventType.includes('SPIKE')).length;
     const unresolvedAlerts = events.filter(e => e.status !== 'Close').length;
     const accountsRequiringReview = reviews.filter(r => r.reviewStatus === 'Pending Review' || r.reviewStatus === 'Clarification Requested').length;

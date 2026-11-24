@@ -1,3 +1,4 @@
+@import url('liquid-toggles.css');
 /* ==========================================================================
    Sri Vidya E.M High School - Dedicated Teacher Portal Stylesheet
    Color Palette: Emerald Forest Green (#064E3B / #047857 / #059669 / #10B981) with White & Clean Slate
@@ -392,7 +393,12 @@ body {
 
 .header-search {
   position: relative;
-  width: 280px;
+  width: 440px;
+  max-width: 100%;
+  transition: width 0.25s ease;
+}
+.header-search:focus-within {
+  width: 500px;
 }
 
 .header-search input {
@@ -3378,4 +3384,245 @@ body {
   font-size: 0.72rem;
   color: #64748b;
   line-height: 1.3;
+}
+
+/* ==========================================================================
+   TEACHER PORTAL - MODERN INSTITUTIONAL DESIGN SYSTEM OVERHAUL
+   ========================================================================== */
+body, .teacher-layout, .portal-main {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif !important;
+  -webkit-font-smoothing: antialiased !important;
+  -moz-osx-font-smoothing: grayscale !important;
+  text-rendering: optimizeLegibility !important;
+}
+
+.module-header {
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  gap: 1.5rem !important;
+  padding: 0 0 1.25rem 0 !important;
+  margin-bottom: 1.5rem !important;
+  border-bottom: 1px solid var(--color-border, #e2e8f0) !important;
+  flex-wrap: wrap !important;
+}
+
+.module-header-info h2 {
+  font-size: 1.5rem !important;
+  font-weight: 700 !important;
+  color: var(--color-text-dark, #0f172a) !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 0.85rem !important;
+  margin: 0 !important;
+  line-height: 1.2 !important;
+}
+
+.module-header-info h2 i {
+  width: 44px !important;
+  height: 44px !important;
+  border-radius: 12px !important;
+  background: rgba(5, 150, 105, 0.1) !important;
+  color: var(--color-primary, #059669) !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-size: 1.2rem !important;
+  flex-shrink: 0 !important;
+  box-shadow: inset 0 0 0 1px rgba(5, 150, 105, 0.15) !important;
+}
+
+.tab-strip {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 4px !important;
+  background: var(--color-bg-subtle, #f1f5f9) !important;
+  border: 1px solid var(--color-border, #e2e8f0) !important;
+  border-radius: 12px !important;
+  padding: 5px !important;
+  margin-bottom: 1.5rem !important;
+  max-width: 100% !important;
+  overflow-x: auto !important;
+  scrollbar-width: none !important;
+  -webkit-overflow-scrolling: touch !important;
+}
+
+.tab-strip .tab-btn {
+  height: 38px !important;
+  padding: 0 16px !important;
+  border: none !important;
+  background: transparent !important;
+  font-weight: 500 !important;
+  font-size: 0.85rem !important;
+  color: var(--color-text-muted, #64748b) !important;
+  cursor: pointer !important;
+  border-radius: 8px !important;
+  margin-bottom: 0 !important;
+  transition: all 0.18s ease !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
+  white-space: nowrap !important;
+}
+
+.tab-strip .tab-btn:hover {
+  color: var(--color-text-dark, #0f172a) !important;
+  background: rgba(255, 255, 255, 0.8) !important;
+}
+
+.tab-strip .tab-btn.active {
+  color: var(--color-primary, #059669) !important;
+  background: var(--color-bg-surface, #ffffff) !important;
+  font-weight: 600 !important;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.08), 0 1px 2px rgba(15, 23, 42, 0.04) !important;
+  border-bottom: none !important;
+}
+
+.btn-primary {
+  background: var(--color-primary, #059669) !important;
+  border: 1px solid var(--color-primary, #059669) !important;
+  color: #ffffff !important;
+  box-shadow: 0 1px 2px rgba(5, 150, 105, 0.2) !important;
+}
+
+.btn-primary:hover {
+  background: var(--color-primary-hover, #047857) !important;
+  border-color: var(--color-primary-hover, #047857) !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 4px 10px rgba(5, 150, 105, 0.25) !important;
+}
+
+/* ==========================================================================
+   Teacher Portal - Authoritative Dark Theme Overrides for Tab Strip & Controls
+   ========================================================================== */
+[data-theme="dark"] .tab-strip {
+  background: #0B1426 !important;
+  border-color: #1E293B !important;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.4) !important;
+}
+
+[data-theme="dark"] .tab-strip .tab-btn {
+  color: #94A3B8 !important;
+}
+
+[data-theme="dark"] .tab-strip .tab-btn:hover {
+  color: #F8FAFC !important;
+  background: rgba(30, 41, 59, 0.6) !important;
+}
+
+[data-theme="dark"] .tab-strip .tab-btn.active {
+  color: #34D399 !important;
+  background: #162032 !important;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.08) !important;
+  border: 1px solid #1E293B !important;
+}
+
+[data-theme="dark"] .header-action-btn,
+[data-theme="dark"] .theme-toggle-btn {
+  background: linear-gradient(180deg, #162032 0%, #0F172A 100%) !important;
+  border-color: #1E293B !important;
+  color: #E2E8F0 !important;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3) !important;
+}
+
+[data-theme="dark"] .header-action-btn:hover,
+[data-theme="dark"] .theme-toggle-btn:hover {
+  background: linear-gradient(180deg, #1E293B 0%, #162032 100%) !important;
+  border-color: #334155 !important;
+  color: #FFFFFF !important;
+}
+
+[data-theme="dark"] .brand-name {
+  color: #FFFFFF !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+[data-theme="dark"] .brand-sub {
+  color: #34D399 !important; /* Emerald green accent for Faculty Portal in dark mode */
+  text-shadow: 0 0 10px rgba(52, 211, 153, 0.4) !important;
+  font-weight: 800 !important;
+}
+
+[data-theme="dark"] .brand-est {
+  color: #94A3B8 !important;
+}
+
+
+
+/* Executive Premium Header Logout Button */
+.btn-header-signout {
+  flex-shrink: 0 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
+  height: 38px !important;
+  padding: 0 16px 0 10px !important;
+  border-radius: 9999px !important;
+  background: linear-gradient(135deg, #ffffff 0%, #fff5f5 45%, #fee2e2 100%) !important;
+  border: 1px solid rgba(239, 68, 68, 0.35) !important;
+  color: #b91c1c !important;
+  font-size: 0.8125rem !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.03em !important;
+  cursor: pointer !important;
+  text-decoration: none !important;
+  user-select: none !important;
+  white-space: nowrap !important;
+  font-family: inherit !important;
+  box-shadow: 0 2px 6px rgba(220, 38, 38, 0.1), inset 0 1px 0 #ffffff !important;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+.btn-header-signout i {
+  width: 24px !important;
+  height: 24px !important;
+  border-radius: 50% !important;
+  background: rgba(239, 68, 68, 0.12) !important;
+  color: #dc2626 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-size: 0.72rem !important;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  flex-shrink: 0 !important;
+}
+
+.btn-header-signout:hover {
+  background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%) !important;
+  border-color: rgba(220, 38, 38, 0.6) !important;
+  color: #991b1b !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 4px 12px rgba(220, 38, 38, 0.22), inset 0 1px 0 #ffffff !important;
+}
+
+.btn-header-signout:hover i {
+  background: #dc2626 !important;
+  color: #ffffff !important;
+  transform: translateX(2px) scale(1.05) !important;
+}
+
+[data-theme="dark"] .btn-header-signout {
+  background: linear-gradient(135deg, #1e293b 0%, #291515 50%, #3f1212 100%) !important;
+  border: 1px solid rgba(239, 68, 68, 0.45) !important;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.08) !important;
+  color: #fca5a5 !important;
+}
+
+[data-theme="dark"] .btn-header-signout i {
+  background: rgba(239, 68, 68, 0.25) !important;
+  color: #f87171 !important;
+}
+
+[data-theme="dark"] .btn-header-signout:hover {
+  background: linear-gradient(135deg, #450a0a 0%, #5c1111 100%) !important;
+  border-color: #ef4444 !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 16px rgba(239, 68, 68, 0.35) !important;
+}
+
+[data-theme="dark"] .btn-header-signout:hover i {
+  background: #ef4444 !important;
+  color: #ffffff !important;
 }

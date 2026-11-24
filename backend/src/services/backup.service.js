@@ -325,15 +325,25 @@ class BackupService {
         nextScheduledRun: 'Today 20:00 IST',
         isAutomated: true
       },
-      backupStorageStatus: {
-        totalAllocatedGB: 2048,
-        usedGB: 248.6,
-        availableGB: 1799.4,
-        usagePercentage: '12.1%',
-        vaultLocation: 'AWS S3 Multi-Region ap-south-1 (Mumbai) / Immutable Glacier Deep Archive',
-        encryptionStandard: 'AES-256 KMS Hardware-Sealed (Envelope Encryption)',
-        storageHealth: 'OPTIMAL'
-      },
+      backupStorageStatus: (() => {
+        const allocatedGB = 2048;
+        const totalBytes = records
+          .filter((r) => r.status === 'SUCCESS')
+          .reduce((sum, r) => sum + (Number(r.sizeBytes) || 0), 0);
+        const usedGB = Math.round((totalBytes / (1024 * 1024 * 1024)) * 100) / 100;
+        const availGB = Math.max(0, Math.round((allocatedGB - usedGB) * 100) / 100);
+        const pct = allocatedGB > 0 ? ((usedGB / allocatedGB) * 100).toFixed(2) + '%' : '0.00%';
+        return {
+          totalAllocatedGB: allocatedGB,
+          usedGB,
+          availableGB: availGB,
+          usagePercentage: pct,
+          totalSnapshots: records.length,
+          vaultLocation: 'AWS S3 Multi-Region ap-south-1 (Mumbai) / Immutable Glacier Deep Archive',
+          encryptionStandard: 'AES-256 KMS Hardware-Sealed (Envelope Encryption)',
+          storageHealth: 'OPTIMAL',
+        };
+      })(),
       retentionPolicy: {
         statutoryFramework: 'Andhra Pradesh Statutory Education Act (G.O.Ms.No. 1)',
         operationalRecordsRetentionYears: 7,
@@ -467,6 +477,29 @@ class BackupService {
         reason: payload.reason || 'Operator manual disaster prevention snapshot'
       }
     };
+
+    const fs = require('fs');
+    const path = require('path');
+    const backupDir = path.resolve(__dirname, '../../backups');
+    try {
+      if (!fs.existsSync(backupDir)) {
+        fs.mkdirSync(backupDir, { recursive: true });
+      }
+      const dumpMeta = {
+        backupId,
+        name,
+        scope,
+        campusScope,
+        timestamp: new Date().toISOString(),
+        checksumSha256,
+        operator,
+      };
+      // Write snapshot manifest
+      fs.writeFileSync(path.join(backupDir, `${backupId}.json`), JSON.stringify(dumpMeta, null, 2), 'utf8');
+      newRecord.storageReference = `local://backend/backups/${backupId}.json`;
+    } catch (fsErr) {
+      console.warn('Backup disk snapshot warning:', fsErr.message);
+    }
 
     if (this.isMongoReady()) {
       try {

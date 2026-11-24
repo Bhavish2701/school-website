@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Open-Source Licences &amp; Intellectual Property | Sri Vidya E.M High School</title>
+  <link rel="icon" type="image/x-icon" href="/assets/images/favicon.ico">
+  <!-- Fonts & Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Outfit:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="/css/skeuomorphic-portal.css">
+
+  <style>
+    :root {
+      --sv-primary: #1D4ED8;
+      --sv-navy: #0B192C;
+      --sv-border: #E2E8F0;
+      --sv-text: #0F172A;
+      --sv-text-muted: #475569;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: #0B1329 linear-gradient(180deg, #0B1329 0%, #0F172A 100%);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      color: var(--sv-text);
+      min-height: 100vh;
+      padding: 40px 20px;
+    }
+
+    .policy-container {
+      max-width: 860px;
+      margin: 0 auto;
+      background: #FFFFFF;
+      border-radius: 20px;
+      padding: 44px 48px;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.1);
+      border: 1px solid #CBD5E1;
+    }
+
+    @media (max-width: 640px) { .policy-container { padding: 28px 20px; } }
+
+    .brand-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 2px solid #E2E8F0;
+      padding-bottom: 20px;
+      margin-bottom: 28px;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .brand-left { display: flex; align-items: center; gap: 14px; }
+    .brand-crest {
+      width: 52px; height: 52px; background: #FFFFFF; border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08); border: 1px solid #CBD5E1;
+    }
+
+    .brand-title h1 { font-size: 1.25rem; font-weight: 800; color: #0F172A; }
+    .brand-title p { font-size: 0.78rem; color: #0284C7; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; }
+
+    .nav-back-btn {
+      display: inline-flex; align-items: center; gap: 8px; padding: 8px 16px;
+      background: #EFF6FF; color: var(--sv-primary); border-radius: 8px;
+      font-size: 0.84rem; font-weight: 700; text-decoration: none; border: 1px solid #BFDBFE;
+    }
+
+    .dep-card {
+      background: #F8FAFC;
+      border: 1px solid #CBD5E1;
+      border-radius: 10px;
+      padding: 14px 18px;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 0.88rem;
+    }
+
+    .dep-tag {
+      padding: 3px 8px;
+      background: #ECFDF5;
+      color: #065F46;
+      border: 1px solid #A7F3D0;
+      border-radius: 6px;
+      font-size: 0.76rem;
+      font-weight: 700;
+    }
+  </style>
+</head>
+<body>
+  <div class="policy-container">
+    <div class="brand-header">
+      <div class="brand-left">
+        <div class="brand-crest">
+          <img src="/assets/images/favicon.ico" alt="Crest" style="width: 32px; height: 32px; object-fit: contain;" onerror="this.outerHTML='<i class=\'fa-solid fa-code\' style=\'color:#1D4ED8; font-size:1.5rem;\'></i>'">
+        </div>
+        <div class="brand-title">
+          <h1>SRI VIDYA E.M HIGH SCHOOL</h1>
+          <p>Open-Source Software Notices &amp; Intellectual Property</p>
+        </div>
+      </div>
+      <a href="/login" class="nav-back-btn">
+        <i class="fa-solid fa-arrow-left"></i>
+        <span>Return to Login</span>
+      </a>
+    </div>
+
+    <h2 style="font-size: 1.15rem; font-weight: 800; color: #0F172A; margin-bottom: 8px;">
+      <i class="fa-solid fa-copyright" style="color: #1D4ED8;"></i> Proprietary Software &amp; Content Ownership
+    </h2>
+    <p style="font-size: 0.92rem; color: #475569; line-height: 1.65; margin-bottom: 24px;">
+      The Sri Vidya School Management ERP application architecture, custom UI components, skeuomorphic stylesheets, and proprietary school data models are the exclusive intellectual property of the <strong>Sri Vidya Educational Trust</strong>. Unauthorized reproduction, reverse engineering, or commercial redistribution is strictly prohibited.
+    </p>
+
+    <h2 style="font-size: 1.15rem; font-weight: 800; color: #0F172A; margin-bottom: 8px;">
+      <i class="fa-solid fa-box-open" style="color: #1D4ED8;"></i> Permissive Open-Source Dependencies
+    </h2>
+    <p style="font-size: 0.92rem; color: #475569; line-height: 1.65; margin-bottom: 18px;">
+      Sri Vidya ERP incorporates vetted, highly permissive open-source libraries under approved licenses (MIT and BSD-2-Clause). Our automated compliance audit confirms zero copyleft or viral GPL license entanglements:
+    </p>
+
+    <div class="dep-card">
+      <div><strong>express</strong> <span style="color: #64748B;">&bull; Web Application Server</span></div>
+      <span class="dep-tag">MIT License</span>
+    </div>
+    <div class="dep-card">
+      <div><strong>mongoose</strong> <span style="color: #64748B;">&bull; MongoDB Document Modeling</span></div>
+      <span class="dep-tag">MIT License</span>
+    </div>
+    <div class="dep-card">
+      <div><strong>bcryptjs</strong> <span style="color: #64748B;">&bull; Salted Cryptographic Password Hashing</span></div>
+      <span class="dep-tag">MIT License</span>
+    </div>
+    <div class="dep-card">
+      <div><strong>jsonwebtoken</strong> <span style="color: #64748B;">&bull; JSON Web Token Authentication</span></div>
+      <span class="dep-tag">MIT License</span>
+    </div>
+    <div class="dep-card">
+      <div><strong>helmet</strong> <span style="color: #64748B;">&bull; HTTP Security Headers Middleware</span></div>
+      <span class="dep-tag">MIT License</span>
+    </div>
+    <div class="dep-card">
+      <div><strong>cors</strong> <span style="color: #64748B;">&bull; Cross-Origin Resource Sharing Protection</span></div>
+      <span class="dep-tag">MIT License</span>
+    </div>
+    <div class="dep-card">
+      <div><strong>dotenv</strong> <span style="color: #64748B;">&bull; Environment Configuration Isolation</span></div>
+      <span class="dep-tag">BSD-2-Clause</span>
+    </div>
+    <div class="dep-card">
+      <div><strong>express-rate-limit</strong> <span style="color: #64748B;">&bull; Brute-Force Rate Limiting</span></div>
+      <span class="dep-tag">MIT License</span>
+    </div>
+
+    <div style="border-top: 2px solid #E2E8F0; padding-top: 20px; margin-top: 36px; display: flex; justify-content: space-between; font-size: 0.82rem; color: #64748B;">
+      <span>&copy; 2026 Sri Vidya Educational Trust</span>
+      <div>
+        <a href="/privacy" style="color: var(--sv-primary); text-decoration: none; margin-right: 14px; font-weight: 700;">Privacy Policy</a>
+        <a href="/terms" style="color: var(--sv-primary); text-decoration: none; font-weight: 700;">Terms of Service</a>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

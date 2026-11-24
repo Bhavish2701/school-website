@@ -5,13 +5,16 @@ const app = require('./app');
 const config = require('./config/env');
 const connectDB = require('./config/db');
 const seedUsers = require('./config/seed');
+const mongoose = require('mongoose');
 
 const startServer = async () => {
   // Connect to MongoDB
-  await connectDB();
+  const conn = await connectDB();
 
-  // Seed default users if collection is empty
-  await seedUsers();
+  // Seed default users if collection is empty and DB is connected
+  if (conn && mongoose.connection.readyState === 1) {
+    await seedUsers();
+  }
 
   // Start HTTP Server
   const server = app.listen(config.port, () => {

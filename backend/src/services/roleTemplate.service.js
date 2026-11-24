@@ -5,6 +5,9 @@
 
 const mongoose = require('mongoose');
 const { RoleTemplate } = require('../models/roleTemplate.model');
+const { UserAccount } = require('../models/userAccount.model');
+const { User } = require('../models/user.model');
+const liveSyncBus = require('../utils/liveSyncBus');
 
 // In-memory fallback repository when running without active MongoDB
 const inMemoryRoles = [];
@@ -324,6 +327,53 @@ class RoleTemplateService {
     }
   }
 
+  static async _computeLiveRoleCounts() {
+    if (!this.isMongoReady()) return { byRoleKey: {}, totalAccounts: 0 };
+    try {
+      const [uaAgg, userAgg, uaTotal, userTotal] = await Promise.all([
+        UserAccount.aggregate([
+          { $match: { status: { $ne: 'Deactivated' } } },
+          { $unwind: '$roles' },
+          { $group: { _id: { $toLower: '$roles' }, count: { $sum: 1 } } },
+        ]),
+        User.aggregate([{ $group: { _id: '$role', count: { $sum: 1 } } }]),
+        UserAccount.countDocuments({ status: { $ne: 'Deactivated' } }),
+        User.countDocuments({ isActive: { $ne: false } }),
+      ]);
+      const byRoleKey = {};
+      uaAgg.forEach((entry) => {
+        if (entry._id) byRoleKey[entry._id.trim()] = (byRoleKey[entry._id.trim()] || 0) + entry.count;
+      });
+      const userRoleMap = {
+        SUPER_ADMIN: 'platform administrator',
+        PRINCIPAL: 'principal',
+        VICE_PRINCIPAL: 'vice principal',
+        OFFICE: 'office',
+        TEACHER: 'teacher',
+        STUDENT: 'student',
+        PARENT: 'parent',
+      };
+      userAgg.forEach((entry) => {
+        const mapped = userRoleMap[entry._id] || String(entry._id || '').toLowerCase();
+        if (mapped) byRoleKey[mapped] = (byRoleKey[mapped] || 0) + entry.count;
+      });
+      return { byRoleKey, totalAccounts: uaTotal + userTotal };
+    } catch (e) {
+      return { byRoleKey: {}, totalAccounts: 0 };
+    }
+  }
+
+  static _resolveDynamicRoleCount(roleDoc, byRoleKey) {
+    const nameKey = String(roleDoc.name || '').toLowerCase().trim();
+    const slugKey = String(roleDoc.slug || '').toLowerCase().replace(/-/g, ' ').trim();
+    if (Object.prototype.hasOwnProperty.call(byRoleKey, nameKey)) return byRoleKey[nameKey];
+    if (Object.prototype.hasOwnProperty.call(byRoleKey, slugKey)) return byRoleKey[slugKey];
+    const partial = Object.keys(byRoleKey).find(
+      (k) => k.includes(nameKey) || nameKey.includes(k) || k.includes(slugKey)
+    );
+    return partial ? byRoleKey[partial] : 0;
+  }
+
   /**
    * 7.2 Summary KPI Counters
    */
@@ -335,24 +385,28 @@ class RoleTemplateService {
       all = inMemoryRoles;
     } else {
       try {
-        all = await RoleTemplate.find();
+        all = await RoleTemplate.find().lean();
       } catch (e) {
         all = inMemoryRoles;
       }
     }
 
+    const { byRoleKey, totalAccounts } = await this._computeLiveRoleCounts();
     const totalRoles = all.length;
     const platformRoles = all.filter(r => r.scope === 'Platform').length;
     const institutionRoles = all.filter(r => r.scope === 'Institution').length;
     const customRoles = all.filter(r => !r.isBuiltIn).length;
-    const totalAssignedUsers = all.reduce((sum, r) => sum + (r.assignedUsersCount || 0), 0);
+    const totalAssignedUsers = this.isMongoReady()
+      ? totalAccounts
+      : all.reduce((sum, r) => sum + (r.assignedUsersCount || 0), 0);
 
     return {
       totalRoles,
       platformRoles,
       institutionRoles,
       customRoles,
-      totalAssignedUsers
+      totalAssignedUsers,
+      byRoleKey
     };
   }
 
@@ -367,7 +421,12 @@ class RoleTemplateService {
       roles = inMemoryRoles;
     } else {
       try {
-        roles = await RoleTemplate.find().sort({ scope: 1, isBuiltIn: -1, createdAt: 1 });
+        const docs = await RoleTemplate.find().sort({ scope: 1, isBuiltIn: -1, createdAt: 1 }).lean();
+        const { byRoleKey } = await this._computeLiveRoleCounts();
+        roles = docs.map((r) => ({
+          ...r,
+          assignedUsersCount: this._resolveDynamicRoleCount(r, byRoleKey),
+        }));
       } catch (e) {
         roles = inMemoryRoles;
       }
@@ -513,6 +572,7 @@ class RoleTemplateService {
 
     try {
       const created = await RoleTemplate.create(newRole);
+      liveSyncBus.emitSync('PLATFORM', 'ROLE_CREATED', { entityId: created.roleId });
       return { success: true, data: created };
     } catch (e) {
       inMemoryRoles.push(newRole);
@@ -651,6 +711,7 @@ class RoleTemplateService {
     });
 
     if (this.isMongoReady() && typeof role.save === 'function') await role.save();
+    liveSyncBus.emitSync('PLATFORM', 'ROLE_UPDATED', { entityId: role.roleId });
 
     return {
       success: true,
@@ -705,6 +766,7 @@ class RoleTemplateService {
     }
 
     if (this.isMongoReady() && typeof role.save === 'function') await role.save();
+    liveSyncBus.emitSync('PLATFORM', 'ROLE_UPDATED', { entityId: role.roleId });
 
     return {
       success: true,
@@ -745,6 +807,7 @@ class RoleTemplateService {
     });
 
     if (this.isMongoReady() && typeof role.save === 'function') await role.save();
+    liveSyncBus.emitSync('PLATFORM', 'ROLE_UPDATED', { entityId: role.roleId });
 
     return {
       success: true,
@@ -771,6 +834,7 @@ class RoleTemplateService {
     });
 
     if (this.isMongoReady() && typeof role.save === 'function') await role.save();
+    liveSyncBus.emitSync('PLATFORM', 'ROLE_USERS_ASSIGNED', { entityId: role.roleId });
     return { success: true, assignedUsersCount: role.assignedUsersCount, data: role };
   }
 

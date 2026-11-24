@@ -58,6 +58,37 @@ const authenticateUser = asyncHandler(async (req, res, next) => {
 });
 
 /**
+ * 1b. Optional Authenticate User Middleware
+ * If token is present, validates and sets req.user.
+ * If token is absent or invalid, proceeds without setting req.user (no 401 thrown).
+ */
+const optionalAuthenticateUser = asyncHandler(async (req, res, next) => {
+  let token = null;
+
+  if (
+    req.headers.authorization &&
+    req.headers.authorization.startsWith('Bearer ')
+  ) {
+    token = req.headers.authorization.split(' ')[1];
+  }
+
+  if (!token) {
+    return next();
+  }
+
+  try {
+    const decoded = jwt.verify(token, config.jwt.secret);
+    const user = await User.findById(decoded.id);
+    if (user && user.isActive) {
+      req.user = user;
+    }
+  } catch (err) {
+    // Ignore invalid/expired token in optional mode
+  }
+  next();
+});
+
+/**
  * 2. Authorize Roles Middleware
  * Checks if the authenticated user's role is in the permitted list
  *
@@ -234,8 +265,49 @@ const authorizeResource = (options = {}) => {
   });
 };
 
+/**
+ * 4. Row-Level Query Scoping Helper
+ * Returns Mongoose query filter conditions scoped strictly to authenticated user's assigned jurisdiction.
+ */
+const getRowLevelQueryFilter = (user, options = {}) => {
+  if (!user) return { _id: null };
+  const { classField = 'class', sectionField = 'section', studentField = 'student' } = options;
+
+  if (['SUPER_ADMIN', 'PRINCIPAL', 'VICE_PRINCIPAL'].includes(user.role)) {
+    return {}; // Full campus jurisdiction
+  }
+
+  if (user.role === 'OFFICE') {
+    return {}; // Campus administrative scope
+  }
+
+  if (user.role === 'TEACHER') {
+    const assigned = user.assignedClasses || [];
+    if (!assigned.length) return { _id: null };
+    const orConditions = assigned.map((a) => {
+      const cond = { [classField]: a.class };
+      if (a.section) cond[sectionField] = a.section;
+      return cond;
+    });
+    return orConditions.length === 1 ? orConditions[0] : { $or: orConditions };
+  }
+
+  if (user.role === 'STUDENT') {
+    return { [studentField]: user._id };
+  }
+
+  if (user.role === 'PARENT') {
+    const childrenIds = user.children || [];
+    return { [studentField]: { $in: childrenIds } };
+  }
+
+  return { _id: null };
+};
+
 module.exports = {
   authenticateUser,
+  optionalAuthenticateUser,
   authorizeRoles,
   authorizeResource,
+  getRowLevelQueryFilter,
 };

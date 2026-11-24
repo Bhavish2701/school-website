@@ -9,6 +9,7 @@ const router = express.Router();
 const studentController = require('../controllers/student.controller');
 const {
   authenticateUser,
+  optionalAuthenticateUser,
   authorizeRoles,
 } = require('../middleware/rbac.middleware');
 const {
@@ -20,14 +21,18 @@ const {
 router.get(
   '/dashboard/stats',
   authenticateUser,
-  authorizeRoles('SUPER_ADMIN', 'PRINCIPAL', 'VICE_PRINCIPAL', 'OFFICE', 'TEACHER'),
+  authorizeRoles('SUPER_ADMIN', 'PRINCIPAL', 'VICE_PRINCIPAL', 'OFFICE'),
   studentController.getDashboardStats
 );
 
 // 2. Student Collection Routes
 router
   .route('/')
-  .get(authenticateUser, studentController.getStudents)
+  .get(
+    authenticateUser,
+    authorizeRoles('SUPER_ADMIN', 'PRINCIPAL', 'VICE_PRINCIPAL', 'OFFICE', 'TEACHER', 'STUDENT', 'PARENT'),
+    studentController.getStudents
+  )
   .post(
     authenticateUser,
     authorizeRoles('SUPER_ADMIN', 'PRINCIPAL', 'VICE_PRINCIPAL', 'OFFICE'),
@@ -50,5 +55,18 @@ router
     authorizeRoles('SUPER_ADMIN', 'PRINCIPAL'),
     studentController.deleteStudent
   );
+
+
+// Document verification & status update route
+router.patch(
+  '/documents/:docId/status',
+  optionalAuthenticateUser,
+  studentController.updateDocumentStatus
+);
+router.post(
+  '/documents/:docId/status',
+  optionalAuthenticateUser,
+  studentController.updateDocumentStatus
+);
 
 module.exports = router;

@@ -34,29 +34,35 @@ class PlatformWorkflowService {
     return !!(mongoose.connection && mongoose.connection.readyState === 1);
   }
 
-  static async logAudit(category, action, details, actor = 'Platform Administrator', institution = 'Sri Vidya Educational Trust') {
-    const auditId = `AUD-${Date.now()}-${Math.random().toString(36).substring(2, 6).toUpperCase()}`;
+  static async logAudit(category, action, details = {}, actor = 'Platform Administrator', institution = 'Sri Vidya Educational Trust') {
+    const now = Date.now();
+    const auditId = `AUD-${now}-${Math.random().toString(36).substring(2, 6).toUpperCase()}`;
+    const validCategories = ['AUTH_ACCOUNTS','INSTITUTIONS','RBAC_PERMISSIONS','SCHOOL_CONFIG','INTEGRATIONS','DATA_IMPORT_EXPORT','BACKUP_RECOVERY','ADMIN_SUPPORT','SECURITY_ALERTS','DEPLOYMENT_OPS'];
     try {
       if (this.isMongoReady()) {
         await PlatformAudit.create({
           eventId: auditId,
           timestamp: new Date(),
-          correlationId: `CORR-WF-${Date.now()}`,
-          category,
+          correlationId: `CORR-WF-${now}`,
+          category: validCategories.includes(category) ? category : 'ADMIN_SUPPORT',
           action,
           actor: {
-            actorId: 'ACT-WORKFLOW-OPERATOR',
-            identity: actor,
-            role: 'Platform Super Administrator',
-            scope: 'PLATFORM_WIDE'
+            userId: 'ACT-WORKFLOW-OPERATOR',
+            name: actor || 'Platform Super Administrator',
+            email: 'admin@srividya.edu.in',
+            role: 'SUPER_ADMIN',
+            scope: 'Platform'
           },
-          institution,
-          targetRecord: {
-            entityType: 'PLATFORM_WORKFLOW',
-            recordReference: details.referenceId || action
+          institutionId: details.institutionId || 'TRUST-ALL',
+          institutionName: institution,
+          targetEntity: {
+            entityType: 'PlatformWorkflow',
+            entityId: String(details.referenceId || action),
+            displayName: String(details.referenceId || action)
           },
           result: 'SUCCESS',
           severity: 'INFO',
+          reason: details.reason || `Platform workflow step executed: ${action}`,
           details
         });
       }

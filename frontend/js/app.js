@@ -408,39 +408,8 @@ function initHashRouter() {
 /* ==========================================================================
    4. Online Admission Application Form
    ========================================================================== */
-const INITIAL_ADMISSIONS_REGISTER = [
-  { appId: 'SV202600001', name: 'K. Sai Tharun', studentName: 'K. Sai Tharun', dob: '2012-04-18', gender: 'Male', class: 'VIII', grade: 'Class VIII', prevSchool: "St. Ann's High School", parent: 'K. Narayana', parentName: 'K. Narayana', phone: '9848011223', email: 'narayana.k@gmail.com', address: 'D.No 4-12, Main Road, Srikakulam', score: '88% (Distinction)', docStatus: 'Verified', status: 'Pending Principal Review', submissionDate: '12 Oct 2026', submissionTime: '10:30 AM' },
-  { appId: 'SV202600002', name: 'B. Vennela', studentName: 'B. Vennela', dob: '2014-07-22', gender: 'Female', class: 'VI', grade: 'Class VI', prevSchool: 'Kendriya Vidyalaya', parent: 'B. Srinivas', parentName: 'B. Srinivas', phone: '9848022334', email: 'srinivas.b@gmail.com', address: 'Plot 45, Vidya Nagar, Rajam', score: '92% (Top Tier)', docStatus: 'Verified', status: 'Approved - Fee Due', submissionDate: '14 Oct 2026', submissionTime: '11:15 AM' },
-  { appId: 'SV202600003', name: 'M. Dinesh Kumar', studentName: 'M. Dinesh Kumar', dob: '2016-11-05', gender: 'Male', class: 'IV', grade: 'Class IV', prevSchool: 'Ravindra Bharathi', parent: 'M. Jagannath', parentName: 'M. Jagannath', phone: '9848033445', email: 'jagannath.m@gmail.com', address: 'H.No 12-88, NGO Colony, Srikakulam', score: '78% (Pass)', docStatus: 'Pending TC Transfer', status: 'Document Review', submissionDate: '15 Oct 2026', submissionTime: '02:40 PM' },
-  { appId: 'SV202600004', name: 'CH. Charitha', studentName: 'CH. Charitha', dob: '2019-09-14', gender: 'Female', class: '1', grade: '1 class', prevSchool: 'Bright Stars Play School', parent: 'CH. Mohan', parentName: 'CH. Mohan', phone: '9848044556', email: 'mohan.ch@gmail.com', address: 'Flat 202, Sri Sai Nilayam, Rajam', score: 'Interview Cleared', docStatus: 'Verified', status: 'Ready for Enrolment', submissionDate: '16 Oct 2026', submissionTime: '09:20 AM' },
-  { appId: 'SV202600005', name: 'V. Aditya', studentName: 'V. Aditya', dob: '2011-03-30', gender: 'Male', class: 'IX', grade: 'Class IX', prevSchool: 'Bhashyam Public School', parent: 'V. Suresh Babu', parentName: 'V. Suresh Babu', phone: '9848055667', email: 'sureshbabu.v@gmail.com', address: 'Door 8-19, RTC Complex Road, Srikakulam', score: '84% (Distinction)', docStatus: 'Verified', status: 'Pending Interview', submissionDate: '18 Oct 2026', submissionTime: '04:10 PM' },
-  { appId: 'SV202600006', name: 'S. Harini', studentName: 'S. Harini', dob: '2021-06-12', gender: 'Female', class: 'LKG', grade: 'LKG', prevSchool: 'Little Angels Play School', parent: 'S. Venkatesh', parentName: 'S. Venkatesh', phone: '9848066778', email: 'venkatesh.s@gmail.com', address: 'Beside Post Office, Main Road, Ponduru', score: 'Direct Admission', docStatus: 'Verified', status: 'Ready for Enrolment', submissionDate: '19 Oct 2026', submissionTime: '11:00 AM' }
-];
-
-const sampleApplications = [
-  {
-    appId: 'SV-2025-1082',
-    studentName: 'K. Sai Charan',
-    grade: 'Class VIII',
-    parentName: 'K. Srinivasa Rao',
-    phone: '8106636230',
-    status: 'Application Verified & Counseling Scheduled',
-    statusStep: 3,
-    interviewDate: '28th March 2025, 10:30 AM',
-    submissionDate: '12th Jan 2025'
-  },
-  {
-    appId: 'SV-2025-2140',
-    studentName: 'P. Ananya Reddy',
-    grade: 'Class I',
-    parentName: 'P. Venkat Reddy',
-    phone: '9440654321',
-    status: 'Admission Confirmed & Fee Deposited',
-    statusStep: 4,
-    interviewDate: 'Completed',
-    submissionDate: '18th Jan 2025'
-  }
-];
+const INITIAL_ADMISSIONS_REGISTER = [];
+const sampleApplications = [];
 
 function initAdmissionForm() {
   const form = document.getElementById('onlineAdmissionForm');

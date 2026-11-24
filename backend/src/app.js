@@ -78,8 +78,9 @@ app.get(['/api', '/api/v1'], (req, res) => {
   );
 });
 
-// 10. Mount Version 1 Core APIs
-app.use('/api/v1', apiV1Router);
+// 10. Mount Version 1 Core APIs (with Platform Maintenance Mode gate)
+const { maintenanceMiddleware } = require('./middleware/maintenance.middleware');
+app.use('/api/v1', maintenanceMiddleware, apiV1Router);
 
 // 10b. Mount Modular ERP Domain Subsystems (/api/v1/modules/*)
 const erpModulesRouter = require('./modules');
@@ -99,6 +100,46 @@ if (fs.existsSync(FRONTEND_DIR)) {
   // Clean ERP Portal Routes
   app.get(['/', '/public-website', '/index.html'], (req, res) => {
     res.sendFile(path.join(FRONTEND_DIR, 'public-website', 'index.html'));
+  });
+
+  // Unified School Login Route (Single Common Authentication Gateway)
+  app.get(['/login', '/login/', '/signin', '/signin/', '/portal-login'], (req, res) => {
+    res.sendFile(path.join(FRONTEND_DIR, 'login.html'));
+  });
+
+  // Password Recovery / Reset Flow
+  app.get(['/forgot-password', '/forgot-password/', '/reset-password', '/forgot-password.html'], (req, res) => {
+    res.sendFile(path.join(FRONTEND_DIR, 'forgot-password.html'));
+  });
+
+  // Privacy Policy Page (DPDP Act 2023 & AP Education Board Compliance)
+  app.get(['/privacy', '/privacy/', '/privacy-policy', '/privacy.html', '/privacy-policy.html'], (req, res) => {
+    res.sendFile(path.join(FRONTEND_DIR, 'privacy.html'));
+  });
+
+  // Terms and Conditions Page
+  app.get(['/terms', '/terms/', '/terms-and-conditions', '/terms.html', '/terms-and-conditions.html'], (req, res) => {
+    res.sendFile(path.join(FRONTEND_DIR, 'terms.html'));
+  });
+
+  // Cookie Policy & Consent Governance
+  app.get(['/cookie-policy', '/cookie-policy/', '/cookies', '/cookie-policy.html'], (req, res) => {
+    res.sendFile(path.join(FRONTEND_DIR, 'cookie-policy.html'));
+  });
+
+  // Institutional Fee Structure, Receipts & Refund Policy
+  app.get(['/fee-policy', '/fee-policy/', '/fee-terms', '/fee-policy.html'], (req, res) => {
+    res.sendFile(path.join(FRONTEND_DIR, 'fee-policy.html'));
+  });
+
+  // Open-Source Licences & Intellectual Property Notices
+  app.get(['/licenses', '/licenses/', '/open-source', '/licenses.html'], (req, res) => {
+    res.sendFile(path.join(FRONTEND_DIR, 'licenses.html'));
+  });
+
+  // School-Branded 404 Page Direct Route
+  app.get(['/404', '/404.html'], (req, res) => {
+    res.sendFile(path.join(FRONTEND_DIR, '404.html'));
   });
 
   app.get(['/platform-admin', '/platform-admin/', '/admin', '/admin/'], (req, res) => {

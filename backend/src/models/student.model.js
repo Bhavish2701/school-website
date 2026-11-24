@@ -4,7 +4,7 @@
  */
 const mongoose = require('mongoose');
 
-const STATUS_VALUES = ['ACTIVE', 'INACTIVE', 'SUSPENDED', 'ALUMNI', 'TRANSFERRED'];
+const STATUS_VALUES = ['ACTIVE', 'INACTIVE', 'SUSPENDED', 'ALUMNI', 'TRANSFERRED', 'WITHDRAWN', 'ARCHIVED'];
 const GENDER_VALUES = ['male', 'female', 'other'];
 const BLOOD_GROUPS = ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'];
 const FEE_STATUSES = ['Paid', 'Partial', 'Pending'];
@@ -53,7 +53,7 @@ const studentSchema = new mongoose.Schema(
     },
     academicYear: {
       type: String,
-      default: '2025-2026',
+      default: '2026-2027',
       trim: true,
     },
     status: {
@@ -64,6 +64,22 @@ const studentSchema = new mongoose.Schema(
       },
       default: 'ACTIVE',
       index: true,
+    },
+    tcNumber: {
+      type: String,
+      trim: true,
+      default: '',
+      index: true,
+    },
+    effectiveWithdrawalDate: {
+      type: String,
+      trim: true,
+      default: '',
+    },
+    withdrawalReason: {
+      type: String,
+      trim: true,
+      default: '',
     },
     dob: {
       type: String, // String format (e.g. "15 Jun 2012") or Date

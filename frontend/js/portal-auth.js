@@ -44,7 +44,93 @@ const PortalAuth = {
       welcomeMsg: 'Welcome to Sri Vidya Parent Portal!',
       defaultUser: 'parent1',
       defaultPass: 'Parent@123'
+    },
+    'platform-admin': {
+      storageKey: 'sv_auth_platform_admin',
+      roleKey: 'sv_role_platform_admin',
+      defaultRole: 'superadmin',
+      portalTitle: 'Platform Administration Console',
+      welcomeMsg: 'Welcome to Sri Vidya Trust Platform Administration!',
+      defaultUser: 'superadmin',
+      defaultPass: 'SuperAdmin@123'
     }
+  },
+
+  /* Role to Portal & Permission Authorization Matrix */
+  roleMatrix: {
+    SUPER_ADMIN: { portal: 'platform-admin', redirectUrl: '/platform-admin#dashboard', roleSubtype: 'superadmin', dashboardTitle: 'Platform Systems Administration', allowedPortals: ['platform-admin', 'management', 'teacher'] },
+    PLATFORM_ADMIN: { portal: 'platform-admin', redirectUrl: '/platform-admin#dashboard', roleSubtype: 'superadmin', dashboardTitle: 'Platform Systems Administration', allowedPortals: ['platform-admin', 'management', 'teacher'] },
+    PRINCIPAL: { portal: 'management', redirectUrl: '/management#dashboard', roleSubtype: 'principal', dashboardTitle: 'Principal Executive Dashboard', allowedPortals: ['management'] },
+    VICE_PRINCIPAL: { portal: 'management', redirectUrl: '/management#dashboard', roleSubtype: 'vice-principal', dashboardTitle: 'Vice Principal Administration Dashboard', allowedPortals: ['management'] },
+    ADMIN: { portal: 'management', redirectUrl: '/management#dashboard', roleSubtype: 'admin', dashboardTitle: 'Campus Office Administration Dashboard', allowedPortals: ['management'] },
+    OFFICE: { portal: 'management', redirectUrl: '/management#dashboard', roleSubtype: 'admin', dashboardTitle: 'Campus Office Administration Dashboard', allowedPortals: ['management'] },
+    CLERK: { portal: 'management', redirectUrl: '/management#dashboard', roleSubtype: 'admin', dashboardTitle: 'Campus Office Administration Dashboard', allowedPortals: ['management'] },
+    ACCOUNTS: { portal: 'management', redirectUrl: '/management#dashboard', roleSubtype: 'admin', dashboardTitle: 'Campus Office Administration Dashboard', allowedPortals: ['management'] },
+    EXAM_COORDINATOR: { portal: 'management', redirectUrl: '/management#dashboard', roleSubtype: 'admin', dashboardTitle: 'Campus Office Administration Dashboard', allowedPortals: ['management'] },
+    TEACHER: { portal: 'teacher', redirectUrl: '/teacher#dashboard', roleSubtype: 'teacher', dashboardTitle: 'Faculty Academic Workspace', allowedPortals: ['teacher'] },
+    STUDENT: { portal: 'student', redirectUrl: '/student#dashboard', roleSubtype: 'student', dashboardTitle: 'Student Academic Portal', allowedPortals: ['student'] },
+    PARENT: { portal: 'parent', redirectUrl: '/parent#dashboard', roleSubtype: 'parent', dashboardTitle: 'Parent Portal', allowedPortals: ['parent'] }
+  },
+
+  /* Helper to guarantee resolution to authoritative role Main Dashboard */
+  getMainDashboardUrlForRole(role) {
+    const r = (role || '').toUpperCase();
+    if (r === 'SUPER_ADMIN' || r === 'PLATFORM_ADMIN') return '/platform-admin#dashboard';
+    if (r === 'TEACHER' || r === 'FACULTY') return '/teacher#dashboard';
+    if (r === 'STUDENT') return '/student#dashboard';
+    if (r === 'PARENT') return '/parent#dashboard';
+    if (r === 'VICE_PRINCIPAL' || r === 'VP') return '/management#dashboard';
+    if (r === 'OFFICE' || r === 'CLERK' || r === 'ADMIN' || r === 'ACCOUNTS' || r === 'EXAM_COORDINATOR' || r === 'OFFICESTAFF') return '/management#dashboard';
+    return '/management#dashboard';
+  },
+
+  /* Synchronous pre-flight check used by portal boot scripts before mounting data fetches */
+  canAccessPortalSync(portalType) {
+    try {
+      const hasToken = (window.ApiClient && typeof window.ApiClient.isAuthenticated === 'function')
+        ? window.ApiClient.isAuthenticated()
+        : Boolean(localStorage.getItem('sv_token_access') || sessionStorage.getItem('sv_token_access'));
+      if (!hasToken) return false;
+
+      const storedProfile = (window.ApiClient && typeof window.ApiClient.getUser === 'function') ? window.ApiClient.getUser() : null;
+      const userRole = ((storedProfile && storedProfile.role) || localStorage.getItem('sv_user_role') || sessionStorage.getItem('sv_user_role') || '').toUpperCase();
+      if (!userRole) return false;
+
+      let allowedPortals = [];
+      try {
+        const rawAllowed = localStorage.getItem('sv_user_allowed_portals') || sessionStorage.getItem('sv_user_allowed_portals');
+        if (rawAllowed) allowedPortals = JSON.parse(rawAllowed);
+      } catch (e) {}
+
+      if (!Array.isArray(allowedPortals) || allowedPortals.length === 0) {
+        const mapping = this.roleMatrix[userRole] || this.resolvePortalForRole(userRole);
+        allowedPortals = (mapping && mapping.allowedPortals) || [];
+      }
+
+      return allowedPortals.includes(portalType);
+    } catch (e) {
+      return false;
+    }
+  },
+
+  /* Helper to purge stale module navigation caches so logins start on Main Dashboard */
+  clearNavigationCaches() {
+    try {
+      const keys = [
+        'sv_mgmt_last_module',
+        'sv_mgmt_last_sub',
+        'sv_teacher_last_module',
+        'sv_teacher_last_sub',
+        'sv_teacher_last_profile_tab',
+        'sv_active_view',
+        'sv_last_view',
+        'sv_platform_last_view'
+      ];
+      keys.forEach(k => {
+        sessionStorage.removeItem(k);
+        localStorage.removeItem(k);
+      });
+    } catch (e) {}
   },
 
   /* =========================================================================
@@ -53,8 +139,8 @@ const PortalAuth = {
    * If inactive for 15 minutes, expires the session and presents the login screen.
    * ========================================================================= */
   inactivity: {
-    TIMEOUT_MS: 15 * 60 * 1000, // 15 minutes = 900,000 ms
-    WARNING_MS: 60 * 1000,       // 1 minute remaining warning
+    TIMEOUT_MS: 15 * 60 * 1000, // Strictly 15 minutes = 900,000 ms of continuous inactivity
+    WARNING_MS: 60 * 1000,       // 1 minute remaining warning modal
     STORAGE_KEY: 'sv_session_last_active',
     timerId: null,
     warningTimerId: null,
@@ -62,18 +148,32 @@ const PortalAuth = {
     activePortalType: null,
     isInitialized: false,
     lastInteractionTime: Date.now(),
+    lastStorageWriteTime: Date.now(),
 
     recordActivity() {
       const now = Date.now();
-      // Throttle localStorage updates to avoid unnecessary disk/storage writes
-      if (now - this.lastInteractionTime > 2000) {
-        this.lastInteractionTime = now;
+      this.lastInteractionTime = now;
+
+      // If warning modal is open and user moves mouse or interacts, auto-dismiss and restore session
+      const modal = document.getElementById('inactivityWarningModal');
+      if (modal && modal.style.display !== 'none') {
+        this.hideWarningModal();
+        PortalAuth.showToast('✓ Activity detected: Session refreshed for 15 minutes!', 'fa-circle-check');
+      }
+
+      // Throttle localStorage updates to avoid disk performance drag (every 2 seconds max)
+      if (now - this.lastStorageWriteTime > 2000) {
+        this.lastStorageWriteTime = now;
         try {
           localStorage.setItem(this.STORAGE_KEY, String(now));
         } catch (e) {}
-      } else {
-        this.lastInteractionTime = now;
       }
+
+      // Proactively keep API session token fresh while user is active
+      if (window.ApiClient && typeof window.ApiClient.keepAlive === 'function') {
+        window.ApiClient.keepAlive();
+      }
+
       this.restartTimers();
     },
 
@@ -84,51 +184,52 @@ const PortalAuth = {
         clearInterval(this.tickerIntervalId);
         this.tickerIntervalId = null;
       }
-      this.hideWarningModal();
 
       if (!this.isAuthenticated()) return;
 
       const now = Date.now();
       const last = this.getLastActivity();
-      const elapsed = now - last;
+      const elapsed = Math.max(0, now - last);
       const remaining = Math.max(0, this.TIMEOUT_MS - elapsed);
 
+      // Only expire if continuous inactivity has genuinely reached or exceeded 15 minutes
       if (remaining <= 0) {
         this.triggerExpiry();
         return;
       }
 
-      // Schedule 60-second warning countdown modal before session expires
+      // Schedule 60-second warning countdown modal at 14 minutes of inactivity
       const warningDelay = Math.max(0, remaining - this.WARNING_MS);
       this.warningTimerId = setTimeout(() => {
         this.showWarningModal();
       }, warningDelay);
 
-      // Schedule session lock when 15 minutes of inactivity elapse
+      // Schedule session lock when full 15 minutes of continuous inactivity elapse
       this.timerId = setTimeout(() => {
         this.triggerExpiry();
       }, remaining);
     },
 
     getLastActivity() {
+      let storedTime = 0;
       try {
         const stored = localStorage.getItem(this.STORAGE_KEY);
         if (stored) {
           const t = parseInt(stored, 10);
-          if (!isNaN(t)) return t;
+          if (!isNaN(t)) storedTime = t;
         }
       } catch (e) {}
-      return this.lastInteractionTime;
+      // Always respect the freshest timestamp between memory and localStorage
+      return Math.max(this.lastInteractionTime || 0, storedTime);
     },
 
     isAuthenticated() {
+      const hasToken = (window.ApiClient && typeof window.ApiClient.isAuthenticated === 'function') ? window.ApiClient.isAuthenticated() : false;
+      const hasUnified = (sessionStorage.getItem('sv_auth_unified') === 'true' || localStorage.getItem('sv_auth_unified') === 'true');
       const type = this.activePortalType || 'management';
       const cfg = PortalAuth.configs[type];
-      const overlay = document.getElementById(`${type}LoginOverlay`);
-      const isOverlayHidden = overlay && overlay.classList.contains('hidden');
-      const hasAuth = (cfg && (sessionStorage.getItem(cfg.storageKey) === 'true' || localStorage.getItem(cfg.storageKey) === 'true')) ||
-                      (window.ApiClient && typeof window.ApiClient.isAuthenticated === 'function' && window.ApiClient.isAuthenticated());
-      return Boolean(hasAuth && isOverlayHidden);
+      const hasPortalAuth = cfg ? (sessionStorage.getItem(cfg.storageKey) === 'true' || localStorage.getItem(cfg.storageKey) === 'true') : false;
+      return Boolean(hasToken || hasUnified || hasPortalAuth);
     },
 
     triggerExpiry() {
@@ -214,6 +315,7 @@ const PortalAuth = {
     init(portalType) {
       this.activePortalType = portalType;
       this.lastInteractionTime = Date.now();
+      this.lastStorageWriteTime = Date.now();
       try {
         localStorage.setItem(this.STORAGE_KEY, String(this.lastInteractionTime));
       } catch (e) {}
@@ -221,8 +323,8 @@ const PortalAuth = {
       if (!this.isInitialized) {
         this.isInitialized = true;
 
-        // User activity listeners: reset countdown whenever user is active
-        const events = ['mousemove', 'mousedown', 'keydown', 'touchstart', 'scroll', 'click'];
+        // Comprehensive user activity listeners: continuously reset countdown whenever user is active
+        const events = ['mousemove', 'mousedown', 'keydown', 'touchstart', 'scroll', 'click', 'wheel', 'pointermove'];
         const activityHandler = () => {
           if (this.isAuthenticated()) {
             this.recordActivity();
@@ -236,15 +338,18 @@ const PortalAuth = {
         // Sync activity across multiple open tabs
         window.addEventListener('storage', (e) => {
           if (e.key === this.STORAGE_KEY) {
-            this.lastInteractionTime = parseInt(e.newValue || String(Date.now()), 10);
-            this.restartTimers();
+            const val = parseInt(e.newValue || String(Date.now()), 10);
+            if (!isNaN(val)) {
+              this.lastInteractionTime = val;
+              this.restartTimers();
+            }
           }
         });
 
-        // Check if session expired while tab was in background / machine was asleep
+        // Check/resume timers when user switches back to this tab
         document.addEventListener('visibilitychange', () => {
           if (!document.hidden && this.isAuthenticated()) {
-            this.restartTimers();
+            this.recordActivity();
           }
         });
       }
@@ -270,36 +375,34 @@ const PortalAuth = {
       }
     }
 
+    try {
+      sessionStorage.removeItem('sv_auth_unified');
+      localStorage.removeItem('sv_auth_unified');
+      sessionStorage.removeItem('sv_user_role');
+      localStorage.removeItem('sv_user_role');
+      sessionStorage.removeItem('sv_user_portal');
+      localStorage.removeItem('sv_user_portal');
+      sessionStorage.removeItem('sv_user_allowed_portals');
+      localStorage.removeItem('sv_user_allowed_portals');
+      sessionStorage.removeItem('sv_user_profile');
+      localStorage.removeItem('sv_user_profile');
+    } catch (e) {}
+
     if (window.ApiClient && typeof window.ApiClient.clearSession === 'function') {
       window.ApiClient.clearSession();
     }
 
-    // Reset OTP session if active
-    if (this.otpSessions && this.otpSessions[portalType]) {
-      if (this.otpSessions[portalType].intervalId) {
-        clearInterval(this.otpSessions[portalType].intervalId);
-      }
-      delete this.otpSessions[portalType];
+    if (this.inactivity) {
+      this.inactivity.stop();
     }
 
-    const overlay = document.getElementById(`${portalType}LoginOverlay`);
-    if (overlay) {
-      overlay.classList.remove('hidden');
-      const prefix = portalType === 'management' ? 'mgmt' : 'teacher';
-      const loginForm = document.getElementById(portalType === 'management' ? 'mgmtLoginForm' : 'teacherLoginForm');
-      const otpForm = document.getElementById(`${prefix}OtpForm`);
-      if (otpForm) { otpForm.style.display = 'none'; otpForm.classList.add('hidden'); }
-      if (loginForm) { loginForm.style.display = ''; loginForm.classList.remove('hidden'); }
-
-      // Clear password field requiring credential re-entry
-      const passInput = document.getElementById(`${portalType}LoginPass`);
-      if (passInput) {
-        passInput.value = '';
-        passInput.focus();
+    this.showToast('⏱️ Session Expired: Inactive for 15 minutes. Redirecting to Unified Sign In...', 'fa-lock', true);
+    const currentPath = (typeof window !== 'undefined' && window.location) ? (window.location.pathname + window.location.search) : '';
+    setTimeout(() => {
+      if (typeof window !== 'undefined' && window.location) {
+        window.location.href = '/login?msg=session_expired&redirect=' + encodeURIComponent(currentPath);
       }
-    }
-
-    this.showToast('⏱️ Session Expired: Inactive for 15 minutes. Please sign in with your credentials.', 'fa-lock', true);
+    }, 600);
   },
 
   showToast(msg, icon = 'fa-circle-check', isError = false) {
@@ -366,42 +469,36 @@ const PortalAuth = {
 
   getAuthorizedFaculty() {
     try {
+      const demoFacultyIds = ['SV200001', 'SV200002', 'SV200003', 'SV200004', 'SV200005'];
       const stored = localStorage.getItem('sv_authorized_faculty');
-      if (stored) return JSON.parse(stored);
+      if (stored) {
+        let parsed = JSON.parse(stored);
+        if (Array.isArray(parsed)) {
+          if (parsed.length > 5 || parsed.some(f => !demoFacultyIds.includes(f.id))) {
+            parsed = parsed.filter(f => demoFacultyIds.includes(f.id));
+            if (parsed.length !== 5) {
+              parsed = [
+                { id: 'SV200001', name: 'Smt. Gorle Varalakshmi', role: 'Principal & Academic Director', personalEmail: 'srividyaschools2017@gmail.com' },
+                { id: 'SV200002', name: 'Sri Navva Anand', role: 'Vice Principal & Discipline Head', personalEmail: 'navva.anand.personal@gmail.com' },
+                { id: 'SV200003', name: 'Smt. M. Sunitha', role: 'Senior Faculty & English HOD', personalEmail: 'sunitha.m.personal@gmail.com' },
+                { id: 'SV200004', name: 'Sri P. Satyanarayana', role: 'Senior Faculty & Maths HOD', personalEmail: 'satya.p.personal@gmail.com' },
+                { id: 'SV200005', name: 'Sri K. Rajesh', role: 'Faculty - Physical Science', personalEmail: 'rajesh.k.personal@gmail.com' }
+              ];
+            }
+            localStorage.setItem('sv_authorized_faculty', JSON.stringify(parsed));
+          }
+          return parsed;
+        }
+      }
     } catch (e) {}
 
-    // Fallback default list with IDs starting SV200001
+    // Fallback default list with IDs starting SV200001 (5 Demo Teachers)
     return [
       { id: 'SV200001', name: 'Smt. Gorle Varalakshmi', role: 'Principal & Academic Director', personalEmail: 'srividyaschools2017@gmail.com' },
       { id: 'SV200002', name: 'Sri Navva Anand', role: 'Vice Principal & Discipline Head', personalEmail: 'navva.anand.personal@gmail.com' },
       { id: 'SV200003', name: 'Smt. M. Sunitha', role: 'Senior Faculty & English HOD', personalEmail: 'sunitha.m.personal@gmail.com' },
       { id: 'SV200004', name: 'Sri P. Satyanarayana', role: 'Senior Faculty & Maths HOD', personalEmail: 'satya.p.personal@gmail.com' },
-      { id: 'SV200005', name: 'Sri K. Rajesh', role: 'Faculty - Physical Science', personalEmail: 'rajesh.k.personal@gmail.com' },
-      { id: 'SV200006', name: 'Smt. S. Lakshmi', role: 'Faculty - Biological Science', personalEmail: 'lakshmi.s.personal@gmail.com' },
-      { id: 'SV200007', name: 'Sri R. Venkata Ramana', role: 'Senior Faculty - Social Studies', personalEmail: 'ramana.r.personal@gmail.com' },
-      { id: 'SV200008', name: 'Sri D. Srinivas', role: 'Faculty & Computer Lab Incharge', personalEmail: 'srinivas.d.personal@gmail.com' },
-      { id: 'SV200009', name: 'Smt. G. Sarada', role: 'Faculty - First Language (Telugu)', personalEmail: 'sarada.g.personal@gmail.com' },
-      { id: 'SV200010', name: 'Smt. B. Meenakshi', role: 'Faculty - Second Language (Hindi)', personalEmail: 'meenakshi.b.personal@gmail.com' },
-      { id: 'SV200011', name: 'Sri V. Ramesh Babu', role: 'Physical Education Director (PET)', personalEmail: 'ramesh.pet.personal@gmail.com' },
-      { id: 'SV200012', name: 'Smt. K. Anitha', role: 'Primary Wing Coordinator', personalEmail: 'anitha.k.personal@gmail.com' },
-      { id: 'SV200013', name: 'Sri B. Narayana', role: 'Class Teacher - Class X', personalEmail: 'narayana.b.personal@gmail.com' },
-      { id: 'SV200014', name: 'Smt. T. Padmavathi', role: 'Class Teacher - Class IX', personalEmail: 'padmavathi.t.personal@gmail.com' },
-      { id: 'SV200015', name: 'Sri M. Raju', role: 'Class Teacher - Class VIII', personalEmail: 'raju.m.personal@gmail.com' },
-      { id: 'SV200016', name: 'Smt. V. Jyothsna', role: 'Class Teacher - Class VII', personalEmail: 'jyothsna.v.personal@gmail.com' },
-      { id: 'SV200017', name: 'Sri CH. Venkateswara Rao', role: 'Class Teacher - Class VI', personalEmail: 'venkat.ch.personal@gmail.com' },
-      { id: 'SV200018', name: 'Smt. N. Sirisha', role: 'Class Teacher - Class V', personalEmail: 'sirisha.n.personal@gmail.com' },
-      { id: 'SV200019', name: 'Sri A. Prasad', role: 'Class Teacher - Class IV', personalEmail: 'prasad.a.personal@gmail.com' },
-      { id: 'SV200020', name: 'Smt. R. Kavitha', role: 'Class Teacher - Class III', personalEmail: 'kavitha.r.personal@gmail.com' },
-      { id: 'SV200021', name: 'Sri S. Gopal', role: 'Class Teacher - Class II', personalEmail: 'gopal.s.personal@gmail.com' },
-      { id: 'SV200022', name: 'Smt. Y. Anusha', role: 'Class Teacher - Class I', personalEmail: 'anusha.y.personal@gmail.com' },
-      { id: 'SV200023', name: 'Smt. D. Meena', role: 'Pre-Primary Wing Teacher', personalEmail: 'meena.d.personal@gmail.com' },
-      { id: 'SV200024', name: 'Sri K. Srinath', role: 'Pre-Primary Wing Teacher', personalEmail: 'srinath.k.personal@gmail.com' },
-      { id: 'SV200025', name: 'Smt. P. Swapna', role: 'Drawing & Arts Teacher', personalEmail: 'swapna.p.personal@gmail.com' },
-      { id: 'SV200026', name: 'Sri G. Ranga Rao', role: 'School Librarian', personalEmail: 'ranga.g.personal@gmail.com' },
-      { id: 'SV200027', name: 'Smt. M. Vijaya', role: 'Office Administrator', personalEmail: 'vijaya.m.personal@gmail.com' },
-      { id: 'SV200028', name: 'Sri B. Kishore', role: 'Accounts Clerk', personalEmail: 'kishore.b.personal@gmail.com' },
-      { id: 'SV200029', name: 'Sri V. Suresh Babu', role: 'Lab Assistant - Science', personalEmail: 'suresh.v.personal@gmail.com' },
-      { id: 'SV200030', name: 'Smt. CH. Saranya', role: 'Counsellor & Welfare Officer', personalEmail: 'saranya.ch.personal@gmail.com' }
+      { id: 'SV200005', name: 'Sri K. Rajesh', role: 'Faculty - Physical Science', personalEmail: 'rajesh.k.personal@gmail.com' }
     ];
   },
 
@@ -545,6 +642,19 @@ const PortalAuth = {
   otpSessions: {},
 
   getPhoneForRole(portalType, roleOrTeacherId) {
+    if (portalType === 'unified') {
+      const r = (roleOrTeacherId || '').toLowerCase();
+      if (r === 'vice-principal' || r === 'viceprincipal' || r === 'vp') return '+91 98480 11002';
+      if (r === 'admin' || r === 'clerk' || r === 'office' || r === 'officestaff') return '+91 98480 99887';
+      if (r.startsWith('sv20000') || r === 'teacher' || r === 'teacher1' || r === 'faculty') return '+91 98480 33443';
+      if (r === 'superadmin' || r === 'platform-admin') return '+91 94401 23456';
+      return '+91 93985 78584';
+    }
+
+    if (portalType === 'platform-admin') {
+      return '+91 94401 23456';
+    }
+
     if (portalType === 'management') {
       const role = roleOrTeacherId || 'principal';
       const customPhone = localStorage.getItem(`sv_phone_mgmt_${role}`);
@@ -604,9 +714,38 @@ const PortalAuth = {
     return `${start} *****${end}`;
   },
 
+  getOtpPrefix(portalType) {
+    if (portalType === 'unified') return 'unified';
+    if (portalType === 'management') return 'mgmt';
+    return 'teacher';
+  },
+
+  getOtpLoginForm(portalType) {
+    if (portalType === 'unified') return document.getElementById('unifiedLoginForm');
+    if (portalType === 'management') return document.getElementById('mgmtLoginForm');
+    return document.getElementById('teacherLoginForm');
+  },
+
+  setOtpStatus(portalType, state, title, sub) {
+    const prefix = this.getOtpPrefix(portalType);
+    const wrap = document.getElementById(`${prefix}OtpStatusWrap`);
+    const titleEl = document.getElementById(`${prefix}OtpStatusTitle`);
+    const subEl = document.getElementById(`${prefix}OtpStatusSub`);
+    if (!wrap) return;
+    wrap.classList.remove('state-verifying', 'state-success', 'state-failed', 'state-expired');
+    if (state) {
+      wrap.classList.add(`state-${state}`);
+      wrap.style.display = 'flex';
+    } else {
+      wrap.style.display = 'none';
+    }
+    if (titleEl && title) titleEl.textContent = title;
+    if (subEl && sub) subEl.textContent = sub;
+  },
+
   initiateOtp(portalType, sessionData) {
-    const prefix = portalType === 'management' ? 'mgmt' : 'teacher';
-    const loginForm = document.getElementById(portalType === 'management' ? 'mgmtLoginForm' : 'teacherLoginForm');
+    const prefix = this.getOtpPrefix(portalType);
+    const loginForm = this.getOtpLoginForm(portalType);
     const otpForm = document.getElementById(`${prefix}OtpForm`);
     if (!otpForm) {
       this.completeSuccessfulLogin(portalType, sessionData);
@@ -666,6 +805,19 @@ const PortalAuth = {
         if (e.target.value && i < 6) {
           const next = document.getElementById(`${prefix}Otp-${i + 1}`);
           if (next) next.focus();
+        } else if (e.target.value && i === 6) {
+          let complete = true;
+          for (let k = 1; k <= 6; k++) {
+            const b = document.getElementById(`${prefix}Otp-${k}`);
+            if (!b || !b.value.trim()) { complete = false; break; }
+          }
+          if (complete) {
+            if (prefix === 'unified') {
+              PortalAuth.verifyUnifiedOtp();
+            } else {
+              PortalAuth.verifyOtp(prefix === 'mgmt' ? 'management' : 'teacher');
+            }
+          }
         }
       });
 
@@ -682,6 +834,13 @@ const PortalAuth = {
         } else if (e.key === 'ArrowRight' && i < 6) {
           const next = document.getElementById(`${prefix}Otp-${i + 1}`);
           if (next) next.focus();
+        } else if (e.key === 'Enter') {
+          e.preventDefault();
+          if (prefix === 'unified') {
+            PortalAuth.verifyUnifiedOtp();
+          } else {
+            PortalAuth.verifyOtp(prefix === 'mgmt' ? 'management' : 'teacher');
+          }
         }
       });
 
@@ -699,13 +858,23 @@ const PortalAuth = {
           const lastIndex = Math.min(pasteData.length, 6);
           const focusBox = document.getElementById(`${prefix}Otp-${lastIndex}`);
           if (focusBox) focusBox.focus();
+
+          if (pasteData.length >= 6) {
+            setTimeout(() => {
+              if (prefix === 'unified') {
+                PortalAuth.verifyUnifiedOtp();
+              } else {
+                PortalAuth.verifyOtp(prefix === 'mgmt' ? 'management' : 'teacher');
+              }
+            }, 80);
+          }
         }
       });
     }
   },
 
   startOtpTimer(portalType) {
-    const prefix = portalType === 'management' ? 'mgmt' : 'teacher';
+    const prefix = this.getOtpPrefix(portalType);
     const timerSpan = document.getElementById(`${prefix}OtpTimer`);
     const resendBtn = document.getElementById(`${prefix}ResendOtpBtn`);
     const session = this.otpSessions[portalType];
@@ -713,10 +882,10 @@ const PortalAuth = {
 
     if (session.intervalId) clearInterval(session.intervalId);
 
-    session.timerSec = 45;
+    session.timerSec = session.timerSec || 45;
     if (resendBtn) {
       resendBtn.disabled = true;
-      resendBtn.innerHTML = `Resend OTP in <span id="${prefix}OtpTimer">45</span>s`;
+      resendBtn.innerHTML = `Resend code in <span id="${prefix}OtpTimer">${session.timerSec}</span>s`;
     }
 
     session.intervalId = setInterval(() => {
@@ -736,7 +905,7 @@ const PortalAuth = {
   },
 
   autoFillOtp(portalType) {
-    const prefix = portalType === 'management' ? 'mgmt' : 'teacher';
+    const prefix = this.getOtpPrefix(portalType);
     const session = this.otpSessions[portalType];
     if (!session || !session.otp) return;
 
@@ -755,14 +924,65 @@ const PortalAuth = {
     }, 200);
   },
 
-  resendOtp(portalType) {
+  async resendOtp(portalType) {
     const session = this.otpSessions[portalType];
     if (!session) return;
+
+    const prefix = this.getOtpPrefix(portalType);
+
+    if (portalType === 'unified') {
+      try {
+        const resendBtn = document.getElementById('unifiedResendOtpBtn');
+        if (resendBtn) {
+          resendBtn.disabled = true;
+          resendBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Dispatched...';
+        }
+
+        const res = await window.ApiClient.auth.resendOtp(session.preAuthToken);
+        if (res && res.success) {
+          this.setOtpStatus('unified', null);
+          for (let i = 1; i <= 6; i++) {
+            const box = document.getElementById(`unifiedOtp-${i}`);
+            if (box) {
+              box.value = '';
+              box.classList.remove('error', 'success');
+              box.disabled = false;
+            }
+          }
+          if (res.data && res.data.destination) {
+            session.destination = res.data.destination;
+            const destDisplay = document.getElementById('unifiedOtpDestinationDisplay');
+            if (destDisplay) destDisplay.textContent = res.data.destination;
+          }
+          if (res.data && res.data.otp) {
+            session.otp = res.data.otp;
+            const whatsappDisplay = document.getElementById('unifiedWhatsappCodeDisplay');
+            if (whatsappDisplay) whatsappDisplay.textContent = res.data.otp;
+          }
+          session.timerSec = (res.data && res.data.cooldownSeconds) || 45;
+          this.startOtpTimer('unified');
+          const firstBox = document.getElementById('unifiedOtp-1');
+          if (firstBox) firstBox.focus();
+          this.showToast('A new security code has been dispatched.', 'fa-shield-halved');
+        } else {
+          throw new Error(res.message || 'Unable to resend OTP.');
+        }
+      } catch (err) {
+        console.error('[Resend OTP Error]:', err);
+        const errMsg = err.message || 'Failed to resend OTP. Please wait before retrying.';
+        this.showToast(errMsg, 'fa-triangle-exclamation', true);
+        const resendBtn = document.getElementById('unifiedResendOtpBtn');
+        if (resendBtn && !session.intervalId) {
+          resendBtn.disabled = false;
+          resendBtn.innerHTML = '<i class="fa-solid fa-rotate-right"></i> Resend OTP';
+        }
+      }
+      return;
+    }
 
     const newOtp = String(Math.floor(100000 + Math.random() * 900000));
     session.otp = newOtp;
 
-    const prefix = portalType === 'management' ? 'mgmt' : 'teacher';
     const demoOtpText = document.getElementById(`${prefix}DemoOtpText`);
     if (demoOtpText) demoOtpText.textContent = newOtp;
 
@@ -788,12 +1008,34 @@ const PortalAuth = {
     }
     delete this.otpSessions[portalType];
 
-    const prefix = portalType === 'management' ? 'mgmt' : 'teacher';
-    const loginForm = document.getElementById(portalType === 'management' ? 'mgmtLoginForm' : 'teacherLoginForm');
+    if (portalType === 'unified') {
+      this.setOtpStatus('unified', null);
+      for (let i = 1; i <= 6; i++) {
+        const box = document.getElementById(`unifiedOtp-${i}`);
+        if (box) {
+          box.value = '';
+          box.classList.remove('error', 'success');
+          box.disabled = false;
+        }
+      }
+      const overlay = document.getElementById('unifiedLoginOverlay');
+      if (overlay) overlay.classList.remove('in-otp-mode');
+    }
+
+    const prefix = this.getOtpPrefix(portalType);
+    const loginForm = this.getOtpLoginForm(portalType);
     const otpForm = document.getElementById(`${prefix}OtpForm`);
 
     if (otpForm) { otpForm.style.display = 'none'; otpForm.classList.add('hidden'); }
-      if (loginForm) { loginForm.style.display = ''; loginForm.classList.remove('hidden'); }
+    if (loginForm) { loginForm.style.display = ''; loginForm.classList.remove('hidden'); }
+
+    if (portalType === 'unified') {
+      const passInput = document.getElementById('unifiedLoginPass');
+      if (passInput) {
+        passInput.focus();
+        passInput.select();
+      }
+    }
 
     this.showToast('Returned to sign-in credentials form', 'fa-arrow-left');
   },
@@ -809,12 +1051,14 @@ const PortalAuth = {
       session.phone = cleanPhone;
       session.maskedPhone = this.maskPhoneNumber(cleanPhone);
 
-      const prefix = portalType === 'management' ? 'mgmt' : 'teacher';
+      const prefix = this.getOtpPrefix(portalType);
       const phoneDisplay = document.getElementById(`${prefix}OtpPhoneDisplay`);
       if (phoneDisplay) phoneDisplay.textContent = session.maskedPhone;
 
       if (portalType === 'management') {
         localStorage.setItem(`sv_phone_mgmt_${session.role || 'principal'}`, cleanPhone);
+      } else if (portalType === 'unified') {
+        localStorage.setItem(`sv_phone_unified`, cleanPhone);
       } else {
         localStorage.setItem(`sv_phone_teacher_${session.teacherId || 'SV200005'}`, cleanPhone);
       }
@@ -826,7 +1070,7 @@ const PortalAuth = {
 
   async verifyOtp(portalType, e) {
     if (e && e.preventDefault) e.preventDefault();
-    const prefix = portalType === 'management' ? 'mgmt' : 'teacher';
+    const prefix = this.getOtpPrefix(portalType);
     const session = this.otpSessions[portalType];
     if (!session) {
       this.showToast('Authentication session expired. Please sign in again.', 'fa-triangle-exclamation', true);
@@ -853,11 +1097,99 @@ const PortalAuth = {
     let originalBtnHTML = '';
     if (submitBtn) {
       originalBtnHTML = submitBtn.innerHTML;
-      submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Verifying OTP...';
       submitBtn.disabled = true;
     }
 
-    const isValid = (enteredOtp === session.otp) || (enteredOtp === '123456');
+    // Real 2FA Backend Verification for Unified SSO Gateway
+    if (portalType === 'unified') {
+      // 1. Verifying State: Rotating circular loader
+      this.setOtpStatus('unified', 'verifying', 'Verifying...', 'Validating security code with authentication gateway');
+      boxes.forEach(b => { if (b) b.disabled = true; });
+
+      try {
+        if (!window.ApiClient || !window.ApiClient.auth || typeof window.ApiClient.auth.verifyOtp !== 'function') {
+          throw new Error('API client verifyOtp method unavailable.');
+        }
+
+        const res = await window.ApiClient.auth.verifyOtp(session.preAuthToken, enteredOtp, session.rememberMe);
+
+        if (res && res.success && res.data && res.data.user) {
+          // 2. Success State: Green circular checkmark with "OTP Verified Successfully"
+          this.setOtpStatus('unified', 'success', 'OTP Verified Successfully', 'Launching your authorized Main Dashboard...');
+          boxes.forEach(b => {
+            if (b) {
+              b.disabled = false;
+              b.classList.remove('error');
+              b.classList.add('success');
+            }
+          });
+
+          if (session.intervalId) clearInterval(session.intervalId);
+          delete this.otpSessions[portalType];
+
+          const user = res.data.user;
+          const routing = res.data.routing || this.resolvePortalForRole(user.role);
+          this.persistUnifiedSession(user, routing, session.enteredUser);
+          this.clearNavigationCaches();
+
+          const targetUrl = this.getMainDashboardUrlForRole(user.role);
+          this.showToast('✓ OTP Verified Successfully! Launching Main Dashboard...', 'fa-circle-check');
+
+          setTimeout(() => {
+            window.location.href = targetUrl;
+          }, 650);
+          return;
+        }
+
+        throw new Error(res.message || 'Invalid OTP code.');
+      } catch (err) {
+        console.error('[Unified OTP Verification Error]:', err);
+        boxes.forEach(b => { if (b) b.disabled = false; });
+        if (submitBtn) submitBtn.disabled = false;
+
+        const errCode = (err.response && err.response.code) || err.code || '';
+        const errMsg = err.message || '';
+
+        if (errCode === 'OTP_EXPIRED' || errMsg.toLowerCase().includes('expired')) {
+          // 3. Expired State: Amber circular indicator with "OTP Expired. Request a New OTP"
+          this.setOtpStatus('unified', 'expired', 'OTP Expired. Request a New OTP', 'Your security code has timed out. Click Resend below.');
+          boxes.forEach(b => { if (b) b.classList.add('error'); });
+          const resendBtn = document.getElementById('unifiedResendOtpBtn');
+          if (resendBtn) {
+            resendBtn.disabled = false;
+            resendBtn.innerHTML = '<i class="fa-solid fa-rotate-right"></i> Resend OTP';
+          }
+          this.showToast('OTP Expired. Request a New OTP', 'fa-clock', true);
+        } else {
+          // 4. Failed State: Red circular indicator with "Invalid OTP. Please try again"
+          this.setOtpStatus('unified', 'failed', 'Invalid OTP. Please try again', 'Invalid OTP code entered. Please check and try again.');
+          boxes.forEach(b => {
+            if (b) {
+              b.classList.add('error');
+            }
+          });
+          this.showToast('Invalid OTP. Please try again', 'fa-triangle-exclamation', true);
+
+          setTimeout(() => {
+            boxes.forEach(b => {
+              if (b) {
+                b.value = '';
+                b.classList.remove('error');
+              }
+            });
+            this.setOtpStatus('unified', null);
+            if (boxes[0]) boxes[0].focus();
+          }, 1400);
+        }
+      } finally {
+        if (submitBtn && !submitBtn.disabled) {
+          submitBtn.innerHTML = originalBtnHTML;
+        }
+      }
+      return;
+    }
+
+    const isValid = Boolean(session.otp && enteredOtp === session.otp);
 
     setTimeout(() => {
       if (submitBtn) {
@@ -888,6 +1220,19 @@ const PortalAuth = {
   },
 
   completeSuccessfulLogin(portalType, sessionData) {
+    if (portalType === 'unified') {
+      const user = sessionData.user || {};
+      const routing = sessionData.routing || this.resolvePortalForRole(user.role);
+      this.persistUnifiedSession(user, routing, sessionData.enteredUser);
+      this.clearNavigationCaches();
+      const targetUrl = this.getMainDashboardUrlForRole(user.role);
+      this.showToast(`✓ Authentication verified! Opening ${routing.dashboardTitle || 'Main Dashboard'}...`, 'fa-circle-check');
+      setTimeout(() => {
+        window.location.href = targetUrl;
+      }, 500);
+      return;
+    }
+
     const cfg = this.configs[portalType];
     const overlay = document.getElementById(`${portalType}LoginOverlay`);
 
@@ -921,6 +1266,9 @@ const PortalAuth = {
 
       if (window.portalApp && typeof window.portalApp.switchRole === 'function') {
         window.portalApp.switchRole(chosenRole);
+      }
+      if (window.portalApp && typeof window.portalApp.refreshDashboardData === 'function') {
+        window.portalApp.refreshDashboardData();
       }
     }
 
@@ -1074,13 +1422,21 @@ const PortalAuth = {
       const res = await window.ApiClient.auth.login(enteredUser, enteredPass);
 
       if (portalType === 'management' || portalType === 'teacher') {
-        let chosenRole = 'principal';
-        if (portalType === 'management') {
-          const roleSelect = document.getElementById('mgmtRoleSelect');
-          chosenRole = roleSelect ? roleSelect.value : 'principal';
-          if (chosenRole === 'vp' || chosenRole === 'viceprincipal') chosenRole = 'vice-principal';
-          if (chosenRole === 'clerk' || chosenRole === 'office') chosenRole = 'admin';
+        const apiUser = (res.data && res.data.user) || res.user || {};
+        const detectedRole = (apiUser.role || '').toUpperCase();
+
+        // Strict Role Isolation: If teacher submitted credentials on management overlay, redirect to faculty portal
+        if (portalType === 'management' && (detectedRole === 'TEACHER' || detectedRole === 'FACULTY')) {
+          this.showToast('Faculty credentials verified. Launching Faculty Academic Workspace...', 'fa-chalkboard-user');
+          setTimeout(() => { window.location.href = '/teacher'; }, 500);
+          return;
         }
+
+        let chosenRole = 'principal';
+        if (detectedRole === 'VICE_PRINCIPAL') chosenRole = 'vice-principal';
+        else if (detectedRole === 'OFFICE' || detectedRole === 'ADMIN' || detectedRole === 'CLERK' || detectedRole === 'ACCOUNTS' || detectedRole === 'EXAM_COORDINATOR') chosenRole = 'admin';
+        else if (detectedRole === 'SUPER_ADMIN') chosenRole = 'principal';
+
         this.initiateOtp(portalType, {
           role: chosenRole,
           enteredUser,
@@ -1115,105 +1471,605 @@ const PortalAuth = {
     }
   },
 
-  async logout(portalType) {
-    const cfg = this.configs[portalType];
-    if (cfg) {
-      sessionStorage.removeItem(cfg.storageKey);
-      localStorage.removeItem(cfg.storageKey);
-      if (cfg.roleKey) {
-        sessionStorage.removeItem(cfg.roleKey);
-        localStorage.removeItem(cfg.roleKey);
-      }
-      sessionStorage.removeItem('sv_' + portalType + '_last_module');
-      localStorage.removeItem('sv_' + portalType + '_last_module');
-      sessionStorage.removeItem('sv_' + portalType + '_last_sub');
-      localStorage.removeItem('sv_' + portalType + '_last_sub');
-      sessionStorage.removeItem('sv_' + portalType + '_last_profile_tab');
-      localStorage.removeItem('sv_' + portalType + '_last_profile_tab');
-      if (portalType === 'teacher') {
-        sessionStorage.removeItem('sv_active_teacher_id');
-        localStorage.removeItem('sv_active_teacher_id');
-        sessionStorage.removeItem('sv_active_teacher_name');
-        localStorage.removeItem('sv_active_teacher_name');
+  /* =========================================================================
+   * UNIFIED LOGIN PLATFORM (SINGLE COMMON SIGN-IN GATEWAY)
+   * ========================================================================= */
+
+  async initUnifiedLoginPage() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const msgParam = urlParams.get('msg');
+
+    if (msgParam === 'logged_out') {
+      this.showToast('You have been signed out successfully.', 'fa-circle-check');
+    } else if (msgParam === 'unauthorized' || msgParam === 'restricted') {
+      this.showToast('Access restricted: Please sign in with an account authorized for that portal.', 'fa-shield-halved', true);
+    } else if (msgParam === 'session_expired') {
+      this.showToast('Session expired due to inactivity. Please sign in again.', 'fa-clock', true);
+    }
+
+    const clearResidualSession = () => {
+      try {
+        if (window.ApiClient && typeof window.ApiClient.clearSession === 'function') {
+          window.ApiClient.clearSession();
+        }
+        sessionStorage.clear();
+        this.clearNavigationCaches();
+        [
+          'sv_token_access', 'sv_token_refresh', 'sv_auth_unified',
+          'sv_user_role', 'sv_user_portal', 'sv_user_allowed_portals',
+          'sv_user_profile', 'sv_auth_management', 'sv_auth_teacher',
+          'sv_auth_platform_admin', 'sv_role_management', 'sv_role_platform_admin',
+          'sv_active_teacher_id', 'sv_active_teacher_name', 'sv_session_last_active'
+        ].forEach(k => localStorage.removeItem(k));
+      } catch (e) {}
+    };
+
+    // Clear any residual session tokens if user arrived from logout or session expiration
+    if (msgParam === 'logged_out' || msgParam === 'session_expired') {
+      clearResidualSession();
+    } else if (msgParam !== 'unauthorized' && msgParam !== 'restricted' && this.isAnySessionActive()) {
+      // Validate token with backend before auto-redirecting so expired/stale tokens never cause redirect loops
+      try {
+        if (window.ApiClient && window.ApiClient.auth && typeof window.ApiClient.auth.getMe === 'function') {
+          const meRes = await window.ApiClient.auth.getMe();
+          const verifiedUser = meRes && meRes.data && (meRes.data.user || meRes.data);
+          if (meRes && meRes.success && verifiedUser && verifiedUser.role) {
+            const verifiedRole = String(verifiedUser.role).toUpperCase();
+            localStorage.setItem('sv_user_role', verifiedRole);
+            sessionStorage.setItem('sv_user_role', verifiedRole);
+            const target = this.getMainDashboardUrlForRole(verifiedRole);
+            this.showToast(`Active session detected (${verifiedRole}). Redirecting to your Main Dashboard...`, 'fa-circle-check');
+            setTimeout(() => {
+              window.location.href = target;
+            }, 350);
+            return;
+          }
+        }
+        clearResidualSession();
+      } catch (err) {
+        // Invalid or expired token: clear stale flags silently and remain on login page
+        clearResidualSession();
       }
     }
+
+    // Setup OTP input auto-advance
+    this.setupOtpInputListeners('unified');
+
+    // Ensure pre-login visual state
+    const overlay = document.getElementById('unifiedLoginOverlay');
+    if (overlay) overlay.classList.remove('in-otp-mode');
+
+    // Focus user input
+    const userInp = document.getElementById('unifiedLoginUser');
+    if (userInp) userInp.focus();
+
+    // Check if WhatsApp code element is present and pre-fetch active dev OTP code
+    if (document.getElementById('unifiedWhatsappCodeDisplay')) {
+      this.fetchDevOtp();
+    }
+  },
+
+  isAnySessionActive() {
+    const hasToken = (window.ApiClient && typeof window.ApiClient.isAuthenticated === 'function')
+      ? window.ApiClient.isAuthenticated()
+      : Boolean(localStorage.getItem('sv_token_access') || sessionStorage.getItem('sv_token_access'));
+    const userRole = localStorage.getItem('sv_user_role') || sessionStorage.getItem('sv_user_role');
+    return Boolean(hasToken && userRole);
+  },
+
+  quickFillDemo(role) {
+    const userInput = document.getElementById('unifiedLoginUser');
+    const passInput = document.getElementById('unifiedLoginPass');
+    if (!userInput || !passInput) return;
+
+    const creds = {
+      principal: { u: 'principal', p: 'Principal@123', label: 'Principal (Smt. Gorle Varalakshmi)' },
+      viceprincipal: { u: 'viceprincipal', p: 'VicePrincipal@123', label: 'Vice Principal (Sri Navva Anand)' },
+      teacher: { u: 'teacher1', p: 'Teacher@123', label: 'Faculty (Senior Faculty & HOD)' },
+      faculty: { u: 'teacher1', p: 'Teacher@123', label: 'Faculty (Senior Faculty & HOD)' },
+      superadmin: { u: 'superadmin', p: 'SuperAdmin@123', label: 'Platform Super Admin' },
+      'platform-admin': { u: 'superadmin', p: 'SuperAdmin@123', label: 'Platform Super Admin' },
+      officestaff: { u: 'officestaff', p: 'Office@123', label: 'Office Administrator / Clerk' },
+      clerk: { u: 'officestaff', p: 'Office@123', label: 'Office Administrator / Clerk' }
+    };
+
+    const target = creds[role] || creds.principal;
+    userInput.value = target.u;
+    passInput.value = target.p;
+    this.showToast(`Auto-filled demo credentials for ${target.label}. Click 'Sign In' to test automatic role redirection.`, 'fa-bolt');
+    userInput.focus();
+  },
+
+  async handleUnifiedLogin(e) {
+    if (e && e.preventDefault) e.preventDefault();
+    const userInput = document.getElementById('unifiedLoginUser');
+    const passInput = document.getElementById('unifiedLoginPass');
+    const submitBtn = document.getElementById('unifiedSubmitBtn');
+
+    const enteredUser = userInput ? userInput.value.trim() : '';
+    const enteredPass = passInput ? passInput.value : '';
+
+    if (!enteredUser || !enteredPass) {
+      this.showToast('Please enter both username/School ID/email and password.', 'fa-triangle-exclamation', true);
+      return;
+    }
+
+    let originalBtnHTML = '';
+    if (submitBtn) {
+      originalBtnHTML = submitBtn.innerHTML;
+      submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Authenticating Credentials...';
+      submitBtn.disabled = true;
+    }
+
+    try {
+      let loginSuccess = false;
+      let userData = null;
+      let routingData = null;
+
+      const rememberCheckbox = document.getElementById('unifiedRememberMe');
+      const rememberMe = rememberCheckbox ? rememberCheckbox.checked : true;
+
+      // 1. Authoritative Backend REST API Authentication with 2FA OTP
+      if (window.ApiClient && window.ApiClient.auth && typeof window.ApiClient.auth.login === 'function') {
+        const res = await window.ApiClient.auth.login(enteredUser, enteredPass, rememberMe, true);
+
+        if (res && res.requiresOtp) {
+          // Password verified! Enter Two-Factor Identity Verification state
+          const otpCode = (res.data && res.data.otp) || '';
+          this.otpSessions.unified = {
+            preAuthToken: res.data.preAuthToken,
+            destination: res.data.destination,
+            destinationType: res.data.destinationType,
+            otp: otpCode,
+            enteredUser,
+            rememberMe,
+            timerSec: (res.data && res.data.cooldownSeconds) || 45,
+          };
+
+          const loginForm = document.getElementById('unifiedLoginForm');
+          const otpForm = document.getElementById('unifiedOtpForm');
+          const destDisplay = document.getElementById('unifiedOtpDestinationDisplay');
+          const whatsappDisplay = document.getElementById('unifiedWhatsappCodeDisplay');
+
+          if (destDisplay && res.data && res.data.destination) {
+            destDisplay.textContent = res.data.destination;
+          }
+
+          if (whatsappDisplay) {
+            if (otpCode) {
+              whatsappDisplay.textContent = otpCode;
+            } else {
+              this.fetchDevOtp(res.data.preAuthToken);
+            }
+          }
+
+          this.setOtpStatus('unified', null);
+
+          for (let i = 1; i <= 6; i++) {
+            const box = document.getElementById(`unifiedOtp-${i}`);
+            if (box) {
+              box.value = '';
+              box.classList.remove('error', 'success');
+              box.disabled = false;
+            }
+          }
+
+          if (loginForm) loginForm.style.display = 'none';
+          if (otpForm) otpForm.style.display = '';
+          const overlay = document.getElementById('unifiedLoginOverlay');
+          if (overlay) overlay.classList.add('in-otp-mode');
+
+          this.startOtpTimer('unified');
+
+          const firstBox = document.getElementById('unifiedOtp-1');
+          if (firstBox) setTimeout(() => firstBox.focus(), 150);
+
+          this.showToast(`Security code dispatched to ${res.data.destination}. Enter OTP to continue.`, 'fa-shield-halved');
+          return;
+        }
+
+        if (res && (res.success || res.token || res.data)) {
+          loginSuccess = true;
+          userData = (res.data && res.data.user) || res.user || {};
+          routingData = (res.data && res.data.routing) || res.routing || null;
+        }
+      }
+
+      if (!loginSuccess) {
+        throw new Error('Invalid credentials. Please verify your username/School ID and security password.');
+      }
+
+      // 3. Verify Account Status (Block Suspended or Deactivated accounts)
+      if (userData && (userData.accountStatus === 'Suspended' || userData.accountStatus === 'Deactivated' || userData.accountStatus === 'Locked' || userData.isActive === false)) {
+        throw new Error('Your account is deactivated or suspended. Access denied. Please contact school administration.');
+      }
+
+      // 4. Resolve authoritative role and routing
+      const finalRole = ((userData && userData.role) || 'PRINCIPAL').toUpperCase();
+      const routing = routingData || this.resolvePortalForRole(finalRole);
+
+      // 5. Persist session across all storages
+      this.persistUnifiedSession(userData, routing, enteredUser);
+
+      // Clear all legacy navigation caches so user begins strictly on Main Dashboard
+      this.clearNavigationCaches();
+
+      // 6. Authoritative role-based redirection target to Main Dashboard
+      const targetUrl = this.getMainDashboardUrlForRole(finalRole);
+
+      this.showToast(`✓ Authentication successful! Identified: ${routing.dashboardTitle || finalRole}. Launching Main Dashboard...`, 'fa-circle-check');
+
+      setTimeout(() => {
+        window.location.href = targetUrl;
+      }, 500);
+
+    } catch (err) {
+      console.error('[Unified Login Error]:', err);
+      this.showToast(err.message || 'Authentication failed. Please verify your credentials.', 'fa-triangle-exclamation', true);
+      if (passInput) {
+        passInput.focus();
+        passInput.select();
+      }
+    } finally {
+      if (submitBtn) {
+        submitBtn.innerHTML = originalBtnHTML;
+        submitBtn.disabled = false;
+      }
+    }
+  },
+
+  verifyUnifiedOtp(e) {
+    if (e && e.preventDefault) e.preventDefault();
+    this.verifyOtp('unified', e);
+  },
+
+  cancelUnifiedOtp() {
+    this.cancelOtp('unified');
+  },
+
+  autoFillOtp(portalType = 'unified') {
+    const session = this.otpSessions[portalType];
+    const displayEl = document.getElementById('unifiedWhatsappCodeDisplay');
+    const otpToFill = (session && session.otp) || (displayEl ? displayEl.textContent.trim() : '') || '123456';
+    const cleanOtp = String(otpToFill).replace(/\D/g, '');
+    if (!cleanOtp) return;
+
+    const prefix = this.getOtpPrefix(portalType);
+    for (let i = 0; i < 6; i++) {
+      const box = document.getElementById(`${prefix}Otp-${i + 1}`);
+      if (box) {
+        box.value = cleanOtp[i] || '';
+        box.classList.remove('error');
+      }
+    }
+
+    const lastBox = document.getElementById(`${prefix}Otp-${Math.min(cleanOtp.length, 6)}`);
+    if (lastBox) lastBox.focus();
+
+    this.showToast(`Auto-filled security code: ${cleanOtp}`, 'fa-shield-halved');
+  },
+
+  async fetchDevOtp(preAuthToken) {
+    try {
+      const url = preAuthToken ? `/api/v1/auth/dev-otp?preAuthToken=${encodeURIComponent(preAuthToken)}` : '/api/v1/auth/dev-otp';
+      const res = await fetch(url);
+      const data = await res.json();
+      if (data && data.success && data.data && data.data.otp) {
+        const whatsappDisplay = document.getElementById('unifiedWhatsappCodeDisplay');
+        if (whatsappDisplay) {
+          whatsappDisplay.textContent = data.data.otp;
+        }
+        if (this.otpSessions && this.otpSessions.unified) {
+          this.otpSessions.unified.otp = data.data.otp;
+        }
+        return data.data.otp;
+      }
+    } catch (e) {
+      console.warn('[PortalAuth] Could not fetch active dev OTP:', e);
+    }
+    return null;
+  },
+
+  persistUnifiedSession(user, routing, enteredUser) {
+    const role = (user && user.role) ? user.role.toUpperCase() : 'PRINCIPAL';
+    const portal = (routing && routing.portal) || 'management';
+    const allowed = (routing && routing.allowedPortals) || [portal];
+
+    // Master Unified Keys
+    sessionStorage.setItem('sv_auth_unified', 'true');
+    localStorage.setItem('sv_auth_unified', 'true');
+    try { localStorage.setItem('sv_session_last_active', String(Date.now())); } catch (e) {}
+    sessionStorage.setItem('sv_user_role', role);
+    localStorage.setItem('sv_user_role', role);
+    sessionStorage.setItem('sv_user_portal', portal);
+    localStorage.setItem('sv_user_portal', portal);
+    sessionStorage.setItem('sv_user_allowed_portals', JSON.stringify(allowed));
+    localStorage.setItem('sv_user_allowed_portals', JSON.stringify(allowed));
+    if (user) {
+      sessionStorage.setItem('sv_user_profile', JSON.stringify(user));
+      localStorage.setItem('sv_user_profile', JSON.stringify(user));
+    }
+
+    // Portal Compatibility Keys
+    if (portal === 'management' || allowed.includes('management')) {
+      sessionStorage.setItem('sv_auth_management', 'true');
+      localStorage.setItem('sv_auth_management', 'true');
+      const subtype = (routing && routing.roleSubtype) || (role === 'VICE_PRINCIPAL' ? 'vice-principal' : (role === 'OFFICE' || role === 'ADMIN' ? 'admin' : 'principal'));
+      sessionStorage.setItem('sv_role_management', subtype);
+      localStorage.setItem('sv_role_management', subtype);
+    }
+
+    if (portal === 'teacher' || allowed.includes('teacher')) {
+      sessionStorage.setItem('sv_auth_teacher', 'true');
+      localStorage.setItem('sv_auth_teacher', 'true');
+      const tId = (user && (user.id || user.teacherId)) || (enteredUser && enteredUser.toUpperCase().startsWith('SV') ? enteredUser.toUpperCase() : 'SV200005');
+      const tName = (user && (user.name || user.username)) || 'Senior Faculty';
+      sessionStorage.setItem('sv_active_teacher_id', tId);
+      localStorage.setItem('sv_active_teacher_id', tId);
+      sessionStorage.setItem('sv_active_teacher_name', tName);
+      localStorage.setItem('sv_active_teacher_name', tName);
+    }
+
+    if (portal === 'platform-admin' || allowed.includes('platform-admin')) {
+      sessionStorage.setItem('sv_auth_platform_admin', 'true');
+      localStorage.setItem('sv_auth_platform_admin', 'true');
+      sessionStorage.setItem('sv_role_platform_admin', 'superadmin');
+      localStorage.setItem('sv_role_platform_admin', 'superadmin');
+    }
+  },
+
+  resolvePortalForRole(role) {
+    const r = (role || '').toUpperCase();
+    if (this.roleMatrix[r]) {
+      return this.roleMatrix[r];
+    }
+    if (r.includes('ADMIN') || r.includes('SUPER')) {
+      return this.roleMatrix.SUPER_ADMIN;
+    }
+    if (r.includes('VICE')) {
+      return this.roleMatrix.VICE_PRINCIPAL;
+    }
+    if (r.includes('CLERK') || r.includes('OFFICE')) {
+      return this.roleMatrix.ADMIN;
+    }
+    if (r.includes('TEACH') || r.includes('FACULTY')) {
+      return this.roleMatrix.TEACHER;
+    }
+    if (r.includes('STUDENT')) {
+      return this.roleMatrix.STUDENT;
+    }
+    if (r.includes('PARENT')) {
+      return this.roleMatrix.PARENT;
+    }
+    return this.roleMatrix.PRINCIPAL;
+  },
+
+  isAuthorizedForPath(role, path) {
+    if (!role) return false;
+    const r = role.toUpperCase();
+    const cleanPath = (path || '').toLowerCase();
+
+    if (r === 'SUPER_ADMIN' || r === 'PLATFORM_ADMIN') {
+      return true;
+    }
+
+    if (r === 'PRINCIPAL' || r === 'VICE_PRINCIPAL' || r === 'ADMIN' || r === 'OFFICE' || r === 'CLERK') {
+      return cleanPath.startsWith('/management') || cleanPath.startsWith('/administration-portal');
+    }
+
+    if (r === 'TEACHER' || r === 'FACULTY') {
+      return cleanPath.startsWith('/teacher') || cleanPath.startsWith('/faculty-portal');
+    }
+
+    if (r === 'STUDENT') {
+      return cleanPath.startsWith('/student');
+    }
+
+    if (r === 'PARENT') {
+      return cleanPath.startsWith('/parent');
+    }
+
+    return false;
+  },
+
+  handleDemoCredentialFallback() {
+    // Hardcoded client-side password bypasses are disabled in production.
+    return null;
+  },
+
+  _disabledLegacyFallback(enteredUser, enteredPass) {
+    return null;
+    const validPasswords = [];
+    const u = (enteredUser || '').toLowerCase().trim();
+    const upper = (enteredUser || '').toUpperCase().trim();
+    const p = enteredPass;
+    const isPassOk = validPasswords.includes(p);
+    if (!isPassOk) return null;
+
+    // 1. Super Admin
+    if (u === 'superadmin' || u === 'admin@srividya.edu.in' || u === 'platform-admin') {
+      return {
+        user: { id: 'ADM-001', username: 'superadmin', name: 'Platform Super Administrator', role: 'SUPER_ADMIN' },
+        routing: this.roleMatrix.SUPER_ADMIN
+      };
+    }
+
+    // 2. Vice Principal
+    if (u === 'viceprincipal' || u === 'vp' || upper === 'SV200002') {
+      return {
+        user: { id: 'SV200002', username: 'viceprincipal', name: 'Sri Navva Anand', role: 'VICE_PRINCIPAL' },
+        routing: this.roleMatrix.VICE_PRINCIPAL
+      };
+    }
+
+    // 3. Office Staff
+    if (u === 'officestaff' || u === 'office' || u === 'clerk' || upper === 'SV-OFFICE-01' || upper === 'SV200027') {
+      return {
+        user: { id: 'SV-OFFICE-01', username: 'officestaff', name: 'Office Administration Desk', role: 'ADMIN' },
+        routing: this.roleMatrix.ADMIN
+      };
+    }
+
+    // 4. Teachers
+    if (u.startsWith('teacher') || upper.startsWith('SV200003') || upper.startsWith('SV200004') || upper.startsWith('SV200005')) {
+      const faculty = this.getAuthorizedFaculty().find(f => f.id === upper) || { id: 'SV200005', name: 'Sri K. Rajesh' };
+      return {
+        user: { id: faculty.id, username: u, name: faculty.name, role: 'TEACHER' },
+        routing: this.roleMatrix.TEACHER
+      };
+    }
+
+    // 5. Principal
+    if (u === 'principal' || u === 'srividyaschools2017@gmail.com' || upper === 'SV200001' || u.includes('varalakshmi') || u.includes('bhavish')) {
+      return {
+        user: { id: 'SV200001', username: 'principal', name: 'Smt. Gorle Varalakshmi', role: 'PRINCIPAL' },
+        routing: this.roleMatrix.PRINCIPAL
+      };
+    }
+
+    return null;
+  },
+
+  async logout(portalType) {
+    try {
+      this.clearNavigationCaches();
+      sessionStorage.clear();
+      localStorage.removeItem('sv_token_access');
+      localStorage.removeItem('sv_token_refresh');
+      localStorage.removeItem('sv_auth_unified');
+      localStorage.removeItem('sv_user_role');
+      localStorage.removeItem('sv_user_portal');
+      localStorage.removeItem('sv_user_allowed_portals');
+      localStorage.removeItem('sv_user_profile');
+
+      ['management', 'teacher', 'student', 'parent', 'platform-admin'].forEach(p => {
+        const c = this.configs[p];
+        if (c) {
+          sessionStorage.removeItem(c.storageKey);
+          localStorage.removeItem(c.storageKey);
+          if (c.roleKey) {
+            sessionStorage.removeItem(c.roleKey);
+            localStorage.removeItem(c.roleKey);
+          }
+        }
+      });
+
+      sessionStorage.removeItem('sv_active_teacher_id');
+      localStorage.removeItem('sv_active_teacher_id');
+      sessionStorage.removeItem('sv_active_teacher_name');
+      localStorage.removeItem('sv_active_teacher_name');
+      sessionStorage.removeItem('sv_session_last_active');
+      localStorage.removeItem('sv_session_last_active');
+    } catch (e) {}
 
     if (this.inactivity) {
       this.inactivity.stop();
     }
 
-    if (window.ApiClient && typeof window.ApiClient.auth?.logout === 'function') {
-      try { await window.ApiClient.auth.logout(); } catch (e) {}
+    if (window.ApiClient) {
+      if (typeof window.ApiClient.clearSession === 'function') {
+        window.ApiClient.clearSession();
+      }
+      if (typeof window.ApiClient.auth?.logout === 'function') {
+        try { await window.ApiClient.auth.logout(); } catch (e) {}
+      }
     }
 
-    try {
-      history.replaceState(null, '', window.location.pathname);
-    } catch (e) {}
-
-    const overlay = document.getElementById(`${portalType}LoginOverlay`);
-    if (overlay) {
-      overlay.classList.remove('hidden');
-      const prefix = portalType === 'management' ? 'mgmt' : 'teacher';
-      const loginForm = document.getElementById(portalType === 'management' ? 'mgmtLoginForm' : 'teacherLoginForm');
-      const otpForm = document.getElementById(`${prefix}OtpForm`);
-      if (otpForm) { otpForm.style.display = 'none'; otpForm.classList.add('hidden'); }
-      if (loginForm) { loginForm.style.display = ''; loginForm.classList.remove('hidden'); }
-
-      const userInput = document.getElementById(`${portalType}LoginUser`) || document.getElementById(`${portalType}LoginId`);
-      const passInput = document.getElementById(`${portalType}LoginPass`);
-      if (passInput) passInput.value = '';
-      if (userInput) userInput.focus();
-    }
-
-    this.showToast('Logged out successfully', 'fa-arrow-right-from-bracket');
+    this.showToast('Logged out successfully. Redirecting to Unified Sign In...', 'fa-arrow-right-from-bracket');
+    setTimeout(() => {
+      window.location.href = '/login?msg=logged_out';
+    }, 400);
   },
 
   restoreActiveView(portalType) {
     try {
+      const rawHash = (window.location.hash || '').replace('#', '').trim();
       if (portalType === 'teacher') {
-        const hash = window.location.hash.replace('#', '');
-        let mod = null;
+        let mod = 'dashboard';
         let sub = null;
-        if (hash) {
-          if (hash === 'security' || hash === 'change-password' || hash === 'password') {
-            mod = 'security';
-          } else if (hash.startsWith('profile-')) {
+        if (rawHash) {
+          if (rawHash === 'dashboard' || rawHash.startsWith('dashboard-')) {
+            mod = 'dashboard';
+          } else if (rawHash === 'security' || rawHash === 'change-password' || rawHash === 'password') {
             mod = 'profile';
-            sub = hash.replace('profile-', '');
+            sub = 'security';
+          } else if (rawHash.startsWith('profile-')) {
+            mod = 'profile';
+            sub = rawHash.replace('profile-', '');
+          } else if (rawHash.startsWith('my-classes')) {
+            mod = 'my-classes';
+            sub = rawHash.replace('my-classes-', '').replace('my-classes', '') || null;
+          } else if (rawHash.startsWith('class-')) {
+            mod = 'my-classes';
+            sub = rawHash.replace('class-', '');
+          } else if (rawHash.startsWith('comm-')) {
+            mod = 'communication';
+            sub = rawHash.replace('comm-', '');
+          } else if (rawHash.startsWith('exams-')) {
+            mod = 'examinations';
+            sub = rawHash.replace('exams-', '');
           } else {
-            const parts = hash.split('-');
+            const parts = rawHash.split('-');
             mod = parts[0];
             sub = parts.slice(1).join('-') || null;
           }
-        } else {
-          mod = sessionStorage.getItem('sv_teacher_last_module') || localStorage.getItem('sv_teacher_last_module') || 'dashboard';
-          sub = sessionStorage.getItem('sv_teacher_last_sub') || localStorage.getItem('sv_teacher_last_sub') || null;
+        }
+
+        if (!document.getElementById('view-' + mod)) {
+          mod = 'dashboard';
+          sub = null;
         }
 
         if (window.teacherApp && typeof window.teacherApp.navigateTo === 'function') {
           window.teacherApp.navigateTo(mod, sub);
-          if (mod === 'profile') {
-            const lastTab = sub || sessionStorage.getItem('sv_teacher_last_profile_tab') || localStorage.getItem('sv_teacher_last_profile_tab') || 'personal';
-            if (typeof window.teacherApp.switchProfileTab === 'function') {
-              window.teacherApp.switchProfileTab(lastTab);
-            }
+          if (mod === 'profile' && typeof window.teacherApp.switchProfileTab === 'function') {
+            window.teacherApp.switchProfileTab(sub || 'personal');
           }
         }
       } else if (portalType === 'management') {
-        const hash = window.location.hash.replace('#', '');
-        let mod = null;
+        const aliasMap = {
+          comm: 'communication',
+          exams: 'examinations',
+          exam: 'examinations',
+          tt: 'timetable',
+          att: 'attendance'
+        };
+        let mod = 'dashboard';
         let sub = null;
-        if (hash) {
-          const parts = hash.split('-');
-          mod = parts[0];
-          sub = parts.slice(1).join('-') || null;
-        } else {
-          mod = sessionStorage.getItem('sv_mgmt_last_module') || localStorage.getItem('sv_mgmt_last_module') || 'dashboard';
-          sub = sessionStorage.getItem('sv_mgmt_last_sub') || localStorage.getItem('sv_mgmt_last_sub') || null;
+        if (rawHash) {
+          if (rawHash === 'dashboard' || rawHash.startsWith('dashboard-')) {
+            mod = 'dashboard';
+            sub = rawHash.replace('dashboard-', '');
+            if (sub === 'dashboard') sub = null;
+          } else if (rawHash.startsWith('my-classes')) {
+            mod = 'my-classes';
+            sub = rawHash.replace('my-classes-', '').replace('my-classes', '') || null;
+          } else if (rawHash.startsWith('class-')) {
+            mod = 'my-classes';
+            sub = rawHash.replace('class-', '');
+          } else {
+            const parts = rawHash.split('-');
+            const rawMod = parts[0];
+            mod = aliasMap[rawMod] || rawMod;
+            sub = parts.slice(1).join('-') || null;
+          }
+        }
+
+        if (!document.getElementById('view-' + mod)) {
+          mod = 'dashboard';
+          sub = null;
         }
 
         if (window.portalApp && typeof window.portalApp.navigateTo === 'function') {
           window.portalApp.navigateTo(mod, sub);
+        }
+      } else if (portalType === 'platform-admin') {
+        let mod = rawHash || 'dashboard';
+        if (!document.getElementById('view-' + mod)) {
+          mod = 'dashboard';
+        }
+        if (window.platformApp && typeof window.platformApp.navigateTo === 'function') {
+          window.platformApp.navigateTo(mod);
         }
       }
     } catch (e) {
@@ -1240,78 +2096,137 @@ const PortalAuth = {
     }
     const cfg = this.configs[portalType];
     if (!cfg) return;
+    if (!cfg) return false;
 
-    const overlay = document.getElementById(`${portalType}LoginOverlay`);
-    if (!overlay) return;
-
+    // 1. Check Authentication Status (require valid JWT token)
     const hasToken = (window.ApiClient && typeof window.ApiClient.isAuthenticated === 'function') ? window.ApiClient.isAuthenticated() : false;
-    const isSessionAuth = (sessionStorage.getItem(cfg.storageKey) === 'true') || (localStorage.getItem(cfg.storageKey) === 'true');
 
-    if (hasToken || isSessionAuth) {
-      // 1. Immediately hide login overlay - NEVER show login form on page refresh when authenticated
-      overlay.classList.add('hidden');
-
-      // 2. Synchronize session across storages so refreshing never loses authentication
-      sessionStorage.setItem(cfg.storageKey, 'true');
-      localStorage.setItem(cfg.storageKey, 'true');
-
-      if (portalType === 'management') {
-        let savedRole = sessionStorage.getItem(cfg.roleKey) || localStorage.getItem(cfg.roleKey) || cfg.defaultRole;
-        if (savedRole === 'vp' || savedRole === 'viceprincipal') savedRole = 'vice-principal';
-        if (savedRole === 'clerk' || savedRole === 'office') savedRole = 'admin';
-
-        sessionStorage.setItem(cfg.roleKey, savedRole);
-        localStorage.setItem(cfg.roleKey, savedRole);
-
-        const roleSelect = document.getElementById('mgmtRoleSelect');
-        if (roleSelect) roleSelect.value = savedRole;
-
-        if (window.portalApp && typeof window.portalApp.switchRole === 'function') {
-          window.portalApp.switchRole(savedRole);
-        }
-      } else if (portalType === 'teacher') {
-        const teacherName = sessionStorage.getItem('sv_active_teacher_name') || localStorage.getItem('sv_active_teacher_name') || 'Ms. Anjali';
-        const teacherId = sessionStorage.getItem('sv_active_teacher_id') || localStorage.getItem('sv_active_teacher_id') || 'SV200005';
-        sessionStorage.setItem('sv_active_teacher_name', teacherName);
-        localStorage.setItem('sv_active_teacher_name', teacherName);
-        sessionStorage.setItem('sv_active_teacher_id', teacherId);
-        localStorage.setItem('sv_active_teacher_id', teacherId);
-
-        const nameEl = document.getElementById('teacherUserName');
-        if (nameEl) nameEl.textContent = `${teacherName} (${teacherId})`;
-      }
-
-      // 3. Immediately restore the exact view & sub-tab where the user was before refreshing
-      this.restoreActiveView(portalType);
-
-      // 4. Background session check with backend if online
-      if (window.ApiClient && typeof window.ApiClient.auth?.getMe === 'function') {
-        window.ApiClient.auth.getMe().catch(() => {});
-      }
-
-      // 5. Trigger portal-specific live data reload
-      if (portalType === 'management' && window.portalApp && typeof window.portalApp.loadLiveData === 'function') {
-        window.portalApp.loadLiveData();
-      } else if (portalType === 'teacher' && window.teacherApp && typeof window.teacherApp.loadLiveData === 'function') {
-        window.teacherApp.loadLiveData();
-      } else if (portalType === 'student' && window.studentApp && typeof window.studentApp.loadLiveData === 'function') {
-        window.studentApp.loadLiveData();
-      } else if (portalType === 'parent' && typeof window.loadParentLiveData === 'function') {
-        window.loadParentLiveData();
-      }
-
-      this.bindLogoutButtons(portalType);
-
-      // Start 15-minute inactivity session expiration countdown
-      if (this.inactivity) {
-        this.inactivity.init(portalType);
-      }
+    if (!hasToken) {
+      // Unauthenticated: Redirect directly to Unified Login Page with return path
+      const currentPath = window.location.pathname + window.location.search;
+      window.location.href = `/login?redirect=${encodeURIComponent(currentPath)}`;
       return;
+      return false;
     }
 
-    // Default: Show login overlay ONLY when not logged in
-    overlay.classList.remove('hidden');
+    // 2. Route Guarding: Check Role Authorization from authoritative profile or token storage
+    const storedProfile = (window.ApiClient && typeof window.ApiClient.getUser === 'function') ? window.ApiClient.getUser() : null;
+    const userRole = ((storedProfile && storedProfile.role) || localStorage.getItem('sv_user_role') || sessionStorage.getItem('sv_user_role') || '').toUpperCase();
+    if (!userRole) {
+      const currentPath = window.location.pathname + window.location.search;
+      window.location.href = `/login?redirect=${encodeURIComponent(currentPath)}`;
+      return false;
+    }
+    let allowedPortals = [];
+    try {
+      const rawAllowed = localStorage.getItem('sv_user_allowed_portals') || sessionStorage.getItem('sv_user_allowed_portals');
+      if (rawAllowed) allowedPortals = JSON.parse(rawAllowed);
+    } catch (e) {}
+
+    if (!allowedPortals || allowedPortals.length === 0) {
+      const mapping = this.roleMatrix[userRole] || null;
+      allowedPortals = mapping ? mapping.allowedPortals : [];
+    }
+
+    if (!allowedPortals.includes(portalType)) {
+      console.warn(`[RouteGuard] Role ${userRole} unauthorized for portal '${portalType}'. Redirecting to authorized workspace.`);
+      const home = this.resolvePortalForRole(userRole);
+      sessionStorage.setItem('sv_access_notice', `Access restricted: Your assigned role (${userRole}) is authorized for ${home.dashboardTitle || home.portal}.`);
+      window.location.href = this.getMainDashboardUrlForRole(userRole);
+      return false;
+    }
+
+    // 3. Authorized! Check if there is an access notice to show
+    const pendingNotice = sessionStorage.getItem('sv_access_notice');
+    if (pendingNotice) {
+      sessionStorage.removeItem('sv_access_notice');
+      setTimeout(() => {
+        this.showToast(pendingNotice, 'fa-shield-halved', true);
+      }, 400);
+    }
+
+    // 4. Synchronize storage keys across storages
+    sessionStorage.setItem(cfg.storageKey, 'true');
+    localStorage.setItem(cfg.storageKey, 'true');
+    sessionStorage.setItem('sv_auth_unified', 'true');
+    localStorage.setItem('sv_auth_unified', 'true');
+
+    if (portalType === 'management') {
+      let savedRole = sessionStorage.getItem(cfg.roleKey) || localStorage.getItem(cfg.roleKey) || cfg.defaultRole;
+      if (userRole === 'VICE_PRINCIPAL' || userRole === 'VP') savedRole = 'vice-principal';
+      else if (userRole === 'ADMIN' || userRole === 'OFFICE' || userRole === 'CLERK' || userRole === 'ACCOUNTS' || userRole === 'EXAM_COORDINATOR') savedRole = 'admin';
+      else if (userRole === 'PRINCIPAL') savedRole = 'principal';
+
+      sessionStorage.setItem(cfg.roleKey, savedRole);
+      localStorage.setItem(cfg.roleKey, savedRole);
+
+      const roleSelect = document.getElementById('mgmtRoleSelect');
+      if (roleSelect) roleSelect.value = savedRole;
+
+      if (window.portalApp && typeof window.portalApp.switchRole === 'function') {
+        window.portalApp.switchRole(savedRole);
+      }
+    } else if (portalType === 'teacher') {
+      const profile = (window.ApiClient && typeof window.ApiClient.getUser === 'function') ? window.ApiClient.getUser() : null;
+      const teacherName = (profile && (profile.fullName || profile.name)) || sessionStorage.getItem('sv_active_teacher_name') || localStorage.getItem('sv_active_teacher_name') || 'Faculty Member';
+      const teacherId = (profile && (profile.username || profile.employeeId)) || sessionStorage.getItem('sv_active_teacher_id') || localStorage.getItem('sv_active_teacher_id') || '';
+      sessionStorage.setItem('sv_active_teacher_name', teacherName);
+      localStorage.setItem('sv_active_teacher_name', teacherName);
+      if (teacherId) {
+        sessionStorage.setItem('sv_active_teacher_id', teacherId);
+        localStorage.setItem('sv_active_teacher_id', teacherId);
+      }
+
+      const nameEl = document.getElementById('teacherUserName');
+      if (nameEl) nameEl.textContent = teacherId ? `${teacherName} (${teacherId})` : teacherName;
+    }
+
+    // 5. Restore active view & sub-tab
+    this.restoreActiveView(portalType);
+
+    // 6. Authoritative session & role verification with backend
+    if (window.ApiClient && typeof window.ApiClient.auth?.getMe === 'function' && window.ApiClient.getAccessToken()) {
+      window.ApiClient.auth.getMe()
+        .then((meRes) => {
+          const authUser = meRes && meRes.data && (meRes.data.user || meRes.data);
+          if (authUser && authUser.role) {
+            const authRole = authUser.role.toUpperCase();
+            localStorage.setItem('sv_user_role', authRole);
+            sessionStorage.setItem('sv_user_role', authRole);
+            const targetStorage = localStorage.getItem('sv_token_access') ? localStorage : sessionStorage;
+            targetStorage.setItem('sv_user_profile', JSON.stringify(authUser));
+            const authMapping = this.roleMatrix[authRole] || this.resolvePortalForRole(authRole);
+            if (authMapping && Array.isArray(authMapping.allowedPortals)) {
+              localStorage.setItem('sv_user_allowed_portals', JSON.stringify(authMapping.allowedPortals));
+              sessionStorage.setItem('sv_user_allowed_portals', JSON.stringify(authMapping.allowedPortals));
+              if (!authMapping.allowedPortals.includes(portalType)) {
+                window.location.href = this.getMainDashboardUrlForRole(authRole);
+                return;
+              }
+            }
+          }
+        })
+        .catch(() => {});
+    }
+
+    // 7. Trigger portal-specific live data reload
+    if (portalType === 'management' && window.portalApp && typeof window.portalApp.loadLiveData === 'function') {
+      window.portalApp.loadLiveData();
+    } else if (portalType === 'teacher' && window.teacherApp && typeof window.teacherApp.loadLiveData === 'function') {
+      window.teacherApp.loadLiveData();
+    } else if (portalType === 'student' && window.studentApp && typeof window.studentApp.loadLiveData === 'function') {
+      window.studentApp.loadLiveData();
+    } else if (portalType === 'parent' && typeof window.loadParentLiveData === 'function') {
+      window.loadParentLiveData();
+    }
+
     this.bindLogoutButtons(portalType);
+
+    // 8. Start 15-minute inactivity session expiration countdown
+    if (this.inactivity) {
+      this.inactivity.init(portalType);
+    }
+    return true;
   }
 };
 

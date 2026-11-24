@@ -1,0 +1,1080 @@
+/* ==========================================================================
+   Sri Vidya ERP & School Portals - Modern Popover & Overlay Component System
+   - 1. Tooltips (Hover / Focus Helpful Info with Smart Collision Flip)
+   - 2. Dropdowns (Clean Menus with Keyboard Navigation & Raised Shadows)
+   - 3. Context Menus (Right-Click & Action Menus with Viewport Clamping)
+   - 4. Info Cards (Compact Popovers with Details & Dismissal)
+   - 5. Date Pickers (Interactive Calendar with Date Selection & Limits)
+   - 6. Reactions (Quick Reaction Dock with Spring Hover & Counts)
+   - 7. Hover Cards (Rich Previews for Users, Records & Items)
+   - 8. Share Sheets (Link Copy, WhatsApp, Print, Email & Mobile Bottom Sheet)
+   - Skeuomorphic Raised & Inset Tactile Finishes
+   - Full Dark Mode Support & Responsive Mobile Touch Optimization
+   ========================================================================== */
+
+:root {
+  --overlay-bg: #FFFFFF;
+  --overlay-bg-elevated: linear-gradient(180deg, #FFFFFF 0%, #F8FAFC 100%);
+  --overlay-border: #CBD5E1;
+  --overlay-border-subtle: #E2E8F0;
+  --overlay-text-main: #0F172A;
+  --overlay-text-muted: #64748B;
+  --overlay-primary: #1D4ED8;
+  --overlay-primary-hover: #2563EB;
+  --overlay-primary-light: #EFF6FF;
+  --overlay-shadow-sm: 0 4px 6px -1px rgba(15, 23, 42, 0.08), 0 2px 4px -2px rgba(15, 23, 42, 0.05);
+  --overlay-shadow-md: 0 10px 25px -5px rgba(15, 23, 42, 0.12), 0 8px 10px -6px rgba(15, 23, 42, 0.08), 0 0 0 1px rgba(15, 23, 42, 0.04);
+  --overlay-shadow-lg: 0 20px 35px -8px rgba(15, 23, 42, 0.16), 0 10px 15px -3px rgba(15, 23, 42, 0.08), 0 0 0 1px rgba(15, 23, 42, 0.05);
+  --overlay-radius-sm: 8px;
+  --overlay-radius-md: 12px;
+  --overlay-radius-lg: 16px;
+  --overlay-z-index: 1050;
+  --overlay-backdrop: rgba(15, 23, 42, 0.45);
+}
+
+/* ==========================================================================
+   1. TOOLTIPS SYSTEM
+   ========================================================================== */
+.sv-tooltip {
+  position: fixed;
+  z-index: 1080;
+  background: #0F172A;
+  color: #F8FAFC;
+  font-family: 'Outfit', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 0.76rem;
+  font-weight: 600;
+  line-height: 1.35;
+  padding: 5px 10px;
+  border-radius: 6px;
+  box-shadow: 0 6px 16px -2px rgba(15, 23, 42, 0.3), 0 2px 4px -1px rgba(15, 23, 42, 0.2);
+  pointer-events: none;
+  opacity: 0;
+  transform: scale(0.92);
+  transition: opacity 0.15s cubic-bezier(0.16, 1, 0.3, 1), transform 0.15s cubic-bezier(0.16, 1, 0.3, 1);
+  max-width: 260px;
+  text-align: center;
+  word-break: break-word;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.sv-tooltip.visible {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* Tooltip Arrow */
+.sv-tooltip-arrow {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  background: #0F172A;
+  transform: rotate(45deg);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.sv-tooltip[data-pos="top"] .sv-tooltip-arrow {
+  bottom: -4px;
+  left: calc(50% - 4px);
+  border-top: none;
+  border-left: none;
+}
+
+.sv-tooltip[data-pos="bottom"] .sv-tooltip-arrow {
+  top: -4px;
+  left: calc(50% - 4px);
+  border-bottom: none;
+  border-right: none;
+}
+
+.sv-tooltip[data-pos="left"] .sv-tooltip-arrow {
+  right: -4px;
+  top: calc(50% - 4px);
+  border-left: none;
+  border-bottom: none;
+}
+
+.sv-tooltip[data-pos="right"] .sv-tooltip-arrow {
+  left: -4px;
+  top: calc(50% - 4px);
+  border-right: none;
+  border-top: none;
+}
+
+/* ==========================================================================
+   2. DROPDOWN MENUS
+   ========================================================================== */
+.sv-dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.sv-dropdown-menu,
+.dropdown-menu {
+  position: absolute;
+  z-index: 1060;
+  min-width: 180px;
+  padding: 6px;
+  background: var(--overlay-bg-elevated);
+  border: 1px solid var(--overlay-border);
+  border-radius: var(--overlay-radius-md);
+  box-shadow: var(--overlay-shadow-md);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(6px) scale(0.97);
+  transform-origin: top left;
+  transition: opacity 0.18s cubic-bezier(0.16, 1, 0.3, 1), transform 0.18s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.18s;
+  list-style: none;
+  margin: 0;
+}
+
+.sv-dropdown-menu.show,
+.dropdown-menu.show {
+  opacity: 1 !important;
+  visibility: visible !important;
+  transform: translateY(0) scale(1) !important;
+  display: block !important;
+}
+
+.sv-dropdown-menu.flip-up,
+.dropdown-menu.flip-up {
+  transform-origin: bottom left;
+  bottom: 100%;
+  top: auto;
+  margin-bottom: 6px;
+}
+
+.sv-dropdown-header {
+  font-size: 0.7rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  color: var(--overlay-text-muted);
+  padding: 6px 10px 4px 10px;
+}
+
+.sv-dropdown-item,
+.dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  font-size: 0.83rem;
+  font-weight: 500;
+  color: var(--overlay-text-main);
+  border-radius: var(--overlay-radius-sm);
+  text-decoration: none;
+  background: transparent;
+  border: none;
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  user-select: none;
+}
+
+.sv-dropdown-item:hover,
+.sv-dropdown-item:focus,
+.sv-dropdown-item.active,
+.dropdown-item:hover,
+.dropdown-item:focus,
+.dropdown-item.active {
+  background: var(--overlay-primary-light);
+  color: var(--overlay-primary);
+  outline: none;
+  transform: translateX(2px);
+}
+
+.sv-dropdown-item i,
+.dropdown-item i {
+  font-size: 0.9rem;
+  width: 16px;
+  text-align: center;
+  color: var(--overlay-text-muted);
+  transition: color 0.15s ease;
+}
+
+.sv-dropdown-item:hover i,
+.sv-dropdown-item:focus i,
+.dropdown-item:hover i {
+  color: var(--overlay-primary);
+}
+
+.sv-dropdown-item.danger,
+.dropdown-item.danger {
+  color: #DC2626;
+}
+
+.sv-dropdown-item.danger:hover,
+.sv-dropdown-item.danger:focus,
+.dropdown-item.danger:hover {
+  background: #FEF2F2;
+  color: #B91C1C;
+}
+
+.sv-dropdown-item.danger i,
+.dropdown-item.danger i {
+  color: #EF4444;
+}
+
+.sv-dropdown-divider,
+.dropdown-divider {
+  height: 1px;
+  margin: 4px 0;
+  background: var(--overlay-border-subtle);
+  border: none;
+}
+
+/* ==========================================================================
+   3. CONTEXT MENUS (Right-Click & Action Menus)
+   ========================================================================== */
+.sv-context-menu {
+  position: fixed;
+  z-index: 1070;
+  min-width: 200px;
+  background: var(--overlay-bg-elevated);
+  border: 1px solid var(--overlay-border);
+  border-radius: var(--overlay-radius-md);
+  box-shadow: var(--overlay-shadow-lg);
+  padding: 6px;
+  opacity: 0;
+  visibility: hidden;
+  transform: scale(0.95);
+  transform-origin: top left;
+  transition: opacity 0.15s cubic-bezier(0.16, 1, 0.3, 1), transform 0.15s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.sv-context-menu.visible {
+  opacity: 1;
+  visibility: visible;
+  transform: scale(1);
+}
+
+.sv-context-menu-title {
+  padding: 6px 12px 4px;
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: var(--overlay-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-bottom: 1px solid var(--overlay-border-subtle);
+  margin-bottom: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.sv-context-menu-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 8px 12px;
+  font-size: 0.83rem;
+  font-weight: 500;
+  color: var(--overlay-text-main);
+  border-radius: var(--overlay-radius-sm);
+  background: transparent;
+  border: none;
+  width: 100%;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  user-select: none;
+}
+
+.sv-context-menu-item:hover,
+.sv-context-menu-item:focus {
+  background: var(--overlay-primary-light);
+  color: var(--overlay-primary);
+  outline: none;
+}
+
+.sv-context-menu-item-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.sv-context-menu-item-left i {
+  font-size: 0.88rem;
+  width: 16px;
+  color: var(--overlay-text-muted);
+}
+
+.sv-context-menu-item:hover .sv-context-menu-item-left i {
+  color: var(--overlay-primary);
+}
+
+.sv-context-menu-shortcut {
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--overlay-text-muted);
+  background: #F1F5F9;
+  border: 1px solid #CBD5E1;
+  border-radius: 4px;
+  padding: 1px 5px;
+}
+
+/* ==========================================================================
+   4. INFO CARDS
+   ========================================================================== */
+.sv-info-card {
+  position: absolute;
+  z-index: 1060;
+  width: 290px;
+  max-width: calc(100vw - 32px);
+  background: var(--overlay-bg-elevated);
+  border: 1px solid var(--overlay-border);
+  border-radius: var(--overlay-radius-md);
+  box-shadow: var(--overlay-shadow-lg);
+  padding: 12px 14px;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(6px) scale(0.97);
+  transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.sv-info-card.visible {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0) scale(1);
+}
+
+.sv-info-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--overlay-border-subtle);
+}
+
+.sv-info-card-title {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--overlay-text-main);
+  margin: 0;
+}
+
+.sv-info-card-title i {
+  color: var(--overlay-primary);
+}
+
+.sv-info-card-close {
+  background: none;
+  border: none;
+  color: var(--overlay-text-muted);
+  font-size: 0.9rem;
+  cursor: pointer;
+  padding: 2px 6px;
+  border-radius: 4px;
+  line-height: 1;
+  transition: color 0.15s ease, background 0.15s ease;
+}
+
+.sv-info-card-close:hover {
+  color: #DC2626;
+  background: #FEE2E2;
+}
+
+.sv-info-card-body {
+  font-size: 0.8rem;
+  color: #334155;
+  line-height: 1.45;
+}
+
+.sv-info-card-badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  background: #EFF6FF;
+  color: #1D4ED8;
+  border: 1px solid #BFDBFE;
+  margin-top: 6px;
+}
+
+/* ==========================================================================
+   5. DATE PICKERS (Interactive Calendar Popover)
+   ========================================================================== */
+.sv-datepicker-popover {
+  position: absolute;
+  z-index: 1065;
+  width: 300px;
+  background: var(--overlay-bg-elevated);
+  border: 1px solid var(--overlay-border);
+  border-radius: var(--overlay-radius-md);
+  box-shadow: var(--overlay-shadow-lg);
+  padding: 14px;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(6px) scale(0.98);
+  transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+  user-select: none;
+}
+
+.sv-datepicker-popover.visible {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0) scale(1);
+}
+
+.sv-dp-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.sv-dp-title {
+  font-size: 0.88rem;
+  font-weight: 800;
+  color: var(--overlay-text-main);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.sv-dp-nav-btn {
+  background: linear-gradient(180deg, #FFFFFF 0%, #F1F5F9 100%);
+  border: 1px solid #CBD5E1;
+  border-radius: 6px;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #334155;
+  font-size: 0.8rem;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.05);
+  transition: all 0.15s ease;
+}
+
+.sv-dp-nav-btn:hover {
+  background: #EFF6FF;
+  border-color: #93C5FD;
+  color: #1D4ED8;
+}
+
+.sv-dp-grid-weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 2px;
+  text-align: center;
+  margin-bottom: 6px;
+}
+
+.sv-dp-weekday {
+  font-size: 0.7rem;
+  font-weight: 800;
+  color: var(--overlay-text-muted);
+  text-transform: uppercase;
+  padding: 4px 0;
+}
+
+.sv-dp-grid-days {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 3px;
+  text-align: center;
+}
+
+.sv-dp-day {
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--overlay-text-main);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.12s ease;
+  border: 1px solid transparent;
+}
+
+.sv-dp-day:hover:not(.disabled):not(.other-month) {
+  background: #EFF6FF;
+  border-color: #BFDBFE;
+  color: #1D4ED8;
+  transform: scale(1.06);
+}
+
+.sv-dp-day.today {
+  border-color: #3B82F6;
+  font-weight: 800;
+  color: #1D4ED8;
+  background: #F8FAFC;
+}
+
+.sv-dp-day.selected {
+  background: linear-gradient(180deg, #2563EB 0%, #1D4ED8 100%) !important;
+  color: #FFFFFF !important;
+  font-weight: 800 !important;
+  box-shadow: 0 2px 4px rgba(29, 78, 216, 0.3) !important;
+}
+
+.sv-dp-day.other-month {
+  color: #CBD5E1;
+  cursor: default;
+}
+
+.sv-dp-day.disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+  text-decoration: line-through;
+}
+
+.sv-dp-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 10px;
+  padding-top: 8px;
+  border-top: 1px solid var(--overlay-border-subtle);
+}
+
+.sv-dp-quick-btn {
+  background: none;
+  border: none;
+  font-size: 0.74rem;
+  font-weight: 700;
+  color: var(--overlay-primary);
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 4px;
+  transition: background 0.15s ease;
+}
+
+.sv-dp-quick-btn:hover {
+  background: #EFF6FF;
+}
+
+/* ==========================================================================
+   6. REACTIONS DOCK
+   ========================================================================== */
+.sv-reactions-bar {
+  position: absolute;
+  z-index: 1060;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--overlay-bg-elevated);
+  border: 1px solid var(--overlay-border);
+  border-radius: 30px;
+  padding: 4px 8px;
+  box-shadow: var(--overlay-shadow-lg);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(6px) scale(0.9);
+  transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.sv-reactions-bar.visible {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0) scale(1);
+}
+
+.sv-reaction-btn {
+  background: none;
+  border: none;
+  font-size: 1.35rem;
+  padding: 4px;
+  cursor: pointer;
+  line-height: 1;
+  border-radius: 50%;
+  transition: transform 0.18s cubic-bezier(0.175, 0.885, 0.32, 1.275), background 0.15s ease;
+  user-select: none;
+}
+
+.sv-reaction-btn:hover {
+  transform: translateY(-6px) scale(1.35);
+  background: rgba(226, 232, 240, 0.5);
+}
+
+.sv-reaction-btn:active {
+  transform: scale(0.95);
+}
+
+.sv-reaction-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: #EFF6FF;
+  border: 1px solid #BFDBFE;
+  color: #1D4ED8;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 12px;
+  cursor: pointer;
+  box-shadow: 0 1px 2px rgba(29, 78, 216, 0.08);
+  transition: all 0.15s ease;
+}
+
+.sv-reaction-pill:hover {
+  background: #DBEAFE;
+  transform: scale(1.05);
+}
+
+/* ==========================================================================
+   7. HOVER CARDS (Rich Previews for Users & Records)
+   ========================================================================== */
+.sv-hover-card {
+  position: absolute;
+  z-index: 1060;
+  width: 320px;
+  max-width: calc(100vw - 32px);
+  background: var(--overlay-bg-elevated);
+  border: 1px solid var(--overlay-border);
+  border-radius: var(--overlay-radius-lg);
+  box-shadow: var(--overlay-shadow-lg);
+  padding: 16px;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(8px) scale(0.97);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.sv-hover-card.visible {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0) scale(1);
+}
+
+.sv-hover-card-top {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.sv-hover-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #2563EB 0%, #1D4ED8 100%);
+  color: #FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.15rem;
+  font-weight: 800;
+  border: 2px solid #FFFFFF;
+  box-shadow: 0 2px 6px rgba(29, 78, 216, 0.25);
+  flex-shrink: 0;
+}
+
+.sv-hover-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.sv-hover-name {
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: var(--overlay-text-main);
+  margin: 0 0 2px 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sv-hover-subtitle {
+  font-size: 0.78rem;
+  color: var(--overlay-text-muted);
+  margin: 0;
+}
+
+.sv-hover-badge {
+  display: inline-block;
+  font-size: 0.68rem;
+  font-weight: 800;
+  padding: 1px 6px;
+  border-radius: 8px;
+  margin-top: 3px;
+}
+
+.sv-hover-badge.active {
+  background: #DCFCE7;
+  color: #15803D;
+  border: 1px solid #86EFAC;
+}
+
+.sv-hover-badge.role {
+  background: #EFF6FF;
+  color: #1D4ED8;
+  border: 1px solid #BFDBFE;
+}
+
+.sv-hover-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  padding: 10px;
+  background: #F8FAFC;
+  border: 1px solid #E2E8F0;
+  border-radius: 8px;
+  margin-bottom: 12px;
+  text-align: center;
+}
+
+.sv-hover-stat-val {
+  font-size: 0.88rem;
+  font-weight: 800;
+  color: #0F172A;
+}
+
+.sv-hover-stat-lbl {
+  font-size: 0.68rem;
+  color: #64748B;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.sv-hover-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.sv-hover-btn {
+  flex: 1;
+  padding: 6px 10px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  border-radius: 6px;
+  text-align: center;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: all 0.15s ease;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+}
+
+.sv-hover-btn-primary {
+  background: linear-gradient(180deg, #2563EB 0%, #1D4ED8 100%);
+  color: #FFFFFF;
+  box-shadow: 0 1px 2px rgba(29, 78, 216, 0.2);
+}
+
+.sv-hover-btn-primary:hover {
+  background: #1D4ED8;
+  color: #FFFFFF;
+}
+
+.sv-hover-btn-outline {
+  background: #FFFFFF;
+  border-color: #CBD5E1;
+  color: #334155;
+}
+
+.sv-hover-btn-outline:hover {
+  background: #F1F5F9;
+  color: #0F172A;
+}
+
+/* ==========================================================================
+   8. SHARE SHEETS (Link Copy, WhatsApp, Print, Email & Mobile Bottom Sheet)
+   ========================================================================== */
+.sv-share-sheet {
+  position: absolute;
+  z-index: 1060;
+  width: 330px;
+  max-width: calc(100vw - 32px);
+  background: var(--overlay-bg-elevated);
+  border: 1px solid var(--overlay-border);
+  border-radius: var(--overlay-radius-lg);
+  box-shadow: var(--overlay-shadow-lg);
+  padding: 16px;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(8px) scale(0.97);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.sv-share-sheet.visible {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0) scale(1);
+}
+
+.sv-share-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.sv-share-title {
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: var(--overlay-text-main);
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.sv-share-title i {
+  color: var(--overlay-primary);
+}
+
+.sv-share-close {
+  background: none;
+  border: none;
+  font-size: 1rem;
+  color: var(--overlay-text-muted);
+  cursor: pointer;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.sv-share-close:hover {
+  color: #DC2626;
+  background: #FEE2E2;
+}
+
+.sv-share-copy-box {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: #F1F5F9;
+  border: 1px solid #CBD5E1;
+  border-radius: 8px;
+  padding: 6px 8px;
+  margin-bottom: 14px;
+}
+
+.sv-share-copy-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  font-size: 0.78rem;
+  color: #334155;
+  outline: none;
+  font-family: monospace;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.sv-share-copy-btn {
+  background: linear-gradient(180deg, #FFFFFF 0%, #E2E8F0 100%);
+  border: 1px solid #CBD5E1;
+  border-radius: 6px;
+  font-size: 0.74rem;
+  font-weight: 700;
+  color: #1E293B;
+  padding: 4px 10px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+}
+
+.sv-share-copy-btn:hover {
+  background: #DBEAFE;
+  color: #1D4ED8;
+  border-color: #93C5FD;
+}
+
+.sv-share-copy-btn.copied {
+  background: #DCFCE7 !important;
+  color: #15803D !important;
+  border-color: #86EFAC !important;
+}
+
+.sv-share-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  text-align: center;
+}
+
+.sv-share-option {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 6px 4px;
+  border-radius: 8px;
+  transition: all 0.15s ease;
+  text-decoration: none;
+}
+
+.sv-share-option:hover {
+  background: #F1F5F9;
+  transform: translateY(-2px);
+}
+
+.sv-share-icon-circle {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.15rem;
+  color: #FFFFFF;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: transform 0.15s ease;
+}
+
+.sv-share-option:hover .sv-share-icon-circle {
+  transform: scale(1.1);
+}
+
+.sv-share-icon-whatsapp { background: linear-gradient(135deg, #25D366 0%, #128C7E 100%); }
+.sv-share-icon-print { background: linear-gradient(135deg, #3B82F6 0%, #1D4ED8 100%); }
+.sv-share-icon-email { background: linear-gradient(135deg, #EA4335 0%, #C5221F 100%); }
+.sv-share-icon-device { background: linear-gradient(135deg, #8B5CF6 0%, #6D28D9 100%); }
+
+.sv-share-label {
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--overlay-text-main);
+}
+
+/* ==========================================================================
+   MOBILE BOTTOM SHEET OVERLAY FOR SHARE & CONTEXT MENUS
+   ========================================================================== */
+.sv-overlay-backdrop {
+  position: fixed;
+  inset: 0;
+  background: var(--overlay-backdrop);
+  z-index: 1055;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.22s ease, visibility 0.22s;
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+}
+
+.sv-overlay-backdrop.visible {
+  opacity: 1;
+  visibility: visible;
+}
+
+@media (max-width: 768px) {
+  .sv-share-sheet.mobile-bottom-sheet,
+  .sv-context-menu.mobile-bottom-sheet {
+    position: fixed !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    top: auto !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    border-radius: 20px 20px 0 0 !important;
+    border-bottom: none !important;
+    z-index: 1060 !important;
+    padding: 16px 20px calc(20px + env(safe-area-inset-bottom, 12px)) 20px !important;
+    transform: translateY(100%) !important;
+    box-shadow: 0 -10px 25px rgba(0, 0, 0, 0.2) !important;
+  }
+
+  .sv-share-sheet.mobile-bottom-sheet.visible,
+  .sv-context-menu.mobile-bottom-sheet.visible {
+    transform: translateY(0) !important;
+  }
+
+  .sv-sheet-drag-handle {
+    width: 40px;
+    height: 4px;
+    background: #CBD5E1;
+    border-radius: 4px;
+    margin: -6px auto 14px auto;
+  }
+}
+
+/* ==========================================================================
+   9. DARK MODE PALETTE
+   ========================================================================== */
+[data-theme="dark"],
+body.dark-theme {
+  --overlay-bg: #111C2E;
+  --overlay-bg-elevated: linear-gradient(180deg, #162238 0%, #0F172A 100%);
+  --overlay-border: #243550;
+  --overlay-border-subtle: #1E2D45;
+  --overlay-text-main: #F8FAFC;
+  --overlay-text-muted: #94A3B8;
+  --overlay-primary-light: #1E293B;
+  --overlay-shadow-md: 0 10px 25px -5px rgba(0, 0, 0, 0.4), 0 0 0 1px #243550;
+  --overlay-shadow-lg: 0 20px 35px -8px rgba(0, 0, 0, 0.5), 0 0 0 1px #243550;
+}
+
+[data-theme="dark"] .sv-tooltip,
+body.dark-theme .sv-tooltip {
+  background: #1E293B;
+  color: #F8FAFC;
+  border-color: #334155;
+}
+
+[data-theme="dark"] .sv-tooltip-arrow,
+body.dark-theme .sv-tooltip-arrow {
+  background: #1E293B;
+  border-color: #334155;
+}
+
+[data-theme="dark"] .sv-context-menu-shortcut,
+body.dark-theme .sv-context-menu-shortcut {
+  background: #1E293B;
+  border-color: #334155;
+  color: #CBD5E1;
+}
+
+[data-theme="dark"] .sv-hover-stats,
+body.dark-theme .sv-hover-stats {
+  background: #0B132B;
+  border-color: #243550;
+}
+
+[data-theme="dark"] .sv-hover-stat-val,
+body.dark-theme .sv-hover-stat-val {
+  color: #F8FAFC;
+}
+
+[data-theme="dark"] .sv-hover-btn-outline,
+body.dark-theme .sv-hover-btn-outline {
+  background: #1E293B;
+  border-color: #334155;
+  color: #E2E8F0;
+}
+
+[data-theme="dark"] .sv-share-copy-box,
+body.dark-theme .sv-share-copy-box {
+  background: #0B132B;
+  border-color: #243550;
+}
+
+[data-theme="dark"] .sv-share-copy-input,
+body.dark-theme .sv-share-copy-input {
+  color: #E2E8F0;
+}
+
+[data-theme="dark"] .sv-share-copy-btn,
+body.dark-theme .sv-share-copy-btn {
+  background: #1E293B;
+  border-color: #334155;
+  color: #F8FAFC;
+}
+
+[data-theme="dark"] .sv-dp-nav-btn,
+body.dark-theme .sv-dp-nav-btn {
+  background: #1E293B;
+  border-color: #334155;
+  color: #E2E8F0;
+}

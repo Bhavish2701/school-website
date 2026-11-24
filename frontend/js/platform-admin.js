@@ -6,6 +6,58 @@
 const platformApp = (function () {
   'use strict';
 
+  function escapeHtml(val) {
+    return String(val == null ? '' : val).replace(/[&<>"']/g, (ch) => ({
+      '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+    }[ch]));
+  }
+
+  // Ensure every /api/v1/ request carries Bearer JWT, refreshes on 401, and triggers live-sync invalidation
+  (function installAuthenticatedFetch() {
+    if (typeof window === 'undefined' || typeof window.fetch !== 'function' || window.__svPlatformFetchPatched) return;
+    window.__svPlatformFetchPatched = true;
+    const origFetch = window.fetch.bind(window);
+    window.fetch = async function (input, init) {
+      const url = typeof input === 'string' ? input : (input && input.url) || '';
+      const isApi = url.startsWith('/api/v1') || url.includes('/api/v1/');
+      if (!isApi) return origFetch(input, init);
+      const opts = { ...(init || {}) };
+      const headers = new Headers(opts.headers || (typeof input !== 'string' && input && input.headers) || {});
+      const token = (window.ApiClient && window.ApiClient.getAccessToken()) || localStorage.getItem('sv_token_access') || sessionStorage.getItem('sv_token_access');
+      if (token && !headers.has('Authorization')) headers.set('Authorization', 'Bearer ' + token);
+      opts.headers = headers;
+      let res = await origFetch(input, opts);
+      if (res.status === 401 && window.ApiClient && typeof window.ApiClient.silentRefreshToken === 'function' && !opts.__retried) {
+        opts.__retried = true;
+        const ok = await window.ApiClient.silentRefreshToken();
+        if (ok) {
+          const newTok = window.ApiClient.getAccessToken();
+          if (newTok) headers.set('Authorization', 'Bearer ' + newTok);
+          res = await origFetch(input, opts);
+        }
+      }
+      const method = String(opts.method || 'GET').toUpperCase();
+      if (res.ok && ['POST', 'PUT', 'PATCH', 'DELETE'].includes(method) && window.ApiClient && window.ApiClient.sync) {
+        window.ApiClient.sync.invalidate(['PLATFORM', 'DASHBOARD']);
+        setTimeout(() => { try { loadPlatformDashboard(); } catch (_) {} }, 120);
+      }
+      return res;
+    };
+    if (window.ApiClient && window.ApiClient.sync) {
+      let debounceTimer = null;
+      window.ApiClient.sync.on('PLATFORM', () => {
+        if (state.activeView !== 'dashboard') return;
+        clearTimeout(debounceTimer);
+        debounceTimer = setTimeout(() => { try { loadPlatformDashboard(); } catch (_) {} }, 250);
+      });
+      setInterval(() => {
+        if (typeof document !== 'undefined' && document.visibilityState === 'visible' && state.activeView === 'dashboard') {
+          try { loadPlatformDashboard(); } catch (_) {}
+        }
+      }, 60000);
+    }
+  })();
+
   // State Management
   const state = {
     activeView: 'dashboard',
@@ -439,10 +491,130 @@ const platformApp = (function () {
     }
   }
 
+  
+  // =========================================================================
+  // TWO-LEVEL SIDEBAR NAVIGATION & COLLAPSE CONTROLLER
+  // =========================================================================
+  let _lastPaToggleStamp = 0;
+  let _lastPaToggleMod = null;
+
+  function toggleSubmenu(moduleKey, event) {
+    if (event) {
+      try {
+        event.preventDefault();
+        event.stopPropagation();
+      } catch (e) {}
+      if (event.__svToggleHandled) return;
+      event.__svToggleHandled = true;
+    }
+    const now = Date.now();
+    if (_lastPaToggleMod === moduleKey && (now - _lastPaToggleStamp) < 250) {
+      return;
+    }
+    _lastPaToggleStamp = now;
+    _lastPaToggleMod = moduleKey;
+
+    const navItems = document.querySelectorAll('.nav-item');
+    const targetItem = document.querySelector(`.nav-item[data-module="${moduleKey}"]`);
+    if (!targetItem) return;
+
+    const hasSub = !!targetItem.querySelector('.nav-sub');
+    if (!hasSub) {
+      const link = targetItem.querySelector('.nav-link[data-view]');
+      if (link) {
+        navigateTo(link.getAttribute('data-view'));
+      }
+      return;
+    }
+
+    const wasOpen = targetItem.classList.contains('open');
+    navItems.forEach(item => {
+      if (item !== targetItem) {
+        item.classList.remove('open');
+      }
+    });
+    targetItem.classList.toggle('open', !wasOpen);
+
+    const sb = document.getElementById('sidebar');
+    if (sb && sb.classList.contains('collapsed')) {
+      toggleSidebarCollapse();
+    }
+  }
+
+  function toggleSidebarCollapse() {
+    const sb = document.getElementById('sidebar');
+    const isCollapsed = document.body.classList.toggle('sidebar-collapsed');
+    if (sb) {
+      sb.classList.toggle('collapsed', isCollapsed);
+    }
+    try {
+      localStorage.setItem('sv_sidebar_collapsed', isCollapsed ? 'true' : 'false');
+    } catch (e) {}
+
+    const btn = document.getElementById('sidebarCollapseBtn');
+    if (btn) {
+      btn.innerHTML = isCollapsed
+        ? '<i class="fa-solid fa-angles-right"></i>'
+        : '<i class="fa-solid fa-angles-left"></i>';
+      btn.setAttribute('title', isCollapsed ? 'Expand Sidebar (Ctrl+B)' : 'Collapse Sidebar (Ctrl+B)');
+    }
+  }
+
+  function initSidebarCollapsedState() {
+    try {
+      const stored = localStorage.getItem('sv_sidebar_collapsed');
+      if (stored === 'true') {
+        document.body.classList.add('sidebar-collapsed');
+        const sb = document.getElementById('sidebar');
+        if (sb) sb.classList.add('collapsed');
+        const btn = document.getElementById('sidebarCollapseBtn');
+        if (btn) {
+          btn.innerHTML = '<i class="fa-solid fa-angles-right"></i>';
+          btn.setAttribute('title', 'Expand Sidebar (Ctrl+B)');
+        }
+      }
+    } catch (e) {}
+
+    // Populate data-tooltip on each .nav-item
+    document.querySelectorAll('.nav-item').forEach(item => {
+      const textEl = item.querySelector('.nav-text');
+      if (textEl && !item.getAttribute('data-tooltip')) {
+        item.setAttribute('data-tooltip', textEl.textContent.trim());
+      }
+    });
+
+    // Dynamic flyout vertical positioning for collapsed sidebar
+    document.addEventListener('mouseenter', function (e) {
+      if (!document.body.classList.contains('sidebar-collapsed')) return;
+      const navItem = e.target && e.target.closest && e.target.closest('.nav-item');
+      if (!navItem) return;
+      const sub = navItem.querySelector('.nav-sub');
+      if (!sub) return;
+      const rect = navItem.getBoundingClientRect();
+      const flyoutHeight = sub.offsetHeight || 280;
+      let top = rect.top;
+      if (top + flyoutHeight > window.innerHeight - 16) {
+        top = Math.max(12, window.innerHeight - flyoutHeight - 16);
+      }
+      sub.style.top = top + 'px';
+    }, true);
+
+    // Keyboard shortcut Ctrl+B or Cmd+B
+    document.addEventListener('keydown', function(e) {
+      if ((e.ctrlKey || e.metaKey) && (e.key === 'b' || e.key === 'B')) {
+        e.preventDefault();
+        toggleSidebarCollapse();
+      }
+    });
+  }
+
   // Navigation Controller
   function navigateTo(viewId) {
     if (!viewId) return;
     state.activeView = viewId;
+    if (window.FloatingBottomNav && typeof window.FloatingBottomNav.syncActiveState === 'function') {
+      window.FloatingBottomNav.syncActiveState();
+    }
 
     // Update URL Hash cleanly without page jumping
     if (window.location.hash !== '#' + viewId) {
@@ -453,12 +625,32 @@ const platformApp = (function () {
       }
     }
 
-    // Update Sidebar Active Links
-    document.querySelectorAll('.sidebar-nav .nav-link').forEach(link => {
+    // Update Sidebar Active Links & Two-Level Skeuomorphic States
+    try {
+      localStorage.setItem('sv_platform_last_view', viewId);
+      sessionStorage.setItem('sv_platform_last_view', viewId);
+    } catch (e) {}
+
+    document.querySelectorAll('.sidebar-nav .nav-link, .sidebar-nav .nav-sub-link').forEach(link => {
       if (link.getAttribute('data-view') === viewId) {
         link.classList.add('active');
       } else {
         link.classList.remove('active');
+      }
+    });
+
+    // Active Level 1 nav-item highlight and accordion auto-open
+    const activeSub = document.querySelector(`.nav-sub-link[data-view="${viewId}"]`);
+    const activeDirect = document.querySelector(`.nav-item > .nav-link[data-view="${viewId}"]`);
+    const targetParent = activeSub ? activeSub.closest('.nav-item') : (activeDirect ? activeDirect.closest('.nav-item') : null);
+
+    document.querySelectorAll('.nav-item').forEach(item => {
+      if (item === targetParent) {
+        item.classList.add('active');
+        item.classList.add('open');
+      } else {
+        item.classList.remove('active');
+        item.classList.remove('open');
       }
     });
 
@@ -1605,248 +1797,167 @@ const platformApp = (function () {
   // Default Platform Telemetry (Specification 2.1 & 2.2)
   function getDefaultPlatformData() {
     return {
+      unavailable: true,
       overview: {
-        registeredInstitutions: state.institutions.length,
-        platformAccounts: 128,
-        applicationStatus: 'Healthy',
-        openIssues: 2,
+        registeredInstitutions: '--',
+        platformAccounts: '--',
+        applicationStatus: 'Unavailable',
+        openIssues: '--',
         securityIssuesCount: 0,
-        pendingTasksCount: 4,
-        p95LatencyMs: 24,
-        uptimePercentage: '99.98%'
+        pendingTasksCount: 0,
+        p95LatencyMs: null
       },
-      institutionSummary: {
-        totalRegistered: state.institutions.length,
-        active: state.institutions.filter(i => i.status === 'Active').length,
-        onboarding: 0,
-        suspended: 0,
-        configIssues: 0
-      },
-      platformHealth: {
-        frontendAvailability: { status: 'Healthy', metrics: '99.99% Uptime (P90: 12ms)' },
-        backendApiHealth: { status: 'Healthy', metrics: '24ms P95 Latency (Zero Drops)' },
-        databaseConnectivity: { status: 'Healthy', metrics: 'MongoDB 8.0 (6ms Ping)' },
-        fileStorageAvailability: { status: 'Healthy', metrics: 'Local Storage & S3 Vault' },
-        emailDeliveryStatus: { status: 'Healthy', metrics: 'Google Workspace SMTP Relay' },
-        backgroundJobFailures: { status: 'Healthy', metrics: 'Scheduler Active (12 Success)' },
-        latestSuccessfulBackup: { status: 'Healthy', metrics: 'Today, 03:00 AM UTC' },
-        recentDeploymentStatus: { status: 'Healthy', metrics: 'v2.4.0-prod (Commit a3e9c55)' }
-      },
-      securityOverview: {
-        failedLoginCount: 4,
-        suspiciousAuthEvents: 0,
-        adminPermissionChanges: 2,
-        accountsAwaitingActivation: 5,
-        expiringPrivilegedAccess: 1,
-        unresolvedSecurityAlerts: 0
-      },
-      operationalTasks: [
-        {
-          id: 'TASK-01',
-          title: 'New institution setup review',
-          institution: 'Sri Vidya Kids Academy',
-          assignedTo: 'Platform Root SysAdmin',
-          status: 'Pending Verification',
-          priority: 'Medium',
-          actionText: 'Review Setup',
-          targetView: 'institutions'
-        },
-        {
-          id: 'TASK-02',
-          title: 'School configuration pending review',
-          institution: 'Sri Vidya Junior College',
-          assignedTo: 'Super Administrator',
-          status: 'Pending Review',
-          priority: 'High',
-          actionText: 'Review Config',
-          targetView: 'config'
-        },
-        {
-          id: 'TASK-03',
-          title: 'Integration setup pending',
-          institution: 'Sri Vidya Main Campus',
-          assignedTo: 'DevOps Operator',
-          status: 'Ready for Test',
-          priority: 'Normal',
-          actionText: 'Open Integrations',
-          targetView: 'integrations'
-        },
-        {
-          id: 'TASK-04',
-          title: 'Open support tickets (2 unresolved)',
-          institution: 'Sri Vidya E.M High School',
-          assignedTo: 'Lead Support Engineer',
-          status: '2 Open Tickets',
-          priority: 'High',
-          actionText: 'Open Tickets',
-          targetView: 'support'
-        },
-        {
-          id: 'TASK-05',
-          title: 'Failed background jobs check',
-          institution: 'Platform Scheduler',
-          assignedTo: 'DevOps Operator',
-          status: '0 Critical',
-          priority: 'Low',
-          actionText: 'View Jobs',
-          targetView: 'health'
-        },
-        {
-          id: 'TASK-06',
-          title: 'Backup snapshot retention verification',
-          institution: 'Disaster Recovery Vault',
-          assignedTo: 'Security Officer',
-          status: 'Verified',
-          priority: 'Low',
-          actionText: 'Review Vault',
-          targetView: 'backups'
-        }
-      ],
-      recentActivity: [
-        {
-          id: 'AUD-9941',
-          activity: 'Institution Onboarding Phase 2 Verified',
-          institution: 'Sri Vidya E.M High School (SV-MAIN)',
-          responsibleUser: 'sysadmin.root@s***.trust',
-          role: 'Super Admin',
-          timestamp: '12 mins ago',
-          outcome: 'Success',
-          details: 'AP Statutory Form 16 and UDISE+ compliance verified'
-        },
-        {
-          id: 'AUD-9940',
-          activity: 'Disaster Recovery Snapshot Completed',
-          institution: 'AWS S3 Glacier Snapshot Vault',
-          responsibleUser: 'devops.ops@s***.trust',
-          role: 'Platform Operator',
-          timestamp: '48 mins ago',
-          outcome: 'Success',
-          details: 'Daily immutable snapshot #SNAP-2026-LIVE verified (AES-256)'
-        },
-        {
-          id: 'AUD-9939',
-          activity: 'Faculty Permission Grant Audited',
-          institution: 'Classroom Attendance & Mark Roster',
-          responsibleUser: 'srividyaschools2017@g***.com',
-          role: 'Principal',
-          timestamp: '2 hours ago',
-          outcome: 'Success',
-          details: 'Authorized Class 8A lead attendance register submission'
-        },
-        {
-          id: 'AUD-9938',
-          activity: 'Seat Quota Allocation Adjusted',
-          institution: 'Sri Vidya Main Campus',
-          responsibleUser: 'sysadmin.root@s***.trust',
-          role: 'Super Admin',
-          timestamp: '4 hours ago',
-          outcome: 'Success',
-          details: 'Allocated 1,000 maximum student quota for academic year 2025-26'
-        }
-      ]
+      institutionSummary: { totalRegistered: '--', active: '--', onboarding: '--', suspended: '--', configIssues: '--' },
+      platformHealth: null,
+      securityOverview: null,
+      operationalTasks: [],
+      recentActivity: [],
+      institutions: []
     };
   }
 
-  // Load Platform Dashboard Live Telemetry
+
+  // Load Platform Dashboard Live Telemetry (with stale-response protection + zero fake fallback)
   async function loadPlatformDashboard() {
-    try {
-      const res = await fetch('/api/v1/dashboard/platform');
-      if (res.ok) {
-        const json = await res.json();
-        if (json.success && json.data) {
-          applyPlatformDashboardData(json.data);
-          return;
-        }
-      }
-    } catch (e) {
-      // Fallback to local state if fetch fails or network blocked
+    const refreshBtn = document.getElementById('paManualRefreshBtn');
+    if (refreshBtn) {
+      refreshBtn.disabled = true;
+      refreshBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Syncing';
     }
-    applyPlatformDashboardData(getDefaultPlatformData());
+    const statusSubEl = document.getElementById('paHeroStatusSub');
+    try {
+      const token = (window.ApiClient && window.ApiClient.getAccessToken()) || localStorage.getItem('sv_token_access') || sessionStorage.getItem('sv_token_access');
+      if (!token) {
+        applyPlatformDashboardError('Authentication required to load live platform telemetry.');
+        return;
+      }
+      const fetcher = async (signal) => {
+        const res = await fetch('/api/v1/platform/dashboard', {
+          headers: { 'Authorization': 'Bearer ' + token },
+          signal
+        });
+        if (!res.ok) {
+          const errJson = await res.json().catch(() => ({}));
+          throw new Error(errJson.message || `HTTP ${res.status}`);
+        }
+        const json = await res.json();
+        if (!json.success || !json.data) throw new Error(json.message || 'Invalid dashboard payload');
+        return json.data;
+      };
+      const data = (window.ApiClient && window.ApiClient.sync && typeof window.ApiClient.sync.fetchLatest === 'function')
+        ? await window.ApiClient.sync.fetchLatest('platform-dashboard', fetcher)
+        : await fetcher();
+      applyPlatformDashboardData(data);
+    } catch (e) {
+      if (e && e.isStale) return;
+      console.error('[PlatformDashboard] Failed to load live telemetry:', e);
+      applyPlatformDashboardError(e && e.message ? e.message : 'Unable to reach platform telemetry API');
+    } finally {
+      if (refreshBtn) {
+        refreshBtn.disabled = false;
+        refreshBtn.innerHTML = '<i class="fa-solid fa-rotate"></i> Refresh';
+      }
+    }
   }
 
-  // Apply Data to Dashboard DOM
+  function applyPlatformDashboardError(errMsg) {
+    const fallback = getDefaultPlatformData();
+    applyPlatformDashboardData(fallback);
+    const subEl = document.getElementById('paHeroStatusSub');
+    if (subEl) subEl.innerHTML = `<i class="fa-solid fa-triangle-exclamation text-amber"></i> ${errMsg || 'Telemetry unavailable'}`;
+    const campEl = document.getElementById('paTelemetryCampuses');
+    if (campEl) campEl.textContent = `Operational Command Status: Unavailable (${errMsg || 'API error'})`;
+    const grid = document.getElementById('activeTenantsGrid');
+    if (grid) {
+      grid.innerHTML = `<div class="text-center py-4 text-muted" style="grid-column: 1 / -1;"><i class="fa-solid fa-triangle-exclamation text-amber me-2"></i> Institutional tenant data is currently unavailable: ${errMsg || 'API error'}</div>`;
+    }
+    const updEl = document.getElementById('paLastUpdatedText');
+    if (updEl) updEl.textContent = 'Failed';
+  }
+
+
   function applyPlatformDashboardData(data) {
     if (!data) return;
     state.platformData = data;
     state.recentActivities = data.recentActivity || [];
-
-    // 1. Hero Overview Cards (Answers 5 questions immediately)
     const elInst = document.getElementById('paHeroInstitutions');
     const elAcc = document.getElementById('paHeroAccounts');
     const elStatus = document.getElementById('paHeroStatus');
+    const elStatusSub = document.getElementById('paHeroStatusSub');
     const elIssues = document.getElementById('paHeroOpenIssues');
+    const navSuppBadge = document.getElementById('paNavSupportBadge');
+    if (elInst) elInst.textContent = data.overview?.registeredInstitutions ?? '--';
+    if (elAcc) elAcc.textContent = data.overview?.platformAccounts ?? '--';
+    if (elStatus) {
+      const st = data.overview?.applicationStatus ?? 'Unavailable';
+      elStatus.textContent = st;
+      elStatus.className = 'pa-metric-value ' + (st === 'Healthy' ? 'text-emerald' : 'text-amber');
+    }
+    if (elStatusSub) {
+      const lat = data.overview?.p95LatencyMs;
+      elStatusSub.innerHTML = lat !== null && lat !== undefined
+        ? `<i class="fa-solid fa-cloud-arrow-up"></i> Live telemetry (${lat}ms API latency)`
+        : `<i class="fa-solid fa-cloud-arrow-up"></i> ${data.platformHealth?.backendApiHealth?.metrics || 'Live DB telemetry'}`;
+    }
+    if (elIssues) elIssues.textContent = data.overview?.openIssues ?? '--';
+    if (navSuppBadge) navSuppBadge.textContent = data.unavailable ? '--' : `${data.overview?.openIssues ?? 0} Open`;
 
-    if (elInst) elInst.textContent = data.overview?.registeredInstitutions ?? state.institutions.length;
-    if (elAcc) elAcc.textContent = data.overview?.platformAccounts ?? 128;
-    if (elStatus) elStatus.textContent = data.overview?.applicationStatus ?? 'Healthy';
-    if (elIssues) elIssues.textContent = data.overview?.openIssues ?? 2;
-
-    // 2. Section 2.1 A: Institution Summary
-    const sumTotal = document.getElementById('sumTotalRegistered');
-    const sumAct = document.getElementById('sumActive');
-    const sumOnb = document.getElementById('sumOnboarding');
-    const sumSusp = document.getElementById('sumSuspended');
-    const sumCfg = document.getElementById('sumConfigIssues');
-
-    if (sumTotal) sumTotal.textContent = data.institutionSummary?.totalRegistered ?? state.institutions.length;
-    if (sumAct) sumAct.textContent = data.institutionSummary?.active ?? state.institutions.length;
-    if (sumOnb) sumOnb.textContent = data.institutionSummary?.onboarding ?? 0;
-    if (sumSusp) sumSusp.textContent = data.institutionSummary?.suspended ?? 0;
-    if (sumCfg) sumCfg.textContent = data.institutionSummary?.configIssues ?? 0;
-
-    // 3. Section 2.1 B: Platform Health Matrix
-    if (data.platformHealth) {
-      const map = {
-        Frontend: data.platformHealth.frontendAvailability,
-        Backend: data.platformHealth.backendApiHealth,
-        Database: data.platformHealth.databaseConnectivity,
-        Storage: data.platformHealth.fileStorageAvailability,
-        Email: data.platformHealth.emailDeliveryStatus,
-        Jobs: data.platformHealth.backgroundJobFailures,
-        Backup: data.platformHealth.latestSuccessfulBackup,
-        Deployment: data.platformHealth.recentDeploymentStatus
-      };
-      Object.keys(map).forEach(key => {
-        const item = map[key];
-        if (!item) return;
-        const badgeEl = document.getElementById(`badgeHealth${key}`);
-        const metricEl = document.getElementById(`metricsHealth${key}`);
-        if (badgeEl) {
-          const isHealthy = item.status === 'Healthy' || item.status === 'Connected' || item.status === 'Operational' || item.status === 'Current' || item.status === 'Verified' || item.status === '0 Failures';
-          badgeEl.className = isHealthy ? 'badge-active' : 'badge-operator';
-          badgeEl.innerHTML = `<i class="fa-solid fa-${isHealthy ? 'check' : 'triangle-exclamation'}"></i> ${item.status || 'Active'}`;
-        }
-        if (metricEl && item.metrics) {
-          metricEl.textContent = item.metrics;
-        }
-      });
+    const elCamp = document.getElementById('paTelemetryCampuses');
+    const elSec = document.getElementById('paTelemetrySecurity');
+    const elTsk = document.getElementById('paTelemetryTasks');
+    const elBkp = document.getElementById('paTelemetryBackup');
+    const elUpd = document.getElementById('paLastUpdatedText');
+    if (elCamp && !data.unavailable) {
+      const actCount = data.institutionSummary?.active ?? 0;
+      const totCount = data.institutionSummary?.totalRegistered ?? 0;
+      elCamp.textContent = `Operational Command Status: ${actCount} of ${totCount} Registered Campuses Active`;
+    }
+    if (elSec) elSec.innerHTML = `<i class="fa-solid fa-shield-halved text-emerald"></i> Security: <strong>${data.securityOverview?.unresolvedSecurityAlerts ?? 0} Active Alerts</strong>`;
+    if (elTsk) elTsk.innerHTML = `<i class="fa-solid fa-list-check text-primary"></i> Operator Tasks: <strong>${data.overview?.pendingTasksCount ?? (data.operationalTasks || []).length} Queued</strong>`;
+    if (elBkp) elBkp.innerHTML = `<i class="fa-solid fa-database text-blue"></i> Latest Backup: <strong>${data.platformHealth?.latestSuccessfulBackup?.metrics || 'No snapshots recorded'}</strong>`;
+    if (elUpd) {
+      elUpd.textContent = (window.ApiClient && window.ApiClient.sync)
+        ? window.ApiClient.sync.formatLastUpdated(data.generatedAt)
+        : new Date().toLocaleTimeString('en-IN');
     }
 
-    // 4. Section 2.1 C: Security Overview
-    const elFail = document.getElementById('secFailedLogins');
-    const elSusp = document.getElementById('secSuspiciousAuth');
-    const elPerm = document.getElementById('secAdminPermChanges');
-    const elPend = document.getElementById('secPendingActivation');
-    const elExp = document.getElementById('secExpiringAccess');
-    const elAlert = document.getElementById('secUnresolvedAlerts');
-
-    if (elFail) elFail.textContent = data.securityOverview?.failedLoginCount ?? 4;
-    if (elSusp) elSusp.textContent = data.securityOverview?.suspiciousAuthEvents ?? 0;
-    if (elPerm) elPerm.textContent = data.securityOverview?.adminPermissionChanges ?? 2;
-    if (elPend) elPend.textContent = data.securityOverview?.accountsAwaitingActivation ?? 5;
-    if (elExp) elExp.textContent = data.securityOverview?.expiringPrivilegedAccess ?? 1;
-    if (elAlert) elAlert.textContent = data.securityOverview?.unresolvedSecurityAlerts ?? 0;
-
-    // 5. Section 2.1 D: Operational Tasks
-    if (data.operationalTasks) {
-      renderOperationalTasks(data.operationalTasks);
-    }
-
-    // 6. Section 2.1 E: Recent Platform Activity
-    if (data.recentActivity) {
-      renderRecentPlatformActivity(data.recentActivity);
+    // Dynamic Institutional Tenants grid (live from DB, zero hardcoded 855/320/140)
+    const grid = document.getElementById('activeTenantsGrid');
+    if (grid && !data.unavailable) {
+      const list = Array.isArray(data.institutions) && data.institutions.length ? data.institutions : (state.institutions || []);
+      const termName = data.activeAcademicYear || '--';
+      if (list.length === 0) {
+        grid.innerHTML = `<div class="text-center py-4 text-muted" style="grid-column: 1 / -1;"><i class="fa-solid fa-school-flag me-2"></i> No registered institutions in database yet.</div>`;
+      } else {
+        grid.innerHTML = list.map((inst) => {
+          const isMain = (inst.code || '').includes('MAIN') || (inst.institutionId || '') === 'INST-001';
+          const statusCls = inst.status === 'Active' ? 'badge-active' : 'badge-operator';
+          return `<div style="border: 1px solid var(--color-border); border-radius: 12px; padding: 1.35rem; background: var(--color-bg-subtle);">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem;">
+              <span class="badge-operator" style="${isMain ? 'background:#4F46E5; color:#fff;' : ''}">${inst.code || inst.institutionId || 'CAMPUS'}</span>
+              <span class="${statusCls}">${inst.status || 'Active'}</span>
+            </div>
+            <h4 style="margin: 0.25rem 0; font-size: 1.05rem;">${inst.name || inst.displayName || 'Institution'}</h4>
+            <p style="margin: 0 0 0.75rem; font-size: 0.8rem; color: #64748B;">UDISE: ${inst.udise || '--'} • ${inst.category || inst.board || 'State Board'}</p>
+            <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 1rem; padding: 0.5rem 0; border-top: 1px dashed var(--color-border); border-bottom: 1px dashed var(--color-border);">
+              <span>Students: <strong>${inst.activeStudentsCount ?? inst.students ?? '--'}</strong></span>
+              <span>Staff: <strong>${inst.activeTeachersCount ?? inst.staff ?? '--'}</strong></span>
+              <span>Term: <strong>${inst.currentAcademicYear || termName}</strong></span>
+            </div>
+            <div style="display: flex; gap: 0.5rem;">
+              <a href="/management" class="btn-pa ${isMain ? 'btn-pa-primary' : 'btn-pa-secondary'}" style="flex:1; justify-content:center; font-size:0.8rem;">
+                <i class="fa-solid fa-arrow-right"></i> Open Portal
+              </a>
+              <button class="btn-pa btn-pa-secondary" onclick="platformApp.navigateTo('config')" style="font-size:0.8rem;" title="Configure Institution">
+                <i class="fa-solid fa-sliders"></i>
+              </button>
+            </div>
+          </div>`;
+        }).join('');
+      }
     }
   }
+
 
   // Render Section 2.1 D: Operational Tasks Table
   function renderOperationalTasks(tasks) {
@@ -2500,7 +2611,7 @@ const platformApp = (function () {
   async function publishAcademicConfig() {
     if (!validateAcademicConfig()) return;
 
-    const confirmed = confirm('POLICY LOCK CONFIRMATION:\\n\\nPublishing will activate this academic policy for AY 2026-2027.\\nAs an institutional invariant, existing historical registers and completed terms will remain sealed under their original grading snapshots.\\n\\nDo you wish to proceed?');
+    const confirmed = confirm('POLICY LOCK CONFIRMATION:\n\nPublishing will activate this academic policy for AY 2026-2027.\nAs an institutional invariant, existing historical registers and completed terms will remain sealed under their original grading snapshots.\n\nDo you wish to proceed?');
     if (!confirmed) return;
 
     await updateAcademicWithAction('publish', 'Academic Configuration published live. Historical policy lock applied.');
@@ -2745,7 +2856,7 @@ const platformApp = (function () {
     const tpl = templates.find(t => t.templateId === templateId);
     if (!tpl) return;
 
-    const note = prompt(`Create New Revision for ${tpl.templateName} (${tpl.version}):\\n\\nEnter reason or summary for this new template version:`, 'Updated statutory guidelines');
+    const note = prompt(`Create New Revision for ${tpl.templateName} (${tpl.version}):\n\nEnter reason or summary for this new template version:`, 'Updated statutory guidelines');
     if (!note) return;
 
     // Increment minor version
@@ -5427,21 +5538,16 @@ const platformApp = (function () {
             updateAuditSummaryCards(json.summary);
           }
         } else {
-          platformAuditLogsData = DEFAULT_AUDIT_SEED_FALLBACK;
+          platformAuditLogsData = [];
         }
       } else {
-        platformAuditLogsData = DEFAULT_AUDIT_SEED_FALLBACK;
+        platformAuditLogsData = [];
       }
     } catch (e) {
-      console.warn('Platform audit API offline; using fallback audit seed:', e.message);
-      platformAuditLogsData = DEFAULT_AUDIT_SEED_FALLBACK;
+      console.warn('Platform audit API unavailable:', e.message);
+      platformAuditLogsData = [];
     }
 
-    if (!platformAuditLogsData || platformAuditLogsData.length === 0) {
-      platformAuditLogsData = DEFAULT_AUDIT_SEED_FALLBACK;
-    }
-
-    updateAuditSummaryCardsFromLocal();
     renderPlatformAuditTable(platformAuditLogsData);
   }
 
@@ -13995,6 +14101,9 @@ const platformApp = (function () {
 
 
   function init() {
+    if (window.PortalAuth && typeof window.PortalAuth.canAccessPortalSync === 'function' && !window.PortalAuth.canAccessPortalSync('platform-admin')) {
+      return;
+    }
     setupTheme();
     updatePlatformClock();
     setInterval(updatePlatformClock, 1000);
@@ -14007,16 +14116,37 @@ const platformApp = (function () {
     loadSchoolConfig();
     refreshGatewayStatus();
 
-    // Global Delegated Sidebar Click Listener
+    initSidebarCollapsedState();
+
+    // Global Delegated Sidebar Click Listener with Two-Level Hierarchy
     const sidebarNav = document.querySelector('.sidebar-nav');
     if (sidebarNav) {
       sidebarNav.addEventListener('click', (e) => {
-        const link = e.target.closest('.nav-link[data-view]');
-        if (link) {
+        // Sub-link clicked
+        const subLink = e.target.closest('.nav-sub-link[data-view]');
+        if (subLink) {
           e.preventDefault();
-          const targetView = link.getAttribute('data-view');
-          if (targetView) {
-            navigateTo(targetView);
+          const targetView = subLink.getAttribute('data-view');
+          if (targetView) navigateTo(targetView);
+          return;
+        }
+
+        // Main nav-link clicked
+        const mainLink = e.target.closest('.nav-link');
+        if (mainLink) {
+          if (e.__svToggleHandled) return;
+          const navItem = mainLink.closest('.nav-item');
+          const hasSub = navItem && navItem.querySelector('.nav-sub');
+          if (hasSub) {
+            e.preventDefault();
+            const mod = navItem.getAttribute('data-module');
+            toggleSubmenu(mod, e);
+          } else {
+            const targetView = mainLink.getAttribute('data-view');
+            if (targetView) {
+              e.preventDefault();
+              navigateTo(targetView);
+            }
           }
         }
       });
@@ -14030,11 +14160,18 @@ const platformApp = (function () {
       }
     });
 
-    // Check hash for direct view navigation (e.g. #institutions)
+    // Check hash for direct view navigation (e.g. #institutions) or restore last state
     const hash = window.location.hash.replace('#', '');
     if (hash && document.getElementById('view-' + hash)) {
       navigateTo(hash);
     } else {
+      try {
+        const lastView = localStorage.getItem('sv_platform_last_view');
+        if (lastView && document.getElementById('view-' + lastView)) {
+          navigateTo(lastView);
+          return;
+        }
+      } catch (e) {}
       navigateTo('dashboard');
     }
   }
@@ -14316,7 +14453,10 @@ const platformApp = (function () {
     submitAssignUsers,
 
     // Core Navigation & Theme
+    init,
     navigateTo,
+    toggleSubmenu,
+    toggleSidebarCollapse,
     toggleTheme,
     toggleMobileSidebar,
     closeMobileSidebar,
@@ -14427,7 +14567,8 @@ const platformApp = (function () {
     triggerManualBackup,
     terminateAllSuspiciousSessions,
     verifyDnsStatus,
-    savePlatformPolicies
+    savePlatformPolicies,
+    refreshDashboard: loadPlatformDashboard
   };
 })();
 

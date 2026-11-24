@@ -102,6 +102,14 @@ router.post(
   examController.createExam
 );
 
+// Management: Update examination details
+router.put(
+  '/:id',
+  authenticateUser,
+  authorizeRoles('SUPER_ADMIN', 'PRINCIPAL', 'VICE_PRINCIPAL', 'OFFICE'),
+  examController.updateExam
+);
+
 // Management: Schedule subject timetable for exam
 router.post(
   '/:id/schedule',
@@ -123,7 +131,7 @@ router.post(
 router.post(
   '/:id/publish',
   authenticateUser,
-  authorizeRoles('SUPER_ADMIN', 'PRINCIPAL', 'VICE_PRINCIPAL', 'OFFICE'),
+  authorizeRoles('SUPER_ADMIN', 'PRINCIPAL', 'VICE_PRINCIPAL'),
   examController.publishResults
 );
 

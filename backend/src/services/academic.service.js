@@ -257,6 +257,26 @@ class AcademicService {
       await teacher.save();
     }
 
+    // Keep linked User.assignedClasses synchronized to eliminate identity split-brain
+    if (teacher.user) {
+      const { User } = require('../models/user.model');
+      await User.findByIdAndUpdate(teacher.user, {
+        $set: {
+          assignedClasses: teacher.assignedClasses.map((a) => ({
+            class: a.class,
+            section: a.section,
+            subject: a.subject,
+            isClassTeacher: a.isClassTeacher,
+          })),
+        },
+      });
+    }
+
+    try {
+      const liveSyncBus = require('../utils/liveSyncBus');
+      liveSyncBus.emitSync('ACADEMIC', 'UPDATED', { entityId: classSection._id });
+    } catch (e) {}
+
     return await ClassSection.findById(classSectionId)
       .populate('classTeacher', 'fullName employeeId specialization phone')
       .populate('subjectAllocations.teacher', 'fullName employeeId specialization phone')

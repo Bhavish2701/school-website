@@ -9,7 +9,7 @@
 const express = require('express');
 const router = express.Router();
 
-const { authenticateUser, authorizeRoles } = require('../middleware/rbac.middleware');
+const { authenticateUser, optionalAuthenticateUser, authorizeRoles } = require('../middleware/rbac.middleware');
 const { verifyParentChildAccess } = require('../middleware/parentChild.middleware');
 const {
   validateMarkAttendance,
@@ -25,7 +25,7 @@ const attendanceController = require('../controllers/attendance.controller');
 router.get(
   '/teacher/classes',
   authenticateUser,
-  authorizeRoles('TEACHER'),
+  authorizeRoles('TEACHER', 'SUPER_ADMIN', 'PRINCIPAL', 'VICE_PRINCIPAL'),
   attendanceController.getTeacherClasses
 );
 
@@ -142,6 +142,14 @@ router.get(
 // 4. MANAGEMENT ATTENDANCE ENDPOINTS
 // ==========================================
 
+// Management: Get today's reported absentees for Principal Dashboard
+router.get(
+  '/management/absentees',
+  authenticateUser,
+  authorizeRoles('SUPER_ADMIN', 'PRINCIPAL', 'VICE_PRINCIPAL', 'OFFICE'),
+  attendanceController.getTodayAbsentees
+);
+
 // Management: School-wide daily attendance overview
 router.get(
   '/management/overview',
@@ -171,11 +179,15 @@ router.get(
 // ==========================================
 router.post(
   '/absentees/dispatch',
+  authenticateUser,
+  authorizeRoles('SUPER_ADMIN', 'PRINCIPAL', 'VICE_PRINCIPAL', 'OFFICE'),
   attendanceController.dispatchAbsenteeNotifications
 );
 
 router.post(
   '/absentees/:admNo/resend',
+  authenticateUser,
+  authorizeRoles('SUPER_ADMIN', 'PRINCIPAL', 'VICE_PRINCIPAL', 'OFFICE'),
   attendanceController.resendAbsenteeNotification
 );
 

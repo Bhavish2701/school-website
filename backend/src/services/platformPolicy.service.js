@@ -406,26 +406,32 @@ initializeDefaults();
 // Helper to log audit events
 async function logAudit(category, action, actor, targetRecord, result, severity, details = {}) {
   try {
-    const eventId = `AUD-${Date.now()}-${Math.random().toString(36).substring(2, 7).toUpperCase()}`;
+    const now = Date.now();
+    const eventId = `AUD-${now}-${Math.random().toString(36).substring(2, 7).toUpperCase()}`;
+    const validCategories = ['AUTH_ACCOUNTS','INSTITUTIONS','RBAC_PERMISSIONS','SCHOOL_CONFIG','INTEGRATIONS','DATA_IMPORT_EXPORT','BACKUP_RECOVERY','ADMIN_SUPPORT','SECURITY_ALERTS','DEPLOYMENT_OPS'];
     const logDoc = {
       eventId,
       timestamp: new Date(),
-      correlationId: `CORR-${Date.now()}`,
-      category: category || 'ADMIN_SUPPORT',
+      correlationId: `CORR-${now}`,
+      category: validCategories.includes(category) ? category : 'ADMIN_SUPPORT',
       action,
       actor: {
-        actorId: 'ACT-OPERATOR',
-        identity: actor || 'Platform Administrator',
-        role: 'Platform Operator',
-        scope: 'PLATFORM_WIDE'
+        userId: 'ACT-OPERATOR',
+        name: actor || 'Platform Administrator',
+        email: 'admin@srividya.edu.in',
+        role: 'SUPER_ADMIN',
+        scope: 'Platform'
       },
-      institution: 'Sri Vidya Educational Trust',
-      targetRecord: {
-        entityType: 'GOVERNANCE_POLICY',
-        recordReference: targetRecord || 'POLICY-MGMT'
+      institutionId: 'TRUST-ALL',
+      institutionName: 'Sri Vidya Educational Trust',
+      targetEntity: {
+        entityType: 'GovernancePolicy',
+        entityId: String(targetRecord || 'POLICY-MGMT'),
+        displayName: String(targetRecord || action || 'Governance Policy'),
       },
-      result: result || 'SUCCESS',
-      severity: severity || 'INFO',
+      result: ['SUCCESS', 'FAILED', 'DENIED', 'WARNING'].includes(result) ? result : 'SUCCESS',
+      severity: ['INFO', 'LOW', 'MEDIUM', 'HIGH', 'CRITICAL'].includes(severity) ? severity : 'INFO',
+      reason: details?.reason || `Governance policy event: ${action}`,
       details
     };
 

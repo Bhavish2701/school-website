@@ -4,6 +4,7 @@
  * and emergency substitution coordination.
  */
 const Timetable = require('../models/timetable.model');
+const Substitution = require('../models/substitution.model');
 const { ApiError } = require('../utils/apiError');
 
 // Helper to convert "08:50 AM" to minutes from midnight
@@ -141,9 +142,81 @@ async function assignPeriod(data) {
   return assignment;
 }
 
+/**
+ * Get approved timetable for a specific day and class (or all classes for today)
+ */
+async function getTodayTimetable(day, className = 'Class X-A', academicYear = '2025-2026') {
+  const query = {
+    day: day === 'Sunday' ? 'Monday' : day,
+    academicYear,
+    status: 'ACTIVE',
+    isBreak: false,
+  };
+  if (className) query.className = className;
+
+  const periods = await Timetable.find(query).sort({ periodNumber: 1 }).lean();
+
+  const now = new Date();
+  const startOfToday = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), 0, 0, 0, 0));
+  const endOfToday = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), 23, 59, 59, 999));
+
+  const activeSub = await Substitution.findOne({
+    date: { $gte: startOfToday, $lte: endOfToday },
+    status: 'CONFIRMED',
+  }).sort({ createdAt: -1 }).lean();
+
+  return {
+    day,
+    isSunday: day === 'Sunday',
+    className,
+    academicYear,
+    periods,
+    activeSubstitution: activeSub,
+  };
+}
+
+/**
+ * Create or update a substitution
+ */
+async function createSubstitution(data) {
+  const date = data.date ? new Date(data.date) : new Date();
+  const dateUtc = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
+
+  const subId = data.substitutionId || `SUB-${date.getFullYear()}-${Math.floor(100 + Math.random() * 900)}`;
+
+  const sub = await Substitution.findOneAndUpdate(
+    { substitutionId: subId },
+    {
+      ...data,
+      substitutionId: subId,
+      date: dateUtc,
+      status: data.status || 'CONFIRMED',
+    },
+    { upsert: true, new: true, runValidators: true }
+  );
+
+  return sub;
+}
+
+/**
+ * Get active substitutions for today or given date
+ */
+async function getSubstitutions(dateInput) {
+  const d = dateInput ? new Date(dateInput) : new Date();
+  const startOfDay = new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate(), 0, 0, 0, 0));
+  const endOfDay = new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate(), 23, 59, 59, 999));
+
+  return Substitution.find({
+    date: { $gte: startOfDay, $lte: endOfDay },
+  }).sort({ periodNumber: 1 }).lean();
+}
+
 module.exports = {
   checkConflict,
   getClassTimetable,
   assignPeriod,
   parseTimeToMinutes,
+  getTodayTimetable,
+  createSubstitution,
+  getSubstitutions,
 };

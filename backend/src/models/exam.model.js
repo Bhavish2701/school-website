@@ -19,7 +19,7 @@ const EXAM_TYPES = [
   'OTHER',
 ];
 
-const EXAM_STATUS = ['UPCOMING', 'ONGOING', 'COMPLETED', 'CANCELLED'];
+const EXAM_STATUS = ['UPCOMING', 'ONGOING', 'COMPLETED', 'CANCELLED', 'POSTPONED'];
 const RESULT_STATUS = ['PASSED', 'FAILED', 'WITHHELD', 'PENDING'];
 
 /**
@@ -66,6 +66,26 @@ const examSchema = new mongoose.Schema(
       type: String,
       trim: true,
       default: '',
+    },
+    timings: {
+      type: String,
+      trim: true,
+      default: '09:30 AM – 12:30 PM',
+    },
+    subjectsCovered: {
+      type: String,
+      trim: true,
+      default: 'All Core Subjects',
+    },
+    hallTicketStatus: {
+      type: String,
+      trim: true,
+      default: 'Scheduled',
+    },
+    actionLabel: {
+      type: String,
+      trim: true,
+      default: 'View Datesheet',
     },
     isPublished: {
       type: Boolean,

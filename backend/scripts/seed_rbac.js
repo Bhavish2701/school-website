@@ -29,7 +29,7 @@ const resetAndSeed = async () => {
     username: 'principal',
     email: 'principal@srividya.edu.in',
     password: 'Principal@123',
-    fullName: 'Dr. K. S. Rao (Principal)',
+    fullName: 'Smt. Gorle Varalakshmi',
     role: 'PRINCIPAL',
     phone: '9876543211',
   });
@@ -39,7 +39,7 @@ const resetAndSeed = async () => {
     username: 'viceprincipal',
     email: 'viceprincipal@srividya.edu.in',
     password: 'VicePrincipal@123',
-    fullName: 'Mrs. L. Vani (Vice Principal)',
+    fullName: 'Sri Navva Anand',
     role: 'VICE_PRINCIPAL',
     phone: '9876543212',
   });
