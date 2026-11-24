@@ -29289,8 +29289,32 @@ select,
    ========================================================================= */
 #workloadFilterInput,
 #staffDocsFilterInput,
-#appraisalSearchInput {
+#appraisalSearchInput,
+#leaveSearchInput {
   padding-left: 42px !important;
+}
+
+/* =========================================================================
+   LEAVE REQUESTS EQUALIZED 4-CARD RESPONSIVE KPI GRID
+   ========================================================================= */
+.leave-kpi-grid {
+  display: grid !important;
+  grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  gap: 14px !important;
+  width: 100% !important;
+  margin-bottom: 1.5rem !important;
+}
+
+@media (max-width: 992px) {
+  .leave-kpi-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+}
+
+@media (max-width: 576px) {
+  .leave-kpi-grid {
+    grid-template-columns: 1fr !important;
+  }
 }
 
 /* =========================================================================
