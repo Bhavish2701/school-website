@@ -29183,3 +29183,128 @@ select,
   min-width: 900px !important;
   width: 100% !important;
 }
+
+/* =========================================================================
+   STUDENT DOSSIER MODAL EQUALIZED KPI GRID (NO RIGHT GAP)
+   ========================================================================= */
+.dossier-metrics-quad {
+  display: grid !important;
+  grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  gap: 14px !important;
+  width: 100% !important;
+  margin-bottom: 1.25rem !important;
+}
+
+@media (max-width: 900px) {
+  .dossier-metrics-quad {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+}
+
+@media (max-width: 580px) {
+  .dossier-metrics-quad {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* =========================================================================
+   APPRAISAL & FEEDBACK SYMMETRICAL 5-CARD KPI GRID
+   ========================================================================= */
+.appraisal-kpi-grid {
+  display: grid !important;
+  grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
+  gap: 14px !important;
+  width: 100% !important;
+  margin-bottom: 1.5rem !important;
+}
+
+@media (max-width: 1200px) {
+  .appraisal-kpi-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  }
+}
+
+@media (max-width: 900px) {
+  .appraisal-kpi-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+}
+
+@media (max-width: 580px) {
+  .appraisal-kpi-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* =========================================================================
+   APPRAISAL & FEEDBACK FILTER GRID (NO ORPHAN WRAPPING)
+   ========================================================================= */
+.appraisal-filter-grid {
+  display: grid !important;
+  grid-template-columns: 2fr 1fr 1fr 1fr !important;
+  gap: 12px !important;
+  width: 100% !important;
+  align-items: center !important;
+}
+
+@media (max-width: 992px) {
+  .appraisal-filter-grid {
+    grid-template-columns: 1fr 1fr !important;
+  }
+}
+
+@media (max-width: 576px) {
+  .appraisal-filter-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* =========================================================================
+   APPRAISAL TABLE WIDTH & SPACING
+   ========================================================================= */
+#facultyAppraisalsTable {
+  min-width: 1560px !important;
+  width: 100% !important;
+}
+
+#facultyAppraisalsTable th {
+  white-space: nowrap !important;
+  padding: 14px 16px !important;
+}
+
+#facultyAppraisalsTable td {
+  padding: 14px 16px !important;
+  vertical-align: middle !important;
+}
+
+#facultyAppraisalsTable th:last-child,
+#facultyAppraisalsTable td:last-child {
+  min-width: 140px !important;
+  width: 140px !important;
+  text-align: center !important;
+}
+
+/* =========================================================================
+   SEARCH INPUT ICON CLEARANCE (PREVENT "QFilter" COLLISION)
+   ========================================================================= */
+#workloadFilterInput,
+#staffDocsFilterInput,
+#appraisalSearchInput {
+  padding-left: 42px !important;
+}
+
+/* =========================================================================
+   STAFF DOCUMENTS TABLE MIN-WIDTH & ACTIONS
+   ========================================================================= */
+#staffDocumentsTable {
+  min-width: 1420px !important;
+  width: 100% !important;
+}
+
+#staffDocumentsTable th:last-child,
+#staffDocumentsTable td:last-child {
+  min-width: 150px !important;
+  width: 150px !important;
+  text-align: center !important;
+  white-space: nowrap !important;
+}

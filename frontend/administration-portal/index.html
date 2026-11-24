@@ -4537,76 +4537,77 @@
               </div>
             </div>
 
-            <!-- Executive KPI Cards (Symmetric 4-Card Responsive Grid) -->
-            <div class="row mb-4">
-              <div class="col-xl-3 col-md-6 col-sm-6 mb-3">
-                <div class="card h-100 shadow-sm border-0"
-                  style="border-left: 4px solid #3b82f6 !important; border-radius: 8px; background: #ffffff;">
-                  <div class="card-body p-3">
-                    <div class="d-flex align-items-center justify-content-between mb-1">
-                      <span class="text-xs font-weight-bold text-muted text-uppercase" style="letter-spacing: 0.5px;">Cadre Reviews</span>
-                      <i class="fa-solid fa-clipboard-user text-primary" style="font-size: 1.15rem;"></i>
-                    </div>
-                    <div class="h4 mb-0 font-weight-bold text-gray-800" id="kpiTotalAppraisals">3</div>
-                    <div class="text-xs text-muted mt-1">Teaching &amp; Staff Cadre</div>
+            <!-- Executive Appraisal KPI Cards (Symmetric 5-Card Grid) -->
+            <div class="appraisal-kpi-grid mb-4" style="display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 14px; width: 100%;">
+              <div class="card h-100 shadow-sm border-0"
+                style="border-left: 4px solid #3b82f6 !important; border-radius: 8px; background: #ffffff;">
+                <div class="card-body p-3">
+                  <div class="d-flex align-items-center justify-content-between mb-1">
+                    <span class="text-xs font-weight-bold text-muted text-uppercase" style="letter-spacing: 0.5px;">Cadre Reviews</span>
+                    <i class="fa-solid fa-clipboard-user text-primary" style="font-size: 1.15rem;"></i>
                   </div>
+                  <div class="h4 mb-0 font-weight-bold text-gray-800" id="kpiTotalAppraisals">8</div>
+                  <div class="text-xs text-muted mt-1">Teaching &amp; Staff Cadre</div>
                 </div>
               </div>
 
-              <div class="col-xl-3 col-md-6 col-sm-6 mb-3">
-                <div class="card h-100 shadow-sm border-0"
-                  style="border-left: 4px solid #10b981 !important; border-radius: 8px; background: #ffffff;">
-                  <div class="card-body p-3">
-                    <div class="d-flex align-items-center justify-content-between mb-1">
-                      <span class="text-xs font-weight-bold text-muted text-uppercase" style="letter-spacing: 0.5px;">Completed Reviews</span>
-                      <i class="fa-solid fa-circle-check text-success" style="font-size: 1.15rem;"></i>
-                    </div>
-                    <div class="h4 mb-0 font-weight-bold text-success" id="kpiCompletedAppraisals">1</div>
-                    <div class="text-xs text-success mt-1"><i class="fa-solid fa-signature mr-1"></i> Mutually Acknowledged</div>
+              <div class="card h-100 shadow-sm border-0"
+                style="border-left: 4px solid #10b981 !important; border-radius: 8px; background: #ffffff;">
+                <div class="card-body p-3">
+                  <div class="d-flex align-items-center justify-content-between mb-1">
+                    <span class="text-xs font-weight-bold text-muted text-uppercase" style="letter-spacing: 0.5px;">Completed Reviews</span>
+                    <i class="fa-solid fa-circle-check text-success" style="font-size: 1.15rem;"></i>
                   </div>
+                  <div class="h4 mb-0 font-weight-bold text-success" id="kpiCompletedAppraisals">3</div>
+                  <div class="text-xs text-success mt-1"><i class="fa-solid fa-signature mr-1"></i> Mutually Acknowledged</div>
                 </div>
               </div>
 
-              <div class="col-xl-3 col-md-6 col-sm-6 mb-3">
-                <div class="card h-100 shadow-sm border-0"
-                  style="border-left: 4px solid #f59e0b !important; border-radius: 8px; background: #ffffff;">
-                  <div class="card-body p-3">
-                    <div class="d-flex align-items-center justify-content-between mb-1">
-                      <span class="text-xs font-weight-bold text-muted text-uppercase" style="letter-spacing: 0.5px;">Under Review</span>
-                      <i class="fa-solid fa-hourglass-half text-warning" style="font-size: 1.15rem;"></i>
-                    </div>
-                    <div class="h4 mb-0 font-weight-bold text-warning" id="kpiActiveAppraisals">1</div>
-                    <div class="text-xs text-muted mt-1">Discussion In Progress</div>
+              <div class="card h-100 shadow-sm border-0"
+                style="border-left: 4px solid #f59e0b !important; border-radius: 8px; background: #ffffff;">
+                <div class="card-body p-3">
+                  <div class="d-flex align-items-center justify-content-between mb-1">
+                    <span class="text-xs font-weight-bold text-muted text-uppercase" style="letter-spacing: 0.5px;">Under Review</span>
+                    <i class="fa-solid fa-hourglass-half text-warning" style="font-size: 1.15rem;"></i>
                   </div>
+                  <div class="h4 mb-0 font-weight-bold text-warning" id="kpiActiveAppraisals">2</div>
+                  <div class="text-xs text-muted mt-1">Discussion In Progress</div>
                 </div>
               </div>
 
-              <div class="col-xl-3 col-md-6 col-sm-6 mb-3">
-                <div class="card h-100 shadow-sm border-0"
-                  style="border-left: 4px solid #8b5cf6 !important; border-radius: 8px; background: #ffffff;">
-                  <div class="card-body p-3">
-                    <div class="d-flex align-items-center justify-content-between mb-1">
-                      <span class="text-xs font-weight-bold text-muted text-uppercase" style="letter-spacing: 0.5px;">Action Required</span>
-                      <i class="fa-solid fa-user-pen" style="font-size: 1.15rem; color:#8b5cf6;"></i>
-                    </div>
-                    <div class="d-flex align-items-baseline" style="gap: 8px;">
-                      <div class="h4 mb-0 font-weight-bold" style="color:#7c3aed;" id="kpiSelfAssessmentPending">1</div>
-                      <span class="text-xs text-muted">(<span id="kpiRevisionDueAppraisals">0</span> revisions)</span>
-                    </div>
-                    <div class="text-xs text-muted mt-1">Awaiting Submission / Review</div>
+              <div class="card h-100 shadow-sm border-0"
+                style="border-left: 4px solid #8b5cf6 !important; border-radius: 8px; background: #ffffff;">
+                <div class="card-body p-3">
+                  <div class="d-flex align-items-center justify-content-between mb-1">
+                    <span class="text-xs font-weight-bold text-muted text-uppercase" style="letter-spacing: 0.5px;">Self-Assessment Due</span>
+                    <i class="fa-solid fa-user-pen" style="font-size: 1.15rem; color:#8b5cf6;"></i>
                   </div>
+                  <div class="h4 mb-0 font-weight-bold" style="color:#7c3aed;" id="kpiSelfAssessmentPending">2</div>
+                  <div class="text-xs text-muted mt-1">Awaiting Employee Submission</div>
+                </div>
+              </div>
+
+              <div class="card h-100 shadow-sm border-0"
+                style="border-left: 4px solid #ea580c !important; border-radius: 8px; background: #ffffff;">
+                <div class="card-body p-3">
+                  <div class="d-flex align-items-center justify-content-between mb-1">
+                    <span class="text-xs font-weight-bold text-muted text-uppercase" style="letter-spacing: 0.5px;">Revisions Due</span>
+                    <i class="fa-solid fa-rotate-left" style="font-size: 1.15rem; color:#ea580c;"></i>
+                  </div>
+                  <div class="h4 mb-0 font-weight-bold" style="color:#c2410c;" id="kpiRevisionDueAppraisals">1</div>
+                  <div class="text-xs text-muted mt-1">Returned for Evidence</div>
                 </div>
               </div>
             </div>
 
             <!-- Executive Filter Toolbar (Clean Responsive Grid) -->
-            <div class="card mb-4 shadow-sm border-0" id="appraisalFilterToolbarCard" style="border-radius: 8px; background: #fff;">
+            <div class="card mb-4 shadow-sm border-0" id="appraisalFilterToolbarCard" style="border-radius: 8px; background: #fff; border: 1px solid #e2e8f0 !important;">
               <div class="card-body p-3">
                 <div class="d-flex align-items-center justify-content-between flex-wrap mb-3" style="gap: 10px;">
                   <div>
                     <span class="badge badge-light font-weight-normal py-2 px-3" id="appraisalCountPill"
                       style="background:#f1f5f9; color:#334155; font-size:0.84rem; border:1px solid #cbd5e1; border-radius: 6px;">
-                      <i class="fa-solid fa-award text-primary mr-1"></i> Showing 3 of 3 Appraisal Reviews
+                      <i class="fa-solid fa-award text-primary mr-1"></i> Showing 8 of 8 Appraisal Reviews
                     </span>
                   </div>
                   <div>
@@ -4617,21 +4618,19 @@
                   </div>
                 </div>
 
-                <div class="row align-items-center" style="margin: 0 -6px;">
+                <div class="appraisal-filter-grid" style="display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 12px; width: 100%; align-items: center;">
                   <!-- Search Input -->
-                  <div class="col-xl-4 col-lg-4 col-md-12 p-1">
-                    <div style="position: relative;">
-                      <i class="fa-solid fa-magnifying-glass"
-                        style="position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: #94a3b8; font-size: 0.88rem;"></i>
-                      <input type="text" id="appraisalSearchInput" class="form-control"
-                        style="padding-left: 38px; height: 38px; font-size: 0.85rem; border: 1px solid #cbd5e1; border-radius: 6px; background: #ffffff;"
-                        placeholder="Search employee, reviewer, objectives..."
-                        oninput="portalApp.filterAppraisals()">
-                    </div>
+                  <div style="position: relative;">
+                    <i class="fa-solid fa-magnifying-glass"
+                      style="position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: #94a3b8; font-size: 0.88rem; pointer-events: none;"></i>
+                    <input type="text" id="appraisalSearchInput" class="form-control"
+                      style="padding-left: 42px !important; height: 38px; font-size: 0.85rem; border: 1px solid #cbd5e1; border-radius: 6px; background: #ffffff;"
+                      placeholder="Search employee, reviewer, objectives, department..."
+                      oninput="portalApp.filterAppraisals()">
                   </div>
 
                   <!-- Review Period Filter -->
-                  <div class="col-xl-3 col-lg-3 col-md-4 col-sm-6 p-1">
+                  <div>
                     <select id="appraisalPeriodFilter" class="form-control"
                       style="height: 38px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.84rem; background-color: #f8fafc; color: #1e293b; font-weight: 500;"
                       onchange="portalApp.filterAppraisals()">
@@ -4642,7 +4641,7 @@
                   </div>
 
                   <!-- Department Filter -->
-                  <div class="col-xl-3 col-lg-3 col-md-4 col-sm-6 p-1">
+                  <div>
                     <select id="appraisalDeptFilter" class="form-control"
                       style="height: 38px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.84rem; background-color: #f8fafc; color: #1e293b; font-weight: 500;"
                       onchange="portalApp.filterAppraisals()">
@@ -4657,7 +4656,7 @@
                   </div>
 
                   <!-- Status Filter -->
-                  <div class="col-xl-2 col-lg-2 col-md-4 col-sm-12 p-1">
+                  <div>
                     <select id="appraisalStatusFilter" class="form-control"
                       style="height: 38px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.84rem; background-color: #f8fafc; color: #1e293b; font-weight: 500;"
                       onchange="portalApp.filterAppraisals()">
@@ -4794,10 +4793,10 @@
                     <!-- Search Input -->
                     <div style="position: relative; flex: 1; min-width: 280px;">
                       <i class="fa-solid fa-magnifying-glass"
-                        style="position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: #94a3b8; font-size: 0.88rem;"></i>
+                        style="position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: #94a3b8; font-size: 0.88rem; pointer-events: none;"></i>
                       <input type="text" id="workloadFilterInput" class="form-control"
-                        style="padding-left: 38px; height: 38px; font-size: 0.85rem; border: 1px solid #cbd5e1; border-radius: 6px; background: #ffffff;"
-                        placeholder="Filter workload by teacher name, subject, assigned class..."
+                        style="padding-left: 42px !important; height: 38px; font-size: 0.85rem; border: 1px solid #cbd5e1; border-radius: 6px; background: #ffffff;"
+                        placeholder="Search faculty workload by teacher, subject, class..."
                         oninput="portalApp.filterFacultyWorkload()">
                     </div>
 
@@ -4878,10 +4877,10 @@
                     <!-- Search Input with Fixed Icon -->
                     <div style="position: relative; flex: 1; min-width: 280px;">
                       <i class="fa-solid fa-magnifying-glass"
-                        style="position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: #94a3b8; font-size: 0.88rem;"></i>
+                        style="position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: #94a3b8; font-size: 0.88rem; pointer-events: none;"></i>
                       <input type="text" id="staffDocsFilterInput" class="form-control"
-                        style="padding-left: 38px; height: 38px; font-size: 0.85rem; border: 1px solid #cbd5e1; border-radius: 6px; background: #ffffff;"
-                        placeholder="Filter documents by staff name, employee ID, document type..."
+                        style="padding-left: 42px !important; height: 38px; font-size: 0.85rem; border: 1px solid #cbd5e1; border-radius: 6px; background: #ffffff;"
+                        placeholder="Search staff documents by name, employee ID, qualification..."
                         oninput="portalApp.filterStaffDocuments()">
                     </div>
 

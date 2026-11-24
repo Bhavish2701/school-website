@@ -6884,7 +6884,7 @@ const FEE_CATEGORY_AUDIT_DATA = [
           </div>
         </div>
 
-        <div class="metrics-quad mb-3" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 14px;">
+        <div class="metrics-quad dossier-metrics-quad mb-3" style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; width: 100%;">
           <div class="metric-card">
             <div class="metric-icon-wrap icon-blue"><i class="fa-solid fa-award"></i></div>
             <div class="metric-details">
@@ -7499,7 +7499,7 @@ const FEE_CATEGORY_AUDIT_DATA = [
           </div>
         </div>
 
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 14px; margin-bottom: 1.25rem;">
+        <div class="dossier-metrics-quad mb-3" style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; width: 100%; margin-bottom: 1.25rem;">
           <div class="p-3 bg-white border rounded-3 text-center" style="box-shadow: 0 1px 3px rgba(15,23,42,0.03);">
             <span class="dossier-meta-label d-block mb-1">Total Working Days</span>
             <strong style="font-size: 1.35rem; color: #1e293b; display: block;">${s.attendanceStats?.workingDays || 182}</strong>
@@ -51516,88 +51516,218 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
 
   function ensureAppraisalState() {
     ensureTeachersEnriched();
-    // If state.appraisals is uninitialized or contains old dummy mock data (e.g. SV-FAC-0105 or Smt. M. Vijaya)
-    if (!state.appraisals || state.appraisals.length === 0 || state.appraisals.length > 3 || state.appraisals.some(a => a.employeeId === 'SV-FAC-0105' || a.employeeName === 'Smt. M. Vijaya' || a.employeeId === 'SV-STF-0201' || a.employeeName === 'Sri M. Srinivas')) {
+    if (!state.appraisals || state.appraisals.length < 8) {
       state.appraisals = [
         {
           id: 'APP-2026-001',
-          employeeId: 'SV-TEA-001',
-          employeeName: 'P. Sunitha (Senior Teacher)',
-          department: 'Academics',
-          designation: 'Senior Mathematics Teacher & HOD',
-          isTeaching: true,
-          reviewPeriod: 'Academic Year 2025–26',
-          reviewer: 'Principal Smt. Gorle Varalakshmi',
-          reviewerRole: 'Principal & Executive Evaluator',
-          objectives: 'Class X Board Examination pass rate > 98% with zero grade drops; integration of digital interactive mathematics labs.',
-          criteria: 'Curriculum Delivery (5/5), Student Engagement (5/5), Formative Feedback (4.8/5), Classroom Discipline (5/5), Professional Development (5/5)',
-          selfAssessment: {
-            rating: '4.9 / 5.0',
-            reflection: 'Conducted daily remedial math clinics for board candidates and digitized trigonometry problem sets.',
-            evidenceDoc: 'Class_X_Math_Performance_Audit_2026.pdf',
-            submittedAt: '2026-10-18'
-          },
-          reviewerComments: 'Outstanding pedagogical precision and dedicated board exam mentorship. Highly commendable classroom engagement.',
-          meetingDate: '2026-10-24 15:30',
-          meetingDateFormatted: '2026-10-24 at 03:30 PM (Chamber)',
-          developmentGoals: 'Lead District Secondary Mathematics Curriculum Cell; mentor junior faculty in board assessment criteria.',
-          status: 'Completed',
-          rating: '4.9 - Outstanding',
-          acknowledgement: {
-            employee: 'Signed & Acknowledged by P. Sunitha on 2026-10-25',
-            reviewer: 'Authorized by Principal Smt. Gorle Varalakshmi on 2026-10-26'
-          }
-        },
-        {
-          id: 'APP-2026-002',
-          employeeId: 'SV200005',
-          employeeName: 'Sri K. Rajesh',
-          department: 'Academics',
-          designation: 'Senior Science Faculty',
-          isTeaching: true,
-          reviewPeriod: 'Academic Year 2025–26',
-          reviewer: 'Principal Smt. Gorle Varalakshmi',
-          reviewerRole: 'Principal & Executive Evaluator',
-          objectives: 'Physics & Chemistry laboratory safety compliance, Class IX practical setups, and science Olympiad mentorship.',
-          criteria: 'Curriculum Delivery (4.5/5), Lab Demonstrations (5/5), Student Engagement (4.5/5), Classroom Discipline (4.5/5)',
-          selfAssessment: {
-            rating: '4.6 / 5.0',
-            reflection: 'Guided 4 students to State Level Science Fair finals; maintained 100% lab apparatus calibration.',
-            evidenceDoc: 'Science_Lab_Calibration_Log_2026.pdf',
-            submittedAt: '2026-10-22'
-          },
-          reviewerComments: 'Excellent laboratory supervision and student enthusiasm in experimental science. Scheduled for final sign-off.',
-          meetingDate: '2026-10-30 11:30',
-          meetingDateFormatted: '2026-10-30 at 11:30 AM (VP Office)',
-          developmentGoals: 'Complete Advanced Experimental Physics Teacher Training with AP State Education Board.',
-          status: 'Under Review',
-          rating: '4.6 - Excellent',
-          acknowledgement: null
-        },
-        {
-          id: 'APP-2026-003',
-          employeeId: 'SV-TEA-002',
-          employeeName: 'K. Ramesh',
-          department: 'Academics',
+          employeeId: 'SV-FAC-0105',
+          employeeName: 'Sri M. Srinivas',
+          department: 'Social Studies',
           designation: 'Faculty Member',
           isTeaching: true,
           reviewPeriod: 'Academic Year 2025–26',
           reviewer: 'Principal Smt. Gorle Varalakshmi',
           reviewerRole: 'Principal & Executive Evaluator',
-          objectives: 'Middle school general science conceptual foundations and formative assessment tracking.',
-          criteria: 'Instructional Clarity (4.5/5), Formative Feedback (4/5), Classroom Discipline (4.5/5)',
+          objectives: 'CBSE Class X Social Studies pass rate > 95% with zero academic failures; complete digital pedagogy workshops.',
+          criteria: 'Curriculum Delivery (5/5), Student Engagement (4.5/5), Formative Feedback (4.5/5), Classroom Discipline (5/5), Professional Development (4.5/5)',
           selfAssessment: {
             rating: '4.5 / 5.0',
-            reflection: 'Implemented bi-weekly hands-on micro-experiments and updated student learning progress ledgers.',
-            evidenceDoc: 'Formative_Assessment_Science_Ledger.pdf',
+            reflection: 'Conducted weekly remedial doubt clinics and utilized smart interactive displays for map analysis.',
+            evidenceDoc: 'CBSE_Board_Pass_Percentages_2026.pdf',
+            submittedAt: '2026-10-15'
+          },
+          reviewerComments: 'Demonstrated exceptional pedagogical leadership. Student engagement and exam preparedness exceeded board standards.',
+          meetingDate: '2026-10-24 15:30',
+          meetingDateFormatted: '2026-10-24 at 03:30 PM (Chamber)',
+          developmentGoals: 'Attend CBSE National Pedagogy Workshop; lead secondary school curriculum committee.',
+          status: 'Completed',
+          rating: '4.8 - Outstanding',
+          acknowledgement: {
+            employee: 'Signed & Acknowledged by Sri M. Srinivas on 2026-10-25',
+            reviewer: 'Authorized by Principal Smt. Gorle Varalakshmi on 2026-10-26'
+          }
+        },
+        {
+          id: 'APP-2026-002',
+          employeeId: 'SV-STF-0201',
+          employeeName: 'Smt. M. Vijaya',
+          department: 'Administrative Office',
+          designation: 'Office Administrator & Head Clerk',
+          isTeaching: false,
+          reviewPeriod: 'Academic Year 2025–26',
+          reviewer: 'Principal Smt. Gorle Varalakshmi',
+          reviewerRole: 'Principal & Executive Evaluator',
+          objectives: 'CBSE Affiliation portal annual compliance renewal; statutory staff attendance audit with zero non-conformances.',
+          criteria: 'Process Efficiency (5/5), Timely Record Keeping (5/5), Asset Custody (4.5/5), Punctuality & Shift Adherence (5/5), Inter-Departmental Collaboration (5/5)',
+          selfAssessment: {
+            rating: '4.8 / 5.0',
+            reflection: 'Streamlined CBSE affiliation dossier submission 15 days ahead of deadline.',
+            evidenceDoc: 'CBSE_Affiliation_Filing_Confirmation.pdf',
+            submittedAt: '2026-10-18'
+          },
+          reviewerComments: 'Exemplary administrative vigilance. Office workflows and board liaison executed with utmost precision.',
+          meetingDate: '2026-10-26 14:00',
+          meetingDateFormatted: '2026-10-26 at 02:00 PM (Admin Office)',
+          developmentGoals: 'Master Advanced School ERP Data Security protocols and staff portal credentialing.',
+          status: 'Completed',
+          rating: '4.9 - Outstanding',
+          acknowledgement: {
+            employee: 'Signed & Acknowledged by Smt. M. Vijaya on 2026-10-26',
+            reviewer: 'Authorized by Principal Smt. Gorle Varalakshmi on 2026-10-27'
+          }
+        },
+        {
+          id: 'APP-2026-003',
+          employeeId: 'SV-FAC-0103',
+          employeeName: 'Sri K. Anand Kumar',
+          department: 'English',
+          designation: 'Faculty Member',
+          isTeaching: true,
+          reviewPeriod: 'Academic Year 2025–26',
+          reviewer: 'Vice Principal Sri Navva Anand',
+          reviewerRole: 'Vice Principal & Academic Evaluator',
+          objectives: 'Class X English communicative language fluency & creative writing portfolio development.',
+          criteria: 'Curriculum Delivery (4/5), Student Engagement (4/5), Formative Feedback (4/5), Classroom Discipline (4.5/5), Professional Development (4/5)',
+          selfAssessment: {
+            rating: '4.0 / 5.0',
+            reflection: 'Organized inter-school debate and school magazine editorial club.',
+            evidenceDoc: 'School_Literary_Club_Report.pdf',
+            submittedAt: '2026-10-20'
+          },
+          reviewerComments: 'Solid linguistic instruction. Recommended to incorporate more structured grammar drills for slow learners.',
+          meetingDate: '2026-10-28 11:30',
+          meetingDateFormatted: '2026-10-28 at 11:30 AM (VP Office)',
+          developmentGoals: 'Complete British Council Secondary English Teaching Certification.',
+          status: 'Under Review',
+          rating: '4.1 - Very Good',
+          acknowledgement: null
+        },
+        {
+          id: 'APP-2026-004',
+          employeeId: 'SV-STF-0203',
+          employeeName: 'Sri V. Suresh Babu',
+          department: 'Science Laboratories',
+          designation: 'Senior Science Laboratory Assistant',
+          isTeaching: false,
+          reviewPeriod: 'Academic Year 2025–26',
+          reviewer: 'Vice Principal Sri Navva Anand',
+          reviewerRole: 'Vice Principal & Academic Evaluator',
+          objectives: 'Physics & Chemistry laboratory apparatus readiness, chemical storage safety audits, and CBSE practicals setup.',
+          criteria: 'Lab Safety & Chemical Custody (5/5), Apparatus Calibration (4.5/5), Practical Exam Setup (5/5), Punctuality (4.5/5)',
+          selfAssessment: {
+            rating: '4.5 / 5.0',
+            reflection: 'Maintained zero glass breakage during term practicals; updated MSDS sheets for all reagents.',
+            evidenceDoc: 'Lab_Safety_Audit_Report_2026.pdf',
+            submittedAt: '2026-10-22'
+          },
+          reviewerComments: 'Awaiting formal review meeting with Vice Principal scheduled for tomorrow morning.',
+          meetingDate: '2026-10-31 10:30',
+          meetingDateFormatted: '2026-10-31 at 10:30 AM (Science Lab)',
+          developmentGoals: 'Procure digital sensor-based physics apparatus and attend chemical disposal training.',
+          status: 'Under Review',
+          rating: '4.6 - Excellent',
+          acknowledgement: null
+        },
+        {
+          id: 'APP-2026-005',
+          employeeId: 'SV-STF-0210',
+          employeeName: 'Sri D. Ramana',
+          department: 'Finance & Accounts',
+          designation: 'Assistant Accounts Clerk & Billing',
+          isTeaching: false,
+          reviewPeriod: 'Academic Year 2025–26',
+          reviewer: 'Principal Smt. Gorle Varalakshmi',
+          reviewerRole: 'Principal & Executive Evaluator',
+          objectives: 'Daily fee reconciliation, Tally Prime accounting entries, and fee receipt dispatch.',
+          criteria: 'Billing Accuracy (4/5), Cash Counter Punctuality (4.5/5), Parent Communication (4/5)',
+          selfAssessment: {
+            rating: '4.0 / 5.0',
+            reflection: 'Processed over 1,500 fee receipts with zero accounting discrepancies.',
+            evidenceDoc: 'Fee_Receipt_Reconciliation_Ledger.pdf',
             submittedAt: '2026-10-25'
           },
-          reviewerComments: 'Self-assessment received. Executive evaluation meeting to be scheduled this week.',
+          reviewerComments: 'Interim review draft saved. Scheduled for discussion.',
           meetingDate: null,
           meetingDateFormatted: 'To be scheduled',
-          developmentGoals: 'Incorporate inquiry-based science pedagogy in upper primary classes.',
+          developmentGoals: 'Undergo Tally Prime Advanced GST Taxation Training.',
           status: 'Self-Assessment Submitted',
-          rating: '4.5 - Very Good',
+          rating: '4.0 - Very Good',
+          acknowledgement: null
+        },
+        {
+          id: 'APP-2026-006',
+          employeeId: 'SV-STF-0207',
+          employeeName: 'Sri P. Appa Rao',
+          department: 'Transport Operations',
+          designation: 'Transport & Fleet Logistics Supervisor',
+          isTeaching: false,
+          reviewPeriod: 'Academic Year 2025–26',
+          reviewer: 'Vice Principal Sri Navva Anand',
+          reviewerRole: 'Vice Principal & Academic Evaluator',
+          objectives: '14 school bus fleet roadworthiness, driver punctuality, and zero transit incidents.',
+          criteria: 'Fleet Fitness & RTO Compliance (4.5/5), Route Timing Adherence (4.5/5), Student Safety (5/5)',
+          selfAssessment: {
+            rating: '4.0 / 5.0',
+            reflection: 'Conducted bi-monthly bus mechanical fitness inspections; GPS units active 100%.',
+            evidenceDoc: 'Fleet_Inspection_Log_2026.pdf',
+            submittedAt: '2026-10-10'
+          },
+          reviewerComments: 'Please attach certified driver medical fitness test certificates before final closure.',
+          meetingDate: '2026-10-22 16:00',
+          meetingDateFormatted: '2026-10-22 at 04:00 PM',
+          developmentGoals: 'Implement digital driver breathalyzer logging terminal.',
+          status: 'Returned for Revision',
+          rating: 'Pending Revision',
+          acknowledgement: null
+        },
+        {
+          id: 'APP-2026-007',
+          employeeId: 'SV-STF-0204',
+          employeeName: 'Sri G. Ranga Rao',
+          department: 'Library & Learning Resource',
+          designation: 'Head Librarian & Media In-Charge',
+          isTeaching: false,
+          reviewPeriod: 'Academic Year 2025–26',
+          reviewer: 'Principal Smt. Gorle Varalakshmi',
+          reviewerRole: 'Principal & Executive Evaluator',
+          objectives: 'Library automation, digital cataloging, and reading circle engagement.',
+          criteria: 'Catalog System (4.5/5), Book Circulation (4.5/5), Student Reading Hours (5/5)',
+          selfAssessment: {
+            rating: '4.5 / 5.0',
+            reflection: 'Cataloged 1,200 new reference books and launched weekend reading club.',
+            evidenceDoc: 'Library_Circulation_Ledger_2026.pdf',
+            submittedAt: '2026-10-24'
+          },
+          reviewerComments: 'Excellent book circulation management and positive student reading club outcomes.',
+          meetingDate: '2026-10-27 15:00',
+          meetingDateFormatted: '2026-10-27 at 03:00 PM',
+          developmentGoals: 'Integrate RFID self-checkout kiosk.',
+          status: 'Completed',
+          rating: '4.7 - Outstanding',
+          acknowledgement: {
+            employee: 'Signed & Acknowledged by Sri G. Ranga Rao on 2026-10-27',
+            reviewer: 'Authorized by Principal Smt. Gorle Varalakshmi on 2026-10-28'
+          }
+        },
+        {
+          id: 'APP-2026-008',
+          employeeId: 'SV-FAC-0104',
+          employeeName: 'Smt. S. Aruna',
+          department: 'Biological Science',
+          designation: 'Faculty Member',
+          isTeaching: true,
+          reviewPeriod: 'Academic Year 2026–27',
+          reviewer: 'Vice Principal Sri Navva Anand',
+          reviewerRole: 'Vice Principal & Academic Evaluator',
+          objectives: 'High school biology practical experiment mastery and eco-club botanical garden maintenance.',
+          criteria: 'Instructional Clarity (4.5/5), Lab Demonstration (4.5/5), Remedial Biology (4/5)',
+          selfAssessment: null,
+          reviewerComments: 'Draft review initiated for upcoming mid-term evaluation.',
+          meetingDate: null,
+          meetingDateFormatted: 'Not Scheduled',
+          developmentGoals: 'Organize inter-school science exhibition.',
+          status: 'Draft',
+          rating: 'Draft In Progress',
           acknowledgement: null
         }
       ];
@@ -52310,7 +52440,7 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     }
 
     tbody.innerHTML = data.map(f => {
-      const classesChips = (f.assignedClasses || []).map(c => '<span class="class-allocation-chip" style="display:inline-flex; align-items:center; gap:5px; background:#eff6ff; color:#1d4ed8; border:1px solid #bfdbfe; font-size:0.75rem; font-weight:600; padding:3px 8px; border-radius:5px;"><i class="fa-solid fa-chalkboard"></i> ' + c + '</span>').join(' ');
+      const classesChips = (f.assignedClasses || []).map(c => '<span class="class-allocation-chip" style="display:inline-flex; align-items:center; gap:6px; background:#eff6ff; color:#1d4ed8; border:1px solid #bfdbfe; font-size:0.75rem; font-weight:600; padding:3px 9px; border-radius:5px;"><i class="fa-solid fa-chalkboard text-primary" style="font-size:0.75rem; margin-right:4px;"></i>' + c + '</span>').join(' ');
       const periods = f.weeklyPeriods || 24;
       const pct = Math.min(100, Math.round((periods / 30) * 100));
       const isOverload = periods > 26;
