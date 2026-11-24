@@ -1,0 +1,21 @@
+{
+  "name": "srividya-school-portal",
+  "version": "1.0.0",
+  "description": "Unified Web ERP and Management Portals for Sri Vidya E.M High School",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js",
+    "test": "cd backend && npm test",
+    "test:acceptance": "node scripts/run_all_acceptance_tests.js"
+  },
+  "keywords": [
+    "school-erp",
+    "sri-vidya",
+    "express",
+    "mongodb",
+    "education-portal"
+  ],
+  "author": "Sri Vidya E.M High School",
+  "license": "ISC"
+}

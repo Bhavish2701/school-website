@@ -2,6 +2,15 @@
 scratch/
 *.log
 __pycache__/
+*.tmp
+*.bak
+*.swp
+*~
+
+# Test Coverage and Caches
+coverage/
+.nyc_output/
+.eslintcache
 
 # Extracted duplicate nested directory
 School-Website-1-main/
@@ -12,10 +21,10 @@ backend/node_modules/
 
 # IDE / OS files
 .DS_Store
+Thumbs.db
 .vscode/
 .idea/
 
 # Environment files
 .env
 backend/.env
-
