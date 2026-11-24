@@ -1,5 +1,7 @@
 # Sri Vidya E.M. High School - Comprehensive School ERP Platform
 
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/Bhavish2701/school-website)
+
 Official website and unified enterprise ERP portal ecosystem for **Sri Vidya E.M. High School**, established with the guiding motto:
 > *"Vidyathe Vijayam" — Knowledge Brings Victory*
 

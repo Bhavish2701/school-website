@@ -5,6 +5,7 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
+    "build": "npm install --prefix backend",
     "dev": "node --watch server.js",
     "test": "cd backend && npm test",
     "test:acceptance": "node scripts/run_all_acceptance_tests.js"

@@ -55,11 +55,11 @@ const connectDB = async () => {
     return conn;
   } catch (error) {
     console.error(`[Database Error] Could not connect to MongoDB: ${error.message}`);
-    if (config.isProd) {
-      console.error('[Database Fatal] Production requires a working MongoDB instance. Halting process.');
+    if (config.isProd && process.env.STRICT_DB === 'true') {
+      console.error('[Database Fatal] Strict production mode enabled. Halting process.');
       process.exit(1);
     } else {
-      console.warn('[Database] Running in development mode without MongoDB. Ensure MongoDB is running for persistence.');
+      console.warn('[Database] MongoDB connection unavailable or deferred. Portals and static endpoints remain active.');
     }
     return null;
   }
