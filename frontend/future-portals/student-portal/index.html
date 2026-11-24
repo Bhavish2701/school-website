@@ -10,6 +10,18 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/css/style.css">
   <link rel="stylesheet" href="/css/portal.css">
+  <!-- Early Route Guard: Student Portal Authentication Verification -->
+  <script>
+    (function () {
+      try {
+        var token = localStorage.getItem('sv_token_access') || sessionStorage.getItem('sv_token_access');
+        if (!token) {
+          var cur = window.location.pathname + window.location.search;
+          window.location.replace('/login?portal=student&redirect=' + encodeURIComponent(cur));
+        }
+      } catch (e) { }
+    })();
+  </script>
 </head>
 <body class="portal-body">
   <div class="portal-main-wrapper" style="margin-left: 0; padding: 1.5rem 2.5rem; max-width: 1400px; margin: 0 auto;">
@@ -220,6 +232,12 @@
     }
   </script>
   <script src="/js/api-client.js"></script>
-  <script>hydrateLiveStudentPortal();</script>
+  <script src="/js/portal-auth.js"></script>
+  <script>
+    if (window.PortalAuth && typeof window.PortalAuth.init === 'function') {
+      PortalAuth.init('student');
+    }
+    hydrateLiveStudentPortal();
+  </script>
 </body>
 </html>

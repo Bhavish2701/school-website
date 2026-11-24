@@ -31,7 +31,7 @@
         var token = localStorage.getItem('sv_token_access') || sessionStorage.getItem('sv_token_access');
         if (!token) {
           var cur = window.location.pathname + window.location.search;
-          window.location.replace('/login?redirect=' + encodeURIComponent(cur));
+          window.location.replace('/login?portal=teacher&redirect=' + encodeURIComponent(cur));
         }
       } catch (e) { }
     })();

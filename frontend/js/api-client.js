@@ -501,20 +501,20 @@
     // 1. Authentication Service
     get auth() {
       return {
-        login: async (identifier, password, remember = true, requireOtp = false) => {
+        login: async (identifier, password, remember = true, requireOtp = false, requestedPortal = '') => {
           const res = await this.request('/auth/login', {
             method: 'POST',
-            body: { identifier, password, requireOtp },
+            body: { identifier, password, requireOtp, requestedPortal },
           });
           if (res.success && res.data && !res.requiresOtp && res.data.tokens) {
             this.setSession(res.data.tokens, res.data.user, remember);
           }
           return res;
         },
-        verifyOtp: async (preAuthToken, otp, remember = true) => {
+        verifyOtp: async (preAuthToken, otp, remember = true, requestedPortal = '') => {
           const res = await this.request('/auth/verify-otp', {
             method: 'POST',
-            body: { preAuthToken, otp },
+            body: { preAuthToken, otp, requestedPortal },
           });
           if (res.success && res.data && res.data.tokens) {
             this.setSession(res.data.tokens, res.data.user, remember);

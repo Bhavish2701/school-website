@@ -32,11 +32,38 @@ const maskDestination = (dest, type = 'mobile') => {
 };
 
 /**
+ * Portal Normalization and Human-Readable Display Names
+ */
+const normalizePortalName = (p) => {
+  if (!p) return '';
+  const s = String(p).trim().toLowerCase();
+  if (s === 'platform' || s === 'platform-admin' || s === 'platform_admin' || s === 'superadmin') return 'platform-admin';
+  if (s === 'management' || s === 'administration' || s === 'admin' || s === 'executive') return 'management';
+  if (s === 'teacher' || s === 'faculty' || s === 'staff') return 'teacher';
+  if (s === 'student') return 'student';
+  if (s === 'parent' || s === 'guardian') return 'parent';
+  return s;
+};
+
+const getPortalDisplayName = (p) => {
+  const norm = normalizePortalName(p);
+  const names = {
+    'platform-admin': 'Platform Administration',
+    'management': 'Administration Portal',
+    'teacher': 'Faculty Portal',
+    'student': 'Student Portal',
+    'parent': 'Parent Portal',
+  };
+  return names[norm] || p || 'Authorized Portal';
+};
+
+/**
  * Role-to-Portal Redirection and Authorization Mapping
  */
 const getRolePortalMapping = (role) => {
   switch (role) {
     case 'SUPER_ADMIN':
+    case 'PLATFORM_ADMIN':
       return {
         portal: 'platform-admin',
         redirectUrl: '/platform-admin#dashboard',
@@ -61,6 +88,10 @@ const getRolePortalMapping = (role) => {
         allowedPortals: ['management']
       };
     case 'OFFICE':
+    case 'CLERK':
+    case 'ADMIN':
+    case 'ACCOUNTS':
+    case 'EXAM_COORDINATOR':
       return {
         portal: 'management',
         redirectUrl: '/management#dashboard',
@@ -69,6 +100,7 @@ const getRolePortalMapping = (role) => {
         allowedPortals: ['management']
       };
     case 'TEACHER':
+    case 'FACULTY':
       return {
         portal: 'teacher',
         redirectUrl: '/teacher#dashboard',
@@ -167,6 +199,22 @@ const login = asyncHandler(async (req, res) => {
     );
   }
 
+  // Compute authoritative role-based portal routing
+  const portalInfo = getRolePortalMapping(user.role);
+
+  // Authoritative Role & Permission Verification against requested portal
+  const rawRequestedPortal = (req.body.requestedPortal || req.query.portal || '').trim().toLowerCase();
+  const requestedPortal = normalizePortalName(rawRequestedPortal);
+
+  if (requestedPortal && !portalInfo.allowedPortals.includes(requestedPortal)) {
+    const targetPortalName = getPortalDisplayName(requestedPortal);
+    const authorizedNames = portalInfo.allowedPortals.map(p => getPortalDisplayName(p)).join(', ');
+    throw ApiError.forbidden(
+      `Access Denied: Your account role (${user.role}) is not authorized to access ${targetPortalName}. Authorized portal(s): ${authorizedNames}.`,
+      'PORTAL_UNAUTHORIZED'
+    );
+  }
+
   // 2FA Security: If OTP verification is requested by client, generate secure 6-digit OTP and preAuthToken
   const requireOtp = req.body.requireOtp === true || req.headers['x-require-otp'] === 'true';
   if (requireOtp) {
@@ -186,6 +234,7 @@ const login = asyncHandler(async (req, res) => {
       plainOtp,
       destination: maskedDest,
       destinationType: destType,
+      requestedPortal,
       expiresAt: new Date(Date.now() + 5 * 60 * 1000), // 5 minutes
       lastSentAt: new Date(),
     });
@@ -203,6 +252,7 @@ const login = asyncHandler(async (req, res) => {
         expiresInSeconds: 300,
         cooldownSeconds: 45,
         otp: plainOtp,
+        requestedPortal,
       },
     });
   }
@@ -216,8 +266,18 @@ const login = asyncHandler(async (req, res) => {
   user.lastLogin = new Date();
   await user.save({ validateBeforeSave: false });
 
-  // Compute authoritative role-based portal routing
-  const portalInfo = getRolePortalMapping(user.role);
+  // Derive tailored destination portal and redirect URL
+  let targetPortal = portalInfo.portal;
+  let targetRedirectUrl = portalInfo.redirectUrl;
+
+  if (requestedPortal && portalInfo.allowedPortals.includes(requestedPortal)) {
+    targetPortal = requestedPortal;
+    if (requestedPortal === 'platform-admin') targetRedirectUrl = '/platform-admin#dashboard';
+    else if (requestedPortal === 'management') targetRedirectUrl = '/management#dashboard';
+    else if (requestedPortal === 'teacher') targetRedirectUrl = '/teacher#dashboard';
+    else if (requestedPortal === 'student') targetRedirectUrl = '/student#dashboard';
+    else if (requestedPortal === 'parent') targetRedirectUrl = '/parent#dashboard';
+  }
 
   res.status(200).json({
     success: true,
@@ -225,8 +285,8 @@ const login = asyncHandler(async (req, res) => {
     data: {
       user: {
         ...user.toJSON(),
-        portal: portalInfo.portal,
-        redirectUrl: portalInfo.redirectUrl,
+        portal: targetPortal,
+        redirectUrl: targetRedirectUrl,
         dashboardTitle: portalInfo.dashboardTitle,
         roleSubtype: portalInfo.roleSubtype,
         allowedPortals: portalInfo.allowedPortals,
@@ -238,8 +298,8 @@ const login = asyncHandler(async (req, res) => {
         expiresIn: config.jwt.expire,
       },
       routing: {
-        portal: portalInfo.portal,
-        redirectUrl: portalInfo.redirectUrl,
+        portal: targetPortal,
+        redirectUrl: targetRedirectUrl,
         dashboardTitle: portalInfo.dashboardTitle,
         roleSubtype: portalInfo.roleSubtype,
         allowedPortals: portalInfo.allowedPortals,
@@ -743,14 +803,40 @@ const verifyOtp = asyncHandler(async (req, res) => {
 
   const portalInfo = getRolePortalMapping(user.role);
 
+  // Authoritative Role & Permission Verification against requested portal
+  const rawRequestedPortal = (req.body.requestedPortal || record.requestedPortal || req.query.portal || '').trim().toLowerCase();
+  const requestedPortal = normalizePortalName(rawRequestedPortal);
+
+  if (requestedPortal && !portalInfo.allowedPortals.includes(requestedPortal)) {
+    const targetPortalName = getPortalDisplayName(requestedPortal);
+    const authorizedNames = portalInfo.allowedPortals.map(p => getPortalDisplayName(p)).join(', ');
+    throw ApiError.forbidden(
+      `Access Denied: Your account role (${user.role}) is not authorized to access ${targetPortalName}. Authorized portal(s): ${authorizedNames}.`,
+      'PORTAL_UNAUTHORIZED'
+    );
+  }
+
+  // Derive tailored destination portal and redirect URL
+  let targetPortal = portalInfo.portal;
+  let targetRedirectUrl = portalInfo.redirectUrl;
+
+  if (requestedPortal && portalInfo.allowedPortals.includes(requestedPortal)) {
+    targetPortal = requestedPortal;
+    if (requestedPortal === 'platform-admin') targetRedirectUrl = '/platform-admin#dashboard';
+    else if (requestedPortal === 'management') targetRedirectUrl = '/management#dashboard';
+    else if (requestedPortal === 'teacher') targetRedirectUrl = '/teacher#dashboard';
+    else if (requestedPortal === 'student') targetRedirectUrl = '/student#dashboard';
+    else if (requestedPortal === 'parent') targetRedirectUrl = '/parent#dashboard';
+  }
+
   return res.status(200).json({
     success: true,
     message: 'OTP Verified Successfully',
     data: {
       user: {
         ...user.toJSON(),
-        portal: portalInfo.portal,
-        redirectUrl: portalInfo.redirectUrl,
+        portal: targetPortal,
+        redirectUrl: targetRedirectUrl,
         dashboardTitle: portalInfo.dashboardTitle,
         roleSubtype: portalInfo.roleSubtype,
         allowedPortals: portalInfo.allowedPortals,
@@ -762,8 +848,8 @@ const verifyOtp = asyncHandler(async (req, res) => {
         expiresIn: config.jwt.expire,
       },
       routing: {
-        portal: portalInfo.portal,
-        redirectUrl: portalInfo.redirectUrl,
+        portal: targetPortal,
+        redirectUrl: targetRedirectUrl,
         dashboardTitle: portalInfo.dashboardTitle,
         roleSubtype: portalInfo.roleSubtype,
         allowedPortals: portalInfo.allowedPortals,

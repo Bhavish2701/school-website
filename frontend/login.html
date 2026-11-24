@@ -249,6 +249,79 @@
       font-weight: 600;
     }
 
+    /* Dynamic Portal Target Badge & Alert Banner */
+    .portal-target-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      padding: 0.28rem 0.85rem;
+      border-radius: 20px;
+      font-size: 0.72rem;
+      font-weight: 800;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+      margin-bottom: 0.35rem;
+      transition: all 0.2s ease;
+    }
+    .portal-target-pill.platform-admin {
+      background: #0F172A;
+      color: #93C5FD;
+      border: 1px solid #334155;
+    }
+    .portal-target-pill.management {
+      background: #FEF2F2;
+      color: #DC2626;
+      border: 1px solid #FECACA;
+    }
+    .portal-target-pill.teacher {
+      background: #EFF6FF;
+      color: #1D4ED8;
+      border: 1px solid #BFDBFE;
+    }
+    .portal-target-pill.student {
+      background: #F0FDF4;
+      color: #15803D;
+      border: 1px solid #BBF7D0;
+    }
+    .portal-target-pill.parent {
+      background: #FDF4FF;
+      color: #A21CAF;
+      border: 1px solid #F0ABFC;
+    }
+
+    .login-alert-banner {
+      margin-bottom: 0.85rem;
+      padding: 0.75rem 1rem;
+      border-radius: 12px;
+      font-size: 0.82rem;
+      line-height: 1.45;
+      display: flex;
+      align-items: flex-start;
+      gap: 0.65rem;
+      text-align: left;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+      animation: bannerSlideDown 0.25s ease forwards;
+    }
+    .login-alert-banner.danger {
+      background: #FEF2F2;
+      border: 1.5px solid #FCA5A5;
+      color: #991B1B;
+    }
+    .login-alert-banner.info {
+      background: #EFF6FF;
+      border: 1.5px solid #BFDBFE;
+      color: #1E40AF;
+    }
+    .login-alert-banner.warning {
+      background: #FFFBEB;
+      border: 1.5px solid #FDE68A;
+      color: #92400E;
+    }
+    @keyframes bannerSlideDown {
+      from { opacity: 0; transform: translateY(-8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
     /* When in OTP verification mode, hide redundant pre-login identity and demo pillars to save vertical space */
     .unified-login-overlay.in-otp-mode .portal-identity-bar,
     .unified-login-overlay.in-otp-mode .institutional-pillars-bar,
@@ -1034,15 +1107,18 @@
         </header>
 
         <!-- Gateway Identity & Automatic Role Redirection Notice -->
-        <div class="portal-identity-bar">
-          <div class="sso-badge-wrap">
-            <i class="fa-solid fa-shield-halved"></i> Unified Single Sign-On (SSO) Gateway
+        <div class="portal-identity-bar" id="portalIdentityBar">
+          <div class="sso-badge-wrap" id="ssoBadgeWrap">
+            <i class="fa-solid fa-shield-halved" id="ssoBadgeIcon"></i> <span id="ssoBadgeText">Unified Single Sign-On (SSO) Gateway</span>
           </div>
-          <h2 class="portal-card-title">Sign In to Your Workspace</h2>
-          <p class="sso-desc">
+          <h2 class="portal-card-title" id="portalCardTitle">Sign In to Your Workspace</h2>
+          <p class="sso-desc" id="portalCardDesc">
             Single secure gateway for <strong>Management, Faculty, Staff,</strong> and <strong>Platform Admin</strong>.
           </p>
         </div>
+
+        <!-- Dynamic Portal Alert / Access-Denied Banner -->
+        <div id="loginAlertBanner" style="display: none;" class="login-alert-banner"></div>
 
         <!-- Primary Sign-In Form -->
         <form class="unified-form" id="unifiedLoginForm" action="javascript:void(0);" onsubmit="PortalAuth.handleUnifiedLogin(event)">
@@ -1176,20 +1252,25 @@
         </form>
 
         <!-- Integrated Institutional Workspaces -->
-        <div class="institutional-pillars-bar" title="Click any role to quick-fill credentials">
+        <div class="institutional-pillars-bar" id="institutionalPillarsBar" title="Click any role to quick-fill credentials">
+          <div class="pillar-item" onclick="PortalAuth.quickFillDemo('superadmin')" title="Click to fill Super Admin credentials">
+            <i class="fa-solid fa-server"></i>
+            <span>Super Admin</span>
+          </div>
+          <div class="pillar-divider">&bull;</div>
           <div class="pillar-item" onclick="PortalAuth.quickFillDemo('principal')" title="Click to fill Principal credentials">
             <i class="fa-solid fa-building-columns"></i>
-            <span>Executive Management</span>
+            <span>Executive</span>
           </div>
           <div class="pillar-divider">&bull;</div>
           <div class="pillar-item" onclick="PortalAuth.quickFillDemo('teacher')" title="Click to fill Faculty credentials">
             <i class="fa-solid fa-chalkboard-user"></i>
-            <span>Faculty Workspace</span>
+            <span>Faculty</span>
           </div>
           <div class="pillar-divider">&bull;</div>
           <div class="pillar-item" onclick="PortalAuth.quickFillDemo('officestaff')" title="Click to fill Office Staff credentials">
             <i class="fa-solid fa-shield-halved"></i>
-            <span>Administration</span>
+            <span>Staff</span>
           </div>
         </div>
 

@@ -1111,11 +1111,12 @@ const PortalAuth = {
           throw new Error('API client verifyOtp method unavailable.');
         }
 
-        const res = await window.ApiClient.auth.verifyOtp(session.preAuthToken, enteredOtp, session.rememberMe);
+        const requestedPortal = session.requestedPortal || this.inferPortalFromUrl();
+        const res = await window.ApiClient.auth.verifyOtp(session.preAuthToken, enteredOtp, session.rememberMe, requestedPortal);
 
         if (res && res.success && res.data && res.data.user) {
           // 2. Success State: Green circular checkmark with "OTP Verified Successfully"
-          this.setOtpStatus('unified', 'success', 'OTP Verified Successfully', 'Launching your authorized Main Dashboard...');
+          this.setOtpStatus('unified', 'success', 'OTP Verified Successfully', 'Launching your authorized Dashboard...');
           boxes.forEach(b => {
             if (b) {
               b.disabled = false;
@@ -1124,16 +1125,29 @@ const PortalAuth = {
             }
           });
 
+          const user = res.data.user;
+          const routing = res.data.routing || this.resolvePortalForRole(user.role);
+          const allowedPortals = (user && user.allowedPortals) || routing.allowedPortals || [routing.portal];
+
+          if (requestedPortal && !allowedPortals.includes(requestedPortal)) {
+            const portalName = this.getPortalDisplayName(requestedPortal);
+            throw new Error(`Access Denied: Your assigned account role (${user.role}) is not authorized for ${portalName}.`);
+          }
+
           if (session.intervalId) clearInterval(session.intervalId);
           delete this.otpSessions[portalType];
 
-          const user = res.data.user;
-          const routing = res.data.routing || this.resolvePortalForRole(user.role);
           this.persistUnifiedSession(user, routing, session.enteredUser);
           this.clearNavigationCaches();
 
-          const targetUrl = this.getMainDashboardUrlForRole(user.role);
-          this.showToast('✓ OTP Verified Successfully! Launching Main Dashboard...', 'fa-circle-check');
+          let targetUrl = '';
+          if (requestedPortal && allowedPortals.includes(requestedPortal)) {
+            targetUrl = session.redirectUrl || (routing && routing.redirectUrl) || (this.getPortalConfig(requestedPortal)?.dashboardUrl) || this.getMainDashboardUrlForRole(user.role);
+          } else {
+            targetUrl = (routing && routing.redirectUrl) || this.getMainDashboardUrlForRole(user.role);
+          }
+
+          this.showToast('✓ OTP Verified Successfully! Launching Dashboard...', 'fa-circle-check');
 
           setTimeout(() => {
             window.location.href = targetUrl;
@@ -1475,14 +1489,191 @@ const PortalAuth = {
    * UNIFIED LOGIN PLATFORM (SINGLE COMMON SIGN-IN GATEWAY)
    * ========================================================================= */
 
+  inferPortalFromUrl() {
+    try {
+      const params = new URLSearchParams(window.location.search);
+      const portalParam = params.get('portal');
+      if (portalParam) return portalParam.trim().toLowerCase();
+      const redirectParam = params.get('redirect') || '';
+      if (redirectParam.includes('platform-admin') || redirectParam.includes('platform')) return 'platform-admin';
+      if (redirectParam.includes('management') || redirectParam.includes('administration-portal')) return 'management';
+      if (redirectParam.includes('teacher') || redirectParam.includes('faculty-portal')) return 'teacher';
+      if (redirectParam.includes('student')) return 'student';
+      if (redirectParam.includes('parent')) return 'parent';
+    } catch (e) {}
+    return '';
+  },
+
+  getPortalDisplayName(portal) {
+    const p = (portal || '').toLowerCase();
+    const map = {
+      'platform-admin': 'Platform Administration',
+      'management': 'Administration Portal',
+      'teacher': 'Faculty Portal',
+      'student': 'Student Portal',
+      'parent': 'Parent Portal'
+    };
+    return map[p] || portal || 'Authorized Portal';
+  },
+
+  getPortalConfig(portal) {
+    const p = (portal || '').toLowerCase();
+    const configs = {
+      'platform-admin': {
+        id: 'platform-admin',
+        title: 'Platform Administration Console',
+        badgeText: 'Platform Administration',
+        badgeIcon: 'fa-server',
+        badgeClass: 'platform-admin',
+        desc: 'Authorized access for <strong>Super Administrators</strong>. Multi-tenant controls, security audits, and cloud infrastructure.',
+        btnText: 'Sign In to Platform Admin',
+        allowedRoles: ['SUPER_ADMIN', 'PLATFORM_ADMIN'],
+        defaultRole: 'superadmin',
+        dashboardUrl: '/platform-admin#dashboard',
+      },
+      'management': {
+        id: 'management',
+        title: 'Administration Portal',
+        badgeText: 'Executive Management',
+        badgeIcon: 'fa-building-columns',
+        badgeClass: 'management',
+        desc: 'Executive access for <strong>Principal Smt. Gorle Varalakshmi, Vice Principal Sri Navva Anand</strong>, and authorized <strong>Office Staff</strong>.',
+        btnText: 'Sign In to Administration Portal',
+        allowedRoles: ['PRINCIPAL', 'VICE_PRINCIPAL', 'OFFICE', 'CLERK', 'ADMIN', 'ACCOUNTS', 'EXAM_COORDINATOR', 'SUPER_ADMIN'],
+        defaultRole: 'principal',
+        dashboardUrl: '/management#dashboard',
+      },
+      'teacher': {
+        id: 'teacher',
+        title: 'Faculty Academic Workspace',
+        badgeText: 'Faculty Portal',
+        badgeIcon: 'fa-chalkboard-user',
+        badgeClass: 'teacher',
+        desc: 'For <strong>Teaching Staff &amp; Subject Mentors</strong>. Attendance marking, marks entry, timetable schedules, and student logs.',
+        btnText: 'Sign In to Faculty Portal',
+        allowedRoles: ['TEACHER', 'FACULTY', 'SUPER_ADMIN'],
+        defaultRole: 'teacher',
+        dashboardUrl: '/teacher#dashboard',
+      },
+      'student': {
+        id: 'student',
+        title: 'Student Self-Service Portal',
+        badgeText: 'Student Portal',
+        badgeIcon: 'fa-graduation-cap',
+        badgeClass: 'student',
+        desc: 'Sign in with your <strong>Student ID or Admission Number</strong> to view attendance, exam marks, and timetable.',
+        btnText: 'Sign In to Student Portal',
+        allowedRoles: ['STUDENT'],
+        defaultRole: 'student',
+        dashboardUrl: '/student#dashboard',
+      },
+      'parent': {
+        id: 'parent',
+        title: 'Parent & Guardian Companion Portal',
+        badgeText: 'Parent Portal',
+        badgeIcon: 'fa-people-roof',
+        badgeClass: 'parent',
+        desc: 'For <strong>Parents &amp; Guardians</strong>. Monitor child attendance, fee clearance, and school notices.',
+        btnText: 'Sign In to Parent Portal',
+        allowedRoles: ['PARENT'],
+        defaultRole: 'parent',
+        dashboardUrl: '/parent#dashboard',
+      },
+    };
+    return configs[p] || null;
+  },
+
+  showAccessDeniedBanner(message, options = {}) {
+    const banner = document.getElementById('loginAlertBanner');
+    if (!banner) return;
+    const type = options.type || 'danger';
+    banner.className = `login-alert-banner ${type}`;
+    let iconClass = 'fa-triangle-exclamation';
+    if (type === 'info') iconClass = 'fa-circle-info';
+    else if (type === 'warning') iconClass = 'fa-shield-halved';
+
+    let actionsHtml = '';
+    if (options.authorizedUrl && options.authorizedLabel) {
+      actionsHtml += `
+        <div style="margin-top: 0.5rem; display: flex; gap: 0.65rem; flex-wrap: wrap;">
+          <a href="${options.authorizedUrl}" style="display: inline-flex; align-items: center; gap: 0.35rem; font-weight: 700; color: #1D4ED8; text-decoration: underline; font-size: 0.8rem;">
+            <i class="fa-solid fa-arrow-right"></i> ${options.authorizedLabel}
+          </a>
+        </div>
+      `;
+    }
+
+    banner.innerHTML = `
+      <i class="fa-solid ${iconClass}" style="font-size: 1.15rem; margin-top: 2px; flex-shrink: 0;"></i>
+      <div style="flex: 1; min-width: 0;">
+        <div style="font-weight: 800; font-size: 0.88rem; margin-bottom: 2px;">${options.title || 'Access Denied'}</div>
+        <div style="font-size: 0.8rem;">${message}</div>
+        ${actionsHtml}
+      </div>
+    `;
+    banner.style.display = 'flex';
+  },
+
+  hideAccessDeniedBanner() {
+    const banner = document.getElementById('loginAlertBanner');
+    if (banner) {
+      banner.style.display = 'none';
+      banner.innerHTML = '';
+    }
+  },
+
   async initUnifiedLoginPage() {
     const urlParams = new URLSearchParams(window.location.search);
     const msgParam = urlParams.get('msg');
+    const attemptedPortal = urlParams.get('attempted') || '';
+    const currentRoleParam = (urlParams.get('currentRole') || urlParams.get('role') || '').toUpperCase();
+    const requestedPortal = urlParams.get('portal') || this.inferPortalFromUrl();
+    const redirectUrl = urlParams.get('redirect') || '';
 
+    // Apply portal-specific visual customization
+    if (requestedPortal) {
+      const cfg = this.getPortalConfig(requestedPortal);
+      if (cfg) {
+        const badgeWrap = document.getElementById('ssoBadgeWrap');
+        const badgeIcon = document.getElementById('ssoBadgeIcon');
+        const badgeText = document.getElementById('ssoBadgeText');
+        const cardTitle = document.getElementById('portalCardTitle');
+        const cardDesc = document.getElementById('portalCardDesc');
+        const submitBtn = document.getElementById('unifiedSubmitBtn');
+
+        if (badgeWrap) badgeWrap.className = `portal-target-pill ${cfg.badgeClass}`;
+        if (badgeIcon) badgeIcon.className = `fa-solid ${cfg.badgeIcon}`;
+        if (badgeText) badgeText.textContent = cfg.badgeText;
+        if (cardTitle) cardTitle.textContent = cfg.title;
+        if (cardDesc) cardDesc.innerHTML = cfg.desc;
+        if (submitBtn) {
+          const btnSpan = submitBtn.querySelector('span');
+          if (btnSpan) btnSpan.textContent = cfg.btnText;
+        }
+      }
+    }
+
+    // Access Notice / Access Denied Handling
     if (msgParam === 'logged_out') {
       this.showToast('You have been signed out successfully.', 'fa-circle-check');
     } else if (msgParam === 'unauthorized' || msgParam === 'restricted') {
-      this.showToast('Access restricted: Please sign in with an account authorized for that portal.', 'fa-shield-halved', true);
+      const targetPortalName = this.getPortalDisplayName(attemptedPortal || requestedPortal);
+      let authUrl = '';
+      let authLabel = '';
+      if (currentRoleParam) {
+        authUrl = this.getMainDashboardUrlForRole(currentRoleParam);
+        authLabel = `Go to Your Authorized Dashboard (${currentRoleParam})`;
+      }
+      this.showAccessDeniedBanner(
+        `Your account role <strong>${currentRoleParam || 'current role'}</strong> is not authorized to access <strong>${targetPortalName}</strong>. Please sign in with an authorized account.`,
+        {
+          title: 'Access Denied',
+          type: 'danger',
+          authorizedUrl: authUrl,
+          authorizedLabel: authLabel,
+        }
+      );
+      this.showToast(`Access Denied: ${currentRoleParam || 'Account'} is not authorized for ${targetPortalName}.`, 'fa-triangle-exclamation', true);
     } else if (msgParam === 'session_expired') {
       this.showToast('Session expired due to inactivity. Please sign in again.', 'fa-clock', true);
     }
@@ -1517,12 +1708,41 @@ const PortalAuth = {
             const verifiedRole = String(verifiedUser.role).toUpperCase();
             localStorage.setItem('sv_user_role', verifiedRole);
             sessionStorage.setItem('sv_user_role', verifiedRole);
-            const target = this.getMainDashboardUrlForRole(verifiedRole);
-            this.showToast(`Active session detected (${verifiedRole}). Redirecting to your Main Dashboard...`, 'fa-circle-check');
-            setTimeout(() => {
-              window.location.href = target;
-            }, 350);
-            return;
+            const mapping = this.roleMatrix[verifiedRole] || this.resolvePortalForRole(verifiedRole);
+            const allowedPortals = mapping.allowedPortals || [mapping.portal];
+
+            if (requestedPortal) {
+              if (allowedPortals.includes(requestedPortal)) {
+                // Verified session has permission for requested portal: proceed
+                const target = redirectUrl || (this.getPortalConfig(requestedPortal)?.dashboardUrl) || this.getMainDashboardUrlForRole(verifiedRole);
+                this.showToast(`Active session verified (${verifiedRole}). Launching ${this.getPortalDisplayName(requestedPortal)}...`, 'fa-circle-check');
+                setTimeout(() => {
+                  window.location.href = target;
+                }, 350);
+                return;
+              } else {
+                // Active session role cannot access the requested portal!
+                // Clear session credentials so user can enter the correct credentials without loop
+                clearResidualSession();
+                this.showAccessDeniedBanner(
+                  `Active session was signed in as <strong>${verifiedRole}</strong>, which cannot access <strong>${this.getPortalDisplayName(requestedPortal)}</strong>. Please sign in with an authorized account below.`,
+                  {
+                    title: 'Account Role Mismatch',
+                    type: 'warning',
+                    authorizedUrl: this.getMainDashboardUrlForRole(verifiedRole),
+                    authorizedLabel: `Previous ${verifiedRole} Dashboard`,
+                  }
+                );
+              }
+            } else {
+              // Generic login without specific portal: redirect to main dashboard
+              const target = this.getMainDashboardUrlForRole(verifiedRole);
+              this.showToast(`Active session detected (${verifiedRole}). Redirecting to your Main Dashboard...`, 'fa-circle-check');
+              setTimeout(() => {
+                window.location.href = target;
+              }, 350);
+              return;
+            }
           }
         }
         clearResidualSession();
@@ -1570,13 +1790,15 @@ const PortalAuth = {
       superadmin: { u: 'superadmin', p: 'SuperAdmin@123', label: 'Platform Super Admin' },
       'platform-admin': { u: 'superadmin', p: 'SuperAdmin@123', label: 'Platform Super Admin' },
       officestaff: { u: 'officestaff', p: 'Office@123', label: 'Office Administrator / Clerk' },
-      clerk: { u: 'officestaff', p: 'Office@123', label: 'Office Administrator / Clerk' }
+      clerk: { u: 'officestaff', p: 'Office@123', label: 'Office Administrator / Clerk' },
+      student: { u: 'student1', p: 'Student@123', label: 'Student (Class 10)' },
+      parent: { u: 'parent1', p: 'Parent@123', label: 'Parent / Guardian' }
     };
 
     const target = creds[role] || creds.principal;
     userInput.value = target.u;
     passInput.value = target.p;
-    this.showToast(`Auto-filled demo credentials for ${target.label}. Click 'Sign In' to test automatic role redirection.`, 'fa-bolt');
+    this.showToast(`Auto-filled demo credentials for ${target.label}. Click 'Sign In' to verify authoritative role redirection.`, 'fa-bolt');
     userInput.focus();
   },
 
@@ -1594,6 +1816,10 @@ const PortalAuth = {
       return;
     }
 
+    const urlParams = new URLSearchParams(window.location.search);
+    const requestedPortal = urlParams.get('portal') || this.inferPortalFromUrl();
+    const redirectUrl = urlParams.get('redirect') || '';
+
     let originalBtnHTML = '';
     if (submitBtn) {
       originalBtnHTML = submitBtn.innerHTML;
@@ -1602,6 +1828,7 @@ const PortalAuth = {
     }
 
     try {
+      this.hideAccessDeniedBanner();
       let loginSuccess = false;
       let userData = null;
       let routingData = null;
@@ -1609,9 +1836,9 @@ const PortalAuth = {
       const rememberCheckbox = document.getElementById('unifiedRememberMe');
       const rememberMe = rememberCheckbox ? rememberCheckbox.checked : true;
 
-      // 1. Authoritative Backend REST API Authentication with 2FA OTP
+      // 1. Authoritative Backend REST API Authentication with 2FA OTP & requestedPortal
       if (window.ApiClient && window.ApiClient.auth && typeof window.ApiClient.auth.login === 'function') {
-        const res = await window.ApiClient.auth.login(enteredUser, enteredPass, rememberMe, true);
+        const res = await window.ApiClient.auth.login(enteredUser, enteredPass, rememberMe, true, requestedPortal);
 
         if (res && res.requiresOtp) {
           // Password verified! Enter Two-Factor Identity Verification state
@@ -1623,6 +1850,8 @@ const PortalAuth = {
             otp: otpCode,
             enteredUser,
             rememberMe,
+            requestedPortal,
+            redirectUrl,
             timerSec: (res.data && res.data.cooldownSeconds) || 45,
           };
 
@@ -1684,9 +1913,27 @@ const PortalAuth = {
         throw new Error('Your account is deactivated or suspended. Access denied. Please contact school administration.');
       }
 
-      // 4. Resolve authoritative role and routing
+      // 4. Resolve authoritative role and routing from database
       const finalRole = ((userData && userData.role) || 'PRINCIPAL').toUpperCase();
       const routing = routingData || this.resolvePortalForRole(finalRole);
+      const allowedPortals = (userData && userData.allowedPortals) || routing.allowedPortals || [routing.portal];
+
+      // Enforce portal permission verification if a specific portal was requested
+      if (requestedPortal && !allowedPortals.includes(requestedPortal)) {
+        const portalName = this.getPortalDisplayName(requestedPortal);
+        const userPortalName = this.getPortalDisplayName(routing.portal);
+        const errMsg = `Access Denied: Your assigned account role (${finalRole}) is not authorized for ${portalName}.`;
+        this.showAccessDeniedBanner(
+          `${errMsg} Your account is authorized for <strong>${userPortalName}</strong>.`,
+          {
+            title: 'Access Denied',
+            type: 'danger',
+            authorizedUrl: routing.redirectUrl || this.getMainDashboardUrlForRole(finalRole),
+            authorizedLabel: `Go to Your Authorized Portal (${userPortalName})`,
+          }
+        );
+        throw new Error(errMsg);
+      }
 
       // 5. Persist session across all storages
       this.persistUnifiedSession(userData, routing, enteredUser);
@@ -1694,10 +1941,15 @@ const PortalAuth = {
       // Clear all legacy navigation caches so user begins strictly on Main Dashboard
       this.clearNavigationCaches();
 
-      // 6. Authoritative role-based redirection target to Main Dashboard
-      const targetUrl = this.getMainDashboardUrlForRole(finalRole);
+      // 6. Authoritative role-based redirection target
+      let targetUrl = '';
+      if (requestedPortal && allowedPortals.includes(requestedPortal)) {
+        targetUrl = redirectUrl || (routing && routing.redirectUrl) || (this.getPortalConfig(requestedPortal)?.dashboardUrl) || this.getMainDashboardUrlForRole(finalRole);
+      } else {
+        targetUrl = (routing && routing.redirectUrl) || this.getMainDashboardUrlForRole(finalRole);
+      }
 
-      this.showToast(`✓ Authentication successful! Identified: ${routing.dashboardTitle || finalRole}. Launching Main Dashboard...`, 'fa-circle-check');
+      this.showToast(`✓ Authentication successful! Identified: ${routing.dashboardTitle || finalRole}. Launching Dashboard...`, 'fa-circle-check');
 
       setTimeout(() => {
         window.location.href = targetUrl;
@@ -1705,7 +1957,11 @@ const PortalAuth = {
 
     } catch (err) {
       console.error('[Unified Login Error]:', err);
-      this.showToast(err.message || 'Authentication failed. Please verify your credentials.', 'fa-triangle-exclamation', true);
+      const errMsg = err.message || 'Authentication failed. Please verify your credentials.';
+      this.showToast(errMsg, 'fa-triangle-exclamation', true);
+      if (!errMsg.includes('Access Denied')) {
+        this.showAccessDeniedBanner(errMsg, { title: 'Authentication Failed', type: 'danger' });
+      }
       if (passInput) {
         passInput.focus();
         passInput.select();
@@ -2102,10 +2358,9 @@ const PortalAuth = {
     const hasToken = (window.ApiClient && typeof window.ApiClient.isAuthenticated === 'function') ? window.ApiClient.isAuthenticated() : false;
 
     if (!hasToken) {
-      // Unauthenticated: Redirect directly to Unified Login Page with return path
+      // Unauthenticated: Redirect directly to Unified Login Page with return path and portal
       const currentPath = window.location.pathname + window.location.search;
-      window.location.href = `/login?redirect=${encodeURIComponent(currentPath)}`;
-      return;
+      window.location.href = `/login?portal=${portalType}&redirect=${encodeURIComponent(currentPath)}`;
       return false;
     }
 
@@ -2114,7 +2369,7 @@ const PortalAuth = {
     const userRole = ((storedProfile && storedProfile.role) || localStorage.getItem('sv_user_role') || sessionStorage.getItem('sv_user_role') || '').toUpperCase();
     if (!userRole) {
       const currentPath = window.location.pathname + window.location.search;
-      window.location.href = `/login?redirect=${encodeURIComponent(currentPath)}`;
+      window.location.href = `/login?portal=${portalType}&redirect=${encodeURIComponent(currentPath)}`;
       return false;
     }
     let allowedPortals = [];
@@ -2129,10 +2384,9 @@ const PortalAuth = {
     }
 
     if (!allowedPortals.includes(portalType)) {
-      console.warn(`[RouteGuard] Role ${userRole} unauthorized for portal '${portalType}'. Redirecting to authorized workspace.`);
-      const home = this.resolvePortalForRole(userRole);
-      sessionStorage.setItem('sv_access_notice', `Access restricted: Your assigned role (${userRole}) is authorized for ${home.dashboardTitle || home.portal}.`);
-      window.location.href = this.getMainDashboardUrlForRole(userRole);
+      console.warn(`[RouteGuard] Role ${userRole} unauthorized for portal '${portalType}'. Redirecting to authorized workspace notification.`);
+      const currentPath = window.location.pathname + window.location.search;
+      window.location.href = `/login?portal=${portalType}&msg=unauthorized&attempted=${portalType}&currentRole=${userRole}&redirect=${encodeURIComponent(currentPath)}`;
       return false;
     }
 
@@ -2200,7 +2454,8 @@ const PortalAuth = {
               localStorage.setItem('sv_user_allowed_portals', JSON.stringify(authMapping.allowedPortals));
               sessionStorage.setItem('sv_user_allowed_portals', JSON.stringify(authMapping.allowedPortals));
               if (!authMapping.allowedPortals.includes(portalType)) {
-                window.location.href = this.getMainDashboardUrlForRole(authRole);
+                const currentPath = window.location.pathname + window.location.search;
+                window.location.href = `/login?portal=${portalType}&msg=unauthorized&attempted=${portalType}&currentRole=${authRole}&redirect=${encodeURIComponent(currentPath)}`;
                 return;
               }
             }

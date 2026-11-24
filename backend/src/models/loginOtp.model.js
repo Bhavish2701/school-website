@@ -35,6 +35,10 @@ const loginOtpSchema = new mongoose.Schema(
       enum: ['mobile', 'email'],
       default: 'mobile',
     },
+    requestedPortal: {
+      type: String,
+      default: '',
+    },
     attempts: {
       type: Number,
       default: 0,

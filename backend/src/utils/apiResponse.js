@@ -46,6 +46,7 @@ const formatError = (message = 'An error occurred', errors = {}, recoveryAction 
   }
   if (errorCode) {
     payload.errorCode = errorCode;
+    payload.code = errorCode;
   }
 
   return payload;
