@@ -6863,6 +6863,18 @@ const FEE_CATEGORY_AUDIT_DATA = [
     const initial = s.name.charAt(0).toUpperCase();
     const isPaid = (s.feeStatus || '').toLowerCase() === 'paid';
 
+    // Format transport allocation for crisp, balanced ERP metric presentation
+    let routeVal = s.transportAllocation || 'Route 3';
+    let routeSub = 'Seat Allocated';
+    if (routeVal.includes('(')) {
+      const routeParts = routeVal.split('(');
+      routeVal = routeParts[0].trim();
+      routeSub = routeParts[1].replace(')', '').trim() || 'Seat Allocated';
+    } else if (routeVal.length > 16) {
+      routeSub = routeVal;
+      routeVal = 'Allocated';
+    }
+
     container.innerHTML = `
       <!-- TAB 1: OVERVIEW -->
       <div class="dossier-tab-pane active" id="pane-dossier-overview">
@@ -6885,7 +6897,7 @@ const FEE_CATEGORY_AUDIT_DATA = [
         </div>
 
         <div class="metrics-quad dossier-metrics-quad mb-3" style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; width: 100%;">
-          <div class="metric-card">
+          <div class="metric-card" style="min-height: 140px; justify-content: space-between;">
             <div class="metric-icon-wrap icon-blue"><i class="fa-solid fa-award"></i></div>
             <div class="metric-details">
               <span class="metric-label">Cumulative GPA</span>
@@ -6893,7 +6905,7 @@ const FEE_CATEGORY_AUDIT_DATA = [
               <div class="metric-trend trend-up"><span>Top 10% in Class ${s.class}</span></div>
             </div>
           </div>
-          <div class="metric-card">
+          <div class="metric-card" style="min-height: 140px; justify-content: space-between;">
             <div class="metric-icon-wrap icon-emerald"><i class="fa-solid fa-calendar-check"></i></div>
             <div class="metric-details">
               <span class="metric-label">Annual Attendance</span>
@@ -6901,7 +6913,7 @@ const FEE_CATEGORY_AUDIT_DATA = [
               <div class="metric-trend trend-steady"><span>172 / 182 Working Days</span></div>
             </div>
           </div>
-          <div class="metric-card">
+          <div class="metric-card" style="min-height: 140px; justify-content: space-between;">
             <div class="metric-icon-wrap icon-purple"><i class="fa-solid fa-receipt"></i></div>
             <div class="metric-details">
               <span class="metric-label">Fee Clearance</span>
@@ -6909,12 +6921,12 @@ const FEE_CATEGORY_AUDIT_DATA = [
               <div class="metric-trend trend-up"><span>All Term Dues Settled</span></div>
             </div>
           </div>
-          <div class="metric-card">
+          <div class="metric-card" style="min-height: 140px; justify-content: space-between;">
             <div class="metric-icon-wrap icon-amber"><i class="fa-solid fa-bus"></i></div>
             <div class="metric-details">
               <span class="metric-label">Transport Route</span>
-              <div class="metric-value text-amber">${s.transportAllocation || 'Route 3'}</div>
-              <div class="metric-trend trend-steady"><span>Seat Allocated</span></div>
+              <div class="metric-value text-amber" style="font-size: 1.55rem; line-height: 1.15; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="${s.transportAllocation || 'Route 3'}">${routeVal}</div>
+              <div class="metric-trend trend-steady"><span title="${routeSub}" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; display: inline-block;">${routeSub}</span></div>
             </div>
           </div>
         </div>

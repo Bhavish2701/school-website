@@ -29332,3 +29332,103 @@ select,
   text-align: center !important;
   white-space: nowrap !important;
 }
+
+/* =========================================================================
+   LEAVE REQUESTS & APPRAISAL ERP DESIGN SYSTEM STYLES
+   ========================================================================= */
+.leave-kpi-card {
+  min-height: 125px;
+  justify-content: space-between;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.05);
+  border-radius: 8px;
+  background: #ffffff;
+  padding: 1.15rem 1.25rem;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.leave-kpi-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.08);
+}
+
+.leave-kpi-card .metric-label {
+  font-size: 0.74rem;
+  letter-spacing: 0.05em;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #64748b;
+}
+
+.leave-kpi-card .metric-value {
+  font-size: 1.95rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  margin: 0.2rem 0;
+}
+
+.leave-kpi-card .metric-subtext {
+  font-size: 0.75rem;
+  color: #64748b;
+  font-weight: 500;
+  margin-top: 0.25rem;
+}
+
+.erp-policy-banner {
+  box-shadow: 0 1px 3px rgba(37, 99, 235, 0.06);
+  transition: all 0.2s ease;
+}
+
+/* Header Action Button Consistency */
+.erp-header-toolbar button {
+  font-family: inherit;
+  font-size: 0.84rem;
+  height: 38px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+}
+
+.erp-header-toolbar .btn-outline-secondary {
+  background: #ffffff !important;
+  color: #334155 !important;
+  border: 1px solid #cbd5e1 !important;
+  font-weight: 600 !important;
+  transition: all 0.2s ease !important;
+}
+
+.erp-header-toolbar .btn-outline-secondary:hover {
+  background: #f8fafc !important;
+  border-color: #94a3b8 !important;
+  color: #0f172a !important;
+  transform: translateY(-1px);
+}
+
+.erp-header-toolbar .btn-primary {
+  background: #2563eb !important;
+  border: 1px solid #2563eb !important;
+  color: #ffffff !important;
+  font-weight: 600 !important;
+  transition: all 0.2s ease !important;
+}
+
+.erp-header-toolbar .btn-primary:hover {
+  background: #1d4ed8 !important;
+  border-color: #1d4ed8 !important;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.3) !important;
+}
+
+/* Color & Metric Value Utilities */
+.text-blue {
+  color: #1d4ed8 !important;
+}
+
+.text-emerald {
+  color: #059669 !important;
+}
+
+.text-amber {
+  color: #d97706 !important;
+}
