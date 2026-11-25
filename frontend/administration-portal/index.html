@@ -15076,40 +15076,39 @@
             </div>
 
             <!-- Academic Year Actions Toolbar -->
-            <div class="card p-3 mb-4 border rounded-3 bg-white shadow-sm">
+            <div class="card p-3 mb-4 border rounded-3 bg-white shadow-sm settings-action-toolbar">
               <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
-                <div class="d-flex align-items-center gap-2">
+                <div class="d-flex align-items-center gap-2 flex-wrap">
                   <span class="badge"
-                    style="background:#dcfce7; color:#166534; font-weight:700; font-size:0.8rem; padding:6px 12px;">
-                    <i class="fa-solid fa-circle mr-1" style="font-size:0.5rem;"></i> Operating Session: AY 2026-27
+                    style="background:#dcfce7; color:#166534; font-weight:700; font-size:0.8rem; padding:6px 12px; border-radius:6px; border:1px solid #bbf7d0;">
+                    <i class="fa-solid fa-circle me-1" style="font-size:0.5rem;"></i> Operating Session: AY 2026-27
                   </span>
-                  <span class="text-muted text-xs">Start Date: <strong>12 Jun 2026</strong> &bull; End Date: <strong>23
-                      Apr 2027</strong></span>
+                  <span class="text-muted text-xs">Start Date: <strong>12 Jun 2026</strong> &bull; End Date: <strong>23 Apr 2027</strong></span>
                 </div>
                 <div class="d-flex align-items-center gap-2 flex-wrap">
-                  <button type="button" class="btn btn-outline-primary btn-sm"
+                  <button type="button" class="btn btn-primary btn-sm"
                     onclick="portalApp.openCreateAcademicYearModal()">
-                    <i class="fa-solid fa-calendar-plus mr-1"></i> Create academic year
+                    <i class="fa-solid fa-calendar-plus me-1"></i> Create Academic Year
                   </button>
-                  <button type="button" class="btn btn-outline-secondary btn-sm"
+                  <button type="button" class="btn btn-secondary btn-sm"
                     onclick="portalApp.openConfigureTermsModal()">
-                    <i class="fa-solid fa-sliders mr-1"></i> Configure terms
+                    <i class="fa-solid fa-sliders me-1 text-primary"></i> Configure Terms
                   </button>
-                  <button type="button" class="btn btn-outline-info btn-sm"
+                  <button type="button" class="btn btn-secondary btn-sm"
                     onclick="portalApp.reviewAcademicDateConflicts()">
-                    <i class="fa-solid fa-triangle-exclamation mr-1"></i> Review date conflicts
+                    <i class="fa-solid fa-triangle-exclamation me-1 text-amber"></i> Review Conflicts
                   </button>
-                  <button type="button" class="btn btn-outline-success btn-sm"
+                  <button type="button" class="btn btn-secondary btn-sm"
                     onclick="portalApp.activateAcademicYear('AY-2026-27')">
-                    <i class="fa-solid fa-circle-check mr-1"></i> Activate year
+                    <i class="fa-solid fa-circle-check me-1 text-success"></i> Activate Year
                   </button>
-                  <button type="button" class="btn btn-outline-danger btn-sm"
+                  <button type="button" class="btn btn-secondary btn-sm"
                     onclick="portalApp.openCloseAcademicYearModal('AY-2026-27')">
-                    <i class="fa-solid fa-lock mr-1"></i> Close year
+                    <i class="fa-solid fa-lock me-1 text-danger"></i> Close Year
                   </button>
-                  <button type="button" class="btn btn-outline-dark btn-sm"
+                  <button type="button" class="btn btn-secondary btn-sm"
                     onclick="portalApp.archivePreviousAcademicYear('AY-2025-26')">
-                    <i class="fa-solid fa-box-archive mr-1"></i> Archive previous year
+                    <i class="fa-solid fa-box-archive me-1 text-secondary"></i> Archive Previous Year
                   </button>
                 </div>
               </div>
@@ -15229,7 +15228,7 @@
                ==================================================================== -->
           <div class="setting-subview" id="subview-settings-roles" style="display: none;">
             <!-- Role Actions & Header Toolbar -->
-            <div class="card p-3 mb-4 border rounded-3 bg-white shadow-sm">
+            <div class="card p-3 mb-4 border rounded-3 bg-white shadow-sm settings-action-toolbar">
               <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
                 <div class="d-flex align-items-center gap-2">
                   <span class="badge"
@@ -15286,7 +15285,7 @@
                ==================================================================== -->
           <div class="setting-subview" id="subview-settings-permissions" style="display: none;">
             <!-- Matrix Header & Advisory -->
-            <div class="card p-3 mb-4 border rounded-3 bg-white shadow-sm">
+            <div class="card p-3 mb-4 border rounded-3 bg-white shadow-sm settings-action-toolbar">
               <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
                 <div class="d-flex align-items-center gap-2">
                   <span class="badge"
@@ -15699,7 +15698,7 @@
             </div>
 
             <!-- Audit Logs Filter Toolbar -->
-            <div class="card p-3 mb-4 border rounded-3 bg-white shadow-sm">
+            <div class="card p-3 mb-4 border rounded-3 bg-white shadow-sm settings-action-toolbar">
               <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
                 <div class="d-flex align-items-center gap-2 flex-wrap">
                   <input type="text" id="auditSearchInput" class="form-control form-control-sm"

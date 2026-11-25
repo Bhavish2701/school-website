@@ -12,7 +12,7 @@ const config = {
   isDev: (process.env.NODE_ENV || 'development') === 'development',
   isProd: process.env.NODE_ENV === 'production',
   mongodbUri: process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/srividya_school_db',
-  corsOrigins: (process.env.CORS_ORIGIN || 'http://localhost:5000,http://127.0.0.1:5000,http://localhost:8080')
+  corsOrigins: (process.env.CORS_ORIGIN || 'http://localhost:5000,http://127.0.0.1:5000,http://localhost:8080,https://school-website-root-nex.vercel.app')
     .split(',')
     .map(origin => origin.trim()),
   jwt: {

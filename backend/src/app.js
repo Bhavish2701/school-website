@@ -28,6 +28,7 @@ app.use(securityHeaders);
 
 // 2. CORS middleware
 app.use(cors(corsOptions));
+app.options('*', cors(corsOptions));
 
 // 3. Compression middleware (if available)
 try {
