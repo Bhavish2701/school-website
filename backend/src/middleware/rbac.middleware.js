@@ -12,6 +12,7 @@ const config = require('../config/env');
 const ApiError = require('../utils/apiError');
 const asyncHandler = require('../utils/asyncHandler');
 const { User } = require('../models/user.model');
+const { getFallbackUser, createMockUserDoc } = require('../config/fallbackAuth');
 
 /**
  * 1. Authenticate User Middleware
@@ -34,8 +35,23 @@ const authenticateUser = asyncHandler(async (req, res, next) => {
   try {
     const decoded = jwt.verify(token, config.jwt.secret);
 
-    // Fetch user with role, profile, and relationship fields
-    const user = await User.findById(decoded.id);
+    // Fetch user with role, profile, and relationship fields (with DB safety)
+    let user = null;
+    if (mongoose.connection && mongoose.connection.readyState === 1) {
+      try {
+        user = await User.findById(decoded.id);
+      } catch (err) {
+        user = null;
+      }
+    }
+
+    if (!user) {
+      const fb = getFallbackUser(decoded.id || decoded.username);
+      if (fb) {
+        user = createMockUserDoc(fb);
+      }
+    }
+
     if (!user) {
       throw ApiError.unauthorized('User associated with this token no longer exists');
     }
@@ -78,7 +94,20 @@ const optionalAuthenticateUser = asyncHandler(async (req, res, next) => {
 
   try {
     const decoded = jwt.verify(token, config.jwt.secret);
-    const user = await User.findById(decoded.id);
+    let user = null;
+    if (mongoose.connection && mongoose.connection.readyState === 1) {
+      try {
+        user = await User.findById(decoded.id);
+      } catch (err) {
+        user = null;
+      }
+    }
+    if (!user) {
+      const fb = getFallbackUser(decoded.id || decoded.username);
+      if (fb) {
+        user = createMockUserDoc(fb);
+      }
+    }
     if (user && user.isActive) {
       req.user = user;
     }

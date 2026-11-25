@@ -5,6 +5,10 @@
 const mongoose = require('mongoose');
 const config = require('./env');
 
+// Disable command buffering globally so Mongoose operations fail fast when disconnected
+// instead of hanging for 10,000ms and throwing buffering timeouts
+mongoose.set('bufferCommands', false);
+
 const connectDB = async () => {
   try {
     const options = {
