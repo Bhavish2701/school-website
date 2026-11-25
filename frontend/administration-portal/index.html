@@ -4180,57 +4180,35 @@
           <!-- ========================================================================= -->
           <div class="teacher-subview" id="subview-teachers-leave" style="display: none;">
 
-            <!-- Page Header -->
-            <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap"
-              style="gap:15px; border-bottom: 1px solid #e2e8f0; padding-bottom: 1.25rem;">
-              <div>
-                <div class="text-xs text-uppercase font-weight-bold text-muted mb-1" style="letter-spacing: 0.5px;">
-                  <i class="fa-solid fa-calendar-check mr-1 text-primary"></i> Teachers &amp; Staff &gt; Leave Requests
-                  &amp; Leave History
-                </div>
-                <h2 class="h3 font-weight-bold text-gray-800 mb-1" style="color: #1e293b; margin: 0; font-size: 1.55rem;">Leave Requests and
-                  Leave History</h2>
-                <p class="text-muted mb-0" style="font-size: 0.88rem; line-height: 1.45;">Statutory faculty and staff leave management,
-                  policy limit verification, substitute coverage coordination, multi-tier approvals, and leave balance
-                  ledger.</p>
+            <!-- Standard Subview Institutional Header (Staff Attendance Aligned) -->
+            <div class="subview-header-bar">
+              <div class="subview-header-info">
+                <h2>
+                  <i class="fa-solid fa-calendar-check text-primary"></i> Leave Requests &amp; Leave History
+                </h2>
+                <p>
+                  Statutory faculty and staff leave management, policy limit verification, substitute coverage coordination, multi-tier approvals, and leave balance ledger.
+                </p>
               </div>
-              <div class="erp-header-toolbar d-flex align-items-center flex-wrap" style="gap: 10px;">
-                <button type="button" class="btn btn-outline-secondary btn-sm"
-                  onclick="portalApp.openViewLeaveBalancesModal()" title="View comprehensive cadre leave balances"
-                  style="height: 38px; padding: 0 14px; border: 1px solid #cbd5e1; border-radius: 6px; font-weight: 600; background: #fff; color: #334155; display: inline-flex; align-items: center; gap: 6px;">
-                  <i class="fa-solid fa-scale-balanced mr-1 text-primary"></i> View Leave Balances
+              <div class="subview-header-actions">
+                <button type="button" class="btn btn-secondary" onclick="portalApp.openViewLeaveBalancesModal()" title="View comprehensive cadre leave balances">
+                  <i class="fa-solid fa-scale-balanced text-primary"></i> View Leave Balances
                 </button>
-                <button type="button" class="btn btn-outline-secondary btn-sm"
-                  onclick="portalApp.exportLeaveRegisterCSV()" title="Export official staff leave register to CSV"
-                  style="height: 38px; padding: 0 14px; border: 1px solid #cbd5e1; border-radius: 6px; font-weight: 600; background: #fff; color: #334155; display: inline-flex; align-items: center; gap: 6px;">
-                  <i class="fa-solid fa-file-csv mr-1 text-emerald"></i> Export Leave Register
+                <button type="button" class="btn btn-secondary" onclick="portalApp.exportLeaveRegisterCSV()" title="Export official staff leave register to CSV">
+                  <i class="fa-solid fa-file-csv text-primary"></i> Export Leave Register
                 </button>
-                <button type="button" class="btn btn-primary btn-sm" onclick="portalApp.openSubmitLeaveRequestModal()"
-                  style="height: 38px; padding: 0 16px; border-radius: 6px; font-weight: 600; background: #2563eb; border: 1px solid #2563eb; color: #fff; box-shadow: 0 2px 4px rgba(37,99,235,0.2); display: inline-flex; align-items: center; gap: 6px;" title="Submit new staff leave request">
-                  <i class="fa-solid fa-plus-circle mr-1"></i> + Submit Leave Request
+                <button type="button" class="btn btn-primary" onclick="portalApp.openSubmitLeaveRequestModal()" title="Submit new staff leave request">
+                  <i class="fa-solid fa-plus-circle"></i> + Submit Leave Request
                 </button>
               </div>
             </div>
 
-            <!-- Policy & Rules Banner -->
-            <div class="erp-policy-banner mb-4"
-              style="background: #eff6ff; border: 1px solid #bfdbfe; border-left: 4px solid #2563eb; border-radius: 8px; padding: 14px 18px; box-shadow: 0 1px 3px rgba(37,99,235,0.06);">
-              <div style="display: flex; align-items: flex-start; gap: 14px;">
-                <div style="width: 38px; height: 38px; border-radius: 8px; background: rgba(37, 99, 235, 0.12); color: #2563eb; display: flex; align-items: center; justify-content: center; font-size: 1.15rem; flex-shrink: 0; margin-top: 2px;">
-                  <i class="fa-solid fa-scale-unbalanced-flip"></i>
-                </div>
-                <div style="flex-grow: 1;">
-                  <div style="color: #1e3a8a; font-size: 0.92rem; font-weight: 700; margin-bottom: 3px;">Statutory School Leave Policy &amp; Approval Guidelines:</div>
-                  <div style="color: #1e40af; font-size: 0.83rem; line-height: 1.5;">
-                    Annual entitlements: <strong>Casual Leave (12 days)</strong>, <strong>Medical Leave (12
-                      days)</strong>, and <strong>Earned Leave (15 days)</strong>.
-                    Submitting leave triggers automated policy limit and overlapping request checks. Medical leaves
-                    exceeding 2 consecutive days require a physician certificate.
-                    Approval by designated authority (Principal / Vice Principal / AO) automatically updates the staff
-                    balance, syncs substitute timetable coverage, and flags daily attendance records without silent
-                    overwrite.
-                  </div>
-                </div>
+            <!-- Policy & Validation Notice (Staff Attendance Aligned) -->
+            <div class="faculty-statutory-notice">
+              <i class="fa-solid fa-shield-halved text-primary mr-1" style="font-size: 1rem; margin-top: 2px;"></i>
+              <div>
+                <strong>Statutory School Leave Policy &amp; Approval Guidelines:</strong>
+                Annual entitlements: <strong>Casual Leave (12 days)</strong>, <strong>Medical Leave (12 days)</strong>, and <strong>Earned Leave (15 days)</strong>. Submitting leave triggers automated policy limit and overlapping request checks. Medical leaves exceeding 2 consecutive days require a physician certificate. Approval by designated authority (Principal / Vice Principal / AO) automatically updates the staff balance, syncs substitute timetable coverage, and flags daily attendance records without silent overwrite.
               </div>
             </div>
 
@@ -4273,146 +4251,118 @@
               </div>
             </div>
 
-            <!-- View Mode Tabs -->
-            <div class="d-flex align-items-center justify-content-between mb-3 flex-wrap"
-              style="gap:10px; border-bottom: 2px solid #e2e8f0; padding-bottom: 4px;">
-              <div class="nav nav-pills" style="gap:6px;">
-                <button type="button" class="btn btn-sm btn-primary" id="leaveTabAllBtn"
-                  onclick="portalApp.switchLeaveViewMode('table')">
-                  <i class="fa-solid fa-table-list mr-1"></i> All Leave Applications
-                </button>
-                <button type="button" class="btn btn-sm btn-outline-secondary" id="leaveTabPendingBtn"
-                  onclick="portalApp.switchLeaveViewMode('cards')">
-                  <i class="fa-solid fa-clock-rotate-left mr-1"></i> Pending Sign-off Cards
-                </button>
-                <button type="button" class="btn btn-sm btn-outline-secondary" id="leaveTabBalancesBtn"
-                  onclick="portalApp.switchLeaveViewMode('balances')">
-                  <i class="fa-solid fa-scale-balanced mr-1"></i> Leave Balances Ledger
-                </button>
+            <!-- Executive Search & Filter Toolbar (Staff Attendance Aligned) -->
+            <div class="transfers-toolbar-container" id="leaveFilterToolbarCard">
+              <!-- Tier 1: Search & Filter Grid -->
+              <div class="attendance-filter-grid" style="grid-template-columns: minmax(260px, 2fr) minmax(170px, 1fr) minmax(160px, 1fr) minmax(160px, 1fr);">
+                <div class="tc-search-wrap">
+                  <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                  <input type="text" id="leaveSearchInput" class="tc-search-input"
+                    placeholder="Search staff name, ID, department, reason..."
+                    oninput="portalApp.filterLeaveRequests()">
+                  <button type="button" class="tc-clear-btn" id="leaveClearSearchBtn"
+                    onclick="document.getElementById('leaveSearchInput').value=''; portalApp.filterLeaveRequests();"
+                    title="Clear Search">
+                    <i class="fa-solid fa-xmark"></i>
+                  </button>
+                </div>
+
+                <div class="tc-select-wrap">
+                  <select id="leaveDeptFilter" class="tc-filter-select"
+                    onchange="portalApp.filterLeaveRequests()"
+                    title="Filter by Department">
+                    <option value="all">All Departments (10)</option>
+                    <option value="Administrative Office">Administrative Office</option>
+                    <option value="Finance &amp; Accounts">Finance &amp; Accounts</option>
+                    <option value="Mathematics">Mathematics</option>
+                    <option value="Physical Science">Physical Science</option>
+                    <option value="Biological Science">Biological Science</option>
+                    <option value="Social Studies">Social Studies</option>
+                    <option value="English">English</option>
+                    <option value="Telugu Language">Telugu Language</option>
+                    <option value="Transport Operations">Transport Operations</option>
+                    <option value="Library &amp; Learning Resource">Library &amp; Learning Resource</option>
+                  </select>
+                </div>
+
+                <div class="tc-select-wrap">
+                  <select id="leaveTypeFilter" class="tc-filter-select"
+                    onchange="portalApp.filterLeaveRequests()"
+                    title="Filter by Leave Type">
+                    <option value="all">All Leave Types</option>
+                    <option value="Casual Leave">Casual Leave (CL)</option>
+                    <option value="Medical Leave">Medical Leave (ML)</option>
+                    <option value="Earned Leave">Earned Leave (EL)</option>
+                    <option value="On Duty (OD)">On Duty (OD) / Deputation</option>
+                    <option value="Maternity / Paternity">Maternity / Paternity</option>
+                  </select>
+                </div>
+
+                <div class="tc-select-wrap">
+                  <select id="leaveStatusFilter" class="tc-filter-select"
+                    onchange="portalApp.filterLeaveRequests()"
+                    title="Filter by Status">
+                    <option value="all">All Statuses</option>
+                    <option value="Pending Sign-off">Pending Sign-off</option>
+                    <option value="Approved">Approved</option>
+                    <option value="Rejected">Rejected</option>
+                    <option value="Returned for Correction">Returned for Correction</option>
+                    <option value="Cancelled">Cancelled</option>
+                  </select>
+                </div>
               </div>
 
-              <div>
-                <span class="badge badge-light font-weight-normal py-2 px-3" id="leaveCountPill"
-                  style="background:#f1f5f9; color:#334155; font-size:0.82rem; border:1px solid #e2e8f0;">
-                  Showing 6 of 6 Leave Requests
-                </span>
-              </div>
-            </div>
-
-            <!-- Executive Filter Toolbar -->
-            <div class="card mb-4 shadow-sm border-0" style="border-radius: 8px; background: #fff;"
-              id="leaveFilterToolbarCard">
-              <div class="card-body p-3">
-                <div class="d-flex align-items-center justify-content-between flex-wrap" style="gap: 12px;">
-
-                  <div class="d-flex align-items-center flex-wrap" style="gap: 10px; flex: 1;">
-                    <!-- Search Input -->
-                    <div style="position: relative; min-width: 260px; flex: 1;">
-                      <i class="fa-solid fa-magnifying-glass"
-                        style="position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: #94a3b8; font-size: 0.88rem; pointer-events: none;"></i>
-                      <input type="text" id="leaveSearchInput" class="form-control"
-                        style="padding-left: 42px !important; height: 38px; font-size: 0.85rem; border: 1px solid #cbd5e1; border-radius: 6px; background: #ffffff;"
-                        placeholder="Search staff name, ID, department, reason..."
-                        oninput="portalApp.filterLeaveRequests()">
-                    </div>
-
-                    <!-- Department Filter -->
-                    <div style="min-width: 175px;">
-                      <select id="leaveDeptFilter" class="form-control"
-                        style="height: 38px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.84rem; background-color: #f8fafc; color: #1e293b; font-weight: 500;"
-                        onchange="portalApp.filterLeaveRequests()">
-                        <option value="all">All Departments</option>
-                        <option value="Administrative Office">Administrative Office</option>
-                        <option value="Finance &amp; Accounts">Finance &amp; Accounts</option>
-                        <option value="Mathematics">Mathematics</option>
-                        <option value="Physical Science">Physical Science</option>
-                        <option value="Biological Science">Biological Science</option>
-                        <option value="Social Studies">Social Studies</option>
-                        <option value="English">English</option>
-                        <option value="Telugu Language">Telugu Language</option>
-                        <option value="Transport Operations">Transport Operations</option>
-                        <option value="Library &amp; Learning Resource">Library &amp; Learning Resource</option>
-                      </select>
-                    </div>
-
-                    <!-- Leave Type Filter -->
-                    <div style="min-width: 165px;">
-                      <select id="leaveTypeFilter" class="form-control"
-                        style="height: 38px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.84rem; background-color: #f8fafc; color: #1e293b; font-weight: 500;"
-                        onchange="portalApp.filterLeaveRequests()">
-                        <option value="all">All Leave Types</option>
-                        <option value="Casual Leave">Casual Leave (CL)</option>
-                        <option value="Medical Leave">Medical Leave (ML)</option>
-                        <option value="Earned Leave">Earned Leave (EL)</option>
-                        <option value="On Duty (OD)">On Duty (OD) / Deputation</option>
-                        <option value="Maternity / Paternity">Maternity / Paternity</option>
-                      </select>
-                    </div>
-
-                    <!-- Status Filter -->
-                    <div style="min-width: 170px;">
-                      <select id="leaveStatusFilter" class="form-control"
-                        style="height: 38px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.84rem; background-color: #f8fafc; color: #1e293b; font-weight: 500;"
-                        onchange="portalApp.filterLeaveRequests()">
-                        <option value="all">All Statuses</option>
-                        <option value="Pending Sign-off">Pending Sign-off</option>
-                        <option value="Approved">Approved</option>
-                        <option value="Rejected">Rejected</option>
-                        <option value="Returned for Correction">Returned for Correction</option>
-                        <option value="Cancelled">Cancelled</option>
-                      </select>
-                    </div>
-                  </div>
-
-                  <div class="d-flex align-items-center" style="gap: 8px;">
-                    <button type="button" class="btn btn-outline-secondary"
-                      style="height: 38px; border-radius: 6px; font-size: 0.84rem; font-weight: 600; padding: 0 16px; border: 1px solid #cbd5e1; display: inline-flex; align-items: center; gap: 6px;"
-                      onclick="portalApp.resetLeaveFilters()" title="Reset Filters">
-                      <i class="fa-solid fa-rotate-left"></i> Reset
+              <!-- Tier 2: Governance & View Mode Operations -->
+              <div class="transfers-governance-row">
+                <div class="tc-stats-left" style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+                  <div class="btn-group" role="group" style="display: inline-flex; border-radius: 8px; overflow: hidden; border: 1px solid #cbd5e1; background: #f8fafc;">
+                    <button type="button" class="btn btn-sm btn-primary" id="leaveTabAllBtn"
+                      onclick="portalApp.switchLeaveViewMode('table')" style="border-radius: 0; height: 32px; font-size: 0.78rem; font-weight: 600; padding: 0 12px;">
+                      <i class="fa-solid fa-table-list mr-1"></i> All Applications
+                    </button>
+                    <button type="button" class="btn btn-sm btn-outline-secondary" id="leaveTabPendingBtn"
+                      onclick="portalApp.switchLeaveViewMode('cards')" style="border-radius: 0; height: 32px; font-size: 0.78rem; font-weight: 600; padding: 0 12px; border: none; background: transparent; color: #475569;">
+                      <i class="fa-solid fa-clock-rotate-left mr-1"></i> Pending Sign-off Cards
+                    </button>
+                    <button type="button" class="btn btn-sm btn-outline-secondary" id="leaveTabBalancesBtn"
+                      onclick="portalApp.switchLeaveViewMode('balances')" style="border-radius: 0; height: 32px; font-size: 0.78rem; font-weight: 600; padding: 0 12px; border: none; background: transparent; color: #475569;">
+                      <i class="fa-solid fa-scale-balanced mr-1"></i> Balances Ledger
                     </button>
                   </div>
+                  <span class="tc-count-pill" id="leaveCountPill">
+                    <i class="fa-solid fa-calendar-check text-primary mr-1"></i> Showing 6 of 6 Leave Requests
+                  </span>
+                </div>
 
+                <div class="tc-actions-right">
+                  <button type="button" class="btn btn-secondary btn-sm btn-filter-reset"
+                    onclick="portalApp.resetLeaveFilters()" title="Reset all filters">
+                    <i class="fa-solid fa-rotate-left me-1"></i> Reset Filters
+                  </button>
+                  <button type="button" class="btn btn-secondary btn-sm"
+                    onclick="portalApp.exportLeaveRegisterCSV()" title="Export official staff leave register to CSV">
+                    <i class="fa-solid fa-file-csv me-1 text-primary"></i> Export CSV
+                  </button>
                 </div>
               </div>
             </div>
 
-            <!-- VIEW 1: All Leave Applications Table -->
-            <div id="leaveTableViewContainer" class="card shadow-sm border-0 mb-4"
-              style="border-radius: 8px; overflow: hidden; background: #fff;">
-              <div class="table-responsive" style="overflow-x: auto;">
-                <table class="table table-hover mb-0" id="teacherLeavesTable" style="vertical-align: middle; min-width: 1120px; width: 100%;">
-                  <thead style="background: #f8fafc; border-bottom: 2px solid #e2e8f0;">
+            <!-- VIEW 1: All Leave Applications Table (Staff Attendance Aligned) -->
+            <div id="leaveTableViewContainer" class="parent-table-wrap" style="margin-top:0;">
+              <div class="parent-table-scroll">
+                <table class="parent-table table mb-0" id="teacherLeavesTable" style="vertical-align: middle; min-width: 1200px; width: 100%;">
+                  <thead>
                     <tr>
-                      <th
-                        style="font-size: 0.78rem; text-transform: uppercase; color: #475569; letter-spacing: 0.5px; padding: 12px 14px; min-width: 105px; width: 105px;">
-                        Leave ID</th>
-                      <th
-                        style="font-size: 0.78rem; text-transform: uppercase; color: #475569; letter-spacing: 0.5px; padding: 12px 14px; min-width: 220px;">
-                        Staff Member</th>
-                      <th
-                        style="font-size: 0.78rem; text-transform: uppercase; color: #475569; letter-spacing: 0.5px; padding: 12px 14px; min-width: 160px;">
-                        Department</th>
-                      <th
-                        style="font-size: 0.78rem; text-transform: uppercase; color: #475569; letter-spacing: 0.5px; padding: 12px 14px; min-width: 130px;">
-                        Leave Type</th>
-                      <th
-                        style="font-size: 0.78rem; text-transform: uppercase; color: #475569; letter-spacing: 0.5px; padding: 12px 14px; min-width: 160px;">
-                        Dates &amp; Duration</th>
-                      <th
-                        style="font-size: 0.78rem; text-transform: uppercase; color: #475569; letter-spacing: 0.5px; padding: 12px 14px; min-width: 220px;">
-                        Reason &amp; Document</th>
-                      <th
-                        style="font-size: 0.78rem; text-transform: uppercase; color: #475569; letter-spacing: 0.5px; padding: 12px 14px; min-width: 190px;">
-                        Substitute Arrangements</th>
-                      <th
-                        style="font-size: 0.78rem; text-transform: uppercase; color: #475569; letter-spacing: 0.5px; padding: 12px 14px; min-width: 160px;">
-                        Approver</th>
-                      <th
-                        style="font-size: 0.78rem; text-transform: uppercase; color: #475569; letter-spacing: 0.5px; padding: 12px 14px; min-width: 160px;">
-                        Status &amp; Remarks</th>
-                      <th
-                        style="font-size: 0.78rem; text-transform: uppercase; color: #475569; letter-spacing: 0.5px; padding: 12px 14px; min-width: 100px; text-align: center;">
-                        Actions</th>
+                      <th style="min-width: 105px; width: 105px;">Leave ID</th>
+                      <th style="min-width: 220px;">Staff Member</th>
+                      <th style="min-width: 160px;">Department</th>
+                      <th style="min-width: 130px;">Leave Type</th>
+                      <th style="min-width: 160px;">Dates &amp; Duration</th>
+                      <th style="min-width: 220px;">Reason &amp; Document</th>
+                      <th style="min-width: 190px;">Substitute Arrangements</th>
+                      <th style="min-width: 160px;">Approver</th>
+                      <th style="min-width: 160px;">Status &amp; Remarks</th>
+                      <th style="min-width: 125px; text-align: center;">Actions</th>
                     </tr>
                   </thead>
                   <tbody id="teacherLeavesTableBody">
@@ -14756,76 +14706,74 @@
 
         <!-- 18. Settings & Access Control View -->
         <section class="portal-view" id="view-settings">
-          <!-- Module Header Strip -->
-          <div class="module-header-strip mb-4">
-            <div class="mhs-title">
-              <h2><i class="fa-solid fa-user-gear text-primary"></i> Institutional Settings &amp; Access Control Center
-              </h2>
-              <p>School Profile • Academic Year • Role Management • Access Permissions Matrix • Security Policies •
-                Immutable Audit Logs • Data &amp; Backup</p>
+          <!-- Subview Header Bar (Institutional Standard) -->
+          <div class="subview-header-bar">
+            <div class="subview-header-info">
+              <h2><i class="fa-solid fa-user-gear text-primary"></i> Institutional Settings &amp; Access Control Center</h2>
+              <p>School Profile &bull; Academic Year &bull; Role Management &bull; Access Permissions Matrix &bull; Security Policies &bull; Immutable Audit Logs &bull; Data &amp; Backup</p>
             </div>
-            <div class="mhs-actions" style="display:flex; align-items:center; gap:0.75rem; flex-wrap:wrap;">
-              <span class="badge"
-                style="background:#f0fdf4; color:#166534; padding: 7px 14px; font-size: 0.82rem; font-weight:700; border:1px solid #bbf7d0; border-radius: 6px;">
-                <i class="fa-solid fa-lock text-success mr-1"></i> Security Protocol: <strong>TLS 1.3 &bull; AES-256
-                  Encrypted</strong>
+            <div class="subview-header-actions">
+              <span class="institutional-security-badge" title="Transport and data layer encryption active">
+                <i class="fa-solid fa-lock text-success me-1"></i> Security: <strong>TLS 1.3 &bull; AES-256</strong>
               </span>
-              <button class="btn btn-secondary btn-sm" onclick="portalApp.triggerAuthorizedBackup()">
-                <i class="fa-solid fa-cloud-arrow-up mr-1"></i> Start Authorized Backup
+              <button type="button" class="btn btn-secondary" onclick="portalApp.triggerAuthorizedBackup()" title="Initiate authorized cloud snapshot">
+                <i class="fa-solid fa-cloud-arrow-up me-1 text-primary"></i> Start Backup
               </button>
-              <button class="btn btn-primary btn-sm" onclick="portalApp.publishSchoolProfileChanges()">
-                <i class="fa-solid fa-cloud-check mr-1"></i> Publish Changes
+              <button type="button" class="btn btn-primary" onclick="portalApp.publishSchoolProfileChanges()" title="Commit and publish school configuration">
+                <i class="fa-solid fa-cloud-arrow-up me-1"></i> Publish Changes
               </button>
             </div>
           </div>
 
           <!-- Statutory Protocol Notice Strip -->
-          <div class="p-3 mb-4 rounded-3 border" style="background: #f8fafc; border-color: #cbd5e1 !important;">
-            <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
+          <div class="faculty-statutory-notice settings-statutory-notice">
+            <div class="d-flex align-items-center justify-content-between flex-wrap gap-3 w-100">
               <div class="d-flex align-items-center gap-3">
-                <div
-                  style="width: 42px; height: 42px; border-radius: 8px; background: #0f172a; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 1.25rem;">
+                <div class="statutory-icon-box">
                   <i class="fa-solid fa-shield-halved"></i>
                 </div>
                 <div>
-                  <h6 class="mb-0 font-bold" style="color: #0f172a; font-size: 0.95rem;">Andhra Pradesh Statutory
-                    Governance &amp; Executive Access Standard</h6>
-                  <p class="mb-0 text-muted" style="font-size: 0.8rem;">Modifications to school profile, academic term
-                    boundaries, role hierarchies, and security parameters require Executive Principal authorization. All
-                    changes are cryptographically timestamped in the immutable Audit Log.</p>
+                  <h6 class="mb-0 font-bold" style="color: #0f172a; font-size: 0.92rem;">
+                    Andhra Pradesh Statutory Governance &amp; Executive Access Standard
+                  </h6>
+                  <p class="mb-0 text-muted" style="font-size: 0.8rem; line-height: 1.45;">
+                    Modifications to school profile, academic term boundaries, role hierarchies, and security parameters require Executive Principal authorization. All changes are cryptographically timestamped in the Immutable Audit Log.
+                  </p>
                 </div>
               </div>
-              <div class="d-flex align-items-center gap-2">
-                <span class="badge" style="background:#e2e8f0; color:#334155; padding:6px 12px; font-weight:700;"><i
-                    class="fa-solid fa-fingerprint mr-1"></i> Audit Active</span>
-                <span class="badge" style="background:#dcfce7; color:#166534; padding:6px 12px; font-weight:700;"><i
-                    class="fa-solid fa-circle-check mr-1"></i> U-DISE+ 28111501008</span>
+              <div class="d-flex align-items-center gap-2 flex-wrap">
+                <span class="badge" style="background:#e2e8f0; color:#334155; padding:6px 12px; font-weight:700; border-radius:6px; font-size:0.75rem;">
+                  <i class="fa-solid fa-fingerprint me-1 text-primary"></i> Audit Active
+                </span>
+                <span class="badge" style="background:#dcfce7; color:#166534; padding:6px 12px; font-weight:700; border-radius:6px; font-size:0.75rem;">
+                  <i class="fa-solid fa-circle-check me-1 text-success"></i> U-DISE+ 28111501008
+                </span>
               </div>
             </div>
           </div>
 
           <!-- Module Tab Strip (7 Core Subviews) -->
-          <div class="tab-strip mb-4" id="settingsTabStrip" style="overflow-x: auto; white-space: nowrap;">
-            <button class="tab-btn active" data-sub="profile" onclick="portalApp.switchSubTab('settings', 'profile')">
-              <i class="fa-solid fa-school mr-1"></i> School Profile
+          <div class="tab-strip mb-4" id="settingsTabStrip">
+            <button type="button" class="tab-btn active" data-sub="profile" onclick="portalApp.switchSubTab('settings', 'profile')">
+              <i class="fa-solid fa-school me-1"></i> School Profile
             </button>
-            <button class="tab-btn" data-sub="year" onclick="portalApp.switchSubTab('settings', 'year')">
-              <i class="fa-solid fa-calendar-days mr-1"></i> Academic Year
+            <button type="button" class="tab-btn" data-sub="year" onclick="portalApp.switchSubTab('settings', 'year')">
+              <i class="fa-solid fa-calendar-days me-1"></i> Academic Year
             </button>
-            <button class="tab-btn" data-sub="roles" onclick="portalApp.switchSubTab('settings', 'roles')">
-              <i class="fa-solid fa-sitemap mr-1"></i> Role Management
+            <button type="button" class="tab-btn" data-sub="roles" onclick="portalApp.switchSubTab('settings', 'roles')">
+              <i class="fa-solid fa-sitemap me-1"></i> Role Management
             </button>
-            <button class="tab-btn" data-sub="permissions" onclick="portalApp.switchSubTab('settings', 'permissions')">
-              <i class="fa-solid fa-shield-halved mr-1"></i> Access Permissions
+            <button type="button" class="tab-btn" data-sub="permissions" onclick="portalApp.switchSubTab('settings', 'permissions')">
+              <i class="fa-solid fa-shield-halved me-1"></i> Access Permissions
             </button>
-            <button class="tab-btn" data-sub="security" onclick="portalApp.switchSubTab('settings', 'security')">
-              <i class="fa-solid fa-key mr-1"></i> Security Settings
+            <button type="button" class="tab-btn" data-sub="security" onclick="portalApp.switchSubTab('settings', 'security')">
+              <i class="fa-solid fa-key me-1"></i> Security Settings
             </button>
-            <button class="tab-btn" data-sub="audit" onclick="portalApp.switchSubTab('settings', 'audit')">
-              <i class="fa-solid fa-clipboard-list mr-1"></i> Audit Logs
+            <button type="button" class="tab-btn" data-sub="audit" onclick="portalApp.switchSubTab('settings', 'audit')">
+              <i class="fa-solid fa-clipboard-list me-1"></i> Audit Logs
             </button>
-            <button class="tab-btn" data-sub="backup" onclick="portalApp.switchSubTab('settings', 'backup')">
-              <i class="fa-solid fa-database mr-1"></i> Data &amp; Backup
+            <button type="button" class="tab-btn" data-sub="backup" onclick="portalApp.switchSubTab('settings', 'backup')">
+              <i class="fa-solid fa-database me-1"></i> Data &amp; Backup
             </button>
           </div>
 
@@ -14837,34 +14785,34 @@
                ==================================================================== -->
           <div class="setting-subview active" id="subview-settings-profile">
             <!-- Action Toolbar Strip -->
-            <div class="card p-3 mb-4 border rounded-3 bg-white shadow-sm">
+            <div class="card p-3 mb-4 border rounded-3 bg-white shadow-sm settings-action-toolbar">
               <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
-                <div class="d-flex align-items-center gap-2">
+                <div class="d-flex align-items-center gap-2 flex-wrap">
                   <span class="badge"
-                    style="background:#eff6ff; color:#1d4ed8; font-weight:700; font-size:0.8rem; padding:6px 12px;">
-                    <i class="fa-solid fa-circle-check mr-1"></i> Active Published Profile
+                    style="background:#eff6ff; color:#1d4ed8; font-weight:700; font-size:0.8rem; padding:6px 12px; border-radius:6px; border:1px solid #bfdbfe;">
+                    <i class="fa-solid fa-circle-check me-1 text-primary"></i> Active Published Profile
                   </span>
-                  <span class="text-muted text-xs">Version 2026.3 &bull; Last published by Smt. Gorle Varalakshmi</span>
+                  <span class="text-muted text-xs">Version 2026.3 &bull; Last published by <strong>Smt. Gorle Varalakshmi</strong></span>
                 </div>
                 <div class="d-flex align-items-center gap-2 flex-wrap">
-                  <button type="button" class="btn btn-outline-primary btn-sm"
+                  <button type="button" class="btn btn-secondary btn-sm"
                     onclick="portalApp.editSchoolProfileDraft()">
-                    <i class="fa-solid fa-pen-to-square mr-1"></i> Edit draft
+                    <i class="fa-solid fa-pen-to-square me-1 text-primary"></i> Edit Draft
                   </button>
-                  <button type="button" class="btn btn-outline-info btn-sm" onclick="portalApp.previewSchoolProfile()">
-                    <i class="fa-regular fa-eye mr-1"></i> Preview
+                  <button type="button" class="btn btn-secondary btn-sm" onclick="portalApp.previewSchoolProfile()">
+                    <i class="fa-regular fa-eye me-1 text-info"></i> Preview
                   </button>
-                  <button type="button" class="btn btn-outline-warning btn-sm"
+                  <button type="button" class="btn btn-secondary btn-sm"
                     onclick="portalApp.submitSchoolProfileForApproval()">
-                    <i class="fa-solid fa-paper-plane mr-1"></i> Submit for approval
+                    <i class="fa-solid fa-paper-plane me-1 text-amber"></i> Submit for Approval
                   </button>
-                  <button type="button" class="btn btn-success btn-sm"
+                  <button type="button" class="btn btn-primary btn-sm"
                     onclick="portalApp.publishSchoolProfileChanges()">
-                    <i class="fa-solid fa-cloud-check mr-1"></i> Publish changes
+                    <i class="fa-solid fa-cloud-arrow-up me-1"></i> Publish Changes
                   </button>
-                  <button type="button" class="btn btn-outline-secondary btn-sm"
+                  <button type="button" class="btn btn-secondary btn-sm"
                     onclick="portalApp.viewSchoolProfileHistory()">
-                    <i class="fa-solid fa-clock-rotate-left mr-1"></i> View history
+                    <i class="fa-solid fa-clock-rotate-left me-1 text-secondary"></i> View History
                   </button>
                 </div>
               </div>
@@ -14873,53 +14821,51 @@
             <div class="row g-4">
               <!-- Left Column: Logo Emblem & School Branding -->
               <div class="col-lg-4">
-                <div class="card p-4 border rounded-3 bg-white text-center shadow-sm mb-4">
-                  <div class="mb-3">
+                <div class="card p-4 border rounded-3 bg-white text-center shadow-sm mb-4 settings-branding-card">
+                  <div class="settings-logo-frame">
                     <img src="assets/images/school-logo.jpg" alt="Official School Logo Emblem"
-                      style="width: 130px; height: 130px; object-fit: contain; border-radius: 14px; border: 2px solid #e2e8f0; padding: 6px; background: #fff;"
                       id="profileLogoPreview">
                   </div>
-                  <h5 class="font-bold mb-1" style="color: #0f172a;">SRI VIDYA ENGLISH MEDIUM HIGH SCHOOL</h5>
-                  <p class="text-muted text-xs mb-3">"Vidyathe Vijayam — Knowledge Brings Victory"</p>
+                  <h5 class="font-bold mb-1" style="color: #0f172a; font-size: 0.95rem; letter-spacing: 0.02em;">SRI VIDYA ENGLISH MEDIUM HIGH SCHOOL</h5>
+                  <p class="text-muted text-xs mb-3 italic">"Vidyathe Vijayam — Knowledge Brings Victory"</p>
                   <div class="d-flex justify-content-center gap-2 mb-3">
-                    <span class="badge" style="background:#eff6ff; color:#1d4ed8; font-weight:700;">Est. 2017</span>
-                    <span class="badge" style="background:#f0fdf4; color:#166534; font-weight:700;">AP Govt
-                      Recognized</span>
+                    <span class="badge" style="background:#eff6ff; color:#1d4ed8; font-weight:700; border:1px solid #bfdbfe; border-radius:6px; padding: 5px 10px; font-size:0.75rem;">Est. 2017</span>
+                    <span class="badge" style="background:#f0fdf4; color:#166534; font-weight:700; border:1px solid #bbf7d0; border-radius:6px; padding: 5px 10px; font-size:0.75rem;">AP Govt Recognized</span>
                   </div>
-                  <button type="button" class="btn btn-outline-secondary btn-sm w-100"
+                  <button type="button" class="btn btn-secondary btn-sm w-100"
                     onclick="portalApp.showToast('Select replacement high-resolution emblem (PNG/JPEG under 2MB).', 'info')">
-                    <i class="fa-solid fa-image mr-1"></i> Update Logo Emblem
+                    <i class="fa-solid fa-image me-1 text-primary"></i> Update Logo Emblem
                   </button>
                 </div>
 
                 <!-- School Branding Configuration -->
                 <div class="card p-4 border rounded-3 bg-white shadow-sm">
-                  <h6 class="font-bold mb-3" style="color:#0f172a;"><i
-                      class="fa-solid fa-palette text-primary mr-2"></i> School Branding &amp; Visual Identity</h6>
+                  <h6 class="font-bold mb-3" style="color:#0f172a; font-size:0.92rem;"><i
+                      class="fa-solid fa-palette text-primary me-2"></i> School Branding &amp; Visual Identity</h6>
                   <div class="mb-3">
-                    <label class="form-label text-xs font-bold text-muted">Primary Brand Color</label>
+                    <label class="form-label text-xs font-bold text-muted mb-1">Primary Brand Color</label>
                     <div class="d-flex align-items-center gap-2">
                       <input type="color" id="profilePrimaryBrandColor" value="#1e3a8a"
-                        style="width:40px; height:38px; border:1px solid #cbd5e1; border-radius:6px; cursor:pointer;">
-                      <input type="text" class="form-control form-control-sm font-monospace" value="#1e3a8a" readonly
-                        style="font-weight:700;">
+                        style="width:42px; height:36px; border:1px solid #cbd5e1; border-radius:6px; cursor:pointer; padding:2px;">
+                      <input type="text" class="form-control form-control-sm font-monospace font-bold" value="#1e3a8a" readonly
+                        style="height:36px;">
                     </div>
                   </div>
                   <div class="mb-3">
-                    <label class="form-label text-xs font-bold text-muted">Secondary Accent Color</label>
+                    <label class="form-label text-xs font-bold text-muted mb-1">Secondary Accent Color</label>
                     <div class="d-flex align-items-center gap-2">
                       <input type="color" id="profileSecondaryBrandColor" value="#d97706"
-                        style="width:40px; height:38px; border:1px solid #cbd5e1; border-radius:6px; cursor:pointer;">
-                      <input type="text" class="form-control form-control-sm font-monospace" value="#d97706" readonly
-                        style="font-weight:700;">
+                        style="width:42px; height:36px; border:1px solid #cbd5e1; border-radius:6px; cursor:pointer; padding:2px;">
+                      <input type="text" class="form-control form-control-sm font-monospace font-bold" value="#d97706" readonly
+                        style="height:36px;">
                     </div>
                   </div>
                   <div class="mb-3">
-                    <label class="form-label text-xs font-bold text-muted">Official Institutional Motto</label>
-                    <input type="text" class="form-control" id="profileSchoolMotto"
-                      value="Vidyathe Vijayam — Knowledge Brings Victory">
+                    <label class="form-label text-xs font-bold text-muted mb-1">Official Institutional Motto</label>
+                    <input type="text" class="form-control form-control-sm" id="profileSchoolMotto"
+                      value="Vidyathe Vijayam — Knowledge Brings Victory" style="height:36px;">
                   </div>
-                  <div class="form-check form-switch mt-2">
+                  <div class="form-check form-switch mt-3 pt-2 border-top">
                     <input class="form-check-input" type="checkbox" id="profileBrandingWatermarkToggle" checked>
                     <label class="form-check-label text-xs font-bold text-muted"
                       for="profileBrandingWatermarkToggle">Watermark Emblem on Transcripts &amp; TCs</label>
@@ -14931,34 +14877,34 @@
               <div class="col-lg-8">
                 <!-- Section 1: Basic Identifiers & Contact -->
                 <div class="card p-4 border rounded-3 bg-white shadow-sm mb-4">
-                  <h5 class="font-bold mb-3" style="color:#1e3a8a;"><i
-                      class="fa-solid fa-landmark text-primary mr-2"></i> Official Identity &amp; Contact Information
+                  <h5 class="font-bold mb-3" style="color:#0f172a; font-size:0.95rem;"><i
+                      class="fa-solid fa-landmark text-primary me-2"></i> Official Identity &amp; Contact Information
                   </h5>
                   <div class="row g-3">
                     <div class="col-md-6">
-                      <label class="form-label text-xs font-bold text-muted">Official School Name <span
+                      <label class="form-label text-xs font-bold text-muted mb-1">Official School Name <span
                           class="text-danger">*</span></label>
                       <input type="text" class="form-control" id="profileSchoolName"
                         value="Sri Vidya English Medium High School">
                     </div>
                     <div class="col-md-6">
-                      <label class="form-label text-xs font-bold text-muted">Executive Principal <span
+                      <label class="form-label text-xs font-bold text-muted mb-1">Executive Principal <span
                           class="text-danger">*</span></label>
                       <input type="text" class="form-control" id="profilePrincipalName" value="Smt. Gorle Varalakshmi">
                     </div>
                     <div class="col-12">
-                      <label class="form-label text-xs font-bold text-muted">Official Campus Address <span
+                      <label class="form-label text-xs font-bold text-muted mb-1">Official Campus Address <span
                           class="text-danger">*</span></label>
                       <input type="text" class="form-control" id="profileAddress"
                         value="Door No. 4-128, Main Campus Road, Near Old Bus Stand, Visakhapatnam - 530041, Andhra Pradesh">
                     </div>
                     <div class="col-md-6">
-                      <label class="form-label text-xs font-bold text-muted">Primary Contact Phone <span
+                      <label class="form-label text-xs font-bold text-muted mb-1">Primary Contact Phone <span
                           class="text-danger">*</span></label>
                       <input type="text" class="form-control" id="profilePhone" value="+91 93985 78584 / 0891-2548911">
                     </div>
                     <div class="col-md-6">
-                      <label class="form-label text-xs font-bold text-muted">Primary Administrative Email <span
+                      <label class="form-label text-xs font-bold text-muted mb-1">Primary Administrative Email <span
                           class="text-danger">*</span></label>
                       <input type="email" class="form-control" id="profileEmail" value="admin@srividya.edu.in">
                     </div>
@@ -14967,46 +14913,46 @@
 
                 <!-- Section 2: Domains & Regulatory Identifiers -->
                 <div class="card p-4 border rounded-3 bg-white shadow-sm mb-4">
-                  <h5 class="font-bold mb-3" style="color:#0f172a;"><i class="fa-solid fa-globe text-primary mr-2"></i>
+                  <h5 class="font-bold mb-3" style="color:#0f172a; font-size:0.95rem;"><i class="fa-solid fa-globe text-primary me-2"></i>
                     Domains, Regulatory Identifiers &amp; Affiliation</h5>
                   <div class="row g-3">
                     <div class="col-md-6">
-                      <label class="form-label text-xs font-bold text-muted">Website Domain <span
+                      <label class="form-label text-xs font-bold text-muted mb-1">Website Domain <span
                           class="text-danger">*</span></label>
                       <div class="input-group">
-                        <span class="input-group-text bg-light text-muted"><i class="fa-solid fa-link"></i></span>
+                        <span class="input-group-text bg-light text-muted border-end-0"><i class="fa-solid fa-globe"></i></span>
                         <input type="url" class="form-control" id="profileWebsiteDomain"
                           value="https://srividyaschool.edu.in">
                       </div>
                     </div>
                     <div class="col-md-6">
-                      <label class="form-label text-xs font-bold text-muted">Official Email Domain <span
+                      <label class="form-label text-xs font-bold text-muted mb-1">Official Email Domain <span
                           class="text-danger">*</span></label>
                       <div class="input-group">
-                        <span class="input-group-text bg-light text-muted"><i class="fa-solid fa-at"></i></span>
+                        <span class="input-group-text bg-light text-muted border-end-0"><i class="fa-solid fa-at"></i></span>
                         <input type="text" class="form-control" id="profileOfficialEmailDomain"
                           value="@srividya.edu.in">
                       </div>
                     </div>
                     <div class="col-md-6">
-                      <label class="form-label text-xs font-bold text-muted">National U-DISE+ Code <span
+                      <label class="form-label text-xs font-bold text-muted mb-1">National U-DISE+ Code <span
                           class="text-danger">*</span></label>
                       <input type="text" class="form-control font-monospace font-bold" id="profileUdiseCode"
                         value="28111501008" readonly>
                     </div>
                     <div class="col-md-6">
-                      <label class="form-label text-xs font-bold text-muted">Affiliation Board &amp; Code <span
+                      <label class="form-label text-xs font-bold text-muted mb-1">Affiliation Board &amp; Code <span
                           class="text-danger">*</span></label>
                       <input type="text" class="form-control" id="profileAffiliationBoard"
                         value="AP SCERT &amp; State Board of Secondary Education, AP (CBSE Aligned)">
                     </div>
                     <div class="col-md-6">
-                      <label class="form-label text-xs font-bold text-muted">Statutory School Registration No</label>
+                      <label class="form-label text-xs font-bold text-muted mb-1">Statutory School Registration No</label>
                       <input type="text" class="form-control font-monospace" id="profileRegNo"
                         value="AP-VSP-REC-2017/0491" readonly>
                     </div>
                     <div class="col-md-6">
-                      <label class="form-label text-xs font-bold text-muted">Government Recognition Order</label>
+                      <label class="form-label text-xs font-bold text-muted mb-1">Government Recognition Order</label>
                       <input type="text" class="form-control" id="profileGovtOrder" value="G.O.Ms.No. 412/SE-DEO/2017"
                         readonly>
                     </div>
@@ -15015,50 +14961,52 @@
 
                 <!-- Section 3: Authorized Signatories -->
                 <div class="card p-4 border rounded-3 bg-white shadow-sm" id="profileAuthorizedSignatories">
-                  <div class="d-flex justify-content-between align-items-center mb-3">
-                    <h5 class="font-bold mb-0" style="color:#0f172a;"><i
-                        class="fa-solid fa-file-signature text-primary mr-2"></i> Authorized Institutional Signatories
+                  <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+                    <h5 class="font-bold mb-0" style="color:#0f172a; font-size:0.95rem;"><i
+                        class="fa-solid fa-file-signature text-primary me-2"></i> Authorized Institutional Signatories
                     </h5>
-                    <button type="button" class="btn btn-outline-primary btn-sm"
+                    <button type="button" class="btn btn-secondary btn-sm"
                       onclick="portalApp.openAddSignatoryModal()">
-                      <i class="fa-solid fa-plus mr-1"></i> Add Signatory
+                      <i class="fa-solid fa-plus me-1 text-primary"></i> Add Signatory
                     </button>
                   </div>
-                  <div class="table-responsive">
-                    <table class="table table-sm table-bordered align-middle mb-0" style="font-size:0.84rem;">
-                      <thead class="table-light">
-                        <tr>
-                          <th>Signatory Name</th>
-                          <th>Institutional Designation</th>
-                          <th>Signing Authority Scope</th>
-                          <th>Digital Seal</th>
-                          <th>Status</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr>
-                          <td><strong>Smt. Gorle Varalakshmi</strong></td>
-                          <td>Principal &amp; Head of Institution</td>
-                          <td>Transfer Certificates (TC), Board Transcripts, Staff Relinquishment</td>
-                          <td><span class="badge bg-success"><i class="fa-solid fa-signature"></i> Sealed</span></td>
-                          <td><span class="badge bg-primary">Primary</span></td>
-                        </tr>
-                        <tr>
-                          <td><strong>Sri Navva Anand</strong></td>
-                          <td>Vice Principal (Academic Dean)</td>
-                          <td>Attendance Registers, Internal Moderation, Routine Clearances</td>
-                          <td><span class="badge bg-success"><i class="fa-solid fa-signature"></i> Sealed</span></td>
-                          <td><span class="badge bg-secondary">Secondary</span></td>
-                        </tr>
-                        <tr>
-                          <td><strong>Sri K. Venkat</strong></td>
-                          <td>School Correspondent &amp; Secretary</td>
-                          <td>Financial Sanctions, Legal Affidavits, Infrastructure Leases</td>
-                          <td><span class="badge bg-success"><i class="fa-solid fa-signature"></i> Sealed</span></td>
-                          <td><span class="badge bg-secondary">Executive</span></td>
-                        </tr>
-                      </tbody>
-                    </table>
+                  <div class="parent-table-wrap" style="border: 1px solid #e2e8f0; border-radius: 8px; overflow: hidden;">
+                    <div class="parent-table-scroll">
+                      <table class="table table-hover align-middle mb-0 parent-table" style="font-size:0.83rem;">
+                        <thead class="table-light">
+                          <tr>
+                            <th style="min-width: 180px;"><i class="fa-solid fa-user me-1 text-muted"></i> Signatory Name</th>
+                            <th style="min-width: 170px;"><i class="fa-solid fa-id-badge me-1 text-muted"></i> Institutional Designation</th>
+                            <th style="min-width: 250px;"><i class="fa-solid fa-stamp me-1 text-muted"></i> Signing Authority Scope</th>
+                            <th style="min-width: 110px;" class="text-center"><i class="fa-solid fa-signature me-1 text-muted"></i> Digital Seal</th>
+                            <th style="min-width: 100px;" class="text-center"><i class="fa-solid fa-shield me-1 text-muted"></i> Authority</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td><strong>Smt. Gorle Varalakshmi</strong></td>
+                            <td>Principal &amp; Head of Institution</td>
+                            <td>Transfer Certificates (TC), Board Transcripts, Staff Relinquishment</td>
+                            <td class="text-center"><span class="badge" style="background:#dcfce7; color:#166534; font-weight:700; border-radius:6px; padding:5px 9px;"><i class="fa-solid fa-signature me-1"></i> Sealed</span></td>
+                            <td class="text-center"><span class="badge" style="background:#eff6ff; color:#1d4ed8; font-weight:700; border-radius:6px; padding:5px 9px;">Primary</span></td>
+                          </tr>
+                          <tr>
+                            <td><strong>Sri Navva Anand</strong></td>
+                            <td>Vice Principal (Academic Dean)</td>
+                            <td>Attendance Registers, Internal Moderation, Routine Clearances</td>
+                            <td class="text-center"><span class="badge" style="background:#dcfce7; color:#166534; font-weight:700; border-radius:6px; padding:5px 9px;"><i class="fa-solid fa-signature me-1"></i> Sealed</span></td>
+                            <td class="text-center"><span class="badge" style="background:#f1f5f9; color:#475569; font-weight:700; border-radius:6px; padding:5px 9px;">Secondary</span></td>
+                          </tr>
+                          <tr>
+                            <td><strong>Sri K. Venkat</strong></td>
+                            <td>School Correspondent &amp; Secretary</td>
+                            <td>Financial Sanctions, Legal Affidavits, Infrastructure Leases</td>
+                            <td class="text-center"><span class="badge" style="background:#dcfce7; color:#166534; font-weight:700; border-radius:6px; padding:5px 9px;"><i class="fa-solid fa-signature me-1"></i> Sealed</span></td>
+                            <td class="text-center"><span class="badge" style="background:#f1f5f9; color:#475569; font-weight:700; border-radius:6px; padding:5px 9px;">Executive</span></td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
                   </div>
                 </div>
               </div>

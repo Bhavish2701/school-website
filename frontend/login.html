@@ -1161,7 +1161,7 @@
           </div>
 
           <!-- Prominent Sign In Button -->
-          <button type="submit" class="submit-btn" id="unifiedSubmitBtn">
+          <button type="submit" class="submit-btn" id="unifiedSubmitBtn" onclick="PortalAuth.handleUnifiedLogin(event)">
             <span>Sign In to Portal</span>
             <i class="fa-solid fa-arrow-right"></i>
           </button>
@@ -1236,7 +1236,7 @@
             <input type="text" maxlength="1" class="otp-digit" id="unifiedOtp-6" inputmode="numeric" required>
           </div>
 
-          <button type="submit" class="submit-btn" id="unifiedOtpSubmitBtn">
+          <button type="submit" class="submit-btn" id="unifiedOtpSubmitBtn" onclick="PortalAuth.verifyUnifiedOtp(event)">
             <span>Verify &amp; Launch Dashboard</span>
             <i class="fa-solid fa-shield-check"></i>
           </button>
@@ -1305,7 +1305,7 @@
   <!-- API Client & Unified Authentication Script -->
   <script src="/js/api-client.js?v=20261122-v13"></script>
   <script src="/js/portal-auth.js?v=20261122-v13"></script>
-  <script src="/js/cookie-consent.js?v=20261122-v13"></script>
+  <script src="/js/cookie-consent.js?v=20261125-v1"></script>
   <script>
     document.addEventListener('DOMContentLoaded', function () {
       PortalAuth.initUnifiedLoginPage();

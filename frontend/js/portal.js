@@ -28981,34 +28981,53 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
               '<div style="white-space:nowrap;">' + statusBadge + '</div>' +
               (remarks && remarks !== '-' ? '<div style="font-size:0.74rem; color:#64748b; margin-top:4px; max-width:180px; line-height:1.35;">' + remarks + '</div>' : '') +
             '</td>' +
-            // 10. Actions
+            // 10. Actions (Enterprise ERP Leave Row Actions)
             '<td class="text-center">' +
-              (decision === 'Pending Sign-off' ?
-                '<div class="d-inline-flex align-items-center" style="gap:4px;">' +
-                  '<button class="btn btn-sm btn-success py-1 px-2" style="font-size:0.75rem; border-radius:4px; font-weight:600;" title="Approve Request" onclick="portalApp.openLeaveDecisionModal(\'' + (req._id || req.id) + '\', \'Approved\')"><i class="fa-solid fa-check"></i></button>' +
-                  '<button class="btn btn-sm btn-outline-danger py-1 px-2" style="font-size:0.75rem; border-radius:4px; font-weight:600;" title="Reject with Reason" onclick="portalApp.openLeaveDecisionModal(\'' + (req._id || req.id) + '\', \'Rejected\')"><i class="fa-solid fa-xmark"></i></button>' +
+              '<div class="leave-actions-cell">' +
+                (decision === 'Pending Sign-off' ?
+                  '<button type="button" class="leave-action-btn btn-action-approve" title="Approve Leave Request" onclick="portalApp.openLeaveDecisionModal(\'' + (req._id || req.id) + '\', \'Approved\')">' +
+                    '<i class="fa-solid fa-check"></i>' +
+                  '</button>' +
+                  '<button type="button" class="leave-action-btn btn-action-reject" title="Reject with Reason" onclick="portalApp.openLeaveDecisionModal(\'' + (req._id || req.id) + '\', \'Rejected\')">' +
+                    '<i class="fa-solid fa-xmark"></i>' +
+                  '</button>' +
                   '<div class="dropdown d-inline-block">' +
-                    '<button class="leave-action-btn dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="More Options">' +
+                    '<button class="leave-action-btn btn-action-more dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="More Options">' +
                       '<i class="fa-solid fa-ellipsis-vertical"></i>' +
                     '</button>' +
-                    '<div class="dropdown-menu dropdown-menu-right shadow-sm" style="font-size:0.84rem;">' +
-                      '<a class="dropdown-item text-warning" href="javascript:void(0)" onclick="portalApp.openLeaveDecisionModal(\'' + (req._id || req.id) + '\', \'Returned for Correction\')"><i class="fa-solid fa-rotate-left mr-2"></i> Return for Correction</a>' +
-                      '<a class="dropdown-item text-muted" href="javascript:void(0)" onclick="portalApp.cancelLeaveRequest(\'' + (req._id || req.id) + '\')"><i class="fa-solid fa-ban mr-2"></i> Cancel</a>' +
+                    '<div class="dropdown-menu dropdown-menu-right shadow-sm">' +
+                      '<a class="dropdown-item text-warning font-weight-500" href="javascript:void(0)" onclick="portalApp.openLeaveDecisionModal(\'' + (req._id || req.id) + '\', \'Returned for Correction\')">' +
+                        '<i class="fa-solid fa-rotate-left mr-2"></i> Return for Correction' +
+                      '</a>' +
+                      '<a class="dropdown-item text-primary font-weight-500" href="javascript:void(0)" onclick="portalApp.openStaffLeaveLedger(\'' + (req.employeeId || '') + '\')">' +
+                        '<i class="fa-solid fa-clock-rotate-left mr-2"></i> View Leave Ledger' +
+                      '</a>' +
+                      '<div class="dropdown-divider"></div>' +
+                      '<a class="dropdown-item text-danger font-weight-500" href="javascript:void(0)" onclick="portalApp.cancelLeaveRequest(\'' + (req._id || req.id) + '\')">' +
+                        '<i class="fa-solid fa-ban mr-2"></i> Cancel Request' +
+                      '</a>' +
                     '</div>' +
-                  '</div>' +
-                '</div>' :
-                '<div class="dropdown d-inline-block">' +
-                  '<button class="leave-action-btn dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="Actions">' +
-                    '<i class="fa-solid fa-ellipsis-vertical"></i>' +
+                  '</div>' :
+                  '<button type="button" class="leave-action-btn btn-action-view" title="View Staff Leave Ledger & Balance" onclick="portalApp.openStaffLeaveLedger(\'' + (req.employeeId || '') + '\')">' +
+                    '<i class="fa-solid fa-clock-rotate-left mr-1"></i> Ledger' +
                   '</button>' +
-                  '<div class="dropdown-menu dropdown-menu-right shadow-sm" style="font-size:0.84rem;">' +
-                    (decision !== 'Cancelled' ?
-                      '<a class="dropdown-item text-muted" href="javascript:void(0)" onclick="portalApp.cancelLeaveRequest(\'' + (req._id || req.id) + '\')">' +
-                        '<i class="fa-solid fa-ban mr-2"></i> Cancel according to policy' +
-                      '</a>' : '') +
-                  '</div>' +
-                '</div>'
-              ) +
+                  '<div class="dropdown d-inline-block">' +
+                    '<button class="leave-action-btn btn-action-more dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="More Actions">' +
+                      '<i class="fa-solid fa-ellipsis-vertical"></i>' +
+                    '</button>' +
+                    '<div class="dropdown-menu dropdown-menu-right shadow-sm">' +
+                      '<a class="dropdown-item text-primary font-weight-500" href="javascript:void(0)" onclick="portalApp.openStaffLeaveLedger(\'' + (req.employeeId || '') + '\')">' +
+                        '<i class="fa-solid fa-id-card-clip mr-2"></i> Staff Leave Dossier' +
+                      '</a>' +
+                      (decision !== 'Cancelled' ?
+                        '<div class="dropdown-divider"></div>' +
+                        '<a class="dropdown-item text-danger font-weight-500" href="javascript:void(0)" onclick="portalApp.cancelLeaveRequest(\'' + (req._id || req.id) + '\')">' +
+                          '<i class="fa-solid fa-ban mr-2"></i> Cancel according to policy' +
+                        '</a>' : '') +
+                    '</div>' +
+                  '</div>'
+                ) +
+              '</div>' +
             '</td>' +
           '</tr>';
         });
@@ -51872,7 +51891,7 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
       let actionsHtml = '';
       if (isAuthorized) {
         actionsHtml = '<div class="dropdown d-inline-block">' +
-          '<button class="leave-action-btn dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="Actions">' +
+          '<button class="leave-action-btn btn-action-more dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="Actions">' +
             '<i class="fa-solid fa-ellipsis-vertical"></i>' +
           '</button>' +
           '<div class="dropdown-menu dropdown-menu-right shadow-sm" style="font-size:0.84rem;">' +
@@ -69237,18 +69256,18 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
       inp.removeAttribute('readonly');
       inp.classList.remove('bg-light');
     });
-    const firstInp = document.getElementById('profSchoolName');
+    const firstInp = document.getElementById('profileSchoolName') || document.getElementById('profSchoolName');
     if (firstInp) firstInp.focus();
     showToast('Draft profile unlocked for editing. Make modifications and submit for approval.', 'info');
   }
 
   function previewSchoolProfile() {
-    const schoolName = document.getElementById('profSchoolName')?.value || 'Sri Vidya E.M High School';
-    const address = document.getElementById('profSchoolAddress')?.value || 'Door No. 4-12, Main Road, Tilak Nagar, Guntur, AP - 522002';
-    const email = document.getElementById('profContactEmail')?.value || 'principal@srividyaschool.edu.in';
-    const phone = document.getElementById('profContactPhone')?.value || '+91 863 2234567';
-    const affil = document.getElementById('profAffiliationNo')?.value || 'CBSE Affiliation No: 130284 / AP State Code: 28111501008';
-    const brandColor = document.getElementById('profPrimaryColor')?.value || '#1e3a8a';
+    const schoolName = document.getElementById('profileSchoolName')?.value || document.getElementById('profSchoolName')?.value || 'Sri Vidya English Medium High School';
+    const address = document.getElementById('profileAddress')?.value || document.getElementById('profSchoolAddress')?.value || 'Door No. 4-128, Main Campus Road, Near Old Bus Stand, Visakhapatnam - 530041, Andhra Pradesh';
+    const email = document.getElementById('profileEmail')?.value || document.getElementById('profContactEmail')?.value || 'admin@srividya.edu.in';
+    const phone = document.getElementById('profilePhone')?.value || document.getElementById('profContactPhone')?.value || '+91 93985 78584 / 0891-2548911';
+    const affil = document.getElementById('profileAffiliationBoard')?.value || document.getElementById('profAffiliationNo')?.value || 'AP SCERT & State Board of Secondary Education, AP (CBSE Aligned)';
+    const brandColor = document.getElementById('profilePrimaryBrandColor')?.value || document.getElementById('profPrimaryColor')?.value || '#1e3a8a';
 
     const pName = document.getElementById('profilePreviewSchoolName');
     if (pName) pName.textContent = schoolName;
@@ -69269,7 +69288,7 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
   }
 
   function publishSchoolProfileChanges() {
-    const name = document.getElementById('profSchoolName')?.value || 'Sri Vidya E.M High School';
+    const name = document.getElementById('profileSchoolName')?.value || document.getElementById('profSchoolName')?.value || 'Sri Vidya English Medium High School';
     document.title = `${name} | Management Portal`;
     closeModal('schoolProfilePreviewModal');
     showToast('School profile changes approved and published successfully. Portal headers and statutory documents updated.', 'success');

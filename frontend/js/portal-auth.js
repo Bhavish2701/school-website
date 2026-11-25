@@ -1767,6 +1767,78 @@ const PortalAuth = {
     if (document.getElementById('unifiedWhatsappCodeDisplay')) {
       this.fetchDevOtp();
     }
+
+    // Explicit event listeners for forms and buttons (immune to CSP script-src-attr restrictions)
+    const loginForm = document.getElementById('unifiedLoginForm');
+    const submitBtn = document.getElementById('unifiedSubmitBtn');
+
+    if (loginForm && !loginForm.__boundUnifiedLogin) {
+      loginForm.__boundUnifiedLogin = true;
+      loginForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        this.handleUnifiedLogin(e);
+      });
+    }
+
+    if (submitBtn && !submitBtn.__boundUnifiedLogin) {
+      submitBtn.__boundUnifiedLogin = true;
+      submitBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        this.handleUnifiedLogin(e);
+      });
+    }
+
+    const userInput = document.getElementById('unifiedLoginUser');
+    const passInput = document.getElementById('unifiedLoginPass');
+    const onEnter = (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        this.handleUnifiedLogin(e);
+      }
+    };
+    if (userInput && !userInput.__boundEnter) {
+      userInput.__boundEnter = true;
+      userInput.addEventListener('keydown', onEnter);
+    }
+    if (passInput && !passInput.__boundEnter) {
+      passInput.__boundEnter = true;
+      passInput.addEventListener('keydown', onEnter);
+    }
+
+    const otpForm = document.getElementById('unifiedOtpForm');
+    const otpSubmitBtn = document.getElementById('unifiedOtpSubmitBtn');
+    if (otpForm && !otpForm.__boundOtp) {
+      otpForm.__boundOtp = true;
+      otpForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        this.verifyUnifiedOtp(e);
+      });
+    }
+    if (otpSubmitBtn && !otpSubmitBtn.__boundOtp) {
+      otpSubmitBtn.__boundOtp = true;
+      otpSubmitBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        this.verifyUnifiedOtp(e);
+      });
+    }
+
+    const resendBtn = document.getElementById('unifiedResendOtpBtn');
+    if (resendBtn && !resendBtn.__boundResend) {
+      resendBtn.__boundResend = true;
+      resendBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        this.resendOtp('unified');
+      });
+    }
+
+    const cancelOtpBtn = document.getElementById('unifiedCancelOtpBtn');
+    if (cancelOtpBtn && !cancelOtpBtn.__boundCancel) {
+      cancelOtpBtn.__boundCancel = true;
+      cancelOtpBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        this.cancelUnifiedOtp();
+      });
+    }
   },
 
   isAnySessionActive() {
@@ -1837,8 +1909,21 @@ const PortalAuth = {
       const rememberMe = rememberCheckbox ? rememberCheckbox.checked : true;
 
       // 1. Authoritative Backend REST API Authentication with 2FA OTP & requestedPortal
+      let res = null;
       if (window.ApiClient && window.ApiClient.auth && typeof window.ApiClient.auth.login === 'function') {
-        const res = await window.ApiClient.auth.login(enteredUser, enteredPass, rememberMe, true, requestedPortal);
+        res = await window.ApiClient.auth.login(enteredUser, enteredPass, rememberMe, true, requestedPortal);
+      } else {
+        const fetchRes = await fetch('/api/v1/auth/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+          body: JSON.stringify({ identifier: enteredUser, password: enteredPass, requireOtp: true, requestedPortal })
+        });
+        res = await fetchRes.json();
+        if (res && res.success && res.data && res.data.tokens) {
+          localStorage.setItem('sv_token_access', res.data.tokens.accessToken);
+          localStorage.setItem('sv_token_refresh', res.data.tokens.refreshToken);
+        }
+      }
 
         if (res && res.requiresOtp) {
           // Password verified! Enter Two-Factor Identity Verification state
@@ -1902,7 +1987,6 @@ const PortalAuth = {
           userData = (res.data && res.data.user) || res.user || {};
           routingData = (res.data && res.data.routing) || res.routing || null;
         }
-      }
 
       if (!loginSuccess) {
         throw new Error('Invalid credentials. Please verify your username/School ID and security password.');

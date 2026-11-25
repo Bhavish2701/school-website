@@ -39,20 +39,29 @@
     },
 
     savePreferences(prefs) {
-      this.preferences = Object.assign(this.preferences, prefs, {
-        essential: true,
-        timestamp: new Date().toISOString(),
-      });
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(this.preferences));
+      try {
+        this.preferences = Object.assign(this.preferences, prefs, {
+          essential: true,
+          timestamp: new Date().toISOString(),
+        });
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(this.preferences));
+      } catch (e) {
+        console.warn('[CookieConsent] Failed to save preferences to localStorage:', e);
+      }
 
-      // Sync with backend if ApiClient is available
-      this.syncConsentWithBackend();
-
+      // Immediately hide UI without waiting for background sync
       this.hideBanner();
       this.closeModal();
 
+      // Background telemetry/audit sync with backend if ApiClient is available
+      try {
+        this.syncConsentWithBackend();
+      } catch (_) {}
+
       // Dispatch event
-      window.dispatchEvent(new CustomEvent('sv:cookie-consent-updated', { detail: this.preferences }));
+      try {
+        window.dispatchEvent(new CustomEvent('sv:cookie-consent-updated', { detail: this.preferences }));
+      } catch (_) {}
     },
 
     async syncConsentWithBackend() {
@@ -91,12 +100,29 @@
 
     showBanner() {
       const banner = document.getElementById('skeuoCookieBanner');
-      if (banner) banner.classList.add('active');
+      if (banner) {
+        banner.style.display = 'block';
+        banner.style.pointerEvents = 'auto';
+        banner.style.opacity = '1';
+        banner.style.bottom = '';
+        void banner.offsetWidth; // force reflow
+        banner.classList.add('active');
+      }
     },
 
     hideBanner() {
       const banner = document.getElementById('skeuoCookieBanner');
-      if (banner) banner.classList.remove('active');
+      if (banner) {
+        banner.classList.remove('active');
+        banner.style.pointerEvents = 'none';
+        banner.style.bottom = '-320px';
+        banner.style.opacity = '0';
+        setTimeout(() => {
+          if (banner && !banner.classList.contains('active')) {
+            banner.style.display = 'none';
+          }
+        }, 360);
+      }
     },
 
     openModal() {
@@ -104,15 +130,26 @@
       const toggleFunctional = document.getElementById('cookieToggleFunctional');
       const toggleAnalytics = document.getElementById('cookieToggleAnalytics');
 
-      if (toggleFunctional) toggleFunctional.checked = this.preferences.functional;
-      if (toggleAnalytics) toggleAnalytics.checked = this.preferences.analytics;
+      if (toggleFunctional) toggleFunctional.checked = !!this.preferences.functional;
+      if (toggleAnalytics) toggleAnalytics.checked = !!this.preferences.analytics;
 
-      if (modal) modal.classList.add('active');
+      if (modal) {
+        modal.style.display = 'flex';
+        void modal.offsetWidth;
+        modal.classList.add('active');
+      }
     },
 
     closeModal() {
       const modal = document.getElementById('skeuoCookieModal');
-      if (modal) modal.classList.remove('active');
+      if (modal) {
+        modal.classList.remove('active');
+        setTimeout(() => {
+          if (modal && !modal.classList.contains('active')) {
+            modal.style.display = 'none';
+          }
+        }, 250);
+      }
     },
 
     saveModalPreferences() {
@@ -157,6 +194,43 @@
         </div>
       `;
       document.body.appendChild(banner);
+
+      // Bind direct button event listeners (immune to CSP script-src-attr restrictions)
+      const btnAccept = banner.querySelector('.btn-cookie-accept');
+      const btnReject = banner.querySelector('.btn-cookie-reject');
+      const btnManage = banner.querySelector('.btn-cookie-manage');
+
+      if (btnAccept) {
+        btnAccept.addEventListener('click', (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          CookieConsent.acceptAll();
+        });
+      }
+      if (btnReject) {
+        btnReject.addEventListener('click', (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          CookieConsent.rejectNonEssential();
+        });
+      }
+      if (btnManage) {
+        btnManage.addEventListener('click', (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          CookieConsent.openModal();
+        });
+      }
+
+      // Delegated click handler on banner container
+      banner.addEventListener('click', (e) => {
+        const accept = e.target.closest('.btn-cookie-accept');
+        const reject = e.target.closest('.btn-cookie-reject');
+        const manage = e.target.closest('.btn-cookie-manage');
+        if (accept) { e.preventDefault(); CookieConsent.acceptAll(); }
+        else if (reject) { e.preventDefault(); CookieConsent.rejectNonEssential(); }
+        else if (manage) { e.preventDefault(); CookieConsent.openModal(); }
+      });
 
       // 2. Granular Modal HTML
       const modal = document.createElement('div');
@@ -225,6 +299,22 @@
         </div>
       `;
       document.body.appendChild(modal);
+
+      // Bind direct modal listeners
+      const modalClose = modal.querySelector('.cookie-modal-close');
+      const modalSave = modal.querySelector('.btn-cookie-save');
+      if (modalClose) {
+        modalClose.addEventListener('click', (e) => {
+          e.preventDefault();
+          CookieConsent.closeModal();
+        });
+      }
+      if (modalSave) {
+        modalSave.addEventListener('click', (e) => {
+          e.preventDefault();
+          CookieConsent.saveModalPreferences();
+        });
+      }
 
       // Close on backdrop click
       modal.addEventListener('click', (e) => {
@@ -539,16 +629,27 @@
         }
         .skeuo-cookie-banner {
           position: fixed;
-          bottom: -150px;
+          bottom: -320px;
           left: 0; right: 0;
           z-index: 99998;
           padding: 16px 24px;
           background: linear-gradient(180deg, #FFFFFF 0%, #F8FAFC 100%);
           border-top: 2px solid #CBD5E1;
           box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.15);
-          transition: bottom 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+          transition: bottom 0.35s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
+          pointer-events: none;
+          opacity: 0;
         }
-        .skeuo-cookie-banner.active { bottom: 0; }
+        .skeuo-cookie-banner.active {
+          bottom: 0 !important;
+          pointer-events: auto !important;
+          opacity: 1 !important;
+        }
+        .cookie-banner-actions button {
+          pointer-events: auto !important;
+          cursor: pointer !important;
+          user-select: none;
+        }
         .cookie-banner-inner {
           max-width: 1200px;
           margin: 0 auto;
