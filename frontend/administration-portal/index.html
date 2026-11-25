@@ -14821,52 +14821,57 @@
             <div class="row g-4">
               <!-- Left Column: Logo Emblem & School Branding -->
               <div class="col-lg-4">
-                <div class="card p-4 border rounded-3 bg-white text-center shadow-sm mb-4 settings-branding-card">
-                  <div class="settings-logo-frame">
+                <div class="card p-3 border rounded-3 bg-white text-center shadow-sm mb-4 settings-branding-card">
+                  <div class="settings-logo-frame mb-3">
                     <img src="assets/images/school-logo.jpg" alt="Official School Logo Emblem"
                       id="profileLogoPreview">
                   </div>
-                  <h5 class="font-bold mb-1" style="color: #0f172a; font-size: 0.95rem; letter-spacing: 0.02em;">SRI VIDYA ENGLISH MEDIUM HIGH SCHOOL</h5>
-                  <p class="text-muted text-xs mb-3 italic">"Vidyathe Vijayam — Knowledge Brings Victory"</p>
+                  <h5 class="font-bold mb-1" style="color: #0f172a; font-size: 0.94rem; letter-spacing: 0.02em;">SRI VIDYA ENGLISH MEDIUM HIGH SCHOOL</h5>
+                  <p class="text-muted text-xs mb-2.5 italic">"Vidyathe Vijayam — Knowledge Brings Victory"</p>
                   <div class="d-flex justify-content-center gap-2 mb-3">
-                    <span class="badge" style="background:#eff6ff; color:#1d4ed8; font-weight:700; border:1px solid #bfdbfe; border-radius:6px; padding: 5px 10px; font-size:0.75rem;">Est. 2017</span>
-                    <span class="badge" style="background:#f0fdf4; color:#166534; font-weight:700; border:1px solid #bbf7d0; border-radius:6px; padding: 5px 10px; font-size:0.75rem;">AP Govt Recognized</span>
+                    <span class="badge" style="background:#eff6ff; color:#1d4ed8; font-weight:700; border:1px solid #bfdbfe; border-radius:6px; padding: 4px 8px; font-size:0.74rem;">Est. 2017</span>
+                    <span class="badge" style="background:#f0fdf4; color:#166534; font-weight:700; border:1px solid #bbf7d0; border-radius:6px; padding: 4px 8px; font-size:0.74rem;">AP Govt Recognized</span>
                   </div>
                   <button type="button" class="btn btn-secondary btn-sm w-100"
                     onclick="portalApp.showToast('Select replacement high-resolution emblem (PNG/JPEG under 2MB).', 'info')">
-                    <i class="fa-solid fa-image me-1 text-primary"></i> Update Logo Emblem
+                    <i class="fa-solid fa-camera me-1 text-primary"></i> Update Logo Emblem
                   </button>
                 </div>
 
                 <!-- School Branding Configuration -->
-                <div class="card p-4 border rounded-3 bg-white shadow-sm">
+                <div class="card p-3 border rounded-3 bg-white shadow-sm">
                   <h6 class="font-bold mb-3" style="color:#0f172a; font-size:0.92rem;"><i
                       class="fa-solid fa-palette text-primary me-2"></i> School Branding &amp; Visual Identity</h6>
-                  <div class="mb-3">
-                    <label class="form-label text-xs font-bold text-muted mb-1">Primary Brand Color</label>
-                    <div class="d-flex align-items-center gap-2">
-                      <input type="color" id="profilePrimaryBrandColor" value="#1e3a8a"
-                        style="width:42px; height:36px; border:1px solid #cbd5e1; border-radius:6px; cursor:pointer; padding:2px;">
-                      <input type="text" class="form-control form-control-sm font-monospace font-bold" value="#1e3a8a" readonly
-                        style="height:36px;">
+                  
+                  <!-- Compact 2-column color layout -->
+                  <div class="row g-2 mb-3">
+                    <div class="col-6">
+                      <label class="form-label text-xs font-bold text-muted mb-1">Primary Color</label>
+                      <div class="d-flex align-items-center gap-1">
+                        <input type="color" id="profilePrimaryBrandColor" value="#1e3a8a"
+                          style="width:36px; height:36px; border:1px solid #cbd5e1; border-radius:6px; cursor:pointer; padding:2px; flex-shrink:0;">
+                        <input type="text" class="form-control form-control-sm font-monospace font-bold text-center px-1" value="#1e3a8a" readonly
+                          style="height:36px; font-size:0.78rem;">
+                      </div>
+                    </div>
+                    <div class="col-6">
+                      <label class="form-label text-xs font-bold text-muted mb-1">Accent Color</label>
+                      <div class="d-flex align-items-center gap-1">
+                        <input type="color" id="profileSecondaryBrandColor" value="#d97706"
+                          style="width:36px; height:36px; border:1px solid #cbd5e1; border-radius:6px; cursor:pointer; padding:2px; flex-shrink:0;">
+                        <input type="text" class="form-control form-control-sm font-monospace font-bold text-center px-1" value="#d97706" readonly
+                          style="height:36px; font-size:0.78rem;">
+                      </div>
                     </div>
                   </div>
-                  <div class="mb-3">
-                    <label class="form-label text-xs font-bold text-muted mb-1">Secondary Accent Color</label>
-                    <div class="d-flex align-items-center gap-2">
-                      <input type="color" id="profileSecondaryBrandColor" value="#d97706"
-                        style="width:42px; height:36px; border:1px solid #cbd5e1; border-radius:6px; cursor:pointer; padding:2px;">
-                      <input type="text" class="form-control form-control-sm font-monospace font-bold" value="#d97706" readonly
-                        style="height:36px;">
-                    </div>
-                  </div>
+
                   <div class="mb-3">
                     <label class="form-label text-xs font-bold text-muted mb-1">Official Institutional Motto</label>
                     <input type="text" class="form-control form-control-sm" id="profileSchoolMotto"
-                      value="Vidyathe Vijayam — Knowledge Brings Victory" style="height:36px;">
+                      value="Vidyathe Vijayam — Knowledge Brings Victory" style="height:36px; font-size:0.82rem;">
                   </div>
-                  <div class="form-check form-switch mt-3 pt-2 border-top">
-                    <input class="form-check-input" type="checkbox" id="profileBrandingWatermarkToggle" checked>
+                  <div class="form-check form-switch pt-2 border-top d-flex align-items-center gap-2">
+                    <input class="form-check-input" type="checkbox" id="profileBrandingWatermarkToggle" checked style="margin-top:0;">
                     <label class="form-check-label text-xs font-bold text-muted"
                       for="profileBrandingWatermarkToggle">Watermark Emblem on Transcripts &amp; TCs</label>
                   </div>
@@ -14937,8 +14942,12 @@
                     <div class="col-md-6">
                       <label class="form-label text-xs font-bold text-muted mb-1">National U-DISE+ Code <span
                           class="text-danger">*</span></label>
-                      <input type="text" class="form-control font-monospace font-bold" id="profileUdiseCode"
-                        value="28111501008" readonly>
+                      <div class="input-group">
+                        <span class="input-group-text bg-light text-muted border-end-0"><i class="fa-solid fa-certificate"></i></span>
+                        <input type="text" class="form-control font-monospace font-bold input-statutory-locked" id="profileUdiseCode"
+                          value="28111501008" readonly style="height:36px; font-size:0.84rem;">
+                        <span class="input-group-text bg-light text-muted border-start-0" title="Locked Statutory Code"><i class="fa-solid fa-lock text-xs"></i></span>
+                      </div>
                     </div>
                     <div class="col-md-6">
                       <label class="form-label text-xs font-bold text-muted mb-1">Affiliation Board &amp; Code <span
@@ -14948,13 +14957,21 @@
                     </div>
                     <div class="col-md-6">
                       <label class="form-label text-xs font-bold text-muted mb-1">Statutory School Registration No</label>
-                      <input type="text" class="form-control font-monospace" id="profileRegNo"
-                        value="AP-VSP-REC-2017/0491" readonly>
+                      <div class="input-group">
+                        <span class="input-group-text bg-light text-muted border-end-0"><i class="fa-solid fa-id-card"></i></span>
+                        <input type="text" class="form-control font-monospace input-statutory-locked" id="profileRegNo"
+                          value="AP-VSP-REC-2017/0491" readonly style="height:36px; font-size:0.84rem;">
+                        <span class="input-group-text bg-light text-muted border-start-0" title="Locked Regulatory Record"><i class="fa-solid fa-lock text-xs"></i></span>
+                      </div>
                     </div>
                     <div class="col-md-6">
                       <label class="form-label text-xs font-bold text-muted mb-1">Government Recognition Order</label>
-                      <input type="text" class="form-control" id="profileGovtOrder" value="G.O.Ms.No. 412/SE-DEO/2017"
-                        readonly>
+                      <div class="input-group">
+                        <span class="input-group-text bg-light text-muted border-end-0"><i class="fa-solid fa-file-shield"></i></span>
+                        <input type="text" class="form-control input-statutory-locked" id="profileGovtOrder" value="G.O.Ms.No. 412/SE-DEO/2017"
+                          readonly style="height:36px; font-size:0.84rem;">
+                        <span class="input-group-text bg-light text-muted border-start-0" title="Locked Government Order"><i class="fa-solid fa-lock text-xs"></i></span>
+                      </div>
                     </div>
                   </div>
                 </div>
