@@ -26033,88 +26033,192 @@ button.close:hover,
 }
 
 .row {
-  display: flex;
-  flex-wrap: wrap;
-  margin-right: -8px;
-  margin-left: -8px;
+  display: flex !important;
+  flex-wrap: wrap !important;
+  margin-right: -8px !important;
+  margin-left: -8px !important;
 }
 
 .row.g-2 {
-  margin-right: -4px;
-  margin-left: -4px;
+  margin-right: -4px !important;
+  margin-left: -4px !important;
 }
 
 .row.g-2>* {
-  padding-right: 4px;
-  padding-left: 4px;
+  padding-right: 4px !important;
+  padding-left: 4px !important;
 }
 
 .row.g-3 {
-  margin-right: -8px;
-  margin-left: -8px;
+  margin-right: -8px !important;
+  margin-left: -8px !important;
 }
 
 .row.g-3>* {
-  padding-right: 8px;
-  padding-left: 8px;
-  margin-bottom: 12px;
+  padding-right: 8px !important;
+  padding-left: 8px !important;
+  margin-bottom: 12px !important;
+}
+
+.row.g-4 {
+  margin-right: -12px !important;
+  margin-left: -12px !important;
+}
+
+.row.g-4>* {
+  padding-right: 12px !important;
+  padding-left: 12px !important;
+  margin-bottom: 20px !important;
 }
 
 .col-12 {
-  flex: 0 0 100%;
-  max-width: 100%;
-  width: 100%;
-  box-sizing: border-box;
+  flex: 0 0 100% !important;
+  max-width: 100% !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+.col-8 {
+  flex: 0 0 66.666667% !important;
+  max-width: 66.666667% !important;
+  width: 66.666667% !important;
+  box-sizing: border-box !important;
+}
+
+.col-7 {
+  flex: 0 0 58.333333% !important;
+  max-width: 58.333333% !important;
+  width: 58.333333% !important;
+  box-sizing: border-box !important;
 }
 
 .col-6 {
-  flex: 0 0 50%;
-  max-width: 50%;
-  width: 50%;
-  box-sizing: border-box;
+  flex: 0 0 50% !important;
+  max-width: 50% !important;
+  width: 50% !important;
+  box-sizing: border-box !important;
+}
+
+.col-5 {
+  flex: 0 0 41.666667% !important;
+  max-width: 41.666667% !important;
+  width: 41.666667% !important;
+  box-sizing: border-box !important;
 }
 
 .col-4 {
-  flex: 0 0 33.333333%;
-  max-width: 33.333333%;
-  width: 33.333333%;
-  box-sizing: border-box;
+  flex: 0 0 33.333333% !important;
+  max-width: 33.333333% !important;
+  width: 33.333333% !important;
+  box-sizing: border-box !important;
 }
 
 .col-3 {
-  flex: 0 0 25%;
-  max-width: 25%;
-  width: 25%;
-  box-sizing: border-box;
+  flex: 0 0 25% !important;
+  max-width: 25% !important;
+  width: 25% !important;
+  box-sizing: border-box !important;
 }
 
 @media (min-width: 768px) {
+  .col-md-12 {
+    flex: 0 0 100% !important;
+    max-width: 100% !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
   .col-md-8 {
-    flex: 0 0 66.666667%;
-    max-width: 66.666667%;
-    width: 66.666667%;
-    box-sizing: border-box;
+    flex: 0 0 66.666667% !important;
+    max-width: 66.666667% !important;
+    width: 66.666667% !important;
+    box-sizing: border-box !important;
+  }
+
+  .col-md-7 {
+    flex: 0 0 58.333333% !important;
+    max-width: 58.333333% !important;
+    width: 58.333333% !important;
+    box-sizing: border-box !important;
   }
 
   .col-md-6 {
-    flex: 0 0 50%;
-    max-width: 50%;
-    width: 50%;
-    box-sizing: border-box;
+    flex: 0 0 50% !important;
+    max-width: 50% !important;
+    width: 50% !important;
+    box-sizing: border-box !important;
+  }
+
+  .col-md-5 {
+    flex: 0 0 41.666667% !important;
+    max-width: 41.666667% !important;
+    width: 41.666667% !important;
+    box-sizing: border-box !important;
   }
 
   .col-md-4 {
-    flex: 0 0 33.333333%;
-    max-width: 33.333333%;
-    width: 33.333333%;
-    box-sizing: border-box;
+    flex: 0 0 33.333333% !important;
+    max-width: 33.333333% !important;
+    width: 33.333333% !important;
+    box-sizing: border-box !important;
   }
 
   .col-md-3 {
-    flex: 0 0 25%;
-    max-width: 25%;
-    width: 25%;
-    box-sizing: border-box;
+    flex: 0 0 25% !important;
+    max-width: 25% !important;
+    width: 25% !important;
+    box-sizing: border-box !important;
+  }
+}
+
+@media (min-width: 992px) {
+  .col-lg-12 {
+    flex: 0 0 100% !important;
+    max-width: 100% !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  .col-lg-8 {
+    flex: 0 0 66.666667% !important;
+    max-width: 66.666667% !important;
+    width: 66.666667% !important;
+    box-sizing: border-box !important;
+  }
+
+  .col-lg-7 {
+    flex: 0 0 58.333333% !important;
+    max-width: 58.333333% !important;
+    width: 58.333333% !important;
+    box-sizing: border-box !important;
+  }
+
+  .col-lg-6 {
+    flex: 0 0 50% !important;
+    max-width: 50% !important;
+    width: 50% !important;
+    box-sizing: border-box !important;
+  }
+
+  .col-lg-5 {
+    flex: 0 0 41.666667% !important;
+    max-width: 41.666667% !important;
+    width: 41.666667% !important;
+    box-sizing: border-box !important;
+  }
+
+  .col-lg-4 {
+    flex: 0 0 33.333333% !important;
+    max-width: 33.333333% !important;
+    width: 33.333333% !important;
+    box-sizing: border-box !important;
+  }
+
+  .col-lg-3 {
+    flex: 0 0 25% !important;
+    max-width: 25% !important;
+    width: 25% !important;
+    box-sizing: border-box !important;
   }
 }
 
@@ -26231,19 +26335,125 @@ input[type="file"].form-control {
   display: flex !important;
   align-items: stretch !important;
   width: 100% !important;
+  position: relative !important;
 }
 
-.input-group>.form-select:first-child,
-.input-group>.form-control:first-child {
+.input-group-text {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 0 12px !important;
+  font-size: 0.85rem !important;
+  font-weight: 500 !important;
+  color: #475569 !important;
+  background-color: #f8fafc !important;
+  border: 1px solid #cbd5e1 !important;
+  border-radius: 8px !important;
+  white-space: nowrap !important;
+  min-width: 40px !important;
+  height: 38px !important;
+  box-sizing: border-box !important;
+}
+
+.input-group-text i {
+  font-size: 0.92rem !important;
+  line-height: 1 !important;
+}
+
+.input-group-text.input-lock-badge {
+  background: #fef3c7 !important;
+  border-color: #fde68a !important;
+  color: #92400e !important;
+  font-weight: 700 !important;
+  font-size: 0.72rem !important;
+  letter-spacing: 0.03em !important;
+  gap: 5px !important;
+  padding: 0 10px !important;
+}
+
+.input-group-text.input-lock-badge i {
+  color: #b45309 !important;
+  font-size: 0.76rem !important;
+}
+
+.input-group > .input-group-text:first-child {
+  border-top-right-radius: 0 !important;
+  border-bottom-right-radius: 0 !important;
+  border-right: none !important;
+}
+
+.input-group > .input-group-text:last-child {
+  border-top-left-radius: 0 !important;
+  border-bottom-left-radius: 0 !important;
+  border-left: none !important;
+}
+
+.input-group > .form-control {
+  position: relative !important;
+  flex: 1 1 auto !important;
+  width: 1% !important;
+  min-width: 0 !important;
+  height: 38px !important;
+  border: 1px solid #cbd5e1 !important;
+  border-radius: 8px !important;
+  padding: 6px 12px !important;
+  font-size: 0.86rem !important;
+  color: #0f172a !important;
+  background-color: #ffffff !important;
+}
+
+.input-group > .form-control:not(:first-child):not(:last-child) {
+  border-radius: 0 !important;
+}
+
+.input-group > .form-control:first-child {
   border-top-right-radius: 0 !important;
   border-bottom-right-radius: 0 !important;
 }
 
-.input-group>.form-select:last-child,
-.input-group>.form-control:last-child {
+.input-group > .form-control:last-child {
   border-top-left-radius: 0 !important;
   border-bottom-left-radius: 0 !important;
-  margin-left: -1px !important;
+}
+
+.input-group:focus-within > .input-group-text {
+  border-color: #2563eb !important;
+}
+
+.input-group:focus-within > .form-control {
+  border-color: #2563eb !important;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12) !important;
+  z-index: 2 !important;
+}
+
+.input-statutory-locked {
+  background-color: #f8fafc !important;
+  color: #1e293b !important;
+  font-weight: 600 !important;
+  cursor: default !important;
+}
+
+[data-theme="dark"] .input-group-text {
+  background-color: #1e293b !important;
+  border-color: #334155 !important;
+  color: #94a3b8 !important;
+}
+
+[data-theme="dark"] .input-group-text.input-lock-badge {
+  background-color: #78350f !important;
+  border-color: #92400e !important;
+  color: #fde68a !important;
+}
+
+[data-theme="dark"] .input-group > .form-control {
+  background-color: #0f172a !important;
+  border-color: #334155 !important;
+  color: #f8fafc !important;
+}
+
+[data-theme="dark"] .input-statutory-locked {
+  background-color: #1e293b !important;
+  color: #cbd5e1 !important;
 }
 
 /* Edit Student Modal Grid */

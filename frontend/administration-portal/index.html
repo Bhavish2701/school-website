@@ -14818,9 +14818,9 @@
               </div>
             </div>
 
-            <div class="row g-4">
+            <div class="row g-4 mb-4">
               <!-- Left Column: Logo Emblem & School Branding -->
-              <div class="col-lg-4">
+              <div class="col-lg-4 col-md-5">
                 <div class="card p-3 border rounded-3 bg-white text-center shadow-sm mb-4 settings-branding-card">
                   <div class="settings-logo-frame mb-3">
                     <img src="assets/images/school-logo.jpg" alt="Official School Logo Emblem"
@@ -14878,155 +14878,185 @@
                 </div>
               </div>
 
-              <!-- Right Column: Institutional Identity, Domains, Identifiers & Signatories -->
-              <div class="col-lg-8">
+              <!-- Right Column: Institutional Identity & Official Contacts -->
+              <div class="col-lg-8 col-md-7">
                 <!-- Section 1: Basic Identifiers & Contact -->
-                <div class="card p-4 border rounded-3 bg-white shadow-sm mb-4">
-                  <h5 class="font-bold mb-3" style="color:#0f172a; font-size:0.95rem;"><i
-                      class="fa-solid fa-landmark text-primary me-2"></i> Official Identity &amp; Contact Information
-                  </h5>
+                <div class="card p-4 border rounded-3 bg-white shadow-sm h-100">
+                  <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h5 class="font-bold mb-0" style="color:#0f172a; font-size:0.95rem;">
+                      <i class="fa-solid fa-landmark text-primary me-2"></i> Official Identity &amp; Contact Information
+                    </h5>
+                    <span class="badge" style="background:#eff6ff; color:#1d4ed8; font-weight:700; border-radius:6px; padding:4px 8px; font-size:0.74rem;">
+                      <i class="fa-solid fa-shield-halved me-1"></i> Executive Verified
+                    </span>
+                  </div>
                   <div class="row g-3">
                     <div class="col-md-6">
                       <label class="form-label text-xs font-bold text-muted mb-1">Official School Name <span
                           class="text-danger">*</span></label>
-                      <input type="text" class="form-control" id="profileSchoolName"
-                        value="Sri Vidya English Medium High School">
+                      <div class="input-group">
+                        <span class="input-group-text"><i class="fa-solid fa-school text-primary"></i></span>
+                        <input type="text" class="form-control" id="profileSchoolName"
+                          value="Sri Vidya English Medium High School">
+                      </div>
                     </div>
                     <div class="col-md-6">
                       <label class="form-label text-xs font-bold text-muted mb-1">Executive Principal <span
                           class="text-danger">*</span></label>
-                      <input type="text" class="form-control" id="profilePrincipalName" value="Smt. Gorle Varalakshmi">
+                      <div class="input-group">
+                        <span class="input-group-text"><i class="fa-solid fa-user-tie text-primary"></i></span>
+                        <input type="text" class="form-control" id="profilePrincipalName" value="Smt. Gorle Varalakshmi">
+                      </div>
                     </div>
                     <div class="col-12">
                       <label class="form-label text-xs font-bold text-muted mb-1">Official Campus Address <span
                           class="text-danger">*</span></label>
-                      <input type="text" class="form-control" id="profileAddress"
-                        value="Door No. 4-128, Main Campus Road, Near Old Bus Stand, Visakhapatnam - 530041, Andhra Pradesh">
+                      <div class="input-group">
+                        <span class="input-group-text"><i class="fa-solid fa-location-dot text-primary"></i></span>
+                        <input type="text" class="form-control" id="profileAddress"
+                          value="Door No. 4-128, Main Campus Road, Near Old Bus Stand, Visakhapatnam - 530041, Andhra Pradesh">
+                      </div>
                     </div>
                     <div class="col-md-6">
                       <label class="form-label text-xs font-bold text-muted mb-1">Primary Contact Phone <span
                           class="text-danger">*</span></label>
-                      <input type="text" class="form-control" id="profilePhone" value="+91 93985 78584 / 0891-2548911">
+                      <div class="input-group">
+                        <span class="input-group-text"><i class="fa-solid fa-phone text-primary"></i></span>
+                        <input type="text" class="form-control" id="profilePhone" value="+91 93985 78584 / 0891-2548911">
+                      </div>
                     </div>
                     <div class="col-md-6">
                       <label class="form-label text-xs font-bold text-muted mb-1">Primary Administrative Email <span
                           class="text-danger">*</span></label>
-                      <input type="email" class="form-control" id="profileEmail" value="admin@srividya.edu.in">
-                    </div>
-                  </div>
-                </div>
-
-                <!-- Section 2: Domains & Regulatory Identifiers -->
-                <div class="card p-4 border rounded-3 bg-white shadow-sm mb-4">
-                  <h5 class="font-bold mb-3" style="color:#0f172a; font-size:0.95rem;"><i class="fa-solid fa-globe text-primary me-2"></i>
-                    Domains, Regulatory Identifiers &amp; Affiliation</h5>
-                  <div class="row g-3">
-                    <div class="col-md-6">
-                      <label class="form-label text-xs font-bold text-muted mb-1">Website Domain <span
-                          class="text-danger">*</span></label>
                       <div class="input-group">
-                        <span class="input-group-text bg-light text-muted border-end-0"><i class="fa-solid fa-globe"></i></span>
-                        <input type="url" class="form-control" id="profileWebsiteDomain"
-                          value="https://srividyaschool.edu.in">
+                        <span class="input-group-text"><i class="fa-solid fa-envelope text-primary"></i></span>
+                        <input type="email" class="form-control" id="profileEmail" value="admin@srividya.edu.in">
                       </div>
-                    </div>
-                    <div class="col-md-6">
-                      <label class="form-label text-xs font-bold text-muted mb-1">Official Email Domain <span
-                          class="text-danger">*</span></label>
-                      <div class="input-group">
-                        <span class="input-group-text bg-light text-muted border-end-0"><i class="fa-solid fa-at"></i></span>
-                        <input type="text" class="form-control" id="profileOfficialEmailDomain"
-                          value="@srividya.edu.in">
-                      </div>
-                    </div>
-                    <div class="col-md-6">
-                      <label class="form-label text-xs font-bold text-muted mb-1">National U-DISE+ Code <span
-                          class="text-danger">*</span></label>
-                      <div class="input-group">
-                        <span class="input-group-text bg-light text-muted border-end-0"><i class="fa-solid fa-certificate"></i></span>
-                        <input type="text" class="form-control font-monospace font-bold input-statutory-locked" id="profileUdiseCode"
-                          value="28111501008" readonly style="height:36px; font-size:0.84rem;">
-                        <span class="input-group-text bg-light text-muted border-start-0" title="Locked Statutory Code"><i class="fa-solid fa-lock text-xs"></i></span>
-                      </div>
-                    </div>
-                    <div class="col-md-6">
-                      <label class="form-label text-xs font-bold text-muted mb-1">Affiliation Board &amp; Code <span
-                          class="text-danger">*</span></label>
-                      <input type="text" class="form-control" id="profileAffiliationBoard"
-                        value="AP SCERT &amp; State Board of Secondary Education, AP (CBSE Aligned)">
-                    </div>
-                    <div class="col-md-6">
-                      <label class="form-label text-xs font-bold text-muted mb-1">Statutory School Registration No</label>
-                      <div class="input-group">
-                        <span class="input-group-text bg-light text-muted border-end-0"><i class="fa-solid fa-id-card"></i></span>
-                        <input type="text" class="form-control font-monospace input-statutory-locked" id="profileRegNo"
-                          value="AP-VSP-REC-2017/0491" readonly style="height:36px; font-size:0.84rem;">
-                        <span class="input-group-text bg-light text-muted border-start-0" title="Locked Regulatory Record"><i class="fa-solid fa-lock text-xs"></i></span>
-                      </div>
-                    </div>
-                    <div class="col-md-6">
-                      <label class="form-label text-xs font-bold text-muted mb-1">Government Recognition Order</label>
-                      <div class="input-group">
-                        <span class="input-group-text bg-light text-muted border-end-0"><i class="fa-solid fa-file-shield"></i></span>
-                        <input type="text" class="form-control input-statutory-locked" id="profileGovtOrder" value="G.O.Ms.No. 412/SE-DEO/2017"
-                          readonly style="height:36px; font-size:0.84rem;">
-                        <span class="input-group-text bg-light text-muted border-start-0" title="Locked Government Order"><i class="fa-solid fa-lock text-xs"></i></span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <!-- Section 3: Authorized Signatories -->
-                <div class="card p-4 border rounded-3 bg-white shadow-sm" id="profileAuthorizedSignatories">
-                  <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
-                    <h5 class="font-bold mb-0" style="color:#0f172a; font-size:0.95rem;"><i
-                        class="fa-solid fa-file-signature text-primary me-2"></i> Authorized Institutional Signatories
-                    </h5>
-                    <button type="button" class="btn btn-secondary btn-sm"
-                      onclick="portalApp.openAddSignatoryModal()">
-                      <i class="fa-solid fa-plus me-1 text-primary"></i> Add Signatory
-                    </button>
-                  </div>
-                  <div class="parent-table-wrap" style="border: 1px solid #e2e8f0; border-radius: 8px; overflow: hidden;">
-                    <div class="parent-table-scroll">
-                      <table class="table table-hover align-middle mb-0 parent-table" style="font-size:0.83rem;">
-                        <thead class="table-light">
-                          <tr>
-                            <th style="min-width: 180px;"><i class="fa-solid fa-user me-1 text-muted"></i> Signatory Name</th>
-                            <th style="min-width: 170px;"><i class="fa-solid fa-id-badge me-1 text-muted"></i> Institutional Designation</th>
-                            <th style="min-width: 250px;"><i class="fa-solid fa-stamp me-1 text-muted"></i> Signing Authority Scope</th>
-                            <th style="min-width: 110px;" class="text-center"><i class="fa-solid fa-signature me-1 text-muted"></i> Digital Seal</th>
-                            <th style="min-width: 100px;" class="text-center"><i class="fa-solid fa-shield me-1 text-muted"></i> Authority</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <tr>
-                            <td><strong>Smt. Gorle Varalakshmi</strong></td>
-                            <td>Principal &amp; Head of Institution</td>
-                            <td>Transfer Certificates (TC), Board Transcripts, Staff Relinquishment</td>
-                            <td class="text-center"><span class="badge" style="background:#dcfce7; color:#166534; font-weight:700; border-radius:6px; padding:5px 9px;"><i class="fa-solid fa-signature me-1"></i> Sealed</span></td>
-                            <td class="text-center"><span class="badge" style="background:#eff6ff; color:#1d4ed8; font-weight:700; border-radius:6px; padding:5px 9px;">Primary</span></td>
-                          </tr>
-                          <tr>
-                            <td><strong>Sri Navva Anand</strong></td>
-                            <td>Vice Principal (Academic Dean)</td>
-                            <td>Attendance Registers, Internal Moderation, Routine Clearances</td>
-                            <td class="text-center"><span class="badge" style="background:#dcfce7; color:#166534; font-weight:700; border-radius:6px; padding:5px 9px;"><i class="fa-solid fa-signature me-1"></i> Sealed</span></td>
-                            <td class="text-center"><span class="badge" style="background:#f1f5f9; color:#475569; font-weight:700; border-radius:6px; padding:5px 9px;">Secondary</span></td>
-                          </tr>
-                          <tr>
-                            <td><strong>Sri K. Venkat</strong></td>
-                            <td>School Correspondent &amp; Secretary</td>
-                            <td>Financial Sanctions, Legal Affidavits, Infrastructure Leases</td>
-                            <td class="text-center"><span class="badge" style="background:#dcfce7; color:#166534; font-weight:700; border-radius:6px; padding:5px 9px;"><i class="fa-solid fa-signature me-1"></i> Sealed</span></td>
-                            <td class="text-center"><span class="badge" style="background:#f1f5f9; color:#475569; font-weight:700; border-radius:6px; padding:5px 9px;">Executive</span></td>
-                          </tr>
-                        </tbody>
-                      </table>
                     </div>
                   </div>
                 </div>
               </div>
+            </div>
+
+            <!-- Section 2: Domains & Regulatory Identifiers (Full Width) -->
+            <div class="card p-4 border rounded-3 bg-white shadow-sm mb-4">
+              <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+                <h5 class="font-bold mb-0" style="color:#0f172a; font-size:0.95rem;">
+                  <i class="fa-solid fa-certificate text-primary me-2"></i> Domains, Regulatory Identifiers &amp; Board Affiliation
+                </h5>
+                <span class="badge" style="background:#fef3c7; color:#92400e; font-weight:700; border:1px solid #fde68a; border-radius:6px; padding:4px 9px; font-size:0.74rem;">
+                  <i class="fa-solid fa-lock me-1"></i> Statutory Compliance Enforced
+                </span>
+              </div>
+              <div class="row g-3">
+                <div class="col-lg-4 col-md-6">
+                  <label class="form-label text-xs font-bold text-muted mb-1">Website Domain <span
+                      class="text-danger">*</span></label>
+                  <div class="input-group">
+                    <span class="input-group-text"><i class="fa-solid fa-globe text-primary"></i></span>
+                    <input type="url" class="form-control" id="profileWebsiteDomain"
+                      value="https://srividyaschool.edu.in">
+                  </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                  <label class="form-label text-xs font-bold text-muted mb-1">Official Email Domain <span
+                      class="text-danger">*</span></label>
+                  <div class="input-group">
+                    <span class="input-group-text"><i class="fa-solid fa-at text-primary"></i></span>
+                    <input type="text" class="form-control" id="profileOfficialEmailDomain"
+                      value="@srividya.edu.in">
+                  </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                  <label class="form-label text-xs font-bold text-muted mb-1">Affiliation Board &amp; Code <span
+                      class="text-danger">*</span></label>
+                  <div class="input-group">
+                    <span class="input-group-text"><i class="fa-solid fa-graduation-cap text-primary"></i></span>
+                    <input type="text" class="form-control" id="profileAffiliationBoard"
+                      value="AP SCERT &amp; State Board (CBSE Aligned)">
+                  </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                  <label class="form-label text-xs font-bold text-muted mb-1">National U-DISE+ Code <span
+                      class="text-danger">*</span></label>
+                  <div class="input-group">
+                    <span class="input-group-text"><i class="fa-solid fa-barcode text-primary"></i></span>
+                    <input type="text" class="form-control font-monospace font-bold input-statutory-locked" id="profileUdiseCode"
+                      value="28111501008" readonly>
+                    <span class="input-group-text input-lock-badge" title="Statutory Locked Field (AP Govt Registered)"><i class="fa-solid fa-lock"></i> Locked</span>
+                  </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                  <label class="form-label text-xs font-bold text-muted mb-1">Statutory School Registration No</label>
+                  <div class="input-group">
+                    <span class="input-group-text"><i class="fa-solid fa-file-contract text-primary"></i></span>
+                    <input type="text" class="form-control font-monospace font-bold input-statutory-locked" id="profileRegNo"
+                      value="AP-VSP-REC-2017/0491" readonly>
+                    <span class="input-group-text input-lock-badge" title="Statutory Locked Record"><i class="fa-solid fa-lock"></i> Locked</span>
+                  </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                  <label class="form-label text-xs font-bold text-muted mb-1">Government Recognition Order</label>
+                  <div class="input-group">
+                    <span class="input-group-text"><i class="fa-solid fa-stamp text-primary"></i></span>
+                    <input type="text" class="form-control font-bold input-statutory-locked" id="profileGovtOrder" value="G.O.Ms.No. 412/SE-DEO/2017"
+                      readonly>
+                    <span class="input-group-text input-lock-badge" title="Statutory Locked Order"><i class="fa-solid fa-lock"></i> Locked</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Section 3: Authorized Signatories (Full Width) -->
+            <div class="card p-4 border rounded-3 bg-white shadow-sm mb-4" id="profileAuthorizedSignatories">
+              <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+                <h5 class="font-bold mb-0" style="color:#0f172a; font-size:0.95rem;">
+                  <i class="fa-solid fa-file-signature text-primary me-2"></i> Authorized Institutional Signatories
+                </h5>
+                <button type="button" class="btn btn-secondary btn-sm"
+                  onclick="portalApp.openAddSignatoryModal()">
+                  <i class="fa-solid fa-plus me-1 text-primary"></i> Add Signatory
+                </button>
+              </div>
+              <div class="parent-table-wrap" style="border: 1px solid #e2e8f0; border-radius: 8px; overflow: hidden;">
+                <div class="parent-table-scroll">
+                  <table class="table table-hover align-middle mb-0 parent-table" style="font-size:0.83rem;">
+                    <thead class="table-light">
+                      <tr>
+                        <th style="min-width: 180px;"><i class="fa-solid fa-user me-1 text-muted"></i> Signatory Name</th>
+                        <th style="min-width: 170px;"><i class="fa-solid fa-id-badge me-1 text-muted"></i> Institutional Designation</th>
+                        <th style="min-width: 250px;"><i class="fa-solid fa-stamp me-1 text-muted"></i> Signing Authority Scope</th>
+                        <th style="min-width: 110px;" class="text-center"><i class="fa-solid fa-signature me-1 text-muted"></i> Digital Seal</th>
+                        <th style="min-width: 100px;" class="text-center"><i class="fa-solid fa-shield me-1 text-muted"></i> Authority</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td><strong>Smt. Gorle Varalakshmi</strong></td>
+                        <td>Principal &amp; Head of Institution</td>
+                        <td>Transfer Certificates (TC), Board Transcripts, Staff Relinquishment</td>
+                        <td class="text-center"><span class="badge" style="background:#dcfce7; color:#166534; font-weight:700; border-radius:6px; padding:5px 9px;"><i class="fa-solid fa-signature me-1"></i> Sealed</span></td>
+                        <td class="text-center"><span class="badge" style="background:#eff6ff; color:#1d4ed8; font-weight:700; border-radius:6px; padding:5px 9px;">Primary</span></td>
+                      </tr>
+                      <tr>
+                        <td><strong>Sri Navva Anand</strong></td>
+                        <td>Vice Principal (Academic Dean)</td>
+                        <td>Attendance Registers, Internal Moderation, Routine Clearances</td>
+                        <td class="text-center"><span class="badge" style="background:#dcfce7; color:#166534; font-weight:700; border-radius:6px; padding:5px 9px;"><i class="fa-solid fa-signature me-1"></i> Sealed</span></td>
+                        <td class="text-center"><span class="badge" style="background:#f1f5f9; color:#475569; font-weight:700; border-radius:6px; padding:5px 9px;">Secondary</span></td>
+                      </tr>
+                      <tr>
+                        <td><strong>Sri K. Venkat</strong></td>
+                        <td>School Correspondent &amp; Secretary</td>
+                        <td>Financial Sanctions, Legal Affidavits, Infrastructure Leases</td>
+                        <td class="text-center"><span class="badge" style="background:#dcfce7; color:#166534; font-weight:700; border-radius:6px; padding:5px 9px;"><i class="fa-solid fa-signature me-1"></i> Sealed</span></td>
+                        <td class="text-center"><span class="badge" style="background:#f1f5f9; color:#475569; font-weight:700; border-radius:6px; padding:5px 9px;">Executive</span></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
             </div>
           </div>
 
