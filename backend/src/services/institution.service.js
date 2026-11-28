@@ -9,10 +9,8 @@ try {
   const auditMod = require('../models/auditLog.model');
   AuditLogModel = auditMod.AuditLog || auditMod;
 } catch (e) {
-  // Graceful fallback
 }
 
-// In-memory fallback if MongoDB is not connected
 const defaultInstitutions = [
   {
     institutionId: 'INST-001',
@@ -308,7 +306,6 @@ const defaultInstitutions = [
   }
 ];
 
-// Helper to record audit events & broadcast live sync
 async function logAuditEvent(action, details, user, ip) {
   liveSyncBus.emitSync('PLATFORM', action, { category: 'INSTITUTIONS', details });
   if (mongoose.connection.readyState !== 1) return;
@@ -345,14 +342,10 @@ async function logAuditEvent(action, details, user, ip) {
       reason: details
     });
   } catch (err) {
-    // Non-blocking
   }
 }
 
 class InstitutionService {
-  /**
-   * Seed default 3 trust institutions if collection is empty
-   */
   async seedIfEmpty() {
     if (mongoose.connection.readyState !== 1) return defaultInstitutions;
     try {
@@ -361,13 +354,9 @@ class InstitutionService {
         await Institution.insertMany(defaultInstitutions);
       }
     } catch (e) {
-      // Non-blocking
     }
   }
 
-  /**
-   * List all institutions with multi-field search and filters
-   */
   async listInstitutions(filters = {}) {
     await this.seedIfEmpty();
     const {
@@ -417,11 +406,9 @@ class InstitutionService {
           data: list
         };
       } catch (err) {
-        // Fall back to memory
       }
     }
 
-    // In-memory filtering
     let list = [...defaultInstitutions];
     if (search) {
       const q = search.toLowerCase();
@@ -459,9 +446,6 @@ class InstitutionService {
     };
   }
 
-  /**
-   * Get summary counts for the 5 hero cards
-   */
   async getSummaryCounts() {
     if (mongoose.connection.readyState === 1) {
       try {
@@ -485,7 +469,6 @@ class InstitutionService {
           configIssues
         };
       } catch (e) {
-        // Fall back to memory
       }
     }
 
@@ -500,9 +483,6 @@ class InstitutionService {
     return { total, active, setupInProgress, suspended, configIssues };
   }
 
-  /**
-   * Get single institution by ID or code
-   */
   async getInstitutionById(id) {
     await this.seedIfEmpty();
     if (mongoose.connection.readyState === 1) {
@@ -512,7 +492,6 @@ class InstitutionService {
         }).lean();
         if (doc) return { success: true, data: doc };
       } catch (e) {
-        // Fall back to memory
       }
     }
     const found = defaultInstitutions.find(i => i.institutionId === id || i.code === id.toUpperCase());
@@ -520,17 +499,13 @@ class InstitutionService {
     return { success: false, message: `Institution '${id}' not found` };
   }
 
-  /**
-   * Multi-Step Setup Wizard: Create new institution
-   */
   async createInstitution(data, operator = 'Platform Root Administrator') {
     const nextNum = Math.floor(100 + Math.random() * 900);
     const institutionId = data.institutionId || `INST-0${nextNum}`;
     const code = (data.code || `SV-${nextNum}`).toUpperCase();
 
-    // Generate cryptographic invitation token for initial admin (never shared password!)
     const inviteToken = `SEC-INV-${crypto.randomBytes(8).toString('hex').toUpperCase()}`;
-    const inviteExpiry = new Date(Date.now() + 7 * 24 * 3600 * 1000); // 7 days
+    const inviteExpiry = new Date(Date.now() + 7 * 24 * 3600 * 1000);
 
     const initialAdmin = {
       name: data.adminName || 'Institutional Administrator',
@@ -638,7 +613,6 @@ class InstitutionService {
           inviteToken
         };
       } catch (err) {
-        // Fall through to memory
       }
     }
 
@@ -651,9 +625,6 @@ class InstitutionService {
     };
   }
 
-  /**
-   * Update institution details
-   */
   async updateInstitution(id, updateData, operator = 'Platform Root Administrator') {
     if (mongoose.connection.readyState === 1) {
       try {
@@ -667,7 +638,6 @@ class InstitutionService {
           return { success: true, message: 'Institution updated successfully', data: doc };
         }
       } catch (e) {
-        // Fall back
       }
     }
     const idx = defaultInstitutions.findIndex(i => i.institutionId === id || i.code === id.toUpperCase());
@@ -678,10 +648,6 @@ class InstitutionService {
     return { success: false, message: 'Institution not found' };
   }
 
-  /**
-   * Suspend Institution (Section 3.3 & 3.4)
-   * Enforces Access Policy: Login access disabled, records NOT deleted, audit retained.
-   */
   async suspendInstitution(id, reason, accessPolicy, operator = 'Platform Root Administrator') {
     if (!reason || reason.trim().length < 5) {
       return { success: false, message: 'Suspension requires an authoritative justification reason (minimum 5 characters).' };
@@ -714,7 +680,6 @@ class InstitutionService {
           };
         }
       } catch (e) {
-        // Fall back
       }
     }
 
@@ -737,9 +702,6 @@ class InstitutionService {
     return { success: false, message: 'Institution not found' };
   }
 
-  /**
-   * Reactivate a suspended institution
-   */
   async reactivateInstitution(id, operator = 'Platform Root Administrator') {
     const updateFields = {
       status: 'Active',
@@ -762,7 +724,6 @@ class InstitutionService {
           return { success: true, message: `Institution '${doc.name}' has been reactivated. Full portal access restored.`, data: doc };
         }
       } catch (e) {
-        // Fall back
       }
     }
 
@@ -775,9 +736,6 @@ class InstitutionService {
     return { success: false, message: 'Institution not found' };
   }
 
-  /**
-   * Archive an institution
-   */
   async archiveInstitution(id, operator = 'Platform Root Administrator') {
     const updateFields = {
       status: 'Archived',
@@ -796,7 +754,6 @@ class InstitutionService {
           return { success: true, message: `Institution '${doc.name}' archived. Read-only historical audit preserved.`, data: doc };
         }
       } catch (e) {
-        // Fall back
       }
     }
 
@@ -808,9 +765,6 @@ class InstitutionService {
     return { success: false, message: 'Institution not found' };
   }
 
-  /**
-   * Run simulated DNS check & verification
-   */
   async verifyDomain(id, domain) {
     const isSuccess = Boolean(domain && !domain.includes('invalid'));
     const records = [
@@ -831,9 +785,6 @@ class InstitutionService {
     };
   }
 
-  /**
-   * Invite an institutional administrator
-   */
   async inviteAdministrator(id, adminData, operator = 'Platform Root Administrator') {
     const inviteToken = `SEC-INV-${crypto.randomBytes(8).toString('hex').toUpperCase()}`;
     const newAdmin = {
@@ -861,7 +812,6 @@ class InstitutionService {
           inviteLink: `http://localhost:5000/management?activate=${inviteToken}`
         };
       } catch (e) {
-        // Fall back
       }
     }
 

@@ -9,22 +9,17 @@
     content="Dedicated Faculty Portal for Sri Vidya E.M High School teachers and classroom management.">
   <link rel="icon" type="image/x-icon" href="assets/images/favicon.ico">
 
-  <!-- Google Fonts: Inter, Outfit, Plus Jakarta Sans -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
     href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
     rel="stylesheet">
 
-  <!-- Font Awesome 6 Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-  <!-- Teacher Portal Stylesheet -->
   <link rel="stylesheet" href="/css/teacher.css?v=20261122-v12">
-  <!-- Skeuomorphic 2-Level Portal Design Tokens & Styles -->
   <link rel="stylesheet" href="/css/skeuomorphic-portal.css?v=20261122-v12">
   <link rel="stylesheet" href="/css/floating-bottom-nav.css?v=20261122-v12">
-  <!-- Early Route Guard: Unified Authentication Verification -->
   <script>
     (function () {
       try {
@@ -36,11 +31,8 @@
       } catch (e) { }
     })();
   </script>
-  <!-- Modern Input Field System -->
   <link rel="stylesheet" href="/css/modern-inputs.css?v=20261122-v12">
-  <!-- Modern Popover & Overlay Component System -->
   <link rel="stylesheet" href="/css/modern-popovers.css?v=20261122-v12">
-  <!-- Liquid-Fill Toggle Switch Design System -->
   <link rel="stylesheet" href="/css/liquid-toggles.css?v=20261122-v18">
 </head>
 
@@ -50,11 +42,7 @@
 
   <div class="portal-layout">
 
-    <!-- ==========================================
-         SIDEBAR NAVIGATION
-         ========================================== -->
     <aside class="portal-sidebar" id="portalSidebar">
-      <!-- School Brand Header -->
       <div class="sidebar-brand">
         <a href="index.html" class="brand-link" title="Return to Public Website">
           <img src="assets/images/school-logo.jpg" alt="Logo" class="brand-logo"
@@ -76,13 +64,9 @@
         </button>
       </div>
 
-      <!-- Navigation Modules Menu -->
-      <!-- Navigation Modules Menu (Faculty Portal - 20 Submenu Specification) -->
-      <!-- Navigation Modules Menu (Faculty Portal - 20 Submenu Specification) -->
       <nav class="sidebar-menu" id="teacherSidebarMenu">
         <div class="nav-section-title">DAILY TEACHING</div>
 
-        <!-- Dashboard -->
         <div class="nav-item active" data-module="dashboard">
           <a href="#dashboard" class="nav-link" onclick="teacherApp.navigateTo('dashboard'); return false;">
             <span class="nav-icon"><i class="fa-solid fa-chalkboard-user"></i></span>
@@ -91,7 +75,6 @@
           </a>
         </div>
 
-        <!-- 2 & 3. My Classes & Student Profiles -->
         <div class="nav-item" data-module="my-classes">
           <a href="#my-classes" class="nav-link" onclick="teacherApp.toggleSubmenu('my-classes', event); return false;">
             <span class="nav-icon"><i class="fa-solid fa-shapes"></i></span>
@@ -106,7 +89,6 @@
           </div>
         </div>
 
-        <!-- 4 & 5. Mark Attendance & Attendance History -->
         <div class="nav-item" data-module="attendance">
           <a href="#attendance" class="nav-link" onclick="teacherApp.toggleSubmenu('attendance', event); return false;">
             <span class="nav-icon"><i class="fa-solid fa-clipboard-check"></i></span>
@@ -123,7 +105,6 @@
 
         <div class="nav-section-title">ACADEMICS &amp; WORK</div>
 
-        <!-- 6, 7 & 8. Lesson Plans, Syllabus Progress & Study Materials -->
         <div class="nav-item" data-module="academics">
           <a href="#academics" class="nav-link" onclick="teacherApp.toggleSubmenu('academics', event); return false;">
             <span class="nav-icon"><i class="fa-solid fa-book-open"></i></span>
@@ -140,7 +121,6 @@
           </div>
         </div>
 
-        <!-- 9 & 10. Assignments & Student Submissions -->
         <div class="nav-item" data-module="assignments">
           <a href="#assignments" class="nav-link"
             onclick="teacherApp.toggleSubmenu('assignments', event); return false;">
@@ -157,7 +137,6 @@
           </div>
         </div>
 
-        <!-- 11, 12 & 13. Examination Schedule, Enter Marks & Marks Review -->
         <div class="nav-item" data-module="examinations">
           <a href="#examinations" class="nav-link"
             onclick="teacherApp.toggleSubmenu('examinations', event); return false;">
@@ -177,7 +156,6 @@
 
         <div class="nav-section-title">SCHEDULE &amp; MEETINGS</div>
 
-        <!-- 14. My Timetable -->
         <div class="nav-item" data-module="timetable">
           <a href="#timetable" class="nav-link" onclick="teacherApp.navigateTo('timetable', 'my'); return false;">
             <span class="nav-icon"><i class="fa-solid fa-calendar-days"></i></span>
@@ -185,7 +163,6 @@
           </a>
         </div>
 
-        <!-- 15. Parent Meetings -->
         <div class="nav-item" data-module="appointments">
           <a href="#appointments" class="nav-link" onclick="teacherApp.navigateTo('appointments'); return false;">
             <span class="nav-icon"><i class="fa-solid fa-handshake-angle"></i></span>
@@ -194,7 +171,6 @@
           </a>
         </div>
 
-        <!-- 16. Communication -->
         <div class="nav-item" data-module="communication">
           <a href="#communication" class="nav-link" onclick="teacherApp.navigateTo('communication'); return false;">
             <span class="nav-icon"><i class="fa-solid fa-comments"></i></span>
@@ -205,7 +181,6 @@
 
         <div class="nav-section-title">LEAVE &amp; WORKSPACE</div>
 
-        <!-- 17 & 18. Apply Leave & Leave History -->
         <div class="nav-item" data-module="leave">
           <a href="#leave" class="nav-link" onclick="teacherApp.toggleSubmenu('leave', event); return false;">
             <span class="nav-icon"><i class="fa-solid fa-calendar-minus"></i></span>
@@ -220,7 +195,6 @@
           </div>
         </div>
 
-        <!-- 19. My Tasks -->
         <div class="nav-item" data-module="tasks">
           <a href="#tasks" class="nav-link" onclick="teacherApp.navigateTo('tasks'); return false;">
             <span class="nav-icon"><i class="fa-solid fa-list-check"></i></span>
@@ -229,7 +203,6 @@
           </a>
         </div>
 
-        <!-- 20. My Profile -->
         <div class="nav-item" data-module="profile">
           <a href="#profile" class="nav-link" onclick="teacherApp.navigateTo('profile'); return false;">
             <span class="nav-icon"><i class="fa-solid fa-id-badge"></i></span>
@@ -238,7 +211,6 @@
         </div>
       </nav>
 
-      <!-- Sidebar Footer User Card -->
       <div class="sidebar-user-card" onclick="teacherApp.navigateTo('profile')" style="cursor: pointer;"
         title="View & Edit My Profile">
         <div class="user-avatar-mini" id="teacherUserAvatar">
@@ -255,15 +227,10 @@
       </div>
     </aside>
 
-    <!-- Mobile Sidebar Backdrop Overlay -->
     <div class="portal-backdrop" id="portalBackdrop"></div>
 
-    <!-- ==========================================
-         MAIN TEACHER PORTAL CONTAINER
-         ========================================== -->
     <div class="portal-main">
 
-      <!-- Top Header -->
       <header class="portal-header">
         <div class="header-left">
           <button class="mobile-toggle-btn" id="mobileSidebarToggle" aria-label="Toggle Navigation">
@@ -284,13 +251,10 @@
         </div>
 
         <div class="header-right">
-          <!-- Quick Role/Class Switcher -->
           <div style="font-size: 0.85rem; color: var(--color-text-muted);">
             Active: <strong class="text-primary" id="tdHeaderActiveTeacher">Synchronizing...</strong>
           </div>
 
-          <!-- Theme Toggle -->
-          <!-- Interactive Quick Popovers & Overlays -->
           <button type="button" class="header-action-btn" id="teacherDatePickerBtn" data-datepicker="true"
             data-tooltip="Academic Calendar" aria-label="Academic Calendar">
             <i class="fa-solid fa-calendar-days"></i>
@@ -317,13 +281,11 @@
             <i class="fa-solid fa-moon theme-icon" id="themeIcon"></i>
           </button>
 
-          <!-- Notifications -->
           <button class="header-action-btn" onclick="teacherApp.navigateTo('communication', 'notifications')"
             title="Notifications">
             <i class="fa-regular fa-bell"></i>
             <span class="notif-badge">3</span>
           </button>
-
 
           <button type="button" class="btn-header-signout" data-action="portal-logout"
             onclick="PortalAuth.logout('teacher')" title="Fast Logout from Faculty Portal">
@@ -333,15 +295,10 @@
         </div>
       </header>
 
-      <!-- Dynamic Content Views -->
       <main class="portal-content" id="teacherMainContent">
 
-        <!-- =================================================================
-             MODULE 1: DASHBOARD (EXACT USER WIREFRAME)
-             ================================================================= -->
         <section class="portal-view active" id="view-dashboard">
 
-          <!-- Header Greeting: Good Morning, Ms. Anjali | Class Teacher – Grade 8A -->
           <div class="teacher-welcome-banner">
             <div>
               <div class="tw-badge" id="tdBannerDeptBadge"><i class="fa-solid fa-award"></i> Faculty Workspace</div>
@@ -370,7 +327,6 @@
             </div>
           </div>
 
-          <!-- Permitted Records Scope Policy Banner -->
           <div class="alert alert-info d-flex align-items-center justify-content-between flex-wrap gap-2 mb-4"
             style="background:#f0f9ff; border:1px solid #bae6fd; border-radius:10px; padding:0.75rem 1.25rem;">
             <div class="d-flex align-items-center gap-2">
@@ -385,7 +341,6 @@
               Senior Faculty</span>
           </div>
 
-          <!-- Quick Actions Bar (6 Required Actions) -->
           <div class="card p-3 mb-4 border rounded-3 bg-white shadow-sm">
             <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
               <span style="font-weight:700; font-size:0.85rem; color:#0f172a;">
@@ -420,7 +375,6 @@
             </div>
           </div>
 
-          <!-- Newly Admitted Students Directive Alert -->
           <div id="teacherErrorBanner"
             style="display:none;background:#fef2f2;border:1px solid #fecaca;border-left:4px solid #dc2626;border-radius:8px;padding:0.75rem 1rem;margin-bottom:1rem;color:#991b1b;align-items:center;justify-content:space-between;gap:1rem;">
             <span id="teacherErrorBannerMsg">Unable to reach server.</span>
@@ -429,7 +383,6 @@
           </div>
           <div id="teacherNewAdmissionsAlert" class="mb-4" style="display: none;"></div>
 
-          <!-- 9 Metric & Status Quad Cards (Display: Today's classes, Assigned students, Attendance pending, Assignments to grade, Marks pending submission, Upcoming exams, School announcements, Parent meeting requests, Tasks and deadlines) -->
           <div class="metrics-quad mb-4"
             style="display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 1rem;">
             <div class="metric-card" onclick="teacherApp.navigateTo('my-classes')" style="cursor:pointer;">
@@ -479,7 +432,6 @@
             </div>
           </div>
 
-          <!-- Today's Classes Section -->
           <div class="today-classes-card mb-4">
             <div class="card-header-bar">
               <h2><i class="fa-solid fa-clock text-primary"></i> Today's classes</h2>
@@ -493,10 +445,8 @@
             </div>
           </div>
 
-          <!-- 2-Column Split: [Tasks & Deadlines | School Announcements & Meeting Requests] -->
           <div class="teacher-two-col" id="dashboardTwoCol">
 
-            <!-- Column 1: Tasks and Deadlines -->
             <div class="task-list-card">
               <div class="card-header-bar">
                 <h3><i class="fa-solid fa-list-check text-amber"></i> Tasks and deadlines</h3>
@@ -537,7 +487,6 @@
               </div>
             </div>
 
-            <!-- Column 2: School Announcements & Parent Meeting Requests -->
             <div class="announcements-card">
               <div class="card-header-bar">
                 <h3><i class="fa-solid fa-bullhorn text-primary"></i> School announcements</h3>
@@ -579,9 +528,6 @@
 
         </section>
 
-        <!-- =================================================================
-             MODULE 2: MY CLASSES (8A, 9B, 7C)
-             ================================================================= -->
         <section class="portal-view" id="view-my-classes">
 
           <div class="card-header-bar mb-3">
@@ -597,7 +543,6 @@
             </div>
           </div>
 
-          <!-- Subtab Strip: Classes Table, Class Lists, Student Profiles, Parent Contacts -->
           <div class="tab-strip mb-4" id="myClassesTabStrip">
             <button type="button" class="tab-btn active" data-sub="classes"
               onclick="teacherApp.switchSubTab('my-classes', 'classes'); return false;">
@@ -613,7 +558,6 @@
             </button>
           </div>
 
-          <!-- Panel 1: Master Classes Table (Specification 19.2) -->
           <div id="subtab-classes-panel" class="my-classes-subview">
             <div class="card p-0 border rounded-3 bg-white shadow-sm overflow-hidden mb-4">
               <div class="table-responsive">
@@ -796,7 +740,6 @@
             </div>
           </div>
 
-          <!-- Panel 2: Class Lists (Roster) -->
           <div id="subtab-roster-panel" class="my-classes-subview" style="display: none;">
             <div class="card p-3 border rounded-3 bg-white shadow-sm mb-4">
               <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-3">
@@ -826,14 +769,12 @@
                     </tr>
                   </thead>
                   <tbody id="classListTableBody">
-                    <!-- Populated via JS -->
                   </tbody>
                 </table>
               </div>
             </div>
           </div>
 
-          <!-- Panel 3: Student Profiles Subtab -->
           <div id="subtab-profiles-panel" class="my-classes-subview" style="display: none;">
             <div class="card p-3 border rounded-3 bg-white shadow-sm mb-4">
               <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-3">
@@ -843,18 +784,14 @@
                   style="width: 220px;" onkeyup="teacherApp.searchStudentProfile(this.value)">
               </div>
               <div id="studentProfilePreviewCard">
-                <!-- Rendered dynamically -->
               </div>
             </div>
           </div>
 
         </section>
 
-        <!-- =================================================================
-             ===================================== -->
         <section class="portal-view" id="view-students">
 
-          <!-- Institutional Scope & Privacy Notice -->
           <div class="alert alert-info d-flex align-items-center justify-content-between flex-wrap gap-2 mb-3"
             style="background: rgba(14, 165, 233, 0.08); border: 1px solid rgba(14, 165, 233, 0.25); border-radius: 8px; padding: 0.85rem 1.25rem;">
             <div class="d-flex align-items-center gap-3">
@@ -889,7 +826,6 @@
             </div>
           </div>
 
-          <!-- Student Profile Detail Tabs: Overview, Attendance, Academic Progress, Assignments, Published Results, Authorized Remarks -->
           <div class="card p-0 border rounded-3 bg-white shadow-sm overflow-hidden mb-4">
             <div class="p-3 border-bottom bg-light">
               <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
@@ -921,7 +857,6 @@
               </div>
             </div>
 
-            <!-- 6 Required Profile Tabs -->
             <div class="tab-strip p-2 bg-white border-bottom" id="studentDetailTabStrip">
               <button type="button" class="tab-btn active" data-tab="overview"
                 onclick="teacherApp.switchStudentProfileTab('overview')">
@@ -983,10 +918,6 @@
 
         </section>
 
-        <!-- =================================================================
-             MODULE 4: ATTENDANCE
-             (Mark Attendance, Attendance History, Report)
-             ================================================================= -->
         <section class="portal-view" id="view-attendance">
 
           <div class="card-header-bar mb-3">
@@ -1012,7 +943,6 @@
             </div>
           </div>
 
-          <!-- Attendance Parameter Strip: Class and section, Date, Submission status, Attendance summary -->
           <div class="card p-3 mb-3 border rounded-3 bg-white shadow-sm">
             <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
               <div class="d-flex align-items-center gap-3 flex-wrap">
@@ -1042,7 +972,6 @@
                 </div>
               </div>
 
-              <!-- Attendance summary -->
               <div class="d-flex align-items-center gap-2 p-2 border rounded" style="background:#f8fafc;"
                 id="attendanceSummaryBlock">
                 <span style="font-size:0.8rem; font-weight:700; color:#334155;"><i
@@ -1055,7 +984,6 @@
             </div>
           </div>
 
-          <!-- Student list Table: Present, absent or late -->
           <div class="card p-0 border rounded-3 bg-white shadow-sm overflow-hidden mb-4">
             <div class="table-responsive">
               <table class="table table-hover align-middle mb-0" id="tableAttendanceRoster" style="font-size: 0.85rem;">
@@ -1135,10 +1063,6 @@
 
         </section>
 
-        <!-- =================================================================
-             MODULE 5: ACADEMICS
-             (Assignments, Homework, Study Materials, Lesson Plans, Syllabus)
-             ================================================================= -->
         <section class="portal-view" id="view-academics">
 
           <div class="card-header-bar mb-3">
@@ -1163,7 +1087,6 @@
             </div>
           </div>
 
-          <!-- Lesson Plans Table: Subject, Class, Chapter, Topic, Objectives, Planned date, Completion status, Review comments -->
           <div class="card p-0 border rounded-3 bg-white shadow-sm overflow-hidden mb-4">
             <div class="table-responsive">
               <table class="table table-hover align-middle mb-0" id="tableLessonPlans" style="font-size: 0.85rem;">
@@ -1228,13 +1151,8 @@
 
         </section>
 
-        <!-- =================================================================
-             MODULE 6: EXAMINATIONS
-             (Create Exam, Enter Marks, Grade Students, Results)
-             ================================================================= -->
         <section class="portal-view" id="view-examinations">
 
-          <!-- Statutory Policy Banner -->
           <div class="alert alert-warning d-flex align-items-center justify-content-between flex-wrap gap-2 mb-3"
             style="background:#fffbeb; border:1px solid #fde68a; border-radius:8px; padding:0.85rem 1.25rem;">
             <div class="d-flex align-items-center gap-3">
@@ -1272,7 +1190,6 @@
             </div>
           </div>
 
-          <!-- Examinations Table: Exam, Class, Subject, Maximum marks, Marks entry progress, Submission deadline, Review status -->
           <div class="card p-0 border rounded-3 bg-white shadow-sm overflow-hidden mb-4">
             <div class="table-responsive">
               <table class="table table-hover align-middle mb-0" id="tableExamsMarks" style="font-size: 0.85rem;">
@@ -1322,10 +1239,6 @@
 
         </section>
 
-        <!-- =================================================================
-             MODULE 7: TIMETABLE
-             (My Timetable, Class Timetable)
-             ================================================================= -->
         <section class="portal-view" id="view-timetable">
 
           <div class="card-header-bar mb-3">
@@ -1344,7 +1257,6 @@
             </div>
           </div>
 
-          <!-- Timetable Alert: Schedule updates & Substitution -->
           <div class="alert alert-info d-flex align-items-center justify-content-between flex-wrap gap-2 mb-3"
             style="background:#f0fdf4; border:1px solid #bbf7d0; border-radius:8px; padding:0.75rem 1.25rem;">
             <div class="d-flex align-items-center gap-2">
@@ -1360,7 +1272,6 @@
             </button>
           </div>
 
-          <!-- Weekly Schedule Table: Weekly schedule, Period, Class, Subject, Room, Substitution -->
           <div class="card p-0 border rounded-3 bg-white shadow-sm overflow-hidden mb-4">
             <div class="p-3 border-bottom bg-light d-flex justify-content-between align-items-center">
               <h5 class="mb-0 font-bold" style="font-size:0.95rem; color:#0f172a;"><i
@@ -1433,10 +1344,6 @@
 
         </section>
 
-        <!-- =================================================================
-             MODULE 8: COMMUNICATION
-             (Class Announcements, Parent Messages, Notifications)
-             ================================================================= -->
         <section class="portal-view" id="view-communication">
 
           <div class="card-header-bar mb-3">
@@ -1458,7 +1365,6 @@
             </div>
           </div>
 
-          <!-- Communication Panels: School notices, Assigned class announcements, Parent messages, Meeting requests, Message history -->
           <div class="row g-3 mb-4">
             <div class="col-md-6">
               <div class="card p-3 border rounded-3 bg-white shadow-sm h-100">
@@ -1520,10 +1426,6 @@
 
         </section>
 
-        <!-- =================================================================
-             MODULE 9: LEAVE
-             (Apply Leave, Leave Status)
-             ================================================================= -->
         <section class="portal-view" id="view-leave">
 
           <div class="card-header-bar mb-3">
@@ -1542,7 +1444,6 @@
             </div>
           </div>
 
-          <!-- Leave Balance Quad: Leave balance, Previous requests, Pending requests, Upcoming approved leave -->
           <div class="metrics-quad mb-4"
             style="display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 1rem;">
             <div class="metric-card">
@@ -1567,7 +1468,6 @@
             </div>
           </div>
 
-          <!-- Leave Ledger Table -->
           <div class="card p-0 border rounded-3 bg-white shadow-sm overflow-hidden mb-4">
             <div class="table-responsive">
               <table class="table table-hover align-middle mb-0" id="tableTeacherLeaveHistory"
@@ -1615,10 +1515,6 @@
 
         </section>
 
-        <!-- =================================================================
-             MODULE 10: REPORTS
-             (Student Performance)
-             ================================================================= -->
         <section class="portal-view" id="view-reports">
           <div class="card-header-bar mb-3">
             <h2><i class="fa-solid fa-chart-line text-primary"></i> Student Academic Performance Analytics</h2>
@@ -1661,10 +1557,8 @@
               </div>
             </div>
 
-            <!-- Visual Analytics Grid: Pie/Donut Chart + Bar Graph -->
             <div class="chart-card-grid">
 
-              <!-- Chart 1: Performance Tier Donut / Pie Chart -->
               <div class="chart-card">
                 <div class="chart-title-wrap">
                   <h4><i class="fa-solid fa-chart-pie text-primary"></i> Performance Tier Ratio</h4>
@@ -1704,7 +1598,6 @@
                 </div>
               </div>
 
-              <!-- Chart 2: Score Bracket Distribution Bar Graph -->
               <div class="chart-card">
                 <div class="chart-title-wrap">
                   <h4><i class="fa-solid fa-chart-simple text-primary"></i> Score Bracket Distribution</h4>
@@ -1758,13 +1651,6 @@
           </div>
         </section>
 
-        <!-- =================================================================
-             MODULE 11: MY PROFILE & PROFESSIONAL DETAILS
-             ================================================================= -->
-
-        <!-- =================================================================
-             MODULE 6: ASSIGNMENTS & STUDY MATERIALS
-             ================================================================= -->
         <section class="portal-view" id="view-assignments">
 
           <div class="card-header-bar mb-3">
@@ -1783,7 +1669,6 @@
             </div>
           </div>
 
-          <!-- Assignments Table: Assignment title, Class, Subject, Assigned date, Due date, Submission count, Grading status -->
           <div class="card p-0 border rounded-3 bg-white shadow-sm overflow-hidden mb-4">
             <div class="table-responsive">
               <table class="table table-hover align-middle mb-0" id="tableAssignmentsList" style="font-size: 0.85rem;">
@@ -1846,9 +1731,6 @@
 
         </section>
 
-        <!-- =================================================================
-             MODULE 10: APPOINTMENTS & PARENT MEETINGS (PTM)
-             ================================================================= -->
         <section class="portal-view" id="view-appointments">
           <div class="card-header-bar mb-3">
             <div>
@@ -1924,9 +1806,6 @@
           </div>
         </section>
 
-        <!-- =================================================================
-             MODULE 12: TASKS & NOTIFICATIONS
-             ================================================================= -->
         <section class="portal-view" id="view-tasks">
           <div class="card-header-bar mb-3">
             <div>
@@ -1944,7 +1823,6 @@
               <div class="card p-4">
                 <h3 class="mb-3"><i class="fa-solid fa-check-double text-primary"></i> Academic Action Items</h3>
                 <div class="pending-tasks-list" id="fullTaskListContainer">
-                  <!-- Dynamically populated from teacherApp.renderTasksList -->
                 </div>
               </div>
             </div>
@@ -1974,7 +1852,6 @@
                 </div>
               </div>
 
-              <!-- Institutional Boundary Card -->
               <div class="card p-3"
                 style="background: rgba(15, 23, 42, 0.03); border: 1px dashed rgba(100, 116, 139, 0.3);">
                 <div class="d-flex align-items-center gap-2 mb-2">
@@ -1995,7 +1872,6 @@
 
           <div class="prof-clean-container">
 
-            <!-- Hero Card -->
             <div
               class="prof-hero-card mb-4 p-4 border rounded-3 bg-white shadow-sm d-flex align-items-center justify-content-between flex-wrap gap-3">
               <div class="d-flex align-items-center gap-3">
@@ -2037,7 +1913,6 @@
               </div>
             </div>
 
-            <!-- Profile Sections Quad: Personal information, Employment details, Qualifications, Authorized documents, Contact details, Account security -->
             <div class="row g-3">
               <div class="col-md-6">
                 <div class="card p-3 border rounded-3 bg-white shadow-sm h-100">
@@ -2070,7 +1945,6 @@
               </div>
             </div>
 
-            <!-- Statutory Privacy, Consent & Communication Preferences (DPDP Act 2023 Sec 6) -->
             <div class="card p-3 mt-3 border rounded-3 bg-white shadow-sm">
               <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-3">
                 <div>
@@ -2139,18 +2013,10 @@
 
         </section>
 
-
-
-
       </main>
     </div>
   </div>
 
-  <!-- ==========================================
-       MODALS
-       ========================================== -->
-
-  <!-- Modal 1: Quick Mark Attendance -->
   <div class="modal-backdrop" id="markAttendanceModal">
     <div class="portal-modal">
       <div class="modal-header">
@@ -2175,7 +2041,6 @@
     </div>
   </div>
 
-  <!-- Modal 2: Create Homework -->
   <div class="modal-backdrop" id="createHomeworkModal">
     <div class="portal-modal">
       <div class="modal-header">
@@ -2218,7 +2083,6 @@
     </div>
   </div>
 
-  <!-- Modal 3: Apply Leave -->
   <div class="modal-backdrop" id="applyLeaveModal">
     <div class="portal-modal">
       <div class="modal-header">
@@ -2274,7 +2138,6 @@
     </div>
   </div>
 
-  <!-- Modal 4: Post Class Notice -->
   <div class="modal-backdrop" id="postAnnouncementModal">
     <div class="portal-modal">
       <div class="modal-header">
@@ -2311,7 +2174,6 @@
     </div>
   </div>
 
-  <!-- Modal 5: Student Dossier Details -->
   <div class="modal-backdrop" id="studentDossierModal">
     <div class="portal-modal" style="max-width: 580px;">
       <div class="modal-header">
@@ -2320,7 +2182,6 @@
           onclick="teacherApp.closeModal('studentDossierModal')">&times;</button>
       </div>
       <div class="modal-body" id="studentDossierContent">
-        <!-- Dynamically injected via teacherApp.viewStudentDossier -->
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary"
@@ -2332,9 +2193,6 @@
     </div>
   </div>
 
-  <!-- Toast Container -->
-
-  <!-- Modal: Class Teacher Student Withdrawal (Quit School / Transfer) -->
   <div class="modal-backdrop" id="withdrawStudentModal" style="display:none;">
     <div class="portal-modal"
       style="max-width: 580px; border-radius: 14px; overflow: hidden; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);">
@@ -2431,7 +2289,6 @@
     </div>
   </div>
 
-  <!-- Non-Class-Teacher Restriction Warning Modal -->
   <div class="modal-backdrop" id="nonClassTeacherRestrictedModal" style="display:none;">
     <div class="portal-modal" style="max-width: 480px; border-radius: 12px; overflow:hidden;">
       <div class="modal-header"
@@ -2462,14 +2319,10 @@
 
   <div class="toast-container" id="toastContainer"></div>
 
-  <!-- Reusable API Client -->
   <script src="/js/api-client.js?v=20261122-v12"></script>
-  <!-- Teacher Portal Logic -->
   <script src="/js/student-roster.js?v=20261122-v12"></script>
   <script src="/js/teacher.js?v=20261122-v12"></script>
-  <!-- Portal Auth Script -->
   <script src="/js/portal-auth.js?v=20261122-v12"></script>
-  <!-- Production Readiness Suite -->
   <script src="/js/portal-production-suite.js?v=20261122-v12"></script>
   <script>
     document.addEventListener('DOMContentLoaded', () => {
@@ -2477,19 +2330,7 @@
     });
   </script>
 
-  <!-- =========================================================================
-       MODAL: NEWLY JOINED TEACHER CREDENTIAL VERIFICATION & DISPATCH
-       ========================================================================= -->
-
-
-  <!-- =========================================================================
-       MODAL: TEACHER CHANGE / FIRST-TIME PASSWORD SETTING
-       ========================================================================= -->
-  <!-- Teacher password is managed in Security & Password tab -->
-
-
   <script>
-    // Universal Portals Hub Toggle Function
     function togglePortalsHub(e) {
       if (e) {
         e.preventDefault();
@@ -2525,7 +2366,6 @@
     });
   </script>
 
-
   <script>
     function switchProfileTab(tabId) {
       if (tabId === 'identity' || tabId === 'bank') tabId = 'identity-bank';
@@ -2555,10 +2395,6 @@
     }
   </script>
 
-
-  <!-- ==========================================================================
-       FLOATING BOTTOM NAVIGATION BAR (Compulsory on Mobile)
-       ========================================================================== -->
   <nav class="floating-bottom-nav" id="floatingBottomNav" aria-label="Faculty Mobile Bottom Navigation">
     <div class="bottom-nav-inner">
       <a href="#dashboard" class="bottom-nav-item active" data-nav="dashboard"
@@ -2591,11 +2427,8 @@
   </nav>
   <script src="/js/floating-bottom-nav.js?v=20261122-v12"></script>
 
-  <!-- Modern Input Field System Controller -->
   <script src="/js/modern-inputs.js?v=20261122-v12"></script>
-  <!-- Modern Popover & Overlay Component System Controller -->
   <script src="/js/modern-popovers.js?v=20261122-v12"></script>
-  <!-- Liquid-Fill Toggle Switch Micro-Interaction Controller -->
   <script src="/js/liquid-toggles.js?v=20261122-v18"></script>
 </body>
 

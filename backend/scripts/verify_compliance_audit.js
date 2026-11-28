@@ -1,23 +1,3 @@
-/**
- * Sri Vidya English Medium High School - Legal, Privacy & Compliance Audit Verification
- * 
- * Comprehensive E2E Verification of All 15 Production Compliance Requirements:
- * 1. Privacy Policy
- * 2. Terms & Conditions
- * 3. GDPR Compliance & Data Subject Rights (SAR / Portability)
- * 4. Cookie Consent & Preference Ledger
- * 5. Lawful Processing Documentation (DPDP Sec 4 & 6, GDPR Art 6)
- * 6. Marketing & Communication Consent Management
- * 7. Statutory Data Deletion & Anonymization Preserving Academic Ledgers
- * 8. Dual-Track Statutory Data Retention Schedules
- * 9. Third-Party Data Processing Agreements (DPAs)
- * 10. Third-Party Disclosures & India Data Residency
- * 11. Data Security Safeguards (SSL, Bcrypt, RBAC, RLS, Audit Trails)
- * 12. Security Breach Management & CERT-In Protocol
- * 13. Intellectual Property Ownership & Proprietary Notices
- * 14. Open-Source License Audit (100% Permissive, 0 GPL Conflicts)
- * 15. Fee Structure, Payment Terms & AP Education Act Refund Policies
- */
 
 const mongoose = require('mongoose');
 const fs = require('fs');
@@ -59,14 +39,10 @@ async function runAudit() {
   }
 
   try {
-    // Ensure compliance defaults are populated
     if (typeof complianceController.ensureComplianceDefaults === 'function') {
       await complianceController.ensureComplianceDefaults();
     }
 
-    // -------------------------------------------------------------------------
-    // REQUIREMENT 1: Privacy Policy
-    // -------------------------------------------------------------------------
     const privacyHtmlPath = path.join(__dirname, '../../frontend/privacy.html');
     const privacyHtmlExists = fs.existsSync(privacyHtmlPath);
     const privacyHtmlContent = privacyHtmlExists ? fs.readFileSync(privacyHtmlPath, 'utf8') : '';
@@ -77,9 +53,6 @@ async function runAudit() {
     check('Req 1: Privacy Policy Presence & Structure', privacyHtmlExists && hasDpdp && hasMinorProtection && hasDataCategories, 
       'Verified comprehensive Privacy Policy with minor protections, parent consent, and data categories under DPDP Act 2023.');
 
-    // -------------------------------------------------------------------------
-    // REQUIREMENT 2: Terms & Conditions
-    // -------------------------------------------------------------------------
     const termsHtmlPath = path.join(__dirname, '../../frontend/terms.html');
     const termsHtmlExists = fs.existsSync(termsHtmlPath);
     const termsContent = termsHtmlExists ? fs.readFileSync(termsHtmlPath, 'utf8') : '';
@@ -89,16 +62,12 @@ async function runAudit() {
     check('Req 2: Terms & Conditions', termsHtmlExists && hasAcceptableUse && hasTrustEntity,
       'Verified platform usage terms, conduct rules, disclaimers and institution authority.');
 
-    // -------------------------------------------------------------------------
-    // REQUIREMENT 3: GDPR Compliance & Data Portability (SAR / DSR)
-    // -------------------------------------------------------------------------
     let sampleUser = await User.findOne({ role: { $in: ['SUPER_ADMIN', 'PRINCIPAL', 'TEACHER', 'STUDENT'] } });
     if (!sampleUser) {
       sampleUser = await User.findOne();
     }
     const hasDsrEndpoint = typeof complianceController.exportUserDataDossier === 'function';
     
-    // Simulate DSR export
     let exportedDossier = null;
     if (sampleUser && hasDsrEndpoint) {
       const fakeReq = { params: { userId: sampleUser._id.toString() }, user: sampleUser };
@@ -118,14 +87,10 @@ async function runAudit() {
     check('Req 3: GDPR & DPDP Subject Access Request (DSR / Data Portability)', !!dsrSuccess,
       `SAR dossier generated for ${exportedDossier?.data?.subject?.fullName} (${exportedDossier?.data?.subject?.role}) under ${exportedDossier?.data?.governingLegislation}.`);
 
-    // -------------------------------------------------------------------------
-    // REQUIREMENT 4: Cookie Consent & Preferences Management
-    // -------------------------------------------------------------------------
     const cookieHtmlPath = path.join(__dirname, '../../frontend/cookie-policy.html');
     const cookieJsPath = path.join(__dirname, '../../frontend/js/cookie-consent.js');
     const hasCookieUi = fs.existsSync(cookieHtmlPath) && fs.existsSync(cookieJsPath);
     
-    // Record test consent
     const testConsent = await ConsentRecord.create({
       userId: sampleUser ? sampleUser._id : new mongoose.Types.ObjectId(),
       userRole: sampleUser ? sampleUser.role : 'AUDITOR',
@@ -141,9 +106,6 @@ async function runAudit() {
     check('Req 4: Cookie Consent & Policy', hasCookieUi && !!testConsent,
       `Cookie Policy, banner, preference manager and MongoDB consent record verified (ID: ${testConsent._id}).`);
 
-    // -------------------------------------------------------------------------
-    // REQUIREMENT 5: Lawful Processing Documentation
-    // -------------------------------------------------------------------------
     const policiesCount = await PolicyVersion.countDocuments();
     let samplePolicy = await PolicyVersion.findOne({ policyType: 'PRIVACY_POLICY' });
     const hasLawfulProse = privacyHtmlContent.includes('DPDP Act 2023') && 
@@ -152,9 +114,6 @@ async function runAudit() {
     check('Req 5: Lawful Processing Documentation', policiesCount > 0 && !!samplePolicy && hasLawfulProse,
       `Documented lawful processing grounds under DPDP Act 2023 Sec 4 & 6, AP Education Act Sec 17, and GDPR Art 6.`);
 
-    // -------------------------------------------------------------------------
-    // REQUIREMENT 6: Marketing & Communication Consent Management
-    // -------------------------------------------------------------------------
     const marketingConsent = await ConsentRecord.create({
       userId: sampleUser ? sampleUser._id : new mongoose.Types.ObjectId(),
       userRole: sampleUser ? sampleUser.role : 'AUDITOR',
@@ -170,27 +129,18 @@ async function runAudit() {
     check('Req 6: Marketing & Communication Consent', marketingConsent.status === 'GRANTED',
       'Granular consent recording and opt-out support verified for WhatsApp & SMS broadcasts.');
 
-    // -------------------------------------------------------------------------
-    // REQUIREMENT 7: Statutory Data Deletion Safeguards
-    // -------------------------------------------------------------------------
     const deletionModelExists = !!AccountDeletionRequest;
     const studentCount = await Student.countDocuments();
     
     check('Req 7: Data Deletion & Statutory Record Preservation', deletionModelExists && studentCount > 0,
       `Student academic records (${studentCount} enrolled) legally preserved under AP Education Act Section 17 while deactivating credentials.`);
 
-    // -------------------------------------------------------------------------
-    // REQUIREMENT 8: Dual-Track Statutory Retention Schedules
-    // -------------------------------------------------------------------------
     const adminHtml = fs.readFileSync(path.join(__dirname, '../../frontend/administration-portal/index.html'), 'utf8');
     const hasRetentionTable = adminHtml.includes('Statutory Data Retention Schedule') && adminHtml.includes('Permanent Statutory');
 
     check('Req 8: Statutory Data Retention Schedules', hasRetentionTable,
       'Permanent admission registers vs 8-year financial ledgers vs 3-year attendance logs formally documented.');
 
-    // -------------------------------------------------------------------------
-    // REQUIREMENT 9: Third-Party Data Processing Agreements (DPAs)
-    // -------------------------------------------------------------------------
     let dpaCount = await ThirdPartyDpa.countDocuments();
     if (dpaCount === 0) {
       await ThirdPartyDpa.create([
@@ -237,9 +187,6 @@ async function runAudit() {
     check('Req 9: Third-Party Data Processing Agreements (DPAs)', dpaCount >= 3,
       `Verified ${dpaCount} active DPAs covering Cloud (AWS), Payment (Razorpay), and Messaging (WhatsApp).`);
 
-    // -------------------------------------------------------------------------
-    // REQUIREMENT 10: Third-Party Disclosures & India Data Residency
-    // -------------------------------------------------------------------------
     const awsDpa = await ThirdPartyDpa.findOne({ vendorId: /AWS/i });
     const rzpDpa = await ThirdPartyDpa.findOne({ vendorId: /RAZORPAY/i });
     const isIndiaResident = awsDpa?.serverJurisdiction.includes('India') && rzpDpa?.serverJurisdiction.includes('India');
@@ -247,19 +194,12 @@ async function runAudit() {
     check('Req 10: Third-Party Disclosure & India Data Residency', isIndiaResident,
       `All primary data processors located in India: AWS (${awsDpa?.serverJurisdiction}), Razorpay (${rzpDpa?.serverJurisdiction}).`);
 
-    // -------------------------------------------------------------------------
-    // REQUIREMENT 11: Data Security Safeguards
-    // -------------------------------------------------------------------------
     const auditLogsCount = await AuditLog.countDocuments();
-    // Verify passwords in User are hashed with bcrypt ($2a$ or $2b$)
     const userWithHash = await User.findOne({ password: { $regex: /^\$2[ab]\$/ } }).select('+password');
 
     check('Req 11: Technical & Organizational Data Security', !!userWithHash && auditLogsCount >= 0,
       `Verified salted bcrypt password hashing, RBAC enforcement, and ${auditLogsCount} immutable audit trail entries.`);
 
-    // -------------------------------------------------------------------------
-    // REQUIREMENT 12: Data Breach Management & CERT-In Protocol
-    // -------------------------------------------------------------------------
     const testBreach = await DataBreachIncident.findOneAndUpdate(
       { incidentId: 'INC-2026-TEST' },
       {
@@ -279,9 +219,6 @@ async function runAudit() {
     check('Req 12: Security Breach Detection & CERT-In Response Protocol', !!testBreach,
       `Data breach incident workflow verified with severity categorization and CERT-In protocol logging (ID: ${testBreach.incidentId}).`);
 
-    // -------------------------------------------------------------------------
-    // REQUIREMENT 13: Intellectual Property & Proprietary Notices
-    // -------------------------------------------------------------------------
     const licHtmlPath = path.join(__dirname, '../../frontend/licenses.html');
     const licHtmlContent = fs.existsSync(licHtmlPath) ? fs.readFileSync(licHtmlPath, 'utf8') : '';
     const hasIpNotice = licHtmlContent.includes('Sri Vidya Educational Trust') && licHtmlContent.includes('Proprietary Software');
@@ -289,9 +226,6 @@ async function runAudit() {
     check('Req 13: Intellectual Property & Proprietary Rights', hasIpNotice,
       'Institutional ownership by Sri Vidya Educational Trust and copyright protection verified.');
 
-    // -------------------------------------------------------------------------
-    // REQUIREMENT 14: Open-Source Licences Audit
-    // -------------------------------------------------------------------------
     const auditReportPath = path.join(__dirname, '../data/license_audit_report.json');
     let licAuditPass = false;
     let auditSummary = 'Audit file not found';
@@ -303,9 +237,6 @@ async function runAudit() {
 
     check('Req 14: Open-Source License Audit', licAuditPass, auditSummary);
 
-    // -------------------------------------------------------------------------
-    // REQUIREMENT 15: Payments, Fee Structure & Refund Policies
-    // -------------------------------------------------------------------------
     const feePolicyPath = path.join(__dirname, '../../frontend/fee-policy.html');
     const feePolicyExists = fs.existsSync(feePolicyPath);
     const feePolicyContent = feePolicyExists ? fs.readFileSync(feePolicyPath, 'utf8') : '';
@@ -315,10 +246,6 @@ async function runAudit() {
     check('Req 15: Payments, Subscriptions & Refund Terms', feePolicyExists && hasRefundTerms && hasAct,
       'Complete fee schedule, installment dates, official receipt generation and statutory refund rules verified.');
 
-    // -------------------------------------------------------------------------
-    // ADDITIONAL REQUIREMENTS:
-    // Minor Protection, Dedicated Admin Compliance Center, Legal Disclaimer
-    // -------------------------------------------------------------------------
     const hasAdminComplianceTab = adminHtml.includes('subview-settings-compliance') && 
       (adminHtml.includes('Legal & Compliance') || adminHtml.includes('Legal &amp; Compliance'));
     
@@ -337,9 +264,6 @@ async function runAudit() {
     check('Additional: Professional Legal Review Disclaimer', hasLegalDisclaimer,
       'Standard professional notice verified: policies are institutional frameworks subject to final formal review by qualified legal counsel without unverified claims.');
 
-    // -------------------------------------------------------------------------
-    // AUDIT SUMMARY & SCORECARD
-    // -------------------------------------------------------------------------
     console.log('\n================================================================');
     console.log('AUDIT SCORECARD RESULTS:');
     console.log('================================================================');

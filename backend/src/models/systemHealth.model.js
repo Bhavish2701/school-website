@@ -1,11 +1,6 @@
-/**
- * Sri Vidya Educational Trust - System Health & Deployment Models
- * Module 11: Service Health Telemetry, Deployment History, Sanitized Logs & Background Jobs
- */
 
 const mongoose = require('mongoose');
 
-// 11.2 Deployment History Schema
 const DeploymentHistorySchema = new mongoose.Schema({
   deploymentId: {
     type: String,
@@ -84,7 +79,6 @@ const DeploymentHistorySchema = new mongoose.Schema({
   timestamps: true
 });
 
-// 11.3 Sanitized Application Log Schema
 const AppLogSchema = new mongoose.Schema({
   logId: {
     type: String,
@@ -137,7 +131,6 @@ const AppLogSchema = new mongoose.Schema({
   timestamps: true
 });
 
-// 11.4 Background Job Schema
 const BackgroundJobSchema = new mongoose.Schema({
   jobId: {
     type: String,
@@ -182,7 +175,6 @@ const BackgroundJobSchema = new mongoose.Schema({
   isIdempotent: {
     type: Boolean,
     default: true
-    // Invariant: Section 11.4 - Must be safe against duplicate emails, payments, records
   },
   errorSummary: {
     type: String,

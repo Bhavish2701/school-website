@@ -1,7 +1,3 @@
-/**
- * FeeStructure Mongoose Model
- * Manages school fee heads and default fee templates per class and academic year
- */
 const mongoose = require('mongoose');
 
 const feeStructureSchema = new mongoose.Schema(
@@ -95,7 +91,6 @@ const feeStructureSchema = new mongoose.Schema(
   }
 );
 
-// Unique constraint per class, academic year, and term
 feeStructureSchema.index({ class: 1, academicYear: 1, term: 1 }, { unique: true });
 
 const FeeStructure = mongoose.model('FeeStructure', feeStructureSchema);

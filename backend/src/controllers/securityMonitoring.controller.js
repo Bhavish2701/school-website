@@ -1,12 +1,6 @@
-/**
- * Sri Vidya Educational Trust - Security & Access Monitoring Controller
- * Module 9: Real-time Threat Defense, 9.1 Overview, 9.2 Event Register,
- * 9.3 Privileged Access Reviews, and 9.4 7-Step Incident Workflow
- */
 
 const SecurityMonitoringService = require('../services/securityMonitoring.service');
 
-// 9.1 Get Overview KPIs
 const getOverview = async (req, res) => {
   try {
     const data = await SecurityMonitoringService.getSecurityOverview();
@@ -16,7 +10,6 @@ const getOverview = async (req, res) => {
   }
 };
 
-// 9.2 List Security Events
 const listEvents = async (req, res) => {
   try {
     const result = await SecurityMonitoringService.listSecurityEvents(req.query);
@@ -26,7 +19,6 @@ const listEvents = async (req, res) => {
   }
 };
 
-// 9.2 Get Single Security Event
 const getEvent = async (req, res) => {
   try {
     const result = await SecurityMonitoringService.getSecurityEventById(req.params.eventId);
@@ -39,7 +31,6 @@ const getEvent = async (req, res) => {
   }
 };
 
-// 9.4 Lifecycle Transition: Triage Event
 const triageEvent = async (req, res) => {
   try {
     const { riskClassification, operator } = req.body;
@@ -54,7 +45,6 @@ const triageEvent = async (req, res) => {
   }
 };
 
-// 9.4 Lifecycle Transition: Assign Investigator
 const assignInvestigator = async (req, res) => {
   try {
     const { investigatorName, slaHours, operator } = req.body;
@@ -69,7 +59,6 @@ const assignInvestigator = async (req, res) => {
   }
 };
 
-// 9.2 Action: Mark Under Investigation
 const markUnderInvestigation = async (req, res) => {
   try {
     const op = req.body.operator || req.user?.username || 'Platform Administrator';
@@ -83,7 +72,6 @@ const markUnderInvestigation = async (req, res) => {
   }
 };
 
-// 9.2 Action: Record Findings
 const recordFindings = async (req, res) => {
   try {
     const op = req.body.operator || req.user?.username || 'Platform Administrator';
@@ -97,7 +85,6 @@ const recordFindings = async (req, res) => {
   }
 };
 
-// 9.4 Lifecycle Transition: Contain or Remediate (High-Impact Action)
 const containOrRemediate = async (req, res) => {
   try {
     const op = req.body.operator || req.user?.username || 'Platform Administrator';
@@ -111,7 +98,6 @@ const containOrRemediate = async (req, res) => {
   }
 };
 
-// 9.2 Action: Close Event
 const closeEvent = async (req, res) => {
   try {
     const op = req.body.operator || req.user?.username || 'Platform Administrator';
@@ -125,7 +111,6 @@ const closeEvent = async (req, res) => {
   }
 };
 
-// 9.2 Action: Escalate According to Policy (High-Impact Action)
 const escalateEvent = async (req, res) => {
   try {
     const { escalationLevel, reason, operator } = req.body;
@@ -140,7 +125,6 @@ const escalateEvent = async (req, res) => {
   }
 };
 
-// 9.3 Privileged Access Reviews: List Reviews
 const listAccessReviews = async (req, res) => {
   try {
     const result = await SecurityMonitoringService.listAccessReviews(req.query);
@@ -150,7 +134,6 @@ const listAccessReviews = async (req, res) => {
   }
 };
 
-// 9.3 Action: Record Review Outcome (Confirm, Reduce, Revoke, Clarify)
 const recordAccessReviewOutcome = async (req, res) => {
   try {
     const { decision, notes, operator } = req.body;

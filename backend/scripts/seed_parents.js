@@ -1,6 +1,3 @@
-/**
- * Seed Parents, Multiple Children, Fees, Assignments, and Messages
- */
 const mongoose = require('mongoose');
 const config = require('../src/config/env');
 const { Student } = require('../src/models/student.model');
@@ -14,13 +11,10 @@ const seedParents = async () => {
   await mongoose.connect(config.mongodbUri);
   console.log('[Parent Seed] Connected to MongoDB');
 
-  // Find users
   const parent1User = await User.findOne({ username: 'parent1' });
   const parent2User = await User.findOne({ username: 'parent2' });
   const teacherUser = await User.findOne({ username: 'teacher1' });
 
-  // 1. Ensure Parent 1 has MULTIPLE children
-  // Child 1: A. Rahul (Class 10-A, SV-0001)
   let child1 = await Student.findOne({ admissionNo: 'SV-0001' });
   if (child1) {
     child1.parentUser = parent1User._id;
@@ -29,7 +23,6 @@ const seedParents = async () => {
     await child1.save();
   }
 
-  // Child 2: A. Sneha (Class 6-A, SV-0010) - Second child for parent1!
   let child2 = await Student.findOne({ admissionNo: 'SV-0010' });
   if (!child2) {
     child2 = await Student.create({
@@ -56,7 +49,6 @@ const seedParents = async () => {
     await child2.save();
   }
 
-  // Child of Parent 2: B. Priya (Class 8-C, SV-0002)
   let childPriya = await Student.findOne({ admissionNo: 'SV-0002' });
   if (childPriya) {
     childPriya.parentUser = parent2User._id;
@@ -65,7 +57,6 @@ const seedParents = async () => {
     await childPriya.save();
   }
 
-  // Update parent users' children arrays
   parent1User.children = [child1._id, child2._id];
   await parent1User.save({ validateBeforeSave: false });
 
@@ -75,7 +66,6 @@ const seedParents = async () => {
   console.log(`[Parent Seed] Configured Parent 1 (${parent1User.fullName}) with 2 children: Rahul & Sneha.`);
   console.log(`[Parent Seed] Configured Parent 2 (${parent2User.fullName}) with 1 child: Priya.`);
 
-  // 2. Seed Assignments for Class 10-A and Class 6-A
   await Assignment.deleteMany({});
   await Assignment.create([
     {
@@ -114,7 +104,6 @@ const seedParents = async () => {
   ]);
   console.log('[Parent Seed] Seeded class homework & assignments.');
 
-  // 3. Seed Fees for Child 1 & Child 2
   await Fee.deleteMany({});
   await Fee.create([
     {
@@ -168,7 +157,6 @@ const seedParents = async () => {
   ]);
   console.log('[Parent Seed] Seeded student fees and payment records.');
 
-  // 4. Seed Parent Message
   await Message.deleteMany({});
   await Message.create({
     sender: parent1User._id,

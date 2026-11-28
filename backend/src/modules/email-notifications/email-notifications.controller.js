@@ -1,7 +1,3 @@
-/**
- * Email Relay & Notification Delivery - Controller Layer
- * Handles HTTP requests, responses, and status codes
- */
 
 const Service = require('./email-notifications.service');
 

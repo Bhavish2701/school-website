@@ -1,7 +1,3 @@
-/**
- * Deployment History & Lifecycle - Validation Layer
- * Enforces field schemas, constraints, and data integrity
- */
 
 class DeploymentsValidation {
   static validateRequest(req, res, next) {

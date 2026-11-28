@@ -1,8 +1,3 @@
-/**
- * Student Records & Academic Routes
- * Demonstrates and enforces Role-Based & Object-Level Authorization,
- * as well as Common Infrastructure (Pagination, Filtering, Searching, Sorting, Validation)
- */
 const express = require('express');
 const router = express.Router();
 const StudentRecord = require('../models/studentRecord.model');
@@ -16,10 +11,6 @@ const QueryFeatures = require('../utils/queryFeatures');
 const { formatSuccess } = require('../utils/apiResponse');
 const asyncHandler = require('../utils/asyncHandler');
 
-/**
- * @route   GET /api/v1/records/:id
- * @desc    Get specific student academic record by ID (Object-Level Authorization)
- */
 router.get(
   '/:id',
   authenticateUser,
@@ -47,11 +38,6 @@ router.get(
   })
 );
 
-/**
- * @route   GET /api/v1/records
- * @desc    List student records with Pagination, Filtering, Searching, and Sorting
- * @access  Protected (Scoped by role)
- */
 router.get(
   '/',
   authenticateUser,
@@ -59,7 +45,6 @@ router.get(
     const user = req.user;
     let baseQuery = {};
 
-    // 1. Role-based scoping
     if (user.role === 'STUDENT') {
       baseQuery.student = user._id;
     } else if (user.role === 'PARENT') {
@@ -73,7 +58,6 @@ router.get(
       baseQuery.$or = classFilters.length > 0 ? classFilters : [{ _id: null }];
     }
 
-    // 2. Initialize QueryFeatures chain on StudentRecord.find(baseQuery)
     const mongooseQuery = StudentRecord.find(baseQuery).populate(
       'student',
       'fullName username email studentProfile'
@@ -99,11 +83,6 @@ router.get(
   })
 );
 
-/**
- * @route   POST /api/v1/records
- * @desc    Create student record with input validation
- * @access  Protected (Management & Teachers only)
- */
 router.post(
   '/',
   authenticateUser,

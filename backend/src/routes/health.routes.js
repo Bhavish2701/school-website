@@ -1,10 +1,3 @@
-/**
- * Production Health & Diagnostics Routes
- * Implements:
- * - GET /api/v1/health (Full system metrics & DB latency)
- * - GET /api/v1/health/live (Liveness probe for Docker / Kubernetes)
- * - GET /api/v1/health/ready (Readiness probe verifying DB connectivity)
- */
 const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
@@ -16,11 +9,6 @@ const MONGO_STATES = {
   3: 'disconnecting',
 };
 
-/**
- * @route   GET /api/v1/health/live
- * @desc    Kubernetes / Docker liveness probe
- * @access  Public
- */
 router.get('/live', (req, res) => {
   res.status(200).json({
     status: 'UP',
@@ -28,11 +16,6 @@ router.get('/live', (req, res) => {
   });
 });
 
-/**
- * @route   GET /api/v1/health/ready
- * @desc    Kubernetes / Docker / Nginx readiness probe
- * @access  Public
- */
 router.get('/ready', async (req, res) => {
   const isDbReady = mongoose.connection.readyState === 1;
 
@@ -52,11 +35,6 @@ router.get('/ready', async (req, res) => {
   });
 });
 
-/**
- * @route   GET /api/v1/health
- * @desc    Detailed system health diagnostics & resource consumption
- * @access  Public
- */
 router.get('/', async (req, res) => {
   const dbState = mongoose.connection.readyState;
   let dbLatencyMs = null;

@@ -1,7 +1,3 @@
-/**
- * Email Relay & Notification Delivery - Repository Layer
- * Manages database access and persistence
- */
 
 const mongoose = require('mongoose');
 const { EmailService } = require('../../models/domainEmail.model');

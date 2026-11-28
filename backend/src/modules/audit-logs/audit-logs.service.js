@@ -1,7 +1,3 @@
-/**
- * Forensic Audit Logs Explorer - Service Layer
- * Business rules, calculations, and operational orchestration
- */
 
 const Repository = require('./audit-logs.repository');
 const MultiInstitutionSecurity = require('../common/multiInstitutionSecurity');

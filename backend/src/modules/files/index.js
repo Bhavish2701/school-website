@@ -1,7 +1,3 @@
-/**
- * FILES Module
- * File Storage, Transfer Certificates, Study Certificates, and Document Management
- */
 const routes = require('./routes');
 
 module.exports = {

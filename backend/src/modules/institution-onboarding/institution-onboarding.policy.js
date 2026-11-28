@@ -1,7 +1,3 @@
-/**
- * Institution Onboarding & Migration - Policy & Authorization Layer
- * Enforces Multi-Institution Scoping, RBAC roles, and Audit Logging
- */
 
 const MultiInstitutionSecurity = require('../common/multiInstitutionSecurity');
 
@@ -19,7 +15,7 @@ class InstitutionOnboardingPolicy {
     return MultiInstitutionSecurity.policyMiddleware({
       allowedRoles: ['Super Administrator', 'Institutional Principal', 'Campus Administrator'],
       requiredPermission: 'onboarding.manage',
-      requirePlatformWideScope: false, // permits scoped school operations
+      requirePlatformWideScope: false,
       auditCategory: 'INSTITUTION_ONBOARDING',
       auditAction: 'WRITE_INSTITUTION_ONBOARDING'
     })(req, res, next);
@@ -27,7 +23,7 @@ class InstitutionOnboardingPolicy {
 
   static sensitiveActionPolicy(req, res, next) {
     return MultiInstitutionSecurity.policyMiddleware({
-      requirePlatformWideScope: true, // sensitive actions require platform super admin
+      requirePlatformWideScope: true,
       allowedRoles: ['Super Administrator'],
       requireApprovalSignatory: true,
       auditCategory: 'INSTITUTION_ONBOARDING',

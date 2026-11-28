@@ -1,13 +1,3 @@
-/**
- * Student Archival & Record Inactivation Service
- * Sri Vidya English Medium High School - ERP
- *
- * Implements authoritative business rules:
- * - Student archival closes active enrolment while 100% preserving historical records.
- * - ZERO DATA DELETION: Never permanently purges student identity, grades, fees, or documents.
- * - Departmental clearances must be satisfied or waived prior to completion.
- * - Principal holds final executive approval authority.
- */
 
 const StudentArchival = require('../models/studentArchival.model');
 const { Student } = require('../models/student.model');
@@ -187,7 +177,6 @@ class StudentArchivalService {
       throw err;
     }
 
-    // Verify all 7 departments are satisfied
     const depts = record.departmentalClearances;
     const deptKeys = ['library', 'accounts', 'academic', 'examination', 'labAndSports', 'transport', 'administration'];
     for (const key of deptKeys) {
@@ -199,7 +188,6 @@ class StudentArchivalService {
       }
     }
 
-    // Update Student Record (ZERO DATA DELETION GUARANTEE)
     const student = await Student.findOne({ admissionNo: record.admissionNo });
     if (student) {
       student.status = 'ARCHIVED';

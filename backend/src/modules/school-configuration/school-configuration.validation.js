@@ -1,7 +1,3 @@
-/**
- * School Configuration & Defaults - Validation Layer
- * Enforces field schemas, constraints, and data integrity
- */
 
 class SchoolConfigurationValidation {
   static validateRequest(req, res, next) {

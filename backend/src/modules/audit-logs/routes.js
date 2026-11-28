@@ -1,17 +1,8 @@
-/**
- * Audit Logs Route Controller
- * Sri Vidya English Medium High School - ERP Governance
- *
- * Implements Specification 22.4: Every sensitive change needs traceability
- * Record the responsible user, timestamp, reason and relevant old/new values
- * for important changes to student details, attendance, marks, financial transactions and permissions.
- */
 const express = require('express');
 const router = express.Router();
 const { formatSuccess, formatError } = require('../../utils/apiResponse');
 const auditLogService = require('../../services/auditLog.service');
 
-// Seed audit logs in case DB is newly initialized
 const STATUTORY_SEED_LOGS = [
   {
     user: 'Smt. Gorle Varalakshmi',
@@ -80,15 +71,10 @@ const STATUTORY_SEED_LOGS = [
   },
 ];
 
-/**
- * GET /api/v1/modules/audit-logs
- * List all immutable audit entries with search, module filtering, and pagination
- */
 router.get('/', async (req, res) => {
   try {
     const data = await auditLogService.getAuditLogs(req.query);
 
-    // If database is empty, return statutory seed logs
     if (data.logs.length === 0 && (!req.query.page || parseInt(req.query.page, 10) === 1)) {
       return res.json(
         formatSuccess(
@@ -113,10 +99,6 @@ router.get('/', async (req, res) => {
   }
 });
 
-/**
- * POST /api/v1/modules/audit-logs
- * Record a new sensitive change log (Rule 22.4)
- */
 router.post('/', async (req, res) => {
   try {
     const {
@@ -159,10 +141,6 @@ router.post('/', async (req, res) => {
   }
 });
 
-/**
- * GET /api/v1/modules/audit-logs/stats
- * Audit metrics and compliance statistics
- */
 router.get('/stats', async (req, res) => {
   try {
     const stats = await auditLogService.getAuditStats();

@@ -1,12 +1,6 @@
-/**
- * Sri Vidya Educational Trust - Subscriptions & Plans Controller
- * Module 10: Multi-Tenant Commercial Plans Directory, Institution Subscriptions,
- * Usage Tracking, and Statutory Record Non-Disruption Guarantees
- */
 
 const SubscriptionService = require('../services/subscription.service');
 
-// Get Summary
 const getSummary = async (req, res) => {
   try {
     const summary = await SubscriptionService.getSubscriptionSummary();
@@ -16,7 +10,6 @@ const getSummary = async (req, res) => {
   }
 };
 
-// 10.1 Plans Operations
 const listPlans = async (req, res) => {
   try {
     const result = await SubscriptionService.listPlans(req.query);
@@ -87,7 +80,6 @@ const archivePlan = async (req, res) => {
   }
 };
 
-// 10.2 Subscriptions Operations
 const listSubscriptions = async (req, res) => {
   try {
     const result = await SubscriptionService.listSubscriptions(req.query);
@@ -180,7 +172,6 @@ const suspendOrCancel = async (req, res) => {
   }
 };
 
-// 10.3 Usage & Entitlements
 const getUsage = async (req, res) => {
   try {
     const instId = req.params.institutionId || req.query.institutionId || 'INST-001';

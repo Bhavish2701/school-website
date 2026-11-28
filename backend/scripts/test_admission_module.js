@@ -1,19 +1,3 @@
-/**
- * Comprehensive Test Suite for Admissions Module
- * Tests:
- * 1. Public online admission registration & Application Reference Number generation
- * 2. Public document upload / attachment
- * 3. Secure public status tracking (requiring applicationNumber + phone)
- * 4. Privacy protection: Rejection of status check with wrong phone number (404)
- * 5. Management search & filtering of applications queue
- * 6. Management requesting additional documents (DOCUMENT_VERIFICATION status)
- * 7. Public status check displaying requested documents note
- * 8. Applicant uploading requested documents (auto-transition to UNDER_REVIEW)
- * 9. Management approving application (APPROVED status)
- * 10. Management auto-enrolling approved applicant into Student collection
- * 11. Management rejection workflow with rejection reason
- * 12. Management dashboard overview & queue statistics
- */
 const BASE_URL = 'http://localhost:5000/api/v1';
 
 const login = async (identifier, password) => {
@@ -37,7 +21,6 @@ const runAdmissionTests = async () => {
   const parentToken = await login('parent1', 'Parent@123');
   console.log('Tokens generated successfully.\n');
 
-  // 1. Public: Submit Online Admission Application
   console.log('1. Testing POST /api/v1/admissions/apply (Public Online Registration)...');
   const applyRes = await fetch(`${BASE_URL}/admissions/apply`, {
     method: 'POST',
@@ -66,7 +49,6 @@ const runAdmissionTests = async () => {
   const appNo = applyData.data?.applicationNumber;
   const appId = applyData.data?.application?._id;
 
-  // 2. Public / Applicant: Attach Required Documents
   console.log(`2. Testing POST /api/v1/admissions/${appId}/documents (Uploading Documents)...`);
   const docsToUpload = [
     {
@@ -92,7 +74,6 @@ const runAdmissionTests = async () => {
   }
   console.log();
 
-  // 3. Public: Track Application Status (With Phone Verification)
   console.log(`3. Testing GET /api/v1/admissions/status?applicationNumber=${appNo}&phone=9848022338...`);
   const trackRes = await fetch(`${BASE_URL}/admissions/status?applicationNumber=${appNo}&phone=9848022338`);
   const trackData = await trackRes.json();
@@ -101,7 +82,6 @@ const runAdmissionTests = async () => {
   console.log(`Documents Uploaded Count: ${trackData.data?.documentsUploadedCount}`);
   console.log();
 
-  // 4. Privacy Check: Status Tracking with Wrong Phone Number
   console.log(`4. Testing Status Lookup Security (Wrong Phone Number)...`);
   const wrongPhoneRes = await fetch(`${BASE_URL}/admissions/status?applicationNumber=${appNo}&phone=9999999999`);
   const wrongPhoneData = await wrongPhoneRes.json();
@@ -109,7 +89,6 @@ const runAdmissionTests = async () => {
   console.log(`Rejection Message: ${wrongPhoneData.message}`);
   console.log();
 
-  // 5. Management: Search & Filter Applications Queue
   console.log('5. Testing GET /api/v1/admissions (Management Search & Filter)...');
   const mgmtListRes = await fetch(`${BASE_URL}/admissions?search=Harsha&status=SUBMITTED`, {
     headers: { Authorization: `Bearer ${principalToken}` },
@@ -120,7 +99,6 @@ const runAdmissionTests = async () => {
   console.log(`Applicant in Queue: ${mgmtListData.data?.applications?.[0]?.studentName} (${mgmtListData.data?.applications?.[0]?.applicationNumber})`);
   console.log();
 
-  // 6. Management: Request Additional Documents (DOCUMENT_VERIFICATION status)
   console.log('6. Testing PATCH /api/v1/admissions/:id/status (Requesting Documents)...');
   const reqDocsRes = await fetch(`${BASE_URL}/admissions/${appId}/status`, {
     method: 'PATCH',
@@ -143,7 +121,6 @@ const runAdmissionTests = async () => {
   console.log(`Requested Documents:`, reqDocsData.data?.application?.requestedDocuments);
   console.log();
 
-  // 7. Public: Applicant Tracks Status and sees Requested Documents Notice
   console.log('7. Testing Public Status Inquiry reflecting Document Request...');
   const trackReqRes = await fetch(`${BASE_URL}/admissions/status?applicationNumber=${appNo}&phone=9848022338`);
   const trackReqData = await trackReqRes.json();
@@ -153,7 +130,6 @@ const runAdmissionTests = async () => {
   console.log(`Required Documents:`, trackReqData.data?.requestedDocuments);
   console.log();
 
-  // 8. Applicant Uploads Requested TC -> Auto-transition to UNDER_REVIEW
   console.log('8. Testing Applicant Uploading Requested TC (Auto-transition to UNDER_REVIEW)...');
   const uploadTcRes = await fetch(`${BASE_URL}/admissions/${appId}/documents`, {
     method: 'POST',
@@ -169,7 +145,6 @@ const runAdmissionTests = async () => {
   console.log(`Status after uploading required docs: ${uploadTcData.data?.application?.status}`);
   console.log();
 
-  // 9. Management Approves Application (APPROVED status)
   console.log('9. Testing PATCH /api/v1/admissions/:id/status (Approving Application)...');
   const approveRes = await fetch(`${BASE_URL}/admissions/${appId}/status`, {
     method: 'PATCH',
@@ -187,7 +162,6 @@ const runAdmissionTests = async () => {
   console.log(`Updated Status: ${approveData.data?.application?.status}`);
   console.log();
 
-  // 10. Management Converts Approved Application into Enrolled Student
   console.log('10. Testing POST /api/v1/admissions/:id/enroll (Auto-Enrolling Student)...');
   const enrollRes = await fetch(`${BASE_URL}/admissions/${appId}/enroll`, {
     method: 'POST',
@@ -207,14 +181,13 @@ const runAdmissionTests = async () => {
   console.log(`Class Allocation: Class ${enrollData.data?.student?.class}-${enrollData.data?.student?.section} (Roll: ${enrollData.data?.student?.rollNo})`);
   console.log();
 
-  // 11. Test Rejection Workflow on Second Application
   console.log('11. Testing Rejection Workflow on Ineligible Application...');
   const app2Res = await fetch(`${BASE_URL}/admissions/apply`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
       studentName: 'R. Vignesh',
-      dob: '2023-01-01', // Too young for Class 5
+      dob: '2023-01-01',
       gender: 'Male',
       applyingClass: '5',
       parentName: 'R. Ramu',
@@ -241,13 +214,11 @@ const runAdmissionTests = async () => {
   console.log(`Application ${app2No} Status: ${rejectData.data?.application?.status}`);
   console.log(`Rejection Reason: ${rejectData.data?.application?.rejectionReason}`);
 
-  // Verify applicant sees rejection reason on status inquiry
   const trackRejectRes = await fetch(`${BASE_URL}/admissions/status?applicationNumber=${app2No}&phone=9988776655`);
   const trackRejectData = await trackRejectRes.json();
   console.log(`Applicant Inquiry Status: ${trackRejectData.data?.status} - Reason: ${trackRejectData.data?.rejectionReason}`);
   console.log();
 
-  // 12. Management: Admissions Dashboard Overview & Queue Statistics
   console.log('12. Testing GET /api/v1/admissions/overview (Dashboard Overview & Queue)...');
   const overviewRes = await fetch(`${BASE_URL}/admissions/overview`, {
     headers: { Authorization: `Bearer ${principalToken}` },

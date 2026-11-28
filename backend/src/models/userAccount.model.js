@@ -1,7 +1,3 @@
-/**
- * Sri Vidya Educational Trust - Platform User & Account Management Schema
- * Module 6: User Directory, Account Lifecycle, 7-Tab Dossier, and Session Security
- */
 
 const mongoose = require('mongoose');
 
@@ -65,7 +61,7 @@ const UserAccountSchema = new mongoose.Schema({
   },
   institutionName: { type: String, required: true },
   department: { type: String, default: 'Administration' },
-  employeeRecordId: { type: String, default: null }, // Linkage to staff cadre record
+  employeeRecordId: { type: String, default: null },
   roles: [{
     type: String,
     required: true

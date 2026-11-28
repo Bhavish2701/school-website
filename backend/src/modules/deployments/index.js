@@ -1,7 +1,3 @@
-/**
- * Deployment History & Lifecycle - Module Aggregator
- * Exports all 6 architectural layers
- */
 
 const routes = require('./deployments.routes');
 const controller = require('./deployments.controller');

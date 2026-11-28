@@ -1,7 +1,3 @@
-/**
- * Login OTP Verification Model
- * Stores short-lived cryptographic hashes of 2FA login verification codes.
- */
 const mongoose = require('mongoose');
 
 const loginOtpSchema = new mongoose.Schema(
@@ -58,7 +54,7 @@ const loginOtpSchema = new mongoose.Schema(
     createdAt: {
       type: Date,
       default: Date.now,
-      expires: 600, // MongoDB TTL index: 10 minutes auto-cleanup
+      expires: 600,
     },
   },
   { timestamps: true }

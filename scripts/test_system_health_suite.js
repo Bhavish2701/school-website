@@ -1,14 +1,3 @@
-/**
- * Acceptance Test Suite: Module 11 - System Health & Deployment
- * Sri Vidya Educational Trust Platform Administration Console
- * 
- * Verifies:
- * - 11.1 Service Health Probes (Frontend, Backend, Database, File Storage, Email, Jobs)
- * - 11.2 Deployment History (Lifecycle, Rollback, Secrets Redaction Guard)
- * - 11.3 Application Logs & Diagnostic Dossier (PII/Secret Scrubbing, Sealed SHA-256 Export)
- * - 11.4 Background Jobs (Idempotent Safe Retries, Status Management)
- * - Frontend UI & JavaScript Controller Export Contracts
- */
 
 const http = require('http');
 const fs = require('fs');
@@ -76,9 +65,6 @@ async function runSystemHealthSuite() {
   }
 
   try {
-    // --------------------------------------------------------------------------
-    // Test 1: GET /api/v1/platform/health (Service Health Probes & Runtime Metrics)
-    // --------------------------------------------------------------------------
     console.log('--- TEST 1: Service Health Probes & Runtime Telemetry ---');
     const hlthRes = await makeRequest('GET', '/api/v1/platform/health');
     assert(hlthRes.status === 200, `Health endpoint returns HTTP 200 (Got ${hlthRes.status})`);
@@ -95,9 +81,6 @@ async function runSystemHealthSuite() {
     assert(hlthRes.body.data?.process?.uptimeFormatted, 'Process uptime formatted string is present');
     assert(hlthRes.body.data?.recentErrorRate?.percentage !== undefined, 'Recent error rate percentage is computed');
 
-    // --------------------------------------------------------------------------
-    // Test 2: GET /api/v1/platform/deployments (Deployment History & Secrets Redaction)
-    // --------------------------------------------------------------------------
     console.log('\n--- TEST 2: Deployment History & Secrets Redaction Guard ---');
     const depListRes = await makeRequest('GET', '/api/v1/platform/deployments');
     assert(depListRes.status === 200, `Deployments list returns HTTP 200 (Got ${depListRes.status})`);
@@ -108,9 +91,6 @@ async function runSystemHealthSuite() {
     const leaksSecret = rawPayload.includes('mongodb://') || rawPayload.includes('MONGO_PASSWORD') || rawPayload.includes('JWT_SECRET');
     assert(!leaksSecret, 'Deployments API payload contains NO secrets, credentials, or DB connection URIs');
 
-    // --------------------------------------------------------------------------
-    // Test 3: POST /api/v1/platform/deployments (Initiate Approved Deployment)
-    // --------------------------------------------------------------------------
     console.log('\n--- TEST 3: Initiate Approved Deployment Release ---');
     const newDepPayload = {
       application: 'Sri Vidya Platform API',
@@ -131,9 +111,6 @@ async function runSystemHealthSuite() {
     assert(createdDepId && createdDepId.startsWith('DEP-'), `Deployment assigned ID ${createdDepId}`);
     assert(createDepRes.body.data?.status === 'SUCCESS', 'Simulated deployment transitioned to SUCCESS');
 
-    // --------------------------------------------------------------------------
-    // Test 4: POST /api/v1/platform/deployments/:id/rollback (Emergency Rollback)
-    // --------------------------------------------------------------------------
     console.log('\n--- TEST 4: Emergency Deployment Rollback ---');
     const rollbackRes = await makeRequest('POST', `/api/v1/platform/deployments/${createdDepId}/rollback`, {
       reason: 'Automated test of rollback safeguards'
@@ -143,13 +120,9 @@ async function runSystemHealthSuite() {
     assert(rollbackRes.body.data?.isRollback === true, 'Rollback record marked with isRollback: true');
     assert(rollbackRes.body.data?.rollbackSourceId === createdDepId, 'Rollback links to previous deployment ID');
 
-    // Verify original deployment updated to ROLLED_BACK
     const verifyDepRes = await makeRequest('GET', `/api/v1/platform/deployments/${createdDepId}`);
     assert(verifyDepRes.body.data?.status === 'ROLLED_BACK', 'Original deployment marked as ROLLED_BACK');
 
-    // --------------------------------------------------------------------------
-    // Test 5: Application Logs & PII / Secrets Sanitization Invariant
-    // --------------------------------------------------------------------------
     console.log('\n--- TEST 5: Application Logs Ingestion & PII/Secret Scrubbing ---');
     const sensitiveLogPayload = {
       service: 'platform-api',
@@ -172,9 +145,6 @@ async function runSystemHealthSuite() {
     assert(!ingestedLog.stackTrace.includes('SecretPass123'), 'Stack trace scrubbed of Mongo DB credentials');
     assert(ingestedLog.stackTrace.includes('[REDACTED_DB_URI]'), 'Stack trace contains [REDACTED_DB_URI]');
 
-    // --------------------------------------------------------------------------
-    // Test 6: GET /api/v1/platform/logs/export (Diagnostic Dossier with SHA-256 Seal)
-    // --------------------------------------------------------------------------
     console.log('\n--- TEST 6: Sealed Diagnostic Report Dossier ---');
     const exportRes = await makeRequest('GET', '/api/v1/platform/logs/export');
     assert(exportRes.status === 200, `Log export returns HTTP 200 (Got ${exportRes.status})`);
@@ -183,9 +153,6 @@ async function runSystemHealthSuite() {
     assert(exportRes.body.systemState?.activeProbes?.length === 6, 'Report captures all 6 service health probe snapshots');
     assert(Array.isArray(exportRes.body.diagnosticLogs), 'Report includes array of sanitized diagnostic logs');
 
-    // --------------------------------------------------------------------------
-    // Test 7: GET /api/v1/platform/jobs (Background Jobs Directory)
-    // --------------------------------------------------------------------------
     console.log('\n--- TEST 7: Background Jobs Directory ---');
     const jobsRes = await makeRequest('GET', '/api/v1/platform/jobs');
     assert(jobsRes.status === 200, `Jobs list returns HTTP 200 (Got ${jobsRes.status})`);
@@ -196,9 +163,6 @@ async function runSystemHealthSuite() {
     assert(reportJob !== undefined, 'Automated report generation background job exists');
     assert(reportJob.isIdempotent === true, 'Report job is tagged as idempotent');
 
-    // --------------------------------------------------------------------------
-    // Test 8: POST /api/v1/platform/jobs/:id/retry (Idempotent Safe Retries)
-    // --------------------------------------------------------------------------
     console.log('\n--- TEST 8: Safe Idempotent Job Retry ---');
     const targetJob = jobsRes.body.data.find(j => j.status === 'FAILED') || jobsRes.body.data[0];
     const initialAttempts = targetJob.attempts;
@@ -211,9 +175,6 @@ async function runSystemHealthSuite() {
     assert(retryRes.body.isIdempotent === true, 'Retry confirmed idempotent with zero duplicate side effects');
     assert(retryRes.body.data.attempts === initialAttempts + 1, 'Attempt counter safely incremented');
 
-    // --------------------------------------------------------------------------
-    // Test 9: POST /api/v1/platform/jobs/:id/cancel (Cancel Queued Job)
-    // --------------------------------------------------------------------------
     console.log('\n--- TEST 9: Cancel Background Job ---');
     const queuedJob = jobsRes.body.data.find(j => j.status === 'QUEUED') || jobsRes.body.data[0];
     const cancelRes = await makeRequest('POST', `/api/v1/platform/jobs/${queuedJob.jobId}/cancel`, {
@@ -222,9 +183,6 @@ async function runSystemHealthSuite() {
     assert(cancelRes.status === 200, `Cancel endpoint returns HTTP 200 (Got ${cancelRes.status})`);
     assert(cancelRes.body.data.status === 'CANCELLED', 'Job status updated to CANCELLED');
 
-    // --------------------------------------------------------------------------
-    // Test 10: Frontend HTML Elements & Modals Inspection
-    // --------------------------------------------------------------------------
     console.log('\n--- TEST 10: Frontend HTML Elements & Modals Verification ---');
     const htmlPath = path.join(__dirname, '..', 'frontend', 'platform-admin', 'index.html');
     const htmlContent = fs.readFileSync(htmlPath, 'utf8');
@@ -253,9 +211,6 @@ async function runSystemHealthSuite() {
       assert(htmlContent.includes(`id="${id}"`), `HTML contains element with id="${id}"`);
     });
 
-    // --------------------------------------------------------------------------
-    // Test 11: Frontend JavaScript Controller Methods Contract
-    // --------------------------------------------------------------------------
     console.log('\n--- TEST 11: Frontend JavaScript Controller Methods Contract ---');
     const jsPath = path.join(__dirname, '..', 'frontend', 'js', 'platform-admin.js');
     const jsContent = fs.readFileSync(jsPath, 'utf8');

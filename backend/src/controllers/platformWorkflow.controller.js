@@ -1,11 +1,6 @@
-/**
- * Sri Vidya Educational Trust - Platform Administration Workflows Controller
- * Implements Workflows A through F
- */
 
 const PlatformWorkflowService = require('../services/platformWorkflow.service');
 
-// Workflow A: Register a new school
 const registerSchool = async (req, res) => {
   try {
     const operator = req.body.operator || req.user?.username || 'Platform Super Administrator';
@@ -16,7 +11,6 @@ const registerSchool = async (req, res) => {
   }
 };
 
-// Workflow B: Invite a new school administrator
 const inviteAdmin = async (req, res) => {
   try {
     const operator = req.body.operator || req.user?.username || 'Platform Super Administrator';
@@ -45,7 +39,6 @@ const activateAdmin = async (req, res) => {
   }
 };
 
-// Workflow C: Deploy a new application version
 const deployVersion = async (req, res) => {
   try {
     const operator = req.body.operator || req.user?.username || 'Platform Super Administrator';
@@ -67,7 +60,6 @@ const rollbackDeployment = async (req, res) => {
   }
 };
 
-// Workflow D: Resolve a system incident
 const createIncident = async (req, res) => {
   try {
     const operator = req.body.operator || req.user?.username || 'Platform Monitoring Service';
@@ -92,7 +84,6 @@ const resolveIncident = async (req, res) => {
   }
 };
 
-// Workflow E: Suspend a compromised account
 const suspendAccount = async (req, res) => {
   try {
     const operator = req.body.operator || req.user?.username || 'Platform SecOps Lead';
@@ -119,7 +110,6 @@ const reinstateAccount = async (req, res) => {
   }
 };
 
-// Workflow F: Import an existing school's records
 const testImport = async (req, res) => {
   try {
     const operator = req.body.operator || req.user?.username || 'Platform Super Administrator';
@@ -140,7 +130,6 @@ const approveImport = async (req, res) => {
   }
 };
 
-// Workflows Overview
 const getOverview = async (req, res) => {
   try {
     const result = await PlatformWorkflowService.getWorkflowsOverview();

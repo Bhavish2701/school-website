@@ -1,6 +1,3 @@
-/**
- * Seed Academic Years, Subjects, Classes, Sections, and Teacher Allocations
- */
 const mongoose = require('mongoose');
 const config = require('../src/config/env');
 const AcademicYear = require('../src/models/academicYear.model');
@@ -17,11 +14,9 @@ const seedAcademic = async () => {
   await ClassSection.deleteMany({});
   console.log('[Academic Seed] Cleared academic years, subjects, and class sections.');
 
-  // Find faculty
   const teacherSunitha = await Teacher.findOne({ fullName: /Sunitha/i });
   const teacherRamesh = await Teacher.findOne({ fullName: /Ramesh/i });
 
-  // 1. Seed Academic Years (Historical, Current Active 2026-2027, and Upcoming)
   const yearsData = [
     { name: '2021-2022', startDate: new Date('2021-06-12'), endDate: new Date('2022-04-20'), isCurrent: false, status: 'COMPLETED' },
     { name: '2022-2023', startDate: new Date('2022-06-12'), endDate: new Date('2023-04-20'), isCurrent: false, status: 'COMPLETED' },
@@ -47,7 +42,6 @@ const seedAcademic = async () => {
   const currentYear = await AcademicYear.findOne({ name: '2026-2027' });
   console.log(`[Academic Seed] Seeded Academic Years: 2021-2022 to 2029-2030 (Active Present Year: ${currentYear.name})`);
 
-  // 2. Seed Subjects
   const subjects = await Subject.insertMany([
     {
       code: 'MATH-10',
@@ -97,13 +91,12 @@ const seedAcademic = async () => {
   const mathSubject = subjects.find((s) => s.code === 'MATH-10');
   const sciSubject = subjects.find((s) => s.code === 'SCI-10');
 
-  // 3. Seed ClassSections with Room Allocation, Class Teachers, and Subject Allocations
   const class10A = await ClassSection.create({
     className: '10',
     section: 'A',
     academicYear: '2025-2026',
     roomNumber: 'Room 101',
-    capacity: 45,
+    capacity: 50,
     classTeacher: teacherSunitha ? teacherSunitha._id : null,
     subjectAllocations: [
       {
@@ -121,12 +114,12 @@ const seedAcademic = async () => {
     ],
   });
 
-  const class9B = await ClassSection.create({
+  const class9A = await ClassSection.create({
     className: '9',
-    section: 'B',
+    section: 'A',
     academicYear: '2025-2026',
     roomNumber: 'Room 203',
-    capacity: 45,
+    capacity: 50,
     subjectAllocations: [
       {
         subject: mathSubject._id,
@@ -137,12 +130,12 @@ const seedAcademic = async () => {
     ],
   });
 
-  const class8C = await ClassSection.create({
+  const class8A = await ClassSection.create({
     className: '8',
-    section: 'C',
+    section: 'A',
     academicYear: '2025-2026',
     roomNumber: 'Room 108',
-    capacity: 45,
+    capacity: 50,
     classTeacher: teacherRamesh ? teacherRamesh._id : null,
     subjectAllocations: [
       {
@@ -159,10 +152,10 @@ const seedAcademic = async () => {
     section: 'A',
     academicYear: '2025-2026',
     roomNumber: 'Room 004',
-    capacity: 40,
+    capacity: 50,
   });
 
-  console.log(`[Academic Seed] Seeded Class Sections: 10-A (Class Teacher: Sunitha), 9-B, 8-C (Class Teacher: Ramesh), 6-A.`);
+  console.log(`[Academic Seed] Seeded Class Sections: 10-A (Class Teacher: Sunitha), 9-A, 8-A (Class Teacher: Ramesh), 6-A.`);
   await mongoose.disconnect();
 };
 

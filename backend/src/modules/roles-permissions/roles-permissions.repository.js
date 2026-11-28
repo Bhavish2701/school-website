@@ -1,7 +1,3 @@
-/**
- * Role Templates & RBAC Permissions - Repository Layer
- * Manages database access and persistence
- */
 
 const mongoose = require('mongoose');
 const { RoleTemplate } = require('../../models/roleTemplate.model');

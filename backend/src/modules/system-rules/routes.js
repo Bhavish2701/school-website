@@ -1,15 +1,3 @@
-/**
- * System-Wide Architectural Rules Route Controller
- * Sri Vidya English Medium High School - ERP Governance
- *
- * Implements Specifications 22.1 through 22.6:
- * 22.1 One source of truth
- * 22.2 Online and offline data must converge
- * 22.3 Notifications must follow actual state changes
- * 22.4 Every sensitive change needs traceability
- * 22.5 Protect sensitive information
- * 22.6 Do not build every feature at once (Foundation First)
- */
 const express = require('express');
 const router = express.Router();
 const { formatSuccess, formatError } = require('../../utils/apiResponse');
@@ -120,10 +108,6 @@ const SYSTEM_WIDE_RULES_REGISTRY = [
   }
 ];
 
-/**
- * GET /api/v1/modules/system-rules
- * Retrieve the full system-wide architectural rules registry
- */
 router.get('/', (req, res) => {
   res.json(
     formatSuccess(
@@ -137,10 +121,6 @@ router.get('/', (req, res) => {
   );
 });
 
-/**
- * GET /api/v1/modules/system-rules/status
- * Live diagnostic check for each of the 6 rules
- */
 router.get('/status', async (req, res) => {
   try {
     const [totalStudents, totalAdmissions, totalPayments, totalAuditLogs] = await Promise.all([
@@ -207,10 +187,6 @@ router.get('/status', async (req, res) => {
   }
 });
 
-/**
- * POST /api/v1/modules/system-rules/verify-traceability
- * Test logging a sensitive change with mandatory reason and diff
- */
 router.post('/verify-traceability', async (req, res) => {
   try {
     const { user, role, action, module, recordReference, reason, changedFields } = req.body;

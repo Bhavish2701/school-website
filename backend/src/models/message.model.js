@@ -1,6 +1,3 @@
-/**
- * Parent-Teacher Communication Message Model
- */
 const mongoose = require('mongoose');
 
 const messageSchema = new mongoose.Schema(

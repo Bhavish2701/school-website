@@ -1,16 +1,8 @@
-/**
- * Rate Limiting Middleware
- * Protects APIs against brute-force attacks and denial-of-service
- */
 const rateLimit = require('express-rate-limit');
 const { formatError } = require('../utils/apiResponse');
 
-/**
- * Standard API Rate Limiter
- * 500 requests per 15 minutes per IP
- */
 const apiLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
+  windowMs: 15 * 60 * 1000,
   max: process.env.NODE_ENV === 'production' ? 500 : 100000,
   skip: (req) => req.ip === '127.0.0.1' || req.ip === '::1' || req.ip === '::ffff:127.0.0.1' || req.hostname === 'localhost',
   standardHeaders: true,
@@ -25,12 +17,8 @@ const apiLimiter = rateLimit({
   },
 });
 
-/**
- * Strict Authentication Rate Limiter
- * 15 login attempts per 15 minutes per IP
- */
 const authLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
+  windowMs: 15 * 60 * 1000,
   max: process.env.NODE_ENV === 'production' ? 15 : 50000,
   skip: (req) => req.ip === '127.0.0.1' || req.ip === '::1' || req.ip === '::ffff:127.0.0.1' || req.hostname === 'localhost',
   standardHeaders: true,
@@ -45,12 +33,8 @@ const authLimiter = rateLimit({
   },
 });
 
-/**
- * 2FA / Login OTP Rate Limiter
- * 5 attempts per 10 minutes per IP
- */
 const otpLimiter = rateLimit({
-  windowMs: 10 * 60 * 1000, // 10 minutes
+  windowMs: 10 * 60 * 1000,
   max: process.env.NODE_ENV === 'production' ? 5 : 50000,
   skip: (req) => req.ip === '127.0.0.1' || req.ip === '::1' || req.ip === '::ffff:127.0.0.1' || req.hostname === 'localhost',
   standardHeaders: true,
@@ -65,12 +49,8 @@ const otpLimiter = rateLimit({
   },
 });
 
-/**
- * Password Reset Rate Limiter
- * 5 requests per 15 minutes per IP
- */
 const passwordResetLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
+  windowMs: 15 * 60 * 1000,
   max: process.env.NODE_ENV === 'production' ? 5 : 50000,
   skip: (req) => req.ip === '127.0.0.1' || req.ip === '::1' || req.ip === '::ffff:127.0.0.1' || req.hostname === 'localhost',
   standardHeaders: true,
@@ -85,12 +65,8 @@ const passwordResetLimiter = rateLimit({
   },
 });
 
-/**
- * Email Verification Rate Limiter
- * 5 attempts per 15 minutes per IP
- */
 const emailVerificationLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
+  windowMs: 15 * 60 * 1000,
   max: process.env.NODE_ENV === 'production' ? 5 : 50000,
   skip: (req) => req.ip === '127.0.0.1' || req.ip === '::1' || req.ip === '::ffff:127.0.0.1' || req.hostname === 'localhost',
   standardHeaders: true,

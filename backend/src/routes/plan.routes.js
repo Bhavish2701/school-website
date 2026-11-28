@@ -1,7 +1,3 @@
-/**
- * Sri Vidya Educational Trust - Commercial Plans Routes
- * Module 10.1: Commercial Plans Directory Endpoints
- */
 
 const express = require('express');
 const router = express.Router();

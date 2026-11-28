@@ -4,7 +4,6 @@ const path = require('path');
 const portalJsPath = path.join(__dirname, '../../frontend/js/portal.js');
 let code = fs.readFileSync(portalJsPath, 'utf8');
 
-// Find boundaries of updateTCPrintableSheet, printExitTC and downloadExitTCPdf
 const startMarker = 'function updateTCPrintableSheet() {';
 const endMarker = 'function submitStudentTransfer(e) {';
 

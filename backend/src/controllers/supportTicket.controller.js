@@ -1,7 +1,3 @@
-/**
- * Sri Vidya Educational Trust - Support & Issue Management Controller
- * Module 14: Support Overview, Ticket Directory, Lifecycle Workflow, and Internal Notes
- */
 
 const SupportTicketService = require('../services/supportTicket.service');
 

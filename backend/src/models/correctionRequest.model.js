@@ -1,10 +1,3 @@
-/**
- * Correction Request Mongoose Model
- * Specification 20.2:
- * "Parents should not be able to change verified attendance, examination marks,
- * fee balances or official school records directly. They can submit requests for corrections
- * that authorized staff review."
- */
 const mongoose = require('mongoose');
 
 const CORRECTION_MODULES = [
@@ -83,7 +76,7 @@ const correctionRequestSchema = new mongoose.Schema(
     recordReference: {
       type: String,
       trim: true,
-      default: '', // e.g., 'Term-1 Math Exam', 'Attendance 2026-10-14', 'Receipt REC-2025-012'
+      default: '',
     },
     fieldToCorrect: {
       type: String,
@@ -157,7 +150,6 @@ const correctionRequestSchema = new mongoose.Schema(
   }
 );
 
-// Fast indexing for parent queries and administration queue
 correctionRequestSchema.index({ student: 1, status: 1 });
 correctionRequestSchema.index({ requesterUser: 1, createdAt: -1 });
 

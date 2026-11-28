@@ -1,6 +1,3 @@
-/**
- * Workflows ERP Domain Module
- */
 const routes = require('./routes');
 
 module.exports = {

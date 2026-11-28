@@ -1,6 +1,3 @@
-/**
- * Sri Vidya Educational Trust - Onboarding & Migration Routes
- */
 
 const express = require('express');
 const router = express.Router();

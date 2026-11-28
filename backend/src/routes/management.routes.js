@@ -1,7 +1,3 @@
-/**
- * School Management Routes
- * Restricted to School Management Roles: PRINCIPAL, VICE_PRINCIPAL, SUPER_ADMIN
- */
 const express = require('express');
 const router = express.Router();
 const {
@@ -20,11 +16,6 @@ const liveSyncBus = require('../utils/liveSyncBus');
 
 const dashboardController = require('../controllers/dashboard.controller');
 
-/**
- * @route   GET /api/v1/management/dashboard/overview
- * @desc    Comprehensive School ERP Management Dashboard Overview
- * @access  Protected (SUPER_ADMIN, PRINCIPAL, VICE_PRINCIPAL, OFFICE)
- */
 router.get(
   '/dashboard/overview',
   authenticateUser,
@@ -32,11 +23,6 @@ router.get(
   dashboardController.getManagementDashboard
 );
 
-/**
- * @route   GET /api/v1/management/overview
- * @desc    School-level management summary and analytics
- * @access  Protected (SUPER_ADMIN, PRINCIPAL, VICE_PRINCIPAL only)
- */
 router.get(
   '/overview',
   authenticateUser,
@@ -73,10 +59,6 @@ router.get(
   })
 );
 
-/**
- * @route   GET/POST /api/v1/management/notifications
- * @desc    Live management notifications feed & broadcasts
- */
 router.get(
   '/notifications',
   authenticateUser,
@@ -138,10 +120,6 @@ router.patch(
   })
 );
 
-/**
- * @route   GET/POST /api/v1/management/messages
- * @desc    Management communication messages backed by MongoDB Message collection
- */
 router.get(
   '/messages',
   authenticateUser,

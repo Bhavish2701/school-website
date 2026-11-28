@@ -1,7 +1,3 @@
-/**
- * Forensic Audit Logs Explorer - Route Layer
- * Connects endpoints with validation and policy middleware
- */
 
 const express = require('express');
 const router = express.Router();
@@ -16,7 +12,6 @@ router.get('/:id', Policy.readPolicy, Controller.getById);
 router.post('/', Policy.writePolicy, Validation.validateRequest, Controller.createOrExecute);
 router.post('/action', Policy.sensitiveActionPolicy, Validation.validateAction, Controller.createOrExecute);
 
-// Full backward compatibility for modules with legacy routes.js
 const legacyRouteFile = path.join(__dirname, 'routes.js');
 if (fs.existsSync(legacyRouteFile)) {
   try {

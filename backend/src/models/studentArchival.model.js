@@ -1,12 +1,3 @@
-/**
- * Student Archival & Record Inactivation Mongoose Model
- * Sri Vidya English Medium High School - ERP
- * 
- * CRITICAL BUSINESS RULE:
- * Student archival is NOT permanent deletion. It closes active institutional enrolment
- * while securely and permanently preserving all historical academic, financial, attendance,
- * examination, and administrative records.
- */
 
 const mongoose = require('mongoose');
 

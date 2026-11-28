@@ -4,7 +4,6 @@ const vm = require('vm');
 
 console.log('=== TEST SUITE: PLATFORM ADMINISTRATION SIDEBAR BUTTONS & NAVIGATION ===\n');
 
-// 1. Verify HTML Sidebar Navigation Links & Target Sections
 console.log('[CHECK 1] Verifying all 16 sidebar navigation links and target sections in HTML...');
 const html = fs.readFileSync('frontend/platform-admin/index.html', 'utf8');
 
@@ -28,21 +27,17 @@ const expectedViews = [
 ];
 
 expectedViews.forEach(viewId => {
-  // Check matching nav link
   const linkRegex = new RegExp(`href="#${viewId}"[^>]*data-view="${viewId}"[^>]*onclick="platformApp\\.navigateTo\\('${viewId}'\\)"`);
   const altLinkRegex = new RegExp(`data-view="${viewId}"[^>]*href="#${viewId}"[^>]*onclick="platformApp\\.navigateTo\\('${viewId}'\\)"`);
   assert(linkRegex.test(html) || altLinkRegex.test(html), `Sidebar link for view '${viewId}' must have href, data-view, and onclick`);
 
-  // Check matching view container
   assert(html.includes(`id="view-${viewId}"`), `View section #view-${viewId} must exist in HTML`);
 });
 console.log(`  ✓ All ${expectedViews.length} sidebar navigation links and matching view sections verified in HTML.`);
 
-// 2. Verify Execution of frontend/js/platform-admin.js in Mock DOM Environment
 console.log('\n[CHECK 2] Verifying platform-admin.js execution and window.platformApp definition...');
 const js = fs.readFileSync('frontend/js/platform-admin.js', 'utf8');
 
-// Build mock DOM elements
 const idMatches = [...html.matchAll(/id="([^"]+)"/g)].map(m => m[1]);
 const elementStore = {};
 
@@ -150,7 +145,6 @@ mockWindow.window = mockWindow;
 
 const context = vm.createContext(mockWindow);
 
-// Execute platform-admin.js
 try {
   vm.runInContext(js, context);
 } catch (err) {
@@ -162,22 +156,18 @@ assert(context.window.platformApp, 'window.platformApp must be defined on window
 assert(typeof context.window.platformApp.navigateTo === 'function', 'platformApp.navigateTo must be a callable function');
 console.log('  ✓ platform-admin.js executed with ZERO errors and window.platformApp is accessible');
 
-// 3. Verify navigateTo switching for all 16 views
 console.log('\n[CHECK 3] Verifying navigation switching across all 16 views...');
 expectedViews.forEach(v => {
   context.window.platformApp.navigateTo(v);
 
-  // Check active view element
   const viewEl = elementStore[`view-${v}`];
   assert(viewEl.classList.contains('active'), `View section #view-${v} must have .active class`);
 
-  // Check active link
   const linkEl = mockLinks.find(l => l.getAttribute('data-view') === v);
   assert(linkEl.classList.contains('active'), `Nav link for '${v}' must have .active class`);
 });
 console.log('  ✓ navigateTo successfully activated every view and updated active sidebar indicators');
 
-// 4. Verify Delegated Sidebar Click Event Handling
 console.log('\n[CHECK 4] Verifying delegated click event listener on .sidebar-nav...');
 assert(mockSidebarNav.dispatchEvent, 'Sidebar nav element must support click events');
 

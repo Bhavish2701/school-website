@@ -1,8 +1,3 @@
-/**
- * Data Breach Incident Model
- * Under Indian DPDP Act 2023 (Section 8(6)) & CERT-In Cyber Security Directions:
- * Mandatory recording, containment, and notification protocols for security incidents.
- */
 const mongoose = require('mongoose');
 
 const dataBreachIncidentSchema = new mongoose.Schema(
@@ -73,7 +68,6 @@ const dataBreachIncidentSchema = new mongoose.Schema(
       default: null,
     },
     notifiedDpbi: {
-      // Data Protection Board of India
       type: Boolean,
       default: false,
     },

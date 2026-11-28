@@ -1,8 +1,3 @@
-/**
- * School Configuration Controller
- * Endpoints for School Profile, Academic Configuration, Operational Defaults,
- * and Document & Report Templates.
- */
 const schoolConfigService = require('../services/schoolConfig.service');
 
 class SchoolConfigController {

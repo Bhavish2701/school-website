@@ -37,7 +37,6 @@ class CleanURLRequestHandler(http.server.SimpleHTTPRequestHandler):
         path = parsed.path
         clean_path = path.rstrip('/')
 
-        # Clean routing for management and teacher
         if clean_path in ('/management', '/portal.html', '/management.html'):
             self.path = '/portal.html'
         elif clean_path in ('/teacher', '/teacher-portal.html', '/teacher.html'):

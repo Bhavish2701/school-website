@@ -4,7 +4,6 @@ const path = require('path');
 const authJsPath = path.join(__dirname, '../../frontend/js/portal-auth.js');
 let code = fs.readFileSync(authJsPath, 'utf8');
 
-// 1. Update inactivity.isAuthenticated
 const oldInactivityAuth = `    isAuthenticated() {
       const type = this.activePortalType || 'management';
       const cfg = PortalAuth.configs[type];
@@ -32,7 +31,6 @@ if (code.includes(oldInactivityAuth)) {
   code = code.replace(/isAuthenticated\(\)\s*\{[\s\S]*?return Boolean\(hasAuth && isOverlayHidden\);\s*\},/, newInactivityAuth);
 }
 
-// 2. Update expireSessionDueToInactivity
 const oldExpiryRegex = /expireSessionDueToInactivity\(portalType\)\s*\{[\s\S]*?this\.showToast\('⏱️ Session Expired: Inactive for 15 minutes\. Please sign in with your credentials\.', 'fa-lock', true\);\s*\}/;
 
 const newExpiryMethod = `expireSessionDueToInactivity(portalType) {
@@ -89,7 +87,6 @@ if (oldExpiryRegex.test(code)) {
   console.log('(!) Could not match oldExpiryRegex');
 }
 
-// 3. Update initUnifiedLoginPage
 const oldInitUnifiedRegex = /initUnifiedLoginPage\(\)\s*\{[\s\S]*?if \(this\.isAnySessionActive\(\)\)\s*\{[\s\S]*?setTimeout\(\(\)\s*=>\s*\{[\s\S]*?window\.location\.href\s*=\s*target;\s*\}, 500\);\s*return;\s*\}/;
 
 const newInitUnifiedMethod = `initUnifiedLoginPage() {
@@ -154,7 +151,6 @@ if (oldInitUnifiedRegex.test(code)) {
   console.log('(!) Could not match oldInitUnifiedRegex');
 }
 
-// 4. Update init(portalType)
 const oldInitRegex = /async init\(portalType\)\s*\{[\s\S]*?\/\/ 9\. Start 15-minute inactivity session expiration countdown[\s\S]*?if \(this\.inactivity\)\s*\{[\s\S]*?this\.inactivity\.init\(portalType\);\s*\}\s*\}/;
 
 const newInitMethod = `async init(portalType) {
@@ -275,7 +271,6 @@ if (oldInitRegex.test(code)) {
   console.log('(!) Could not match oldInitRegex');
 }
 
-// 5. Update logout(portalType)
 const oldLogoutRegex = /async logout\(portalType\)\s*\{[\s\S]*?window\.location\.href\s*=\s*['"]\/login['"];\s*\}, 400\);\s*\}/;
 
 const newLogoutMethod = `async logout(portalType) {

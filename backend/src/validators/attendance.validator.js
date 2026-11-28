@@ -1,14 +1,8 @@
-/**
- * Attendance Request Validators
- */
 const mongoose = require('mongoose');
 const validate = require('../middleware/validate.middleware');
 const { ATTENDANCE_STATUS } = require('../models/attendance.model');
 const ApiError = require('../utils/apiError');
 
-/**
- * Validate Attendance Submission
- */
 const validateMarkAttendance = (req, res, next) => {
   const { class: className, section, date, records } = req.body;
   const errors = {};
@@ -51,9 +45,6 @@ const validateMarkAttendance = (req, res, next) => {
   next();
 };
 
-/**
- * Validate Individual Record Correction / Permitted Update
- */
 const validateUpdateRecord = validate({
   status: {
     enum: ATTENDANCE_STATUS,

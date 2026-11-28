@@ -1,7 +1,3 @@
-/**
- * API Gateway & Client Management - Repository Layer
- * Manages database access and persistence
- */
 
 const mongoose = require('mongoose');
 const { ApiClient } = require('../../models/integration.model');

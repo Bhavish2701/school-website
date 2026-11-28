@@ -1,6 +1,3 @@
-/**
- * Comprehensive Test Suite for Teacher Management Module
- */
 const BASE_URL = 'http://localhost:5000/api/v1';
 
 const login = async (identifier, password) => {
@@ -25,7 +22,6 @@ const runTeacherTests = async () => {
   const studentToken = await login('student1', 'Student@123');
   console.log('Tokens generated.\n');
 
-  // 1. Teacher Dashboard
   console.log('1. Testing GET /api/v1/teachers/dashboard (Teacher view)...');
   const dashRes = await fetch(`${BASE_URL}/teachers/dashboard`, {
     headers: { Authorization: `Bearer ${teacherToken}` },
@@ -38,7 +34,6 @@ const runTeacherTests = async () => {
   console.log(`Leave Balance:`, dashData.data?.dashboard?.leaveBalance);
   console.log();
 
-  // 2. Teacher Profile (Self)
   console.log('2. Testing GET /api/v1/teachers/me (Teacher Profile)...');
   const profileRes = await fetch(`${BASE_URL}/teachers/me`, {
     headers: { Authorization: `Bearer ${teacherToken}` },
@@ -50,7 +45,6 @@ const runTeacherTests = async () => {
   console.log(`Assigned Subjects: [${profileData.data?.teacher?.assignedSubjects?.join(', ')}]`);
   console.log();
 
-  // 3. Teacher Timetable (Self)
   console.log('3. Testing GET /api/v1/teachers/me/timetable...');
   const ttRes = await fetch(`${BASE_URL}/teachers/me/timetable`, {
     headers: { Authorization: `Bearer ${teacherToken}` },
@@ -62,7 +56,6 @@ const runTeacherTests = async () => {
   console.log(`Period 1: ${monday?.periods?.[0]?.subject} for Class ${monday?.periods?.[0]?.class}-${monday?.periods?.[0]?.section} in ${monday?.periods?.[0]?.room}`);
   console.log();
 
-  // 4. List Teachers (Management view)
   console.log('4. Testing GET /api/v1/teachers (Directory listing)...');
   const listRes = await fetch(`${BASE_URL}/teachers`, {
     headers: { Authorization: `Bearer ${principalToken}` },
@@ -73,7 +66,6 @@ const runTeacherTests = async () => {
   console.log(`Names: [${listData.data?.teachers?.map((t) => t.fullName).join(', ')}]`);
   console.log();
 
-  // 5. Create Teacher (Management only)
   console.log('5. Testing POST /api/v1/teachers (Register New Faculty)...');
   const newTeacherPayload = {
     employeeId: 'SV-TEA-009',
@@ -102,7 +94,6 @@ const runTeacherTests = async () => {
   const createdTeacherId = createData.data?.teacher?._id;
   console.log();
 
-  // 6. Update Teacher Profile
   console.log(`6. Testing PATCH /api/v1/teachers/:id (Update phone & qualification)...`);
   const updateRes = await fetch(`${BASE_URL}/teachers/${createdTeacherId}`, {
     method: 'PATCH',
@@ -120,7 +111,6 @@ const runTeacherTests = async () => {
   console.log(`Updated Phone: ${updateData.data?.teacher?.phone} | Qualification: ${updateData.data?.teacher?.qualification}`);
   console.log();
 
-  // 7. Delete Teacher (Management only)
   console.log(`7. Testing DELETE /api/v1/teachers/:id...`);
   const delRes = await fetch(`${BASE_URL}/teachers/${createdTeacherId}`, {
     method: 'DELETE',
@@ -131,7 +121,6 @@ const runTeacherTests = async () => {
   console.log(`Deleted: ${delData.message} (${delData.data?.fullName})`);
   console.log();
 
-  // 8. Apply for Leave (Teacher)
   console.log('8. Testing POST /api/v1/teachers/leaves (Apply Leave)...');
   const leavePayload = {
     leaveType: 'CASUAL',
@@ -153,7 +142,6 @@ const runTeacherTests = async () => {
   const createdLeaveId = leaveApplyData.data?.leave?._id;
   console.log();
 
-  // 9. List Leaves (Role Scoping)
   console.log('9. Testing GET /api/v1/teachers/leaves...');
   const teacherLeavesRes = await fetch(`${BASE_URL}/teachers/leaves`, {
     headers: { Authorization: `Bearer ${teacherToken}` },
@@ -168,7 +156,6 @@ const runTeacherTests = async () => {
   console.log(`Principal visible leaves: ${principalLeavesData.data?.leaves?.length} (School-wide management view)`);
   console.log();
 
-  // 10. Review Leave (Principal approves leave)
   console.log(`10. Testing PATCH /api/v1/teachers/leaves/:id/status (Principal Approval)...`);
   const reviewRes = await fetch(`${BASE_URL}/teachers/leaves/${createdLeaveId}/status`, {
     method: 'PATCH',
@@ -186,7 +173,6 @@ const runTeacherTests = async () => {
   console.log(`Leave Status now: ${reviewData.data?.leave?.status} | Remarks: "${reviewData.data?.leave?.reviewRemarks}"`);
   console.log();
 
-  // 11. Teacher Notifications
   console.log('11. Testing GET /api/v1/teachers/notifications...');
   const notifRes = await fetch(`${BASE_URL}/teachers/notifications`, {
     headers: { Authorization: `Bearer ${teacherToken}` },
@@ -206,9 +192,7 @@ const runTeacherTests = async () => {
   }
   console.log();
 
-  // 12. Permission Violations (Enforcing RBAC)
   console.log('12. Testing RBAC & Unauthorized Access Protections...');
-  // 12a. Teacher attempts to review leave (management only)
   const teacherReviewRes = await fetch(`${BASE_URL}/teachers/leaves/${createdLeaveId}/status`, {
     method: 'PATCH',
     headers: {
@@ -219,14 +203,12 @@ const runTeacherTests = async () => {
   });
   console.log(`Teacher reviewing leave -> Status: ${teacherReviewRes.status} (Expected 403 Forbidden)`);
 
-  // 12b. Teacher attempts to delete teacher
   const teacherDelRes = await fetch(`${BASE_URL}/teachers/${profileData.data?.teacher?._id}`, {
     method: 'DELETE',
     headers: { Authorization: `Bearer ${teacherToken}` },
   });
   console.log(`Teacher deleting teacher -> Status: ${teacherDelRes.status} (Expected 403 Forbidden)`);
 
-  // 12c. Student attempts to access teacher dashboard
   const studentDashRes = await fetch(`${BASE_URL}/teachers/dashboard`, {
     headers: { Authorization: `Bearer ${studentToken}` },
   });

@@ -1,6 +1,3 @@
-/**
- * Jest Configuration for MERN Backend Integration & API Testing
- */
 module.exports = {
   testEnvironment: 'node',
   testMatch: ['<rootDir>/tests/**/*.test.js'],

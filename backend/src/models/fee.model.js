@@ -1,7 +1,3 @@
-/**
- * Fee Mongoose Model
- * Manages student fee accounts, concessions, payments, and receipts
- */
 const mongoose = require('mongoose');
 
 const FEE_STATUSES = ['Paid', 'Partial', 'Pending', 'Overdue'];

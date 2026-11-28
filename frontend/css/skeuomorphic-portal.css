@@ -1,12 +1,6 @@
 @import url('liquid-toggles.css');
-/* ==========================================================================
-   Sri Vidya E.M High School - Management Portal
-   PREMIUM SKEUOMORPHISM UI DESIGN SYSTEM
-   Executive Navy, Royal Blue, Platinum Silver & Tactile Elevation
-   ========================================================================== */
 
 :root {
-  /* Skeuomorphic Color Foundation */
   --skeuo-navy-deep: #0A192F;
   --skeuo-navy-mid: #0F172A;
   --skeuo-navy-surface: #1E293B;
@@ -20,7 +14,6 @@
   --skeuo-surface-pure: #FFFFFF;
   --skeuo-canvas-base: #EEF2F6;
 
-  /* Tactile Shadows & Insets */
   --skeuo-shadow-raised: 0 2px 4px rgba(15, 23, 42, 0.04), 0 8px 18px -2px rgba(15, 23, 42, 0.07), inset 0 1px 0 #FFFFFF;
   --skeuo-shadow-card: 0 1px 3px rgba(15, 23, 42, 0.03), 0 6px 16px -2px rgba(15, 23, 42, 0.06), inset 0 1px 0 #FFFFFF;
   --skeuo-shadow-lifted: 0 4px 8px rgba(15, 23, 42, 0.06), 0 16px 30px -4px rgba(29, 78, 216, 0.14), inset 0 1px 0 #FFFFFF;
@@ -28,7 +21,6 @@
   --skeuo-shadow-btn-primary: inset 0 1px 0 rgba(255, 255, 255, 0.35), 0 3px 6px rgba(29, 78, 216, 0.28), 0 1px 2px rgba(15, 23, 42, 0.12);
   --skeuo-shadow-btn-pressed: inset 0 3px 6px rgba(0, 0, 0, 0.3), 0 1px 2px rgba(0, 0, 0, 0.08);
 
-  /* Surface Gradients */
   --skeuo-grad-card: linear-gradient(180deg, #FFFFFF 0%, #FAFBFD 55%, #F2F6FA 100%);
   --skeuo-grad-card-header: linear-gradient(180deg, #FFFFFF 0%, #F8FAFC 100%);
   --skeuo-grad-primary-btn: linear-gradient(180deg, #2563EB 0%, #1D4ED8 65%, #1E40AF 100%);
@@ -37,9 +29,6 @@
   --skeuo-grad-well: linear-gradient(180deg, #F8FAFC 0%, #FFFFFF 100%);
 }
 
-/* ==========================================================================
-   1. Canvas & Global Layout Elevation
-   ========================================================================== */
 body {
   background-color: var(--skeuo-canvas-base) !important;
 }
@@ -56,9 +45,6 @@ body {
   background-color: var(--skeuo-canvas-base) !important;
 }
 
-/* ==========================================================================
-   2. Tactile Skeuomorphic Sidebar & Two-Level Navigation
-   ========================================================================== */
 :root {
   --sidebar-width: 295px;
   --sidebar-collapsed-width: 74px;
@@ -85,7 +71,6 @@ body {
   justify-content: space-between !important;
 }
 
-/* Sidebar Collapse Toggle Button */
 .sidebar-collapse-btn {
   background: linear-gradient(180deg, #FFFFFF 0%, #F1F5F9 100%);
   border: 1px solid #CBD5E1;
@@ -130,7 +115,6 @@ body {
   border-color: #3B82F6;
 }
 
-/* Collapsed State Overrides */
 body.sidebar-collapsed .portal-sidebar,
 .portal-sidebar.collapsed {
   width: 74px !important;
@@ -226,7 +210,6 @@ body.sidebar-collapsed .sidebar-user-card .btn-logout {
   display: none !important;
 }
 
-/* Collapsed Mode Item Layout */
 body.sidebar-collapsed .portal-sidebar .sidebar-menu,
 .portal-sidebar.collapsed .sidebar-menu {
   padding: 0.65rem 0.35rem !important;
@@ -286,10 +269,6 @@ body.sidebar-collapsed .nav-icon,
   justify-content: center !important;
 }
 
-/* -------------------------------------------------------------------------
-   CRITICAL: Suppress all inline submenus when sidebar is collapsed.
-   Prevents ugly vertical lines, huge empty gaps, and unwanted scrollbars.
-   ------------------------------------------------------------------------- */
 body.sidebar-collapsed .portal-sidebar .nav-sub:not(:hover),
 body.sidebar-collapsed .portal-sidebar .nav-item:not(:hover) > .nav-sub,
 body.sidebar-collapsed .portal-sidebar .nav-item:not(:hover) .nav-sub,
@@ -307,7 +286,6 @@ body.sidebar-collapsed .portal-sidebar .nav-item:not(:hover) .nav-sub,
   overflow: hidden !important;
 }
 
-/* Collapsed Floating Tooltip for items without submenu */
 body.sidebar-collapsed .nav-item[data-tooltip]:not(:has(.nav-sub)):hover::after,
 .portal-sidebar.collapsed .nav-item[data-tooltip]:not(:has(.nav-sub)):hover::after {
   content: attr(data-tooltip);
@@ -331,7 +309,6 @@ body.sidebar-collapsed .nav-item[data-tooltip]:not(:has(.nav-sub)):hover::after,
   to { opacity: 1; transform: translateX(0); }
 }
 
-/* Collapsed Floating Flyout Submenu for items WITH submenu */
 body.sidebar-collapsed .nav-item:hover > .nav-sub,
 .portal-sidebar.collapsed .nav-item:hover > .nav-sub {
   display: flex !important;
@@ -355,7 +332,6 @@ body.sidebar-collapsed .nav-item:hover > .nav-sub,
   animation: skeuoFlyoutIn 0.16s cubic-bezier(0.16, 1, 0.3, 1) !important;
 }
 
-/* Invisible bridge so moving cursor between icon and flyout never drops */
 body.sidebar-collapsed .nav-item:hover > .nav-sub::before,
 .portal-sidebar.collapsed .nav-item:hover > .nav-sub::before {
   content: '' !important;
@@ -379,7 +355,6 @@ body.sidebar-collapsed .nav-item:hover > .nav-sub::before,
   }
 }
 
-/* Flyout Submenu Links */
 body.sidebar-collapsed .nav-sub .nav-sub-link,
 .portal-sidebar.collapsed .nav-sub .nav-sub-link {
   display: flex !important;
@@ -466,7 +441,6 @@ body.sidebar-collapsed .nav-sub .nav-sub-link.active,
   margin-top: 1px !important;
 }
 
-/* Sidebar Role Indicator Badge */
 .sidebar-role-indicator {
   margin: 1.15rem 1.25rem 0.65rem !important;
   padding: 0.95rem 1rem !important;
@@ -510,7 +484,6 @@ body.sidebar-collapsed .nav-sub .nav-sub-link.active,
   text-shadow: 0 1px 0 rgba(255, 255, 255, 0.8);
 }
 
-/* Sidebar Section Headers */
 .nav-section-title {
   font-size: 0.68rem !important;
   font-weight: 800 !important;
@@ -522,7 +495,6 @@ body.sidebar-collapsed .nav-sub .nav-sub-link.active,
   margin: 0.5rem 0.5rem 0.25rem !important;
 }
 
-/* Raised Navigation Items (Level 1) */
 .nav-item {
   margin-bottom: 0.35rem !important;
   padding: 0 0.25rem !important;
@@ -555,7 +527,6 @@ body.sidebar-collapsed .nav-sub .nav-sub-link.active,
   box-shadow: inset 0 2px 4px rgba(15, 23, 42, 0.1) !important;
 }
 
-/* Active Navigation State - Tactile Royal Blue Plate (Level 1) */
 .nav-item.active > .nav-link {
   background: linear-gradient(180deg, #2563EB 0%, #1D4ED8 65%, #1E40AF 100%) !important;
   border: 1px solid #1E3A8A !important;
@@ -574,7 +545,6 @@ body.sidebar-collapsed .nav-sub .nav-sub-link.active,
   color: #FFFFFF !important;
 }
 
-/* Open Level 1 State (when expanded without active) */
 .nav-item.open:not(.active) > .nav-link {
   background: linear-gradient(180deg, #FFFFFF 0%, #F8FAFC 100%) !important;
   border: 1px solid #CBD5E1 !important;
@@ -598,7 +568,6 @@ body.sidebar-collapsed .nav-sub .nav-sub-link.active,
   opacity: 1 !important;
 }
 
-/* Smooth Accordion Submenu (Level 2) */
 .nav-sub {
   display: none !important;
   max-height: 0;
@@ -614,7 +583,6 @@ body.sidebar-collapsed .nav-sub .nav-sub-link.active,
   pointer-events: none;
 }
 
-/* Smooth Accordion Submenu (Level 2) - Only active in full expanded sidebar */
 body:not(.sidebar-collapsed) .portal-sidebar:not(.collapsed) .nav-item.open > .nav-sub,
 body:not(.sidebar-collapsed) .portal-sidebar:not(.collapsed) .nav-item.open .nav-sub {
   display: block !important;
@@ -626,7 +594,6 @@ body:not(.sidebar-collapsed) .portal-sidebar:not(.collapsed) .nav-item.open .nav
   pointer-events: auto !important;
 }
 
-/* Level 2 Submenu Links */
 .nav-sub-link {
   display: flex !important;
   align-items: center !important;
@@ -651,7 +618,6 @@ body:not(.sidebar-collapsed) .portal-sidebar:not(.collapsed) .nav-item.open .nav
   transform: translateX(3px) !important;
 }
 
-/* Active Level 2 Submenu State - Tactile Highlight Pill */
 .nav-sub-link.active {
   background: linear-gradient(180deg, #EFF6FF 0%, #DBEAFE 100%) !important;
   border: 1px solid #93C5FD !important;
@@ -675,7 +641,6 @@ body:not(.sidebar-collapsed) .portal-sidebar:not(.collapsed) .nav-item.open .nav
   box-shadow: 0 0 6px rgba(29, 78, 216, 0.4);
 }
 
-/* Sidebar Footer User Card */
 .sidebar-user-card {
   background: linear-gradient(180deg, #F8FAFC 0%, #F1F5F9 100%) !important;
   border-top: 1px solid #CBD5E1 !important;
@@ -718,9 +683,6 @@ body:not(.sidebar-collapsed) .portal-sidebar:not(.collapsed) .nav-item.open .nav
   box-shadow: inset 0 2px 4px rgba(220, 38, 38, 0.15) !important;
 }
 
-/* ==========================================================================
-   3. Skeuomorphic Top Header & Control Bar
-   ========================================================================== */
 .portal-header {
   background: linear-gradient(180deg, rgba(255, 255, 255, 0.95) 0%, rgba(248, 250, 252, 0.92) 100%) !important;
   border-bottom: 1px solid #CBD5E1 !important;
@@ -729,7 +691,6 @@ body:not(.sidebar-collapsed) .portal-sidebar:not(.collapsed) .nav-item.open .nav
   -webkit-backdrop-filter: blur(16px) saturate(180%) !important;
 }
 
-/* Recessed Inset Search Well */
 .portal-header {
   display: flex !important;
   align-items: center !important;
@@ -828,7 +789,6 @@ body:not(.sidebar-collapsed) .portal-sidebar:not(.collapsed) .nav-item.open .nav
   box-shadow: 0 1px 2px rgba(15, 23, 42, 0.08), inset 0 1px 0 #FFFFFF !important;
 }
 
-/* Raised Header Role Indicator (Premium Executive Crest) */
 .role-indicator-badge {
   display: inline-flex !important;
   align-items: center !important;
@@ -890,7 +850,6 @@ body:not(.sidebar-collapsed) .portal-sidebar:not(.collapsed) .nav-item.open .nav
   line-height: 1 !important;
 }
 
-/* Tactile Header Action Buttons */
 .theme-toggle-btn,
 .header-action-btn {
   background: linear-gradient(180deg, #FFFFFF 0%, #F8FAFC 100%) !important;
@@ -916,7 +875,6 @@ body:not(.sidebar-collapsed) .portal-sidebar:not(.collapsed) .nav-item.open .nav
   box-shadow: inset 0 2px 4px rgba(15, 23, 42, 0.15) !important;
 }
 
-/* Tactile Public Site & Logout Buttons */
 .btn-back-public {
   flex-shrink: 0 !important;
   background: linear-gradient(180deg, #FFFFFF 0%, #F8FAFC 100%) !important;
@@ -992,9 +950,6 @@ body:not(.sidebar-collapsed) .portal-sidebar:not(.collapsed) .nav-item.open .nav
   box-shadow: inset 0 2px 4px rgba(185, 28, 28, 0.2) !important;
 }
 
-/* ==========================================================================
-   4. High-Impact Skeuomorphic Welcome Banner
-   ========================================================================== */
 .welcome-banner {
   background: linear-gradient(135deg, #0A192F 0%, #0F2A66 45%, #1D4ED8 100%) !important;
   border: 1px solid rgba(147, 197, 253, 0.35) !important;
@@ -1023,7 +978,6 @@ body:not(.sidebar-collapsed) .portal-sidebar:not(.collapsed) .nav-item.open .nav
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
 }
 
-/* Frosted & Tactile Metadata Pills */
 .welcome-meta .meta-pill {
   background: rgba(10, 25, 47, 0.5) !important;
   border: 1px solid rgba(255, 255, 255, 0.22) !important;
@@ -1045,9 +999,6 @@ body:not(.sidebar-collapsed) .portal-sidebar:not(.collapsed) .nav-item.open .nav
   color: #1D4ED8 !important;
 }
 
-/* ==========================================================================
-   5. Principal Governance & Restriction Bar
-   ========================================================================== */
 :root:not([data-theme="dark"]) #erbRow,
 :root:not([data-theme="dark"]) .executive-restrictions-banner,
 :root:not([data-theme="dark"]) .restrictions-banner {
@@ -1065,9 +1016,6 @@ body:not(.sidebar-collapsed) .portal-sidebar:not(.collapsed) .nav-item.open .nav
   font-weight: 700 !important;
 }
 
-/* ==========================================================================
-   6. Tactile Skeuomorphic Cards & Metric Widgets
-   ========================================================================== */
 .metric-card,
 .stat-card,
 .dash-tile {
@@ -1106,7 +1054,6 @@ body:not(.sidebar-collapsed) .portal-sidebar:not(.collapsed) .nav-item.open .nav
   text-transform: uppercase !important;
 }
 
-/* Generic Cards Across All Modules */
 .card,
 .portal-card,
 .chart-card,
@@ -1141,9 +1088,6 @@ body:not(.sidebar-collapsed) .portal-sidebar:not(.collapsed) .nav-item.open .nav
   text-shadow: 0 1px 0 #FFFFFF;
 }
 
-/* ==========================================================================
-   7. Raised Physical Buttons with Tactile Feedback
-   ========================================================================== */
 .btn {
   font-weight: 700 !important;
   border-radius: 8px !important;
@@ -1155,7 +1099,6 @@ body:not(.sidebar-collapsed) .portal-sidebar:not(.collapsed) .nav-item.open .nav
   gap: 0.45rem !important;
 }
 
-/* Primary Button - Royal Blue Tactile Plate */
 .btn-primary,
 .btn-submit {
   background: var(--skeuo-grad-primary-btn) !important;
@@ -1179,7 +1122,6 @@ body:not(.sidebar-collapsed) .portal-sidebar:not(.collapsed) .nav-item.open .nav
   box-shadow: var(--skeuo-shadow-btn-pressed) !important;
 }
 
-/* Secondary Button - Tactile Silver / White Plate */
 .btn-secondary,
 .btn-default {
   background: var(--skeuo-grad-secondary-btn) !important;
@@ -1203,7 +1145,6 @@ body:not(.sidebar-collapsed) .portal-sidebar:not(.collapsed) .nav-item.open .nav
   box-shadow: inset 0 2px 4px rgba(15, 23, 42, 0.12) !important;
 }
 
-/* Danger Button */
 .btn-danger {
   background: linear-gradient(180deg, #EF4444 0%, #DC2626 65%, #B91C1C 100%) !important;
   border: 1px solid #991B1B !important;
@@ -1223,7 +1164,6 @@ body:not(.sidebar-collapsed) .portal-sidebar:not(.collapsed) .nav-item.open .nav
   box-shadow: inset 0 3px 6px rgba(0, 0, 0, 0.35) !important;
 }
 
-/* Success Button */
 .btn-success {
   background: linear-gradient(180deg, #10B981 0%, #059669 65%, #047857 100%) !important;
   border: 1px solid #065F46 !important;
@@ -1243,9 +1183,6 @@ body:not(.sidebar-collapsed) .portal-sidebar:not(.collapsed) .nav-item.open .nav
   box-shadow: inset 0 3px 6px rgba(0, 0, 0, 0.35) !important;
 }
 
-/* ==========================================================================
-   8. Inset Form Wells & Select Controls
-   ========================================================================== */
 .form-control,
 input[type="text"],
 input[type="number"],
@@ -1278,7 +1215,6 @@ textarea:focus {
   outline: none !important;
 }
 
-/* Tactile Select Dropdowns */
 select,
 .form-select {
   background: linear-gradient(180deg, #FFFFFF 0%, #F8FAFC 100%) !important;
@@ -1304,9 +1240,6 @@ select:focus,
   outline: none !important;
 }
 
-/* ==========================================================================
-   9. Segmented Tabs & Sub-Navigation Rail
-   ========================================================================== */
 .tab-strip,
 .tab-container,
 .nav-tabs,
@@ -1337,7 +1270,6 @@ select:focus,
   background: rgba(255, 255, 255, 0.5) !important;
 }
 
-/* Raised Active Tab Plate */
 .tab-btn.active,
 .tab-btn[aria-selected="true"] {
   background: linear-gradient(180deg, #FFFFFF 0%, #F8FAFC 100%) !important;
@@ -1347,9 +1279,6 @@ select:focus,
   font-weight: 800 !important;
 }
 
-/* ==========================================================================
-   10. Skeuomorphic Data Tables
-   ========================================================================== */
 .table,
 .portal-table,
 .table-responsive table {
@@ -1393,9 +1322,6 @@ tbody td {
   color: #1E293B !important;
 }
 
-/* ==========================================================================
-   11. Elevated Modals & Dialogs
-   ========================================================================== */
 .modal-content,
 .modal-dialog .modal-content,
 .portal-modal,
@@ -1437,7 +1363,6 @@ tbody td {
   margin: 0 !important;
 }
 
-/* Modal Title Icon & Typography */
 .modal-title-wrap {
   display: flex !important;
   align-items: center !important;
@@ -1479,7 +1404,6 @@ tbody td {
   line-height: 1.3 !important;
 }
 
-/* Modal Body */
 .modal-body,
 .portal-modal-body {
   background: #FFFFFF !important;
@@ -1489,7 +1413,6 @@ tbody td {
   box-sizing: border-box !important;
 }
 
-/* Modal Footer */
 .modal-footer,
 .portal-modal-footer {
   background: linear-gradient(180deg, #F8FAFC 0%, #F1F5F9 100%) !important;
@@ -1505,7 +1428,6 @@ tbody td {
   width: 100% !important;
 }
 
-/* Modal Close Button */
 .portal-modal-close,
 .modal-close-x {
   background: #F1F5F9 !important;
@@ -1534,9 +1456,6 @@ tbody td {
   box-shadow: 0 2px 6px rgba(239, 68, 68, 0.3) !important;
 }
 
-/* ==========================================================================
-   12. Tactile Status Badges & Chips
-   ========================================================================== */
 .badge,
 .status-badge,
 .pill,
@@ -1550,9 +1469,6 @@ tbody td {
   gap: 0.35rem !important;
 }
 
-/* ==========================================================================
-   13. Dark Mode Skeuomorphic Palette (Executive Obsidian & Cobalt)
-   ========================================================================== */
 [data-theme="dark"] body,
 [data-theme="dark"] .portal-layout,
 [data-theme="dark"] .portal-main,
@@ -1578,7 +1494,7 @@ tbody td {
 }
 
 [data-theme="dark"] .brand-sub {
-  color: #38BDF8 !important; /* Radiant Sky Blue for pristine legibility on dark obsidian */
+  color: #38BDF8 !important; 
   text-shadow: 0 0 10px rgba(56, 189, 248, 0.45) !important;
   font-weight: 800 !important;
 }
@@ -1759,14 +1675,6 @@ tbody td {
   box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(255, 255, 255, 0.1) !important;
 }
 
-
-/* ==========================================================================
-   PRODUCTION READINESS ENHANCEMENTS: SKELETONS, EMPTY STATES, FORMS & MOBILE
-   ========================================================================== */
-
-/* --------------------------------------------------------------------------
-   Req 4: Skeuomorphic Loading States & Skeletons
-   -------------------------------------------------------------------------- */
 @keyframes skeuoShimmer {
   0% {
     background-position: -200% 0;
@@ -1844,9 +1752,6 @@ tbody td {
   to { transform: rotate(360deg); }
 }
 
-/* --------------------------------------------------------------------------
-   Req 5: Skeuomorphic Empty States
-   -------------------------------------------------------------------------- */
 .skeuo-empty-state {
   display: flex;
   flex-direction: column;
@@ -1935,9 +1840,6 @@ tbody td {
   transform: translateY(-1px);
 }
 
-/* --------------------------------------------------------------------------
-   Req 7: Form Validation Helpers
-   -------------------------------------------------------------------------- */
 .skeuo-field-error,
 .invalid-feedback {
   color: #DC2626 !important;
@@ -2008,9 +1910,6 @@ textarea.is-invalid:focus {
   outline: none !important;
 }
 
-/* --------------------------------------------------------------------------
-   Req 12: Mobile Responsiveness
-   -------------------------------------------------------------------------- */
 .mobile-sidebar-toggle {
   display: none;
   background: linear-gradient(180deg, #FFFFFF 0%, #E2E8F0 100%);
@@ -2116,9 +2015,6 @@ textarea.is-invalid:focus {
   }
 }
 
-/* --------------------------------------------------------------------------
-   Req 1: Inactivity Session Auto-Logout Modal
-   -------------------------------------------------------------------------- */
 .skeuo-session-modal-overlay {
   display: none;
   position: fixed;
@@ -2224,9 +2120,6 @@ textarea.is-invalid:focus {
   transform: translateY(1px);
 }
 
-/* --------------------------------------------------------------------------
-   Req 19: Guided Onboarding Tour Modal
-   -------------------------------------------------------------------------- */
 .skeuo-onboarding-overlay {
   display: none;
   position: fixed;
@@ -2340,9 +2233,6 @@ textarea.is-invalid:focus {
   padding-top: 18px;
 }
 
-/* --------------------------------------------------------------------------
-   Req 3: Email Verification Status Badges
-   -------------------------------------------------------------------------- */
 .badge-email-verified {
   display: inline-flex;
   align-items: center;
@@ -2376,9 +2266,6 @@ textarea.is-invalid:focus {
   transform: translateY(-1px);
 }
 
-/* ==========================================================================
-   Skeuomorphic Notification Flyout & Interactive Action Styling
-   ========================================================================== */
 .notif-flyout {
   z-index: 100000 !important;
   border-radius: 14px !important;
@@ -2453,7 +2340,6 @@ textarea.is-invalid:focus {
   box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.25) !important;
 }
 
-/* Prevent tooltip overlap when notification flyout is open */
 body:has(.notif-flyout.active) .sv-tooltip,
 .header-actions:has(.notif-flyout.active) .sv-tooltip {
   display: none !important;
@@ -2461,14 +2347,6 @@ body:has(.notif-flyout.active) .sv-tooltip,
   pointer-events: none !important;
 }
 
-
-/* ==========================================================================
-   AUTHORITATIVE DARK MODE SYSTEM OVERRIDES
-   Executive Obsidian & Cobalt Skeuomorphic Palette
-   Eliminates all leaking light mode colors (pure white, light pastels) in dark mode
-   ========================================================================== */
-
-/* 1. Header Role Badge & Interactive Action Buttons (Executive Crest) */
 [data-theme="dark"] .role-indicator-badge {
   background: linear-gradient(135deg, #1e293b 0%, #1a2234 50%, #261c0b 100%) !important;
   border: 1px solid rgba(245, 158, 11, 0.4) !important;
@@ -2574,7 +2452,6 @@ body:has(.notif-flyout.active) .sv-tooltip,
   box-shadow: none !important;
 }
 
-/* 2. Sub-tab Selector & Segmented Rail */
 [data-theme="dark"] .tab-strip,
 [data-theme="dark"] .tab-container,
 [data-theme="dark"] .nav-tabs,
@@ -2607,7 +2484,6 @@ body:has(.notif-flyout.active) .sv-tooltip,
   font-weight: 700 !important;
 }
 
-/* 3. Enterprise Filter & Action Toolbar (.enterprise-toolbar) */
 [data-theme="dark"] .enterprise-toolbar {
   background: linear-gradient(180deg, #162032 0%, #0F172A 100%) !important;
   border: 1px solid #243048 !important;
@@ -2733,7 +2609,6 @@ body:has(.notif-flyout.active) .sv-tooltip,
   color: #60A5FA !important;
 }
 
-/* 4. Student Profile Dossier Cards & Adaptive Internal Pills */
 [data-theme="dark"] .student-profile-card {
   background: linear-gradient(180deg, #162032 0%, #0F172A 100%) !important;
   border: 1px solid #243048 !important;
@@ -2765,7 +2640,6 @@ body:has(.notif-flyout.active) .sv-tooltip,
   color: #E2E8F0 !important;
 }
 
-/* Eliminate stark light pastel backgrounds in dark mode */
 [data-theme="dark"] .profile-card-field .class-pill,
 [data-theme="dark"] .class-pill,
 [data-theme="dark"] .id-class-pill,
@@ -2815,7 +2689,6 @@ body:has(.notif-flyout.active) .sv-tooltip,
   border-color: #3B82F6 !important;
 }
 
-/* 5. Universal Badges, Status Dots, and Chips */
 [data-theme="dark"] .portal-badge.badge-success,
 [data-theme="dark"] .badge-success,
 [data-theme="dark"] .status-active,
@@ -2859,7 +2732,6 @@ body:has(.notif-flyout.active) .sv-tooltip,
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.05) !important;
 }
 
-/* 6. Roster Table Toolbar & Data Tables */
 [data-theme="dark"] .roster-toolbar-header {
   background: linear-gradient(180deg, #162032 0%, #0F172A 100%) !important;
   border-bottom: 1px solid #243048 !important;
@@ -2930,7 +2802,6 @@ body:has(.notif-flyout.active) .sv-tooltip,
   color: #E2E8F0 !important;
 }
 
-/* 7. Notification Flyout & Action Bar */
 [data-theme="dark"] .notif-flyout {
   background: #0F172A !important;
   border: 1px solid #243048 !important;
@@ -2983,7 +2854,6 @@ body:has(.notif-flyout.active) .sv-tooltip,
   color: #64748B !important;
 }
 
-/* 8. Modals, Dialogs, Cards & Structural Surfaces */
 [data-theme="dark"] .modal-content,
 [data-theme="dark"] .modal-dialog .modal-content,
 [data-theme="dark"] .portal-modal,
@@ -3032,16 +2902,12 @@ body:has(.notif-flyout.active) .sv-tooltip,
   color: #94A3B8 !important;
 }
 
-/* 9. Universal Form Inputs & Controls across All Portals */
 [data-theme="dark"] select,
 [data-theme="dark"] input:not([type="checkbox"]):not([type="radio"]),
 [data-theme="dark"] textarea {
   color-scheme: dark;
 }
 
-/* ==========================================================================
-   10. Dashboard Executive Governance Banner & Dash Components (Dark Mode)
-   ========================================================================== */
 :root[data-theme="dark"] #erbRow,
 [data-theme="dark"] #erbRow,
 :root[data-theme="dark"] .executive-restrictions-banner,
@@ -3144,7 +3010,6 @@ body:has(.notif-flyout.active) .sv-tooltip,
   border: 1px solid rgba(129, 140, 248, 0.4) !important;
 }
 
-/* Dashboard Fast Navigation Ribbon & Chips */
 [data-theme="dark"] .dash-nav-chip {
   background: #111C2E !important;
   border: 1px solid #243048 !important;
@@ -3163,7 +3028,6 @@ body:has(.notif-flyout.active) .sv-tooltip,
   color: #60A5FA !important;
 }
 
-/* Dashboard Sections */
 [data-theme="dark"] .dash-section {
   background: #111C2E !important;
   border: 1px solid #243048 !important;
@@ -3216,15 +3080,6 @@ body:has(.notif-flyout.active) .sv-tooltip,
   color: #818CF8 !important;
 }
 
-
-
-/* ==========================================================================
-   11. Dark Theme Official Student ID Card Component
-   ========================================================================== */
-/* ==========================================================================
-   Comprehensive Dark Theme: Official Student Identity Card
-   Eliminates all leaking light mode/white backgrounds & low-contrast text
-   ========================================================================== */
 [data-theme="dark"] #studentIdCardModal .modal-body {
   background: #0B1120 !important;
 }
@@ -3397,12 +3252,6 @@ body:has(.notif-flyout.active) .sv-tooltip,
   color: #94A3B8 !important;
 }
 
-
-/* ==========================================================================
-   MY PROFILE & PERSONAL CREDENTIALS GOVERNANCE
-   Light & Dark Mode Skeuomorphic Styling
-   ========================================================================== */
-
 #subview-settings-my-profile .card {
   transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
@@ -3423,7 +3272,6 @@ body:has(.notif-flyout.active) .sv-tooltip,
   font-weight: 600;
 }
 
-/* Dark Mode Overrides for My Profile */
 [data-theme="dark"] #subview-settings-my-profile .card,
 [data-theme="dark"] #subview-settings-my-profile .bg-white {
   background: linear-gradient(145deg, #111c2e 0%, #0d1527 100%) !important;
@@ -3523,10 +3371,6 @@ body:has(.notif-flyout.active) .sv-tooltip,
   border: 1px solid rgba(245, 158, 11, 0.35) !important;
 }
 
-
-/* ==========================================================================
-   DOCUMENT PREVIEW MODAL & ACTION BUTTONS CLICKABILITY GUARANTEE
-   ========================================================================== */
 #docPreviewWatermark,
 .doc-watermark-overlay {
   pointer-events: none !important;
@@ -3545,10 +3389,6 @@ body:has(.notif-flyout.active) .sv-tooltip,
   cursor: pointer !important;
 }
 
-
-/* ==========================================================================
-   Dark Theme & Skeuomorphic Fixes for Select Dropdowns & Verification Modal
-   ========================================================================== */
 [data-theme="dark"] select,
 [data-theme="dark"] .filter-select,
 [data-theme="dark"] .form-select,

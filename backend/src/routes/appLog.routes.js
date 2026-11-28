@@ -1,6 +1,3 @@
-/**
- * Sri Vidya Educational Trust - Application Logs Routes (11.3)
- */
 
 const express = require('express');
 const router = express.Router();

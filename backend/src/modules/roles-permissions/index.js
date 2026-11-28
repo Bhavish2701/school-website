@@ -1,7 +1,3 @@
-/**
- * Role Templates & RBAC Permissions - Module Aggregator
- * Exports all 6 architectural layers
- */
 
 const routes = require('./roles-permissions.routes');
 const controller = require('./roles-permissions.controller');

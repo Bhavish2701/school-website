@@ -1,7 +1,3 @@
-/**
- * School Configuration & Defaults - Repository Layer
- * Manages database access and persistence
- */
 
 const mongoose = require('mongoose');
 const { SchoolConfig } = require('../../models/schoolConfig.model');

@@ -1,7 +1,3 @@
-/**
- * Global Platform Settings - Module Aggregator
- * Exports all 6 architectural layers
- */
 
 const routes = require('./global-settings.routes');
 const controller = require('./global-settings.controller');

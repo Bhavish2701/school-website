@@ -1,6 +1,3 @@
-/**
- * System-Wide Architectural Rules ERP Module
- */
 const routes = require('./routes');
 
 module.exports = {

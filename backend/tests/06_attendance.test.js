@@ -1,15 +1,3 @@
-/**
- * Test Suite 06: Attendance Module & Teacher-Class Authorization Tests
- * Covers:
- * - Teacher retrieving assigned class roster (200)
- * - Teacher successfully marking attendance for ASSIGNED class (201)
- * - Teacher-Class Authorization: Teacher attempting to mark attendance for UNASSIGNED class (403 Forbidden)
- * - Attendance validation errors (422)
- * - Student viewing own attendance records (200)
- * - Parent viewing linked child's attendance (200)
- * - Parent viewing unlinked child's attendance (403 Forbidden)
- * - 401 Unauthenticated requests
- */
 const request = require('supertest');
 const app = require('../src/app');
 const { seedBaseUsers } = require('./helpers/testFixtures');
@@ -21,8 +9,8 @@ describe('06 - Attendance Module & Teacher-Class Authorization Test Suite', () =
 
   beforeAll(async () => {
     fixtures = await seedBaseUsers();
-    student1Id = fixtures.students.studentDoc1._id.toString(); // Class 10-A
-    student2Id = fixtures.students.studentDoc2._id.toString(); // Class 8-C
+    student1Id = fixtures.students.studentDoc1._id.toString();
+    student2Id = fixtures.students.studentDoc2._id.toString();
   });
 
   describe('Teacher-Class Authorization on Marking Attendance', () => {
@@ -108,7 +96,7 @@ describe('06 - Attendance Module & Teacher-Class Authorization Test Suite', () =
           class: '10',
           section: 'A',
           date: '2026-10-05',
-          records: [], // Empty records
+          records: [],
         });
 
       expect(res.status).toBe(422);

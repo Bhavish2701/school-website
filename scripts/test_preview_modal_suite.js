@@ -7,7 +7,6 @@ const html = fs.readFileSync('frontend/administration-portal/index.html', 'utf8'
 const js = fs.readFileSync('frontend/js/portal.js', 'utf8');
 const css = fs.readFileSync('frontend/css/portal.css', 'utf8');
 
-// TEST 1: Modals in index.html
 console.log('[CHECK 1] Verifying all core and action modal backdrops in HTML...');
 const requiredModals = [
   'previewDocumentModal',
@@ -23,7 +22,6 @@ requiredModals.forEach(id => {
   console.log(`  ✓ Modal #${id} verified`);
 });
 
-// TEST 2: Certificate Elements in previewDocumentModal
 console.log('\n[CHECK 2] Verifying certificate and credential docket elements in HTML...');
 const certElements = [
   'prevModalDocTitle',
@@ -47,15 +45,12 @@ certElements.forEach(id => {
   console.log(`  ✓ Certificate element #${id} verified`);
 });
 
-// TEST 3: Action Modals Form Inputs & Targets
 console.log('\n[CHECK 3] Verifying action modal controls and input bindings...');
 const actionInputs = [
-  // Reject
   'rejectDocTargetId',
   'rejectDocSummary',
   'rejectReasonCategorySelect',
   'rejectDetailedRemarks',
-  // Replace
   'replaceDocTargetId',
   'replaceDocCurrentInfo',
   'replaceDocSourceSelect',
@@ -63,12 +58,10 @@ const actionInputs = [
   'replaceSelectedFilePreview',
   'replaceSelectedFileName',
   'replaceDocNotes',
-  // Mark N/A
   'markNaDocTargetId',
   'markNaDocSummary',
   'markNaReasonSelect',
   'markNaRemarks',
-  // History
   'historyDocSummary',
   'docVersionTimelineContainer'
 ];
@@ -78,7 +71,6 @@ actionInputs.forEach(id => {
   console.log(`  ✓ Action input #${id} verified`);
 });
 
-// TEST 4: Function presence in portal.js
 console.log('\n[CHECK 4] Verifying controller functions in portal.js...');
 const requiredFunctions = [
   'openDocumentPreviewModal',
@@ -103,14 +95,12 @@ requiredFunctions.forEach(fn => {
   console.log(`  ✓ Controller function portalApp.${fn} verified and exported`);
 });
 
-// TEST 5: Modal alias handling in openModal / closeModal
 console.log('\n[CHECK 5] Verifying openModal and closeModal alias resolution...');
 assert.ok(js.includes("modalId === 'uploadDocumentModal' || modalId === 'studentDocsModal'"), 'uploadDocumentModal and studentDocsModal must be aliased in closeModal');
 assert.ok(js.includes("modalId === 'studentDocViewerModal' || modalId === 'previewDocumentModal'"), 'studentDocViewerModal and previewDocumentModal must be aliased in closeModal');
 assert.ok(js.includes("if (modalId === 'uploadDocumentModal')"), 'uploadDocumentModal must be handled in openModal');
 console.log('  ✓ Modal ID aliases properly resolved for openModal and closeModal');
 
-// TEST 6: CSS styling support
 console.log('\n[CHECK 6] Verifying styling rules in portal.css...');
 const cssClasses = [
   '.doc-preview-wrapper',

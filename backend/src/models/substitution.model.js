@@ -1,7 +1,3 @@
-/**
- * Teacher Substitution Mongoose Model
- * Manages institutional period substitutions with approval tracking, class, and timetable sync.
- */
 const mongoose = require('mongoose');
 
 const substitutionSchema = new mongoose.Schema(
@@ -40,12 +36,12 @@ const substitutionSchema = new mongoose.Schema(
     },
     periodName: {
       type: String,
-      required: true, // e.g. 'Period 3 & Period 6' or 'Period 3'
+      required: true,
       trim: true,
     },
     time: {
       type: String,
-      required: true, // e.g. '10:30 – 11:15 AM'
+      required: true,
     },
     originalSubject: {
       type: String,

@@ -1,7 +1,6 @@
 const fs = require('fs');
 const path = require('path');
 
-// 1. Update index.html stepper titles
 const htmlPath = path.join(__dirname, '../../frontend/administration-portal/index.html');
 let htmlContent = fs.readFileSync(htmlPath, 'utf8');
 
@@ -109,7 +108,6 @@ if (htmlContent.includes(oldStepperHtml)) {
   console.log('Stepper HTML in index.html was not matching oldStepperHtml, checking...');
 }
 
-// 2. Update portal.css lines 33042 to 34140
 const cssPath = path.join(__dirname, '../../frontend/css/portal.css');
 let cssContent = fs.readFileSync(cssPath, 'utf8');
 

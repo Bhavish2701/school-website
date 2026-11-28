@@ -8,13 +8,9 @@ console.log('====================================================\n');
 const html = fs.readFileSync('frontend/administration-portal/index.html', 'utf8');
 const js = fs.readFileSync('frontend/js/portal.js', 'utf8');
 
-// --------------------------------------------------------------------------
-// TEST 1: Subview 18.1 School Profile (Fields & Actions)
-// --------------------------------------------------------------------------
 console.log('--- Test 1: Verify 18.1 School Profile Fields & Actions ---');
 assert.ok(html.includes('id="subview-settings-profile"'), 'subview-settings-profile must exist');
 
-// Required Fields
 assert.ok(html.includes('id="profileSchoolName"'), 'Official school name field must exist');
 assert.ok(html.includes('id="profileLogoPreview"') || html.includes('school-logo'), 'Logo field must exist');
 assert.ok(html.includes('id="profileAddress"'), 'Address field must exist');
@@ -27,7 +23,6 @@ assert.ok(html.includes('id="profileOfficialEmailDomain"'), 'Official email doma
 assert.ok(html.includes('id="profileAuthorizedSignatories"') || html.includes('authorizedSignatoriesContainer'), 'Authorized signatories must exist');
 assert.ok(html.includes('id="profilePrimaryBrandColor"') || html.includes('schoolBrandColor'), 'School branding must exist');
 
-// Required Actions
 assert.ok(html.includes('editSchoolProfileDraft') || js.includes('editSchoolProfileDraft'), 'Action: Edit draft must exist');
 assert.ok(html.includes('previewSchoolProfile') || js.includes('previewSchoolProfile'), 'Action: Preview must exist');
 assert.ok(html.includes('submitSchoolProfileForApproval') || js.includes('submitSchoolProfileForApproval'), 'Action: Submit for approval must exist');
@@ -35,13 +30,9 @@ assert.ok(html.includes('publishSchoolProfileChanges') || js.includes('publishSc
 assert.ok(html.includes('viewSchoolProfileHistory') || js.includes('viewSchoolProfileHistory'), 'Action: View history must exist');
 console.log('[PASS] Test 1: 18.1 School Profile fields and actions verified');
 
-// --------------------------------------------------------------------------
-// TEST 2: Subview 18.2 Academic Year (Fields, Actions & Retention Rule)
-// --------------------------------------------------------------------------
 console.log('\n--- Test 2: Verify 18.2 Academic Year Fields, Actions & Statutory Retention ---');
 assert.ok(html.includes('id="subview-settings-year"'), 'subview-settings-year must exist');
 
-// Required Fields
 assert.ok(html.includes('Academic Year Name') || html.includes('Academic Year') || html.includes('AY 2026-27'), 'Academic year name must exist');
 assert.ok(html.includes('Start Date') || html.includes('Start date') || html.includes('termStartDate'), 'Start date must exist');
 assert.ok(html.includes('End Date') || html.includes('End date') || html.includes('termEndDate'), 'End date must exist');
@@ -50,7 +41,6 @@ assert.ok(html.includes('Holidays') || html.includes('holidaysTable') || html.in
 assert.ok(html.includes('Working Days') || html.includes('Working days') || html.includes('workingDaysDisplay'), 'Working days must exist');
 assert.ok(html.includes('Current-Year Status') || html.includes('Current-year status') || html.includes('currentYearStatusBadge'), 'Current-year status must exist');
 
-// Required Actions
 assert.ok(html.includes('openCreateAcademicYearModal') || js.includes('openCreateAcademicYearModal'), 'Action: Create academic year must exist');
 assert.ok(html.includes('openConfigureTermsModal') || js.includes('openConfigureTermsModal'), 'Action: Configure terms must exist');
 assert.ok(html.includes('reviewAcademicDateConflicts') || js.includes('reviewAcademicDateConflicts'), 'Action: Review date conflicts must exist');
@@ -58,16 +48,12 @@ assert.ok(html.includes('activateAcademicYear') || js.includes('activateAcademic
 assert.ok(html.includes('openCloseAcademicYearModal') || js.includes('openCloseAcademicYearModal'), 'Action: Close year must exist');
 assert.ok(html.includes('archivePreviousAcademicYear') || js.includes('archivePreviousAcademicYear'), 'Action: Archive previous year must exist');
 
-// Statutory Non-Deletion Rule Verification
 assert.ok(
   html.includes('delete previous enrolments') || html.includes('not delete') || html.includes('preserves all historical') || js.includes('not delete previous enrolments'),
   'Statutory rule: Closing an academic year should not delete previous enrolments, attendance, marks or fee history'
 );
 console.log('[PASS] Test 2: 18.2 Academic Year fields, actions & non-deletion guarantee verified');
 
-// --------------------------------------------------------------------------
-// TEST 3: Subview 18.3 Role Management (Display & Actions)
-// --------------------------------------------------------------------------
 console.log('\n--- Test 3: Verify 18.3 Role Management Display Columns & Actions ---');
 assert.ok(html.includes('id="subview-settings-roles"'), 'subview-settings-roles must exist');
 assert.ok(html.includes('id="tableSettingsRoles"'), 'tableSettingsRoles must exist');
@@ -82,7 +68,6 @@ assert.ok(rolesTableSnippet.includes('Assigned Users') || rolesTableSnippet.incl
 assert.ok(rolesTableSnippet.includes('Default Permissions') || rolesTableSnippet.includes('Default permissions'), 'Default permissions column must exist');
 assert.ok(rolesTableSnippet.includes('Status'), 'Status column must exist');
 
-// Actions
 assert.ok(html.includes('openCreateRoleModal') || js.includes('openCreateRoleModal'), 'Action: Create role must exist');
 assert.ok(html.includes('duplicateRole') || js.includes('duplicateRole'), 'Action: Duplicate role must exist');
 assert.ok(html.includes('openAssignUsersModal') || js.includes('openAssignUsersModal'), 'Action: Assign users must exist');
@@ -91,9 +76,6 @@ assert.ok(html.includes('deactivateRole') || js.includes('deactivateRole'), 'Act
 assert.ok(html.includes('viewRolePermissionHistory') || js.includes('viewRolePermissionHistory'), 'Action: View permission history must exist');
 console.log('[PASS] Test 3: 18.3 Role Management display and actions verified');
 
-// --------------------------------------------------------------------------
-// TEST 4: Subview 18.4 Access Permissions Matrix & Additional Settings
-// --------------------------------------------------------------------------
 console.log('\n--- Test 4: Verify 18.4 Access Permissions Matrix & Additional Settings ---');
 assert.ok(html.includes('id="subview-settings-permissions"'), 'subview-settings-permissions must exist');
 assert.ok(html.includes('id="tablePermissionsMatrix"'), 'tablePermissionsMatrix must exist');
@@ -102,7 +84,6 @@ const permTableStart = html.indexOf('id="tablePermissionsMatrix"');
 const permTableEnd = html.indexOf('</table>', permTableStart);
 const permTableSnippet = html.substring(permTableStart, permTableEnd);
 
-// Required Matrix Columns
 assert.ok(permTableSnippet.includes('Module'), 'Matrix must contain Module column');
 assert.ok(permTableSnippet.includes('View'), 'Matrix must contain View column');
 assert.ok(permTableSnippet.includes('Create/Edit') || permTableSnippet.includes('Create / Edit'), 'Matrix must contain Create/Edit column');
@@ -110,13 +91,11 @@ assert.ok(permTableSnippet.includes('Approve'), 'Matrix must contain Approve col
 assert.ok(permTableSnippet.includes('Archive'), 'Matrix must contain Archive column');
 assert.ok(permTableSnippet.includes('Export'), 'Matrix must contain Export column');
 
-// Required 5 Modules present in table or rendered by JS
 const expectedModules = ['Students', 'Attendance', 'Results', 'Fees', 'Staff HR'];
 expectedModules.forEach(mod => {
   assert.ok(html.includes(mod) || js.includes(mod), `Module "${mod}" must be configured in matrix`);
 });
 
-// Additional Settings
 assert.ok(html.includes('id="permRecordScope"') || html.includes('Record scope') || html.includes('Record Scope'), 'Record scope setting must exist');
 assert.ok(html.includes('id="permAssignedScope"') || html.includes('Assigned class or department') || html.includes('Class or Department'), 'Assigned class/dept setting must exist');
 assert.ok(html.includes('id="permSensitiveAccess"') || html.includes('sensitive fields') || html.includes('Sensitive Fields'), 'Access to sensitive fields setting must exist');
@@ -125,9 +104,6 @@ assert.ok(html.includes('id="permEffectiveDate"') || html.includes('Effective da
 assert.ok(html.includes('id="permExpiryDate"') || html.includes('Expiry date') || html.includes('Expiry Date'), 'Expiry date setting must exist');
 console.log('[PASS] Test 4: 18.4 Access Permissions Matrix and additional settings verified');
 
-// --------------------------------------------------------------------------
-// TEST 5: Subview 18.5 Security Settings
-// --------------------------------------------------------------------------
 console.log('\n--- Test 5: Verify 18.5 Security Settings Components ---');
 assert.ok(html.includes('id="subview-settings-security"'), 'subview-settings-security must exist');
 
@@ -141,9 +117,6 @@ assert.ok(html.includes('Security notifications') || html.includes('Security Not
 assert.ok(html.includes('Device and sign-in history') || html.includes('Sign-in History') || html.includes('tableSignInHistory'), 'Device and sign-in history must exist');
 console.log('[PASS] Test 5: 18.5 Security Settings verified');
 
-// --------------------------------------------------------------------------
-// TEST 6: Subview 18.6 Audit Logs (Display & Compliance Rules)
-// --------------------------------------------------------------------------
 console.log('\n--- Test 6: Verify 18.6 Audit Logs Display & Immutable Protection ---');
 assert.ok(html.includes('id="subview-settings-audit"'), 'subview-settings-audit must exist');
 assert.ok(html.includes('id="tableSettingsAuditLogs"') || html.includes('id="tableAuditLogs"'), 'tableSettingsAuditLogs must exist');
@@ -158,16 +131,12 @@ assert.ok(auditSnippet.includes('Result'), 'Audit log must display Result');
 assert.ok(auditSnippet.includes('Reason'), 'Audit log must display Reason');
 assert.ok(auditSnippet.includes('Relevant Changed Fields') || auditSnippet.includes('Relevant changed fields') || auditSnippet.includes('Changed Fields'), 'Audit log must display Relevant changed fields');
 
-// Statutory Protection Rule
 assert.ok(
   auditSnippet.includes('protected from ordinary modification or deletion') || auditSnippet.includes('Immutable') || auditSnippet.includes('passwords') || auditSnippet.includes('never be logged'),
   'Audit logs must explicitly state protection from ordinary modification/deletion and no logging of sensitive credentials'
 );
 console.log('[PASS] Test 6: 18.6 Audit Logs columns & immutable compliance verified');
 
-// --------------------------------------------------------------------------
-// TEST 7: Subview 18.7 Data & Backup (Display, Actions & Role Restrictions)
-// --------------------------------------------------------------------------
 console.log('\n--- Test 7: Verify 18.7 Data & Backup Display, Actions & Security Rules ---');
 assert.ok(html.includes('id="subview-settings-backup"'), 'subview-settings-backup must exist');
 
@@ -178,13 +147,11 @@ assert.ok(html.includes('Retention Period') || html.includes('Retention period')
 assert.ok(html.includes('Storage Status') || html.includes('Storage status') || html.includes('Storage Capacity'), 'Storage status must exist');
 assert.ok(html.includes('Recovery Test History') || html.includes('Recovery test history') || html.includes('Recovery Drill'), 'Recovery test history must exist');
 
-// Actions
 assert.ok(html.includes('triggerAuthorizedBackup') || js.includes('triggerAuthorizedBackup'), 'Action: Start authorized backup must exist');
 assert.ok(html.includes('viewBackupHistory') || js.includes('viewBackupHistory'), 'Action: View backup history must exist');
 assert.ok(html.includes('runBackupRecoveryTest') || js.includes('runBackupRecoveryTest'), 'Action: Run recovery test must exist');
 assert.ok(html.includes('reviewBackupFailures') || js.includes('reviewBackupFailures'), 'Action: Review failures must exist');
 
-// Security Restrictions
 assert.ok(
   html.includes('ordinary school employees') || html.includes('Do not provide unrestricted') || html.includes('destructive recovery actions') || js.includes('ordinary school employees'),
   'Security rule: Do not provide unrestricted database exports or destructive recovery actions to ordinary school employees'

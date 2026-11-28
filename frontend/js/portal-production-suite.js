@@ -1,30 +1,14 @@
-/**
- * Sri Vidya E.M High School ERP - Production Readiness Suite
- * Implements:
- * 1. Inactivity Session Auto-Logout (30 min inactivity monitor + 2 min modal countdown)
- * 2. Skeuomorphic Skeletons & Table Loading States
- * 3. Skeuomorphic Empty States Component
- * 4. Field-level Form Validation Utilities
- * 5. Mobile Drawer Navigation & Backdrop Interactivity
- * 6. Privacy-Conscious In-House Telemetry Tracker
- * 7. Guided Onboarding Tour Wizard (4 steps with role personalization)
- * 8. Email Verification Badges and Modal Workflow
- */
 
 (function (window, document) {
   'use strict';
 
   const ProductionSuite = {
-    // -------------------------------------------------------------------------
-    // 1. INACTIVITY SESSION AUTO-LOGOUT
-    // -------------------------------------------------------------------------
     inactivityTimer: null,
     countdownInterval: null,
-    INACTIVITY_LIMIT_MS: 28 * 60 * 1000, // 28 minutes warning
-    COUNTDOWN_SECONDS: 120, // 2 minutes countdown
+    INACTIVITY_LIMIT_MS: 28 * 60 * 1000,
+    COUNTDOWN_SECONDS: 120,
 
     initInactivityMonitor() {
-      // Don't run on public website or login page
       const path = window.location.pathname;
       if (path === '/' || path.includes('/login') || path.includes('/forgot-password') || path.includes('/public-website')) {
         return;
@@ -44,7 +28,6 @@
     resetInactivityTimer() {
       const modal = document.getElementById('skeuoSessionTimeoutModal');
       if (modal && modal.classList.contains('active')) {
-        // Modal is actively warning, user must click "Stay Logged In"
         return;
       }
 
@@ -124,9 +107,6 @@
       document.body.appendChild(overlay);
     },
 
-    // -------------------------------------------------------------------------
-    // 2. SKELETONS & TABLE LOADING STATES (Req 4)
-    // -------------------------------------------------------------------------
     showTableSkeleton(tableSelector, rows = 5, cols = 6) {
       const table = typeof tableSelector === 'string' ? document.querySelector(tableSelector) : tableSelector;
       if (!table) return;
@@ -156,9 +136,6 @@
       }
     },
 
-    // -------------------------------------------------------------------------
-    // 3. EMPTY STATES (Req 5)
-    // -------------------------------------------------------------------------
     renderEmptyState(containerSelector, options = {}) {
       const el = typeof containerSelector === 'string' ? document.querySelector(containerSelector) : containerSelector;
       if (!el) return;
@@ -190,15 +167,11 @@
       }
     },
 
-    // -------------------------------------------------------------------------
-    // 4. FORM VALIDATION HELPERS (Req 7)
-    // -------------------------------------------------------------------------
     validateField(inputEl, rules = {}) {
       if (!inputEl) return true;
       const val = (inputEl.value || '').trim();
       const parent = inputEl.closest('.form-group') || inputEl.parentElement;
 
-      // Remove previous error
       const prevErr = parent.querySelector('.skeuo-field-error');
       if (prevErr) prevErr.remove();
       inputEl.classList.remove('is-invalid');
@@ -260,11 +233,7 @@
       }
     },
 
-    // -------------------------------------------------------------------------
-    // 5. MOBILE RESPONSIVENESS & SIDEBAR DRAWER (Req 12)
-    // -------------------------------------------------------------------------
     initMobileDrawer() {
-      // Create backdrop if absent
       let backdrop = document.getElementById('portalDrawerBackdrop');
       if (!backdrop) {
         backdrop = document.createElement('div');
@@ -290,9 +259,6 @@
       });
     },
 
-    // -------------------------------------------------------------------------
-    // 6. IN-HOUSE PRIVACY-CONSCIOUS TELEMETRY (Req 14)
-    // -------------------------------------------------------------------------
     trackModuleAccess(moduleName, action = 'NAVIGATE') {
       try {
         if (window.ApiClient && window.ApiClient.analytics) {
@@ -304,9 +270,6 @@
       } catch (_) {}
     },
 
-    // -------------------------------------------------------------------------
-    // 7. GUIDED ONBOARDING TOUR (Req 19)
-    // -------------------------------------------------------------------------
     tourCurrentStep: 0,
     tourSteps: [
       {
@@ -482,9 +445,6 @@
       document.body.appendChild(overlay);
     },
 
-    // -------------------------------------------------------------------------
-    // 8. EMAIL VERIFICATION MODAL & WORKFLOW (Req 3)
-    // -------------------------------------------------------------------------
     injectEmailVerificationModal() {
       if (document.getElementById('skeuoEmailVerificationModal')) return;
 
@@ -596,7 +556,6 @@
           alertBox.innerHTML = '<i class="fa-solid fa-circle-check"></i> Email verified successfully!';
           setTimeout(() => {
             this.closeEmailVerificationModal();
-            // Update badge in profile
             const badge = document.querySelector('.badge-email-unverified');
             if (badge) {
               badge.className = 'badge-email-verified';
@@ -619,9 +578,6 @@
       }
     },
 
-    // -------------------------------------------------------------------------
-    // MASTER INITIALIZER
-    // -------------------------------------------------------------------------
     init() {
       this.initInactivityMonitor();
       this.initMobileDrawer();
@@ -629,7 +585,6 @@
     },
   };
 
-  // Expose globally
   window.ProductionSuite = ProductionSuite;
   window.showTableSkeleton = ProductionSuite.showTableSkeleton.bind(ProductionSuite);
   window.hideTableSkeleton = ProductionSuite.hideTableSkeleton.bind(ProductionSuite);

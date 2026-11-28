@@ -1,16 +1,3 @@
-/**
- * Centralized Error Handling Middleware
- *
- * Formats all exceptions to the uniform contract:
- * {
- *   "success": false,
- *   "message": "...",
- *   "data": null,
- *   "errors": {},
- *   "recoveryAction": "...",
- *   "errorCode": "..."
- * }
- */
 const ApiError = require('../utils/apiError');
 const { formatError } = require('../utils/apiResponse');
 const ErrorLog = require('../models/errorLog.model');
@@ -18,14 +5,12 @@ const ErrorLog = require('../models/errorLog.model');
 const errorHandler = (err, req, res, next) => {
   let error = err;
 
-  // 1. Handle SyntaxError for malformed JSON body
   if (err instanceof SyntaxError && err.status === 400 && 'body' in err) {
     error = ApiError.badRequest('Malformed JSON in request payload', 'INVALID_JSON', {
       body: 'Malformed JSON syntax',
     });
   }
 
-  // 2. Handle Mongoose CastError (e.g. invalid ObjectId format)
   if (err.name === 'CastError') {
     const message = `Invalid value for parameter '${err.path}'`;
     error = ApiError.badRequest(message, 'INVALID_PARAMETER', {
@@ -33,7 +18,6 @@ const errorHandler = (err, req, res, next) => {
     });
   }
 
-  // 3. Handle Mongoose Validation Error
   if (err.name === 'ValidationError') {
     const errorMap = {};
     Object.values(err.errors || {}).forEach((val) => {
@@ -42,7 +26,6 @@ const errorHandler = (err, req, res, next) => {
     error = ApiError.validation(errorMap, 'Validation failed for model');
   }
 
-  // 4. Handle MongoDB Duplicate Key Error (E11000)
   if (err.code === 11000) {
     const duplicateFields = Object.keys(err.keyValue || {});
     const errorMap = {};
@@ -52,7 +35,6 @@ const errorHandler = (err, req, res, next) => {
     error = ApiError.conflict('Duplicate entry detected', 'DUPLICATE_KEY', errorMap);
   }
 
-  // 5. Handle JWT Errors
   if (err.name === 'JsonWebTokenError') {
     error = ApiError.unauthorized('Invalid authentication token', 'TOKEN_INVALID', {
       token: 'Token is invalid or corrupted',
@@ -69,7 +51,6 @@ const errorHandler = (err, req, res, next) => {
   const errors = error.errors || {};
   const errorCode = error.code || (statusCode >= 500 ? 'INTERNAL_SERVER_ERROR' : 'REQUEST_ERROR');
 
-  // Determine recovery action based on context
   let recoveryAction = null;
   if (statusCode === 401) {
     recoveryAction = 'Your session has expired or authentication failed. Please sign in again with your credentials.';
@@ -87,7 +68,6 @@ const errorHandler = (err, req, res, next) => {
     recoveryAction = 'Our school ERP engineering team has been notified. Please refresh the page or retry in a few moments.';
   }
 
-  // Persist 5xx and fatal errors into central ErrorLog collection for monitoring
   if (statusCode >= 500 || !(err instanceof ApiError)) {
     console.error(`[ERP Central Error Tracker] ${err.name || 'Error'}: ${err.message}`, err.stack);
     ErrorLog.create({

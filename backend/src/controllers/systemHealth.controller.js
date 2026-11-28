@@ -1,11 +1,6 @@
-/**
- * Sri Vidya Educational Trust - System Health & Deployment Controller
- * Module 11: Real-Time Service Health, Deployment History, Sanitized Logs & Background Jobs
- */
 
 const SystemHealthService = require('../services/systemHealth.service');
 
-// 11.1 Service Health Probes
 const getServiceHealth = async (req, res) => {
   try {
     const health = await SystemHealthService.getServiceHealth();
@@ -15,7 +10,6 @@ const getServiceHealth = async (req, res) => {
   }
 };
 
-// 11.2 Deployment History
 const listDeployments = async (req, res) => {
   try {
     const result = await SystemHealthService.listDeployments(req.query);
@@ -60,7 +54,6 @@ const requestRollback = async (req, res) => {
   }
 };
 
-// 11.3 Application Logs
 const listLogs = async (req, res) => {
   try {
     const result = await SystemHealthService.listLogs(req.query);
@@ -89,7 +82,6 @@ const exportDiagnostics = async (req, res) => {
   }
 };
 
-// 11.4 Background Jobs
 const listJobs = async (req, res) => {
   try {
     const result = await SystemHealthService.listJobs(req.query);

@@ -1,7 +1,3 @@
-/**
- * Sri Vidya Educational Trust - Role Templates Controller
- * REST API Endpoints for Module 7: Role Templates & Permissions
- */
 
 const RoleTemplateService = require('../services/roleTemplate.service');
 
@@ -75,7 +71,7 @@ const updateRole = async (req, res) => {
 const reviewRoleChange = async (req, res) => {
   try {
     const reviewer = req.body.reviewer || req.user?.username || 'Platform Owner';
-    const decision = req.body.decision; // 'Approved' | 'Rejected'
+    const decision = req.body.decision;
     const reviewNotes = req.body.notes || '';
     const result = await RoleTemplateService.reviewRoleChange(req.params.roleId, decision, reviewer, reviewNotes);
     if (!result.success) {

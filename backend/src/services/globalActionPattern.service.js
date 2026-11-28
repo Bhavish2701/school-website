@@ -1,8 +1,3 @@
-/**
- * Sri Vidya Educational Trust - Global Action Patterns & High-Impact Confirmation Service
- * Specification: Consistent Confirmation Dialogs, Field Validation, Duplicate Checking,
- * Access & History Preservation, Difference Previews, and Post-Backend Success Feedback.
- */
 
 const mongoose = require('mongoose');
 const { PlatformAudit } = require('../models/platformAudit.model');
@@ -12,7 +7,6 @@ const { RoleTemplate } = require('../models/roleTemplate.model');
 const { Integration } = require('../models/integration.model');
 const { BackupJob } = require('../models/backup.model');
 
-// 10 Statutorily Regulated High-Impact Platform Actions
 const HIGH_IMPACT_ACTIONS = {
   CREATE_INSTITUTION: {
     action: 'CREATE_INSTITUTION',
@@ -86,16 +80,10 @@ const HIGH_IMPACT_ACTIONS = {
   }
 };
 
-/**
- * Returns metadata and rules for all 10 global high-impact action patterns
- */
 function getActionPatternsRegistry() {
   return Object.values(HIGH_IMPACT_ACTIONS);
 }
 
-/**
- * Validates a high-impact action against its statutory and architectural rules
- */
 async function validateAction(actionType, payload = {}, user = {}) {
   const spec = HIGH_IMPACT_ACTIONS[actionType];
   if (!spec) {
@@ -106,7 +94,6 @@ async function validateAction(actionType, payload = {}, user = {}) {
   }
 
   switch (actionType) {
-    // 1. Create institution: Validate fields, check duplicates and save a draft or activate
     case 'CREATE_INSTITUTION': {
       const { name, code, domain, udise, status, workflowType } = payload;
       if (!name || !code) {
@@ -117,7 +104,6 @@ async function validateAction(actionType, payload = {}, user = {}) {
         };
       }
 
-      // Check duplicates in memory and MongoDB
       const KNOWN_CODES = ['SV-MAIN', 'SV-PRIMARY', 'SV-CAMPUS-01', 'INST-001', 'INST-002', 'INST-003'];
       const KNOWN_DOMAINS = ['srividya.edu.in', 'primary.srividya.edu.in', 'annur.srividya.edu.in'];
       const normCode = code ? code.toUpperCase() : '';
@@ -141,7 +127,6 @@ async function validateAction(actionType, payload = {}, user = {}) {
             if (udise && existing.udise === udise) udiseExists = true;
           }
         } catch (e) {
-          // fallback to memory check
         }
       }
 
@@ -183,7 +168,6 @@ async function validateAction(actionType, payload = {}, user = {}) {
       };
     }
 
-    // 2. Suspend institution: Explain impact, require reason and confirm authority
     case 'SUSPEND_INSTITUTION': {
       const { institutionId, reason, confirmAuthority, authorityConfirmed } = payload;
       const isAuthConfirmed = confirmAuthority === true || authorityConfirmed === true;
@@ -216,7 +200,6 @@ async function validateAction(actionType, payload = {}, user = {}) {
       };
     }
 
-    // 3. Disable user: Explain access impact and preserve history
     case 'DISABLE_USER': {
       const { userId, reason } = payload;
       if (!userId) {
@@ -233,7 +216,6 @@ async function validateAction(actionType, payload = {}, user = {}) {
       };
     }
 
-    // 4. Change privileged role: Show permission differences and require authorized approval
     case 'CHANGE_PRIVILEGED_ROLE': {
       const { roleId, currentPermissions = [], newPermissions = [], approvedBy, approvalSignatory } = payload;
       const signatory = approvedBy || approvalSignatory;
@@ -249,7 +231,6 @@ async function validateAction(actionType, payload = {}, user = {}) {
         };
       }
 
-      // Compute permission diffs
       const curr = Array.isArray(currentPermissions) && currentPermissions.length ? currentPermissions : ['students.view', 'attendance.mark', 'billing.adjust'];
       const next = Array.isArray(newPermissions) ? newPermissions : [];
       const added = next.filter(p => !curr.includes(p));
@@ -271,7 +252,6 @@ async function validateAction(actionType, payload = {}, user = {}) {
       };
     }
 
-    // 5. Rotate integration credential: Validate replacement and record rotation
     case 'ROTATE_INTEGRATION_CREDENTIAL': {
       const { integrationId, newKey, replacementKey } = payload;
       const activeKey = newKey || replacementKey;
@@ -297,7 +277,6 @@ async function validateAction(actionType, payload = {}, user = {}) {
       };
     }
 
-    // 6. Start backup: Show scope and status
     case 'START_BACKUP': {
       const { scope = 'FULL_DATABASE', targetScope, destination = 'AWS_S3_MUMBAI' } = payload;
       const resolvedScope = targetScope || scope;
@@ -323,7 +302,6 @@ async function validateAction(actionType, payload = {}, user = {}) {
       };
     }
 
-    // 7. Restore backup: Require elevated permission, confirmation and approved recovery process
     case 'RESTORE_BACKUP': {
       const { backupId, changeRequestId, recoveryTicketId, confirmationText, confirmationPhrase, elevatedRole } = payload;
       const resolvedTicket = changeRequestId || recoveryTicketId;
@@ -367,7 +345,6 @@ async function validateAction(actionType, payload = {}, user = {}) {
       };
     }
 
-    // 8. Change global security policy: Validate configuration and record change
     case 'CHANGE_GLOBAL_SECURITY_POLICY': {
       const policy = payload.policy || payload;
       const minLength = policy.passwordMinLength ?? policy.passwordRequirements?.minLength;
@@ -397,7 +374,6 @@ async function validateAction(actionType, payload = {}, user = {}) {
       };
     }
 
-    // 9. Export data: Check permission, scope and audit requirements
     case 'EXPORT_DATA': {
       const { exportType = 'CSV', scope = 'INSTITUTION_DIRECTORY' } = payload;
       return {
@@ -412,7 +388,6 @@ async function validateAction(actionType, payload = {}, user = {}) {
       };
     }
 
-    // 10. Open school portal: Validate target URL and use secure authentication
     case 'OPEN_SCHOOL_PORTAL': {
       const { portal = 'management', queryParams = {} } = payload;
       const sensitiveKeys = ['password', 'pwd', 'token', 'session', 'jwt', 'auth', 'apiKey'];
@@ -452,11 +427,7 @@ async function validateAction(actionType, payload = {}, user = {}) {
   }
 }
 
-/**
- * Confirms and executes high-impact action, generating immutable audit record
- */
 async function confirmHighImpactAction(actionType, payload = {}, actor = 'Platform Administrator') {
-  // 1. Run validation first
   const validation = await validateAction(actionType, payload);
   if (!validation.valid) {
     return {
@@ -467,7 +438,6 @@ async function confirmHighImpactAction(actionType, payload = {}, actor = 'Platfo
     };
   }
 
-  // 2. Generate Audit Record in PlatformAudit
   const now = Date.now();
   const auditId = `AUD-${now}-${Math.random().toString(36).substring(2, 6).toUpperCase()}`;
   const rawSeverity = String(HIGH_IMPACT_ACTIONS[actionType]?.severity || 'INFO').toUpperCase();

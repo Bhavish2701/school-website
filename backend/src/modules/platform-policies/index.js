@@ -1,7 +1,3 @@
-/**
- * Platform Policies & Governance Register - Module Aggregator
- * Exports all 6 architectural layers
- */
 
 const routes = require('./platform-policies.routes');
 const controller = require('./platform-policies.controller');

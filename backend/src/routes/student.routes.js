@@ -1,9 +1,3 @@
-/**
- * Student Module Routes
- *
- * Architecture Flow:
- * Route → Middleware → Controller → Service → Model
- */
 const express = require('express');
 const router = express.Router();
 const studentController = require('../controllers/student.controller');
@@ -17,7 +11,6 @@ const {
   validateUpdateStudent,
 } = require('../validators/student.validator');
 
-// 1. Dashboard Statistics Route (Must precede /:id parameter route)
 router.get(
   '/dashboard/stats',
   authenticateUser,
@@ -25,7 +18,6 @@ router.get(
   studentController.getDashboardStats
 );
 
-// 2. Student Collection Routes
 router
   .route('/')
   .get(
@@ -40,7 +32,6 @@ router
     studentController.createStudent
   );
 
-// 3. Individual Student Member Routes
 router
   .route('/:id')
   .get(authenticateUser, studentController.getStudentById)
@@ -56,8 +47,6 @@ router
     studentController.deleteStudent
   );
 
-
-// Document verification & status update route
 router.patch(
   '/documents/:docId/status',
   optionalAuthenticateUser,

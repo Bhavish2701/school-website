@@ -8,13 +8,9 @@ console.log('====================================================\n');
 const html = fs.readFileSync('frontend/administration-portal/index.html', 'utf8');
 const js = fs.readFileSync('frontend/js/portal.js', 'utf8');
 
-// --------------------------------------------------------------------------
-// TEST 1: Subview 17.1 Pending Approvals (Table Headers & All 8 Categories)
-// --------------------------------------------------------------------------
 console.log('--- Test 1: Verify 17.1 Pending Approvals Table & 8 Request Categories ---');
 assert.ok(html.includes('id="tablePendingApprovals"'), 'tablePendingApprovals must exist');
 
-// Table Headers
 const pendingTableStart = html.indexOf('id="tablePendingApprovals"');
 const pendingTableEnd = html.indexOf('</table>', pendingTableStart);
 const pendingTableSnippet = html.substring(pendingTableStart, pendingTableEnd);
@@ -28,7 +24,6 @@ assert.ok(pendingTableSnippet.includes('Current Approval Stage') || pendingTable
 assert.ok(pendingTableSnippet.includes('Due Date') || pendingTableSnippet.includes('Due date'), 'Header must contain "Due Date"');
 assert.ok(pendingTableSnippet.includes('Actions'), 'Header must contain "Actions"');
 
-// Verify All 8 Categories present in JS data
 assert.ok(js.includes('Admission'), 'Must include Admission approvals in tasks pending data');
 assert.ok(js.includes('Staff Leave') || js.includes('Leave Request'), 'Must include Leave requests');
 assert.ok(js.includes('Marks') || js.includes('Results'), 'Must include Marks or results approvals');
@@ -40,9 +35,6 @@ assert.ok(js.includes('Communication') || js.includes('Published communication')
 
 console.log('[PASS] Test 1: 17.1 Pending Approvals structure & categories verified');
 
-// --------------------------------------------------------------------------
-// TEST 2: Subview 17.2 My Assigned Tasks (Table Headers & Actions)
-// --------------------------------------------------------------------------
 console.log('\n--- Test 2: Verify 17.2 My Assigned Tasks Table Columns & Action Handlers ---');
 assert.ok(html.includes('id="tableAssignedTasks"'), 'tableAssignedTasks must exist');
 
@@ -61,9 +53,6 @@ assert.ok(assignedTableSnippet.includes('Actions'), 'Header must contain "Action
 
 console.log('[PASS] Test 2: 17.2 My Assigned Tasks table columns verified');
 
-// --------------------------------------------------------------------------
-// TEST 3: Subview 17.3 Approval History (Table Columns & Traceability)
-// --------------------------------------------------------------------------
 console.log('\n--- Test 3: Verify 17.3 Approval History Columns & Traceability Statement ---');
 assert.ok(html.includes('id="tableApprovalHistory"'), 'tableApprovalHistory must exist');
 
@@ -79,7 +68,6 @@ assert.ok(historyTableSnippet.includes('Reason'), 'Header must contain "Reason"'
 assert.ok(historyTableSnippet.includes('Previous Stage') || historyTableSnippet.includes('Previous stage'), 'Header must contain "Previous stage"');
 assert.ok(historyTableSnippet.includes('Next Stage') || historyTableSnippet.includes('Next stage'), 'Header must contain "Next stage"');
 
-// Traceability statement in index.html
 assert.ok(
   html.includes('traceable') || html.includes('disputes'),
   'Approval history section must explicitly document traceability and dispute reduction'
@@ -87,9 +75,6 @@ assert.ok(
 
 console.log('[PASS] Test 3: 17.3 Approval History columns and traceability verified');
 
-// --------------------------------------------------------------------------
-// TEST 4: Subview 17.4 Escalations (Table Columns & Policy Compliance)
-// --------------------------------------------------------------------------
 console.log('\n--- Test 4: Verify 17.4 Escalations Columns & Policy Notice ---');
 assert.ok(html.includes('id="tableEscalations"'), 'tableEscalations must exist');
 
@@ -104,7 +89,6 @@ assert.ok(escTableSnippet.includes('Priority'), 'Header must contain "Priority"'
 assert.ok(escTableSnippet.includes('Escalation Level') || escTableSnippet.includes('Escalation level'), 'Header must contain "Escalation level"');
 assert.ok(escTableSnippet.includes('Next Action') || escTableSnippet.includes('Next action'), 'Header must contain "Next action"');
 
-// Policy notice statement in index.html
 assert.ok(
   html.includes('bypass') || html.includes('defined school policies') || html.includes('policies'),
   'Escalations section must explicitly state school policy adherence without bypassing approval requirements'
@@ -112,11 +96,7 @@ assert.ok(
 
 console.log('[PASS] Test 4: 17.4 Escalations columns and policy adherence verified');
 
-// --------------------------------------------------------------------------
-// TEST 5: Action Modals & Controller Handlers in portal.js
-// --------------------------------------------------------------------------
 console.log('\n--- Test 5: Verify Required Action Functions & Modals in portal.js ---');
-// 17.1 Actions
 assert.ok(js.includes('function openApprovalDecisionModal('), 'openApprovalDecisionModal must exist');
 assert.ok(js.includes('function executeQuickDecision('), 'executeQuickDecision must exist');
 assert.ok(js.includes('function openRejectRequestModal(') || js.includes('rejectRequest'), 'Rejection action must exist');
@@ -124,7 +104,6 @@ assert.ok(js.includes('function openReturnRequestModal(') || js.includes('return
 assert.ok(js.includes('function openReassignRequestModal(') || js.includes('reassignRequest'), 'Reassign action must exist');
 assert.ok(js.includes('function openRequestHistoryModal(') || js.includes('viewHistory'), 'View history action must exist');
 
-// 17.2 Actions
 assert.ok(js.includes('function startAssignedTask(') || js.includes('startTask'), 'Start task action must exist');
 assert.ok(js.includes('function openUpdateTaskProgressModal(') || js.includes('updateProgress'), 'Update progress action must exist');
 assert.ok(js.includes('function openAddTaskCommentModal(') || js.includes('addComment'), 'Add comment action must exist');

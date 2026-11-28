@@ -1,11 +1,6 @@
-/**
- * Sri Vidya Educational Trust - Platform Policies & Data Retention Model
- * Module 17: Governance Policy Register, Granular Retention Rules, and Controlled Data Requests
- */
 
 const mongoose = require('mongoose');
 
-// 17.1 Policy Register Schema
 const GovernancePolicySchema = new mongoose.Schema({
   policyId: {
     type: String,
@@ -66,7 +61,6 @@ const GovernancePolicySchema = new mongoose.Schema({
   timestamps: true
 });
 
-// 17.2 Data Retention Rule Schema
 const RetentionVersionSchema = new mongoose.Schema({
   version: { type: Number, required: true },
   retentionRule: { type: String, required: true },
@@ -100,7 +94,7 @@ const RetentionRuleSchema = new mongoose.Schema({
   },
   retentionYears: {
     type: Number,
-    required: true // -1 = PERMANENT, otherwise number of years
+    required: true
   },
   legalBasis: {
     type: String,
@@ -133,7 +127,6 @@ const RetentionRuleSchema = new mongoose.Schema({
   timestamps: true
 });
 
-// 17.3 Data Requests Schema
 const DataRequestSchema = new mongoose.Schema({
   requestId: {
     type: String,

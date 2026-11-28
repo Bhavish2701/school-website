@@ -1,7 +1,3 @@
-/**
- * Authentication & Session Security - Service Layer
- * Business rules, calculations, and operational orchestration
- */
 
 const Repository = require('./auth.repository');
 const MultiInstitutionSecurity = require('../common/multiInstitutionSecurity');

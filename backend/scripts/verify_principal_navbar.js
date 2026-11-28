@@ -19,13 +19,10 @@ function assert(condition, message) {
   }
 }
 
-// 1. Verify HTML in administration-portal/index.html
 const html = fs.readFileSync(htmlPath, 'utf8');
 
-// Header exists
 assert(html.includes('<header class="portal-header">'), 'portal-header element exists');
 
-// Portals dropdown completely removed from header
 const headerMatch = html.match(/<header class="portal-header">([\s\S]*?)<\/header>/);
 assert(headerMatch !== null, 'Found <header class="portal-header">...</header>');
 const headerContent = headerMatch ? headerMatch[1] : '';
@@ -34,7 +31,6 @@ assert(!headerContent.includes('portalsHubWrapper'), 'Portals hub wrapper remove
 assert(!headerContent.includes('btnPortalsHub'), 'btnPortalsHub removed from header');
 assert(!headerContent.includes('togglePortalsHub'), 'togglePortalsHub click handler removed from header');
 
-// Left section elements
 assert(headerContent.includes('mobileSidebarToggle'), 'Mobile sidebar toggle exists');
 assert(headerContent.includes('header-breadcrumb'), 'header-breadcrumb container exists');
 assert(headerContent.includes('crumb-school'), 'crumb-school exists');
@@ -43,7 +39,6 @@ assert(headerContent.includes('header-search'), 'header-search container exists'
 assert(headerContent.includes('portalUniversalSearch'), 'portalUniversalSearch input exists');
 assert(headerContent.includes('search-shortcut'), '⌘K shortcut indicator exists');
 
-// Right section elements
 assert(headerContent.includes('role-indicator-badge'), 'Principal role indicator badge exists');
 assert(headerContent.includes('headerRoleLabel'), 'headerRoleLabel exists');
 assert(headerContent.includes('themeToggleBtn'), 'Theme toggle button exists');
@@ -57,7 +52,6 @@ assert(headerContent.includes('btn-back-public'), 'btn-back-public link exists')
 assert(headerContent.includes('btn-header-signout'), 'btn-header-signout button exists');
 assert(headerContent.includes('PortalAuth.logout'), 'PortalAuth.logout handler preserved on signout button');
 
-// 2. Verify CSS in portal.css
 const css = fs.readFileSync(cssPath, 'utf8');
 
 assert(css.includes('.portal-header {'), '.portal-header CSS exists');
@@ -71,19 +65,15 @@ assert(css.includes('.header-divider {'), '.header-divider CSS exists');
 assert(css.includes('.btn-back-public {'), '.btn-back-public CSS exists');
 assert(css.includes('.btn-header-signout {'), '.btn-header-signout CSS exists');
 
-// Verify Logout button specific requirements
 assert(css.includes('.btn-header-signout:hover {'), '.btn-header-signout hover state defined');
 assert(css.includes('#FEF2F2') || css.includes('rgba(239, 68, 68'), 'Logout button subtle red hover background defined');
 assert(css.includes('#DC2626') || css.includes('--color-accent-red'), 'Logout button red text/icon hover defined');
 
-// Verify Height Consistency (38px controls)
 assert(css.includes('height: 38px'), 'Standard 38px control height applied');
 
-// Verify Responsive behavior
 assert(css.includes('@media (max-width: 768px)'), 'Mobile responsive rules defined for navbar');
 assert(css.includes('@media (max-width: 992px)'), 'Tablet responsive rules defined for navbar');
 
-// Verify Dark mode support
 assert(css.includes('[data-theme="dark"] .portal-header'), 'Dark mode header styling defined');
 assert(css.includes('[data-theme="dark"] .btn-header-signout'), 'Dark mode logout button styling defined');
 

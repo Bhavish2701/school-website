@@ -1,7 +1,3 @@
-/**
- * Payment Mongoose Model
- * Manages server-side payment orders, transaction states, and cryptographic verification
- */
 const mongoose = require('mongoose');
 
 const PAYMENT_METHODS = ['UPI', 'CARD', 'NETBANKING', 'CASH', 'DEMAND_DRAFT', 'CHEQUE', 'POS'];
@@ -58,7 +54,6 @@ const paymentSchema = new mongoose.Schema(
       },
       default: 'UPI',
     },
-    // Specification 22.2: Online and offline financial records convergence
     paymentChannel: {
       type: String,
       enum: {

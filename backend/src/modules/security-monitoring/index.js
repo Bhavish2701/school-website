@@ -1,7 +1,3 @@
-/**
- * Security & Access Threat Monitoring - Module Aggregator
- * Exports all 6 architectural layers
- */
 
 const routes = require('./security-monitoring.routes');
 const controller = require('./security-monitoring.controller');

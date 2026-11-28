@@ -1,7 +1,3 @@
-/**
- * Centralized Error Log Model
- * Tracks unhandled backend errors and forwarded frontend runtime errors
- */
 const mongoose = require('mongoose');
 
 const errorLogSchema = new mongoose.Schema(

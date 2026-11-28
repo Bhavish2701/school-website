@@ -1,14 +1,8 @@
-/**
- * Examination Module Request Validators
- */
 const mongoose = require('mongoose');
 const validate = require('../middleware/validate.middleware');
 const { EXAM_TYPES } = require('../models/exam.model');
 const ApiError = require('../utils/apiError');
 
-/**
- * Validate Exam Creation
- */
 const validateCreateExam = validate({
   name: {
     required: true,
@@ -29,9 +23,6 @@ const validateCreateExam = validate({
   },
 });
 
-/**
- * Validate Exam Scheduling
- */
 const validateCreateSchedule = validate({
   class: {
     required: true,
@@ -55,9 +46,6 @@ const validateCreateSchedule = validate({
   },
 });
 
-/**
- * Validate Marks Entry Payload
- */
 const validateEnterMarks = (req, res, next) => {
   const { class: className, section, subject, marks } = req.body;
   const errors = {};

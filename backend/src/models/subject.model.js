@@ -1,7 +1,3 @@
-/**
- * Subject Mongoose Model
- * Manages school curriculum subjects, codes, types, and applicable grade levels
- */
 const mongoose = require('mongoose');
 
 const SUBJECT_TYPES = ['CORE', 'ELECTIVE', 'LANGUAGE', 'LAB', 'ACTIVITY'];

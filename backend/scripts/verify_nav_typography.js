@@ -5,7 +5,6 @@ console.log('=== SRI VIDYA ERP: NAVIGATION TYPOGRAPHY VERIFICATION ===');
 const css = fs.readFileSync('frontend/css/portal.css', 'utf8');
 const html = fs.readFileSync('frontend/administration-portal/index.html', 'utf8');
 
-// 1. Verify CSS rules
 const checks = [
   '#studentsTabStrip .tab-btn',
   'font-size: 14.5px !important;',
@@ -34,7 +33,6 @@ if (failedCss.length > 0) {
   console.log('PASS: All typography and color rules exist in portal.css');
 }
 
-// 2. Verify HTML buttons
 const requiredButtons = [
   { sub: 'profiles', label: 'Student Profiles', icon: 'fa-address-card' },
   { sub: 'documents', label: 'Student Documents', icon: 'fa-folder-tree' },

@@ -1,7 +1,3 @@
-/**
- * Timetable Mongoose Model
- * Manages periodic academic schedules with strict teacher, room, and class conflict prevention.
- */
 const mongoose = require('mongoose');
 
 const DAYS_OF_WEEK = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
@@ -55,12 +51,12 @@ const timetableSchema = new mongoose.Schema(
       required: [true, 'End time is required (e.g. 09:35 AM)'],
     },
     startMinutes: {
-      type: Number, // Minutes since midnight for range overlap queries
+      type: Number,
       required: true,
       index: true,
     },
     endMinutes: {
-      type: Number, // Minutes since midnight
+      type: Number,
       required: true,
       index: true,
     },
@@ -111,7 +107,6 @@ const timetableSchema = new mongoose.Schema(
   }
 );
 
-// Compound indexes for fast conflict lookup and timetable retrieval
 timetableSchema.index(
   { className: 1, day: 1, periodNumber: 1, academicYear: 1 },
   { unique: true }
@@ -120,15 +115,9 @@ timetableSchema.index(
 timetableSchema.index({ teacher: 1, day: 1, startMinutes: 1, endMinutes: 1, academicYear: 1 });
 timetableSchema.index({ room: 1, day: 1, startMinutes: 1, endMinutes: 1, academicYear: 1 });
 
-/**
- * Validate conflict before saving:
- * Checks if teacher or room is already booked in an overlapping time window
- * A.start < B.end && B.start < A.end
- */
 timetableSchema.pre('save', async function (next) {
   if (this.isBreak || this.status === 'INACTIVE') return next();
 
-  // 1. Teacher conflict check
   const teacherConflict = await mongoose.model('Timetable').findOne({
     _id: { $ne: this._id },
     academicYear: this.academicYear,
@@ -148,7 +137,6 @@ timetableSchema.pre('save', async function (next) {
     return next(err);
   }
 
-  // 2. Room conflict check
   const roomConflict = await mongoose.model('Timetable').findOne({
     _id: { $ne: this._id },
     academicYear: this.academicYear,

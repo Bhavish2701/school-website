@@ -1,19 +1,9 @@
-/**
- * Attendance Mongoose Model
- *
- * Implements:
- * 1. AttendanceRecord - Individual student daily attendance with compound unique index { student: 1, date: 1 }
- * 2. AttendanceRegister - Classroom daily session summary with compound unique index { class: 1, section: 1, date: 1 }
- */
 const mongoose = require('mongoose');
 
 const ATTENDANCE_STATUS = ['PRESENT', 'ABSENT', 'LATE', 'HALF_DAY', 'EXCUSED'];
 const ATTENDANCE_SESSIONS = ['FULL_DAY', 'MORNING', 'AFTERNOON'];
 const REGISTER_STATUS = ['SUBMITTED', 'DRAFT', 'REOPENED'];
 
-/**
- * Attendance Record Schema (Per Student Per Date)
- */
 const attendanceRecordSchema = new mongoose.Schema(
   {
     student: {
@@ -111,16 +101,11 @@ const attendanceRecordSchema = new mongoose.Schema(
   }
 );
 
-// DUPLICATE PREVENTION: A student can only have 1 attendance record per calendar date and session (Full Day / Morning / Afternoon)
 attendanceRecordSchema.index({ student: 1, date: 1, session: 1 }, { unique: true });
 
-// Query optimizations for classroom views and student timeline
 attendanceRecordSchema.index({ class: 1, section: 1, date: 1 });
 attendanceRecordSchema.index({ student: 1, date: -1 });
 
-/**
- * Attendance Register Schema (Classroom Session Header)
- */
 const attendanceRegisterSchema = new mongoose.Schema(
   {
     class: {
@@ -222,7 +207,6 @@ const attendanceRegisterSchema = new mongoose.Schema(
   }
 );
 
-// DUPLICATE PREVENTION: Only 1 official register per class-section per calendar date and session
 attendanceRegisterSchema.index({ class: 1, section: 1, date: 1, session: 1 }, { unique: true });
 
 const AttendanceRecord = mongoose.model('AttendanceRecord', attendanceRecordSchema);

@@ -1,8 +1,3 @@
-/**
- * Legal, Privacy & Compliance Controller
- * Implements Indian DPDP Act 2023, GDPR, AP Education Act statutory mandates,
- * Cookie preferences, DPA registry, Data Subject Access Requests (SAR), and Data Breach incident handling.
- */
 const asyncHandler = require('../utils/asyncHandler');
 const ApiError = require('../utils/apiError');
 const { formatSuccess } = require('../utils/apiResponse');
@@ -15,9 +10,6 @@ const { Student } = require('../models/student.model');
 const { AuditLog } = require('../models/auditLog.model');
 const auditLicenses = require('../../scripts/audit_licenses');
 
-/**
- * Seed initial third-party DPAs and policy versions if empty
- */
 async function ensureComplianceDefaults() {
   try {
     const dpaCount = await ThirdPartyDpa.countDocuments();
@@ -112,9 +104,6 @@ async function ensureComplianceDefaults() {
   }
 }
 
-// -----------------------------------------------------------------------------
-// 1. CONSENT MANAGEMENT
-// -----------------------------------------------------------------------------
 const recordConsent = asyncHandler(async (req, res) => {
   const { consentType, status, policyVersion, metadata, guardianUserId, studentAdmissionNo } = req.body;
 
@@ -198,9 +187,6 @@ const getConsentLedger = asyncHandler(async (req, res) => {
   );
 });
 
-// -----------------------------------------------------------------------------
-// 2. POLICIES & VERSIONS
-// -----------------------------------------------------------------------------
 const getPolicies = asyncHandler(async (req, res) => {
   await ensureComplianceDefaults();
   const policies = await PolicyVersion.find().sort({ effectiveDate: -1 });
@@ -214,7 +200,6 @@ const publishPolicyVersion = asyncHandler(async (req, res) => {
     throw ApiError.badRequest('policyType, version, and title are required.');
   }
 
-  // Mark previous as non-active
   await PolicyVersion.updateMany({ policyType }, { isCurrentActive: false });
 
   const newPolicy = await PolicyVersion.create({
@@ -241,9 +226,6 @@ const publishPolicyVersion = asyncHandler(async (req, res) => {
   res.status(201).json(formatSuccess(newPolicy, 'New policy version published successfully.'));
 });
 
-// -----------------------------------------------------------------------------
-// 3. THIRD-PARTY DPAS & PROCESSOR REGISTRY
-// -----------------------------------------------------------------------------
 const getThirdPartyDpas = asyncHandler(async (req, res) => {
   await ensureComplianceDefaults();
   const dpas = await ThirdPartyDpa.find().sort({ name: 1 });
@@ -276,9 +258,6 @@ const registerDpa = asyncHandler(async (req, res) => {
   res.status(201).json(formatSuccess(dpa, 'Third-party DPA saved successfully.'));
 });
 
-// -----------------------------------------------------------------------------
-// 4. DATA BREACH MANAGEMENT
-// -----------------------------------------------------------------------------
 const listBreachIncidents = asyncHandler(async (req, res) => {
   const incidents = await DataBreachIncident.find().sort({ detectedAt: -1 });
   res.status(200).json(formatSuccess(incidents, 'Data breach incidents retrieved'));
@@ -345,13 +324,9 @@ const updateBreachIncident = asyncHandler(async (req, res) => {
   res.status(200).json(formatSuccess(incident, 'Breach incident status updated.'));
 });
 
-// -----------------------------------------------------------------------------
-// 5. DATA SUBJECT ACCESS REQUEST (SAR / DATA PORTABILITY)
-// -----------------------------------------------------------------------------
 const exportUserDataDossier = asyncHandler(async (req, res) => {
   const { userId } = req.params;
 
-  // Authorization check: User can export self, or Principal/Super Admin can export anyone
   const isSelf = String(req.user._id) === String(userId);
   const isExecutive = ['SUPER_ADMIN', 'PRINCIPAL'].includes(req.user.role);
   if (!isSelf && !isExecutive) {
@@ -415,9 +390,6 @@ const exportUserDataDossier = asyncHandler(async (req, res) => {
   res.status(200).json(formatSuccess(dossier, 'Data Subject Access Request (SAR) exported successfully'));
 });
 
-// -----------------------------------------------------------------------------
-// 6. OPEN SOURCE LICENSES AUDIT
-// -----------------------------------------------------------------------------
 const getLicenseAudit = asyncHandler(async (req, res) => {
   const report = auditLicenses();
   res.status(200).json(formatSuccess(report, 'Open-source software license audit retrieved'));

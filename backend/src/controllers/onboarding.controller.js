@@ -1,7 +1,3 @@
-/**
- * Sri Vidya Educational Trust - Institution Onboarding & Migration Controller
- * REST API Endpoints for Module 5
- */
 
 const OnboardingService = require('../services/onboarding.service');
 

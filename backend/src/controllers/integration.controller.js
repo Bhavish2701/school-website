@@ -1,11 +1,6 @@
-/**
- * Sri Vidya Educational Trust - Integrations & API Management Controller
- * Module 13: Integrations Directory, Configuration, API Clients, and Event Logs
- */
 
 const IntegrationService = require('../services/integration.service');
 
-// 13.1 & 13.2 Integrations Directory & Configuration
 const listIntegrations = async (req, res) => {
   try {
     const result = await IntegrationService.listIntegrations(req.query);
@@ -112,7 +107,6 @@ const disconnectIntegration = async (req, res) => {
   }
 };
 
-// 13.3 API Management (External Clients)
 const listApiClients = async (req, res) => {
   try {
     const result = await IntegrationService.listApiClients(req.query);
@@ -159,7 +153,6 @@ const revokeApiClient = async (req, res) => {
   }
 };
 
-// 13.4 Integration Event Logs
 const listEventLogs = async (req, res) => {
   try {
     const result = await IntegrationService.listEventLogs(req.query);

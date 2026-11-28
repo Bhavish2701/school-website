@@ -1,7 +1,3 @@
-/**
- * Sri Vidya Educational Trust - Platform User & Account Management Controller
- * REST API Endpoints for Module 6
- */
 
 const UserAccountService = require('../services/userAccount.service');
 

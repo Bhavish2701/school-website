@@ -1,7 +1,3 @@
-/**
- * API Gateway & Client Management - Service Layer
- * Business rules, calculations, and operational orchestration
- */
 
 const Repository = require('./api-management.repository');
 const MultiInstitutionSecurity = require('../common/multiInstitutionSecurity');

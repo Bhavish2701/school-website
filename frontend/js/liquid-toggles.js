@@ -1,7 +1,3 @@
-/**
- * Sri Vidya E.M. High School ERP - Liquid Toggle Micro-Interaction Engine
- * Handles smooth fluid wave interactions, keyboard accessibility, and state persistence
- */
 
 (function (window, document) {
   'use strict';
@@ -29,27 +25,22 @@
       if (!input || input.__liquidEnhanced) return;
       input.__liquidEnhanced = true;
 
-      // Ensure proper accessibility attributes
       if (!input.getAttribute('role')) {
         input.setAttribute('role', 'switch');
       }
       input.setAttribute('aria-checked', input.checked ? 'true' : 'false');
 
-      // Bind interaction listener for fluid feedback
       input.addEventListener('change', function () {
         input.setAttribute('aria-checked', input.checked ? 'true' : 'false');
 
-        // Optional micro-haptic feedback on mobile / touch devices
         try {
           if (typeof navigator !== 'undefined' && typeof navigator.vibrate === 'function') {
             navigator.vibrate(input.checked ? 18 : 12);
           }
         } catch (e) {}
 
-        // Create ripple effect inside the track
         LiquidToggles.createRipple(input);
 
-        // Dispatch custom event for extensible reactive architectures
         input.dispatchEvent(
           new CustomEvent('liquid-toggle-change', {
             bubbles: true,
@@ -58,7 +49,6 @@
         );
       });
 
-      // Keyboard support for space and enter keys
       input.addEventListener('keydown', function (e) {
         if (e.key === ' ' || e.key === 'Enter') {
           e.preventDefault();
@@ -105,7 +95,6 @@
     },
 
     bindGlobalEvents: function () {
-      // MutationObserver to automatically enhance newly injected switches (e.g. inside dynamic modals or wizards)
       if (typeof MutationObserver !== 'undefined' && document.body) {
         const observer = new MutationObserver((mutations) => {
           let shouldEnhance = false;
@@ -134,7 +123,6 @@
     }
   };
 
-  // Auto-initialize when DOM is ready
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', function () {
       LiquidToggles.init();

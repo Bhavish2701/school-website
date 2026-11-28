@@ -1,7 +1,3 @@
-/**
- * System Health & Telemetry - Module Aggregator
- * Exports all 6 architectural layers
- */
 
 const routes = require('./system-health.routes');
 const controller = require('./system-health.controller');

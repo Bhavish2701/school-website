@@ -1,7 +1,3 @@
-/**
- * Forensic Audit Logs Explorer - Module Aggregator
- * Exports all 6 architectural layers
- */
 
 const routes = require('./audit-logs.routes');
 const controller = require('./audit-logs.controller');

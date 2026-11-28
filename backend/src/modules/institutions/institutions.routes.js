@@ -1,7 +1,3 @@
-/**
- * Institutions Module - Route Layer
- * Connects endpoints with validation and policy middleware
- */
 
 const express = require('express');
 const router = express.Router();

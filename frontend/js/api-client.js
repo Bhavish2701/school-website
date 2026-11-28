@@ -1,23 +1,8 @@
-/**
- * Sri Vidya E.M High School - Unified REST API Client
- * Reusable JavaScript API service connecting the frontend to Express.js / MERN backend.
- *
- * Capabilities:
- * 1. Base URL configuration with auto-detection fallback.
- * 2. Token management (localStorage & sessionStorage sync).
- * 3. Automatic JWT Authorization Bearer header injection.
- * 4. Silent token renewal on 401 Unauthorized / Token Expiration.
- * 5. Role-based & Object-Level 403 Forbidden interceptor.
- * 6. Centralized loading state dispatchers.
- * 7. Graceful offline / network error handling.
- * 8. Standardized API response unwrapping: { success, message, data, errors }.
- */
 (function (global) {
   'use strict';
 
   const DEFAULT_API_BASE = 'http://localhost:5000/api/v1';
 
-  // Storage Keys
   const STORAGE_ACCESS_TOKEN = 'sv_token_access';
   const STORAGE_REFRESH_TOKEN = 'sv_token_refresh';
   const STORAGE_USER = 'sv_user_profile';
@@ -157,7 +142,6 @@
                 });
               }
             } catch (_) {
-              // Silent reconnect backoff
             } finally {
               self._sseState.connected = false;
               self._sseState.connecting = false;
@@ -172,9 +156,6 @@
       };
     }
 
-    /* =========================================================================
-     * TOKEN & CREDENTIAL MANAGEMENT
-     * ========================================================================= */
     getAccessToken() {
       return localStorage.getItem(STORAGE_ACCESS_TOKEN) || sessionStorage.getItem(STORAGE_ACCESS_TOKEN) || null;
     }
@@ -194,7 +175,6 @@
 
     setSession(tokens, user, remember = true) {
       const storage = remember ? localStorage : sessionStorage;
-      // Clear both first to avoid stale tokens in other storage
       localStorage.removeItem(STORAGE_ACCESS_TOKEN);
       localStorage.removeItem(STORAGE_REFRESH_TOKEN);
       localStorage.removeItem(STORAGE_USER);
@@ -252,9 +232,6 @@
       return !!this.getAccessToken();
     }
 
-    /* =========================================================================
-     * UI FEEDBACK & NOTIFICATION HELPERS
-     * ========================================================================= */
     showToast(message, icon = 'fa-circle-check', isError = false) {
       if (typeof document === 'undefined') return;
       const existing = document.querySelector('.api-toast-banner');
@@ -323,9 +300,6 @@
       }
     }
 
-    /* =========================================================================
-     * CORE HTTP REQUEST WRAPPER WITH INTERCEPTORS
-     * ========================================================================= */
     async request(endpoint, options = {}) {
       const url = endpoint.startsWith('http') ? endpoint : `${this.baseUrl}${endpoint.startsWith('/') ? '' : '/'}${endpoint}`;
       
@@ -334,13 +308,11 @@
         ...(options.headers || {}),
       };
 
-      // Auto-set Content-Type if JSON payload
       if (options.body && typeof options.body === 'object' && !(options.body instanceof FormData)) {
         headers['Content-Type'] = 'application/json';
         options.body = JSON.stringify(options.body);
       }
 
-      // Attach Bearer Access Token
       const token = this.getAccessToken();
       if (token && !headers['Authorization']) {
         headers['Authorization'] = `Bearer ${token}`;
@@ -353,12 +325,10 @@
       try {
         let res = await fetch(url, options);
 
-        // 1. Handle 401 Unauthorized (Expired Token) -> Attempt Refresh
         if (res.status === 401 && !options._retry && this.getRefreshToken()) {
           options._retry = true;
           const refreshed = await this.silentRefreshToken();
           if (refreshed) {
-            // Re-apply refreshed token and retry
             options.headers['Authorization'] = `Bearer ${this.getAccessToken()}`;
             res = await fetch(url, options);
           } else {
@@ -367,7 +337,6 @@
           }
         }
 
-        // 2. Handle 403 Forbidden (RBAC / Object Level Access Violation)
         if (res.status === 403) {
           const errData = await res.json().catch(() => ({}));
           const errMsg = errData.message || 'Access denied: You are not authorized to view or edit this resource.';
@@ -393,7 +362,6 @@
 
         return data;
       } catch (err) {
-        // Network / Server connection errors
         if (err.name === 'TypeError' && err.message.includes('fetch')) {
           const offlineMsg = 'Unable to connect to school backend server. Please verify Express server is running on port 5000.';
           console.error('[ApiClient Network Error]:', err);
@@ -407,7 +375,6 @@
     }
 
     async silentRefreshToken() {
-      // Re-use active refresh promise to serialize parallel 401 calls and prevent token rotation race conditions
       if (this._refreshPromise) {
         return this._refreshPromise;
       }
@@ -441,7 +408,6 @@
     }
 
     async keepAlive() {
-      // Proactively keep session tokens fresh in background while user is active
       const refreshToken = this.getRefreshToken();
       const accessToken = this.getAccessToken();
       if (!refreshToken || !accessToken) return;
@@ -450,7 +416,6 @@
       if (!this._lastTokenRefreshTime) {
         this._lastTokenRefreshTime = now;
       }
-      // If 5 minutes have elapsed since last refresh, silently refresh access token
       if (now - this._lastTokenRefreshTime > 5 * 60 * 1000) {
         this._lastTokenRefreshTime = now;
         await this.silentRefreshToken();
@@ -494,11 +459,6 @@
       }, 500);
     }
 
-    /* =========================================================================
-     * DOMAIN API SERVICES
-     * ========================================================================= */
-
-    // 1. Authentication Service
     get auth() {
       return {
         login: async (identifier, password, remember = true, requireOtp = false, requestedPortal = '') => {
@@ -531,7 +491,6 @@
           try {
             await this.request('/auth/logout', { method: 'POST' });
           } catch (e) {
-            // Ignore logout network errors
           } finally {
             this.clearSession();
           }
@@ -577,7 +536,6 @@
       };
     }
 
-    // 2. Dashboard Service
     get dashboard() {
       return {
         getManagementDashboard: async (params = {}) => {
@@ -608,7 +566,6 @@
       };
     }
 
-    // 3. Students Service
     get students() {
       return {
         getStudents: async (params = {}) => {
@@ -638,7 +595,6 @@
       };
     }
 
-    // 4. Teachers Service
     get teachers() {
       return {
         getTeachers: async (params = {}) => {
@@ -667,7 +623,6 @@
       };
     }
 
-    // 5. Parents Service
     get parents() {
       return {
         getProfile: async () => {
@@ -692,7 +647,6 @@
       };
     }
 
-    // 6. Attendance Service
     get attendance() {
       return {
         getTeacherClasses: async () => {
@@ -735,7 +689,6 @@
       };
     }
 
-    // 7. Assignments & Academics Service
     get academic() {
       return {
         listYears: async (params = {}) => {
@@ -777,7 +730,6 @@
       };
     }
 
-    // 8. Examinations Service
     get exams() {
       return {
         getExams: async (params = {}) => {
@@ -818,7 +770,6 @@
       };
     }
 
-    // 9. Fee & Payment Service
     get fees() {
       return {
         getDashboardOverview: async (params = {}) => {
@@ -866,7 +817,6 @@
       };
     }
 
-    // 10. Admissions Service
     get admissions() {
       return {
         submitApplication: async (applicationData) => {
@@ -907,7 +857,6 @@
       };
     }
 
-    // 11. Notifications Service
     get notifications() {
       return {
         getNotifications: async (params = {}) => {
@@ -928,7 +877,6 @@
       };
     }
 
-    // 12. Messages & Communication Service
     get messages() {
       return {
         sendMessage: async (data) => {
@@ -944,7 +892,6 @@
       };
     }
 
-    // 13. Student Exit & Department Clearances Service
     get transfers() {
       return {
         getExitRequests: async (params = {}) => {
@@ -998,7 +945,6 @@
       };
     }
 
-    // 14. Timetable, Discipline, Events, Appointments, Settings & Platform Admin
     get timetable() {
       return {
         getToday: async (params = {}) => {
@@ -1133,11 +1079,9 @@
     }
   }
 
-  // Export singleton instance
   const ApiClient = new ApiClientService();
   global.ApiClient = ApiClient;
 
-  // Global browser error listeners for centralized telemetry
   if (typeof window !== 'undefined') {
     window.addEventListener('error', function (event) {
       try {

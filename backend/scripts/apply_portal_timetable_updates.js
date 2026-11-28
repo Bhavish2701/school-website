@@ -4,7 +4,6 @@ const path = require('path');
 const portalPath = path.join(__dirname, '../../frontend/js/portal.js');
 let content = fs.readFileSync(portalPath, 'utf8');
 
-// 1. Replace DASHBOARD_PERIODS and updateDashboardTimetable
 const oldTimetableSection = `  // Dashboard Dynamic Timetable Period Definitions
   const DASHBOARD_PERIODS = [
     { id: 1, num: 'Period 1', time: '09:00 – 09:45 AM', start: 540, end: 585, subj: 'Mathematics', teacher: 'Sri P. Satyanarayana' },
@@ -219,7 +218,6 @@ if (!content.includes(oldTimetableSection)) {
 content = content.replace(oldTimetableSection, newTimetableSection);
 console.log('✓ Successfully replaced Timetable definitions and added helper functions');
 
-// 2. Update updateDashboardTimetable implementation
 const oldUpdateTimetable = `  function updateDashboardTimetable(weekday, currentMinutes) {
     const pillEl = document.getElementById('activePeriodPill');
     const railEl = document.getElementById('dashPeriodsRail');
@@ -416,7 +414,6 @@ if (!content.includes(oldUpdateTimetable)) {
 content = content.replace(oldUpdateTimetable, newUpdateTimetable);
 console.log('✓ Successfully replaced updateDashboardTimetable');
 
-// 3. Update renderDashboardLiveMetrics
 const oldLiveMetricsTail = `    // 7. Live Synced IST Timestamp
     const syncTimeEl = document.getElementById('dashLastSyncTime');
     if (syncTimeEl) {
@@ -458,7 +455,6 @@ if (!content.includes(oldLiveMetricsTail)) {
 content = content.replace(oldLiveMetricsTail, newLiveMetricsTail);
 console.log('✓ Successfully updated renderDashboardLiveMetrics');
 
-// 4. Update Exports on portalApp
 const oldExportTarget = `    // Scholastic Report Card Workflow Exports
     openGenerateReportModal,
     switchReportStage,

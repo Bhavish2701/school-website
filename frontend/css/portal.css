@@ -1,9 +1,4 @@
 @import url('liquid-toggles.css');
-/* ==========================================================================
-   Sri Vidya E.M High School - Management Portal Stylesheet
-   Complete Architecture: Principal, Vice Principal & School Office Admin
-   Design Palette: White & Royal Blue (#1D4ED8 / #0F172A) with Dark Mode
-   ========================================================================== */
 
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap');
 
@@ -109,18 +104,12 @@ body {
   overflow-x: hidden;
 }
 
-/* ==========================================================================
-   PORTAL MAIN LAYOUT
-   ========================================================================== */
 .portal-layout {
   display: flex;
   min-height: 100vh;
   width: 100%;
 }
 
-/* ==========================================================================
-   SIDEBAR NAVIGATION
-   ========================================================================== */
 .portal-sidebar {
   width: var(--sidebar-width);
   background-color: var(--color-bg-surface);
@@ -186,7 +175,6 @@ body {
   color: var(--color-text-muted);
 }
 
-/* Active Role Indicator in Sidebar */
 .sidebar-role-indicator {
   margin: 1rem 1.25rem 0.5rem;
   padding: 0.85rem;
@@ -245,7 +233,6 @@ body {
   box-shadow: 0 0 0 2px var(--color-bg-surface);
 }
 
-/* Sidebar Menu */
 .sidebar-menu {
   flex: 1;
   overflow-y: auto;
@@ -388,7 +375,6 @@ body {
   outline-offset: 1px;
 }
 
-/* Submenu */
 .nav-sub {
   display: none;
   padding-left: 2.35rem;
@@ -449,7 +435,6 @@ body {
   color: var(--color-accent-amber);
 }
 
-/* Sidebar Footer User Card */
 .sidebar-user-card {
   padding: 0.85rem 1.25rem;
   border-top: 1px solid var(--color-border);
@@ -511,9 +496,6 @@ body {
   color: var(--color-accent-red);
 }
 
-/* ==========================================================================
-   PORTAL MAIN CONTENT CONTAINER
-   ========================================================================== */
 .portal-main {
   flex: 1;
   margin-left: var(--sidebar-width);
@@ -523,7 +505,6 @@ body {
   background-color: var(--color-bg-base);
 }
 
-/* Portal Sticky Header */
 .portal-header {
   height: var(--header-height);
   background-color: var(--color-bg-surface);
@@ -659,7 +640,6 @@ body {
   flex-shrink: 0;
 }
 
-/* Authenticated Role Indicator Badge (Read-Only) */
 .role-indicator-badge {
   display: inline-flex;
   align-items: center;
@@ -710,7 +690,6 @@ body {
   color: #93C5FD;
 }
 
-/* Role Selector Dropdown */
 .role-selector-wrap {
   display: flex;
   align-items: center;
@@ -778,7 +757,6 @@ body {
   border-radius: var(--radius-full);
 }
 
-/* Notification Flyout (Must be hidden by default!) */
 .notification-dropdown-wrapper {
   position: relative;
 }
@@ -794,7 +772,6 @@ body {
   box-shadow: var(--shadow-xl);
   z-index: 200;
   display: none;
-  /* Crucial: Not visible until clicked */
 }
 
 .notif-flyout.active {
@@ -923,7 +900,6 @@ body {
   color: var(--color-primary);
 }
 
-/* Redesigned Institutional Header Logout Button */
 .btn-header-signout {
   display: inline-flex;
   align-items: center;
@@ -972,7 +948,6 @@ body {
   transform: translateY(1px);
 }
 
-/* Responsive Top Bar Adjustments */
 @media (max-width: 1200px) {
   .header-search {
     width: 250px;
@@ -1031,7 +1006,6 @@ body {
   }
 }
 
-/* Dark Theme Overrides for Top Control Bar */
 [data-theme="dark"] .portal-header {
   background-color: #0F172A;
   border-bottom-color: #1E293B;
@@ -1131,9 +1105,6 @@ body {
   color: #F87171;
 }
 
-/* ==========================================================================
-   PORTAL VIEWS & CONTENT AREA
-   ========================================================================== */
 .portal-content {
   flex: 1;
   padding: 2rem;
@@ -1161,11 +1132,6 @@ body {
   }
 }
 
-/* ==========================================================================
-   MODULE 1: DASHBOARD
-   ========================================================================== */
-
-/* Executive Role Switcher (Principal vs VP) */
 .executive-role-switcher {
   background: var(--color-bg-card);
   border: 1px solid var(--color-border);
@@ -1310,7 +1276,6 @@ body {
   border-color: rgba(255, 255, 255, 0.3);
 }
 
-/* Vice Principal Focus & Permissions Banner */
 .vp-permissions-bar {
   background: var(--color-bg-card);
   border: 2px solid var(--color-primary);
@@ -1409,7 +1374,6 @@ body {
   border: 1px solid rgba(239, 68, 68, 0.3);
 }
 
-/* Welcome Banner */
 .welcome-banner {
   background: linear-gradient(135deg, var(--color-primary-dark) 0%, #1E3A8A 50%, var(--color-primary) 100%);
   color: #FFFFFF;
@@ -1478,7 +1442,6 @@ body {
   border: 1px solid rgba(16, 185, 129, 0.3);
 }
 
-/* Live Clock Pill (IST) - High Contrast, Big & Prominent First Position */
 .welcome-meta .meta-pill.live-clock-pill,
 .meta-pill.live-clock-pill {
   background: #FFFFFF !important;
@@ -1508,7 +1471,6 @@ body {
   font-size: 1.18rem !important;
 }
 
-/* Dark Mode - Big Luminous IST Clock */
 [data-theme="dark"] .welcome-meta .meta-pill.live-clock-pill,
 .dark-mode .welcome-meta .meta-pill.live-clock-pill {
   background: rgba(30, 58, 138, 0.75) !important;
@@ -1672,7 +1634,6 @@ body {
   color: var(--color-text-muted);
 }
 
-/* Badges */
 .badge {
   display: inline-block;
   padding: 0.2rem 0.55rem;
@@ -1914,7 +1875,6 @@ body {
   border-color: var(--color-primary);
 }
 
-/* Pagination */
 .table-pagination {
   padding: 0.85rem 1.5rem;
   background: var(--color-bg-surface);
@@ -1949,7 +1909,6 @@ body {
   border-color: var(--color-primary);
 }
 
-/* Modals */
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -2018,7 +1977,6 @@ body {
   gap: 0.75rem;
 }
 
-/* Toast */
 .toast-container {
   position: fixed;
   bottom: 2rem;
@@ -2054,7 +2012,6 @@ body {
   }
 }
 
-/* Responsive Media Queries */
 @media (max-width: 1024px) {
   .portal-sidebar {
     transform: translateX(-100%);
@@ -2097,12 +2054,6 @@ body {
   }
 }
 
-
-/* ==========================================================================
-   Additional Portal Components & Utility Classes
-   ========================================================================== */
-
-/* Utility spacing & text */
 .w-100 {
   width: 100% !important;
 }
@@ -2151,7 +2102,6 @@ body {
   font-size: 1.1rem;
 }
 
-/* Alerts & Badges */
 .alert {
   padding: 1rem 1.25rem;
   border-radius: var(--radius-md);
@@ -2180,14 +2130,12 @@ body {
   line-height: 1;
 }
 
-/* Welcome content */
 .welcome-content {
   display: flex;
   flex-direction: column;
   gap: 0.35rem;
 }
 
-/* Restricted banner (Role permissions notice for VP / Admin) */
 .restricted-banner {
   background: #FFFBEB;
   border: 1px solid #FCD34D;
@@ -2209,7 +2157,6 @@ body {
   color: #FDE68A;
 }
 
-/* Module Header & Actions */
 .module-header {
   display: flex;
   justify-content: space-between;
@@ -2240,7 +2187,6 @@ body {
   flex-wrap: wrap;
 }
 
-/* Table Containers & Toolbars */
 .table-container {
   background: var(--color-bg-surface);
   border: 1px solid var(--color-border);
@@ -2261,7 +2207,6 @@ body {
   gap: 1rem;
 }
 
-/* Premium Filter Toolbar (Authoritative Professional Enterprise Layout) */
 .filter-toolbar {
   display: flex;
   align-items: center;
@@ -2479,7 +2424,6 @@ body {
   border-color: var(--color-accent-red);
 }
 
-/* Student Subview Panels */
 .student-subview {
   display: none;
   animation: subviewFadeIn 0.25s ease-out;
@@ -2501,7 +2445,6 @@ body {
   }
 }
 
-/* Action Icon Buttons */
 .table-action-btns {
   display: flex;
   align-items: center;
@@ -2531,7 +2474,6 @@ body {
   box-shadow: 0 2px 4px rgba(29, 78, 216, 0.12);
 }
 
-/* Phone link styling */
 .phone-link {
   display: inline-flex;
   align-items: center;
@@ -2551,7 +2493,6 @@ body {
   color: #FFFFFF;
 }
 
-/* Student Profiles Grid */
 .student-profiles-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
@@ -2724,9 +2665,6 @@ body {
   padding: 0.45rem 0.75rem;
 }
 
-/* ==========================================================================
-   STUDENT PROFILES - EXECUTIVE TABULAR ROSTER VIEW
-   ========================================================================== */
 .student-roster-wrap {
   background: var(--color-bg-surface, #ffffff);
   border: 1px solid var(--color-border, #E2E8F0);
@@ -2876,7 +2814,6 @@ body {
   border-bottom: none;
 }
 
-/* Roster Cell Elements */
 .roster-adm-code {
   display: inline-flex;
   align-items: center;
@@ -3149,7 +3086,6 @@ body {
   box-shadow: 0 3px 8px rgba(29, 78, 216, 0.35);
 }
 
-/* Dark Mode Roster Enhancements */
 [data-theme="dark"] .student-roster-wrap {
   background: #1e293b;
   border-color: #334155;
@@ -3254,10 +3190,6 @@ body {
   color: #ffffff;
 }
 
-
-/* ==========================================================================
-   STUDENT DOCUMENTS - EXECUTIVE DOSSIER GOVERNANCE & AUDIT VIEW
-   ========================================================================== */
 .doc-kpi-bar {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
@@ -3367,7 +3299,6 @@ body {
   margin-top: 0.25rem;
 }
 
-/* Document Table Container */
 .student-docs-wrap {
   background: var(--color-bg-surface, #ffffff);
   border: 1px solid var(--color-border, #E2E8F0);
@@ -3464,7 +3395,6 @@ body {
   color: var(--color-text-main, #1e293b);
 }
 
-/* Dossier Progress Cell */
 .dossier-progress-cell {
   display: flex;
   flex-direction: column;
@@ -3569,7 +3499,6 @@ body {
   font-weight: 700;
 }
 
-/* Submission Channel Badge */
 .submission-channel-badge {
   display: inline-flex;
   align-items: center;
@@ -3605,7 +3534,6 @@ body {
   border: 1px solid var(--color-border, #e2e8f0);
 }
 
-/* Document Verification Badge */
 .doc-verify-badge {
   display: inline-flex;
   align-items: center;
@@ -3692,7 +3620,6 @@ body {
   color: var(--color-text-muted, #64748b);
 }
 
-/* Document Action Buttons */
 .doc-actions-wrap {
   display: inline-flex;
   align-items: center;
@@ -3743,7 +3670,6 @@ body {
   box-shadow: 0 3px 8px rgba(29, 78, 216, 0.35);
 }
 
-/* Dark Mode for Student Documents */
 [data-theme="dark"] .doc-kpi-card {
   background: #1e293b;
   border-color: #334155;
@@ -3834,7 +3760,6 @@ body {
   background: #334155;
 }
 
-/* Admissions Queue Card / Table Layout */
 .admissions-overview-bar {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -3893,7 +3818,6 @@ body {
   color: var(--color-text-muted);
 }
 
-/* Academic Performance Dashboard & Charts */
 .perf-header-banner {
   background: linear-gradient(135deg, #1E3A8A 0%, #1D4ED8 100%);
   color: #FFFFFF;
@@ -3995,7 +3919,6 @@ body {
   gap: 0.5rem;
 }
 
-/* Donut / Pie Chart Layout */
 .donut-chart-box {
   display: flex;
   align-items: center;
@@ -4097,7 +4020,6 @@ body {
   color: var(--color-text-dark);
 }
 
-/* Vertical Bar Chart */
 .v-bar-chart-container {
   display: flex;
   align-items: flex-end;
@@ -4158,7 +4080,6 @@ body {
   color: var(--color-text-dark);
 }
 
-/* Forms & Tab strips */
 .form-row {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -4250,9 +4171,6 @@ body {
   border-bottom-color: var(--color-primary);
 }
 
-/* ==========================================================================
-   Subview Header Bar & Action Layout (Institutional Standard)
-   ========================================================================== */
 .subview-header-bar {
   background: var(--color-bg-surface, #ffffff);
   border: 1px solid var(--color-border, #e2e8f0);
@@ -4362,7 +4280,6 @@ input[type="radio"]:checked+.radio-chip {
   border-color: var(--color-primary);
 }
 
-/* Substitution Roster Grid & Cards */
 .academics-container {
   display: flex;
   flex-direction: column;
@@ -4417,11 +4334,6 @@ input[type="radio"]:checked+.radio-chip {
   color: var(--color-text-muted);
 }
 
-/* ==========================================================================
-   ATTENDANCE MODULE STYLING & PROFESSIONAL ALIGNMENT ENGINE
-   ========================================================================== */
-
-/* 1. Summary Cards Grid & Flex Alignment */
 .attendance-summary-grid {
   display: grid !important;
   grid-template-columns: repeat(4, 1fr) !important;
@@ -4518,7 +4430,6 @@ input[type="radio"]:checked+.radio-chip {
   color: #2563eb !important;
 }
 
-/* 2. Professional Attendance Table Layouts (Full 100% Width) */
 #view-attendance .table-container {
   background: #ffffff !important;
   border: 1px solid #e2e8f0 !important;
@@ -4540,7 +4451,6 @@ input[type="radio"]:checked+.radio-chip {
   gap: 0.85rem !important;
 }
 
-/* Universal Base Data Table Styles */
 .table-responsive {
   width: 100%;
   overflow-x: auto;
@@ -4668,7 +4578,6 @@ input[type="radio"]:checked+.radio-chip {
   border-bottom: none !important;
 }
 
-/* 3. Component Elements Inside Attendance Tables */
 .att-date-pill {
   display: inline-flex !important;
   align-items: center !important;
@@ -4745,12 +4654,6 @@ input[type="radio"]:checked+.radio-chip {
   background: #ef4444 !important;
 }
 
-/* ==========================================================================
-   TIMETABLE MODULE & ACADEMIC SCHEDULING - PROFESSIONAL ALIGNMENT ENGINE
-   Class Schedules, Substitution Planner, Lab & Hall Allocations, Conflicts
-   ========================================================================== */
-
-/* 1. Global Timetable Container & Full 100% Width Tables */
 #view-timetable {
   width: 100% !important;
 }
@@ -4824,7 +4727,6 @@ input[type="radio"]:checked+.radio-chip {
   background: #f8fafc !important;
 }
 
-/* 2. Official Bell Timings & Breaks Ribbon */
 .tt-timing-ribbon {
   display: flex !important;
   flex-direction: row !important;
@@ -4862,7 +4764,6 @@ input[type="radio"]:checked+.radio-chip {
   font-weight: 700 !important;
 }
 
-/* 3. Calendar View Switcher Buttons */
 .calendar-view-btn-group {
   display: inline-flex !important;
   align-items: center !important;
@@ -4901,7 +4802,6 @@ input[type="radio"]:checked+.radio-chip {
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) !important;
 }
 
-/* 4. Class Schedule Slot Cards (Weekly Grid) */
 .tt-slot-card {
   display: flex !important;
   flex-direction: column !important;
@@ -5024,7 +4924,6 @@ input[type="radio"]:checked+.radio-chip {
   white-space: nowrap !important;
 }
 
-/* 5. Highlighted Break Rows */
 .tt-break-row td {
   background: #fefce8 !important;
   color: #854d0e !important;
@@ -5055,7 +4954,6 @@ input[type="radio"]:checked+.radio-chip {
   font-size: 1rem !important;
 }
 
-/* 6. Daily Timeline View Cards */
 .tt-daily-timeline {
   display: flex !important;
   flex-direction: column !important;
@@ -5101,7 +4999,6 @@ input[type="radio"]:checked+.radio-chip {
   min-width: 0 !important;
 }
 
-/* 7. Facility Cards Grid */
 .facility-cards-grid {
   display: grid !important;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)) !important;
@@ -5127,7 +5024,6 @@ input[type="radio"]:checked+.radio-chip {
   border-color: #93c5fd !important;
 }
 
-/* 8. Printable Timetable Modal Styles & Print Optimization */
 #printableTimetableModal .portal-modal {
   max-width: 980px !important;
   width: min(980px, calc(100vw - 32px)) !important;
@@ -5205,8 +5101,6 @@ input[type="radio"]:checked+.radio-chip {
   margin-bottom: 0.4rem !important;
 }
 
-
-/* Discipline & Fees Stat Quad */
 .discipline-quad-stat,
 .fees-quad-stat,
 .leaves-quad-stat {
@@ -5264,7 +5158,6 @@ input[type="radio"]:checked+.radio-chip {
   color: var(--color-text-muted);
 }
 
-/* Communication Split & Feeds */
 .communication-split {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -5345,7 +5238,6 @@ input[type="radio"]:checked+.radio-chip {
   color: var(--color-text-muted);
 }
 
-/* Events, Incidents, Reports Dossier, Settings */
 .events-portal-grid,
 .incident-grid,
 .reports-dossier-grid,
@@ -5382,7 +5274,6 @@ input[type="radio"]:checked+.radio-chip {
   grid-column: 1 / -1;
 }
 
-/* Hierarchy Tree */
 .roles-hierarchy-preview {
   background: var(--color-bg-surface);
   border: 1px solid var(--color-border);
@@ -5434,7 +5325,6 @@ input[type="radio"]:checked+.radio-chip {
   margin-top: 0.25rem;
 }
 
-/* Modals */
 .modal-backdrop {
   position: fixed;
   inset: 0;
@@ -5669,7 +5559,6 @@ input[type="radio"]:checked+.radio-chip {
   }
 }
 
-/* ✕ Close button for .portal-modal */
 .modal-close-x {
   background: var(--color-bg-subtle);
   border: 1px solid var(--color-border);
@@ -5693,7 +5582,6 @@ input[type="radio"]:checked+.radio-chip {
   transform: rotate(90deg);
 }
 
-/* Fee Status info note inside admission modal */
 .fee-note-box {
   background: rgba(59, 130, 246, 0.08);
   border: 1px solid rgba(59, 130, 246, 0.2);
@@ -5726,7 +5614,6 @@ input[type="radio"]:checked+.radio-chip {
   gap: 0.25rem;
 }
 
-/* ── Student Table Pagination ──────────────────────────────────────────── */
 .pagination-bar {
   display: flex;
   align-items: center;
@@ -5792,10 +5679,6 @@ input[type="radio"]:checked+.radio-chip {
   font-size: 0.85rem;
 }
 
-
-/* ==========================================================================
-   COMMUNICATION METRICS & STAT BOXES (SMS, Email, App Push, Announcements)
-   ========================================================================== */
 .comm-quad-stat {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -5906,7 +5789,6 @@ input[type="radio"]:checked+.radio-chip {
   color: #d97706 !important;
 }
 
-/* Communication Toolbar & Headers */
 .table-header-left {
   display: flex;
   align-items: center;
@@ -5944,9 +5826,6 @@ input[type="radio"]:checked+.radio-chip {
   font-weight: 600;
 }
 
-/* =============================================================================
-   UNIFIED PORTALS SWITCHER HUB (ALL IN ONE PLACE)
-   ============================================================================= */
 .portals-hub-wrapper {
   position: relative;
 }
@@ -5993,7 +5872,6 @@ input[type="radio"]:checked+.radio-chip {
   transform: rotate(180deg);
 }
 
-/* Portals Hub Flyout Menu */
 .portals-hub-flyout {
   position: absolute;
   top: calc(100% + 10px);
@@ -6177,9 +6055,6 @@ input[type="radio"]:checked+.radio-chip {
   background: rgba(30, 41, 59, 0.5);
 }
 
-/* ==========================================================================
-   OFFICIAL STUDENT IDENTITY CARD (PVC BADGE STYLING)
-   ========================================================================== */
 .id-card-stage {
   display: flex;
   justify-content: center;
@@ -6198,7 +6073,6 @@ input[type="radio"]:checked+.radio-chip {
   margin: 0 auto;
 }
 
-/* Lanyard Slot Hole Punch (Physical Badge Effect) */
 .id-card-lanyard-slot {
   width: 52px;
   height: 11px;
@@ -6225,14 +6099,12 @@ input[type="radio"]:checked+.radio-chip {
   user-select: none;
 }
 
-/* Top Golden Accent Bar */
 .id-card-top-accent {
   height: 5px;
   width: 100%;
   background: linear-gradient(90deg, #f59e0b, #fbbf24, #d97706);
 }
 
-/* Header Section */
 .id-card-header {
   background: linear-gradient(135deg, #1e3a8a 0%, #1d4ed8 70%, #2563eb 100%);
   color: #ffffff;
@@ -6328,7 +6200,6 @@ input[type="radio"]:checked+.radio-chip {
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
 }
 
-/* Card Body */
 .id-card-body {
   padding: 14px 16px 10px;
   position: relative;
@@ -6336,7 +6207,6 @@ input[type="radio"]:checked+.radio-chip {
   overflow: hidden;
 }
 
-/* Watermark background emblem */
 .id-watermark {
   position: absolute;
   top: 50%;
@@ -6364,7 +6234,6 @@ input[type="radio"]:checked+.radio-chip {
   display: block;
 }
 
-/* Profile Photo Section */
 .id-photo-section {
   display: flex;
   flex-direction: column;
@@ -6440,7 +6309,6 @@ input[type="radio"]:checked+.radio-chip {
   font-size: 0.65rem;
 }
 
-/* Student Particulars */
 .id-student-details {
   position: relative;
   z-index: 1;
@@ -6533,7 +6401,6 @@ input[type="radio"]:checked+.radio-chip {
   font-size: 0.72rem;
 }
 
-/* Barcode Identification */
 .id-barcode-container {
   margin-top: 6px;
   padding-top: 6px;
@@ -6560,7 +6427,6 @@ input[type="radio"]:checked+.radio-chip {
   font-weight: 700;
 }
 
-/* Footer Section */
 .id-card-footer {
   background: #f8fafc;
   border-top: 1.5px solid #e2e8f0;
@@ -6637,10 +6503,6 @@ input[type="radio"]:checked+.radio-chip {
   font-weight: 600;
 }
 
-/* ==========================================================================
-   Comprehensive Dark Theme: Official Student Identity Card
-   Eliminates all leaking light mode/white backgrounds & low-contrast text
-   ========================================================================== */
 [data-theme="dark"] #studentIdCardModal .modal-body {
   background: #0B1120 !important;
 }
@@ -6813,12 +6675,6 @@ input[type="radio"]:checked+.radio-chip {
   color: #94A3B8 !important;
 }
 
-/* ==========================================================================
-   MODULE 3: TEACHERS & STAFF MANAGEMENT - COMPREHENSIVE DESIGN SYSTEM
-   Professional UI Alignment, 5-Column Grid, Toolbars, Dropzones & Modals
-   ========================================================================== */
-
-/* 1. Main Page Header */
 #view-teachers .module-header {
   display: flex;
   justify-content: space-between;
@@ -6888,7 +6744,6 @@ input[type="radio"]:checked+.radio-chip {
   outline-offset: 2px;
 }
 
-/* 2. Navigation Tab Strip */
 #teachersTabStrip {
   display: flex;
   align-items: flex-end;
@@ -6955,7 +6810,6 @@ input[type="radio"]:checked+.radio-chip {
   outline-offset: -2px;
 }
 
-/* 3. Search and Filter Toolbar */
 #view-teachers .filter-toolbar {
   display: flex;
   align-items: center;
@@ -7051,7 +6905,6 @@ input[type="radio"]:checked+.radio-chip {
   box-shadow: 0 0 0 3px rgba(29, 78, 216, 0.12);
 }
 
-/* 4. Faculty and Non-Teaching Staff Responsive Grid (5-column desktop) */
 .staff-grid {
   display: grid;
   grid-template-columns: repeat(5, minmax(0, 1fr));
@@ -7083,7 +6936,6 @@ input[type="radio"]:checked+.radio-chip {
   }
 }
 
-/* 5. Staff Card UI Components */
 .staff-card {
   background: var(--color-bg-card, #ffffff);
   border: 1px solid var(--color-border, #e2e8f0);
@@ -7225,7 +7077,6 @@ input[type="radio"]:checked+.radio-chip {
   text-decoration: underline;
 }
 
-/* Assigned Duty panel for Non-Teaching Staff */
 .staff-active-task-badge {
   background: rgba(29, 78, 216, 0.04);
   border: 1px solid rgba(29, 78, 216, 0.15);
@@ -7277,7 +7128,6 @@ input[type="radio"]:checked+.radio-chip {
   gap: 0.3rem;
 }
 
-/* Staff Card Action Footer */
 .staff-footer {
   display: flex;
   gap: 0.5rem;
@@ -7325,7 +7175,6 @@ input[type="radio"]:checked+.radio-chip {
   outline-offset: 1px;
 }
 
-/* 6. Bulk Import Staff Page & Assistant Modal Components */
 .import-step-card {
   background: var(--color-bg-surface, #ffffff);
   border: 1px solid var(--color-border, #e2e8f0);
@@ -7408,7 +7257,6 @@ input[type="radio"]:checked+.radio-chip {
   outline-offset: 1px;
 }
 
-/* Drag & Drop Upload Zone */
 .import-box {
   border: 2px dashed #93c5fd;
   background: #f0f7ff;
@@ -7450,7 +7298,6 @@ input[type="radio"]:checked+.radio-chip {
   text-decoration: underline;
 }
 
-/* Paste CSV Textarea and Actions */
 .import-textarea-actions {
   display: flex;
   justify-content: space-between;
@@ -7495,7 +7342,6 @@ input[type="radio"]:checked+.radio-chip {
   box-shadow: 0 0 0 3px rgba(29, 78, 216, 0.12);
 }
 
-/* 7. High-Priority Bulk Import Modal Layout */
 #importStaffModal .portal-modal {
   max-width: 820px;
   width: 95%;
@@ -7584,7 +7430,6 @@ input[type="radio"]:checked+.radio-chip {
   filter: grayscale(0.4);
 }
 
-/* 8. Responsive Design & Media Queries */
 @media (max-width: 900px) {
   #view-teachers .module-header {
     flex-direction: column;
@@ -7630,7 +7475,6 @@ input[type="radio"]:checked+.radio-chip {
   }
 }
 
-/* 9. Dark Mode Adaptation for Teachers & Staff */
 [data-theme="dark"] #view-teachers .filter-toolbar,
 [data-theme="dark"] .staff-card,
 [data-theme="dark"] .import-step-card,
@@ -7696,12 +7540,6 @@ input[type="radio"]:checked+.radio-chip {
   color: #93c5fd;
 }
 
-/* ==========================================================================
-   MODULE 4: ACADEMIC MANAGEMENT & TIMETABLE IMPORT MODAL - DESIGN SYSTEM
-   School Wing Cards, 4-Column KPI Metrics Grid, Timetable Assistant Modal
-   ========================================================================== */
-
-/* 1. Academic School Wings Card Grid (.timing-highlight-banner) */
 .timing-highlight-banner {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -7829,7 +7667,6 @@ input[type="radio"]:checked+.radio-chip {
   border-color: rgba(15, 118, 110, 0.18);
 }
 
-/* 2. Academic Audit & Institutional Progress Reports (4-Column KPI Grid) */
 .academic-metric-cards {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -7923,7 +7760,6 @@ input[type="radio"]:checked+.radio-chip {
   line-height: 1.35;
 }
 
-/* KPI Progress Bars */
 .ac-stat-progress-wrap {
   margin-top: 0.35rem;
   display: flex;
@@ -7961,7 +7797,6 @@ input[type="radio"]:checked+.radio-chip {
   background: linear-gradient(90deg, #7c3aed, #a855f7);
 }
 
-/* 3. Bulk Import Timetable & Schedule Modal */
 #academicImportModal .portal-modal {
   max-width: 680px;
   width: min(680px, calc(100vw - 32px));
@@ -8054,7 +7889,6 @@ input[type="radio"]:checked+.radio-chip {
   }
 }
 
-/* Dark Mode Overrides for Academics */
 [data-theme="dark"] .timing-badge-box,
 [data-theme="dark"] .ac-stat-card,
 [data-theme="dark"] #academicImportModal .portal-modal,
@@ -8089,7 +7923,6 @@ input[type="radio"]:checked+.radio-chip {
   background: var(--color-bg-base);
 }
 
-/* Badge Color Accents for Academic KPI Stat Cards */
 .ac-stat-badge.badge-blue {
   background: var(--color-primary-subtle, #eff6ff);
   color: var(--color-primary, #1d4ed8);
@@ -8114,7 +7947,6 @@ input[type="radio"]:checked+.radio-chip {
   border: 1px solid #ddd6fe;
 }
 
-/* Modal Close Button for Bulk Timetable Import */
 #academicImportModal .modal-close-x {
   background: var(--color-bg-subtle, #f1f5f9);
   border: 1px solid var(--color-border, #e2e8f0);
@@ -8138,7 +7970,6 @@ input[type="radio"]:checked+.radio-chip {
   transform: rotate(90deg);
 }
 
-/* Academic Wing Detail Subtext Styling */
 .timing-details p {
   margin: 0;
   font-size: 0.85rem;
@@ -8151,7 +7982,6 @@ input[type="radio"]:checked+.radio-chip {
   color: var(--color-primary, #1d4ed8);
 }
 
-/* Dark Mode Overrides for KPI Badges and Close Button */
 [data-theme="dark"] .ac-stat-badge.badge-blue {
   background: rgba(29, 78, 216, 0.2);
   color: #93c5fd;
@@ -8182,12 +8012,6 @@ input[type="radio"]:checked+.radio-chip {
   color: var(--color-text-muted);
 }
 
-
-/* ==========================================================================
-   MASTER TIMETABLE & BIOMETRIC ATTENDANCE - ENTERPRISE ALIGNMENT & DESIGN
-   ========================================================================== */
-
-/* 1. Master Weekly Schedule Header & Class Selection Controls */
 .timetable-header-controls {
   display: flex;
   align-items: center;
@@ -8270,7 +8094,6 @@ input[type="radio"]:checked+.radio-chip {
   white-space: nowrap;
 }
 
-/* 2. Bell Schedule Information Panel */
 .bell-schedule-panel {
   border-radius: var(--radius-md, 10px);
   padding: 0.9rem 1.25rem;
@@ -8334,7 +8157,6 @@ input[type="radio"]:checked+.radio-chip {
   margin-left: auto;
 }
 
-/* 3. Biometric Register Toolbar */
 .biometric-toolbar {
   display: flex;
   align-items: center;
@@ -8393,7 +8215,6 @@ input[type="radio"]:checked+.radio-chip {
   transition: var(--transition);
 }
 
-/* 4. Biometric Register Table & Action Buttons */
 .biometric-register-table {
   width: 100%;
   border-collapse: collapse;
@@ -8503,12 +8324,6 @@ input[type="radio"]:checked+.radio-chip {
   }
 }
 
-
-/* ==========================================================================
-   MASTER BUG FIX: Alignment, Timetable, Modal, and Ledger Enhancements
-   ========================================================================== */
-
-/* Modal Alignment and Polish */
 #sendAbsenteeSmsModal .portal-modal {
   max-width: 680px;
   width: 95%;
@@ -8529,7 +8344,6 @@ input[type="radio"]:checked+.radio-chip {
   border-bottom: 1px solid var(--color-border, #f1f5f9);
 }
 
-/* Bell Schedule Notice Panel */
 .bell-schedule-panel {
   border-radius: 8px;
   padding: 0.85rem 1.15rem;
@@ -8579,7 +8393,6 @@ input[type="radio"]:checked+.radio-chip {
   flex-wrap: wrap;
 }
 
-/* Master Timetable Table Grid Styling */
 .timetable-table-container {
   overflow-x: auto;
   border: 1px solid var(--color-border, #e2e8f0);
@@ -8647,7 +8460,6 @@ input[type="radio"]:checked+.radio-chip {
   line-height: 1.2;
 }
 
-/* Substitution Roster Card & Register */
 .sub-period-badge {
   background: #eff6ff;
   color: var(--color-primary, #1d4ed8);
@@ -8658,7 +8470,6 @@ input[type="radio"]:checked+.radio-chip {
   border: 1px solid #bfdbfe;
 }
 
-/* Attendance Timeline Metrics */
 .timeline-metric-row {
   display: flex;
   justify-content: space-between;
@@ -8668,7 +8479,6 @@ input[type="radio"]:checked+.radio-chip {
   margin-bottom: 0.35rem;
 }
 
-/* Responsive adjustments across devices */
 @media (max-width: 768px) {
   .bell-schedule-panel {
     flex-direction: column;
@@ -8685,12 +8495,6 @@ input[type="radio"]:checked+.radio-chip {
   }
 }
 
-
-/* ==========================================================================
-   EXAMINATION MANAGEMENT MODULE STYLING
-   ========================================================================== */
-
-/* 1. Official Examination Hall Ticket Issuer Modal */
 #issueHallTicketsModal .portal-modal.hall-ticket-modal-container {
   max-width: 860px;
   width: 95%;
@@ -8730,7 +8534,6 @@ input[type="radio"]:checked+.radio-chip {
   flex-shrink: 0;
 }
 
-/* Hall Ticket Toolbar */
 .hall-ticket-modal-toolbar {
   padding: 0.85rem 1.5rem;
   background: #ffffff;
@@ -8795,7 +8598,6 @@ input[type="radio"]:checked+.radio-chip {
   padding: 0 1.15rem;
 }
 
-/* Hall Ticket Document Preview Container */
 .hall-ticket-preview-box {
   background: #ffffff;
   border: 2px solid #1e3a8a;
@@ -8883,7 +8685,6 @@ input[type="radio"]:checked+.radio-chip {
   min-width: 85px;
 }
 
-/* Candidate Information Grid */
 .hall-ticket-info-card {
   display: flex;
   justify-content: space-between;
@@ -8948,7 +8749,6 @@ input[type="radio"]:checked+.radio-chip {
   text-transform: uppercase;
 }
 
-/* Hall Ticket Subject Schedule Table */
 .hall-ticket-table {
   width: 100%;
   border-collapse: collapse;
@@ -8978,7 +8778,6 @@ input[type="radio"]:checked+.radio-chip {
   background: #f8fafc;
 }
 
-/* Rules Section */
 .hall-ticket-rules {
   background: #fffbeb;
   border: 1px solid #fef08a;
@@ -9002,7 +8801,6 @@ input[type="radio"]:checked+.radio-chip {
   line-height: 1.4;
 }
 
-/* Signatures */
 .hall-ticket-signatures {
   display: flex;
   justify-content: space-between;
@@ -9046,7 +8844,6 @@ input[type="radio"]:checked+.radio-chip {
   color: #64748b;
 }
 
-/* 2. Examination Instructions & Notices (Cards Grid) */
 .exam-notices-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -9081,7 +8878,6 @@ input[type="radio"]:checked+.radio-chip {
   line-height: 1.45;
 }
 
-/* 3. Examination Hall Metrics & Seating Desk Grid */
 #examHallMetricsRow,
 #tabulationMetricsRow {
   display: grid;
@@ -9124,7 +8920,6 @@ input[type="radio"]:checked+.radio-chip {
   color: var(--color-text-muted, #64748b);
 }
 
-/* Desk Seating Grid */
 #seatingHallDesksContainer {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(135px, 1fr));
@@ -9164,9 +8959,6 @@ input[type="radio"]:checked+.radio-chip {
   gap: 0.15rem;
 }
 
-/* ==========================================================================
-   DISCIPLINE & BEHAVIORAL RECORDS STYLING
-   ========================================================================== */
 .incident-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
@@ -9263,7 +9055,6 @@ input[type="radio"]:checked+.radio-chip {
   height: 34px;
 }
 
-/* Merit Cards & Convocation Cards */
 .merit-card,
 .convocation-card {
   background: #ffffff;
@@ -9304,7 +9095,6 @@ input[type="radio"]:checked+.radio-chip {
   gap: 0.3rem;
 }
 
-/* Responsive Overrides */
 @media (max-width: 1024px) {
 
   #tabulationMetricsRow,
@@ -9352,10 +9142,6 @@ input[type="radio"]:checked+.radio-chip {
   }
 }
 
-
-/* ==========================================================================
-   OFFICIAL QUESTION PAPER GENERATOR & VIEWER (CLASS 9 MATHEMATICS V-23)
-   ========================================================================== */
 .qp-paper-sheet {
   background: #ffffff;
   border: 1px solid #cbd5e1;
@@ -9534,10 +9320,6 @@ input[type="radio"]:checked+.radio-chip {
   }
 }
 
-
-/* ==========================================================================
-   OFFICIAL TRANSFER CERTIFICATE MODAL STYLES (APPENDIX 16)
-   ========================================================================== */
 .tc-modal-container {
   max-width: 920px;
   width: 95%;
@@ -9562,7 +9344,6 @@ input[type="radio"]:checked+.radio-chip {
   overflow-y: auto;
 }
 
-/* Modal TC Sheet Container */
 .modal-tc-sheet {
   background: #ffffff;
   border: 2px solid #222;
@@ -9577,8 +9358,6 @@ input[type="radio"]:checked+.radio-chip {
   padding: 15px 18px;
 }
 
-
-/* Discipline, Fees, Leaves & Comm Stat Quads - 4 Column Responsive Grid */
 .discipline-quad-stat,
 .fees-quad-stat,
 .leaves-quad-stat,
@@ -9635,12 +9414,6 @@ input[type="radio"]:checked+.radio-chip {
   gap: 1rem;
 }
 
-
-/* ==========================================================================
-   FEE MANAGEMENT MODULE STYLES (High-Definition Layout & Alignment)
-   ========================================================================== */
-
-/* Quad Stats alignment */
 .fees-quad-stat {
   display: grid !important;
   grid-template-columns: repeat(4, 1fr) !important;
@@ -9660,7 +9433,6 @@ input[type="radio"]:checked+.radio-chip {
   }
 }
 
-/* Charts Row in Collection Overview */
 .fee-charts-row {
   display: grid !important;
   grid-template-columns: repeat(2, 1fr) !important;
@@ -9739,7 +9511,6 @@ input[type="radio"]:checked+.radio-chip {
   justify-content: center;
 }
 
-/* Defaulter Summary Cards in Subview 2 */
 .defaulter-summary-grid {
   display: grid !important;
   grid-template-columns: repeat(4, 1fr) !important;
@@ -9812,7 +9583,6 @@ input[type="radio"]:checked+.radio-chip {
   color: #64748b;
 }
 
-/* Defaulters Toolbar Alignment */
 .defaulters-toolbar {
   display: flex;
   justify-content: space-between;
@@ -9849,7 +9619,6 @@ input[type="radio"]:checked+.radio-chip {
   flex-wrap: wrap;
 }
 
-/* Report KPI Cards in Subview 3 */
 .report-kpi-grid {
   display: grid !important;
   grid-template-columns: repeat(4, 1fr) !important;
@@ -9928,7 +9697,6 @@ input[type="radio"]:checked+.radio-chip {
   flex-wrap: wrap;
 }
 
-/* Class Fee Realization Matrix */
 .class-matrix-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -9964,7 +9732,6 @@ input[type="radio"]:checked+.radio-chip {
   color: #475569;
 }
 
-/* Transactions Ledger Toolbar */
 .fee-ledger-toolbar {
   display: flex;
   justify-content: space-between;
@@ -9989,12 +9756,6 @@ input[type="radio"]:checked+.radio-chip {
   flex-wrap: wrap;
 }
 
-
-/* ==========================================================================
-   SRI VIDYA HIGH SCHOOL - PROFESSIONAL COMMUNICATION DESK ENHANCEMENTS
-   ========================================================================== */
-
-/* Active & Hover states for Radio/Checkbox Chips */
 .radio-chip:has(input:checked) {
   background: var(--color-primary-subtle, #eff6ff) !important;
   color: var(--color-primary, #1e40af) !important;
@@ -10009,7 +9770,6 @@ input[type="radio"]:checked+.radio-chip {
   accent-color: var(--color-primary, #1e40af);
 }
 
-/* Broadcast Feed Container & Scrollbar */
 .broadcast-feed {
   display: flex;
   flex-direction: column;
@@ -10037,7 +9797,6 @@ input[type="radio"]:checked+.radio-chip {
   background: #94a3b8;
 }
 
-/* Feed Item Card */
 .feed-item-card {
   background: #ffffff;
   border: 1px solid #e2e8f0;
@@ -10074,7 +9833,6 @@ input[type="radio"]:checked+.radio-chip {
   border-left-color: #8b5cf6;
 }
 
-/* Header inside Feed Item */
 .feed-item-header {
   display: flex;
   align-items: center;
@@ -10136,7 +9894,6 @@ input[type="radio"]:checked+.radio-chip {
   font-weight: 500;
 }
 
-/* Title & Status inside Feed Item */
 .feed-title-row {
   display: flex;
   align-items: flex-start;
@@ -10159,7 +9916,6 @@ input[type="radio"]:checked+.radio-chip {
   color: #334155;
 }
 
-/* Footer inside Feed Item */
 .feed-item-footer {
   display: flex;
   align-items: center;
@@ -10197,10 +9953,6 @@ input[type="radio"]:checked+.radio-chip {
   font-weight: 600;
   border-radius: 6px;
 }
-
-/* =========================================================================
-   GRANULAR RBAC PERMISSIONS CENTER & RESTRICTED CARD STYLES
-   ========================================================================= */
 
 .teacher-id-badge {
   display: inline-flex;
@@ -10359,7 +10111,6 @@ input[type="radio"]:checked+.radio-chip {
   color: var(--color-text-muted, #64748b);
 }
 
-/* Modern Toggle Switch */
 .perm-switch {
   position: relative;
   display: inline-block;
@@ -10412,7 +10163,6 @@ input:disabled+.perm-slider {
   cursor: not-allowed;
 }
 
-/* Teacher Selected Profile Card */
 .teacher-perm-profile {
   background: var(--color-bg-subtle, #f8fafc);
   border: 1px solid var(--color-border, #e2e8f0);
@@ -10462,7 +10212,6 @@ input:disabled+.perm-slider {
   color: var(--color-text-muted, #64748b);
 }
 
-/* Clerk Module Restricted State Card */
 .clerk-module-restricted-card {
   padding: 3rem 1.5rem;
   display: flex;
@@ -10532,8 +10281,6 @@ input:disabled+.perm-slider {
   justify-content: center;
 }
 
-
-/* Universal Dark Mode for Sidebar User Card */
 [data-theme="dark"] .sidebar-user-card {
   background: var(--color-bg-surface, #151F32) !important;
   border-top-color: var(--color-border, #243048) !important;
@@ -10556,8 +10303,6 @@ input:disabled+.perm-slider {
   color: #EF4444 !important;
 }
 
-
-/* Base Card Component */
 .card {
   background: var(--color-bg-card, var(--color-bg-surface, #FFFFFF));
   border: 1px solid var(--color-border);
@@ -10568,10 +10313,6 @@ input:disabled+.perm-slider {
   box-sizing: border-box;
 }
 
-
-/* ==========================================================================
-   Executive Dashboard Dark Mode Color Harmony & Contrast
-   ========================================================================== */
 [data-theme="dark"] .welcome-banner {
   background: linear-gradient(135deg, #0B132B 0%, #172554 45%, #1E3A8A 100%) !important;
   border: 1px solid #243048 !important;
@@ -10694,8 +10435,6 @@ input:disabled+.perm-slider {
   color: #FFFFFF !important;
 }
 
-
-/* Uniform Academic Performance & Stat Metric Boxes in Dark Theme */
 [data-theme="dark"] .perf-metric-box,
 [data-theme="dark"] .perf-metric-box.highlight {
   background: var(--color-bg-subtle, #1E293B) !important;
@@ -10717,8 +10456,6 @@ input:disabled+.perm-slider {
   color: var(--color-text-muted, #94A3B8) !important;
 }
 
-
-/* Executive Restrictions & Governance Banner */
 .executive-restrictions-banner {
   background: var(--color-bg-surface, #ffffff);
   border: 1px solid var(--color-border, #e2e8f0);
@@ -10842,7 +10579,6 @@ input:disabled+.perm-slider {
   border: 1px solid #e2e8f0;
 }
 
-/* Executive Settings Section Cards */
 .exec-jurisdiction-box {
   background: var(--color-bg-surface, #ffffff);
   border: 1px solid var(--color-border, #e2e8f0);
@@ -10933,12 +10669,10 @@ input:disabled+.perm-slider {
   border-color: #243048;
 }
 
-/* Utility classes */
 .d-block {
   display: block !important;
 }
 
-/* Staff Attendance Checklist & Buttons (Office / Clerk Authority) */
 .staff-att-row {
   display: flex;
   justify-content: space-between;
@@ -11018,10 +10752,6 @@ input:disabled+.perm-slider {
   color: #94a3b8;
 }
 
-
-/* ==========================================================================
-   PORTAL TOAST NOTIFICATION CONTAINER & COMPONENTS
-   ========================================================================== */
 .toast-container {
   position: fixed !important;
   bottom: 24px !important;
@@ -11143,9 +10873,6 @@ input:disabled+.perm-slider {
   background: rgba(255, 255, 255, 0.1) !important;
 }
 
-/* ==========================================================================
-   SUBMENU PERMISSIONS MODULE & CARD SYSTEM (SETTINGS -> ACCESS PERMISSIONS)
-   ========================================================================== */
 .perm-module-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
@@ -11311,9 +11038,6 @@ input:disabled+.perm-slider {
   gap: 10px;
 }
 
-/* ==========================================================================
-   STUDENT PROFILE DOSSIER (EXECUTIVE ERP DESIGN)
-   ========================================================================== */
 #viewStudentModal .portal-modal {
   max-width: 680px;
   width: 95%;
@@ -11325,7 +11049,6 @@ input:disabled+.perm-slider {
   gap: 1.15rem;
 }
 
-/* Header Strip & Avatar */
 .profile-header-strip {
   display: flex;
   align-items: center;
@@ -11407,7 +11130,6 @@ input:disabled+.perm-slider {
   color: #065f46;
 }
 
-/* 3 Quick KPI Stat Cards */
 .dossier-kpi-row {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -11448,7 +11170,6 @@ input:disabled+.perm-slider {
   line-height: 1.2;
 }
 
-/* Info Grid (2 Columns, Clean Card Style) */
 .profile-info-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -11503,7 +11224,6 @@ input:disabled+.perm-slider {
   color: #ffffff;
 }
 
-/* Academic Report Section Card */
 .profile-section-card {
   border-radius: var(--radius-md, 12px);
   border: 1px solid var(--color-border, #e2e8f0);
@@ -11586,7 +11306,6 @@ input:disabled+.perm-slider {
   }
 }
 
-/* Dark theme overrides */
 [data-theme="dark"] .profile-header-strip {
   background: rgba(30, 58, 138, 0.25);
   border-color: rgba(59, 130, 246, 0.3);
@@ -11655,11 +11374,6 @@ input:disabled+.perm-slider {
   color: #93c5fd;
 }
 
-
-
-/* ==========================================================================
-   STUDENT DOCUMENT DOSSIER VIEWER & INSPECTION MODAL
-   ========================================================================== */
 .doc-viewer-modal {
   max-width: 1200px;
   width: 96%;
@@ -11795,11 +11509,6 @@ input:disabled+.perm-slider {
   background: rgba(37, 99, 235, 0.25);
   border-color: #3b82f6;
 }
-
-/* ==========================================================================
-   OFFICE STAFF OPERATIONAL STYLING & STRICT BOUNDARY INDICATORS
-   Scope: Operational Desk, Admissions, Pending Docs, Fees Counter, Tasks, Requests
-   ========================================================================== */
 
 .office-scope-banner {
   background: linear-gradient(135deg, rgba(37, 99, 235, 0.08) 0%, rgba(16, 185, 129, 0.08) 100%);
@@ -11997,12 +11706,6 @@ input:disabled+.perm-slider {
   border: 1px solid rgba(245, 158, 11, 0.3);
 }
 
-/* ==========================================================================
-   ADMINISTRATION PORTAL - EXECUTIVE DASHBOARD EXPANDED SECTIONS
-   Design: Modern Corporate Academic ERP, Royal Blue & Clean Whites, Responsive
-   ========================================================================== */
-
-/* Fast Navigation Ribbon */
 .dash-nav-ribbon {
   display: flex;
   align-items: center;
@@ -12075,7 +11778,6 @@ input:disabled+.perm-slider {
   color: #059669;
 }
 
-/* Base Dashboard Section Card */
 .dash-section {
   background: var(--color-bg-surface, #ffffff);
   border: 1px solid var(--color-border, #e2e8f0);
@@ -12203,7 +11905,6 @@ input:disabled+.perm-slider {
   flex-wrap: wrap;
 }
 
-/* Dual Column Layout */
 .dash-grid-2 {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -12216,7 +11917,6 @@ input:disabled+.perm-slider {
   }
 }
 
-/* Triple Column Layout */
 .dash-grid-3 {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -12229,7 +11929,6 @@ input:disabled+.perm-slider {
   }
 }
 
-/* 4 Column Layout */
 .dash-grid-4 {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -12248,7 +11947,6 @@ input:disabled+.perm-slider {
   }
 }
 
-/* Modern Dashboard Tables */
 .dash-table-wrap {
   width: 100%;
   overflow-x: auto;
@@ -12295,7 +11993,6 @@ input:disabled+.perm-slider {
   background: rgba(30, 41, 59, 0.5);
 }
 
-/* Student & Faculty Entity Cell */
 .dash-entity-cell {
   display: flex;
   align-items: center;
@@ -12351,7 +12048,6 @@ input:disabled+.perm-slider {
   color: var(--color-text-muted, #64748b);
 }
 
-/* Mini KPI Pill Badges */
 .dash-pill {
   display: inline-flex;
   align-items: center;
@@ -12393,7 +12089,6 @@ input:disabled+.perm-slider {
   border: 1px solid rgba(139, 92, 246, 0.25);
 }
 
-/* Timetable Period Horizontal Rail */
 .dash-periods-rail {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
@@ -12499,7 +12194,6 @@ input:disabled+.perm-slider {
   border-color: rgba(59, 130, 246, 0.4);
 }
 
-/* Substitution Alert Strip */
 .dash-subst-alert {
   display: flex;
   align-items: center;
@@ -12520,7 +12214,6 @@ input:disabled+.perm-slider {
   border-color: rgba(245, 158, 11, 0.4);
 }
 
-/* Staff Leave Cards */
 .dash-leave-card {
   background: var(--color-bg-subtle, #f8fafc);
   border: 1px solid var(--color-border, #e2e8f0);
@@ -12555,7 +12248,6 @@ input:disabled+.perm-slider {
   color: #a7f3d0;
 }
 
-/* Admissions Pipeline Stages */
 .dash-pipeline-wrap {
   display: flex;
   align-items: center;
@@ -12607,7 +12299,6 @@ input:disabled+.perm-slider {
   font-size: 0.85rem;
 }
 
-/* Document Verification Check Tag */
 .doc-tag {
   display: inline-flex;
   align-items: center;
@@ -12629,7 +12320,6 @@ input:disabled+.perm-slider {
   color: #dc2626;
 }
 
-/* Financial Stat Cards (Fee Module) */
 .dash-fee-card {
   background: var(--color-bg-subtle, #f8fafc);
   border: 1px solid var(--color-border, #e2e8f0);
@@ -12685,7 +12375,6 @@ input:disabled+.perm-slider {
   margin-top: 0.15rem;
 }
 
-/* Appointment Timeline Item */
 .dash-appt-item {
   display: flex;
   align-items: flex-start;
@@ -12739,7 +12428,6 @@ input:disabled+.perm-slider {
   color: var(--color-text-muted, #64748b);
 }
 
-/* Announcement Card */
 .dash-notice-item {
   display: flex;
   align-items: flex-start;
@@ -12790,7 +12478,6 @@ input:disabled+.perm-slider {
   color: var(--color-text-muted, #64748b);
 }
 
-/* Academic Benchmark Bars */
 .dash-benchmark-row {
   display: flex;
   align-items: center;
@@ -12830,7 +12517,6 @@ input:disabled+.perm-slider {
   flex-shrink: 0;
 }
 
-/* Audit Activities Timeline */
 .dash-audit-feed {
   display: flex;
   flex-direction: column;
@@ -12871,7 +12557,6 @@ input:disabled+.perm-slider {
   line-height: 1.4;
 }
 
-/* Campus Health Stat Tiles */
 .dash-health-tile {
   background: var(--color-bg-subtle, #f8fafc);
   border: 1px solid var(--color-border, #e2e8f0);
@@ -12911,9 +12596,6 @@ input:disabled+.perm-slider {
   box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.25);
 }
 
-/* ==========================================================================
-   GLOBAL BUTTON SYSTEM (MANAGEMENT PORTAL)
-   ========================================================================== */
 .btn {
   display: inline-flex;
   align-items: center;
@@ -13038,9 +12720,6 @@ input:disabled+.perm-slider {
   border-radius: var(--radius-sm);
 }
 
-/* ==========================================================================
-   TOP 4 EXECUTIVE INDICATORS (METRICS QUAD)
-   ========================================================================== */
 .metrics-quad {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -13207,9 +12886,6 @@ input:disabled+.perm-slider {
   background: #d97706;
 }
 
-/* ==========================================================================
-   ACADEMIC PERFORMANCE CHARTS & BENCHMARKS (SECTION 8)
-   ========================================================================== */
 .perf-stats-grid {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -13298,9 +12974,6 @@ input:disabled+.perm-slider {
   color: #1d4ed8 !important;
 }
 
-/* ==========================================================================
-   PENDING DECISIONS & EXECUTIVE APPROVALS (SECTION 10)
-   ========================================================================== */
 .approval-list {
   display: flex;
   flex-direction: column;
@@ -13443,7 +13116,6 @@ input:disabled+.perm-slider {
   transform: translateY(-1px);
 }
 
-/* Examination and Table Action Buttons */
 .dash-table td .btn-xs,
 .dash-table td .btn-secondary {
   font-size: 0.75rem;
@@ -13465,7 +13137,6 @@ input:disabled+.perm-slider {
   transform: translateY(-1px);
 }
 
-/* Responsive Overrides */
 @media (max-width: 1024px) {
   .metrics-quad {
     grid-template-columns: repeat(2, 1fr) !important;
@@ -13497,9 +13168,6 @@ input:disabled+.perm-slider {
   }
 }
 
-/* ==========================================================================
-   CAMPUS EVENTS CALENDAR TIMELINE (SECTION 7)
-   ========================================================================== */
 .events-timeline {
   display: flex;
   flex-direction: column;
@@ -13627,7 +13295,6 @@ input:disabled+.perm-slider {
   margin: 0;
 }
 
-/* Additional Dashboard UI Utilities & Badges */
 .mb-3 {
   margin-bottom: 1rem !important;
 }
@@ -13700,15 +13367,6 @@ input:disabled+.perm-slider {
   box-shadow: 0 0 0 3px rgba(29, 78, 216, 0.1);
 }
 
-
-
-
-
-/* ==========================================================================
-   ADMISSIONS MANAGEMENT ENTERPRISE REDESIGN (SUBMENU OF STUDENTS)
-   ========================================================================== */
-
-/* Upgraded KPI Cards */
 .admissions-overview-bar {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -13920,7 +13578,6 @@ input:disabled+.perm-slider {
   margin-top: 0.2rem;
 }
 
-/* Admissions Executive Toolbar & Enterprise 2-Tier Architecture */
 .admissions-toolbar,
 .admissions-toolbar-container {
   display: flex;
@@ -14124,7 +13781,6 @@ input:disabled+.perm-slider {
   gap: 5px;
 }
 
-/* Master Admissions Table Layout */
 .admissions-wrap {
   background: var(--color-bg-surface, #ffffff);
   border: 1px solid var(--color-border, #e2e8f0);
@@ -14266,7 +13922,6 @@ input:disabled+.perm-slider {
   white-space: nowrap;
 }
 
-/* Column Specific Styling */
 .adm-app-cell {
   display: flex;
   flex-direction: column;
@@ -14437,7 +14092,6 @@ input:disabled+.perm-slider {
   text-decoration: underline;
 }
 
-/* Entrance Exam & Score Badges */
 .adm-score-cell {
   white-space: nowrap;
 }
@@ -14476,7 +14130,6 @@ input:disabled+.perm-slider {
   border: 1px solid #fde68a;
 }
 
-/* Document Screening Badges */
 .adm-doc-badge {
   display: inline-flex;
   align-items: center;
@@ -14517,7 +14170,6 @@ input:disabled+.perm-slider {
   box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.25);
 }
 
-/* Admission Decision & Allocation */
 .adm-decision-cell {
   min-width: 180px;
 }
@@ -14574,7 +14226,6 @@ input:disabled+.perm-slider {
   white-space: nowrap;
 }
 
-/* Action Buttons Group */
 .adm-actions-cell {
   display: flex;
   align-items: center;
@@ -14660,7 +14311,6 @@ input:disabled+.perm-slider {
   border-color: #fecaca;
 }
 
-/* Admissions Pagination Bar */
 .admissions-pagination-bar {
   display: flex;
   align-items: center;
@@ -14715,9 +14365,6 @@ input:disabled+.perm-slider {
   cursor: not-allowed;
 }
 
-/* ==========================================================================
-   DARK MODE OVERRIDES FOR ADMISSIONS SUBVIEW
-   ========================================================================== */
 [data-theme="dark"] .admissions-toolbar,
 [data-theme="dark"] .admissions-wrap,
 [data-theme="dark"] .admissions-pagination-bar {
@@ -14824,12 +14471,6 @@ input:disabled+.perm-slider {
   color: #ffffff;
 }
 
-
-/* ==========================================================================
-   TRANSFERS (TC) MANAGEMENT ENTERPRISE REDESIGN (SUBMENU OF STUDENTS)
-   ========================================================================== */
-
-/* Upgraded Transfers & Module Filter Toolbars */
 .transfers-toolbar {
   display: flex !important;
   flex-direction: column !important;
@@ -14992,7 +14633,6 @@ select.form-select,
   gap: 5px;
 }
 
-/* Master Transfers Table Layout */
 .transfers-wrap {
   background: var(--color-bg-surface, #ffffff);
   border: 1px solid var(--color-border, #e2e8f0);
@@ -15094,7 +14734,6 @@ select.form-select,
   white-space: nowrap;
 }
 
-/* TC Column Specific Styling */
 .tc-id-cell {
   display: flex;
   flex-direction: column;
@@ -15294,7 +14933,6 @@ select.form-select,
   border: 1px solid #fecaca;
 }
 
-/* Actions Group */
 .tc-actions-cell {
   display: flex;
   align-items: center;
@@ -15354,7 +14992,6 @@ select.form-select,
   border-color: #bbf7d0;
 }
 
-/* Transfers Pagination Bar */
 .transfers-pagination-bar {
   display: flex;
   align-items: center;
@@ -15409,9 +15046,6 @@ select.form-select,
   cursor: not-allowed;
 }
 
-/* ==========================================================================
-   DARK MODE OVERRIDES FOR TRANSFERS SUBVIEW
-   ========================================================================== */
 [data-theme="dark"] .transfers-toolbar,
 [data-theme="dark"] .transfers-wrap,
 [data-theme="dark"] .transfers-pagination-bar {
@@ -15507,12 +15141,6 @@ select.form-select,
   color: #ffffff;
 }
 
-
-/* ==========================================================================
-   STUDENT PERFORMANCE ENTERPRISE REDESIGN (SUBMENU OF STUDENTS)
-   ========================================================================== */
-
-/* Performance Table Wrapper */
 .perf-table-wrap {
   background: var(--color-bg-surface, #ffffff);
   border: 1px solid var(--color-border, #e2e8f0);
@@ -15614,7 +15242,6 @@ select.form-select,
   color: var(--color-text-main, #1e293b);
 }
 
-/* Performance Column Specifics */
 .perf-student-cell {
   display: flex;
   align-items: center;
@@ -15665,7 +15292,6 @@ select.form-select,
   letter-spacing: 0.02em;
 }
 
-/* Subject-wise Marks Grid */
 .perf-marks-grid {
   display: flex;
   flex-wrap: wrap;
@@ -15708,7 +15334,6 @@ select.form-select,
   border: 1px solid #fecaca;
 }
 
-/* Aggregate & GPA Cell */
 .perf-gpa-cell {
   display: flex;
   flex-direction: column;
@@ -15777,7 +15402,6 @@ select.form-select,
   border: 1px solid #fecaca;
 }
 
-/* Attendance Cell */
 .perf-att-cell {
   display: flex;
   flex-direction: column;
@@ -15818,7 +15442,6 @@ select.form-select,
   color: var(--color-text-muted, #64748b);
 }
 
-/* Trend Cell */
 .perf-trend-cell {
   white-space: nowrap;
 }
@@ -15851,7 +15474,6 @@ select.form-select,
   border: 1px solid #fde68a;
 }
 
-/* Remarks Cell */
 .perf-remarks-cell {
   max-width: 220px;
   font-size: 0.78rem;
@@ -15860,7 +15482,6 @@ select.form-select,
   font-style: italic;
 }
 
-/* Actions Cell */
 .perf-actions-cell {
   display: flex;
   align-items: center;
@@ -15920,7 +15541,6 @@ select.form-select,
   border-color: #bfdbfe;
 }
 
-/* Performance Pagination Bar */
 .perf-pagination-bar {
   display: flex;
   align-items: center;
@@ -15975,9 +15595,6 @@ select.form-select,
   cursor: not-allowed;
 }
 
-/* ==========================================================================
-   DARK MODE OVERRIDES FOR PERFORMANCE SUBVIEW
-   ========================================================================== */
 [data-theme="dark"] .perf-table-wrap,
 [data-theme="dark"] .perf-pagination-bar {
   background: #1e293b;
@@ -16041,10 +15658,6 @@ select.form-select,
   color: #ffffff;
 }
 
-
-/* =============================================================================
-   PARENT / GUARDIAN RECORDS SUBMENU STYLES
-   ============================================================================= */
 .parent-table-wrap {
   background: var(--color-bg-surface, #ffffff);
   border: 1px solid var(--color-border, #e2e8f0);
@@ -16114,7 +15727,6 @@ select.form-select,
   color: var(--color-text-main, #1e293b);
 }
 
-/* Sticky First Column (Guardian Details) */
 .parent-table thead th:first-child,
 .parent-table tbody td:first-child {
   position: sticky;
@@ -16148,7 +15760,6 @@ select.form-select,
   letter-spacing: 0.02em;
 }
 
-/* Guardian Details Cell */
 .parent-details-cell {
   display: flex;
   align-items: center;
@@ -16193,7 +15804,6 @@ select.form-select,
   gap: 5px;
 }
 
-/* Contact Info Cell */
 .parent-contact-cell {
   display: flex;
   flex-direction: column;
@@ -16245,7 +15855,6 @@ select.form-select,
   width: fit-content;
 }
 
-/* Relationship & Authority Cell */
 .parent-relation-cell {
   display: flex;
   flex-direction: column;
@@ -16291,7 +15900,6 @@ select.form-select,
   color: #1d4ed8;
 }
 
-/* Linked Child Cell */
 .parent-child-cell {
   display: flex;
   flex-direction: column;
@@ -16332,7 +15940,6 @@ select.form-select,
   border-radius: 4px;
 }
 
-/* Status Cell */
 .parent-status-cell {
   display: flex;
   flex-direction: column;
@@ -16368,7 +15975,6 @@ select.form-select,
   color: var(--color-text-muted, #64748b);
 }
 
-/* Actions Cell */
 .parent-actions-cell {
   display: flex;
   align-items: center;
@@ -16448,7 +16054,6 @@ select.form-select,
   transform: translateY(-1px);
 }
 
-/* Pagination Bar */
 .parent-pagination-bar {
   display: flex;
   align-items: center;
@@ -16508,7 +16113,6 @@ select.form-select,
   cursor: not-allowed;
 }
 
-/* Dark Mode Overrides */
 [data-theme="dark"] .parent-table-wrap {
   background: #1e293b;
   border-color: #334155;
@@ -16596,11 +16200,6 @@ select.form-select,
   color: #ffffff;
 }
 
-
-/* =============================================================================
-   TEACHERS & STAFF MANAGEMENT - 7 INSTITUTIONAL SUBMENUS STYLES
-   ============================================================================= */
-
 .staff-table-card {
   background: var(--color-surface, #ffffff);
   border: 1px solid var(--color-border, #e2e8f0);
@@ -16680,7 +16279,6 @@ select.form-select,
   background: #f8fafc;
 }
 
-/* Confidentiality & Masking */
 .confidential-lock {
   display: inline-flex;
   align-items: center;
@@ -16722,7 +16320,6 @@ select.form-select,
   gap: 10px;
 }
 
-/* Class chips & Subject badges */
 .class-allocation-chip {
   display: inline-flex;
   align-items: center;
@@ -16747,7 +16344,6 @@ select.form-select,
   font-weight: 600;
 }
 
-/* Workload & Conflicts */
 .workload-progress-wrap {
   width: 120px;
   background: #e2e8f0;
@@ -16801,7 +16397,6 @@ select.form-select,
   font-weight: 700;
 }
 
-/* Staff Documents Pills */
 .staff-doc-tag {
   display: inline-flex;
   align-items: center;
@@ -16840,7 +16435,6 @@ select.form-select,
   color: #dc2626;
 }
 
-/* Dark mode overrides */
 [data-theme="dark"] .staff-table-card {
   background: #1e293b;
   border-color: #334155;
@@ -16897,11 +16491,6 @@ select.form-select,
   color: #cbd5e1;
 }
 
-
-/* =========================================================================
-   PROFESSIONAL NON-TEACHING STAFF ROSTER & MANAGEMENT STYLES
-   ========================================================================= */
-
 .non-teaching-roster-table {
   width: 100%;
   border-collapse: collapse;
@@ -16935,7 +16524,6 @@ select.form-select,
   background-color: #f8fafc;
 }
 
-/* Staff ID badge with monospace clarity */
 .staff-id-pill {
   display: inline-flex;
   align-items: center;
@@ -16952,7 +16540,6 @@ select.form-select,
   white-space: nowrap;
 }
 
-/* Staff Member Cell */
 .staff-member-cell {
   display: flex;
   align-items: center;
@@ -17030,7 +16617,6 @@ select.form-select,
   text-decoration: none;
 }
 
-/* Department Badge */
 .staff-dept-badge {
   display: inline-flex;
   align-items: center;
@@ -17049,7 +16635,6 @@ select.form-select,
   color: #2563eb;
 }
 
-/* Designation & Role */
 .staff-designation-box {
   display: flex;
   flex-direction: column;
@@ -17071,7 +16656,6 @@ select.form-select,
   gap: 4px;
 }
 
-/* Joining Date & Service Tenure */
 .staff-date-box {
   display: flex;
   flex-direction: column;
@@ -17103,7 +16687,6 @@ select.form-select,
   white-space: nowrap;
 }
 
-/* Employment Status Badge: GUARANTEED NO WRAP */
 .staff-status-badge {
   display: inline-flex;
   align-items: center;
@@ -17136,7 +16719,6 @@ select.form-select,
   border: 1px solid #bfdbfe;
 }
 
-/* Confidential HR Details Box */
 .staff-confidential-box {
   display: flex;
   flex-direction: column;
@@ -17163,7 +16745,6 @@ select.form-select,
   white-space: nowrap;
 }
 
-/* Actions Group */
 .staff-actions-group {
   display: flex;
   align-items: center;
@@ -17206,7 +16787,6 @@ select.form-select,
   color: #1e40af;
 }
 
-/* Dark mode overrides for non-teaching staff */
 [data-theme="dark"] .non-teaching-roster-table th {
   background: #0f172a;
   color: #cbd5e1;
@@ -17262,11 +16842,6 @@ select.form-select,
   border-color: #1d4ed8;
   color: #93c5fd;
 }
-
-
-/* =========================================================================
-   PROFESSIONAL STAFF ATTENDANCE & OFFLINE CHECK-IN / CHECK-OUT STYLES
-   ========================================================================= */
 
 .offline-attendance-banner {
   display: flex;
@@ -17341,7 +16916,6 @@ select.form-select,
   gap: 8px;
 }
 
-/* Offline Check-In & Check-Out Punch Box */
 .offline-punch-box {
   display: flex;
   flex-direction: column;
@@ -17425,7 +16999,6 @@ select.form-select,
   font-weight: 700;
 }
 
-/* Staff Category Badges */
 .category-badge-teaching {
   display: inline-flex;
   align-items: center;
@@ -17456,7 +17029,6 @@ select.form-select,
   letter-spacing: 0.03em;
 }
 
-/* Dark mode overrides for attendance */
 [data-theme="dark"] .offline-attendance-banner {
   background: #064e3b;
   border-color: #047857;
@@ -17494,10 +17066,6 @@ select.form-select,
   color: #f1f5f9;
 }
 
-
-/* =========================================================================
-   STAFF LEAVE REQUESTS & SUBSTITUTION SYSTEM
-   ========================================================================= */
 .leave-badge-medical {
   display: inline-flex;
   align-items: center;
@@ -17617,10 +17185,6 @@ select.form-select,
   color: #a7f3d0;
 }
 
-
-/* =========================================================================
-   ACADEMICS MODULE (8 SUBMENUS) STYLES
-   ========================================================================= */
 .academics-quad {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -17825,11 +17389,6 @@ select.form-select,
   background: #eff6ff;
 }
 
-
-/* ==========================================================================
-   MASTER TIMETABLE & ACADEMIC SCHEDULING - PROFESSIONAL ALIGNMENT & DESIGN
-   ========================================================================== */
-
 #view-timetable .attendance-summary-grid {
   display: grid !important;
   grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)) !important;
@@ -17882,7 +17441,6 @@ select.form-select,
   text-overflow: ellipsis !important;
 }
 
-/* Timetable Banner Styling */
 #view-timetable .card.p-3.mb-4 {
   background: #ffffff !important;
   border: 1px solid #e2e8f0 !important;
@@ -17897,7 +17455,6 @@ select.form-select,
   border-left-color: #ef4444 !important;
 }
 
-/* Master Timetable Table Container */
 #view-timetable .table-container {
   background: #ffffff !important;
   border: 1px solid #e2e8f0 !important;
@@ -17919,7 +17476,6 @@ select.form-select,
   gap: 0.75rem !important;
 }
 
-/* Professional Data-Table Styling for All Subviews in Timetable */
 #view-timetable .data-table {
   width: 100% !important;
   min-width: 920px !important;
@@ -17989,7 +17545,6 @@ select.form-select,
   border-bottom: none !important;
 }
 
-/* Substitution Planner Specialized Cell Classes */
 .sub-teacher-cell {
   display: flex !important;
   flex-direction: column !important;
@@ -18142,7 +17697,6 @@ select.form-select,
   color: #ffffff !important;
 }
 
-/* Facility Cards Grid */
 .facility-cards-grid {
   display: grid !important;
   grid-template-columns: repeat(3, 1fr) !important;
@@ -18186,10 +17740,6 @@ select.form-select,
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06) !important;
 }
 
-
-/* ==========================================================================
-   EXAMINATIONS & RESULTS HIGH-DEFINITION STYLING
-   ========================================================================== */
 #view-examinations .data-table tbody tr {
   transition: background-color 0.15s ease !important;
   border-bottom: 1px solid #e2e8f0 !important;
@@ -18225,7 +17775,6 @@ select.form-select,
   white-space: nowrap !important;
 }
 
-/* Tabulation Missing & Status Badges */
 .tab-missing-badge {
   display: inline-flex;
   align-items: center;
@@ -18271,7 +17820,6 @@ select.form-select,
   letter-spacing: 0.02em;
 }
 
-/* Desk Seating Styles */
 .seating-desk-card {
   background: #ffffff;
   border: 1.5px solid #cbd5e1;
@@ -18340,11 +17888,6 @@ select.form-select,
   max-width: 90px;
 }
 
-
-
-/* ==========================================================================
-   REPORT CARD CANVAS STYLING
-   ========================================================================== */
 #reportCardCanvas {
   background: #ffffff !important;
   border: 2px solid #cbd5e1 !important;
@@ -18414,10 +17957,6 @@ select.form-select,
   }
 }
 
-
-/* ==========================================================================
-   LEAVE MANAGEMENT MODULE - RESPONSIVE & PROFESSIONAL STYLING
-   ========================================================================== */
 #view-leaves .table-container {
   overflow-x: auto !important;
   width: 100% !important;
@@ -18479,9 +18018,6 @@ select.form-select,
   padding: 0.65rem 0.5rem !important;
 }
 
-/* ==========================================================================
-   FEES & FINANCE MODULE - RESPONSIVE & PROFESSIONAL STYLING
-   ========================================================================== */
 #view-fees .table-container {
   overflow-x: auto !important;
   width: 100% !important;
@@ -18539,9 +18075,6 @@ select.form-select,
   font-size: 0.84rem !important;
 }
 
-/* ==========================================================================
-   APPOINTMENTS & VISITORS MODULE STYLES (#view-appointments)
-   ========================================================================== */
 #view-appointments .table-container {
   overflow-x: auto !important;
   width: 100% !important;
@@ -18596,10 +18129,6 @@ select.form-select,
   font-size: 0.84rem !important;
 }
 
-
-/* ==========================================================================
-   MODULE 12: COMMUNICATION - RESPONSIVE & PROFESSIONAL TABLE STYLES
-   ========================================================================== */
 #view-communication .table-container,
 #view-communication .table-responsive {
   overflow-x: auto !important;
@@ -18663,10 +18192,6 @@ select.form-select,
   flex-wrap: wrap !important;
 }
 
-
-/* ==========================================================================
-   QUAD STAT GRID FOR COMMUNICATION & MANAGEMENT MODULES
-   ========================================================================== */
 .quad-stat-grid {
   display: grid !important;
   grid-template-columns: repeat(4, 1fr) !important;
@@ -18762,14 +18287,6 @@ select.form-select,
   font-weight: 500 !important;
 }
 
-/* ==========================================================================
-   STANDARD PAGE LAYOUT ARCHITECTURE & REUSABLE UI SYSTEM
-   Spec: Breadcrumb, Title, Description, Primary Action, Summary Cards,
-         Search, Filters, Records Table, Row Actions, Bulk Actions,
-         Pagination, Export/Print, Activity History, Empty State, Loading/Error
-   ========================================================================== */
-
-/* 1. Breadcrumbs */
 .header-breadcrumb .crumb-link {
   color: var(--color-text-muted, #64748b);
   text-decoration: none;
@@ -18787,7 +18304,6 @@ select.form-select,
   color: var(--color-text-dark, #0f172a);
 }
 
-/* 2. Standard Page Header */
 .standard-page-header {
   display: flex;
   align-items: flex-start;
@@ -18833,7 +18349,6 @@ select.form-select,
   flex-wrap: wrap;
 }
 
-/* 3. Standard Summary Cards Grid */
 .standard-summary-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
@@ -18923,7 +18438,6 @@ select.form-select,
   gap: 0.35rem;
 }
 
-/* 4. Filter Toolbar & Search */
 .standard-filter-toolbar {
   background: var(--color-bg-surface, #ffffff);
   border: 1px solid var(--color-border, #e2e8f0);
@@ -18998,7 +18512,6 @@ select.form-select,
   gap: 0.5rem;
 }
 
-/* 5. Bulk Actions Floating/Docked Toolbar */
 .bulk-actions-toolbar {
   position: fixed;
   bottom: 24px;
@@ -19083,7 +18596,6 @@ select.form-select,
   text-decoration: underline;
 }
 
-/* 6. Standard Reusable Pagination */
 .portal-pagination {
   display: flex;
   align-items: center;
@@ -19161,7 +18673,6 @@ select.form-select,
   cursor: not-allowed;
 }
 
-/* 7. Standard Empty State Component */
 .empty-state {
   text-align: center;
   padding: 3.5rem 1.5rem;
@@ -19207,7 +18718,6 @@ select.form-select,
   flex-wrap: wrap;
 }
 
-/* 8. Standard Loading & Error States */
 .loading-state {
   text-align: center;
   padding: 3.5rem 1.5rem;
@@ -19275,7 +18785,6 @@ select.form-select,
   line-height: 1.5;
 }
 
-/* 9. Activity History Timeline & Drawer */
 .activity-timeline {
   position: relative;
   padding-left: 24px;
@@ -19354,10 +18863,6 @@ select.form-select,
   line-height: 1.45;
 }
 
-/* ==========================================================================
-   10. STANDARD RECORD ACTIONS (VIEW, EDIT, SUBMIT, APPROVE, REJECT,
-       RETURN FOR CORRECTION, ARCHIVE, RESTORE, DOWNLOAD, PRINT, HISTORY, MORE)
-   ========================================================================== */
 .record-actions-wrap {
   display: inline-flex;
   align-items: center;
@@ -19516,7 +19021,6 @@ select.form-select,
   color: #1e293b;
 }
 
-/* More Actions Floating Dropdown Menu */
 .record-more-menu {
   display: none;
   position: absolute;
@@ -19621,9 +19125,6 @@ select.form-select,
   margin: 4px 0;
 }
 
-/* ==========================================================================
-   11. STANDARD APPROVAL & LIFECYCLE STATUS MODEL
-   ========================================================================== */
 .portal-status-badge {
   display: inline-flex;
   align-items: center;
@@ -19643,8 +19144,6 @@ select.form-select,
   font-size: 0.75rem;
 }
 
-/* Core Standard Statuses */
-/* 1. Draft: Created but not submitted */
 .status-draft,
 .badge-status-draft {
   background: #f1f5f9;
@@ -19652,7 +19151,6 @@ select.form-select,
   border-color: #cbd5e1;
 }
 
-/* 2. Submitted: Waiting for review */
 .status-submitted,
 .badge-status-submitted {
   background: #f0f9ff;
@@ -19660,7 +19158,6 @@ select.form-select,
   border-color: #bae6fd;
 }
 
-/* 3. Under Review: Being verified */
 .status-under-review,
 .badge-status-under-review {
   background: #eef2ff;
@@ -19695,7 +19192,6 @@ select.form-select,
   }
 }
 
-/* 4. Returned for Correction: More information is required */
 .status-returned,
 .status-returned-for-correction,
 .badge-status-returned,
@@ -19705,7 +19201,6 @@ select.form-select,
   border-color: #fde68a;
 }
 
-/* 5. Approved: Authorized to proceed */
 .status-approved,
 .badge-status-approved {
   background: #f0fdf4;
@@ -19713,7 +19208,6 @@ select.form-select,
   border-color: #bbf7d0;
 }
 
-/* 6. Rejected: Request declined */
 .status-rejected,
 .badge-status-rejected {
   background: #fef2f2;
@@ -19721,7 +19215,6 @@ select.form-select,
   border-color: #fecaca;
 }
 
-/* 7. Completed: Process finished */
 .status-completed,
 .badge-status-completed {
   background: #ecfdf5;
@@ -19729,7 +19222,6 @@ select.form-select,
   border-color: #a7f3d0;
 }
 
-/* 8. Cancelled: Process cancelled with a recorded reason */
 .status-cancelled,
 .badge-status-cancelled {
   background: #fafaf9;
@@ -19737,7 +19229,6 @@ select.form-select,
   border-color: #e7e5e4;
 }
 
-/* 9. Archived: Retained but no longer active */
 .status-archived,
 .badge-status-archived {
   background: #f8fafc;
@@ -19745,8 +19236,6 @@ select.form-select,
   border-color: #cbd5e1;
 }
 
-/* Domain-Specific Adapted Statuses */
-/* Admissions: Documents Pending */
 .status-documents-pending,
 .badge-status-documents-pending {
   background: #fff7ed;
@@ -19754,7 +19243,6 @@ select.form-select,
   border-color: #fed7aa;
 }
 
-/* Admissions: Offered */
 .status-offered,
 .badge-status-offered {
   background: #faf5ff;
@@ -19762,7 +19250,6 @@ select.form-select,
   border-color: #e9d5ff;
 }
 
-/* Admissions: Accepted */
 .status-accepted,
 .badge-status-accepted {
   background: #eff6ff;
@@ -19770,7 +19257,6 @@ select.form-select,
   border-color: #bfdbfe;
 }
 
-/* Admissions: Enrolled */
 .status-enrolled,
 .badge-status-enrolled {
   background: #ecfdf5;
@@ -19779,7 +19265,6 @@ select.form-select,
   font-weight: 800;
 }
 
-/* Financial: Partial */
 .status-partial,
 .badge-status-partial {
   background: #fffbeb;
@@ -19787,19 +19272,12 @@ select.form-select,
   border-color: #fcd34d;
 }
 
-/* Financial: Reversed / Credit Note */
 .status-reversed,
 .badge-status-reversed {
   background: #fef2f2;
   color: #991b1b;
   border-color: #fca5a5;
 }
-
-
-/* ==========================================================================
-   UNIVERSAL PERMISSIONS & RECORD SCOPE SYSTEM
-   Supports 9 Universal Permissions & 5 Granular Record Scopes
-   ========================================================================== */
 
 .univ-perm-badge-group {
   display: flex;
@@ -19875,7 +19353,6 @@ select.form-select,
   color: #4f46e5;
 }
 
-/* Record Scope Badges */
 .univ-scope-pill {
   display: inline-flex;
   align-items: center;
@@ -19918,7 +19395,6 @@ select.form-select,
   border: 1px solid #fde68a;
 }
 
-/* Segregation of Duties / Anti-Self-Approval Pill */
 .univ-segregation-pill {
   display: inline-flex;
   align-items: center;
@@ -19945,7 +19421,6 @@ select.form-select,
   border: 1px solid #e2e8f0;
 }
 
-/* Simulator Styles */
 .perm-simulator-card {
   background: #ffffff;
   border: 1.5px solid #e2e8f0;
@@ -19990,7 +19465,6 @@ select.form-select,
   line-height: 1.3;
 }
 
-/* Manage Modal Grid */
 .perm-matrix-modal-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
@@ -20019,13 +19493,6 @@ select.form-select,
   border-color: #93c5fd;
 }
 
-/* ==========================================================================
-   STUDENT PROFILES SPECIFICATION - ENHANCED STYLING
-   Authoritative Student Register, 14-Tab Dossier, Multi-Step Wizard,
-   Clearance Checklist, Duplicate Scanner, and Audit Modals
-   ========================================================================== */
-
-/* Multi-Step Wizard Stepper */
 .wizard-stepper-wrap {
   display: flex !important;
   align-items: center !important;
@@ -20109,7 +19576,6 @@ select.form-select,
   font-weight: 700 !important;
 }
 
-/* 14-Tab Dossier Navigation */
 .dossier-tab-strip {
   display: flex;
   align-items: center;
@@ -20178,7 +19644,6 @@ select.form-select,
   }
 }
 
-/* Duplicate Student Detection Alert */
 .duplicate-alert-box {
   border-radius: 8px;
   padding: 12px 16px;
@@ -20201,7 +19666,6 @@ select.form-select,
   color: #92400e;
 }
 
-/* Formal Transfer & Clearance Checklist */
 #studentTransferWithdrawalModal .portal-modal {
   max-width: 780px !important;
   width: 95% !important;
@@ -20265,7 +19729,6 @@ select.form-select,
   border-radius: 4px;
 }
 
-/* Action Dropdown Menu */
 .student-actions-dropdown {
   min-width: 210px;
   box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
@@ -20296,10 +19759,6 @@ select.form-select,
   background: #fee2e2;
   color: #b91c1c;
 }
-
-/* ==========================================================================
-   AUTHORITATIVE STUDENT DOCUMENTS GOVERNANCE & VERIFICATION SYSTEM
-   ========================================================================== */
 
 .doc-source-badge {
   display: inline-flex;
@@ -20354,7 +19813,6 @@ select.form-select,
   background: #94a3b8;
 }
 
-/* Document Preview Modal & Certificate Container */
 .doc-preview-wrapper {
   background: #f8fafc;
   border: 1px solid #cbd5e1;
@@ -20426,7 +19884,6 @@ select.form-select,
   font-size: 0.8rem;
 }
 
-/* Version History Timeline */
 .doc-version-timeline {
   display: flex;
   flex-direction: column;
@@ -20477,7 +19934,6 @@ select.form-select,
   box-shadow: 0 0 0 2px #fecaca;
 }
 
-/* Missing Document Notice Card */
 .missing-doc-card {
   display: flex;
   align-items: center;
@@ -20503,10 +19959,6 @@ select.form-select,
   padding: 2px 8px;
   border-radius: 4px;
 }
-
-/* ==========================================================================
-   AUTHORITATIVE ADMISSIONS LIFECYCLE, 8 TABS & DETAIL DOSSIER STYLING
-   ========================================================================== */
 
 .admissions-tab-strip {
   display: flex;
@@ -20581,7 +20033,6 @@ select.form-select,
   color: #ffffff;
 }
 
-/* Detail Dossier Multi-Tab Navigation */
 .adm-detail-nav {
   display: flex;
   gap: 0.25rem;
@@ -20645,7 +20096,6 @@ select.form-select,
   to { opacity: 1; transform: translateY(0); }
 }
 
-/* Institutional Dossier Field Tile Styles */
 .adm-dossier-hero {
   display: flex;
   align-items: center;
@@ -20745,7 +20195,6 @@ select.form-select,
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02);
 }
 
-/* Assessment Outcome Pill */
 .assessment-outcome-badge {
   display: inline-flex;
   align-items: center;
@@ -20774,7 +20223,6 @@ select.form-select,
   border: 1px solid #fecaca;
 }
 
-/* Duplicate Match Alert Box */
 .duplicate-scanner-card {
   background: #fffbeb;
   border: 1px solid #fcd34d;
@@ -20794,11 +20242,6 @@ select.form-select,
   gap: 0.5rem;
   font-size: 0.82rem;
 }
-
-/* =========================================================================
-   AUTHORITATIVE TRANSFERS & TRANSFER CERTIFICATES GOVERNANCE STYLES
-   Compliant with AP Education Code Statutory Clearance & TC Regulations
-   ========================================================================= */
 
 .tc-header-actions {
   display: flex;
@@ -20877,7 +20320,6 @@ select.form-select,
   }
 }
 
-/* Clearance Pills */
 .clearance-pill {
   display: inline-flex;
   align-items: center;
@@ -20913,7 +20355,6 @@ select.form-select,
   border: 1px solid #ddd6fe;
 }
 
-/* Department Clearance Grid */
 .tc-clearance-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
@@ -20945,7 +20386,6 @@ select.form-select,
   border-left: 4px solid #8b5cf6;
 }
 
-/* Statutory Non-Blocking Warning Notice */
 .tc-statutory-notice {
   background: #f8fafc;
   border: 1px solid #e2e8f0;
@@ -20958,7 +20398,6 @@ select.form-select,
   margin-bottom: 1.25rem;
 }
 
-/* External Transfer Inward/Outward Badges */
 .external-transfer-badge {
   display: inline-flex;
   align-items: center;
@@ -21013,11 +20452,6 @@ select.form-select,
   color: #bfdbfe;
 }
 
-/* =========================================================================
-   AUTHORITATIVE STUDENT PERFORMANCE & SCHOLASTIC GOVERNANCE STYLES
-   Compliant with AP SSC / CCE Evaluation & Publication Standards
-   ========================================================================= */
-
 .perf-header-actions {
   display: flex;
   align-items: center;
@@ -21025,7 +20459,6 @@ select.form-select,
   flex-wrap: wrap;
 }
 
-/* Publication Status Badges */
 .perf-status-badge {
   display: inline-flex;
   align-items: center;
@@ -21056,7 +20489,6 @@ select.form-select,
   border: 1px solid #cbd5e1;
 }
 
-/* Assessment Comparison Pills */
 .perf-cmp-pill {
   display: inline-flex;
   align-items: center;
@@ -21082,7 +20514,6 @@ select.form-select,
   color: #64748b;
 }
 
-/* Performance Detail Dossier Tabs */
 .perf-detail-nav {
   display: flex;
   background: #f1f5f9;
@@ -21153,7 +20584,6 @@ select.form-select,
   }
 }
 
-/* Subject Marks Table */
 .perf-marks-table {
   width: 100%;
   border-collapse: collapse;
@@ -21182,7 +20612,6 @@ select.form-select,
   background: #f8fafc;
 }
 
-/* Learning Objectives Checklist */
 .learning-obj-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
@@ -21212,7 +20641,6 @@ select.form-select,
   border-left: 4px solid #ef4444;
 }
 
-/* Remedial Intervention Plan Box */
 .intervention-docket-card {
   background: #fefce8;
   border: 1px solid #fef08a;
@@ -21222,7 +20650,6 @@ select.form-select,
   margin-top: 0.75rem;
 }
 
-/* PTM Interaction History Item */
 .ptm-history-row {
   background: #ffffff;
   border: 1px solid #e2e8f0;
@@ -21276,11 +20703,6 @@ select.form-select,
   border-color: #334155;
 }
 
-/* ==========================================================================
-   AUTHORITATIVE PARENT AND GUARDIAN RECORDS MODULE
-   Compliant with Student Register, Contact Verification & Future Parent Portal
-   ========================================================================== */
-
 .guardian-header-actions {
   display: flex;
   align-items: center;
@@ -21303,7 +20725,6 @@ select.form-select,
   gap: 0.75rem;
 }
 
-/* Portal Account Status Badges */
 .portal-status-badge {
   display: inline-flex;
   align-items: center;
@@ -21341,7 +20762,6 @@ select.form-select,
   color: #64748b;
 }
 
-/* Verification Status Badges */
 .verify-status-badge {
   display: inline-flex;
   align-items: center;
@@ -21371,7 +20791,6 @@ select.form-select,
   border: 1px solid #fca5a5;
 }
 
-/* Linked Ward Pills */
 .linked-ward-pill {
   display: inline-flex;
   align-items: center;
@@ -21398,7 +20817,6 @@ select.form-select,
   font-size: 0.72rem;
 }
 
-/* Guardian Dossier Modal Layout */
 .guardian-modal-dialog {
   max-width: 960px !important;
   width: 95vw !important;
@@ -21459,7 +20877,6 @@ select.form-select,
   animation: fadeIn 0.2s ease-in-out;
 }
 
-/* Profile Card */
 .guardian-profile-card {
   background: #ffffff;
   border: 1px solid #e2e8f0;
@@ -21533,7 +20950,6 @@ select.form-select,
   word-break: break-word;
 }
 
-/* Linked Students List in Modal */
 .ward-cards-list {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
@@ -21568,7 +20984,6 @@ select.form-select,
   margin-bottom: 0.65rem;
 }
 
-/* Communication Preferences Grid */
 .comm-pref-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
@@ -21591,7 +21006,6 @@ select.form-select,
   border-color: #bbf7d0;
 }
 
-/* Custody & Legal Restriction Alert Box */
 .custody-alert-box {
   background: #fff1f2;
   border: 1px solid #fecdd3;
@@ -21604,7 +21018,6 @@ select.form-select,
   margin-top: 0.75rem;
 }
 
-/* Parent Portal Linkage Box */
 .portal-link-box {
   background: #f0fdfa;
   border: 1px solid #ccfbf1;
@@ -21614,7 +21027,6 @@ select.form-select,
   margin-top: 0.75rem;
 }
 
-/* Parent Correction Docket */
 .parent-correction-docket {
   background: #fffbeb;
   border: 1px solid #fde68a;
@@ -21623,7 +21035,6 @@ select.form-select,
   margin-top: 0.75rem;
 }
 
-/* Dark Mode Support */
 [data-theme="dark"] .subview-header-bar {
   background: #1e293b;
   border-color: #334155;
@@ -21724,11 +21135,6 @@ select.form-select,
   color: #fecdd3;
 }
 
-/* ==========================================================================
-   AUTHORITATIVE FACULTY (TEACHING) MODULE
-   Compliant with Role-Based Record Scope, Class/Subject Allocation & Clearances
-   ========================================================================== */
-
 .faculty-header-actions {
   display: flex;
   align-items: center;
@@ -21751,7 +21157,6 @@ select.form-select,
   gap: 0.75rem;
 }
 
-/* Faculty Employment Status Badges */
 .faculty-status-badge {
   display: inline-flex;
   align-items: center;
@@ -21801,7 +21206,6 @@ select.form-select,
   color: #64748b;
 }
 
-/* Department Badge */
 .faculty-dept-badge {
   display: inline-flex;
   align-items: center;
@@ -21816,7 +21220,6 @@ select.form-select,
   white-space: nowrap;
 }
 
-/* Assigned Class Pills */
 .assigned-class-pill {
   display: inline-flex;
   align-items: center;
@@ -21837,7 +21240,6 @@ select.form-select,
   font-size: 0.7rem;
 }
 
-/* Faculty & Teaching Staff Table Alignment & Elements */
 .faculty-name-cell {
   display: flex !important;
   align-items: center !important;
@@ -21906,7 +21308,6 @@ select.form-select,
   letter-spacing: 0.01em !important;
 }
 
-/* Faculty Action Buttons & Button Groups */
 .faculty-actions-cell {
   display: inline-flex !important;
   align-items: center !important;
@@ -21947,7 +21348,6 @@ select.form-select,
   outline-offset: 1px !important;
 }
 
-/* Dossier Button */
 .faculty-action-btn.btn-action-dossier,
 .faculty-actions-cell .btn-dossier {
   background: #eff6ff !important;
@@ -21964,7 +21364,6 @@ select.form-select,
   box-shadow: 0 2px 4px rgba(37, 99, 235, 0.15) !important;
 }
 
-/* Assign Classes Button */
 .faculty-action-btn.btn-action-assign,
 .faculty-actions-cell .btn-icon-action:has(.fa-chalkboard) {
   background: #f8fafc !important;
@@ -21983,7 +21382,6 @@ select.form-select,
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08) !important;
 }
 
-/* Transition Status Button */
 .faculty-action-btn.btn-action-status,
 .faculty-actions-cell .btn-icon-action:has(.fa-user-pen) {
   background: #fffbeb !important;
@@ -22002,7 +21400,6 @@ select.form-select,
   box-shadow: 0 2px 4px rgba(180, 83, 9, 0.15) !important;
 }
 
-/* Exit Clearance Button */
 .faculty-action-btn.btn-action-exit,
 .faculty-actions-cell .btn-icon-action.btn-danger-hover,
 .faculty-actions-cell .btn-icon-action:has(.fa-arrow-right-from-bracket) {
@@ -22023,7 +21420,6 @@ select.form-select,
   box-shadow: 0 2px 4px rgba(220, 38, 38, 0.15) !important;
 }
 
-/* Teacher Detail Modal Layout */
 .teacher-modal-dialog {
   max-width: 980px;
   width: 95vw;
@@ -22084,7 +21480,6 @@ select.form-select,
   animation: fadeIn 0.2s ease-in-out;
 }
 
-/* Teacher Profile Card */
 .teacher-profile-card {
   background: #ffffff;
   border: 1px solid #e2e8f0;
@@ -22112,7 +21507,6 @@ select.form-select,
   flex-shrink: 0;
 }
 
-/* Timetable Mini Grid */
 .timetable-mini-grid {
   width: 100%;
   border-collapse: collapse;
@@ -22146,7 +21540,6 @@ select.form-select,
   color: #94a3b8;
 }
 
-/* Role-Based Permissions Scope Box */
 .permissions-scope-box {
   background: #f0fdf4;
   border: 1px solid #bbf7d0;
@@ -22158,7 +21551,6 @@ select.form-select,
   margin-bottom: 1rem;
 }
 
-/* Appraisal Restricted Card */
 .appraisal-card-restricted {
   background: #fffbeb;
   border: 1px solid #fde68a;
@@ -22168,7 +21560,6 @@ select.form-select,
   overflow: hidden;
 }
 
-/* Clearance Checklist */
 .clearance-checklist-card {
   background: #f8fafc;
   border: 1px solid #e2e8f0;
@@ -22180,7 +21571,6 @@ select.form-select,
   margin-bottom: 0.5rem;
 }
 
-/* Dark Mode Styles */
 [data-theme="dark"] .faculty-statutory-notice {
   background: rgba(30, 41, 59, 0.6);
   border-color: #334155;
@@ -22366,11 +21756,6 @@ select.form-select,
   color: #fde68a;
 }
 
-/* ==========================================================================
-   AUTHORITATIVE NON-TEACHING STAFF MODULE
-   Compliant with Operational Wings, Reporting Hierarchy & Responsibilities
-   ========================================================================== */
-
 .staff-manager-pill {
   display: inline-flex;
   align-items: center;
@@ -22463,7 +21848,6 @@ select.form-select,
   animation: fadeIn 0.2s ease-in-out;
 }
 
-/* Dark Mode Support */
 [data-theme="dark"] .staff-manager-pill {
   background: #1e293b;
   border-color: #334155;
@@ -22490,12 +21874,6 @@ select.form-select,
   color: #60a5fa;
   border-bottom-color: #60a5fa;
 }
-
-
-/* ==========================================================================
-   AUTHORITATIVE STAFF ATTENDANCE MODULE SPECIFICATION STYLES
-   Sri Vidya E.M. High School - Standard Biometric & Audit System
-   ========================================================================== */
 
 .att-source-badge {
   display: inline-flex;
@@ -22665,7 +22043,6 @@ select.form-select,
   padding: 8px 10px;
 }
 
-/* Dark mode compatibility */
 body.dark-mode .att-source-biometric {
   background: #064e3b;
   color: #a7f3d0;
@@ -22729,12 +22106,6 @@ body.dark-mode .muster-roll-table th {
   background: #0f172a;
   color: #94a3b8;
 }
-
-
-/* ==========================================================================
-   AUTHORITATIVE LEAVE REQUESTS & LEAVE HISTORY SPECIFICATION STYLES
-   Sri Vidya E.M. High School - Standard Leave & Substitution System
-   ========================================================================== */
 
 .leave-status-pending {
   background: #fef3c7;
@@ -22850,7 +22221,6 @@ body.dark-mode .muster-roll-table th {
   background-color: #f8fafc;
 }
 
-/* Dark mode overrides */
 body.dark-mode .leave-status-pending {
   background: #78350f;
   color: #fde68a;
@@ -22899,12 +22269,6 @@ body.dark-mode .leave-approver-box {
   border-left-color: #3b82f6;
 }
 
-
-/* ==========================================================================
-   AUTHORITATIVE APPRAISAL & FEEDBACK SPECIFICATION STYLES
-   Sri Vidya E.M. High School - Confidential Performance Evaluation Engine
-   ========================================================================== */
-
 #facultyAppraisalsTable {
   min-width: 1520px;
   width: 100%;
@@ -22948,10 +22312,6 @@ body.dark-mode #facultyAppraisalsTable tr:hover td {
   background-color: #1e293b;
 }
 
-/* ==========================================================================
-   AUTHORITATIVE TEACHING WORKLOAD SPECIFICATION STYLES
-   ========================================================================== */
-
 #facultyWorkloadTable {
   min-width: 1080px;
   width: 100%;
@@ -22994,10 +22354,6 @@ body.dark-mode #facultyWorkloadTable td {
 body.dark-mode #facultyWorkloadTable tr:hover td {
   background-color: #1e293b;
 }
-
-/* ==========================================================================
-   AUTHORITATIVE STAFF DOCUMENTS SPECIFICATION STYLES
-   ========================================================================== */
 
 #staffDocumentsTable {
   min-width: 1320px;
@@ -23149,7 +22505,6 @@ body.dark-mode #staffDocumentsTable tr:hover td {
   padding: 4px 8px;
 }
 
-/* Dark mode overrides */
 body.dark-mode .confidential-lock {
   background: #1e293b;
   color: #94a3b8;
@@ -23210,11 +22565,6 @@ body.dark-mode .appraisal-ack-seal {
   border-color: #047857;
 }
 
-/* ==========================================================================
-   CLASSES & SECTIONS / PROMOTION WORKFLOW ENHANCEMENTS
-   ========================================================================== */
-
-/* Status badges */
 .class-status-badge {
   display: inline-flex;
   align-items: center;
@@ -23251,7 +22601,6 @@ body.dark-mode .appraisal-ack-seal {
   border: 1px solid rgba(100, 116, 139, 0.3);
 }
 
-/* Detail Modal Styles */
 .class-detail-nav {
   display: flex;
   gap: 6px;
@@ -23308,7 +22657,6 @@ body.dark-mode .appraisal-ack-seal {
   display: block;
 }
 
-/* Teacher Profile Card inside Detail Page */
 .class-teacher-card {
   display: flex;
   align-items: center;
@@ -23350,7 +22698,6 @@ body.dark-mode .appraisal-ack-seal {
   margin-top: 6px;
 }
 
-/* Subject Teachers Grid */
 .subject-teachers-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -23367,7 +22714,6 @@ body.dark-mode .appraisal-ack-seal {
   gap: 6px;
 }
 
-/* Promotion Wizard Styles */
 .promotion-wizard-steps {
   display: flex;
   justify-content: space-between;
@@ -23434,7 +22780,6 @@ body.dark-mode .appraisal-ack-seal {
   font-weight: 700;
 }
 
-/* Promotion Eligibility Tags */
 .promo-badge-eligible {
   background: rgba(16, 185, 129, 0.15);
   color: #059669;
@@ -23474,7 +22819,6 @@ body.dark-mode .appraisal-ack-seal {
   gap: 4px;
 }
 
-/* Promotion Target Allocation Box */
 .promo-allocation-card {
   background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
   border: 1px solid #86efac;
@@ -23488,7 +22832,6 @@ body.dark-mode .appraisal-ack-seal {
   border-color: #fcd34d;
 }
 
-/* Dark mode adjustments */
 body.dark-mode .class-status-active {
   background: rgba(16, 185, 129, 0.2);
   color: #34d399;
@@ -23533,11 +22876,6 @@ body.dark-mode .promo-allocation-card {
   border-color: rgba(16, 185, 129, 0.3);
 }
 
-/* ==========================================================================
-   SUBJECTS & SYLLABUS MANAGEMENT ENHANCEMENTS
-   ========================================================================== */
-
-/* Subject Status Badges */
 .subj-status-badge {
   display: inline-flex;
   align-items: center;
@@ -23574,7 +22912,6 @@ body.dark-mode .promo-allocation-card {
   border: 1px solid rgba(100, 116, 139, 0.3);
 }
 
-/* Detail Navigation Strip */
 .subject-detail-nav {
   display: flex;
   gap: 6px;
@@ -23631,7 +22968,6 @@ body.dark-mode .promo-allocation-card {
   display: block;
 }
 
-/* Chapter / Unit Row Cards */
 .chapter-unit-card {
   display: flex;
   align-items: center;
@@ -23654,7 +22990,6 @@ body.dark-mode .promo-allocation-card {
   border-color: rgba(16, 185, 129, 0.3);
 }
 
-/* Learning Objective Item */
 .learning-obj-item {
   display: flex;
   align-items: flex-start;
@@ -23666,7 +23001,6 @@ body.dark-mode .promo-allocation-card {
   margin-bottom: 8px;
 }
 
-/* Target Milestone Box */
 .target-milestone-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -23685,7 +23019,6 @@ body.dark-mode .promo-allocation-card {
   background: rgba(16, 185, 129, 0.05);
 }
 
-/* Dark mode adjustments */
 body.dark-mode .subj-status-ontrack {
   background: rgba(16, 185, 129, 0.2);
   color: #34d399;
@@ -23720,11 +23053,6 @@ body.dark-mode .learning-obj-item {
   background: #1e293b;
 }
 
-/* ==========================================================================
-   ACADEMIC CALENDAR & INSTITUTIONAL SCHEDULE ENHANCEMENTS
-   ========================================================================== */
-
-/* Calendar View Switcher */
 .calendar-view-nav {
   display: flex;
   gap: 6px;
@@ -23760,7 +23088,6 @@ body.dark-mode .learning-obj-item {
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
 }
 
-/* Monthly Calendar Grid */
 .calendar-month-controls {
   display: flex;
   justify-content: space-between;
@@ -23871,7 +23198,6 @@ body.dark-mode .learning-obj-item {
   border-left: 3px solid #d97706;
 }
 
-/* Term View Cards */
 .term-timeline-card {
   border: 1px solid var(--border-color, #e2e8f0);
   border-radius: 10px;
@@ -23890,7 +23216,6 @@ body.dark-mode .learning-obj-item {
   margin-bottom: 6px;
 }
 
-/* Category Badges */
 .cal-badge-academic {
   background: #dbeafe;
   color: #1e40af;
@@ -23916,7 +23241,6 @@ body.dark-mode .learning-obj-item {
   color: #92400e;
 }
 
-/* Dark mode adjustments */
 body.dark-mode .calendar-view-nav {
   background: #1e293b;
 }
@@ -23969,12 +23293,6 @@ body.dark-mode .cal-pill-meeting {
   color: #fde047;
 }
 
-
-
-/* ==========================================================================
-   MASTER TIMETABLE & SCHEDULING GOVERNANCE STYLES
-   ========================================================================== */
-
 .timetable-view-nav {
   display: inline-flex;
   border-radius: 8px;
@@ -24003,7 +23321,6 @@ body.dark-mode .cal-pill-meeting {
   border-color: #2563eb !important;
 }
 
-/* Master Weekly Grid Matrix */
 .weekly-matrix-table {
   width: 100%;
   border-collapse: separate;
@@ -24126,7 +23443,6 @@ body.dark-mode .cal-pill-meeting {
   margin-top: 4px;
 }
 
-/* Teacher Workload Gauge */
 .workload-gauge-card {
   background: #ffffff;
   border-radius: 10px;
@@ -24159,7 +23475,6 @@ body.dark-mode .cal-pill-meeting {
   background-color: #ef4444;
 }
 
-/* Conflict Scanner Box */
 .conflict-scanner-box {
   background-color: #f0fdf4;
   border: 1px solid #86efac;
@@ -24193,7 +23508,6 @@ body.dark-mode .cal-pill-meeting {
   background-color: #ef4444;
 }
 
-/* Room Occupancy Chips */
 .room-status-occupied {
   background-color: #fee2e2;
   color: #b91c1c;
@@ -24214,7 +23528,6 @@ body.dark-mode .cal-pill-meeting {
   font-weight: 600;
 }
 
-/* Dark mode overrides */
 [data-theme="dark"] .timetable-view-btn {
   background-color: #1e293b;
   border-color: #334155;
@@ -24256,12 +23569,6 @@ body.dark-mode .cal-pill-meeting {
   color: #e2e8f0;
 }
 
-
-
-/* ==========================================================================
-   LESSON PLAN REVIEW & CURRICULUM DELIVERY GOVERNANCE STYLES
-   ========================================================================== */
-
 .lesson-plans-nav {
   display: inline-flex;
   border-radius: 8px;
@@ -24290,7 +23597,6 @@ body.dark-mode .cal-pill-meeting {
   border-color: #2563eb !important;
 }
 
-/* Pedagogical Cards for Teacher Submission Desk */
 .pedagogy-card {
   background-color: #ffffff;
   border-radius: 10px;
@@ -24337,7 +23643,6 @@ body.dark-mode .cal-pill-meeting {
   margin-top: 0.5rem;
 }
 
-/* Syllabus Coverage Comparison Meter */
 .syllabus-meter-row {
   background-color: #ffffff;
   border-radius: 8px;
@@ -24352,7 +23657,6 @@ body.dark-mode .cal-pill-meeting {
   background-color: #fafbfc;
 }
 
-/* Dark mode overrides */
 [data-theme="dark"] .lesson-plans-btn {
   background-color: #1e293b;
   border-color: #334155;
@@ -24388,10 +23692,6 @@ body.dark-mode .cal-pill-meeting {
   border-color: #334155;
 }
 
-
-/* ==========================================================================
-   STUDENT PROFILE CARD PROFESSIONAL DESIGN SYSTEM
-   ========================================================================== */
 .student-profiles-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(330px, 1fr));
@@ -24736,10 +24036,6 @@ body.dark-mode .cal-pill-meeting {
   border-radius: var(--radius-md, 8px);
 }
 
-
-/* ==========================================================================
-   UNIFIED AUTHORITATIVE MODAL ARCHITECTURE (.modal.fade & .modal-backdrop)
-   ========================================================================== */
 .modal.fade,
 .modal-backdrop,
 .portal-modal-backdrop {
@@ -24869,7 +24165,6 @@ body.dark-mode .cal-pill-meeting {
   flex-shrink: 0;
 }
 
-/* Modal close button */
 .portal-modal-close,
 .modal-close-x,
 .modal.fade .modal-header .close,
@@ -24912,7 +24207,6 @@ button.close:hover,
   border-color: rgba(255, 255, 255, 0.3) !important;
 }
 
-/* Class Detail Nav Styling */
 .class-detail-nav {
   display: flex;
   gap: 6px;
@@ -24960,10 +24254,6 @@ button.close:hover,
   background: rgba(30, 64, 175, 0.08);
 }
 
-
-/* ==========================================================================
-   MODAL INTERIOR GRID & TABLE REFINEMENTS
-   ========================================================================== */
 .modal .row,
 .modal-body .row,
 .portal-modal .row {
@@ -25073,10 +24363,6 @@ button.close:hover,
   display: none !important;
 }
 
-
-/* ==========================================================================
-   AUTHORITATIVE ENTERPRISE 2-TIER TOOLBAR DESIGN SYSTEM
-   ========================================================================== */
 .enterprise-toolbar {
   background: #ffffff;
   border: 1px solid #e2e8f0;
@@ -25383,7 +24669,6 @@ button.close:hover,
   border-color: #fca5a5;
 }
 
-/* Tier 2: Governance & Actions Row */
 .toolbar-actions-row {
   border-top: 1px solid #f1f5f9;
   padding-top: 0.75rem;
@@ -25408,7 +24693,6 @@ button.close:hover,
   flex-wrap: wrap;
 }
 
-/* Segmented View Switcher (Cards vs Table) */
 .view-segmented-control {
   display: inline-flex;
   align-items: center;
@@ -25486,8 +24770,6 @@ button.close:hover,
   border-radius: var(--radius-full, 9999px);
 }
 
-
-/* Universal Dropdown Architecture */
 .dropdown {
   position: relative;
   display: inline-block;
@@ -25585,12 +24867,6 @@ button.close:hover,
   background-color: #334155 !important;
 }
 
-
-/* ==========================================================================
-   STUDENT PROFILE DOSSIER & ENTERPRISE MODAL LAYOUT REFINEMENTS
-   ========================================================================== */
-
-/* Modal Header Layout */
 .dossier-modal-header {
   display: flex !important;
   align-items: center !important;
@@ -25668,7 +24944,6 @@ button.close:hover,
   transform: rotate(90deg);
 }
 
-/* 14-Tab Strip Wrapper & Strip */
 .dossier-tab-strip-wrapper {
   background: #f8fafc;
   border-bottom: 1px solid #e2e8f0;
@@ -25728,7 +25003,6 @@ button.close:hover,
   box-shadow: 0 -2px 4px rgba(15, 23, 42, 0.04);
 }
 
-/* Institutional Header Strip for Dossier Tabs */
 .dossier-header-strip {
   display: flex;
   justify-content: space-between;
@@ -25774,7 +25048,6 @@ button.close:hover,
   flex-wrap: wrap;
 }
 
-/* Dossier Card System */
 .dossier-cards-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -25865,7 +25138,6 @@ button.close:hover,
   text-decoration: underline;
 }
 
-/* Communication & Dispatch Activity Items */
 .dossier-dispatch-list {
   display: flex;
   flex-direction: column;
@@ -25953,7 +25225,6 @@ button.close:hover,
   border: 1px solid #bbf7d0;
 }
 
-/* Modal Footer Layout */
 .dossier-modal-footer {
   display: flex !important;
   justify-content: space-between !important;
@@ -25976,7 +25247,6 @@ button.close:hover,
   gap: 8px;
 }
 
-/* Fallback Grid & Flex Utilities */
 .d-flex {
   display: flex !important;
 }
@@ -26235,12 +25505,6 @@ button.close:hover,
   }
 }
 
-
-/* ==========================================================================
-   EDIT STUDENT RECORD MODAL & FORM CONTROLS REFINEMENT
-   ========================================================================== */
-
-/* Universal Form Controls */
 .form-label,
 .portal-form-label {
   display: block !important;
@@ -26469,7 +25733,6 @@ input[type="file"].form-control {
   color: #cbd5e1 !important;
 }
 
-/* Edit Student Modal Grid */
 .edit-student-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -26499,7 +25762,6 @@ input[type="file"].form-control {
   width: 100%;
 }
 
-/* Audit Justification Box */
 .audit-justification-card {
   background: #fffbeb;
   border: 1px solid #fef3c7;
@@ -26546,7 +25808,6 @@ input[type="file"].form-control {
   gap: 6px;
 }
 
-/* Edit Modal Footer */
 .edit-modal-footer {
   display: flex !important;
   justify-content: flex-end !important;
@@ -26572,8 +25833,6 @@ input[type="file"].form-control {
   transition: all 0.2s ease !important;
 }
 
-
-/* Edit Student Modal Sizing & Scrolling Container */
 #editStudentModal .portal-modal {
   max-width: 740px !important;
   width: 95% !important;
@@ -26635,11 +25894,6 @@ input[type="file"].form-control {
   flex-shrink: 0 !important;
   padding: 0.9rem 1.5rem !important;
 }
-
-/* =========================================================================
-   DOSSIER SPECIFICATION TABLES & KEY-VALUE GRIDS
-   Strict Left-Alignment, Crisp Borders, and Institutional Typography
-   ========================================================================= */
 
 .dossier-spec-table,
 .dossier-tab-pane table.table-bordered {
@@ -26705,7 +25959,6 @@ input[type="file"].form-control {
   background: #f1f5f9 !important;
 }
 
-/* Multi-column tables inside dossier (e.g. Enrolments, Results, Audit) */
 .dossier-data-table {
   width: 100% !important;
   border-collapse: separate !important;
@@ -26761,8 +26014,6 @@ input[type="file"].form-control {
   background: #f8fafc !important;
 }
 
-
-/* Students Management Module Header Professional Alignment */
 #view-students .module-header {
   display: flex;
   justify-content: space-between;
@@ -26827,12 +26078,6 @@ input[type="file"].form-control {
   transform: translateY(-1px);
   box-shadow: 0 2px 4px rgba(15, 23, 42, 0.08);
 }
-
-
-/* ==========================================================================
-   STUDENT ATTENDANCE MODULE ENHANCEMENTS
-   Page Header, Entry Register Table, Action Buttons, Badges & Modals
-   ========================================================================== */
 
 .att-page-header-card {
   background: #ffffff;
@@ -26920,7 +26165,6 @@ input[type="file"].form-control {
   min-width: 200px;
 }
 
-/* Register Live Info Bar */
 .att-register-info-bar {
   display: flex;
   justify-content: space-between;
@@ -26986,7 +26230,6 @@ input[type="file"].form-control {
   line-height: 1.2;
 }
 
-/* Batch Toolbar */
 .att-batch-toolbar {
   display: flex;
   justify-content: space-between;
@@ -27017,7 +26260,6 @@ input[type="file"].form-control {
   color: #475569;
 }
 
-/* Segmented Status Pill Marker */
 .att-status-segmented-group {
   display: inline-flex;
   align-items: center;
@@ -27076,7 +26318,6 @@ input[type="file"].form-control {
   box-shadow: 0 1px 3px rgba(14, 165, 233, 0.35);
 }
 
-/* Row-level Arrival Time and Remarks Controls */
 .att-row-time-input {
   width: 110px;
   padding: 0.25rem 0.45rem;
@@ -27111,7 +26352,6 @@ input[type="file"].form-control {
   box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.15);
 }
 
-/* Bottom Actions Bar */
 .att-footer-action-bar {
   display: flex;
   justify-content: space-between;
@@ -27135,7 +26375,6 @@ input[type="file"].form-control {
   flex-wrap: wrap;
 }
 
-/* Print Register Styles */
 @media print {
   body * {
     visibility: hidden;
@@ -27152,12 +26391,6 @@ input[type="file"].form-control {
     padding: 20px;
   }
 }
-
-
-/* ==========================================================================
-   PERMANENT STUDENT ARCHIVE & CLEARANCE RECORDS REPOSITORY
-   Statutory Records Governance - Sri Vidya E.M. High School
-   ========================================================================== */
 
 .archived-modal-dialog {
   max-width: 1240px !important;
@@ -27240,7 +26473,6 @@ input[type="file"].form-control {
   background: #f8fafc;
 }
 
-/* Institutional KPI Stats Row */
 .archived-kpi-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -27299,7 +26531,6 @@ input[type="file"].form-control {
   white-space: nowrap;
 }
 
-/* Toolbar */
 .archived-toolbar {
   display: flex;
   justify-content: space-between;
@@ -27408,7 +26639,6 @@ input[type="file"].form-control {
   transition: all 0.15s ease;
 }
 
-/* Dedicated Table & Horizontal Scrollbar */
 .archived-table-container {
   background: #ffffff;
   border: 1px solid #e2e8f0;
@@ -27558,11 +26788,6 @@ input[type="file"].form-control {
   }
 }
 
-/* ==========================================================================
-   EXAMINATIONS SUITE: SEATING PLAN, TABULATION & RESULTS WORKFLOW
-   ========================================================================== */
-
-/* Seating Roster & Allocation Table */
 .seating-roster-table {
   width: 100%;
   border-collapse: separate;
@@ -27594,7 +26819,6 @@ input[type="file"].form-control {
   background: #f8fafc;
 }
 
-/* Tabulation Inline Mark Input */
 .mark-input-inline {
   width: 65px;
   padding: 4px 6px;
@@ -27619,7 +26843,6 @@ input[type="file"].form-control {
   color: #b91c1c;
 }
 
-/* Workflow Timeline Bar */
 .exam-workflow-bar {
   display: flex;
   align-items: center;
@@ -27671,11 +26894,6 @@ input[type="file"].form-control {
   color: #cbd5e1;
   font-size: 0.75rem;
 }
-
-
-/* ==========================================================================
-   SECTION 8: DISCIPLINE & STUDENT WELFARE SUITE STYLING (8.1 - 8.5)
-   ========================================================================== */
 
 .badge-restricted-mask {
   display: inline-flex;
@@ -27783,10 +27001,6 @@ input[type="file"].form-control {
   background: #2563eb;
 }
 
-/* ==========================================================================
-   OFFICIAL STUDENT DOSSIER PRINT MEDIA OVERRIDE
-   Guarantees 100% visible, sharp, multi-page print docket
-   ========================================================================== */
 @media print {
   body.printing-dossier * {
     visibility: hidden !important;
@@ -27810,7 +27024,6 @@ input[type="file"].form-control {
   }
 }
 
-/* Student Documents Professional Column Alignment & Layout */
 .student-docs-table th.text-center,
 .student-docs-table td.text-center {
   text-align: center !important;
@@ -27847,10 +27060,6 @@ input[type="file"].form-control {
   min-width: 260px;
 }
 
-
-/* ==========================================================================
-   ADMISSIONS BULK IMPORT MODAL DESIGN & ALIGNMENT
-   ========================================================================== */
 .adm-import-spec-card {
   background: #f8fafc;
   border: 1px solid #e2e8f0;
@@ -27958,10 +27167,6 @@ input[type="file"].form-control {
   }
 }
 
-
-/* ==========================================================================
-   TRANSFER CERTIFICATE (TC) DOSSIER MODAL DESIGN & ALIGNMENT
-   ========================================================================== */
 .tc-profile-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -28103,10 +27308,6 @@ input[type="file"].form-control {
   }
 }
 
-
-/* ==========================================================================
-   PROSPECTIVE ENQUIRY MODAL DESIGN & ALIGNMENT
-   ========================================================================== */
 .enq-form-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -28192,7 +27393,6 @@ input[type="file"].form-control {
   z-index: 10070 !important;
 }
 
-/* Child / Sub-dialog Modals that open on top of Dossiers */
 #studentIdCardModal,
 #studentTransferWithdrawalModal,
 #editStudentModal,
@@ -28205,10 +27405,6 @@ input[type="file"].form-control {
   z-index: 10100 !important;
 }
 
-
-/* ==========================================================================
-   ENTERPRISE TWO-TIER TRANSFERS & TC FILTER TOOLBAR
-   ========================================================================== */
 .transfers-toolbar-container {
   background: var(--color-bg-surface, #ffffff);
   border: 1px solid var(--color-border, #e2e8f0);
@@ -28356,7 +27552,6 @@ input[type="file"].form-control {
   }
 }
 
-/* Institutional Grid Definitions */
 .perf-filter-grid {
   display: grid;
   grid-template-columns: minmax(220px, 1.8fr) repeat(5, minmax(115px, 1fr));
@@ -28447,9 +27642,6 @@ input[type="file"].form-control {
   }
 }
 
-/* ==========================================================================
-   INSTITUTIONAL CORE WORKFLOW STEPPER & CHAIN STYLES (WORKFLOWS A - J)
-   ========================================================================== */
 .workflow-step-chain {
   display: flex;
   align-items: center;
@@ -28547,12 +27739,6 @@ input[type="file"].form-control {
   color: #475569;
 }
 
-
-/* ==========================================================================
-   INSTITUTIONAL SCHOOL MANAGEMENT MODAL DESIGN SYSTEM
-   Professional Government/Affiliated School ERP Aesthetic
-   ========================================================================== */
-
 .school-gov-modal {
   max-width: 720px;
   width: 95%;
@@ -28630,7 +27816,6 @@ input[type="file"].form-control {
   letter-spacing: -0.01em;
 }
 
-/* Applicant Header Dossier Card */
 .school-applicant-dossier {
   background: #f8fafc;
   border: 1.5px solid #e2e8f0;
@@ -28715,7 +27900,6 @@ input[type="file"].form-control {
   border: 1px solid #e9d5ff;
 }
 
-/* Institutional Form Fields & Controls */
 .school-form-group {
   margin-bottom: 0;
 }
@@ -28831,7 +28015,6 @@ input[type="file"].form-control {
   box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.14);
 }
 
-/* Symmetrical Form Grid */
 .school-grid-2col {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -28845,7 +28028,6 @@ input[type="file"].form-control {
   }
 }
 
-/* Governance Footer */
 .school-gov-footer {
   display: flex;
   justify-content: space-between;
@@ -28883,7 +28065,6 @@ input[type="file"].form-control {
   gap: 6px;
 }
 
-/* Dark Theme Brand Sub & Role Holder */
 [data-theme="dark"] .brand-sub {
   color: #38BDF8 !important;
   text-shadow: 0 0 10px rgba(56, 189, 248, 0.45) !important;
@@ -28901,9 +28082,6 @@ input[type="file"].form-control {
   text-shadow: 0 0 8px rgba(147, 197, 253, 0.3) !important;
 }
 
-/* --------------------------------------------------------------------------
-   Universal Form Field Validation Error Alignment (Prevents Beside Label Collision)
-   -------------------------------------------------------------------------- */
 .invalid-feedback,
 .skeuo-field-error,
 .valid-feedback {
@@ -28975,12 +28153,6 @@ textarea.is-invalid:focus {
   box-shadow: 0 0 0 3px rgba(248, 113, 113, 0.3) !important;
 }
 
-
-/* ==========================================================================
-   MY PROFILE & PERSONAL CREDENTIALS GOVERNANCE
-   Light & Dark Mode Skeuomorphic Styling
-   ========================================================================== */
-
 #subview-settings-my-profile .card {
   transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
@@ -29001,7 +28173,6 @@ textarea.is-invalid:focus {
   font-weight: 600;
 }
 
-/* Dark Mode Overrides for My Profile */
 [data-theme="dark"] #subview-settings-my-profile .card,
 [data-theme="dark"] #subview-settings-my-profile .bg-white {
   background: linear-gradient(145deg, #111c2e 0%, #0d1527 100%) !important;
@@ -29101,10 +28272,6 @@ textarea.is-invalid:focus {
   border: 1px solid rgba(245, 158, 11, 0.35) !important;
 }
 
-
-/* ==========================================================================
-   DOCUMENT PREVIEW MODAL & ACTION BUTTONS CLICKABILITY GUARANTEE
-   ========================================================================== */
 #docPreviewWatermark,
 .doc-watermark-overlay {
   pointer-events: none !important;
@@ -29123,12 +28290,6 @@ textarea.is-invalid:focus {
   cursor: pointer !important;
 }
 
-
-/* ==========================================================================
-   Authoritative Global Select & Document Verification Modal Alignment Rules
-   - Guarantees appearance: none and no-repeat across all dropdowns (fixes repeating arrows)
-   - Consistent flex alignment and responsive wrap on desktop and mobile
-   ========================================================================== */
 select,
 .filter-select,
 .form-select,
@@ -29210,10 +28371,6 @@ select,
   }
 }
 
-
-/* =========================================================================
-   GUARDIAN DOSSIER MODAL PREMIUM SPECIFICATIONS
-   ========================================================================= */
 #guardianDetailModal.portal-modal-backdrop {
   background: rgba(15, 23, 42, 0.75) !important;
   backdrop-filter: blur(8px) !important;
@@ -29342,9 +28499,6 @@ select,
   border-radius: 0 0 16px 16px !important;
 }
 
-/* =========================================================================
-   APPRAISALS TABLE SPECIFICATIONS & NO TRUNCATION
-   ========================================================================= */
 #facultyAppraisalsTable {
   min-width: 1450px !important;
   width: 100% !important;
@@ -29374,9 +28528,6 @@ select,
   white-space: nowrap !important;
 }
 
-/* =========================================================================
-   FACULTY WORKLOAD TABLE SPECIFICATIONS
-   ========================================================================= */
 #facultyWorkloadTable {
   min-width: 1100px !important;
   width: 100% !important;
@@ -29399,17 +28550,11 @@ select,
   text-align: center !important;
 }
 
-/* =========================================================================
-   DASHBOARD ADMISSIONS TABLE MIN-WIDTH
-   ========================================================================= */
 .dash-table {
   min-width: 900px !important;
   width: 100% !important;
 }
 
-/* =========================================================================
-   STUDENT DOSSIER MODAL EQUALIZED KPI GRID (NO RIGHT GAP)
-   ========================================================================= */
 .dossier-metrics-quad {
   display: grid !important;
   grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
@@ -29430,9 +28575,6 @@ select,
   }
 }
 
-/* =========================================================================
-   APPRAISAL & FEEDBACK SYMMETRICAL 5-CARD KPI GRID
-   ========================================================================= */
 .appraisal-kpi-grid {
   display: grid !important;
   grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
@@ -29459,9 +28601,6 @@ select,
   }
 }
 
-/* =========================================================================
-   WORKLOAD 4-CARD KPI GRID (PERFECT HORIZONTAL ALIGNMENT)
-   ========================================================================= */
 .workload-kpi-grid {
   display: grid !important;
   grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
@@ -29482,9 +28621,6 @@ select,
   }
 }
 
-/* =========================================================================
-   APPRAISAL & FEEDBACK FILTER GRID (NO ORPHAN WRAPPING)
-   ========================================================================= */
 .appraisal-filter-grid {
   display: grid !important;
   grid-template-columns: 2fr 1fr 1fr 1fr !important;
@@ -29505,9 +28641,6 @@ select,
   }
 }
 
-/* =========================================================================
-   APPRAISAL TABLE WIDTH & SPACING
-   ========================================================================= */
 #facultyAppraisalsTable {
   min-width: 1560px !important;
   width: 100% !important;
@@ -29530,9 +28663,6 @@ select,
   text-align: center !important;
 }
 
-/* =========================================================================
-   SEARCH INPUT ICON CLEARANCE (PREVENT "QFilter" COLLISION)
-   ========================================================================= */
 #workloadFilterInput,
 #staffDocsFilterInput,
 #appraisalSearchInput,
@@ -29540,9 +28670,6 @@ select,
   padding-left: 42px !important;
 }
 
-/* =========================================================================
-   LEAVE REQUESTS EQUALIZED 4-CARD RESPONSIVE KPI GRID
-   ========================================================================= */
 .leave-kpi-grid {
   display: grid !important;
   grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
@@ -29563,9 +28690,6 @@ select,
   }
 }
 
-/* =========================================================================
-   STAFF DOCUMENTS TABLE MIN-WIDTH & ACTIONS
-   ========================================================================= */
 #staffDocumentsTable {
   min-width: 1420px !important;
   width: 100% !important;
@@ -29579,9 +28703,6 @@ select,
   white-space: nowrap !important;
 }
 
-/* =========================================================================
-   LEAVE REQUESTS & APPRAISAL ERP DESIGN SYSTEM STYLES
-   ========================================================================= */
 .leave-kpi-card {
   min-height: 125px;
   justify-content: space-between;
@@ -29625,7 +28746,6 @@ select,
   transition: all 0.2s ease;
 }
 
-/* Header Action Button Consistency */
 .erp-header-toolbar button {
   font-family: inherit;
   font-size: 0.84rem;
@@ -29666,7 +28786,6 @@ select,
   box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.3) !important;
 }
 
-/* Color & Metric Value Utilities */
 .text-blue {
   color: #1d4ed8 !important;
 }
@@ -29680,9 +28799,6 @@ select,
 }
 
 
-/* ==========================================================================
-   Leave Table Row Actions & Universal Dropdown Button Styling
-   ========================================================================== */
 .leave-actions-cell,
 .leave-row-actions {
   display: inline-flex !important;
@@ -29728,7 +28844,6 @@ select,
   outline-offset: 1px !important;
 }
 
-/* Approve Button */
 .leave-action-btn.btn-action-approve {
   background: #ecfdf5 !important;
   color: #059669 !important;
@@ -29742,7 +28857,6 @@ select,
   box-shadow: 0 2px 4px rgba(16, 185, 129, 0.25) !important;
 }
 
-/* Reject Button */
 .leave-action-btn.btn-action-reject {
   background: #fef2f2 !important;
   color: #dc2626 !important;
@@ -29756,7 +28870,6 @@ select,
   box-shadow: 0 2px 4px rgba(239, 68, 68, 0.25) !important;
 }
 
-/* View / Ledger Button */
 .leave-action-btn.btn-action-view {
   width: auto !important;
   min-width: 32px !important;
@@ -29774,7 +28887,6 @@ select,
   box-shadow: 0 2px 4px rgba(37, 99, 235, 0.25) !important;
 }
 
-/* More / Dropdown Toggle Button */
 .leave-action-btn.btn-action-more,
 .leave-action-btn.dropdown-toggle {
   background: #f8fafc !important;
@@ -29789,12 +28901,10 @@ select,
   border-color: #94a3b8 !important;
 }
 
-/* Suppress unwanted caret on dropdown-toggle for icon buttons */
 .leave-action-btn.dropdown-toggle::after {
   display: none !important;
 }
 
-/* Dropdown Menu inside Leave Table */
 .leave-actions-cell .dropdown,
 .leave-row-actions .dropdown {
   position: relative !important;
@@ -29837,7 +28947,6 @@ select,
   color: #dc2626 !important;
 }
 
-/* Dark mode overrides for leave actions */
 [data-theme="dark"] .leave-action-btn {
   background: #1e293b !important;
   border-color: #334155 !important;
@@ -29899,10 +29008,6 @@ select,
   color: #f8fafc !important;
 }
 
-
-/* ==========================================================================
-   Institutional Settings & Access Control Design System (Standard)
-   ========================================================================== */
 .institutional-security-badge {
   background: #f0fdf4;
   color: #166534;
@@ -30038,7 +29143,6 @@ select,
   object-fit: contain;
 }
 
-/* Dark theme overrides for settings */
 [data-theme="dark"] .institutional-security-badge {
   background: rgba(16, 185, 129, 0.12);
   color: #34d399;
@@ -30090,10 +29194,6 @@ select,
   border-color: #334155;
 }
 
-
-/* ==========================================================================
-   Definitive Enterprise Segmented Tab Strip & Form Control Standards
-   ========================================================================== */
 .tab-strip {
   background: #f1f5f9 !important;
   border: 1px solid #cbd5e1 !important;
@@ -30184,14 +29284,6 @@ select,
   color: #cbd5e1 !important;
 }
 
-
-
-/* ==========================================================================
-   SRI VIDYA ERP - MASTER UI ALIGNMENT, TYPOGRAPHY & ICON CONSISTENCY SYSTEM
-   Standardized layout tokens, icon spacing, table alignment & form precision
-   ========================================================================== */
-
-/* 1. Universal Legacy Utility Compatibility (Restores proper margins across all icons & badges) */
 .mr-0 { margin-right: 0 !important; }
 .mr-1 { margin-right: 0.25rem !important; }
 .mr-2 { margin-right: 0.5rem !important; }
@@ -30203,7 +29295,6 @@ select,
 .ml-3 { margin-left: 1rem !important; }
 .ml-4 { margin-left: 1.5rem !important; }
 
-/* 2. Precision Icon Centering & Vertical Balance */
 .fa, .fa-solid, .fa-regular, .fa-brands, .fas, .far {
   display: inline-flex;
   align-items: center;
@@ -30220,7 +29311,6 @@ select,
   line-height: 1;
 }
 
-/* 3. Master Table Cell & Header Alignment */
 .table, .dash-table, .data-table, .pa-table {
   border-collapse: separate;
   border-spacing: 0;
@@ -30247,7 +29337,6 @@ select,
   line-height: 1.45;
 }
 
-/* 4. Action Button Containers & Single-Row Preservation */
 .record-actions-wrap {
   display: inline-flex;
   align-items: center;
@@ -30261,7 +29350,6 @@ select,
   min-width: 200px;
 }
 
-/* 5. Centralized Button Layout & Consistent Focus States */
 .btn {
   display: inline-flex;
   align-items: center;
@@ -30271,7 +29359,6 @@ select,
   line-height: 1.25;
 }
 
-/* 6. Consistent Form Labels & Inputs */
 .form-label {
   display: inline-flex;
   align-items: center;
@@ -30297,7 +29384,6 @@ select,
   box-shadow: 0 0 0 3px rgba(29, 78, 216, 0.14);
 }
 
-/* 7. Badges & Status Indicators */
 .badge {
   display: inline-flex;
   align-items: center;
@@ -30308,8 +29394,6 @@ select,
   vertical-align: middle;
 }
 
-
-/* 8. Universal Table Checkbox, Switch & Radio Centering */
 .table td .form-check-input,
 .table th .form-check-input,
 td.text-center .form-check-input,
@@ -30357,7 +29441,6 @@ th.text-center .form-check-input:focus {
   border-color: var(--color-primary, #1d4ed8) !important;
 }
 
-/* 9. Permission Matrix Table Symmetry & Column Balancing */
 #tablePermissionsMatrix th.text-center,
 #tablePermissionsMatrix td.text-center {
   text-align: center !important;
@@ -30368,4 +29451,1024 @@ th.text-center .form-check-input:focus {
 #tablePermissionsMatrix th:first-child,
 #tablePermissionsMatrix td:first-child {
   min-width: 200px;
+}
+
+.module-header-strip {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem 1.5rem;
+  flex-wrap: wrap;
+  margin-bottom: 1.25rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.module-header-strip .mhs-title {
+  flex: 1 1 360px;
+  min-width: 0;
+}
+
+.module-header-strip .mhs-title h2 {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin: 0 0 0.3rem 0;
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: #0f172a;
+  letter-spacing: -0.015em;
+  line-height: 1.25;
+}
+
+.module-header-strip .mhs-title p {
+  margin: 0;
+  font-size: 0.84rem;
+  color: #64748b;
+  line-height: 1.45;
+}
+
+.module-header-strip .mhs-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.65rem;
+  flex-wrap: wrap;
+  flex-shrink: 0;
+}
+
+.mhs-pending-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  background: #fef2f2;
+  color: #b91c1c;
+  padding: 0.45rem 0.85rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+  border: 1px solid #fecaca;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+
+.governance-notice-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem 1.5rem;
+  flex-wrap: wrap;
+  background: linear-gradient(135deg, #f8fbff 0%, #eff6ff 100%);
+  border: 1px solid #bfdbfe;
+  border-left: 4px solid #2563eb;
+  border-radius: 12px;
+  padding: 1rem 1.25rem;
+  margin-bottom: 1.35rem;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04);
+}
+
+.governance-notice-main {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.9rem;
+  flex: 1 1 460px;
+  min-width: 0;
+}
+
+.governance-notice-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+  color: #ffffff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.15rem;
+  flex-shrink: 0;
+  box-shadow: 0 2px 6px rgba(37, 99, 235, 0.25);
+}
+
+.governance-notice-copy h6 {
+  margin: 0 0 0.25rem 0;
+  font-size: 0.94rem;
+  font-weight: 700;
+  color: #1e3a8a;
+  line-height: 1.3;
+}
+
+.governance-notice-copy p {
+  margin: 0;
+  font-size: 0.81rem;
+  color: #475569;
+  line-height: 1.5;
+  max-width: 780px;
+}
+
+.governance-notice-pills {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  flex-wrap: wrap;
+  flex-shrink: 0;
+}
+
+.governance-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.4rem 0.78rem;
+  border-radius: 999px;
+  font-size: 0.76rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.governance-pill.sla {
+  background: #dbeafe;
+  color: #1e40af;
+  border: 1px solid #bfdbfe;
+}
+
+.governance-pill.sod {
+  background: #dcfce7;
+  color: #166534;
+  border: 1px solid #bbf7d0;
+}
+
+[data-theme="dark"] .module-header-strip {
+  border-bottom-color: #1e293b;
+}
+
+[data-theme="dark"] .module-header-strip .mhs-title h2 {
+  color: #f8fafc;
+}
+
+[data-theme="dark"] .module-header-strip .mhs-title p {
+  color: #94a3b8;
+}
+
+[data-theme="dark"] .governance-notice-banner {
+  background: linear-gradient(135deg, rgba(30, 58, 138, 0.22) 0%, rgba(15, 23, 42, 0.85) 100%);
+  border-color: #1e3a8a;
+  border-left-color: #3b82f6;
+}
+
+[data-theme="dark"] .governance-notice-copy h6 {
+  color: #93c5fd;
+}
+
+[data-theme="dark"] .governance-notice-copy p {
+  color: #cbd5e1;
+}
+
+.report-meta-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 1.15rem;
+}
+
+.report-meta-header > div:first-child {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  flex-wrap: wrap;
+  flex: 1 1 480px;
+}
+
+.report-export-buttons {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  flex-shrink: 0;
+}
+
+#subview-teachers-performance > div:first-child {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 1.1rem;
+  padding-bottom: 0.9rem !important;
+}
+
+#subview-teachers-performance > div:first-child > div:first-child {
+  flex: 1 1 380px;
+  min-width: 0;
+}
+
+#subview-teachers-performance > div:first-child > div:last-child {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-shrink: 0;
+}
+
+.leave-kpi-grid,
+.appraisal-kpi-grid,
+.workload-kpi-grid {
+  gap: 0.75rem !important;
+  margin-bottom: 1rem !important;
+}
+
+.leave-kpi-card,
+.appraisal-kpi-grid .metric-card,
+.workload-kpi-grid .metric-card {
+  padding: 0.8rem 1rem !important;
+  gap: 0.35rem !important;
+  border-radius: 10px !important;
+}
+
+.leave-kpi-card > div:first-child,
+.appraisal-kpi-grid .metric-card > div:first-child,
+.workload-kpi-grid .metric-card > div:first-child {
+  margin-bottom: 0 !important;
+}
+
+.leave-kpi-card .metric-icon-wrap,
+.appraisal-kpi-grid .metric-card .metric-icon-wrap,
+.workload-kpi-grid .metric-card .metric-icon-wrap {
+  width: 34px !important;
+  height: 34px !important;
+  font-size: 0.9rem !important;
+  border-radius: 8px !important;
+}
+
+.leave-kpi-card .metric-label,
+.appraisal-kpi-grid .metric-card .metric-label,
+.workload-kpi-grid .metric-card .metric-label {
+  font-size: 0.72rem !important;
+}
+
+.leave-kpi-card .metric-value,
+.appraisal-kpi-grid .metric-card .metric-value,
+.workload-kpi-grid .metric-card .metric-value {
+  font-size: 1.45rem !important;
+  line-height: 1.15 !important;
+}
+
+.leave-kpi-card .metric-subtext,
+.appraisal-kpi-grid .metric-card .metric-subtext,
+.workload-kpi-grid .metric-card .metric-subtext {
+  font-size: 0.75rem !important;
+}
+
+#subview-teachers-workload .card .card {
+  margin-bottom: 1rem !important;
+}
+
+#subview-teachers-workload .card .card .card-body {
+  padding: 0.65rem 0.9rem !important;
+}
+
+#facultyWorkloadTable th,
+#facultyWorkloadTable td {
+  text-align: left !important;
+  vertical-align: middle !important;
+  padding: 11px 14px !important;
+}
+
+#facultyWorkloadTable th:last-child,
+#facultyWorkloadTable td:last-child {
+  text-align: right !important;
+}
+
+#facultyWorkloadTable .faculty-avatar-circle {
+  flex-shrink: 0 !important;
+}
+
+#facultyWorkloadTable td:nth-child(2) .badge,
+#facultyWorkloadTable td:nth-child(5) .badge,
+#facultyWorkloadTable td:last-child .btn,
+#facultyWorkloadTable .class-allocation-chip {
+  white-space: nowrap !important;
+}
+
+.card-header-bar,
+.module-header {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  flex-wrap: wrap !important;
+  gap: 0.75rem 1.25rem !important;
+  padding-bottom: 0.85rem;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.card-header-bar > div:first-child,
+.module-header > .module-header-info {
+  flex: 1 1 340px;
+  min-width: 0;
+}
+
+.card-header-bar > div:last-child,
+.module-header > .module-header-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  flex-shrink: 0;
+}
+
+.card-header-bar .btn,
+.module-header .btn,
+.academics-subview-header .btn {
+  white-space: nowrap;
+}
+
+/* Professional Academics Subview Headers, 5-Card KPI Grid & Filter Toolbars */
+.me-1, .mr-1 { margin-right: 0.25rem !important; }
+.me-2, .mr-2 { margin-right: 0.5rem !important; }
+.ms-1 { margin-left: 0.25rem !important; }
+.ms-2 { margin-left: 0.5rem !important; }
+.ms-3 { margin-left: 1rem !important; }
+
+.academics-subview-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.85rem 1.5rem;
+  background: var(--color-surface, #ffffff);
+  border: 1px solid var(--color-border, #e2e8f0);
+  border-radius: 12px;
+  padding: 1.1rem 1.35rem;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.05);
+  margin-bottom: 1rem !important;
+}
+
+.academics-subview-header-info {
+  flex: 1 1 380px;
+  min-width: 0;
+}
+
+.academics-subview-header-info h4 {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 1.15rem;
+  line-height: 1.3;
+}
+
+.academics-subview-header-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+  flex-shrink: 0;
+}
+
+.academics-subview-header-actions .btn {
+  min-height: 36px;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.45rem 0.9rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+#calBroadcastAlertBanner {
+  background: #f0f9ff !important;
+  border: 1px solid #bae6fd !important;
+  border-left: 4px solid #0284c7 !important;
+  border-radius: 12px !important;
+  padding: 0.9rem 1.25rem !important;
+}
+
+#calBroadcastAlertBanner .bg-info {
+  background-color: #0284c7 !important;
+  color: #ffffff !important;
+  border-radius: 9999px !important;
+}
+
+#calBroadcastAlertBanner .bg-success {
+  background-color: #10b981 !important;
+  color: #ffffff !important;
+  border-radius: 9999px !important;
+  padding: 0.15rem 0.55rem !important;
+  font-weight: 700 !important;
+}
+
+.academics-kpi-row-5 {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+  align-items: stretch;
+}
+
+.academics-kpi-row-5 > div {
+  width: 100% !important;
+  max-width: 100% !important;
+  flex: none !important;
+  min-width: 0;
+  display: flex;
+}
+
+.academics-kpi-row-5 .card {
+  width: 100%;
+  height: 100% !important;
+  min-height: 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  border-radius: 8px !important;
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+
+.academics-kpi-row-5 .card:hover {
+  transform: translateY(-1px);
+}
+
+.academics-kpi-row-5 .card.border-primary { border-left: 3px solid #2563eb !important; }
+.academics-kpi-row-5 .card.border-danger { border-left: 3px solid #dc2626 !important; }
+.academics-kpi-row-5 .card.border-info { border-left: 3px solid #0891b2 !important; }
+.academics-kpi-row-5 .card.border-warning { border-left: 3px solid #d97706 !important; }
+.academics-kpi-row-5 .card.border-success { border-left: 3px solid #059669 !important; }
+.academics-kpi-row-5 .card.border-secondary { border-left: 3px solid #64748b !important; }
+
+.academics-kpi-row-5 .card-body {
+  flex: 1 1 auto !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+  gap: 0.15rem !important;
+  padding: 0.45rem 0.65rem !important;
+}
+
+.academics-kpi-row-5 .card-body > div:first-child {
+  font-size: 0.74rem !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.04em;
+  color: #475569 !important;
+  line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.academics-kpi-row-5 .card-body > div:nth-child(2) {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 0.4rem;
+  margin-top: 0 !important;
+  min-height: 30px;
+}
+
+.academics-kpi-row-5 .card-body h3,
+.academics-kpi-row-5 .card-body h4,
+.academics-kpi-row-5 .card-body h5 {
+  margin: 0 !important;
+  line-height: 1.15 !important;
+  font-weight: 800 !important;
+  letter-spacing: -0.02em;
+}
+
+.academics-kpi-row-5 .card-body h3 { font-size: 1.45rem !important; }
+.academics-kpi-row-5 .card-body h4 { font-size: 1.22rem !important; }
+.academics-kpi-row-5 .card-body h5 { font-size: 1.08rem !important; }
+
+.academics-kpi-row-5 .rounded-circle {
+  width: 30px !important;
+  height: 30px !important;
+  min-width: 30px !important;
+  border-radius: 7px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 0 !important;
+  flex-shrink: 0 !important;
+  font-size: 0.95rem !important;
+}
+
+.academics-kpi-row-5 .rounded-circle i {
+  font-size: 0.95rem !important;
+}
+
+.academics-kpi-row-5 .bg-primary-subtle { background-color: #eff6ff !important; color: #2563eb !important; }
+.academics-kpi-row-5 .bg-danger-subtle { background-color: #fef2f2 !important; color: #dc2626 !important; }
+.academics-kpi-row-5 .bg-info-subtle { background-color: #ecfeff !important; color: #0891b2 !important; }
+.academics-kpi-row-5 .bg-warning-subtle { background-color: #fffbeb !important; color: #d97706 !important; }
+.academics-kpi-row-5 .bg-success-subtle { background-color: #ecfdf5 !important; color: #059669 !important; }
+.academics-kpi-row-5 .bg-light { background-color: #f1f5f9 !important; color: #475569 !important; }
+
+.academics-kpi-row-5 .text-primary { color: #2563eb !important; }
+.academics-kpi-row-5 .text-danger { color: #dc2626 !important; }
+.academics-kpi-row-5 .text-info { color: #0891b2 !important; }
+.academics-kpi-row-5 .text-warning { color: #d97706 !important; }
+.academics-kpi-row-5 .text-success { color: #059669 !important; }
+
+.academics-kpi-row-5 .card-body > div:last-child {
+  margin-top: 0.1rem !important;
+  padding-top: 0 !important;
+  font-size: 0.78rem !important;
+  line-height: 1.25;
+  color: #475569 !important;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.academics-kpi-row-5 .badge {
+  display: inline-flex !important;
+  align-items: center;
+  padding: 0.15rem 0.5rem !important;
+  border-radius: 9999px !important;
+  font-size: 0.74rem !important;
+  font-weight: 600 !important;
+  line-height: 1.15;
+}
+
+@media (max-width: 1280px) {
+  .academics-kpi-row-5 {
+    grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  }
+}
+
+.p-2 {
+  padding: 0.5rem 0.85rem !important;
+}
+
+@media (min-width: 768px) {
+  .d-md-inline {
+    display: inline !important;
+  }
+}
+
+.card:has(> .card-body > .calendar-view-nav),
+.card:has(> .card-body > .timetable-view-nav),
+.card:has(> .card-body > .lesson-plans-nav) {
+  border-radius: 10px !important;
+  margin-bottom: 0.85rem !important;
+}
+
+.card-body:has(> .calendar-view-nav) .badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.3rem 0.7rem !important;
+  border-radius: 9999px !important;
+  font-size: 0.78rem !important;
+  font-weight: 600 !important;
+  background: #f8fafc !important;
+  color: #1e293b !important;
+  border: 1px solid #cbd5e1 !important;
+}
+
+.tt-filter-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem 1rem;
+}
+
+.tt-filter-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem 1rem;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.tt-filter-controls label {
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.tt-filter-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-shrink: 0;
+}
+
+.tt-filter-actions .btn {
+  white-space: nowrap;
+}
+
+.card-header:has(.lp-filter-bar) {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: stretch !important;
+  gap: 0.65rem !important;
+}
+
+.lp-filter-bar {
+  display: grid;
+  grid-template-columns: minmax(180px, 1.5fr) repeat(4, minmax(115px, 1fr)) auto;
+  gap: 0.5rem;
+  align-items: center;
+  width: 100%;
+}
+
+.lp-filter-bar > div {
+  width: 100% !important;
+  max-width: 100% !important;
+  flex: none !important;
+  min-width: 0;
+}
+
+.lp-filter-bar .form-control,
+.lp-filter-bar .form-select {
+  width: 100%;
+  min-width: 0;
+  font-size: 0.8rem;
+  height: 34px;
+}
+
+.lp-filter-bar .btn {
+  white-space: nowrap;
+  padding: 0 0.75rem;
+  height: 34px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  font-size: 0.8rem;
+}
+
+@media (max-width: 1180px) {
+  .lp-filter-bar {
+    grid-template-columns: repeat(auto-fit, minmax(155px, 1fr));
+  }
+}
+
+#academicExamsMasterTable .portal-badge,
+#academicExamsMasterTable .btn,
+#academicReportsMasterTable .portal-badge,
+#academicReportsMasterTable .btn {
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+/* Flex .col helper & Monthly Calendar 7-Column Grid */
+.col {
+  flex: 1 0 0% !important;
+  min-width: 0;
+}
+
+.calendar-grid-container {
+  padding: 0.75rem !important;
+}
+
+/* =========================================================
+   MODERN PROFESSIONAL ACADEMIC CALENDAR
+   ========================================================= */
+
+.cal-filter-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 11px;
+  border-radius: 999px;
+  font-size: 0.74rem;
+  font-weight: 600;
+  color: #475569;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  line-height: 1.3;
+}
+
+.cal-filter-chip:hover {
+  background: #f1f5f9;
+  color: #0f172a;
+  border-color: #cbd5e1;
+}
+
+.cal-filter-chip.active {
+  background: #0f172a;
+  color: #ffffff;
+  border-color: #0f172a;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.18);
+}
+
+.cal-filter-chip .chip-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.cal-filter-chip.chip-festival .chip-dot { background: #ea580c; }
+.cal-filter-chip.chip-birthday .chip-dot { background: #db2777; }
+.cal-filter-chip.chip-holiday .chip-dot { background: #dc2626; }
+.cal-filter-chip.chip-academic .chip-dot { background: #2563eb; }
+.cal-filter-chip.chip-exam .chip-dot { background: #d97706; }
+.cal-filter-chip.chip-institutional .chip-dot { background: #059669; }
+.cal-filter-chip.chip-sports .chip-dot { background: #7c3aed; }
+.cal-filter-chip.chip-ptm .chip-dot { background: #0891b2; }
+
+.cal-filter-chip.chip-festival.active { background: #c2410c; border-color: #c2410c; }
+.cal-filter-chip.chip-birthday.active { background: #be185d; border-color: #be185d; }
+.cal-filter-chip.chip-holiday.active { background: #b91c1c; border-color: #b91c1c; }
+.cal-filter-chip.chip-academic.active { background: #1d4ed8; border-color: #1d4ed8; }
+.cal-filter-chip.chip-exam.active { background: #b45309; border-color: #b45309; }
+.cal-filter-chip.chip-institutional.active { background: #047857; border-color: #047857; }
+.cal-filter-chip.chip-sports.active { background: #6d28d9; border-color: #6d28d9; }
+.cal-filter-chip.chip-ptm.active { background: #0e7490; border-color: #0e7490; }
+
+.cal-filter-chip.active .chip-dot {
+  background: #ffffff;
+}
+
+.calendar-grid-shell {
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #ffffff;
+}
+
+.calendar-weekdays-row {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  background: #f8fafc;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.calendar-col-header {
+  padding: 10px 6px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: #64748b;
+  text-align: center;
+  border-right: 1px solid #f1f5f9;
+}
+
+.calendar-col-header:last-child {
+  border-right: none;
+}
+
+.calendar-month-grid {
+  display: flex;
+  flex-direction: column;
+}
+
+.calendar-week-row {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.calendar-week-row:last-child {
+  border-bottom: none;
+}
+
+.calendar-day-cell {
+  min-height: 120px;
+  background: #ffffff;
+  border-right: 1px solid #f1f5f9;
+  padding: 6px 7px 7px;
+  display: flex;
+  flex-direction: column;
+  transition: background-color 0.15s ease;
+  position: relative;
+  min-width: 0;
+}
+
+.calendar-day-cell:last-child {
+  border-right: none;
+}
+
+.calendar-day-cell:hover {
+  background: #f8fafc;
+}
+
+.calendar-day-cell.is-outside {
+  background: #fafbfc;
+}
+
+.calendar-day-cell.is-outside .calendar-day-number {
+  color: #cbd5e1;
+}
+
+.calendar-day-cell.is-sunday {
+  background: #fffafa;
+}
+
+.calendar-day-cell.is-second-sat {
+  background: #fafbfd;
+}
+
+.calendar-day-cell.is-holiday-bg {
+  background: linear-gradient(180deg, rgba(254, 242, 242, 0.5) 0%, rgba(255, 255, 255, 0.92) 100%);
+}
+
+.calendar-day-cell.is-today {
+  background: #f0f7ff;
+  box-shadow: inset 0 2px 0 #2563eb;
+}
+
+.calendar-day-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 4px;
+  margin-bottom: 5px;
+  min-height: 24px;
+}
+
+.calendar-day-number {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #1e293b;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.calendar-day-cell.is-today .calendar-day-number {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #2563eb;
+  color: #ffffff;
+  font-size: 0.76rem;
+  box-shadow: 0 1px 4px rgba(37, 99, 235, 0.35);
+}
+
+.calendar-day-add-btn {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 1px solid #cbd5e1;
+  background: #ffffff;
+  color: #475569;
+  font-size: 0.72rem;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.15s ease, background-color 0.15s ease, color 0.15s ease;
+  padding: 0;
+}
+
+.calendar-day-cell:hover .calendar-day-add-btn {
+  opacity: 1;
+}
+
+.calendar-day-add-btn:hover {
+  background: #2563eb;
+  border-color: #2563eb;
+  color: #ffffff;
+}
+
+.calendar-events-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+.calendar-event-pill {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 6px;
+  border-radius: 5px;
+  font-size: 0.71rem;
+  font-weight: 600;
+  line-height: 1.25;
+  height: 22px;
+  cursor: pointer;
+  transition: filter 0.15s ease, transform 0.12s ease;
+  min-width: 0;
+  position: relative;
+  z-index: 1;
+}
+
+.calendar-event-pill:hover {
+  filter: brightness(0.95);
+  z-index: 3;
+}
+
+/* Connected multi-day range styling */
+.calendar-event-pill.is-range-start {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+  margin-right: -8px;
+  padding-right: 10px;
+  border-right-width: 0 !important;
+  z-index: 2;
+}
+
+.calendar-event-pill.is-range-mid {
+  border-radius: 0;
+  margin-left: -8px;
+  margin-right: -8px;
+  border-left-width: 0 !important;
+  border-right-width: 0 !important;
+  justify-content: center;
+  opacity: 0.92;
+}
+
+.calendar-event-pill.is-range-end {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+  margin-left: -8px;
+  border-left-width: 0 !important;
+  justify-content: flex-end;
+  opacity: 0.92;
+}
+
+.calendar-event-pill .pill-icon {
+  font-size: 0.68rem;
+  flex-shrink: 0;
+  opacity: 0.9;
+}
+
+.calendar-event-pill .pill-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  background: currentColor;
+}
+
+.calendar-event-pill .pill-text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.calendar-more-pill {
+  font-size: 0.69rem;
+  font-weight: 700;
+  color: #475569;
+  background: #f1f5f9;
+  border: 1px dashed #cbd5e1;
+  border-radius: 5px;
+  padding: 2px 6px;
+  text-align: center;
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.calendar-more-pill:hover {
+  background: #e2e8f0;
+  color: #0f172a;
+}
+
+.calendar-event-pill.pill-academic {
+  background: #eff6ff;
+  color: #1d4ed8;
+  border: 1px solid #bfdbfe;
+}
+
+.calendar-event-pill.pill-exam {
+  background: #fffbeb;
+  color: #b45309;
+  border: 1px solid #fde68a;
+}
+
+.calendar-event-pill.pill-holiday {
+  background: #fef2f2;
+  color: #b91c1c;
+  border: 1px solid #fecaca;
+}
+
+.calendar-event-pill.pill-festival {
+  background: #fff7ed;
+  color: #c2410c;
+  border: 1px solid #fed7aa;
+}
+
+.calendar-event-pill.pill-birthday {
+  background: #fdf2f8;
+  color: #be185d;
+  border: 1px solid #fbcfe8;
+}
+
+.calendar-event-pill.pill-institutional {
+  background: #ecfdf5;
+  color: #047857;
+  border: 1px solid #a7f3d0;
+}
+
+.calendar-event-pill.pill-sports {
+  background: #f5f3ff;
+  color: #6d28d9;
+  border: 1px solid #ddd6fe;
+}
+
+.calendar-event-pill.pill-ptm {
+  background: #ecfeff;
+  color: #0e7490;
+  border: 1px solid #a5f3fc;
 }

@@ -1,7 +1,3 @@
-/**
- * Platform Users & Accounts - Controller Layer
- * Handles HTTP requests, responses, and status codes
- */
 
 const Service = require('./users.service');
 

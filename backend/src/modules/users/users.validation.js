@@ -1,7 +1,3 @@
-/**
- * Platform Users & Accounts - Validation Layer
- * Enforces field schemas, constraints, and data integrity
- */
 
 class UsersValidation {
   static validateRequest(req, res, next) {

@@ -7,20 +7,15 @@
   <meta name="description" content="Sri Vidya E.M High School (Est. 2017) is committed to quality English medium education, character formation, and student excellence from Pre-Primary to Class X. Principal: Gorle Varalakshmi, Vice Principal: Navva Anand.">
   <meta name="keywords" content="Sri Vidya E.M High School, Vidyathe Vijayam, English Medium School, Admissions 2026-27, High School Education, Gorle Varalakshmi, Navva Anand, Est 2017">
 
-  <!-- Favicon using school logo -->
   <link rel="icon" type="image/jpeg" href="assets/images/school-logo.jpg">
 
-  <!-- Google Fonts: Outfit, Plus Jakarta Sans, Inter -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
 
-  <!-- Font Awesome 6 Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
-  <!-- Custom Stylesheet -->
   <link rel="stylesheet" href="css/style.css?v=modern">
-  <!-- Ensure Default English Language on Initial Load / Refresh -->
   <script>
     (function() {
       try {
@@ -31,27 +26,11 @@
       } catch(e) {}
     })();
   </script>
-  <!-- Modern Input Field System -->
   <link rel="stylesheet" href="css/modern-inputs.css?v=20261122-v1">
-  <!-- Modern Popover & Overlay Component System -->
   <link rel="stylesheet" href="/css/modern-popovers.css?v=20261122-v1">
 </head>
 <body>
 
-  <!-- ==========================================================================
-       STICKY MAIN HEADER & NAVIGATION BAR
-       Architecture:
-       - Home
-       - About Us (School Profile · Principal's Message · Vision & Mission · Infrastructure)
-       - Academics (Classes Offered · Curriculum · Teaching Approach · Academic Calendar)
-       - Admissions (Admission Process · Eligibility · Required Documents · Enquiry Form · Application Status)
-       - News & Events
-       - Gallery
-       - Appointments (Request a meeting with the Principal or authorized school official.)
-       - Contact Us
-       - Institutional Portals (Platform Administration · Administration Portal · Faculty Portal)
-       ========================================================================== -->
-  <!-- Sleek Top Utility Bar (Contact Desk, School Motto, Language Switcher & Dark Mode) -->
   <div class="top-bar" id="topBar">
     <div class="top-bar-inner">
       <div class="top-bar-contact">
@@ -61,7 +40,6 @@
         <span class="motto-badge" id="topBarMotto"><i class="fa-solid fa-graduation-cap"></i> Vidyathe Vijayam</span>
       </div>
       <div style="display: flex; align-items: center; gap: 0.85rem;">
-        <!-- Clean Language Switcher in Top Utility Bar -->
         <div class="lang-selector-wrap" title="Change Language (English, Telugu, Hindi)">
           <i class="fa-solid fa-language" style="color: #93C5FD;"></i>
           <select id="langSelector" class="lang-select" aria-label="Select Language">
@@ -70,7 +48,6 @@
             <option value="hi">हिन्दी (Hindi)</option>
           </select>
         </div>
-        <!-- Theme Toggle in Top Utility Bar -->
         <button type="button" class="theme-toggle-btn" id="themeToggleBtn" aria-label="Toggle dark / light theme" title="Switch Theme" style="width: 32px; height: 32px; font-size: 0.85rem; border-color: rgba(255,255,255,0.3); color: #fff; background: rgba(255,255,255,0.15); display: inline-flex; align-items: center; justify-content: center; border-radius: 50%; cursor: pointer;">
           <i class="fa-solid fa-moon"></i>
         </button>
@@ -78,10 +55,8 @@
     </div>
   </div>
 
-  <!-- Primary Sticky Header (Spacious, Elegant, Focused) -->
   <header class="site-header" id="siteHeader">
     <div class="header-container header-inner">
-      <!-- School Brand Emblem & Name Anchored at Left Corner -->
       <a href="#home" class="brand-wrapper" title="Sri Vidya E.M High School">
         <img src="assets/images/school-logo.jpg" alt="Sri Vidya E.M High School Official Emblem" class="school-logo-img" id="schoolLogo">
         <div class="brand-text">
@@ -90,7 +65,6 @@
         </div>
       </a>
 
-      <!-- Navigation Menu strictly following requested architecture -->
       <nav aria-label="Main Navigation">
         <ul class="nav-menu" id="mainNavMenu">
           <li class="nav-item">
@@ -99,7 +73,6 @@
             </a>
           </li>
 
-          <!-- About Us Dropdown -->
           <li class="nav-item has-dropdown">
             <a href="#about" class="nav-link" id="navAbout">
               About Us <i class="fa-solid fa-chevron-down dropdown-caret"></i>
@@ -112,7 +85,6 @@
             </ul>
           </li>
 
-          <!-- Academics Dropdown -->
           <li class="nav-item has-dropdown">
             <a href="#academics" class="nav-link" id="navAcademics">
               Academics <i class="fa-solid fa-chevron-down dropdown-caret"></i>
@@ -125,7 +97,6 @@
             </ul>
           </li>
 
-          <!-- Admissions Dropdown -->
           <li class="nav-item has-dropdown">
             <a href="#admissions" class="nav-link" id="navAdmissions">
               Admissions <i class="fa-solid fa-chevron-down dropdown-caret"></i>
@@ -139,28 +110,24 @@
             </ul>
           </li>
 
-          <!-- News & Events -->
           <li class="nav-item">
             <a href="#news-events" class="nav-link" id="navNewsEvents">
               News &amp; Events
             </a>
           </li>
 
-          <!-- Gallery -->
           <li class="nav-item">
             <a href="#gallery" class="nav-link" id="navGallery">
               Gallery
             </a>
           </li>
 
-          <!-- Appointments -->
           <li class="nav-item">
             <a href="#appointments" class="nav-link" id="navAppointments" title="Request a meeting with the Principal or authorized school official.">
               Appointments
             </a>
           </li>
 
-          <!-- Contact Us -->
           <li class="nav-item">
             <a href="#contact" class="nav-link" id="navContact">
               Contact Us
@@ -169,15 +136,12 @@
         </ul>
       </nav>
 
-      <!-- Action Button & Mobile Toggle -->
       <div class="nav-cta-group">
-        <!-- Unified Single Sign-On Portal CTA -->
         <a href="/login" class="btn-portal-trigger" title="Sri Vidya Unified Portal Gateway (Management, Faculty & Platform Admin)" style="text-decoration: none;">
           <i class="fa-solid fa-shield-halved"></i>
           <span>Portal Sign In</span>
         </a>
 
-        <!-- Mobile Drawer Toggle -->
         <button type="button" class="mobile-toggle" id="mobileMenuToggle" aria-label="Toggle navigation menu">
           <i class="fa-solid fa-bars"></i>
         </button>
@@ -185,9 +149,6 @@
     </div>
   </header>
 
-  <!-- ==========================================================================
-       BREAKING NEWS TICKER
-       ========================================================================== -->
   <section class="announcement-ticker" aria-label="Important Updates">
     <div class="container ticker-inner">
       <div class="ticker-label">
@@ -204,9 +165,6 @@
     </div>
   </section>
 
-  <!-- ==========================================================================
-       1. HOME: HERO SECTION
-       ========================================================================== -->
   <section class="hero-section" id="home">
     <div class="container hero-grid">
       <div class="hero-content-col">
@@ -245,7 +203,6 @@
         </div>
       </div>
 
-      <!-- Hero Visuals -->
       <div class="hero-visual-box">
         <div class="hero-main-img-card">
           <div class="hero-img-header-overlay">
@@ -285,7 +242,6 @@
     </div>
   </section>
 
-  <!-- HOME QUICK ACCESS -->
   <section class="section quick-access-section" style="padding-top: 2.5rem; padding-bottom: 3.5rem;">
     <div class="container">
       <div class="quick-access-grid">
@@ -328,14 +284,6 @@
     </div>
   </section>
 
-  <!-- ==========================================================================
-       2. ABOUT US
-       Architecture:
-       - School Profile
-       - Principal's Message
-       - Vision & Mission
-       - Infrastructure
-       ========================================================================== -->
   <section class="section tabs-wrapper" id="about">
     <div class="container">
       <div class="section-header">
@@ -344,7 +292,6 @@
         <p class="section-subtitle">Fostering excellence, ethical character, and academic mastery since 2017 in Visakhapatnam.</p>
       </div>
 
-      <!-- Sub-Tabs Navigation (School Profile · Principal's Message · Vision & Mission · Infrastructure) -->
       <div class="sub-tabs-nav">
         <button type="button" class="tab-btn active" data-tab="tab-profile" id="tabBtnProfile">
           <i class="fa-solid fa-school"></i> School Profile
@@ -360,7 +307,6 @@
         </button>
       </div>
 
-      <!-- TAB 1: SCHOOL PROFILE -->
       <div class="tab-pane active" id="tab-profile">
         <div class="school-profile-grid">
           <div class="profile-card">
@@ -402,9 +348,7 @@
         </div>
       </div>
 
-      <!-- TAB 2: PRINCIPAL & VICE PRINCIPAL DESK -->
       <div class="tab-pane" id="tab-principal">
-        <!-- Executive Leadership Switcher -->
         <div class="leadership-desk-switch">
           <button type="button" class="lead-switch-btn active" id="btnSwitchPrincipal" onclick="switchLeadershipDesk('principal')">
             <i class="fa-solid fa-user-tie"></i> Principal: Smt. Gorle Varalakshmi
@@ -414,7 +358,6 @@
           </button>
         </div>
 
-        <!-- 1. Principal Showcase -->
         <div class="principal-message-layout" id="leadershipDeskPrincipal">
           <div class="principal-photo-col">
             <div class="principal-card-box">
@@ -431,7 +374,6 @@
               </div>
             </div>
 
-            <!-- Fast Switch to VP Prompt Card -->
             <div class="vice-principal-card-box" onclick="switchLeadershipDesk('vp')" style="margin-top: 1.25rem; cursor: pointer;">
               <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.35rem;">
                 <h4 style="margin: 0; font-family: var(--font-heading); font-size: 1.05rem; color: var(--color-text-dark);">Sri Navva Anand</h4>
@@ -466,7 +408,6 @@
           </div>
         </div>
 
-        <!-- 2. Vice Principal Showcase (Same Prestigious Full Card Layout) -->
         <div class="principal-message-layout" id="leadershipDeskVicePrincipal" style="display: none;">
           <div class="principal-photo-col">
             <div class="principal-card-box">
@@ -486,7 +427,6 @@
               </div>
             </div>
 
-            <!-- Fast Switch to Principal Prompt Card -->
             <div class="vice-principal-card-box" onclick="switchLeadershipDesk('principal')" style="margin-top: 1.25rem; cursor: pointer; border-left-color: var(--color-primary);">
               <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.35rem;">
                 <h4 style="margin: 0; font-family: var(--font-heading); font-size: 1.05rem; color: var(--color-text-dark);">Smt. Gorle Varalakshmi</h4>
@@ -523,7 +463,6 @@
         </div>
       </div>
 
-      <!-- TAB 3: VISION & MISSION -->
       <div class="tab-pane" id="tab-vision">
         <div class="vision-mission-grid">
           <div class="vm-card vision-card">
@@ -552,7 +491,6 @@
         </div>
       </div>
 
-      <!-- TAB 4: INFRASTRUCTURE -->
       <div class="tab-pane" id="tab-infrastructure">
         <div class="infra-grid">
           <div class="infra-card">
@@ -603,14 +541,6 @@
     </div>
   </section>
 
-  <!-- ==========================================================================
-       3. ACADEMICS
-       Architecture:
-       - Classes Offered
-       - Curriculum
-       - Teaching Approach
-       - Academic Calendar
-       ========================================================================== -->
   <section class="section section-alt tabs-wrapper" id="academics">
     <div class="container">
       <div class="section-header">
@@ -619,7 +549,6 @@
         <p class="section-subtitle">A balanced curriculum balancing Board syllabus mastery, STEM experiments, and personalized student attention.</p>
       </div>
 
-      <!-- Sub-Tabs Navigation (Classes Offered · Curriculum · Teaching Approach · Academic Calendar) -->
       <div class="sub-tabs-nav">
         <button type="button" class="tab-btn active" data-tab="tab-classes" id="tabBtnClasses">
           <i class="fa-solid fa-graduation-cap"></i> Classes Offered
@@ -635,7 +564,6 @@
         </button>
       </div>
 
-      <!-- TAB 1: CLASSES OFFERED -->
       <div class="tab-pane active" id="tab-classes">
         <div class="wings-grid">
           <div class="wing-card">
@@ -700,7 +628,6 @@
         </div>
       </div>
 
-      <!-- TAB 2: CURRICULUM -->
       <div class="tab-pane" id="tab-curriculum">
         <div class="curriculum-overview">
           <div class="curr-card">
@@ -719,7 +646,6 @@
         </div>
       </div>
 
-      <!-- TAB 3: TEACHING APPROACH -->
       <div class="tab-pane" id="tab-approach">
         <div class="teaching-approach-grid">
           <div class="approach-card">
@@ -748,7 +674,6 @@
         </div>
       </div>
 
-      <!-- TAB 4: ACADEMIC CALENDAR -->
       <div class="tab-pane" id="tab-calendar">
         <div class="calendar-card">
           <div class="calendar-header-strip">
@@ -817,15 +742,6 @@
     </div>
   </section>
 
-  <!-- ==========================================================================
-       4. ADMISSIONS
-       Architecture:
-       - Admission Process
-       - Eligibility
-       - Required Documents
-       - Enquiry Form
-       - Application Status, if enabled
-       ========================================================================== -->
   <section class="section tabs-wrapper" id="admissions">
     <div class="container">
       <div class="section-header">
@@ -834,7 +750,6 @@
         <p class="section-subtitle">We warmly invite parents seeking value-based English medium education to enroll their children in Sri Vidya E.M High School.</p>
       </div>
 
-      <!-- Sub-Tabs Navigation (Admission Process · Eligibility · Required Documents · Enquiry Form · Application Status) -->
       <div class="sub-tabs-nav">
         <button type="button" class="tab-btn active" data-tab="tab-adm-process" id="tabBtnAdmProcess">
           <i class="fa-solid fa-list-check"></i> Admission Process
@@ -853,7 +768,6 @@
         </button>
       </div>
 
-      <!-- TAB 1: ADMISSION PROCESS -->
       <div class="tab-pane active" id="tab-adm-process">
         <div class="admission-process-steps">
           <div class="step-card">
@@ -907,7 +821,6 @@
         </div>
       </div>
 
-      <!-- TAB 2: ELIGIBILITY -->
       <div class="tab-pane" id="tab-adm-eligibility">
         <div class="calendar-card" style="margin-bottom: 2rem;">
           <div class="table-responsive">
@@ -969,7 +882,6 @@
         </div>
       </div>
 
-      <!-- TAB 3: REQUIRED DOCUMENTS -->
       <div class="tab-pane" id="tab-adm-documents">
         <div class="documents-checklist-grid">
           <div class="doc-card">
@@ -1016,7 +928,6 @@
         </div>
       </div>
 
-      <!-- TAB 4: ENQUIRY FORM -->
       <div class="tab-pane" id="tab-adm-apply">
         <div class="admission-form-wrapper">
           <div class="form-header-box">
@@ -1108,7 +1019,6 @@
         </div>
       </div>
 
-      <!-- TAB 5: APPLICATION STATUS -->
       <div class="tab-pane" id="tab-adm-status">
         <div class="status-tracker-card">
           <div class="status-search-header">
@@ -1125,16 +1035,12 @@
           </div>
 
           <div id="statusResultArea" class="status-result-area" style="display: none;">
-            <!-- Populated dynamically via app.js -->
           </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- ==========================================================================
-       5. NEWS & EVENTS
-       ========================================================================== -->
   <section class="section" id="news-events">
     <div class="container">
       <div class="section-header">
@@ -1189,9 +1095,6 @@
     </div>
   </section>
 
-  <!-- ==========================================================================
-       6. GALLERY
-       ========================================================================== -->
   <section class="section section-alt" id="gallery">
     <div class="container">
       <div class="section-header">
@@ -1200,7 +1103,6 @@
         <p class="section-subtitle">A glimpse into our classrooms, laboratories, sports grounds, and festive cultural milestones.</p>
       </div>
 
-      <!-- Filters -->
       <div class="gallery-filters">
         <button type="button" class="tab-btn active gallery-filter-btn" data-filter="all">All Photos</button>
         <button type="button" class="tab-btn gallery-filter-btn" data-filter="campus">Campus &amp; Building</button>
@@ -1208,7 +1110,6 @@
         <button type="button" class="tab-btn gallery-filter-btn" data-filter="cultural">Cultural &amp; Celebrations</button>
       </div>
 
-      <!-- Grid -->
       <div class="gallery-grid">
         <div class="gallery-item" data-category="campus">
           <img src="assets/images/campus.jpg" alt="Main School Campus Entrance &amp; Building">
@@ -1277,12 +1178,6 @@
     </div>
   </section>
 
-  <!-- ==========================================================================
-       7. APPOINTMENTS
-       Architecture:
-       - Appointments
-       - Request a meeting with the Principal or authorized school official.
-       ========================================================================== -->
   <section class="section tabs-wrapper" id="appointments">
     <div class="container">
       <div class="section-header">
@@ -1292,7 +1187,6 @@
       </div>
 
       <div class="appointments-grid">
-        <!-- Officials Directory Card Column -->
         <div class="officials-list-col">
           <h3 class="col-heading"><i class="fa-solid fa-user-tie"></i> Authorized School Officials</h3>
           <p class="col-sub">Select the authority you wish to meet for admissions counseling, student academic review, or institutional administration.</p>
@@ -1328,7 +1222,6 @@
           </div>
         </div>
 
-        <!-- Appointment Request Form Column -->
         <div class="appointment-form-col">
           <div class="appointment-form-card">
             <div class="form-card-header">
@@ -1413,7 +1306,6 @@
             </form>
 
             <div id="aptSuccessPass" class="apt-pass-card" style="display: none;">
-              <!-- Generated Dynamically by app.js -->
             </div>
           </div>
         </div>
@@ -1421,9 +1313,6 @@
     </div>
   </section>
 
-  <!-- ==========================================================================
-       8. CONTACT US
-       ========================================================================== -->
   <section class="section section-alt" id="contact">
     <div class="container">
       <div class="section-header">
@@ -1433,7 +1322,6 @@
       </div>
 
       <div class="contact-grid">
-        <!-- Contact Information Column -->
         <div class="contact-info-col">
           <div class="contact-card">
             <div class="contact-icon"><i class="fa-solid fa-location-dot"></i></div>
@@ -1467,7 +1355,6 @@
           </div>
         </div>
 
-        <!-- Contact Message Form Column -->
         <div class="contact-form-col">
           <form class="contact-form-card" id="contactInquiryForm">
             <div class="form-group" style="margin-bottom: 1rem;">
@@ -1508,7 +1395,6 @@
         </div>
       </div>
 
-      <!-- Google Maps Embed & Route Showcase -->
       <div class="school-route-showcase" id="schoolLocationRouteGuide" style="margin-top: 3rem;">
         <div class="map-card-header">
           <div class="map-card-title-group">
@@ -1540,9 +1426,7 @@
             </iframe>
           </div>
 
-          <!-- Comprehensive Route Guide & Campus Transit Details (Fills the right column) -->
           <div class="school-route-details">
-            <!-- Key Location Attributes -->
             <div class="location-details-grid">
               <div class="location-item">
                 <i class="fa-solid fa-map-pin location-item-icon"></i>
@@ -1574,7 +1458,6 @@
               </div>
             </div>
 
-            <!-- Campus Connectivity & Commute Guide -->
             <div class="route-guide-block">
               <h4 class="route-guide-title">
                 <i class="fa-solid fa-route" style="color: var(--color-primary);"></i> Campus Connectivity &amp; Transit Guide
@@ -1622,7 +1505,6 @@
               </div>
             </div>
 
-            <!-- Action Buttons -->
             <div class="map-action-buttons">
               <a href="https://www.google.com/maps/dir/?api=1&destination=17.8199359,83.2038483" target="_blank" rel="noopener noreferrer" class="btn btn-primary">
                 <i class="fa-solid fa-diamond-turn-right"></i> Start GPS Navigation
@@ -1640,13 +1522,6 @@
     </div>
   </section>
 
-  <!-- ==========================================================================
-       9. INSTITUTIONAL PORTALS
-       Architecture:
-       - Platform Administration
-       - Administration Portal
-       - Faculty Portal
-       ========================================================================== -->
   <section class="section portals-showcase-section" id="portals">
     <div class="container">
       <div class="section-header">
@@ -1655,7 +1530,6 @@
         <p class="section-subtitle">Unified single sign-on access for Platform Administration, Executive Management, and Academic Faculty. Sign in with your username or School ID, and the platform automatically opens your authorized console.</p>
       </div>
 
-      <!-- Unified Single Sign-On Callout Banner -->
       <div class="portal-unified-banner" style="background: linear-gradient(135deg, #0F172A 0%, #1E3A8A 50%, #1D4ED8 100%); color: #FFFFFF; border-radius: 16px; padding: 1.5rem 2rem; margin-bottom: 2.25rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1.25rem; box-shadow: 0 10px 25px -5px rgba(29, 78, 216, 0.3);">
         <div style="max-width: 650px;">
           <div style="display: inline-flex; align-items: center; gap: 0.5rem; background: rgba(255, 255, 255, 0.15); padding: 0.25rem 0.75rem; border-radius: 20px; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 0.5rem;">
@@ -1670,7 +1544,6 @@
       </div>
 
       <div class="portals-showcase-grid">
-        <!-- Portal 1: Platform Administration -->
         <div class="portal-card-gateway">
           <div class="portal-gw-header">
             <div class="portal-gw-icon platform"><i class="fa-solid fa-server"></i></div>
@@ -1689,7 +1562,6 @@
           </a>
         </div>
 
-        <!-- Portal 2: Administration Portal -->
         <div class="portal-card-gateway highlight">
           <div class="portal-gw-header">
             <div class="portal-gw-icon admin"><i class="fa-solid fa-building-columns"></i></div>
@@ -1708,7 +1580,6 @@
           </a>
         </div>
 
-        <!-- Portal 3: Faculty Portal -->
         <div class="portal-card-gateway">
           <div class="portal-gw-header">
             <div class="portal-gw-icon faculty"><i class="fa-solid fa-chalkboard-user"></i></div>
@@ -1730,9 +1601,6 @@
     </div>
   </section>
 
-  <!-- ==========================================================================
-       FOOTER
-       ========================================================================== -->
   <footer class="site-footer">
     <div class="container footer-container">
       <div class="footer-grid">
@@ -1807,9 +1675,6 @@
     </div>
   </footer>
 
-  <!-- ==========================================================================
-       MODAL 1: ADMISSION APPLICATION RECEIPT SLIP
-       ========================================================================== -->
   <div class="modal-overlay" id="receiptModal">
     <div class="modal-content-box" style="max-width: 520px;">
       <button class="modal-close-btn modal-close-trigger" aria-label="Close modal">&times;</button>
@@ -1851,9 +1716,6 @@
     </div>
   </div>
 
-  <!-- ==========================================================================
-       MODAL 2: GALLERY LIGHTBOX
-       ========================================================================== -->
   <div class="modal-overlay" id="galleryLightboxModal">
     <div class="modal-content-box" style="max-width: 900px; background: #000; color: #fff;">
       <button class="modal-close-btn modal-close-trigger" aria-label="Close lightbox">&times;</button>
@@ -1866,15 +1728,11 @@
     </div>
   </div>
 
-  <!-- ==========================================================================
-       MODAL 3: NOTICE & DOCUMENT VIEWER MODAL
-       ========================================================================== -->
   <div class="modal-overlay" id="noticeDetailModal" role="dialog" aria-modal="true" aria-labelledby="noticeModalTitle">
     <div class="modal-content-box" style="max-width: 860px; max-height: 90vh; display: flex; flex-direction: column;">
       <button class="modal-close-btn modal-close-trigger" aria-label="Close modal">&times;</button>
       <div class="modal-body" style="overflow-y: auto; padding: 2rem 2.25rem;">
         <div id="noticeModalContent">
-          <!-- Populated dynamically by app.js -->
         </div>
       </div>
       <div class="modal-actions" style="display: flex; justify-content: space-between; align-items: center; padding: 1.25rem 2rem; border-top: 1px solid var(--color-border); background: var(--color-bg-warm); flex-wrap: wrap; gap: 0.75rem;">
@@ -1888,17 +1746,12 @@
     </div>
   </div>
 
-  <!-- Toast Container -->
   <div class="toast-container" id="toastContainer"></div>
 
-  <!-- Reusable API Client -->
   <script src="/js/api-client.js"></script>
-  <!-- Cookie Consent & Privacy Manager -->
   <script src="/js/cookie-consent.js?v=20261125-v1"></script>
-  <!-- Main JavaScript File -->
   <script src="/js/app.js?v=2.7"></script>
 
-  <!-- Google Translate Engine for Native Translation -->
   <div id="google_translate_element" style="display:none;"></div>
   <script type="text/javascript">
     function googleTranslateElementInit() {
@@ -1911,13 +1764,8 @@
   </script>
   <script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 
-  <!-- ==========================================================================
-       FLOATING BOTTOM NAVIGATION BAR (Mobile Compulsory & Desktop Dock on Scroll)
-       ========================================================================== -->
   
-  <!-- Modern Input Field System Controller -->
   <script src="js/modern-inputs.js?v=20261122-v1"></script>
-  <!-- Modern Popover & Overlay Component System Controller -->
   <script src="/js/modern-popovers.js?v=20261122-v1"></script>
 </body>
 </html>

@@ -1,29 +1,9 @@
-/**
- * Sri Vidya Educational Trust - Multi-Institution Security & Policy Enforcement
- * 
- * Crucial Security Rule:
- * Every school-owned record and operation must be scoped to the correct institution.
- * Platform-level access must be explicitly authorized and audited.
- * Do not rely only on a frontend institution selector to prevent cross-school access.
- * 
- * Enforces 6 Security Dimensions:
- * 1. Institution scope (Prevents cross-school tenant leakage)
- * 2. User's active role (Verifies role tier authority)
- * 3. Required permission (Checks granular RBAC capability)
- * 4. Record-level restrictions (Suspended, archived, or locked entities)
- * 5. Approval requirements (Signatory or change ticket requirement for high-impact actions)
- * 6. Audit logging (Mandatory permanent audit seal in PlatformAudit)
- */
 
 const { PlatformAudit } = require('../../models/platformAudit.model');
 const mongoose = require('mongoose');
 
 class MultiInstitutionSecurity {
 
-  /**
-   * Resolves the authenticated actor strictly from verified JWT session context.
-   * Never fails open or elevates privileges from spoofable request headers.
-   */
   static resolveActor(req) {
     if (req?.headers && (req.headers['x-actor-role'] || req.headers['x-actor-id'])) {
       const hRole = req.headers['x-actor-role'] || 'GUEST';
@@ -66,9 +46,6 @@ class MultiInstitutionSecurity {
     };
   }
 
-  /**
-   * Enforces the 6-dimension multi-institution security policy
-   */
   static async enforcePolicy(req, res, options = {}) {
     const actor = this.resolveActor(req);
     const targetInstitutionId = options.targetInstitutionId ||
@@ -77,9 +54,7 @@ class MultiInstitutionSecurity {
       req?.body?.institutionId ||
       req?.query?.institutionId;
 
-    // 1. INSTITUTION SCOPE CHECK (Prevents Cross-School Tenant Access)
     if (actor.scope === 'INSTITUTION_ONLY') {
-      // If user is institution-scoped, target institution MUST match user's institution
       if (targetInstitutionId && targetInstitutionId !== 'ALL' && targetInstitutionId !== actor.institutionId) {
         await this.logSecurityViolation(actor, 'CROSS_INSTITUTION_ACCESS_ATTEMPT', {
           attemptedInstitution: targetInstitutionId,
@@ -95,7 +70,6 @@ class MultiInstitutionSecurity {
         return false;
       }
 
-      // If action requires explicit platform-wide scope, block institution-only users
       if (options.requirePlatformWideScope) {
         await this.logSecurityViolation(actor, 'PLATFORM_WIDE_OPERATION_DENIED', {
           requiredScope: 'PLATFORM_WIDE',
@@ -112,7 +86,6 @@ class MultiInstitutionSecurity {
       }
     }
 
-    // 2. USER ACTIVE ROLE CHECK
     if (options.allowedRoles && options.allowedRoles.length > 0) {
       const hasRole = options.allowedRoles.includes(actor.role) || actor.role === 'Super Administrator';
       if (!hasRole) {
@@ -125,7 +98,6 @@ class MultiInstitutionSecurity {
       }
     }
 
-    // 3. REQUIRED PERMISSION CHECK
     if (options.requiredPermission && !actor.permissions.includes('*')) {
       const hasPerm = actor.permissions.includes(options.requiredPermission);
       if (!hasPerm) {
@@ -138,7 +110,6 @@ class MultiInstitutionSecurity {
       }
     }
 
-    // 4. RECORD-LEVEL RESTRICTION CHECK
     if (typeof options.recordRestrictionCheck === 'function') {
       const restriction = options.recordRestrictionCheck(req);
       if (restriction && restriction.blocked) {
@@ -151,7 +122,6 @@ class MultiInstitutionSecurity {
       }
     }
 
-    // 5. APPROVAL REQUIREMENTS CHECK (For High-Impact Sensitive Operations)
     if (options.requireApprovalSignatory) {
       const signatory = req?.body?.approvalSignatory || req?.body?.approvedBy || req?.headers?.['x-approval-signatory'];
       if (!signatory) {
@@ -176,7 +146,6 @@ class MultiInstitutionSecurity {
       }
     }
 
-    // 6. AUDIT LOGGING (Seals the authorized action)
     if (options.auditAction) {
       await this.logAuditRecord(actor, options.auditCategory || 'PLATFORM_OPERATION', options.auditAction, {
         targetInstitutionId: targetInstitutionId || 'PLATFORM_WIDE',
@@ -189,9 +158,6 @@ class MultiInstitutionSecurity {
     return true;
   }
 
-  /**
-   * Express middleware factory for multi-institution policy enforcement
-   */
   static policyMiddleware(options = {}) {
     return async (req, res, next) => {
       try {
@@ -205,9 +171,6 @@ class MultiInstitutionSecurity {
     };
   }
 
-  /**
-   * Automatically scopes any database query to prevent cross-institution leaks
-   */
   static scopeQuery(baseQuery = {}, req, explicitInstitutionId = null) {
     const actor = this.resolveActor(req);
     const resolvedInstId = explicitInstitutionId || req?.params?.institutionId || req?.query?.institutionId;

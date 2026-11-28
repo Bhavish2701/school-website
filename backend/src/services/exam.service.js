@@ -1,13 +1,3 @@
-/**
- * Examination Service
- *
- * Implements:
- * 1. Exam lifecycle: creation, scheduling, status updates, and publication
- * 2. Teacher subject authorization: teachers can only enter/modify marks for their assigned classes/subjects
- * 3. Zero-trust validation: validates student enrollment, rejects tampered payloads
- * 4. Automatic calculation: grades, GPA, percentage, pass/fail status, and class rankings
- * 5. Secure student & parent result viewing (preventing access to unpublished drafts)
- */
 const mongoose = require('mongoose');
 const {
   Exam,
@@ -20,9 +10,6 @@ const { Student } = require('../models/student.model');
 const { Teacher } = require('../models/teacher.model');
 const ApiError = require('../utils/apiError');
 
-/**
- * 1. Create a New Exam (Management)
- */
 const createExam = async (examData, user) => {
   const { name, examType, academicYear, startDate, endDate, classes, description } = examData;
 
@@ -46,9 +33,6 @@ const createExam = async (examData, user) => {
   return exam;
 };
 
-/**
- * 2. Get Exams List (Filtered by role and publication status)
- */
 const getExams = async (query = {}, user) => {
   const { academicYear, examType, isPublished, search } = query;
   const filter = {};
@@ -56,7 +40,6 @@ const getExams = async (query = {}, user) => {
   if (academicYear) filter.academicYear = academicYear;
   if (examType) filter.examType = examType;
 
-  // Students and parents only see published exams
   if (['STUDENT', 'PARENT'].includes(user.role)) {
     filter.isPublished = true;
   } else if (isPublished !== undefined) {
@@ -74,16 +57,12 @@ const getExams = async (query = {}, user) => {
   return exams;
 };
 
-/**
- * 3. Get Single Exam Details with Schedules
- */
 const getExamById = async (examId, user) => {
   const exam = await Exam.findById(examId).populate('createdBy', 'fullName role');
   if (!exam) {
     throw ApiError.notFound('Examination not found');
   }
 
-  // If student or parent, restrict unpublished exam results
   if (['STUDENT', 'PARENT'].includes(user.role) && !exam.isPublished) {
     throw ApiError.forbidden('Examination results have not been published yet');
   }
@@ -96,9 +75,6 @@ const getExamById = async (examId, user) => {
   };
 };
 
-/**
- * 4. Create / Update Exam Schedule for a Subject & Class
- */
 const createSchedule = async (examId, scheduleData, user) => {
   const exam = await Exam.findById(examId);
   if (!exam) {
@@ -139,9 +115,6 @@ const createSchedule = async (examId, scheduleData, user) => {
   return schedule;
 };
 
-/**
- * 5. Get Exam Schedule for a Class
- */
 const getExamSchedule = async (examId, className) => {
   const filter = { exam: examId };
   if (className) filter.class = className;
@@ -150,11 +123,7 @@ const getExamSchedule = async (examId, className) => {
   return schedules;
 };
 
-/**
- * Helper to verify Teacher subject/class authorization
- */
 const verifyTeacherSubjectAccess = async (user, className, section, subjectName) => {
-  // Management roles have universal authorization
   if (['SUPER_ADMIN', 'PRINCIPAL', 'VICE_PRINCIPAL', 'OFFICE'].includes(user.role)) {
     return true;
   }
@@ -181,23 +150,17 @@ const verifyTeacherSubjectAccess = async (user, className, section, subjectName)
     return true;
   }
 
-  // Students and parents must NEVER be able to modify marks
   throw ApiError.forbidden('Your user role is strictly prohibited from entering or modifying examination marks');
 };
 
-/**
- * 6. Enter / Submit Marks for a Subject in a Class (With Teacher Authorization)
- */
 const enterSubjectMarks = async (examId, className, section, subjectName, marksList, user) => {
   const exam = await Exam.findById(examId);
   if (!exam) {
     throw ApiError.notFound('Examination not found');
   }
 
-  // 1. Enforce strict Teacher authorization for this subject & class
   await verifyTeacherSubjectAccess(user, className, section, subjectName);
 
-  // 2. Fetch subject schedule for maxMarks and passMarks
   const schedule = await ExamSchedule.findOne({
     exam: examId,
     class: className,
@@ -207,7 +170,6 @@ const enterSubjectMarks = async (examId, className, section, subjectName, marksL
   const maxMarks = schedule ? schedule.maxMarks : 100;
   const passMarks = schedule ? schedule.passMarks : 35;
 
-  // 3. Validate student IDs belong to this class and section
   const studentIds = marksList.map((m) => m.studentId);
   const matchedStudents = await Student.find({
     _id: { $in: studentIds },
@@ -224,7 +186,6 @@ const enterSubjectMarks = async (examId, className, section, subjectName, marksL
 
   const results = [];
 
-  // 4. Record/Upsert subject marks for each student
   for (const item of marksList) {
     const isAbsent = Boolean(item.isAbsent);
     const marksObtained = isAbsent ? 0 : Number(item.marksObtained);
@@ -244,7 +205,6 @@ const enterSubjectMarks = async (examId, className, section, subjectName, marksL
       });
     }
 
-    // Check if this subject already exists in student's marks memo
     const existingIndex = examMark.subjectMarks.findIndex(
       (sm) => sm.subject.toLowerCase() === subjectName.toLowerCase()
     );
@@ -270,7 +230,6 @@ const enterSubjectMarks = async (examId, className, section, subjectName, marksL
       examMark.subjectMarks.push(newSubjectEntry);
     }
 
-    // 5. Recalculate Student Overall Results
     let totalObtained = 0;
     let totalMax = 0;
     let totalGradePoints = 0;
@@ -312,16 +271,12 @@ const enterSubjectMarks = async (examId, className, section, subjectName, marksL
   };
 };
 
-/**
- * 7. Modify Individual Student Mark (With Authorization Check)
- */
 const modifyStudentMark = async (markId, subjectName, updateData, user) => {
   const examMark = await ExamMark.findById(markId);
   if (!examMark) {
     throw ApiError.notFound('Exam mark record not found');
   }
 
-  // Enforce Teacher Authorization
   await verifyTeacherSubjectAccess(user, examMark.class, examMark.section, subjectName);
 
   const subjectEntry = examMark.subjectMarks.find(
@@ -344,7 +299,6 @@ const modifyStudentMark = async (markId, subjectName, updateData, user) => {
     subjectEntry.remarks = updateData.remarks;
   }
 
-  // Recalculate subject grade
   const { grade, gradePoint } = calculateSubjectGrade(
     subjectEntry.marksObtained,
     subjectEntry.maxMarks,
@@ -355,7 +309,6 @@ const modifyStudentMark = async (markId, subjectName, updateData, user) => {
   subjectEntry.updatedBy = user._id;
   subjectEntry.updatedAt = new Date();
 
-  // Recalculate student totals
   let totalObtained = 0;
   let totalMax = 0;
   let totalGradePoints = 0;
@@ -381,9 +334,6 @@ const modifyStudentMark = async (markId, subjectName, updateData, user) => {
   return examMark;
 };
 
-/**
- * 8. Calculate Class Results & Rankings
- */
 const calculateExamResults = async (examId, className, section) => {
   const filter = { exam: examId, class: className };
   if (section && section !== 'ALL') filter.section = section;
@@ -394,7 +344,6 @@ const calculateExamResults = async (examId, className, section) => {
     throw ApiError.notFound(`No marks records found for Class ${className}-${section || 'ALL'}`);
   }
 
-  // Assign class rank
   let currentRank = 1;
   for (let i = 0; i < marksList.length; i++) {
     if (i > 0 && marksList[i].totalMarksObtained < marksList[i - 1].totalMarksObtained) {
@@ -428,9 +377,6 @@ const calculateExamResults = async (examId, className, section) => {
   };
 };
 
-/**
- * 9. Publish Exam Results (Management Only)
- */
 const publishExamResults = async (examId, user) => {
   const exam = await Exam.findById(examId);
   if (!exam) {
@@ -443,7 +389,6 @@ const publishExamResults = async (examId, user) => {
   exam.status = 'COMPLETED';
   await exam.save();
 
-  // Set isPublished to true on all associated ExamMark records
   await ExamMark.updateMany({ exam: examId }, { isPublished: true });
 
   return {
@@ -455,16 +400,12 @@ const publishExamResults = async (examId, user) => {
   };
 };
 
-/**
- * 10. Get Student Specific Exam Result / Marks Memo
- */
 const getStudentResult = async (examId, studentId, user) => {
   const exam = await Exam.findById(examId);
   if (!exam) {
     throw ApiError.notFound('Examination not found');
   }
 
-  // If student or parent, enforce result publication check
   if (['STUDENT', 'PARENT'].includes(user.role) && !exam.isPublished) {
     throw ApiError.forbidden('Results for this examination have not been published yet');
   }
@@ -480,9 +421,6 @@ const getStudentResult = async (examId, studentId, user) => {
   return mark;
 };
 
-/**
- * 11. Get All Published Report Cards for a Student
- */
 const getStudentReportCards = async (studentId, user) => {
   const student = await Student.findById(studentId);
   if (!student) {
@@ -510,9 +448,6 @@ const getStudentReportCards = async (studentId, user) => {
   };
 };
 
-/**
- * 12. Class Results Dossier (Staff View)
- */
 const getClassMarksDossier = async (examId, className, section) => {
   const marks = await ExamMark.find({
     exam: examId,
@@ -525,9 +460,6 @@ const getClassMarksDossier = async (examId, className, section) => {
   return marks;
 };
 
-/**
- * 13. Update Exam Details (Management)
- */
 const updateExam = async (examId, updateData, user) => {
   const exam = await Exam.findById(examId);
   if (!exam) throw ApiError.notFound('Exam not found');

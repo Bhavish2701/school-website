@@ -1,7 +1,3 @@
-/**
- * Platform Dashboard Telemetry - Module Aggregator
- * Exports all 6 architectural layers
- */
 
 const routes = require('./platform-dashboard.routes');
 const controller = require('./platform-dashboard.controller');

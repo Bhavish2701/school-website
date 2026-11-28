@@ -1,14 +1,3 @@
-/**
- * Test Suite 07: Academic Assignments Module API Tests
- * Covers:
- * - Create assignment by Teacher & Management (201)
- * - Validation error when fields missing (422)
- * - List assignments (200)
- * - Get assignment by ID (200)
- * - 404 for non-existent assignment ID
- * - Role-based authorization: Students/Parents cannot create assignments (403 Forbidden)
- * - 401 Unauthenticated requests
- */
 const request = require('supertest');
 const mongoose = require('mongoose');
 const app = require('../src/app');
@@ -48,7 +37,6 @@ describe('07 - Academic Assignments Module API Test Suite', () => {
         .post('/api/v1/academic/assignments')
         .set('Authorization', `Bearer ${fixtures.tokens.teacher1}`)
         .send({
-          // Missing title, description, subject, class, dueDate
           section: 'A',
         });
 

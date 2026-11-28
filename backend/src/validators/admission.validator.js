@@ -1,13 +1,7 @@
-/**
- * Admission Module Request Validators
- */
 const validate = require('../middleware/validate.middleware');
 const { ADMISSION_STATUSES, GENDERS, DOCUMENT_TYPES } = require('../models/admission.model');
 const ApiError = require('../utils/apiError');
 
-/**
- * Validate Online Admission Application Submission
- */
 const validateSubmitApplication = validate({
   studentName: {
     required: true,
@@ -40,9 +34,6 @@ const validateSubmitApplication = validate({
   },
 });
 
-/**
- * Validate Application Status Inquiry
- */
 const validateCheckStatus = (req, res, next) => {
   const { applicationNumber, phone } = req.query;
   const errors = {};
@@ -62,9 +53,6 @@ const validateCheckStatus = (req, res, next) => {
   next();
 };
 
-/**
- * Validate Status Update / Review Actions (Management)
- */
 const validateUpdateStatus = validate({
   status: {
     required: true,
@@ -73,9 +61,6 @@ const validateUpdateStatus = validate({
   },
 });
 
-/**
- * Validate Document Attachment
- */
 const validateUploadDocument = validate({
   docName: {
     required: true,

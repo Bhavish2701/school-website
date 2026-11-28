@@ -1,16 +1,3 @@
-/* ==========================================================================
-   Sri Vidya ERP & School Portals - Modern Input Field System
-   - Floating Labels
-   - Password Fields with Strength Meter & Eye Toggle
-   - Search Fields with Left Icon & Instant Clear Button
-   - Real-Time Validation with Success/Error Visual Feedback
-   - Code/OTP Fields with Auto-advance, Paste & Backspace Support
-   - Stepper Fields with Increment/Decrement Controls
-   - Tag-based Inputs with Add/Remove functionality
-   - Date Masks with Auto-formatting & Validation
-   - Skeuomorphic Raised & Inset Tactile Finishes
-   - Full Dark Mode Support
-   ========================================================================== */
 
 :root {
   --input-bg-light: #FFFFFF;
@@ -24,7 +11,6 @@
   --input-focus-ring: 0 0 0 3px rgba(37, 99, 235, 0.18), inset 0 1px 2px rgba(15, 23, 42, 0.04);
   --input-radius: 10px;
 
-  /* Validation Colors */
   --input-success-border: #10B981;
   --input-success-bg: #F0FDF4;
   --input-success-ring: 0 0 0 3px rgba(16, 185, 129, 0.18);
@@ -33,9 +19,6 @@
   --input-error-ring: 0 0 0 3px rgba(239, 68, 68, 0.18);
 }
 
-/* ==========================================================================
-   1. Universal Modern Base Form Control
-   ========================================================================== */
 .sv-form-control,
 .form-control {
   border-radius: var(--input-radius) !important;
@@ -63,9 +46,6 @@
   background: #FFFFFF !important;
 }
 
-/* ==========================================================================
-   Universal Left / Right Icon Alignment (Prevents Text Colliding With Icons)
-   ========================================================================== */
 .input-container,
 .input-wrapper,
 .school-input-wrap,
@@ -118,9 +98,6 @@
   padding-right: 3rem !important;
 }
 
-/* ==========================================================================
-   2. Floating Labels System
-   ========================================================================== */
 .sv-floating-group,
 .form-floating {
   position: relative;
@@ -181,9 +158,6 @@
   opacity: 1;
 }
 
-/* ==========================================================================
-   3. Password Fields with Strength Meter & Eye Toggle
-   ========================================================================== */
 .sv-password-wrap {
   position: relative;
   width: 100%;
@@ -218,7 +192,6 @@
   background-color: rgba(226, 232, 240, 0.5);
 }
 
-/* Password Strength Indicator */
 .password-strength-container {
   margin-top: 0.5rem;
   width: 100%;
@@ -266,7 +239,6 @@
 .strength-level-strong .password-strength-segment { background: #10B981; }
 .strength-level-strong .password-strength-label span:last-child { color: #10B981; }
 
-/* Password Criteria Checklist */
 .password-criteria-list {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
@@ -299,9 +271,6 @@
   transform: scale(1.15);
 }
 
-/* ==========================================================================
-   4. Search Fields with Search Icon & Instant Clear Button
-   ========================================================================== */
 .sv-search-wrap {
   position: relative;
   display: flex;
@@ -363,11 +332,9 @@
   transform: scale(1.08);
 }
 
-/* ==========================================================================
-   5. Real-Time Field Validation System (Success & Error Visual States)
-   ========================================================================== */
-.is-valid,
 .sv-form-control.is-valid,
+.form-control.is-valid,
+.school-control.is-valid,
 input.is-valid,
 select.is-valid,
 textarea.is-valid {
@@ -381,8 +348,9 @@ textarea.is-valid {
   padding-right: 2.25rem !important;
 }
 
-.is-invalid,
 .sv-form-control.is-invalid,
+.form-control.is-invalid,
+.school-control.is-invalid,
 input.is-invalid,
 select.is-invalid,
 textarea.is-invalid {
@@ -395,6 +363,18 @@ textarea.is-invalid {
   background-size: 1.15rem 1.15rem;
   padding-right: 2.25rem !important;
   animation: svFieldShake 0.35s ease-in-out;
+}
+
+.sv-password-wrap input.is-valid,
+.sv-password-wrap input.is-invalid,
+.input-container:has(.pwd-toggle-btn, .sv-password-toggle, .login-password-toggle) input.is-valid,
+.input-container:has(.pwd-toggle-btn, .sv-password-toggle, .login-password-toggle) input.is-invalid,
+.input-wrapper:has(.pwd-toggle-btn, .sv-password-toggle, .login-password-toggle) input.is-valid,
+.input-wrapper:has(.pwd-toggle-btn, .sv-password-toggle, .login-password-toggle) input.is-invalid,
+.login-input-wrap:has(.login-password-toggle) input.is-valid,
+.login-input-wrap:has(.login-password-toggle) input.is-invalid {
+  background-position: right 2.75rem center !important;
+  padding-right: 4.25rem !important;
 }
 
 @keyframes svFieldShake {
@@ -466,8 +446,6 @@ textarea.is-invalid {
   display: flex !important;
 }
 
-/* Focused Invalid State: Maintain crisp Red glow rather than falling back to Blue */
-.is-invalid:focus,
 .sv-form-control.is-invalid:focus,
 .form-control.is-invalid:focus,
 input.is-invalid:focus,
@@ -479,23 +457,19 @@ textarea.is-invalid:focus {
   outline: none !important;
 }
 
-/* Dark mode error contrast */
 [data-theme="dark"] .invalid-feedback,
 body.dark-theme .invalid-feedback {
   color: #F87171 !important;
 }
 
-[data-theme="dark"] .is-invalid:focus,
 [data-theme="dark"] .form-control.is-invalid:focus,
-body.dark-theme .is-invalid:focus,
-body.dark-theme .form-control.is-invalid:focus {
+[data-theme="dark"] input.is-invalid:focus,
+body.dark-theme .form-control.is-invalid:focus,
+body.dark-theme input.is-invalid:focus {
   border-color: #F87171 !important;
   box-shadow: 0 0 0 3px rgba(248, 113, 113, 0.28), inset 0 1px 2px rgba(0, 0, 0, 0.3) !important;
 }
 
-/* ==========================================================================
-   6. Code / OTP Individual Digit Inputs
-   ========================================================================== */
 .sv-otp-group,
 .otp-input-container {
   display: flex;
@@ -545,9 +519,6 @@ body.dark-theme .form-control.is-invalid:focus {
   color: #1D4ED8;
 }
 
-/* ==========================================================================
-   7. Stepper Fields (Increment / Decrement Controls)
-   ========================================================================== */
 .sv-stepper-field {
   display: inline-flex;
   align-items: center;
@@ -611,9 +582,6 @@ body.dark-theme .form-control.is-invalid:focus {
   margin: 0;
 }
 
-/* ==========================================================================
-   8. Tag-Based Multiple Entry Inputs
-   ========================================================================== */
 .sv-tags-container {
   display: flex;
   flex-wrap: wrap;
@@ -688,9 +656,6 @@ body.dark-theme .form-control.is-invalid:focus {
   padding: 4px 6px !important;
 }
 
-/* ==========================================================================
-   9. Date Masks & Formatting
-   ========================================================================== */
 .sv-date-wrap {
   position: relative;
   display: flex;
@@ -712,9 +677,6 @@ body.dark-theme .form-control.is-invalid:focus {
   pointer-events: none;
 }
 
-/* ==========================================================================
-   10. Dark Mode Support
-   ========================================================================== */
 [data-theme="dark"] .sv-form-control,
 [data-theme="dark"] .form-control,
 body.dark-theme .sv-form-control,

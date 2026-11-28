@@ -1,7 +1,3 @@
-/**
- * Platform Policies & Governance Register - Controller Layer
- * Handles HTTP requests, responses, and status codes
- */
 
 const Service = require('./platform-policies.service');
 

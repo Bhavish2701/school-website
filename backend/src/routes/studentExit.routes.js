@@ -1,12 +1,8 @@
-/**
- * Student Exit & Transfer Certificate Express Routes
- */
 const express = require('express');
 const router = express.Router();
 const studentExitController = require('../controllers/studentExit.controller');
 const { authenticateUser, authorizeRoles } = require('../middleware/rbac.middleware');
 
-// Authenticated management read or creation
 router.get(
   '/',
   authenticateUser,

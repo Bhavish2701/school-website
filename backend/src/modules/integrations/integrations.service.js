@@ -1,7 +1,3 @@
-/**
- * External Integrations Directory - Service Layer
- * Business rules, calculations, and operational orchestration
- */
 
 const Repository = require('./integrations.repository');
 const MultiInstitutionSecurity = require('../common/multiInstitutionSecurity');

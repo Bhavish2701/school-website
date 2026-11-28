@@ -1,7 +1,3 @@
-/**
- * Sri Vidya Educational Trust - Role Templates & Permissions Model
- * Module 7 Specification: Role-Based Access Control (RBAC) Architecture
- */
 
 const mongoose = require('mongoose');
 
@@ -60,7 +56,6 @@ const RoleTemplateSchema = new mongoose.Schema({
     type: Number,
     default: 0
   },
-  // 7.3 Permission Matrix Modules
   permissions: {
     institutions: { type: ActionPermissionsSchema, default: () => ({}) },
     user_accounts: { type: ActionPermissionsSchema, default: () => ({}) },
@@ -69,7 +64,6 @@ const RoleTemplateSchema = new mongoose.Schema({
     audit_logs: { type: ActionPermissionsSchema, default: () => ({}) },
     integrations: { type: ActionPermissionsSchema, default: () => ({}) }
   },
-  // Additional Scope & Governance Controls (Section 7.3)
   recordScope: {
     type: String,
     enum: ['all_records', 'own_campus', 'assigned_department', 'assigned_classes', 'own_records'],
@@ -78,7 +72,6 @@ const RoleTemplateSchema = new mongoose.Schema({
   sensitiveFields: {
     type: [String],
     default: []
-    // e.g. ['aadhaar_pii', 'financial_ledgers', 'staff_compensation', 'mark_moderation']
   },
   effectiveDate: {
     type: Date,
@@ -98,7 +91,6 @@ const RoleTemplateSchema = new mongoose.Schema({
     enum: ['unrestricted', 'masked_pii', 'approval_required', 'prohibited'],
     default: 'masked_pii'
   },
-  // 7.4 Review Workflow State
   reviewDetails: {
     isPendingReview: { type: Boolean, default: false },
     requestedBy: { type: String, default: null },
@@ -106,7 +98,6 @@ const RoleTemplateSchema = new mongoose.Schema({
     rationale: { type: String, default: null },
     changesDiff: { type: mongoose.Schema.Types.Mixed, default: null }
   },
-  // Immutable Audit History
   changeHistory: [{
     action: { type: String, required: true },
     performedBy: { type: String, required: true },

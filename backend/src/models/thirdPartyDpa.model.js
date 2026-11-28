@@ -1,8 +1,3 @@
-/**
- * Third-Party Data Processing Agreement (DPA) & Processor Registry Model
- * Under Indian DPDP Act 2023 & GDPR Article 28:
- * Institutional registry of data processors, hosting providers, communication gateways, and payment partners.
- */
 const mongoose = require('mongoose');
 
 const thirdPartyDpaSchema = new mongoose.Schema(

@@ -85,7 +85,6 @@ router.get(
   })
 );
 
-// Base attendance routes
 router.use('/', attendanceRoutes);
 
 module.exports = router;

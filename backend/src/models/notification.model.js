@@ -1,6 +1,3 @@
-/**
- * Notification Model (Announcements, Alerts, Parent Messages)
- */
 const mongoose = require('mongoose');
 
 const NOTIFICATION_TYPES = [
@@ -28,7 +25,6 @@ const notificationSchema = new mongoose.Schema(
       enum: NOTIFICATION_TYPES,
       default: 'ANNOUNCEMENT',
     },
-    // Null if sent to whole role (broadcast)
     recipientUser: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',

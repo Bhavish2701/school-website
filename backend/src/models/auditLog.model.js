@@ -1,12 +1,3 @@
-/**
- * AuditLog Mongoose Model
- * Specification 22.4: Every sensitive change needs traceability
- * Record the responsible user, timestamp, reason and relevant old/new values
- * for important changes to student details, attendance, marks, financial transactions and permissions.
- *
- * Immutability Guarantee:
- * Audit logs cannot be updated or deleted by ordinary users or administration.
- */
 const mongoose = require('mongoose');
 
 const AUDIT_MODULES = [
@@ -123,7 +114,6 @@ const auditLogSchema = new mongoose.Schema(
   }
 );
 
-// Immutability Hook: Prevent updating existing audit logs
 const preventModification = function (next) {
   const err = new Error(
     'Audit Log Immutability Violation: Audit records are permanently protected from modification or deletion under AP Education Code statutory rules.'
@@ -138,7 +128,6 @@ auditLogSchema.pre('deleteOne', preventModification);
 auditLogSchema.pre('deleteMany', preventModification);
 auditLogSchema.pre('findOneAndDelete', preventModification);
 
-// Composite indexes for audit compliance queries
 auditLogSchema.index({ module: 1, timestamp: -1 });
 auditLogSchema.index({ recordReference: 1, timestamp: -1 });
 auditLogSchema.index({ user: 1, timestamp: -1 });

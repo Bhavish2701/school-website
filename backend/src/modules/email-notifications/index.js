@@ -1,7 +1,3 @@
-/**
- * Email Relay & Notification Delivery - Module Aggregator
- * Exports all 6 architectural layers
- */
 
 const routes = require('./email-notifications.routes');
 const controller = require('./email-notifications.controller');

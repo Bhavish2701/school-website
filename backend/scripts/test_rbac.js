@@ -1,6 +1,3 @@
-/**
- * Comprehensive RBAC & Object-Level Authorization Test Suite
- */
 const mongoose = require('mongoose');
 const config = require('../src/config/env');
 const { User } = require('../src/models/user.model');
@@ -38,7 +35,6 @@ const runRBACTests = async () => {
   console.log('  STARTING RBAC & OBJECT-LEVEL AUTHORIZATION VERIFICATION TESTS ');
   console.log('===============================================================\n');
 
-  // Query database to get record IDs dynamically
   await mongoose.connect(config.mongodbUri);
   const student1 = await User.findOne({ username: 'student1' });
   const student2 = await User.findOne({ username: 'student2' });
@@ -53,7 +49,6 @@ const runRBACTests = async () => {
   console.log(`- Record 1 [Student 1 / Class 10-A]: ${rec1Id}`);
   console.log(`- Record 2 [Student 2 / Class 8-C ]: ${rec2Id}\n`);
 
-  // Obtain tokens for all roles
   console.log('Logging in test actors...');
   const tokenStudent1 = await loginAndGetToken('student1', 'Student@123');
   const tokenParent1 = await loginAndGetToken('parent1', 'Parent@123');
@@ -61,9 +56,6 @@ const runRBACTests = async () => {
   const tokenPrincipal = await loginAndGetToken('principal', 'Principal@123');
   console.log('Tokens generated successfully.\n');
 
-  // -------------------------------------------------------------
-  // TEST SCENARIO 1: STUDENT OBJECT-LEVEL AUTHORIZATION
-  // -------------------------------------------------------------
   console.log('--- SCENARIO 1: Student Object-Level Authorization ---');
   console.log('1a. Student 1 requests their OWN record (Record 1)...');
   const s1Own = await makeRequest(`${BASE_URL}/records/${rec1Id}`, tokenStudent1);
@@ -75,9 +67,6 @@ const runRBACTests = async () => {
   console.log(`Status: ${s1Tamper.status} (Expected 403)`);
   console.log(`Denied: ${s1Tamper.body.message}\n`);
 
-  // -------------------------------------------------------------
-  // TEST SCENARIO 2: PARENT OBJECT-LEVEL AUTHORIZATION
-  // -------------------------------------------------------------
   console.log('--- SCENARIO 2: Parent Object-Level Authorization ---');
   console.log('2a. Parent 1 requests their child\'s record (Record 1 - Rahul)...');
   const p1OwnChild = await makeRequest(`${BASE_URL}/records/${rec1Id}`, tokenParent1);
@@ -89,9 +78,6 @@ const runRBACTests = async () => {
   console.log(`Status: ${p1Tamper.status} (Expected 403)`);
   console.log(`Denied: ${p1Tamper.body.message}\n`);
 
-  // -------------------------------------------------------------
-  // TEST SCENARIO 3: TEACHER OBJECT-LEVEL AUTHORIZATION
-  // -------------------------------------------------------------
   console.log('--- SCENARIO 3: Teacher Class Assignment Authorization ---');
   console.log('3a. Teacher 1 (assigned to Class 10-A) requests Record 1 (Class 10-A)...');
   const t1Assigned = await makeRequest(`${BASE_URL}/records/${rec1Id}`, tokenTeacher1);
@@ -103,9 +89,6 @@ const runRBACTests = async () => {
   console.log(`Status: ${t1Unassigned.status} (Expected 403)`);
   console.log(`Denied: ${t1Unassigned.body.message}\n`);
 
-  // -------------------------------------------------------------
-  // TEST SCENARIO 4: PRINCIPAL SCHOOL-LEVEL MANAGEMENT
-  // -------------------------------------------------------------
   console.log('--- SCENARIO 4: School-Level Management Functions ---');
   console.log('4a. Principal requests school management overview (/management/overview)...');
   const prinMgmt = await makeRequest(`${BASE_URL}/management/overview`, tokenPrincipal);

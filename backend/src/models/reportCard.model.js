@@ -1,16 +1,3 @@
-/**
- * Scholastic Report Card Mongoose Model
- * Sri Vidya English Medium High School Management System
- *
- * Implements:
- * - Comprehensive student scholastic record (AP SSC & CCE compliant)
- * - Attendance standing and working days calculation
- * - 8-dimension co-scholastic assessment
- * - Class teacher and Principal qualitative remarks
- * - Multi-stage verification and executive approval docket
- * - Controlled revision and version history (zero silent overwrites)
- * - Tamper-evident verification code and publication control for parent portal
- */
 const mongoose = require('mongoose');
 
 const REPORT_FORMATS = [
@@ -65,7 +52,7 @@ const subjectReportSchema = new mongoose.Schema({
 
 const coScholasticSchema = new mongoose.Schema({
   category: { type: String, required: true },
-  grade: { type: String, default: 'A' }, // A+, A, B, C
+  grade: { type: String, default: 'A' },
   descriptiveRemarks: { type: String, default: '' },
   evaluatingTeacher: { type: String, default: 'Class Teacher' },
   assessmentDate: { type: Date, default: Date.now },
@@ -127,7 +114,6 @@ const reportCardSchema = new mongoose.Schema(
       default: 'AP_SSC_CCE',
     },
 
-    // Scholastic Performance Table & Totals
     subjects: [subjectReportSchema],
     scholasticSummary: {
       totalMaxMarks: { type: Number, default: 600 },
@@ -140,7 +126,6 @@ const reportCardSchema = new mongoose.Schema(
       performanceSummary: { type: String, default: 'First Class with Distinction' },
     },
 
-    // Attendance Standing
     attendanceSummary: {
       totalWorkingDays: { type: Number, default: 114 },
       daysPresent: { type: Number, default: 110 },
@@ -150,10 +135,8 @@ const reportCardSchema = new mongoose.Schema(
       standing: { type: String, default: 'Exemplary' },
     },
 
-    // Co-Scholastic 8 Dimensions
     coScholasticAssessment: [coScholasticSchema],
 
-    // Qualitative Faculty & Executive Feedback
     remarks: {
       classTeacherRemarks: { type: String, trim: true, default: '' },
       subjectTeacherRemarks: { type: String, trim: true, default: '' },
@@ -164,7 +147,6 @@ const reportCardSchema = new mongoose.Schema(
       recommendationsNextTerm: { type: String, trim: true, default: '' },
     },
 
-    // Promotion & Result Details
     promotionDetails: {
       resultStatus: { type: String, default: 'Passed' },
       promotionStatus: { type: String, enum: PROMOTION_STATUSES, default: 'Promoted' },
@@ -175,7 +157,6 @@ const reportCardSchema = new mongoose.Schema(
       examinationCompletionStatus: { type: String, default: 'Completed & Certified' },
     },
 
-    // Selected Report Components
     componentsIncluded: {
       studentInfo: { type: Boolean, default: true },
       subjectMarks: { type: Boolean, default: true },
@@ -195,7 +176,6 @@ const reportCardSchema = new mongoose.Schema(
       qrCode: { type: Boolean, default: true },
     },
 
-    // Lifecycle & RBAC Approval Workflow
     workflowStage: {
       type: String,
       enum: WORKFLOW_STAGES,
@@ -215,7 +195,6 @@ const reportCardSchema = new mongoose.Schema(
       approvalRemarks: { type: String, default: '' },
     },
 
-    // Publication status (Controls visibility on future Student/Parent Portals)
     publication: {
       isPublished: { type: Boolean, default: false, index: true },
       publishedAt: { type: Date },
@@ -223,11 +202,9 @@ const reportCardSchema = new mongoose.Schema(
       publicPortalEligible: { type: Boolean, default: true },
     },
 
-    // Versioning & Controlled Revision Audit Trail
     version: { type: Number, default: 1 },
     revisionHistory: [revisionRecordSchema],
 
-    // Security Verification Code & Digital Footprint
     verificationCode: { type: String, trim: true, index: true },
     pdfStoragePath: { type: String, default: '' },
 
@@ -241,7 +218,6 @@ const reportCardSchema = new mongoose.Schema(
   }
 );
 
-// Indexes for high performance and duplicate prevention
 reportCardSchema.index({ student: 1, exam: 1, version: 1 }, { unique: true });
 reportCardSchema.index({ class: 1, section: 1, academicYear: 1 });
 reportCardSchema.index({ 'publication.isPublished': 1, student: 1 });

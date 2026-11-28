@@ -1,7 +1,3 @@
-/**
- * Email Relay & Notification Delivery - Policy & Authorization Layer
- * Enforces Multi-Institution Scoping, RBAC roles, and Audit Logging
- */
 
 const MultiInstitutionSecurity = require('../common/multiInstitutionSecurity');
 
@@ -19,7 +15,7 @@ class EmailNotificationsPolicy {
     return MultiInstitutionSecurity.policyMiddleware({
       allowedRoles: ['Super Administrator', 'Institutional Principal', 'Campus Administrator'],
       requiredPermission: 'email.manage',
-      requirePlatformWideScope: false, // permits scoped school operations
+      requirePlatformWideScope: false,
       auditCategory: 'EMAIL_NOTIFICATIONS',
       auditAction: 'WRITE_EMAIL_NOTIFICATIONS'
     })(req, res, next);
@@ -27,7 +23,7 @@ class EmailNotificationsPolicy {
 
   static sensitiveActionPolicy(req, res, next) {
     return MultiInstitutionSecurity.policyMiddleware({
-      requirePlatformWideScope: true, // sensitive actions require platform super admin
+      requirePlatformWideScope: true,
       allowedRoles: ['Super Administrator'],
       requireApprovalSignatory: true,
       auditCategory: 'EMAIL_NOTIFICATIONS',

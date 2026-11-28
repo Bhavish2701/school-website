@@ -1,7 +1,3 @@
-/**
- * Role Templates & RBAC Permissions - Service Layer
- * Business rules, calculations, and operational orchestration
- */
 
 const Repository = require('./roles-permissions.repository');
 const MultiInstitutionSecurity = require('../common/multiInstitutionSecurity');

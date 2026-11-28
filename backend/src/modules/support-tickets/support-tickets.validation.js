@@ -1,7 +1,3 @@
-/**
- * Support & Issue Management - Validation Layer
- * Enforces field schemas, constraints, and data integrity
- */
 
 class SupportTicketsValidation {
   static validateRequest(req, res, next) {

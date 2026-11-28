@@ -1,8 +1,3 @@
-/**
- * Sri Vidya Educational Trust - Security & Access Monitoring Service
- * Module 9: Real-time Threat Telemetry, 9.1 Overview, 9.2 Event Register,
- * 9.3 Privileged Access Reviews, and 9.4 7-Step Incident Workflow
- */
 
 const mongoose = require('mongoose');
 const {
@@ -13,12 +8,10 @@ const {
 } = require('../models/securityMonitoring.model');
 const PlatformAuditService = require('./platformAudit.service');
 
-// In-memory fallback repositories
 const inMemorySecurityEvents = [];
 const inMemoryAccessReviews = [];
 
 const DEFAULT_SECURITY_EVENTS_SEED = [
-  // 1. High: Brute-Force Credential Stuffing
   {
     eventId: 'SEC-2026-088',
     eventType: 'BRUTE_FORCE_PROBE',
@@ -64,7 +57,6 @@ const DEFAULT_SECURITY_EVENTS_SEED = [
       { stage: 'Under Investigation', performedBy: 'Sri V. Krishna Mohan', timestamp: new Date('2026-11-05T18:45:00Z'), notes: 'Investigating external IP provenance and request headers.' }
     ]
   },
-  // 2. Medium: Off-Hours Privileged Login
   {
     eventId: 'SEC-2026-089',
     eventType: 'OFF_HOURS_PRIVILEGED_LOGIN',
@@ -96,7 +88,6 @@ const DEFAULT_SECURITY_EVENTS_SEED = [
       { stage: 'Triage', performedBy: 'Threat Detection Engine', timestamp: new Date('2026-11-05T02:46:00Z'), notes: 'MFA was successfully verified. Awaiting morning administrative validation.' }
     ]
   },
-  // 3. High: Unusual Cross-Campus Record Access
   {
     eventId: 'SEC-2026-090',
     eventType: 'UNUSUAL_CROSS_CAMPUS_ACCESS',
@@ -136,7 +127,6 @@ const DEFAULT_SECURITY_EVENTS_SEED = [
       { stage: 'Contain or Remediate', performedBy: 'Root Platform Administrator', timestamp: new Date('2026-11-04T16:00:00Z'), notes: 'Active login sessions revoked and account suspended.' }
     ]
   },
-  // 4. Critical: Rapid CSV Export Volume Spike
   {
     eventId: 'SEC-2026-091',
     eventType: 'SENSITIVE_DATA_EXPORT_SPIKE',
@@ -167,7 +157,6 @@ const DEFAULT_SECURITY_EVENTS_SEED = [
       { stage: 'Alert Detected', performedBy: 'DLP Sentry Engine', timestamp: new Date('2026-11-04T11:00:00Z'), notes: '5 consecutive student marks gazette CSV exports detected within 2 minutes.' }
     ]
   },
-  // 5. Low: Password Reset Attempt Rate Limit
   {
     eventId: 'SEC-2026-092',
     eventType: 'PASSWORD_RESET_VELOCITY',
@@ -209,7 +198,6 @@ const DEFAULT_SECURITY_EVENTS_SEED = [
 ];
 
 const DEFAULT_ACCESS_REVIEWS_SEED = [
-  // 1. Platform Owner (Central Trust)
   {
     reviewId: 'REV-2026-001',
     userId: 'USR-1001',
@@ -234,7 +222,6 @@ const DEFAULT_ACCESS_REVIEWS_SEED = [
       recordedAt: new Date('2026-10-15T11:00:00Z')
     }
   },
-  // 2. Institutional Principal (Main Campus)
   {
     reviewId: 'REV-2026-002',
     userId: 'USR-1002',
@@ -254,7 +241,6 @@ const DEFAULT_ACCESS_REVIEWS_SEED = [
     reviewStatus: 'Pending Review',
     outcomeDetails: { decision: null, decisionNotes: null, recordedBy: null, recordedAt: null }
   },
-  // 3. Vice Principal & HOD Maths (Main Campus)
   {
     reviewId: 'REV-2026-003',
     userId: 'USR-1003',
@@ -274,7 +260,6 @@ const DEFAULT_ACCESS_REVIEWS_SEED = [
     reviewStatus: 'Pending Review',
     outcomeDetails: { decision: null, decisionNotes: null, recordedBy: null, recordedAt: null }
   },
-  // 4. Fee Collection Clerk (City Branch) - Overdue
   {
     reviewId: 'REV-2026-004',
     userId: 'USR-1006',
@@ -337,9 +322,6 @@ class SecurityMonitoringService {
     }
   }
 
-  /**
-   * 9.1 Security Overview KPI Metrics
-   */
   static async getSecurityOverview() {
     await this.seedIfEmpty();
 
@@ -382,9 +364,6 @@ class SecurityMonitoringService {
     };
   }
 
-  /**
-   * 9.2 Security Events Register Query with Multi-Field Filters
-   */
   static async listSecurityEvents(query = {}) {
     await this.seedIfEmpty();
 
@@ -432,9 +411,6 @@ class SecurityMonitoringService {
     };
   }
 
-  /**
-   * 9.2 Get Single Security Event by ID
-   */
   static async getSecurityEventById(eventId) {
     await this.seedIfEmpty();
 
@@ -452,9 +428,6 @@ class SecurityMonitoringService {
     }
   }
 
-  /**
-   * 9.4 Lifecycle Transition: Triage Event
-   */
   static async triageEvent(eventId, riskClassification, operator = 'Platform Administrator') {
     const res = await this.getSecurityEventById(eventId);
     if (!res.success || !res.data) return { success: false, message: 'Event not found' };
@@ -473,9 +446,6 @@ class SecurityMonitoringService {
     return { success: true, data: event };
   }
 
-  /**
-   * 9.4 Lifecycle Transition: Assign Investigator
-   */
   static async assignInvestigator(eventId, investigatorName, slaHours = 4, operator = 'Platform Administrator') {
     const res = await this.getSecurityEventById(eventId);
     if (!res.success || !res.data) return { success: false, message: 'Event not found' };
@@ -499,9 +469,6 @@ class SecurityMonitoringService {
     return { success: true, data: event };
   }
 
-  /**
-   * 9.2 Action: Mark Under Investigation
-   */
   static async markUnderInvestigation(eventId, operator = 'Platform Administrator') {
     const res = await this.getSecurityEventById(eventId);
     if (!res.success || !res.data) return { success: false, message: 'Event not found' };
@@ -519,9 +486,6 @@ class SecurityMonitoringService {
     return { success: true, data: event };
   }
 
-  /**
-   * 9.2 Action: Record Findings
-   */
   static async recordFindings(eventId, findingsData, operator = 'Platform Administrator') {
     const res = await this.getSecurityEventById(eventId);
     if (!res.success || !res.data) return { success: false, message: 'Event not found' };
@@ -546,10 +510,6 @@ class SecurityMonitoringService {
     return { success: true, data: event };
   }
 
-  /**
-   * 9.4 Lifecycle Transition: Contain or Remediate
-   * High-Impact Action: Logs immutable audit entry
-   */
   static async containOrRemediate(eventId, remediationData, operator = 'Platform Administrator') {
     const res = await this.getSecurityEventById(eventId);
     if (!res.success || !res.data) return { success: false, message: 'Event not found' };
@@ -567,7 +527,6 @@ class SecurityMonitoringService {
 
     if (this.isMongoReady() && typeof event.save === 'function') await event.save();
 
-    // Invariant: Log high-impact action to PlatformAudit
     await PlatformAuditService.logEvent({
       action: 'SECURITY_CONTAINMENT_EXECUTED',
       category: 'SECURITY_ALERTS',
@@ -585,9 +544,6 @@ class SecurityMonitoringService {
     return { success: true, data: event };
   }
 
-  /**
-   * 9.2 Action: Close Event
-   */
   static async closeEvent(eventId, resolutionNotes, operator = 'Platform Administrator') {
     const res = await this.getSecurityEventById(eventId);
     if (!res.success || !res.data) return { success: false, message: 'Event not found' };
@@ -605,10 +561,6 @@ class SecurityMonitoringService {
     return { success: true, data: event };
   }
 
-  /**
-   * 9.2 Action: Escalate According to Policy
-   * High-Impact Action: Logs immutable audit entry
-   */
   static async escalateEvent(eventId, escalationLevel = 'L2_LEADERSHIP', reason, operator = 'Platform Administrator') {
     const res = await this.getSecurityEventById(eventId);
     if (!res.success || !res.data) return { success: false, message: 'Event not found' };
@@ -632,7 +584,6 @@ class SecurityMonitoringService {
 
     if (this.isMongoReady() && typeof event.save === 'function') await event.save();
 
-    // Invariant: Log high-impact action to PlatformAudit
     await PlatformAuditService.logEvent({
       action: 'SECURITY_INCIDENT_ESCALATED',
       category: 'SECURITY_ALERTS',
@@ -650,9 +601,6 @@ class SecurityMonitoringService {
     return { success: true, data: event };
   }
 
-  /**
-   * 9.3 Privileged Access Reviews: List Reviews
-   */
   static async listAccessReviews(query = {}) {
     await this.seedIfEmpty();
 
@@ -688,9 +636,6 @@ class SecurityMonitoringService {
     };
   }
 
-  /**
-   * 9.3 Action: Record Review Outcome (Confirm, Reduce, Revoke, Clarify)
-   */
   static async recordAccessReviewOutcome(reviewId, decision, notes, operator = 'Trust Security Auditor') {
     await this.seedIfEmpty();
 
@@ -723,7 +668,6 @@ class SecurityMonitoringService {
 
     if (this.isMongoReady() && typeof review.save === 'function') await review.save();
 
-    // High impact audit log
     if (decision === 'revoke' || decision === 'reduce') {
       await PlatformAuditService.logEvent({
         action: decision === 'revoke' ? 'PRIVILEGED_ROLE_REVOKED_AUDIT' : 'PRIVILEGED_PERMISSIONS_REDUCED_AUDIT',

@@ -1,11 +1,6 @@
-/**
- * Sri Vidya Educational Trust - Support & Issue Management Models
- * Module 14: Support Overview, Ticket Directory, Lifecycle Workflow, and Internal Notes
- */
 
 const mongoose = require('mongoose');
 
-// 14.4 Subdocument Schemas
 const ConversationMessageSchema = new mongoose.Schema({
   messageId: {
     type: String,
@@ -123,7 +118,6 @@ const ActivityHistorySchema = new mongoose.Schema({
   }
 }, { _id: false });
 
-// 14.2 & 14.3 Support Ticket Schema
 const SupportTicketSchema = new mongoose.Schema({
   ticketId: {
     type: String,

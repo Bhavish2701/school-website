@@ -1,8 +1,3 @@
-/**
- * Sri Vidya E.M. High School ERP - Liquid-Fill Toggle Switch Design System
- * Highly responsive, tactile liquid-fill toggle controls for all portals
- * Light & Dark mode native support, accessible (WCAG 2.1 AA), zero-dependencies
- */
 
 :root {
   --lq-toggle-w: 48px;
@@ -11,7 +6,6 @@
   --lq-knob-offset: 3px;
   --lq-travel: 22px;
 
-  /* Light Mode Palette */
   --lq-track-off-bg: #e2e8f0;
   --lq-track-off-border: #cbd5e1;
   --lq-knob-off-bg: radial-gradient(circle at 35% 35%, #ffffff 0%, #f8fafc 70%, #e2e8f0 100%);
@@ -27,7 +21,6 @@
   --lq-ease-drain: cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* Dark Mode Tokens */
 [data-theme="dark"] {
   --lq-track-off-bg: #151f32;
   --lq-track-off-border: #243048;
@@ -39,10 +32,6 @@
   --lq-liquid-border: #38bdf8;
   --lq-liquid-glow: 0 0 16px rgba(56, 189, 248, 0.35), inset 0 1px 2px rgba(255, 255, 255, 0.2);
 }
-
-/* ==========================================================================
-   1. Universal Switch Container & Base Checkbox Override
-   ========================================================================== */
 
 .form-check.form-switch,
 .liquid-toggle-wrap {
@@ -80,12 +69,8 @@ input[type="checkbox"].liquid-switch {
   overflow: hidden !important;
   vertical-align: middle !important;
   box-sizing: border-box !important;
-  background-image: none !important; /* Clears flat Bootstrap default SVG */
+  background-image: none !important; 
 }
-
-/* ==========================================================================
-   2. Liquid Fill Reservoir (Layer 1: Fluid wave expansion)
-   ========================================================================== */
 
 .form-check.form-switch .form-check-input::before,
 .liquid-toggle-wrap input[type="checkbox"]::before,
@@ -102,7 +87,6 @@ input[type="checkbox"].liquid-switch::before {
   z-index: 1 !important;
 }
 
-/* Wave reservoir expansion when checked */
 .form-check.form-switch .form-check-input:checked::before,
 .liquid-toggle-wrap input[type="checkbox"]:checked::before,
 input[type="checkbox"].liquid-switch:checked::before {
@@ -111,17 +95,12 @@ input[type="checkbox"].liquid-switch:checked::before {
   transition: clip-path 0.45s var(--lq-ease-spring), opacity 0.15s ease !important;
 }
 
-/* Track glow and border activation */
 .form-check.form-switch .form-check-input:checked,
 .liquid-toggle-wrap input[type="checkbox"]:checked,
 input[type="checkbox"].liquid-switch:checked {
   border-color: var(--lq-liquid-border) !important;
   box-shadow: var(--lq-liquid-glow) !important;
 }
-
-/* ==========================================================================
-   3. Tactile Floating Knob (Layer 2: Viscous Bead Micro-Interaction)
-   ========================================================================== */
 
 .form-check.form-switch .form-check-input::after,
 .liquid-toggle-wrap input[type="checkbox"]::after,
@@ -142,7 +121,6 @@ input[type="checkbox"].liquid-switch::after {
   z-index: 2 !important;
 }
 
-/* Knob movement and elastic spring on checked */
 .form-check.form-switch .form-check-input:checked::after,
 .liquid-toggle-wrap input[type="checkbox"]:checked::after,
 input[type="checkbox"].liquid-switch:checked::after {
@@ -152,7 +130,6 @@ input[type="checkbox"].liquid-switch:checked::after {
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.28), inset 0 1px 1px #ffffff !important;
 }
 
-/* Fluid squish & stretch on active/press (viscous drag feedback) */
 .form-check.form-switch .form-check-input:active::after,
 .liquid-toggle-wrap input[type="checkbox"]:active::after,
 input[type="checkbox"].liquid-switch:active::after {
@@ -167,10 +144,6 @@ input[type="checkbox"].liquid-switch:active::after {
   transform: translateX(calc(var(--lq-travel) - 4px)) scaleX(1.15) !important;
 }
 
-/* ==========================================================================
-   4. Keyboard Focus & Accessibility (WCAG 2.1 AA Compliance)
-   ========================================================================== */
-
 .form-check.form-switch .form-check-input:focus-visible,
 .liquid-toggle-wrap input[type="checkbox"]:focus-visible,
 input[type="checkbox"].liquid-switch:focus-visible {
@@ -178,7 +151,6 @@ input[type="checkbox"].liquid-switch:focus-visible {
   box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.45), var(--lq-liquid-glow) !important;
 }
 
-/* Label interaction enhancement */
 .form-check.form-switch .form-check-label,
 .liquid-toggle-wrap label {
   cursor: pointer;
@@ -201,10 +173,6 @@ input[type="checkbox"].liquid-switch:focus-visible {
   color: #38bdf8;
 }
 
-/* ==========================================================================
-   5. Disabled State (Clear Non-Editable / Locked Feedback)
-   ========================================================================== */
-
 .form-check.form-switch .form-check-input:disabled,
 .form-check.form-switch .form-check-input[disabled],
 .liquid-toggle-wrap input[type="checkbox"]:disabled,
@@ -224,11 +192,6 @@ input[type="checkbox"].liquid-switch:disabled {
   pointer-events: none;
 }
 
-/* ==========================================================================
-   6. Sizing Variants (Small, Standard, Large)
-   ========================================================================== */
-
-/* Small Switch (e.g. Table Rows, Permission Matrix, Dense Lists) */
 .form-check.form-switch.form-switch-sm,
 .form-switch-sm {
   padding-left: 2.75rem !important;
@@ -256,7 +219,6 @@ input[type="checkbox"].liquid-switch-sm:checked::after {
   transform: translateX(18px) !important;
 }
 
-/* Large Switch (e.g. Master Mode Toggles, Security Enforcement) */
 .form-check.form-switch.form-switch-lg,
 .form-switch-lg {
   padding-left: 3.8rem !important;
@@ -284,11 +246,6 @@ input[type="checkbox"].liquid-switch-lg:checked::after {
   transform: translateX(28px) !important;
 }
 
-/* ==========================================================================
-   7. Color Intent Variants (Success/Emerald, Warning/Amber, Danger/Red)
-   ========================================================================== */
-
-/* Emerald / Success (e.g., Active Permission, Verified Consent) */
 .form-switch-success .form-check-input::before,
 input[type="checkbox"].liquid-switch-success::before {
   background: linear-gradient(135deg, #059669 0%, #10b981 50%, #34d399 100%) !important;
@@ -299,7 +256,6 @@ input[type="checkbox"].liquid-switch-success:checked {
   box-shadow: 0 0 14px rgba(16, 185, 129, 0.4) !important;
 }
 
-/* Amber / Warning (e.g., Sensitive Scope, Moderated Approvals) */
 .form-switch-warning .form-check-input::before,
 input[type="checkbox"].liquid-switch-warning::before {
   background: linear-gradient(135deg, #d97706 0%, #f59e0b 50%, #fbbf24 100%) !important;
@@ -310,7 +266,6 @@ input[type="checkbox"].liquid-switch-warning:checked {
   box-shadow: 0 0 14px rgba(245, 158, 11, 0.4) !important;
 }
 
-/* Red / Danger (e.g., Emergency Lockdown, Anti-Self-Approval, Restrictions) */
 .form-switch-danger .form-check-input::before,
 input[type="checkbox"].liquid-switch-danger::before {
   background: linear-gradient(135deg, #b91c1c 0%, #dc2626 50%, #f87171 100%) !important;
@@ -320,10 +275,6 @@ input[type="checkbox"].liquid-switch-danger:checked {
   border-color: #dc2626 !important;
   box-shadow: 0 0 14px rgba(220, 38, 38, 0.4) !important;
 }
-
-/* ==========================================================================
-   8. Reduced Motion Support
-   ========================================================================== */
 
 @media (prefers-reduced-motion: reduce) {
   .form-check.form-switch .form-check-input,

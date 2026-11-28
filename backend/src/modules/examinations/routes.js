@@ -46,7 +46,6 @@ router.get(
   })
 );
 
-// Base exam routes
 router.use('/', examRoutes);
 
 module.exports = router;

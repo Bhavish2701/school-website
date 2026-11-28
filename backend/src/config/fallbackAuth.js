@@ -1,13 +1,7 @@
-/**
- * Fallback In-Memory Authentication Registry & Resilient Session Store
- * Ensures 100% ERP uptime, cloud resilience, and instantaneous sign-in across all roles
- * even when MongoDB connection is deferred, buffering, or unreachable.
- */
 const mongoose = require('mongoose');
 const jwt = require('jsonwebtoken');
 const config = require('./env');
 
-// Canonical In-Memory Seed Accounts with deterministic ObjectIds
 const FALLBACK_USERS = [
   {
     _id: new mongoose.Types.ObjectId('650000000000000000000001'),
@@ -100,7 +94,6 @@ const FALLBACK_USERS = [
   },
 ];
 
-// Universal Alias Resolution Map
 const ALIAS_MAP = {
   'srividyaschools2017@gmail.com': 'principal',
   'sv200001': 'principal',
@@ -122,9 +115,6 @@ const ALIAS_MAP = {
   'student': 'student1',
 };
 
-/**
- * Find fallback user by ID, username, email, or official school alias
- */
 const getFallbackUser = (rawIdentifier) => {
   if (!rawIdentifier) return null;
   const str = String(rawIdentifier).trim().toLowerCase();
@@ -140,9 +130,6 @@ const getFallbackUser = (rawIdentifier) => {
   );
 };
 
-/**
- * Verify plaintext password against seed credentials or universal school demo keys
- */
 const verifyFallbackPassword = (userRecord, candidatePassword) => {
   if (!userRecord || !candidatePassword) return false;
   const cand = String(candidatePassword);
@@ -161,7 +148,6 @@ const verifyFallbackPassword = (userRecord, candidatePassword) => {
     return true;
   }
 
-  // Role standard fallback checks
   if (userRecord.role === 'PRINCIPAL' && (cand === 'Principal@123' || cand === 'G.Varalakshmi.2017.')) return true;
   if (userRecord.role === 'VICE_PRINCIPAL' && (cand === 'VicePrincipal@123' || cand === 'Vp@123')) return true;
   if (userRecord.role === 'SUPER_ADMIN' && cand === 'SuperAdmin@123') return true;
@@ -173,9 +159,6 @@ const verifyFallbackPassword = (userRecord, candidatePassword) => {
   return false;
 };
 
-/**
- * Instantiate a resilient Mongoose-compatible User document for in-memory session handling
- */
 const createMockUserDoc = (userRecord) => {
   const { User } = require('../models/user.model');
   const user = new User({
@@ -192,7 +175,6 @@ const createMockUserDoc = (userRecord) => {
     children: userRecord.children || [],
   });
 
-  // Non-blocking no-op save when in-memory
   user.save = async function () {
     return this;
   };
@@ -204,7 +186,6 @@ const createMockUserDoc = (userRecord) => {
   return user;
 };
 
-// In-Memory Resilient OTP Session Store
 const fallbackOtpStore = new Map();
 
 const saveFallbackOtp = (data) => {
@@ -215,7 +196,6 @@ const saveFallbackOtp = (data) => {
     createdAt: new Date(),
     lastSentAt: new Date(),
   });
-  // Auto-prune expired OTP after 10 minutes
   setTimeout(() => {
     fallbackOtpStore.delete(data.preAuthToken);
   }, 10 * 60 * 1000);

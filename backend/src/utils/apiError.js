@@ -1,6 +1,3 @@
-/**
- * Custom Operational API Error Class
- */
 class ApiError extends Error {
   constructor(statusCode = 500, message = 'Internal Server Error', code = 'INTERNAL_ERROR', errors = {}) {
     super(message);

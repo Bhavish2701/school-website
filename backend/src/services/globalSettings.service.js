@@ -1,7 +1,3 @@
-/**
- * Sri Vidya Educational Trust - Global Platform Settings Service
- * Module 16: General Settings, Authentication Policies, Platform Feature Controls, and Maintenance Safeguards
- */
 
 const mongoose = require('mongoose');
 const { GlobalSettings, FeatureControl } = require('../models/globalSettings.model');
@@ -9,7 +5,6 @@ const { PlatformAudit } = require('../models/platformAudit.model');
 const liveSyncBus = require('../utils/liveSyncBus');
 const { invalidateMaintenanceCache } = require('../middleware/maintenance.middleware');
 
-// In-Memory Fallbacks & Defaults
 let inMemorySettings = null;
 let inMemoryFeatures = [];
 
@@ -208,7 +203,6 @@ class GlobalSettingsService {
         reason: details || `Global settings updated (${action})`,
       });
     } catch (e) {
-      // Non-blocking audit failure
     }
   }
 
@@ -224,13 +218,9 @@ class GlobalSettingsService {
         await FeatureControl.insertMany(inMemoryFeatures);
       }
     } catch (e) {
-      // Fallback
     }
   }
 
-  // --------------------------------------------------------------------------
-  // 16.1 & Master Settings Fetch
-  // --------------------------------------------------------------------------
   static async getGlobalSettings() {
     await this.seedIfEmpty();
     let settings = null;
@@ -250,9 +240,6 @@ class GlobalSettingsService {
     };
   }
 
-  // --------------------------------------------------------------------------
-  // 16.1 General Settings Update
-  // --------------------------------------------------------------------------
   static async updateGeneralSettings(payload, actor = 'Platform Administrator') {
     await this.seedIfEmpty();
     const update = payload.general || payload;
@@ -286,7 +273,6 @@ class GlobalSettingsService {
           await target.save();
         }
       } catch (e) {
-        // Fallback
       }
     }
 
@@ -323,15 +309,10 @@ class GlobalSettingsService {
     };
   }
 
-  // --------------------------------------------------------------------------
-  // 16.2 Authentication Settings & Safety Invariant Enforcement
-  // --------------------------------------------------------------------------
   static async updateAuthenticationSettings(payload, actor = 'Platform Administrator') {
     await this.seedIfEmpty();
     const update = payload.authentication || payload;
 
-    // --- Strict Invariant Checks (Section 16.2) ---
-    // Rule A: Cannot disable localPassword authentication
     if (update.supportedAuthMethods && update.supportedAuthMethods.localPassword === false) {
       return {
         success: false,
@@ -339,7 +320,6 @@ class GlobalSettingsService {
       };
     }
 
-    // Rule B: Break-glass recovery access cannot be disabled
     if (update.breakGlassEmergencyAccessEnabled === false) {
       return {
         success: false,
@@ -347,7 +327,6 @@ class GlobalSettingsService {
       };
     }
 
-    // Rule C: Password minimum length cannot be less than 8 characters
     if (update.passwordRequirements && update.passwordRequirements.minLength != null && update.passwordRequirements.minLength < 8) {
       return {
         success: false,
@@ -355,7 +334,6 @@ class GlobalSettingsService {
       };
     }
 
-    // Rule D: Inactivity timeout cannot be less than 5 minutes
     if (update.sessionDuration && update.sessionDuration.inactivityTimeoutMinutes != null && update.sessionDuration.inactivityTimeoutMinutes < 5) {
       return {
         success: false,
@@ -363,7 +341,6 @@ class GlobalSettingsService {
       };
     }
 
-    // Rule E: Max failed attempts must be at least 1
     if (update.loginAttemptLimits && update.loginAttemptLimits.maxFailedAttempts != null && update.loginAttemptLimits.maxFailedAttempts < 1) {
       return {
         success: false,
@@ -410,7 +387,7 @@ class GlobalSettingsService {
             target.authentication.supportedAuthMethods = {
               ...target.authentication.supportedAuthMethods,
               ...update.supportedAuthMethods,
-              localPassword: true // Immutable guarantee
+              localPassword: true
             };
           }
           target.authentication.breakGlassEmergencyAccessEnabled = true;
@@ -418,7 +395,6 @@ class GlobalSettingsService {
           await target.save();
         }
       } catch (e) {
-        // Fallback
       }
     }
 
@@ -473,9 +449,6 @@ class GlobalSettingsService {
     };
   }
 
-  // --------------------------------------------------------------------------
-  // 16.3 Platform Feature Controls
-  // --------------------------------------------------------------------------
   static async listFeatureControls() {
     await this.seedIfEmpty();
     let features = [];
@@ -546,7 +519,6 @@ class GlobalSettingsService {
         await this._logAudit('FEATURE_FLAG_CREATED', featureKey, actor, `Registered feature flag [${payload.featureName}]`);
         return { success: true, message: `Feature flag ${featureKey} created.`, data: created };
       } catch (e) {
-        // Fallback
       }
     }
 
@@ -586,7 +558,6 @@ class GlobalSettingsService {
           await target.save();
         }
       } catch (e) {
-        // Fallback
       }
     }
 
@@ -623,9 +594,6 @@ class GlobalSettingsService {
     }, actor);
   }
 
-  // --------------------------------------------------------------------------
-  // 16.4 Maintenance Settings & Lockout Safeguards
-  // --------------------------------------------------------------------------
   static async getMaintenanceSettings() {
     const res = await this.getGlobalSettings();
     return {
@@ -657,7 +625,7 @@ class GlobalSettingsService {
           target.maintenance.affectedServices = affectedServices;
           target.maintenance.userFacingMessage = message;
           target.maintenance.authorizedOperator = actor;
-          target.maintenance.operatorLockoutProtection = true; // Invariant
+          target.maintenance.operatorLockoutProtection = true;
           target.maintenance.history.push(historyEntry);
           await target.save();
         }
@@ -702,7 +670,7 @@ class GlobalSettingsService {
         target = await GlobalSettings.findOne({ settingsId: 'PLATFORM_GLOBAL_SETTINGS' });
         if (target) {
           target.maintenance.isActive = active;
-          target.maintenance.operatorLockoutProtection = true; // Strict Invariant: Admin can NEVER be locked out
+          target.maintenance.operatorLockoutProtection = true;
           if (payload.userFacingMessage) target.maintenance.userFacingMessage = payload.userFacingMessage;
           if (payload.affectedServices) target.maintenance.affectedServices = payload.affectedServices;
           target.maintenance.authorizedOperator = actor;

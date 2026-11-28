@@ -1,6 +1,3 @@
-/**
- * Seed Teachers, Timetables, Leaves, and Notifications
- */
 const mongoose = require('mongoose');
 const config = require('../src/config/env');
 const { Teacher } = require('../src/models/teacher.model');
@@ -17,11 +14,9 @@ const seedTeachers = async () => {
   await Notification.deleteMany({});
   console.log('[Teacher Seed] Cleared teacher, leave, and notification collections.');
 
-  // Find existing teacher user
   const teacherUser = await User.findOne({ username: 'teacher1' });
   const principalUser = await User.findOne({ username: 'principal' });
 
-  // Standard Weekday Timetable Template
   const sampleTimetable = [
     {
       day: 'Monday',
@@ -61,7 +56,6 @@ const seedTeachers = async () => {
     },
   ];
 
-  // 1. Teacher 1 (Linked to User teacher1)
   const teacher1 = await Teacher.create({
     employeeId: 'SV-TEA-001',
     fullName: 'P. Sunitha',
@@ -84,7 +78,6 @@ const seedTeachers = async () => {
     leaveBalance: { casual: 10, sick: 9, earned: 15 },
   });
 
-  // 2. Teacher 2 (Science Faculty)
   const teacher2 = await Teacher.create({
     employeeId: 'SV-TEA-002',
     fullName: 'K. Ramesh',
@@ -105,7 +98,6 @@ const seedTeachers = async () => {
     leaveBalance: { casual: 12, sick: 10, earned: 14 },
   });
 
-  // 3. Seed Sample Leave Applications
   const leave1 = await Leave.create({
     teacher: teacher1._id,
     user: teacherUser ? teacherUser._id : null,
@@ -117,7 +109,6 @@ const seedTeachers = async () => {
     status: 'PENDING',
   });
 
-  // 4. Seed Sample Notifications
   await Notification.create({
     title: 'Staff Meeting on Formative Assessment (FA-2)',
     message: 'All secondary faculty members are requested to attend the academic review meeting on Friday at 3:30 PM in the Conference Hall.',

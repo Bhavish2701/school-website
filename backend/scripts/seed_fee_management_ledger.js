@@ -1,8 +1,3 @@
-/**
- * Seed Fee Management Ledger
- * Seeds authentic fee structures, student fee ledgers, payment receipts,
- * and SMS reminder logs for Sri Vidya English Medium High School.
- */
 const mongoose = require('mongoose');
 require('dotenv').config({ path: 'backend/.env' });
 const uri = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/srividya_school_db';
@@ -19,7 +14,6 @@ async function seedFeeLedger() {
   const SmsLog = require('../src/models/smsLog.model');
   const { User } = require('../src/models/user.model');
 
-  // Find admin or principal user for references
   let adminUser = await User.findOne({ role: { $in: ['SUPER_ADMIN', 'PRINCIPAL'] } });
   if (!adminUser) {
     adminUser = await User.findOne({});
@@ -125,14 +119,12 @@ async function seedFeeLedger() {
   const createdStructures = await FeeStructure.insertMany(structuresData);
   console.log(`✓ Seeded ${createdStructures.length} fee structures`);
 
-  // Map structures by class
   const structMap = {};
   createdStructures.forEach((s) => {
     structMap[s.class] = s;
   });
 
   console.log('\n--- 2. Seeding Student Fee Ledgers & Accounts ---');
-  // Clean existing fees to rebuild consistent traceable ledger
   await Fee.deleteMany({});
   await Payment.deleteMany({});
   await Receipt.deleteMany({});
@@ -142,7 +134,6 @@ async function seedFeeLedger() {
   console.log(`Found ${allStudents.length} students in DB`);
 
   const studentFeeLedgerDefs = [
-    // 1. A. Rahul (Class 10-A, SV-0001) - Cleared
     {
       admNo: 'SV-0001',
       totalAmount: 32000,
@@ -156,7 +147,6 @@ async function seedFeeLedger() {
         { receiptNumber: 'RCP-2026-2045', amount: 16000, date: new Date('2026-10-10T14:30:00.000Z'), mode: 'UPI', desc: 'Term 2 Final Settlement' },
       ],
     },
-    // 2. B. Priya (Class 8-C, SV-0002) - Cleared
     {
       admNo: 'SV-0002',
       totalAmount: 26000,
@@ -170,14 +160,13 @@ async function seedFeeLedger() {
         { receiptNumber: 'RCP-2026-2046', amount: 13000, date: new Date('2026-10-12T15:20:00.000Z'), mode: 'UPI', desc: 'Term 2 Academic Fee' },
       ],
     },
-    // 3. K. Sai Teja (Class 10-A, SV-0003) - DEFAULTER (₹12,500 due, 18 days overdue)
     {
       admNo: 'SV-0003',
       totalAmount: 32000,
       concessionAmount: 0,
       paidAmount: 19500,
       dueAmount: 12500,
-      dueDate: new Date('2026-10-22T00:00:00.000Z'), // 18 days overdue as of Nov 9, 2026
+      dueDate: new Date('2026-10-22T00:00:00.000Z'),
       status: 'Partial',
       receipts: [
         { receiptNumber: 'RCP-2026-1013', amount: 16000, date: new Date('2026-06-16T12:00:00.000Z'), mode: 'Cash', desc: 'Term 1 Complete Fee' },
@@ -194,7 +183,6 @@ async function seedFeeLedger() {
         },
       ],
     },
-    // 4. M. Divya Bharathi (Class 10-A, SV-0004) - Cleared
     {
       admNo: 'SV-0004',
       totalAmount: 32000,
@@ -208,14 +196,13 @@ async function seedFeeLedger() {
         { receiptNumber: 'RCP-2026-2048', amount: 16000, date: new Date('2026-10-14T10:00:00.000Z'), mode: 'Card', desc: 'Term 2 Academic Fee' },
       ],
     },
-    // 5. G. Karthik (Class 9-B, SV-0005) - DEFAULTER (₹10,000 due, 14 days overdue)
     {
       admNo: 'SV-0005',
       totalAmount: 28000,
-      concessionAmount: 3000, // Merit concession
+      concessionAmount: 3000,
       paidAmount: 15000,
       dueAmount: 10000,
-      dueDate: new Date('2026-10-26T00:00:00.000Z'), // 14 days overdue as of Nov 9, 2026
+      dueDate: new Date('2026-10-26T00:00:00.000Z'),
       status: 'Pending',
       receipts: [
         { receiptNumber: 'RCP-2026-1015', amount: 13000, date: new Date('2026-06-22T14:10:00.000Z'), mode: 'UPI', desc: 'Term 1 Settlement' },
@@ -232,7 +219,6 @@ async function seedFeeLedger() {
         },
       ],
     },
-    // 6. V. Siri Varshini (Class 9-B, SV-0006) - Cleared
     {
       admNo: 'SV-0006',
       totalAmount: 28000,
@@ -246,14 +232,13 @@ async function seedFeeLedger() {
         { receiptNumber: 'RCP-2026-2050', amount: 14000, date: new Date('2026-10-15T13:45:00.000Z'), mode: 'Cash', desc: 'Term 2 Academic Fee' },
       ],
     },
-    // 7. CH. Hemanth (Class 7-A, SV-0007, Inactive) - DEFAULTER (₹8,500 due, 22 days overdue)
     {
       admNo: 'SV-0007',
       totalAmount: 24000,
-      concessionAmount: 3500, // Exit adjustment
+      concessionAmount: 3500,
       paidAmount: 12000,
       dueAmount: 8500,
-      dueDate: new Date('2026-10-18T00:00:00.000Z'), // 22 days overdue as of Nov 9, 2026
+      dueDate: new Date('2026-10-18T00:00:00.000Z'),
       status: 'Pending',
       receipts: [
         { receiptNumber: 'RCP-2026-1017', amount: 12000, date: new Date('2026-06-25T15:00:00.000Z'), mode: 'UPI', desc: 'Term 1 Academic Fee' },
@@ -269,7 +254,6 @@ async function seedFeeLedger() {
         },
       ],
     },
-    // 8. S. Tanvi Sree (Class 6-A, SV-0008) - Cleared
     {
       admNo: 'SV-0008',
       totalAmount: 22000,
@@ -283,7 +267,6 @@ async function seedFeeLedger() {
         { receiptNumber: 'RCP-2026-2052', amount: 11000, date: new Date('2026-10-18T16:20:00.000Z'), mode: 'UPI', desc: 'Term 2 Primary Academic Fee' },
       ],
     },
-    // 9. A. Sneha (Class 6-A, SV-0010) - Cleared
     {
       admNo: 'SV-0010',
       totalAmount: 22000,
@@ -332,7 +315,6 @@ async function seedFeeLedger() {
       ],
     });
 
-    // Update student's feeStatus on student record
     await Student.findByIdAndUpdate(student._id, {
       feeStatus: def.dueAmount === 0 ? 'Paid' : def.paidAmount > 0 ? 'Partial' : 'Pending',
     });
@@ -342,7 +324,6 @@ async function seedFeeLedger() {
     totalPaidSum += def.paidAmount;
     totalDueSum += def.dueAmount;
 
-    // Create Receipts and Payments for this student
     for (const r of def.receipts) {
       const orderId = `ORD_SV_${Date.now()}_${Math.floor(1000 + Math.random() * 9000)}`;
 
@@ -379,7 +360,6 @@ async function seedFeeLedger() {
       });
     }
 
-    // Create SMS Reminder logs if any
     if (Array.isArray(def.smsReminders)) {
       for (const sms of def.smsReminders) {
         await SmsLog.create({
@@ -402,8 +382,6 @@ async function seedFeeLedger() {
   }
 
   console.log('\n--- 3. Seeding Authentic Today Counter Receipts (Nov 9, 2026) ---');
-  // Today's counter receipts:
-  // E.g. Receipt 1: ₹45,000 Cash, Receipt 2: ₹97,500 UPI = ₹1,42,500 Today Counter Collections (18 receipts aggregate or featured receipts)
   const todayDate = new Date();
   todayDate.setHours(9, 30, 0, 0);
 
@@ -414,7 +392,6 @@ async function seedFeeLedger() {
   const fee1 = await Fee.findOne({ student: student1Id });
   const fee2 = await Fee.findOne({ student: student2Id });
 
-  // Receipt Today Cash: ₹45,000
   const orderTodayCash = `ORD_SV_TODAY_CASH_${Date.now()}`;
   const payTodayCash = await Payment.create({
     orderId: orderTodayCash,
@@ -448,7 +425,6 @@ async function seedFeeLedger() {
     createdAt: todayDate,
   });
 
-  // Receipt Today UPI: ₹97,500
   const todayDate2 = new Date();
   todayDate2.setHours(11, 45, 0, 0);
   const orderTodayUPI = `ORD_SV_TODAY_UPI_${Date.now()}`;

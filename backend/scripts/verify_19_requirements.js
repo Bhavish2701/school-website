@@ -1,6 +1,3 @@
-/**
- * End-to-End Verification Test for the 19 Production-Readiness Requirements
- */
 const mongoose = require('mongoose');
 const path = require('path');
 const fs = require('fs');
@@ -26,7 +23,6 @@ async function runVerification() {
   let passedTests = 0;
   const totalTests = 19;
 
-  // 1. Real Login, Logout & Session Management
   try {
     const user = await User.findOne({ username: 'principal' });
     if (user) {
@@ -46,7 +42,6 @@ async function runVerification() {
     console.error('✗ Req 1 FAILED:', e.message);
   }
 
-  // 2. Password Reset Workflow
   try {
     const user = await User.findOne({ username: 'teacher1' });
     if (user) {
@@ -67,7 +62,6 @@ async function runVerification() {
     console.error('✗ Req 2 FAILED:', e.message);
   }
 
-  // 3. Email Verification System
   try {
     const user = await User.findOne({ username: 'principal' });
     const otp = user.createEmailVerificationOtp();
@@ -86,7 +80,6 @@ async function runVerification() {
     console.error('✗ Req 3 FAILED:', e.message);
   }
 
-  // 4. Loading States & Skeletons
   try {
     const css = fs.readFileSync(path.resolve(__dirname, '../../frontend/css/skeuomorphic-portal.css'), 'utf8');
     const js = fs.readFileSync(path.resolve(__dirname, '../../frontend/js/portal-production-suite.js'), 'utf8');
@@ -98,7 +91,6 @@ async function runVerification() {
     console.error('✗ Req 4 FAILED:', e.message);
   }
 
-  // 5. Empty States Component
   try {
     const css = fs.readFileSync(path.resolve(__dirname, '../../frontend/css/skeuomorphic-portal.css'), 'utf8');
     const js = fs.readFileSync(path.resolve(__dirname, '../../frontend/js/portal-production-suite.js'), 'utf8');
@@ -110,7 +102,6 @@ async function runVerification() {
     console.error('✗ Req 5 FAILED:', e.message);
   }
 
-  // 6. Clear Error Messages with Recovery Instructions
   try {
     const errMid = fs.readFileSync(path.resolve(__dirname, '../src/middleware/error.middleware.js'), 'utf8');
     if (errMid.includes('recoveryAction') && errMid.includes('errorCode')) {
@@ -121,7 +112,6 @@ async function runVerification() {
     console.error('✗ Req 6 FAILED:', e.message);
   }
 
-  // 7. Form Validation (Frontend & Backend)
   try {
     const js = fs.readFileSync(path.resolve(__dirname, '../../frontend/js/portal-production-suite.js'), 'utf8');
     if (js.includes('validateField') && js.includes('showFieldError')) {
@@ -132,7 +122,6 @@ async function runVerification() {
     console.error('✗ Req 7 FAILED:', e.message);
   }
 
-  // 8. Rate Limiting Protection
   try {
     const rateMid = require('../src/middleware/rateLimiter.middleware');
     if (rateMid.authLimiter && rateMid.otpLimiter && rateMid.passwordResetLimiter && rateMid.emailVerificationLimiter) {
@@ -143,7 +132,6 @@ async function runVerification() {
     console.error('✗ Req 8 FAILED:', e.message);
   }
 
-  // 9. Database Backups & Recovery
   try {
     const backupRes = await BackupService.startAuthorizedBackup(
       { scope: 'DATABASE', reason: 'Automated Verification Snapshot' },
@@ -157,7 +145,6 @@ async function runVerification() {
     console.error('✗ Req 9 FAILED:', e.message);
   }
 
-  // 10. Row-Level Security (RLS) & Multi-Tenant Role Isolation
   try {
     const principalUser = { role: 'PRINCIPAL' };
     const teacherUser = { role: 'TEACHER', assignedClasses: [{ class: '10', section: 'A' }] };
@@ -175,7 +162,6 @@ async function runVerification() {
     console.error('✗ Req 10 FAILED:', e.message);
   }
 
-  // 11. API Key & Secret Security
   try {
     const envContent = fs.existsSync('.env') ? fs.readFileSync('.env', 'utf8') : '';
     const gitignore = fs.readFileSync('.gitignore', 'utf8');
@@ -187,7 +173,6 @@ async function runVerification() {
     console.error('✗ Req 11 FAILED:', e.message);
   }
 
-  // 12. Mobile Responsiveness
   try {
     const css = fs.readFileSync(path.resolve(__dirname, '../../frontend/css/skeuomorphic-portal.css'), 'utf8');
     if (css.includes('@media (max-width: 992px)') && css.includes('.table-responsive') && css.includes('.portal-drawer-backdrop')) {
@@ -198,7 +183,6 @@ async function runVerification() {
     console.error('✗ Req 12 FAILED:', e.message);
   }
 
-  // 13. Custom 404 Page
   try {
     const html404 = fs.readFileSync(path.resolve(__dirname, '../../frontend/404.html'), 'utf8');
     const mid404 = fs.readFileSync(path.resolve(__dirname, '../src/middleware/notFound.middleware.js'), 'utf8');
@@ -210,7 +194,6 @@ async function runVerification() {
     console.error('✗ Req 13 FAILED:', e.message);
   }
 
-  // 14. In-House Privacy-Conscious Analytics
   try {
     const event = await AnalyticsEvent.create({
       eventType: 'PAGE_VIEW',
@@ -226,7 +209,6 @@ async function runVerification() {
     console.error('✗ Req 14 FAILED:', e.message);
   }
 
-  // 15. Centralized Error Tracking
   try {
     const log = await ErrorLog.create({
       source: 'backend',
@@ -242,7 +224,6 @@ async function runVerification() {
     console.error('✗ Req 15 FAILED:', e.message);
   }
 
-  // 16. School Data Privacy Policy Page
   try {
     const privacy = fs.readFileSync(path.resolve(__dirname, '../../frontend/privacy.html'), 'utf8');
     if (privacy.includes('DPDP Act 2023') && privacy.includes('Sri Vidya English Medium High School')) {
@@ -253,7 +234,6 @@ async function runVerification() {
     console.error('✗ Req 16 FAILED:', e.message);
   }
 
-  // 17. Terms & Conditions Page
   try {
     const terms = fs.readFileSync(path.resolve(__dirname, '../../frontend/terms.html'), 'utf8');
     if (terms.includes('ERP Terms of Service') && terms.includes('Acceptable Use Policy')) {
@@ -264,7 +244,6 @@ async function runVerification() {
     console.error('✗ Req 17 FAILED:', e.message);
   }
 
-  // 18. Account Deletion with Statutory Records Preservation
   try {
     const user = await User.findOne({ username: 'officestaff' });
     const reqDoc = await AccountDeletionRequest.create({
@@ -287,7 +266,6 @@ async function runVerification() {
     console.error('✗ Req 18 FAILED:', e.message);
   }
 
-  // 19. Guided Onboarding Tour Flow
   try {
     const js = fs.readFileSync(path.resolve(__dirname, '../../frontend/js/portal-production-suite.js'), 'utf8');
     if (js.includes('tourSteps') && js.includes('completeOnboardingTour') && js.includes('injectOnboardingModal')) {

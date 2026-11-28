@@ -1,6 +1,3 @@
-/**
- * Student Exit & Transfer Certificate Controller
- */
 const studentExitService = require('../services/studentExit.service');
 const { sendSuccess } = require('../utils/apiResponse');
 const asyncHandler = require('../utils/asyncHandler');

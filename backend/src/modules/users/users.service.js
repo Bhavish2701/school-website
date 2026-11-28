@@ -1,7 +1,3 @@
-/**
- * Platform Users & Accounts - Service Layer
- * Business rules, calculations, and operational orchestration
- */
 
 const Repository = require('./users.repository');
 const MultiInstitutionSecurity = require('../common/multiInstitutionSecurity');

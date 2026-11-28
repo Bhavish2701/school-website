@@ -5,7 +5,6 @@ console.log('====================================================');
 console.log('TEST SUITE: TC DETAIL DOSSIER MODAL ALIGNMENT & LOGIC');
 console.log('====================================================');
 
-// Mock DOM environment
 const elements = {};
 function getMock(id, tag = 'div') {
   if (!elements[id]) {
@@ -75,7 +74,6 @@ global.document = {
   removeEventListener: () => {}
 };
 
-// Load student-roster.js and portal.js
 eval(fs.readFileSync('frontend/js/student-roster.js', 'utf8'));
 eval(fs.readFileSync('frontend/js/portal.js', 'utf8'));
 const portal = global.portalApp || window.portalApp;
@@ -83,13 +81,11 @@ const portal = global.portalApp || window.portalApp;
 assert(portal, 'portalApp must be defined on window');
 console.log('\n[PASS] Portal and Roster loaded successfully');
 
-// Initialize transfers
 portal.initTransfers();
 const initialTransfers = portal.state.transfers;
 assert(Array.isArray(initialTransfers) && initialTransfers.length > 0, 'state.transfers must be loaded');
 console.log(`[PASS] Transfers state initialized with ${initialTransfers.length} records`);
 
-// --- Test 1: Verify HTML Structure and ID mappings in index.html ---
 console.log('\n--- Test 1: Verify HTML Structure & ID Mappings in index.html ---');
 const html = fs.readFileSync('frontend/administration-portal/index.html', 'utf8');
 
@@ -149,7 +145,6 @@ expectedIds.forEach(id => {
 });
 console.log(`[PASS] All ${expectedIds.length} expected element IDs verified in index.html`);
 
-// --- Test 2: Verify CSS Rules in portal.css ---
 console.log('\n--- Test 2: Verify CSS Rules in portal.css ---');
 const css = fs.readFileSync('frontend/css/portal.css', 'utf8');
 
@@ -162,7 +157,6 @@ assert(css.includes('.tc-metrics-grid'), 'CSS must define .tc-metrics-grid');
 assert(css.includes('.tc-metric-tile'), 'CSS must define .tc-metric-tile');
 console.log('[PASS] All TC Dossier layout classes verified in portal.css');
 
-// --- Test 3: Open TC Detail Modal & Populate Data ---
 console.log('\n--- Test 3: Open TC Detail Modal & Verify Field Population ---');
 portal.openTcDetailModal('TC-REQ-2026-0041');
 
@@ -178,7 +172,6 @@ assert(getMock('tcDossierRequester').textContent.length > 0, 'Requester name mus
 
 console.log('[PASS] Test 3: openTcDetailModal successfully populates header, profile, requester, and metrics');
 
-// --- Test 4: Tab Switching Navigation ---
 console.log('\n--- Test 4: Tab Switching Navigation ---');
 portal.switchTcDetailTab('clearance');
 portal.switchTcDetailTab('preview');
@@ -186,7 +179,6 @@ portal.switchTcDetailTab('issuance');
 portal.switchTcDetailTab('profile');
 console.log('[PASS] Test 4: Tab switching executed cleanly across all 4 panes');
 
-// --- Test 5: Footer Actions Rendering ---
 console.log('\n--- Test 5: Footer Actions Rendering across Lifecycle Stages ---');
 const issuedRec = portal.state.transfers.find(t => t.approvalStatus === 'Issued') || portal.state.transfers[0];
 portal.renderTcDetailActions(issuedRec);

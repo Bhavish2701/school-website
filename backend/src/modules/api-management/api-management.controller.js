@@ -1,7 +1,3 @@
-/**
- * API Gateway & Client Management - Controller Layer
- * Handles HTTP requests, responses, and status codes
- */
 
 const Service = require('./api-management.service');
 

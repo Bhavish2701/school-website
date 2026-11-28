@@ -1,11 +1,3 @@
-/**
- * Examination Mongoose Models
- *
- * Implements:
- * 1. Exam - Exam profile, term/academic year, schedule bounds, and publication status
- * 2. ExamSchedule - Date, start/end time, venue, maxMarks, and passMarks per subject/class
- * 3. ExamMark - Comprehensive marks memo per student with subject scores, GPA, grades, and class rank
- */
 const mongoose = require('mongoose');
 
 const EXAM_TYPES = [
@@ -22,9 +14,6 @@ const EXAM_TYPES = [
 const EXAM_STATUS = ['UPCOMING', 'ONGOING', 'COMPLETED', 'CANCELLED', 'POSTPONED'];
 const RESULT_STATUS = ['PASSED', 'FAILED', 'WITHHELD', 'PENDING'];
 
-/**
- * 1. Exam Model Schema
- */
 const examSchema = new mongoose.Schema(
   {
     name: {
@@ -115,9 +104,6 @@ const examSchema = new mongoose.Schema(
   }
 );
 
-/**
- * 2. Exam Schedule Schema (Subject-wise Timetable per Class)
- */
 const examScheduleSchema = new mongoose.Schema(
   {
     exam: {
@@ -185,12 +171,8 @@ const examScheduleSchema = new mongoose.Schema(
   }
 );
 
-// Prevent duplicate subject scheduling for the same exam and class
 examScheduleSchema.index({ exam: 1, class: 1, subject: 1 }, { unique: true });
 
-/**
- * 3. Exam Marks Schema (Student Subject Marks Memo & Dossier)
- */
 const subjectMarkSchema = new mongoose.Schema({
   subject: {
     type: String,
@@ -327,13 +309,9 @@ const examMarkSchema = new mongoose.Schema(
   }
 );
 
-// DUPLICATE PREVENTION: A student has exactly one marks memo per exam
 examMarkSchema.index({ exam: 1, student: 1 }, { unique: true });
 examMarkSchema.index({ exam: 1, class: 1, section: 1 });
 
-/**
- * Standard Grading Helper (10-Point AP/CBSE System)
- */
 const calculateSubjectGrade = (marksObtained, maxMarks = 100, isAbsent = false) => {
   if (isAbsent) {
     return { grade: 'AB', gradePoint: 0, isPass: false };

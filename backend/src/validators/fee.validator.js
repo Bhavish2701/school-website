@@ -1,14 +1,8 @@
-/**
- * Fee & Payment Module Request Validators
- */
 const mongoose = require('mongoose');
 const validate = require('../middleware/validate.middleware');
 const { PAYMENT_METHODS } = require('../models/payment.model');
 const ApiError = require('../utils/apiError');
 
-/**
- * Validate Fee Structure Creation
- */
 const validateCreateFeeStructure = validate({
   name: {
     required: true,
@@ -31,9 +25,6 @@ const validateCreateFeeStructure = validate({
   },
 });
 
-/**
- * Validate Student Fee Allocation
- */
 const validateAssignStudentFee = (req, res, next) => {
   const { studentId, feeStructureId, totalAmount, dueDate } = req.body;
   const errors = {};
@@ -61,9 +52,6 @@ const validateAssignStudentFee = (req, res, next) => {
   next();
 };
 
-/**
- * Validate Payment Initiation Order (POST /api/v1/payments/create)
- */
 const validateCreatePaymentOrder = (req, res, next) => {
   const { feeId, amount, paymentMethod } = req.body;
   const errors = {};
@@ -87,9 +75,6 @@ const validateCreatePaymentOrder = (req, res, next) => {
   next();
 };
 
-/**
- * Validate Payment Verification (POST /api/v1/payments/verify)
- */
 const validateVerifyPayment = (req, res, next) => {
   const { orderId, paymentId } = req.body;
   const errors = {};

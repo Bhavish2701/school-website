@@ -1,7 +1,3 @@
-/**
- * Global Platform Settings - Service Layer
- * Business rules, calculations, and operational orchestration
- */
 
 const Repository = require('./global-settings.repository');
 const MultiInstitutionSecurity = require('../common/multiInstitutionSecurity');

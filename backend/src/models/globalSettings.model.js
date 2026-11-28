@@ -1,11 +1,6 @@
-/**
- * Sri Vidya Educational Trust - Global Platform Settings Model
- * Module 16: General Settings, Authentication Policies, Platform Feature Controls, and Maintenance Safeguards
- */
 
 const mongoose = require('mongoose');
 
-// 16.3 Feature Control Subdocuments
 const FeatureChangeHistorySchema = new mongoose.Schema({
   timestamp: { type: Date, default: Date.now },
   operator: { type: String, default: 'Platform Administrator' },
@@ -36,7 +31,7 @@ const FeatureControlSchema = new mongoose.Schema({
     index: true
   },
   applicableInstitutions: [{
-    type: String // e.g. 'ALL', 'SV-MAIN', 'SV-PRIMARY', 'SV-VILLAGE'
+    type: String
   }],
   rolloutStatus: {
     type: String,
@@ -53,15 +48,13 @@ const FeatureControlSchema = new mongoose.Schema({
   timestamps: true
 });
 
-// 16.4 Maintenance History Subdocument
 const MaintenanceEventHistorySchema = new mongoose.Schema({
   timestamp: { type: Date, default: Date.now },
-  action: { type: String, required: true }, // e.g. 'SCHEDULED', 'ACTIVATED', 'ENDED'
+  action: { type: String, required: true },
   operator: { type: String, default: 'Platform Administrator' },
   details: { type: String }
 }, { _id: false });
 
-// 16.1 - 16.4 Global Settings Master Schema
 const GlobalSettingsSchema = new mongoose.Schema({
   settingsId: {
     type: String,
@@ -70,7 +63,6 @@ const GlobalSettingsSchema = new mongoose.Schema({
     index: true
   },
 
-  // 16.1 General Settings
   general: {
     platformName: {
       type: String,
@@ -136,7 +128,6 @@ const GlobalSettingsSchema = new mongoose.Schema({
     }
   },
 
-  // 16.2 Authentication Settings & Safety Invariants
   authentication: {
     passwordRequirements: {
       minLength: {
@@ -228,7 +219,6 @@ const GlobalSettingsSchema = new mongoose.Schema({
         default: true
       }
     },
-    // Invariant: At least one safe recovery method must ALWAYS remain active
     supportedAuthMethods: {
       localPassword: {
         type: Boolean,
@@ -253,14 +243,12 @@ const GlobalSettingsSchema = new mongoose.Schema({
     }
   },
 
-  // 16.4 Maintenance Settings & Safeguards
   maintenance: {
     isActive: {
       type: Boolean,
       default: false,
       index: true
     },
-    // Invariant: Administrators and recovery operations can NEVER be locked out
     operatorLockoutProtection: {
       type: Boolean,
       default: true

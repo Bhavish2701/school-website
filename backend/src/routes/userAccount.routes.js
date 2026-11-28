@@ -1,6 +1,3 @@
-/**
- * Sri Vidya Educational Trust - Platform User & Account Management Routes
- */
 
 const express = require('express');
 const router = express.Router();

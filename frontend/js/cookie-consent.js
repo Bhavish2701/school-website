@@ -1,8 +1,3 @@
-/**
- * Sri Vidya E.M High School - Cookie Consent & Privacy Preference Manager
- * Strictly adheres to Indian DPDP Act 2023 (Section 6 & 9) and GDPR (Article 7)
- * Provides granular user choice: Essential, Functional, and Performance Telemetry.
- */
 (function (window, document) {
   'use strict';
 
@@ -10,7 +5,7 @@
 
   const CookieConsent = {
     preferences: {
-      essential: true, // Always true (non-negotiable for auth/security)
+      essential: true,
       functional: true,
       analytics: false,
       timestamp: null,
@@ -23,7 +18,6 @@
 
       const stored = localStorage.getItem(STORAGE_KEY);
       if (!stored) {
-        // Show banner after short delay
         setTimeout(() => this.showBanner(), 800);
       }
     },
@@ -49,16 +43,13 @@
         console.warn('[CookieConsent] Failed to save preferences to localStorage:', e);
       }
 
-      // Immediately hide UI without waiting for background sync
       this.hideBanner();
       this.closeModal();
 
-      // Background telemetry/audit sync with backend if ApiClient is available
       try {
         this.syncConsentWithBackend();
       } catch (_) {}
 
-      // Dispatch event
       try {
         window.dispatchEvent(new CustomEvent('sv:cookie-consent-updated', { detail: this.preferences }));
       } catch (_) {}
@@ -105,7 +96,7 @@
         banner.style.pointerEvents = 'auto';
         banner.style.opacity = '1';
         banner.style.bottom = '';
-        void banner.offsetWidth; // force reflow
+        void banner.offsetWidth;
         banner.classList.add('active');
       }
     },
@@ -165,7 +156,6 @@
     injectBannerAndModal() {
       if (document.getElementById('skeuoCookieBanner')) return;
 
-      // 1. Banner HTML
       const banner = document.createElement('div');
       banner.id = 'skeuoCookieBanner';
       banner.className = 'skeuo-cookie-banner';
@@ -195,7 +185,6 @@
       `;
       document.body.appendChild(banner);
 
-      // Bind direct button event listeners (immune to CSP script-src-attr restrictions)
       const btnAccept = banner.querySelector('.btn-cookie-accept');
       const btnReject = banner.querySelector('.btn-cookie-reject');
       const btnManage = banner.querySelector('.btn-cookie-manage');
@@ -222,7 +211,6 @@
         });
       }
 
-      // Delegated click handler on banner container
       banner.addEventListener('click', (e) => {
         const accept = e.target.closest('.btn-cookie-accept');
         const reject = e.target.closest('.btn-cookie-reject');
@@ -232,7 +220,6 @@
         else if (manage) { e.preventDefault(); CookieConsent.openModal(); }
       });
 
-      // 2. Granular Modal HTML
       const modal = document.createElement('div');
       modal.id = 'skeuoCookieModal';
       modal.className = 'skeuo-session-modal-overlay skeuo-cookie-modal-overlay';
@@ -300,7 +287,6 @@
       `;
       document.body.appendChild(modal);
 
-      // Bind direct modal listeners
       const modalClose = modal.querySelector('.cookie-modal-close');
       const modalSave = modal.querySelector('.btn-cookie-save');
       if (modalClose) {
@@ -316,21 +302,18 @@
         });
       }
 
-      // Close on backdrop click
       modal.addEventListener('click', (e) => {
         if (e.target === modal) {
           CookieConsent.closeModal();
         }
       });
 
-      // Close on Escape key
       document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape' && modal.classList.contains('active')) {
           CookieConsent.closeModal();
         }
       });
 
-      // 3. Inject CSS
       const style = document.createElement('style');
       style.textContent = `
         /* Overlay: Fixed, full-screen, backdrop blur, centered */

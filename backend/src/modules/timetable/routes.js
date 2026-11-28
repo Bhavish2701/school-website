@@ -57,7 +57,6 @@ router.get(
   })
 );
 
-// Base timetable routes
 router.use('/', timetableRoutes);
 
 module.exports = router;

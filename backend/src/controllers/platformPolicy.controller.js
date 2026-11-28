@@ -1,11 +1,6 @@
-/**
- * Sri Vidya Educational Trust - Platform Policies & Data Retention Controller
- * Module 17: Governance Policy Register, Granular Retention Rules, and Controlled Data Requests
- */
 
 const PlatformPolicyService = require('../services/platformPolicy.service');
 
-// 17.1 Policy Register
 const listPolicies = async (req, res) => {
   try {
     const filters = {
@@ -52,7 +47,6 @@ const updatePolicy = async (req, res) => {
   }
 };
 
-// 17.2 Data Retention Configuration
 const listRetentionRules = async (req, res) => {
   try {
     const filters = {
@@ -135,7 +129,6 @@ const getRetentionVersions = async (req, res) => {
   }
 };
 
-// 17.3 Data Requests
 const listDataRequests = async (req, res) => {
   try {
     const filters = {
@@ -216,13 +209,11 @@ const fulfillDataRequest = async (req, res) => {
 };
 
 module.exports = {
-  // 17.1
   listPolicies,
   getPolicy,
   createPolicy,
   updatePolicy,
 
-  // 17.2
   listRetentionRules,
   getRetentionRule,
   createRetentionDraft,
@@ -231,7 +222,6 @@ module.exports = {
   publishRetentionRule,
   getRetentionVersions,
 
-  // 17.3
   listDataRequests,
   getDataRequest,
   createDataRequest,

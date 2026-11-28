@@ -21,7 +21,6 @@ function assert(condition, message) {
   }
 }
 
-// 1. FILE INSPECTION TESTS
 console.log('--- 1. Testing Portal HTML Files & Route Guards ---');
 const mgmtHtml = fs.readFileSync(path.join(__dirname, '../../frontend/administration-portal/index.html'), 'utf8');
 assert(!mgmtHtml.includes('id="managementLoginOverlay"'), 'administration-portal/index.html does not contain managementLoginOverlay');
@@ -42,7 +41,6 @@ const loginHtml = fs.readFileSync(path.join(__dirname, '../../frontend/login.htm
 assert(loginHtml.includes('id="unifiedLoginForm"'), 'login.html is the central single login page with unifiedLoginForm');
 assert(loginHtml.includes('id="unifiedOtpForm"'), 'login.html has unifiedOtpForm for 2FA verification');
 
-// 2. CLIENT SCRIPTS INSPECTION TESTS
 console.log('\n--- 2. Testing Authentication Logic Scripts ---');
 const apiClientJs = fs.readFileSync(path.join(__dirname, '../../frontend/js/api-client.js'), 'utf8');
 assert(!apiClientJs.includes('overlays.forEach((ov) => ov.classList.remove(\'hidden\'))'), 'api-client.js handleSessionExpired does NOT unhide overlays');
@@ -53,7 +51,6 @@ assert(!portalAuthJs.includes('overlay.classList.remove(\'hidden\')'), 'portal-a
 assert(portalAuthJs.includes('msgParam !== \'logged_out\' && msgParam !== \'session_expired\' && this.isAnySessionActive()'), 'portal-auth.js respects logout and avoids auto-redirect loops on logout');
 assert(portalAuthJs.includes('/login?msg=logged_out'), 'portal-auth.js logout redirects to /login?msg=logged_out');
 
-// 3. BACKEND AUTH CONTROLLER & RBAC TESTS
 console.log('\n--- 3. Testing Backend REST Auth Controller (/api/v1/auth/login) ---');
 
 function mockRequestResponse(body) {
@@ -157,7 +154,6 @@ async function runLiveAuthTests() {
     }
   }
 
-  // 4. TEST INVALID CREDENTIALS
   console.log('\n--- 4. Testing Invalid Credentials & Error Handling ---');
   try {
     const { req, res, next, promise } = mockRequestResponse({
@@ -172,7 +168,6 @@ async function runLiveAuthTests() {
     assert(false, `Invalid credentials test failed: ${e.message}`);
   }
 
-  // 5. TEST GET /login PAGE DELIVERY
   console.log('\n--- 5. Testing Unified Login Page HTML Structure ---');
   const loginHtmlDelivery = fs.readFileSync(path.join(__dirname, '../../frontend/login.html'), 'utf8');
   assert(loginHtmlDelivery.includes('Unified Portal Sign In'), 'login.html delivers Unified Portal Sign In interface');

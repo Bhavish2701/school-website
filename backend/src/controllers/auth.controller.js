@@ -1,8 +1,3 @@
-/**
-/**
- * Authentication Controller
- * Implements JWT authentication, token lifecycle, and credential management
- */
 const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
 const mongoose = require('mongoose');
@@ -25,9 +20,6 @@ const {
 
 const isDbConnected = () => !!(mongoose.connection && mongoose.connection.readyState === 1);
 
-/**
- * Mask mobile numbers and emails for privacy & security
- */
 const maskDestination = (dest, type = 'mobile') => {
   if (!dest) return '+91 93985 *****84';
   if (type === 'email' || dest.includes('@')) {
@@ -44,9 +36,6 @@ const maskDestination = (dest, type = 'mobile') => {
   return dest.replace(/.(?=.{2})/g, '*');
 };
 
-/**
- * Portal Normalization and Human-Readable Display Names
- */
 const normalizePortalName = (p) => {
   if (!p) return '';
   const s = String(p).trim().toLowerCase();
@@ -70,9 +59,6 @@ const getPortalDisplayName = (p) => {
   return names[norm] || p || 'Authorized Portal';
 };
 
-/**
- * Role-to-Portal Redirection and Authorization Mapping
- */
 const getRolePortalMapping = (role) => {
   switch (role) {
     case 'SUPER_ADMIN':
@@ -148,17 +134,10 @@ const getRolePortalMapping = (role) => {
   }
 };
 
-/**
- * @route   POST /api/v1/auth/login
- * @desc    Authenticate user and issue JWT access & refresh tokens
- * @desc    Authenticate user, identify role/permissions, and return tokens + portal redirection
- * @access  Public
- */
 const login = asyncHandler(async (req, res) => {
   const { username, email, identifier, password } = req.body;
   const rawIdentifier = (identifier || username || email || '').trim().toLowerCase();
 
-  // Alias resolution map for seamless school login across faculty IDs, school emails, and usernames
   const ALIAS_MAP = {
     'srividyaschools2017@gmail.com': 'principal',
     'sv200001': 'principal',
@@ -176,7 +155,6 @@ const login = asyncHandler(async (req, res) => {
 
   const userIdentifier = ALIAS_MAP[rawIdentifier] || rawIdentifier;
 
-  // Find user by username or email (with DB connection safety and in-memory seed fallback)
   let user = null;
   let isFallback = false;
 
@@ -191,7 +169,6 @@ const login = asyncHandler(async (req, res) => {
     }
   }
 
-  // If database is offline or user not found in DB, search seed fallback accounts
   if (!user) {
     const fallbackUser = getFallbackUser(userIdentifier);
     if (fallbackUser) {
@@ -204,7 +181,6 @@ const login = asyncHandler(async (req, res) => {
     throw ApiError.unauthorized('Invalid username/email or password', 'INVALID_CREDENTIALS');
   }
 
-  // Verify password with bcrypt or recognized school demo fallback passwords
   const isMatch = await user.comparePassword(password);
   if (!isMatch) {
     const isDemoMatch = (
@@ -225,7 +201,6 @@ const login = asyncHandler(async (req, res) => {
     }
   }
 
-  // Check account active status
   if (!user.isActive) {
     throw ApiError.forbidden(
       'Your account is deactivated. Please contact the administrator.',
@@ -233,10 +208,8 @@ const login = asyncHandler(async (req, res) => {
     );
   }
 
-  // Compute authoritative role-based portal routing
   const portalInfo = getRolePortalMapping(user.role);
 
-  // Authoritative Role & Permission Verification against requested portal
   const rawRequestedPortal = (req.body.requestedPortal || req.query.portal || '').trim().toLowerCase();
   const requestedPortal = normalizePortalName(rawRequestedPortal);
 
@@ -249,7 +222,6 @@ const login = asyncHandler(async (req, res) => {
     );
   }
 
-  // 2FA Security: If OTP verification is requested by client, generate secure 6-digit OTP and preAuthToken
   const requireOtp = req.body.requireOtp === true || req.headers['x-require-otp'] === 'true';
   if (requireOtp) {
     const plainOtp = String(crypto.randomInt(100000, 1000000));
@@ -260,7 +232,6 @@ const login = asyncHandler(async (req, res) => {
     const destType = user.phone ? 'mobile' : 'email';
     const maskedDest = maskDestination(destRaw, destType);
 
-    // Persist in resilient fallback store
     saveFallbackOtp({
       userId: user._id,
       preAuthToken,
@@ -269,7 +240,7 @@ const login = asyncHandler(async (req, res) => {
       destination: maskedDest,
       destinationType: destType,
       requestedPortal,
-      expiresAt: new Date(Date.now() + 5 * 60 * 1000), // 5 minutes
+      expiresAt: new Date(Date.now() + 5 * 60 * 1000),
     });
 
     if (isDbConnected() && !isFallback) {
@@ -283,7 +254,7 @@ const login = asyncHandler(async (req, res) => {
           destination: maskedDest,
           destinationType: destType,
           requestedPortal,
-          expiresAt: new Date(Date.now() + 5 * 60 * 1000), // 5 minutes
+          expiresAt: new Date(Date.now() + 5 * 60 * 1000),
           lastSentAt: new Date(),
         });
       } catch (otpDbErr) {
@@ -309,11 +280,9 @@ const login = asyncHandler(async (req, res) => {
     });
   }
 
-  // Generate tokens
   const accessToken = user.generateAccessToken();
   const refreshToken = user.generateRefreshToken();
 
-  // Persist refresh token & last login timestamp
   user.refreshToken = refreshToken;
   user.lastLogin = new Date();
   if (isDbConnected() && !isFallback) {
@@ -324,7 +293,6 @@ const login = asyncHandler(async (req, res) => {
     }
   }
 
-  // Derive tailored destination portal and redirect URL
   let targetPortal = portalInfo.portal;
   let targetRedirectUrl = portalInfo.redirectUrl;
 
@@ -366,16 +334,10 @@ const login = asyncHandler(async (req, res) => {
   });
 });
 
-/**
- * @route   POST /api/v1/auth/logout
- * @desc    Invalidate refresh token and log user out
- * @access  Public / Authenticated
- */
 const logout = asyncHandler(async (req, res) => {
   const incomingRefreshToken = req.body.refreshToken;
 
   if (req.user) {
-    // If authenticated via middleware
     req.user.refreshToken = undefined;
     await req.user.save({ validateBeforeSave: false });
     AuditLog.create({
@@ -389,7 +351,6 @@ const logout = asyncHandler(async (req, res) => {
       result: 'SUCCESS',
     }).catch(() => {});
   } else if (incomingRefreshToken) {
-    // If client supplied refreshToken in body
     const u = await User.findOne({ refreshToken: incomingRefreshToken });
     if (u) {
       u.refreshToken = undefined;
@@ -413,11 +374,6 @@ const logout = asyncHandler(async (req, res) => {
   });
 });
 
-/**
- * @route   POST /api/v1/auth/refresh
- * @desc    Exchange valid refresh token for a new access token
- * @access  Public
- */
 const refresh = asyncHandler(async (req, res) => {
   const { refreshToken } = req.body;
 
@@ -432,7 +388,6 @@ const refresh = asyncHandler(async (req, res) => {
     throw ApiError.unauthorized('Invalid or expired refresh token. Please log in again.', 'INVALID_REFRESH_TOKEN');
   }
 
-  // Find user and select stored refresh token (with DB safety and in-memory fallback)
   let user = null;
   if (isDbConnected()) {
     try {
@@ -457,7 +412,6 @@ const refresh = asyncHandler(async (req, res) => {
     throw ApiError.forbidden('Account is deactivated', 'ACCOUNT_DEACTIVATED');
   }
 
-  // Issue new access token and rotate refresh token
   const newAccessToken = user.generateAccessToken();
   const newRefreshToken = user.generateRefreshToken();
 
@@ -482,11 +436,6 @@ const refresh = asyncHandler(async (req, res) => {
   });
 });
 
-/**
- * @route   GET /api/v1/auth/me
- * @desc    Get currently authenticated user's profile
- * @access  Protected
- */
 const getMe = asyncHandler(async (req, res) => {
   res.status(200).json({
     success: true,
@@ -497,21 +446,12 @@ const getMe = asyncHandler(async (req, res) => {
   });
 });
 
-/**
- * @route   PUT /api/v1/auth/me
- * @route   PATCH /api/v1/auth/me
- * @desc    Update authenticated user's personal details
- *          NOTE: Institutional email, username, and assigned role are strictly IMMUTABLE / FIXED by school policy.
- * @access  Protected
- */
 const updateMe = asyncHandler(async (req, res) => {
   const user = await User.findById(req.user._id);
   if (!user) {
     throw ApiError.notFound('User not found');
   }
 
-  // Institutional Protection Rule:
-  // Official school email, username/employee ID, and assigned role are fixed by institutional policy and cannot be altered by the user
   const {
     fullName,
     phone,
@@ -553,15 +493,9 @@ const updateMe = asyncHandler(async (req, res) => {
   });
 });
 
-/**
- * @route   POST /api/v1/auth/change-password
- * @desc    Change authenticated user's password
- * @access  Protected
- */
 const changePassword = asyncHandler(async (req, res) => {
   const { currentPassword, newPassword } = req.body;
 
-  // Retrieve user with password hash
   const user = await User.findById(req.user._id).select('+password');
   if (!user) {
     throw ApiError.notFound('User not found');
@@ -572,7 +506,6 @@ const changePassword = asyncHandler(async (req, res) => {
     throw ApiError.badRequest('Current password is incorrect', 'INVALID_CURRENT_PASSWORD');
   }
 
-  // Update password and invalidate active refresh tokens
   user.password = newPassword;
   user.refreshToken = undefined;
   await user.save();
@@ -583,11 +516,6 @@ const changePassword = asyncHandler(async (req, res) => {
   });
 });
 
-/**
- * @route   POST /api/v1/auth/forgot-password
- * @desc    Generate password reset token
- * @access  Public
- */
 const forgotPassword = asyncHandler(async (req, res) => {
   const { email, identifier, username } = req.body;
   const target = (email || identifier || username || '').trim().toLowerCase();
@@ -596,7 +524,6 @@ const forgotPassword = asyncHandler(async (req, res) => {
     $or: [{ email: target }, { username: target }],
   });
 
-  // Always return consistent response to prevent username enumeration attacks
   if (!user) {
     return res.status(200).json({
       success: true,
@@ -604,7 +531,6 @@ const forgotPassword = asyncHandler(async (req, res) => {
     });
   }
 
-  // Generate reset token and set expiry
   const resetToken = user.createPasswordResetToken();
   await user.save({ validateBeforeSave: false });
 
@@ -618,15 +544,9 @@ const forgotPassword = asyncHandler(async (req, res) => {
   });
 });
 
-/**
- * @route   POST /api/v1/auth/reset-password
- * @desc    Reset password using reset token
- * @access  Public
- */
 const resetPassword = asyncHandler(async (req, res) => {
   const { resetToken, newPassword } = req.body;
 
-  // Hash incoming token to match stored sha256 hash
   const hashedToken = crypto
     .createHash('sha256')
     .update(resetToken)
@@ -641,7 +561,6 @@ const resetPassword = asyncHandler(async (req, res) => {
     throw ApiError.badRequest('Password reset token is invalid or has expired', 'INVALID_RESET_TOKEN');
   }
 
-  // Set new password and clear reset fields
   user.password = newPassword;
   user.passwordResetToken = undefined;
   user.passwordResetExpires = undefined;
@@ -654,11 +573,6 @@ const resetPassword = asyncHandler(async (req, res) => {
   });
 });
 
-/**
- * @route   POST /api/v1/auth/parent/activate
- * @desc    Activate Verified Guardian Portal Account (Specification 20.3)
- * @access  Public
- */
 const activateParentAccount = asyncHandler(async (req, res) => {
   const { admissionNo, parentPhone, activationCode, password, fullName } = req.body;
 
@@ -669,19 +583,16 @@ const activateParentAccount = asyncHandler(async (req, res) => {
   const cleanAdmNo = admissionNo.trim().toUpperCase();
   const cleanPhone = parentPhone.trim();
 
-  // Find student by admissionNo
   const student = await Student.findOne({ admissionNo: cleanAdmNo });
   if (!student) {
     throw ApiError.notFound(`No official student record found for Admission No '${cleanAdmNo}'`);
   }
 
-  // Verify guardian phone matches registered student records
   const registeredPhone = student.parentPhone || (student.guardianDetails && student.guardianDetails.phone);
   if (registeredPhone && registeredPhone.slice(-10) !== cleanPhone.slice(-10)) {
     throw ApiError.forbidden('Guardian phone number does not match registered student records');
   }
 
-  // Find or create User with role PARENT
   const username = `parent_${cleanPhone.slice(-10)}`;
   let parentUser = await User.findOne({
     $or: [{ phone: cleanPhone }, { username }],
@@ -707,7 +618,6 @@ const activateParentAccount = asyncHandler(async (req, res) => {
     await parentUser.save();
   }
 
-  // Link student to parent User and mark activation
   student.parentUser = parentUser._id;
   if (!student.parentPortalAccess) student.parentPortalAccess = {};
   student.parentPortalAccess.isActivated = true;
@@ -733,11 +643,6 @@ const activateParentAccount = asyncHandler(async (req, res) => {
   });
 });
 
-/**
- * @route   POST /api/v1/auth/student/activate
- * @desc    Activate Student Self-Service Portal Account (Specification 20.3)
- * @access  Public
- */
 const activateStudentAccount = asyncHandler(async (req, res) => {
   const { admissionNo, dob, activationCode, password } = req.body;
 
@@ -752,7 +657,6 @@ const activateStudentAccount = asyncHandler(async (req, res) => {
     throw ApiError.notFound(`No official student record found for Admission No '${cleanAdmNo}'`);
   }
 
-  // Find or create User with role STUDENT
   const username = cleanAdmNo.toLowerCase().replace(/[^a-z0-9]/g, '');
   let studentUser = await User.findOne({ username });
 
@@ -778,7 +682,6 @@ const activateStudentAccount = asyncHandler(async (req, res) => {
     await studentUser.save();
   }
 
-  // Link student to User and mark activation
   student.user = studentUser._id;
   if (!student.studentPortalAccess) student.studentPortalAccess = {};
   student.studentPortalAccess.isActivated = true;
@@ -803,11 +706,6 @@ const activateStudentAccount = asyncHandler(async (req, res) => {
   });
 });
 
-/**
- * @route   POST /api/v1/auth/verify-otp
- * @desc    Verify 6-digit OTP code submitted for preAuthToken and issue JWT tokens
- * @access  Public (Pre-Auth)
- */
 const verifyOtp = asyncHandler(async (req, res) => {
   const { preAuthToken, otp } = req.body;
 
@@ -834,7 +732,6 @@ const verifyOtp = asyncHandler(async (req, res) => {
     });
   }
 
-  // Check expiry
   if (new Date() > new Date(record.expiresAt)) {
     return res.status(400).json({
       success: false,
@@ -843,7 +740,6 @@ const verifyOtp = asyncHandler(async (req, res) => {
     });
   }
 
-  // Check max attempts
   if (record.attempts >= (record.maxAttempts || 3)) {
     return res.status(400).json({
       success: false,
@@ -872,7 +768,6 @@ const verifyOtp = asyncHandler(async (req, res) => {
     });
   }
 
-  // Success: invalidate OTP record so it cannot be reused
   deleteFallbackOtp(preAuthToken);
   if (isDbConnected() && record._id) {
     try {
@@ -899,7 +794,6 @@ const verifyOtp = asyncHandler(async (req, res) => {
     throw ApiError.forbidden('User account is deactivated or unavailable.', 'ACCOUNT_DEACTIVATED');
   }
 
-  // Generate permanent tokens
   const accessToken = user.generateAccessToken();
   const refreshToken = user.generateRefreshToken();
 
@@ -913,7 +807,6 @@ const verifyOtp = asyncHandler(async (req, res) => {
 
   const portalInfo = getRolePortalMapping(user.role);
 
-  // Authoritative Role & Permission Verification against requested portal
   const rawRequestedPortal = (req.body.requestedPortal || record.requestedPortal || req.query.portal || '').trim().toLowerCase();
   const requestedPortal = normalizePortalName(rawRequestedPortal);
 
@@ -926,7 +819,6 @@ const verifyOtp = asyncHandler(async (req, res) => {
     );
   }
 
-  // Derive tailored destination portal and redirect URL
   let targetPortal = portalInfo.portal;
   let targetRedirectUrl = portalInfo.redirectUrl;
 
@@ -968,11 +860,6 @@ const verifyOtp = asyncHandler(async (req, res) => {
   });
 });
 
-/**
- * @route   POST /api/v1/auth/resend-otp
- * @desc    Resend a fresh 6-digit OTP code to registered destination with 45s cooldown
- * @access  Public (Pre-Auth)
- */
 const resendOtp = asyncHandler(async (req, res) => {
   const { preAuthToken } = req.body;
 
@@ -1037,10 +924,6 @@ const resendOtp = asyncHandler(async (req, res) => {
   });
 });
 
-/**
- * @route   GET/POST /api/v1/auth/dev-otp
- * @desc    Get active OTP code on screen during pre-deployment when WhatsApp/SMS is offline
- */
 const getDevOtp = asyncHandler(async (req, res) => {
   const preAuthToken = req.query.preAuthToken || req.body.preAuthToken;
   let record = null;
@@ -1068,11 +951,6 @@ const getDevOtp = asyncHandler(async (req, res) => {
   });
 });
 
-/**
- * @route   POST /api/v1/auth/send-verification-email
- * @desc    Send 6-digit email verification OTP
- * @access  Public / Authenticated
- */
 const sendVerificationEmail = asyncHandler(async (req, res) => {
   let user = null;
   if (req.user) {
@@ -1097,7 +975,6 @@ const sendVerificationEmail = asyncHandler(async (req, res) => {
   const otp = user.createEmailVerificationOtp();
   await user.save({ validateBeforeSave: false });
 
-  // Log audit
   AuditLog.create({
     user: user.fullName || user.username,
     userId: user._id,
@@ -1120,11 +997,6 @@ const sendVerificationEmail = asyncHandler(async (req, res) => {
   });
 });
 
-/**
- * @route   POST /api/v1/auth/verify-email
- * @desc    Verify email address using 6-digit OTP
- * @access  Public / Authenticated
- */
 const verifyEmail = asyncHandler(async (req, res) => {
   const { otp, email, username } = req.body;
   if (!otp) {
@@ -1178,11 +1050,6 @@ const verifyEmail = asyncHandler(async (req, res) => {
   });
 });
 
-/**
- * @route   POST /api/v1/auth/complete-onboarding
- * @desc    Record completion of interactive onboarding tour
- * @access  Authenticated
- */
 const completeOnboarding = asyncHandler(async (req, res) => {
   const user = await User.findById(req.user._id);
   if (!user) {

@@ -1,8 +1,4 @@
 @import url('liquid-toggles.css');
-/* ==========================================================================
-   Sri Vidya E.M High School - Dedicated Teacher Portal Stylesheet
-   Color Palette: Emerald Forest Green (#064E3B / #047857 / #059669 / #10B981) with White & Clean Slate
-   ========================================================================== */
 
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap');
 
@@ -101,13 +97,11 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-/* Layout */
 .portal-layout {
   display: flex;
   min-height: 100vh;
 }
 
-/* Sidebar */
 .portal-sidebar {
   width: var(--sidebar-width);
   background: var(--color-bg-surface);
@@ -164,7 +158,6 @@ body {
   color: var(--color-text-muted);
 }
 
-/* Teacher Profile Card in Sidebar */
 .teacher-profile-pill {
   padding: 1rem 1.25rem;
   margin: 1rem;
@@ -201,7 +194,6 @@ body {
   font-weight: 600;
 }
 
-/* Sidebar Menu */
 .sidebar-menu {
   flex: 1;
   overflow-y: auto;
@@ -309,7 +301,6 @@ body {
   font-weight: 600;
 }
 
-/* Sidebar Footer */
 .sidebar-footer {
   padding: 0.75rem 1rem;
   border-top: 1px solid var(--color-border);
@@ -332,7 +323,6 @@ body {
   text-decoration: underline;
 }
 
-/* Main Container */
 .portal-main {
   flex: 1;
   margin-left: var(--sidebar-width);
@@ -341,7 +331,6 @@ body {
   min-width: 0;
 }
 
-/* Header */
 .portal-header {
   height: var(--header-height);
   background: var(--color-bg-surface);
@@ -486,7 +475,6 @@ body {
   color: #fff;
 }
 
-/* Content Area */
 .portal-content {
   flex: 1;
   padding: 2rem;
@@ -506,7 +494,6 @@ body {
   to { opacity: 1; transform: translateY(0); }
 }
 
-/* Teacher Dashboard Header Banner */
 .teacher-welcome-banner {
   background: linear-gradient(135deg, #064E3B 0%, #047857 50%, #059669 100%);
   color: #FFFFFF;
@@ -587,7 +574,6 @@ body {
   color: #A7F3D0;
 }
 
-/* Dedicated Live IST Clock Pill - Big & Executive Quality */
 .tw-pill.live-clock-pill {
   background: #FFFFFF !important;
   color: #064E3B !important;
@@ -612,7 +598,6 @@ body {
   font-size: 1.15rem !important;
 }
 
-/* Dark Mode - Big Luminous Emerald IST Clock */
 [data-theme="dark"] .tw-pill.live-clock-pill,
 .dark-mode .tw-pill.live-clock-pill {
   background: rgba(6, 78, 59, 0.8) !important;
@@ -636,9 +621,6 @@ body {
   font-size: 1.15rem !important;
 }
 
-/* 4 Metrics Quad Cards:
-   [My Classes: 4] [Students: 152] [Attendance: 96%] [Pending: 8 Tasks] */
-/* Base Card Component */
 .card {
   background: var(--color-bg-card);
   border: 1px solid var(--color-border);
@@ -650,7 +632,6 @@ body {
   box-sizing: border-box;
 }
 
-/* Universal Spacing & Utility Classes */
 .p-0 { padding: 0 !important; }
 .p-1 { padding: 0.25rem !important; }
 .p-2 { padding: 0.5rem !important; }
@@ -740,7 +721,6 @@ body {
   color: var(--color-text-muted);
 }
 
-/* Today's Classes Schedule Card */
 .today-classes-card {
   background: var(--color-bg-card);
   border: 1px solid var(--color-border);
@@ -830,7 +810,6 @@ body {
   gap: 0.6rem;
 }
 
-/* 2-Column Split: [Pending Work | Announcements] */
 .teacher-two-col {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -939,7 +918,6 @@ body {
   margin-top: 0.4rem;
 }
 
-/* Tables & Shared Controls */
 .table-container {
   overflow-x: auto;
   background: var(--color-bg-card);
@@ -1021,7 +999,6 @@ body {
   border-bottom-color: var(--color-primary);
 }
 
-/* Attendance Counter & Live Badges */
 #attendanceLiveCounter {
   display: inline-flex;
   align-items: center;
@@ -1029,7 +1006,6 @@ body {
   flex-wrap: wrap;
 }
 
-/* Attendance Marking Grid */
 .att-marker-toggle {
   display: inline-flex;
   align-items: center;
@@ -1081,7 +1057,6 @@ body {
   box-shadow: 0 1px 3px rgba(245, 158, 11, 0.35);
 }
 
-/* Marks Entry Input */
 .marks-input {
   width: 65px;
   padding: 0.35rem 0.5rem;
@@ -1100,7 +1075,6 @@ body {
   box-shadow: 0 0 0 2px rgba(29, 78, 216, 0.2);
 }
 
-/* Modals */
 .modal-backdrop {
   position: fixed;
   top: 0;
@@ -1204,7 +1178,6 @@ body {
   gap: 1rem;
 }
 
-/* Toast */
 .toast-container {
   position: fixed;
   bottom: 24px;
@@ -1267,7 +1240,6 @@ body {
   font-size: 0.8rem;
 }
 
-/* Badges */
 .portal-badge {
   display: inline-flex;
   align-items: center;
@@ -1283,7 +1255,6 @@ body {
 .badge-danger { background: var(--color-accent-red-subtle); color: var(--color-accent-red); }
 .badge-primary { background: var(--color-primary-subtle); color: var(--color-primary); }
 
-/* Responsive */
 @media (max-width: 992px) {
   .metrics-quad { grid-template-columns: repeat(2, 1fr); }
   .teacher-two-col { grid-template-columns: 1fr; }
@@ -1298,9 +1269,6 @@ body {
   .metrics-quad { grid-template-columns: 1fr; }
 }
 
-/* ==========================================
-   CHARTS & VISUAL ANALYTICS (PIE & BAR)
-   ========================================== */
 .chart-card-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -1343,7 +1311,6 @@ body {
   margin: 0;
 }
 
-/* Donut / Pie Chart */
 .pie-chart-wrap {
   display: flex;
   align-items: center;
@@ -1399,7 +1366,6 @@ body {
   margin-top: 0.15rem;
 }
 
-/* Pie Chart Legend */
 .chart-legend {
   display: flex;
   flex-direction: column;
@@ -1442,7 +1408,6 @@ body {
   color: var(--color-text-dark);
 }
 
-/* Horizontal Bar Graph */
 .bar-chart-container {
   display: flex;
   flex-direction: column;
@@ -1512,9 +1477,6 @@ body {
   background: linear-gradient(90deg, #EF4444, #DC2626);
 }
 
-/* =============================================================================
-   UNIFIED PORTALS SWITCHER HUB (ALL IN ONE PLACE)
-   ============================================================================= */
 .portals-hub-wrapper {
   position: relative;
 }
@@ -1561,7 +1523,6 @@ body {
   transform: rotate(180deg);
 }
 
-/* Portals Hub Flyout Menu */
 .portals-hub-flyout {
   position: absolute;
   top: calc(100% + 10px);
@@ -1744,7 +1705,6 @@ body {
   color: #059669;
 }
 
-
 .sidebar-brand {
   display: flex !important;
   align-items: center !important;
@@ -1780,7 +1740,6 @@ body {
   border-color: #EF4444;
 }
 
-/* Sidebar Backdrop Overlay on Mobile */
 .portal-backdrop {
   display: none;
   position: fixed;
@@ -1824,10 +1783,6 @@ body {
   }
 }
 
-
-/* =============================================================================
-   PROFESSIONAL TEACHER PROFILE STYLES
-   ============================================================================= */
 .prof-clean-container {
   max-width: 1100px;
   margin: 0 auto;
@@ -1836,7 +1791,6 @@ body {
   gap: 1.5rem;
 }
 
-/* Hero Header Card */
 .prof-hero-card {
   background: linear-gradient(135deg, #064E3B 0%, #047857 50%, #059669 100%);
   border-radius: 16px;
@@ -1907,7 +1861,6 @@ body {
   gap: 0.4rem;
 }
 
-/* Modern Profile Tab Strip */
 .prof-tab-nav {
   display: flex;
   background: var(--color-bg-card);
@@ -1950,7 +1903,6 @@ body {
   color: #ffffff;
 }
 
-/* Card Sections */
 .prof-section-card {
   background: var(--color-bg-card);
   border: 1px solid var(--color-border);
@@ -1990,7 +1942,6 @@ body {
   margin: 0.25rem 0 0 0;
 }
 
-/* Clean Form Grid */
 .prof-grid-2 {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -2057,7 +2008,6 @@ body {
   gap: 4px;
 }
 
-/* Security notice block */
 .prof-security-note {
   background: var(--color-bg-subtle);
   border: 1px solid var(--color-border);
@@ -2079,7 +2029,6 @@ body {
   margin-top: 0.1rem;
 }
 
-/* Action button bar */
 .prof-actions-bar {
   display: flex;
   align-items: center;
@@ -2122,7 +2071,6 @@ body {
   }
 }
 
-/* Class Quick Selector Pills */
 .btn-class-pill {
   padding: 0.45rem 1rem;
   border-radius: 9999px;
@@ -2152,7 +2100,6 @@ body {
   color: #fff !important;
 }
 
-/* Class Information Banner - Adaptive Light & Dark Mode */
 .class-info-card {
   background: var(--color-bg-card);
   border: 1px solid var(--color-border);
@@ -2200,7 +2147,6 @@ body {
   box-shadow: 0 4px 14px rgba(5, 150, 105, 0.25);
 }
 
-/* Specific Dark Mode Enhancements */
 [data-theme="dark"] .class-info-card {
   background: var(--color-bg-card);
   border-color: var(--color-border);
@@ -2259,7 +2205,6 @@ body {
   color: #ffffff !important;
 }
 
-/* Sidebar User Card with Dark Theme support */
 .sidebar-user-card {
   padding: 0.85rem 1.15rem;
   border-top: 1px solid var(--color-border);
@@ -2296,15 +2241,6 @@ body {
   border-color: rgba(239, 68, 68, 0.4) !important;
 }
 
-
-/* ==========================================================================
-   STANDARD PAGE LAYOUT ARCHITECTURE & REUSABLE UI SYSTEM
-   Spec: Breadcrumb, Title, Description, Primary Action, Summary Cards,
-         Search, Filters, Records Table, Row Actions, Bulk Actions,
-         Pagination, Export/Print, Activity History, Empty State, Loading/Error
-   ========================================================================== */
-
-/* 1. Breadcrumbs */
 .header-breadcrumb .crumb-link {
   color: var(--color-text-muted, #64748b);
   text-decoration: none;
@@ -2320,7 +2256,6 @@ body {
   color: var(--color-text-dark, #0f172a);
 }
 
-/* 2. Standard Page Header */
 .standard-page-header {
   display: flex;
   align-items: flex-start;
@@ -2361,7 +2296,6 @@ body {
   flex-wrap: wrap;
 }
 
-/* 3. Standard Summary Cards Grid */
 .standard-summary-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
@@ -2425,7 +2359,6 @@ body {
   gap: 0.35rem;
 }
 
-/* 4. Filter Toolbar & Search */
 .standard-filter-toolbar {
   background: var(--color-bg-surface, #ffffff);
   border: 1px solid var(--color-border, #e2e8f0);
@@ -2492,7 +2425,6 @@ body {
   gap: 0.5rem;
 }
 
-/* 5. Bulk Actions Floating/Docked Toolbar */
 .bulk-actions-toolbar {
   position: fixed;
   bottom: 24px;
@@ -2569,7 +2501,6 @@ body {
   text-decoration: underline;
 }
 
-/* 6. Standard Reusable Pagination */
 .portal-pagination {
   display: flex;
   align-items: center;
@@ -2639,7 +2570,6 @@ body {
   cursor: not-allowed;
 }
 
-/* 7. Standard Empty State Component */
 .empty-state {
   text-align: center;
   padding: 3.5rem 1.5rem;
@@ -2681,7 +2611,6 @@ body {
   flex-wrap: wrap;
 }
 
-/* 8. Standard Loading & Error States */
 .loading-state {
   text-align: center;
   padding: 3.5rem 1.5rem;
@@ -2741,7 +2670,6 @@ body {
   line-height: 1.5;
 }
 
-/* 9. Activity History Timeline & Drawer */
 .activity-timeline {
   position: relative;
   padding-left: 24px;
@@ -2801,10 +2729,6 @@ body {
   line-height: 1.45;
 }
 
-/* ==========================================================================
-   10. STANDARD RECORD ACTIONS (VIEW, EDIT, SUBMIT, APPROVE, REJECT,
-       RETURN FOR CORRECTION, ARCHIVE, RESTORE, DOWNLOAD, PRINT, HISTORY, MORE)
-   ========================================================================== */
 .record-actions-wrap {
   display: inline-flex;
   align-items: center;
@@ -2950,7 +2874,6 @@ body {
   color: #1e293b;
 }
 
-/* More Actions Floating Dropdown Menu */
 .record-more-menu {
   display: none;
   position: absolute;
@@ -3031,9 +2954,6 @@ body {
   margin: 4px 0;
 }
 
-/* ==========================================================================
-   11. STANDARD APPROVAL & LIFECYCLE STATUS MODEL
-   ========================================================================== */
 .portal-status-badge {
   display: inline-flex;
   align-items: center;
@@ -3052,8 +2972,6 @@ body {
   font-size: 0.75rem;
 }
 
-/* Core Standard Statuses */
-/* 1. Draft: Created but not submitted */
 .status-draft,
 .badge-status-draft {
   background: #f1f5f9;
@@ -3061,7 +2979,6 @@ body {
   border-color: #cbd5e1;
 }
 
-/* 2. Submitted: Waiting for review */
 .status-submitted,
 .badge-status-submitted {
   background: #f0f9ff;
@@ -3069,7 +2986,6 @@ body {
   border-color: #bae6fd;
 }
 
-/* 3. Under Review: Being verified */
 .status-under-review,
 .badge-status-under-review {
   background: #eef2ff;
@@ -3091,7 +3007,6 @@ body {
   100% { transform: scale(0.9); opacity: 0.6; }
 }
 
-/* 4. Returned for Correction: More information is required */
 .status-returned,
 .status-returned-for-correction,
 .badge-status-returned,
@@ -3101,7 +3016,6 @@ body {
   border-color: #fde68a;
 }
 
-/* 5. Approved: Authorized to proceed */
 .status-approved,
 .badge-status-approved {
   background: #f0fdf4;
@@ -3109,7 +3023,6 @@ body {
   border-color: #bbf7d0;
 }
 
-/* 6. Rejected: Request declined */
 .status-rejected,
 .badge-status-rejected {
   background: #fef2f2;
@@ -3117,7 +3030,6 @@ body {
   border-color: #fecaca;
 }
 
-/* 7. Completed: Process finished */
 .status-completed,
 .badge-status-completed {
   background: #ecfdf5;
@@ -3125,7 +3037,6 @@ body {
   border-color: #a7f3d0;
 }
 
-/* 8. Cancelled: Process cancelled with a recorded reason */
 .status-cancelled,
 .badge-status-cancelled {
   background: #fafaf9;
@@ -3133,7 +3044,6 @@ body {
   border-color: #e7e5e4;
 }
 
-/* 9. Archived: Retained but no longer active */
 .status-archived,
 .badge-status-archived {
   background: #f8fafc;
@@ -3141,8 +3051,6 @@ body {
   border-color: #cbd5e1;
 }
 
-/* Domain-Specific Adapted Statuses */
-/* Admissions: Documents Pending */
 .status-documents-pending,
 .badge-status-documents-pending {
   background: #fff7ed;
@@ -3150,7 +3058,6 @@ body {
   border-color: #fed7aa;
 }
 
-/* Admissions: Offered */
 .status-offered,
 .badge-status-offered {
   background: #faf5ff;
@@ -3158,7 +3065,6 @@ body {
   border-color: #e9d5ff;
 }
 
-/* Admissions: Accepted */
 .status-accepted,
 .badge-status-accepted {
   background: #eff6ff;
@@ -3166,7 +3072,6 @@ body {
   border-color: #bfdbfe;
 }
 
-/* Admissions: Enrolled */
 .status-enrolled,
 .badge-status-enrolled {
   background: #ecfdf5;
@@ -3175,7 +3080,6 @@ body {
   font-weight: 800;
 }
 
-/* Financial: Partial */
 .status-partial,
 .badge-status-partial {
   background: #fffbeb;
@@ -3183,19 +3087,12 @@ body {
   border-color: #fcd34d;
 }
 
-/* Financial: Reversed / Credit Note */
 .status-reversed,
 .badge-status-reversed {
   background: #fef2f2;
   color: #991b1b;
   border-color: #fca5a5;
 }
-
-
-/* ==========================================================================
-   UNIVERSAL PERMISSIONS & RECORD SCOPE SYSTEM
-   Supports 9 Universal Permissions & 5 Granular Record Scopes
-   ========================================================================== */
 
 .univ-perm-badge-group {
   display: flex;
@@ -3271,7 +3168,6 @@ body {
   color: #4f46e5;
 }
 
-/* Record Scope Badges */
 .univ-scope-pill {
   display: inline-flex;
   align-items: center;
@@ -3314,7 +3210,6 @@ body {
   border: 1px solid #fde68a;
 }
 
-/* Segregation of Duties / Anti-Self-Approval Pill */
 .univ-segregation-pill {
   display: inline-flex;
   align-items: center;
@@ -3341,7 +3236,6 @@ body {
   border: 1px solid #e2e8f0;
 }
 
-/* Simulator Styles */
 .perm-simulator-card {
   background: #ffffff;
   border: 1.5px solid #e2e8f0;
@@ -3386,9 +3280,6 @@ body {
   line-height: 1.3;
 }
 
-/* ==========================================================================
-   TEACHER PORTAL - MODERN INSTITUTIONAL DESIGN SYSTEM OVERHAUL
-   ========================================================================== */
 body, .teacher-layout, .portal-main {
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif !important;
   -webkit-font-smoothing: antialiased !important;
@@ -3493,9 +3384,6 @@ body, .teacher-layout, .portal-main {
   box-shadow: 0 4px 10px rgba(5, 150, 105, 0.25) !important;
 }
 
-/* ==========================================================================
-   Teacher Portal - Authoritative Dark Theme Overrides for Tab Strip & Controls
-   ========================================================================== */
 [data-theme="dark"] .tab-strip {
   background: #0B1426 !important;
   border-color: #1E293B !important;
@@ -3539,7 +3427,7 @@ body, .teacher-layout, .portal-main {
 }
 
 [data-theme="dark"] .brand-sub {
-  color: #34D399 !important; /* Emerald green accent for Faculty Portal in dark mode */
+  color: #34D399 !important; 
   text-shadow: 0 0 10px rgba(52, 211, 153, 0.4) !important;
   font-weight: 800 !important;
 }
@@ -3548,9 +3436,6 @@ body, .teacher-layout, .portal-main {
   color: #94A3B8 !important;
 }
 
-
-
-/* Executive Premium Header Logout Button */
 .btn-header-signout {
   flex-shrink: 0 !important;
   display: inline-flex !important;
@@ -3641,9 +3526,6 @@ body, .teacher-layout, .portal-main {
   gap: 1rem;
 }
 
-/* ==========================================================================
-   FACULTY PORTAL RESPONSIVE GRID SYSTEM
-   ========================================================================== */
 .row {
   display: flex !important;
   flex-wrap: wrap !important;
@@ -3708,13 +3590,6 @@ body, .teacher-layout, .portal-main {
   .col-lg-3 { flex: 0 0 25% !important; max-width: 25% !important; width: 25% !important; box-sizing: border-box !important; }
 }
 
-
-/* ==========================================================================
-   SRI VIDYA ERP - MASTER UI ALIGNMENT, TYPOGRAPHY & ICON CONSISTENCY SYSTEM
-   Standardized layout tokens, icon spacing, table alignment & form precision
-   ========================================================================== */
-
-/* 1. Universal Legacy Utility Compatibility (Restores proper margins across all icons & badges) */
 .mr-0 { margin-right: 0 !important; }
 .mr-1 { margin-right: 0.25rem !important; }
 .mr-2 { margin-right: 0.5rem !important; }
@@ -3726,7 +3601,6 @@ body, .teacher-layout, .portal-main {
 .ml-3 { margin-left: 1rem !important; }
 .ml-4 { margin-left: 1.5rem !important; }
 
-/* 2. Precision Icon Centering & Vertical Balance */
 .fa, .fa-solid, .fa-regular, .fa-brands, .fas, .far {
   display: inline-flex;
   align-items: center;
@@ -3743,7 +3617,6 @@ body, .teacher-layout, .portal-main {
   line-height: 1;
 }
 
-/* 3. Master Table Cell & Header Alignment */
 .table, .dash-table, .data-table, .pa-table {
   border-collapse: separate;
   border-spacing: 0;
@@ -3770,7 +3643,6 @@ body, .teacher-layout, .portal-main {
   line-height: 1.45;
 }
 
-/* 4. Action Button Containers & Single-Row Preservation */
 .record-actions-wrap {
   display: inline-flex;
   align-items: center;
@@ -3784,7 +3656,6 @@ body, .teacher-layout, .portal-main {
   min-width: 200px;
 }
 
-/* 5. Centralized Button Layout & Consistent Focus States */
 .btn {
   display: inline-flex;
   align-items: center;
@@ -3794,7 +3665,6 @@ body, .teacher-layout, .portal-main {
   line-height: 1.25;
 }
 
-/* 6. Consistent Form Labels & Inputs */
 .form-label {
   display: inline-flex;
   align-items: center;
@@ -3820,7 +3690,6 @@ body, .teacher-layout, .portal-main {
   box-shadow: 0 0 0 3px rgba(29, 78, 216, 0.14);
 }
 
-/* 7. Badges & Status Indicators */
 .badge {
   display: inline-flex;
   align-items: center;
@@ -3831,8 +3700,6 @@ body, .teacher-layout, .portal-main {
   vertical-align: middle;
 }
 
-
-/* 8. Universal Table Checkbox, Switch & Radio Centering */
 .table td .form-check-input,
 .table th .form-check-input,
 td.text-center .form-check-input,
@@ -3880,7 +3747,6 @@ th.text-center .form-check-input:focus {
   border-color: var(--color-primary, #1d4ed8) !important;
 }
 
-/* 9. Permission Matrix Table Symmetry & Column Balancing */
 #tablePermissionsMatrix th.text-center,
 #tablePermissionsMatrix td.text-center {
   text-align: center !important;
@@ -3893,7 +3759,6 @@ th.text-center .form-check-input:focus {
   min-width: 200px;
 }
 
-/* Form Select Standardization */
 select.form-control,
 select.form-select {
   background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23475569' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e") !important;

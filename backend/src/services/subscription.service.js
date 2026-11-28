@@ -1,14 +1,8 @@
-/**
- * Sri Vidya Educational Trust - Subscriptions, Plans & Entitlements Service
- * Module 10: Multi-Tenant Commercial Plans Directory, Institution Subscriptions,
- * Usage Tracking, and Statutory Record Non-Disruption Guarantees
- */
 
 const mongoose = require('mongoose');
 const { Plan, Subscription } = require('../models/subscription.model');
 const PlatformAuditService = require('./platformAudit.service');
 
-// In-memory fallback stores
 const inMemoryPlans = [];
 const inMemorySubscriptions = [];
 
@@ -232,7 +226,6 @@ class SubscriptionService {
     }
   }
 
-  // Summary Metrics for Dashboard
   static async getSubscriptionSummary() {
     await this.seedIfEmpty();
     const plansRes = await this.listPlans();
@@ -254,10 +247,6 @@ class SubscriptionService {
       statutoryGuarantee: 'AP_EDU_CODE_ACTIVE_NON_DISRUPTION'
     };
   }
-
-  // =========================================================================
-  // 10.1 Commercial Plans Directory Operations
-  // =========================================================================
 
   static async listPlans(query = {}) {
     await this.seedIfEmpty();
@@ -397,10 +386,6 @@ class SubscriptionService {
   static async archivePlan(planId, operator = 'Platform Administrator') {
     return this.updatePlan(planId, { status: 'Archived' }, operator);
   }
-
-  // =========================================================================
-  // 10.2 Institution Subscriptions Operations
-  // =========================================================================
 
   static async listSubscriptions(query = {}) {
     await this.seedIfEmpty();
@@ -577,10 +562,6 @@ class SubscriptionService {
     return { success: true, adjustment, data: sub };
   }
 
-  /**
-   * Suspend or Cancel According to Contract
-   * Invariant: Section 10.3 Non-disruption guarantee
-   */
   static async suspendOrCancelSubscription(subscriptionId, action = 'Suspend', reason = '', operator = 'Platform Administrator') {
     await this.seedIfEmpty();
     const subRes = await this.getSubscriptionById(subscriptionId);
@@ -590,7 +571,6 @@ class SubscriptionService {
     const isCancel = action.toLowerCase().includes('cancel');
     sub.subscriptionStatus = isCancel ? 'Cancelled' : 'Suspended';
     
-    // Invariant Guarantee: Contractual notes explicitly mandate preserved read & export access
     sub.contractualNotes = `[${new Date().toISOString().slice(0, 10)}] ${action} Action executed: ${reason || 'Contractual adjustment'}. AP Statutory Invariant: Read & Export access unconditionally preserved.`;
 
     if (this.isMongoReady() && typeof sub.save === 'function') {
@@ -600,10 +580,6 @@ class SubscriptionService {
     await this._logSubAudit(isCancel ? 'SUBSCRIPTION_CANCELLED' : 'SUBSCRIPTION_SUSPENDED', sub.subscriptionId, sub.institutionId, sub.planName, operator, `Action: ${action}. Reason: ${reason}. Access preserved under statutory guarantee.`);
     return { success: true, status: sub.subscriptionStatus, data: sub };
   }
-
-  // =========================================================================
-  // 10.3 Usage and Entitlements
-  // =========================================================================
 
   static async getUsageAndEntitlements(institutionId = 'INST-001') {
     await this.seedIfEmpty();
@@ -671,7 +647,6 @@ class SubscriptionService {
     };
   }
 
-  // Internal Audit Logger Helper
   static async _logPlanAudit(action, planId, planName, operator, reason) {
     try {
       await PlatformAuditService.logEvent({

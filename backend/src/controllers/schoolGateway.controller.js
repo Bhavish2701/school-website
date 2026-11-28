@@ -1,7 +1,3 @@
-/**
- * Sri Vidya Educational Trust - School Gateways Controller
- * Module 18: Navigation Gateways, Identity Scoping, and Decoupled Telemetry
- */
 
 const SchoolGatewayService = require('../services/schoolGateway.service');
 
@@ -21,7 +17,6 @@ const verifyAdministrationAccess = async (req, res) => {
       role: req.body?.role || req.user?.role || 'GUEST',
       institutionId: req.body?.institutionId || req.user?.institutionId || req.query.institutionId || 'INST-001'
     };
-    // Pass query params to check for token/password leakage
     const result = SchoolGatewayService.verifyAdministrationAccess(user, { ...req.query, ...req.body });
     return res.status(result.statusCode || 200).json(result);
   } catch (err) {
@@ -35,7 +30,6 @@ const verifyFacultyAccess = async (req, res) => {
       role: req.body?.role || req.user?.role || 'GUEST',
       institutionId: req.body?.institutionId || req.user?.institutionId || req.query.institutionId || 'INST-001'
     };
-    // Pass query params to check for token/password leakage
     const result = SchoolGatewayService.verifyFacultyAccess(user, { ...req.query, ...req.body });
     return res.status(result.statusCode || 200).json(result);
   } catch (err) {

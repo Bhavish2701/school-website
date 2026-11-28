@@ -1,7 +1,3 @@
-/**
- * Policy Version Model
- * Tracks official versioning, change audits, and publication status for all institutional compliance charters.
- */
 const mongoose = require('mongoose');
 
 const policyVersionSchema = new mongoose.Schema(

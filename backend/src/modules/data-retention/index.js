@@ -1,7 +1,3 @@
-/**
- * Statutory Data Retention & Requests - Module Aggregator
- * Exports all 6 architectural layers
- */
 
 const routes = require('./data-retention.routes');
 const controller = require('./data-retention.controller');

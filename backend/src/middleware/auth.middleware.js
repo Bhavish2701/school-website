@@ -1,6 +1,3 @@
-/**
- * Re-export Authentication & RBAC Middlewares
- */
 const {
   authenticateUser,
   authorizeRoles,

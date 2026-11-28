@@ -1,9 +1,3 @@
-/**
- * Teacher Module Routes
- *
- * Architecture:
- * Route → Middleware → Controller → Service → Model
- */
 const express = require('express');
 const router = express.Router();
 const teacherController = require('../controllers/teacher.controller');
@@ -20,7 +14,6 @@ const {
   validateCreateNotification,
 } = require('../validators/teacher.validator');
 
-// 1. Current Teacher Self-Service & Workspace Routes (Restricted to Faculty & Management)
 router.get(
   '/me',
   authenticateUser,
@@ -40,7 +33,6 @@ router.get(
   teacherController.getDashboard
 );
 
-// 2. Leave Management Routes (Faculty & Management)
 router
   .route('/leaves')
   .get(
@@ -61,7 +53,6 @@ router.patch(
   teacherController.reviewLeave
 );
 
-// 3. Notifications & Announcements Routes
 router
   .route('/notifications')
   .get(
@@ -82,7 +73,6 @@ router.patch(
   teacherController.markNotificationRead
 );
 
-// 4. Timetable Management Routes
 router
   .route('/:id/timetable')
   .get(
@@ -96,7 +86,6 @@ router
     teacherController.updateTimetable
   );
 
-// 5. Teacher CRUD Routes
 router
   .route('/')
   .get(

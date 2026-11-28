@@ -1,7 +1,3 @@
-/**
- * Seed Timetable, Active Substitutions, and Examination Schedules
- * For Sri Vidya English Medium High School
- */
 const mongoose = require('mongoose');
 require('dotenv').config({ path: 'backend/.env' });
 const uri = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/srividya_school_db';
@@ -18,7 +14,6 @@ async function seed() {
   const principal = await User.findOne({ role: 'PRINCIPAL' }) || await User.findOne({ username: 'principal' });
   const createdBy = principal ? principal._id : new mongoose.Types.ObjectId();
 
-  // 1. Seed Timetable for Class X-A
   await Timetable.deleteMany({ className: 'Class X-A' });
   console.log('[Seed] Cleared previous Class X-A timetable records');
 
@@ -159,7 +154,6 @@ async function seed() {
   await Timetable.insertMany(timetableEntries);
   console.log(`[Seed] Inserted ${timetableEntries.length} timetable periods for Class X-A.`);
 
-  // 2. Seed Active Substitution for Today (2026-11-09)
   await Substitution.deleteMany({});
   const today = new Date();
   const todayUtc = new Date(Date.UTC(today.getFullYear(), today.getMonth(), today.getDate()));
@@ -186,12 +180,10 @@ async function seed() {
   });
   console.log('[Seed] Inserted active substitution:', sub.substitutionId);
 
-  // 3. Seed Comprehensive Examination Calendar
   await Exam.deleteMany({});
   console.log('[Seed] Cleared previous exam records');
 
   const examsData = [
-    // Past completed exams (Must be excluded automatically!)
     {
       name: 'Quarterly Summative Assessment (SA-1)',
       examType: 'SUMMATIVE_1',
@@ -224,7 +216,6 @@ async function seed() {
       status: 'COMPLETED',
       createdBy,
     },
-    // Active Upcoming Examinations (Must be displayed in chronological order!)
     {
       name: 'Half-Yearly Examinations & Practicals',
       examType: 'SUMMATIVE_2',

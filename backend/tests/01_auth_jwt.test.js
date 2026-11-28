@@ -1,12 +1,3 @@
-/**
- * Test Suite 01: Authentication & JWT Security Tests
- * Covers:
- * - Login (Success, Invalid credentials, Validation errors)
- * - Protected routes (/auth/me)
- * - JWT validation (Valid, Missing, Malformed, Expired)
- * - Password change (Success, Validation errors, Incorrect old password)
- * - Logout
- */
 const request = require('supertest');
 const app = require('../src/app');
 const {

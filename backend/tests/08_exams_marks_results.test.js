@@ -1,16 +1,3 @@
-/**
- * Test Suite 08: Exams, Marks & Results Module Tests
- * Covers:
- * - Create exam (Management: 201)
- * - Validation error when creating exam with missing fields (422)
- * - Create exam schedule (201)
- * - Teacher entering marks for ASSIGNED class & subject (200)
- * - Teacher-Class Authorization: Teacher entering marks for UNASSIGNED subject/class (403 Forbidden)
- * - Calculate exam results and publish (200)
- * - Student viewing published results (200)
- * - Parent viewing child results with Parent-Child Authorization (200 / 403)
- * - 404 for non-existent exam ID
- */
 const request = require('supertest');
 const mongoose = require('mongoose');
 const app = require('../src/app');
@@ -24,8 +11,8 @@ describe('08 - Exams, Marks & Results Module Test Suite', () => {
 
   beforeAll(async () => {
     fixtures = await seedBaseUsers();
-    student1Id = fixtures.students.studentDoc1._id.toString(); // Class 10-A
-    student2Id = fixtures.students.studentDoc2._id.toString(); // Class 8-C
+    student1Id = fixtures.students.studentDoc1._id.toString();
+    student2Id = fixtures.students.studentDoc2._id.toString();
   });
 
   describe('POST /api/v1/exams (Exam Lifecycle)', () => {
@@ -54,7 +41,6 @@ describe('08 - Exams, Marks & Results Module Test Suite', () => {
         .post('/api/v1/exams')
         .set('Authorization', `Bearer ${fixtures.tokens.principal}`)
         .send({
-          // Missing name, startDate, endDate
           description: 'Incomplete exam payload',
         });
 
@@ -148,7 +134,7 @@ describe('08 - Exams, Marks & Results Module Test Suite', () => {
         .send({
           class: '10',
           section: 'A',
-          subject: 'Science', // Teacher 1 only assigned to Mathematics
+          subject: 'Science',
           marks: [
             {
               studentId: student1Id,

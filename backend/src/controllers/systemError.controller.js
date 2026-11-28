@@ -1,16 +1,7 @@
-/**
- * Centralized System Error Monitoring Controller
- * Handles frontend error logging and error log inspection for executives
- */
 const asyncHandler = require('../utils/asyncHandler');
 const { formatSuccess } = require('../utils/apiResponse');
 const ErrorLog = require('../models/errorLog.model');
 
-/**
- * @route   POST /api/v1/system/client-errors
- * @desc    Ingest frontend runtime error from client browser
- * @access  Public / Authenticated
- */
 const logClientError = asyncHandler(async (req, res) => {
   const { message, stack, endpoint, errorType, metadata } = req.body;
 
@@ -40,11 +31,6 @@ const logClientError = asyncHandler(async (req, res) => {
   res.status(201).json(formatSuccess({ id: log._id }, 'Client error recorded'));
 });
 
-/**
- * @route   GET /api/v1/system/error-logs
- * @desc    Fetch recent system error logs
- * @access  Protected (Super Admin, Principal)
- */
 const getErrorLogs = asyncHandler(async (req, res) => {
   const { limit = 50, source } = req.query;
   const filter = {};

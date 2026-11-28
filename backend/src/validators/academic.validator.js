@@ -1,6 +1,3 @@
-/**
- * Academic Module Request Validators
- */
 const validate = require('../middleware/validate.middleware');
 const { SUBJECT_TYPES } = require('../models/subject.model');
 
@@ -14,7 +11,7 @@ const validateCreateClass = validate({
   className: { required: true, minLength: 1, label: 'Class / Grade Name' },
   section: { required: true, minLength: 1, label: 'Section' },
   roomNumber: { label: 'Room Number' },
-  capacity: { type: 'number', min: 1, label: 'Capacity' },
+  capacity: { type: 'number', min: 1, max: 50, label: 'Capacity' },
 });
 
 const validateCreateSubject = validate({

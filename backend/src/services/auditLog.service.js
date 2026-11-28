@@ -1,12 +1,5 @@
-/**
- * AuditLog Service
- * Specification 22.4: Every sensitive change needs traceability
- * Record the responsible user, timestamp, reason and relevant old/new values
- * for important changes to student details, attendance, marks, financial transactions and permissions.
- */
 const { AuditLog } = require('../models/auditLog.model');
 
-// Blacklist of fields that must NEVER be logged directly in audit values (Rule 22.4 & 22.5)
 const SENSITIVE_MASKED_FIELDS = [
   'password',
   'token',
@@ -18,9 +11,6 @@ const SENSITIVE_MASKED_FIELDS = [
   'secret',
 ];
 
-/**
- * Cleanse any sensitive secrets before logging
- */
 const sanitizeValue = (field, val) => {
   if (val === undefined || val === null) return null;
   const lowerField = String(field).toLowerCase();
@@ -39,22 +29,6 @@ const sanitizeValue = (field, val) => {
   return val;
 };
 
-/**
- * Record an authoritative sensitive change log
- *
- * @param {Object} params
- * @param {string} params.user - Responsible user name
- * @param {string} [params.userId] - Responsible user MongoDB ID
- * @param {string} params.role - Responsible role (e.g. 'Principal', 'Vice Principal', 'Teacher', 'Bursar')
- * @param {string} params.action - Action executed (e.g. 'STUDENT_RECORD_UPDATE', 'ATTENDANCE_CORRECTION')
- * @param {string} params.module - Domain module ('STUDENTS', 'ATTENDANCE', 'MARKS', 'FEES', 'PERMISSIONS')
- * @param {string} params.recordReference - Unique record key (e.g. 'SV-0501', 'TC-2026-004')
- * @param {string} params.reason - Mandatory statutory reason for change
- * @param {Array<{field: string, oldValue: any, newValue: any}>} [params.changedFields] - Specific diff values
- * @param {string} [params.result='SUCCESS'] - Outcome ('SUCCESS', 'DENIED', 'REVERSED')
- * @param {string} [params.ipAddress='127.0.0.1'] - Client IP
- * @param {string} [params.userAgent] - Client device
- */
 const logSensitiveChange = async (params) => {
   const {
     user,
@@ -74,7 +48,6 @@ const logSensitiveChange = async (params) => {
     throw new Error('Audit logging requires user, action, module, recordReference, and a valid reason.');
   }
 
-  // Sanitize changed fields
   const sanitizedDiff = (changedFields || []).map((cf) => ({
     field: cf.field,
     oldValue: sanitizeValue(cf.field, cf.oldValue),
@@ -100,9 +73,6 @@ const logSensitiveChange = async (params) => {
   return logEntry;
 };
 
-/**
- * Retrieve audit logs with query filters, search, and pagination
- */
 const getAuditLogs = async (query = {}) => {
   const {
     search,
@@ -159,9 +129,6 @@ const getAuditLogs = async (query = {}) => {
   };
 };
 
-/**
- * Retrieve audit compliance statistics
- */
 const getAuditStats = async () => {
   const [totalLogs, moduleBreakdown, recentDenied] = await Promise.all([
     AuditLog.countDocuments(),

@@ -1,6 +1,3 @@
-/**
- * API Gateway & Client Management - Module Test
- */
 
 const assert = require('assert');
 const Service = require('./api-management.service');
@@ -9,7 +6,6 @@ const Validation = require('./api-management.validation');
 async function testModule() {
   console.log('Testing API Gateway & Client Management Module Layers...');
 
-  // 1. Validation test
   let valFailed = false;
   const mockReq = { method: 'POST', body: {} };
   const mockRes = {
@@ -23,7 +19,6 @@ async function testModule() {
   Validation.validateRequest(mockReq, mockRes, () => {});
   assert.strictEqual(valFailed, true, 'Validation correctly rejects empty payload');
 
-  // 2. Service test
   const res = await Service.getOverview({ user: { scope: 'PLATFORM_WIDE' } });
   assert.strictEqual(res.success, true, 'Service getOverview executes successfully');
 

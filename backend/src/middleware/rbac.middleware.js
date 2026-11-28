@@ -1,11 +1,3 @@
-/**
- * Role-Based Access Control (RBAC) & Object-Level Authorization Middleware
- *
- * Provides:
- * 1. authenticateUser - Validates JWT and attaches user to req.user
- * 2. authorizeRoles - Restricts routes by user role
- * 3. authorizeResource - Enforces object-level authorization (ID tampering protection)
- */
 const mongoose = require('mongoose');
 const jwt = require('jsonwebtoken');
 const config = require('../config/env');
@@ -14,10 +6,6 @@ const asyncHandler = require('../utils/asyncHandler');
 const { User } = require('../models/user.model');
 const { getFallbackUser, createMockUserDoc } = require('../config/fallbackAuth');
 
-/**
- * 1. Authenticate User Middleware
- * Verifies JWT token and loads user profile into req.user
- */
 const authenticateUser = asyncHandler(async (req, res, next) => {
   let token = null;
 
@@ -48,7 +36,6 @@ const authenticateUser = asyncHandler(async (req, res, next) => {
   try {
     const decoded = jwt.verify(token, config.jwt.secret);
 
-    // Fetch user with role, profile, and relationship fields (with DB safety)
     let user = null;
     if (mongoose.connection && mongoose.connection.readyState === 1) {
       try {
@@ -86,11 +73,6 @@ const authenticateUser = asyncHandler(async (req, res, next) => {
   }
 });
 
-/**
- * 1b. Optional Authenticate User Middleware
- * If token is present, validates and sets req.user.
- * If token is absent or invalid, proceeds without setting req.user (no 401 thrown).
- */
 const optionalAuthenticateUser = asyncHandler(async (req, res, next) => {
   let token = null;
 
@@ -125,17 +107,10 @@ const optionalAuthenticateUser = asyncHandler(async (req, res, next) => {
       req.user = user;
     }
   } catch (err) {
-    // Ignore invalid/expired token in optional mode
   }
   next();
 });
 
-/**
- * 2. Authorize Roles Middleware
- * Checks if the authenticated user's role is in the permitted list
- *
- * @param  {...string} roles - Permitted roles (e.g. 'SUPER_ADMIN', 'PRINCIPAL')
- */
 const authorizeRoles = (...roles) => {
   const allowedRoles = roles.flat();
 
@@ -154,28 +129,6 @@ const authorizeRoles = (...roles) => {
   };
 };
 
-/**
- * 3. Authorize Resource Middleware (Object-Level Authorization)
- * Enforces ownership and relationship rules so that users cannot access
- * unauthorized records simply by manipulating IDs in the URL.
- *
- * Rules enforced:
- * - SUPER_ADMIN: Unrestricted access across all resources.
- * - PRINCIPAL & VICE_PRINCIPAL: School-level management access across all resources.
- * - OFFICE: Administrative access when allowed for the resource type.
- * - STUDENT: Can access ONLY records where student === req.user._id.
- * - PARENT: Can access ONLY records where student belongs to parent's registered children.
- * - TEACHER: Can access ONLY records for classes and sections assigned to that teacher.
- *
- * @param {Object} options
- * @param {mongoose.Model} options.model - The Mongoose model to query
- * @param {string} [options.paramKey='id'] - The request param containing the record ID (e.g. :id)
- * @param {string} [options.studentField='student'] - Field on the document identifying the student
- * @param {string} [options.classField='class'] - Field on the document identifying class
- * @param {string} [options.sectionField='section'] - Field on the document identifying section
- * @param {boolean} [options.allowOffice=false] - Whether OFFICE staff can access this resource
- * @param {Function} [options.customCheck=null] - Optional async custom access validator: (req, doc) => boolean
- */
 const authorizeResource = (options = {}) => {
   const {
     model,
@@ -201,12 +154,10 @@ const authorizeResource = (options = {}) => {
       throw ApiError.badRequest(`Missing '${paramKey}' route parameter`);
     }
 
-    // Validate MongoDB ObjectId format
     if (!mongoose.Types.ObjectId.isValid(resourceId)) {
       throw ApiError.badRequest(`Invalid resource ID format: '${resourceId}'`);
     }
 
-    // Query resource document
     const doc = await model.findById(resourceId);
     if (!doc) {
       throw ApiError.notFound(`Resource with ID '${resourceId}' not found`);
@@ -215,19 +166,16 @@ const authorizeResource = (options = {}) => {
     const userRole = req.user.role;
     const userId = req.user._id.toString();
 
-    // 1. Full School Management Access: SUPER_ADMIN, PRINCIPAL, VICE_PRINCIPAL
     if (['SUPER_ADMIN', 'PRINCIPAL', 'VICE_PRINCIPAL'].includes(userRole)) {
       req.resource = doc;
       return next();
     }
 
-    // 2. Office Staff Access (if permitted for this resource)
     if (userRole === 'OFFICE' && allowOffice) {
       req.resource = doc;
       return next();
     }
 
-    // 3. STUDENT Object-Level Check: Must own the record
     if (userRole === 'STUDENT') {
       const recordStudentId = (
         doc[studentField]?._id || doc[studentField] || doc.user || doc._id
@@ -243,7 +191,6 @@ const authorizeResource = (options = {}) => {
       return next();
     }
 
-    // 4. PARENT Object-Level Check: Must be the parent of the student owning this record
     if (userRole === 'PARENT') {
       const recordStudentId = (
         doc[studentField]?._id || doc[studentField] || doc._id
@@ -265,7 +212,6 @@ const authorizeResource = (options = {}) => {
       return next();
     }
 
-    // 5. TEACHER Object-Level Check: Must be assigned to this class and section
     if (userRole === 'TEACHER') {
       const recordClass = doc[classField];
       const recordSection = doc[sectionField];
@@ -290,7 +236,6 @@ const authorizeResource = (options = {}) => {
       return next();
     }
 
-    // 6. Optional Custom Check
     if (typeof customCheck === 'function') {
       const isAllowed = await customCheck(req, doc);
       if (!isAllowed) {
@@ -300,27 +245,22 @@ const authorizeResource = (options = {}) => {
       return next();
     }
 
-    // If none of the role rules allowed access, deny
     throw ApiError.forbidden(
       `Object-level authorization failed: Role '${userRole}' is not permitted to access this record.`
     );
   });
 };
 
-/**
- * 4. Row-Level Query Scoping Helper
- * Returns Mongoose query filter conditions scoped strictly to authenticated user's assigned jurisdiction.
- */
 const getRowLevelQueryFilter = (user, options = {}) => {
   if (!user) return { _id: null };
   const { classField = 'class', sectionField = 'section', studentField = 'student' } = options;
 
   if (['SUPER_ADMIN', 'PRINCIPAL', 'VICE_PRINCIPAL'].includes(user.role)) {
-    return {}; // Full campus jurisdiction
+    return {};
   }
 
   if (user.role === 'OFFICE') {
-    return {}; // Campus administrative scope
+    return {};
   }
 
   if (user.role === 'TEACHER') {

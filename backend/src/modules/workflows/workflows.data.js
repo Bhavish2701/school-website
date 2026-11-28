@@ -1,7 +1,3 @@
-/**
- * Institutional Statutory Workflows Registry (A through J)
- * Compliant with Andhra Pradesh Education Department Code & Trust Governance
- */
 const INSTITUTIONAL_WORKFLOWS_REGISTRY = [
   {
     id: 'WF-A',

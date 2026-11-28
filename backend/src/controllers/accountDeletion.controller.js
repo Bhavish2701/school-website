@@ -1,9 +1,3 @@
-/**
- * Account Deletion & Deactivation Controller
- * Enforces legal safeguards under Andhra Pradesh Education Act & DPDP Act 2023
- * Allows deactivation/deletion requests with authorized executive approval
- * while strictly preserving statutory academic and financial records.
- */
 const asyncHandler = require('../utils/asyncHandler');
 const ApiError = require('../utils/apiError');
 const { formatSuccess } = require('../utils/apiResponse');
@@ -11,18 +5,12 @@ const AccountDeletionRequest = require('../models/accountDeletionRequest.model')
 const { User } = require('../models/user.model');
 const { AuditLog } = require('../models/auditLog.model');
 
-/**
- * @route   POST /api/v1/users/request-deletion
- * @desc    Submit an account deactivation/deletion request
- * @access  Authenticated
- */
 const requestDeletion = asyncHandler(async (req, res) => {
   const { reason, userId } = req.body;
   if (!reason || reason.trim().length < 5) {
     throw ApiError.badRequest('A clear reason (at least 5 characters) is required for deactivation requests.');
   }
 
-  // Determine target user (self if not specified or requester is not executive)
   let targetUserId = req.user._id;
   const isExecutive = ['SUPER_ADMIN', 'PRINCIPAL'].includes(req.user.role);
   if (userId && isExecutive) {
@@ -34,7 +22,6 @@ const requestDeletion = asyncHandler(async (req, res) => {
     throw ApiError.notFound('Target user account not found.');
   }
 
-  // Check if active pending request already exists
   const existing = await AccountDeletionRequest.findOne({
     userId: targetUser._id,
     status: 'PENDING',
@@ -85,11 +72,6 @@ const requestDeletion = asyncHandler(async (req, res) => {
   );
 });
 
-/**
- * @route   GET /api/v1/users/deletion-requests
- * @desc    List all deactivation requests
- * @access  Protected (Super Admin, Principal)
- */
 const listDeletionRequests = asyncHandler(async (req, res) => {
   const requests = await AccountDeletionRequest.find()
     .sort({ createdAt: -1 })
@@ -99,11 +81,6 @@ const listDeletionRequests = asyncHandler(async (req, res) => {
   res.status(200).json(formatSuccess(requests, 'Account deletion requests retrieved.'));
 });
 
-/**
- * @route   POST /api/v1/users/deletion-requests/:id/review
- * @desc    Approve or reject account deactivation request
- * @access  Protected (Super Admin, Principal)
- */
 const reviewDeletionRequest = asyncHandler(async (req, res) => {
   const { id } = req.params;
   const { decision, reviewNotes } = req.body;
@@ -133,7 +110,6 @@ const reviewDeletionRequest = asyncHandler(async (req, res) => {
       user.isActive = false;
       user.accountStatus = 'Deactivated';
       user.refreshToken = undefined;
-      // Anonymize personal direct communication details while maintaining statutory scholastic history
       user.phone = '+91 00000 00000';
       user.email = `deactivated_${user._id}@srividya.school.local`;
       await user.save({ validateBeforeSave: false });

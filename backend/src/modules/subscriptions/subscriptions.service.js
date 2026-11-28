@@ -1,7 +1,3 @@
-/**
- * Subscriptions & Commercial Plans - Service Layer
- * Business rules, calculations, and operational orchestration
- */
 
 const Repository = require('./subscriptions.repository');
 const MultiInstitutionSecurity = require('../common/multiInstitutionSecurity');

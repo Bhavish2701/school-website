@@ -1,18 +1,3 @@
-/**
- * Comprehensive Test Suite for Fee Management & Cryptographic Payment Processing
- * Tests:
- * 1. Fee structure creation (Management)
- * 2. Student fee assignment with concession
- * 3. Student fee ledger & breakdown retrieval
- * 4. Management pending fees analytics & overdue reporting
- * 5. Payment Initiation: POST /api/v1/payments/create (server-side order)
- * 6. Tamper Rejection Test: Rejection of fake payment verification / tampered signature
- * 7. Server-Side Payment Verification: POST /api/v1/payments/verify with HMAC SHA-256
- * 8. Second payment settlement (full balance clearance, updating Student.feeStatus to Paid)
- * 9. Payment transaction history (searchable & filterable)
- * 10. Official receipt retrieval by receipt number
- * 11. Security check: Unauthorized parent access denial to another student's receipt (403)
- */
 const crypto = require('crypto');
 const config = require('../src/config/env');
 
@@ -38,11 +23,10 @@ const runFeeTests = async () => {
   console.log('Obtaining authentication tokens...');
   const principalToken = await login('principal', 'Principal@123');
   const studentToken = await login('student1', 'Student@123');
-  const parent1Token = await login('parent1', 'Parent@123'); // Parent of A. Rahul
+  const parent1Token = await login('parent1', 'Parent@123');
   const parent2Token = await login('parent2', 'Parent@123');
   console.log('Tokens generated successfully.\n');
 
-  // 1. Management: Create Fee Structure for Class 10
   console.log('1. Testing POST /api/v1/fees/structures (Creating Class 10 Fee Structure)...');
   const structRes = await fetch(`${BASE_URL}/fees/structures`, {
     method: 'POST',
@@ -75,7 +59,6 @@ const runFeeTests = async () => {
 
   const structureId = structData.data?.structure?._id;
 
-  // 2. Fetch student details (A. Rahul)
   const rosterRes = await fetch(`${BASE_URL}/attendance/classes/10/A/students`, {
     headers: { Authorization: `Bearer ${principalToken}` },
   });
@@ -84,7 +67,6 @@ const runFeeTests = async () => {
   if (!rahul) throw new Error('Student A. Rahul not found in Class 10-A');
   const rahulId = rahul.studentId;
 
-  // 3. Management: Assign Fee to Student with ₹5,000 Merit Concession
   console.log('2. Testing POST /api/v1/fees/assign (Assigning Fee with Concession)...');
   const assignRes = await fetch(`${BASE_URL}/fees/assign`, {
     method: 'POST',
@@ -97,7 +79,7 @@ const runFeeTests = async () => {
       feeStructureId: structureId,
       academicYear: '2025-2026',
       term: 'Annual',
-      concessionAmount: 5000, // Merit concession
+      concessionAmount: 5000,
       dueDate: '2026-11-30',
     }),
   });
@@ -108,7 +90,6 @@ const runFeeTests = async () => {
 
   const feeId = assignData.data?.fee?._id;
 
-  // 4. Student / Parent views fee ledger
   console.log(`3. Testing GET /api/v1/fees/student/${rahulId} (Student Fee Ledger)...`);
   const ledgerRes = await fetch(`${BASE_URL}/fees/student/${rahulId}`, {
     headers: { Authorization: `Bearer ${parent1Token}` },
@@ -120,7 +101,6 @@ const runFeeTests = async () => {
   console.log(`Fee Breakdown:`, ledgerData.data?.fees?.[0]?.breakdown?.map((b) => `${b.item}: ₹${b.amount}`));
   console.log();
 
-  // 5. Management: Pending / Overdue Fees Report
   console.log('4. Testing GET /api/v1/fees/pending (Pending & Overdue Fees Report)...');
   const pendingRes = await fetch(`${BASE_URL}/fees/pending?class=10`, {
     headers: { Authorization: `Bearer ${principalToken}` },
@@ -130,7 +110,6 @@ const runFeeTests = async () => {
   console.log(`Total Pending Records: ${pendingData.data?.totalPendingRecords}, Outstanding Amount: ₹${pendingData.data?.totalPendingAmount.toLocaleString('en-IN')}`);
   console.log();
 
-  // 6. Tamper Rejection Test: Spoofed signature rejected
   console.log('5. Testing Tamper Rejection: Spoofed payment signature verification...');
   const tamperOrderRes = await fetch(`${BASE_URL}/payments/create`, {
     method: 'POST',
@@ -164,7 +143,6 @@ const runFeeTests = async () => {
   console.log(`Rejection Message: ${tamperVerifyData.message}`);
   console.log();
 
-  // 7. Payment Initiation: POST /api/v1/payments/create (Installment 1: ₹20,000)
   console.log('6. Testing POST /api/v1/payments/create (Initiating Legitimate Payment Order)...');
   const createPayRes = await fetch(`${BASE_URL}/payments/create`, {
     method: 'POST',
@@ -189,9 +167,7 @@ const runFeeTests = async () => {
   const orderId1 = createPayData.data?.orderId;
   const mockPaymentId1 = `pay_upi_${Date.now()}_9412`;
 
-  // 8. Server-Side Payment Verification with Cryptographic HMAC Signature
   console.log('7. Testing Server-Side Cryptographic Verification (HMAC SHA-256)...');
-  // Generate authentic HMAC signature matching server secret
   const validSignature1 = crypto
     .createHmac('sha256', PAYMENT_SECRET)
     .update(`${orderId1}|${mockPaymentId1}`)
@@ -219,7 +195,6 @@ const runFeeTests = async () => {
 
   const receiptNumber1 = verifyData1.data?.receiptNumber;
 
-  // 9. Payment Initiation & Settlement: Remaining ₹20,000
   console.log('8. Testing Complete Fee Settlement (Remaining ₹20,000)...');
   const createPayRes2 = await fetch(`${BASE_URL}/payments/create`, {
     method: 'POST',
@@ -260,7 +235,6 @@ const runFeeTests = async () => {
   console.log(`Receipt Number: ${verifyData2.data?.receiptNumber}`);
   console.log();
 
-  // 10. Payment History
   console.log('9. Testing GET /api/v1/payments/history (Payment History)...');
   const historyRes = await fetch(`${BASE_URL}/payments/history?studentId=${rahulId}`, {
     headers: { Authorization: `Bearer ${parent1Token}` },
@@ -271,7 +245,6 @@ const runFeeTests = async () => {
   console.log(`Transactions:`, historyData.data?.payments?.map((p) => `Order: ${p.orderId}, ₹${p.amount} (${p.paymentMethod}) - Status: ${p.status}, Receipt: ${p.receiptNumber}`));
   console.log();
 
-  // 11. View Official Receipt Details
   console.log(`10. Testing GET /api/v1/payments/receipts/${receiptNumber1}...`);
   const receiptRes = await fetch(`${BASE_URL}/payments/receipts/${receiptNumber1}`, {
     headers: { Authorization: `Bearer ${parent1Token}` },
@@ -286,7 +259,6 @@ const runFeeTests = async () => {
   console.log(`Remaining Due at Payment: ₹${receiptData.data?.receipt?.remainingDue}`);
   console.log();
 
-  // 12. Security Test: Parent 2 attempting to view Parent 1's child receipt
   console.log("11. Testing Receipt Access Security (Parent 2 accessing Parent 1's child receipt)...");
   const unauthReceiptRes = await fetch(`${BASE_URL}/payments/receipts/${receiptNumber1}`, {
     headers: { Authorization: `Bearer ${parent2Token}` },

@@ -1,7 +1,3 @@
-/**
- * Platform Policies & Governance Register - Service Layer
- * Business rules, calculations, and operational orchestration
- */
 
 const Repository = require('./platform-policies.repository');
 const MultiInstitutionSecurity = require('../common/multiInstitutionSecurity');

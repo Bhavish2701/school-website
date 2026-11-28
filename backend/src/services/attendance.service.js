@@ -1,13 +1,4 @@
 const SmsLog = require('../models/smsLog.model');
-/**
- * Attendance Service
- *
- * Implements business logic for:
- * - Teacher: class assignment verification, class rosters, attendance submission, duplicate-proof bulk upserts
- * - Student: self attendance summary, daily log, monthly calendar view
- * - Parent: child attendance tracking (with parent-child authorization)
- * - Management: school-wide daily overview, class breakdown, low-attendance reports
- */
 const mongoose = require('mongoose');
 const { AttendanceRecord, AttendanceRegister } = require('../models/attendance.model');
 const { Student } = require('../models/student.model');
@@ -15,10 +6,6 @@ const { Teacher } = require('../models/teacher.model');
 const { ClassSection } = require('../models/classSection.model');
 const ApiError = require('../utils/apiError');
 
-/**
- * Normalize Date to UTC midnight (00:00:00.000Z)
- * Crucial for duplicate prevention across different timezones
- */
 const normalizeDate = (dateInput) => {
   const d = dateInput ? new Date(dateInput) : new Date();
   if (isNaN(d.getTime())) {
@@ -27,9 +14,6 @@ const normalizeDate = (dateInput) => {
   return new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate(), 0, 0, 0, 0));
 };
 
-/**
- * Helper to recalculate a student's cumulative attendance percentage
- */
 const recalculateStudentAttendance = async (studentId) => {
   const totalDays = await AttendanceRecord.countDocuments({ student: studentId });
   if (totalDays === 0) return 100;
@@ -50,9 +34,6 @@ const recalculateStudentAttendance = async (studentId) => {
   return percentage;
 };
 
-/**
- * 1. Get teacher's assigned classes with live student counts and today's attendance status
- */
 const getTeacherAssignedClasses = async (user) => {
   const teacher = await Teacher.findOne({ user: user._id });
   if (!teacher) {
@@ -62,7 +43,6 @@ const getTeacherAssignedClasses = async (user) => {
   const today = normalizeDate(new Date());
   const classesSummary = [];
 
-  // Deduplicate classes if teacher teaches multiple subjects in same class/section
   const seenMap = new Map();
   for (const ac of teacher.assignedClasses || []) {
     const key = `${ac.class}-${ac.section}`;
@@ -111,14 +91,10 @@ const getTeacherAssignedClasses = async (user) => {
   };
 };
 
-/**
- * 2. Get students of a class-section for attendance marking
- */
 const getClassStudentsForAttendance = async (className, section, dateInput, user, sessionInput = 'FULL_DAY') => {
   const targetDate = normalizeDate(dateInput);
   const session = sessionInput ? sessionInput.toUpperCase() : 'FULL_DAY';
 
-  // If role is TEACHER, verify authorization
   if (user.role === 'TEACHER') {
     const teacher = await Teacher.findOne({ user: user._id });
     if (!teacher) {
@@ -132,14 +108,12 @@ const getClassStudentsForAttendance = async (className, section, dateInput, user
     }
   }
 
-  // Fetch active students in class
   const students = await Student.find({
     class: className,
     section: section,
     status: 'ACTIVE',
   }).sort({ rollNo: 1, fullName: 1 });
 
-  // Fetch existing attendance records for these students on targetDate and session
   const studentIds = students.map((s) => s._id);
   const existingRecords = await AttendanceRecord.find({
     student: { $in: studentIds },
@@ -200,15 +174,11 @@ const getClassStudentsForAttendance = async (className, section, dateInput, user
   };
 };
 
-/**
- * 3. Mark & Submit Class Attendance (With backend validation, session policy & duplicate prevention)
- */
 const markClassAttendance = async (className, section, dateInput, records, remarks, user, sessionInput = 'FULL_DAY', statusInput = 'SUBMITTED') => {
   const normalizedDate = normalizeDate(dateInput);
   const session = sessionInput ? sessionInput.toUpperCase() : 'FULL_DAY';
   const registerStatus = statusInput === 'DRAFT' ? 'DRAFT' : 'SUBMITTED';
 
-  // 1. Authorization: If TEACHER, verify assignment
   if (user.role === 'TEACHER') {
     const teacher = await Teacher.findOne({ user: user._id });
     if (!teacher) {
@@ -222,7 +192,6 @@ const markClassAttendance = async (className, section, dateInput, records, remar
     }
   }
 
-  // 2. Validate that every student in the records actually exists and belongs to this class/section
   const studentIds = records.map((r) => r.studentId);
   const matchedStudents = await Student.find({
     _id: { $in: studentIds },
@@ -237,7 +206,6 @@ const markClassAttendance = async (className, section, dateInput, records, remar
     );
   }
 
-  // 3. Compute Register Metrics
   let presentCount = 0;
   let absentCount = 0;
   let lateCount = 0;
@@ -275,14 +243,12 @@ const markClassAttendance = async (className, section, dateInput, records, remar
     };
   });
 
-  // 4. Duplicate-Proof Bulk Upsert for Student Attendance Records
   await AttendanceRecord.bulkWrite(bulkOps);
 
   const totalStudents = records.length;
   const weightedPresent = presentCount + lateCount + excusedCount + halfDayCount * 0.5;
   const attendanceRate = totalStudents > 0 ? Math.round((weightedPresent / totalStudents) * 1000) / 10 : 100;
 
-  // 5. Upsert Classroom Session Register Header
   const register = await AttendanceRegister.findOneAndUpdate(
     { class: className, section, date: normalizedDate, session },
     {
@@ -304,7 +270,6 @@ const markClassAttendance = async (className, section, dateInput, records, remar
     { upsert: true, new: true, setDefaultsOnInsert: true }
   );
 
-  // 6. Recalculate Student Cumulative Attendance in Background/Sequential Loop
   for (const studentId of studentIds) {
     await recalculateStudentAttendance(studentId);
   }
@@ -329,17 +294,12 @@ const markClassAttendance = async (className, section, dateInput, records, remar
   };
 };
 
-/**
- * 4. Update Permitted Attendance Record
- * Allows teachers / admin to update a record (e.g. absent -> excused, late -> present)
- */
 const updatePermittedAttendance = async (recordId, updateData, user) => {
   const record = await AttendanceRecord.findById(recordId);
   if (!record) {
     throw ApiError.notFound('Attendance record not found');
   }
 
-  // Teacher authorization check
   if (user.role === 'TEACHER') {
     const teacher = await Teacher.findOne({ user: user._id });
     if (!teacher) {
@@ -366,10 +326,8 @@ const updatePermittedAttendance = async (recordId, updateData, user) => {
 
   await record.save();
 
-  // Recalculate student cumulative percentage
   const updatedStudentPercentage = await recalculateStudentAttendance(record.student);
 
-  // Recalculate the day's class register counts
   const allRecords = await AttendanceRecord.find({
     class: record.class,
     section: record.section,
@@ -402,9 +360,6 @@ const updatePermittedAttendance = async (recordId, updateData, user) => {
   };
 };
 
-/**
- * 5. Get Attendance History for a Class/Section
- */
 const getAttendanceHistory = async (query) => {
   const { class: className, section, startDate, endDate, page = 1, limit = 20 } = query;
   const filter = {};
@@ -441,9 +396,6 @@ const getAttendanceHistory = async (query) => {
   };
 };
 
-/**
- * 6. Get Student Own Attendance Summary
- */
 const getStudentAttendanceSummary = async (studentId) => {
   const student = await Student.findById(studentId);
   if (!student) {
@@ -481,9 +433,6 @@ const getStudentAttendanceSummary = async (studentId) => {
   };
 };
 
-/**
- * 7. Get Student Daily Attendance Log
- */
 const getStudentDailyAttendance = async (studentId, query = {}) => {
   const { startDate, endDate, page = 1, limit = 30 } = query;
   const filter = { student: studentId };
@@ -513,12 +462,9 @@ const getStudentDailyAttendance = async (studentId, query = {}) => {
   };
 };
 
-/**
- * 8. Get Student Monthly Attendance Register
- */
 const getStudentMonthlyAttendance = async (studentId, month, year) => {
   const currentYear = year ? parseInt(year, 10) : new Date().getUTCFullYear();
-  const currentMonth = month ? parseInt(month, 10) - 1 : new Date().getUTCMonth(); // 0-indexed
+  const currentMonth = month ? parseInt(month, 10) - 1 : new Date().getUTCMonth();
 
   const startOfMonth = new Date(Date.UTC(currentYear, currentMonth, 1, 0, 0, 0, 0));
   const endOfMonth = new Date(Date.UTC(currentYear, currentMonth + 1, 0, 23, 59, 59, 999));
@@ -568,13 +514,9 @@ const getStudentMonthlyAttendance = async (studentId, month, year) => {
   };
 };
 
-/**
- * 9. Management: School-Wide Attendance Overview
- */
 const getManagementSchoolOverview = async (dateInput) => {
   const targetDate = normalizeDate(dateInput);
 
-  // Fetch all class-sections
   const classSections = await ClassSection.find({}).sort({ className: 1, section: 1 });
   const registers = await AttendanceRegister.find({ date: targetDate }).populate('takenBy', 'fullName employeeId');
 
@@ -660,9 +602,6 @@ const getManagementSchoolOverview = async (dateInput) => {
   };
 };
 
-/**
- * 10. Management: Attendance Reports & Low Attendance Alerts
- */
 const getManagementReports = async (query = {}) => {
   const { threshold = 75, class: className, section } = query;
   const parsedThreshold = parseFloat(threshold) || 75;
@@ -671,13 +610,11 @@ const getManagementReports = async (query = {}) => {
   if (className) studentFilter.class = className;
   if (section) studentFilter.section = section;
 
-  // Find students whose attendance is below threshold
   const lowAttendanceStudents = await Student.find({
     ...studentFilter,
     attendancePercentage: { $lt: parsedThreshold },
   }).select('admissionNo fullName class section rollNo parentName parentPhone attendancePercentage');
 
-  // Overall attendance statistics by class
   const classStats = await Student.aggregate([
     { $match: { status: 'ACTIVE' } },
     {
@@ -707,10 +644,6 @@ const getManagementReports = async (query = {}) => {
   };
 };
 
-/**
- * 12. Reopen Attendance Register
- * Allows authorized personnel (Principal/Admin) to unlock a submitted attendance register for corrections
- */
 const reopenAttendanceRegister = async (className, section, dateInput, sessionInput, reason, user) => {
   const normalizedDate = normalizeDate(dateInput);
   const session = sessionInput ? sessionInput.toUpperCase() : 'FULL_DAY';
@@ -744,9 +677,6 @@ const reopenAttendanceRegister = async (className, section, dateInput, sessionIn
   };
 };
 
-/**
- * 13. Submit Attendance Correction with Audit Trail
- */
 const submitAttendanceCorrection = async (recordId, newStatus, reason, user) => {
   const record = await AttendanceRecord.findById(recordId);
   if (!record) {
@@ -771,7 +701,6 @@ const submitAttendanceCorrection = async (recordId, newStatus, reason, user) => 
   await record.save();
   await recalculateStudentAttendance(record.student);
 
-  // Recalculate register
   const allRecords = await AttendanceRecord.find({
     class: record.class,
     section: record.section,
@@ -812,10 +741,6 @@ const submitAttendanceCorrection = async (recordId, newStatus, reason, user) => 
   };
 };
 
-
-/**
- * Get live reported absentees for a given school date
- */
 const getTodayAbsenteesList = async (dateInput) => {
   const istOffsetMs = 5.5 * 60 * 60 * 1000;
   const targetDate = dateInput ? new Date(dateInput) : new Date();

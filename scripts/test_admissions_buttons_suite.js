@@ -6,7 +6,6 @@ console.log('====================================================');
 console.log('TEST SUITE: Admissions Action Buttons & Modals');
 console.log('====================================================');
 
-// Mock DOM Environment
 const mockElements = new Map();
 function getMock(id, tag = 'div') {
   if (!mockElements.has(id)) {
@@ -100,10 +99,8 @@ global.document = {
 
 getMock('toastContainer').children = [];
 
-// Load student-roster.js
 eval(fs.readFileSync('frontend/js/student-roster.js', 'utf8'));
 
-// Load portal.js
 eval(fs.readFileSync('frontend/js/portal.js', 'utf8'));
 const portal = global.portalApp || window.portalApp;
 
@@ -111,14 +108,10 @@ assert(portal, 'portalApp must be defined on window');
 
 console.log('\n[PASS] Portal and Roster loaded successfully');
 
-// Initialize admissions
 portal.initAdmissions();
 const initialCount = portal.state.admissions.length;
 console.log(`Initial admissions count: ${initialCount}`);
 
-// --------------------------------------------------------------------------
-// TEST 1: Button 1 - New Admission (#btnNewAdmissionPrimary)
-// --------------------------------------------------------------------------
 console.log('\n--- Test 1: New Admission Modal & Submission ---');
 portal.openNewAdmissionModal('Bhavish Test Student', 'X', 'Bhavish Parent', '9988776655');
 
@@ -128,7 +121,6 @@ assert.strictEqual(getMock('admFullName').value, 'Bhavish Test Student', 'admFul
 assert.strictEqual(getMock('admDob').value, '2014-06-15', 'admDob must be set to prevent HTML5 date validation failure');
 assert.strictEqual(getMock('admClassApplied').value, 'X', 'admClassApplied must be set');
 
-// Submit the form
 portal.submitNewAdmission({ preventDefault: () => {} });
 
 assert.strictEqual(portal.state.admissions.length, initialCount + 1, 'state.admissions must have 1 more record');
@@ -140,9 +132,6 @@ assert(newAdmModal.style.display === 'none' || !newAdmModal.classList.contains('
 
 console.log('[PASS] Test 1: New Admission modal opened, validated, submitted, and tab badge synchronized');
 
-// --------------------------------------------------------------------------
-// TEST 2: Button 2 - Add Enquiry (#btnAddEnquirySecondary)
-// --------------------------------------------------------------------------
 console.log('\n--- Test 2: Add Enquiry Modal & Submission ---');
 portal.openAddEnquiryModal();
 
@@ -150,7 +139,6 @@ const enqModal = getMock('addEnquiryModal');
 assert(enqModal.style.display === 'flex' || enqModal.classList.contains('active'), 'addEnquiryModal must be displayed');
 assert(getMock('enqFollowupDate').value.length > 0, 'Followup date must be pre-populated');
 
-// Fill enquiry form
 getMock('enqStudentName').value = 'Rohan Enquiry Student';
 getMock('enqClass').value = 'VII';
 getMock('enqParentName').value = 'Rohan Parent';
@@ -169,23 +157,17 @@ assert(enqModal.style.display === 'none' || !enqModal.classList.contains('active
 
 console.log('[PASS] Test 2: Add Enquiry modal opened, validated, submitted, and tab badge synchronized');
 
-// --------------------------------------------------------------------------
-// TEST 3: Button 3 - Import Applications (#btnImportAdmissionsSecondary)
-// --------------------------------------------------------------------------
 console.log('\n--- Test 3: Import Applications Modal, Sample CSV & Ingestion ---');
 
-// Check modal opens
 portal.openImportAdmissionsModal();
 const importModal = getMock('importAdmissionsModal');
 assert(importModal.style.display === 'flex' || importModal.classList.contains('active'), 'importAdmissionsModal must be displayed');
 
-// Test sample template download
 capturedDownloads.length = 0;
 portal.downloadAdmissionsImportSample();
 assert.strictEqual(capturedDownloads.length, 1, 'Sample CSV download must be triggered');
 assert(capturedDownloads[0].download.includes('template') || capturedDownloads[0].download.includes('sample'), 'Download filename must identify template');
 
-// Test CSV parsing with 3 valid records and 1 invalid row
 const testCsv = `Full Name,Class Applied,Gender,Date of Birth,Parent Name,Relationship,Mobile Phone,Email,Address,Intake Channel,Previous School,Notes
 Sunita Rao,VIII,Female,2013-05-10,S. Narayana,Father,9848555111,narayana@gmail.com,MVP Colony,Walk-In,St. Ann's,Good student
 K. Naveen,IX,Male,2012-07-15,K. Bhaskar,Father,9848555222,bhaskar@gmail.com,Seethammadhara,Online Form,KV-1,Sports enthusiast
@@ -202,7 +184,6 @@ assert(tbody.innerHTML.includes('Missing') || tbody.innerHTML.includes('required
 const validCount = parseInt(getMock('admImportValidCount').textContent, 10);
 assert.strictEqual(validCount, 3, 'Must have exactly 3 valid applications');
 
-// Confirm import
 const countBeforeImport = portal.state.admissions.length;
 portal.confirmAdmissionsImport();
 
@@ -215,9 +196,6 @@ assert(importModal.style.display === 'none' || !importModal.classList.contains('
 
 console.log('[PASS] Test 3: Import Applications fully verified (modal, sample CSV, parsing, validation, batch ingest)');
 
-// --------------------------------------------------------------------------
-// TEST 4: Button 4 - Export Register (#btnExportAdmissionsSecondary)
-// --------------------------------------------------------------------------
 console.log('\n--- Test 4: Export Admissions CSV Register ---');
 capturedDownloads.length = 0;
 portal.exportAdmissionsCSV();
@@ -225,7 +203,6 @@ portal.exportAdmissionsCSV();
 assert.strictEqual(capturedDownloads.length, 1, 'Export register must trigger 1 download');
 assert(capturedDownloads[0].download.includes('admissions_master_register'), 'Download filename must contain admissions_master_register');
 
-// Verify downloadCsvFile handles argument reversal
 capturedDownloads.length = 0;
 portal.downloadCsvFile('Test_Reversed_Arg.csv', 'Col1,Col2\nVal1,Val2');
 assert.strictEqual(capturedDownloads.length, 1, 'downloadCsvFile must handle (filename, content)');
@@ -233,9 +210,6 @@ assert.strictEqual(capturedDownloads[0].download, 'Test_Reversed_Arg.csv', 'File
 
 console.log('[PASS] Test 4: Export Admissions CSV Register verified with UTF-8 BOM, delayed revocation, and parameter swap protection');
 
-// --------------------------------------------------------------------------
-// TEST 5: HTML Verification
-// --------------------------------------------------------------------------
 console.log('\n--- Test 5: Verify HTML Elements and Modal Structure ---');
 const html = fs.readFileSync('frontend/administration-portal/index.html', 'utf8');
 

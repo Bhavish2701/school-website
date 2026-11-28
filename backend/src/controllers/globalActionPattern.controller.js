@@ -1,8 +1,3 @@
-/**
- * Sri Vidya Educational Trust - Global Action Patterns Controller
- * Consistent Confirmation Dialogs, Field Validation, Duplicate Checking,
- * and Post-Backend Success Feedback.
- */
 
 const globalActionPatternService = require('../services/globalActionPattern.service');
 

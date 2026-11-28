@@ -1,7 +1,3 @@
-/**
- * Sri Vidya Educational Trust - Institution Onboarding & Migration Schema
- * Module 5: Onboarding Overview, 12-Step Readiness Checklist, and 10-Step Data Import Centre
- */
 
 const mongoose = require('mongoose');
 

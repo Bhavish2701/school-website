@@ -1,7 +1,3 @@
-/**
- * Global Platform Settings - Controller Layer
- * Handles HTTP requests, responses, and status codes
- */
 
 const Service = require('./global-settings.service');
 

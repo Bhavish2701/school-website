@@ -1,8 +1,3 @@
-/**
- * Student Exit & Transfer Certificate Docket Model
- * Manages institutional student withdrawal, statutory department clearances,
- * character evaluation, Transfer Certificate issuance, and historical preservation.
- */
 const mongoose = require('mongoose');
 
 const EXIT_STATUS_VALUES = [

@@ -1,7 +1,3 @@
-/**
- * Sri Vidya Educational Trust - Platform Administration Controller
- * Scope: Multi-tenant Platform Infrastructure, Institutional Configuration, Privacy Guard
- */
 
 const platformApp = (function () {
   'use strict';
@@ -12,7 +8,6 @@ const platformApp = (function () {
     }[ch]));
   }
 
-  // Ensure every /api/v1/ request carries Bearer JWT, refreshes on 401, and triggers live-sync invalidation
   (function installAuthenticatedFetch() {
     if (typeof window === 'undefined' || typeof window.fetch !== 'function' || window.__svPlatformFetchPatched) return;
     window.__svPlatformFetchPatched = true;
@@ -58,7 +53,6 @@ const platformApp = (function () {
     }
   })();
 
-  // State Management
   const state = {
     activeView: 'dashboard',
     theme: localStorage.getItem('sv_theme') || 'light',
@@ -411,7 +405,6 @@ const platformApp = (function () {
     ]
   };
 
-  // Indian Standard Time (Asia/Kolkata) Engine
   function getISTDateTime() {
     const now = new Date();
     const dateOptions = {
@@ -445,7 +438,6 @@ const platformApp = (function () {
     }
   }
 
-  // Theme Management
   function setupTheme() {
     const saved = localStorage.getItem('sv_theme') || 'light';
     document.documentElement.setAttribute('data-theme', saved);
@@ -468,7 +460,6 @@ const platformApp = (function () {
     }
   }
 
-  // Toast Alerts
   function showToast(message, type = 'success') {
     let toast = document.getElementById('platformToast');
     if (!toast) {
@@ -492,9 +483,6 @@ const platformApp = (function () {
   }
 
   
-  // =========================================================================
-  // TWO-LEVEL SIDEBAR NAVIGATION & COLLAPSE CONTROLLER
-  // =========================================================================
   let _lastPaToggleStamp = 0;
   let _lastPaToggleMod = null;
 
@@ -575,7 +563,6 @@ const platformApp = (function () {
       }
     } catch (e) {}
 
-    // Populate data-tooltip on each .nav-item
     document.querySelectorAll('.nav-item').forEach(item => {
       const textEl = item.querySelector('.nav-text');
       if (textEl && !item.getAttribute('data-tooltip')) {
@@ -583,7 +570,6 @@ const platformApp = (function () {
       }
     });
 
-    // Dynamic flyout vertical positioning for collapsed sidebar
     document.addEventListener('mouseenter', function (e) {
       if (!document.body.classList.contains('sidebar-collapsed')) return;
       const navItem = e.target && e.target.closest && e.target.closest('.nav-item');
@@ -599,7 +585,6 @@ const platformApp = (function () {
       sub.style.top = top + 'px';
     }, true);
 
-    // Keyboard shortcut Ctrl+B or Cmd+B
     document.addEventListener('keydown', function(e) {
       if ((e.ctrlKey || e.metaKey) && (e.key === 'b' || e.key === 'B')) {
         e.preventDefault();
@@ -608,7 +593,6 @@ const platformApp = (function () {
     });
   }
 
-  // Navigation Controller
   function navigateTo(viewId) {
     if (!viewId) return;
     state.activeView = viewId;
@@ -616,7 +600,6 @@ const platformApp = (function () {
       window.FloatingBottomNav.syncActiveState();
     }
 
-    // Update URL Hash cleanly without page jumping
     if (window.location.hash !== '#' + viewId) {
       try {
         history.pushState(null, '', '#' + viewId);
@@ -625,7 +608,6 @@ const platformApp = (function () {
       }
     }
 
-    // Update Sidebar Active Links & Two-Level Skeuomorphic States
     try {
       localStorage.setItem('sv_platform_last_view', viewId);
       sessionStorage.setItem('sv_platform_last_view', viewId);
@@ -639,7 +621,6 @@ const platformApp = (function () {
       }
     });
 
-    // Active Level 1 nav-item highlight and accordion auto-open
     const activeSub = document.querySelector(`.nav-sub-link[data-view="${viewId}"]`);
     const activeDirect = document.querySelector(`.nav-item > .nav-link[data-view="${viewId}"]`);
     const targetParent = activeSub ? activeSub.closest('.nav-item') : (activeDirect ? activeDirect.closest('.nav-item') : null);
@@ -654,7 +635,6 @@ const platformApp = (function () {
       }
     });
 
-    // Update Visible Views
     document.querySelectorAll('.portal-view').forEach(view => {
       if (view.id === 'view-' + viewId) {
         view.classList.add('active');
@@ -663,7 +643,6 @@ const platformApp = (function () {
       }
     });
 
-    // View-specific data initializations
     if (viewId === 'institutions' && typeof loadInstitutions === 'function') {
       loadInstitutions();
     } else if (viewId === 'config' && typeof loadSchoolConfig === 'function') {
@@ -711,7 +690,6 @@ const platformApp = (function () {
       loadWorkflowsData();
     }
 
-    // Update Header Breadcrumb
     const crumbEl = document.getElementById('currentViewBreadcrumb');
     if (crumbEl) {
       const titles = {
@@ -741,7 +719,6 @@ const platformApp = (function () {
     closeMobileSidebar();
   }
 
-  // Mobile Sidebar Controls
   function toggleMobileSidebar() {
     const sb = document.getElementById('sidebar');
     if (sb) sb.classList.toggle('mobile-open');
@@ -752,7 +729,6 @@ const platformApp = (function () {
     if (sb) sb.classList.remove('mobile-open');
   }
 
-  // Modals
   function openModal(modalId) {
     const modal = document.getElementById(modalId);
     if (modal) {
@@ -769,7 +745,6 @@ const platformApp = (function () {
     }
   }
 
-  // Action: Add New Institution
   function handleAddInstitution(e) {
     e.preventDefault();
     const name = document.getElementById('newInstName').value;
@@ -797,7 +772,6 @@ const platformApp = (function () {
     closeModal('modalAddInstitution');
     showToast(`Institution "${name}" provisioned successfully!`, 'success');
 
-    // Add Audit Log Entry
     state.auditLogs.unshift({
       id: `AUD-${Math.floor(1000 + Math.random() * 9000)}`,
       timestamp: 'Just now',
@@ -812,7 +786,6 @@ const platformApp = (function () {
     renderAuditLogsTable();
   }
 
-  // Action: Create Support Ticket
   function handleCreateTicket(e) {
     e.preventDefault();
     const subject = document.getElementById('newTicketSubject').value;
@@ -836,16 +809,10 @@ const platformApp = (function () {
     showToast(`Support ticket #${newTicket.id} logged successfully!`, 'success');
   }
 
-  // Renders
-    // =========================================================================
-  // MODULE 3: INSTITUTION MANAGEMENT (SECTIONS 3.1, 3.2, 3.3, 3.4)
-  // =========================================================================
-
   let currentWizardStep = 1;
   let selectedInstitutionId = null;
   let importedFileData = null;
 
-  // Load institutions from API or fallback
   async function loadInstitutions() {
     try {
       const res = await fetch('/api/v1/platform/institutions');
@@ -862,7 +829,6 @@ const platformApp = (function () {
     renderInstitutionsTable();
   }
 
-  // Update Section 3.1 5 Summary Cards
   function updateInstitutionSummaryCards() {
     const total = state.institutions.length;
     const active = state.institutions.filter(i => i.status === 'Active').length;
@@ -882,7 +848,6 @@ const platformApp = (function () {
     if (confEl) confEl.textContent = configIssues;
   }
 
-  // Render 10-Column Directory Table (Section 3.1)
   function renderInstitutionsTable(list = null) {
     const tbody = document.getElementById('institutionsTableBody');
     if (!tbody) return;
@@ -996,7 +961,6 @@ const platformApp = (function () {
 
   document.addEventListener('click', () => closeAllRowDropdowns());
 
-  // Multi-Field Filter Directory (Section 3.1)
   function filterInstitutionsDirectory() {
     const q = (document.getElementById('instSearchInput')?.value || '').trim().toLowerCase();
     const code = (document.getElementById('instCodeFilter')?.value || '').trim().toLowerCase();
@@ -1040,10 +1004,6 @@ const platformApp = (function () {
     renderInstitutionsTable();
     showToast('Institution directory filters reset', 'info');
   }
-
-  // =========================================================================
-  // SECTION 3.2: ADD INSTITUTION 6-STEP SETUP WIZARD
-  // =========================================================================
 
   function openAddInstitutionWizard() {
     currentWizardStep = 1;
@@ -1219,10 +1179,6 @@ const platformApp = (function () {
     showToast('Institution "' + name + '" ' + (actionType === 'activate' ? 'activated and live' : 'saved as draft') + ' successfully!', 'success');
   }
 
-  // =========================================================================
-  // SECTION 3.3: INSTITUTION DETAIL DOSSIER (10 TABS)
-  // =========================================================================
-
     function viewInstitution(id) {
     selectedInstitutionId = id;
     const inst = state.institutions.find(i => (i.institutionId === id || i.id === id));
@@ -1245,7 +1201,6 @@ const platformApp = (function () {
     const boardEl = document.getElementById('detailModalBoard');
     if (boardEl) boardEl.textContent = inst.board || 'AP State SSC Board';
 
-    // Overview KPIs
     const studEl = document.getElementById('detailOverviewStudents');
     if (studEl) studEl.textContent = (inst.metrics && inst.metrics.students) || inst.students || 0;
     const staffEl = document.getElementById('detailOverviewStaff');
@@ -1268,7 +1223,6 @@ const platformApp = (function () {
       domLink.href = 'http://' + d;
     }
 
-    // Profile Tab
     const pName = document.getElementById('detailProfileName');
     if (pName) pName.textContent = inst.name;
     const pDisp = document.getElementById('detailProfileDisplayName');
@@ -1291,7 +1245,6 @@ const platformApp = (function () {
       pFullAddr.textContent = (a.street || 'Main Road') + ', ' + (a.city || 'Guntur') + ', ' + (a.state || 'Andhra Pradesh') + ' - ' + (a.postalCode || '522002');
     }
 
-    // Config Tab
     const cTz = document.getElementById('detailConfigTimezone');
     if (cTz) cTz.textContent = (inst.configuration && inst.configuration.timezone) || 'Asia/Kolkata (IST)';
     const cLoc = document.getElementById('detailConfigLocale');
@@ -1305,7 +1258,6 @@ const platformApp = (function () {
     const cAtt = document.getElementById('detailConfigAttendance');
     if (cAtt) cAtt.textContent = (inst.configuration && inst.configuration.attendanceMode) || 'Twice Daily (Morning & Afternoon)';
 
-    // Domains Tab Table
     const domTbody = document.getElementById('detailDomainsTableBody');
     if (domTbody) {
       const d = (inst.domains && inst.domains.primary) || inst.domain || 'srividya.edu.in';
@@ -1315,7 +1267,6 @@ const platformApp = (function () {
         '</td><td><button class="btn-pa btn-pa-secondary" style="padding:2px 8px; font-size:0.75rem;" onclick="platformApp.verifyDomainFromDetail(\'' + d + '\')">Check DNS</button></td></tr>';
     }
 
-    // Admins Tab Table
     const admTbody = document.getElementById('detailAdminsTableBody');
     if (admTbody) {
       const admins = inst.administrators || [
@@ -1382,10 +1333,6 @@ const platformApp = (function () {
   function verifyDomainFromDetail(domain) {
     showToast('Probing DNS records for ' + domain + '... All authoritative A & CNAME records match!', 'success');
   }
-
-  // =========================================================================
-  // SECTION 3.4: INSTITUTION SUSPENSION & GOVERNANCE WORKFLOW
-  // =========================================================================
 
     function openSuspendFromDetail(id) {
     const instId = id || selectedInstitutionId;
@@ -1506,10 +1453,6 @@ const platformApp = (function () {
     showToast('Institution ' + instId + ' marked as Archived', 'info');
   }
 
-  // =========================================================================
-  // IMPORT & EXPORT OPERATIONS (SECTION 3.1)
-  // =========================================================================
-
   function exportInstitutionsCSV() {
     const headers = ['Institution ID', 'Official Name', 'Display Name', 'Code', 'Type', 'Trust', 'Domain', 'Contact Email', 'Phone', 'Setup Status', 'Status', 'Created Date'];
     const rows = state.institutions.map(i => [
@@ -1621,7 +1564,6 @@ const platformApp = (function () {
     reader.readAsText(importedFileData);
   }
 
-
   function renderOperatorsTable() {
     const tbody = document.getElementById('operatorsTableBody');
     if (!tbody) return;
@@ -1712,12 +1654,10 @@ const platformApp = (function () {
     `).join('');
   }
 
-  // Feature Toggle Handler
   function toggleFeature(flagName) {
     showToast(`Institutional feature "${flagName}" updated and synchronized!`, 'success');
   }
 
-  // Operator Actions
   function invalidateSession(userName) {
     showToast(`Active sessions for "${userName}" have been invalidated. User must re-authenticate.`, 'warning');
   }
@@ -1735,7 +1675,6 @@ const platformApp = (function () {
     }
   }
 
-  // Filter Audit Logs by Search
   function filterAuditLogs() {
     const query = (document.getElementById('auditSearchInput')?.value || '').toLowerCase();
     const rows = document.querySelectorAll('#auditLogsTableBody tr');
@@ -1745,7 +1684,6 @@ const platformApp = (function () {
     });
   }
 
-  // Live Ping Latency Test
   function pingCluster() {
     const btn = document.getElementById('btnPingCluster');
     if (btn) btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Pinging...';
@@ -1756,7 +1694,6 @@ const platformApp = (function () {
     }, 700);
   }
 
-  // Export Audit Trail
   function exportAuditTrail() {
     let csv = 'Timestamp,Actor,Role,Action,Target,IP,Status,Details\n';
     state.auditLogs.forEach(l => {
@@ -1771,7 +1708,6 @@ const platformApp = (function () {
     showToast('Audit trail exported successfully as CSV!', 'success');
   }
 
-  // Infrastructure & Operations Actions
   function triggerManualBackup() {
     showToast('Snapshot initiation dispatched to AWS S3 Mumbai Vault (ap-south-1). Encryption: AES-256.', 'info');
     setTimeout(() => {
@@ -1794,7 +1730,6 @@ const platformApp = (function () {
     showToast('AP Statutory Retention Policies (Rule 88/99) updated and locked into database governance matrix.', 'success');
   }
 
-  // Default Platform Telemetry (Specification 2.1 & 2.2)
   function getDefaultPlatformData() {
     return {
       unavailable: true,
@@ -1816,8 +1751,6 @@ const platformApp = (function () {
     };
   }
 
-
-  // Load Platform Dashboard Live Telemetry (with stale-response protection + zero fake fallback)
   async function loadPlatformDashboard() {
     const refreshBtn = document.getElementById('paManualRefreshBtn');
     if (refreshBtn) {
@@ -1875,7 +1808,6 @@ const platformApp = (function () {
     if (updEl) updEl.textContent = 'Failed';
   }
 
-
   function applyPlatformDashboardData(data) {
     if (!data) return;
     state.platformData = data;
@@ -1921,7 +1853,6 @@ const platformApp = (function () {
         : new Date().toLocaleTimeString('en-IN');
     }
 
-    // Dynamic Institutional Tenants grid (live from DB, zero hardcoded 855/320/140)
     const grid = document.getElementById('activeTenantsGrid');
     if (grid && !data.unavailable) {
       const list = Array.isArray(data.institutions) && data.institutions.length ? data.institutions : (state.institutions || []);
@@ -1958,8 +1889,6 @@ const platformApp = (function () {
     }
   }
 
-
-  // Render Section 2.1 D: Operational Tasks Table
   function renderOperationalTasks(tasks) {
     const tbody = document.getElementById('operationalTasksTableBody');
     if (!tbody) return;
@@ -2000,7 +1929,6 @@ const platformApp = (function () {
     }).join('');
   }
 
-  // Render Section 2.1 E: Recent Platform Activity
   function renderRecentPlatformActivity(activities) {
     const tbody = document.getElementById('recentPlatformActivityTableBody');
     if (!tbody) return;
@@ -2044,7 +1972,6 @@ const platformApp = (function () {
     }).join('');
   }
 
-  // Action for Operational Tasks
   function openTaskAction(taskId, targetView) {
     if (targetView && targetView !== 'dashboard') {
       navigateTo(targetView);
@@ -2054,7 +1981,6 @@ const platformApp = (function () {
     }
   }
 
-  // View Masked Activity Details Modal
   function viewActivityDetails(activityId) {
     const act = (state.recentActivities || []).find(a => a.id === activityId) || {
       id: activityId,
@@ -2124,17 +2050,10 @@ const platformApp = (function () {
     showToast(`Cryptographic invitation issued to ${name} (${email}) for role ${role}!`, 'success');
   }
 
-  // Initialization
-/* ==========================================================================
-     MODULE 4: SCHOOL CONFIGURATION CONTROLLER & REPOSITORY
-     ========================================================================== */
-
-  // State
   let activeConfigTab = 'profile';
   let activeConfigInstitution = 'INST-001';
   let currentSchoolConfig = null;
 
-  // Default Fallback Config Data (Matches Trust Campus Data)
   const defaultTrustConfigs = {
     'INST-001': {
       institutionId: 'INST-001',
@@ -2317,10 +2236,8 @@ const platformApp = (function () {
         }
       }
     } catch (e) {
-      // Direct offline fallback
     }
 
-    // Fallback to local trust cache
     currentSchoolConfig = defaultTrustConfigs[instId] || defaultTrustConfigs['INST-001'];
     populateConfigUI(currentSchoolConfig);
   }
@@ -2328,7 +2245,6 @@ const platformApp = (function () {
   function populateConfigUI(cfg) {
     if (!cfg) return;
 
-    // 1. School Profile
     const p = cfg.schoolProfile || {};
     const setVal = (id, val) => { const el = document.getElementById(id); if (el) el.value = val || ''; };
     setVal('cfgSchoolName', p.officialName);
@@ -2365,7 +2281,6 @@ const platformApp = (function () {
     const verEl = document.getElementById('profileVersionNum');
     if (verEl) verEl.textContent = `v${p.version || 1}.0`;
 
-    // Render Signatories
     const sigBox = document.getElementById('cfgSignatoriesContainer');
     if (sigBox && p.signatories) {
       sigBox.innerHTML = p.signatories.map((s, idx) => `
@@ -2386,7 +2301,6 @@ const platformApp = (function () {
       `).join('');
     }
 
-    // 2. Academic Config
     const ac = cfg.academicConfiguration || {};
     setVal('cfgAyStructure', ac.academicYearStructure || 'annual');
     setVal('cfgAyCurrent', ac.currentAcademicYear || '2026-2027');
@@ -2408,7 +2322,6 @@ const platformApp = (function () {
     const acadVer = document.getElementById('acadVersionNum');
     if (acadVer) acadVer.textContent = `v${ac.version || 1}.0`;
 
-    // 3. Operational Defaults
     const op = cfg.operationalDefaults || {};
     const opsBox = document.getElementById('cfgPaneOperational');
     if (opsBox) {
@@ -2423,7 +2336,6 @@ const platformApp = (function () {
       if (minAtt && ac.attendanceRules?.minimumPercentageForExams) minAtt.value = ac.attendanceRules.minimumPercentageForExams;
     }
 
-    // 4. Document Templates
     renderDocumentTemplates(cfg.documentTemplates || defaultTrustConfigs['INST-001'].documentTemplates);
   }
 
@@ -2515,7 +2427,6 @@ const platformApp = (function () {
       }
     } catch(e) {}
 
-    // Offline state update
     if (!currentSchoolConfig) currentSchoolConfig = defaultTrustConfigs[activeConfigInstitution];
     currentSchoolConfig.schoolProfile = {
       ...currentSchoolConfig.schoolProfile,
@@ -2658,7 +2569,6 @@ const platformApp = (function () {
       }
     } catch(e) {}
 
-    // Offline update
     if (!currentSchoolConfig) currentSchoolConfig = defaultTrustConfigs[activeConfigInstitution];
     currentSchoolConfig.academicConfiguration = {
       ...currentSchoolConfig.academicConfiguration,
@@ -2859,7 +2769,6 @@ const platformApp = (function () {
     const note = prompt(`Create New Revision for ${tpl.templateName} (${tpl.version}):\n\nEnter reason or summary for this new template version:`, 'Updated statutory guidelines');
     if (!note) return;
 
-    // Increment minor version
     const currNum = parseFloat(tpl.version.replace('v', '')) || 1.0;
     const nextVer = 'v' + (currNum + 0.1).toFixed(1);
 
@@ -2877,13 +2786,6 @@ const platformApp = (function () {
     showToast(`Template ${tpl.templateId} updated to ${nextVer}. Historical versions remain sealed.`, 'success');
   }
 
-
-
-  /* ==========================================================================
-     MODULE 5: INSTITUTION ONBOARDING & MIGRATION CONTROLLER (SECTIONS 5.1 - 5.3)
-     ========================================================================== */
-
-  // State
   let activeOnboardingTab = 'overview';
   let activeChecklistInstitution = 'INST-001';
   let currentImportStep = 1;
@@ -2985,7 +2887,6 @@ const platformApp = (function () {
       }
     } catch (e) {}
 
-    // Offline Fallback
     applyOnboardingOverviewData({
       summary: {
         institutionsAwaitingSetup: 1,
@@ -3062,7 +2963,6 @@ const platformApp = (function () {
       }
     } catch (e) {}
 
-    // Fallback based on institution
     let readyCount = 11;
     let badgeText = 'Live Production Certified';
     if (instId === 'INST-002') { readyCount = 9; badgeText = 'Ready for Review'; }
@@ -3163,7 +3063,6 @@ const platformApp = (function () {
       }
     } catch (e) {}
 
-    // Offline data
     renderImportJobsTable([activeImportJob], filterType);
   }
 
@@ -3205,9 +3104,6 @@ const platformApp = (function () {
     loadImportJobs(type);
   }
 
-  /* -------------------------------------------------------------------------
-     5.3 DATA IMPORT WIZARD (10 STEPS)
-     ------------------------------------------------------------------------- */
   function openNewImportWizard() {
     currentImportStep = 1;
     goToImportStep(1);
@@ -3252,7 +3148,6 @@ const platformApp = (function () {
     }
     if (btnFinish) btnFinish.style.display = (step === 10) ? 'inline-block' : 'none';
 
-    // Step-specific initialization
     if (step === 4) populateImportMapper();
     else if (step === 7) populateImportPreview('accepted');
     else if (step === 9) executeImportProcessing();
@@ -3260,7 +3155,6 @@ const platformApp = (function () {
 
   function nextImportStep() {
     if (currentImportStep === 8) {
-      // Check confirmation
       const confirmCb = document.getElementById('impCheckExplicitConfirm');
       if (confirmCb && !confirmCb.checked) {
         showToast('Please confirm explicit verification checkbox to proceed.', 'warning');
@@ -3445,13 +3339,6 @@ const platformApp = (function () {
     showToast('Sample CSV migration template downloaded.', 'success');
   }
 
-
-
-  /* ==========================================================================
-     MODULE 6: USER & ACCOUNT MANAGEMENT CONTROLLER (SECTIONS 6.1 - 6.5)
-     ========================================================================== */
-
-  // State
   let usersDirectoryData = [];
   let activeUserDossier = null;
   let activeUserDossierTab = 'profile';
@@ -3577,7 +3464,6 @@ const platformApp = (function () {
       }
     } catch (e) {}
 
-    // Offline fallback
     usersDirectoryData = defaultUsersDataFallback;
     applyUsersSummary({
       totalAccounts: usersDirectoryData.length,
@@ -3620,7 +3506,6 @@ const platformApp = (function () {
       return true;
     });
 
-    // Update filtered counts
     const fCountEl = document.getElementById('userFilteredCount');
     const tCountEl = document.getElementById('userTotalCount');
     if (fCountEl) fCountEl.textContent = filtered.length;
@@ -3723,9 +3608,6 @@ const platformApp = (function () {
     openNewImportWizard();
   }
 
-  /* -------------------------------------------------------------------------
-     6.2 CREATE USER
-     ------------------------------------------------------------------------- */
   function openCreateUserModal() {
     const f = document.getElementById('formCreateUser');
     if (f) f.reset();
@@ -3780,7 +3662,6 @@ const platformApp = (function () {
       }
     } catch (e) {}
 
-    // Offline fallback
     const mockCreated = {
       userId: `USR-${Math.floor(1008 + Math.random() * 8000)}`,
       name,
@@ -3802,15 +3683,11 @@ const platformApp = (function () {
     showToast(`User account ${name} provisioned. Activation invitation dispatched.`, 'success');
   }
 
-  /* -------------------------------------------------------------------------
-     6.3 & 6.5 USER DETAIL 7-TAB DOSSIER
-     ------------------------------------------------------------------------- */
   function viewUserDossier(userId) {
     const user = usersDirectoryData.find(u => u.userId === userId || u.email === userId) || usersDirectoryData[0];
     if (!user) return;
     activeUserDossier = user;
 
-    // Header Info
     const nameEl = document.getElementById('dossierUserName'); if (nameEl) nameEl.textContent = user.name;
     const idEl = document.getElementById('dossierUserId'); if (idEl) idEl.textContent = user.userId;
     const emailEl = document.getElementById('dossierUserEmail'); if (emailEl) emailEl.textContent = user.email;
@@ -3831,7 +3708,6 @@ const platformApp = (function () {
         : '<i class="fa-solid fa-ban me-1"></i> Suspend Account';
     }
 
-    // Populate Tab 1: Profile
     const setT = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val || 'N/A'; };
     setT('dossierProfName', user.name);
     setT('dossierProfEmail', user.email);
@@ -3839,11 +3715,9 @@ const platformApp = (function () {
     setT('dossierProfDept', user.department || 'Administration');
     setT('dossierProfEmp', user.employeeRecordId || 'EMP-SV-014');
 
-    // Populate Tab 2: Institutions
     const instEl = document.getElementById('dossierInstName');
     if (instEl) instEl.textContent = user.institutionName || user.institutionId;
 
-    // Populate Tab 3: Roles
     const rolesContainer = document.getElementById('dossierRolesList');
     if (rolesContainer) {
       rolesContainer.innerHTML = (user.roles || []).map(r => `
@@ -3853,14 +3727,12 @@ const platformApp = (function () {
       `).join('');
     }
 
-    // Populate Tab 4: Security
     const mfaBadge = document.getElementById('dossierMfaBadge');
     if (mfaBadge) {
       mfaBadge.textContent = user.mfa?.enabled ? `Enforced (${(user.mfa.method || 'TOTP').toUpperCase()})` : 'Disabled';
       mfaBadge.className = user.mfa?.enabled ? 'badge bg-success' : 'badge bg-warning text-dark';
     }
 
-    // Populate Tab 5: Sessions
     const sessions = user.sessions || [];
     const sessCountEl = document.getElementById('dossierSessionCount');
     if (sessCountEl) sessCountEl.textContent = sessions.length;
@@ -3898,7 +3770,6 @@ const platformApp = (function () {
       }
     }
 
-    // Populate Tab 6: Invitations
     const invBox = document.getElementById('dossierInvitationsContainer');
     if (invBox) {
       invBox.innerHTML = `
@@ -3916,7 +3787,6 @@ const platformApp = (function () {
       `;
     }
 
-    // Populate Tab 7: Audit
     const auditBox = document.getElementById('dossierAuditContainer');
     if (auditBox) {
       const logs = user.auditHistory || [];
@@ -4041,13 +3911,8 @@ const platformApp = (function () {
     showToast(`All active login sessions for ${activeUserDossier.name} forcefully revoked.`, 'success');
   }
 
-
   
-  /* ==========================================================================
-     MODULE 7: ROLE TEMPLATES & PERMISSIONS CONTROLLER (SECTIONS 7.1 - 7.4)
-     ========================================================================== */
 
-  // State
   let rolesDirectoryData = [];
   let activeEditorRole = null;
   let activeViewerRoleId = null;
@@ -4316,9 +4181,6 @@ const platformApp = (function () {
     }
   ];
 
-  /**
-   * 7.2 Load Roles Directory from Backend
-   */
   async function loadRoleTemplatesDirectory() {
     try {
       const res = await fetch('/api/v1/platform/roles');
@@ -4375,9 +4237,6 @@ const platformApp = (function () {
     });
   }
 
-  /**
-   * 7.2 Render Roles Table
-   */
   function renderRolesTable(roles) {
     const tbody = document.getElementById('rolesTableBody');
     if (!tbody) return;
@@ -4480,9 +4339,6 @@ const platformApp = (function () {
     if (totalEl) totalEl.textContent = rolesDirectoryData.length;
   }
 
-  /**
-   * 7.2 Filter Roles Directory
-   */
   function filterRolesDirectory() {
     const q = (document.getElementById('roleSearchInput')?.value || '').toLowerCase().trim();
     const scope = document.getElementById('roleScopeFilter')?.value || 'all';
@@ -4524,9 +4380,6 @@ const platformApp = (function () {
     filterRolesDirectory();
   }
 
-  /**
-   * 7.2 Export Roles Matrix CSV
-   */
   function exportRolesMatrixCSV() {
     if (!rolesDirectoryData || rolesDirectoryData.length === 0) {
       showToast('No role data available to export.', 'warning');
@@ -4585,9 +4438,6 @@ const platformApp = (function () {
     showToast('Role permissions matrix exported successfully.', 'success');
   }
 
-  /**
-   * 7.3 Modal: Open Create Role
-   */
   function openCreateRoleModal() {
     activeEditorRole = null;
     const title = document.getElementById('modalRoleEditorTitle');
@@ -4616,10 +4466,8 @@ const platformApp = (function () {
     const scopeSelect = document.getElementById('roleEditScope');
     if (scopeSelect) scopeSelect.disabled = false;
 
-    // Default permissions: read only
     quickPresetPerms('readonly');
 
-    // Sensitive fields uncheck
     ['aadhaar_pii', 'financial_ledgers', 'staff_compensation', 'mark_moderation'].forEach(f => {
       const cb = document.getElementById(`sens_${f}`);
       if (cb) cb.checked = false;
@@ -4628,9 +4476,6 @@ const platformApp = (function () {
     openModal('modalRoleEditor');
   }
 
-  /**
-   * 7.3 Modal: Open Edit Role
-   */
   function openEditRoleModal(roleId) {
     const role = rolesDirectoryData.find(r => r.roleId === roleId || r.slug === roleId);
     if (!role) {
@@ -4667,7 +4512,6 @@ const platformApp = (function () {
     const scopeSelect = document.getElementById('roleEditScope');
     if (scopeSelect) scopeSelect.disabled = role.isBuiltIn;
 
-    // Matrix Checkboxes
     const modules = ['institutions', 'user_accounts', 'school_config', 'system_health', 'audit_logs', 'integrations'];
     const actions = ['view', 'create_edit', 'approve', 'export', 'manage_access'];
 
@@ -4680,7 +4524,6 @@ const platformApp = (function () {
       });
     });
 
-    // Sensitive Fields
     ['aadhaar_pii', 'financial_ledgers', 'staff_compensation', 'mark_moderation'].forEach(f => {
       const cb = document.getElementById(`sens_${f}`);
       if (cb) {
@@ -4691,9 +4534,6 @@ const platformApp = (function () {
     openModal('modalRoleEditor');
   }
 
-  /**
-   * 7.2 Action: Duplicate Role
-   */
   async function openDuplicateRoleModal(roleId) {
     const role = rolesDirectoryData.find(r => r.roleId === roleId || r.slug === roleId);
     if (!role) return;
@@ -4722,7 +4562,6 @@ const platformApp = (function () {
       console.warn('Backend duplicate failed; duplicating in local state:', e.message);
     }
 
-    // Local fallback
     const nextSeq = Math.floor(100 + Math.random() * 900);
     const cloned = JSON.parse(JSON.stringify(role));
     cloned.roleId = `ROLE-INST-CUS${nextSeq}`;
@@ -4740,9 +4579,6 @@ const platformApp = (function () {
     showToast(`Role duplicated successfully as '${cloned.name}'.`, 'success');
   }
 
-  /**
-   * 7.2 Action: View Permissions Dossier
-   */
   function viewRolePermissions(roleId) {
     const role = rolesDirectoryData.find(r => r.roleId === roleId || r.slug === roleId);
     if (!role) return;
@@ -4770,7 +4606,6 @@ const platformApp = (function () {
       safeguardBadge.className = role.isBuiltIn ? 'role-safeguard-badge' : 'role-type-badge role-type-custom';
     }
 
-    // Populate Matrix Table in Viewer
     const modules = [
       { id: 'institutions', label: 'Institutions', desc: 'Campus profiles & directory' },
       { id: 'user_accounts', label: 'User Accounts', desc: 'Identity lifecycle & sessions' },
@@ -4805,7 +4640,6 @@ const platformApp = (function () {
       }).join('');
     }
 
-    // Sensitive Fields Pills
     const sensContainer = document.getElementById('viewRoleSensitiveFields');
     if (sensContainer) {
       if (!role.sensitiveFields || role.sensitiveFields.length === 0) {
@@ -4819,7 +4653,6 @@ const platformApp = (function () {
       }
     }
 
-    // Change History Ledger
     const histContainer = document.getElementById('viewRoleHistoryContainer');
     if (histContainer) {
       const history = role.changeHistory || [];
@@ -4849,9 +4682,6 @@ const platformApp = (function () {
     }
   }
 
-  /**
-   * Quick Preset Toggles for Permission Matrix
-   */
   function quickPresetPerms(preset) {
     const modules = ['institutions', 'user_accounts', 'school_config', 'system_health', 'audit_logs', 'integrations'];
     const actions = ['view', 'create_edit', 'approve', 'export', 'manage_access'];
@@ -4872,9 +4702,6 @@ const platformApp = (function () {
     });
   }
 
-  /**
-   * 7.4 Form Submission: Compute Diff & Present Review Workflow
-   */
   function handleRoleFormSubmit(event) {
     event.preventDefault();
 
@@ -4888,7 +4715,6 @@ const platformApp = (function () {
     const expiryDate = document.getElementById('roleEditExpiryDate')?.value || null;
     const delegatedAuthority = document.getElementById('roleEditDelegatedAuth')?.value || 'no_delegation';
 
-    // Gather Matrix Permissions
     const modules = ['institutions', 'user_accounts', 'school_config', 'system_health', 'audit_logs', 'integrations'];
     const actions = ['view', 'create_edit', 'approve', 'export', 'manage_access'];
 
@@ -4901,7 +4727,6 @@ const platformApp = (function () {
       });
     });
 
-    // Gather Sensitive Fields
     const sensFields = [];
     ['aadhaar_pii', 'financial_ledgers', 'staff_compensation', 'mark_moderation'].forEach(f => {
       const cb = document.getElementById(`sens_${f}`);
@@ -4922,13 +4747,11 @@ const platformApp = (function () {
       exportRestrictions
     };
 
-    // If new role creation, skip diff workflow and create directly
     if (!roleId) {
       createNewRoleSubmit(draftData);
       return;
     }
 
-    // Existing role: compute diff against activeEditorRole
     const oldPerms = activeEditorRole?.permissions || {};
     const added = [];
     const removed = [];
@@ -4952,7 +4775,6 @@ const platformApp = (function () {
       isCritical: !!(activeEditorRole?.isPrivileged || (activeEditorRole?.isBuiltIn && activeEditorRole?.scope === 'Platform'))
     };
 
-    // Populate Diff Modal
     const addedCont = document.getElementById('roleDiffAddedContainer');
     const removedCont = document.getElementById('roleDiffRemovedContainer');
     const addedCount = document.getElementById('diffAddedCount');
@@ -4973,7 +4795,6 @@ const platformApp = (function () {
         : removed.map(x => `<span class="diff-chip-removed"><i class="fa-solid fa-minus"></i> ${x.label}</span>`).join('');
     }
 
-    // Check safeguard requirement
     const reviewerNotice = document.getElementById('roleDiffReviewerNotice');
     if (reviewerNotice) {
       reviewerNotice.style.display = pendingRoleDraft.isCritical ? 'block' : 'none';
@@ -4983,9 +4804,6 @@ const platformApp = (function () {
     openModal('modalRoleDiff');
   }
 
-  /**
-   * Create New Custom Role Handler
-   */
   async function createNewRoleSubmit(draftData) {
     try {
       const res = await fetch('/api/v1/platform/roles', {
@@ -5009,7 +4827,6 @@ const platformApp = (function () {
       console.warn('Backend role creation failed; creating locally:', e.message);
     }
 
-    // Fallback local
     const nextSeq = Math.floor(100 + Math.random() * 900);
     const newRole = {
       roleId: `ROLE-INST-CUS${nextSeq}`,
@@ -5038,9 +4855,6 @@ const platformApp = (function () {
     showToast(`Custom role '${newRole.name}' created successfully.`, 'success');
   }
 
-  /**
-   * 7.4 Confirm Role Save or Submit for Review
-   */
   async function confirmRoleSaveOrSubmit() {
     if (!pendingRoleDraft) return;
 
@@ -5076,7 +4890,6 @@ const platformApp = (function () {
       console.warn('Backend update failed; applying locally:', e.message);
     }
 
-    // Local apply
     const idx = rolesDirectoryData.findIndex(r => r.roleId === roleId);
     if (idx !== -1) {
       const role = rolesDirectoryData[idx];
@@ -5101,10 +4914,6 @@ const platformApp = (function () {
     showToast(isCritical ? 'Changes submitted for authorized reviewer sign-off.' : 'Role permissions updated and activated.', 'success');
   }
 
-  /**
-   * 7.2 Action: Toggle Role Status
-   * Safeguard: Built-in roles with critical privileges cannot be deactivated!
-   */
   async function toggleRoleStatus(roleId) {
     const role = rolesDirectoryData.find(r => r.roleId === roleId);
     if (!role) return;
@@ -5143,9 +4952,6 @@ const platformApp = (function () {
     showToast(`Role status updated to ${newStatus}.`, 'success');
   }
 
-  /**
-   * 7.2 Action: Quick User Assignment Modal
-   */
   function openAssignUsersModal(roleId) {
     const role = rolesDirectoryData.find(r => r.roleId === roleId);
     if (!role) return;
@@ -5201,12 +5007,6 @@ const platformApp = (function () {
     showToast(`Assigned user count updated for ${role.name}.`, 'success');
   }
 
-
-  /* ==========================================================================
-     MODULE 8: AUDIT LOG EXPLORER & FORENSIC EVIDENCE CONTROLLER (SECTIONS 8.1 - 8.4)
-     ========================================================================== */
-
-  // State
   let platformAuditLogsData = [];
   let activeAuditDetailEvent = null;
 
@@ -5524,9 +5324,6 @@ const platformApp = (function () {
     }
   ];
 
-  /**
-   * 8.1 Load Platform Audit Logs Directory
-   */
   async function loadPlatformAuditDirectory() {
     try {
       const res = await fetch('/api/v1/platform/audit');
@@ -5576,9 +5373,6 @@ const platformApp = (function () {
     });
   }
 
-  /**
-   * 8.1 Render 9-Column Forensic Table
-   */
   function renderPlatformAuditTable(events) {
     const tbody = document.getElementById('auditLogsTableBody');
     if (!tbody) return;
@@ -5604,20 +5398,17 @@ const platformApp = (function () {
         hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false
       });
 
-      // Severity Badge
       const sevClass = e.severity === 'CRITICAL' ? 'badge-sev-critical'
         : e.severity === 'HIGH' ? 'badge-sev-high'
         : e.severity === 'MEDIUM' ? 'badge-sev-medium'
         : e.severity === 'LOW' ? 'badge-sev-low'
         : 'badge-sev-info';
 
-      // Result Badge
       const resClass = e.result === 'SUCCESS' ? 'badge-res-success'
         : e.result === 'DENIED' ? 'badge-res-denied'
         : e.result === 'FAILED' ? 'badge-res-failed'
         : 'badge-res-warning';
 
-      // Institution short label
       const instShort = e.institutionId === 'TRUST-ALL' ? 'Trust Central'
         : e.institutionId === 'INST-001' ? 'Main Campus'
         : e.institutionId === 'INST-002' ? 'City Branch'
@@ -5684,9 +5475,6 @@ const platformApp = (function () {
     if (totalEl) totalEl.textContent = platformAuditLogsData.length;
   }
 
-  /**
-   * 8.1 Multi-Field Filter Processor
-   */
   function filterPlatformAuditLogs() {
     const q = (document.getElementById('auditSearchInput')?.value || '').toLowerCase().trim();
     const startDateVal = document.getElementById('auditStartDate')?.value || '';
@@ -5703,38 +5491,29 @@ const platformApp = (function () {
     const end = endDateVal ? new Date(endDateVal + 'T23:59:59') : null;
 
     const filtered = platformAuditLogsData.filter(e => {
-      // 1. Text Search
       if (q) {
         const hay = `${e.eventId} ${e.action} ${e.actor?.name} ${e.actor?.email} ${e.targetEntity?.displayName} ${e.targetEntity?.entityId} ${e.reason}`.toLowerCase();
         if (!hay.includes(q)) return false;
       }
-      // 2. Date Range
       const evtDate = new Date(e.timestamp);
       if (start && evtDate < start) return false;
       if (end && evtDate > end) return false;
 
-      // 3. User
       if (user !== 'all') {
         const actorName = (e.actor?.name || '').toLowerCase();
         const actorId = (e.actor?.userId || '').toLowerCase();
         if (!actorName.includes(user) && !actorId.includes(user)) return false;
       }
-      // 4. Institution
       if (inst !== 'all' && e.institutionId !== inst) return false;
 
-      // 5. Category
       if (cat !== 'all' && e.category !== cat) return false;
 
-      // 6. Action Type
       if (act !== 'all' && !e.action.toLowerCase().includes(act)) return false;
 
-      // 7. Result
       if (res !== 'all' && e.result !== res) return false;
 
-      // 8. Severity
       if (sev !== 'all' && e.severity !== sev) return false;
 
-      // 9. Record Ref
       if (recordRef) {
         const tgtId = (e.targetEntity?.entityId || '').toLowerCase();
         const tgtName = (e.targetEntity?.displayName || '').toLowerCase();
@@ -5765,9 +5544,6 @@ const platformApp = (function () {
     filterPlatformAuditLogs();
   }
 
-  /**
-   * 8.2 Event Detail Modal Inspection
-   */
   async function openAuditEventDetails(eventId) {
     let event = platformAuditLogsData.find(e => e.eventId === eventId);
     let relatedEvents = [];
@@ -5804,7 +5580,6 @@ const platformApp = (function () {
     const dateObj = new Date(event.timestamp);
     setT('auditDetailTimestamp', `${dateObj.toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })}, ${dateObj.toLocaleTimeString('en-IN')} (IST)`);
 
-    // Severity & Result badges
     const sevEl = document.getElementById('auditDetailSeverityBadge');
     if (sevEl) {
       sevEl.textContent = event.severity;
@@ -5824,7 +5599,6 @@ const platformApp = (function () {
         : 'badge-res-warning';
     }
 
-    // Actor Card
     setT('auditDetailActorName', event.actor?.name || 'Unknown');
     setT('auditDetailActorEmail', event.actor?.email || 'N/A');
     setT('auditDetailActorRole', event.actor?.role || 'Operator');
@@ -5832,20 +5606,16 @@ const platformApp = (function () {
     setT('auditDetailActorAgent', event.actor?.userAgent || 'Standard Browser Client');
     setT('auditDetailActorScope', `${event.actor?.scope || 'Platform'} Scope`);
 
-    // Target Card
     setT('auditDetailTargetName', event.targetEntity?.displayName || 'System Asset');
     setT('auditDetailTargetId', event.targetEntity?.entityId || 'N/A');
     setT('auditDetailTargetType', event.targetEntity?.entityType || 'GeneralRecord');
     setT('auditDetailInstitution', event.institutionName || event.institutionId);
     setT('auditDetailAction', event.action);
 
-    // Reason
     setT('auditDetailReason', event.reason || 'Statutory administrative action logged.');
 
-    // Tamper Seal
     setT('auditDetailTamperSeal', event.tamperSealHash || 'SHA-256 Block Seal Validated');
 
-    // 8.2 Changed Fields Diff Viewer
     const diffTbody = document.getElementById('auditDetailDiffTableBody');
     if (diffTbody) {
       const diffs = event.changedFields || [];
@@ -5866,11 +5636,9 @@ const platformApp = (function () {
       }
     }
 
-    // Related Events Timeline
     const relContainer = document.getElementById('auditDetailRelatedEvents');
     if (relContainer) {
       if (relatedEvents.length === 0) {
-        // Fallback local resolution
         relatedEvents = platformAuditLogsData.filter(e => {
           if (e.eventId === event.eventId) return false;
           if (e.correlationId === event.correlationId) return true;
@@ -5897,7 +5665,6 @@ const platformApp = (function () {
       }
     }
 
-    // Security Alert Button
     const btnSec = document.getElementById('btnOpenRelatedSecurityEvent');
     if (btnSec) {
       btnSec.style.display = event.relatedSecurityEventId ? 'inline-block' : 'none';
@@ -5906,9 +5673,6 @@ const platformApp = (function () {
     openModal('modalAuditEventDetail');
   }
 
-  /**
-   * 8.4 Action: Export Authorized Report
-   */
   async function exportAuthorizedAuditReport() {
     if (!platformAuditLogsData || platformAuditLogsData.length === 0) {
       showToast('No audit data available to export.', 'warning');
@@ -5933,7 +5697,6 @@ const platformApp = (function () {
       console.warn('Backend export failed; compiling locally:', e.message);
     }
 
-    // Local fallback
     const headers = [
       'Event ID', 'Timestamp (UTC)', 'Correlation ID', 'Category', 'Action Executed',
       'Actor User ID', 'Actor Name', 'Actor Role', 'Actor Scope', 'Actor IP Address',
@@ -5989,20 +5752,11 @@ const platformApp = (function () {
     URL.revokeObjectURL(url);
   }
 
-  /**
-   * 8.4 Action: Open Related Security Event
-   */
   function openRelatedSecurityEvent() {
     closeModal('modalAuditEventDetail');
     navigateTo('security-monitoring');
     showToast('Navigated to Security & Access Monitoring.', 'info');
   }
-
-
-  /* ==========================================================================
-     MODULE 9: SECURITY & ACCESS MONITORING CONTROLLER
-     9.1 Overview, 9.2 Events Register, 9.3 Access Reviews, 9.4 Workflow
-     ========================================================================== */
 
   let securityEventsData = [];
   let accessReviewsData = [];
@@ -6178,7 +5932,6 @@ const platformApp = (function () {
     setTxt('secDetailInvestigatorName', event.assignedInvestigator?.name || 'Unassigned');
     setTxt('secDetailInvestigatorSLA', 'SLA Target: ' + (event.assignedInvestigator?.slaTargetHours || 4) + 'h');
 
-    // Risk badge
     const riskBadge = document.getElementById('secDetailRiskBadge');
     if (riskBadge) {
       const rClass = (event.riskClassification || 'MEDIUM').toLowerCase();
@@ -6186,13 +5939,11 @@ const platformApp = (function () {
       riskBadge.textContent = event.riskClassification + ' RISK';
     }
 
-    // Status badge
     const statusBadge = document.getElementById('secDetailStatusBadge');
     if (statusBadge) {
       statusBadge.textContent = event.status;
     }
 
-    // Telemetry
     setTxt('secDetailIpAddress', event.telemetry?.ipAddress || '127.0.0.1');
     setTxt('secDetailLocation', event.telemetry?.location || 'Visakhapatnam, AP, India');
     setTxt('secDetailUserAgent', event.telemetry?.userAgent || 'Standard Browser Client');
@@ -6209,12 +5960,10 @@ const platformApp = (function () {
       }
     }
 
-    // Findings
     setTxt('secDetailRootCause', event.findings?.rootCause || 'No findings recorded yet. Investigator assigned.');
     setTxt('secDetailEvidence', event.findings?.evidence || 'No evidence uploaded.');
     setTxt('secDetailRemediationNotes', event.findings?.remediationNotes || 'Remediation pending.');
 
-    // Escalation banner
     const escBanner = document.getElementById('secDetailEscalationBanner');
     if (escBanner) {
       if (event.escalationDetails?.isEscalated) {
@@ -6227,7 +5976,6 @@ const platformApp = (function () {
       }
     }
 
-    // Timeline list
     const timelineEl = document.getElementById('secDetailTimelineList');
     if (timelineEl) {
       const list = event.timeline || [];
@@ -6582,12 +6330,6 @@ const platformApp = (function () {
     document.body.removeChild(a);
     showToast('Security dossier exported successfully.', 'success');
   }
-
-
-  /* ==========================================================================
-     MODULE 10: SUBSCRIPTIONS & COMMERCIAL PLANS CONTROLLER
-     10.1 Plans Directory, 10.2 Institution Subscriptions, 10.3 Usage/Entitlements
-     ========================================================================== */
 
   let plansData = [];
   let subscriptionsData = [];
@@ -7006,14 +6748,12 @@ const platformApp = (function () {
     try {
       let res;
       if (subId) {
-        // Change plan
         res = await fetch('/api/v1/platform/subscriptions/' + subId + '/change-plan', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ planId, operator: 'Platform Administrator' })
         });
       } else {
-        // Assign new plan
         res = await fetch('/api/v1/platform/subscriptions/assign', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -7166,7 +6906,6 @@ const platformApp = (function () {
       const u = json.usage;
       if (!u) return;
 
-      // Student usage
       const sVal = document.getElementById('usageStudentValue');
       if (sVal) sVal.textContent = u.activeStudents.used + ' / ' + u.activeStudents.limit.toLocaleString('en-IN');
       const sBar = document.getElementById('usageStudentBar');
@@ -7179,7 +6918,6 @@ const platformApp = (function () {
       const sSub = document.getElementById('usageStudentSub');
       if (sSub) sSub.textContent = (u.activeStudents.limit - u.activeStudents.used) + ' student seats remaining';
 
-      // Storage usage
       const stVal = document.getElementById('usageStorageValue');
       if (stVal) stVal.textContent = u.storageGB.used + ' / ' + u.storageGB.limit + ' GB';
       const stBar = document.getElementById('usageStorageBar');
@@ -7192,7 +6930,6 @@ const platformApp = (function () {
       const stSub = document.getElementById('usageStorageSub');
       if (stSub) stSub.textContent = (u.storageGB.limit - u.storageGB.used).toFixed(1) + ' GB capacity available';
 
-      // Staff usage
       const sfVal = document.getElementById('usageStaffValue');
       if (sfVal) sfVal.textContent = u.activeStaff.used + ' / ' + u.activeStaff.limit;
       const sfBar = document.getElementById('usageStaffBar');
@@ -7200,7 +6937,6 @@ const platformApp = (function () {
       const sfSub = document.getElementById('usageStaffSub');
       if (sfSub) sfSub.textContent = (u.activeStaff.limit - u.activeStaff.used) + ' staff logins available';
 
-      // API usage
       const aVal = document.getElementById('usageApiValue');
       if (aVal) aVal.textContent = u.apiRequestsToday.used.toLocaleString('en-IN') + ' / ' + (u.apiRequestsToday.limit / 1000) + 'k';
       const aBar = document.getElementById('usageApiBar');
@@ -7208,7 +6944,6 @@ const platformApp = (function () {
       const aSub = document.getElementById('usageApiSub');
       if (aSub) aSub.textContent = (u.apiRequestsToday.limit - u.apiRequestsToday.used).toLocaleString('en-IN') + ' calls remaining today';
 
-      // Warnings
       const warnContainer = document.getElementById('usageWarningContainer');
       if (warnContainer) {
         const warnings = json.warnings || [];
@@ -7223,7 +6958,6 @@ const platformApp = (function () {
         }
       }
 
-      // Modules list
       const modsList = document.getElementById('usageEnabledModulesList');
       if (modsList) {
         const modules = json.enabledModules || [];
@@ -7276,15 +7010,6 @@ const platformApp = (function () {
     document.body.removeChild(a);
     showToast('Subscription register exported successfully.', 'success');
   }
-
-
-  /* ==========================================================================
-     MODULE 11: SYSTEM HEALTH & DEPLOYMENT CONTROLLER
-     11.1 Service Health Probes
-     11.2 Deployment History & Rollbacks (Secrets Redacted)
-     11.3 Application Logs & Diagnostic Dossier Exporter (PII & Tokens Scrubbed)
-     11.4 Background Jobs (Idempotent Safe Retries)
-     ========================================================================== */
 
   let healthTelemetry = null;
   let deploymentsData = [];
@@ -7439,13 +7164,9 @@ const platformApp = (function () {
     }
   }
 
-  /* --------------------------------------------------------------------------
-     11.1 Service Health Probes
-     -------------------------------------------------------------------------- */
   function renderSystemHealthTelemetry(data) {
     if (!data) return;
 
-    // Node.js process metrics
     const setEl = (id, val) => {
       const el = document.getElementById(id);
       if (el) el.textContent = val;
@@ -7464,7 +7185,6 @@ const platformApp = (function () {
 
     setEl('kpiHlthLastCheck', formatHlthDateTime(data.lastSuccessfulHealthCheck));
 
-    // Service Health Cards (6 Probes)
     const grid = document.getElementById('serviceHealthGrid');
     if (!grid) return;
 
@@ -7547,9 +7267,6 @@ const platformApp = (function () {
     }).join('');
   }
 
-  /* --------------------------------------------------------------------------
-     11.2 Deployment History & Rollbacks (Secrets Redacted)
-     -------------------------------------------------------------------------- */
   function renderDeploymentsTable(deployments) {
     const tbody = document.getElementById('tbodyDeployments');
     const badgeCount = document.getElementById('badgeDeploymentsCount');
@@ -7676,7 +7393,6 @@ const platformApp = (function () {
       if (errBox) errBox.style.display = 'none';
     }
 
-    // Rollback button state
     const btnRollback = document.getElementById('btnDepDetailRollback');
     if (btnRollback) {
       if ((dep.status === 'SUCCESS' || dep.status === 'FAILED') && !dep.isRollback) {
@@ -7772,9 +7488,6 @@ const platformApp = (function () {
     }
   }
 
-  /* --------------------------------------------------------------------------
-     11.3 Application Logs & Diagnostic Export (Sanitized & Sealed)
-     -------------------------------------------------------------------------- */
   function renderAppLogsTable(logs) {
     const tbody = document.getElementById('tbodyAppLogs');
     if (!tbody) return;
@@ -7910,9 +7623,6 @@ const platformApp = (function () {
     }
   }
 
-  /* --------------------------------------------------------------------------
-     11.4 Idempotent Background Jobs
-     -------------------------------------------------------------------------- */
   function renderBackgroundJobsTable(jobs) {
     const tbody = document.getElementById('tbodyBackgroundJobs');
     const badgeCount = document.getElementById('badgeBackgroundJobsCount');
@@ -8030,7 +7740,6 @@ const platformApp = (function () {
       if (errBox) errBox.style.display = 'none';
     }
 
-    // Cancel and Retry button visibility
     const btnCancel = document.getElementById('btnJobCancelAction');
     const btnRetry = document.getElementById('btnJobRetryAction');
 
@@ -8096,14 +7805,6 @@ const platformApp = (function () {
       showToast('Error cancelling job: ' + e.message, 'danger');
     }
   }
-
-
-  /* ==========================================================================
-     MODULE 12: BACKUPS & DISASTER RECOVERY CONTROLLER
-     12.1 Backup Overview
-     12.2 Backup History
-     12.3 Controlled 8-Step Recovery Workflow
-     ========================================================================== */
 
   let backupsOverviewData = null;
   let backupsData = [];
@@ -8232,9 +7933,6 @@ const platformApp = (function () {
     }
   }
 
-  /* --------------------------------------------------------------------------
-     12.1 Backup Overview
-     -------------------------------------------------------------------------- */
   function renderBackupOverview(overview) {
     if (!overview) return;
 
@@ -8243,25 +7941,21 @@ const platformApp = (function () {
       if (el) el.textContent = val;
     };
 
-    // 1. Last database backup
     if (overview.lastSuccessfulDatabaseBackup) {
       setEl('kpiBkpLastDb', overview.lastSuccessfulDatabaseBackup.sizeFormatted || '142.8 MB');
       setEl('kpiBkpLastDbMeta', formatBkpDateTime(overview.lastSuccessfulDatabaseBackup.completedAt));
     }
 
-    // 2. Last file backup
     if (overview.lastSuccessfulFileBackup) {
       setEl('kpiBkpLastFiles', overview.lastSuccessfulFileBackup.sizeFormatted || '1.40 GB');
       setEl('kpiBkpLastFilesMeta', formatBkpDateTime(overview.lastSuccessfulFileBackup.completedAt));
     }
 
-    // 3. Backup schedule
     if (overview.backupSchedule) {
       setEl('kpiBkpSchedule', overview.backupSchedule.databaseCadence ? 'Every 6 Hours' : 'Automated');
       setEl('kpiBkpNextRun', 'Next: ' + (overview.backupSchedule.nextScheduledRun || 'Today 20:00 IST'));
     }
 
-    // 4. Backup storage status
     if (overview.backupStorageStatus) {
       const st = overview.backupStorageStatus;
       setEl('kpiBkpStorage', (st.usedGB ?? 248.6) + ' GB / ' + (Math.round((st.totalAllocatedGB || 2048) / 1024)) + ' TB');
@@ -8274,17 +7968,14 @@ const platformApp = (function () {
       if (pBar) pBar.style.width = st.usagePercentage || '12.1%';
     }
 
-    // 5. Retention policy
     setEl('kpiBkpRetention', '7 Yrs / Permanent');
 
-    // 6. Failed backups
     if (overview.failedBackups) {
       const f = overview.failedBackups;
       setEl('kpiBkpFailedCount', (f.totalFailedCount || 0) + ' Events');
       setEl('kpiBkpFailedMeta', f.totalFailedCount > 0 ? (f.totalFailedCount + ' archived error events') : 'Zero Unresolved Failures');
     }
 
-    // 7. Latest recovery test
     if (overview.latestRecoveryTest) {
       const r = overview.latestRecoveryTest;
       setEl('kpiBkpLatestDrill', r.drillId || 'REC-2026-001');
@@ -8292,9 +7983,6 @@ const platformApp = (function () {
     }
   }
 
-  /* --------------------------------------------------------------------------
-     12.2 Backup History
-     -------------------------------------------------------------------------- */
   function renderBackupsTable(backups) {
     const tbody = document.getElementById('tbodyBackups');
     const badgeCount = document.getElementById('badgeBackupsCount');
@@ -8541,7 +8229,6 @@ const platformApp = (function () {
         document.body.removeChild(a);
         window.URL.revokeObjectURL(url);
       } else {
-        // Direct download restricted by policy
         showToast(json.message || 'Security Policy: Direct download of raw PII vault archives is restricted.', 'warning');
       }
     } catch (e) {
@@ -8550,9 +8237,6 @@ const platformApp = (function () {
     }
   }
 
-  /* --------------------------------------------------------------------------
-     12.3 Recovery Workflow (8-Step Controlled Process)
-     -------------------------------------------------------------------------- */
   function openRequestRecoveryModal(presetBackupId) {
     const sel = document.getElementById('selReqRecBackupId');
     if (sel) {
@@ -8587,7 +8271,6 @@ const platformApp = (function () {
       }
       if (recordsEl) recordsEl.textContent = '920 Test Records Synchronized';
     } else {
-      // ISOLATED_SANDBOX or DISASTER_RECOVERY_CLUSTER
       if (downtimeEl) downtimeEl.textContent = '0 Minutes (Zero Downtime)';
       if (overwriteEl) {
         overwriteEl.className = 'badge bg-success-subtle text-success border border-success-subtle';
@@ -8772,7 +8455,6 @@ const platformApp = (function () {
       statusPill.textContent = r.recoveryStatus || 'COMPLETED';
     }
 
-    // Render 8 Steps
     const container = document.getElementById('workflowStepperContainer');
     if (container) {
       const steps = r.stepDetails && r.stepDetails.length > 0 ? r.stepDetails : [
@@ -8817,15 +8499,6 @@ const platformApp = (function () {
 
     openModal('modalRecoveryWorkflowDetail');
   }
-
-
-  /* ==========================================================================
-     MODULE 13: INTEGRATIONS & API MANAGEMENT CONTROLLER
-     13.1 Integrations Directory
-     13.2 Integration Configuration & Masked KMS Credentials
-     13.3 External API Clients Management & Scopes
-     13.4 Integration Event Logs & Strict Payment Reconciliation Invariant
-     ========================================================================== */
 
   let integrationsData = [];
   let apiClientsData = [];
@@ -8943,9 +8616,6 @@ const platformApp = (function () {
     }
   }
 
-  /* --------------------------------------------------------------------------
-     13.1 Integrations Directory
-     -------------------------------------------------------------------------- */
   function renderIntegrationsTable(list) {
     const tbody = document.getElementById('tbodyIntegrations');
     const badgeCount = document.getElementById('badgeIntegrationsCount');
@@ -9060,9 +8730,6 @@ const platformApp = (function () {
     renderIntegrationsTable(integrationsData);
   }
 
-  /* --------------------------------------------------------------------------
-     13.2 Integration Configuration & Actions
-     -------------------------------------------------------------------------- */
   function openCreateIntegrationModal() {
     const setVal = (id, v) => { const el = document.getElementById(id); if (el) el.value = v; };
     setVal('txtIntFormId', '');
@@ -9337,9 +9004,6 @@ const platformApp = (function () {
     openModal('modalIntegrationDetail');
   }
 
-  /* --------------------------------------------------------------------------
-     13.3 API Management (External Clients)
-     -------------------------------------------------------------------------- */
   function renderApiClientsTable(list) {
     const tbody = document.getElementById('tbodyApiClients');
     const badgeCount = document.getElementById('badgeApiClientsCount');
@@ -9514,9 +9178,6 @@ const platformApp = (function () {
     }
   }
 
-  /* --------------------------------------------------------------------------
-     13.4 Integration Event Logs & Payment Reconciliation
-     -------------------------------------------------------------------------- */
   function renderEventLogsTable(list) {
     const tbody = document.getElementById('tbodyIntegrationEventLogs');
     const badgeCount = document.getElementById('badgeEventLogsCount');
@@ -9532,7 +9193,6 @@ const platformApp = (function () {
     }
 
     tbody.innerHTML = list.map(evt => {
-      // Payment Invariant Section 13.4: Strictly distinguish unverified webhooks from independently reconciled payments
       let statusBadge = '';
       if (evt.isPayment) {
         if (evt.paymentVerificationStatus === 'INDEPENDENTLY_RECONCILED') {
@@ -9667,7 +9327,6 @@ const platformApp = (function () {
       metaEl.textContent = JSON.stringify(evt.metadata || {}, null, 2);
     }
 
-    // Payment Section 13.4 Box
     const payBox = document.getElementById('boxEventPaymentReconciliation');
     const payStatusEl = document.getElementById('lblEventDetailPayStatus');
     const payNoteEl = document.getElementById('lblEventDetailPayNote');
@@ -9733,7 +9392,6 @@ const platformApp = (function () {
         showToast('Payment independently verified & credited to student fee ledger', 'success');
         await loadIntegrationsData();
 
-        // If modal open, refresh modal
         const idHidden = document.getElementById('txtEventDetailId');
         if (idHidden && idHidden.value === targetId) {
           openEventLogDetailsModal(targetId);
@@ -9755,17 +9413,6 @@ const platformApp = (function () {
       filterEventLogsTable();
     }
   }
-
-
-
-  /* ==========================================================================
-     MODULE 14: SUPPORT & ISSUE MANAGEMENT CONTROLLER
-     14.1 Support Overview (5 KPI Cards)
-     14.2 Support Ticket Directory (10 Columns & Filters)
-     14.3 Create Support Ticket Form & Validation
-     14.4 Ticket Detail Inspector (6 Tabs & Actions)
-     14.5 Lifecycle Workflow & Dedicated Security Response Invariant
-     ========================================================================== */
 
   let supportTicketsData = [];
   let supportOverviewData = null;
@@ -9854,9 +9501,6 @@ const platformApp = (function () {
     }
   }
 
-  /* --------------------------------------------------------------------------
-     14.1 Support Overview (5 KPI Cards)
-     -------------------------------------------------------------------------- */
   function renderSupportOverview(overview) {
     if (!overview) return;
     const setVal = (id, val) => {
@@ -9871,9 +9515,6 @@ const platformApp = (function () {
     setVal('kpiSupportResolvedCount', overview.recentlyResolvedCount ?? 0);
   }
 
-  /* --------------------------------------------------------------------------
-     14.2 Support Ticket Directory (10 Columns)
-     -------------------------------------------------------------------------- */
   function renderSupportTicketsTable(list) {
     const tbody = document.getElementById('tbodySupportTickets');
     const legacyTbody = document.getElementById('supportTicketsTableBody');
@@ -9992,9 +9633,6 @@ const platformApp = (function () {
     renderSupportTicketsTable(supportTicketsData);
   }
 
-  /* --------------------------------------------------------------------------
-     14.3 Create Support Ticket Form & Handling
-     -------------------------------------------------------------------------- */
   function openCreateTicketModal() {
     const setVal = (id, v) => { const el = document.getElementById(id); if (el) el.value = v; };
     setVal('txtTicketFormSubject', '');
@@ -10085,9 +9723,6 @@ const platformApp = (function () {
     }
   }
 
-  /* --------------------------------------------------------------------------
-     14.4 Ticket Detail Inspector (6 Tabs & Actions)
-     -------------------------------------------------------------------------- */
   async function openSupportTicketDetailsModal(ticketId) {
     currentViewingTicketId = ticketId;
     let ticket = (supportTicketsData || []).find(t => (t.ticketId === ticketId || t.id === ticketId));
@@ -10115,7 +9750,6 @@ const platformApp = (function () {
     setEl('lblTicketDetailAgent', ticket.assignedAgent?.name || 'Unassigned');
     setEl('lblTicketDetailSLA', ticket.slaDeadline ? formatSupportDate(ticket.slaDeadline) : 'None');
 
-    // Priority & Status Badges
     const pEl = document.getElementById('lblTicketDetailPriority');
     if (pEl) {
       pEl.className = 'badge ' + (ticket.priority === 'Critical' ? 'badge-pri-critical' : ticket.priority === 'High' ? 'badge-pri-high' : ticket.priority === 'Medium' ? 'badge-pri-medium' : 'badge-pri-low');
@@ -10128,13 +9762,11 @@ const platformApp = (function () {
       sEl.textContent = ticket.status;
     }
 
-    // Section 14.5 Security Incident Workflow Banner
     const secBox = document.getElementById('boxTicketDetailSecurityBanner');
     if (secBox) {
       secBox.style.display = ticket.isSecurityIncident ? 'flex' : 'none';
     }
 
-    // Toggle Resolve vs Reopen buttons
     const btnResolve = document.getElementById('btnTicketActionResolve');
     const btnReopen = document.getElementById('btnTicketActionReopen');
     if (['Resolved', 'Closed'].includes(ticket.status)) {
@@ -10145,7 +9777,6 @@ const platformApp = (function () {
       if (btnReopen) btnReopen.style.display = 'none';
     }
 
-    // Populate Tab 1: Overview
     setEl('lblTicketDetailDescription', ticket.description || 'No detailed description provided.');
     setEl('lblTicketDetailCategory', ticket.category || 'General');
     setEl('lblTicketDetailImpact', ticket.impact || 'Single User');
@@ -10162,7 +9793,6 @@ const platformApp = (function () {
       if (resBox) resBox.style.display = 'none';
     }
 
-    // Populate Tab 2: Conversation
     const conversation = ticket.conversation || [];
     const convBadge = document.getElementById('badgeTicketConversationCount');
     if (convBadge) convBadge.textContent = conversation.length;
@@ -10190,7 +9820,6 @@ const platformApp = (function () {
       }
     }
 
-    // Populate Tab 3: Attachments
     const attachments = ticket.supportingFiles || [];
     const attBadge = document.getElementById('badgeTicketAttachmentsCount');
     if (attBadge) attBadge.textContent = attachments.length;
@@ -10217,7 +9846,6 @@ const platformApp = (function () {
       }
     }
 
-    // Populate Tab 4: Internal Notes (Strict Invariant: Internal only)
     const notes = ticket.internalNotes || [];
     const notesBadge = document.getElementById('badgeTicketNotesCount');
     if (notesBadge) notesBadge.textContent = notes.length;
@@ -10242,7 +9870,6 @@ const platformApp = (function () {
       }
     }
 
-    // Populate Tab 5: Related Incidents
     const related = ticket.relatedIncidents || [];
     const relatedEl = document.getElementById('listTicketRelatedIncidents');
     if (relatedEl) {
@@ -10261,7 +9888,6 @@ const platformApp = (function () {
       }
     }
 
-    // Populate Tab 6: Activity History
     const activity = ticket.activityHistory || [];
     const activityEl = document.getElementById('listTicketActivityHistory');
     if (activityEl) {
@@ -10300,9 +9926,6 @@ const platformApp = (function () {
     });
   }
 
-  /* --------------------------------------------------------------------------
-     14.4 Action Modals & Handlers
-     -------------------------------------------------------------------------- */
   function openAssignModal() {
     openModal('modalAssignTicket');
   }
@@ -10563,10 +10186,6 @@ const platformApp = (function () {
     }
   }
 
-
-  // ===========================================================================
-  // MODULE 15: DOMAINS, EMAIL & NOTIFICATIONS
-  // ===========================================================================
   let domainsEmailState = {
     domains: [],
     emailServices: [],
@@ -10615,7 +10234,6 @@ const platformApp = (function () {
       domainsEmailState.emailServices = (jServices && jServices.success) ? (jServices.data || []) : [];
       domainsEmailState.templates = (jTemplates && jTemplates.success) ? (jTemplates.data || []) : [];
 
-      // Update Sub-Tab Counts
       const bDomains = document.getElementById('badgeDomainsCount');
       if (bDomains) bDomains.textContent = domainsEmailState.domains.length;
 
@@ -10681,7 +10299,6 @@ const platformApp = (function () {
     }
 
     tbody.innerHTML = list.map(d => {
-      // Verification badge
       let vBadge = '<span class="badge badge-dom-pending"><i class="fa-solid fa-clock me-1"></i>PENDING</span>';
       if (d.verificationStatus === 'VERIFIED') {
         vBadge = '<span class="badge badge-dom-verified"><i class="fa-solid fa-circle-check me-1"></i>VERIFIED</span>';
@@ -10689,7 +10306,6 @@ const platformApp = (function () {
         vBadge = '<span class="badge badge-dom-failed"><i class="fa-solid fa-triangle-exclamation me-1"></i>FAILED</span>';
       }
 
-      // DNS status badge
       let dnsBadge = '<span class="badge badge-dns-propagating"><i class="fa-solid fa-spinner fa-spin me-1"></i>PROPAGATING</span>';
       if (d.dnsStatus === 'HEALTHY' || d.dnsStatus === 'ACTIVE') {
         dnsBadge = '<span class="badge badge-dns-healthy"><i class="fa-solid fa-check me-1"></i>HEALTHY</span>';
@@ -10697,7 +10313,6 @@ const platformApp = (function () {
         dnsBadge = '<span class="badge badge-dns-misconfigured"><i class="fa-solid fa-circle-xmark me-1"></i>MISCONFIGURED</span>';
       }
 
-      // SSL status badge
       let sslBadge = '<span class="badge badge-ssl-none"><i class="fa-solid fa-xmark me-1"></i>NONE</span>';
       if (d.sslStatus === 'VALID') {
         sslBadge = '<span class="badge badge-ssl-valid"><i class="fa-solid fa-shield-halved me-1"></i>VALID</span>';
@@ -10869,7 +10484,6 @@ const platformApp = (function () {
         lblToken.textContent = domainData.verificationToken || 'N/A';
       }
 
-      // Render Records Table
       const tbody = document.getElementById('tbodyDomainDnsRecords');
       if (tbody) {
         if (records.length === 0) {
@@ -10998,7 +10612,6 @@ const platformApp = (function () {
     }
   }
 
-  // 15.3 Email Service Management
   function renderEmailServicesTable(list) {
     const tbody = document.getElementById('tbodyEmailServices');
     if (!tbody) return;
@@ -11169,7 +10782,6 @@ const platformApp = (function () {
     }
   }
 
-  // 15.4 Notification Templates
   function renderNotificationTemplatesTable(list) {
     const tbody = document.getElementById('tbodyNotificationTemplates');
     if (!tbody) return;
@@ -11272,7 +10884,6 @@ const platformApp = (function () {
       return;
     }
 
-    // Client-side Privacy Guard Invariant check
     const prohibitedTokens = ['password', 'password_hash', 'token', 'session_token', 'aadhaar_full', 'bank_account_full', 'secret', 'api_key'];
     const lowerBody = body.toLowerCase();
     for (const p of prohibitedTokens) {
@@ -11357,10 +10968,6 @@ const platformApp = (function () {
     }
   }
 
-
-    // ===========================================================================
-  // MODULE 16: GLOBAL PLATFORM SETTINGS
-  // ===========================================================================
   let globalSettingsState = {
     settings: null,
     features: [],
@@ -11416,7 +11023,6 @@ const platformApp = (function () {
   function populateGlobalSettingsForm(settings) {
     if (!settings) return;
 
-    // 16.1 General Settings
     const gen = settings.general || {};
     const elName = document.getElementById('txtSettingsPlatformName');
     const elLogo = document.getElementById('txtSettingsPlatformLogo');
@@ -11461,7 +11067,6 @@ const platformApp = (function () {
     if (elNotifyWhatsApp && notify.whatsappEnabled !== undefined) elNotifyWhatsApp.checked = notify.whatsappEnabled;
     if (elDigestFreq && notify.digestFrequency) elDigestFreq.value = notify.digestFrequency;
 
-    // 16.2 Authentication Settings
     const auth = settings.authentication || {};
     const pwd = auth.passwordRequirements || {};
     const sess = auth.sessionDuration || {};
@@ -11504,7 +11109,6 @@ const platformApp = (function () {
     if (elAuthGoogle && methods.googleWorkspaceSSO !== undefined) elAuthGoogle.checked = methods.googleWorkspaceSSO;
     if (elAuthMicrosoft && methods.microsoftEntraID !== undefined) elAuthMicrosoft.checked = methods.microsoftEntraID;
 
-    // 16.4 Maintenance Settings
     renderMaintenanceSettings(settings.maintenance);
   }
 
@@ -11596,7 +11200,6 @@ const platformApp = (function () {
     const googleWorkspaceSSO = Boolean(document.getElementById('chkSettingsAuthGoogle')?.checked);
     const microsoftEntraID = Boolean(document.getElementById('chkSettingsAuthMicrosoft')?.checked);
 
-    // Client-side invariant check (Section 16.2)
     if (isNaN(minLength) || minLength < 8) {
       showToast('Validation Error: Password minimum length cannot be less than 8 characters.', 'danger');
       return;
@@ -11637,11 +11240,11 @@ const platformApp = (function () {
             autoUnlockAfterTimeout
           },
           supportedAuthMethods: {
-            localPassword: true, // Permanent invariant
+            localPassword: true,
             googleWorkspaceSSO,
             microsoftEntraID
           },
-          breakGlassEmergencyAccessEnabled: true // Permanent invariant
+          breakGlassEmergencyAccessEnabled: true
         })
       });
       const j = await res.json();
@@ -11657,7 +11260,6 @@ const platformApp = (function () {
     }
   }
 
-  // 16.3 Feature Controls
   function renderFeatureControlsTable(list) {
     const tbody = document.getElementById('tbodyFeatureControls');
     const badgeCount = document.getElementById('badgeFeaturesCount');
@@ -11848,7 +11450,6 @@ const platformApp = (function () {
     }
   }
 
-  // 16.4 Maintenance Settings
   function renderMaintenanceSettings(maint) {
     if (!maint) return;
 
@@ -11901,7 +11502,6 @@ const platformApp = (function () {
       }
     }
 
-    // Window & Operator
     const lblWindow = document.getElementById('lblMaintenanceWindowText');
     if (lblWindow) {
       if (maint.plannedWindow && maint.plannedWindow.startTime) {
@@ -11921,7 +11521,6 @@ const platformApp = (function () {
       boxMsg.textContent = maint.userFacingMessage || 'Sri Vidya Educational Trust ERP is undergoing scheduled maintenance.';
     }
 
-    // History Table
     const tbodyHistory = document.getElementById('tbodyMaintenanceHistory');
     if (tbodyHistory) {
       const hist = maint.history || [];
@@ -12049,10 +11648,6 @@ const platformApp = (function () {
     }
   }
 
-  // ==========================================================================
-  // MODULE 17: PLATFORM POLICIES & DATA RETENTION
-  // ==========================================================================
-
   let currentPolicies = [];
   let currentRetentionRules = [];
   let currentDataRequests = [];
@@ -12109,7 +11704,6 @@ const platformApp = (function () {
     if (secReq) secReq.style.display = (tabName === 'requests') ? 'block' : 'none';
   }
 
-  // 17.1 Policy Register Rendering & Controls
   function renderPoliciesTable(policies) {
     const tbody = document.getElementById('tbodyGovernancePolicies');
     if (!tbody) return;
@@ -12276,7 +11870,6 @@ const platformApp = (function () {
     }
   }
 
-  // 17.2 Data Retention Rendering & Controls
   function renderRetentionRulesTable(rules) {
     const tbody = document.getElementById('tbodyRetentionRules');
     if (!tbody) return;
@@ -12525,7 +12118,6 @@ const platformApp = (function () {
     }
   }
 
-  // 17.3 Data Requests Rendering & Controls
   function renderDataRequestsTable(requests) {
     const tbody = document.getElementById('tbodyDataRequests');
     if (!tbody) return;
@@ -12893,12 +12485,8 @@ const platformApp = (function () {
     }
   }
 
-  // ==========================================================================
-  // MODULE 18: SCHOOL GATEWAYS & DECOUPLED TELEMETRY
-  // ==========================================================================
-
   let currentGatewayData = null;
-  let simulatedRole = 'SUPER_ADMIN'; // Default platform root operator
+  let simulatedRole = 'SUPER_ADMIN';
 
   function setSimulatedGatewayRole(role) {
     simulatedRole = role;
@@ -12921,7 +12509,6 @@ const platformApp = (function () {
   function renderGatewayStatus(data) {
     if (!data) return;
 
-    // Sidebar Elements
     const domEl = document.getElementById('lblGatewayDomain');
     const sslEl = document.getElementById('lblGatewaySslBadge');
     const checkEl = document.getElementById('lblGatewayLastCheck');
@@ -12932,7 +12519,6 @@ const platformApp = (function () {
     if (sslEl) sslEl.textContent = data.sslStatus?.includes('VALID') ? 'SSL: ACTIVE' : 'SSL: CHECK';
     if (checkEl) checkEl.textContent = new Date().toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' });
 
-    // Decoupled Subsystem Badges
     const d = data.decoupledHealth || {};
     const bWeb = document.getElementById('badgeGatewayFrontend');
     const bApi = document.getElementById('badgeGatewayApi');
@@ -12959,7 +12545,6 @@ const platformApp = (function () {
       headerStatus.className = data.decoupledHealth?.isOverallHealthy ? 'text-success' : 'text-warning';
     }
 
-    // Modal Elements (if open)
     const mDom = document.getElementById('lblModalGatewayDomain');
     const mSsl = document.getElementById('lblModalGatewaySsl');
     const mCheck = document.getElementById('lblModalGatewayLastCheck');
@@ -12987,14 +12572,12 @@ const platformApp = (function () {
 
     const activeInst = (typeof activeConfigInstitution !== 'undefined' && activeConfigInstitution) ? activeConfigInstitution : 'INST-001';
 
-    // 18.3 Public Website
     if (portalType === 'website') {
       window.open('/', '_blank', 'noopener,noreferrer');
       refreshGatewayStatus();
       return;
     }
 
-    // 18.1 School Administration Portal
     if (portalType === 'management') {
       try {
         const res = await fetch(`/api/v1/platform/gateways/verify-access`, {
@@ -13008,11 +12591,9 @@ const platformApp = (function () {
 
         const j = await res.json();
         if (res.ok && j.allowed) {
-          // Preserve institution context safely in localStorage without URL token leakage
           localStorage.setItem('srividya_active_institution', activeInst);
           window.open(j.portalUrl || '/management', '_blank', 'noopener,noreferrer');
         } else {
-          // Show Access Denied modal
           const lblDenied = document.getElementById('lblDeniedInstitution');
           if (lblDenied) lblDenied.textContent = activeInst;
           openModal('modalGatewayAccessDenied');
@@ -13024,7 +12605,6 @@ const platformApp = (function () {
       return;
     }
 
-    // 18.2 Faculty & Teacher Portal
     if (portalType === 'teacher') {
       try {
         const res = await fetch(`/api/v1/platform/gateways/verify-faculty`, {
@@ -13041,7 +12621,6 @@ const platformApp = (function () {
           localStorage.setItem('srividya_active_institution', activeInst);
           window.open(j.portalUrl || '/teacher', '_blank', 'noopener,noreferrer');
         } else {
-          // Show Faculty Verification modal
           const lblInst = document.getElementById('lblFacultyInstContext');
           if (lblInst) lblInst.textContent = activeInst;
           openModal('modalFacultyGatewayAuth');
@@ -13069,10 +12648,6 @@ const platformApp = (function () {
     showToast('Verified Faculty Identity. Launching Faculty & Teacher Portal...', 'success');
     window.open('/teacher', '_blank', 'noopener,noreferrer');
   }
-
-  // =========================================================================
-  // GLOBAL ACTION PATTERNS & HIGH-IMPACT SAFEGUARDS FRAMEWORK
-  // =========================================================================
 
   let highImpactState = {
     currentAction: null,
@@ -13169,15 +12744,12 @@ const platformApp = (function () {
     highImpactState.currentPayload = Object.assign({}, payload);
     highImpactState.onConfirmCallback = onConfirmCallback;
 
-    // Clear previous error message and hide error alert
     const errAlert = document.getElementById('alertHighImpactError');
     if (errAlert) errAlert.style.display = 'none';
 
-    // Reset authority checkbox
     const chkAuth = document.getElementById('chkHighImpactAuthority');
     if (chkAuth) chkAuth.checked = false;
 
-    // Reset or keep reason if provided
     const txtReason = document.getElementById('txtHighImpactReason');
     if (txtReason && payload.reason) {
       txtReason.value = payload.reason;
@@ -13185,7 +12757,6 @@ const platformApp = (function () {
       txtReason.value = '';
     }
 
-    // Call pre-validation API
     let validation = null;
     try {
       const res = await fetch('/api/v1/platform/actions/validate', {
@@ -13200,7 +12771,6 @@ const platformApp = (function () {
 
     highImpactState.preValidation = validation;
 
-    // Populate Modal UI
     const lblTitle = document.getElementById('lblHighImpactTitle');
     const lblBehavior = document.getElementById('lblHighImpactRequiredBehavior');
     const lblActionKey = document.getElementById('lblHighImpactActionKey');
@@ -13219,7 +12789,6 @@ const platformApp = (function () {
       lblTarget.textContent = payload.institutionName || payload.name || payload.userName || payload.roleName || payload.targetScope || actionType;
     }
 
-    // Style severity
     const sev = validation?.spec?.severity || (actionType.includes('SUSPEND') || actionType.includes('RESTORE') ? 'danger' : 'warning');
     if (badgeSeverity) {
       badgeSeverity.className = `badge p-2 bg-${sev === 'danger' ? 'danger' : sev === 'warning' ? 'warning text-dark' : 'primary'}`;
@@ -13238,12 +12807,10 @@ const platformApp = (function () {
       lblImpactSummary.textContent = validation?.impactExplanation || validation?.spec?.impactSummary || 'Review potential operational and regulatory impact before executing.';
     }
 
-    // Render Dynamic Custom Action Fields
     if (customFields) {
       customFields.innerHTML = renderDynamicCustomActionFields(actionType, payload, validation);
     }
 
-    // Configure Reason & Authority requirements
     if (groupReason) {
       groupReason.style.display = (actionType === 'SUSPEND_INSTITUTION' || actionType === 'RESTORE_BACKUP' || actionType === 'CHANGE_PRIVILEGED_ROLE') ? 'block' : 'block';
     }
@@ -13451,10 +13018,8 @@ const platformApp = (function () {
       if (errAlert) errAlert.style.display = 'block';
       showToast(msg, 'danger');
       appendActionDiagnosticLog(`[FAILED CLIENT-CHECK] ${actionType}: ${msg}`);
-      // NOTE: Modal is NOT closed. User input is preserved!
     }
 
-    // 1. Mandatory Authority Confirmation
     const chkAuth = document.getElementById('chkHighImpactAuthority');
     if (!chkAuth || !chkAuth.checked) {
       displayErrorAndPreserve('You must confirm statutory authority by checking the confirmation box.');
@@ -13462,7 +13027,6 @@ const platformApp = (function () {
     }
     payload.authorityConfirmed = true;
 
-    // 2. Reason / Justification
     const txtReason = document.getElementById('txtHighImpactReason');
     const reasonVal = txtReason ? txtReason.value.trim() : '';
     if (actionType === 'SUSPEND_INSTITUTION' && reasonVal.length < 8) {
@@ -13471,7 +13035,6 @@ const platformApp = (function () {
     }
     payload.reason = reasonVal || 'Administrative Execution';
 
-    // 3. Action-specific fields
     if (actionType === 'CREATE_INSTITUTION') {
       const radActivate = document.getElementById('radInstActivate');
       payload.workflowType = (radActivate && radActivate.checked) ? 'ACTIVATE' : 'DRAFT';
@@ -13498,7 +13061,6 @@ const platformApp = (function () {
       payload.approvalSignatory = signatory;
     }
 
-    // 4. Send Execution Request to Backend
     try {
       const res = await fetch('/api/v1/platform/actions/confirm', {
         method: 'POST',
@@ -13512,23 +13074,19 @@ const platformApp = (function () {
 
       const data = await res.json();
 
-      // INVARIANT 1: IF REQUEST FAILS, PRESERVE INPUT AND DISPLAY CLEAR ERROR
       if (!res.ok || !data.success) {
         displayErrorAndPreserve(data.message || 'Operation failed on the server.');
         return;
       }
 
-      // INVARIANT 2: USE SUCCESS MESSAGES ONLY AFTER THE BACKEND CONFIRMS SUCCESS
       closeModal('modalHighImpactConfirm');
       showToast(data.message || `Action '${actionType}' confirmed and executed.`, 'success');
       appendActionDiagnosticLog(`[SUCCESS 200 OK] ${actionType}: Confirmed by backend. Audit ID: ${data.auditId || 'SEALED'}`);
 
-      // Run any action callback
       if (typeof highImpactState.onConfirmCallback === 'function') {
         highImpactState.onConfirmCallback(data);
       }
 
-      // Synchronize affected subsystem views
       if (actionType === 'SUSPEND_INSTITUTION') {
         const instId = payload.institutionId;
         const inst = state.institutions?.find(i => i.institutionId === instId || i.id === instId);
@@ -13548,11 +13106,9 @@ const platformApp = (function () {
     }
   }
 
-  // Diagnostic Test Harness Triggers
   function testActionTrigger(testKey) {
     switch (testKey) {
       case 'CREATE_INSTITUTION_DUPLICATE': {
-        // Trigger duplicate code error to verify input preservation & no premature toast
         openHighImpactModal('CREATE_INSTITUTION', {
           code: 'SV-MAIN',
           name: 'Sri Vidya Main Campus (Duplicate)',
@@ -13571,7 +13127,6 @@ const platformApp = (function () {
         break;
       }
       case 'OPEN_PORTAL_LEAK': {
-        // Trigger sensitive URL parameter injection error
         openHighImpactModal('OPEN_SCHOOL_PORTAL', {
           portal: 'management',
           queryParams: { token: 'jwt_secret_token_123', admin: 'true' }
@@ -13681,10 +13236,6 @@ const platformApp = (function () {
     }
   }
 
-  // =========================================================================
-  // COMPLETE PLATFORM ADMINISTRATION WORKFLOWS CONTROLLER (A–F)
-  // =========================================================================
-
   let workflowState = {
     overview: null,
     lastDeployment: null,
@@ -13720,7 +13271,6 @@ const platformApp = (function () {
     });
   }
 
-  // Workflow A: Register a New School
   async function executeWorkflowA() {
     const code = document.getElementById('txtWfA_Code')?.value.trim();
     const name = document.getElementById('txtWfA_Name')?.value.trim();
@@ -13734,7 +13284,6 @@ const platformApp = (function () {
     }
 
     try {
-      // Step animation on vertical stepper
       const stepItems = [1, 2, 3, 4, 5, 6].map(i => document.getElementById(`wfA_step${i}`));
       stepItems.forEach(el => el && el.classList.remove('active'));
 
@@ -13755,7 +13304,6 @@ const platformApp = (function () {
         return;
       }
 
-      // Display Outcome
       const box = document.getElementById('boxWfA_Outcome');
       if (box) box.style.display = 'block';
       const lblMsg = document.getElementById('lblWfA_SuccessMessage');
@@ -13772,7 +13320,6 @@ const platformApp = (function () {
     }
   }
 
-  // Workflow B: Invite a New School Administrator
   async function executeWorkflowB() {
     const institutionId = document.getElementById('selWfB_Inst')?.value;
     const email = document.getElementById('txtWfB_Email')?.value.trim();
@@ -13837,7 +13384,6 @@ const platformApp = (function () {
     }
   }
 
-  // Workflow C: Deploy Application Version
   async function executeWorkflowC(simulateFailure = false) {
     const version = document.getElementById('txtWfC_Version')?.value.trim() || 'v2.5.0';
     const commitRef = document.getElementById('txtWfC_Commit')?.value.trim() || '6198ab0';
@@ -13898,7 +13444,6 @@ const platformApp = (function () {
     }
   }
 
-  // Workflow D: Resolve a System Incident
   async function createIncidentWorkflow() {
     const title = document.getElementById('txtWfD_Title')?.value.trim();
     const source = document.getElementById('selWfD_Source')?.value;
@@ -13957,7 +13502,6 @@ const platformApp = (function () {
     }
   }
 
-  // Workflow E: Suspend Compromised Account
   async function suspendAccountWorkflow() {
     const userId = document.getElementById('txtWfE_UserId')?.value.trim();
     const reason = document.getElementById('txtWfE_Reason')?.value.trim();
@@ -14028,7 +13572,6 @@ const platformApp = (function () {
     }
   }
 
-  // Workflow F: Import an Existing School's Records
   async function testImportWorkflow() {
     const institutionId = document.getElementById('selWfF_Inst')?.value;
     const dataType = document.getElementById('selWfF_Category')?.value;
@@ -14097,9 +13640,6 @@ const platformApp = (function () {
     }
   }
 
-
-
-
   function init() {
     if (window.PortalAuth && typeof window.PortalAuth.canAccessPortalSync === 'function' && !window.PortalAuth.canAccessPortalSync('platform-admin')) {
       return;
@@ -14118,11 +13658,9 @@ const platformApp = (function () {
 
     initSidebarCollapsedState();
 
-    // Global Delegated Sidebar Click Listener with Two-Level Hierarchy
     const sidebarNav = document.querySelector('.sidebar-nav');
     if (sidebarNav) {
       sidebarNav.addEventListener('click', (e) => {
-        // Sub-link clicked
         const subLink = e.target.closest('.nav-sub-link[data-view]');
         if (subLink) {
           e.preventDefault();
@@ -14131,7 +13669,6 @@ const platformApp = (function () {
           return;
         }
 
-        // Main nav-link clicked
         const mainLink = e.target.closest('.nav-link');
         if (mainLink) {
           if (e.__svToggleHandled) return;
@@ -14152,7 +13689,6 @@ const platformApp = (function () {
       });
     }
 
-    // Hash change listener for browser forward/back buttons
     window.addEventListener('hashchange', () => {
       const currentHash = window.location.hash.replace('#', '');
       if (currentHash && document.getElementById('view-' + currentHash)) {
@@ -14160,7 +13696,6 @@ const platformApp = (function () {
       }
     });
 
-    // Check hash for direct view navigation (e.g. #institutions) or restore last state
     const hash = window.location.hash.replace('#', '');
     if (hash && document.getElementById('view-' + hash)) {
       navigateTo(hash);
@@ -14176,16 +13711,13 @@ const platformApp = (function () {
     }
   }
 
-  // Auto-init on DOM ready
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', init);
   } else {
     init();
   }
 
-  // Public Interface
   return {
-    // Global Action Patterns & High-Impact Safeguards
     loadActionPatternsData,
     renderActionPatternsCards,
     switchActionSubTab,
@@ -14194,7 +13726,6 @@ const platformApp = (function () {
     testActionTrigger,
     clearActionDiagnosticLogs,
 
-    // Complete Platform Administration Workflows (A–F)
     loadWorkflowsData,
     switchWorkflowTab,
     executeWorkflowA,
@@ -14209,7 +13740,6 @@ const platformApp = (function () {
     testImportWorkflow,
     approveImportWorkflow,
 
-    // Module 18: School Gateways & Decoupled Telemetry
     launchSchoolGateway,
     openGatewayStatusModal,
     refreshGatewayStatus,
@@ -14217,7 +13747,6 @@ const platformApp = (function () {
     authorizeAndLaunchFacultyGateway,
     setSimulatedGatewayRole,
 
-    // Module 17: Platform Policies & Data Retention
     loadPlatformPoliciesData,
     switchPoliciesSubTab,
     renderPoliciesTable,
@@ -14245,7 +13774,6 @@ const platformApp = (function () {
     rejectCurrentDataRequest,
     fulfillCurrentDataRequest,
 
-    // Module 16: Global Platform Settings
     loadGlobalSettingsData,
     switchSettingsSubTab,
     previewSettingsLogo,
@@ -14263,7 +13791,6 @@ const platformApp = (function () {
     submitScheduleMaintenance,
     openPreviewMaintenanceModal,
 
-    // Module 15: Domains, Email & Notifications
     loadDomainsEmailData,
     switchDomainsSubTab,
     renderDomainsTable,
@@ -14289,7 +13816,6 @@ const platformApp = (function () {
     openPreviewTemplateModal,
     testSendNotificationTemplate,
 
-    // Module 14: Support & Issue Management
     loadSupportData,
     renderSupportOverview,
     renderSupportTicketsTable,
@@ -14315,7 +13841,6 @@ const platformApp = (function () {
     reopenCurrentTicket,
     openTicketSecurityEvent,
 
-    // Module 13: Integrations & API Management
     loadIntegrationsData,
     switchIntegrationsSubTab,
     renderIntegrationsTable,
@@ -14342,7 +13867,6 @@ const platformApp = (function () {
     reconcilePaymentEvent,
     viewIntegrationLogs,
 
-    // Module 12: Backups & Recovery
     loadBackupsData,
     switchBackupsSubTab,
     renderBackupOverview,
@@ -14362,7 +13886,6 @@ const platformApp = (function () {
     submitApproveRecovery,
     openRecoveryWorkflowDetailModal,
 
-    // Module 11: System Health & Deployment
     loadSystemHealthData,
     switchHealthSubTab,
     renderSystemHealthTelemetry,
@@ -14383,7 +13906,6 @@ const platformApp = (function () {
     retryBackgroundJob,
     cancelBackgroundJob,
 
-    // Module 10: Subscriptions & Plans
     loadSubscriptionsData,
     switchSubscriptionSubTab,
     filterPlansDirectory,
@@ -14406,7 +13928,6 @@ const platformApp = (function () {
     renderUsageAndEntitlements,
     exportSubscriptionsCSV,
 
-    // Module 9: Security & Access Monitoring
     loadSecurityMonitoringData,
     switchSecuritySubTab,
     filterSecurityEvents,
@@ -14427,7 +13948,6 @@ const platformApp = (function () {
     submitAccessReviewAction,
     exportSecurityDossierCSV,
 
-    // Module 8: Audit Logs Explorer (Forensic Evidence & Investigation)
     loadPlatformAuditDirectory,
     filterPlatformAuditLogs,
     resetAuditFilters,
@@ -14435,7 +13955,6 @@ const platformApp = (function () {
     exportAuthorizedAuditReport,
     openRelatedSecurityEvent,
 
-    // Module 7: Role Templates & Permissions (RBAC)
     loadRoleTemplatesDirectory,
     filterRolesDirectory,
     resetRoleFilters,
@@ -14452,7 +13971,6 @@ const platformApp = (function () {
     openAssignUsersModal,
     submitAssignUsers,
 
-    // Core Navigation & Theme
     init,
     navigateTo,
     toggleSubmenu,
@@ -14463,7 +13981,6 @@ const platformApp = (function () {
     openModal,
     closeModal,
 
-    // Module 2: Platform Dashboard
     loadPlatformDashboard,
     openTaskAction,
     viewActivityDetails,
@@ -14504,7 +14021,6 @@ const platformApp = (function () {
     loadOnboardingOverview,
     switchOnboardingTab,
 
-    // Module 3: Institution Management (Directory, Wizard, Dossier, Suspension)
     loadInstitutions,
     updateInstitutionSummaryCards,
     filterInstitutionsDirectory,
@@ -14537,7 +14053,6 @@ const platformApp = (function () {
     toggleRowDropdown,
     closeAllRowDropdowns,
 
-    // Module 4: School Configuration (Profile, Academic, Operational, Templates)
     switchConfigTab,
     switchConfigInstitution,
     loadSchoolConfig,
@@ -14555,7 +14070,6 @@ const platformApp = (function () {
     previewDocumentTemplate,
     openEditTemplate,
 
-    // Other System & Operator Actions
     handleCreateTicket,
     toggleFeature,
     invalidateSession,

@@ -1,7 +1,3 @@
-/**
- * Assignment Mongoose Model
- * Manages classroom homework, assignments, and due dates
- */
 const mongoose = require('mongoose');
 
 const assignmentSchema = new mongoose.Schema(

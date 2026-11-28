@@ -1,14 +1,3 @@
-/**
- * Institution Onboarding & Migration - Service Layer
- * Orchestrates the 6-Step New School Registration Lifecycle (Workflow A):
- * 1. Create institution record
- * 2. Configure school identity and academic defaults
- * 3. Verify domains and email
- * 4. Invite institution administrator
- * 5. Validate permissions and configuration
- * 6. Activate institution
- * Invariant: Student, staff and financial records are NOT fabricated automatically.
- */
 
 const Repository = require('./institution-onboarding.repository');
 const MultiInstitutionSecurity = require('../common/multiInstitutionSecurity');

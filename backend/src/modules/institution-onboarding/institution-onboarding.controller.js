@@ -1,7 +1,3 @@
-/**
- * Institution Onboarding & Migration - Controller Layer
- * Handles HTTP requests, responses, and status codes
- */
 
 const Service = require('./institution-onboarding.service');
 

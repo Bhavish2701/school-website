@@ -1,7 +1,3 @@
-/**
- * School Configuration & Defaults - Controller Layer
- * Handles HTTP requests, responses, and status codes
- */
 
 const Service = require('./school-configuration.service');
 

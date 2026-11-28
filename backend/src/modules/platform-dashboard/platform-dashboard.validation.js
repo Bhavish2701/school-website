@@ -1,7 +1,3 @@
-/**
- * Platform Dashboard Telemetry - Validation Layer
- * Enforces field schemas, constraints, and data integrity
- */
 
 class PlatformDashboardValidation {
   static validateRequest(req, res, next) {

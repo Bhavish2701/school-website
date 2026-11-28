@@ -1,13 +1,3 @@
-/**
- * Test Suite 11: Dashboard APIs & Notifications Test Suite
- * Covers:
- * - Management Dashboard (/dashboard/management) - RBAC enforcement
- * - Teacher Dashboard (/dashboard/teacher) - RBAC enforcement
- * - Student Dashboard (/dashboard/student) - Self profile metrics
- * - Parent Dashboard (/dashboard/parent) - Child summary & switcher
- * - Notifications creation, listing, read status update
- * - 401 Unauthenticated, 403 Forbidden, 404 Not Found, 422 Validation errors
- */
 const request = require('supertest');
 const mongoose = require('mongoose');
 const app = require('../src/app');

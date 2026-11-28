@@ -1,27 +1,3 @@
-/**
- * scripts/test_backend_architecture_modules_suite.js
- * Comprehensive Acceptance Test Suite for Modular Backend Architecture & Multi-Institution Security
- * Sri Vidya Educational Trust Platform Administration
- *
- * Verifies:
- * 1. All 21 Modules exist with the consistent 7-file layered architecture
- * 2. Each module exports { routes, controller, service, repository, validation, policy }
- * 3. Multi-Institution Security Engine enforces the 6 security dimensions:
- *    - Cross-school isolation (INST-001 vs INST-002 -> 403 Forbidden + Audit Log)
- *    - Platform-wide scope enforcement for sensitive actions
- *    - Record-level query scoping (scopeQuery)
- *    - Approval signatory checks for high-impact actions
- *    - Immutable audit trails in PlatformAudit
- * 4. Workflow A (New School Registration 6-step lifecycle flowchart) execution
- *    - Step 1: Create institution record (Draft)
- *    - Step 2: Configure school identity and academic defaults
- *    - Step 3: Verify domains and email
- *    - Step 4: Invite institution administrator
- *    - Step 5: Validate permissions and configuration
- *    - Step 6: Activate institution
- *    - Zero Fabricated Data Invariant (0 students, 0 staff, 0 finance)
- * 5. Live HTTP endpoints for modular architecture on running server
- */
 
 const assert = require('assert');
 const http = require('http');
@@ -107,9 +83,6 @@ async function runTests() {
     }
   }
 
-  // --------------------------------------------------------------------------
-  // SECTION 1: ARCHITECTURAL INTEGRITY (All 21 Modules & 7 Files)
-  // --------------------------------------------------------------------------
   console.log('--- SECTION 1: 21 Modules & 7-File Architecture ---');
 
   MODULES.forEach(modName => {
@@ -154,9 +127,6 @@ async function runTests() {
     assert.ok(masterModules.stack.length >= 21, `Master router must mount at least 21 modules, found: ${masterModules.stack.length}`);
   });
 
-  // --------------------------------------------------------------------------
-  // SECTION 2: MULTI-INSTITUTION SECURITY ENGINE (6 Dimensions)
-  // --------------------------------------------------------------------------
   console.log('\n--- SECTION 2: Multi-Institution Security Engine ---');
 
   await testAsync('Dimension 1: Cross-School Isolation - Blocks INST-001 actor from accessing INST-002', async () => {
@@ -355,9 +325,6 @@ async function runTests() {
     assert.strictEqual(auditRecord.result, 'SUCCESS');
   });
 
-  // --------------------------------------------------------------------------
-  // SECTION 3: WORKFLOW A (6-STEP REGISTRATION LIFECYCLE FLOWCHART)
-  // --------------------------------------------------------------------------
   console.log('\n--- SECTION 3: Workflow A - Register a New School (6-Step Lifecycle) ---');
 
   await testAsync('Executes complete 6-step registration lifecycle matching flowchart', async () => {
@@ -381,7 +348,6 @@ async function runTests() {
     assert.ok(regResult.steps, 'Workflow must return steps trace');
     assert.strictEqual(regResult.steps.length, 6, 'Must contain exactly 6 lifecycle steps');
 
-    // Verify 6 Steps match the flowchart
     const stepNames = regResult.steps.map(s => s.step);
     assert.ok(stepNames[0].includes('Create institution record'), 'Step 1 matches');
     assert.ok(stepNames[1].includes('Configure school identity and academic defaults'), 'Step 2 matches');
@@ -390,16 +356,12 @@ async function runTests() {
     assert.ok(stepNames[4].includes('Validate permissions and configuration'), 'Step 5 matches');
     assert.ok(stepNames[5].includes('Activate institution'), 'Step 6 matches');
 
-    // Invariant: Student, staff and financial records are NOT fabricated automatically
     assert.strictEqual(regResult.data.metrics.enrolledStudents, 0, 'Zero fabricated students invariant');
     assert.strictEqual(regResult.data.metrics.teachingFaculty, 0, 'Zero fabricated faculty invariant');
     assert.strictEqual(regResult.data.metrics.revenueYTD, '₹ 0.00', 'Zero fabricated revenue invariant');
     assert.strictEqual(regResult.data.status, 'Active', 'School status is Active upon completion');
   });
 
-  // --------------------------------------------------------------------------
-  // SECTION 4: HTTP API LIVE ENDPOINTS TEST (Server Integration)
-  // --------------------------------------------------------------------------
   console.log('\n--- SECTION 4: HTTP API Modular Endpoints Integration ---');
 
   const testEndpoints = [
@@ -429,9 +391,6 @@ async function runTests() {
     });
   }
 
-  // --------------------------------------------------------------------------
-  // SUMMARY
-  // --------------------------------------------------------------------------
   console.log('\n================================================================');
   console.log(`TEST SUMMARY: ${passed} / ${total} tests passed (${Math.round((passed / total) * 100)}%)`);
   console.log('================================================================\n');

@@ -1,7 +1,3 @@
-/**
- * Subscriptions & Commercial Plans - Validation Layer
- * Enforces field schemas, constraints, and data integrity
- */
 
 class SubscriptionsValidation {
   static validateRequest(req, res, next) {

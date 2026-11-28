@@ -1,9 +1,3 @@
-/**
- * School Configuration Model
- * Scope: Institution-wide environmental configuration, academic parameters,
- * operational defaults, document & report templates, and immutable history.
- * Compliant with Sri Vidya Educational Trust Multi-Tenant Standards.
- */
 const mongoose = require('mongoose');
 
 const signatorySchema = new mongoose.Schema({
@@ -51,7 +45,6 @@ const schoolConfigSchema = new mongoose.Schema({
     index: true
   },
 
-  // 4.1 School Profile
   schoolProfile: {
     name: { type: String, required: true },
     displayName: { type: String, default: '' },
@@ -101,7 +94,6 @@ const schoolConfigSchema = new mongoose.Schema({
     }]
   },
 
-  // 4.2 Academic Configuration
   academicConfiguration: {
     academicYearStructure: { type: String, default: 'June – April (10 Months Calendar)' },
     currentAcademicYear: { type: String, default: '2026–2027' },
@@ -159,7 +151,6 @@ const schoolConfigSchema = new mongoose.Schema({
     }]
   },
 
-  // 4.3 Operational Defaults
   operationalDefaults: {
     workingDays: [{ type: String }],
     attendanceSessions: [{
@@ -197,7 +188,6 @@ const schoolConfigSchema = new mongoose.Schema({
     status: { type: String, default: 'Published' }
   },
 
-  // 4.4 Document & Report Templates
   documentTemplates: [documentTemplateSchema]
 }, {
   timestamps: true

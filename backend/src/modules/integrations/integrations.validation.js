@@ -1,7 +1,3 @@
-/**
- * External Integrations Directory - Validation Layer
- * Enforces field schemas, constraints, and data integrity
- */
 
 class IntegrationsValidation {
   static validateRequest(req, res, next) {

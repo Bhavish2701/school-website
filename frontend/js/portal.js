@@ -11,12 +11,6 @@
     if (btn) btn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
   };
 
-/**
- * Sri Vidya E.M High School - Management Portal Application Logic
- * Role Architecture: Principal, Vice Principal, Admin / School Office
- * Established: 2017
- */
-
 const portalApp = (function () {
   'use strict';
 
@@ -26,7 +20,6 @@ const portalApp = (function () {
     }[ch]));
   }
 
-  // Install global authenticated /api/v1/ fetch interceptor (Bearer JWT + 401 refresh + cache invalidation)
   (function installManagementFetchInterceptor() {
     if (typeof window === 'undefined' || typeof window.fetch !== 'function' || window.__svMgmtFetchPatched) return;
     window.__svMgmtFetchPatched = true;
@@ -80,15 +73,13 @@ const portalApp = (function () {
 
   let selectedAcademicYearFilter = '';
 
-  // Timetable Module Shared State
   let currentTimetableClass = 'Class X-A';
   let currentTimetableDay = 'Monday';
   let currentTimetableCalendarView = 'weekly';
   let ttIsDraftMode = false;
 
-  // State
   const state = {
-    currentRole: 'principal', // 'principal' | 'vice-principal' | 'admin'
+    currentRole: 'principal',
     authenticatedUser: null,
     activeModule: 'dashboard',
     activeSubTab: {
@@ -107,8 +98,6 @@ const portalApp = (function () {
       settings: 'my-profile'
     },
     pendingApprovalsCount: 4,
-    // All 500 students are loaded from js/student-roster.js (window.STUDENT_ROSTER)
-    // Fallback to empty array if roster script failed to load
     students: (typeof window !== 'undefined' && Array.isArray(window.STUDENT_ROSTER) && window.STUDENT_ROSTER.length > 0)
       ? window.STUDENT_ROSTER
       : [],
@@ -230,6 +219,166 @@ const portalApp = (function () {
             "phone": "9848033443",
             "email": "rajesh.k@srividya.edu",
             "personalEmail": "rajesh.k.personal@gmail.com"
+      },
+      {
+            "id": "EMP-T01",
+            "employeeId": "EMP-T01",
+            "name": "Sri B. Narayana",
+            "role": "Senior Mathematics Master & Class Coordinator",
+            "qualification": "M.Sc (Mathematics), B.Ed",
+            "exp": "16 Years",
+            "subject": "Mathematics",
+            "status": "Active",
+            "weeklyPeriods": 24,
+            "assignedClasses": ["Class X-A", "Class IX-A", "Class VIII-A"],
+            "workloadConflict": null,
+            "phone": "9848022331",
+            "email": "b.narayana@srividya.edu.in",
+            "personalEmail": "b.narayana.personal@gmail.com"
+      },
+      {
+            "id": "EMP-T02",
+            "employeeId": "EMP-T02",
+            "name": "Smt. T. Padmavathi",
+            "role": "Senior Faculty - English",
+            "qualification": "M.A (English), B.Ed",
+            "exp": "13 Years",
+            "subject": "English",
+            "status": "Active",
+            "weeklyPeriods": 24,
+            "assignedClasses": ["Class X-A", "Class IX-A", "Class VIII-A", "Class VII-A"],
+            "workloadConflict": null,
+            "phone": "9848022332",
+            "email": "t.padmavathi@srividya.edu.in",
+            "personalEmail": "t.padmavathi.personal@gmail.com"
+      },
+      {
+            "id": "EMP-T03",
+            "employeeId": "EMP-T03",
+            "name": "Sri M. Raju",
+            "role": "Physical Science Faculty & STEM Mentor",
+            "qualification": "M.Sc (Physics), B.Ed",
+            "exp": "11 Years",
+            "subject": "Physical Science",
+            "status": "Active",
+            "weeklyPeriods": 22,
+            "assignedClasses": ["Class X-A", "Class IX-A", "Class VIII-A"],
+            "workloadConflict": null,
+            "phone": "9848044553",
+            "email": "m.raju@srividya.edu.in",
+            "personalEmail": "m.raju.personal@gmail.com"
+      },
+      {
+            "id": "EMP-T04",
+            "employeeId": "EMP-T04",
+            "name": "Sri CH. Venkateswara Rao",
+            "role": "Senior Faculty - Telugu",
+            "qualification": "M.A (Telugu), Pandit Training",
+            "exp": "15 Years",
+            "subject": "Telugu",
+            "status": "Active",
+            "weeklyPeriods": 22,
+            "assignedClasses": ["Class X-A", "Class IX-A", "Class VIII-A", "Class VII-A"],
+            "workloadConflict": null,
+            "phone": "9848055664",
+            "email": "ch.venkateswararao@srividya.edu.in",
+            "personalEmail": "ch.venkatesh.personal@gmail.com"
+      },
+      {
+            "id": "EMP-T05",
+            "employeeId": "EMP-T05",
+            "name": "Smt. V. Jyothsna",
+            "role": "Faculty - Social Studies",
+            "qualification": "M.A (History & Civics), B.Ed",
+            "exp": "10 Years",
+            "subject": "Social Studies",
+            "status": "Active",
+            "weeklyPeriods": 22,
+            "assignedClasses": ["Class X-A", "Class IX-A", "Class VIII-A", "Class VII-A"],
+            "workloadConflict": null,
+            "phone": "9848066775",
+            "email": "v.jyothsna@srividya.edu.in",
+            "personalEmail": "v.jyothsna.personal@gmail.com"
+      },
+      {
+            "id": "EMP-T06",
+            "employeeId": "EMP-T06",
+            "name": "Smt. N. Sirisha",
+            "role": "Faculty - Biological Sciences",
+            "qualification": "B.Sc (BZC), B.Ed",
+            "exp": "9 Years",
+            "subject": "Biological Science",
+            "status": "Active",
+            "weeklyPeriods": 20,
+            "assignedClasses": ["Class X-A", "Class IX-A", "Class VIII-A", "Class VII-A"],
+            "workloadConflict": null,
+            "phone": "9848077886",
+            "email": "n.sirisha@srividya.edu.in",
+            "personalEmail": "n.sirisha.personal@gmail.com"
+      },
+      {
+            "id": "EMP-T07",
+            "employeeId": "EMP-T07",
+            "name": "Sri A. Prasad",
+            "role": "Faculty - General Science",
+            "qualification": "M.Sc (Botany), B.Ed",
+            "exp": "8 Years",
+            "subject": "General Science",
+            "status": "Active",
+            "weeklyPeriods": 20,
+            "assignedClasses": ["Class VII-A", "Class VI-A"],
+            "workloadConflict": null,
+            "phone": "9848088997",
+            "email": "a.prasad@srividya.edu.in",
+            "personalEmail": "a.prasad.personal@gmail.com"
+      },
+      {
+            "id": "EMP-T08",
+            "employeeId": "EMP-T08",
+            "name": "Sri S. Gopal",
+            "role": "Faculty - Mathematics (Primary)",
+            "qualification": "B.Sc (Mathematics), B.Ed",
+            "exp": "7 Years",
+            "subject": "Mathematics",
+            "status": "Active",
+            "weeklyPeriods": 22,
+            "assignedClasses": ["Class VII-A", "Class VI-A", "Class V-A"],
+            "workloadConflict": null,
+            "phone": "9848099118",
+            "email": "s.gopal@srividya.edu.in",
+            "personalEmail": "s.gopal.personal@gmail.com"
+      },
+      {
+            "id": "EMP-T09",
+            "employeeId": "EMP-T09",
+            "name": "Sri D. Suresh",
+            "role": "Faculty - Computer Science & ATL Lab",
+            "qualification": "M.C.A, B.Ed",
+            "exp": "9 Years",
+            "subject": "Computer Science",
+            "status": "Active",
+            "weeklyPeriods": 20,
+            "assignedClasses": ["Class X-A", "Class IX-A", "Class VIII-A", "Class VII-A", "Class VI-A"],
+            "workloadConflict": null,
+            "phone": "9848011339",
+            "email": "d.suresh@srividya.edu.in",
+            "personalEmail": "d.suresh.personal@gmail.com"
+      },
+      {
+            "id": "EMP-T10",
+            "employeeId": "EMP-T10",
+            "name": "Sri B. Raman",
+            "role": "Physical Education Director (PET)",
+            "qualification": "M.P.Ed",
+            "exp": "12 Years",
+            "subject": "Physical Education",
+            "status": "Active",
+            "weeklyPeriods": 20,
+            "assignedClasses": ["Class X-A", "Class IX-A", "Class VIII-A", "Class VII-A", "Class VI-A"],
+            "workloadConflict": null,
+            "phone": "9848022440",
+            "email": "b.raman@srividya.edu.in",
+            "personalEmail": "b.raman.personal@gmail.com"
       }
     ],
     feeTransactions: [
@@ -248,7 +397,6 @@ const portalApp = (function () {
       { receiptNo: 'RCPT-2026-4879', student: 'P. Tejaswini', class: 'Class II-A', term: 'Term 2 Tuition', amount: '₹10,000', mode: 'UPI (PhonePe)', date: '18 Sep 2026, 10:15 AM', cashier: 'B. Krishna' },
       { receiptNo: 'RCPT-2026-4878', student: 'A. Lokesh', class: 'Class X-A', term: 'Examination & Board Fee', amount: '₹3,500', mode: 'Cash', date: '17 Sep 2026, 04:00 PM', cashier: 'S. Ramu' }
     ],
-    // Total Students across all classes = exactly 855 members (Section A only)
     classAttendance: [
       { class: 'Class X-A', total: 44, present: 42, absent: 2, leave: 0, pct: '95.5%', teacher: 'Sri P. Satyanarayana', status: 'Submitted' },
       { class: 'Class IX-A', total: 44, present: 42, absent: 2, leave: 0, pct: '95.5%', teacher: 'Smt. M. Sunitha', status: 'Submitted' },
@@ -838,12 +986,10 @@ const portalApp = (function () {
       }
     ]
   };
-  // Teachers & Staff State & Access Control
   var facultyViewMode = 'table';
   var staffViewMode = 'table';
   var teachersEnriched = false;
 
-  // Helper to format assigned classes gracefully (handles objects or strings)
   function formatClassAllocationLabel(c) {
     if (!c) return '';
     if (typeof c === 'string') return c;
@@ -861,7 +1007,6 @@ const portalApp = (function () {
     return String(c);
   }
 
-  // Helper to format faculty joining dates consistently
   function formatFacultyJoiningDate(d) {
     if (!d) return '12-Jun-2018';
     try {
@@ -875,7 +1020,6 @@ const portalApp = (function () {
     }
   }
 
-  // Helper to resolve faculty member across multiple identifier schemes
   function findFacultyMember(idOrRef) {
     if (!idOrRef && activeTeacherDossierId) idOrRef = activeTeacherDossierId;
     if (!idOrRef) return (state.faculty && state.faculty[0]) || null;
@@ -914,11 +1058,9 @@ const portalApp = (function () {
       f.isTeaching = true;
       if (!f.subjects) f.subjects = f.subject || f.department || 'Academics';
 
-      // Standardize displayId
       const rawId = f.employeeId || f.id || f._id || ('SV-FAC-0' + (101 + idx));
       f.displayId = String(rawId).startsWith('SV') ? String(rawId) : ('SV-FAC-0' + (String(rawId).replace(/[^0-9]/g, '').slice(-3) || (101 + idx)));
 
-      // Normalize assignedClasses: handle arrays of objects or missing
       if (!f.assignedClasses || !Array.isArray(f.assignedClasses) || f.assignedClasses.length === 0) {
         let matchedClasses = null;
         for (const [key, classes] of Object.entries(classMap)) {
@@ -933,7 +1075,6 @@ const portalApp = (function () {
 
       if (!f.qualifications) f.qualifications = f.qualification || 'M.Sc, B.Ed';
 
-      // Normalize joiningDate (handle ISO timestamp strings e.g. 2026-10-25T19:56:35.063Z)
       if (!f.joiningDate) {
         f.joiningDate = f.joinDate || ('15-Jun-' + (2014 + (idx % 9)));
       } else if (/^\d{4}-\d{2}-\d{2}T/.test(String(f.joiningDate))) {
@@ -1061,10 +1202,6 @@ const portalApp = (function () {
     }
   }
 
-
-  // =========================================================================
-  // SRI VIDYA HIGH SCHOOL - SUBVIEW STATIC & HISTORICAL REGISTERS
-  // =========================================================================
   const STUDENT_LEAVES_DATA = [
     { slipId: 'SLP-2026-014', admNo: 'SV-0082', name: 'P. Kiran Kumar', class: 'Class X-A', roll: '#1004', guardian: 'P. Appala Naidu (Father)', parent: 'P. Appala Naidu', phone: '9848011223', dates: '24 Sep – 26 Sep 2026', daysRequested: '3 Days', ground: 'Medical Grounds', reason: 'Typhoid recovery • Doctor Certificate Verified', requestDate: '2026-09-22', supportingDocs: 'Doctor Certificate Verified (SLG Hospital)', status: 'Approved', source: 'Parent Portal (Online)' },
     { slipId: 'SLP-2026-013', admNo: 'SV-0012', name: 'G. Sai Teja', class: 'Class X-A', roll: '#1001', guardian: 'G. Venkata Rao (Father)', parent: 'G. Venkata Rao', phone: '9848022334', dates: '25 Sep 2026', daysRequested: '1 Day', ground: 'Sports / Olympiad', reason: 'AP State Athletics Meet Representation (Vizag)', requestDate: '2026-09-23', supportingDocs: 'Sports Directorate Entry Pass', status: 'Approved', source: 'Parent Portal (Online)' },
@@ -1653,7 +1790,6 @@ const portalApp = (function () {
     }
   ];
 
-  // Tabulation & Marks Database (Subject-wise, missing entries, totals, grades and moderation)
   const TABULATION_MARKS_DATA = [
     { roll: '01', admNo: 'SV-0210', name: 'K. Sai Tharun', internal: 19, theory: 78, moderation: 2, total: 99, grade: 'A1', gp: '10.0', status: 'Entered & Verified', notes: 'Top distinction. Flawless algebraic solutions.' },
     { roll: '02', admNo: 'SV-0588', name: 'B. Vennela', internal: 19, theory: 76, moderation: 2, total: 97, grade: 'A1', gp: '10.0', status: 'Entered & Verified', notes: 'Outstanding theorem step explanations.' },
@@ -1678,7 +1814,6 @@ const portalApp = (function () {
     { roll: '27', admNo: 'SV-0352', name: 'S. Bhavana', internal: 0, theory: 0, moderation: 0, total: 0, grade: 'F', gp: '0.0', status: 'Missing Entry', notes: 'Absent: Sanctioned Family Emergency. Retest scheduled 02 Nov.' }
   ];
 
-  // Result Approval & Reviewer Ledger (Designated reviewers verify results before authorized publication)
   let RESULT_APPROVAL_DATA = [
     {
       id: 'APR-2026-X-MATH',
@@ -1748,7 +1883,6 @@ const portalApp = (function () {
     }
   ];
 
-  // Report Cards Student Summaries Database
   const REPORT_CARDS_DATA = {
     'SV-0210': {
       name: 'K. Sai Tharun',
@@ -2472,9 +2606,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
     }
   ];
 
-
-
-  // Role Metadata
   const roleConfigs = {
     'principal': {
       title: 'Principal',
@@ -2502,7 +2633,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
     }
   };
 
-  // Synchronization of Faculty Records from Teacher Portal to Management Dashboard
   function syncFacultyFromStorage() {
     try {
       const demoFacultyIds = ['SV200001', 'SV200002', 'SV-TEA-001', 'SV-TEA-002', 'SV200005'];
@@ -2553,11 +2683,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
     }
   }
 
-  // Initialization
-
-  // =========================================================================
-  // PERSISTENT NOTIFICATION ECOSYSTEM (Stateful across page reloads)
-  // =========================================================================
   const DEFAULT_PORTAL_NOTIFICATIONS = [
     {
       id: 'notif-1',
@@ -2610,7 +2735,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
     } catch (e) {}
   }
 
-  // Update all notification badge elements across the header
   function updateNotifBadges(count) {
     const badges = document.querySelectorAll('#headerNotifCount, #notifBadge, .notif-badge');
     badges.forEach(b => {
@@ -2648,7 +2772,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
         }
       } catch (e) {}
 
-      // Fallback: Check if HTML already has default items
       const existingDomItems = listEl.querySelectorAll('.notif-item');
       if (existingDomItems.length > 0) {
         syncDomNotificationItems(isAllRead);
@@ -2720,7 +2843,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
     if (e && typeof e.preventDefault === 'function') e.preventDefault();
     if (e && typeof e.stopPropagation === 'function') e.stopPropagation();
 
-    // 1. Update localStorage
     try {
       localStorage.setItem('sv_notifications_all_read', 'true');
       localStorage.setItem('sv_notifications_read_timestamp', String(Date.now()));
@@ -2731,12 +2853,10 @@ const FEE_CATEGORY_AUDIT_DATA = [
       }
     } catch (err) {}
 
-    // 2. Clear state flags
     if (Array.isArray(state._liveNotifications)) {
       state._liveNotifications.forEach(n => { n.unread = false; });
     }
 
-    // 3. Mark all DOM notification items as read
     const notifItems = document.querySelectorAll('.notif-item');
     notifItems.forEach(item => {
       item.classList.remove('unread');
@@ -2744,10 +2864,8 @@ const FEE_CATEGORY_AUDIT_DATA = [
       if (dot) dot.style.display = 'none';
     });
 
-    // 4. Reset badge to 0 and hide
     updateNotifBadges(0);
 
-    // 5. Update "Mark all read" button indicator
     const markBtn = document.getElementById('markAllRead');
     if (markBtn) {
       markBtn.innerHTML = '<i class="fa-solid fa-check" style="color:#10b981;margin-right:4px;"></i><span style="color:#059669;font-weight:700;">All read</span>';
@@ -2756,14 +2874,12 @@ const FEE_CATEGORY_AUDIT_DATA = [
       markBtn.style.opacity = '0.9';
     }
 
-    // 6. Notify backend if authenticated API client is present
     try {
       if (window.ApiClient && typeof window.ApiClient.getAccessToken === 'function' && window.ApiClient.getAccessToken()) {
         fetch('/api/v1/management/notifications/read-all', { method: 'PATCH' }).catch(() => {});
       }
     } catch (err) {}
 
-    // 7. Show confirmation toast
     if (typeof showToast === 'function') {
       showToast('All notifications marked as read', 'success');
     }
@@ -2775,7 +2891,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
     const dot = el.querySelector('.notif-dot');
     if (dot) dot.style.display = 'none';
 
-    // Recalculate remaining unread items in DOM
     const listEl = document.getElementById('notifList');
     const remaining = listEl ? listEl.querySelectorAll('.notif-item.unread').length : 0;
     updateNotifBadges(remaining);
@@ -2839,7 +2954,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
     notifs.unshift(newNotif);
     savePortalNotifications(notifs);
 
-    // New update arrived: reset all-read flag so badge appears
     localStorage.setItem('sv_notifications_all_read', 'false');
 
     const markBtn = document.getElementById('markAllRead');
@@ -2859,7 +2973,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
       return;
     }
     try {
-      // Clear legacy/stale student cache to ensure exact demo student roster (4 boys, 4 girls)
       localStorage.removeItem('sv_enrolled_students');
       localStorage.removeItem('sv_deleted_student_adm_nos');
       localStorage.removeItem('sv_withdrawn_students');
@@ -2869,7 +2982,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
     if (typeof window !== 'undefined' && Array.isArray(window.STUDENT_ROSTER) && window.STUDENT_ROSTER.length > 0) {
       state.students = [...window.STUDENT_ROSTER];
     }
-    // Filter out permanently deleted students (Principal / VP sign-offs)
     const deletedAdmNos = JSON.parse(localStorage.getItem('sv_deleted_student_adm_nos') || '[]');
     if (deletedAdmNos.length > 0 && Array.isArray(state.students)) {
       state.students = state.students.filter(s => !deletedAdmNos.includes(s.admNo));
@@ -2877,7 +2989,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
         window.STUDENT_ROSTER = window.STUDENT_ROSTER.filter(s => !deletedAdmNos.includes(s.admNo));
       }
     }
-    // Clean and deduplicate state.students and stored enrolled cache
     state.students = deduplicateStudents(state.students);
     try {
       const storedEnr = JSON.parse(localStorage.getItem('sv_enrolled_students') || '[]');
@@ -2886,11 +2997,9 @@ const FEE_CATEGORY_AUDIT_DATA = [
       }
     } catch (e) {}
     
-    // Restore saved authorized faculty and sync from Teacher Portal
     syncFacultyFromStorage();
     syncAdmissionsFromStorage();
 
-    // Listen for live updates from Teacher Portal (same browser window or multi-tab)
     window.addEventListener('storage', function(e) {
       if (e.key === 'sv_departure_notice_alert' && e.newValue) {
         try {
@@ -2928,7 +3037,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
       }
     });
 
-    // Also sync on window focus when switching tabs
     window.addEventListener('focus', function() {
       syncFacultyFromStorage();
     });
@@ -2954,15 +3062,12 @@ const FEE_CATEGORY_AUDIT_DATA = [
       });
     }
 
-    // Automatically verify session & load authenticated role
     initAuthenticatedSession();
 
-    // Ingest authoritative live database records on initial load
     if (typeof loadLiveManagementData === 'function') {
       loadLiveManagementData();
     }
 
-    // Periodic background sync (60s) for timetable, examinations, and attendance
     if (!window.__sv_dashboard_sync_interval) {
       window.__sv_dashboard_sync_interval = setInterval(function() {
         if (typeof refreshDashboardTimetableAndExams === 'function') refreshDashboardTimetableAndExams(false);
@@ -2970,11 +3075,9 @@ const FEE_CATEGORY_AUDIT_DATA = [
       }, 60000);
     }
 
-    // Restore persistent toggle settings
     restoreSecurityAndToggleSettings();
   }
 
-  // Indian Standard Time (Asia/Kolkata, UTC+5:30) Engine
   function getISTDateTime() {
     const now = new Date();
     const dateOptions = {
@@ -3010,8 +3113,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
     const weekday = getPart('weekday') || '';
     const currentMinutes = hour24 * 60 + minute;
 
-
-
     return {
       dateString,
       timeString,
@@ -3023,7 +3124,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
     };
   }
 
-  // Dashboard Dynamic Timetable Period Definitions (Fallback when offline/before initial fetch)
   const DASHBOARD_FALLBACK_PERIODS = [
     { id: 1, periodNumber: 1, num: 'Period 1', time: '09:00 – 09:45 AM', startTime: '09:00 AM', endTime: '09:45 AM', start: 540, end: 585, startMinutes: 540, endMinutes: 585, subj: 'Mathematics', teacher: 'Smt. P. Sunitha (SV-TEA-001)' },
     { id: 2, periodNumber: 2, num: 'Period 2', time: '09:45 – 10:30 AM', startTime: '09:45 AM', endTime: '10:30 AM', start: 585, end: 630, startMinutes: 585, endMinutes: 630, subj: 'Physical Science', teacher: 'Sri K. Ramesh (SV-TEA-002)' },
@@ -3035,7 +3135,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
     { id: 8, periodNumber: 8, num: 'Period 8', time: '03:00 – 03:45 PM', startTime: '03:00 PM', endTime: '03:45 PM', start: 900, end: 945, startMinutes: 900, endMinutes: 945, subj: 'Guided Library & Study', teacher: 'Sri Navva Anand (VP)' }
   ];
 
-  // Live state synchronized from MongoDB Timetable & Exam collections
   let dashboardActiveTimetablePeriods = [];
   let dashboardActiveSubstitution = null;
   let dashboardUpcomingExams = [];
@@ -3107,21 +3206,16 @@ const FEE_CATEGORY_AUDIT_DATA = [
 
     let rowsHtml = '';
     list.forEach(exam => {
-      // 1. Exam Name & Description/Code
       const examName = escapeDashHtml(exam.name || 'Examination');
       const examSub = escapeDashHtml(exam.description || (exam.code ? `Code: ${exam.code}` : 'AP Board Assessment'));
 
-      // 2. Eligible Classes
       const classesFormatted = escapeDashHtml(exam.classesFormatted || (Array.isArray(exam.classes) ? exam.classes.join(', ') : 'All Classes'));
 
-      // 3. Dates & Schedule
       const datesFormatted = escapeDashHtml(exam.datesFormatted || 'Schedule Announced Soon');
       const timingsFormatted = escapeDashHtml(exam.timings || '09:30 AM – 12:30 PM');
 
-      // 4. Subjects Covered
       const subjectsFormatted = escapeDashHtml(exam.subjectsCovered || (Array.isArray(exam.subjects) ? exam.subjects.map(s => s.name || s).join(', ') : 'All Core Subjects'));
 
-      // 5. Status / Hall Tickets badge
       let statusBadge = '';
       const statusUpper = (exam.status || 'UPCOMING').toUpperCase();
       const hallStatusUpper = (exam.hallTicketStatus || 'PENDING').toUpperCase();
@@ -3140,7 +3234,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
         statusBadge = `<span class="badge" style="background: #eff6ff; color: #2563eb; border: 1px solid #bfdbfe; font-size: 0.75rem; padding: 0.25rem 0.6rem; border-radius: 9999px; display: inline-flex; align-items: center; gap: 0.35rem; font-weight: 600;"><i class="fa-solid fa-calendar-check"></i> Upcoming Schedule</span>`;
       }
 
-      // 6. Action Button
       const actionLabel = escapeDashHtml(exam.actionLabel || 'View Datesheet');
       const actionBtnHtml = `
         <button class="btn btn-secondary btn-xs" onclick="if(window.portalApp&&window.portalApp.navigateTo)window.portalApp.navigateTo('examinations');else navigateTo('examinations');" title="Open Examination Portal">
@@ -3201,7 +3294,7 @@ const FEE_CATEGORY_AUDIT_DATA = [
           }
 
           const { weekday, currentMinutes } = getISTDateTime();
-          lastRenderedPeriodMinute = -1; // force fresh render
+          lastRenderedPeriodMinute = -1;
           updateDashboardTimetable(weekday, currentMinutes);
 
           if (isManual && typeof showToast === 'function') {
@@ -3216,16 +3309,12 @@ const FEE_CATEGORY_AUDIT_DATA = [
     }
   }
 
-  // =========================================================================
-  // DYNAMIC FEE COLLECTION & OUTSTANDING DUES OVERVIEW ENGINE
-  // =========================================================================
   let dashboardActiveFeeOverview = null;
 
   function renderDashboardFeeOverviewLive(finances) {
     if (!finances || typeof finances !== 'object') return;
     dashboardActiveFeeOverview = finances;
 
-    // 1. Metric 1: Today's Counter Collections
     const todayAmtEl = document.getElementById('dashFeeTodayAmount');
     const todaySubEl = document.getElementById('dashFeeTodaySub');
     if (todayAmtEl) {
@@ -3239,7 +3328,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
       todaySubEl.textContent = `${rCount} Receipts Issued Today (Cash: ₹${cashK} • UPI: ₹${upiK})`;
     }
 
-    // 2. Metric 2: Term 2 Total Collected & Realization
     const termAmtEl = document.getElementById('dashFeeTermAmount');
     const termLabelEl = document.getElementById('dashFeeTermLabel');
     const termSubEl = document.getElementById('dashFeeTermSub');
@@ -3264,7 +3352,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
       termSubEl.textContent = `₹${targetL} Target • ${cleared} of ${totalStudents} Cleared`;
     }
 
-    // 3. Metric 3: Outstanding Dues
     const outAmtEl = document.getElementById('dashFeeOutstandingAmount');
     const outLabelEl = document.getElementById('dashFeeOutstandingLabel');
     const outSubEl = document.getElementById('dashFeeOutstandingSub');
@@ -3286,7 +3373,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
       outSubEl.textContent = `${od15} Overdue > 15 Days • Reminders Sent (${sentReminders})`;
     }
 
-    // 4. Defaulters Count Pill & Table
     const countEl = document.getElementById('dashFeeDefaultersCount');
     const tbody = document.getElementById('dashFeeDefaultersTableBody');
     const defaulters = Array.isArray(finances.highPriorityDefaulters) ? finances.highPriorityDefaulters : [];
@@ -3491,7 +3577,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
   function updateISTClockAndTimetable() {
     const { dateString, timeString, hour24, weekday, currentMinutes } = getISTDateTime();
 
-    // 1. Update Live Time and Date display in Header
     const timeEl = document.getElementById('liveTimeText');
     if (timeEl) {
       timeEl.textContent = `${timeString} IST`;
@@ -3501,7 +3586,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
       dateEl.textContent = dateString;
     }
 
-    // 2. Dynamic Time-of-Day Greeting
     const greetingEl = document.getElementById('dashboardGreeting');
     if (greetingEl) {
       const userDetails = typeof resolveAuthenticatedUserDetails === 'function'
@@ -3512,7 +3596,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
         : `Good Morning, ${userDetails.fullName}`;
     }
 
-    // 3. Update Timetable Status & Cards
     updateDashboardTimetable(weekday, currentMinutes);
   }
 
@@ -3530,12 +3613,10 @@ const FEE_CATEGORY_AUDIT_DATA = [
     const isRemedial = (!isSunday && currentMinutes >= 945 && currentMinutes < 1020);
     const isDispersed = (!isSunday && currentMinutes >= 1020);
 
-    // Find active period
     const activePeriod = (!isSunday && !isLunchBreak && !isMorningPrep && !isRemedial && !isDispersed)
       ? periodsToUse.find(p => currentMinutes >= p.start && currentMinutes < p.end)
       : null;
 
-    // Update Header Pill
     if (pillEl) {
       if (isSunday) {
         pillEl.className = 'dash-pill gray';
@@ -3565,7 +3646,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
       }
     }
 
-    // Only re-render cards when minute changes or on initial render
     if (lastRenderedPeriodMinute === currentMinutes && railEl && railEl.children.length > 0 && !railEl.querySelector('.text-muted')) {
       return;
     }
@@ -3573,7 +3653,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
 
     if (!railEl) return;
 
-    // Render Period Cards
     let html = '';
     periodsToUse.forEach((p, idx) => {
       let cardClass = 'dash-period-card';
@@ -3588,7 +3667,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
         cardClass += ' completed';
         statusLabel = `${escapeDashHtml(p.num)} <span style="font-size:0.68rem; color:#10b981; font-weight:700; margin-left:3px;"><i class="fa-solid fa-check"></i> Done</span>`;
       } else {
-        // Upcoming
         const isNext = (isLunchBreak && p.id === 5) || (!isLunchBreak && periodsToUse.find(op => op.id === p.id - 1 && currentMinutes >= op.end && currentMinutes < p.start));
         if (isNext) {
           cardClass += ' next-period';
@@ -3629,17 +3707,9 @@ const FEE_CATEGORY_AUDIT_DATA = [
     window.__sv_clock_interval = setInterval(updateISTClockAndTimetable, 1000);
   }
 
-  // =========================================================================
-  // DYNAMIC DASHBOARD DATA SYNCHRONIZATION, ACADEMIC YEAR & HEALTH ENGINE
-  // =========================================================================
   let lastDashboardSyncData = null;
   let isDashboardSyncing = false;
 
-  /**
-   * Computes dynamic dashboard metrics from local in-memory state as Tier 2 fallback.
-   * Zero hardcoded figures: dynamically derived from state.students, state.faculty,
-   * state.admissions, state.transfers, state.staffAttendanceRecords, etc.
-   */
   function computeLocalDashboardData() {
     const studentList = Array.isArray(state.students) ? state.students : [];
     const totalStudents = studentList.length;
@@ -3652,7 +3722,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
     const archivedCount = studentList.filter(s => (s.status || '').toLowerCase() === 'archived').length;
     const inactiveCount = studentList.filter(s => (s.status || '').toLowerCase() === 'inactive').length;
 
-    // Faculty & Staff
     const facultyList = Array.isArray(state.faculty) ? state.faculty : [];
     const totalTeachers = facultyList.length;
     const activeTeachers = facultyList.filter(f => {
@@ -3663,7 +3732,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
     const employeeCount = Array.isArray(state.nonTeachingStaff) ? state.nonTeachingStaff.length : 3;
     const totalStaffCount = totalTeachers + employeeCount;
 
-    // Attendance (Today)
     const todayStr = new Date().toISOString().split('T')[0];
     let isMarkedToday = false;
     let todayPresent = 0;
@@ -3681,7 +3749,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
       ? Math.round((todayPresent / expectedStudents) * 1000) / 10
       : 0;
 
-    // Approvals: Admissions, Leaves, Transfers, Archivals
     const admissionsList = Array.isArray(state.admissions) ? state.admissions : [];
     const pendingAdmissions = admissionsList.filter(a => {
       const st = (a.status || '').toLowerCase();
@@ -3711,7 +3778,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
 
     const totalPending = pendingLeaves + pendingAdmissions + pendingTransfers + pendingArchivals;
 
-    // Academic
     const uniqueClasses = new Set(studentList.map(s => s.class || 'X'));
 
     return {
@@ -3806,7 +3872,7 @@ const FEE_CATEGORY_AUDIT_DATA = [
         ? await window.ApiClient.sync.fetchLatest('management-dashboard', fetcher, force ? 0 : 3000)
         : await fetcher();
 
-      if (!bundle) return lastDashboardSyncData; // superseded by newer request
+      if (!bundle) return lastDashboardSyncData;
 
       const rawDash = bundle.dashRes;
       const data = (rawDash && rawDash.success && rawDash.data) ? rawDash.data : rawDash;
@@ -3870,14 +3936,12 @@ const FEE_CATEGORY_AUDIT_DATA = [
   function renderDashboardLiveMetrics(data) {
     if (!data) return;
 
-    // 1. Dynamic Academic Year in Welcome Banner
     const yearEl = document.getElementById('liveAcademicYearText');
     if (yearEl) {
       const yearName = selectedAcademicYearFilter || (data.academic && data.academic.academicYear) ? (selectedAcademicYearFilter || data.academic.academicYear) : '2026–2027';
       yearEl.textContent = 'Academic Year: ' + yearName;
     }
 
-    // 2. Metric 1: Students (Total Registered & Active Enrolment)
     if (data.studentCount) {
       const totalStudents = Number(data.studentCount.total) || 0;
       const activeStudents = Number(data.studentCount.active) || 0;
@@ -3905,7 +3969,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
       if (sBarEl) sBarEl.style.width = activePct + '%';
     }
 
-    // 3. Metric 2: Staff (Teaching Faculty & Non-Teaching Staff)
     if (data.teacherCount) {
       const teachers = Number(data.teacherCount.total) || 0;
       const employees = Number(data.teacherCount.employees) || 0;
@@ -3930,7 +3993,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
       }
     }
 
-    // 4. Metric 3: Attendance (Today's rate, present vs expected)
     const attData = data.attendance || {};
     const isMarked = Boolean(attData.isMarkedToday) || (Number(attData.totalRegistersSubmitted) > 0);
     const pct = Number(attData.schoolAttendancePercentage) || 0;
@@ -3955,7 +4017,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
       if (attBarEl) attBarEl.style.width = '0%';
     }
 
-    // Render Students Absent Today live section on Principal Dashboard
     if (typeof renderDashboardAbsentees === 'function') {
       if (Array.isArray(attData.todayAbsentees)) {
         renderDashboardAbsentees(attData.todayAbsentees, attData.absenteeBreakdown);
@@ -3964,7 +4025,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
       }
     }
 
-    // Synchronize Attendance Module Summary Card
     const attModAbsent = document.getElementById('studentAbsenteesToday');
     if (attModAbsent) attModAbsent.textContent = absent;
     const attModPresent = document.getElementById('studentPresentToday');
@@ -3972,7 +4032,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
     const attModTotal = document.getElementById('studentTotalEnrolled');
     if (attModTotal && data.studentCount) attModTotal.textContent = data.studentCount.active || expected;
 
-    // 5. Metric 4: Approvals (Leaves, Admissions, TC, Archivals)
     if (data.approvals) {
       const pendingTotal = Number(data.approvals.totalPending) || 0;
       const pendingLeaves = Number(data.approvals.pendingLeaves) || 0;
@@ -4004,7 +4063,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
       }
     }
 
-    // 6. Navigation Ribbon Badges
     const absBadge = document.getElementById('dashRibbonAbsenteesBadge');
     if (absBadge && data.attendance) {
       const c = Number(data.attendance.todayAbsent) || 0;
@@ -4042,7 +4100,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
       appBadge.textContent = Number(data.approvals.totalPending) || 0;
     }
 
-    // 7. Live Synced IST Timestamp
     const syncTimeEl = document.getElementById('dashLastSyncTime');
     if (syncTimeEl) {
       const now = new Date();
@@ -4050,7 +4107,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
       syncTimeEl.textContent = 'Live Synced: ' + timeStr + ' IST';
     }
 
-    // 8. Timetable & Upcoming Exams Dynamic Real-Time Sync
     if (data.timetable) {
       if (Array.isArray(data.timetable.periods) && data.timetable.periods.length > 0) {
         dashboardActiveTimetablePeriods = data.timetable.periods;
@@ -4066,7 +4122,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
       renderDashboardUpcomingExamsLive(dashboardUpcomingExams);
     }
 
-    // 9. Fee Collection & Outstanding Dues Dynamic Real-Time Sync
     if (data.finances) {
       renderDashboardFeeOverviewLive(data.finances);
     }
@@ -4117,12 +4172,12 @@ const FEE_CATEGORY_AUDIT_DATA = [
     const headers = token ? { 'Authorization': 'Bearer ' + token } : {};
 
     try {
-      // 1. Ingest live student records from MongoDB
       const sResp = await fetch('/api/v1/students?limit=2000', { headers });
       if (sResp.ok) {
         const sJson = await sResp.json();
         const records = (sJson && sJson.data && (sJson.data.students || sJson.data.records)) || (Array.isArray(sJson.data) ? sJson.data : []);
-        if (Array.isArray(records) && records.length > 0) {
+        hasLoadedLiveStudents = true;
+        if (Array.isArray(records)) {
           state.students = records.map(s => ({
             _id: s._id,
             id: s._id,
@@ -4155,10 +4210,11 @@ const FEE_CATEGORY_AUDIT_DATA = [
           if (typeof window !== 'undefined') {
             window.STUDENT_ROSTER = state.students;
           }
+          syncAcademicClassesLiveCounts();
+          renderAcademicClasses();
         }
       }
 
-      // 2. Ingest live faculty records from MongoDB
       const tResp = await fetch('/api/v1/teachers', { headers });
       if (tResp.ok) {
         const tJson = await tResp.json();
@@ -4240,7 +4296,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
         }
       }
 
-      // 3. Ingest live admissions applications from MongoDB
       const aResp = await fetch('/api/v1/admissions', { headers });
       if (aResp.ok) {
         const aJson = await aResp.json();
@@ -4271,7 +4326,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
         }
       }
 
-      // 4. Ingest live financial overview from MongoDB
       const fResp = await fetch('/api/v1/fees/dashboard-overview', { headers });
       if (fResp.ok) {
         const fJson = await fResp.json();
@@ -4280,7 +4334,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
         }
       }
 
-      // 5. Ingest live staff leave applications from MongoDB
       try {
         const lResp = await fetch('/api/v1/teachers/leaves', { headers });
         if (lResp.ok) {
@@ -4331,7 +4384,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
         console.warn('[Management Live Leaves Note]:', lErr);
       }
 
-      // 6. Update UI modules with live synchronized data
       if (typeof filterStudentProfiles === 'function') filterStudentProfiles();
       if (typeof filterFacultyProfiles === 'function') filterFacultyProfiles();
       if (typeof filterAdmissions === 'function') filterAdmissions();
@@ -4403,15 +4455,12 @@ const FEE_CATEGORY_AUDIT_DATA = [
   }
 
   function bindEvents() {
-    // Role switcher (Removed - Authenticated read-only badge enforced)
 
-    // Theme toggle
     const themeBtn = document.getElementById('themeToggleBtn');
     if (themeBtn) {
       themeBtn.addEventListener('click', toggleTheme);
     }
 
-    // Mobile sidebar toggle
     const mobileToggle = document.getElementById('mobileSidebarToggle');
     const sidebar = document.getElementById('portalSidebar');
     if (mobileToggle && sidebar) {
@@ -4426,7 +4475,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
       });
     }
 
-    // Universal Search Shortcut
     window.addEventListener('keydown', function (e) {
       if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
         e.preventDefault();
@@ -4435,7 +4483,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
       }
     });
 
-    // Search input handler
     const searchInput = document.getElementById('portalUniversalSearch');
     if (searchInput) {
       searchInput.addEventListener('input', function (e) {
@@ -4443,7 +4490,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
       });
     }
 
-    // Notification bell flyout toggle
     const notifBell = document.getElementById('notifBellBtn');
     const notifFlyout = document.getElementById('notifFlyout');
     if (notifBell && notifFlyout) {
@@ -4458,7 +4504,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
       });
     }
 
-    // Mark all read (Statefully stored in localStorage across page reloads)
     const markAllRead = document.getElementById('markAllRead');
     if (markAllRead) {
       markAllRead.addEventListener('click', function () {
@@ -4466,7 +4511,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
       });
     }
 
-    // Two-Level Side Navigation System: Setup navigation items, tooltips & accordion handlers
     const navItems = document.querySelectorAll('.nav-item');
     navItems.forEach(item => {
       const mainLink = item.querySelector('.nav-link');
@@ -4474,13 +4518,11 @@ const FEE_CATEGORY_AUDIT_DATA = [
       const arrow = item.querySelector('.nav-arrow');
       const hasSub = !!item.querySelector('.nav-sub');
 
-      // Populate tooltip attribute for minimized/collapsed sidebar mode
       const navTextEl = item.querySelector('.nav-text');
       if (navTextEl && !item.getAttribute('data-tooltip')) {
         item.setAttribute('data-tooltip', navTextEl.textContent.trim());
       }
 
-      // Clicking arrow toggles the sub-menu list without navigating
       if (arrow) {
         arrow.addEventListener('click', function (e) {
           if (e.__svToggleHandled) return;
@@ -4490,7 +4532,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
         });
       }
 
-      // Clicking main nav link
       if (mainLink) {
         mainLink.addEventListener('click', function (e) {
           if (e.__svToggleHandled) return;
@@ -4498,16 +4539,13 @@ const FEE_CATEGORY_AUDIT_DATA = [
           e.stopPropagation();
 
           if (hasSub) {
-            // Level 1: Expand/collapse submenu WITHOUT navigating away
             toggleSubmenu(moduleKey, e);
           } else {
-            // Module without submenus (e.g. Dashboard): close submenus & navigate directly
             document.querySelectorAll('.nav-item').forEach(other => {
               if (other !== item) other.classList.remove('open');
             });
             navigateTo(moduleKey);
 
-            // Close mobile sidebar if open
             const sb = document.getElementById('portalSidebar');
             const bd = document.getElementById('portalBackdrop');
             if (window.innerWidth <= 1024) {
@@ -4518,7 +4556,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
         });
       }
 
-      // Level 2 Sub-links
       const subLinks = item.querySelectorAll('.nav-sub-link');
       subLinks.forEach(sub => {
         sub.addEventListener('click', function (e) {
@@ -4527,7 +4564,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
           const subKey = sub.getAttribute('data-sub');
           navigateTo(moduleKey, subKey);
 
-          // Close mobile sidebar if open
           const sb = document.getElementById('portalSidebar');
           const bd = document.getElementById('portalBackdrop');
           if (window.innerWidth <= 1024) {
@@ -4538,11 +4574,9 @@ const FEE_CATEGORY_AUDIT_DATA = [
       });
     });
 
-    // Initialize sidebar collapsed state & keyboard shortcuts
     initSidebarCollapsedState();
   }
 
-  // Toggle Submenu Accordion Handler (Level 1) with Double-Invocation Guard
   let _lastPortalToggleStamp = 0;
   let _lastPortalToggleMod = null;
 
@@ -4571,7 +4605,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
     }
 
     const wasOpen = targetItem.classList.contains('open');
-    // Accordion behavior: close other open submenus smoothly
     document.querySelectorAll('.nav-item').forEach(other => {
       if (other !== targetItem) {
         other.classList.remove('open');
@@ -4590,7 +4623,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
     }
   }
 
-  // Toggle Collapsible Sidebar Mode (Minimized/Full)
   function toggleSidebarCollapse() {
     const isCollapsed = document.body.classList.toggle('sidebar-collapsed');
     const sb = document.getElementById('portalSidebar');
@@ -4615,7 +4647,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
       }
     } catch (e) {}
 
-    // Ensure all nav-items have tooltips for collapsed sidebar mode
     document.querySelectorAll('.nav-item').forEach(item => {
       if (!item.getAttribute('data-tooltip')) {
         const text = item.querySelector('.nav-text');
@@ -4623,7 +4654,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
       }
     });
 
-    // Dynamic flyout vertical positioning for collapsed sidebar
     document.addEventListener('mouseenter', function (e) {
       if (!document.body.classList.contains('sidebar-collapsed')) return;
       const navItem = e.target && e.target.closest && e.target.closest('.nav-item');
@@ -4639,7 +4669,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
       sub.style.top = top + 'px';
     }, true);
 
-    // Global keyboard shortcut: Ctrl+B / Cmd+B toggles sidebar collapse
     window.addEventListener('keydown', function (e) {
       if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'b' && !e.target.matches('input, textarea, select')) {
         e.preventDefault();
@@ -4686,10 +4715,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
     handleHash();
   }
 
-  // Dynamic Greeting Generator following user requirements:
-  // Morning: Good Morning, Smt. Gorle Varalakshmi
-  // Afternoon: Good Afternoon, [Logged-in User Name]
-  // Evening: Good Evening, [Logged-in User Name]
   function getDynamicGreeting(name) {
     const now = new Date();
     const utcHours = now.getUTCHours();
@@ -4708,7 +4733,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
     return `${salutation}, ${targetName}`;
   }
 
-  // Unified Session User Resolver
   function resolveAuthenticatedUserDetails() {
     let user = state.authenticatedUser;
     if (!user && window.ApiClient && typeof window.ApiClient.getUser === 'function') {
@@ -4741,7 +4765,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
     let fullName = (user && user.fullName && user.fullName.trim()) ? user.fullName.trim() : defaultName;
     let designation = (user && user.designation && user.designation.trim()) ? user.designation.trim() : defaultDesignation;
 
-    // SANITIZATION: Eliminate legacy outdated/incorrect names throughout the application
     if (/Dr\.?\s*K\.?\s*S\.?\s*Rao/i.test(fullName) || fullName === 'Principal' || fullName === 'admin') {
       fullName = defaultName;
     }
@@ -4749,7 +4772,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
       fullName = 'Sri Navva Anand';
     }
 
-    // Role-specific designations
     if (roleKey === 'principal') {
       designation = 'Principal';
     } else if (roleKey === 'vice-principal') {
@@ -4760,7 +4782,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
       }
     }
 
-    // Update in-memory user and storage to heal stale browser cookies/localStorage
     if (user) {
       user.fullName = fullName;
       user.designation = designation;
@@ -4779,11 +4800,9 @@ const FEE_CATEGORY_AUDIT_DATA = [
     };
   }
 
-  // Unified DOM Sync for Sidebar Card, Header, and Dashboard Welcome
   function syncUserProfileDOM() {
     const details = resolveAuthenticatedUserDetails();
 
-    // 1. Sidebar Role Indicator (top of sidebar)
     const roleTitleEl = document.getElementById('sidebarRoleTitle');
     if (roleTitleEl) roleTitleEl.textContent = details.designation;
 
@@ -4793,7 +4812,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
     const roleAvatarEl = document.getElementById('sidebarRoleAvatar');
     if (roleAvatarEl) roleAvatarEl.innerHTML = `<i class="${details.avatarIcon}"></i>`;
 
-    // 2. Sidebar User Card (bottom of sidebar)
     const userNameEl = document.getElementById('sidebarUserName');
     if (userNameEl) userNameEl.textContent = details.fullName;
 
@@ -4803,7 +4821,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
     const userAvatarEl = document.getElementById('sidebarUserAvatar');
     if (userAvatarEl) userAvatarEl.innerHTML = `<i class="${details.avatarIcon}"></i>`;
 
-    // 3. Header Profile Pill & Role Badge
     const headerRoleLabel = document.getElementById('headerRoleLabel');
     if (headerRoleLabel) {
       headerRoleLabel.textContent = details.designation;
@@ -4813,7 +4830,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
       headerRoleWrap.title = `Authenticated: ${details.fullName} (${details.designation})`;
     }
 
-    // 4. Dashboard Greeting & Banner
     const greetingEl = document.getElementById('dashboardGreeting');
     if (greetingEl) {
       greetingEl.textContent = getDynamicGreeting(details.fullName);
@@ -4850,7 +4866,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
     let authenticatedUser = null;
     let authRole = 'principal';
 
-    // 1. Try to verify session with backend /api/v1/auth/me
     if (window.ApiClient && typeof window.ApiClient.getAccessToken === 'function' && window.ApiClient.getAccessToken()) {
       try {
         const meRes = await window.ApiClient.auth.getMe();
@@ -4867,14 +4882,12 @@ const FEE_CATEGORY_AUDIT_DATA = [
       }
     }
 
-    // 2. Fallback to stored profile if offline or local state
     if (!authenticatedUser) {
       try {
         authenticatedUser = JSON.parse(sessionStorage.getItem('sv_user_profile') || localStorage.getItem('sv_user_profile') || 'null');
       } catch (e) {}
     }
 
-    // 3. Determine authoritative role
     const rawRole = (authenticatedUser && authenticatedUser.role) ||
                     sessionStorage.getItem('sv_user_role') ||
                     localStorage.getItem('sv_user_role') ||
@@ -4882,7 +4895,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
                     'PRINCIPAL';
     const normRole = String(rawRole).toUpperCase();
 
-    // 4. Strict Role Isolation: Block teachers/students/parents from Management Dashboard!
     if (normRole === 'TEACHER' || normRole === 'FACULTY') {
       console.warn('[Access Control] Teacher accounts are not permitted on the Management Dashboard. Redirecting to Faculty Workspace...');
       window.location.href = '/teacher#dashboard';
@@ -4897,14 +4909,12 @@ const FEE_CATEGORY_AUDIT_DATA = [
       return;
     }
 
-    // Check account status
     if (authenticatedUser && (authenticatedUser.accountStatus === 'Suspended' || authenticatedUser.accountStatus === 'Deactivated' || authenticatedUser.isActive === false)) {
       if (window.ApiClient) window.ApiClient.clearSession();
       window.location.href = '/login?msg=restricted';
       return;
     }
 
-    // 5. Map to Management Workspace Role
     if (normRole === 'VICE_PRINCIPAL' || normRole === 'VP') {
       authRole = 'vice-principal';
     } else if (normRole === 'OFFICE' || normRole === 'ADMIN' || normRole === 'CLERK' || normRole === 'OFFICESTAFF') {
@@ -4917,22 +4927,17 @@ const FEE_CATEGORY_AUDIT_DATA = [
       authRole = 'principal';
     }
 
-    // Persist verified role
     try {
       sessionStorage.setItem('sv_role_management', authRole);
     } catch (e) {}
 
-    // Store verified authenticated user in state
     state.authenticatedUser = authenticatedUser;
 
-    // Apply the authenticated role & permissions to UI
     switchRole(authRole);
 
-    // Sync user profile across all components (sidebar top, sidebar bottom, header, dashboard greeting)
     syncUserProfileDOM();
     try { loadMyProfileData(); } catch(e){}
 
-    // Initialize live data sync & health monitoring
     initDashboardSync();
   }
 
@@ -4948,10 +4953,8 @@ const FEE_CATEGORY_AUDIT_DATA = [
       sessionStorage.setItem('sv_role_management', roleKey);
     } catch (e) {}
 
-    // Update header role indicator badge
     syncHeaderRoleIndicator(roleKey, config);
 
-    // Update greeting & texts
     const greetingEl = document.getElementById('dashboardGreeting');
     if (greetingEl) greetingEl.textContent = config.greeting;
 
@@ -4980,7 +4983,7 @@ const FEE_CATEGORY_AUDIT_DATA = [
       if (officePermissionsBar) officePermissionsBar.style.display = 'none';
       if (metricCardFees) metricCardFees.style.display = 'none';
       if (metricCardVPDiscipline) metricCardVPDiscipline.style.display = 'flex';
-    } else { // principal
+    } else {
       if (principalDash) principalDash.style.display = 'block';
       if (adminDash) adminDash.style.display = 'none';
       if (vpPermissionsBar) vpPermissionsBar.style.display = 'none';
@@ -4996,13 +4999,10 @@ const FEE_CATEGORY_AUDIT_DATA = [
       crumb.textContent = `${config.title} Dashboard`;
     }
 
-    // Synchronize authenticated profile details across all UI areas
     syncUserProfileDOM();
 
-    // Apply role-specific navigation access permissions
     applyRolePermissions(roleKey);
 
-    // If currently on a module restricted to the active role, route back to dashboard
     const clerkPerms = getClerkPermissions();
     if (roleKey === 'admin' && state.activeModule !== 'dashboard' && !clerkPerms[state.activeModule]) {
       navigateTo('dashboard');
@@ -5025,7 +5025,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
         item.style.display = '';
         item.title = '';
       } else if (isVP) {
-        // Vice Principal: Operational & academic governance; settings/security locked to Principal
         if (mod === 'settings') {
           item.classList.add('nav-locked');
           item.style.opacity = '0.55';
@@ -5047,7 +5046,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
       }
     });
 
-    // Enforce fee concession/waiver & settings control visibility for non-Principal roles
     document.querySelectorAll('[data-principal-only="true"]').forEach(el => {
       el.style.display = isPrincipal ? '' : 'none';
     });
@@ -5116,7 +5114,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
       }
     } catch (e) {}
 
-    // Update sidebar active class (Two-Level Highlighting)
     const navItems = document.querySelectorAll('.nav-item');
     navItems.forEach(item => {
       const isTarget = (item.getAttribute('data-module') === moduleKey);
@@ -5131,7 +5128,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
       }
     });
 
-    // Synchronize Level 2 submenu links active state
     const activeItem = document.querySelector(`.nav-item[data-module="${moduleKey}"]`);
     if (activeItem) {
       document.querySelectorAll('.nav-sub-link').forEach(s => s.classList.remove('active'));
@@ -5144,18 +5140,14 @@ const FEE_CATEGORY_AUDIT_DATA = [
       }
     }
 
-    // Hide all views, show targeted view
     const allViews = document.querySelectorAll('.portal-view');
     allViews.forEach(v => v.classList.remove('active'));
     targetView.classList.add('active');
 
-    // Update standard breadcrumb
     updateBreadcrumb(moduleKey, subKey || (typeof getDefaultSubTab === 'function' ? getDefaultSubTab(moduleKey) : ''));
 
-    // Scroll to top
     window.scrollTo({ top: 0, behavior: 'smooth' });
 
-    // Auto-switch to default or requested sub-tab
     const activeSub = subKey || state.activeSubTab[moduleKey] || getDefaultSubTab(moduleKey);
     handleClerkModuleAccess(moduleKey, isRestrictedForClerk);
     if (!isRestrictedForClerk) {
@@ -5175,12 +5167,10 @@ const FEE_CATEGORY_AUDIT_DATA = [
     const moduleSection = document.getElementById(`view-${moduleKey}`);
     if (!moduleSection) return;
     
-    // Standard Breadcrumb Synchronization
     if (typeof updateBreadcrumb === 'function') {
       updateBreadcrumb(moduleKey, subKey);
     }
 
-    // Synchronize Level 2 sidebar sub-link
     const currentNavItem = document.querySelector(`.nav-item[data-module="${moduleKey}"]`);
     if (currentNavItem) {
       currentNavItem.querySelectorAll('.nav-sub-link').forEach(s => {
@@ -5192,7 +5182,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
       });
     }
 
-    // 1. Toggle active class on all tab-strip buttons in this module
     const tabStrip = moduleSection.querySelector('.tab-strip');
     if (tabStrip) {
       const buttons = tabStrip.querySelectorAll('.tab-btn');
@@ -5206,7 +5195,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
       });
     }
 
-    // 2. Universal subview switching across ALL modules
     const allSubviews = moduleSection.querySelectorAll(`[id^="subview-"], .${moduleKey}-subview, .${moduleKey.slice(0, -1)}-subview, .student-subview, .teacher-subview, .academic-subview, .attendance-subview, .timetable-subview, .examination-subview, .discipline-subview, .leaves-subview, .fees-subview, .communication-subview`);
     if (allSubviews.length > 0) {
       let matchedAny = false;
@@ -5222,14 +5210,12 @@ const FEE_CATEGORY_AUDIT_DATA = [
           sv.classList.remove('active');
         }
       });
-      // Fallback: if no specific subview matched, ensure the first subview is displayed
       if (!matchedAny && allSubviews[0]) {
         allSubviews[0].style.display = 'block';
         allSubviews[0].classList.add('active');
       }
     }
 
-    // 3. Module-specific dynamic content loaders
     if (moduleKey === 'students') {
       if ((!state.students || state.students.length === 0) && typeof window !== 'undefined' && Array.isArray(window.STUDENT_ROSTER) && window.STUDENT_ROSTER.length > 0) {
         state.students = window.STUDENT_ROSTER;
@@ -5497,7 +5483,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
       }
     }
 
-    // 4. Sync sidebar sub-link active state
     const sidebarSubLinks = document.querySelectorAll(`.nav-item[data-module="${moduleKey}"] .nav-sub-link`);
     sidebarSubLinks.forEach(link => {
       if (link.getAttribute('data-sub') === subKey) {
@@ -5507,17 +5492,14 @@ const FEE_CATEGORY_AUDIT_DATA = [
       }
     });
 
-    // 5. Ensure parent nav-item stays open
     const parentNavItem = document.querySelector(`.nav-item[data-module="${moduleKey}"]`);
     if (parentNavItem && parentNavItem.querySelector('.nav-sub')) {
       parentNavItem.classList.add('open');
     }
 
-    // showToast(`Switched view to ${moduleKey} → ${subKey}`, 'info');
   }
 
   function updateStudentTabBadges() {
-    // Dynamic counts that strictly match list length
     const allBadge = document.getElementById('allStudentsCountBadge');
     if (allBadge) allBadge.textContent = state.students.length;
 
@@ -5574,7 +5556,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
     renderEvents(state.events);
     renderDisciplineIncidents(state.disciplineIncidents);
     renderVPLeaves(state.facultyLeaves);
-    // Sri Vidya Subview Initial Pre-population
     renderStudentLeaves();
     renderLeaveHistoryRegister();
     renderLeaveCalendar();
@@ -5625,8 +5606,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
     renderClerkPermissionsForm();
   }
 
-  // Helpers for sequential admission numbers & Section A enforcement
-    // Safe deduplication of student records by Admission Number
   function deduplicateStudents(arr) {
     if (!Array.isArray(arr)) return [];
     const seenAdm = new Set();
@@ -5685,12 +5664,9 @@ const FEE_CATEGORY_AUDIT_DATA = [
     });
     return 'SV-' + String(maxNum + 1).padStart(4, '0');
   }
-  // ── Pagination state for All Students table ─────────────────────────────
   var studentPage = { current: 1, pageSize: 50, filteredList: [] };
 
-
   function renderStudentsTable(list) {
-    // Store the full filtered list and reset to page 1
     studentPage.filteredList = sortStudentsByAdmNo(deduplicateStudents(list));
     studentPage.current = 1;
     renderStudentsPage();
@@ -5708,7 +5684,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
     const end    = Math.min(start + ps, total);
     const slice  = sorted.slice(start, end);
 
-    // Update counters
     const showingEl = document.getElementById('studentShowingCount');
     if (showingEl) showingEl.textContent = total;
     const totalEl = document.getElementById('studentTotalCount');
@@ -5822,8 +5797,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
     if (tableEl) tableEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 
-
-
   function filterStudents() {
     state.students = deduplicateStudents(state.students);
     const query = (document.getElementById('studentFilterInput')?.value || '').toLowerCase().trim();
@@ -5869,12 +5842,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
     renderStudentProfiles(state.students);
     showToast('Filters reset to default view', 'info');
   }
-
-
-  /* =========================================================================
-     AUTHORITATIVE STUDENT PROFILES, 14-TAB DOSSIER & MULTI-STEP WIZARD ENGINE
-     Compliant with AP Education Code Statutory Intake & Records Governance
-     ========================================================================= */
 
   let currentWizardStep = 1;
   let currentActiveDossierTab = 'overview';
@@ -6061,7 +6028,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
 
     updateStudentSummaryKPIs(finalFiltered);
 
-    // Keep both cards grid and table roster synchronized and fresh
     renderStudentProfiles(finalFiltered);
     renderStudentProfilesTable(finalFiltered);
   }
@@ -6081,7 +6047,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
     showToast('Student register filters reset to default view.', 'info');
   }
 
-  // REUSABLE PAGINATION CONTROLLER HELPER
   const paginationCallbacks = {};
   function _onPaginate(containerId, page) {
     if (typeof paginationCallbacks[containerId] === 'function') {
@@ -6141,7 +6106,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
     paginationCallbacks[containerId] = onPageClick;
   }
 
-  // STUDENT PROFILES VIEW MODE TOGGLE (CARDS vs TABLE ROSTER)
   let profileViewMode = 'cards';
   let profilePageSize = 50;
   let profileCurrentPage = 1;
@@ -6478,15 +6442,10 @@ const FEE_CATEGORY_AUDIT_DATA = [
     window.print();
   }
 
-  /* =========================================================================
-     MULTI-STEP ADD STUDENT WIZARD ENGINE (STEPS 1 TO 6)
-     ========================================================================= */
-
   function openAddStudentWizard() {
     currentWizardStep = 1;
     goToWizardStep(1);
 
-    // Pre-fill clean defaults
     if (document.getElementById('wizFullName')) document.getElementById('wizFullName').value = '';
     if (document.getElementById('wizDob')) document.getElementById('wizDob').value = '2013-05-18';
     if (document.getElementById('wizGender')) document.getElementById('wizGender').value = 'Male';
@@ -6528,7 +6487,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
     if (step < 1 || step > 6) return;
     currentWizardStep = step;
 
-    // Toggle Panes
     for (let i = 1; i <= 6; i++) {
       const pane = document.getElementById('wizPane' + i);
       const node = document.getElementById('wizNode' + i);
@@ -6547,7 +6505,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
       }
     }
 
-    // Toggle navigation buttons
     const btnPrev = document.getElementById('btnWizPrev');
     const btnNext = document.getElementById('btnWizNext');
     const btnComplete = document.getElementById('btnWizComplete');
@@ -6564,7 +6521,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
   }
 
   function stepWizardNext() {
-    // Validate current step
     if (currentWizardStep === 1) {
       const name = document.getElementById('wizFullName')?.value.trim();
       const dob = document.getElementById('wizDob')?.value.trim();
@@ -6603,7 +6559,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
     const blood = document.getElementById('wizBloodGroup')?.value || 'O+';
     const gender = document.getElementById('wizGender')?.value || 'Male';
 
-    // Populate preview elements
     if (document.getElementById('prevStudentName')) document.getElementById('prevStudentName').textContent = fullName;
     if (document.getElementById('prevDob')) document.getElementById('prevDob').textContent = dob;
     if (document.getElementById('prevGenderBlood')) document.getElementById('prevGenderBlood').textContent = `${gender} / ${blood}`;
@@ -6613,7 +6568,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
     if (document.getElementById('prevAdmCat')) document.getElementById('prevAdmCat').textContent = admCat;
     if (document.getElementById('prevTransport')) document.getElementById('prevTransport').textContent = trans;
 
-    // Scan duplicates
     const dupBox = document.getElementById('wizardDuplicateScannerBox');
     const dupTitle = document.getElementById('wizDupTitle');
     const dupDesc = document.getElementById('wizDupDesc');
@@ -6643,7 +6597,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
     const phone = document.getElementById('wizGuardianPhone')?.value || '9848011223';
     const draftAppId = (typeof getNextApplicationId === 'function') ? getNextApplicationId() : ('APP-2026-' + String((state.admissions ? state.admissions.length : 0) + 1).padStart(4, '0'));
 
-    // Per specification: Do not assign an official admission number until appropriate. A draft has an application ID.
     const newStudent = {
       studentId: 'STU-' + draftAppId,
       admNo: draftAppId,
@@ -6766,10 +6719,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
     }
   }
 
-  /* =========================================================================
-     14-TAB STUDENT PROFILE DETAIL DOSSIER ENGINE
-     ========================================================================= */
-
   function getActiveDossierStudent() {
     let s = state.activeDossierStudent || (state.students && state.students[0]) || (typeof CANONICAL_ARCHIVED_STUDENTS !== 'undefined' && CANONICAL_ARCHIVED_STUDENTS[0]) || null;
     if (s && typeof ensureStudentRecord === 'function') {
@@ -6867,7 +6816,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
     const initial = s.name.charAt(0).toUpperCase();
     const isPaid = (s.feeStatus || '').toLowerCase() === 'paid';
 
-    // Format transport allocation for crisp, balanced ERP metric presentation
     let routeVal = s.transportAllocation || 'Route 3';
     let routeSub = 'Seat Allocated';
     if (routeVal.includes('(')) {
@@ -8092,11 +8040,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
     `;
   }
 
-  /* =========================================================================
-     COMPREHENSIVE STUDENT CUMULATIVE DOSSIER PRINT GENERATOR & ENGINE
-     Authoritative AP Board Official Scholastic & Institutional Dossier
-     ========================================================================= */
-
   function generateStudentDossierPrintHTML(s) {
     const num = (s.admNo ? parseInt(s.admNo.replace(/\D/g, ''), 10) : 1) || 1;
     const initial = (s.name || 'S').trim().charAt(0).toUpperCase();
@@ -8854,7 +8797,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
 
     const html = generateStudentDossierPrintHTML(student);
 
-    // Keep printable container updated in portal DOM
     let printContainer = document.getElementById('printableStudentDossier');
     if (!printContainer) {
       printContainer = document.createElement('div');
@@ -8864,7 +8806,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
     }
     printContainer.innerHTML = html;
 
-    // 1. Primary Strategy: Clean dedicated print window
     let printWin = null;
     try {
       printWin = window.open('', '_blank', 'width=960,height=900,menubar=no,toolbar=no,location=no,status=no');
@@ -8891,7 +8832,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
       }
     }
 
-    // 2. Secondary Strategy: Hidden iframe (bypasses popup blockers)
     let iframe = document.getElementById('dossierPrintIframe');
     if (!iframe) {
       iframe = document.createElement('iframe');
@@ -8926,10 +8866,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
   }
 
   
-  /* =========================================================================
-     STUDENT EXIT & TRANSFER CERTIFICATE (TC) MANAGEMENT SYSTEM ENGINE
-     Official Student Withdrawal, Departmental Clearance & Statutory TC Workflow
-     ========================================================================= */
 
   let currentExitRecord = null;
   let currentExitTab = 'request';
@@ -8946,7 +8882,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
     ensureStudentRecord(student);
     studentTransferTargetAdmNo = student.admNo;
 
-    // Check if there is an existing exit record in state or create one
     if (!state.studentExits) state.studentExits = [];
     let exitRecord = null;
     if (existingRequestId) {
@@ -9086,7 +9021,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
 
     currentExitRecord = exitRecord;
 
-    // Populate Student Identity Summary Card
     if (document.getElementById('tcAvatar')) document.getElementById('tcAvatar').textContent = student.name.charAt(0).toUpperCase();
     if (document.getElementById('tcStudentName')) document.getElementById('tcStudentName').textContent = student.name;
     if (document.getElementById('tcCurrentStatus')) document.getElementById('tcCurrentStatus').textContent = student.status || 'Active Enrolled';
@@ -9102,7 +9036,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
     if (document.getElementById('tcRequestingOfficerDisplay')) document.getElementById('tcRequestingOfficerDisplay').textContent = (state.currentUser && state.currentUser.name) || 'Smt. Gorle Varalakshmi (Principal)';
     if (document.getElementById('tcReasonDisplay')) document.getElementById('tcReasonDisplay').textContent = currentExitRecord.reason || 'Parent Job Transfer / Family Relocation';
 
-    // Populate Tab 1: Request
     const radioTransfer = document.getElementById('labelExitTypeTransfer');
     const radioWithdrawal = document.getElementById('labelExitTypeWithdrawal');
     if (currentExitRecord.exitType === 'Withdrawal') {
@@ -9126,7 +9059,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
     if (document.getElementById('tcDestinationAddress')) document.getElementById('tcDestinationAddress').value = currentExitRecord.destinationSchoolAddress || '';
     if (document.getElementById('tcDestinationAffiliation')) document.getElementById('tcDestinationAffiliation').value = currentExitRecord.destinationSchoolAffiliation || '';
 
-    // Populate Tab 2: Parent Verification
     const pVer = currentExitRecord.parentVerification || {};
     if (document.getElementById('tcAppReceivedDate')) document.getElementById('tcAppReceivedDate').value = pVer.receivedDate || currentExitRecord.requestDate;
     if (document.getElementById('tcAppPhysicalRef')) document.getElementById('tcAppPhysicalRef').value = pVer.physicalAppRef || 'PHY-APP-2026-0842';
@@ -9135,7 +9067,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
     if (document.getElementById('tcVerificationDate')) document.getElementById('tcVerificationDate').value = pVer.verificationDate || currentExitRecord.requestDate;
     if (document.getElementById('tcVerificationRemarks')) document.getElementById('tcVerificationRemarks').value = pVer.verificationRemarks || 'Parent physical application verified with signature on record.';
 
-    // Populate Tab 3: Department Clearances
     const depts = currentExitRecord.departmentClearances || {};
     if (depts.library) {
       if (document.getElementById('deptStatusLibrary')) document.getElementById('deptStatusLibrary').value = depts.library.status;
@@ -9164,7 +9095,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
     }
     updateClearanceDashboardKPIs();
 
-    // Populate Tab 4: Conduct
     const cond = currentExitRecord.conductEvaluation || {};
     if (document.getElementById('tcConduct')) document.getElementById('tcConduct').value = cond.rating || 'Exemplary';
     if (document.getElementById('tcBehaviour')) document.getElementById('tcBehaviour').value = cond.behaviourSummary || '';
@@ -9172,13 +9102,10 @@ const FEE_CATEGORY_AUDIT_DATA = [
     if (document.getElementById('tcTeacherRemarks')) document.getElementById('tcTeacherRemarks').value = cond.teacherRemarks || '';
     if (document.getElementById('tcPrincipalRemarks')) document.getElementById('tcPrincipalRemarks').value = cond.principalRemarks || '';
 
-    // Populate Tab 5: Transfer Certificate Preview
     updateTCPrintableSheet();
 
-    // Populate Tab 6: Audit
     renderExitAuditTimeline();
 
-    // Switch to request tab and update workflow UI
     switchExitTab('request');
     updateExitWorkflowUI();
 
@@ -9191,7 +9118,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
 
     const stepIdx = exitTabOrder.indexOf(tabId) + 1;
 
-    // 1. Update Stepper Step states
     const stepperSteps = document.querySelectorAll('#exitNavStrip .stepper-step');
     stepperSteps.forEach((step, idx) => {
       const circle = step.querySelector('.stepper-circle');
@@ -9210,7 +9136,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
       }
     });
 
-    // Backward-compatible update for nav items
     const navButtons = document.querySelectorAll('#exitNavStrip .exit-nav-item');
     navButtons.forEach(btn => {
       const target = btn.getAttribute('onclick') || '';
@@ -9221,7 +9146,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
       }
     });
 
-    // 2. Update panes
     const panes = document.querySelectorAll('#exitModalBody .exit-pane');
     panes.forEach(pane => {
       if (pane.id === 'pane-exit-' + tabId) {
@@ -9231,13 +9155,11 @@ const FEE_CATEGORY_AUDIT_DATA = [
       }
     });
 
-    // 3. Smoothly scroll form body to top
     const modalBody = document.getElementById('exitModalBody');
     if (modalBody) {
       modalBody.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-    // 4. Update stage indicator & progress bar
     const tabLabels = {
       request: 'Exit Request Initiation',
       parent: 'Parent / Guardian Verification',
@@ -9253,7 +9175,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
       document.getElementById('tcStageProgressBar').style.width = ((stepIdx / 6) * 100) + '%';
     }
 
-    // 5. Update prev/next buttons
     if (document.getElementById('btnExitPrevTab')) {
       document.getElementById('btnExitPrevTab').disabled = (stepIdx === 1);
     }
@@ -9261,7 +9182,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
       document.getElementById('btnExitNextTab').disabled = (stepIdx === 6);
     }
 
-    // 6. Refresh contextual action buttons
     updateExitWorkflowUI();
   }
 
@@ -9277,7 +9197,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
     if (!currentExitRecord) return;
     currentExitRecord.exitType = type;
 
-    // Update Ribbon Badge
     if (document.getElementById('tcExitTypeBadge')) {
       document.getElementById('tcExitTypeBadge').textContent = type;
       if (type === 'Formal Transfer') {
@@ -9287,7 +9206,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
       }
     }
 
-    // Update radio cards visual style
     const cardTransfer = document.getElementById('labelExitTypeTransfer');
     const cardWithdrawal = document.getElementById('labelExitTypeWithdrawal');
     if (type === 'Formal Transfer') {
@@ -9298,7 +9216,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
       if (cardWithdrawal) cardWithdrawal.classList.add('selected');
     }
 
-    // Populate reason select options
     const reasonSelect = document.getElementById('tcReason');
     if (reasonSelect) {
       let options = '';
@@ -9325,7 +9242,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
       currentExitRecord.reason = reasonSelect.value;
     }
 
-    // Show/hide destination school container
     const destContainer = document.getElementById('tcDestinationSchoolContainer');
     if (destContainer) {
       destContainer.style.display = (type === 'Formal Transfer') ? 'block' : 'none';
@@ -9392,7 +9308,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
     const depts = currentExitRecord.departmentClearances;
     if (!depts[deptKey]) depts[deptKey] = {};
 
-    // Critical Accounts Guardrail
     if (deptKey === 'accounts' && status === 'Cleared') {
       const balance = depts.accounts.outstandingBalance || 0;
       if (balance > 0 && !depts.accounts.waiverApproved) {
@@ -9504,7 +9419,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
 
   function saveExitDraft() {
     if (!currentExitRecord) return;
-    // Collect form fields
     if (document.getElementById('tcParentName')) currentExitRecord.parentName = document.getElementById('tcParentName').value;
     if (document.getElementById('tcParentPhone')) currentExitRecord.parentPhone = document.getElementById('tcParentPhone').value;
     if (document.getElementById('tcLeavingDate')) currentExitRecord.officialLeavingDate = document.getElementById('tcLeavingDate').value;
@@ -9655,7 +9569,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
     const reason = currentExitRecord.reason || 'Parent Relocation';
     const conduct = (currentExitRecord.conductEvaluation && currentExitRecord.conductEvaluation.rating) || 'Exemplary';
 
-    // Update Student Record (ZERO DATA DELETION)
     student.status = newStatus;
     student.withdrawalDate = leavingDate;
     student.tcNumber = tcNo;
@@ -9673,7 +9586,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
       reason: 'Multi-department clearances certified. TC ' + tcNo + ' generated and signed. Student transitioned to ' + newStatus + '. Zero data deletion enforced.'
     });
 
-    // Update or Insert into state.transfers Register
     if (!state.transfers) state.transfers = [];
     const existingTransIdx = state.transfers.findIndex(t => t.admNo === student.admNo);
     const transferEntry = {
@@ -9714,7 +9626,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
       remarks: 'Student record transitioned to ' + newStatus + '. All academic, fee, and attendance history permanently archived.'
     });
 
-    // Refresh UI
     closeModal('studentTransferWithdrawalModal');
     filterStudentProfiles();
     if (typeof renderTransfersTable === 'function') {
@@ -9768,7 +9679,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
     const status = currentExitRecord.status;
     const currentTab = currentExitTab || 'request';
 
-    // Badge styling & text
     const badge = document.getElementById('tcWorkflowStatusBadge');
     const badgeText = document.getElementById('tcWorkflowStatusText');
     if (badge && badgeText) {
@@ -9782,12 +9692,10 @@ const FEE_CATEGORY_AUDIT_DATA = [
       else if (status === 'Rejected' || status === 'Cancelled') badge.classList.add('status-rejected');
     }
 
-    // Update Reason display in summary card bottom strip
     if (document.getElementById('tcReasonDisplay')) {
       document.getElementById('tcReasonDisplay').textContent = currentExitRecord.reason || (document.getElementById('tcReason') ? document.getElementById('tcReason').value : 'Parent Job Transfer / Family Relocation');
     }
 
-    // Dynamic Context-Aware Footer Action Buttons
     const btnDraft = document.getElementById('btnSaveExitDraft');
     const btnStage1Proceed = document.getElementById('btnStage1Proceed');
     const btnVerifyParent = document.getElementById('btnVerifyParentAction');
@@ -9799,7 +9707,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
     const btnPrintTC = document.getElementById('btnPrintExitTCAction');
     const btnComplete = document.getElementById('btnCompleteStudentExit');
 
-    // Hide all contextual buttons first
     if (btnStage1Proceed) btnStage1Proceed.style.display = 'none';
     if (btnVerifyParent) btnVerifyParent.style.display = 'none';
     if (btnCertifyClearances) btnCertifyClearances.style.display = 'none';
@@ -9810,12 +9717,10 @@ const FEE_CATEGORY_AUDIT_DATA = [
     if (btnPrintTC) btnPrintTC.style.display = 'none';
     if (btnComplete) btnComplete.style.display = 'none';
 
-    // Draft button: visible on non-terminal states
     if (btnDraft) {
       btnDraft.style.display = (status !== 'Completed' && status !== 'Rejected' && status !== 'Cancelled') ? 'inline-flex' : 'none';
     }
 
-    // Check clearances status helper
     const depts = currentExitRecord.departmentClearances || {};
     const deptKeys = ['library', 'accounts', 'labAndSports', 'academic', 'transport', 'administration'];
     const allCleared = deptKeys.every(k => {
@@ -9823,7 +9728,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
       return d && (d.status === 'Cleared' || d.status === 'Not Applicable' || d.status === 'Waiver Approved');
     });
 
-    // Display STRICTLY based on current active tab & status
     if (currentTab === 'request') {
       if (btnStage1Proceed) {
         btnStage1Proceed.innerHTML = 'Proceed to Parent Verification <i class="fa-solid fa-arrow-right ms-1"></i>';
@@ -9907,7 +9811,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
       penNo: '12059048123'
     };
 
-    // Determine Official vs Approval Status
     const isApprovedOrCompleted = (
       currentExitRecord.status === 'Approved' ||
       currentExitRecord.status === 'TC Generated' ||
@@ -9934,7 +9837,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
     const penNo = student.penNo || student.studentId || ('PEN-' + student.admNo);
     const aadhaarFormatted = student.aadhaar ? student.aadhaar.replace(/(\d{4})(?=\d)/g, '$1-') : '4357-8410-9235';
 
-    // 1. Metadata 4-pillar bar
     const serialEl = document.getElementById('tcDocSerial');
     if (serialEl) {
       serialEl.textContent = tcNo;
@@ -9948,7 +9850,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
     if (document.getElementById('tcDocPenNo')) document.getElementById('tcDocPenNo').textContent = penNo;
     if (document.getElementById('tcDocIssueDate')) document.getElementById('tcDocIssueDate').textContent = issueDate;
 
-    // 2. Student & Parent Information
     if (document.getElementById('tcDocStudentName')) document.getElementById('tcDocStudentName').textContent = (student.name || 'RK. Sunil').toUpperCase();
     if (document.getElementById('tcDocAadhaar')) document.getElementById('tcDocAadhaar').textContent = aadhaarFormatted;
     if (document.getElementById('tcDocFatherName')) document.getElementById('tcDocFatherName').textContent = currentExitRecord.parentName || student.parent || 'Sri S. Mohan Rao';
@@ -9960,7 +9861,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
       document.getElementById('tcDocCasteCategory').textContent = student.category || student.caste || 'General / OC (Open Category)';
     }
 
-    // 3. DOB, Class, Medium & Subjects
     if (document.getElementById('tcDocDob')) {
       const dobVal = student.dob || '15-06-2011';
       const dobWords = student.dobWords || 'Fifteenth June Two Thousand Eleven';
@@ -9979,7 +9879,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
       document.getElementById('tcDocSubjects').textContent = '1. Telugu (First Lang), 2. Hindi (Second Lang), 3. English (Third Lang), 4. Mathematics, 5. General Science, 6. Social Studies';
     }
 
-    // 4. Academic Standing, Fees & Attendance
     if (document.getElementById('tcDocPromotion')) {
       const nextClass = student.class === 'X' ? 'Class XI / Intermediate 1st Year' : `Class ${Number(student.class) + 1 || 'Next Higher Class'}`;
       document.getElementById('tcDocPromotion').textContent = `Yes, Qualified for Promotion to Next Higher Class (${nextClass})`;
@@ -9997,7 +9896,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
       document.getElementById('tcDocConcession').textContent = 'Nil (Standard Board Tariff Paid in Full)';
     }
 
-    // 5. Leaving Details, Reason & Conduct
     if (document.getElementById('tcDocLeavingDate')) document.getElementById('tcDocLeavingDate').textContent = leavingDate;
     if (document.getElementById('tcDocAppDate')) document.getElementById('tcDocAppDate').textContent = currentExitRecord.requestDate || issueDate;
     if (document.getElementById('tcDocIssueDateRow')) document.getElementById('tcDocIssueDateRow').textContent = issueDate;
@@ -10006,7 +9904,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
       document.getElementById('tcDocConduct').textContent = conduct.toUpperCase() + ' • Satisfactory in All Respects';
     }
 
-    // 6. Identification & Remarks
     if (document.getElementById('tcDocIdentification')) {
       const m1 = student.identificationMark1 || 'A small dark mole on the right side of neck below jawline';
       const m2 = student.identificationMark2 || 'A distinct birthmark on the left forearm';
@@ -10019,7 +9916,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
       document.getElementById('tcDocRemarks').textContent = 'Student record verified with General Admission Register Vol. 3, Page 142. All institutional library books, laboratory items and sports equipment surrendered.';
     }
 
-    // 7. Security Hash & Dates
     const secHash = (isApprovedOrCompleted ? (tcNo.replace(/\//g, '-') + '-AUTH') : ('SV-TC-PREVIEW-' + student.admNo)) + '-' + issueDate.replace(/-/g, '');
     if (document.getElementById('tcDocSecurityHash')) document.getElementById('tcDocSecurityHash').textContent = secHash;
     if (document.getElementById('tcDocSignDateClerk')) document.getElementById('tcDocSignDateClerk').textContent = issueDate;
@@ -10524,11 +10420,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
     completeStudentExitProcess();
   }
 
-
-  /* =========================================================================
-     EDIT STUDENT MODAL WITH SENSITIVE FIELD AUDIT LOGGING
-     ========================================================================= */
-
   function openEditStudentModal(admNo) {
     const student = state.students.find(s => s.admNo === admNo || s.studentId === admNo) || state.students[0];
     if (!student) return;
@@ -10607,7 +10498,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
       reason: auditReason
     });
 
-    // Persist modification to MongoDB Student Collection
     try {
       const studentId = student._id || student.id;
       if (studentId) {
@@ -10639,15 +10529,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
     if (typeof syncManagementDashboardData === 'function') syncManagementDashboardData(true);
     showToast(`Student record for ${student.name} updated and change justification logged to permanent Audit History.`, 'success');
   }
-
-  /* =========================================================================
-     ARCHIVED STUDENTS PERMANENT REPOSITORY DRAWER
-     ========================================================================= */
-
-  /* =========================================================================
-     ARCHIVED STUDENTS PERMANENT STATUTORY REPOSITORY CONTROLLER
-     Sri Vidya E.M. High School - Est. 2017
-     ========================================================================= */
 
   const CANONICAL_ARCHIVED_STUDENTS = [
     {
@@ -10756,7 +10637,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
 
     let liveArchived = roster.filter(s => s.status === 'Transferred' || s.status === 'Withdrawn');
     
-    // Merge canonical if live list is sparse
     const map = new Map();
     CANONICAL_ARCHIVED_STUDENTS.forEach(c => map.set(c.admNo, { ...c }));
     liveArchived.forEach(s => {
@@ -10782,7 +10662,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
 
     const allArchived = getCombinedArchivedStudents();
 
-    // 1. Update KPI Strip Counters
     const totalCount = allArchived.length;
     const tcCount = allArchived.filter(s => s.status === 'Transferred' || (s.tcNumber && !s.status.toLowerCase().includes('withdrawn'))).length;
     const withdrawnCount = allArchived.filter(s => s.status === 'Withdrawn').length;
@@ -10794,7 +10673,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
     if (tcEl) tcEl.textContent = tcCount;
     if (withEl) withEl.textContent = withdrawnCount;
 
-    // 2. Filter logic
     let filtered = [...allArchived];
 
     const q = (query !== undefined ? query : (document.getElementById('archivedSearchInput')?.value || '')).toLowerCase().trim();
@@ -10819,13 +10697,11 @@ const FEE_CATEGORY_AUDIT_DATA = [
       filtered = filtered.filter(s => String(s.class).trim().toUpperCase() === classVal.trim().toUpperCase());
     }
 
-    // 3. Update count label in footer
     const countEl = document.getElementById('archivedTableCountText');
     if (countEl) {
       countEl.innerHTML = `<i class="fa-solid fa-database" style="color: #94a3b8; margin-right: 5px;"></i> Showing <strong>${filtered.length}</strong> of ${totalCount} permanent statutory archive records`;
     }
 
-    // 4. Render Table Body
     if (filtered.length === 0) {
       tbody.innerHTML = `
         <tr>
@@ -11113,13 +10989,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
     return openEditStudentModal(admNo);
   }
 
-
-
-  /* =========================================================================
-     AUTHORITATIVE STUDENT DOCUMENTS GOVERNANCE & VERIFICATION CONTROLLER
-     Compliant with Statutory Records Governance & Dual Submission Workflow
-     ========================================================================= */
-
   let docsCurrentPage = 1;
   const docsPageSize = 50;
   let activePreviewDocId = null;
@@ -11169,7 +11038,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
     let docCounter = 1;
 
     students.forEach((s, sIdx) => {
-      // Each student gets 3 standard documents, plus 4th or 5th based on class
       const countForStudent = (sIdx % 4 === 0) ? 2 : ((sIdx % 3 === 0) ? 4 : 3);
 
       for (let dIdx = 0; dIdx < countForStudent; dIdx++) {
@@ -11185,7 +11053,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
         let rejReason = null;
         let notes = 'Original document verified and attested copy archived in institutional locker.';
 
-        // Status distribution: ~80% Verified, ~14% Pending Verification, ~3% Rejected or Invalid, ~3% Replacement Requested
         const randSeed = (sIdx * 7 + dIdx * 11) % 100;
         if (randSeed < 14) {
           status = 'Pending Verification';
@@ -11222,7 +11089,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
           }
         ];
 
-        // For rejected or replacement documents, add a v2.0 history entry if applicable
         if (status === 'Replacement Requested') {
           versions.push({
             version: 'v2.0',
@@ -11271,7 +11137,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
     });
 
     state.studentDocuments = docs;
-    // Sync state.studentDocs for backwards compatibility
     state.studentDocs = state.studentDocuments;
   }
 
@@ -11284,7 +11149,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
     const pending = all.filter(d => d.status === 'Pending Verification').length;
     const rejected = all.filter(d => d.status === 'Rejected or Invalid').length;
 
-    // Calculate students with missing documents (students who have fewer than 3 documents or have rejected documents)
     const studentDocCounts = {};
     all.forEach(d => {
       if (!studentDocCounts[d.admNo]) studentDocCounts[d.admNo] = { total: 0, verified: 0, rejected: 0, pending: 0 };
@@ -11335,7 +11199,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
     const kpiMis = document.getElementById('kpiDocMissing');
     if (kpiMis) kpiMis.textContent = (missingCount || 48).toLocaleString();
 
-    // Also update subview badge in navigation sidebar with total documents
     const badge = document.getElementById('studentDocsCountBadge');
     if (badge) {
       const displayTotal = total || (state.studentDocs && state.studentDocs.length) || 1500;
@@ -11426,7 +11289,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
     }
 
     tbody.innerHTML = pageItems.map(d => {
-      // Status badge mapping
       let statusBadge = `<span class="badge" style="background:#dcfce7; color:#15803d; font-weight:700;"><i class="fa-solid fa-circle-check mr-1"></i>Verified</span>`;
       if (d.status === 'Pending Verification') {
         statusBadge = `<span class="badge" style="background:#fef3c7; color:#b45309; font-weight:700;"><i class="fa-solid fa-clock-rotate-left mr-1"></i>Pending Verification</span>`;
@@ -11438,7 +11300,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
         statusBadge = `<span class="badge" style="background:#f1f5f9; color:#475569; font-weight:700;"><i class="fa-solid fa-shield-slash mr-1"></i>Not Applicable</span>`;
       }
 
-      // Source badge
       const isPhysical = d.docSource === 'Received Physically';
       const sourceBadge = isPhysical
         ? `<span class="doc-source-badge physical" title="Received physically at school reception desk"><i class="fa-solid fa-building-columns"></i> Received Physically</span>`
@@ -11578,10 +11439,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
       filterStudentDocs(false);
     });
   }
-
-  /* =========================================================================
-     MODAL CONTROLLERS & WORKFLOW ACTIONS
-     ========================================================================= */
 
   function openStudentDocsModal(admNo) {
     initStudentDocs();
@@ -11731,7 +11588,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
     const isRejected = (doc.status === 'Rejected' || doc.status === 'Rejected or Invalid');
     const isRevision = (doc.status === 'Revision Requested' || doc.status === 'Replacement Requested');
 
-    // 1. Watermark overlay
     const watermark = document.getElementById('docPreviewWatermark');
     if (watermark) {
       watermark.style.pointerEvents = 'none';
@@ -11752,7 +11608,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
       }
     }
 
-    // 2. Certificate Type Badge
     const typeBadge = document.getElementById('prevCertDocType');
     if (typeBadge) {
       if (isVerified) {
@@ -11770,7 +11625,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
       }
     }
 
-    // 3. Verifying Authority
     const authEl = document.getElementById('prevCertAuthority');
     if (authEl) {
       if (isVerified) {
@@ -11788,7 +11642,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
       }
     }
 
-    // 4. Digital Signature Status Block
     const sigEl = document.getElementById('prevCertSigStatus');
     if (sigEl) {
       if (isVerified) {
@@ -11802,7 +11655,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
       }
     }
 
-    // 5. Notes / Remarks
     const notesEl = document.getElementById('prevCertNotes');
     if (notesEl) {
       if (isRejected && doc.rejectionReason) {
@@ -11817,7 +11669,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
       }
     }
 
-    // 6. Action buttons
     renderPreviewActionButtons(doc);
   }
 
@@ -11838,10 +11689,8 @@ const FEE_CATEGORY_AUDIT_DATA = [
     if (document.getElementById('prevCertUploadDate')) document.getElementById('prevCertUploadDate').textContent = doc.uploadDate;
     if (document.getElementById('prevCertStampId')) document.getElementById('prevCertStampId').textContent = 'AP-STATUTORY-ARCHIVE-' + doc.id;
 
-    // Apply synchronized status indicators, watermark, signature block and action buttons
     updateModalVerificationStatusUI(doc);
 
-    // Attach authoritative event delegator on modal
     attachPreviewModalDelegator();
 
     openModal('previewDocumentModal');
@@ -11873,7 +11722,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
         '</button>'
       ].join('');
     } else {
-      // Verified state
       btnContainer.innerHTML = [
         '<button type="button" class="btn btn-outline-primary btn-sm" onclick="portalApp.openReplaceDocumentModal(\'' + doc.id + '\')" title="Replace document file with updated copy">',
         '  <i class="fa-solid fa-cloud-arrow-up me-1"></i> Replace File',
@@ -11946,7 +11794,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
 
     showToast('Generating official printable document for "' + doc.title + '"...', 'info');
 
-    // Build authentic printable HTML certificate blob
     const certHtml = [
       '<!DOCTYPE html>',
       '<html lang="en">',
@@ -12064,17 +11911,14 @@ const FEE_CATEGORY_AUDIT_DATA = [
       actionDate: timestamp
     });
 
-    // Update open modal UI immediately with consistent styling
     updateModalVerificationStatusUI(doc);
 
-    // Persist to backend and audit log
     await persistDocumentStatusToBackend(doc.id, {
       status: 'Verified',
       verifiedBy: actor,
       remarks: doc.notes
     });
 
-    // Refresh table and KPIs
     filterStudentDocs(false);
     showToast('Document "' + doc.title + '" for ' + doc.studentName + ' officially verified and authorized by ' + actor + '!', 'success');
   }
@@ -12132,10 +11976,8 @@ const FEE_CATEGORY_AUDIT_DATA = [
 
     closeModal('rejectDocumentModal');
 
-    // Update open preview modal UI immediately with consistent styling
     updateModalVerificationStatusUI(doc);
 
-    // Persist to backend and audit log
     await persistDocumentStatusToBackend(doc.id, {
       status: 'Rejected or Invalid',
       verifiedBy: actor,
@@ -12198,10 +12040,8 @@ const FEE_CATEGORY_AUDIT_DATA = [
 
     closeModal('requestReplacementModal');
 
-    // Update open preview modal UI immediately with consistent styling
     updateModalVerificationStatusUI(doc);
 
-    // Persist to backend and audit log
     await persistDocumentStatusToBackend(doc.id, {
       status: 'Replacement Requested',
       verifiedBy: actor,
@@ -12276,7 +12116,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
 
     openModal('documentHistoryModal');
   }
-
 
   function openReplaceDocumentModal(docId) {
     initStudentDocs();
@@ -12474,7 +12313,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
     initStudentDocs();
     const select = document.getElementById('missingDocsStudentSelect');
     if (select) {
-      // Find students who have missing documents or deficient records
       select.innerHTML = state.students.slice(0, 30).map(s => `
         <option value="${s.admNo}">
           ${s.admNo} - ${s.name} (Class ${s.class}-${s.section || 'A'} • Roll #${s.rollNo})
@@ -12485,7 +12323,7 @@ const FEE_CATEGORY_AUDIT_DATA = [
     const deadline = document.getElementById('missingDocsDeadline');
     if (deadline) {
       const d = new Date();
-      d.setDate(d.getDate() + 14); // 14 days default
+      d.setDate(d.getDate() + 14);
       deadline.value = d.toISOString().split('T')[0];
     }
 
@@ -12493,7 +12331,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
   }
 
   function handleMissingDocsStudentChange() {
-    // Dynamic update of which checkboxes are checked based on student's missing records
     showToast('Student missing records docket loaded.', 'info');
   }
 
@@ -12617,10 +12454,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
     filterStudentDocs(false);
   }
 
-    // ==========================================================================
-  // SUBVIEW 6: PARENT AND GUARDIAN RECORDS MODULE
-  // Compliant with Independent Guardian Entity, Contact Verification & Future Parent Portal
-  // ==========================================================================
   let parentCurrentPage = 1;
   const parentPageSize = 25;
   let activeGuardianId = null;
@@ -12663,15 +12496,12 @@ const FEE_CATEGORY_AUDIT_DATA = [
       'Door No. 3-88, Phool Baugh, Vizianagaram Town'
     ];
 
-    // Build guardians by grouping potential siblings (multi-child families)
     const guardianMap = new Map();
     const records = [];
 
     students.forEach((s, idx) => {
-      // Create multi-child families for ~36 students sharing parents
       let famKey = s.parent.toLowerCase().trim();
       if (idx % 14 === 3 && idx > 14) {
-        // Share guardian with student (idx - 14)
         const sibling = students[idx - 14];
         if (sibling) famKey = sibling.parent.toLowerCase().trim();
       }
@@ -12693,7 +12523,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
       };
 
       if (guardianMap.has(famKey)) {
-        // Existing multi-child guardian!
         const existing = guardianMap.get(famKey);
         wardObj.isPrimary = (existing.linkedStudents.length === 0);
         existing.linkedStudents.push(wardObj);
@@ -12705,14 +12534,12 @@ const FEE_CATEGORY_AUDIT_DATA = [
         const padIndex = String(grdIndex).padStart(4, '0');
         const guardianId = `GRD-2025-${padIndex}`;
 
-        // 14 Review Due, 468 Verified
         const isReviewDue = (grdIndex % 35 === 7) && grdIndex <= 490;
         const verificationStatus = isReviewDue ? 'Review Due' : 'Verified';
         const occ = occupations[grdIndex % occupations.length];
         const addr = addresses[grdIndex % addresses.length];
         const cleanEmail = s.name.toLowerCase().replace(/[^a-z]/g, '').slice(0, 10) + '.parent@srividya.edu.in';
 
-        // Portal Account Status: Active (412), Invitation Sent (35), Pending Verification (21), Not Enrolled (14)
         let portalStatus = 'Active';
         if (grdIndex > 468) portalStatus = 'Not Enrolled';
         else if (grdIndex > 447) portalStatus = 'Pending Verification';
@@ -12847,7 +12674,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
         relIcon = 'fa-user-shield';
       }
 
-      // Verification Badge
       const isVerified = p.verificationStatus === 'Verified';
       const verifyBadgeHtml = isVerified
         ? `<span class="verify-status-badge verified" title="Verified via ${p.verificationMethod}"><i class="fa-solid fa-circle-check"></i> Verified</span>`
@@ -12855,7 +12681,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
             ? `<span class="verify-status-badge review" title="Contact Verification Review Due"><i class="fa-solid fa-clock-rotate-left"></i> Review Due</span>`
             : `<span class="verify-status-badge unverified" title="Unverified Record"><i class="fa-solid fa-triangle-exclamation"></i> Unverified</span>`);
 
-      // Portal Badge
       const pStatus = p.portalAccount ? p.portalAccount.status : 'Not Enrolled';
       let portalBadgeHtml = '';
       if (pStatus === 'Active') {
@@ -12868,7 +12693,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
         portalBadgeHtml = `<span class="portal-status-badge unregistered"><i class="fa-solid fa-user-xmark"></i> Not Enrolled</span>`;
       }
 
-      // Linked Students HTML pills
       const wardsHtml = (p.linkedStudents || []).map(w => `
         <a href="#students-profiles" class="linked-ward-pill" onclick="portalApp.switchSubTab('students', 'profiles'); portalApp.viewStudentProfile('${w.admNo}');" title="${w.name} (Class ${w.class}-${w.section})">
           <i class="fa-solid fa-graduation-cap"></i>
@@ -13004,7 +12828,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
     showToast('Parent directory filters reset to default view', 'info');
   }
 
-  // --- GUARDIAN DETAIL DOSSIER ---
   function openGuardianDetailModal(guardianId) {
     initParentRecords();
     if (!guardianId && activeGuardianId) guardianId = activeGuardianId;
@@ -13013,13 +12836,11 @@ const FEE_CATEGORY_AUDIT_DATA = [
 
     activeGuardianId = record.guardianId;
 
-    // Header info
     document.getElementById('dossierGuardianName').textContent = record.guardianName;
     document.getElementById('dossierGuardianId').textContent = record.guardianId;
     document.getElementById('dossierGuardianMeta').textContent = `${record.relation} · ${record.occupation} · ${record.address}`;
     (document.getElementById('guardianDossierAvatar') || document.getElementById('dossierAvatar')).textContent = record.guardianName.charAt(0);
 
-    // Badges
     const relBadge = document.getElementById('dossierRelationBadge');
     if (relBadge) {
       relBadge.className = `parent-relation-badge relation-${record.relation.toLowerCase().replace(' ', '-')}`;
@@ -13037,7 +12858,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
       portBadge.textContent = `Portal ${pStat}`;
     }
 
-    // Tab 1: Profile & Contacts
     document.getElementById('dossierValName').textContent = record.guardianName;
     document.getElementById('dossierValRelation').textContent = record.relation;
     document.getElementById('dossierValOccupation').textContent = record.occupation;
@@ -13047,7 +12867,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
     document.getElementById('dossierValAltPhone').textContent = record.altPhone || 'None Provided';
     document.getElementById('dossierValVerifyInfo').textContent = `${record.verificationMethod} (Verified on ${record.lastVerifiedDate})`;
 
-    // Tab 2: Linked Students
     const wardsList = document.getElementById('dossierWardsList');
     if (wardsList) {
       wardsList.innerHTML = (record.linkedStudents || []).map(w => `
@@ -13070,22 +12889,17 @@ const FEE_CATEGORY_AUDIT_DATA = [
       `).join('');
     }
 
-    // Tab 3: Authorizations
     document.getElementById('dossierEmergencyPriority').textContent = `${record.emergencyPriority} (Designated call priority during campus emergencies)`;
 
-    // Tab 4: Communication
     document.getElementById('dossierCommLang').textContent = `${record.communicationPreferences.preferredLang} (Institutional Circulars)`;
 
-    // Tab 5: Custody
     document.getElementById('dossierCustodyStatus').textContent = record.custodyRestrictions.details;
 
-    // Tab 6: Portal
     const portAcc = record.portalAccount || {};
     document.getElementById('dossierPortalAccountTitle').textContent = `Parent Portal Status: ${portAcc.status}`;
     document.getElementById('dossierPortalUserId').textContent = portAcc.accountUid || 'PRNT-PENDING';
     document.getElementById('dossierPortalAuthorizedChildren').textContent = (portAcc.authorizedChildren || []).join(', ');
 
-    // Tab 7: Correction Requests
     const docket = document.getElementById('dossierCorrectionDocket');
     if (docket) {
       docket.innerHTML = (record.correctionRequests || []).map(r => `
@@ -13102,7 +12916,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
       `).join('');
     }
 
-    // Default to tab 1
     switchGuardianDetailTab('profile');
     openModal('guardianDetailModal');
   }
@@ -13117,7 +12930,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
     const targetPane = document.getElementById(`guardianPane-${tabId}`);
     if (targetPane) targetPane.classList.add('active');
 
-    // Highlight button with strict exact matching to avoid substring collision (e.g. portalApp vs 'portal')
     tabs.forEach(btn => {
       const dataTab = btn.getAttribute('data-tab');
       const onclick = btn.getAttribute('onclick') || '';
@@ -13128,7 +12940,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
     });
   }
 
-  // --- ADD GUARDIAN WORKFLOW ---
   function openAddGuardianModal() {
     openModal('addGuardianModal');
   }
@@ -13151,7 +12962,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
     const isPrimary = document.getElementById('addGrdIsPrimary')?.checked !== false;
     const canPickup = document.getElementById('addGrdCanPickup')?.checked !== false;
 
-    // Find student name if exists
     let studentName = 'Linked Ward';
     let studentClass = 'X';
     let studentSec = 'A';
@@ -13226,7 +13036,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
     showToast(`Authoritative Guardian Dossier created for ${name} linked to ${studentName} (${studentAdm})`, 'success');
   }
 
-  // --- VERIFY CONTACT WORKFLOW ---
   function openVerifyContactModal(guardianId) {
     initParentRecords();
     if (!guardianId && activeGuardianId) guardianId = activeGuardianId;
@@ -13277,7 +13086,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
     }
   }
 
-  // --- PARENT INFORMATION CORRECTION REQUEST WORKFLOW ---
   function openParentCorrectionModal(guardianId) {
     initParentRecords();
     if (!guardianId && activeGuardianId) guardianId = activeGuardianId;
@@ -13329,7 +13137,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
     if (activeGuardianId) openGuardianDetailModal(activeGuardianId);
   }
 
-  // --- MULTI-CHILD STUDENT LINKAGE ---
   function openLinkStudentModal(guardianId) {
     initParentRecords();
     if (!guardianId && activeGuardianId) guardianId = activeGuardianId;
@@ -13383,7 +13190,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
     if (activeGuardianId) openGuardianDetailModal(activeGuardianId);
   }
 
-  // --- PROVISION PARENT PORTAL ACCOUNT ---
   function provisionParentPortalAccount(guardianId) {
     initParentRecords();
     if (!guardianId && activeGuardianId) guardianId = activeGuardianId;
@@ -13430,12 +13236,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
     if (phoneInput) phoneInput.value = phone;
     showToast(`Prepared communication broadcast for ${name} (${phone})`, 'info');
   }
-
-
-  /* =========================================================================
-     AUTHORITATIVE STUDENT PERFORMANCE & SCHOLASTIC GOVERNANCE
-     Compliant with AP SSC / CCE Evaluation & Publication Standards
-     ========================================================================= */
 
   let perfCurrentPage = 1;
   const perfPageSize = 25;
@@ -13495,7 +13295,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
         trendLabel = '-1.8% vs FA-1';
       }
 
-      // Statutory Publication Status: 90% published, 10% draft/moderation to demonstrate visual distinction
       let publicationStatus = 'Published';
       if (idx === 3 || idx === 11 || idx === 22) {
         publicationStatus = 'Draft (Unapproved)';
@@ -13592,20 +13391,16 @@ const FEE_CATEGORY_AUDIT_DATA = [
 
     if (records.length === 0) return;
 
-    // 1. Class Average
     const sumPct = records.reduce((acc, r) => acc + (parseFloat(r.pct) || 0), 0);
     const avgPct = (sumPct / records.length).toFixed(1);
     const sumGpa = records.reduce((acc, r) => acc + (parseFloat(r.gpa) || 0), 0);
     const avgGpa = (sumGpa / records.length).toFixed(1);
 
-    // 2. Pass Rate (pct >= 35%)
     const passedCount = records.filter(r => r.pct >= 35).length;
     const passRate = ((passedCount / records.length) * 100).toFixed(1);
 
-    // 3. Students Requiring Support
     const supportCount = records.filter(r => r.needsSupport || r.pct < 65).length;
 
-    // 4. Missing Marks Entries (draft or missing)
     const missingCount = records.filter(r => r.publicationStatus !== 'Published').length;
 
     const elAvg = document.getElementById('perfKpiClassAvg');
@@ -13664,7 +13459,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
 
       const attNum = parseFloat(p.attendance) || 92;
 
-      // Statutory Publication Distinction
       const isOfficial = p.publicationStatus === 'Published';
       const statusPill = isOfficial
         ? `<span class="perf-status-badge published"><i class="fa-solid fa-circle-check"></i> Published (Official)</span>`
@@ -13672,7 +13466,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
           ? `<span class="perf-status-badge draft" title="Draft / Unapproved marks: Not an official result"><i class="fa-solid fa-triangle-exclamation"></i> Draft (Unapproved)</span>`
           : `<span class="perf-status-badge moderation"><i class="fa-solid fa-clock-rotate-left"></i> Moderation Pending</span>`);
 
-      // Delta comparison styling
       let cmpClass = 'stable';
       let cmpIcon = 'fa-minus';
       if (p.trend === 'up') {
@@ -13791,7 +13584,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
     const subjectVal = document.getElementById('perfSubjectFilter')?.value || '';
 
     const filtered = state.performanceRecords.filter(p => {
-      // 1. Search Query
       const matchQuery = !query ||
         p.name.toLowerCase().includes(query) ||
         p.admNo.toLowerCase().includes(query) ||
@@ -13800,13 +13592,10 @@ const FEE_CATEGORY_AUDIT_DATA = [
 
       if (!matchQuery) return false;
 
-      // 2. Class Filter
       if (classVal && !p.class.includes(classVal)) return false;
 
-      // 3. Section Filter
       if (secVal && p.section !== secVal) return false;
 
-      // 4. Subject filter (if specific subject requested, optionally check benchmark)
       return true;
     });
 
@@ -13858,7 +13647,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
     const rec = state.performanceRecords.find(p => p.admNo === activePerfAdmNo) || state.performanceRecords[0];
     if (!rec) return;
 
-    // Header info
     const nameEl = document.getElementById('perfModalStudentName');
     const badgeEl = document.getElementById('perfModalPublishBadge');
     const classBadgeEl = document.getElementById('perfModalClassBadge');
@@ -13877,7 +13665,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
     if (classBadgeEl) classBadgeEl.textContent = `Class ${rec.class}-${rec.section}`;
     if (subEl) subEl.textContent = `Adm No: ${rec.admNo} • Roll No: ${rec.rollNo} • Academic Year: ${rec.academicYear} • Exam: ${rec.exam}`;
 
-    // Pane 1: Assessment History
     const histContainer = document.getElementById('perfAssessmentHistoryContainer');
     if (histContainer) {
       histContainer.innerHTML = `
@@ -13896,7 +13683,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
       `;
     }
 
-    // Pane 2: Subject Marks Table
     const marksTbody = document.getElementById('perfModalMarksTbody');
     const aggPill = document.getElementById('perfAggregatePill');
     if (aggPill) aggPill.textContent = `Total: ${rec.totalMarks} / ${rec.maxMarks} (${rec.pct}% • ${rec.gpa} GPA • Grade ${rec.grade})`;
@@ -13928,7 +13714,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
       }).join('');
     }
 
-    // Pane 3: Attendance
     const attNum = document.getElementById('perfAttRateNumber');
     const attPres = document.getElementById('perfAttDaysPresent');
     const attLvs = document.getElementById('perfAttLeaves');
@@ -13936,7 +13721,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
     if (attPres) attPres.textContent = `${rec.daysPresent} Days`;
     if (attLvs) attLvs.textContent = '8 Days';
 
-    // Pane 4: Teacher Feedback
     const fbContainer = document.getElementById('perfTeacherFeedbackContainer');
     if (fbContainer) {
       fbContainer.innerHTML = `
@@ -13955,7 +13739,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
       `;
     }
 
-    // Pane 5: Learning Objectives
     const objContainer = document.getElementById('perfLearningObjectivesContainer');
     if (objContainer) {
       objContainer.innerHTML = (rec.learningObjectives || []).map(lo => `
@@ -13972,7 +13755,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
       `).join('');
     }
 
-    // Pane 6: Improvement Areas
     const impContainer = document.getElementById('perfImprovementContainer');
     if (impContainer) {
       impContainer.innerHTML = (rec.improvementAreas || []).map(ia => `
@@ -13983,7 +13765,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
       `).join('');
     }
 
-    // Pane 7: Intervention Plan
     const intervContent = document.getElementById('perfInterventionPlanContent');
     const intervBadge = document.getElementById('perfInterventionTierBadge');
     if (intervBadge) {
@@ -14001,7 +13782,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
       `;
     }
 
-    // Pane 8: Parent Meetings
     const ptmContainer = document.getElementById('perfPtmHistoryContainer');
     if (ptmContainer) {
       ptmContainer.innerHTML = (rec.parentMeetingHistory || []).map(ptm => `
@@ -14018,7 +13798,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
       `).join('');
     }
 
-    // Toggle button style
     const toggleBtn = document.getElementById('btnToggleStudentPerformancePublication') || document.getElementById('btnTogglePublication');
     if (toggleBtn) {
       if (rec.publicationStatus === 'Published') {
@@ -14148,18 +13927,13 @@ const FEE_CATEGORY_AUDIT_DATA = [
     `;
   }
 
-  /* =========================================================================
-     COMPREHENSIVE SCHOLASTIC REPORT CARD GENERATION & WORKFLOW SYSTEM
-     Compliant with AP SSC CCE 10-Point Evaluation Standards & SRS Specifications
-     ========================================================================= */
-
   const AUTHORITATIVE_STUDENTS_ROSTER = [
     { admNo: 'SV-0001', studentId: 'STU-SV-0001', name: 'A. Rahul', gender: 'male', class: '10', section: 'A', rollNo: '1001', parent: 'A. Srinivasa Rao', phone: '9848011001', dob: '12 May 2010', attendance: '96.5%', daysPresent: 110, totalDays: 114, gpa: 9.8 },
-    { admNo: 'SV-0002', studentId: 'STU-SV-0002', name: 'B. Priya', gender: 'female', class: '8', section: 'C', rollNo: '8024', parent: 'B. Venkat', phone: '9848011002', dob: '18 Aug 2012', attendance: '94.7%', daysPresent: 108, totalDays: 114, gpa: 8.9 },
+    { admNo: 'SV-0002', studentId: 'STU-SV-0002', name: 'B. Priya', gender: 'female', class: '8', section: 'A', rollNo: '8024', parent: 'B. Venkat', phone: '9848011002', dob: '18 Aug 2012', attendance: '94.7%', daysPresent: 108, totalDays: 114, gpa: 8.9 },
     { admNo: 'SV-0003', studentId: 'STU-SV-0003', name: 'K. Sai Teja', gender: 'male', class: '10', section: 'A', rollNo: '1002', parent: 'K. Appala Naidu', phone: '9848011003', dob: '24 Jan 2010', attendance: '95.6%', daysPresent: 109, totalDays: 114, gpa: 9.3 },
     { admNo: 'SV-0004', studentId: 'STU-SV-0004', name: 'M. Divya Bharathi', gender: 'female', class: '10', section: 'A', rollNo: '1003', parent: 'M. Narayana Murthy', phone: '9848011004', dob: '05 Mar 2010', attendance: '97.4%', daysPresent: 111, totalDays: 114, gpa: 9.5 },
-    { admNo: 'SV-0005', studentId: 'STU-SV-0005', name: 'G. Karthik', gender: 'male', class: '9', section: 'B', rollNo: '901', parent: 'G. Mohan Rao', phone: '9848011005', dob: '14 Jul 2011', attendance: '93.0%', daysPresent: 106, totalDays: 114, gpa: 8.4 },
-    { admNo: 'SV-0006', studentId: 'STU-SV-0006', name: 'V. Siri Varshini', gender: 'female', class: '9', section: 'B', rollNo: '902', parent: 'V. Rambabu', phone: '9848011006', dob: '28 Sep 2011', attendance: '97.8%', daysPresent: 112, totalDays: 114, gpa: 9.5 },
+    { admNo: 'SV-0005', studentId: 'STU-SV-0005', name: 'G. Karthik', gender: 'male', class: '9', section: 'A', rollNo: '901', parent: 'G. Mohan Rao', phone: '9848011005', dob: '14 Jul 2011', attendance: '93.0%', daysPresent: 106, totalDays: 114, gpa: 8.4 },
+    { admNo: 'SV-0006', studentId: 'STU-SV-0006', name: 'V. Siri Varshini', gender: 'female', class: '9', section: 'A', rollNo: '902', parent: 'V. Rambabu', phone: '9848011006', dob: '28 Sep 2011', attendance: '97.8%', daysPresent: 112, totalDays: 114, gpa: 9.5 },
     { admNo: 'SV-0007', studentId: 'STU-SV-0007', name: 'CH. Hemanth', gender: 'male', class: '7', section: 'A', rollNo: '701', parent: 'CH. Suresh', phone: '9848011007', dob: '11 Nov 2013', attendance: '92.1%', daysPresent: 105, totalDays: 114, gpa: 8.1 },
     { admNo: 'SV-0008', studentId: 'STU-SV-0008', name: 'S. Tanvi Sree', gender: 'female', class: '6', section: 'A', rollNo: '601', parent: 'S. Satyanarayana', phone: '9848011008', dob: '02 Feb 2014', attendance: '98.2%', daysPresent: 112, totalDays: 114, gpa: 9.8 },
     { admNo: 'SV-0010', studentId: 'STU-SV-0010', name: 'A. Sneha', gender: 'female', class: '6', section: 'A', rollNo: '6015', parent: 'A. Srinivasa Rao', phone: '9848011010', dob: '22 Mar 2014', attendance: '94.0%', daysPresent: 107, totalDays: 114, gpa: 8.8 }
@@ -14239,7 +14013,7 @@ const FEE_CATEGORY_AUDIT_DATA = [
       teacherRemarks: 'Steady, dependable student with high enthusiasm for physical science experiments.',
       strengths: 'Laboratory dexterity, sincere project work, cooperative attitude.',
       improvements: 'More regular revision in Hindi and Social Studies terminology.',
-      nextClass: 'Class X - Section B'
+      nextClass: 'Class X - Section A'
     },
     'SV-0006': {
       subjects: [
@@ -14254,7 +14028,7 @@ const FEE_CATEGORY_AUDIT_DATA = [
       teacherRemarks: 'Exceptional academic excellence, polite speech, and strong co-curricular achievements.',
       strengths: 'Consistent precision, articulate answers, high moral values.',
       improvements: 'Explore advanced literature reading beyond the curriculum.',
-      nextClass: 'Class X - Section B'
+      nextClass: 'Class X - Section A'
     },
     'SV-0007': {
       subjects: [
@@ -14425,7 +14199,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
     reportCardState.selectedStudentAdmNo = targetAdm;
     reportCardState.previewAdmNo = targetAdm;
 
-    // Populate Scope Dropdown
     const selectEl = document.getElementById('repIndividualStudentSelect');
     if (selectEl) {
       selectEl.innerHTML = list.map(s => `
@@ -14435,7 +14208,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
       `).join('');
     }
 
-    // Populate Multi-Student Table Body
     const multiTbody = document.getElementById('repMultiStudentTableBody');
     if (multiTbody) {
       multiTbody.innerHTML = list.map(s => {
@@ -14456,19 +14228,15 @@ const FEE_CATEGORY_AUDIT_DATA = [
       }).join('');
     }
 
-    // Update Multi-selection counter badge
     const countBadge = document.getElementById('repSelectedStudentsCount');
     if (countBadge) {
       countBadge.textContent = `${reportCardState.selectedMultiAdmNos.length} Students Selected`;
     }
 
-    // Sync demographic baseline card
     handleReportStudentSelect(targetAdm);
 
-    // Set Stage 1
     switchReportStage(1);
 
-    // Open Modal
     openModal('generateReportModal');
   }
 
@@ -14476,7 +14244,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
     if (stageNum < 1 || stageNum > 6) return;
     reportCardState.activeStage = stageNum;
 
-    // 1. Update Stepper Tabs
     const steps = document.querySelectorAll('#reportNavStrip .report-step');
     steps.forEach(step => {
       const sNum = parseInt(step.getAttribute('data-report-stage'), 10);
@@ -14493,7 +14260,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
       }
     });
 
-    // 2. Switch Tab Panes
     const paneIds = [
       'pane-report-scope',
       'pane-report-config',
@@ -14513,11 +14279,9 @@ const FEE_CATEGORY_AUDIT_DATA = [
       }
     });
 
-    // 3. Reset Body Scroll
     const modalBody = document.getElementById('reportModalBody');
     if (modalBody) modalBody.scrollTop = 0;
 
-    // 4. Update Footer Nav Row & Progress Bar
     const indicator = document.getElementById('reportStageIndicator');
     const stageTitles = [
       'Stage 1 of 6 • Scope & Cohort Selection',
@@ -14540,7 +14304,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
     const btnNext = document.getElementById('btnReportNextStage');
     if (btnNext) btnNext.disabled = (stageNum === 6);
 
-    // 5. Contextual Action Buttons in Footer
     const s1Btn = document.getElementById('btnStage1ProceedReport');
     const s2Btn = document.getElementById('btnStage2ProceedReport');
     const s3Btn = document.getElementById('btnStage3ProceedReport');
@@ -14559,7 +14322,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
     if (genOfficialBtn) genOfficialBtn.style.display = (stageNum === 6) ? 'inline-flex' : 'none';
     if (pubOfficialBtn) pubOfficialBtn.style.display = (stageNum === 6) ? 'inline-flex' : 'none';
 
-    // 6. Stage-Specific Lifecycle Handlers
     if (stageNum === 4) {
       validateReportAcademicData();
     } else if (stageNum === 5) {
@@ -14579,7 +14341,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
   }
 
   function validateAndProceedToStage4() {
-    // Read Stage 2 inputs
     reportCardState.config.academicYear = document.getElementById('cfgAcademicYear')?.value || '2025-2026';
     reportCardState.config.class = document.getElementById('cfgClass')?.value || '10';
     reportCardState.config.section = document.getElementById('cfgSection')?.value || 'A';
@@ -14591,7 +14352,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
     reportCardState.config.assessmentType = document.getElementById('cfgAssessmentType')?.value || 'Summative Assessment (CCE)';
     reportCardState.config.template = document.getElementById('cfgReportTemplate')?.value || 'AP_SSC_CCE';
 
-    // Read Stage 3 checkboxes
     reportCardState.components.studentInfo = !!document.getElementById('chkCompStudentInfo')?.checked;
     reportCardState.components.subjectMarks = !!document.getElementById('chkCompSubjectMarks')?.checked;
     reportCardState.components.internalMarks = !!document.getElementById('chkCompInternalMarks')?.checked;
@@ -14629,7 +14389,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
       }
     });
 
-    // Toggle container sections
     const contInd = document.getElementById('scopeContainerIndividual');
     const contCls = document.getElementById('scopeContainerClass');
     const contMlt = document.getElementById('scopeContainerMulti');
@@ -14640,7 +14399,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
     if (contMlt) contMlt.style.display = (scope === 'multi') ? 'block' : 'none';
     if (contSch) contSch.style.display = (scope === 'school') ? 'block' : 'none';
 
-    // Toggle section dropdown in Class view if section-specific
     const secWrap = document.getElementById('repSectionWrapper');
     if (secWrap) {
       secWrap.style.display = (scope === 'section' || scope === 'class') ? 'block' : 'none';
@@ -14791,7 +14549,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
       const filtered = all.filter(s => selected.includes(s.admNo));
       return filtered.length > 0 ? filtered : all.slice(0, 3);
     }
-    // school
     return all;
   }
 
@@ -14883,18 +14640,15 @@ const FEE_CATEGORY_AUDIT_DATA = [
     const comp = reportCardState.components;
     const cfg = reportCardState.config;
 
-    // Report Number badge in preview strip
     const repNo = `RC-${cfg.academicYear.split('-')[0]}-${student.class}-${student.admNo.replace('SV-', '')}`;
     const badgeEl = document.getElementById('previewReportNumberBadge');
     if (badgeEl) badgeEl.textContent = repNo;
 
-    // Title badge in canvas
     const titleBadge = document.getElementById('canvasReportTitleBadge');
     if (titleBadge) {
       titleBadge.textContent = `Scholastic Cumulative Progress Report • Academic Year ${cfg.academicYear}`;
     }
 
-    // Student identity docket
     const sName = document.getElementById('canvasStudentName');
     if (sName) sName.textContent = student.name;
 
@@ -14923,7 +14677,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
     const sExam = document.getElementById('canvasExamName');
     if (sExam) sExam.textContent = cfg.examName;
 
-    // Scholastic marks table
     const marksTbody = document.getElementById('canvasMarksTableBody');
     if (marksTbody) {
       marksTbody.innerHTML = marksData.subjects.map(sub => `
@@ -14942,7 +14695,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
       `).join('');
     }
 
-    // Totals banner
     const gTot = document.getElementById('canvasGrandTotal');
     if (gTot) gTot.textContent = `${marksData.total} / ${marksData.maxTotal}`;
 
@@ -14961,7 +14713,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
     const resEl = document.getElementById('canvasResultStatus');
     if (resEl) resEl.textContent = marksData.resultStatus;
 
-    // Attendance docket
     const totDays = student.totalDays || 114;
     const presDays = student.daysPresent || 110;
     const absDays = totDays - presDays;
@@ -14982,7 +14733,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
     const standEl = document.getElementById('canvasAttendanceStanding');
     if (standEl) standEl.textContent = (parseFloat(attPct) >= 95) ? 'Exemplary' : 'Regular';
 
-    // Co-scholastic grid
     const coGrid = document.getElementById('canvasCoScholasticGrid');
     if (coGrid) {
       coGrid.innerHTML = CO_SCHOLASTIC_DIMENSIONS.map(dim => `
@@ -14996,7 +14746,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
       `).join('');
     }
 
-    // Qualitative feedback & promotion
     const tRem = document.getElementById('canvasTeacherRemarks');
     if (tRem) tRem.textContent = marksData.teacherRemarks;
 
@@ -15012,7 +14761,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
     const decDate = document.getElementById('canvasDeclarationDate');
     if (decDate) decDate.textContent = cfg.resultDate;
 
-    // Security strip & verification
     const repNumEl = document.getElementById('canvasReportCardNumber');
     if (repNumEl) repNumEl.textContent = repNo;
 
@@ -15022,7 +14770,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
     const issDate = document.getElementById('canvasIssuedDate');
     if (issDate) issDate.textContent = cfg.resultDate;
 
-    // Component visibility sync based on Stage 3 checkboxes
     const dockets = document.querySelectorAll('.canvas-student-docket');
     if (dockets[0]) dockets[0].style.display = comp.studentInfo ? 'grid' : 'none';
 
@@ -15145,7 +14892,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
       };
       newlyGenerated.push(rec);
 
-      // Add to state if not already there
       const existingIdx = reportCardState.generatedReports.findIndex(r => r.reportNumber === repNo);
       if (existingIdx >= 0) {
         reportCardState.generatedReports[existingIdx] = rec;
@@ -15154,7 +14900,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
       }
     });
 
-    // Try background API persistence to /api/v1/report-cards
     const token = localStorage.getItem('sv_token_access') || sessionStorage.getItem('sv_token_access');
     const headers = { 'Content-Type': 'application/json' };
     if (token) headers['Authorization'] = 'Bearer ' + token;
@@ -15169,7 +14914,7 @@ const FEE_CATEGORY_AUDIT_DATA = [
         section: cfg.section,
         reports: newlyGenerated
       })
-    }).catch(() => { /* Graceful offline fallback */ });
+    }).catch(() => {  });
 
     refreshReportHistoryTable();
     showToast(`Successfully generated ${cohort.length} official scholastic report cards! Registered in school record docket.`, 'success');
@@ -15323,10 +15068,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
     }
   }
 
-
-// ==========================================================================
-  // Respective Class Teachers Register & Direct Student Auto-Enrollment Module
-  // ==========================================================================
   const CLASS_TEACHERS = {
     'X': { name: 'Sri Ch. Ramesh', code: '10A', subject: 'Mathematics & Board Prep', phone: '9848011001', room: 'Room 301 (3rd Floor)' },
     'IX': { name: 'Sri P. Venkat', code: '9A', subject: 'Physical Science', phone: '9848011002', room: 'Room 302 (3rd Floor)' },
@@ -15363,7 +15104,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
     const targetClass = normalizeClassKey(applicant.class || applicant.grade);
     const teacherInfo = CLASS_TEACHERS[targetClass] || { name: 'Smt. K. Sunitha', code: '5A', subject: 'General', phone: '9848011006', room: 'Staff Room' };
 
-    // Initialize state.students if empty
     if ((!state.students || state.students.length === 0) && typeof window !== 'undefined' && Array.isArray(window.STUDENT_ROSTER)) {
       state.students = [...window.STUDENT_ROSTER];
     }
@@ -15449,7 +15189,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
         classTeacherPhone: teacherInfo.phone,
         room: teacherInfo.room
       };
-      // Add once to state.students and deduplicate
       state.students.unshift(existing);
       if (typeof window !== 'undefined' && Array.isArray(window.STUDENT_ROSTER) && window.STUDENT_ROSTER !== state.students) {
         if (!window.STUDENT_ROSTER.some(s => s.admNo === existing.admNo)) {
@@ -15459,7 +15198,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
       state.students = deduplicateStudents(state.students);
     }
 
-    // Persist enrolled students in localStorage
     try {
       const storedEnrolled = JSON.parse(localStorage.getItem('sv_enrolled_students') || '[]');
       if (!storedEnrolled.some(s => s.admNo === existing.admNo)) {
@@ -15468,7 +15206,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
       }
     } catch (e) {}
 
-    // Dispatch to Class Teacher Inbox & Roster
     try {
       const teacherAdmissions = JSON.parse(localStorage.getItem('sv_teacher_new_admissions') || '[]');
       const teacherEntry = {
@@ -15493,7 +15230,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
       localStorage.setItem('sv_teacher_new_admissions', JSON.stringify(teacherAdmissions));
     } catch (e) {}
 
-    // Attach student & teacher details to applicant admission record
     applicant.enrolled = true;
     applicant.enrolledAdmNo = admNo;
     applicant.enrolledClass = `Class ${targetClass}-A`;
@@ -15502,7 +15238,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
     applicant.assignedTeacherPhone = teacherInfo.phone;
     applicant.assignedTeacherRoom = teacherInfo.room;
 
-    // Refresh student directory count badges
     const profileCountBadge = document.getElementById('studentProfilesCountBadge');
     if (profileCountBadge) profileCountBadge.textContent = state.students.length;
     const profilesShowingCount = document.getElementById('profilesShowingCount');
@@ -15523,7 +15258,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
     return 0;
   }
 
-  // Sort Admissions in descending order by Application ID number
   function sortAdmissionsDescending(list) {
     if (!Array.isArray(list)) return [];
     return list.slice().sort((a, b) => {
@@ -15536,14 +15270,12 @@ const FEE_CATEGORY_AUDIT_DATA = [
     });
   }
 
-  // Synchronization of Online Admissions from localStorage & shared ecosystem
   function syncAdmissionsFromStorage() {
     try {
       const stored = localStorage.getItem('sv_applications');
       if (stored) {
         let parsed = JSON.parse(stored);
         if (Array.isArray(parsed) && parsed.length > 0) {
-          // Self-heal: Purge obsolete legacy APP-2026-0104..0112 and ENQ-2026-0081..0082 from localStorage
           let healed = false;
           const preLen = parsed.length;
           parsed = parsed.filter(item => {
@@ -15577,7 +15309,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
             submittedAt: item.submittedAt || null
           }));
 
-          // Merge without duplicate appIds
           const seen = new Set();
           const merged = [];
           mapped.forEach(item => {
@@ -15602,7 +15333,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
     }
   }
 
-  // Permission Verification: Check if Office Members (admin/clerk) are allowed to view Admissions
   function isOfficeAdmissionAllowed() {
     try {
       const perm = localStorage.getItem('sv_office_admission_permission');
@@ -15610,12 +15340,10 @@ const FEE_CATEGORY_AUDIT_DATA = [
         return perm === 'true';
       }
     } catch (e) {}
-    return false; // Default: restricted until Principal or VP grants clearance
+    return false;
   }
 
-  // Render Permission Controls Banner (Principal / VP view) and Active Clearance (Office view)
   function renderOfficePermissionControls() {
-    // Permission toggle controls belong strictly in Settings -> Access Permissions!
     const container = document.getElementById('officeAdmissionPermControl');
     if (container) {
       container.style.display = 'none';
@@ -15674,7 +15402,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
     `;
   }
 
-  // Toggle Office Staff Admission Permission by Principal or Vice Principal
   function toggleOfficeAdmissionPermission() {
     const current = isOfficeAdmissionAllowed();
     const next = !current;
@@ -15689,7 +15416,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
       };
       localStorage.setItem('sv_office_admission_permission_meta', JSON.stringify(meta));
       
-      // Update Clerk permissions dictionary
       if (typeof getClerkPermissions === 'function' && typeof saveClerkPermissions === 'function') {
         renderSettingsAdmissionPermissionCard();
     const perms = getClerkPermissions();
@@ -15709,16 +15435,9 @@ const FEE_CATEGORY_AUDIT_DATA = [
     }
   }
 
-  // Request Access from Principal / Vice Principal by Office Staff
   function requestOfficeAdmissionPermission() {
     showToast('Permission request dispatched to Principal (Smt. Gorle Varalakshmi) and Vice Principal (Sri Navva Anand)!', 'info');
   }
-
-
-  /* =========================================================================
-     AUTHORITATIVE ADMISSIONS LIFECYCLE, 8 TABS & ENROLMENT GOVERNANCE
-     Compliant with AP Education Code Statutory Intake & Duplicate Prevention
-     ========================================================================= */
 
   let currentAdmissionsTab = 'all';
   let activeDetailAppId = null;
@@ -15754,7 +15473,6 @@ const FEE_CATEGORY_AUDIT_DATA = [
 function initAdmissions() {
     if (state.admissions && state.admissions.length > 0) return;
 
-    // Check localStorage first
     let localApps = [];
     try {
       localApps = JSON.parse(localStorage.getItem('sv_applications') || '[]');
@@ -16131,7 +15849,6 @@ function initAdmissions() {
       }
     ];
 
-    // Filter out obsolete legacy seed records (0104..0112, 0081..0082, legacy SV20260000X)
     const cleanedLocal = (localApps || []).filter(item => {
       if (!item) return false;
       const rawId = item.appId || item.applicationNumber || '';
@@ -16144,13 +15861,11 @@ function initAdmissions() {
     const seen = new Set();
     const combined = [];
 
-    // 1. Authoritative seed admissions start strictly from 1 (APP-2026-0001..0009, ENQ-2026-0001..0002)
     seedApps.forEach(s => {
       seen.add(s.appId);
       combined.push(s);
     });
 
-    // 2. Retain user-added admissions from local storage
     cleanedLocal.forEach(item => {
       if (item && item.appId && !seen.has(item.appId)) {
         seen.add(item.appId);
@@ -16175,7 +15890,6 @@ function initAdmissions() {
     const offers = all.filter(a => a.status === 'Offer Issued').length;
     const confirmed = all.filter(a => a.status === 'Confirmed Admission' || a.enrolled === true).length;
 
-    // KPI Elements
     const kpiEnq = document.getElementById('kpiAdmEnquiries');
     const kpiApp = document.getElementById('kpiAdmApplications');
     const kpiDoc = document.getElementById('kpiAdmDocsPending');
@@ -16190,7 +15904,6 @@ function initAdmissions() {
     if (kpiOff) kpiOff.textContent = offers;
     if (kpiCon) kpiCon.textContent = confirmed;
 
-    // Update Tab Badges
     const badgeAll = document.getElementById('tabBadgeAll');
     const badgeEnq = document.getElementById('tabBadgeEnquiries');
     const badgeApps = document.getElementById('tabBadgeApplications');
@@ -16211,13 +15924,11 @@ function initAdmissions() {
     if (badgeEnr) badgeEnr.textContent = all.filter(a => a.status === 'Enrolment Pending').length;
     if (badgeRej) badgeRej.textContent = all.filter(a => a.status === 'Rejected' || a.status === 'Withdrawn' || a.status === 'Cancelled').length;
 
-    // Filter count display
     const countShowing = document.getElementById('admFilteredCount');
     const countTotal = document.getElementById('admTotalCount');
     if (countShowing) countShowing.textContent = list ? list.length : all.length;
     if (countTotal) countTotal.textContent = all.length;
 
-    // Sidebar badge
     const sidebarBadge = document.getElementById('admissionsCountBadge');
     if (sidebarBadge) sidebarBadge.textContent = all.length;
   }
@@ -16244,7 +15955,6 @@ function initAdmissions() {
     const all = state.admissions || [];
 
     const filtered = all.filter(item => {
-      // 1. Tab Constraint
       let matchTab = true;
       if (currentAdmissionsTab === 'enquiries') {
         matchTab = (item.status === 'New Enquiry');
@@ -16264,7 +15974,6 @@ function initAdmissions() {
         matchTab = (item.status === 'Rejected' || item.status === 'Withdrawn' || item.status === 'Cancelled');
       }
 
-      // 2. Search Query
       const matchQuery = !query ||
         item.appId.toLowerCase().includes(query) ||
         (item.name || item.studentName || '').toLowerCase().includes(query) ||
@@ -16272,7 +15981,6 @@ function initAdmissions() {
         (item.phone || '').includes(query) ||
         (item.prevSchool || '').toLowerCase().includes(query);
 
-      // 3. Dropdown Filters
       const matchClass = !classVal || (item.class === classVal || item.grade === classVal);
       const matchStatus = !statusVal || (item.status === statusVal);
       const matchDoc = !docVal || (item.docStatus === docVal || (docVal === 'Complete' && (item.docStatus || '').includes('Verified')));
@@ -16374,7 +16082,6 @@ function initAdmissions() {
       const isOnline = item.intakeChannel === 'Online Application';
       const initial = (item.name || item.studentName || 'S').trim().charAt(0).toUpperCase();
 
-      // Doc status pill
       let docBadge = `<span class="badge" style="background:#dcfce7; color:#15803d; font-weight:700;"><i class="fa-solid fa-circle-check mr-1"></i>Complete</span>`;
       if ((item.docStatus || '').includes('Pending')) {
         docBadge = `<span class="badge" style="background:#fef3c7; color:#b45309; font-weight:700;"><i class="fa-solid fa-clock-rotate-left mr-1"></i>Pending Review</span>`;
@@ -16384,7 +16091,6 @@ function initAdmissions() {
         docBadge = `<span class="badge" style="background:#f1f5f9; color:#475569; font-weight:700;"><i class="fa-solid fa-shield-slash mr-1"></i>Exempt</span>`;
       }
 
-      // App status badge
       let appStatusBadge = `<span class="badge" style="background:#e0f2fe; color:#0369a1; font-weight:700;">${item.status}</span>`;
       if (item.status === 'New Enquiry') {
         appStatusBadge = `<span class="badge" style="background:#f1f5f9; color:#334155; font-weight:700;"><i class="fa-solid fa-comments mr-1"></i>New Enquiry</span>`;
@@ -16404,7 +16110,6 @@ function initAdmissions() {
         appStatusBadge = `<span class="badge" style="background:#fee2e2; color:#b91c1c; font-weight:700;"><i class="fa-solid fa-ban mr-1"></i>${item.status}</span>`;
       }
 
-      // Dynamic Contextual Next Action
       let primaryActionBtn = '';
       if (item.status === 'New Enquiry') {
         primaryActionBtn = `<button type="button" class="btn btn-sm btn-primary" onclick="portalApp.openNewAdmissionModal('${item.name}', '${item.class}', '${item.parent}', '${item.phone}')" title="Convert enquiry to full application"><i class="fa-solid fa-file-signature"></i> Convert</button>`;
@@ -16554,10 +16259,6 @@ function initAdmissions() {
     }
   }
 
-  /* =========================================================================
-     MODAL CONTROLLERS & WORKFLOW ACTIONS FOR ADMISSIONS
-     ========================================================================= */
-
   function openNewAdmissionModal(name, cls, parent, phone) {
     const form = document.getElementById('newAdmissionForm');
     if (form) form.reset();
@@ -16656,7 +16357,6 @@ function initAdmissions() {
 
     state.admissions.unshift(newApp);
 
-    // Save to localStorage for multi-tab awareness
     try {
       const stored = JSON.parse(localStorage.getItem('sv_applications') || '[]');
       stored.unshift(newApp);
@@ -16673,7 +16373,6 @@ function initAdmissions() {
     if (typeof syncManagementDashboardData === 'function') syncManagementDashboardData(true);
     showToast(`Admission Application ${newApp.appId} for ${fullName} registered and synced live!`, 'success');
 
-    // Persist directly to MongoDB Admissions Collection
     try {
       const resp = await fetch('/api/v1/admissions/apply', {
         method: 'POST',
@@ -16876,7 +16575,6 @@ function initAdmissions() {
 
     renderAdmissionDetailPanes(app);
 
-    // Injects context-appropriate action buttons
     const btnContainer = document.getElementById('admDetailActionButtons');
     if (btnContainer) {
       if (app.status === 'Enrolment Pending') {
@@ -17363,7 +17061,6 @@ function initAdmissions() {
     if (document.getElementById('schedTargetAppId')) document.getElementById('schedTargetAppId').value = app.appId;
     if (document.getElementById('schedModalSubtitle')) document.getElementById('schedModalSubtitle').textContent = `Applicant: ${app.name} (${app.appId}) • Class ${app.class || app.grade || 'LKG'}`;
 
-    // Populate Rich Applicant Dossier Card
     if (document.getElementById('schedApplicantName')) document.getElementById('schedApplicantName').textContent = app.name || 'Applicant';
     if (document.getElementById('schedChipAppId')) document.getElementById('schedChipAppId').innerHTML = `<i class="fa-solid fa-hashtag"></i> ${app.appId}`;
     if (document.getElementById('schedChipClass')) document.getElementById('schedChipClass').innerHTML = `<i class="fa-solid fa-graduation-cap"></i> Class ${app.class || app.grade || 'LKG'}`;
@@ -17475,7 +17172,6 @@ function initAdmissions() {
     if (document.getElementById('offerModalSub')) document.getElementById('offerModalSub').textContent = `Applicant: ${app.name} (${app.appId}) • Class ${app.class || app.grade || 'N/A'}`;
     if (document.getElementById('offerClass')) document.getElementById('offerClass').value = `Class ${app.class || app.grade || 'LKG'} (Section A)`;
 
-    // Populate Rich Applicant Dossier Card
     if (document.getElementById('offerApplicantName')) document.getElementById('offerApplicantName').textContent = app.name || 'Applicant';
     if (document.getElementById('offerChipAppId')) document.getElementById('offerChipAppId').innerHTML = `<i class="fa-solid fa-hashtag"></i> ${app.appId}`;
     if (document.getElementById('offerChipClass')) document.getElementById('offerChipClass').innerHTML = `<i class="fa-solid fa-graduation-cap"></i> Class ${app.class || app.grade || 'LKG'}`;
@@ -17576,10 +17272,6 @@ function initAdmissions() {
     showToast(`Fee deposit confirmed (${txnRef}). ${app.name} is ready for Final Enrolment!`, 'success');
   }
 
-  /* =========================================================================
-     DUPLICATE PREVENTION SCANNER & FINAL ENROLMENT
-     ========================================================================= */
-
   function openConfirmEnrolmentModal(appId) {
     initAdmissions();
     const app = state.admissions.find(a => a.appId === appId) || state.admissions[0];
@@ -17588,7 +17280,6 @@ function initAdmissions() {
     if (document.getElementById('enrolTargetAppId')) document.getElementById('enrolTargetAppId').value = app.appId;
     if (document.getElementById('enrolModalSub')) document.getElementById('enrolModalSub').textContent = `Applicant: ${app.name} (${app.appId}) • Class ${app.class || app.grade || 'N/A'}`;
 
-    // Calculate next admission number
     const nextNum = (state.students ? state.students.length : 500) + 1;
     const nextAdmNo = 'SV-' + String(nextNum).padStart(4, '0');
     const nextStudentId = 'STU-SV-' + String(nextNum).padStart(4, '0');
@@ -17601,7 +17292,6 @@ function initAdmissions() {
     const teacherInfo = CLASS_TEACHERS[targetClassKey] || { name: 'Smt. K. Hymavathi', code: '5A' };
     if (document.getElementById('enrolClassTeacher')) document.getElementById('enrolClassTeacher').value = teacherInfo.name;
 
-    // Run Duplicate Scanner
     scanAdmissionsDuplicate(app);
 
     closeModal('applicationDetailModal');
@@ -17617,7 +17307,6 @@ function initAdmissions() {
     const appPhone = (app.phone || '').trim();
     const appDob = (app.dob || '').trim();
 
-    // Scan for potential matches: name, DOB, phone
     const matches = students.filter(s => {
       const matchName = (s.name || '').toLowerCase().trim() === appNameLower;
       const matchPhone = (s.phone || '').trim() === appPhone;
@@ -17680,7 +17369,6 @@ function initAdmissions() {
     const teacher = document.getElementById('enrolClassTeacher')?.value || 'Class Teacher';
     const remarks = document.getElementById('enrolRemarks')?.value || 'Statutory enrolment completed.';
 
-    // 1. Update Admission record in state
     app.status = 'Confirmed Admission';
     app.enrolled = true;
     app.enrolledAdmNo = admNo;
@@ -17708,7 +17396,6 @@ function initAdmissions() {
       remarks: `Allocated Admission Number ${admNo} (${studentId}) in Class ${cls}-A.`
     });
 
-    // 2. Persist Enrollment to MongoDB
     try {
       const token = localStorage.getItem('sv_token_access') || sessionStorage.getItem('sv_token_access');
       const headers = { 'Content-Type': 'application/json' };
@@ -17752,7 +17439,6 @@ function initAdmissions() {
       console.warn('[Enrolment Persistence Note]:', enrErr);
     }
 
-    // Refresh live records and dashboard immediately
     if (typeof loadLiveManagementData === 'function') {
       await loadLiveManagementData();
     }
@@ -18127,7 +17813,6 @@ function initAdmissions() {
     showToast(`Successfully imported and registered ${newApps.length} prospective admissions applications!`, 'success');
   }
 
-  // Legacy admissions backwards-compatibility wrappers
   function approveAdmission(appId) {
     if (typeof openConfirmEnrolmentModal === 'function') {
       openConfirmEnrolmentModal(appId);
@@ -18146,12 +17831,6 @@ function initAdmissions() {
     }
   }
 
-
-  /* =========================================================================
-     AUTHORITATIVE TRANSFERS AND TRANSFER CERTIFICATES GOVERNANCE
-     Compliant with AP Education Code Statutory Clearance & TC Regulations
-     ========================================================================= */
-
   let activeDossierRequestId = 'TC-REQ-2026-0001';
   let activeClearanceTargetId = null;
   let activeIssueTargetId = null;
@@ -18159,7 +17838,6 @@ function initAdmissions() {
   function initTransfers() {
     if (state.transfers && state.transfers.length >= 8 && state.transfers[0].requestId) return;
 
-    // Authoritative Seed Records with complete statutory fields
     const seedTransfers = [
       {
         requestId: 'TC-REQ-2026-0001',
@@ -18637,7 +18315,6 @@ function initAdmissions() {
 
     state.transfers = seedTransfers;
 
-    // External transfers ledger
     if (!state.externalTransfers) {
       state.externalTransfers = [
         {
@@ -18699,7 +18376,6 @@ function initAdmissions() {
     if (elIss) elIss.textContent = issuedCount;
     if (elExt) elExt.textContent = extCount;
 
-    // Badge updates in sidebar & navigation
     const countBadge = document.getElementById('transfersCountBadge');
     if (countBadge) countBadge.textContent = activeCount;
 
@@ -18753,7 +18429,6 @@ function initAdmissions() {
 
     updateTransfersKPIs(list);
 
-    // Update filter count display
     const filteredCountEl = document.getElementById('tcFilteredCount');
     const totalCountEl = document.getElementById('tcTotalCount');
     if (filteredCountEl) filteredCountEl.textContent = list.length;
@@ -18775,13 +18450,11 @@ function initAdmissions() {
     }
 
     tbody.innerHTML = list.map(item => {
-      // Academic clearance badge
       const isAcadCleared = item.academicClearance === 'Cleared';
       const acadBadge = isAcadCleared
         ? `<span class="clearance-pill cleared"><i class="fa-solid fa-circle-check"></i> Cleared</span>`
         : `<span class="clearance-pill pending"><i class="fa-solid fa-clock"></i> Pending</span>`;
 
-      // Financial clearance badge
       let finBadge = '';
       const finClr = String(item.financialClearance || '');
       if (finClr.includes('Cleared') || finClr.includes('No Dues')) {
@@ -18792,7 +18465,6 @@ function initAdmissions() {
         finBadge = `<span class="clearance-pill dues"><i class="fa-solid fa-circle-exclamation"></i> ${finClr || 'Pending Dues'}</span>`;
       }
 
-      // Approval Status Badge
       let statusClass = 'badge-secondary';
       if (item.approvalStatus === 'Issued') statusClass = 'badge-success';
       else if (item.approvalStatus === 'Approved') statusClass = 'badge-purple';
@@ -18802,7 +18474,6 @@ function initAdmissions() {
 
       const statusBadge = `<span class="portal-badge ${statusClass}">${item.approvalStatus}</span>`;
 
-      // TC Number Badge
       const isTcIssued = item.tcNo && item.tcNo !== 'Pending Issue';
       const tcNumberBadge = isTcIssued
         ? `<span class="tc-id-pill" onclick="portalApp.openTcDetailModal('${item.requestId}')" style="cursor:pointer;" title="View Official TC"><i class="fa-solid fa-certificate text-primary mr-1"></i>${item.tcNo}</span>`
@@ -18910,7 +18581,6 @@ function initAdmissions() {
     const statusVal = document.getElementById('tcApprovalStatusFilter')?.value || '';
 
     const filtered = all.filter(t => {
-      // 1. Search Match
       const matchesSearch = !searchVal ||
         (t.requestId && t.requestId.toLowerCase().includes(searchVal)) ||
         (t.name && t.name.toLowerCase().includes(searchVal)) ||
@@ -18921,20 +18591,16 @@ function initAdmissions() {
 
       if (!matchesSearch) return false;
 
-      // 2. Class Filter
       if (classVal && !t.class.includes(classVal)) return false;
 
-      // 3. Academic Clearance Filter
       if (acadVal && t.academicClearance !== acadVal) return false;
 
-      // 4. Financial Clearance Filter
       if (finVal) {
         if (finVal === 'Cleared (No Dues)' && (!t.financialClearance.includes('Cleared') && !t.financialClearance.includes('No Dues'))) return false;
         if (finVal === 'Dues Pending' && !t.financialClearance.includes('Dues Pending')) return false;
         if (finVal === 'Statutory Undertaking' && !t.financialClearance.includes('Statutory')) return false;
       }
 
-      // 5. Approval Status Filter
       if (statusVal && t.approvalStatus !== statusVal) return false;
 
       return true;
@@ -19006,7 +18672,6 @@ function initAdmissions() {
     if (pEl) pEl.textContent = student.phone || student.contact || '9848011223';
     if (dEl) dEl.textContent = student.admissionDate || student.enrolDate || '12-Jun-2022';
 
-    // Auto-fill requester fields
     const reqName = document.getElementById('tcRequesterName');
     const reqPhone = document.getElementById('tcRequesterPhone');
     if (reqName) reqName.value = student.guardian || student.father || student.parent || '';
@@ -19188,7 +18853,6 @@ function initAdmissions() {
       rec = { ...rec, requestId: activeDossierRequestId };
     }
 
-    // Header info
     const titleEl = document.getElementById('tcDetailModalTitle');
     const badgeEl = document.getElementById('tcDetailStatusBadge');
     const reqPillEl = document.getElementById('tcDetailRequestIdPill');
@@ -19202,7 +18866,6 @@ function initAdmissions() {
     if (reqPillEl) reqPillEl.textContent = rec.requestId;
     if (subEl) subEl.textContent = `Adm No: ${rec.admNo} • ${rec.class} • Reason: ${rec.reason}`;
 
-    // Section 1: Student Profile
     const nEl = document.getElementById('tcDossierName');
     const admEl = document.getElementById('tcDossierAdmNo');
     const stuIdEl = document.getElementById('tcDossierStudentId');
@@ -19223,7 +18886,6 @@ function initAdmissions() {
     if (fEl) fEl.textContent = rec.father;
     if (mEl) mEl.textContent = rec.mother;
 
-    // Section 2: Requester
     const rEl = document.getElementById('tcDossierRequester');
     const relEl = document.getElementById('tcDossierRelation');
     const pEl = document.getElementById('tcDossierPhone');
@@ -19236,7 +18898,6 @@ function initAdmissions() {
     if (rdEl) rdEl.textContent = rec.requestDate;
     if (ordEl) ordEl.textContent = rec.transferOrderRef || 'Parent Application on File';
 
-    // Section 3 & 4: Reason & Attendance
     const reasEl = document.getElementById('tcDossierReason');
     const destEl = document.getElementById('tcDossierDest');
     const lastEl = document.getElementById('tcDossierLastDate');
@@ -19247,7 +18908,6 @@ function initAdmissions() {
     if (lastEl) lastEl.textContent = rec.lastDateAttendance;
     if (attEl) attEl.textContent = rec.attendanceRecord || '204 / 220 Days';
 
-    // Section 5: Academic History
     const exEl = document.getElementById('tcDossierExam');
     const cEl = document.getElementById('tcDossierConduct');
     const promEl = document.getElementById('tcDossierPromotion');
@@ -19258,7 +18918,6 @@ function initAdmissions() {
     if (promEl) promEl.textContent = rec.academicHistory?.qualifiedForPromotion || 'Yes';
     if (tsEl) tsEl.textContent = rec.academicHistory?.teacherSign || 'Class Teacher Sign-off Complete';
 
-    // Section 6: Library & Assets
     const lbEl = document.getElementById('tcDossierLibBooks');
     const labEl = document.getElementById('tcDossierLab');
     const spEl = document.getElementById('tcDossierSports');
@@ -19269,7 +18928,6 @@ function initAdmissions() {
     if (spEl) spEl.textContent = rec.libraryAssets?.sportsKit || 'Sports gear surrendered';
     if (lsEl) lsEl.textContent = rec.libraryAssets?.librarianSign || 'Librarian Sign-off Complete';
 
-    // Section 7: Fee Clearance
     const dEl = document.getElementById('tcDossierDues');
     const ndcEl = document.getElementById('tcDossierNdcRef');
     const statEl = document.getElementById('tcDossierStatutoryStatus');
@@ -19283,7 +18941,6 @@ function initAdmissions() {
     }
     if (bsEl) bsEl.textContent = rec.feeClearance?.bursarSign || 'Bursar Sign-off Complete';
 
-    // Update Clearance Status Badges & Cards dynamically from 8-department state
     ensureDepartmentClearances(rec);
     const depts = rec.departmentClearances || {};
 
@@ -19320,13 +18977,11 @@ function initAdmissions() {
       if (cardFee) cardFee.className = `tc-clearance-card ${isRev ? 'dues' : (isStat ? 'statutory-override' : (isCleared ? 'cleared' : 'dues'))}`;
     }
 
-    // Section 8: Principal Approval
     const psEl = document.getElementById('tcDossierPrincipalStatus');
     const pdEl = document.getElementById('tcDossierPrincipalDate');
     if (psEl) psEl.textContent = rec.approvals?.principalStatus || 'Approved';
     if (pdEl) pdEl.textContent = rec.approvals?.principalDate || rec.issueDate || 'Pending';
 
-    // Section 10 & 11: Final Issuance & Signatures
     const fnEl = document.getElementById('tcDossierFinalNo');
     const fdEl = document.getElementById('tcDossierFinalDate');
     const sigEl = document.getElementById('tcDossierSignatory');
@@ -19339,13 +18994,10 @@ function initAdmissions() {
     if (hEl) hEl.textContent = rec.digitalSignHash || 'SV-DIGISIGN-RECORD';
     if (permEl) permEl.textContent = rec.studentId || `STU-${rec.admNo}`;
 
-    // Render Preview TC Document
     renderDossierTCDocument(rec);
 
-    // Render Actions
     renderTcDetailActions(rec);
 
-    // Open first tab by default
     switchTcDetailTab('profile');
 
     openModal('tcDetailModal');
@@ -19480,12 +19132,6 @@ function initAdmissions() {
     }
   }
 
-  /* =========================================================================
-     MULTI-DEPARTMENT CLEARANCE SIGN-OFF & STATUTORY WORKFLOW ENGINE
-     Covers 8 Departments: Accounts, Library, Science Lab, Sports, Transport,
-     IT Lab, Hostel, and Academic. Compliant with AP Educational Code Rule 99.
-     ========================================================================= */
-
   const CLEARANCE_DEPTS_CONFIG = {
     accounts: {
       key: 'accounts',
@@ -19593,11 +19239,9 @@ function initAdmissions() {
     const studentRoster = state.students || (typeof window !== 'undefined' && window.STUDENT_ROSTER) || [];
     const student = studentRoster.find(s => s.admNo === rec.admNo || s.studentId === rec.studentId || s.id === rec.admNo);
 
-    // Determine Day Scholar vs Hostel and Commute
     const isHostelite = student ? (student.residenceType === 'Hostel' || student.hostel === true) : false;
     const isBusCommuter = student ? (student.commuteType === 'School Bus' || student.busRoute || student.transport === 'Bus') : false;
 
-    // Accounts
     if (!rec.departmentClearances.accounts) {
       const isFinCleared = String(rec.financialClearance || '').includes('Cleared') || String(rec.financialClearance || '').includes('No Dues');
       const isStatutory = String(rec.financialClearance || '').includes('Statutory');
@@ -19623,7 +19267,6 @@ function initAdmissions() {
       };
     }
 
-    // Library
     if (!rec.departmentClearances.library) {
       const libReturned = rec.libraryAssets?.booksStatus && rec.libraryAssets.booksStatus.toLowerCase().includes('returned');
       rec.departmentClearances.library = {
@@ -19649,7 +19292,6 @@ function initAdmissions() {
       };
     }
 
-    // Science Lab
     if (!rec.departmentClearances.scienceLab) {
       const labCleared = rec.libraryAssets?.labClearance && rec.libraryAssets.labClearance.toLowerCase().includes('clear');
       rec.departmentClearances.scienceLab = {
@@ -19674,7 +19316,6 @@ function initAdmissions() {
       };
     }
 
-    // Sports
     if (!rec.departmentClearances.sports) {
       const kitReturned = rec.libraryAssets?.sportsKit && rec.libraryAssets.sportsKit.toLowerCase().includes('return');
       rec.departmentClearances.sports = {
@@ -19698,7 +19339,6 @@ function initAdmissions() {
       };
     }
 
-    // Transport
     if (!rec.departmentClearances.transport) {
       rec.departmentClearances.transport = {
         status: isBusCommuter ? 'Cleared' : 'Not Applicable',
@@ -19723,7 +19363,6 @@ function initAdmissions() {
       };
     }
 
-    // IT Lab
     if (!rec.departmentClearances.itLab) {
       rec.departmentClearances.itLab = {
         status: rec.approvalStatus === 'Issued' || rec.approvalStatus === 'Approved' ? 'Cleared' : 'Pending Verification',
@@ -19746,7 +19385,6 @@ function initAdmissions() {
       };
     }
 
-    // Hostel
     if (!rec.departmentClearances.hostel) {
       rec.departmentClearances.hostel = {
         status: isHostelite ? 'Cleared' : 'Not Applicable',
@@ -19770,7 +19408,6 @@ function initAdmissions() {
       };
     }
 
-    // Academic
     if (!rec.departmentClearances.academic) {
       const isAcadCleared = rec.academicClearance === 'Cleared';
       rec.departmentClearances.academic = {
@@ -19807,7 +19444,6 @@ function initAdmissions() {
     let html = `<option value="">-- Choose Verifying Officer --</option>`;
     html += `<option value="DEFAULT" selected>${deptConfig.defaultInCharge}</option>`;
 
-    // Add principal / bursar / in-charges
     html += `<option value="SV-BURSAR-01">Sri P. Srinivas (Bursar &amp; Accounts Officer)</option>`;
     html += `<option value="SV-LIB-01">Smt. S. Padma (Chief Librarian)</option>`;
     html += `<option value="SV-SCI-01">Sri K. Ramu (Senior Science Faculty &amp; Lab In-Charge)</option>`;
@@ -19818,7 +19454,6 @@ function initAdmissions() {
     html += `<option value="SV200002">Sri Navva Anand (Vice Principal &amp; Academic Director)</option>`;
     html += `<option value="SV200001">Smt. Gorle Varalakshmi (Executive Principal)</option>`;
 
-    // Add roster faculty
     if (Array.isArray(staffList)) {
       staffList.slice(0, 30).forEach(f => {
         if (f.name && !html.includes(f.name)) {
@@ -19842,15 +19477,12 @@ function initAdmissions() {
 
     ensureDepartmentClearances(rec);
 
-    // Update Hidden Request ID
     const hiddenInput = document.getElementById('clearanceTargetRequestId');
     if (hiddenInput) hiddenInput.value = rec.requestId;
 
-    // Subtitle & Header
     const subEl = document.getElementById('clearanceModalSubtitle');
     if (subEl) subEl.textContent = `Pupil: ${rec.name} (${rec.admNo} • ${rec.class})`;
 
-    // Student & Exit Snapshot
     const nameEl = document.getElementById('clearanceStudentName');
     const admEl = document.getElementById('clearanceStudentAdm');
     const classEl = document.getElementById('clearanceStudentClass');
@@ -19874,7 +19506,6 @@ function initAdmissions() {
       avatarEl.textContent = initials;
     }
 
-    // Student Tagging (Residence & Commute)
     const studentRoster = state.students || (typeof window !== 'undefined' && window.STUDENT_ROSTER) || [];
     const student = studentRoster.find(s => s.admNo === rec.admNo || s.studentId === rec.studentId);
     const isHostel = student ? (student.residenceType === 'Hostel' || student.hostel === true) : false;
@@ -19898,14 +19529,11 @@ function initAdmissions() {
       comTag.style.color = isBus ? '#0369a1' : '#475569';
     }
 
-    // Refresh ribbon tab badges
     updateClearanceRibbonBadges(rec);
 
-    // Filter applicable departments according to toggle state
     const applicableOnlyChecked = document.getElementById('tcApplicableOnlyCheckbox')?.checked ?? true;
     toggleApplicableDeptsFilter(applicableOnlyChecked);
 
-    // Switch to active department
     const targetDeptKey = initialDeptKey || 'accounts';
     switchClearanceDepartment(targetDeptKey);
 
@@ -19970,11 +19598,9 @@ function initAdmissions() {
     const deptConfig = CLEARANCE_DEPTS_CONFIG[deptKey] || CLEARANCE_DEPTS_CONFIG.accounts;
     const deptData = rec.departmentClearances[deptKey] || {};
 
-    // Update Active Hidden Key
     const hiddenDeptKey = document.getElementById('clearanceActiveDeptKey');
     if (hiddenDeptKey) hiddenDeptKey.value = deptKey;
 
-    // Update Ribbon active styling
     const tabs = document.querySelectorAll('.btn-clearance-tab');
     tabs.forEach(btn => {
       if (btn.getAttribute('data-dept') === deptKey) {
@@ -19984,7 +19610,6 @@ function initAdmissions() {
       }
     });
 
-    // Update Active Title & In-charge
     const titleEl = document.getElementById('clearanceActiveDeptTitle');
     if (titleEl) titleEl.innerHTML = `<i class="${deptConfig.icon} text-primary mr-1"></i> ${deptConfig.name}`;
 
@@ -19993,7 +19618,6 @@ function initAdmissions() {
       defaultInChargeEl.textContent = `Default In-Charge: ${deptConfig.defaultInCharge}`;
     }
 
-    // Reference Number
     let refNo = deptData.referenceNo;
     if (!refNo) {
       refNo = generateClearanceRefNo(deptKey);
@@ -20002,7 +19626,6 @@ function initAdmissions() {
     const refDisplay = document.getElementById('clearanceRefNoDisplay');
     if (refDisplay) refDisplay.textContent = refNo;
 
-    // Revocation Banner
     const revokeBanner = document.getElementById('clearanceRevocationBanner');
     if (revokeBanner) {
       if (deptData.isRevoked) {
@@ -20018,20 +19641,17 @@ function initAdmissions() {
       }
     }
 
-    // Revoke Action Button Visibility (Only show if not already revoked and currently cleared/statutory/waiver)
     const revokeBtn = document.getElementById('clearanceRevokeBtn');
     if (revokeBtn) {
       const canRevoke = !deptData.isRevoked && (deptData.status === 'Cleared' || deptData.status === 'Statutory Undertaking' || deptData.status === 'Waiver Approved');
       revokeBtn.style.display = canRevoke ? 'inline-flex' : 'none';
     }
 
-    // Clearance Decision Select
     const decisionSelect = document.getElementById('clearanceStatusDecision');
     if (decisionSelect) {
       decisionSelect.value = deptData.status || 'Pending Verification';
     }
 
-    // Populate Verifying Officers Dropdown
     populateClearanceOfficersDropdown(deptKey);
 
     const officerInput = document.getElementById('clearanceOfficer');
@@ -20042,7 +19662,6 @@ function initAdmissions() {
     if (designationInput) designationInput.value = deptData.verifyingOfficerDesignation || deptConfig.defaultDesignation;
     if (staffIdInput) staffIdInput.value = deptData.verifyingOfficerId || deptConfig.defaultOfficerId;
 
-    // Date & Time
     const dateInput = document.getElementById('clearanceDate');
     const timeInput = document.getElementById('clearanceTime');
     const todayStr = new Date().toISOString().split('T')[0];
@@ -20051,10 +19670,8 @@ function initAdmissions() {
     if (dateInput) dateInput.value = deptData.verifiedDate || todayStr;
     if (timeInput) timeInput.value = deptData.verifiedTime || nowTimeStr;
 
-    // Render Department-Specific Verification Container
     renderDepartmentSpecificFields(deptKey, deptData, rec);
 
-    // Handle Statutory Undertaking Box Display
     const statBox = document.getElementById('statutoryUndertakingBox');
     const statRef = document.getElementById('statutoryUndertakingRef');
     const statChk = document.getElementById('statutoryNonBlockingChecked');
@@ -20067,7 +19684,6 @@ function initAdmissions() {
       if (statBox) statBox.style.display = 'none';
     }
 
-    // Supporting Document Preview
     const docPreview = document.getElementById('clearanceDocPreview');
     const docName = document.getElementById('clearanceDocName');
     const docSize = document.getElementById('clearanceDocSize');
@@ -20079,13 +19695,11 @@ function initAdmissions() {
       if (docPreview) docPreview.style.display = 'none';
     }
 
-    // Remarks
     const remarksInput = document.getElementById('clearanceRemarks');
     if (remarksInput) {
       remarksInput.value = deptData.remarks || `All departmental requirements for ${deptConfig.shortName} verified in full.`;
     }
 
-    // Preserved Audit History List in Accordion
     renderClearanceAuditHistory(deptData);
   }
 
@@ -20564,7 +20178,6 @@ function initAdmissions() {
       revokedReason: ''
     };
 
-    // Department specific extra fields
     if (activeDeptKey === 'accounts') {
       payload.duesAmount = parseFloat(document.getElementById('deptAccountsDues')?.value || '0') || 0;
       payload.cautionDepositRefund = document.getElementById('deptAccountsCaution')?.value || 'Reconciled';
@@ -20641,7 +20254,6 @@ function initAdmissions() {
     updateClearanceRibbonBadges(rec);
     showToast(`Draft clearance sign-off saved for ${CLEARANCE_DEPTS_CONFIG[activeDeptKey].shortName}.`, 'info');
 
-    // Async sync to server
     if (typeof ApiClient !== 'undefined' && ApiClient.transfers && ApiClient.transfers.updateClearance) {
       ApiClient.transfers.updateClearance(rec.requestId || rec.id, activeDeptKey, payload).catch(err => {
         console.warn('Draft clearance sync notice:', err.message);
@@ -20663,7 +20275,6 @@ function initAdmissions() {
     ensureDepartmentClearances(rec);
     const currentDept = rec.departmentClearances[activeDeptKey] || {};
 
-    // Preserve historical snapshot in history array (Never delete approved history!)
     if (!Array.isArray(currentDept.history)) currentDept.history = [];
     if (currentDept.status && currentDept.status !== 'Pending Verification') {
       currentDept.history.unshift({
@@ -20683,7 +20294,6 @@ function initAdmissions() {
       history: currentDept.history
     };
 
-    // Synchronize legacy fields for backward compatibility
     if (activeDeptKey === 'academic') {
       rec.academicClearance = (payload.status === 'Cleared' || payload.status === 'Waiver Approved') ? 'Cleared' : 'Pending';
       if (!rec.academicHistory) rec.academicHistory = {};
@@ -20721,7 +20331,6 @@ function initAdmissions() {
       }
     }
 
-    // Comprehensive 8-Department Progression Check
     const allDeptKeys = Object.keys(CLEARANCE_DEPTS_CONFIG);
     const allCleared = allDeptKeys.every(k => {
       const dep = rec.departmentClearances[k];
@@ -20740,11 +20349,9 @@ function initAdmissions() {
       rec.approvalStatus = 'Under Review';
     }
 
-    // Close Modal and update UI
     closeModal('departmentClearanceModal');
     filterTransfers();
 
-    // Re-render TC Detail Modal if open
     const detailModal = document.getElementById('tcDetailModal');
     if (detailModal && (detailModal.style.display === 'flex' || detailModal.classList.contains('active'))) {
       openTcDetailModal(rec.requestId);
@@ -20752,7 +20359,6 @@ function initAdmissions() {
 
     showToast(`${CLEARANCE_DEPTS_CONFIG[activeDeptKey].shortName} Clearance sign-off verified and logged for ${rec.name}.`, 'success');
 
-    // Async sync to server
     if (typeof ApiClient !== 'undefined' && ApiClient.transfers && ApiClient.transfers.updateClearance) {
       ApiClient.transfers.updateClearance(rec.requestId || rec.id, activeDeptKey, payload).catch(err => {
         console.warn('Clearance server update notice:', err.message);
@@ -20822,7 +20428,6 @@ function initAdmissions() {
     const nowStr = new Date().toISOString().split('T')[0];
     const timeStr = new Date().toTimeString().split(' ')[0].substring(0, 5);
 
-    // Archive previous sign-off in permanent history (NEVER PERMANENTLY DELETE)
     if (!Array.isArray(deptData.history)) deptData.history = [];
     deptData.history.unshift({
       timestamp: new Date().toLocaleString(),
@@ -20837,14 +20442,12 @@ function initAdmissions() {
       revokedDate: nowStr
     });
 
-    // Update Department State to Revoked
     deptData.status = 'Dues Pending';
     deptData.isRevoked = true;
     deptData.revokedReason = reason;
     deptData.revokedBy = officer;
     deptData.revokedDate = nowStr;
 
-    // Reset Overall Docket Progression: Revert to Clearance Pending & block TC
     if (rec.approvalStatus === 'Approved') {
       rec.approvalStatus = 'Under Review';
     }
@@ -20859,7 +20462,6 @@ function initAdmissions() {
     switchClearanceDepartment(activeDeptKey);
     filterTransfers();
 
-    // Refresh TC detail modal if open
     const detailModal = document.getElementById('tcDetailModal');
     if (detailModal && (detailModal.style.display === 'flex' || detailModal.classList.contains('active'))) {
       openTcDetailModal(rec.requestId);
@@ -20867,7 +20469,6 @@ function initAdmissions() {
 
     showToast(`Clearance for ${deptConfig.shortName} REVOKED. Transfer Certificate issuance is BLOCKED until re-verified.`, 'error');
 
-    // Sync to backend API
     if (typeof ApiClient !== 'undefined' && ApiClient.transfers && ApiClient.transfers.updateClearance) {
       ApiClient.transfers.updateClearance(rec.requestId || rec.id, activeDeptKey, {
         action: 'REVOKE',
@@ -20879,7 +20480,6 @@ function initAdmissions() {
     }
   }
 
-  // Backwards compatibility aliases
   const onClearanceDeptChange = switchClearanceDepartment;
   const submitDepartmentClearance = submitDepartmentClearanceSignoff;
 
@@ -20891,12 +20491,10 @@ function initAdmissions() {
       all.filter(t => t.tcNo && t.tcNo !== 'Pending Issue').map(t => t.tcNo.trim().toUpperCase())
     );
 
-    // If student already has an assigned valid TC number, preserve it
     if (rec && rec.tcNo && rec.tcNo !== 'Pending Issue' && !rec.tcNo.includes('Pending')) {
       return rec.tcNo;
     }
 
-    // Find highest sequential number for the current year
     let maxSeq = 41;
     all.forEach(t => {
       if (t.tcNo && t.tcNo.includes('SV/')) {
@@ -21002,7 +20600,6 @@ function initAdmissions() {
       return;
     }
 
-    // 1. Departmental clearances & statutory rules verification
     ensureDepartmentClearances(rec);
     const depts = rec.departmentClearances || {};
 
@@ -21023,11 +20620,9 @@ function initAdmissions() {
       return;
     }
 
-    // 2. Retrieve student information from actual database / master roster
     const studentRoster = state.students || (typeof window !== 'undefined' && window.STUDENT_ROSTER) || [];
     const student = studentRoster.find(s => s.admNo === rec.admNo || s.studentId === rec.studentId || s.id === rec.admNo);
 
-    // 3. Header & Subtitle
     const subEl = document.getElementById('issueModalSubtitle');
     if (subEl) subEl.textContent = `Pupil: ${rec.name} (${rec.admNo} • ${rec.class}) • Appendix 16 Statutory Instrument`;
 
@@ -21038,7 +20633,6 @@ function initAdmissions() {
       statusBadge.style.color = rec.approvalStatus === 'Issued' ? '#065f46' : '#1d4ed8';
     }
 
-    // Hidden inputs
     const hiddenReqId = document.getElementById('issueTargetRequestId');
     const hiddenAdmNo = document.getElementById('issueStudentAdmNo');
     const hiddenExitType = document.getElementById('issueStudentExitType');
@@ -21046,13 +20640,11 @@ function initAdmissions() {
     if (hiddenAdmNo) hiddenAdmNo.value = rec.admNo;
     if (hiddenExitType) hiddenExitType.value = rec.exitType || 'Formal Transfer';
 
-    // Target Enrolment status label (Transferred vs Withdrawn)
     const targetStatusText = document.getElementById('issueTargetStatusText');
     if (targetStatusText) {
       targetStatusText.textContent = (rec.exitType === 'Withdrawal') ? 'Withdrawn' : 'Transferred';
     }
 
-    // Check if already issued
     const alreadyIssuedBanner = document.getElementById('issueTcAlreadyIssuedBanner');
     const btnAuthorize = document.getElementById('btnAuthorizeAndIssueTc');
     const isAlreadyIssued = rec.approvalStatus === 'Issued' || (rec.tcNo && rec.tcNo !== 'Pending Issue');
@@ -21079,11 +20671,9 @@ function initAdmissions() {
       }
     }
 
-    // Reset validation alert
     const validationAlert = document.getElementById('issueTcValidationAlert');
     if (validationAlert) validationAlert.style.display = 'none';
 
-    // Section 1: Official TC Details
     const tcNoInput = document.getElementById('issueAllocatedTcNo');
     let tcNo = rec.tcNo;
     if (!tcNo || tcNo === 'Pending Issue') {
@@ -21109,7 +20699,6 @@ function initAdmissions() {
     if (classInput) classInput.value = rec.class;
     if (acadYearInput) acadYearInput.value = rec.academicYear || '2025-2026';
 
-    // Section 2: Authorized Signatory
     const signatorySelect = document.getElementById('issueSignatorySelect');
     const signatoryName = document.getElementById('issueSignatoryName');
     const signatoryDesig = document.getElementById('issueSignatoryDesignation');
@@ -21124,7 +20713,6 @@ function initAdmissions() {
       digiHashEl.textContent = rec.digitalSignHash || ('SV-DIGISIGN-' + Math.random().toString(36).substring(2, 11).toUpperCase());
     }
 
-    // Section 3: Student Conduct & Character
     const conductRating = document.getElementById('issueConductRating');
     const conductRemarks = document.getElementById('issueConductRemarks');
     let conductVal = 'Excellent';
@@ -21144,7 +20732,6 @@ function initAdmissions() {
         'EXEMPLARY • TOP MERIT SCHOLAR; actively participated in school academic and cultural activities.');
     }
 
-    // Section 4: Academic Verification
     const lastClassInput = document.getElementById('issueLastClass');
     const lastAcadYearInput = document.getElementById('issueLastAcadYear');
     const lastExamInput = document.getElementById('issueLastExam');
@@ -21159,7 +20746,6 @@ function initAdmissions() {
     if (promotionInput) promotionInput.value = rec.academicHistory?.qualifiedForPromotion || 'Yes, Qualified for Promotion to Next Higher Class';
     if (attInput) attInput.value = rec.attendanceRecord || '204 / 220 Days (92.7%)';
 
-    // Section 5: Authorization Checklist (Set all to checked by default)
     const chkClearances = document.getElementById('chkAuthClearances');
     const chkParent = document.getElementById('chkAuthParent');
     const chkFinancial = document.getElementById('chkAuthFinancial');
@@ -21247,7 +20833,6 @@ function initAdmissions() {
 
     showToast(`Transfer Certificate authorization details saved as draft for ${rec.name}.`, 'info');
 
-    // Sync draft to server
     if (typeof ApiClient !== 'undefined' && ApiClient.transfers && ApiClient.transfers.issueTC) {
       ApiClient.transfers.issueTC(rec.requestId || rec.id, payload).catch(err => {
         console.warn('Draft TC server sync notice:', err.message);
@@ -21297,7 +20882,6 @@ function initAdmissions() {
     const rec = (state.transfers || []).find(t => t.requestId === activeIssueTargetId);
     if (!rec) return;
 
-    // 1. Mandatory Field Validations
     const validationAlert = document.getElementById('issueTcValidationAlert');
     const alertText = document.getElementById('issueTcValidationAlertText');
 
@@ -21310,7 +20894,6 @@ function initAdmissions() {
       return;
     }
 
-    // 2. Duplicate TC Check
     const all = state.transfers || [];
     const isDuplicate = all.some(t => t.requestId !== rec.requestId && t.tcNo && t.tcNo.trim().toUpperCase() === payload.tcNumber.trim().toUpperCase());
     if (isDuplicate) {
@@ -21322,7 +20905,6 @@ function initAdmissions() {
       return;
     }
 
-    // 3. Final Checklist Validation (All 5 mandatory items must be checked)
     if (!payload.checklistClearances || !payload.checklistParent || !payload.checklistFinancial || !payload.checklistDocs || !payload.checklistApproval) {
       if (validationAlert && alertText) {
         alertText.textContent = 'All 5 mandatory authorization checklist items must be verified and checked before formal issuance.';
@@ -21334,7 +20916,6 @@ function initAdmissions() {
 
     if (validationAlert) validationAlert.style.display = 'none';
 
-    // 4. Update Exit Docket Record
     rec.tcNo = payload.tcNumber;
     rec.issueDate = payload.issueDate;
     rec.lastDateAttendance = payload.leavingDate;
@@ -21357,7 +20938,6 @@ function initAdmissions() {
       issuedTimestamp: new Date().toLocaleString()
     });
 
-    // 5. Update Master Student Enrolment Status with Zero Deletion
     const studentRoster = state.students || (typeof window !== 'undefined' && window.STUDENT_ROSTER) || [];
     const student = studentRoster.find(s => s.admNo === rec.admNo || s.studentId === rec.studentId || s.id === rec.admNo || s.name === rec.name);
     const targetStatus = rec.exitType === 'Withdrawal' ? 'Withdrawn' : 'Transferred';
@@ -21366,13 +20946,11 @@ function initAdmissions() {
       student.status = targetStatus;
       student.effectiveWithdrawalDate = payload.issueDate;
       student.tcNumber = payload.tcNumber;
-      // Preserve all historical attendance, marks, fees, and demographic records
     }
 
     closeModal('issueTcModal');
     filterTransfers();
 
-    // Re-render dossier modal if open
     const detailModal = document.getElementById('tcDetailModal');
     if (detailModal && (detailModal.style.display === 'flex' || detailModal.classList.contains('active'))) {
       openTcDetailModal(rec.requestId);
@@ -21380,7 +20958,6 @@ function initAdmissions() {
 
     showToast(`Official Transfer Certificate ${payload.tcNumber} formally issued for ${rec.name}. Enrolment transition complete with records preserved in statutory archive.`, 'success');
 
-    // 6. Sync to backend API
     if (typeof ApiClient !== 'undefined' && ApiClient.transfers && ApiClient.transfers.issueTC) {
       ApiClient.transfers.issueTC(rec.requestId || rec.id, payload).catch(err => {
         console.warn('Issue TC server sync notice:', err.message);
@@ -21411,7 +20988,6 @@ function initAdmissions() {
     }
   }
 
-  // Backwards-compatible printTC using Appendix 16 layout
   function printTC(tcKeyOrReqId) {
     initTransfers();
     let rec = (state.transfers || []).find(t => t.requestId === tcKeyOrReqId || t.tcNo === tcKeyOrReqId);
@@ -21460,9 +21036,7 @@ function initAdmissions() {
     window.print();
   }
 
-  // Academic Performance & Charts Subview
   function renderAcademicPerformance() {
-    // 1. Render Bar Chart
     const barContainer = document.getElementById('classGpaBarChart');
     if (barContainer && state.classGpaList) {
       barContainer.innerHTML = state.classGpaList.map(item => {
@@ -21478,7 +21052,6 @@ function initAdmissions() {
       }).join('');
     }
 
-    // 2. Render Top Achievers Leaderboard
     const achieversTbody = document.getElementById('achieversTableBody');
     if (achieversTbody && state.topAchievers) {
       achieversTbody.innerHTML = state.topAchievers.map(achiever => {
@@ -21512,14 +21085,8 @@ function initAdmissions() {
       }).join('');
     }
 
-    // 3. Render Comprehensive Student Academic Performance Register Table
     renderStudentPerformanceRegister();
   }
-
-    // ==========================================================================
-  // FACULTY (TEACHING) MANAGEMENT MODULE
-  // Compliant with Role-Based Record Scope, Class & Subject Allocation & Exit Clearances
-  // ==========================================================================
 
   let activeTeacherDossierId = 'SV-FAC-0101';
 
@@ -21589,7 +21156,6 @@ function initAdmissions() {
     const countBadge = document.getElementById('facultyCountBadge');
     if (countBadge) countBadge.textContent = data.length;
 
-    // 1. Render Table Roster Body (Authoritative 8 Columns)
     const tbody = document.getElementById('facultyTableBody');
     if (tbody) {
       if (data.length === 0) {
@@ -21603,15 +21169,12 @@ function initAdmissions() {
           </tr>`;
       } else {
         tbody.innerHTML = data.map(f => {
-          // Standardize ID
           const displayId = f.displayId || f.employeeId || (f.id && f.id.startsWith('SV-FAC-') ? f.id : (f.id ? ('SV-FAC-0' + (f.id.replace(/[^0-9]/g, '').slice(-3) || '101')) : 'SV-FAC-101'));
           f.displayId = displayId;
           const teacherRef = f.id || f.employeeId || f._id || displayId;
 
-          // Department display
           const dept = f.department || (f.subjects && f.subjects.toLowerCase().includes('math') ? 'Department of Mathematics' : (f.subjects && f.subjects.toLowerCase().includes('sci') ? 'Department of Natural Sciences' : 'Department of Languages'));
 
-          // Assigned classes pills (safe normalized class string formatting)
           const classesChips = (f.assignedClasses || []).map(c => {
             const label = formatClassAllocationLabel(c);
             if (!label) return '';
@@ -21622,7 +21185,6 @@ function initAdmissions() {
             `;
           }).filter(Boolean).join(' ');
 
-          // Employment Status Badge
           let statusBadgeClass = 'active';
           let statusLabel = 'Active (Confirmed)';
           const st = (f.employmentStatus || f.status || 'Active').toLowerCase();
@@ -21710,7 +21272,6 @@ function initAdmissions() {
       }
     }
 
-    // 2. Render Cards Grid (Alternate View)
     const cardsContainer = document.getElementById('staffGridContainer');
     if (cardsContainer) {
       cardsContainer.innerHTML = data.map(member => {
@@ -21767,10 +21328,8 @@ function initAdmissions() {
     showToast('Faculty directory filters reset to full view', 'info');
   }
 
-  // --- ADD TEACHER MODAL & WORKFLOW ---
   function openAddTeacherModal() {
     ensureTeachersEnriched();
-    // Generate next sequence Employee ID
     const count = (state.faculty || []).length + 1;
     const nextId = `SV-FAC-0${100 + count}`;
     const idInput = document.getElementById('tfEmployeeId');
@@ -21796,7 +21355,6 @@ function initAdmissions() {
     const address = document.getElementById('tfAddress')?.value || 'Visakhapatnam, AP';
     const createAccount = document.getElementById('tfCreateUserAccount')?.checked !== false;
 
-    // Collect checked assigned classes
     const classCheckboxes = document.querySelectorAll('input[name="tfClassCheck"]:checked');
     const assignedClasses = Array.from(classCheckboxes).map(cb => cb.value);
     if (assignedClasses.length === 0) {
@@ -21861,7 +21419,6 @@ function initAdmissions() {
     showToast(`Faculty member ${name} (${empId}) registered. Scoped access restricted to: ${assignedClasses.join(', ')}`, 'success');
   }
 
-  // --- 10-TAB TEACHER DOSSIER ---
   function openTeacherDetailModal(teacherId) {
     ensureTeachersEnriched();
     const member = findFacultyMember(teacherId);
@@ -21871,20 +21428,17 @@ function initAdmissions() {
     const cleanEmpId = member.displayId || member.employeeId || member.id;
     const cleanJoinDate = formatFacultyJoiningDate(member.joiningDate);
 
-    // Header info
     document.getElementById('tdDossierName').textContent = member.name;
     document.getElementById('tdEmployeeId').textContent = cleanEmpId;
     document.getElementById('tdDossierMeta').textContent = `${member.role || 'Faculty'} · ${member.department || 'Academics'} · Joining: ${cleanJoinDate}`;
     document.getElementById('tdAvatar').textContent = member.name.replace(/^(Smt\.|Sri\.|Ms\.|Mr\.|Dr\.)\s*/, '').charAt(0) || 'F';
     document.getElementById('tdDeptBadge').textContent = member.department || 'Department of Mathematics';
     
-    // Status badge
     const stBadge = document.getElementById('tdStatusBadge');
     if (stBadge) {
       stBadge.textContent = member.employmentStatus || member.status || 'Active (Confirmed)';
     }
 
-    // Tab 1: Profile
     document.getElementById('tdValName').textContent = member.name;
     document.getElementById('tdValRole').textContent = member.role || 'Teaching Faculty';
     document.getElementById('tdValDept').textContent = member.department || 'Department of Mathematics';
@@ -21894,7 +21448,6 @@ function initAdmissions() {
     document.getElementById('tdValAddress').textContent = member.address || 'Door No. 4-21, MVP Colony, Visakhapatnam, AP';
     document.getElementById('tdValEmergency').textContent = member.emergency || 'Spouse: 9848099887';
 
-    // Tab 2: Qualifications & Docs
     document.getElementById('tdValQualifications').textContent = member.qualifications || 'M.Sc (Mathematics), B.Ed (First Class)';
     const docsGrid = document.getElementById('tdDocumentsGrid');
     if (docsGrid) {
@@ -21930,7 +21483,6 @@ function initAdmissions() {
       `;
     }
 
-    // Tab 3: Subject Allocations
     const subjList = document.getElementById('tdSubjectAllocationsList');
     if (subjList) {
       subjList.innerHTML = `
@@ -21946,7 +21498,6 @@ function initAdmissions() {
       `;
     }
 
-    // Tab 4: Class Allocations
     const classList = document.getElementById('tdClassAllocationsList');
     if (classList) {
       classList.innerHTML = (member.assignedClasses || ['Class X-A', 'Class X-B', 'Class IX-A']).map((rawC, idx) => {
@@ -21963,7 +21514,6 @@ function initAdmissions() {
       }).join('');
     }
 
-    // Tab 5: Timetable
     const ttBody = document.getElementById('tdTimetableBody');
     if (ttBody) {
       const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
@@ -21987,18 +21537,14 @@ function initAdmissions() {
       }).join('');
     }
 
-    // Tab 8: Appraisal
     const app = member.appraisal || {};
     document.getElementById('tdAppraisalRating').textContent = app.rating || '4.8 / 5.0 (Exemplary A+)';
     document.getElementById('tdAppraisalFeedback').textContent = app.feedback || 'Exemplary pedagogical performance. Maintained 100% Board preparation adherence.';
 
-    // Tab 10: Scope & Permissions
     document.getElementById('tdScopeClassesDisplay').textContent = (member.assignedClasses || []).map(formatClassAllocationLabel).join(', ') || 'Class X-A, Class X-B';
 
-    // Tab 9: Render Employment Lifecycle History Table
     renderEmploymentHistoryTable(member);
 
-    // Default to tab 1
     switchTeacherDetailTab('profile');
     openModal('teacherDetailModal');
   }
@@ -22013,7 +21559,6 @@ function initAdmissions() {
     const targetPane = document.getElementById(`teacherPane-${tabId}`);
     if (targetPane) targetPane.classList.add('active');
 
-    // Highlight button with strict exact matching to avoid substring collision
     tabs.forEach(btn => {
       const dataTab = btn.getAttribute('data-tab');
       const onclick = btn.getAttribute('onclick') || '';
@@ -22024,7 +21569,6 @@ function initAdmissions() {
     });
   }
 
-  // --- ASSIGN CLASSES WORKFLOW ---
   function getAllSchoolClassSections() {
     const classesMap = new Map();
     const romanMap = { '10': 'X', '9': 'IX', '8': 'VIII', '7': 'VII', '6': 'VI', '5': 'V', '4': 'IV', '3': 'III', '2': 'II', '1': 'I' };
@@ -22034,10 +21578,8 @@ function initAdmissions() {
       let name = String(rawName).trim();
       let sec = rawSec ? String(rawSec).trim().replace(/^Section\s+/i, '') : '';
 
-      // Skip multi-class summary aggregate strings
       if (/Classes\s+I\s*[–-]\s*X/i.test(name) || /All\s+Classes/i.test(name) || /Laboratories/i.test(name) || /Science\s+Dept/i.test(name) || /High\s+School\s+Wing/i.test(name)) return;
 
-      // Handle strings like 'Class X (A & B)' or 'Class V (A & B)'
       const multiSecMatch = name.match(/^(?:Class\s+)?([IVX0-9]+|UKG|LKG|NURSERY)\s*\(([A-Z])\s*&\s*([A-Z])\)/i);
       if (multiSecMatch) {
         let core = multiSecMatch[1].toUpperCase();
@@ -22047,7 +21589,6 @@ function initAdmissions() {
         return;
       }
 
-      // Handle strings like 'Classes I – IV (8 Secs)'
       if (/Classes\s+I\s*[–-]\s*IV/i.test(name)) {
         ['I', 'II', 'III', 'IV'].forEach(lvl => {
           registerClass(`Class ${lvl}-A`);
@@ -22056,7 +21597,6 @@ function initAdmissions() {
         return;
       }
 
-      // If name already contains dash & section e.g. 'Class X-A', 'Class 8-C', '10-A', 'UKG-A'
       const dashMatch = name.match(/^(?:Class\s+)?([IVX0-9]+|UKG|LKG|NURSERY|PP-?\d?)[-\s]+([A-Z])$/i);
       if (dashMatch) {
         let core = dashMatch[1].toUpperCase();
@@ -22070,7 +21610,6 @@ function initAdmissions() {
         return;
       }
 
-      // Standard className and separate section
       let core = name.replace(/^Class\s+/i, '').trim().toUpperCase();
       if (romanMap[core]) core = romanMap[core];
       if (core === 'NURSERY') core = 'Nursery';
@@ -22081,7 +21620,6 @@ function initAdmissions() {
       }
     }
 
-    // 1. Source: Class Management module registry (ensureAcademicClassesState)
     try {
       const reg = ensureAcademicClassesState();
       if (Array.isArray(reg)) {
@@ -22095,12 +21633,10 @@ function initAdmissions() {
       console.warn('getAllSchoolClassSections: registry read error', e);
     }
 
-    // 2. Source: ACADEMIC_CLASSES_SECTIONS_DATA master dataset
     if (typeof ACADEMIC_CLASSES_SECTIONS_DATA !== 'undefined' && Array.isArray(ACADEMIC_CLASSES_SECTIONS_DATA)) {
       ACADEMIC_CLASSES_SECTIONS_DATA.forEach(c => registerClass(c.className, c.section, c.wing));
     }
 
-    // 3. Source: Enrolled Student Records (state.students / window.STUDENT_ROSTER)
     const students = state.students || window.STUDENT_ROSTER || [];
     if (Array.isArray(students)) {
       students.forEach(s => {
@@ -22109,7 +21645,6 @@ function initAdmissions() {
       });
     }
 
-    // 4. Source: state.faculty assigned classes
     if (Array.isArray(state.faculty)) {
       state.faculty.forEach(f => {
         if (Array.isArray(f.assignedClasses)) {
@@ -22118,15 +21653,13 @@ function initAdmissions() {
       });
     }
 
-    // 5. Source: localStorage sv_academic_classes_registry
     try {
-      const cached = JSON.parse(localStorage.getItem('sv_academic_classes_registry') || '[]');
+      const cached = JSON.parse(localStorage.getItem('sv_academic_classes_registry_v2') || '[]');
       if (Array.isArray(cached)) {
         cached.forEach(c => registerClass(c.className, c.section, c.wing));
       }
     } catch (e) {}
 
-    // Pedagogical sorting
     const orderRank = {
       'X': 100,
       'IX': 90,
@@ -22167,10 +21700,8 @@ function initAdmissions() {
     const subjectInput = document.getElementById('asSubject');
     if (subjectInput) subjectInput.value = member.subjects || member.subject || 'Mathematics';
 
-    // Fetch all available school classes and sections dynamically
     const allClasses = getAllSchoolClassSections();
 
-    // Reset search filter input
     const searchInput = document.getElementById('asClassSearchInput');
     if (searchInput) searchInput.value = '';
     const clearBtn = document.getElementById('asClassSearchClearBtn');
@@ -22178,13 +21709,11 @@ function initAdmissions() {
     const noMatchEl = document.getElementById('asClassesNoMatch');
     if (noMatchEl) noMatchEl.style.display = 'none';
 
-    // Populate total count chip
     const totalCountChip = document.getElementById('asClassesTotalCount');
     if (totalCountChip) {
       totalCountChip.innerHTML = `<i class="fa-solid fa-school"></i> ${allClasses.length} Classes`;
     }
 
-    // Render checkbox cards in scrollable responsive grid
     const container = document.getElementById('asClassesCheckboxContainer');
     if (container) {
       const memberClassLabels = (member.assignedClasses || []).map(c => formatClassAllocationLabel(c).toLowerCase().replace(/[^a-z0-9]/g, ''));
@@ -22200,10 +21729,8 @@ function initAdmissions() {
       }).join('');
     }
 
-    // Update selected count badge
     updateAssignClassesSelectedCount();
 
-    // Populate Class Teacher dropdown with all available classes dynamically
     const ctSelect = document.getElementById('asClassTeacherSelect');
     if (ctSelect) {
       const currentRole = member.classTeacher || member.classTeacherRole || '';
@@ -22329,7 +21856,6 @@ function initAdmissions() {
     if (activeTeacherDossierId) openTeacherDetailModal(activeTeacherDossierId);
   }
 
-  // --- EMPLOYMENT STATUS TRANSITIONS & LIFECYCLE MANAGEMENT ---
   let currentEmploymentStatusFile = null;
 
   function seedEmploymentHistory(member) {
@@ -22337,7 +21863,6 @@ function initAdmissions() {
     const joinYear = parseInt(String(member.joiningDate || '2014').match(/\d{4}/)?.[0] || '2014', 10);
     const history = [];
 
-    // Transition 1: Selection & Onboarding
     history.push({
       id: `TRN-${joinYear}-001`,
       previousStatus: 'Institutional Selection Panel',
@@ -22366,7 +21891,6 @@ function initAdmissions() {
       createdAt: `${joinYear}-05-25T10:00:00Z`
     });
 
-    // Transition 2: Statutory Probation
     history.push({
       id: `TRN-${joinYear}-002`,
       previousStatus: 'Onboarding',
@@ -22396,7 +21920,6 @@ function initAdmissions() {
       createdAt: `${joinYear}-06-14T11:30:00Z`
     });
 
-    // Transition 3: Regular Service Confirmation
     const confYear = joinYear + 1;
     const currStatus = member.employmentStatus || member.status || 'Active – Confirmed';
     history.push({
@@ -22441,7 +21964,6 @@ function initAdmissions() {
       member.employmentHistory = seedEmploymentHistory(member);
     }
 
-    // 1. Populate Header Card
     const avatarEl = document.getElementById('esEmpAvatar');
     if (avatarEl) {
       avatarEl.textContent = member.name.replace(/^(Smt\.|Sri\.|Ms\.|Mr\.|Dr\.)\s*/, '').charAt(0) || 'F';
@@ -22459,7 +21981,6 @@ function initAdmissions() {
     const sinceEl = document.getElementById('esEmpEffectiveSinceText');
     if (sinceEl) sinceEl.textContent = `Since ${member.joiningDate || '15-Jun-2014'}`;
 
-    // Read-only Current Status Field
     const currStatusInput = document.getElementById('esCurrentStatus');
     if (currStatusInput) currStatusInput.value = currStatusText;
 
@@ -22468,7 +21989,6 @@ function initAdmissions() {
     const employeeIdHidden = document.getElementById('esEmployeeId');
     if (employeeIdHidden) employeeIdHidden.value = member.id;
 
-    // Reset New Status dropdown & Dates
     const today = new Date().toISOString().split('T')[0];
     const transDateInput = document.getElementById('esTransitionDate');
     if (transDateInput) transDateInput.value = today;
@@ -22487,7 +22007,6 @@ function initAdmissions() {
       lastWorkInput.removeAttribute('required');
     }
 
-    // Auto-generate reference numbers
     const orderRefInput = document.getElementById('esOrderRef');
     if (orderRefInput) {
       orderRefInput.value = `SV-MC-RES/${new Date().getFullYear()}/${String(Math.floor(100 + Math.random() * 900))}`;
@@ -22505,14 +22024,11 @@ function initAdmissions() {
     const docRemarksInput = document.getElementById('esDocRemarks');
     if (docRemarksInput) docRemarksInput.value = '';
 
-    // Reset File Upload
     removeEmploymentStatusFile();
 
-    // Reset Conditional Container
     const condContainer = document.getElementById('esConditionalContainer');
     if (condContainer) condContainer.innerHTML = '';
 
-    // Check Role & Permissions
     const activeRole = sessionStorage.getItem('sv_active_role') || state.currentRole || 'principal';
     const currentUserId = (state.currentUser && state.currentUser.id) || sessionStorage.getItem('sv_active_user_id') || 'SV200001';
     const isSelf = member.id === currentUserId;
@@ -22552,7 +22068,6 @@ function initAdmissions() {
       showToast(`Notice: ${member.name} is already recorded under '${currentStatus}'. Please verify your transitional selection.`, 'warning');
     }
 
-    // Toggle Last Working Date for exit / departure statuses
     const departureStatuses = ['Notice Period', 'Resigned', 'Retired', 'Terminated'];
     const lastWorkGroup = document.getElementById('esLastWorkingDateGroup');
     const lastWorkInput = document.getElementById('esLastWorkingDate');
@@ -22571,7 +22086,6 @@ function initAdmissions() {
       }
     }
 
-    // Suggest default document type based on status
     const docTypeSelect = document.getElementById('esDocType');
     const docTitleInput = document.getElementById('esDocTitle');
     if (docTypeSelect) {
@@ -22602,7 +22116,6 @@ function initAdmissions() {
       }
     }
 
-    // Render Conditional Status-Specific Fields
     const condContainer = document.getElementById('esConditionalContainer');
     if (!condContainer) return;
 
@@ -23025,7 +22538,6 @@ function initAdmissions() {
       noticeEl.className = 'est-date-note text-success';
     }
 
-    // Validate Last Working Date if shown
     const lastWorkInput = document.getElementById('esLastWorkingDate');
     const lastWorkNotice = document.getElementById('esLastWorkingDateNotice');
     if (lastWorkInput && lastWorkNotice && lastWorkInput.value) {
@@ -23045,7 +22557,6 @@ function initAdmissions() {
     if (!input || !input.files || input.files.length === 0) return;
     const file = input.files[0];
 
-    // Validate extension
     const validExtensions = ['.pdf', '.jpg', '.jpeg', '.png'];
     const ext = '.' + file.name.split('.').pop().toLowerCase();
     if (!validExtensions.includes(ext)) {
@@ -23054,7 +22565,6 @@ function initAdmissions() {
       return;
     }
 
-    // Validate file size (5MB max)
     const maxSize = 5 * 1024 * 1024;
     if (file.size > maxSize) {
       showToast('File size exceeds the 5MB statutory limit. Please select a smaller file.', 'error');
@@ -23064,7 +22574,6 @@ function initAdmissions() {
 
     currentEmploymentStatusFile = file;
 
-    // Show attached chip
     const chip = document.getElementById('esAttachedChip');
     const prompt = document.getElementById('esUploadPrompt');
     const nameEl = document.getElementById('esChipFileName');
@@ -23139,13 +22648,11 @@ function initAdmissions() {
       return;
     }
 
-    // Role, Actor & Self-Approval Validation
     const activeRole = sessionStorage.getItem('sv_active_role') || state.currentRole || 'principal';
     const currentUserId = (state.currentUser && state.currentUser.id) || sessionStorage.getItem('sv_active_user_id') || 'SV200001';
     const currentUserName = (state.currentUser && state.currentUser.name) || (activeRole === 'principal' ? 'Smt. Gorle Varalakshmi (Principal)' : 'Sri K. Suryanarayana (HR Admin)');
     const isSelf = member.id === currentUserId;
 
-    // Self-approval enforcement
     let finalActionType = actionType;
     if (isSelf && finalActionType === 'approve') {
       finalActionType = 'submit_for_approval';
@@ -23154,7 +22661,6 @@ function initAdmissions() {
       finalActionType = 'submit_for_approval';
     }
 
-    // High Impact Transition Prompt
     if (['Suspended', 'Terminated'].includes(newStatus) && finalActionType === 'approve') {
       const confirmed = window.confirm(
         `CRITICAL ADMINISTRATIVE ACTION REQUIRED:\n\n` +
@@ -23167,7 +22673,6 @@ function initAdmissions() {
       if (!confirmed) return;
     }
 
-    // Determine transition record status
     const today = new Date();
     today.setHours(0, 0, 0, 0);
     const effDateObj = new Date(effDate);
@@ -23181,7 +22686,6 @@ function initAdmissions() {
       transitionStatus = 'Scheduled';
     }
 
-    // Collect Supporting Document particulars
     const docType = document.getElementById('esDocType')?.value || 'Confirmation Order';
     const docTitle = document.getElementById('esDocTitle')?.value || `${docType} - ${member.name}`;
     const docDate = document.getElementById('esDocDate')?.value || effDate;
@@ -23189,7 +22693,6 @@ function initAdmissions() {
     const docRemarks = document.getElementById('esDocRemarks')?.value || '';
     const approvingAuthority = document.getElementById('esApprovingAuthority')?.value || 'Managing Committee & Principal';
 
-    // Collect Status-Specific Conditional Data
     const condData = {};
     if (newStatus === 'Probation') {
       condData.probStart = document.getElementById('esCondProbStart')?.value || effDate;
@@ -23248,7 +22751,6 @@ function initAdmissions() {
       condData.medicalRef = document.getElementById('esCondOnboardMedical')?.value || '';
     }
 
-    // Build Transition Record
     const transId = `TRN-${new Date().getFullYear()}-${String(Math.floor(100 + Math.random() * 900))}`;
     const previousStatus = member.employmentStatus || member.status || 'Active – Confirmed';
 
@@ -23281,7 +22783,6 @@ function initAdmissions() {
       member.employmentHistory = seedEmploymentHistory(member);
     }
 
-    // If new status is Active, mark previous Active records as Superseded
     if (transitionStatus === 'Active') {
       member.employmentHistory.forEach(r => {
         if (r.transitionStatus === 'Active') r.transitionStatus = 'Superseded';
@@ -23289,7 +22790,6 @@ function initAdmissions() {
       member.employmentStatus = newStatus;
       member.status = newStatus;
 
-      // Handle departure / suspension system actions
       if (['Suspended', 'Terminated', 'Resigned', 'Deceased'].includes(newStatus)) {
         if (!member.userAccount) member.userAccount = {};
         member.userAccount.status = 'Suspended';
@@ -23300,17 +22800,14 @@ function initAdmissions() {
       }
     }
 
-    // Prepend new record to history
     member.employmentHistory.unshift(newTransitionRecord);
 
-    // Save state to localStorage
     try {
       localStorage.setItem('sv_authorized_faculty', JSON.stringify(state.faculty));
     } catch (err) {
       console.warn('Could not serialize faculty to localStorage:', err);
     }
 
-    // Record Immutable Audit Log
     if (state.auditLogs && Array.isArray(state.auditLogs)) {
       state.auditLogs.unshift({
         id: `AUD-${Date.now()}`,
@@ -23325,7 +22822,6 @@ function initAdmissions() {
     closeModal('employmentStatusModal');
     renderStaffGrid(state.faculty);
 
-    // Toast feedback
     if (transitionStatus === 'Active') {
       showToast(`Success: Employment status transitioned to '${newStatus}' for ${member.name} effective ${effDate}.`, 'success');
     } else if (transitionStatus === 'Scheduled') {
@@ -23336,7 +22832,6 @@ function initAdmissions() {
       showToast(`Draft Saved: Transition record ${transId} saved as draft.`, 'info');
     }
 
-    // If dossier is open, refresh dossier
     if (activeTeacherDossierId === member.id) {
       const stBadge = document.getElementById('tdStatusBadge');
       if (stBadge) {
@@ -23370,7 +22865,6 @@ function initAdmissions() {
     if (emptyState) emptyState.style.display = 'none';
 
     tbody.innerHTML = member.employmentHistory.map(r => {
-      // Badge mapping
       let badgeClass = 'badge-status-superseded';
       let badgeIcon = 'fa-clock-rotate-left';
       if (r.transitionStatus === 'Active') {
@@ -23437,7 +22931,6 @@ function initAdmissions() {
     const record = member.employmentHistory.find(r => r.id === transId) || member.employmentHistory[0];
     if (!record) return;
 
-    // Populate Memo Header
     const orderRefEl = document.getElementById('tmOrderRef');
     if (orderRefEl) orderRefEl.textContent = record.orderReference || record.id;
     const orderDateEl = document.getElementById('tmOrderDate');
@@ -23450,7 +22943,6 @@ function initAdmissions() {
       statusEl.className = `td-memo-badge ${record.transitionStatus.toLowerCase().replace(/\s+/g, '-')}`;
     }
 
-    // Populate Employee Particulars
     const empNameEl = document.getElementById('tmEmployeeName');
     if (empNameEl) empNameEl.textContent = member.name;
     const empIdEl = document.getElementById('tmEmployeeId');
@@ -23464,7 +22956,6 @@ function initAdmissions() {
     const folioEl = document.getElementById('tmRecordFolio');
     if (folioEl) folioEl.textContent = `HR-FOLIO-${member.id}-REG`;
 
-    // Populate Transition Scope
     const prevStatusEl = document.getElementById('tmPrevStatus');
     if (prevStatusEl) prevStatusEl.textContent = record.previousStatus;
     const newStatusEl = document.getElementById('tmNewStatus');
@@ -23485,13 +22976,11 @@ function initAdmissions() {
       }
     }
 
-    // Populate Justification & Order Text
     const justEl = document.getElementById('tmJustification');
     if (justEl) {
       justEl.textContent = record.justification || 'Administrative order passed in accordance with AP Educational Institutions service regulations and Managing Committee resolutions.';
     }
 
-    // Populate Conditional Terms
     const condTitle = document.getElementById('tmConditionsTitle');
     const condGrid = document.getElementById('tmConditionsGrid');
     if (condGrid) {
@@ -23515,7 +23004,6 @@ function initAdmissions() {
       }
     }
 
-    // Populate Supporting Evidence Box
     const docTitleEl = document.getElementById('tmDocTitle');
     if (docTitleEl) docTitleEl.textContent = record.attachedFileName || record.docTitle || `Official_Resolution_${record.id}.pdf`;
     const docSubEl = document.getElementById('tmDocSub');
@@ -23523,13 +23011,11 @@ function initAdmissions() {
       docSubEl.textContent = `Type: ${record.docType || 'Statutory Order'} • Ref: ${record.docRefNo || record.orderReference} • Remarks: ${record.docRemarks || 'Ratified & Archival Recorded'}`;
     }
 
-    // Populate Signatories
     const prepEl = document.getElementById('tmSigPrepBy');
     if (prepEl) prepEl.textContent = record.requestedBy || 'Sri K. Suryanarayana';
     const appEl = document.getElementById('tmSigApprBy');
     if (appEl) appEl.textContent = record.approvedBy || 'Managing Committee & Principal';
 
-    // Hash stamp simulation
     const hashEl = document.getElementById('tmHashStamp');
     if (hashEl) {
       const hashSeed = `${record.id}-${member.id}-${record.effectiveDate}`;
@@ -23632,7 +23118,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     }, 350);
   }
 
-  // --- EXIT CLEARANCE WORKFLOW ---
   function openTeacherExitClearanceModal(teacherId) {
     ensureTeachersEnriched();
     const member = findFacultyMember(teacherId);
@@ -23660,7 +23145,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     showToast(`Departmental exit clearances finalized for ${member.name}. Relieving order issued (${ref}). Record moved to archive.`, 'info');
   }
 
-  // --- ACCOUNT INVITATION & ACCESS CONTROL ---
   function generateTeacherAccountInvitation(teacherId) {
     ensureTeachersEnriched();
     if (!teacherId && activeTeacherDossierId) teacherId = activeTeacherDossierId;
@@ -23707,7 +23191,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     downloadCsvFile(csv, 'sri_vidya_faculty_teaching_authoritative_register.csv');
     showToast('Authoritative Faculty Register exported to CSV', 'success');
   }
-
 
   function renderFeeTransactions(list) {
     renderFeeCollection(list);
@@ -23760,7 +23243,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     `).join('');
   }
 
-  // Approvals workflow
   async function handleApproval(id, isApproved, message, category) {
     const decision = isApproved ? 'APPROVED' : 'REJECTED';
     try {
@@ -23807,7 +23289,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
   }
 
   
-  // --- Examination Configurations & Dynamic Marks Engine ---
   const EXAMS_CONFIG = {
     'quarterly-2026': {
       id: 'quarterly-2026',
@@ -23867,7 +23348,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     const exam = EXAMS_CONFIG[examKey] || EXAMS_CONFIG['quarterly-2026'];
     const maxMarks = exam.maxMarks;
 
-    // 1. Check if user or faculty entered and saved marks in localStorage
     let studentStore = {};
     try {
       const raw = localStorage.getItem('srividya_marks_' + (student.admNo || 'SV-0001'));
@@ -23887,7 +23367,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
       };
     }
 
-    // 2. Check if teacher entered mathematics marks in teacher portal
     let teacherMathMarks = null;
     try {
       const tRaw = localStorage.getItem('srividya_teacher_marks_math_ut2');
@@ -23899,11 +23378,9 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
       }
     } catch (e) {}
 
-    // 3. Generate realistic, non-hardcoded marks unique to this student's GPA and admission number
     const gpa = parseFloat(student.gpa) || 8.6;
     const basePct = Math.min(99, Math.max(52, (gpa / 10) * 100));
 
-    // Stable hash based on admission number and student name for realistic subject-level variance
     const seed = ((student.admNo || '').split('').reduce((acc, c) => acc + c.charCodeAt(0), 0) + (student.name || '').length) % 17;
     const subjectOffsets = [
       (seed % 5) - 2,
@@ -23919,7 +23396,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
 
       let scored = Math.round((subjectPct / 100) * maxMarks);
 
-      // If this is Unit Test 2 and teacher entered mathematics marks, use teacher's assigned marks
       if (sub.key === 'math' && examKey === 'unit-test-2' && teacherMathMarks !== null) {
         scored = Math.min(maxMarks, Math.max(0, teacherMathMarks));
         subjectPct = Math.round((scored / maxMarks) * 100);
@@ -24121,7 +23597,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     else if (parseFloat(overallPct) >= 60) performanceStatus = 'Second Class';
     else performanceStatus = 'Satisfactory';
 
-    // Persist to localStorage
     try {
       const storageKey = 'srividya_marks_' + student.admNo;
       const store = JSON.parse(localStorage.getItem(storageKey) || '{}');
@@ -24139,7 +23614,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
       };
       localStorage.setItem(storageKey, JSON.stringify(store));
 
-      // Also recalculate and update student GPA in memory if this is Quarterly/Summative
       if (examKey === 'quarterly-2026' || examKey === 'half-yearly-2026') {
         const newGpa = Math.min(10.0, Math.max(4.0, (parseFloat(overallPct) / 10))).toFixed(1);
         student.gpa = newGpa;
@@ -24151,33 +23625,25 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     closeModal('editStudentMarksModal');
     showToast(`Examination marks for ${student.name} updated and published successfully!`, 'success');
 
-    // Refresh student dossier view if currently open
     state.activeDossierExam = examKey;
     viewStudentProfile(student.admNo);
   }
 
-
-
-  // Note: Student Dossier Modal, Official Dossier Printing, and Intake Wizard
-  // are governed by the authoritative Student Profiles engine above.
   function handleNewStudent(e) {
     if (e && e.preventDefault) e.preventDefault();
     openAddStudentWizard();
   }
 
-  // Universal Search
   function handleUniversalSearch(query) {
     const q = query.toLowerCase().trim();
     if (!q) return;
 
-    // Search students
     const matchedStudent = state.students.find(s => 
       s.name.toLowerCase().includes(q) || 
       s.admNo.toLowerCase().includes(q) || 
       s.phone.includes(q)
     );
 
-    // Search teachers
     const matchedFaculty = state.faculty.find(f => 
       f.name.toLowerCase().includes(q) || 
       f.subject.toLowerCase().includes(q)
@@ -24195,7 +23661,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     }
   }
 
-  // Instant Broadcast Handler
   function handleBroadcast(e) {
     if (e && e.preventDefault) e.preventDefault();
     const subject = (document.getElementById('broadcastSubject')?.value || '').trim();
@@ -24233,7 +23698,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
 
     BROADCAST_FEED_DATA.unshift(newBroadcast);
 
-    // Also mirror to CIRCULARS_DATA if Notice Board was selected
     if (selectedChannels.includes('Notice Board')) {
       CIRCULARS_DATA.unshift({
         ref: newBroadcast.ref,
@@ -24249,7 +23713,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
       renderCircularsTable();
     }
 
-    // Mirror to SMS_LOGS_DATA if SMS selected
     if (selectedChannels.includes('SMS')) {
       SMS_LOGS_DATA.unshift({
         logId: 'SMS-' + Math.floor(849100 + Math.random() * 900),
@@ -24265,7 +23728,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
 
     renderBroadcastFeed();
 
-    // Reset broadcast form
     document.getElementById('broadcastForm')?.reset();
     if (document.getElementById('bcChSms')) document.getElementById('bcChSms').checked = true;
     if (document.getElementById('bcChNotice')) document.getElementById('bcChNotice').checked = true;
@@ -24273,22 +23735,18 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     showToast(`Instant broadcast "${subject}" transmitted across ${selectedChannels.join(', ')}!`, 'success');
   }
 
-  // Fee Reminders Simulation
   function sendFeeReminders() {
     showToast('Dispatched automated SMS & WhatsApp fee payment reminders to 38 defaulters.', 'success');
   }
 
-  // Absentee SMS Simulation
   function triggerAbsenteeSMS() {
     showToast('Sent daily absence notifications to parents of 33 absent students.', 'success');
   }
 
-  // Refresh Dashboard
   function refreshDashboard() {
     showToast('Refreshed live campus metrics and biometric logs.', 'info');
   }
 
-  // Modal helpers
   function openModal(modalId) {
     if (modalId === 'addStudentModal') {
       if (typeof openAddStudentWizard === 'function') {
@@ -24329,7 +23787,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
         }
       }
 
-      // Check if child modal opening on top of another active modal (e.g. ID Card or Transfer on top of Dossier)
       const activeBackdrops = document.querySelectorAll('.modal-backdrop.active, .portal-modal-backdrop.active');
       if (activeBackdrops.length > 0 && modalId !== 'studentDossierModal') {
         let maxZ = 10070;
@@ -24416,12 +23873,10 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     }
   }
 
-  // Settings Save
   function saveSettings() {
     showToast('School profile configuration saved successfully!', 'success');
   }
 
-  // Export to CSV utility
   function exportTableToCSV(tableId, filename) {
     const table = document.getElementById(tableId);
     if (!table) return;
@@ -24430,7 +23885,7 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     const rows = table.querySelectorAll('tr');
     for (let i = 0; i < rows.length; i++) {
       const row = [], cols = rows[i].querySelectorAll('td, th');
-      for (let j = 0; j < cols.length - 1; j++) { // Exclude actions column
+      for (let j = 0; j < cols.length - 1; j++) {
         let data = cols[j].innerText.replace(/(\r\n|\n|\r)/gm, '').replace(/(\s\s+)/g, ' ');
         data = data.replace(/"/g, '""');
         row.push('"' + data + '"');
@@ -24450,12 +23905,10 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     showToast(`Exported ${filename} successfully`, 'success');
   }
 
-  // Toast Notification System (Deduplicated & Cleanly Positioned)
   function showToast(message, type = 'info') {
     const container = document.getElementById('toastContainer');
     if (!container) return;
 
-    // Deduplicate: ignore if an identical message is already visible
     const existing = container.querySelectorAll('.portal-toast');
     for (const t of existing) {
       if (t.innerText && t.innerText.includes(message)) {
@@ -24463,7 +23916,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
       }
     }
 
-    // Limit maximum concurrent toasts to 2
     while (container.children.length >= 2) {
       if (container.firstElementChild && typeof container.firstElementChild.remove === 'function') {
         container.firstElementChild.remove();
@@ -24498,13 +23950,11 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     }, 3500);
   }
 
-  // Discipline Incident Rendering & Management
   function renderDisciplineIncidents(list) {
     const tableBody = document.getElementById('incidentsTableBody');
     const container = document.getElementById('disciplineIncidentsGrid');
     const incidents = list || state.disciplineIncidents || [];
 
-    // Sync badges & stats
     const badgeAll = document.getElementById('tabBadgeDisciplineAll');
     if (badgeAll) badgeAll.textContent = incidents.length;
     const activeBadge = document.getElementById('activeIncidentsBadge');
@@ -24694,7 +24144,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     showToast(`SMS notice and official conference letter dispatched to parent of ${studentName} for Monday meeting with Vice Principal`, 'warning');
   }
 
-  // Substitution Assignment Handler
   function handleAssignSubstitution(e) {
     e.preventDefault();
     const absent = document.getElementById('subAbsentTeacher')?.value;
@@ -24706,9 +24155,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     showToast(`Substitution allocated: ${substitute} assigned to ${period} in place of ${absent}`, 'success');
   }
 
-  // VP Faculty Leave Review Table Rendering
-  // VP Faculty Leave Review Table Rendering
-  // User Requirement: Employee, leave type, dates, balance, reason and approval actions
   function renderVPLeaves(list) {
     const tbody = document.getElementById('vpLeaveTableBody');
     if (!tbody) return;
@@ -25310,10 +24756,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     printWin.document.close();
   }
 
-  // =========================================================================
-  // TABULATION REGISTER (QUARTERLY EXAMINATION 2026)
-  // =========================================================================
-
   const TABULATION_CANDIDATES = [
     { roll: '#1001', name: 'P. Hema Latha', adm: 'SV-0001', t: 98, h: 96, e: 98, m: 100, sci: 99, soc: 97, gpa: 10.0, status: 'Promoted (A1)' },
     { roll: '#1002', name: 'G. Sai Teja', adm: 'SV-0002', t: 95, h: 94, e: 97, m: 99, sci: 98, soc: 96, gpa: 9.8, status: 'Promoted (A1)' },
@@ -25327,12 +24769,11 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     { roll: '#1010', name: 'Y. Manjunath', adm: 'SV-0010', t: 85, h: 84, e: 88, m: 90, sci: 87, soc: 86, gpa: 9.0, status: 'Promoted (A1)' }
   ];
 
-  // Fill up to 35 candidates for Class X-A to perfectly match Screenshot 4
   while (TABULATION_CANDIDATES.length < 35) {
     const idx = TABULATION_CANDIDATES.length + 1;
     const roll = '#10' + String(idx).padStart(2, '0');
     const adm = 'SV-00' + String(idx).padStart(2, '0');
-    const isA1 = idx <= 27; // 27 Achievers Distinction
+    const isA1 = idx <= 27;
     const mBase = isA1 ? 90 + (idx % 8) : 80 + (idx % 8);
     TABULATION_CANDIDATES.push({
       roll: roll,
@@ -25354,9 +24795,9 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     const tbody = document.getElementById('tabulationTableBody');
 
     const totalCandidates = TABULATION_CANDIDATES.length;
-    const passCount = TABULATION_CANDIDATES.length; // 100% pass
+    const passCount = TABULATION_CANDIDATES.length;
     const passRate = 100;
-    const distinctionsCount = TABULATION_CANDIDATES.filter(c => parseFloat(c.gpa) >= 9.0).length; // 27 Achievers
+    const distinctionsCount = TABULATION_CANDIDATES.filter(c => parseFloat(c.gpa) >= 9.0).length;
 
     let sumMarks = 0;
     TABULATION_CANDIDATES.forEach(c => {
@@ -25503,10 +24944,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     `);
     printWin.document.close();
   }
-
-  // =========================================================================
-  // HALL TICKET ISSUER (ADMIT CARDS)
-  // =========================================================================
 
   function openIssueHallTicketsModal() {
     openModal('issueHallTicketsModal');
@@ -25742,10 +25179,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     }, 400);
   }
 
-  // =========================================================================
-  // DISCIPLINE SUBVIEWS (GATE LATE, MERIT AWARDS, PARENT CONVOCATIONS)
-  // =========================================================================
-
   function filterDisciplineIncidents(severity) {
     if (severity === 'all') {
       renderDisciplineIncidents(state.disciplineIncidents);
@@ -25761,7 +25194,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
 
     const records = state.gateLateRecords || [];
 
-    // Sync badges
     const lateBadge = document.getElementById('tabBadgeDisciplineLate');
     if (lateBadge) lateBadge.textContent = records.length;
     const lateTodayCount = document.getElementById('lateArrivalsTodayCount');
@@ -26236,10 +25668,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     }
   }
 
-  // =========================================================================
-  // OFFICIAL QUESTION PAPER BANK & ASSESSMENT GENERATOR (CLASS 9 MATHEMATICS)
-  // =========================================================================
-
   function renderOfficialQuestionPaper() {
     const box = document.getElementById('questionPaperRenderBox');
     if (!box) return;
@@ -26414,10 +25842,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
   function openAddQuestionModal() {
     showToast('Add Custom Examination Question modal initializing...', 'info');
   }
-
-  // =========================================================================
-  // BULK IMPORT, REGISTERS, ATTENDANCE & EXPORT UTILITIES
-  // =========================================================================
 
   function downloadCsvFile(content, filename) {
     let finalContent = content;
@@ -26786,7 +26210,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
       return;
     }
 
-    // Role check: Only Principal or Vice Principal can permanently delete student records!
     if (state.currentRole !== 'principal' && state.currentRole !== 'vice-principal') {
       openModal('deletePermissionRestrictedModal');
       return;
@@ -26851,7 +26274,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     const student = state.students[sIdx];
     const studentName = student.name;
 
-    // 1. Archive permanently deleted student with audit details
     const deletedArchive = JSON.parse(localStorage.getItem('sv_deleted_students_archive') || '[]');
     deletedArchive.unshift({
       admNo: student.admNo,
@@ -26870,7 +26292,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     });
     localStorage.setItem('sv_deleted_students_archive', JSON.stringify(deletedArchive));
 
-    // Also persist into dedicated deletion remarks log
     try {
       const remarksLog = JSON.parse(localStorage.getItem('sv_deletion_remarks_log') || '[]');
       remarksLog.unshift({
@@ -26891,14 +26312,12 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
       localStorage.setItem('sv_deletion_remarks_log', JSON.stringify(remarksLog));
     } catch (e) {}
 
-    // 2. Track deleted admission numbers so they are permanently retired and filtered on reloads
     const deletedAdmNos = JSON.parse(localStorage.getItem('sv_deleted_student_adm_nos') || '[]');
     if (!deletedAdmNos.includes(admNo)) {
       deletedAdmNos.push(admNo);
       localStorage.setItem('sv_deleted_student_adm_nos', JSON.stringify(deletedAdmNos));
     }
 
-    // 3. Mark in sv_withdrawn_students as permanently purged if present
     try {
       const withdrawnList = JSON.parse(localStorage.getItem('sv_withdrawn_students') || '[]');
       let updated = false;
@@ -26915,22 +26334,18 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
       }
     } catch (e) {}
 
-    // 4. Remove from sv_enrolled_students if present
     try {
       const storedEnrolled = JSON.parse(localStorage.getItem('sv_enrolled_students') || '[]');
       const updatedEnrolled = storedEnrolled.filter(s => s.admNo !== admNo);
       localStorage.setItem('sv_enrolled_students', JSON.stringify(updatedEnrolled));
     } catch (e) {}
 
-    // 5. Purge from state.students and window.STUDENT_ROSTER
-    // CRITICAL: NEVER ALTER OR SHIFT ADMISSION NUMBERS OF REMAINING STUDENTS!
     state.students.splice(sIdx, 1);
     if (typeof window !== 'undefined' && Array.isArray(window.STUDENT_ROSTER)) {
       const rIdx = window.STUDENT_ROSTER.findIndex(s => s.admNo === admNo);
       if (rIdx !== -1) window.STUDENT_ROSTER.splice(rIdx, 1);
     }
 
-    // 6. Update badge counters
     const showingEl = document.getElementById('studentShowingCount');
     const totalEl = document.getElementById('studentTotalCount');
     const allBadge = document.getElementById('allStudentsCountBadge');
@@ -26940,7 +26355,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     if (allBadge) allBadge.textContent = state.students.length;
     if (profileBadge) profileBadge.textContent = state.students.length;
 
-    // 7. Dispatch formal audit notification
     addNewNotification(
       'Student Record Permanently Deleted',
       `${studentName} (${admNo}) permanently deleted from school registers by ${executingRoleTitle}. Reason: ${reason}. All remaining students retain their fixed admission numbers.`,
@@ -27102,7 +26516,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     const nonTeachingList = (NON_TEACHING_STAFF_DATA || []).map(nt => Object.assign({}, nt, { isTeaching: false }));
     const fullStaffList = facultyList.concat(nonTeachingList);
 
-    // Filter staff
     const filtered = fullStaffList.filter(s => {
       if (modalStaffCategoryFilter === 'Teaching' && !s.isTeaching) return false;
       if (modalStaffCategoryFilter === 'Non-Teaching' && s.isTeaching) return false;
@@ -27210,7 +26623,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
       }
     });
 
-    // Update punch preview tag
     const previewEl = document.getElementById('modalPunchPreview_' + staffId);
     if (previewEl) {
       if (status === 'Present') {
@@ -27229,7 +26641,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     const nt = (NON_TEACHING_STAFF_DATA || []).find(n => n.id === staffId);
     if (nt) nt.status = status;
 
-    // Refresh summary numbers
     const facultyList = (state.faculty || []).map(f => Object.assign({}, f, { isTeaching: true }));
     const nonTeachingList = (NON_TEACHING_STAFF_DATA || []).map(nt => Object.assign({}, nt, { isTeaching: false }));
     updateModalSummaryCounters(facultyList.concat(nonTeachingList), {}, {});
@@ -28004,10 +27415,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
   }
 
   
-  // ── Missing Interactive Functions for Complete Portal Operation ──────────
-
-
-  // ── Sri Vidya Non-Teaching Staff & Faculty Leaves Interactive Renderers ──────
 
   function getDeptIcon(dept) {
     if (!dept) return 'fa-building';
@@ -28037,10 +27444,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
   }
 
   
-  // =========================================================================
-  // AUTHORITATIVE NON-TEACHING STAFF MODULE (SRI VIDYA E.M. HIGH SCHOOL)
-  // Standard Staff Management Foundation with Administrative / Operational Wings
-  // =========================================================================
 
   let nonTeachingStaffCurrentView = 'table';
   let activeStaffDossierId = null;
@@ -28063,13 +27466,11 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     const totalCadre = all.length;
     const activeToday = all.filter(s => (s.status || 'Active') === 'Active' || (s.status || '') === 'Probation').length;
     
-    // Unique operational departments
     const depts = new Set(all.map(s => s.dept || s.department || 'Administrative Office'));
     const wingsCount = depts.size;
 
     const onLeave = all.filter(s => (s.status || '') === 'On Leave').length;
 
-    // Statutory compliance: staff with all verified documents
     const compliantCount = all.filter(s => {
       const docs = s.documents || [];
       return docs.length >= 4 && docs.every(d => d.status === 'Verified');
@@ -28087,7 +27488,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     setEl('ntStaffOnLeaveCount', onLeave);
     setEl('ntStaffComplianceRate', complianceRate + '%');
 
-    // Count Pill
     const pill = document.getElementById('nonTeachingFilteredCountPill');
     if (pill) {
       pill.textContent = 'Showing ' + list.length + ' of ' + totalCadre + ' Non-Teaching Staff';
@@ -28120,7 +27520,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
       return;
     }
 
-    // Build Table Rows
     let rowsHtml = '';
     data.forEach(staff => {
       const empId = staff.employeeId || staff.id || 'SV-STF-0200';
@@ -28137,7 +27536,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
       const email = staff.email || 'staff@srividya.edu.in';
       const responsibilities = staff.assignedResponsibilities || ['Administrative Support', 'Institutional Operations'];
 
-      // Department badge styling
       let deptColor = '#475569';
       let deptBg = '#f1f5f9';
       let deptIcon = 'fa-building';
@@ -28150,7 +27548,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
       else if (dept.includes('Facilities') || dept.includes('Security')) { deptColor = '#b91c1c'; deptBg = '#fee2e2'; deptIcon = 'fa-shield-halved'; }
       else if (dept.includes('Student')) { deptColor = '#047857'; deptBg = '#d1fae5'; deptIcon = 'fa-hand-holding-heart'; }
 
-      // Account Status Badge
       let accountBadge = '<span class="badge badge-success" style="font-size:0.75rem;"><i class="fa-solid fa-circle-check mr-1"></i> Active</span>';
       if (accountStatus === 'Invited') {
         accountBadge = '<span class="badge badge-warning" style="font-size:0.75rem;"><i class="fa-solid fa-envelope mr-1"></i> Invited</span>';
@@ -28160,7 +27557,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
         accountBadge = '<span class="badge badge-secondary" style="font-size:0.75rem;"><i class="fa-solid fa-circle-minus mr-1"></i> Not Enrolled</span>';
       }
 
-      // Employment Status Badge
       let statusBadge = '<span class="badge badge-success" style="font-size:0.75rem;">Active</span>';
       if (status === 'Probation') {
         statusBadge = '<span class="badge badge-info" style="font-size:0.75rem;">Probation</span>';
@@ -28172,7 +27568,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
         statusBadge = '<span class="badge badge-secondary" style="font-size:0.75rem;">Archived</span>';
       }
 
-      // Responsibilities tags preview (first 2, then +count)
       let respHtml = '';
       const previewResps = responsibilities.slice(0, 2);
       previewResps.forEach(r => {
@@ -28183,13 +27578,11 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
       }
 
       rowsHtml += '<tr data-staff-id="' + empId + '">' +
-        // 1. Employee ID
         '<td>' +
           '<div style="display:flex; align-items:center; gap:6px;">' +
             '<span class="teacher-id-badge">' + empId + '</span>' +
           '</div>' +
         '</td>' +
-        // 2. Staff Name
         '<td>' +
           '<div style="display:flex; align-items:center; gap:10px;">' +
             '<div style="width:36px; height:36px; border-radius:50%; background:linear-gradient(135deg, #1e3a8a, #3b82f6); color:#fff; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:0.85rem; flex-shrink:0;">' +
@@ -28205,43 +27598,36 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
             '</div>' +
           '</div>' +
         '</td>' +
-        // 3. Department
         '<td>' +
           '<span class="badge" style="background:' + deptBg + '; color:' + deptColor + '; font-size:0.8rem; padding:5px 9px; font-weight:600; display:inline-flex; align-items:center; gap:5px; border-radius:6px;">' +
             '<i class="fa-solid ' + deptIcon + '"></i> ' + dept +
           '</span>' +
         '</td>' +
-        // 4. Designation & Shift
         '<td>' +
           '<div style="font-weight:600; font-size:0.88rem; color:#1e293b;">' + designation + '</div>' +
           '<div style="font-size:0.76rem; color:#64748b; margin-top:3px; display:inline-flex; align-items:center; gap:4px; background:#f8fafc; padding:2px 6px; border-radius:4px; border:1px solid #e2e8f0;">' +
             '<i class="fa-solid fa-clock" style="font-size:0.7rem; color:#94a3b8;"></i> ' + shift +
           '</div>' +
         '</td>' +
-        // 5. Reporting Manager
         '<td>' +
           '<div class="staff-manager-pill">' +
             '<i class="fa-solid fa-sitemap mr-1" style="color:#2563eb;"></i>' +
             '<span style="font-weight:600;">' + reportingManager + '</span>' +
           '</div>' +
         '</td>' +
-        // 6. Assigned Responsibilities
         '<td>' +
           '<div style="min-width:240px; max-width:320px; display:flex; flex-direction:column; gap:4px;">' + respHtml + '</div>' +
         '</td>' +
-        // 7. Joining Date & Employment Type
         '<td>' +
           '<div style="font-weight:600; font-size:0.84rem; color:#334155;">' + joinDate + '</div>' +
           '<div style="font-size:0.76rem; color:#64748b; margin-top:2px;">' + empType + '</div>' +
         '</td>' +
-        // 8. Account & Status
         '<td>' +
           '<div style="display:flex; flex-direction:column; gap:4px; align-items:flex-start;">' +
             accountBadge +
             statusBadge +
           '</div>' +
         '</td>' +
-        // 9. Actions
         '<td class="text-right">' +
           '<div class="dropdown d-inline-block">' +
             '<button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="font-size:0.82rem; padding:3px 8px;">' +
@@ -28263,7 +27649,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
 
     tbody.innerHTML = rowsHtml;
 
-    // Build Cards View
     if (cardsContainer) {
       let cardsHtml = '';
       data.forEach(staff => {
@@ -28336,7 +27721,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
       const designation = (staff.role || staff.designation || '').toLowerCase();
       const duties = (staff.assignedResponsibilities || []).join(' ').toLowerCase();
 
-      // Search match
       const matchesQuery = !query ||
         empId.includes(query) ||
         name.includes(query) ||
@@ -28344,11 +27728,9 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
         designation.includes(query) ||
         duties.includes(query);
 
-      // Dept match
       const staffDept = staff.dept || staff.department || '';
       const matchesDept = (dept === 'all') || (staffDept === dept);
 
-      // Status match
       const staffStatus = staff.status || 'Active';
       const matchesStatus = (status === 'all') || (staffStatus === status);
 
@@ -28392,7 +27774,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     ensureNonTeachingStaffState();
     const all = state.nonTeachingStaff || [];
     
-    // Generate next policy employee ID: SV-STF-02XX
     let nextNum = 201;
     all.forEach(s => {
       const match = (s.employeeId || s.id || '').match(/SV-STF-(\d+)/);
@@ -28513,7 +27894,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
 
     activeStaffDossierId = staff.id || staff.employeeId;
 
-    // Header info
     const nameEl = document.getElementById('staffDetailModalName');
     if (nameEl) nameEl.textContent = staff.name;
 
@@ -28526,7 +27906,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     const statusEl = document.getElementById('staffDetailModalStatus');
     if (statusEl) statusEl.textContent = staff.status || 'Active';
 
-    // TAB 1: Profile & Particulars
     const setT1 = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
     setT1('stDetailFullName', staff.name);
     setT1('stDetailGender', staff.gender || 'Not Specified');
@@ -28540,14 +27919,12 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     setT1('stDetailEmpType', staff.employmentType || 'Permanent (Full Time)');
     setT1('stDetailQualifications', staff.qualification || staff.qualifications || 'Graduate');
 
-    // TAB 2: Department & Reporting Hierarchy
     setT1('stDetailDeptWing', staff.dept || staff.department || 'Administrative Office');
     setT1('stDetailDesignation', staff.role || staff.designation || 'Staff Member');
     setT1('stDetailReportingManager', staff.reportingManager || 'Principal Smt. Gorle Varalakshmi');
     setT1('stDetailOfficeLocation', staff.workstation || 'Central Administrative Wing, Ground Floor');
     setT1('stDetailShiftHours', staff.shift || '08:00 AM - 04:30 PM (Main Office)');
 
-    // TAB 3: Assigned Operational Responsibilities
     const respContainer = document.getElementById('stDetailResponsibilitiesList');
     if (respContainer) {
       const responsibilities = staff.assignedResponsibilities || ['Administrative and operational duties as assigned.'];
@@ -28566,7 +27943,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
       respContainer.innerHTML = html;
     }
 
-    // TAB 4: Statutory Documents
     const docsContainer = document.getElementById('stDetailDocumentsTbody');
     if (docsContainer) {
       const docs = staff.documents || [
@@ -28589,7 +27965,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
       docsContainer.innerHTML = dHtml;
     }
 
-    // TAB 5: Biometric Attendance & Shift Hours
     const att = staff.attendance || { presentDays: 25, workingDays: 26, rate: '96.2%', punctuality: '98.5%', biometricId: 'BIO-049', lastPunch: 'Today at 07:54 AM' };
     setT1('stDetailBiometricId', att.biometricId);
     setT1('stDetailPresentDays', att.presentDays + ' / ' + att.workingDays + ' Days');
@@ -28597,21 +27972,18 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     setT1('stDetailPunctuality', att.punctuality);
     setT1('stDetailLastPunch', att.lastPunch);
 
-    // TAB 6: Leave Balances
     const lev = staff.leave || { casualBalance: 8, medicalBalance: 10, earnedBalance: 14, takenThisYear: 2 };
     setT1('stDetailCasualLeave', lev.casualBalance + ' Days Available');
     setT1('stDetailMedicalLeave', lev.medicalBalance + ' Days Available');
     setT1('stDetailEarnedLeave', lev.earnedBalance + ' Days Available');
     setT1('stDetailTakenLeave', (lev.takenThisYear || 2) + ' Days Availed this Academic Year');
 
-    // TAB 7: Portal Account & Audit Log
     const accStatus = staff.accountStatus || 'Active';
     setT1('stDetailAccountStatus', accStatus);
     setT1('stDetailPortalUsername', staff.email || (staff.id.toLowerCase() + '@srividya.edu.in'));
     setT1('stDetailPortalAuth', 'Institutional Google Workspace SSO / Two-Factor Authentication');
     setT1('stDetailAccessScope', 'Operational Role: ' + (staff.role || staff.designation) + ' (Restricted by Department Scope)');
 
-    // Switch to first tab by default
     switchStaffDetailTab('tab-staff-profile');
 
     openModal('staffDetailModal');
@@ -28743,7 +28115,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
   }
 
   function openEditStaffModal(staffId) {
-    // Open dossier in edit-accessible mode or assign department
     openAssignStaffDepartmentModal(staffId);
   }
 
@@ -28794,17 +28165,10 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     showToast('Export Complete', 'Exported ' + list.length + ' staff records to official CSV register.', 'success');
   }
 
-  // Aliases for compatibility
   function exportStaffCSV() { exportNonTeachingStaffCSV(); }
   function printStaffTable() { window.print(); }
   function assignStaffShift(id) { openAssignStaffDepartmentModal(id); }
   function openStaffDossier(id) { openStaffDetailModal(id); }
-
-
-    // =========================================================================
-  // AUTHORITATIVE LEAVE REQUESTS & LEAVE HISTORY MODULE CONTROLLER
-  // Sri Vidya E.M. High School - Standard Leave & Substitution System
-  // =========================================================================
 
   let leaveCurrentViewMode = 'table';
 
@@ -28814,7 +28178,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
       state.staffLeaveBalances = {};
     }
 
-    // Build balances for all 42 staff if not yet populated
     const facultyList = (state.faculty || []).map(f => ({
       id: f.employeeId || f.id,
       name: f.name,
@@ -28961,7 +28324,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
           const decision = req.decision;
           const remarks = req.remarks || '-';
 
-          // Status Badge
           let statusBadge = '<span class="leave-status-pending"><i class="fa-solid fa-clock mr-1"></i> Pending Sign-off</span>';
           if (decision === 'Approved') {
             statusBadge = '<span class="leave-status-approved"><i class="fa-solid fa-circle-check mr-1"></i> Approved</span>';
@@ -28973,7 +28335,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
             statusBadge = '<span class="leave-status-cancelled"><i class="fa-solid fa-ban mr-1"></i> Cancelled</span>';
           }
 
-          // Substitute tag
           let subHtml = '<span class="text-muted" style="font-size:0.78rem;">None Required</span>';
           if (req.hasSubstitute && subName) {
             subHtml = '<div>' +
@@ -28982,16 +28343,13 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
             '</div>';
           }
 
-          // Doc display
           let docHtml = '';
           if (doc) {
             docHtml = '<div style="margin-top:3px;"><span class="badge badge-light" style="font-size:0.73rem; background:#f1f5f9; color:#0369a1; border:1px solid #bae6fd;"><i class="fa-solid fa-paperclip mr-1"></i>' + doc + '</span></div>';
           }
 
           rowsHtml += '<tr data-leave-id="' + req.id + '">' +
-            // 1. Leave ID
             '<td><span class="leave-id-badge">' + req.id + '</span></td>' +
-            // 2. Staff Member
             '<td>' +
               '<div class="faculty-name-cell">' +
                 '<div class="faculty-avatar-circle">' +
@@ -29003,30 +28361,22 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
                 '</div>' +
               '</div>' +
             '</td>' +
-            // 3. Department
             '<td><span class="faculty-dept-badge"><i class="fa-solid fa-building-columns mr-1"></i> ' + dept + '</span></td>' +
-            // 4. Leave Type
             '<td><span class="subject-pill font-weight-bold" style="white-space:nowrap;">' + type + '</span></td>' +
-            // 5. Dates & Duration
             '<td>' +
               '<div style="font-weight:600; font-size:0.84rem; color:#1e293b; white-space:nowrap;"><i class="fa-regular fa-calendar mr-1 text-muted"></i> ' + dates + '</div>' +
               '<div style="font-size:0.76rem; color:#2563eb; font-weight:700; margin-top:2px;">' + duration + '</div>' +
             '</td>' +
-            // 6. Reason & Document
             '<td>' +
               '<div style="max-width:240px; font-size:0.82rem; color:#334155; line-height:1.45;">' + reason + '</div>' +
               docHtml +
             '</td>' +
-            // 7. Substitute Arrangements
             '<td>' + subHtml + '</td>' +
-            // 8. Approver
             '<td><div style="font-size:0.83rem; font-weight:600; color:#1e293b;"><i class="fa-solid fa-user-check mr-1 text-muted"></i> ' + approver + '</div></td>' +
-            // 9. Status & Remarks
             '<td>' +
               '<div style="white-space:nowrap;">' + statusBadge + '</div>' +
               (remarks && remarks !== '-' ? '<div style="font-size:0.74rem; color:#64748b; margin-top:4px; max-width:180px; line-height:1.35;">' + remarks + '</div>' : '') +
             '</td>' +
-            // 10. Actions (Enterprise ERP Leave Row Actions)
             '<td class="text-center">' +
               '<div class="leave-actions-cell">' +
                 (decision === 'Pending Sign-off' ?
@@ -29080,7 +28430,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
       }
     }
 
-    // Populate Pending Cards View
     if (cardsContainer) {
       const pendingCards = allRequests.filter(r => r.decision === 'Pending Sign-off');
       if (pendingCards.length === 0) {
@@ -29144,7 +28493,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
       }
     }
 
-    // Populate Cadre Leave Balances Table
     if (balancesTbody) {
       const facultyList = (state.faculty || []).map(f => ({ id: f.employeeId || f.id, name: f.name, department: f.department || 'Faculty' }));
       const nonTeachingList = (state.nonTeachingStaff || NON_TEACHING_STAFF_DATA || []).map(nt => ({ id: nt.employeeId || nt.id, name: nt.name, department: nt.dept || nt.department || 'Staff' }));
@@ -29154,9 +28502,7 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
       allCadre.forEach(s => {
         const bal = state.staffLeaveBalances[s.id] || { casualBalance: 8, medicalBalance: 10, earnedBalance: 14, availedThisYear: 2 };
         balHtml += '<tr>' +
-          // 1. Employee ID
           '<td><span class="leave-id-badge">' + s.id + '</span></td>' +
-          // 2. Staff Member
           '<td>' +
             '<div class="faculty-name-cell">' +
               '<div class="faculty-avatar-circle">' +
@@ -29167,17 +28513,11 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
               '</div>' +
             '</div>' +
           '</td>' +
-          // 3. Department
           '<td><span class="faculty-dept-badge"><i class="fa-solid fa-building-columns mr-1"></i> ' + s.department + '</span></td>' +
-          // 4. Casual Leave (CL)
           '<td style="text-align:center;"><span class="leave-bal-pill"><i class="fa-solid fa-calendar-check mr-1 text-primary"></i> ' + bal.casualBalance + ' / 12 Days</span></td>' +
-          // 5. Medical Leave (ML)
           '<td style="text-align:center;"><span class="leave-bal-pill"><i class="fa-solid fa-heart-pulse mr-1 text-primary"></i> ' + bal.medicalBalance + ' / 12 Days</span></td>' +
-          // 6. Earned Leave (EL)
           '<td style="text-align:center;"><span class="leave-bal-pill"><i class="fa-solid fa-briefcase mr-1 text-primary"></i> ' + bal.earnedBalance + ' / 15 Days</span></td>' +
-          // 7. Availed This Year
           '<td style="text-align:center;"><span class="badge badge-light font-weight-bold" style="font-size:0.8rem; color:#2563eb; background:#eff6ff; border:1px solid #bfdbfe; padding:4px 10px; border-radius:6px; white-space:nowrap;"><i class="fa-solid fa-clock-rotate-left mr-1"></i> ' + bal.availedThisYear + ' Days</span></td>' +
-          // 8. Action
           '<td style="text-align:center;"><button class="btn btn-sm btn-outline-primary" style="height:32px; border-radius:6px; font-size:0.8rem; font-weight:600; padding:0 12px; display:inline-flex; align-items:center; gap:5px;" onclick="portalApp.openStaffLeaveLedger(\'' + s.id + '\')"><i class="fa-solid fa-eye"></i> View</button></td>' +
         '</tr>';
       });
@@ -29365,7 +28705,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
       return;
     }
 
-    // Days difference inclusive
     const diffTime = Math.abs(end - start);
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
 
@@ -29392,7 +28731,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     ensureStaffLeaveState();
     const requests = state.leaveRequests || [];
 
-    // Check overlap with existing approved or pending requests for same staff
     const reqStart = new Date(sDate);
     const reqEnd = new Date(eDate);
 
@@ -29434,7 +28772,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
   function openSubmitLeaveRequestModal() {
     populateSubmitLeaveModalDropdowns();
 
-    // Default dates: tomorrow to day after tomorrow
     const today = new Date();
     const tomorrow = new Date(today);
     tomorrow.setDate(tomorrow.getDate() + 1);
@@ -29478,12 +28815,10 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     const diffDays = Math.ceil(Math.abs(end - start) / (1000 * 60 * 60 * 24)) + 1;
     const durationStr = diffDays + (diffDays === 1 ? ' Day' : ' Days');
 
-    // Medical leave check: if > 2 days, doctor certificate recommended/mandatory
     if (leaveType === 'Medical Leave' && diffDays > 2 && !doc) {
       showToast('Document Requirement', 'Policy Notice: Medical leave exceeding 2 days requires a medical certificate.', 'warning');
     }
 
-    // Lookup staff info
     let staffName = 'Staff Member';
     let dept = 'Administrative Office';
     let isTeaching = false;
@@ -29501,7 +28836,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
       }
     }
 
-    // Lookup substitute info
     let subName = null;
     if (hasSub && subId) {
       const subFac = (state.faculty || []).find(f => (f.employeeId || f.id) === subId);
@@ -29636,14 +28970,12 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
         req.remarks = remarks || action;
         req.reviewedAt = new Date().toISOString();
 
-        // Update staff status
         const facultyMember = (state.faculty || []).find(f => (f.employeeId === req.employeeId || f.id === req.employeeId || f.name === req.employeeName));
         if (facultyMember) {
           facultyMember.status = (action === 'Approved') ? 'On Leave' : 'Active';
         }
       }
 
-      // Add notification for staff dashboard
       if (!state.notifications) state.notifications = [];
       state.notifications.unshift({
         id: 'NOTIF-' + Date.now(),
@@ -29671,7 +29003,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     if (!req) return;
 
     if (confirm('Cancel leave request ' + req.id + ' for ' + req.employeeName + ' according to policy? If previously approved, deducted leave days will be restored to available balance.')) {
-      // If was approved, restore balance
       if (req.decision === 'Approved') {
         const bal = state.staffLeaveBalances[req.employeeId];
         if (bal) {
@@ -29768,7 +29099,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     showToast('Export Complete', 'Exported ' + list.length + ' leave records to official CSV register.', 'success');
   }
 
-  // Compatibility aliases
   function handleLeaveDecision(id, action) { openLeaveDecisionModal(id, action); }
   function revertLeaveStatus(id) { cancelLeaveRequest(id); }
   function openApplyTeacherLeaveModal() { openSubmitLeaveRequestModal(); }
@@ -29780,17 +29110,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     }
   }
 
-  // =========================================================================
-  // MODULE 13: EVENTS, CALENDAR & EXTRACURRICULAR ACTIVITIES ENGINE
-  // =========================================================================
-  // Comprehensive institutional management of:
-  // 13.1 Annual Calendar (Date, Event/holiday, Category, Applicable classes, Location, Published status)
-  // 13.2 School Events (10 Fields: Event name, Description, Organizer, Date/time, Venue, Expected participants, Budget, Required permissions, Safety arrangements, Status)
-  // 13.3 Competitions (Competition, Eligible classes, Registration deadline, Participants, Coordinator, Results, Certificates)
-  // 13.4 Clubs & Sports (Club or sport, Coordinator, Members, Schedule, Venue, Attendance, Activities, Achievements)
-  // =========================================================================
-
-  // 13.1 Annual Calendar Dataset
   let ANNUAL_CALENDAR_DATA = [
     {
       id: 'AC-01',
@@ -29926,7 +29245,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     }
   ];
 
-  // 13.2 School Events Dataset (All 10 Fields)
   let SCHOOL_EVENTS_DATA = [
     {
       id: 'SE-01',
@@ -30015,7 +29333,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     }
   ];
 
-  // 13.3 Competitions Dataset
   let COMPETITIONS_DATA = [
     {
       id: 'CMP-01',
@@ -30079,7 +29396,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     }
   ];
 
-  // 13.4 Clubs & Sports Dataset
   let CLUBS_SPORTS_DATA = [
     {
       id: 'CS-01',
@@ -30143,10 +29459,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     }
   ];
 
-  // =========================================================================
-  // 13.1 ANNUAL CALENDAR CONTROLLERS
-  // =========================================================================
-
   function renderAnnualCalendar(filterQuery) {
     const tbody = document.getElementById('annualCalendarTableBody');
     if (!tbody) return;
@@ -30172,7 +29484,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
       items = items.filter(i => i.category.toLowerCase() === cat.toLowerCase());
     }
 
-    // Update tab badge count
     const badge = document.getElementById('tabBadgeEventsCalendar');
     if (badge) badge.textContent = items.length;
 
@@ -30386,10 +29697,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     }, 800);
   }
 
-  // =========================================================================
-  // 13.2 SCHOOL EVENTS CONTROLLERS (10 MANDATORY FIELDS)
-  // =========================================================================
-
   function renderSchoolEventsTable(filterQuery) {
     const tbody = document.getElementById('schoolEventsTableBody');
     if (!tbody) return;
@@ -30416,7 +29723,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
       items = items.filter(e => e.status.toLowerCase() === st.toLowerCase());
     }
 
-    // Update tab badge count
     const badge = document.getElementById('tabBadgeEventsSchool');
     if (badge) badge.textContent = items.length;
 
@@ -30668,10 +29974,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     showToast(`Official post-event report for "${ev.name}" archived with status: ${outcome}!`, 'success');
   }
 
-  // =========================================================================
-  // 13.3 COMPETITIONS CONTROLLERS
-  // =========================================================================
-
   function renderCompetitionsTable(filterQuery) {
     const tbody = document.getElementById('competitionsTableBody');
     if (!tbody) return;
@@ -30696,7 +29998,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
       items = items.filter(c => c.eligibleClasses.toLowerCase().includes(cl.toLowerCase()));
     }
 
-    // Update tab badge count
     const badge = document.getElementById('tabBadgeEventsCompetitions');
     if (badge) badge.textContent = items.length;
 
@@ -30900,10 +30201,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     openModal('generateCertificatesModal');
   }
 
-  // =========================================================================
-  // 13.4 CLUBS & SPORTS CONTROLLERS
-  // =========================================================================
-
   function renderClubsSportsTable(filterQuery) {
     const tbody = document.getElementById('clubsSportsTableBody');
     if (!tbody) return;
@@ -30929,7 +30226,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
       items = items.filter(c => c.club.toLowerCase().includes(tf.toLowerCase()));
     }
 
-    // Update tab badge count
     const badge = document.getElementById('tabBadgeEventsClubs');
     if (badge) badge.textContent = items.length;
 
@@ -31170,7 +30466,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     openPublishClubAchievementModal(id);
   }
 
-  // Supporting legacy wrappers
   function renderSchoolEvents() { renderSchoolEventsTable(); }
   function renderCompetitionEvents() { renderCompetitionsTable(); }
   function renderClubActivities() { renderClubsSportsTable(); }
@@ -31184,12 +30479,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
   function exportEventReportCSV() { showToast('Exporting event report CSV...', 'info'); }
   function openEventDetailsModal() {}
   function openRegisterCompModal(id) { openRegisterCompParticipantsModal(id); }
-
-  // =========================================================================
-  // MODULE 14: TRANSPORT & FACILITIES DATASETS & ENGINES
-  // AP Motor Vehicles Department (MVD) & School Bus Transit Safety Norms
-  // Logistics In-charge: Sri P. Appa Rao (NT-107), Executive Sanction: Principal Smt. Gorle Varalakshmi
-  // =========================================================================
 
   const TRANSPORT_ROUTES_DATA = [
     {
@@ -31951,10 +31240,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     }
   ];
 
-  // =========================================================================
-  // SECTION 14.1: ROUTES & STOPS CONTROLLERS
-  // =========================================================================
-
   function renderTransportRoutesTable() {
     const tbody = document.getElementById('transportRoutesTableBody');
     if (!tbody) return;
@@ -32218,10 +31503,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     }
   }
 
-  // =========================================================================
-  // SECTION 14.2: VEHICLES CONTROLLERS
-  // =========================================================================
-
   function renderTransportVehiclesTable() {
     const tbody = document.getElementById('transportVehiclesTableBody');
     if (!tbody) return;
@@ -32441,10 +31722,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     openTransportDossierModal(regNo, 'vehicle');
   }
 
-  // =========================================================================
-  // SECTION 14.3: DRIVERS & ATTENDANTS CONTROLLERS
-  // =========================================================================
-
   function renderTransportDriversTable() {
     const tbody = document.getElementById('transportDriversTableBody');
     if (!tbody) return;
@@ -32602,10 +31879,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
   function viewDriverDutyHistory(empId) {
     openTransportDossierModal(empId, 'driver');
   }
-
-  // =========================================================================
-  // SECTION 14.4: TRANSPORT ALLOCATION CONTROLLERS
-  // =========================================================================
 
   function renderTransportAllocationsTable() {
     const tbody = document.getElementById('transportAllocationsTableBody');
@@ -32807,10 +32080,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
       showToast('Guardian Notified', 'SMS and App Alert delivered to ' + a.parentName + ' (' + a.parentPhone + ') with live bus tracking and morning pickup window (' + a.pickupTime + ').', 'success');
     }
   }
-
-  // =========================================================================
-  // SECTION 14.5: MAINTENANCE & SAFETY CONTROLLERS
-  // =========================================================================
 
   function renderTransportMaintenanceTable() {
     const tbody = document.getElementById('transportMaintenanceTableBody');
@@ -33036,10 +32305,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     showToast('Inspection Scheduled', 'Official safety inspection booked for ' + asset + ' on ' + date + ' with ' + inspector + '.', 'success');
   }
 
-  // =========================================================================
-  // SECTION 14.6: SAFETY AUDIT CONTROLLERS & SHARED SUITE UTILITIES
-  // =========================================================================
-
   function renderTransportSafetyTable() {
     const tbody = document.getElementById('transportSafetyTableBody');
     if (!tbody) return;
@@ -33100,7 +32365,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
   }
 
   function handleTransportModalCategoryChange() {
-    // Dynamic tab routing
   }
 
   function handleNewTransportSubmit(e) {
@@ -33326,11 +32590,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
   }
 
   
-  // =========================================================================
-  // MODULE 15: INVENTORY & ASSETS DATASETS & ENGINES
-  // AP Educational Institutions Capital Asset & Material Governance Protocol
-  // Store & Estate In-charge: Sri P. Appa Rao (NT-107), Executive Sanction: Principal Smt. Gorle Varalakshmi
-  // =========================================================================
 
   const INVENTORY_ASSETS_DATA = [
     {
@@ -33935,10 +33194,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     }
   ];
 
-  // =========================================================================
-  // SECTION 15.1: ASSET REGISTER CONTROLLERS
-  // =========================================================================
-
   function renderInventoryAssetsTable() {
     const tbody = document.getElementById('inventoryAssetsTableBody');
     if (!tbody) return;
@@ -34183,10 +33438,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
   function viewAssetHistory(assetId) {
     openInventoryDossierModal(assetId, 'asset');
   }
-
-  // =========================================================================
-  // SECTION 15.2: STOCK MANAGEMENT CONTROLLERS
-  // =========================================================================
 
   function renderInventoryStockTable() {
     const tbody = document.getElementById('inventoryStockTableBody');
@@ -34445,10 +33696,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     showToast('Stock Report Exported', 'Exported stock inventory report to CSV.', 'success');
   }
 
-  // =========================================================================
-  // SECTION 15.3: PURCHASE REQUESTS CONTROLLERS
-  // =========================================================================
-
   function renderInventoryPurchasesTable() {
     const tbody = document.getElementById('inventoryPurchasesTableBody');
     if (!tbody) return;
@@ -34687,10 +33934,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     showToast('Purchase Indents Exported', 'Exported purchase requisitions and procurement log to CSV.', 'success');
   }
 
-  // =========================================================================
-  // SECTION 15.4: VENDORS CONTROLLERS
-  // =========================================================================
-
   function renderInventoryVendorsTable() {
     const tbody = document.getElementById('inventoryVendorsTableBody');
     if (!tbody) return;
@@ -34901,10 +34144,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
       showToast('Vendor Deactivated', v.name + ' deactivated from procurement panel: ' + r, 'warning');
     }
   }
-
-  // =========================================================================
-  // SECTION 15.5: ISSUE, RETURN & MAINTENANCE CONTROLLERS
-  // =========================================================================
 
   function renderInventoryIssueReturnTable() {
     const tbody = document.getElementById('inventoryIssueReturnTableBody');
@@ -35221,7 +34460,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     showToast('Issue/Return Log Exported', 'Exported equipment handover and return log to CSV.', 'success');
   }
 
-
   function filterFaculty(val) {
     const q = (typeof val === 'string' ? val : (document.getElementById('facultyFilterInput')?.value || '')).toLowerCase().trim();
     const dept = (document.getElementById('facultyDeptFilter')?.value || '').toLowerCase().trim();
@@ -35233,8 +34471,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
       card.style.display = (matchQ && matchDept) ? '' : 'none';
     });
   }
-
-  // Duplicate removed; filterNonTeachingStaff is handled by master renderer
 
   function handleStaffCsvFileUpload(e) {
     const file = e && e.target && e.target.files && e.target.files[0];
@@ -35374,8 +34610,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
       r.style.display = (!dept || dept === 'all' || txt.includes(dept)) ? '' : 'none';
     });
   }
-
-  // ── Sri Vidya Fee Visual Analytics & Chart Engines ──────────────────────────
 
   let feeMonthlyTrendChartInst = null;
   let feeStreamBreakdownChartInst = null;
@@ -35822,7 +35056,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     const phone = document.getElementById('tfPhone')?.value || '9848011223';
     const personalEmail = document.getElementById('tfEmail')?.value || (name.toLowerCase().replace(/[^a-z]/g, '') + '@gmail.com');
 
-    // Generate sequential School Teacher ID (SV200001+)
     let maxNum = 200000;
     state.faculty.forEach(f => {
       const match = f.id ? f.id.match(/SV(\d+)/) : null;
@@ -35854,12 +35087,10 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
 
     state.faculty.push(newTeacher);
 
-    // Save to persistent storage for teacher verification
     try {
       localStorage.setItem('sv_authorized_faculty', JSON.stringify(state.faculty));
     } catch (e) {}
 
-    // Dispatch email log
     if (typeof EMAIL_LOGS_DATA !== 'undefined') {
       EMAIL_LOGS_DATA.unshift({
         emailId: 'EML-' + Math.floor(94050 + Math.random() * 800),
@@ -35883,7 +35114,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
 
     closeModal('addTeacherModal');
 
-    // Show Credential Issued Receipt Modal
     const modalContent = document.getElementById('teacherCredentialIssuedContent');
     if (modalContent) {
       modalContent.innerHTML = `
@@ -36024,8 +35254,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     if (absEl) absEl.textContent = absent;
   }
 
-  // Duplicate handleSaveSingleStaffAttendance removed; authoritative version implemented in Staff Attendance module.
-
   function handleStatusSelectChange(val) {
     const reasonBox = document.getElementById('statusChangeReasonGroup');
     if (reasonBox) {
@@ -36036,8 +35264,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
       punchesRow.style.display = (val === 'Absent' || val === 'Leave') ? 'none' : 'flex';
     }
   }
-
-  // Legacy handleScheduleExamSubmit replaced by comprehensive Exam Schedule engine below
 
   function handleAcademicCsvFile(file) {
     if (file) {
@@ -36275,12 +35501,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     }
   }
 
-  // =========================================================================
-  // SRI VIDYA HIGH SCHOOL - DYNAMIC SUBVIEW DATASETS & RENDERERS
-  // =========================================================================
-
-  // Student Leave Requests Rendering
-  // User Requirement: Student, class, guardian, dates, reason and approval status
   function renderStudentLeaves(data) {
     const list = data || STUDENT_LEAVES_DATA;
     const tbody = document.getElementById('studentLeavesTableBody');
@@ -36992,8 +36212,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     window.print();
   }
 
-  // Leave Calendar Rendering
-  // User Requirement: Staff absences, substitute requirements and overlapping leave
   function renderLeaveCalendar() {
     const tbody = document.getElementById('leaveCalendarTableBody');
     if (!tbody) return;
@@ -37001,7 +36219,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     const weekData = state.leaveCalendar || [];
 
     tbody.innerHTML = weekData.map(day => {
-      // Absences cell
       let absencesHtml = '';
       if (!day.absences || day.absences.length === 0) {
         absencesHtml = '<div style="color: #059669; font-weight: 600; font-size: 0.82rem;"><i class="fa-solid fa-circle-check mr-1"></i> Zero Absences (Full Strength)</div>';
@@ -37017,7 +36234,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
         `).join('');
       }
 
-      // Substitutes cell
       let subsHtml = '';
       if (!day.substitutes || day.substitutes.length === 0) {
         subsHtml = '<div style="color: #64748b; font-size: 0.82rem;">Regular Timetable Active</div>';
@@ -37037,7 +36253,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
         `).join('');
       }
 
-      // Overlap cell
       let overlapBadgeCls = 'badge-success';
       let overlapBorderColor = '#10b981';
       let overlapBg = '#f0fdf4';
@@ -37087,10 +36302,7 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     showToast(offset > 0 ? 'Viewing next week scheduled leave roster' : 'Viewing previous week archived leave roster', 'info');
   }
 
-  // Leave Policy Rendering
-  // User Requirement: Leave types, eligibility, limits and approval rules
   function renderLeavePolicy() {
-    // Subview 5 policy is static interactive DOM
   }
 
   function printLeavePolicyDoc() {
@@ -37337,7 +36549,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
       });
     }
 
-    // Deterministic balanced quotas for all 30 staff members
     tbody.innerHTML = filtered.map((s, idx) => {
       const clTotal = 12;
       const mlTotal = 10;
@@ -37381,7 +36592,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     }).join('');
   }
 
-  // Universal Filter wrappers for Leave Desk
   function filterStudentLeaveSlips() {
     const q = (document.getElementById('studentLeaveSearch')?.value || document.getElementById('studentLeaveSearchInput')?.value || '').toLowerCase().trim();
     const cls = (document.getElementById('studentLeaveClassFilter')?.value || 'all').toLowerCase().trim();
@@ -37419,10 +36629,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     if (!teacher) return;
     alert(`SRI VIDYA E.M HIGH SCHOOL • STAFF ATTENDANCE & LEAVE AUDIT\n------------------------------------------------------------\nStaff Member: ${teacher.name}\nRole: ${teacher.role}\nDepartment: ${teacher.subject}\nQualifications: ${teacher.qualification} (${teacher.exp})\nContact: ${teacher.phone} • ${teacher.email}\nCasual Leave Entitlement: 12 Days (Consumed: 2, Left: 10)\nMedical Leave Entitlement: 10 Days (Consumed: 0, Left: 10)\nOn Duty Quota: 5 Days (Utilized: 1)\nAttendance Rate: 97.4% (September)\nEndorsed by: Principal Smt. Gorle Varalakshmi`);
   }
-
-  // =========================================================================
-  // ACADEMICS MODULE RENDERERS
-  // =========================================================================
 
   
 
@@ -37541,18 +36747,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     `).join('');
   }
 
-  // =========================================================================
-  // ATTENDANCE MODULE IMPLEMENTATION (6 COMPLETE SUBMENUS)
-  // 1. Student Attendance: Date, class, section, present, absent, late, attendance %
-  // 2. Teacher Attendance: Employee, date, attendance status, check-in/out, exceptions
-  // 3. Daily Report: Class-wise and school-wide attendance summary
-  // 4. Monthly Summary: Student and staff attendance trends by month
-  // 5. Correction Requests: Original entry, requested change, reason, requester, approval status
-  //    (Retaining original value, updated value, reason, and identity of authorizer)
-  // 6. Attendance Alerts: Repeated absences, consecutive absences, configured thresholds
-  // =========================================================================
-
-  // Initial Seed Data for Attendance Corrections (Strictly retains original value, updated value, reason, and authorizer identity)
   if (!state.attendanceCorrections) {
     state.attendanceCorrections = [
       {
@@ -37663,7 +36857,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     ];
   }
 
-  // Master Roster of 11 Classes for Student Attendance
   const ATTENDANCE_CLASS_DATA = [
     { class: 'Class X', section: 'A', total: 44, present: 42, absent: 2, late: 1, pct: '95.5%', pctVal: 95.5, teacher: 'Sri B. Narayana', wing: 'High School' },
     { class: 'Class IX', section: 'A', total: 44, present: 42, absent: 2, late: 1, pct: '95.5%', pctVal: 95.5, teacher: 'Smt. T. Padmavathi', wing: 'High School' },
@@ -37678,7 +36871,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     { class: 'Pre-Primary', section: 'A', total: 50, present: 48, absent: 2, late: 0, pct: '96.0%', pctVal: 96.0, teacher: 'Smt. D. Meena', wing: 'Pre-Primary' }
   ];
 
-  // 1. STUDENT ATTENDANCE RENDERER (Date, class, section, present, absent, late, attendance percentage)
   function renderStudentAttendanceTable(customDate) {
     const tbody = document.getElementById('studentAttendanceTableBody') || document.getElementById('attendanceClassTableBody');
     if (!tbody) return;
@@ -37687,7 +36879,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     const filterWing = document.getElementById('studentAttendanceClassFilter')?.value || 'all';
     const searchVal = (document.getElementById('studentAttendanceSearchInput')?.value || '').toLowerCase().trim();
 
-    // Format date string for display
     const dObj = new Date(dateVal);
     const dateFormatted = !isNaN(dObj.getTime())
       ? dObj.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })
@@ -37749,7 +36940,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     renderStudentAttendanceTable(dateVal);
   }
 
-  // 2. TEACHER ATTENDANCE RENDERER (Employee, date, attendance status, check-in/out, exceptions)
   function renderTeacherAttendanceTable(customDate) {
     const tbody = document.getElementById('attendanceTeacherTableBody');
     if (!tbody) return;
@@ -37765,7 +36955,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
 
     const facultyList = state.faculty || [];
     
-    // Build 34 personnel records with realistic check-in/out and exception notes
     const teacherRecords = facultyList.map((t, idx) => {
       const bioId = `BIO-SV-${101 + idx}`;
       const isNonTeaching = idx >= 26;
@@ -37817,7 +37006,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
       };
     });
 
-    // Filter
     const filtered = teacherRecords.filter(item => {
       let matchCat = true;
       if (filterCat === 'Teaching') matchCat = item.category === 'Teaching';
@@ -37876,7 +37064,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     renderTeacherAttendanceTable();
   }
 
-  // 3. DAILY REPORT RENDERER (Class-wise and school-wide attendance summary)
   function renderDailyAttendanceReport() {
     const tbody = document.getElementById('dailyClassSummaryTableBody');
     if (!tbody) return;
@@ -37924,11 +37111,9 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     }).join('');
   }
 
-  // 4. MONTHLY SUMMARY RENDERER (Student and staff attendance trends by month)
   function renderMonthlyAttendanceSummary(monthKey) {
     const selMonth = monthKey || document.getElementById('monthlyAttendanceSelector')?.value || '2026-09';
     
-    // Monthly Trends Comparison Cards
     const trendsContainer = document.getElementById('attendanceMonthlyTrendsComparison');
     if (trendsContainer) {
       const monthTrends = [
@@ -37955,7 +37140,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
       `).join('');
     }
 
-    // Student Class-wise Monthly Register Table
     const studentTbody = document.getElementById('monthlyStudentSummaryTableBody') || document.getElementById('attendanceMonthlyTableBody');
     if (studentTbody && typeof ATTENDANCE_MONTHLY_DATA !== 'undefined') {
       studentTbody.innerHTML = ATTENDANCE_MONTHLY_DATA.map(m => {
@@ -37987,7 +37171,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
       }).join('');
     }
 
-    // Staff Department-wise Monthly Register Table
     const staffTbody = document.getElementById('monthlyStaffSummaryTableBody');
     if (staffTbody) {
       const deptData = [
@@ -38029,9 +37212,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     }
   }
 
-  // 5. CORRECTION REQUESTS RENDERER
-  // Original entry, requested change, reason, requester, and approval status
-  // STRICT CONSTRAINT: Must retain the original value, the updated value, the reason, and the identity of the person who authorized the change
   function renderAttendanceCorrections() {
     const tbody = document.getElementById('correctionsTableBody');
     if (!tbody) return;
@@ -38118,7 +37298,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
       `;
     }).join('');
 
-    // Update count badges
     const badge = document.getElementById('correctionsCount');
     if (badge) badge.textContent = `${filtered.length} Records`;
   }
@@ -38147,7 +37326,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
 
     const newId = `COR-2026-00${(state.attendanceCorrections.length + 1)}`;
 
-    // Strictly retain original value, updated value, reason, and identity of authorizer
     const newRecord = {
       id: newId,
       date: date,
@@ -38195,16 +37373,13 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     showToast('Exported complete Attendance Corrections Audit Register (CSV)', 'success');
   }
 
-  // 6. ATTENDANCE ALERTS RENDERER (Repeated absences, consecutive absences, configured thresholds)
   const ATTENDANCE_ALERTS_DATA = [
-    // Consecutive absences (>=3 days)
     { id: 'ALT-01', admNo: 'SV-0112', name: 'Naveen Chandra', class: 'Class VIII-A', roll: '824', cat: 'Consecutive Absences (≥3 Days)', catType: 'consecutive', rate: 71.4, pattern: '4 Consecutive Days (23-26 Oct)', historyDetail: 'Uninformed absence since Thursday; no medical slip', thresholdStatus: 'HIGH RISK (Consecutive ≥3 Days)', parent: 'Rambabu', phone: '9848012112', status: 'VP Summons Dispatched', statusBadge: 'badge-danger' },
     { id: 'ALT-02', admNo: 'SV-0005', name: 'B. Hemanth', class: 'Class X-A', roll: '1005', cat: 'Consecutive Absences (≥3 Days)', catType: 'consecutive', rate: 73.2, pattern: '3 Consecutive Days (24-26 Oct)', historyDetail: 'Missed board prep tests; parent phone unreachable', thresholdStatus: 'HIGH RISK (Consecutive ≥3 Days)', parent: 'Appala Naidu', phone: '9848012005', status: 'Parent Called - Meeting 30 Oct', statusBadge: 'badge-warning' },
     { id: 'ALT-03', admNo: 'SV-0278', name: 'M. Dinesh Kumar', class: 'Class VI-A', roll: '628', cat: 'Consecutive Absences (≥3 Days)', catType: 'consecutive', rate: 74.0, pattern: '3 Consecutive Days (24-26 Oct)', historyDetail: 'Transportation issue reported informally by classmate', thresholdStatus: 'HIGH RISK (Consecutive ≥3 Days)', parent: 'M. Jagannadham', phone: '9848055678', status: 'Class Teacher Follow-up', statusBadge: 'badge-primary' },
     { id: 'ALT-04', admNo: 'SV-0245', name: 'Pooja Varshini', class: 'Class VI-A', roll: '645', cat: 'Consecutive Absences (≥3 Days)', catType: 'consecutive', rate: 70.8, pattern: '3 Consecutive Days (24-26 Oct)', historyDetail: 'Doctor consultation note submitted via WhatsApp', thresholdStatus: 'HIGH RISK (Consecutive ≥3 Days)', parent: 'Srinivasa Rao', phone: '9848012245', status: 'Medical Slip Verified', statusBadge: 'badge-success' },
     { id: 'ALT-05', admNo: 'SV-0390', name: 'T. Tarun Teja', class: 'Class IV-A', roll: '490', cat: 'Consecutive Absences (≥3 Days)', catType: 'consecutive', rate: 69.5, pattern: '4 Consecutive Days (23-26 Oct)', historyDetail: 'Extended family festival out of town; unexcused', thresholdStatus: 'HIGH RISK (Consecutive ≥3 Days)', parent: 'T. Tirupathi Rao', phone: '9848077890', status: 'Advisory Warning Sent', statusBadge: 'badge-warning' },
 
-    // Repeated absences (>=4 instances/month)
     { id: 'ALT-06', admNo: 'SV-0022', name: 'Keerthi Priya', class: 'Class X-A', roll: '1022', cat: 'Repeated Absences (≥4 Times)', catType: 'repeated', rate: 76.5, pattern: '4 Recurring Fridays Missed', historyDetail: 'Chronic pattern of weekend-adjacent absenteeism', thresholdStatus: 'WARNING (Repeated Absences)', parent: 'Someswara Rao', phone: '9848012022', status: 'Counselor Assigned', statusBadge: 'badge-warning' },
     { id: 'ALT-07', admNo: 'SV-0067', name: 'Tanvi Sree', class: 'Class IX-A', roll: '923', cat: 'Repeated Absences (≥4 Times)', catType: 'repeated', rate: 77.2, pattern: '4 Mondays Absent in Term 1', historyDetail: 'Monday morning assembly consistently missed', thresholdStatus: 'WARNING (Repeated Absences)', parent: 'Krishna Reddy', phone: '9848012067', status: 'Parent Interview Conducted', statusBadge: 'badge-primary' },
     { id: 'ALT-08', admNo: 'SV-0180', name: 'Deepak Raj', class: 'Class VII-A', roll: '734', cat: 'Repeated Absences (≥4 Times)', catType: 'repeated', rate: 72.5, pattern: '5 Uninformed Days in Oct', historyDetail: 'No leave letters submitted; SMS delivered', thresholdStatus: 'WARNING (Repeated Absences)', parent: 'Jagannadham', phone: '9848012180', status: 'SMS Warning Dispatched', statusBadge: 'badge-danger' },
@@ -38214,7 +37389,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     { id: 'ALT-12', admNo: 'SV-0332', name: 'G. Harini', class: 'Class V-A', roll: '532', cat: 'Repeated Absences (≥4 Times)', catType: 'repeated', rate: 78.4, pattern: '4 Days Absent Post-Vacation', historyDetail: 'Delayed return from native village post Dussehra', thresholdStatus: 'WARNING (Repeated Absences)', parent: 'G. Venkateswara Rao', phone: '9848066789', status: 'Late Rejoining Form Signed', statusBadge: 'badge-success' },
     { id: 'ALT-13', admNo: 'SV-0014', name: 'K. Sai Karthik', class: 'Class X-A', roll: '1014', cat: 'Repeated Absences (≥4 Times)', catType: 'repeated', rate: 79.1, pattern: '4 Days Absent + 6 Late Gate Entries', historyDetail: 'Combined chronic lateness and monthly absence', thresholdStatus: 'WARNING (Repeated Absences)', parent: 'K. Someswara Rao', phone: '9848011234', status: 'Vice-Principal Summons', statusBadge: 'badge-danger' },
 
-    // Configured attendance thresholds (<75% critical condonation risk)
     { id: 'ALT-14', admNo: 'SV-0015', name: 'K. Vamsi', class: 'Class X-A', roll: '1015', cat: 'Critical Threshold (<75%)', catType: 'threshold', rate: 64.2, pattern: '22 Days Missed in Term 1', historyDetail: 'Severe condonation risk; Board exam hall ticket blocked', thresholdStatus: 'CRITICAL (<75% Condonation Limit)', parent: 'K. Prasad', phone: '9848011223', status: 'Board Disbarment Notice Issued', statusBadge: 'badge-danger' },
     { id: 'ALT-15', admNo: 'SV-0038', name: 'S. Rohith', class: 'Class X-A', roll: '1038', cat: 'Critical Threshold (<75%)', catType: 'threshold', rate: 67.5, pattern: '19 Days Missed in Term 1', historyDetail: 'Under medical recovery; hospital certificates pending', thresholdStatus: 'CRITICAL (<75% Condonation Limit)', parent: 'S. Satish', phone: '9848011238', status: 'Medical Board Verification', statusBadge: 'badge-warning' },
     { id: 'ALT-16', admNo: 'SV-0072', name: 'M. Sumanth', class: 'Class IX-A', roll: '912', cat: 'Critical Threshold (<75%)', catType: 'threshold', rate: 68.4, pattern: '18 Days Missed in Term 1', historyDetail: 'Chronic absenteeism; two written warnings ignored', thresholdStatus: 'CRITICAL (<75% Condonation Limit)', parent: 'M. Krishna', phone: '9848011272', status: 'Mandatory Parent Interview 31 Oct', statusBadge: 'badge-danger' },
@@ -38326,7 +37500,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     showToast('Exported Attendance Early Warning Alerts Register (CSV)', 'success');
   }
 
-  // Backward-compatible aliases
   function renderAttendanceClasses(list) {
     renderStudentAttendanceTable();
   }
@@ -38351,19 +37524,9 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     renderMonthlyAttendanceSummary();
   }
 
-  // =========================================================================
-  // EXAMINATION EXPANDED RENDERERS
-  // =========================================================================
   
-  // =========================================================================
-  // EXAMINATIONS 6-SUBMENU COMPREHENSIVE RENDERERS & LOGIC
-  // =========================================================================
 
-  // 1. EXAM SCHEDULE TABLE
   
-  // =========================================================================
-  // SUBMENU 1: EXAM SCHEDULE ENGINE & DATASETS
-  // =========================================================================
 
   let EXAM_SERIES_LIST = [
     {
@@ -38578,9 +37741,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     }
   ];
 
-  // -------------------------------------------------------------------------
-  // 1. RENDER EXAM SCHEDULE TABLE
-  // -------------------------------------------------------------------------
   function renderExamScheduleTable() {
     const tbody = document.getElementById('examScheduleTableBody');
     if (!tbody) return;
@@ -38607,7 +37767,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
       return matchTerm && matchClass && matchStatus && matchSearch;
     });
 
-    // Update KPI count
     const kpiCount = document.getElementById('kpiScheduledPapersCount');
     if (kpiCount) kpiCount.innerText = filtered.length + ' Major Papers';
 
@@ -38708,9 +37867,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     renderExamScheduleTable();
   }
 
-  // -------------------------------------------------------------------------
-  // ACTION 1: CREATE EXAMINATION
-  // -------------------------------------------------------------------------
   function openCreateExaminationModal() {
     openModal('createExaminationModal');
   }
@@ -38744,7 +37900,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
 
     EXAM_SERIES_LIST.push(newSeries);
 
-    // Update Series Dropdown
     const seriesSelect = document.getElementById('examScheduleTermFilter');
     if (seriesSelect) {
       const opt = document.createElement('option');
@@ -38761,7 +37916,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
       seExamTitle.appendChild(opt2);
     }
 
-    // Update KPI
     const kpiTerm = document.getElementById('kpiAcademicTermDisplay');
     if (kpiTerm) kpiTerm.innerText = year + ' • ' + term;
 
@@ -38770,9 +37924,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     renderExamScheduleTable();
   }
 
-  // -------------------------------------------------------------------------
-  // ACTION 2: ADD SUBJECTS / SCHEDULE PAPER
-  // -------------------------------------------------------------------------
   function openAddExamSubjectModal() {
     const editId = document.getElementById('editExamPaperId');
     if (editId) editId.value = '';
@@ -38847,7 +37998,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
 
     if (!date || !room) return;
 
-    // Check room conflict
     const roomClash = EXAM_SCHEDULE_PAPERS.find(p => p.id !== currentId && p.date === date && p.room === room);
     if (roomClash) {
       if (banner && bannerText) {
@@ -38857,7 +38007,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
       return;
     }
 
-    // Check invigilator clash
     if (invigilator) {
       const invigClash = EXAM_SCHEDULE_PAPERS.find(p => p.id !== currentId && p.date === date && p.invigilators === invigilator && p.room !== room);
       if (invigClash) {
@@ -38890,7 +38039,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     const invigilators = document.getElementById('seInvigilator')?.value || 'Sri Navva Anand & Smt. M. Sunitha';
     const status = document.getElementById('seStatus')?.value || 'Published';
 
-    // Parse subject and code
     let subjectName = subjectRaw;
     let paperCode = 'SSC-GEN';
     const codeMatch = subjectRaw.match(/(.+?)s*\((.+?)\)/);
@@ -38899,11 +38047,9 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
       paperCode = codeMatch[2].trim();
     }
 
-    // Format Day of Week
     const dObj = new Date(examDate + 'T00:00:00');
     const dayName = isNaN(dObj.getTime()) ? 'Friday' : dObj.toLocaleDateString('en-US', { weekday: 'long' });
 
-    // Format Start & End AM/PM
     const formatTime = (tStr) => {
       if (!tStr) return '09:30 AM';
       const [h, m] = tStr.split(':');
@@ -38918,7 +38064,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     const endTimeFormatted = formatTime(endTimeRaw);
 
     if (editId) {
-      // Update existing paper
       const p = EXAM_SCHEDULE_PAPERS.find(item => item.id === editId);
       if (p) {
         p.examName = examName;
@@ -38938,7 +38083,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
         showToast('Examination Paper Updated: ' + p.id + ' (' + p.subject + ')', 'success');
       }
     } else {
-      // Add new paper
       const newPaper = {
         id: examId,
         examName: examName,
@@ -38978,9 +38122,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     }
   }
 
-  // -------------------------------------------------------------------------
-  // ACTION 3: ASSIGN ROOMS
-  // -------------------------------------------------------------------------
   function openAssignExamRoomsModal() {
     const tbody = document.getElementById('assignExamRoomsTableBody');
     if (tbody) {
@@ -39007,13 +38148,9 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     openModal('assignExamRoomsModal');
   }
 
-  // -------------------------------------------------------------------------
-  // ACTION 4: CHECK CONFLICTS
-  // -------------------------------------------------------------------------
   function checkExamScheduleConflicts() {
     const conflicts = [];
 
-    // 1. Check for Room Overlaps (same room + same date)
     for (let i = 0; i < EXAM_SCHEDULE_PAPERS.length; i++) {
       for (let j = i + 1; j < EXAM_SCHEDULE_PAPERS.length; j++) {
         const p1 = EXAM_SCHEDULE_PAPERS[i];
@@ -39028,7 +38165,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
       }
     }
 
-    // 2. Check for Student Double-Booking (same class with 2 papers on same date)
     const classDateMap = {};
     EXAM_SCHEDULE_PAPERS.forEach(p => {
       const key = p.class + '|' + p.date;
@@ -39047,7 +38183,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
       }
     });
 
-    // 3. Check for Invigilator Double-Booking (same invigilator in 2 rooms on same date)
     for (let i = 0; i < EXAM_SCHEDULE_PAPERS.length; i++) {
       for (let j = i + 1; j < EXAM_SCHEDULE_PAPERS.length; j++) {
         const p1 = EXAM_SCHEDULE_PAPERS[i];
@@ -39062,7 +38197,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
       }
     }
 
-    // Populate modal counters
     const totalEl = document.getElementById('conflictAuditTotalPapers');
     const studentEl = document.getElementById('conflictAuditStudentClashes');
     const roomEl = document.getElementById('conflictAuditRoomClashes');
@@ -39105,9 +38239,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     openModal('examConflictAuditModal');
   }
 
-  // -------------------------------------------------------------------------
-  // ACTION 5: PUBLISH SCHEDULE
-  // -------------------------------------------------------------------------
   function publishExamSchedule() {
     if (confirm('Are you sure you want to officially publish the master examination datesheet? This locks the timetable and notifies parents, students, and teachers.')) {
       EXAM_SCHEDULE_PAPERS.forEach(p => {
@@ -39118,13 +38249,9 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     }
   }
 
-  // -------------------------------------------------------------------------
-  // ACTION 6: NOTIFY TEACHERS
-  // -------------------------------------------------------------------------
   function openNotifyExamTeachersModal() {
     const tbody = document.getElementById('notifyTeachersDutyTableBody');
     if (tbody) {
-      // Group duties by invigilator
       tbody.innerHTML = EXAM_SCHEDULE_PAPERS.map(p => `
         <tr>
           <td>
@@ -39157,9 +38284,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     closeModal('notifyExamTeachersModal');
   }
 
-  // -------------------------------------------------------------------------
-  // ACTION 7: PRINT EXAMINATION TIMETABLE
-  // -------------------------------------------------------------------------
   function printExamScheduleTimetable() {
     const container = document.getElementById('printableExamScheduleModalBody');
     if (container) {
@@ -39261,7 +38385,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     openModal('printableExamScheduleModal');
   }
 
-  // Backward compatibility alias for printExamSchedule
   function printExamSchedule() {
     printExamScheduleTimetable();
   }
@@ -39285,13 +38408,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     document.body.removeChild(link);
     showToast('Examination schedule CSV downloaded successfully!', 'success');
   }
-
-
-  // =========================================================================
-// 2. INVIGILATION DUTY ENGINE (COMPREHENSIVE AP SCERT / BOARD SPECIFICATION)
-// Displays: Examination session, Room, Invigilator, Duty time, Assigned students or capacity, Confirmation status
-// Actions: Assign duty, Reassign, Resolve conflicts, Notify staff, Print duty register
-// =========================================================================
 
   function ensureInvigilationDutiesData() {
     if (!window.INVIGILATION_DUTIES_DATA || !window.INVIGILATION_DUTIES_DATA.length) {
@@ -39496,16 +38612,13 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     ensureInvigilationDutiesData();
     const duties = window.INVIGILATION_DUTIES_DATA;
 
-    // 1. Invigilators Deployed
     const kpiInvigilators = document.getElementById('kpiInvigilatorsDeployed');
     if (kpiInvigilators) kpiInvigilators.textContent = duties.length;
 
-    // 2. Active Examination Halls
     const uniqueHalls = new Set(duties.map(d => d.hall));
     const kpiHalls = document.getElementById('kpiActiveExamHalls');
     if (kpiHalls) kpiHalls.textContent = uniqueHalls.size;
 
-    // 3. Conflict Surveillance
     const conflicts = detectInvigilationClashes();
     const kpiConflicts = document.getElementById('kpiInvigilationConflicts');
     if (kpiConflicts) {
@@ -39513,7 +38626,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
       kpiConflicts.style.color = conflicts.length === 0 ? '#10b981' : '#ef4444';
     }
 
-    // 4. Superintendent Status
     const kpiSuper = document.getElementById('kpiSuperintendentStatus');
     if (kpiSuper) kpiSuper.textContent = 'Active On Duty';
   }
@@ -39523,7 +38635,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     const duties = window.INVIGILATION_DUTIES_DATA;
     const clashes = [];
 
-    // Check 1: Same staff double-booked at the same date and session
     for (let i = 0; i < duties.length; i++) {
       for (let j = i + 1; j < duties.length; j++) {
         const d1 = duties[i];
@@ -39542,7 +38653,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
       }
     }
 
-    // Check 2: Assigned students > capacity
     duties.forEach(d => {
       if (d.assignedStudents > d.capacity) {
         clashes.push({
@@ -39558,7 +38668,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     return clashes;
   }
 
-  // 2. INVIGILATION DUTY TABLE RENDERER
   function renderInvigilationDutyTable() {
     ensureInvigilationDutiesData();
     updateInvigilationKPIs();
@@ -39776,7 +38885,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     showToast(`Duty status for ${duty.invigilator} updated to: ${duty.status}`, 'info');
   }
 
-  // --- ACTION 1: ASSIGN DUTY ---
   function openAssignInvigilationModal() {
     openModal('assignInvigilationDutyModal');
   }
@@ -39802,7 +38910,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
       return;
     }
 
-    // Clash audit
     const isShiftFN = startTimeVal < '13:00';
     const shiftLabel = isShiftFN ? 'Forenoon (FN)' : 'Afternoon (AN)';
     const existingClash = window.INVIGILATION_DUTIES_DATA.find(d => 
@@ -39846,7 +38953,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     showToast(`Official duty ${newId} successfully assigned to ${primaryInv}!`, 'success');
   }
 
-  // --- ACTION 2: REASSIGN ---
   function openReassignInvigilatorModal(dutyId) {
     ensureInvigilationDutiesData();
     const duty = window.INVIGILATION_DUTIES_DATA.find(d => d.id === dutyId);
@@ -39909,7 +39015,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     }
   }
 
-  // --- ACTION 3: RESOLVE CONFLICTS ---
   function resolveInvigilationConflicts() {
     ensureInvigilationDutiesData();
     const clashes = detectInvigilationClashes();
@@ -39958,7 +39063,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     ensureInvigilationDutiesData();
     const duties = window.INVIGILATION_DUTIES_DATA.filter(d => d.invigilator === staffName);
     if (duties.length > 1) {
-      // Reassign the second duty to reserve relief staff
       duties[1].invigilator = 'Sri P. Satyanarayana (Relief Reserve)';
       duties[1].status = 'Assigned & Confirmed';
       renderInvigilationDutyTable();
@@ -39994,7 +39098,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     showToast(`Surveillance engine automatically resolved ${resolvedCount} invigilation and hall conflict(s)!`, 'success');
   }
 
-  // --- ACTION 4: NOTIFY STAFF ---
   function openNotifyInvigilationStaffModal() {
     openModal('notifyInvigilationStaffModal');
   }
@@ -40015,7 +39118,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     showToast(`Official invigilation duty orders dispatched to ${window.INVIGILATION_DUTIES_DATA.length} teachers for ${sessionTarget} via [${channels.join(', ')}]!`, 'success');
   }
 
-  // --- ACTION 5: PRINT DUTY REGISTER ---
   function printInvigilationDutyRegister() {
     ensureInvigilationDutiesData();
     const duties = window.INVIGILATION_DUTIES_DATA;
@@ -40089,8 +39191,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     showToast('Invigilation duty register exported to CSV successfully.', 'success');
   }
 
-
-  // 3. TABULATION & MARKS
   function renderTabulationAndMarks() {
     const tbody = document.getElementById('tabulationMarksTableBody');
     if (!tbody) return;
@@ -40115,7 +39215,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
       );
     }
 
-    // Update KPI badges
     const totalCount = TABULATION_MARKS_DATA.length;
     const enteredCount = TABULATION_MARKS_DATA.filter(m => m.status !== 'Missing Entry').length;
     const missingCount = TABULATION_MARKS_DATA.filter(m => m.status === 'Missing Entry').length;
@@ -40187,7 +39286,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     showToast('Exporting official AP SCERT Class X-A Tabulation Register (CSV)...', 'info');
   }
 
-  // 4. RESULT APPROVAL LEDGER
   function renderResultApprovalQueue() {
     const tbody = document.getElementById('resultApprovalTableBody');
     if (!tbody) return;
@@ -40300,7 +39398,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     showToast('Exporting official Result Approval & Reviewer Audit Log (CSV)...', 'info');
   }
 
-  // 5. REPORT CARDS DESK
   function renderReportCardsDesk() {
     const studentSelect = document.getElementById('reportCardStudentSelect');
     const studentAdm = studentSelect?.value || 'SV-0210';
@@ -40317,7 +39414,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     const canvas = document.getElementById('reportCardCanvas');
     if (!canvas) return;
 
-    // Update banner publication heading
     const pubHeading = document.getElementById('reportCardPublicationHeading');
     const pubSub = document.getElementById('reportCardPublicationSub');
     if (pubHeading) {
@@ -40557,19 +39653,15 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     showToast('Compiling batch PDF dossier for all 44 Class X-A students...', 'info');
   }
 
-  // Compatibility aliases for legacy subview calls
   const renderMarksEntryTable = renderTabulationAndMarks;
   const renderModerationTable = renderTabulationAndMarks;
   const renderResultPublications = renderReportCardsDesk;
-
 
   function renderCounsellingReferrals() {
     const tbody = document.getElementById('counsellingTableBody');
     const restrictedNotice = document.getElementById('counsellingRestrictedNotice');
     const authorizedDesk = document.getElementById('counsellingAuthorizedDesk');
 
-    // Role-based safeguarding security gate:
-    // Only Principal and Vice Principal (and designated child psychologist) have clearance to view confidential guidance files.
     const isLeadership = (state.currentRole === 'principal' || state.currentRole === 'vice-principal' || state.currentRole === 'vp');
 
     if (!isLeadership) {
@@ -40783,36 +39875,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     showToast('Confidential counselling audit register exported with executive watermark.', 'success');
   }
 
-  // =========================================================================
-  // FEES & FINANCE MODULE: COMPREHENSIVE 7 SUBMENUS ENGINE
-  // Submenu 1: Fee Collection (Student, invoice, amount due, amount paid, payment method and receipt)
-  // Submenu 2: Pending Dues (Student, class, outstanding amount, due date and overdue status)
-  // Submenu 3: Fee Structure (Class-wise fee heads, instalments, due dates and academic year)
-  // Submenu 4: Concessions & Scholarships (Application, eligibility, requested concession, approval and effective amount)
-  // Submenu 5: Refunds (Original transaction, refund reason, amount, approval and processing status)
-  // Submenu 6: Fee Reports (Collections by date, class, fee type and payment method)
-  // Submenu 7: Transactions Ledger (Transaction ID, debit/credit entry, reference, date and reconciliation status)
-  // Statutory Governance: Self-approval prevention on refunds & audited reversals for transaction immutability.
-  // =========================================================================
-
-    // =========================================================================
-  // SECTION 10: FEES & FINANCE SUITE (10.1 - 10.6) - SRI VIDYA HIGH SCHOOL
-  // Authoritative Campus Financial Management System
-  // Supervised by Principal Smt. Gorle Varalakshmi & Accounts Office
-  // Statutory Rules: Server-side Gateway Auth, Strict Segregation of Duties,
-  // Immutable Audit Ledger with Traceable Counterbalance Reversals.
-  // =========================================================================
-
-  // 10.1 INITIAL FEE COLLECTION DATA
-    // =========================================================================
-  // SECTION 10: FEES & FINANCE SUITE (10.1 - 10.6) - SRI VIDYA HIGH SCHOOL
-  // Authoritative Campus Financial Management System
-  // Supervised by Principal Smt. Gorle Varalakshmi & Accounts Office
-  // Statutory Rules: Server-side Gateway Auth, Strict Segregation of Duties,
-  // Immutable Audit Ledger with Traceable Counterbalance Reversals.
-  // =========================================================================
-
-  // 10.1 INITIAL FEE COLLECTION DATA
   const INITIAL_FEE_COLLECTION_DATA = [
     {
       receiptNo: 'RCPT-2026-4891',
@@ -40962,10 +40024,8 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
 
   let feeCollectionData = [...INITIAL_FEE_COLLECTION_DATA];
 
-  // 10.2 DEFAULTERS / PENDING DUES DATA (Synchronized with DEFAULTERS_DATA)
   let defaultersData = [...DEFAULTERS_DATA];
 
-  // 10.3 FEE STRUCTURE DATA
   let feeStructureData = [
     {
       id: 'FS-2026-01',
@@ -41065,7 +40125,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     }
   ];
 
-  // 10.4 CONCESSIONS & SCHOLARSHIPS DATA
   let feeConcessionsData = [
     {
       id: 'CONC-2026-01',
@@ -41144,7 +40203,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     }
   ];
 
-  // 10.5 REFUNDS DATA (With Segregation of Duties: Recorder !== Approver)
   let feeRefundsData = [
     {
       id: 'REF-2026-01',
@@ -41216,7 +40274,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     }
   ];
 
-  // 10.6 TRANSACTIONS LEDGER (Immutable Traceable Financial Audit Trail)
   let transactionsLedgerData = [
     {
       txnId: 'TXN-2026-8910',
@@ -41307,10 +40364,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
       isReversal: false
     }
   ];
-
-  // =========================================================================
-  // 10.1 FEE COLLECTION CONTROLLER & ACTIONS
-  // =========================================================================
 
   function renderFeeCollection(list) {
     const tbody = document.getElementById('feeCollectionTableBody');
@@ -41544,7 +40597,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
       return;
     }
 
-    // Duplicate Prevention Check
     const isDuplicateReceipt = feeCollectionData.some(function(r) { return r.receiptNo === receiptNoVal; });
     const isDuplicateTxn = txnRefVal && feeCollectionData.some(function(r) { return r.txnRef && r.txnRef === txnRefVal; });
     if (isDuplicateReceipt || isDuplicateTxn) {
@@ -41558,12 +40610,10 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     const feeHead = studentRec ? studentRec.head : 'Term Fee';
     const originalDue = studentRec ? studentRec.amountDue : ('₹' + amountPaidVal.toLocaleString('en-IN'));
 
-    // Calculate updated balance
     const currentBal = parseFloat(String(studentRec?.balance || originalDue).replace(/[^0-9.]/g, '')) || amountPaidVal;
     const newBal = Math.max(0, currentBal - amountPaidVal);
     const newBalStr = newBal === 0 ? '₹0' : '₹' + newBal.toLocaleString('en-IN');
 
-    // Create new collection record
     const newRecord = {
       receiptNo: receiptNoVal,
       invoiceNo: invoiceNo,
@@ -41585,7 +40635,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
 
     feeCollectionData.unshift(newRecord);
 
-    // Update balance in defaulters data
     if (studentRec) {
       studentRec.amountPaid = '₹' + ((parseFloat(String(studentRec.amountPaid || '0').replace(/[^0-9.]/g, '')) || 0) + amountPaidVal).toLocaleString('en-IN');
       studentRec.balance = newBalStr;
@@ -41595,7 +40644,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
       }
     }
 
-    // Post to Immutable Financial Ledger
     const nextTxnId = 'TXN-2026-' + (transactionsLedgerData.length + 8911);
     transactionsLedgerData.unshift({
       txnId: nextTxnId,
@@ -41616,7 +40664,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
 
     showToast('Payment of ₹' + amountPaidVal.toLocaleString('en-IN') + ' recorded successfully. Receipt ' + receiptNoVal + ' generated and financial ledger posted.', 'success');
 
-    // Immediately open official receipt slip
     setTimeout(function() {
       generateFeeReceipt(receiptNoVal);
     }, 400);
@@ -41718,7 +40765,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     const reason = prompt('Enter authorized statutory reason for Reversal or Refund Request on ' + rec.receiptNo + ' (' + rec.student + ' - ' + rec.amountPaid + '):', 'Parent excess payment refund request');
     if (!reason) return;
 
-    // Create a refund request
     const nextRefId = 'REF-2026-0' + (feeRefundsData.length + 1);
     feeRefundsData.unshift({
       id: nextRefId,
@@ -41776,10 +40822,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     closeModal('reconcilePaymentsModal');
     showToast('Daily reconciliation confirmed and locked with Core Banking Statement. All 14 transactions verified.', 'success');
   }
-
-  // =========================================================================
-  // 10.2 PENDING DUES CONTROLLER & ACTIONS
-  // =========================================================================
 
   function renderDefaultersTable(list) {
     const tbody = document.getElementById('defaultersTableBody');
@@ -41926,7 +40968,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
       item.balance = newBal === 0 ? '₹0' : '₹' + newBal.toLocaleString('en-IN');
       item.concessionApplied = true;
 
-      // Post traceable non-cash adjustment entry to financial ledger
       const nextTxnId = 'TXN-2026-' + (transactionsLedgerData.length + 8911);
       transactionsLedgerData.unshift({
         txnId: nextTxnId,
@@ -41979,10 +41020,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
   function printPendingDuesRegister() {
     window.print();
   }
-
-  // =========================================================================
-  // 10.3 FEE STRUCTURE CONTROLLER & ACTIONS
-  // =========================================================================
 
   function renderFeeStructure(list) {
     const tbody = document.getElementById('feeStructureTableBody');
@@ -42187,10 +41224,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     window.print();
   }
 
-  // =========================================================================
-  // 10.4 CONCESSIONS & SCHOLARSHIPS CONTROLLER & ACTIONS
-  // =========================================================================
-
   function renderFeeConcessions(list) {
     const tbody = document.getElementById('concessionsTableBody');
     if (!tbody) return;
@@ -42378,7 +41411,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     matchedDef.balance = newBal === 0 ? '₹0' : '₹' + newBal.toLocaleString('en-IN');
     item.applied = true;
 
-    // Post to ledger
     const nextTxnId = 'TXN-2026-' + (transactionsLedgerData.length + 8911);
     transactionsLedgerData.unshift({
       txnId: nextTxnId,
@@ -42425,10 +41457,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     downloadCsvFile(csv, 'SriVidya_Fee_Concessions_Scholarships.csv');
     showToast('Fee concessions and scholarships exported to CSV.', 'success');
   }
-
-  // =========================================================================
-  // 10.5 REFUNDS CONTROLLER & ACTIONS (SEGREGATION OF DUTIES ENFORCED)
-  // =========================================================================
 
   function renderFeeRefunds(list) {
     const tbody = document.getElementById('refundsTableBody');
@@ -42606,7 +41634,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     item.approvedBy = 'Smt. Gorle Varalakshmi (Principal)';
     item.receiptNo = 'REF-RCPT-2026-0' + (feeRefundsData.length + 1);
 
-    // Post Debit Entry to Financial Ledger
     const numAmt = parseFloat(String(item.requestedAmount).replace(/[^0-9.]/g, '')) || 0;
     const nextTxnId = 'TXN-2026-' + (transactionsLedgerData.length + 8911);
     transactionsLedgerData.unshift({
@@ -42691,10 +41718,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     downloadCsvFile(csv, 'SriVidya_Fee_Refunds_Register.csv');
     showToast('Fee refunds register exported to CSV.', 'success');
   }
-
-  // =========================================================================
-  // 10.6 FINANCIAL REPORTS & LEDGER (IMMUTABLE AUDIT TRAIL)
-  // =========================================================================
 
     function showFeeAuditAlert(txnId) {
     const list = state.recentFeeTransactions || (typeof RECENT_FEE_TRANSACTIONS !== "undefined" ? RECENT_FEE_TRANSACTIONS : []);
@@ -42817,9 +41840,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     showToast('Immutable transactions ledger exported to CSV.', 'success');
   }
 
-  // =========================================================================
-  // BACKWARD COMPATIBILITY & SHORTHAND ALIASES FOR SECTION 10
-  // =========================================================================
   const filterFeeConcessions = renderFeeConcessions;
   const handleConcessionSubmit = handleSubmitConcessionRequest;
   function handleConcessionStudentChange() {}
@@ -42833,25 +41853,10 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
   function submitTransactionReversal() {}
   const printTransactionsLedger = printFinancialStatement;
 
-
-  // =========================================================================
-  // TIMETABLE MODULE RENDERERS
-  // =========================================================================
-
-  // =========================================================================
-  // SRI VIDYA MASTER TIMETABLE & ACADEMIC SCHEDULING ENGINE
-  // 1. Class Schedules (Periods, subjects, teachers, rooms and breaks)
-  // 2. Substitution Planner (Absent teacher, replacement, period, class, status)
-  // 3. Lab & Hall Allocations (Room availability, capacity, booking, conflicts)
-  // 4. Timetable Conflicts (Double-booked teachers, rooms, classes, overlapping)
-  // Multi-view: Daily, Weekly, Class-wise calendar views + Printable Timetable
-  // =========================================================================
-
   currentTimetableClass = currentTimetableClass || 'Class X-A';
   currentTimetableCalendarView = currentTimetableCalendarView || 'weekly';
   currentTimetableDay = currentTimetableDay || 'Monday';
 
-  // 1. CLASS TIMETABLE DATASET
   const TIMETABLE_CLASS_DATA = {
   "Class X-A": {
     "classTeacher": "Sri Navva Anand (M.Sc, B.Ed)",
@@ -47271,12 +46276,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
   }
 };
 
-  // 2. SUBSTITUTION PLANNER DATASET
-  // Absent teacher, replacement teacher, period, class and assignment status
-  // SUBSTITUTION_PLANNER_DATA defined in Submenu 2 below
-
-  // 3. LAB & HALL ALLOCATIONS DATASET
-  // Room availability, capacity, booking schedule and conflicts
   const LAB_HALL_ALLOCATIONS_DATA = [
     {
       id: 'LAB-01',
@@ -47358,8 +46357,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     }
   ];
 
-  // 4. TIMETABLE CONFLICTS DATASET
-  // Double-booked teachers, rooms, classes or overlapping periods
   const TIMETABLE_CONFLICTS_DATA = [
     {
       id: 'CONF-01',
@@ -47414,12 +46411,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
       statusBadge: 'badge-success'
     }
   ];
-
-    // -------------------------------------------------------------------------
-  // SUBMENU 1 RENDERER: CLASS SCHEDULES & MASTER ACADEMIC SCHEDULING ENGINE
-  // Display: Day & period, Subject, Teacher, Room, Breaks, Schedule conflicts
-  // Actions: Create schedule, Edit draft, Check conflicts, Publish, Print, View previous version
-  // -------------------------------------------------------------------------
 
   currentTimetableClass = currentTimetableClass || 'Class X-A';
   currentTimetableDay = currentTimetableDay || 'Monday';
@@ -47737,14 +46728,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     showToast('Switched timetable schedule to ' + currentTimetableDay, 'info');
   }
 
-
-  // -------------------------------------------------------------------------
-  // SUBMENU 2 RENDERER: SUBSTITUTION PLANNER & FACULTY WORKLOAD ENGINE
-  // Display: Absent teacher, Affected class, Period, Original subject, Available replacement teacher, Replacement status
-  // Actions: Find available teacher, Assign substitute, Check workload, Notify affected teachers, Publish substitution
-  // -------------------------------------------------------------------------
-
-  // Authoritative Substitution Planner Dataset
   let SUBSTITUTION_PLANNER_DATA = [
     {
       id: 'SUB-2026-001',
@@ -47868,7 +46851,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     }
   ];
 
-  // Comprehensive Faculty Teaching Workload Matrix (AP SCERT 6 Period Cap Compliant)
   let TEACHER_WORKLOAD_DATA = [
     {
       id: 'T-1001',
@@ -48052,10 +47034,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     }
   ];
 
-  // =========================================================================
-  // SUBMENU 2: SUBSTITUTION PLANNER RENDERER & ACTIONS
-  // =========================================================================
-
   function renderSubstitutionPlanner() {
     const tbody = document.getElementById('substitutionPlannerTableBody');
     if (!tbody) return;
@@ -48078,7 +47056,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
       return matchClass && matchPeriod && matchStatus && matchSearch;
     });
 
-    // Update KPI counts based on full roster
     const absentCount = new Set(SUBSTITUTION_PLANNER_DATA.map(i => i.absentTeacher)).size;
     const totalPeriodsToCover = SUBSTITUTION_PLANNER_DATA.length;
     const coveredCount = SUBSTITUTION_PLANNER_DATA.filter(i => i.replacementTeacher !== 'Unassigned').length;
@@ -48099,7 +47076,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     const elBadgeCount = document.getElementById('subBadgeCount');
     if (elBadgeCount) elBadgeCount.textContent = filtered.length + ' Roster Entries';
 
-    // Update banner text
     const bannerText = document.getElementById('subRosterStatusText');
     const banner = document.getElementById('subRosterStatusBanner');
     if (banner && bannerText) {
@@ -48246,7 +47222,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     showToast('Substitution filters reset to default view.', 'info');
   }
 
-  // ACTION 1: FIND AVAILABLE TEACHER
   function openFindAvailableTeacherModal(targetPeriod, targetSlotId) {
     const periodSelect = document.getElementById('findTeacherPeriodSelect');
     if (periodSelect && targetPeriod) {
@@ -48274,7 +47249,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     const modal = document.getElementById('findAvailableTeacherModal');
     const targetSlotId = modal ? modal.getAttribute('data-target-slot') : '';
 
-    // Filter teachers who are FREE in this period and match department
     const freeTeachers = TEACHER_WORKLOAD_DATA.filter(t => {
       const pInfo = t.periods[period];
       const isFree = pInfo && pInfo.status === 'Free';
@@ -48282,7 +47256,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
       return isFree && matchDept;
     });
 
-    // Sort by lowest current daily teaching load to avoid fatigue
     freeTeachers.sort((a, b) => a.assignedCount - b.assignedCount);
 
     if (badgeCount) {
@@ -48344,7 +47317,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     slot.status = 'Confirmed';
     slot.statusBadge = 'badge-success';
 
-    // Update teacher workload
     if (teacher && teacher.periods[slot.period]) {
       teacher.periods[slot.period] = {
         status: 'Substituted',
@@ -48359,7 +47331,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     showToast('Successfully assigned ' + teacherName + ' to cover ' + slot.class + ' (' + slot.period + ')!', 'success');
   }
 
-  // ACTION 2: ASSIGN SUBSTITUTE MODAL & SUBMIT
   function openAssignSubstitutionModal(slotId) {
     const select = document.getElementById('subSlotSelect');
     if (select) {
@@ -48386,7 +47357,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     if (elRoom) elRoom.value = slot.room;
     if (elInstr && slot.topic) elInstr.value = 'Conduct ' + slot.topic + ' & class workbook corrections';
 
-    // Populate substitute options filtered for this period
     if (elSubTeacher) {
       const freeTeachers = TEACHER_WORKLOAD_DATA.filter(t => {
         const p = t.periods[slot.period];
@@ -48424,7 +47394,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
       slot.statusBadge = 'badge-success';
       if (notifyCheck) slot.notified = true;
 
-      // Update teacher workload
       if (teacher && teacher.periods[slot.period]) {
         teacher.periods[slot.period] = {
           status: 'Substituted',
@@ -48441,7 +47410,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     showToast('Faculty substitution confirmed for ' + subTeacherName + ' covering ' + (slot ? slot.class : 'Class') + '!' + (notifyCheck ? ' (SMS Notice Dispatched)' : ''), 'success');
   }
 
-  // ACTION 3: CHECK WORKLOAD MODAL
   function openTeacherWorkloadModal() {
     const tbody = document.getElementById('teacherWorkloadTableBody');
     if (tbody) {
@@ -48487,7 +47455,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     if (modal) modal.style.display = 'flex';
   }
 
-  // ACTION 4: NOTIFY AFFECTED TEACHERS
   function openNotifySubstitutionModal(slotId) {
     const list = document.getElementById('notifyRecipientsList');
     if (list) {
@@ -48544,7 +47511,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     showToast('Substitution #' + slot.id + ' officially verified and signed-off by Vice Principal!', 'success');
   }
 
-  // ACTION 5: PUBLISH SUBSTITUTION
   function openPublishSubstitutionModal() {
     const summary = document.getElementById('publishValidationSummary');
     const pendingSlots = SUBSTITUTION_PLANNER_DATA.filter(s => s.replacementTeacher === 'Unassigned');
@@ -48589,7 +47555,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     showToast('Official daily substitution roster published to Staff Room display & Digital Notice Board!', 'success');
   }
 
-  // PRINTABLE SUBSTITUTION REGISTER
   function printSubstitutionSheet() {
     const modalBody = document.getElementById('printableSubstitutionModalBody');
     if (!modalBody) return;
@@ -48687,12 +47652,7 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     showToast('Daily substitution register exported as CSV successfully!', 'success');
   }
 
-
-  // -------------------------------------------------------------------------
   
-  // =========================================================================
-  // SUBMENU 3: LAB & HALL ALLOCATIONS DATASETS & ENGINE
-  // =========================================================================
 
   let LAB_HALL_FACILITIES = [
     {
@@ -48949,7 +47909,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     }
   ];
 
-  // Helper: calculate free periods for a facility
   function calculateFacilityFreePeriods(facId) {
     const allPeriods = [1, 2, 3, 4, 5, 6, 7, 8];
     const fac = LAB_HALL_FACILITIES.find(f => f.id === facId);
@@ -48967,9 +47926,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     return { freePeriods, bookedPeriods, blackoutPeriods: blackout };
   }
 
-  // -------------------------------------------------------------------------
-  // SUBMENU 3 RENDERER: LAB & HALL ALLOCATIONS
-  // -------------------------------------------------------------------------
   function renderLabHallAllocations() {
     const tbody = document.getElementById('labHallAllocationsTableBody');
     if (!tbody) return;
@@ -49006,7 +47962,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
       const inUseBooking = LAB_HALL_BOOKINGS.find(b => b.facilityId === fac.id && b.status === 'In-Use');
       const { freePeriods, blackoutPeriods } = calculateFacilityFreePeriods(fac.id);
 
-      // 1. Room or Facility Display
       const roomHtml = `
         <div style="display:flex; flex-direction:column; gap:0.25rem;">
           <div style="display:flex; align-items:center; gap:0.45rem;">
@@ -49021,7 +47976,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
         </div>
       `;
 
-      // 2. Capacity Display
       const capacityHtml = `
         <div style="display:flex; flex-direction:column; gap:0.2rem;">
           <strong style="color:#0f172a; font-size:0.875rem;">${fac.capacity}</strong>
@@ -49031,7 +47985,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
         </div>
       `;
 
-      // 3. Available Periods Display
       let periodsPills = '';
       if (freePeriods.length === 0) {
         periodsPills = '<span class="portal-badge badge-danger" style="font-size:0.72rem;">All Periods Booked</span>';
@@ -49047,7 +48000,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
         `;
       }
 
-      // 4. Existing Bookings Display
       let bookingHtml = '';
       if (activeBooking) {
         const isNow = activeBooking.status === 'In-Use';
@@ -49072,7 +48024,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
         `;
       }
 
-      // 5. Equipment Requirements Display
       let equipmentHtml = '';
       if (activeBooking && activeBooking.equipment) {
         equipmentHtml = `
@@ -49091,7 +48042,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
         `;
       }
 
-      // 6. Maintenance Restrictions Display
       let maintenanceHtml = '';
       if (fac.maintenanceStatus === 'Active Window' || fac.maintenanceStatus === 'Scheduled Active') {
         maintenanceHtml = `
@@ -49115,7 +48065,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
         `;
       }
 
-      // 7. Actions Column
       let actionsHtml = `
         <div style="display:flex; align-items:center; justify-content:center; gap:0.4rem;">
           <button type="button" class="btn btn-primary btn-sm" style="padding:0.25rem 0.55rem; font-size:0.78rem;"
@@ -49167,9 +48116,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     renderLabHallAllocations();
   }
 
-  // -------------------------------------------------------------------------
-  // ACTION 1: CREATE BOOKING
-  // -------------------------------------------------------------------------
   function openCreateLabBookingModal(preselectedFacId) {
     const facSelect = document.getElementById('reserveLabFacility');
     if (facSelect) {
@@ -49206,7 +48152,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     const periodVal = document.getElementById('reserveLabPeriod')?.value;
     if (!facId || !periodVal) return;
 
-    // Parse period number from string "Period 5 (12:50 – 01:35 PM)"
     const match = periodVal.match(/Period (\d+)/i);
     if (!match) return;
     const pNum = parseInt(match[1], 10);
@@ -49235,25 +48180,21 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     const statusRadio = document.querySelector('input[name="bookingStatus"]:checked');
     const status = statusRadio ? statusRadio.value : 'Confirmed';
 
-    // Parse period number
     const match = periodText.match(/Period (\d+)/i);
     const pNum = match ? parseInt(match[1], 10) : 5;
 
-    // 1. Check Maintenance Blackout
     const fac = LAB_HALL_FACILITIES.find(f => f.id === facId);
     if (fac && fac.maintenanceBlackoutPeriods && fac.maintenanceBlackoutPeriods.includes(pNum)) {
       showToast('Cannot Book: Period ' + pNum + ' is strictly locked under Maintenance Blackout for ' + fac.name + '!', 'error');
       return;
     }
 
-    // 2. Check Existing Clash
     const existingClash = LAB_HALL_BOOKINGS.find(b => b.facilityId === facId && (b.status === 'In-Use' || b.status === 'Confirmed') && Array.isArray(b.periods) && b.periods.includes(pNum));
     if (existingClash) {
       showToast('Booking Conflict: Facility is already allocated to ' + existingClash.class + ' during Period ' + pNum + '!', 'error');
       return;
     }
 
-    // 3. Create Booking Record
     const newId = 'BK-2026-0' + (LAB_HALL_BOOKINGS.length + 1).toString().padStart(2, '0');
     const newBooking = {
       id: newId,
@@ -49278,9 +48219,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     renderFacilityBookingHistoryTable();
   }
 
-  // -------------------------------------------------------------------------
-  // ACTION 2: EDIT BOOKING
-  // -------------------------------------------------------------------------
   function openEditLabBookingModal(bookingId) {
     const booking = LAB_HALL_BOOKINGS.find(b => b.id === bookingId);
     if (!booking) {
@@ -49334,9 +48272,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     renderFacilityBookingHistoryTable();
   }
 
-  // -------------------------------------------------------------------------
-  // ACTION 3: CANCEL BOOKING
-  // -------------------------------------------------------------------------
   function cancelLabBooking(bookingId) {
     const booking = LAB_HALL_BOOKINGS.find(b => b.id === bookingId);
     if (!booking) return;
@@ -49350,13 +48285,9 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     }
   }
 
-  // -------------------------------------------------------------------------
-  // ACTION 4: DETECT CONFLICTS
-  // -------------------------------------------------------------------------
   function detectFacilityConflicts() {
     const conflicts = [];
 
-    // 1. Scan for double bookings (same facility + overlapping period)
     const activeBookings = LAB_HALL_BOOKINGS.filter(b => b.status === 'In-Use' || b.status === 'Confirmed');
     for (let i = 0; i < activeBookings.length; i++) {
       for (let j = i + 1; j < activeBookings.length; j++) {
@@ -49376,7 +48307,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
       }
     }
 
-    // 2. Scan for maintenance blackout violations
     activeBookings.forEach(b => {
       const fac = LAB_HALL_FACILITIES.find(f => f.id === b.facilityId);
       if (fac && fac.maintenanceBlackoutPeriods) {
@@ -49392,7 +48322,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
       }
     });
 
-    // Populate modal counters
     const totalBookingsEl = document.getElementById('conflictAuditTotalBookings');
     const doubleBookingsEl = document.getElementById('conflictAuditDoubleBookings');
     const maintenanceClashesEl = document.getElementById('conflictAuditMaintenanceClashes');
@@ -49433,9 +48362,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     openModal('facilityConflictModal');
   }
 
-  // -------------------------------------------------------------------------
-  // ACTION 5: VIEW BOOKING HISTORY
-  // -------------------------------------------------------------------------
   function openFacilityBookingHistoryModal() {
     renderFacilityBookingHistoryTable();
     openModal('facilityBookingHistoryModal');
@@ -49494,9 +48420,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     }).join('');
   }
 
-  // -------------------------------------------------------------------------
-  // ACTION 6: MAINTENANCE RESTRICTIONS & PRINT/EXPORT UTILITIES
-  // -------------------------------------------------------------------------
   function openMaintenanceRestrictionsModal() {
     const tbody = document.getElementById('maintenanceRestrictionsTableBody');
     if (tbody) {
@@ -49616,9 +48539,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     showToast('Facility allocations CSV downloaded successfully!', 'success');
   }
 
-
-  // SUBMENU 4 RENDERER: TIMETABLE CONFLICTS
-  // -------------------------------------------------------------------------
   function renderTimetableConflicts() {
     const tbody = document.getElementById('timetableConflictsTableBody');
     if (!tbody) return;
@@ -49643,7 +48563,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     }
 
     tbody.innerHTML = filtered.map(item => {
-      // Split overlapping period into day-period and timing pill for zero-wrap layout
       const periodParts = item.overlappingPeriod.includes('(')
         ? [item.overlappingPeriod.substring(0, item.overlappingPeriod.indexOf('(')).trim(), item.overlappingPeriod.substring(item.overlappingPeriod.indexOf('(') + 1, item.overlappingPeriod.indexOf(')')).trim()]
         : [item.overlappingPeriod, ''];
@@ -49727,9 +48646,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     showToast(`Conflict ${id} reconciled and timetable updated successfully!`, 'success');
   }
 
-  // -------------------------------------------------------------------------
-  // PRINTABLE TIMETABLE ENGINE (DAILY, WEEKLY, PRINTABLE OPTIONS)
-  // -------------------------------------------------------------------------
   function printTimetable(type) {
     if (typeof type === "string" && typeof TIMETABLE_CLASS_DATA !== "undefined" && TIMETABLE_CLASS_DATA[type]) { currentTimetableClass = type; }
     type = (type && type !== currentTimetableClass) ? type : "weekly";
@@ -49818,7 +48734,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     showToast(`Official printable timetable generated for ${currentTimetableClass}!`, 'success');
   }
 
-  // Export Timetable to CSV
   function exportTimetableCSV() {
     const classData = TIMETABLE_CLASS_DATA[currentTimetableClass] || TIMETABLE_CLASS_DATA['Class X-A'];
     let csv = `Class,Period,Time,Monday,Tuesday,Wednesday,Thursday,Friday,Saturday\n`;
@@ -49836,7 +48751,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     showToast(`Exported timetable for ${currentTimetableClass} (CSV)`, 'success');
   }
 
-  // Export Conflicts CSV
   function exportConflictsCSV() {
     let csv = 'ConflictID,Severity,Category,Details,OverlappingPeriod,ImpactedResources,RecommendedResolution,Status\n';
     TIMETABLE_CONFLICTS_DATA.forEach(c => {
@@ -49846,9 +48760,7 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     showToast('Exported Timetable Conflicts Audit Report (CSV)', 'success');
   }
 
-
   function renderMasterTimetable() {
-    // Reuse VP timetable renderer for master timetable body
     const tbody = document.getElementById('masterTimetableBody');
     if (!tbody) return;
 
@@ -49936,21 +48848,11 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     `).join('');
   }
 
-  // =========================================================================
-  // FEES MODULE RENDERERS
-  // =========================================================================
-
   
-
-  // Note: renderDefaultersTable is defined in the Fees & Finance module section above with exact 6 columns
 
   function renderFeeLedgerTable() {
     renderTransactionsLedger();
   }
-
-  // =========================================================================
-  // COMMUNICATION MODULE RENDERERS
-  // =========================================================================
 
   
 
@@ -50196,11 +49098,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
   }
 
   
-  // =========================================================================
-  // ADDITIONAL SUBVIEW RENDERERS (STAFF ATTENDANCE, APPRAISALS, TIMETABLE, EXAM SCHEDULE & AUDIT)
-  // =========================================================================
-
-  // ── Sri Vidya Staff Attendance (School Offline Mode & Dual Punch Engine) ──
 
   let offlineAttendanceCache = {};
 
@@ -50243,11 +49140,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     return offlineAttendanceCache[attDate];
   }
 
-  // =========================================================================
-  // AUTHORITATIVE STAFF ATTENDANCE MODULE CONTROLLER
-  // Sri Vidya E.M. High School - Standard Biometric, Validation & Audit System
-  // =========================================================================
-
   let attendanceCurrentFilterDate = null;
   let parsedAttendanceImportRows = [];
 
@@ -50264,7 +49156,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     const targetDate = attendanceCurrentFilterDate || todayStr;
 
     if (!state.staffAttendanceRecords[targetDate]) {
-      // Build authoritative cadre roster of 42 staff (30 Faculty + 12 Staff)
       const facultyList = (state.faculty || []).map(f => ({
         id: f.employeeId || f.id,
         employeeId: f.employeeId || f.id,
@@ -50285,7 +49176,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
 
       const fullCadre = [...facultyList, ...nonTeachingList];
 
-      // Seed records for targetDate with realistic, policy-compliant attendance data
       const records = [];
       fullCadre.forEach((staff, idx) => {
         let checkIn = '08:15 AM';
@@ -50304,9 +49194,7 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
           }
         ];
 
-        // Specific policy cases for testing & demonstration
         if (staff.employeeId === 'SV-FAC-0105') {
-          // Late arrival case with pending correction
           checkIn = '08:52 AM';
           checkOut = '04:30 PM';
           status = 'Late Arrival';
@@ -50323,7 +49211,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
             }
           ];
         } else if (staff.employeeId === 'SV-STF-0210') {
-          // Late arrival case
           checkIn = '08:58 AM';
           checkOut = '04:30 PM';
           status = 'Late Arrival';
@@ -50331,7 +49218,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
           source = 'Biometric Device (BIO-089)';
           notes = 'Late arrival recorded.';
         } else if (staff.employeeId === 'SV-STF-0211') {
-          // Transport early shift late arrival
           checkIn = '07:15 AM';
           checkOut = '05:30 PM';
           status = 'Late Arrival';
@@ -50339,7 +49225,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
           source = 'Gate Register Entry';
           notes = 'Transport shift delay due to route traffic.';
         } else if (staff.employeeId === 'SV-STF-0212') {
-          // Half day
           checkIn = '08:25 AM';
           checkOut = '12:30 PM';
           status = 'Half Day';
@@ -50347,7 +49232,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
           source = 'Manual Entry';
           notes = 'Approved half-day medical leave for afternoon.';
         } else if (staff.employeeId === 'SV-STF-0205') {
-          // Sanctioned duty / leave
           checkIn = '-';
           checkOut = '-';
           status = 'On Duty / Leave';
@@ -50355,7 +49239,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
           source = 'Sanctioned Duty Deputation';
           notes = 'Deputed for District Child Welfare & Counseling Meet.';
         } else if (staff.employeeId === 'SV-STF-0203') {
-          // Missing check-out punch
           checkIn = '08:15 AM';
           checkOut = null;
           status = 'Present';
@@ -50363,7 +49246,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
           source = 'Biometric Device (BIO-061)';
           notes = 'Check-in recorded; check-out punch pending.';
         } else if (staff.employeeId === 'SV-STF-0201') {
-          // Smt. M. Vijaya has approved correction audit history
           checkIn = '07:54 AM';
           checkOut = '04:35 PM';
           status = 'Present';
@@ -50394,7 +49276,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
             }
           ];
         } else {
-          // Distributed realistic check-in times
           const min = (idx * 3) % 25;
           const minStr = min < 10 ? '0' + min : '' + min;
           checkIn = '08:' + minStr + ' AM';
@@ -50422,7 +49303,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
       state.staffAttendanceRecords[targetDate] = records;
     }
 
-    // Seed 1 pending correction for demonstration if not already present
     if (state.attendanceCorrections.length === 0) {
       state.attendanceCorrections.push({
         id: 'CORR-2026-001',
@@ -50523,7 +49403,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
       const lateDuration = record.lateDuration || '-';
       const source = record.source || 'Biometric Device';
 
-      // Status Badge
       let statusBadge = '<span class="badge badge-success" style="font-size:0.78rem; padding:4px 8px;"><i class="fa-solid fa-circle-check mr-1"></i> Present</span>';
       if (status === 'Late Arrival') {
         statusBadge = '<span class="badge badge-warning" style="font-size:0.78rem; padding:4px 8px; color:#1e293b;"><i class="fa-solid fa-clock mr-1"></i> Late Arrival</span>';
@@ -50535,19 +49414,16 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
         statusBadge = '<span class="badge" style="background:#e0e7ff; color:#3730a3; font-size:0.78rem; padding:4px 8px;"><i class="fa-solid fa-briefcase mr-1"></i> On Duty</span>';
       }
 
-      // Check-Out Display
       let checkOutDisplay = checkOut || '-';
       if (!checkOut && checkIn !== '-' && status !== 'Absent') {
         checkOutDisplay = '<span class="att-missing-pill"><i class="fa-solid fa-triangle-exclamation"></i> Missing Punch</span>';
       }
 
-      // Late Duration Display
       let lateDisplay = '<span class="att-ontime-pill">-</span>';
       if (status === 'Late Arrival' && lateDuration !== '-') {
         lateDisplay = '<span class="att-late-pill"><i class="fa-solid fa-clock"></i> ' + lateDuration + '</span>';
       }
 
-      // Source Badge
       let sourceClass = 'att-source-biometric';
       let sourceIcon = 'fa-fingerprint';
       if (source.includes('Manual')) {
@@ -50563,9 +49439,7 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
       const sourceBadge = '<span class="att-source-badge ' + sourceClass + '"><i class="fa-solid ' + sourceIcon + ' mr-1"></i>' + source + '</span>';
 
       rowsHtml += '<tr data-record-id="' + record.id + '">' +
-        // 1. Employee ID
         '<td><span class="teacher-id-badge">' + empId + '</span></td>' +
-        // 2. Employee Name
         '<td>' +
           '<div style="display:flex; align-items:center; gap:8px;">' +
             '<div style="width:32px; height:32px; border-radius:50%; background:linear-gradient(135deg, #1e3a8a, #3b82f6); color:#fff; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:0.75rem; flex-shrink:0;">' +
@@ -50577,21 +49451,13 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
             '</div>' +
           '</div>' +
         '</td>' +
-        // 3. Department
         '<td><span class="badge badge-light" style="background:#f8fafc; border:1px solid #e2e8f0; font-size:0.8rem; padding:4px 8px; color:#334155;">' + dept + '</span></td>' +
-        // 4. Date
         '<td style="font-size:0.84rem; color:#475569; font-weight:600;">' + date + '</td>' +
-        // 5. Check-In
         '<td><span style="font-weight:700; font-size:0.85rem; color:#1e293b;"><i class="fa-solid fa-arrow-right-to-bracket text-success mr-1"></i>' + checkIn + '</span></td>' +
-        // 6. Check-Out
         '<td><span style="font-weight:600; font-size:0.85rem;">' + checkOutDisplay + '</span></td>' +
-        // 7. Attendance Status
         '<td>' + statusBadge + '</td>' +
-        // 8. Late Duration
         '<td>' + lateDisplay + '</td>' +
-        // 9. Source
         '<td>' + sourceBadge + '</td>' +
-        // 10. Actions
         '<td class="text-right">' +
           '<div class="dropdown d-inline-block">' +
             '<button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="font-size:0.8rem; padding:3px 8px;">' +
@@ -50669,7 +49535,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
 
     select.innerHTML = '<option value="">-- Select Staff Member (42 Total) --</option>';
 
-    // Group 1: Teaching Faculty
     const facGroup = document.createElement('optgroup');
     facGroup.label = 'Teaching Faculty (30)';
     (state.faculty || []).forEach(f => {
@@ -50680,7 +49545,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     });
     select.appendChild(facGroup);
 
-    // Group 2: Non-Teaching Staff
     const ntGroup = document.createElement('optgroup');
     ntGroup.label = 'Non-Teaching Staff (12)';
     (state.nonTeachingStaff || NON_TEACHING_STAFF_DATA || []).forEach(nt => {
@@ -50717,10 +49581,9 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     const statusSelect = document.getElementById('recordAttStatus');
     if (!checkIn || !statusSelect) return;
 
-    // Grace arrival buffer is 08:40 AM
     const [h, m] = checkIn.split(':').map(Number);
     const totalMinutes = h * 60 + m;
-    const graceMinutes = 8 * 60 + 40; // 08:40 AM
+    const graceMinutes = 8 * 60 + 40;
 
     if (totalMinutes > graceMinutes) {
       statusSelect.value = 'Late Arrival';
@@ -50760,7 +49623,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     const valMsg = document.getElementById('recordAttValidationMsg');
     const valText = document.getElementById('recordAttValidationMsgText');
 
-    // 1. Permitted Time Range Validation
     if (checkIn && checkOut) {
       const [inH, inM] = checkIn.split(':').map(Number);
       const [outH, outM] = checkOut.split(':').map(Number);
@@ -50778,7 +49640,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
 
     if (valMsg) valMsg.style.display = 'none';
 
-    // Format times into AM/PM
     const formatTime = (tStr) => {
       if (!tStr) return null;
       const [hh, mm] = tStr.split(':').map(Number);
@@ -50790,7 +49651,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     const formattedIn = formatTime(checkIn);
     const formattedOut = formatTime(checkOut);
 
-    // Calculate late duration if late
     let lateDuration = '-';
     if (status === 'Late Arrival' && checkIn) {
       const [h, m] = checkIn.split(':').map(Number);
@@ -50806,7 +49666,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     const records = state.staffAttendanceRecords[date];
     const existingIndex = records.findIndex(r => r.employeeId === empId);
 
-    // Lookup staff name and department
     let staffName = 'Staff Member';
     let dept = 'Administrative Office';
     let designation = 'Staff';
@@ -50836,7 +49695,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     };
 
     if (existingIndex !== -1) {
-      // Update duplicate record
       const rec = records[existingIndex];
       rec.checkIn = formattedIn;
       rec.checkOut = formattedOut;
@@ -50848,7 +49706,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
       rec.auditHistory.push(auditEntry);
       showToast('Attendance Updated', 'Existing entry for ' + staffName + ' updated with audit trail.', 'success');
     } else {
-      // Create new record
       records.unshift({
         id: 'ATT-' + date.replace(/-/g, '') + '-' + empId,
         employeeId: empId,
@@ -50958,7 +49815,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
         const outTime = parts[3] || '16:30';
         const deviceId = parts[4] || 'BIO-049';
 
-        // Lookup staff
         let name = 'Staff Member';
         let dept = 'Administrative Office';
         const fac = (state.faculty || []).find(f => (f.employeeId || f.id) === empId);
@@ -50968,7 +49824,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
           if (nt) { name = nt.name; dept = nt.dept || nt.department || 'Staff'; }
         }
 
-        // Duplicate check
         const isDuplicate = currentRecords.some(r => r.employeeId === empId && r.date === date);
 
         parsedAttendanceImportRows.push({
@@ -51041,7 +49896,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
       const formattedIn = formatT(row.inTime);
       const formattedOut = formatT(row.outTime);
 
-      // Status check
       let status = 'Present';
       let lateDuration = '-';
       if (row.inTime) {
@@ -51120,7 +49974,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     const origSrc = document.getElementById('corrOrigSource');
     if (origSrc) origSrc.textContent = record.source || 'Biometric Device';
 
-    // Defaults for revised values
     const revIn = document.getElementById('corrRevCheckIn');
     if (revIn) revIn.value = '08:15';
 
@@ -51284,7 +50137,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     const corr = (state.attendanceCorrections || []).find(c => c.id === corrId);
     if (!corr) return;
 
-    // Locate matching attendance record
     const targetDate = corr.date;
     const records = state.staffAttendanceRecords[targetDate] || [];
     const record = records.find(r => r.id === corr.attendanceRecordId || r.employeeId === corr.employeeId);
@@ -51409,7 +50261,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
 
     ensureStaffAttendanceState();
 
-    // Generate monthly aggregated stats for all 42 staff
     const facultyList = (state.faculty || []).map(f => ({
       id: f.employeeId || f.id,
       name: f.name,
@@ -51440,7 +50291,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
 
     let rowsHtml = '';
     allStaff.forEach((s, idx) => {
-      // Deterministic realistic monthly metrics based on index
       const present = Math.max(22, workingDays - (idx % 4));
       const late = idx % 5 === 0 ? 2 : (idx % 3 === 0 ? 1 : 0);
       const absences = workingDays - present;
@@ -51567,7 +50417,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     openDailyRegisterModal();
   }
 
-  // Compatibility aliases
   function openSingleStaffAttendanceModal(staffId) {
     openRecordStaffAttendanceModal();
     if (staffId) {
@@ -51582,11 +50431,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
   function handleSaveSingleStaffAttendance(e) {
     handleRecordStaffAttendance(e);
   }
-
-  // =========================================================================
-  // AUTHORITATIVE APPRAISAL & FEEDBACK MODULE CONTROLLER
-  // Sri Vidya E.M. High School - Confidential Performance Evaluation Engine
-  // =========================================================================
 
   let activeAppraisalDossierId = null;
 
@@ -51849,7 +50693,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     const data = customList || allAppraisals;
     const isAuthorized = isStaffAuthorized();
 
-    // Update privacy auth badge
     const authBadge = document.getElementById('appraisalAuthBadge');
     if (authBadge) {
       if (isAuthorized) {
@@ -51886,7 +50729,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
       const rating = app.rating;
       const ack = app.acknowledgement;
 
-      // Status Badge
       let statusBadge = '<span class="appraisal-status-draft">Draft</span>';
       if (status === 'Completed') {
         statusBadge = '<span class="appraisal-status-completed"><i class="fa-solid fa-circle-check me-1"></i> Completed</span>';
@@ -51898,7 +50740,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
         statusBadge = '<span class="appraisal-status-returned"><i class="fa-solid fa-rotate-left me-1"></i> Returned for Info</span>';
       }
 
-      // Self-Assessment Cell (Privacy Aware)
       let selfCell = '<span class="text-muted" style="font-size:0.78rem;">Not Submitted</span>';
       if (self) {
         selfCell = isAuthorized ?
@@ -51910,7 +50751,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
           '<span class="confidential-lock" title="Confidential self-assessment restricted"><i class="fa-solid fa-lock"></i> Confidential</span>';
       }
 
-      // Reviewer Comments Cell (Privacy Aware)
       let commentsCell = '<span class="text-muted" style="font-size:0.78rem;">None recorded</span>';
       if (comments) {
         commentsCell = isAuthorized ?
@@ -51921,18 +50761,15 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
           '<span class="confidential-lock" title="Evaluator feedback restricted to Principal / VP"><i class="fa-solid fa-lock"></i> Restricted HR Review</span>';
       }
 
-      // Development Goals Cell (Privacy Aware)
       let goalsCell = isAuthorized ?
         '<div style="max-width:180px; font-size:0.82rem; color:#334155;">' + goals + '</div>' :
         '<span class="confidential-lock"><i class="fa-solid fa-lock"></i> Restricted</span>';
 
-      // Acknowledgement Seal
       let ackCell = '<span class="text-muted" style="font-size:0.76rem;">Pending Mutual Sign-off</span>';
       if (ack && ack.employee) {
         ackCell = '<div class="appraisal-ack-seal"><i class="fa-solid fa-signature"></i> Sealed &bull; ' + (status === 'Completed' ? 'Closed' : 'Signed') + '</div>';
       }
 
-      // Actions (Privacy Aware)
       let actionsHtml = '';
       if (isAuthorized) {
         actionsHtml = '<div class="dropdown d-inline-block">' +
@@ -51965,9 +50802,7 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
       }
 
       rowsHtml += '<tr data-appraisal-id="' + app.id + '">' +
-        // 1. Review Period
         '<td style="white-space:nowrap;"><span class="leave-id-badge" style="white-space:nowrap; display:inline-flex; align-items:center; gap:6px; font-family:inherit; background:#f0f9ff; border:1px solid #bae6fd; color:#0369a1; font-size:0.8rem; font-weight:700; padding:5px 10px; border-radius:6px;"><i class="fa-solid fa-calendar-days text-primary"></i> ' + period + '</span></td>' +
-        // 2. Employee
         '<td>' +
           '<div class="faculty-name-cell">' +
             '<div class="faculty-avatar-circle">' +
@@ -51979,29 +50814,20 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
             '</div>' +
           '</div>' +
         '</td>' +
-        // 3. Reviewer
         '<td>' +
           '<div style="font-weight:600; font-size:0.84rem; color:#1e293b;">' + reviewer + '</div>' +
           '<div style="font-size:0.74rem; color:#64748b;">' + (app.reviewerRole || 'Reviewer') + '</div>' +
         '</td>' +
-        // 4. Performance Objectives
         '<td><div style="max-width:200px; font-size:0.82rem; color:#334155; line-height:1.4;">' + objectives + '</div></td>' +
-        // 5. Criteria
         '<td><div style="max-width:180px; font-size:0.78rem; color:#475569; line-height:1.35;">' + criteria + '</div></td>' +
-        // 6. Self-Assessment
         '<td>' + selfCell + '</td>' +
-        // 7. Reviewer Comments
         '<td>' + commentsCell + '</td>' +
-        // 8. Meeting Date
         '<td><div style="font-size:0.8rem; font-weight:600; color:#1e293b;"><i class="fa-solid fa-clock mr-1 text-muted"></i>' + meeting + '</div></td>' +
-        // 9. Development Goals
         '<td>' + goalsCell + '</td>' +
-        // 10. Status & Ack
         '<td>' +
           '<div>' + statusBadge + '</div>' +
           '<div style="margin-top:4px;">' + ackCell + '</div>' +
         '</td>' +
-        // 11. Actions
         '<td class="text-right">' + actionsHtml + '</td>' +
       '</tr>';
     });
@@ -52091,7 +50917,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     const critInput = document.getElementById('startReviewCriteria');
     if (!critInput || !empId) return;
 
-    // Adapt criteria presets based on teaching vs non-teaching
     if (empId.startsWith('SV-STF') || empId.startsWith('NT')) {
       critInput.value = 'Process Efficiency, Timely Record Maintenance, Asset Custody, Punctuality & Shift Adherence, Inter-Departmental Collaboration';
     } else {
@@ -52114,7 +50939,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     const criteria = document.getElementById('startReviewCriteria').value.trim();
     const goals = document.getElementById('startReviewGoals').value.trim();
 
-    // Lookup staff
     let staffName = 'Staff Member';
     let dept = 'Administrative Office';
     let isTeaching = false;
@@ -52629,7 +51453,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
 
     const isAuthorized = isStaffAuthorized();
 
-    // Update Live Count Pill
     const countPill = document.getElementById('staffDocsCountPill');
     if (countPill) {
       countPill.innerHTML = '<i class="fa-solid fa-file-shield text-primary mr-1"></i> ' + data.length + ' Staff Dossiers';
@@ -52742,7 +51565,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
       return;
     }
 
-    // Populate staff dropdown with all 38 personnel
     const staffSelect = document.getElementById('leaveStaffSelect');
     const subSelect = document.getElementById('leaveSubstituteSelect');
 
@@ -52764,7 +51586,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
       }).join('');
     }
 
-    // Prefill dates with tomorrow
     const tomorrow = new Date();
     tomorrow.setDate(tomorrow.getDate() + 1);
     const tomorrowStr = tomorrow.toISOString().split('T')[0];
@@ -52781,7 +51602,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     const quotaPill = document.getElementById('leaveStaffQuotaPill');
     if (!quotaPill) return;
 
-    // Simulate quota check based on personnel ID
     quotaPill.innerHTML = '<div style="display:flex; justify-content:space-between; align-items:center;">' +
       '<span><strong>Casual Leave:</strong> 8 / 12 left</span>' +
       '<span><strong>Medical Leave:</strong> 10 / 10 left</span>' +
@@ -52809,7 +51629,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     const dept = staff ? (staff.isTeaching ? (staff.subjects || staff.subject || 'Academics') : (staff.department || staff.dept || 'Administration')) : 'General Cadre';
     const isTeaching = staff ? staff.isTeaching : true;
 
-    // Compute duration string
     let dateStr = startDate || 'Upcoming Date';
     let daysCount = 1;
     if (startDate && endDate && startDate !== endDate) {
@@ -52847,7 +51666,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     showToast('Leave request submitted successfully for ' + staffName + '. Awaiting VP sign-off.', 'success');
     return false;
   }
-
 
   function openStaffDocUploadModal() {
     showToast('Staff Document Repository: Click Dossier on any staff row to verify or upload compliance documents.', 'info');
@@ -52909,27 +51727,21 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
   }
 
   
-  // =========================================================================
-  // GRANULAR ACCESS CONTROL & PERMISSIONS ENGINE (EXECUTIVE GOVERNANCE)
-  // =========================================================================
 
-  // EXECUTIVE OPERATIONAL RESTRICTIONS & INSTITUTIONAL SECURITY
   const DEFAULT_EXECUTIVE_RESTRICTIONS = {
-    // Principal Statutory Jurisdiction
-    freeze_marks: true,              // Freeze Marks Alteration after terminal exams
-    dual_tc_approval: true,          // Dual-Executive Signoff for Transfer Certificates
-    fee_concession_cap: true,        // Clerk Fee Concession Ceiling (Max ₹2,000 without Principal)
-    cash_handover_audit: true,       // Cashier Shift Closing Physical Audit
-    dossier_delete_protection: true, // Permanent Student Dossier Deletion PIN Protection
-    timetable_master_lock: true,     // Master Timetable modification locked
+    freeze_marks: true,
+    dual_tc_approval: true,
+    fee_concession_cap: true,
+    cash_handover_audit: true,
+    dossier_delete_protection: true,
+    timetable_master_lock: true,
 
-    // Vice Principal Operational Jurisdiction
-    seal_question_papers: true,      // 24-Hour Confidential Question Paper Seal
-    leave_escalation_cap: true,      // Leaves >2 Days require Principal signoff (VP max 2 days)
-    sms_broadcast_gate: true,        // Parent Mass SMS Executive Preview Gate
-    gate_late_auto_summons: true,    // Automated Parent Summons on 3 Late Gate Passes
-    sub_master_protocol: true,       // Emergency Faculty Substitution Mandatory Logging
-    discipline_escalation: true      // Disciplinary Hearing & Detention VP Jurisdiction
+    seal_question_papers: true,
+    leave_escalation_cap: true,
+    sms_broadcast_gate: true,
+    gate_late_auto_summons: true,
+    sub_master_protocol: true,
+    discipline_escalation: true
   };
 
   const PRINCIPAL_RESTRICTIONS_DEFS = [
@@ -53215,7 +52027,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     renderVicePrincipalRestrictionsForm();
   }
 
-  // HOD (HEAD OF DEPARTMENT) PERMISSION DELEGATION SYSTEM
   const HOD_DEPARTMENTS = {
     science: {
       key: 'science',
@@ -53262,7 +52073,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     currentHodDeptKey = deptKey;
     const dept = HOD_DEPARTMENTS[deptKey] || HOD_DEPARTMENTS.science;
 
-    // 1. Populate teacher dropdown with faculty under this HOD
     const select = document.getElementById('permHodTeacherSelect');
     if (select) {
       select.innerHTML = dept.faculty.map(fid => {
@@ -53271,14 +52081,12 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
         return `<option value="${fid}" ${fid === currentHodTeacherId ? 'selected' : ''}>${fac.id} — ${fac.name} (${fac.subject || fac.role})${isHod ? ' [DEPT HOD]' : ''}</option>`;
       }).join('');
 
-      // If currentHodTeacherId not in this dept, pick first
       if (!dept.faculty.includes(currentHodTeacherId)) {
         currentHodTeacherId = dept.faculty[0];
         select.value = currentHodTeacherId;
       }
     }
 
-    // 2. Render HOD Lead & Scope Card
     const cardEl = document.getElementById('hodDeptScopeCard');
     if (cardEl) {
       cardEl.innerHTML = `
@@ -53299,7 +52107,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
       `;
     }
 
-    // 3. Render granular capabilities grid for current teacher
     renderHodTeacherPermsGrid(currentHodTeacherId);
     renderHodDeptFacultyTable();
   }
@@ -53392,7 +52199,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     const dept = HOD_DEPARTMENTS[currentHodDeptKey];
     saveTeacherPermissions(teacherId, perms);
 
-    // Save delegation audit log
     try {
       const logs = JSON.parse(localStorage.getItem('sv_hod_delegation_audit') || '[]');
       logs.unshift({
@@ -53445,10 +52251,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
       `;
     }).join('');
   }
-
-  // =========================================================================
-  // GRANULAR NAVIGATION SUBMENU PERMISSIONS SYSTEM (Principal & VP Governance)
-  // =========================================================================
 
   const MANAGEMENT_SUBMENU_SCHEMA = [
     {
@@ -53708,16 +52510,13 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     }
   ];
 
-  // Institutional default: Every submenu is hidden from Office/Clerk until allowed by Principal/VP
   const DEFAULT_CLERK_SUBMENU_PERMISSIONS = {
-    // Students
     'students.all': true,
     'students.profiles': true,
     'students.admissions': false,
     'students.transfers': false,
     'students.performance': false,
 
-    // Teachers & Staff
     'teachers.faculty': false,
     'teachers.staff': false,
     'teachers.attendance': false,
@@ -53726,7 +52525,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     'teachers.workload': true,
     'teachers.documents': true,
 
-    // Academics
     'academics.classes': false,
     'academics.subjects': false,
     'academics.timetable': false,
@@ -53734,54 +52532,45 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     'academics.results': false,
     'academics.reports': false,
 
-    // Attendance
     'attendance.student': true,
     'attendance.teacher': false,
     'attendance.daily': true,
     'attendance.monthly': false,
 
-    // Timetable
     'timetable.master': false,
     'timetable.substitutions': false,
     'timetable.rooms': false,
 
-    // Examinations
     'examinations.schedule': false,
     'examinations.invigilation': false,
     'examinations.halls': false,
     'examinations.results': false,
 
-    // Discipline
     'discipline.all': false,
     'discipline.late': false,
     'discipline.merit': false,
     'discipline.summons': false,
 
-    // Leaves
     'leaves.faculty': false,
     'leaves.students': false,
     'leaves.history': false,
 
-    // Fees
     'fees.collection': true,
     'fees.pending': true,
     'fees.reports': false,
     'fees.transactions': false,
 
-    // Communication
     'communication.announcements': true,
     'communication.notices': true,
     'communication.sms': false,
     'communication.email': false,
     'communication.push': false,
 
-    // Events
     'events.calendar': false,
     'events.school': false,
     'events.competitions': false,
     'events.activities': false,
 
-    // Reports
     'reports.academic': false,
     'reports.attendance': false,
     'reports.financial': false,
@@ -54274,8 +53063,7 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     renderTeacherSubmenuPermissionsForm(tId);
   }
 
-  // Teacher permissions functions
-  let currentEditingTeacherId = 'SV200005'; // default Sri K. Rajesh
+  let currentEditingTeacherId = 'SV200005';
 
   function initTeacherPermissionsView() {
     populateTeacherSelectDropdown();
@@ -54295,7 +53083,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
   }
 
   function openTeacherPermissionsConfig(teacherId) {
-    // Switch to Settings -> Access Permissions -> Teacher tab
     navigateTo('settings');
     switchSubTab('settings', 'permissions');
     switchPermissionsSubTab('teacher');
@@ -54311,7 +53098,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     const teacher = state.faculty.find(f => f.id === teacherId) || state.faculty[0];
     const perms = getTeacherPermissions(teacherId);
 
-    // Update teacher card summary
     const cardEl = document.getElementById('permSelectedTeacherCard');
     if (cardEl && teacher) {
       const initials = teacher.name.replace(/^(Smt\.|Sri\.)\s*/, '').split(' ').map(n => n[0]).join('').slice(0, 2);
@@ -54335,10 +53121,8 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
       `;
     }
 
-    // Render submenu permissions grid
     renderTeacherSubmenuPermissionsForm(teacherId);
 
-    // Render toggles
     const container = document.getElementById('teacherPermsGrid');
     if (!container) return;
 
@@ -54482,7 +53266,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     let restrictedCard = targetView.querySelector('.clerk-module-restricted-card');
 
     if (isRestricted) {
-      // Hide other direct children inside moduleSection and show restricted card
       Array.from(targetView.children).forEach(child => {
         if (!child.classList.contains('clerk-module-restricted-card') && !child.classList.contains('portal-view-header')) {
           child.dataset.clerkHidden = 'true';
@@ -54518,7 +53301,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
         restrictedCard.style.display = 'block';
       }
     } else {
-      // Unhide children and hide restricted card
       if (restrictedCard) restrictedCard.style.display = 'none';
       Array.from(targetView.children).forEach(child => {
         if (child.dataset.clerkHidden === 'true') {
@@ -54564,12 +53346,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     }
   }
 
-
-  // =========================================================================
-  // ACADEMICS MODULE (8 INSTITUTIONAL SUBMENUS) - MASTER DATASETS & RENDERERS
-  // =========================================================================
-
-  // 1. Classes & Sections Dataset
   const ACADEMIC_CLASSES_SECTIONS_DATA = [
     { className: 'Class X', section: 'Section A', teacher: 'Sri B. Narayana (M.Sc)', capacity: 50, enrolled: 44, year: '2026–27', wing: 'High School', room: 'Room 204' },
     { className: 'Class IX', section: 'Section A', teacher: 'Smt. T. Padmavathi (M.A)', capacity: 50, enrolled: 42, year: '2026–27', wing: 'High School', room: 'Room 203' },
@@ -54583,7 +53359,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     { className: 'Class I', section: 'Section A', teacher: 'Smt. Y. Anusha (B.A)', capacity: 40, enrolled: 48, year: '2026–27', wing: 'Primary', room: 'Room 004' }
   ];
 
-  // 2. Subjects & Syllabus Dataset
   const ACADEMIC_SUBJECTS_SYLLABUS_DATA = [
     { code: 'MTH-101', name: 'Mathematics & Vedic Arithmetic', assignedClass: 'Class X-A', units: '8 of 10 Units Covered (Units 1–8 Cleared)', progress: '85%', pace: 'Ahead of Schedule', faculty: 'Sri B. Narayana (M.Sc)' },
     { code: 'PHY-102', name: 'Physical Science (Physics & Chemistry)', assignedClass: 'Class X-A', units: '7 of 10 Units Covered (Mechanics & Light)', progress: '75%', pace: 'On Schedule', faculty: 'Sri Navva Anand & Sri K. Rajesh' },
@@ -54595,7 +53370,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     { code: 'CMP-108', name: 'Computer Science & ICT Applications', assignedClass: 'Class VII-A', units: '9 of 10 Units Covered (Coding & Scratch)', progress: '88%', pace: 'Ahead of Schedule', faculty: 'Sri D. Srinivas (MCA)' }
   ];
 
-  // 3. Academic Calendar Dataset
   const ACADEMIC_CALENDAR_MASTER_DATA = [
     { date: '12 Jun 2026', event: 'Term 1 School Reopening & Commencement', category: 'Working Days', terms: 'Term 1', workingDays: 'Instructional Day 1', exams: 'Regular Classes', status: 'Completed', badge: 'badge-primary' },
     { date: '15 Jul – 18 Jul 2026', event: 'Formative Assessment 1 (FA-1 Examination)', category: 'Examination Periods', terms: 'Term 1', workingDays: '4 Exam Days', exams: 'FA-1 Assessment', status: 'Completed', badge: 'badge-warning' },
@@ -54609,7 +53383,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     { date: '15 Mar – 28 Mar 2027', event: 'Summative Assessment 2 & Annual Board Examinations', category: 'Examination Periods', terms: 'Term 2', workingDays: '10 Exam Days', exams: 'SA-2 Public Board', status: 'Scheduled', badge: 'badge-warning' }
   ];
 
-  // 4. Master Timetable Dataset (Class-wise Allocations)
   const MASTER_TIMETABLE_ALLOCATIONS_DATA = {
     'Class X-A': [
       { period: 'Period 1 (08:45 – 09:30 AM)', subject: 'Mathematics & Arithmetic', teacher: 'Sri P. Satyanarayana (M.Sc) • SV200004', room: 'Room 204 (Maths Wing)', conflict: 'Clean (0 Conflicts)', status: 'Active' },
@@ -54633,7 +53406,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     ]
   };
 
-  // 5. Lesson Plan Review Dataset
   const LESSON_PLAN_REVIEW_DATA = [
     {
       teacher: 'Sri Navva Anand',
@@ -54682,7 +53454,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     }
   ];
 
-  // 6. Exams Schedule Dataset
   const EXAMS_SCHEDULE_MASTER_DATA = [
     { examName: 'Unit Test 2 (Quarterly Assessment 2026)', class: 'Class X-A', subject: 'Mathematics', date: '28 Sep 2026', time: '09:30 AM – 12:00 PM', duration: '2.5 Hours (150 Mins)', room: 'Hall 1 (Main Auditorium)' },
     { examName: 'Unit Test 2 (Quarterly Assessment 2026)', class: 'Class X-A', subject: 'Physical Science', date: '29 Sep 2026', time: '09:30 AM – 12:00 PM', duration: '2.5 Hours (150 Mins)', room: 'Hall 1 (Main Auditorium)' },
@@ -54692,7 +53463,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     { examName: 'Half Yearly Examination 2026', class: 'Classes I – X', subject: 'All State Board Subjects', date: '15 Oct – 24 Oct 2026', time: '09:30 AM – 12:30 PM', duration: '3.0 Hours (180 Mins)', room: 'All Examination Halls' }
   ];
 
-  // 7. Results & Grading Dataset
   const RESULTS_GRADING_MASTER_DATA = [
     {
       class: 'Class X-A',
@@ -54756,7 +53526,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     }
   ];
 
-  // 8. Academic Reports Dataset
   const ACADEMIC_REPORTS_MASTER_DATA = [
     {
       class: 'Class X-A',
@@ -54820,18 +53589,10 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     }
   ];
 
-  // =========================================================================
-  // RENDERER IMPLEMENTATIONS FOR ALL 8 SUBMENUS
-  // =========================================================================
-
   
-  // =========================================================================
-  // SUBMENU 1: CLASSES & SECTIONS (AUTHORITATIVE AP SSC STANDARD)
-  // Standardized grade allocations, class teachers, sanctioned capacity,
-  // subject curriculum, and student promotion governance.
-  // =========================================================================
 
   let academicClassesRegistry = null;
+  let hasLoadedLiveStudents = false;
   let activeDetailClassId = 'CLS-2026-X-A';
   let activePromotionSourceClassId = 'CLS-2025-IX-A';
   let activePromotionStep = 1;
@@ -54840,7 +53601,7 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     if (academicClassesRegistry) return academicClassesRegistry;
 
     try {
-      const cached = localStorage.getItem('sv_academic_classes_registry');
+      const cached = localStorage.getItem('sv_academic_classes_registry_v2');
       if (cached) {
         const parsed = JSON.parse(cached);
         if (Array.isArray(parsed) && parsed.length >= 10) {
@@ -54920,33 +53681,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
         ]
       },
       {
-        id: 'CLS-2026-X-B',
-        year: '2026–27',
-        className: 'Class X',
-        section: 'Section B',
-        wing: 'High School',
-        room: 'Room 203',
-        shift: 'Morning Session (08:30 AM – 03:45 PM)',
-        capacity: 45,
-        enrolled: 41,
-        status: 'Active',
-        teacher: 'Smt. T. Padmavathi (M.A, B.Ed)',
-        teacherDetails: {
-          name: 'Smt. T. Padmavathi',
-          empId: 'EMP-T02',
-          designation: 'Senior English Faculty & Cultural Head',
-          qualification: 'M.A (English), B.Ed',
-          phone: '+91 98480 33442',
-          email: 't.padmavathi@srividya.edu.in',
-          experience: '14 Years in Secondary Language Pedagogy'
-        },
-        subjects: [],
-        attendance: { todayPresent: 39, total: 41, avgRate: '94.1%', trend: '+0.9%', defaulters: [] },
-        exams: [],
-        history: { passRatePrevYear: '100%', distinctionsPrevYear: '58.0%', topGpa: '9.7' },
-        roster: []
-      },
-      {
         id: 'CLS-2026-IX-A',
         year: '2026–27',
         className: 'Class IX',
@@ -54971,33 +53705,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
         attendance: { todayPresent: 44, total: 46, avgRate: '92.8%', trend: '+1.2%', defaulters: [] },
         exams: [],
         history: { passRatePrevYear: '98.0%', distinctionsPrevYear: '60.0%', topGpa: '9.6' },
-        roster: []
-      },
-      {
-        id: 'CLS-2026-IX-B',
-        year: '2026–27',
-        className: 'Class IX',
-        section: 'Section B',
-        wing: 'High School',
-        room: 'Room 201',
-        shift: 'Morning Session (08:30 AM – 03:45 PM)',
-        capacity: 45,
-        enrolled: 43,
-        status: 'Active',
-        teacher: 'Smt. V. Jyothsna (M.A, B.Ed)',
-        teacherDetails: {
-          name: 'Smt. V. Jyothsna',
-          empId: 'EMP-T04',
-          designation: 'Social Sciences Master & Heritage Club Advisor',
-          qualification: 'M.A (History), B.Ed',
-          phone: '+91 98480 55664',
-          email: 'v.jyothsna@srividya.edu.in',
-          experience: '12 Years Teaching Experience'
-        },
-        subjects: [],
-        attendance: { todayPresent: 41, total: 43, avgRate: '93.0%', trend: '+0.5%', defaulters: [] },
-        exams: [],
-        history: { passRatePrevYear: '97.5%', distinctionsPrevYear: '55.0%', topGpa: '9.5' },
         roster: []
       },
       {
@@ -55035,7 +53742,7 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
         wing: 'High School',
         room: 'Room 104',
         shift: 'Morning Session (08:30 AM – 03:45 PM)',
-        capacity: 45,
+        capacity: 50,
         enrolled: 42,
         status: 'Active',
         teacher: 'Smt. N. Sirisha (B.Sc, B.Ed)',
@@ -55062,7 +53769,7 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
         wing: 'High School',
         room: 'Room 103',
         shift: 'Morning Session (08:30 AM – 03:45 PM)',
-        capacity: 45,
+        capacity: 50,
         enrolled: 40,
         status: 'Active',
         teacher: 'Sri A. Prasad (B.Sc, B.Ed)',
@@ -55089,7 +53796,7 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
         wing: 'Primary',
         room: 'Room 102',
         shift: 'Primary Session (08:45 AM – 03:30 PM)',
-        capacity: 45,
+        capacity: 50,
         enrolled: 38,
         status: 'Active',
         teacher: 'Smt. R. Kavitha (B.A, D.Ed)',
@@ -55116,7 +53823,7 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
         wing: 'Primary',
         room: 'Room 101',
         shift: 'Primary Session (08:45 AM – 03:30 PM)',
-        capacity: 45,
+        capacity: 50,
         enrolled: 44,
         status: 'Active',
         teacher: 'Sri S. Gopal (B.Sc, B.Ed)',
@@ -55143,9 +53850,9 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
         wing: 'Primary',
         room: 'Room 004',
         shift: 'Primary Session (08:45 AM – 03:30 PM)',
-        capacity: 45,
+        capacity: 50,
         enrolled: 45,
-        status: 'Full / At Capacity',
+        status: 'Active',
         teacher: 'Smt. Y. Anusha (B.A, D.Ed)',
         teacherDetails: {
           name: 'Smt. Y. Anusha',
@@ -55170,7 +53877,7 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
         wing: 'Primary',
         room: 'Room 003',
         shift: 'Primary Session (08:45 AM – 03:30 PM)',
-        capacity: 40,
+        capacity: 50,
         enrolled: 36,
         status: 'Active',
         teacher: 'Smt. G. Lakshmi (B.Sc, D.Ed)',
@@ -55197,7 +53904,7 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
         wing: 'Primary',
         room: 'Room 002',
         shift: 'Primary Session (08:45 AM – 03:30 PM)',
-        capacity: 40,
+        capacity: 50,
         enrolled: 39,
         status: 'Active',
         teacher: 'Smt. P. Sunitha (B.A, D.Ed)',
@@ -55224,7 +53931,7 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
         wing: 'Pre-Primary',
         room: 'KG Block - Room 1',
         shift: 'Pre-Primary Shift (09:00 AM – 01:00 PM)',
-        capacity: 35,
+        capacity: 50,
         enrolled: 32,
         status: 'Active',
         teacher: 'Smt. K. Bhavani (B.A, PPT)',
@@ -55251,7 +53958,7 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
         wing: 'Pre-Primary',
         room: 'KG Block - Room 2',
         shift: 'Pre-Primary Shift (09:00 AM – 01:00 PM)',
-        capacity: 35,
+        capacity: 50,
         enrolled: 30,
         status: 'Enrolment Open',
         teacher: 'Smt. M. Lavanya (B.A, PPT)',
@@ -55271,215 +53978,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
         roster: []
       },
       {
-        id: 'CLS-2026-VIII-B',
-        year: '2026–27',
-        className: 'Class VIII',
-        section: 'Section B',
-        wing: 'High School',
-        room: 'Room 107',
-        shift: 'Morning Session (08:30 AM – 03:45 PM)',
-        capacity: 45,
-        enrolled: 40,
-        status: 'Active',
-        teacher: 'Sri M. Raju (M.Sc, B.Ed)',
-        teacherDetails: { name: 'Sri M. Raju', empId: 'EMP-T03', designation: 'Physical Science Master', qualification: 'M.Sc, B.Ed', phone: '+91 98480 44553', email: 'm.raju@srividya.edu.in', experience: '11 Years' },
-        subjects: [],
-        attendance: { todayPresent: 38, total: 40, avgRate: '95.0%', trend: '+0.5%', defaulters: [] },
-        exams: [],
-        history: { passRatePrevYear: '98%', distinctionsPrevYear: '60.0%', topGpa: '9.5' },
-        roster: []
-      },
-      {
-        id: 'CLS-2026-VIII-C',
-        year: '2026–27',
-        className: 'Class VIII',
-        section: 'Section C',
-        wing: 'High School',
-        room: 'Room 106',
-        shift: 'Morning Session (08:30 AM – 03:45 PM)',
-        capacity: 45,
-        enrolled: 38,
-        status: 'Active',
-        teacher: 'Sri K. Rajesh (M.Sc, B.Ed)',
-        teacherDetails: { name: 'Sri K. Rajesh', empId: 'EMP-T05', designation: 'Chemistry & Physical Science Specialist', qualification: 'M.Sc, B.Ed', phone: '+91 98480 55664', email: 'k.rajesh@srividya.edu.in', experience: '9 Years' },
-        subjects: [],
-        attendance: { todayPresent: 36, total: 38, avgRate: '94.7%', trend: '+1.1%', defaulters: [] },
-        exams: [],
-        history: { passRatePrevYear: '97%', distinctionsPrevYear: '58.0%', topGpa: '9.4' },
-        roster: []
-      },
-      {
-        id: 'CLS-2026-VII-B',
-        year: '2026–27',
-        className: 'Class VII',
-        section: 'Section B',
-        wing: 'High School',
-        room: 'Room 104',
-        shift: 'Morning Session (08:30 AM – 03:45 PM)',
-        capacity: 45,
-        enrolled: 41,
-        status: 'Active',
-        teacher: 'Smt. V. Jyothsna (M.A, B.Ed)',
-        teacherDetails: { name: 'Smt. V. Jyothsna', empId: 'EMP-T04', designation: 'Social Studies Master', qualification: 'M.A, B.Ed', phone: '+91 98480 66775', email: 'v.jyothsna@srividya.edu.in', experience: '12 Years' },
-        subjects: [],
-        attendance: { todayPresent: 39, total: 41, avgRate: '95.1%', trend: '+0.8%', defaulters: [] },
-        exams: [],
-        history: { passRatePrevYear: '99%', distinctionsPrevYear: '62.0%', topGpa: '9.6' },
-        roster: []
-      },
-      {
-        id: 'CLS-2026-VI-B',
-        year: '2026–27',
-        className: 'Class VI',
-        section: 'Section B',
-        wing: 'High School',
-        room: 'Room 102',
-        shift: 'Morning Session (08:30 AM – 03:45 PM)',
-        capacity: 45,
-        enrolled: 39,
-        status: 'Active',
-        teacher: 'Sri CH. Venkateswara Rao (M.Sc, B.Ed)',
-        teacherDetails: { name: 'Sri CH. Venkateswara Rao', empId: 'EMP-T05', designation: 'Telugu Literature Master', qualification: 'M.Sc, B.Ed', phone: '+91 98480 77886', email: 'ch.v.rao@srividya.edu.in', experience: '15 Years' },
-        subjects: [],
-        attendance: { todayPresent: 37, total: 39, avgRate: '94.8%', trend: '+0.6%', defaulters: [] },
-        exams: [],
-        history: { passRatePrevYear: '98%', distinctionsPrevYear: '59.0%', topGpa: '9.5' },
-        roster: []
-      },
-      {
-        id: 'CLS-2026-V-B',
-        year: '2026–27',
-        className: 'Class V',
-        section: 'Section B',
-        wing: 'Primary',
-        room: 'Room 008',
-        shift: 'Morning Session (08:30 AM – 03:45 PM)',
-        capacity: 45,
-        enrolled: 36,
-        status: 'Active',
-        teacher: 'Smt. N. Sirisha (B.Sc, B.Ed)',
-        teacherDetails: { name: 'Smt. N. Sirisha', empId: 'EMP-T06', designation: 'Primary Science Coordinator', qualification: 'B.Sc, B.Ed', phone: '+91 98480 88997', email: 'n.sirisha@srividya.edu.in', experience: '8 Years' },
-        subjects: [],
-        attendance: { todayPresent: 35, total: 36, avgRate: '97.2%', trend: '+1.4%', defaulters: [] },
-        exams: [],
-        history: { passRatePrevYear: '100%', distinctionsPrevYear: '70.0%', topGpa: '9.7' },
-        roster: []
-      },
-      {
-        id: 'CLS-2026-IV-B',
-        year: '2026–27',
-        className: 'Class IV',
-        section: 'Section B',
-        wing: 'Primary',
-        room: 'Room 006',
-        shift: 'Morning Session (08:30 AM – 03:45 PM)',
-        capacity: 45,
-        enrolled: 42,
-        status: 'Active',
-        teacher: 'Sri A. Prasad (B.Sc, B.Ed)',
-        teacherDetails: { name: 'Sri A. Prasad', empId: 'EMP-T07', designation: 'General Science Master', qualification: 'B.Sc, B.Ed', phone: '+91 98480 99008', email: 'a.prasad@srividya.edu.in', experience: '10 Years' },
-        subjects: [],
-        attendance: { todayPresent: 40, total: 42, avgRate: '95.2%', trend: '+0.7%', defaulters: [] },
-        exams: [],
-        history: { passRatePrevYear: '100%', distinctionsPrevYear: '68.0%', topGpa: '9.8' },
-        roster: []
-      },
-      {
-        id: 'CLS-2026-III-B',
-        year: '2026–27',
-        className: 'Class III',
-        section: 'Section B',
-        wing: 'Primary',
-        room: 'Room 004',
-        shift: 'Morning Session (08:30 AM – 03:45 PM)',
-        capacity: 45,
-        enrolled: 40,
-        status: 'Active',
-        teacher: 'Smt. R. Kavitha (B.A, D.Ed)',
-        teacherDetails: { name: 'Smt. R. Kavitha', empId: 'EMP-T08', designation: 'Primary Language Teacher', qualification: 'B.A, D.Ed', phone: '+91 98480 11229', email: 'r.kavitha@srividya.edu.in', experience: '9 Years' },
-        subjects: [],
-        attendance: { todayPresent: 38, total: 40, avgRate: '95.0%', trend: '+1.0%', defaulters: [] },
-        exams: [],
-        history: { passRatePrevYear: '100%', distinctionsPrevYear: '65.0%', topGpa: '9.6' },
-        roster: []
-      },
-      {
-        id: 'CLS-2026-II-B',
-        year: '2026–27',
-        className: 'Class II',
-        section: 'Section B',
-        wing: 'Primary',
-        room: 'Room 002',
-        shift: 'Morning Session (08:30 AM – 03:45 PM)',
-        capacity: 45,
-        enrolled: 43,
-        status: 'Active',
-        teacher: 'Sri S. Gopal (B.Sc, B.Ed)',
-        teacherDetails: { name: 'Sri S. Gopal', empId: 'EMP-T09', designation: 'Primary Mathematics Teacher', qualification: 'B.Sc, B.Ed', phone: '+91 98480 22330', email: 's.gopal@srividya.edu.in', experience: '7 Years' },
-        subjects: [],
-        attendance: { todayPresent: 41, total: 43, avgRate: '95.3%', trend: '+0.5%', defaulters: [] },
-        exams: [],
-        history: { passRatePrevYear: '100%', distinctionsPrevYear: '72.0%', topGpa: '9.9' },
-        roster: []
-      },
-      {
-        id: 'CLS-2026-I-B',
-        year: '2026–27',
-        className: 'Class I',
-        section: 'Section B',
-        wing: 'Primary',
-        room: 'Room 009',
-        shift: 'Morning Session (08:30 AM – 03:45 PM)',
-        capacity: 45,
-        enrolled: 45,
-        status: 'Active',
-        teacher: 'Smt. Y. Anusha (B.A, D.Ed)',
-        teacherDetails: { name: 'Smt. Y. Anusha', empId: 'EMP-T10', designation: 'Early Grade Educator', qualification: 'B.A, D.Ed', phone: '+91 98480 33441', email: 'y.anusha@srividya.edu.in', experience: '6 Years' },
-        subjects: [],
-        attendance: { todayPresent: 43, total: 45, avgRate: '95.5%', trend: '+1.2%', defaulters: [] },
-        exams: [],
-        history: { passRatePrevYear: '100%', distinctionsPrevYear: '75.0%', topGpa: '10.0' },
-        roster: []
-      },
-      {
-        id: 'CLS-2026-UKG-B',
-        year: '2026–27',
-        className: 'UKG',
-        section: 'Section B',
-        wing: 'Pre-Primary',
-        room: 'Kindergarten Room 2',
-        shift: 'Pre-Primary Shift (09:00 AM – 01:00 PM)',
-        capacity: 40,
-        enrolled: 38,
-        status: 'Active',
-        teacher: 'Smt. K. Bhavani (B.A, PPT)',
-        teacherDetails: { name: 'Smt. K. Bhavani', empId: 'EMP-T11', designation: 'Pre-Primary Educator', qualification: 'B.A, PPT', phone: '+91 98480 44552', email: 'k.bhavani@srividya.edu.in', experience: '8 Years' },
-        subjects: [],
-        attendance: { todayPresent: 36, total: 38, avgRate: '94.7%', trend: '+0.8%', defaulters: [] },
-        exams: [],
-        history: { passRatePrevYear: '100%', distinctionsPrevYear: '80.0%', topGpa: '10.0' },
-        roster: []
-      },
-      {
-        id: 'CLS-2026-LKG-B',
-        year: '2026–27',
-        className: 'LKG',
-        section: 'Section B',
-        wing: 'Pre-Primary',
-        room: 'Kindergarten Room 4',
-        shift: 'Pre-Primary Shift (09:00 AM – 01:00 PM)',
-        capacity: 40,
-        enrolled: 35,
-        status: 'Active',
-        teacher: 'Smt. M. Lavanya (B.A, PPT)',
-        teacherDetails: { name: 'Smt. M. Lavanya', empId: 'EMP-T12', designation: 'Early Childhood Specialist', qualification: 'B.A, PPT', phone: '+91 98480 55663', email: 'm.lavanya@srividya.edu.in', experience: '5 Years' },
-        subjects: [],
-        attendance: { todayPresent: 33, total: 35, avgRate: '94.3%', trend: '+1.0%', defaulters: [] },
-        exams: [],
-        history: { passRatePrevYear: '100%', distinctionsPrevYear: '85.0%', topGpa: '10.0' },
-        roster: []
-      },
-      {
         id: 'CLS-2026-NURSERY-A',
         year: '2026–27',
         className: 'Nursery',
@@ -55487,7 +53985,7 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
         wing: 'Pre-Primary',
         room: 'Activity Center',
         shift: 'Pre-Primary Shift (09:00 AM – 01:00 PM)',
-        capacity: 35,
+        capacity: 50,
         enrolled: 30,
         status: 'Active',
         teacher: 'Smt. K. Bhavani (B.A, PPT)',
@@ -55506,7 +54004,7 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
         wing: 'High School',
         room: 'Room 204',
         shift: 'Morning Session (08:30 AM – 03:45 PM)',
-        capacity: 45,
+        capacity: 50,
         enrolled: 45,
         status: 'Archived / Completed',
         teacher: 'Sri B. Narayana (M.Sc, B.Ed)',
@@ -55533,7 +54031,7 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
         wing: 'High School',
         room: 'Room 202',
         shift: 'Morning Session (08:30 AM – 03:45 PM)',
-        capacity: 45,
+        capacity: 50,
         enrolled: 44,
         status: 'Archived / Completed',
         teacher: 'Sri M. Raju (M.Sc, B.Ed)',
@@ -55570,7 +54068,43 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     return academicClassesRegistry;
   }
 
+  function normalizeClassKey(val) {
+    const raw = String(val || '').trim().toUpperCase().replace(/^CLASS\s+/i, '');
+    const map = { '10': 'X', '9': 'IX', '8': 'VIII', '7': 'VII', '6': 'VI', '5': 'V', '4': 'IV', '3': 'III', '2': 'II', '1': 'I' };
+    return map[raw] || raw;
+  }
+
+  function normalizeSectionKey(val) {
+    return String(val || '').trim().toUpperCase().replace(/^SECTION\s+/i, '') || 'A';
+  }
+
+  function syncAcademicClassesLiveCounts() {
+    if (!hasLoadedLiveStudents) return;
+    const list = ensureAcademicClassesState();
+    const activeStudents = (state.students || []).filter(s => String(s.status || '').toUpperCase() === 'ACTIVE');
+    list.forEach(c => {
+      if (c.status === 'Archived / Completed') return;
+      const clsKey = normalizeClassKey(c.className);
+      const secKey = normalizeSectionKey(c.section);
+      const matched = activeStudents.filter(s =>
+        normalizeClassKey(s.class) === clsKey && normalizeSectionKey(s.section) === secKey
+      );
+      c.enrolled = matched.length;
+      c.roster = matched.map((s, idx) => ({
+        roll: s.rollNo || (idx + 1),
+        admNo: s.admissionNo || s.admNo || '-',
+        name: s.fullName || s.name || 'Student',
+        gender: s.gender || 'Male',
+        att: s.attendance || '0%',
+        res: s.gpa ? String(s.gpa) : '-',
+        elig: 'Eligible',
+        exception: 'Standard'
+      }));
+    });
+  }
+
   function updateAcademicClassesKPIs() {
+    syncAcademicClassesLiveCounts();
     const list = ensureAcademicClassesState();
     const activeList = list.filter(c => c.status !== 'Archived / Completed');
 
@@ -55668,26 +54202,26 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
           </td>
 
           <!-- 8. Actions -->
-          <td style="text-align:center;">
-            <div style="display:inline-flex; gap:4px; flex-wrap:wrap; justify-content:center;">
-              <button type="button" class="btn btn-secondary btn-sm" onclick="portalApp.openClassDetailModal('${c.id}')" title="View Class Dossier & Roster">
+          <td style="text-align:center; white-space:nowrap;">
+            <div style="display:inline-flex; gap:4px; flex-wrap:nowrap; align-items:center; justify-content:center;">
+              <button type="button" class="btn btn-secondary btn-sm" style="width:30px; height:30px; padding:0; display:inline-flex; align-items:center; justify-content:center;" onclick="portalApp.openClassDetailModal('${c.id}')" title="View Class Dossier & Roster">
                 <i class="fa-solid fa-eye text-primary"></i>
               </button>
-              <button type="button" class="btn btn-secondary btn-sm" onclick="portalApp.openAssignClassTeacherModal('${c.id}')" title="Assign Class Teacher">
+              <button type="button" class="btn btn-secondary btn-sm" style="width:30px; height:30px; padding:0; display:inline-flex; align-items:center; justify-content:center;" onclick="portalApp.openAssignClassTeacherModal('${c.id}')" title="Assign Class Teacher">
                 <i class="fa-solid fa-chalkboard-user"></i>
               </button>
-              <button type="button" class="btn btn-secondary btn-sm" onclick="portalApp.openSetClassCapacityModal('${c.id}')" title="Set Sanctioned Capacity">
+              <button type="button" class="btn btn-secondary btn-sm" style="width:30px; height:30px; padding:0; display:inline-flex; align-items:center; justify-content:center;" onclick="portalApp.openSetClassCapacityModal('${c.id}')" title="Set Sanctioned Capacity">
                 <i class="fa-solid fa-chart-pie"></i>
               </button>
-              <button type="button" class="btn btn-secondary btn-sm" onclick="portalApp.openPromoteStudentsModal('${c.id}')" title="Promote Class Cohort">
+              <button type="button" class="btn btn-secondary btn-sm" style="width:30px; height:30px; padding:0; display:inline-flex; align-items:center; justify-content:center;" onclick="portalApp.openPromoteStudentsModal('${c.id}')" title="Promote Class Cohort">
                 <i class="fa-solid fa-graduation-cap text-success"></i>
               </button>
               ${c.status === 'Archived / Completed' ? `
-                <button type="button" class="btn btn-secondary btn-sm" onclick="portalApp.restoreClass('${c.id}')" title="Restore to Active">
+                <button type="button" class="btn btn-secondary btn-sm" style="width:30px; height:30px; padding:0; display:inline-flex; align-items:center; justify-content:center;" onclick="portalApp.restoreClass('${c.id}')" title="Restore to Active">
                   <i class="fa-solid fa-box-open text-info"></i>
                 </button>
               ` : `
-                <button type="button" class="btn btn-secondary btn-sm" onclick="portalApp.archiveClass('${c.id}')" title="Archive for Completed Year">
+                <button type="button" class="btn btn-secondary btn-sm" style="width:30px; height:30px; padding:0; display:inline-flex; align-items:center; justify-content:center;" onclick="portalApp.archiveClass('${c.id}')" title="Archive for Completed Year">
                   <i class="fa-solid fa-box-archive text-warning"></i>
                 </button>
               `}
@@ -55736,7 +54270,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     showToast('Filters reset to show all class records', 'info');
   }
 
-  // --- DETAIL PAGE MODAL (9 SECTIONS) ---
   function openClassDetailModal(classId, initialTab = 'overview') {
     const list = ensureAcademicClassesState();
     const cls = list.find(c => c.id === classId) || list[0];
@@ -55744,7 +54277,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
 
     activeDetailClassId = cls.id;
 
-    // Header updates
     const titleEl = document.getElementById('classDetailModalTitle');
     const yearBadge = document.getElementById('classDetailYearBadge');
     const statusBadge = document.getElementById('classDetailStatusBadge');
@@ -55762,7 +54294,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     }
     if (subTitle) subTitle.textContent = `${cls.wing} Wing • ${cls.room} • ${cls.shift} • AP SSC Board`;
 
-    // Overview Stats
     const elCap = document.getElementById('detailOverviewCapacity');
     const elEnr = document.getElementById('detailOverviewEnrolled');
     const elAtt = document.getElementById('detailOverviewAttendance');
@@ -55775,7 +54306,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     if (elPromo) elPromo.textContent = `${Math.max(1, cls.enrolled - 2)} / ${cls.enrolled}`;
     if (elOcc) elOcc.textContent = `${Math.round((cls.enrolled / cls.capacity) * 100)}% Utilized`;
 
-    // Overview Parameters
     const pYear = document.getElementById('detailParamYear');
     const pWing = document.getElementById('detailParamWing');
     const pRoom = document.getElementById('detailParamRoom');
@@ -55785,28 +54315,20 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     if (pRoom) pRoom.textContent = `${cls.room} (Academic Block B)`;
     if (pShift) pShift.textContent = cls.shift;
 
-    // Assigned Subjects Table
     renderDetailSubjectsTable(cls);
 
-    // Class Teacher Card
     renderDetailClassTeacherCard(cls);
 
-    // Subject Teachers Grid
     renderDetailSubjectTeachersGrid(cls);
 
-    // Enrolled Students Roster
     renderDetailStudentsRoster(cls);
 
-    // Timetable
     renderDetailTimetable(cls);
 
-    // Attendance
     renderDetailAttendance(cls);
 
-    // Exams
     renderDetailExams(cls);
 
-    // Tab Switch
     switchClassDetailTab(initialTab);
 
     openModal('classDetailModal');
@@ -55916,7 +54438,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     const navCount = document.getElementById('detailRosterCount');
     if (!tbody) return;
 
-    // Generate roster if missing
     let roster = cls.roster;
     if (!roster || roster.length === 0) {
       roster = [];
@@ -56047,7 +54568,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     `).join('');
   }
 
-  // --- CREATE CLASS / ADD SECTION ACTIONS ---
   function openCreateClassSectionModal(isSectionMode = false, defaultClassId = null) {
     const titleEl = document.getElementById('createClassModalTitle');
     const classNameInput = document.getElementById('newClassName');
@@ -56083,7 +54603,7 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     const section = document.getElementById('newClassSection')?.value || 'Section A';
     const teacher = document.getElementById('newClassTeacher')?.value || 'Sri B. Narayana (M.Sc, B.Ed)';
     const room = document.getElementById('newClassRoom')?.value || 'Room 205';
-    const capacity = parseInt(document.getElementById('newClassCapacity')?.value || '45', 10);
+    const capacity = Math.min(50, Math.max(10, parseInt(document.getElementById('newClassCapacity')?.value || '50', 10)));
     const status = document.getElementById('newClassStatus')?.value || 'Active';
 
     const list = ensureAcademicClassesState();
@@ -56122,14 +54642,13 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
 
     list.unshift(newClass);
     try {
-      localStorage.setItem('sv_academic_classes_registry', JSON.stringify(list));
+      localStorage.setItem('sv_academic_classes_registry_v2', JSON.stringify(list));
     } catch (e) {}
     closeModal('createClassSectionModal');
     renderAcademicClasses();
     showToast(`Created ${className} ${section} for AY ${year} successfully!`, 'success');
   }
 
-  // --- ASSIGN CLASS TEACHER ACTIONS ---
   function openAssignClassTeacherModal(classId) {
     const list = ensureAcademicClassesState();
     const cls = list.find(c => c.id === (classId || activeDetailClassId)) || list[0];
@@ -56188,7 +54707,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     }
   }
 
-  // --- SET CAPACITY ACTIONS ---
   function openSetClassCapacityModal(classId) {
     const list = ensureAcademicClassesState();
     const cls = list.find(c => c.id === (classId || activeDetailClassId)) || list[0];
@@ -56203,8 +54721,9 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     if (displayInput) displayInput.value = `${cls.className} - ${cls.section} (AY ${cls.year})`;
     if (enrInput) enrInput.value = `${cls.enrolled} Students`;
     if (newInput) {
-      newInput.value = cls.capacity;
+      newInput.value = Math.min(50, cls.capacity || 50);
       newInput.min = Math.max(10, cls.enrolled);
+      newInput.max = 50;
     }
 
     openModal('setClassCapacityModal');
@@ -56213,7 +54732,7 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
   function handleSetClassCapacitySubmit(e) {
     if (e && e.preventDefault) e.preventDefault();
     const classId = document.getElementById('setCapacityClassId')?.value;
-    const newCap = parseInt(document.getElementById('setCapacityNewInput')?.value || '45', 10);
+    const newCap = Math.min(50, Math.max(10, parseInt(document.getElementById('setCapacityNewInput')?.value || '50', 10)));
 
     const list = ensureAcademicClassesState();
     const cls = list.find(c => c.id === classId);
@@ -56224,13 +54743,15 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
       } else if (cls.status === 'Full / At Capacity') {
         cls.status = 'Active';
       }
+      try {
+        localStorage.setItem('sv_academic_classes_registry_v2', JSON.stringify(list));
+      } catch (e) {}
       closeModal('setClassCapacityModal');
       renderAcademicClasses();
       showToast(`Updated sanctioned capacity for ${cls.className} to ${newCap} seats`, 'success');
     }
   }
 
-  // --- ASSIGN SUBJECTS ACTIONS ---
   function openAssignClassSubjectsModal(classId) {
     const list = ensureAcademicClassesState();
     const cls = list.find(c => c.id === (classId || activeDetailClassId)) || list[0];
@@ -56275,7 +54796,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     showToast('Saved subject and faculty allocations successfully!', 'success');
   }
 
-  // --- ARCHIVE / RESTORE CLASS ---
   function archiveClass(classId) {
     const list = ensureAcademicClassesState();
     const cls = list.find(c => c.id === classId);
@@ -56296,7 +54816,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     showToast(`Restored ${cls.className} ${cls.section} to Active status`, 'success');
   }
 
-  // --- STUDENT PROMOTION WORKFLOW ENGINE ---
   function openPromoteStudentsModal(sourceClassId = null) {
     const list = ensureAcademicClassesState();
     const sourceCls = sourceClassId ? list.find(c => c.id === sourceClassId) : list.find(c => c.id === 'CLS-2025-IX-A') || list[0];
@@ -56304,7 +54823,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
       activePromotionSourceClassId = sourceCls.id;
     }
 
-    // Populate source year and class dropdowns
     const sYear = document.getElementById('promoSourceYear');
     const sClass = document.getElementById('promoSourceClass');
     if (sYear && sourceCls) sYear.value = sourceCls.year.includes('2025') ? '2025–26' : '2026–27';
@@ -56319,7 +54837,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
   function switchPromotionStep(stepNum) {
     activePromotionStep = stepNum;
 
-    // Update wizard nodes
     for (let i = 1; i <= 4; i++) {
       const node = document.getElementById(`pnode-${i}`);
       const pane = document.getElementById(`step-pane-${i}`);
@@ -56499,15 +55016,12 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     const checks = document.querySelectorAll('.promo-candidate-check:checked');
     const promotedCount = checks.length;
 
-    // STATUTORY NON-OVERWRITE PRESERVATION:
-    // Append previous enrolment to enrolmentHistory array for each promoted student
     if (state.students && Array.isArray(state.students)) {
       checks.forEach(chk => {
         const adm = chk.getAttribute('data-adm');
         const st = state.students.find(s => s.admissionNo === adm || s.id === adm);
         if (st) {
           if (!st.enrolmentHistory) st.enrolmentHistory = [];
-          // Preserve historical record
           st.enrolmentHistory.push({
             ay: sourceYearSel,
             class: sourceClassSel.split('-')[0],
@@ -56517,7 +55031,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
             orderRef: orderRef,
             promotedDate: new Date().toLocaleDateString('en-GB')
           });
-          // Set new active class for the target AY
           st.class = targetClassSel.split('-')[0];
           st.section = targetClassSel.split('-')[1] || 'A';
           st.academicYear = targetYearSel;
@@ -56525,7 +55038,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
       });
     }
 
-    // Update target class enrollment count in the registry
     const list = ensureAcademicClassesState();
     const targetCls = list.find(c => c.year.includes(targetYearSel.slice(0, 4)) && (c.className + '-' + c.section.slice(-1) === targetClassSel));
     if (targetCls) {
@@ -56537,7 +55049,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     showToast(`Successfully promoted ${promotedCount} students to ${targetClassSel} (AY ${targetYearSel}) with enrolment history preserved!`, 'success');
   }
 
-  // --- CSV EXPORT FUNCTIONS ---
   function exportClassRegisterCSV() {
     const list = ensureAcademicClassesState();
     let csv = 'Academic Year,Class,Section,Wing,Class Teacher,Room,Capacity,Enrolled Students,Occupancy %,Status\n';
@@ -56583,13 +55094,7 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     exportClassRosterCSV(activeDetailClassId);
   }
 
-
   
-  // =========================================================================
-  // SUBMENU 2: SUBJECTS & SYLLABUS (AUTHORITATIVE AP SCERT STANDARD)
-  // Curricula standards, learning objectives, chapter units, teacher allocations,
-  // completion pacing, and syllabus archives.
-  // =========================================================================
 
   let academicSubjectsRegistry = null;
   let activeDetailSubjectId = 'SUBJ-MTH-101-X';
@@ -57279,7 +55784,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     showToast('Filters reset to show all subjects', 'info');
   }
 
-  // --- SUBJECT DETAIL PAGE (7 EXACT SECTIONS) ---
   function openSubjectDetailModal(subjectId, initialTab = 'info') {
     const list = ensureAcademicSubjectsState();
     const subj = list.find(s => s.id === subjectId) || list[0];
@@ -57287,7 +55791,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
 
     activeDetailSubjectId = subj.id;
 
-    // Header updates
     const titleEl = document.getElementById('subjDetailModalTitle');
     const codeBadge = document.getElementById('subjDetailCodeBadge');
     const statusBadge = document.getElementById('subjDetailStatusBadge');
@@ -57305,7 +55808,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     }
     if (subTitle) subTitle.textContent = `${subj.className} • AY ${subj.year} • Syllabus ${subj.version}`;
 
-    // Overview Stats
     const pProg = document.getElementById('subjInfoProgress');
     const pCovered = document.getElementById('subjInfoUnitsCovered');
     const pPeriods = document.getElementById('subjInfoPeriods');
@@ -57321,7 +55823,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     if (pPass) pPass.textContent = subj.passingMarks || '35 / 100';
     if (pPace) pPace.textContent = subj.status;
 
-    // Overview Specs
     const sCode = document.getElementById('subjInfoCodeText');
     const sYear = document.getElementById('subjInfoYearText');
     const sClass = document.getElementById('subjInfoClassText');
@@ -57336,19 +55837,14 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     if (sVer) sVer.textContent = subj.version;
     if (sBook) sBook.textContent = subj.textbook || 'AP SCERT Official Reader';
 
-    // Learning Objectives
     renderDetailObjectives(subj);
 
-    // Chapters & Units
     renderDetailChapters(subj);
 
-    // Teacher Allocation
     renderDetailTeacher(subj);
 
-    // Lesson Plans
     renderDetailLessonPlans(subj);
 
-    // History
     renderDetailHistory(subj);
 
     switchSubjectDetailTab(initialTab);
@@ -57496,7 +55992,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     `).join('');
   }
 
-  // --- CHAPTER / UNIT MANAGEMENT ---
   function openManageChaptersModal(subjectId = null) {
     const list = ensureAcademicSubjectsState();
     const subj = list.find(s => s.id === (subjectId || activeDetailSubjectId)) || list[0];
@@ -57548,7 +56043,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
         date: `Target: ${new Date().toLocaleDateString('en-GB')}`
       });
 
-      // Recalculate completion
       recalculateSubjectProgress(subj);
       openManageChaptersModal(subj.id);
       renderAcademicSubjects();
@@ -57591,7 +56085,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     else subj.status = 'Behind Target';
   }
 
-  // --- CREATE SUBJECT ACTIONS ---
   function openCreateSubjectModal() {
     openModal('createSubjectModal');
   }
@@ -57651,7 +56144,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     showToast(`Created ${code}: ${name} for ${className} successfully!`, 'success');
   }
 
-  // --- UPLOAD SYLLABUS ACTIONS ---
   function openUploadSyllabusModal(subjectId = null) {
     const list = ensureAcademicSubjectsState();
     const selectEl = document.getElementById('uploadSyllabusSubject');
@@ -57684,7 +56176,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     }
   }
 
-  // --- SET COMPLETION TARGETS ACTIONS ---
   function openSetCompletionTargetsModal(subjectId = null) {
     const list = ensureAcademicSubjectsState();
     const selectEl = document.getElementById('targetSelectSubject');
@@ -57718,7 +56209,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     }
   }
 
-  // --- ASSIGN SUBJECT TEACHER ACTIONS ---
   function openAssignSubjectTeacherModal(subjectId = null) {
     const list = ensureAcademicSubjectsState();
     const subj = list.find(s => s.id === (subjectId || activeDetailSubjectId)) || list[0];
@@ -57784,7 +56274,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     }
   }
 
-  // --- ARCHIVE / RESTORE SUBJECT ---
   function archiveSubject(subjectId) {
     const list = ensureAcademicSubjectsState();
     const subj = list.find(s => s.id === subjectId);
@@ -57805,7 +56294,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     showToast(`Restored ${subj.code}: ${subj.name} to active curriculum`, 'success');
   }
 
-  // --- EXPORT CSV ---
   function exportSyllabusRegisterCSV() {
     const list = ensureAcademicSubjectsState();
     let csv = 'Subject Code,Subject Name,Class,Academic Year,Assigned Teacher,Syllabus Version,Completion %,Status,Weekly Periods,Textbook\n';
@@ -57823,13 +56311,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     showToast('Exported Subjects & Syllabus Register CSV', 'success');
   }
 
-
-    // =========================================================================
-  // =========================================================================
-  // SUBMENU 3: AUTHORITATIVE ACADEMIC CALENDAR CONTROLLER & STATE
-  // =========================================================================
-
-  // Initial Master Calendar Events Data (AY 2026-2027)
   const INITIAL_ACADEMIC_CALENDAR_EVENTS = [
     {
       id: 'EVT-2026-001',
@@ -58155,10 +56636,650 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
       approvalStatus: 'Published',
       publishedBy: 'Smt. Gorle Varalakshmi - Principal',
       isGazetted: false
+    },
+    // --- Festivals & Cultural Celebrations ---
+    {
+      id: 'EVT-2026-026',
+      title: 'International Yoga Day & Wellness Assembly',
+      category: 'Institutional Event',
+      startDate: '2026-06-21',
+      endDate: '2026-06-21',
+      affectedClasses: 'All Classes (Nursery–Class X)',
+      description: 'Morning mass yoga protocol, pranayama session, and health awareness talk.',
+      visibility: 'Public (All Students & Parents)',
+      approvalStatus: 'Published',
+      publishedBy: 'Sri B. Raman - Physical Director',
+      isGazetted: false
+    },
+    {
+      id: 'EVT-2026-027',
+      title: 'Term 1 Orientation & Parent-Teacher Meet',
+      category: 'Parent-Teacher Meeting',
+      startDate: '2026-07-11',
+      endDate: '2026-07-11',
+      affectedClasses: 'All Classes (Nursery–Class X)',
+      description: 'Interactive parent orientation on curriculum roadmap, attendance rules, and portal access.',
+      visibility: 'Public (All Students & Parents)',
+      approvalStatus: 'Published',
+      publishedBy: 'Smt. Gorle Varalakshmi - Principal',
+      isGazetted: false
+    },
+    {
+      id: 'EVT-2026-028',
+      title: 'Guru Purnima Celebrations',
+      category: 'Festival',
+      startDate: '2026-07-29',
+      endDate: '2026-07-29',
+      affectedClasses: 'All Classes (Nursery–Class X)',
+      description: 'Special assembly honoring teachers and mentors with cultural tributes.',
+      visibility: 'Public (All Students & Parents)',
+      approvalStatus: 'Published',
+      publishedBy: 'Smt. Gorle Varalakshmi - Principal',
+      isGazetted: false
+    },
+    {
+      id: 'EVT-2026-029',
+      title: 'Inter-House Debate & Elocution Finals',
+      category: 'Institutional Event',
+      startDate: '2026-08-08',
+      endDate: '2026-08-08',
+      affectedClasses: 'High School (VI–X)',
+      description: 'Annual inter-house English & Telugu debate championship in the school auditorium.',
+      visibility: 'Public (All Students & Parents)',
+      approvalStatus: 'Published',
+      publishedBy: 'Smt. T. Padmavathi - Senior English',
+      isGazetted: false
+    },
+    {
+      id: 'EVT-2026-030',
+      title: 'Raksha Bandhan',
+      category: 'Festival',
+      startDate: '2026-08-19',
+      endDate: '2026-08-19',
+      affectedClasses: 'All Classes (Nursery–Class X)',
+      description: 'Cultural celebration of sibling bond and eco-friendly rakhi making activity.',
+      visibility: 'Public (All Students & Parents)',
+      approvalStatus: 'Published',
+      publishedBy: 'Smt. Gorle Varalakshmi - Principal',
+      isGazetted: false
+    },
+    {
+      id: 'EVT-2026-031',
+      title: 'Sri Krishna Janmashtami',
+      category: 'Festival',
+      startDate: '2026-09-04',
+      endDate: '2026-09-04',
+      affectedClasses: 'All Classes (Nursery–Class X)',
+      description: 'State Gazetted Festival. Fancy dress and devotional music celebration for Pre-Primary & Primary.',
+      visibility: 'Public (All Students & Parents)',
+      approvalStatus: 'Published',
+      publishedBy: 'Smt. Gorle Varalakshmi - Principal',
+      isGazetted: true
+    },
+    {
+      id: 'EVT-2026-032',
+      title: "Teachers' Day (Dr. S. Radhakrishnan Birthday)",
+      category: 'Birthday',
+      startDate: '2026-09-05',
+      endDate: '2026-09-05',
+      affectedClasses: 'All Classes (Nursery–Class X)',
+      description: "Commemorating Dr. Sarvepalli Radhakrishnan's birth anniversary with student-led classes and faculty felicitation.",
+      visibility: 'Public (All Students & Parents)',
+      approvalStatus: 'Published',
+      publishedBy: 'Sri Navva Anand - Vice Principal',
+      isGazetted: false
+    },
+    {
+      id: 'EVT-2026-033',
+      title: 'Vinayaka Chavithi (Ganesh Chaturthi)',
+      category: 'Festival',
+      startDate: '2026-09-14',
+      endDate: '2026-09-14',
+      affectedClasses: 'All Classes (Nursery–Class X)',
+      description: 'State Gazetted Festival. Eco-friendly clay idol workshop held prior to festival.',
+      visibility: 'Public (All Students & Parents)',
+      approvalStatus: 'Published',
+      publishedBy: 'Smt. Gorle Varalakshmi - Principal',
+      isGazetted: true
+    },
+    {
+      id: 'EVT-2026-034',
+      title: 'FA-2 Answer Script Review & PTM',
+      category: 'Parent-Teacher Meeting',
+      startDate: '2026-09-26',
+      endDate: '2026-09-26',
+      affectedClasses: 'All Classes (Nursery–Class X)',
+      description: 'Individual parent-teacher review of Formative Assessment-2 performance.',
+      visibility: 'Public (All Students & Parents)',
+      approvalStatus: 'Published',
+      publishedBy: 'Sri Navva Anand - Vice Principal',
+      isGazetted: false
+    },
+    // --- Rich October 2026 Events (Festivals, Birthdays, Sports, Academic, PTM) ---
+    {
+      id: 'EVT-2026-035',
+      title: 'Swachhata & Campus Eco-Plantation Drive',
+      category: 'Institutional Event',
+      startDate: '2026-10-03',
+      endDate: '2026-10-03',
+      affectedClasses: 'All Classes (Nursery–Class X)',
+      description: 'Eco-Club tree plantation and campus cleanliness drive with 150 saplings planted.',
+      visibility: 'Public (All Students & Parents)',
+      approvalStatus: 'Published',
+      publishedBy: 'Smt. N. Sirisha - Eco Club Coordinator',
+      isGazetted: false
+    },
+    {
+      id: 'EVT-2026-036',
+      title: 'Birthday: Sri B. Narayana (Senior Maths)',
+      category: 'Birthday',
+      startDate: '2026-10-05',
+      endDate: '2026-10-05',
+      affectedClasses: 'Faculty & Staff Only',
+      description: 'Warm birthday wishes to Senior Mathematics Faculty Sri B. Narayana.',
+      visibility: 'Faculty & Staff Only',
+      approvalStatus: 'Published',
+      publishedBy: 'Smt. Gorle Varalakshmi - Principal',
+      isGazetted: false
+    },
+    {
+      id: 'EVT-2026-037',
+      title: 'Inter-House Chess & Carrom Championship',
+      category: 'Sports & Co-Curricular',
+      startDate: '2026-10-06',
+      endDate: '2026-10-07',
+      affectedClasses: 'High School (VI–X)',
+      description: 'Two-day indoor board games championship across Red, Blue, Green, and Yellow houses.',
+      visibility: 'Public (All Students & Parents)',
+      approvalStatus: 'Published',
+      publishedBy: 'Sri B. Raman - Physical Director',
+      isGazetted: false
+    },
+    {
+      id: 'EVT-2026-038',
+      title: 'Bathukamma & Navaratri Celebrations',
+      category: 'Festival',
+      startDate: '2026-10-08',
+      endDate: '2026-10-08',
+      affectedClasses: 'All Classes (Nursery–Class X)',
+      description: 'Traditional floral Bathukamma arrangement, folk songs, and Navaratri cultural showcase.',
+      visibility: 'Public (All Students & Parents)',
+      approvalStatus: 'Published',
+      publishedBy: 'Smt. Gorle Varalakshmi - Principal',
+      isGazetted: false
+    },
+    {
+      id: 'EVT-2026-039',
+      title: 'Pre-Vacation Art, Craft & Rangoli Contest',
+      category: 'Institutional Event',
+      startDate: '2026-10-09',
+      endDate: '2026-10-09',
+      affectedClasses: 'All Classes (Nursery–Class X)',
+      description: 'Festive Rangoli and greeting card competition before Dussehra vacation.',
+      visibility: 'Public (All Students & Parents)',
+      approvalStatus: 'Published',
+      publishedBy: 'Smt. V. Jyothsna - Cultural Head',
+      isGazetted: false
+    },
+    {
+      id: 'EVT-2026-040',
+      title: 'Durga Ashtami',
+      category: 'Festival',
+      startDate: '2026-10-11',
+      endDate: '2026-10-11',
+      affectedClasses: 'All Classes (Nursery–Class X)',
+      description: 'Auspicious Navaratri Ashtami festival observance.',
+      visibility: 'Public (All Students & Parents)',
+      approvalStatus: 'Published',
+      publishedBy: 'Smt. Gorle Varalakshmi - Principal',
+      isGazetted: false
+    },
+    {
+      id: 'EVT-2026-041',
+      title: 'Birthday: Ananya Sharma (Class IX-A)',
+      category: 'Birthday',
+      startDate: '2026-10-12',
+      endDate: '2026-10-12',
+      affectedClasses: 'High School (VI–X)',
+      description: 'Student Birthday Celebration — Ananya Sharma (Class IX-A).',
+      visibility: 'Public (All Students & Parents)',
+      approvalStatus: 'Published',
+      publishedBy: 'Class Teacher - IX-A',
+      isGazetted: false
+    },
+    {
+      id: 'EVT-2026-042',
+      title: "Dr. A.P.J. Abdul Kalam Jayanti (Students' Day)",
+      category: 'Birthday',
+      startDate: '2026-10-15',
+      endDate: '2026-10-15',
+      affectedClasses: 'All Classes (Nursery–Class X)',
+      description: "Birth anniversary of Bharat Ratna Dr. A.P.J. Abdul Kalam celebrated as World Students' Day.",
+      visibility: 'Public (All Students & Parents)',
+      approvalStatus: 'Published',
+      publishedBy: 'Smt. Gorle Varalakshmi - Principal',
+      isGazetted: false
+    },
+    {
+      id: 'EVT-2026-043',
+      title: 'Atla Tadde Cultural Observance',
+      category: 'Festival',
+      startDate: '2026-10-19',
+      endDate: '2026-10-19',
+      affectedClasses: 'All Classes (Nursery–Class X)',
+      description: 'Traditional Andhra cultural festival.',
+      visibility: 'Public (All Students & Parents)',
+      approvalStatus: 'Published',
+      publishedBy: 'Smt. Gorle Varalakshmi - Principal',
+      isGazetted: false
+    },
+    {
+      id: 'EVT-2026-044',
+      title: 'Valmiki Jayanti',
+      category: 'Festival',
+      startDate: '2026-10-20',
+      endDate: '2026-10-20',
+      affectedClasses: 'All Classes (Nursery–Class X)',
+      description: 'Maharshi Valmiki Jayanti observance.',
+      visibility: 'Public (All Students & Parents)',
+      approvalStatus: 'Published',
+      publishedBy: 'Smt. Gorle Varalakshmi - Principal',
+      isGazetted: false
+    },
+    {
+      id: 'EVT-2026-045',
+      title: 'Birthday: Smt. T. Padmavathi (English)',
+      category: 'Birthday',
+      startDate: '2026-10-22',
+      endDate: '2026-10-22',
+      affectedClasses: 'Faculty & Staff Only',
+      description: 'Warm birthday wishes to Senior English Faculty Smt. T. Padmavathi.',
+      visibility: 'Faculty & Staff Only',
+      approvalStatus: 'Published',
+      publishedBy: 'Smt. Gorle Varalakshmi - Principal',
+      isGazetted: false
+    },
+    {
+      id: 'EVT-2026-046',
+      title: 'National Science Olympiad Prep Workshop',
+      category: 'Academic',
+      startDate: '2026-10-23',
+      endDate: '2026-10-23',
+      affectedClasses: 'High School (VI–X)',
+      description: 'Special problem-solving clinic for NSO and Maths Olympiad registered students.',
+      visibility: 'Public (All Students & Parents)',
+      approvalStatus: 'Published',
+      publishedBy: 'Sri M. Raju - Physical Science',
+      isGazetted: false
+    },
+    {
+      id: 'EVT-2026-047',
+      title: 'Term 1 Mega Parent-Teacher Meeting (PTM)',
+      category: 'Parent-Teacher Meeting',
+      startDate: '2026-10-24',
+      endDate: '2026-10-24',
+      affectedClasses: 'All Classes (Nursery–Class X)',
+      description: 'Term 1 progress review, attendance briefing, and SA-1 preparation guidance (9:30 AM – 1:30 PM).',
+      visibility: 'Public (All Students & Parents)',
+      approvalStatus: 'Published',
+      publishedBy: 'Smt. Gorle Varalakshmi - Principal',
+      isGazetted: false
+    },
+    {
+      id: 'EVT-2026-048',
+      title: 'Birthday: Karthik Reddy (X-A) & Priya Nair (VII-B)',
+      category: 'Birthday',
+      startDate: '2026-10-27',
+      endDate: '2026-10-27',
+      affectedClasses: 'All Classes (Nursery–Class X)',
+      description: 'Student Birthday Celebrations in morning assembly.',
+      visibility: 'Public (All Students & Parents)',
+      approvalStatus: 'Published',
+      publishedBy: 'Academic Office',
+      isGazetted: false
+    },
+    {
+      id: 'EVT-2026-049',
+      title: 'Annual Health, Vision & Dental Checkup Camp',
+      category: 'Institutional Event',
+      startDate: '2026-10-28',
+      endDate: '2026-10-28',
+      affectedClasses: 'All Classes (Nursery–Class X)',
+      description: 'Comprehensive pediatric, dental, and ophthalmology screening by district medical team.',
+      visibility: 'Public (All Students & Parents)',
+      approvalStatus: 'Published',
+      publishedBy: 'Campus Health & Sanitation Officer',
+      isGazetted: false
+    },
+    {
+      id: 'EVT-2026-050',
+      title: 'Dhanteras Festival',
+      category: 'Festival',
+      startDate: '2026-10-30',
+      endDate: '2026-10-30',
+      affectedClasses: 'All Classes (Nursery–Class X)',
+      description: 'Beginning of Deepavali festivities.',
+      visibility: 'Public (All Students & Parents)',
+      approvalStatus: 'Published',
+      publishedBy: 'Smt. Gorle Varalakshmi - Principal',
+      isGazetted: false
+    },
+    {
+      id: 'EVT-2026-051',
+      title: 'Naraka Chaturdashi',
+      category: 'Festival',
+      startDate: '2026-10-31',
+      endDate: '2026-10-31',
+      affectedClasses: 'All Classes (Nursery–Class X)',
+      description: 'Deepavali Eve festival celebration.',
+      visibility: 'Public (All Students & Parents)',
+      approvalStatus: 'Published',
+      publishedBy: 'Smt. Gorle Varalakshmi - Principal',
+      isGazetted: false
+    },
+    {
+      id: 'EVT-2026-052',
+      title: 'Sardar Patel Jayanti (Rashtriya Ekta Diwas)',
+      category: 'Birthday',
+      startDate: '2026-10-31',
+      endDate: '2026-10-31',
+      affectedClasses: 'All Classes (Nursery–Class X)',
+      description: 'National Unity Day pledge and morning Run for Unity.',
+      visibility: 'Public (All Students & Parents)',
+      approvalStatus: 'Published',
+      publishedBy: 'Sri Navva Anand - Vice Principal',
+      isGazetted: false
+    },
+    // --- November 2026 Events ---
+    {
+      id: 'EVT-2026-053',
+      title: 'Bhai Dooj',
+      category: 'Festival',
+      startDate: '2026-11-03',
+      endDate: '2026-11-03',
+      affectedClasses: 'All Classes (Nursery–Class X)',
+      description: 'Traditional post-Deepavali festival.',
+      visibility: 'Public (All Students & Parents)',
+      approvalStatus: 'Published',
+      publishedBy: 'Smt. Gorle Varalakshmi - Principal',
+      isGazetted: false
+    },
+    {
+      id: 'EVT-2026-054',
+      title: 'Inter-School Robotics & Coding Hackathon',
+      category: 'Academic',
+      startDate: '2026-11-06',
+      endDate: '2026-11-06',
+      affectedClasses: 'High School (VI–X)',
+      description: 'STEM innovation challenge hosted in the Computer Science & Atal Tinkering Lab.',
+      visibility: 'Public (All Students & Parents)',
+      approvalStatus: 'Published',
+      publishedBy: 'Sri D. Suresh - Computer Science',
+      isGazetted: false
+    },
+    {
+      id: 'EVT-2026-055',
+      title: 'Birthday: Smt. Gorle Varalakshmi (Principal)',
+      category: 'Birthday',
+      startDate: '2026-11-07',
+      endDate: '2026-11-07',
+      affectedClasses: 'All Classes (Nursery–Class X)',
+      description: 'Warm birthday wishes to Principal & Correspondent Smt. Gorle Varalakshmi.',
+      visibility: 'Public (All Students & Parents)',
+      approvalStatus: 'Published',
+      publishedBy: 'Faculty & Student Council',
+      isGazetted: false
+    },
+    {
+      id: 'EVT-2026-056',
+      title: 'National Education Day Quiz',
+      category: 'Academic',
+      startDate: '2026-11-11',
+      endDate: '2026-11-11',
+      affectedClasses: 'All Classes (Nursery–Class X)',
+      description: 'Inter-house GK & Academic Quiz commemorating Maulana Abul Kalam Azad.',
+      visibility: 'Public (All Students & Parents)',
+      approvalStatus: 'Published',
+      publishedBy: 'Sri Navva Anand - Vice Principal',
+      isGazetted: false
+    },
+    {
+      id: 'EVT-2026-057',
+      title: 'Jawaharlal Nehru Birthday (Children’s Day)',
+      category: 'Birthday',
+      startDate: '2026-11-14',
+      endDate: '2026-11-14',
+      affectedClasses: 'All Classes (Nursery–Class X)',
+      description: 'Cultural fiesta, teacher performances for students, and sweet distribution.',
+      visibility: 'Public (All Students & Parents)',
+      approvalStatus: 'Published',
+      publishedBy: 'Smt. Gorle Varalakshmi - Principal',
+      isGazetted: false
+    },
+    {
+      id: 'EVT-2026-058',
+      title: 'Birthday: Rohan Verma (Class VIII-A)',
+      category: 'Birthday',
+      startDate: '2026-11-19',
+      endDate: '2026-11-19',
+      affectedClasses: 'High School (VI–X)',
+      description: 'Student Birthday Celebration — Rohan Verma (Class VIII-A).',
+      visibility: 'Public (All Students & Parents)',
+      approvalStatus: 'Published',
+      publishedBy: 'Class Teacher - VIII-A',
+      isGazetted: false
+    },
+    {
+      id: 'EVT-2026-059',
+      title: 'Kartika Poornima & Guru Nanak Jayanti',
+      category: 'Festival',
+      startDate: '2026-11-24',
+      endDate: '2026-11-24',
+      affectedClasses: 'All Classes (Nursery–Class X)',
+      description: 'State Gazetted Festival & Prakash Parv observance.',
+      visibility: 'Public (All Students & Parents)',
+      approvalStatus: 'Published',
+      publishedBy: 'Smt. Gorle Varalakshmi - Principal',
+      isGazetted: true
+    },
+    {
+      id: 'EVT-2026-060',
+      title: 'Constitution Day Assembly & Mock Parliament',
+      category: 'Institutional Event',
+      startDate: '2026-11-26',
+      endDate: '2026-11-26',
+      affectedClasses: 'High School (VI–X)',
+      description: 'Preamble reading and student mock parliament session by Social Studies department.',
+      visibility: 'Public (All Students & Parents)',
+      approvalStatus: 'Published',
+      publishedBy: 'Smt. V. Jyothsna - Social Studies',
+      isGazetted: false
+    },
+    {
+      id: 'EVT-2026-061',
+      title: 'Birthday: Sri Navva Anand (Vice Principal)',
+      category: 'Birthday',
+      startDate: '2026-11-28',
+      endDate: '2026-11-28',
+      affectedClasses: 'Faculty & Staff Only',
+      description: 'Warm birthday wishes to Vice Principal Sri Navva Anand.',
+      visibility: 'Faculty & Staff Only',
+      approvalStatus: 'Published',
+      publishedBy: 'Smt. Gorle Varalakshmi - Principal',
+      isGazetted: false
+    },
+    // --- December 2026 to April 2027 Key Festivals, Birthdays & Events ---
+    {
+      id: 'EVT-2026-062',
+      title: 'SA-1 Progress Card Declaration & PTM',
+      category: 'Parent-Teacher Meeting',
+      startDate: '2026-12-05',
+      endDate: '2026-12-05',
+      affectedClasses: 'All Classes (Nursery–Class X)',
+      description: 'Half-Yearly report card distribution and parent-teacher review.',
+      visibility: 'Public (All Students & Parents)',
+      approvalStatus: 'Published',
+      publishedBy: 'Smt. Gorle Varalakshmi - Principal',
+      isGazetted: false
+    },
+    {
+      id: 'EVT-2026-063',
+      title: 'Fire & Road Safety Mock Drill',
+      category: 'Institutional Event',
+      startDate: '2026-12-12',
+      endDate: '2026-12-12',
+      affectedClasses: 'All Classes (Nursery–Class X)',
+      description: 'Campus emergency evacuation and safety awareness workshop.',
+      visibility: 'Public (All Students & Parents)',
+      approvalStatus: 'Published',
+      publishedBy: 'Campus Safety Committee',
+      isGazetted: false
+    },
+    {
+      id: 'EVT-2026-064',
+      title: 'Srinivasa Ramanujan Birthday (Maths Day)',
+      category: 'Birthday',
+      startDate: '2026-12-22',
+      endDate: '2026-12-22',
+      affectedClasses: 'All Classes (Nursery–Class X)',
+      description: 'National Mathematics Day puzzle exhibition and mental maths contest.',
+      visibility: 'Public (All Students & Parents)',
+      approvalStatus: 'Published',
+      publishedBy: 'Sri B. Narayana - Maths HOD',
+      isGazetted: false
+    },
+    {
+      id: 'EVT-2026-065',
+      title: 'Swami Vivekananda Birthday (Youth Day)',
+      category: 'Birthday',
+      startDate: '2027-01-12',
+      endDate: '2027-01-12',
+      affectedClasses: 'All Classes (Nursery–Class X)',
+      description: 'National Youth Day inspirational talks and literary awards.',
+      visibility: 'Public (All Students & Parents)',
+      approvalStatus: 'Published',
+      publishedBy: 'Smt. Gorle Varalakshmi - Principal',
+      isGazetted: false
+    },
+    {
+      id: 'EVT-2026-066',
+      title: 'Bhogi, Makara Sankranti & Kanuma Festivals',
+      category: 'Festival',
+      startDate: '2027-01-13',
+      endDate: '2027-01-15',
+      affectedClasses: 'All Classes (Nursery–Class X)',
+      description: 'Three-day harvest festival celebrations across Andhra Pradesh.',
+      visibility: 'Public (All Students & Parents)',
+      approvalStatus: 'Published',
+      publishedBy: 'Smt. Gorle Varalakshmi - Principal',
+      isGazetted: true
+    },
+    {
+      id: 'EVT-2026-067',
+      title: 'Netaji Subhas Chandra Bose Jayanti',
+      category: 'Birthday',
+      startDate: '2027-01-23',
+      endDate: '2027-01-23',
+      affectedClasses: 'All Classes (Nursery–Class X)',
+      description: 'Parakram Diwas patriotic assembly.',
+      visibility: 'Public (All Students & Parents)',
+      approvalStatus: 'Published',
+      publishedBy: 'Smt. Gorle Varalakshmi - Principal',
+      isGazetted: false
+    },
+    {
+      id: 'EVT-2026-068',
+      title: 'Vasant Panchami (Saraswati Puja)',
+      category: 'Festival',
+      startDate: '2027-02-02',
+      endDate: '2027-02-02',
+      affectedClasses: 'All Classes (Nursery–Class X)',
+      description: 'Aksharabhyasam for Pre-Primary and Saraswati Puja assembly.',
+      visibility: 'Public (All Students & Parents)',
+      approvalStatus: 'Published',
+      publishedBy: 'Smt. Gorle Varalakshmi - Principal',
+      isGazetted: false
+    },
+    {
+      id: 'EVT-2026-069',
+      title: 'Pre-Board Parent-Teacher Counseling',
+      category: 'Parent-Teacher Meeting',
+      startDate: '2027-02-06',
+      endDate: '2027-02-06',
+      affectedClasses: 'Class X Only',
+      description: 'Individual SSC Board readiness review for Class X students and parents.',
+      visibility: 'Public (All Students & Parents)',
+      approvalStatus: 'Published',
+      publishedBy: 'Sri Navva Anand - Vice Principal',
+      isGazetted: false
+    },
+    {
+      id: 'EVT-2026-070',
+      title: 'Annual Cultural Day & Prize Distribution',
+      category: 'Institutional Event',
+      startDate: '2027-03-13',
+      endDate: '2027-03-13',
+      affectedClasses: 'All Classes (Nursery–Class X)',
+      description: 'Annual day cultural performances, academic toppers awards, and founder’s address.',
+      visibility: 'Public (All Students & Parents)',
+      approvalStatus: 'Published',
+      publishedBy: 'Sri Gorle Anand Rao - Founder',
+      isGazetted: false
+    },
+    {
+      id: 'EVT-2026-071',
+      title: 'Holi — Festival of Colors',
+      category: 'Festival',
+      startDate: '2027-03-22',
+      endDate: '2027-03-22',
+      affectedClasses: 'All Classes (Nursery–Class X)',
+      description: 'State Gazetted Festival.',
+      visibility: 'Public (All Students & Parents)',
+      approvalStatus: 'Published',
+      publishedBy: 'Smt. Gorle Varalakshmi - Principal',
+      isGazetted: true
+    },
+    {
+      id: 'EVT-2026-072',
+      title: 'Ugadi — Telugu New Year',
+      category: 'Festival',
+      startDate: '2027-04-08',
+      endDate: '2027-04-08',
+      affectedClasses: 'All Classes (Nursery–Class X)',
+      description: 'Traditional Panchanga Sravanam and Ugadi Pachadi cultural observance.',
+      visibility: 'Public (All Students & Parents)',
+      approvalStatus: 'Published',
+      publishedBy: 'Smt. Gorle Varalakshmi - Principal',
+      isGazetted: true
+    },
+    {
+      id: 'EVT-2026-073',
+      title: 'Dr. B.R. Ambedkar Jayanti',
+      category: 'Birthday',
+      startDate: '2027-04-14',
+      endDate: '2027-04-14',
+      affectedClasses: 'All Classes (Nursery–Class X)',
+      description: 'National observance honoring the architect of the Indian Constitution.',
+      visibility: 'Public (All Students & Parents)',
+      approvalStatus: 'Published',
+      publishedBy: 'Smt. Gorle Varalakshmi - Principal',
+      isGazetted: true
+    },
+    {
+      id: 'EVT-2026-074',
+      title: 'Sri Rama Navami',
+      category: 'Festival',
+      startDate: '2027-04-16',
+      endDate: '2027-04-16',
+      affectedClasses: 'All Classes (Nursery–Class X)',
+      description: 'State Gazetted Festival.',
+      visibility: 'Public (All Students & Parents)',
+      approvalStatus: 'Published',
+      publishedBy: 'Smt. Gorle Varalakshmi - Principal',
+      isGazetted: true
     }
   ];
 
-  // Dedicated Holiday Register Data
   const INITIAL_ACADEMIC_HOLIDAYS = [
     { name: 'Bakrid (Eid-ul-Adha)', category: 'State Gazetted', date: '2026-06-17', duration: '1 Day', ref: 'G.O.Rt.No. 248/2026', wing: 'All Classes (Nursery–Class X)', status: 'Gazetted' },
     { name: 'Muharram', category: 'State Gazetted', date: '2026-07-17', duration: '1 Day', ref: 'G.O.Rt.No. 248/2026', wing: 'All Classes (Nursery–Class X)', status: 'Gazetted' },
@@ -58180,7 +57301,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     { name: 'Summer Vacation', category: 'Vacation', date: '2027-04-24 to 2027-06-11', duration: '48 Days', ref: 'AP-DSE/RC.18021/2026', wing: 'All Classes (Nursery–Class X)', status: 'Gazetted' }
   ];
 
-  // Academic Calendar Terms Structure
   const INITIAL_ACADEMIC_TERMS = {
     academicYear: '2026–2027',
     term1: {
@@ -58238,8 +57358,10 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
       state.calendarCurrentYear = 2026;
     }
     if (typeof state.calendarCurrentMonth === 'undefined') {
-      // Month index: 9 is October (0-indexed: 0=Jan, 9=Oct, 10=Nov, 11=Dec)
       state.calendarCurrentMonth = 9;
+    }
+    if (typeof state.calendarCategoryFilter === 'undefined') {
+      state.calendarCategoryFilter = '';
     }
   }
 
@@ -58253,7 +57375,7 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     const lastPubDateElem = document.getElementById('kpiCalLastPublishedDate');
 
     const totalWorkingDays = state.academicCalendarTerms ? state.academicCalendarTerms.totalInstructionalDays : 224;
-    const totalHolidayDays = 68; // 68 cumulative gazetted & term vacation days
+    const totalHolidayDays = 68;
     const termsCount = 2;
     const examEventsCount = state.academicCalendarEvents.filter(e => e.category === 'Examination' && e.approvalStatus !== 'Cancelled').length;
 
@@ -58317,7 +57439,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     switchCalendarView(state.calendarActiveView || 'monthly');
   }
 
-  // --- VIEW 1: MONTHLY CALENDAR GRID ---
   function navigateCalendarMonth(delta) {
     ensureAcademicCalendarState();
     state.calendarCurrentMonth += delta;
@@ -58334,8 +57455,107 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
   function navigateCalendarToday() {
     ensureAcademicCalendarState();
     state.calendarCurrentYear = 2026;
-    state.calendarCurrentMonth = 9; // October 2026
+    state.calendarCurrentMonth = 9;
     renderMonthlyCalendarView();
+  }
+
+  function getCalendarCategoryMeta(category) {
+    switch (category) {
+      case 'Examination':
+        return { pillClass: 'pill-exam', icon: 'bi-journal-check', label: 'Exam' };
+      case 'Holiday':
+        return { pillClass: 'pill-holiday', icon: 'bi-sun-fill', label: 'Holiday' };
+      case 'Festival':
+        return { pillClass: 'pill-festival', icon: 'bi-stars', label: 'Festival' };
+      case 'Birthday':
+        return { pillClass: 'pill-birthday', icon: 'bi-cake2-fill', label: 'Birthday' };
+      case 'Institutional Event':
+        return { pillClass: 'pill-institutional', icon: 'bi-building-check', label: 'Institutional' };
+      case 'Sports & Co-Curricular':
+        return { pillClass: 'pill-sports', icon: 'bi-trophy-fill', label: 'Sports' };
+      case 'Parent-Teacher Meeting':
+        return { pillClass: 'pill-ptm', icon: 'bi-people-fill', label: 'PTM' };
+      default:
+        return { pillClass: 'pill-academic', icon: 'bi-book-half', label: 'Academic' };
+    }
+  }
+
+  function setCalendarCategoryFilter(category) {
+    ensureAcademicCalendarState();
+    state.calendarCategoryFilter = (state.calendarCategoryFilter === category && category !== '') ? '' : category;
+
+    const filterBar = document.getElementById('calCategoryFilterBar');
+    if (filterBar) {
+      filterBar.querySelectorAll('.cal-filter-chip').forEach(chip => {
+        const chipCat = chip.getAttribute('data-cat') || '';
+        if (chipCat === state.calendarCategoryFilter) {
+          chip.classList.add('active');
+        } else {
+          chip.classList.remove('active');
+        }
+      });
+    }
+
+    renderMonthlyCalendarView();
+  }
+
+  function openDayDetailModal(dateStr) {
+    ensureAcademicCalendarState();
+    const modalEl = document.getElementById('calDayDetailModal');
+    const titleEl = document.getElementById('calDayDetailModalLabel');
+    const bodyEl = document.getElementById('calDayDetailBody');
+    const addBtn = document.getElementById('btnDayDetailAddEvent');
+    if (!modalEl || !bodyEl) return;
+
+    const dateObj = new Date(dateStr + 'T00:00:00');
+    const formattedDate = isNaN(dateObj.getTime())
+      ? dateStr
+      : dateObj.toLocaleDateString('en-IN', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+
+    if (titleEl) {
+      titleEl.innerHTML = '<i class="bi bi-calendar-day me-2"></i>' + formattedDate;
+    }
+
+    if (addBtn) {
+      addBtn.onclick = function () {
+        hideCalendarModal('calDayDetailModal');
+        openAddCalendarEventModal('', dateStr);
+      };
+    }
+
+    const activeCat = state.calendarCategoryFilter || '';
+    const dayEvents = state.academicCalendarEvents.filter(evt => {
+      if (evt.approvalStatus === 'Cancelled') return false;
+      if (activeCat && evt.category !== activeCat) return false;
+      return (dateStr >= evt.startDate && dateStr <= evt.endDate);
+    });
+
+    if (dayEvents.length === 0) {
+      bodyEl.innerHTML = '<div class="text-center py-4 text-muted"><i class="bi bi-calendar-check fs-2 d-block mb-2 opacity-50"></i>No events scheduled for this date.</div>';
+    } else {
+      let html = '<div class="d-flex flex-column gap-2">';
+      dayEvents.forEach(evt => {
+        const meta = getCalendarCategoryMeta(evt.category);
+        const dateSpan = evt.startDate === evt.endDate ? evt.startDate : (evt.startDate + ' to ' + evt.endDate);
+        html += '<div class="p-2 px-3 rounded-3 border bg-light d-flex justify-content-between align-items-start gap-2" style="cursor:pointer;" onclick="portalApp.hideCalendarModal(\'calDayDetailModal\'); portalApp.openAddCalendarEventModal(\'' + evt.id + '\')">';
+        html += '  <div class="min-w-0">';
+        html += '    <div class="d-flex align-items-center gap-2 mb-1 flex-wrap">';
+        html += '      <span class="calendar-event-pill ' + meta.pillClass + '" style="height:auto; padding:2px 8px;"><i class="bi ' + meta.icon + ' pill-icon"></i><span>' + meta.label + '</span></span>';
+        html += '      <strong class="text-dark small">' + evt.title + '</strong>';
+        html += '    </div>';
+        if (evt.description) {
+          html += '    <div class="text-muted small" style="font-size:0.78rem;">' + evt.description + '</div>';
+        }
+        html += '    <div class="text-muted mt-1" style="font-size:0.72rem;"><i class="bi bi-calendar3 me-1"></i>' + dateSpan + ' &bull; ' + evt.affectedClasses + '</div>';
+        html += '  </div>';
+        html += '  <button type="button" class="btn btn-sm btn-outline-primary py-0 px-2" title="Edit"><i class="bi bi-pencil"></i></button>';
+        html += '</div>';
+      });
+      html += '</div>';
+      bodyEl.innerHTML = html;
+    }
+
+    showCalendarModal(modalEl.id);
   }
 
   function renderMonthlyCalendarView() {
@@ -58343,6 +57563,7 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     const gridContainer = document.getElementById('calMonthlyGrid');
     const titleElem = document.getElementById('calCurrentMonthTitle');
     const termBadgeElem = document.getElementById('calCurrentMonthTermBadge');
+    const summaryBar = document.getElementById('calMonthSummaryBar');
     if (!gridContainer) return;
 
     const year = state.calendarCurrentYear;
@@ -58369,106 +57590,158 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
       }
     }
 
-    // Days calculation
-    const firstDayIndex = new Date(year, month, 1).getDay(); // 0 is Sunday
+    const firstDayIndex = new Date(year, month, 1).getDay();
     const daysInMonth = new Date(year, month + 1, 0).getDate();
     const daysInPrevMonth = new Date(year, month, 0).getDate();
+    const monthStartStr = year + '-' + String(month + 1).padStart(2, '0') + '-01';
+    const monthEndStr = year + '-' + String(month + 1).padStart(2, '0') + '-' + String(daysInMonth).padStart(2, '0');
+    const activeCat = state.calendarCategoryFilter || '';
 
-    let html = '';
-    // Weekday headers
+    // Update Month Summary Bar
+    if (summaryBar) {
+      const monthEvents = state.academicCalendarEvents.filter(evt => {
+        if (evt.approvalStatus === 'Cancelled') return false;
+        return evt.endDate >= monthStartStr && evt.startDate <= monthEndStr;
+      });
+      const festCount = monthEvents.filter(e => e.category === 'Festival').length;
+      const bdayCount = monthEvents.filter(e => e.category === 'Birthday').length;
+      const holCount = monthEvents.filter(e => e.category === 'Holiday').length;
+      summaryBar.innerHTML =
+        '<span class="badge bg-light text-dark border fw-semibold px-2 py-1"><i class="bi bi-stars text-warning me-1"></i>' + festCount + ' Festivals</span>' +
+        '<span class="badge bg-light text-dark border fw-semibold px-2 py-1"><i class="bi bi-cake2-fill text-danger me-1"></i>' + bdayCount + ' Birthdays</span>' +
+        '<span class="badge bg-light text-dark border fw-semibold px-2 py-1"><i class="bi bi-calendar-event text-primary me-1"></i>' + monthEvents.length + ' Events</span>' +
+        (holCount > 0 ? '<span class="badge bg-danger-subtle text-danger border border-danger-subtle fw-semibold px-2 py-1">' + holCount + ' Holidays</span>' : '');
+    }
+
+    let html = '<div class="calendar-grid-shell">';
     const weekdays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-    html += '<div class="row g-1 text-center fw-bold text-muted small mb-1 py-1 border-bottom bg-light rounded-top">';
+    html += '<div class="calendar-weekdays-row">';
     weekdays.forEach((day, idx) => {
       const isSun = (idx === 0);
-      html += '<div class="col calendar-col-header ' + (isSun ? 'text-danger' : '') + '">' + day.substring(0, 3).toUpperCase() + '</div>';
+      html += '<div class="calendar-col-header ' + (isSun ? 'text-danger' : '') + '">' + day.substring(0, 3).toUpperCase() + '</div>';
     });
     html += '</div>';
 
-    // Calendar Cells Grid
     html += '<div class="calendar-month-grid">';
     let cellCount = 0;
-    let rowHtml = '<div class="row g-1 mb-1">';
+    let rowHtml = '<div class="calendar-week-row">';
 
-    // Leading days from previous month
     for (let i = firstDayIndex - 1; i >= 0; i--) {
       const prevDateNum = daysInPrevMonth - i;
-      rowHtml += '<div class="col calendar-day-cell is-outside">';
-      rowHtml += '  <div class="calendar-day-header"><span class="calendar-day-number text-muted">' + prevDateNum + '</span></div>';
+      rowHtml += '<div class="calendar-day-cell is-outside">';
+      rowHtml += '  <div class="calendar-day-header"><span class="calendar-day-number">' + prevDateNum + '</span></div>';
       rowHtml += '</div>';
       cellCount++;
     }
 
-    // Active month days
     for (let day = 1; day <= daysInMonth; day++) {
       if (cellCount % 7 === 0 && cellCount > 0) {
-        rowHtml += '</div><div class="row g-1 mb-1">';
+        rowHtml += '</div><div class="calendar-week-row">';
       }
 
       const dayOfWeek = (cellCount % 7);
       const isSunday = (dayOfWeek === 0);
       const isSecondSaturday = (dayOfWeek === 6 && day >= 8 && day <= 14);
 
-      // Format date YYYY-MM-DD
       const mm = String(month + 1).padStart(2, '0');
       const dd = String(day).padStart(2, '0');
       const dateStr = year + '-' + mm + '-' + dd;
 
-      // Find events on this day
-      const dayEvents = state.academicCalendarEvents.filter(evt => {
-        if (evt.approvalStatus === 'Cancelled') return false;
-        return (dateStr >= evt.startDate && dateStr <= evt.endDate);
-      });
+      const dayEvents = state.academicCalendarEvents
+        .filter(evt => {
+          if (evt.approvalStatus === 'Cancelled') return false;
+          if (activeCat && evt.category !== activeCat) return false;
+          return (dateStr >= evt.startDate && dateStr <= evt.endDate);
+        })
+        .sort((a, b) => {
+          // Multi-day events first so spanning ribbons align cleanly at top of cells
+          const aSpan = a.startDate !== a.endDate ? 1 : 0;
+          const bSpan = b.startDate !== b.endDate ? 1 : 0;
+          if (aSpan !== bSpan) return bSpan - aSpan;
+          return a.startDate.localeCompare(b.startDate);
+        });
 
-      // Check if isToday (simulate Oct 15, 2026 or real today)
+      const hasHoliday = dayEvents.some(e => e.category === 'Holiday');
       const isToday = (year === 2026 && month === 9 && day === 15);
 
-      rowHtml += '<div class="col calendar-day-cell ' + (isSunday ? 'is-sunday' : '') + ' ' + (isSecondSaturday ? 'is-second-sat' : '') + ' ' + (isToday ? 'is-today' : '') + '">';
-      rowHtml += '  <div class="calendar-day-header d-flex justify-content-between align-items-center">';
-      rowHtml += '    <span class="calendar-day-number ' + (isSunday ? 'text-danger fw-bold' : '') + '">' + day + '</span>';
+      rowHtml += '<div class="calendar-day-cell ' + (isSunday ? 'is-sunday ' : '') + (isSecondSaturday ? 'is-second-sat ' : '') + (hasHoliday ? 'is-holiday-bg ' : '') + (isToday ? 'is-today' : '') + '">';
+      rowHtml += '  <div class="calendar-day-header">';
+      rowHtml += '    <div class="d-flex align-items-center gap-1">';
+      rowHtml += '      <span class="calendar-day-number ' + (isSunday && !isToday ? 'text-danger' : '') + '">' + day + '</span>';
       if (isToday) {
-        rowHtml += '    <span class="badge bg-primary text-white rounded-pill px-1 small" style="font-size: 0.65rem;">Today</span>';
+        rowHtml += '      <span class="badge bg-primary text-white rounded-pill px-1" style="font-size: 0.6rem;">Today</span>';
       } else if (isSecondSaturday) {
-        rowHtml += '    <span class="badge bg-light text-muted border rounded px-1 small" style="font-size: 0.62rem;">2nd Sat</span>';
+        rowHtml += '      <span class="badge bg-light text-muted border rounded px-1" style="font-size: 0.6rem;">2nd Sat</span>';
       }
+      rowHtml += '    </div>';
+      rowHtml += '    <button type="button" class="calendar-day-add-btn" onclick="portalApp.openAddCalendarEventModal(\'\', \'' + dateStr + '\')" title="Add event on ' + dateStr + '"><i class="bi bi-plus"></i></button>';
       rowHtml += '  </div>';
 
-      rowHtml += '  <div class="calendar-events-stack mt-1">';
-      dayEvents.forEach(evt => {
-        let catClass = 'pill-academic';
-        if (evt.category === 'Examination') catClass = 'pill-exam';
-        else if (evt.category === 'Holiday') catClass = 'pill-holiday';
-        else if (evt.category === 'Institutional Event') catClass = 'pill-institutional';
-        else if (evt.category === 'Sports & Co-Curricular') catClass = 'pill-sports';
-        else if (evt.category === 'Parent-Teacher Meeting') catClass = 'pill-ptm';
+      rowHtml += '  <div class="calendar-events-stack">';
+      const maxVisible = 3;
+      const visibleEvents = dayEvents.length > 4 ? dayEvents.slice(0, maxVisible) : dayEvents;
 
-        rowHtml += '    <div class="calendar-event-pill ' + catClass + '" onclick="portalApp.openAddCalendarEventModal(\'' + evt.id + '\')" title="' + evt.title + ' (' + evt.category + ') - ' + evt.affectedClasses + '">';
-        rowHtml += '      <span class="pill-dot"></span>';
-        rowHtml += '      <span class="pill-text">' + evt.title + '</span>';
+      visibleEvents.forEach(evt => {
+        const meta = getCalendarCategoryMeta(evt.category);
+        const isMultiDay = evt.startDate !== evt.endDate;
+        const safeTitle = evt.title.replace(/"/g, '&quot;');
+        let rangeClass = '';
+        let showLabel = true;
+        let labelText = evt.title;
+
+        if (isMultiDay) {
+          const isStart = (dateStr === evt.startDate);
+          const isEnd = (dateStr === evt.endDate);
+          if (isStart && !isEnd) {
+            rangeClass = 'is-range-start';
+          } else if (isEnd && !isStart) {
+            rangeClass = 'is-range-end';
+            showLabel = (dayOfWeek === 0);
+          } else if (!isStart && !isEnd) {
+            rangeClass = (dayOfWeek === 0) ? 'is-range-start' : 'is-range-mid';
+            showLabel = (dayOfWeek === 0);
+            if (dayOfWeek === 0) labelText = evt.title + ' (cont.)';
+          }
+          if (dayOfWeek === 6 && !isEnd) {
+            rangeClass = (isStart || dayOfWeek === 0) ? '' : 'is-range-end';
+          }
+        }
+
+        rowHtml += '    <div class="calendar-event-pill ' + meta.pillClass + ' ' + rangeClass + '" onclick="portalApp.openAddCalendarEventModal(\'' + evt.id + '\')" title="' + safeTitle + ' (' + evt.category + ') • ' + evt.affectedClasses + '">';
+        if (showLabel) {
+          rowHtml += '      <i class="bi ' + meta.icon + ' pill-icon"></i>';
+          rowHtml += '      <span class="pill-text">' + labelText + '</span>';
+        } else {
+          rowHtml += '      <span class="pill-text" style="opacity:0.45; font-size:0.62rem;">•</span>';
+        }
         rowHtml += '    </div>';
       });
+
+      if (dayEvents.length > 4) {
+        const hiddenCount = dayEvents.length - maxVisible;
+        rowHtml += '    <div class="calendar-more-pill" onclick="portalApp.openDayDetailModal(\'' + dateStr + '\')">+' + hiddenCount + ' more</div>';
+      }
       rowHtml += '  </div>';
       rowHtml += '</div>';
 
       cellCount++;
     }
 
-    // Trailing days to finish last week row
     const remaining = (7 - (cellCount % 7)) % 7;
     for (let j = 1; j <= remaining; j++) {
-      rowHtml += '<div class="col calendar-day-cell is-outside">';
-      rowHtml += '  <div class="calendar-day-header"><span class="calendar-day-number text-muted">' + j + '</span></div>';
+      rowHtml += '<div class="calendar-day-cell is-outside">';
+      rowHtml += '  <div class="calendar-day-header"><span class="calendar-day-number">' + j + '</span></div>';
       rowHtml += '</div>';
       cellCount++;
     }
 
     rowHtml += '</div>';
     html += rowHtml;
-    html += '</div>';
+    html += '</div></div>';
 
     gridContainer.innerHTML = html;
   }
 
-  // --- VIEW 2: TERM VIEW ---
   function renderTermCalendarView() {
     ensureAcademicCalendarState();
     const container = document.getElementById('calTermViewContent');
@@ -58479,7 +57752,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     let html = '';
     html += '<div class="row g-4">';
 
-    // Term 1 Card
     html += '<div class="col-lg-6">';
     html += '  <div class="card border rounded-3 h-100 shadow-sm">';
     html += '    <div class="card-header bg-primary text-white py-3 d-flex justify-content-between align-items-center">';
@@ -58523,7 +57795,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     html += '  </div>';
     html += '</div>';
 
-    // Term 2 Card
     html += '<div class="col-lg-6">';
     html += '  <div class="card border rounded-3 h-100 shadow-sm">';
     html += '    <div class="card-header bg-success text-white py-3 d-flex justify-content-between align-items-center">';
@@ -58567,7 +57838,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     html += '  </div>';
     html += '</div>';
 
-    // Board Compliance Bar
     html += '<div class="col-12">';
     html += '  <div class="card border rounded-3 p-3 bg-light d-flex flex-wrap justify-content-between align-items-center flex-row gap-3">';
     html += '    <div class="d-flex align-items-center gap-3">';
@@ -58586,7 +57856,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     container.innerHTML = html;
   }
 
-  // --- VIEW 3: LIST VIEW (MASTER EVENTS REGISTER) ---
   function renderListCalendarView(filteredData) {
     ensureAcademicCalendarState();
     const tbody = document.getElementById('calEventsTableBody');
@@ -58605,15 +57874,15 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
 
     let html = '';
     events.forEach(evt => {
-      // Category badge
       let catBadge = '<span class="badge bg-primary-subtle text-primary border border-primary-subtle px-2 py-1">' + evt.category + '</span>';
       if (evt.category === 'Examination') catBadge = '<span class="badge bg-warning-subtle text-warning border border-warning-subtle px-2 py-1"><i class="bi bi-clipboard2-check me-1"></i>Exam</span>';
       else if (evt.category === 'Holiday') catBadge = '<span class="badge bg-danger-subtle text-danger border border-danger-subtle px-2 py-1"><i class="bi bi-heart me-1"></i>Holiday</span>';
+      else if (evt.category === 'Festival') catBadge = '<span class="badge px-2 py-1" style="background:#fff7ed; color:#c2410c; border:1px solid #fed7aa;"><i class="bi bi-stars me-1"></i>Festival</span>';
+      else if (evt.category === 'Birthday') catBadge = '<span class="badge px-2 py-1" style="background:#fdf2f8; color:#be185d; border:1px solid #fbcfe8;"><i class="bi bi-cake2-fill me-1"></i>Birthday</span>';
       else if (evt.category === 'Institutional Event') catBadge = '<span class="badge bg-success-subtle text-success border border-success-subtle px-2 py-1"><i class="bi bi-flag me-1"></i>Institutional</span>';
       else if (evt.category === 'Sports & Co-Curricular') catBadge = '<span class="badge bg-info-subtle text-info border border-info-subtle px-2 py-1"><i class="bi bi-trophy me-1"></i>Sports</span>';
       else if (evt.category === 'Parent-Teacher Meeting') catBadge = '<span class="badge bg-secondary-subtle text-dark border px-2 py-1"><i class="bi bi-people me-1"></i>PTM</span>';
 
-      // Status badge
       let statusBadge = '<span class="badge bg-success text-white px-2 py-1 rounded-pill"><i class="bi bi-check-circle me-1"></i>Published</span>';
       if (evt.approvalStatus === 'Draft') {
         statusBadge = '<span class="badge bg-secondary text-white px-2 py-1 rounded-pill">Draft</span>';
@@ -58623,7 +57892,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
         statusBadge = '<span class="badge bg-danger text-white px-2 py-1 rounded-pill"><i class="bi bi-x-circle me-1"></i>Cancelled</span>';
       }
 
-      // Visibility badge
       let visBadge = '<span class="badge bg-light text-dark border"><i class="bi bi-globe me-1"></i>Public</span>';
       if (evt.visibility.includes('Faculty')) {
         visBadge = '<span class="badge bg-light text-primary border"><i class="bi bi-lock me-1"></i>Faculty Only</span>';
@@ -58631,7 +57899,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
         visBadge = '<span class="badge bg-light text-danger border"><i class="bi bi-shield-lock me-1"></i>Board Only</span>';
       }
 
-      // Date string format
       let dateText = evt.startDate;
       if (evt.startDate !== evt.endDate) {
         dateText += ' to ' + evt.endDate;
@@ -58700,7 +57967,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     renderListCalendarView();
   }
 
-  // --- VIEW 4: HOLIDAY REGISTER ---
   function renderHolidayRegisterView() {
     ensureAcademicCalendarState();
     const tbody = document.getElementById('calHolidaysTableBody');
@@ -58735,8 +58001,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     tbody.innerHTML = html;
   }
 
-  // --- MODALS & INTERACTIVE ACTIONS ---
-
   
   function showCalendarModal(modalId) {
     const el = document.getElementById(modalId);
@@ -58748,6 +58012,17 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
         return;
       } catch (e) {}
     }
+    el.querySelectorAll('[data-bs-dismiss="modal"]').forEach(btn => {
+      btn.onclick = function (ev) {
+        if (ev && ev.preventDefault) ev.preventDefault();
+        hideCalendarModal(modalId);
+      };
+    });
+    el.onclick = function (ev) {
+      if (ev.target === el) {
+        hideCalendarModal(modalId);
+      }
+    };
     el.style.display = 'block';
     el.classList.add('show');
     el.setAttribute('aria-modal', 'true');
@@ -58757,6 +58032,7 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
       backdrop = document.createElement('div');
       backdrop.id = modalId + '_backdrop';
       backdrop.className = 'modal-backdrop fade show';
+      backdrop.onclick = function () { hideCalendarModal(modalId); };
       document.body.appendChild(backdrop);
     }
     document.body.classList.add('modal-open');
@@ -58782,7 +58058,7 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     document.body.style.overflow = '';
   }
 
-  function openAddCalendarEventModal(eventId) {
+  function openAddCalendarEventModal(eventId, defaultDate) {
     ensureAcademicCalendarState();
     const modalEl = document.getElementById('addCalendarEventModal');
     if (!modalEl) return;
@@ -58815,11 +58091,12 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
         if (modalTitle) modalTitle.innerHTML = '<i class="bi bi-pencil-square me-2"></i>Edit Academic Event (' + evt.id + ')';
       }
     } else {
+      const targetDate = defaultDate || '2026-10-15';
       if (idInput) idInput.value = '';
       if (titleInput) titleInput.value = '';
       if (catInput) catInput.value = 'Academic';
-      if (startInput) startInput.value = '2026-10-15';
-      if (endInput) endInput.value = '2026-10-15';
+      if (startInput) startInput.value = targetDate;
+      if (endInput) endInput.value = targetDate;
       if (classesInput) classesInput.value = 'All Classes (Nursery–Class X)';
       if (visInput) visInput.value = 'Public (All Students & Parents)';
       if (statusInput) statusInput.value = 'Published';
@@ -58853,7 +58130,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     }
 
     if (id) {
-      // Update existing
       const evtIndex = state.academicCalendarEvents.findIndex(item => item.id === id);
       if (evtIndex !== -1) {
         state.academicCalendarEvents[evtIndex] = {
@@ -58862,7 +58138,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
         };
       }
     } else {
-      // Create new
       const newId = 'EVT-2026-' + String(state.academicCalendarEvents.length + 1).padStart(3, '0');
       state.academicCalendarEvents.unshift({
         id: newId,
@@ -58879,16 +58154,13 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
       });
     }
 
-    // Close modal
     const modalEl = document.getElementById('addCalendarEventModal');
     if (modalEl) {
       hideCalendarModal(modalEl.id);
     }
 
-    // Refresh view
     renderAcademicCalendar();
 
-    // Trigger Notification confirmation alert
     if (notifyCheck && approvalStatus === 'Published') {
       const alertBanner = document.getElementById('calBroadcastAlertText');
       if (alertBanner) {
@@ -58935,7 +58207,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
       duration = diffDays + ' Days';
     }
 
-    // Add to holidays
     state.academicCalendarHolidays.unshift({
       name: title,
       category,
@@ -58946,7 +58217,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
       status: 'Gazetted'
     });
 
-    // Also add to master events
     const newId = 'EVT-HOL-' + String(state.academicCalendarEvents.length + 1).padStart(3, '0');
     state.academicCalendarEvents.unshift({
       id: newId,
@@ -58962,7 +58232,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
       isGazetted: true
     });
 
-    // Close modal
     const modalEl = document.getElementById('addHolidayModal');
     if (modalEl) {
       hideCalendarModal(modalEl.id);
@@ -59102,7 +58371,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     state.academicCalendarTerms.publishedAuthority = authority;
     state.academicCalendarTerms.gazetteRef = orderRef;
 
-    // Set all draft events to Published
     state.academicCalendarEvents.forEach(evt => {
       if (evt.approvalStatus === 'Draft' || evt.approvalStatus === 'Approved') {
         evt.approvalStatus = 'Published';
@@ -59203,11 +58471,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     showToast('Gazetted Holiday Register exported as CSV.', 'info');
   }
 
-  // =========================================================================
-  // SUBMENU 4: AUTHORITATIVE MASTER TIMETABLE CONTROLLER & CONFLICT ENGINE
-  // =========================================================================
-
-  // Standard 8 Periods Framework with Timings
   const TIMETABLE_PERIOD_TIMINGS = {
     'Period 1': '8:45 AM – 9:30 AM',
     'Period 2': '9:30 AM – 10:15 AM',
@@ -59220,62 +58483,81 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
   };
 
   const TIMETABLE_DAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-  const TIMETABLE_CLASSES = ['Class X-A', 'Class X-B', 'Class IX-A', 'Class VIII-A', 'Class VII-A', 'Class VI-A', 'Class V-A'];
+  const TIMETABLE_CLASSES = ['Class X-A', 'Class IX-A', 'Class VIII-A', 'Class VII-A', 'Class VI-A', 'Class V-A'];
 
-  // Seeded Comprehensive Schedule Data for AY 2026-2027
   function generateInitialMasterTimetableData() {
     const allocations = [];
+    // 8-slot cyclic rotation per class with distinct offsets (0..5) guarantees
+    // zero teacher clashes, zero room collisions, and <= 24 periods/week per teacher.
     const subjectsMap = {
       'Class X-A': [
-        { subject: 'Mathematics', teacher: 'Sri Navva Anand', room: 'Room 101' },
-        { subject: 'Physical Science', teacher: 'Sri K. Appa Rao', room: 'Physics & Chemistry Lab' },
-        { subject: 'Biological Science', teacher: 'Smt. K. Vani', room: 'Room 101' },
-        { subject: 'English', teacher: 'Smt. M. Saraswathi', room: 'Room 101' },
-        { subject: 'Telugu', teacher: 'Smt. P. Santhoshi', room: 'Room 101' },
-        { subject: 'Social Studies', teacher: 'Sri G. Prasad', room: 'Room 101' },
+        { subject: 'Mathematics', teacher: 'Sri B. Narayana', room: 'Room 204' },
+        { subject: 'Physical Science', teacher: 'Sri M. Raju', room: 'Physics & Chemistry Lab' },
+        { subject: 'Biological Science', teacher: 'Smt. N. Sirisha', room: 'Room 204' },
+        { subject: 'English', teacher: 'Smt. T. Padmavathi', room: 'Room 204' },
+        { subject: 'Telugu', teacher: 'Sri CH. Venkateswara Rao', room: 'Room 204' },
+        { subject: 'Social Studies', teacher: 'Smt. V. Jyothsna', room: 'Room 204' },
         { subject: 'Computer Science', teacher: 'Sri D. Suresh', room: 'Computer Science Lab' },
-        { subject: 'Physical Education', teacher: 'Sri B. Raman', room: 'Sports Ground' }
-      ],
-      'Class X-B': [
-        { subject: 'English', teacher: 'Smt. M. Saraswathi', room: 'Room 102' },
-        { subject: 'Mathematics', teacher: 'Sri D. Suresh', room: 'Room 102' },
-        { subject: 'Telugu', teacher: 'Smt. P. Santhoshi', room: 'Room 102' },
-        { subject: 'Physical Science', teacher: 'Sri K. Appa Rao', room: 'Room 102' },
-        { subject: 'Social Studies', teacher: 'Sri G. Prasad', room: 'Room 102' },
-        { subject: 'Biological Science', teacher: 'Smt. K. Vani', room: 'Physics & Chemistry Lab' },
-        { subject: 'Hindi', teacher: 'Smt. T. Radha', room: 'Room 102' },
         { subject: 'Physical Education', teacher: 'Sri B. Raman', room: 'Sports Ground' }
       ],
       'Class IX-A': [
-        { subject: 'Social Studies', teacher: 'Sri G. Prasad', room: 'Room 103' },
-        { subject: 'Mathematics', teacher: 'Sri Navva Anand', room: 'Room 103' },
-        { subject: 'English', teacher: 'Smt. M. Saraswathi', room: 'Room 103' },
-        { subject: 'Telugu', teacher: 'Smt. P. Santhoshi', room: 'Room 103' },
-        { subject: 'Physical Science', teacher: 'Sri K. Appa Rao', room: 'Room 103' },
-        { subject: 'Hindi', teacher: 'Smt. T. Radha', room: 'Room 103' },
+        { subject: 'Mathematics', teacher: 'Sri B. Narayana', room: 'Room 202' },
+        { subject: 'Physical Science', teacher: 'Sri M. Raju', room: 'Physics & Chemistry Lab' },
+        { subject: 'Biological Science', teacher: 'Smt. N. Sirisha', room: 'Room 202' },
+        { subject: 'English', teacher: 'Smt. T. Padmavathi', room: 'Room 202' },
+        { subject: 'Telugu', teacher: 'Sri CH. Venkateswara Rao', room: 'Room 202' },
+        { subject: 'Social Studies', teacher: 'Smt. V. Jyothsna', room: 'Room 202' },
         { subject: 'Computer Science', teacher: 'Sri D. Suresh', room: 'Computer Science Lab' },
-        { subject: 'Library / Study Hour', teacher: 'Smt. K. Vani', room: 'Library & Resource Center' }
+        { subject: 'Physical Education', teacher: 'Sri B. Raman', room: 'Sports Ground' }
       ],
       'Class VIII-A': [
-        { subject: 'Telugu', teacher: 'Smt. P. Santhoshi', room: 'Room 104' },
-        { subject: 'English', teacher: 'Smt. M. Saraswathi', room: 'Room 104' },
-        { subject: 'Mathematics', teacher: 'Sri D. Suresh', room: 'Room 104' },
-        { subject: 'Social Studies', teacher: 'Sri G. Prasad', room: 'Room 104' },
-        { subject: 'Physical Science', teacher: 'Sri K. Appa Rao', room: 'Room 104' },
-        { subject: 'Hindi', teacher: 'Smt. T. Radha', room: 'Room 104' },
-        { subject: 'Biological Science', teacher: 'Smt. K. Vani', room: 'Room 104' },
+        { subject: 'Mathematics', teacher: 'Sri B. Narayana', room: 'Room 105' },
+        { subject: 'Physical Science', teacher: 'Sri M. Raju', room: 'Physics & Chemistry Lab' },
+        { subject: 'Biological Science', teacher: 'Smt. N. Sirisha', room: 'Room 105' },
+        { subject: 'English', teacher: 'Smt. T. Padmavathi', room: 'Room 105' },
+        { subject: 'Telugu', teacher: 'Sri CH. Venkateswara Rao', room: 'Room 105' },
+        { subject: 'Social Studies', teacher: 'Smt. V. Jyothsna', room: 'Room 105' },
+        { subject: 'Computer Science', teacher: 'Sri D. Suresh', room: 'Computer Science Lab' },
         { subject: 'Physical Education', teacher: 'Sri B. Raman', room: 'Sports Ground' }
+      ],
+      'Class VII-A': [
+        { subject: 'Mathematics', teacher: 'Sri S. Gopal', room: 'Room 104' },
+        { subject: 'General Science', teacher: 'Sri A. Prasad', room: 'Physics & Chemistry Lab' },
+        { subject: 'Biological Science', teacher: 'Smt. N. Sirisha', room: 'Room 104' },
+        { subject: 'English', teacher: 'Smt. T. Padmavathi', room: 'Room 104' },
+        { subject: 'Telugu', teacher: 'Sri CH. Venkateswara Rao', room: 'Room 104' },
+        { subject: 'Social Studies', teacher: 'Smt. V. Jyothsna', room: 'Room 104' },
+        { subject: 'Computer Science', teacher: 'Sri D. Suresh', room: 'Computer Science Lab' },
+        { subject: 'Physical Education', teacher: 'Sri B. Raman', room: 'Sports Ground' }
+      ],
+      'Class VI-A': [
+        { subject: 'Mathematics', teacher: 'Sri S. Gopal', room: 'Room 103' },
+        { subject: 'General Science', teacher: 'Sri A. Prasad', room: 'Physics & Chemistry Lab' },
+        { subject: 'Environmental Science', teacher: 'Smt. G. Lakshmi', room: 'Room 103' },
+        { subject: 'English', teacher: 'Smt. Y. Anusha', room: 'Room 103' },
+        { subject: 'Telugu', teacher: 'Smt. P. Sunitha', room: 'Room 103' },
+        { subject: 'Social Studies', teacher: 'Smt. R. Kavitha', room: 'Room 103' },
+        { subject: 'Hindi', teacher: 'Smt. P. Sunitha', room: 'Room 103' },
+        { subject: 'Library / Study Hour', teacher: 'Smt. G. Lakshmi', room: 'Library & Resource Center' }
+      ],
+      'Class V-A': [
+        { subject: 'Mathematics', teacher: 'Sri S. Gopal', room: 'Room 102' },
+        { subject: 'General Science', teacher: 'Sri A. Prasad', room: 'Room 102' },
+        { subject: 'Environmental Science', teacher: 'Smt. G. Lakshmi', room: 'Room 102' },
+        { subject: 'English', teacher: 'Smt. Y. Anusha', room: 'Room 102' },
+        { subject: 'Telugu', teacher: 'Smt. P. Sunitha', room: 'Room 102' },
+        { subject: 'Social Studies', teacher: 'Smt. R. Kavitha', room: 'Room 102' },
+        { subject: 'Hindi', teacher: 'Smt. P. Sunitha', room: 'Room 102' },
+        { subject: 'Library / Study Hour', teacher: 'Smt. G. Lakshmi', room: 'Library & Resource Center' }
       ]
     };
 
-    // Build deterministic clash-free slots across all 6 days for each class
-    TIMETABLE_CLASSES.forEach(className => {
+    TIMETABLE_CLASSES.forEach((className, classIndex) => {
       const classSubjs = subjectsMap[className] || subjectsMap['Class X-A'];
       TIMETABLE_DAYS.forEach((day, dayIndex) => {
         for (let p = 1; p <= 8; p++) {
           const periodName = 'Period ' + p;
-          // Rotate subject index smoothly across days to avoid teacher collisions
-          const subjIndex = (p - 1 + dayIndex * 2 + (className.charCodeAt(6) || 0)) % classSubjs.length;
+          const subjIndex = (p - 1 + dayIndex + classIndex) % classSubjs.length;
           const assigned = classSubjs[subjIndex];
 
           allocations.push({
@@ -59299,36 +58581,36 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     return allocations;
   }
 
-  // Teacher Workload Limit Policies (Max 28 periods/week)
   const INITIAL_TEACHER_WORKLOADS = [
-    { teacher: 'Sri Navva Anand', subject: 'Mathematics', maxWeekly: 28, assignedWeekly: 24, classes: ['Class X-A', 'Class IX-A'] },
-    { teacher: 'Smt. M. Saraswathi', subject: 'English', maxWeekly: 28, assignedWeekly: 26, classes: ['Class X-A', 'Class X-B', 'Class IX-A'] },
-    { teacher: 'Sri K. Appa Rao', subject: 'Physical Science', maxWeekly: 28, assignedWeekly: 22, classes: ['Class X-A', 'Class X-B', 'Class VIII-A'] },
-    { teacher: 'Smt. P. Santhoshi', subject: 'Telugu', maxWeekly: 28, assignedWeekly: 24, classes: ['Class X-A', 'Class X-B', 'Class IX-A', 'Class VIII-A'] },
-    { teacher: 'Sri G. Prasad', subject: 'Social Studies', maxWeekly: 28, assignedWeekly: 24, classes: ['Class X-A', 'Class X-B', 'Class IX-A', 'Class VIII-A'] },
-    { teacher: 'Sri D. Suresh', subject: 'Computer Science / Maths', maxWeekly: 28, assignedWeekly: 22, classes: ['Class X-A', 'Class X-B', 'Class IX-A'] },
-    { teacher: 'Smt. K. Vani', subject: 'Biological Science', maxWeekly: 28, assignedWeekly: 20, classes: ['Class X-A', 'Class X-B', 'Class VIII-A'] },
-    { teacher: 'Smt. T. Radha', subject: 'Hindi', maxWeekly: 28, assignedWeekly: 18, classes: ['Class X-B', 'Class IX-A', 'Class VIII-A'] },
-    { teacher: 'Sri B. Raman', subject: 'Physical Education (PET)', maxWeekly: 28, assignedWeekly: 22, classes: ['All Classes (VI–X)'] }
+    { teacher: 'Sri B. Narayana', subject: 'Mathematics', maxWeekly: 28, assignedWeekly: 18, classes: ['Class X-A', 'Class IX-A', 'Class VIII-A'] },
+    { teacher: 'Sri M. Raju', subject: 'Physical Science', maxWeekly: 28, assignedWeekly: 18, classes: ['Class X-A', 'Class IX-A', 'Class VIII-A'] },
+    { teacher: 'Smt. N. Sirisha', subject: 'Biological Science', maxWeekly: 28, assignedWeekly: 24, classes: ['Class X-A', 'Class IX-A', 'Class VIII-A', 'Class VII-A'] },
+    { teacher: 'Smt. T. Padmavathi', subject: 'English', maxWeekly: 28, assignedWeekly: 24, classes: ['Class X-A', 'Class IX-A', 'Class VIII-A', 'Class VII-A'] },
+    { teacher: 'Sri CH. Venkateswara Rao', subject: 'Telugu', maxWeekly: 28, assignedWeekly: 24, classes: ['Class X-A', 'Class IX-A', 'Class VIII-A', 'Class VII-A'] },
+    { teacher: 'Smt. V. Jyothsna', subject: 'Social Studies', maxWeekly: 28, assignedWeekly: 24, classes: ['Class X-A', 'Class IX-A', 'Class VIII-A', 'Class VII-A'] },
+    { teacher: 'Sri A. Prasad', subject: 'General Science', maxWeekly: 28, assignedWeekly: 18, classes: ['Class VII-A', 'Class VI-A', 'Class V-A'] },
+    { teacher: 'Sri S. Gopal', subject: 'Mathematics (Middle/Primary)', maxWeekly: 28, assignedWeekly: 18, classes: ['Class VII-A', 'Class VI-A', 'Class V-A'] },
+    { teacher: 'Sri D. Suresh', subject: 'Computer Science', maxWeekly: 28, assignedWeekly: 24, classes: ['Class X-A', 'Class IX-A', 'Class VIII-A', 'Class VII-A'] },
+    { teacher: 'Sri B. Raman', subject: 'Physical Education (PET)', maxWeekly: 28, assignedWeekly: 24, classes: ['Class X-A', 'Class IX-A', 'Class VIII-A', 'Class VII-A'] }
   ];
 
-  // Room Utilization & Laboratory Registry
   const INITIAL_TIMETABLE_ROOMS = [
-    { name: 'Room 101', type: 'Classroom', capacity: 40, assignedClass: 'Class X-A', wing: 'High School' },
-    { name: 'Room 102', type: 'Classroom', capacity: 40, assignedClass: 'Class X-B', wing: 'High School' },
-    { name: 'Room 103', type: 'Classroom', capacity: 40, assignedClass: 'Class IX-A', wing: 'High School' },
-    { name: 'Room 104', type: 'Classroom', capacity: 40, assignedClass: 'Class VIII-A', wing: 'High School' },
+    { name: 'Room 204', type: 'Classroom', capacity: 50, assignedClass: 'Class X-A', wing: 'High School' },
+    { name: 'Room 202', type: 'Classroom', capacity: 50, assignedClass: 'Class IX-A', wing: 'High School' },
+    { name: 'Room 105', type: 'Classroom', capacity: 50, assignedClass: 'Class VIII-A', wing: 'High School' },
+    { name: 'Room 104', type: 'Classroom', capacity: 50, assignedClass: 'Class VII-A', wing: 'High School' },
+    { name: 'Room 103', type: 'Classroom', capacity: 50, assignedClass: 'Class VI-A', wing: 'High School' },
+    { name: 'Room 102', type: 'Classroom', capacity: 50, assignedClass: 'Class V-A', wing: 'Primary' },
     { name: 'Physics & Chemistry Lab', type: 'Laboratory', capacity: 35, assignedClass: 'Multi-Class Science', wing: 'Labs Wing' },
     { name: 'Computer Science Lab', type: 'Computer Lab', capacity: 35, assignedClass: 'Multi-Class IT', wing: 'Labs Wing' },
     { name: 'Library & Resource Center', type: 'Library', capacity: 50, assignedClass: 'Resource Room', wing: 'Academic Wing' },
     { name: 'Sports Ground', type: 'Outdoor Field', capacity: 150, assignedClass: 'PET & Drill', wing: 'Playground' }
   ];
 
-  // Schedule Modification / Swap Requests Queue
   const INITIAL_TIMETABLE_CHANGE_REQUESTS = [
     {
       id: 'TTR-2026-001',
-      faculty: 'Sri K. Appa Rao (Physical Science)',
+      faculty: 'Sri M. Raju (Physical Science)',
       type: 'Period Swap with Colleague',
       className: 'Class X-A',
       day: 'Tuesday',
@@ -59340,7 +58622,7 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     },
     {
       id: 'TTR-2026-002',
-      faculty: 'Smt. M. Saraswathi (English)',
+      faculty: 'Smt. T. Padmavathi (English)',
       type: 'Room / Laboratory Reassignment',
       className: 'Class IX-A',
       day: 'Thursday',
@@ -59394,16 +58676,13 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     }
   }
 
-  // --- STATUTORY CONFLICT DETECTION ENGINE ---
   function runTimetableConflictCheck() {
     ensureMasterTimetableState();
     const allocations = state.masterTimetableAllocations;
     const conflicts = [];
 
-    // Reset clash flags
     allocations.forEach(slot => { slot.hasClash = false; slot.clashReason = ''; });
 
-    // Multi-key mapping to detect collisions
     const teacherMap = {};
     const roomMap = {};
     const classMap = {};
@@ -59412,7 +58691,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     allocations.forEach(slot => {
       const keyDayPeriod = slot.day + '|' + slot.period;
 
-      // 1. Teacher Collision Check: Same teacher in two classes at the same day & period
       const tKey = slot.teacher + '|' + keyDayPeriod;
       if (teacherMap[tKey]) {
         conflicts.push({
@@ -59430,7 +58708,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
         teacherMap[tKey] = slot;
       }
 
-      // 2. Room Collision Check: Same room booked for overlapping classes
       if (slot.room && !slot.room.includes('Ground')) {
         const rKey = slot.room + '|' + keyDayPeriod;
         if (roomMap[rKey]) {
@@ -59450,7 +58727,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
         }
       }
 
-      // 3. Class Overlap Check: Same class having two simultaneous periods
       const cKey = slot.className + '|' + keyDayPeriod;
       if (classMap[cKey]) {
         conflicts.push({
@@ -59467,11 +58743,9 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
         classMap[cKey] = slot;
       }
 
-      // 4. Teacher Workload Accumulator
       teacherWeeklyCounts[slot.teacher] = (teacherWeeklyCounts[slot.teacher] || 0) + 1;
     });
 
-    // Check workload threshold: Max 28 periods/week
     Object.keys(teacherWeeklyCounts).forEach(teacherName => {
       const count = teacherWeeklyCounts[teacherName];
       if (count > 28) {
@@ -59484,7 +58758,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
       }
     });
 
-    // Update UI Status Banner & KPIs
     const bannerBox = document.getElementById('ttConflictAlertBox');
     const pill = document.getElementById('ttConflictStatusPill');
     const detail = document.getElementById('ttConflictDetailText');
@@ -59529,7 +58802,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     return conflicts;
   }
 
-  // Pre-save validation rule enforcing the 4 statutory constraints
   function validatePeriodAssignment(day, period, className, teacherName, roomName, excludeSlotId) {
     ensureMasterTimetableState();
     const allocations = state.masterTimetableAllocations;
@@ -59537,21 +58809,18 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     for (let slot of allocations) {
       if (excludeSlotId && slot.id === excludeSlotId) continue;
       if (slot.day === day && slot.period === period) {
-        // 1. Teacher double-booking check
         if (slot.teacher === teacherName && slot.className !== className) {
           return {
             isValid: false,
             message: 'Teacher Clash: ' + teacherName + ' is already assigned to ' + slot.className + ' during ' + day + ' ' + period + '.'
           };
         }
-        // 2. Room collision check
         if (roomName && !roomName.includes('Ground') && slot.room === roomName && slot.className !== className) {
           return {
             isValid: false,
             message: 'Room Collision: ' + roomName + ' is already occupied by ' + slot.className + ' during ' + day + ' ' + period + '.'
           };
         }
-        // 3. Class period duplicate check
         if (slot.className === className) {
           return {
             isValid: false,
@@ -59561,7 +58830,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
       }
     }
 
-    // 4. Workload limit check
     const currentTeacherPeriods = allocations.filter(s => s.teacher === teacherName && (!excludeSlotId || s.id !== excludeSlotId)).length;
     if (currentTeacherPeriods >= 28) {
       return {
@@ -59590,7 +58858,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     if (pendingChangesKpi) pendingChangesKpi.textContent = pendingCount + ' Pending Change Request' + (pendingCount === 1 ? '' : 's');
   }
 
-  // --- VIEW SWITCHING ---
   function switchTimetableMasterView(viewKey) {
     ensureMasterTimetableState();
     state.activeTimetableMasterView = viewKey;
@@ -59639,16 +58906,23 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     switchTimetableMasterView(state.activeTimetableMasterView || 'class');
   }
 
-  // --- VIEW 1: CLASS-WISE TIMETABLE ---
   function switchTimetableClass(className) {
     ensureMasterTimetableState();
     state.currentTimetableClass = className;
     const teacherDisplay = document.getElementById('ttClassTeacherDisplay');
     if (teacherDisplay) {
-      let ct = 'Sri Navva Anand';
-      if (className === 'Class X-B') ct = 'Sri K. Appa Rao';
-      else if (className === 'Class IX-A') ct = 'Smt. M. Saraswathi';
-      else if (className === 'Class VIII-A') ct = 'Sri G. Prasad';
+      let ct = 'Sri B. Narayana';
+      try {
+        const reg = typeof ensureAcademicClassesState === 'function' ? ensureAcademicClassesState() : [];
+        const matched = reg.find(c => `${c.className}-${String(c.section || '').replace(/^Section\s+/i, '')}` === className && c.status !== 'Archived / Completed');
+        if (matched && matched.teacher) {
+          ct = matched.teacher.split(' (')[0];
+        } else if (className === 'Class IX-A') ct = 'Sri M. Raju';
+        else if (className === 'Class VIII-A') ct = 'Sri CH. Venkateswara Rao';
+        else if (className === 'Class VII-A') ct = 'Smt. N. Sirisha';
+        else if (className === 'Class VI-A') ct = 'Sri A. Prasad';
+        else if (className === 'Class V-A') ct = 'Smt. R. Kavitha';
+      } catch (e) {}
       teacherDisplay.innerHTML = '<i class="bi bi-person-fill me-1"></i>Class Teacher: ' + ct;
     }
     renderClassWiseTimetable();
@@ -59722,7 +58996,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     tbody.innerHTML = html;
   }
 
-  // --- VIEW 2: TEACHER-WISE TIMETABLE ---
   function switchTimetableTeacher(teacherName) {
     ensureMasterTimetableState();
     state.currentTimetableTeacher = teacherName;
@@ -59783,7 +59056,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     html += '  </div>';
     html += '</div>';
 
-    // Daily breakdown table
     html += '<h6 class="fw-bold text-dark small text-uppercase mb-2"><i class="bi bi-calendar3 me-1 text-primary"></i> ' + teacherName + ' &bull; Weekly Period Allocations</h6>';
     html += '<div class="table-responsive">';
     html += '  <table class="table table-bordered table-hover align-middle small mb-0">';
@@ -59820,7 +59092,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     container.innerHTML = html;
   }
 
-  // --- VIEW 3: ROOM-WISE TIMETABLE ---
   function switchTimetableRoom(roomName) {
     ensureMasterTimetableState();
     state.currentTimetableRoom = roomName;
@@ -59843,7 +59114,7 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     };
 
     const slots = state.masterTimetableAllocations.filter(s => s.room === roomName);
-    const totalWeeklySlots = 6 * 8; // 48
+    const totalWeeklySlots = 6 * 8;
     const occupiedCount = slots.length;
     const occupancyRate = Math.round((occupiedCount / totalWeeklySlots) * 100);
 
@@ -59923,7 +59194,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     container.innerHTML = html;
   }
 
-  // --- VIEW 4: WEEKLY VIEW (FULL MATRIX) ---
   function renderWeeklyTimetableGrid(className) {
     ensureMasterTimetableState();
     const table = document.getElementById('ttWeeklyMatrixTable');
@@ -59956,28 +59226,21 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
       html += '  <tr>';
       html += '    <td class="fw-bold bg-light align-middle text-center">' + day + '</td>';
 
-      // Periods 1 & 2
       for (let p = 1; p <= 2; p++) {
         html += renderMatrixCell(slots, day, p);
       }
-      // Morning Break
       html += '    <td class="break-column">10:15–10:30</td>';
 
-      // Periods 3 & 4
       for (let p = 3; p <= 4; p++) {
         html += renderMatrixCell(slots, day, p);
       }
-      // Lunch Break
       html += '    <td class="break-column">12:00–12:45</td>';
 
-      // Periods 5 & 6
       for (let p = 5; p <= 6; p++) {
         html += renderMatrixCell(slots, day, p);
       }
-      // Afternoon Break
       html += '    <td class="break-column">2:15–2:25</td>';
 
-      // Periods 7 & 8
       for (let p = 7; p <= 8; p++) {
         html += renderMatrixCell(slots, day, p);
       }
@@ -60014,7 +59277,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
       '</td>';
   }
 
-  // --- VIEW 5: CHANGE REQUESTS & APPROVALS QUEUE ---
   function renderTimetableChangeRequests() {
     ensureMasterTimetableState();
     const tbody = document.getElementById('ttChangeRequestsTableBody');
@@ -60057,8 +59319,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
 
     tbody.innerHTML = html;
   }
-
-  // --- MODAL WORKFLOWS & INTERACTIVE ACTIONS ---
 
   function showTimetableModal(modalId) {
     const el = document.getElementById(modalId);
@@ -60167,7 +59427,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     const teacher = document.getElementById('ttSlotTeacher').value;
     const room = document.getElementById('ttSlotRoom').value;
 
-    // Hard statutory validation
     const validation = validatePeriodAssignment(day, period, className, teacher, room, slotId);
     if (!validation.isValid) {
       const warningBox = document.getElementById('ttConflictWarningBox');
@@ -60340,17 +59599,11 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     showToast('Master Timetable exported as CSV.', 'info');
   }
 
-  // printTimetable unified
-
-    // =========================================================================
-  // SUBMENU 5: AUTHORITATIVE LESSON PLAN REVIEW & CURRICULUM GOVERNANCE
-  // =========================================================================
-
   const INITIAL_LESSON_PLANS = [
     {
       id: 'LP-2026-001',
-      teacher: 'Sri Navva Anand',
-      empId: 'T-1021',
+      teacher: 'Sri B. Narayana',
+      empId: 'EMP-T01',
       department: 'Mathematics',
       className: 'Class X-A',
       subject: 'Mathematics',
@@ -60370,8 +59623,8 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     },
     {
       id: 'LP-2026-002',
-      teacher: 'Sri K. Appa Rao',
-      empId: 'T-1023',
+      teacher: 'Sri M. Raju',
+      empId: 'EMP-T03',
       department: 'Physical Science',
       className: 'Class X-A',
       subject: 'Physical Science',
@@ -60391,8 +59644,8 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     },
     {
       id: 'LP-2026-003',
-      teacher: 'Smt. M. Saraswathi',
-      empId: 'T-1022',
+      teacher: 'Smt. T. Padmavathi',
+      empId: 'EMP-T02',
       department: 'English',
       className: 'Class X-A',
       subject: 'English',
@@ -60412,8 +59665,8 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     },
     {
       id: 'LP-2026-004',
-      teacher: 'Smt. P. Santhoshi',
-      empId: 'T-1024',
+      teacher: 'Sri CH. Venkateswara Rao',
+      empId: 'EMP-T04',
       department: 'Telugu',
       className: 'Class X-A',
       subject: 'Telugu',
@@ -60433,8 +59686,8 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     },
     {
       id: 'LP-2026-005',
-      teacher: 'Sri G. Prasad',
-      empId: 'T-1025',
+      teacher: 'Smt. V. Jyothsna',
+      empId: 'EMP-T05',
       department: 'Social Studies',
       className: 'Class X-A',
       subject: 'Social Studies',
@@ -60455,7 +59708,7 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     {
       id: 'LP-2026-006',
       teacher: 'Sri D. Suresh',
-      empId: 'T-1026',
+      empId: 'EMP-T09',
       department: 'Computer Science',
       className: 'Class X-A',
       subject: 'Computer Science',
@@ -60475,8 +59728,8 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     },
     {
       id: 'LP-2026-007',
-      teacher: 'Smt. K. Vani',
-      empId: 'T-1027',
+      teacher: 'Smt. N. Sirisha',
+      empId: 'EMP-T06',
       department: 'Biological Science',
       className: 'Class X-B',
       subject: 'Biological Science',
@@ -60496,8 +59749,8 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     },
     {
       id: 'LP-2026-008',
-      teacher: 'Sri Navva Anand',
-      empId: 'T-1021',
+      teacher: 'Sri B. Narayana',
+      empId: 'EMP-T01',
       department: 'Mathematics',
       className: 'Class IX-A',
       subject: 'Mathematics',
@@ -60517,8 +59770,8 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     },
     {
       id: 'LP-2026-009',
-      teacher: 'Smt. M. Saraswathi',
-      empId: 'T-1022',
+      teacher: 'Smt. T. Padmavathi',
+      empId: 'EMP-T02',
       department: 'English',
       className: 'Class IX-A',
       subject: 'English',
@@ -60538,8 +59791,8 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     },
     {
       id: 'LP-2026-010',
-      teacher: 'Sri K. Appa Rao',
-      empId: 'T-1023',
+      teacher: 'Sri M. Raju',
+      empId: 'EMP-T03',
       department: 'Physical Science',
       className: 'Class VIII-A',
       subject: 'Physical Science',
@@ -60559,29 +59812,29 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     },
     {
       id: 'LP-2026-011',
-      teacher: 'Smt. T. Radha',
-      empId: 'T-1028',
-      department: 'Hindi',
-      className: 'Class X-B',
-      subject: 'Hindi',
-      chapter: 'Sparsh - Chapter 2: Diary Ka Ek Panna (Sitaram Seksaria)',
-      topic: 'Historic Jan 26, 1931 Calcutta Freedom Movement Chronicle',
-      objectives: 'Read diary entry chronologically, analyze patriotic resistance against British colonial ban, and write a report on national struggle.',
-      method: 'Flipped Classroom & Multimedia Discussion',
-      materials: 'Historical photographs of Calcutta 1931, Hindi textbook, Glossary chart',
+      teacher: 'Sri A. Prasad',
+      empId: 'EMP-T07',
+      department: 'General Science',
+      className: 'Class VII-A',
+      subject: 'General Science',
+      chapter: 'Chapter 5: Acids, Bases and Salts',
+      topic: 'Natural Indicators (Litmus, Turmeric & China Rose)',
+      objectives: 'Test household solutions with natural pH indicators, classify acidic/basic substances, and record neutralization reactions.',
+      method: 'Inquiry-Based Lab Activity',
+      materials: 'Litmus strips, Turmeric paper, Hibiscus extract, Test tubes, Vinegar & Soap solution',
       plannedDate: '2026-11-11',
       completionStatus: 'Pending',
       submissionStatus: 'Submitted for Review',
-      completionProgress: 15,
-      teacherRemarks: 'Prepared timeline chart of 1931 civil disobedience movement for students.',
+      completionProgress: 25,
+      teacherRemarks: 'Prepared lab trays with natural indicator kits for Class VII-A.',
       reviewComments: 'Under administrative review.',
       reviewedBy: 'Pending Vice Principal Review',
       reviewedAt: 'Nov 02, 2026'
     },
     {
       id: 'LP-2026-012',
-      teacher: 'Sri G. Prasad',
-      empId: 'T-1025',
+      teacher: 'Smt. V. Jyothsna',
+      empId: 'EMP-T05',
       department: 'Social Studies',
       className: 'Class IX-A',
       subject: 'Social Studies',
@@ -60598,20 +59851,62 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
       reviewComments: 'Approved by Vice Principal. Excellent use of satellite imagery to explain monsoon currents.',
       reviewedBy: 'Sri Navva Anand (Vice Principal)',
       reviewedAt: 'Oct 29, 2026'
+    },
+    {
+      id: 'LP-2026-013',
+      teacher: 'Sri S. Gopal',
+      empId: 'EMP-T08',
+      department: 'Mathematics',
+      className: 'Class VI-A',
+      subject: 'Mathematics',
+      chapter: 'Chapter 7: Fractions and Decimals',
+      topic: 'Equivalent Fractions, Number Line & Decimal Conversions',
+      objectives: 'Represent mixed fractions on a number line, convert fractions to decimals, and solve daily-life measurement problems.',
+      method: 'Interactive Board Work & Practice',
+      materials: 'Fraction bars, Number line chart, Practice worksheets',
+      plannedDate: '2026-11-07',
+      completionStatus: 'Completed',
+      submissionStatus: 'Approved',
+      completionProgress: 100,
+      teacherRemarks: 'Visual fraction strips helped primary-transition students grasp equivalence quickly.',
+      reviewComments: 'Approved by Principal. Strong foundational numeracy approach.',
+      reviewedBy: 'Smt. Gorle Varalakshmi (Principal)',
+      reviewedAt: 'Oct 30, 2026'
+    },
+    {
+      id: 'LP-2026-014',
+      teacher: 'Sri B. Raman',
+      empId: 'EMP-T10',
+      department: 'Physical Education',
+      className: 'Class VIII-A',
+      subject: 'Physical Education',
+      chapter: 'Module 3: Athletics & Team Sports Strategy',
+      topic: 'Kho-Kho & Relay Baton Exchange Techniques',
+      objectives: 'Demonstrate upsweep and downsweep baton exchange in 4x100m relay and apply defensive chasing formations in Kho-Kho.',
+      method: 'Direct Instruction & Step-by-Step Modelling',
+      materials: 'Relay batons, Track cones, Stopwatch, Whistle',
+      plannedDate: '2026-11-08',
+      completionStatus: 'In Progress',
+      submissionStatus: 'Approved',
+      completionProgress: 70,
+      teacherRemarks: 'Inter-house practice heats timed for Under-14 squads.',
+      reviewComments: 'Approved by Vice Principal. Ensure hydration breaks during afternoon track drills.',
+      reviewedBy: 'Sri Navva Anand (Vice Principal)',
+      reviewedAt: 'Oct 31, 2026'
     }
   ];
 
-  // Syllabus Delivery Progress Tracking Dataset
   const INITIAL_SYLLABUS_PROGRESS = [
-    { subject: 'Mathematics', className: 'Class X', totalUnits: 21, completedUnits: 18, pct: 86, termTarget: 80, status: 'On Track', teacher: 'Sri Navva Anand' },
-    { subject: 'Physical Science', className: 'Class X', totalUnits: 19, completedUnits: 15, pct: 79, termTarget: 75, status: 'On Track', teacher: 'Sri K. Appa Rao' },
-    { subject: 'Biological Science', className: 'Class X', totalUnits: 19, completedUnits: 16, pct: 84, termTarget: 80, status: 'On Track', teacher: 'Smt. K. Vani' },
-    { subject: 'English', className: 'Class X', totalUnits: 25, completedUnits: 22, pct: 88, termTarget: 85, status: 'Ahead of Schedule', teacher: 'Smt. M. Saraswathi' },
-    { subject: 'Telugu', className: 'Class X', totalUnits: 22, completedUnits: 18, pct: 82, termTarget: 80, status: 'On Track', teacher: 'Smt. P. Santhoshi' },
-    { subject: 'Social Studies', className: 'Class X', totalUnits: 20, completedUnits: 16, pct: 80, termTarget: 75, status: 'On Track', teacher: 'Sri G. Prasad' },
+    { subject: 'Mathematics', className: 'Class X', totalUnits: 21, completedUnits: 18, pct: 86, termTarget: 80, status: 'On Track', teacher: 'Sri B. Narayana' },
+    { subject: 'Physical Science', className: 'Class X', totalUnits: 19, completedUnits: 15, pct: 79, termTarget: 75, status: 'On Track', teacher: 'Sri M. Raju' },
+    { subject: 'Biological Science', className: 'Class X', totalUnits: 19, completedUnits: 16, pct: 84, termTarget: 80, status: 'On Track', teacher: 'Smt. N. Sirisha' },
+    { subject: 'English', className: 'Class X', totalUnits: 25, completedUnits: 22, pct: 88, termTarget: 85, status: 'Ahead of Schedule', teacher: 'Smt. T. Padmavathi' },
+    { subject: 'Telugu', className: 'Class X', totalUnits: 22, completedUnits: 18, pct: 82, termTarget: 80, status: 'On Track', teacher: 'Sri CH. Venkateswara Rao' },
+    { subject: 'Social Studies', className: 'Class X', totalUnits: 20, completedUnits: 16, pct: 80, termTarget: 75, status: 'On Track', teacher: 'Smt. V. Jyothsna' },
     { subject: 'Computer Science', className: 'Class X', totalUnits: 10, completedUnits: 9, pct: 90, termTarget: 85, status: 'Ahead of Schedule', teacher: 'Sri D. Suresh' },
-    { subject: 'Mathematics', className: 'Class IX', totalUnits: 20, completedUnits: 16, pct: 80, termTarget: 75, status: 'On Track', teacher: 'Sri Navva Anand' },
-    { subject: 'Physical Science', className: 'Class VIII', totalUnits: 18, completedUnits: 14, pct: 78, termTarget: 75, status: 'On Track', teacher: 'Sri K. Appa Rao' }
+    { subject: 'General Science', className: 'Class VII', totalUnits: 16, completedUnits: 13, pct: 81, termTarget: 75, status: 'On Track', teacher: 'Sri A. Prasad' },
+    { subject: 'Mathematics', className: 'Class VI', totalUnits: 18, completedUnits: 15, pct: 83, termTarget: 75, status: 'On Track', teacher: 'Sri S. Gopal' },
+    { subject: 'Physical Education', className: 'Class VIII', totalUnits: 12, completedUnits: 10, pct: 83, termTarget: 75, status: 'On Track', teacher: 'Sri B. Raman' }
   ];
 
   function ensureLessonPlansState() {
@@ -60690,7 +59985,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     switchLessonPlansView(state.activeLessonPlansView || 'admin');
   }
 
-  // --- VIEW 1: ADMINISTRATION REVIEW DESK ---
   function renderAdminLessonPlansTable(filteredData) {
     ensureLessonPlansState();
     const tbody = document.getElementById('lessonPlansTableBody');
@@ -60709,7 +60003,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
 
     let html = '';
     data.forEach(lp => {
-      // Submission Status Badge
       let subBadge = '<span class="badge bg-secondary text-white px-2 py-1 rounded-pill">Draft</span>';
       if (lp.submissionStatus === 'Submitted for Review') {
         subBadge = '<span class="badge bg-warning text-dark px-2 py-1 rounded-pill"><i class="bi bi-hourglass-split me-1"></i>Submitted</span>';
@@ -60719,7 +60012,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
         subBadge = '<span class="badge bg-danger text-white px-2 py-1 rounded-pill"><i class="bi bi-arrow-return-left me-1"></i>Returned</span>';
       }
 
-      // Completion Status & Progress Bar
       let compPill = '<span class="badge bg-light text-muted border">Pending</span>';
       let barColor = 'bg-secondary';
       if (lp.completionStatus === 'Completed') {
@@ -60733,7 +60025,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
         barColor = 'bg-danger';
       }
 
-      // Subject badge
       let subjBadge = '<span class="badge bg-primary-subtle text-primary border border-primary-subtle px-2 py-1">' + lp.subject + '</span>';
       if (lp.subject.includes('Science')) subjBadge = '<span class="badge bg-success-subtle text-success border border-success-subtle px-2 py-1">' + lp.subject + '</span>';
       else if (lp.subject.includes('English')) subjBadge = '<span class="badge bg-purple-subtle text-dark border px-2 py-1" style="background-color:#f3e8ff;">' + lp.subject + '</span>';
@@ -60814,7 +60105,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     renderAdminLessonPlansTable();
   }
 
-  // --- VIEW 2: TEACHER SUBMISSION DESK ---
   function renderTeacherSubmissionDesk(teacherName) {
     ensureLessonPlansState();
     const container = document.getElementById('lpTeacherDeskContent');
@@ -60879,7 +60169,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     container.innerHTML = html;
   }
 
-  // --- VIEW 3: SYLLABUS PROGRESS & DELIVERY REPORT ---
   function renderSyllabusProgressReportView() {
     ensureLessonPlansState();
     const container = document.getElementById('lpSyllabusReportContent');
@@ -60925,8 +60214,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
 
     container.innerHTML = html;
   }
-
-  // --- MODAL WORKFLOWS & INTERACTIVE ACTIONS ---
 
   function showLessonPlanModal(modalId) {
     const el = document.getElementById(modalId);
@@ -61059,11 +60346,13 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
         };
       }
     } else {
+      const facultyMatch = (state.faculty || []).find(f => f.name === teacher);
+      const empId = facultyMatch ? (facultyMatch.employeeId || facultyMatch.id) : 'EMP-T01';
       const newId = 'LP-2026-' + String(state.lessonPlansList.length + 1).padStart(3, '0');
       state.lessonPlansList.unshift({
         id: newId,
         teacher,
-        empId: 'T-1021',
+        empId,
         department: subject,
         className,
         subject,
@@ -61274,7 +60563,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     showToast('Lesson plans register exported as CSV.', 'info');
   }
 
-  // Submenu 6: Exams Schedule
   function renderExamsSchedule(filteredData) {
     const tbody = document.getElementById('academicExamsTableBody');
     if (!tbody) return;
@@ -61288,19 +60576,19 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
             <div style="font-weight:700; color:var(--color-text-dark, #0f172a);"><i class="fa-solid fa-file-signature mr-1 text-primary"></i> ${ex.examName}</div>
           </td>
           <td>
-            <span class="portal-badge badge-primary font-weight-bold">${ex.class}</span>
+            <span class="portal-badge badge-primary font-weight-bold" style="white-space:nowrap;">${ex.class}</span>
           </td>
           <td>
             <strong style="color:var(--color-text-dark, #0f172a);">${ex.subject}</strong>
           </td>
-          <td>
+          <td style="white-space:nowrap;">
             <div style="font-weight:600;"><i class="fa-regular fa-calendar mr-1 text-muted"></i> ${ex.date}</div>
           </td>
-          <td>
+          <td style="white-space:nowrap;">
             <div style="font-size:0.85rem;"><i class="fa-regular fa-clock mr-1 text-muted"></i> ${ex.time}</div>
           </td>
-          <td>
-            <span class="portal-badge badge-neutral font-weight-bold">${ex.duration}</span>
+          <td style="white-space:nowrap;">
+            <span class="portal-badge badge-neutral font-weight-bold" style="white-space:nowrap;">${ex.duration}</span>
           </td>
           <td>
             <div style="font-size:0.85rem;"><i class="fa-solid fa-door-open mr-1 text-muted"></i> ${ex.room}</div>
@@ -61331,12 +60619,157 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     renderExamsSchedule(filtered);
   }
 
-  // Submenu 7: Results & Grading
+  function normalizeClassNameForExamSync(cls) {
+    if (!cls) return '';
+    const s = String(cls).trim().toUpperCase().replace(/^CLASS\s+/i, '');
+    const romanMap = { '10': 'X', '9': 'IX', '8': 'VIII', '7': 'VII', '6': 'VI', '5': 'V', '4': 'IV', '3': 'III', '2': 'II', '1': 'I' };
+    const m = s.match(/^(\d+)(-[A-Z]|[A-Z])?$/);
+    if (m && romanMap[m[1]]) {
+      const sec = m[2] ? (m[2].startsWith('-') ? m[2] : '-' + m[2]) : '';
+      return 'Class ' + romanMap[m[1]] + sec;
+    }
+    if (cls.toLowerCase().startsWith('class ')) return cls.trim();
+    return 'Class ' + cls.trim();
+  }
+
+  function summarizeExamScores(scores, totalStudents) {
+    if (!scores || scores.length === 0) return null;
+    const count = scores.length;
+    const total = totalStudents && totalStudents > count ? totalStudents : count;
+    const sum = scores.reduce((a, b) => a + b, 0);
+    const mean = (sum / count).toFixed(1);
+    const max = Math.max(...scores);
+    const min = Math.min(...scores);
+    let a1 = 0, a2 = 0, b1 = 0, b2 = 0, gpSum = 0, passed = 0;
+    scores.forEach(sc => {
+      const g = computeGradeAndGp(sc);
+      if (g.grade === 'A1') a1++;
+      else if (g.grade === 'A2') a2++;
+      else if (g.grade === 'B1') b1++;
+      else if (g.grade === 'B2') b2++;
+      gpSum += parseFloat(g.gp) || 0;
+      if (sc >= 35) passed++;
+    });
+    const meanGpa = (gpSum / count).toFixed(2);
+    const passPct = ((passed / total) * 100).toFixed(1).replace(/\.0$/, '');
+    return {
+      marks: `Class Mean: ${mean} / 100 (Max: ${max}, Min: ${min})`,
+      gradeScales: `A1: ${a1} | A2: ${a2} | B1: ${b1} | B2: ${b2} (Mean GPA: ${meanGpa})`,
+      passRate: `${passPct}% Pass Rate (${passed} / ${total} Students)`
+    };
+  }
+
+  function computeLiveResultsGradingData() {
+    const rows = RESULTS_GRADING_MASTER_DATA.map(r => ({ ...r }));
+
+    // 1. Live sync from TABULATION_RECORDS (marks entered/modified by teachers & admins in Tabulation)
+    if (typeof TABULATION_RECORDS !== 'undefined' && Array.isArray(TABULATION_RECORDS) && TABULATION_RECORDS.length > 0) {
+      const byClass = {};
+      TABULATION_RECORDS.forEach(rec => {
+        const cls = normalizeClassNameForExamSync(rec.class || 'Class X-A');
+        if (!byClass[cls]) byClass[cls] = [];
+        byClass[cls].push(rec);
+      });
+      Object.keys(byClass).forEach(cls => {
+        const recs = byClass[cls];
+        const enteredScores = recs
+          .filter(r => r.missingEntry === 'None (Entered)')
+          .map(r => {
+            const max = Number(r.maxMarks) || 100;
+            const obt = Number(r.marksObtained) || 0;
+            return Math.round((obt / max) * 100);
+          });
+        const summary = summarizeExamScores(enteredScores, recs.length);
+        if (summary) {
+          const targetRow = rows.find(r => r.class === cls);
+          if (targetRow) {
+            targetRow.marks = summary.marks;
+            targetRow.gradeScales = summary.gradeScales;
+            targetRow.passRate = summary.passRate;
+            if (typeof currentMarksBatchSubmissionStatus !== 'undefined' && currentMarksBatchSubmissionStatus) {
+              targetRow.moderationStatus = currentMarksBatchSubmissionStatus === 'Approved'
+                ? 'Moderated & Certified by Academic Council'
+                : `${currentMarksBatchSubmissionStatus} (Live Tabulation)`;
+              targetRow.isPublished = (currentMarksBatchSubmissionStatus === 'Approved' || currentMarksBatchSubmissionStatus === 'Locked');
+              targetRow.publicationStatus = targetRow.isPublished
+                ? 'Published to Portal & SMS Notified'
+                : 'Live Teacher Marks (Awaiting Publish)';
+            }
+          }
+        }
+      });
+    }
+
+    // 2. Live sync from Faculty Portal localStorage (srividya_synced_exam_marks & srividya_teacher_marks_math_ut2)
+    try {
+      const studentClassMap = {};
+      if (typeof state !== 'undefined' && Array.isArray(state.students)) {
+        state.students.forEach(st => {
+          const normCls = normalizeClassNameForExamSync(st.class || '');
+          if (st.admNo) studentClassMap[st.admNo] = normCls;
+          if (st.name) studentClassMap[st.name.trim().toLowerCase()] = normCls;
+          if (st.roll) studentClassMap[String(st.roll)] = normCls;
+        });
+      }
+
+      const syncStore = JSON.parse(localStorage.getItem('srividya_synced_exam_marks') || '{}');
+      const syncScoresByClass = {};
+      Object.keys(syncStore).forEach(key => {
+        const entry = syncStore[key];
+        if (!entry || !Array.isArray(entry.subjects) || entry.subjects.length === 0) return;
+        const idPart = key.split('_')[0];
+        const cls = normalizeClassNameForExamSync(entry.className || entry.class || studentClassMap[idPart] || '');
+        if (!cls) return;
+        let scored = 0, max = 0;
+        entry.subjects.forEach(sub => {
+          scored += Number(sub.marksScored) || 0;
+          max += Number(sub.maxMarks) || 0;
+        });
+        if (max > 0) {
+          if (!syncScoresByClass[cls]) syncScoresByClass[cls] = [];
+          syncScoresByClass[cls].push(Math.round((scored / max) * 100));
+        }
+      });
+
+      const mathUt2 = JSON.parse(localStorage.getItem('srividya_teacher_marks_math_ut2') || '{}');
+      const ut2Keys = Object.keys(mathUt2);
+      if (ut2Keys.length > 0 && !syncScoresByClass['Class VIII-A']) {
+        const ut2Scores = [];
+        const seen = new Set();
+        ut2Keys.forEach(k => {
+          if (isNaN(Number(k))) return; // avoid double-counting roll + name
+          const val = Number(mathUt2[k]);
+          if (!isNaN(val) && !seen.has(k)) {
+            seen.add(k);
+            ut2Scores.push(Math.min(100, Math.round((val / 50) * 100)));
+          }
+        });
+        if (ut2Scores.length > 0) {
+          syncScoresByClass['Class VIII-A'] = ut2Scores;
+        }
+      }
+
+      Object.keys(syncScoresByClass).forEach(cls => {
+        const summary = summarizeExamScores(syncScoresByClass[cls], syncScoresByClass[cls].length);
+        const targetRow = rows.find(r => r.class === cls);
+        if (summary && targetRow) {
+          targetRow.marks = summary.marks;
+          targetRow.gradeScales = summary.gradeScales;
+          targetRow.passRate = summary.passRate;
+          targetRow.moderationStatus = 'Live Teacher Sync (Updated)';
+          targetRow.publicationStatus = 'Synced from Faculty Marks Ledger';
+        }
+      });
+    } catch (e) {}
+
+    return rows;
+  }
+
   function renderResultsAndGrading(filteredData) {
     const tbody = document.getElementById('academicResultsTableBody');
     if (!tbody) return;
 
-    const data = filteredData || RESULTS_GRADING_MASTER_DATA;
+    const data = filteredData || computeLiveResultsGradingData();
 
     tbody.innerHTML = data.map((res, idx) => {
       return `
@@ -61376,25 +60809,176 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
   function filterAcademicResults() {
     const q = (document.getElementById('resultsSearchInput')?.value || '').toLowerCase().trim();
 
-    const filtered = RESULTS_GRADING_MASTER_DATA.filter(item => {
+    const liveData = computeLiveResultsGradingData();
+    const filtered = liveData.filter(item => {
       return !q || item.class.toLowerCase().includes(q) || item.exam.toLowerCase().includes(q) || item.marks.toLowerCase().includes(q) || item.gradeScales.toLowerCase().includes(q) || item.publicationStatus.toLowerCase().includes(q);
     });
 
     renderResultsAndGrading(filtered);
   }
 
-  // Submenu 8: Academic Reports
+  if (typeof window !== 'undefined') {
+    window.addEventListener('storage', function (ev) {
+      if (ev && (ev.key === 'srividya_synced_exam_marks' || ev.key === 'srividya_teacher_marks_math_ut2')) {
+        renderResultsAndGrading();
+        renderAcademicReports();
+      }
+    });
+  }
+
+  function computeLiveAcademicReportsData() {
+    const rows = ACADEMIC_REPORTS_MASTER_DATA.map(r => ({ ...r }));
+
+    // 1. Live Syllabus Completion from daily teacher lesson plans & syllabus registry
+    try {
+      const lpList = (typeof state !== 'undefined' && Array.isArray(state.lessonPlansList))
+        ? state.lessonPlansList
+        : (typeof INITIAL_LESSON_PLANS !== 'undefined' ? INITIAL_LESSON_PLANS : []);
+      const lpByClass = {};
+      lpList.forEach(lp => {
+        const cls = normalizeClassNameForExamSync(lp.className || '');
+        if (!cls) return;
+        if (!lpByClass[cls]) lpByClass[cls] = [];
+        lpByClass[cls].push(Number(lp.completionProgress) || 0);
+      });
+
+      const subjList = (typeof ensureAcademicSubjectsState === 'function') ? ensureAcademicSubjectsState() : [];
+      const subjByBaseClass = {};
+      subjList.forEach(s => {
+        const baseCls = String(s.className || '').trim();
+        if (!baseCls) return;
+        if (!subjByBaseClass[baseCls]) subjByBaseClass[baseCls] = [];
+        subjByBaseClass[baseCls].push(Number(s.completionPct) || 0);
+      });
+
+      rows.forEach(row => {
+        const baseCls = row.class.replace(/-[A-Z]$/i, '');
+        const lpScores = lpByClass[row.class] || [];
+        const subjScores = subjByBaseClass[baseCls] || [];
+        const combined = lpScores.concat(subjScores);
+        if (combined.length > 0) {
+          const avgPct = Math.round(combined.reduce((a, b) => a + b, 0) / combined.length);
+          row.progressPct = Math.max(0, Math.min(100, avgPct));
+          row.syllabusCompletion = `${row.progressPct}% Units Cleared` + (lpScores.length > 0 ? ' (Live Teacher Log)' : '');
+        }
+      });
+    } catch (e) {}
+
+    // 2. Live Class Performance & Subject Averages from TABULATION_RECORDS + Teacher Marks localStorage
+    const classPerfStats = {};
+
+    const recordScoreForClass = (cls, subjLabel, pctScore) => {
+      if (!cls || isNaN(pctScore)) return;
+      if (!classPerfStats[cls]) classPerfStats[cls] = { scores: [], bySubj: {} };
+      classPerfStats[cls].scores.push(pctScore);
+      if (subjLabel) {
+        if (!classPerfStats[cls].bySubj[subjLabel]) classPerfStats[cls].bySubj[subjLabel] = [];
+        classPerfStats[cls].bySubj[subjLabel].push(pctScore);
+      }
+    };
+
+    if (typeof TABULATION_RECORDS !== 'undefined' && Array.isArray(TABULATION_RECORDS)) {
+      TABULATION_RECORDS.forEach(rec => {
+        if (rec.missingEntry !== 'None (Entered)') return;
+        const cls = normalizeClassNameForExamSync(rec.class || 'Class X-A');
+        const pct = Math.round(((Number(rec.marksObtained) || 0) / (Number(rec.maxMarks) || 100)) * 100);
+        const subjShort = (rec.subject || 'Maths').startsWith('Math') ? 'Maths' : rec.subject;
+        recordScoreForClass(cls, subjShort, pct);
+      });
+    }
+
+    try {
+      const studentClassMap = {};
+      if (typeof state !== 'undefined' && Array.isArray(state.students)) {
+        state.students.forEach(st => {
+          const normCls = normalizeClassNameForExamSync(st.class || '');
+          if (st.admNo) studentClassMap[st.admNo] = normCls;
+          if (st.name) studentClassMap[st.name.trim().toLowerCase()] = normCls;
+          if (st.roll) studentClassMap[String(st.roll)] = normCls;
+        });
+      }
+
+      const syncStore = JSON.parse(localStorage.getItem('srividya_synced_exam_marks') || '{}');
+      Object.keys(syncStore).forEach(key => {
+        const entry = syncStore[key];
+        if (!entry || !Array.isArray(entry.subjects) || entry.subjects.length === 0) return;
+        const idPart = key.split('_')[0];
+        const cls = normalizeClassNameForExamSync(entry.className || entry.class || studentClassMap[idPart] || '');
+        if (!cls) return;
+        let totS = 0, totM = 0;
+        entry.subjects.forEach(sub => {
+          const s = Number(sub.marksScored) || 0;
+          const m = Number(sub.maxMarks) || 0;
+          if (m > 0) {
+            totS += s;
+            totM += m;
+            const labelMap = { math: 'Maths', sci: 'Sci', science: 'Sci', eng: 'Eng', english: 'Eng', tel: 'Tel', telugu: 'Tel', soc: 'Soc', social: 'Soc' };
+            const shortName = labelMap[String(sub.key || '').toLowerCase()] || (sub.name ? sub.name.slice(0, 4) : 'Subj');
+            recordScoreForClass(cls, shortName, Math.round((s / m) * 100));
+          }
+        });
+        if (totM > 0) {
+          recordScoreForClass(cls, null, Math.round((totS / totM) * 100));
+        }
+      });
+
+      const mathUt2 = JSON.parse(localStorage.getItem('srividya_teacher_marks_math_ut2') || '{}');
+      Object.keys(mathUt2).forEach(k => {
+        if (isNaN(Number(k))) return;
+        const val = Number(mathUt2[k]);
+        if (!isNaN(val)) {
+          recordScoreForClass('Class VIII-A', 'Maths', Math.min(100, Math.round((val / 50) * 100)));
+        }
+      });
+    } catch (e) {}
+
+    rows.forEach(row => {
+      const stat = classPerfStats[row.class];
+      if (stat && stat.scores.length > 0) {
+        const meanPct = stat.scores.reduce((a, b) => a + b, 0) / stat.scores.length;
+        const gpSum = stat.scores.reduce((acc, sc) => acc + (parseFloat(computeGradeAndGp(sc).gp) || 0), 0);
+        const meanGpa = (gpSum / stat.scores.length).toFixed(2);
+        const distCount = stat.scores.filter(sc => sc >= 75).length;
+        const distPct = ((distCount / stat.scores.length) * 100).toFixed(1);
+        row.performance = `GPA ${meanGpa} / 10.0 • ${meanPct.toFixed(1)}% Score (Distinctions: ${distPct}%)`;
+
+        const subjKeys = Object.keys(stat.bySubj);
+        if (subjKeys.length > 0) {
+          const liveSubjParts = subjKeys.map(sk => {
+            const arr = stat.bySubj[sk];
+            const avg = (arr.reduce((a, b) => a + b, 0) / arr.length).toFixed(1);
+            return `${sk}: ${avg}%`;
+          });
+          row.subjectAverages = liveSubjParts.join(' | ') + ' (Live Sync)';
+        }
+
+        if (meanPct >= 88) {
+          row.trends = `+${(meanPct - 84).toFixed(1)}% Upward Trajectory (High Performance Tier)`;
+          row.trendBadge = 'badge-success';
+        } else if (meanPct >= 78) {
+          row.trends = `+${(meanPct - 76).toFixed(1)}% Steady Growth (Consistent Tier)`;
+          row.trendBadge = 'badge-primary';
+        } else {
+          row.trends = 'Needs Remedial Attention (Focus Tier)';
+          row.trendBadge = 'badge-warning';
+        }
+      }
+    });
+
+    return rows;
+  }
+
   function renderAcademicReports(filteredData) {
     const tbody = document.getElementById('academicReportsTableBody');
     if (!tbody) return;
 
-    const data = filteredData || ACADEMIC_REPORTS_MASTER_DATA;
+    const data = filteredData || computeLiveAcademicReportsData();
 
     tbody.innerHTML = data.map(rep => {
       return `
         <tr>
-          <td>
-            <div style="font-weight:800; font-size:0.92rem; color:var(--color-text-dark, #0f172a);"><i class="fa-solid fa-shapes text-primary mr-1"></i> ${rep.class}</div>
+          <td style="white-space:nowrap;">
+            <div style="font-weight:800; font-size:0.92rem; color:var(--color-text-dark, #0f172a); white-space:nowrap;"><i class="fa-solid fa-shapes text-primary mr-1"></i> ${rep.class}</div>
             <small class="text-muted">${rep.wing}</small>
           </td>
           <td>
@@ -61432,23 +61016,14 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
   function filterAcademicReports() {
     const q = (document.getElementById('reportsSearchInput')?.value || '').toLowerCase().trim();
 
-    const filtered = ACADEMIC_REPORTS_MASTER_DATA.filter(item => {
+    const liveData = computeLiveAcademicReportsData();
+    const filtered = liveData.filter(item => {
       return !q || item.class.toLowerCase().includes(q) || item.wing.toLowerCase().includes(q) || item.performance.toLowerCase().includes(q) || item.subjectAverages.toLowerCase().includes(q) || item.trends.toLowerCase().includes(q);
     });
 
     renderAcademicReports(filtered);
   }
 
-
-  // =========================================================================
-  // SECTION 11: APPOINTMENTS & CAMPUS VISITORS SUITE (11.1 - 11.5)
-  // Authoritative Campus Executive Diary & Leadership Hearing System
-  // Supervised by Principal Smt. Gorle Varalakshmi & Vice Principal Sri Navva Anand
-  // Statutory Governance: Executive Confidentiality Guard, Gate Safeguarding &
-  // 90-Day Mandatory Statutory Visitor Data Retention Policy.
-  // =========================================================================
-
-  // 11.1 INITIAL APPOINTMENTS OVERVIEW DATA
   const APPOINTMENTS_OVERVIEW_DATA = {
     todayMeetings: [
       {
@@ -61588,7 +61163,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     ]
   };
 
-  // 11.2 PRINCIPAL'S CALENDAR DATA (Chronological & Slot Classified)
   const PRINCIPALS_CALENDAR_DATA = [
     {
       id: 'CAL-SLOT-01',
@@ -61696,7 +61270,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     }
   ];
 
-  // 11.3 APPOINTMENT REQUESTS DATA (10 User-Specified Fields)
   const APPOINTMENT_REQUESTS_DATA = [
     {
       id: 'REQ-2026-081',
@@ -61790,7 +61363,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     }
   ];
 
-  // 11.4 VISITOR REGISTER DATA (9 User-Specified Fields)
   const VISITOR_REGISTER_DATA = [
     {
       passId: 'PASS-2026-1049',
@@ -61878,7 +61450,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     }
   ];
 
-  // 11.5 MEETING HISTORY & AUDIT ARCHIVE
   const MEETING_HISTORY_DATA = [
     {
       meetingId: 'MTG-2026-098',
@@ -61954,7 +61525,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     }
   ];
 
-  // FOLLOW-UP ACTIONS DATA
   const FOLLOWUP_ACTIONS_DATA = [
     {
       id: 'FUP-2026-071',
@@ -61994,7 +61564,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     }
   ];
 
-  // Dynamic mutable operational stores
   let appointmentRequestsData = [...APPOINTMENT_REQUESTS_DATA];
   let approvedAppointmentsData = [...APPOINTMENTS_OVERVIEW_DATA.upcomingAppointments];
   let visitorRegisterData = [...VISITOR_REGISTER_DATA];
@@ -62002,17 +61571,12 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
   let followupActionsData = [...FOLLOWUP_ACTIONS_DATA];
   let principalsCalendarData = [...PRINCIPALS_CALENDAR_DATA];
 
-  let activeCalendarViewMode = 'day'; // 'day' | 'week' | 'month' | 'agenda'
-  let activeCalendarFilter = 'all';   // 'all' | 'available' | 'booked' | 'blocked'
-  let activeCalendarDate = new Date(2026, 9, 29); // 29 Oct 2026
+  let activeCalendarViewMode = 'day';
+  let activeCalendarFilter = 'all';
+  let activeCalendarDate = new Date(2026, 9, 29);
   let activeHistoryFilter = 'all';
 
-  // =========================================================================
-  // 11.1 APPOINTMENT OVERVIEW CONTROLLER & ACTIONS
-  // =========================================================================
-
   function renderAppointmentsOverview() {
-    // 1. Render Today's Meetings
     const todayTbody = document.getElementById('overviewTodayMeetingsTableBody');
     if (todayTbody) {
       if (APPOINTMENTS_OVERVIEW_DATA.todayMeetings.length === 0) {
@@ -62064,7 +61628,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
       }
     }
 
-    // 2. Render Pending Requests Queue
     const pendingTbody = document.getElementById('overviewPendingRequestsTableBody');
     if (pendingTbody) {
       const pendingList = appointmentRequestsData.filter(function(r) { return r.status === 'Pending Review' || r.status === 'Clarification Requested'; });
@@ -62091,7 +61654,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
       }
     }
 
-    // 3. Render Rescheduling Requests Queue
     const reschedTbody = document.getElementById('overviewReschedulingTableBody');
     if (reschedTbody) {
       const reschedList = APPOINTMENTS_OVERVIEW_DATA.reschedulingRequests;
@@ -62118,7 +61680,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
       }
     }
 
-    // 4. Render Upcoming Appointments (Next 7 Days)
     const upcomingTbody = document.getElementById('overviewUpcomingAppointmentsTableBody');
     if (upcomingTbody) {
       if (APPOINTMENTS_OVERVIEW_DATA.upcomingAppointments.length === 0) {
@@ -62141,7 +61702,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
       }
     }
 
-    // 5. Render Completed Meetings Summary
     const completedTbody = document.getElementById('overviewCompletedMeetingsTableBody');
     if (completedTbody) {
       const compList = meetingHistoryData.filter(function(m) { return m.status === 'Completed'; }).slice(0, 4);
@@ -62164,7 +61724,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
       }
     }
 
-    // 6. Render Active Follow-up Tasks in Overview
     const followupTbody = document.getElementById('overviewFollowupTableBody');
     if (followupTbody) {
       if (followupActionsData.length === 0) {
@@ -62270,7 +61829,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
 
     APPOINTMENTS_OVERVIEW_DATA.todayMeetings.unshift(newMeeting);
 
-    // Also insert into Calendar
     principalsCalendarData.push({
       id: 'CAL-SLOT-' + (principalsCalendarData.length + 1),
       time: slot,
@@ -62299,7 +61857,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     item.arrived = true;
     item.status = 'In Progress';
 
-    // Auto-create or verify Visitor Gate Pass
     const nextPassId = 'PASS-2026-' + (visitorRegisterData.length + 1050);
     visitorRegisterData.unshift({
       passId: nextPassId,
@@ -62367,7 +61924,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
       });
     }
 
-    // Move to Meeting History
     meetingHistoryData.unshift({
       meetingId: item.meetingId,
       date: 'Today, ' + item.time,
@@ -62381,7 +61937,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
       followupId: fupId
     });
 
-    // Remove from active today's list or mark concluded
     item.status = 'Completed';
 
     closeModal('recordMeetingCompletionModal');
@@ -62501,17 +62056,12 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     openModal('newFollowupModal');
   }
 
-  // =========================================================================
-  // 11.2 PRINCIPAL'S CALENDAR CONTROLLER & MULTI-VIEW ENGINE
-  // =========================================================================
-
   function renderPrincipalsCalendar() {
     const container = document.getElementById('principalsCalendarContainer');
     if (!container) return;
 
     const isAuthorized = (state.currentRole === 'principal' || state.currentRole === 'vice-principal' || state.currentRole === 'admin');
 
-    // Filter slots based on active filter
     let slots = principalsCalendarData;
     if (activeCalendarFilter !== 'all') {
       slots = slots.filter(function(s) { return s.type === activeCalendarFilter; });
@@ -62558,7 +62108,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
           typeBadge = '<span class="portal-badge badge-warning" style="font-size:0.75rem;"><i class="fa-solid fa-lock mr-1"></i>Blocked Time</span>';
         }
 
-        // Privacy Masking for Confidential Items
         let agendaContent = '';
         let catContent = s.category;
         if (s.isPrivate && !isAuthorized) {
@@ -62764,10 +62313,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
   function printPrincipalsCalendar() {
     window.print();
   }
-
-  // =========================================================================
-  // 11.3 APPOINTMENT REQUESTS CONTROLLER & SANCTION WORKFLOW
-  // =========================================================================
 
   function renderAppointmentRequests(list) {
     const tbody = document.getElementById('appointmentRequestsTableBody');
@@ -63036,10 +62581,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     showToast('Appointment requests register exported to CSV.', 'success');
   }
 
-  // =========================================================================
-  // 11.4 VISITOR REGISTER CONTROLLER & SAFEKEEPING RETENTION
-  // =========================================================================
-
   function renderVisitorRegister(list) {
     const tbody = document.getElementById('visitorRegisterTableBody');
     if (!tbody) return;
@@ -63248,10 +62789,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     downloadCsvFile(csv, 'SriVidya_Visitor_Register_Retention.csv');
     showToast('Visitor security register exported to CSV.', 'success');
   }
-
-  // =========================================================================
-  // 11.5 MEETING HISTORY, CONFIDENTIAL MINUTES & FOLLOW-UP DIRECTIVES
-  // =========================================================================
 
   function renderMeetingHistory(filterStatus) {
     const tbody = document.getElementById('meetingHistoryTableBody');
@@ -63470,7 +63007,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     showToast('Follow-up directives exported to CSV.', 'success');
   }
 
-  // Backward compatibility aliases for legacy onclick handlers
   function handleApproveAppointment(id) {
     return approveAppointmentRequest(id);
   }
@@ -63489,23 +63025,10 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     setTimeout(() => window.print(), 350);
   }
 
-
-
-
   function renderApprovedAppointments() {
     renderAppointmentsOverview();
   }
 
-
-    // =========================================================================
-  // SECTION 12: CAMPUS COMMUNICATION & BROADCAST CENTER (12.1 - 12.6)
-  // Authoritative Multi-Channel Messaging, DLT SMS, Email & Parent Enquiries
-  // Supervised by Principal Smt. Gorle Varalakshmi & Vice Principal Sri Navva Anand
-  // Institutional Governance: Recipient Safeguarding, Staged Approvals, 
-  // DLT Compliance, and Unified Parent Portal Communication Pipeline.
-  // =========================================================================
-
-  // 12.1 INITIAL ANNOUNCEMENTS DATA (10 Statutory Fields)
   const COMM_ANNOUNCEMENTS_DATA = [
     {
       id: 'ANN-2026-038',
@@ -63621,7 +63144,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     }
   ];
 
-  // 12.2 INITIAL OFFICIAL CIRCULARS DATA (8 Statutory Fields)
   const COMM_CIRCULARS_DATA = [
     {
       circularNo: 'CIR/2026-27/024',
@@ -63691,7 +63213,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     }
   ];
 
-  // 12.3 INITIAL SMS BROADCAST DATA (6 Statutory Fields)
   const COMM_SMS_DATA = [
     {
       campaignId: 'SMS-2026-042',
@@ -63747,7 +63268,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     }
   ];
 
-  // 12.4 INITIAL EMAIL DISPATCH DATA (8 Statutory Fields)
   const COMM_EMAIL_DATA = [
     {
       campaignId: 'EML-2026-018',
@@ -63793,7 +63313,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     }
   ];
 
-  // 12.5 INITIAL MOBILE PUSH DATA (Staging Architecture)
   const COMM_PUSH_DATA = [
     {
       pushId: 'PUSH-2026-009',
@@ -63833,7 +63352,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     }
   ];
 
-  // 12.6 INITIAL PARENT ENQUIRIES DATA (9 Statutory Fields & Unified Portal Workflow)
   const COMM_ENQUIRIES_DATA = [
     {
       enquiryId: 'ENQ-2026-089',
@@ -63922,7 +63440,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     }
   ];
 
-  // 12.7 INITIAL MESSAGE TEMPLATES DATA
   const COMM_TEMPLATES_DATA = [
     {
       id: 'TPL-DLT-001',
@@ -63971,7 +63488,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     }
   ];
 
-  // Local state references for Section 12
   let commAnnouncementsData = [...COMM_ANNOUNCEMENTS_DATA];
   let commCircularsData = [...COMM_CIRCULARS_DATA];
   let commSmsData = [...COMM_SMS_DATA];
@@ -63979,10 +63495,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
   let commPushData = [...COMM_PUSH_DATA];
   let commEnquiriesData = [...COMM_ENQUIRIES_DATA];
   let commTemplatesData = [...COMM_TEMPLATES_DATA];
-
-  // =========================================================================
-  // 12.1 ANNOUNCEMENTS CONTROLLER & ACTIONS
-  // =========================================================================
 
   function renderAnnouncements(list) {
     const tbody = document.getElementById('announcementsTableBody');
@@ -64318,10 +63830,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     }
   }
 
-  // =========================================================================
-  // 12.2 OFFICIAL CIRCULARS CONTROLLER & ACTIONS
-  // =========================================================================
-
   function renderOfficialCirculars(list) {
     const tbody = document.getElementById('officialCircularsTableBody');
     if (!tbody) return;
@@ -64556,10 +64064,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     showToast('Authorized SMS Reminders successfully dispatched to pending parents.', 'success');
   }
 
-  // =========================================================================
-  // 12.3 SMS BROADCAST CONTROLLER & ACTIONS
-  // =========================================================================
-
   function renderSmsBroadcast(list) {
     const tbody = document.getElementById('smsBroadcastTableBody');
     if (!tbody) return;
@@ -64740,10 +64244,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     showToast('SMS delivery report exported to CSV.', 'success');
   }
 
-  // =========================================================================
-  // 12.4 EMAIL DISPATCH CONTROLLER & ACTIONS
-  // =========================================================================
-
   function renderEmailDispatch(list) {
     const tbody = document.getElementById('emailDispatchTableBody');
     if (!tbody) return;
@@ -64876,10 +64376,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     showToast('Email dispatch report exported to CSV.', 'success');
   }
 
-  // =========================================================================
-  // 12.5 MOBILE PUSH NOTIFICATIONS CONTROLLER (Staging Architecture)
-  // =========================================================================
-
   function renderMobilePush(list) {
     const tbody = document.getElementById('mobilePushTableBody');
     if (!tbody) return;
@@ -64928,10 +64424,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
   function openStagePushModal() {
     showToast('Mobile Push Gateway: Ready for registration once native Android/iOS or PWA service worker is activated.', 'info');
   }
-
-  // =========================================================================
-  // 12.6 PARENT ENQUIRIES AND MESSAGES CONTROLLER & ACTIONS
-  // =========================================================================
 
   function renderParentEnquiries(list) {
     const tbody = document.getElementById('parentEnquiriesTableBody');
@@ -65033,7 +64525,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
   }
 
   function openNewEnquiryModal() {
-    // Uses addEnquiryModal if present
     const modal = document.getElementById('addEnquiryModal');
     if (modal) {
       openModal('addEnquiryModal');
@@ -65168,10 +64659,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     showToast('Parent enquiries register exported to CSV.', 'success');
   }
 
-  // =========================================================================
-  // 12.7 MESSAGE TEMPLATES CONTROLLER & ACTIONS
-  // =========================================================================
-
   function renderMessageTemplates(list) {
     const tbody = document.getElementById('messageTemplatesTableBody');
     if (!tbody) return;
@@ -65245,7 +64732,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     }
   }
 
-  // Multi-Channel Delivery Audit Modal
   
   function approveCircular(circularNo) {
     const cir = commCircularsData.find(c => c.circularNo === circularNo);
@@ -65261,7 +64747,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
   }
 
   function handleChannelChange() {
-    // Channel selection handler for multi-channel broadcast modal
   }
 
   function toggleScheduleTime(val) {
@@ -65298,14 +64783,10 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     showToast('New message template registered and queued for DLT validation.', 'success');
   }
 
-
   function openDeliveryAuditModal() {
     showToast('Campus Gateway Audit: SMS (99.2% Delivered), Email (84.3% Read), Push (Staged).', 'info');
   }
 
-
-
-  // Backward-compatibility aliases for legacy communication handlers
   function openComposeBroadcastModal(channel) {
     if (channel === 'circulars') {
       openCreateCircularModal();
@@ -65346,12 +64827,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     handleReplyEnquirySubmit(e);
   }
 
-
-  // ==========================================================================
-  // 16. INSTITUTIONAL REPORTS & EXECUTIVE ANALYTICS INTELLIGENCE (AY 2026-27)
-  // ==========================================================================
-
-  // --- DATASETS ---
   const REPORTS_ACADEMIC_DATA = [
     { classId: 'X-A', className: 'Class X-A (SSC Board Batch)', enrolled: 45, examined: 45, gpa: '9.42 / 10', topSubjects: 'Mathematics (94.2%), Physical Science (91.8%), English (89.5%)', passRate: '100%', trend: '+0.58 GPA', trendType: 'up', classTeacher: 'Sri N. Anand (Vice Principal)' },
     { classId: 'X-B', className: 'Class X-B (SSC Board Batch)', enrolled: 43, examined: 43, gpa: '9.18 / 10', topSubjects: 'Biological Science (92.4%), Social Studies (89.6%), Telugu (91.0%)', passRate: '100%', trend: '+0.41 GPA', trendType: 'up', classTeacher: 'Smt. K. Anuradha' },
@@ -65429,7 +64904,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     { wing: 'Campus Health & Safety Audits', scope: 'Fire Extinguishers, RO Water, CCTV', metric: '100% Compliant (Fire Dept NOC Active)', pendingItems: 'Quarterly Water Test Certificate Renewal', official: 'Sri G. Venkatesh (Campus Admin)', status: 'Optimal', notes: 'RO water sample tested zero bacteria; 32 CCTV cameras recording with 45-day storage backup.' }
   ];
 
-  // --- CHART INSTANCES ---
   let chartAcademicSubjectInst = null;
   let chartAcademicGradeInst = null;
   let chartAttendanceDailyInst = null;
@@ -65445,7 +64919,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
   let chartOperationalRadarInst = null;
   let chartOperationalWingInst = null;
 
-  // --- RENDERERS ---
   function renderAcademicReportsTable(data) {
     const list = data || REPORTS_ACADEMIC_DATA;
     const tbody = document.getElementById('tbodyAcademicReports');
@@ -66153,7 +65626,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     }
   }
 
-  // --- EXPORT & PRINT FUNCTIONS ---
   function exportAcademicReportsCSV() {
     let csv = 'Class & Section,Enrolled,Examined,Class GPA,Top Subject Averages,Pass Rate,Performance Trend,Class Teacher\n';
     REPORTS_ACADEMIC_DATA.forEach(r => {
@@ -66336,7 +65808,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
       `;
     }
 
-    // Append Statutory Officer Signatures
     dossierContent += `
       <div style="margin-top: 2.5rem; display: flex; justify-content: space-between; text-align: center; font-size: 0.8rem; color: #475569; border-top: 1px dashed #cbd5e1; padding-top: 1.5rem;">
         <div>
@@ -66378,14 +65849,10 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
   }
 
   
-  // ==========================================================================
-  // 17. TASKS & APPROVALS UNIFIED DECISION HUB
-  // ==========================================================================
 
   let activeDecisionRequestId = null;
   let activeTaskActionId = null;
 
-  // 17.1 Pending Approvals Data (All 8 Required Institutional Categories)
   const TASKS_PENDING_DATA = [
     {
       id: 'REQ-ADM-2026-052',
@@ -66541,7 +66008,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     }
   ];
 
-  // 17.2 My Assigned Tasks Data
   const TASKS_ASSIGNED_DATA = [
     {
       taskId: 'TSK-2026-101',
@@ -66659,7 +66125,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     }
   ];
 
-  // 17.3 Approval History Data (Traceable Decisions & Complete Stage Audit)
   const TASKS_HISTORY_DATA = [
     {
       id: 'DEC-2026-072',
@@ -66765,7 +66230,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     }
   ];
 
-  // 17.4 Escalations Data (Follows Defined Policies, No Approval Bypass)
   const TASKS_ESCALATIONS_DATA = [
     {
       id: 'ESC-2026-009',
@@ -66896,68 +66360,63 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     }
   ];
 
-  // =========================================================================
-  // 17.1 PENDING APPROVALS RENDERER & ACTIONS
-  // =========================================================================
-
   function renderPendingApprovalsTable(data) {
     const list = data || TASKS_PENDING_DATA;
     const tbody = document.getElementById('tbodyPendingApprovals');
-    if (!tbody) return;
-    if (list.length === 0) {
-      tbody.innerHTML = '<tr><td colspan="8" class="text-center p-4 text-muted">No pending approvals awaiting decision. All statutory items cleared.</td></tr>';
-      return;
-    }
-    tbody.innerHTML = list.map(item => `
+    if (tbody) {
+      if (list.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="8" class="text-center p-4 text-muted">No pending approvals awaiting decision. All statutory items cleared.</td></tr>';
+      } else {
+        tbody.innerHTML = list.map(item => `
       <tr>
         <td>
-          <div style="font-weight: 700; color: #0f172a;"><i class="fa-solid fa-stamp text-primary mr-1"></i> ${item.id}</div>
-          <small class="text-muted">${item.impact || ''}</small>
+          <div style="font-weight: 700; color: #0f172a;"><i class="fa-solid fa-stamp text-primary mr-1"></i> ${escapeHtml(item.id)}</div>
+          <small class="text-muted">${escapeHtml(item.impact || '')}</small>
         </td>
         <td>
-          <span class="badge" style="background:#eff6ff; color:#1d4ed8; font-weight:700; font-size:0.75rem;">${item.module || item.category}</span>
+          <span class="badge" style="background:#eff6ff; color:#1d4ed8; font-weight:700; font-size:0.75rem;">${escapeHtml(item.module || item.category)}</span>
         </td>
         <td>
-          <div style="font-weight: 600; color: #1e293b;">${item.requester}</div>
-          <small class="text-muted">${item.dept || ''}</small>
+          <div style="font-weight: 600; color: #1e293b;">${escapeHtml(item.requester)}</div>
+          <small class="text-muted">${escapeHtml(item.dept || '')}</small>
         </td>
         <td>
-          <div style="font-size: 0.85rem; color: #475569;"><i class="fa-regular fa-calendar mr-1"></i> ${item.requestDate || item.submittedOn}</div>
+          <div style="font-size: 0.85rem; color: #475569;"><i class="fa-regular fa-calendar mr-1"></i> ${escapeHtml(item.requestDate || item.submittedOn)}</div>
         </td>
         <td>
           <span class="badge" style="background: ${item.priority === 'Critical' ? '#fee2e2; color: #991b1b' : (item.priority === 'High' ? '#fef3c7; color: #92400e' : '#e0e7ff; color: #3730a3')}; font-weight: 700; font-size:0.75rem;">
-            ${item.priority}
+            ${escapeHtml(item.priority)}
           </span>
         </td>
         <td>
-          <div style="font-weight: 600; color: #0369a1; font-size:0.85rem;"><i class="fa-solid fa-hourglass-half mr-1"></i> ${item.approvalStage}</div>
+          <div style="font-weight: 600; color: #0369a1; font-size:0.85rem;"><i class="fa-solid fa-hourglass-half mr-1"></i> ${escapeHtml(item.approvalStage)}</div>
         </td>
         <td>
-          <div style="font-weight: 700; color: #0f172a; font-size:0.85rem;"><i class="fa-regular fa-clock mr-1 text-danger"></i> ${item.dueDate}</div>
+          <div style="font-weight: 700; color: #0f172a; font-size:0.85rem;"><i class="fa-regular fa-clock mr-1 text-danger"></i> ${escapeHtml(item.dueDate)}</div>
         </td>
         <td class="text-end">
           <div class="record-actions-wrap d-inline-flex align-items-center justify-content-end gap-1 flex-nowrap">
-            <button type="button" class="btn btn-sm btn-success px-2.5 py-1" onclick="portalApp.approvePendingRequest('${item.id}')" title="Approve Request">
+            <button type="button" class="btn btn-sm btn-success px-2.5 py-1" onclick="portalApp.approvePendingRequest('${escapeHtml(item.id)}')" title="Approve Request">
               <i class="fa-solid fa-check me-1"></i> Approve
             </button>
-            <button type="button" class="btn btn-sm btn-outline-primary px-2.5 py-1" onclick="portalApp.openApprovalDecisionModal('${item.id}')" title="Open Request Details">
+            <button type="button" class="btn btn-sm btn-outline-primary px-2.5 py-1" onclick="portalApp.openApprovalDecisionModal('${escapeHtml(item.id)}')" title="Open Request Details">
               <i class="fa-regular fa-folder-open me-1"></i> Open
             </button>
             <button type="button" class="record-action-btn btn-action-more" onclick="portalApp.toggleRecordMoreMenu(this, event)" title="More Actions">
               <i class="fa-solid fa-ellipsis-vertical"></i>
             </button>
             <div class="record-more-menu">
-              <button type="button" class="record-more-item text-danger" onclick="portalApp.openRejectRequestModal('${item.id}')">
+              <button type="button" class="record-more-item text-danger" onclick="portalApp.openRejectRequestModal('${escapeHtml(item.id)}')">
                 <i class="fa-solid fa-xmark me-2 text-danger"></i> Reject with reason
               </button>
-              <button type="button" class="record-more-item text-warning" onclick="portalApp.openReturnRequestModal('${item.id}')">
+              <button type="button" class="record-more-item text-warning" onclick="portalApp.openReturnRequestModal('${escapeHtml(item.id)}')">
                 <i class="fa-solid fa-rotate-left me-2 text-warning"></i> Return for correction
               </button>
-              <button type="button" class="record-more-item" onclick="portalApp.openReassignRequestModal('${item.id}')">
+              <button type="button" class="record-more-item" onclick="portalApp.openReassignRequestModal('${escapeHtml(item.id)}')">
                 <i class="fa-solid fa-user-pen me-2 text-muted"></i> Reassign if permitted
               </button>
               <div class="dropdown-divider my-1 border-top"></div>
-              <button type="button" class="record-more-item" onclick="portalApp.openRequestHistoryModal('${item.id}')">
+              <button type="button" class="record-more-item" onclick="portalApp.openRequestHistoryModal('${escapeHtml(item.id)}')">
                 <i class="fa-solid fa-clock-rotate-left me-2 text-muted"></i> View history
               </button>
             </div>
@@ -66965,13 +66424,17 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
         </td>
       </tr>
     `).join('');
+      }
+    }
 
     const badge = document.getElementById('tabBadgeTasksPending');
     if (badge) badge.textContent = list.length;
     const headerBadge = document.getElementById('tasksPendingHeaderBadge');
-    if (headerBadge) headerBadge.textContent = list.length + ' Decisions Awaiting Executive Clearance';
+    if (headerBadge) headerBadge.textContent = list.length + ' Decision' + (list.length === 1 ? '' : 's') + ' Awaiting Executive Clearance';
     const sideBadge = document.getElementById('sidebarTasksPendingBadge');
     if (sideBadge) sideBadge.textContent = list.length + ' Pending';
+    const cardValEl = document.getElementById('tasksPendingCardVal');
+    if (cardValEl) cardValEl.textContent = list.length + ' Request' + (list.length === 1 ? '' : 's');
 
     const routineCount = list.filter(x => x.priority === 'Normal' || x.urgency === 'Normal').length;
     const btnCountEl = document.getElementById('quickApproveRoutineCount');
@@ -66995,8 +66458,11 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     const idx = TASKS_PENDING_DATA.findIndex(x => x.id === reqId);
     if (idx === -1) return;
     const item = TASKS_PENDING_DATA[idx];
+    if (item.isLive && item.liveCategory) {
+      handleApproval(item.liveId || item.id, true, 'Approved: ' + (item.summary || item.id), item.liveCategory);
+      return;
+    }
     
-    // Add to history
     TASKS_HISTORY_DATA.unshift({
       id: 'DEC-2026-0' + (TASKS_HISTORY_DATA.length + 73),
       request: item.id + ' (' + item.module + ')',
@@ -67033,8 +66499,12 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
       }
       return;
     }
-    document.getElementById('rejectModalReqIdDisplay').textContent = item.id + ' (' + item.module + ')';
-    document.getElementById('rejectReasonInput').value = '';
+    const displayEl = document.getElementById('rejectModalReqIdDisplay');
+    if (displayEl) displayEl.textContent = item.id + ' (' + item.module + ')';
+    const subEl = document.getElementById('rejectRequestModalSub');
+    if (subEl) subEl.textContent = 'Request: ' + item.id + ' (' + item.module + ')';
+    const inputEl = document.getElementById('rejectReasonInput') || document.getElementById('rejectReasonTextarea');
+    if (inputEl) inputEl.value = '';
     openModal('rejectRequestReasonModal');
   }
 
@@ -67042,6 +66512,11 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     const idx = TASKS_PENDING_DATA.findIndex(x => x.id === reqId);
     if (idx === -1) return;
     const item = TASKS_PENDING_DATA[idx];
+    if (item.isLive && item.liveCategory) {
+      closeModal('rejectRequestReasonModal');
+      handleApproval(item.liveId || item.id, false, reason || 'Rejected by Principal', item.liveCategory);
+      return;
+    }
 
     TASKS_HISTORY_DATA.unshift({
       id: 'DEC-2026-0' + (TASKS_HISTORY_DATA.length + 73),
@@ -67070,7 +66545,7 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
 
   function submitRejectRequest(e) {
     if (e && e.preventDefault) e.preventDefault();
-    const reason = document.getElementById('rejectReasonInput')?.value || 'Statutory criteria not met.';
+    const reason = (document.getElementById('rejectReasonInput') || document.getElementById('rejectReasonTextarea'))?.value || 'Statutory criteria not met.';
     if (activeDecisionRequestId) {
       recordRejectDecision(activeDecisionRequestId, reason);
     }
@@ -67217,10 +66692,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     }
     openModal('requestHistoryTimelineModal');
   }
-
-  // =========================================================================
-  // 17.2 MY ASSIGNED TASKS RENDERER & ACTIONS
-  // =========================================================================
 
   function renderAssignedTasksTable(data) {
     const list = data || TASKS_ASSIGNED_DATA;
@@ -67451,16 +66922,12 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     }
   }
 
-  // =========================================================================
-  // 17.3 APPROVAL HISTORY RENDERER (DECISION TRACEABILITY)
-  // =========================================================================
-
   function renderApprovalHistoryTable(data) {
     const list = data || TASKS_HISTORY_DATA;
     const tbody = document.getElementById('tbodyApprovalHistory');
     if (!tbody) return;
     if (list.length === 0) {
-      tbody.innerHTML = '<tr><td colspan="7" class="text-center p-4 text-muted">No approval history records found.</td></tr>';
+      tbody.innerHTML = '<tr><td colspan="8" class="text-center p-4 text-muted">No approval history records found.</td></tr>';
       return;
     }
     tbody.innerHTML = list.map(item => `
@@ -67489,6 +66956,11 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
         <td>
           <span class="badge" style="background:#eff6ff; color:#1d4ed8; font-weight:600; font-size:0.75rem;">${item.nextStage || 'Finalized'}</span>
         </td>
+        <td class="text-end">
+          <span class="badge" style="background:#f8fafc; color:#334155; border:1px solid #e2e8f0; font-family:monospace; font-size:0.75rem;">
+            <i class="fa-solid fa-fingerprint text-primary mr-1"></i> ${item.audit || item.id}
+          </span>
+        </td>
       </tr>
     `).join('');
 
@@ -67506,10 +66978,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     });
     renderApprovalHistoryTable(filtered);
   }
-
-  // =========================================================================
-  // 17.4 ESCALATIONS RENDERER (POLICY COMPLIANCE, NO BYPASS)
-  // =========================================================================
 
   function renderEscalationsTable(data) {
     const list = data || TASKS_ESCALATIONS_DATA;
@@ -67566,12 +67034,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     });
     renderEscalationsTable(filtered);
   }
-
-    /* =========================================================================
-     THE MOST IMPORTANT SCHOOL WORKFLOWS (WORKFLOWS A THROUGH J)
-     Specification:
-     At each step, record the responsible user, status, timestamps and required next action.
-     ========================================================================= */
 
   const INSTITUTIONAL_WORKFLOWS_DATA = [
     {
@@ -67839,7 +67301,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
       const activeStepObj = item.steps[item.currentActiveStep - 1] || item.steps[0];
       const progressPercent = Math.round((item.currentActiveStep / item.totalSteps) * 100);
 
-      // Micro stepper nodes
       const stepperDots = item.steps.map((st, i) => {
         let dotClass = 'pending';
         let iconHtml = '<i class="fa-solid fa-circle"></i>';
@@ -68042,7 +67503,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     showToast('Exported complete 10-workflow lifecycle registry to CSV', 'success');
   }
 
-  // --- MODAL DECISION HANDLERS ---
   function openApprovalDecisionModal(reqId) {
     activeDecisionRequestId = reqId;
     const item = TASKS_PENDING_DATA.find(x => x.id === reqId) || TASKS_PENDING_DATA[0];
@@ -68091,6 +67551,11 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     if (idx !== -1) {
       const item = TASKS_PENDING_DATA[idx];
       const notes = document.getElementById('approvalDecisionNotesInput')?.value || `Decision recorded as ${action} by Principal.`;
+      if (item.isLive && item.liveCategory && (action === 'Approved' || action === 'Rejected')) {
+        closeModal('approvalDecisionModal');
+        handleApproval(item.liveId || item.id, action === 'Approved', notes, item.liveCategory);
+        return;
+      }
       
       TASKS_HISTORY_DATA.unshift({
         id: 'DEC-2026-0' + (TASKS_HISTORY_DATA.length + 73),
@@ -68128,7 +67593,7 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     executeQuickDecision(action);
   }
 
-  function openBulkDecisionModal() {
+  async function openBulkDecisionModal() {
     if (TASKS_PENDING_DATA.length === 0) {
       showToast('No pending requests awaiting bulk clearance.', 'info');
       return;
@@ -68136,6 +67601,13 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     const routineItems = TASKS_PENDING_DATA.filter(x => x.priority === 'Normal' || x.urgency === 'Normal');
     if (routineItems.length === 0) {
       showToast('All remaining items are High or Critical Priority and require individual review.', 'warning');
+      return;
+    }
+    const liveRoutine = routineItems.filter(x => x.isLive && x.liveCategory);
+    if (liveRoutine.length > 0) {
+      for (const item of liveRoutine) {
+        await handleApproval(item.liveId || item.id, true, 'Bulk approved routine request: ' + item.id, item.liveCategory);
+      }
       return;
     }
     routineItems.forEach(item => {
@@ -68165,6 +67637,12 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
   }
 
   function openNewTaskModal() {
+    const deadlineEl = document.getElementById('newTaskDeadlineInput');
+    if (deadlineEl && !deadlineEl.value) {
+      const d = new Date();
+      d.setDate(d.getDate() + 3);
+      deadlineEl.value = d.toISOString().split('T')[0];
+    }
     openModal('newTaskOrWorkflowModal');
   }
 
@@ -68226,7 +67704,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     showToast(`Editing routing rules for ${item ? item.category : wfId}`, 'info');
   }
 
-  // --- CSV EXPORTS ---
   function exportPendingApprovalsCSV() {
     let csv = 'Request ID,Module,Requester,Department,Summary,Request Date,Priority,Current Approval Stage,Due Date\n';
     TASKS_PENDING_DATA.forEach(r => {
@@ -68266,12 +67743,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     });
     downloadCSV(csv, 'SriVidya_Workflow_Routing_Matrix.csv');
   }
-
-  /* =========================================================================
-     MODULE 18: SETTINGS & ACCESS CONTROL IMPLEMENTATION
-     9 Subviews: Profile, Academic Year, Role Management, Access Permissions,
-     Approval Workflows, Notifications, Security Settings, Audit Logs, Data & Backup
-     ========================================================================= */
 
   const SETTINGS_ROLES_DATA = [
     {
@@ -68383,28 +67854,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
       description: 'Bus route optimization, student stop allocations, RTO compliance, and vehicle safety maintenance.'
     }
   ];
-
-/* =========================================================================
-     UNIVERSAL PERMISSIONS & RECORD SCOPE ENGINE
-     Every module independently supports:
-     1. View records
-     2. Create records
-     3. Edit records
-     4. Submit records
-     5. Approve or reject
-     6. Archive or cancel
-     7. Export or print
-     8. View sensitive information
-     9. Manage permissions
-     
-     Record Scope Limitations:
-     - Campus-Wide (ALL)
-     - Assigned Classes Only (ASSIGNED_CLASSES: e.g. Teachers 8A, 9B, 7C, 10A)
-     - Assigned Department Only (ASSIGNED_DEPARTMENT: e.g. Accounts, Transport, Inventory)
-     - Assigned Students Only (ASSIGNED_STUDENTS: e.g. Counselor)
-     - Own Records Only (OWN_RECORDS)
-     - Segregation of Duties: Accounts employees cannot approve own refunds/waivers
-     ========================================================================= */
 
   const UNIVERSAL_PERMISSIONS_CATALOG = [
     { key: 'view', label: 'View records', icon: 'fa-eye', desc: 'Inspect records within permitted scope' },
@@ -68817,7 +68266,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
   let activePermissionsMatrix = getUniversalPermissionsMatrix();
   let currentPermissionsFilterRole = 'all';
 
-  // Backward compatibility alias
   const SETTINGS_PERMISSIONS_DATA = DEFAULT_UNIVERSAL_PERMISSIONS_MATRIX;
   const SETTINGS_WORKFLOWS_DATA = [
     {
@@ -69141,12 +68589,7 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     }
   }
 
-  /* =========================================================================
-     MODULE 18: SETTINGS & ACCESS CONTROL ACTIONS (18.1 - 18.7)
-     ========================================================================= */
-
   
-  // --- 18.0 My Profile & User Account Actions ---
   function loadMyProfileData() {
     const details = resolveAuthenticatedUserDetails();
     let stored = null;
@@ -69157,7 +68600,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     const isVP = (state.currentRole === 'vice-principal');
     const isClerk = (state.currentRole === 'admin');
 
-    // Default institutional values based on role
     const officialEmail = (stored && stored.officialEmail) || (stored && stored.email) || (isVP ? 'vp@srividyaschool.edu.in' : isClerk ? 'clerk@srividyaschool.edu.in' : 'principal@srividyaschool.edu.in');
     const empId = (stored && stored.empId) || (isVP ? 'SV-EMP-201702' : isClerk ? 'SV-EMP-201805' : 'SV-EMP-201701');
     const designation = details.designation;
@@ -69174,7 +68616,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     const qualification = (stored && stored.qualification) || (isVP ? 'M.Sc. (Physics), M.Ed.' : isClerk ? 'B.Com., PGDCA' : 'M.A. (English), M.Ed., Ph.D. (Educational Administration)');
     const bio = (stored && stored.bio) || 'Committed to academic excellence, value-based pedagogy, and holistic student development at Sri Vidya E.M. High School since 2017.';
 
-    // Populate DOM Elements
     const titleEl = document.getElementById('myProfileDisplayTitle');
     if (titleEl) titleEl.textContent = fullName;
 
@@ -69187,7 +68628,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     const iconEl = document.getElementById('myProfileAvatarIcon');
     if (iconEl) iconEl.className = details.avatarIcon;
 
-    // Fixed institutional fields
     const schoolEmailInp = document.getElementById('myProfileSchoolEmail');
     if (schoolEmailInp) schoolEmailInp.value = officialEmail;
 
@@ -69197,7 +68637,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     const roleInp = document.getElementById('myProfileRole');
     if (roleInp) roleInp.value = designation;
 
-    // Editable personal fields
     const fnInp = document.getElementById('myProfileFullName');
     if (fnInp) fnInp.value = fullName;
 
@@ -69261,7 +68700,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
       return;
     }
 
-    // Retrieve existing user profile
     let user = null;
     try {
       user = JSON.parse(sessionStorage.getItem('sv_user_profile') || localStorage.getItem('sv_user_profile') || '{}');
@@ -69269,7 +68707,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
       user = {};
     }
 
-    // Keep institutional credentials strictly protected / immutable
     const fixedSchoolEmail = document.getElementById('myProfileSchoolEmail')?.value || user.email || 'principal@srividyaschool.edu.in';
     const fixedEmpId = document.getElementById('myProfileEmpId')?.value || user.empId || 'SV-EMP-201701';
     const fixedRole = document.getElementById('myProfileRole')?.value || user.designation || 'Principal';
@@ -69299,11 +68736,9 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
       localStorage.setItem('sv_user_profile', JSON.stringify(user));
     } catch (e) {}
 
-    // Update global DOM displays (sidebar user card, header role indicator, dashboard greeting)
     syncUserProfileDOM();
     loadMyProfileData();
 
-    // Call backend API if user is authenticated with token
     if (window.ApiClient && typeof window.ApiClient.put === 'function') {
       window.ApiClient.put('/auth/me', {
         fullName,
@@ -69335,7 +68770,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     showToast('Opening security settings & password management.', 'info');
   }
 
-  // --- 18.1 School Profile Actions ---
   function editSchoolProfileDraft() {
     const inputs = document.querySelectorAll('#subview-settings-profile input, #subview-settings-profile textarea');
     inputs.forEach(inp => {
@@ -69385,7 +68819,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     showToast('Displaying immutable profile change audit history.', 'info');
   }
 
-  // --- 18.2 Academic Year Actions ---
   function openCreateAcademicYearModal() {
     const form = document.querySelector('#createAcademicYearModal form');
     if (form) form.reset();
@@ -69435,7 +68868,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     showToast(`${ayId || 'AY 2025–2026'} archived to permanent institutional cold storage. Historical continuity intact.`, 'success');
   }
 
-  // --- 18.3 Role Management Actions ---
   function openCreateRoleModal() {
     const form = document.querySelector('#createRoleModal form');
     if (form) form.reset();
@@ -69507,11 +68939,9 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     document.getElementById('assignRoleUsersRoleStatus').textContent = role.status;
     document.getElementById('assignRoleUsersRoleDesc').textContent = role.description || role.scope || '';
 
-    // Populate current assigned users
     tempRoleAssignedUsers = [...(role.assignedUsers || [])];
     renderAssignRoleUsersChips();
 
-    // Populate available staff select
     const staffSelect = document.getElementById('assignRoleUsersStaffSelect');
     if (staffSelect) {
       const allStaff = [
@@ -69646,7 +69076,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     document.getElementById('editRolePermsRoleDesc').textContent = role.description || role.scope || '';
     document.getElementById('editRolePermsScopeBadge').innerHTML = `<i class="fa-solid fa-key me-1"></i> ${role.permissionsCount}`;
 
-    // Render matrix table rows
     const tbody = document.getElementById('editRolePermsTableBody');
     if (tbody) {
       const modules = ['Students', 'Attendance', 'Results', 'Fees', 'Staff HR'];
@@ -69696,7 +69125,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     }
     role.customPerms = updatedPerms;
 
-    // Calculate count
     let totalChecks = 0;
     Object.values(updatedPerms).forEach(acts => {
       Object.values(acts).forEach(v => { if (v) totalChecks++; });
@@ -69742,9 +69170,7 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     openActivityHistory(`Role Permissions • ${roleName}`, `Cryptographically sequenced audit ledger of privilege assignments and scope delegations for ${roleName}.`);
   }
 
-  // --- 18.4 Access Permissions Actions ---
   function renderPermissionsMatrixTable() {
-    // 5 modules rendered in HTML: Students, Attendance, Results, Fees, Staff HR
   }
 
   function savePermissionsMatrixAndScopes() {
@@ -69755,7 +69181,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     showToast('Permission matrix and security scopes reset to statutory institutional defaults.', 'info');
   }
 
-    // --- 18.5 Security Settings Actions ---
   function saveSecuritySettings() {
     try {
       const secMfa = document.getElementById('secMfaToggle')?.checked ?? true;
@@ -69778,7 +69203,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
 
   function restoreSecurityAndToggleSettings() {
     try {
-      // 1. Security Settings
       const secRaw = localStorage.getItem('sv_security_settings');
       if (secRaw) {
         const sec = JSON.parse(secRaw);
@@ -69796,7 +69220,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
         }
       }
 
-      // 2. Profile Branding Watermark Toggle
       const brandingWatermark = localStorage.getItem('sv_profile_branding_watermark');
       if (brandingWatermark !== null) {
         const isWatermark = brandingWatermark === 'true';
@@ -69804,7 +69227,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
         if (el) { el.checked = isWatermark; el.setAttribute('aria-checked', el.checked ? 'true' : 'false'); }
       }
 
-      // 3. Sensitive Access Matrix Toggle
       const permSensitive = localStorage.getItem('sv_perm_sensitive_access');
       if (permSensitive !== null) {
         const isPerm = permSensitive === 'true';
@@ -69812,7 +69234,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
         if (el) { el.checked = isPerm; el.setAttribute('aria-checked', el.checked ? 'true' : 'false'); }
       }
 
-      // Instant change listeners
       const elWatermark = document.getElementById('profileBrandingWatermarkToggle');
       if (elWatermark && !elWatermark.__svBound) {
         elWatermark.__svBound = true;
@@ -69856,7 +69277,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     showToast(`Session ${sessionId || 'SES-CURRENT'} revoked and logged out immediately.`, 'info');
   }
 
-  // --- 18.6 Audit Logs Actions ---
   function renderSettingsAuditLogsTable(recordsToRender) {
     const tbody = document.getElementById('tbodySettingsAuditLogs') || document.getElementById('tbodyAuditLogs');
     if (!tbody) return;
@@ -69901,7 +69321,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     }).join('');
   }
 
-  // --- 18.7 Data & Backup Actions ---
   function renderSettingsBackupsTable() {
     const tbody = document.getElementById('tbodyDataBackups') || document.getElementById('tbodySettingsBackups');
     if (!tbody) return;
@@ -69968,11 +69387,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
   function reviewBackupFailures() {
     showToast('Backup Telemetry Review: 0 failed backups in the last 365 days. All primary, secondary, and cold-storage archives are HEALTHY.', 'success');
   }
-
-  /* =========================================================================
-     UNIVERSAL PERMISSIONS RENDERING, SCOPE EVALUATION & SIMULATION
-     Supports 9 core permissions, 5 record scopes, and statutory anti-self-approval
-     ========================================================================= */
 
   function getActiveFilterRole() {
     return currentPermissionsFilterRole || 'all';
@@ -70886,15 +70300,11 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
   }
 
   
-    /* =========================================================================
-     LEGAL & PRIVACY COMPLIANCE AUDIT ENGINE (DPDP ACT 2023 & GDPR ALIGNED)
-     ========================================================================= */
 
   async function loadComplianceData() {
     try {
       if (!window.ApiClient || !window.ApiClient.compliance) return;
 
-      // 1. Load Consents Ledger
       try {
         const consentRes = await window.ApiClient.compliance.getConsentLedger();
         if (consentRes && consentRes.success && consentRes.data) {
@@ -70929,7 +70339,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
         console.warn('Compliance: Consents ledger load error', err);
       }
 
-      // 2. Load DPAs (Third-Party Processors)
       try {
         const dpaRes = await window.ApiClient.compliance.getThirdPartyDpas();
         if (dpaRes && dpaRes.success && dpaRes.data) {
@@ -70955,7 +70364,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
         console.warn('Compliance: DPAs load error', err);
       }
 
-      // 3. Load Breaches & Incidents
       try {
         const breachRes = await window.ApiClient.compliance.getBreaches();
         if (breachRes && breachRes.success && breachRes.data) {
@@ -71000,7 +70408,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
         console.warn('Compliance: Breaches load error', err);
       }
 
-      // 4. Load OSS Licenses
       try {
         const licRes = await window.ApiClient.compliance.getLicenses();
         if (licRes && licRes.success && licRes.data) {
@@ -71124,13 +70531,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
       showToast('Failed to export compliance dossier: ' + e.message, 'error');
     }
   }
-
-/* =========================================================================
-     STANDARD PAGE LAYOUT ARCHITECTURE & REUSABLE UI ENGINE
-     Spec: Breadcrumb, Page title, Description, Primary action, Summary cards,
-           Search, Filters, Records table, Row actions, Bulk actions, Pagination,
-           Export/Print, Activity history, Empty state, Loading & error states
-     ========================================================================= */
 
   function updateBreadcrumb(moduleKey, subKey) {
     const crumb = document.getElementById('currentPageCrumb');
@@ -71317,7 +70717,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     }
   }
 
-  // Universal Bulk Actions State & Handlers
   let activeBulkSelection = {
     tableId: null,
     selectedRows: []
@@ -71403,7 +70802,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     }
   }
 
-  // Universal Pagination Renderer
   function renderTablePagination(containerId, options = {}) {
     const container = document.getElementById(containerId);
     if (!container) return;
@@ -71472,7 +70870,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     showToast('Adjusted records view to ' + newSize + ' per page', 'info');
   }
 
-  // Universal Activity History / Audit Timeline
   const ACTIVITY_HISTORY_DATABASE = [
     {
       actor: 'Dr. M. R. Krishna (Principal)',
@@ -71567,7 +70964,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     showToast('Activity history audit log exported to CSV.', 'success');
   }
 
-  // Universal Empty State Generator
   function getEmptyStateHtml(options = {}) {
     const {
       icon = 'fa-folder-open',
@@ -71615,7 +71011,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     if (typeof filterFeesTable === 'function') filterFeesTable();
   }
 
-  // Universal Loading & Error State Generator
   function getLoadingStateHtml(message = 'Retrieving institutional records from secure database...') {
     return `
       <div class="loading-state">
@@ -71668,11 +71063,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     }
   }
 
-
-
-  // ==========================================================================
-  // STANDARD APPROVAL STATUS MODEL & ENGINE
-  // ==========================================================================
   const STANDARD_APPROVAL_STATUSES = {
     'Draft': {
       meaning: 'Created but not submitted',
@@ -71730,7 +71120,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
       category: 'core'
     },
 
-    // Domain Specific: Admissions Lifecycle
     'Documents Pending': {
       meaning: 'Missing mandatory certificates or credentials',
       badgeClass: 'badge-status-documents-pending',
@@ -71756,7 +71145,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
       category: 'admissions'
     },
 
-    // Domain Specific: Financial Lifecycle
     'Pending': {
       meaning: 'Payment due or pending clearance',
       badgeClass: 'badge-status-returned',
@@ -71821,9 +71209,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     return `<span class="portal-status-badge ${match.badgeClass}"${tooltip}>${dotHtml}${iconHtml}<span>${cleanStatus}</span></span>`;
   }
 
-  // ==========================================================================
-  // STANDARD RECORD ACTIONS ENGINE
-  // ==========================================================================
   let activeStandardDecisionConfig = null;
 
   function toggleRecordMoreMenu(btn, e) {
@@ -71835,7 +71220,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
 
     const isOpen = menu.classList.contains('open');
 
-    // Close all other open menus and reset positioning
     document.querySelectorAll('.record-more-menu.open').forEach(m => {
       m.classList.remove('open');
       m.style.bottom = '';
@@ -71845,7 +71229,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     });
 
     if (!isOpen) {
-      // Calculate viewport space below the button (menu height is ~110px)
       const rect = btn.getBoundingClientRect();
       const spaceBelow = window.innerHeight - rect.bottom;
       if (spaceBelow < 125) {
@@ -71863,15 +71246,12 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     }
   }
 
-  // Global dismissal when clicking outside any open more-menu
   if (typeof document !== 'undefined') {
     document.addEventListener('click', (e) => {
-      // 1. Existing record-actions-wrap dismissal
       if (!e.target.closest('.record-actions-wrap')) {
         document.querySelectorAll('.record-more-menu.open').forEach(m => m.classList.remove('open'));
       }
 
-      // 2. Modal backdrop click dismissal: clicking directly on backdrop
       if (e.target && (e.target.classList.contains('modal-backdrop') || e.target.classList.contains('portal-modal-backdrop'))) {
         const modalId = e.target.id;
         if (modalId && typeof closeModal === 'function') {
@@ -71879,7 +71259,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
         }
       }
 
-      // 3. Universal dropdown menu toggle & outside-click dismissal
       const toggle = e.target.closest('[data-bs-toggle="dropdown"], [data-toggle="dropdown"]');
       const openDropdowns = document.querySelectorAll('.dropdown-menu.show');
 
@@ -71901,7 +71280,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
   }
 
   
-  // portalApp_escape_listener: Universal Escape key to close active modal
   if (typeof document !== 'undefined') {
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') {
@@ -72102,11 +71480,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     showToast(`Request ${recordId} marked as: ${statusLabel}. Written reason recorded in audit log.`, actionType === 'reject' ? 'danger' : 'warning');
   }
 
-  /* =========================================================================
-     CONTROLLED STUDENT ARCHIVAL & RECORD INACTIVATION SYSTEM ENGINE
-     Authoritative Institutional Enrolment Closure with Zero Data Deletion
-     ========================================================================= */
-
   let currentArchivalRecord = null;
 
   function openControlledStudentArchiveModal(admNo, existingRequestId) {
@@ -72201,7 +71574,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
 
     currentArchivalRecord = arcRecord;
 
-    // 1. Populate Student Information Card
     if (document.getElementById('arcStudentAvatar')) document.getElementById('arcStudentAvatar').textContent = student.name.charAt(0).toUpperCase();
     if (document.getElementById('arcStudentName')) document.getElementById('arcStudentName').textContent = student.name;
     if (document.getElementById('arcStudentAdmNo')) document.getElementById('arcStudentAdmNo').textContent = student.admNo;
@@ -72222,7 +71594,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     if (document.getElementById('arcGuardianPhone')) document.getElementById('arcGuardianPhone').textContent = student.phone || '9848006228';
     if (document.getElementById('arcTargetAdmNoInput')) document.getElementById('arcTargetAdmNoInput').value = student.admNo;
 
-    // 2. Populate Reason & Metadata Fields
     if (document.getElementById('arcReasonSelect')) {
       document.getElementById('arcReasonSelect').value = currentArchivalRecord.reason;
       handleArchivalReasonChange(currentArchivalRecord.reason);
@@ -72236,7 +71607,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     if (document.getElementById('arcAdminRemarks')) document.getElementById('arcAdminRemarks').value = currentArchivalRecord.administrativeRemarks || '';
     if (document.getElementById('arcConfirmCheckbox')) document.getElementById('arcConfirmCheckbox').checked = false;
 
-    // 3. Populate Departmental Clearances
     const depts = currentArchivalRecord.departmentalClearances || {};
     if (depts.library && document.getElementById('arcStatusLibrary')) {
       document.getElementById('arcStatusLibrary').textContent = depts.library.status;
@@ -72272,7 +71642,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
       if (document.getElementById('arcRemarksAdmin')) document.getElementById('arcRemarksAdmin').textContent = depts.administration.remarks;
     }
 
-    // 4. Populate Executive Authorization
     const auth = currentArchivalRecord.executiveAuthorization || {};
     if (document.getElementById('arcAuthRequestedBy')) document.getElementById('arcAuthRequestedBy').textContent = auth.requestedBy || 'Sri Ch. Venkat (Administrative Officer)';
     if (document.getElementById('arcAuthRequestingEmpId')) document.getElementById('arcAuthRequestingEmpId').textContent = auth.requestingEmployeeId || 'SV100012';
@@ -72445,7 +71814,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
   function completeControlledStudentArchival() {
     if (!currentArchivalRecord) return;
 
-    // Check confirmation checkbox
     const confirmCb = document.getElementById('arcConfirmCheckbox');
     if (!confirmCb || !confirmCb.checked) {
       showToast('Mandatory Confirmation Required: Please check the box confirming you are closing active enrolment while preserving all historical records.', 'warning');
@@ -72453,7 +71821,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
       return;
     }
 
-    // Check approval status
     if (currentArchivalRecord.status !== 'Approved' && currentArchivalRecord.executiveAuthorization.approvalStatus !== 'Approved') {
       showToast('Prerequisite Error: Final student archival requires Principal Executive Approval.', 'danger');
       return;
@@ -72470,8 +71837,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     const reason = currentArchivalRecord.reason;
     const reqRef = currentArchivalRecord.archivalRequestId;
 
-    // CRITICAL BUSINESS RULE: ZERO DATA DELETION
-    // Update student's status without deleting profile, grades, attendance, or fees
     student.status = 'Archived';
     student.enrolmentStatus = 'Archived';
     student.archivedAt = effectiveDate;
@@ -72489,7 +71854,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
       reason: `Active enrolment closed on effective date ${effectiveDate}. Reason: ${reason}. All 14 historical record categories permanently preserved in institutional archive vault. Zero data deletion enforced.`
     });
 
-    // Save in state.studentArchivals and localStorage
     currentArchivalRecord.status = 'Completed';
     currentArchivalRecord.auditHistory.unshift({
       timestamp: new Date().toLocaleString(),
@@ -72507,7 +71871,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
       localStorage.setItem('sv_controlled_student_archives', JSON.stringify(archives));
     } catch (e) {}
 
-    // Update active dashboard metrics & student table
     if (typeof syncManagementDashboardData === 'function') syncManagementDashboardData(true);
     if (typeof filterStudentProfiles === 'function') filterStudentProfiles();
     if (typeof filterStudents === 'function') filterStudents();
@@ -72531,7 +71894,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     if (!currentArchivalRecord) return;
     const status = currentArchivalRecord.status;
 
-    // Header Status Pill
     const badge = document.getElementById('arcWorkflowStatusBadge');
     const badgeText = document.getElementById('arcWorkflowStatusText');
     if (badge && badgeText) {
@@ -72544,7 +71906,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
       else if (status === 'Rejected' || status === 'Returned for Correction') badge.classList.add('status-rejected');
     }
 
-    // Footer Action Buttons
     const btnDraft = document.getElementById('btnSaveArchivalDraft');
     const btnSubmit = document.getElementById('btnSubmitArchivalApproval');
     const princGroup = document.getElementById('arcPrincipalDecisionGroup');
@@ -72683,8 +72044,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     showToast(`Student ${student.name} (${student.admNo}) successfully restored to active enrolment.`, 'success');
   }
 
-
-  // --- Controlled Fee Reversal & Credit Note Workflow ---
   function openFeeReversalModal(receiptNo) {
     if (state.currentRole !== 'principal' && state.currentRole !== 'vice-principal' && state.currentRole !== 'accountant') {
       showToast('Unauthorized: Only Principal, Vice Principal, or Accounts Officer can issue fee reversals.', 'danger');
@@ -72745,7 +72104,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     renderFeeCollection();
   }
 
-  // --- Examination Marks Correction & Historical Audit Workflow ---
   function openMarksCorrectionModal(admNo, examId, subject) {
     const student = state.students.find(s => s.admNo === admNo) || state.students[0];
     const examData = getStudentExamData(student, examId || 'quarterly-2026');
@@ -72834,9 +72192,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
   }
 
   
-  // =========================================================================
-  // CORE BUTTON & INTERACTION SUITE (SYSTEM WIDE ACTIONS)
-  // =========================================================================
 
   function scrollToSection(sectionId) {
     const el = document.getElementById(sectionId);
@@ -72848,9 +72203,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
   }
 
   
-  // =========================================================================
-  // REAL-TIME STUDENTS ABSENT TODAY ENGINE (PRINCIPAL DASHBOARD)
-  // =========================================================================
 
   let currentAbsenteeFilter = 'all';
   let currentAbsenteesList = [];
@@ -72875,7 +72227,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
       };
     }
 
-    // Update Counts in Header & Filter Buttons
     const countHeaderEl = document.getElementById('dashAbsenteesCount');
     if (countHeaderEl) countHeaderEl.textContent = currentAbsenteeCounts.all || 0;
 
@@ -72897,7 +72248,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     const cntExcEl = document.getElementById('dashFilterCountExcused');
     if (cntExcEl) cntExcEl.textContent = currentAbsenteeCounts.excused || 0;
 
-    // Update Top Navigation Ribbon Badge
     const ribbonBadge = document.getElementById('dashRibbonAbsenteesBadge');
     if (ribbonBadge) {
       const cnt = currentAbsenteeCounts.all || 0;
@@ -72905,7 +72255,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
       ribbonBadge.className = cnt > 0 ? 'dash-nav-badge danger' : 'dash-nav-badge';
     }
 
-    // Filter list according to active filter
     const filtered = currentAbsenteesList.filter(item => {
       if (currentAbsenteeFilter === 'all') return true;
       return item.category === currentAbsenteeFilter;
@@ -72945,7 +72294,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
 
         const avatarClass = item.category === 'medical' ? 'amber' : (item.category === 'excused' ? 'emerald' : 'rose');
 
-        // Pill formatting
         let pillHtml = '';
         if (item.category === 'medical') {
           pillHtml = `<span class="dash-pill amber"><i class="fa-solid fa-notes-medical"></i> ${escapeHtml(item.reportedReason || 'Medical')}</span>`;
@@ -72955,7 +72303,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
           pillHtml = `<span class="dash-pill red"><i class="fa-solid fa-triangle-exclamation"></i> ${escapeHtml(item.reportedReason || 'Uninformed Absence')}</span>`;
         }
 
-        // SMS Status Pill
         let smsPillHtml = '';
         const isSmsDelivered = item.smsStatus && item.smsStatus.delivered;
         if (isSmsDelivered) {
@@ -72964,7 +72311,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
           smsPillHtml = `<span class="dash-pill" id="smsStatusPill-${item.admissionNo}" style="background:#f1f5f9; color:#64748b; border:1px solid #e2e8f0;"><i class="fa-solid fa-clock"></i> Not Dispatched</span>`;
         }
 
-        // Action Buttons
         const parentPhoneClean = (item.parentPhone || '').replace(/[^0-9+]/g, '');
         const alertBtnHtml = !isSmsDelivered
           ? `<button class="btn btn-secondary btn-xs" id="btnAlert-${item.admissionNo}" onclick="portalApp.sendAbsenteeSMS('${escapeHtml(item.parentPhone)}', '${escapeHtml(item.studentName)}', '${escapeHtml(item.admissionNo)}')" title="Send SMS Alert"><i class="fa-solid fa-paper-plane"></i> Alert</button>`
@@ -73003,7 +72349,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
       }).join('');
     }
 
-    // Update Footer Text
     const footerCountEl = document.getElementById('dashAbsenteesFooterCount');
     if (footerCountEl) {
       if (currentAbsenteesList.length === 0) {
@@ -73059,7 +72404,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
           if (isManual) showToast(`Absentees register refreshed: ${json.data.totalAbsentees || 0} students recorded absent.`, 'success');
         }
       } else {
-        // Fallback to syncDashboardFromBackend
         await syncDashboardFromBackend();
       }
     } catch (e) {
@@ -73092,7 +72436,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
         const json = await resp.json();
         const deliveryTime = (json.data && json.data.deliveryTime) || new Date().toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', hour12: true });
 
-        // Update Pill dynamically
         const pill = document.getElementById('smsStatusPill-' + admNo);
         if (pill) {
           pill.outerHTML = `<span class="dash-pill green" id="smsStatusPill-${admNo}"><i class="fa-solid fa-check-double"></i> Delivered ${deliveryTime}</span>`;
@@ -73101,7 +72444,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
         const alertBtn = document.getElementById('btnAlert-' + admNo);
         if (alertBtn) alertBtn.remove();
 
-        // Update local memory list
         const found = currentAbsenteesList.find(a => a.admissionNo === admNo);
         if (found) {
           found.smsStatus = { delivered: true, statusText: 'Delivered ' + deliveryTime, deliveryTime };
@@ -73114,7 +72456,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
       console.warn('[sendAbsenteeSMS] API error:', err.message);
     }
 
-    // Graceful offline/local update
     const deliveryTime = new Date().toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', hour12: true });
     const pill = document.getElementById('smsStatusPill-' + admNo);
     if (pill) {
@@ -73136,16 +72477,11 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     }
   }
 
-  // =========================================================================
-  // SRI VIDYA EXAMINATION SUITE: 7.3 SEATING, 7.4 TABULATION, 7.5 RESULTS
-  // =========================================================================
-
   let activeSeatingSubView = 'matrix';
   let isTabulationMarksLocked = false;
-  let currentMarksBatchSubmissionStatus = 'Draft'; // 'Draft' | 'Submitted for Review' | 'Changes Requested' | 'Approved' | 'Locked'
+  let currentMarksBatchSubmissionStatus = 'Draft';
   let AUDIT_CORRECTIONS_LOG = [];
 
-  // 7.3 ROOM SEATING PLAN ENGINE
   function switchSeatingSubView(view) {
     activeSeatingSubView = view;
     const matrixContainer = document.getElementById('seatingHallDesksContainer');
@@ -73369,12 +72705,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     showToast(`Exported Room Attendance Verification Register for ${hallKey} (CSV)`, 'success');
   }
 
-
-  // =========================================================================
-  // 7.4 TABULATION & MARKS ENGINE
-  // =========================================================================
-
-  // Enhanced Tabulation Data with all 9 Table Columns
   let TABULATION_RECORDS = [
     { student: 'K. Sai Tharun', admNo: 'SV-0210', class: 'Class X-A', subject: 'Mathematics', maxMarks: 100, marksObtained: 99, internal: 19, theory: 78, moderation: 2, grade: 'A1 (10.0)', missingEntry: 'None (Entered)', submissionStatus: 'Draft', notes: 'Top distinction; flawless proofs.' },
     { student: 'B. Vennela', admNo: 'SV-0588', class: 'Class X-A', subject: 'Mathematics', maxMarks: 100, marksObtained: 97, internal: 19, theory: 76, moderation: 2, grade: 'A1 (10.0)', missingEntry: 'None (Entered)', submissionStatus: 'Draft', notes: 'Outstanding theorem explanations.' },
@@ -73426,7 +72756,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
       );
     }
 
-    // Update KPI badges
     const totalCount = TABULATION_RECORDS.length;
     const enteredCount = TABULATION_RECORDS.filter(m => m.missingEntry === 'None (Entered)').length;
     const missingCount = TABULATION_RECORDS.filter(m => m.missingEntry !== 'None (Entered)').length;
@@ -73439,6 +72768,8 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     if (totalEl) totalEl.textContent = `${totalCount} Students`;
     if (enteredEl) enteredEl.textContent = `${enteredCount} Entered`;
     if (missingEl) missingEl.textContent = `${missingCount} Flagged`;
+    if (typeof renderResultsAndGrading === 'function') renderResultsAndGrading();
+    if (typeof renderAcademicReports === 'function') renderAcademicReports();
     if (badgeEl) {
       badgeEl.innerHTML = `<i class="fa-solid fa-stamp"></i> ${currentMarksBatchSubmissionStatus}`;
       badgeEl.className = currentMarksBatchSubmissionStatus === 'Approved' ? 'portal-badge badge-success'
@@ -73711,11 +73042,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     showToast('Official AP SCERT Tabulation Register generated and downloaded (CSV)', 'success');
   }
 
-
-  // =========================================================================
-  // 7.5 RESULTS & REPORT CARDS ENGINE
-  // =========================================================================
-
   function calculateCumulativeResults() {
     showToast('Calculating cumulative scholastic totals, percentages, GPAs, and class ranks...', 'info');
     setTimeout(() => {
@@ -73819,16 +73145,10 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     showToast(`Correction officially authorized & recorded: ${admNo} ${subj} = ${newScore} (Auth: ${authorizer})`, 'success');
   }
 
-
-
   
   
   
-  // =========================================================================
-  // SRI VIDYA DISCIPLINE & STUDENT WELFARE SUITE: 8.1, 8.2, 8.3, 8.4, 8.5
-  // =========================================================================
 
-  // Ensure state datasets exist with full schema fields
   if (!state.disciplineIncidents || state.disciplineIncidents.length === 0) {
     state.disciplineIncidents = [
       {
@@ -74139,14 +73459,10 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     ];
   }
 
-  // =========================================================================
-  // 8.1 INCIDENT RECORDS RENDERER & ACTIONS
-  // =========================================================================
   function renderDisciplineIncidents(list) {
     const tableBody = document.getElementById('incidentsTableBody');
     const incidents = list || state.disciplineIncidents || [];
 
-    // Sync badges & stats
     const badgeAll = document.getElementById('tabBadgeDisciplineAll');
     if (badgeAll) badgeAll.textContent = incidents.length;
     const activeBadge = document.getElementById('activeIncidentsBadge');
@@ -74512,9 +73828,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     openModal('restrictedIncidentHistoryModal');
   }
 
-  // =========================================================================
-  // 8.2 LATE-COMING REGISTER RENDERER & ACTIONS
-  // =========================================================================
   function renderGateLateComing(list) {
     const tbody = document.getElementById('disciplineLateArrivalsTableBody') || document.getElementById('morningGateLateTableBody');
     if (!tbody) return;
@@ -74718,9 +74031,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     }
   }
 
-  // =========================================================================
-  // 8.3 MERIT & ACHIEVEMENT RENDERER & ACTIONS
-  // =========================================================================
   function renderMeritAwards(list) {
     const tableBody = document.getElementById('disciplineMeritTableBody');
     if (!tableBody) return;
@@ -74917,9 +74227,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     }
   }
 
-  // =========================================================================
-  // 8.4 PARENT MEETINGS RENDERER & ACTIONS
-  // =========================================================================
   function renderParentConvocations(list) {
     const tableBody = document.getElementById('disciplineParentMeetingsTableBody');
     if (!tableBody) return;
@@ -75093,16 +74400,11 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     }
   }
 
-  // =========================================================================
-  // 8.5 COUNSELLING REFERRALS RENDERER & ACTIONS
-  // =========================================================================
   function renderCounsellingReferrals(list) {
     const tbody = document.getElementById('counsellingTableBody');
     const restrictedNotice = document.getElementById('counsellingRestrictedNotice');
     const authorizedDesk = document.getElementById('counsellingAuthorizedDesk');
 
-    // Role-based safeguarding security gate:
-    // Only Principal and Vice Principal (and designated child psychologist) have clearance to view confidential guidance files.
     const isLeadership = (state.currentRole === 'principal' || state.currentRole === 'vice-principal');
 
     if (!isLeadership) {
@@ -75310,9 +74612,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     showToast('Confidential Counselling Audit Ledger exported securely.', 'success');
   }
 
-  // =========================================================================
-  // INTEGRATED WORKFLOW & MODAL ACTION SUITE
-  // =========================================================================
   function verifyAdmissionDoc(appId, docName, btnEl) {
     if (btnEl) {
       btnEl.innerHTML = '<i class="fa-solid fa-check"></i> Verified';
@@ -75541,17 +74840,12 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     }
   }
 
-
-  // =========================================================================
-  // LIVE SECTIONS 3–10 + OFFICE DASHBOARD + MODULE SYNCHRONIZATION ENGINE
-  // =========================================================================
   function renderAcademicYearOptions(years, activeYearName) {
     const sel = document.getElementById('dashAcademicYearSelect');
     if (!sel) return;
     const currentActiveYear = activeYearName || '2026-2027';
     const prev = selectedAcademicYearFilter || sel.value || '';
 
-    // Comprehensive list of academic years across the institution
     const defaultYears = [
       { name: '2026-2027', isCurrent: true, status: 'ACTIVE', label: '2026–2027 ★ (Present Year)' },
       { name: '2027-2028', isCurrent: false, status: 'UPCOMING', label: '2027–2028 (Upcoming)' },
@@ -75583,7 +74877,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
 
     const options = ['<option value="">Active (' + escapeHtml(currentActiveYear) + ')</option>'];
 
-    // Sort so Present Year is first, then upcoming years (ascending), then past years (descending)
     const sortedYears = Array.from(map.values()).sort((a, b) => {
       if (a.name === currentActiveYear) return -1;
       if (b.name === currentActiveYear) return 1;
@@ -75652,7 +74945,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     const formatINR = (v) => '₹' + Math.round(Number(v) || 0).toLocaleString('en-IN');
     const formatDateIST = (d) => d ? new Date(d).toLocaleDateString('en-IN', { timeZone: 'Asia/Kolkata', day: '2-digit', month: 'short', year: 'numeric' }) : '--';
 
-    // Update Fee & Teacher Attendance summary DOM nodes outside dashboard
     const fin = data.finances || {};
     const statTotal = document.getElementById('statTotalCollected');
     if (statTotal) statTotal.textContent = formatINR(fin.totalCollected);
@@ -75676,7 +74968,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     const elBioBadge = document.getElementById('biometricPersonnelCountBadge');
     if (elBioBadge) elBioBadge.textContent = (tc.totalStaff || tc.total || 0) + ' Personnel';
 
-    // Section 3: Staff on Leave (De-duplicated per staff member)
     const rawLeaves = Array.isArray(data.staffLeaves) ? data.staffLeaves : [];
     const seenStaffIds = new Set();
     const leaves = [];
@@ -75732,7 +75023,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
       }
     }
 
-    // Section 4: Pending Admissions
     const admCounts = data.admissions || {};
     const setTxt = (id, txt) => { const e = document.getElementById(id); if (e) e.textContent = txt; };
     setTxt('dashAdmEnquiriesCount', 'Submitted / Enquiries (' + (admCounts.SUBMITTED || 0) + ')');
@@ -75758,7 +75048,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
         ).join('');
     }
 
-    // Section 6: Appointments
     const appts = Array.isArray(comp.appointments) ? comp.appointments : [];
     const apptBadge = document.getElementById('dashRibbonApptBadge');
     if (apptBadge) apptBadge.textContent = appts.length;
@@ -75777,7 +75066,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
         ).join('');
     }
 
-    // Section 7: Notices & Events
     const circulars = Array.isArray(comp.circulars) ? comp.circulars : [];
     const noticesEl = document.getElementById('dashNoticesList');
     if (noticesEl) {
@@ -75806,7 +75094,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
         }).join('');
     }
 
-    // Section 8: Academic Charts
     const acad = data.academic || {};
     setTxt('dashAcadPassRate', (acad.totalExams > 0 && acad.overallPassRate !== undefined) ? (acad.overallPassRate + '%') : 'N/A');
     setTxt('dashAcadClassesTotal', acad.totalClasses || 0);
@@ -75829,7 +75116,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
       }
     }
 
-    // Section 9: Audit Stream
     const acts = Array.isArray(data.recentActivities) ? data.recentActivities : [];
     const feedEl = document.getElementById('dashAuditFeed');
     if (feedEl) {
@@ -75842,10 +75128,12 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
         ).join('');
     }
 
-    // Section 10: Executive Approvals Queue
     const queue = (data.approvals && Array.isArray(data.approvals.queue)) ? data.approvals.queue : [];
+    const totalPendingCount = data.approvals && typeof data.approvals.totalPending === 'number'
+      ? data.approvals.totalPending
+      : queue.length;
     const pBadge = document.getElementById('pendingCountBadge');
-    if (pBadge) pBadge.innerHTML = '<i class="fa-solid fa-clock"></i> ' + (data.approvals ? data.approvals.totalPending : queue.length) + ' Requiring Action';
+    if (pBadge) pBadge.innerHTML = '<i class="fa-solid fa-clock"></i> ' + totalPendingCount + ' Requiring Action';
     const appListEl = document.getElementById('approvalListContainer');
     if (appListEl) {
       appListEl.innerHTML = queue.length === 0
@@ -75866,7 +75154,49 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
         ).join('');
     }
 
-    // Office / Clerk Dashboard (#roleDashboardAdmin)
+    if (data.approvals && Array.isArray(data.approvals.queue)) {
+      const catLabelMap = {
+        ADMISSION: 'Admission approvals',
+        LEAVE: 'Leave requests',
+        TRANSFER_TC: 'TC / Exit Requests',
+        ARCHIVAL: 'Student Archivals'
+      };
+      const mappedLivePending = queue.map(q => {
+        const dtStr = q.createdAt ? formatDateIST(q.createdAt) : 'Today';
+        const modLabel = catLabelMap[q.category] || q.category || 'Approvals';
+        return {
+          id: q.reference || String(q.id),
+          liveId: String(q.id),
+          liveCategory: q.category,
+          isLive: true,
+          module: modLabel,
+          category: modLabel,
+          requester: q.title || modLabel,
+          dept: q.subtitle || 'Pending Executive Review',
+          summary: q.title || q.subtitle || 'Pending institutional approval',
+          requestDate: dtStr,
+          submittedOn: dtStr,
+          priority: q.category === 'TRANSFER_TC' || q.category === 'LEAVE' ? 'High' : 'Normal',
+          urgency: q.category === 'TRANSFER_TC' || q.category === 'LEAVE' ? 'High Priority' : 'Normal',
+          badgeClass: 'warning',
+          approvalStage: q.status || 'Principal Review',
+          dueDate: dtStr,
+          impact: q.subtitle || '',
+          docs: 'Verified in System',
+          amount: '-',
+          status: q.status || 'Pending Approval'
+        };
+      });
+      TASKS_PENDING_DATA.splice(0, TASKS_PENDING_DATA.length, ...mappedLivePending);
+      renderPendingApprovalsTable();
+      const trendEl = document.getElementById('tasksPendingCardTrend');
+      if (trendEl) {
+        trendEl.textContent = totalPendingCount > 0
+          ? 'Synced with Live Executive Approval Queue'
+          : 'All Institutional Approvals Cleared';
+      }
+    }
+
     setTxt('officeMetricAdmVal', pendingAdms.length + ' Pending');
     setTxt('officeMetricAdmTrend', (admCounts.SUBMITTED || 0) + ' New • ' + (admCounts.APPROVED || 0) + ' Approved');
     setTxt('officeMetricDocsVal', (data.studentCount ? data.studentCount.active : 0) + ' Active');
@@ -75985,7 +75315,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     }
   }
   return {
-    // Institutional Core Workflows (Workflows A through J)
     INSTITUTIONAL_WORKFLOWS_DATA,
     renderWorkflowSettingsTable,
     filterWorkflowSettingsTable,
@@ -76046,7 +75375,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     printFinancialStatement,
     exportAuthorizedFinancialReport,
 
-    // Section 8.1 Incident Records Exports
     renderDisciplineIncidents,
     filterDisciplineIncidents,
     openRecordIncidentModal,
@@ -76061,7 +75389,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     closeIncidentCase,
     openRestrictedIncidentHistoryModal,
 
-    // Section 8.2 Late-Coming Register Exports
     renderGateLateComing,
     openRecordLateArrivalModal,
     handleRecordLateArrivalSubmit,
@@ -76070,7 +75397,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     generateLateComingReport,
     sendAuthorizedLateNotification,
 
-    // Section 8.3 Merit & Achievement Exports
     renderMeritAwards,
     openNominateStudentModal,
     handleNominateStudentSubmit,
@@ -76079,7 +75405,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     generateMeritCertificate,
     publishApprovedAchievement,
 
-    // Section 8.4 Parent Meetings Exports
     renderParentConvocations,
     openScheduleParentMeetingModal,
     handleScheduleParentMeetingSubmit,
@@ -76089,7 +75414,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     handleAddRestrictedMeetingNotesSubmit,
     closeParentMeeting,
 
-    // Section 8.5 Counselling Referrals Exports
     renderCounsellingReferrals,
     openNewCounsellingModal,
     handleNewCounsellingReferralSubmit,
@@ -76097,13 +75421,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     closeCounsellingCase,
     exportCounsellingLedgerCSV,
 
-
-
-
-
-
-
-    // Section 7.3 Room Seating Plan Exports
     switchSeatingSubView,
     renderAllocatedStudentsTable,
     openGenerateSeatingPlanModal,
@@ -76114,7 +75431,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     printExamSeatingPlan,
     exportRoomAttendanceSheet,
 
-    // Section 7.4 Tabulation & Marks Exports
     handleInlineMarkChange,
     openEnterMarksModal,
     onEnterMarksStudentChange,
@@ -76130,7 +75446,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     lockApprovedMarks,
     generateTabulationRegister,
 
-    // Section 7.5 Results & Report Cards Exports
     calculateCumulativeResults,
     openReviewExceptionsModal,
     resolveException,
@@ -76141,7 +75456,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     toggleResultPublication,
     openRecordCorrectionModal,
     handleRecordCorrectionSubmit,
-    // Core Buttons & Navigation Action Suite Exports
     scrollToSection,
     renderDashboardAbsentees,
     refreshDashboardAbsentees,
@@ -76177,7 +75491,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     saveStudentExamMarks,
     handleEditMarksExamChange,
     
-    // Lesson Plan Review Module Exports
     ensureLessonPlansState: ensureLessonPlansState,
     updateLessonPlansKPIs: updateLessonPlansKPIs,
     switchLessonPlansView: switchLessonPlansView,
@@ -76198,8 +75511,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     showLessonPlanModal: showLessonPlanModal,
     hideLessonPlanModal: hideLessonPlanModal,
 
-    // Master Timetable Module Exports
-    // Class Schedules Exports
     toggleEditScheduleDraft: toggleEditScheduleDraft,
     openCreateScheduleModal: openCreateScheduleModal,
     checkScheduleConflicts: checkScheduleConflicts,
@@ -76212,7 +75523,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     renderTimetableDailyView: renderTimetableDailyView,
     renderTimetableClassWiseView: renderTimetableClassWiseView,
 
-    // Substitution Planner Exports
     renderSubstitutionPlanner: renderSubstitutionPlanner,
     filterSubstitutionPlanner: filterSubstitutionPlanner,
     resetSubstitutionFilters: resetSubstitutionFilters,
@@ -76231,7 +75541,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     confirmPublishSubstitution: confirmPublishSubstitution,
     printSubstitutionSheet: printSubstitutionSheet,
     exportDailySubstitutionCSV: exportDailySubstitutionCSV,
-    // Substitution Planner Exports
     renderSubstitutionPlanner: renderSubstitutionPlanner,
     filterSubstitutionPlanner: filterSubstitutionPlanner,
     resetSubstitutionFilters: resetSubstitutionFilters,
@@ -76250,7 +75559,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     confirmPublishSubstitution: confirmPublishSubstitution,
     printSubstitutionSheet: printSubstitutionSheet,
     exportDailySubstitutionCSV: exportDailySubstitutionCSV,
-    // Lab & Hall Allocations Exports
     renderLabHallAllocations: renderLabHallAllocations,
     filterLabHallAllocations: filterLabHallAllocations,
     resetLabHallFilters: resetLabHallFilters,
@@ -76300,13 +75608,14 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     printTimetable: printTimetable,
     showCalendarModal: showCalendarModal,
     hideCalendarModal: hideCalendarModal,
-    // Academic Calendar Module Exports
     ensureAcademicCalendarState: ensureAcademicCalendarState,
     updateAcademicCalendarKPIs: updateAcademicCalendarKPIs,
     switchCalendarView: switchCalendarView,
     renderAcademicCalendar: renderAcademicCalendar,
     navigateCalendarMonth: navigateCalendarMonth,
     navigateCalendarToday: navigateCalendarToday,
+    setCalendarCategoryFilter: setCalendarCategoryFilter,
+    openDayDetailModal: openDayDetailModal,
     renderMonthlyCalendarView: renderMonthlyCalendarView,
     renderTermCalendarView: renderTermCalendarView,
     renderListCalendarView: renderListCalendarView,
@@ -76439,11 +75748,9 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     openEditStaffModal: openEditStaffModal,
     archiveStaffRecord: archiveStaffRecord,
     exportNonTeachingStaffCSV: exportNonTeachingStaffCSV,
-    // Standard Approval Status Model API
     STANDARD_APPROVAL_STATUSES,
     getStandardStatusBadgeHtml,
     
-    // Standard Record Actions API
     toggleRecordMoreMenu,
     executeStandardAction,
     openStandardRecordDecisionModal,
@@ -76456,7 +75763,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     confirmFeeReversal,
     openMarksCorrectionModal,
     confirmMarksCorrection,
-        // Standard Page Layout Engine API
     updateBreadcrumb,
     handleTableCheckboxChange,
     toggleSelectAll,
@@ -76475,7 +75781,6 @@ Audit Digital Stamp: SHA256#${record.id}-${member.id}-${Date.now().toString(16)}
     getErrorStateHtml,
     renderErrorState,
 
-    // Inventory & Assets
     renderInventoryAssetsTable,
     filterInventoryAssets,
     renderInventoryStockTable,
@@ -76585,7 +75890,6 @@ exportInventoryAssetsCSV,
     exportInventoryStockCSV,
     exportInventoryPurchasesCSV,
     exportInventoryIssueReturnCSV,
-    // Transport & Facilities Suite (14.1 - 14.5)
     renderTransportRoutesTable,
     filterTransportRoutes,
     openCreateTransportRouteModal,
@@ -76670,7 +75974,6 @@ exportInventoryAssetsCSV,
     exportTransportAllocationsCSV,
     exportTransportMaintenanceCSV,
     exportSafetyInspectionPDF,
-    // Events & Activities
     renderAnnualCalendar,
     filterAnnualCalendar,
     exportCalendarPDF,
@@ -76799,7 +76102,6 @@ exportInventoryAssetsCSV,
     renderExamScheduleTable,
     renderInvigilationDutyTable,
     renderFeeCategoryAuditTable,
-    // Subview Renderers and Actions
     renderStudentLeaves,
     renderStaffLeaveBalances,
     filterStudentLeaveSlips,
@@ -76981,14 +76283,12 @@ exportInventoryAssetsCSV,
     saveSettings,
     exportTableToCSV,
     showToast,
-    // Vice Principal Specialized Functions
     handleLogIncident,
     resolveIncident,
     summonParent,
     handleAssignSubstitution,
     handleVPLeaveAction,
     goToStudentPage,
-    // Examination Management Exports
     handleExamHallChange,
     renderRoomSeatingArrangement,
     printExamSeatingPlan,
@@ -77004,7 +76304,6 @@ exportInventoryAssetsCSV,
     printTabulationRegister,
     exportTabulationCSV,
     printStudentMarksMemo,
-    // Discipline Management Exports
     filterDisciplineIncidents,
     renderGateLateComing,
     sendGateLateSms,
@@ -77020,13 +76319,11 @@ exportInventoryAssetsCSV,
     handleScheduleSummonsSubmit,
     printSummonsNotice,
     recordConferenceCompleted,
-    // Question Paper Exports
     renderOfficialQuestionPaper,
     printOfficialQuestionPaper,
     exportQuestionPaperPDF,
     handlePaperFilterChange,
     openAddQuestionModal,
-    // Newly Added Complete Function Exports
     downloadCsvFile,
     openImportModal,
     openStaffImportModal,
@@ -77275,7 +76572,6 @@ exportInventoryAssetsCSV,
     loadDemoCsvToPaste,
     parsePastedCsv,
     confirmBulkImport,
-    // Interactive Table & Form Handlers
     filterFaculty,
     filterNonTeachingStaff,
     renderNonTeachingStaff,
@@ -77303,8 +76599,6 @@ exportInventoryAssetsCSV,
     filterDailyAbsentees,
     switchVpTimetableClass,
     handleExamScheduleClassChange,
-    // Exam Schedule 7-Action Exports
-    // Invigilation Duties 5-Action & Display Exports
     openAssignInvigilationModal,
     handleAssignInvigilationDutySubmit,
     openReassignInvigilatorModal,
@@ -77377,7 +76671,6 @@ exportInventoryAssetsCSV,
     updateReminderStats,
     handleComposeBroadcastModalSubmit,
     updateSmsCharCounter,
-    // Teachers & Staff Institutional 7-Submenu Exports
 
   
 
@@ -77510,7 +76803,6 @@ exportInventoryAssetsCSV,
     exportStaffAttendanceCSV,
     printStaffAttendanceRegister,
   
-    // Reports & Analytics Exports
     REPORTS_ACADEMIC_DATA,
     REPORTS_ATTENDANCE_DATA,
     REPORTS_FINANCIAL_DATA,
@@ -77553,7 +76845,6 @@ exportInventoryAssetsCSV,
     handleCustomReportsExportSubmit,
 
   
-    // Tasks & Approvals Exports
     TASKS_PENDING_DATA,
     TASKS_ASSIGNED_DATA,
     TASKS_HISTORY_DATA,
@@ -77604,9 +76895,7 @@ exportInventoryAssetsCSV,
     exportEscalationsCSV,
     exportWorkflowSettingsCSV,
 
-
     renderSettingsRolesTable,
-    // Module 18: Settings & Governance Actions
     editSchoolProfileDraft,
     previewSchoolProfile,
     submitSchoolProfileForApproval,
@@ -77775,7 +77064,6 @@ exportInventoryAssetsCSV,
     reopenParentEnquiry,
     exportParentEnquiriesCSV,
 
-    // 13.1 Annual Calendar Exports
     renderAnnualCalendar,
     filterAnnualCalendar,
     openCreateCalendarEventModal,
@@ -77789,7 +77077,6 @@ exportInventoryAssetsCSV,
     exportCalendarPDF,
     exportCalendarICS,
 
-    // 13.2 School Events Exports
     renderSchoolEventsTable,
     filterSchoolEvents,
     openCreateSchoolEventModal,
@@ -77803,7 +77090,6 @@ exportInventoryAssetsCSV,
     openCompleteEventReportModal,
     handleCompleteEventReportSubmit,
 
-    // 13.3 Competitions Exports
     renderCompetitionsTable,
     filterCompetitions,
     openCreateCompetitionModal,
@@ -77816,7 +77102,6 @@ exportInventoryAssetsCSV,
     generateCompetitionCertificates,
     openRegisterCompModal,
 
-    // 13.4 Clubs & Sports Exports
     renderClubsSportsTable,
     filterClubsSports,
     openCreateClubModal,
@@ -77834,7 +77119,6 @@ exportInventoryAssetsCSV,
     handlePublishClubAchievementSubmit,
     publishClubAchievement,
 
-    // Supporting & Aliases
     renderSchoolEvents,
     renderCompetitionEvents,
     renderClubActivities,
@@ -77861,7 +77145,6 @@ exportInventoryAssetsCSV,
     pollSystemHealth,
     updateISTClockAndTimetable,
 
-    // Student Exit & Transfer Certificate (TC) Workflow Exports
     openStudentTransferModal,
     submitStudentTransfer,
     switchExitTab,
@@ -77887,7 +77170,6 @@ exportInventoryAssetsCSV,
     verifyParentRequest,
     updateExitWorkflowUI,
 
-    // Controlled Student Archival & Record Inactivation Exports
     openControlledStudentArchiveModal,
     handleStudentArchiveClick,
     archiveActiveDossierStudent,
@@ -77903,7 +77185,6 @@ exportInventoryAssetsCSV,
     viewArchivedStudentRecord,
     restoreArchivedStudent,
 
-    // Scholastic Report Card Workflow Exports
     openGenerateReportModal,
     switchReportStage,
     navigateReportStage,
@@ -77937,19 +77218,15 @@ exportInventoryAssetsCSV,
     generateReportCardForStudent,
     generateReportCardForActiveStudent,
 
-    // Timetable & Upcoming Exams Exports
     renderDashboardUpcomingExamsLive,
     renderDashboardSubstitutionsLive,
     refreshDashboardTimetableAndExams: refreshDashboardTimetableAndExams,
 
-    // Fee Collection & Outstanding Dues Exports
     renderDashboardFeeOverviewLive,
     sendStudentFeeReminder,
     broadcastFeeReminders,
     refreshDashboardFeeDues: refreshDashboardFeeDues,
 
-    // User Profile & Dynamic Greeting Synchronization Exports
-    // Legal & Privacy Compliance Exports
     loadComplianceData: loadComplianceData,
     openNewBreachModal: openNewBreachModal,
     closeNewBreachModal: closeNewBreachModal,
@@ -77961,11 +77238,8 @@ exportInventoryAssetsCSV,
     resolveAuthenticatedUserDetails: resolveAuthenticatedUserDetails,
   };
 
-
 })();
 
-// Expose on global window object for HTML onclick handlers and console debugging
-// Expose on global window object for HTML onclick handlers and console debugging
 if (typeof window !== 'undefined') {
   window.portalApp = portalApp;
   try {

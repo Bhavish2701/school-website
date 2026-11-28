@@ -1,6 +1,3 @@
-/**
- * Institutions Module - Unit & Policy Test
- */
 
 const assert = require('assert');
 const InstitutionsService = require('./institutions.service');
@@ -9,7 +6,6 @@ const InstitutionsValidation = require('./institutions.validation');
 async function testInstitutionsModule() {
   console.log('Testing Institutions Module Layers...');
 
-  // 1. Validation test: missing name
   let valErr = false;
   const mockReq = { body: { code: 'SV-TEST' } };
   const mockRes = {
@@ -24,7 +20,6 @@ async function testInstitutionsModule() {
   InstitutionsValidation.validateCreate(mockReq, mockRes, () => {});
   assert.strictEqual(valErr, true, 'Validation correctly rejects creation when name is missing');
 
-  // 2. Service test: creation
   const created = await InstitutionsService.createInstitution({
     code: `SV-MOD-${Date.now().toString().slice(-4)}`,
     name: 'Modular Campus Architecture Test',

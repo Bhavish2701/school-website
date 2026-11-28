@@ -1,13 +1,9 @@
-/**
- * Verification script for all 7 authentication endpoints
- */
 const testAuth = async () => {
   const BASE_URL = 'http://localhost:5000/api/v1/auth';
   const fetch = (...args) => import('node:http').then(() => globalThis.fetch(...args));
 
   console.log('--- Starting Authentication Verification Tests ---\n');
 
-  // 1. Test Login (Super Admin)
   console.log('1. Testing POST /login with valid credentials (superadmin)...');
   const loginRes = await fetch(`${BASE_URL}/login`, {
     method: 'POST',
@@ -24,7 +20,6 @@ const testAuth = async () => {
   const accessToken = loginData.data?.tokens?.accessToken;
   const refreshToken = loginData.data?.tokens?.refreshToken;
 
-  // 2. Test Login with invalid credentials
   console.log('2. Testing POST /login with invalid password...');
   const invalidLoginRes = await fetch(`${BASE_URL}/login`, {
     method: 'POST',
@@ -36,7 +31,6 @@ const testAuth = async () => {
   console.log(`Code: ${invalidData.code}`);
   console.log(`Message: ${invalidData.message}\n`);
 
-  // 3. Test GET /me (Protected)
   console.log('3. Testing GET /me with Bearer token...');
   const meRes = await fetch(`${BASE_URL}/me`, {
     method: 'GET',
@@ -46,7 +40,6 @@ const testAuth = async () => {
   console.log(`Status: ${meRes.status}`);
   console.log(`User: ${meData.data?.user?.fullName} [${meData.data?.user?.role}]\n`);
 
-  // 4. Test POST /refresh
   console.log('4. Testing POST /refresh with refresh token...');
   const refreshRes = await fetch(`${BASE_URL}/refresh`, {
     method: 'POST',
@@ -60,7 +53,6 @@ const testAuth = async () => {
 
   const newAccessToken = refreshData.data?.tokens?.accessToken;
 
-  // 5. Test Change Password (on student1 account)
   console.log('5. Testing POST /change-password (logging in as student1 first)...');
   const studentLoginRes = await fetch(`${BASE_URL}/login`, {
     method: 'POST',
@@ -86,7 +78,6 @@ const testAuth = async () => {
   console.log(`Status: ${changePassRes.status}`);
   console.log(`Message: ${changePassData.message}`);
 
-  // Verify login with new password
   const verifyNewPassRes = await fetch(`${BASE_URL}/login`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -94,7 +85,6 @@ const testAuth = async () => {
   });
   console.log(`Login with new password status: ${verifyNewPassRes.status} (Expected 200)\n`);
 
-  // 6. Test Forgot Password
   console.log('6. Testing POST /forgot-password for student1...');
   const forgotRes = await fetch(`${BASE_URL}/forgot-password`, {
     method: 'POST',
@@ -106,7 +96,6 @@ const testAuth = async () => {
   console.log(`Reset Token: ${forgotData.data?.resetToken?.substring(0, 16)}...`);
   const resetToken = forgotData.data?.resetToken;
 
-  // 7. Test Reset Password
   console.log('7. Testing POST /reset-password with reset token...');
   const resetRes = await fetch(`${BASE_URL}/reset-password`, {
     method: 'POST',
@@ -121,7 +110,6 @@ const testAuth = async () => {
   console.log(`Status: ${resetRes.status}`);
   console.log(`Message: ${resetData.message}\n`);
 
-  // 8. Test Logout
   console.log('8. Testing POST /logout...');
   const logoutRes = await fetch(`${BASE_URL}/logout`, {
     method: 'POST',

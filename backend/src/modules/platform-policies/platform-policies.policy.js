@@ -1,7 +1,3 @@
-/**
- * Platform Policies & Governance Register - Policy & Authorization Layer
- * Enforces Multi-Institution Scoping, RBAC roles, and Audit Logging
- */
 
 const MultiInstitutionSecurity = require('../common/multiInstitutionSecurity');
 
@@ -19,7 +15,7 @@ class PlatformPoliciesPolicy {
     return MultiInstitutionSecurity.policyMiddleware({
       allowedRoles: ['Super Administrator', 'Institutional Principal', 'Campus Administrator'],
       requiredPermission: 'policies.manage',
-      requirePlatformWideScope: false, // permits scoped school operations
+      requirePlatformWideScope: false,
       auditCategory: 'PLATFORM_POLICIES',
       auditAction: 'WRITE_PLATFORM_POLICIES'
     })(req, res, next);
@@ -27,7 +23,7 @@ class PlatformPoliciesPolicy {
 
   static sensitiveActionPolicy(req, res, next) {
     return MultiInstitutionSecurity.policyMiddleware({
-      requirePlatformWideScope: true, // sensitive actions require platform super admin
+      requirePlatformWideScope: true,
       allowedRoles: ['Super Administrator'],
       requireApprovalSignatory: true,
       auditCategory: 'PLATFORM_POLICIES',

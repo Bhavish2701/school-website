@@ -1,16 +1,3 @@
-/**
- * scripts/scaffold_backend_modules.js
- * Builds the complete modular backend architecture for Platform Administration:
- * Generates all 21 recommended modules with the consistent 7-file structure:
- * - <module>.routes.js
- * - <module>.controller.js
- * - <module>.service.js
- * - <module>.repository.js
- * - <module>.validation.js
- * - <module>.policy.js (Enforcing the 6-dimension multi-institution security rule)
- * - <module>.test.js
- * - index.js
- */
 
 const fs = require('fs');
 const path = require('path');
@@ -41,7 +28,7 @@ const MODULE_DEFINITIONS = [
     modelRequire: "const { Institution } = require('../../models/institution.model');",
     modelName: 'Institution',
     sampleQuery: '{ status: "Active" }',
-    skipGenerate: true // already generated as exemplar
+    skipGenerate: true
   },
   {
     name: 'institution-onboarding',
@@ -198,7 +185,6 @@ function generateModule(def) {
 
   const baseFileName = def.name;
 
-  // 1. Repository Layer
   const repoContent = `/**
  * ${def.title} - Repository Layer
  * Manages database access and persistence
@@ -261,7 +247,6 @@ module.exports = ${pascalCase(def.name)}Repository;
 `;
   fs.writeFileSync(path.join(modDir, `${baseFileName}.repository.js`), repoContent);
 
-  // 2. Validation Layer
   const valContent = `/**
  * ${def.title} - Validation Layer
  * Enforces field schemas, constraints, and data integrity
@@ -300,7 +285,6 @@ module.exports = ${pascalCase(def.name)}Validation;
 `;
   fs.writeFileSync(path.join(modDir, `${baseFileName}.validation.js`), valContent);
 
-  // 3. Policy Layer (Enforcing the 6 multi-institution security dimensions)
   const polContent = `/**
  * ${def.title} - Policy & Authorization Layer
  * Enforces Multi-Institution Scoping, RBAC roles, and Audit Logging
@@ -343,7 +327,6 @@ module.exports = ${pascalCase(def.name)}Policy;
 `;
   fs.writeFileSync(path.join(modDir, `${baseFileName}.policy.js`), polContent);
 
-  // 4. Service Layer
   let srvContent;
   if (def.name === 'institution-onboarding') {
     srvContent = `/**
@@ -468,7 +451,6 @@ module.exports = ${pascalCase(def.name)}Service;
   }
   fs.writeFileSync(path.join(modDir, `${baseFileName}.service.js`), srvContent);
 
-  // 5. Controller Layer
   const ctrlContent = `/**
  * ${def.title} - Controller Layer
  * Handles HTTP requests, responses, and status codes
@@ -511,7 +493,6 @@ module.exports = ${pascalCase(def.name)}Controller;
 `;
   fs.writeFileSync(path.join(modDir, `${baseFileName}.controller.js`), ctrlContent);
 
-  // 6. Route Layer
   const routesContent = `/**
  * ${def.title} - Route Layer
  * Connects endpoints with validation and policy middleware
@@ -543,7 +524,6 @@ module.exports = router;
 `;
   fs.writeFileSync(path.join(modDir, `${baseFileName}.routes.js`), routesContent);
 
-  // 7. Unit / Module Test
   const testContent = `/**
  * ${def.title} - Module Test
  */
@@ -587,7 +567,6 @@ module.exports = testModule;
 `;
   fs.writeFileSync(path.join(modDir, `${baseFileName}.test.js`), testContent);
 
-  // 8. Module Index Aggregator
   const indexContent = `/**
  * ${def.title} - Module Aggregator
  * Exports all 6 architectural layers
@@ -622,7 +601,6 @@ MODULE_DEFINITIONS.forEach(def => {
   console.log(`[OK] Module generated: ${def.name}`);
 });
 
-// Update master backend/src/modules/index.js
 const CORE_ERP_MODULES = [
   'students',
   'staff',

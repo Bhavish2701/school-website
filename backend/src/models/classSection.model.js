@@ -1,8 +1,3 @@
-/**
- * ClassSection Mongoose Model
- * Manages school class levels, sections, room numbers, class teacher allocations,
- * and subject teacher mappings.
- */
 const mongoose = require('mongoose');
 
 const subjectAllocationSchema = new mongoose.Schema({
@@ -56,8 +51,9 @@ const classSectionSchema = new mongoose.Schema(
     },
     capacity: {
       type: Number,
-      default: 45,
+      default: 50,
       min: 1,
+      max: [50, 'Section capacity cannot exceed 50 students'],
     },
     classTeacher: {
       type: mongoose.Schema.Types.ObjectId,
@@ -76,13 +72,11 @@ const classSectionSchema = new mongoose.Schema(
   }
 );
 
-// Compound index to guarantee uniqueness of a section within a class in an academic year
 classSectionSchema.index(
   { className: 1, section: 1, academicYear: 1 },
   { unique: true }
 );
 
-// Virtual for formatted label (e.g. "10-A")
 classSectionSchema.virtual('label').get(function () {
   return `${this.className}-${this.section}`;
 });

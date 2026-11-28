@@ -1,8 +1,3 @@
-/**
- * Verification Suite: Fee Collection & Outstanding Dues Overview
- * Verifies end-to-end synchronization between Student Management, Fee Management,
- * MongoDB collections, and Principal Dashboard UI.
- */
 const mongoose = require('mongoose');
 const fs = require('fs');
 const path = require('path');
@@ -43,7 +38,6 @@ async function runVerification() {
   assert(html.includes('id="btnRefreshFeeDues"'), 'btnRefreshFeeDues exists');
   assert(html.includes('id="dashFeeRefreshIcon"'), 'dashFeeRefreshIcon exists');
 
-  // Verify that hardcoded sample defaulter rows inside dashFeeDefaultersTableBody were removed
   const tableBodyMatch = html.match(/<tbody id="dashFeeDefaultersTableBody">([\s\S]*?)<\/tbody>/);
   assert(tableBodyMatch !== null, 'Found dashFeeDefaultersTableBody');
   if (tableBodyMatch) {
@@ -81,7 +75,6 @@ async function runVerification() {
   const feeService = require('../src/services/fee.service');
   const dashboardService = require('../src/services/dashboard.service');
 
-  // Test 3a: Get Management Dashboard
   const dashData = await dashboardService.getManagementDashboard({ role: 'PRINCIPAL' });
   assert(dashData && typeof dashData === 'object', 'Management dashboard returned data object');
   assert(dashData.finances && typeof dashData.finances === 'object', 'finances is an object in dashboard response');
@@ -97,7 +90,6 @@ async function runVerification() {
   assert(finances.clearedStudentsCount === 6, `Count of cleared students matches DB (6): ${finances.clearedStudentsCount}`);
   assert(finances.remindersSentCount >= 3, `Fee reminder communication logs exist in DB (>= 3): ${finances.remindersSentCount}`);
 
-  // Test 3b: Verify highPriorityDefaulters validity against Student Management
   assert(Array.isArray(finances.highPriorityDefaulters), 'highPriorityDefaulters is an array');
   assert(finances.highPriorityDefaulters.length === 3, `highPriorityDefaulters has 3 genuine defaulters: ${finances.highPriorityDefaulters.length}`);
 
@@ -110,7 +102,6 @@ async function runVerification() {
     assert(defaulter.parentPhone && defaulter.parentPhone.length > 5, `Defaulter ${defaulter.fullName} has valid verified parent phone: ${defaulter.parentPhone}`);
   }
 
-  // Check specific genuine students
   const saiTeja = finances.highPriorityDefaulters.find(d => d.admissionNo === 'SV-0003');
   assert(saiTeja !== undefined, 'K. Sai Teja (SV-0003) present in defaulters');
   if (saiTeja) {
@@ -133,7 +124,6 @@ async function runVerification() {
     assert(hemanth.overdueDays === 22, `CH. Hemanth overdue days is 22: ${hemanth.overdueDays}`);
   }
 
-  // Test 4: Dynamic Ledger Modification Test
   console.log('\n--- 4. Testing Dynamic Fee Payment Modification ---');
   const saiTejaFee = await Fee.findOne({ student: saiTeja.studentId });
   assert(saiTejaFee !== null, 'Found Sai Teja Fee record in DB');
@@ -141,24 +131,20 @@ async function runVerification() {
   const origPaid = saiTejaFee.paidAmount;
   const origDue = saiTejaFee.dueAmount;
 
-  // Simulate payment of ₹5,000
   saiTejaFee.paidAmount += 5000;
   saiTejaFee.dueAmount -= 5000;
   await saiTejaFee.save();
 
-  // Query overview again
   const updatedOverview = await feeService.getFeeDashboardOverview();
   const updatedSaiTeja = updatedOverview.highPriorityDefaulters.find(d => d.admissionNo === 'SV-0003');
   assert(updatedSaiTeja && updatedSaiTeja.pendingAmount === 7500, `Dashboard immediately reflects updated pending amount (₹7,500): ${updatedSaiTeja?.pendingAmount}`);
   assert(updatedOverview.totalOutstanding === 26000, `Dashboard immediately reflects updated total outstanding dues (₹26,000): ${updatedOverview.totalOutstanding}`);
 
-  // Revert payment
   saiTejaFee.paidAmount = origPaid;
   saiTejaFee.dueAmount = origDue;
   await saiTejaFee.save();
   console.log('✓ Restored original Fee balance in DB');
 
-  // Test 5: Real SMS Reminder Dispatch Test
   console.log('\n--- 5. Testing Persistent SMS Fee Reminder Dispatch ---');
   const initialSmsCount = await SmsLog.countDocuments({ category: 'FEE_REMINDER' });
   const reminderResult = await feeService.sendFeeReminder(
@@ -178,7 +164,6 @@ async function runVerification() {
   assert(createdLog && createdLog.status === 'DELIVERED', 'SmsLog status is DELIVERED');
   assert(createdLog && createdLog.gateway === 'AP-EDUSMS (Airtel DLT)', 'SmsLog gateway is AP-EDUSMS (Airtel DLT)');
 
-  // Clean up test SMS log
   await SmsLog.findByIdAndDelete(reminderResult.logId);
   console.log('✓ Cleaned up test SMS log');
 

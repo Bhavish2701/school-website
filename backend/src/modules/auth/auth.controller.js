@@ -1,7 +1,3 @@
-/**
- * Authentication & Session Security - Controller Layer
- * Handles HTTP requests, responses, and status codes
- */
 
 const Service = require('./auth.service');
 

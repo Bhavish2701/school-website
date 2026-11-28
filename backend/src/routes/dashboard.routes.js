@@ -1,14 +1,3 @@
-/**
- * Dashboard Express Router
- *
- * Implements:
- * GET /api/v1/dashboard/management
- * GET /api/v1/dashboard/teacher
- * GET /api/v1/dashboard/student
- * GET /api/v1/dashboard/parent
- *
- * Enforces strict authentication and role-based / object-level authorization.
- */
 const express = require('express');
 const router = express.Router();
 const dashboardController = require('../controllers/dashboard.controller');
@@ -18,7 +7,6 @@ const {
   authorizeRoles,
 } = require('../middleware/rbac.middleware');
 
-// 0. Real-Time Live Sync SSE Stream (Authenticated users only; role-filtered updates)
 router.get('/stream', authenticateUser, (req, res) => {
   res.setHeader('Content-Type', 'text/event-stream');
   res.setHeader('Cache-Control', 'no-cache, no-transform');
@@ -55,7 +43,6 @@ router.get('/stream', authenticateUser, (req, res) => {
   });
 });
 
-// 1. Management Dashboard (Strict leadership and office RBAC)
 router.get(
   '/management',
   authenticateUser,
@@ -84,7 +71,6 @@ router.get(
   dashboardController.getManagementFees
 );
 
-// 2. Teacher Dashboard
 router.get(
   '/teacher',
   authenticateUser,
@@ -92,7 +78,6 @@ router.get(
   dashboardController.getTeacherDashboard
 );
 
-// 3. Student Dashboard
 router.get(
   '/student',
   authenticateUser,
@@ -100,7 +85,6 @@ router.get(
   dashboardController.getStudentDashboard
 );
 
-// 4. Parent Dashboard
 router.get(
   '/parent',
   authenticateUser,
@@ -108,7 +92,6 @@ router.get(
   dashboardController.getParentDashboard
 );
 
-// 5. Multi-Tenant Platform Administration Dashboard (Specification 2.1 & 2.2)
 router.get(
   '/platform',
   authenticateUser,

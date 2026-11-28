@@ -1,7 +1,3 @@
-/**
- * System Health & Telemetry - Policy & Authorization Layer
- * Enforces Multi-Institution Scoping, RBAC roles, and Audit Logging
- */
 
 const MultiInstitutionSecurity = require('../common/multiInstitutionSecurity');
 
@@ -19,7 +15,7 @@ class SystemHealthPolicy {
     return MultiInstitutionSecurity.policyMiddleware({
       allowedRoles: ['Super Administrator', 'Institutional Principal', 'Campus Administrator'],
       requiredPermission: 'health.read',
-      requirePlatformWideScope: false, // permits scoped school operations
+      requirePlatformWideScope: false,
       auditCategory: 'SYSTEM_HEALTH',
       auditAction: 'WRITE_SYSTEM_HEALTH'
     })(req, res, next);
@@ -27,7 +23,7 @@ class SystemHealthPolicy {
 
   static sensitiveActionPolicy(req, res, next) {
     return MultiInstitutionSecurity.policyMiddleware({
-      requirePlatformWideScope: true, // sensitive actions require platform super admin
+      requirePlatformWideScope: true,
       allowedRoles: ['Super Administrator'],
       requireApprovalSignatory: true,
       auditCategory: 'SYSTEM_HEALTH',

@@ -1,7 +1,3 @@
-/**
- * Student Business Logic Service Layer
- * Decouples business rules, database queries, and role-based scoping from HTTP transport
- */
 const mongoose = require('mongoose');
 const { Student } = require('../models/student.model');
 const { User } = require('../models/user.model');
@@ -9,22 +5,16 @@ const QueryFeatures = require('../utils/queryFeatures');
 const ApiError = require('../utils/apiError');
 
 class StudentService {
-  /**
-   * List students with role-based scope, filtering, searching, sorting, and pagination
-   */
   async getStudents(queryString = {}, currentUser = null) {
     const baseFilter = {};
 
-    // 1. Role-Based Scoping
     if (currentUser) {
       if (currentUser.role === 'STUDENT') {
-        // A student can see only their own student record
         baseFilter.$or = [
           { user: currentUser._id },
           { admissionNo: currentUser.studentProfile?.admissionNo || '__NONE__' },
         ];
       } else if (currentUser.role === 'PARENT') {
-        // A parent can see only their children's records
         const childrenIds = currentUser.children || [];
         baseFilter.$or = [
           { parentUser: currentUser._id },
@@ -32,10 +22,9 @@ class StudentService {
           { _id: { $in: childrenIds } },
         ];
       } else if (currentUser.role === 'TEACHER') {
-        // A teacher can see only students in their assigned classes & sections
         const assigned = currentUser.assignedClasses || [];
         if (assigned.length === 0) {
-          baseFilter._id = null; // No access if no assigned classes
+          baseFilter._id = null;
         } else {
           baseFilter.$or = assigned.map((a) => ({
             class: a.class,
@@ -43,10 +32,8 @@ class StudentService {
           }));
         }
       }
-      // SUPER_ADMIN, PRINCIPAL, VICE_PRINCIPAL, OFFICE have school-wide view (baseFilter remains empty)
     }
 
-    // 2. Query Features Pipeline
     const mongooseQuery = Student.find(baseFilter).populate(
       'parentUser',
       'fullName phone email'
@@ -61,9 +48,6 @@ class StudentService {
     return await queryFeatures.execute();
   }
 
-  /**
-   * Get single student by ID with object-level authorization
-   */
   async getStudentById(id, currentUser = null) {
     if (!mongoose.Types.ObjectId.isValid(id)) {
       throw ApiError.badRequest(`Invalid student ID format: '${id}'`);
@@ -77,7 +61,6 @@ class StudentService {
       throw ApiError.notFound(`Student with ID '${id}' not found`);
     }
 
-    // Object-Level Access Control Checks
     if (currentUser) {
       const userRole = currentUser.role;
       const userId = currentUser._id.toString();
@@ -114,13 +97,9 @@ class StudentService {
     return student;
   }
 
-  /**
-   * Create new student record
-   */
   async createStudent(studentData, currentUser = null) {
     const admissionNo = (studentData.admissionNo || '').trim().toUpperCase();
 
-    // Check duplicate admission number
     const existing = await Student.findOne({ admissionNo });
     if (existing) {
       throw ApiError.conflict(`Student with admission number '${admissionNo}' already exists`, 'DUPLICATE_ADMISSION_NO', {
@@ -128,7 +107,6 @@ class StudentService {
       });
     }
 
-    // Try linking parentUser if parentPhone or parentEmail corresponds to an existing parent user
     if (!studentData.parentUser && studentData.parentPhone) {
       const parentUser = await User.findOne({
         role: 'PARENT',
@@ -144,7 +122,6 @@ class StudentService {
       admissionNo,
     });
 
-    // If parent was linked, ensure student is added to parent's children array
     if (newStudent.parentUser) {
       await User.findByIdAndUpdate(newStudent.parentUser, {
         $addToSet: { children: newStudent._id },
@@ -154,9 +131,6 @@ class StudentService {
     return newStudent;
   }
 
-  /**
-   * Update student record
-   */
   async updateStudent(id, updateData, currentUser = null) {
     if (!mongoose.Types.ObjectId.isValid(id)) {
       throw ApiError.badRequest(`Invalid student ID format: '${id}'`);
@@ -167,9 +141,7 @@ class StudentService {
       throw ApiError.notFound(`Student with ID '${id}' not found`);
     }
 
-    // Role-based update restrictions
     if (currentUser && currentUser.role === 'TEACHER') {
-      // Teachers can only update attendance or remarks for their assigned classes
       const assigned = currentUser.assignedClasses || [];
       const isAssigned = assigned.some(
         (a) => a.class === student.class && (!a.section || a.section === student.section)
@@ -178,7 +150,6 @@ class StudentService {
         throw ApiError.forbidden('Teachers can only update records of students in their assigned classes');
       }
 
-      // Filter updateData to academic/attendance fields only
       const allowedFields = ['attendancePercentage', 'gpa', 'emergencyContact'];
       Object.keys(updateData).forEach((key) => {
         if (!allowedFields.includes(key)) {
@@ -187,7 +158,6 @@ class StudentService {
       });
     }
 
-    // Check admissionNo collision if being modified
     if (updateData.admissionNo) {
       const normalizedAdm = updateData.admissionNo.trim().toUpperCase();
       if (normalizedAdm !== student.admissionNo) {
@@ -205,9 +175,6 @@ class StudentService {
     return student;
   }
 
-  /**
-   * Delete or archive student record
-   */
   async deleteStudent(id, currentUser = null) {
     if (!mongoose.Types.ObjectId.isValid(id)) {
       throw ApiError.badRequest(`Invalid student ID format: '${id}'`);
@@ -218,10 +185,8 @@ class StudentService {
       throw ApiError.notFound(`Student with ID '${id}' not found`);
     }
 
-    // Soft delete by updating status to TRANSFERRED or remove completely
     await Student.findByIdAndDelete(id);
 
-    // Remove from linked parent children if applicable
     if (student.parentUser) {
       await User.findByIdAndUpdate(student.parentUser, {
         $pull: { children: student._id },
@@ -236,25 +201,19 @@ class StudentService {
     };
   }
 
-  /**
-   * Dashboard statistics for student management portal
-   */
   async getStudentDashboardStats(currentUser = null) {
     const activeFilter = { status: 'ACTIVE' };
     const totalStudents = await Student.countDocuments({ status: { $ne: 'DELETED' } });
     const activeStudents = await Student.countDocuments(activeFilter);
     const inactiveStudents = await Student.countDocuments({ status: { $in: ['INACTIVE', 'SUSPENDED', 'TRANSFERRED', 'WITHDRAWN', 'ARCHIVED'] } });
 
-    // Gender breakdown across ACTIVE students
     const maleCount = await Student.countDocuments({ ...activeFilter, gender: 'male' });
     const femaleCount = await Student.countDocuments({ ...activeFilter, gender: 'female' });
 
-    // Fee status distribution across ACTIVE students
     const paidCount = await Student.countDocuments({ ...activeFilter, feeStatus: 'Paid' });
     const partialCount = await Student.countDocuments({ ...activeFilter, feeStatus: 'Partial' });
     const pendingCount = await Student.countDocuments({ ...activeFilter, feeStatus: 'Pending' });
 
-    // Real attendance average computed from active AttendanceRecord rows (null if no records)
     const { AttendanceRecord } = require('../models/attendance.model');
     const activeStudentIds = await Student.find(activeFilter).distinct('_id');
     const [totalAttRecords, presentAttRecords] = activeStudentIds.length > 0
@@ -267,7 +226,6 @@ class StudentService {
       ? Math.round((presentAttRecords / totalAttRecords) * 1000) / 10
       : null;
 
-    // Class distribution across ACTIVE students
     const classAggregation = await Student.aggregate([
       { $match: activeFilter },
       { $group: { _id: '$class', count: { $sum: 1 } } },
@@ -278,7 +236,6 @@ class StudentService {
       count: c.count,
     }));
 
-    // Recent 5 Enrolled Active Students
     const recentAdmissions = await Student.find(activeFilter)
       .sort({ createdAt: -1 })
       .limit(5)

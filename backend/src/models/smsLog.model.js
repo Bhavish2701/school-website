@@ -1,7 +1,3 @@
-/**
- * SMS Gateway Log Model
- * Tracks official SMS delivery logs dispatched via AP-EDUSMS Gateway
- */
 const mongoose = require('mongoose');
 
 const smsLogSchema = new mongoose.Schema(

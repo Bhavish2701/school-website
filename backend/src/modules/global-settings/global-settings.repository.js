@@ -1,7 +1,3 @@
-/**
- * Global Platform Settings - Repository Layer
- * Manages database access and persistence
- */
 
 const mongoose = require('mongoose');
 const { GlobalSettings } = require('../../models/globalSettings.model');

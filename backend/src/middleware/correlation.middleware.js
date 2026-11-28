@@ -1,7 +1,3 @@
-/**
- * Correlation ID Middleware
- * Assigns a unique request ID to track request lifecycles.
- */
 const crypto = require('crypto');
 
 const correlationMiddleware = (req, res, next) => {

@@ -1,7 +1,3 @@
-/**
- * Platform Dashboard Telemetry - Repository Layer
- * Manages database access and persistence
- */
 
 const mongoose = require('mongoose');
 const { PlatformAudit } = require('../../models/platformAudit.model');

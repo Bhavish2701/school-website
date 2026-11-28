@@ -1,7 +1,3 @@
-/**
- * Institution Onboarding & Migration - Module Aggregator
- * Exports all 6 architectural layers
- */
 
 const routes = require('./institution-onboarding.routes');
 const controller = require('./institution-onboarding.controller');

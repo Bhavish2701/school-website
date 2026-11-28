@@ -1,12 +1,3 @@
-/**
- * Student Portal Business Logic Service Layer
- * Specification 20.1:
- * "Pages:
- *  Dashboard, My Profile, My Classes, Timetable, Attendance, Assignments,
- *  Study Materials, Examination Schedule, Published Results, School Notices,
- *  Events, Library (if implemented), Transport (if applicable), Help & Support.
- *  Students should be able to see their own information and perform only permitted actions."
- */
 const mongoose = require('mongoose');
 const { Student } = require('../models/student.model');
 const { User } = require('../models/user.model');
@@ -19,23 +10,17 @@ const { Notification } = require('../models/notification.model');
 const ApiError = require('../utils/apiError');
 
 class StudentPortalService {
-  /**
-   * Helper: Resolve Student document for authenticated student user
-   */
   async resolveStudentDoc(currentUser) {
     let student = null;
 
-    // 1. Check user.studentProfile.admissionNo
     if (currentUser.studentProfile && currentUser.studentProfile.admissionNo) {
       student = await Student.findOne({ admissionNo: currentUser.studentProfile.admissionNo });
     }
 
-    // 2. Fallback: Search by linked user ID
     if (!student) {
       student = await Student.findOne({ user: currentUser._id });
     }
 
-    // 3. Fallback: Search by username (which often holds admissionNo like SV-0210 or SV202600001)
     if (!student && currentUser.username) {
       const uname = currentUser.username.toUpperCase();
       student = await Student.findOne({
@@ -43,7 +28,6 @@ class StudentPortalService {
       });
     }
 
-    // 4. Default Mock/Demo Fallback if student collection has active records
     if (!student) {
       student = await Student.findOne({ status: 'ACTIVE' });
     }
@@ -55,13 +39,9 @@ class StudentPortalService {
     return student;
   }
 
-  /**
-   * 1. Dashboard Overview (Specification 20.1)
-   */
   async getDashboard(currentUser) {
     const student = await this.resolveStudentDoc(currentUser);
 
-    // Active assignments count
     const activeAssignments = await Assignment.find({
       class: student.class,
       section: student.section,
@@ -70,7 +50,6 @@ class StudentPortalService {
       .sort({ dueDate: 1 })
       .limit(3);
 
-    // Upcoming exams
     const upcomingExams = await Exam.find({
       class: student.class,
       status: { $in: ['SCHEDULED', 'PUBLISHED'] },
@@ -78,7 +57,6 @@ class StudentPortalService {
       .sort({ startDate: 1 })
       .limit(3);
 
-    // Recent announcements
     const notices = await Notification.find({
       $or: [
         { recipientRole: 'STUDENT' },
@@ -117,9 +95,6 @@ class StudentPortalService {
     };
   }
 
-  /**
-   * 2. My Profile (Specification 20.1)
-   */
   async getProfile(currentUser) {
     const student = await this.resolveStudentDoc(currentUser);
 
@@ -146,13 +121,9 @@ class StudentPortalService {
     };
   }
 
-  /**
-   * 3. My Classes & Class Roster (Specification 20.1)
-   */
   async getMyClasses(currentUser) {
     const student = await this.resolveStudentDoc(currentUser);
 
-    // Class Teacher
     const classTeacher = await Teacher.findOne({
       assignedClasses: {
         $elemMatch: {
@@ -163,7 +134,6 @@ class StudentPortalService {
       },
     }).select('fullName email phone specialization');
 
-    // Subjects & Teachers
     const subjects = [
       { code: 'MATH-101', name: 'Mathematics', teacher: 'Sri K. Venkat Rao', periodsPerWeek: 6 },
       { code: 'SCI-102', name: 'Physical Sciences', teacher: 'Dr. M. Sreenivasa Rao', periodsPerWeek: 5 },
@@ -174,7 +144,6 @@ class StudentPortalService {
       { code: 'HIN-107', name: 'Hindi Third Language', teacher: 'Smt. K. Lalitha', periodsPerWeek: 3 },
     ];
 
-    // Permitted classmate list (authorized fields only: rollNo, fullName - no private contact details)
     const classmates = await Student.find({
       class: student.class,
       section: student.section,
@@ -196,9 +165,6 @@ class StudentPortalService {
     };
   }
 
-  /**
-   * 4. Timetable (Specification 20.1)
-   */
   async getTimetable(currentUser) {
     const student = await this.resolveStudentDoc(currentUser);
 
@@ -207,7 +173,6 @@ class StudentPortalService {
       section: student.section,
     }).sort({ day: 1, periodNumber: 1 });
 
-    // If no custom entries in DB, supply authoritative weekly timetable
     const defaultDays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
     const periodsTemplate = [
       { period: 1, time: '08:50 AM - 09:35 AM', subject: 'Mathematics', room: 'Room 204' },
@@ -233,9 +198,6 @@ class StudentPortalService {
     };
   }
 
-  /**
-   * 5. Verified Attendance (Specification 20.1: Read-only)
-   */
   async getAttendance(currentUser) {
     const student = await this.resolveStudentDoc(currentUser);
 
@@ -268,9 +230,6 @@ class StudentPortalService {
     };
   }
 
-  /**
-   * 6. Assignments (Specification 20.1)
-   */
   async getAssignments(currentUser) {
     const student = await this.resolveStudentDoc(currentUser);
 
@@ -287,9 +246,6 @@ class StudentPortalService {
     };
   }
 
-  /**
-   * 7. Submit Assignment (Permitted Action)
-   */
   async submitAssignment(currentUser, assignmentId, submissionData) {
     const student = await this.resolveStudentDoc(currentUser);
 
@@ -302,7 +258,6 @@ class StudentPortalService {
       throw ApiError.badRequest('Submission must include written response content or attached file');
     }
 
-    // Record submission
     const submissionRecord = {
       studentId: student._id.toString(),
       admissionNo: student.admissionNo,
@@ -321,9 +276,6 @@ class StudentPortalService {
     };
   }
 
-  /**
-   * 8. Study Materials & Syllabus (Specification 20.1)
-   */
   async getStudyMaterials(currentUser) {
     const student = await this.resolveStudentDoc(currentUser);
 
@@ -377,9 +329,6 @@ class StudentPortalService {
     };
   }
 
-  /**
-   * 9. Examination Schedule (Specification 20.1)
-   */
   async getExamSchedule(currentUser) {
     const student = await this.resolveStudentDoc(currentUser);
 
@@ -410,16 +359,12 @@ class StudentPortalService {
     };
   }
 
-  /**
-   * 10. Published Results (Specification 20.1: STRICTLY PUBLISHED ONLY)
-   */
   async getPublishedResults(currentUser) {
     const student = await this.resolveStudentDoc(currentUser);
 
     const studentIds = [student._id];
     if (student.user) studentIds.push(student.user);
 
-    // Fetch published results
     const records = await StudentRecord.find({
       student: { $in: studentIds },
     }).sort({ createdAt: -1 });
@@ -455,9 +400,6 @@ class StudentPortalService {
     };
   }
 
-  /**
-   * 11. School Notices (Specification 20.1)
-   */
   async getNotices(currentUser) {
     const notices = await Notification.find({
       $or: [
@@ -473,9 +415,6 @@ class StudentPortalService {
     };
   }
 
-  /**
-   * 12. Events & Calendar (Specification 20.1)
-   */
   async getEvents(currentUser) {
     const events = [
       {
@@ -513,9 +452,6 @@ class StudentPortalService {
     };
   }
 
-  /**
-   * 13. Library (Specification 20.1: If implemented)
-   */
   async getLibrary(currentUser) {
     const student = await this.resolveStudentDoc(currentUser);
 
@@ -548,9 +484,6 @@ class StudentPortalService {
     };
   }
 
-  /**
-   * 14. Transport (Specification 20.1: If applicable)
-   */
   async getTransport(currentUser) {
     const student = await this.resolveStudentDoc(currentUser);
 
@@ -570,9 +503,6 @@ class StudentPortalService {
     };
   }
 
-  /**
-   * 15. Help & Support (Specification 20.1)
-   */
   async getHelpSupport(currentUser) {
     const faqs = [
       {
@@ -596,9 +526,6 @@ class StudentPortalService {
     };
   }
 
-  /**
-   * 16. Submit Help & Support Ticket (Specification 20.1)
-   */
   async submitHelpSupportQuery(currentUser, queryData) {
     const student = await this.resolveStudentDoc(currentUser);
 

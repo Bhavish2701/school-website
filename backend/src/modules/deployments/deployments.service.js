@@ -1,7 +1,3 @@
-/**
- * Deployment History & Lifecycle - Service Layer
- * Business rules, calculations, and operational orchestration
- */
 
 const Repository = require('./deployments.repository');
 const MultiInstitutionSecurity = require('../common/multiInstitutionSecurity');

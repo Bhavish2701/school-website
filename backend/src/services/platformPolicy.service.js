@@ -1,20 +1,8 @@
-/**
- * Sri Vidya Educational Trust - Platform Policies & Data Retention Service
- * Module 17: Governance Policy Register, Granular Statutory Retention Rules, and Controlled Data Requests
- *
- * Statutory Invariants Enforced:
- * 1. Section 17.2: Universal deletion periods are strictly forbidden. Student, financial, employment,
- *    and audit records maintain separate granular retention periods (Permanent, 7 years, 3 years, etc.).
- * 2. Section 17.3: Platform operators cannot independently delete school records. Deletion or
- *    anonymization requests require dual authorized signoffs (School Principal + Trust Legal Directorate)
- *    and statutory minimum period verification.
- */
 
 const mongoose = require('mongoose');
 const { GovernancePolicy, RetentionRule, DataRequest } = require('../models/platformPolicy.model');
 const { PlatformAudit } = require('../models/platformAudit.model');
 
-// In-Memory Fallbacks for zero-downtime execution
 let inMemoryPolicies = [];
 let inMemoryRetentionRules = [];
 let inMemoryDataRequests = [];
@@ -403,7 +391,6 @@ function initializeDefaults() {
 
 initializeDefaults();
 
-// Helper to log audit events
 async function logAudit(category, action, actor, targetRecord, result, severity, details = {}) {
   try {
     const now = Date.now();
@@ -443,9 +430,6 @@ async function logAudit(category, action, actor, targetRecord, result, severity,
   }
 }
 
-// --------------------------------------------------------------------------
-// 17.1 Policy Register Methods
-// --------------------------------------------------------------------------
 
 async function listPolicies(filters = {}) {
   try {
@@ -464,7 +448,6 @@ async function listPolicies(filters = {}) {
     if (mongoose.connection && mongoose.connection.readyState === 1) {
       let policies = await GovernancePolicy.find(query).sort({ policyId: 1 }).lean();
       if (!policies || policies.length === 0) {
-        // Seed default policies into DB
         await GovernancePolicy.insertMany(inMemoryPolicies);
         policies = await GovernancePolicy.find(query).sort({ policyId: 1 }).lean();
       }
@@ -474,7 +457,6 @@ async function listPolicies(filters = {}) {
     console.warn('[PlatformPolicyService] DB query failed, using in-memory policies:', err.message);
   }
 
-  // Fallback to in-memory
   let result = [...inMemoryPolicies];
   if (filters.category) {
     result = result.filter(p => p.category === filters.category);
@@ -580,16 +562,7 @@ async function updatePolicy(policyId, data, actor = 'Platform Administrator') {
   return { success: true, message: `Policy '${policyId}' updated successfully in memory.`, data: inMemoryPolicies[idx] };
 }
 
-// --------------------------------------------------------------------------
-// 17.2 Data Retention Configuration Methods & Non-Universal Invariant
-// --------------------------------------------------------------------------
 
-/**
- * Validates that retention periods adhere strictly to statutory non-universal rules.
- * Section 17.2 Invariant:
- * "Retention rules must follow applicable law, contractual obligations and the school's requirements.
- *  Do not use one universal deletion period for student, financial, employment and audit records."
- */
 function validateRetentionInvariant(category, retentionYears, isUniversalAttempt = false) {
   if (isUniversalAttempt || String(category).toUpperCase() === 'ALL' || String(category).toUpperCase() === 'UNIVERSAL') {
     return {
@@ -606,7 +579,6 @@ function validateRetentionInvariant(category, retentionYears, isUniversalAttempt
     catLower.includes('tabulation') ||
     catLower.includes('ssc');
 
-  // If category is a statutory permanent register, retentionYears MUST be -1 (Permanent)
   if (isPermanentCategory && Number(retentionYears) !== -1) {
     return {
       valid: false,
@@ -678,7 +650,6 @@ async function createRetentionDraft(data, actor = 'Trust Governance Officer') {
     return { success: false, message: 'Record category, retention rule description, retention years, and legal basis are required.' };
   }
 
-  // Enforce Section 17.2 statutory non-universal retention invariant
   const validation = validateRetentionInvariant(data.recordCategory, data.retentionYears, data.isUniversalAttempt);
   if (!validation.valid) {
     return { success: false, message: validation.message, statutoryInvariantBlocked: true };
@@ -819,28 +790,12 @@ async function getRetentionVersions(ruleId) {
   };
 }
 
-// --------------------------------------------------------------------------
-// 17.3 Data Requests Methods & Controlled Deletion Invariant
-// --------------------------------------------------------------------------
 
-/**
- * Validates the governance invariant for Deletion or Anonymization requests:
- * Section 17.3 Invariant:
- * "Platform operators should not independently decide to delete a school's records."
- *
- * Rules enforced:
- * 1. For DELETION_ANONYMIZATION, fulfillment requires at least two distinct authorized signoffs:
- *    - One from School Principal
- *    - One from Trust Legal Directorate / Statutory Compliance Officer
- * 2. Statutory permanent records (General Register, TC Appendix 16 Dockets, SSC Tabulation)
- *    can NEVER be approved or fulfilled for deletion.
- */
 function validateDeletionGovernance(dataRequest, operatorRole = 'Platform Operator') {
   if (dataRequest.requestType !== 'DELETION_ANONYMIZATION') {
     return { allowed: true };
   }
 
-  // Check if target involves statutory permanent records
   const targetLower = String(dataRequest.targetSubject).toLowerCase();
   if (
     targetLower.includes('admission') ||
@@ -856,7 +811,6 @@ function validateDeletionGovernance(dataRequest, operatorRole = 'Platform Operat
     };
   }
 
-  // Check dual authorized signoffs requirement
   const signoffs = dataRequest.authorizedSignoffs || [];
   const hasPrincipalSignoff = signoffs.some(s => s.role && s.role.toLowerCase().includes('principal'));
   const hasLegalSignoff = signoffs.some(s => s.role && (s.role.toLowerCase().includes('legal') || s.role.toLowerCase().includes('compliance') || s.role.toLowerCase().includes('counsel')));
@@ -1004,7 +958,6 @@ async function approveDataRequest(requestId, signoffData = {}, actor = 'Platform
       }
 
       request.authorizedSignoffs.push(newSignoff);
-      // For deletion/anonymization, check if we now have dual signoffs
       if (request.requestType === 'DELETION_ANONYMIZATION') {
         const hasPrincipal = request.authorizedSignoffs.some(s => s.role.toLowerCase().includes('principal'));
         const hasLegal = request.authorizedSignoffs.some(s => s.role.toLowerCase().includes('legal') || s.role.toLowerCase().includes('compliance'));
@@ -1082,7 +1035,6 @@ async function fulfillDataRequest(requestId, fulfillmentDetails = '', actor = 'P
   if (!reqRes.success) return reqRes;
   const request = reqRes.data;
 
-  // Enforce Section 17.3 Invariant: Platform operators should not independently decide to delete a school's records
   const govCheck = validateDeletionGovernance(request, actor);
   if (!govCheck.allowed) {
     return {
@@ -1122,13 +1074,11 @@ async function fulfillDataRequest(requestId, fulfillmentDetails = '', actor = 'P
 }
 
 module.exports = {
-  // Policies (17.1)
   listPolicies,
   getPolicy,
   createPolicy,
   updatePolicy,
 
-  // Retention Rules (17.2)
   listRetentionRules,
   getRetentionRule,
   createRetentionDraft,
@@ -1138,7 +1088,6 @@ module.exports = {
   getRetentionVersions,
   validateRetentionInvariant,
 
-  // Data Requests (17.3)
   listDataRequests,
   getDataRequest,
   createDataRequest,

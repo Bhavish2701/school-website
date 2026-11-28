@@ -46,7 +46,6 @@ async function testBackendLogin(identifier, password, expectedRole, expectedRedi
 
 function testFrontendLogic() {
   console.log('\n--- Testing Frontend Navigation & Redirection Logic ---');
-  // Load portal-auth.js in node context with mock window/document/storage
   const storage = {};
   const mockStorage = {
     getItem: (k) => storage[k] || null,
@@ -74,7 +73,6 @@ function testFrontendLogic() {
   const PA = global.window.PortalAuth;
   assert.ok(PA, 'PortalAuth must exist');
 
-  // Test getMainDashboardUrlForRole
   const testCases = [
     { role: 'SUPER_ADMIN', expected: '/platform-admin#dashboard' },
     { role: 'PLATFORM_ADMIN', expected: '/platform-admin#dashboard' },
@@ -102,7 +100,6 @@ function testFrontendLogic() {
     assert.ok(!res.includes('#attendance'), `${tc.role} must not redirect to #attendance`);
   });
 
-  // Test clearNavigationCaches
   mockStorage.setItem('sv_mgmt_last_module', 'fees');
   mockStorage.setItem('sv_teacher_last_module', 'attendance');
   mockStorage.setItem('sv_active_view', 'examinations');
@@ -112,7 +109,6 @@ function testFrontendLogic() {
   assert.strictEqual(mockStorage.getItem('sv_active_view'), null);
   console.log('[PASS] clearNavigationCaches successfully cleared all module caches');
 
-  // Test restoreActiveView logic
   let navigatedMod = null;
   let navigatedSub = null;
   global.window.portalApp = {
@@ -122,7 +118,6 @@ function testFrontendLogic() {
     navigateTo: (mod, sub) => { navigatedMod = mod; navigatedSub = sub; }
   };
 
-  // Case 1: Empty hash -> must default to dashboard
   global.window.location.hash = '';
   PA.restoreActiveView('management');
   assert.strictEqual(navigatedMod, 'dashboard');
@@ -132,7 +127,6 @@ function testFrontendLogic() {
   assert.strictEqual(navigatedMod, 'dashboard');
   console.log('[PASS] restoreActiveView(teacher) with empty hash -> dashboard');
 
-  // Case 2: Browser refreshed with active hash -> must preserve active module
   global.window.location.hash = '#students';
   PA.restoreActiveView('management');
   assert.strictEqual(navigatedMod, 'students');
@@ -143,7 +137,6 @@ function testFrontendLogic() {
   assert.strictEqual(navigatedMod, 'attendance');
   console.log('[PASS] restoreActiveView(teacher) with #attendance -> attendance (maintains view on refresh)');
 
-  // Case 3: Test demo fallback logins
   const demoCases = [
     { u: 'principal', p: 'Principal@123', expectedUrl: '/management#dashboard' },
     { u: 'viceprincipal', p: 'VicePrincipal@123', expectedUrl: '/management#dashboard' },
@@ -164,22 +157,16 @@ function testFrontendLogic() {
 async function run() {
   console.log('=== E2E NAVIGATION & AUTHENTICATION VERIFICATION ===\n');
   try {
-    // 1. Super Admin
     await testBackendLogin('superadmin@srividya.edu.in', 'SuperAdmin@123', 'SUPER_ADMIN', '/platform-admin#dashboard');
 
-    // 2. Principal
     await testBackendLogin('principal@srividya.edu.in', 'Principal@123', 'PRINCIPAL', '/management#dashboard');
 
-    // 3. Vice Principal
     await testBackendLogin('viceprincipal@srividya.edu.in', 'VicePrincipal@123', 'VICE_PRINCIPAL', '/management#dashboard');
 
-    // 4. Office Staff
     await testBackendLogin('office@srividya.edu.in', 'Office@123', 'OFFICE', '/management#dashboard');
 
-    // 5. Teacher
     await testBackendLogin('teacher@srividya.edu.in', 'Teacher@123', 'TEACHER', '/teacher#dashboard');
 
-    // 6. Test Frontend Matrix and Refresh logic
     testFrontendLogic();
 
     console.log('\n====================================================');

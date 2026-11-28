@@ -1,7 +1,3 @@
-/**
- * Seed Students Database for Student Module
- * Demo Dataset: Exactly 8 Students (4 Boys & 4 Girls) | Class 10-A
- */
 const mongoose = require('mongoose');
 const config = require('../src/config/env');
 const { Student } = require('../src/models/student.model');
@@ -14,14 +10,12 @@ const seedStudents = async () => {
   await Student.deleteMany({});
   console.log('[Student Seed] Cleared existing student collection.');
 
-  // Find existing demo users to link if available
   const student1User = await User.findOne({ username: 'student1' });
   const student2User = await User.findOne({ username: 'student2' });
   const parent1User = await User.findOne({ username: 'parent1' });
   const parent2User = await User.findOne({ username: 'parent2' });
 
   const initialStudents = [
-    // 4 BOYS
     {
       admissionNo: 'SV-0001',
       fullName: 'RK. Sunil',
@@ -127,7 +121,6 @@ const seedStudents = async () => {
       },
     },
 
-    // 4 GIRLS
     {
       admissionNo: 'SV-0005',
       fullName: 'P. Pravalika',

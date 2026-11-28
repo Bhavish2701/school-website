@@ -1,13 +1,7 @@
-/**
- * Timetable & Substitution Service
- * Business logic for class timetable generation, interval conflict verification,
- * and emergency substitution coordination.
- */
 const Timetable = require('../models/timetable.model');
 const Substitution = require('../models/substitution.model');
 const { ApiError } = require('../utils/apiError');
 
-// Helper to convert "08:50 AM" to minutes from midnight
 function parseTimeToMinutes(timeStr) {
   if (!timeStr) return 0;
   const match = timeStr.match(/(\d+):(\d+)\s*(AM|PM)?/i);
@@ -20,10 +14,6 @@ function parseTimeToMinutes(timeStr) {
   return hours * 60 + mins;
 }
 
-/**
- * Validate scheduling conflict for a proposed assignment
- * Time overlap condition: A.start < B.end && B.start < A.end
- */
 async function checkConflict({
   className,
   day,
@@ -37,7 +27,6 @@ async function checkConflict({
   const startMins = parseTimeToMinutes(startTime);
   const endMins = parseTimeToMinutes(endTime);
 
-  // Check teacher overlap
   const teacherConflict = await Timetable.findOne({
     _id: { $ne: excludeId },
     academicYear,
@@ -57,7 +46,6 @@ async function checkConflict({
     };
   }
 
-  // Check room overlap
   const roomConflict = await Timetable.findOne({
     _id: { $ne: excludeId },
     academicYear,
@@ -81,9 +69,6 @@ async function checkConflict({
   return { hasConflict: false };
 }
 
-/**
- * Get full weekly schedule for a specific class
- */
 async function getClassTimetable(className, academicYear = '2025-2026') {
   const items = await Timetable.find({
     className,
@@ -94,9 +79,6 @@ async function getClassTimetable(className, academicYear = '2025-2026') {
   return items;
 }
 
-/**
- * Create or update a timetable assignment with conflict check
- */
 async function assignPeriod(data) {
   const {
     className,
@@ -142,9 +124,6 @@ async function assignPeriod(data) {
   return assignment;
 }
 
-/**
- * Get approved timetable for a specific day and class (or all classes for today)
- */
 async function getTodayTimetable(day, className = 'Class X-A', academicYear = '2025-2026') {
   const query = {
     day: day === 'Sunday' ? 'Monday' : day,
@@ -175,9 +154,6 @@ async function getTodayTimetable(day, className = 'Class X-A', academicYear = '2
   };
 }
 
-/**
- * Create or update a substitution
- */
 async function createSubstitution(data) {
   const date = data.date ? new Date(data.date) : new Date();
   const dateUtc = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
@@ -198,9 +174,6 @@ async function createSubstitution(data) {
   return sub;
 }
 
-/**
- * Get active substitutions for today or given date
- */
 async function getSubstitutions(dateInput) {
   const d = dateInput ? new Date(dateInput) : new Date();
   const startOfDay = new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate(), 0, 0, 0, 0));

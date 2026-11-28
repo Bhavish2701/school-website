@@ -1,7 +1,3 @@
-/**
- * Backups & Disaster Recovery - Validation Layer
- * Enforces field schemas, constraints, and data integrity
- */
 
 class BackupsRecoveryValidation {
   static validateRequest(req, res, next) {

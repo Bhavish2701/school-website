@@ -66,7 +66,6 @@ async function runTests() {
     }
   }
 
-  // 1. Verify /login HTTP 200 Route
   try {
     const loginPage = await get('/login');
     assert(loginPage.status === 200, 'HTTP GET /login serves unified login page (200 OK)', `Status: ${loginPage.status}`);
@@ -74,7 +73,6 @@ async function runTests() {
     assert(false, 'HTTP GET /login accessible', e.message);
   }
 
-  // 2. Authentication Test Cases (Unified Single Login API)
   const testUsers = [
     {
       label: 'Principal (Executive Management)',
@@ -181,7 +179,6 @@ async function runTests() {
     }
   }
 
-  // 3. Negative Login Test: Invalid Password
   try {
     const invalidRes = await postJson('/api/v1/auth/login', {
       username: 'principal',
@@ -192,7 +189,6 @@ async function runTests() {
     assert(false, 'Invalid password rejection', e.message);
   }
 
-  // 4. Verify Frontend Files Integrity
   const loginHtml = fs.readFileSync(path.join(__dirname, '../frontend/login.html'), 'utf8');
   assert(loginHtml.includes('unifiedLoginForm'), 'frontend/login.html contains #unifiedLoginForm');
   assert(loginHtml.includes('PortalAuth.initUnifiedLoginPage'), 'frontend/login.html initializes PortalAuth.initUnifiedLoginPage');

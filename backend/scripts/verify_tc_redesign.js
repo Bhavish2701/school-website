@@ -20,7 +20,6 @@ function assert(condition, message) {
   }
 }
 
-// 1. Check HTML
 const html = fs.readFileSync(htmlPath, 'utf8');
 assert(html.includes('id="printableExitTC"'), 'printableExitTC container exists');
 assert(html.includes('class="exit-tc-sheet-wrapper"'), 'exit-tc-sheet-wrapper exists');
@@ -39,7 +38,6 @@ assert(html.includes('class="tc-circular-seal"'), 'Institutional circular seal p
 assert(html.includes('Gorle Varalakshmi'), 'Executive Principal name present');
 assert(html.includes('Ch. Venkat'), 'Head Clerk name present');
 
-// Check all dynamic element IDs referenced in JS
 const requiredIds = [
   'tcDocSerial',
   'tcDocAdmNo',
@@ -76,7 +74,6 @@ requiredIds.forEach(id => {
   assert(html.includes(`id="${id}"`), `Dynamic element ID #${id} exists in HTML`);
 });
 
-// 2. Check CSS
 const css = fs.readFileSync(cssPath, 'utf8');
 assert(css.includes('.exit-tc-sheet-wrapper'), '.exit-tc-sheet-wrapper CSS class exists');
 assert(css.includes('.exit-tc-sheet'), '.exit-tc-sheet CSS class exists');
@@ -88,7 +85,6 @@ assert(css.includes('.tc-circular-seal'), '.tc-circular-seal CSS class exists');
 assert(css.includes('@page'), 'A4 print @page directive exists');
 assert(css.includes('size: A4 portrait') || css.includes('A4 portrait'), 'A4 portrait print setup exists');
 
-// 3. Check JS
 const js = fs.readFileSync(jsPath, 'utf8');
 assert(js.includes('function updateTCPrintableSheet('), 'updateTCPrintableSheet function exists');
 assert(js.includes('function printExitTC('), 'printExitTC function exists');

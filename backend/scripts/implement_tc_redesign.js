@@ -3,7 +3,6 @@ const path = require('path');
 
 console.log('--- Implementing Premium Transfer Certificate (TC) Redesign ---');
 
-// 1. Update frontend/administration-portal/index.html
 const htmlPath = path.join(__dirname, '../../frontend/administration-portal/index.html');
 let html = fs.readFileSync(htmlPath, 'utf8');
 
@@ -18,7 +17,6 @@ if (startIdx === -1 || endIdx === -1) {
   process.exit(1);
 }
 
-// Find the closing </div> of stage 5 tab pane right before PANE 6
 const pane5ClosingTarget = '</div>\n        </div>\n\n        <!-- PANE 6: AUDIT HISTORY & NOTIFICATIONS LOG -->';
 let replaceEnd = html.indexOf(pane5ClosingTarget, startIdx);
 if (replaceEnd === -1) {

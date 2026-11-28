@@ -1,12 +1,6 @@
-/**
- * Sri Vidya Educational Trust - Subscriptions, Plans & Entitlements Models
- * Module 10: Multi-Tenant Commercial Plans Directory, Institution Subscriptions,
- * Usage Tracking, and Statutory Record Non-Disruption Guarantees
- */
 
 const mongoose = require('mongoose');
 
-// 10.1 Commercial Plan Schema
 const PlanSchema = new mongoose.Schema({
   planId: {
     type: String,
@@ -67,7 +61,6 @@ const PlanSchema = new mongoose.Schema({
   timestamps: true
 });
 
-// 10.2 Institution Subscription Schema
 const SubscriptionSchema = new mongoose.Schema({
   subscriptionId: {
     type: String,

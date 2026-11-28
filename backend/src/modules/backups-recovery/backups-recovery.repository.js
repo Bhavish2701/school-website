@@ -1,7 +1,3 @@
-/**
- * Backups & Disaster Recovery - Repository Layer
- * Manages database access and persistence
- */
 
 const mongoose = require('mongoose');
 const { BackupRecord } = require('../../models/backup.model');

@@ -8,7 +8,6 @@ console.log('====================================================\n');
 const html = fs.readFileSync('frontend/administration-portal/index.html', 'utf8');
 const js = fs.readFileSync('frontend/js/portal.js', 'utf8');
 
-// CHECK 1: Modal Structure and IDs in index.html
 console.log('--- Test 1: Verify Modal Elements and Input IDs in index.html ---');
 assert.ok(html.includes('id="confirmEnrolmentModal"'), '#confirmEnrolmentModal must exist in index.html');
 assert.ok(html.includes('id="enrolTargetAppId"'), '#enrolTargetAppId must exist');
@@ -24,32 +23,27 @@ assert.ok(html.includes('submitConfirmEnrolment'), 'submitConfirmEnrolment form 
 assert.ok(html.includes("closeModal('confirmEnrolmentModal')"), 'closeModal must be hooked to close button');
 console.log('[PASS] All modal elements, IDs, and form handlers verified');
 
-// CHECK 2: Visual Alignment & Layout Structure
 console.log('\n--- Test 2: Verify Symmetrical Layout and Input Proportions ---');
 const modalIndex = html.indexOf('id="confirmEnrolmentModal"');
 const modalEnd = html.indexOf('id="cancelApplicationModal"', modalIndex);
 const modalSnippet = html.substring(modalIndex, modalEnd);
 
-// Verify modal width allows comfortable layout without cramped controls
 assert.ok(
   modalSnippet.includes('max-width: 680px') || modalSnippet.includes('max-width: 700px'),
   'Modal should have expanded max-width (>= 680px) for institutional presentation'
 );
 
-// Verify symmetrical grid or equal columns in credentials card
 assert.ok(
   modalSnippet.includes('grid-template-columns: 1fr 1fr') || modalSnippet.includes('grid-template-columns: repeat(2'),
   'Credentials card must use symmetrical 2-column grid layout for Admission No & Student ID'
 );
 
-// Verify professional institutional header
 assert.ok(
   modalSnippet.includes('Statutory Admissions') || modalSnippet.includes('General Register'),
   'Header should contain institutional category kicker'
 );
 console.log('[PASS] Symmetrical 2-column layout and comfortable proportions verified');
 
-// CHECK 3: Controller Functionality in portal.js
 console.log('\n--- Test 3: Verify Controller Functions and State Updates in portal.js ---');
 assert.ok(js.includes('function openConfirmEnrolmentModal('), 'openConfirmEnrolmentModal must be defined');
 assert.ok(js.includes('function submitConfirmEnrolment('), 'submitConfirmEnrolment must be defined');
@@ -57,7 +51,6 @@ assert.ok(js.includes('function scanAdmissionsDuplicate('), 'scanAdmissionsDupli
 assert.ok(js.includes('openConfirmEnrolmentModal'), 'openConfirmEnrolmentModal must be exported');
 assert.ok(js.includes('submitConfirmEnrolment'), 'submitConfirmEnrolment must be exported');
 
-// Mock state and test submitConfirmEnrolment logic
 const mockApp = {
   appId: 'SV202600006',
   name: 'S. Harini',
@@ -94,7 +87,6 @@ global.initAdmissions = () => {};
 global.filterAdmissions = () => {};
 global.showToast = () => {};
 
-// Evaluate submitConfirmEnrolment
 let idxSubmit = js.indexOf('async function submitConfirmEnrolment(');
 if (idxSubmit === -1) idxSubmit = js.indexOf('function submitConfirmEnrolment(');
 const endSubmit = js.indexOf('\n  function openCancelApplicationModal', idxSubmit);

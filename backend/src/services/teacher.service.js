@@ -1,8 +1,3 @@
-/**
- * Teacher Business Logic Service Layer
- * Decouples teacher operations, timetable scheduling, leave management,
- * and notifications from HTTP transport.
- */
 const mongoose = require('mongoose');
 const { Teacher } = require('../models/teacher.model');
 const { Student } = require('../models/student.model');
@@ -12,20 +7,13 @@ const QueryFeatures = require('../utils/queryFeatures');
 const ApiError = require('../utils/apiError');
 
 class TeacherService {
-  /**
-   * Helper: Resolve teacher document associated with a user
-   */
   async getTeacherDocByUser(userId) {
     return await Teacher.findOne({ user: userId });
   }
 
-  /**
-   * List teachers with query features (pagination, search, filter, sort)
-   */
   async getTeachers(queryString = {}, currentUser = null) {
     const baseFilter = {};
 
-    // Teachers can see active faculty directory; management can view all
     if (currentUser && currentUser.role === 'TEACHER') {
       baseFilter.status = 'ACTIVE';
     }
@@ -43,9 +31,6 @@ class TeacherService {
     return await queryFeatures.execute();
   }
 
-  /**
-   * Get single teacher by ID
-   */
   async getTeacherById(id, currentUser = null) {
     if (!mongoose.Types.ObjectId.isValid(id)) {
       throw ApiError.badRequest(`Invalid teacher ID format: '${id}'`);
@@ -59,13 +44,9 @@ class TeacherService {
     return teacher;
   }
 
-  /**
-   * Get current teacher's own profile
-   */
   async getMyProfile(currentUser) {
     let teacher = await this.getTeacherDocByUser(currentUser._id);
     if (!teacher) {
-      // Fallback search by email
       teacher = await Teacher.findOne({ email: currentUser.email });
     }
     if (!teacher) {
@@ -74,19 +55,14 @@ class TeacherService {
     return teacher;
   }
 
-  /**
-   * Create new teacher profile
-   */
   async createTeacher(teacherData, currentUser = null) {
     const employeeId = (teacherData.employeeId || '').trim().toUpperCase();
 
-    // Check duplicate employee ID
     const existingEmp = await Teacher.findOne({ employeeId });
     if (existingEmp) {
       throw ApiError.conflict(`Teacher with employee ID '${employeeId}' already exists`, 'DUPLICATE_EMPLOYEE_ID');
     }
 
-    // Check duplicate email
     const existingEmail = await Teacher.findOne({ email: teacherData.email.trim().toLowerCase() });
     if (existingEmail) {
       throw ApiError.conflict(`Teacher with email '${teacherData.email}' already exists`, 'DUPLICATE_EMAIL');
@@ -101,9 +77,6 @@ class TeacherService {
     return newTeacher;
   }
 
-  /**
-   * Update teacher record
-   */
   async updateTeacher(id, updateData, currentUser = null) {
     if (!mongoose.Types.ObjectId.isValid(id)) {
       throw ApiError.badRequest(`Invalid teacher ID format: '${id}'`);
@@ -114,8 +87,6 @@ class TeacherService {
       throw ApiError.notFound(`Teacher with ID '${id}' not found`);
     }
 
-    // Permission enforcement:
-    // Regular teachers can only update their own phone and address
     if (currentUser && currentUser.role === 'TEACHER') {
       const isOwnProfile =
         teacher.user && teacher.user.toString() === currentUser._id.toString();
@@ -123,7 +94,6 @@ class TeacherService {
         throw ApiError.forbidden('Teachers are authorized to edit only their own profile');
       }
 
-      // Restrict fields teacher can modify
       const allowedSelfUpdates = ['phone', 'address', 'bloodGroup'];
       Object.keys(updateData).forEach((key) => {
         if (!allowedSelfUpdates.includes(key)) {
@@ -132,7 +102,6 @@ class TeacherService {
       });
     }
 
-    // Check employeeId collision if modified
     if (updateData.employeeId) {
       const normalizedEmp = updateData.employeeId.trim().toUpperCase();
       if (normalizedEmp !== teacher.employeeId) {
@@ -150,9 +119,6 @@ class TeacherService {
     return teacher;
   }
 
-  /**
-   * Delete teacher profile
-   */
   async deleteTeacher(id, currentUser = null) {
     if (!mongoose.Types.ObjectId.isValid(id)) {
       throw ApiError.badRequest(`Invalid teacher ID format: '${id}'`);
@@ -173,9 +139,6 @@ class TeacherService {
     };
   }
 
-  /**
-   * Get teacher timetable
-   */
   async getTimetable(teacherId, currentUser = null) {
     let teacher;
     if (teacherId === 'me' || !teacherId) {
@@ -192,9 +155,6 @@ class TeacherService {
     };
   }
 
-  /**
-   * Update teacher timetable (Management only)
-   */
   async updateTimetable(teacherId, timetableData, currentUser = null) {
     const teacher = await this.getTeacherById(teacherId, currentUser);
     teacher.timetable = timetableData;
@@ -207,16 +167,12 @@ class TeacherService {
     };
   }
 
-  /**
-   * Get teacher dashboard statistics
-   */
   async getTeacherDashboard(currentUser) {
     let teacher = await this.getTeacherDocByUser(currentUser._id);
     if (!teacher) {
       teacher = await Teacher.findOne({ email: currentUser.email });
     }
 
-    // Fallback if current user is admin viewing teacher dashboard
     if (!teacher) {
       teacher = await Teacher.findOne({ status: 'ACTIVE' });
     }
@@ -235,7 +191,6 @@ class TeacherService {
     const assigned = teacher.assignedClasses || [];
     const assignedClassesCount = assigned.length;
 
-    // Calculate total students across assigned classes
     let totalStudentsCount = 0;
     if (assigned.length > 0) {
       const classFilters = assigned.map((a) => ({
@@ -248,19 +203,16 @@ class TeacherService {
       });
     }
 
-    // Determine today's day of week
     const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
     const todayName = days[new Date().getDay()];
     const todaySchedule = (teacher.timetable || []).find((s) => s.day === todayName);
     const todayPeriods = todaySchedule ? todaySchedule.periods : [];
 
-    // Pending leaves
     const pendingLeavesCount = await Leave.countDocuments({
       teacher: teacher._id,
       status: 'PENDING',
     });
 
-    // Unread notifications
     const unreadNotificationsCount = await Notification.countDocuments({
       $or: [
         { recipientUser: currentUser._id, isRead: false },
@@ -292,9 +244,6 @@ class TeacherService {
     };
   }
 
-  /**
-   * Apply for Leave (Teacher)
-   */
   async applyLeave(currentUser, leaveData) {
     const teacher = await this.getMyProfile(currentUser);
 
@@ -305,7 +254,6 @@ class TeacherService {
       throw ApiError.badRequest('End date cannot precede start date');
     }
 
-    // Calculate business days difference
     const diffTime = Math.abs(end - start);
     const daysCount = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
 
@@ -320,7 +268,6 @@ class TeacherService {
       status: 'PENDING',
     });
 
-    // Generate notification for Principal / Management
     await Notification.create({
       title: `New Leave Application - ${teacher.fullName}`,
       message: `${teacher.fullName} (${teacher.employeeId}) has requested ${daysCount} day(s) ${leave.leaveType} leave from ${start.toDateString()} to ${end.toDateString()}.`,
@@ -332,13 +279,9 @@ class TeacherService {
     return leave;
   }
 
-  /**
-   * List Leaves (Role-scoped)
-   */
   async getLeaves(currentUser, queryString = {}) {
     const filter = {};
 
-    // Teachers can view only their own leaves
     if (currentUser && currentUser.role === 'TEACHER') {
       const teacher = await this.getTeacherDocByUser(currentUser._id);
       if (teacher) {
@@ -361,9 +304,6 @@ class TeacherService {
     return leaves;
   }
 
-  /**
-   * Review Leave (Approve / Reject by Principal or Management)
-   */
   async reviewLeave(leaveId, currentUser, { status, reviewRemarks = '' }) {
     if (!mongoose.Types.ObjectId.isValid(leaveId)) {
       throw ApiError.badRequest(`Invalid leave ID: '${leaveId}'`);
@@ -382,7 +322,6 @@ class TeacherService {
     leave.reviewRemarks = reviewRemarks;
     await leave.save();
 
-    // Deduct leave balance and update teacher status
     if (leave.teacher) {
       const teacher = await Teacher.findById(leave.teacher._id);
       if (teacher) {
@@ -410,7 +349,6 @@ class TeacherService {
       }
     }
 
-    // Send notification to teacher user
     if (leave.user) {
       await Notification.create({
         title: `Leave Application ${status}`,
@@ -425,9 +363,6 @@ class TeacherService {
     return leave;
   }
 
-  /**
-   * Get Notifications (Role-scoped)
-   */
   async getNotifications(currentUser) {
     const notifications = await Notification.find({
       $or: [
@@ -447,9 +382,6 @@ class TeacherService {
     };
   }
 
-  /**
-   * Mark notification as read
-   */
   async markNotificationRead(notificationId, currentUser) {
     if (!mongoose.Types.ObjectId.isValid(notificationId)) {
       throw ApiError.badRequest(`Invalid notification ID: '${notificationId}'`);
@@ -468,9 +400,6 @@ class TeacherService {
     return notification;
   }
 
-  /**
-   * Create Notification / Announcement
-   */
   async createNotification(currentUser, notificationData) {
     const notification = await Notification.create({
       title: notificationData.title,

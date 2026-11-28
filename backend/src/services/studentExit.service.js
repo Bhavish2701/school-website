@@ -1,8 +1,3 @@
-/**
- * Student Exit & Transfer Certificate Service
- * Enterprise business logic for multi-department clearances, statutory approval,
- * TC generation, and zero data deletion archival.
- */
 const StudentExit = require('../models/studentExit.model');
 const { Student } = require('../models/student.model');
 const { AttendanceRecord } = require('../models/attendance.model');
@@ -106,7 +101,6 @@ class StudentExitService {
     const timeStr = now.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' }) + ' IST';
     const timestampStr = now.toLocaleString();
 
-    // Unique reference number generation if not already set
     const deptPrefix = (deptKey || 'CLR').substring(0, 3).toUpperCase();
     const referenceNo = clearanceData.referenceNo || currentDept.referenceNo || `CLR-${deptPrefix}-${now.getFullYear()}-${Math.floor(1000 + Math.random() * 9000)}`;
 
@@ -116,7 +110,6 @@ class StudentExitService {
         throw new Error('A mandatory revocation reason of at least 10 characters is required when revoking a departmental clearance sign-off.');
       }
 
-      // Archive previous approved record into history array - NEVER permanently delete
       if (!Array.isArray(currentDept.history)) currentDept.history = [];
       currentDept.history.unshift({
         timestamp: timestampStr,
@@ -154,8 +147,6 @@ class StudentExitService {
         reason: revokedReason
       });
     } else {
-      // SAVE, EDIT, or SUBMIT
-      // If updating an existing signoff, snapshot previous entry into history
       if (!Array.isArray(currentDept.history)) currentDept.history = [];
       if (currentDept.status && currentDept.status !== 'Pending Verification') {
         currentDept.history.unshift({
@@ -193,7 +184,6 @@ class StudentExitService {
       });
     }
 
-    // Keep legacy labAndSports synced if scienceLab or sports updated
     if (deptKey === 'scienceLab' || deptKey === 'sports') {
       const sci = exitRec.departmentClearances.scienceLab;
       const spt = exitRec.departmentClearances.sports;
@@ -209,12 +199,10 @@ class StudentExitService {
       };
     }
 
-    // Evaluate all 8 departments for overall TC progression
     const allDepts = ['accounts', 'library', 'scienceLab', 'sports', 'transport', 'itLab', 'hostel', 'academic'];
     const allCleared = allDepts.every(d => {
       const dep = exitRec.departmentClearances[d];
       if (!dep) {
-        // Fallback for legacy
         if (d === 'scienceLab' || d === 'sports') {
           const leg = exitRec.departmentClearances.labAndSports;
           return leg && (leg.status === 'Cleared' || leg.status === 'Waiver Approved' || leg.isNotApplicable === true);
@@ -302,7 +290,6 @@ class StudentExitService {
 
     const isDraft = (tcData.action || '').toUpperCase() === 'SAVE_DRAFT';
 
-    // 1. If not draft, validate required statutory approvals
     if (!isDraft) {
       const depts = exitRec.departmentClearances || {};
       const revokedDepts = Object.keys(depts).filter(k => depts[k]?.isRevoked);
@@ -318,7 +305,6 @@ class StudentExitService {
     const yearSuffix = (exitRec.academicYear || '2025-2026').slice(0, 4);
     const tcNo = (tcData.tcNumber || exitRec.transferCertificate?.tcNumber || `SV/${yearSuffix}/${String(Math.floor(40 + Math.random() * 900)).padStart(3, '0')}`).trim();
 
-    // 2. Prevent duplicate TC Numbers across all students
     if (!isDraft) {
       const duplicate = await StudentExit.findOne({
         'transferCertificate.tcNumber': tcNo,
@@ -329,7 +315,6 @@ class StudentExitService {
       }
     }
 
-    // 3. Map Conduct & Character
     const validConducts = ['Excellent', 'Very Good', 'Good', 'Satisfactory', 'Needs Improvement', 'Not Evaluated'];
     let conductVal = tcData.conduct || exitRec.transferCertificate?.conduct || 'Excellent';
     if (!validConducts.includes(conductVal)) {
@@ -345,7 +330,6 @@ class StudentExitService {
     const leavingDate = tcData.leavingDate || exitRec.proposedLastDate || exitRec.officialLeavingDate || exitRec.transferCertificate?.leavingDate || issueDate;
     const digiHash = tcData.digitalSignatureHash || exitRec.transferCertificate?.digitalSignatureHash || ('SV-DIGISIGN-' + Math.random().toString(36).substring(2, 11).toUpperCase());
 
-    // Compute real attendance verification from AttendanceRecord if not explicitly supplied
     let computedAttendanceSummary = tcData.attendanceVerification || exitRec.departmentClearances?.academic?.attendanceDays;
     if (!computedAttendanceSummary) {
       const studentDoc = await Student.findOne({ admissionNo: exitRec.admissionNo }).select('_id').lean();
@@ -406,7 +390,6 @@ class StudentExitService {
     if (!isDraft) {
       exitRec.status = 'TC Generated';
 
-      // 4. Update student enrolment status with Zero Deletion of historical records
       const targetStatus = exitRec.exitType === 'Withdrawal' ? 'WITHDRAWN' : 'TRANSFERRED';
       await Student.findOneAndUpdate(
         { admissionNo: exitRec.admissionNo },
@@ -481,7 +464,6 @@ class StudentExitService {
 
     exitRec.status = 'Completed';
 
-    // Zero Deletion: Update student status in Student collection consistently
     const isWithdrawal = ['Withdrawal', 'Mid-Year Withdrawal', 'Medical Withdrawal'].includes(exitRec.exitType);
     const targetStatus = isWithdrawal ? 'WITHDRAWN' : 'TRANSFERRED';
     await Student.findOneAndUpdate(

@@ -1,7 +1,3 @@
-/**
- * Statutory Data Retention & Requests - Repository Layer
- * Manages database access and persistence
- */
 
 const mongoose = require('mongoose');
 const { RetentionRule, DataRequest } = require('../../models/platformPolicy.model');

@@ -1,12 +1,3 @@
-/**
- * Notification Dispatcher Service
- * Specification 22.3: Notifications must follow actual state changes
- *
- * Rules:
- * - Send a notification when an application is submitted, a document is rejected,
- *   admission is approved, a fee payment is verified or a result is published.
- * - Do not send a success message before the transaction has actually completed.
- */
 const { Notification } = require('../models/notification.model');
 
 const NOTIFICATION_TRIGGER_EVENTS = [
@@ -17,10 +8,6 @@ const NOTIFICATION_TRIGGER_EVENTS = [
   'RESULT_PUBLISHED',
 ];
 
-/**
- * 1. Dispatch Notification on Actual Application Submission
- * Requires application to be persisted with a valid applicationNumber
- */
 const dispatchApplicationSubmitted = async ({ application, channel = 'SMS & Email' }) => {
   if (!application || !application.applicationNumber || !application._id) {
     throw new Error('Rule 22.3 Violation: Cannot dispatch notification before application record is committed.');
@@ -52,10 +39,6 @@ const dispatchApplicationSubmitted = async ({ application, channel = 'SMS & Emai
   };
 };
 
-/**
- * 2. Dispatch Notification on Actual Document Rejection
- * Requires document to be in REJECTED state with a mandatory reason
- */
 const dispatchDocumentRejected = async ({
   application,
   documentName,
@@ -98,10 +81,6 @@ const dispatchDocumentRejected = async ({
   };
 };
 
-/**
- * 3. Dispatch Notification on Actual Admission Approval & Offer Issuance
- * Requires application to be in APPROVED state
- */
 const dispatchAdmissionApproved = async ({
   application,
   classOffered,
@@ -143,10 +122,6 @@ const dispatchAdmissionApproved = async ({
   };
 };
 
-/**
- * 4. Dispatch Notification on Actual Fee Payment Verification
- * Requires payment to be in SUCCESS state with receipt generated
- */
 const dispatchFeePaymentVerified = async ({
   payment,
   receiptNumber,
@@ -188,10 +163,6 @@ const dispatchFeePaymentVerified = async ({
   };
 };
 
-/**
- * 5. Dispatch Notification on Actual Exam Result Publication
- * Requires exam to be marked isPublished = true
- */
 const dispatchResultPublished = async ({
   exam,
   classSection,

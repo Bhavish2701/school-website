@@ -1,6 +1,3 @@
-/**
- * Comprehensive Test Suite for Academic Module
- */
 const BASE_URL = 'http://localhost:5000/api/v1';
 
 const login = async (identifier, password) => {
@@ -25,7 +22,6 @@ const runAcademicTests = async () => {
   const studentToken = await login('student1', 'Student@123');
   console.log('Tokens generated.\n');
 
-  // 1. Academic Dashboard
   console.log('1. Testing GET /api/v1/academic/dashboard...');
   const dashRes = await fetch(`${BASE_URL}/academic/dashboard`, {
     headers: { Authorization: `Bearer ${principalToken}` },
@@ -37,7 +33,6 @@ const runAcademicTests = async () => {
   console.log(`Enrollment Summary:`, dashData.data?.dashboard?.classEnrollmentOverview);
   console.log();
 
-  // 2. Academic Years
   console.log('2. Testing GET /api/v1/academic/years...');
   const yearsRes = await fetch(`${BASE_URL}/academic/years`, {
     headers: { Authorization: `Bearer ${principalToken}` },
@@ -48,7 +43,6 @@ const runAcademicTests = async () => {
   console.log(`Current Year: ${yearsData.data?.years?.[0]?.name} (isCurrent: ${yearsData.data?.years?.[0]?.isCurrent})`);
   console.log();
 
-  // 3. Create Academic Year
   console.log('3. Testing POST /api/v1/academic/years (Create 2026-2027)...');
   const createYearRes = await fetch(`${BASE_URL}/academic/years`, {
     method: 'POST',
@@ -67,7 +61,6 @@ const runAcademicTests = async () => {
   console.log(`Status: ${createYearRes.status} (Expected 201)`);
   console.log(`Created: ${createYearData.data?.year?.name} [Status: ${createYearData.data?.year?.status}]\n`);
 
-  // 4. Classes & Sections List
   console.log('4. Testing GET /api/v1/academic/classes (Classes with live enrollment)...');
   const classesRes = await fetch(`${BASE_URL}/academic/classes`, {
     headers: { Authorization: `Bearer ${principalToken}` },
@@ -83,7 +76,6 @@ const runAcademicTests = async () => {
 
   const class10AId = firstClass?._id;
 
-  // 5. Get Class by ID
   console.log(`5. Testing GET /api/v1/academic/classes/:id (Class ${firstClass?.className}-${firstClass?.section})...`);
   const classDetailRes = await fetch(`${BASE_URL}/academic/classes/${class10AId}`, {
     headers: { Authorization: `Bearer ${principalToken}` },
@@ -94,7 +86,6 @@ const runAcademicTests = async () => {
   console.log(`Subject Allocations count: ${classDetailData.data?.class?.subjectAllocations?.length}`);
   console.log();
 
-  // 6. Create New Class Section
   console.log('6. Testing POST /api/v1/academic/classes (Create Class 7-B)...');
   const createClassRes = await fetch(`${BASE_URL}/academic/classes`, {
     method: 'POST',
@@ -114,7 +105,6 @@ const runAcademicTests = async () => {
   console.log(`Status: ${createClassRes.status} (Expected 201)`);
   console.log(`Created: Class ${createClassData.data?.class?.className}-${createClassData.data?.class?.section}\n`);
 
-  // 7. Subjects List
   console.log('7. Testing GET /api/v1/academic/subjects...');
   const subjectsRes = await fetch(`${BASE_URL}/academic/subjects`, {
     headers: { Authorization: `Bearer ${principalToken}` },
@@ -127,7 +117,6 @@ const runAcademicTests = async () => {
 
   const sampleSubjectId = subjectsData.data?.subjects?.[0]?._id;
 
-  // 8. Create New Subject
   console.log('8. Testing POST /api/v1/academic/subjects (Create Hindi HIN-10)...');
   const createSubRes = await fetch(`${BASE_URL}/academic/subjects`, {
     method: 'POST',
@@ -147,9 +136,7 @@ const runAcademicTests = async () => {
   console.log(`Status: ${createSubRes.status} (Expected 201)`);
   console.log(`Created Subject: ${createSubData.data?.subject?.code} - ${createSubData.data?.subject?.name}\n`);
 
-  // 9. Teacher Allocation
   console.log(`9. Testing POST /api/v1/academic/classes/:id/assign-teacher...`);
-  // Get teacher ID
   const teacherProfileRes = await fetch(`${BASE_URL}/teachers/me`, {
     headers: { Authorization: `Bearer ${teacherToken}` },
   });
@@ -174,7 +161,6 @@ const runAcademicTests = async () => {
   console.log(`Class Teacher allocated: ${assignData.data?.class?.classTeacher?.fullName}`);
   console.log(`Subject Allocations: ${assignData.data?.class?.subjectAllocations?.length} subjects configured\n`);
 
-  // 10. Class Assignments (Homework / Projects)
   console.log('10. Testing GET /api/v1/academic/assignments...');
   const assignListRes = await fetch(`${BASE_URL}/academic/assignments`, {
     headers: { Authorization: `Bearer ${teacherToken}` },
@@ -184,7 +170,6 @@ const runAcademicTests = async () => {
   console.log(`Active Assignments: ${assignListData.data?.assignments?.length}`);
   console.log();
 
-  // 11. Create Assignment (Teacher posting homework)
   console.log('11. Testing POST /api/v1/academic/assignments (Publish Homework)...');
   const createAssignRes = await fetch(`${BASE_URL}/academic/assignments`, {
     method: 'POST',
@@ -207,7 +192,6 @@ const runAcademicTests = async () => {
   console.log(`Published Assignment: "${createAssignData.data?.assignment?.title}" (Due: ${createAssignData.data?.assignment?.dueDate})\n`);
   const createdAssignId = createAssignData.data?.assignment?._id;
 
-  // 12. Update Assignment
   console.log(`12. Testing PATCH /api/v1/academic/assignments/:id...`);
   const patchAssignRes = await fetch(`${BASE_URL}/academic/assignments/${createdAssignId}`, {
     method: 'PATCH',
@@ -220,7 +204,6 @@ const runAcademicTests = async () => {
   const patchAssignData = await patchAssignRes.json();
   console.log(`Status: ${patchAssignRes.status} | Updated Total Marks: ${patchAssignData.data?.assignment?.totalMarks}\n`);
 
-  // 13. Delete Assignment
   console.log(`13. Testing DELETE /api/v1/academic/assignments/:id...`);
   const delAssignRes = await fetch(`${BASE_URL}/academic/assignments/${createdAssignId}`, {
     method: 'DELETE',
@@ -229,9 +212,7 @@ const runAcademicTests = async () => {
   const delAssignData = await delAssignRes.json();
   console.log(`Status: ${delAssignRes.status} (Expected 200) | Deleted: "${delAssignData.data?.title}"\n`);
 
-  // 14. RBAC Permission Checks
   console.log('14. Testing RBAC Permissions on Academic Routes...');
-  // Teacher attempting to create academic year (management only)
   const teacherCreateYearRes = await fetch(`${BASE_URL}/academic/years`, {
     method: 'POST',
     headers: {
@@ -242,7 +223,6 @@ const runAcademicTests = async () => {
   });
   console.log(`Teacher creating Academic Year -> Status: ${teacherCreateYearRes.status} (Expected 403 Forbidden)`);
 
-  // Student attempting to delete subject
   const studentDelSubjectRes = await fetch(`${BASE_URL}/academic/subjects/${sampleSubjectId}`, {
     method: 'DELETE',
     headers: { Authorization: `Bearer ${studentToken}` },

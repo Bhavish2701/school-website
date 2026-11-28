@@ -3,14 +3,12 @@ const assert = require('assert');
 
 console.log('=== TEST SUITE: MODULE 8 AUDIT LOGS (FORENSIC EVIDENCE & INVESTIGATION) ===\n');
 
-// 1. Verify 8.1 HTML Structure, Table, and KPI Summary Cards
 console.log('[CHECK 1] Verifying Section 8.1 Audit Log Explorer HTML Structure...');
 const html = fs.readFileSync('frontend/platform-admin/index.html', 'utf8');
 
 assert(html.includes('id="view-audit"'), 'View #view-audit must exist in HTML');
 assert(html.includes('platformApp.exportAuthorizedAuditReport()'), 'Primary action Export Authorized Report must exist');
 
-// 5 Summary KPI Cards
 const expectedKpis = [
   'kpiAuditTotal',
   'kpiAuditCritical',
@@ -23,7 +21,6 @@ expectedKpis.forEach(kpi => {
 });
 console.log('  ✓ 5 Summary KPI cards verified (Total, Critical/High, Denied/Failed, Operators, Vault Integrity)');
 
-// Multi-field Filters (Section 8.1)
 const expectedFilters = [
   'auditSearchInput',
   'auditStartDate',
@@ -42,7 +39,6 @@ expectedFilters.forEach(f => {
 });
 console.log('  ✓ All 8 Filter controls (Search, Date Range, User, Inst, Category, Action, Result, Severity, Record Ref) verified');
 
-// 9 Table Columns (Section 8.1)
 const tableHeaders = [
   'Event ID',
   'Timestamp',
@@ -60,7 +56,6 @@ tableHeaders.forEach(th => {
 assert(html.includes('id="auditLogsTableBody"'), '#auditLogsTableBody must exist');
 console.log('  ✓ All 9 Table columns and tbody verified');
 
-// 2. Verify 8.2 Event Detail Modal (#modalAuditEventDetail)
 console.log('\n[CHECK 2] Verifying Section 8.2 Event Detail Inspection Modal & Sensitive Masking...');
 assert(html.includes('id="modalAuditEventDetail"'), 'Modal #modalAuditEventDetail must exist');
 
@@ -90,7 +85,6 @@ expectedDetailFields.forEach(f => {
   assert(html.includes(`id="${f}"`), `Detail modal element #${f} must exist in HTML`);
 });
 
-// Sensitive masking guarantee notice in HTML
 assert(
   html.includes('Sensitive values (passwords, tokens, Aadhaar) masked') ||
   html.includes('passwords, session tokens'),
@@ -98,21 +92,20 @@ assert(
 );
 console.log('  ✓ Event detail modal verified with all 8.2 attributes, diff viewer, and sensitive masking notice');
 
-// 3. Verify 8.3 10 Statutory Categories in Backend Model
 console.log('\n[CHECK 3] Verifying Section 8.3 10 Statutory Audit Categories...');
 const { AUDIT_EVENT_CATEGORIES } = require('../backend/src/models/platformAudit.model');
 
 const required10Categories = [
-  'AUTH_ACCOUNTS',           // 1. Authentication and account changes
-  'INSTITUTIONS',            // 2. Institution activation or suspension
-  'RBAC_PERMISSIONS',        // 3. Role and permission changes
-  'SCHOOL_CONFIG',           // 4. Configuration changes
-  'INTEGRATIONS',            // 5. Integration changes
-  'DATA_IMPORT_EXPORT',      // 6. Data import and export
-  'BACKUP_RECOVERY',         // 7. Backup and recovery actions
-  'ADMIN_SUPPORT',           // 8. Administrative support actions
-  'SECURITY_ALERTS',         // 9. Security alerts
-  'DEPLOYMENT_OPS'           // 10. Deployment-related administrative events
+  'AUTH_ACCOUNTS',
+  'INSTITUTIONS',
+  'RBAC_PERMISSIONS',
+  'SCHOOL_CONFIG',
+  'INTEGRATIONS',
+  'DATA_IMPORT_EXPORT',
+  'BACKUP_RECOVERY',
+  'ADMIN_SUPPORT',
+  'SECURITY_ALERTS',
+  'DEPLOYMENT_OPS'
 ];
 
 required10Categories.forEach(cat => {
@@ -121,7 +114,6 @@ required10Categories.forEach(cat => {
 });
 console.log('  ✓ All 10 Statutory audit event categories verified in schema and frontend dropdown');
 
-// 4. Verify 8.4 JavaScript Controller Functions in platform-admin.js
 console.log('\n[CHECK 4] Verifying JavaScript Controller Exports in platform-admin.js...');
 const js = fs.readFileSync('frontend/js/platform-admin.js', 'utf8');
 
@@ -140,13 +132,11 @@ requiredJsFunctions.forEach(fn => {
 });
 console.log('  ✓ All 6 Module 8 JavaScript functions and platformApp exports verified');
 
-// 5. Verify Backend PlatformAuditService Business Logic, Masking, and Immutability
 console.log('\n[CHECK 5] Verifying Backend PlatformAuditService & Immutability Guarantees...');
 const PlatformAuditService = require('../backend/src/services/platformAudit.service');
 
 (async () => {
   try {
-    // 5.1 Summary Stats
     const summary = await PlatformAuditService.getAuditSummary();
     assert(summary.totalEvents >= 10, 'There must be at least 10 seeded audit events');
     assert(summary.criticalHighEvents >= 2, 'There must be at least 2 critical/high events');
@@ -154,31 +144,25 @@ const PlatformAuditService = require('../backend/src/services/platformAudit.serv
     assert(summary.vaultIntegrityStatus.includes('SEALED'), 'Vault integrity status must be sealed');
     console.log(`  ✓ Summary stats verified: Total=${summary.totalEvents}, Critical/High=${summary.criticalHighEvents}, Denied=${summary.deniedFailedEvents}, Actors=${summary.uniqueActors}`);
 
-    // 5.2 Multi-Field Filtering
     const allEventsRes = await PlatformAuditService.listEvents();
     assert(allEventsRes.success && allEventsRes.data.length >= 10, 'listEvents must return events');
 
-    // Filter by category
     const rbacEventsRes = await PlatformAuditService.listEvents({ category: 'RBAC_PERMISSIONS' });
     assert(rbacEventsRes.data.length >= 1, 'Filter by RBAC_PERMISSIONS must return events');
     assert(rbacEventsRes.data[0].category === 'RBAC_PERMISSIONS', 'Category must match');
 
-    // Filter by severity
     const criticalEventsRes = await PlatformAuditService.listEvents({ severity: 'CRITICAL' });
     assert(criticalEventsRes.data.length >= 1, 'Filter by CRITICAL must return events');
     assert(criticalEventsRes.data[0].severity === 'CRITICAL', 'Severity must match');
 
-    // Filter by result
     const deniedEventsRes = await PlatformAuditService.listEvents({ result: 'DENIED' });
     assert(deniedEventsRes.data.length >= 1, 'Filter by DENIED must return events');
     assert(deniedEventsRes.data[0].result === 'DENIED', 'Result must match');
 
-    // Search query
     const searchRes = await PlatformAuditService.listEvents({ search: 'SendGrid' });
     assert(searchRes.data.length >= 1, 'Search query for SendGrid must find integration event');
     console.log('  ✓ Multi-field filtering (Category, Severity, Result, Text Search) verified');
 
-    // 5.3 Event Detail & Related Events
     const singleRes = await PlatformAuditService.getEventById('EVT-2026-10491');
     assert(singleRes.success && singleRes.data, 'Must retrieve EVT-2026-10491');
     assert(singleRes.data.actor.name === 'Root Platform Administrator', 'Actor name must match');
@@ -186,7 +170,6 @@ const PlatformAuditService = require('../backend/src/services/platformAudit.serv
     assert(Array.isArray(singleRes.relatedEvents), 'relatedEvents must be an array');
     console.log(`  ✓ Event detail retrieved with ${singleRes.relatedEvents.length} correlated events`);
 
-    // 5.4 Sensitive Masking Verification (Rule 8.2 Invariant)
     const sensitiveLog = {
       action: 'ADMIN_CREDENTIAL_CHANGE',
       category: 'AUTH_ACCOUNTS',
@@ -214,11 +197,9 @@ const PlatformAuditService = require('../backend/src/services/platformAudit.serv
     assert(normalEmail.newValue === 'new@srividya.edu.in', 'Non-sensitive email field should be preserved');
     console.log('  ✓ Sensitive Masking Invariant verified: Passwords, tokens, and national IDs are permanently redacted');
 
-    // 5.5 Cryptographic Tamper Seal Verification
     assert(typeof logged.data.tamperSealHash === 'string' && logged.data.tamperSealHash.length === 64, 'tamperSealHash must be 64-char SHA-256');
     console.log(`  ✓ Cryptographic SHA-256 Tamper Seal generated: ${logged.data.tamperSealHash.slice(0, 16)}...`);
 
-    // 5.6 Export Authorized Report
     const reportRes = await PlatformAuditService.exportAuthorizedReport({ category: 'INSTITUTIONS' }, 'Root Platform Administrator');
     assert(reportRes.success, 'exportAuthorizedReport must succeed');
     assert(reportRes.csvContent.includes('# SRI VIDYA EDUCATIONAL TRUST - AUTHORIZED PLATFORM AUDIT EVIDENCE DOSSIER'), 'Must contain authorized report banner');

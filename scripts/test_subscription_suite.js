@@ -1,12 +1,3 @@
-/**
- * Sri Vidya Educational Trust - Module 10: Subscriptions & Plans Acceptance Test Suite
- * Validates:
- * 1. 10.1 Commercial Plans Directory (Listing, Create, Update, Publish, Archive)
- * 2. 10.2 Institution Subscriptions (Listing, Assign, Renew, Change Plan, Adjustments, Suspend/Cancel)
- * 3. 10.3 Usage, Quotas & Entitlements (Active users, Storage, Enabled modules, Warnings)
- * 4. Section 10.3 Statutory Record Protection & Non-Disruption Invariant Guarantee
- * 5. UI & Template Integrity in platform-admin index.html & platform-admin.js
- */
 
 const http = require('http');
 const fs = require('fs');
@@ -83,7 +74,6 @@ async function runTests() {
     }
   }
 
-  // 1. Summary KPI
   await asyncTest('GET /api/v1/platform/subscriptions/summary returns aggregate metrics', async () => {
     const res = await request('GET', '/api/v1/platform/subscriptions/summary');
     assert.strictEqual(res.status, 200);
@@ -96,7 +86,6 @@ async function runTests() {
     assert.strictEqual(d.statutoryGuarantee, 'AP_EDU_CODE_ACTIVE_NON_DISRUPTION');
   });
 
-  // 2. 10.1 Commercial Plans Directory Listing
   await asyncTest('GET /api/v1/platform/plans returns populated commercial tiers', async () => {
     const res = await request('GET', '/api/v1/platform/plans');
     assert.strictEqual(res.status, 200);
@@ -111,7 +100,6 @@ async function runTests() {
     assert(core.limits?.maxStudents, 'Must specify student limits');
   });
 
-  // 3. 10.1 Create, Update, Archive, Publish Plan
   await asyncTest('POST /api/v1/platform/plans creates a new commercial plan', async () => {
     const res = await request('POST', '/api/v1/platform/plans', {
       planId: 'PLAN-TEST-AI',
@@ -151,7 +139,6 @@ async function runTests() {
     assert.strictEqual(res.body.data.status, 'Archived');
   });
 
-  // 4. 10.2 Institution Subscriptions Listing
   await asyncTest('GET /api/v1/platform/subscriptions returns all institution contracts', async () => {
     const res = await request('GET', '/api/v1/platform/subscriptions');
     assert.strictEqual(res.status, 200);
@@ -166,7 +153,6 @@ async function runTests() {
     assert(mainCampus.usage?.activeStudents > 0, 'Must record active students usage');
   });
 
-  // 5. 10.2 Renew Subscription
   await asyncTest('POST /api/v1/platform/subscriptions/:id/renew extends contract renewal date', async () => {
     const res = await request('POST', '/api/v1/platform/subscriptions/SUB-2026-001/renew', {
       renewalDate: '2028-03-31T23:59:59Z',
@@ -177,7 +163,6 @@ async function runTests() {
     assert(new Date(res.body.data.renewalDate).getFullYear() >= 2028, 'Renewal year must be >= 2028');
   });
 
-  // 6. 10.2 Change / Migrate Plan
   await asyncTest('POST /api/v1/platform/subscriptions/:id/change-plan migrates institution to Enterprise tier', async () => {
     const res = await request('POST', '/api/v1/platform/subscriptions/SUB-2026-001/change-plan', {
       planId: 'PLAN-SVT-ENT'
@@ -187,7 +172,6 @@ async function runTests() {
     assert.strictEqual(res.body.data.planName, 'Multi-Academy Network Enterprise');
   });
 
-  // 7. 10.2 Record Billing Adjustment
   await asyncTest('POST /api/v1/platform/subscriptions/:id/adjustments records concession with trustee authorization', async () => {
     const res = await request('POST', '/api/v1/platform/subscriptions/SUB-2026-001/adjustments', {
       amount: 10000,
@@ -200,7 +184,6 @@ async function runTests() {
     assert.strictEqual(res.body.adjustment.amount, 10000);
   });
 
-  // 8. 10.2 Suspend with Non-Disruption Guarantee
   await asyncTest('POST /api/v1/platform/subscriptions/:id/status suspends subscription but preserves record access', async () => {
     const res = await request('POST', '/api/v1/platform/subscriptions/SUB-2026-002/status', {
       action: 'Suspend',
@@ -211,7 +194,6 @@ async function runTests() {
     assert(res.body.data.contractualNotes.includes('AP Statutory Invariant'), 'Must explicitly record non-disruption guarantee in contractual notes');
   });
 
-  // 9. 10.3 Usage & Entitlements
   await asyncTest('GET /api/v1/platform/subscriptions/usage/INST-001 returns active quotas and warnings', async () => {
     const res = await request('GET', '/api/v1/platform/subscriptions/usage/INST-001');
     assert.strictEqual(res.status, 200);
@@ -225,27 +207,21 @@ async function runTests() {
     assert(res.body.statutoryNonDisruptionGuarantee?.isProtected === true, 'Statutory non-disruption guarantee must be true');
   });
 
-  // 10. UI & Template Integrity in index.html
   test('frontend/platform-admin/index.html includes 10.1 plans, 10.2 subscriptions, 10.3 usage, and 5 modals', () => {
     const html = fs.readFileSync(path.join(__dirname, '..', 'frontend', 'platform-admin', 'index.html'), 'utf8');
 
-    // Section view root
     assert(html.includes('id="view-subscription"'), 'Must have #view-subscription');
 
-    // Sub tabs
     assert(html.includes('id="btnSubTabPlans"'), 'Must have #btnSubTabPlans');
     assert(html.includes('id="btnSubTabSubscriptions"'), 'Must have #btnSubTabSubscriptions');
     assert(html.includes('id="btnSubTabUsage"'), 'Must have #btnSubTabUsage');
 
-    // 10.1 Plans Directory
     assert(html.includes('id="planGridContainer"'), 'Must have #planGridContainer');
     assert(html.includes('id="txtPlanFilterSearch"'), 'Must have #txtPlanFilterSearch');
 
-    // 10.2 Subscriptions Table
     assert(html.includes('id="tblSubscriptionsBody"'), 'Must have #tblSubscriptionsBody');
     assert(html.includes('id="txtSubFilterSearch"'), 'Must have #txtSubFilterSearch');
 
-    // 10.3 Usage & Entitlements
     assert(html.includes('id="selUsageInstitution"'), 'Must have #selUsageInstitution');
     assert(html.includes('id="usageStudentValue"'), 'Must have #usageStudentValue');
     assert(html.includes('id="usageStorageValue"'), 'Must have #usageStorageValue');
@@ -253,7 +229,6 @@ async function runTests() {
     assert(html.includes('id="usageApiValue"'), 'Must have #usageApiValue');
     assert(html.includes('Section 10.3 Statutory Record Protection &amp; Non-Disruption Guarantee'), 'Must display non-disruption guarantee');
 
-    // 5 Modals
     assert(html.includes('id="modalCreateEditPlan"'), 'Must have #modalCreateEditPlan');
     assert(html.includes('id="modalAssignChangePlan"'), 'Must have #modalAssignChangePlan');
     assert(html.includes('id="modalRenewSubscription"'), 'Must have #modalRenewSubscription');
@@ -261,7 +236,6 @@ async function runTests() {
     assert(html.includes('id="modalSuspendCancelSubscription"'), 'Must have #modalSuspendCancelSubscription');
   });
 
-  // 11. Controller exports integrity in platform-admin.js
   test('frontend/js/platform-admin.js exports all Module 10 controller functions', () => {
     const js = fs.readFileSync(path.join(__dirname, '..', 'frontend', 'js', 'platform-admin.js'), 'utf8');
 

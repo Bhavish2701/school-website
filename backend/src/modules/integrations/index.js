@@ -1,7 +1,3 @@
-/**
- * External Integrations Directory - Module Aggregator
- * Exports all 6 architectural layers
- */
 
 const routes = require('./integrations.routes');
 const controller = require('./integrations.controller');

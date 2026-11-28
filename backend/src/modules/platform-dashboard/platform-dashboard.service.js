@@ -1,7 +1,3 @@
-/**
- * Platform Dashboard Telemetry - Service Layer
- * Business rules, calculations, and operational orchestration
- */
 
 const Repository = require('./platform-dashboard.repository');
 const MultiInstitutionSecurity = require('../common/multiInstitutionSecurity');

@@ -1,11 +1,6 @@
-/**
- * Sri Vidya Educational Trust - Backups & Recovery Models
- * Module 12: Backup Overview, Backup History, and Controlled 8-Step Recovery Workflow
- */
 
 const mongoose = require('mongoose');
 
-// 12.2 Backup Record Schema
 const BackupRecordSchema = new mongoose.Schema({
   backupId: {
     type: String,
@@ -44,7 +39,7 @@ const BackupRecordSchema = new mongoose.Schema({
   },
   sizeBytes: {
     type: Number,
-    default: 149737472 // ~142.8 MB
+    default: 149737472
   },
   sizeFormatted: {
     type: String,
@@ -100,7 +95,6 @@ const BackupRecordSchema = new mongoose.Schema({
   timestamps: true
 });
 
-// 12.3 Recovery Request Schema (Controlled 8-Step Workflow)
 const RecoveryRequestSchema = new mongoose.Schema({
   recoveryId: {
     type: String,
@@ -158,14 +152,6 @@ const RecoveryRequestSchema = new mongoose.Schema({
     min: 1,
     max: 8,
     default: 1
-    // 1: Requested
-    // 2: Target Environment Identified
-    // 3: Potential Impact Reviewed
-    // 4: Dual Authorized & Approved
-    // 5: Controlled Recovery Performed
-    // 6: Data Integrity Checked
-    // 7: System Validated
-    // 8: Recovery Logged in Audit Ledger
   },
   stepDetails: [{
     stepNumber: Number,

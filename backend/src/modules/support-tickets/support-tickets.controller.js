@@ -1,7 +1,3 @@
-/**
- * Support & Issue Management - Controller Layer
- * Handles HTTP requests, responses, and status codes
- */
 
 const Service = require('./support-tickets.service');
 

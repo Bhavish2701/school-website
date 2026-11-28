@@ -1,8 +1,3 @@
-/**
- * School Configuration Service
- * Scope: Manages 4.1 School Profile, 4.2 Academic Configuration, 4.3 Operational Defaults,
- * and 4.4 Document & Report Templates with strict versioning and audit traceability.
- */
 const mongoose = require('mongoose');
 const { SchoolConfig } = require('../models/schoolConfig.model');
 const { PlatformAudit } = require('../models/platformAudit.model');
@@ -13,10 +8,8 @@ try {
   const auditMod = require('../models/auditLog.model');
   AuditLogModel = auditMod.AuditLog || auditMod;
 } catch (e) {
-  // Graceful fallback
 }
 
-// In-memory fallback if MongoDB is not connected
 const defaultConfigs = {
   'INST-001': {
     institutionId: 'INST-001',
@@ -330,15 +323,11 @@ async function logAuditEvent(action, details, user = 'Platform Administrator', i
         reason: details
       });
     } catch (e) {
-      // Non-fatal
     }
   }
 }
 
 class SchoolConfigService {
-  /**
-   * Seed default configuration if empty
-   */
   async seedIfEmpty() {
     if (mongoose.connection.readyState === 1) {
       try {
@@ -348,14 +337,10 @@ class SchoolConfigService {
           await SchoolConfig.insertMany(docs);
         }
       } catch (err) {
-        // Fall back to memory
       }
     }
   }
 
-  /**
-   * Get complete configuration for an institution
-   */
   async getConfigByInstitution(institutionId = 'INST-001') {
     await this.seedIfEmpty();
 
@@ -366,7 +351,6 @@ class SchoolConfigService {
           return { success: true, data: config };
         }
       } catch (err) {
-        // Fall back to memory
       }
     }
 
@@ -374,9 +358,6 @@ class SchoolConfigService {
     return { success: true, data: fallback };
   }
 
-  /**
-   * 4.1 Update School Profile (Save Draft, Submit for Approval, Publish)
-   */
   async updateSchoolProfile(institutionId, profileData, action = 'publish', operator = 'Platform Administrator') {
     await this.seedIfEmpty();
     const configRes = await this.getConfigByInstitution(institutionId);
@@ -412,7 +393,6 @@ class SchoolConfigService {
           { upsert: true }
         );
       } catch (err) {
-        // Fallback
       }
     }
 
@@ -430,10 +410,6 @@ class SchoolConfigService {
     };
   }
 
-  /**
-   * 4.2 Update Academic Configuration
-   * Critical Rule: Changes to grading or roll number rules must not silently rewrite historical academic records.
-   */
   async updateAcademicConfig(institutionId, academicData, action = 'publish', operator = 'Platform Administrator') {
     await this.seedIfEmpty();
     const configRes = await this.getConfigByInstitution(institutionId);
@@ -486,7 +462,6 @@ class SchoolConfigService {
           { upsert: true }
         );
       } catch (err) {
-        // Fallback
       }
     }
 
@@ -503,9 +478,6 @@ class SchoolConfigService {
     };
   }
 
-  /**
-   * 4.3 Update Operational Defaults
-   */
   async updateOperationalDefaults(institutionId, defaultsData, operator = 'Platform Administrator') {
     await this.seedIfEmpty();
     const configRes = await this.getConfigByInstitution(institutionId);
@@ -525,7 +497,6 @@ class SchoolConfigService {
           { upsert: true }
         );
       } catch (err) {
-        // Fallback
       }
     }
 
@@ -542,9 +513,6 @@ class SchoolConfigService {
     };
   }
 
-  /**
-   * 4.4 List Document Templates
-   */
   async listDocumentTemplates(institutionId = 'INST-001', filterType = '') {
     const configRes = await this.getConfigByInstitution(institutionId);
     let templates = configRes.data.documentTemplates || [];
@@ -560,9 +528,6 @@ class SchoolConfigService {
     };
   }
 
-  /**
-   * 4.4 Create or Update Document Template (with strict versioning)
-   */
   async updateDocumentTemplate(institutionId, templateId, templateData, operator = 'Platform Administrator') {
     await this.seedIfEmpty();
     const configRes = await this.getConfigByInstitution(institutionId);
@@ -617,7 +582,6 @@ class SchoolConfigService {
           { upsert: true }
         );
       } catch (err) {
-        // Fallback
       }
     }
 

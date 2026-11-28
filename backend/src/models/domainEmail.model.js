@@ -1,11 +1,6 @@
-/**
- * Sri Vidya Educational Trust - Domains, Email & Notifications Models
- * Module 15: Domain Directory, DNS Configuration, Email Services, and Notification Templates
- */
 
 const mongoose = require('mongoose');
 
-// 15.2 DNS Record Subdocument Schema
 const DnsRecordSchema = new mongoose.Schema({
   recordId: {
     type: String,
@@ -49,7 +44,6 @@ const DnsRecordSchema = new mongoose.Schema({
   }
 }, { _id: false });
 
-// 15.1 & 15.2 Domain Schema
 const DomainSchema = new mongoose.Schema({
   domainId: {
     type: String,
@@ -85,7 +79,6 @@ const DomainSchema = new mongoose.Schema({
     enum: ['VERIFIED', 'PENDING_VERIFICATION', 'FAILED', 'UNVERIFIED'],
     default: 'PENDING_VERIFICATION',
     index: true
-    // Strict Invariant (Section 15.2): Never report a domain as verified before the relevant check succeeds
   },
   dnsStatus: {
     type: String,
@@ -130,7 +123,6 @@ const DomainSchema = new mongoose.Schema({
   timestamps: true
 });
 
-// 15.3 Email Service Schema
 const EmailDeliveryLogSchema = new mongoose.Schema({
   logId: { type: String, required: true },
   recipient: { type: String, required: true },
@@ -210,7 +202,6 @@ const EmailServiceSchema = new mongoose.Schema({
   timestamps: true
 });
 
-// 15.4 Notification Template Schema
 const TemplateVersionSchema = new mongoose.Schema({
   version: { type: Number, required: true },
   subject: { type: String, required: true },

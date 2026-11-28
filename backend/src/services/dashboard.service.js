@@ -1,17 +1,3 @@
-/**
- * Dashboard Business Logic Service Layer
- *
- * Implements high-performance aggregated dashboards for:
- * 1. Management: Student/teacher metrics, today's attendance, admissions pipeline, academic stats, recent activities
- * 2. Teacher: Assigned classes, today's timetable, class attendance tracking, active assignments, notifications
- * 3. Student: Attendance rate & logs, today's timetable, pending assignments, upcoming exams, results, notices
- * 4. Parent: Multi-child overview, child attendance, assignments, exams, fee ledger, notices, notifications
- *
- * Optimizations:
- * - Parallel asynchronous execution via Promise.all
- * - Lean queries with projection fields
- * - Strict object-level authorization & role scoping
- */
 const mongoose = require('mongoose');
 const { Student } = require('../models/student.model');
 const { Teacher } = require('../models/teacher.model');
@@ -65,9 +51,6 @@ function formatExamDateRange(start, end) {
 }
 
 class DashboardService {
-  /**
-   * Helper: Normalize date bounds for today in IST (Asia/Kolkata UTC+05:30)
-   */
   getTodayBounds() {
     const istOffsetMs = 5.5 * 60 * 60 * 1000;
     const nowIst = new Date(Date.now() + istOffsetMs);
@@ -85,9 +68,6 @@ class DashboardService {
     return { startOfToday, endOfToday, dayName, todayStr };
   }
 
-  // =========================================================================
-  // 1. MANAGEMENT DASHBOARD
-  // =========================================================================
   async getManagementDashboard(currentUser, query = {}) {
     const { startOfToday, endOfToday, dayName, todayStr } = this.getTodayBounds();
     const activeAcademicYearDoc = (query && query.academicYear)
@@ -98,7 +78,6 @@ class DashboardService {
       ? { academicYear: query.academicYear }
       : { $or: [{ academicYear: '2026-2027' }, { academicYear: '2025-2026' }, { academicYear: { $exists: false } }] };
 
-    // Execute independent analytical queries in parallel with zero hardcoded fallbacks
     const [
       studentCounts,
       studentStatusBreakdown,
@@ -123,7 +102,6 @@ class DashboardService {
       activeSubstitutionRecord,
       upcomingExamsRecords,
     ] = await Promise.all([
-      // 1. Student counts (total, active, gender distribution strictly across ACTIVE students)
       Promise.all([
         Student.countDocuments({ status: { $ne: 'DELETED' }, ...studentYearFilter }),
         Student.countDocuments({ status: 'ACTIVE', ...studentYearFilter }),
@@ -133,7 +111,6 @@ class DashboardService {
         ]),
       ]),
 
-      // 1b. Student detailed status breakdown
       Promise.all([
         Student.countDocuments({ status: 'TRANSFERRED', ...studentYearFilter }),
         Student.countDocuments({ status: 'WITHDRAWN', ...studentYearFilter }),
@@ -142,37 +119,31 @@ class DashboardService {
         Student.countDocuments({ status: 'SUSPENDED', ...studentYearFilter }),
       ]),
 
-      // 2. Teacher counts (total, active, on leave)
       Promise.all([
         Teacher.countDocuments(),
         Teacher.countDocuments({ status: 'ACTIVE' }),
         Teacher.countDocuments({ status: 'ON_LEAVE' }),
       ]),
 
-      // 2b. Non-teaching / administrative staff count (valid User model roles)
       User.countDocuments({
         role: { $in: ['OFFICE', 'VICE_PRINCIPAL', 'PRINCIPAL', 'SUPER_ADMIN'] },
         isActive: true,
       }),
 
-      // 3. Attendance overview for today
       AttendanceRegister.find({
         date: { $gte: startOfToday, $lte: endOfToday },
       }).lean(),
 
-      // 3b. Today's Individual Attendance Records (with student populated)
       AttendanceRecord.find({
         date: { $gte: startOfToday, $lte: endOfToday },
       })
         .populate('student', 'fullName admissionNo rollNo class section parentName parentPhone status')
         .lean(),
 
-      // 3c. Today's SMS Gateway Logs
       SmsLog.find({
         createdAt: { $gte: startOfToday, $lte: endOfToday },
       }).lean(),
 
-      // 4. Admissions pipeline breakdown (scoped to active academic year when specified)
       Admission.aggregate([
         ...(resolvedAcademicYear ? [{ $match: { $or: [{ academicYear: resolvedAcademicYear }, { academicYear: { $exists: false } }] } }] : []),
         { $group: { _id: '$status', count: { $sum: 1 } } },
@@ -181,7 +152,6 @@ class DashboardService {
         resolvedAcademicYear ? { $or: [{ academicYear: resolvedAcademicYear }, { academicYear: { $exists: false } }] } : {}
       ),
 
-      // 5. Academic statistics (classes, sections, pass rate)
       Promise.all([
         ClassSection.countDocuments({ status: 'ACTIVE' }),
         Student.aggregate([
@@ -194,13 +164,10 @@ class DashboardService {
         Exam.countDocuments(resolvedAcademicYear ? { academicYear: resolvedAcademicYear } : {}),
       ]),
 
-      // 5c. Approvals: Pending Leaves
       Leave.countDocuments({ status: { $in: ['PENDING', 'APPLIED'] } }),
 
-      // 5d. Approvals: Pending Admissions
       Admission.countDocuments({ status: { $in: ['SUBMITTED', 'UNDER_REVIEW', 'DOCUMENT_VERIFICATION'] } }),
 
-      // 5e. Approvals: Pending Transfer & Exit Requests (using actual StudentExit enum values)
       StudentExit.countDocuments({
         status: {
           $in: [
@@ -213,13 +180,10 @@ class DashboardService {
         },
       }),
 
-      // 5f. Approvals: Pending Student Archivals
       StudentArchival.countDocuments({ status: { $in: ['Pending Review', 'Under Review'] } }),
 
-      // 6. Comprehensive Financial Overview (Scoped to active/requested academic year)
       feeService.getFeeDashboardOverview({ academicYear: resolvedAcademicYear }),
 
-      // 7. Management Notifications
       Notification.find(
         currentUser && currentUser._id
           ? {
@@ -234,21 +198,18 @@ class DashboardService {
         .limit(10)
         .lean(),
 
-      // 8. Recent / Pending Admissions
       Admission.find()
         .sort({ createdAt: -1 })
         .limit(25)
         .select('applicationNumber studentName applyingClass applyingForClass parentName phone status academicYear createdAt')
         .lean(),
 
-      // 8. Recent activities: Receipts
       Receipt.find()
         .sort({ paymentDate: -1, createdAt: -1 })
         .limit(6)
         .populate('student', 'fullName admissionNo class section')
         .lean(),
 
-      // 8. Approved staff leaves active today
       Leave.find({
         status: 'APPROVED',
         startDate: { $lte: endOfToday },
@@ -258,7 +219,6 @@ class DashboardService {
         .populate('teacher', 'fullName employeeId specialization department')
         .lean(),
 
-      // 9. Today's Approved Timetable for Management Dashboard (Sunday = school holiday, empty schedule)
       dayName === 'Sunday'
         ? Promise.resolve([])
         : Timetable.find({
@@ -270,7 +230,6 @@ class DashboardService {
             .sort({ periodNumber: 1 })
             .lean(),
 
-      // 10. All Confirmed Teacher Substitutions for Today
       Substitution.find({
         date: { $gte: startOfToday, $lte: endOfToday },
         status: 'CONFIRMED',
@@ -278,7 +237,6 @@ class DashboardService {
         .sort({ createdAt: -1 })
         .lean(),
 
-      // 11. Upcoming Examinations
       Exam.find({
         endDate: { $gte: startOfToday },
         status: { $ne: 'COMPLETED' },
@@ -288,7 +246,6 @@ class DashboardService {
         .lean(),
     ]);
 
-    // Format Student Count
     const [totalStudents, activeStudents, studentGenderAgg] = studentCounts;
     const [transferredCount, withdrawnCount, archivedCount, inactiveCount, suspendedCount] = studentStatusBreakdown;
     const genderDist = { male: 0, female: 0, other: 0 };
@@ -296,11 +253,9 @@ class DashboardService {
       if (g._id && genderDist[g._id] !== undefined) genderDist[g._id] = g.count;
     });
 
-    // Format Teacher Count
     const [totalTeachers, activeTeachers, onLeaveTeachers] = teacherCounts;
     const totalStaffCount = totalTeachers + employeeCount;
 
-    // Format Attendance (Zero hardcoded values: reflects actual registers or marked state)
     let todayPresent = 0;
     let todayAbsent = 0;
     let todayTotalReported = 0;
@@ -311,7 +266,6 @@ class DashboardService {
       todayTotalReported += reg.totalStudents || 0;
     });
 
-    // Process Today's Absentee List directly from actual database records
     const todayAbsentees = [];
     let unexcusedCount = 0;
     let medicalCount = 0;
@@ -417,7 +371,6 @@ class DashboardService {
       ? Math.round((todayPresent / todayTotalReported) * 1000) / 10
       : 0;
 
-    // Format Admissions pipeline
     const admissionStatuses = {
       SUBMITTED: 0,
       UNDER_REVIEW: 0,
@@ -432,7 +385,6 @@ class DashboardService {
       }
     });
 
-    // Format Academic statistics
     const [
       activeSectionsCount,
       classDistributionAgg,
@@ -446,7 +398,6 @@ class DashboardService {
         ? Math.round((passedExamMarks / totalExamMarks) * 1000) / 10
         : 0;
 
-    // Consolidate Recent Activities Timeline
     const activities = [];
 
     recentAdmissions.slice(0, 4).forEach((adm) => {
@@ -488,12 +439,10 @@ class DashboardService {
     const totalOutstandingVal = financesOverview?.totalOutstanding || 0;
     const totalPendingApprovals = pendingLeavesCount + pendingAdmissionsCount + pendingExitsCount + pendingArchivalsCount;
 
-    // Normalize active substitutions array and match strictly by period + class
     const substitutionsList = Array.isArray(activeSubstitutionRecord)
       ? activeSubstitutionRecord
       : (activeSubstitutionRecord ? [activeSubstitutionRecord] : []);
 
-    // Format Timetable Periods & Substitutions for Management Dashboard
     const periodsList = (todayTimetableRecords || []).map((p) => {
       const matchedSub = substitutionsList.find((sub) => {
         const periodMatch =
@@ -559,24 +508,9 @@ class DashboardService {
       });
     }
 
-    const pendingAdmissionsQueue = recentAdmissions
-      .filter((a) => ['SUBMITTED', 'UNDER_REVIEW', 'DOCUMENT_VERIFICATION'].includes(a.status))
-      .map((a) => ({
-        id: a._id,
-        applicationNumber: a.applicationNumber,
-        studentName: a.studentName,
-        applyingClass: a.applyingClass || a.applyingForClass || '',
-        parentName: a.parentName || '',
-        phone: a.phone || '',
-        status: a.status,
-        createdAt: a.createdAt,
-      }));
-
-    // Build consolidated live pending approvals queue across Leave, Exit, Archival, Admission
-    const [pendingLeavesDocs, pendingExitsDocs, pendingArchivalsDocs] = await Promise.all([
+    const [pendingLeavesDocs, pendingExitsDocs, pendingArchivalsDocs, pendingAdmissionsDocs] = await Promise.all([
       Leave.find({ status: { $in: ['PENDING', 'APPLIED'] } })
         .sort({ createdAt: -1 })
-        .limit(10)
         .populate('teacher', 'fullName employeeId specialization department')
         .lean(),
       StudentExit.find({
@@ -591,15 +525,28 @@ class DashboardService {
         },
       })
         .sort({ createdAt: -1 })
-        .limit(5)
         .select('exitRequestId studentName admissionNo class exitType status createdAt')
         .lean(),
       StudentArchival.find({ status: { $in: ['Pending Review', 'Under Review'] } })
         .sort({ createdAt: -1 })
-        .limit(5)
         .select('archivalRequestId studentName admissionNo class category status createdAt')
         .lean(),
+      Admission.find({ status: { $in: ['SUBMITTED', 'UNDER_REVIEW', 'DOCUMENT_VERIFICATION'] } })
+        .sort({ createdAt: -1 })
+        .select('applicationNumber studentName applyingClass applyingForClass parentName phone status academicYear createdAt')
+        .lean(),
     ]);
+
+    const pendingAdmissionsQueue = pendingAdmissionsDocs.map((a) => ({
+      id: a._id,
+      applicationNumber: a.applicationNumber,
+      studentName: a.studentName,
+      applyingClass: a.applyingClass || a.applyingForClass || '',
+      parentName: a.parentName || '',
+      phone: a.phone || '',
+      status: a.status,
+      createdAt: a.createdAt,
+    }));
 
     const pendingApprovalsQueue = [
       ...pendingLeavesDocs.map((lv) => ({
@@ -629,12 +576,12 @@ class DashboardService {
         status: arc.status,
         createdAt: arc.createdAt,
       })),
-      ...pendingAdmissionsQueue.slice(0, 25).map((adm) => ({
+      ...pendingAdmissionsQueue.map((adm) => ({
         id: adm.id,
         category: 'ADMISSION',
         reference: adm.applicationNumber,
         title: `Admission Review: ${adm.studentName}`,
-        subtitle: `Applying for Class ${adm.applyingClass}`,
+        subtitle: `Applying for Class ${adm.applyingClass}${adm.parentName ? ` • Parent: ${adm.parentName}${adm.phone ? ` (${adm.phone})` : ''}` : ''}`,
         status: adm.status,
         createdAt: adm.createdAt,
       })),
@@ -642,7 +589,6 @@ class DashboardService {
 
     const firstSub = substitutionsList[0] || null;
 
-    // Format Upcoming Examinations (Excludes completed and past exams)
     const upcomingExamsList = (upcomingExamsRecords || [])
       .filter((ex) => {
         if (ex.status === 'COMPLETED') return false;
@@ -776,13 +722,9 @@ class DashboardService {
     };
   }
 
-  // =========================================================================
-  // 2. TEACHER DASHBOARD
-  // =========================================================================
   async getTeacherDashboard(currentUser, requestedTeacherId = null) {
     const { startOfToday, endOfToday, dayName } = this.getTodayBounds();
 
-    // 1. Resolve Teacher Document strictly for authenticated TEACHER (no cross-teacher fallback)
     let teacher = null;
     const isManagementRole = currentUser && ['SUPER_ADMIN', 'PRINCIPAL', 'VICE_PRINCIPAL', 'OFFICE'].includes(currentUser.role);
     if (requestedTeacherId && isManagementRole) {
@@ -810,7 +752,6 @@ class DashboardService {
       ? [{ recipientUser: currentUser._id }, { recipientRole: 'TEACHER' }]
       : [{ recipientRole: 'TEACHER' }];
 
-    // 2. Run Parallel Queries
     const [
       studentsInClassesCount,
       todayRegisters,
@@ -819,7 +760,6 @@ class DashboardService {
       unreadNotifCount,
       pendingLeavesCount,
     ] = await Promise.all([
-      // Total students in teacher's assigned classes
       assignedClasses.length > 0
         ? Student.countDocuments({
             status: 'ACTIVE',
@@ -830,7 +770,6 @@ class DashboardService {
           })
         : 0,
 
-      // Attendance registers for teacher's classes today
       AttendanceRegister.find({
         date: { $gte: startOfToday, $lte: endOfToday },
         $or: assignedClasses.map((a) => ({
@@ -839,7 +778,6 @@ class DashboardService {
         })),
       }).lean(),
 
-      // Active / recent assignments
       Assignment.find({
         $or: [
           { teacher: teacher._id },
@@ -850,7 +788,6 @@ class DashboardService {
         .limit(6)
         .lean(),
 
-      // Notifications
       Notification.find({
         $or: notifUserQuery,
       })
@@ -869,7 +806,6 @@ class DashboardService {
       }),
     ]);
 
-    // Timetable for today
     const daySchedule = (teacher.timetable || []).find(
       (s) => s.day.toLowerCase() === dayName.toLowerCase()
     );
@@ -877,7 +813,6 @@ class DashboardService {
       (a, b) => a.periodNumber - b.periodNumber
     );
 
-    // Map attendance status per assigned class
     const attendanceTracker = assignedClasses.map((ac) => {
       const reg = todayRegisters.find(
         (r) => r.class === ac.class && r.section === ac.section
@@ -967,13 +902,9 @@ class DashboardService {
     };
   }
 
-  // =========================================================================
-  // 3. STUDENT DASHBOARD
-  // =========================================================================
   async getStudentDashboard(currentUser, requestedStudentId = null) {
     const { startOfToday, endOfToday, dayName } = this.getTodayBounds();
 
-    // 1. Resolve Student Document based on strict authorization (fail closed if unauthenticated)
     let student = null;
 
     if (!currentUser) {
@@ -1010,7 +941,6 @@ class DashboardService {
       throw ApiError.notFound('Student record not found or access unauthorized');
     }
 
-    // 2. Run Parallel Queries for Student Components
     const [
       attendanceStats,
       todayAttendanceRecord,
@@ -1021,7 +951,6 @@ class DashboardService {
       recentResults,
       notices,
     ] = await Promise.all([
-      // Total attendance breakdown
       Promise.all([
         AttendanceRecord.countDocuments({ student: student._id }),
         AttendanceRecord.countDocuments({
@@ -1034,20 +963,17 @@ class DashboardService {
         }),
       ]),
 
-      // Today's attendance record
       AttendanceRecord.findOne({
         student: student._id,
         date: { $gte: startOfToday, $lte: endOfToday },
       }).lean(),
 
-      // Recent 7 attendance records
       AttendanceRecord.find({ student: student._id })
         .sort({ date: -1 })
         .limit(7)
         .select('date status remarks')
         .lean(),
 
-      // Timetable: Find teachers who teach this student's class and section
       Teacher.find({
         status: 'ACTIVE',
         $or: [
@@ -1058,7 +984,6 @@ class DashboardService {
         .select('fullName employeeId timetable')
         .lean(),
 
-      // Active / upcoming assignments for student's class and section
       Assignment.find({
         class: student.class,
         section: { $in: [student.section, 'ALL'] },
@@ -1068,7 +993,6 @@ class DashboardService {
         .limit(5)
         .lean(),
 
-      // Upcoming or active exams for student's class
       Exam.find({
         classes: student.class,
         status: { $in: ['UPCOMING', 'ONGOING'] },
@@ -1077,7 +1001,6 @@ class DashboardService {
         .limit(4)
         .lean(),
 
-      // Published exam results
       ExamMark.find({
         student: student._id,
         isPublished: true,
@@ -1087,7 +1010,6 @@ class DashboardService {
         .limit(3)
         .lean(),
 
-      // Notices & announcements for students
       Notification.find({
         $or: [
           { recipientRole: 'STUDENT' },
@@ -1099,7 +1021,6 @@ class DashboardService {
         .lean(),
     ]);
 
-    // Build today's timetable for student
     const studentDayPeriods = [];
     timetableTeachers.forEach((t) => {
       const schedule = (t.timetable || []).find(
@@ -1126,7 +1047,6 @@ class DashboardService {
 
     studentDayPeriods.sort((a, b) => a.periodNumber - b.periodNumber);
 
-    // Format Attendance Numbers (no fabricated 92.0 fallback)
     const [totalAttDays, presentDays, absentDays] = attendanceStats;
     const computedPercentage =
       totalAttDays > 0
@@ -1215,13 +1135,9 @@ class DashboardService {
     };
   }
 
-  // =========================================================================
-  // 4. PARENT DASHBOARD
-  // =========================================================================
   async getParentDashboard(currentUser, requestedChildId = null) {
     const { startOfToday, endOfToday } = this.getTodayBounds();
 
-    // 1. Resolve Children belonging to this Parent
     const parentUserId = currentUser._id;
     const registeredChildren = currentUser.children || [];
 
@@ -1253,7 +1169,6 @@ class DashboardService {
       };
     }
 
-    // Determine active / selected child
     let activeChild = children[0];
     if (requestedChildId) {
       const foundChild = children.find(
@@ -1267,7 +1182,6 @@ class DashboardService {
       activeChild = foundChild;
     }
 
-    // 2. Fetch Selected Child's Academic & Administrative Data in Parallel
     const [
       todayAttendance,
       attendanceHistory,
@@ -1277,20 +1191,17 @@ class DashboardService {
       notices,
       notifications,
     ] = await Promise.all([
-      // Today's attendance for child
       AttendanceRecord.findOne({
         student: activeChild._id,
         date: { $gte: startOfToday, $lte: endOfToday },
       }).lean(),
 
-      // Recent 5 attendance logs
       AttendanceRecord.find({ student: activeChild._id })
         .sort({ date: -1 })
         .limit(5)
         .select('date status remarks')
         .lean(),
 
-      // Active assignments for child's class
       Assignment.find({
         class: activeChild.class,
         section: { $in: [activeChild.section, 'ALL'] },
@@ -1300,7 +1211,6 @@ class DashboardService {
         .limit(5)
         .lean(),
 
-      // Upcoming exams for child's class
       Exam.find({
         classes: activeChild.class,
         status: { $in: ['UPCOMING', 'ONGOING'] },
@@ -1309,12 +1219,10 @@ class DashboardService {
         .limit(4)
         .lean(),
 
-      // Fee ledger & outstanding balance
       Fee.findOne({ student: activeChild._id })
         .sort({ createdAt: -1 })
         .lean(),
 
-      // Notices
       Notification.find({
         $or: [
           { recipientRole: 'PARENT' },
@@ -1325,7 +1233,6 @@ class DashboardService {
         .limit(5)
         .lean(),
 
-      // Notifications
       Notification.find({
         $or: [
           { recipientRole: 'PARENT' },
@@ -1337,7 +1244,6 @@ class DashboardService {
         .lean(),
     ]);
 
-    // Format child's fee details (no fabricated ₹35,000 Paid fallback)
     const feesData = childFeeLedger
       ? {
           totalAmount: childFeeLedger.totalAmount,
@@ -1439,11 +1345,6 @@ class DashboardService {
     };
   }
 
-  /**
-   * 5. Get Multi-Tenant Platform Administration Dashboard (Specification 2.1 & 2.2)
-   * Dynamically aggregates live metrics directly from MongoDB collections:
-   * Institutions, User Accounts, Support Tickets, Audits, Health Telemetry
-   */
   async getPlatformDashboard(user = null, query = {}) {
     const os = require('os');
     const fs = require('fs');
@@ -1590,7 +1491,6 @@ class DashboardService {
       activeInstitutions = 3;
     }
 
-    // Live DB Ping
     let dbStatus = 'Healthy';
     let dbLatencyMs = 0;
     try {
@@ -1606,7 +1506,6 @@ class DashboardService {
       dbLatencyMs = -1;
     }
 
-    // Live Storage Check
     let storageStatus = 'Healthy';
     try {
       const probeFile = path.join(os.tmpdir(), `pa_health_${Date.now()}.tmp`);
@@ -1622,7 +1521,6 @@ class DashboardService {
     const uptimeHours = (process.uptime() / 3600).toFixed(2);
     const activeTermLabel = activeAcademicYearDoc ? activeAcademicYearDoc.name : null;
 
-    // Format Campuses dynamically from Institution metrics in MongoDB
     const campuses = (activeCampuses || []).map((inst, idx) => ({
       id: inst.institutionId || String(inst._id),
       name: inst.name,
@@ -1643,7 +1541,6 @@ class DashboardService {
       badge: idx === 0 ? 'Primary Campus' : (inst.type || 'Campus'),
     }));
 
-    // Real Audit Activity formatting (reads PlatformAudit actor & targetEntity accurately)
     let maskedActivity = (recentAuditLogs || []).map((l) => {
       const rawUser = l.actor?.name || l.actor?.email || l.user || l.operator || 'System Operator';
       const maskedUser = rawUser.includes('@')
@@ -1690,7 +1587,6 @@ class DashboardService {
       ];
     }
 
-    // Dynamic Operational Tasks strictly from live DB counts
     const operationalTasks = [];
     if (onboardingInstitutions > 0) {
       operationalTasks.push({

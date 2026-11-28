@@ -1,11 +1,7 @@
-/**
- * Academic Year Mongoose Model
- * Manages school academic calendar cycles, terms, and current active year
- */
 const mongoose = require('mongoose');
 
 const termSchema = new mongoose.Schema({
-  name: { type: String, required: true }, // e.g. "Term 1", "Term 2"
+  name: { type: String, required: true },
   startDate: { type: Date, required: true },
   endDate: { type: Date, required: true },
 });
@@ -44,7 +40,6 @@ const academicYearSchema = new mongoose.Schema(
   }
 );
 
-// If an academic year is marked as isCurrent, unmark others
 academicYearSchema.pre('save', async function (next) {
   if (this.isModified('isCurrent') && this.isCurrent) {
     await this.constructor.updateMany(

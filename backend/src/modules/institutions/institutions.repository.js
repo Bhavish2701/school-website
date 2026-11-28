@@ -1,7 +1,3 @@
-/**
- * Institutions Module - Repository Layer
- * Manages database access and persistence for institutional tenants
- */
 
 const { Institution } = require('../../models/institution.model');
 const mongoose = require('mongoose');

@@ -1,16 +1,3 @@
-/**
- * Test Suite 10: Admissions Module API Tests
- * Covers:
- * - Public submit admission application (201)
- * - Validation error on missing applicant details (422)
- * - Public track application status (200)
- * - Track status with invalid reference/phone (404 / 400)
- * - Management review and status update (200)
- * - Management auto-enroll student (200)
- * - Duplicate enrollment prevention (400 / 409)
- * - Unauthorized roles denied access to management admissions (403 Forbidden)
- * - 401 Unauthenticated requests
- */
 const request = require('supertest');
 const app = require('../src/app');
 const { seedBaseUsers } = require('./helpers/testFixtures');
@@ -53,7 +40,6 @@ describe('10 - Admissions Module API Test Suite', () => {
       const res = await request(app)
         .post('/api/v1/admissions/apply')
         .send({
-          // Missing studentName, dob, gender, applyingClass, parentName, phone
           email: 'incomplete@test.com',
         });
 

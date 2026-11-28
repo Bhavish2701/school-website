@@ -1,11 +1,6 @@
-/**
- * Sri Vidya Educational Trust - Domains, Email & Notifications Controller
- * Module 15: Domain Directory, DNS Configuration, Email Services, and Notification Templates
- */
 
 const DomainEmailService = require('../services/domainEmail.service');
 
-// 15.1 & 15.2 Domain Directory & DNS
 const listDomains = async (req, res) => {
   try {
     const result = await DomainEmailService.listDomains(req.query);
@@ -107,7 +102,6 @@ const toggleDomain = async (req, res) => {
   }
 };
 
-// 15.3 Email Service Management
 const listEmailServices = async (req, res) => {
   try {
     const result = await DomainEmailService.listEmailServices();
@@ -162,7 +156,6 @@ const getDeliveryLogs = async (req, res) => {
   }
 };
 
-// 15.4 Notification Templates
 const listTemplates = async (req, res) => {
   try {
     const result = await DomainEmailService.listNotificationTemplates(req.query);

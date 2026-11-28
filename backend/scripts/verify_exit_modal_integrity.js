@@ -3,7 +3,6 @@ const http = require('http');
 
 console.log('=== SRI VIDYA ERP: EXIT MODAL VERIFICATION ===');
 
-// 1. Verify index.html
 const html = fs.readFileSync('frontend/administration-portal/index.html', 'utf8');
 
 const requiredElements = [
@@ -80,7 +79,6 @@ if (missingElements.length > 0) {
   console.log('PASS: All 57 required HTML IDs and classes exist in index.html');
 }
 
-// 2. Verify portal.css
 const css = fs.readFileSync('frontend/css/portal.css', 'utf8');
 
 const requiredCssTokens = [
@@ -129,7 +127,6 @@ if (missingCss.length > 0) {
   console.log('PASS: All 30 required CSS selectors and properties exist in portal.css');
 }
 
-// 3. Test HTTP Server
 http.get('http://localhost:5000/api/dashboard', res => {
   console.log('PASS: Application server responds with HTTP', res.statusCode);
   process.exit(missingElements.length === 0 && missingCss.length === 0 ? 0 : 1);

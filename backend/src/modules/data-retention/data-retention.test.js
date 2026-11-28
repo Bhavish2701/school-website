@@ -1,6 +1,3 @@
-/**
- * Statutory Data Retention & Requests - Module Test
- */
 
 const assert = require('assert');
 const Service = require('./data-retention.service');
@@ -9,7 +6,6 @@ const Validation = require('./data-retention.validation');
 async function testModule() {
   console.log('Testing Statutory Data Retention & Requests Module Layers...');
 
-  // 1. Validation test
   let valFailed = false;
   const mockReq = { method: 'POST', body: {} };
   const mockRes = {
@@ -23,7 +19,6 @@ async function testModule() {
   Validation.validateRequest(mockReq, mockRes, () => {});
   assert.strictEqual(valFailed, true, 'Validation correctly rejects empty payload');
 
-  // 2. Service test
   const res = await Service.getOverview({ user: { scope: 'PLATFORM_WIDE' } });
   assert.strictEqual(res.success, true, 'Service getOverview executes successfully');
 

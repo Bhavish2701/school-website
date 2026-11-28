@@ -1,6 +1,3 @@
-/**
- * Sri Vidya Educational Trust - Deployment History Routes (11.2)
- */
 
 const express = require('express');
 const router = express.Router();

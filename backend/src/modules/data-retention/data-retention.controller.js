@@ -1,7 +1,3 @@
-/**
- * Statutory Data Retention & Requests - Controller Layer
- * Handles HTTP requests, responses, and status codes
- */
 
 const Service = require('./data-retention.service');
 

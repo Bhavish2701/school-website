@@ -1,7 +1,3 @@
-/**
- * ATTENDANCE Module
- * Student & Staff Attendance, Late Arrivals, Absences, Corrections, Summaries
- */
 const routes = require('./routes');
 
 module.exports = {

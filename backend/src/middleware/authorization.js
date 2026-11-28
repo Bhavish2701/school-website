@@ -1,7 +1,3 @@
-/**
- * Authorization Middleware (RBAC & Permissions)
- * Verifies roles and fine-grained permissions for secured endpoints
- */
 const {
   authorizeRoles,
   authorizeResource,

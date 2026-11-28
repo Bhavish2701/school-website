@@ -1,7 +1,3 @@
-/**
- * Security & Access Threat Monitoring - Controller Layer
- * Handles HTTP requests, responses, and status codes
- */
 
 const Service = require('./security-monitoring.service');
 

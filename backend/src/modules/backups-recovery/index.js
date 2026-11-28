@@ -1,7 +1,3 @@
-/**
- * Backups & Disaster Recovery - Module Aggregator
- * Exports all 6 architectural layers
- */
 
 const routes = require('./backups-recovery.routes');
 const controller = require('./backups-recovery.controller');

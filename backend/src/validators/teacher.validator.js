@@ -1,6 +1,3 @@
-/**
- * Teacher Module Request Validators
- */
 const validate = require('../middleware/validate.middleware');
 const { TEACHER_STATUS } = require('../models/teacher.model');
 const { LEAVE_TYPES, LEAVE_STATUS } = require('../models/leave.model');

@@ -1,7 +1,3 @@
-/**
- * Institutional Domains & DNS - Controller Layer
- * Handles HTTP requests, responses, and status codes
- */
 
 const Service = require('./domains.service');
 

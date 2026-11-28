@@ -1,7 +1,3 @@
-/**
- * Email Relay & Notification Delivery - Validation Layer
- * Enforces field schemas, constraints, and data integrity
- */
 
 class EmailNotificationsValidation {
   static validateRequest(req, res, next) {

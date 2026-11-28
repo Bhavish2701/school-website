@@ -8,21 +8,17 @@
   <meta name="description"
     content="Central multi-tenant platform administration and institutional infrastructure configuration for Sri Vidya Educational Trust.">
 
-  <!-- FontAwesome & Google Fonts -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
     rel="stylesheet">
 
-  <!-- Core Styles -->
   <link rel="stylesheet" href="/css/style.css?v=20261122-v13">
   <link rel="stylesheet" href="/css/portal.css?v=20261122-v13">
   <link rel="stylesheet" href="/css/platform-admin.css?v=20261122-v13">
-  <!-- Skeuomorphic 2-Level Portal Design Tokens & Styles -->
   <link rel="stylesheet" href="/css/skeuomorphic-portal.css?v=20261122-v13">
   <link rel="stylesheet" href="/css/floating-bottom-nav.css?v=20261122-v13">
-  <!-- Early Route Guard: Unified Authentication Verification -->
   <script>
     (function() {
       try {
@@ -34,19 +30,13 @@
       } catch (e) {}
     })();
   </script>
-  <!-- Modern Input Field System -->
   <link rel="stylesheet" href="/css/modern-inputs.css?v=20261122-v13">
-  <!-- Modern Popover & Overlay Component System -->
   <link rel="stylesheet" href="/css/modern-popovers.css?v=20261122-v13">
-  <!-- Liquid-Fill Toggle Switch Design System -->
   <link rel="stylesheet" href="/css/liquid-toggles.css?v=20261122-v18">
 </head>
 
 <body class="platform-admin-body">
 
-  <!-- =========================================================================
-       SIDEBAR NAVIGATION (10 RECOMMENDED PLATFORM MODULES)
-       ========================================================================= -->
   <aside class="portal-sidebar" id="sidebar">
     <div class="sidebar-header">
       <a href="#dashboard" class="sidebar-brand" onclick="platformApp.navigateTo('dashboard'); return false;">
@@ -64,7 +54,6 @@
     </div>
 
         <nav class="sidebar-nav" id="platformSidebarNav">
-      <!-- 1. DASHBOARD (Direct Level 1 module) -->
       <div class="nav-item active" data-module="dashboard">
         <a href="#dashboard" class="nav-link" data-view="dashboard" onclick="platformApp.navigateTo('dashboard')">
           <span class="nav-icon"><i class="fa-solid fa-gauge-high"></i></span>
@@ -73,7 +62,6 @@
         </a>
       </div>
 
-      <!-- 2. INSTITUTIONS & TENANCY (Level 1 with Level 2 submenus) -->
       <div class="nav-item" data-module="institutions-tenancy">
         <a href="#institutions" class="nav-link" onclick="platformApp.toggleSubmenu('institutions-tenancy', event); return false;">
           <span class="nav-icon"><i class="fa-solid fa-school-flag"></i></span>
@@ -88,7 +76,6 @@
         </div>
       </div>
 
-      <!-- 3. ACCESS & SECURITY (Level 1 with Level 2 submenus) -->
       <div class="nav-item" data-module="access-security">
         <a href="#users" class="nav-link" onclick="platformApp.toggleSubmenu('access-security', event); return false;">
           <span class="nav-icon"><i class="fa-solid fa-user-shield"></i></span>
@@ -103,7 +90,6 @@
         </div>
       </div>
 
-      <!-- 4. INFRASTRUCTURE & HEALTH (Level 1 with Level 2 submenus) -->
       <div class="nav-item" data-module="platform-infrastructure">
         <a href="#subscription" class="nav-link" onclick="platformApp.toggleSubmenu('platform-infrastructure', event); return false;">
           <span class="nav-icon"><i class="fa-solid fa-server"></i></span>
@@ -119,7 +105,6 @@
         </div>
       </div>
 
-      <!-- 5. PLATFORM GOVERNANCE (Level 1 with Level 2 submenus) -->
       <div class="nav-item" data-module="platform-governance">
         <a href="#domains-email" class="nav-link" onclick="platformApp.toggleSubmenu('platform-governance', event); return false;">
           <span class="nav-icon"><i class="fa-solid fa-gears"></i></span>
@@ -135,7 +120,6 @@
         </div>
       </div>
 
-      <!-- 6. SCHOOL GATEWAYS (Level 1 with Level 2 submenus) -->
       <div class="nav-item" data-module="school-gateways">
         <a href="#school-gateways" class="nav-link" onclick="platformApp.toggleSubmenu('school-gateways', event); return false;">
           <span class="nav-icon"><i class="fa-solid fa-building-columns"></i></span>
@@ -149,7 +133,6 @@
         </div>
       </div>
 
-      <!-- 18.3 Status Indicator in Sidebar -->
       <div class="gateway-status-card" id="gatewaySidebarStatusCard">
         <div class="gateway-status-header">
           <div class="d-flex align-items-center gap-1">
@@ -182,7 +165,6 @@
       </div>
     </nav>
 
-    <!-- Sidebar Operator Card -->
     <div class="sidebar-operator-card">
       <div class="operator-avatar">SA</div>
       <div class="operator-info">
@@ -196,12 +178,8 @@
     </div>
   </aside>
 
-  <!-- =========================================================================
-       MAIN CONTENT CONTAINER
-       ========================================================================= -->
   <div class="portal-main">
 
-    <!-- Top Sticky Header Bar -->
     <header class="portal-header">
       <div class="header-left">
         <button class="mobile-toggle" onclick="platformApp.toggleMobileSidebar()" aria-label="Toggle Navigation">
@@ -216,7 +194,6 @@
       </div>
 
       <div class="header-right">
-        <!-- Interactive Quick Popovers & Overlays -->
         <button type="button" class="header-action-btn" id="paDatePickerBtn"
           data-datepicker="true" data-tooltip="Operations Calendar" aria-label="Operations Calendar" style="display:inline-flex; align-items:center; justify-content:center; width:36px; height:36px; border-radius:8px; border:1px solid #CBD5E1; background:#fff; color:#334155; cursor:pointer;">
           <i class="fa-solid fa-calendar-days"></i>
@@ -238,26 +215,22 @@
           data-reactions="true" data-tooltip="React / Kudos" aria-label="Quick Reactions" style="display:inline-flex; align-items:center; justify-content:center; width:36px; height:36px; border-radius:8px; border:1px solid #CBD5E1; background:#fff; color:#334155; cursor:pointer;">
           <i class="fa-regular fa-face-smile"></i>
         </button>
-        <!-- 18.3 Header Gateway Status Indicator -->
         <button class="badge-gateway-header d-none d-md-inline-flex" id="btnHeaderGatewayStatus" onclick="platformApp.openGatewayStatusModal()" title="View School Gateway Decoupled Telemetry (18.3)">
           <i class="fa-solid fa-globe text-primary"></i>
           <span>Web &amp; SSL: <strong class="text-success" id="lblHeaderGatewayStatus">Online</strong></span>
         </button>
 
-        <!-- Live Cluster Status Indicator -->
         <span class="badge-active" style="padding: 0.35rem 0.75rem;">
           <span
             style="width: 8px; height: 8px; border-radius: 50%; background: #10B981; box-shadow: 0 0 6px #10B981;"></span>
           Cluster: Healthy (99.98%)
         </span>
 
-        <!-- Theme Toggle -->
         <button class="btn-pa btn-pa-secondary" id="platformThemeToggle" onclick="platformApp.toggleTheme()"
           title="Toggle Dark/Light Mode" style="padding: 0.45rem 0.8rem;">
           <i class="fa-solid fa-moon" id="platformThemeIcon"></i>
         </button>
 
-        <!-- Direct Launch Gateway -->
         <a href="/management" class="btn-pa btn-pa-primary" style="padding: 0.45rem 0.9rem;">
           <i class="fa-solid fa-arrow-up-right-from-square"></i> Open School Portal
         </a>
@@ -266,9 +239,6 @@
 
     <main class="portal-content">
 
-      <!-- =======================================================================
-           EXECUTIVE WELCOME BANNER WITH PROMINENT LIVE IST CLOCK (BIG & FIRST)
-           ======================================================================= -->
       <div class="super-admin-banner">
         <div>
           <span class="banner-badge">
@@ -282,13 +252,11 @@
         </div>
 
         <div class="banner-meta-col">
-          <!-- Big, High-Contrast Live IST Clock (Top & First) -->
           <div class="banner-clock-pill" id="platformClockPill" title="Indian Standard Time (IST, UTC+5:30)">
             <i class="fa-regular fa-clock"></i>
             <span id="platformLiveTimeText">--:--:-- -- IST</span>
           </div>
 
-          <!-- Secondary Metadata Down of the Time -->
           <div class="banner-subpill">
             <i class="fa-regular fa-calendar"></i>
             <span id="platformLiveDateText">Loading IST date...</span>
@@ -300,9 +268,6 @@
         </div>
       </div>
 
-      <!-- =======================================================================
-           CRITICAL PRIVACY BOUNDARY ENFORCEMENT BANNER
-           ======================================================================= -->
       <div class="privacy-guard-banner">
         <div class="privacy-guard-icon">
           <i class="fa-solid fa-user-shield"></i>
@@ -319,18 +284,8 @@
         </div>
       </div>
 
-      <!-- =======================================================================
-           MODULE 1: PLATFORM DASHBOARD (#view-dashboard)
-           Scope: Multi-tenant Operational Command Centre answering the 5 Questions:
-           1. How many institutions are registered?
-           2. Is the platform operating correctly?
-           3. Are there security issues or failed operations?
-           4. Which institutions need attention?
-           5. What tasks must the Platform Administrator complete?
-           ======================================================================= -->
       <section class="portal-view active" id="view-dashboard">
 
-        <!-- Platform Core Overview Quad (Example Design Specification) -->
         <div class="platform-metric-quad">
           <div class="pa-metric-card" onclick="platformApp.navigateTo('institutions')" style="cursor: pointer;"
             title="Question 1: Total Registered Institutions">
@@ -389,7 +344,6 @@
           </div>
         </div>
 
-        <!-- 5 Core Questions Executive Telemetry Strip -->
         <div class="executive-telemetry-strip">
           <div class="telemetry-strip-left">
             <div class="telemetry-live-dot"></div>
@@ -404,7 +358,6 @@
           </div>
         </div>
 
-        <!-- SECTION 2.2: DASHBOARD ACTIONS (Operational Command Centre) -->
         <div class="pa-card command-actions-card">
           <div class="pa-card-header command-actions-header">
             <div>
@@ -437,7 +390,6 @@
           </div>
         </div>
 
-        <!-- SECTION 2.1 A: INSTITUTION SUMMARY -->
         <div class="pa-card" style="margin-bottom: 1.5rem;">
           <div class="pa-card-header">
             <div>
@@ -450,7 +402,6 @@
             </button>
           </div>
 
-          <!-- 5 Category Cards (Each card opens Institution Management with the relevant filter applied) -->
           <div
             style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem; margin-bottom: 1.5rem;">
             <div class="pa-metric-card" onclick="platformApp.filterInstitutions('all')"
@@ -507,7 +458,6 @@
             </div>
           </div>
 
-          <!-- Multi-Campus Tenant Overview Cards -->
           <h4 style="margin: 0 0 0.85rem; font-size: 0.95rem; color: var(--color-text-main); font-weight: 700;">
             <i class="fa-solid fa-sitemap text-primary mr-1"></i> Active Institutional Tenants
           </h4>
@@ -517,7 +467,6 @@
           </div>
         </div>
 
-        <!-- SECTION 2.1 B: PLATFORM HEALTH -->
         <div class="pa-card" style="margin-bottom: 1.5rem;">
           <div class="pa-card-header">
             <div>
@@ -640,7 +589,6 @@
           </div>
         </div>
 
-        <!-- SECTION 2.1 C: SECURITY OVERVIEW -->
         <div class="pa-card" style="margin-bottom: 1.5rem;">
           <div class="pa-card-header">
             <div>
@@ -718,7 +666,6 @@
           </div>
         </div>
 
-        <!-- SECTION 2.1 D: OPERATIONAL TASKS -->
         <div class="pa-card" style="margin-bottom: 1.5rem;">
           <div class="pa-card-header">
             <div>
@@ -743,13 +690,11 @@
                 </tr>
               </thead>
               <tbody id="operationalTasksTableBody">
-                <!-- Populated dynamically by platform-admin.js -->
               </tbody>
             </table>
           </div>
         </div>
 
-        <!-- SECTION 2.1 E: RECENT PLATFORM ACTIVITY -->
         <div class="pa-card">
           <div class="pa-card-header">
             <div>
@@ -776,7 +721,6 @@
                 </tr>
               </thead>
               <tbody id="recentPlatformActivityTableBody">
-                <!-- Populated dynamically by platform-admin.js -->
               </tbody>
             </table>
           </div>
@@ -784,16 +728,8 @@
 
       </section>
 
-      <!-- =======================================================================
-           MODULE 2: INSTITUTION MANAGEMENT (#view-institutions)
-           ======================================================================= -->
-      <!-- =======================================================================
-           MODULE 3: INSTITUTION MANAGEMENT DIRECTORY & LIFECYCLE (#view-institutions)
-           Compliant with Sri Vidya Educational Trust Multi-Tenant Platform Standards
-           ======================================================================= -->
       <section class="portal-view" id="view-institutions">
 
-        <!-- Page Header (Section 3.1) -->
         <div class="pa-page-header" style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;">
           <div>
             <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.25rem;">
@@ -811,11 +747,9 @@
           </div>
 
           <div style="display: flex; align-items: center; gap: 0.6rem; flex-wrap: wrap;">
-            <!-- Primary Action -->
             <button type="button" class="btn-pa btn-pa-primary" onclick="platformApp.openAddInstitutionWizard()" id="btnPrimaryAddInstitution" style="font-weight: 700;">
               <i class="fa-solid fa-plus me-1"></i> Add Institution
             </button>
-            <!-- Secondary Actions -->
             <button type="button" class="btn-pa btn-pa-secondary" onclick="platformApp.openImportModal()" id="btnImportInstitutions">
               <i class="fa-solid fa-file-import me-1"></i> Import Institutions
             </button>
@@ -825,7 +759,6 @@
           </div>
         </div>
 
-        <!-- Summary Cards (Section 3.1) -->
         <div class="inst-summary-grid">
           <div class="pa-card" id="cardTotalInstitutions" onclick="platformApp.filterInstitutions('all')" style="cursor: pointer; border-left: 4px solid var(--pa-primary, #4F46E5); padding: 1.15rem; transition: transform 0.2s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">
             <div style="display: flex; justify-content: space-between; align-items: center;">
@@ -893,21 +826,17 @@
           </div>
         </div>
 
-        <!-- Search & Multi-Field Filters Bar (Section 3.1) -->
         <div class="pa-card" style="margin-bottom: 1.5rem; padding: 1.15rem;">
           <div class="inst-filter-grid">
-            <!-- Free-text search -->
             <div style="position: relative;">
               <i class="fa-solid fa-magnifying-glass" style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: #94A3B8; font-size: 0.85rem;"></i>
               <input type="text" id="instSearchInput" class="pa-search-input" placeholder="Search by name, code, email, domain, UDISE..." style="width: 100%; padding-left: 34px; height: 38px; border-radius: 8px;" oninput="platformApp.filterInstitutionsDirectory()">
             </div>
 
-            <!-- Code Filter -->
             <div>
               <input type="text" id="instCodeFilter" class="pa-search-input" placeholder="Filter by Code..." style="width: 100%; height: 38px; border-radius: 8px;" oninput="platformApp.filterInstitutionsDirectory()">
             </div>
 
-            <!-- Type Filter -->
             <div>
               <select id="instTypeFilter" class="pa-select" style="width: 100%; height: 38px; border-radius: 8px;" onchange="platformApp.filterInstitutionsDirectory()">
                 <option value="All">All Types</option>
@@ -919,7 +848,6 @@
               </select>
             </div>
 
-            <!-- Status Filter -->
             <div>
               <select id="instStatusFilter" class="pa-select" style="width: 100%; height: 38px; border-radius: 8px;" onchange="platformApp.filterInstitutionsDirectory()">
                 <option value="All">All Statuses</option>
@@ -933,7 +861,6 @@
               </select>
             </div>
 
-            <!-- Academic Year Filter -->
             <div>
               <select id="instAyFilter" class="pa-select" style="width: 100%; height: 38px; border-radius: 8px;" onchange="platformApp.filterInstitutionsDirectory()">
                 <option value="All">All Academic Years</option>
@@ -942,7 +869,6 @@
               </select>
             </div>
 
-            <!-- Domain Status Filter -->
             <div>
               <select id="instDomainFilter" class="pa-select" style="width: 100%; height: 38px; border-radius: 8px;" onchange="platformApp.filterInstitutionsDirectory()">
                 <option value="All">All Domains</option>
@@ -951,7 +877,6 @@
               </select>
             </div>
 
-            <!-- Reset Button -->
             <div>
               <button type="button" class="btn-pa btn-pa-secondary" style="height: 38px; padding: 0 0.9rem;" onclick="platformApp.resetInstitutionFilters()" title="Reset all search &amp; filters">
                 <i class="fa-solid fa-rotate-left"></i> Reset
@@ -959,7 +884,6 @@
             </div>
           </div>
 
-          <!-- Secondary Toolbar: Count Pill & Active Tags -->
           <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 0.85rem; padding-top: 0.75rem; border-top: 1px solid var(--color-border, #E2E8F0); font-size: 0.8rem; color: #64748B; flex-wrap: wrap; gap: 0.5rem;">
             <div style="display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
               <span class="badge" style="background: rgba(79, 70, 229, 0.1); color: var(--pa-primary, #4F46E5); font-weight: 700; padding: 0.35rem 0.75rem; border-radius: 20px;" id="instShowingCountPill">
@@ -975,7 +899,6 @@
           </div>
         </div>
 
-        <!-- Authoritative 10-Column Institution Directory Table (Section 3.1) -->
         <div class="pa-card">
           <div class="pa-table-responsive">
             <table class="pa-table" id="institutionsDirectoryTable">
@@ -994,7 +917,6 @@
                 </tr>
               </thead>
               <tbody id="institutionsTableBody">
-                <!-- Dynamically populated by platformApp.renderInstitutionsTable -->
               </tbody>
             </table>
           </div>
@@ -1002,17 +924,8 @@
 
       </section>
 
-      <!-- =======================================================================
-           MODULE 3: SCHOOL CONFIGURATION (#view-config)
-           ======================================================================= -->
-      <!-- =======================================================================
-           MODULE 4: SCHOOL CONFIGURATION (#view-config)
-           Institution-wide Settings, Academic Policies, Operational Defaults & Templates
-           Compliant with Sri Vidya Educational Trust Multi-Tenant Standards
-           ======================================================================= -->
       <section class="portal-view" id="view-config">
 
-        <!-- Page Header -->
         <div class="pa-page-header" style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1.25rem; flex-wrap: wrap; gap: 1rem;">
           <div>
             <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.25rem;">
@@ -1029,7 +942,6 @@
             </p>
           </div>
 
-          <!-- Scope Switcher & Live Status -->
           <div class="pa-scope-bar" style="margin: 0; padding: 0.5rem 1rem;">
             <div style="display: flex; align-items: center; gap: 0.6rem;">
               <label for="cfgInstitutionScope" style="font-size: 0.8rem; font-weight: 700; color: #475569; margin: 0;">Configuring Campus:</label>
@@ -1047,7 +959,6 @@
           </div>
         </div>
 
-        <!-- Sub-Navigation (Sections 4.1, 4.2, 4.3, 4.4) -->
         <div class="pa-config-subnav" id="cfgSubnav">
           <button type="button" class="pa-config-tab-btn active" id="btnCfgTabProfile" onclick="platformApp.switchConfigTab('profile')">
             <i class="fa-solid fa-building-columns"></i> 4.1 School Profile
@@ -1063,11 +974,7 @@
           </button>
         </div>
 
-        <!-- =====================================================================
-             SUB-TAB 1: 4.1 SCHOOL PROFILE
-             ===================================================================== -->
         <div class="pa-config-pane" id="cfgPaneProfile">
-          <!-- Profile Action Toolbar -->
           <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.75rem; margin-bottom: 1.25rem; background: #FFFFFF; border: 1px solid #E2E8F0; border-radius: 10px; padding: 0.75rem 1.25rem;">
             <div style="display: flex; align-items: center; gap: 0.5rem;">
               <span style="font-size: 0.85rem; font-weight: 700; color: var(--color-text-main);">
@@ -1097,10 +1004,8 @@
             </div>
           </div>
 
-          <!-- Profile Fields Grid -->
           <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 1.25rem;">
 
-            <!-- Column 1: Identity & Official Affiliation -->
             <div class="pa-field-card">
               <div class="pa-field-card-title">
                 <i class="fa-solid fa-id-badge text-primary"></i> Institutional Identity &amp; Statutory Affiliation
@@ -1149,7 +1054,6 @@
               </div>
             </div>
 
-            <!-- Column 2: Address, Contact & Domain -->
             <div class="pa-field-card">
               <div class="pa-field-card-title">
                 <i class="fa-solid fa-map-location-dot text-primary"></i> Address, Contact &amp; Digital Presence
@@ -1203,13 +1107,11 @@
               </div>
             </div>
 
-            <!-- Column 3: Authorized Signatories & School Branding -->
             <div class="pa-field-card">
               <div class="pa-field-card-title">
                 <i class="fa-solid fa-stamp text-primary"></i> Authorized Signatories &amp; Branding
               </div>
 
-              <!-- Signatories List -->
               <div class="mb-3">
                 <label style="font-size: 0.8rem; font-weight: 700; display: block; margin-bottom: 0.35rem;">Authorized Document Signatories</label>
                 <div style="background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 8px; padding: 0.6rem;" id="cfgSignatoriesContainer">
@@ -1237,7 +1139,6 @@
                 </div>
               </div>
 
-              <!-- Branding Colors -->
               <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;" class="mb-3">
                 <div>
                   <label style="font-size: 0.8rem; font-weight: 700; display: block; margin-bottom: 0.35rem;">Primary Brand Color</label>
@@ -1255,7 +1156,6 @@
                 </div>
               </div>
 
-              <!-- Official Header Lines -->
               <div>
                 <label style="font-size: 0.8rem; font-weight: 700; display: block; margin-bottom: 0.35rem;">Document Header Title</label>
                 <input type="text" id="cfgHeaderTitle" class="pa-search-input" value="SRI VIDYA ENGLISH MEDIUM HIGH SCHOOL" style="width: 100%; font-weight: 700; margin-bottom: 0.4rem;">
@@ -1266,12 +1166,8 @@
           </div>
         </div>
 
-        <!-- =====================================================================
-             SUB-TAB 2: 4.2 ACADEMIC CONFIGURATION
-             ===================================================================== -->
         <div class="pa-config-pane" id="cfgPaneAcademic" style="display: none;">
 
-          <!-- Historical Immutability Lock Banner -->
           <div class="pa-policy-lock-banner">
             <i class="fa-solid fa-shield-halved" style="color: #D97706; font-size: 1.4rem; margin-top: 2px;"></i>
             <div>
@@ -1283,7 +1179,6 @@
             </div>
           </div>
 
-          <!-- Academic Action Toolbar -->
           <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.75rem; margin-bottom: 1.25rem; background: #FFFFFF; border: 1px solid #E2E8F0; border-radius: 10px; padding: 0.75rem 1.25rem;">
             <div style="display: flex; align-items: center; gap: 0.6rem;">
               <span style="font-size: 0.85rem; font-weight: 700; color: var(--color-text-main);">
@@ -1310,10 +1205,8 @@
             </div>
           </div>
 
-          <!-- Academic Settings 2-Column Grid -->
           <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); gap: 1.25rem;">
 
-            <!-- Left: Calendar, Naming & Policies -->
             <div>
               <div class="pa-field-card">
                 <div class="pa-field-card-title">
@@ -1399,14 +1292,12 @@
               </div>
             </div>
 
-            <!-- Right: Examination, Grading Scales & Attendance Rules -->
             <div>
               <div class="pa-field-card">
                 <div class="pa-field-card-title">
                   <i class="fa-solid fa-square-poll-vertical text-primary"></i> Examination Categories &amp; Grading Scales
                 </div>
 
-                <!-- Exam Categories -->
                 <div class="mb-3">
                   <label style="font-size: 0.8rem; font-weight: 700; display: block; margin-bottom: 0.35rem;">Statutory Examination Cycles</label>
                   <div style="background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 8px; padding: 0.6rem;">
@@ -1429,7 +1320,6 @@
                   </div>
                 </div>
 
-                <!-- Grading Scale Table -->
                 <div class="mb-3">
                   <label style="font-size: 0.8rem; font-weight: 700; display: block; margin-bottom: 0.35rem;">Andhra Pradesh SSC 10-Point GPA Scale</label>
                   <div style="max-height: 170px; overflow-y: auto; border: 1px solid #E2E8F0; border-radius: 8px;">
@@ -1456,7 +1346,6 @@
                   </div>
                 </div>
 
-                <!-- Passing Criteria -->
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;" class="mb-3">
                   <div>
                     <label style="font-size: 0.78rem; font-weight: 700; display: block; margin-bottom: 0.35rem;">Min Subject Passing %</label>
@@ -1468,7 +1357,6 @@
                   </div>
                 </div>
 
-                <!-- Attendance Rules -->
                 <div>
                   <label style="font-size: 0.8rem; font-weight: 700; display: block; margin-bottom: 0.35rem;">Attendance Calculation &amp; Exam Eligibility</label>
                   <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;">
@@ -1489,11 +1377,7 @@
           </div>
         </div>
 
-        <!-- =====================================================================
-             SUB-TAB 3: 4.3 OPERATIONAL DEFAULTS
-             ===================================================================== -->
         <div class="pa-config-pane" id="cfgPaneOperational" style="display: none;">
-          <!-- Action Bar -->
           <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.75rem; margin-bottom: 1.25rem; background: #FFFFFF; border: 1px solid #E2E8F0; border-radius: 10px; padding: 0.75rem 1.25rem;">
             <div>
               <strong style="font-size: 0.9rem; color: var(--color-text-main);">
@@ -1508,7 +1392,6 @@
 
           <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 1.25rem;">
 
-            <!-- Working Days & Session Times -->
             <div class="pa-field-card">
               <div class="pa-field-card-title">
                 <i class="fa-solid fa-business-time text-primary"></i> Working Days &amp; Attendance Sessions
@@ -1538,7 +1421,6 @@
               </div>
             </div>
 
-            <!-- Periods & Fee Conventions -->
             <div class="pa-field-card">
               <div class="pa-field-card-title">
                 <i class="fa-solid fa-bell text-primary"></i> Timetable Periods &amp; Fee Conventions
@@ -1569,7 +1451,6 @@
               </div>
             </div>
 
-            <!-- Workflows & Notification Templates -->
             <div class="pa-field-card">
               <div class="pa-field-card-title">
                 <i class="fa-solid fa-route text-primary"></i> Approval Workflows &amp; Notifications
@@ -1601,12 +1482,8 @@
           </div>
         </div>
 
-        <!-- =====================================================================
-             SUB-TAB 4: 4.4 DOCUMENT & REPORT TEMPLATES
-             ===================================================================== -->
         <div class="pa-config-pane" id="cfgPaneTemplates" style="display: none;">
 
-          <!-- Templates Header Bar -->
           <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.75rem; margin-bottom: 1.25rem; background: #FFFFFF; border: 1px solid #E2E8F0; border-radius: 10px; padding: 0.75rem 1.25rem;">
             <div>
               <strong style="font-size: 0.92rem; color: var(--color-text-main);">
@@ -1629,23 +1506,14 @@
             </div>
           </div>
 
-          <!-- Document Templates Grid -->
           <div class="pa-template-grid" id="cfgTemplatesContainer">
-            <!-- Dynamically populated by platformApp.renderDocumentTemplates -->
           </div>
 
         </div>
 
       </section>
 
-      <!-- =======================================================================
-           MODULE 4: USER & ACCOUNT MANAGEMENT (#view-users)
-           ======================================================================= -->
-            <!-- =======================================================================
-           MODULE 6: USER & ACCOUNT MANAGEMENT (#view-users)
-           ======================================================================= -->
       <section class="portal-view" id="view-users">
-        <!-- Module Header -->
         <div class="pa-view-header mb-3" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
           <div>
             <h2 style="margin: 0; font-size: 1.4rem; font-weight: 800; color: var(--color-text-main); display: flex; align-items: center; gap: 0.5rem;">
@@ -1668,7 +1536,6 @@
           </div>
         </div>
 
-        <!-- 5 Summary Cards (Section 6.1 Specification) -->
         <div class="pa-kpi-grid mb-4" style="grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));">
           <div class="pa-kpi-card" style="border-left: 4px solid #4F46E5;">
             <div class="pa-kpi-header">
@@ -1716,9 +1583,7 @@
           </div>
         </div>
 
-        <!-- Multi-Field Search & Filter Toolbar (2-Tier Enterprise Architecture) -->
         <div class="transfers-toolbar-container mb-3">
-          <!-- Tier 1: Search & Granular Filters -->
           <div class="pa-users-filter-grid">
             <div class="tc-search-wrap" style="width: 100%; position: relative;">
               <i class="fa-solid fa-magnifying-glass search-icon"></i>
@@ -1793,7 +1658,6 @@
             </div>
           </div>
 
-          <!-- Tier 2: Governance Indicators & Actions -->
           <div class="transfers-governance-row">
             <div class="tc-stats-left">
               <span class="tc-count-pill" id="userFilterCountDisplay">
@@ -1819,7 +1683,6 @@
           </div>
         </div>
 
-        <!-- Authoritative 9-Column Accounts Table (Section 6.1 Specification) -->
         <div class="pa-card">
           <div class="pa-table-responsive">
             <table class="pa-table" id="usersTable">
@@ -1837,18 +1700,13 @@
                 </tr>
               </thead>
               <tbody id="usersTableBody">
-                <!-- Dynamically populated by platformApp.loadUsersDirectory -->
               </tbody>
             </table>
           </div>
         </div>
       </section>
 
-      <!-- =======================================================================
-           MODULE 7: ROLE TEMPLATES & PERMISSIONS (#view-roles)
-           ======================================================================= -->
       <section class="portal-view" id="view-roles">
-        <!-- Module Header -->
         <div class="pa-view-header mb-3" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
           <div>
             <h2 style="margin: 0; font-size: 1.4rem; font-weight: 800; color: var(--color-text-main); display: flex; align-items: center; gap: 0.5rem;">
@@ -1868,7 +1726,6 @@
           </div>
         </div>
 
-        <!-- 5 Summary KPI Cards (Section 7.2 Specification) -->
         <div class="pa-kpi-grid mb-4" style="grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));">
           <div class="pa-kpi-card" style="border-left: 4px solid #4F46E5;">
             <div class="pa-kpi-header">
@@ -1916,9 +1773,7 @@
           </div>
         </div>
 
-        <!-- Multi-Field Search & Filter Toolbar -->
         <div class="transfers-toolbar-container mb-3">
-          <!-- Tier 1: Search & Filter Selects -->
           <div class="pa-roles-filter-grid">
             <div class="tc-search-wrap" style="width: 100%; position: relative;">
               <i class="fa-solid fa-magnifying-glass search-icon"></i>
@@ -1959,7 +1814,6 @@
             </div>
           </div>
 
-          <!-- Tier 2: Governance Indicators & Action Controls -->
           <div class="transfers-governance-row">
             <div class="tc-stats-left">
               <span class="tc-count-pill" id="roleFilterCountDisplay">
@@ -1985,7 +1839,6 @@
           </div>
         </div>
 
-        <!-- Authoritative 7-Column Role Directory Table (Section 7.2 Specification) -->
         <div class="pa-card">
           <div class="pa-table-responsive">
             <table class="pa-table" id="rolesTable">
@@ -2001,18 +1854,13 @@
                 </tr>
               </thead>
               <tbody id="rolesTableBody">
-                <!-- Dynamically populated by platformApp.loadRoleTemplatesDirectory() -->
               </tbody>
             </table>
           </div>
         </div>
       </section>
 
-      <!-- =======================================================================
-           MODULE 10: SUBSCRIPTIONS & PLANS (#view-subscription)
-           ======================================================================= -->
       <section class="portal-view" id="view-subscription">
-        <!-- Module Header -->
         <div class="d-flex justify-content-between align-items-center mb-3">
           <div>
             <h2 class="h4 mb-1 fw-bold text-dark">
@@ -2035,7 +1883,6 @@
           </div>
         </div>
 
-        <!-- Sub-navigation Tabs -->
         <div class="sub-subnav">
           <button type="button" class="sub-tab-btn active" id="btnSubTabPlans" onclick="platformApp.switchSubscriptionSubTab('plans')">
             <i class="fa-solid fa-layer-group"></i> 10.1 Commercial Plans Directory
@@ -2049,9 +1896,7 @@
           </button>
         </div>
 
-        <!-- TAB 1: 10.1 Commercial Plans Directory -->
         <div id="subTabPlansContent">
-          <!-- Overview Cards -->
           <div class="pa-kpi-grid mb-4" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
             <div class="pa-kpi-card">
               <div class="pa-kpi-header">
@@ -2087,7 +1932,6 @@
             </div>
           </div>
 
-          <!-- Plans Filter & Toolbar -->
           <div class="pa-card mb-4">
             <div class="pa-card-header">
               <div>
@@ -2125,7 +1969,6 @@
           </div>
         </div>
 
-        <!-- TAB 2: 10.2 Institution Subscriptions -->
         <div id="subTabSubscriptionsContent" style="display: none;">
           <div class="pa-card">
             <div class="pa-card-header">
@@ -2136,7 +1979,6 @@
               <span class="badge bg-secondary" id="lblSubFilteredCount">Showing 0 Subscriptions</span>
             </div>
 
-            <!-- Filter Toolbar -->
             <div class="p-3 bg-light border-bottom">
               <div class="row g-2 align-items-center">
                 <div class="col-md-3">
@@ -2180,7 +2022,6 @@
               </div>
             </div>
 
-            <!-- Table with 8 Columns (Section 10.2) -->
             <div class="pa-table-responsive">
               <table class="pa-table">
                 <thead>
@@ -2207,7 +2048,6 @@
           </div>
         </div>
 
-        <!-- TAB 3: 10.3 Usage & Entitlements -->
         <div id="subTabUsageContent" style="display: none;">
           <div class="pa-card mb-4">
             <div class="pa-card-header">
@@ -2226,12 +2066,9 @@
             </div>
 
             <div class="p-4">
-              <!-- Warning Banner Container (Dynamic) -->
               <div id="usageWarningContainer"></div>
 
-              <!-- 4 Usage Metrics -->
               <div class="row g-4 mb-4">
-                <!-- 1. Active Student Enrollment -->
                 <div class="col-md-6 col-lg-3">
                   <div class="p-3 border rounded bg-light">
                     <div class="d-flex justify-content-between align-items-center mb-1">
@@ -2246,7 +2083,6 @@
                   </div>
                 </div>
 
-                <!-- 2. Storage Usage -->
                 <div class="col-md-6 col-lg-3">
                   <div class="p-3 border rounded bg-light">
                     <div class="d-flex justify-content-between align-items-center mb-1">
@@ -2261,7 +2097,6 @@
                   </div>
                 </div>
 
-                <!-- 3. Active Staff Seats -->
                 <div class="col-md-6 col-lg-3">
                   <div class="p-3 border rounded bg-light">
                     <div class="d-flex justify-content-between align-items-center mb-1">
@@ -2276,7 +2111,6 @@
                   </div>
                 </div>
 
-                <!-- 4. Daily API Throughput -->
                 <div class="col-md-6 col-lg-3">
                   <div class="p-3 border rounded bg-light">
                     <div class="d-flex justify-content-between align-items-center mb-1">
@@ -2292,15 +2126,12 @@
                 </div>
               </div>
 
-              <!-- Enabled Modules Pills Grid -->
               <div class="pa-card p-3 border mb-3">
                 <h6 class="fw-bold text-dark mb-2"><i class="fa-solid fa-cubes text-primary me-2"></i>Enabled System Modules &amp; Entitlements</h6>
                 <div class="d-flex flex-wrap gap-2" id="usageEnabledModulesList">
-                  <!-- Dynamically populated -->
                 </div>
               </div>
 
-              <!-- Section 10.3 Statutory Non-Disruption Guarantee Box -->
               <div class="statutory-guarantee-box">
                 <div class="d-flex align-items-start gap-3">
                   <i class="fa-solid fa-scale-balanced fa-2x mt-1 text-success"></i>
@@ -2317,11 +2148,7 @@
         </div>
       </section>
 
-      <!-- =======================================================================
-           MODULE 11: SYSTEM HEALTH & DEPLOYMENT (#view-health)
-           ======================================================================= -->
       <section class="portal-view" id="view-health">
-        <!-- Module Header -->
         <div class="d-flex justify-content-between align-items-center mb-3">
           <div>
             <h2 class="h4 mb-1 fw-bold text-dark">
@@ -2344,7 +2171,6 @@
           </div>
         </div>
 
-        <!-- Sub-navigation Tabs -->
         <div class="hlth-subnav">
           <button type="button" class="hlth-tab-btn active" id="btnHealthTabServices" onclick="platformApp.switchHealthSubTab('services')">
             <i class="fa-solid fa-heart-pulse"></i> 11.1 Service Health
@@ -2362,9 +2188,7 @@
           </button>
         </div>
 
-        <!-- TAB 1: 11.1 Service Health -->
         <div id="healthTabServicesContent">
-          <!-- Real-Time Node.js Process Metrics Strip -->
           <div class="pa-kpi-grid mb-4" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
             <div class="pa-kpi-card">
               <div class="pa-kpi-header">
@@ -2400,13 +2224,10 @@
             </div>
           </div>
 
-          <!-- 6 Service Health Cards Grid -->
           <div class="service-health-grid" id="serviceHealthGrid">
-            <!-- Dynamically populated -->
           </div>
         </div>
 
-        <!-- TAB 2: 11.2 Deployment History -->
         <div id="healthTabDeploymentsContent" style="display: none;">
           <div class="pa-card">
             <div class="pa-card-header">
@@ -2417,13 +2238,11 @@
               <span class="badge bg-secondary" id="lblDepFilteredCount">Showing 0 Deployments</span>
             </div>
 
-            <!-- Secrets Protection Notice Banner -->
             <div class="alert alert-secondary d-flex align-items-center mx-3 mt-3 mb-0 py-2" style="font-size: 0.8rem; background: #F8FAFC; border-left: 4px solid #4F46E5;">
               <i class="fa-solid fa-shield-halved text-primary me-2"></i>
               <span><strong>Deployment Security Guard:</strong> In compliance with Section 11.2 rules, environment variables, database credentials, and secrets are strictly redacted and prohibited from display.</span>
             </div>
 
-            <!-- Filter Toolbar -->
             <div class="p-3 bg-light border-bottom">
               <div class="row g-2 align-items-center">
                 <div class="col-md-4">
@@ -2457,7 +2276,6 @@
               </div>
             </div>
 
-            <!-- Table with 8 Columns (Section 11.2) -->
             <div class="pa-table-responsive">
               <table class="pa-table">
                 <thead>
@@ -2484,7 +2302,6 @@
           </div>
         </div>
 
-        <!-- TAB 3: 11.3 Application Logs -->
         <div id="healthTabLogsContent" style="display: none;">
           <div class="pa-card">
             <div class="pa-card-header">
@@ -2495,7 +2312,6 @@
               <span class="badge bg-secondary" id="lblLogFilteredCount">Showing 0 Logs</span>
             </div>
 
-            <!-- Filter Toolbar -->
             <div class="p-3 bg-light border-bottom">
               <div class="row g-2 align-items-center">
                 <div class="col-md-3">
@@ -2544,7 +2360,6 @@
               </div>
             </div>
 
-            <!-- Table with 6 Columns (Section 11.3) -->
             <div class="pa-table-responsive">
               <table class="pa-table">
                 <thead>
@@ -2570,7 +2385,6 @@
           </div>
         </div>
 
-        <!-- TAB 4: 11.4 Background Jobs -->
         <div id="healthTabJobsContent" style="display: none;">
           <div class="pa-card">
             <div class="pa-card-header">
@@ -2581,13 +2395,11 @@
               <span class="badge bg-secondary" id="lblJobFilteredCount">Showing 0 Jobs</span>
             </div>
 
-            <!-- Idempotent Invariant Notice -->
             <div class="alert alert-info d-flex align-items-center mx-3 mt-3 mb-0 py-2" style="font-size: 0.8rem; background: #F0FDF4; border-left: 4px solid #10B981; color: #166534;">
               <i class="fa-solid fa-shield-check text-success me-2"></i>
               <span><strong>Idempotent Execution Invariant:</strong> In compliance with Section 11.4 rules, all background job retries are strictly verified as idempotent and safe against duplicate emails, payments, or duplicate academic records.</span>
             </div>
 
-            <!-- Filter Toolbar -->
             <div class="p-3 bg-light border-bottom">
               <div class="row g-2 align-items-center">
                 <div class="col-md-4">
@@ -2622,7 +2434,6 @@
               </div>
             </div>
 
-            <!-- Table with 8 Columns (Section 11.4) -->
             <div class="pa-table-responsive">
               <table class="pa-table">
                 <thead>
@@ -2650,11 +2461,7 @@
         </div>
       </section>
 
-      <!-- =======================================================================
-           MODULE 8: AUDIT LOGS (#view-audit)
-           ======================================================================= -->
       <section class="portal-view" id="view-audit">
-        <!-- Module Header -->
         <div class="pa-view-header mb-3" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
           <div>
             <h2 style="margin: 0; font-size: 1.4rem; font-weight: 800; color: var(--color-text-main); display: flex; align-items: center; gap: 0.5rem;">
@@ -2674,7 +2481,6 @@
           </div>
         </div>
 
-        <!-- 5 Summary KPI Cards (Section 8.1 Specification) -->
         <div class="pa-kpi-grid mb-4" style="grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));">
           <div class="pa-kpi-card" style="border-left: 4px solid #4F46E5;">
             <div class="pa-kpi-header">
@@ -2722,9 +2528,7 @@
           </div>
         </div>
 
-        <!-- 2-Tier Multi-Field Search & Filter Toolbar (Section 8.1 Specification) -->
         <div class="transfers-toolbar-container mb-3">
-          <!-- Tier 1: Search & Date Range -->
           <div class="pa-audit-filter-tier1">
             <div class="tc-search-wrap" style="width: 100%; position: relative;">
               <i class="fa-solid fa-magnifying-glass search-icon"></i>
@@ -2768,9 +2572,7 @@
             </div>
           </div>
 
-          <!-- Tier 2: Category, Action, Result, Severity & Record Reference -->
           <div class="pa-audit-filter-tier2">
-            <!-- 8.3 10 Statutory Categories -->
             <div class="tc-select-wrap">
               <select id="auditCategoryFilter" class="tc-filter-select" onchange="platformApp.filterPlatformAuditLogs()" title="Filter by Module / Category">
                 <option value="all">All 10 Categories</option>
@@ -2833,7 +2635,6 @@
             </div>
           </div>
 
-          <!-- Bottom Provenance Counter Strip -->
           <div class="transfers-governance-row mt-2">
             <div class="tc-stats-left">
               <span class="tc-count-pill" id="auditFilterCountDisplay">
@@ -2852,7 +2653,6 @@
           </div>
         </div>
 
-        <!-- Authoritative 9-Column Forensic Audit Table (Section 8.1 Specification) -->
         <div class="pa-card">
           <div class="pa-table-responsive">
             <table class="pa-table" id="auditTable">
@@ -2870,18 +2670,13 @@
                 </tr>
               </thead>
               <tbody id="auditLogsTableBody">
-                <!-- Dynamically populated by platformApp.loadPlatformAuditDirectory() -->
               </tbody>
             </table>
           </div>
         </div>
       </section>
 
-      <!-- =======================================================================
-           MODULE 16: GLOBAL PLATFORM SETTINGS (#view-settings)
-           ======================================================================= -->
       <section class="portal-view" id="view-settings">
-        <!-- Module Header -->
         <div class="d-flex justify-content-between align-items-center mb-3">
           <div>
             <h2 class="h4 mb-1 fw-bold text-dark">
@@ -2898,7 +2693,6 @@
           </div>
         </div>
 
-        <!-- Active Maintenance Emergency Banner (if active) -->
         <div id="bannerPlatformMaintenanceActive" class="alert alert-danger d-flex align-items-center justify-content-between mb-3 py-2 px-3" style="display: none !important; border-left: 5px solid #DC2626;">
           <div class="d-flex align-items-center gap-2">
             <span class="spinner-grow spinner-grow-sm text-danger" role="status"></span>
@@ -2913,7 +2707,6 @@
           </div>
         </div>
 
-        <!-- Sub-navigation Tabs -->
         <div class="settings-subnav">
           <button type="button" class="settings-tab-btn active" id="btnSettingsTabGeneral" onclick="platformApp.switchSettingsSubTab('general')">
             <i class="fa-solid fa-sliders"></i> 16.1 General Settings
@@ -2931,7 +2724,6 @@
           </button>
         </div>
 
-        <!-- TAB 1: 16.1 General Settings -->
         <div id="settingsTabGeneralContent">
           <div class="pa-card">
             <div class="pa-card-header">
@@ -2946,7 +2738,6 @@
 
             <div class="p-3">
               <div class="row g-4">
-                <!-- Left Column: Branding & Regional -->
                 <div class="col-md-6 border-end">
                   <h4 class="h6 fw-bold text-dark mb-3"><i class="fa-solid fa-palette text-primary me-2"></i>Platform Identity &amp; Localization</h4>
 
@@ -3023,7 +2814,6 @@
                   </div>
                 </div>
 
-                <!-- Right Column: Support & Default Notifications -->
                 <div class="col-md-6">
                   <h4 class="h6 fw-bold text-dark mb-3"><i class="fa-solid fa-headset text-primary me-2"></i>Public Support Contact &amp; Notifications</h4>
 
@@ -3075,7 +2865,6 @@
           </div>
         </div>
 
-        <!-- TAB 2: 16.2 Authentication Settings -->
         <div id="settingsTabAuthContent" style="display: none;">
           <div class="pa-card">
             <div class="pa-card-header">
@@ -3088,7 +2877,6 @@
               </button>
             </div>
 
-            <!-- Invariant Notice (Section 16.2) -->
             <div class="alert alert-secondary d-flex align-items-center mx-3 mt-3 mb-0 py-2" style="font-size: 0.8rem; background: #F8FAFC; border-left: 4px solid #4F46E5;">
               <i class="fa-solid fa-shield-check text-primary me-2"></i>
               <span><strong>Safety Invariant (Section 16.2):</strong> Changes to authentication settings are strictly validated before platform-wide enforcement. Local Password and break-glass emergency recovery access are permanently preserved to prevent administrator lockout.</span>
@@ -3096,7 +2884,6 @@
 
             <div class="p-3">
               <div class="row g-4">
-                <!-- Left Column: Password & Session Policies -->
                 <div class="col-md-6 border-end">
                   <h4 class="h6 fw-bold text-dark mb-3"><i class="fa-solid fa-key text-primary me-2"></i>Password Requirements</h4>
 
@@ -3167,7 +2954,6 @@
                   </div>
                 </div>
 
-                <!-- Right Column: MFA, Lockout & Methods -->
                 <div class="col-md-6">
                   <h4 class="h6 fw-bold text-dark mb-3"><i class="fa-solid fa-mobile-screen-button text-primary me-2"></i>MFA &amp; Login Attempt Limits</h4>
 
@@ -3206,7 +2992,6 @@
                   <h4 class="h6 fw-bold text-dark mb-3"><i class="fa-solid fa-id-badge text-primary me-2"></i>Supported Authentication Methods</h4>
 
                   <div class="p-2 border rounded bg-light mb-3">
-                    <!-- Invariant: Local password is locked to prevent administrator lockout -->
                     <div class="d-flex justify-content-between align-items-center mb-2 pb-2 border-bottom">
                       <div>
                         <strong class="small text-dark d-block">Local Password Authentication</strong>
@@ -3253,7 +3038,6 @@
           </div>
         </div>
 
-        <!-- TAB 3: 16.3 Platform Feature Controls -->
         <div id="settingsTabFeaturesContent" style="display: none;">
           <div class="pa-card">
             <div class="pa-card-header">
@@ -3266,13 +3050,11 @@
               </button>
             </div>
 
-            <!-- Invariant Note -->
             <div class="alert alert-secondary d-flex align-items-center mx-3 mt-3 mb-0 py-2" style="font-size: 0.8rem; background: #F8FAFC; border-left: 4px solid #4F46E5;">
               <i class="fa-solid fa-circle-info text-primary me-2"></i>
               <span><strong>Gradual Rollout Principle (Section 16.3):</strong> New portal features (e.g. Parent Self-Service Portal) can be enabled for a test institution (e.g. SV-MAIN) before global release across all Trust schools.</span>
             </div>
 
-            <!-- Features Table -->
             <div class="pa-table-responsive">
               <table class="pa-table">
                 <thead>
@@ -3298,7 +3080,6 @@
           </div>
         </div>
 
-        <!-- TAB 4: 16.4 Maintenance Settings -->
         <div id="settingsTabMaintenanceContent" style="display: none;">
           <div class="pa-card">
             <div class="pa-card-header">
@@ -3316,14 +3097,12 @@
               </div>
             </div>
 
-            <!-- Operator Lockout Safeguard Invariant Banner (Section 16.4) -->
             <div class="alert alert-secondary d-flex align-items-center mx-3 mt-3 mb-0 py-2" style="font-size: 0.8rem; background: #FFFDF0; border-left: 4px solid #F59E0B; color: #92400E;">
               <i class="fa-solid fa-shield-halved text-warning me-2"></i>
               <span><strong>Operator Lockout Safeguard (Section 16.4):</strong> Activating maintenance mode contains safeguards ensuring administrators cannot accidentally lock themselves out of recovery or operational controls. Platform Admin operators bypass the maintenance barrier automatically.</span>
             </div>
 
             <div class="p-3">
-              <!-- Maintenance Hero Card -->
               <div class="maintenance-card-hero inactive" id="boxMaintenanceHero">
                 <div class="d-flex justify-content-between align-items-center">
                   <div>
@@ -3366,7 +3145,6 @@
                 </div>
               </div>
 
-              <!-- Maintenance Event History Table -->
               <h4 class="h6 fw-bold text-dark mb-2"><i class="fa-solid fa-clock-rotate-left text-primary me-2"></i>Maintenance Change History</h4>
               <div class="pa-table-responsive">
                 <table class="pa-table">
@@ -3379,7 +3157,6 @@
                     </tr>
                   </thead>
                   <tbody id="tbodyMaintenanceHistory">
-                    <!-- Populated by JS -->
                   </tbody>
                 </table>
               </div>
@@ -3388,11 +3165,7 @@
         </div>
       </section>
 
-      <!-- =======================================================================
-           MODULE 14: SUPPORT & ISSUE MANAGEMENT (#view-support)
-           ======================================================================= -->
       <section class="portal-view" id="view-support">
-        <!-- Module Header -->
         <div class="d-flex justify-content-between align-items-center mb-3">
           <div>
             <h2 class="h4 mb-1 fw-bold text-dark">
@@ -3412,9 +3185,7 @@
           </div>
         </div>
 
-        <!-- 14.1 Support Overview (5 KPI Cards) -->
         <div class="support-kpi-grid">
-          <!-- Card 1: Open Issues -->
           <div class="support-kpi-card">
             <div class="support-kpi-icon bg-primary-subtle text-primary">
               <i class="fa-solid fa-folder-open"></i>
@@ -3426,7 +3197,6 @@
             </div>
           </div>
 
-          <!-- Card 2: High-Priority Issues -->
           <div class="support-kpi-card">
             <div class="support-kpi-icon bg-danger-subtle text-danger">
               <i class="fa-solid fa-triangle-exclamation"></i>
@@ -3438,7 +3208,6 @@
             </div>
           </div>
 
-          <!-- Card 3: Issues Awaiting Trust / School -->
           <div class="support-kpi-card">
             <div class="support-kpi-icon bg-warning-subtle text-warning">
               <i class="fa-solid fa-hourglass-half"></i>
@@ -3450,7 +3219,6 @@
             </div>
           </div>
 
-          <!-- Card 4: Overdue Issues -->
           <div class="support-kpi-card">
             <div class="support-kpi-icon bg-danger-subtle text-danger">
               <i class="fa-solid fa-clock-rotate-left"></i>
@@ -3462,7 +3230,6 @@
             </div>
           </div>
 
-          <!-- Card 5: Recently Resolved Issues -->
           <div class="support-kpi-card">
             <div class="support-kpi-icon bg-success-subtle text-success">
               <i class="fa-solid fa-circle-check"></i>
@@ -3475,7 +3242,6 @@
           </div>
         </div>
 
-        <!-- 14.2 Support Ticket Directory Card -->
         <div class="pa-card">
           <div class="pa-card-header">
             <div>
@@ -3485,7 +3251,6 @@
             <span class="badge bg-secondary" id="lblSupportFilteredCount">Showing 0 Tickets</span>
           </div>
 
-          <!-- Filter Toolbar -->
           <div class="p-3 bg-light border-bottom">
             <div class="row g-2 align-items-center">
               <div class="col-md-3">
@@ -3547,7 +3312,6 @@
             </div>
           </div>
 
-          <!-- 10-Column Table (Section 14.2) -->
           <div class="pa-table-responsive">
             <table class="pa-table">
               <thead>
@@ -3577,14 +3341,7 @@
         </div>
       </section>
 
-      <!-- =======================================================================
-           MODULE 11: INSTITUTION ONBOARDING & MIGRATION (#view-onboarding)
-           ======================================================================= -->
-            <!-- =======================================================================
-           MODULE 5: INSTITUTION ONBOARDING & MIGRATION (#view-onboarding)
-           ======================================================================= -->
       <section class="portal-view" id="view-onboarding">
-        <!-- Module Header -->
         <div class="pa-view-header mb-3" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
           <div>
             <h2 style="margin: 0; font-size: 1.4rem; font-weight: 800; color: var(--color-text-main); display: flex; align-items: center; gap: 0.5rem;">
@@ -3604,7 +3361,6 @@
           </div>
         </div>
 
-        <!-- 3-Tab Sub-Navigation Strip -->
         <div class="pa-onboarding-subnav" id="obSubnav">
           <button type="button" class="pa-onboarding-tab-btn active" id="btnObTabOverview" onclick="platformApp.switchOnboardingTab('overview')">
             <i class="fa-solid fa-chart-pie me-1"></i> 5.1 Onboarding Overview
@@ -3617,11 +3373,7 @@
           </button>
         </div>
 
-        <!-- =====================================================================
-             SUB-TAB 1: 5.1 ONBOARDING OVERVIEW
-             ===================================================================== -->
         <div class="pa-onboarding-pane" id="obPaneOverview">
-          <!-- 6 Stat KPIs (Section 5.1 Specification) -->
           <div class="pa-kpi-grid mb-4" style="grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));">
             <div class="pa-kpi-card" style="border-left: 4px solid #6366F1;">
               <div class="pa-kpi-header">
@@ -3678,7 +3430,6 @@
             </div>
           </div>
 
-          <!-- Active Migration Pipelines Queue -->
           <div class="pa-card">
             <div class="pa-card-header">
               <div>
@@ -3707,18 +3458,13 @@
                   </tr>
                 </thead>
                 <tbody id="obPipelinesTableBody">
-                  <!-- Dynamically populated by platformApp.loadOnboardingOverview -->
                 </tbody>
               </table>
             </div>
           </div>
         </div>
 
-        <!-- =====================================================================
-             SUB-TAB 2: 5.2 ONBOARDING CHECKLIST (12 STATUTORY POINTS)
-             ===================================================================== -->
         <div class="pa-onboarding-pane" id="obPaneChecklist" style="display: none;">
-          <!-- Campus Scope & Readiness Header -->
           <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; margin-bottom: 1.25rem; background: var(--pa-card-bg, #FFFFFF); border: 1px solid var(--pa-border, #E2E8F0); border-radius: 10px; padding: 1rem 1.25rem;">
             <div style="display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;">
               <div>
@@ -3739,7 +3485,6 @@
               </div>
             </div>
 
-            <!-- Readiness Progress Meter -->
             <div style="min-width: 260px; flex: 1; max-width: 380px;">
               <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.35rem;">
                 <span style="font-size: 0.8rem; font-weight: 700; color: #334155;">Institutional Readiness Meter</span>
@@ -3757,17 +3502,11 @@
             </div>
           </div>
 
-          <!-- 12-Item Checklist Container -->
           <div class="pa-checklist-container" id="obChecklistItemsContainer">
-            <!-- Dynamically populated with all 12 items -->
           </div>
         </div>
 
-        <!-- =====================================================================
-             SUB-TAB 3: 5.3 DATA IMPORT CENTRE
-             ===================================================================== -->
         <div class="pa-onboarding-pane" id="obPaneImports" style="display: none;">
-          <!-- Controls Header Bar -->
           <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.75rem; margin-bottom: 1.25rem; background: var(--pa-card-bg, #FFFFFF); border: 1px solid var(--pa-border, #E2E8F0); border-radius: 10px; padding: 0.75rem 1.25rem;">
             <div style="display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;">
               <div>
@@ -3795,7 +3534,6 @@
             </div>
           </div>
 
-          <!-- Historical & In-Flight Imports Table -->
           <div class="pa-card">
             <div class="pa-table-responsive">
               <table class="pa-table">
@@ -3814,7 +3552,6 @@
                   </tr>
                 </thead>
                 <tbody id="obImportsTableBody">
-                  <!-- Populated dynamically by platformApp.loadImportJobs -->
                 </tbody>
               </table>
             </div>
@@ -3822,11 +3559,7 @@
         </div>
       </section>
 
-      <!-- =======================================================================
-           MODULE 9: SECURITY & ACCESS MONITORING (#view-security-monitoring)
-           ======================================================================= -->
       <section class="portal-view" id="view-security-monitoring">
-        <!-- Module Header -->
         <div class="d-flex justify-content-between align-items-center mb-3">
           <div>
             <h2 class="h4 mb-1 fw-bold text-dark">
@@ -3846,7 +3579,6 @@
           </div>
         </div>
 
-        <!-- Sub-navigation Tabs -->
         <div class="sec-subnav">
           <button type="button" class="sec-tab-btn active" id="btnSecTabOverview" onclick="platformApp.switchSecuritySubTab('overview')">
             <i class="fa-solid fa-chart-line"></i> 9.1 Overview &amp; Incident Workflow
@@ -3861,11 +3593,8 @@
           </button>
         </div>
 
-        <!-- TAB 1: Overview & 9.4 7-Stage Incident Workflow Pipeline -->
         <div id="secSubTabOverviewContent">
-          <!-- 9.1 7 KPI Summary Cards -->
           <div class="pa-kpi-grid mb-4" style="grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));">
-            <!-- 1. Failed Auth Attempts -->
             <div class="pa-kpi-card">
               <div class="pa-kpi-header">
                 <span class="pa-kpi-title">Failed Logins</span>
@@ -3877,7 +3606,6 @@
               <div class="pa-kpi-sub">Failed Auth Attempts</div>
             </div>
 
-            <!-- 2. Suspicious Login Patterns -->
             <div class="pa-kpi-card">
               <div class="pa-kpi-header">
                 <span class="pa-kpi-title">Suspicious Logins</span>
@@ -3889,7 +3617,6 @@
               <div class="pa-kpi-sub">Anomalous Patterns</div>
             </div>
 
-            <!-- 3. Privileged Role Changes -->
             <div class="pa-kpi-card">
               <div class="pa-kpi-header">
                 <span class="pa-kpi-title">Role Changes</span>
@@ -3901,7 +3628,6 @@
               <div class="pa-kpi-sub">Privileged Changes</div>
             </div>
 
-            <!-- 4. Unusual Access Activity -->
             <div class="pa-kpi-card">
               <div class="pa-kpi-header">
                 <span class="pa-kpi-title">Unusual Access</span>
@@ -3913,7 +3639,6 @@
               <div class="pa-kpi-sub">Cross-Campus / Spikes</div>
             </div>
 
-            <!-- 5. Unresolved Security Alerts -->
             <div class="pa-kpi-card">
               <div class="pa-kpi-header">
                 <span class="pa-kpi-title">Unresolved Alerts</span>
@@ -3925,7 +3650,6 @@
               <div class="pa-kpi-sub">Active Alerts Open</div>
             </div>
 
-            <!-- 6. Accounts Requiring Review -->
             <div class="pa-kpi-card">
               <div class="pa-kpi-header">
                 <span class="pa-kpi-title">Reviews Pending</span>
@@ -3937,7 +3661,6 @@
               <div class="pa-kpi-sub">Privileged Accounts</div>
             </div>
 
-            <!-- 7. Recent Security Incidents -->
             <div class="pa-kpi-card">
               <div class="pa-kpi-header">
                 <span class="pa-kpi-title">Recent Incidents</span>
@@ -3950,7 +3673,6 @@
             </div>
           </div>
 
-          <!-- 9.4 7-Stage Incident Workflow Pipeline Visualizer -->
           <div class="pa-card mb-4">
             <div class="pa-card-header">
               <div>
@@ -4007,7 +3729,6 @@
               </div>
             </div>
 
-            <!-- Invariant Notice Banner -->
             <div class="alert alert-info d-flex align-items-center mb-0" style="font-size: 0.85rem; border-left: 4px solid #4F46E5;">
               <i class="fa-solid fa-scale-balanced fa-lg me-3 text-primary"></i>
               <div>
@@ -4017,7 +3738,6 @@
           </div>
         </div>
 
-        <!-- TAB 2: 9.2 Security Events Register -->
         <div id="secSubTabEventsContent" style="display: none;">
           <div class="pa-card">
             <div class="pa-card-header">
@@ -4032,7 +3752,6 @@
               <span class="badge bg-secondary" id="lblSecFilteredCount">Showing 0 Events</span>
             </div>
 
-            <!-- Filter Toolbar -->
             <div class="p-3 bg-light border-bottom">
               <div class="row g-2 align-items-center">
                 <div class="col-md-3">
@@ -4083,7 +3802,6 @@
               </div>
             </div>
 
-            <!-- Table with 9 Columns (Section 9.2) -->
             <div class="pa-table-responsive">
               <table class="pa-table">
                 <thead>
@@ -4111,7 +3829,6 @@
           </div>
         </div>
 
-        <!-- TAB 3: 9.3 Privileged Access Reviews -->
         <div id="secSubTabReviewsContent" style="display: none;">
           <div class="pa-card">
             <div class="pa-card-header">
@@ -4126,7 +3843,6 @@
               <span class="badge bg-secondary" id="lblSecReviewsCount">Showing 0 Reviews</span>
             </div>
 
-            <!-- Filter Toolbar -->
             <div class="p-3 bg-light border-bottom">
               <div class="row g-2 align-items-center">
                 <div class="col-md-4">
@@ -4161,7 +3877,6 @@
               </div>
             </div>
 
-            <!-- Table with 8 Columns (Section 9.3) -->
             <div class="pa-table-responsive">
               <table class="pa-table">
                 <thead>
@@ -4189,11 +3904,7 @@
         </div>
       </section>
 
-      <!-- =======================================================================
-           MODULE 12: BACKUPS & RECOVERY (#view-backups)
-           ======================================================================= -->
       <section class="portal-view" id="view-backups">
-        <!-- Module Header -->
         <div class="d-flex justify-content-between align-items-center mb-3">
           <div>
             <h2 class="h4 mb-1 fw-bold text-dark">
@@ -4216,7 +3927,6 @@
           </div>
         </div>
 
-        <!-- Sub-navigation Tabs -->
         <div class="bkp-subnav">
           <button type="button" class="bkp-tab-btn active" id="btnBkpTabOverview" onclick="platformApp.switchBackupsSubTab('overview')">
             <i class="fa-solid fa-chart-pie"></i> 12.1 Backup Overview
@@ -4231,11 +3941,8 @@
           </button>
         </div>
 
-        <!-- TAB 1: 12.1 Backup Overview -->
         <div id="bkpTabOverviewContent">
-          <!-- Summary Cards (Section 12.1 Display Requirements) -->
           <div class="pa-kpi-grid mb-4" style="grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));">
-            <!-- 1. Last successful database backup -->
             <div class="pa-kpi-card">
               <div class="pa-kpi-header">
                 <span class="pa-kpi-title">Last Database Backup</span>
@@ -4245,7 +3952,6 @@
               <div class="pa-kpi-sub" id="kpiBkpLastDbMeta">SHA-256 Verified Clean</div>
             </div>
 
-            <!-- 2. Last successful file backup -->
             <div class="pa-kpi-card">
               <div class="pa-kpi-header">
                 <span class="pa-kpi-title">Last File Vault Backup</span>
@@ -4255,7 +3961,6 @@
               <div class="pa-kpi-sub" id="kpiBkpLastFilesMeta">AES-256 Encrypted</div>
             </div>
 
-            <!-- 3. Backup schedule -->
             <div class="pa-kpi-card">
               <div class="pa-kpi-header">
                 <span class="pa-kpi-title">Backup Schedule</span>
@@ -4265,7 +3970,6 @@
               <div class="pa-kpi-sub" id="kpiBkpNextRun">Next: Today 20:00 IST</div>
             </div>
 
-            <!-- 4. Backup storage status -->
             <div class="pa-kpi-card">
               <div class="pa-kpi-header">
                 <span class="pa-kpi-title">Storage Status</span>
@@ -4275,7 +3979,6 @@
               <div class="pa-kpi-sub" id="kpiBkpStorageUsage">12.1% Utilized (Optimal)</div>
             </div>
 
-            <!-- 5. Retention policy -->
             <div class="pa-kpi-card">
               <div class="pa-kpi-header">
                 <span class="pa-kpi-title">Retention Policy</span>
@@ -4285,7 +3988,6 @@
               <div class="pa-kpi-sub">AP Statutory Education Act</div>
             </div>
 
-            <!-- 6. Failed backups -->
             <div class="pa-kpi-card">
               <div class="pa-kpi-header">
                 <span class="pa-kpi-title">Failed Backups</span>
@@ -4295,7 +3997,6 @@
               <div class="pa-kpi-sub" id="kpiBkpFailedMeta">Zero Unresolved Failures</div>
             </div>
 
-            <!-- 7. Latest recovery test -->
             <div class="pa-kpi-card">
               <div class="pa-kpi-header">
                 <span class="pa-kpi-title">Latest Recovery Test</span>
@@ -4306,7 +4007,6 @@
             </div>
           </div>
 
-          <!-- Overview Detailed Breakdowns -->
           <div class="row g-3">
             <div class="col-md-6">
               <div class="pa-card h-100">
@@ -4384,7 +4084,6 @@
           </div>
         </div>
 
-        <!-- TAB 2: 12.2 Backup History -->
         <div id="bkpTabHistoryContent" style="display: none;">
           <div class="pa-card">
             <div class="pa-card-header">
@@ -4395,7 +4094,6 @@
               <span class="badge bg-secondary" id="lblBkpFilteredCount">Showing 0 Backups</span>
             </div>
 
-            <!-- Filter Toolbar -->
             <div class="p-3 bg-light border-bottom">
               <div class="row g-2 align-items-center">
                 <div class="col-md-3">
@@ -4437,7 +4135,6 @@
               </div>
             </div>
 
-            <!-- Table with 8 Columns (Section 12.2) -->
             <div class="pa-table-responsive">
               <table class="pa-table">
                 <thead>
@@ -4465,7 +4162,6 @@
           </div>
         </div>
 
-        <!-- TAB 3: 12.3 Recovery Workflow -->
         <div id="bkpTabRecoveryContent" style="display: none;">
           <div class="pa-card">
             <div class="pa-card-header">
@@ -4478,13 +4174,11 @@
               </button>
             </div>
 
-            <!-- Invariant Notice Banner (Section 12.3) -->
             <div class="alert alert-warning d-flex align-items-center mx-3 mt-3 mb-0 py-2" style="font-size: 0.8rem; background: #FFFBEB; border-left: 4px solid #F59E0B; color: #92400E;">
               <i class="fa-solid fa-triangle-exclamation text-warning me-2" style="font-size: 1.1rem;"></i>
               <span><strong>Disaster Recovery Policy (Section 12.3):</strong> Never offer an unrestricted one-click production restore to every Platform Administrator. All restore operations require target environment isolation, impact assessment, independent dual-authorization approval, data integrity checks, and audit logging.</span>
             </div>
 
-            <!-- 8-Step Procedure Visual Explainer -->
             <div class="p-3 bg-light border-bottom m-3 rounded">
               <span class="small fw-bold text-dark text-uppercase d-block mb-2">Mandated 8-Step Recovery Workflow:</span>
               <div class="d-flex flex-wrap gap-2 small">
@@ -4506,7 +4200,6 @@
               </div>
             </div>
 
-            <!-- Table of Recovery Requests -->
             <div class="pa-table-responsive">
               <table class="pa-table">
                 <thead>
@@ -4534,11 +4227,7 @@
         </div>
       </section>
 
-      <!-- =======================================================================
-           MODULE 13: INTEGRATIONS & API MANAGEMENT (#view-integrations)
-           ======================================================================= -->
       <section class="portal-view" id="view-integrations">
-        <!-- Module Header -->
         <div class="d-flex justify-content-between align-items-center mb-3">
           <div>
             <h2 class="h4 mb-1 fw-bold text-dark">
@@ -4561,7 +4250,6 @@
           </div>
         </div>
 
-        <!-- Sub-navigation Tabs -->
         <div class="int-subnav">
           <button type="button" class="int-tab-btn active" id="btnIntTabDirectory" onclick="platformApp.switchIntegrationsSubTab('directory')">
             <i class="fa-solid fa-puzzle-piece"></i> 13.1 Integrations Directory
@@ -4577,7 +4265,6 @@
           </button>
         </div>
 
-        <!-- TAB 1: 13.1 Integrations Directory -->
         <div id="intTabDirectoryContent">
           <div class="pa-card">
             <div class="pa-card-header">
@@ -4588,7 +4275,6 @@
               <span class="badge bg-secondary" id="lblIntFilteredCount">Showing 0 Integrations</span>
             </div>
 
-            <!-- Filter Toolbar -->
             <div class="p-3 bg-light border-bottom">
               <div class="row g-2 align-items-center">
                 <div class="col-md-3">
@@ -4635,7 +4321,6 @@
               </div>
             </div>
 
-            <!-- Table with 8 Columns (Section 13.1) -->
             <div class="pa-table-responsive">
               <table class="pa-table">
                 <thead>
@@ -4662,7 +4347,6 @@
           </div>
         </div>
 
-        <!-- TAB 2: 13.3 API Management -->
         <div id="intTabApiContent" style="display: none;">
           <div class="pa-card">
             <div class="pa-card-header">
@@ -4675,13 +4359,11 @@
               </button>
             </div>
 
-            <!-- Security Invariant Notice Banner -->
             <div class="alert alert-secondary d-flex align-items-center mx-3 mt-3 mb-0 py-2" style="font-size: 0.8rem; background: #F8FAFC; border-left: 4px solid #4F46E5;">
               <i class="fa-solid fa-shield-halved text-primary me-2"></i>
               <span><strong>Credential Privacy Guard (Section 13.3):</strong> Internal API client secrets are never exposed to school administrators or ordinary users. Only platform administrators can register clients or rotate credentials.</span>
             </div>
 
-            <!-- API Clients Table -->
             <div class="pa-table-responsive">
               <table class="pa-table">
                 <thead>
@@ -4708,7 +4390,6 @@
           </div>
         </div>
 
-        <!-- TAB 3: 13.4 Integration Event Logs -->
         <div id="intTabLogsContent" style="display: none;">
           <div class="pa-card">
             <div class="pa-card-header">
@@ -4719,13 +4400,11 @@
               <span class="badge bg-secondary" id="lblEventLogsFilteredCount">Showing 0 Events</span>
             </div>
 
-            <!-- Payment Reconciliation Invariant Banner (Section 13.4) -->
             <div class="alert alert-info d-flex align-items-center mx-3 mt-3 mb-0 py-2" style="font-size: 0.8rem; background: #F0FDF4; border-left: 4px solid #10B981; color: #166534;">
               <i class="fa-solid fa-scale-balanced text-success me-2" style="font-size: 1.1rem;"></i>
               <span><strong>Payment Reconciliation Invariant (Section 13.4):</strong> For payment integrations, an unverified webhook notification received is strictly distinguished from a payment that has been independently verified against banking settlements and reconciled into fee ledgers.</span>
             </div>
 
-            <!-- Filter Toolbar -->
             <div class="p-3 bg-light border-bottom">
               <div class="row g-2 align-items-center">
                 <div class="col-md-3">
@@ -4754,7 +4433,6 @@
                 <div class="col-md-2">
                   <select class="form-select form-select-sm" id="selEventFilterIntegration" onchange="platformApp.filterEventLogsTable()">
                     <option value="">All Integrations</option>
-                    <!-- Dynamically populated -->
                   </select>
                 </div>
                 <div class="col-md-2">
@@ -4765,7 +4443,6 @@
               </div>
             </div>
 
-            <!-- Table with 8 Columns (Section 13.4) -->
             <div class="pa-table-responsive">
               <table class="pa-table">
                 <thead>
@@ -4794,11 +4471,7 @@
         </div>
       </section>
 
-      <!-- =======================================================================
-           MODULE 15: DOMAINS, EMAIL & NOTIFICATIONS (#view-domains-email)
-           ======================================================================= -->
       <section class="portal-view" id="view-domains-email">
-        <!-- Module Header -->
         <div class="d-flex justify-content-between align-items-center mb-3">
           <div>
             <h2 class="h4 mb-1 fw-bold text-dark">
@@ -4818,7 +4491,6 @@
           </div>
         </div>
 
-        <!-- Sub-navigation Tabs -->
         <div class="dom-subnav">
           <button type="button" class="dom-tab-btn active" id="btnDomTabDirectory" onclick="platformApp.switchDomainsSubTab('directory')">
             <i class="fa-solid fa-globe"></i> 15.1 &amp; 15.2 Domain Directory &amp; DNS
@@ -4834,7 +4506,6 @@
           </button>
         </div>
 
-        <!-- TAB 1: 15.1 & 15.2 Domain Directory & DNS Verification -->
         <div id="domTabDirectoryContent">
           <div class="pa-card">
             <div class="pa-card-header">
@@ -4845,13 +4516,11 @@
               <span class="badge bg-secondary" id="lblDomFilteredCount">Showing 0 Domains</span>
             </div>
 
-            <!-- Invariant Notice (Section 15.2) -->
             <div class="alert alert-secondary d-flex align-items-center mx-3 mt-3 mb-0 py-2" style="font-size: 0.8rem; background: #F8FAFC; border-left: 4px solid #4F46E5;">
               <i class="fa-solid fa-shield-check text-primary me-2"></i>
               <span><strong>Verification Integrity Rule (Section 15.2):</strong> A domain is never reported as verified before the authoritative DNS verification check succeeds.</span>
             </div>
 
-            <!-- Filter Toolbar -->
             <div class="p-3 bg-light border-bottom">
               <div class="row g-2 align-items-center">
                 <div class="col-md-3">
@@ -4895,7 +4564,6 @@
               </div>
             </div>
 
-            <!-- 8-Column Table (Section 15.1) -->
             <div class="pa-table-responsive">
               <table class="pa-table">
                 <thead>
@@ -4922,7 +4590,6 @@
           </div>
         </div>
 
-        <!-- TAB 2: 15.3 Email Service Management -->
         <div id="domTabEmailContent" style="display: none;">
           <div class="pa-card">
             <div class="pa-card-header">
@@ -4958,7 +4625,6 @@
           </div>
         </div>
 
-        <!-- TAB 3: 15.4 Notification Templates -->
         <div id="domTabTemplatesContent" style="display: none;">
           <div class="pa-card">
             <div class="pa-card-header">
@@ -4968,7 +4634,6 @@
               </div>
             </div>
 
-            <!-- Invariant Notice (Section 15.4) -->
             <div class="alert alert-secondary d-flex align-items-center mx-3 mt-3 mb-0 py-2" style="font-size: 0.8rem; background: #FFFDF0; border-left: 4px solid #F59E0B; color: #92400E;">
               <i class="fa-solid fa-lock text-warning me-2"></i>
               <span><strong>Privacy Guard (Section 15.4):</strong> Arbitrary template variables are strictly validated. Confidential variables (passwords, tokens, raw Aadhaar, bank credentials) are prohibited to prevent data leakage.</span>
@@ -5001,9 +4666,6 @@
         </div>
       </section>
 
-      <!-- =======================================================================
-           MODULE 17: PLATFORM POLICIES & DATA RETENTION (#view-policies)
-           ======================================================================= -->
       <section class="portal-view" id="view-policies">
         <div class="pa-card">
           <div class="pa-card-header">
@@ -5018,7 +4680,6 @@
             </div>
           </div>
 
-          <!-- Module 17 3-Tab Subnavigation -->
           <div class="pol-subnav">
             <button class="pol-subnav-btn active" id="btnPolTabRegister" onclick="platformApp.switchPoliciesSubTab('register')">
               <i class="fa-solid fa-book-bookmark"></i> 17.1 Policy Register
@@ -5031,7 +4692,6 @@
             </button>
           </div>
 
-          <!-- 17.1 Policy Register Subtab -->
           <div id="polSectionRegister">
             <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
               <div class="d-flex align-items-center gap-2 flex-wrap">
@@ -5091,7 +4751,6 @@
             </div>
           </div>
 
-          <!-- 17.2 Data Retention Configuration Subtab -->
           <div id="polSectionRetention" style="display: none;">
             <div class="pol-statutory-alert">
               <i class="fa-solid fa-shield-halved text-success" style="font-size: 1.5rem; margin-top: 2px;"></i>
@@ -5157,7 +4816,6 @@
             </div>
           </div>
 
-          <!-- 17.3 Data Requests & Controlled Governance Subtab -->
           <div id="polSectionDataRequests" style="display: none;">
             <div class="pol-governance-alert">
               <i class="fa-solid fa-user-lock text-primary" style="font-size: 1.5rem; margin-top: 2px;"></i>
@@ -5228,9 +4886,6 @@
         </div>
       </section>
 
-      <!-- =======================================================================
-           RECOMMENDED GLOBAL ACTION PATTERNS & HIGH-IMPACT SAFEGUARDS VIEW
-           ======================================================================= -->
       <section class="portal-view" id="view-actions">
         <div class="pa-card">
           <div class="pa-card-header">
@@ -5245,7 +4900,6 @@
             </div>
           </div>
 
-          <!-- Dual Feedback Invariants Callout Box -->
           <div class="feedback-invariant-banner">
             <div class="d-flex align-items-center gap-2 mb-1">
               <i class="fa-solid fa-scale-balanced fs-5 text-primary"></i>
@@ -5257,7 +4911,6 @@
             </ul>
           </div>
 
-          <!-- Subnav for Action Patterns -->
           <div class="pol-subnav mb-3">
             <button class="pol-subnav-btn active" id="btnActionTabRegistry" onclick="platformApp.switchActionSubTab('registry')">
               <i class="fa-solid fa-list-check"></i> 10 Regulated Action Patterns
@@ -5267,24 +4920,20 @@
             </button>
           </div>
 
-          <!-- Section A: 10 Action Rules Cards & Directory -->
           <div id="actionSectionRegistry">
             <div class="row g-3" id="containerActionPatternCards">
-              <!-- Rendered dynamically by platformApp.loadActionPatternsData() -->
               <div class="col-12 text-center py-4 text-muted">
                 <i class="fa-solid fa-spinner fa-spin me-2"></i> Loading 10 Regulated Action Patterns...
               </div>
             </div>
           </div>
 
-          <!-- Section B: Interactive Verification Sandbox -->
           <div id="actionSectionDiagnostic" style="display: none;">
             <div class="p-3 border rounded bg-light mb-3">
               <h5 class="h6 fw-bold mb-1 text-dark"><i class="fa-solid fa-microscope text-primary me-2"></i>Action Pattern Invariant Test Harness</h5>
               <p class="text-muted small mb-3">Test duplicate detection, difference previews, access impact preservation, and input-retaining error handling in real time.</p>
               
               <div class="row g-3">
-                <!-- Sandbox Test 1: Duplicate Institution Code & Domain Check -->
                 <div class="col-md-6">
                   <div class="p-3 border rounded bg-white h-100 shadow-sm">
                     <div class="d-flex justify-content-between align-items-center mb-2">
@@ -5304,7 +4953,6 @@
                   </div>
                 </div>
 
-                <!-- Sandbox Test 2: URL Token Leakage Rejection -->
                 <div class="col-md-6">
                   <div class="p-3 border rounded bg-white h-100 shadow-sm">
                     <div class="d-flex justify-content-between align-items-center mb-2">
@@ -5324,7 +4972,6 @@
                   </div>
                 </div>
 
-                <!-- Sandbox Test 3: High-Impact Suspension Justification & Authority -->
                 <div class="col-md-6">
                   <div class="p-3 border rounded bg-white h-100 shadow-sm">
                     <div class="d-flex justify-content-between align-items-center mb-2">
@@ -5339,7 +4986,6 @@
                   </div>
                 </div>
 
-                <!-- Sandbox Test 4: Role Permission Differences Preview -->
                 <div class="col-md-6">
                   <div class="p-3 border rounded bg-white h-100 shadow-sm">
                     <div class="d-flex justify-content-between align-items-center mb-2">
@@ -5357,7 +5003,6 @@
               </div>
             </div>
 
-            <!-- Invariant Execution Telemetry / Audit Log -->
             <div class="pa-field-card mt-3">
               <div class="pa-field-card-title d-flex justify-content-between align-items-center">
                 <span><i class="fa-solid fa-terminal text-primary"></i> Live Pattern Execution &amp; Feedback Verification Stream</span>
@@ -5372,9 +5017,6 @@
         </div>
       </section>
 
-      <!-- =======================================================================
-           COMPLETE PLATFORM ADMINISTRATION WORKFLOWS (A–F) VIEW
-           ======================================================================= -->
       <section class="portal-view" id="view-workflows">
         <div class="pa-card">
           <div class="pa-card-header">
@@ -5389,7 +5031,6 @@
             </div>
           </div>
 
-          <!-- Workflows Subnav Tabs -->
           <div class="pol-subnav mb-3">
             <button class="pol-subnav-btn active" id="btnWfTabOverview" onclick="platformApp.switchWorkflowTab('overview')">
               <i class="fa-solid fa-table-cells-large"></i> Workflows Hub (A–F)
@@ -5414,10 +5055,8 @@
             </button>
           </div>
 
-          <!-- Tab 1: Workflows Overview Hub -->
           <div id="wfSectionOverview">
             <div class="row g-3">
-              <!-- Workflow A Card -->
               <div class="col-md-6 col-lg-4">
                 <div class="workflow-card">
                   <div>
@@ -5436,7 +5075,6 @@
                 </div>
               </div>
 
-              <!-- Workflow B Card -->
               <div class="col-md-6 col-lg-4">
                 <div class="workflow-card">
                   <div>
@@ -5455,7 +5093,6 @@
                 </div>
               </div>
 
-              <!-- Workflow C Card -->
               <div class="col-md-6 col-lg-4">
                 <div class="workflow-card">
                   <div>
@@ -5474,7 +5111,6 @@
                 </div>
               </div>
 
-              <!-- Workflow D Card -->
               <div class="col-md-6 col-lg-4">
                 <div class="workflow-card">
                   <div>
@@ -5493,7 +5129,6 @@
                 </div>
               </div>
 
-              <!-- Workflow E Card -->
               <div class="col-md-6 col-lg-4">
                 <div class="workflow-card">
                   <div>
@@ -5512,7 +5147,6 @@
                 </div>
               </div>
 
-              <!-- Workflow F Card -->
               <div class="col-md-6 col-lg-4">
                 <div class="workflow-card">
                   <div>
@@ -5534,18 +5168,15 @@
             </div>
           </div>
 
-          <!-- Tab 2: Workflow A (Register a New School) -->
           <div id="wfSectionA" style="display: none;">
             <div class="p-3 border rounded bg-light mb-3">
               <h5 class="h6 fw-bold text-dark mb-2"><i class="fa-solid fa-school text-primary me-2"></i>Workflow A: Register a New School (6-Step Lifecycle)</h5>
               
-              <!-- Invariant Alert -->
               <div class="alert alert-info py-2 px-3 small mb-3">
                 <i class="fa-solid fa-shield-check text-primary me-1"></i>
                 <strong>Statutory Zero-Fabricated Data Invariant:</strong> At activation, the school is ready to sign in and begin its own setup. Student, staff and financial records are NOT fabricated automatically; they must be imported or created through the school's operational workflows.
               </div>
 
-              <!-- Visual 6-Step Vertical Flowchart (Exact specification from diagram) -->
               <div class="workflow-stepper-box mb-3">
                 <div class="workflow-step-item" id="wfA_step1">1. Create institution record</div>
                 <div class="workflow-step-arrow">↓</div>
@@ -5560,7 +5191,6 @@
                 <div class="workflow-step-item" id="wfA_step6">6. Activate institution</div>
               </div>
 
-              <!-- Interactive Execution Form -->
               <div class="pa-field-card">
                 <div class="pa-field-card-title">Provision New Institution Campus</div>
                 <div class="row g-2 mb-2">
@@ -5594,7 +5224,6 @@
                 </div>
               </div>
 
-              <!-- Live Execution Outcome Box -->
               <div id="boxWfA_Outcome" class="mt-3" style="display: none;">
                 <div class="alert alert-success py-2 px-3 small mb-2" id="lblWfA_SuccessMessage">
                   Institution successfully provisioned and activated.
@@ -5610,7 +5239,6 @@
             </div>
           </div>
 
-          <!-- Tab 3: Workflow B (Invite Administrator) -->
           <div id="wfSectionB" style="display: none;">
             <div class="p-3 border rounded bg-light mb-3">
               <h5 class="h6 fw-bold text-dark mb-2"><i class="fa-solid fa-user-plus text-primary me-2"></i>Workflow B: Invite a New School Administrator (10 Steps)</h5>
@@ -5666,7 +5294,6 @@
             </div>
           </div>
 
-          <!-- Tab 4: Workflow C (Deploy Application Version) -->
           <div id="wfSectionC" style="display: none;">
             <div class="p-3 border rounded bg-light mb-3">
               <h5 class="h6 fw-bold text-dark mb-2"><i class="fa-solid fa-cloud-arrow-up text-primary me-2"></i>Workflow C: Deploy a New Application Version (7 Steps)</h5>
@@ -5697,7 +5324,6 @@
                 </div>
               </div>
 
-              <!-- Live Deployment Log Console -->
               <div class="pa-field-card">
                 <div class="pa-field-card-title d-flex justify-content-between align-items-center">
                   <span><i class="fa-solid fa-terminal text-primary"></i> Automated Checks &amp; Deployment Stream</span>
@@ -5712,7 +5338,6 @@
             </div>
           </div>
 
-          <!-- Tab 5: Workflow D (Resolve System Incident) -->
           <div id="wfSectionD" style="display: none;">
             <div class="p-3 border rounded bg-light mb-3">
               <h5 class="h6 fw-bold text-dark mb-2"><i class="fa-solid fa-triangle-exclamation text-primary me-2"></i>Workflow D: Resolve a System Incident (8 Steps)</h5>
@@ -5777,7 +5402,6 @@
             </div>
           </div>
 
-          <!-- Tab 6: Workflow E (Suspend Compromised Account) -->
           <div id="wfSectionE" style="display: none;">
             <div class="p-3 border rounded bg-light mb-3">
               <h5 class="h6 fw-bold text-dark mb-2"><i class="fa-solid fa-user-lock text-primary me-2"></i>Workflow E: Suspend a Compromised Account (8 Steps)</h5>
@@ -5831,7 +5455,6 @@
             </div>
           </div>
 
-          <!-- Tab 7: Workflow F (Import an Existing School's Records) -->
           <div id="wfSectionF" style="display: none;">
             <div class="p-3 border rounded bg-light mb-3">
               <h5 class="h6 fw-bold text-dark mb-2"><i class="fa-solid fa-file-import text-primary me-2"></i>Workflow F: Import an Existing School's Records (10 Steps)</h5>
@@ -5866,7 +5489,6 @@
                 </div>
               </div>
 
-              <!-- Dry Run & Ingest Outcome -->
               <div id="boxWfF_Outcome" style="display: none;">
                 <div class="p-3 border rounded bg-white font-mono small mb-2">
                   <div class="d-flex justify-content-between align-items-center mb-2">
@@ -5896,12 +5518,6 @@
     </main>
   </div>
 
-  <!-- =========================================================================
-       MODAL 1: ADD NEW INSTITUTION
-       ========================================================================= -->
-  <!-- =========================================================================
-       MODAL 1: ADD INSTITUTION MULTI-STEP SETUP WIZARD (SECTION 3.2)
-       ========================================================================= -->
   <div class="pa-modal-backdrop" id="modalAddInstitution">
     <div class="pa-modal pa-modal-xl">
       <div class="pa-modal-header">
@@ -5918,7 +5534,6 @@
         </button>
       </div>
 
-      <!-- 6-Step Stepper Navigation -->
       <div class="pa-wizard-stepper" id="wizardStepperNav">
         <div class="pa-wizard-step active" id="wizardStepNav1" onclick="platformApp.goToWizardStep(1)">
           <span class="pa-wizard-num">1</span>
@@ -5954,7 +5569,6 @@
       <form id="formAddInstitutionWizard" onsubmit="event.preventDefault();">
         <div class="pa-modal-body" style="padding: 1.5rem; max-height: 65vh; overflow-y: auto;">
 
-          <!-- STEP 1: INSTITUTION IDENTITY -->
           <div class="wizard-pane active" id="wizardPane1">
             <h4 style="margin: 0 0 1rem; font-size: 0.95rem; font-weight: 700; color: var(--color-text-main); display: flex; align-items: center; gap: 0.5rem;">
               <i class="fa-solid fa-id-card text-primary"></i> Step 1: Institutional Identity &amp; Legal Entity
@@ -6007,7 +5621,6 @@
             </div>
           </div>
 
-          <!-- STEP 2: INSTITUTION CONFIGURATION -->
           <div class="wizard-pane" id="wizardPane2" style="display: none;">
             <h4 style="margin: 0 0 1rem; font-size: 0.95rem; font-weight: 700; color: var(--color-text-main); display: flex; align-items: center; gap: 0.5rem;">
               <i class="fa-solid fa-sliders text-primary"></i> Step 2: Operational &amp; Academic Configuration
@@ -6066,14 +5679,12 @@
             </div>
           </div>
 
-          <!-- STEP 3: BRANDING -->
           <div class="wizard-pane" id="wizardPane3" style="display: none;">
             <h4 style="margin: 0 0 1rem; font-size: 0.95rem; font-weight: 700; color: var(--color-text-main); display: flex; align-items: center; gap: 0.5rem;">
               <i class="fa-solid fa-palette text-primary"></i> Step 3: Campus Branding &amp; Visual Identity
             </h4>
 
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.25rem;">
-              <!-- Controls -->
               <div>
                 <div class="mb-3">
                   <label style="font-size: 0.8rem; font-weight: 600; display: block; margin-bottom: 0.35rem;">School Logo Path / URL</label>
@@ -6099,13 +5710,11 @@
                 </div>
               </div>
 
-              <!-- Live Previews -->
               <div>
                 <label style="font-size: 0.8rem; font-weight: 700; color: #475569; display: block; margin-bottom: 0.5rem;">
                   <i class="fa-solid fa-eye text-primary mr-1"></i> Live Institutional Branding Previews
                 </label>
 
-                <!-- Document Header Preview -->
                 <div class="branding-preview-box mb-3" style="text-align: center; border-top: 4px solid #1e3a8a;" id="previewDocHeaderBox">
                   <div style="font-size: 0.75rem; font-weight: 800; letter-spacing: 0.05em; color: #1e3a8a;" id="previewDocHeaderText">
                     SRI VIDYA EDUCATIONAL TRUST • GOVT RECOGNIZED
@@ -6116,7 +5725,6 @@
                   <div style="font-size: 0.72rem; color: #64748B;">Affiliated to AP State Board • Visakhapatnam</div>
                 </div>
 
-                <!-- Report Card Crest Preview -->
                 <div class="branding-preview-box" style="display: flex; align-items: center; gap: 1rem;">
                   <div style="width: 46px; height: 46px; border-radius: 8px; background: #1e3a8a; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 1.3rem;" id="previewLogoBox">
                     <i class="fa-solid fa-graduation-cap"></i>
@@ -6130,7 +5738,6 @@
             </div>
           </div>
 
-          <!-- STEP 4: DOMAIN AND EMAIL -->
           <div class="wizard-pane" id="wizardPane4" style="display: none;">
             <h4 style="margin: 0 0 1rem; font-size: 0.95rem; font-weight: 700; color: var(--color-text-main); display: flex; align-items: center; gap: 0.5rem;">
               <i class="fa-solid fa-globe text-primary"></i> Step 4: Domain Mapping &amp; DNS Verification
@@ -6155,7 +5762,6 @@
               </div>
             </div>
 
-            <!-- DNS Verification Console -->
             <div style="background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 10px; padding: 1.25rem;">
               <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
                 <div style="font-weight: 700; font-size: 0.85rem; color: #1E293B;">
@@ -6183,7 +5789,6 @@
             </div>
           </div>
 
-          <!-- STEP 5: INITIAL ADMINISTRATOR -->
           <div class="wizard-pane" id="wizardPane5" style="display: none;">
             <h4 style="margin: 0 0 1rem; font-size: 0.95rem; font-weight: 700; color: var(--color-text-main); display: flex; align-items: center; gap: 0.5rem;">
               <i class="fa-solid fa-user-shield text-primary"></i> Step 5: Initial Campus Administrator Provisioning
@@ -6227,7 +5832,6 @@
             </div>
           </div>
 
-          <!-- STEP 6: REVIEW AND ACTIVATE -->
           <div class="wizard-pane" id="wizardPane6" style="display: none;">
             <h4 style="margin: 0 0 1rem; font-size: 0.95rem; font-weight: 700; color: var(--color-text-main); display: flex; align-items: center; gap: 0.5rem;">
               <i class="fa-solid fa-clipboard-check text-primary"></i> Step 6: Review Institutional Parameters &amp; Provision
@@ -6268,7 +5872,6 @@
 
         </div>
 
-        <!-- Wizard Footer Controls -->
         <div class="pa-modal-footer" style="justify-content: space-between;">
           <button type="button" class="btn-pa btn-pa-secondary" id="btnWizardBack" onclick="platformApp.prevWizardStep()" style="display: none;">
             <i class="fa-solid fa-arrow-left me-1"></i> Back
@@ -6292,9 +5895,6 @@
     </div>
   </div>
 
-  <!-- =========================================================================
-       MODAL 2: INSTITUTION DETAIL (10 AUTHORITATIVE TABS - SECTION 3.3)
-       ========================================================================= -->
   <div class="pa-modal-backdrop" id="modalInstitutionDetail">
     <div class="pa-modal pa-modal-xl">
       <div class="pa-modal-header" style="flex-wrap: wrap; gap: 0.75rem;">
@@ -6310,7 +5910,6 @@
           </div>
         </div>
 
-        <!-- Detail Actions Toolbar -->
         <div style="display: flex; gap: 0.4rem; flex-wrap: wrap;">
           <button type="button" class="btn-pa btn-pa-secondary" style="padding: 0.35rem 0.75rem; font-size: 0.8rem;" onclick="platformApp.openEditFromDetail()">
             <i class="fa-solid fa-pen-to-square me-1"></i> Edit
@@ -6333,7 +5932,6 @@
         </div>
       </div>
 
-      <!-- 10 Detail Tabs Header -->
       <div class="pa-detail-nav" id="institutionDetailTabsNav">
         <button class="pa-detail-tab-btn active" onclick="platformApp.switchInstitutionDetailTab('overview')"><i class="fa-solid fa-chart-pie"></i> 1. Overview</button>
         <button class="pa-detail-tab-btn" onclick="platformApp.switchInstitutionDetailTab('profile')"><i class="fa-solid fa-building-columns"></i> 2. Profile</button>
@@ -6347,12 +5945,9 @@
         <button class="pa-detail-tab-btn" onclick="platformApp.switchInstitutionDetailTab('audit')"><i class="fa-solid fa-clock-rotate-left"></i> 10. Audit History</button>
       </div>
 
-      <!-- Detail Tabs Content -->
       <div class="pa-modal-body" style="padding: 1.5rem; max-height: 65vh; overflow-y: auto;" id="institutionDetailBody">
 
-        <!-- TAB 1: OVERVIEW -->
         <div class="detail-tab-pane active" id="detailTabPane-overview">
-          <!-- Status Pipeline Banner -->
           <div class="pa-status-pipeline" id="detailModalPipeline">
             <span class="pa-pipeline-node done"><i class="fa-solid fa-check-circle"></i> Draft</span>
             <i class="fa-solid fa-chevron-right pa-pipeline-arrow"></i>
@@ -6365,7 +5960,6 @@
             <span class="pa-pipeline-node current" id="detailPipelineStatusNode"><i class="fa-solid fa-circle-dot"></i> Active</span>
           </div>
 
-          <!-- Suspension Alert Box (if suspended) -->
           <div id="detailSuspensionAlert" style="display: none; background: #FEE2E2; border: 1.5px solid #F87171; border-radius: 10px; padding: 1rem; margin-bottom: 1.25rem;">
             <div style="font-weight: 800; color: #991B1B; font-size: 0.9rem; display: flex; align-items: center; gap: 0.5rem;">
               <i class="fa-solid fa-triangle-exclamation"></i> INSTITUTION ACCESS SUSPENDED
@@ -6401,7 +5995,6 @@
             </div>
           </div>
 
-          <!-- Quick Information Columns -->
           <div class="pa-dossier-2col">
             <div class="pa-card" style="padding: 1rem;">
               <div style="font-weight: 700; font-size: 0.85rem; margin-bottom: 0.75rem; color: #1E293B;"><i class="fa-solid fa-address-book text-primary mr-1"></i> Authorized Campus Contacts</div>
@@ -6425,7 +6018,6 @@
           </div>
         </div>
 
-        <!-- TAB 2: PROFILE -->
         <div class="detail-tab-pane" id="detailTabPane-profile" style="display: none;">
           <h4 style="margin: 0 0 1rem; font-size: 0.95rem; font-weight: 700; color: #1E293B;"><i class="fa-solid fa-building-columns text-primary mr-1"></i> Complete Institutional Profile</h4>
           <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem; font-size: 0.83rem;">
@@ -6441,7 +6033,6 @@
           </div>
         </div>
 
-        <!-- TAB 3: CONFIGURATION -->
         <div class="detail-tab-pane" id="detailTabPane-config" style="display: none;">
           <h4 style="margin: 0 0 1rem; font-size: 0.95rem; font-weight: 700; color: #1E293B;"><i class="fa-solid fa-sliders text-primary mr-1"></i> Operational &amp; Academic Settings</h4>
           <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem; font-size: 0.83rem;">
@@ -6456,7 +6047,6 @@
           </div>
         </div>
 
-        <!-- TAB 4: DOMAINS -->
         <div class="detail-tab-pane" id="detailTabPane-domains" style="display: none;">
           <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
             <h4 style="margin: 0; font-size: 0.95rem; font-weight: 700; color: #1E293B;"><i class="fa-solid fa-globe text-primary mr-1"></i> Verified Domains &amp; DNS Records</h4>
@@ -6474,7 +6064,6 @@
           </table>
         </div>
 
-        <!-- TAB 5: PORTAL STATUS -->
         <div class="detail-tab-pane" id="detailTabPane-portals" style="display: none;">
           <h4 style="margin: 0 0 1rem; font-size: 0.95rem; font-weight: 700; color: #1E293B;"><i class="fa-solid fa-network-wired text-primary mr-1"></i> Sub-Portal Health &amp; Gateway Status</h4>
           <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem;">
@@ -6505,7 +6094,6 @@
           </div>
         </div>
 
-        <!-- TAB 6: ADMINISTRATORS -->
         <div class="detail-tab-pane" id="detailTabPane-admins" style="display: none;">
           <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
             <h4 style="margin: 0; font-size: 0.95rem; font-weight: 700; color: #1E293B;"><i class="fa-solid fa-user-shield text-primary mr-1"></i> Authorized Institutional Leaders</h4>
@@ -6516,12 +6104,10 @@
               <tr><th>Administrator Name</th><th>Official Email</th><th>Role</th><th>Status</th><th>Last Login</th><th>Actions</th></tr>
             </thead>
             <tbody id="detailAdminsTableBody">
-              <!-- Dynamically populated -->
             </tbody>
           </table>
         </div>
 
-        <!-- TAB 7: INTEGRATIONS -->
         <div class="detail-tab-pane" id="detailTabPane-integrations" style="display: none;">
           <h4 style="margin: 0 0 1rem; font-size: 0.95rem; font-weight: 700; color: #1E293B;"><i class="fa-solid fa-puzzle-piece text-primary mr-1"></i> Institutional Integrations</h4>
           <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem; font-size: 0.82rem;">
@@ -6548,7 +6134,6 @@
           </div>
         </div>
 
-        <!-- TAB 8: SUBSCRIPTION -->
         <div class="detail-tab-pane" id="detailTabPane-subscription" style="display: none;">
           <h4 style="margin: 0 0 1rem; font-size: 0.95rem; font-weight: 700; color: #1E293B;"><i class="fa-solid fa-id-card-clip text-primary mr-1"></i> Trust Multi-Campus License</h4>
           <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem; font-size: 0.83rem;">
@@ -6572,7 +6157,6 @@
           </div>
         </div>
 
-        <!-- TAB 9: SUPPORT HISTORY -->
         <div class="detail-tab-pane" id="detailTabPane-support" style="display: none;">
           <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
             <h4 style="margin: 0; font-size: 0.95rem; font-weight: 700; color: #1E293B;"><i class="fa-solid fa-headset text-primary mr-1"></i> Technical Tickets Log</h4>
@@ -6589,7 +6173,6 @@
           </table>
         </div>
 
-        <!-- TAB 10: AUDIT HISTORY -->
         <div class="detail-tab-pane" id="detailTabPane-audit" style="display: none;">
           <h4 style="margin: 0 0 1rem; font-size: 0.95rem; font-weight: 700; color: #1E293B;"><i class="fa-solid fa-clock-rotate-left text-primary mr-1"></i> Immutable Institutional Audit Trail</h4>
           <table class="pa-table" style="font-size: 0.82rem;">
@@ -6611,9 +6194,6 @@
     </div>
   </div>
 
-  <!-- =========================================================================
-       MODAL 3: SUSPEND INSTITUTION CONFIRMATION (SECTIONS 3.3 & 3.4)
-       ========================================================================= -->
   <div class="pa-modal-backdrop" id="modalSuspendInstitution">
     <div class="pa-modal pa-modal-lg">
       <div class="pa-modal-header" style="background: #FEF2F2; border-bottom: 1px solid #FECACA;">
@@ -6676,9 +6256,6 @@
     </div>
   </div>
 
-  <!-- =========================================================================
-       MODAL 4: IMPORT INSTITUTIONS DOCKET (SECTION 3.1)
-       ========================================================================= -->
   <div class="pa-modal-backdrop" id="modalImportInstitutions">
     <div class="pa-modal pa-modal-lg">
       <div class="pa-modal-header">
@@ -6727,9 +6304,6 @@
     </div>
   </div>
 
-  <!-- =========================================================================
-       MODAL: 14.3 CREATE SUPPORT TICKET
-       ========================================================================= -->
   <div class="pa-modal-backdrop" id="modalCreateTicket" style="display: none;">
     <div class="pa-modal-card" style="max-width: 680px; width: 90%;">
       <div class="pa-modal-header" style="padding: 1.25rem 1.5rem; border-bottom: 1px solid #E2E8F0; display: flex; justify-content: space-between; align-items: center;">
@@ -6740,7 +6314,6 @@
       </div>
       <form onsubmit="platformApp.handleCreateTicket(event)">
         <div class="pa-modal-body" style="padding: 1.5rem; max-height: 75vh; overflow-y: auto;">
-          <!-- Section 14.5 Security Incident Warning Banner -->
           <div id="boxTicketSecurityNotice" class="alert alert-danger py-2 small mb-3" style="display: none;">
             <i class="fa-solid fa-shield-halved me-1"></i>
             <strong>Section 14.5 Invariant:</strong> Security incidents follow a dedicated triage and incident containment workflow rather than ordinary support queues.
@@ -6749,7 +6322,6 @@
           <div class="mb-3">
             <label class="form-label small fw-bold">Subject / Issue Summary *</label>
             <input type="text" id="txtTicketFormSubject" class="form-control form-control-sm" required placeholder="e.g. Faculty Portal Authentication Failure for Science Staff">
-            <!-- Hidden backward-compatible field -->
             <input type="hidden" id="newTicketSubject">
           </div>
 
@@ -6848,7 +6420,6 @@
     </div>
   </div>
 
-  <!-- Modal: Invite Platform Administrator -->
   <div class="pa-modal-backdrop" id="modalInviteAdmin">
     <div class="pa-modal">
       <div class="pa-modal-header">
@@ -6903,7 +6474,6 @@
     </div>
   </div>
 
-  <!-- Modal: View Failed Background Jobs -->
   <div class="pa-modal-backdrop" id="modalFailedJobs">
     <div class="pa-modal" style="max-width: 650px;">
       <div class="pa-modal-header">
@@ -6960,7 +6530,6 @@
     </div>
   </div>
 
-  <!-- Modal: Review Security Alerts -->
   <div class="pa-modal-backdrop" id="modalSecurityAlerts">
     <div class="pa-modal" style="max-width: 650px;">
       <div class="pa-modal-header">
@@ -7014,7 +6583,6 @@
     </div>
   </div>
 
-  <!-- Modal: Activity Detail Inspection -->
   <div class="pa-modal-backdrop" id="modalActivityDetail">
     <div class="pa-modal" style="max-width: 580px;">
       <div class="pa-modal-header">
@@ -7028,7 +6596,6 @@
         </button>
       </div>
       <div class="pa-modal-body" id="activityDetailModalBody">
-        <!-- Populated dynamically by platformApp.viewActivityDetails -->
       </div>
       <div class="pa-modal-footer">
         <button type="button" class="btn-pa btn-pa-secondary"
@@ -7037,11 +6604,9 @@
     </div>
   </div>
 
-  <!-- Scripts -->
   <script src="/js/api-client.js?v=20261122-v13"></script>
   <script src="/js/portal-auth.js?v=20261122-v13"></script>
   <script src="/js/platform-admin.js?v=20261122-v13"></script>
-  <!-- Production Readiness Suite -->
   <script src="/js/portal-production-suite.js?v=20261122-v13"></script>
   <script>
     document.addEventListener('DOMContentLoaded', function () {
@@ -7050,9 +6615,6 @@
       }
     });
   </script>
-<!-- =========================================================================
-       MODAL: SCHOOL PROFILE LETTERHEAD & BRANDING PREVIEW (SECTION 4.1)
-       ========================================================================= -->
   <div class="pa-modal-backdrop" id="modalConfigProfilePreview">
     <div class="pa-modal pa-modal-lg">
       <div class="pa-modal-header">
@@ -7115,9 +6677,6 @@
     </div>
   </div>
 
-  <!-- =========================================================================
-       MODAL: CONFIGURATION CHANGE HISTORY DRAWER (SECTIONS 4.1, 4.2)
-       ========================================================================= -->
   <div class="pa-modal-backdrop" id="modalConfigHistory">
     <div class="pa-modal pa-modal-lg">
       <div class="pa-modal-header">
@@ -7147,7 +6706,6 @@
               </tr>
             </thead>
             <tbody id="cfgHistoryTableBody">
-              <!-- Dynamically populated -->
             </tbody>
           </table>
         </div>
@@ -7159,9 +6717,6 @@
     </div>
   </div>
 
-  <!-- =========================================================================
-       MODAL: DOCUMENT TEMPLATE PREVIEW (SECTION 4.4)
-       ========================================================================= -->
   <div class="pa-modal-backdrop" id="modalTemplatePreview">
     <div class="pa-modal pa-modal-lg">
       <div class="pa-modal-header">
@@ -7180,7 +6735,6 @@
 
       <div class="pa-modal-body" style="padding: 1.5rem; background: #F8FAFC;">
         <div style="background: #fff; border: 1px solid #CBD5E1; border-radius: 8px; padding: 1.5rem; box-shadow: 0 2px 8px rgba(0,0,0,0.05);" id="prevTplDocContent">
-          <!-- Content dynamically rendered -->
         </div>
       </div>
 
@@ -7190,9 +6744,6 @@
     </div>
   </div>
 
-  <!-- =========================================================================
-       MODAL: 10-STEP DATA IMPORT WIZARD (SECTION 5.3 SPECIFICATION)
-       ========================================================================= -->
   <div class="pa-modal-backdrop" id="modalNewDataImport">
     <div class="pa-modal pa-modal-lg" style="max-width: 900px; width: 95%;">
       <div class="pa-modal-header" style="border-bottom: 1px solid #E2E8F0; padding: 1.25rem 1.5rem;">
@@ -7210,7 +6761,6 @@
       </div>
 
       <div class="pa-modal-body" style="padding: 1.75rem; min-height: 400px; background: #FFFFFF;">
-        <!-- Step 1: Select Institution -->
         <div class="imp-wizard-pane" id="impPaneStep1">
           <h4 style="margin: 0 0 0.5rem; font-size: 1.05rem; font-weight: 700;">Select Target Institution Campus</h4>
           <p style="font-size: 0.82rem; color: #64748B; margin-bottom: 1.25rem;">Choose the registered school or college under Sri Vidya Educational Trust where this dataset will be imported.</p>
@@ -7227,7 +6777,6 @@
           </div>
         </div>
 
-        <!-- Step 2: Select Data Type -->
         <div class="imp-wizard-pane" id="impPaneStep2" style="display: none;">
           <h4 style="margin: 0 0 0.5rem; font-size: 1.05rem; font-weight: 700;">Select Approved Data Type</h4>
           <p style="font-size: 0.82rem; color: #64748B; margin-bottom: 1.25rem;">Choose the exact entity type to import. Strict field validation applies based on statutory standards.</p>
@@ -7277,7 +6826,6 @@
           </div>
         </div>
 
-        <!-- Step 3: Upload the File -->
         <div class="imp-wizard-pane" id="impPaneStep3" style="display: none;">
           <h4 style="margin: 0 0 0.5rem; font-size: 1.05rem; font-weight: 700;">Upload Source Spreadsheet / Register</h4>
           <p style="font-size: 0.82rem; color: #64748B; margin-bottom: 1.25rem;">Upload files exported from Excel, CSV, UDISE+ portals, or legacy school software.</p>
@@ -7297,7 +6845,6 @@
           </div>
         </div>
 
-        <!-- Step 4: Map Source Columns -->
         <div class="imp-wizard-pane" id="impPaneStep4" style="display: none;">
           <h4 style="margin: 0 0 0.5rem; font-size: 1.05rem; font-weight: 700;">Map Source Columns to Required Schema Fields</h4>
           <p style="font-size: 0.82rem; color: #64748B; margin-bottom: 1rem;">Confirm matching between your file's header names and Sri Vidya schema targets.</p>
@@ -7312,13 +6859,11 @@
                 </tr>
               </thead>
               <tbody id="impMapperTableBody">
-                <!-- Dynamically rendered -->
               </tbody>
             </table>
           </div>
         </div>
 
-        <!-- Step 5: Validate Mandatory Fields & Formats -->
         <div class="imp-wizard-pane" id="impPaneStep5" style="display: none;">
           <h4 style="margin: 0 0 0.5rem; font-size: 1.05rem; font-weight: 700;">Mandatory Field &amp; Format Validation</h4>
           <p style="font-size: 0.82rem; color: #64748B; margin-bottom: 1rem;">Verifying regex formats, dates, telephone conventions, and statutory identifiers.</p>
@@ -7333,7 +6878,6 @@
           </div>
         </div>
 
-        <!-- Step 6: Detect Duplicates & Conflicting Identifiers -->
         <div class="imp-wizard-pane" id="impPaneStep6" style="display: none;">
           <h4 style="margin: 0 0 0.5rem; font-size: 1.05rem; font-weight: 700;">Duplicate Detection &amp; Update Policy</h4>
           <p style="font-size: 0.82rem; color: #64748B; margin-bottom: 1rem;">Cross-referencing Admission Numbers, PEN numbers, and Aadhaar identifiers against active records.</p>
@@ -7348,7 +6892,6 @@
           </div>
         </div>
 
-        <!-- Step 7: Preview Accepted Rows & Rejected Rows -->
         <div class="imp-wizard-pane" id="impPaneStep7" style="display: none;">
           <h4 style="margin: 0 0 0.5rem; font-size: 1.05rem; font-weight: 700;">Preview Accepted Rows &amp; Flagged / Rejected Rows</h4>
           <div class="d-flex gap-2 mb-3">
@@ -7360,11 +6903,9 @@
             </button>
           </div>
           <div class="pa-table-responsive" style="max-height: 250px; overflow-y: auto;" id="impPreviewTableContainer">
-            <!-- Dynamically populated -->
           </div>
         </div>
 
-        <!-- Step 8: Confirm Import & Sensitivity Test Run -->
         <div class="imp-wizard-pane" id="impPaneStep8" style="display: none;">
           <h4 style="margin: 0 0 0.5rem; font-size: 1.05rem; font-weight: 700;">Sensitivity Confirmation &amp; Dry-Run Simulation</h4>
           <div class="alert alert-warning small mb-3">
@@ -7385,7 +6926,6 @@
           </div>
         </div>
 
-        <!-- Step 9: Processing Live Monitor -->
         <div class="imp-wizard-pane" id="impPaneStep9" style="display: none; text-align: center; padding: 3rem 1rem;">
           <div style="font-size: 2.5rem; color: #4F46E5; margin-bottom: 1rem;"><i class="fa-solid fa-spinner fa-spin"></i></div>
           <h4 style="font-weight: 800; margin-bottom: 0.25rem;">Processing Institutional Ingestion...</h4>
@@ -7395,7 +6935,6 @@
           </div>
         </div>
 
-        <!-- Step 10: Completion Report & Downloadable Error List -->
         <div class="imp-wizard-pane" id="impPaneStep10" style="display: none;">
           <div class="text-center py-3">
             <div style="width: 60px; height: 60px; border-radius: 50%; background: #DCFCE7; color: #16A34A; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; margin: 0 auto 1rem;">
@@ -7451,9 +6990,6 @@
   </div>
 
 
-  <!-- =========================================================================
-       MODAL: 6.2 CREATE USER / ACCOUNT PROVISIONING WIZARD
-       ========================================================================= -->
   <div class="pa-modal-backdrop" id="modalCreateUser">
     <div class="pa-modal pa-modal-lg" style="max-width: 760px; width: 95%;">
       <div class="pa-modal-header" style="border-bottom: 1px solid #E2E8F0; padding: 1.25rem 1.5rem;">
@@ -7473,7 +7009,6 @@
       <form id="formCreateUser" onsubmit="platformApp.handleCreateUserSubmit(event)">
         <div class="pa-modal-body" style="padding: 1.5rem; background: #FFFFFF;">
 
-          <!-- School Employee Authorization Invariant Notice -->
           <div class="p-3 mb-3 rounded" style="background: #EFF6FF; border: 1px solid #BFDBFE; font-size: 0.82rem; color: #1E40AF; display: flex; gap: 0.75rem; align-items: flex-start;">
             <i class="fa-solid fa-shield-halved mt-1" style="font-size: 1.1rem;"></i>
             <div>
@@ -7543,7 +7078,6 @@
               </select>
             </div>
 
-            <!-- Required Security Settings -->
             <div class="col-md-12 mt-2">
               <label class="form-label small fw-bold text-dark d-block mb-2">Required Security Controls</label>
               <div class="p-3 bg-light rounded border">
@@ -7580,12 +7114,8 @@
     </div>
   </div>
 
-  <!-- =========================================================================
-       MODAL: 6.3 USER DETAIL 7-TAB DOSSIER & SESSION GOVERNANCE
-       ========================================================================= -->
   <div class="pa-modal-backdrop" id="modalUserDossier">
     <div class="pa-modal pa-modal-lg" style="max-width: 960px; width: 95%;">
-      <!-- Dossier Header -->
       <div class="pa-modal-header" style="border-bottom: 1px solid #E2E8F0; padding: 1.25rem 1.5rem; background: #FFFFFF;">
         <div style="display: flex; align-items: center; gap: 1rem;">
           <div class="pa-user-avatar" id="dossierUserAvatar" style="width: 48px; height: 48px; font-size: 1.2rem;">
@@ -7610,7 +7140,6 @@
         </button>
       </div>
 
-      <!-- 7-Tab Sub-Navigation Strip (Section 6.3 Specification) -->
       <div class="pa-user-dossier-subnav" id="userDossierSubnav">
         <button type="button" class="pa-user-dossier-tab-btn active" id="btnUserTab_profile" onclick="platformApp.switchUserDossierTab('profile')">
           <i class="fa-solid fa-user me-1"></i> 1. Profile
@@ -7635,9 +7164,7 @@
         </button>
       </div>
 
-      <!-- Tab Content Panes -->
       <div class="pa-modal-body" style="padding: 1.5rem; min-height: 380px; background: #FFFFFF;">
-        <!-- Tab 1: Profile -->
         <div class="user-dossier-pane" id="dossierPane_profile">
           <div class="row g-3">
             <div class="col-md-6">
@@ -7667,7 +7194,6 @@
           </div>
         </div>
 
-        <!-- Tab 2: Institution Scope -->
         <div class="user-dossier-pane" id="dossierPane_institutions" style="display: none;">
           <h5 class="fw-bold mb-2">Tenant Scope &amp; Branch Authorizations</h5>
           <p class="small text-muted mb-3">This identity is bound to the following institutional tenant scopes. Cross-campus access is governed strictly by Trust senate policy.</p>
@@ -7682,16 +7208,13 @@
           </div>
         </div>
 
-        <!-- Tab 3: Roles and Permissions -->
         <div class="user-dossier-pane" id="dossierPane_roles" style="display: none;">
           <h5 class="fw-bold mb-2">Assigned Role Templates</h5>
           <p class="small text-muted mb-3">Granular authorization boundaries ensuring strict separation between software operations and school records.</p>
           <div id="dossierRolesList" class="d-flex flex-wrap gap-2 mb-3">
-            <!-- Dynamically populated -->
           </div>
         </div>
 
-        <!-- Tab 4: Account Security -->
         <div class="user-dossier-pane" id="dossierPane_security" style="display: none;">
           <h5 class="fw-bold mb-2">Authentication &amp; Cryptographic Security Posture</h5>
           <div class="p-3 bg-light rounded border mb-3">
@@ -7712,7 +7235,6 @@
           </div>
         </div>
 
-        <!-- Tab 5: Sessions (Section 6.5 Specification) -->
         <div class="user-dossier-pane" id="dossierPane_sessions" style="display: none;">
           <div class="d-flex justify-content-between align-items-center mb-3">
             <div>
@@ -7724,11 +7246,9 @@
             </button>
           </div>
           <div id="dossierSessionsContainer">
-            <!-- Dynamically populated with session cards -->
           </div>
         </div>
 
-        <!-- Tab 6: Invitation History -->
         <div class="user-dossier-pane" id="dossierPane_invitations" style="display: none;">
           <div class="d-flex justify-content-between align-items-center mb-3">
             <div>
@@ -7740,21 +7260,17 @@
             </button>
           </div>
           <div id="dossierInvitationsContainer">
-            <!-- Dynamically populated -->
           </div>
         </div>
 
-        <!-- Tab 7: Audit History -->
         <div class="user-dossier-pane" id="dossierPane_audit" style="display: none;">
           <h5 class="fw-bold mb-2">Immutable Sensitive Changes Ledger</h5>
           <p class="small text-muted mb-3">Traceable log of role updates, session terminations, suspensions, and password resets.</p>
           <div id="dossierAuditContainer">
-            <!-- Dynamically populated -->
           </div>
         </div>
       </div>
 
-      <!-- Dossier Actions Footer (Section 6.3 Specification) -->
       <div class="pa-modal-footer" style="border-top: 1px solid #E2E8F0; padding: 1rem 1.5rem; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem; background: #F8FAFC;">
         <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
           <button type="button" class="btn btn-outline-secondary btn-sm" onclick="platformApp.triggerUserPasswordReset()">
@@ -7774,11 +7290,7 @@
     </div>
   </div>
 
-  <!-- =========================================================================
-       MODULE 7 MODALS: ROLE TEMPLATES & PERMISSION EDITOR
-       ========================================================================= -->
 
-  <!-- Modal 1: 7.3 Permission Editor & Role Configuration (#modalRoleEditor) -->
   <div class="pa-modal-backdrop" id="modalRoleEditor">
     <div class="pa-modal pa-modal-lg" style="max-width: 900px; width: 95%;">
       <div class="pa-modal-header" style="border-bottom: 1px solid #E2E8F0; padding: 1.25rem 1.5rem;">
@@ -7798,13 +7310,11 @@
       <form id="formRoleEditor" onsubmit="platformApp.handleRoleFormSubmit(event)">
         <input type="hidden" id="roleEditId">
         <div class="pa-modal-body" style="padding: 1.5rem; background: #FFFFFF; max-height: 75vh; overflow-y: auto;">
-          <!-- Safeguard Alert Banner -->
           <div class="p-3 mb-3 rounded" id="roleEditorSafeguardAlert" style="background: #FFFBEB; border: 1px solid #FCD34D; font-size: 0.82rem; color: #92400E; display: none;">
             <i class="fa-solid fa-shield-halved me-1"></i>
             <strong>Critical Privileges Safeguard:</strong> This is a built-in privileged role template. Any modifications require an authorized reviewer approval before becoming effective. Built-in roles cannot be deactivated.
           </div>
 
-          <!-- Basic Role Meta -->
           <div class="row g-3 mb-3">
             <div class="col-md-5">
               <label class="form-label small fw-bold">Role Name *</label>
@@ -7827,7 +7337,6 @@
             </div>
           </div>
 
-          <!-- Section 7.3: Module Action Permission Matrix -->
           <div class="mb-4">
             <div class="d-flex justify-content-between align-items-center mb-2">
               <div>
@@ -7856,7 +7365,6 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <!-- 1. Institutions -->
                   <tr>
                     <td><strong>Institutions</strong><div class="small text-muted">Campus profiles &amp; directories</div></td>
                     <td><input type="checkbox" class="role-matrix-checkbox" id="perm_institutions_view"></td>
@@ -7865,7 +7373,6 @@
                     <td><input type="checkbox" class="role-matrix-checkbox" id="perm_institutions_export"></td>
                     <td><input type="checkbox" class="role-matrix-checkbox" id="perm_institutions_manage_access"></td>
                   </tr>
-                  <!-- 2. User Accounts -->
                   <tr>
                     <td><strong>User Accounts</strong><div class="small text-muted">Identity lifecycle &amp; sessions</div></td>
                     <td><input type="checkbox" class="role-matrix-checkbox" id="perm_user_accounts_view"></td>
@@ -7874,7 +7381,6 @@
                     <td><input type="checkbox" class="role-matrix-checkbox" id="perm_user_accounts_export"></td>
                     <td><input type="checkbox" class="role-matrix-checkbox" id="perm_user_accounts_manage_access"></td>
                   </tr>
-                  <!-- 3. School Configuration -->
                   <tr>
                     <td><strong>School Configuration</strong><div class="small text-muted">Academic years, terms, grading</div></td>
                     <td><input type="checkbox" class="role-matrix-checkbox" id="perm_school_config_view"></td>
@@ -7883,7 +7389,6 @@
                     <td><input type="checkbox" class="role-matrix-checkbox" id="perm_school_config_export"></td>
                     <td><input type="checkbox" class="role-matrix-checkbox" id="perm_school_config_manage_access"></td>
                   </tr>
-                  <!-- 4. System Health -->
                   <tr>
                     <td><strong>System Health</strong><div class="small text-muted">Cluster diagnostics &amp; jobs</div></td>
                     <td><input type="checkbox" class="role-matrix-checkbox" id="perm_system_health_view"></td>
@@ -7892,7 +7397,6 @@
                     <td><input type="checkbox" class="role-matrix-checkbox" id="perm_system_health_export"></td>
                     <td><span class="role-matrix-na">N/A</span></td>
                   </tr>
-                  <!-- 5. Audit Logs -->
                   <tr>
                     <td><strong>Audit Logs</strong><div class="small text-muted">Immutable forensic event trail</div></td>
                     <td><input type="checkbox" class="role-matrix-checkbox" id="perm_audit_logs_view"></td>
@@ -7901,7 +7405,6 @@
                     <td><input type="checkbox" class="role-matrix-checkbox" id="perm_audit_logs_export"></td>
                     <td><span class="role-matrix-na">N/A</span></td>
                   </tr>
-                  <!-- 6. Integrations -->
                   <tr>
                     <td><strong>Integrations</strong><div class="small text-muted">APIs, SMTP &amp; webhooks</div></td>
                     <td><input type="checkbox" class="role-matrix-checkbox" id="perm_integrations_view"></td>
@@ -7915,14 +7418,12 @@
             </div>
           </div>
 
-          <!-- Section 7.3: Scope, Sensitive Fields, Dates, Delegations & Export Controls -->
           <div class="p-3 bg-light rounded border mb-3">
             <h5 class="fw-bold mb-3" style="font-size: 0.95rem;">
               <i class="fa-solid fa-shield-halved text-primary me-1"></i> Governance Boundaries &amp; Data Protections
             </h5>
 
             <div class="row g-3">
-              <!-- Allowed Record Scope -->
               <div class="col-md-6">
                 <label class="form-label small fw-bold">Allowed Record Scope *</label>
                 <select id="roleEditRecordScope" class="pa-select" style="width: 100%; height: 38px;" required>
@@ -7934,7 +7435,6 @@
                 </select>
               </div>
 
-              <!-- Export Restrictions -->
               <div class="col-md-6">
                 <label class="form-label small fw-bold">Restrictions on Exporting Data *</label>
                 <select id="roleEditExportRestrictions" class="pa-select" style="width: 100%; height: 38px;" required>
@@ -7945,7 +7445,6 @@
                 </select>
               </div>
 
-              <!-- Effective Date & Expiry Date -->
               <div class="col-md-6">
                 <label class="form-label small fw-bold">Effective Date *</label>
                 <input type="date" id="roleEditEffectiveDate" class="pa-search-input" style="width: 100%; height: 38px;" required>
@@ -7955,7 +7454,6 @@
                 <input type="date" id="roleEditExpiryDate" class="pa-search-input" style="width: 100%; height: 38px;" placeholder="dd/mm/yyyy">
               </div>
 
-              <!-- Delegated Authority -->
               <div class="col-md-12">
                 <label class="form-label small fw-bold">Delegated Authority</label>
                 <select id="roleEditDelegatedAuth" class="pa-select" style="width: 100%; height: 38px;">
@@ -7964,7 +7462,6 @@
                 </select>
               </div>
 
-              <!-- Sensitive Fields Clearance -->
               <div class="col-md-12">
                 <label class="form-label small fw-bold d-block mb-2">Access to Sensitive Fields</label>
                 <div class="d-flex flex-wrap gap-3 p-2 bg-white rounded border">
@@ -8008,7 +7505,6 @@
     </div>
   </div>
 
-  <!-- Modal 2: 7.4 Permission Change Workflow Diff Modal (#modalRoleDiff) -->
   <div class="pa-modal-backdrop" id="modalRoleDiff">
     <div class="pa-modal pa-modal-lg" style="max-width: 720px; width: 95%;">
       <div class="pa-modal-header" style="border-bottom: 1px solid #E2E8F0; padding: 1.25rem 1.5rem;">
@@ -8026,7 +7522,6 @@
       </div>
 
       <div class="pa-modal-body" style="padding: 1.5rem; background: #FFFFFF;">
-        <!-- Diff Highlights -->
         <div class="mb-3">
           <label class="form-label small fw-bold text-success mb-1">
             <i class="fa-solid fa-circle-plus me-1"></i> Permissions Added (<span id="diffAddedCount">0</span>)
@@ -8045,7 +7540,6 @@
           </div>
         </div>
 
-        <!-- Privileged Role Reviewer Notice -->
         <div id="roleDiffReviewerNotice" class="p-3 mb-3 rounded" style="background: #EFF6FF; border: 1px solid #BFDBFE;">
           <h6 class="fw-bold text-primary mb-1">
             <i class="fa-solid fa-shield-halved me-1"></i> Privileged Role Change Safeguard
@@ -8069,7 +7563,6 @@
           </div>
         </div>
 
-        <!-- Rationale -->
         <div class="mb-2">
           <label class="form-label small fw-bold">Audit Rationale &amp; Operational Justification *</label>
           <textarea id="roleChangeRationale" class="pa-search-input" style="width: 100%;" rows="2" placeholder="e.g. Authorized under Academic Senate Resolution 2026/04 for terminal exam coordination..." required></textarea>
@@ -8087,7 +7580,6 @@
     </div>
   </div>
 
-  <!-- Modal 3: 7.2 Read-Only Permission Viewer (#modalRoleViewer) -->
   <div class="pa-modal-backdrop" id="modalRoleViewer">
     <div class="pa-modal pa-modal-lg" style="max-width: 860px; width: 95%;">
       <div class="pa-modal-header" style="border-bottom: 1px solid #E2E8F0; padding: 1.25rem 1.5rem;">
@@ -8112,7 +7604,6 @@
       </div>
 
       <div class="pa-modal-body" style="padding: 1.5rem; background: #FFFFFF; max-height: 70vh; overflow-y: auto;">
-        <!-- Matrix View -->
         <h5 class="fw-bold mb-2" style="font-size: 0.95rem;">Assigned Capability Matrix</h5>
         <div class="table-responsive mb-3">
           <table class="role-matrix-table" id="viewMatrixTable">
@@ -8127,12 +7618,10 @@
               </tr>
             </thead>
             <tbody id="viewMatrixTableBody">
-              <!-- Dynamically populated -->
             </tbody>
           </table>
         </div>
 
-        <!-- Scope & Sensitive Fields Summary -->
         <div class="row g-2 mb-3">
           <div class="col-md-6">
             <div class="p-2 bg-light rounded border">
@@ -8150,16 +7639,13 @@
             <div class="p-2 bg-light rounded border">
               <span class="small text-muted fw-bold d-block">Sensitive Fields Cleared</span>
               <div id="viewRoleSensitiveFields" class="d-flex flex-wrap gap-1 mt-1">
-                <!-- Dynamically populated -->
               </div>
             </div>
           </div>
         </div>
 
-        <!-- Immutable Audit Trail -->
         <h5 class="fw-bold mb-2" style="font-size: 0.95rem;">Permission Revision History</h5>
         <div id="viewRoleHistoryContainer">
-          <!-- Dynamically populated -->
         </div>
       </div>
 
@@ -8172,7 +7658,6 @@
     </div>
   </div>
 
-  <!-- Modal 4: 7.2 Quick User Assignment (#modalAssignUsers) -->
   <div class="pa-modal-backdrop" id="modalAssignUsers">
     <div class="pa-modal" style="max-width: 480px; width: 95%;">
       <div class="pa-modal-header" style="border-bottom: 1px solid #E2E8F0; padding: 1.25rem 1.5rem;">
@@ -8221,12 +7706,8 @@
     </div>
   </div>
 
-  <!-- =========================================================================
-       MODULE 8 MODAL: 8.2 EVENT DETAIL PAGE / INSPECTION MODAL (#modalAuditEventDetail)
-       ========================================================================= -->
   <div class="pa-modal-backdrop" id="modalAuditEventDetail">
     <div class="pa-modal pa-modal-lg" style="max-width: 900px; width: 95%;">
-      <!-- Header -->
       <div class="pa-modal-header" style="border-bottom: 1px solid #E2E8F0; padding: 1.25rem 1.5rem; background: #FFFFFF;">
         <div style="display: flex; align-items: center; gap: 0.85rem;">
           <div class="pa-kpi-icon" style="background: rgba(79,70,229,0.12); color: #4F46E5; width: 44px; height: 44px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem;">
@@ -8253,9 +7734,7 @@
       </div>
 
       <div class="pa-modal-body" style="padding: 1.5rem; background: #FFFFFF; max-height: 75vh; overflow-y: auto;">
-        <!-- Two Column Overview: Actor vs Target -->
         <div class="row g-3 mb-3">
-          <!-- Actor Card -->
           <div class="col-md-6">
             <div class="p-3 bg-light rounded border h-100">
               <div class="d-flex justify-content-between align-items-center mb-2">
@@ -8274,7 +7753,6 @@
             </div>
           </div>
 
-          <!-- Target Entity Card -->
           <div class="col-md-6">
             <div class="p-3 bg-light rounded border h-100">
               <div class="d-flex justify-content-between align-items-center mb-2">
@@ -8293,7 +7771,6 @@
           </div>
         </div>
 
-        <!-- Statutory Reason / Justification -->
         <div class="p-3 mb-3 rounded" style="background: #F8FAFC; border: 1px solid #E2E8F0;">
           <label class="small text-muted fw-bold text-uppercase d-block mb-1">
             <i class="fa-solid fa-pen-fancy text-primary me-1"></i> Mandatory Statutory Reason / Audit Justification
@@ -8303,7 +7780,6 @@
           </div>
         </div>
 
-        <!-- 8.2 Changed Fields Diff Viewer with Sensitive Masking Guard -->
         <div class="mb-3">
           <div class="d-flex justify-content-between align-items-center mb-1">
             <label class="small text-muted fw-bold text-uppercase">
@@ -8323,12 +7799,10 @@
               </tr>
             </thead>
             <tbody id="auditDetailDiffTableBody">
-              <!-- Dynamically populated -->
             </tbody>
           </table>
         </div>
 
-        <!-- Cryptographic Tamper Seal -->
         <div class="tamper-seal-box mb-3">
           <div class="d-flex justify-content-between align-items-center">
             <div>
@@ -8342,18 +7816,15 @@
           </span>
         </div>
 
-        <!-- Related Events Timeline -->
         <div>
           <label class="small text-muted fw-bold text-uppercase d-block mb-2">
             <i class="fa-solid fa-timeline text-primary me-1"></i> Correlated Forensic Chain &amp; Related Events
           </label>
           <div id="auditDetailRelatedEvents" class="d-flex flex-column gap-2">
-            <!-- Dynamically populated -->
           </div>
         </div>
       </div>
 
-      <!-- Footer Actions -->
       <div class="pa-modal-footer" style="border-top: 1px solid #E2E8F0; padding: 1rem 1.5rem; display: flex; justify-content: space-between; background: #F8FAFC;">
         <div>
           <button type="button" class="btn btn-outline-warning btn-sm" id="btnOpenRelatedSecurityEvent" onclick="platformApp.openRelatedSecurityEvent()">
@@ -8367,7 +7838,6 @@
     </div>
   </div>
 
-  <!-- Modal 9.2: Security Event Detail & Lifecycle Controller -->
   <div class="pa-modal-backdrop" id="modalSecurityEventDetail" style="display: none;">
     <div class="pa-modal-card" style="max-width: 850px; width: 95%;">
       <div class="pa-modal-header" style="background: linear-gradient(135deg, #0F172A 0%, #1E1B4B 100%); color: #FFFFFF; padding: 1.25rem 1.5rem; display: flex; justify-content: space-between; align-items: center;">
@@ -8388,7 +7858,6 @@
       </div>
 
       <div class="pa-modal-body" style="padding: 1.5rem; max-height: calc(85vh - 160px); overflow-y: auto;">
-        <!-- Entity & Campus Overview -->
         <div class="row g-3 mb-3">
           <div class="col-md-4">
             <div class="p-2 border rounded bg-light">
@@ -8413,7 +7882,6 @@
           </div>
         </div>
 
-        <!-- Real-Time Threat Telemetry Box -->
         <div class="sec-telemetry-box mb-3">
           <div class="d-flex justify-content-between align-items-center mb-2">
             <span class="fw-bold text-uppercase small text-muted"><i class="fa-solid fa-satellite-dish text-primary me-1"></i> Threat Telemetry</span>
@@ -8439,7 +7907,6 @@
           </div>
         </div>
 
-        <!-- Incident Findings & Forensic Analysis -->
         <div class="pa-card mb-3 p-3 border">
           <div class="d-flex justify-content-between align-items-center mb-2">
             <h6 class="fw-bold text-dark mb-0"><i class="fa-solid fa-magnifying-glass text-primary me-1"></i> Investigation Findings</h6>
@@ -8461,7 +7928,6 @@
           </div>
         </div>
 
-        <!-- Escalation Details Banner (if escalated) -->
         <div class="alert alert-danger mb-3" id="secDetailEscalationBanner" style="display: none;">
           <div class="d-flex align-items-center justify-content-between mb-1">
             <strong><i class="fa-solid fa-triangle-exclamation me-1"></i> Incident Escalated</strong>
@@ -8471,16 +7937,13 @@
           <div class="small text-muted mt-1" id="secDetailEscalationMeta">Escalated by SecOps</div>
         </div>
 
-        <!-- Lifecycle Stage Progression & Timeline -->
         <div>
           <h6 class="fw-bold text-dark mb-2"><i class="fa-solid fa-timeline text-primary me-1"></i> Incident Audit Timeline</h6>
           <div class="sec-timeline-list" id="secDetailTimelineList">
-            <!-- Timeline items rendered dynamically -->
           </div>
         </div>
       </div>
 
-      <!-- Footer Action Buttons: 9.4 Lifecycle Transitions -->
       <div class="pa-modal-footer" style="border-top: 1px solid #E2E8F0; padding: 1rem 1.5rem; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 0.5rem; background: #F8FAFC;">
         <div class="d-flex gap-2 flex-wrap">
           <button type="button" class="btn btn-sm btn-outline-primary" onclick="platformApp.markEventUnderInvestigation()">
@@ -8508,7 +7971,6 @@
     </div>
   </div>
 
-  <!-- Modal 9.4: Assign Investigator -->
   <div class="pa-modal-backdrop" id="modalAssignInvestigator" style="display: none;">
     <div class="pa-modal-card" style="max-width: 500px; width: 90%;">
       <div class="pa-modal-header" style="padding: 1.25rem 1.5rem; border-bottom: 1px solid #E2E8F0; display: flex; justify-content: space-between; align-items: center;">
@@ -8543,7 +8005,6 @@
     </div>
   </div>
 
-  <!-- Modal 9.2: Record Findings -->
   <div class="pa-modal-backdrop" id="modalRecordFindings" style="display: none;">
     <div class="pa-modal-card" style="max-width: 600px; width: 90%;">
       <div class="pa-modal-header" style="padding: 1.25rem 1.5rem; border-bottom: 1px solid #E2E8F0; display: flex; justify-content: space-between; align-items: center;">
@@ -8572,7 +8033,6 @@
     </div>
   </div>
 
-  <!-- Modal 9.2: Escalate Incident According to Policy -->
   <div class="pa-modal-backdrop" id="modalEscalateIncident" style="display: none;">
     <div class="pa-modal-card" style="max-width: 520px; width: 90%;">
       <div class="pa-modal-header" style="background: #FFF1F2; border-bottom: 1px solid #FDA4AF; padding: 1.25rem 1.5rem; display: flex; justify-content: space-between; align-items: center;">
@@ -8604,7 +8064,6 @@
     </div>
   </div>
 
-  <!-- Modal 9.3: Privileged Access Review Action -->
   <div class="pa-modal-backdrop" id="modalAccessReviewAction" style="display: none;">
     <div class="pa-modal-card" style="max-width: 550px; width: 90%;">
       <div class="pa-modal-header" style="padding: 1.25rem 1.5rem; border-bottom: 1px solid #E2E8F0; display: flex; justify-content: space-between; align-items: center;">
@@ -8643,7 +8102,6 @@
     </div>
   </div>
 
-  <!-- Modal 10.1: Create / Edit Commercial Plan -->
   <div class="pa-modal-backdrop" id="modalCreateEditPlan" style="display: none;">
     <div class="pa-modal-card" style="max-width: 680px; width: 95%;">
       <div class="pa-modal-header" style="background: linear-gradient(135deg, #0F172A 0%, #1E1B4B 100%); color: #FFFFFF; padding: 1.25rem 1.5rem; display: flex; justify-content: space-between; align-items: center;">
@@ -8723,7 +8181,6 @@
     </div>
   </div>
 
-  <!-- Modal 10.2: Assign / Change Institution Plan -->
   <div class="pa-modal-backdrop" id="modalAssignChangePlan" style="display: none;">
     <div class="pa-modal-card" style="max-width: 550px; width: 90%;">
       <div class="pa-modal-header" style="padding: 1.25rem 1.5rem; border-bottom: 1px solid #E2E8F0; display: flex; justify-content: space-between; align-items: center;">
@@ -8743,7 +8200,6 @@
         <div class="mb-3">
           <label class="form-label small fw-bold">Select Target Commercial Plan *</label>
           <select class="form-select form-select-sm" id="selAssignPlan">
-            <!-- Dynamically populated from plans -->
           </select>
         </div>
         <div class="row g-2 mb-3">
@@ -8773,7 +8229,6 @@
     </div>
   </div>
 
-  <!-- Modal 10.2: Renew Subscription -->
   <div class="pa-modal-backdrop" id="modalRenewSubscription" style="display: none;">
     <div class="pa-modal-card" style="max-width: 480px; width: 90%;">
       <div class="pa-modal-header" style="padding: 1.25rem 1.5rem; border-bottom: 1px solid #E2E8F0; display: flex; justify-content: space-between; align-items: center;">
@@ -8806,7 +8261,6 @@
     </div>
   </div>
 
-  <!-- Modal 10.2: Record Authorized Billing Adjustment -->
   <div class="pa-modal-backdrop" id="modalBillingAdjustment" style="display: none;">
     <div class="pa-modal-card" style="max-width: 500px; width: 90%;">
       <div class="pa-modal-header" style="padding: 1.25rem 1.5rem; border-bottom: 1px solid #E2E8F0; display: flex; justify-content: space-between; align-items: center;">
@@ -8840,7 +8294,6 @@
     </div>
   </div>
 
-  <!-- Modal 10.2: Suspend or Cancel According to Contract -->
   <div class="pa-modal-backdrop" id="modalSuspendCancelSubscription" style="display: none;">
     <div class="pa-modal-card" style="max-width: 520px; width: 90%;">
       <div class="pa-modal-header" style="background: #FFF1F2; border-bottom: 1px solid #FDA4AF; padding: 1.25rem 1.5rem; display: flex; justify-content: space-between; align-items: center;">
@@ -8871,7 +8324,6 @@
     </div>
   </div>
 
-  <!-- Modal 11.2: Deployment Detail -->
   <div class="pa-modal-backdrop" id="modalDeploymentDetail" style="display: none;">
     <div class="pa-modal-card" style="max-width: 650px; width: 95%;">
       <div class="pa-modal-header" style="background: linear-gradient(135deg, #0F172A 0%, #1E1B4B 100%); color: #FFFFFF; padding: 1.25rem 1.5rem; display: flex; justify-content: space-between; align-items: center;">
@@ -8940,7 +8392,6 @@
     </div>
   </div>
 
-  <!-- Modal 11.2: Initiate Approved Deployment -->
   <div class="pa-modal-backdrop" id="modalInitiateDeployment" style="display: none;">
     <div class="pa-modal-card" style="max-width: 550px; width: 90%;">
       <div class="pa-modal-header" style="padding: 1.25rem 1.5rem; border-bottom: 1px solid #E2E8F0; display: flex; justify-content: space-between; align-items: center;">
@@ -8987,7 +8438,6 @@
     </div>
   </div>
 
-  <!-- Modal 11.3: Sanitized Application Log Detail -->
   <div class="pa-modal-backdrop" id="modalAppLogDetail" style="display: none;">
     <div class="pa-modal-card" style="max-width: 650px; width: 95%;">
       <div class="pa-modal-header" style="background: linear-gradient(135deg, #0F172A 0%, #1E1B4B 100%); color: #FFFFFF; padding: 1.25rem 1.5rem; display: flex; justify-content: space-between; align-items: center;">
@@ -9040,7 +8490,6 @@
     </div>
   </div>
 
-  <!-- Modal 11.4: Background Job Detail -->
   <div class="pa-modal-backdrop" id="modalJobDetail" style="display: none;">
     <div class="pa-modal-card" style="max-width: 580px; width: 90%;">
       <div class="pa-modal-header" style="padding: 1.25rem 1.5rem; border-bottom: 1px solid #E2E8F0; display: flex; justify-content: space-between; align-items: center;">
@@ -9105,11 +8554,7 @@
     </div>
   </div>
 
-  <!-- =======================================================================
-       MODULE 12: BACKUPS & RECOVERY MODALS
-       ======================================================================= -->
 
-  <!-- Modal 12.1: Start Authorized Backup -->
   <div class="pa-modal-backdrop" id="modalStartBackup" style="display: none;">
     <div class="pa-modal-card" style="max-width: 540px; width: 90%;">
       <div class="pa-modal-header" style="padding: 1.25rem 1.5rem; border-bottom: 1px solid #E2E8F0; display: flex; justify-content: space-between; align-items: center;">
@@ -9154,7 +8599,6 @@
     </div>
   </div>
 
-  <!-- Modal 12.2: Backup Record Details -->
   <div class="pa-modal-backdrop" id="modalBackupDetail" style="display: none;">
     <div class="pa-modal-card" style="max-width: 640px; width: 90%;">
       <div class="pa-modal-header" style="padding: 1.25rem 1.5rem; border-bottom: 1px solid #E2E8F0; display: flex; justify-content: space-between; align-items: center;">
@@ -9233,7 +8677,6 @@
     </div>
   </div>
 
-  <!-- Modal 12.3: Request Controlled Recovery (Steps 1, 2, 3) -->
   <div class="pa-modal-backdrop" id="modalRequestRecovery" style="display: none;">
     <div class="pa-modal-card" style="max-width: 580px; width: 90%;">
       <div class="pa-modal-header" style="padding: 1.25rem 1.5rem; border-bottom: 1px solid #E2E8F0; display: flex; justify-content: space-between; align-items: center;">
@@ -9244,7 +8687,6 @@
         <div class="mb-3">
           <label class="form-label small fw-bold">Target Backup Snapshot (Source)</label>
           <select class="form-select form-select-sm" id="selReqRecBackupId">
-            <!-- Dynamically populated -->
           </select>
         </div>
         <div class="mb-3">
@@ -9261,7 +8703,6 @@
           <textarea class="form-control form-control-sm" id="txtReqRecReason" rows="2" placeholder="e.g. Mandatory quarterly statutory disaster recovery audit and data fidelity verification."></textarea>
         </div>
 
-        <!-- Step 3: Potential Impact Review Box -->
         <div class="p-3 border rounded bg-light mb-3 small" id="boxReqRecImpact">
           <span class="small fw-bold text-dark text-uppercase d-block mb-2"><i class="fa-solid fa-scale-balanced text-primary me-1"></i> Step 3: Potential Impact Assessment</span>
           <div class="d-flex justify-content-between mb-1">
@@ -9289,7 +8730,6 @@
     </div>
   </div>
 
-  <!-- Modal 12.4: Dual-Authorization Approval (Step 4) -->
   <div class="pa-modal-backdrop" id="modalApproveRecovery" style="display: none;">
     <div class="pa-modal-card" style="max-width: 540px; width: 90%;">
       <div class="pa-modal-header" style="padding: 1.25rem 1.5rem; border-bottom: 1px solid #E2E8F0; display: flex; justify-content: space-between; align-items: center;">
@@ -9340,7 +8780,6 @@
     </div>
   </div>
 
-  <!-- Modal 12.5: Controlled 8-Step Recovery Workflow Tracker -->
   <div class="pa-modal-backdrop" id="modalRecoveryWorkflowDetail" style="display: none;">
     <div class="pa-modal-card" style="max-width: 680px; width: 90%;">
       <div class="pa-modal-header" style="padding: 1.25rem 1.5rem; border-bottom: 1px solid #E2E8F0; display: flex; justify-content: space-between; align-items: center;">
@@ -9351,12 +8790,9 @@
         <button type="button" class="btn-close" onclick="platformApp.closeModal('modalRecoveryWorkflowDetail')"></button>
       </div>
       <div class="pa-modal-body" style="padding: 1.5rem; max-height: 70vh; overflow-y: auto;">
-        <!-- 8-Step Stepper -->
         <div class="recovery-workflow-stepper mb-3" id="workflowStepperContainer">
-          <!-- Dynamically populated with Steps 1 through 8 -->
         </div>
 
-        <!-- Integrity & Validation Results Box -->
         <div class="p-3 border rounded bg-light mb-2 small" id="boxWorkflowIntegrity">
           <div class="d-flex justify-content-between mb-1">
             <span class="text-muted fw-bold">Data Integrity Check:</span>
@@ -9382,11 +8818,7 @@
     </div>
   </div>
 
-  <!-- =======================================================================
-       MODULE 13: INTEGRATIONS & API MANAGEMENT MODALS
-       ======================================================================= -->
 
-  <!-- Modal 13.1 & 13.2: Create / Configure Integration -->
   <div class="pa-modal-backdrop" id="modalCreateEditIntegration" style="display: none;">
     <div class="pa-modal-card" style="max-width: 680px; width: 90%;">
       <div class="pa-modal-header" style="padding: 1.25rem 1.5rem; border-bottom: 1px solid #E2E8F0; display: flex; justify-content: space-between; align-items: center;">
@@ -9460,7 +8892,6 @@
           <input type="text" class="form-control form-control-sm font-mono" id="txtIntFormScopes" placeholder="orders.read, payments.capture, refunds.verify">
         </div>
 
-        <!-- Webhook Configuration -->
         <div class="p-3 border rounded bg-light mb-3 small">
           <span class="small fw-bold text-dark text-uppercase d-block mb-2"><i class="fa-solid fa-satellite-dish text-primary me-1"></i> Webhook Callback Configuration</span>
           <div class="mb-2">
@@ -9473,7 +8904,6 @@
           </div>
         </div>
 
-        <!-- Retry Policy -->
         <div class="row g-2 mb-3">
           <div class="col-md-4">
             <label class="form-label small fw-bold">Max Retries</label>
@@ -9504,7 +8934,6 @@
     </div>
   </div>
 
-  <!-- Modal 13.2B: Integration Details Modal -->
   <div class="pa-modal-backdrop" id="modalIntegrationDetail" style="display: none;">
     <div class="pa-modal-card" style="max-width: 620px; width: 90%;">
       <div class="pa-modal-header" style="padding: 1.25rem 1.5rem; border-bottom: 1px solid #E2E8F0; display: flex; justify-content: space-between; align-items: center;">
@@ -9575,7 +9004,6 @@
     </div>
   </div>
 
-  <!-- Modal 13.3A: Register API Client -->
   <div class="pa-modal-backdrop" id="modalRegisterApiClient" style="display: none;">
     <div class="pa-modal-card" style="max-width: 580px; width: 90%;">
       <div class="pa-modal-header" style="padding: 1.25rem 1.5rem; border-bottom: 1px solid #E2E8F0; display: flex; justify-content: space-between; align-items: center;">
@@ -9626,7 +9054,6 @@
     </div>
   </div>
 
-  <!-- Modal 13.4: Event Log Detail & Payment Reconciliation -->
   <div class="pa-modal-backdrop" id="modalIntegrationEventDetail" style="display: none;">
     <div class="pa-modal-card" style="max-width: 620px; width: 90%;">
       <div class="pa-modal-header" style="padding: 1.25rem 1.5rem; border-bottom: 1px solid #E2E8F0; display: flex; justify-content: space-between; align-items: center;">
@@ -9657,7 +9084,6 @@
           </div>
         </div>
 
-        <!-- Section 13.4 Payment Reconciliation Banner -->
         <div class="p-3 border rounded bg-light mb-3" id="boxEventPaymentReconciliation">
           <span class="small fw-bold text-dark text-uppercase d-block mb-1"><i class="fa-solid fa-scale-balanced text-primary me-1"></i> Section 13.4 Payment Verification Status</span>
           <div class="d-flex justify-content-between align-items-center">
@@ -9672,7 +9098,6 @@
         </div>
 
         <div class="p-2 border rounded bg-dark text-white font-mono small mb-3" style="max-height: 140px; overflow-y: auto; font-size: 0.75rem;" id="lblEventDetailMetadata">
-          <!-- Metadata json -->
         </div>
 
         <div class="mb-2" id="eventDetailErrorBox" style="display: none;">
@@ -9686,11 +9111,7 @@
     </div>
   </div>
 
-  <!-- =======================================================================
-       MODULE 14: SUPPORT & ISSUE MANAGEMENT MODALS (14.4 & 14.5)
-       ======================================================================= -->
 
-  <!-- Modal 14.4: Master Support Ticket Detail Inspector -->
   <div class="pa-modal-backdrop" id="modalSupportTicketDetail" style="display: none;">
     <div class="pa-modal-card" style="max-width: 860px; width: 95%;">
       <div class="pa-modal-header" style="padding: 1.25rem 1.5rem; border-bottom: 1px solid #E2E8F0; display: flex; justify-content: space-between; align-items: center;">
@@ -9703,7 +9124,6 @@
       </div>
 
       <div class="pa-modal-body" style="padding: 1.5rem; max-height: 78vh; overflow-y: auto;">
-        <!-- Ticket Subject & Context -->
         <div class="mb-3">
           <h4 class="h5 fw-bold text-dark mb-1" id="lblTicketDetailSubject">Ticket Subject</h4>
           <div class="d-flex flex-wrap align-items-center gap-3 text-muted small">
@@ -9714,7 +9134,6 @@
           </div>
         </div>
 
-        <!-- Section 14.5: Dedicated Security Incident Workflow Banner -->
         <div id="boxTicketDetailSecurityBanner" class="ticket-security-banner" style="display: none;">
           <div>
             <div class="fw-bold"><i class="fa-solid fa-shield-halved me-1"></i> Dedicated Security Incident Response Active</div>
@@ -9725,7 +9144,6 @@
           </button>
         </div>
 
-        <!-- Action Bar (Section 14.4) -->
         <div class="d-flex flex-wrap gap-2 p-2 bg-light border rounded mb-3">
           <button type="button" class="btn btn-sm btn-outline-primary" id="btnTicketActionAssign" onclick="platformApp.openAssignModal()">
             <i class="fa-solid fa-user-plus me-1"></i> Assign
@@ -9753,7 +9171,6 @@
           </button>
         </div>
 
-        <!-- 6 Tabs (Section 14.4) -->
         <div class="ticket-subnav">
           <button type="button" class="ticket-tab-btn active" id="btnTicketTabOverview" onclick="platformApp.switchTicketTab('overview')">
             <i class="fa-solid fa-circle-info"></i> 1. Overview
@@ -9778,7 +9195,6 @@
           </button>
         </div>
 
-        <!-- TAB 1: Overview -->
         <div id="tabTicketOverviewContent">
           <div class="p-3 border rounded bg-light mb-3">
             <span class="small text-muted fw-bold text-uppercase d-block mb-1">Issue Description</span>
@@ -9811,10 +9227,8 @@
           </div>
         </div>
 
-        <!-- TAB 2: Conversation (School-visible) -->
         <div id="tabTicketConversationContent" style="display: none;">
           <div class="ticket-message-stream mb-3" id="streamTicketConversation">
-            <!-- Populated by platform-admin.js -->
           </div>
           <div class="p-3 border rounded bg-light">
             <label class="form-label small fw-bold"><i class="fa-solid fa-reply me-1 text-primary"></i> Reply to Requester / School</label>
@@ -9827,21 +9241,17 @@
           </div>
         </div>
 
-        <!-- TAB 3: Attachments -->
         <div id="tabTicketAttachmentsContent" style="display: none;">
           <div id="listTicketAttachments">
-            <!-- Populated by platform-admin.js -->
           </div>
         </div>
 
-        <!-- TAB 4: Internal Notes (Strict Invariant: Internal only) -->
         <div id="tabTicketInternalNotesContent" style="display: none;">
           <div class="ticket-internal-banner">
             <i class="fa-solid fa-lock text-warning me-1"></i>
             <strong>Strict Confidentiality Guard (Section 14.4):</strong> Internal notes are strictly isolated to platform administrators and support operations. They are never transmitted or visible to the school.
           </div>
           <div class="mb-3" id="streamTicketInternalNotes">
-            <!-- Populated by platform-admin.js -->
           </div>
           <div class="p-3 border rounded bg-light">
             <label class="form-label small fw-bold text-dark"><i class="fa-solid fa-lock me-1 text-warning"></i> Add Internal Note</label>
@@ -9859,17 +9269,13 @@
           </div>
         </div>
 
-        <!-- TAB 5: Related Incidents -->
         <div id="tabTicketRelatedContent" style="display: none;">
           <div id="listTicketRelatedIncidents">
-            <!-- Populated by platform-admin.js -->
           </div>
         </div>
 
-        <!-- TAB 6: Activity History -->
         <div id="tabTicketActivityContent" style="display: none;">
           <div id="listTicketActivityHistory">
-            <!-- Populated by platform-admin.js -->
           </div>
         </div>
 
@@ -9881,7 +9287,6 @@
     </div>
   </div>
 
-  <!-- Modal 14.4A: Assign Support Ticket -->
   <div class="pa-modal-backdrop" id="modalAssignTicket" style="display: none;">
     <div class="pa-modal-card" style="max-width: 480px; width: 90%;">
       <div class="pa-modal-header" style="padding: 1.25rem 1.5rem; border-bottom: 1px solid #E2E8F0; display: flex; justify-content: space-between; align-items: center;">
@@ -9907,7 +9312,6 @@
     </div>
   </div>
 
-  <!-- Modal 14.4B: Change Priority -->
   <div class="pa-modal-backdrop" id="modalChangePriority" style="display: none;">
     <div class="pa-modal-card" style="max-width: 480px; width: 90%;">
       <div class="pa-modal-header" style="padding: 1.25rem 1.5rem; border-bottom: 1px solid #E2E8F0; display: flex; justify-content: space-between; align-items: center;">
@@ -9936,7 +9340,6 @@
     </div>
   </div>
 
-  <!-- Modal 14.4C: Escalate Ticket -->
   <div class="pa-modal-backdrop" id="modalEscalateTicket" style="display: none;">
     <div class="pa-modal-card" style="max-width: 500px; width: 90%;">
       <div class="pa-modal-header" style="padding: 1.25rem 1.5rem; border-bottom: 1px solid #E2E8F0; display: flex; justify-content: space-between; align-items: center;">
@@ -9964,7 +9367,6 @@
     </div>
   </div>
 
-  <!-- Modal 14.4D: Resolve Ticket -->
   <div class="pa-modal-backdrop" id="modalResolveTicket" style="display: none;">
     <div class="pa-modal-card" style="max-width: 520px; width: 90%;">
       <div class="pa-modal-header" style="padding: 1.25rem 1.5rem; border-bottom: 1px solid #E2E8F0; display: flex; justify-content: space-between; align-items: center;">
@@ -9984,7 +9386,6 @@
     </div>
   </div>
 
-  <!-- Modal 14.4E: Request Info -->
   <div class="pa-modal-backdrop" id="modalRequestInfo" style="display: none;">
     <div class="pa-modal-card" style="max-width: 500px; width: 90%;">
       <div class="pa-modal-header" style="padding: 1.25rem 1.5rem; border-bottom: 1px solid #E2E8F0; display: flex; justify-content: space-between; align-items: center;">
@@ -10004,11 +9405,7 @@
     </div>
   </div>
 
-  <!-- =======================================================================
-       MODULE 15: DOMAINS, EMAIL & NOTIFICATIONS MODALS (15.1 - 15.4)
-       ======================================================================= -->
 
-  <!-- Modal 15.1: Add Domain -->
   <div class="pa-modal-backdrop" id="modalAddDomain" style="display: none;">
     <div class="pa-modal-card" style="max-width: 540px; width: 90%;">
       <div class="pa-modal-header" style="padding: 1.25rem 1.5rem; border-bottom: 1px solid #E2E8F0; display: flex; justify-content: space-between; align-items: center;">
@@ -10052,7 +9449,6 @@
     </div>
   </div>
 
-  <!-- Modal 15.2: Domain Configuration & DNS Records Detail -->
   <div class="pa-modal-backdrop" id="modalDomainDnsDetail" style="display: none;">
     <div class="pa-modal-card" style="max-width: 860px; width: 95%;">
       <div class="pa-modal-header" style="padding: 1.25rem 1.5rem; border-bottom: 1px solid #E2E8F0; display: flex; justify-content: space-between; align-items: center;">
@@ -10066,13 +9462,11 @@
       <div class="pa-modal-body" style="padding: 1.5rem; max-height: 75vh; overflow-y: auto;">
         <input type="hidden" id="txtDnsDetailDomainId">
 
-        <!-- Invariant Notice -->
         <div class="alert alert-secondary d-flex align-items-center py-2 mb-3 small" style="background:#F8FAFC; border-left: 4px solid #4F46E5;">
           <i class="fa-solid fa-circle-info text-primary me-2"></i>
           <span><strong>Section 15.2 DNS Integrity:</strong> Publish the records below at your domain registrar/DNS provider. Missing or misconfigured records are explained in simple language.</span>
         </div>
 
-        <!-- DNS Records Table -->
         <div class="pa-table-responsive mb-3">
           <table class="pa-table">
             <thead>
@@ -10086,7 +9480,6 @@
               </tr>
             </thead>
             <tbody id="tbodyDomainDnsRecords">
-              <!-- Populated by platform-admin.js -->
             </tbody>
           </table>
         </div>
@@ -10120,7 +9513,6 @@
     </div>
   </div>
 
-  <!-- Modal 15.3A: Send Test Email -->
   <div class="pa-modal-backdrop" id="modalSendTestEmail" style="display: none;">
     <div class="pa-modal-card" style="max-width: 480px; width: 90%;">
       <div class="pa-modal-header" style="padding: 1.25rem 1.5rem; border-bottom: 1px solid #E2E8F0; display: flex; justify-content: space-between; align-items: center;">
@@ -10146,7 +9538,6 @@
     </div>
   </div>
 
-  <!-- Modal 15.3B: Email Delivery Logs -->
   <div class="pa-modal-backdrop" id="modalEmailDeliveryLogs" style="display: none;">
     <div class="pa-modal-card" style="max-width: 720px; width: 90%;">
       <div class="pa-modal-header" style="padding: 1.25rem 1.5rem; border-bottom: 1px solid #E2E8F0; display: flex; justify-content: space-between; align-items: center;">
@@ -10166,7 +9557,6 @@
               </tr>
             </thead>
             <tbody id="tbodyEmailDeliveryLogs">
-              <!-- Populated by platform-admin.js -->
             </tbody>
           </table>
         </div>
@@ -10177,7 +9567,6 @@
     </div>
   </div>
 
-  <!-- Modal 15.4A: Edit Notification Template -->
   <div class="pa-modal-backdrop" id="modalEditNotificationTemplate" style="display: none;">
     <div class="pa-modal-card" style="max-width: 760px; width: 90%;">
       <div class="pa-modal-header" style="padding: 1.25rem 1.5rem; border-bottom: 1px solid #E2E8F0; display: flex; justify-content: space-between; align-items: center;">
@@ -10187,7 +9576,6 @@
       <div class="pa-modal-body" style="padding: 1.5rem; max-height: 75vh; overflow-y: auto;">
         <input type="hidden" id="txtEditTemplateId">
 
-        <!-- Privacy Guard Alert Banner (Section 15.4) -->
         <div class="alert alert-secondary py-2 small mb-3" style="background:#FFFDF0; border-left: 4px solid #F59E0B; color: #92400E;">
           <i class="fa-solid fa-lock text-warning me-1"></i>
           <strong>Privacy Guard Invariant:</strong> Confidential variables (e.g. passwords, token hashes, raw credentials, full bank accounts) are prohibited and will be rejected automatically on save.
@@ -10212,7 +9600,6 @@
         <div class="mb-3">
           <label class="form-label small fw-bold">Available Dynamic Variables (Click to copy)</label>
           <div id="boxEditTemplateVariables" class="p-2 border rounded bg-light">
-            <!-- Populated by platform-admin.js -->
           </div>
         </div>
 
@@ -10233,7 +9620,6 @@
     </div>
   </div>
 
-  <!-- Modal 15.4B: Preview Notification Template -->
   <div class="pa-modal-backdrop" id="modalPreviewNotificationTemplate" style="display: none;">
     <div class="pa-modal-card" style="max-width: 680px; width: 90%;">
       <div class="pa-modal-header" style="padding: 1.25rem 1.5rem; border-bottom: 1px solid #E2E8F0; display: flex; justify-content: space-between; align-items: center;">
@@ -10246,7 +9632,6 @@
           <div><strong class="text-muted">Channel:</strong> <span class="badge bg-secondary font-mono" id="lblPreviewTemplateChannel">EMAIL</span></div>
         </div>
         <div class="preview-email-frame" id="boxPreviewTemplateBody" style="white-space: pre-wrap; font-size: 0.88rem; max-height: 380px; overflow-y: auto;">
-          <!-- Rendered sample preview -->
         </div>
       </div>
       <div class="pa-modal-footer" style="padding: 1rem 1.5rem; border-top: 1px solid #E2E8F0; display: flex; justify-content: flex-end; background: #F8FAFC;">
@@ -10255,11 +9640,7 @@
     </div>
   </div>
 
-  <!-- =======================================================================
-       MODULE 16 MODALS (Global Settings)
-       ======================================================================= -->
 
-  <!-- Modal 16.3A: Add Feature Flag -->
   <div class="pa-modal-backdrop" id="modalAddFeatureFlag" style="display: none;">
     <div class="pa-modal-card" style="max-width: 580px; width: 90%;">
       <div class="pa-modal-header" style="padding: 1.25rem 1.5rem; border-bottom: 1px solid #E2E8F0; display: flex; justify-content: space-between; align-items: center;">
@@ -10313,7 +9694,6 @@
     </div>
   </div>
 
-  <!-- Modal 16.3B: Edit Feature Flag Rollout -->
   <div class="pa-modal-backdrop" id="modalEditFeatureFlag" style="display: none;">
     <div class="pa-modal-card" style="max-width: 600px; width: 90%;">
       <div class="pa-modal-header" style="padding: 1.25rem 1.5rem; border-bottom: 1px solid #E2E8F0; display: flex; justify-content: space-between; align-items: center;">
@@ -10364,7 +9744,6 @@
     </div>
   </div>
 
-  <!-- Modal 16.4A: Schedule Maintenance Window -->
   <div class="pa-modal-backdrop" id="modalScheduleMaintenance" style="display: none;">
     <div class="pa-modal-card" style="max-width: 600px; width: 90%;">
       <div class="pa-modal-header" style="padding: 1.25rem 1.5rem; border-bottom: 1px solid #E2E8F0; display: flex; justify-content: space-between; align-items: center;">
@@ -10426,7 +9805,6 @@
     </div>
   </div>
 
-  <!-- Modal 16.4B: Preview Maintenance Splash Announcement -->
   <div class="pa-modal-backdrop" id="modalPreviewMaintenance" style="display: none;">
     <div class="pa-modal-card" style="max-width: 640px; width: 90%;">
       <div class="pa-modal-header" style="padding: 1.25rem 1.5rem; border-bottom: 1px solid #E2E8F0; display: flex; justify-content: space-between; align-items: center;">
@@ -10460,11 +9838,7 @@
     </div>
   </div>
 
-  <!-- =========================================================================
-       MODULE 17 MODALS: PLATFORM POLICIES & DATA RETENTION
-       ========================================================================= -->
 
-  <!-- Modal 17.1: Create Governance Policy -->
   <div class="pa-modal-backdrop" id="modalCreatePolicy" style="display: none;">
     <div class="pa-modal-card" style="max-width: 680px; width: 90%;">
       <div class="pa-modal-header" style="padding: 1.25rem 1.5rem; border-bottom: 1px solid #E2E8F0; display: flex; justify-content: space-between; align-items: center;">
@@ -10546,7 +9920,6 @@
     </div>
   </div>
 
-  <!-- Modal 17.2: Create Retention Policy Draft -->
   <div class="pa-modal-backdrop" id="modalRetentionDraft" style="display: none;">
     <div class="pa-modal-card" style="max-width: 680px; width: 90%;">
       <div class="pa-modal-header" style="padding: 1.25rem 1.5rem; border-bottom: 1px solid #E2E8F0; display: flex; justify-content: space-between; align-items: center;">
@@ -10615,7 +9988,6 @@
     </div>
   </div>
 
-  <!-- Modal 17.2B: Retention Previous Versions -->
   <div class="pa-modal-backdrop" id="modalRetentionVersions" style="display: none;">
     <div class="pa-modal-card" style="max-width: 680px; width: 90%;">
       <div class="pa-modal-header" style="padding: 1.25rem 1.5rem; border-bottom: 1px solid #E2E8F0; display: flex; justify-content: space-between; align-items: center;">
@@ -10628,7 +10000,6 @@
           <div class="text-muted small font-mono" id="lblRetVersionRuleId">Rule ID: RET-STU-001</div>
         </div>
         <div id="divRetentionVersionsList" class="d-flex flex-column gap-3">
-          <!-- Populated dynamically -->
         </div>
       </div>
       <div class="pa-modal-footer" style="padding: 1rem 1.5rem; border-top: 1px solid #E2E8F0; display: flex; justify-content: flex-end; background: #F8FAFC;">
@@ -10637,7 +10008,6 @@
     </div>
   </div>
 
-  <!-- Modal 17.3A: Submit Authorized Data Request -->
   <div class="pa-modal-backdrop" id="modalSubmitDataRequest" style="display: none;">
     <div class="pa-modal-card" style="max-width: 680px; width: 90%;">
       <div class="pa-modal-header" style="padding: 1.25rem 1.5rem; border-bottom: 1px solid #E2E8F0; display: flex; justify-content: space-between; align-items: center;">
@@ -10701,7 +10071,6 @@
     </div>
   </div>
 
-  <!-- Modal 17.3B: Data Request Detail & Multi-Party Governance Signoff -->
   <div class="pa-modal-backdrop" id="modalDataRequestDetail" style="display: none;">
     <div class="pa-modal-card" style="max-width: 720px; width: 90%;">
       <div class="pa-modal-header" style="padding: 1.25rem 1.5rem; border-bottom: 1px solid #E2E8F0; display: flex; justify-content: space-between; align-items: center;">
@@ -10709,7 +10078,6 @@
         <button type="button" class="btn-close" onclick="platformApp.closeModal('modalDataRequestDetail')"></button>
       </div>
       <div class="pa-modal-body" style="padding: 1.5rem; max-height: 75vh; overflow-y: auto;" id="divDataRequestDetailContent">
-        <!-- Loaded dynamically -->
       </div>
       <div class="pa-modal-footer" style="padding: 1rem 1.5rem; border-top: 1px solid #E2E8F0; display: flex; justify-content: flex-end; background: #F8FAFC;">
         <button type="button" class="btn btn-sm btn-secondary" onclick="platformApp.closeModal('modalDataRequestDetail')">Close</button>
@@ -10717,11 +10085,7 @@
     </div>
   </div>
 
-  <!-- =========================================================================
-       MODULE 18 MODALS: SCHOOL GATEWAYS & DECOUPLED TELEMETRY
-       ========================================================================= -->
 
-  <!-- Modal 18.1: School Administration Portal Access Denied -->
   <div class="pa-modal-backdrop" id="modalGatewayAccessDenied" style="display: none;">
     <div class="pa-modal-card" style="max-width: 580px; width: 90%;">
       <div class="pa-modal-header" style="padding: 1.25rem 1.5rem; border-bottom: 1px solid #E2E8F0; display: flex; justify-content: space-between; align-items: center;">
@@ -10759,7 +10123,6 @@
     </div>
   </div>
 
-  <!-- Modal 18.2: Faculty & Teacher Portal Verification -->
   <div class="pa-modal-backdrop" id="modalFacultyGatewayAuth" style="display: none;">
     <div class="pa-modal-card" style="max-width: 580px; width: 90%;">
       <div class="pa-modal-header" style="padding: 1.25rem 1.5rem; border-bottom: 1px solid #E2E8F0; display: flex; justify-content: space-between; align-items: center;">
@@ -10805,7 +10168,6 @@
     </div>
   </div>
 
-  <!-- Modal 18.3: School Public Website & Decoupled Telemetry Inspector -->
   <div class="pa-modal-backdrop" id="modalSchoolGatewayStatus" style="display: none;">
     <div class="pa-modal-card" style="max-width: 680px; width: 90%;">
       <div class="pa-modal-header" style="padding: 1.25rem 1.5rem; border-bottom: 1px solid #E2E8F0; display: flex; justify-content: space-between; align-items: center;">
@@ -10814,13 +10176,11 @@
       </div>
       <div class="pa-modal-body" style="padding: 1.5rem; max-height: 75vh; overflow-y: auto;">
         
-        <!-- Section 18.3 Invariant Callout Banner -->
         <div class="alert alert-warning py-2 px-3 small mb-3">
           <i class="fa-solid fa-triangle-exclamation text-warning me-1"></i>
           <strong>Decoupled Architecture Mandate (Section 18.3):</strong> Do not automatically assume that a successful frontend response means the backend and database are healthy. Telemetry across all three architectural layers is probed and verified independently.
         </div>
 
-        <!-- Public Website Overview Card -->
         <div class="p-3 border rounded bg-light mb-3">
           <div class="d-flex justify-content-between align-items-center mb-2 flex-wrap gap-2">
             <div>
@@ -10843,10 +10203,8 @@
           </div>
         </div>
 
-        <!-- 3 Decoupled Subsystem Breakdown Cards -->
         <h6 class="small fw-bold text-uppercase text-muted mb-2">Decoupled Subsystem Health Verification</h6>
         
-        <!-- Layer 1: Frontend Web -->
         <div class="decoupled-layer-box">
           <div class="d-flex justify-content-between align-items-center">
             <div class="d-flex align-items-center gap-2">
@@ -10860,7 +10218,6 @@
           </div>
         </div>
 
-        <!-- Layer 2: Backend REST API -->
         <div class="decoupled-layer-box">
           <div class="d-flex justify-content-between align-items-center">
             <div class="d-flex align-items-center gap-2">
@@ -10874,7 +10231,6 @@
           </div>
         </div>
 
-        <!-- Layer 3: Database Storage -->
         <div class="decoupled-layer-box">
           <div class="d-flex justify-content-between align-items-center">
             <div class="d-flex align-items-center gap-2">
@@ -10898,9 +10254,6 @@
     </div>
   </div>
 
-  <!-- =========================================================================
-       GLOBAL ACTION PATTERN: UNIFIED HIGH-IMPACT CONFIRMATION MODAL
-       ========================================================================= -->
   <div class="pa-modal-backdrop" id="modalHighImpactConfirm" style="display: none; z-index: 1060;">
     <div class="pa-modal-card high-impact-dialog" style="max-width: 650px; width: 92%;">
       <div class="pa-modal-header" id="modalHighImpactHeader" style="padding: 1.25rem 1.5rem; border-bottom: 1px solid #E2E8F0; display: flex; justify-content: space-between; align-items: center;">
@@ -10916,7 +10269,6 @@
 
       <div class="pa-modal-body" style="padding: 1.5rem; max-height: 75vh; overflow-y: auto;">
         
-        <!-- Target Record & Scope Indicator -->
         <div class="p-3 border rounded bg-light mb-3">
           <div class="d-flex justify-content-between align-items-center">
             <span class="text-muted small fw-bold text-uppercase">Target Record / Scope</span>
@@ -10925,16 +10277,13 @@
           <div class="fw-bold fs-6 text-dark mt-1 font-mono" id="lblHighImpactTarget">Target Record Details</div>
         </div>
 
-        <!-- Invariant / Impact Explanation Box -->
         <div class="alert alert-warning py-2 px-3 small mb-3" id="divHighImpactImpactNotice">
           <i class="fa-solid fa-circle-exclamation me-1"></i>
           <span id="lblHighImpactImpactSummary">Impact summary</span>
         </div>
 
-        <!-- Dynamic Action Fields Container (Diff Preview, Scope checklist, Duplicate notice) -->
         <div id="divHighImpactCustomFields" class="mb-3"></div>
 
-        <!-- Mandatory Justification / Reason -->
         <div class="mb-3" id="groupHighImpactReason">
           <label class="form-label small fw-bold">
             <span class="text-danger">*</span> Statutory Justification / Reason:
@@ -10943,7 +10292,6 @@
           <div class="form-text text-muted" style="font-size: 0.72rem;">All justifications are permanently sealed in PlatformAudit logs.</div>
         </div>
 
-        <!-- Mandatory Authority Confirmation Checkbox -->
         <div class="form-check p-3 bg-light border rounded mb-3" id="groupHighImpactAuthority">
           <input class="form-check-input" type="checkbox" id="chkHighImpactAuthority" style="cursor: pointer;">
           <label class="form-check-label small fw-bold text-dark" for="chkHighImpactAuthority" style="cursor: pointer;" id="lblHighImpactAuthorityText">
@@ -10951,7 +10299,6 @@
           </label>
         </div>
 
-        <!-- Dynamic Failure Alert (Preserves input without closing modal) -->
         <div class="alert alert-danger py-2 px-3 small mb-0" id="alertHighImpactError" style="display: none;">
           <i class="fa-solid fa-triangle-exclamation me-1"></i>
           <span id="lblHighImpactErrorMessage">Error message</span>
@@ -10969,9 +10316,6 @@
   </div>
 
 
-  <!-- ==========================================================================
-       FLOATING BOTTOM NAVIGATION BAR (Compulsory on Mobile)
-       ========================================================================== -->
   <nav class="floating-bottom-nav" id="floatingBottomNav" aria-label="Platform Admin Mobile Bottom Navigation">
     <div class="bottom-nav-inner">
       <a href="#dashboard" class="bottom-nav-item active" data-nav="dashboard" onclick="platformApp.navigateTo('dashboard'); return false;" title="Platform Dashboard">
@@ -10998,11 +10342,8 @@
   </nav>
   <script src="/js/floating-bottom-nav.js?v=20261122-v13"></script>
 
-  <!-- Modern Input Field System Controller -->
   <script src="/js/modern-inputs.js?v=20261122-v13"></script>
-  <!-- Modern Popover & Overlay Component System Controller -->
   <script src="/js/modern-popovers.js?v=20261122-v13"></script>
-  <!-- Liquid-Fill Toggle Switch Micro-Interaction Controller -->
   <script src="/js/liquid-toggles.js?v=20261122-v18"></script>
 </body>
 

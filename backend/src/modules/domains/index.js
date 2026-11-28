@@ -1,7 +1,3 @@
-/**
- * Institutional Domains & DNS - Module Aggregator
- * Exports all 6 architectural layers
- */
 
 const routes = require('./domains.routes');
 const controller = require('./domains.controller');

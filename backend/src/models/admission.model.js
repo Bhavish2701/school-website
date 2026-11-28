@@ -1,7 +1,3 @@
-/**
- * Admission Mongoose Model
- * Manages prospective student applications, document attachments, and verification lifecycle
- */
 const mongoose = require('mongoose');
 
 const ADMISSION_STATUSES = [
@@ -161,21 +157,18 @@ const admissionSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Student',
     },
-    // Unified Workflow Source (Specification 20.3: One workflow shared by online and offline admissions)
     admissionSource: {
       type: String,
       enum: ['ONLINE', 'OFFLINE_WALKIN', 'REFERRAL', 'TRANSFER_IN'],
       default: 'ONLINE',
       index: true,
     },
-    // Document Verification Workflow by Office Staff (Specification 20.3)
     documentVerification: {
       verifiedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
       verifiedAt: { type: Date },
       remarks: { type: String, default: '' },
       allVerified: { type: Boolean, default: false },
     },
-    // Eligibility Review by Designated Authority (Specification 20.3)
     eligibilityReview: {
       reviewedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
       decision: {
@@ -186,7 +179,6 @@ const admissionSchema = new mongoose.Schema(
       reviewedAt: { type: Date },
       notes: { type: String, default: '' },
     },
-    // Official Decision Record & Communication Channel (Specification 20.3)
     decisionRecord: {
       status: { type: String, default: 'SUBMITTED' },
       decisionBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
@@ -198,7 +190,6 @@ const admissionSchema = new mongoose.Schema(
         status: { type: String, default: 'DELIVERED' },
       },
     },
-    // Future Portal Activation Credentials (Specification 20.3)
     portalActivation: {
       studentAccount: {
         isEligible: { type: Boolean, default: true },
@@ -221,7 +212,6 @@ const admissionSchema = new mongoose.Schema(
   }
 );
 
-// Composite index for fast & secure public status queries
 admissionSchema.index({ applicationNumber: 1, phone: 1 });
 
 const Admission = mongoose.model('Admission', admissionSchema);

@@ -1,7 +1,3 @@
-/**
- * Sri Vidya Educational Trust - Role Templates & Permissions Service
- * Module 7: RBAC Architecture, Permission Editor Matrix, Safeguards & Backend Enforcement
- */
 
 const mongoose = require('mongoose');
 const { RoleTemplate } = require('../models/roleTemplate.model');
@@ -9,11 +5,9 @@ const { UserAccount } = require('../models/userAccount.model');
 const { User } = require('../models/user.model');
 const liveSyncBus = require('../utils/liveSyncBus');
 
-// In-memory fallback repository when running without active MongoDB
 const inMemoryRoles = [];
 
 const DEFAULT_ROLE_TEMPLATES_SEED = [
-  // 1. Platform Owner (Platform Scope, Built-in, Privileged)
   {
     roleId: 'ROLE-PLT-001',
     name: 'Platform Owner',
@@ -43,7 +37,6 @@ const DEFAULT_ROLE_TEMPLATES_SEED = [
       { action: 'Role Template Initialized', performedBy: 'System Bootstrap', timestamp: new Date('2026-01-01T00:00:00Z'), details: 'Platform Owner master role initialized with critical privileges safeguard.' }
     ]
   },
-  // 2. Platform Administrator (Platform Scope, Built-in, Privileged)
   {
     roleId: 'ROLE-PLT-002',
     name: 'Platform Administrator',
@@ -73,7 +66,6 @@ const DEFAULT_ROLE_TEMPLATES_SEED = [
       { action: 'Role Template Initialized', performedBy: 'System Bootstrap', timestamp: new Date('2026-01-01T00:00:00Z'), details: 'Platform Administrator role initialized.' }
     ]
   },
-  // 3. Platform Operations (Platform Scope, Built-in)
   {
     roleId: 'ROLE-PLT-003',
     name: 'Platform Operations',
@@ -101,7 +93,6 @@ const DEFAULT_ROLE_TEMPLATES_SEED = [
     reviewDetails: { isPendingReview: false, requestedBy: null, requestedAt: null, rationale: null, changesDiff: null },
     changeHistory: []
   },
-  // 4. Platform Support (Platform Scope, Built-in)
   {
     roleId: 'ROLE-PLT-004',
     name: 'Platform Support',
@@ -129,7 +120,6 @@ const DEFAULT_ROLE_TEMPLATES_SEED = [
     reviewDetails: { isPendingReview: false, requestedBy: null, requestedAt: null, rationale: null, changesDiff: null },
     changeHistory: []
   },
-  // 5. Institution Administrator (Platform Scope / Cross-Institution Onboarding, Built-in)
   {
     roleId: 'ROLE-PLT-005',
     name: 'Institution Administrator',
@@ -157,7 +147,6 @@ const DEFAULT_ROLE_TEMPLATES_SEED = [
     reviewDetails: { isPendingReview: false, requestedBy: null, requestedAt: null, rationale: null, changesDiff: null },
     changeHistory: []
   },
-  // 6. Principal (Institution Scope, Built-in, Privileged)
   {
     roleId: 'ROLE-INST-006',
     name: 'Principal',
@@ -185,7 +174,6 @@ const DEFAULT_ROLE_TEMPLATES_SEED = [
     reviewDetails: { isPendingReview: false, requestedBy: null, requestedAt: null, rationale: null, changesDiff: null },
     changeHistory: []
   },
-  // 7. Vice Principal (Institution Scope, Built-in)
   {
     roleId: 'ROLE-INST-007',
     name: 'Vice Principal',
@@ -213,7 +201,6 @@ const DEFAULT_ROLE_TEMPLATES_SEED = [
     reviewDetails: { isPendingReview: false, requestedBy: null, requestedAt: null, rationale: null, changesDiff: null },
     changeHistory: []
   },
-  // 8. Office Staff (Institution Scope, Built-in)
   {
     roleId: 'ROLE-INST-008',
     name: 'Office Staff',
@@ -241,7 +228,6 @@ const DEFAULT_ROLE_TEMPLATES_SEED = [
     reviewDetails: { isPendingReview: false, requestedBy: null, requestedAt: null, rationale: null, changesDiff: null },
     changeHistory: []
   },
-  // 9. Accounts Staff (Institution Scope, Built-in)
   {
     roleId: 'ROLE-INST-009',
     name: 'Accounts Staff',
@@ -269,7 +255,6 @@ const DEFAULT_ROLE_TEMPLATES_SEED = [
     reviewDetails: { isPendingReview: false, requestedBy: null, requestedAt: null, rationale: null, changesDiff: null },
     changeHistory: []
   },
-  // 10. Teacher (Institution Scope, Built-in)
   {
     roleId: 'ROLE-INST-010',
     name: 'Teacher',
@@ -374,9 +359,6 @@ class RoleTemplateService {
     return partial ? byRoleKey[partial] : 0;
   }
 
-  /**
-   * 7.2 Summary KPI Counters
-   */
   static async getRolesSummary() {
     await this.seedIfEmpty();
 
@@ -410,9 +392,6 @@ class RoleTemplateService {
     };
   }
 
-  /**
-   * 7.2 Role Directory Listing with Search & Filters
-   */
   static async listRoles(filter = {}) {
     await this.seedIfEmpty();
 
@@ -438,23 +417,19 @@ class RoleTemplateService {
     const status = filter.status || '';
 
     const filtered = roles.filter(r => {
-      // 1. Text Search (Name, Description, RoleId, Slug)
       if (q && !r.name.toLowerCase().includes(q) &&
           !r.description.toLowerCase().includes(q) &&
           !r.roleId.toLowerCase().includes(q) &&
           !r.slug.toLowerCase().includes(q)) {
         return false;
       }
-      // 2. Scope Filter (Platform vs Institution)
       if (scope && scope !== 'all' && r.scope.toLowerCase() !== scope.toLowerCase()) {
         return false;
       }
-      // 3. Type Filter (Built-in vs Custom)
       if (type && type !== 'all') {
         if (type === 'builtin' && !r.isBuiltIn) return false;
         if (type === 'custom' && r.isBuiltIn) return false;
       }
-      // 4. Status Filter
       if (status && status !== 'all' && r.status !== status) {
         return false;
       }
@@ -471,9 +446,6 @@ class RoleTemplateService {
     };
   }
 
-  /**
-   * Get single role by roleId or slug
-   */
   static async getRoleById(roleId) {
     await this.seedIfEmpty();
 
@@ -491,9 +463,6 @@ class RoleTemplateService {
     }
   }
 
-  /**
-   * 7.4 Compute Permission Diff
-   */
   static computePermissionDiff(oldPerms = {}, newPerms = {}) {
     const modules = ['institutions', 'user_accounts', 'school_config', 'system_health', 'audit_logs', 'integrations'];
     const actions = ['view', 'create_edit', 'approve', 'export', 'manage_access'];
@@ -521,9 +490,6 @@ class RoleTemplateService {
     };
   }
 
-  /**
-   * 7.2 Primary Action: Create Custom Role
-   */
   static async createRole(roleData, operator = 'Platform Administrator') {
     const nextSeq = Math.floor(100 + Math.random() * 900);
     const scopePrefix = (roleData.scope || 'Institution') === 'Platform' ? 'PLT' : 'INST';
@@ -580,9 +546,6 @@ class RoleTemplateService {
     }
   }
 
-  /**
-   * 7.2 Action: Duplicate Role
-   */
   static async duplicateRole(roleId, newName, operator = 'Platform Administrator') {
     const origRes = await this.getRoleById(roleId);
     if (!origRes.success || !origRes.data) {
@@ -638,9 +601,6 @@ class RoleTemplateService {
     }
   }
 
-  /**
-   * 7.4 Permission Change Workflow: Update Role & Enforce Safeguards
-   */
   static async updateRole(roleId, updates, operator = 'Platform Administrator', rationale = '') {
     const roleRes = await this.getRoleById(roleId);
     if (!roleRes.success || !roleRes.data) {
@@ -652,12 +612,10 @@ class RoleTemplateService {
     const newPermissions = updates.permissions || oldPermissions;
     const diff = this.computePermissionDiff(oldPermissions, newPermissions);
 
-    // Safeguard 7.4.5: Changes to privileged or built-in critical roles require review submission
     const isCritical = role.isPrivileged || (role.isBuiltIn && role.scope === 'Platform');
     const requiresReview = isCritical && updates.skipReview !== true;
 
     if (requiresReview) {
-      // Record review draft without immediately applying changes to live active permissions
       role.status = 'Pending Review';
       role.reviewDetails = {
         isPendingReview: true,
@@ -688,7 +646,6 @@ class RoleTemplateService {
       };
     }
 
-    // Direct apply for custom or pre-approved roles
     if (updates.name && !role.isBuiltIn) role.name = updates.name;
     if (updates.description) role.description = updates.description;
     if (updates.permissions) role.permissions = updates.permissions;
@@ -722,9 +679,6 @@ class RoleTemplateService {
     };
   }
 
-  /**
-   * 7.4 Action: Approve or Reject Pending Role Review
-   */
   static async reviewRoleChange(roleId, decision, reviewer = 'Platform Owner', reviewNotes = '') {
     const roleRes = await this.getRoleById(roleId);
     if (!roleRes.success || !roleRes.data) {
@@ -776,10 +730,6 @@ class RoleTemplateService {
     };
   }
 
-  /**
-   * 7.2 Action: Toggle Role Status (Deactivate / Reactivate)
-   * Safeguard: Built-in roles with critical privileges cannot be deactivated!
-   */
   static async toggleRoleStatus(roleId, operator = 'Platform Administrator') {
     const roleRes = await this.getRoleById(roleId);
     if (!roleRes.success || !roleRes.data) {
@@ -788,7 +738,6 @@ class RoleTemplateService {
 
     const role = roleRes.data;
 
-    // Safeguard: built-in roles cannot be deactivated
     if (role.isBuiltIn) {
       return {
         success: false,
@@ -816,9 +765,6 @@ class RoleTemplateService {
     };
   }
 
-  /**
-   * 7.2 Action: Assign Users to Role
-   */
   static async assignUsersToRole(roleId, countDelta = 1, operator = 'Platform Administrator') {
     const roleRes = await this.getRoleById(roleId);
     if (!roleRes.success || !roleRes.data) return { success: false, message: 'Role not found' };
@@ -838,10 +784,6 @@ class RoleTemplateService {
     return { success: true, assignedUsersCount: role.assignedUsersCount, data: role };
   }
 
-  /**
-   * Backend Permission Enforcement Engine (Section 7.4 Invariant)
-   * Evaluates if a set of roles satisfies the requested module + action + context
-   */
   static async evaluatePermission(userRoleNames = [], moduleName, action, context = {}) {
     await this.seedIfEmpty();
 
@@ -856,12 +798,10 @@ class RoleTemplateService {
       }
     }
 
-    // If super admin / platform owner is among roles, grant full access
     if (userRoleNames.includes('Super Administrator') || userRoleNames.includes('Platform Owner')) {
       return { allowed: true, reason: 'Platform Owner / Super Administrator root override' };
     }
 
-    // Find all matching active role templates for this user
     const matchingRoles = allRoles.filter(r =>
       userRoleNames.some(name => name.toLowerCase() === r.name.toLowerCase() || name.toLowerCase() === r.slug.toLowerCase())
     );
@@ -870,7 +810,6 @@ class RoleTemplateService {
       return { allowed: false, reason: 'No active role templates assigned to user' };
     }
 
-    // Check if ANY assigned role grants the required action on the module
     const hasModuleAction = matchingRoles.some(r => {
       const modPerms = r.permissions?.[moduleName];
       if (!modPerms) return false;
@@ -884,10 +823,9 @@ class RoleTemplateService {
       };
     }
 
-    // Context check 1: Institution Scope Check
     if (context.institutionId) {
       const hasScope = matchingRoles.some(r => {
-        if (r.scope === 'Platform') return true; // Platform roles can access all campuses
+        if (r.scope === 'Platform') return true;
         if (r.recordScope === 'all_records') return true;
         if (context.userInstitutionId && context.institutionId === context.userInstitutionId) return true;
         return false;
@@ -901,7 +839,6 @@ class RoleTemplateService {
       }
     }
 
-    // Context check 2: Sensitive Fields
     if (context.requestedSensitiveField) {
       const hasSensitiveAccess = matchingRoles.some(r =>
         (r.sensitiveFields || []).includes(context.requestedSensitiveField)
@@ -914,7 +851,6 @@ class RoleTemplateService {
       }
     }
 
-    // Context check 3: Export Restrictions
     if (action === 'export') {
       const isProhibited = matchingRoles.every(r => r.exportRestrictions === 'prohibited');
       if (isProhibited) {

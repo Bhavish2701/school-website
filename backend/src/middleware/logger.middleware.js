@@ -1,7 +1,3 @@
-/**
- * HTTP Request Logger Middleware
- * Formats structured log output for every request and response.
- */
 const loggerMiddleware = (req, res, next) => {
   const startTime = Date.now();
   const { method, originalUrl, ip } = req;
@@ -14,12 +10,12 @@ const loggerMiddleware = (req, res, next) => {
 
     const color =
       statusCode >= 500
-        ? '\x1b[31m' // Red
+        ? '\x1b[31m'
         : statusCode >= 400
-        ? '\x1b[33m' // Yellow
+        ? '\x1b[33m'
         : statusCode >= 300
-        ? '\x1b[36m' // Cyan
-        : '\x1b[32m'; // Green
+        ? '\x1b[36m'
+        : '\x1b[32m';
     const reset = '\x1b[0m';
 
     console.log(

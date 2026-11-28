@@ -3,7 +3,6 @@ const assert = require('assert');
 
 console.log('=== TEST SUITE: MODULE 5 INSTITUTION ONBOARDING & MIGRATION ===\n');
 
-// 1. Verify HTML Structure in frontend/platform-admin/index.html
 console.log('[CHECK 1] Verifying Section 5 Header, Sub-Navigation & Panes in HTML...');
 const html = fs.readFileSync('frontend/platform-admin/index.html', 'utf8');
 
@@ -16,7 +15,6 @@ assert(html.includes('id="obPaneChecklist"'), 'Sub-pane #obPaneChecklist must ex
 assert(html.includes('id="obPaneImports"'), 'Sub-pane #obPaneImports must exist');
 console.log('  ✓ Header, 3 sub-navigation tabs, and 3 content panes verified');
 
-// 2. Verify 5.1 Onboarding Overview KPIs
 console.log('\n[CHECK 2] Verifying Section 5.1 Onboarding Overview KPIs...');
 const expectedKpis = [
   'kpiObAwaitingSetup',
@@ -33,7 +31,6 @@ expectedKpis.forEach(kpi => {
 assert(html.includes('id="obPipelinesTableBody"'), 'Active migration pipelines tbody must exist');
 console.log('  ✓ All 6 statutory overview KPIs and pipeline queue table verified');
 
-// 3. Verify 5.2 Onboarding Checklist
 console.log('\n[CHECK 3] Verifying Section 5.2 12-Item Checklist Specification...');
 assert(html.includes('id="obChecklistScope"'), 'Institution scope selector #obChecklistScope must exist');
 assert(html.includes('id="obReadinessPct"'), 'Readiness percentage meter #obReadinessPct must exist');
@@ -62,7 +59,6 @@ expected12ChecklistItems.forEach(item => {
 });
 console.log('  ✓ All 12 onboarding checklist requirements verified with progress meter');
 
-// 4. Verify 5.3 Data Import Centre & 10-Step Wizard Modal
 console.log('\n[CHECK 4] Verifying Section 5.3 Data Import Centre & 10-Step Wizard Modal...');
 assert(html.includes('id="obImportTypeFilter"'), 'Import type filter #obImportTypeFilter must exist');
 assert(html.includes('id="obImportsTableBody"'), 'Import jobs table body #obImportsTableBody must exist');
@@ -80,7 +76,6 @@ approvedDataTypes.forEach(t => {
   assert(html.includes(`value="${t}"`), `Approved data type '${t}' must exist in filter/modal`);
 });
 
-// Verify 10-Step Wizard Modal
 assert(html.includes('id="modalNewDataImport"'), '10-Step Wizard modal #modalNewDataImport must exist');
 for (let step = 1; step <= 10; step++) {
   assert(html.includes(`id="impPaneStep${step}"`), `Wizard step pane #impPaneStep${step} must exist`);
@@ -93,7 +88,6 @@ assert(html.includes('id="impCheckDryRun"'), 'Dry-run simulation checkbox #impCh
 assert(html.includes('id="btnDownloadErrorList"'), 'Downloadable error list button #btnDownloadErrorList must exist');
 console.log('  ✓ 5.3 Data Import Centre, all 7 approved data types, and 10-Step Wizard verified');
 
-// 5. Verify Controller Exports in frontend/js/platform-admin.js
 console.log('\n[CHECK 5] Verifying JavaScript Controller Exports in platformApp...');
 const js = fs.readFileSync('frontend/js/platform-admin.js', 'utf8');
 const expectedMethods = [
@@ -120,7 +114,6 @@ expectedMethods.forEach(method => {
 });
 console.log(`  ✓ All ${expectedMethods.length} Module 5 controller methods verified in platform-admin.js`);
 
-// 6. Verify Backend Architecture
 console.log('\n[CHECK 6] Verifying Backend Architecture...');
 assert(fs.existsSync('backend/src/models/onboarding.model.js'), 'onboarding.model.js must exist');
 assert(fs.existsSync('backend/src/services/onboarding.service.js'), 'onboarding.service.js must exist');
@@ -131,7 +124,6 @@ const routesCode = fs.readFileSync('backend/src/routes/index.js', 'utf8');
 assert(routesCode.includes("platformRouter.use('/onboarding'"), 'Routes must mount onboarding in platformRouter');
 console.log('  ✓ Backend model, service, controller, and mounted routes verified');
 
-// 7. Verify Onboarding Service Logic Direct Execution
 console.log('\n[CHECK 7] Verifying OnboardingService direct methods execution...');
 const OnboardingService = require('../backend/src/services/onboarding.service');
 

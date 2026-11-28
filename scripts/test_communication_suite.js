@@ -136,9 +136,6 @@ function assert(condition, testName) {
   }
 }
 
-// ==========================================
-// TEST SUITE 12.1: ANNOUNCEMENTS
-// ==========================================
 console.log("\n--- Testing 12.1: Announcements ---");
 app.renderAnnouncements();
 const annTbody = mockDoc.getElementById('announcementsTableBody');
@@ -149,7 +146,6 @@ assert(annTbody.innerHTML.includes('STEM_Fair_Guidelines_2026.pdf'), "12.1 Displ
 assert(annTbody.innerHTML.includes('Expires:'), "12.1 Displays Publication and Expiry dates");
 assert(annTbody.innerHTML.includes('Principal') || annTbody.innerHTML.includes('Vice Principal'), "12.1 Displays Author & Approval Status");
 
-// Test Announcement Actions
 app.openPreviewAnnouncementModal('ANN-2026-038');
 assert(mockDoc.getElementById('previewAnnouncementBody').innerHTML.includes('STEM'), "12.1 Preview announcement renders layout");
 
@@ -167,9 +163,6 @@ mockDoc.getElementById('retractReason').value = 'Completed scheduled event';
 app.handleRetractAnnouncementSubmit();
 assert(true, "12.1 Retract / Archive announcement with reason executes cleanly");
 
-// ==========================================
-// TEST SUITE 12.2: OFFICIAL CIRCULARS
-// ==========================================
 console.log("\n--- Testing 12.2: Official Circulars ---");
 app.renderOfficialCirculars();
 const cirTbody = mockDoc.getElementById('officialCircularsTableBody');
@@ -178,7 +171,6 @@ assert(cirTbody.innerHTML.includes('CIR_2026_FA3_Schedule.pdf'), "12.2 Displays 
 assert(cirTbody.innerHTML.includes('Mandatory Digital Signature') || cirTbody.innerHTML.includes('General Information'), "12.2 Displays acknowledgement requirement");
 assert(cirTbody.innerHTML.includes('484 / 500 Signed'), "12.2 Real-time parent signature tracking displayed");
 
-// Test Circular Actions
 app.openPreviewCircularModal('CIR/2026-27/024');
 assert(mockDoc.getElementById('previewCircularBody').innerHTML.includes('SRI VIDYA ENGLISH MEDIUM HIGH SCHOOL'), "12.2 Preview circular renders official school letterhead");
 
@@ -191,9 +183,6 @@ assert(mockDoc.getElementById('trackCircularAckTableBody').innerHTML.includes('A
 app.sendReminderToPendingAck();
 assert(true, "12.2 Send reminder to pending parents dispatches notification");
 
-// ==========================================
-// TEST SUITE 12.3: SMS BROADCAST
-// ==========================================
 console.log("\n--- Testing 12.3: SMS Broadcast ---");
 app.renderSmsBroadcast();
 const smsTbody = mockDoc.getElementById('smsBroadcastTableBody');
@@ -202,7 +191,6 @@ assert(smsTbody.innerHTML.includes('TPL-DLT-'), "12.3 Displays DLT template ID &
 assert(smsTbody.innerHTML.includes('Absent Today') || smsTbody.innerHTML.includes('Fee Due'), "12.3 Displays recipient group & recipient count");
 assert(smsTbody.innerHTML.includes('Delivered') && smsTbody.innerHTML.includes('Failed'), "12.3 Displays delivery summary");
 
-// Test SMS Actions
 app.openValidateRecipientsModal();
 assert(mockDoc.getElementById('validateRecipientsBody').innerHTML.includes('TOTAL VALID'), "12.3 Validate recipients renders DND clearance dossier");
 
@@ -212,9 +200,6 @@ assert(true, "12.3 Retry failed messages updates campaign delivery");
 app.exportSmsDeliveryCSV();
 assert(true, "12.3 Export SMS delivery report executes cleanly");
 
-// ==========================================
-// TEST SUITE 12.4: EMAIL DISPATCH
-// ==========================================
 console.log("\n--- Testing 12.4: Email Dispatch ---");
 app.renderEmailDispatch();
 const emlTbody = mockDoc.getElementById('emailDispatchTableBody');
@@ -223,7 +208,6 @@ assert(emlTbody.innerHTML.includes('Monthly Academic Performance') || emlTbody.i
 assert(emlTbody.innerHTML.includes('principal@srividya.edu.in'), "12.4 Displays official sender email address");
 assert(emlTbody.innerHTML.includes('Delivered') || emlTbody.innerHTML.includes('Scheduled'), "12.4 Displays delivery status & schedule");
 
-// Test Email Actions
 app.cancelScheduledEmail('EML-2026-019');
 assert(true, "12.4 Cancel scheduled email updates campaign state");
 
@@ -234,9 +218,6 @@ assert(true, "12.4 Test send dispatches verification sample");
 app.exportEmailDispatchCSV();
 assert(true, "12.4 Export email delivery report executes cleanly");
 
-// ==========================================
-// TEST SUITE 12.5: MOBILE PUSH NOTIFICATIONS
-// ==========================================
 console.log("\n--- Testing 12.5: Mobile Push Notifications ---");
 app.renderMobilePush();
 const pushTbody = mockDoc.getElementById('mobilePushTableBody');
@@ -245,9 +226,6 @@ assert(pushTbody.innerHTML.includes('Staged'), "12.5 Displays staging delivery s
 assert(pushTbody.innerHTML.includes('#appointments-overview') || pushTbody.innerHTML.includes('#academics-timetable'), "12.5 Displays deep link click-through destination");
 assert(indexHtml.includes('Mobile Push Gateway Interface') && indexHtml.includes('Staged for Native App'), "12.5 Staging advisory banner prominently displayed");
 
-// ==========================================
-// TEST SUITE 12.6: PARENT ENQUIRIES & MESSAGES
-// ==========================================
 console.log("\n--- Testing 12.6: Parent Enquiries & Messages ---");
 app.renderParentEnquiries();
 const enqTbody = mockDoc.getElementById('parentEnquiriesTableBody');
@@ -257,7 +235,6 @@ assert(enqTbody.innerHTML.includes('K. Sai Tharun') || enqTbody.innerHTML.includ
 assert(enqTbody.innerHTML.includes('Academic') || enqTbody.innerHTML.includes('Transport'), "12.6 Displays inquiry category");
 assert(enqTbody.innerHTML.includes('Vice Principal') || enqTbody.innerHTML.includes('Accounts Clerk'), "12.6 Displays assigned employee");
 
-// Test Enquiry Actions
 app.openReplyEnquiryModal('ENQ-2026-089');
 assert(mockDoc.getElementById('replyRequesterName').textContent.includes('Sri K. Ramana'), "12.6 Reply modal loads inquiry dossier");
 
@@ -285,9 +262,6 @@ assert(true, "12.6 Export parent enquiries CSV executes cleanly");
 
 assert(indexHtml.includes('Authorized Parent Communication') && indexHtml.includes('Parent Portal Integrated'), "12.6 Unified communication pipeline seamlessly integrated for Parent Portal");
 
-// ==========================================
-// TEST SUITE 12.7: MESSAGE TEMPLATES
-// ==========================================
 console.log("\n--- Testing 12.7: Message Templates ---");
 app.renderMessageTemplates();
 const tplTbody = mockDoc.getElementById('messageTemplatesTableBody');

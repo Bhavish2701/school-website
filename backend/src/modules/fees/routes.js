@@ -47,7 +47,6 @@ router.get(
   })
 );
 
-// Base fee routes
 router.use('/', feeRoutes);
 
 module.exports = router;

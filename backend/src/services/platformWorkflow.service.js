@@ -1,13 +1,3 @@
-/**
- * Sri Vidya Educational Trust - Complete Platform Administration Workflows Service
- * Implements Workflows A through F:
- * - Workflow A: Register a new school (6-Step Lifecycle, zero-fabricated data invariant)
- * - Workflow B: Invite a new school administrator (10-Step Scoped Invitation & Activation)
- * - Workflow C: Deploy a new application version (7-Step Pre-checks, Health Probes, Rollback)
- * - Workflow D: Resolve a system incident (8-Step Triage, Mitigation, Recovery Probing, RCA)
- * - Workflow E: Suspend a compromised account (8-Step Evidence, Session Revocation, Reinstatement)
- * - Workflow F: Import an existing school's records (10-Step Column Mapping, Dry-Run, Verification)
- */
 
 const mongoose = require('mongoose');
 const crypto = require('crypto');
@@ -20,7 +10,6 @@ const { SecurityEvent } = require('../models/securityMonitoring.model');
 const { DataImportJob } = require('../models/onboarding.model');
 const systemHealthService = require('./systemHealth.service');
 
-// In-memory fallback stores for offline/test resilience
 const inMemoryWorkflows = {
   incidents: [],
   invitations: {},
@@ -72,22 +61,10 @@ class PlatformWorkflowService {
     return auditId;
   }
 
-  // =========================================================================
-  // WORKFLOW A: REGISTER A NEW SCHOOL
-  // 6-Step Lifecycle:
-  // 1. Create institution record (Draft)
-  // 2. Configure school identity and academic defaults
-  // 3. Verify domains and email
-  // 4. Invite institution administrator
-  // 5. Validate permissions and configuration
-  // 6. Activate institution (Zero fabricated records invariant)
-  // =========================================================================
-
   static async registerSchoolWorkflow(data, operator = 'Platform Super Administrator') {
     const institutionCode = (data.code || `SV-${Date.now().toString().slice(-4)}`).toUpperCase();
     const institutionId = data.institutionId || `INST-${Date.now().toString().slice(-4)}`;
 
-    // 1. Create institution record in Draft status
     const institutionRecord = {
       institutionId,
       code: institutionCode,
@@ -112,7 +89,6 @@ class PlatformWorkflowService {
       },
       status: 'Draft',
       setupStatus: 'In_Progress',
-      // Invariant: Student, staff and financial records are NOT fabricated automatically
       metrics: {
         enrolledStudents: 0,
         teachingFaculty: 0,
@@ -121,7 +97,6 @@ class PlatformWorkflowService {
       }
     };
 
-    // 2. Configure school identity and academic defaults
     institutionRecord.configuration = {
       timezone: 'Asia/Kolkata (IST +05:30)',
       locale: 'en-IN',
@@ -143,7 +118,6 @@ class PlatformWorkflowService {
       documentHeader: `SRI VIDYA EDUCATIONAL TRUST • ${data.name || 'NEW CAMPUS'}`
     };
 
-    // 3. Verify domains and email
     const baseDomain = data.domain || `${institutionCode.toLowerCase()}.srividya.edu.in`;
     institutionRecord.domains = {
       primary: baseDomain,
@@ -157,7 +131,6 @@ class PlatformWorkflowService {
       spfStatus: 'Valid (v=spf1 include:_spf.google.com ~all)'
     };
 
-    // 4. Invite institution administrator
     const inviteToken = `SEC-INV-${crypto.randomBytes(8).toString('hex').toUpperCase()}`;
     const initialAdmin = {
       name: data.adminName || 'Institutional Principal',
@@ -171,7 +144,6 @@ class PlatformWorkflowService {
     };
     institutionRecord.administrators = [initialAdmin];
 
-    // 5. Validate permissions and configuration
     const validationChecklist = {
       institutionProfileComplete: !!(institutionRecord.name && institutionRecord.code && institutionRecord.udise),
       identityAndAcademicDefaultsConfigured: !!(institutionRecord.configuration?.currentAcademicYear && institutionRecord.branding?.primaryColor),
@@ -181,7 +153,6 @@ class PlatformWorkflowService {
       readyForActivation: true
     };
 
-    // 6. Activate institution
     institutionRecord.status = 'Active';
     institutionRecord.setupStatus = 'Complete';
     institutionRecord.activatedAt = new Date();
@@ -226,7 +197,6 @@ class PlatformWorkflowService {
         inviteLink: `http://localhost:5000/management?activate=${inviteToken}`
       },
       validationChecklist,
-      // INVARIANT: Student, staff and financial records are NOT fabricated automatically
       zeroDataGuarantee: {
         studentsCount: 0,
         staffCount: 0,
@@ -237,16 +207,6 @@ class PlatformWorkflowService {
     };
   }
 
-  // =========================================================================
-  // WORKFLOW B: INVITE A NEW SCHOOL ADMINISTRATOR
-  // 1. Select Institution
-  // 2. Enter official email and assign institution-level role
-  // 3. Send secure invitation
-  // 4. Recipient verifies identity & activates account
-  // 5. Platform verifies invitation & role validity
-  // 6. User receives scoped access and action logged in audit history
-  // =========================================================================
-
   static async inviteAdministratorWorkflow(data, operator = 'Platform Super Administrator') {
     const { institutionId = 'INST-001', email, name, role = 'Institutional Principal', phone = '' } = data;
     if (!email) {
@@ -254,7 +214,7 @@ class PlatformWorkflowService {
     }
 
     const inviteToken = `AUTH-INV-${crypto.randomBytes(10).toString('hex').toUpperCase()}`;
-    const expiresAt = new Date(Date.now() + 7 * 24 * 3600 * 1000); // 7-day expiration
+    const expiresAt = new Date(Date.now() + 7 * 24 * 3600 * 1000);
 
     const invitationRecord = {
       inviteToken,
@@ -271,7 +231,6 @@ class PlatformWorkflowService {
 
     inMemoryWorkflows.invitations[inviteToken] = invitationRecord;
 
-    // Record in Institution model if mongo ready
     if (this.isMongoReady()) {
       try {
         await Institution.updateOne(
@@ -320,7 +279,6 @@ class PlatformWorkflowService {
 
     let invitation = inMemoryWorkflows.invitations[inviteToken];
 
-    // Check MongoDB if not found in memory
     if (!invitation && this.isMongoReady()) {
       try {
         const inst = await Institution.findOne({ 'administrators.inviteToken': inviteToken }).lean();
@@ -345,7 +303,6 @@ class PlatformWorkflowService {
       return { success: false, message: 'Invalid or unknown administrator invitation token.' };
     }
 
-    // Step 8: Verify that the invitation and role assignment are still valid
     if (new Date() > new Date(invitation.expiresAt)) {
       return { success: false, message: 'Invitation token has expired. Please request a new invitation.' };
     }
@@ -354,7 +311,6 @@ class PlatformWorkflowService {
       return { success: false, message: 'This administrator account invitation has already been activated.' };
     }
 
-    // Activate and generate scoped account
     invitation.status = 'Active';
     invitation.activatedAt = new Date();
 
@@ -386,7 +342,6 @@ class PlatformWorkflowService {
       } catch (err) {}
     }
 
-    // Step 10: Record activation and permission assignment in audit history
     const auditId = await this.logAudit(
       'ACCESS_CONTROL',
       'ADMIN_INVITATION_ACTIVATED',
@@ -418,17 +373,6 @@ class PlatformWorkflowService {
     };
   }
 
-  // =========================================================================
-  // WORKFLOW C: DEPLOY A NEW APPLICATION VERSION
-  // 1. Prepare and review deployment
-  // 2. Initiate authorized deployment
-  // 3. Automated checks run (syntax, schema, migrations, assets)
-  // 4. Deployment logs stream and status
-  // 5. Health checks verify affected services
-  // 6. Rollback support if checks fail
-  // 7. Outcome recorded
-  // =========================================================================
-
   static async initiateDeploymentWorkflow(data, operator = 'Platform Super Administrator') {
     const deploymentId = `DEP-${new Date().getFullYear()}-${Math.floor(1000 + Math.random() * 9000)}`;
     const version = data.version || 'v2.5.0';
@@ -436,7 +380,6 @@ class PlatformWorkflowService {
     const service = data.service || 'Platform API & Gateways';
     const environment = data.environment || 'PRODUCTION';
 
-    // Step 3: Run automated checks
     const automatedChecks = [
       { checkName: 'Syntax and Static Code Verification', status: 'PASSED', latencyMs: 38 },
       { checkName: 'Database Schema & Migration Validation', status: 'PASSED', latencyMs: 64 },
@@ -444,7 +387,6 @@ class PlatformWorkflowService {
       { checkName: 'API Micro-Service Signature Alignment', status: 'PASSED', latencyMs: 29 }
     ];
 
-    // Step 4: Deployment status and logs stream
     const deploymentLogs = [
       `[${new Date().toISOString()}] [DEPLOY-INIT] Deployment ${deploymentId} initiated by ${operator} for ${service} (${version})`,
       `[${new Date().toISOString()}] [AUTOMATED-CHECKS] Running pre-flight checks: all 4 automated checks passed.`,
@@ -453,7 +395,6 @@ class PlatformWorkflowService {
       `[${new Date().toISOString()}] [HEALTH-PROBE] Executing 3-tier decoupled service telemetry verification...`
     ];
 
-    // Step 5: Health checks verify affected services
     const healthVerification = {
       frontend: 'HTTP 200 OK (Healthy)',
       backendApi: 'HTTP 200 OK (Cluster Active)',
@@ -578,24 +519,12 @@ class PlatformWorkflowService {
     };
   }
 
-  // =========================================================================
-  // WORKFLOW D: RESOLVE A SYSTEM INCIDENT
-  // 1. Health check or support report identifies problem
-  // 2. System creates/records incident
-  // 3. Assigned severity and owner
-  // 4. Operator investigates logs and related events
-  // 5. Issue mitigated and corrected
-  // 6. Health checks confirm recovery
-  // 7. Incident closed with explanation
-  // 8. Relevant audit and support records linked
-  // =========================================================================
-
   static async createIncidentWorkflow(data, operator = 'Platform Monitoring Service') {
     const incidentId = `INC-${new Date().getFullYear()}-${Math.floor(1000 + Math.random() * 9000)}`;
     const newIncident = {
       incidentId,
       title: data.title || 'Service Degradation Detected on Gateway Ingress',
-      source: data.source || 'HEALTH_CHECK', // HEALTH_CHECK, SECURITY_MONITOR, SUPPORT_TICKET
+      source: data.source || 'HEALTH_CHECK',
       sourceRefId: data.sourceRefId || 'HLTH-PROBE-001',
       severity: data.severity || 'P2_HIGH',
       status: 'TRIAGED',
@@ -637,11 +566,9 @@ class PlatformWorkflowService {
 
     const { mitigationActions, rootCause, resolutionSummary } = resolutionData;
 
-    // Step 5: Issue mitigated
     inc.status = 'MITIGATED';
     inc.investigationLogs.push(`[${new Date().toISOString()}] Issue mitigated: ${mitigationActions || 'Applied memory and connection pool optimization.'}`);
 
-    // Step 6: Health checks confirm recovery
     const recoveryHealthCheck = {
       frontend: 'HTTP 200 OK (Recovered)',
       backendApi: 'HEALTHY (0% error rate)',
@@ -651,14 +578,12 @@ class PlatformWorkflowService {
     inc.recoveryVerification = recoveryHealthCheck;
     inc.investigationLogs.push(`[${new Date().toISOString()}] Telemetry health check confirmed recovery. Services healthy.`);
 
-    // Step 7: Incident closed with explanation
     inc.status = 'RESOLVED';
     inc.rootCause = rootCause || 'Transient socket saturation on legacy keep-alive connection pool';
     inc.resolutionSummary = resolutionSummary || 'Connection pool recycled, health probes verified 100% operational.';
     inc.closedAt = new Date();
     inc.closedBy = operator;
 
-    // Step 8: Relevant audit and support records linked
     const auditId = await this.logAudit(
       'SYSTEM_HEALTH',
       'INCIDENT_RESOLVED',
@@ -686,25 +611,12 @@ class PlatformWorkflowService {
     };
   }
 
-  // =========================================================================
-  // WORKFLOW E: SUSPEND A COMPROMISED ACCOUNT
-  // 1. Suspicious account identified
-  // 2. Operator reviews evidence
-  // 3. Account temporarily restricted/suspended
-  // 4. Active sessions revoked immediately
-  // 5. Account owner and institution notified according to policy
-  // 6. Incident investigated
-  // 7. Access restored only after verification and authorization
-  // 8. Actions retained in audit history
-  // =========================================================================
-
   static async suspendCompromisedAccountWorkflow(data, operator = 'Platform SecOps Lead') {
     const { userId, reason, evidenceSummary } = data;
     if (!userId) {
       return { success: false, message: 'User identifier is required.' };
     }
 
-    // Step 2: Evidence review
     const evidence = {
       userId,
       anomalousIps: ['49.37.112.9', '185.220.101.5'],
@@ -715,7 +627,6 @@ class PlatformWorkflowService {
       reviewedBy: operator
     };
 
-    // Step 3 & 4: Suspend account & revoke active sessions immediately
     let targetUser = null;
     if (this.isMongoReady()) {
       try {
@@ -728,7 +639,7 @@ class PlatformWorkflowService {
               'suspension.reason': evidence.reason,
               'suspension.suspendedAt': new Date(),
               'suspension.suspendedBy': operator,
-              sessions: [] // Kill-switch: terminate all active sessions
+              sessions: []
             }
           },
           { new: true }
@@ -736,7 +647,6 @@ class PlatformWorkflowService {
       } catch (err) {}
     }
 
-    // Step 5: Notify account owner and relevant institution according to policy
     const notificationDispatch = {
       notifiedUserEmail: targetUser?.email || `${userId.toLowerCase()}@srividya.edu.in`,
       notifiedInstitutionPrincipal: 'principal.main@srividya.edu.in',
@@ -746,7 +656,6 @@ class PlatformWorkflowService {
       policy: 'Trust Data Protection & Compromised Identity Policy §4.2'
     };
 
-    // Step 8: Actions retained in audit history
     const auditId = await this.logAudit(
       'SECURITY_MONITORING',
       'USER_ACCOUNT_SUSPENDED_COMPROMISED',
@@ -781,7 +690,6 @@ class PlatformWorkflowService {
       return { success: false, message: 'Authorized signatory approval is required to reinstate a suspended compromised account.' };
     }
 
-    // Step 7: Restore access only after verification and authorization
     if (this.isMongoReady()) {
       try {
         await UserAccount.updateOne(
@@ -800,7 +708,6 @@ class PlatformWorkflowService {
       } catch (err) {}
     }
 
-    // Step 8: Retained in audit history
     const auditId = await this.logAudit(
       'SECURITY_MONITORING',
       'USER_ACCOUNT_REINSTATED',
@@ -827,20 +734,6 @@ class PlatformWorkflowService {
     };
   }
 
-  // =========================================================================
-  // WORKFLOW F: IMPORT AN EXISTING SCHOOL'S RECORDS
-  // 1. Select institution
-  // 2. Upload source file
-  // 3. Map columns
-  // 4. Validate required fields
-  // 5. Preview duplicates and invalid rows
-  // 6. Run test import (Dry-Run)
-  // 7. Review results
-  // 8. Approve production import
-  // 9. Save import report and error list
-  // 10. Verify resulting records in School Administration Portal
-  // =========================================================================
-
   static async runImportWorkflow({ institutionId = 'INST-001', dataType = 'students', sourceFileName = 'Students_Data.csv', columnMapping = {}, records = [], isDryRun = true }, operator = 'Platform Super Administrator') {
     const jobId = `IMP-${new Date().getFullYear()}-${Math.floor(1000 + Math.random() * 9000)}`;
 
@@ -848,7 +741,6 @@ class PlatformWorkflowService {
       { 'Adm No': 'SV/2026/001', 'Full Name': 'K. Sai Varun', 'Grade': 'Class X-A', 'Phone': '+91 9848011221', 'DOB': '2010-04-12' },
       { 'Adm No': 'SV/2026/002', 'Full Name': 'M. Sravani', 'Grade': 'Class X-A', 'Phone': '+91 9848011222', 'DOB': '2010-06-18' },
       { 'Adm No': 'SV/2026/003', 'Full Name': 'P. Rajesh Kumar', 'Grade': 'Class X-B', 'Phone': '+91 9848011223', 'DOB': '2010-08-25' },
-      // Invalid sample row
       { 'Adm No': 'SV/2026/004', 'Full Name': 'R. Incomplete', 'Grade': 'Class X-B', 'Phone': 'INVALID', 'DOB': '32/13/2010' }
     ];
 
@@ -860,7 +752,6 @@ class PlatformWorkflowService {
       'DOB': 'dateOfBirth'
     };
 
-    // Step 4 & 5: Validate required fields and preview duplicates & invalid rows
     const acceptedPreview = [];
     const rejectedRecords = [];
 
@@ -889,7 +780,6 @@ class PlatformWorkflowService {
     const validRows = acceptedPreview.length;
     const rejectedRows = rejectedRecords.length;
 
-    // Step 6 & 7: Test import (Dry-Run) vs Step 8: Approved Production Import
     const status = isDryRun ? 'DRY_RUN_PREVIEW' : 'COMPLETED';
 
     const importJob = {
@@ -912,7 +802,6 @@ class PlatformWorkflowService {
         recordsFailed: rejectedRows,
         executionMode: isDryRun ? 'SIMULATED_DRY_RUN' : 'PRODUCTION_IMPORT'
       },
-      // Step 10: Verification target in School Administration Portal
       portalVerificationUrl: `/management?tab=students&inst=${institutionId}`,
       createdAt: new Date(),
       operator
@@ -968,10 +857,6 @@ class PlatformWorkflowService {
       auditId
     };
   }
-
-  // =========================================================================
-  // WORKFLOW OVERVIEW & AUDIT SUMMARY
-  // =========================================================================
 
   static async getWorkflowsOverview() {
     return {

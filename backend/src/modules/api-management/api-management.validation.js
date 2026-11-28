@@ -1,7 +1,3 @@
-/**
- * API Gateway & Client Management - Validation Layer
- * Enforces field schemas, constraints, and data integrity
- */
 
 class ApiManagementValidation {
   static validateRequest(req, res, next) {

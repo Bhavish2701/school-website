@@ -1,12 +1,7 @@
-/**
- * Sri Vidya Master Modular Architecture Aggregator
- * Bundles all 21 Platform Administration and Core ERP Modules
- */
 
 const express = require('express');
 const router = express.Router();
 
-// 21 Platform Administration Modules
 const authModule = require('./auth');
 router.use('/auth', authModule.routes);
 const platform_dashboardModule = require('./platform-dashboard');
@@ -50,7 +45,6 @@ router.use('/platform-policies', platform_policiesModule.routes);
 const data_retentionModule = require('./data-retention');
 router.use('/data-retention', data_retentionModule.routes);
 
-// Core Institutional ERP Modules
 const studentsModule = require('./students');
 router.use('/students', studentsModule.routes);
 const staffModule = require('./staff');

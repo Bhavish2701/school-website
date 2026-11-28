@@ -1,7 +1,3 @@
-/**
- * Backups & Disaster Recovery - Controller Layer
- * Handles HTTP requests, responses, and status codes
- */
 
 const Service = require('./backups-recovery.service');
 

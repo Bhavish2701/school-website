@@ -1,13 +1,3 @@
-/**
- * Frontend-Backend Integration Test Script
- * Validates the full API contract used by js/api-client.js and portal frontends:
- * - Multi-role Authentication (Management, Teacher, Student, Parent)
- * - Legacy demo credentials auto-mapping
- * - JWT Refresh flow (silent 401 recovery)
- * - Role-Based Access Control (403 Forbidden enforcement)
- * - Management, Teacher, Student, and Parent Dashboard APIs
- * - Students, Teachers, Admissions, Attendance, and Fee endpoints
- */
 
 const http = require('http');
 
@@ -69,7 +59,6 @@ async function runIntegrationSuite() {
     }
   }
 
-  // 1. Management Authentication
   console.log('1. Testing Authentication Flows');
   const mgmtRes = await makeRequest('/auth/login', {
     method: 'POST',
@@ -81,7 +70,6 @@ async function runIntegrationSuite() {
   const refreshToken = mgmtRes.data?.data?.tokens?.refreshToken;
   assert(!!mgmtToken, 'Principal received valid accessToken');
 
-  // 2. Teacher Authentication
   const teacherRes = await makeRequest('/auth/login', {
     method: 'POST',
     body: { identifier: 'teacher1', password: 'Teacher@123' },
@@ -90,7 +78,6 @@ async function runIntegrationSuite() {
   assert(teacherRes.status === 200, 'Teacher login returned HTTP 200');
   const teacherToken = teacherRes.data?.data?.tokens?.accessToken;
 
-  // 3. Student Authentication
   const studentRes = await makeRequest('/auth/login', {
     method: 'POST',
     body: { identifier: 'student1', password: 'Student@123' },
@@ -99,7 +86,6 @@ async function runIntegrationSuite() {
   assert(studentRes.status === 200, 'Student login returned HTTP 200');
   const studentToken = studentRes.data?.data?.tokens?.accessToken;
 
-  // 4. Parent Authentication
   const parentRes = await makeRequest('/auth/login', {
     method: 'POST',
     body: { identifier: 'parent1', password: 'Parent@123' },
@@ -108,7 +94,6 @@ async function runIntegrationSuite() {
   assert(parentRes.status === 200, 'Parent login returned HTTP 200');
   const parentToken = parentRes.data?.data?.tokens?.accessToken;
 
-  // 5. Token Silent Refresh (401 Recovery)
   console.log('\n2. Testing JWT Refresh Flow (Token Lifecycle)');
   const refreshRes = await makeRequest('/auth/refresh', {
     method: 'POST',
@@ -118,7 +103,6 @@ async function runIntegrationSuite() {
   assert(refreshRes.status === 200, 'POST /auth/refresh returned HTTP 200');
   assert(!!refreshRes.data?.data?.tokens?.accessToken, 'Successfully obtained renewed accessToken');
 
-  // 6. RBAC 403 Forbidden Enforcement (Security Validation)
   console.log('\n3. Testing 403 Forbidden Authorization Boundaries');
   const forbiddenRes = await makeRequest('/dashboard/management', {
     headers: { Authorization: `Bearer ${studentToken}` },
@@ -128,7 +112,6 @@ async function runIntegrationSuite() {
     `Student denied access to Management Dashboard (HTTP ${forbiddenRes.status})`
   );
 
-  // 7. Management Dashboard & Resources
   console.log('\n4. Testing Management Dashboard & School Resources');
   const mgmtDash = await makeRequest('/dashboard/management', {
     headers: { Authorization: `Bearer ${mgmtToken}` },
@@ -147,7 +130,6 @@ async function runIntegrationSuite() {
   });
   assert(teachersList.status === 200, 'GET /teachers returned HTTP 200 with faculty directory');
 
-  // 8. Teacher Dashboard
   console.log('\n5. Testing Teacher Dashboard & Class Data');
   const teacherDash = await makeRequest('/dashboard/teacher', {
     headers: { Authorization: `Bearer ${teacherToken}` },
@@ -155,7 +137,6 @@ async function runIntegrationSuite() {
   assert(teacherDash.status === 200, 'GET /dashboard/teacher returned HTTP 200');
   assert(teacherDash.data?.data?.teacherProfile?.fullName !== undefined, 'Teacher dashboard contains assigned profile and classes');
 
-  // 9. Student Dashboard
   console.log('\n6. Testing Student Dashboard & Academics');
   const studentDash = await makeRequest('/dashboard/student', {
     headers: { Authorization: `Bearer ${studentToken}` },
@@ -163,7 +144,6 @@ async function runIntegrationSuite() {
   assert(studentDash.status === 200, 'GET /dashboard/student returned HTTP 200');
   assert(studentDash.data?.data?.studentProfile?.admissionNo !== undefined, 'Student dashboard contains academic attendance & coursework');
 
-  // 10. Parent Dashboard
   console.log('\n7. Testing Parent Dashboard & Multi-Child Switcher');
   const parentDash = await makeRequest('/dashboard/parent', {
     headers: { Authorization: `Bearer ${parentToken}` },
@@ -171,7 +151,6 @@ async function runIntegrationSuite() {
   assert(parentDash.status === 200, 'GET /dashboard/parent returned HTTP 200');
   assert(Array.isArray(parentDash.data?.data?.children), 'Parent dashboard contains authorized children array');
 
-  // 11. Public Admissions Submission & Tracking Flow
   console.log('\n8. Testing Public Admissions Submission & Status Tracking');
   const uniquePhone = `98480${Math.floor(10000 + Math.random() * 90000)}`;
   const submitAppRes = await makeRequest('/admissions/apply', {

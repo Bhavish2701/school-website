@@ -1,7 +1,3 @@
-/**
- * Role Templates & RBAC Permissions - Controller Layer
- * Handles HTTP requests, responses, and status codes
- */
 
 const Service = require('./roles-permissions.service');
 

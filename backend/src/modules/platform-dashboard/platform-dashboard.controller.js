@@ -1,7 +1,3 @@
-/**
- * Platform Dashboard Telemetry - Controller Layer
- * Handles HTTP requests, responses, and status codes
- */
 
 const Service = require('./platform-dashboard.service');
 

@@ -1,9 +1,3 @@
-/**
- * Academic Module Routes
- *
- * Architecture:
- * Express routes → Middlewares (Auth & RBAC) → Controllers → Services → Mongoose models
- */
 const express = require('express');
 const router = express.Router();
 const academicController = require('../controllers/academic.controller');
@@ -19,13 +13,10 @@ const {
   validateCreateAssignment,
 } = require('../validators/academic.validator');
 
-// All academic routes require authentication
 router.use(authenticateUser);
 
-// 1. Academic Dashboard (Accessible to all authenticated staff & students/parents read overview)
 router.get('/dashboard', academicController.getAcademicDashboard);
 
-// 2. Academic Years
 router
   .route('/years')
   .get(academicController.getAcademicYears)
@@ -41,7 +32,6 @@ router.patch(
   academicController.setCurrentYear
 );
 
-// 3. Classes & Sections
 router
   .route('/classes')
   .get(academicController.getClasses)
@@ -59,7 +49,6 @@ router
     academicController.updateClass
   );
 
-// 4. Teacher Allocations
 router.post(
   '/classes/:id/assign-teacher',
   authorizeRoles('SUPER_ADMIN', 'PRINCIPAL', 'VICE_PRINCIPAL'),
@@ -67,7 +56,6 @@ router.post(
   academicController.assignTeacher
 );
 
-// 5. Subjects
 router
   .route('/subjects')
   .get(academicController.getSubjects)
@@ -88,7 +76,6 @@ router
     academicController.deleteSubject
   );
 
-// 6. Class Assignments (Homework / Projects)
 router
   .route('/assignments')
   .get(academicController.getAssignments)

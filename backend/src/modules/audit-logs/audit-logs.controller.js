@@ -1,7 +1,3 @@
-/**
- * Forensic Audit Logs Explorer - Controller Layer
- * Handles HTTP requests, responses, and status codes
- */
 
 const Service = require('./audit-logs.service');
 

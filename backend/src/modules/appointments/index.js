@@ -1,7 +1,3 @@
-/**
- * APPOINTMENTS Module
- * Parent-Teacher Appointments, Counselor Meetings, and Visitor Gate Passes
- */
 const routes = require('./routes');
 
 module.exports = {

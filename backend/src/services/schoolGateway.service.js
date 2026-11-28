@@ -1,27 +1,11 @@
-/**
- * Sri Vidya Educational Trust - School Gateways Service
- * Module 18: Navigation Gateways, Identity Scoping, and Decoupled Telemetry
- *
- * Statutory / Architectural Invariants:
- * 1. Section 18.1: Preserve institution context without sending passwords or session tokens in URLs.
- * 2. Section 18.2: Verify faculty account / identity flow before launching Faculty Portal.
- * 3. Section 18.3: Display public website status (Domain, SSL, Last Check, Link).
- *    Do NOT automatically assume that a successful frontend response means backend & DB are healthy.
- *    Decoupled verification must check frontend, backend API, and database independently.
- */
 
 const mongoose = require('mongoose');
 const { Domain } = require('../models/domainEmail.model');
 const { SchoolConfig } = require('../models/schoolConfig.model');
 
-// In-memory cache for live telemetry
 let lastGatewayStatus = null;
 let lastProbeTime = null;
 
-/**
- * Checks for prohibited credentials in URL query parameters.
- * Security Invariant: Avoid sending passwords or session tokens in URLs.
- */
 function checkForProhibitedUrlTokens(queryParams = {}) {
   const sensitiveKeys = ['password', 'pwd', 'pass', 'token', 'access_token', 'session_token', 'session', 'auth', 'jwt', 'apiKey', 'secret'];
   const queryKeys = Object.keys(queryParams).map(k => k.toLowerCase());
@@ -38,16 +22,9 @@ function checkForProhibitedUrlTokens(queryParams = {}) {
   return { hasViolation: false };
 }
 
-/**
- * Probes the decoupled layers of the platform:
- * Layer 1: Frontend web server / static delivery
- * Layer 2: Backend REST API router
- * Layer 3: Database storage layer (MongoDB connection)
- */
 async function probeDecoupledHealth() {
   const timestamp = new Date();
   
-  // Layer 1: Frontend Web Status
   const frontend = {
     status: 'HEALTHY',
     statusCode: 200,
@@ -55,7 +32,6 @@ async function probeDecoupledHealth() {
     checkedAt: timestamp
   };
 
-  // Layer 2: Backend API Status
   const backend = {
     status: 'HEALTHY',
     layer: 'Backend REST API Routing Layer',
@@ -63,7 +39,6 @@ async function probeDecoupledHealth() {
     checkedAt: timestamp
   };
 
-  // Layer 3: Database Layer
   const isDbConnected = mongoose.connection && mongoose.connection.readyState === 1;
   const database = {
     status: isDbConnected ? 'CONNECTED' : 'DEGRADED',
@@ -72,7 +47,6 @@ async function probeDecoupledHealth() {
     checkedAt: timestamp
   };
 
-  // Invariant validation: Frontend health alone does NOT imply backend & DB are healthy
   const isOverallHealthy = frontend.status === 'HEALTHY' && backend.status === 'HEALTHY' && database.status === 'CONNECTED';
 
   return {
@@ -85,11 +59,7 @@ async function probeDecoupledHealth() {
   };
 }
 
-/**
- * 18.3 Public Website & Gateway Telemetry Status
- */
 async function getGatewayStatus(institutionId = 'INST-001') {
-  // Resolve configured domain or default
   let configuredDomain = 'srividya.edu.in';
   let sslStatus = 'VALID';
   let publicUrl = 'http://localhost:5000/';
@@ -144,13 +114,7 @@ async function getGatewayStatus(institutionId = 'INST-001') {
   return lastGatewayStatus;
 }
 
-/**
- * 18.1 School Administration Portal Access Verification
- * Verifies permissions, ensures institution context is preserved, and strictly checks
- * that no session tokens or passwords are passed in the URL.
- */
 function verifyAdministrationAccess(user = {}, queryParams = {}) {
-  // 1. Strict Security Invariant: Check for token leakage in query string
   const tokenCheck = checkForProhibitedUrlTokens(queryParams);
   if (tokenCheck.hasViolation) {
     return {
@@ -161,7 +125,6 @@ function verifyAdministrationAccess(user = {}, queryParams = {}) {
     };
   }
 
-  // 2. Permission Evaluation
   const allowedRoles = ['admin', 'principal', 'super_admin', 'platform_owner', 'vice_principal', 'institutional_admin'];
   const userRole = String(user.role || '').toLowerCase();
 
@@ -186,13 +149,7 @@ function verifyAdministrationAccess(user = {}, queryParams = {}) {
   };
 }
 
-/**
- * 18.2 Faculty & Teacher Portal Access Verification
- * Verifies that the user has an appropriate faculty account or can securely authenticate
- * through the institution's identity flow.
- */
 function verifyFacultyAccess(user = {}, queryParams = {}) {
-  // 1. Strict Security Invariant: Check for token leakage in query string
   const tokenCheck = checkForProhibitedUrlTokens(queryParams);
   if (tokenCheck.hasViolation) {
     return {
@@ -203,7 +160,6 @@ function verifyFacultyAccess(user = {}, queryParams = {}) {
     };
   }
 
-  // 2. Faculty Identity Verification
   const facultyRoles = ['teacher', 'faculty', 'principal', 'academic_coordinator', 'super_admin', 'platform_owner'];
   const userRole = String(user.role || '').toLowerCase();
 

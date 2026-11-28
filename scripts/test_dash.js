@@ -6,7 +6,8 @@ const mongoose = require('mongoose');
 require('dotenv').config({ path: path.join(__dirname, '../backend/.env') });
 
 async function run() {
-  await mongoose.connect(process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/srividya_school_db');
+  if (!process.env.MONGODB_URI) throw new Error('MONGODB_URI is required for MongoDB Atlas');
+  await mongoose.connect(process.env.MONGODB_URI);
   console.log('MongoDB connected');
   const dashboardService = require('../backend/src/services/dashboard.service');
   const mgmt = await dashboardService.getManagementDashboard(null);

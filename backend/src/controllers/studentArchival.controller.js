@@ -1,7 +1,3 @@
-/**
- * Student Archival & Record Inactivation Controller
- * Sri Vidya English Medium High School - ERP
- */
 
 const studentArchivalService = require('../services/studentArchival.service');
 const { sendSuccess } = require('../utils/apiResponse');

@@ -6,7 +6,6 @@ console.log('=== TEST SUITE: PLATFORM ADMIN EXPANDED SIDEBAR & VIEW ARCHITECTURE
 const html = fs.readFileSync('frontend/platform-admin/index.html', 'utf8');
 const js = fs.readFileSync('frontend/js/platform-admin.js', 'utf8');
 
-// CHECK 1: Five Distinct Nav Sections in HTML
 console.log('[CHECK 1] Verifying 5 Sidebar Categories in HTML...');
 const expectedSections = [
   'CORE OPERATIONS',
@@ -20,7 +19,6 @@ expectedSections.forEach(section => {
   console.log(`  ✓ Section "${section}" verified`);
 });
 
-// CHECK 2: All 15 Links in Sidebar
 console.log('\n[CHECK 2] Verifying 15 Sidebar Navigation Links...');
 const expectedLinks = [
   'data-view="dashboard"',
@@ -48,7 +46,6 @@ expectedLinks.forEach(link => {
   console.log(`  ✓ Link [${link}] verified`);
 });
 
-// CHECK 3: All 6 New Views in HTML
 console.log('\n[CHECK 3] Verifying 6 New View DOM containers in HTML...');
 const expectedViews = [
   'id="view-onboarding"',
@@ -63,7 +60,6 @@ expectedViews.forEach(v => {
   console.log(`  ✓ View container [${v}] verified`);
 });
 
-// CHECK 4: platform-admin.js titles mapping
 console.log('\n[CHECK 4] Verifying Titles dictionary in platform-admin.js...');
 const expectedTitles = [
   "'onboarding': 'Institution Onboarding & Migration'",
@@ -79,7 +75,6 @@ expectedTitles.forEach(title => {
   console.log(`  ✓ Title mapping [${title}] verified`);
 });
 
-// CHECK 5: Public API Exports
 console.log('\n[CHECK 5] Verifying Public API Exports in platform-admin.js...');
 const expectedExports = [
   'triggerManualBackup',

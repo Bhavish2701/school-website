@@ -35,7 +35,6 @@ function createMockElement(id, tag = 'div') {
     blur: function() {},
     click: function() {},
     querySelectorAll: function(sel) { 
-      // Return matching elements
       const res = [];
       elements.forEach(el => {
         if (sel.includes(el.id)) res.push(el);
@@ -146,9 +145,6 @@ function assert(condition, testName) {
   }
 }
 
-// ==========================================
-// TEST SUITE 11.1: APPOINTMENT OVERVIEW
-// ==========================================
 console.log("\n--- Testing 11.1: Appointment Overview ---");
 app.renderAppointmentsOverview();
 const todayTbody = mockDoc.getElementById('overviewTodayMeetingsTableBody');
@@ -163,19 +159,14 @@ assert(reschedTbody && reschedTbody.innerHTML.length > 50, "11.1 Renders resched
 const upcomingTbody = mockDoc.getElementById('overviewUpcomingAppointmentsTableBody');
 assert(upcomingTbody && upcomingTbody.innerHTML.length > 50, "11.1 Renders upcoming meetings");
 
-// Test mark arrival
 app.markAppointmentArrival('APT-TODAY-01');
 assert(todayTbody.innerHTML.includes('Arrived at Campus'), "11.1 Mark arrival updates status to Arrived");
 
-// ==========================================
-// TEST SUITE 11.2: PRINCIPAL'S CALENDAR
-// ==========================================
 console.log("\n--- Testing 11.2: Principal's Calendar ---");
 app.renderPrincipalsCalendar();
 const calContainer = mockDoc.getElementById('principalsCalendarContainer');
 assert(calContainer && calContainer.innerHTML.length > 50, "11.2 Renders Principal's Calendar");
 
-// View switchers: Day, Week, Month, Agenda
 app.setCalendarViewMode('day');
 assert(calContainer.innerHTML.includes('Time Window') || calContainer.innerHTML.includes('Classification'), "11.2 Day View rendered with time windows");
 
@@ -188,22 +179,17 @@ assert(calContainer.innerHTML.includes('Month') || calContainer.innerHTML.includ
 app.setCalendarViewMode('agenda');
 assert(calContainer.innerHTML.includes('flex') && (calContainer.innerHTML.includes('Consultation') || calContainer.innerHTML.includes('Review') || calContainer.innerHTML.includes('AM') || calContainer.innerHTML.includes('PM')), "11.2 Agenda View rendered");
 
-// Test Privacy Masking: Non-executive role
-app.switchRole('admin'); // Clerk role
+app.switchRole('admin');
 app.setCalendarViewMode('agenda');
 assert(calContainer.innerHTML.includes('Private Agenda') || calContainer.innerHTML.includes('Leadership Jurisdiction') || calContainer.innerHTML.includes('Confidential'), "11.2 Privacy Guard masks executive meetings for Office Clerk");
-app.switchRole('principal'); // Restore principal
+app.switchRole('principal');
 
-// ==========================================
-// TEST SUITE 11.3: APPOINTMENT REQUESTS
-// ==========================================
 console.log("\n--- Testing 11.3: Appointment Requests ---");
 app.renderAppointmentRequests();
 const reqTable = mockDoc.getElementById('appointmentRequestsTableBody');
 assert(reqTable && reqTable.innerHTML.includes('REQ-'), "11.3 Renders requests table with Request IDs");
 assert(reqTable.innerHTML.includes('Sri') || reqTable.innerHTML.includes('Dr.') || reqTable.innerHTML.includes('Smt.'), "11.3 Displays requester identity & purpose");
 
-// Test request actions
 app.approveAppointmentRequest('REQ-2026-0041');
 assert(true, "11.3 Approve request executes cleanly");
 
@@ -216,16 +202,12 @@ assert(true, "11.3 Decline request executes cleanly");
 app.notifyAppointmentRequester('REQ-2026-0041');
 assert(true, "11.3 Notify requester dispatches alert");
 
-// ==========================================
-// TEST SUITE 11.4: VISITOR REGISTER & 90-DAY RETENTION
-// ==========================================
 console.log("\n--- Testing 11.4: Visitor Register ---");
 app.renderVisitorRegister();
 const visTable = mockDoc.getElementById('visitorRegisterTableBody');
 assert(visTable && (visTable.innerHTML.includes('PASS-') || visTable.innerHTML.includes('VISITOR-')), "11.4 Renders visitor register with Badge & Pass IDs");
 assert(visTable.innerHTML.includes('In Campus') || visTable.innerHTML.includes('Checked Out') || visTable.innerHTML.includes('Visitor'), "11.4 Tracks visitor badge & status");
 
-// Test visitor actions
 app.handleCheckInVisitor('PASS-2026-1049');
 assert(true, "11.4 Check-in visitor executes cleanly");
 
@@ -238,9 +220,6 @@ assert(true, "11.4 Visitor check-out records exit timestamp");
 app.viewVisitorHistory('Sri K. Venkat Rao', '98480 33445');
 assert(mockDoc.getElementById('visitorHistoryModalBody').innerHTML.includes('Venkat Rao'), "11.4 View visitor history renders past visits dossier");
 
-// ==========================================
-// TEST SUITE 11.5: MEETING HISTORY & DIRECTIVES
-// ==========================================
 console.log("\n--- Testing 11.5: Meeting History & Directives ---");
 app.renderMeetingHistory();
 const histTable = mockDoc.getElementById('meetingHistoryTableBody');
@@ -253,9 +232,6 @@ assert(fupTable && fupTable.innerHTML.includes('FUP-'), "11.5 Renders follow-up 
 app.handleCompleteFollowup('FUP-2026-001');
 assert(true, "11.5 Complete follow-up directive updates task state");
 
-// ==========================================
-// LIVE CLOCK & RETENTION POLICY
-// ==========================================
 console.log("\n--- Testing Live Clock & Statutory Retention Policy ---");
 const timeText = mockDoc.getElementById('liveTimeText').textContent;
 assert(timeText.includes('IST') && !timeText.includes('--:--:--'), `Live clock displays current IST time: ${timeText}`);

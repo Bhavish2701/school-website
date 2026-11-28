@@ -1,7 +1,3 @@
-/**
- * Receipt Mongoose Model
- * Manages official immutable fee payment receipts
- */
 const mongoose = require('mongoose');
 
 const receiptSchema = new mongoose.Schema(

@@ -1,8 +1,3 @@
-/**
- * Platform Maintenance Mode Enforcement Middleware
- * Reads GlobalSettings.maintenance.isActive (with lightweight 5s cache) and blocks
- * non-SUPER_ADMIN operational endpoints during scheduled maintenance windows.
- */
 const jwt = require('jsonwebtoken');
 const { env } = require('../config/env');
 const { GlobalSettings } = require('../models/globalSettings.model');
@@ -42,7 +37,6 @@ const maintenanceMiddleware = async (req, res, next) => {
 
     if (!cachedState.isActive) return next();
 
-    // Allow authenticated SUPER_ADMIN to bypass maintenance mode
     const authHeader = req.headers.authorization;
     if (authHeader && authHeader.startsWith('Bearer ')) {
       try {
@@ -51,7 +45,6 @@ const maintenanceMiddleware = async (req, res, next) => {
           return next();
         }
       } catch (_) {
-        // Invalid token falls through to 503 during maintenance
       }
     }
 

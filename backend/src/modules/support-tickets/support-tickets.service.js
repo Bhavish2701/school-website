@@ -1,7 +1,3 @@
-/**
- * Support & Issue Management - Service Layer
- * Business rules, calculations, and operational orchestration
- */
 
 const Repository = require('./support-tickets.repository');
 const MultiInstitutionSecurity = require('../common/multiInstitutionSecurity');

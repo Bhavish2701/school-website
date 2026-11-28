@@ -1,7 +1,3 @@
-/**
- * School Configuration & Defaults - Module Aggregator
- * Exports all 6 architectural layers
- */
 
 const routes = require('./school-configuration.routes');
 const controller = require('./school-configuration.controller');

@@ -1,45 +1,31 @@
-/* ==========================================================================
-   Sri Vidya E.M High School - Modern White & Royal Blue Design System
-   Palette:
-   - Primary Royal Blue: #1D4ED8 / #1E40AF / #2563EB
-   - Scholastic Deep Navy: #0F172A / #1E3A8A
-   - Sky Blue Accents: #38BDF8 / #60A5FA / #DBEAFE / #EFF6FF
-   - Surfaces: Pure White (#FFFFFF) & Crisp Light (#F8FAFC, #F1F5F9)
-   - Brand Letters: Solid Black (#000000 / #111827)
-   ========================================================================== */
 
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap');
 
 :root {
-  /* Royal Blue & Navy Primary Palette (Not Logo Related) */
-  --color-primary: #1D4ED8;          /* Vibrant Royal Blue */
-  --color-primary-hover: #1E40AF;    /* Deep Royal Blue */
-  --color-primary-dark: #0F172A;     /* Scholastic Navy */
-  --color-primary-light: #2563EB;    /* Bright Blue */
-  --color-primary-subtle: #EFF6FF;  /* Ice Blue Tint */
-  --color-primary-tint: #DBEAFE;    /* Soft Sky Tint */
+  --color-primary: #1D4ED8;          
+  --color-primary-hover: #1E40AF;    
+  --color-primary-dark: #0F172A;     
+  --color-primary-light: #2563EB;    
+  --color-primary-subtle: #EFF6FF;  
+  --color-primary-tint: #DBEAFE;    
 
-  /* Neutral Surfaces (Crisp White & Pale Slate) */
-  --color-bg-base: #FFFFFF;          /* Pure Crisp White */
-  --color-bg-surface: #FFFFFF;       /* Pure White Card */
-  --color-bg-subtle: #F8FAFC;        /* Light Slate Tint */
-  --color-bg-warm: #F0F7FF;          /* Light Sky Wash */
+  --color-bg-base: #FFFFFF;          
+  --color-bg-surface: #FFFFFF;       
+  --color-bg-subtle: #F8FAFC;        
+  --color-bg-warm: #F0F7FF;          
   --card-bg-gradient: linear-gradient(135deg, #FFFFFF 0%, #F8FAFC 100%);
   --header-bg: rgba(255, 255, 255, 0.98);
 
-  /* Borders & Dividers */
-  --color-border: #E2E8F0;           /* Clean Modern Border */
-  --color-border-hover: #1D4ED8;     /* Blue Hover Border */
+  --color-border: #E2E8F0;           
+  --color-border-hover: #1D4ED8;     
   --color-border-light: #F1F5F9;
 
-  /* Typography Colors */
-  --color-brand-black: #000000;      /* Pure Black for School Name */
-  --color-text-main: #1E293B;        /* High-contrast slate */
-  --color-text-muted: #64748B;       /* Secondary slate */
-  --color-text-dark: #0F172A;        /* Dark Navy for headings */
+  --color-brand-black: #000000;      
+  --color-text-main: #1E293B;        
+  --color-text-muted: #64748B;       
+  --color-text-dark: #0F172A;        
   --color-text-white: #FFFFFF;
 
-  /* Accent Colors (Red, Green, Amber, Blue, Teal) */
   --color-accent-red: #DC2626;
   --color-accent-red-hover: #B91C1C;
   --color-accent-red-subtle: #FEF2F2;
@@ -56,18 +42,15 @@
   --color-accent-teal: #0D9488;
   --color-accent-teal-subtle: #CCFBF1;
 
-  /* Shadows */
   --shadow-sm: 0 1px 3px 0 rgba(15, 23, 42, 0.05);
   --shadow-md: 0 4px 14px -2px rgba(29, 78, 216, 0.08), 0 2px 6px -2px rgba(15, 23, 42, 0.04);
   --shadow-lg: 0 12px 24px -4px rgba(29, 78, 216, 0.12), 0 4px 10px -2px rgba(15, 23, 42, 0.04);
   --shadow-xl: 0 20px 35px -5px rgba(29, 78, 216, 0.15), 0 10px 15px -5px rgba(15, 23, 42, 0.04);
 
-  /* Typography */
   --font-heading: 'Outfit', 'Plus Jakarta Sans', sans-serif;
   --font-subheading: 'Plus Jakarta Sans', sans-serif;
   --font-body: 'Inter', system-ui, -apple-system, sans-serif;
 
-  /* Transitions & Radius */
   --radius-sm: 6px;
   --radius-md: 10px;
   --radius-lg: 16px;
@@ -76,21 +59,18 @@
   --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* ==========================================================================
-   Dark Mode Overrides (Deep Midnight Slate & Vibrant Royal Blue)
-   ========================================================================== */
 [data-theme="dark"] {
-  --color-primary: #3B82F6;          /* Bright Blue */
+  --color-primary: #3B82F6;          
   --color-primary-hover: #60A5FA;
   --color-primary-dark: #93C5FD;
   --color-primary-light: #60A5FA;
   --color-primary-subtle: rgba(59, 130, 246, 0.15);
   --color-primary-tint: rgba(59, 130, 246, 0.25);
 
-  --color-bg-base: #0B1120;          /* Deep Slate Midnight */
-  --color-bg-surface: #151F32;       /* Slate Card Surface */
-  --color-bg-subtle: #1E293B;        /* Slate Section */
-  --color-bg-warm: #111A2E;          /* Midnight Blue */
+  --color-bg-base: #0B1120;          
+  --color-bg-surface: #151F32;       
+  --color-bg-subtle: #1E293B;        
+  --color-bg-warm: #111A2E;          
   --card-bg-gradient: linear-gradient(135deg, #151F32 0%, #1A2740 100%);
   --header-bg: rgba(11, 17, 32, 0.96);
 
@@ -98,13 +78,12 @@
   --color-border-hover: #3B82F6;
   --color-border-light: #1E293B;
 
-  --color-brand-black: #FFFFFF;      /* In dark mode, brand letters flip to crisp white */
+  --color-brand-black: #FFFFFF;      
   --color-text-main: #E2E8F0;
   --color-text-muted: #94A3B8;
   --color-text-dark: #F8FAFC;
   --color-text-white: #FFFFFF;
 
-  /* Accent Colors for Dark Mode (Vibrant & High Contrast on Midnight Dark) */
   --color-accent-red: #F87171;
   --color-accent-red-hover: #EF4444;
   --color-accent-red-subtle: rgba(239, 68, 68, 0.18);
@@ -128,9 +107,6 @@
   --shadow-xl: 0 20px 35px -5px rgba(0, 0, 0, 0.7);
 }
 
-/* ==========================================================================
-   Base & Reset
-   ========================================================================== */
 *, *::before, *::after {
   box-sizing: border-box;
   margin: 0;
@@ -178,7 +154,6 @@ button, input, select, textarea {
   padding-right: clamp(1.25rem, 2.5vw, 2.5rem);
 }
 
-/* Expansive Header Container Aligned to Container Width */
 .header-container {
   width: 100%;
   max-width: min(1660px, 94vw);
@@ -188,9 +163,6 @@ button, input, select, textarea {
   padding-right: clamp(1.25rem, 2.5vw, 2.5rem);
 }
 
-/* ==========================================================================
-   Top Announcement Bar
-   ========================================================================== */
 .top-bar {
   background: linear-gradient(90deg, #0F172A 0%, #1E3A8A 50%, #1D4ED8 100%);
   color: var(--color-text-white);
@@ -312,9 +284,6 @@ button, input, select, textarea {
   background-color: var(--color-bg-surface);
 }
 
-/* ==========================================================================
-   Main Sticky Navbar (Logo & Name Anchored at Left Corner)
-   ========================================================================== */
 .site-header {
   position: sticky;
   top: 0;
@@ -334,7 +303,6 @@ button, input, select, textarea {
   gap: 0.75rem;
 }
 
-/* Brand Group: Anchored to the Far Left Corner - Prevent shrinking or word breaking */
 .brand-wrapper {
   display: flex;
   align-items: center;
@@ -368,7 +336,6 @@ button, input, select, textarea {
   white-space: nowrap;
 }
 
-/* Brand Name in Solid Black as Requested */
 .brand-name {
   font-family: var(--font-heading);
   font-size: 1.3rem;
@@ -411,7 +378,6 @@ button, input, select, textarea {
   white-space: nowrap;
 }
 
-/* Nav Menu */
 .nav-menu {
   display: flex;
   align-items: center;
@@ -496,7 +462,6 @@ button, input, select, textarea {
   transform: rotate(180deg);
 }
 
-/* Dropdowns */
 .nav-dropdown {
   position: absolute;
   top: 100%;
@@ -544,7 +509,6 @@ button, input, select, textarea {
   width: 16px;
 }
 
-/* Nav Actions */
 #headerApplyBtn {
   flex-shrink: 0;
   white-space: nowrap;
@@ -558,7 +522,6 @@ button, input, select, textarea {
   white-space: nowrap;
 }
 
-/* Unified School Portals Dropdown */
 .portal-dropdown-wrapper {
   position: relative;
 }
@@ -796,7 +759,6 @@ button, input, select, textarea {
   border-color: rgba(168, 85, 247, 0.4);
 }
 
-/* Responsive Navbar Adjustments */
 @media (max-width: 1400px) {
   .nav-menu {
     gap: 0.35rem;
@@ -860,7 +822,6 @@ button, input, select, textarea {
   text-align: center;
 }
 
-/* Royal Blue Buttons (Replacing former red/gold colors) */
 .btn-primary {
   background: linear-gradient(135deg, #2563EB 0%, #1D4ED8 100%);
   color: #FFFFFF;
@@ -916,9 +877,6 @@ button, input, select, textarea {
   padding: 0.4rem;
 }
 
-/* ==========================================================================
-   Live Ticker / Announcement Banner
-   ========================================================================== */
 .announcement-ticker {
   background-color: var(--color-primary-subtle);
   border-bottom: 1px solid var(--color-border);
@@ -998,9 +956,6 @@ button, input, select, textarea {
   100% { transform: translateX(-50%); }
 }
 
-/* ==========================================================================
-   Hero Section (Clean White & Soft Blue)
-   ========================================================================== */
 .hero-section {
   position: relative;
   background: linear-gradient(180deg, #F0F7FF 0%, #F8FAFC 60%, #FFFFFF 100%);
@@ -1171,7 +1126,6 @@ button, input, select, textarea {
   margin-top: 0.3rem;
 }
 
-/* Hero Visual Card */
 .hero-visual-box {
   position: relative;
   z-index: 5;
@@ -1286,7 +1240,6 @@ button, input, select, textarea {
   pointer-events: none;
 }
 
-/* Admissions Pill inside Image Container */
 .hero-admissions-pill {
   position: absolute;
   top: 1.25rem;
@@ -1326,7 +1279,6 @@ button, input, select, textarea {
   transform: translateX(3px);
 }
 
-/* Virtual Tour Floating Play Button */
 .hero-virtual-tour-btn {
   position: absolute;
   top: 1.25rem;
@@ -1377,7 +1329,6 @@ button, input, select, textarea {
   50% { transform: scale(1.1); box-shadow: 0 0 0 6px rgba(239, 68, 68, 0); }
 }
 
-/* Live Facility Switcher Strip */
 .hero-facility-switcher {
   position: absolute;
   bottom: 2.85rem;
@@ -1432,7 +1383,6 @@ button, input, select, textarea {
   color: #1e3a8a;
 }
 
-/* Image Caption Bar */
 .hero-img-caption {
   position: absolute;
   bottom: 0.75rem;
@@ -1452,9 +1402,6 @@ button, input, select, textarea {
   color: #38bdf8;
 }
 
-/* ==========================================================================
-   ELEVATED FLOATING BADGES & HERO VISUAL (NO CLIPPING, NO OVERLAP)
-   ========================================================================== */
 .hero-floating-badge {
   position: absolute;
   background: rgba(255, 255, 255, 0.96);
@@ -1489,7 +1436,6 @@ button, input, select, textarea {
   min-width: 0;
 }
 
-/* Badge Positioning - Coordinated Non-Colliding Layout */
 .badge-top-left {
   top: -18px;
   left: -16px;
@@ -1532,7 +1478,6 @@ button, input, select, textarea {
   100% { transform: translateY(2px); }
 }
 
-/* Badge Icons */
 .badge-icon {
   width: 38px;
   height: 38px;
@@ -1592,7 +1537,6 @@ button, input, select, textarea {
   color: #4f46e5;
 }
 
-/* Badge Typography & Pills */
 .badge-pill-header {
   display: flex;
   align-items: center;
@@ -1642,7 +1586,6 @@ button, input, select, textarea {
   color: #94A3B8 !important;
 }
 
-/* Pulsing Indicator for Live Admissions */
 .pulse-indicator {
   width: 9px;
   height: 9px;
@@ -1687,7 +1630,6 @@ button, input, select, textarea {
   text-decoration: underline;
 }
 
-/* Facility Switcher Single-Row Strip */
 .hero-facility-switcher {
   position: absolute;
   bottom: 2.2rem;
@@ -1741,7 +1683,6 @@ button, input, select, textarea {
   color: #1e3a8a;
 }
 
-/* Responsive Handling */
 @media (max-width: 992px) {
   .badge-bottom-left {
     display: none;
@@ -1811,9 +1752,6 @@ button, input, select, textarea {
   }
 }
 
-/* ==========================================================================
-   Section Common Utilities
-   ========================================================================== */
 .section {
   padding: 4.5rem 0;
   position: relative;
@@ -1877,7 +1815,6 @@ button, input, select, textarea {
   line-height: 1.6;
 }
 
-/* Sub-Tabs Navigation */
 .sub-tabs-nav {
   display: flex;
   justify-content: center;
@@ -1941,9 +1878,6 @@ button, input, select, textarea {
   to { opacity: 1; transform: translateY(0); }
 }
 
-/* ==========================================================================
-   Quick Access Feature Cards (Home)
-   ========================================================================== */
 .quick-access-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -2042,9 +1976,6 @@ button, input, select, textarea {
   gap: 0.55rem;
 }
 
-/* ==========================================================================
-   Leadership Spotlight (Home & About)
-   ========================================================================== */
 .leadership-spotlight-card {
   background: var(--card-bg-gradient);
   border-radius: var(--radius-xl);
@@ -2182,9 +2113,6 @@ button, input, select, textarea {
   border-color: var(--color-primary);
 }
 
-/* ==========================================================================
-   About Section - Vision, History, Infrastructure
-   ========================================================================== */
 .vision-mission-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -2260,7 +2188,6 @@ button, input, select, textarea {
   color: var(--color-primary);
 }
 
-/* Timeline */
 .timeline-wrapper {
   position: relative;
   max-width: 860px;
@@ -2351,7 +2278,6 @@ button, input, select, textarea {
   line-height: 1.6;
 }
 
-/* Infrastructure Grid */
 .infra-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -2421,9 +2347,6 @@ button, input, select, textarea {
   line-height: 1.6;
 }
 
-/* ==========================================================================
-   Academics Section
-   ========================================================================== */
 .curriculum-hero {
   background: var(--card-bg-gradient);
   border-radius: var(--radius-xl);
@@ -2545,7 +2468,6 @@ button, input, select, textarea {
   line-height: 1.5;
 }
 
-/* Faculty Grid */
 .faculty-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -2602,7 +2524,6 @@ button, input, select, textarea {
   color: var(--color-text-muted);
 }
 
-/* Teachers & Staff Dashboard */
 .staff-section {
   background: var(--color-bg-subtle);
 }
@@ -2716,7 +2637,6 @@ button, input, select, textarea {
   background: var(--color-bg-subtle);
 }
 
-/* Academic Calendar Table */
 .calendar-card {
   background-color: var(--color-bg-surface);
   border-radius: var(--radius-xl);
@@ -2782,9 +2702,6 @@ button, input, select, textarea {
   background: #fee2e2;
 }
 
-/* ==========================================================================
-   Admissions Section
-   ========================================================================== */
 .admission-process-steps {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -2844,7 +2761,6 @@ button, input, select, textarea {
   line-height: 1.5;
 }
 
-/* Online Application Form */
 .form-card {
   background-color: var(--color-bg-surface);
   border-radius: var(--radius-xl);
@@ -3152,7 +3068,6 @@ button, input, select, textarea {
   box-shadow: 0 0 0 4px var(--color-primary-subtle);
 }
 
-/* Status Tracker Box */
 .status-lookup-box {
   background-color: var(--color-bg-surface);
   border-radius: var(--radius-xl);
@@ -3369,9 +3284,6 @@ button, input, select, textarea {
   display: none;
 }
 
-/* ==========================================================================
-   Student Life Section
-   ========================================================================== */
 .activities-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -3413,7 +3325,6 @@ button, input, select, textarea {
   line-height: 1.6;
 }
 
-/* Achievements Wall */
 .achievements-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -3468,9 +3379,6 @@ button, input, select, textarea {
   color: var(--color-text-muted);
 }
 
-/* ==========================================================================
-   Gallery Section & Lightbox
-   ========================================================================== */
 .gallery-filters {
   display: flex;
   justify-content: center;
@@ -3537,7 +3445,6 @@ button, input, select, textarea {
   font-weight: 700;
 }
 
-/* Lightbox Modal */
 .modal-overlay {
   position: fixed;
   inset: 0;
@@ -3603,9 +3510,6 @@ button, input, select, textarea {
   padding: 2rem;
 }
 
-/* ==========================================================================
-   Notices Section
-   ========================================================================== */
 .notices-search-row {
   display: flex;
   gap: 1rem;
@@ -3696,9 +3600,6 @@ button, input, select, textarea {
   color: var(--color-text-muted);
 }
 
-/* ==========================================================================
-   Downloads Section
-   ========================================================================== */
 .downloads-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -3756,9 +3657,6 @@ button, input, select, textarea {
   color: var(--color-text-muted);
 }
 
-/* ==========================================================================
-   Contact Section
-   ========================================================================== */
 .contact-grid {
   display: grid;
   grid-template-columns: 1fr 1.2fr;
@@ -3922,7 +3820,6 @@ button, input, select, textarea {
   color: #FFFFFF !important;
 }
 
-/* Form Trust & Support Banner */
 .form-trust-banner {
   margin-top: 1.5rem;
   padding-top: 1.25rem;
@@ -3957,9 +3854,6 @@ button, input, select, textarea {
   color: #0284C7;
 }
 
-/* ==========================================================================
-   Full-Width School Location & Route Showcase
-   ========================================================================== */
 .school-route-showcase {
   background-color: var(--color-bg-surface);
   border-radius: var(--radius-xl);
@@ -4075,7 +3969,6 @@ button, input, select, textarea {
   transition: filter 0.3s ease;
 }
 
-/* Elegant dark-mode Google Maps treatment */
 [data-theme="dark"] .map-embed-wrapper {
   background-color: #0F172A;
   border-color: #243048;
@@ -4302,11 +4195,7 @@ button, input, select, textarea {
   gap: 0.45rem;
 }
 
-/* ==========================================================================
-   Comprehensive Responsive System (Phones, Tablets, Laptops, Desktops)
-   ========================================================================== */
 
-/* Tablets & Small Laptops (max-width: 1024px) */
 @media (max-width: 1024px) {
   .contact-grid {
     grid-template-columns: 1fr;
@@ -4329,7 +4218,6 @@ button, input, select, textarea {
   }
 }
 
-/* Phablets & Large Android Phones (max-width: 768px) */
 @media (max-width: 768px) {
   .admission-form-header {
     grid-template-columns: auto 1fr;
@@ -4388,7 +4276,6 @@ button, input, select, textarea {
     padding: 1.5rem 1.25rem !important;
   }
 
-  /* Prevent auto-zoom on input focus in Android & iOS */
   .form-card input,
   .form-card select,
   .form-card textarea {
@@ -4461,7 +4348,6 @@ button, input, select, textarea {
   }
 }
 
-/* Compact Android Phones (max-width: 576px) */
 @media (max-width: 576px) {
   .contact-card {
     padding: 1rem;
@@ -4510,7 +4396,6 @@ button, input, select, textarea {
   }
 }
 
-/* Extra Small Phones (max-width: 380px) */
 @media (max-width: 380px) {
   .school-route-showcase {
     padding: 1rem 0.85rem;
@@ -4531,9 +4416,6 @@ button, input, select, textarea {
   }
 }
 
-/* ==========================================================================
-   Footer
-   ========================================================================== */
 .site-footer {
   background: linear-gradient(180deg, var(--color-bg-surface) 0%, var(--color-bg-subtle) 100%);
   border-top: 3px solid var(--color-primary);
@@ -4725,9 +4607,6 @@ button, input, select, textarea {
   font-weight: 600;
 }
 
-/* ==========================================================================
-   Toast Notification System
-   ========================================================================== */
 .toast-container {
   position: fixed;
   bottom: 25px;
@@ -4766,9 +4645,6 @@ button, input, select, textarea {
   to { transform: translateX(0); opacity: 1; }
 }
 
-/* ==========================================================================
-   Admission Receipt Slip Modal
-   ========================================================================== */
 .receipt-box {
   background: var(--color-bg-surface);
   border: 2px dashed var(--color-primary);
@@ -4821,9 +4697,6 @@ button, input, select, textarea {
   display: inline-block;
 }
 
-/* ==========================================================================
-   Notice & Document Viewer Modal Styles
-   ========================================================================== */
 .notice-doc-wrapper {
   background: var(--color-bg-surface);
   border-radius: var(--radius-lg);
@@ -5068,9 +4941,6 @@ button, input, select, textarea {
   color: var(--color-text-muted);
 }
 
-/* ==========================================================================
-   Responsive Adjustments
-   ========================================================================== */
 @media (max-width: 1024px) {
   .header-container {
     padding-left: 1.25rem;
@@ -5121,7 +4991,6 @@ button, input, select, textarea {
   }
 }
 
-/* Compact header navigation for standard desktop screens (1101px - 1380px) */
 @media (max-width: 1380px) and (min-width: 1101px) {
   .header-container {
     padding-left: 0.75rem;
@@ -5169,7 +5038,6 @@ button, input, select, textarea {
   }
 }
 
-/* Tablet & Mobile Drawer Navigation (< 1100px) */
 @media (max-width: 1100px) {
   .mobile-toggle {
     display: block;
@@ -5302,9 +5170,6 @@ button, input, select, textarea {
   }
 }
 
-/* ==========================================================================
-   Full-Page Translation (Seamless Google Translate Integration)
-   ========================================================================== */
 .goog-te-banner-frame.skiptranslate,
 .goog-te-banner-frame {
   display: none !important;
@@ -5342,11 +5207,7 @@ font {
   box-shadow: none !important;
 }
 
-/* ==========================================================================
-   PUBLIC WEBSITE ARCHITECTURE: ENHANCED SECTIONS
-   ========================================================================== */
 
-/* 1. School Profile Sub-Tab */
 .school-profile-grid {
   display: grid;
   grid-template-columns: 1.4fr 1fr;
@@ -5485,7 +5346,6 @@ font {
   margin: 0;
 }
 
-/* 2. Teaching Approach Grid */
 .teaching-approach-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
@@ -5537,7 +5397,6 @@ font {
   margin: 0;
 }
 
-/* 3. Required Documents Checklist Grid */
 .documents-checklist-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -5596,7 +5455,6 @@ font {
 .doc-badge.conditional { background: #fef3c7; color: #92400e; }
 .doc-badge.optional { background: #f1f5f9; color: #475569; }
 
-/* 4. Appointments Section */
 .appointments-grid {
   display: grid;
   grid-template-columns: 1fr 1.35fr;
@@ -5742,7 +5600,6 @@ font {
   border: 1px solid #bbf7d0;
 }
 
-/* 5. Institutional Portals Showcase Grid & Professional Gateways */
 .portals-showcase-section {
   background: var(--color-bg-subtle);
   padding: 5rem 0;
@@ -5949,7 +5806,6 @@ font {
   transform: translateY(-2px);
 }
 
-/* Dark Theme Overrides for Portals */
 [data-theme="dark"] .portals-showcase-section {
   background: #0B1120;
   border-color: #1E293B;
@@ -6035,11 +5891,7 @@ font {
   }
 }
 
-/* ==========================================================================
-   PUBLIC WEBSITE ARCHITECTURE - PREMIUM MODERN STYLES
-   ========================================================================== */
 
-/* 1. Sub-Tabs Bar Enhancement */
 .sub-tabs-nav {
   display: flex;
   align-items: center;
@@ -6089,7 +5941,6 @@ font {
   box-shadow: 0 4px 14px rgba(220, 38, 38, 0.35);
 }
 
-/* 2. School Profile (About Us -> Tab 1) */
 .school-profile-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -6228,7 +6079,6 @@ font {
   color: var(--color-text-muted);
 }
 
-/* 3. Leadership Desk: Principal & Vice Principal (About Us -> Tab 2) */
 .leadership-desk-switch {
   display: flex;
   align-items: center;
@@ -6468,7 +6318,6 @@ font {
   color: var(--color-text-muted);
 }
 
-/* 4. Vision & Mission (About Us -> Tab 3) */
 .vision-mission-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -6587,7 +6436,6 @@ font {
   color: var(--color-accent-green);
 }
 
-/* 5. Infrastructure (About Us -> Tab 4) & News & Events */
 .infra-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -6667,7 +6515,6 @@ font {
   margin: 0;
 }
 
-/* 6. Academics: Classes Offered (Wings Grid) */
 .wings-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -6720,7 +6567,6 @@ font {
   box-shadow: 0 10px 25px rgba(245, 158, 11, 0.15);
 }
 
-/* Dark Theme Overrides for Wing Cards */
 [data-theme="dark"] .wing-card,
 .dark-mode .wing-card {
   background: #111A2E !important;
@@ -6839,7 +6685,6 @@ font {
   font-size: 0.9rem;
 }
 
-/* 7. Academics: Curriculum */
 .curriculum-overview {
   margin-top: 1rem;
 }
@@ -6906,7 +6751,6 @@ font {
   text-align: center;
 }
 
-/* 8. Academics: Teaching Approach */
 .teaching-approach-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -6959,7 +6803,6 @@ font {
   margin: 0;
 }
 
-/* 9. Academics & Admissions: Tables & Cards */
 .calendar-card {
   background: var(--color-bg-surface);
   border: 1px solid var(--color-border);
@@ -7056,7 +6899,6 @@ font {
   color: #B45309;
 }
 
-/* 10. Admissions: Process Steps */
 .admission-process-steps {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -7111,7 +6953,6 @@ font {
   margin: 0;
 }
 
-/* 11. Admissions: Documents Checklist */
 .documents-checklist-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -7191,7 +7032,6 @@ font {
   color: var(--color-accent-amber);
 }
 
-/* 12. Admissions: Enquiry Form Wrapper & Status Tracker */
 .admission-form-wrapper {
   background: var(--color-bg-surface);
   border: 1px solid var(--color-border);
@@ -7246,9 +7086,6 @@ font {
   margin-bottom: 1.25rem;
 }
 
-/* ==========================================================================
-   FORM CONTROLS & INPUT SYSTEM (Institutional Quality)
-   ========================================================================== */
 .form-group {
   display: flex;
   flex-direction: column;
@@ -7326,7 +7163,6 @@ font {
   -webkit-appearance: none;
 }
 
-/* 12. Admissions: Enquiry Form Wrapper & Status Tracker */
 .admission-form-wrapper {
   background: var(--color-bg-surface);
   border: 1px solid var(--color-border);
@@ -7389,7 +7225,6 @@ font {
   text-align: center;
 }
 
-/* Status Tracker Card (Admissions -> Tab 5) */
 .status-tracker-card {
   background: var(--color-bg-surface);
   border: 1px solid var(--color-border);
@@ -7471,9 +7306,6 @@ font {
   white-space: nowrap;
 }
 
-/* ==========================================================================
-   APPOINTMENTS SECTION (Grid, Officials & Booking Form)
-   ========================================================================== */
 .appointments-grid {
   display: grid;
   grid-template-columns: 420px 1fr;
@@ -7588,7 +7420,6 @@ font {
   margin: 0;
 }
 
-/* Meeting Pass Result Display */
 .apt-pass-id {
   font-family: var(--font-heading);
   font-size: 1.6rem;
@@ -7603,9 +7434,6 @@ font {
   margin: 0.5rem 0;
 }
 
-/* ==========================================================================
-   ACADEMIC CALENDAR TABLE POLISH
-   ========================================================================== */
 .calendar-card {
   background: var(--color-bg-surface);
   border: 1px solid var(--color-border);
@@ -7671,7 +7499,6 @@ font {
   background: rgba(29, 78, 216, 0.04);
 }
 
-/* Dark Theme Overrides for Tables & Cards */
 [data-theme="dark"] .calendar-card,
 .dark-mode .calendar-card {
   background: #111A2E !important;
@@ -7754,9 +7581,6 @@ font {
   border-color: rgba(239, 68, 68, 0.35) !important;
 }
 
-/* ==========================================================================
-   RESPONSIVE LAYOUTS
-   ========================================================================== */
 @media (max-width: 1200px) {
   .infra-grid,
   .wings-grid,
@@ -7817,9 +7641,6 @@ font {
   }
 }
 
-/* ==========================================================================
-   PUBLIC WEBSITE - MODERN INSTITUTIONAL DESIGN SYSTEM OVERHAUL
-   ========================================================================== */
 body {
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif !important;
   -webkit-font-smoothing: antialiased !important;
@@ -7832,7 +7653,6 @@ h1, h2, h3, h4, h5, h6 {
   letter-spacing: -0.02em !important;
 }
 
-/* Polished Button Component */
 .btn {
   display: inline-flex !important;
   align-items: center !important;
@@ -7859,13 +7679,6 @@ h1, h2, h3, h4, h5, h6 {
 
 
 
-
-/* ==========================================================================
-   SRI VIDYA ERP - MASTER UI ALIGNMENT, TYPOGRAPHY & ICON CONSISTENCY SYSTEM
-   Standardized layout tokens, icon spacing, table alignment & form precision
-   ========================================================================== */
-
-/* 1. Universal Legacy Utility Compatibility (Restores proper margins across all icons & badges) */
 .mr-0 { margin-right: 0 !important; }
 .mr-1 { margin-right: 0.25rem !important; }
 .mr-2 { margin-right: 0.5rem !important; }
@@ -7877,7 +7690,6 @@ h1, h2, h3, h4, h5, h6 {
 .ml-3 { margin-left: 1rem !important; }
 .ml-4 { margin-left: 1.5rem !important; }
 
-/* 2. Precision Icon Centering & Vertical Balance */
 .fa, .fa-solid, .fa-regular, .fa-brands, .fas, .far {
   display: inline-flex;
   align-items: center;
@@ -7894,7 +7706,6 @@ h1, h2, h3, h4, h5, h6 {
   line-height: 1;
 }
 
-/* 3. Master Table Cell & Header Alignment */
 .table, .dash-table, .data-table, .pa-table {
   border-collapse: separate;
   border-spacing: 0;
@@ -7921,7 +7732,6 @@ h1, h2, h3, h4, h5, h6 {
   line-height: 1.45;
 }
 
-/* 4. Action Button Containers & Single-Row Preservation */
 .record-actions-wrap {
   display: inline-flex;
   align-items: center;
@@ -7935,7 +7745,6 @@ h1, h2, h3, h4, h5, h6 {
   min-width: 200px;
 }
 
-/* 5. Centralized Button Layout & Consistent Focus States */
 .btn {
   display: inline-flex;
   align-items: center;
@@ -7945,7 +7754,6 @@ h1, h2, h3, h4, h5, h6 {
   line-height: 1.25;
 }
 
-/* 6. Consistent Form Labels & Inputs */
 .form-label {
   display: inline-flex;
   align-items: center;
@@ -7971,7 +7779,6 @@ h1, h2, h3, h4, h5, h6 {
   box-shadow: 0 0 0 3px rgba(29, 78, 216, 0.14);
 }
 
-/* 7. Badges & Status Indicators */
 .badge {
   display: inline-flex;
   align-items: center;
@@ -7982,8 +7789,6 @@ h1, h2, h3, h4, h5, h6 {
   vertical-align: middle;
 }
 
-
-/* 8. Universal Table Checkbox, Switch & Radio Centering */
 .table td .form-check-input,
 .table th .form-check-input,
 td.text-center .form-check-input,
@@ -8031,7 +7836,6 @@ th.text-center .form-check-input:focus {
   border-color: var(--color-primary, #1d4ed8) !important;
 }
 
-/* 9. Permission Matrix Table Symmetry & Column Balancing */
 #tablePermissionsMatrix th.text-center,
 #tablePermissionsMatrix td.text-center {
   text-align: center !important;

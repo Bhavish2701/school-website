@@ -1,12 +1,7 @@
-/**
- * Academic Module HTTP Controller
- * Dispatches HTTP requests to AcademicService and returns uniform API responses.
- */
 const academicService = require('../services/academic.service');
 const { sendSuccess } = require('../utils/apiResponse');
 const asyncHandler = require('../utils/asyncHandler');
 
-// 1. Academic Years
 const getAcademicYears = asyncHandler(async (req, res) => {
   const years = await academicService.getAcademicYears();
   sendSuccess(res, { years }, 'Academic years retrieved successfully', 200);
@@ -22,7 +17,6 @@ const setCurrentYear = asyncHandler(async (req, res) => {
   sendSuccess(res, { year }, 'Current academic year updated successfully', 200);
 });
 
-// 2. Classes & Sections
 const getClasses = asyncHandler(async (req, res) => {
   const result = await academicService.getClasses(req.query);
   sendSuccess(res, result, 'Classes retrieved successfully', 200);
@@ -43,7 +37,6 @@ const updateClass = asyncHandler(async (req, res) => {
   sendSuccess(res, { class: updated }, 'Class and section updated successfully', 200);
 });
 
-// 3. Subjects
 const getSubjects = asyncHandler(async (req, res) => {
   const result = await academicService.getSubjects(req.query);
   sendSuccess(res, result, 'Subjects retrieved successfully', 200);
@@ -64,13 +57,11 @@ const deleteSubject = asyncHandler(async (req, res) => {
   sendSuccess(res, result, 'Subject deleted successfully', 200);
 });
 
-// 4. Teacher Allocations
 const assignTeacher = asyncHandler(async (req, res) => {
   const classSection = await academicService.assignTeacher(req.params.id, req.body);
   sendSuccess(res, { class: classSection }, 'Teacher allocated to class successfully', 200);
 });
 
-// 5. Class Assignments (Homework / Projects)
 const getAssignments = asyncHandler(async (req, res) => {
   const result = await academicService.getAssignments(req.query);
   sendSuccess(res, result, 'Assignments retrieved successfully', 200);
@@ -96,7 +87,6 @@ const deleteAssignment = asyncHandler(async (req, res) => {
   sendSuccess(res, result, 'Assignment deleted successfully', 200);
 });
 
-// 6. Academic Dashboard
 const getAcademicDashboard = asyncHandler(async (req, res) => {
   const dashboard = await academicService.getAcademicDashboard();
   sendSuccess(res, { dashboard }, 'Academic dashboard metrics retrieved successfully', 200);

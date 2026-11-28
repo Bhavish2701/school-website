@@ -1,7 +1,3 @@
-/**
- * Authentication & Session Security - Validation Layer
- * Enforces field schemas, constraints, and data integrity
- */
 
 class AuthValidation {
   static validateRequest(req, res, next) {

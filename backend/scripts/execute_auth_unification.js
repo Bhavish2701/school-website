@@ -3,14 +3,11 @@ const path = require('path');
 
 console.log('--- Starting Authentication Unification Refactoring ---');
 
-// 1. Update frontend/administration-portal/index.html
 const mgmtPath = path.join(__dirname, '../../frontend/administration-portal/index.html');
 let mgmtContent = fs.readFileSync(mgmtPath, 'utf8');
 
-// Check if managementLoginOverlay exists
 if (mgmtContent.includes('id="managementLoginOverlay"')) {
   console.log('[1/5] Removing managementLoginOverlay from administration-portal/index.html...');
-  // Find start and end of overlay
   const startIdx = mgmtContent.indexOf('<!-- ==========================================================================\n       MANAGEMENT PORTAL LOGIN OVERLAY');
   const targetEnd = '<div class="portal-layout">';
   const endIdx = mgmtContent.indexOf(targetEnd, startIdx);
@@ -19,12 +16,10 @@ if (mgmtContent.includes('id="managementLoginOverlay"')) {
     mgmtContent = mgmtContent.slice(0, startIdx) + '<div class="portal-layout">' + mgmtContent.slice(endIdx + targetEnd.length);
     console.log('✓ Successfully removed managementLoginOverlay');
   } else {
-    // Fallback regex removal
     mgmtContent = mgmtContent.replace(/<!-- ==========================================================================[\s\S]*?id="managementLoginOverlay"[\s\S]*?<\/div>\s*<\/div>\s*<\/div>\s*<\/div>/, '');
     console.log('✓ Fallback regex removed managementLoginOverlay');
   }
 
-  // Remove portal-login.css link and insert early route-guard
   const oldLoginCss = /<link rel="stylesheet" href="(?:\/|\.\.\/)css\/portal-login\.css[^>]*>\s*/g;
   mgmtContent = mgmtContent.replace(oldLoginCss, '');
 
@@ -50,7 +45,6 @@ if (mgmtContent.includes('id="managementLoginOverlay"')) {
   console.log('(!) managementLoginOverlay already removed from administration-portal/index.html');
 }
 
-// 2. Update frontend/faculty-portal/index.html
 const teacherPath = path.join(__dirname, '../../frontend/faculty-portal/index.html');
 let teacherContent = fs.readFileSync(teacherPath, 'utf8');
 
@@ -68,7 +62,6 @@ if (teacherContent.includes('id="teacherLoginOverlay"')) {
     console.log('✓ Fallback regex removed teacherLoginOverlay');
   }
 
-  // Remove portal-login.css link and insert early route-guard
   const oldLoginCss = /<link rel="stylesheet" href="(?:\/|\.\.\/)css\/portal-login\.css[^>]*>\s*/g;
   teacherContent = teacherContent.replace(oldLoginCss, '');
 
@@ -94,7 +87,6 @@ if (teacherContent.includes('id="teacherLoginOverlay"')) {
   console.log('(!) teacherLoginOverlay already removed from faculty-portal/index.html');
 }
 
-// 3. Update frontend/platform-admin/index.html
 const platformPath = path.join(__dirname, '../../frontend/platform-admin/index.html');
 let platformContent = fs.readFileSync(platformPath, 'utf8');
 
@@ -122,7 +114,6 @@ if (!platformContent.includes('Early Route Guard: Unified Authentication Verific
   console.log('(!) Early route guard already present in platform-admin/index.html');
 }
 
-// 4. Update frontend/js/api-client.js
 const apiClientPath = path.join(__dirname, '../../frontend/js/api-client.js');
 let apiClientContent = fs.readFileSync(apiClientPath, 'utf8');
 

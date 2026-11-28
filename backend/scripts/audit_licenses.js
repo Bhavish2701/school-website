@@ -1,9 +1,3 @@
-/**
- * Open-Source Software (OSS) License Audit Script
- * Audits all direct and transient dependencies for license compatibility,
- * ensures 100% compliance with permissive licensing (MIT, Apache, BSD, ISC),
- * and verifies absence of restrictive copyleft (GPL, AGPL) contamination.
- */
 const fs = require('fs');
 const path = require('path');
 
@@ -44,7 +38,6 @@ function auditLicenses() {
         version = info.version || version;
       } catch (_) {}
     } else {
-      // Well-known defaults for core stack
       if (['express', 'mongoose', 'jsonwebtoken', 'bcryptjs', 'cors', 'helmet', 'jest', 'supertest'].includes(pkgName)) {
         license = 'MIT';
       } else if (pkgName === 'dotenv') {

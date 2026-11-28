@@ -1,7 +1,3 @@
-/**
- * Institutional Domains & DNS - Repository Layer
- * Manages database access and persistence
- */
 
 const mongoose = require('mongoose');
 const { Domain } = require('../../models/domainEmail.model');

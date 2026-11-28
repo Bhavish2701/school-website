@@ -1,14 +1,3 @@
-/**
- * Test Suite 04: Teachers Module API Tests
- * Covers:
- * - Create teacher (201)
- * - Validation errors (422)
- * - Duplicate teacher employeeId check (409 Conflict)
- * - Get teacher list & get teacher by ID (200)
- * - Teacher self-service profile (200)
- * - Teacher apply leave & management review (201 / 200)
- * - Role authorization checks (401 & 403)
- */
 const request = require('supertest');
 const mongoose = require('mongoose');
 const app = require('../src/app');
@@ -50,7 +39,6 @@ describe('04 - Teachers Module API Test Suite', () => {
         .post('/api/v1/teachers')
         .set('Authorization', `Bearer ${fixtures.tokens.principal}`)
         .send({
-          // Missing employeeId, fullName, gender, email, phone
           qualification: 'B.Ed',
         });
 
@@ -64,7 +52,7 @@ describe('04 - Teachers Module API Test Suite', () => {
         .post('/api/v1/teachers')
         .set('Authorization', `Bearer ${fixtures.tokens.principal}`)
         .send({
-          employeeId: 'EMP-T3003', // Duplicate
+          employeeId: 'EMP-T3003',
           fullName: 'Duplicate Ramesh',
           gender: 'male',
           email: 'dup.ramesh@srividya.edu.in',
@@ -155,7 +143,6 @@ describe('04 - Teachers Module API Test Suite', () => {
         .post('/api/v1/teachers/leaves')
         .set('Authorization', `Bearer ${fixtures.tokens.teacher1}`)
         .send({
-          // Missing leaveType, startDate, endDate, reason
         });
 
       expect(res.status).toBe(422);

@@ -1,7 +1,3 @@
-/**
- * Student Mongoose Model
- * Manages detailed student profile, academic status, parent relations, and class assignments
- */
 const mongoose = require('mongoose');
 
 const STATUS_VALUES = ['ACTIVE', 'INACTIVE', 'SUSPENDED', 'ALUMNI', 'TRANSFERRED', 'WITHDRAWN', 'ARCHIVED'];
@@ -82,7 +78,7 @@ const studentSchema = new mongoose.Schema(
       default: '',
     },
     dob: {
-      type: String, // String format (e.g. "15 Jun 2012") or Date
+      type: String,
       trim: true,
     },
     bloodGroup: {
@@ -119,13 +115,11 @@ const studentSchema = new mongoose.Schema(
       trim: true,
       default: '',
     },
-    // Reference to User account of parent for portal integration
     parentUser: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',
       index: true,
     },
-    // Reference to User account of student for login integration
     user: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',
@@ -157,7 +151,6 @@ const studentSchema = new mongoose.Schema(
       relation: { type: String, trim: true, default: 'Parent' },
       phone: { type: String, trim: true, default: '' },
     },
-    // Verified Guardian Details (Specification 20.2 & 20.3)
     guardianDetails: {
       name: { type: String, trim: true, default: '' },
       relation: { type: String, trim: true, default: 'Parent' },
@@ -167,7 +160,6 @@ const studentSchema = new mongoose.Schema(
       verifiedAt: { type: Date, default: Date.now },
       verifiedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
     },
-    // Future Student Portal Access Capabilities (Specification 20.1 & 20.3)
     studentPortalAccess: {
       isEligible: { type: Boolean, default: true },
       isActivated: { type: Boolean, default: false },
@@ -175,7 +167,6 @@ const studentSchema = new mongoose.Schema(
       activationToken: { type: String, select: false },
       activatedAt: { type: Date },
     },
-    // Future Parent Portal Access Capabilities (Specification 20.2 & 20.3)
     parentPortalAccess: {
       isEligible: { type: Boolean, default: true },
       isActivated: { type: Boolean, default: false },
@@ -183,7 +174,6 @@ const studentSchema = new mongoose.Schema(
       activationToken: { type: String, select: false },
       activatedAt: { type: Date },
     },
-    // Transport Details (Specification 20.1)
     transportDetails: {
       isApplicable: { type: Boolean, default: true },
       assignedRoute: { type: String, default: 'Route 4 (Maddilapalem - School)' },
@@ -194,7 +184,6 @@ const studentSchema = new mongoose.Schema(
       driverName: { type: String, default: 'B. Appa Rao' },
       driverPhone: { type: String, default: '9848123456' },
     },
-    // Library Details (Specification 20.1)
     libraryDetails: {
       isImplemented: { type: Boolean, default: true },
       libraryCardNo: { type: String, default: '' },
@@ -214,7 +203,6 @@ const studentSchema = new mongoose.Schema(
   }
 );
 
-// Virtual for formatted Class-Section
 studentSchema.virtual('classSection').get(function () {
   return `${this.class}-${this.section}`;
 });

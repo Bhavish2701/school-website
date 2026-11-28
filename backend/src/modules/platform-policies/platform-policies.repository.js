@@ -1,7 +1,3 @@
-/**
- * Platform Policies & Governance Register - Repository Layer
- * Manages database access and persistence
- */
 
 const mongoose = require('mongoose');
 const { GovernancePolicy } = require('../../models/platformPolicy.model');

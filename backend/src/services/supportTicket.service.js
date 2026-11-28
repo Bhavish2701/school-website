@@ -1,7 +1,3 @@
-/**
- * Sri Vidya Educational Trust - Support & Issue Management Service
- * Module 14: Support Overview, Ticket Directory, Lifecycle Workflow, and Internal Notes
- */
 
 const mongoose = require('mongoose');
 const { SupportTicket } = require('../models/supportTicket.model');
@@ -40,7 +36,7 @@ const DEFAULT_SUPPORT_TICKETS_SEED = [
     relatedRecordId: 'SV-MAIN-TEACHER-DEPT',
     isSecurityIncident: false,
     securityIncidentRef: null,
-    slaDeadline: new Date(Date.now() + 3600000 * 10), // 10 hrs remaining
+    slaDeadline: new Date(Date.now() + 3600000 * 10),
     conversation: [
       {
         messageId: 'MSG-001',
@@ -203,7 +199,7 @@ const DEFAULT_SUPPORT_TICKETS_SEED = [
     relatedRecordId: 'INT-PAY-01',
     isSecurityIncident: false,
     securityIncidentRef: null,
-    slaDeadline: new Date(Date.now() - 3600000 * 4), // OVERDUE SLA by 4 hours
+    slaDeadline: new Date(Date.now() - 3600000 * 4),
     conversation: [
       {
         messageId: 'MSG-004',
@@ -515,7 +511,7 @@ const DEFAULT_SUPPORT_TICKETS_SEED = [
     isSecurityIncident: false,
     securityIncidentRef: null,
     slaDeadline: new Date(Date.now() - 3600000 * 48),
-    resolvedAt: new Date(Date.now() - 3600000 * 2), // Recently resolved
+    resolvedAt: new Date(Date.now() - 3600000 * 2),
     resolvedBy: 'P. Swetha',
     resolutionSummary: 'DLT template ID was re-mapped on NIC gateway. Priority routing configured for transport alerts. SMS delivery resumed at 99.8% fidelity.',
     conversation: [
@@ -637,9 +633,6 @@ class SupportTicketService {
     }
   }
 
-  /**
-   * 14.1 Support Overview Metrics
-   */
   static async getSupportOverview() {
     await this.seedIfEmpty();
     let tickets = [];
@@ -680,9 +673,6 @@ class SupportTicketService {
     };
   }
 
-  /**
-   * 14.2 Support Ticket Directory
-   */
   static async listTickets(query = {}) {
     await this.seedIfEmpty();
     let tickets = [];
@@ -729,9 +719,6 @@ class SupportTicketService {
     };
   }
 
-  /**
-   * 14.4 Get Single Ticket
-   */
   static async getTicketById(ticketId) {
     await this.seedIfEmpty();
     let ticket = null;
@@ -750,9 +737,6 @@ class SupportTicketService {
     return { success: true, data: ticket };
   }
 
-  /**
-   * 14.3 Create Support Ticket
-   */
   static async createTicket(payload, actor = 'School Staff') {
     await this.seedIfEmpty();
     const now = new Date();
@@ -760,7 +744,6 @@ class SupportTicketService {
     const randomSuffix = Math.floor(100 + Math.random() * 900);
     const ticketId = payload.ticketId || `TICK-2026-${randomSuffix}`;
 
-    // Calculate SLA
     let slaHours = 48;
     if (payload.priority === 'Critical') slaHours = 4;
     else if (payload.priority === 'High') slaHours = 12;
@@ -769,7 +752,6 @@ class SupportTicketService {
 
     const slaDeadline = new Date(now.getTime() + slaHours * 3600000);
 
-    // Section 14.5 Invariant: Dedicated Security Incident Response
     const isSecurity = payload.category === 'Security incident' || payload.isSecurityIncident === true;
     const secRef = isSecurity ? (payload.securityIncidentRef || `SEC-2026-${randomSuffix}`) : null;
 
@@ -867,9 +849,6 @@ class SupportTicketService {
     return { success: true, data: newTicket };
   }
 
-  /**
-   * 14.4 Action: Assign Ticket
-   */
   static async assignTicket(ticketId, { agentName, agentEmail, tier }, actor = 'Platform Administrator') {
     const res = await this.getTicketById(ticketId);
     if (!res.success || !res.data) return { success: false, message: 'Ticket not found.' };
@@ -902,7 +881,6 @@ class SupportTicketService {
           await ticket.save();
         }
       } catch (e) {
-        // Fallback
       }
     }
 
@@ -934,9 +912,6 @@ class SupportTicketService {
     return { success: true, data: ticket };
   }
 
-  /**
-   * 14.4 Action: Change Priority
-   */
   static async changePriority(ticketId, { priority, reason }, actor = 'Platform Administrator') {
     const res = await this.getTicketById(ticketId);
     if (!res.success || !res.data) return { success: false, message: 'Ticket not found.' };
@@ -970,7 +945,6 @@ class SupportTicketService {
           await ticket.save();
         }
       } catch (e) {
-        // Fallback
       }
     }
 
@@ -995,9 +969,6 @@ class SupportTicketService {
     return { success: true, data: ticket };
   }
 
-  /**
-   * 14.4 Action: Reply (School Visible Message)
-   */
   static async addReply(ticketId, { message, senderName, senderRole, senderType, attachments }, actor = 'Support Agent') {
     const res = await this.getTicketById(ticketId);
     if (!res.success || !res.data) return { success: false, message: 'Ticket not found.' };
@@ -1038,7 +1009,6 @@ class SupportTicketService {
           await ticket.save();
         }
       } catch (e) {
-        // Fallback
       }
     }
 
@@ -1062,9 +1032,6 @@ class SupportTicketService {
     return { success: true, data: ticket };
   }
 
-  /**
-   * 14.4 Action: Add Internal Note (Strict Invariant: Internal only, isolated from school)
-   */
   static async addInternalNote(ticketId, { note, confidentialityLevel }, actor = 'Platform Administrator') {
     const res = await this.getTicketById(ticketId);
     if (!res.success || !res.data) return { success: false, message: 'Ticket not found.' };
@@ -1098,7 +1065,6 @@ class SupportTicketService {
           await ticket.save();
         }
       } catch (e) {
-        // Fallback
       }
     }
 
@@ -1121,9 +1087,6 @@ class SupportTicketService {
     return { success: true, data: ticket };
   }
 
-  /**
-   * 14.4 Action: Request Additional Information
-   */
   static async requestAdditionalInfo(ticketId, { message }, actor = 'Support Agent') {
     const res = await this.getTicketById(ticketId);
     if (!res.success || !res.data) return { success: false, message: 'Ticket not found.' };
@@ -1160,7 +1123,6 @@ class SupportTicketService {
           await ticket.save();
         }
       } catch (e) {
-        // Fallback
       }
     }
 
@@ -1184,9 +1146,6 @@ class SupportTicketService {
     return { success: true, data: ticket };
   }
 
-  /**
-   * 14.4 Action: Escalate Ticket (Engineering or Security)
-   */
   static async escalateTicket(ticketId, { escalationTier, reason }, actor = 'Platform Support') {
     const res = await this.getTicketById(ticketId);
     if (!res.success || !res.data) return { success: false, message: 'Ticket not found.' };
@@ -1227,7 +1186,6 @@ class SupportTicketService {
           await ticket.save();
         }
       } catch (e) {
-        // Fallback
       }
     }
 
@@ -1262,9 +1220,6 @@ class SupportTicketService {
     return { success: true, data: ticket };
   }
 
-  /**
-   * 14.4 Action: Resolve Ticket
-   */
   static async resolveTicket(ticketId, { resolutionSummary }, actor = 'Platform Support') {
     const res = await this.getTicketById(ticketId);
     if (!res.success || !res.data) return { success: false, message: 'Ticket not found.' };
@@ -1294,7 +1249,6 @@ class SupportTicketService {
           await ticket.save();
         }
       } catch (e) {
-        // Fallback
       }
     }
 
@@ -1322,9 +1276,6 @@ class SupportTicketService {
     return { success: true, data: ticket };
   }
 
-  /**
-   * 14.4 Action: Reopen Ticket
-   */
   static async reopenTicket(ticketId, { reason }, actor = 'School Staff') {
     const res = await this.getTicketById(ticketId);
     if (!res.success || !res.data) return { success: false, message: 'Ticket not found.' };
@@ -1353,7 +1304,6 @@ class SupportTicketService {
           await ticket.save();
         }
       } catch (e) {
-        // Fallback
       }
     }
 
@@ -1408,7 +1358,6 @@ class SupportTicketService {
           reason: details || `Support ticket action: ${action}`,
         });
       } catch (e) {
-        // Fallback
       }
     }
   }

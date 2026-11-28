@@ -1,14 +1,8 @@
-/**
- * Sri Vidya Educational Trust - Platform User & Account Management Service
- * Module 6: User Directory (6.1), User Provisioning (6.2), 7-Tab Dossier (6.3),
- * Account Invitation Lifecycle (6.4), and Session Security (6.5)
- */
 
 const mongoose = require('mongoose');
 const crypto = require('crypto');
 const { UserAccount } = require('../models/userAccount.model');
 
-// In-memory fallback repository when running without active MongoDB
 const inMemoryUsers = [];
 
 const DEFAULT_USERS_SEED = [
@@ -179,9 +173,6 @@ class UserAccountService {
     }
   }
 
-  /**
-   * Summary Cards for 6.1
-   */
   static async getUsersSummary() {
     await this.seedIfEmpty();
 
@@ -217,9 +208,6 @@ class UserAccountService {
     }
   }
 
-  /**
-   * 6.1 User Directory List & Multi-field Filtering
-   */
   static async listUsers(filter = {}) {
     await this.seedIfEmpty();
 
@@ -234,7 +222,6 @@ class UserAccountService {
       }
     }
 
-    // Multi-field Filtering
     const q = (filter.query || '').toLowerCase().trim();
     const instId = filter.institutionId || '';
     const role = filter.role || '';
@@ -243,27 +230,21 @@ class UserAccountService {
     const mfaStatus = filter.mfaStatus || '';
 
     const filtered = users.filter(u => {
-      // 1. Name or Email Search
       if (q && !u.name.toLowerCase().includes(q) && !u.email.toLowerCase().includes(q) && !u.userId.toLowerCase().includes(q)) {
         return false;
       }
-      // 2. Institution
       if (instId && instId !== 'all' && u.institutionId !== instId) {
         return false;
       }
-      // 3. Role
       if (role && role !== 'all' && !u.roles.some(r => r.toLowerCase().includes(role.toLowerCase()))) {
         return false;
       }
-      // 4. Status
       if (status && status !== 'all' && u.status !== status) {
         return false;
       }
-      // 5. Invitation Status
       if (inviteStatus && inviteStatus !== 'all' && u.invitation?.status !== inviteStatus) {
         return false;
       }
-      // 6. MFA Status
       if (mfaStatus && mfaStatus !== 'all') {
         if (mfaStatus === 'enforced' && !u.mfa?.enabled) return false;
         if (mfaStatus === 'disabled' && u.mfa?.enabled) return false;
@@ -281,9 +262,6 @@ class UserAccountService {
     };
   }
 
-  /**
-   * 6.3 User Detail
-   */
   static async getUserById(userId) {
     await this.seedIfEmpty();
 
@@ -301,14 +279,11 @@ class UserAccountService {
     }
   }
 
-  /**
-   * 6.2 Create User & Account Provisioning
-   */
   static async createUser(userData, operator = 'Platform Super Administrator') {
     const nextSeq = Math.floor(1007 + Math.random() * 8990);
     const userId = `USR-${nextSeq}`;
     const tokenHash = `tok_${crypto.randomBytes(8).toString('hex')}`;
-    const expiryHours = parseInt(userData.invitationExpiryHours || '168', 10); // 7 days = 168h default
+    const expiryHours = parseInt(userData.invitationExpiryHours || '168', 10);
     const expiresAt = new Date(Date.now() + expiryHours * 60 * 60 * 1000);
 
     const isInvite = userData.activationMethod !== 'direct_password';
@@ -373,9 +348,6 @@ class UserAccountService {
     }
   }
 
-  /**
-   * 6.4 Resend Invitation
-   */
   static async resendInvitation(userId, operator = 'Platform Super Administrator') {
     const userRes = await this.getUserById(userId);
     if (!userRes.success || !userRes.data) {
@@ -383,7 +355,7 @@ class UserAccountService {
     }
 
     const tokenHash = `tok_${crypto.randomBytes(8).toString('hex')}`;
-    const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000); // 7-day statutory window
+    const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
 
     const newInviteLog = {
       invitationId: `INV-${new Date().getFullYear()}-${Math.floor(100 + Math.random() * 900)}`,
@@ -419,9 +391,6 @@ class UserAccountService {
     return { success: true, data: user };
   }
 
-  /**
-   * Suspend Account
-   */
   static async suspendUser(userId, reason, operator = 'Platform Super Administrator') {
     const userRes = await this.getUserById(userId);
     if (!userRes.success || !userRes.data) return { success: false, message: 'User not found' };
@@ -433,7 +402,7 @@ class UserAccountService {
       suspendedAt: new Date(),
       suspendedBy: operator
     };
-    user.sessions = []; // Terminate all sessions on suspension
+    user.sessions = [];
 
     user.auditHistory.unshift({
       action: 'Account Suspended',
@@ -446,9 +415,6 @@ class UserAccountService {
     return { success: true, data: user };
   }
 
-  /**
-   * Reactivate Account
-   */
   static async reactivateUser(userId, operator = 'Platform Super Administrator') {
     const userRes = await this.getUserById(userId);
     if (!userRes.success || !userRes.data) return { success: false, message: 'User not found' };
@@ -468,9 +434,6 @@ class UserAccountService {
     return { success: true, data: user };
   }
 
-  /**
-   * Deactivate Account (Audit Invariant: No permanent hard delete)
-   */
   static async deactivateUser(userId, reason, operator = 'Platform Super Administrator') {
     const userRes = await this.getUserById(userId);
     if (!userRes.success || !userRes.data) return { success: false, message: 'User not found' };
@@ -490,9 +453,6 @@ class UserAccountService {
     return { success: true, data: user };
   }
 
-  /**
-   * 6.5 Session Management: Revoke single session
-   */
   static async revokeSession(userId, sessionId, operator = 'Platform Super Administrator') {
     const userRes = await this.getUserById(userId);
     if (!userRes.success || !userRes.data) return { success: false, message: 'User not found' };
@@ -511,9 +471,6 @@ class UserAccountService {
     return { success: true, data: user };
   }
 
-  /**
-   * 6.5 Session Management: Revoke ALL sessions for a user
-   */
   static async revokeAllSessions(userId, operator = 'Platform Super Administrator') {
     const userRes = await this.getUserById(userId);
     if (!userRes.success || !userRes.data) return { success: false, message: 'User not found' };
@@ -533,16 +490,13 @@ class UserAccountService {
     return { success: true, data: user };
   }
 
-  /**
-   * Require Password Reset through secure flow
-   */
   static async triggerPasswordReset(userId, operator = 'Platform Super Administrator') {
     const userRes = await this.getUserById(userId);
     if (!userRes.success || !userRes.data) return { success: false, message: 'User not found' };
 
     const user = userRes.data;
     user.securitySettings.mustChangePasswordOnNextLogin = true;
-    user.sessions = []; // Revoke sessions to force re-authentication
+    user.sessions = [];
 
     user.auditHistory.unshift({
       action: 'Password Reset Required',
@@ -555,9 +509,6 @@ class UserAccountService {
     return { success: true, data: user };
   }
 
-  /**
-   * Enable / Enforce Supported MFA
-   */
   static async toggleMfa(userId, enable, method = 'totp', operator = 'Platform Super Administrator') {
     const userRes = await this.getUserById(userId);
     if (!userRes.success || !userRes.data) return { success: false, message: 'User not found' };

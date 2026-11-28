@@ -1,7 +1,3 @@
-/**
- * Forensic Audit Logs Explorer - Validation Layer
- * Enforces field schemas, constraints, and data integrity
- */
 
 class AuditLogsValidation {
   static validateRequest(req, res, next) {

@@ -4,7 +4,6 @@ const fs = require('fs');
 
 console.log('--- RUNNING STATUTORY SCHOOL WORKFLOWS (WORKFLOWS A THROUGH J) TEST SUITE ---');
 
-// 1. Verify Backend Workflows Module
 const routesPath = path.resolve(__dirname, '../backend/src/modules/workflows/routes.js');
 assert.ok(fs.existsSync(routesPath), 'backend/src/modules/workflows/routes.js must exist');
 const { INSTITUTIONAL_WORKFLOWS_REGISTRY } = require(routesPath);
@@ -32,7 +31,6 @@ expectedWorkflows.forEach(expected => {
   assert.ok(wf.steps.length >= 7, `${expected.id} must have at least 7 steps`);
   totalStepsCount += wf.steps.length;
 
-  // Verify mandatory step fields: responsible user, status, timestamps and required next action
   wf.steps.forEach(step => {
     assert.ok(step.stepNo > 0, `Step must have positive stepNo in ${wf.id}`);
     assert.ok(step.name, `Step must have name in ${wf.id}`);
@@ -46,13 +44,11 @@ expectedWorkflows.forEach(expected => {
 
 console.log(`✓ Backend registry verified: 10 workflows with all ${totalStepsCount} statutory audit steps!`);
 
-// 2. Verify Module Mounting in backend/src/modules/index.js
 const moduleIndexPath = path.resolve(__dirname, '../backend/src/modules/index.js');
 const moduleIndexContent = fs.readFileSync(moduleIndexPath, 'utf8');
 assert.ok(moduleIndexContent.includes('/workflows'), 'backend/src/modules/index.js must mount /workflows route');
 console.log('✓ Backend API route mount verified: /api/v1/modules/workflows');
 
-// 3. Verify Frontend UI in frontend/administration-portal/index.html
 const htmlPath = path.resolve(__dirname, '../frontend/administration-portal/index.html');
 const html = fs.readFileSync(htmlPath, 'utf8');
 assert.ok(html.includes('subview-tasks-workflows'), 'index.html must have subview-tasks-workflows');
@@ -61,7 +57,6 @@ assert.ok(html.includes('Core Workflows (A–J)'), 'index.html must have sidebar
 assert.ok(html.includes('Core Workflows (10 Pipelines)'), 'index.html must have subtab button');
 console.log('✓ Frontend subview, modal stepper, and navigation buttons verified in index.html');
 
-// 4. Verify Frontend Controller in frontend/js/portal.js
 const jsPath = path.resolve(__dirname, '../frontend/js/portal.js');
 const js = fs.readFileSync(jsPath, 'utf8');
 assert.ok(js.includes('INSTITUTIONAL_WORKFLOWS_DATA'), 'portal.js must define INSTITUTIONAL_WORKFLOWS_DATA');
@@ -73,7 +68,6 @@ assert.ok(js.includes('openWorkflowPipelineModal,'), 'portalApp must export open
 assert.ok(js.includes('advanceWorkflowStep,'), 'portalApp must export advanceWorkflowStep');
 console.log('✓ Frontend controller functions and portalApp exports verified in portal.js');
 
-// 5. Verify CSS in frontend/css/portal.css
 const cssPath = path.resolve(__dirname, '../frontend/css/portal.css');
 const css = fs.readFileSync(cssPath, 'utf8');
 assert.ok(css.includes('.workflow-step-chain'), 'portal.css must have .workflow-step-chain');

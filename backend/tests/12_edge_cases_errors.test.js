@@ -1,12 +1,3 @@
-/**
- * Test Suite 12: Error Handling, Object Tampering & Edge Cases Test Suite
- * Covers:
- * - 404 Not Found for undefined routes
- * - 400 Bad Request on invalid MongoDB ObjectId parameters
- * - Object-Level ID Tampering Protection across Students, Parents, and Teachers (403 Forbidden)
- * - Management school-wide bypass (200)
- * - 401 Unauthenticated requests to protected endpoints
- */
 const request = require('supertest');
 const mongoose = require('mongoose');
 const app = require('../src/app');
@@ -21,7 +12,6 @@ describe('12 - Error Handling, Object Tampering & Edge Cases Test Suite', () => 
   beforeAll(async () => {
     fixtures = await seedBaseUsers();
 
-    // Create 2 test student records
     const rec1 = await StudentRecord.create({
       student: fixtures.users.student1User._id,
       class: '10',

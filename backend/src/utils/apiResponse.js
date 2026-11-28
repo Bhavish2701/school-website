@@ -1,14 +1,4 @@
-/**
- * Standardized API Response Formatter
- *
- * Ensures consistent contract across all endpoints:
- * Success: { success: true, message: "...", data: {}, errors: null }
- * Error:   { success: false, message: "...", data: null, errors: {}, recoveryAction?: "...", errorCode?: "..." }
- */
 
-/**
- * Format success payload
- */
 const formatSuccess = (data = {}, message = 'Operation completed successfully') => {
   return {
     success: true,
@@ -18,11 +8,7 @@ const formatSuccess = (data = {}, message = 'Operation completed successfully') 
   };
 };
 
-/**
- * Format error payload with optional recovery action and error code
- */
 const formatError = (message = 'An error occurred', errors = {}, recoveryAction = null, errorCode = null) => {
-  // Ensure errors is an object
   let formattedErrors = errors;
   if (Array.isArray(errors)) {
     formattedErrors = {};
@@ -52,16 +38,10 @@ const formatError = (message = 'An error occurred', errors = {}, recoveryAction 
   return payload;
 };
 
-/**
- * Express helper to send formatted success response
- */
 const sendSuccess = (res, data = {}, message = 'Operation successful', statusCode = 200) => {
   return res.status(statusCode).json(formatSuccess(data, message));
 };
 
-/**
- * Express helper to send formatted error response
- */
 const sendError = (res, message = 'Request failed', errors = {}, statusCode = 400, recoveryAction = null, errorCode = null) => {
   return res.status(statusCode).json(formatError(message, errors, recoveryAction, errorCode));
 };
@@ -71,7 +51,6 @@ module.exports = {
   formatError,
   sendSuccess,
   sendError,
-  // Alias for backward compatibility
   apiResponse: (data = {}, message = 'Operation successful') => formatSuccess(data, message),
   ApiResponse: {
     success: (res, message = 'Operation successful', data = {}, statusCode = 200) => sendSuccess(res, data, message, statusCode),

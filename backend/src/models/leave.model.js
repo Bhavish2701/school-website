@@ -1,6 +1,3 @@
-/**
- * Teacher Leave Request Model
- */
 const mongoose = require('mongoose');
 
 const LEAVE_TYPES = ['CASUAL', 'SICK', 'EARNED', 'MATERNITY', 'UNPAID'];

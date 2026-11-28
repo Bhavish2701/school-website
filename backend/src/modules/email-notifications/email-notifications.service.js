@@ -1,7 +1,3 @@
-/**
- * Email Relay & Notification Delivery - Service Layer
- * Business rules, calculations, and operational orchestration
- */
 
 const Repository = require('./email-notifications.repository');
 const MultiInstitutionSecurity = require('../common/multiInstitutionSecurity');

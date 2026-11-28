@@ -1,6 +1,3 @@
-/**
- * Seed Initial Users and Sample Student Records for all Roles
- */
 const { User } = require('../models/user.model');
 const { Teacher } = require('../models/teacher.model');
 const StudentRecord = require('../models/studentRecord.model');
@@ -47,7 +44,6 @@ const seedData = async () => {
   try {
     const existingCount = await User.countDocuments();
     if (existingCount > 0) {
-      // Check if student records exist; if not, populate them
       const recordCount = await StudentRecord.countDocuments();
       if (recordCount === 0) {
         await seedRecords();
@@ -58,7 +54,6 @@ const seedData = async () => {
 
     console.log('[Seed] Seeding initial role accounts and relationship mappings...');
 
-    // 1. Create Super Admin
     await User.create({
       username: 'superadmin',
       email: 'superadmin@srividya.edu.in',
@@ -68,7 +63,6 @@ const seedData = async () => {
       phone: '9876543210',
     });
 
-    // 2. Create Principal
     await User.create({
       username: 'principal',
       email: 'principal@srividya.edu.in',
@@ -78,7 +72,6 @@ const seedData = async () => {
       phone: '9876543211',
     });
 
-    // 3. Create Vice Principal
     await User.create({
       username: 'viceprincipal',
       email: 'viceprincipal@srividya.edu.in',
@@ -88,7 +81,6 @@ const seedData = async () => {
       phone: '9876543212',
     });
 
-    // 4. Create Office Staff
     await User.create({
       username: 'officestaff',
       email: 'office@srividya.edu.in',
@@ -98,7 +90,6 @@ const seedData = async () => {
       phone: '9876543213',
     });
 
-    // 5. Create Teacher (assigned to 10-A and 9-B)
     await User.create({
       username: 'teacher1',
       email: 'teacher@srividya.edu.in',
@@ -112,7 +103,6 @@ const seedData = async () => {
       ],
     });
 
-    // 6. Create Parents first to get their IDs
     const parent1 = await User.create({
       username: 'parent1',
       email: 'parent1@srividya.edu.in',
@@ -133,7 +123,6 @@ const seedData = async () => {
       children: [],
     });
 
-    // 7. Create Students linked to their Parents
     const student1 = await User.create({
       username: 'student1',
       email: 'student1@srividya.edu.in',
@@ -166,7 +155,6 @@ const seedData = async () => {
       },
     });
 
-    // Link children back to parents
     parent1.children = [student1._id];
     await parent1.save({ validateBeforeSave: false });
 
@@ -175,7 +163,6 @@ const seedData = async () => {
 
     console.log('[Seed] Users seeded successfully with role relationships.');
 
-    // 8. Ensure teacher1 has a linked Teacher profile & seed Student Records
     await ensureSeededTeacherProfile();
     await seedRecords(student1, student2);
   } catch (error) {
@@ -192,7 +179,6 @@ const seedRecords = async (s1, s2) => {
 
     await StudentRecord.deleteMany({});
 
-    // Record for student1 (Class 10-A)
     await StudentRecord.create({
       student: student1._id,
       class: '10',
@@ -209,7 +195,6 @@ const seedRecords = async (s1, s2) => {
       teacherRemarks: 'Excellent analytical aptitude in Mathematics and Science.',
     });
 
-    // Record for student2 (Class 8-C - not assigned to teacher1)
     await StudentRecord.create({
       student: student2._id,
       class: '8',

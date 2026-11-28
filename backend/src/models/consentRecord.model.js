@@ -1,8 +1,3 @@
-/**
- * Consent Record Model
- * In strict compliance with Indian DPDP Act 2023 (Section 6) and GDPR (Article 7)
- * Records explicit, informed, and verifiable consent for cookies, communications, and parental consent for minors.
- */
 const mongoose = require('mongoose');
 
 const CONSENT_TYPES = [

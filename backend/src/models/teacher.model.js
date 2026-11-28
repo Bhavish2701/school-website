@@ -1,7 +1,3 @@
-/**
- * Teacher Mongoose Model
- * Manages faculty profile, qualifications, assigned classes/subjects, timetable, and leave balances
- */
 const mongoose = require('mongoose');
 
 const TEACHER_STATUS = ['ACTIVE', 'ON_LEAVE', 'INACTIVE', 'RESIGNED'];
@@ -10,8 +6,8 @@ const DAYS_OF_WEEK = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'S
 
 const periodSchema = new mongoose.Schema({
   periodNumber: { type: Number, required: true },
-  startTime: { type: String, required: true }, // e.g. "09:00 AM"
-  endTime: { type: String, required: true },   // e.g. "09:45 AM"
+  startTime: { type: String, required: true },
+  endTime: { type: String, required: true },
   class: { type: String, required: true },
   section: { type: String, default: 'A' },
   subject: { type: String, required: true },
@@ -102,7 +98,6 @@ const teacherSchema = new mongoose.Schema(
       default: 'ACTIVE',
       index: true,
     },
-    // Reference to User account for auth/portal access
     user: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',
@@ -122,7 +117,6 @@ const teacherSchema = new mongoose.Schema(
   }
 );
 
-// Virtual for total assigned classes count
 teacherSchema.virtual('assignedClassCount').get(function () {
   return this.assignedClasses ? this.assignedClasses.length : 0;
 });

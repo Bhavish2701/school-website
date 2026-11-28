@@ -1,17 +1,3 @@
-/**
- * Acceptance Test Suite for Module 14: Support & Issue Management
- * Covers:
- * - 14.1 Support Overview (5 KPI Metrics: open, high-priority, awaiting trust/school, overdue, recently resolved)
- * - 14.2 Support Ticket Directory (10 columns, 9 categories, priority, agent, status)
- * - 14.3 Create Ticket (Validation, SLA calculation, security incident triage)
- * - 14.4 Ticket Detail Inspector (6 Tabs: Overview, Conversation, Attachments, Internal Notes, Related Incidents, Activity History)
- * - 14.4 Actions: Assign, Change Priority, Reply, Internal Note, Request Info, Escalate, Resolve, Reopen
- * - Strict Invariants:
- *   - Internal notes kept separate from school-visible conversation
- *   - Security incidents follow dedicated security workflow rather than ordinary support queue
- * - HTML View, KPI Cards, 10-Column Table, and Modals
- * - Frontend JS Controller Exports and Navigation Handler
- */
 
 const http = require('http');
 const fs = require('fs');
@@ -70,7 +56,6 @@ async function runSupportSuite() {
   console.log(' MODULE 14: SUPPORT & ISSUE MANAGEMENT ACCEPTANCE SUITE');
   console.log('=============================================================\n');
 
-  // --- PART 1: 14.1 SUPPORT OVERVIEW ---
   console.log('--- 1. Support Overview KPI Metrics (14.1) ---');
 
   try {
@@ -92,7 +77,6 @@ async function runSupportSuite() {
     report('GET /api/v1/platform/support/overview', false, err);
   }
 
-  // --- PART 2: 14.2 SUPPORT TICKET DIRECTORY ---
   console.log('\n--- 2. Support Ticket Directory (14.2) ---');
 
   let testTicketId = null;
@@ -121,7 +105,6 @@ async function runSupportSuite() {
     report('GET /api/v1/platform/support/tickets', false, err);
   }
 
-  // Filter query test
   try {
     const res = await makeRequest('GET', '/api/v1/platform/support/tickets?priority=Critical');
     const ok = res.status === 200 && res.body.success && Array.isArray(res.body.data);
@@ -131,7 +114,6 @@ async function runSupportSuite() {
     report('Filter tickets by priority', false, err);
   }
 
-  // --- PART 3: 14.3 CREATE TICKET & SECURITY INCIDENT INVARIANT ---
   console.log('\n--- 3. Create Ticket & Security Incident Invariant (14.3 & 14.5) ---');
 
   let createdTicketId = null;
@@ -164,7 +146,6 @@ async function runSupportSuite() {
     report('POST /api/v1/platform/support/tickets', false, err);
   }
 
-  // Section 14.5 Invariant: Dedicated Security Incident Response
   try {
     const secTicketPayload = {
       subject: 'SQL Injection Probe Detected on Public Admissions Form',
@@ -195,7 +176,6 @@ async function runSupportSuite() {
     report('Security incident invariant check', false, err);
   }
 
-  // --- PART 4: 14.4 TICKET DETAIL INSPECTOR (6 TABS & ACTIONS) ---
   console.log('\n--- 4. Ticket Detail Inspector & Lifecycle Actions (14.4) ---');
 
   try {
@@ -217,7 +197,6 @@ async function runSupportSuite() {
     report('GET /api/v1/platform/support/tickets/:id', false, err);
   }
 
-  // Action 1: Assign Ticket
   try {
     const assignPayload = {
       agentName: 'K. Sudhir',
@@ -231,7 +210,6 @@ async function runSupportSuite() {
     report('POST /api/v1/platform/support/tickets/:id/assign', false, err);
   }
 
-  // Action 2: Change Priority
   try {
     const priPayload = {
       priority: 'Critical',
@@ -244,7 +222,6 @@ async function runSupportSuite() {
     report('POST /api/v1/platform/support/tickets/:id/priority', false, err);
   }
 
-  // Action 3: Reply to School (Public Conversation)
   try {
     const replyPayload = {
       message: 'Hello Shailaja garu, we have released the lock on section 9-B mark entry grid. Please refresh your browser.',
@@ -259,7 +236,6 @@ async function runSupportSuite() {
     report('POST /api/v1/platform/support/tickets/:id/reply', false, err);
   }
 
-  // Action 4: Add Internal Note (STRICT INVARIANT: Internal only, isolated from school)
   try {
     const notePayload = {
       note: 'Internal root cause note: Redis lock was not released due to network drop between web worker and cluster.',
@@ -270,7 +246,6 @@ async function runSupportSuite() {
     report('POST /api/v1/platform/support/tickets/:id/internal-note logs confidential note', ok);
 
     if (ok) {
-      // Invariant: Verify internal note is in internalNotes array, NOT in conversation array
       const inConv = res.body.data.conversation.some(m => m.message.includes('Redis lock'));
       const inNotes = res.body.data.internalNotes.some(n => n.note.includes('Redis lock'));
       report('Section 14.4 Invariant: Internal notes strictly isolated from public conversation visible to school', inNotes && !inConv);
@@ -279,7 +254,6 @@ async function runSupportSuite() {
     report('Internal note isolation invariant', false, err);
   }
 
-  // Action 5: Request Additional Information
   try {
     const reqInfoPayload = {
       message: 'Please confirm if teacher mark entry has concluded without error.'
@@ -291,7 +265,6 @@ async function runSupportSuite() {
     report('POST /api/v1/platform/support/tickets/:id/request-info', false, err);
   }
 
-  // Action 6: Escalate Ticket
   try {
     const escPayload = {
       escalationTier: 'Tier 3 Engineering',
@@ -304,7 +277,6 @@ async function runSupportSuite() {
     report('POST /api/v1/platform/support/tickets/:id/escalate', false, err);
   }
 
-  // Action 7: Resolve Ticket
   try {
     const resPayload = {
       resolutionSummary: 'Redis lock TTL adjusted to 30s. Marks entry completed and verified by principal.'
@@ -316,7 +288,6 @@ async function runSupportSuite() {
     report('POST /api/v1/platform/support/tickets/:id/resolve', false, err);
   }
 
-  // Action 8: Reopen Ticket
   try {
     const reopenPayload = {
       reason: 'Science teacher reported lingering lock on grade 9-A'
@@ -328,14 +299,12 @@ async function runSupportSuite() {
     report('POST /api/v1/platform/support/tickets/:id/reopen', false, err);
   }
 
-  // --- PART 5: HTML DOM & UI ELEMENTS VERIFICATION ---
   console.log('\n--- 5. HTML Elements & Modals Verification ---');
 
   const htmlPath = path.join(__dirname, '..', 'frontend', 'platform-admin', 'index.html');
   const html = fs.readFileSync(htmlPath, 'utf8');
 
   const requiredIds = [
-    // Main View & Overview KPI Cards
     'view-support',
     'kpiSupportOpenCount',
     'kpiSupportHighPriorityCount',
@@ -343,7 +312,6 @@ async function runSupportSuite() {
     'kpiSupportOverdueCount',
     'kpiSupportResolvedCount',
 
-    // Directory & Filters
     'lblSupportFilteredCount',
     'txtSupportSearch',
     'selSupportFilterCategory',
@@ -352,7 +320,6 @@ async function runSupportSuite() {
     'selSupportFilterInstitution',
     'tbodySupportTickets',
 
-    // Create Modal (Section 14.3)
     'modalCreateTicket',
     'txtTicketFormSubject',
     'selTicketFormInstitution',
@@ -367,7 +334,6 @@ async function runSupportSuite() {
     'txtTicketFormRelatedId',
     'boxTicketSecurityNotice',
 
-    // Detail Inspector (Section 14.4)
     'modalSupportTicketDetail',
     'lblTicketDetailId',
     'lblTicketDetailSubject',
@@ -379,7 +345,6 @@ async function runSupportSuite() {
     'lblTicketDetailStatus',
     'boxTicketDetailSecurityBanner',
 
-    // Detail Tabs
     'btnTicketTabOverview',
     'btnTicketTabConversation',
     'btnTicketTabAttachments',
@@ -393,7 +358,6 @@ async function runSupportSuite() {
     'tabTicketRelatedContent',
     'tabTicketActivityContent',
 
-    // Action Modals
     'modalAssignTicket',
     'selAssignAgent',
     'modalChangePriority',
@@ -419,7 +383,6 @@ async function runSupportSuite() {
     report(`All ${requiredIds.length} required HTML elements, KPI cards, and modals present in index.html`, true);
   }
 
-  // Check 10-column table structure (Section 14.2)
   const has10Columns = html.includes('<th>Ticket ID</th>') &&
     html.includes('<th>Subject</th>') &&
     html.includes('<th>Institution</th>') &&
@@ -432,7 +395,6 @@ async function runSupportSuite() {
     html.includes('<th>Status</th>');
   report('Support ticket directory table defines exactly 10 columns (Section 14.2)', has10Columns);
 
-  // --- PART 6: FRONTEND JS CONTROLLER EXPORTS & SYNTAX ---
   console.log('\n--- 6. Frontend Controller Exports & Interface ---');
 
   const jsPath = path.join(__dirname, '..', 'frontend', 'js', 'platform-admin.js');
@@ -476,11 +438,9 @@ async function runSupportSuite() {
     report(`All ${requiredExports.length} required Module 14 controller methods exported`, true);
   }
 
-  // Check navigateTo support handler
   const navHandlesSupport = js.includes("viewId === 'support'") && js.includes("loadSupportData");
   report('navigateTo("support") dispatches loadSupportData()', navHandlesSupport);
 
-  // Summary
   console.log('\n=============================================================');
   console.log(` RESULTS: ${passedTests} passed, ${failedTests} failed`);
   console.log('=============================================================\n');

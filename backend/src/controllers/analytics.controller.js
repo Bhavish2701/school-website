@@ -1,16 +1,7 @@
-/**
- * Privacy-Conscious Analytics Controller
- * Under DPDP Act 2023: No student PII or third-party ad tracking
- */
 const asyncHandler = require('../utils/asyncHandler');
 const { formatSuccess } = require('../utils/apiResponse');
 const AnalyticsEvent = require('../models/analyticsEvent.model');
 
-/**
- * @route   POST /api/v1/analytics/track
- * @desc    Record telemetry event (privacy-safe, zero 3rd party)
- * @access  Public / Authenticated
- */
 const trackEvent = asyncHandler(async (req, res) => {
   const { eventType, module, action, durationMs, metadata } = req.body;
 
@@ -18,13 +9,11 @@ const trackEvent = asyncHandler(async (req, res) => {
     return res.status(200).json(formatSuccess({}, 'Event omitted'));
   }
 
-  // Anonymize IP (strip last octet for IPv4, last 80 bits for IPv6)
   const rawIp = req.ip || (req.connection && req.connection.remoteAddress) || '';
   const anonymizedIp = rawIp.includes('.')
     ? rawIp.replace(/\.\d+$/, '.0')
     : '0.0.0.0';
 
-  // Scrub any accidental student PII from metadata
   const sanitizedMeta = { ...(metadata || {}) };
   delete sanitizedMeta.password;
   delete sanitizedMeta.token;
@@ -44,11 +33,6 @@ const trackEvent = asyncHandler(async (req, res) => {
   res.status(201).json(formatSuccess({ id: event._id }, 'Analytics event logged'));
 });
 
-/**
- * @route   GET /api/v1/analytics/summary
- * @desc    Get aggregated in-house telemetry summary
- * @access  Protected (Super Admin, Principal)
- */
 const getAnalyticsSummary = asyncHandler(async (req, res) => {
   const totalEvents = await AnalyticsEvent.countDocuments();
   const moduleBreakdown = await AnalyticsEvent.aggregate([

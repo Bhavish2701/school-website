@@ -1,7 +1,3 @@
-/**
- * Student Record Model (Grades, Attendance, Progress Reports)
- * Used to demonstrate and enforce object-level authorization
- */
 const mongoose = require('mongoose');
 
 const studentRecordSchema = new mongoose.Schema(

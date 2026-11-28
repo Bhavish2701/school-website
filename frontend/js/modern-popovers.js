@@ -1,15 +1,3 @@
-/**
- * Sri Vidya E.M High School & ERP Portals
- * Modern Popover & Overlay Component System
- * - 1. Tooltips (Hover / Focus with Smart Viewport Collision Flip)
- * - 2. Dropdowns (Clean Menus with Keyboard Navigation & Raised Shadows)
- * - 3. Context Menus (Right-Click & Action Menus with Viewport Clamping)
- * - 4. Info Cards (Compact Popovers with Details & Dismissal)
- * - 5. Date Pickers (Interactive Calendar with Date Selection & Limits)
- * - 6. Reactions (Quick Reaction Dock with Spring Hover & Counts)
- * - 7. Hover Cards (Rich Previews for Users, Records & Items)
- * - 8. Share Sheets (Link Copy, WhatsApp, Print, Email & Mobile Bottom Sheet)
- */
 
 (function (root, factory) {
   if (typeof define === 'function' && define.amd) {
@@ -30,7 +18,6 @@
   let hoverCardTimeout = null;
   let activeBackdrop = null;
 
-  // Curated reaction emoji set
   const REACTIONS_LIST = [
     { emoji: '👍', name: 'Like' },
     { emoji: '❤️', name: 'Love' },
@@ -59,9 +46,6 @@
     }
   }
 
-  // =========================================================================
-  // 1. TOOLTIPS
-  // =========================================================================
   function initTooltips(root) {
     const targets = root.querySelectorAll('[data-tooltip]');
     targets.forEach(el => {
@@ -99,7 +83,6 @@
       el.addEventListener('focus', show);
       el.addEventListener('blur', hide);
 
-      // Touch handling: brief tap shows tooltip, disappears on tap away
       el.addEventListener('touchstart', (e) => {
         show(e);
         setTimeout(hide, 2500);
@@ -114,9 +97,6 @@
     }
   }
 
-  // =========================================================================
-  // 2. DROPDOWNS
-  // =========================================================================
   function initDropdowns(root) {
     const toggles = root.querySelectorAll(
       '[data-dropdown], [data-bs-toggle="dropdown"], [data-toggle="dropdown"], .sv-dropdown-toggle'
@@ -141,7 +121,6 @@
           menu.classList.add('show');
           btn.setAttribute('aria-expanded', 'true');
 
-          // Check if menu goes below viewport
           const rect = menu.getBoundingClientRect();
           if (rect.bottom > window.innerHeight - 10) {
             menu.classList.add('flip-up');
@@ -149,7 +128,6 @@
             menu.classList.remove('flip-up');
           }
 
-          // Keyboard navigation inside menu
           menu.setAttribute('tabindex', '-1');
           const firstItem = menu.querySelector('.sv-dropdown-item, .dropdown-item, a, button');
           if (firstItem) firstItem.focus();
@@ -168,9 +146,6 @@
     });
   }
 
-  // =========================================================================
-  // 3. CONTEXT MENUS
-  // =========================================================================
   function initContextMenus(root) {
     const targets = root.querySelectorAll('[data-context-menu], .context-menu-trigger');
     targets.forEach(target => {
@@ -183,7 +158,6 @@
         openContextMenu(target, e.clientX, e.clientY);
       });
 
-      // Long-press support on mobile touch devices
       let touchTimer = null;
       target.addEventListener('touchstart', (e) => {
         const touch = e.touches[0];
@@ -262,7 +236,6 @@
       menu.classList.add('visible');
     });
 
-    // Handle Item Clicks
     menu.querySelectorAll('.sv-context-menu-item').forEach(btn => {
       btn.addEventListener('click', () => {
         const action = btn.dataset.action;
@@ -282,9 +255,6 @@
     });
   }
 
-  // =========================================================================
-  // 4. INFO CARDS
-  // =========================================================================
   function initInfoCards(root) {
     const targets = root.querySelectorAll('[data-info-card]');
     targets.forEach(target => {
@@ -334,16 +304,12 @@
     });
   }
 
-  // =========================================================================
-  // 5. DATE PICKERS
-  // =========================================================================
   function initDatePickers(root) {
     const dateInputs = root.querySelectorAll('[data-datepicker], input.sv-datepicker-input');
     dateInputs.forEach(input => {
       if (input.dataset.svDatepickerInit) return;
       input.dataset.svDatepickerInit = 'true';
 
-      // Open on click or calendar icon click
       input.addEventListener('click', (e) => {
         e.stopPropagation();
         openDatePicker(input);
@@ -391,7 +357,6 @@
 
       let daysHtml = '';
 
-      // Previous month filler days
       for (let i = firstDay - 1; i >= 0; i--) {
         daysHtml += `<div class="sv-dp-day other-month">${daysInPrevMonth - i}</div>`;
       }
@@ -399,7 +364,6 @@
       const today = new Date();
       const isCurrentMonth = (today.getFullYear() === viewYear && today.getMonth() === viewMonth);
 
-      // Current month days
       for (let day = 1; day <= daysInMonth; day++) {
         const isToday = isCurrentMonth && (today.getDate() === day);
         const isSelected = (currentDate.getFullYear() === viewYear && currentDate.getMonth() === viewMonth && currentDate.getDate() === day);
@@ -435,7 +399,6 @@
         </div>
       `;
 
-      // Handlers
       picker.querySelector('.sv-dp-prev').addEventListener('click', (e) => {
         e.stopPropagation();
         viewMonth--;
@@ -498,9 +461,6 @@
     requestAnimationFrame(() => picker.classList.add('visible'));
   }
 
-  // =========================================================================
-  // 6. REACTIONS DOCK
-  // =========================================================================
   function initReactions(root) {
     const targets = root.querySelectorAll('[data-reactions], .sv-reactions-trigger');
     targets.forEach(target => {
@@ -539,7 +499,6 @@
             ev.stopPropagation();
             const emoji = btn.dataset.emoji;
 
-            // Attach / Update Reaction Pill next to target
             let pill = target.parentNode.querySelector(`.sv-reaction-pill[data-emoji="${emoji}"]`);
             if (pill) {
               const countEl = pill.querySelector('.reaction-count');
@@ -565,9 +524,6 @@
     });
   }
 
-  // =========================================================================
-  // 7. HOVER CARDS (Rich Previews for Users & Records)
-  // =========================================================================
   function initHoverCards(root) {
     const targets = root.querySelectorAll('[data-hover-card]');
     targets.forEach(target => {
@@ -663,7 +619,6 @@
       target.addEventListener('mouseenter', show);
       target.addEventListener('mouseleave', scheduleHoverCardClose);
 
-      // Mobile Tap Toggle
       target.addEventListener('click', (e) => {
         if (window.innerWidth <= 768) {
           e.preventDefault();
@@ -680,9 +635,6 @@
     }
   }
 
-  // =========================================================================
-  // 8. SHARE SHEETS
-  // =========================================================================
   function initShareSheets(root) {
     const targets = root.querySelectorAll('[data-share-sheet], .sv-share-btn');
     targets.forEach(target => {
@@ -758,7 +710,6 @@
     }
     requestAnimationFrame(() => sheet.classList.add('visible'));
 
-    // Copy Button Handler
     const copyBtn = sheet.querySelector('.sv-share-copy-btn');
     copyBtn.addEventListener('click', () => {
       copyToClipboard(url);
@@ -770,25 +721,21 @@
       }, 2000);
     });
 
-    // WhatsApp
     sheet.querySelector('.share-whatsapp').addEventListener('click', () => {
       window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(title + ' - ' + url)}`, '_blank');
       closeAllOverlays();
     });
 
-    // Print
     sheet.querySelector('.share-print').addEventListener('click', () => {
       window.print();
       closeAllOverlays();
     });
 
-    // Email
     sheet.querySelector('.share-email').addEventListener('click', () => {
       window.location.href = `mailto:?subject=${encodeURIComponent(title)}&body=${encodeURIComponent(url)}`;
       closeAllOverlays();
     });
 
-    // Native Device Share
     sheet.querySelector('.share-native').addEventListener('click', () => {
       if (navigator.share) {
         navigator.share({ title, url }).catch(() => {});
@@ -803,9 +750,6 @@
     });
   }
 
-  // =========================================================================
-  // POSITIONING & COLLISION ENGINE
-  // =========================================================================
   function positionElement(trigger, overlay, preferredPos = 'top', offset = 8) {
     const triggerRect = trigger.getBoundingClientRect();
     const overlayRect = overlay.getBoundingClientRect();
@@ -814,7 +758,6 @@
     let top = 0;
     let left = 0;
 
-    // Flip checks
     if (pos === 'top' && triggerRect.top - overlayRect.height - offset < 8) {
       pos = 'bottom';
     } else if (pos === 'bottom' && triggerRect.bottom + overlayRect.height + offset > window.innerHeight - 8) {
@@ -837,7 +780,6 @@
       left = triggerRect.right + offset;
     }
 
-    // Horizontal clamping within viewport
     if (left < 8) left = 8;
     if (left + overlayRect.width > window.innerWidth - 8) {
       left = window.innerWidth - overlayRect.width - 8;
@@ -886,7 +828,6 @@
   }
 
   function initGlobalListeners() {
-    // Click outside to dismiss all overlays
     document.addEventListener('click', (e) => {
       if (e.target.closest(
         '.sv-dropdown-menu, .sv-info-card, .sv-datepicker-popover, .sv-reactions-bar, .sv-hover-card, .sv-share-sheet, .sv-context-menu'
@@ -896,14 +837,12 @@
       closeAllOverlays();
     });
 
-    // Escape key to dismiss all overlays
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') {
         closeAllOverlays();
       }
     });
 
-    // Close overlays on scroll
     window.addEventListener('scroll', () => {
       if (activeTooltip) hideTooltip();
       if (activeHoverCard) closeHoverCard();
@@ -959,7 +898,6 @@
       .replace(/'/g, '&#39;');
   }
 
-  // Auto-init on DOM ready
   if (typeof document !== 'undefined') {
     if (document.readyState === 'loading') {
       document.addEventListener('DOMContentLoaded', () => init());

@@ -1,11 +1,6 @@
-/**
- * Sri Vidya Educational Trust - Integrations & API Management Models
- * Module 13: Integrations Directory, Configuration, API Clients, and Event Logs
- */
 
 const mongoose = require('mongoose');
 
-// 13.1 & 13.2 Integration Schema
 const IntegrationSchema = new mongoose.Schema({
   integrationId: {
     type: String,
@@ -55,7 +50,6 @@ const IntegrationSchema = new mongoose.Schema({
   credentialRef: {
     type: String,
     required: true
-    // Invariant: Section 13.2 - Secret reference in secure manager (e.g. vault://kms/...)
   },
   credentialMasked: {
     type: String,
@@ -101,7 +95,6 @@ const IntegrationSchema = new mongoose.Schema({
   timestamps: true
 });
 
-// 13.3 API Management Schema (External API Clients)
 const ApiClientSchema = new mongoose.Schema({
   clientId: {
     type: String,
@@ -150,7 +143,6 @@ const ApiClientSchema = new mongoose.Schema({
   timestamps: true
 });
 
-// 13.4 Integration Event Logs Schema (With Payment Reconciliation Distinction)
 const IntegrationEventLogSchema = new mongoose.Schema({
   eventId: {
     type: String,

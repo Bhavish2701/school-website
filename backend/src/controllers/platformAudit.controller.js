@@ -1,7 +1,3 @@
-/**
- * Sri Vidya Educational Trust - Platform Audit Controller
- * REST API Endpoints for Module 8: Audit Logs
- */
 
 const PlatformAuditService = require('../services/platformAudit.service');
 

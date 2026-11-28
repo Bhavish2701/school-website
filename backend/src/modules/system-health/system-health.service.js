@@ -1,7 +1,3 @@
-/**
- * System Health & Telemetry - Service Layer
- * Business rules, calculations, and operational orchestration
- */
 
 const Repository = require('./system-health.repository');
 const MultiInstitutionSecurity = require('../common/multiInstitutionSecurity');

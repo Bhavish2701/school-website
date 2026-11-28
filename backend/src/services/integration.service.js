@@ -1,14 +1,9 @@
-/**
- * Sri Vidya Educational Trust - Integrations & API Management Service
- * Module 13: Integrations Directory, Configuration, API Clients, and Event Logs
- */
 
 const crypto = require('crypto');
 const mongoose = require('mongoose');
 const { Integration, ApiClient, IntegrationEventLog } = require('../models/integration.model');
 const PlatformAuditService = require('./platformAudit.service');
 
-// Memory fallbacks
 const inMemoryIntegrations = [];
 const inMemoryApiClients = [];
 const inMemoryEventLogs = [];
@@ -359,10 +354,6 @@ class IntegrationService {
     }
   }
 
-  // =========================================================================
-  // 13.1 Integrations Directory
-  // =========================================================================
-
   static async listIntegrations(query = {}) {
     await this.seedIfEmpty();
     let integrations = [];
@@ -419,10 +410,6 @@ class IntegrationService {
     if (!item) return { success: false, message: 'Integration not found.' };
     return { success: true, data: this._sanitizeIntegration(item) };
   }
-
-  // =========================================================================
-  // 13.2 Integration Configuration
-  // =========================================================================
 
   static async createIntegration(payload, operator = 'Platform Administrator') {
     await this.seedIfEmpty();
@@ -551,7 +538,6 @@ class IntegrationService {
           await target.save();
         }
       } catch (e) {
-        // Fallback
       }
     }
 
@@ -587,7 +573,6 @@ class IntegrationService {
           await item.save();
         }
       } catch (e) {
-        // Fallback
       }
     }
 
@@ -622,7 +607,6 @@ class IntegrationService {
           await item.save();
         }
       } catch (e) {
-        // Fallback
       }
     }
 
@@ -658,7 +642,6 @@ class IntegrationService {
           await item.save();
         }
       } catch (e) {
-        // Fallback
       }
     }
 
@@ -675,10 +658,6 @@ class IntegrationService {
     await this._logIntegrationAudit('INTEGRATION_DISCONNECTED', integrationId, item.name, operator, `Disconnected integration from platform routing.`);
     return { success: true, message: 'Integration disconnected safely.', data: this._sanitizeIntegration(item) };
   }
-
-  // =========================================================================
-  // 13.3 API Management (External Clients)
-  // =========================================================================
 
   static async listApiClients(query = {}) {
     await this.seedIfEmpty();
@@ -774,7 +753,6 @@ class IntegrationService {
           await client.save();
         }
       } catch (e) {
-        // Fallback
       }
     }
 
@@ -811,7 +789,6 @@ class IntegrationService {
           await client.save();
         }
       } catch (e) {
-        // Fallback
       }
     }
 
@@ -832,10 +809,6 @@ class IntegrationService {
     await this._logIntegrationAudit('API_CLIENT_REVOKED', clientId, client.clientName, operator, `Revoked API client access. Reason: ${reason}`);
     return { success: true, message: 'API client revoked successfully.', data: client };
   }
-
-  // =========================================================================
-  // 13.4 Integration Event Logs (With Payment Reconciliation Distinction)
-  // =========================================================================
 
   static async listEventLogs(query = {}) {
     await this.seedIfEmpty();
@@ -876,10 +849,6 @@ class IntegrationService {
     };
   }
 
-  /**
-   * Section 13.4 Payment Reconciliation Invariant:
-   * Explicitly transition a payment notification received into an independently verified & reconciled state
-   */
   static async reconcilePaymentEvent(eventId, operator = 'Accounts Staff') {
     await this.seedIfEmpty();
     let evt = null;
@@ -902,7 +871,6 @@ class IntegrationService {
           await evt.save();
         }
       } catch (e) {
-        // Fallback
       }
     }
 
@@ -932,7 +900,6 @@ class IntegrationService {
 
   static _sanitizeIntegration(item) {
     const raw = typeof item.toObject === 'function' ? item.toObject() : JSON.parse(JSON.stringify(item));
-    // Invariant: Never display full API keys or passwords in the UI or API response
     delete raw.apiKey;
     delete raw.password;
     delete raw.rawCredential;

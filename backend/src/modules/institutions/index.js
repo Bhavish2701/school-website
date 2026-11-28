@@ -1,7 +1,3 @@
-/**
- * Institutions Module Aggregator
- * Exposes all 6 architectural layers
- */
 
 const routes = require('./institutions.routes');
 const controller = require('./institutions.controller');

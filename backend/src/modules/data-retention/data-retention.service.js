@@ -1,7 +1,3 @@
-/**
- * Statutory Data Retention & Requests - Service Layer
- * Business rules, calculations, and operational orchestration
- */
 
 const Repository = require('./data-retention.repository');
 const MultiInstitutionSecurity = require('../common/multiInstitutionSecurity');

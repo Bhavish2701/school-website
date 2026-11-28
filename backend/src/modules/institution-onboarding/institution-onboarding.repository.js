@@ -1,7 +1,3 @@
-/**
- * Institution Onboarding & Migration - Repository Layer
- * Manages database access and persistence
- */
 
 const mongoose = require('mongoose');
 const { OnboardingChecklist, DataImportJob } = require('../../models/onboarding.model');

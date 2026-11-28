@@ -4,7 +4,6 @@ const vm = require('vm');
 
 let code = fs.readFileSync(path.join(__dirname, '../../frontend/js/portal.js'), 'utf8');
 
-// Find all identifiers in the return object
 const returnMatch = code.match(/return\s*\{([\s\S]*?)\n\s*\};/);
 if (returnMatch) {
   const returnBody = returnMatch[1];
@@ -23,8 +22,6 @@ if (returnMatch) {
 
   console.log(`Found ${exportedIdentifiers.length} exported identifiers.`);
 
-  // Test which ones are not defined in the scope of portalApp
-  // We can inject code right before the return statement to check `typeof x`
   const checks = exportedIdentifiers.map(id => `
     try {
       if (typeof ${id} === 'undefined') {

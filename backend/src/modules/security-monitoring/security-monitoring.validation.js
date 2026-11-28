@@ -1,7 +1,3 @@
-/**
- * Security & Access Threat Monitoring - Validation Layer
- * Enforces field schemas, constraints, and data integrity
- */
 
 class SecurityMonitoringValidation {
   static validateRequest(req, res, next) {

@@ -1,7 +1,3 @@
-/**
- * Platform Policies & Governance Register - Validation Layer
- * Enforces field schemas, constraints, and data integrity
- */
 
 class PlatformPoliciesValidation {
   static validateRequest(req, res, next) {

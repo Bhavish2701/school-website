@@ -1,7 +1,3 @@
-/**
- * Subscriptions & Commercial Plans - Controller Layer
- * Handles HTTP requests, responses, and status codes
- */
 
 const Service = require('./subscriptions.service');
 

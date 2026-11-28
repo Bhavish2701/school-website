@@ -4,7 +4,6 @@ const vm = require('vm');
 
 let code = fs.readFileSync(path.join(__dirname, '../../frontend/js/portal.js'), 'utf8');
 
-// Find the last return { ... } in the file
 const lastReturnIndex = code.lastIndexOf('return {');
 const endReturnIndex = code.indexOf('};', lastReturnIndex);
 
@@ -45,7 +44,6 @@ const mockFunctions = [
   'lookupLateStudent'
 ].map(fn => `function ${fn}() {}`).join('\n');
 
-// Inject check right before the return statement
 const checks = exportedIdentifiers.map(id => `
   try {
     if (typeof ${id} === 'undefined') {

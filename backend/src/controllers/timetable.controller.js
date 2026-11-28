@@ -1,7 +1,3 @@
-/**
- * Timetable Controller
- * REST handlers for timetable inspection, conflict validation, and assignments.
- */
 const timetableService = require('../services/timetable.service');
 const { formatSuccess, formatError } = require('../utils/apiResponse');
 const asyncHandler = require('../utils/asyncHandler');

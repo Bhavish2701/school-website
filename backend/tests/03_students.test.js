@@ -1,15 +1,3 @@
-/**
- * Test Suite 03: Students Module API Tests
- * Covers:
- * - Successful student creation (201)
- * - Validation errors (422)
- * - Duplicate student admission number handling (409 Conflict)
- * - List students with pagination/filters (200)
- * - Get student by ID (200)
- * - Non-existent student ID (404)
- * - Invalid ID format (400)
- * - Role authorization checks (401 & 403)
- */
 const request = require('supertest');
 const mongoose = require('mongoose');
 const app = require('../src/app');
@@ -50,7 +38,6 @@ describe('03 - Students Module API Test Suite', () => {
         .post('/api/v1/students')
         .set('Authorization', `Bearer ${fixtures.tokens.principal}`)
         .send({
-          // Missing admissionNo, fullName, gender, class
           section: 'A',
         });
 
@@ -64,7 +51,7 @@ describe('03 - Students Module API Test Suite', () => {
         .post('/api/v1/students')
         .set('Authorization', `Bearer ${fixtures.tokens.principal}`)
         .send({
-          admissionNo: 'ADM-2026-999', // Already created in earlier test
+          admissionNo: 'ADM-2026-999',
           fullName: 'Duplicate Kiran',
           gender: 'male',
           class: '10',

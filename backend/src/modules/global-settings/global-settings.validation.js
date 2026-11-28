@@ -1,7 +1,3 @@
-/**
- * Global Platform Settings - Validation Layer
- * Enforces field schemas, constraints, and data integrity
- */
 
 class GlobalSettingsValidation {
   static validateRequest(req, res, next) {

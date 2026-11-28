@@ -1,13 +1,8 @@
-/**
- * Sri Vidya Educational Trust - Institution Onboarding & Migration Service
- * Module 5: Onboarding Overview (5.1), 12-Point Checklist (5.2), and 10-Step Data Import Centre (5.3)
- */
 
 const mongoose = require('mongoose');
 const { OnboardingChecklist, DataImportJob } = require('../models/onboarding.model');
 const { Institution } = require('../models/institution.model');
 
-// In-memory fallback repository when running offline / without MongoDB
 const inMemoryChecklists = {};
 const inMemoryImportJobs = [];
 
@@ -79,7 +74,6 @@ class OnboardingService {
       });
     }
 
-    // Seed sample Data Import Jobs
     const initialJobs = [
       {
         jobId: 'IMP-2026-001',
@@ -212,10 +206,6 @@ class OnboardingService {
     });
   }
 
-  /**
-   * 5.1 Onboarding Overview
-   * Displays the 6 statutory KPIs and active migration pipelines
-   */
   static async getOnboardingOverview() {
     await this.seedIfEmpty();
 
@@ -304,10 +294,6 @@ class OnboardingService {
     }
   }
 
-  /**
-   * 5.2 Onboarding Checklist
-   * Retrieves all 12 items for a given institution
-   */
   static async getInstitutionChecklist(institutionId) {
     institutionId = institutionId || 'INST-001';
     await this.seedIfEmpty();
@@ -338,9 +324,6 @@ class OnboardingService {
     }
   }
 
-  /**
-   * Updates an item's status in the 12-point checklist
-   */
   static async updateChecklistItem(institutionId, itemKey, status, operator, notes) {
     if (this.isMongoReady()) {
       try {
@@ -364,7 +347,6 @@ class OnboardingService {
       } catch (e) {}
     }
 
-    // In-memory fallback
     const memDoc = inMemoryChecklists[institutionId];
     if (memDoc) {
       const it = memDoc.items.find(i => i.key === itemKey);
@@ -382,9 +364,6 @@ class OnboardingService {
     return { success: false, message: 'Checklist item not found' };
   }
 
-  /**
-   * 5.3 Data Import Centre: List Jobs
-   */
   static async listImportJobs(filter = {}) {
     await this.seedIfEmpty();
 
@@ -413,9 +392,6 @@ class OnboardingService {
     }
   }
 
-  /**
-   * 5.3 Data Import Centre: Initiate New Import (Steps 1 to 7)
-   */
   static async createImportJob(data, operator = 'Platform Super Administrator') {
     const jobId = `IMP-${new Date().getFullYear()}-${Math.floor(1000 + Math.random() * 9000)}`;
 
@@ -460,9 +436,6 @@ class OnboardingService {
     }
   }
 
-  /**
-   * 5.3 Step 8 & 9: Execute or Dry-Run Import
-   */
   static async executeImport(jobId, operator = 'Platform Super Administrator', isDryRun = false, updatePolicy = 'reject_duplicates') {
     const startTime = Date.now();
 
@@ -502,7 +475,6 @@ class OnboardingService {
       }
     } catch (e) {}
 
-    // In-memory fallback
     const memJob = inMemoryImportJobs.find(j => j.jobId === jobId);
     if (memJob) {
       memJob.isDryRun = isDryRun;
@@ -521,9 +493,6 @@ class OnboardingService {
     return { success: false, message: 'Import job not found' };
   }
 
-  /**
-   * 5.3 Step 10: Generate Downloadable Error List CSV
-   */
   static async exportImportErrorsCSV(jobId) {
     let job = null;
     if (this.isMongoReady()) {

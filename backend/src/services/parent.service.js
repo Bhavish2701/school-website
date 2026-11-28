@@ -1,8 +1,3 @@
-/**
- * Parent Business Logic Service Layer
- * Supports multiple children, child switching, attendance, assignments, exams,
- * fees, communication, notifications, and leave requests.
- */
 const mongoose = require('mongoose');
 const { Student } = require('../models/student.model');
 const { User } = require('../models/user.model');
@@ -16,9 +11,6 @@ const { CorrectionRequest } = require('../models/correctionRequest.model');
 const ApiError = require('../utils/apiError');
 
 class ParentService {
-  /**
-   * Helper: Resolve all children belonging to authenticated parent
-   */
   async getChildrenDocs(currentUser) {
     const parentUserId = currentUser._id;
     const registeredChildren = currentUser.children || [];
@@ -34,9 +26,6 @@ class ParentService {
     return children;
   }
 
-  /**
-   * Get Parent Profile with summary of linked children
-   */
   async getProfile(currentUser) {
     const children = await this.getChildrenDocs(currentUser);
 
@@ -62,9 +51,6 @@ class ParentService {
     };
   }
 
-  /**
-   * Update Parent Contact Profile
-   */
   async updateProfile(currentUser, updateData) {
     const user = await User.findById(currentUser._id);
     if (!user) throw ApiError.notFound('Parent account not found');
@@ -80,32 +66,22 @@ class ParentService {
     };
   }
 
-  /**
-   * Multiple Children List (For child switcher selector in UI)
-   */
   async getChildren(currentUser) {
     const children = await this.getChildrenDocs(currentUser);
     return children;
   }
 
-  /**
-   * Child Overview / Dashboard (Active Child View)
-   */
   async getChildOverview(currentUser, childStudent) {
-    // 1. Academic results summary
     const academicRecord = await StudentRecord.findOne({ student: childStudent._id });
 
-    // 2. Pending fees
     const feeRecord = await Fee.findOne({ student: childStudent._id });
 
-    // 3. Active assignments count
     const assignmentsCount = await Assignment.countDocuments({
       class: childStudent.class,
       section: childStudent.section,
       status: 'ACTIVE',
     });
 
-    // 4. Class teacher
     const classTeacher = await Teacher.findOne({
       assignedClasses: {
         $elemMatch: {
@@ -151,9 +127,6 @@ class ParentService {
     };
   }
 
-  /**
-   * Child Attendance
-   */
   async getChildAttendance(currentUser, childStudent) {
     const totalWorkingDays = 120;
     const attendancePct = childStudent.attendancePercentage || 94;
@@ -174,9 +147,6 @@ class ParentService {
     };
   }
 
-  /**
-   * Child Assignments & Homework
-   */
   async getChildAssignments(currentUser, childStudent) {
     const assignments = await Assignment.find({
       class: childStudent.class,
@@ -192,9 +162,6 @@ class ParentService {
     };
   }
 
-  /**
-   * Child Exams & Results / Report Card
-   */
   async getChildExamsAndResults(currentUser, childStudent) {
     const studentIds = [childStudent._id];
     if (childStudent.user) studentIds.push(childStudent.user);
@@ -213,13 +180,9 @@ class ParentService {
     };
   }
 
-  /**
-   * Child Fee Invoices & Payment Receipts
-   */
   async getChildFees(currentUser, childStudent) {
     let fee = await Fee.findOne({ student: childStudent._id });
 
-    // Auto-create initial fee invoice if none exists
     if (!fee) {
       fee = await Fee.create({
         student: childStudent._id,
@@ -255,9 +218,6 @@ class ParentService {
     };
   }
 
-  /**
-   * Child Notices & Circulars
-   */
   async getChildNotices(currentUser, childStudent) {
     const notices = await Notification.find({
       $or: [
@@ -275,9 +235,6 @@ class ParentService {
     };
   }
 
-  /**
-   * Apply Child Leave (Parent requesting leave on behalf of child)
-   */
   async applyChildLeave(currentUser, childStudent, leaveData) {
     const start = new Date(leaveData.startDate);
     const end = new Date(leaveData.endDate);
@@ -288,7 +245,6 @@ class ParentService {
 
     const diffDays = Math.ceil(Math.abs(end - start) / (1000 * 60 * 60 * 24)) + 1;
 
-    // Create Notification / Leave notice for class teacher and administration
     const notice = await Notification.create({
       title: `Child Leave Request - ${childStudent.fullName} (${childStudent.class}-${childStudent.section})`,
       message: `Parent ${currentUser.fullName} has requested ${diffDays} day(s) leave for ${childStudent.fullName} from ${start.toDateString()} to ${end.toDateString()}. Reason: ${leaveData.reason}`,
@@ -324,9 +280,6 @@ class ParentService {
     };
   }
 
-  /**
-   * Communication: Send message to child's teacher
-   */
   async sendMessage(currentUser, childStudent, messageData) {
     if (!mongoose.Types.ObjectId.isValid(messageData.recipient)) {
       throw ApiError.badRequest('Invalid recipient teacher ID');
@@ -340,7 +293,6 @@ class ParentService {
       body: messageData.body,
     });
 
-    // Generate in-app notification for the teacher
     await Notification.create({
       title: `Parent Message from ${currentUser.fullName}`,
       message: `Re: ${childStudent ? childStudent.fullName : 'Academic'}: ${messageData.subject}`,
@@ -352,9 +304,6 @@ class ParentService {
     return message;
   }
 
-  /**
-   * Communication: Get parent messages
-   */
   async getMessages(currentUser) {
     const messages = await Message.find({
       $or: [{ sender: currentUser._id }, { recipient: currentUser._id }],
@@ -367,9 +316,6 @@ class ParentService {
     return messages;
   }
 
-  /**
-   * Notifications for parent
-   */
   async getNotifications(currentUser) {
     const notifications = await Notification.find({
       $or: [
@@ -387,9 +333,6 @@ class ParentService {
     };
   }
 
-  /**
-   * Child Profile (Specification 20.2)
-   */
   async getChildProfile(currentUser, childStudent) {
     const classTeacher = await Teacher.findOne({
       assignedClasses: {
@@ -434,9 +377,6 @@ class ParentService {
     };
   }
 
-  /**
-   * Academic Progress (Specification 20.2)
-   */
   async getChildAcademicProgress(currentUser, childStudent) {
     const studentIds = [childStudent._id];
     if (childStudent.user) studentIds.push(childStudent.user);
@@ -467,9 +407,6 @@ class ParentService {
     };
   }
 
-  /**
-   * Official Fee Payment Receipts (Specification 20.2)
-   */
   async getChildReceipts(currentUser, childStudent) {
     let fee = await Fee.findOne({ student: childStudent._id });
 
@@ -501,9 +438,6 @@ class ParentService {
     };
   }
 
-  /**
-   * Child Leaves History (Specification 20.2)
-   */
   async getChildLeaves(currentUser, childStudent) {
     const notifications = await Notification.find({
       type: 'LEAVE_STATUS',
@@ -530,9 +464,6 @@ class ParentService {
     };
   }
 
-  /**
-   * Appointments List (Specification 20.2)
-   */
   async getAppointments(currentUser) {
     const appointments = [
       {
@@ -563,9 +494,6 @@ class ParentService {
     };
   }
 
-  /**
-   * Book Appointment (Specification 20.2)
-   */
   async bookAppointment(currentUser, appointmentData) {
     if (!appointmentData.date || !appointmentData.agenda) {
       throw ApiError.badRequest('Appointment booking requires date and agenda');
@@ -584,7 +512,6 @@ class ParentService {
       bookedAt: new Date(),
     };
 
-    // Alert faculty / office
     try {
       await Notification.create({
         title: `Parent Meeting Request from ${currentUser.fullName}`,
@@ -601,9 +528,6 @@ class ParentService {
     };
   }
 
-  /**
-   * School Events & PTM Schedule (Specification 20.2)
-   */
   async getEvents(currentUser) {
     const events = [
       {
@@ -644,9 +568,6 @@ class ParentService {
     };
   }
 
-  /**
-   * Official Child Documents (Specification 20.2)
-   */
   async getChildDocuments(currentUser, childStudent) {
     const documents = [
       {
@@ -688,9 +609,6 @@ class ParentService {
     };
   }
 
-  /**
-   * Help & Support (Specification 20.2)
-   */
   async getHelpSupport(currentUser) {
     const faqs = [
       {
@@ -714,9 +632,6 @@ class ParentService {
     };
   }
 
-  /**
-   * Submit Support Ticket (Specification 20.2)
-   */
   async submitHelpSupportTicket(currentUser, ticketData) {
     if (!ticketData.subject || !ticketData.description) {
       throw ApiError.badRequest('Ticket requires subject and description');
@@ -735,12 +650,6 @@ class ParentService {
     };
   }
 
-  /**
-   * Submit Correction Request (CRITICAL REQUIREMENT Specification 20.2):
-   * "Parents should not be able to change verified attendance, examination marks,
-   * fee balances or official school records directly. They can submit requests for
-   * corrections that authorized staff review."
-   */
   async submitCorrectionRequest(currentUser, childStudent, requestData) {
     const { module, fieldToCorrect, currentValue, requestedValue, reason, evidenceUrl, recordReference } = requestData;
 
@@ -781,7 +690,6 @@ class ParentService {
       ],
     });
 
-    // Alert administration and teacher of pending correction request
     try {
       await Notification.create({
         title: `Pending Correction Request: ${requestId} (${module})`,
@@ -803,9 +711,6 @@ class ParentService {
     };
   }
 
-  /**
-   * Get Correction Requests (Specification 20.2)
-   */
   async getCorrectionRequests(currentUser, childStudent) {
     const requests = await CorrectionRequest.find({
       student: childStudent._id,

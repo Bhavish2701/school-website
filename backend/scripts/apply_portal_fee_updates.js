@@ -4,7 +4,6 @@ const path = require('path');
 const portalPath = path.join(__dirname, '../../frontend/js/portal.js');
 let content = fs.readFileSync(portalPath, 'utf8');
 
-// 1. Add Fee Functions right after refreshDashboardTimetableAndExams
 const targetAfterTimetable = `          if (isManual && typeof showToast === 'function') {
             showToast('Timetable & examination calendar synchronized with school database.', 'fa-arrows-rotate');
           }
@@ -308,7 +307,6 @@ if (!content.includes(targetAfterTimetable)) {
 content = content.replace(targetAfterTimetable, feeFunctionsContent);
 console.log('✓ Successfully added fee dashboard functions');
 
-// 2. Hook into renderDashboardLiveMetrics
 const targetInLiveMetrics = `    if (Array.isArray(data.upcomingExams)) {
       dashboardUpcomingExams = data.upcomingExams;
       renderDashboardUpcomingExamsLive(dashboardUpcomingExams);
@@ -333,7 +331,6 @@ if (!content.includes(targetInLiveMetrics)) {
 content = content.replace(targetInLiveMetrics, replacementInLiveMetrics);
 console.log('✓ Successfully hooked renderDashboardFeeOverviewLive into renderDashboardLiveMetrics');
 
-// 3. Export in portalApp
 const targetExport = `    // Timetable & Upcoming Exams Exports
     renderDashboardUpcomingExamsLive,
     renderDashboardSubstitutionsLive,

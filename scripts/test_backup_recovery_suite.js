@@ -1,13 +1,3 @@
-/**
- * Acceptance Test Suite: Module 12 - Backups & Recovery
- * Sri Vidya Educational Trust Platform Administration Console
- * 
- * Verifies:
- * - 12.1 Backup Overview (Database, File Vault, Schedule, Storage Status, Retention, Failed Backups, Latest Recovery Test)
- * - 12.2 Backup History (8 Columns, Verify Backup, Start Authorized Backup, Download with Policy Guard)
- * - 12.3 Controlled 8-Step Recovery Workflow (Dual-Authorization Safeguard, Target Isolation, Integrity Check, Audit Sealing)
- * - Frontend HTML Elements, Modals, and JavaScript Controller Contract
- */
 
 const http = require('http');
 const fs = require('fs');
@@ -75,9 +65,6 @@ async function runBackupRecoverySuite() {
   }
 
   try {
-    // --------------------------------------------------------------------------
-    // Test 1: 12.1 Backup Overview Endpoint & 7 Display Fields
-    // --------------------------------------------------------------------------
     console.log('--- TEST 1: 12.1 Backup Overview Telemetry ---');
     const overviewRes = await makeRequest('GET', '/api/v1/platform/backups/overview');
     assert(overviewRes.status === 200, `Overview endpoint returns HTTP 200 (Got ${overviewRes.status})`);
@@ -92,9 +79,6 @@ async function runBackupRecoverySuite() {
     assert(ov.failedBackups && ov.failedBackups.totalFailedCount !== undefined, 'Failed backups counter and error events reported');
     assert(ov.latestRecoveryTest && ov.latestRecoveryTest.drillId, 'Latest recovery test drill reports 100% fidelity');
 
-    // --------------------------------------------------------------------------
-    // Test 2: 12.2 Backup History Register & 8 Columns Verification
-    // --------------------------------------------------------------------------
     console.log('\n--- TEST 2: 12.2 Backup History Register & Column Integrity ---');
     const backupsRes = await makeRequest('GET', '/api/v1/platform/backups');
     assert(backupsRes.status === 200, `Backups list returns HTTP 200 (Got ${backupsRes.status})`);
@@ -111,9 +95,6 @@ async function runBackupRecoverySuite() {
     assert(firstBkp.storageReference && firstBkp.storageReference.startsWith('s3://'), 'Column 7: Storage reference is encrypted cloud URI');
     assert(firstBkp.verificationStatus, 'Column 8: Verification status present');
 
-    // --------------------------------------------------------------------------
-    // Test 3: Start an Authorized Backup Action
-    // --------------------------------------------------------------------------
     console.log('\n--- TEST 3: Start Authorized Backup Action ---');
     const newBackupPayload = {
       scope: 'FULL_TRUST',
@@ -130,32 +111,21 @@ async function runBackupRecoverySuite() {
     assert(createdBackupId && createdBackupId.startsWith('BKP-'), `Backup assigned valid ID: ${createdBackupId}`);
     assert(startRes.body.data?.checksumSha256?.length === 64, 'Generated cryptographic SHA-256 checksum (64 chars)');
 
-    // --------------------------------------------------------------------------
-    // Test 4: Verify Backup Action (Re-calculate Checksum)
-    // --------------------------------------------------------------------------
     console.log('\n--- TEST 4: Verify Backup Action ---');
     const verifyRes = await makeRequest('POST', `/api/v1/platform/backups/${createdBackupId}/verify`);
     assert(verifyRes.status === 200, `Verify backup returns HTTP 200 (Got ${verifyRes.status})`);
     assert(verifyRes.body.success === true, 'Verification completed successfully');
     assert(verifyRes.body.data?.verificationStatus === 'VERIFIED_CLEAN', 'Verification status marked as VERIFIED_CLEAN');
 
-    // --------------------------------------------------------------------------
-    // Test 5: Download Backup Action & Security Policy Enforcement
-    // --------------------------------------------------------------------------
     console.log('\n--- TEST 5: Download Backup Action & Policy Guard ---');
-    // Permitted download test
     const downloadPermittedRes = await makeRequest('GET', `/api/v1/platform/backups/${createdBackupId}/download`);
     assert(downloadPermittedRes.status === 200, 'Permitted backup download returns HTTP 200 with manifest');
     assert(downloadPermittedRes.body.downloadManifest?.signedUrl, 'Download manifest includes temporary signed URL');
 
-    // Restricted download test (BKP-2026-002: raw files vault)
     const downloadRestrictedRes = await makeRequest('GET', '/api/v1/platform/backups/BKP-2026-002/download');
     assert(downloadRestrictedRes.status === 403, `Restricted vault download returns HTTP 403 (Got ${downloadRestrictedRes.status})`);
     assert(downloadRestrictedRes.body.restricted === true, 'Direct download correctly blocked by statutory security policy');
 
-    // --------------------------------------------------------------------------
-    // Test 6: 12.3 Recovery Workflow - Steps 1, 2, 3 (Request & Impact Review)
-    // --------------------------------------------------------------------------
     console.log('\n--- TEST 6: Recovery Workflow Steps 1, 2, 3 (Request & Impact Assessment) ---');
     const recoveryRequestPayload = {
       backupId: createdBackupId,
@@ -174,14 +144,10 @@ async function runBackupRecoverySuite() {
     assert(reqRecoveryRes.body.data?.approvalStatus === 'PENDING_APPROVAL', 'Approval status is PENDING_APPROVAL');
     assert(reqRecoveryRes.body.data?.potentialImpact?.recordsCount > 0, 'Potential impact records reconciled assessed');
 
-    // --------------------------------------------------------------------------
-    // Test 7: 12.3 Recovery Workflow - Step 4 Dual-Authorization Safeguard
-    // --------------------------------------------------------------------------
     console.log('\n--- TEST 7: Step 4 Dual-Authorization Safeguard ---');
-    // Attempt self-approval by same operator -> Must be rejected
     const selfApprovalRes = await makeRequest('POST', `/api/v1/platform/backups/recovery-requests/${createdRecId}/approve`, {
       approver: {
-        userId: 'USR-PLAT-OPERATOR', // Same as requester!
+        userId: 'USR-PLAT-OPERATOR',
         name: 'Platform Operator',
         role: 'Platform Operations'
       }
@@ -189,11 +155,7 @@ async function runBackupRecoverySuite() {
     assert(selfApprovalRes.status === 403, `Self-approval rejected with HTTP 403 (Got ${selfApprovalRes.status})`);
     assert(selfApprovalRes.body.message.includes('Dual-authorization'), 'Security error message enforces dual-authorization');
 
-    // --------------------------------------------------------------------------
-    // Test 8: 12.3 Recovery Workflow - Steps 4 to 8 Execution & Audit Sealing
-    // --------------------------------------------------------------------------
     console.log('\n--- TEST 8: Steps 4 to 8 Execution, Integrity Check & Audit Sealing ---');
-    // Authorized independent approval
     const validApprovalRes = await makeRequest('POST', `/api/v1/platform/backups/recovery-requests/${createdRecId}/approve`, {
       approver: {
         userId: 'USR-PLAT-CHIEF-OWNER',
@@ -212,9 +174,6 @@ async function runBackupRecoverySuite() {
     assert(executedRecovery.validationSummary && executedRecovery.validationSummary.includes('Validation Successful'), 'Step 7: System validated successfully');
     assert(executedRecovery.auditLogRef && executedRecovery.auditLogRef.startsWith('AUD-REC-'), 'Step 8: Recovery sealed with audit log reference');
 
-    // --------------------------------------------------------------------------
-    // Test 9: Frontend HTML Elements & Modals Inspection
-    // --------------------------------------------------------------------------
     console.log('\n--- TEST 9: Frontend HTML Elements & Modals Verification ---');
     const htmlPath = path.join(__dirname, '..', 'frontend', 'platform-admin', 'index.html');
     const htmlContent = fs.readFileSync(htmlPath, 'utf8');
@@ -244,9 +203,6 @@ async function runBackupRecoverySuite() {
       assert(htmlContent.includes(`id="${id}"`), `HTML contains element with id="${id}"`);
     });
 
-    // --------------------------------------------------------------------------
-    // Test 10: Frontend JavaScript Controller Methods Contract
-    // --------------------------------------------------------------------------
     console.log('\n--- TEST 10: Frontend JavaScript Controller Methods Contract ---');
     const jsPath = path.join(__dirname, '..', 'frontend', 'js', 'platform-admin.js');
     const jsContent = fs.readFileSync(jsPath, 'utf8');

@@ -10,7 +10,6 @@ async function testBackend() {
   const timetableService = require('../src/services/timetable.service');
   const examService = require('../src/services/exam.service');
 
-  // Test 1: Management Dashboard returns timetable and upcomingExams
   const dashData = await dashboardService.getManagementDashboard({ role: 'PRINCIPAL' });
 
   console.log('Timetable Data:');
@@ -25,15 +24,12 @@ async function testBackend() {
     console.log(`  [${idx + 1}] ${ex.name} - Classes: ${ex.classes} - Dates: ${ex.datesFormatted} - Status: ${ex.status} - Hall Tickets: ${ex.hallTicketStatus}`);
   });
 
-  // Verify SA-1 is excluded
   const hasPastSA1 = dashData.upcomingExams?.some(e => e.name.includes('SA-1') || e.name.includes('Quarterly'));
   console.log('  Past SA-1 excluded:', !hasPastSA1 ? 'PASS' : 'FAIL');
 
-  // Verify Science Olympiad (past) is excluded
   const hasPastOlympiad = dashData.upcomingExams?.some(e => e.name.includes('Olympiad'));
   console.log('  Past Olympiad excluded:', !hasPastOlympiad ? 'PASS' : 'FAIL');
 
-  // Verify chronological order
   let isSorted = true;
   for (let i = 0; i < dashData.upcomingExams.length - 1; i++) {
     if (new Date(dashData.upcomingExams[i].startDate) > new Date(dashData.upcomingExams[i + 1].startDate)) {

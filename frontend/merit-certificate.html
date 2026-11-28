@@ -38,7 +38,6 @@
       padding: 2rem 1rem 4rem;
     }
 
-    /* ---------- CONTROLS ---------- */
     .control-panel {
       display: flex;
       gap: 1rem;
@@ -78,7 +77,6 @@
 
     .ctrl-btn.secondary:hover { background: rgba(255,255,255,0.2); }
 
-    /* Toast Notification */
     .cert-toast {
       position: fixed;
       bottom: 25px;
@@ -105,7 +103,6 @@
       transform: translateX(-50%) translateY(0);
     }
 
-    /* ---------- CERT WRAPPER ---------- */
     .certificate-wrapper { width: 880px; max-width: 98vw; }
 
     .cert-frame-outer {
@@ -123,7 +120,6 @@
       position: relative;
     }
 
-    /* Inner double-rule border */
     .cert-frame-inner::before {
       content: '';
       position: absolute;
@@ -140,7 +136,6 @@
       overflow: hidden;
     }
 
-    /* Watermark */
     .watermark-logo {
       position: absolute;
       top: 50%; left: 50%;
@@ -152,7 +147,6 @@
       z-index: 0;
     }
 
-    /* Corner ornaments */
     .corner-ornament {
       position: absolute;
       width: 90px; height: 90px;
@@ -165,14 +159,12 @@
     .corner-ornament.bl { bottom: 6px; left: 6px; transform: scaleY(-1); }
     .corner-ornament.br { bottom: 6px; right: 6px; transform: scale(-1,-1); }
 
-    /* Content */
     .cert-content {
       position: relative;
       z-index: 1;
       padding: 2.2rem 3.5rem 1.5rem 3.5rem;
     }
 
-    /* ---------- HEADER ---------- */
     .cert-header {
       display: flex;
       align-items: center;
@@ -235,7 +227,6 @@
     .cert-no-label { font-size: 0.6rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); }
     .cert-no-value { font-family: 'Cinzel', serif; font-size: 0.82rem; font-weight: 700; color: var(--navy); margin-top: 0.15rem; }
 
-    /* ---------- DIVIDERS ---------- */
     .gold-divider {
       display: flex; align-items: center; gap: 0.75rem; margin: 0.65rem 0;
     }
@@ -247,7 +238,6 @@
 
     .divider-star { color: var(--gold-lt); font-size: 0.9rem; }
 
-    /* ---------- TITLE BLOCK ---------- */
     .cert-title-block { text-align: center; margin: 0.4rem 0 0.8rem; }
 
     .cert-type-label {
@@ -271,7 +261,6 @@
       color: var(--text-muted); letter-spacing: 1px;
     }
 
-    /* ---------- RANK MEDAL ---------- */
     .rank-medal-container { display: flex; justify-content: center; margin: 0.4rem 0 0.6rem; }
 
     .rank-medal {
@@ -288,7 +277,6 @@
     .rank-medal .medal-icon { font-size: 1.25rem; }
     .rank-medal .medal-text { font-family: 'Cinzel', serif; font-size: 0.88rem; font-weight: 700; letter-spacing: 2px; }
 
-    /* ---------- CITATION ---------- */
     .citation-text {
       text-align: center;
       font-family: 'EB Garamond', serif;
@@ -296,7 +284,6 @@
       margin: 0.2rem 0 0.6rem;
     }
 
-    /* ---------- AWARDEE ---------- */
     .awardee-block { text-align: center; margin: 0.5rem 0; }
 
     .to-label {
@@ -319,7 +306,6 @@
       margin-top: 0.15rem; border-radius: 2px;
     }
 
-    /* ---------- DETAIL PILLS ---------- */
     .details-row {
       display: flex; justify-content: center;
       gap: 1.5rem; margin: 0.65rem 0; flex-wrap: wrap;
@@ -336,7 +322,6 @@
     .detail-pill .dp-label { font-size: 0.65rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.8px; font-weight: 600; }
     .detail-pill .dp-value { font-family: 'EB Garamond', serif; font-size: 0.9rem; font-weight: 700; color: var(--navy); }
 
-    /* ---------- ACHIEVEMENT BANNER ---------- */
     .achievement-banner {
       background: linear-gradient(135deg, var(--navy) 0%, #1e3a8a 100%);
       border: 2px solid var(--border-gold);
@@ -355,14 +340,12 @@
     .ach-text { font-family: 'Playfair Display', serif; font-size: 1.1rem; font-weight: 700; color: #fff; position: relative; }
     .ach-score { font-family: 'Cinzel', serif; font-size: 1.1rem; font-weight: 900; color: var(--gold-hl); margin-top: 0.2rem; letter-spacing: 2px; position: relative; }
 
-    /* ---------- BODY TEXT ---------- */
     .cert-body-text {
       font-family: 'EB Garamond', serif;
       font-size: 0.97rem; color: var(--text-body);
       line-height: 1.78; text-align: center; margin: 0.45rem 0;
     }
 
-    /* ---------- SIGNATURES ---------- */
     .sign-row {
       display: grid;
       grid-template-columns: 1fr auto 1fr;
@@ -375,7 +358,6 @@
     .sign-name { font-family: 'Cinzel', serif; font-size: 0.78rem; font-weight: 700; color: var(--navy); letter-spacing: 1px; text-transform: uppercase; }
     .sign-title { font-family: 'EB Garamond', serif; font-size: 0.75rem; color: var(--text-muted); margin-top: 0.05rem; }
 
-    /* Official Seal */
     .seal-container { display: flex; flex-direction: column; align-items: center; gap: 0.2rem; }
 
     .official-seal {
@@ -408,7 +390,6 @@
       position: relative; z-index: 1;
     }
 
-    /* ---------- FOOTER BAND ---------- */
     .cert-footer-band {
       margin-top: 0.75rem; padding: 0.85rem 1.25rem;
       background: linear-gradient(90deg, var(--navy) 0%, #1e3a8a 50%, var(--navy) 100%);
@@ -440,7 +421,6 @@
     .qr-container canvas, .qr-container img { width: 100% !important; height: 100% !important; }
     .qr-label { font-size: 0.58rem; color: var(--gold-lt); font-weight: 700; letter-spacing: 1px; }
 
-    /* ---------- PRINT STYLES (FULL-HEIGHT SINGLE A4 PAGE) ---------- */
     @page {
       size: A4 portrait;
       margin: 4mm 5mm;
@@ -538,7 +518,6 @@
         padding: 1.3rem 2.8rem 0.6rem 2.8rem !important;
       }
 
-      /* Header */
       .cert-header {
         display: flex !important;
         flex-direction: row !important;
@@ -594,7 +573,6 @@
         font-size: 0.82rem !important;
       }
 
-      /* Dividers */
       .gold-divider {
         margin: 0.4rem 0 !important;
       }
@@ -603,7 +581,6 @@
         font-size: 0.85rem !important;
       }
 
-      /* Title */
       .cert-title-block {
         margin: 0.2rem 0 0.4rem !important;
       }
@@ -623,7 +600,6 @@
         font-size: 0.95rem !important;
       }
 
-      /* Medal */
       .rank-medal-container {
         margin: 0.25rem 0 0.4rem !important;
       }
@@ -641,14 +617,12 @@
         letter-spacing: 2px !important;
       }
 
-      /* Citation */
       .citation-text {
         font-size: 1.02rem !important;
         line-height: 1.5 !important;
         margin: 0.15rem 0 0.35rem !important;
       }
 
-      /* Awardee */
       .awardee-block {
         margin: 0.25rem 0 !important;
       }
@@ -662,7 +636,6 @@
         margin: 0.08rem 0 !important;
       }
 
-      /* Detail pills */
       .details-row {
         gap: 1rem !important;
         margin: 0.45rem 0 !important;
@@ -684,7 +657,6 @@
         font-size: 0.88rem !important;
       }
 
-      /* Achievement banner */
       .achievement-banner {
         padding: 0.6rem 1.8rem !important;
         margin: 0.45rem 0 !important;
@@ -704,14 +676,12 @@
         margin-top: 0.15rem !important;
       }
 
-      /* Body text */
       .cert-body-text {
         font-size: 0.94rem !important;
         line-height: 1.65 !important;
         margin: 0.35rem 0 !important;
       }
 
-      /* Signatures row: STRICTLY 3-columns horizontal */
       .sign-row {
         display: grid !important;
         grid-template-columns: 1fr auto 1fr !important;
@@ -770,7 +740,6 @@
         letter-spacing: 1.2px !important;
       }
 
-      /* Footer band */
       .cert-footer-band {
         margin-top: 0 !important;
         padding: 0.65rem 1.3rem !important;
@@ -804,7 +773,6 @@
       }
     }
 
-    /* Screen-only responsive adjustments */
     @media screen and (max-width: 920px) {
       .cert-content { padding: 1.5rem 1.5rem 1rem; }
       .cert-main-title { font-size: 1.8rem; letter-spacing: 2px; }
@@ -818,7 +786,6 @@
 </head>
 <body>
 
-  <!-- CONTROLS -->
   <div class="control-panel">
     <button class="ctrl-btn primary" onclick="window.print()">
       <i class="fa-solid fa-print"></i> Print / Save as PDF
@@ -831,17 +798,14 @@
     </a>
   </div>
 
-  <!-- CERTIFICATE -->
   <div class="certificate-wrapper">
     <div class="cert-frame-outer">
       <div class="cert-frame-inner">
         <div class="certificate" id="certificateDocument">
 
-          <!-- WATERMARK -->
           <img src="assets/images/school-logo.jpg" alt="" class="watermark-logo"
                onerror="this.style.display='none'">
 
-          <!-- CORNER ORNAMENTS -->
           <div class="corner-ornament tl">
             <svg viewBox="0 0 90 90" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M8 8 L38 8" stroke="#b8860b" stroke-width="2.5" stroke-linecap="round"/>
@@ -889,10 +853,8 @@
             </svg>
           </div>
 
-          <!-- CONTENT -->
           <div class="cert-content">
 
-            <!-- === HEADER === -->
             <div class="cert-header">
               <img src="assets/images/school-logo.jpg" alt="Sri Vidya Logo" class="cert-school-logo"
                    onerror="this.src='data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'90\' height=\'90\'%3E%3Ccircle cx=\'45\' cy=\'45\' r=\'43\' fill=\'%230d1b40\' stroke=\'%23b8860b\' stroke-width=\'2\'/%3E%3Ctext x=\'45\' y=\'52\' text-anchor=\'middle\' font-size=\'26\' fill=\'%23d4af37\' font-weight=\'bold\'%3ESV%3C/text%3E%3C/svg%3E'">
@@ -918,21 +880,18 @@
               </div>
             </div>
 
-            <!-- DIVIDER -->
             <div class="gold-divider">
               <span class="divider-star">&#10022;</span>
               <span class="divider-star">&#10022;</span>
               <span class="divider-star">&#10022;</span>
             </div>
 
-            <!-- TITLE -->
             <div class="cert-title-block">
               <div class="cert-type-label">Sri Vidya E.M. High School Proudly Presents</div>
               <div class="cert-main-title">Merit Certificate</div>
               <div class="cert-subtitle">Academic Excellence &amp; Outstanding Achievement Award</div>
             </div>
 
-            <!-- RANK MEDAL -->
             <div class="rank-medal-container">
               <div class="rank-medal" id="rankMedal">
                 <span class="medal-icon" id="rankIcon">&#127945;</span>
@@ -940,16 +899,13 @@
               </div>
             </div>
 
-            <!-- CITATION -->
             <p class="citation-text">This is to certify with great honour and distinguished pride that</p>
 
-            <!-- AWARDEE -->
             <div class="awardee-block">
               <div class="to-label">&mdash; The Student &mdash;</div>
               <div class="awardee-name" id="awardeeName">P. Hema Latha</div>
             </div>
 
-            <!-- DETAIL PILLS -->
             <div class="details-row">
               <div class="detail-pill">
                 <i class="fa-solid fa-school dp-icon"></i>
@@ -973,14 +929,12 @@
               </div>
             </div>
 
-            <!-- ACHIEVEMENT BANNER -->
             <div class="achievement-banner">
               <div class="ach-label">&#9733; &nbsp; Distinction &amp; Special Achievement &nbsp; &#9733;</div>
               <div class="ach-text" id="achText">Distinction in Mathematics &amp; Science (100%)</div>
               <div class="ach-score" id="achScore">GPA: 10.0 / 10.0 &nbsp;&bull;&nbsp; BOARD &amp; SCHOOL TOPPER</div>
             </div>
 
-            <!-- BODY TEXT -->
             <p class="cert-body-text" id="certBody">
               has demonstrated <strong>exemplary academic excellence</strong>, intellectual merit, and extraordinary dedication
               throughout the academic year 2024&ndash;25. This student has brought exceptional honour and pride to
@@ -988,17 +942,14 @@
               We extend our heartfelt congratulations and wish continued success in all future endeavours.
             </p>
 
-            <!-- DIVIDER -->
             <div class="gold-divider">
               <span class="divider-star">&#10022;</span>
               <span class="divider-star">&#10022;</span>
               <span class="divider-star">&#10022;</span>
             </div>
 
-            <!-- SIGNATURES -->
             <div class="sign-row">
 
-              <!-- Class Teacher -->
               <div class="sign-block">
                 <div class="sign-svg-area">
                   <svg width="170" height="60" viewBox="0 0 170 60" xmlns="http://www.w3.org/2000/svg">
@@ -1013,7 +964,6 @@
                 <div class="sign-title" id="ctTitle">Class Teacher &ndash; X-A</div>
               </div>
 
-              <!-- Official Seal -->
               <div class="seal-container">
                 <div class="official-seal">
                   <img src="assets/images/school-logo.jpg" alt="Seal" class="seal-logo"
@@ -1023,21 +973,14 @@
                 <div style="font-size:0.58rem;color:var(--text-muted);margin-top:0.2rem;font-style:italic;">Official Seal</div>
               </div>
 
-              <!-- Principal Signature -->
               <div class="sign-block">
                 <div class="sign-svg-area">
                   <svg width="170" height="60" viewBox="0 0 170 60" xmlns="http://www.w3.org/2000/svg">
-                    <!-- G -->
                     <path d="M10,30 C8,17 18,8 30,10 S42,20 38,30 S28,38 24,30 L29,28" stroke="#0d1b40" stroke-width="2.5" fill="none" stroke-linecap="round"/>
-                    <!-- V -->
                     <path d="M45,12 L57,36 L68,12" stroke="#0d1b40" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-                    <!-- flowing middle -->
                     <path d="M70,22 C80,8 90,40 100,22 S112,8 122,22" stroke="#0d1b40" stroke-width="2" fill="none" stroke-linecap="round"/>
-                    <!-- tail flourish -->
                     <path d="M120,22 C134,16 150,30 162,24" stroke="#0d1b40" stroke-width="1.8" fill="none" stroke-linecap="round"/>
-                    <!-- underline -->
                     <path d="M8,48 C55,44 110,50 162,46" stroke="#b8860b" stroke-width="1.3" fill="none" stroke-linecap="round" opacity="0.65"/>
-                    <!-- dot -->
                     <circle cx="78" cy="8" r="2.8" fill="#0d1b40" opacity="0.55"/>
                   </svg>
                 </div>
@@ -1049,7 +992,6 @@
             </div>
           </div>
 
-          <!-- FOOTER BAND -->
           <div class="cert-footer-band">
             <div class="footer-left">
               <div class="footer-contact">
@@ -1126,7 +1068,6 @@
 
     function goBackToPortal(e) {
       if (e) e.preventDefault();
-      // If window was opened by script / target=_blank from portal tab
       if (window.opener && !window.opener.closed) {
         try {
           window.opener.focus();
@@ -1134,12 +1075,10 @@
           return;
         } catch(err) {}
       }
-      // If there is history within the same site, go back
       if (window.history.length > 1 && document.referrer && document.referrer.includes(window.location.host)) {
         window.history.back();
         return;
       }
-      // Otherwise navigate directly to /management
       window.location.href = '/management';
     }
 
@@ -1167,7 +1106,6 @@
       document.getElementById('footerCertNo').textContent      = certNo;
       document.getElementById('footerDate').textContent        = today;
 
-      // QR Code with robust fallback
       const qrEl = document.getElementById('qrcode');
       qrEl.innerHTML = '';
       let generated = false;

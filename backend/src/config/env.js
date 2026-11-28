@@ -1,17 +1,22 @@
-/**
- * Centralized Environment Configuration
- */
 const dotenv = require('dotenv');
 const path = require('path');
 
 dotenv.config({ path: path.resolve(__dirname, '../../.env') });
+
+const mongodbUri = (process.env.MONGODB_URI || process.env.MONGO_URI || '').trim();
+if (!mongodbUri) {
+  throw new Error('[Config] MONGODB_URI is required and must point to MongoDB Atlas.');
+}
+if (/^(mongodb(\+srv)?:\/\/)?(localhost|127\.0\.0\.1)(:|\/|$)/i.test(mongodbUri) || /@(localhost|127\.0\.0\.1)(:|\/|$)/i.test(mongodbUri)) {
+  throw new Error('[Config] Local MongoDB (localhost / 127.0.0.1) is disabled. Configure MONGODB_URI for MongoDB Atlas.');
+}
 
 const config = {
   port: parseInt(process.env.PORT || '5000', 10),
   nodeEnv: process.env.NODE_ENV || 'development',
   isDev: (process.env.NODE_ENV || 'development') === 'development',
   isProd: process.env.NODE_ENV === 'production',
-  mongodbUri: process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/srividya_school_db',
+  mongodbUri,
   corsOrigins: (process.env.CORS_ORIGIN || 'http://localhost:5000,http://127.0.0.1:5000,http://localhost:8080,https://school-website-root-nex.vercel.app')
     .split(',')
     .map(origin => origin.trim()),

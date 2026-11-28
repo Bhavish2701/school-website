@@ -1,6 +1,3 @@
-/**
- * Student Request Validation Schemas
- */
 const validate = require('../middleware/validate.middleware');
 const { STATUS_VALUES, GENDER_VALUES, BLOOD_GROUPS, FEE_STATUSES } = require('../models/student.model');
 

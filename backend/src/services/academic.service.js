@@ -1,8 +1,3 @@
-/**
- * Academic Business Logic Service Layer
- * Decouples Academic Years, Classes, Sections, Subjects, Teacher Allocations,
- * Class Assignments, and Academic Dashboard from HTTP transport.
- */
 const mongoose = require('mongoose');
 const AcademicYear = require('../models/academicYear.model');
 const ClassSection = require('../models/classSection.model');
@@ -14,9 +9,6 @@ const QueryFeatures = require('../utils/queryFeatures');
 const ApiError = require('../utils/apiError');
 
 class AcademicService {
-  // =========================================================================
-  // 1. ACADEMIC YEARS
-  // =========================================================================
   async getAcademicYears() {
     return await AcademicYear.find().sort({ startDate: -1 });
   }
@@ -41,9 +33,6 @@ class AcademicService {
     return year;
   }
 
-  // =========================================================================
-  // 2. CLASSES & SECTIONS
-  // =========================================================================
   async getClasses(queryString = {}) {
     const mongooseQuery = ClassSection.find()
       .populate('classTeacher', 'fullName employeeId phone specialization email')
@@ -58,7 +47,6 @@ class AcademicService {
 
     const result = await queryFeatures.execute();
 
-    // Attach live enrolled student count per class-section
     const classesWithEnrollment = await Promise.all(
       result.records.map(async (cls) => {
         const enrolledCount = await Student.countDocuments({
@@ -106,6 +94,11 @@ class AcademicService {
     const className = classData.className.trim();
     const section = (classData.section || 'A').trim().toUpperCase();
     const academicYear = classData.academicYear || '2025-2026';
+    const capacity = classData.capacity !== undefined ? Number(classData.capacity) : 50;
+
+    if (capacity > 50) {
+      throw ApiError.badRequest('Section capacity cannot exceed 50 students');
+    }
 
     const existing = await ClassSection.findOne({ className, section, academicYear });
     if (existing) {
@@ -120,11 +113,16 @@ class AcademicService {
       className,
       section,
       academicYear,
+      capacity,
     });
   }
 
   async updateClass(id, updateData) {
     if (!mongoose.Types.ObjectId.isValid(id)) throw ApiError.badRequest('Invalid ClassSection ID');
+
+    if (updateData.capacity !== undefined && Number(updateData.capacity) > 50) {
+      throw ApiError.badRequest('Section capacity cannot exceed 50 students');
+    }
 
     const classSection = await ClassSection.findById(id);
     if (!classSection) throw ApiError.notFound('Class / Section not found');
@@ -135,9 +133,6 @@ class AcademicService {
     return classSection;
   }
 
-  // =========================================================================
-  // 3. SUBJECTS
-  // =========================================================================
   async getSubjects(queryString = {}) {
     const mongooseQuery = Subject.find();
     const queryFeatures = new QueryFeatures(mongooseQuery, queryString)
@@ -196,9 +191,6 @@ class AcademicService {
     return { id: subject._id, code: subject.code, name: subject.name, deleted: true };
   }
 
-  // =========================================================================
-  // 4. TEACHER ALLOCATIONS (Class Teacher & Subject Allocation)
-  // =========================================================================
   async assignTeacher(classSectionId, { teacherId, subjectId, isClassTeacher = false, weeklyPeriods = 5 }) {
     if (!mongoose.Types.ObjectId.isValid(classSectionId)) throw ApiError.badRequest('Invalid ClassSection ID');
     if (!mongoose.Types.ObjectId.isValid(teacherId)) throw ApiError.badRequest('Invalid Teacher ID');
@@ -211,12 +203,10 @@ class AcademicService {
 
     let assignedSubjectName = 'General';
 
-    // 1. Assign as Class Teacher
     if (isClassTeacher) {
       classSection.classTeacher = teacher._id;
     }
 
-    // 2. Assign as Subject Teacher
     if (subjectId) {
       if (!mongoose.Types.ObjectId.isValid(subjectId)) throw ApiError.badRequest('Invalid Subject ID');
       const subject = await Subject.findById(subjectId);
@@ -224,7 +214,6 @@ class AcademicService {
 
       assignedSubjectName = subject.name;
 
-      // Remove existing allocation for this subject in the class if present
       classSection.subjectAllocations = classSection.subjectAllocations.filter(
         (alloc) => alloc.subject.toString() !== subjectId.toString()
       );
@@ -239,7 +228,6 @@ class AcademicService {
 
     await classSection.save();
 
-    // 3. Update Teacher's assignedClasses array for consistency
     const alreadyAssigned = (teacher.assignedClasses || []).some(
       (a) =>
         a.class === classSection.className &&
@@ -257,7 +245,6 @@ class AcademicService {
       await teacher.save();
     }
 
-    // Keep linked User.assignedClasses synchronized to eliminate identity split-brain
     if (teacher.user) {
       const { User } = require('../models/user.model');
       await User.findByIdAndUpdate(teacher.user, {
@@ -283,9 +270,6 @@ class AcademicService {
       .populate('subjectAllocations.subject', 'code name type');
   }
 
-  // =========================================================================
-  // 5. CLASS ASSIGNMENTS (Homework / Projects)
-  // =========================================================================
   async getAssignments(queryString = {}) {
     const mongooseQuery = Assignment.find().populate('teacher', 'fullName employeeId specialization');
 
@@ -334,9 +318,6 @@ class AcademicService {
     return { id: assignment._id, title: assignment.title, deleted: true };
   }
 
-  // =========================================================================
-  // 6. ACADEMIC DASHBOARD
-  // =========================================================================
   async getAcademicDashboard() {
     const currentYear = await AcademicYear.findOne({ isCurrent: true }) || { name: '2025-2026' };
 
@@ -345,7 +326,6 @@ class AcademicService {
     const totalSubjectsCount = await Subject.countDocuments({ status: 'ACTIVE' });
     const activeAssignmentsCount = await Assignment.countDocuments({ status: 'ACTIVE' });
 
-    // Calculate class teacher allocation rate
     const sectionsWithClassTeacher = await ClassSection.countDocuments({
       status: 'ACTIVE',
       classTeacher: { $exists: true, $ne: null },
@@ -354,7 +334,6 @@ class AcademicService {
       ? Math.round((sectionsWithClassTeacher / totalSectionsCount) * 100)
       : 100;
 
-    // Class enrollment overview
     const sections = await ClassSection.find({ status: 'ACTIVE' }).select('className section capacity');
     const classEnrollmentOverview = await Promise.all(
       sections.map(async (s) => {

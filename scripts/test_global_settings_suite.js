@@ -1,8 +1,3 @@
-/**
- * test_global_settings_suite.js
- * Acceptance test suite for Module 16: Global Platform Settings
- * Sri Vidya Educational Trust Platform Administration
- */
 
 const http = require('http');
 const fs = require('fs');
@@ -54,9 +49,6 @@ async function runTests() {
   console.log('=============================================================\n');
 
   try {
-    // -------------------------------------------------------------
-    // Test Group 1: 16.1 General Settings
-    // -------------------------------------------------------------
     console.log('--- Test Group 1: 16.1 General Settings ---');
     const resGet = await request({
       hostname: 'localhost',
@@ -82,7 +74,6 @@ async function runTests() {
     assert(gen.publicSupportContact && gen.publicSupportContact.email.includes('@srividya.edu.in'),
       'Public support email is configured');
 
-    // Update General Settings
     const resUpdateGen = await request({
       hostname: 'localhost',
       port: PORT,
@@ -103,12 +94,8 @@ async function runTests() {
     assert(resUpdateGen.data.data.platformName === 'Sri Vidya Educational Trust Unified ERP',
       'Platform name successfully updated');
 
-    // -------------------------------------------------------------
-    // Test Group 2: 16.2 Authentication Settings & Safety Invariants
-    // -------------------------------------------------------------
     console.log('\n--- Test Group 2: 16.2 Authentication Settings & Invariants ---');
 
-    // Invariant Rule A: Disabling localPassword must be REJECTED to preserve administrator safe recovery
     const resDisallowNoLocal = await request({
       hostname: 'localhost',
       port: PORT,
@@ -128,7 +115,6 @@ async function runTests() {
            resDisallowNoLocal.data.message.includes('safe recovery method'),
       'Error message explicitly warns about preserving administrator safe recovery');
 
-    // Invariant Rule B: Disabling breakGlassEmergencyAccessEnabled must be REJECTED
     const resDisallowNoBreakGlass = await request({
       hostname: 'localhost',
       port: PORT,
@@ -140,7 +126,6 @@ async function runTests() {
     assert(resDisallowNoBreakGlass.status === 400,
       'Invariant: Disabling break-glass emergency recovery access returns 400 Bad Request');
 
-    // Validation Rule C: minLength < 8 must be REJECTED
     const resDisallowShortPwd = await request({
       hostname: 'localhost',
       port: PORT,
@@ -153,7 +138,6 @@ async function runTests() {
     });
     assert(resDisallowShortPwd.status === 400, 'Validation: Password minLength < 8 returns 400 Bad Request');
 
-    // Validation Rule D: inactivityTimeoutMinutes < 5 must be REJECTED
     const resDisallowTinyTimeout = await request({
       hostname: 'localhost',
       port: PORT,
@@ -166,7 +150,6 @@ async function runTests() {
     });
     assert(resDisallowTinyTimeout.status === 400, 'Validation: Inactivity timeout < 5 mins returns 400 Bad Request');
 
-    // Valid Authentication Update
     const resValidAuth = await request({
       hostname: 'localhost',
       port: PORT,
@@ -200,9 +183,6 @@ async function runTests() {
     assert(resValidAuth.data.data.supportedAuthMethods.localPassword === true,
       'Local Password authentication remains preserved');
 
-    // -------------------------------------------------------------
-    // Test Group 3: 16.3 Platform Feature Controls
-    // -------------------------------------------------------------
     console.log('\n--- Test Group 3: 16.3 Platform Feature Controls ---');
     const resFeatures = await request({
       hostname: 'localhost',
@@ -237,7 +217,6 @@ async function runTests() {
     assert(parentPortalFeature.applicableInstitutions.includes('SV-MAIN'),
       'Parent Portal is pilot-gated to SV-MAIN');
 
-    // Register a new feature flag
     const newFeatureKey = `bus_gps_${Date.now()}`;
     const resCreateFeat = await request({
       hostname: 'localhost',
@@ -256,7 +235,6 @@ async function runTests() {
     assert(resCreateFeat.status === 201, 'POST /api/v1/platform/settings/features returns 201 Created');
     assert(resCreateFeat.data.data.featureKey === newFeatureKey, 'Created feature flag has correct key');
 
-    // Update feature rollout to GA
     const resUpdateFeat = await request({
       hostname: 'localhost',
       port: PORT,
@@ -273,7 +251,6 @@ async function runTests() {
     assert(resUpdateFeat.data.data.availability === 'GLOBAL_ENABLED', 'Feature availability updated to GLOBAL_ENABLED');
     assert(resUpdateFeat.data.data.rolloutStatus === 'GA', 'Rollout status is GA');
 
-    // Quick toggle feature
     const resToggleFeat = await request({
       hostname: 'localhost',
       port: PORT,
@@ -283,9 +260,6 @@ async function runTests() {
     assert(resToggleFeat.status === 200, 'POST /api/v1/platform/settings/features/:id/toggle returns 200 OK');
     assert(resToggleFeat.data.data.availability === 'DISABLED', 'Feature availability toggled to DISABLED');
 
-    // -------------------------------------------------------------
-    // Test Group 4: 16.4 Maintenance Settings & Safeguards
-    // -------------------------------------------------------------
     console.log('\n--- Test Group 4: 16.4 Maintenance Settings & Safeguards ---');
     const resMaint = await request({
       hostname: 'localhost',
@@ -299,7 +273,6 @@ async function runTests() {
     assert(resMaint.data.data.operatorLockoutProtection === true,
       'Safeguard Invariant: Operator lockout protection is permanently active');
 
-    // Schedule maintenance window
     const startTime = new Date(Date.now() + 3600000 * 24).toISOString();
     const endTime = new Date(Date.now() + 3600000 * 27).toISOString();
     const resSched = await request({
@@ -317,7 +290,6 @@ async function runTests() {
     assert(resSched.status === 200, 'POST /api/v1/platform/settings/maintenance/schedule returns 200 OK');
     assert(resSched.data.success === true, 'Schedule maintenance returned success');
 
-    // Activate Maintenance Mode (with Administrator Lockout Protection Invariant)
     const resActivateMaint = await request({
       hostname: 'localhost',
       port: PORT,
@@ -333,7 +305,6 @@ async function runTests() {
     assert(resActivateMaint.data.data.operatorLockoutProtection === true,
       'Safeguard Invariant: operatorLockoutProtection is guaranteed true during maintenance');
 
-    // Preview maintenance announcement
     const resPreviewMaint = await request({
       hostname: 'localhost',
       port: PORT,
@@ -344,7 +315,6 @@ async function runTests() {
     assert(resPreviewMaint.data.data.operatorBypassActive === true,
       'Preview includes operator bypass confirmation');
 
-    // Deactivate Maintenance Mode
     const resDeactivateMaint = await request({
       hostname: 'localhost',
       port: PORT,
@@ -356,9 +326,6 @@ async function runTests() {
     assert(resDeactivateMaint.status === 200, 'POST end maintenance returns 200 OK');
     assert(resDeactivateMaint.data.data.isActive === false, 'Maintenance mode is now INACTIVE');
 
-    // -------------------------------------------------------------
-    // Test Group 5: Frontend HTML & JS Integrity
-    // -------------------------------------------------------------
     console.log('\n--- Test Group 5: Frontend HTML & JS Integrity ---');
     const htmlPath = path.join(__dirname, '..', 'frontend', 'platform-admin', 'index.html');
     const html = fs.readFileSync(htmlPath, 'utf8');
@@ -371,13 +338,11 @@ async function runTests() {
     assert(html.includes('id="tbodyFeatureControls"'), 'HTML contains tbodyFeatureControls');
     assert(html.includes('id="tbodyMaintenanceHistory"'), 'HTML contains tbodyMaintenanceHistory');
 
-    // Modals
     assert(html.includes('id="modalAddFeatureFlag"'), 'HTML contains modalAddFeatureFlag');
     assert(html.includes('id="modalEditFeatureFlag"'), 'HTML contains modalEditFeatureFlag');
     assert(html.includes('id="modalScheduleMaintenance"'), 'HTML contains modalScheduleMaintenance');
     assert(html.includes('id="modalPreviewMaintenance"'), 'HTML contains modalPreviewMaintenance');
 
-    // JS Exports
     const jsPath = path.join(__dirname, '..', 'frontend', 'js', 'platform-admin.js');
     const js = fs.readFileSync(jsPath, 'utf8');
 

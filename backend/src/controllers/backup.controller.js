@@ -1,11 +1,6 @@
-/**
- * Sri Vidya Educational Trust - Backups & Recovery Controller
- * Module 12: 12.1 Backup Overview, 12.2 Backup History, and 12.3 Controlled 8-Step Recovery Workflow
- */
 
 const BackupService = require('../services/backup.service');
 
-// 12.1 Backup Overview
 const getBackupOverview = async (req, res) => {
   try {
     const result = await BackupService.getBackupOverview();
@@ -15,7 +10,6 @@ const getBackupOverview = async (req, res) => {
   }
 };
 
-// 12.2 Backup History
 const listBackups = async (req, res) => {
   try {
     const result = await BackupService.listBackups(req.query);
@@ -73,7 +67,6 @@ const downloadBackup = async (req, res) => {
   }
 };
 
-// 12.3 Recovery Workflow
 const listRecoveryRequests = async (req, res) => {
   try {
     const result = await BackupService.listRecoveryRequests(req.query);

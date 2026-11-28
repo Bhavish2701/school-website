@@ -1,15 +1,3 @@
-/**
- * Sri Vidya E.M High School & ERP Portals
- * Modern Input Field System
- * - 1. Floating Labels
- * - 2. Password Show/Hide, Strength Meter & Validation Checklist
- * - 3. Search Fields with Left Icon & Instant Clear Button
- * - 4. Code/OTP Inputs with Auto-Focus, Backspace & Paste Support
- * - 5. Stepper Controls for Numeric Values
- * - 6. Tag-Based Multiple Entry Inputs
- * - 7. Date Masking & Calendar Formatters
- * - 8. Real-Time Validation Engine (Success & Error Visual States)
- */
 
 (function (root, factory) {
   if (typeof define === 'function' && define.amd) {
@@ -42,9 +30,6 @@
     }
   }
 
-  // =========================================================================
-  // 1. Floating Labels System
-  // =========================================================================
   function enhanceFloatingLabels(root) {
     const floatingGroups = root.querySelectorAll('.sv-floating-group, .form-floating');
     floatingGroups.forEach(group => {
@@ -55,12 +40,10 @@
       const label = group.querySelector('label');
       if (!input || !label) return;
 
-      // Ensure input has a placeholder for CSS :not(:placeholder-shown) pseudo-class
       if (!input.getAttribute('placeholder')) {
         input.setAttribute('placeholder', ' ');
       }
 
-      // If label is before input in DOM, reorder so CSS sibling selectors work
       if (label.nextElementSibling === input || label.compareDocumentPosition(input) & Node.DOCUMENT_POSITION_FOLLOWING) {
         group.appendChild(label);
       }
@@ -81,21 +64,16 @@
     });
   }
 
-  // =========================================================================
-  // 2. Password Show/Hide, Strength Meter & Validation Checklist
-  // =========================================================================
   function enhancePasswords(root) {
     const passwordInputs = root.querySelectorAll('input[type="password"]');
     passwordInputs.forEach(input => {
       if (input.dataset.enhancedPassword) return;
       input.dataset.enhancedPassword = 'true';
 
-      // Check if input is already in a container with a password toggle (e.g. login.html's .pwd-toggle-btn)
       const parentContainer = input.closest('.input-container, .sv-password-wrap') || input.parentNode;
       const existingToggle = parentContainer ? parentContainer.querySelector('.pwd-toggle-btn, .sv-password-toggle') : null;
 
       if (existingToggle) {
-        // Form already provides an action toggle button; do not wrap or add duplicate
         return;
       }
 
@@ -107,7 +85,6 @@
         wrap.appendChild(input);
       }
 
-      // Add Show/Hide Toggle Button if not present
       let toggleBtn = wrap.querySelector('.sv-password-toggle, .pwd-toggle-btn');
       if (!toggleBtn) {
         toggleBtn = document.createElement('button');
@@ -130,7 +107,6 @@
         }
       });
 
-      // Add Strength Meter if opted-in or on registration / change password fields
       const shouldHaveMeter = input.dataset.strengthMeter !== undefined ||
         input.id.includes('newPass') ||
         input.id.includes('createPass') ||
@@ -215,9 +191,6 @@
     }
   }
 
-  // =========================================================================
-  // 3. Search Fields with Magnifying Glass & Instant Clear Button
-  // =========================================================================
   function enhanceSearches(root) {
     const searchInputs = root.querySelectorAll(
       'input[type="search"], .search-input, [data-role="search"], .pa-search-input, input[id*="Search" i], input[placeholder*="Search" i]'
@@ -228,8 +201,7 @@
       if (input.type === 'hidden' || input.disabled) return;
       input.dataset.enhancedSearch = 'true';
 
-      // Check if input is already in a search container
-      let wrap = input.closest('.header-search, .search-group, .pa-search-wrap, .sv-search-wrap');
+      let wrap = input.closest('.header-search, .search-group, .pa-search-wrap, .sv-search-wrap, .search-input-wrap, .portal-search-box');
       if (!wrap) {
         wrap = document.createElement('div');
         wrap.className = 'sv-search-wrap';
@@ -239,7 +211,6 @@
         wrap.classList.add('sv-search-wrap');
       }
 
-      // Check for existing search icon
       let icon = wrap.querySelector('.sv-search-icon, .search-icon, .fa-magnifying-glass');
       if (!icon) {
         icon = document.createElement('i');
@@ -247,7 +218,6 @@
         wrap.insertBefore(icon, input);
       }
 
-      // Check for existing clear button or add modern clear button
       let clearBtn = wrap.querySelector('.sv-search-clear, .adm-clear-btn');
       if (!clearBtn) {
         clearBtn = document.createElement('button');
@@ -279,7 +249,6 @@
         updateClearState();
         input.focus();
 
-        // Dispatch all standard search events for instant reactive filtering
         input.dispatchEvent(new Event('input', { bubbles: true }));
         input.dispatchEvent(new Event('change', { bubbles: true }));
         input.dispatchEvent(new KeyboardEvent('keyup', { bubbles: true, key: 'Escape' }));
@@ -292,16 +261,12 @@
     });
   }
 
-  // =========================================================================
-  // 4. Code / OTP Fields (Auto-Focus, Backspace, Paste & Arrow Nav)
-  // =========================================================================
   function enhanceOtpInputs(root) {
     const otpGroups = root.querySelectorAll('.sv-otp-group, .otp-input-container, [data-role="otp"]');
     otpGroups.forEach(group => {
       if (group.dataset.enhancedOtp) return;
       group.dataset.enhancedOtp = 'true';
 
-      // If handled by portal-auth.js, preserve existing handler to avoid double-firing
       if (group.id && group.id.includes('unifiedOtp')) {
         return;
       }
@@ -316,7 +281,6 @@
         digit.setAttribute('autocomplete', 'one-time-code');
         digit.classList.add('sv-otp-digit');
 
-        // Input handler: auto-advance
         digit.addEventListener('input', () => {
           const val = digit.value.replace(/\D/g, '');
           digit.value = val ? val[0] : '';
@@ -334,7 +298,6 @@
           checkOtpCompletion(digits, group);
         });
 
-        // Keydown handler: backspace & arrow navigation
         digit.addEventListener('keydown', (e) => {
           if (e.key === 'Backspace') {
             if (!digit.value && idx > 0) {
@@ -356,7 +319,6 @@
           }
         });
 
-        // Paste support: distributes string into individual digit boxes
         digit.addEventListener('paste', (e) => {
           e.preventDefault();
           const pastedData = (e.clipboardData || window.clipboardData).getData('text');
@@ -388,9 +350,6 @@
     }
   }
 
-  // =========================================================================
-  // 5. Stepper Fields (Increment / Decrement Controls)
-  // =========================================================================
   function enhanceSteppers(root) {
     const stepperInputs = root.querySelectorAll('input[data-stepper], .sv-stepper-input');
     stepperInputs.forEach(input => {
@@ -467,9 +426,6 @@
     });
   }
 
-  // =========================================================================
-  // 6. Tag-Based Multiple Entry Inputs
-  // =========================================================================
   function enhanceTagsInputs(root) {
     const tagInputs = root.querySelectorAll('input[data-role="tags"], .sv-tags-input');
     tagInputs.forEach(input => {
@@ -531,9 +487,6 @@
     });
   }
 
-  // =========================================================================
-  // 7. Date Masks & Validation
-  // =========================================================================
   function enhanceDateMasks(root) {
     const dateInputs = root.querySelectorAll('input[data-mask="date"], .sv-date-mask');
     dateInputs.forEach(input => {
@@ -588,9 +541,6 @@
     });
   }
 
-  // =========================================================================
-  // 8. Real-Time Validation Engine
-  // =========================================================================
   function enhanceRealtimeValidation(root) {
     const fields = root.querySelectorAll(
       'input[required], input[type="email"], input[type="tel"], input[data-validate], select[required], textarea[required]'
@@ -604,13 +554,11 @@
       function validate() {
         const val = field.value !== undefined ? String(field.value).trim() : '';
 
-        // Required check
         if (field.hasAttribute('required') && !val) {
           setValidationState(field, false, 'This field is required');
           return;
         }
 
-        // Email check
         if (field.type === 'email' && val) {
           const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
           if (!emailRegex.test(val)) {
@@ -619,7 +567,6 @@
           }
         }
 
-        // Indian 10-Digit Mobile / Phone check
         if ((field.type === 'tel' || field.dataset.validate === 'phone') && val) {
           const cleanPhone = val.replace(/[\s\-\(\)\+]/g, '');
           if (!/^[6-9]\d{9}$/.test(cleanPhone) && cleanPhone.length !== 10) {
@@ -628,14 +575,12 @@
           }
         }
 
-        // Custom Minimum Length
         const minLen = field.getAttribute('minlength') || field.dataset.minLength;
         if (minLen && val.length < parseInt(minLen, 10)) {
           setValidationState(field, false, `Minimum ${minLen} characters required`);
           return;
         }
 
-        // Passed checks
         if (val) {
           setValidationState(field, true);
         } else {
@@ -736,7 +681,7 @@
       mutations.forEach(m => {
         if (m.addedNodes && m.addedNodes.length > 0) {
           m.addedNodes.forEach(node => {
-            if (node.nodeType === 1) { // ELEMENT_NODE
+            if (node.nodeType === 1) {
               if (node.matches && (node.matches('.modal, .portal-modal, .modal-content, form') || node.querySelector('input'))) {
                 init(node);
               }
@@ -758,7 +703,6 @@
       .replace(/'/g, '&#39;');
   }
 
-  // Auto-init on DOM ready
   if (typeof document !== 'undefined') {
     if (document.readyState === 'loading') {
       document.addEventListener('DOMContentLoaded', () => init());

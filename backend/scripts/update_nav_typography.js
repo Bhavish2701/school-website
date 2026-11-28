@@ -250,7 +250,6 @@ const replacementBlock = `/* 3. Modern Segmented Tab Strip Controller - Institut
   font-size: 15px !important;
 }`;
 
-// Also update dark mode section for tab strips
 const targetDarkBlock = `/* 9. Dark Mode Overrides for Modern System */
 [data-theme="dark"] .tab-strip,
 [data-theme="dark"] #teachersTabStrip,
@@ -320,7 +319,6 @@ const replacementDarkBlock = `/* 9. Dark Mode Overrides for Modern System */
   opacity: 1 !important;
 }`;
 
-// Execute replacement
 if (!cssContent.includes(targetBlock)) {
   console.error('Target block not found in portal.css!');
   process.exit(1);

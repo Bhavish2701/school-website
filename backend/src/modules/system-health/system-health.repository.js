@@ -1,7 +1,3 @@
-/**
- * System Health & Telemetry - Repository Layer
- * Manages database access and persistence
- */
 
 const mongoose = require('mongoose');
 const { AppLog } = require('../../models/systemHealth.model');

@@ -1,7 +1,3 @@
-/**
- * Role Templates & RBAC Permissions - Validation Layer
- * Enforces field schemas, constraints, and data integrity
- */
 
 class RolesPermissionsValidation {
   static validateRequest(req, res, next) {

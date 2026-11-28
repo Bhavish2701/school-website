@@ -1,7 +1,3 @@
-/**
- * Authentication & Session Security - Module Aggregator
- * Exports all 6 architectural layers
- */
 
 const routes = require('./auth.routes');
 const controller = require('./auth.controller');

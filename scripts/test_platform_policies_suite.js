@@ -1,14 +1,3 @@
-/**
- * test_platform_policies_suite.js
- * Acceptance test suite for Module 17: Platform Policies & Data Retention
- * Sri Vidya Educational Trust Platform Administration
- *
- * Verifies:
- * 17.1 Policy Register (8 Categories, lifecycle, audit logging)
- * 17.2 Data Retention Configuration (Statutory Granular Invariant, Permanent Records, Versions, Review Lifecycle)
- * 17.3 Data Requests & Governance Safeguards (5 Request Types, Controlled Deletion Dual Signoff Invariant)
- * HTML structure, CSS rules, and JavaScript public interfaces
- */
 
 const http = require('http');
 const fs = require('fs');
@@ -60,9 +49,6 @@ async function runTests() {
   console.log('=============================================================\n');
 
   try {
-    // -------------------------------------------------------------
-    // Test Group 1: 17.1 Policy Register
-    // -------------------------------------------------------------
     console.log('--- Test Group 1: 17.1 Policy Register ---');
     const resPolList = await request({
       hostname: 'localhost',
@@ -76,7 +62,6 @@ async function runTests() {
     const policies = resPolList.data.data;
     assert(Array.isArray(policies) && policies.length >= 8, `Policy register has ${policies.length} items (expected at least 8)`);
 
-    // Verify all 8 categories are represented
     const categoriesFound = new Set(policies.map(p => p.category));
     const expectedCategories = [
       'ACCOUNT_SECURITY',
@@ -93,7 +78,6 @@ async function runTests() {
       assert(categoriesFound.has(cat), `Policy register contains category '${cat}'`);
     });
 
-    // Check specific policy attributes
     const secPolicy = policies.find(p => p.category === 'ACCOUNT_SECURITY');
     assert(!!secPolicy.policyId, 'Policy has unique policyId');
     assert(!!secPolicy.name, 'Policy has name');
@@ -103,7 +87,6 @@ async function runTests() {
     assert(!!secPolicy.approvalStatus, 'Policy has approval status');
     assert(!!secPolicy.reviewDate, 'Policy has review date');
 
-    // Test Create Policy
     const testPolId = `POL-TEST-${Date.now().toString().slice(-4)}`;
     const resCreatePol = await request({
       hostname: 'localhost',
@@ -124,7 +107,6 @@ async function runTests() {
     assert(resCreatePol.status === 201, 'POST /api/v1/platform/policies/register returns 201 Created');
     assert(resCreatePol.data.success === true, 'Policy creation succeeds');
 
-    // Test Get Policy by ID
     const resGetPol = await request({
       hostname: 'localhost',
       port: PORT,
@@ -134,7 +116,6 @@ async function runTests() {
     assert(resGetPol.status === 200, `GET /api/v1/platform/policies/register/${testPolId} returns 200 OK`);
     assert(resGetPol.data.data.name === 'Test Mobile Device Management Governance Policy', 'Retrieved policy matches creation');
 
-    // Test Update Policy
     const resUpdatePol = await request({
       hostname: 'localhost',
       port: PORT,
@@ -146,9 +127,6 @@ async function runTests() {
     assert(resUpdatePol.status === 200, 'PUT /api/v1/platform/policies/register/:id updates policy');
     assert(resUpdatePol.data.data.approvalStatus === 'APPROVED', 'Policy status updated to APPROVED');
 
-    // -------------------------------------------------------------
-    // Test Group 2: 17.2 Data Retention Configuration & Non-Universal Invariant
-    // -------------------------------------------------------------
     console.log('\n--- Test Group 2: 17.2 Data Retention Configuration & Statutory Invariant ---');
     const resRetList = await request({
       hostname: 'localhost',
@@ -162,30 +140,25 @@ async function runTests() {
     const retentionRules = resRetList.data.data;
     assert(Array.isArray(retentionRules) && retentionRules.length >= 7, `Retention rules count is ${retentionRules.length} (expected at least 7)`);
 
-    // Verify statutory permanent preservation for Admission General Register (Rule 88)
     const admRule = retentionRules.find(r => r.recordCategory.includes('Admission General Register'));
     assert(!!admRule, 'Statutory Student Admission General Register exists');
     assert(admRule.retentionYears === -1, 'Admission General Register retention is Permanent (-1 years)');
     assert(admRule.isStatutoryPermanent === true, 'Admission General Register is flagged isStatutoryPermanent = true');
     assert(admRule.legalBasis.includes('Rule 88') || admRule.legalBasis.includes('Education Act'), 'Governing legal basis cites AP Education Code');
 
-    // Verify statutory permanent preservation for TC Counterfoils (Rule 99)
     const tcRule = retentionRules.find(r => r.recordCategory.includes('Transfer Certificate'));
     assert(!!tcRule, 'Transfer Certificate Appendix 16 Docket exists');
     assert(tcRule.retentionYears === -1, 'TC Appendix 16 Docket retention is Permanent (-1 years)');
     assert(tcRule.isStatutoryPermanent === true, 'TC Docket is flagged isStatutoryPermanent = true');
 
-    // Verify 7-year fiscal audit retention
     const finRule = retentionRules.find(r => r.recordCategory.includes('Fee Day Books'));
     assert(!!finRule, 'Fee Day Books & Audit Vouchers retention rule exists');
     assert(finRule.retentionYears === 7, 'Financial vouchers retention is 7 years under Companies / Income Tax Act');
 
-    // Verify 3-year rolling attendance retention
     const attRule = retentionRules.find(r => r.recordCategory.includes('Attendance'));
     assert(!!attRule, 'Biometric attendance retention rule exists');
     assert(attRule.retentionYears === 3, 'Biometric attendance retention is 3 rolling academic years');
 
-    // Verify Section 17.2 Invariant: Universal deletion period is strictly blocked
     console.log('Testing Section 17.2 Invariant: Universal deletion attempts must be blocked...');
     const resUniversalAttempt = await request({
       hostname: 'localhost',
@@ -204,7 +177,6 @@ async function runTests() {
     assert(resUniversalAttempt.data.statutoryInvariantBlocked === true, 'Response flags statutoryInvariantBlocked = true');
     assert(resUniversalAttempt.data.message.includes('Universal deletion periods are strictly forbidden'), 'Error message cites statutory invariant against universal deletion');
 
-    // Verify Section 17.2 Invariant: Cannot assign temporary retention to Statutory Permanent record
     console.log('Testing Statutory Permanent record protection...');
     const resPermanentTamper = await request({
       hostname: 'localhost',
@@ -221,7 +193,6 @@ async function runTests() {
     assert(resPermanentTamper.status === 422 || resPermanentTamper.status === 400, 'Attempt to assign temporary retention to Admission Register rejected');
     assert(resPermanentTamper.data.message.includes('Permanent under the Andhra Pradesh Education Act'), 'Error explains statutory permanent requirement');
 
-    // Test Valid Retention Draft & Multi-Stage Lifecycle
     const testRuleId = `RET-TST-${Date.now().toString().slice(-4)}`;
     const resCreateDraft = await request({
       hostname: 'localhost',
@@ -241,7 +212,6 @@ async function runTests() {
     assert(resCreateDraft.status === 201, 'POST /api/v1/platform/policies/retention/draft returns 201 Created');
     assert(resCreateDraft.data.data.reviewStatus === 'DRAFT', 'Draft created in DRAFT status');
 
-    // Lifecycle Step 1: Submit for Review
     const resSubmitRev = await request({
       hostname: 'localhost',
       port: PORT,
@@ -251,7 +221,6 @@ async function runTests() {
     assert(resSubmitRev.status === 200, 'Submit for review returns 200 OK');
     assert(resSubmitRev.data.data.reviewStatus === 'UNDER_REVIEW', 'Status progressed to UNDER_REVIEW');
 
-    // Lifecycle Step 2: Approve
     const resApproveRule = await request({
       hostname: 'localhost',
       port: PORT,
@@ -263,7 +232,6 @@ async function runTests() {
     assert(resApproveRule.status === 200, 'Approve rule returns 200 OK');
     assert(resApproveRule.data.data.reviewStatus === 'APPROVED', 'Status progressed to APPROVED');
 
-    // Lifecycle Step 3: Publish
     const resPublishRule = await request({
       hostname: 'localhost',
       port: PORT,
@@ -273,7 +241,6 @@ async function runTests() {
     assert(resPublishRule.status === 200, 'Publish rule returns 200 OK');
     assert(resPublishRule.data.data.reviewStatus === 'PUBLISHED', 'Status progressed to PUBLISHED');
 
-    // Versions history check
     const resVersions = await request({
       hostname: 'localhost',
       port: PORT,
@@ -283,9 +250,6 @@ async function runTests() {
     assert(resVersions.status === 200, 'GET versions returns 200 OK');
     assert(Array.isArray(resVersions.data.versions) && resVersions.data.versions.length >= 1, 'Versions history contains initial version');
 
-    // -------------------------------------------------------------
-    // Test Group 3: 17.3 Data Requests & Governance Safeguards
-    // -------------------------------------------------------------
     console.log('\n--- Test Group 3: 17.3 Data Requests & Controlled Deletion Governance ---');
     const resReqList = await request({
       hostname: 'localhost',
@@ -299,7 +263,6 @@ async function runTests() {
     const requests = resReqList.data.data;
     assert(Array.isArray(requests) && requests.length >= 5, `Data requests count is ${requests.length} (expected at least 5)`);
 
-    // Verify all 5 request types are represented
     const reqTypes = new Set(requests.map(r => r.requestType));
     const expectedTypes = [
       'RECORD_ACCESS',
@@ -312,7 +275,6 @@ async function runTests() {
       assert(reqTypes.has(t), `Data requests contains request type '${t}'`);
     });
 
-    // Test Create New Data Request
     const testReqId = `REQ-TST-${Date.now().toString().slice(-4)}`;
     const resCreateReq = await request({
       hostname: 'localhost',
@@ -333,7 +295,6 @@ async function runTests() {
     assert(resCreateReq.status === 201, 'POST /api/v1/platform/policies/requests returns 201 Created');
     assert(resCreateReq.data.data.status === 'SUBMITTED', 'New request created in SUBMITTED status');
 
-    // Test Approval & Signoff
     const resSignoff1 = await request({
       hostname: 'localhost',
       port: PORT,
@@ -347,7 +308,6 @@ async function runTests() {
     assert(resSignoff1.status === 200, 'Approve/Signoff endpoint returns 200 OK');
     assert(resSignoff1.data.data.authorizedSignoffs.length === 1, 'Signoff recorded in authorizedSignoffs');
 
-    // Test Fulfill Request
     const resFulfill = await request({
       hostname: 'localhost',
       port: PORT,
@@ -360,7 +320,6 @@ async function runTests() {
     assert(resFulfill.data.data.status === 'FULFILLED', 'Status updated to FULFILLED');
     assert(!!resFulfill.data.data.fulfilledAt, 'Fulfillment timestamp recorded');
 
-    // Test Controlled Deletion Invariant (Section 17.3)
     console.log('Testing Section 17.3 Invariant: Lone operator cannot delete school records...');
     const testDelId = `REQ-DEL-${Date.now().toString().slice(-4)}`;
     await request({
@@ -379,7 +338,6 @@ async function runTests() {
       businessJustification: 'Routine cleanup of expired visitor entry logs.'
     });
 
-    // Attempting fulfillment without dual signoff MUST fail
     const resUnilateralFulfill = await request({
       hostname: 'localhost',
       port: PORT,
@@ -393,7 +351,6 @@ async function runTests() {
     assert(resUnilateralFulfill.data.governanceSafeguardBlocked === true, 'Response flags governanceSafeguardBlocked = true');
     assert(resUnilateralFulfill.data.message.includes('Platform operators cannot unilaterally delete'), 'Error explains dual signoff mandate');
 
-    // Attempting deletion of statutory permanent records MUST fail even if attempted
     console.log('Testing Permanent record deletion immunity...');
     const testPermDelId = `REQ-PERM-${Date.now().toString().slice(-4)}`;
     await request({
@@ -412,7 +369,6 @@ async function runTests() {
       businessJustification: 'Disk reclamation request'
     });
 
-    // Provide dual signoffs but on statutory permanent record
     await request({
       hostname: 'localhost',
       port: PORT,
@@ -437,15 +393,11 @@ async function runTests() {
     assert(resPermanentPurgeAttempt.status === 403, 'Permanent register purge attempt rejected with 403 Forbidden');
     assert(resPermanentPurgeAttempt.data.message.includes('STATUTORY NON-PURGEABLE VIOLATION'), 'Error confirms General Register cannot be deleted');
 
-    // -------------------------------------------------------------
-    // Test Group 4: UI View, Modals, CSS & JS Interfaces
-    // -------------------------------------------------------------
     console.log('\n--- Test Group 4: UI View, Modals, CSS & JS Public Interfaces ---');
     const htmlContent = fs.readFileSync(path.join(__dirname, '../frontend/platform-admin/index.html'), 'utf8');
     const cssContent = fs.readFileSync(path.join(__dirname, '../frontend/css/platform-admin.css'), 'utf8');
     const jsContent = fs.readFileSync(path.join(__dirname, '../frontend/js/platform-admin.js'), 'utf8');
 
-    // Check HTML IDs
     const requiredHtmlElements = [
       'id="view-policies"',
       'id="btnPolTabRegister"',
@@ -468,7 +420,6 @@ async function runTests() {
       assert(htmlContent.includes(elem), `HTML contains element '${elem}'`);
     });
 
-    // Check CSS classes
     const requiredCssClasses = [
       '.pol-subnav',
       '.pol-subnav-btn',
@@ -482,7 +433,6 @@ async function runTests() {
       assert(cssContent.includes(cls), `CSS contains class rule '${cls}'`);
     });
 
-    // Check JS exports
     const requiredJsExports = [
       'loadPlatformPoliciesData',
       'switchPoliciesSubTab',

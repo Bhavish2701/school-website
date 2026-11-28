@@ -1,12 +1,7 @@
-/**
- * Parent Module HTTP Controller
- * Dispatches requests to ParentService and formats uniform responses.
- */
 const parentService = require('../services/parent.service');
 const { sendSuccess } = require('../utils/apiResponse');
 const asyncHandler = require('../utils/asyncHandler');
 
-// 1. Parent Profile
 const getProfile = asyncHandler(async (req, res) => {
   const profile = await parentService.getProfile(req.user);
   sendSuccess(res, profile, 'Parent profile retrieved successfully', 200);
@@ -17,13 +12,11 @@ const updateProfile = asyncHandler(async (req, res) => {
   sendSuccess(res, { profile: updated }, 'Parent profile updated successfully', 200);
 });
 
-// 2. Children List (Child Switcher)
 const getChildren = asyncHandler(async (req, res) => {
   const children = await parentService.getChildren(req.user);
   sendSuccess(res, { children }, 'Linked children retrieved successfully', 200);
 });
 
-// 3. Child Specific Modules (req.child is guaranteed and verified by verifyParentChildAccess)
 const getChildOverview = asyncHandler(async (req, res) => {
   const overview = await parentService.getChildOverview(req.user, req.child);
   sendSuccess(res, overview, 'Child overview dashboard retrieved successfully', 200);
@@ -59,7 +52,6 @@ const applyChildLeave = asyncHandler(async (req, res) => {
   sendSuccess(res, leave, 'Child leave request submitted successfully', 201);
 });
 
-// 4. Communication & Messages
 const getMessages = asyncHandler(async (req, res) => {
   const messages = await parentService.getMessages(req.user);
   sendSuccess(res, { messages }, 'Messages retrieved successfully', 200);
@@ -70,37 +62,31 @@ const sendMessage = asyncHandler(async (req, res) => {
   sendSuccess(res, { message }, 'Message sent to teacher successfully', 201);
 });
 
-// 5. Notifications
 const getNotifications = asyncHandler(async (req, res) => {
   const data = await parentService.getNotifications(req.user);
   sendSuccess(res, data, 'Parent notifications retrieved successfully', 200);
 });
 
-// 6. Child Profile (Specification 20.2)
 const getChildProfile = asyncHandler(async (req, res) => {
   const data = await parentService.getChildProfile(req.user, req.child);
   sendSuccess(res, data, 'Child profile retrieved successfully', 200);
 });
 
-// 7. Academic Progress (Specification 20.2)
 const getChildAcademicProgress = asyncHandler(async (req, res) => {
   const data = await parentService.getChildAcademicProgress(req.user, req.child);
   sendSuccess(res, data, 'Child academic progress retrieved successfully', 200);
 });
 
-// 8. Official Payment Receipts (Specification 20.2)
 const getChildReceipts = asyncHandler(async (req, res) => {
   const data = await parentService.getChildReceipts(req.user, req.child);
   sendSuccess(res, data, 'Child payment receipts retrieved successfully', 200);
 });
 
-// 9. Leave Requests History (Specification 20.2)
 const getChildLeaves = asyncHandler(async (req, res) => {
   const data = await parentService.getChildLeaves(req.user, req.child);
   sendSuccess(res, data, 'Child leave requests retrieved successfully', 200);
 });
 
-// 10. Appointments (Specification 20.2)
 const getAppointments = asyncHandler(async (req, res) => {
   const data = await parentService.getAppointments(req.user);
   sendSuccess(res, data, 'Appointments retrieved successfully', 200);
@@ -111,19 +97,16 @@ const bookAppointment = asyncHandler(async (req, res) => {
   sendSuccess(res, data, 'Appointment booked successfully', 201);
 });
 
-// 11. School Events (Specification 20.2)
 const getEvents = asyncHandler(async (req, res) => {
   const data = await parentService.getEvents(req.user);
   sendSuccess(res, data, 'School events retrieved successfully', 200);
 });
 
-// 12. Documents (Specification 20.2)
 const getChildDocuments = asyncHandler(async (req, res) => {
   const data = await parentService.getChildDocuments(req.user, req.child);
   sendSuccess(res, data, 'Child documents retrieved successfully', 200);
 });
 
-// 13. Help & Support (Specification 20.2)
 const getHelpSupport = asyncHandler(async (req, res) => {
   const data = await parentService.getHelpSupport(req.user);
   sendSuccess(res, data, 'Help & Support FAQs retrieved successfully', 200);
@@ -134,7 +117,6 @@ const submitHelpSupportTicket = asyncHandler(async (req, res) => {
   sendSuccess(res, data, 'Support ticket submitted successfully', 201);
 });
 
-// 14. Correction Requests (Specification 20.2)
 const submitCorrectionRequest = asyncHandler(async (req, res) => {
   const data = await parentService.submitCorrectionRequest(req.user, req.child, req.body);
   sendSuccess(res, data, 'Correction request submitted successfully for staff review', 201);

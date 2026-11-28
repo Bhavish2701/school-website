@@ -1,14 +1,7 @@
-/**
- * Production Security Middleware Suite
- * Includes Helmet HTTP Headers, HSTS, and Recursive NoSQL Query Sanitization
- */
 const helmet = require('helmet');
 
 const isProd = process.env.NODE_ENV === 'production';
 
-/**
- * Production Helmet configuration
- */
 const securityHeaders = helmet({
   contentSecurityPolicy: isProd
     ? {
@@ -25,7 +18,7 @@ const securityHeaders = helmet({
           objectSrc: ["'none'"],
         },
       }
-    : false, // relaxed for development testing
+    : false,
   crossOriginEmbedderPolicy: false,
   crossOriginResourcePolicy: { policy: 'cross-origin' },
   dnsPrefetchControl: { allow: false },
@@ -44,10 +37,6 @@ const securityHeaders = helmet({
   xssFilter: true,
 });
 
-/**
- * Sanitize NoSQL Injection
- * Recursively strips keys starting with '$' or containing '.' from target objects
- */
 const sanitizeData = (target) => {
   if (target && typeof target === 'object') {
     Object.keys(target).forEach((key) => {

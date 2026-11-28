@@ -1,7 +1,3 @@
-/**
- * API Gateway & Client Management - Module Aggregator
- * Exports all 6 architectural layers
- */
 
 const routes = require('./api-management.routes');
 const controller = require('./api-management.controller');

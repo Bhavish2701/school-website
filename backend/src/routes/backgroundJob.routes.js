@@ -1,6 +1,3 @@
-/**
- * Sri Vidya Educational Trust - Background Jobs Routes (11.4)
- */
 
 const express = require('express');
 const router = express.Router();

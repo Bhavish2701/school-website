@@ -1,7 +1,3 @@
-/**
- * Institutions Module - Validation Layer
- * Enforces schema formats, required fields, and duplicate pre-verification
- */
 
 class InstitutionsValidation {
   static validateCreate(req, res, next) {

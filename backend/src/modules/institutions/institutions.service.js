@@ -1,7 +1,3 @@
-/**
- * Institutions Module - Service Layer
- * Encapsulates core business rules, default configurations, and state transitions
- */
 
 const InstitutionsRepository = require('./institutions.repository');
 const MultiInstitutionSecurity = require('../common/multiInstitutionSecurity');
@@ -11,7 +7,6 @@ class InstitutionsService {
     const scopedQuery = MultiInstitutionSecurity.scopeQuery({}, req);
     const institutions = await InstitutionsRepository.findAll(scopedQuery);
 
-    // Summary calculation
     const activeCount = institutions.filter(i => i.status === 'Active').length;
     const suspendedCount = institutions.filter(i => i.status === 'Suspended' || i.suspension?.isSuspended).length;
 
@@ -39,7 +34,6 @@ class InstitutionsService {
     const code = (data.code || '').toUpperCase().trim();
     const domain = (data.domain || `${code.toLowerCase()}.srividya.edu.in`).trim();
 
-    // Check duplicates
     const dupCheck = await InstitutionsRepository.checkDuplicateCodeOrDomain(code, domain);
     if (dupCheck.duplicate) {
       return {

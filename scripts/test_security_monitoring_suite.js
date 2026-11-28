@@ -1,13 +1,3 @@
-/**
- * Sri Vidya Educational Trust - Module 9: Security & Access Monitoring Acceptance Test Suite
- * Validates:
- * 1. 9.1 Overview (7 KPI metrics)
- * 2. 9.2 Security Events Register (9-column table, multi-field filtering, detail view)
- * 3. 9.3 Privileged Access Reviews (8 columns, review outcomes, role reduction/revocation audit)
- * 4. 9.4 7-Step Incident Workflow Lifecycle (Triage -> Assign -> Investigate -> Contain -> Close -> Escalate)
- * 5. Immutable Audit Invariant: High-impact actions logged to Module 8 PlatformAudit
- * 6. UI & Template Integrity in platform-admin index.html & platform-admin.js
- */
 
 const http = require('http');
 const fs = require('fs');
@@ -84,7 +74,6 @@ async function runTests() {
     }
   }
 
-  // 1. 9.1 Overview KPIs
   await asyncTest('GET /api/v1/platform/security/overview returns 7 statutory KPI metrics', async () => {
     const res = await request('GET', '/api/v1/platform/security/overview');
     assert.strictEqual(res.status, 200);
@@ -100,7 +89,6 @@ async function runTests() {
     assert.strictEqual(d.threatDefensePosture, 'ACTIVE_GUARD');
   });
 
-  // 2. 9.2 Security Events Register List & Filters
   await asyncTest('GET /api/v1/platform/security/events returns populated security events', async () => {
     const res = await request('GET', '/api/v1/platform/security/events');
     assert.strictEqual(res.status, 200);
@@ -128,7 +116,6 @@ async function runTests() {
     assert(res.body.data.every(e => e.institutionId === 'INST-002'), 'All returned events must belong to INST-002');
   });
 
-  // 3. 9.2 Single Security Event Detail
   await asyncTest('GET /api/v1/platform/security/events/SEC-2026-088 returns full telemetry & timeline', async () => {
     const res = await request('GET', '/api/v1/platform/security/events/SEC-2026-088');
     assert.strictEqual(res.status, 200);
@@ -140,7 +127,6 @@ async function runTests() {
     assert(ev.timeline.length > 0, 'Timeline must have at least 1 entry');
   });
 
-  // 4. 9.4 7-Step Incident Workflow Lifecycle Transitions
   await asyncTest('POST /api/v1/platform/security/events/:id/triage updates risk and stage', async () => {
     const res = await request('POST', '/api/v1/platform/security/events/SEC-2026-089/triage', {
       riskClassification: 'HIGH',
@@ -184,7 +170,6 @@ async function runTests() {
     assert(res.body.data.findings.rootCause.includes('Legitimate off-hours'), 'Findings must be saved');
   });
 
-  // 5. High-Impact Containment & Audit Invariant
   await asyncTest('POST /api/v1/platform/security/events/:id/contain invalidates session & records PlatformAudit', async () => {
     const res = await request('POST', '/api/v1/platform/security/events/SEC-2026-090/contain', {
       terminateSession: true,
@@ -195,7 +180,6 @@ async function runTests() {
     assert.strictEqual(res.body.data.status, 'Contain or Remediate');
     assert.strictEqual(res.body.data.telemetry.sessionTerminated, true);
 
-    // Verify PlatformAudit has an immutable log entry
     const auditRes = await request('GET', '/api/v1/platform/audit?category=SECURITY_ALERTS');
     assert.strictEqual(auditRes.status, 200);
     const auditEntry = auditRes.body.data.find(a => a.action === 'SECURITY_CONTAINMENT_EXECUTED');
@@ -204,7 +188,6 @@ async function runTests() {
     assert.strictEqual(auditEntry.result, 'SUCCESS');
   });
 
-  // 6. High-Impact Escalation & Audit Invariant
   await asyncTest('POST /api/v1/platform/security/events/:id/escalate escalates incident & records PlatformAudit', async () => {
     const res = await request('POST', '/api/v1/platform/security/events/SEC-2026-090/escalate', {
       escalationLevel: 'L3_EXECUTIVE_SENATE',
@@ -217,7 +200,6 @@ async function runTests() {
     assert.strictEqual(res.body.data.escalationDetails.isEscalated, true);
     assert.strictEqual(res.body.data.escalationDetails.escalationLevel, 'L3_EXECUTIVE_SENATE');
 
-    // Verify PlatformAudit has an immutable log entry
     const auditRes = await request('GET', '/api/v1/platform/audit?category=SECURITY_ALERTS');
     assert.strictEqual(auditRes.status, 200);
     const auditEntry = auditRes.body.data.find(a => a.action === 'SECURITY_INCIDENT_ESCALATED');
@@ -225,7 +207,6 @@ async function runTests() {
     assert.strictEqual(auditEntry.severity, 'CRITICAL');
   });
 
-  // 7. Close Security Event
   await asyncTest('POST /api/v1/platform/security/events/:id/close completes lifecycle', async () => {
     const res = await request('POST', '/api/v1/platform/security/events/SEC-2026-089/close', {
       resolutionNotes: 'Investigation completed; identity validated by institutional management',
@@ -236,7 +217,6 @@ async function runTests() {
     assert.strictEqual(res.body.data.timeline[0].stage, 'Close');
   });
 
-  // 8. 9.3 Privileged Access Reviews
   await asyncTest('GET /api/v1/platform/security/reviews returns privileged user access list', async () => {
     const res = await request('GET', '/api/v1/platform/security/reviews');
     assert.strictEqual(res.status, 200);
@@ -274,7 +254,6 @@ async function runTests() {
     assert.strictEqual(res.body.reviewStatus, 'Role Revoked');
     assert.strictEqual(res.body.data.reviewStatus, 'Role Revoked');
 
-    // Verify PlatformAudit has an immutable log entry
     const auditRes = await request('GET', '/api/v1/platform/audit?category=RBAC_PERMISSIONS');
     assert.strictEqual(auditRes.status, 200);
     const auditEntry = auditRes.body.data.find(a => a.action === 'PRIVILEGED_ROLE_REVOKED_AUDIT');
@@ -282,19 +261,15 @@ async function runTests() {
     assert.strictEqual(auditEntry.severity, 'HIGH');
   });
 
-  // 9. UI & Template Integrity in index.html
   test('frontend/platform-admin/index.html includes 9.1 KPI cards, 9.4 pipeline, 9.2 table, 9.3 table, and 5 modals', () => {
     const html = fs.readFileSync(path.join(__dirname, '..', 'frontend', 'platform-admin', 'index.html'), 'utf8');
 
-    // Section root
     assert(html.includes('id="view-security-monitoring"'), 'Must have #view-security-monitoring');
 
-    // Sub tabs
     assert(html.includes('id="btnSecTabOverview"'), 'Must have #btnSecTabOverview');
     assert(html.includes('id="btnSecTabEvents"'), 'Must have #btnSecTabEvents');
     assert(html.includes('id="btnSecTabReviews"'), 'Must have #btnSecTabReviews');
 
-    // 7 KPI cards
     assert(html.includes('id="kpiSecFailedLogins"'), 'Must have #kpiSecFailedLogins');
     assert(html.includes('id="kpiSecSuspiciousPatterns"'), 'Must have #kpiSecSuspiciousPatterns');
     assert(html.includes('id="kpiSecPrivRoleChanges"'), 'Must have #kpiSecPrivRoleChanges');
@@ -303,7 +278,6 @@ async function runTests() {
     assert(html.includes('id="kpiSecAccountsReview"'), 'Must have #kpiSecAccountsReview');
     assert(html.includes('id="kpiSecRecentIncidents"'), 'Must have #kpiSecRecentIncidents');
 
-    // 9.4 7-Step Workflow Stepper
     assert(html.includes('sec-workflow-stepper'), 'Must have .sec-workflow-stepper');
     assert(html.includes('1. Alert Detected'), 'Must have Step 1 Alert Detected');
     assert(html.includes('2. Triage'), 'Must have Step 2 Triage');
@@ -313,17 +287,14 @@ async function runTests() {
     assert(html.includes('6. Validate Resolution'), 'Must have Step 6 Validate Resolution');
     assert(html.includes('7. Close'), 'Must have Step 7 Close');
 
-    // 9.2 Security Events Register table
     assert(html.includes('id="tblSecurityEventsBody"'), 'Must have #tblSecurityEventsBody');
     assert(html.includes('id="txtSecFilterSearch"'), 'Must have #txtSecFilterSearch');
     assert(html.includes('id="selSecFilterRisk"'), 'Must have #selSecFilterRisk');
 
-    // 9.3 Privileged Access Reviews table
     assert(html.includes('id="tblAccessReviewsBody"'), 'Must have #tblAccessReviewsBody');
     assert(html.includes('id="txtRevFilterSearch"'), 'Must have #txtRevFilterSearch');
     assert(html.includes('id="selRevFilterStatus"'), 'Must have #selRevFilterStatus');
 
-    // 5 Modals
     assert(html.includes('id="modalSecurityEventDetail"'), 'Must have #modalSecurityEventDetail');
     assert(html.includes('id="modalAssignInvestigator"'), 'Must have #modalAssignInvestigator');
     assert(html.includes('id="modalRecordFindings"'), 'Must have #modalRecordFindings');
@@ -331,7 +302,6 @@ async function runTests() {
     assert(html.includes('id="modalAccessReviewAction"'), 'Must have #modalAccessReviewAction');
   });
 
-  // 10. Controller exports integrity in platform-admin.js
   test('frontend/js/platform-admin.js exports all Module 9 controller functions', () => {
     const js = fs.readFileSync(path.join(__dirname, '..', 'frontend', 'js', 'platform-admin.js'), 'utf8');
 

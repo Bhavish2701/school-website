@@ -1,14 +1,3 @@
-/**
- * Admission Service
- *
- * Implements:
- * 1. Public online registration and unique Application Number generation
- * 2. Document upload and attachment tracking
- * 3. Secure public status tracking (requiring applicationNumber + phone)
- * 4. Management review, search, filtering, and status workflows:
- *    SUBMITTED -> UNDER_REVIEW -> DOCUMENT_VERIFICATION -> APPROVED -> REJECTED -> WAITLISTED
- * 5. Dashboard analytics & auto-enrollment into Student collection upon approval
- */
 const mongoose = require('mongoose');
 const crypto = require('crypto');
 const { Admission } = require('../models/admission.model');
@@ -18,9 +7,6 @@ const Fee = require('../models/fee.model');
 const { Notification } = require('../models/notification.model');
 const ApiError = require('../utils/apiError');
 
-/**
- * Generate unique Application Reference Number (e.g. SV202600001, SV202700001)
- */
 const generateApplicationNumber = async (year = new Date().getFullYear().toString()) => {
   const prefix = `SV${year}`;
   const regex = new RegExp(`^${prefix}\\d{5}$`);
@@ -34,9 +20,6 @@ const generateApplicationNumber = async (year = new Date().getFullYear().toStrin
   return `${prefix}${padded}`;
 };
 
-/**
- * 1. Submit Online Admission Application (Public)
- */
 const submitApplication = async (applicationData) => {
   const {
     studentName,
@@ -75,15 +58,12 @@ const submitApplication = async (applicationData) => {
     admissionSource: applicationData.admissionSource || 'ONLINE',
   });
 
-  // Specification 22.3: Notifications must follow actual state changes
   try {
     const { dispatchApplicationSubmitted } = require('./notificationDispatcher.service');
     await dispatchApplicationSubmitted({ application });
   } catch (e) {
-    // Non-fatal notification error
   }
 
-  // Specification 22.4: Traceability of new applications
   try {
     const auditLogService = require('./auditLog.service');
     await auditLogService.logSensitiveChange({
@@ -97,16 +77,11 @@ const submitApplication = async (applicationData) => {
       result: 'SUCCESS',
     });
   } catch (e) {
-    // Non-fatal audit log error
   }
 
   return application;
 };
 
-/**
- * 2. Check Application Status (Public)
- * Requires applicationNumber and registered phone for security
- */
 const checkApplicationStatus = async (applicationNumber, phone) => {
   const application = await Admission.findOne({
     applicationNumber: applicationNumber.toUpperCase().trim(),
@@ -135,9 +110,6 @@ const checkApplicationStatus = async (applicationNumber, phone) => {
   };
 };
 
-/**
- * 3. Upload / Attach Document to Application
- */
 const uploadDocument = async (applicationId, docData) => {
   let application;
   if (mongoose.Types.ObjectId.isValid(applicationId)) {
@@ -160,7 +132,6 @@ const uploadDocument = async (applicationId, docData) => {
     verified: false,
   });
 
-  // If application was awaiting document verification, automatically transition to UNDER_REVIEW
   if (application.status === 'DOCUMENT_VERIFICATION') {
     application.status = 'UNDER_REVIEW';
     application.reviewerRemarks = 'Additional documents received from applicant. Under review by Admissions Office.';
@@ -170,9 +141,6 @@ const uploadDocument = async (applicationId, docData) => {
   return application;
 };
 
-/**
- * 4. Get Applications List (Management: Search, Filter, Pagination)
- */
 const getApplications = async (query = {}) => {
   const {
     search,
@@ -232,9 +200,6 @@ const getApplications = async (query = {}) => {
   };
 };
 
-/**
- * 5. Get Application Details by ID (Management Review)
- */
 const getApplicationById = async (applicationId) => {
   const application = await Admission.findById(applicationId)
     .populate('reviewedBy', 'fullName role employeeId email')
@@ -247,10 +212,6 @@ const getApplicationById = async (applicationId) => {
   return application;
 };
 
-/**
- * 6. Update Application Status (Management Action)
- * Supports: SUBMITTED, UNDER_REVIEW, DOCUMENT_VERIFICATION, APPROVED, REJECTED, WAITLISTED
- */
 const updateApplicationStatus = async (applicationId, updateData, user) => {
   const application = await Admission.findById(applicationId);
   if (!application) {
@@ -275,7 +236,6 @@ const updateApplicationStatus = async (applicationId, updateData, user) => {
 
   await application.save();
 
-  // Specification 22.3: Notifications must follow actual state changes
   try {
     const { dispatchAdmissionApproved, dispatchDocumentRejected } = require('./notificationDispatcher.service');
     if (status === 'APPROVED') {
@@ -293,10 +253,8 @@ const updateApplicationStatus = async (applicationId, updateData, user) => {
       });
     }
   } catch (e) {
-    // Non-fatal notification error
   }
 
-  // Specification 22.4: Traceability of sensitive admission status changes
   try {
     const auditLogService = require('./auditLog.service');
     await auditLogService.logSensitiveChange({
@@ -311,15 +269,11 @@ const updateApplicationStatus = async (applicationId, updateData, user) => {
       result: 'SUCCESS',
     });
   } catch (e) {
-    // Non-fatal audit log error
   }
 
   return application;
 };
 
-/**
- * 7. Get Admissions Dashboard Overview & Queue Metrics (Management)
- */
 const getAdmissionStatsOverview = async () => {
   const [
     totalApplications,
@@ -339,7 +293,6 @@ const getAdmissionStatsOverview = async () => {
     Admission.countDocuments({ status: 'WAITLISTED' }),
   ]);
 
-  // Aggregate by applying class
   const classBreakdown = await Admission.aggregate([
     {
       $group: {
@@ -367,17 +320,6 @@ const getAdmissionStatsOverview = async () => {
   };
 };
 
-/**
- * 8. Convert Approved Application to Enrolled Student (Management)
- * Specification 20.3:
- * - Creates or links the official student record.
- * - Verifies guardian relationship.
- * - Class allocation and fee records created.
- * - Student records become available to authorized teachers and administration.
- * - Pre-provisions Parent & Student portal activation credentials.
- * - Dispatches status notification to parent communication channel.
- * - Shared workflow for online and offline admissions.
- */
 const convertToStudent = async (applicationId, enrollmentData = {}, user) => {
   const application = await Admission.findById(applicationId);
   if (!application) {
@@ -404,11 +346,9 @@ const convertToStudent = async (applicationId, enrollmentData = {}, user) => {
   const randNum = Math.floor(100 + Math.random() * 900);
   const admissionNo = enrollmentData.admissionNo || `SV-${year}-${randNum}`;
 
-  // Generate unique activation codes for future portal access
   const studentActivationCode = 'ACT-STU-' + Math.floor(100000 + Math.random() * 900000);
   const parentActivationCode = 'ACT-PAR-' + Math.floor(100000 + Math.random() * 900000);
 
-  // Check if guardian User account already exists (e.g. sibling already enrolled)
   let parentUser = null;
   if (application.phone || application.email) {
     const queries = [];
@@ -417,7 +357,6 @@ const convertToStudent = async (applicationId, enrollmentData = {}, user) => {
     parentUser = await User.findOne({ $or: queries, role: 'PARENT' });
   }
 
-  // 1. Create official Student record
   const student = await Student.create({
     admissionNo,
     fullName: application.studentName,
@@ -457,7 +396,6 @@ const convertToStudent = async (applicationId, enrollmentData = {}, user) => {
     },
   });
 
-  // 2. Link student to existing parent user if found
   if (parentUser) {
     if (!parentUser.children) parentUser.children = [];
     if (!parentUser.children.includes(student._id)) {
@@ -466,7 +404,6 @@ const convertToStudent = async (applicationId, enrollmentData = {}, user) => {
     }
   }
 
-  // 3. Provision Fee ledger from configured FeeStructure for this class/year (if defined)
   const FeeStructure = require('../models/feeStructure.model');
   const structure = await FeeStructure.findOne({
     class: student.class,
@@ -497,7 +434,6 @@ const convertToStudent = async (applicationId, enrollmentData = {}, user) => {
     liveSyncBus.emitSync('STUDENTS', 'CREATED', { entityId: student._id, academicYear: student.academicYear });
   } catch (e) {}
 
-  // 4. Update Admission record with link, decision history, and portal credentials
   application.enrolledStudent = student._id;
   application.decisionRecord = {
     status: 'APPROVED',
@@ -526,7 +462,6 @@ const convertToStudent = async (applicationId, enrollmentData = {}, user) => {
   };
   await application.save();
 
-  // 5. In-app notification for administration and class teachers
   try {
     await Notification.create({
       title: `New Student Enrolled: ${student.fullName} (${student.admissionNo})`,
@@ -541,10 +476,8 @@ const convertToStudent = async (applicationId, enrollmentData = {}, user) => {
       },
     });
   } catch (e) {
-    // Non-fatal notification error
   }
 
-  // Specification 22.4: Traceability of student enrolment
   try {
     const auditLogService = require('./auditLog.service');
     await auditLogService.logSensitiveChange({
@@ -564,7 +497,6 @@ const convertToStudent = async (applicationId, enrollmentData = {}, user) => {
       result: 'SUCCESS',
     });
   } catch (e) {
-    // Non-fatal audit log error
   }
 
   return {

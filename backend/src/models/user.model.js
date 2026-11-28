@@ -1,7 +1,3 @@
-/**
- * User Mongoose Model
- * Role-Based Access Control and Secure Password Management
- */
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
@@ -43,7 +39,7 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: [true, 'Password is required'],
       minlength: [6, 'Password must be at least 6 characters'],
-      select: false, // Never return password hash in queries by default
+      select: false,
     },
     fullName: {
       type: String,
@@ -114,7 +110,6 @@ const userSchema = new mongoose.Schema(
       trim: true,
       default: '',
     },
-    // Student specific profile data
     studentProfile: {
       class: { type: String, trim: true },
       section: { type: String, trim: true },
@@ -122,14 +117,12 @@ const userSchema = new mongoose.Schema(
       admissionNo: { type: String, trim: true },
       parentUser: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
     },
-    // Parent specific: linked children user IDs
     children: [
       {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
       },
     ],
-    // Teacher specific: assigned classes and sections
     assignedClasses: [
       {
         class: { type: String, trim: true },
@@ -183,7 +176,6 @@ const userSchema = new mongoose.Schema(
   }
 );
 
-// Hash password before saving
 userSchema.pre('save', async function (next) {
   if (!this.isModified('password')) {
     return next();
@@ -193,7 +185,6 @@ userSchema.pre('save', async function (next) {
   next();
 });
 
-// Compare plaintext password with stored hash
 userSchema.methods.comparePassword = async function (candidatePassword) {
   if (!this.password) {
     throw new Error('Password field not selected for comparison');
@@ -201,7 +192,6 @@ userSchema.methods.comparePassword = async function (candidatePassword) {
   return bcrypt.compare(candidatePassword, this.password);
 };
 
-// Generate Short-lived Access Token
 userSchema.methods.generateAccessToken = function () {
   return jwt.sign(
     {
@@ -218,7 +208,6 @@ userSchema.methods.generateAccessToken = function () {
   );
 };
 
-// Generate Long-lived Refresh Token
 userSchema.methods.generateRefreshToken = function () {
   return jwt.sign(
     {
@@ -231,34 +220,29 @@ userSchema.methods.generateRefreshToken = function () {
   );
 };
 
-// Create Password Reset Token
 userSchema.methods.createPasswordResetToken = function () {
   const resetToken = crypto.randomBytes(32).toString('hex');
 
-  // Hash token and set to passwordResetToken field
   this.passwordResetToken = crypto
     .createHash('sha256')
     .update(resetToken)
     .digest('hex');
 
-  // Set expiration (15 minutes from now)
   this.passwordResetExpires = Date.now() + 15 * 60 * 1000;
 
   return resetToken;
 };
 
-// Create Email Verification OTP (6 digits)
 userSchema.methods.createEmailVerificationOtp = function () {
   const otp = Math.floor(100000 + Math.random() * 900000).toString();
   this.emailVerificationOtp = crypto
     .createHash('sha256')
     .update(otp)
     .digest('hex');
-  this.emailVerificationExpires = Date.now() + 15 * 60 * 1000; // 15 mins
+  this.emailVerificationExpires = Date.now() + 15 * 60 * 1000;
   return otp;
 };
 
-// Clean object representation to ensure no secrets are exposed
 userSchema.methods.toJSON = function () {
   const obj = this.toObject();
   delete obj.password;

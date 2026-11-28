@@ -1,7 +1,3 @@
-/**
- * Institutional Domains & DNS - Service Layer
- * Business rules, calculations, and operational orchestration
- */
 
 const Repository = require('./domains.repository');
 const MultiInstitutionSecurity = require('../common/multiInstitutionSecurity');

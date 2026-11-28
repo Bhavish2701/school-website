@@ -1,10 +1,3 @@
-/**
- * Regression Test Suite: Future Student & Parent Portals Backend Support
- * Specification 20:
- * - 20.1 Future Student Portal Backend API Support (14 Pages, Scoping, Permitted Actions)
- * - 20.2 Future Parent Portal Backend API Support (16 Pages, Child Switching, Immutability, Correction Requests)
- * - 20.3 Online Admission & Single Unified Portal Connection Workflow
- */
 const fs = require('fs');
 const path = require('path');
 const assert = require('assert');
@@ -29,31 +22,28 @@ function check(desc, fn) {
   }
 }
 
-// -------------------------------------------------------------
-// TEST 1: 20.1 Future Student Portal Service & Endpoints
-// -------------------------------------------------------------
 check('Verify 20.1 Student Portal Service has all 14 required page handlers', () => {
   const servicePath = path.resolve(__dirname, '../backend/src/services/studentPortal.service.js');
   assert.ok(fs.existsSync(servicePath), 'studentPortal.service.js must exist');
   const serviceCode = fs.readFileSync(servicePath, 'utf8');
 
   const requiredMethods = [
-    'getDashboard',          // Dashboard
-    'getProfile',            // My Profile
-    'getMyClasses',          // My Classes
-    'getTimetable',          // Timetable
-    'getAttendance',         // Attendance
-    'getAssignments',        // Assignments
-    'submitAssignment',      // Submit Assignment (permitted action)
-    'getStudyMaterials',     // Study Materials
-    'getExamSchedule',       // Examination Schedule
-    'getPublishedResults',   // Published Results
-    'getNotices',            // School Notices
-    'getEvents',             // Events
-    'getLibrary',            // Library
-    'getTransport',          // Transport
-    'getHelpSupport',        // Help & Support
-    'submitHelpSupportQuery' // Submit Support Ticket
+    'getDashboard',
+    'getProfile',
+    'getMyClasses',
+    'getTimetable',
+    'getAttendance',
+    'getAssignments',
+    'submitAssignment',
+    'getStudyMaterials',
+    'getExamSchedule',
+    'getPublishedResults',
+    'getNotices',
+    'getEvents',
+    'getLibrary',
+    'getTransport',
+    'getHelpSupport',
+    'submitHelpSupportQuery'
   ];
 
   requiredMethods.forEach((method) => {
@@ -63,14 +53,12 @@ check('Verify 20.1 Student Portal Service has all 14 required page handlers', ()
     );
   });
 
-  // Verify published results rule (strictly published results only)
   assert.ok(
     serviceCode.includes('Only official results published and sealed') ||
     serviceCode.includes('resultStatus: \'PUBLISHED\''),
     'Service must enforce that only published results are exposed to students'
   );
 
-  // Verify attendance advisory on read-only status
   assert.ok(
     serviceCode.includes('cannot be directly edited') ||
     serviceCode.includes('read-only'),
@@ -78,9 +66,6 @@ check('Verify 20.1 Student Portal Service has all 14 required page handlers', ()
   );
 });
 
-// -------------------------------------------------------------
-// TEST 2: 20.1 Student Portal Routes & RBAC Middleware
-// -------------------------------------------------------------
 check('Verify 20.1 Student Portal Routes enforce STUDENT role & mount 14 endpoints', () => {
   const routesPath = path.resolve(__dirname, '../backend/src/routes/studentPortal.routes.js');
   assert.ok(fs.existsSync(routesPath), 'studentPortal.routes.js must exist');
@@ -113,37 +98,34 @@ check('Verify 20.1 Student Portal Routes enforce STUDENT role & mount 14 endpoin
   });
 });
 
-// -------------------------------------------------------------
-// TEST 3: 20.2 Parent Portal Service & All 16 Required Page Handlers
-// -------------------------------------------------------------
 check('Verify 20.2 Parent Portal Service supports all 16 pages and multi-child switching', () => {
   const servicePath = path.resolve(__dirname, '../backend/src/services/parent.service.js');
   assert.ok(fs.existsSync(servicePath), 'parent.service.js must exist');
   const serviceCode = fs.readFileSync(servicePath, 'utf8');
 
   const requiredMethods = [
-    'getChildOverview',          // 1. Dashboard
-    'getChildren',               // 2. My Children (child switcher)
-    'getChildProfile',           // 3. Child Profile
-    'getChildAttendance',        // 4. Attendance
-    'getChildAcademicProgress',  // 5. Academic Progress
-    'getChildExamsAndResults',   // 6. Published Results
-    'getChildAssignments',       // 7. Assignments
-    'getChildFees',              // 8. Fees & Payments
-    'getChildReceipts',          // 9. Receipts
-    'applyChildLeave',           // 10. Leave Requests (apply)
-    'getChildLeaves',            // 10b. Leave Requests (history)
-    'getAppointments',           // 11. Appointments
-    'bookAppointment',           // 11b. Book Appointment
-    'getMessages',               // 12. Teacher Communication
-    'sendMessage',               // 12b. Send Message to Teacher
-    'getChildNotices',           // 13. School Notices
-    'getEvents',                 // 14. Events & PTM Schedule
-    'getChildDocuments',         // 15. Documents
-    'getHelpSupport',            // 16. Help & Support
-    'submitHelpSupportTicket',   // 16b. Submit Helpdesk Ticket
-    'submitCorrectionRequest',   // Correction Requests (Statutory Workflow)
-    'getCorrectionRequests',     // Correction Requests History
+    'getChildOverview',
+    'getChildren',
+    'getChildProfile',
+    'getChildAttendance',
+    'getChildAcademicProgress',
+    'getChildExamsAndResults',
+    'getChildAssignments',
+    'getChildFees',
+    'getChildReceipts',
+    'applyChildLeave',
+    'getChildLeaves',
+    'getAppointments',
+    'bookAppointment',
+    'getMessages',
+    'sendMessage',
+    'getChildNotices',
+    'getEvents',
+    'getChildDocuments',
+    'getHelpSupport',
+    'submitHelpSupportTicket',
+    'submitCorrectionRequest',
+    'getCorrectionRequests',
   ];
 
   requiredMethods.forEach((method) => {
@@ -154,11 +136,7 @@ check('Verify 20.2 Parent Portal Service supports all 16 pages and multi-child s
   });
 });
 
-// -------------------------------------------------------------
-// TEST 4: 20.2 Immutability of Verified Records & Correction Requests
-// -------------------------------------------------------------
 check('Verify 20.2 CorrectionRequest Model and Route Guards prevent direct record tampering', () => {
-  // Check CorrectionRequest Model
   const modelPath = path.resolve(__dirname, '../backend/src/models/correctionRequest.model.js');
   assert.ok(fs.existsSync(modelPath), 'correctionRequest.model.js must exist');
   const modelCode = fs.readFileSync(modelPath, 'utf8');
@@ -169,7 +147,6 @@ check('Verify 20.2 CorrectionRequest Model and Route Guards prevent direct recor
   assert.ok(modelCode.includes('STUDENT_RECORD'), 'Must support STUDENT_RECORD correction module');
   assert.ok(modelCode.includes('SUBMITTED'), 'Must have default status SUBMITTED');
 
-  // Check Parent Routes Guard
   const routesPath = path.resolve(__dirname, '../backend/src/routes/parent.routes.js');
   const routesCode = fs.readFileSync(routesPath, 'utf8');
 
@@ -185,11 +162,7 @@ check('Verify 20.2 CorrectionRequest Model and Route Guards prevent direct recor
   );
 });
 
-// -------------------------------------------------------------
-// TEST 5: 20.3 Online Admission & Single Workflow Schema Verification
-// -------------------------------------------------------------
 check('Verify 20.3 Admission and Student Models support unified workflow & portal readiness', () => {
-  // Admission Model
   const admModelPath = path.resolve(__dirname, '../backend/src/models/admission.model.js');
   const admCode = fs.readFileSync(admModelPath, 'utf8');
 
@@ -199,7 +172,6 @@ check('Verify 20.3 Admission and Student Models support unified workflow & porta
   assert.ok(admCode.includes('decisionRecord'), 'Admission must track official decisionRecord');
   assert.ok(admCode.includes('portalActivation'), 'Admission must hold portalActivation credentials');
 
-  // Student Model
   const studentModelPath = path.resolve(__dirname, '../backend/src/models/student.model.js');
   const studentCode = fs.readFileSync(studentModelPath, 'utf8');
 
@@ -210,9 +182,6 @@ check('Verify 20.3 Admission and Student Models support unified workflow & porta
   assert.ok(studentCode.includes('libraryDetails'), 'Student must store libraryDetails');
 });
 
-// -------------------------------------------------------------
-// TEST 6: 20.3 Admission Service Auto-Enrollment & Credential Generation
-// -------------------------------------------------------------
 check('Verify 20.3 convertToStudent creates student, links guardian, fees, and portal tokens', () => {
   const admServicePath = path.resolve(__dirname, '../backend/src/services/admission.service.js');
   const admServiceCode = fs.readFileSync(admServicePath, 'utf8');
@@ -224,9 +193,6 @@ check('Verify 20.3 convertToStudent creates student, links guardian, fees, and p
   assert.ok(admServiceCode.includes('isVerified: true'), 'Must mark guardian relationship as verified');
 });
 
-// -------------------------------------------------------------
-// TEST 7: 20.3 Account Activation Endpoints & Master Route Mounting
-// -------------------------------------------------------------
 check('Verify 20.3 Auth activation endpoints and master router configuration', () => {
   const authControllerPath = path.resolve(__dirname, '../backend/src/controllers/auth.controller.js');
   const authControllerCode = fs.readFileSync(authControllerPath, 'utf8');

@@ -8,7 +8,6 @@ const html = fs.readFileSync('frontend/platform-admin/index.html', 'utf8');
 const js = fs.readFileSync('frontend/js/platform-admin.js', 'utf8');
 const css = fs.readFileSync('frontend/css/platform-admin.css', 'utf8');
 
-// CHECK 1: Section 3.1 Directory Page Structure, Header, 5 Summary Cards & 10 Table Columns
 console.log('[CHECK 1] Verifying Section 3.1 Institution Directory Structure...');
 assert.ok(html.includes('id="view-institutions"'), '#view-institutions must exist');
 assert.ok(html.includes('Institution Management'), 'Page title "Institution Management" must exist');
@@ -16,7 +15,6 @@ assert.ok(html.includes('id="btnPrimaryAddInstitution"'), '+ Add Institution pri
 assert.ok(html.includes('id="btnImportInstitutions"'), 'Import Institutions secondary action must exist');
 assert.ok(html.includes('id="btnExportInstitutionsDirectory"'), 'Export Directory secondary action must exist');
 
-// 5 Summary Cards
 const summaryCards = [
   'instSummaryTotal',
   'instSummaryActive',
@@ -29,7 +27,6 @@ summaryCards.forEach(id => {
 });
 console.log('  ✓ 5 Summary Cards verified: Total, Active, Setup in Progress, Suspended, Configuration Issues');
 
-// Search and Filter Controls
 const filterControls = [
   'instSearchInput',
   'instCodeFilter',
@@ -43,7 +40,6 @@ filterControls.forEach(id => {
 });
 console.log('  ✓ All 6 directory search and multi-field filter controls verified');
 
-// 10 Table Columns
 const tableColumns = [
   'Institution ID',
   'Institution Name',
@@ -61,7 +57,6 @@ tableColumns.forEach(col => {
 });
 console.log('  ✓ All 10 Table Columns verified');
 
-// CHECK 2: Section 3.2 Add Institution 6-Step Setup Wizard
 console.log('\n[CHECK 2] Verifying Section 3.2 6-Step Setup Wizard Modal & Flow...');
 assert.ok(html.includes('id="modalAddInstitution"'), '#modalAddInstitution backdrop must exist');
 assert.ok(html.includes('class="pa-wizard-stepper"'), '6-step wizard stepper navigation must exist');
@@ -71,7 +66,6 @@ for (let s = 1; s <= 6; s++) {
   assert.ok(html.includes(`id="wizardPane${s}"`), `Step Pane ${s} must exist`);
 }
 
-// Wizard Step Inputs
 assert.ok(html.includes('id="wizName"'), 'Step 1: Official name input exists');
 assert.ok(html.includes('id="wizDisplayName"'), 'Step 1: Display name input exists');
 assert.ok(html.includes('id="wizCode"'), 'Step 1: Institution code input exists');
@@ -85,7 +79,6 @@ assert.ok(html.includes('id="btnWizardDraft"'), 'Step 6: Save Draft button exist
 assert.ok(html.includes('id="btnWizardSubmit"'), 'Step 6: Activate button exists');
 console.log('  ✓ 6-Step Wizard navigation, fields, branding preview, and actions verified');
 
-// CHECK 3: Section 3.3 Institution Detail Dossier (10 Comprehensive Tabs)
 console.log('\n[CHECK 3] Verifying Section 3.3 10-Tab Detail Dossier...');
 assert.ok(html.includes('id="modalInstitutionDetail"'), '#modalInstitutionDetail backdrop must exist');
 assert.ok(html.includes('id="institutionDetailTabsNav"'), '#institutionDetailTabsNav must exist');
@@ -108,7 +101,6 @@ tenTabs.forEach((tab, idx) => {
 });
 console.log('  ✓ All 10 Dossier Tabs verified: Overview, Profile, Config, Domains, Portals, Admins, Integrations, Subscription, Support, Audit');
 
-// CHECK 4: Section 3.4 Status Workflow, Suspension Governance & Zero-Deletion Mandate
 console.log('\n[CHECK 4] Verifying Section 3.4 Status Workflow & Suspension Policy...');
 assert.ok(html.includes('id="modalSuspendInstitution"'), '#modalSuspendInstitution modal must exist');
 assert.ok(html.includes('id="suspendReason"'), 'Mandatory suspension reason textarea must exist');
@@ -117,7 +109,6 @@ assert.ok(html.includes('id="suspendTargetInstName"'), 'Target campus name input
 assert.ok(js.includes('statutory zero-deletion preservation statement'), 'JS validates zero deletion confirmation before suspension');
 console.log('  ✓ Suspension Governance and statutory preservation rules verified');
 
-// CHECK 5: JavaScript Controller Export Methods
 console.log('\n[CHECK 5] Verifying JavaScript Controller Exports in platformApp...');
 const exportedMethods = [
   'loadInstitutions',
@@ -154,7 +145,6 @@ exportedMethods.forEach(method => {
 });
 console.log('  ✓ All 27 Module 3 methods implemented in controller');
 
-// CHECK 6: Backend Service & Model Verification
 console.log('\n[CHECK 6] Verifying Backend Service & Model Architecture...');
 const serviceCode = fs.readFileSync('backend/src/services/institution.service.js', 'utf8');
 const modelCode = fs.readFileSync('backend/src/models/institution.model.js', 'utf8');
@@ -171,7 +161,6 @@ assert.ok(routesCode.includes('router.post(\'/:id/suspend\''), 'Routes mount /:i
 assert.ok(routesCode.includes('router.post(\'/:id/reactivate\''), 'Routes mount /:id/reactivate');
 console.log('  ✓ Backend Model, Service, and Routes verified');
 
-// CHECK 7: Live Backend REST API probe (HTTP request to localhost:5000)
 console.log('\n[CHECK 7] Probing Live Server REST API at http://localhost:5000/api/v1/platform/institutions ...');
 const req = http.get('http://localhost:5000/api/v1/platform/institutions', (res) => {
   let body = '';

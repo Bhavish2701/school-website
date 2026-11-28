@@ -85,19 +85,16 @@ function apiPatch(path, data) {
 async function testAdmissionWorkflow() {
   console.log('--- ADMISSION TO ENROLMENT SYNC TEST ---');
 
-  // 1. Get the created application
   const admRes = await apiGet('/api/v1/admissions');
   const app = admRes.body.data.applications[0];
   console.log('Target Application:', app.applicationNumber, app.studentName, 'Status:', app.status);
 
-  // 2. Approve application
   const patchRes = await apiPatch('/api/v1/admissions/' + app._id + '/status', {
     status: 'APPROVED',
     remarks: 'Documents verified and eligible for enrolment'
   });
   console.log('Approve Status Change:', patchRes.status, 'Success:', patchRes.body?.success);
 
-  // 3. Enroll student
   const nextAdmNo = 'SV-' + String(Date.now()).slice(-4);
   const enrollRes = await apiPost('/api/v1/admissions/' + app._id + '/enroll', {
     admissionNo: nextAdmNo,
@@ -107,7 +104,6 @@ async function testAdmissionWorkflow() {
   });
   console.log('Enrollment API Response:', enrollRes.status, 'Success:', enrollRes.body?.success);
 
-  // 4. Verify in Management Dashboard
   const mgmt = await apiGet('/api/v1/dashboard/management');
   console.log('Updated Dashboard Student Count:', mgmt.body.data.studentCount);
   console.log('Updated Dashboard Pending Approvals:', mgmt.body.data.approvals.totalPending);

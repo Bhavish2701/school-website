@@ -1,7 +1,3 @@
-/**
- * System Health & Telemetry - Controller Layer
- * Handles HTTP requests, responses, and status codes
- */
 
 const Service = require('./system-health.service');
 

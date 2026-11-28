@@ -1,13 +1,3 @@
-/**
- * Test Suite 02: RBAC (Role-Based Access Control) & Route Authorization Tests
- * Validates permission boundaries across:
- * - SUPER_ADMIN & PRINCIPAL (Management access)
- * - TEACHER (Faculty workspace)
- * - STUDENT (Student portal)
- * - PARENT (Parent gateway)
- * - OFFICE (Administrative staff)
- * - 401 Unauthenticated & 403 Forbidden scenarios
- */
 const request = require('supertest');
 const app = require('../src/app');
 const { seedBaseUsers } = require('./helpers/testFixtures');

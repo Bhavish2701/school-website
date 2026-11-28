@@ -1,14 +1,7 @@
-/**
- * Institutions Module - Policy & Authorization Layer
- * Enforces Multi-Institution Scoping, RBAC roles, and Audit Logging
- */
 
 const MultiInstitutionSecurity = require('../common/multiInstitutionSecurity');
 
 class InstitutionsPolicy {
-  /**
-   * Reading institutions: platform-wide admins see all, school admins see only their campus
-   */
   static readPolicy(req, res, next) {
     return MultiInstitutionSecurity.policyMiddleware({
       allowedRoles: ['Super Administrator', 'Institutional Principal', 'Campus Administrator', 'Trust Security Auditor'],
@@ -18,9 +11,6 @@ class InstitutionsPolicy {
     })(req, res, next);
   }
 
-  /**
-   * Creating an institution requires explicit Platform-Wide authorization
-   */
   static createPolicy(req, res, next) {
     return MultiInstitutionSecurity.policyMiddleware({
       requirePlatformWideScope: true,
@@ -31,9 +21,6 @@ class InstitutionsPolicy {
     })(req, res, next);
   }
 
-  /**
-   * Modifying an institution: Must be scoped to institution or have platform-wide superadmin authority
-   */
   static updatePolicy(req, res, next) {
     return MultiInstitutionSecurity.policyMiddleware({
       allowedRoles: ['Super Administrator', 'Institutional Principal'],
@@ -43,15 +30,12 @@ class InstitutionsPolicy {
     })(req, res, next);
   }
 
-  /**
-   * Suspending an institution: High-impact action requiring statutory authority and explicit reason
-   */
   static suspendPolicy(req, res, next) {
     return MultiInstitutionSecurity.policyMiddleware({
       requirePlatformWideScope: true,
       allowedRoles: ['Super Administrator'],
       requiredPermission: 'institutions.suspend',
-      requireApprovalSignatory: false, // validated via authority checkbox
+      requireApprovalSignatory: false,
       auditCategory: 'INSTITUTION_MANAGEMENT',
       auditAction: 'SUSPEND_INSTITUTION'
     })(req, res, next);

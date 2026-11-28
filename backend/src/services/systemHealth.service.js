@@ -1,8 +1,3 @@
-/**
- * Sri Vidya Educational Trust - System Health & Deployment Service
- * Module 11: Real-Time Service Health, Deployment History, Sanitized Logs,
- * and Idempotent Background Job Execution
- */
 
 const crypto = require('crypto');
 const os = require('os');
@@ -10,7 +5,6 @@ const mongoose = require('mongoose');
 const { DeploymentHistory, AppLog, BackgroundJob } = require('../models/systemHealth.model');
 const PlatformAuditService = require('./platformAudit.service');
 
-// Memory fallbacks for resilience
 const inMemoryDeployments = [];
 const inMemoryLogs = [];
 const inMemoryJobs = [];
@@ -287,10 +281,6 @@ class SystemHealthService {
     }
   }
 
-  // =========================================================================
-  // 11.1 Service Health Probes
-  // =========================================================================
-
   static async getServiceHealth() {
     await this.seedIfEmpty();
     const now = new Date();
@@ -404,7 +394,6 @@ class SystemHealthService {
       }
     };
 
-    // Live error rate from AppLog in last 24h
     const oneDayAgo = new Date(Date.now() - 24 * 60 * 60 * 1000);
     let errLogs24h = 0;
     let totalLogs24h = 0;
@@ -459,10 +448,6 @@ class SystemHealthService {
       data: dataPayload
     };
   }
-
-  // =========================================================================
-  // 11.2 Deployment History
-  // =========================================================================
 
   static async listDeployments(query = {}) {
     await this.seedIfEmpty();
@@ -618,7 +603,6 @@ class SystemHealthService {
       try {
         await DeploymentHistory.create(rollbackDeployment);
       } catch (e) {
-        // Fallback
       }
     }
     inMemoryDeployments.unshift(rollbackDeployment);
@@ -635,10 +619,6 @@ class SystemHealthService {
     delete raw.apiKey;
     return raw;
   }
-
-  // =========================================================================
-  // 11.3 Application Logs
-  // =========================================================================
 
   static async listLogs(query = {}) {
     await this.seedIfEmpty();
@@ -702,7 +682,6 @@ class SystemHealthService {
         const doc = await AppLog.create(logDoc);
         return { success: true, data: this._scrubLog(doc) };
       } catch (e) {
-        // Fallback
       }
     }
     inMemoryLogs.unshift(logDoc);
@@ -771,7 +750,6 @@ class SystemHealthService {
   static _scrubLog(log) {
     const raw = typeof log.toObject === 'function' ? log.toObject() : JSON.parse(JSON.stringify(log));
 
-    // Automated Secret & PII Masking
     if (raw.message) {
       raw.message = raw.message
         .replace(/(Bearer\s+)[A-Za-z0-9._-]+/gi, '$1[REDACTED_AUTH_TOKEN]')
@@ -797,10 +775,6 @@ class SystemHealthService {
 
     return raw;
   }
-
-  // =========================================================================
-  // 11.4 Background Jobs & Safe Idempotent Execution
-  // =========================================================================
 
   static async listJobs(query = {}) {
     await this.seedIfEmpty();
@@ -855,10 +829,6 @@ class SystemHealthService {
     return { success: true, data: j };
   }
 
-  /**
-   * Section 11.4 Action: Retry a Safe Failed Job
-   * Guard Invariant: Must be idempotent and safe against duplicate side-effects
-   */
   static async retryJob(jobId, operator = 'Platform Administrator') {
     await this.seedIfEmpty();
     const jobRes = await this.getJobById(jobId);
@@ -900,7 +870,6 @@ class SystemHealthService {
     return { success: true, status: 'CANCELLED', data: job };
   }
 
-  // Internal Audit Logger
   static async _logHealthAudit(action, entityId, entityName, operator, reason) {
     try {
       await PlatformAuditService.logEvent({

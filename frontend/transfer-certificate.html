@@ -28,7 +28,6 @@
       padding: 1.5rem 1rem 3rem;
     }
 
-    /* ---------- SCREEN CONTROL BAR (NO PRINT) ---------- */
     .control-bar {
       width: 100%;
       max-width: 210mm;
@@ -116,7 +115,6 @@
       cursor: pointer;
     }
 
-    /* ---------- A4 TRANSFER CERTIFICATE SHEET ---------- */
     .tc-sheet {
       width: 210mm;
       min-height: 297mm;
@@ -146,7 +144,6 @@
       height: 100%;
     }
 
-    /* ---------- STATUTORY HEADER (APPENDIX 16) ---------- */
     .tc-statutory-header {
       text-align: center;
       font-size: 0.74rem;
@@ -196,7 +193,6 @@
       letter-spacing: 1px;
     }
 
-    /* Form Title */
     .tc-main-title {
       font-family: 'Cinzel', serif;
       font-size: 1.15rem;
@@ -208,7 +204,6 @@
       text-transform: uppercase;
     }
 
-    /* Document Reference Meta Bar */
     .tc-doc-meta {
       display: grid;
       grid-template-columns: 1.4fr 1.1fr 1.3fr;
@@ -233,7 +228,6 @@
       font-size: 0.82rem;
     }
 
-    /* ---------- 21 NUMBERED ITEMS LIST ---------- */
     .tc-items-container {
       display: flex;
       flex-direction: column;
@@ -265,7 +259,6 @@
       min-height: 15px;
     }
 
-    /* Aadhaar 12-box grid */
     .aadhaar-box-row {
       display: inline-flex;
       align-items: center;
@@ -293,7 +286,6 @@
       width: 4px;
     }
 
-    /* Multi-part sub-items */
     .sub-item-row {
       display: flex;
       align-items: baseline;
@@ -301,7 +293,6 @@
       font-size: 0.825rem;
     }
 
-    /* Identification Marks */
     .ident-row {
       display: flex;
       align-items: baseline;
@@ -309,7 +300,6 @@
       font-size: 0.82rem;
     }
 
-    /* Signatures Section */
     .tc-signatures-section {
       display: flex;
       justify-content: space-between;
@@ -356,7 +346,6 @@
       color: #475569;
     }
 
-    /* Statutory Legal Notes at Bottom */
     .tc-statutory-notes {
       margin-top: 8px;
       padding-top: 4px;
@@ -371,7 +360,6 @@
       padding-left: 0;
     }
 
-    /* ---------- PRINT STYLES (STRICT A4 PORTRAIT) ---------- */
     @page {
       size: A4 portrait;
       margin: 6mm 6mm;
@@ -428,7 +416,6 @@
 </head>
 <body>
 
-  <!-- SCREEN TOP BAR -->
   <div class="control-bar">
     <div class="selector-wrap">
       <i class="fa-solid fa-file-signature" style="color:#d4af37;"></i>
@@ -462,12 +449,10 @@
     </div>
   </div>
 
-  <!-- A4 TC DOCUMENT -->
   <div class="tc-sheet" id="tcSheet">
     <div class="tc-outer-border">
       <div class="tc-inner-border">
 
-        <!-- 1. STATUTORY PROCEEDINGS & AUTHORITY HEADER -->
         <div class="tc-statutory-header">
           <div class="statutory-line1">Supplied by the District Common Examination Board, Visakhapatnam.</div>
           <div class="statutory-line2">Proceedings of the District Educational Officer, Visakhapatnam R.C.No. 72 B1 / 79 Dt. 30-5-80</div>
@@ -486,38 +471,31 @@
           </div>
         </div>
 
-        <!-- 2. DOCUMENT TITLE -->
         <div class="tc-main-title">Form of Transfer Certificate</div>
 
-        <!-- 3. REFERENCE METADATA ROW -->
         <div class="tc-doc-meta">
           <span>Transfer Certificate No. : <strong class="meta-fill" id="dispTcNo">V/2026/041</strong></span>
           <span>Admn. No. : <strong class="meta-fill" id="dispAdmNo">SV-0082</strong></span>
           <span>PEN No. : <strong class="meta-fill" id="dispPenNo">12059048123</strong></span>
         </div>
 
-        <!-- 4. THE 21 NUMBERED STATUTORY ITEMS -->
         <div class="tc-items-container">
 
-          <!-- 1. School details -->
           <div class="tc-item-row">
             <span class="item-label">1. Name of the School (Place and District) &amp; UDISE Code :</span>
             <span class="item-fill" id="dispSchoolInfo">SRI VIDYA E.M HIGH SCHOOL, SRIHARIPURAM, VISAKHAPATNAM - 530026 (UDISE: 28132510004)</span>
           </div>
 
-          <!-- 2. Pupil Name & Aadhaar Box Grid -->
           <div class="tc-item-row" style="flex-wrap: wrap;">
             <span class="item-label">2. Name of the Pupil :</span>
             <span class="item-fill" style="min-width: 200px;" id="dispPupilName">P. KIRAN KUMAR</span>
             <div style="display: inline-flex; align-items: baseline; margin-left: 8px;">
               <span class="item-label" style="font-size: 0.78rem;">AADHAAR NO. :</span>
               <div class="aadhaar-box-row" id="dispAadhaarGrid">
-                <!-- 12-box individual digit cells -->
               </div>
             </div>
           </div>
 
-          <!-- 3. Parents -->
           <div class="tc-item-row">
             <span class="item-label">3. a) Name of the Father :</span>
             <span class="item-fill" id="dispFatherName">P. VENKATA RAMANA</span>
@@ -531,25 +509,21 @@
             <span class="item-fill" id="dispGuardianName">N/A (UNDER PARENTAL CUSTODY)</span>
           </div>
 
-          <!-- 4. Nationality & Religion -->
           <div class="tc-item-row">
             <span class="item-label">4. Nationality and Religion :</span>
             <span class="item-fill" id="dispNationalityReligion">INDIAN / HINDU</span>
           </div>
 
-          <!-- 5. Community / Caste -->
           <div class="tc-item-row" style="align-items: flex-start;">
             <span class="item-label" style="max-width: 48%; line-height: 1.25;">5. Whether the candidate belongs to SCs or STs or Vimuktha Jathis or other socially and Educationally Backward classes specified in the A.P. Educational Rules :</span>
             <span class="item-fill" style="margin-top: 4px;" id="dispSocialCategory">BC-D (YADAVA) — SOCIAL &amp; EDUCATIONALLY BACKWARD CLASS</span>
           </div>
 
-          <!-- 6. Date of Birth in figures & words -->
           <div class="tc-item-row">
             <span class="item-label">6. Date of birth (in words) as entered in the Admission Register :</span>
             <span class="item-fill" id="dispDobWords">07-04-2011 (SEVENTH APRIL TWO THOUSAND ELEVEN)</span>
           </div>
 
-          <!-- 7. Class, Languages, Course -->
           <div class="tc-item-row">
             <span class="item-label">7. (a) Class in which the pupil was reading at the time of leaving (in words) :</span>
             <span class="item-fill" id="dispClassLeaving">CLASS X (TENTH STANDARD)</span>
@@ -565,37 +539,31 @@
             <span class="item-fill" id="dispCourse">ACADEMIC (GENERAL HIGH SCHOOL STREAM)</span>
           </div>
 
-          <!-- 8. Mother Tongue & Medium -->
           <div class="tc-item-row">
             <span class="item-label">8. Mother Tongue &ndash; Medium of instruction Optional :</span>
             <span class="item-fill" id="dispMotherTongueMedium">Mother Tongue: TELUGU &bull; Medium of Instruction: ENGLISH</span>
           </div>
 
-          <!-- 9. Date of admission/promotion to class -->
           <div class="tc-item-row">
             <span class="item-label">9. Date of admission or promotion to that class (year in words) :</span>
             <span class="item-fill" id="dispAdmPromotionDate">12-06-2025 (TWELVE JUNE TWO THOUSAND TWENTY FIVE)</span>
           </div>
 
-          <!-- 10. Class & Year first admitted -->
           <div class="tc-item-row">
             <span class="item-label">10. Class and year in which the pupil was first admitted into the school :</span>
             <span class="item-fill" id="dispFirstAdmClassYear">CLASS I (ACADEMIC YEAR 2016&ndash;2017)</span>
           </div>
 
-          <!-- 11. Qualified for promotion -->
           <div class="tc-item-row">
             <span class="item-label">11. Whether qualified for promotion to a Higher Class :</span>
             <span class="item-fill" id="dispPromotionQualified">YES, QUALIFIED FOR PROMOTION TO CLASS XI / INTERMEDIATE</span>
           </div>
 
-          <!-- 12. Fees paid -->
           <div class="tc-item-row">
             <span class="item-label">12. Whether the pupil has paid all the fees due to the school :</span>
             <span class="item-fill" id="dispFeesPaid">YES, ALL INSTITUTIONAL DUES FULLY CLEARED (NO DUES)</span>
           </div>
 
-          <!-- 13. Scholarships & Concessions -->
           <div class="tc-item-row">
             <span class="item-label">13. (a) Whether in receipt of any scholarship (Nature specified) :</span>
             <span class="item-fill" id="dispScholarship">NIL</span>
@@ -605,13 +573,11 @@
             <span class="item-fill" id="dispConcession">NIL</span>
           </div>
 
-          <!-- 14. Medical Inspection -->
           <div class="tc-item-row">
             <span class="item-label">14. Whether the pupil has undergone medical inspection :</span>
             <span class="item-fill" id="dispMedicalInspection">YES, ANNUAL INSTITUTIONAL HEALTH INSPECTION SATISFACTORY</span>
           </div>
 
-          <!-- 15. Personal marks of identification -->
           <div class="tc-item-row">
             <span class="item-label">15. Personal marks of identification :</span>
           </div>
@@ -624,44 +590,37 @@
             <span class="item-fill" id="dispMole2">A mole on right collar bone</span>
           </div>
 
-          <!-- 16. Actual date left -->
           <div class="tc-item-row">
             <span class="item-label">16. Date on which the pupil actually left the School :</span>
             <span class="item-fill" id="dispDateLeft">18-04-2026</span>
           </div>
 
-          <!-- 17. Application date -->
           <div class="tc-item-row">
             <span class="item-label">17. Date on which application for TC was made by Parent/Guardian :</span>
             <span class="item-fill" id="dispAppDate">12-04-2026</span>
           </div>
 
-          <!-- 18. Issue date -->
           <div class="tc-item-row">
             <span class="item-label">18. Date of the Transfer Certificate :</span>
             <span class="item-fill" id="dispIssueDate">18-04-2026</span>
           </div>
 
-          <!-- 19. Conduct -->
           <div class="tc-item-row">
             <span class="item-label">19. CONDUCT :</span>
             <span class="item-fill" style="font-weight: 800; color: #166534;" id="dispConduct">EXEMPLARY &bull; SATISFACTORY IN ALL RESPECTS</span>
           </div>
 
-          <!-- 20. Attendance days -->
           <div class="tc-item-row">
             <span class="item-label">20. Attendance in the Class of leaving days Present / Total working days :</span>
             <span class="item-fill" id="dispAttendance">204 / 220 DAYS (92.7% CUMULATIVE ATTENDANCE)</span>
           </div>
 
-          <!-- 21. Head of School Signature -->
           <div class="tc-item-row">
             <span class="item-label">21. Signature of the Head of the School :</span>
             <span class="item-fill" style="border:none; color:#475569; font-style:italic;">(Affixed Below with Institutional Seal)</span>
           </div>
         </div>
 
-        <!-- 5. SIGNATURES & VERIFICATION SEAL ROW -->
         <div class="tc-signatures-section">
           <div class="tc-sign-box" style="text-align: left;">
             <div style="height: 32px; display: flex; align-items: flex-end;">
@@ -688,7 +647,6 @@
           </div>
         </div>
 
-        <!-- 6. MANDATORY STATUTORY NOTES (FROM ORIGINAL OFFICIAL AP BOARD TC FORM) -->
         <div class="tc-statutory-notes">
           <strong>Note :</strong>
           <ol>
@@ -703,7 +661,6 @@
   </div>
 
   <script>
-    // Authentic Student Records based on School Database & Official AP TC Form
     const TC_RECORDS = {
       'TC-2026-001': {
         tcNo: 'V/2026/041',

@@ -106,7 +106,6 @@ global.localStorage = {
 global.showToast = function(msg, type) {};
 global.bootstrap = { Modal: function() { return { show: () => {}, hide: () => {} }; } };
 
-// Load student-roster.js first to populate window.STUDENT_ROSTER
 const rosterPath = path.join(__dirname, '..', 'frontend', 'js', 'student-roster.js');
 if (fs.existsSync(rosterPath)) {
   const rosterCode = fs.readFileSync(rosterPath, 'utf8');
@@ -114,7 +113,6 @@ if (fs.existsSync(rosterPath)) {
   console.log('[PASS] Loaded student-roster.js, student count:', (global.window.STUDENT_ROSTER || []).length);
 }
 
-// Load portal.js
 const jsPath = path.join(__dirname, '..', 'frontend', 'js', 'portal.js');
 const portalCode = fs.readFileSync(jsPath, 'utf8');
 eval(portalCode);
@@ -125,7 +123,6 @@ if (!portalApp) {
 }
 console.log('[PASS] portalApp initialized successfully');
 
-// Test 1: Verify Exports
 if (typeof portalApp.generateStudentDossierPrintHTML !== 'function') {
   throw new Error('portalApp.generateStudentDossierPrintHTML is not exported');
 }
@@ -141,7 +138,6 @@ if (typeof portalApp.getActiveDossierStudent !== 'function') {
 }
 console.log('[PASS] Export exists: getActiveDossierStudent');
 
-// Test 2: Generate Print HTML for default/seed student
 const student = portalApp.getActiveDossierStudent();
 if (!student) {
   throw new Error('No active student returned from getActiveDossierStudent');
@@ -150,7 +146,6 @@ console.log(`[PASS] Retrieved active dossier student: ${student.name} (${student
 
 const printDoc = portalApp.generateStudentDossierPrintHTML(student);
 
-// Assertions on the generated HTML content
 const requiredSubstrings = [
   '<!DOCTYPE html>',
   'Sri Vidya English Medium High School',
@@ -177,14 +172,12 @@ requiredSubstrings.forEach(sub => {
 });
 console.log('[PASS] Generated A4 Dossier Document contains all 7 statutory sections, AP Board credentials, tables, and tripartite signature blocks');
 
-// Test 3: Test printStudentDossier execution
 portalApp.printStudentDossier(student.admNo);
 if (!windowOpenCalled && !printCalled) {
   throw new Error('Neither window.open nor window.print was called by printStudentDossier');
 }
 console.log('[PASS] printStudentDossier executed cleanly and opened official print docket window');
 
-// Test 4: Test in-page printable container fallback
 const inPagePrintable = global.document.getElementById('printableStudentDossier');
 if (!inPagePrintable || !inPagePrintable.innerHTML.includes(student.name)) {
   throw new Error('In-page #printableStudentDossier container was not created/populated');

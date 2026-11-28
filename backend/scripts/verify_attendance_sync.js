@@ -17,7 +17,6 @@ function assert(condition, message) {
   }
 }
 
-// 1. Static HTML Checks
 const htmlPath = path.join(__dirname, '../../frontend/administration-portal/index.html');
 const html = fs.readFileSync(htmlPath, 'utf8');
 
@@ -31,7 +30,6 @@ assert(html.includes('id="dashAbsenteesTableBody"'), 'dashAbsenteesTableBody exi
 assert(html.includes('id="dashAbsenteesFooterCount"'), 'dashAbsenteesFooterCount exists');
 assert(html.includes('portalApp.refreshDashboardAbsentees'), 'Manual refresh button exists');
 
-// Verify hardcoded sample students removed from tbody
 const tbodyMatch = html.match(/<tbody id="dashAbsenteesTableBody">([\s\S]*?)<\/tbody>/);
 assert(tbodyMatch !== null, 'Found dashAbsenteesTableBody tbody');
 const tbodyContent = tbodyMatch ? tbodyMatch[1] : '';
@@ -43,7 +41,6 @@ assert(!tbodyContent.includes('S. Rohit Varma'), 'Hardcoded S. Rohit Varma remov
 assert(!tbodyContent.includes('+91 98480 23145'), 'Hardcoded fake phone numbers removed from table body');
 assert(!tbodyContent.includes('Delivered 08:42 AM'), 'Hardcoded fake SMS timestamps removed from table body');
 
-// 2. Static JS Checks
 const jsPath = path.join(__dirname, '../../frontend/js/portal.js');
 const js = fs.readFileSync(jsPath, 'utf8');
 
@@ -55,7 +52,6 @@ assert(js.includes('function callParent('), 'callParent function exists');
 assert(js.includes('setInterval(refreshDashboardAbsentees, 60000);'), 'Periodic 60s background refresh registered');
 assert(js.includes('/api/v1/attendance/management/absentees'), 'API route /api/v1/attendance/management/absentees referenced');
 
-// 3. Backend Model & Service Checks
 const dashboardService = require('../src/services/dashboard.service');
 const attendanceService = require('../src/services/attendance.service');
 const { Student } = require('../src/models/student.model');
@@ -64,26 +60,24 @@ const SmsLog = require('../src/models/smsLog.model');
 
 async function runLiveDbTests() {
   console.log('\n--- Running Live DB Integration & Attendance Flow Tests ---');
-  await mongoose.connect('mongodb://localhost:27017/srividya_school_db');
+  const envConfig = require('../src/config/env');
+  await mongoose.connect(envConfig.mongodbUri);
   console.log('Connected to MongoDB');
 
-  // Test 1: Query management dashboard with current DB state
   const dashData = await dashboardService.getManagementDashboard({ role: 'PRINCIPAL' });
   assert(dashData && dashData.attendance, 'Management dashboard returns attendance object');
   assert(Array.isArray(dashData.attendance.todayAbsentees), 'todayAbsentees is an array');
   assert(dashData.attendance.absenteeBreakdown !== undefined, 'absenteeBreakdown object exists');
   console.log(`Current Absentees Today: ${dashData.attendance.todayAbsentees.length}`);
 
-  // Test 2: Mark attendance for testing: 1 student ABSENT (Medical) and 1 EXCUSED (On-Duty)
-  const testStudent1 = await Student.findOne({ admissionNo: 'SV-0003' }); // K. Sai Teja
-  const testStudent2 = await Student.findOne({ admissionNo: 'SV-0004' }); // M. Divya Bharathi
+  const testStudent1 = await Student.findOne({ admissionNo: 'SV-0003' });
+  const testStudent2 = await Student.findOne({ admissionNo: 'SV-0004' });
   assert(testStudent1 !== null, 'Found student SV-0003 (K. Sai Teja) in DB');
   assert(testStudent2 !== null, 'Found student SV-0004 (M. Divya Bharathi) in DB');
 
   const today = new Date();
   const testDate = new Date(Date.UTC(today.getUTCFullYear(), today.getUTCMonth(), today.getUTCDate(), 0, 0, 0, 0));
 
-  // Upsert test attendance records
   await AttendanceRecord.findOneAndUpdate(
     { student: testStudent1._id, date: testDate, session: 'FULL_DAY' },
     {
@@ -117,7 +111,6 @@ async function runLiveDbTests() {
     { upsert: true, new: true }
   );
 
-  // Test 3: Verify dashboard immediately catches the marked absentees
   const updatedDash = await dashboardService.getManagementDashboard({ role: 'PRINCIPAL' });
   const absList = updatedDash.attendance.todayAbsentees;
   assert(absList.length >= 2, `todayAbsentees length is ${absList.length} (expected >= 2)`);
@@ -138,7 +131,6 @@ async function runLiveDbTests() {
     assert(divya.reportedReason.includes('On-Duty') || divya.reportedReason.includes('Tournament'), 'Reason reflects on-duty');
   }
 
-  // Test 4: Dispatch real SMS log for SV-0003
   await SmsLog.create({
     student: testStudent1._id,
     admissionNo: testStudent1.admissionNo,
@@ -152,13 +144,11 @@ async function runLiveDbTests() {
     deliveredAt: new Date(),
   });
 
-  // Test 5: Re-query and verify SMS delivery status reflects actual gateway log
   const afterSmsDash = await dashboardService.getManagementDashboard({ role: 'PRINCIPAL' });
   const saiTejaAfterSms = afterSmsDash.attendance.todayAbsentees.find(a => a.admissionNo === 'SV-0003');
   assert(saiTejaAfterSms && saiTejaAfterSms.smsStatus.delivered === true, 'SMS delivery status is true after real gateway dispatch');
   assert(saiTejaAfterSms && saiTejaAfterSms.smsStatus.statusText.includes('Delivered'), 'SMS status text includes Delivered');
 
-  // Test 6: Attendance Correction: Change SV-0003 from ABSENT to PRESENT
   await AttendanceRecord.findOneAndUpdate(
     { student: testStudent1._id, date: testDate, session: 'FULL_DAY' },
     {
@@ -171,7 +161,6 @@ async function runLiveDbTests() {
   const saiTejaAfterCorrection = afterCorrectionDash.attendance.todayAbsentees.find(a => a.admissionNo === 'SV-0003');
   assert(saiTejaAfterCorrection === undefined, 'Corrected student (now PRESENT) immediately removed from absentees list');
 
-  // Clean up test records
   await AttendanceRecord.deleteMany({ student: { $in: [testStudent1._id, testStudent2._id] }, date: testDate });
   await SmsLog.deleteMany({ admissionNo: testStudent1.admissionNo });
 

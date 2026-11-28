@@ -1,6 +1,3 @@
-/**
- * End-to-End Test Suite for Student Management Module
- */
 const BASE_URL = 'http://localhost:5000/api/v1';
 
 const login = async (identifier, password) => {
@@ -26,7 +23,6 @@ const runStudentTests = async () => {
   const parentToken = await login('parent1', 'Parent@123');
   console.log('Tokens generated successfully.\n');
 
-  // 1. Dashboard Statistics
   console.log('1. Testing GET /api/v1/students/dashboard/stats...');
   const statsRes = await fetch(`${BASE_URL}/students/dashboard/stats`, {
     headers: { Authorization: `Bearer ${principalToken}` },
@@ -38,7 +34,6 @@ const runStudentTests = async () => {
   console.log(`Class Distribution:`, statsData.data?.stats?.classDistribution);
   console.log();
 
-  // 2. List all students (Management view)
   console.log('2. Testing GET /api/v1/students (Management View)...');
   const listRes = await fetch(`${BASE_URL}/students`, {
     headers: { Authorization: `Bearer ${principalToken}` },
@@ -52,7 +47,6 @@ const runStudentTests = async () => {
   const firstStudent = listData.data?.students?.[0];
   const testStudentId = firstStudent?._id;
 
-  // 3. Search students
   console.log('3. Testing Search (?search=Rahul)...');
   const searchRes = await fetch(`${BASE_URL}/students?search=Rahul`, {
     headers: { Authorization: `Bearer ${principalToken}` },
@@ -62,7 +56,6 @@ const runStudentTests = async () => {
   console.log(`Matches: ${searchData.data?.students?.length} -> Name: ${searchData.data?.students?.[0]?.fullName}`);
   console.log();
 
-  // 4. Filtering (class=10 & gender=female)
   console.log('4. Testing Filtering (?class=10&gender=female)...');
   const filterRes = await fetch(`${BASE_URL}/students?class=10&gender=female`, {
     headers: { Authorization: `Bearer ${principalToken}` },
@@ -72,7 +65,6 @@ const runStudentTests = async () => {
   console.log(`Filtered Count: ${filterData.data?.students?.length} -> Found: ${filterData.data?.students?.[0]?.fullName} (${filterData.data?.students?.[0]?.admissionNo})`);
   console.log();
 
-  // 5. Pagination
   console.log('5. Testing Pagination (?page=1&limit=3)...');
   const pageRes = await fetch(`${BASE_URL}/students?page=1&limit=3`, {
     headers: { Authorization: `Bearer ${principalToken}` },
@@ -83,7 +75,6 @@ const runStudentTests = async () => {
   console.log(`Pagination Meta:`, pageData.data?.pagination);
   console.log();
 
-  // 6. Sorting (?sort=-gpa)
   console.log('6. Testing Sorting (?sort=-gpa)...');
   const sortRes = await fetch(`${BASE_URL}/students?sort=-gpa`, {
     headers: { Authorization: `Bearer ${principalToken}` },
@@ -94,7 +85,6 @@ const runStudentTests = async () => {
   console.log(`Top GPAs: [${topGPAs?.join(', ')}]`);
   console.log();
 
-  // 7. Get Student by ID
   console.log(`7. Testing GET /api/v1/students/:id (ID: ${testStudentId})...`);
   const getByIdRes = await fetch(`${BASE_URL}/students/${testStudentId}`, {
     headers: { Authorization: `Bearer ${principalToken}` },
@@ -106,7 +96,6 @@ const runStudentTests = async () => {
   console.log(`Blood Group: ${getByIdData.data?.student?.bloodGroup} | Status: ${getByIdData.data?.student?.status}`);
   console.log();
 
-  // 8. Create New Student (POST /api/v1/students)
   console.log('8. Testing POST /api/v1/students (Register New Student)...');
   const newStudentPayload = {
     admissionNo: 'SV-0099',
@@ -140,7 +129,6 @@ const runStudentTests = async () => {
   const createdStudentId = postData.data?.student?._id;
   console.log();
 
-  // 9. Update Student (PATCH /api/v1/students/:id)
   console.log(`9. Testing PATCH /api/v1/students/:id (Update Attendance & GPA)...`);
   const patchRes = await fetch(`${BASE_URL}/students/${createdStudentId}`, {
     method: 'PATCH',
@@ -159,7 +147,6 @@ const runStudentTests = async () => {
   console.log(`Updated GPA: ${patchData.data?.student?.gpa} | Attendance: ${patchData.data?.student?.attendancePercentage}%`);
   console.log();
 
-  // 10. Delete Student (DELETE /api/v1/students/:id)
   console.log(`10. Testing DELETE /api/v1/students/:id...`);
   const delRes = await fetch(`${BASE_URL}/students/${createdStudentId}`, {
     method: 'DELETE',
@@ -169,29 +156,24 @@ const runStudentTests = async () => {
   console.log(`Status: ${delRes.status} (Expected 200)`);
   console.log(`Deleted: ${delData.message} (ID: ${delData.data?.id})`);
 
-  // Verify deletion
   const verifyDelRes = await fetch(`${BASE_URL}/students/${createdStudentId}`, {
     headers: { Authorization: `Bearer ${principalToken}` },
   });
   console.log(`Re-fetch status: ${verifyDelRes.status} (Expected 404)\n`);
 
-  // 11. Role-based Scope Verification
   console.log('11. Testing Role-Based Scoping...');
-  // Student view:
   const studentListRes = await fetch(`${BASE_URL}/students`, {
     headers: { Authorization: `Bearer ${studentToken}` },
   });
   const studentListData = await studentListRes.json();
   console.log(`Student role visible count: ${studentListData.data?.students?.length} (Should be 1: own record)`);
 
-  // Parent view:
   const parentListRes = await fetch(`${BASE_URL}/students`, {
     headers: { Authorization: `Bearer ${parentToken}` },
   });
   const parentListData = await parentListRes.json();
   console.log(`Parent role visible count: ${parentListData.data?.students?.length} (Should be 1: child record)`);
 
-  // Teacher view (assigned to Class 10-A and 9-B):
   const teacherListRes = await fetch(`${BASE_URL}/students`, {
     headers: { Authorization: `Bearer ${teacherToken}` },
   });

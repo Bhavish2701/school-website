@@ -1,8 +1,3 @@
-/**
- * Sri Vidya E.M High School - Main Application Logic
- * Interactive modules: Sub-Tabs, Hash Routing, Online Admissions,
- * Status Tracking, Gallery Filter & Lightbox, Notices Search, Toast Notifications.
- */
 
 document.addEventListener('DOMContentLoaded', () => {
   initThemeToggle();
@@ -216,9 +211,6 @@ function initPublicAcademicCalendar() {
   });
 }
 
-/* ==========================================================================
-   1. Toast Notifications
-   ========================================================================== */
 function showToast(message, type = 'success') {
   let container = document.querySelector('.toast-container');
   if (!container) {
@@ -255,9 +247,6 @@ function showToast(message, type = 'success') {
   }, 4000);
 }
 
-/* ==========================================================================
-   2. Mobile Menu & Navigation
-   ========================================================================== */
 function initMobileMenu() {
   const toggleBtn = document.getElementById('mobileMenuToggle');
   const navMenu = document.getElementById('mainNavMenu');
@@ -272,7 +261,6 @@ function initMobileMenu() {
       }
     });
 
-    // Mobile dropdown toggle
     const dropdownItems = navMenu.querySelectorAll('.has-dropdown');
     dropdownItems.forEach(item => {
       const link = item.querySelector('.nav-link');
@@ -284,7 +272,6 @@ function initMobileMenu() {
       });
     });
 
-    // Close mobile menu when clicking any navigation link
     const menuLinks = navMenu.querySelectorAll('a:not(.has-dropdown > .nav-link)');
     menuLinks.forEach(link => {
       link.addEventListener('click', () => {
@@ -299,7 +286,6 @@ function initMobileMenu() {
       });
     });
 
-    // Close mobile menu when clicking outside
     document.addEventListener('click', (e) => {
       if (!navMenu.contains(e.target) && !toggleBtn.contains(e.target) && navMenu.classList.contains('open')) {
         navMenu.classList.remove('open');
@@ -313,9 +299,6 @@ function initMobileMenu() {
   }
 }
 
-/* ==========================================================================
-   3. Sub-Tabs Switching
-   ========================================================================== */
 function initSubTabs() {
   const tabContainers = document.querySelectorAll('.tabs-wrapper');
 
@@ -340,7 +323,6 @@ function initSubTabs() {
   });
 }
 
-/* Deep link router for dropdowns and navigation links */
 function initHashRouter() {
   const ALIAS_TABS = {
     'admissions-enquiry': { section: 'admissions', tab: 'tab-adm-apply' },
@@ -362,7 +344,6 @@ function initHashRouter() {
     const rawHash = window.location.hash ? window.location.hash.substring(1) : '';
     if (!rawHash) return;
 
-    // Check alias mapping first
     if (ALIAS_TABS[rawHash]) {
       const { section, tab } = ALIAS_TABS[rawHash];
       const sectionEl = document.getElementById(section);
@@ -374,14 +355,12 @@ function initHashRouter() {
       return;
     }
 
-    // Direct element ID match (e.g., #news-events, #appointments, #gallery, #portals)
     const directEl = document.getElementById(rawHash);
     if (directEl) {
       directEl.scrollIntoView({ behavior: 'smooth' });
       return;
     }
 
-    // Generic split hyphen fallback
     if (rawHash.includes('-')) {
       const parts = rawHash.split('-');
       const sectionId = parts[0];
@@ -399,15 +378,11 @@ function initHashRouter() {
   }
 
   window.addEventListener('hashchange', handleHash);
-  // Initial check on load
   if (window.location.hash) {
     setTimeout(handleHash, 250);
   }
 }
 
-/* ==========================================================================
-   4. Online Admission Application Form
-   ========================================================================== */
 const INITIAL_ADMISSIONS_REGISTER = [];
 const sampleApplications = [];
 
@@ -515,14 +490,12 @@ function initAdmissionForm() {
       }
       await new Promise(resolve => requestAnimationFrame(resolve));
 
-      // Generate Dynamic Year-Based Unique Application ID (e.g. SV202600007)
       const currentYear = new Date().getFullYear();
       const yearPrefix = `SV${currentYear}`;
       const yearSeqKey = `sv_admission_seq_${currentYear}`;
       
       let maxYearSeq = 0;
 
-      // 1. Check initial base roster
       INITIAL_ADMISSIONS_REGISTER.forEach(item => {
         const id = item.appId || item.applicationNumber || '';
         if (typeof id === 'string' && id.startsWith(yearPrefix)) {
@@ -533,7 +506,6 @@ function initAdmissionForm() {
         }
       });
 
-      // 2. Check stored applications
       try {
         const storedApps = JSON.parse(localStorage.getItem('sv_applications') || '[]');
         if (Array.isArray(storedApps)) {
@@ -549,7 +521,6 @@ function initAdmissionForm() {
         }
       } catch (err) {}
 
-      // 3. Increment sequence
       const storedSeq = parseInt(localStorage.getItem(yearSeqKey) || '0', 10);
       const nextSeq = Math.max(maxYearSeq, storedSeq) + 1;
       localStorage.setItem(yearSeqKey, nextSeq.toString());
@@ -581,7 +552,6 @@ function initAdmissionForm() {
         submittedAt: new Date().toISOString()
       };
 
-      // Store in memory & localStorage for shared access with Management Portal
       sampleApplications.unshift(newRecord);
       try {
         let allApps = [];
@@ -604,11 +574,9 @@ function initAdmissionForm() {
         console.warn('LocalStorage save error:', err);
       }
 
-      // Fill Receipt Modal
       const rcAppId = document.getElementById('receiptAppId');
       if (rcAppId) rcAppId.textContent = generatedAppId;
 
-      // Copy Application Number functionality
       const copyBtn = document.getElementById('copyAppIdBtn');
       const copyText = document.getElementById('copyAppIdText');
       if (copyBtn) {
@@ -629,7 +597,6 @@ function initAdmissionForm() {
         };
       }
 
-      // Submit to Express REST backend if active
       if (window.ApiClient && window.ApiClient.admissions && typeof window.ApiClient.admissions.submitApplication === 'function') {
         window.ApiClient.admissions.submitApplication({
           studentName,
@@ -647,7 +614,6 @@ function initAdmissionForm() {
         });
       }
 
-      // Show Receipt Modal
       if (isMultiStep) {
         currentStep = 3;
         setAdmissionStep(currentStep);
@@ -658,7 +624,6 @@ function initAdmissionForm() {
         if (receiptModal) receiptModal.classList.add('active');
       };
       
-      // Auto-open Receipt Modal for parents
       if (receiptModal) {
         receiptModal.classList.add('active');
       }
@@ -673,7 +638,6 @@ function initAdmissionForm() {
     });
   }
 
-  // Close modals
   document.querySelectorAll('.modal-close-trigger').forEach(btn => {
     btn.addEventListener('click', () => {
       document.querySelectorAll('.modal-overlay').forEach(modal => modal.classList.remove('active'));
@@ -687,15 +651,11 @@ function initAdmissionForm() {
   }
 }
 
-/* ==========================================================================
-   5. Admission Status Tracker
-   ========================================================================== */
 function initStatusChecker() {
   const checkBtn = document.getElementById('btnCheckStatus') || document.getElementById('checkStatusBtn');
   const searchInput = document.getElementById('statusSearchInput');
   const resultCard = document.getElementById('statusResultArea') || document.getElementById('statusResultCard');
 
-  // Load from localStorage if present
   try {
     const saved = localStorage.getItem('sv_applications');
     if (saved) {
@@ -715,7 +675,6 @@ function initStatusChecker() {
       return;
     }
 
-    // Refresh application state dynamically from storage & base registers in real time
     let currentApplications = [...INITIAL_ADMISSIONS_REGISTER, ...sampleApplications];
     try {
       const saved = localStorage.getItem('sv_applications');
@@ -744,7 +703,6 @@ function initStatusChecker() {
       return aid === query || phone === query;
     });
 
-    // If ApiClient is available and we have an application id and phone from match or query
     if (window.ApiClient && match && match.appId && match.phone) {
       try {
         const liveRes = await window.ApiClient.admissions.checkStatus(match.appId, match.phone);
@@ -844,7 +802,6 @@ function initStatusChecker() {
     });
   }
 
-  // Auto-refresh displayed status card on live storage event (when Principal or VP approves)
   window.addEventListener('storage', (e) => {
     if (resultCard && resultCard.style.display !== 'none' && searchInput && searchInput.value.trim()) {
       performSearch();
@@ -852,9 +809,6 @@ function initStatusChecker() {
   });
 }
 
-/* ==========================================================================
-   6. Gallery Filter & Lightbox
-   ========================================================================== */
 function initGallery() {
   const filterBtns = document.querySelectorAll('.gallery-filter-btn');
   const items = document.querySelectorAll('.gallery-item');
@@ -879,7 +833,6 @@ function initGallery() {
     });
   });
 
-  // Lightbox click
   items.forEach(item => {
     item.addEventListener('click', () => {
       const img = item.querySelector('img');
@@ -894,9 +847,6 @@ function initGallery() {
   });
 }
 
-/* ==========================================================================
-   7. Notices Search & Filters
-   ========================================================================== */
 function initNotices() {
   const searchInput = document.getElementById('noticeSearchInput');
   const noticeItems = document.querySelectorAll('.notice-item');
@@ -935,9 +885,6 @@ function initNotices() {
   });
 }
 
-/* ==========================================================================
-   8. Notice & Document Modal Viewer System
-   ========================================================================== */
 const NOTICE_DOCUMENTS_DATABASE = {
   'admissions-circular': {
     id: 'admissions-circular',
@@ -1647,17 +1594,14 @@ function openNoticeModal(docKeyOrFile) {
     return;
   }
 
-  // Lookup in database
   let doc = NOTICE_DOCUMENTS_DATABASE[docKeyOrFile];
   if (!doc) {
-    // Search by fileName
     const match = Object.values(NOTICE_DOCUMENTS_DATABASE).find(d => 
       d.fileName === docKeyOrFile || d.id === docKeyOrFile
     );
     if (match) doc = match;
   }
 
-  // Fallback if not specifically in database
   if (!doc) {
     const cleanName = (docKeyOrFile || 'Document').replace(/[_-]/g, ' ').replace(/\.pdf$/i, '');
     doc = {
@@ -1747,7 +1691,6 @@ function initDownloads() {
     });
   }
 
-  // Direct download buttons (Download Syllabus, Download Form, etc.)
   document.querySelectorAll('.direct-download-btn').forEach(btn => {
     btn.addEventListener('click', () => {
       const fileName = btn.getAttribute('data-file') || 'Document.pdf';
@@ -1755,7 +1698,6 @@ function initDownloads() {
     });
   });
 
-  // Preview buttons in download cards
   document.querySelectorAll('.preview-doc-btn').forEach(btn => {
     btn.addEventListener('click', (e) => {
       e.preventDefault();
@@ -1766,7 +1708,6 @@ function initDownloads() {
     });
   });
 
-  // Notice triggers (Circular, Timetable, View, Details)
   document.querySelectorAll('.notice-trigger-btn').forEach(btn => {
     btn.addEventListener('click', (e) => {
       e.preventDefault();
@@ -1780,7 +1721,6 @@ function initDownloads() {
     });
   });
 
-  // Global modal overlay close triggers
   document.querySelectorAll('.modal-overlay').forEach(overlay => {
     overlay.addEventListener('click', (e) => {
       if (e.target === overlay) {
@@ -1802,9 +1742,6 @@ function initDownloads() {
   });
 }
 
-/* ==========================================================================
-   9. Contact Form
-   ========================================================================== */
 function initContactForm() {
   const contactForm = document.getElementById('contactInquiryForm');
 
@@ -1851,9 +1788,6 @@ function initContactForm() {
   }
 }
 
-/* ==========================================================================
-   10. Theme Toggle (Light / Dark Mode)
-   ========================================================================== */
 function initThemeToggle() {
   const toggleBtn = document.getElementById('themeToggleBtn');
   const savedTheme = localStorage.getItem('sv_theme') || 'light';
@@ -1895,12 +1829,6 @@ function initThemeToggle() {
   }
 }
 
-/* ==========================================================================
-   11. Multi-Language Switcher (Mother Tongue Selection)
-   - Supports: English (Default), Telugu (తెలుగు), Hindi (हिन्दी)
-   - Features 100% Full-Website Native Translation via Google Translate Engine
-     integrated with an instant in-memory design dictionary.
-   ========================================================================== */
 function initLanguageSelector() {
   const topLangSelector = document.getElementById('langSelector');
   const navLangSelector = document.getElementById('navLangSelector');
@@ -1982,7 +1910,6 @@ function initLanguageSelector() {
     const hostname = window.location.hostname;
 
     if (langCode === 'en') {
-      // Clear cookies
       document.cookie = "googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
       document.cookie = "googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=" + hostname;
       document.cookie = "googtrans=/en/en; path=/;";
@@ -1993,7 +1920,6 @@ function initLanguageSelector() {
         combo.dispatchEvent(new Event('change'));
       }
 
-      // If user previously translated via Google Translate, reload clean to restore pristine original markup
       if (sessionStorage.getItem('sv_has_translated') === 'true') {
         sessionStorage.removeItem('sv_has_translated');
         window.location.reload();
@@ -2001,7 +1927,6 @@ function initLanguageSelector() {
       return;
     }
 
-    // Set translation session flag and cookie
     sessionStorage.setItem('sv_has_translated', 'true');
     document.cookie = "googtrans=/en/" + langCode + "; path=/;";
     document.cookie = "googtrans=/en/" + langCode + "; path=/; domain=" + hostname;
@@ -2033,11 +1958,9 @@ function initLanguageSelector() {
 
     const data = translations[langCode] || translations.en;
 
-    // Keep selectors in sync
     if (topLangSelector) topLangSelector.value = langCode;
     if (navLangSelector) navLangSelector.value = langCode;
 
-    // Instant in-DOM dictionary replacement
     Object.keys(data.elements).forEach(id => {
       const el = document.getElementById(id);
       if (el) {
@@ -2045,7 +1968,6 @@ function initLanguageSelector() {
       }
     });
 
-    // Fire Full-Website Google Translation
     triggerGoogleTranslateCombo(langCode);
 
     if (showFeedback) {
@@ -2057,7 +1979,6 @@ function initLanguageSelector() {
     }, 400);
   }
 
-  // Event Listeners
   if (topLangSelector) {
     topLangSelector.addEventListener('change', (e) => {
       applyLanguage(e.target.value, true);
@@ -2070,14 +1991,10 @@ function initLanguageSelector() {
     });
   }
 
-  // Ensure initial load ALWAYS defaults to English
   sessionStorage.removeItem('sv_has_translated');
   applyLanguage('en', false);
 }
 
-/* ==========================================================================
-   Portal Dropdown Trigger Handling
-   ========================================================================== */
 function initPortalDropdown() {
   const btn = document.getElementById('portalDropdownBtn');
   const wrapper = document.getElementById('portalDropdownWrap');
@@ -2099,9 +2016,6 @@ function initPortalDropdown() {
   }
 }
 
-/* ==========================================================================
-   Leadership Desk Switcher (Principal & Vice Principal)
-   ========================================================================== */
 function switchLeadershipDesk(target) {
   const pPanel = document.getElementById('leadershipDeskPrincipal');
   const vpPanel = document.getElementById('leadershipDeskVicePrincipal');
@@ -2133,8 +2047,6 @@ function switchLeadershipDesk(target) {
 window.switchLeadershipDesk = switchLeadershipDesk;
 
 
-
-// Universal Section and Tab Switcher for Public Website
 window.switchTab = function(sectionId, tabId) {
   const section = document.getElementById(sectionId);
   if (section) {

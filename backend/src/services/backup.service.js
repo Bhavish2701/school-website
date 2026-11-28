@@ -1,14 +1,9 @@
-/**
- * Sri Vidya Educational Trust - Backups & Recovery Service
- * Module 12: 12.1 Backup Overview, 12.2 Backup History, and 12.3 Controlled 8-Step Recovery Workflow
- */
 
 const crypto = require('crypto');
 const mongoose = require('mongoose');
 const { BackupRecord, RecoveryRequest } = require('../models/backup.model');
 const PlatformAuditService = require('./platformAudit.service');
 
-// In-memory fallbacks
 const inMemoryBackups = [];
 const inMemoryRecoveryRequests = [];
 
@@ -266,10 +261,6 @@ class BackupService {
     }
   }
 
-  // =========================================================================
-  // 12.1 Backup Overview
-  // =========================================================================
-
   static async getBackupOverview() {
     await this.seedIfEmpty();
     let backups = [];
@@ -378,10 +369,6 @@ class BackupService {
     };
   }
 
-  // =========================================================================
-  // 12.2 Backup History
-  // =========================================================================
-
   static async listBackups(query = {}) {
     await this.seedIfEmpty();
     let backups = [];
@@ -460,7 +447,7 @@ class BackupService {
       scope,
       campusScope,
       startTime: new Date(),
-      completionTime: new Date(Date.now() + 120000), // simulated 2 min completion
+      completionTime: new Date(Date.now() + 120000),
       status: 'SUCCESS',
       sizeBytes,
       sizeFormatted,
@@ -499,7 +486,6 @@ class BackupService {
         checksumSha256,
         operator,
       };
-      // Write snapshot manifest
       fs.writeFileSync(path.join(backupDir, `${backupId}.json`), JSON.stringify(dumpMeta, null, 2), 'utf8');
       newRecord.localSnapshotPath = path.join(backupDir, `${backupId}.json`);
     } catch (fsErr) {
@@ -584,10 +570,6 @@ class BackupService {
     };
   }
 
-  // =========================================================================
-  // 12.3 Recovery Workflow (Controlled 8-Step Procedure)
-  // =========================================================================
-
   static async listRecoveryRequests(query = {}) {
     await this.seedIfEmpty();
     let requests = [];
@@ -633,12 +615,6 @@ class BackupService {
     return { success: true, data: r };
   }
 
-  /**
-   * Section 12.3: Steps 1, 2, and 3
-   * 1. Authorized operator submits a recovery request.
-   * 2. System identifies the backup and target environment.
-   * 3. The operator reviews the potential impact.
-   */
   static async createRecoveryRequest(payload, operator = 'Platform Administrator') {
     await this.seedIfEmpty();
     const backupRes = await this.getBackupById(payload.backupId);
@@ -650,7 +626,6 @@ class BackupService {
     const recoveryId = `REC-2026-${Math.floor(100 + Math.random() * 900)}`;
     const targetEnv = payload.targetEnvironment || 'ISOLATED_SANDBOX';
 
-    // Step 3 Impact Assessment
     const potentialImpact = {
       affectedCampuses: backup.campusScope === 'ALL_CAMPUSES' ? ['SV-MAIN', 'SV-PRIMARY', 'SV-VILLAGE'] : [backup.campusScope],
       estimatedDowntimeMinutes: targetEnv === 'PRODUCTION_CONTROLLED' ? 15 : 0,
@@ -680,7 +655,7 @@ class BackupService {
         approvedAt: null,
         remarks: null
       },
-      workflowStep: 3, // Steps 1, 2, 3 complete; awaiting Step 4 Approval
+      workflowStep: 3,
       stepDetails: [
         { stepNumber: 1, stepName: 'Recovery Request Submitted', status: 'COMPLETED', executedAt: new Date(), operator, details: `Requested restore for ${backup.backupId}` },
         { stepNumber: 2, stepName: 'Target Environment Identified', status: 'COMPLETED', executedAt: new Date(), operator: 'System Orchestrator', details: `Selected target: ${targetEnv}` },
@@ -716,14 +691,6 @@ class BackupService {
     return { success: true, data: newRequest };
   }
 
-  /**
-   * Section 12.3: Steps 4 through 8
-   * 4. An appropriately authorized person approves the operation (dual-authorization guard).
-   * 5. Recovery is performed in a controlled environment.
-   * 6. Data integrity checks are performed.
-   * 7. The recovered system is validated.
-   * 8. The recovery outcome is recorded in the audit log.
-   */
   static async approveAndExecuteRecovery(recoveryId, payload = {}, approver = { userId: 'USR-PLAT-OWNER', name: 'Trust Secretary', role: 'Platform Owner' }) {
     await this.seedIfEmpty();
     const reqRes = await this.getRecoveryRequestById(recoveryId);
@@ -733,7 +700,6 @@ class BackupService {
 
     const req = reqRes.data;
 
-    // Dual-authorization guard: Requester cannot approve their own restore
     if (req.requestedBy?.userId && req.requestedBy.userId === approver.userId) {
       return {
         success: false,
@@ -751,7 +717,6 @@ class BackupService {
       return { success: true, data: req };
     }
 
-    // Step 4: Approved
     const now = new Date();
     req.approvalStatus = 'APPROVED';
     req.approvedBy = {
@@ -766,7 +731,6 @@ class BackupService {
     req.stepDetails[3].operator = approver.name;
     req.stepDetails[3].details = `Approved by ${approver.name} (${approver.role})`;
 
-    // Step 5: Controlled Recovery Performed
     req.workflowStep = 5;
     req.recoveryStatus = 'IN_PROGRESS';
     req.stepDetails[4].status = 'COMPLETED';
@@ -774,7 +738,6 @@ class BackupService {
     req.stepDetails[4].operator = 'Automated Recovery Pod Engine';
     req.stepDetails[4].details = `Restored database collections into target sandbox environment [${req.targetEnvironment}]`;
 
-    // Step 6: Data Integrity Checks
     req.workflowStep = 6;
     req.stepDetails[5].status = 'COMPLETED';
     req.stepDetails[5].executedAt = new Date(now.getTime() + 120000);
@@ -786,7 +749,6 @@ class BackupService {
       discrepancies: 0
     };
 
-    // Step 7: The recovered system is validated
     req.workflowStep = 7;
     req.stepDetails[6].status = 'COMPLETED';
     req.stepDetails[6].executedAt = new Date(now.getTime() + 180000);
@@ -794,7 +756,6 @@ class BackupService {
     req.stepDetails[6].details = 'Portal authentication, fee reconciliation, and timetable integrity verified 100%.';
     req.validationSummary = 'Validation Successful: System recovered in controlled environment with 100% data fidelity and 0 discrepancies.';
 
-    // Step 8: The recovery outcome is recorded in the audit log
     req.workflowStep = 8;
     req.recoveryStatus = 'COMPLETED';
     const auditLogId = `AUD-REC-${Date.now().toString().slice(-5)}`;
@@ -816,7 +777,6 @@ class BackupService {
     };
   }
 
-  // Internal Audit Logger
   static async _logBackupAudit(action, entityId, entityName, operator, reason) {
     try {
       await PlatformAuditService.logEvent({

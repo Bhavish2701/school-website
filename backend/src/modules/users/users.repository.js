@@ -1,7 +1,3 @@
-/**
- * Platform Users & Accounts - Repository Layer
- * Manages database access and persistence
- */
 
 const mongoose = require('mongoose');
 const { UserAccount } = require('../../models/userAccount.model');

@@ -1,7 +1,6 @@
 const fs = require('fs');
 let code = fs.readFileSync('frontend/js/teacher.js', 'utf8');
 
-// Replace init call check
 code = code.replace(
   'if (window.ApiClient && window.ApiClient.isAuthenticated()) {\r\n      loadLiveData();\r\n    }',
   'loadLiveData();\r\n    if (!window.__sv_teacher_sync_interval) {\r\n      window.__sv_teacher_sync_interval = setInterval(loadLiveData, 30000);\r\n    }'

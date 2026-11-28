@@ -1,7 +1,3 @@
-/**
- * Institutional Domains & DNS - Validation Layer
- * Enforces field schemas, constraints, and data integrity
- */
 
 class DomainsValidation {
   static validateRequest(req, res, next) {

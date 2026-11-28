@@ -1,7 +1,3 @@
-/* ==========================================================================
-   Sri Vidya E.M High School - Unified Expansive 2-Column Portal Login Styles
-   Applied across Management, Teacher, Student, and Parent Portals
-   ========================================================================== */
 
 .portal-login-overlay {
   position: fixed;
@@ -32,7 +28,6 @@
   pointer-events: none;
 }
 
-/* Ambient Floating Glows for Depth - Hidden in full-screen edge-to-edge mode */
 .login-bg-glow {
   display: none !important;
 }
@@ -58,7 +53,6 @@
   100% { transform: scale(1.12) translate(20px, -20px); opacity: 0.65; }
 }
 
-/* Container */
 .login-card-container {
   width: 100vw;
   max-width: 100vw;
@@ -82,7 +76,6 @@
   }
 }
 
-/* 2-Column Split Full-Page Layout */
 .portal-login-card {
   background: #FFFFFF;
   border-radius: 0 !important;
@@ -97,7 +90,6 @@
   box-sizing: border-box;
 }
 
-/* Top Accent Stripe - Spans full screen width */
 .portal-login-card::before {
   content: '';
   position: absolute;
@@ -126,9 +118,6 @@
   background: linear-gradient(90deg, #7C3AED 0%, #A78BFA 50%, #5B21B6 100%);
 }
 
-/* ==========================================================================
-   LEFT COLUMN: Visual Showcase Panel
-   ========================================================================== */
 .login-showcase-panel {
   position: relative;
   background-size: cover;
@@ -161,7 +150,6 @@
   background-image: url('../assets/images/sports.jpg');
 }
 
-/* High-Contrast Tint Overlays */
 .showcase-overlay {
   position: absolute;
   inset: 0;
@@ -193,7 +181,6 @@
   box-sizing: border-box;
 }
 
-/* School Crest & Identity */
 .showcase-brand {
   display: flex;
   align-items: center;
@@ -244,7 +231,6 @@
   margin-top: 0.15rem;
 }
 
-/* Showcase Hero Headline */
 .showcase-hero {
   margin: 0 0 1.1rem;
 }
@@ -288,7 +274,6 @@
 .showcase-student .showcase-motto { color: #FCD34D; }
 .showcase-parent .showcase-motto { color: #C4B5FD; }
 
-/* Feature Highlights Grid */
 .showcase-features {
   display: flex;
   flex-direction: column;
@@ -349,7 +334,6 @@
   line-height: 1.35;
 }
 
-/* Stats Row */
 .showcase-stats-bar {
   display: grid !important;
   grid-template-columns: repeat(3, 1fr) !important;
@@ -394,7 +378,6 @@
   color: #F1F5F9 !important;
 }
 
-/* Showcase Bottom Helpline */
 .showcase-footer {
   font-size: 0.8rem;
   color: rgba(226, 232, 240, 0.85);
@@ -416,9 +399,6 @@
   letter-spacing: 0.3px;
 }
 
-/* ==========================================================================
-   RIGHT COLUMN: Login Form Panel
-   ========================================================================== */
 .login-form-panel {
   background: #FFFFFF;
   padding: 3rem 3.5rem 2.5rem;
@@ -454,7 +434,6 @@
   margin-bottom: 1.15rem;
 }
 
-/* Distinct Portal Badges */
 .portal-badge-pill {
   display: inline-flex;
   align-items: center;
@@ -509,7 +488,6 @@
   line-height: 1.4;
 }
 
-/* Form Layout */
 .login-form {
   display: flex !important;
   flex-direction: column !important;
@@ -692,7 +670,6 @@
   text-decoration: underline;
 }
 
-/* Big Action Button */
 .btn-login-submit {
   width: 100%;
   height: 44px;
@@ -750,7 +727,6 @@
   box-shadow: 0 6px 18px rgba(124, 58, 237, 0.35);
 }
 
-/* Quick Cross-Portal Switcher */
 .login-portal-switch {
   background: #F8FAFC;
   border: 1px solid #E2E8F0;
@@ -841,7 +817,6 @@
   pointer-events: none;
 }
 
-/* Bottom Footer */
 .login-card-footer {
   margin-top: 1.15rem;
   padding-top: 0.9rem;
@@ -878,7 +853,6 @@
   font-size: 0.74rem;
 }
 
-/* Toast Message */
 .login-toast {
   position: fixed;
   bottom: 2rem;
@@ -903,9 +877,6 @@
   to { opacity: 1; transform: translate(-50%, 0); }
 }
 
-/* ==========================================================================
-   Responsive Adaptations
-   ========================================================================== */
 @media (max-width: 960px) {
   .portal-login-overlay {
     overflow-y: auto;
@@ -961,10 +932,6 @@
   }
 }
 
-/* ==========================================================================
-   Universal Sidebar User Profile Card & Fast Logout
-   Matches Management, Teacher, Student, and Parent Portals
-   ========================================================================== */
 .sidebar-user-card {
   padding: 0.85rem 1.15rem;
   border-top: 1px solid var(--color-border, #E2E8F0);
@@ -1069,7 +1036,6 @@
   border-color: rgba(239, 68, 68, 0.4) !important;
 }
 
-/* Fast Header Signout Button */
 .btn-header-signout {
   display: inline-flex;
   align-items: center;
@@ -1095,12 +1061,6 @@
   box-shadow: 0 4px 12px rgba(220, 38, 38, 0.25);
 }
 
-/* ==========================================================================
-   Universal Portal "My Profile" Styles (Teacher, Student, Parent)
-   ========================================================================== */
-/* ==========================================================================
-   MY PROFILE & DASHBOARD PERSONALIZATION (PIXEL-PERFECT ALIGNMENT)
-   ========================================================================== */
 
 .profile-view-wrap {
   display: flex;
@@ -1112,7 +1072,6 @@
   box-sizing: border-box;
 }
 
-/* 1. Hero Header Banner */
 .profile-hero-banner {
   border-radius: 16px;
   padding: 1.75rem 2rem;
@@ -1190,7 +1149,6 @@
   backdrop-filter: blur(4px);
 }
 
-/* 2. Institutional Policy Callout */
 .profile-policy-callout {
   background: #EFF6FF;
   border: 1px solid #BFDBFE;
@@ -1249,7 +1207,6 @@
   font-size: 0.84rem;
 }
 
-/* 3. Two-Column Grid */
 .profile-cards-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -1312,7 +1269,6 @@
   line-height: 1.45;
 }
 
-/* 4. Form Fields & Alignment */
 .profile-card form,
 .profile-card-body {
   display: flex;
@@ -1479,9 +1435,6 @@
   }
 }
 
-/* ==========================================================================
-   Dark Mode Support for Profile Cards and Form Controls
-   ========================================================================== */
 [data-theme="dark"] .profile-card {
   background: var(--color-bg-surface, #151F32) !important;
   border-color: var(--color-border, #243048) !important;
@@ -1565,7 +1518,6 @@
 
 
 
-/* Universal Card & Padding Utilities */
 .card {
   padding: 1.5rem;
   box-sizing: border-box;
@@ -1576,9 +1528,6 @@
 .p-2 { padding: 0.5rem !important; }
 
 
-/* ==========================================================================
-   Two-Factor Authentication (2FA) Phone Number OTP Verification Styles
-   ========================================================================== */
 .otp-verification-header {
   text-align: center;
   margin-bottom: 1.25rem;
@@ -1747,9 +1696,6 @@
   border-color: #059669;
 }
 
-/* ==========================================================================
-   15-Minute Inactivity Session Warning Modal & Countdown Styles
-   ========================================================================== */
 .inactivity-warning-modal {
   position: fixed;
   inset: 0;

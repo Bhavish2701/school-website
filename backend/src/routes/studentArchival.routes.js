@@ -1,7 +1,3 @@
-/**
- * Student Archival & Record Inactivation Express Routes
- * Sri Vidya English Medium High School - ERP
- */
 
 const express = require('express');
 const router = express.Router();

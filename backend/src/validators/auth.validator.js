@@ -1,6 +1,3 @@
-/**
- * Authentication Input Validation Helper
- */
 const ApiError = require('../utils/apiError');
 
 const validateLogin = (req, res, next) => {

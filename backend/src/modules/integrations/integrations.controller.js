@@ -1,7 +1,3 @@
-/**
- * External Integrations Directory - Controller Layer
- * Handles HTTP requests, responses, and status codes
- */
 
 const Service = require('./integrations.service');
 

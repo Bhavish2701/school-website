@@ -1,7 +1,3 @@
-/**
- * Security & Access Threat Monitoring - Repository Layer
- * Manages database access and persistence
- */
 
 const mongoose = require('mongoose');
 const { SecurityEvent } = require('../../models/securityMonitoring.model');

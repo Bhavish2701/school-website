@@ -1,7 +1,3 @@
-/**
- * Support & Issue Management - Repository Layer
- * Manages database access and persistence
- */
 
 const mongoose = require('mongoose');
 const { SupportTicket } = require('../../models/supportTicket.model');

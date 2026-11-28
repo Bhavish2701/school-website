@@ -1,7 +1,3 @@
-/**
- * Deployment History & Lifecycle - Repository Layer
- * Manages database access and persistence
- */
 
 const mongoose = require('mongoose');
 const { DeploymentHistory } = require('../../models/systemHealth.model');

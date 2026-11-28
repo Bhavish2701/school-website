@@ -1,7 +1,3 @@
-/**
- * Institutions Module - Controller Layer
- * Handles incoming HTTP requests, status codes, and error bubbling
- */
 
 const InstitutionsService = require('./institutions.service');
 

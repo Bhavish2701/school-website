@@ -1,7 +1,3 @@
-/**
- * Deployment History & Lifecycle - Controller Layer
- * Handles HTTP requests, responses, and status codes
- */
 
 const Service = require('./deployments.service');
 

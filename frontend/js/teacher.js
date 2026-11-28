@@ -1,7 +1,3 @@
-/**
- * Sri Vidya E.M High School - Dedicated Teacher Portal
- * Faculty: Ms. Anjali (Class Teacher – Grade 8A, Mathematics)
- */
 
 var teacherApp = (function () {
   'use strict';
@@ -325,7 +321,6 @@ var teacherApp = (function () {
 
       const circulars = (bundle.circularsRes && bundle.circularsRes.data && (bundle.circularsRes.data.circulars || bundle.circularsRes.data)) || [];
 
-      // Populate Dashboard 9 metric cards & Today's classes & Tasks from live API
       const setTxt = (id, v) => { const e = document.getElementById(id); if (e) e.textContent = v; };
       setTxt('tdMetricClassesVal', state.classes.length + ' Classes');
       setTxt('tdMetricClassesSub', state.classes.map(c => c.code).join(', ') || 'No classes assigned');
@@ -346,7 +341,6 @@ var teacherApp = (function () {
       setTxt('tdMetricMeetVal', circulars.length + ' Notices');
       setTxt('tdMetricMeetSub', 'Published circulars');
 
-      // Render Today's Timetable / Assigned Classes
       const periods = (dash.timetable && Array.isArray(dash.timetable.periods)) ? dash.timetable.periods : [];
       setTxt('tdTodayClassesCountBadge', periods.length + ' Scheduled Today');
       const tcListEl = document.getElementById('tdTodayClassesList');
@@ -368,7 +362,6 @@ var teacherApp = (function () {
         }
       }
 
-      // Tasks list from live upcoming exams & homework
       state.pendingTasks = [
         ...upcomingEx.map((ex, i) => ({ id: i + 1, title: 'Exam Schedule: ' + ex.name, meta: ex.datesFormatted || 'Upcoming', badge: 'due-today', badgeText: ex.status || 'UPCOMING', done: false })),
         ...state.homework.slice(0, 4).map((h, i) => ({ id: 100 + i, title: 'Assignment: ' + h.title, meta: h.class + ' • Due ' + h.due, badge: 'due-soon', badgeText: 'Homework', done: false }))
@@ -425,14 +418,10 @@ var teacherApp = (function () {
   }
 
   function bindEvents() {
-    // Theme toggle
     const themeBtn = document.getElementById('themeToggleBtn');
     if (themeBtn) themeBtn.addEventListener('click', toggleTheme);
 
     
-  // =========================================================================
-  // TWO-LEVEL SIDEBAR NAVIGATION & COLLAPSE CONTROLLER
-  // =========================================================================
   let _lastTeacherToggleStamp = 0;
   let _lastTeacherToggleMod = null;
 
@@ -510,7 +499,6 @@ var teacherApp = (function () {
       }
     } catch (e) {}
 
-    // Populate data-tooltip on each .nav-item from .nav-text for minimized icon mode
     document.querySelectorAll('.nav-item').forEach(item => {
       const textEl = item.querySelector('.nav-text');
       if (textEl && !item.getAttribute('data-tooltip')) {
@@ -518,7 +506,6 @@ var teacherApp = (function () {
       }
     });
 
-    // Dynamic flyout vertical positioning for collapsed sidebar
     document.addEventListener('mouseenter', function (e) {
       if (!document.body.classList.contains('sidebar-collapsed')) return;
       const navItem = e.target && e.target.closest && e.target.closest('.nav-item');
@@ -534,7 +521,6 @@ var teacherApp = (function () {
       sub.style.top = top + 'px';
     }, true);
 
-    // Keyboard shortcut Ctrl+B or Cmd+B
     document.addEventListener('keydown', function(e) {
       if ((e.ctrlKey || e.metaKey) && (e.key === 'b' || e.key === 'B')) {
         e.preventDefault();
@@ -543,7 +529,6 @@ var teacherApp = (function () {
     });
   }
 
-  // Mobile sidebar controller with backdrop & outside-click support
     const sidebar = document.getElementById('portalSidebar');
     const mobileBtn = document.getElementById('mobileSidebarToggle');
 
@@ -606,7 +591,6 @@ var teacherApp = (function () {
       }
     });
 
-    // Sidebar navigation
     const navItems = document.querySelectorAll('.nav-item');
     navItems.forEach(item => {
       const link = item.querySelector('.nav-link');
@@ -678,7 +662,6 @@ var teacherApp = (function () {
           return;
         }
 
-        // Sublink aliases and prefixes
         if (rawHash.startsWith('my-classes')) {
           mod = 'my-classes';
           sub = rawHash.replace('my-classes-', '').replace('my-classes', '') || null;
@@ -736,9 +719,6 @@ var teacherApp = (function () {
   }
 
   
-  // =========================================================================
-  // PRINCIPAL & VICE PRINCIPAL FACULTY ACCESS GOVERNANCE ENGINE
-  // =========================================================================
   const DEFAULT_FACULTY_MODULE_PERMS = {
     'dashboard': true,
     'my-classes': true,
@@ -758,7 +738,6 @@ var teacherApp = (function () {
       const stored = localStorage.getItem('sv_teacher_permissions_' + activeId);
       if (stored) {
         const parsed = JSON.parse(stored);
-        // Map granular keys to module keys
         
 
   return {
@@ -779,7 +758,6 @@ var teacherApp = (function () {
     return Object.assign({}, DEFAULT_FACULTY_MODULE_PERMS);
   }
 
-  // --- Class Teacher Student Withdrawal Authority ---
   function promptWithdrawStudent(roll, name, className) {
     const cls = state.classes.find(c => c.code === className || c.id === className.toLowerCase());
     if (!cls || !cls.isClassTeacher) {
@@ -854,10 +832,8 @@ var teacherApp = (function () {
     const studentName = student.name;
     const studentAdmNo = student.admNo || ('SV-0' + roll);
 
-    // 1. Remove from active state.students
     state.students.splice(sIdx, 1);
 
-    // 2. Persist withdrawn rolls and adms in localStorage
     const withdrawnRolls = JSON.parse(localStorage.getItem('sv_teacher_withdrawn_rolls') || '[]');
     if (!withdrawnRolls.includes(roll)) {
       withdrawnRolls.push(roll);
@@ -870,7 +846,6 @@ var teacherApp = (function () {
       localStorage.setItem('sv_teacher_withdrawn_adms', JSON.stringify(withdrawnAdms));
     }
 
-    // 3. Save to formal withdrawn records for Main Department (Principal / VP)
     const departureNotice = {
       id: 'notif-dep-' + Date.now(),
       roll: roll,
@@ -890,7 +865,6 @@ var teacherApp = (function () {
     allWithdrawn.unshift(departureNotice);
     localStorage.setItem('sv_withdrawn_students', JSON.stringify(allWithdrawn));
 
-    // Also persist into dedicated deletion remarks log
     try {
       const remarksLog = JSON.parse(localStorage.getItem('sv_deletion_remarks_log') || '[]');
       remarksLog.unshift({
@@ -910,7 +884,6 @@ var teacherApp = (function () {
       localStorage.setItem('sv_deletion_remarks_log', JSON.stringify(remarksLog));
     } catch (e) {}
 
-    // 4. Send official notification to Main Department (Principal & VP)
     const mainDeptNotice = {
       id: 'notif-wd-' + Date.now(),
       title: `Student Departure: ${studentName} (Class ${className})`,
@@ -929,13 +902,11 @@ var teacherApp = (function () {
       localStorage.setItem('sv_departure_notice_alert', JSON.stringify(mainDeptNotice));
     } catch (e) {}
 
-    // 5. Update class strength and badges
     if (cls) {
       cls.strength = Math.max(0, cls.strength - 1);
     }
     state.teacher.totalStudents = state.students.length;
 
-    // 6. Close modal and re-render
     closeModal('withdrawStudentModal');
     filterStudentList();
     renderClassInfoBanner(className);
@@ -1029,7 +1000,6 @@ var teacherApp = (function () {
     const subPerms = getTeacherSubmenuPermissions(activeTeacherId);
     const granular = getRawTeacherPermissions(activeTeacherId);
 
-    // 1. Sidebar Modules & Granular Submenus
     const navItems = document.querySelectorAll('#teacherSidebarMenu .nav-item[data-module]');
     navItems.forEach(item => {
       const mod = item.getAttribute('data-module');
@@ -1051,12 +1021,10 @@ var teacherApp = (function () {
           const subKey = sub.getAttribute('data-sub');
           const permKey = `${mod}.${subKey}`;
           const isAllowed = subPerms[permKey] !== false;
-          // STRICTLY HIDDEN UP TO ALLOWING PERMISSION BY PRINCIPAL OR VP!
           sub.style.display = isAllowed ? '' : 'none';
           if (isAllowed) visibleSubCount++;
         });
 
-        // If all submenus in this module are hidden, hide parent module
         item.style.display = (visibleSubCount > 0) ? '' : 'none';
       } else {
         const isAllowed = subPerms[mod] !== false;
@@ -1064,10 +1032,8 @@ var teacherApp = (function () {
       }
     });
 
-    // Cleanly toggle sidebar section titles if all child modules in section are hidden
     const sectionTitles = document.querySelectorAll('#teacherSidebarMenu .nav-section-title');
     if (sectionTitles && sectionTitles.length >= 3) {
-      // Section 1: TEACHER WORKSPACE
       const s1Mods = ['dashboard', 'my-classes', 'students', 'attendance', 'academics', 'examinations', 'timetable'];
       const s1Visible = s1Mods.some(m => {
         if (m === 'dashboard') return true;
@@ -1076,7 +1042,6 @@ var teacherApp = (function () {
       });
       sectionTitles[0].style.display = s1Visible ? '' : 'none';
 
-      // Section 2: CONNECT & LEAVE
       const s2Mods = ['communication', 'leave', 'reports'];
       const s2Visible = s2Mods.some(m => {
         const el = document.querySelector(`#teacherSidebarMenu .nav-item[data-module="${m}"]`);
@@ -1085,15 +1050,11 @@ var teacherApp = (function () {
       sectionTitles[1].style.display = s2Visible ? '' : 'none';
     }
 
-    // 2. Sync internal view tab strips
     syncTeacherTabStripPermissions(subPerms);
 
-    // 3. Teacher Dashboard Actions & Metric Cards
-    // Welcome Banner Quick Mark Attendance
     const quickAttBtn = document.querySelector('.teacher-welcome-banner button[onclick*="markAttendanceModal"]');
     if (quickAttBtn) quickAttBtn.style.display = (granular.mark_attendance !== false && subPerms['attendance.mark'] !== false ? '' : 'none');
 
-    // Today's classes schedule buttons
     document.querySelectorAll('.schedule-actions button[onclick*="markAttendanceModal"]').forEach(b => {
       b.style.display = (granular.mark_attendance !== false && subPerms['attendance.mark'] !== false ? '' : 'none');
     });
@@ -1104,7 +1065,6 @@ var teacherApp = (function () {
       b.style.display = (granular.study_materials !== false && subPerms['academics.materials'] !== false ? '' : 'none');
     });
 
-    // Metric Cards on Dashboard
     const myClassesCard = document.querySelector('.metrics-quad .metric-card[onclick*="my-classes"]');
     if (myClassesCard) myClassesCard.style.display = (granular.class_sections !== false ? '' : 'none');
 
@@ -1236,7 +1196,6 @@ var teacherApp = (function () {
       subKey = 'security';
     }
 
-    // Default subKeys for modules with submenus when not specified
     if (!subKey) {
       if (moduleKey === 'my-classes') subKey = 'classes';
       else if (moduleKey === 'attendance') subKey = 'mark';
@@ -1250,7 +1209,6 @@ var teacherApp = (function () {
     const view = document.getElementById('view-' + moduleKey);
     if (!view) return;
 
-    // Close any lingering modal overlays
     if (typeof closeModal === 'function') {
       try { closeModal('createHomeworkModal'); } catch (e) {}
       try { closeModal('applyLeaveModal'); } catch (e) {}
@@ -1259,7 +1217,6 @@ var teacherApp = (function () {
     document.querySelectorAll('.modal.active, .portal-modal.active').forEach(m => m.classList.remove('active'));
     document.querySelectorAll('.modal-backdrop').forEach(b => b.remove());
 
-    // Verify Access Permissions set by Principal / Vice Principal
     if (!checkModuleAccess(moduleKey)) {
       showToast(`Access restricted: Module '${moduleKey}' is turned off for your faculty account by School Leadership.`, 'error');
       if (moduleKey !== 'dashboard') {
@@ -1290,7 +1247,6 @@ var teacherApp = (function () {
       }
     } catch (e) {}
 
-    // Active sidebar highlight & auto-open submenu
     document.querySelectorAll('.nav-item').forEach(item => {
       const itemMod = item.getAttribute('data-module');
       if (itemMod === moduleKey) {
@@ -1301,7 +1257,6 @@ var teacherApp = (function () {
       }
     });
 
-    // Active nav-sub-link highlight
     document.querySelectorAll('.nav-sub-link').forEach(link => {
       const parentMod = link.closest('.nav-item')?.getAttribute('data-module');
       const linkSub = link.getAttribute('data-sub');
@@ -1312,14 +1267,12 @@ var teacherApp = (function () {
       }
     });
 
-    // Hide other views, show target
     document.querySelectorAll('.portal-view').forEach(v => v.classList.remove('active'));
     view.classList.add('active');
     if (moduleKey === 'tasks') {
       renderFullTasksView();
     }
 
-    // Breadcrumb title resolution for all 20 submenus
     const crumb = document.getElementById('teacherCurrentPageCrumb');
     if (crumb) {
       const subTitles = {
@@ -1392,7 +1345,6 @@ var teacherApp = (function () {
   }
 
   function switchSubTab(moduleKey, subKey) {
-    // Exact user-specified 10 modules subtab handler
     if (moduleKey === 'profile') {
       if (typeof switchProfileTab === 'function') {
         switchProfileTab(subKey);
@@ -1427,7 +1379,6 @@ var teacherApp = (function () {
       }
     }
 
-    // Sub-router for the 7 focused workspace modules
     if (moduleKey === 'my-classes') {
       renderMyClassesSubTab(subKey);
     } else if (moduleKey === 'attendance') {
@@ -1446,7 +1397,6 @@ var teacherApp = (function () {
     const view = document.getElementById('view-' + moduleKey);
     if (!view) return;
 
-    // Update tab strip active buttons
     const strip = view.querySelector('.tab-strip');
     if (strip) {
       strip.querySelectorAll('.tab-btn').forEach(btn => {
@@ -1460,7 +1410,6 @@ var teacherApp = (function () {
       });
     }
 
-    // Module-specific interactive subtab rendering
     if (moduleKey === 'my-classes') {
       switchClassTab(subKey);
     } else if (moduleKey === 'academics') {
@@ -1992,7 +1941,6 @@ var teacherApp = (function () {
     const card = document.querySelector('#view-examinations .card');
     if (!card) return;
 
-    // Sync examinations tab strip
     const strip = document.getElementById('examinationsTabStrip');
     if (strip) {
       strip.querySelectorAll('.tab-btn').forEach(btn => {
@@ -2231,7 +2179,6 @@ var teacherApp = (function () {
     const area = document.getElementById('assignmentsContentArea');
     if (!area) return;
 
-    // Sync assignments tab strip
     const strip = document.getElementById('assignmentsTabStrip');
     if (strip) {
       strip.querySelectorAll('.tab-btn').forEach(btn => {
@@ -2354,7 +2301,6 @@ var teacherApp = (function () {
       `;
       showToast('Loaded Student Submissions, Late Tracking & Grading Desk', 'info');
     } else {
-      // Default: Create / Manage Assignments Overview
       area.innerHTML = `
         <div class="row g-3">
           <div class="col-md-4">
@@ -2457,7 +2403,6 @@ var teacherApp = (function () {
     const area = document.getElementById('leaveContentArea');
     if (!area) return;
 
-    // Sync tab strip
     const strip = document.getElementById('leaveTabStrip');
     if (strip) {
       strip.querySelectorAll('.tab-btn').forEach(btn => {
@@ -2572,7 +2517,6 @@ var teacherApp = (function () {
       `;
       showToast('Loaded Leave Application Form', 'info');
     } else {
-      // Default: Leave History
       area.innerHTML = `
         <div class="card p-4">
           <div class="card-header-bar mb-3">
@@ -2677,7 +2621,6 @@ var teacherApp = (function () {
   }
 
   
-  // (Duplicate renderLeaveSubTab removed - see primary renderer above)
 
   function renderReportsSubTab(subKey) {
     showToast('Loaded Class 8A Academic Performance Reports', 'info');
@@ -2698,7 +2641,6 @@ var teacherApp = (function () {
     const overviewEl = document.getElementById('classOverviewContent');
     if (!overviewEl) return;
 
-    // Highlight active button in tab strip
     const tabStrip = document.querySelector('#view-my-classes .tab-strip');
     if (tabStrip) {
       tabStrip.querySelectorAll('.tab-btn').forEach(btn => {
@@ -2949,7 +2891,6 @@ var teacherApp = (function () {
     const select = document.getElementById('studentClassFilterSelect');
     if (select) select.value = classCode;
 
-    // Update active pill
     document.querySelectorAll('.btn-class-pill').forEach(btn => {
       if (btn.id === 'btnClassPill-' + classCode) {
         btn.classList.add('active');
@@ -3125,12 +3066,10 @@ var teacherApp = (function () {
     if (aBadge) aBadge.innerHTML = `<i class="fa-solid fa-xmark"></i> Absent: ${absent}`;
     if (lBadge) lBadge.innerHTML = `<i class="fa-solid fa-clock"></i> Late: ${late}`;
 
-    // Calculate exact percentages
     const presPct = ((present / total) * 100).toFixed(1);
     const absPct = ((absent / total) * 100).toFixed(1);
     const latePct = ((late / total) * 100).toFixed(1);
 
-    // Update Live Attendance Donut Chart and Breakdown Bar
     const donutEl = document.getElementById('attLiveDonut');
     if (donutEl) {
       const pEnd = parseFloat(presPct);
@@ -3160,7 +3099,6 @@ var teacherApp = (function () {
     if (aBar) aBar.style.width = `${absPct}%`;
     if (lBar) lBar.style.width = `${latePct}%`;
 
-    // Update attendance rate in metric card
     const pct = ((present + (late * 0.5)) / total * 100).toFixed(0);
     const rateEl = document.getElementById('dashboardAttRate');
     if (rateEl) rateEl.textContent = `${pct}%`;
@@ -3236,12 +3174,10 @@ var teacherApp = (function () {
     } catch (e) {}
 
     state.students.forEach(s => {
-      // 1. Direct teacher math marks
       if (mathStored[s.roll] !== undefined) s.marks = mathStored[s.roll];
       else if (mathStored[s.name] !== undefined) s.marks = mathStored[s.name];
       else if (s.admNo && mathStored[s.admNo] !== undefined) s.marks = mathStored[s.admNo];
 
-      // 2. Synced full exam record (UT-2, Quarterly, etc.)
       const keys = [
         (s.admNo ? s.admNo + '_unit-test-2' : ''),
         (s.name ? s.name.trim().toLowerCase() + '_unit-test-2' : ''),
@@ -3262,7 +3198,6 @@ var teacherApp = (function () {
         }
       }
 
-      // 3. Fallback: Check student-specific localStorage key if admNo is known
       if (!s.syncedExamData && s.admNo) {
         try {
           const raw = localStorage.getItem('srividya_marks_' + s.admNo);
@@ -3286,12 +3221,10 @@ var teacherApp = (function () {
     const tbody = document.getElementById('marksEntryTableBody');
     if (!tbody) return;
 
-    // Synchronize latest marks from institutional repository
     syncAllTeacherStudentMarks();
 
     const class8A = state.students.filter(s => s.class === '8A');
 
-    // Add synchronization indicator banner above the table if not present
     let banner = document.getElementById('marksSyncFeedbackBanner');
     if (!banner && tbody.closest('.table-container')) {
       banner = document.createElement('div');
@@ -3344,7 +3277,6 @@ var teacherApp = (function () {
         gradeEl.className = `portal-badge ${(grade === 'O' || grade === 'A') ? 'badge-success' : ((grade === 'B' || grade === 'C') ? 'badge-primary' : (grade === 'D' ? 'badge-warning' : 'badge-danger'))}`;
       }
 
-      // Save to localStorage so student profiles and reports update instantly
       try {
         const stored = JSON.parse(localStorage.getItem('srividya_teacher_marks_math_ut2') || '{}');
         stored[roll] = num;
@@ -3353,7 +3285,6 @@ var teacherApp = (function () {
         localStorage.setItem('srividya_teacher_marks_math_ut2', JSON.stringify(stored));
         localStorage.setItem('srividya_teacher_marks_math_ut2_timestamp', new Date().toISOString());
 
-        // Update two-way sync store
         const syncMap = JSON.parse(localStorage.getItem('srividya_synced_exam_marks') || '{}');
         const examRecord = syncMap[roll + '_unit-test-2'] || (s.admNo ? syncMap[s.admNo + '_unit-test-2'] : null) || {};
         if (examRecord.subjects) {
@@ -3367,7 +3298,6 @@ var teacherApp = (function () {
         if (s.admNo) syncMap[s.admNo + '_unit-test-2'] = examRecord;
         localStorage.setItem('srividya_synced_exam_marks', JSON.stringify(syncMap));
 
-        // Dispatch sync event
         if (typeof window !== 'undefined') {
           window.dispatchEvent(new CustomEvent('srividyaMarksUpdated', {
             detail: { roll: roll, name: s.name, admNo: s.admNo, marks: num, subject: 'math' }
@@ -3557,7 +3487,6 @@ var teacherApp = (function () {
     const exam = EXAMS_CONFIG[examKey] || EXAMS_CONFIG['unit-test-2'];
     const maxMarks = exam.maxMarks;
 
-    // Check synced storage first
     try {
       const syncStore = JSON.parse(localStorage.getItem('srividya_synced_exam_marks') || '{}');
       const keys = [
@@ -3582,7 +3511,6 @@ var teacherApp = (function () {
       }
     } catch (e) {}
 
-    // Check student-specific localStorage key
     if (student.admNo) {
       try {
         const raw = localStorage.getItem('srividya_marks_' + student.admNo);
@@ -3605,7 +3533,6 @@ var teacherApp = (function () {
       } catch (e) {}
     }
 
-    // Realistic calculation based on teacher marks and student GPA
     const basePct = Math.min(99, Math.max(50, (student.marks / 50) * 100));
     const STANDARD_SUBJECTS = [
       { key: 'lang1', name: 'First Language (Telugu)', icon: 'fa-book-open', off: 1 },
@@ -3661,13 +3588,11 @@ var teacherApp = (function () {
     activeDossierRoll = roll;
     activeTeacherDossierExam = examKey || activeTeacherDossierExam || 'unit-test-2';
 
-    // Synchronize latest marks for this student
     syncAllTeacherStudentMarks();
 
     const container = document.getElementById('studentDossierContent');
     if (!container) return;
 
-    // Resolve Admission Number if not directly set
     if (!s.admNo && typeof window !== 'undefined' && Array.isArray(window.STUDENT_ROSTER)) {
       const match = window.STUDENT_ROSTER.find(r => r.name === s.name || String(r.rollNo) === String(s.roll));
       if (match) s.admNo = match.admNo;
@@ -3870,7 +3795,6 @@ var teacherApp = (function () {
   }
 
   
-  // Switch Profile Tabs
   function switchProfileTab(tabId) {
     if (tabId === 'identity' || tabId === 'bank') tabId = 'identity-bank';
     if (tabId === 'password' || tabId === 'change-password') tabId = 'security';
@@ -4003,9 +3927,6 @@ var teacherApp = (function () {
   }
 
   
-  // =========================================================================
-  // SYNC APPROVED ADMISSIONS DIRECTLY TO CLASS TEACHER & CLASS STUDENTS ROSTER
-  // =========================================================================
   function normalizeClassForTeacher(rawClass) {
     if (!rawClass) return '8A';
     let str = String(rawClass).toUpperCase().replace(/CLASS/i, '').replace(/GRADE/i, '').replace(/TH|ST|ND|RD/g, '').trim();
@@ -4148,7 +4069,6 @@ var teacherApp = (function () {
     try {
       const admissionsList = [];
 
-      // 1. sv_teacher_new_admissions
       const rawTeacherAdm = localStorage.getItem('sv_teacher_new_admissions');
       if (rawTeacherAdm) {
         try {
@@ -4157,7 +4077,6 @@ var teacherApp = (function () {
         } catch (e) {}
       }
 
-      // 2. sv_enrolled_students
       const rawEnrolled = localStorage.getItem('sv_enrolled_students');
       if (rawEnrolled) {
         try {
@@ -4183,7 +4102,6 @@ var teacherApp = (function () {
         } catch (e) {}
       }
 
-      // 3. sv_applications
       const rawApps = localStorage.getItem('sv_applications');
       if (rawApps) {
         try {
@@ -4224,7 +4142,6 @@ var teacherApp = (function () {
         const targetCode = normalizeClassForTeacher(item.classCode || item.class);
         const admNo = item.admNo || item.enrolledAdmNo || 'SV-0501';
 
-        // Check if student already in state.students
         let existing = state.students.find(s => 
           (s.admNo && s.admNo === admNo) || 
           (s.name && s.name.toLowerCase() === studentName.toLowerCase() && (s.class === targetCode || s.class === item.class))
@@ -4270,7 +4187,6 @@ var teacherApp = (function () {
           state.students.unshift(newStudentObj);
           hasNewAddition = true;
 
-          // Ensure class exists in state.classes and update strength
           let cls = state.classes.find(c => c.code === targetCode || c.id === targetCode.toLowerCase());
           if (!cls) {
             cls = {
@@ -4293,7 +4209,6 @@ var teacherApp = (function () {
 
           updateClassFilterUI(targetCode);
 
-          // Add onboarding task
           const taskId = 'new-adm-' + (item.appId || admNo);
           if (!state.pendingTasks.some(t => t.id === taskId)) {
             state.pendingTasks.unshift({
@@ -4312,7 +4227,6 @@ var teacherApp = (function () {
         }
       });
 
-      // Update total students metric
       state.teacher.totalStudents = state.students.length;
       const countPill = document.getElementById('studentRosterCountBadge');
       if (countPill) countPill.textContent = `${state.students.length} Students`;
@@ -4388,7 +4302,6 @@ var teacherApp = (function () {
       let raw = localStorage.getItem('sv_teacher_profile');
       let profile = raw ? JSON.parse(raw) : null;
 
-      // If no local teacher profile or it belongs to a different school id, load from authorized faculty directory
       if (!profile || (profile.schoolId && profile.schoolId.toUpperCase() !== activeTeacherId.toUpperCase())) {
         try {
           const storedAuth = localStorage.getItem('sv_authorized_faculty');
@@ -4442,7 +4355,6 @@ var teacherApp = (function () {
           address: 'Flat 402, Sri Sai Balaji Enclave, Main Road, Guntur, AP - 522002',
           blood: 'A+',
           emergency: '+91 98480 99887',
-          // Professional
           department: 'Secondary Mathematics',
           designation: 'Senior Faculty & Grade 8A Class Teacher',
           qualification: 'M.Sc (Mathematics), B.Ed',
@@ -4450,12 +4362,10 @@ var teacherApp = (function () {
           joinDate: '12-June-2019',
           allocatedClasses: 'Mathematics (Class 8A, Class 9B, Class 10A Remedial)',
           bio: 'Senior Mathematics Educator with over 9 years of teaching experience. Passionate about interactive problem solving, conceptual clarity, and fostering analytical confidence among students.',
-          // Aadhaar & Identity
           aadhaar: '5482 1920 3847',
           pan: 'ABCDE1234F',
           udise: 'AP-FAC-2017-8821',
           aadhaarMobile: '+91 98481 23456',
-          // Bank Details
           bankName: 'State Bank of India (SBI)',
           accountHolder: 'Ms. Anjali',
           accountNumber: '309812456789',
@@ -4468,7 +4378,6 @@ var teacherApp = (function () {
       state.teacher.name = profile.name;
       state.teacher.role = profile.designation || profile.motto || 'Class Teacher – Grade 8A';
 
-      // Update Dashboard welcome banner with dynamic Indian Standard Time salutation
       const now = new Date();
       const istHour = parseInt(new Intl.DateTimeFormat('en-US', { timeZone: 'Asia/Kolkata', hour: 'numeric', hour12: false }).format(now), 10);
       const salutation = istHour >= 4 && istHour < 12 ? 'Good Morning' : (istHour >= 12 && istHour < 17 ? 'Good Afternoon' : 'Good Evening');
@@ -4478,17 +4387,14 @@ var teacherApp = (function () {
       const bannerSub = document.querySelector('.teacher-welcome-banner .tw-subtitle');
       if (bannerSub) bannerSub.textContent = profile.designation || 'Class Teacher – Grade 8A';
 
-      // Update Top Header active text
       const headerActiveStrong = document.querySelector('.portal-header .text-primary');
       if (headerActiveStrong && headerActiveStrong.closest('.header-right')) {
         headerActiveStrong.textContent = `${profile.name} (${profile.department || 'Mathematics'})`;
       }
 
-      // Update Sidebar user card
       const sidebarName = document.getElementById('teacherUserName');
       if (sidebarName) sidebarName.textContent = profile.name;
 
-      // Update Profile Hero elements
       const heroName = document.getElementById('profTeacherHeroName');
       if (heroName) heroName.textContent = profile.name;
 
@@ -4498,7 +4404,6 @@ var teacherApp = (function () {
       const heroId = document.getElementById('profHeroSchoolId');
       if (heroId) heroId.innerHTML = `<i class="fa-solid fa-id-badge"></i> School ID: ${profile.schoolId || activeTeacherId}`;
 
-      // Fill Personal Tab
       if (document.getElementById('profTeacherName')) document.getElementById('profTeacherName').value = profile.name;
       if (document.getElementById('profSchoolId')) document.getElementById('profSchoolId').value = profile.schoolId || activeTeacherId;
       if (document.getElementById('profTeacherGender')) document.getElementById('profTeacherGender').value = profile.gender || 'Female';
@@ -4510,7 +4415,6 @@ var teacherApp = (function () {
       if (document.getElementById('profTeacherEmergency')) document.getElementById('profTeacherEmergency').value = profile.emergency || '';
       if (document.getElementById('profTeacherAddress')) document.getElementById('profTeacherAddress').value = profile.address || '';
 
-      // Fill Professional Tab
       if (document.getElementById('profDept')) document.getElementById('profDept').value = profile.department || 'Secondary Mathematics';
       const designationField = document.getElementById('profDesignation');
       if (designationField) {
@@ -4529,13 +4433,11 @@ var teacherApp = (function () {
       if (document.getElementById('profAllocatedClasses')) document.getElementById('profAllocatedClasses').value = profile.allocatedClasses || '';
       if (document.getElementById('profTeacherBio')) document.getElementById('profTeacherBio').value = profile.bio || '';
 
-      // Fill Aadhaar / Identity Tab
       if (document.getElementById('profAadhaarNumber')) document.getElementById('profAadhaarNumber').value = profile.aadhaar || '5482 1920 3847';
       if (document.getElementById('profPanNumber')) document.getElementById('profPanNumber').value = profile.pan || 'ABCDE1234F';
       if (document.getElementById('profUdiseCode')) document.getElementById('profUdiseCode').value = profile.udise || 'AP-FAC-2017-8821';
       if (document.getElementById('profAadhaarMobile')) document.getElementById('profAadhaarMobile').value = profile.aadhaarMobile || profile.phone || '';
 
-      // Fill Bank Tab
       if (document.getElementById('profBankName')) document.getElementById('profBankName').value = profile.bankName || 'State Bank of India (SBI)';
       if (document.getElementById('profAccountHolder')) document.getElementById('profAccountHolder').value = profile.accountHolder || profile.name || '';
       if (document.getElementById('profAccountNumber')) document.getElementById('profAccountNumber').value = profile.accountNumber || '309812456789';
@@ -4543,7 +4445,6 @@ var teacherApp = (function () {
       if (document.getElementById('profBranchName')) document.getElementById('profBranchName').value = profile.branch || 'Arundelpet Branch, Guntur';
       if (document.getElementById('profAccountType')) document.getElementById('profAccountType').value = profile.accountType || 'Savings (Salary)';
 
-      // Fill Security Badges
       const schoolBadge = document.getElementById('secSchoolIdBadge');
       if (schoolBadge) schoolBadge.textContent = profile.schoolId || activeTeacherId;
       const lastPass = document.getElementById('secLastPassUpdated');
@@ -4575,7 +4476,6 @@ var teacherApp = (function () {
       address: (document.getElementById('profTeacherAddress')?.value || '').trim(),
       blood: document.getElementById('profTeacherBlood')?.value || 'A+',
       emergency: (document.getElementById('profTeacherEmergency')?.value || '').trim(),
-      // Professional
       department: (document.getElementById('profDept')?.value || 'Secondary Mathematics').trim(),
       designation: (document.getElementById('profDesignation')?.value || 'Senior Faculty').trim(),
       qualification: (document.getElementById('profQualification')?.value || 'M.Sc, B.Ed').trim(),
@@ -4583,12 +4483,10 @@ var teacherApp = (function () {
       joinDate: (document.getElementById('profJoinDate')?.value || '12-June-2019').trim(),
       allocatedClasses: (document.getElementById('profAllocatedClasses')?.value || '').trim(),
       bio: (document.getElementById('profTeacherBio')?.value || '').trim(),
-      // Identity
       aadhaar: (document.getElementById('profAadhaarNumber')?.value || '').trim(),
       pan: (document.getElementById('profPanNumber')?.value || '').trim(),
       udise: (document.getElementById('profUdiseCode')?.value || '').trim(),
       aadhaarMobile: (document.getElementById('profAadhaarMobile')?.value || '').trim(),
-      // Bank
       bankName: (document.getElementById('profBankName')?.value || '').trim(),
       accountHolder: (document.getElementById('profAccountHolder')?.value || '').trim(),
       accountNumber: (document.getElementById('profAccountNumber')?.value || '').trim(),
@@ -4599,9 +4497,6 @@ var teacherApp = (function () {
 
     localStorage.setItem('sv_teacher_profile', JSON.stringify(data));
 
-    // =========================================================================
-    // SYNC DIRECTLY TO PRINCIPAL & VICE PRINCIPAL ROSTER / DASHBOARD DIRECTORY
-    // =========================================================================
     try {
       let facultyList = [];
       const stored = localStorage.getItem('sv_authorized_faculty');
@@ -4628,7 +4523,6 @@ var teacherApp = (function () {
         });
       }
 
-      // If still not matched and lookupId is default SV200005, match SV200005
       if (!matched) {
         matched = facultyList.find(f => f.id === 'SV200005');
       }
@@ -4704,7 +4598,6 @@ var teacherApp = (function () {
       localStorage.setItem('sv_authorized_faculty', JSON.stringify(facultyList));
       localStorage.setItem('sv_faculty_last_sync', Date.now().toString());
 
-      // If portalApp exists in current window (e.g. single tab SPA test)
       if (typeof window.portalApp !== 'undefined' && typeof window.portalApp.syncFacultyFromStorage === 'function') {
         window.portalApp.syncFacultyFromStorage();
       }
@@ -4717,23 +4610,17 @@ var teacherApp = (function () {
   }
 
 
-  // Auto-init
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', init);
   } else {
     init();
   }
 
-  // Public API
   
-  // =========================================================================
-  // FOCUSED TEACHING WORKSPACE SUBVIEW HANDLERS
-  // =========================================================================
 
   function renderMyClassesSubTab(subKey) {
     document.querySelectorAll('.my-classes-subview').forEach(p => p.style.display = 'none');
     
-    // Sync tab strip buttons
     const strip = document.getElementById('myClassesTabStrip');
     if (strip) {
       strip.querySelectorAll('.tab-btn').forEach(b => {
@@ -4904,11 +4791,7 @@ var teacherApp = (function () {
   }
 
   
-  /* =========================================================================
-     MODULE 19: FACULTY & TEACHING STAFF PORTAL ACTION HANDLERS (19.1 - 19.11)
-     ========================================================================= */
 
-  // 19.2 My Classes Actions
   function openClassDetail(classId) {
     showToast('Opening instructional workspace for Class ' + classId + '...', 'info');
     switchSubTab('my-classes', 'roster');
@@ -4946,7 +4829,6 @@ var teacherApp = (function () {
     showToast('Viewing permitted academic performance data for Class ' + classId, 'info');
   }
 
-  // 19.3 Student Profiles Actions
   function viewStudentProfile(studentId) {
     showToast('Loading authorized dossier for student ' + studentId + '...', 'info');
     viewStudentDossier(studentId);
@@ -5063,7 +4945,6 @@ var teacherApp = (function () {
     }
   }
 
-  // 19.4 Mark Attendance Actions
   function markAllPresentConfirm() {
     if (window.confirm('Mark all 42 students present in Class 8A?')) {
       const inputs = document.querySelectorAll('input[type="radio"][id^="att_p_"]');
@@ -5109,7 +4990,6 @@ var teacherApp = (function () {
     showToast('Loaded attendance sheet for Class ' + classId, 'info');
   }
 
-  // 19.5 Lesson Plans & Syllabus Actions
   function openCreateLessonPlanModal() {
     showToast('Opening Lesson Plan creation form...', 'info');
   }
@@ -5130,7 +5010,6 @@ var teacherApp = (function () {
     showToast('Opening Term 1 syllabus progress updater...', 'info');
   }
 
-  // 19.6 Assignments & Study Materials Actions
   function attachStudyMaterialModal() {
     showToast('Opening study material attachment docket (PDF / PPT / Worksheet)...', 'info');
   }
@@ -5155,7 +5034,6 @@ var teacherApp = (function () {
     showToast('Detailed pedagogical feedback sent to student.', 'info');
   }
 
-  // 19.7 Examinations & Marks Actions
   function openMarksEntry(id) {
     showToast('Opening marks entry spreadsheet for ' + id + '...', 'info');
   }
@@ -5180,7 +5058,6 @@ var teacherApp = (function () {
     showToast('Approval Outcome: Approved by Vice Principal Sri Navva Anand.', 'success');
   }
 
-  // 19.8 My Timetable Actions
   function viewFullMasterTimetable() {
     showToast('Displaying full institutional master timetable.', 'info');
   }
@@ -5197,7 +5074,6 @@ var teacherApp = (function () {
     showToast('Substitution ' + id + ' acknowledged. Period 4 cover docket confirmed.', 'success');
   }
 
-  // 19.9 Communication Actions
   function submitAnnouncementForApproval() {
     showToast('Class announcement submitted for Principal executive review.', 'success');
   }
@@ -5218,7 +5094,6 @@ var teacherApp = (function () {
     showToast('Displaying complete parent and administrative message history.', 'info');
   }
 
-  // 19.10 Leave Management Actions
   function openApplyLeaveModal() {
     showToast('Opening formal Leave Application form...', 'info');
     switchSubTab('leave', 'apply');
@@ -5240,7 +5115,6 @@ var teacherApp = (function () {
     showToast('Displaying complete approval history for leave application ' + id + '.', 'info');
   }
 
-  // 19.11 My Profile Actions
   function requestProfileCorrectionModal() {
     showToast('Profile correction request dispatched to HR & Administration.', 'info');
   }
@@ -5263,7 +5137,6 @@ var teacherApp = (function () {
 
 
   return {
-    // Module 19: Faculty & Teaching Staff Actions
     openClassDetail,
     viewClassRoster,
     openClassAttendance,
@@ -5383,7 +5256,6 @@ window.teacherApp = teacherApp;
 window.switchProfileTab = teacherApp.switchProfileTab;
 
 
-// Unified Portals Hub Flyout Toggle (All Portals in One Place)
 document.addEventListener('DOMContentLoaded', function () {
   const btnPortalsHub = document.getElementById('btnPortalsHub');
   const portalsHubFlyout = document.getElementById('portalsHubFlyout');

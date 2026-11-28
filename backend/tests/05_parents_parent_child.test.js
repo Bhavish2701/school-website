@@ -1,15 +1,3 @@
-/**
- * Test Suite 05: Parent Module & Strict Parent-Child Authorization Tests
- * Enforces rule: "A parent must never access another parent's child."
- * Covers:
- * - Parent profile & multiple children retrieval (200)
- * - Parent accessing THEIR OWN child's overview, attendance, results, fees (200)
- * - Parent attempting to access ANOTHER PARENT'S child (403 Forbidden)
- * - Management bypass authorization (SUPER_ADMIN, PRINCIPAL can view any child: 200)
- * - Invalid child ID format (400)
- * - Non-existent child ID (404)
- * - 401 Unauthenticated requests
- */
 const request = require('supertest');
 const mongoose = require('mongoose');
 const app = require('../src/app');
@@ -22,8 +10,8 @@ describe('05 - Parent Module & Parent-Child Authorization Test Suite', () => {
 
   beforeAll(async () => {
     fixtures = await seedBaseUsers();
-    child1Id = fixtures.students.studentDoc1._id.toString(); // Child of Parent 1
-    child2Id = fixtures.students.studentDoc2._id.toString(); // Child of Parent 2
+    child1Id = fixtures.students.studentDoc1._id.toString();
+    child2Id = fixtures.students.studentDoc2._id.toString();
   });
 
   describe('Parent Profile & Child Switcher Endpoints', () => {

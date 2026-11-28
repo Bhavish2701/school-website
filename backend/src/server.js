@@ -1,6 +1,3 @@
-/**
- * Sri Vidya E.M High School Backend - HTTP Server Entry Point
- */
 const app = require('./app');
 const config = require('./config/env');
 const connectDB = require('./config/db');
@@ -8,15 +5,12 @@ const seedUsers = require('./config/seed');
 const mongoose = require('mongoose');
 
 const startServer = async () => {
-  // Connect to MongoDB
   const conn = await connectDB();
 
-  // Seed default users if collection is empty and DB is connected
   if (conn && mongoose.connection.readyState === 1) {
     await seedUsers();
   }
 
-  // Start HTTP Server
   const server = app.listen(config.port, () => {
     console.log('====================================================');
     console.log('  SRI VIDYA ERP - UNIFIED FULL-STACK SERVER (PORT 5000)');
@@ -31,7 +25,6 @@ const startServer = async () => {
     console.log('====================================================');
   });
 
-  // Handle Unhandled Promise Rejections
   process.on('unhandledRejection', (err) => {
     console.error('[Process Error] Unhandled Rejection:', err.message);
     if (server) {
@@ -41,13 +34,11 @@ const startServer = async () => {
     }
   });
 
-  // Handle Uncaught Exceptions
   process.on('uncaughtException', (err) => {
     console.error('[Process Error] Uncaught Exception:', err.message);
     process.exit(1);
   });
 
-  // Graceful Shutdown Signals
   const shutdown = (signal) => {
     console.log(`\n[Process] Received ${signal}. Shutting down gracefully...`);
     if (server) {

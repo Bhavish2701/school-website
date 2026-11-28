@@ -1,23 +1,17 @@
-/**
- * Production MongoDB Connection Handler via Mongoose
- * Architecture: Optimized Connection Pooling, Auto-Reconnect & Graceful Teardown
- */
 const mongoose = require('mongoose');
 const config = require('./env');
 
-// Disable command buffering globally so Mongoose operations fail fast when disconnected
-// instead of hanging for 10,000ms and throwing buffering timeouts
 mongoose.set('bufferCommands', false);
 
 const connectDB = async () => {
   try {
     const options = {
-      maxPoolSize: config.isProd ? 50 : 20, // 50 concurrent sockets in production cluster
-      minPoolSize: config.isProd ? 10 : 2,  // Maintain warm pool
-      serverSelectionTimeoutMS: 10000,                            // 10s for Atlas cloud replica set handshake
-      socketTimeoutMS: 45000,               // Close sockets after 45 seconds of inactivity
-      family: 4,                            // Force IPv4 to prevent IPv6 DNS lookup delays
-      heartbeatFrequencyMS: 10000,          // Check replica set status every 10s
+      maxPoolSize: config.isProd ? 50 : 20,
+      minPoolSize: config.isProd ? 10 : 2,
+      serverSelectionTimeoutMS: 10000,
+      socketTimeoutMS: 45000,
+      family: 4,
+      heartbeatFrequencyMS: 10000,
     };
 
     mongoose.connection.on('connected', () => {
@@ -36,9 +30,12 @@ const connectDB = async () => {
       console.log('[Database] MongoDB connection re-established');
     });
 
+    if (!config.mongodbUri || /@(localhost|127\.0\.0\.1)(:|\/|$)/i.test(config.mongodbUri)) {
+      throw new Error('MongoDB Atlas MONGODB_URI is required; local MongoDB connections are disabled.');
+    }
+
     const conn = await mongoose.connect(config.mongodbUri, options);
 
-    // Drop legacy non-session unique attendance indexes if present (multi-session uses {..., session: 1})
     try {
       const legacyAttendanceIndexes = [
         ['attendancerecords', 'student_1_date_1'],

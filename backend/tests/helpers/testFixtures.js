@@ -1,7 +1,3 @@
-/**
- * Test Fixture & Actor Generation Utilities
- * Provides standardized roles, JWT tokens, mock data, and database reset helpers.
- */
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const mongoose = require('mongoose');
@@ -11,9 +7,6 @@ const { Teacher } = require('../../src/models/teacher.model');
 
 const JWT_SECRET = process.env.JWT_SECRET || 'test_jwt_secret_key_srividya_2026';
 
-/**
- * Generate a valid signed JWT for a given user object
- */
 const generateToken = (user) => {
   return jwt.sign(
     {
@@ -28,9 +21,6 @@ const generateToken = (user) => {
   );
 };
 
-/**
- * Generate an intentionally expired JWT
- */
 const generateExpiredToken = (user) => {
   return jwt.sign(
     {
@@ -43,16 +33,10 @@ const generateExpiredToken = (user) => {
   );
 };
 
-/**
- * Generate an invalid / tampered JWT
- */
 const generateInvalidToken = () => {
   return 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.invalidpayload.tamperedsignature';
 };
 
-/**
- * Reset test database collections
- */
 const resetCollections = async (...models) => {
   for (const model of models) {
     if (model && model.deleteMany) {
@@ -61,16 +45,11 @@ const resetCollections = async (...models) => {
   }
 };
 
-/**
- * Seed all primary role actors and relational links for RBAC, Parent-Child, and Teacher-Class tests
- */
 const seedBaseUsers = async () => {
-  // Clear base models
   await resetCollections(User, Student, Teacher);
 
   const passwordHash = await bcrypt.hash('Test@1234', 10);
 
-  // 1. Super Admin
   const superAdmin = await User.create({
     username: 'superadmin_test',
     email: 'superadmin_test@srividya.edu.in',
@@ -79,7 +58,6 @@ const seedBaseUsers = async () => {
     role: 'SUPER_ADMIN',
   });
 
-  // 2. Principal
   const principal = await User.create({
     username: 'principal_test',
     email: 'principal_test@srividya.edu.in',
@@ -88,7 +66,6 @@ const seedBaseUsers = async () => {
     role: 'PRINCIPAL',
   });
 
-  // 3. Office Staff
   const office = await User.create({
     username: 'office_test',
     email: 'office_test@srividya.edu.in',
@@ -97,7 +74,6 @@ const seedBaseUsers = async () => {
     role: 'OFFICE',
   });
 
-  // 4. Student 1 (Class 10-A)
   const student1User = await User.create({
     username: 'student1_test',
     email: 'student1_test@srividya.edu.in',
@@ -112,7 +88,6 @@ const seedBaseUsers = async () => {
     },
   });
 
-  // 5. Student 2 (Class 8-C)
   const student2User = await User.create({
     username: 'student2_test',
     email: 'student2_test@srividya.edu.in',
@@ -127,7 +102,6 @@ const seedBaseUsers = async () => {
     },
   });
 
-  // 6. Parent 1 (Parent of Student 1 only)
   const parent1User = await User.create({
     username: 'parent1_test',
     email: 'parent1_test@srividya.edu.in',
@@ -137,7 +111,6 @@ const seedBaseUsers = async () => {
     children: [student1User._id],
   });
 
-  // 7. Parent 2 (Parent of Student 2 only)
   const parent2User = await User.create({
     username: 'parent2_test',
     email: 'parent2_test@srividya.edu.in',
@@ -147,7 +120,6 @@ const seedBaseUsers = async () => {
     children: [student2User._id],
   });
 
-  // 8. Teacher 1 (Assigned to Class 10-A, subject Mathematics)
   const teacher1User = await User.create({
     username: 'teacher1_test',
     email: 'teacher1_test@srividya.edu.in',
@@ -159,7 +131,6 @@ const seedBaseUsers = async () => {
     ],
   });
 
-  // 9. Teacher 2 (Assigned to Class 9-B, subject Science; unassigned to 10-A)
   const teacher2User = await User.create({
     username: 'teacher2_test',
     email: 'teacher2_test@srividya.edu.in',
@@ -171,7 +142,6 @@ const seedBaseUsers = async () => {
     ],
   });
 
-  // Create corresponding Student profile documents
   const studentDoc1 = await Student.create({
     admissionNo: 'ADM-TEST-1001',
     fullName: 'Rahul Sharma',
@@ -200,11 +170,9 @@ const seedBaseUsers = async () => {
     attendancePercentage: 88,
   });
 
-  // Link children on parent users directly to Student model doc IDs as well as User IDs
   await User.updateOne({ _id: parent1User._id }, { $set: { children: [student1User._id, studentDoc1._id] } });
   await User.updateOne({ _id: parent2User._id }, { $set: { children: [student2User._id, studentDoc2._id] } });
 
-  // Create corresponding Teacher profile documents
   const teacherDoc1 = await Teacher.create({
     employeeId: 'EMP-T1001',
     fullName: 'Ananya Rao',
@@ -231,7 +199,6 @@ const seedBaseUsers = async () => {
     assignedSubjects: ['Science'],
   });
 
-  // Generate tokens dictionary
   const tokens = {
     superAdmin: generateToken(superAdmin),
     principal: generateToken(principal),

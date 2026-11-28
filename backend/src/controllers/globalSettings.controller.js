@@ -1,7 +1,3 @@
-/**
- * Sri Vidya Educational Trust - Global Platform Settings Controller
- * Module 16: General Settings, Authentication Policies, Platform Feature Controls, and Maintenance Safeguards
- */
 
 const GlobalSettingsService = require('../services/globalSettings.service');
 

@@ -1,7 +1,3 @@
-/**
- * Seed Examination Cycles, Schedules, Marks Memos, and Attendance Records
- * For Sri Vidya English Medium High School
- */
 const mongoose = require('mongoose');
 const config = require('../src/config/env');
 const { Exam, ExamSchedule, ExamMark, calculateSubjectGrade, calculateOverallGrade } = require('../src/models/exam.model');
@@ -15,7 +11,6 @@ const seedExamsAndAttendance = async () => {
   await mongoose.connect(config.mongodbUri);
   console.log('[Exam & Attendance Seed] Connected to MongoDB');
 
-  // 1. Resolve Principal / Admin User
   const principalUser = await User.findOne({ role: 'PRINCIPAL' }) || await User.findOne({ username: 'principal' });
   const teacherUser = await User.findOne({ role: 'TEACHER' }) || await User.findOne({ username: 'teacher1' });
   const teacherSunitha = await Teacher.findOne({ fullName: /Sunitha/i });
@@ -23,7 +18,6 @@ const seedExamsAndAttendance = async () => {
   const createdBy = principalUser ? principalUser._id : (teacherUser ? teacherUser._id : new mongoose.Types.ObjectId());
   const teacherId = teacherUser ? teacherUser._id : createdBy;
 
-  // Clear existing exam & attendance records
   await Exam.deleteMany({});
   await ExamSchedule.deleteMany({});
   await ExamMark.deleteMany({});
@@ -31,7 +25,6 @@ const seedExamsAndAttendance = async () => {
   await AttendanceRegister.deleteMany({});
   console.log('[Exam & Attendance Seed] Cleared previous exam and attendance records.');
 
-  // 2. Create Examination 1: Quarterly Assessment (SA-1)
   const examSA1 = await Exam.create({
     name: 'Quarterly Assessment (SA-1)',
     examType: 'SUMMATIVE_1',
@@ -47,7 +40,6 @@ const seedExamsAndAttendance = async () => {
     createdBy: createdBy,
   });
 
-  // Create Examination 2: Half-Yearly Examination (SA-2)
   const examSA2 = await Exam.create({
     name: 'Half-Yearly Examination (SA-2)',
     examType: 'SUMMATIVE_2',
@@ -63,12 +55,10 @@ const seedExamsAndAttendance = async () => {
 
   console.log(`[Exam & Attendance Seed] Seeded Exams: "${examSA1.name}" and "${examSA2.name}"`);
 
-  // 3. Resolve All Subjects
   const allSubjects = await Subject.find({});
   const subjectMap = {};
   allSubjects.forEach(s => { subjectMap[s.name] = s; });
 
-  // 4. Create Exam Schedules for Class 10
   const class10Subjects = [
     { subject: 'Telugu (First Language)', date: new Date('2025-10-06'), time: '09:30 AM - 12:45 PM', max: 100, pass: 35 },
     { subject: 'English Language & Literature', date: new Date('2025-10-08'), time: '09:30 AM - 12:45 PM', max: 100, pass: 35 },
@@ -94,13 +84,11 @@ const seedExamsAndAttendance = async () => {
     });
   }
 
-  // 5. Seed Marks Memos & Student Results for All 9 Students
   const students = await Student.find({}).sort({ class: -1, rollNo: 1 });
   console.log(`[Exam & Attendance Seed] Populating verified marks memos for ${students.length} students...`);
 
-  // Realistic score templates per student
   const studentMarksProfiles = {
-    'SV-0001': { // A. Rahul (Class 10-A, Roll 1001) - Top distinction
+    'SV-0001': {
       scores: [
         { subject: 'Telugu (First Language)', internal: 19, external: 76, remarks: 'Excellent linguistic articulation' },
         { subject: 'English Language & Literature', internal: 19, external: 73, remarks: 'Mastery in prose & creative writing' },
@@ -111,7 +99,7 @@ const seedExamsAndAttendance = async () => {
       ],
       remarks: 'Exemplary scholastic diligence, active analytical acumen, and outstanding peer leadership.'
     },
-    'SV-0003': { // K. Sai Teja (Class 10-A, Roll 1002) - High First Class
+    'SV-0003': {
       scores: [
         { subject: 'Telugu (First Language)', internal: 18, external: 68, remarks: 'Good grasp of grammar' },
         { subject: 'English Language & Literature', internal: 17, external: 66, remarks: 'Good communicative writing' },
@@ -122,7 +110,7 @@ const seedExamsAndAttendance = async () => {
       ],
       remarks: 'Disciplined and attentive student. Exhibits consistent curiosity and strong study habits.'
     },
-    'SV-0004': { // M. Divya Bharathi (Class 10-A, Roll 1003) - Distinction
+    'SV-0004': {
       scores: [
         { subject: 'Telugu (First Language)', internal: 20, external: 77, remarks: 'Flawless handwriting and poetry exposition' },
         { subject: 'English Language & Literature', internal: 20, external: 75, remarks: 'Superb vocabulary & comprehension' },
@@ -133,7 +121,7 @@ const seedExamsAndAttendance = async () => {
       ],
       remarks: 'Outstanding dedication, courteous deportment, and remarkable intellectual consistency.'
     },
-    'SV-0002': { // B. Priya (Class 8-C, Roll 8024)
+    'SV-0002': {
       scores: [
         { subject: 'Telugu (First Language)', internal: 18, external: 65, remarks: 'Good reading skills' },
         { subject: 'English Language & Literature', internal: 18, external: 67, remarks: 'Good grammar foundation' },
@@ -144,7 +132,7 @@ const seedExamsAndAttendance = async () => {
       ],
       remarks: 'Sincere and eager to learn. Shows steady scholastic improvement.'
     },
-    'SV-0005': { // G. Karthik (Class 9-B, Roll 901)
+    'SV-0005': {
       scores: [
         { subject: 'Telugu (First Language)', internal: 17, external: 62, remarks: 'Good comprehension' },
         { subject: 'English Language & Literature', internal: 17, external: 64, remarks: 'Good speaking skills' },
@@ -155,7 +143,7 @@ const seedExamsAndAttendance = async () => {
       ],
       remarks: 'Capable and disciplined. Recommended to spend more time on science problem solving.'
     },
-    'SV-0006': { // V. Siri Varshini (Class 9-B, Roll 902)
+    'SV-0006': {
       scores: [
         { subject: 'Telugu (First Language)', internal: 19, external: 72, remarks: 'Excellent expression' },
         { subject: 'English Language & Literature', internal: 19, external: 71, remarks: 'Articulate writing' },
@@ -166,7 +154,7 @@ const seedExamsAndAttendance = async () => {
       ],
       remarks: 'Bright, proactive student with excellent creative abilities and analytical aptitude.'
     },
-    'SV-0007': { // CH. Hemanth (Class 7-A, Roll 701)
+    'SV-0007': {
       scores: [
         { subject: 'Telugu (First Language)', internal: 17, external: 60, remarks: 'Good spelling' },
         { subject: 'English Language & Literature', internal: 17, external: 62, remarks: 'Punctual with reading logs' },
@@ -177,7 +165,7 @@ const seedExamsAndAttendance = async () => {
       ],
       remarks: 'Enthusiastic and polite student. Shows great promise with continued focus.'
     },
-    'SV-0008': { // S. Tanvi Sree (Class 6-A, Roll 601)
+    'SV-0008': {
       scores: [
         { subject: 'Telugu (First Language)', internal: 19, external: 73, remarks: 'Very neat calligraphy' },
         { subject: 'English Language & Literature', internal: 19, external: 74, remarks: 'Expressive reader' },
@@ -188,7 +176,7 @@ const seedExamsAndAttendance = async () => {
       ],
       remarks: 'Delightful student with high academic consistency, neat notebook maintenance and pleasant manners.'
     },
-    'SV-0010': { // A. Sneha (Class 6-A, Roll 6015)
+    'SV-0010': {
       scores: [
         { subject: 'Telugu (First Language)', internal: 18, external: 70, remarks: 'Fluent reading' },
         { subject: 'English Language & Literature', internal: 18, external: 69, remarks: 'Good grammar' },
@@ -253,7 +241,6 @@ const seedExamsAndAttendance = async () => {
     });
   }
 
-  // Calculate and assign class ranks for Class 10
   const class10Marks = await ExamMark.find({ exam: examSA1._id, class: '10' }).sort({ totalMarksObtained: -1 });
   for (let r = 0; r < class10Marks.length; r++) {
     class10Marks[r].rankInClass = r + 1;
@@ -262,8 +249,6 @@ const seedExamsAndAttendance = async () => {
 
   console.log(`[Exam & Attendance Seed] Assigned ranks for ${class10Marks.length} Class 10 candidates.`);
 
-  // 6. Seed Attendance Records & Register Summaries for 2025-2026
-  // Academic calendar: 114 working days in Term 1
   const workingDays = 114;
   console.log('[Exam & Attendance Seed] Seeding attendance summaries & registers...');
 
@@ -279,7 +264,6 @@ const seedExamsAndAttendance = async () => {
     'SV-0010': { present: 110, absent: 4, rate: 96.5 },
   };
 
-  // Seed daily attendance for sample recent days so date queries return live logs
   const dates = [
     new Date('2025-10-13'),
     new Date('2025-10-14'),
@@ -311,7 +295,6 @@ const seedExamsAndAttendance = async () => {
     }
   }
 
-  // Create an AttendanceRegister for Class 10-A
   await AttendanceRegister.create({
     class: '10',
     section: 'A',

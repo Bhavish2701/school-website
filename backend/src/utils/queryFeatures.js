@@ -1,7 +1,3 @@
-/**
- * Reusable Query Features Utility
- * Implements Searching, Filtering, Sorting, and Pagination for Mongoose models
- */
 class QueryFeatures {
   constructor(mongooseQuery, queryString = {}) {
     this.query = mongooseQuery;
@@ -10,10 +6,6 @@ class QueryFeatures {
     this.limit = 10;
   }
 
-  /**
-   * Keyword Search across specified model fields using case-insensitive regex
-   * @param {string[]} searchableFields - Array of field names to search across
-   */
   search(searchableFields = []) {
     const keyword = this.queryString.search || this.queryString.q;
     if (keyword && keyword.trim() && searchableFields.length > 0) {
@@ -26,15 +18,10 @@ class QueryFeatures {
     return this;
   }
 
-  /**
-   * Filter query attributes with comparison operator support: [gte, gt, lte, lt, ne, in]
-   * e.g. /records?attendancePercentage[gte]=90&class=10
-   */
   filter(excludedFields = ['page', 'limit', 'sort', 'sortBy', 'search', 'q', 'fields']) {
     const queryObj = { ...this.queryString };
     excludedFields.forEach((key) => delete queryObj[key]);
 
-    // Convert operators: gte, gt, lte, lt to $gte, $gt, etc.
     let queryStr = JSON.stringify(queryObj);
     queryStr = queryStr.replace(/\b(gte|gt|lte|lt|ne|in)\b/g, (match) => `$${match}`);
     const parsedFilter = JSON.parse(queryStr);
@@ -43,10 +30,6 @@ class QueryFeatures {
     return this;
   }
 
-  /**
-   * Sort results by specified field(s)
-   * e.g. /records?sort=-attendancePercentage or /records?sortBy=fullName:asc
-   */
   sort(defaultSort = '-createdAt') {
     const sortParam = this.queryString.sortBy || this.queryString.sort;
     if (sortParam) {
@@ -67,9 +50,6 @@ class QueryFeatures {
     return this;
   }
 
-  /**
-   * Paginate query with page and limit
-   */
   paginate(defaultLimit = 10, maxLimit = 100) {
     const page = Math.max(1, parseInt(this.queryString.page, 10) || 1);
     let limit = parseInt(this.queryString.limit, 10) || defaultLimit;
@@ -82,9 +62,6 @@ class QueryFeatures {
     return this;
   }
 
-  /**
-   * Executes the query and returns records with pagination metadata
-   */
   async execute() {
     const filterConditions = this.query.getFilter();
     const countPromise = this.query.model.countDocuments(filterConditions);

@@ -1,7 +1,3 @@
-/**
- * Platform Users & Accounts - Module Aggregator
- * Exports all 6 architectural layers
- */
 
 const routes = require('./users.routes');
 const controller = require('./users.controller');

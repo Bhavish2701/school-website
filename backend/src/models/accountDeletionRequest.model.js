@@ -1,8 +1,3 @@
-/**
- * Account Deletion Request Model
- * Enforces legal safeguards under Andhra Pradesh Education Act & DPDP Act 2023
- * Requires authorized administrative approval while strictly preserving statutory academic and financial records.
- */
 const mongoose = require('mongoose');
 
 const accountDeletionRequestSchema = new mongoose.Schema(

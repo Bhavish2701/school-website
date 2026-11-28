@@ -1,7 +1,3 @@
-/**
- * Backups & Disaster Recovery - Service Layer
- * Business rules, calculations, and operational orchestration
- */
 
 const Repository = require('./backups-recovery.repository');
 const MultiInstitutionSecurity = require('../common/multiInstitutionSecurity');

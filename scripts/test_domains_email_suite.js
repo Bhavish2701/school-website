@@ -1,8 +1,3 @@
-/**
- * test_domains_email_suite.js
- * Acceptance test suite for Module 15: Domains, Email & Notifications
- * Sri Vidya Educational Trust Platform Administration
- */
 
 const http = require('http');
 const fs = require('fs');
@@ -54,9 +49,6 @@ async function runTests() {
   console.log('=============================================================\n');
 
   try {
-    // -------------------------------------------------------------
-    // Test Group 1: 15.1 Domain Directory
-    // -------------------------------------------------------------
     console.log('--- Test Group 1: 15.1 Domain Directory Listing ---');
     const resDomains = await request({
       hostname: 'localhost',
@@ -77,9 +69,6 @@ async function runTests() {
     assert(primaryDomain.sslStatus === 'VALID', 'srividya.edu.in sslStatus is VALID');
     assert(primaryDomain.purpose === 'Public website', 'srividya.edu.in purpose is Public website');
 
-    // -------------------------------------------------------------
-    // Test Group 2: 15.1 & 15.2 Create Domain & Verification Invariant
-    // -------------------------------------------------------------
     console.log('\n--- Test Group 2: Domain Creation & Verification Invariant (Section 15.2) ---');
     const newDomainName = `test-portal-${Date.now()}.srividya.org`;
     const resCreate = await request({
@@ -98,15 +87,11 @@ async function runTests() {
     const createdDomain = resCreate.data.data;
     assert(createdDomain.domain === newDomainName, 'Created domain matches requested name');
 
-    // Section 15.2 Invariant: Never report a domain as verified before check succeeds
     assert(createdDomain.verificationStatus === 'PENDING_VERIFICATION',
       'Invariant: New domain verificationStatus is strictly PENDING_VERIFICATION');
     assert(createdDomain.dnsRecords && createdDomain.dnsRecords.length >= 2,
       'Domain includes generated DNS records');
 
-    // -------------------------------------------------------------
-    // Test Group 3: 15.2 Domain DNS Details & Plain Language Explanations
-    // -------------------------------------------------------------
     console.log('\n--- Test Group 3: DNS Records & Plain Language Explanations ---');
     const resDns = await request({
       hostname: 'localhost',
@@ -125,9 +110,6 @@ async function runTests() {
     assert((txtRecord.explanation || txtRecord.plainLanguageExplanation) && (txtRecord.explanation || txtRecord.plainLanguageExplanation).length > 10,
       'TXT record provides clear plain-language explanation');
 
-    // -------------------------------------------------------------
-    // Test Group 4: Domain Ownership Verification Probe & DNS Check
-    // -------------------------------------------------------------
     console.log('\n--- Test Group 4: Verification Probes & DNS Checks ---');
     const resVerify = await request({
       hostname: 'localhost',
@@ -152,7 +134,6 @@ async function runTests() {
     assert(resCheckDns.data.success === true, 'Check DNS returns success');
     assert(resCheckDns.data.dnsStatus === 'ACTIVE' || resCheckDns.data.dnsStatus === 'HEALTHY' || (resCheckDns.data.data && resCheckDns.data.data.dnsStatus === 'ACTIVE'), 'DNS status is ACTIVE/HEALTHY');
 
-    // Retry verification endpoint
     const resRetry = await request({
       hostname: 'localhost',
       port: PORT,
@@ -161,7 +142,6 @@ async function runTests() {
     });
     assert(resRetry.status === 200, 'POST /api/v1/platform/domains/:id/retry returns 200 OK');
 
-    // Toggle active status (disable/enable)
     const resToggle = await request({
       hostname: 'localhost',
       port: PORT,
@@ -171,9 +151,6 @@ async function runTests() {
     assert(resToggle.status === 200, 'POST /api/v1/platform/domains/:id/toggle returns 200 OK');
     assert(resToggle.data.data.isEnabled === false || resToggle.data.data.isActive === false, 'Domain is now disabled');
 
-    // -------------------------------------------------------------
-    // Test Group 5: 15.3 Email Service Management
-    // -------------------------------------------------------------
     console.log('\n--- Test Group 5: 15.3 Email Service Management ---');
     const resEmailServices = await request({
       hostname: 'localhost',
@@ -193,7 +170,6 @@ async function runTests() {
     assert(['OPERATIONAL', 'OPTIMAL', 'HEALTHY'].includes(gwService.deliveryHealth), 'GW delivery health is OPERATIONAL/OPTIMAL');
     assert(gwService.bounceRate <= 5.0, 'GW bounce rate is within healthy threshold');
 
-    // Diagnostic test email send
     const resTestMail = await request({
       hostname: 'localhost',
       port: PORT,
@@ -206,7 +182,6 @@ async function runTests() {
     assert(resTestMail.status === 200, 'POST /api/v1/platform/domains/email/services/:id/test returns 200 OK');
     assert(resTestMail.data.success === true, 'Test email dispatch succeeded');
 
-    // Verify sender domain
     const resVerifySender = await request({
       hostname: 'localhost',
       port: PORT,
@@ -216,7 +191,6 @@ async function runTests() {
     assert(resVerifySender.status === 200, 'POST /api/v1/platform/domains/email/services/:id/verify-sender returns 200 OK');
     assert(resVerifySender.data.data.verificationStatus === 'VERIFIED', 'Sender domain is VERIFIED');
 
-    // Delivery logs
     const resLogs = await request({
       hostname: 'localhost',
       port: PORT,
@@ -227,9 +201,6 @@ async function runTests() {
     assert(Array.isArray(resLogs.data.data), 'Delivery logs array returned');
     assert(resLogs.data.data.length >= 1, 'Delivery logs contain recent dispatch');
 
-    // -------------------------------------------------------------
-    // Test Group 6: 15.4 Notification Templates & Privacy Guard Invariant
-    // -------------------------------------------------------------
     console.log('\n--- Test Group 6: 15.4 Notification Templates & Privacy Guard Invariant ---');
     const resTemplates = await request({
       hostname: 'localhost',
@@ -259,11 +230,9 @@ async function runTests() {
       assert(found, `Required template trigger ${trig} is configured`);
     }
 
-    // Section 15.4 Invariant: Confidential variable privacy guard
     console.log('\n--- Test Group 7: Section 15.4 Privacy Guard Invariant Rejections ---');
     const sampleTemplate = templates[0];
 
-    // Attempting to inject {{password_hash}} must be rejected
     const resViolating1 = await request({
       hostname: 'localhost',
       port: PORT,
@@ -279,7 +248,6 @@ async function runTests() {
     assert(resViolating1.data.message.includes('Privacy Guard Violation') || resViolating1.data.message.includes('Confidential variable') || resViolating1.data.message.includes('Security Invariant Violation'),
       'Error message clearly explains the privacy guard invariant violation');
 
-    // Attempting to inject {{session_token}} must also be rejected
     const resViolating2 = await request({
       hostname: 'localhost',
       port: PORT,
@@ -292,7 +260,6 @@ async function runTests() {
 
     assert(resViolating2.status === 400, 'PUT template with {{session_token}} is rejected with 400 Bad Request');
 
-    // Valid update with permitted variables must succeed
     const resValidUpdate = await request({
       hostname: 'localhost',
       port: PORT,
@@ -307,7 +274,6 @@ async function runTests() {
     assert(resValidUpdate.status === 200, 'Valid template update with whitelisted variables returns 200 OK');
     assert(resValidUpdate.data.data.version >= 2, 'Template version incremented on revision');
 
-    // Template preview with safe variable interpolation
     const resPreview = await request({
       hostname: 'localhost',
       port: PORT,
@@ -320,7 +286,6 @@ async function runTests() {
     assert(!resPreview.data.data.interpolatedBody.includes('{{user_name}}'),
       'Preview interpolates tokens with sample values');
 
-    // Test send template
     const resTestSendTpl = await request({
       hostname: 'localhost',
       port: PORT,
@@ -330,9 +295,6 @@ async function runTests() {
     assert(resTestSendTpl.status === 200, 'POST test-send template returns 200 OK');
     assert(resTestSendTpl.data.success === true, 'Test-send reports success');
 
-    // -------------------------------------------------------------
-    // Test Group 8: Frontend Integrity & UI Controls Verification
-    // -------------------------------------------------------------
     console.log('\n--- Test Group 8: Frontend HTML & JS Integrity ---');
     const htmlPath = path.join(__dirname, '..', 'frontend', 'platform-admin', 'index.html');
     const html = fs.readFileSync(htmlPath, 'utf8');
@@ -345,7 +307,6 @@ async function runTests() {
     assert(html.includes('id="tbodyEmailServices"'), 'HTML contains email services tbody');
     assert(html.includes('id="tbodyNotificationTemplates"'), 'HTML contains notification templates tbody');
 
-    // Modals
     assert(html.includes('id="modalAddDomain"'), 'HTML contains modalAddDomain');
     assert(html.includes('id="modalDomainDnsDetail"'), 'HTML contains modalDomainDnsDetail');
     assert(html.includes('id="modalSendTestEmail"'), 'HTML contains modalSendTestEmail');
@@ -353,7 +314,6 @@ async function runTests() {
     assert(html.includes('id="modalEditNotificationTemplate"'), 'HTML contains modalEditNotificationTemplate');
     assert(html.includes('id="modalPreviewNotificationTemplate"'), 'HTML contains modalPreviewNotificationTemplate');
 
-    // JS exports check
     const jsPath = path.join(__dirname, '..', 'frontend', 'js', 'platform-admin.js');
     const js = fs.readFileSync(jsPath, 'utf8');
 

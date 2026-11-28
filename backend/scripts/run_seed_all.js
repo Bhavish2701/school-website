@@ -1,7 +1,3 @@
-/**
- * Master Database Seeder for Sri Vidya School ERP
- * Runs all seed scripts sequentially with robust error checking
- */
 const { execSync } = require('child_process');
 const path = require('path');
 

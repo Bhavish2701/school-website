@@ -1,12 +1,6 @@
-/**
- * Sri Vidya Educational Trust - Security & Access Monitoring Models
- * Module 9: Real-time Threat Defense, Security Events Register,
- * Privileged Access Reviews, and Incident Lifecycle Workflow
- */
 
 const mongoose = require('mongoose');
 
-// 9.4 Security Incident Workflow Stages
 const INCIDENT_WORKFLOW_STAGES = [
   'Alert Detected',
   'Triage',
@@ -21,7 +15,6 @@ const INCIDENT_WORKFLOW_STAGES = [
 
 const RISK_CLASSIFICATIONS = ['CRITICAL', 'HIGH', 'MEDIUM', 'LOW'];
 
-// 9.2 Security Event Schema
 const SecurityEventSchema = new mongoose.Schema({
   eventId: {
     type: String,
@@ -33,7 +26,6 @@ const SecurityEventSchema = new mongoose.Schema({
     type: String,
     required: true,
     index: true
-    // e.g. 'BRUTE_FORCE_PROBE', 'OFF_HOURS_PRIVILEGED_LOGIN', 'UNUSUAL_CROSS_CAMPUS_ACCESS', 'SENSITIVE_DATA_EXPORT_SPIKE', 'CREDENTIAL_STUFFING'
   },
   userId: {
     type: String,
@@ -112,7 +104,6 @@ const SecurityEventSchema = new mongoose.Schema({
   timestamps: true
 });
 
-// 9.3 Privileged Access Review Schema
 const PrivilegedAccessReviewSchema = new mongoose.Schema({
   reviewId: {
     type: String,
@@ -141,12 +132,10 @@ const PrivilegedAccessReviewSchema = new mongoose.Schema({
   institutionScope: {
     type: String,
     required: true
-    // e.g. 'TRUST-ALL (Multi-Tenant Central)', 'INST-001 (Main Campus)'
   },
   privilegedRoles: {
     type: [String],
     required: true
-    // e.g. ['Platform Owner', 'Super Administrator']
   },
   lastAccess: {
     timestamp: { type: Date, default: Date.now },

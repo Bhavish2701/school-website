@@ -1,21 +1,3 @@
-/**
- * Comprehensive Test Suite for Examination Module
- * Tests:
- * 1. Exam creation (Management)
- * 2. Exam scheduling for subjects & classes
- * 3. Schedule retrieval
- * 4. Teacher subject marks entry (authorized class & subject)
- * 5. Teacher subject authorization enforcement (rejecting unauthorized subject)
- * 6. Student & parent tamper rejection (read-only enforcement)
- * 7. Mark modification & automated recalculation of totals/GPA
- * 8. Result calculation & automated class ranking
- * 9. Unpublished result access protection (blocks student/parent prior to publishing)
- * 10. Result publishing workflow
- * 11. Student viewing own published marks memo & report cards
- * 12. Parent viewing child's marks memo & report cards
- * 13. Parent cross-child tamper protection (rejecting access to another parent's child)
- * 14. Class results dossier inspection
- */
 const BASE_URL = 'http://localhost:5000/api/v1';
 
 const login = async (identifier, password) => {
@@ -36,13 +18,12 @@ const runExamTests = async () => {
 
   console.log('Obtaining authentication tokens...');
   const principalToken = await login('principal', 'Principal@123');
-  const teacherToken = await login('teacher1', 'Teacher@123'); // Teaches Class 10-A Mathematics
+  const teacherToken = await login('teacher1', 'Teacher@123');
   const studentToken = await login('student1', 'Student@123');
-  const parent1Token = await login('parent1', 'Parent@123'); // Linked to A. Rahul (Class 10-A)
+  const parent1Token = await login('parent1', 'Parent@123');
   const parent2Token = await login('parent2', 'Parent@123');
   console.log('Tokens generated successfully.\n');
 
-  // 1. Management: Create Examination
   console.log('1. Testing POST /api/v1/exams (Creating Term 1 Summative Assessment)...');
   const createExamRes = await fetch(`${BASE_URL}/exams`, {
     method: 'POST',
@@ -68,7 +49,6 @@ const runExamTests = async () => {
 
   const examId = createExamData.data?.exam?._id;
 
-  // 2. Management: Schedule Exam Subjects
   console.log(`2. Testing POST /api/v1/exams/${examId}/schedule (Scheduling Subjects)...`);
   const schedulesToCreate = [
     {
@@ -120,7 +100,6 @@ const runExamTests = async () => {
   }
   console.log();
 
-  // 3. View Exam Schedule
   console.log(`3. Testing GET /api/v1/exams/${examId}/schedule?class=10...`);
   const viewSchedRes = await fetch(`${BASE_URL}/exams/${examId}/schedule?class=10`, {
     headers: { Authorization: `Bearer ${studentToken}` },
@@ -130,7 +109,6 @@ const runExamTests = async () => {
   console.log(`Total Scheduled Subjects: ${viewSchedData.data?.schedules?.length}`);
   console.log();
 
-  // 4. Fetch students of Class 10-A to enter marks
   const rosterRes = await fetch(`${BASE_URL}/attendance/classes/10/A/students`, {
     headers: { Authorization: `Bearer ${teacherToken}` },
   });
@@ -139,7 +117,6 @@ const runExamTests = async () => {
   console.log(`Roster for Class 10-A has ${students.length} students:`, students.map((s) => s.fullName));
   console.log();
 
-  // 5. Teacher enters marks for authorized subject: Mathematics (Class 10-A)
   console.log(`5. Testing POST /api/v1/exams/${examId}/marks (Teacher entering Mathematics marks)...`);
   const mathMarksPayload = {
     class: '10',
@@ -147,7 +124,7 @@ const runExamTests = async () => {
     subject: 'Mathematics',
     marks: students.map((s, idx) => ({
       studentId: s.studentId,
-      marksObtained: idx === 0 ? 94 : idx === 1 ? 82 : 45, // Rahul 94 (A1), Sai 82 (A2), Divya 45 (C2)
+      marksObtained: idx === 0 ? 94 : idx === 1 ? 82 : 45,
       isAbsent: false,
       remarks: idx === 0 ? 'Outstanding analytical reasoning' : 'Good performance',
     })),
@@ -166,7 +143,6 @@ const runExamTests = async () => {
   console.log(`Result: ${mathMarksData.message}`);
   console.log();
 
-  // Also enter Physical Science marks using Principal token to have multi-subject calculation
   await fetch(`${BASE_URL}/exams/${examId}/marks`, {
     method: 'POST',
     headers: {
@@ -185,7 +161,6 @@ const runExamTests = async () => {
     }),
   });
 
-  // 6. Teacher Authorization Enforcement: Teacher attempts to enter marks for unauthorized subject (Social Studies)
   console.log('6. Testing Teacher Subject Authorization (Teacher entering unauthorized subject: Social Studies)...');
   const unauthorizedSubjectRes = await fetch(`${BASE_URL}/exams/${examId}/marks`, {
     method: 'POST',
@@ -210,7 +185,6 @@ const runExamTests = async () => {
   console.log(`Rejection Message: ${unauthorizedSubjectData.message}`);
   console.log();
 
-  // 7. Student & Parent Tamper Protection (Read-Only Enforcement)
   console.log('7. Testing Student/Parent Tamper Protection (Student attempting to enter marks)...');
   const studentTamperRes = await fetch(`${BASE_URL}/exams/${examId}/marks`, {
     method: 'POST',
@@ -225,9 +199,7 @@ const runExamTests = async () => {
   console.log(`Rejection Message: ${studentTamperData.message}`);
   console.log();
 
-  // 8. Mark Modification & Automated Recalculation
   console.log('8. Testing Mark Modification & Automatic GPA/Percentage Recalculation...');
-  // Find mark record for first student
   const dossierRes = await fetch(`${BASE_URL}/exams/${examId}/class/10/A/dossier`, {
     headers: { Authorization: `Bearer ${principalToken}` },
   });
@@ -243,7 +215,7 @@ const runExamTests = async () => {
       },
       body: JSON.stringify({
         subject: 'Mathematics',
-        marksObtained: 98, // Re-evaluated from 94 to 98
+        marksObtained: 98,
         remarks: 'Re-evaluation verified by HOD',
       }),
     });
@@ -254,7 +226,6 @@ const runExamTests = async () => {
   }
   console.log();
 
-  // 9. Result Calculation & Class Rankings
   console.log(`9. Testing POST /api/v1/exams/${examId}/calculate-results (Assigning Class Ranks)...`);
   const calcRes = await fetch(`${BASE_URL}/exams/${examId}/calculate-results?class=10&section=A`, {
     method: 'POST',
@@ -266,7 +237,6 @@ const runExamTests = async () => {
   console.log(`Ranks Assigned:`, calcData.data?.ranks?.map((r) => `Rank ${r.rank}: ${r.totalMarks} Marks (${r.percentage}%, Status: ${r.status})`));
   console.log();
 
-  // 10. Unpublished Result Access Protection
   console.log('10. Testing Unpublished Result Access Protection (Student attempting to view results before publish)...');
   const unpubStudentRes = await fetch(`${BASE_URL}/exams/${examId}/student/me`, {
     headers: { Authorization: `Bearer ${studentToken}` },
@@ -276,7 +246,6 @@ const runExamTests = async () => {
   console.log(`Rejection Message: ${unpubStudentData.message}`);
   console.log();
 
-  // 11. Management: Publish Results
   console.log(`11. Testing POST /api/v1/exams/${examId}/publish (Publishing Results)...`);
   const pubRes = await fetch(`${BASE_URL}/exams/${examId}/publish`, {
     method: 'POST',
@@ -287,7 +256,6 @@ const runExamTests = async () => {
   console.log(`Message: ${pubData.message}`);
   console.log();
 
-  // 12. Student: View Own Published Marks Memo & Report Cards
   console.log(`12. Testing GET /api/v1/exams/${examId}/student/me (Student viewing published marks memo)...`);
   const studentMemoRes = await fetch(`${BASE_URL}/exams/${examId}/student/me`, {
     headers: { Authorization: `Bearer ${studentToken}` },
@@ -307,7 +275,6 @@ const runExamTests = async () => {
   console.log(`Total Published Report Cards for Student: ${studentAllCardsData.data?.totalExams}`);
   console.log();
 
-  // 13. Parent: View Child's Marks Memo & Report Cards
   console.log('13. Testing Parent Child Marks Access...');
   const parentProfileRes = await fetch(`${BASE_URL}/parents/profile`, {
     headers: { Authorization: `Bearer ${parent1Token}` },
@@ -333,7 +300,6 @@ const runExamTests = async () => {
   }
   console.log();
 
-  // 14. Parent Cross-Child Tamper Protection (Parent 2 accessing Parent 1's child)
   if (childId) {
     console.log("14. Testing Parent Cross-Child Tamper Protection (Parent 2 attempting to view Parent 1's child marks)...");
     const parent2TamperRes = await fetch(`${BASE_URL}/exams/${examId}/parent/child/${childId}`, {
@@ -345,7 +311,6 @@ const runExamTests = async () => {
   }
   console.log();
 
-  // 15. Staff: Class Results Dossier
   console.log(`15. Testing GET /api/v1/exams/${examId}/class/10/A/dossier (Class Results Dossier)...`);
   const finalDossierRes = await fetch(`${BASE_URL}/exams/${examId}/class/10/A/dossier`, {
     headers: { Authorization: `Bearer ${principalToken}` },

@@ -50,7 +50,6 @@ async function verify() {
   console.log('  SRI VIDYA ERP - LIVE SYNCHRONIZATION VERIFICATION');
   console.log('========================================================');
 
-  // 1. Platform Dashboard Check
   const platRes = await apiGet('/api/v1/dashboard/platform');
   console.log('\n[1] Platform Dashboard Telemetry:');
   console.log('    Status:', platRes.status);
@@ -61,7 +60,6 @@ async function verify() {
   console.log('    Total Teachers in System:', platRes.body.data.overview.totalTeachers);
   console.log('    Database Health:', platRes.body.data.platformHealth.databaseConnectivity.status, '(' + platRes.body.data.platformHealth.databaseConnectivity.metrics + ')');
 
-  // 2. Management Dashboard Check
   const mgmtRes = await apiGet('/api/v1/dashboard/management');
   console.log('\n[2] Management Dashboard Telemetry:');
   console.log('    Status:', mgmtRes.status);
@@ -72,7 +70,6 @@ async function verify() {
   console.log('    Finances (Total Outstanding):', '₹' + mgmtRes.body.data.finances.totalOutstanding);
   console.log('    Upcoming Exams Count:', mgmtRes.body.data.upcomingExams?.length);
 
-  // 3. Teacher Dashboard Check
   const teachRes = await apiGet('/api/v1/dashboard/teacher');
   console.log('\n[3] Teacher Dashboard Telemetry:');
   console.log('    Status:', teachRes.status);
@@ -81,7 +78,6 @@ async function verify() {
   console.log('    Assigned Classes Count:', teachRes.body.data.classes?.assignedClassesCount);
   console.log('    Total Students in Teacher Classes:', teachRes.body.data.classes?.totalStudentsCount);
 
-  // 4. Test Live Mutation (Apply New Online Admission)
   console.log('\n[4] Testing Live Mutation: Submit New Admission...');
   const testAdmission = {
     studentName: 'Audit Test Student ' + Date.now().toString().slice(-4),
@@ -100,7 +96,6 @@ async function verify() {
   console.log('    Admission Submission Status:', admPostRes.status, 'Success:', admPostRes.body.success);
   console.log('    Created Application Number:', admPostRes.body.data?.applicationNumber);
 
-  // 5. Verify Dashboard Automatically Reflected the Mutation
   const mgmtAfterRes = await apiGet('/api/v1/dashboard/management');
   console.log('\n[5] Management Dashboard AFTER Mutation:');
   console.log('    Pending Admissions Count:', mgmtAfterRes.body.data.admissions.total, '(Previous:', mgmtRes.body.data.admissions.total, ')');

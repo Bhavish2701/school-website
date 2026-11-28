@@ -6,14 +6,12 @@ console.log('=== TEST SUITE: TC & TRANSFERS TOOLBAR ALIGNMENT & RESPONSIVE GRID 
 const html = fs.readFileSync('frontend/administration-portal/index.html', 'utf8');
 const css = fs.readFileSync('frontend/css/portal.css', 'utf8');
 
-// CHECK 1: Enterprise 2-tier Toolbar Architecture
 console.log('[CHECK 1] Verifying 2-tier container structure in HTML...');
 assert.ok(html.includes('class="transfers-toolbar-container"'), 'transfers-toolbar-container must exist');
 assert.ok(html.includes('class="transfers-filter-grid"'), 'transfers-filter-grid must exist for Tier 1');
 assert.ok(html.includes('class="transfers-governance-row"'), 'transfers-governance-row must exist for Tier 2');
 console.log('  ✓ 2-tier architecture verified');
 
-// CHECK 2: All 5 Filter Controls in Tier 1 Grid
 console.log('\n[CHECK 2] Verifying all 5 filter controls in Tier 1 Grid...');
 const requiredFilterIds = [
   'tcSearchInput',
@@ -29,7 +27,6 @@ requiredFilterIds.forEach(id => {
   console.log(`  ✓ Filter element #${id} verified`);
 });
 
-// CHECK 3: Governance Row Elements in Tier 2
 console.log('\n[CHECK 3] Verifying Tier 2 Governance Indicators and Actions...');
 assert.ok(html.includes('id="tcFilterCountDisplay"'), '#tcFilterCountDisplay must exist');
 assert.ok(html.includes('id="tcFilteredCount"'), '#tcFilteredCount must exist');
@@ -39,7 +36,6 @@ assert.ok(html.includes('portalApp.exportTransfersCSV()'), 'Export Register butt
 assert.ok(html.includes('portalApp.printTransfersTable()'), 'Print Register button verified');
 console.log('  ✓ All Tier 2 elements and actions verified');
 
-// CHECK 4: CSS Grid & Flex Properties
 console.log('\n[CHECK 4] Verifying CSS Grid & Responsive Rules in portal.css...');
 assert.ok(css.includes('.transfers-toolbar-container'), '.transfers-toolbar-container rule must exist in portal.css');
 assert.ok(css.includes('.transfers-filter-grid'), '.transfers-filter-grid rule must exist in portal.css');

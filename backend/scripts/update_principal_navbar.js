@@ -6,10 +6,8 @@ const cssPath = path.join(__dirname, '../../frontend/css/portal.css');
 
 console.log('--- Updating Principal Dashboard Top Navigation Bar ---');
 
-// 1. Update HTML
 let html = fs.readFileSync(htmlPath, 'utf8');
 
-// Target the header block in administration-portal/index.html
 const oldHeaderStart = '<header class="portal-header">';
 const oldHeaderEnd = '</header>';
 
@@ -130,10 +128,8 @@ html = html.substring(0, headerStartIdx) + newHeaderHtml + html.substring(header
 fs.writeFileSync(htmlPath, html, 'utf8');
 console.log('✓ Successfully updated header in index.html (removed portals hub, added header-divider & enhanced logout)');
 
-// 2. Update CSS in portal.css
 let css = fs.readFileSync(cssPath, 'utf8');
 
-// Find boundaries of header styling
 const cssStartMarker = '/* Portal Sticky Header */';
 const cssEndMarker = '/* Role Selector Dropdown */';
 
@@ -336,7 +332,6 @@ const newHeaderCss = `/* Portal Sticky Header */
 
 css = css.substring(0, cssStartIdx) + newHeaderCss + css.substring(cssEndIdx);
 
-// Also update .btn-back-public and add .btn-header-signout and .header-divider
 const publicBtnMarker = '.btn-back-public {';
 const publicBtnStart = css.indexOf(publicBtnMarker);
 if (publicBtnStart !== -1) {

@@ -1,6 +1,3 @@
-/**
- * Parent Module Request Validators
- */
 const validate = require('../middleware/validate.middleware');
 
 const validateUpdateProfile = validate({

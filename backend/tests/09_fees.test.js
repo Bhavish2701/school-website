@@ -1,15 +1,3 @@
-/**
- * Test Suite 09: Fees & Payment Module API Tests
- * Covers:
- * - Create fee structure (Management: 201)
- * - Fee structure validation error (422)
- * - List fee structures (200)
- * - Assign fee to student (200 / 201)
- * - View student fees (200)
- * - View pending fees report (200)
- * - Role-based authorization: Student/Parent forbidden from creating fee structures (403)
- * - 401 Unauthenticated requests
- */
 const request = require('supertest');
 const mongoose = require('mongoose');
 const app = require('../src/app');
@@ -51,7 +39,6 @@ describe('09 - Fees & Payment Module API Test Suite', () => {
         .post('/api/v1/fees/structures')
         .set('Authorization', `Bearer ${fixtures.tokens.principal}`)
         .send({
-          // Missing name, class, totalAmount, dueDate
           academicYear: '2025-2026',
         });
 

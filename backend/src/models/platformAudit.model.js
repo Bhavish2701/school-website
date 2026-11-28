@@ -1,24 +1,18 @@
-/**
- * Sri Vidya Educational Trust - Platform Audit Log Model
- * Module 8: Read-Only Evidence & Investigation Interface for Authorized Platform Operators
- * Statutory Immutability Guarantee & Cryptographic Tamper-Evidence
- */
 
 const mongoose = require('mongoose');
 const crypto = require('crypto');
 
-// 8.3 Audit Event Categories (The 10 Statutory Categories)
 const AUDIT_EVENT_CATEGORIES = [
-  'AUTH_ACCOUNTS',           // 1. Authentication and account changes
-  'INSTITUTIONS',            // 2. Institution activation or suspension
-  'RBAC_PERMISSIONS',        // 3. Role and permission changes
-  'SCHOOL_CONFIG',           // 4. Configuration changes
-  'INTEGRATIONS',            // 5. Integration changes
-  'DATA_IMPORT_EXPORT',      // 6. Data import and export
-  'BACKUP_RECOVERY',         // 7. Backup and recovery actions
-  'ADMIN_SUPPORT',           // 8. Administrative support actions
-  'SECURITY_ALERTS',         // 9. Security alerts
-  'DEPLOYMENT_OPS'           // 10. Deployment-related administrative events
+  'AUTH_ACCOUNTS',
+  'INSTITUTIONS',
+  'RBAC_PERMISSIONS',
+  'SCHOOL_CONFIG',
+  'INTEGRATIONS',
+  'DATA_IMPORT_EXPORT',
+  'BACKUP_RECOVERY',
+  'ADMIN_SUPPORT',
+  'SECURITY_ALERTS',
+  'DEPLOYMENT_OPS'
 ];
 
 const AUDIT_EVENT_RESULTS = ['SUCCESS', 'FAILED', 'DENIED', 'WARNING'];
@@ -80,7 +74,7 @@ const PlatformAuditSchema = new mongoose.Schema({
     default: 'Sri Vidya Educational Trust (Multi-Tenant Central)'
   },
   targetEntity: {
-    entityType: { type: String, required: true }, // e.g. 'UserAccount', 'Institution', 'RoleTemplate', 'SchoolConfig'
+    entityType: { type: String, required: true },
     entityId: { type: String, required: true, index: true },
     displayName: { type: String, required: true }
   },
@@ -118,7 +112,6 @@ const PlatformAuditSchema = new mongoose.Schema({
   timestamps: true
 });
 
-// Immutability Hook: Strictly prevent any modification or deletion of audit records
 const preventModificationOrDeletion = function (next) {
   const err = new Error(
     'Audit Log Immutability Violation: Audit records are permanently protected from modification or deletion under statutory retention rules.'
@@ -133,7 +126,6 @@ PlatformAuditSchema.pre('deleteOne', preventModificationOrDeletion);
 PlatformAuditSchema.pre('deleteMany', preventModificationOrDeletion);
 PlatformAuditSchema.pre('findOneAndDelete', preventModificationOrDeletion);
 
-// Helper to generate SHA-256 tamper seal
 PlatformAuditSchema.statics.generateTamperSeal = function (payload) {
   const content = `${payload.eventId}|${payload.timestamp}|${payload.actor?.userId}|${payload.action}|${payload.result}|${payload.reason}`;
   return crypto.createHash('sha256').update(content).digest('hex');

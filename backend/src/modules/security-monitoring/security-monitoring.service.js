@@ -1,7 +1,3 @@
-/**
- * Security & Access Threat Monitoring - Service Layer
- * Business rules, calculations, and operational orchestration
- */
 
 const Repository = require('./security-monitoring.repository');
 const MultiInstitutionSecurity = require('../common/multiInstitutionSecurity');

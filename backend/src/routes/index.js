@@ -1,12 +1,7 @@
-/**
- * API Version 1 Master Router
- * Mounts all v1 sub-routers
- */
 const express = require('express');
 const router = express.Router();
 const liveSyncBus = require('../utils/liveSyncBus');
 
-// Broadcast live-sync invalidation after any successful mutation request
 router.use((req, res, next) => {
   if (['POST', 'PUT', 'PATCH', 'DELETE'].includes(req.method)) {
     res.on('finish', () => {
@@ -45,83 +40,64 @@ router.use((req, res, next) => {
 const healthRoutes = require('./health.routes');
 const authRoutes = require('./auth.routes');
 
-// Mount health check endpoints at /api/v1/health
 router.use('/health', healthRoutes);
 
-// Mount authentication endpoints at /api/v1/auth
 router.use('/auth', authRoutes);
 
-// Mount student academic records endpoints at /api/v1/records
 const recordRoutes = require('./studentRecord.routes');
 router.use('/records', recordRoutes);
 
-// Mount management endpoints at /api/v1/management
 const managementRoutes = require('./management.routes');
 router.use('/management', managementRoutes);
 
-// Mount student administrative module endpoints at /api/v1/students
 const studentRoutes = require('./student.routes');
 router.use('/students', studentRoutes);
 
-// Mount Student Exit & Transfer Certificate Docket endpoints at /api/v1/transfers and /api/v1/student-exits
 const studentExitRoutes = require('./studentExit.routes');
 router.use('/transfers', studentExitRoutes);
 router.use('/student-exits', studentExitRoutes);
 
-// Mount Controlled Student Archival & Record Inactivation endpoints at /api/v1/student-archivals
 const studentArchivalRoutes = require('./studentArchival.routes');
 router.use('/student-archivals', studentArchivalRoutes);
 router.use('/archivals', studentArchivalRoutes);
 
-// Mount future Student Portal self-service endpoints (Specification 20.1)
 const studentPortalRoutes = require('./studentPortal.routes');
 router.use('/student-portal', studentPortalRoutes);
 router.use('/student', studentPortalRoutes);
 
-// Mount teacher module endpoints at /api/v1/teachers
 const teacherRoutes = require('./teacher.routes');
 router.use('/teachers', teacherRoutes);
 
-// Mount parent module & future Parent Portal endpoints (Specification 20.2)
 const parentRoutes = require('./parent.routes');
 router.use('/parents', parentRoutes);
 router.use('/parent', parentRoutes);
 router.use('/parent-portal', parentRoutes);
 
-// Mount academic module endpoints at /api/v1/academic
 const academicRoutes = require('./academic.routes');
 router.use('/academic', academicRoutes);
 
-// Mount attendance module endpoints at /api/v1/attendance
 const attendanceRoutes = require('./attendance.routes');
 router.use('/attendance', attendanceRoutes);
 
-// Mount examination module endpoints at /api/v1/exams
 const examRoutes = require('./exam.routes');
 router.use('/exams', examRoutes);
 
-// Mount scholastic report cards module endpoints at /api/v1/report-cards and /api/v1/reports/scholastic
 const reportCardRoutes = require('./reportCard.routes');
 router.use('/report-cards', reportCardRoutes);
 router.use('/reports/scholastic', reportCardRoutes);
 
-// Mount fee module endpoints at /api/v1/fees
 const feeRoutes = require('./fee.routes');
 router.use('/fees', feeRoutes);
 
-// Mount payment module endpoints at /api/v1/payments
 const paymentRoutes = require('./payment.routes');
 router.use('/payments', paymentRoutes);
 
-// Mount admission module endpoints at /api/v1/admissions
 const admissionRoutes = require('./admission.routes');
 router.use('/admissions', admissionRoutes);
 
-// Mount dashboard module endpoints at /api/v1/dashboard
 const dashboardRoutes = require('./dashboard.routes');
 router.use('/dashboard', dashboardRoutes);
 
-// Mount platform administration endpoints at /api/v1/platform
 const dashboardController = require('../controllers/dashboard.controller');
 const institutionRoutes = require('./institution.routes');
 const schoolConfigRoutes = require('./schoolConfig.routes');
@@ -174,7 +150,6 @@ platformRouter.use('/gateways', schoolGatewayRoutes);
 platformRouter.use('/actions', globalActionPatternRoutes);
 platformRouter.use('/workflows', platformWorkflowRoutes);
 
-// Mount Modular Backend Architecture (Specification 10: Backend Architecture for Platform Administration)
 const masterModulesRouter = require('../modules');
 platformRouter.use('/modules', masterModulesRouter);
 router.use('/modules', masterModulesRouter);
@@ -210,11 +185,9 @@ router.use('/actions', ...requirePlatformAdmin, globalActionPatternRoutes);
 router.use('/platform/workflows', ...requirePlatformAdmin, platformWorkflowRoutes);
 router.use('/workflows', ...requirePlatformAdmin, platformWorkflowRoutes);
 
-// Mount timetable module endpoints at /api/v1/timetable
 const timetableRoutes = require('./timetable.routes');
 router.use('/timetable', timetableRoutes);
 
-// Mount Discipline, Events, and Appointments endpoints (Management & Authorized Faculty)
 const disciplineRoutes = require('./discipline.routes');
 const eventRoutes = require('./event.routes');
 const appointmentRoutes = require('../modules/appointments/routes');
@@ -222,24 +195,18 @@ router.use('/discipline', disciplineRoutes);
 router.use('/events', eventRoutes);
 router.use('/appointments', appointmentRoutes);
 
-// Mount Production Readiness Subsystems:
-// 1. Privacy-Conscious In-House Analytics (DPDP Act 2023 Compliant)
 const analyticsRoutes = require('./analytics.routes');
 router.use('/analytics', analyticsRoutes);
 
-// 2. Centralized Frontend & Backend Error Monitoring
 const systemErrorRoutes = require('./systemError.routes');
 router.use('/system', systemErrorRoutes);
 
-// 3. Account Deletion & Deactivation with Statutory Preservations
 const accountDeletionRoutes = require('./accountDeletion.routes');
 router.use('/users', accountDeletionRoutes);
 
-// 4. Executive Database Backup & Disaster Recovery
 router.use('/backups', authenticateUser, authorizeRoles('SUPER_ADMIN', 'PRINCIPAL'), backupRoutes);
 router.use('/backup', authenticateUser, authorizeRoles('SUPER_ADMIN', 'PRINCIPAL'), backupRoutes);
 
-// 5. Legal, Privacy & Compliance Management (DPDP Act, GDPR, DPAs, Consent, Breaches)
 const complianceRoutes = require('./compliance.routes');
 router.use('/compliance', complianceRoutes);
 

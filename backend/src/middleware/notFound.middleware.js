@@ -1,8 +1,3 @@
-/**
- * 404 Route Not Found Middleware
- * Serves school-branded Skeuomorphic 404 page for web navigation,
- * and standard JSON error response for API requests.
- */
 const path = require('path');
 const fs = require('fs');
 const ApiError = require('../utils/apiError');

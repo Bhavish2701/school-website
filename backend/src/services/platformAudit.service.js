@@ -1,7 +1,3 @@
-/**
- * Sri Vidya Educational Trust - Platform Audit Log Service
- * Module 8: Audit Log Explorer, Sensitive Masking, 10 Categories, and Tamper-Evidence
- */
 
 const mongoose = require('mongoose');
 const crypto = require('crypto');
@@ -12,10 +8,8 @@ const {
   AUDIT_SEVERITY_LEVELS
 } = require('../models/platformAudit.model');
 
-// In-memory fallback repository when running without active MongoDB
 const inMemoryAuditLogs = [];
 
-// 8.2 Invariant: Fields that must NEVER be logged directly in audit values
 const SENSITIVE_MASKED_FIELDS = [
   'password',
   'token',
@@ -47,9 +41,7 @@ const sanitizeValue = (field, val) => {
   return val;
 };
 
-// 8.3 Representative Seed Data across all 10 Statutory Categories
 const STATUTORY_AUDIT_SEED = [
-  // 1. Authentication and account changes (AUTH_ACCOUNTS)
   {
     eventId: 'EVT-2026-10491',
     timestamp: new Date('2026-11-05T18:45:00Z'),
@@ -82,7 +74,6 @@ const STATUTORY_AUDIT_SEED = [
     tamperSealHash: 'a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1b2c3d4e5f6a7b8',
     relatedSecurityEventId: 'SEC-ALRT-2026-088'
   },
-  // 2. Institution activation or suspension (INSTITUTIONS)
   {
     eventId: 'EVT-2026-10492',
     timestamp: new Date('2026-11-05T17:15:00Z'),
@@ -115,7 +106,6 @@ const STATUTORY_AUDIT_SEED = [
     tamperSealHash: 'b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1b2c3d4e5f6a7b8c9',
     relatedSecurityEventId: 'SEC-ALRT-2026-079'
   },
-  // 3. Role and permission changes (RBAC_PERMISSIONS)
   {
     eventId: 'EVT-2026-10493',
     timestamp: new Date('2026-11-05T16:30:00Z'),
@@ -146,7 +136,6 @@ const STATUTORY_AUDIT_SEED = [
     ],
     tamperSealHash: 'c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1b2c3d4e5f6a7b8c9d0'
   },
-  // 4. Configuration changes (SCHOOL_CONFIG)
   {
     eventId: 'EVT-2026-10494',
     timestamp: new Date('2026-11-05T15:00:00Z'),
@@ -177,7 +166,6 @@ const STATUTORY_AUDIT_SEED = [
     ],
     tamperSealHash: 'd0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1b2c3d4e5f6a7b8c9d0e1'
   },
-  // 5. Integration changes (INTEGRATIONS)
   {
     eventId: 'EVT-2026-10495',
     timestamp: new Date('2026-11-05T13:40:00Z'),
@@ -209,7 +197,6 @@ const STATUTORY_AUDIT_SEED = [
     ],
     tamperSealHash: 'e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1b2c3d4e5f6a7b8c9d0e1f2'
   },
-  // 6. Data import and export (DATA_IMPORT_EXPORT)
   {
     eventId: 'EVT-2026-10496',
     timestamp: new Date('2026-11-05T11:20:00Z'),
@@ -241,7 +228,6 @@ const STATUTORY_AUDIT_SEED = [
     ],
     tamperSealHash: 'f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1b2c3d4e5f6a7b8c9d0e1f2a3'
   },
-  // 7. Backup and recovery actions (BACKUP_RECOVERY)
   {
     eventId: 'EVT-2026-10497',
     timestamp: new Date('2026-11-05T03:00:00Z'),
@@ -273,7 +259,6 @@ const STATUTORY_AUDIT_SEED = [
     ],
     tamperSealHash: 'a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1b2c3d4e5f6a7b8c9d0e1f2a3b4'
   },
-  // 8. Administrative support actions (ADMIN_SUPPORT)
   {
     eventId: 'EVT-2026-10498',
     timestamp: new Date('2026-11-04T16:45:00Z'),
@@ -305,7 +290,6 @@ const STATUTORY_AUDIT_SEED = [
     ],
     tamperSealHash: 'b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5'
   },
-  // 9. Security alerts (SECURITY_ALERTS)
   {
     eventId: 'EVT-2026-10499',
     timestamp: new Date('2026-11-04T14:10:00Z'),
@@ -338,7 +322,6 @@ const STATUTORY_AUDIT_SEED = [
     tamperSealHash: 'c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6',
     relatedSecurityEventId: 'SEC-ALRT-2026-061'
   },
-  // 10. Deployment-related administrative events (DEPLOYMENT_OPS)
   {
     eventId: 'EVT-2026-10500',
     timestamp: new Date('2026-11-04T08:00:00Z'),
@@ -400,9 +383,6 @@ class PlatformAuditService {
     }
   }
 
-  /**
-   * 8.1 Summary KPI Counters
-   */
   static async getAuditSummary() {
     await this.seedIfEmpty();
 
@@ -432,9 +412,6 @@ class PlatformAuditService {
     };
   }
 
-  /**
-   * 8.1 Audit Log Explorer Query & Multi-Field Filtering
-   */
   static async listEvents(query = {}) {
     await this.seedIfEmpty();
 
@@ -461,41 +438,32 @@ class PlatformAuditService {
     const endDate = query.endDate ? new Date(query.endDate) : null;
 
     const filtered = events.filter(evt => {
-      // 1. Keyword search (Event ID, Action, Actor name, Target, Reason)
       if (q) {
         const hay = `${evt.eventId} ${evt.action} ${evt.actor?.name} ${evt.actor?.email} ${evt.targetEntity?.displayName} ${evt.targetEntity?.entityId} ${evt.reason}`.toLowerCase();
         if (!hay.includes(q)) return false;
       }
-      // 2. Date Range
       const evtDate = new Date(evt.timestamp);
       if (startDate && evtDate < startDate) return false;
       if (endDate && evtDate > endDate) return false;
 
-      // 3. User
       if (user && !evt.actor?.name.toLowerCase().includes(user) && !evt.actor?.userId.toLowerCase().includes(user)) {
         return false;
       }
-      // 4. Institution
       if (instId && instId !== 'all' && evt.institutionId !== instId) {
         return false;
       }
-      // 5. Category / Module
       if (category && category !== 'all' && evt.category !== category) {
         return false;
       }
-      // 6. Action
       if (action && !evt.action.toLowerCase().includes(action)) {
         return false;
       }
-      // 7. Result
       if (result && result !== 'all' && evt.result !== result) {
         return false;
       }
-      // 8. Severity
       if (severity && severity !== 'all' && evt.severity !== severity) {
         return false;
       }
-      // 9. Record Reference
       if (recordRef && !evt.targetEntity?.entityId.toLowerCase().includes(recordRef) && !evt.targetEntity?.displayName.toLowerCase().includes(recordRef)) {
         return false;
       }
@@ -512,9 +480,6 @@ class PlatformAuditService {
     };
   }
 
-  /**
-   * 8.2 Event Detail with Related Events Resolution
-   */
   static async getEventById(eventId) {
     await this.seedIfEmpty();
 
@@ -538,7 +503,6 @@ class PlatformAuditService {
       return { success: false, message: 'Audit event not found' };
     }
 
-    // Resolve Related Events (Matching correlationId, same targetEntity, or same actor within 24h)
     const related = all.filter(e => {
       if (e.eventId === event.eventId) return false;
       if (e.correlationId === event.correlationId) return true;
@@ -556,17 +520,12 @@ class PlatformAuditService {
     };
   }
 
-  /**
-   * Authoritative Append-Only Logging Method
-   * Masking Invariant Enforced: Passwords and session tokens are strictly sanitized
-   */
   static async logEvent(eventData) {
     const nextSeq = Math.floor(10501 + Math.random() * 8900);
     const eventId = `EVT-2026-${nextSeq}`;
     const timestamp = new Date();
     const correlationId = eventData.correlationId || `corr_${crypto.randomBytes(4).toString('hex')}`;
 
-    // Sanitize changed fields
     const sanitizedFields = (eventData.changedFields || []).map(cf => ({
       field: cf.field,
       oldValue: sanitizeValue(cf.field, cf.oldValue),
@@ -619,9 +578,6 @@ class PlatformAuditService {
     }
   }
 
-  /**
-   * 8.4 Action: Export Authorized Report with Provenance Watermark
-   */
   static async exportAuthorizedReport(query = {}, operator = 'Platform Super Administrator') {
     const listRes = await this.listEvents(query);
     const events = listRes.data || [];

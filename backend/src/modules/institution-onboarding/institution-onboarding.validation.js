@@ -1,7 +1,3 @@
-/**
- * Institution Onboarding & Migration - Validation Layer
- * Enforces field schemas, constraints, and data integrity
- */
 
 class InstitutionOnboardingValidation {
   static validateRequest(req, res, next) {

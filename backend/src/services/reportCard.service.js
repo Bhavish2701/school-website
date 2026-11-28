@@ -1,7 +1,3 @@
-/**
- * Scholastic Report Card Generation & Management Service
- * Sri Vidya English Medium High School
- */
 const crypto = require('crypto');
 const mongoose = require('mongoose');
 const { ReportCard } = require('../models/reportCard.model');
@@ -12,9 +8,6 @@ const ClassSection = require('../models/classSection.model');
 const AcademicYear = require('../models/academicYear.model');
 const ApiError = require('../utils/apiError');
 
-/**
- * 1. Get Available Examination Cycles & Academic Years
- */
 const getAvailableExams = async () => {
   const exams = await Exam.find({}).sort({ startDate: -1 });
   const academicYears = await AcademicYear.find({}).sort({ isCurrent: -1 });
@@ -46,9 +39,6 @@ const getAvailableExams = async () => {
   };
 };
 
-/**
- * Helper to compute promotion and next class
- */
 const calculatePromotionDetails = (className, resultStatus) => {
   const classNum = parseInt(className, 10);
   let nextClass = '';
@@ -77,9 +67,6 @@ const calculatePromotionDetails = (className, resultStatus) => {
   };
 };
 
-/**
- * 2. Retrieve Complete Student Academic Data for Report Card
- */
 const retrieveStudentAcademicData = async (studentAdmNoOrId, examId) => {
   const student = await Student.findOne({
     $or: [
@@ -104,10 +91,8 @@ const retrieveStudentAcademicData = async (studentAdmNoOrId, examId) => {
     throw ApiError.notFound('No examination cycle configured for report card generation');
   }
 
-  // Find Exam Mark
   const examMark = await ExamMark.findOne({ exam: exam._id, student: student._id });
 
-  // Compute live attendance directly from AttendanceRecord collection
   const [totalRecordedAtt, presentRecordedAtt, absentRecordedAtt, excusedRecordedAtt] = await Promise.all([
     AttendanceRecord.countDocuments({ student: student._id }),
     AttendanceRecord.countDocuments({ student: student._id, status: { $in: ['PRESENT', 'LATE', 'HALF_DAY', 'EXCUSED'] } }),
@@ -138,7 +123,6 @@ const retrieveStudentAcademicData = async (studentAdmNoOrId, examId) => {
     standing,
   };
 
-  // Build subject list and scholastic totals
   const subjects = [];
   let totalMaxMarks = 0;
   let totalObtainedMarks = 0;
@@ -150,7 +134,6 @@ const retrieveStudentAcademicData = async (studentAdmNoOrId, examId) => {
     for (const sm of examMark.subjectMarks) {
       const maxM = sm.maxMarks || 100;
       const obtainedM = sm.marksObtained;
-      // internal is typically 20% and theory 80% in AP SSC CCE format
       const internalM = Math.min(20, Math.round(obtainedM * 0.2));
       const externalM = obtainedM - internalM;
 
@@ -205,7 +188,6 @@ const retrieveStudentAcademicData = async (studentAdmNoOrId, examId) => {
     ? existingReportCard.coScholastic
     : [];
 
-  // Qualitative Remarks (no fabricated defaults when absent)
   const remarks = {
     classTeacherRemarks: (examMark && examMark.classTeacherRemarks) || existingReportCard?.remarks?.classTeacherRemarks || '',
     subjectTeacherRemarks: existingReportCard?.remarks?.subjectTeacherRemarks || '',
@@ -218,7 +200,6 @@ const retrieveStudentAcademicData = async (studentAdmNoOrId, examId) => {
 
   const promotionDetails = calculatePromotionDetails(student.class, resultStatus);
 
-  // Security Verification Reference
   const verificationPayload = `${student.admissionNo}|${exam.name}|${totalObtainedMarks}|${overallGrade}`;
   const verificationCode = 'SV-VER-' + crypto.createHash('md5').update(verificationPayload).digest('hex').substring(0, 10).toUpperCase();
 
@@ -261,9 +242,6 @@ const retrieveStudentAcademicData = async (studentAdmNoOrId, examId) => {
   };
 };
 
-/**
- * 3. Class Validation Engine & Bulk Exception Audit
- */
 const validateClassData = async (className, section, examId) => {
   const query = { class: className, status: 'ACTIVE' };
   if (section && section !== 'ALL') {
@@ -338,9 +316,6 @@ const validateClassData = async (className, section, examId) => {
   };
 };
 
-/**
- * 4. Save / Create Official Report Card Document
- */
 const saveReportCard = async (reportData, user) => {
   const admissionNo = reportData.admissionNo || reportData.studentAdmNo || reportData.admNo;
   let examId = reportData.examId;
@@ -365,14 +340,11 @@ const saveReportCard = async (reportData, user) => {
     throw ApiError.notFound('Examination cycle not found');
   }
 
-  // Generate unique institutional report card number: RC-YYYY-CLASS-ADM
   const yearSuffix = (exam.academicYear || '2025-2026').substring(0, 4);
   const rcNumber = `RC-${yearSuffix}-${student.class}-${student.admissionNo.replace('SV-', '')}`;
 
-  // Check if report card already exists
   let report = await ReportCard.findOne({ student: student._id, exam: exam._id });
 
-  // Retrieve validated academic data
   const data = await retrieveStudentAcademicData(student.admissionNo, exam._id);
 
   if (!report) {
@@ -410,7 +382,6 @@ const saveReportCard = async (reportData, user) => {
       createdBy: user ? user._id : undefined,
     });
   } else {
-    // Record version revision snapshot
     report.revisionHistory.push({
       versionNumber: report.version,
       revisedBy: user ? user.name || user.username : 'Administrator',
@@ -433,9 +404,6 @@ const saveReportCard = async (reportData, user) => {
   return report;
 };
 
-/**
- * 5. Academic Verification by Subject / Class Teacher (Stage 4)
- */
 const verifyReportCard = async (reportCardId, user, remarks) => {
   const report = await ReportCard.findById(reportCardId);
   if (!report) {
@@ -452,9 +420,6 @@ const verifyReportCard = async (reportCardId, user, remarks) => {
   return report;
 };
 
-/**
- * 6. Executive Principal Authorization (Stage 5)
- */
 const authorizeReportCard = async (reportCardId, user, decision, remarks) => {
   const report = await ReportCard.findById(reportCardId);
   if (!report) {
@@ -480,9 +445,6 @@ const authorizeReportCard = async (reportCardId, user, decision, remarks) => {
   return report;
 };
 
-/**
- * 7. Official Issuance & Publication to Student/Parent Portals (Stage 6)
- */
 const publishReportCard = async (reportCardId, user) => {
   const report = await ReportCard.findById(reportCardId);
   if (!report) {
@@ -502,9 +464,6 @@ const publishReportCard = async (reportCardId, user) => {
   return report;
 };
 
-/**
- * 8. Report Card History & Registry
- */
 const getReportCardHistory = async (filters = {}) => {
   const query = {};
   if (filters.class) query.class = filters.class;

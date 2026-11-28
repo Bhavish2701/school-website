@@ -1,17 +1,3 @@
-/**
- * Sri Vidya E.M High School - Unified Portal Authentication System
- * Powered by Express.js / MERN REST Backend (ApiClient)
- *
- * Supports both:
- * 1. Direct Backend Credentials:
- *    - Management: principal / Principal@123 (or viceprincipal, officestaff, superadmin)
- *    - Teacher:    teacher1 / Teacher@123
- *    - Student:    student1 / Student@123
- *    - Parent:     parent1  / Parent@123
- * 2. Legacy UI Demo Credentials (Auto-mapped seamlessly):
- *    - srividyaschools2017@gmail.com / G.Varalakshmi.2017. -> Principal
- *    - yandrapubhavish2701@gmail.com / Bhavish@2701 -> Role-aware
- */
 
 const PortalAuth = {
   configs: {
@@ -56,7 +42,6 @@ const PortalAuth = {
     }
   },
 
-  /* Role to Portal & Permission Authorization Matrix */
   roleMatrix: {
     SUPER_ADMIN: { portal: 'platform-admin', redirectUrl: '/platform-admin#dashboard', roleSubtype: 'superadmin', dashboardTitle: 'Platform Systems Administration', allowedPortals: ['platform-admin', 'management', 'teacher'] },
     PLATFORM_ADMIN: { portal: 'platform-admin', redirectUrl: '/platform-admin#dashboard', roleSubtype: 'superadmin', dashboardTitle: 'Platform Systems Administration', allowedPortals: ['platform-admin', 'management', 'teacher'] },
@@ -72,7 +57,6 @@ const PortalAuth = {
     PARENT: { portal: 'parent', redirectUrl: '/parent#dashboard', roleSubtype: 'parent', dashboardTitle: 'Parent Portal', allowedPortals: ['parent'] }
   },
 
-  /* Helper to guarantee resolution to authoritative role Main Dashboard */
   getMainDashboardUrlForRole(role) {
     const r = (role || '').toUpperCase();
     if (r === 'SUPER_ADMIN' || r === 'PLATFORM_ADMIN') return '/platform-admin#dashboard';
@@ -84,7 +68,6 @@ const PortalAuth = {
     return '/management#dashboard';
   },
 
-  /* Synchronous pre-flight check used by portal boot scripts before mounting data fetches */
   canAccessPortalSync(portalType) {
     try {
       const hasToken = (window.ApiClient && typeof window.ApiClient.isAuthenticated === 'function')
@@ -113,7 +96,6 @@ const PortalAuth = {
     }
   },
 
-  /* Helper to purge stale module navigation caches so logins start on Main Dashboard */
   clearNavigationCaches() {
     try {
       const keys = [
@@ -133,14 +115,9 @@ const PortalAuth = {
     } catch (e) {}
   },
 
-  /* =========================================================================
-   * INACTIVITY / IDLE SESSION EXPIRATION ENGINE (15 MINUTES)
-   * Automatically starts countdown when user stops interacting with the portal.
-   * If inactive for 15 minutes, expires the session and presents the login screen.
-   * ========================================================================= */
   inactivity: {
-    TIMEOUT_MS: 15 * 60 * 1000, // Strictly 15 minutes = 900,000 ms of continuous inactivity
-    WARNING_MS: 60 * 1000,       // 1 minute remaining warning modal
+    TIMEOUT_MS: 15 * 60 * 1000,
+    WARNING_MS: 60 * 1000,
     STORAGE_KEY: 'sv_session_last_active',
     timerId: null,
     warningTimerId: null,
@@ -154,14 +131,12 @@ const PortalAuth = {
       const now = Date.now();
       this.lastInteractionTime = now;
 
-      // If warning modal is open and user moves mouse or interacts, auto-dismiss and restore session
       const modal = document.getElementById('inactivityWarningModal');
       if (modal && modal.style.display !== 'none') {
         this.hideWarningModal();
         PortalAuth.showToast('✓ Activity detected: Session refreshed for 15 minutes!', 'fa-circle-check');
       }
 
-      // Throttle localStorage updates to avoid disk performance drag (every 2 seconds max)
       if (now - this.lastStorageWriteTime > 2000) {
         this.lastStorageWriteTime = now;
         try {
@@ -169,7 +144,6 @@ const PortalAuth = {
         } catch (e) {}
       }
 
-      // Proactively keep API session token fresh while user is active
       if (window.ApiClient && typeof window.ApiClient.keepAlive === 'function') {
         window.ApiClient.keepAlive();
       }
@@ -192,19 +166,16 @@ const PortalAuth = {
       const elapsed = Math.max(0, now - last);
       const remaining = Math.max(0, this.TIMEOUT_MS - elapsed);
 
-      // Only expire if continuous inactivity has genuinely reached or exceeded 15 minutes
       if (remaining <= 0) {
         this.triggerExpiry();
         return;
       }
 
-      // Schedule 60-second warning countdown modal at 14 minutes of inactivity
       const warningDelay = Math.max(0, remaining - this.WARNING_MS);
       this.warningTimerId = setTimeout(() => {
         this.showWarningModal();
       }, warningDelay);
 
-      // Schedule session lock when full 15 minutes of continuous inactivity elapse
       this.timerId = setTimeout(() => {
         this.triggerExpiry();
       }, remaining);
@@ -219,7 +190,6 @@ const PortalAuth = {
           if (!isNaN(t)) storedTime = t;
         }
       } catch (e) {}
-      // Always respect the freshest timestamp between memory and localStorage
       return Math.max(this.lastInteractionTime || 0, storedTime);
     },
 
@@ -323,7 +293,6 @@ const PortalAuth = {
       if (!this.isInitialized) {
         this.isInitialized = true;
 
-        // Comprehensive user activity listeners: continuously reset countdown whenever user is active
         const events = ['mousemove', 'mousedown', 'keydown', 'touchstart', 'scroll', 'click', 'wheel', 'pointermove'];
         const activityHandler = () => {
           if (this.isAuthenticated()) {
@@ -335,7 +304,6 @@ const PortalAuth = {
           window.addEventListener(evt, activityHandler, { passive: true });
         });
 
-        // Sync activity across multiple open tabs
         window.addEventListener('storage', (e) => {
           if (e.key === this.STORAGE_KEY) {
             const val = parseInt(e.newValue || String(Date.now()), 10);
@@ -346,7 +314,6 @@ const PortalAuth = {
           }
         });
 
-        // Check/resume timers when user switches back to this tab
         document.addEventListener('visibilitychange', () => {
           if (!document.hidden && this.isAuthenticated()) {
             this.recordActivity();
@@ -463,9 +430,6 @@ const PortalAuth = {
   },
 
   
-  /* =========================================================================
-   * FACULTY ONBOARDING, CREDENTIAL DISPATCH & SCHOOL ID VERIFICATION
-   * ========================================================================= */
 
   getAuthorizedFaculty() {
     try {
@@ -492,7 +456,6 @@ const PortalAuth = {
       }
     } catch (e) {}
 
-    // Fallback default list with IDs starting SV200001 (5 Demo Teachers)
     return [
       { id: 'SV200001', name: 'Smt. Gorle Varalakshmi', role: 'Principal & Academic Director', personalEmail: 'srividyaschools2017@gmail.com' },
       { id: 'SV200002', name: 'Sri Navva Anand', role: 'Vice Principal & Discipline Head', personalEmail: 'navva.anand.personal@gmail.com' },
@@ -620,7 +583,6 @@ const PortalAuth = {
       return;
     }
 
-    // Save custom password for active teacher
     const activeTeacherId = sessionStorage.getItem('sv_active_teacher_id') || 'SV200005';
     try {
       const customPasswords = JSON.parse(localStorage.getItem('sv_teacher_passwords') || '{}');
@@ -631,7 +593,6 @@ const PortalAuth = {
     this.closeModal('teacherChangePasswordModal');
     this.showToast('Password updated successfully! Your account is now secured.', 'fa-circle-check');
 
-    // If overlay was visible during first-time login, proceed
     const overlay = document.getElementById('teacherLoginOverlay');
     if (overlay && !overlay.classList.contains('hidden')) {
       overlay.classList.add('hidden');
@@ -1100,9 +1061,7 @@ const PortalAuth = {
       submitBtn.disabled = true;
     }
 
-    // Real 2FA Backend Verification for Unified SSO Gateway
     if (portalType === 'unified') {
-      // 1. Verifying State: Rotating circular loader
       this.setOtpStatus('unified', 'verifying', 'Verifying...', 'Validating security code with authentication gateway');
       boxes.forEach(b => { if (b) b.disabled = true; });
 
@@ -1115,7 +1074,6 @@ const PortalAuth = {
         const res = await window.ApiClient.auth.verifyOtp(session.preAuthToken, enteredOtp, session.rememberMe, requestedPortal);
 
         if (res && res.success && res.data && res.data.user) {
-          // 2. Success State: Green circular checkmark with "OTP Verified Successfully"
           this.setOtpStatus('unified', 'success', 'OTP Verified Successfully', 'Launching your authorized Dashboard...');
           boxes.forEach(b => {
             if (b) {
@@ -1165,7 +1123,6 @@ const PortalAuth = {
         const errMsg = err.message || '';
 
         if (errCode === 'OTP_EXPIRED' || errMsg.toLowerCase().includes('expired')) {
-          // 3. Expired State: Amber circular indicator with "OTP Expired. Request a New OTP"
           this.setOtpStatus('unified', 'expired', 'OTP Expired. Request a New OTP', 'Your security code has timed out. Click Resend below.');
           boxes.forEach(b => { if (b) b.classList.add('error'); });
           const resendBtn = document.getElementById('unifiedResendOtpBtn');
@@ -1175,7 +1132,6 @@ const PortalAuth = {
           }
           this.showToast('OTP Expired. Request a New OTP', 'fa-clock', true);
         } else {
-          // 4. Failed State: Red circular indicator with "Invalid OTP. Please try again"
           this.setOtpStatus('unified', 'failed', 'Invalid OTP. Please try again', 'Invalid OTP code entered. Please check and try again.');
           boxes.forEach(b => {
             if (b) {
@@ -1301,12 +1257,10 @@ const PortalAuth = {
       window.teacherApp.loadLiveData();
     }
 
-    // Start 15-minute inactivity session expiration countdown
     if (this.inactivity) {
       this.inactivity.init(portalType);
     }
   },
-
 
   async login(portalType, e) {
     if (e) e.preventDefault();
@@ -1321,7 +1275,6 @@ const PortalAuth = {
     let enteredUser = userInput ? userInput.value.trim() : '';
     let enteredPass = passInput ? passInput.value : '';
 
-    // Faculty School ID Login Verification (SV200001+)
     if (portalType === 'teacher') {
       const facultyList = this.getAuthorizedFaculty();
       const upperUser = enteredUser.toUpperCase();
@@ -1356,12 +1309,10 @@ const PortalAuth = {
       }
     }
 
-    // Office / Clerk ID Login Verification
     if (portalType === 'management') {
       const roleSelect = document.getElementById('mgmtRoleSelect');
       const chosenRole = roleSelect ? roleSelect.value : 'principal';
 
-      // Check custom executive credentials defined in Settings
       try {
         const executiveCreds = JSON.parse(localStorage.getItem('sv_executive_creds') || '{}');
         const roleCred = executiveCreds[chosenRole];
@@ -1376,7 +1327,6 @@ const PortalAuth = {
       } catch (err) {}
   
 
-      // Office / Clerk ID support (SV-OFFICE-01, SV200027, officestaff)
       if (chosenRole === 'admin') {
         const clerkIds = ['SV-OFFICE-01', 'SV-CLERK-01', 'SV200027', 'SV200028', 'OFFICESTAFF', 'ADMIN'];
         if (clerkIds.includes(enteredUser.toUpperCase())) {
@@ -1388,7 +1338,6 @@ const PortalAuth = {
       }
     }
 
-    // Smart-mapping for legacy demo credentials or empty convenience fallbacks
     if (portalType === 'management') {
       const roleSelect = document.getElementById('mgmtRoleSelect');
       const chosenRole = roleSelect ? roleSelect.value : 'principal';
@@ -1439,7 +1388,6 @@ const PortalAuth = {
         const apiUser = (res.data && res.data.user) || res.user || {};
         const detectedRole = (apiUser.role || '').toUpperCase();
 
-        // Strict Role Isolation: If teacher submitted credentials on management overlay, redirect to faculty portal
         if (portalType === 'management' && (detectedRole === 'TEACHER' || detectedRole === 'FACULTY')) {
           this.showToast('Faculty credentials verified. Launching Faculty Academic Workspace...', 'fa-chalkboard-user');
           setTimeout(() => { window.location.href = '/teacher'; }, 500);
@@ -1460,7 +1408,6 @@ const PortalAuth = {
         return;
       }
 
-      // Trigger Portal-specific live data reload
       if (portalType === 'management' && window.portalApp && typeof window.portalApp.loadLiveData === 'function') {
         window.portalApp.loadLiveData();
       } else if (portalType === 'teacher' && window.teacherApp && typeof window.teacherApp.loadLiveData === 'function') {
@@ -1484,10 +1431,6 @@ const PortalAuth = {
       }
     }
   },
-
-  /* =========================================================================
-   * UNIFIED LOGIN PLATFORM (SINGLE COMMON SIGN-IN GATEWAY)
-   * ========================================================================= */
 
   inferPortalFromUrl() {
     try {
@@ -1630,7 +1573,6 @@ const PortalAuth = {
     const requestedPortal = urlParams.get('portal') || this.inferPortalFromUrl();
     const redirectUrl = urlParams.get('redirect') || '';
 
-    // Apply portal-specific visual customization
     if (requestedPortal) {
       const cfg = this.getPortalConfig(requestedPortal);
       if (cfg) {
@@ -1653,7 +1595,6 @@ const PortalAuth = {
       }
     }
 
-    // Access Notice / Access Denied Handling
     if (msgParam === 'logged_out') {
       this.showToast('You have been signed out successfully.', 'fa-circle-check');
     } else if (msgParam === 'unauthorized' || msgParam === 'restricted') {
@@ -1695,11 +1636,9 @@ const PortalAuth = {
       } catch (e) {}
     };
 
-    // Clear any residual session tokens if user arrived from logout or session expiration
     if (msgParam === 'logged_out' || msgParam === 'session_expired') {
       clearResidualSession();
     } else if (msgParam !== 'unauthorized' && msgParam !== 'restricted' && this.isAnySessionActive()) {
-      // Validate token with backend before auto-redirecting so expired/stale tokens never cause redirect loops
       try {
         if (window.ApiClient && window.ApiClient.auth && typeof window.ApiClient.auth.getMe === 'function') {
           const meRes = await window.ApiClient.auth.getMe();
@@ -1713,7 +1652,6 @@ const PortalAuth = {
 
             if (requestedPortal) {
               if (allowedPortals.includes(requestedPortal)) {
-                // Verified session has permission for requested portal: proceed
                 const target = redirectUrl || (this.getPortalConfig(requestedPortal)?.dashboardUrl) || this.getMainDashboardUrlForRole(verifiedRole);
                 this.showToast(`Active session verified (${verifiedRole}). Launching ${this.getPortalDisplayName(requestedPortal)}...`, 'fa-circle-check');
                 setTimeout(() => {
@@ -1721,8 +1659,6 @@ const PortalAuth = {
                 }, 350);
                 return;
               } else {
-                // Active session role cannot access the requested portal!
-                // Clear session credentials so user can enter the correct credentials without loop
                 clearResidualSession();
                 this.showAccessDeniedBanner(
                   `Active session was signed in as <strong>${verifiedRole}</strong>, which cannot access <strong>${this.getPortalDisplayName(requestedPortal)}</strong>. Please sign in with an authorized account below.`,
@@ -1735,7 +1671,6 @@ const PortalAuth = {
                 );
               }
             } else {
-              // Generic login without specific portal: redirect to main dashboard
               const target = this.getMainDashboardUrlForRole(verifiedRole);
               this.showToast(`Active session detected (${verifiedRole}). Redirecting to your Main Dashboard...`, 'fa-circle-check');
               setTimeout(() => {
@@ -1747,28 +1682,22 @@ const PortalAuth = {
         }
         clearResidualSession();
       } catch (err) {
-        // Invalid or expired token: clear stale flags silently and remain on login page
         clearResidualSession();
       }
     }
 
-    // Setup OTP input auto-advance
     this.setupOtpInputListeners('unified');
 
-    // Ensure pre-login visual state
     const overlay = document.getElementById('unifiedLoginOverlay');
     if (overlay) overlay.classList.remove('in-otp-mode');
 
-    // Focus user input
     const userInp = document.getElementById('unifiedLoginUser');
     if (userInp) userInp.focus();
 
-    // Check if WhatsApp code element is present and pre-fetch active dev OTP code
     if (document.getElementById('unifiedWhatsappCodeDisplay')) {
       this.fetchDevOtp();
     }
 
-    // Explicit event listeners for forms and buttons (immune to CSP script-src-attr restrictions)
     const loginForm = document.getElementById('unifiedLoginForm');
     const submitBtn = document.getElementById('unifiedSubmitBtn');
 
@@ -1908,7 +1837,6 @@ const PortalAuth = {
       const rememberCheckbox = document.getElementById('unifiedRememberMe');
       const rememberMe = rememberCheckbox ? rememberCheckbox.checked : true;
 
-      // 1. Authoritative Backend REST API Authentication with 2FA OTP & requestedPortal
       let res = null;
       if (window.ApiClient && window.ApiClient.auth && typeof window.ApiClient.auth.login === 'function') {
         res = await window.ApiClient.auth.login(enteredUser, enteredPass, rememberMe, true, requestedPortal);
@@ -1926,7 +1854,6 @@ const PortalAuth = {
       }
 
         if (res && res.requiresOtp) {
-          // Password verified! Enter Two-Factor Identity Verification state
           const otpCode = (res.data && res.data.otp) || '';
           this.otpSessions.unified = {
             preAuthToken: res.data.preAuthToken,
@@ -1992,17 +1919,14 @@ const PortalAuth = {
         throw new Error('Invalid credentials. Please verify your username/School ID and security password.');
       }
 
-      // 3. Verify Account Status (Block Suspended or Deactivated accounts)
       if (userData && (userData.accountStatus === 'Suspended' || userData.accountStatus === 'Deactivated' || userData.accountStatus === 'Locked' || userData.isActive === false)) {
         throw new Error('Your account is deactivated or suspended. Access denied. Please contact school administration.');
       }
 
-      // 4. Resolve authoritative role and routing from database
       const finalRole = ((userData && userData.role) || 'PRINCIPAL').toUpperCase();
       const routing = routingData || this.resolvePortalForRole(finalRole);
       const allowedPortals = (userData && userData.allowedPortals) || routing.allowedPortals || [routing.portal];
 
-      // Enforce portal permission verification if a specific portal was requested
       if (requestedPortal && !allowedPortals.includes(requestedPortal)) {
         const portalName = this.getPortalDisplayName(requestedPortal);
         const userPortalName = this.getPortalDisplayName(routing.portal);
@@ -2019,13 +1943,10 @@ const PortalAuth = {
         throw new Error(errMsg);
       }
 
-      // 5. Persist session across all storages
       this.persistUnifiedSession(userData, routing, enteredUser);
 
-      // Clear all legacy navigation caches so user begins strictly on Main Dashboard
       this.clearNavigationCaches();
 
-      // 6. Authoritative role-based redirection target
       let targetUrl = '';
       if (requestedPortal && allowedPortals.includes(requestedPortal)) {
         targetUrl = redirectUrl || (routing && routing.redirectUrl) || (this.getPortalConfig(requestedPortal)?.dashboardUrl) || this.getMainDashboardUrlForRole(finalRole);
@@ -2115,7 +2036,6 @@ const PortalAuth = {
     const portal = (routing && routing.portal) || 'management';
     const allowed = (routing && routing.allowedPortals) || [portal];
 
-    // Master Unified Keys
     sessionStorage.setItem('sv_auth_unified', 'true');
     localStorage.setItem('sv_auth_unified', 'true');
     try { localStorage.setItem('sv_session_last_active', String(Date.now())); } catch (e) {}
@@ -2130,7 +2050,6 @@ const PortalAuth = {
       localStorage.setItem('sv_user_profile', JSON.stringify(user));
     }
 
-    // Portal Compatibility Keys
     if (portal === 'management' || allowed.includes('management')) {
       sessionStorage.setItem('sv_auth_management', 'true');
       localStorage.setItem('sv_auth_management', 'true');
@@ -2220,7 +2139,6 @@ const PortalAuth = {
     const isPassOk = !p || validPasswords.includes(p);
     if (!isPassOk) return null;
 
-    // 1. Super Admin
     if (u === 'superadmin' || u === 'admin@srividya.edu.in' || u === 'platform-admin') {
       return {
         user: { id: 'ADM-001', username: 'superadmin', name: 'Platform Super Administrator', role: 'SUPER_ADMIN' },
@@ -2228,7 +2146,6 @@ const PortalAuth = {
       };
     }
 
-    // 2. Vice Principal
     if (u === 'viceprincipal' || u === 'vp' || upper === 'SV200002') {
       return {
         user: { id: 'SV200002', username: 'viceprincipal', name: 'Sri Navva Anand', role: 'VICE_PRINCIPAL' },
@@ -2236,7 +2153,6 @@ const PortalAuth = {
       };
     }
 
-    // 3. Office Staff
     if (u === 'officestaff' || u === 'office' || u === 'clerk' || upper === 'SV-OFFICE-01' || upper === 'SV200027') {
       return {
         user: { id: 'SV-OFFICE-01', username: 'officestaff', name: 'Office Administration Desk', role: 'OFFICE' },
@@ -2244,7 +2160,6 @@ const PortalAuth = {
       };
     }
 
-    // 4. Teachers
     if (u.startsWith('teacher') || upper.startsWith('SV200003') || upper.startsWith('SV200004') || upper.startsWith('SV200005')) {
       const faculty = (typeof this.getAuthorizedFaculty === 'function' ? this.getAuthorizedFaculty() : []).find(f => f.id === upper) || { id: 'SV200005', name: 'Sri K. Rajesh' };
       return {
@@ -2253,7 +2168,6 @@ const PortalAuth = {
       };
     }
 
-    // 5. Principal
     if (u === 'principal' || u === 'srividyaschools2017@gmail.com' || upper === 'SV200001' || u.includes('varalakshmi') || u.includes('bhavish')) {
       return {
         user: { id: 'SV200001', username: 'principal', name: 'Smt. Gorle Varalakshmi', role: 'PRINCIPAL' },
@@ -2432,17 +2346,14 @@ const PortalAuth = {
     if (!cfg) return;
     if (!cfg) return false;
 
-    // 1. Check Authentication Status (require valid JWT token)
     const hasToken = (window.ApiClient && typeof window.ApiClient.isAuthenticated === 'function') ? window.ApiClient.isAuthenticated() : false;
 
     if (!hasToken) {
-      // Unauthenticated: Redirect directly to Unified Login Page with return path and portal
       const currentPath = window.location.pathname + window.location.search;
       window.location.href = `/login?portal=${portalType}&redirect=${encodeURIComponent(currentPath)}`;
       return false;
     }
 
-    // 2. Route Guarding: Check Role Authorization from authoritative profile or token storage
     const storedProfile = (window.ApiClient && typeof window.ApiClient.getUser === 'function') ? window.ApiClient.getUser() : null;
     const userRole = ((storedProfile && storedProfile.role) || localStorage.getItem('sv_user_role') || sessionStorage.getItem('sv_user_role') || '').toUpperCase();
     if (!userRole) {
@@ -2468,7 +2379,6 @@ const PortalAuth = {
       return false;
     }
 
-    // 3. Authorized! Check if there is an access notice to show
     const pendingNotice = sessionStorage.getItem('sv_access_notice');
     if (pendingNotice) {
       sessionStorage.removeItem('sv_access_notice');
@@ -2477,7 +2387,6 @@ const PortalAuth = {
       }, 400);
     }
 
-    // 4. Synchronize storage keys across storages
     sessionStorage.setItem(cfg.storageKey, 'true');
     localStorage.setItem(cfg.storageKey, 'true');
     sessionStorage.setItem('sv_auth_unified', 'true');
@@ -2513,10 +2422,8 @@ const PortalAuth = {
       if (nameEl) nameEl.textContent = teacherId ? `${teacherName} (${teacherId})` : teacherName;
     }
 
-    // 5. Restore active view & sub-tab
     this.restoreActiveView(portalType);
 
-    // 6. Authoritative session & role verification with backend
     if (window.ApiClient && typeof window.ApiClient.auth?.getMe === 'function' && window.ApiClient.getAccessToken()) {
       window.ApiClient.auth.getMe()
         .then((meRes) => {
@@ -2542,7 +2449,6 @@ const PortalAuth = {
         .catch(() => {});
     }
 
-    // 7. Trigger portal-specific live data reload
     if (portalType === 'management' && window.portalApp && typeof window.portalApp.loadLiveData === 'function') {
       window.portalApp.loadLiveData();
     } else if (portalType === 'teacher' && window.teacherApp && typeof window.teacherApp.loadLiveData === 'function') {
@@ -2555,7 +2461,6 @@ const PortalAuth = {
 
     this.bindLogoutButtons(portalType);
 
-    // 8. Start 15-minute inactivity session expiration countdown
     if (this.inactivity) {
       this.inactivity.init(portalType);
     }

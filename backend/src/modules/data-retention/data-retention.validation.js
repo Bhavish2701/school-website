@@ -1,7 +1,3 @@
-/**
- * Statutory Data Retention & Requests - Validation Layer
- * Enforces field schemas, constraints, and data integrity
- */
 
 class DataRetentionValidation {
   static validateRequest(req, res, next) {

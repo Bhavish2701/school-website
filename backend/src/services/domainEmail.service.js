@@ -1,14 +1,9 @@
-/**
- * Sri Vidya Educational Trust - Domains, Email & Notifications Service
- * Module 15: Domain Directory, DNS Configuration, Email Services, and Notification Templates
- */
 
 const mongoose = require('mongoose');
 const crypto = require('crypto');
 const { Domain, EmailService, NotificationTemplate } = require('../models/domainEmail.model');
 const { PlatformAudit } = require('../models/platformAudit.model');
 
-// Strict Invariant (Section 15.4): Confidential forbidden variables that must NEVER be exposed via templates
 const CONFIDENTIAL_FORBIDDEN_VARIABLES = [
   'password',
   'password_hash',
@@ -607,9 +602,6 @@ class DomainEmailService {
     }
   }
 
-  /* --------------------------------------------------------------------------
-     15.1 & 15.2 Domain Directory & DNS Verification
-     -------------------------------------------------------------------------- */
   static async listDomains(query = {}) {
     await this.seedIfEmpty();
     let domains = [];
@@ -672,7 +664,6 @@ class DomainEmailService {
     const domainId = payload.domainId || `DOM-${randomSuffix}`;
     const token = `srividya-site-verification=${crypto.randomBytes(6).toString('hex')}`;
 
-    // Generate required DNS records based on purpose (Section 15.2)
     const dnsRecords = [
       {
         recordId: `REC-${Date.now().toString().slice(-4)}-1`,
@@ -760,7 +751,6 @@ class DomainEmailService {
       });
     }
 
-    // Strict Invariant (Section 15.2): Never report a domain as verified before check succeeds
     const newDomain = {
       domainId,
       domain: cleanDomain,
@@ -807,7 +797,6 @@ class DomainEmailService {
     const item = res.data;
     const now = new Date();
 
-    // Check if domain is currently in failed / mismatch state
     if (item.domain.includes('rural')) {
       return {
         success: false,
@@ -816,7 +805,6 @@ class DomainEmailService {
       };
     }
 
-    // Simulate successful live DNS resolution
     let target = null;
     if (this.isMongoReady()) {
       try {
@@ -844,7 +832,6 @@ class DomainEmailService {
           await target.save();
         }
       } catch (e) {
-        // Fallback
       }
     }
 
@@ -916,7 +903,6 @@ class DomainEmailService {
           }
         }
       } catch (e) {
-        // Fallback
       }
     }
 
@@ -937,9 +923,6 @@ class DomainEmailService {
     return { success: true, message: `Domain ${res.data.domain} disabled safely.`, data: target };
   }
 
-  /* --------------------------------------------------------------------------
-     15.3 Email Service Management
-     -------------------------------------------------------------------------- */
   static async listEmailServices() {
     await this.seedIfEmpty();
     let services = [];
@@ -1081,9 +1064,6 @@ class DomainEmailService {
     return { success: true, data: res.data.deliveryLogs || [] };
   }
 
-  /* --------------------------------------------------------------------------
-     15.4 Notification Templates
-     -------------------------------------------------------------------------- */
   static async listNotificationTemplates(query = {}) {
     await this.seedIfEmpty();
     let templates = [];
@@ -1128,9 +1108,6 @@ class DomainEmailService {
     return { success: true, data: template };
   }
 
-  /**
-   * Section 15.4 Invariant: Do not allow arbitrary template variables to expose confidential information
-   */
   static async updateNotificationTemplate(templateId, payload, actor = 'Platform Administrator') {
     const res = await this.getNotificationTemplateById(templateId);
     if (!res.success || !res.data) return { success: false, message: 'Template not found.' };
@@ -1139,7 +1116,6 @@ class DomainEmailService {
     const messageBody = payload.messageBody || payload.body || res.data.messageBody;
     const combinedContent = (subject + ' ' + messageBody).toLowerCase();
 
-    // Invariant check: Scan for forbidden confidential variables
     for (const forbidden of CONFIDENTIAL_FORBIDDEN_VARIABLES) {
       if (combinedContent.includes(`{{${forbidden}}}`) || combinedContent.includes(`{{ ${forbidden} }}`)) {
         return {
