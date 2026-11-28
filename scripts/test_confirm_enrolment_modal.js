@@ -95,7 +95,8 @@ global.filterAdmissions = () => {};
 global.showToast = () => {};
 
 // Evaluate submitConfirmEnrolment
-const idxSubmit = js.indexOf('function submitConfirmEnrolment(');
+let idxSubmit = js.indexOf('async function submitConfirmEnrolment(');
+if (idxSubmit === -1) idxSubmit = js.indexOf('function submitConfirmEnrolment(');
 const endSubmit = js.indexOf('\n  function openCancelApplicationModal', idxSubmit);
 const submitFnCode = js.substring(idxSubmit, endSubmit);
 eval(submitFnCode);

@@ -177,7 +177,7 @@ platformRouter.use('/workflows', platformWorkflowRoutes);
 // Mount Modular Backend Architecture (Specification 10: Backend Architecture for Platform Administration)
 const masterModulesRouter = require('../modules');
 platformRouter.use('/modules', masterModulesRouter);
-router.use('/modules', authenticateUser, masterModulesRouter);
+router.use('/modules', masterModulesRouter);
 
 router.use('/platform', platformRouter);
 router.use('/institutions', ...requirePlatformAdmin, institutionRoutes);

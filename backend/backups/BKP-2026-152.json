@@ -1,0 +1,9 @@
+{
+  "backupId": "BKP-2026-152",
+  "name": "Pre-Rollup Acceptance Verification Snapshot",
+  "scope": "FULL_TRUST",
+  "campusScope": "ALL_CAMPUSES",
+  "timestamp": "2026-11-27T17:55:40.630Z",
+  "checksumSha256": "706270b6033def536a0058c046a5898281c54c9e8ae3c4902f114eaad973078b",
+  "operator": "Platform Automated Verifier"
+}

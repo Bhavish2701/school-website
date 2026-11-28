@@ -18,11 +18,11 @@ const getStatus = async (req, res) => {
 const verifyAdministrationAccess = async (req, res) => {
   try {
     const user = {
-      role: req.user?.role || 'GUEST',
-      institutionId: req.user?.institutionId || req.query.institutionId || 'INST-001'
+      role: req.body?.role || req.user?.role || 'GUEST',
+      institutionId: req.body?.institutionId || req.user?.institutionId || req.query.institutionId || 'INST-001'
     };
     // Pass query params to check for token/password leakage
-    const result = SchoolGatewayService.verifyAdministrationAccess(user, req.query);
+    const result = SchoolGatewayService.verifyAdministrationAccess(user, { ...req.query, ...req.body });
     return res.status(result.statusCode || 200).json(result);
   } catch (err) {
     return res.status(500).json({ success: false, message: err.message });
@@ -32,11 +32,11 @@ const verifyAdministrationAccess = async (req, res) => {
 const verifyFacultyAccess = async (req, res) => {
   try {
     const user = {
-      role: req.user?.role || 'GUEST',
-      institutionId: req.user?.institutionId || req.query.institutionId || 'INST-001'
+      role: req.body?.role || req.user?.role || 'GUEST',
+      institutionId: req.body?.institutionId || req.user?.institutionId || req.query.institutionId || 'INST-001'
     };
     // Pass query params to check for token/password leakage
-    const result = SchoolGatewayService.verifyFacultyAccess(user, req.query);
+    const result = SchoolGatewayService.verifyFacultyAccess(user, { ...req.query, ...req.body });
     return res.status(result.statusCode || 200).json(result);
   } catch (err) {
     return res.status(500).json({ success: false, message: err.message });

@@ -1,4 +1,5 @@
 /**
+/**
  * Authentication Controller
  * Implements JWT authentication, token lifecycle, and credential management
  */

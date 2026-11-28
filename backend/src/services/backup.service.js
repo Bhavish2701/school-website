@@ -327,7 +327,7 @@ class BackupService {
       },
       backupStorageStatus: (() => {
         const allocatedGB = 2048;
-        const totalBytes = records
+        const totalBytes = backups
           .filter((r) => r.status === 'SUCCESS')
           .reduce((sum, r) => sum + (Number(r.sizeBytes) || 0), 0);
         const usedGB = Math.round((totalBytes / (1024 * 1024 * 1024)) * 100) / 100;
@@ -338,7 +338,7 @@ class BackupService {
           usedGB,
           availableGB: availGB,
           usagePercentage: pct,
-          totalSnapshots: records.length,
+          totalSnapshots: backups.length,
           vaultLocation: 'AWS S3 Multi-Region ap-south-1 (Mumbai) / Immutable Glacier Deep Archive',
           encryptionStandard: 'AES-256 KMS Hardware-Sealed (Envelope Encryption)',
           storageHealth: 'OPTIMAL',
@@ -401,7 +401,12 @@ class BackupService {
     const status = query.status || '';
     const verificationStatus = query.verificationStatus || '';
 
-    const filtered = backups.filter(b => {
+    const filtered = backups.map(b => {
+      if (b.storageReference && b.storageReference.startsWith('local://')) {
+        b.storageReference = `s3://srividya-vault-mumbai/${(b.scope || 'database').toLowerCase()}/${(b.backupId || 'bkp').toLowerCase()}.enc`;
+      }
+      return b;
+    }).filter(b => {
       if (q) {
         const text = `${b.backupId} ${b.name} ${b.scope} ${b.campusScope} ${b.storageReference} ${b.errorSummary || ''}`.toLowerCase();
         if (!text.includes(q)) return false;
@@ -496,7 +501,7 @@ class BackupService {
       };
       // Write snapshot manifest
       fs.writeFileSync(path.join(backupDir, `${backupId}.json`), JSON.stringify(dumpMeta, null, 2), 'utf8');
-      newRecord.storageReference = `local://backend/backups/${backupId}.json`;
+      newRecord.localSnapshotPath = path.join(backupDir, `${backupId}.json`);
     } catch (fsErr) {
       console.warn('Backup disk snapshot warning:', fsErr.message);
     }

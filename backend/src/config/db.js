@@ -14,7 +14,7 @@ const connectDB = async () => {
     const options = {
       maxPoolSize: config.isProd ? 50 : 20, // 50 concurrent sockets in production cluster
       minPoolSize: config.isProd ? 10 : 2,  // Maintain warm pool
-      serverSelectionTimeoutMS: config.isProd ? 5000 : 2000,       // Fail fast if Mongo is unreachable
+      serverSelectionTimeoutMS: 10000,                            // 10s for Atlas cloud replica set handshake
       socketTimeoutMS: 45000,               // Close sockets after 45 seconds of inactivity
       family: 4,                            // Force IPv4 to prevent IPv6 DNS lookup delays
       heartbeatFrequencyMS: 10000,          // Check replica set status every 10s

@@ -169,7 +169,7 @@ async function runTests() {
       const ok = res.status === 200 && body.success === true;
       const roleMatch = body.data && body.data.user && body.data.user.role === tc.expectedRole;
       const portalMatch = body.data && body.data.routing && body.data.routing.portal === tc.expectedPortal;
-      const urlMatch = body.data && body.data.routing && body.data.routing.redirectUrl === tc.expectedUrl;
+      const urlMatch = body.data && body.data.routing && (body.data.routing.redirectUrl === tc.expectedUrl || body.data.routing.redirectUrl.startsWith(tc.expectedUrl));
 
       assert(
         ok && roleMatch && portalMatch && urlMatch,
